@@ -169,6 +169,10 @@ public class SnippetTokenizer
     /**
      * Helps to avoid tokenizer borrow/return thrashing.
      * 
+     * TODO: [DW] Well, the _point_ of having borrow/return
+     * was to implement a pool of tokenizers. If it's not practical,
+     * we should just move to this method and that's it.
+     * 
      * @param rawText
      * @param languageTokenizer
      * @return
