@@ -1,0 +1,43 @@
+
+<!--
+	-//Dawid Weiss//DTD DocBook V3.1-Based Extension for XML and graphics inclusion v0.1//EN
+  -->
+
+
+
+<!-- Add 'include' element to be on the same level as chapter or section class. -->
+
+<!ENTITY % local.chapter.class "|include|ifdefined">
+<!ENTITY % local.section.class "|include|ifdefined">
+<!ENTITY % local.info.class    "|include|ifdefined">
+<!ENTITY % local.para.class    "|pasteFigure|ifdefined">
+
+<!-- load DocBook -->
+
+<!ENTITY % docbook-dtd PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN" "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+%docbook-dtd;
+
+
+
+<!-- define new elements -->
+
+<!ELEMENT ifdefined ANY>
+<!ATTLIST ifdefined value CDATA #REQUIRED >
+
+
+<!ELEMENT include EMPTY>
+<!ATTLIST include file CDATA #REQUIRED>
+
+
+<!ELEMENT pasteFigure ANY>
+<!ATTLIST pasteFigure src   CDATA #REQUIRED >
+<!-- if not present, it will equal the name of the file (src),
+     without the file format extension -->
+<!ATTLIST pasteFigure id    CDATA #IMPLIED > 
+<!ATTLIST pasteFigure width CDATA #IMPLIED > 
+
+
+<!-- define new entities -->
+
+<!ENTITY % local-entities SYSTEM "local-entities.dtd">
+%local-entities;

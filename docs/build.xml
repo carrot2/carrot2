@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="Carrot2 Documentation" default="help" basedir="." >
+
+  <!-- ## You must override this property and point it to the root
+       ## of carrot2 cvs checkout directory -->
+  <property name="carrot2.cvs.dir"         location="../carrot2" />
+
+  <!-- ## override these properties, if needed -->
+
+  <property name="build.dir"               location="tmp/build" />
+  <property name="distribution.dir"        location="tmp/dist" />
+  <property name="temp:docbook.ready.file" location="${build.dir}/docbook-ready-file.tmp"/>
+  <property name="temp:fo.ready.file"      location="${build.dir}/fo-ready-file.tmp" />
+  <property name="manual.name"             value="carrot2-developers-manual" />
+  <property name="installation.manual.name" value="carrot2-installation-manual" />
+
+  <!-- ##################################### -->
+  <!-- ### {{{ PREPARE paths and folders ### -->
+  <!-- ##################################### -->
+
+  <fileset id="figures-bitmap" dir=".">
+    <include name="figures-bitmap/**" />
+  </fileset>
+
+  <path id="ant-extensions">
+    <fileset dir="ant-extensions" includes="**/*.jar" />
+  </path>
+
+
+  <target name="check.required-properties">
+    <condition property="tmp:carrot2.cvs.ok" value="true">
+        <and>
+            <not>
+                <equals arg1="${carrot2.cvs.dir}" arg2="undefined" />
+            </not>
+            <available file="${carrot2.cvs.dir}/schema" type="dir" />
+        </and>
+    </condition>
+    <fail message="### Define 'carrot2.cvs.dir' property pointing at Carrot2 CVS checkout."
+          unless="tmp:carrot2.cvs.ok" />
+  </target>
+  
+  <target name="prepare" depends="check.expand.zips">
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dir}/figures"/>
+    <mkdir dir="${distribution.dir}" />
+  </target>
+
+  <!-- }}} -->  
+  
+  <!-- ##################################### -->
+  <!-- ### {{{ CLEANALL project          ### -->
+  <!-- ##################################### -->
+
+  <target name="clean"
+          description="Clean up temporary files from all subprojects.">
+
+    <!-- clean documentation's garbage -->
+    <delete failonerror="false" includeemptydirs="true" quiet="true">
+        <fileset defaultexcludes="false" dir="tmp" />
+    </delete>
+
+  </target>
+  <!-- }}} -->
+
+  
+  <!-- ########################################################## -->
+  <!-- ### {{{ Prepare for building with docbook -->
+  <!-- ########################################################## -->
+  <target name="copyResources" depends="check.expand.zips">
+    <copy todir="${distribution.dir}/css" includeemptydirs="false">
+        <fileset dir="styler/css"/>
+    </copy>
+    <copy todir="${distribution.dir}/gfx/admonitions" includeemptydirs="false">
+        <fileset dir="styler/docbook/xsl/images">
+            <include name="**/*.gif" />
+        </fileset>
+    </copy>
+    <copy todir="${distribution.dir}/figures" flatten="true" includeemptydirs="false">
+        <fileset refid="figures-bitmap"/>
+    </copy>
+  </target>
+
+  <target name="prepareForDocbook"
+          depends="check.required-properties,xsltprocessor,prepare">
+    <!-- copy figures -->
+    <copy todir="${build.dir}/figures" flatten="true" includeemptydirs="false">
+        <fileset refid="figures-bitmap"/>
+    </copy>
+    
+    <!-- copy css -->
+    <copy todir="${build.dir}/css" includeemptydirs="false">
+        <fileset dir="styler/css"/>
+    </copy>
+    
+    <!-- copy admonition graphics -->
+    <copy todir="${build.dir}/gfx/admonitions" includeemptydirs="false">
+        <fileset dir="styler/docbook/xsl/images">
+            <include name="**/*.gif" />
+        </fileset>
+    </copy>
+
+    <!-- Preprocess to one docbook file - assemble from multiple files,
+         substitute tokens with their corresponding files -->
+    <copy todir="${build.dir}" overwrite="true" filtering="true">
+        <fileset dir="xml">
+            <exclude name="**/*.links" />
+        </fileset>
+
+        <fileset dir="${carrot2.cvs.dir}/schema/mime-types">
+            <include name="*_docbook.xml" />
+        </fileset>
+        
+        <filterchain>
+            <filterreader classname="com.dawidweiss.ant.filters.ReplaceTokensWithFileContents">
+                <classpath refid="ant-extensions" />
+                <param type="file" value="xml/insert-file.links" />
+            </filterreader>
+        </filterchain>
+    </copy>
+
+    <xmlcatalog id="dtdcatalog">
+        <dtd publicId="-//Dawid Weiss//DTD DocBook V3.1-Based Extension for XML and graphics inclusion//EN" 
+             location="styler/preprocess/carrot-docbook-extensions.dtd" />
+        <dtd publicId="-//OASIS//DTD DocBook XML V4.2//EN"
+             location="styler/docbook/dtd/docbookx.dtd" />
+    </xmlcatalog>
+
+    <property name="catalog.location" location="styler/preprocess/catalog.xml" />
+    
+    <style
+        in      = "${build.dir}/developers-guide.xml"
+        style   = "styler/preprocess/preprocess.xsl"
+        out     = "${temp:docbook.ready.file}"
+        processor = "${xslt.processor}"
+        >
+        <xmlcatalog refid="dtdcatalog"/>
+        <classpath refid="ant-extensions" />
+        <param name="conditionals" expression="${conditionals}" />
+        <param name="xsltproc.catalog" expression="${catalog.location}" />
+    </style>
+    
+    <style
+        in      = "${build.dir}/installation-manual-separate.xml"
+        style   = "styler/preprocess/preprocess.xsl"
+        out     = "${build.dir}/installation-manual-separate.tmp"
+        processor = "${xslt.processor}"
+        >
+        <xmlcatalog refid="dtdcatalog"/>
+        <classpath refid="ant-extensions" />
+        <param name="conditionals" expression="${conditionals}" />
+        <param name="xsltproc.catalog" expression="${catalog.location}" />
+    </style>
+
+    <move file="${build.dir}/installation-manual-separate.tmp" overwrite="true"
+          tofile="${build.dir}/installation-manual-separate.xml" />
+
+  </target>
+
+  <!-- }}} -->
+  
+  
+  <!-- ########################################################## -->
+  <!-- ### {{{ Builds a FO stylesheet and then produces PDF   ### -->
+  <!-- ########################################################## -->
+  <target name="noHistory">
+    <property name="conditionals" value="" />
+  </target>
+  <target name="withHistory">
+    <property name="conditionals" value="append.history" />
+  </target>
+ 
+  <target name="fo:xep:elegant"
+          depends="noHistory,prepareForDocbook">
+
+    <style
+        in      = "${temp:docbook.ready.file}"
+        style   = "styler/elegant-fo/customized.xep.xsl"
+        out     = "${temp:fo.ready.file}"
+        processor = "${xslt.processor}"
+        >
+        <classpath refid="ant-extensions" />
+
+        <param name="paper.type" expression="a4" />
+        
+        <param name="admon.graphics" expression="1"/>
+        <param name="admon.graphics.path" expression="gfx/admonitions/" />
+        <param name="admon.graphics.extension"  expression=".gif" />
+
+        <param name="draft.mode" expression="no" />
+        <param name="draft.watermark.image" expression="" />
+
+        <param name="section.label.includes.component.label" expression="1" />         
+        <param name="section.autolabel" expression="1" />
+        <param name="generate.toc" expression="book toc,title"/>         
+
+        <param name="callout.graphics" expression="1" />
+        <param name="callout.graphics.path" expression="gfx/admonitions/callouts/" />
+        <param name="callout.graphics.extension" expression=".gif" />
+        <param name="admonition.title.properties" expression="text-align: left" />
+    </style>
+  </target>
+
+  <target name="pdf">
+    <echo>
+    Use target 'pdf:xep' to render the manual to PDF. XEP must be installed and present in
+    your path.
+    </echo>
+  </target>
+  
+  <target name="pdf:xep" description="Renders the manual using the default docbook xsl:fo and XEP.">
+    <property environment="env"/>
+    <condition  property="tmp:xep.cmd"
+                value="xep.bat">
+        <and>
+            <os family="windows"/>
+            <available file="xep.bat" filepath="${env.Path}" />
+        </and>
+    </condition>
+    <condition  property="tmp:xep.cmd"
+                value="xep.sh">
+        <and>
+            <os family="unix"/>
+            <available file="xep.sh" filepath="${env.PATH}" />
+        </and>
+    </condition>
+    
+    <condition  property="tmp:arg.quot" value="&quot;">
+            <os family="windows"/>
+    </condition>
+    <condition  property="tmp:arg.quot" value="">
+            <not>
+                <os family="windows"/>
+            </not>
+    </condition>
+
+    <condition  property="tmp:xep.fonts"
+                value="true">
+        <available file="styler/elegant-fo/xep/gnu-gs-fonts/n022003l.afm" />
+    </condition>
+    
+    <fail message="Download GNU fonts from http://sourceforge.net/projects/gs-fonts and place them in styler/elegant-fo/xep/gnu-gs-fonts"
+    	  unless="tmp:xep.fonts" />
+	<fail message="XEP is not available, sorry. Download XEP from www.renderx.com."
+		  unless="tmp:xep.cmd" />
+
+    <antcall inheritall="true" target="fo:xep_ok" />
+  </target>
+  
+  <target name="fo:xep_ok" depends="fo:xep:elegant" if="tmp:xep.cmd">
+    <echo message="XEP is available. Rendering PDF..." />
+    
+    <property location="styler/elegant-fo/xep/fonts.xml" name="xep.fontlist" />
+    <property location="styler/elegant-fo/xep" name="xep.metrics" />
+
+    <exec executable="${tmp:xep.cmd}" newenvironment="true" vmlauncher="false">
+        <arg value="${tmp:arg.quot}-DFONTLIST=${xep.fontlist}${tmp:arg.quot}" />
+        <arg value="${tmp:arg.quot}-DMETRICS=${xep.metrics}${tmp:arg.quot}" />
+        <arg value="-fo" /><arg path="${temp:fo.ready.file}" />
+        <arg value="-out" /><arg path="${distribution.dir}/${manual.name}.pdf" />
+    </exec>
+  </target>
+
+  <!-- }}} -->
+
+  <!-- ########################################################## -->
+  <!-- ### {{{ builds HTML documentation (single and chunked) ### -->
+  <!-- ########################################################## -->
+
+  <target name="html.single" depends="withHistory,copyResources, prepareForDocbook"
+          description="Renders the manual to a single HTML file.">
+    <style
+        in      = "${temp:docbook.ready.file}"
+        style   = "styler/elegant-html/customized.single.xsl"
+        out     = "${distribution.dir}/${manual.name}-single.html"
+        processor = "${xslt.processor}"
+        >
+
+        <classpath refid="ant-extensions" />
+
+        <param name="table.borders.with.css" expression="1"/>
+        <param name="html.stylesheet" expression="css/docbook.css" />
+        <param name="html.stylesheet.type" expression="text/css" />         
+        <param name="section.label.includes.component.label" expression="1" />         
+        <param name="section.autolabel" expression="1" />
+        <param name="generate.toc" expression="book toc,title"/>         
+        <param name="make.graphic.viewport" expression="0"/>
+        <param name="admon.graphics" expression="1"/>
+        <param name="admon.graphics.path" expression="gfx/admonitions/" />
+        <param name="admon.graphics.extension"  expression=".gif" />
+        <param name="callout.graphics" expression="1" />
+        <param name="callout.graphics.path" expression="gfx/admonitions/callouts/" />
+        <param name="callout.graphics.extension" expression=".gif" />
+        <param name="admonition.title.properties" expression="text-align: left" />
+    </style>
+  </target>
+
+  
+  <target name="html.chunked" depends="withHistory,copyResources,prepareForDocbook" 
+          description="Renders the manual to a set of HTML files.">
+  
+    <pathconvert property="docbook:tmp:chunked.dir" pathSep=",">
+        <path>
+            <pathelement location="${distribution.dir}" />
+        </path>
+    </pathconvert>
+
+    <style
+        in      = "${temp:docbook.ready.file}"
+        style   = "styler/elegant-html/customized.chunked.xsl"
+        out     = "${distribution.dir}/docbook-ref-file.tmp"
+        processor = "${xslt.processor}"
+        >
+
+        <classpath refid="ant-extensions" />
+
+        <param name="table.borders.with.css" expression="1"/>
+        <param name="html.stylesheet" expression="css/docbook.css" />
+        <param name="html.stylesheet.type" expression="text/css" />         
+        <param name="section.label.includes.component.label" expression="1" />         
+        <param name="section.autolabel" expression="1" />
+        <param name="generate.toc" expression="book toc,title"/>         
+        <param name="make.graphic.viewport" expression="0"/>
+        <param name="callout.graphics" expression="1" />
+        <param name="callout.graphics.path" expression="gfx/admonitions/callouts/" />
+        <param name="callout.graphics.extension" expression=".gif" />
+        <param name="admon.graphics" expression="1"/>
+        <param name="admon.graphics.path" expression="gfx/admonitions/" />
+        <param name="admon.graphics.extension"  expression=".gif" />
+        <param name="admonition.title.properties" expression="text-align: left" />
+        <param name="base.dir" expression="${docbook:tmp:chunked.dir}/" />
+        <param name="root.filename" expression="${manual.name}" />
+    </style>
+  </target>
+
+  <target name="installation-manual" depends="noHistory, prepareForDocbook"
+          description="Renders installation manual for a stand-alone distribution" >
+
+    <style
+        in      = "${build.dir}/installation-manual-separate.xml"
+        style   = "styler/elegant-html/customized.single.xsl"
+        out     = "${distribution.dir}/${installation.manual.name}.html"
+        processor = "${xslt.processor}"
+        >
+
+        <classpath refid="ant-extensions" />
+
+        <param name="table.borders.with.css" expression="1"/>
+        <param name="html.stylesheet" expression="css/docbook.css" />
+        <param name="html.stylesheet.type" expression="text/css" />         
+        <param name="section.label.includes.component.label" expression="1" />         
+        <param name="section.autolabel" expression="1" />
+        <param name="generate.toc" expression="book toc,title"/>         
+        <param name="make.graphic.viewport" expression="0"/>
+        <param name="admon.graphics" expression="1"/>
+        <param name="admon.graphics.path" expression="gfx/admonitions/" />
+        <param name="admon.graphics.extension"  expression=".gif" />
+        <param name="callout.graphics" expression="1" />
+        <param name="callout.graphics.path" expression="gfx/admonitions/callouts/" />
+        <param name="callout.graphics.extension" expression=".gif" />
+        <param name="admonition.title.properties" expression="text-align: left" />
+    </style>
+  </target>
+  
+
+  <target name="html" depends="html.single,html.chunked,installation-manual"
+          description="Renders both single and chunked HTML versions.">
+    <delete >
+        <fileset dir="${build.dir}">
+            <include name="*.tmp" />
+        </fileset>
+    </delete>
+  </target>
+
+  <!-- }}} -->
+  
+  <!-- ########################################################################## -->
+  <!-- ### {{{ XSLT processor recognition. If xsltproc[.exe] is found in path,    -->
+  <!-- ### it will be used for stylesheet processing (much faster than Xalan)     -->
+  <!-- ########################################################################## -->
+  <target name="xsltprocessor">
+    <property environment="env"/>
+    <condition  property="executable.file.extension"
+                value=".exe">
+                <os family="windows"/>
+    </condition>
+    <available  property="tmp:xsltproc.available"
+                file="xsltproc${executable.file.extension}"
+                filepath="${env.Path}"
+    />
+    <echo message="xsltproc available: ${tmp:xsltproc.available}" />
+
+    <condition property="xslt.processor" value="com.dawidweiss.ant.taskdefs.XsltProcLiaison">
+        <and>
+            <isset property="tmp:xsltproc.available" />
+            <not>
+                <isset property="disable.xsltproc" />
+            </not>
+        </and>
+    </condition>
+
+    <condition property="xslt.processor" value="trax">
+        <not>
+        <and>
+                <isset property="tmp:xsltproc.available" />
+                <not>
+                    <isset property="disable.xsltproc" />
+                </not>
+        </and>
+        </not>
+    </condition>
+
+    <antcall target="displayXsltProcessorInfo" />
+  </target>
+
+  <target name="displayXsltProcessorInfo"
+          if="tmp:xsltproc.available"
+          unless="disable.xsltproc">
+    <echo>
+    
+#####################################################
+XSLTProc has been found in your path and will be used
+for processing XSLT transformations. If you experience
+any problems, you can switch to Java's default XSLT 
+processor by defining 'disable.xsltproc' property.
+#####################################################
+
+    </echo>
+  </target>
+  
+  <!-- Expands the any CVS portions that are distributed as ZIP archives -->
+  <target name="check.expand.zips">
+    <condition property="tmp:docbook.available" value="true">
+        <and>
+        <available file="styler/docbook/dtd" type="dir" />
+        <available file="styler/docbook/xsl/fo" type="dir" />
+        <available file="styler/docbook/xsl/html" type="dir" />
+        <uptodate srcfile="styler/docbook/docbook.zip" targetfile="styler/docbook/docbook.zip.tstamp" />
+        </and>
+    </condition>
+    <antcall target="expand.zips" />
+  </target>
+  
+  <target name="expand.zips" unless="tmp:docbook.available">
+    <echo>
+#####################################################
+UNPACKING OR UPGRADING DOCBOOK DISTRIBUTION
+#####################################################
+    </echo>
+    <delete failonerror="false" quiet="true">
+        <fileset dir="styler/docbook">
+        <include name="dtd/**" />
+        <include name="xsl/**" />
+        </fileset>
+    </delete>
+    <unzip src="styler/docbook/docbook.zip" dest="styler/docbook" overwrite="true" />
+    <touch file="styler/docbook/docbook.zip" />
+    <touch file="styler/docbook/docbook.zip.tstamp" />
+  </target>
+  <!-- }}} -->
+
+
+  <!-- ##################################### -->
+  <!-- ### {{{ HELP ON THIS FILE             ### -->
+  <!-- ##################################### -->
+  <target name="help" description="Displays help about the project.">
+    <echo>
+    Project name: ${ant.project.name}
+    (c) Dawid Weiss, Poznań University of Technology.
+
+    Current JDK: ${ant.java.version}
+    Basedir    : ${basedir}
+    -----------------------------------
+    
+    Use ant -projecthelp for tasks' description.
+
+    </echo>
+  </target>
+  <!-- }}} -->
+
+</project>

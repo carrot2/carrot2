@@ -1,0 +1,25 @@
+
+<!-- Define any local entities in this file -->
+
+<!ENTITY  carrot              "Carrot<superscript>2</superscript>">
+<!ENTITY  carrot-logo         "<inlinegraphic fileref='figures/carrot2-logo.png'/>">
+<!ENTITY  carrot-web          "<ulink url='http://www.cs.put.poznan.pl/dweiss/carrot/index.php/index.xml'>http://www.cs.put.poznan.pl/dweiss/carrot/index.php/index.xml</ulink>">
+<!ENTITY  dweiss              "Dawid Weiss">
+<!ENTITY  xml                 "<acronym>XML</acronym>">
+<!ENTITY  xmlschema           "<acronym>XML Schema</acronym>">
+<!ENTITY  cvs                 "<acronym>CVS</acronym>">
+<!ENTITY  url                 "<acronym>URL</acronym>">
+<!ENTITY  http                "<acronym>HTTP</acronym>">
+<!ENTITY  post                "<acronym>POST</acronym>">
+<!ENTITY  get                 "<acronym>GET</acronym>">
+<!ENTITY  utf8                "<acronym>UTF-8</acronym>">
+<!ENTITY  mime                "<acronym>MIME</acronym>">
+<!ENTITY  beanshell           "<ulink url='http://www.beanshell.org'>BeanShell</ulink>">
+<!ENTITY  javascript          "<acronym>JavaScript</acronym>">
+<!ENTITY  log4j               "<ulink url='http://jakarta.apache.org/log4j'>Log4j</ulink>">
+<!ENTITY  tomcat              "<ulink url='http://jakarta.apache.org/tomcat/'>Tomcat</ulink>">
+<!ENTITY  resin               "<ulink url='http://www.caucho.com/'>Resin</ulink>">
+<!ENTITY  jboss               "<ulink url='http://www.jboss.org'>JBoss</ulink>">
+<!ENTITY  java                "<ulink url='http://java.sun.com/'>Java</ulink>">
+<!ENTITY  devmanual           "<ulink url='http://www.cs.put.poznan.pl/dweiss/carrot/index.php/developers/index.xml'><citetitle pubwork='book'>Developers Manual</citetitle></ulink>">
+<!ENTITY  jedit               "<ulink url='http://www.jedit.org'>JEdit</ulink>">

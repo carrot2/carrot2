@@ -1,0 +1,8 @@
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+
+&lt;carrot2-config reloadable=&quot;true&quot; <co id="reloadable"/>&gt;
+    &lt;components contextDir=&quot;/WEB-INF/components&quot; <co id="components"/>/&gt;
+    &lt;processes contextDir=&quot;/WEB-INF/processes&quot; <co id="processes"/>/&gt;
+    &lt;cache config=&quot;/WEB-INF/cache-config.xml&quot; <co id="cache"/>/&gt;
+    &lt;guards contextDir=&quot;/WEB-INF/guards&quot; <co id="guards"/>/&gt;
+&lt;/carrot2-config&gt;

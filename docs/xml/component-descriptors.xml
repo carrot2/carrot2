@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC 
+    "-//Dawid Weiss//DTD DocBook V3.1-Based Extension for XML and graphics inclusion//EN" 
+    "carrot-docbook-extensions.dtd">
+
+<chapter id="sect:component-descriptor-file">
+    <title>Component descriptors</title>
+    
+    <para>
+    A <glossterm>component description file</glossterm> describes the properties
+    of a component. This set of properties is used by the controller to find out
+    about the service <acronym>URL</acronym> of the component, its type, accepted
+    input and output data formats etc.
+    </para>
+
+    <para>
+    Component descriptors files are normally distributed with a certain component.
+    In &carrot; project &cvs;, there is a designated
+    folder for component descriptors (see <xref linkend="sect:repository-structure"/>).
+    During a global build process, component descriptors
+    from that directory automatically copied to the controller component and used at runtime.  
+    </para>
+    
+    <para>
+    The structure of a component descriptor file is defined by an &xml; schema, see
+    example below.
+    </para>
+
+    <example id="listing:component-descriptor-file">
+    <title>Component descriptor schema
+    (<filename>/docs/architecture/componenent-descriptor.xsd</filename>)</title>
+    <programlisting><![CDATA[@insert-file.component-descriptor.schema@]]></programlisting>
+    </example>
+    
+    <para>
+    A typical component descriptor must provide an identification string (assigned
+    by &carrot; &cvs; maintainer), its type and &http; &post; service &url;. Optional
+    elements include an &url; to component's information Web page, configuration
+    Web page and specification of input and output stream formats. An example
+    component descriptor may look as shown in <xref linkend="listing:component-descriptor-example" />.
+    </para>
+
+    <example id="listing:component-descriptor-example">
+    <title>Component descriptor example</title>
+    <programlisting><![CDATA[@insert-file.component-descriptor.example@]]></programlisting>
+    </example>
+
+
+</chapter> 
+ 
+

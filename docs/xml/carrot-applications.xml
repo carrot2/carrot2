@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC 
+    "-//Dawid Weiss//DTD DocBook V3.1-Based Extension for XML and graphics inclusion//EN" 
+    "carrot-docbook-extensions.dtd">
+
+<chapter>
+    <title>Applications of &carrot;</title>
+
+    <include file="clustering-format.xml" />
+    
+</chapter>
+
+

@@ -1,0 +1,699 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC 
+    "-//Dawid Weiss//DTD DocBook V3.1-Based Extension for XML and graphics inclusion//EN" 
+    "carrot-docbook-extensions.dtd">
+
+<chapter id="sect:contributing-to-carrot">
+    <title>Contributing to &carrot;</title>
+
+    <para>
+    &carrot; is an open-source initiative. Everybody can see, use and modify the
+    source code, but we strongly enourage you to join the development and contribute
+    to the project instead of spawning your own.
+    </para>
+    
+    
+    <section id="sect:prerequisities">
+        <title>Prerequisities</title>
+        <!-- {{{ -->
+
+        <section id="sect:getting-the-source-code">
+            <title>Acquiring the source code</title>
+            <!-- {{{ -->
+            <para>
+            Anonymous access to project CVS repository is granted. The code can be checked
+            out using the following CVS arguments:
+            </para>
+            
+            <table frame="topbot" rowsep="0" colsep="0">
+                <title>CVS parameters to access &carrot; repository</title>
+                <tgroup cols="2" align="left">
+                    <colspec colname="cvsparam" />
+                    <colspec colname="value" />
+                    <tbody>
+                        <row><entry><property>Server URL</property></entry><entry><literal>ophelia.cs.put.poznan.pl</literal></entry></row>
+                        <row><entry><property>Port</property></entry><entry><literal>2401</literal> (standard)</entry></row>
+                        <row><entry><property>Authentication</property></entry><entry><literal>pserver</literal></entry></row>
+
+                        <row><entry><property>
+                        Path
+                        </property></entry><entry><filename>
+                        /carrot/cvs
+                        </filename></entry></row>
+
+                        <row><entry><property>
+                        User name
+                        </property></entry><entry><literal>
+                        anonymous
+                        </literal></entry></row>
+
+                        <row><entry><property>
+                        Password
+                        </property></entry><entry><literal>
+                        anonymous
+                        </literal> (or the one assigned by authorities :)</entry></row>
+
+                        <row><entry>
+                        Module to check out
+                        </entry><entry><literal>
+                        carrot2
+                        </literal></entry></row>
+                        
+                        <row><entry>Full <varname>CVSROOT</varname></entry>
+                        <entry><literal>:pserver:<replaceable>User name</replaceable>@ophelia.cs.put.poznan.pl:/carrot/cvs</literal></entry>
+                        </row>
+
+                    </tbody>
+                </tgroup>
+            </table>
+
+            <!-- }}} -->
+        </section>
+
+        <section id="sect:repository-structure">
+            <title>CVS repository structure</title>
+            <!-- {{{ -->
+            <para>
+            The CVS is organized according to the following scheme (which should be
+            preserved when new modules are added):
+            </para>
+            
+            <informalexample id="listing:cvs-structure">
+                <programlisting><![CDATA[@insert-file.cvs-structure@]]></programlisting>
+            </informalexample>
+    
+            <!-- }}} -->
+        </section>
+        
+        <!-- }}} -->
+    </section>
+    
+    <section id="sect:common-management-activities">
+        <title>Common management activities</title>
+        <!-- {{{ -->
+        <section id="sect:adding-new-components">
+            <title>Adding new components</title>
+            <!-- {{{ -->
+            <para>
+            &carrot; components do not have to be placed in the common project structure
+            maintained by &dweiss;, however it is strongly encouraged. Common repository
+            will facilitate build and distribution process. Please refer to <xref linkend="sect:build-files" />
+            for a description of how build files for components should be organized.
+            </para>
+
+            <para>
+            New components should be placed (depending on their type), to <filename>inputs</filename>,
+            <filename>outputs</filename> or <filename>controllers</filename> sections of the CVS structure. If
+            the component is developed in Java, use of shared libraries and template methods
+            is strongly encouraged (refer to section <xref linkend="sect:carrot-shared-lib"/>).
+            The common Java library (<filename>carrot2-common.jar</filename>) is always available in a compiled
+            form in <filename>runtime/shared/lib</filename> and
+            should not be referenced directly from source code folder.
+            </para>
+            
+            <tip>
+            <para>
+            For every type of component there is always an example showing basic
+            steps required to set up a component in the environment and process
+            requests. Please refer to <xref linkend="sect:carrot-shared-lib"/>,
+            where these examples are discussed.
+            </para>
+            </tip>
+            <!-- }}} -->
+        </section>
+        
+        <section id="sect:build-files">
+            <title>Build files</title>
+            <!-- {{{ -->
+            <para>
+            The basic goal is to have a full &carrot; distribution built automatically using 
+            one <application>ANT</application> script at the top level of CVS repository checkout.
+            The CVS also includes a runtime environment, where compiled components are placed
+            upon a successfull build (see <xref linkend="sect:runtimeenvironment" />).
+            In order to achieve this and relieve component designers from the need of updating
+            the main build script when components are added or removed, certain <application>ANT</application>
+            task names have been <emphasis>restricted</emphasis> in the project.
+            </para>
+            
+            <para>
+            In the CVS, one can find a template build script, which should be used to derive custom
+            ones. Also, refer to existing components for examples.
+            </para>
+
+            <simplesect>
+                <title><literal>cleanall</literal> target</title>
+
+                <para>
+                In every component build file, this task should implement the following functionality:
+                </para>
+
+                <itemizedlist>
+                    <listitem><para>
+                    Delete any files and folders created during compilation or build phases.
+                    </para></listitem>
+                    
+                    <listitem><para>
+                    Delete any other files not present in the CVS structure, so that query
+                    update with CVS repository does not yield unknown files in the local checkout.
+                    </para></listitem>
+                    
+                    <listitem><para>
+                    If the component copies any <filename>*.war</filename> files to the runtime
+                    environment, it should delete both the web application archive and the
+                    unpacked <application>Tomcat</application> data. This can usually be achieved
+                    using the following fragment of code:
+                    
+                    <informalexample>
+                        <programlisting>
+&lt;delete failonerror="false" includeemptydirs="true" quiet="true"&gt;
+    &lt;fileset dir="<userinput>${dist.path}</userinput>" <co id="dist.path"/> defaultexcludes="false"&gt;
+        &lt;include name="**/<userinput>${dist.name}</userinput>**" <co id="dist.name" /> /&gt;
+        &lt;include name="**/<userinput>${dist.name}</userinput>/**" /&gt;
+    &lt;/fileset&gt;
+&lt;/delete&gt;
+                        </programlisting>
+                        <calloutlist>
+                            <callout arearefs="dist.path">
+                            <para>
+                                <userinput>${dist.path}</userinput> should be changed to point to <filename>/runtime/webapps</filename>
+                                folder of the distribution. See existing components for an example
+                                on how to set this variable relatively to the component's directory.
+                            </para>
+                            </callout>
+                            <callout arearefs="dist.name">
+                            <para>
+                                <userinput>${dist.name}</userinput> should be set to <filename>WAR</filename>
+                                application filename. For example, if application's name is set to
+                                <filename>MyComponent.war</filename>, the file <filename>MyComponent.war</filename>
+                                should be removed as well as the folder <filename>MyComponent</filename>, which
+                                is created by <application>Tomcat</application> when unzipping the web archive.
+                            </para>
+                            </callout>
+                        </calloutlist>
+                    </informalexample>
+                    
+                    <important>
+                    <para><literal>cleanall</literal> task is invoked automatically on any <filename>build.xml</filename>
+                    file found in subfolders of <filename>components</filename> CVS module. Therefore you must ensure
+                    that it works properly before committing the build file into the shared CVS.
+                    </para>
+                    </important>
+
+                    </para></listitem>
+                </itemizedlist>
+            </simplesect>
+            
+            <simplesect>
+                <title><literal>release</literal> target</title>
+
+                <para>
+                <literal>release</literal> task is reserved for creating a web application archive of
+                a component, or any other form of final deployment a component might have. For Java components,
+                this usually involves creating a <filename>WAR</filename> archive and copying it to
+                the <filename>/runtime/webapps</filename> folder of the local CVS checkout so that
+                the component is automatically deployed upon runtime environment startup.
+                </para>
+                
+                <important>
+                <para>
+                Unlike <literal>cleanall</literal> tasks, <literal>release</literal> targets are not
+                invoked automatically from the common build script. Maintainer of a given component
+                should send a request to include it to the build process to &dweiss;. The component
+                must be tested and working before it is included in the global build process.
+                </para>
+                </important>
+
+            </simplesect>
+            
+            <!-- }}} -->
+        </section>
+
+        <section id="sect:coding-standard">
+            <title>Coding standard</title>
+            <!-- {{{ -->
+            <para>
+            Java developers in &carrot; project should follow SUN's coding guidelines
+            available at <ulink url="http://java.sun.com/docs/codeconv"/>,
+            with exception to curly braces in class/ method/ conditions and loops &ndash; these
+            should be aligned <emphasis>under</emphasis> each other (in the same column of the following
+            line (see <xref linkend="listing:code-layout-example"/>).
+            </para>
+            
+            <para>
+            Please refrain from using tabs in your source code files. Use spaces and set
+            indentation to 4 columns.
+            </para>
+
+            <example id="listing:code-layout-example">
+                <title>
+                A typical source code in the project. Note curly braces are <emphasis>under</emphasis> each other.
+                </title>
+                <programlisting><![CDATA[@insert-file.code-layout-example@]]></programlisting>
+            </example>
+            <!-- }}} -->
+        </section>        
+       
+        <section id="sect:logging-framework">
+            <title>Logging framework</title>
+            <!-- {{{ -->
+            <para>
+            It is suggested that &log4j; logging framework is used across
+            all components to ensure uniform log format. It is also supported by
+            <link linkend="sect:log4j-init-support">the common
+            &carrot; Java library</link> and has very convenient configuration facilities, as
+            described in <xref linkend="sect:defaultlog4jinit"/>.
+            
+            Developers may choose other logging
+            utilities according to their needs, but should avoid using console output
+            (<methodname>System.out</methodname> and <methodname>System.err</methodname> objects).
+            </para>
+
+            <important>
+            <para>
+            In case &log4j; is used, make sure your code,
+            or configuration properties <emphasis>do not override or alter</emphasis>
+            the root logger object.
+            </para>
+            <para>
+            &log4j; initialization is quite simple, but 
+            to ensure similar approach among
+            all components, it is strongly enouraged to use the abstract initialization
+            methods defined in the shared Java library described in detail in
+            <xref linkend="sect:log4j-init-support" />.
+            </para>
+            </important>
+            
+            <para>
+            In-application loggers should be associated with classes they
+            are used in to facilitate debugging, refer to this code example:
+            </para>
+            
+            <informalexample>
+            <programlisting><![CDATA[
+package com.mycompany;
+public class MyClass
+{
+    private final static Logger log = Logger.getLogger( MyClass.class );
+    
+    // rest of class definition follows.
+}
+            ]]></programlisting>
+            </informalexample>
+
+            <para>
+            In this example, the logger will have the name of a fully qualified Java class
+            &ndash; <classname>com.mycompany.MyClass</classname>.
+            </para>
+            <para>
+            The use of a logger object in <productname>Log4j</productname> is quite simple. There are
+            several levels of severity defined for log messages:
+            <constant>FATAL</constant>,
+            <constant>ERROR</constant>,
+            <constant>WARN</constant>,
+            <constant>INFO</constant>,
+            <constant>DEBUG</constant>. A simple advice on which one to choose is to use <constant>FATAL</constant>
+            level to indicate application must be exit, <constant>ERROR</constant> to signal a recoverable
+            error, that the user (or administrator) should be notified about, <constant>WARN</constant> to signal
+            a less important error, which can be overlooked, <constant>INFO</constant> and <constant>DEBUG</constant>
+            levels for application-debugging only. For example:
+            </para>
+            
+            <informalexample>
+            <programlisting><![CDATA[
+public byte [] readNBytesFromInputStream( InputStream stream, int n )
+    throws IOException
+{
+    try
+    {
+        if (n > 1000 || n < 0)
+        {
+            log.error("Illegal parameter passed, n=" + n);
+            throw new RuntimeException("Illegal parameter passed, n=" + n);
+        }
+        return stream.read( new byte[ n ] );
+    }
+    catch (IOException e)
+    {
+        log.warn("IO Error when reading stream.", e);
+    }
+}
+            ]]></programlisting>
+            </informalexample>
+            <!-- }}} -->
+        </section>
+        
+        <!-- }}} -->
+    </section>
+    
+    
+    <section id="sect:carrot-shared-lib">
+        <title>&carrot; shared Java library</title>
+        <!-- {{{ -->
+        <para>
+        Certain elements of &carrot; framework are a little tricky. For instance,
+        handling &post; requests in Java is troublesome, since servlet specification does
+        not include automatic methods for retrieving input arguments as streams. This,
+        and other useful utilities have been compiled into a reusable library
+        of utility classes. A JAR file containing this library should always be available in 
+        <filename>runtime/shared/lib/carrot2-common.jar</filename>.
+        </para>
+
+        <para>
+        The library is composed of several components (java packages), which are briefly
+        described below (please consult JavaDocs for the most recent information).
+        </para>
+
+
+        <section id="sect:input-component-type-utilities">
+            <title>Input component type utilities</title>
+            <!-- {{{ -->
+            <para>
+            Package <classname>com.dawidweiss.carrot.input.*</classname>
+            contains a generic servlet, which
+            can be used to set up a web service and process &carrot; input requests. In
+            order to do this, one must do one of the following:
+            
+            <itemizedlist>
+            
+                <listitem><para>
+                Subclass <classname>InputRequestProcessor</classname> and override
+                <methodname>processQuery</methodname> method. This method takes as an argument the
+                user query, number of expected results, output <classname>Writer</classname>, where
+                the result should be written to, and a <classname>HttpServletRequest</classname>
+                object, which was used to activate processing.
+                </para></listitem>
+                
+                <listitem><para>
+                In web application descriptor file <filename>web.xml</filename>, add servlet
+                mapping to the generic <classname>InputRequestProcessorServlet</classname>
+                class and provide it with the name of your subclassed
+                <classname>InputRequestProcessor</classname> (see <xref linkend="example:web-config-file-for-input-component" />).
+        
+                <example id="example:web-config-file-for-input-component">
+                <title>A fragment of <filename>web.xml</filename> web application
+                descriptor file, specifying processing class for an input component
+                template servlet</title>
+                <programlisting><![CDATA[
+<servlet>
+    <servlet-name>MyInputTypeComponent</servlet-name>
+    <servlet-class>
+        com.dawidweiss.carrot.input.InputRequestProcessorServlet
+    </servlet-class>
+    <init-param>
+      <!-- This is where you specify your implementation class for the
+           component -->
+      <param-name>inputRequestProcessor</param-name>
+      <param-value>com.mycompany.carrot.MyInputProcessor</param-value>
+    </init-param>
+</servlet>
+             ]]></programlisting>
+                </example>
+
+                </para></listitem>
+            
+            </itemizedlist>            
+            </para>
+
+            <para>
+            An example of this approach is presented in snippet generator component,
+            which can be found in <filename>components/inputs/snippet-generator</filename>
+            folder of the distribution.
+            </para>
+
+            <!-- }}} -->
+        </section>
+        
+        <section id="sect:filter-and-output-component-type-utilities">
+            <title>Filter and output component type utilities</title>
+            <!-- {{{ -->
+            <para>            
+            Package <classname>com.dawidweiss.carrot.filter.*</classname>
+            contains a generic servlet, which
+            can be used to set up a web service and process &carrot; requests.
+            Because filter and output components differ only in the format of returned data,
+            the template classes may be reused for both types without much difference.
+            </para>
+
+            <para>
+            In order to use the shared library, one should follow these steps:
+            <itemizedlist>
+                <listitem><para>
+                    Subclass <classname>FilterRequestProcessor</classname> and override
+                    <methodname>processFilterRequest</methodname> method. This method takes as an argument the
+                    data stream to be processed, servlet HTTP request and response which
+                    caused the processing and a mapping of parameters, which were sent in
+                    the POST request <emphasis>before</emphasis>
+                    the data stream occurred (refer to <xref linkend="sect:filter-components" />
+                    for details).
+                </para></listitem>
+                <listitem><para>
+                    In web application descriptor file (<classname>web.xml</classname>), add servlet
+                    mapping to the generic <classname>FilterRequestProcessorServlet</classname>
+                    class and provide it with the name of your subclassed
+                    <classname>FilterRequestProcessor</classname>
+                    (see <xref linkend="example:web-config-file-for-filter-component" />).
+            
+                    <example id="example:web-config-file-for-filter-component">
+                    <title>A fragment of <filename>web.xml</filename> web application
+                    descriptor file, specifying processing class for an output or filter 
+                    type template servlet</title>
+                    <programlisting><![CDATA[
+<servlet>
+  <servlet-name>TextOnly</servlet-name>
+  <servlet-class>
+    com.dawidweiss.carrot.filter.FilterRequestProcessorServlet
+  </servlet-class>
+  <init-param>
+    <!-- This is where you should specify your component
+         processing class -->
+    <param-name>filterRequestProcessor</param-name>
+    <param-value>
+        com.dawidweiss.carrot.filter.textonly.TextOnlyFilter
+    </param-value>
+  </init-param>
+  <load-on-startup>1</load-on-startup>
+</servlet>
+                    ]]></programlisting>
+                    </example>
+                </para></listitem>
+            </itemizedlist>
+            </para>
+            
+            <para>
+            An example of this approach is presented in request filtering component,
+            which can be found in <filename>components/filters/text-only</filename>
+            folder of the distribution.
+            </para>
+
+            <!-- }}} -->
+        </section>
+
+        <section id="sect:log4j-init-support">
+            <title>&log4j; initialization support</title>
+            <!-- {{{ -->
+            <para>        
+            In order to simplify &log4j; initialization, a shared utility class
+            <classname>Log4jStarter</classname>
+            is provided. This class resides in <classname>com.dawidweiss.carrot.util</classname>
+            package of the library and cannot be directly instantiated - use factory method for this
+            purpose:
+            <screen>Log4jStarter starter = com.dawidweiss.carrot.util.Log4jStarter.getLog4jStarter()</screen>
+            </para>
+            
+            <para>
+            Several methods are provided to facilitate log4j initialization:
+            <itemizedlist>
+                <listitem>
+                    <para>
+                        <returnvalue>void</returnvalue>
+                        <function>initializeLog4j</function>()
+                    </para>
+                    <para>
+                    This is the simplest method, which does the default initialization
+                    (see <xref linkend="sect:defaultlog4jinit" />).
+                    </para>
+                </listitem>
+                
+                <listitem>
+                    <para>
+                        <returnvalue>void</returnvalue>
+                        <function>initializeLog4j</function>(
+                        <parameter>Properties p</parameter>)
+                    </para>
+                    <para>
+                    This allows for full customization of log4j configuration. Property
+                    file must contain valid log4j properties. Make sure root logger is not
+                    overriden by any of them.
+                    </para>
+                </listitem>
+                
+                <listitem>
+                    <para>
+                        <returnvalue>void</returnvalue>
+                        <function>initializeLog4j</function>(
+                        <parameter>ServletConfig config</parameter>)
+                    </para>
+                    <para>
+                    This is the recommended method for use in web applications (servlets).
+                    </para>
+                    <para>
+                    A valid <classname>ServletConfig</classname> object should be passed
+                    to this method, where the
+                    web application descriptor file <filename>web.xml</filename>) defines an input
+                    parameter for this servlet named <filename>log4j.properties</filename>,
+                    whose value
+                    is translated to a context-relative path and defines a file where properties
+                    should be read from. For example, the following fragment of <filename>web.xml</filename>
+                    file
+                    defines that &log4j; properties should
+                    be read from folder: <filename>/WEB-INF/myapplication-log4j.properties</filename>,
+                    relative to the unpacked web application base.
+                    </para>
+                    
+                    <informalexample>
+                    <programlisting><![CDATA[
+<servlet-name>MyFilter</servlet-name>
+<servlet-class>
+    com.dawidweiss.carrot.filter.myfilterpackage.MyFilter
+</servlet-class>
+<init-param>
+  <param-name>log4j.properties</param-name>
+  <param-value>/WEB-INF/myapplication-log4j.properties</param-value>
+</init-param>
+                    ]]></programlisting>
+                    </informalexample>
+                    
+                    <para>
+                    All properties starting with a token <token>TRANSLATE_CONTEXT::</token>
+                    will be replaced with real filesystem application path. For example:
+                    
+                    <screen>log4j.appender.FILE.File=TRANSLATE_CONTEXT::/WEB-INF/carrot2.log</screen>
+            
+                    could be rewritten to:        
+                    
+                    <screen>log4j.appender.FILE.File=f:/tomcat/webapps/mywebapp/WEB-INF/carrot2.log</screen>
+                
+                    If the initialization parameter <filename>log4j.properties</filename>
+                    is not defined, default initialization of
+                    &log4j; is performed, which <emphasis>does not display any logging messages</emphasis>.
+                    If the file cannot be read or does not exist, default initialization is performed as well.
+                    </para>
+                </listitem>
+            </itemizedlist>
+            
+            </para>
+            
+            <note>
+                <para>
+                Template servlets from the common &carrot; library automatically detect the 
+                presence of <filename>log4j.properties</filename> parameter and initialize &log4j;
+                accordingly.
+                </para>
+            </note>
+
+            <!-- }}} -->
+        </section>
+        
+        <section id="sect:command-line-tools">
+            <title>Command-line tools</title>
+            <!-- {{{ -->
+            <para>
+            The common library contains a set of useful command-line programs, which can be
+            used for debugging or testing purposes. In order to use these programs, make
+            sure you have the shared JAR library in <envar>CLASSPATH</envar>.
+            This can be for instance
+            achieved by adding: <option>-Djava.ext.dirs=runtime/shared/lib</option> to the
+            invokation line of Java (assuming we are in the top directory of the
+            distribution). A handful or shell scripts to the most frequently used commands is
+            also provided in <filename>bin</filename> directory of the distribution.
+            </para>
+            
+            <itemizedlist>
+                <listitem><para>
+                <classname>QueryInputComponent</classname>
+                utility can be used to send a search request to a certain input
+                component type. For example, typing the command below (assuming the service is running
+                at the given URL, should yield 50 snippets from a random snippet
+                generator for random seed <parameter>anyquery</parameter>.
+            
+                <informalexample>
+                <screen>
+java -Djava.ext.dirs=runtime/shared/lib
+   com.dawidweiss.carrot.tools.QueryInputComponent
+      http://localhost:8080/snippet-generator/service/random 50 anyquery
+                </screen>
+                </informalexample>
+            
+                </para></listitem>
+                
+                <listitem><para>
+                    <classname>QueryFilterComponent</classname> utility can be used to send
+                    search result data stream to a certain filter or output component.
+                    </para>
+                    <para>
+                    The program expects an input file, which should conform filter/ output
+                    component's contract (for instance - it should represent search results
+                    data). The result returned by the component is written to standard
+                    output.
+                    <informalexample>
+                    <screen>
+java -Djava.ext.dirs=runtime/shared/lib
+   com.dawidweiss.carrot.tools.QueryFilterComponent 
+      http://localhost:8080/text-only/service
+                    </screen>
+                    </informalexample>
+                </para></listitem>    
+            </itemizedlist>
+            <para>
+            Command line tools can be combined to form processing chains using standard
+            shell pipelines.
+            </para>
+            <!-- }}} -->
+        </section>
+
+        <!-- }}} -->
+    </section>
+    
+    
+    <section id="sect:runtimeenvironment">
+        <title>Development runtime environment</title>
+        <!-- {{{ -->
+        <para>
+        &carrot;'s <acronym>CVS</acronym> trunk includes a default runtime environment,
+        where components are compiled when they are built using the main
+        <acronym>ANT</acronym> build file (see <xref linkend="sect:build-files"/>).
+        This runtime environment is always a Web server supporting
+        Servlet/JSP specifications (at the moment it is Tomcat 4.1.12, see
+        <filename>/runtime/server.info</filename> file for details).
+        </para>
+        <para>
+        The default runtime environment is preconfigured for &carrot; &ndash; it
+        contains a controller component, security administration page and a copy
+        of this documentation. It also has several utility features, like a single-point
+        configuration of <acronym>log4j</acronym>. Of course, developers
+        are not restricted to the default runtime environment, in particular, it only
+        supports Java-based programs, which may be perceived as a limitation for
+        components written in other languages.
+        </para>
+        
+        <section id="sect:defaultlog4jinit">
+            <title>Default <acronym>Log4j</acronym> initialization</title>
+            <!-- {{{ -->
+            <para>
+            The <link linkend="sect:log4j-init-support"><classname>Log4jStarter</classname> class</link>
+            allows components to safely initialize <acronym>log4j</acronym> environment. Upon the
+            first instantiation using the factory method <methodname>getLog4jStarter</methodname>,
+            a default configuration is read from runtime environment's configuration directory:
+            <filename>/<replaceable>runtime environment base</replaceable>/conf/log4j.properties</filename>.
+            This configuration file may be used to declare appenders, which can be later reused by 
+            other components.
+            </para>
+            <!-- }}} -->
+        </section>
+
+        <!-- }}} -->
+    </section>
+
+</chapter> 
+
+

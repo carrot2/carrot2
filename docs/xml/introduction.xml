@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC 
+    "-//Dawid Weiss//DTD DocBook V3.1-Based Extension for XML and graphics inclusion//EN" 
+    "carrot-docbook-extensions.dtd">
+  
+<chapter id="chapter:introduction">
+    <title>Introduction</title>
+    
+    <section>
+        <title>What is &carrot;?</title>
+        
+        <para>
+        &carrot; is a research framework for experimenting with automated querying of
+        various data sources (such as search engines), processing search results and
+        their visualization.
+        </para>
+
+        <para>
+        Under the term &quot;research&quot;, we understand that the architecture
+        of the system is oriented mostly toward flexibility, sometimes at
+        a price of performance. Mechanisms such as
+        data exchange via XML language, distributed,
+        dynamically accessible components, the use of Java as primary language
+        of implementation &ndash; they all make the system very easy to tailor
+        to one's needs.
+        </para>
+        
+        <para>
+        &carrot; was primarily built with search results clustering in mind, but it can
+        be easily configured to do other, interesting things. 
+        </para>
+    
+    </section>
+
+</chapter>

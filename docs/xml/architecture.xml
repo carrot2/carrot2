@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC 
+    "-//Dawid Weiss//DTD DocBook V3.1-Based Extension for XML and graphics inclusion//EN" 
+    "carrot-docbook-extensions.dtd">
+  
+<chapter id="chapter:architecture">
+    <title>Architecture</title>
+    
+    <section id="sect:components-and-data-flow">
+        <title>Components and data flow</title>
+
+        <!-- {{{ -->
+        <para>
+        &carrot;'s architecture is based on certain definitions of <glossterm>data
+        exchange formats</glossterm> and interaction among <glossterm>components</glossterm>.
+        </para>
+
+        <pasteFigure src="components-dataflow.png" width="4in">
+        Components and data flow in &carrot;
+        </pasteFigure>
+
+        <para>
+        There are four fundamental component types in the framework: input component,
+        output component, filter component and controller component. A typical flow of
+        information among them is presented in 
+        <xref linkend="figure:components-dataflow" />. 
+        Central to this concept is the controller component, which transforms
+        input stimuli (like user's search query) into a format understandable by
+        the input components and then mediates in data exchange among other components,
+        eventually returning the final reasult back to the outside world
+        using the output component (some sort of visualization of matching documents
+        in the above example).
+        </para>
+
+        <para>
+        An established <glossterm>process</glossterm> of data flow from the search
+        request to the final output is one of &carrot;'s strongest features. 
+        Designers have the freedom to make up their own intermediate data
+        formats (passed between components), but they can still use the controller
+        component and any other part of the system as long as it matches
+        the input and output data format of a particular component.
+        </para>
+
+        <para>
+        One could notice that this results in a seemingly excessive communication between the controller
+        and other components in a processing chain. This could be replaced by a &quot;waterfal&quot;
+        scheme, where every component's output would be directly passed to the following
+        component's input. Such situation is of course possible, but it would require
+        that information about the entire process is embedded in the request at the beginning
+        and that components share the functionality of the controller (i.e. send data processing
+        requests to other components).  
+        We decided to make component designers' life easier and went for an easier &quot;centralized&quot;
+        model, where all information is mediated by the controller component. &http; protocol
+        used for data exchange also supports our choice, as it is inherently bound to 
+        query-response paradigm.
+        </para>
+        
+        <note>
+            <para>
+            In the future, waterfall data exchange specification as described above
+            may be included in &carrot; &ndash; controller component will automatically
+            detect the components capable of using it. 
+            </para>
+        </note>
+        <!-- }}} -->
+    </section>
+
+    <section id="sect:communication-method">
+        <title>Communication method</title>
+        <!-- {{{ -->       
+        <para>
+        In <xref linkend="sect:components-and-data-flow"/>, we described <emphasis>where</emphasis>
+        data and processing takes place in the framework. This section explains
+        <emphasis>how</emphasis> it is sent and received by individual components.
+        </para>
+        
+        <important>
+        <para>
+        HTTP protocol is the only way of communication among
+        components in &carrot; architecture. The following points must be respected:
+
+            <itemizedlist>
+                <listitem>
+                <para>
+                    The data stream (query for input components,
+                    result stream for filters and outputs), should be sent
+                    embedded in a &http; &post; request, with the query parameter
+                    name equal to <parameter>carrot-request</parameter> or 
+                    <parameter>carrot-xchange-data</parameter>, depending on
+                    the component type (see further sections).
+                </para>
+                </listitem>
+                
+                <listitem>
+                <para>
+                &http; &get; request is reserved for future extensions of the framework.
+                </para>
+                </listitem>
+                
+                <listitem>
+                <para>
+                &xml; files, if present, must be encoded using &utf8; character
+                encoding. &http; request/ response content type should also be
+                set to &utf8;.
+                </para>
+                </listitem>
+                
+                <listitem>
+                <para>
+                Normal &http; <parameter>Content-encoding</parameter> headers
+                should be respected. In particular, <acronym>GZIP</acronym>
+                compression, if supported by the caller, should be utilized to
+                save network bandwidth.
+                </para>
+                </listitem>
+            </itemizedlist>
+        </para>
+        </important>
+        
+        <para>
+        By implicit assumption, all components must thus define unique Uniform
+        Resource Locators (&url;s), where their services will be accessible to
+        other components.
+        </para>
+
+        <para>
+        There is no special handling of erraneous execution of any of the
+        chained components. In general, an empty, or corrupted response
+        stream indicates such situation. Any remaining processing should be
+        abandoned - the controller component is in charge of signalling the
+        problem to the outside environment.
+        </para>
+        <!-- }}} -->
+    </section>    
+
+    <section id="sect:input-component">
+        <title>Input component type</title>
+        <!-- {{{ -->
+        <para>
+        The input component is in charge of accepting a <glossterm>query
+        request</glossterm> from the controller. Components of this type
+        must provide information about the accepted input request formats
+        in their <link linkend="sect:component-descriptor-file">component
+        descriptors</link>.
+        Please note, that since the controller must be able to assemble
+        a query request for the input component, controllers may refuse to 
+        load components they do not know how to handle.
+        </para>
+
+        <para>
+        The format of results returned by the input component is
+        also specified in its descriptor,
+        however it should be accepted by some filter and output
+        components in order to be processed and returned to the outside
+        world.
+        </para>
+        
+        <para>
+        An example specification of input component's query request
+        is given in <xref linkend="sect:mime:x-carrot-clustering-input-query"/>, which applies to the
+        <link linkend="sect:clustering-format">search result processing</link> application
+        of &carrot;.
+        </para>
+        
+        <!-- }}} -->
+    </section>
+    
+    
+    <section id="sect:filter-components">
+        <title>Filter components</title>
+        <!-- {{{ -->
+        <para>
+        Filter components are used to transform one result data set into another. As
+        mentioned in section <xref linkend="sect:components-and-data-flow"/>, the exact format
+        of input and output data for a filter component is not specified by the
+        framework, but in a component descriptor file that component.
+        However, the data stream itself must be sent as a parameter of &http; &post; request named
+        <parameter>carrot-xchange-data</parameter>. This implies that binary data
+        streams must be encoded following &http; &post; specifications. 
+        </para>
+        
+        <para>
+        The same POST request, which carries &carrot; data can also contain other
+        parameters, which can be used to customize processing done by the component.
+        These extensions, however, are specific to a given component and therefore not
+        subject to this specification. An example of a &http; &post; request specifying
+        optional parameter <parameter>myparameter</parameter> is shown in
+        <xref linkend="listing:post-request"/>.    
+        </para>
+        
+        <example id="listing:post-request">
+            <title>
+            A fragment of a &post; request to a service running at &url;
+            <parameter>http://localhost:8080/myfilter</parameter>, with additional parameter
+            <parameter>myparameter</parameter> set to <literal>myvalue</literal>
+            </title>
+            <programlisting><![CDATA[@insert-file.head-of-post-request@]]></programlisting>
+        </example>
+        
+        <!-- }}} -->
+    </section>
+    
+    <section id="sect:output-components">
+        <title>Output component type</title>
+        <!-- {{{ -->
+        <para>
+        An output component type is responsible for converting the final data stream into
+        some content, which can be utilized by the controller component
+        and returned to the outside environment. Exactly what such content
+        should be is a matter of the specification of the controller component (its
+        component descriptor file). Controllers may refuse output components which
+        do not return data streams in the format controller accepts.
+        </para>
+
+        <important>
+        <para>
+        Output component should declare an appropriate <parameter>Content-type</parameter>
+        HTTP header for the response stream, according to the returned data stream's format. 
+        </para>
+        </important>
+        <!-- }}} -->
+    </section>
+
+    <section id="sect:controller-components">
+        <title>Controller component type</title>
+        <!-- {{{ -->
+        <para>
+        A controller component is the heart of &carrot; framework. It drives the
+        process of processing a query by redirecting the data set from the input, through a
+        set of filters and finally to the output component. A controller is also in
+        charge of interacting with the &quot;outside world&quot; environment &ndash; this can be
+        anything from a set of shell scripts to a fully-fledged web based meta search engine.
+        </para>
+
+        <para>
+        Controllers should be organized so that they expose information about
+        <glossterm>processes</glossterm> of query processing. Such process encompasses a chain of
+        components, starting with an input, ending at some output and having filters in
+        between. Controllers should enforce correctness of data exchange between components by
+        analyzing their respective descriptor files and finding matching &mime; formats.
+        </para>
+        <!-- }}} -->
+    </section>
+    
+</chapter>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE revhistory PUBLIC 
+    "-//Dawid Weiss//DTD DocBook V3.1-Based Extension for XML and graphics inclusion//EN" 
+    "carrot-docbook-extensions.dtd">
+
+<revhistory>
+    <revision>
+        <revnumber>0.17</revnumber>
+        <date>19 Sep 2003</date>
+        <authorinitials>dw</authorinitials>
+        <revdescription>
+            <para>
+            Completely restructured documentation CVS folder. Fonts table for XEP now correct,
+            DTDs referenced as public entities, XSLTPROC support enhanced with catalogs, better
+            separation of build directory and distribution directory.
+            </para>
+        </revdescription>
+    </revision>
+
+    <revision>
+        <revnumber>0.16</revnumber>
+        <date>29 Apr 2003</date>
+        <authorinitials>dw</authorinitials>
+        <revdescription>
+            <para>
+            Whole new chapter about installing and configuring the binary release of &carrot;.
+            </para>
+        </revdescription>
+    </revision>
+
+
+    <revision>
+        <revnumber>0.15</revnumber>
+        <date>2 Jan 2003</date>
+        <authorinitials>dw</authorinitials>
+        <revdescription>
+            <para>
+            A lot of restructuring and rewriting of ugly parts. 
+            Added a big <link linkend="chapter:mime-types">section about &mime; types</link> used in 
+            search results clustering, added schema definitions and examples.
+            </para>
+        </revdescription>
+    </revision>
+
+    <revision>
+        <revnumber>0.14</revnumber>
+        <date>23 Jan 2003</date>
+        <authorinitials>dw</authorinitials>
+        <revdescription>
+            <para>
+            Dropped support for full document descriptions within <sgmltag>&lt;group&gt;</sgmltag>
+            tag (see <xref linkend="sect:clustered-search-results-format" />).
+            Added linguistic information (<sgmltag>&lt;l/&gt;</sgmltag> tag) to SRC format and documentation
+            (see <xref linkend="sect:linguistic-information" />). 
+            </para>
+        </revdescription>
+    </revision>
+
+    <revision>
+        <revnumber>0.13</revnumber>
+        <date>04 Jan 2003</date>
+        <authorinitials>dw</authorinitials>
+        <revdescription><para>
+        A bug in ANT's custom filtering class caused some problems in manual rendering.
+        </para></revdescription>
+    </revision>
+
+    <revision>
+        <revnumber>0.12</revnumber>
+        <date>10 Dec 2002</date>
+        <authorinitials>dw</authorinitials>
+        <revdescription><para>
+        A section <link linkend="sect:build-files">about build files</link> has been added.
+        </para></revdescription>
+    </revision>
+
+    <revision>
+        <revnumber>0.11</revnumber>
+        <date>07 Dec 2002</date>
+        <authorinitials>dw</authorinitials>
+        <revdescription><para>
+        Initial support for PDF output (customized XSL:FO and XEP used)
+        </para></revdescription>
+    </revision>
+
+    <revision>
+        <revnumber>0.1</revnumber>
+        <date>02 Dec 2002</date>
+        <authorinitials>dw</authorinitials>
+        <revdescription><para>
+        First version of the manual after migrating from LaTeX to Docbook.
+        </para></revdescription>
+    </revision>
+
+</revhistory>
+

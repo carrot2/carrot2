@@ -1,0 +1,529 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section PUBLIC 
+    "-//Dawid Weiss//DTD DocBook V3.1-Based Extension for XML and graphics inclusion//EN" 
+    "carrot-docbook-extensions.dtd">
+
+<section id="sect:installation">
+    <title>Binary distribution of &carrot;</title>
+
+    <para>
+    &carrot;'s modular architecture is very flexible, but also brings several difficult
+    issues concerning its installation. Every component can be installed in a different
+    web context, some of them even on physically different machines. Components must
+    be configured and processes of using those components defined. While most of these
+    tasks are trivial, they still require certain amount of work.
+    </para>
+
+    <para>
+    It is generally recommended for experienced users 
+    that the runtime environment from &cvs; is used. It is a preconfigured Tomcat
+    application and &carrot; build scripts prepare all configuration
+    files for it automatically. For this, however, the entire source code
+    distribution is needed along with several other tools, such as JDK, ANT, XEP etc.
+    </para>
+    
+    <section id="sect:bin-contents">
+        <title>Contents of the binary distribution</title>
+        <!-- {{{ -->
+        <para>
+        The binary distribution should contain the following items:
+        </para>
+        <itemizedlist>
+            <listitem><para>Several precompiled components &ndash; inputs, filters and outputs</para></listitem>
+            <listitem><para>A web-based controller component, the heart of &carrot;</para></listitem>
+            <listitem>
+                <para>Templates for component descriptors and process definitions.</para>
+                <para>These templates must be modified and special tokens must be replaced
+                      with URLs to where components are going to be installed and available.
+                      (this cannot be predicted at the moment of assembling
+                      the distribution and cannot be done automatically)</para> 
+            </listitem>
+            <listitem>
+                <para>legal information concerning &carrot; and libraries with which it is distributed</para> 
+            </listitem>
+            <listitem>
+                <para>A set of libraries <emphasis>required</emphasis> for most components. These libraries
+                should be installed in such a location of a web server, where they can be reused
+                by as many components as possible (this prevents quick resource exhaustion). In case
+                of Tomcat, such location is usually found in <filename>/shared/lib</filename>. 
+                </para>
+            </listitem>
+        </itemizedlist>
+        <!-- }}} -->
+    </section>
+    
+    <section id="sect:inst-requirements">
+        <title>Installation requirements</title>
+        <!-- {{{ -->
+        <para>
+        The components contained in the binary distribution are written in Java and packaged as
+        Web Application Archives (WAR files). A web server capable of deploying WAR archives is therefore
+        required. &tomcat; is the recommended web server, although other possibilities exist like
+        &jboss; or &resin;. This manual details the configuration of &tomcat; web server for use with &carrot;. 
+        Installation on other containers should be similar.
+        </para>
+        <para>
+        &java; virtual machine in at least version 1.3 is required, although version 1.4+ is recommended.
+        The application should work on all vendors' JVMs, although problems have been reported in installation
+        on IBM's JDK.
+        </para>
+        <!-- }}} -->
+    </section>
+
+    <section id="sect:choosing-components">
+        <title>Choosing components</title>
+        <!-- {{{ -->
+        <para>
+        The first step is to choose components, which your &carrot; installation will use. Several components
+        are already provided with the distribution, other may be available from independent vendors. More
+        information about the available components and their locations can be found at 
+        the official project website: &carrot-web;.
+        </para>
+        <para>
+        It is important to think of the required components in terms of <emphasis>processes</emphasis> in which
+        they will be linked. For example, in order to build an intranet search engine one should
+        install some input component (some wrappers for existing search engines are provided in the distribution),
+        a stemming filter improving the quality of clustering interface,
+        LSI clustering filter for organizing search results into groups and an output component for rendering
+        the result, such as xslt-renderer with an appropriate stylesheet. The result can be seen in 
+        <xref linkend="figure:screenshot-lsi" />. 
+        </para>
+        <pasteFigure src="screenshot-lsi.png" width="5in">
+        LSI clustering filter combined with other components
+        </pasteFigure>
+        <para>
+        A good help in creating custom processes is taking a look at the templates saved directly from the &carrot;
+        &cvs;. <filename>descriptors-templates</filename> folder in the distribution provides several processes
+        which can serve as a basis for customization (please refer to <xref linkend="sect:modifying-descriptors"/>
+        for more information about descriptor files).
+        </para>
+        <!-- }}} -->
+    </section>
+    
+    
+    <section id="sect:controller-configuration">
+        <title>Controller component configuration</title>
+        <!-- {{{ -->
+        <para>
+        Controller component is the glue combining other &carrot; components. The current controller
+        component is a web application that mimics a search engine (although other controllers may not
+        look like that at all :).
+        </para>
+        
+        <para>
+        The configuration files for the controller component can be found in <filename>controller/WEB-INF/</filename>
+        folder of the distribution.
+        </para>
+        
+        <section id="sect:cache">
+            <!-- {{{ -->
+            <para>
+                <filename>cache-config.xml</filename> is a configuration file for the internal cache of the
+                controller component. Caching makes sense if input components are either slow in responding to
+                queries, or there are restrictions put on their use (the case with most search engines on the Web).
+                Input component's reponse is cached for each unique combination of a query, requested number of results
+                and optional parameters passed to the input component by the controller (or the process script).
+                When such unique combination of attributes is requested again, the input component's response
+                is simulated by the stream taken from the cache.
+            </para>
+            <para>
+                The cache subsystem is implemented as a cascade of containers. The top-level caches should have a fast
+                access (like memory-based caches), caches down the cascading chain can be slower (disk access or database
+                storage). When a query is first added to cache, it is added to the top-container and descends down the
+                chain if it is not reused, finally it is removed from the cache if the maximum capacity of
+                the last container has been reached.
+            </para>
+            <para>
+                Currently memory, disk and read-only caches are implemented:
+                <itemizedlist>
+                    <listitem>
+                        <para>
+                        <classname>MemoryCachedQueriesContainer</classname>
+                        implements a memory cache. This can be used for fast access to recent queries, although
+                        it should be kept in mind that the operating system may swap the overallocated memory
+                        thus slowing it down significantly &ndash; in such case it is more reasonable
+                        to add a disk cache instead.
+                        </para>
+                        <para>
+                        An example of a memory container entry in cache configuration file is given below:
+                        <informalexample id="listing:mem-cache-example">
+                            <programlisting><![CDATA[@insert-file.mem-cache@]]></programlisting>
+                        </informalexample>
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                        <classname>ZIPCachedQueriesContainer</classname>
+                        implements a disk cache. Compressed data is saved to a filesystem folder. The location
+                        of the folder is given either as absolute path (<sgmltag>absolute-dir</sgmltag> element),
+                        web application's context-relative path (<sgmltag>context-relative-dir</sgmltag> element)
+                        or system temporary directory (<sgmltag>use-system-temp</sgmltag> set to true).
+                        <emphasis>The folder must be designed for use by the cache only</emphasis> &ndash; it
+                        must not contain any other files. 
+                        </para>
+                        <para>
+                        An example of a disk container entry in cache configuration file is given below:
+                        <informalexample id="listing:disk-cache-example">
+                            <programlisting><![CDATA[@insert-file.disk-cache@]]></programlisting>
+                        </informalexample>
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                        <classname>ZIPCachedQueriesContainer</classname> can also be used in a read-only 
+                        mode as a constant cache. This mode is especially useful for demonstrating certain
+                        &carrot; features on precached queries.
+                        Set <sgmltag>read-only</sgmltag> &xml; element to <constant>true</constant> in order
+                        to prevent the cache container from saving files. Note that it makes sense to place
+                        a read-only cache at the <emphasis>end</emphasis> of the caches cascade (since
+                        elements will always be immediately dropped from a read-only cache.                          
+                        </para>
+                        <para>
+                        An example of a read-only container entry in cache configuration file is given below:
+                        <informalexample id="listing:ro-cache-example">
+                            <programlisting><![CDATA[@insert-file.ro-cache@]]></programlisting>
+                        </informalexample>
+                        </para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            
+            <!-- }}} -->
+        </section>
+
+        <section id="sect:main-config">
+            <title>Main configuration file</title>
+            <!-- {{{ -->
+            <para>
+            <filename>carrot-config.xml</filename> is the main configuration file of the controller. It
+            contains references to folders where component and process descriptors are located, name
+            of the cache configuration file and other information. This section goes through the elements
+            of the configuration file and describes their meaning.
+            </para>
+            
+            <informalexample>
+                <programlisting>@insert-file.carrot-config@</programlisting>
+                <calloutlist>
+                    <callout arearefs="reloadable">
+                    <para>
+                        <sgmltag>reloadable</sgmltag> attribute allows the controller component to dynamically
+                        reload while it is active and when the configuration file changes. This
+                        attribute should be set to <constant>true</constant> only
+                        during debugging or initial deployment, when component processes are often changed.
+                    </para>
+                    </callout>
+                    <callout arearefs="components">
+                    <para>
+                        <sgmltag>components</sgmltag> defines a web application context-relative directory
+                        where component descriptors can be found. Refer to section <xref linkend="sect:modifying-descriptors"/>
+                        for more information about component descriptors.
+                    </para>
+                    </callout>
+                    <callout arearefs="processes">
+                    <para>
+                        <sgmltag>processes</sgmltag> defines a web application context-relative directory
+                        where process definitions can be found. Refer to section <xref linkend="sect:modifying-descriptors"/>
+                        for more information about process descriptors.
+                    </para>
+                    </callout>
+                    <callout arearefs="cache">
+                    <para>
+                        <sgmltag>cache</sgmltag> specifies a web application context-relative path where
+                        cache configuration file can be found. This file is described in <xref linkend="sect:cache" />.
+                    </para>
+                    </callout>
+                    <callout arearefs="guards">
+                    <para>
+                        <sgmltag>guards</sgmltag> specifies a web application context-relative directory where 
+                        query guards definition can be found. The guards specification is defined in <xref linkend="sect:guards" />.
+                    </para>
+                    </callout>
+                </calloutlist>
+            </informalexample>
+            <!-- }}} -->
+        </section>
+        
+        <section id="sect:modifying-descriptors">
+            <title>Modifying component and process descriptors</title>
+            <!-- {{{ -->
+            <para>
+            A <glossterm>component descriptor</glossterm> is an &xml; file that provides the required information
+            about the type and services provided by a component. The structure of a component descriptor file is
+            defined in an &xmlschema;, which can be found in <filename>schema/component-descriptor.xsd</filename>
+            file in the distribution. Several examples for existing components are also included for convenience
+            in <filename>descriptors-templates</filename>.
+            </para>
+            <para>
+            A detailed definition of a descriptor file can be found on the Internet at
+            &carrot-web;, more specifically in chapter <citetitle pubwork="chapter">Component descriptors</citetitle>
+            in the &devmanual;. The most important properties
+            of a component are highligted below.
+            </para>
+            <informalexample>
+                <programlisting>@insert-file.component-descriptor@</programlisting>
+                <calloutlist>
+                    <callout arearefs="component-id"><para>
+                    This is the identification string assigned to the component. It is usually assigned
+                    by &carrot; project maintainers and <emphasis>should not</emphasis> be changed
+                    individually as it may name clash with other components. The <varname>id</varname>
+                    of a component is used in process definitions and is very important.
+                    </para></callout>
+                    <callout arearefs="component-type"><para>
+                    The type of the component. <constant>input</constant>, <constant>output</constant> or
+                    <constant>filter</constant> values are possible.
+                    </para></callout>
+                    <callout arearefs="component-url"><para>
+                    The &url; at which component's services are available to the controller. The data exchange
+                    formats and specification is described in detail in the &devmanual;, and they should normally
+                    be part of specification of any component. The example component descriptors in
+                    <filename>descriptor-templates</filename>
+                    cover the data formats accepted by the components released in the distribution.
+                    </para>
+                    <tip>
+                    The &url; of a component must be available to the controller, but not necessarily to the 
+                    &quot;outside world&quot;. Web application container (such as Tomcat) can be configured in such a way
+                    to allow local connections (from the controller), but refuse any attempts to connect to components
+                    directly.
+                    </tip>
+                    <para>
+                    When deploying your &carrot; installation, modify &url; of the components replacing <replaceable>host</replaceable>
+                    and <replaceable>port</replaceable> according to your individual environment.
+                    </para></callout>
+                    <callout arearefs="component-info"><para>
+                    The information and configuration page of the component. These can (and should) be removed from
+                    component descriptor in the final deployment. 
+                    </para></callout>
+                    <callout arearefs="formats"><para>
+                    Data exchange formats produced and accepted by the component. Please refer to &devmanual;
+                    for more information. This section of a component descriptor should be provided with the component
+                    (because its developers know best what sort of data formats it can accept or produce).
+                    </para></callout>
+                </calloutlist>
+            </informalexample>
+            
+            <para>
+            <glossterm>Processes</glossterm> define the way data is transformed by separate components yielding the final
+            result. Process descriptor files thus specify a <emphasis>chain</emphasis> of components from the input
+            through filters, to the output component. The result returned from the output component is then shown
+            on user's browser (or any other devide the controller component might support).
+            </para>
+            <para>
+            Processes can be defined in two ways: as an &xml; file or programmaticaly using scripted languages like &beanshell;
+            or &javascript;. The &xml; definition is faster, but less flexible than implementing a process in &beanshell; for
+            example. Below is an example of a scripted process implemented in &beanshell;. 
+            </para>
+
+            <informalexample>
+                <programlisting>@insert-file.process@</programlisting>
+                <calloutlist>
+                    <callout arearefs="process-id"><para>
+                    The identification string of a process. This string can be assigned according to one's 
+                    imagination, although it must be unique within the set of processed defined for one controller.
+                    Also, the <varname>id</varname> of a process is used to find its localized name in the 
+                    application resources (<filename>i18n.xml</filename> file in the controller distribution).
+                    </para></callout>
+                    <callout arearefs="process-description"><para>
+                    The default name of a process if its localized name cannot be found in application's resources.
+                    </para></callout>
+                    <callout arearefs="docache"><para>
+                    If set to <constant>true</constant>, the controller will attempt to use cached input prior to sending requests
+                    to the input component specified later on.
+                    </para></callout>
+                    <callout arearefs="usecache"><para>
+                    If set to <constant>true</constant>, the controller component will cache the data received from
+                    this process's input component.
+                    </para></callout>
+                    <callout arearefs="input.invoke"><para>
+                    This method invokes the input component for the given query and retrieves an <classname>InputStream</classname>
+                    with the results. Replace the component <varname>id</varname> to that your input component here.
+                    </para></callout>
+                    <callout arearefs="filter.invoke"><para>
+                    This method invokes the filter component on the data stream. Here, LSI clustering component
+                    is invoked with some custom parameters specified above the invocation line.
+                    Replace the component <varname>id</varname> to that your filter component here (refer to 
+                    examples in the distribution).
+                    <tip>
+                    <para>
+                    More than one filter can be applied to the data stream. Just apply whatever filters sequentially to
+                    the <classname>InputStream</classname> object instance.
+                    </para>
+                    </tip>
+                    </para></callout>
+                    <callout arearefs="output.invoke"><para>
+                    Invokes the output component for the current data stream. Here, dynamic tree component is
+                    invoked with certain customized parameters. Replace the component <varname>id</varname>
+                    to that your output component here (refer to examples in the distribution).
+                    </para></callout>
+                    <callout arearefs="send.response"><para>
+                    Sends the reponse back to the client. This method <emphasis>must</emphasis> be called
+                    at the end of the process script.
+                    </para></callout>
+                </calloutlist>
+            </informalexample>
+            
+            <para>
+            The details of process programming 
+            are beyond the limits of this guide (most often the only required change
+            will be adjusting the &url;s to components in ). The best way to start is by taking a look
+            at examples in the distribution.
+            </para>
+            
+            <!-- }}} -->
+        </section>
+
+        <section id="sect:guards">
+            <title>Query/ component guards</title>
+            <!-- {{{ -->
+            <para>
+            There exist situations in which queries to a component should be limited. For example,
+            some components may not be available at certain time frames, some may restrict the number
+            of queries to certain limits etc. The guards describe such constraints &ndash; they are executed
+            before any component is invoked by the controller. If any guard <emphasis>vetoes</emphasis>
+            the access to a given component, execution of a query is stopped and the information is
+            displayed to the user.
+            </para>
+            <para>
+            Guards specification is not yet released to the public.
+            </para>
+
+            <important>
+            <para>
+            If any guard files are present in the official distribution of &carrot;, you must not remove
+            them, disable them, or change them in any way.  
+            </para>
+            </important>
+            <!-- }}} -->
+        </section>
+        <!-- }}} -->
+    </section>
+
+    <section id="sect:deploy-tomcat">
+        <title>Deploying &carrot; on &tomcat;</title>
+        <!-- {{{ -->
+        <para>
+        This section provides essential steps leading to installing &carrot; on &tomcat; web server. 
+        It is assumed here that &java; (JDK) is already installed.
+        </para>
+        
+        <itemizedlist>
+            <listitem>
+                <para>
+                    Download and unpack &tomcat; web server from <ulink url="http://jakarta.apache.org/tomcat/" />.
+                    At the moment of writing, we suggest stable release 4.1.24.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    Copy shared libraries from <filename>lib-shared</filename> folder of the distribution
+                    to <filename>shared/lib</filename> of your tomcat installation.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    Copy the controller directory <filename>controller</filename> to
+                    <filename>webapps</filename> in your &tomcat; installation. This will be the &quot;working
+                    copy&quot; on which modifications and additions will be made.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    Copy all <filename>*.war</filename> files (components) from <filename>components</filename> 
+                    folder of the distribution to <filename>webapps</filename> folder of your &tomcat;. The components
+                    will be automatically deployed when &tomcat; is started next time.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    Now it is time to copy and edit component descriptors. Copy the following descriptors
+                    from <filename>descriptors-templates/components-experimental</filename> and
+                    <filename>descriptors-templates/components-release</filename> to
+                    <filename>webapps/controller/WEB-INF/components</filename> of your &tomcat; installation.
+                        <simplelist type='vert' columns='2'>
+                            <member>carrot2.filter.ahc-clusterer.xml</member>
+                            <member>carrot2.filter.diagnostic.snippet-interceptor.xml</member>
+                            <member>carrot2.filter.lsi-clusterer.xml</member>
+                            <member>carrot2.filter.stc.carrot1-stc.xml</member>
+                            <member>carrot2.filter.text-only.xml</member>
+                            <member>carrot2.input.snippet-reader.alltheweb.xml</member>
+                            <member>carrot2.filter.stemming.xml</member>
+                            <member>carrot2.input.snippet-reader.google.xml</member>
+                            <member>carrot2.output.xslt-renderer.dynamic-tree.xml</member>
+                        </simplelist>
+                </para>
+                <para>
+                Load these files into your favorite editor (hey, try &jedit; &ndash; it is free and powerful!)
+                and replace any occurrence of <literal>@DEPLOY_HOST@:@DEPLOY_PORT@</literal> with
+                <literal>localhost:8080</literal> (or change the host and port number to those matching your configuration).
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    A similar procedure applies to processes &ndash; copy the following
+                    processes from 
+                    <filename>descriptors-templates/processes-experimental</filename>
+                    to
+                    <filename>webapps/controller/WEB-INF/processes</filename> of your &tomcat; installation.
+                        <simplelist type='vert' columns='2'>
+                            <member>carrot2.process.ahc-en.xml</member>
+                            <member>carrot2.process.lsi-alltheweb.xml</member>
+                            <member>carrot2.process.lsi-google-cs-only.xml</member>
+                            <member>carrot2.process.lsi-google-pl.xml</member>
+                            <member>carrot2.process.lsi-google.xml</member>
+                            <member>carrot2.process.stc-full.google-cs-only.xml</member>
+                            <member>carrot2.process.stc-full.google.xml</member>
+                        </simplelist>
+                </para>
+                <para>
+                You do not need to alter any of these files - they have been preconfigured.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    You may also want to configure &log4j; so that messages from &carrot; components are
+                    properly saved somewhere. Create and edit <filename>conf/log4j.properties</filename>
+                    in your &tomcat; installation. Type the following:
+                </para>
+                <informalexample><programlisting><![CDATA[# Default logging sink.
+log4j.rootLogger=DEBUG,global.file
+
+# global.file appender (/logs/carrot2.log)
+
+log4j.appender.global.file=org.apache.log4j.FileAppender
+log4j.appender.global.file.File=TRANSLATE_CONTEXT::/logs/carrot2.log
+log4j.appender.global.file.Append=true
+log4j.appender.global.file.layout=org.apache.log4j.PatternLayout
+log4j.appender.global.file.layout.ConversionPattern=%d %-5p [%t] %c{2} -- %m%n]]></programlisting>
+                </informalexample>
+            </listitem>
+            <listitem>
+                <para>
+                <emphasis>Make sure your port number 8080 is not already taken by some other application</emphasis>. Then
+                start &tomcat; using the startup script appropriate for your platform (either <filename>bin/startup.bat</filename>
+                or <filename>bin/startup.sh</filename>. Wait until message <computeroutput>INFO: Starting Coyote HTTP/1.1 on port 8080</computeroutput>
+                shows up on the console. This may take even a couple of minutes because WAR applications must be deployed
+                and <acronym>JSP</acronym> files compiled.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                Open a web browser (&javascript; must be enabled, Internet Explorer or Mozilla is recommended) and point
+                it to <ulink url="http://localhost:8080/controller" />, you should see &carrot;'s query page like below.
+                </para>
+                <pasteFigure src="carrot-query.png" width="5in">
+                Carrot web controller query page
+                </pasteFigure>
+                <para>
+                Now follow <computeroutput>Demo</computeroutput> link on the top of the query page and select any
+                of the cached preconfigured queries. A clustered result should be available within seconds (please
+                allow for the components to initialize if queried for the first time).
+                </para>
+                <pasteFigure src="carrot-sample.png" width="5in">
+                Sample demo clustered result
+                </pasteFigure>
+            </listitem>
+        </itemizedlist>
+        <!-- }}} -->
+    </section>
+    
+</section>
+

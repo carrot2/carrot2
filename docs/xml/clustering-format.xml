@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section PUBLIC 
+    "-//Dawid Weiss//DTD DocBook V3.1-Based Extension for XML and graphics inclusion//EN" 
+    "carrot-docbook-extensions.dtd">
+
+<section id="sect:clustering-format">
+    <title>&carrot; and search results clustering</title>
+
+    <para>
+    Search results clustering attempts to overcome the problem of
+    <emphasis>information overload</emphasis>. 
+    The user interface of the most popular modern search engines
+    is based on keyword-based queries and endless lists of
+    matching documents.
+    Unfortunately, even when exceptional ranking algorithms are used,
+    relevance sorting inevitably promotes quality based
+    on some notion of popularity of what can be found on the Web.
+    If an overview of the topic, or an in-depth analysis of a certain subject is
+    required, search engines usually fail in delivering such information.
+    It seems natural to expect that search engines should not only return the most
+    popular documents matching a query but also provide another, potentially more
+    comprehensive, overview of the subject it covers.
+    Certain inventions have already been introduced in the
+    commercial world: query expansion suggestions in Teoma or
+    Infonetware, graphical visualization of results in Kartoo,
+    image-based interface in Ditto or Google Images.
+    </para>
+    <para>
+    One of the most promising approaches, both commercially and research-wise,
+    is to automatically group search results into thematic categories, called
+    {\em clusters}. Assuming clusters descriptions are informative about the
+    documents they contain,  
+    the user spends much less time following irrelevant links. He also gets
+    an excellent overview of subjects present in the search result and thus
+    knows when the query needs to be reformulated. Because the
+    clustering process is performed dynamically for each query, the discovered set of
+    groups is apt to depict the real structure of results, not some predefined
+    categories. 
+    </para>
+    <para>
+    &carrot; was mainly created for research on search results clustering and hence
+    several data exchange formats evolved for use with components in that application.
+    </para>
+    
+    <section id="sect:search-results-clustering-in-carrot">
+        <title>Search results clustering in &carrot;</title>
+        <!-- {{{ -->
+        <para>
+        Application of &carrot; framework to search results clustering can follow
+        the meta search engine example in <xref linkend="figure:clustering-process"/>. Components
+        cover distinct part of the required functionality like querying and extraction of snippets
+        from a real search engine, data preprocessing (stop-words filtering, stemming), finally
+        clustering and visualization of results. Many of these components can be successfully reused
+        within several processing chains. 
+        </para>
+        
+        <pasteFigure src="clustering-process.png" width="4in">
+        An example &carrot; architecture adopted to the problem
+        of search results clustering. Three different data processing
+        chains are available in this setup.
+        </pasteFigure>
+
+        <important>
+            <para>
+            The search results clustering data exchange format presented in this
+            section is also subject to extensions. For example, a filter component
+            might add extra information about grammatical class of each term in a snippet. Such
+            extra information must be placed so that it does not interfere with the
+            baseline specification. Components should propagate all <acronym>XML</acronym> 
+            tags they are not able to interpret further down the processing chain.
+            </para>
+        </important>
+
+        <!-- }}} -->
+    </section>
+
+
+    <section id="sect:input-component-response-format">
+        <title>Input component query and response format</title>
+        <!-- {{{ -->
+        <para>
+        Input components in this application should accept &xml; query
+        in the format described in <xref linkend="sect:mime:x-carrot-clustering-input-query" />.
+        
+        In response to a query, the input component should return
+        an XML document conforming to the data format
+        described in <xref linkend="sect:mime:x-carrot-clustering-plain-response" />.
+        </para>
+        <!-- }}} -->
+    </section>
+
+
+    <section id="sect:clustered-search-results-format">
+        <title>Clustered snippets format</title>
+        <!-- {{{ -->
+        <para>
+        The data stream with plain search results, returned from the input component,
+        is then processed by some filters, in order to retrieve information about
+        semantically related documents. A filter component should accept
+        at least <link linkend="sect:mime:x-carrot-clustering-plain-response">plain
+        search results stream</link>.
+        <emphasis>All unrecognized tags from the input stream
+        must be propagated to the output</emphasis>. This ensures that extra
+        information not known to the clustering component an possibly required
+        further down the processing chain is not lost.
+        </para>
+        
+        <para>
+        The final data stream should contain information about groups, as specified
+        in the data stream format described in <xref linkend="sect:mime:x-carrot-clustering-groups"/>.
+        </para>
+        <!-- }}} -->
+    </section>
+
+
+    <section id="sect:linguistic-information">
+        <title>Linguistic information about terms</title>
+        <!-- {{{ -->
+        
+        <para>
+        Linguistic information may be embedded in search results clustering streams
+        as described in <xref linkend="sect:mime:x-carrot-clustering-plain-linguistic" />.
+        </para>
+        
+        <!-- }}} -->
+    </section>    
+    
+</section> 
+ 
+

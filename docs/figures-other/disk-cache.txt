@@ -1,0 +1,13 @@
+<container implementation="com.dawidweiss.carrot.controller
+				.carrot2.process.cache.file.ZIPCachedQueriesContainer">
+        
+        <!-- if true, the cache will use a subdirectory under system's
+             default temporary directory. In order to point cache to a 
+             fixed directory, add XML element absolute-dir or
+             a context-relative-dir element.
+          -->
+        <use-system-temp>true</use-system-temp>
+        
+        <!-- capacity limit in bytes -->
+        <size-limit>5000000</size-limit>
+</container>

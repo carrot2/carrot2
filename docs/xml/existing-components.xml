@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE appendix PUBLIC 
+    "-//Dawid Weiss//DTD DocBook V3.1-Based Extension for XML and graphics inclusion//EN" 
+    "carrot-docbook-extensions.dtd">
+
+<appendix id="chapter:existing-components">
+    <title>Existing &carrot; components</title>
+
+    <section>
+        <title>Carrot2 Controller component</title>
+        
+        <para>
+        The &carrot; Web Controller component is an example of how components
+        may be integrated into a unified user interface.
+        </para>
+        
+        <include file="process-descriptor.xml"/>    
+    </section>
+
+</appendix>

@@ -1,0 +1,12 @@
+POST /myfilter HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+Accept-Encoding: gzip
+User-Agent: Java1.4.0
+Host: localhost:8080
+Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
+Connection: keep-alive
+Content-length: 8170
+
+myparameter=myvalue&carrot-xchange-data=\%3C\%3Fxml+version\%3D\%221.0\%22
++encoding\%3D\%22UTF-8\%22+\%3F\%3E\%0D\%0A\%0D\%0A\%3C\%21--+\%2B\%2B\%
+...

@@ -1,0 +1,11 @@
+<?xml version='1.0'?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+
+<public publicId="-//Dawid Weiss//DTD DocBook V3.1-Based Extension for XML and graphics inclusion//EN" 
+     	uri="carrot-docbook-extensions.dtd" />
+
+<public publicId="-//OASIS//DTD DocBook XML V4.2//EN" 
+		uri="../docbook/dtd/docbookx.dtd" />
+
+
+</catalog>

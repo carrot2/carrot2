@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC 
+    "-//Dawid Weiss//DTD DocBook V3.1-Based Extension for XML and graphics inclusion//EN" 
+    "carrot-docbook-extensions.dtd">
+
+<book>
+
+    <!-- chapters follow -->
+
+    <title>&carrot-logo;</title>
+    <subtitle>Developers guide</subtitle>
+    
+    <bookinfo>
+    
+        <authorgroup>
+            <author>
+                <firstname>Dawid</firstname>
+                <surname>Weiss</surname>
+            </author>
+        </authorgroup>
+        
+        <copyright>
+            <year>2002</year>
+            <year>2003</year>
+            <holder>Dawid Weiss, Carrot Developers, Poznań University of Technology</holder>
+        </copyright>
+    
+        <releaseinfo>Release (CVS Id): $Id$</releaseinfo>
+
+        <include file="history.xml"/>
+    </bookinfo>
+    
+    <!-- chapters follow -->
+
+    <include file="introduction.xml" />
+    <include file="architecture.xml" />
+    <include file="contributing.xml" />
+    <include file="component-descriptors.xml" />
+
+    <include file="carrot-applications.xml" />
+    <include file="mime-types.xml" />
+    
+    <chapter id="installation">
+        <title>Binary distribution and installation instructions</title>
+        
+        <para>
+        Besides its preferred source-code CVS access, &carrot; is also distributed
+        as a binary pack for evaluation purposes. The binary pack can be downloaded
+        from project's web site at &carrot-web;. Installation instructions are available
+        below and inside the distribution. 
+        </para>
+        
+        <include file="installation.xml" />
+    </chapter>
+
+    <include file="existing-components.xml" />
+
+    <!-- appendices -->
+    
+    <ifdefined value="append.history">
+        <appendix>
+            <title>Manual versions history</title>
+
+            <para>
+                This chapter presents a list of major enhancements done to this document. Please
+                refer to CVS history for minor ones.
+            </para>
+
+            <include file="history.xml"/>
+        </appendix>
+    </ifdefined>
+
+</book>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section PUBLIC 
+    "-//Dawid Weiss//DTD DocBook V3.1-Based Extension for XML and graphics inclusion//EN" 
+    "carrot-docbook-extensions.dtd">
+
+<section id="sect:process-descriptor">
+    <title>Process descriptor</title>
+
+    <para>
+    A process descriptor file describes how users requests are handled by the controller component.
+    The controller component should somehow interpret the <emphasis>textual query</emphasis>, such as
+    <userinput>ice cream recipe</userinput>, and redirect it to an input component, then process intermediate
+    result using filter components and finally display the result of processing to the user. <emphasis>How</emphasis>
+    this flow is achieved is defined in the process descriptor file.
+    </para>
+    
+    <para>
+    The process descriptor is an XML file, which may specify a linear data flow between components, so-called 
+    <emphasis>processing chain</emphasis>, or a programmatic script which gets executed in response to
+    each query and takes full control over the process of request processing. Both of these approaches are
+    described in this section.
+    </para>
+
+
+    <section id="sect:process-descriptor-schema">
+        <title>Process descriptor &xml; schema</title>
+        <!-- {{{ -->
+        <para>
+        A process descriptor is defined using the &xml; schema presented in
+        <xref linkend="listing:schema:process-descriptor"/>
+        </para>
+
+        <example id="listing:schema:process-descriptor">
+        <title>&xml; schema of a process descriptor file</title>
+        <programlisting><![CDATA[@insert-file.process-descriptor@]]></programlisting>
+        </example>
+        <!-- }}} -->
+    </section>
+
+    
+    <section id="sect:required-elements">
+        <title>Required elements of a process descriptor</title>
+        
+        <para>
+        Every process descriptor must contain the obligatory <sgmltag>process</sgmltag>
+        element, which specifies its <sgmltag>id</sgmltag>. The identification string of a process
+        is assigned by &carrot; project maintainer (because it is also used for assigning a
+        locale-sensitive name). Ad-hoc processes may follow the naming convention
+        of <constant>carrot2.ad-hoc.<replaceable>author</replaceable>.<replaceable>process-name</replaceable></constant>.
+        </para>
+        
+        <para>
+        The main part of a process descriptor consists of specification of how components are applied to the
+        user request in order to produce certain output. This specification may be either passive
+        (see <xref linkend="sect:processing-chain" />), or active (see <xref linkend="sect:processing-script" />).
+        </para>
+    </section>
+    
+
+    <section id="sect:processing-chain">
+        <title>Processing chain (passive specification of a process)</title>
+        
+        <para>
+        <emphasis>Passive</emphasis> specification of how user requests are handled can be given by specifying
+        linear sequence of components which should be involved in data processing. This specification
+        is given in &xml;.
+        <remark>An example should be given here?</remark>
+        </para>
+    </section>
+
+
+    <section id="sect:processing-script">
+        <title>Processing scripts (active specification of a process)</title>
+        
+        <para>
+        <emphasis>Active</emphasis> specification of how requests should be handled can be given in the form
+        of a <emphasis>script</emphasis>. This script can be written in any language supported by the BSF project
+        (Bean Scripting Framework), in particular a Java-like scripting language BeanShell or JavaScript.  
+        </para>
+        
+        <para>
+        The script has access to several global objects, which describe the current processing environment and
+        user request. Namely, <varname>query</varname> object contains the user query and <varname>controller</varname>
+        object allows the script to invoke processing using &carrot; components. Please consult examples for details.
+        </para>
+    </section>
+    
+</section>
