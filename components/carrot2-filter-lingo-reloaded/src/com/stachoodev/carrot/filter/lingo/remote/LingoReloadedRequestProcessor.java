@@ -28,6 +28,7 @@ import com.dawidweiss.carrot.util.jdom.*;
 import com.dawidweiss.carrot.util.tokenizer.*;
 import com.stachoodev.carrot.filter.lingo.algorithm.*;
 import com.stachoodev.carrot.filter.lingo.local.*;
+import com.stachoodev.carrot.filter.normalizer.local.*;
 import com.stachoodev.matrix.factorization.*;
 
 /**
