@@ -41,5 +41,4 @@ public interface ClusteringFilterAdapter
      */
     public Iterator clusterHits(Iterator hits, String query)
         throws RuntimeException;
-    ;
 }
