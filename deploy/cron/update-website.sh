@@ -17,7 +17,7 @@ export JAVA_HOME
 export JAVACMD
 export ANT_HOME
 
-if ant -f build.website.xml -listener org.apache.tools.ant.XmlLogger \
+if ant -f build.website.xml \
        -DMailLogger.properties.file=cron/build.website.logger \
        -logger org.apache.tools.ant.listener.MailLogger \
        publish; then
