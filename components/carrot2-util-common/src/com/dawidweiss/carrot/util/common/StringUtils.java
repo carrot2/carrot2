@@ -63,7 +63,26 @@ public class StringUtils
         return string.toUpperCase().substring(0, 1) + string.substring(1).toLowerCase();
     }
 
+    /**
+     * Capitalizes the string (first character only).
+     */
+    public static String capitalize(String string, Locale locale)
+    {
+        if (string.length() == 0)
+        {
+            return string;
+        }
 
+        return string.toUpperCase(locale).substring(0, 1)
+            + string.substring(1).toLowerCase(locale);
+    }
+
+
+    /**
+     * @param string
+     * @param width
+     * @return
+     */
     public static String addLeftPadding(String string, int width)
     {
         if (string.length() >= width)
