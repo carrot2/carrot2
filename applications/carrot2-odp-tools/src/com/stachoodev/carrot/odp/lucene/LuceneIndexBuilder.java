@@ -16,7 +16,7 @@ import java.util.*;
 import org.apache.lucene.analysis.*;
 import org.apache.lucene.index.*;
 
-import com.carrot.input.lucene.*;
+import com.carrot.input.lucene.PorterAnalyzerFactory;
 import com.stachoodev.carrot.odp.*;
 import com.stachoodev.carrot.odp.common.*;
 

@@ -8,5 +8,6 @@
 	<classpathentry kind="src" path="/carrot2-local-core"/>
 	<classpathentry kind="src" path="/carrot2-util-common"/>
 	<classpathentry kind="src" path="/carrot2-odp-core"/>
+	<classpathentry kind="src" path="/carrot2-input-lucene"/>
 	<classpathentry kind="output" path="tmp/build/classes"/>
 </classpath>
