@@ -227,7 +227,7 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
         stcEngine.createMergedClusters(0.6f);
 
         List clusters = stcEngine.getClusters();
-        int max = 20;
+        int max = 15;
 
         // Convert STC's clusters to the local interfaces' format
         List rawClusters = new ArrayList();
