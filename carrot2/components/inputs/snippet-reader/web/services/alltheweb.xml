@@ -24,7 +24,7 @@
     <response encoding="UTF-8">
         <!-- optional elements for multipage reader -->
         <pageinfo>
-            <expected-results-per-page>100</expected-results-per-page>
+            <expected-results-per-page>50</expected-results-per-page>
             <!-- issues a warning if the number of recognized snippets drops below this percentage. -->
             <warn-when-below>0.8</warn-when-below>
 
