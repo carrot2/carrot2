@@ -1,5 +1,9 @@
 
+<!--
+The SVD decomposition in Jama has been patched to throw a runtimeexception if
+the decomposition goes beyond a certain number of iterations.
+-->
 <component name="jama">
     <!-- Files that this component is composed of -->
-    <file location="Jama-1.0.1.jar" />
+    <file location="Jama-1.0.1-patched.jar" />
 </component>
