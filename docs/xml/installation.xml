@@ -4,7 +4,7 @@
     "carrot-docbook-extensions.dtd">
 
 <section id="sect:installation">
-    <title>Binary distribution of &carrot;</title>
+    <title>Installation of &carrot;</title>
 
     <para>
     &carrot;'s modular architecture is very flexible, but also brings several difficult
@@ -13,44 +13,6 @@
     be configured and processes of using those components defined. While most of these
     tasks are trivial, they still require certain amount of work.
     </para>
-
-    <para>
-    It is generally recommended for experienced users 
-    that the runtime environment from &cvs; is used. It is a preconfigured Tomcat
-    application and &carrot; build scripts prepare all configuration
-    files for it automatically. For this, however, the entire source code
-    distribution is needed along with several other tools, such as JDK, ANT, XEP etc.
-    </para>
-    
-    <section id="sect:bin-contents">
-        <title>Contents of the binary distribution</title>
-        <!-- {{{ -->
-        <para>
-        The binary distribution should contain the following items:
-        </para>
-        <itemizedlist>
-            <listitem><para>Several precompiled components &ndash; inputs, filters and outputs</para></listitem>
-            <listitem><para>A web-based controller component, the heart of &carrot;</para></listitem>
-            <listitem>
-                <para>Templates for component descriptors and process definitions.</para>
-                <para>These templates must be modified and special tokens must be replaced
-                      with URLs to where components are going to be installed and available.
-                      (this cannot be predicted at the moment of assembling
-                      the distribution and cannot be done automatically)</para> 
-            </listitem>
-            <listitem>
-                <para>legal information concerning &carrot; and libraries with which it is distributed</para> 
-            </listitem>
-            <listitem>
-                <para>A set of libraries <emphasis>required</emphasis> for most components. These libraries
-                should be installed in such a location of a web server, where they can be reused
-                by as many components as possible (this prevents quick resource exhaustion). In case
-                of Tomcat, such location is usually found in <filename>/shared/lib</filename>. 
-                </para>
-            </listitem>
-        </itemizedlist>
-        <!-- }}} -->
-    </section>
     
     <section id="sect:inst-requirements">
         <title>Installation requirements</title>
@@ -67,6 +29,10 @@
         The application should work on all vendors' JVMs, although problems have been reported in installation
         on IBM's JDK.
         </para>
+        <para>
+        For building the system from source code, a Java compiler (JDK) and &ant; 
+        build tool are also required. 
+        </para>
         <!-- }}} -->
     </section>
 
@@ -74,8 +40,10 @@
         <title>Choosing components</title>
         <!-- {{{ -->
         <para>
-        The first step is to choose components, which your &carrot; installation will use. Several components
-        are already provided with the distribution, other may be available from independent vendors. More
+        The first step is to choose components, which your &carrot; installation will use.
+        Several components
+        are already provided in the base &carrot; &cvs;, other may be available from independent vendors
+        (we hope ;). More
         information about the available components and their locations can be found at 
         the official project website: &carrot-web;.
         </para>
@@ -99,13 +67,57 @@
         </para>
         <!-- }}} -->
     </section>
+
     
+    <section>
+        <title>Building components from sources</title>
+        <para>
+        In order to build Carrot2's components, you must have ANT in your path. We use 
+        ANT 1.6, lower versions are not supported but may work.
+        </para>
+
+        <para>
+        This command should build all the components for you and place them in tmp/dist.
+        <screen>
+ant build
+        </screen>
+        </para>
+        
+        <para>
+        Note that the Web controller component is built with a set of component 
+        descriptors for which service &url;s are hardcoded inside the descriptor
+        files. To change the defaults, use the following &ant; command:
+        </para>
+
+        <screen>
+ant -Ddeployment.port=80 -Ddeployment.host=myhost.com build.webcontroller
+        </screen>
+        <para>        
+        Adjust the parameters to match your deployment configuration.
+        </para>
+    </section>
+
+    
+    <section>
+        <title>Downloading pre-built components</title>
+        <para>
+        The nightly build process produces a set of <filename>WAR</filename>
+        files which can be used to install &carrot; without a need to compile the
+        system from source files. Please note that the controller component will
+        require some manual adjustments in &url;s hardcoded in components descriptors.
+        </para>
+        <para>
+        Nightly binaries are available at:
+        <ulink href="http://carrot.cs.put.poznan.pl/static/download/nightly/" />.
+        </para>
+    </section>
+   
     
     <section id="sect:controller-configuration">
-        <title>Controller component configuration</title>
+        <title>Web controller component configuration</title>
         <!-- {{{ -->
         <para>
-        Controller component is the glue combining other &carrot; components. The current controller
+        The Web controller component is the glue combining other &carrot; components. The current controller
         component is a web application that mimics a search engine (although other controllers may not
         look like that at all :).
         </para>
@@ -121,7 +133,7 @@
                 <filename>cache-config.xml</filename> is a configuration file for the internal cache of the
                 controller component. Caching makes sense if input components are either slow in responding to
                 queries, or there are restrictions put on their use (the case with most search engines on the Web).
-                Input component's reponse is cached for each unique combination of a query, requested number of results
+                Input component's response is cached for each unique combination of a query, requested number of results
                 and optional parameters passed to the input component by the controller (or the process script).
                 When such unique combination of attributes is requested again, the input component's response
                 is simulated by the stream taken from the cache.
@@ -250,8 +262,7 @@
             A <glossterm>component descriptor</glossterm> is an &xml; file that provides the required information
             about the type and services provided by a component. The structure of a component descriptor file is
             defined in an &xmlschema;, which can be found in <filename>schema/component-descriptor.xsd</filename>
-            file in the distribution. Several examples for existing components are also included for convenience
-            in <filename>descriptors-templates</filename>.
+            file in the distribution.
             </para>
             <para>
             A detailed definition of a descriptor file can be found on the Internet at
@@ -292,11 +303,6 @@
                     <callout arearefs="component-info"><para>
                     The information and configuration page of the component. These can (and should) be removed from
                     component descriptor in the final deployment. 
-                    </para></callout>
-                    <callout arearefs="formats"><para>
-                    Data exchange formats produced and accepted by the component. Please refer to &devmanual;
-                    for more information. This section of a component descriptor should be provided with the component
-                    (because its developers know best what sort of data formats it can accept or produce).
                     </para></callout>
                 </calloutlist>
             </informalexample>
@@ -414,67 +420,25 @@
             </listitem>
             <listitem>
                 <para>
-                    Copy shared libraries from <filename>lib-shared</filename> folder of the distribution
-                    to <filename>shared/lib</filename> of your tomcat installation.
+                    Copy shared libraries from <filename>lib</filename> folder of the &cvs; distribution
+                    to <filename>shared/lib</filename> of your tomcat installation. Alternatively,
+                    you can download a ZIPped pack of shared libraries from the 
+                    nightly binaries dropoff zone (<ulink href="http://carrot.cs.put.poznan.pl/static/download/nightly/" />).
                 </para>
             </listitem>
             <listitem>
                 <para>
-                    Copy the controller directory <filename>controller</filename> to
-                    <filename>webapps</filename> in your &tomcat; installation. This will be the &quot;working
-                    copy&quot; on which modifications and additions will be made.
+                    Build the controller component specifying the deployment host
+                    and port so that component descriptors point at valid &url;s.
+                    Copy the controller component to <filename>webapps</filename>
+                    folder of &tomcat;.
                 </para>
             </listitem>
             <listitem>
                 <para>
-                    Copy all <filename>*.war</filename> files (components) from <filename>components</filename> 
-                    folder of the distribution to <filename>webapps</filename> folder of your &tomcat;. The components
+                    Copy all <filename>*.war</filename> files (components) 
+                    to <filename>webapps</filename> folder of your &tomcat;. The components
                     will be automatically deployed when &tomcat; is started next time.
-                </para>
-            </listitem>
-            <listitem>
-                <para>
-                    Now it is time to copy and edit component descriptors. Copy the following descriptors
-                    from <filename>descriptors-templates/components-experimental</filename> and
-                    <filename>descriptors-templates/components-release</filename> to
-                    <filename>webapps/controller/WEB-INF/components</filename> of your &tomcat; installation.
-                        <simplelist type='vert' columns='2'>
-                            <member>carrot2.filter.ahc-clusterer.xml</member>
-                            <member>carrot2.filter.diagnostic.snippet-interceptor.xml</member>
-                            <member>carrot2.filter.lsi-clusterer.xml</member>
-                            <member>carrot2.filter.stc.carrot1-stc.xml</member>
-                            <member>carrot2.filter.text-only.xml</member>
-                            <member>carrot2.input.snippet-reader.alltheweb.xml</member>
-                            <member>carrot2.filter.stemming.xml</member>
-                            <member>carrot2.input.snippet-reader.google.xml</member>
-                            <member>carrot2.output.xslt-renderer.dynamic-tree.xml</member>
-                        </simplelist>
-                </para>
-                <para>
-                Load these files into your favorite editor (hey, try &jedit; &ndash; it is free and powerful!)
-                and replace any occurrence of <literal>@DEPLOY_HOST@:@DEPLOY_PORT@</literal> with
-                <literal>localhost:8080</literal> (or change the host and port number to those matching your configuration).
-                </para>
-            </listitem>
-            <listitem>
-                <para>
-                    A similar procedure applies to processes &ndash; copy the following
-                    processes from 
-                    <filename>descriptors-templates/processes-experimental</filename>
-                    to
-                    <filename>webapps/controller/WEB-INF/processes</filename> of your &tomcat; installation.
-                        <simplelist type='vert' columns='2'>
-                            <member>carrot2.process.ahc-en.xml</member>
-                            <member>carrot2.process.lsi-alltheweb.xml</member>
-                            <member>carrot2.process.lsi-google-cs-only.xml</member>
-                            <member>carrot2.process.lsi-google-pl.xml</member>
-                            <member>carrot2.process.lsi-google.xml</member>
-                            <member>carrot2.process.stc-full.google-cs-only.xml</member>
-                            <member>carrot2.process.stc-full.google.xml</member>
-                        </simplelist>
-                </para>
-                <para>
-                You do not need to alter any of these files - they have been preconfigured.
                 </para>
             </listitem>
             <listitem>
@@ -507,7 +471,7 @@ log4j.appender.global.file.layout.ConversionPattern=%d %-5p [%t] %c{2} -- %m%n]]
             <listitem>
                 <para>
                 Open a web browser (&javascript; must be enabled, Internet Explorer or Mozilla is recommended) and point
-                it to <ulink url="http://localhost:8080/controller" />, you should see &carrot;'s query page like below.
+                it to <ulink url="http://localhost:8080/carrot2-web-controller" />, you should see &carrot;'s query page like below.
                 </para>
                 <pasteFigure src="carrot-query.png" width="5in">
                 Carrot web controller query page

@@ -14,6 +14,7 @@
 <!ENTITY  get                 "<acronym>GET</acronym>">
 <!ENTITY  utf8                "<acronym>UTF-8</acronym>">
 <!ENTITY  mime                "<acronym>MIME</acronym>">
+<!ENTITY  jar                 "<acronym>JAR</acronym>">
 <!ENTITY  beanshell           "<ulink url='http://www.beanshell.org'>BeanShell</ulink>">
 <!ENTITY  javascript          "<acronym>JavaScript</acronym>">
 <!ENTITY  log4j               "<ulink url='http://jakarta.apache.org/log4j'>Log4j</ulink>">
@@ -23,3 +24,4 @@
 <!ENTITY  java                "<ulink url='http://java.sun.com/'>Java</ulink>">
 <!ENTITY  devmanual           "<ulink url='http://www.cs.put.poznan.pl/dweiss/carrot/index.php/developers/index.xml'><citetitle pubwork='book'>Developers Manual</citetitle></ulink>">
 <!ENTITY  jedit               "<ulink url='http://www.jedit.org'>JEdit</ulink>">
+<!ENTITY  ant                 "<ulink url='http://ant.apache.org/'>ANT</ulink>">

@@ -25,7 +25,9 @@
             <holder>Dawid Weiss, Carrot Developers, Poznań University of Technology</holder>
         </copyright>
     
+    <!--
         <releaseinfo>Release (CVS Id): $Id$</releaseinfo>
+	-->
 
         <include file="history.xml"/>
     </bookinfo>
@@ -39,16 +41,9 @@
 
     <include file="carrot-applications.xml" />
     <include file="mime-types.xml" />
-    
+
     <chapter id="installation">
-        <title>Binary distribution and installation instructions</title>
-        
-        <para>
-        Besides its preferred source-code CVS access, &carrot; is also distributed
-        as a binary pack for evaluation purposes. The binary pack can be downloaded
-        from project's web site at &carrot-web;. Installation instructions are available
-        below and inside the distribution. 
-        </para>
+        <title>Installation and deployment instructions</title>
         
         <include file="installation.xml" />
     </chapter>
@@ -59,7 +54,7 @@
     
     <ifdefined value="append.history">
         <appendix>
-            <title>Manual versions history</title>
+            <title>History of revisions of this document</title>
 
             <para>
                 This chapter presents a list of major enhancements done to this document. Please

@@ -7,10 +7,13 @@
     <title><acronym>MIME</acronym> types and data stream formats in &carrot;</title>
 
     <para>
-    &carrot; component descriptors may include information about <acronym>MIME</acronym> types
-    of the data streams accepted and produced by the component. This information is useful
-    for detecting illegal combinations of components in a processing chain, but is not obligatory.
-    Several <acronym>MIME</acronym> types defined for data exchange in &carrot; are presented
+    &carrot; component descriptors used to include information about <acronym>MIME</acronym> types
+    of the data streams accepted and produced by the component. This specification
+    has been dropped because it was not used by any of the component writers. However,
+    we retained the file format specifications even if they cannot be verified at
+    runtime.
+    </para>
+    <para>
     in this chapter. Please note that components may support other data formats, not necessarily
     restricted to the list below (which is apt to be extended or modified according to our needs
     anyway). 

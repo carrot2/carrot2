@@ -2,52 +2,19 @@ CVS root
 |
 +---bin                             > shell scripts invoking common tools.
 +---components                      > source code of components
-|   +---common-java-lib             > Common abstact Java component classes 
+|   +---carrot2-shared-lib          > Common Java component and utility classes 
 |   +---controllers                 > Controller components
-|   |   \---carrot2                 > Example controller (web-based)
+|   |   \---carrot2-web-controller  > Example controller (web-based)
 |   +---filters                     > Filter components
-|   |   +---experimental-filters    > Experimental filters
-|   |   +---stemming                > Stemming component
-|   |   \---text-only               > Example filter component
+|   |   +---{name}                  > filter component named {name}
 |   +---inputs                      > Input components
-|   |   +---return-verbatim         > Input component returning the query verbatim
-|   |   +---snippet-reader          > Search engine wrapper (quite complex)
-|   |   \---snippet-generator       > Example input component (simple)
-|   |---outputs                     > Output components
-|   |   \---xslt-renderer           > Output component rendering XSLT transformations
-|   \---varia                       > Various elements of the project, not components
-|       \---evaluation              > Clustering evaluation utilities [experimental]
+|   |   +---{name}                  > input component named {name}
+|   \---outputs                     > Output components
+|       +---{name}                  > output component named {name}
 +---descriptors                     > Component descriptors copied to the runtime
 |   +---components-experimental     > experimental (unstable)
 |   \---components-release          > release-quality (stable)
-+---docs                            > Project documentation
-|   +---architecture                > Architecture specification files
-|   |   +---mime-types              > Schemas and Docbook documentation of defined
-|   |                                 data exchange streams
-|   +---legal                       > Project licence + official logos
-|   |   \---logo
-|   |---manual                      > Source code of this manual (Docbook)
-|   |   +---ant-extensions          > Extension tasks to standard ANT
-|   |   +---figures-sources         > Source files for the figures 
-|   |   +---figures-other           > Figures not being pictures (listings etc)
-|   |   +---figures-bitmap          > Figures converted to bitmaps (PNG images)
-|   |   +---styler                  > Docbook and preprocessing scripts
-|   |   \---xml                     > Source files for the manual
-|   +---standards                   > Standards in the project (coding etc)
-|   |   \---templates               > Template classes/ ant scripts etc.
-|   +---todo                        > A list of TODO items
-|   |---uml                         > UML diagrams prepared in ArgoUML
-|   \---website                     > Carrot website (maintained by D.Weiss)
-+---ide                             > Any files required by IDEs
-|   \---jbuilder
-|---runtime                         > Runtime environment for deploying
-|   +---bin                           components. This is a Tomcat server
-|   +---common                        copy your applications as WAR files
-|   +---conf                          to WEBAPPS folder. Also, you can 
-|   +---shared                        reference shared libraries in the
-|   |   +---lib                       shared/lib folder. They will not be
-|   |   \---struts-tld                removed from the project.
-|   \---webapps                     > A directory where components should
-|                                     compile their WAR versions if they
-|                                     are included in the distribution.
-\---test                            > tests and example data
++---lib                             > library dependencies that at least 
+|                                     two components share.
+\---schema                          > XML Schema files describing input/output
+                                    > formats.

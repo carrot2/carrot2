@@ -8,6 +8,7 @@
 
 
 <!-- add a note about work in progress -->
+<!--
 <xsl:template match="section">
     <section>
         <xsl:copy-of select="@*" />
@@ -21,6 +22,7 @@
         <xsl:apply-templates />
     </section>
 </xsl:template>
+-->
                 
 <!--
     Paste an image 

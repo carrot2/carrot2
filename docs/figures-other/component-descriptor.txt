@@ -10,15 +10,6 @@
     serviceURL = "http://]]><replaceable>host</replaceable>:<replaceable>port</replaceable><![CDATA[/xslt-renderer/service?stylesheet=dtree" ]]><co id="component-url"/><![CDATA[
     infoURL    = "http://]]><replaceable>host</replaceable>:<replaceable>port</replaceable><![CDATA[/xslt-renderer" ]]><co id="component-info"/><![CDATA[
 >
-    <acceptedFormat> ]]><co id="formats"/><![CDATA[
-        <mime>application/x-carrot-clustering-plain-response</mime>
-    </acceptedFormat>
-    <acceptedFormat>
-        <mime>application/x-carrot-clustering-groups</mime>
-    </acceptedFormat>
-    <producedFormat>
-        <mime>text/html</mime>
-    </producedFormat>
 </component>
 
 </service>]]>

@@ -21,51 +21,9 @@
             <title>Acquiring the source code</title>
             <!-- {{{ -->
             <para>
-            Anonymous access to project CVS repository is granted. The code can be checked
-            out using the following CVS arguments:
+            Refer to on-line instructions at
+            <ulink url="http://www.cs.put.poznan.pl/dweiss/carrot/xml/index.xml?lang=en" />.
             </para>
-            
-            <table frame="topbot" rowsep="0" colsep="0">
-                <title>CVS parameters to access &carrot; repository</title>
-                <tgroup cols="2" align="left">
-                    <colspec colname="cvsparam" />
-                    <colspec colname="value" />
-                    <tbody>
-                        <row><entry><property>Server URL</property></entry><entry><literal>ophelia.cs.put.poznan.pl</literal></entry></row>
-                        <row><entry><property>Port</property></entry><entry><literal>2401</literal> (standard)</entry></row>
-                        <row><entry><property>Authentication</property></entry><entry><literal>pserver</literal></entry></row>
-
-                        <row><entry><property>
-                        Path
-                        </property></entry><entry><filename>
-                        /carrot/cvs
-                        </filename></entry></row>
-
-                        <row><entry><property>
-                        User name
-                        </property></entry><entry><literal>
-                        anonymous
-                        </literal></entry></row>
-
-                        <row><entry><property>
-                        Password
-                        </property></entry><entry><literal>
-                        anonymous
-                        </literal> (or the one assigned by authorities :)</entry></row>
-
-                        <row><entry>
-                        Module to check out
-                        </entry><entry><literal>
-                        carrot2
-                        </literal></entry></row>
-                        
-                        <row><entry>Full <varname>CVSROOT</varname></entry>
-                        <entry><literal>:pserver:<replaceable>User name</replaceable>@ophelia.cs.put.poznan.pl:/carrot/cvs</literal></entry>
-                        </row>
-
-                    </tbody>
-                </tgroup>
-            </table>
 
             <!-- }}} -->
         </section>
@@ -74,14 +32,18 @@
             <title>CVS repository structure</title>
             <!-- {{{ -->
             <para>
-            The CVS is organized according to the following scheme (which should be
-            preserved when new modules are added):
+            The CVS is organized according to the following scheme:
             </para>
             
             <informalexample id="listing:cvs-structure">
                 <programlisting><![CDATA[@insert-file.cvs-structure@]]></programlisting>
             </informalexample>
     
+            <para>
+            This repository structure is of course apt to change and be refactored
+            as new things are added, or ideology changes. Pay attention to
+            the messages on project mailing list.
+            </para>
             <!-- }}} -->
         </section>
         
@@ -96,26 +58,26 @@
             <!-- {{{ -->
             <para>
             &carrot; components do not have to be placed in the common project structure
-            maintained by &dweiss;, however it is strongly encouraged. Common repository
-            will facilitate build and distribution process. Please refer to <xref linkend="sect:build-files" />
+            maintained in SourceForge's &cvs;. It is strongly encouraged though as common repository
+            facilitates build and distribution process. Please refer to <xref linkend="sect:build-files" />
             for a description of how build files for components should be organized.
             </para>
 
             <para>
-            New components should be placed (depending on their type), to <filename>inputs</filename>,
+            New components should be placed (depending on their type), in <filename>inputs</filename>,
             <filename>outputs</filename> or <filename>controllers</filename> sections of the CVS structure. If
             the component is developed in Java, use of shared libraries and template methods
             is strongly encouraged (refer to section <xref linkend="sect:carrot-shared-lib"/>).
-            The common Java library (<filename>carrot2-common.jar</filename>) is always available in a compiled
+            The common Java library (<filename>carrot2-shared-lib.jar</filename>) is always available in a compiled
             form in <filename>runtime/shared/lib</filename> and
             should not be referenced directly from source code folder.
             </para>
             
             <tip>
             <para>
-            For every type of component there is always an example showing basic
-            steps required to set up a component in the environment and process
-            requests. Please refer to <xref linkend="sect:carrot-shared-lib"/>,
+            For every type of component there is always an template example showing basic
+            steps required to set up a component in the servlet container's environment.
+            Please refer to <xref linkend="sect:carrot-shared-lib"/>,
             where these examples are discussed.
             </para>
             </tip>
@@ -127,21 +89,50 @@
             <!-- {{{ -->
             <para>
             The basic goal is to have a full &carrot; distribution built automatically using 
-            one <application>ANT</application> script at the top level of CVS repository checkout.
-            The CVS also includes a runtime environment, where compiled components are placed
+            one &ant; script at the top level of &cvs; repository checkout.
+            The &cvs; also includes a runtime environment, where compiled components are placed
             upon a successfull build (see <xref linkend="sect:runtimeenvironment" />).
             In order to achieve this and relieve component designers from the need of updating
-            the main build script when components are added or removed, certain <application>ANT</application>
-            task names have been <emphasis>restricted</emphasis> in the project.
+            the main build script when components are added or removed, certain &ant;
+            target names have been <emphasis>restricted</emphasis> in the project. We
+            also define certain properties that a build file should recognize and use.
+            All these are described below:
             </para>
             
-            <para>
-            In the CVS, one can find a template build script, which should be used to derive custom
-            ones. Also, refer to existing components for examples.
-            </para>
+            <simplesect>
+                <title>Overriden properties</title>
+                
+                <itemizedlist>
+                    <listitem>
+                        <para>
+                        <literal>distribution.dir</literal> property.
+                        </para>
+                        <para>
+                        This property is set by the main build file and points to a directory where
+                        the final <filename>WAR</filename> file should be placed upon successfull
+                        compilation.
+                        </para>
+                    </listitem>
+
+                    <listitem>
+                        <para>
+                        <literal>carrot2.cvs.dir</literal> property.
+                        </para>
+                        <para>
+                        This property points to the base directory of a full &cvs; checkout
+                        of the &carrot; project. This can be used, for example, to define
+                        paths to shared libraries (although dependency files are preferred
+                        &mdash; see <link linkend="sect:dependency-files">
+                        section about dependency files</link>.
+                        </para>
+                    </listitem>
+                </itemizedlist>
+            </simplesect>
+
+
 
             <simplesect>
-                <title><literal>cleanall</literal> target</title>
+                <title><literal>clean</literal> target</title>
 
                 <para>
                 In every component build file, this task should implement the following functionality:
@@ -156,58 +147,22 @@
                     Delete any other files not present in the CVS structure, so that query
                     update with CVS repository does not yield unknown files in the local checkout.
                     </para></listitem>
-                    
-                    <listitem><para>
-                    If the component copies any <filename>*.war</filename> files to the runtime
-                    environment, it should delete both the web application archive and the
-                    unpacked <application>Tomcat</application> data. This can usually be achieved
-                    using the following fragment of code:
-                    
-                    <informalexample>
-                        <programlisting>
-&lt;delete failonerror="false" includeemptydirs="true" quiet="true"&gt;
-    &lt;fileset dir="<userinput>${dist.path}</userinput>" <co id="dist.path"/> defaultexcludes="false"&gt;
-        &lt;include name="**/<userinput>${dist.name}</userinput>**" <co id="dist.name" /> /&gt;
-        &lt;include name="**/<userinput>${dist.name}</userinput>/**" /&gt;
-    &lt;/fileset&gt;
-&lt;/delete&gt;
-                        </programlisting>
-                        <calloutlist>
-                            <callout arearefs="dist.path">
-                            <para>
-                                <userinput>${dist.path}</userinput> should be changed to point to <filename>/runtime/webapps</filename>
-                                folder of the distribution. See existing components for an example
-                                on how to set this variable relatively to the component's directory.
-                            </para>
-                            </callout>
-                            <callout arearefs="dist.name">
-                            <para>
-                                <userinput>${dist.name}</userinput> should be set to <filename>WAR</filename>
-                                application filename. For example, if application's name is set to
-                                <filename>MyComponent.war</filename>, the file <filename>MyComponent.war</filename>
-                                should be removed as well as the folder <filename>MyComponent</filename>, which
-                                is created by <application>Tomcat</application> when unzipping the web archive.
-                            </para>
-                            </callout>
-                        </calloutlist>
-                    </informalexample>
-                    
-                    <important>
-                    <para><literal>cleanall</literal> task is invoked automatically on any <filename>build.xml</filename>
-                    file found in subfolders of <filename>components</filename> CVS module. Therefore you must ensure
-                    that it works properly before committing the build file into the shared CVS.
-                    </para>
-                    </important>
-
-                    </para></listitem>
                 </itemizedlist>
+
+                <important>
+                <para><literal>clean</literal> task is invoked automatically on any <filename>build.xml</filename>
+                file found in subfolders of <filename>components</filename> CVS module. Therefore you must ensure
+                that it works properly before committing the build file into the shared CVS.
+                </para>
+                </important>
+
             </simplesect>
             
             <simplesect>
-                <title><literal>release</literal> target</title>
+                <title><literal>build</literal> target</title>
 
                 <para>
-                <literal>release</literal> task is reserved for creating a web application archive of
+                <literal>build</literal> task is reserved for creating a web application archive of
                 a component, or any other form of final deployment a component might have. For Java components,
                 this usually involves creating a <filename>WAR</filename> archive and copying it to
                 the <filename>/runtime/webapps</filename> folder of the local CVS checkout so that
@@ -216,15 +171,66 @@
                 
                 <important>
                 <para>
-                Unlike <literal>cleanall</literal> tasks, <literal>release</literal> targets are not
+                Unlike <literal>clean</literal> tasks, <literal>build</literal> targets are not
                 invoked automatically from the common build script. Maintainer of a given component
-                should send a request to include it to the build process to &dweiss;. The component
+                should send a request to include it to the build process to &carrot; project
+                administrator. The component
                 must be tested and working before it is included in the global build process.
                 </para>
                 </important>
-
             </simplesect>
             
+            <!-- }}} -->
+        </section>
+        
+        <section id="sect:dependency-files">
+            <title>Managing component dependencies</title>
+            <!-- {{{ -->
+            <para>
+            Components often rely on presence of other Open Source products
+            and libraries (such as matrix computation packages, or logging frameworks).
+            Libraries reused by more than one component are placed in
+            <filename>lib</filename> folder of the main &cvs; module to save &cvs; space
+            and avoid version conflicts. However, it would be difficult to track which
+            component uses which libraries &mdash; for this reason, we have developed
+            a simple &ant; task that analyzes <emphasis>dependency files</emphasis>
+            and assembles a list of objects that a component needs.
+            </para>
+            
+            <para>
+            A dependency file is an &xml; file that declares the name of a component,
+            names of the objects it delivers (usually none, but some components,
+            such as the shared library, deliver a &jar; file) and finally, 
+            names of other components that are required. A sample dependency file
+            is shown <link linkend="listing:dep-file">below</link>.
+            </para>
+ 
+           <informalexample id="listing:dep-file">
+                <programlisting><![CDATA[@insert-file.dep-file@]]></programlisting>
+            </informalexample>
+            
+            <para>
+            For other examples of dependency files, see <filename>*.dep</filename> files
+            in the shared libraries folder (<filename>lib</filename> in the main &cvs;
+            checkout directory).
+            </para>
+            
+            <para>
+            Special &ant; tasks must be added to the build file
+            to utilize the dependency specification. For an example of how this is
+            done, refer to any of the component build files already present in the
+            &cvs; and look for targets named:
+            <literal>generate.dependency.path</literal>,
+            <literal>show.dependencies</literal> and <literal>collect.dependencies</literal>.
+            </para>
+            
+            <note>
+            <para>
+            A refactoring is planned when one template build file will be used
+            to build all components.
+            </para>
+            </note>
+ 
             <!-- }}} -->
         </section>
 
@@ -234,8 +240,9 @@
             <para>
             Java developers in &carrot; project should follow SUN's coding guidelines
             available at <ulink url="http://java.sun.com/docs/codeconv"/>,
-            with exception to curly braces in class/ method/ conditions and loops &ndash; these
-            should be aligned <emphasis>under</emphasis> each other (in the same column of the following
+            with exception to curly braces in class/ method/ conditions and loops &mdash; these
+            should be aligned <emphasis>under</emphasis> each other (in the same column
+            of the following
             line (see <xref linkend="listing:code-layout-example"/>).
             </para>
             
@@ -250,6 +257,13 @@
                 </title>
                 <programlisting><![CDATA[@insert-file.code-layout-example@]]></programlisting>
             </example>
+            
+            <note>
+            <para>
+            A sample <ulink url="http://jalopy.sourceforge.net/">Jalopy</ulink>
+            code reformatting tool is included in the &cvs; &mdash; <filename>/misc/jalopy</filename>.
+            </para>
+            </note>
             <!-- }}} -->
         </section>        
        
@@ -258,10 +272,9 @@
             <!-- {{{ -->
             <para>
             It is suggested that &log4j; logging framework is used across
-            all components to ensure uniform log format. It is also supported by
+            all components to ensure a uniform log format. It is also supported by
             <link linkend="sect:log4j-init-support">the common
-            &carrot; Java library</link> and has very convenient configuration facilities, as
-            described in <xref linkend="sect:defaultlog4jinit"/>.
+            &carrot; Java library</link>.
             
             Developers may choose other logging
             utilities according to their needs, but should avoid using console output
@@ -284,8 +297,8 @@
             </important>
             
             <para>
-            In-application loggers should be associated with classes they
-            are used in to facilitate debugging, refer to this code example:
+            In-application loggers should be associated with Java classes
+            facilitate debugging, refer to this code example:
             </para>
             
             <informalexample>
@@ -305,7 +318,7 @@ public class MyClass
             &ndash; <classname>com.mycompany.MyClass</classname>.
             </para>
             <para>
-            The use of a logger object in <productname>Log4j</productname> is quite simple. There are
+            The use of a logger object in &log4j; is quite simple. There are
             several levels of severity defined for log messages:
             <constant>FATAL</constant>,
             <constant>ERROR</constant>,
@@ -440,9 +453,9 @@ public byte [] readNBytesFromInputStream( InputStream stream, int n )
                 <listitem><para>
                     Subclass <classname>FilterRequestProcessor</classname> and override
                     <methodname>processFilterRequest</methodname> method. This method takes as an argument the
-                    data stream to be processed, servlet HTTP request and response which
+                    data stream to be processed, servlet &http; request and response which
                     caused the processing and a mapping of parameters, which were sent in
-                    the POST request <emphasis>before</emphasis>
+                    the &post; request <emphasis>before</emphasis>
                     the data stream occurred (refer to <xref linkend="sect:filter-components" />
                     for details).
                 </para></listitem>
@@ -509,8 +522,7 @@ public byte [] readNBytesFromInputStream( InputStream stream, int n )
                         <function>initializeLog4j</function>()
                     </para>
                     <para>
-                    This is the simplest method, which does the default initialization
-                    (see <xref linkend="sect:defaultlog4jinit" />).
+                    This is the simplest method, which does the default initialization.
                     </para>
                 </listitem>
                 
@@ -659,37 +671,17 @@ java -Djava.ext.dirs=runtime/shared/lib
         <title>Development runtime environment</title>
         <!-- {{{ -->
         <para>
-        &carrot;'s <acronym>CVS</acronym> trunk includes a default runtime environment,
-        where components are compiled when they are built using the main
-        <acronym>ANT</acronym> build file (see <xref linkend="sect:build-files"/>).
-        This runtime environment is always a Web server supporting
-        Servlet/JSP specifications (at the moment it is Tomcat 4.1.12, see
+        The runtime environment for components should be a Servlet container
+        compliant with
+        Servlet/JSP specifications (at the moment we use &tomcat;, see
         <filename>/runtime/server.info</filename> file for details).
         </para>
+
         <para>
-        The default runtime environment is preconfigured for &carrot; &ndash; it
-        contains a controller component, security administration page and a copy
-        of this documentation. It also has several utility features, like a single-point
-        configuration of <acronym>log4j</acronym>. Of course, developers
-        are not restricted to the default runtime environment, in particular, it only
-        supports Java-based programs, which may be perceived as a limitation for
-        components written in other languages.
+        A &quot;standard&quot; preconfigured runtime environment for &carrot;
+        can be also downloaded from the project Web site:
+        <ulink url="http://www.cs.put.poznan.pl/dweiss/carrot/xml/download.xml?lang=en" />.
         </para>
-        
-        <section id="sect:defaultlog4jinit">
-            <title>Default <acronym>Log4j</acronym> initialization</title>
-            <!-- {{{ -->
-            <para>
-            The <link linkend="sect:log4j-init-support"><classname>Log4jStarter</classname> class</link>
-            allows components to safely initialize <acronym>log4j</acronym> environment. Upon the
-            first instantiation using the factory method <methodname>getLog4jStarter</methodname>,
-            a default configuration is read from runtime environment's configuration directory:
-            <filename>/<replaceable>runtime environment base</replaceable>/conf/log4j.properties</filename>.
-            This configuration file may be used to declare appenders, which can be later reused by 
-            other components.
-            </para>
-            <!-- }}} -->
-        </section>
 
         <!-- }}} -->
     </section>

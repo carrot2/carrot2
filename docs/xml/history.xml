@@ -5,6 +5,18 @@
 
 <revhistory>
     <revision>
+        <revnumber>0.18</revnumber>
+        <date>16 Feb 2004</date>
+        <authorinitials>dw</authorinitials>
+        <revdescription>
+            <para>
+            Documentation updated, portions removed entirely (for example,
+            data type specification of components). 
+            </para>
+        </revdescription>
+    </revision>
+
+    <revision>
         <revnumber>0.17</revnumber>
         <date>19 Sep 2003</date>
         <authorinitials>dw</authorinitials>

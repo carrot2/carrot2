@@ -21,13 +21,13 @@
         a price of performance. Mechanisms such as
         data exchange via XML language, distributed,
         dynamically accessible components, the use of Java as primary language
-        of implementation &ndash; they all make the system very easy to tailor
+        of implementation &ndash; they all make the system quite easy to tailor
         to one's needs.
         </para>
         
         <para>
         &carrot; was primarily built with search results clustering in mind, but it can
-        be easily configured to do other, interesting things. 
+        be configured or adjusted to do other kinds of pipelined data processing. 
         </para>
     
     </section>

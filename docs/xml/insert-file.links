@@ -9,6 +9,7 @@ insert-file.head-of-post-request=${basedir}/figures-other/head-of-post-request.t
 
 insert-file.cvs-structure=${basedir}/figures-other/cvs-structure.txt
 insert-file.code-layout-example=${basedir}/figures-other/code-layout-example.txt
+insert-file.dep-file=${basedir}/figures-other/dep-file.xml
 
 
 # MIME types

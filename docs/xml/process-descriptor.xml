@@ -15,10 +15,10 @@
     </para>
     
     <para>
-    The process descriptor is an XML file, which may specify a linear data flow between components, so-called 
-    <emphasis>processing chain</emphasis>, or a programmatic script which gets executed in response to
-    each query and takes full control over the process of request processing. Both of these approaches are
-    described in this section.
+    The process descriptor is an XML file, which specifies 
+    a script (usually in &beanshell;),
+    which gets executed in response to
+    each query and takes full control over the process of request processing. 
     </para>
 
 
@@ -45,32 +45,19 @@
         Every process descriptor must contain the obligatory <sgmltag>process</sgmltag>
         element, which specifies its <sgmltag>id</sgmltag>. The identification string of a process
         is assigned by &carrot; project maintainer (because it is also used for assigning a
-        locale-sensitive name). Ad-hoc processes may follow the naming convention
-        of <constant>carrot2.ad-hoc.<replaceable>author</replaceable>.<replaceable>process-name</replaceable></constant>.
+        locale-sensitive name).
         </para>
         
         <para>
         The main part of a process descriptor consists of specification of how components are applied to the
-        user request in order to produce certain output. This specification may be either passive
-        (see <xref linkend="sect:processing-chain" />), or active (see <xref linkend="sect:processing-script" />).
+        user request in order to produce certain output. This specification is
+        expressed in &beanshell; code (see <xref linkend="sect:processing-script" /> for 
+        an example).
         </para>
     </section>
-    
-
-    <section id="sect:processing-chain">
-        <title>Processing chain (passive specification of a process)</title>
-        
-        <para>
-        <emphasis>Passive</emphasis> specification of how user requests are handled can be given by specifying
-        linear sequence of components which should be involved in data processing. This specification
-        is given in &xml;.
-        <remark>An example should be given here?</remark>
-        </para>
-    </section>
-
 
     <section id="sect:processing-script">
-        <title>Processing scripts (active specification of a process)</title>
+        <title>Processing scripts</title>
         
         <para>
         <emphasis>Active</emphasis> specification of how requests should be handled can be given in the form
@@ -81,7 +68,8 @@
         <para>
         The script has access to several global objects, which describe the current processing environment and
         user request. Namely, <varname>query</varname> object contains the user query and <varname>controller</varname>
-        object allows the script to invoke processing using &carrot; components. Please consult examples for details.
+        object allows the script to invoke processing using &carrot; components. Please consult examples 
+        present in the &cvs; for details.
         </para>
     </section>
     

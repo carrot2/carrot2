@@ -6,7 +6,7 @@
 <appendix id="chapter:existing-components">
     <title>Existing &carrot; components</title>
 
-    <section>
+    <section id="sect:web-controller-component">
         <title>Carrot2 Controller component</title>
         
         <para>

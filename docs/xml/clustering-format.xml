@@ -28,7 +28,8 @@
     <para>
     One of the most promising approaches, both commercially and research-wise,
     is to automatically group search results into thematic categories, called
-    {\em clusters}. Assuming clusters descriptions are informative about the
+    <emphasis>clusters</emphasis>.
+    Assuming clusters descriptions are informative about the
     documents they contain,  
     the user spends much less time following irrelevant links. He also gets
     an excellent overview of subjects present in the search result and thus
@@ -37,6 +38,13 @@
     groups is apt to depict the real structure of results, not some predefined
     categories. 
     </para>
+    
+        
+    <pasteFigure src="clusters-example.png" width="4in">
+    An example of dynamically created clusters for three
+    queries to a search engine.
+    </pasteFigure>
+    
     <para>
     &carrot; was mainly created for research on search results clustering and hence
     several data exchange formats evolved for use with components in that application.
@@ -79,11 +87,12 @@
         <title>Input component query and response format</title>
         <!-- {{{ -->
         <para>
-        Input components in this application should accept &xml; query
+        Input components in search results clustering
+        application should accept &xml; query
         in the format described in <xref linkend="sect:mime:x-carrot-clustering-input-query" />.
         
         In response to a query, the input component should return
-        an XML document conforming to the data format
+        an &xml; document conforming to the data format
         described in <xref linkend="sect:mime:x-carrot-clustering-plain-response" />.
         </para>
         <!-- }}} -->
@@ -94,10 +103,10 @@
         <title>Clustered snippets format</title>
         <!-- {{{ -->
         <para>
-        The data stream with plain search results, returned from the input component,
-        is then processed by some filters, in order to retrieve information about
+        The data stream with plain search results returned from the input component
+        is then processed by some filters to discover
         semantically related documents. A filter component should accept
-        at least <link linkend="sect:mime:x-carrot-clustering-plain-response">plain
+        at least a <link linkend="sect:mime:x-carrot-clustering-plain-response">plain
         search results stream</link>.
         <emphasis>All unrecognized tags from the input stream
         must be propagated to the output</emphasis>. This ensures that extra
