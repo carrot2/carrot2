@@ -23,15 +23,15 @@ import com.stachoodev.carrot.filter.lingo.algorithm.*;
  * @author Stanislaw Osinski
  * @version $Revision$
  */
-public class LingoReloadedLocalFilterComponent extends ProfiledLocalFilterComponentBase
-    implements TokenizedDocumentsConsumer, RawClustersProducer,
-    LocalFilterComponent
+public class LingoWebLocalFilterComponent extends
+    ProfiledLocalFilterComponentBase implements TokenizedDocumentsConsumer,
+    RawClustersProducer, LocalFilterComponent
 {
     /** Documents to be clustered */
     private List tokenizedDocuments;
 
     /** And instance of Lingo algorithm */
-    private Lingo lingo;
+    private LingoWeb lingo;
 
     /** Capabilities required from the previous component in the chain */
     private final static Set CAPABILITIES_PREDECESSOR = new HashSet(Arrays
@@ -51,12 +51,15 @@ public class LingoReloadedLocalFilterComponent extends ProfiledLocalFilterCompon
     /** Raw clusters consumer */
     private RawClustersConsumer rawClustersConsumer;
 
+    /** Request context */
+    private RequestContext requestContext;
+
     /**
      * Creates a new Lingo filter with default parameters.
      */
-    public LingoReloadedLocalFilterComponent()
+    public LingoWebLocalFilterComponent()
     {
-        lingo = new Lingo();
+        lingo = new LingoWeb();
     }
 
     /**
@@ -65,9 +68,9 @@ public class LingoReloadedLocalFilterComponent extends ProfiledLocalFilterCompon
      * 
      * @param parameters
      */
-    public LingoReloadedLocalFilterComponent(Map parameters)
+    public LingoWebLocalFilterComponent(Map parameters)
     {
-        lingo = new Lingo(parameters);
+        lingo = new LingoWeb(parameters);
     }
 
     /*
@@ -135,6 +138,7 @@ public class LingoReloadedLocalFilterComponent extends ProfiledLocalFilterCompon
         tokenizedDocuments.clear();
         lingo.clear();
         rawClustersConsumer = null;
+        requestContext = null;
     }
 
     /*
@@ -146,6 +150,7 @@ public class LingoReloadedLocalFilterComponent extends ProfiledLocalFilterCompon
         throws ProcessingException
     {
         super.startProcessing(requestContext);
+        this.requestContext = requestContext;
     }
 
     /*
@@ -168,8 +173,13 @@ public class LingoReloadedLocalFilterComponent extends ProfiledLocalFilterCompon
         // Unfortunately, Lingo does not support incremental processing, so we
         // need to wait for all documents to come before we start processing
         startTimer();
+
+        // Get the query
+        String query = (String) requestContext.getRequestParameters().get(
+            LocalInputComponent.PARAM_QUERY);
+
         lingo.setProfile(profile);
-        List clusters = lingo.cluster(tokenizedDocuments);
+        List clusters = lingo.cluster(tokenizedDocuments, query);
         for (Iterator iter = clusters.iterator(); iter.hasNext();)
         {
             RawCluster cluster = (RawCluster) iter.next();
