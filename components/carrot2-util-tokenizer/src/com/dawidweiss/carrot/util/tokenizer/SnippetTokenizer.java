@@ -1,5 +1,12 @@
 /*
- * SnippetTokenizer.java Created on 2004-06-15
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
 package com.dawidweiss.carrot.util.tokenizer;
 
@@ -18,7 +25,8 @@ import com.dawidweiss.carrot.util.tokenizer.parser.*;
  * properties should be copied (not just the ones that are defined in
  * RawDocument)
  * 
- * @author stachoo
+ * @author Stanislaw Osinski
+ * @version $Revision$
  */
 public class SnippetTokenizer
 {
@@ -34,6 +42,11 @@ public class SnippetTokenizer
      */
     public List tokenize(List rawDocuments)
     {
+        // TODO: does it make sense to optimize this like this:
+        // 1) create a copy of the document list
+        // 2) sort the list according the the language
+        // 3) tokenize each part of the list using the same instance of
+        //    language tokenizer
         List tokenizedDocuments = new ArrayList();
         for (Iterator documents = rawDocuments.iterator(); documents.hasNext();)
         {
@@ -80,6 +93,7 @@ public class SnippetTokenizer
         tokenizedDocumentSnippet.setProperty(
             TokenizedDocument.PROPERTY_LANGUAGE, rawDocument
                 .getProperty(RawDocument.PROPERTY_LANGUAGE));
+
         return tokenizedDocumentSnippet;
     }
 

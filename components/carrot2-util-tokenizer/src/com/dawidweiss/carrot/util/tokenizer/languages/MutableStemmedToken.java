@@ -25,7 +25,7 @@ public class MutableStemmedToken extends StringTypedToken
      * Sets the stem associated with this token.
      * @param stem
      */
-    /* package */  void setStem(String stem) {
+    public void setStem(String stem) {
         this.stem = stem;
     }
 
