@@ -65,6 +65,26 @@ public interface TokenizedDocument {
     public final static String PROPERTY_URL = "url";
 
     /**
+     * Property that holds an ISO-639 code of the language of this document.
+     * 
+     * <p>
+     * The value returned for this property is of type {@link java.lang.String}
+     * </p>
+     */
+    public final static String PROPERTY_LANGUAGE = "lang";
+    
+    /**
+     * Document property that, if available, yields a {@link RawDocument}
+     * object with the original document that was used to obtain this document.
+     * 
+     * <p>
+     * The value returned for this property is of type  {@link
+     * RawDocument}.
+     * </p>
+     */
+    public final static String PROPERTY_RAW_DOCUMENT = "raw";
+
+    /**
      * Returns a named property of the document.   Names of the available
      * properties depend on the component that produces
      * <code>TokenizedDocument</code> objects. Some constants should also be
