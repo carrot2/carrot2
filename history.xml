@@ -11,6 +11,17 @@
         <date>2004-02-08</date>
         <committer>dawid</committer>
 
+        <change component="carrot2.input.snippet-reader" type="bugfix">
+        Some of Google result pages were not recognized due to a silly regexp
+        error (minimum distance beteen 'of about' and 'Search took' was set to
+        20 characters, while it may be more than that).
+        </change>
+
+        <change component="carrot2.input.snippet-reader" type="bugfix">
+        When a template was not recognized, the component returned 0-sized
+        result. Now it returns a HTTP 500 error together with a result.
+        </change>
+
         <change component="global" type="new">
         Added an Egothor Search Engine input component adapter.
         The code has been moved from the Egothor project.

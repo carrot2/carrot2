@@ -66,8 +66,9 @@
     <!-- build shared library to shared libraries directory -->
     <ant antfile="build.xml" dir="components/carrot2-shared-lib" inheritall="false" target="clean" />
     <ant antfile="build.xml" dir="components/carrot2-shared-lib" inheritall="false" target="build">
-        <property name="distribution.dir" location="lib" />
     </ant>
+    <copy file="components/carrot2-shared-lib/tmp/dist/carrot2-shared-lib.jar"
+          tofile="lib/carrot2-shared-lib.jar" overwrite="true" />
     <!-- copy the dependency specification -->
     <copy file="components/carrot2-shared-lib/carrot2-shared-lib.dep.xml"
         tofile="lib/carrot2-shared-lib.dep.xml" overwrite="true" />
