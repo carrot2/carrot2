@@ -3,7 +3,6 @@
  */
 package com.dawidweiss.carrot.core.local.clustering;
 
-
 /**
  * @author stachoo
  */
@@ -73,5 +72,15 @@ public class RawDocumentSnippet extends RawDocumentBase
     public String getSnippet()
     {
         return snippet;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    public String toString()
+    {
+        return "[" + title + "] " + snippet;
     }
 }
