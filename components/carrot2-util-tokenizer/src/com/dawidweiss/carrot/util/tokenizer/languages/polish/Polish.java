@@ -5,7 +5,7 @@ import java.util.Set;
 
 import com.dawidweiss.carrot.core.local.linguistic.LanguageTokenizer;
 import com.dawidweiss.carrot.core.local.linguistic.Stemmer;
-import com.dawidweiss.carrot.filter.lametyzator.Lametyzator;
+import com.dawidweiss.carrot.filter.stempel.*;
 import com.dawidweiss.carrot.util.common.pools.ReusableObjectsFactory;
 import com.dawidweiss.carrot.util.common.pools.SoftReusableObjectsPool;
 import com.dawidweiss.carrot.util.tokenizer.languages.LanguageBase;
@@ -89,17 +89,12 @@ public class Polish extends StemmedLanguageBase {
 	}
 
     /** 
-     * Return an instance of an Polish stemmer ({@link Lametyzator}) if
-     * it is available.
-     * 
-     * <p>The stemmer is a dictionary-driven heuristic, so it
-     * is not completely accurate and it is not applicable
-     * for proper names (sadly).
+     * Return an instance of an Polish stemmer (Stempel stemmer is used).
      *  
      * @see com.dawidweiss.carrot.util.tokenizer.languages.LanguageBase#createStemmerInstance()
      */
     protected Stemmer createStemmerInstance() {
-		return new Lametyzator();
+		return new com.dawidweiss.carrot.filter.stempel.Stempel();
     }
 
 

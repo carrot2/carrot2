@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE component SYSTEM "../../etc/component-dependency.dtd" >
 
 <component
@@ -19,7 +19,7 @@
     <dependency name="carrot2-util-common" />
     <dependency name="carrot2-license" />
     <dependency name="carrot2-snowball-stemmers" />
-    <dependency name="carrot2-stemmer-lametyzator" />
+    <dependency name="carrot2-stemmer-stempel" />
 
     <!-- Libraries -->
     <dependency name="log4j" />
