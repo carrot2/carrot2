@@ -35,7 +35,8 @@ public class MultilingualPreprocessingStrategy
         );
 
     /** The sentence delimiters over which phrases cannot be spanned */
-    private static final String [] DEFAULT_SENTENCE_DELIMITERS = { ".", "?", "!", "|", ";" };
+    private static final String [] DEFAULT_SENTENCE_DELIMITERS = 
+        { ".", "?", "!", "|", ";" };
 
     /** Sentence delimiters */
     private String [] sentenceDelimiters;
@@ -221,10 +222,6 @@ public class MultilingualPreprocessingStrategy
 
     /**
      * Method clean.
-     *
-     * @param string
-     *
-     * @return String
      */
     protected Snippet preprocess(Snippet snippet)
     {
@@ -491,8 +488,7 @@ public class MultilingualPreprocessingStrategy
     }
 
     /**
-     * Regular expression for matching numbers. TODO: this code should be perhaps replaced with
-     * tokenizer class from carrot-utils
+     * Regular expression for matching numbers.
      */
     private static final RE numberPattern;
 

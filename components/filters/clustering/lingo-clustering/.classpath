@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
     <classpathentry kind="src" path="src"/>
+    <classpathentry kind="src" path="src-test"/>
     <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
     <classpathentry kind="var" path="CARROT2_CVS/lib/commons-beanutils.jar"/>
     <classpathentry kind="var" path="CARROT2_CVS/lib/commons-collections.jar"/>
@@ -13,16 +14,14 @@
     <classpathentry kind="var" path="CARROT2_CVS/lib/colt.jar"/>
     <classpathentry kind="var" path="CARROT2_CVS/lib/dweiss-utils.jar"/>
     <classpathentry kind="var" path="CARROT2_CVS/lib/gnu-regexp-1.1.4.jar"/>
-    <classpathentry kind="var" path="CARROT2_CVS/lib/jaxp.jar"/>
     <classpathentry kind="var" path="CARROT2_CVS/lib/saxon.jar"/>
     <classpathentry kind="var" path="CARROT2_CVS/lib/struts.jar"/>
     <classpathentry kind="var" path="CARROT2_CVS/lib/xercesImpl.jar"/>
     <classpathentry kind="var" path="CARROT2_CVS/lib/xml-apis.jar"/>
-    <classpathentry kind="var" path="CARROT2_CVS/lib/junit.jar"/>
     <classpathentry kind="var" path="CARROT2_CVS/lib/carrot2-shared-lib.jar"/>
-    <classpathentry kind="lib" path="lib/FSA.jar"/>
-    <classpathentry kind="lib" path="lib/Jama-1.0.1.jar"/>
-    <classpathentry kind="lib" path="lib/junit.jar"/>
-    <classpathentry kind="lib" path="lib/stemming.jar"/>
+    <classpathentry kind="var" path="CARROT2_CVS/lib/compile-time-only/junit.jar"/>
+    <classpathentry kind="var" path="CARROT2_CVS/lib/FSA.jar"/>
+    <classpathentry kind="var" path="CARROT2_CVS/lib/lametyzator.jar"/>
+    <classpathentry kind="var" path="CARROT2_CVS/lib/Jama-1.0.1-patched.jar"/>
     <classpathentry kind="output" path="tmp/build/WEB-INF/classes"/>
 </classpath>

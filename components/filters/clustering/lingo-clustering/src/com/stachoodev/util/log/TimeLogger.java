@@ -100,7 +100,8 @@ public class TimeLogger
             case UNIT_SECONDS:
                 return numberFormat.format(elapsed / 1000.0f) + " sec.";
 
-            case UNIT_MILISECONDS:default:
+            case UNIT_MILISECONDS:
+            default:
                 return Long.toString(elapsed) + " msec.";
         }
     }

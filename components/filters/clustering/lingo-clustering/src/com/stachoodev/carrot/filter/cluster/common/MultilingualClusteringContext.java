@@ -51,21 +51,15 @@ public class MultilingualClusteringContext
     /** */
     public static final String UNIDENTIFIED_LANGUAGE_NAME = "unidentified";
 
-    /**
-     * This constructor will probably be used for test purposes only.
-     */
-    public MultilingualClusteringContext()
-    {
-        this(new File(System.getProperty("user.dir")));
-    }
-
 
     /**
      * @param dataDir
      */
-    public MultilingualClusteringContext(File dataDir)
+    public MultilingualClusteringContext(File dataDir, Map params)
     {
         this.dataDir = dataDir;
+        if (params != null)
+            super.setParameters(params);
 
         stopWordSets = new HashMap();
         nonStopWordSets = new HashMap();
@@ -79,8 +73,43 @@ public class MultilingualClusteringContext
 
         initLanguageProcessing();
 
-        preprocessingStrategy = new MultilingualPreprocessingStrategy();
-        featureExtractionStrategy = new MultilingualFeatureExtractionStrategy();
+        Object value;
+        if ( (value = this.getParameter("preprocessing.class")) != null) {
+            if (value instanceof List) {
+                value = ((List) value).get(0);
+            }
+            try
+            {
+                preprocessingStrategy = (PreprocessingStrategy) Thread.currentThread()
+                    .getContextClassLoader().loadClass((String) value).newInstance();
+            }
+            catch (Exception e)
+            {
+                logger.warn("Preprocessing strategy instantiation error",e);
+                throw new RuntimeException("Preprocessing strategy could not be loaded: "
+                    + value + ", " + e.toString());
+            }
+        } else {
+            preprocessingStrategy = new CarrotLibTokenizerPreprocessingStrategy();
+        }
+        
+        if ((value = this.getParameter("feature.extraction.strategy")) != null) {
+            try
+            {
+                featureExtractionStrategy = (FeatureExtractionStrategy)
+                    Thread.currentThread().getContextClassLoader()
+                        .loadClass((String) value).newInstance();
+            }
+            catch (Exception e)
+            {
+                logger.warn("Feature extraction strategy instantiation error",e);
+                throw new RuntimeException("Feature extraction strategy could not be loaded: "
+                    + value + ", " + e.toString());
+            }
+        } else {
+            featureExtractionStrategy = new MultilingualFeatureExtractionStrategy();
+        }
+
         clusteringStrategy = new LsiClusteringStrategy();
     }
 

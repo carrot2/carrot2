@@ -45,7 +45,6 @@ public class DefaultClusteringContext
     public DefaultClusteringContext()
     {
         snippets = new ArrayList();
-        additionalData = new HashMap();
         stems = new HashMap();
         inflected = new HashMap();
         stopWords = new HashSet();
@@ -136,42 +135,6 @@ public class DefaultClusteringContext
         {
             inflected.put(stem, word);
         }
-    }
-
-
-    /**
-     * Method putData.
-     *
-     * @param key
-     * @param data
-     */
-    public void putData(Object key, Object data)
-    {
-        additionalData.put(key, data);
-    }
-
-
-    /**
-     * Method getData.
-     *
-     * @param key
-     *
-     * @return Object
-     */
-    public Object getData(Object key)
-    {
-        return additionalData.get(key);
-    }
-
-
-    /**
-     * Method removeData.
-     *
-     * @param key
-     */
-    public void removeData(Object key)
-    {
-        additionalData.remove(key);
     }
 
 

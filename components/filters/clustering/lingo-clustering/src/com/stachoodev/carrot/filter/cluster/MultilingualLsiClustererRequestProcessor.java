@@ -68,7 +68,7 @@ public class MultilingualLsiClustererRequestProcessor
 
             // Prepare data
             MultilingualClusteringContext clusteringContext = new MultilingualClusteringContext(
-                    new File(getServletConfig().getServletContext().getRealPath(""))
+                    new File(getServletConfig().getServletContext().getRealPath("")), new HashMap()
                 );
 
             // Parameters
