@@ -14,11 +14,9 @@
         
         <xsl:if test="following-sibling::subtitle
                      |following-sibling::bookinfo/subtitle">
-            <fo:block>
                 <xsl:apply-templates select="(following-sibling::subtitle
                                              |following-sibling::bookinfo/subtitle)[1]"
                                      mode="book.verso.subtitle.mode"/>
-            </fo:block>
         </xsl:if>
     </fo:block>
 </xsl:template>

@@ -176,6 +176,38 @@
 
     <style
         in      = "${temp:docbook.ready.file}"
+        style   = "styler/elegant-fo/customized.elegant.xep.xsl"
+        out     = "${temp:fo.ready.file}"
+        processor = "${xslt.processor}"
+        >
+        <classpath refid="ant-extensions" />
+
+        <param name="paper.type" expression="a4" />
+        
+        <param name="admon.graphics" expression="1"/>
+        <param name="admon.graphics.path" expression="gfx/admonitions/" />
+        <param name="admon.graphics.extension"  expression=".gif" />
+
+        <param name="draft.mode" expression="no" />
+        <param name="draft.watermark.image" expression="" />
+
+        <param name="section.label.includes.component.label" expression="1" />         
+        <param name="section.autolabel" expression="1" />
+        <param name="generate.toc" expression="book toc,title"/>         
+
+        <param name="callout.graphics" expression="1" />
+        <param name="callout.graphics.path" expression="gfx/admonitions/callouts/" />
+        <param name="callout.graphics.extension" expression=".gif" />
+        <param name="admonition.title.properties" expression="text-align: left" />
+    </style>
+  </target>
+
+  
+  <target name="fo:xep:plain"
+          depends="noHistory,prepareForDocbook">
+
+    <style
+        in      = "${temp:docbook.ready.file}"
         style   = "styler/elegant-fo/customized.xep.xsl"
         out     = "${temp:fo.ready.file}"
         processor = "${xslt.processor}"
@@ -209,7 +241,7 @@
     </echo>
   </target>
   
-  <target name="pdf:xep" description="Renders the manual using the default docbook xsl:fo and XEP.">
+  <target name="pdf:xep.check" description="Renders the manual using the default docbook xsl:fo and XEP.">
     <property environment="env"/>
     <condition  property="tmp:xep.cmd"
                 value="xep.bat">
@@ -244,21 +276,37 @@
     	  unless="tmp:xep.fonts" />
 	<fail message="XEP is not available, sorry. Download XEP from www.renderx.com."
 		  unless="tmp:xep.cmd" />
-
-    <antcall inheritall="true" target="fo:xep_ok" />
   </target>
   
-  <target name="fo:xep_ok" depends="fo:xep:elegant" if="tmp:xep.cmd">
+  <target name="pdf:xep" depends="pdf:xep.check, fo:xep:plain">
     <echo message="XEP is available. Rendering PDF..." />
     
     <property location="styler/elegant-fo/xep/fonts.xml" name="xep.fontlist" />
     <property location="styler/elegant-fo/xep" name="xep.metrics" />
+
+    <delete file="${distribution.dir}/${manual.name}.pdf" failonerror="false" quiet="true" />
 
     <exec executable="${tmp:xep.cmd}" newenvironment="true" vmlauncher="false">
         <arg value="${tmp:arg.quot}-DFONTLIST=${xep.fontlist}${tmp:arg.quot}" />
         <arg value="${tmp:arg.quot}-DMETRICS=${xep.metrics}${tmp:arg.quot}" />
         <arg value="-fo" /><arg path="${temp:fo.ready.file}" />
         <arg value="-out" /><arg path="${distribution.dir}/${manual.name}.pdf" />
+    </exec>
+  </target>
+
+  <target name="pdf:xep:elegant" depends="pdf:xep.check, fo:xep:elegant">
+    <echo message="XEP is available. Rendering PDF..." />
+    
+    <property location="styler/elegant-fo/xep/fonts.xml" name="xep.fontlist" />
+    <property location="styler/elegant-fo/xep" name="xep.metrics" />
+
+    <delete file="${distribution.dir}/${manual.name}-elegant.pdf" failonerror="false" quiet="true" />
+
+    <exec executable="${tmp:xep.cmd}" newenvironment="true" vmlauncher="false">
+        <arg value="${tmp:arg.quot}-DFONTLIST=${xep.fontlist}${tmp:arg.quot}" />
+        <arg value="${tmp:arg.quot}-DMETRICS=${xep.metrics}${tmp:arg.quot}" />
+        <arg value="-fo" /><arg path="${temp:fo.ready.file}" />
+        <arg value="-out" /><arg path="${distribution.dir}/${manual.name}-elegant.pdf" />
     </exec>
   </target>
 

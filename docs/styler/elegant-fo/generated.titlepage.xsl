@@ -5,6 +5,7 @@
 
 
 
+
   
     
 
@@ -30,11 +31,14 @@
   </xsl:choose>
 
       
+  <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" mode="book.titlepage.recto.auto.mode" select="bookinfo/corpauthor"/>
+      
   <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" mode="book.titlepage.recto.auto.mode" select="bookinfo/authorgroup"/>
       
   <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" mode="book.titlepage.recto.auto.mode" select="bookinfo/author"/>
     
 </xsl:template>
+      
       
       
       
@@ -53,7 +57,6 @@
       <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" mode="book.titlepage.verso.auto.mode" select="title"/>
     </xsl:when>
   </xsl:choose>
-
 
       
   <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" mode="book.titlepage.verso.auto.mode" select="bookinfo/corpauthor"/>
@@ -76,7 +79,6 @@
   
 </xsl:template>
       
-
       
       
       
@@ -111,10 +113,14 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="book.titlepage">
   <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="book.titlepage.before.recto"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="book.titlepage.recto"/>
+    </fo:block>
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="book.titlepage.before.verso"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="book.titlepage.verso"/>
+    </fo:block>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="book.titlepage.separator"/>
   </fo:block>
 </xsl:template>
@@ -132,7 +138,7 @@
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="title" mode="book.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="book.titlepage.recto.style" text-align="center" font-size="24.8832pt" margin-top="2in" font-weight="bold" font-family="{$title.font.family}">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="book.titlepage.recto.style" text-align="center" font-size="24.8832pt" space-before="2in" font-weight="bold" font-family="{$title.fontset}">
 <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="customized.book.title">
 <xsl:with-param xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="node" select="ancestor-or-self::book[1]"/>
 </xsl:call-template>
@@ -140,13 +146,19 @@
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="subtitle" mode="book.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="book.titlepage.recto.style" text-align="center" font-size="20.736pt" space-before="15.552pt" font-family="{$title.font.family}">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="book.titlepage.recto.style" text-align="center" font-size="20.736pt" space-before="15.552pt" font-family="{$title.fontset}">
+<xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="book.titlepage.recto.mode"/>
+</fo:block>
+</xsl:template>
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="corpauthor" mode="book.titlepage.recto.auto.mode">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="book.titlepage.recto.style" font-size="17.28pt" keep-with-next="always" space-before="2in">
 <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="book.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="authorgroup" mode="book.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="book.titlepage.recto.style" space-before="1in">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="book.titlepage.recto.style" space-before="2in">
 <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="book.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>
@@ -158,7 +170,7 @@
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="title" mode="book.titlepage.verso.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="book.titlepage.verso.style" font-size="14.4pt" font-weight="bold" font-family="{$title.font.family}">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="book.titlepage.verso.style" font-size="14.4pt" font-weight="bold" font-family="{$title.fontset}">
 <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="customized.book.verso.title">
 </xsl:call-template>
 </fo:block>
@@ -285,10 +297,14 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="part.titlepage">
   <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="part.titlepage.before.recto"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="part.titlepage.recto"/>
+    </fo:block>
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="part.titlepage.before.verso"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="part.titlepage.verso"/>
+    </fo:block>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="part.titlepage.separator"/>
   </fo:block>
 </xsl:template>
@@ -306,7 +322,7 @@
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="title" mode="part.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="part.titlepage.recto.style" text-align="center" font-size="24.8832pt" space-before="18.6624pt" font-weight="bold" font-family="{$title.font.family}">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="part.titlepage.recto.style" text-align="center" font-size="24.8832pt" space-before="18.6624pt" font-weight="bold" font-family="{$title.fontset}">
 <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="division.title">
 <xsl:with-param xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="node" select="ancestor-or-self::part[1]"/>
 </xsl:call-template>
@@ -314,7 +330,7 @@
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="subtitle" mode="part.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="part.titlepage.recto.style" text-align="center" font-size="20.736pt" space-before="15.552pt" font-weight="bold" font-style="italic" font-family="{$title.font.family}">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="part.titlepage.recto.style" text-align="center" font-size="20.736pt" space-before="15.552pt" font-weight="bold" font-style="italic" font-family="{$title.fontset}">
 <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="part.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>
@@ -427,10 +443,14 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="partintro.titlepage">
   <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="partintro.titlepage.before.recto"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="partintro.titlepage.recto"/>
+    </fo:block>
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="partintro.titlepage.before.verso"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="partintro.titlepage.verso"/>
+    </fo:block>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="partintro.titlepage.separator"/>
   </fo:block>
 </xsl:template>
@@ -448,13 +468,13 @@
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="title" mode="partintro.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="partintro.titlepage.recto.style" text-align="center" font-size="24.8832pt" font-weight="bold" space-before="1em" font-family="{$title.font.family}">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="partintro.titlepage.recto.style" text-align="center" font-size="24.8832pt" font-weight="bold" space-before="1em" font-family="{$title.fontset}">
 <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="partintro.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="subtitle" mode="partintro.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="partintro.titlepage.recto.style" text-align="center" font-size="14.4pt" font-weight="bold" font-style="italic" font-family="{$title.font.family}">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="partintro.titlepage.recto.style" text-align="center" font-size="14.4pt" font-weight="bold" font-style="italic" font-family="{$title.fontset}">
 <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="partintro.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>
@@ -635,10 +655,14 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="reference.titlepage">
   <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="reference.titlepage.before.recto"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="reference.titlepage.recto"/>
+    </fo:block>
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="reference.titlepage.before.verso"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="reference.titlepage.verso"/>
+    </fo:block>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="reference.titlepage.separator"/>
   </fo:block>
 </xsl:template>
@@ -656,7 +680,7 @@
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="title" mode="reference.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="reference.titlepage.recto.style" text-align="center" font-size="24.8832pt" space-before="18.6624pt" font-weight="bold" font-family="{$title.font.family}">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="reference.titlepage.recto.style" text-align="center" font-size="24.8832pt" space-before="18.6624pt" font-weight="bold" font-family="{$title.fontset}">
 <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="division.title">
 <xsl:with-param xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="node" select="ancestor-or-self::reference[1]"/>
 </xsl:call-template>
@@ -664,7 +688,7 @@
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="subtitle" mode="reference.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="reference.titlepage.recto.style" font-family="{$title.font.family}" text-align="center">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="reference.titlepage.recto.style" font-family="{$title.fontset}" text-align="center">
 <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="reference.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>
@@ -787,10 +811,14 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="refsynopsisdiv.titlepage">
   <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="refsynopsisdiv.titlepage.before.recto"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="refsynopsisdiv.titlepage.recto"/>
+    </fo:block>
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="refsynopsisdiv.titlepage.before.verso"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="refsynopsisdiv.titlepage.verso"/>
+    </fo:block>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="refsynopsisdiv.titlepage.separator"/>
   </fo:block>
 </xsl:template>
@@ -808,7 +836,7 @@
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="title" mode="refsynopsisdiv.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="refsynopsisdiv.titlepage.recto.style" font-family="{$title.font.family}">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="refsynopsisdiv.titlepage.recto.style" font-family="{$title.fontset}">
 <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="refsynopsisdiv.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>
@@ -865,10 +893,14 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="refsection.titlepage">
   <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="refsection.titlepage.before.recto"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="refsection.titlepage.recto"/>
+    </fo:block>
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="refsection.titlepage.before.verso"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="refsection.titlepage.verso"/>
+    </fo:block>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="refsection.titlepage.separator"/>
   </fo:block>
 </xsl:template>
@@ -886,7 +918,7 @@
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="title" mode="refsection.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="refsection.titlepage.recto.style" font-family="{$title.font.family}">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="refsection.titlepage.recto.style" font-family="{$title.fontset}">
 <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="refsection.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>
@@ -943,10 +975,14 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="refsect1.titlepage">
   <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="refsect1.titlepage.before.recto"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="refsect1.titlepage.recto"/>
+    </fo:block>
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="refsect1.titlepage.before.verso"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="refsect1.titlepage.verso"/>
+    </fo:block>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="refsect1.titlepage.separator"/>
   </fo:block>
 </xsl:template>
@@ -964,7 +1000,7 @@
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="title" mode="refsect1.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="refsect1.titlepage.recto.style" font-family="{$title.font.family}">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="refsect1.titlepage.recto.style" font-family="{$title.fontset}">
 <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="refsect1.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>
@@ -1021,10 +1057,14 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="refsect2.titlepage">
   <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="refsect2.titlepage.before.recto"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="refsect2.titlepage.recto"/>
+    </fo:block>
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="refsect2.titlepage.before.verso"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="refsect2.titlepage.verso"/>
+    </fo:block>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="refsect2.titlepage.separator"/>
   </fo:block>
 </xsl:template>
@@ -1042,7 +1082,7 @@
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="title" mode="refsect2.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="refsect2.titlepage.recto.style" font-family="{$title.font.family}">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="refsect2.titlepage.recto.style" font-family="{$title.fontset}">
 <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="refsect2.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>
@@ -1099,10 +1139,14 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="refsect3.titlepage">
   <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="refsect3.titlepage.before.recto"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="refsect3.titlepage.recto"/>
+    </fo:block>
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="refsect3.titlepage.before.verso"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="refsect3.titlepage.verso"/>
+    </fo:block>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="refsect3.titlepage.separator"/>
   </fo:block>
 </xsl:template>
@@ -1120,7 +1164,7 @@
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="title" mode="refsect3.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="refsect3.titlepage.recto.style" font-family="{$title.font.family}">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="refsect3.titlepage.recto.style" font-family="{$title.fontset}">
 <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="refsect3.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>
@@ -1132,7 +1176,7 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="dedication.titlepage.recto">
       
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="dedication.titlepage.recto.style" margin-left="{$title.margin.left}" font-size="24.8832pt" font-family="{$title.font.family}" font-weight="bold">
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="dedication.titlepage.recto.style" margin-left="{$title.margin.left}" font-size="24.8832pt" font-family="{$title.fontset}" font-weight="bold">
 <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="component.title">
 <xsl:with-param xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="node" select="ancestor-or-self::dedication[1]"/>
 </xsl:call-template></fo:block>
@@ -1183,10 +1227,14 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="dedication.titlepage">
   <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="dedication.titlepage.before.recto"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="dedication.titlepage.recto"/>
+    </fo:block>
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="dedication.titlepage.before.verso"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="dedication.titlepage.verso"/>
+    </fo:block>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="dedication.titlepage.separator"/>
   </fo:block>
 </xsl:template>
@@ -1204,7 +1252,7 @@
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="subtitle" mode="dedication.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="dedication.titlepage.recto.style" font-family="{$title.font.family}">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="dedication.titlepage.recto.style" font-family="{$title.fontset}">
 <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="dedication.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>
@@ -1216,7 +1264,7 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="preface.titlepage.recto">
       
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="preface.titlepage.recto.style" margin-left="{$title.margin.left}" font-size="24.8832pt" font-family="{$title.font.family}" font-weight="bold">
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="preface.titlepage.recto.style" margin-left="{$title.margin.left}" font-size="24.8832pt" font-family="{$title.fontset}" font-weight="bold">
 <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="component.title">
 <xsl:with-param xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="node" select="ancestor-or-self::preface[1]"/>
 </xsl:call-template></fo:block>
@@ -1311,10 +1359,14 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="preface.titlepage">
   <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="preface.titlepage.before.recto"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="preface.titlepage.recto"/>
+    </fo:block>
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="preface.titlepage.before.verso"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="preface.titlepage.verso"/>
+    </fo:block>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="preface.titlepage.separator"/>
   </fo:block>
 </xsl:template>
@@ -1332,7 +1384,7 @@
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="subtitle" mode="preface.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="preface.titlepage.recto.style" font-family="{$title.font.family}">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="preface.titlepage.recto.style" font-family="{$title.fontset}">
 <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="preface.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>
@@ -1422,6 +1474,7 @@
     </xsl:when>
   </xsl:choose>
 
+
       
   <xsl:choose xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:when xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="chapterinfo/subtitle">
@@ -1435,15 +1488,19 @@
     </xsl:when>
   </xsl:choose>
 
+
       
   <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" mode="chapter.titlepage.recto.auto.mode" select="chapterinfo/corpauthor"/>
   <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" mode="chapter.titlepage.recto.auto.mode" select="docinfo/corpauthor"/>
+
       
   <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" mode="chapter.titlepage.recto.auto.mode" select="chapterinfo/authorgroup"/>
   <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" mode="chapter.titlepage.recto.auto.mode" select="docinfo/authorgroup"/>
+
       
   <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" mode="chapter.titlepage.recto.auto.mode" select="chapterinfo/author"/>
   <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" mode="chapter.titlepage.recto.auto.mode" select="docinfo/author"/>
+
       
   <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" mode="chapter.titlepage.recto.auto.mode" select="chapterinfo/othercredit"/>
   <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" mode="chapter.titlepage.recto.auto.mode" select="docinfo/othercredit"/>
@@ -1471,10 +1528,15 @@
     
 </xsl:template>
       
+
       
+
       
+
       
+
       
+
       
       
       
@@ -1512,11 +1574,15 @@
 
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="chapter.titlepage">
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" font-family="{$title.fontset}">
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" margin-left="{$title.margin.left}">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="chapter.titlepage.before.recto"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="chapter.titlepage.recto"/>
+    </fo:block>
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="chapter.titlepage.before.verso"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="chapter.titlepage.verso"/>
+    </fo:block>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="chapter.titlepage.separator"/>
   </fo:block>
 </xsl:template>
@@ -1534,7 +1600,7 @@
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="title" mode="chapter.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="chapter.titlepage.recto.style" margin-left="{$title.margin.left}" font-size="24.8832pt" font-weight="bold" font-family="{$title.font.family}">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="chapter.titlepage.recto.style" font-size="24.8832pt" font-weight="bold">
 <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="component.title">
 <xsl:with-param xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="node" select="ancestor-or-self::chapter[1]"/>
 </xsl:call-template>
@@ -1542,25 +1608,25 @@
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="subtitle" mode="chapter.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="chapter.titlepage.recto.style" space-before="0.5em" margin-left="{$title.margin.left}" font-style="italic" font-size="14.4pt" font-weight="bold" font-family="{$title.font.family}">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="chapter.titlepage.recto.style" space-before="0.5em" font-style="italic" font-size="14.4pt" font-weight="bold">
 <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="chapter.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="corpauthor" mode="chapter.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="chapter.titlepage.recto.style">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="chapter.titlepage.recto.style" space-before="0.5em" space-after="0.5em" font-size="14.4pt">
 <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="chapter.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="authorgroup" mode="chapter.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="chapter.titlepage.recto.style">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="chapter.titlepage.recto.style" space-before="0.5em" space-after="0.5em" font-size="14.4pt">
 <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="chapter.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="author" mode="chapter.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="chapter.titlepage.recto.style">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="chapter.titlepage.recto.style" space-before="0.5em" space-after="0.5em" font-size="14.4pt">
 <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="chapter.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>
@@ -1723,10 +1789,14 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="appendix.titlepage">
   <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="appendix.titlepage.before.recto"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="appendix.titlepage.recto"/>
+    </fo:block>
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="appendix.titlepage.before.verso"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="appendix.titlepage.verso"/>
+    </fo:block>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="appendix.titlepage.separator"/>
   </fo:block>
 </xsl:template>
@@ -1744,7 +1814,7 @@
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="title" mode="appendix.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="appendix.titlepage.recto.style" margin-left="{$title.margin.left}" font-size="24.8832pt" font-weight="bold" font-family="{$title.font.family}">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="appendix.titlepage.recto.style" margin-left="{$title.margin.left}" font-size="24.8832pt" font-weight="bold" font-family="{$title.fontset}">
 <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="component.title">
 <xsl:with-param xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="node" select="ancestor-or-self::appendix[1]"/>
 </xsl:call-template>
@@ -1752,7 +1822,7 @@
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="subtitle" mode="appendix.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="appendix.titlepage.recto.style" font-family="{$title.font.family}">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="appendix.titlepage.recto.style" font-family="{$title.fontset}">
 <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="appendix.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>
@@ -1916,10 +1986,14 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="section.titlepage">
   <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="section.titlepage.before.recto"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="section.titlepage.recto"/>
+    </fo:block>
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="section.titlepage.before.verso"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="section.titlepage.verso"/>
+    </fo:block>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="section.titlepage.separator"/>
   </fo:block>
 </xsl:template>
@@ -1937,13 +2011,13 @@
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="title" mode="section.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="section.titlepage.recto.style" margin-left="{$title.margin.left}" font-family="{$title.font.family}">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="section.titlepage.recto.style" margin-left="{$title.margin.left}" font-family="{$title.fontset}">
 <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="section.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="subtitle" mode="section.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="section.titlepage.recto.style" font-family="{$title.font.family}">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="section.titlepage.recto.style" font-family="{$title.fontset}">
 <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="section.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>
@@ -2105,10 +2179,14 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="sect1.titlepage">
   <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="sect1.titlepage.before.recto"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="sect1.titlepage.recto"/>
+    </fo:block>
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="sect1.titlepage.before.verso"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="sect1.titlepage.verso"/>
+    </fo:block>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="sect1.titlepage.separator"/>
   </fo:block>
 </xsl:template>
@@ -2126,13 +2204,13 @@
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="title" mode="sect1.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="sect1.titlepage.recto.style" margin-left="{$title.margin.left}" font-family="{$title.font.family}">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="sect1.titlepage.recto.style" margin-left="{$title.margin.left}" font-family="{$title.fontset}">
 <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="sect1.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="subtitle" mode="sect1.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="sect1.titlepage.recto.style" font-family="{$title.font.family}">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="sect1.titlepage.recto.style" font-family="{$title.fontset}">
 <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="sect1.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>
@@ -2294,10 +2372,14 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="sect2.titlepage">
   <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="sect2.titlepage.before.recto"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="sect2.titlepage.recto"/>
+    </fo:block>
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="sect2.titlepage.before.verso"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="sect2.titlepage.verso"/>
+    </fo:block>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="sect2.titlepage.separator"/>
   </fo:block>
 </xsl:template>
@@ -2315,13 +2397,13 @@
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="title" mode="sect2.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="sect2.titlepage.recto.style" margin-left="{$title.margin.left}" font-family="{$title.font.family}">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="sect2.titlepage.recto.style" margin-left="{$title.margin.left}" font-family="{$title.fontset}">
 <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="sect2.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="subtitle" mode="sect2.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="sect2.titlepage.recto.style" font-family="{$title.font.family}">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="sect2.titlepage.recto.style" font-family="{$title.fontset}">
 <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="sect2.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>
@@ -2483,10 +2565,14 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="sect3.titlepage">
   <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="sect3.titlepage.before.recto"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="sect3.titlepage.recto"/>
+    </fo:block>
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="sect3.titlepage.before.verso"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="sect3.titlepage.verso"/>
+    </fo:block>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="sect3.titlepage.separator"/>
   </fo:block>
 </xsl:template>
@@ -2504,13 +2590,13 @@
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="title" mode="sect3.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="sect3.titlepage.recto.style" margin-left="{$title.margin.left}" font-family="{$title.font.family}">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="sect3.titlepage.recto.style" margin-left="{$title.margin.left}" font-family="{$title.fontset}">
 <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="sect3.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="subtitle" mode="sect3.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="sect3.titlepage.recto.style" font-family="{$title.font.family}">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="sect3.titlepage.recto.style" font-family="{$title.fontset}">
 <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="sect3.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>
@@ -2672,10 +2758,14 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="sect4.titlepage">
   <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="sect4.titlepage.before.recto"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="sect4.titlepage.recto"/>
+    </fo:block>
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="sect4.titlepage.before.verso"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="sect4.titlepage.verso"/>
+    </fo:block>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="sect4.titlepage.separator"/>
   </fo:block>
 </xsl:template>
@@ -2693,13 +2783,13 @@
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="title" mode="sect4.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="sect4.titlepage.recto.style" margin-left="{$title.margin.left}" font-family="{$title.font.family}">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="sect4.titlepage.recto.style" margin-left="{$title.margin.left}" font-family="{$title.fontset}">
 <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="sect4.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="subtitle" mode="sect4.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="sect4.titlepage.recto.style" font-family="{$title.font.family}">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="sect4.titlepage.recto.style" font-family="{$title.fontset}">
 <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="sect4.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>
@@ -2861,10 +2951,14 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="sect5.titlepage">
   <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="sect5.titlepage.before.recto"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="sect5.titlepage.recto"/>
+    </fo:block>
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="sect5.titlepage.before.verso"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="sect5.titlepage.verso"/>
+    </fo:block>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="sect5.titlepage.separator"/>
   </fo:block>
 </xsl:template>
@@ -2882,13 +2976,13 @@
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="title" mode="sect5.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="sect5.titlepage.recto.style" margin-left="{$title.margin.left}" font-family="{$title.font.family}">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="sect5.titlepage.recto.style" margin-left="{$title.margin.left}" font-family="{$title.fontset}">
 <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="sect5.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="subtitle" mode="sect5.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="sect5.titlepage.recto.style" font-family="{$title.font.family}">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="sect5.titlepage.recto.style" font-family="{$title.fontset}">
 <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="sect5.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>
@@ -3067,10 +3161,14 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="simplesect.titlepage">
   <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="simplesect.titlepage.before.recto"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="simplesect.titlepage.recto"/>
+    </fo:block>
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="simplesect.titlepage.before.verso"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="simplesect.titlepage.verso"/>
+    </fo:block>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="simplesect.titlepage.separator"/>
   </fo:block>
 </xsl:template>
@@ -3088,13 +3186,13 @@
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="title" mode="simplesect.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="simplesect.titlepage.recto.style" margin-left="{$title.margin.left}" font-family="{$title.font.family}">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="simplesect.titlepage.recto.style" margin-left="{$title.margin.left}" font-family="{$title.fontset}">
 <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="simplesect.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="subtitle" mode="simplesect.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="simplesect.titlepage.recto.style" font-family="{$title.font.family}">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="simplesect.titlepage.recto.style" font-family="{$title.fontset}">
 <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="simplesect.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>
@@ -3172,7 +3270,7 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="bibliography.titlepage.recto">
       
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="bibliography.titlepage.recto.style" margin-left="{$title.margin.left}" font-size="24.8832pt" font-family="{$title.font.family}" font-weight="bold">
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="bibliography.titlepage.recto.style" margin-left="{$title.margin.left}" font-size="24.8832pt" font-family="{$title.fontset}" font-weight="bold">
 <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="component.title">
 <xsl:with-param xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="node" select="ancestor-or-self::bibliography[1]"/>
 </xsl:call-template></fo:block>
@@ -3223,10 +3321,14 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="bibliography.titlepage">
   <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="bibliography.titlepage.before.recto"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="bibliography.titlepage.recto"/>
+    </fo:block>
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="bibliography.titlepage.before.verso"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="bibliography.titlepage.verso"/>
+    </fo:block>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="bibliography.titlepage.separator"/>
   </fo:block>
 </xsl:template>
@@ -3244,8 +3346,112 @@
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="subtitle" mode="bibliography.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="bibliography.titlepage.recto.style" font-family="{$title.font.family}">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="bibliography.titlepage.recto.style" font-family="{$title.fontset}">
 <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="bibliography.titlepage.recto.mode"/>
+</fo:block>
+</xsl:template>
+
+
+
+  
+    
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="bibliodiv.titlepage.recto">
+      
+  <xsl:choose xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+    <xsl:when xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="bibliodivinfo/title">
+      <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" mode="bibliodiv.titlepage.recto.auto.mode" select="bibliodivinfo/title"/>
+    </xsl:when>
+    <xsl:when xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="docinfo/title">
+      <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" mode="bibliodiv.titlepage.recto.auto.mode" select="docinfo/title"/>
+    </xsl:when>
+    <xsl:when xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="title">
+      <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" mode="bibliodiv.titlepage.recto.auto.mode" select="title"/>
+    </xsl:when>
+  </xsl:choose>
+
+      
+  <xsl:choose xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+    <xsl:when xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="bibliodivinfo/subtitle">
+      <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" mode="bibliodiv.titlepage.recto.auto.mode" select="bibliodivinfo/subtitle"/>
+    </xsl:when>
+    <xsl:when xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="docinfo/subtitle">
+      <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" mode="bibliodiv.titlepage.recto.auto.mode" select="docinfo/subtitle"/>
+    </xsl:when>
+    <xsl:when xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="subtitle">
+      <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" mode="bibliodiv.titlepage.recto.auto.mode" select="subtitle"/>
+    </xsl:when>
+  </xsl:choose>
+
+    
+</xsl:template>
+      
+      
+    
+
+    
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="bibliodiv.titlepage.verso">
+    
+</xsl:template>
+    
+
+    
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="bibliodiv.titlepage.separator">
+    
+</xsl:template>
+
+    
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="bibliodiv.titlepage.before.recto">
+    
+</xsl:template>
+
+    
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="bibliodiv.titlepage.before.verso">
+    
+</xsl:template>
+  
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="bibliodiv.titlepage">
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="bibliodiv.titlepage.before.recto"/>
+    <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="bibliodiv.titlepage.recto"/>
+    </fo:block>
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="bibliodiv.titlepage.before.verso"/>
+    <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="bibliodiv.titlepage.verso"/>
+    </fo:block>
+    <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="bibliodiv.titlepage.separator"/>
+  </fo:block>
+</xsl:template>
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="*" mode="bibliodiv.titlepage.recto.mode">
+  <!-- if an element isn't found in this mode, -->
+  <!-- try the generic titlepage.mode -->
+  <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="titlepage.mode"/>
+</xsl:template>
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="*" mode="bibliodiv.titlepage.verso.mode">
+  <!-- if an element isn't found in this mode, -->
+  <!-- try the generic titlepage.mode -->
+  <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="titlepage.mode"/>
+</xsl:template>
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="title" mode="bibliodiv.titlepage.recto.auto.mode">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="bibliodiv.titlepage.recto.style" margin-left="{$title.margin.left}" font-size="20.736pt" font-family="{$title.fontset}" font-weight="bold">
+<xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="component.title">
+<xsl:with-param xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="node" select="ancestor-or-self::bibliodiv[1]"/>
+</xsl:call-template>
+</fo:block>
+</xsl:template>
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="subtitle" mode="bibliodiv.titlepage.recto.auto.mode">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="bibliodiv.titlepage.recto.style" font-family="{$title.fontset}">
+<xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="bibliodiv.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>
 
@@ -3256,7 +3462,7 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="glossary.titlepage.recto">
       
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="glossary.titlepage.recto.style" margin-left="{$title.margin.left}" font-size="24.8832pt" font-family="{$title.font.family}" font-weight="bold">
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="glossary.titlepage.recto.style" margin-left="{$title.margin.left}" font-size="24.8832pt" font-family="{$title.fontset}" font-weight="bold">
 <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="component.title">
 <xsl:with-param xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="node" select="ancestor-or-self::glossary[1]"/>
 </xsl:call-template></fo:block>
@@ -3307,10 +3513,14 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="glossary.titlepage">
   <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="glossary.titlepage.before.recto"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="glossary.titlepage.recto"/>
+    </fo:block>
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="glossary.titlepage.before.verso"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="glossary.titlepage.verso"/>
+    </fo:block>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="glossary.titlepage.separator"/>
   </fo:block>
 </xsl:template>
@@ -3328,8 +3538,112 @@
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="subtitle" mode="glossary.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="glossary.titlepage.recto.style" font-family="{$title.font.family}">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="glossary.titlepage.recto.style" font-family="{$title.fontset}">
 <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="glossary.titlepage.recto.mode"/>
+</fo:block>
+</xsl:template>
+
+
+
+  
+    
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="glossdiv.titlepage.recto">
+      
+  <xsl:choose xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+    <xsl:when xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="glossdivinfo/title">
+      <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" mode="glossdiv.titlepage.recto.auto.mode" select="glossdivinfo/title"/>
+    </xsl:when>
+    <xsl:when xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="docinfo/title">
+      <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" mode="glossdiv.titlepage.recto.auto.mode" select="docinfo/title"/>
+    </xsl:when>
+    <xsl:when xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="title">
+      <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" mode="glossdiv.titlepage.recto.auto.mode" select="title"/>
+    </xsl:when>
+  </xsl:choose>
+
+      
+  <xsl:choose xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+    <xsl:when xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="glossdivinfo/subtitle">
+      <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" mode="glossdiv.titlepage.recto.auto.mode" select="glossdivinfo/subtitle"/>
+    </xsl:when>
+    <xsl:when xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="docinfo/subtitle">
+      <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" mode="glossdiv.titlepage.recto.auto.mode" select="docinfo/subtitle"/>
+    </xsl:when>
+    <xsl:when xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="subtitle">
+      <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" mode="glossdiv.titlepage.recto.auto.mode" select="subtitle"/>
+    </xsl:when>
+  </xsl:choose>
+
+    
+</xsl:template>
+      
+      
+    
+
+    
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="glossdiv.titlepage.verso">
+    
+</xsl:template>
+    
+
+    
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="glossdiv.titlepage.separator">
+    
+</xsl:template>
+
+    
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="glossdiv.titlepage.before.recto">
+    
+</xsl:template>
+
+    
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="glossdiv.titlepage.before.verso">
+    
+</xsl:template>
+  
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="glossdiv.titlepage">
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="glossdiv.titlepage.before.recto"/>
+    <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="glossdiv.titlepage.recto"/>
+    </fo:block>
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="glossdiv.titlepage.before.verso"/>
+    <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="glossdiv.titlepage.verso"/>
+    </fo:block>
+    <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="glossdiv.titlepage.separator"/>
+  </fo:block>
+</xsl:template>
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="*" mode="glossdiv.titlepage.recto.mode">
+  <!-- if an element isn't found in this mode, -->
+  <!-- try the generic titlepage.mode -->
+  <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="titlepage.mode"/>
+</xsl:template>
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="*" mode="glossdiv.titlepage.verso.mode">
+  <!-- if an element isn't found in this mode, -->
+  <!-- try the generic titlepage.mode -->
+  <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="titlepage.mode"/>
+</xsl:template>
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="title" mode="glossdiv.titlepage.recto.auto.mode">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="glossdiv.titlepage.recto.style" margin-left="{$title.margin.left}" font-size="20.736pt" font-family="{$title.fontset}" font-weight="bold">
+<xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="component.title">
+<xsl:with-param xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="node" select="ancestor-or-self::glossdiv[1]"/>
+</xsl:call-template>
+</fo:block>
+</xsl:template>
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="subtitle" mode="glossdiv.titlepage.recto.auto.mode">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="glossdiv.titlepage.recto.style" font-family="{$title.fontset}">
+<xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="glossdiv.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>
 
@@ -3340,7 +3654,7 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="index.titlepage.recto">
       
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="index.titlepage.recto.style" margin-left="{$title.margin.left}" font-size="24.8832pt" font-family="{$title.font.family}" font-weight="bold">
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="index.titlepage.recto.style" margin-left="0" font-size="24.8832pt" font-family="{$title.fontset}" font-weight="bold">
 <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="component.title">
 <xsl:with-param xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="node" select="ancestor-or-self::index[1]"/>
 <xsl:with-param xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="pagewide" select="1"/>
@@ -3392,10 +3706,14 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="index.titlepage">
   <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="index.titlepage.before.recto"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="index.titlepage.recto"/>
+    </fo:block>
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="index.titlepage.before.verso"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="index.titlepage.verso"/>
+    </fo:block>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="index.titlepage.separator"/>
   </fo:block>
 </xsl:template>
@@ -3413,8 +3731,189 @@
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="subtitle" mode="index.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="index.titlepage.recto.style" font-family="{$title.font.family}">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="index.titlepage.recto.style" font-family="{$title.fontset}">
 <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="index.titlepage.recto.mode"/>
+</fo:block>
+</xsl:template>
+
+
+
+  
+  
+  
+
+  
+    
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="indexdiv.titlepage.recto">
+      
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="indexdiv.titlepage.recto.style">
+<xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="indexdiv.title">
+<xsl:with-param xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="title" select="title"/>
+</xsl:call-template></fo:block>
+      
+  <xsl:choose xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+    <xsl:when xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="indexdivinfo/subtitle">
+      <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" mode="indexdiv.titlepage.recto.auto.mode" select="indexdivinfo/subtitle"/>
+    </xsl:when>
+    <xsl:when xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="docinfo/subtitle">
+      <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" mode="indexdiv.titlepage.recto.auto.mode" select="docinfo/subtitle"/>
+    </xsl:when>
+    <xsl:when xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="subtitle">
+      <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" mode="indexdiv.titlepage.recto.auto.mode" select="subtitle"/>
+    </xsl:when>
+  </xsl:choose>
+
+    
+</xsl:template>
+      
+      
+    
+
+    
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="indexdiv.titlepage.verso">
+    
+</xsl:template>
+    
+
+    
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="indexdiv.titlepage.separator">
+    
+</xsl:template>
+
+    
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="indexdiv.titlepage.before.recto">
+    
+</xsl:template>
+
+    
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="indexdiv.titlepage.before.verso">
+    
+</xsl:template>
+  
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="indexdiv.titlepage">
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="indexdiv.titlepage.before.recto"/>
+    <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="indexdiv.titlepage.recto"/>
+    </fo:block>
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="indexdiv.titlepage.before.verso"/>
+    <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="indexdiv.titlepage.verso"/>
+    </fo:block>
+    <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="indexdiv.titlepage.separator"/>
+  </fo:block>
+</xsl:template>
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="*" mode="indexdiv.titlepage.recto.mode">
+  <!-- if an element isn't found in this mode, -->
+  <!-- try the generic titlepage.mode -->
+  <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="titlepage.mode"/>
+</xsl:template>
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="*" mode="indexdiv.titlepage.verso.mode">
+  <!-- if an element isn't found in this mode, -->
+  <!-- try the generic titlepage.mode -->
+  <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="titlepage.mode"/>
+</xsl:template>
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="subtitle" mode="indexdiv.titlepage.recto.auto.mode">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="indexdiv.titlepage.recto.style" font-family="{$title.fontset}">
+<xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="indexdiv.titlepage.recto.mode"/>
+</fo:block>
+</xsl:template>
+
+
+
+  
+    
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="setindex.titlepage.recto">
+      
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="setindex.titlepage.recto.style" margin-left="{$title.margin.left}" font-size="24.8832pt" font-family="{$title.fontset}" font-weight="bold">
+<xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="component.title">
+<xsl:with-param xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="node" select="ancestor-or-self::setindex[1]"/>
+<xsl:with-param xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="pagewide" select="1"/>
+</xsl:call-template></fo:block>
+      
+  <xsl:choose xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+    <xsl:when xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="setindexinfo/subtitle">
+      <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" mode="setindex.titlepage.recto.auto.mode" select="setindexinfo/subtitle"/>
+    </xsl:when>
+    <xsl:when xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="docinfo/subtitle">
+      <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" mode="setindex.titlepage.recto.auto.mode" select="docinfo/subtitle"/>
+    </xsl:when>
+    <xsl:when xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="subtitle">
+      <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" mode="setindex.titlepage.recto.auto.mode" select="subtitle"/>
+    </xsl:when>
+  </xsl:choose>
+
+    
+</xsl:template>
+      
+      
+    
+
+    
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="setindex.titlepage.verso">
+    
+</xsl:template>
+    
+
+    
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="setindex.titlepage.separator">
+    
+</xsl:template>
+
+    
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="setindex.titlepage.before.recto">
+    
+</xsl:template>
+
+    
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="setindex.titlepage.before.verso">
+    
+</xsl:template>
+  
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="setindex.titlepage">
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="setindex.titlepage.before.recto"/>
+    <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="setindex.titlepage.recto"/>
+    </fo:block>
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="setindex.titlepage.before.verso"/>
+    <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="setindex.titlepage.verso"/>
+    </fo:block>
+    <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="setindex.titlepage.separator"/>
+  </fo:block>
+</xsl:template>
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="*" mode="setindex.titlepage.recto.mode">
+  <!-- if an element isn't found in this mode, -->
+  <!-- try the generic titlepage.mode -->
+  <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="titlepage.mode"/>
+</xsl:template>
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="*" mode="setindex.titlepage.verso.mode">
+  <!-- if an element isn't found in this mode, -->
+  <!-- try the generic titlepage.mode -->
+  <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="titlepage.mode"/>
+</xsl:template>
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="subtitle" mode="setindex.titlepage.recto.auto.mode">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="setindex.titlepage.recto.style" font-family="{$title.fontset}">
+<xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="setindex.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>
 
@@ -3425,7 +3924,7 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="colophon.titlepage.recto">
       
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="colophon.titlepage.recto.style" margin-left="{$title.margin.left}" font-size="24.8832pt" font-family="{$title.font.family}" font-weight="bold">
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="colophon.titlepage.recto.style" margin-left="{$title.margin.left}" font-size="24.8832pt" font-family="{$title.fontset}" font-weight="bold">
 <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="component.title">
 <xsl:with-param xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="node" select="ancestor-or-self::colophon[1]"/>
 </xsl:call-template></fo:block>
@@ -3476,10 +3975,14 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="colophon.titlepage">
   <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="colophon.titlepage.before.recto"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="colophon.titlepage.recto"/>
+    </fo:block>
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="colophon.titlepage.before.verso"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="colophon.titlepage.verso"/>
+    </fo:block>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="colophon.titlepage.separator"/>
   </fo:block>
 </xsl:template>
@@ -3497,7 +4000,7 @@
 </xsl:template>
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="subtitle" mode="colophon.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="colophon.titlepage.recto.style" font-family="{$title.font.family}">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="colophon.titlepage.recto.style" font-family="{$title.fontset}">
 <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="colophon.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>
@@ -3509,7 +4012,7 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="table.of.contents.titlepage.recto">
       
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="table.of.contents.titlepage.recto.style" space-before.minimum="1em" space-before.optimum="1.5em" space-before.maximum="2em" space-after="0.5em" margin-left="{$title.margin.left}" font-size="17.28pt" font-weight="bold" font-family="{$title.font.family}">
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="table.of.contents.titlepage.recto.style" space-before.minimum="1em" space-before.optimum="1.5em" space-before.maximum="2em" space-after="0.5em" margin-left="{$title.margin.left}" font-size="17.28pt" font-weight="bold" font-family="{$title.fontset}">
 <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="gentext">
 <xsl:with-param xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="key" select="'TableofContents'"/>
 </xsl:call-template></fo:block>
@@ -3546,10 +4049,14 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="table.of.contents.titlepage">
   <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="table.of.contents.titlepage.before.recto"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="table.of.contents.titlepage.recto"/>
+    </fo:block>
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="table.of.contents.titlepage.before.verso"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="table.of.contents.titlepage.verso"/>
+    </fo:block>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="table.of.contents.titlepage.separator"/>
   </fo:block>
 </xsl:template>
@@ -3571,7 +4078,7 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.tables.titlepage.recto">
       
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="list.of.tables.titlepage.recto.style" space-after="1em" margin-left="{$title.margin.left}" font-size="17.28pt" font-weight="bold" font-family="{$title.font.family}">
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="list.of.tables.titlepage.recto.style" space-before.minimum="1em" space-before.optimum="1.5em" space-before.maximum="2em" space-after="0.5em" margin-left="{$title.margin.left}" font-size="17.28pt" font-weight="bold" font-family="{$title.fontset}">
 <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="gentext">
 <xsl:with-param xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="key" select="'ListofTables'"/>
 </xsl:call-template></fo:block>
@@ -3608,10 +4115,14 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.tables.titlepage">
   <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.tables.titlepage.before.recto"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.tables.titlepage.recto"/>
+    </fo:block>
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.tables.titlepage.before.verso"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.tables.titlepage.verso"/>
+    </fo:block>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.tables.titlepage.separator"/>
   </fo:block>
 </xsl:template>
@@ -3633,7 +4144,7 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.figures.titlepage.recto">
       
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="list.of.figures.titlepage.recto.style" space-before.minimum="1em" space-before.optimum="1.5em" space-before.maximum="2em" space-after="0.5em" margin-left="{$title.margin.left}" font-size="17.28pt" font-weight="bold" font-family="{$title.font.family}">
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="list.of.figures.titlepage.recto.style" space-before.minimum="1em" space-before.optimum="1.5em" space-before.maximum="2em" space-after="0.5em" margin-left="{$title.margin.left}" font-size="17.28pt" font-weight="bold" font-family="{$title.fontset}">
 <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="gentext">
 <xsl:with-param xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="key" select="'ListofFigures'"/>
 </xsl:call-template></fo:block>
@@ -3670,10 +4181,14 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.figures.titlepage">
   <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.figures.titlepage.before.recto"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.figures.titlepage.recto"/>
+    </fo:block>
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.figures.titlepage.before.verso"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.figures.titlepage.verso"/>
+    </fo:block>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.figures.titlepage.separator"/>
   </fo:block>
 </xsl:template>
@@ -3695,7 +4210,7 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.examples.titlepage.recto">
       
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="list.of.examples.titlepage.recto.style" space-before.minimum="1em" space-before.optimum="1.5em" space-before.maximum="2em" space-after="0.5em" margin-left="{$title.margin.left}" font-size="17.28pt" font-weight="bold" font-family="{$title.font.family}">
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="list.of.examples.titlepage.recto.style" space-before.minimum="1em" space-before.optimum="1.5em" space-before.maximum="2em" space-after="0.5em" margin-left="{$title.margin.left}" font-size="17.28pt" font-weight="bold" font-family="{$title.fontset}">
 <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="gentext">
 <xsl:with-param xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="key" select="'ListofExamples'"/>
 </xsl:call-template></fo:block>
@@ -3732,10 +4247,14 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.examples.titlepage">
   <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.examples.titlepage.before.recto"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.examples.titlepage.recto"/>
+    </fo:block>
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.examples.titlepage.before.verso"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.examples.titlepage.verso"/>
+    </fo:block>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.examples.titlepage.separator"/>
   </fo:block>
 </xsl:template>
@@ -3757,7 +4276,7 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.equations.titlepage.recto">
       
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="list.of.equations.titlepage.recto.style" space-before.minimum="1em" space-before.optimum="1.5em" space-before.maximum="2em" space-after="0.5em" margin-left="{$title.margin.left}" font-size="17.28pt" font-weight="bold" font-family="{$title.font.family}">
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="list.of.equations.titlepage.recto.style" space-before.minimum="1em" space-before.optimum="1.5em" space-before.maximum="2em" space-after="0.5em" margin-left="{$title.margin.left}" font-size="17.28pt" font-weight="bold" font-family="{$title.fontset}">
 <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="gentext">
 <xsl:with-param xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="key" select="'ListofEquations'"/>
 </xsl:call-template></fo:block>
@@ -3794,10 +4313,14 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.equations.titlepage">
   <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.equations.titlepage.before.recto"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.equations.titlepage.recto"/>
+    </fo:block>
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.equations.titlepage.before.verso"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.equations.titlepage.verso"/>
+    </fo:block>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.equations.titlepage.separator"/>
   </fo:block>
 </xsl:template>
@@ -3817,9 +4340,75 @@
   
     
 
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.procedures.titlepage.recto">
+      
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="list.of.procedures.titlepage.recto.style" space-before.minimum="1em" space-before.optimum="1.5em" space-before.maximum="2em" space-after="0.5em" margin-left="{$title.margin.left}" font-size="17.28pt" font-weight="bold" font-family="{$title.fontset}">
+<xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="gentext">
+<xsl:with-param xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="key" select="'ListofProcedures'"/>
+</xsl:call-template></fo:block>
+    
+</xsl:template>
+      
+    
+
+    
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.procedures.titlepage.verso">
+    
+</xsl:template>
+    
+
+    
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.procedures.titlepage.separator">
+    
+</xsl:template>
+
+    
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.procedures.titlepage.before.recto">
+    
+</xsl:template>
+
+    
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.procedures.titlepage.before.verso">
+    
+</xsl:template>
+  
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.procedures.titlepage">
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.procedures.titlepage.before.recto"/>
+    <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.procedures.titlepage.recto"/>
+    </fo:block>
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.procedures.titlepage.before.verso"/>
+    <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.procedures.titlepage.verso"/>
+    </fo:block>
+    <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.procedures.titlepage.separator"/>
+  </fo:block>
+</xsl:template>
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="*" mode="list.of.procedures.titlepage.recto.mode">
+  <!-- if an element isn't found in this mode, -->
+  <!-- try the generic titlepage.mode -->
+  <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="titlepage.mode"/>
+</xsl:template>
+
+<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="*" mode="list.of.procedures.titlepage.verso.mode">
+  <!-- if an element isn't found in this mode, -->
+  <!-- try the generic titlepage.mode -->
+  <xsl:apply-templates xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="." mode="titlepage.mode"/>
+</xsl:template>
+
+  
+    
+
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.unknowns.titlepage.recto">
       
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="list.of.unknowns.titlepage.recto.style" space-before.minimum="1em" space-before.optimum="1.5em" space-before.maximum="2em" space-after="0.5em" margin-left="{$title.margin.left}" font-size="17.28pt" font-weight="bold" font-family="{$title.font.family}">
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="list.of.unknowns.titlepage.recto.style" space-before.minimum="1em" space-before.optimum="1.5em" space-before.maximum="2em" space-after="0.5em" margin-left="{$title.margin.left}" font-size="17.28pt" font-weight="bold" font-family="{$title.fontset}">
 <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="gentext">
 <xsl:with-param xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="key" select="'ListofUnknown'"/>
 </xsl:call-template></fo:block>
@@ -3856,10 +4445,14 @@
 
 <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.unknowns.titlepage">
   <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.unknowns.titlepage.before.recto"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.unknowns.titlepage.recto"/>
+    </fo:block>
+    <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.unknowns.titlepage.before.verso"/>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.unknowns.titlepage.verso"/>
+    </fo:block>
     <xsl:call-template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="list.of.unknowns.titlepage.separator"/>
   </fo:block>
 </xsl:template>
