@@ -1,6 +1,15 @@
 
 This is a clusterizer plugin for Grokker.
+http://www.grokker.com/
 
-See Grokker at: http://www.grokker.com/
+This version is compatible with Grokker SDK 2.3 (2.1.4)
+and Grokker 2.3
 
-This version is compatible with Grokker SDK 2.2 and Grokker 2.2
+INSTALLATION:
+Copy the plugin to Plugins folder of Grokker installation. Change this
+property:
+
+groxis.grokker.categorizer.selectable = false
+
+to true in grokker.properties file. Carrot2 clusterizer should be available
+in Preferences->Categorizer menu.
