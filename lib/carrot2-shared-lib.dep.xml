@@ -10,4 +10,5 @@
     <dependency name="jdom" />
     <dependency name="put-utils" />
     <dependency name="log4j" />
+    <dependency name="gnu-regexp" />
 </component>

@@ -88,9 +88,19 @@ public class TokenizerImplTest
                     typeName = "SENTENCEMARKER";
 
                     break;
+                case Tokenizer.TYPE_PERSON:
+                    typeName = "PERSON";
+                    break;
+                case Tokenizer.TYPE_PUNCTUATION:
+                    typeName = "PUNCTIATION";
+                    break;
+                    
+                case Tokenizer.TYPE_NUMERIC:
+                    typeName = "NUMERIC";
+                    break;
 
                 default:
-                    typeName = "UNRECOGNIZED?!";
+                    typeName = "UNRECOGNIZED?! = " + type;
             }
 
             return "[" + typeName + "]" + this.image;
@@ -99,7 +109,7 @@ public class TokenizerImplTest
 
     public void test_Tokenizer_TYPE_TERM()
     {
-        String test = " simple terms: simpleterm 9numterm numerm99x \"quoted string\"";
+        String test = " simple terms simpleterm 9numterm numerm99x \"quoted string\"";
         TokenImage [] tokens = 
         {
             new TokenImage("simple", Tokenizer.TYPE_TERM),
@@ -117,7 +127,7 @@ public class TokenizerImplTest
 
     public void test_Tokenizer_TYPE_EMAIL()
     {
-        String test = "e-mails: dweiss@go2.pl dawid.weiss@go2.com.pl bubu@some-host.com me@me.org bubu99@yahoo.com";
+        String test = "e-mails dweiss@go2.pl dawid.weiss@go2.com.pl bubu@some-host.com me@me.org bubu99@yahoo.com";
         TokenImage [] tokens = 
         {
             new TokenImage("e-mails", Tokenizer.TYPE_TERM),
@@ -135,15 +145,28 @@ public class TokenizerImplTest
     public void test_Tokenizer_TYPE_URL()
     {
         String test =
-            " urls: http://www.google.com http://www.cs.put.poznan.pl/index.jsp?query=term&query2=term "
-            + " ftp://ftp.server";
+            " urls http://www.google.com http://www.cs.put.poznan.pl/index.jsp?query=term&query2=term "
+            + " ftp://ftp.server www.google.com   not.an.url   go2.pl/mail http://www.digimine.com/usama/datamine/.";
         TokenImage [] tokens = 
         {
             new TokenImage("urls", Tokenizer.TYPE_TERM),
             new TokenImage("http://www.google.com", Tokenizer.TYPE_URL),
             new TokenImage(
                 "http://www.cs.put.poznan.pl/index.jsp?query=term&query2=term", Tokenizer.TYPE_URL
-            ), new TokenImage("ftp://ftp.server", Tokenizer.TYPE_URL)
+            ), 
+            new TokenImage("ftp://ftp.server", Tokenizer.TYPE_URL),
+            new TokenImage("www.google.com", Tokenizer.TYPE_URL),
+            
+            new TokenImage("not", Tokenizer.TYPE_TERM),
+            new TokenImage(".", Tokenizer.TYPE_SENTENCEMARKER),
+            new TokenImage("an", Tokenizer.TYPE_TERM),
+            new TokenImage(".", Tokenizer.TYPE_SENTENCEMARKER),
+            new TokenImage("url", Tokenizer.TYPE_TERM),
+            
+            new TokenImage("go2.pl/mail", Tokenizer.TYPE_URL),
+            
+            new TokenImage("http://www.digimine.com/usama/datamine/", Tokenizer.TYPE_URL),
+            new TokenImage(".", Tokenizer.TYPE_SENTENCEMARKER)
         };
 
         compareTokenArrays(test, tokens);
@@ -152,16 +175,24 @@ public class TokenizerImplTest
 
     public void test_Tokenizer_TYPE_PERSON()
     {
-        String test = " O'J'Simpson and D.Weiss and D. Weiss and E.A.Bloober";
+        String test = " O'J'Simpson and D.Weiss and D. Weiss and E.A.Bloober and SentenceEnD. Bloober";
         TokenImage [] tokens = 
         {
-            new TokenImage("O'J'Simpson", Tokenizer.TYPE_PERSON),
+            new TokenImage("O", Tokenizer.TYPE_TERM),
+            new TokenImage("'", Tokenizer.TYPE_PUNCTUATION),
+            new TokenImage("J", Tokenizer.TYPE_TERM),
+            new TokenImage("'", Tokenizer.TYPE_PUNCTUATION),
+            new TokenImage("Simpson", Tokenizer.TYPE_TERM),
             new TokenImage("and", Tokenizer.TYPE_TERM),
             new TokenImage("D.Weiss", Tokenizer.TYPE_PERSON),
             new TokenImage("and", Tokenizer.TYPE_TERM),
             new TokenImage("D. Weiss", Tokenizer.TYPE_PERSON),
             new TokenImage("and", Tokenizer.TYPE_TERM),
-            new TokenImage("E.A.Bloober", Tokenizer.TYPE_PERSON)
+            new TokenImage("E.A.Bloober", Tokenizer.TYPE_PERSON),
+            new TokenImage("and", Tokenizer.TYPE_TERM),
+            new TokenImage("SentenceEnD", Tokenizer.TYPE_TERM),
+            new TokenImage(".", Tokenizer.TYPE_SENTENCEMARKER),
+            new TokenImage("Bloober", Tokenizer.TYPE_TERM)
         };
 
         compareTokenArrays(test, tokens);
@@ -170,7 +201,7 @@ public class TokenizerImplTest
 
     public void test_Tokenizer_TYPE_TERM_acronyms()
     {
-        String test = " acronyms: I.B.M. S.C. z o.o. AT&T garey&johnson&willet";
+        String test = " acronyms I.B.M. S.C. z o.o. AT&T garey&johnson&willet";
         TokenImage [] tokens = 
         {
             new TokenImage("acronyms", Tokenizer.TYPE_TERM),
@@ -181,6 +212,26 @@ public class TokenizerImplTest
             
             new TokenImage("AT&T", Tokenizer.TYPE_TERM),
             new TokenImage("garey&johnson&willet", Tokenizer.TYPE_TERM),
+        };
+
+        compareTokenArrays(test, tokens);
+    }
+
+    public void test_Tokenizer_TYPE_NUMERIC()
+    {
+        String test = " numeric 127 0 12.87 12,12 12-2003/23 term2003 2003term ";
+        TokenImage [] tokens = 
+        {
+            new TokenImage("numeric", Tokenizer.TYPE_TERM),
+
+            new TokenImage("127", Tokenizer.TYPE_NUMERIC),
+            new TokenImage("0", Tokenizer.TYPE_NUMERIC),
+            new TokenImage("12.87", Tokenizer.TYPE_NUMERIC),
+            new TokenImage("12,12", Tokenizer.TYPE_NUMERIC),
+            new TokenImage("12-2003/23", Tokenizer.TYPE_NUMERIC),
+            new TokenImage("term2003", Tokenizer.TYPE_TERM),
+            new TokenImage("2003term", Tokenizer.TYPE_TERM)
+            
         };
 
         compareTokenArrays(test, tokens);
@@ -216,6 +267,32 @@ public class TokenizerImplTest
             }
 
             i++;
+        }
+    }
+    
+    
+    public static void main(String [] args) throws Exception {
+        if (args.length > 0) {
+            for (int i=0;i<args.length;i++) {
+                java.io.File f = new java.io.File( args[i] );
+                if (f.canRead()) {
+                    byte [] fufu = new byte [(int) f.length()];
+                    java.io.FileInputStream is = new java.io.FileInputStream(f);
+                    is.read(fufu);
+                    is.close();
+
+                    Tokenizer t = Tokenizer.getTokenizer();
+                    t.restartTokenizerOn(new String( fufu, "UTF-8"));
+                    int [] type = {0};
+                    String image;
+                    while ((image = t.getNextToken(type)) != null) {
+                        TokenImage timage = new TokenImage(image, type[0]);
+                        System.out.println( timage );
+                    }
+                } else {
+                    System.err.println("Cannot read: " + f.getAbsolutePath());
+                }
+            }
         }
     }
 }

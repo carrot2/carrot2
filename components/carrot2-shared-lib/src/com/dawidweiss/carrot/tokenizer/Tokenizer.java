@@ -48,6 +48,12 @@ public class Tokenizer
     /** Token type representing sentence boundary ('.', '?' or alike) */
     public static final int TYPE_SENTENCEMARKER = 0x0005;
 
+    /** INNER-SENTENCE PUNCTUATION MARK */
+    public static final int TYPE_PUNCTUATION = 0x0006;
+    
+    /** Numeric sequence */
+    public static final int TYPE_NUMERIC = 0x0007;
+
     /**
      * Use factory method to acquire instances of this class.
      */
@@ -126,7 +132,14 @@ public class Tokenizer
 
                     case TokenizerImplConstants.SENTENCEMARKER:
                         tokenTypeHolder[0] = TYPE_SENTENCEMARKER;
+                        break;
 
+                    case TokenizerImplConstants.PUNCTUATION:
+                        tokenTypeHolder[0] = TYPE_PUNCTUATION;
+                        break;
+                        
+                    case TokenizerImplConstants.NUMERIC:
+                        tokenTypeHolder[0] = TYPE_NUMERIC;
                         break;
 
                     default:

@@ -25,23 +25,30 @@ PARSER_END(TokenizerImpl)
 TOKEN:
 {
     // URL
-      <URL: ("http" | "ftp" | "mailto") "://" (<URLPATH> | <EMAIL>) >
-    | < #URLPATH: <SYMBOL> ("." <SYMBOL>)* ("/" ("." | <SYMBOL>)*)* ("?" <SYMBOL> ((";" | ":" | "@" | "&" | "=") <SYMBOL>)*)* >
+      <URL: (("http" | "ftp" | "mailto") "://" ((<SYMBOL> ("." <SYMBOL>)* (<URLPATH>)*) | <EMAIL>)) | (<WWWADDR>) >
+    | < #WWWADDR: <SYMBOL> ("." <SYMBOL>)* 
+    	((( "." (("mil" | "info" | "gov" | "edu" | "biz" | "com" | "org" | "net") (<URLPATH>)* )) 
+    	| 
+    	 ("." (<LETTER>){2} <URLPATH> ))) >
+    | < #URLPATH: ("/" <SYMBOL>)+ ("." <SYMBOL>)? ("/")? ("?" <SYMBOL> ((";" | ":" | "@" | "&" | "=") <SYMBOL>)*)* >
 }
 
 TOKEN :
 {
     // Plain terms - alphanumeric sequences without any other characters in between
-    <TERM: (<LETTER>|<DIGIT>)+ >
+    <TERM: (<LETTER>|<DIGIT>)* <LETTER> (<LETTER>|<DIGIT>)*>
     // Hyphenated term
     | <HYPHTERM: <LETTERSEQ> ( "-" <LETTERSEQ>)* > 
-    // Name abbreviations (O'J'Simpson, D.Weiss, T. Scott)
-    | <PERSON: (<LETTERSEQ> ("'" <LETTERSEQ>)+) | ( (<LETTER> "." (<WHSPACE>)*){1,2} <LETTER> <LETTER> <LETTERSEQ> ) >
+    // Name abbreviations (D.Weiss, T. Scott), Names like O'J'Simpson will be 
+    // recognized as TERM TERM TERM, not a name.
+    | <PERSON: ( (<LETTER> "." (<WHSPACE>)*){1,2} <LETTER> <LETTER> <LETTERSEQ> ) >
     // Abbreviations and acronyms
     | <ACRONYM: (<LETTER> "." (<LETTER> ".")+) | (<TERM> ("&" <TERM>)+) >
     // E-mails
     | <EMAIL: <SYMBOL> ("." <SYMBOL>)* "@" <SYMBOL> ("." <SYMBOL>)* >
-    | <SENTENCEMARKER: ("." | "?" | "!" )+ >
+    | <SENTENCEMARKER: ("." | "?" | "!" | ";" )+ >
+    | <PUNCTUATION: "," | "'" | ":" | "-" >
+    | <NUMERIC: (<DIGIT>)+ ((":" | "-" | "/" | "," | ".") (<DIGIT>)+)* >
     | < #SYMBOL: (<LETTER>|<DIGIT>)(<LETTER>|<DIGIT>|"_"|"-")* >
     | < #WHSPACE: " " | "\n" | "\r" | "\t" >
     | < #LETTERSEQ: (<LETTER>)+ >
