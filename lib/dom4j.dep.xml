@@ -5,7 +5,7 @@
     description="dom4j Flexible XML framework for Java, http://www.dom4j.org/">
 	<provides>
 		<files>
-			<file location="dom4j-1.5-beta-2.jar" />
+			<file location="dom4j-1.5.jar" />
 			<file location="dom4j.LICENSE" />
 		</files>
 	</provides>
