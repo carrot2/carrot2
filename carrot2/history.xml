@@ -8,6 +8,22 @@
 
 <history>
     <changelist>
+        <date>2004-02-10</date>
+        <committer>dawid</committer>
+        
+        <change component="carrot2.filter.lingo-clusterer" type="new">
+        Carrot shared tokenizer used for feature extraction.
+        </change>
+        
+        <change component="carrot2.filter.lingo-clusterer" type="bugfix">
+        If Jama falls into an infinite SVD decomposition, it will 
+        throw a runtime exception. This situation has happened before
+        (more -- seems to be quite common). Download a patched Jama too. 
+        I have contacted Jama's authors at NIST, we will see what they say. 
+        </change>
+    </changelist>
+    
+    <changelist>
         <date>2004-02-09</date>
         <committer>dawid</committer>
         
@@ -20,7 +36,6 @@
         HTML entities were emitted to the XML stream in the CDATA block.
         It is now fixed.
         </change>
-
     </changelist>
 
     <changelist>
