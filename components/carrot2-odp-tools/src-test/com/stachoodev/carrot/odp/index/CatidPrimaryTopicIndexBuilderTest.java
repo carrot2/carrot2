@@ -32,8 +32,9 @@ public class CatidPrimaryTopicIndexBuilderTest extends TestCase
     {
         super.setUp();
         temporaryDirectory = createTemporaryDirectory();
-        indexBuilder = new CatidPrimaryTopicIndexBuilder(temporaryDirectory
-            .getPath());
+        indexBuilder = new CatidPrimaryTopicIndexBuilder();
+        indexBuilder.setMaxDepth(4);
+        indexBuilder.setTopicSerializer(new ZipFileTopicSerializer());
     }
 
     /*
@@ -63,7 +64,8 @@ public class CatidPrimaryTopicIndexBuilderTest extends TestCase
         PrimaryTopicIndex expectedIndex = new SimplePrimaryTopicIndex(
             new ArrayList());
 
-        PrimaryTopicIndex index = indexBuilder.create(odpInputStream);
+        PrimaryTopicIndex index = indexBuilder.create(odpInputStream,
+            temporaryDirectory.getPath());
 
         assertEquals("Equal indices", expectedIndex, index);
     }
@@ -86,7 +88,7 @@ public class CatidPrimaryTopicIndexBuilderTest extends TestCase
         PrimaryTopicIndex expectedIndex = createPrimaryTopicIndex(new String [] []
         {
         { "2", "0/1/2" } });
-        PrimaryTopicIndex index = indexBuilder.create(odpInputStream);
+        PrimaryTopicIndex index = indexBuilder.create(odpInputStream, temporaryDirectory.getPath());
 
         assertEquals("Equal indices", expectedIndex, index);
     }
@@ -120,7 +122,7 @@ public class CatidPrimaryTopicIndexBuilderTest extends TestCase
         PrimaryTopicIndex expectedIndex = createPrimaryTopicIndex(new String [] []
         {
         { "32460", "0/1/2/3/32460" } });
-        PrimaryTopicIndex index = indexBuilder.create(odpInputStream);
+        PrimaryTopicIndex index = indexBuilder.create(odpInputStream, temporaryDirectory.getPath());
 
         assertEquals("Equal indices", expectedIndex, index);
     }
@@ -168,7 +170,7 @@ public class CatidPrimaryTopicIndexBuilderTest extends TestCase
         {
         { "32460", "0/1/2/3/32460" },
         { "32461", "0/1/2/4/32461" } });
-        PrimaryTopicIndex index = indexBuilder.create(odpInputStream);
+        PrimaryTopicIndex index = indexBuilder.create(odpInputStream, temporaryDirectory.getPath());
 
         assertEquals("Equal indices", expectedIndex, index);
     }
@@ -182,13 +184,18 @@ public class CatidPrimaryTopicIndexBuilderTest extends TestCase
             + "    <RDF xmlns:r='http://www.w3.org/TR/RDF/'"
             + "         xmlns:d='http://purl.org/dc/elements/1.0/'"
             + "         xmlns='http://dmoz.org/rdf'>"
-            + "      <Topic r:id='Top/Arts'>" + "        <catid>1</catid>"
-            + "      </Topic>" + "      <Topic r:id='Top/Arts/C1/C2'>"
-            + "        <catid>2</catid>" + "      </Topic>"
-            + "      <Topic r:id='Top/Arts/C1/C2/C3'>"
-            + "        <catid>3</catid>" + "      </Topic>"
-            + "      <Topic r:id='Top/Arts/C1/C2/C3/C4'>"
-            + "        <catid>4</catid>" + "      </Topic>" + "    </RDF>";
+            + "      <Topic r:id='Top/Arts'>"
+            + "        <catid>1</catid>"
+            + "      </Topic>"
+            + "      <Topic r:id='Top/Arts/C1/C2'>"
+            + "        <catid>2</catid>"
+            + "      </Topic>"
+            + "      <Topic r:id='Top/Arts/C1/C2/C3/C4/C5'>"
+            + "        <catid>3</catid>"
+            + "      </Topic>"
+            + "      <Topic r:id='Top/Arts/C1/C2/C3/C4/C5/C6'>"
+            + "        <catid>4</catid>"
+            + "      </Topic>" + "    </RDF>";
 
         InputStream odpInputStream = new ByteArrayInputStream(odpInput
             .getBytes("UTF8"));
@@ -199,7 +206,7 @@ public class CatidPrimaryTopicIndexBuilderTest extends TestCase
         { "2", "0/1/2/3/2" },
         { "3", "0/1/2/3/3" },
         { "4", "0/1/2/3/4" } });
-        PrimaryTopicIndex index = indexBuilder.create(odpInputStream);
+        PrimaryTopicIndex index = indexBuilder.create(odpInputStream, temporaryDirectory.getPath());
 
         assertEquals("Equal indices", expectedIndex, index);
     }
@@ -216,18 +223,16 @@ public class CatidPrimaryTopicIndexBuilderTest extends TestCase
             + "         xmlns:d='http://purl.org/dc/elements/1.0/'"
             + "         xmlns='http://dmoz.org/rdf'>"
             + "      <Topic r:id='Top/World/Polska/Komputery'>"
-            + "        <catid>32460</catid>"
-            + "      </Topic>"
-            + "    </RDF>";
+            + "        <catid>32460</catid>" + "      </Topic>" + "    </RDF>";
 
         InputStream odpInputStream = new ByteArrayInputStream(odpInput
             .getBytes("UTF8"));
 
-        PrimaryTopicIndex index = indexBuilder.create(odpInputStream);
+        PrimaryTopicIndex index = indexBuilder.create(odpInputStream, temporaryDirectory.getPath());
 
         MutableTopic topic01 = new MutableTopic("Top/World/Polska/Komputery");
         topic01.setCatid("32460");
-        TopicSerializer serializer = new CompressedTopicSerializer();
+        TopicSerializer serializer = new ZipFileTopicSerializer();
 
         Topic deserializedTopic01 = serializer
             .deserialize(temporaryDirectory.getAbsolutePath()
@@ -277,7 +282,7 @@ public class CatidPrimaryTopicIndexBuilderTest extends TestCase
         InputStream odpInputStream = new ByteArrayInputStream(odpInput
             .getBytes("UTF8"));
 
-        PrimaryTopicIndex index = indexBuilder.create(odpInputStream);
+        PrimaryTopicIndex index = indexBuilder.create(odpInputStream, temporaryDirectory.getPath());
 
         MutableExternalPage mutableExternalPage;
         MutableTopic topic01 = new MutableTopic("Top/World/Polska/Komputery");
@@ -308,14 +313,14 @@ public class CatidPrimaryTopicIndexBuilderTest extends TestCase
         mutableExternalPage.setDescription("Grupa użytkowników systemu Tex.");
         topic02.addExternalPage(mutableExternalPage);
 
-        TopicSerializer serializer = new CompressedTopicSerializer();
+        TopicSerializer serializer = new ZipFileTopicSerializer();
 
         Topic deserializedTopic01 = serializer
             .deserialize(temporaryDirectory.getAbsolutePath()
                 + System.getProperty("file.separator")
                 + index.getLocation("32460"));
         assertEquals("Topic 1 deserialized", topic01, deserializedTopic01);
-        
+
         Topic deserializedTopic02 = serializer
             .deserialize(temporaryDirectory.getAbsolutePath()
                 + System.getProperty("file.separator")
