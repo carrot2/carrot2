@@ -31,6 +31,7 @@ import com.dawidweiss.carrot.util.tokenizer.languages.AllKnownLanguages;
 
 import java.io.*;
 import java.util.*;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -52,9 +53,12 @@ public class StemmerServlet
      */
     public StemmerServlet()
     {
-        Language [] languages = AllKnownLanguages.getLanguages();
-        for (int i=0;i<languages.length;i++) {
-            this.languages.put( languages[i].getIsoCode(), languages[i]);
+        List languageCodes = AllKnownLanguages.getLanguageCodes();
+        for (Iterator codes = languageCodes.iterator(); codes.hasNext();)
+        {
+            String code = (String) codes.next();
+            this.languages.put(code, AllKnownLanguages
+                .getLanguageForIsoCode(code));
         }
     }
 
