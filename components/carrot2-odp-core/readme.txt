@@ -9,10 +9,10 @@ for more details.
 
 The following ODP indices are available
 
-http://www.man.poznan.pl/~stachoo/carrot/odp-computers.zip  
+http://ophelia.cs.put.poznan.pl/~sosinski/carrot/odp-computers.zip	
 	- index of all categories under Top/Computers
 	
-http://www.man.poznan.pl/~stachoo/carrot/odp-cshpark.zip  
+http://ophelia.cs.put.poznan.pl/~sosinski/carrot/odp-cshpark.zip
 	- index of all the following categories
 		Top/Arts/Literature
 		Top/Arts/Movies
