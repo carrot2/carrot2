@@ -12,7 +12,7 @@
       -->
     <target name="prepare">
         <mkdir dir="${checkout.dir}" />
-        <cvspass cvsroot="${cvs.root}" password="anonymous" passfile="${cvs.pass}"/>
+        <cvspass cvsroot="${cvs.root}" password="" passfile="${cvs.pass}"/>
 
         <ant antfile="cvsoperations.xml" target="cvs.checkout_or_update.module" inheritall="false">
             <property name="checkout.dir" location="${checkout.dir}" />
