@@ -25,6 +25,9 @@ public class MutableExternalPage implements ExternalPage, Serializable
 
     /** This MutableExternalPage's description */
     private String description;
+    
+    /** This MutableExternalPage's url */
+    private String url;
 
     /**
      * Creates a new empty MutableExternalPage.
@@ -41,6 +44,17 @@ public class MutableExternalPage implements ExternalPage, Serializable
     {
         this.title = title;
         this.description = description;
+    }
+    
+    /**
+     * @param title
+     * @param description
+     */
+    public MutableExternalPage(String title, String description, String url)
+    {
+        this.title = title;
+        this.description = description;
+        this.url = url;
     }
     
     /**
@@ -83,6 +97,25 @@ public class MutableExternalPage implements ExternalPage, Serializable
         this.title = title;
     }
 
+    /**
+     * Returns this MutableExternalPage's <code>url</code>.
+     * 
+     * @return
+     */
+    public String getUrl()
+    {
+        return url;
+    }
+    /**
+     * Sets this MutableExternalPage's <code>url</code>.
+     * 
+     * @param url
+     */
+    public void setUrl(String url)
+    {
+        this.url = url;
+    }
+    
     /*
      * (non-Javadoc)
      * 
