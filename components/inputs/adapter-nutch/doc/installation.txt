@@ -9,6 +9,12 @@ add a Carrot2 adapter.
 
 carrot2-adapter-nutch.jar
 
+Also, include the JARs that 'show.dependencies' target in the build file 
+indicates. These JARs can also be collected in the distribution directory by 
+typing:
+
+ant collect.dependencies
+
 3. Copy the adapter JAR to Nutch's deployment folder substituting "DEPLOYED-
 NUTCH-DIR" a path that matches your local configuration.
 
