@@ -150,6 +150,29 @@
   </target>
 
   <!-- }}} -->
+  
+  <!-- ##################################### -->
+  <!-- ### {{{ reformats sources         ### -->
+  <!-- ##################################### -->
+  <target name="reformat">
+    <available classname="de.hunsicker.jalopy.plugin.ant.AntPlugin" property="jalopy.available" value="true" />
+    <taskdef name="jalopy" classname="de.hunsicker.jalopy.plugin.ant.AntPlugin" />
+    <fail message="Jalopy's ANT plugin must be in classpath." unless="jalopy.available" />
+    <fail message="Define property carrot2.cvs.dir" unless="carrot2.cvs.dir" />
+    
+    <jalopy fileformat="unix"
+            convention="${carrot2.cvs.dir}/misc/jalopy/carrot2.jalopy.xml"
+            history="file"
+            historymethod="adler32"
+            loglevel="info"
+            threads="1">
+      <fileset dir="src">
+        <include name="**/*.java" />
+      </fileset>
+    </jalopy>
+  </target>
+  <!-- }}} -->
+  
 
   <!-- ##################################### -->
   <!-- ### {{{ HELP ON THIS FILE         ### -->
