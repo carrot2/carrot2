@@ -1,0 +1,24 @@
+# Search file for carrot.cs.put.poznan.pl
+#
+# Creation:  Dawid Weiss, 12/10/2004
+
+<search 
+	name = "Carrot2"
+    description = "Carrot2 clustering engine (on-line nightly checkout demo)"
+	method = "get"
+	action = "http://carrot.cs.put.poznan.pl/carrot2-remote-controller/newsearch.do"
+    queryEncoding="utf-8"
+    queryCharset="utf-8"
+	>
+
+<input name="query" user>
+<input name="processingChain" value="carrot2.process.lingo-google-en">
+<input name="resultsRequested" value="100">
+
+</search>
+
+<BROWSER
+      update="http://www.cs.put.poznan.pl/dweiss/carrot/site/mozilla/carrot2.src" 
+      updateIcon="http://www.cs.put.poznan.pl/dweiss/carrot/site/mozilla/carrot2.gif" 
+      updateCheckDays="3"
+>
