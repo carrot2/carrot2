@@ -52,4 +52,11 @@ public interface ProcessDefinition
      * included in the localized strings.
      */
     public String getDefaultDescription();
+    
+    
+    /**
+     * @return Should return <code>true</code> if this process is not to be explicitly shown
+     *         in the user interface.
+     */
+    public boolean isHidden();
 }
