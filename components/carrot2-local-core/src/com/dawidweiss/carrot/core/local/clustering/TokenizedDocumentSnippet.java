@@ -25,7 +25,7 @@ public class TokenizedDocumentSnippet extends TokenizedDocumentBase
     private TokenSequence title;
 
     /** This snippets id */
-    private String id;
+    private Object id;
 
     /** This snippets score */
     private float score;
@@ -52,7 +52,7 @@ public class TokenizedDocumentSnippet extends TokenizedDocumentBase
      * @param url
      * @param score
      */
-    public TokenizedDocumentSnippet(String id, TokenSequence title,
+    public TokenizedDocumentSnippet(Object id, TokenSequence title,
         TokenSequence snippet, String url, float score)
     {
         this.id = id;
@@ -157,12 +157,19 @@ public class TokenizedDocumentSnippet extends TokenizedDocumentBase
         }
 
         TokenizedDocumentSnippet otherSnippet = (TokenizedDocumentSnippet) obj;
+        
+        // Try the id first
+        if (id != null && otherSnippet.id != null)
+        {
+            return id.equals(otherSnippet.id);
+        }
+        
         boolean result = true;
         if (title != null)
         {
             result = result && title.equals(otherSnippet.title);
         }
-        if (otherSnippet != null)
+        if (getSnippet() != null)
         {
             result = result && getSnippet().equals(otherSnippet.getSnippet());
         }
@@ -177,6 +184,12 @@ public class TokenizedDocumentSnippet extends TokenizedDocumentBase
      */
     public int hashCode()
     {
+        // Try the id first
+        if (id != null)
+        {
+            return id.hashCode();
+        }
+        
         // Try with the title first
         if (title != null && title.getLength() > 0)
         {
