@@ -29,7 +29,7 @@
     {
         ZIPCachedQueriesContainer cached = new ZIPCachedQueriesContainer();
         cached.setReadOnly(true);
-        cached.setContextRelativeDir( "WEB-INF/precached-queries" );
+        cached.setContextRelativeDir( "/WEB-INF/precached-queries" );
         cached.setServletBase( getServletContext().getRealPath("/") );
         cached.configure();
 

@@ -17,7 +17,7 @@
     <container
         implementation="com.dawidweiss.carrot.remote.controller.cache.ZIPCachedQueriesContainer"
     >
-        <context-relative-dir>WEB-INF/precached-queries</context-relative-dir>
+        <context-relative-dir>/WEB-INF/precached-queries</context-relative-dir>
         <read-only>true</read-only>
     </container>
 
