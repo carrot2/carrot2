@@ -27,8 +27,8 @@ public class AllKnownLanguages
 {
 	private final static Logger logger = Logger.getLogger(AllKnownLanguages.class);
 
-    /** All known languages */
-    private static Language [] languageArray;
+    /** A list of supported language codes */
+    private static List languageCodes;
 
     /** A mapping between ISO codes and Language instances */
     private static Map languages;
@@ -49,6 +49,7 @@ public class AllKnownLanguages
     	};
 
         languages = new HashMap();
+        languageCodes = new ArrayList(languageArray.length);
         for (int i = 0; i < languageArray.length; i++)
         {
         	String langClazz = languageArray[i];
@@ -56,12 +57,11 @@ public class AllKnownLanguages
         		Language lang = (Language) AllKnownLanguages.class.getClassLoader().loadClass(
         			langClazz).newInstance();
 	            languages.put(lang.getIsoCode(), lang);
+                languageCodes.add(lang.getIsoCode());
         	} catch (Throwable t) {
         		logger.warn("Could not instantiate language: " + langClazz, t);
         	}
         }
-        Collection langs = languages.values();
-        AllKnownLanguages.languageArray = (Language []) langs.toArray( new Language [ langs.size() ] );
     }
 
     /** Disallow instantiation */
@@ -72,11 +72,11 @@ public class AllKnownLanguages
     /**
      * @return
      */
-    public static final Language [] getLanguages()
+    public static final List getLanguageCodes()
     {
-        return languageArray;
+        return languageCodes;
     }
-
+    
     /**
      * Returns a {@link Language}instance for the given ISO code. If no known
      * language corresponds to the ISO code <code>null</code> will be
