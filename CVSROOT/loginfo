@@ -25,6 +25,10 @@
 # or
 #DEFAULT (echo ""; id; echo %{sVv}; date; cat) >> $CVSROOT/CVSROOT/commitlog
 
-carrot2 /cvsroot/sitedocs/CVSROOT/cvstools/syncmail %{sVv} dawid.weiss@cs.put.poznan.pl
-DEFAULT /cvsroot/sitedocs/CVSROOT/cvstools/syncmail %{sVv} dawid.weiss@cs.put.poznan.pl
+carrot2 /cvsroot/sitedocs/CVSROOT/cvstools/syncmail %{sVv} carrot2-cvscommits@lists.sourceforge.net
+deploy /cvsroot/sitedocs/CVSROOT/cvstools/syncmail %{sVv} carrot2-cvscommits@lists.sourceforge.net
+docs /cvsroot/sitedocs/CVSROOT/cvstools/syncmail %{sVv} carrot2-cvscommits@lists.sourceforge.net
+tests /cvsroot/sitedocs/CVSROOT/cvstools/syncmail %{sVv} carrot2-cvscommits@lists.sourceforge.net
+website /cvsroot/sitedocs/CVSROOT/cvstools/syncmail %{sVv} carrot2-cvscommits@lists.sourceforge.net
 
+DEFAULT /cvsroot/sitedocs/CVSROOT/cvstools/syncmail %{sVv} dawid.weiss@cs.put.poznan.pl
