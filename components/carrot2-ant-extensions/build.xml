@@ -29,14 +29,18 @@ Bootstrapping ANT extension tasks.
         </javac>
 
         <mkdir dir="tmp/dist" />
-        <jar compress="true" jarfile="tmp/dist/${dist.name}.jar">
+        <jar compress="true" jarfile="tmp/build/${dist.name}-tmp-bootstrap.jar">
             <fileset dir="tmp/build/bootstrap" />
             <manifest>
                 <attribute name="Built-By"   value="${user.name}"/>
             </manifest>
         </jar>
 
+		<!-- TEMPORARY BUGFIX: this causes classnotfound exceptions for unknown reasons. Or actually:
+		 because the ZIP file changes while ANT is running (my guess) -->
         <antcall target="build" />
+        
+        <delete file="tmp/build/${dist.name}-tmp-bootstrap.jar" failonerror="false"/>
     </target>
 
     <!-- common template tasks. -->
