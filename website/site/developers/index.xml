@@ -23,21 +23,21 @@
         
         <ul>
             <li>
-            <a href="manual/index-singlehtml.html">
+            <a href="http://www.cs.put.poznan.pl/dweiss/carrot/manual/carrot2-developers-manual-single.html">
                 <lang:en>Single HTML page (quite large)</lang:en>
                 <lang:pl>Pojedynczy dokument HTML (spory)</lang:pl>
             </a>
             </li>
             
             <li>
-            <a href="manual/index.html">
+            <a href="http://www.cs.put.poznan.pl/dweiss/carrot/manual/carrot2-developers-manual.html">
                 <lang:en>Split into sections</lang:en>
                 <lang:pl>Rozbity na rozdziały</lang:pl>
             </a>
             </li>
 
             <li>
-            <a href="manual/manual.pdf">
+            <a href="http://www.cs.put.poznan.pl/dweiss/carrot/manual/carrot2-developers-manual.pdf">
                 <lang:en>PDF file generated using <a href="http://www.renderx.com">RenderX's</a> <a href="http://xep.xattic.com/">XEP</a>.</lang:en>
                 <lang:pl>Rozbity na rozdziały</lang:pl>
             </a>
