@@ -99,11 +99,19 @@
                 <exclude name="**/.cvsignore" />
             </fileset>
         </delete>
+        <delete failonerror="false" includeemptydirs="false" quiet="true">
+            <fileset dir="${runtime.env}/shared/lib">
+                <include name="*.*" />
+            </fileset>
+        </delete>
     </target>
 
     <target name="copy.webapps">
         <copy overwrite="true" todir="${runtime.webapps}">
             <fileset dir="${build.dir}" includes="**/*.war" />
+        </copy>
+        <copy overwrite="true" todir="${runtime.env}/shared/lib">
+            <fileset dir="${checkout.dir}/carrot2/lib" includes="*.*" />
         </copy>
     </target>
 
