@@ -48,6 +48,7 @@
              target="html.chunked">
             <property name="distribution.dir" location="${build.dir}" />
         </ant>
+
         <!-- now PDF version 
         <ant antfile="${checkout.dir}/${module.name}/build.xml" 
              dir="${checkout.dir}/${module.name}" inheritall="false" 
