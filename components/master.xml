@@ -201,6 +201,7 @@
         <dependencies refid="dependencies" />
         <dependencies refid="local.dependencies" />
     </copyDependencies>
+    <echo message="done." />
     
     <condition property="merge.carrot2.components" value="true">
         <equals arg1="${single.jar}" arg2="true" casesensitive="false" />
@@ -212,6 +213,7 @@
     <!-- Merge the used Carrot2 components into a single JAR-->
     <property name="tmp:c2merge.dir" value="${libs.dir}/_tmp_c2merge" />
     <delete dir="${tmp:c2merge.dir}" failonerror="false" />
+    <mkdir dir="${tmp:c2merge.dir}" />
     <unjar dest="${tmp:c2merge.dir}">
         <fileset dir="${libs.dir}">
             <include name="carrot2-*.jar"/>
