@@ -3,7 +3,7 @@
 <process
     xmlns="http://www.dawidweiss.com/projects/carrot/processDescriptor"
     id="carrot2.process.treeExtractor.google-pl"
-    description="TreeSnippetReader(Google-pl)-Stemmer-LSI">
+    description="Google-pl (TSM), LINGO, Dynamic Tree">
     <processing-script language="beanshell"><![CDATA[
     
     InputStream is;
@@ -13,15 +13,13 @@
 
     is = controller.invokeInputComponent( "carrot2.input.tree-snippet-reader.google-pl", query );
 
-	is = controller.invokeFilterComponent( "carrot2.filter.text-only", is );
+    Map lingoOptions = new HashMap();
+    lingoOptions.put("stemmer.english", "com.dawidweiss.carrot.filter.stemming.porter.PorterStemmer");
+    lingoOptions.put("stemmer.polish", "com.dawidweiss.carrot.filter.stemming.lametyzator.Lametyzator");
+    lingoOptions.put("lsi.threshold.clusterAssignment", "0.150");
+    lingoOptions.put("lsi.threshold.candidateCluster",  "0.775");
+    is = controller.invokeFilterComponent( "carrot2.filter.multilingual-lingo-clustering", is, lingoOptions );
 
-	Map lsiOptions = new HashMap();
-    lsiOptions.put("stemmer.english", "com.dawidweiss.carrot.filter.stemming.porter.PorterStemmer");
-    lsiOptions.put("stemmer.polish", "com.dawidweiss.carrot.filter.stemming.lametyzator.Lametyzator");
-    lsiOptions.put("lsi.threshold.clusterAssignment", "0.225");
-    lsiOptions.put("lsi.threshold.candidateCluster",  "0.775");
-    is = controller.invokeFilterComponent( "carrot2.filter.multilingual-lsi-clusterer", is, lsiOptions );
-    
     Map dtreeOptions = new HashMap();
     dtreeOptions.put("dtree.css", "compact");
     dtreeOptions.put("param.output.terminal.nodes", "true" );

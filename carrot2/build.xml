@@ -56,6 +56,7 @@
     <ant antfile="build.xml" dir="components/filters/pruning/text-only" inheritall="false" target="clean" />
     <ant antfile="build.xml" dir="components/inputs/snippet-generator" inheritall="false" target="clean" />
     <ant antfile="build.xml" dir="components/inputs/snippet-reader" inheritall="false" target="clean" />
+    <ant antfile="build.xml" dir="components/inputs/treeSnippetMiner" inheritall="false" target="clean" />
     <ant antfile="build.xml" dir="components/inputs/verbatim-input" inheritall="false" target="clean" />
     <ant antfile="build.xml" dir="components/outputs/xslt-renderer" inheritall="false" target="clean" />
 
@@ -194,6 +195,19 @@
     </ant>
   </target> <!-- }}} -->
 
+  <target name="build.treeSnippetMiner" depends="init"> <!-- {{{ -->
+    <echo>
+
+    #### Building: Tree Snippet Miner input component ####
+
+    </echo>
+    <ant antfile="build.xml" target="build" dir="components/inputs/treeSnippetMiner" inheritall="false">
+        <property name="distribution.dir" location="${distribution.dir}" />
+        <property name="javadoc.dir"     location="${javadoc.dir}" />
+    </ant>
+  </target> <!-- }}} -->
+
+
   <target name="build.verbatim-input" depends="init"> <!-- {{{ -->
     <echo>
 
@@ -230,6 +244,7 @@
             build.text-only,
             build.snippet-generator,
             build.snippet-reader,
+            build.treeSnippetMiner,
             build.verbatim-input,
             build.xslt-renderer
             ">

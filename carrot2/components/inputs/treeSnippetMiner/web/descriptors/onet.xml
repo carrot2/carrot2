@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<service>
+    <request encoding="ISO-8859-2">
+        <service  url="http://szukaj.onet.pl/query.html"  method="get" />
+        <parameters>
+            <parameter name="qt"       mapto="query.string" />
+            <parameter name="st"	   mapto="query.startFrom" />
+        </parameters>
+        <http-overrides>
+            <header name="User-Agent">Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)</header>
+            <header name="Accept-Charset">UTF-8</header>
+        </http-overrides>
+    </request>
+    <response encoding="ISO-8859-2">
+        <pageinfo>
+            <expected-results-per-page>25</expected-results-per-page>
+        </pageinfo>
+    </response>
+</service>

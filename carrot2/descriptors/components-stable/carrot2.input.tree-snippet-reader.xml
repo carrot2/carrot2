@@ -7,8 +7,7 @@
     <!-- Snippet Reader service, Google pl wrapper input component -->
     <component id               = "carrot2.input.tree-snippet-reader.google-pl"
                type             = "input"
-               serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-snippet-reader/treeExtractor/google-pl"
-               infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-snippet-reader">
+               serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-treeSnippetMiner/treeExtractor/google-pl">
         <acceptedFormat>
             <mime>application/x-carrot-clustering-input-query</mime>
         </acceptedFormat>
@@ -19,8 +18,7 @@
     <!-- Snippet Reader service, Google wrapper input component -->
     <component id               = "carrot2.input.tree-snippet-reader.google"
                type             = "input"
-               serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-snippet-reader/treeExtractor/google"
-               infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-snippet-reader">
+               serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-treeSnippetMiner/treeExtractor/google">
         <acceptedFormat>
             <mime>application/x-carrot-clustering-input-query</mime>
         </acceptedFormat>
@@ -28,11 +26,21 @@
             <mime>application/x-carrot-clustering-plain-response</mime>
         </producedFormat>
     </component>
-    <!-- Snippet Reader service, Szukacz pl wrapper input component -->
-    <component id               = "carrot2.input.tree-snippet-reader.szukacz-pl"
+    <!-- Snippet Reader service, AllTheWeb pl wrapper input component -->
+    <component id               = "carrot2.input.tree-snippet-reader.alltheweb"
                type             = "input"
-               serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-snippet-reader/treeExtractor/szukacz-pl"
-               infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-snippet-reader">
+               serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-treeSnippetMiner/treeExtractor/alltheweb">
+        <acceptedFormat>
+            <mime>application/x-carrot-clustering-input-query</mime>
+        </acceptedFormat>
+        <producedFormat>
+            <mime>application/x-carrot-clustering-plain-response</mime>
+        </producedFormat>
+    </component>
+    <!-- Snippet Reader service, Netoskop.pl wrapper input component -->
+    <component id               = "carrot2.input.tree-snippet-reader.netoskop-pl"
+               type             = "input"
+               serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-treeSnippetMiner/treeExtractor/netoskop-pl">
         <acceptedFormat>
             <mime>application/x-carrot-clustering-input-query</mime>
         </acceptedFormat>
