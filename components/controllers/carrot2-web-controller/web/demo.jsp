@@ -95,7 +95,7 @@
             {
                 ProcessDefinition p = (ProcessDefinition) k.next();
 
-                if (p.usesComponent(component))
+                if (!p.isHidden() && p.usesComponent(component))
                 {
                     out.write("[");
                     %>
