@@ -12,6 +12,7 @@ package com.stachoodev.matrix;
 
 import java.util.*;
 
+import cern.colt.list.*;
 import cern.colt.matrix.*;
 
 /**
@@ -38,24 +39,6 @@ public class MatrixUtils
     public static DoubleMatrix2D normaliseColumnL2(DoubleMatrix2D A,
         double [] work)
     {
-        // Note: This straightforward implementation may cause deterioration of
-        // performance in case of sparse matricess
-        for (int c = 0; c < A.columns(); c++)
-        {
-            double length = 0;
-            for (int r = 0; r < A.rows(); r++)
-            {
-                length += A.getQuick(r, c) * A.getQuick(r, c);
-            }
-
-            length = Math.sqrt(length);
-
-            for (int r = 0; r < A.rows(); r++)
-            {
-                A.setQuick(r, c, A.getQuick(r, c) / length);
-            }
-        }
-
         // Colt's dense matrices are stored in a row-major format, so the
         // processor's cache will be better used when the rows counter is in the
         // outer loop. To do that we need a temporaty double vector
@@ -68,7 +51,7 @@ public class MatrixUtils
             Arrays.fill(work, 0);
         }
 
-        // Calculate the L1 norm for each column
+        // Calculate the L2 norm for each column
         for (int r = 0; r < A.rows(); r++)
         {
             for (int c = 0; c < A.columns(); c++)
@@ -81,6 +64,10 @@ public class MatrixUtils
         for (int c = 0; c < A.columns(); c++)
         {
             work[c] = Math.sqrt(work[c]);
+            if (work[c] == 0)
+            {
+                work[c] = 1;
+            }
         }
 
         // Normalise
@@ -90,6 +77,58 @@ public class MatrixUtils
             {
                 A.setQuick(r, c, A.getQuick(r, c) / work[c]);
             }
+        }
+
+        return A;
+    }
+
+    /**
+     * Normalises column vectors of a sparse matrix <code>A</code> so that
+     * their L2 norm (Euclidean distance) is equal to 1.0.
+     * 
+     * @param A
+     * @param work a temporary array of <code>A.columns()</code> doubles that
+     *            will be overwritten with column's original L2 norms. Supply a
+     *            non-null pointer to avoid continuous allocation/freeing of
+     *            memory when doing calculations in a loop. If this parameter is
+     *            <code>null</code>, a new array will be allocated every time
+     *            this method is called.
+     * @return A with length-normalised columns (for convenience only)
+     */
+    public static DoubleMatrix2D normaliseSparseColumnL2(DoubleMatrix2D A,
+        double [] work)
+    {
+        IntArrayList rows = new IntArrayList(A.cardinality());
+        IntArrayList columns = new IntArrayList(A.cardinality());
+        DoubleArrayList values = new DoubleArrayList(A.cardinality());
+        A.getNonZeros(rows, columns, values);
+
+        if (work == null || work.length != A.columns())
+        {
+            work = new double [A.columns()];
+        }
+        else
+        {
+            Arrays.fill(work, 0);
+        }
+
+        // Calculate columns' length
+        for (int i = 0; i < values.size(); i++)
+        {
+            work[columns.get(i)] += values.get(i) * values.get(i);
+        }
+
+        // Take the square root
+        for (int c = 0; c < A.columns(); c++)
+        {
+            work[c] = Math.sqrt(work[c]);
+        }
+
+        // Normalise
+        for (int i = 0; i < values.size(); i++)
+        {
+            A.setQuick(rows.get(i), columns.get(i), values.get(i)
+                / work[columns.get(i)]);
         }
 
         return A;
@@ -132,6 +171,15 @@ public class MatrixUtils
             }
         }
 
+        // We don't want any NaNs
+        for (int c = 0; c < A.columns(); c++)
+        {
+            if (work[c] == 0)
+            {
+                work[c] = 1;
+            }
+        }
+        
         // Normalise
         for (int r = A.rows() - 1; r >= 0; r--)
         {
@@ -265,7 +313,7 @@ public class MatrixUtils
         {
             minValues = new double [A.columns()];
         }
-        
+
         for (int c = 0; c < A.columns(); c++)
         {
             minValues[c] = A.getQuick(0, c);
@@ -353,7 +401,7 @@ public class MatrixUtils
      */
     public static int maxInRow(DoubleMatrix2D A, int row)
     {
-        if (A == null && A.rows() == 0 || A.columns() == 0 || row >= A.rows())
+        if (A == null || A.rows() == 0 || A.columns() == 0 || row >= A.rows())
         {
             return -1;
         }
@@ -370,5 +418,32 @@ public class MatrixUtils
         }
 
         return index;
+    }
+
+    /**
+     * @param A
+     * @param sums
+     * @return
+     */
+    public static double [] sumRows(DoubleMatrix2D A, double [] sums)
+    {
+        if (sums == null || A.rows() != sums.length)
+        {
+            sums = new double [A.rows()];
+        }
+        else
+        {
+            Arrays.fill(sums, 0);
+        }
+
+        for (int r = 0; r < A.rows(); r++)
+        {
+            for (int c = 0; c < A.columns(); c++)
+            {
+                sums[r] += A.getQuick(r, c);
+            }
+        }
+
+        return sums;
     }
 }
