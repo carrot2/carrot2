@@ -119,27 +119,14 @@ final class StemmingTokenizerWrapper implements LanguageTokenizer {
                 
                 String lowCaseImage = image.toLowerCase(locale);
                 
-                // Perform stemming on the lower case word and take the
-                // appropriate substring of the original word. In many cases
-                // this will retain the original letter case.
-                // However, 1) some stemmers (e.g. Lametyzator) don't simply
-                // return a substring of the original word, 2) in some languages
-                // upper case <-> lower case mapping is not n <-> n, in terms
-                // of string length.
+                // Perform stemming on the lower case word 
                 char [] charray = lowCaseImage.toCharArray();
                 String stem = stemmer.getStem(charray, 0, charray.length);
                 if (stem != null)
                 {
-                    int index = lowCaseImage.indexOf(stem);
-                    if (index >= 0)
-                    {
-                        token.setStem(image.substring(index, index
-                            + stem.length()));
-                    }
-                    else
-                    {
-                        token.setStem(stem);
-                    }
+                    // The assumption here is that for a lower-case word
+                    // the stemmer will returne a lower-case stem. 
+                    token.setStem(stem);
                 }
                 
                 if (this.stopwords != null) {
