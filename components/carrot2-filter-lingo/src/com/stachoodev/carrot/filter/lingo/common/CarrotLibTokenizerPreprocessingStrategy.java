@@ -19,7 +19,6 @@ import com.dawidweiss.carrot.core.local.linguistic.Stemmer;
 import com.dawidweiss.carrot.util.common.StringUtils;
 
 import com.stachoodev.carrot.filter.lingo.tokenizer.*;
-import com.stachoodev.carrot.filter.lingo.tokenizer.JavaCCTokenizer;
 
 import org.apache.log4j.Logger;
 
