@@ -307,33 +307,22 @@ public class SmartCaseNormalizer implements CaseNormalizer
             {
                 lowerCaseToken.assign(StringUtils.capitalize(image, locale),
                     lowerCaseToken.getType());
-                if (stem != null
-                    && lowerCaseToken instanceof MutableStemmedToken)
-                {
-                    ((MutableStemmedToken) lowerCaseToken).setStem(StringUtils
-                        .capitalize(stem, locale));
-                }
             }
             else
             {
                 lowerCaseToken.assign(StringUtils.capitalize(image),
                     lowerCaseToken.getType());
-                if (stem != null
-                    && lowerCaseToken instanceof MutableStemmedToken)
-                {
-                    ((MutableStemmedToken) lowerCaseToken).setStem(StringUtils
-                        .capitalize(stem));
-                }
             }
         }
         else
         {
             lowerCaseToken.assign(image, lowerCaseToken.getType());
-            if (stem != null && lowerCaseToken instanceof MutableStemmedToken)
-            {
-                ((MutableStemmedToken) lowerCaseToken).setStem(StringUtils
-                    .capitalize(stem));
-            }
+        }
+        
+        if (stem != null
+            && lowerCaseToken instanceof MutableStemmedToken)
+        {
+            ((MutableStemmedToken) lowerCaseToken).setStem(stem);
         }
 
         // Replace all tokens with the normalized version
