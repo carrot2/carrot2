@@ -16,6 +16,11 @@ package com.dawidweiss.carrot.controller.carrot2.struts.forms;
 
 
 import org.apache.struts.action.*;
+
+import com.dawidweiss.carrot.controller.carrot2.Carrot2InitServlet;
+import com.dawidweiss.carrot.controller.carrot2.process.ProcessDefinition;
+import com.dawidweiss.carrot.controller.carrot2.process.ProcessingChainLoader;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.*;
 
@@ -100,6 +105,16 @@ public class QueryForm
         if (resultsRequested == 0)
         {
             resultsRequested = 100;
+        }
+        
+        if (processingChain == null)
+        {
+            ProcessingChainLoader processingChainLoader =
+                (ProcessingChainLoader) application
+                    .getAttribute(Carrot2InitServlet.CARROT_PROCESSINGCHAINS_LOADER);
+            ProcessDefinition process = processingChainLoader.getDefaultProcess();
+            if (process != null)
+                processingChain = process.getId();
         }
     }
 
