@@ -7,7 +7,7 @@
       (04/07/01) grouping by process or query?
   -->
 
-  <xsl:variable name="include-fields">Query,Documents,Filter Time,Coverage,Avg Cont</xsl:variable>
+  <xsl:variable name="include-fields">Query,Documents,Filter Time,Extended Topic Coverage,Avg Cont</xsl:variable>
 
   <!-- Root element -->
   <xsl:template match="report">
