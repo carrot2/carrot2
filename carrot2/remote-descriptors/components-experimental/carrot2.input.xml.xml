@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<service xmlns      = "http://www.dawidweiss.com/projects/carrot/componentDescriptor" 
+         framework  = "Carrot2"
+>
+
+    <component id               = "carrot2.input.xml"
+               type             = "input"
+               serviceURL       = "http://localhost:8080/carrot2-input-xml/service"
+               infoURL          = "http://localhost:8080/carrot2-input-xml/"
+    />
+
+</service>
