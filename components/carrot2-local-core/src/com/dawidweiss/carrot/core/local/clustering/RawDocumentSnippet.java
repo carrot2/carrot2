@@ -107,7 +107,7 @@ public class RawDocumentSnippet extends RawDocumentBase implements Cloneable
      */
     public String toString()
     {
-        return "[" + getTitle() + "] " + getSnippet().toString();
+        return "[" + getTitle() + "] " + getSnippet();
     }
 
     /*
