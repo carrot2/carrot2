@@ -13,7 +13,6 @@ import com.chilang.carrot.filter.cluster.rough.data.WebIRContext;
 import com.chilang.carrot.filter.cluster.rough.measure.CosineCoefficient;
 import com.chilang.carrot.filter.cluster.rough.measure.Similarity;
 import com.chilang.carrot.filter.cluster.rough.trsm.RoughSpace;
-import com.chilang.carrot.filter.cluster.rough.trsm.TermRoughSpace;
 import com.chilang.carrot.filter.cluster.rough.CommonFactory;
 import com.chilang.util.StringUtils;
 import org.apache.log4j.Logger;

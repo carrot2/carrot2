@@ -5,8 +5,6 @@
  */
 package com.chilang.util;
 
-import java.text.NumberFormat;
-import java.util.Locale;
 
 /**
  * Create String representation of object

@@ -7,7 +7,6 @@ package com.chilang.carrot.filter.cluster;
 
 import com.chilang.carrot.filter.cluster.rough.XClusterWrapper;
 import com.chilang.carrot.filter.cluster.rough.clustering.Clusterer;
-import com.chilang.carrot.filter.cluster.rough.clustering.KClusterer;
 import com.chilang.carrot.filter.cluster.rough.clustering.RoughClusterer;
 import com.chilang.carrot.filter.cluster.rough.data.IRContext;
 import com.chilang.carrot.filter.cluster.rough.data.WebIRContext;
@@ -23,7 +22,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

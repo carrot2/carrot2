@@ -5,8 +5,6 @@
  */
 package com.chilang.carrot.filter.cluster.rough.filter;
 
-import java.util.Set;
-
 public interface StopWordFilter {
 
     public boolean isStopWord(String word);

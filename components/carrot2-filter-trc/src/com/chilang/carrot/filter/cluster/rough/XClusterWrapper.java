@@ -7,7 +7,6 @@ package com.chilang.carrot.filter.cluster.rough;
 
 import com.chilang.util.JDOMWrapper;
 import com.chilang.carrot.filter.cluster.rough.clustering.XCluster;
-import com.chilang.util.JDOMWrapper;
 import org.jdom.Element;
 
 import java.text.NumberFormat;
