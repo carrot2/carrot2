@@ -3,7 +3,7 @@
 
 <component
     name="carrot2-filter-case-normalizer"
-    description="Carrot2 Cluster Metrics Output Component">
+    description="Carrot2 Case Normalizer filter component.">
     
     <provides>
         <files build-path-exclude="true" prefix="tmp/dist">
