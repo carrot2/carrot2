@@ -146,6 +146,17 @@
   
   <target name="discover.classpath" depends="discover.classpath:autodependency,discover.classpath:empty">
   </target>
+  
+  <target name="dependencies" depends="prepare">
+  	<echo>
+Component descriptor:
+${component.descriptor}
+
+Project dependencies:
+  	
+${string:component.dependencies}
+  	</echo>
+  </target>
 
   <target name="discover.classpath:autodependency" if="tmp:dep.file.available">
     <fileset id="dependencies" dir="${carrot2.cvs.dir}">
