@@ -199,7 +199,6 @@ TESTING: @{component.path}
     <component-apply component.path="components/carrot2-input-local-cache" />
     
     <component-apply component.path="components/carrot2-odp-core" />
-    <component-apply component.path="components/carrot2-odp-tools" />
     <component-apply component.path="components/carrot2-output-cluster-metrics" />
 
     <component-apply component.path="components/carrot2-local-remote-adapters" />
