@@ -1,4 +1,8 @@
 
+(this version of Saxon is slightly modified -- 'service' entries from
+META-INF folder are removed to prevent collisions with Tomcat's default
+parser)
+
                           MOZILLA PUBLIC LICENSE
                                 Version 1.1
 

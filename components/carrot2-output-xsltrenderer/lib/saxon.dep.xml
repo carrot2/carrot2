@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE component SYSTEM "../etc/component-dependency.dtd" >
+<!DOCTYPE component SYSTEM "../../../etc/component-dependency.dtd" >
 
 <component
     name="saxon"
-    description="SAXON XSLT processor, http://saxon.sourceforge.net//">
+    description="SAXON XSLT processor (no services declaration), http://saxon.sourceforge.net//">
 
     <provides>
         <files>
-            <file location="saxon.jar" />
+            <file location="saxon-noautoregister.jar" />
             <file location="aelfred.LICENSE" />
             <file location="saxon.LICENSE" />
         </files>
