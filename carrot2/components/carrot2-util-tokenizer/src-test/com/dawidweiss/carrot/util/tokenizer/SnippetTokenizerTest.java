@@ -34,10 +34,10 @@ public class SnippetTokenizerTest extends TestCase
     public void testEmpty()
     {
         TokenizedDocument document = snippetTokenizer
-                .tokenize(new RawDocumentSnippet("", ""));
+            .tokenize(new RawDocumentSnippet("", ""));
         assertEquals("Zero-length title", 0, document.getTitle().getLength());
         assertEquals("Zero-length snippet", 0, document.getSnippet()
-                .getLength());
+            .getLength());
     }
 
     /**
@@ -46,13 +46,26 @@ public class SnippetTokenizerTest extends TestCase
     public void testNonEmpty()
     {
         TokenizedDocument document = snippetTokenizer
-                .tokenize(new RawDocumentSnippet("a simple test",
-                        "nothing fancy. really"));
+            .tokenize(new RawDocumentSnippet("a simple test",
+                "nothing fancy. really"));
 
         // Note we're not testing the parser, just the factory
         assertEquals("Non-zero-length title", 3, document.getTitle()
-                .getLength());
+            .getLength());
         assertEquals("Non-zero-length snippet", 4, document.getSnippet()
-                .getLength());
+            .getLength());
+    }
+
+    /**
+     * 
+     */
+    public void testPropertyCopying()
+    {
+        TokenizedDocument document = snippetTokenizer
+            .tokenize(new RawDocumentSnippet("a simple test",
+                "nothing fancy. really", "en"));
+
+        assertEquals("Copied property", "en", document
+            .getProperty(RawDocument.PROPERTY_LANGUAGE));
     }
 }
