@@ -13,8 +13,9 @@ import java.util.*;
 public interface TopicIndex
 {
     /**
-     * Returns a list of relative locations of files containing topics
-     * specified in the query.
+     * Returns a list of {@link String}s denoting relative locations of files
+     * containing topics specified in the query. If no locations have been
+     * identified for given query, <code>null</code> will be returned.
      * 
      * @param query
      * @return
