@@ -10,13 +10,12 @@
 package com.dawidweiss.carrot.ant;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.ArrayList;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
-import org.apache.tools.ant.types.FileSet;
 import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.util.FileUtils;
 
@@ -58,13 +57,12 @@ public class DependencyPath extends Path {
     }
 
     /**
-     * Crates a new fileset with a set of dependency
-     * files to scan.
+     * Crates a new path with a set of dependency files to scan.
      */
-    public FileSet createDependencies() {
-        FileSet newFileset = new FileSet();
-        dependencies.add(newFileset);
-        return newFileset;
+    public Path createDependencies() {
+        Path newPath = new Path(getProject());
+        dependencies.add(newPath);
+        return newPath;
     }
 
     /**
@@ -86,7 +84,9 @@ public class DependencyPath extends Path {
             throw new BuildException("Component descriptor not readable: "
                 + componentDescriptor.getAbsolutePath());
         }
-
+        
+        this.dependencies = Utils.convertPathDependencies(getProject(), dependencies);
+        
         ComponentDependency component = null;
         try {
             component = 
@@ -109,7 +109,7 @@ public class DependencyPath extends Path {
         File [] providedFiles = component.getAllProvidedFiles( components, profile, true );
         ArrayList result = new ArrayList(providedFiles.length);
         for (int i=0;i<providedFiles.length;i++) {
-            log(providedFiles[i].toString(), Project.MSG_VERBOSE);
+            getProject().log(providedFiles[i].toString(), Project.MSG_VERBOSE);
             if (!providedFiles[i].isAbsolute()) {
                 throw new BuildException("Resolved dependency file not absolute: "
                     + providedFiles[i]);

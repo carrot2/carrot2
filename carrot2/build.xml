@@ -289,6 +289,9 @@ FORMATTING: @{component.path}
 
   </target>  
 
+  <target name="bootstrap">
+    <ant target="bootstrap" antfile="build.xml" dir="components/carrot2-ant-extensions" inheritall="false" />  
+  </target>
 
   <target name="remote">
     <description>
@@ -308,7 +311,7 @@ FORMATTING: @{component.path}
     </ant>
 
     <path id="bootstrap">
-        <fileset dir="components/carrot2-ant-extensions/tmp/dist" includes="*.jar" />
+        <fileset dir="components/carrot2-ant-extensions/tmp" includes="*.jar" />
     </path>
 
     <taskdef name="bringToDate" 
@@ -321,11 +324,14 @@ FORMATTING: @{component.path}
         <classpath refid="bootstrap" />
     </taskdef>
 
-    <fileset id="dependencies" dir=".">
-        <include name="lib/**/*.dep.xml" />
-        <include name="components/*/*.dep.xml" />
-        <include name="components/*/lib/*.dep.xml" />        
-    </fileset>
+    <path id="dependencies">
+        <fileset dir=".">
+            <include name="lib/**/*.dep.xml" />
+            <include name="components/*/*.dep.xml" />
+            <include name="components/*/lib/*.dep.xml" />
+        </fileset>
+        <path path="${extra.dependencies.path}" />
+    </path>
 
     <!-- Invoke the remote controller's build file to update it. -->
     <ant antfile="build.xml"

@@ -1,0 +1,29 @@
+
+<project name="a" default="test">
+	<target name="prepare">
+    </target>
+		
+	<target name="test">
+	    <taskdef name="bringToDate" 
+	     	classname="com.dawidweiss.carrot.ant.BringToDate" />
+		<typedef name="dependencyPath"
+			classname="com.dawidweiss.carrot.ant.DependencyPath" />
+	    <taskdef name="printDependencies" 
+	        classname="com.dawidweiss.carrot.ant.PrintDependencies" />
+
+		<path id="user.path" path="../:../../otherDeps" />
+
+	    <printDependencies componentDescriptor="i.dep.xml"
+	                       property="string:component.dependencies"
+	    				   profile="">
+			<dependencies refid="user.path" />
+	    </printDependencies>
+		<echo>${string:component.dependencies}</echo>
+		
+		<dependencyPath id="path.dependencies"
+			componentDescriptor="i.dep.xml" profile="">
+			<dependencies refid="user.path" />
+		</dependencyPath>
+	</target>
+
+</project>

@@ -29,10 +29,20 @@ BUILDING FROM SOURCES
 =====================
 
 In order to build Carrot2's components, you must have ANT in your path. We use 
-ANT 1.6, previous versions are not supported but may work.
+ANT 1.6.2, previous versions are not supported but may work. Apache Resolver library
+must be present in ANT's classpath. The resolver JAR can be downloaded from:
+
+http://xml.apache.org/commons/components/resolver/
 
 Carrot2 components can work in two architecture designs: as remote components
 using HTTP and as local Java components.
+
+0) Build 'bootstrap' tasks
+
+Carrot2 uses some ANT tasks that must be built prior to other
+tasks.
+
+ant -q bootstrap
 
 a) Building only remote components
 
@@ -51,7 +61,7 @@ b) Building all components and applications
 
 All components can be compiled using the following ANT command:
 
-ant build
+ant -q build
 
 Components are placed in their respective directories, under 'tmp/dist' folder.
 Their required components and libraries are listed in an *.info file found
@@ -63,6 +73,8 @@ A distribution contains a binary distribution of remote components that is
 'tomcat-ready', that is simply copy the contents of the ZIP file over to a 
 Tomcat installation and everything should be fine.
 
+ant -q dist
+
 d) Assembling a 'custom' component set.
 
 To assemble a 'custom' component set, a build file and a dependency file
@@ -73,8 +85,8 @@ application's folder):
 ant -Dcopy.dependencies=true
 
 
-THE REMOTE CONTROLLER COMPONENT (FORMER WEB CONTROLLER)
-=======================================================
+THE REMOTE CONTROLLER COMPONENT
+===============================
 
 The remote controller component for Carrot2 uses the rest of the components to 
 process user queries. The controller looks for services offered by components 

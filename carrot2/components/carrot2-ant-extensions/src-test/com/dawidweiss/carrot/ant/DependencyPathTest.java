@@ -15,6 +15,16 @@ public class DependencyPathTest extends BuildFileTest {
         configureProject("ant-tests/dependencyPath.xml");
     }
 
+    public void testDependenciesWithPath() {
+        try {
+            executeTarget("test3");
+        }
+        finally {
+            System.out.println( super.getOutput());
+            System.err.println( super.getError());
+        }
+    }    
+    
     public void testDynamicPathUse() {
             executeTarget("test");
     }

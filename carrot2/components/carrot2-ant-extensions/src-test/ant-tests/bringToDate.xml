@@ -17,8 +17,10 @@
 			Simple dependency check.
 		</description>
 		<bringToDate componentDescriptor="deps/proj_a/a.dep.xml">
-			<dependencies dir="deps">
-				<include name="**/*.dep.xml" />
+			<dependencies>
+				<fileset dir="deps">
+					<include name="**/*.dep.xml" />
+				</fileset>
 			</dependencies>
 		</bringToDate>
 		<!-- Output of project b should be present. -->
@@ -37,8 +39,10 @@
 		<!-- This is no circular dependency, since d depends
 			on e only in profile 'test' -->
 		<bringToDate componentDescriptor="deps/proj_d_dep_on_e/d.dep.xml">
-			<dependencies dir="deps">
-				<include name="**/*.dep.xml" />
+			<dependencies>
+				<fileset dir="deps">
+					<include name="**/*.dep.xml" />
+				</fileset>
 			</dependencies>
 		</bringToDate>
 	</target>
@@ -49,8 +53,10 @@
 		</description>
 		<bringToDate componentDescriptor="deps/proj_d_dep_on_e/d.dep.xml"
 			profile="test">
-			<dependencies dir="deps">
-				<include name="**/*.dep.xml" />
+			<dependencies>
+				<fileset dir="deps">
+					<include name="**/*.dep.xml" />
+				</fileset>
 			</dependencies>
 		</bringToDate>
 	</target>

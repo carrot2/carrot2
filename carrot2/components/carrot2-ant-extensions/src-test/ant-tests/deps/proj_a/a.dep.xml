@@ -1,3 +1,5 @@
+<!DOCTYPE component PUBLIC "-//Carrot2//DTD Component Dependency Descriptor V1.0//EN"
+	"http://www.cs.put.poznan.pl/dweiss/carrot/component-dependency.dtd" >
 
 <component name="a">
 
