@@ -5,7 +5,7 @@
         <!-- Query processing service.
 
           Specify the base url of the script/ host, which processes queries
-          (don't include any parameters - they will be defined later).
+          (don&apos;t include any parameters - they will be defined later).
 
           Also, specify the method of posting parameters to the service,
           either "post" or "get" are available.
@@ -58,7 +58,7 @@
             </number-of-matched-documents>
 
             <!-- if no results number is found, the page is again checked whether
-                 it matched a 'no-results' page -->
+                 it matched a &apos;no-results&apos; page -->
             <no-results-marker>
                 <regexpression>
                     <match><![CDATA[did not match any documents]]></match>
@@ -78,7 +78,7 @@
              -->
             <title>
                <start consume="true">
-                   <regexp><![CDATA[<!--m--><a.*?>]]></regexp>
+                   <regexp><![CDATA[<!--m-->(<span class=w>.*?</span> )?<a.*?>]]></regexp>
                </start>
                <end   consume="true">
                    <regexp><![CDATA[</a>]]></regexp>
@@ -89,7 +89,7 @@
              -->
             <url>
                <start consume="true">
-                   <regexp><![CDATA[<!--m--><a href=]]></regexp>
+                   <regexp><![CDATA[<!--m-->(<span class=w>.*?</span> )?<a href=]]></regexp>
                </start>
                <end   consume="true">
                    <regexp><![CDATA[>]]></regexp>
@@ -100,7 +100,7 @@
              -->
             <summary>
                <start consume="true">
-                   <regexp><![CDATA[</a>.*?<font size=-1>]]></regexp>
+                   <regexp><![CDATA[</a>(.*View as HTML)?(.*<font size=-1>)?]]></regexp>
                </start>
                <end   consume="true">
                    <regexp><![CDATA[<br><font]]></regexp>

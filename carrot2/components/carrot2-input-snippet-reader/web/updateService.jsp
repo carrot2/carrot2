@@ -1,10 +1,14 @@
-<%@ page import="org.apache.xmlrpc.*,java.util.*,org.put.snippetreader.*,org.put.util.text.HtmlHelper,gnu.regexp.*,java.util.*"
+<%@ page import="com.dawidweiss.carrot.util.common.*,
+                 org.apache.xmlrpc.*,
+                 java.util.*,
+                 com.dawidweiss.carrot.input.snippetreader.remote.*,
+                 gnu.regexp.*"
          session="false"
          contentType="text/html; charset=utf-8"
 %><%
     // Attempt to update service's configuration.
 
-    XmlRpcClientLite client = new XmlRpcClientLite( org.put.snippetreader.XmlRpcServlet.getSnippetReaderServiceURL(request));
+    XmlRpcClientLite client = new XmlRpcClientLite( XmlRpcServlet.getSnippetReaderServiceURL(request));
     Vector v = new Vector();
     String service = request.getParameter("service");
     String configuration =  request.getParameter("config");
@@ -29,7 +33,10 @@
         <tt><%= e.toString() %><BR><BR></tt>
         <hr>
         <h2>File retrieved.</h2>
-        <pre><%= HtmlHelper.escapeHtmlTags(configuration==null?"":configuration)%></pre>
+        <pre><%
+	         XMLSerializerHelper serializer = XMLSerializerHelper.getInstance();
+			 serializer.writeValidXmlText(out, configuration==null?"":configuration, false);
+        	 %></pre>
         </body>
         </html>
         <%
