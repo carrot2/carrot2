@@ -14,6 +14,17 @@
 	<!-- Required components -->
     <dependency name="carrot2-local-core" />
     <dependency name="carrot2-filter-lingo" in-profile="local" />
+    <dependency name="carrot2-filter-trc" in-profile="local" />
+    <dependency name="carrot2-filter-stc" in-profile="local" />
+    <dependency name="carrot2-util-common" />
+    <dependency name="carrot2-language-guesser" />
+    <dependency name="carrot2-util-tokenizer" />
+    <dependency name="carrot2-input-local-cache" />
+    <dependency name="carrot2-util-matrix" />
+    <dependency name="carrot2-odp-core" />
+    <dependency name="carrot2-output-cluster-metrics" />
+    <dependency name="carrot2-filter-case-normalizer" />
+    
     <dependency name="carrot2-util-common" />
     <dependency name="dom4j" />
 </component>

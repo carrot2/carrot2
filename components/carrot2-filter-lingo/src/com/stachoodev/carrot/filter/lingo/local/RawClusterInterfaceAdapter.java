@@ -1,5 +1,5 @@
 /*
- * Carrot2 Project Copyright (C) 2002-2004, Dawid Weiss Portions (C)
+ * Carrot2 Project Copyright (C) 2002-2005, Dawid Weiss Portions (C)
  * Contributors listed in carrot2.CONTRIBUTORS file. All rights reserved.
  * 
  * Refer to the full license file "carrot2.LICENSE" in the root folder of the

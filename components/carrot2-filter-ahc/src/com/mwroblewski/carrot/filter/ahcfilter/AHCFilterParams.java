@@ -2,7 +2,7 @@
 
 /*
  * Carrot2 Project
- * Copyright (C) 2002-2004, Dawid Weiss
+ * Copyright (C) 2002-2005, Dawid Weiss
  * Portions (C) Contributors listen in carrot2.CONTRIBUTORS file.
  * All rights reserved.
  * 
