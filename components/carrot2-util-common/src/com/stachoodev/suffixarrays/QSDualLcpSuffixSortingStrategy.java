@@ -31,28 +31,35 @@ public class QSDualLcpSuffixSortingStrategy implements
     public DualLcpSuffixArray dualLcpSuffixSort(MaskableIntWrapper intWrapper)
     {
         int [] suffixData = intWrapper.asIntArray();
-        int [] suffixArray = new int [suffixData.length - 1];
-        int [] lcpArray = new int [suffixData.length];
-        int [] secondaryLcpArray = new int [suffixData.length];
 
-        SuffixArraysUtils.qsSuffixSort(suffixArray, suffixData,
+        int [] suffixArray = new int [suffixData.length - 1];
+        int [] superSuffixArray = new int [suffixData.length - 1];
+        int [] lcpArray = new int [suffixData.length];
+        int [] superLcpArray = new int [suffixData.length];
+
+        // NB: These could be parallelized
+        SuffixArraysUtils.qsSuffixSort(suffixArray, suffixData);
+        SuffixArraysUtils.qsSuffixSort(superSuffixArray, suffixData,
             MaskableIntWrapper.SECONDARY_BITS);
 
         if (intWrapper instanceof TypeAwareIntWrapper)
         {
+            // NB: These could be parallelized
             SuffixArraysUtils.naiveLcp(suffixArray, lcpArray, suffixData, 0,
                 (TypeAwareIntWrapper) intWrapper);
-            SuffixArraysUtils.naiveLcp(suffixArray, secondaryLcpArray,
-                suffixData, MaskableIntWrapper.SECONDARY_BITS,
+            SuffixArraysUtils.naiveLcp(superSuffixArray, superLcpArray, suffixData,
+                MaskableIntWrapper.SECONDARY_BITS,
                 (TypeAwareIntWrapper) intWrapper);
         }
         else
         {
+            // NB: These could be parallelized
             SuffixArraysUtils.naiveLcp(suffixArray, lcpArray, suffixData);
-            SuffixArraysUtils.naiveLcp(suffixArray, secondaryLcpArray,
-                suffixData, MaskableIntWrapper.SECONDARY_BITS);
+            SuffixArraysUtils.naiveLcp(superSuffixArray, superLcpArray, suffixData,
+                MaskableIntWrapper.SECONDARY_BITS);
         }
 
-        return new DualLcpSuffixArray(suffixArray, lcpArray, secondaryLcpArray);
+        return new DualLcpSuffixArray(suffixArray, lcpArray, superSuffixArray,
+            superLcpArray);
     }
 }

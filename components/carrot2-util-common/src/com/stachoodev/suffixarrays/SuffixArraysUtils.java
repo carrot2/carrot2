@@ -37,8 +37,7 @@ public class SuffixArraysUtils
             return 0;
         }
 
-        while ((suffixA < suffixData.length) && (suffixB < suffixData.length)
-            && (suffixData[suffixA] == suffixData[suffixB]))
+        while (suffixData[suffixA] == suffixData[suffixB])
         {
             suffixA++;
             suffixB++;
@@ -59,6 +58,22 @@ public class SuffixArraysUtils
     }
 
     /**
+     * @param code
+     * @param mask
+     */
+    private final static int maskCode(int code, int mask)
+    {
+        if (code >= 0)
+        {
+            return code & mask;
+        }
+        else
+        {
+            return code;
+        }
+    }
+
+    /**
      * Compares two suffixes of a string.
      * 
      * @param suffixA start position of the first suffix
@@ -75,62 +90,76 @@ public class SuffixArraysUtils
             return 0;
         }
 
-        // Unmasked comparison
-        int unmasked = 0;
-        int unmaskedSuffixA = suffixA;
-        int unmaskedSuffixB = suffixB;
-        while ((unmaskedSuffixA < suffixData.length)
-            && (unmaskedSuffixB < suffixData.length)
-            && (suffixData[unmaskedSuffixA] == suffixData[unmaskedSuffixB]))
-        {
-            unmaskedSuffixA++;
-            unmaskedSuffixB++;
-        }
-
-        if (suffixData[unmaskedSuffixA] > suffixData[unmaskedSuffixB])
-        {
-            unmasked = 1;
-        }
-        else if (suffixData[unmaskedSuffixA] < suffixData[unmaskedSuffixB])
-        {
-            unmasked = -1;
-        }
-        else
-        {
-            unmasked = 0;
-        }
-
-        // Masked comparison
-        int masked = 0;
         int mask = ~((1 << secondaryBits) - 1);
-        while ((suffixA <= unmaskedSuffixA) && (suffixB <= unmaskedSuffixB)
-            && ((suffixData[suffixA] & mask) == (suffixData[suffixB] & mask)))
+
+        // TODO: the suffixData[suffixX] > 0 condition should
+        // actually be implemented by the MaskedIntWrapper interface
+        // in a method e.g. getMaskedIntCode()
+        while (maskCode(suffixData[suffixA], mask) == maskCode(
+            suffixData[suffixB], mask))
         {
             suffixA++;
             suffixB++;
         }
 
-        if ((suffixData[suffixA] & mask) > (suffixData[suffixB] & mask))
+        if (maskCode(suffixData[suffixA], mask) > maskCode(suffixData[suffixB],
+            mask))
         {
-            masked = 1;
+            return 1;
         }
-        else if ((suffixData[suffixA] & mask) < (suffixData[suffixB] & mask))
+        else if (maskCode(suffixData[suffixA], mask) < maskCode(
+            suffixData[suffixB], mask))
         {
-            masked = -1;
+            return -1;
         }
         else
         {
-            masked = 0;
+            return 0;
+        }
+    }
+
+    /**
+     * Compares two suffixes of a string.
+     * 
+     * @param suffixA start position of the first suffix
+     * @param suffixB start position of the second suffix
+     * @param suffixData suffix data terminated with a -1 value.
+     * @return
+     */
+    public static int compareSuffixes(int suffixA, int suffixB,
+        int length, int [] suffixData, int secondaryBits)
+    {
+        // Reflexiveness
+        if (suffixA == suffixB)
+        {
+            return 0;
         }
 
-        // Final comparison
-        if (masked == 0)
+        int mask = ~((1 << secondaryBits) - 1);
+
+        // TODO: the suffixData[suffixX] > 0 condition should
+        // actually be implemented by the MaskedIntWrapper interface
+        // in a method e.g. getMaskedIntCode()
+        while (--length > 0 && maskCode(suffixData[suffixA], mask) == maskCode(
+            suffixData[suffixB], mask))
         {
-            return unmasked;
+            suffixA++;
+            suffixB++;
+        }
+
+        if (maskCode(suffixData[suffixA], mask) > maskCode(suffixData[suffixB],
+            mask))
+        {
+            return 1;
+        }
+        else if (maskCode(suffixData[suffixA], mask) < maskCode(
+            suffixData[suffixB], mask))
+        {
+            return -1;
         }
         else
         {
-            return masked;
+            return 0;
         }
     }
 
