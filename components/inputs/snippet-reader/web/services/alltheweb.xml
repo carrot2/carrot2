@@ -67,10 +67,10 @@
              -->
             <url>
                <start consume="true">
-                   <regexp><![CDATA[resTitle"><a onmouseover="self.status=']]></regexp>
+                   <regexp><![CDATA[class="resURL">]]></regexp>
                </start>
                <end   consume="true">
-                   <regexp><![CDATA[';return true]]></regexp>
+                   <regexp><![CDATA[</span>]]></regexp>
                </end>
             </url>
 
@@ -78,10 +78,10 @@
              -->
             <summary>
                <start consume="true">
-                   <regexp><![CDATA[resTitle"><a.*?<br />]]></regexp>
+                   <regexp><![CDATA[resTitle"><a.*?<br.*?>]]></regexp>
                </start>
                <end   consume="true">
-                   <regexp><![CDATA[<br />]]></regexp>
+                   <regexp><![CDATA[<br.*?>]]></regexp>
                </end>
             </summary>
         </snippet>
