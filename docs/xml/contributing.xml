@@ -389,9 +389,8 @@ public byte [] readNBytesFromInputStream( InputStream stream, int n )
             <para>
             Package <classname>com.dawidweiss.carrot.input.*</classname>
             contains a generic servlet, which
-            can be used to set up a web service and process &carrot; input requests. In
-            order to do this, one must do one of the following:
-            
+            can be used to set up a web service and process &carrot; input requests.
+            The following two things must be done to achieve this: 
             <itemizedlist>
             
                 <listitem><para>
