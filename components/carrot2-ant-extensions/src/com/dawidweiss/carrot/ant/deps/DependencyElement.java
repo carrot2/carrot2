@@ -45,14 +45,14 @@ public class DependencyElement {
             inprofile = null;
         
         this.name = configElement.getAttribute("name");
-        if (name == null)
+        if (name == null || "".equals(name))
             throw new Exception("name attribute is required.");
         
         String nocopy = configElement.getAttribute("nocopy");
-        if (nocopy == null || "false".equalsIgnoreCase(nocopy)) {
-            this.nocopy = false;
-        } else {
+        if (nocopy != null && Boolean.valueOf(nocopy).booleanValue()) {
             this.nocopy = true;
+        } else {
+            this.nocopy = false;
         }
     }
 
@@ -77,6 +77,11 @@ public class DependencyElement {
     
     public boolean isNoCopy() {
         return this.nocopy;
+    }
+    
+    public String toString() {
+	    return "[dependency name=" + name + " profile=" + profile + " base="
+	    + base.getAbsolutePath() + " inprofile=" + inprofile + " nocopy=" + nocopy + "]";
     }
 
 }

@@ -272,8 +272,8 @@ public class ComponentDependency {
         buf.append("Component [name=\"" + getName() + "\"], dependencies: [\n");
 
         for (Iterator i = dependencies.iterator(); i.hasNext(); ) {
-            ComponentDependency dep = (ComponentDependency) i.next();
-            System.out.println(dep);
+            DependencyElement dep = (DependencyElement) i.next();
+            buf.append(dep);
         }
 
         buf.append("]\n");

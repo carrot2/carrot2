@@ -18,6 +18,32 @@
         </subant>
     </target>
 
+	<target name="copytest" depends="prepare">
+		<description>
+			Check the nocopy attribute on dependency.
+		</description>
+
+        <delete dir="tmp/copydeps" />
+        <mkdir dir="tmp/copydeps" />
+        <copyDependencies
+            componentDescriptor="deps/proj_copydeps/master/master.dep.xml"
+            todir="tmp/copydeps"
+            >
+			<dependencies>
+				<fileset dir="deps/proj_copydeps">
+				<include name="**/*.dep.xml" />
+				</fileset>
+			</dependencies>
+        </copyDependencies>
+        
+		<condition property="tmp:cond:test:1" value="true">
+			<available file="tmp/copydeps/test2.txt" type="file" />
+		</condition>
+		<fail unless="tmp:cond:test:1">
+			Error. File not copied.
+		</fail>
+	</target>
+
 	<target name="nocopytest" depends="prepare">
 		<description>
 			Check the nocopy attribute on dependency.
@@ -45,4 +71,5 @@
 	</target>
 
     
+
 </project>
