@@ -6,10 +6,10 @@
 
         <parameters>
             <parameter name="q"       mapto="query.string" />
-            <parameter name="h"       value="100" />
+            <parameter name="hits"    value="50" />
             <parameter name="o"       mapto="query.startFrom" />
 
-            <parameter name="c"       value="web" />
+            <parameter name="cat"     value="web" />
             <parameter name="custid"  value="mozilla-search" />
             <parameter name="cs"      value="utf-8" />
         </parameters>
