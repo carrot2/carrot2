@@ -1,0 +1,161 @@
+
+/**********************************/
+/* PAGE	BODY                      */
+/**********************************/
+
+BODY {
+	background:	#ffffff;
+	color: 		#000000;
+
+	margin-right: 	0px;
+	margin-bottom: 	0px;
+	margin-top:     0px;
+	margin-left: 	0px;
+	padding-left: 	5px;
+	padding-right: 	30px;
+	padding-top: 	5px;
+	padding-bottom:	30px;
+
+	font-family: 	Verdana, Helvetica, Arial,	Sans-serif;
+	font-size: 	11px;
+}
+
+
+TABLE {
+	font-family: 	Verdana, Helvetica, Arial,	Sans-serif;
+	font-size: 	11px;
+}
+
+
+/**********************************/
+/* LINKS                          */
+/**********************************/
+
+A {
+	color:	   	 #646AB4;
+	text-decoration: underline;
+	font-weight: 	 normal;
+}
+
+A:visited {
+	text-decoration: underline;
+	color:		 #B46464;
+}
+
+A:hover {
+	text-decoration: none;
+	color:		 red;
+}
+
+A.nodecoration, A.nodecoration:visited, A.nodecoration:hover {
+    text-decoration: none;
+}
+
+
+/**********************************/
+/* MISCELLANEOUS CLASSES          */
+/**********************************/
+HR {
+	color: black;
+	height: 1px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+DIV.frame {
+	border-color: red;
+	border-style: solid;
+	border-width: 1px;
+        padding: 5px;
+        margin:  10px;
+}
+
+SPAN.smallgray {
+    font-size: 9px;
+    color:     #606060;
+}
+
+OPTGROUP {
+	color: 			 gray;
+	font-weight: 	 bold;
+	font-style:      normal;
+	font-size: 		 10px;
+	padding-top:     5px;
+}
+
+OPTGROUP OPTION {
+	color: black;
+}
+
+/**********************************/
+/* LISTS                          */
+/**********************************/
+
+OL {
+	text-align: justify;
+}
+
+LI {
+	margin-top: 5px;
+}
+
+
+/**********************************/
+/* PARAGRAPHS                     */
+/**********************************/
+
+
+P {
+        margin-top:	0.7em;
+        margin-left:    0px;
+        margin-bottom:  0px;
+        text-align:	justify;
+}
+
+/**********************************/
+/* Chapters                       */
+/**********************************/
+
+H1 {
+    margin-top: 15px;
+    margin-bottom: 10px;
+    font-size:  2em;
+    border-bottom: 1px dotted gray;
+    padding-bottom: 5px;
+}
+
+H2 {
+    margin-top: 15px;
+    margin-bottom: 10px;
+    font-size:  1.5em;
+    padding-bottom: 5px;
+}
+
+H3 {
+    margin-top: 15px;
+    margin-bottom: 10px;
+    font-size:  1.3em;
+    padding-bottom: 5px;
+    font-style: oblique;
+    font-weight: bold;
+}
+
+DIV.menu {
+	margin-top:   2em;
+    padding-top:  2em;
+    padding-left: 2em;
+}
+
+DIV.errors {
+    padding: 8px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 1px solid red;
+    font-weight: bold;
+}
+
+
+
+

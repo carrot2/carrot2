@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE appendix PUBLIC 
+    "-//Dawid Weiss//DTD DocBook V3.1-Based Extension for XML and graphics inclusion//EN" 
+    "carrot-docbook-extensions.dtd">
+  
+<section id="sect:mime:x-carrot-clustering-input-query">
+    <title>Web search query: <computeroutput>application/x-carrot-clustering-input-query</computeroutput></title>
+
+    <para>
+    This format provides user query and the number of requested results embedded in an
+    &xml; file. The main application of this format is for wrapping search engines and other
+    data sources working on the paradigm of textual user queries and a list of matching results.
+    </para>
+    
+    <para>
+    Input attribute <computeroutput>requested-results</computeroutput> may not be respected
+    by input components and is only a hint as to how many results the client wants from the input
+    component.
+    </para>
+    
+    <para>
+    <computeroutput>query</computeroutput> element is required and must not be empty.
+    </para>
+    
+    <simplesect>
+        <title>&xml; schema</title>
+        
+        <example id="listing:schema:x-carrot-clustering-input-query">
+        <title>&xml; schema for the search query format</title>
+        <programlisting><![CDATA[@insert-file.x-carrot-clustering-input-query.schema@]]></programlisting>
+        </example>
+
+    </simplesect>
+
+    <simplesect>
+        <title>A valid input example</title>
+        
+        <example id="listing:example:x-carrot-clustering-input-query">
+        <title>An example of a valid search query &xml;</title>
+        <programlisting><![CDATA[@insert-file.x-carrot-clustering-input-query.example@]]></programlisting>
+        </example>
+
+    </simplesect>
+
+</section>

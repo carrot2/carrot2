@@ -1,0 +1,5 @@
+<guard class="com.dawidweiss.carrot.controller.carrot2.guard.BlockAllGuard">
+
+    <component-prefix>carrot2.input.snippet-reader.google</component-prefix>
+
+</guard>

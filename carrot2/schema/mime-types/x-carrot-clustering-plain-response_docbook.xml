@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE appendix PUBLIC 
+    "-//Dawid Weiss//DTD DocBook V3.1-Based Extension for XML and graphics inclusion//EN" 
+    "carrot-docbook-extensions.dtd">
+  
+<section id="sect:mime:x-carrot-clustering-plain-response">
+    <title>Plain search results clustering response: <computeroutput>x-carrot-clustering-plain-response</computeroutput></title>
+
+    <para>
+    This format encapsulates a plain response of a search engine to a user query
+    (see. <xref linkend="sect:mime:x-carrot-clustering-input-query"/>). The response
+    includes the original query and a list of query-matching documents,
+    described by at least an &url; and optional title and extracted snippet of text.
+    </para>
+
+    <important>
+        <para>
+        This data format only specifies the <emphasis>required</emphasis> 
+        elements of the &xml; structure. It may contain additional elements not
+        defined here (see <xref linkend="sect:mime:x-carrot-clustering-groups"/>
+        for an extension example) &mdash; components should ignore any elements
+        they do not understand.
+        </para>
+        <para>
+        Repeating the <sgmltag>query</sgmltag> tag in the output is strongly
+        suggested although for some input components it may be impossible and for
+        this reason this element is left as optional.
+        </para>
+    </important>
+    
+    <simplesect>
+        <title>&xml; schema</title>
+        
+        <example id="listing:schema:x-carrot-clustering-plain-response">
+        <title>&xml; schema for plain search results</title>
+        <programlisting><![CDATA[@insert-file.x-carrot-clustering-plain-response.schema@]]></programlisting>
+        </example>
+    </simplesect>
+
+    <simplesect>
+        <title>A valid input example</title>
+        
+        <example id="listing:example:x-carrot-clustering-plain-response">
+        <title>An example of a valid search results &xml;</title>
+        <programlisting><![CDATA[@insert-file.x-carrot-clustering-plain-response.example@]]></programlisting>
+        </example>
+
+    </simplesect>
+
+</section>
+

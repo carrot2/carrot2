@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+
+<!-- Castor binding file -->
+
+<cbf:binding xmlns:cbf="http://www.castor.org/SourceGenerator/Binding"
+             defaultBindingType='element'>
+     
+     <!--define the {namespace,package} binding -->
+
+     <cbf:package>
+          <cbf:name>com.dawidweiss.carrot.controller.carrot2.xmlbinding.query</cbf:name>
+          <cbf:namespace>http://www.dawidweiss.com/projects/carrot/clustering/query</cbf:namespace>
+     </cbf:package>
+
+     <!-- Specific bindings -->
+     
+     <cbf:elementBinding name="search">
+     	<cbf:java-class name="QueryContainer" final="false" equals="false" abstract="false" bound="false" />
+     </cbf:elementBinding>
+     
+     <cbf:elementBinding name="query">
+        <cbf:java-class name="Query" final="false" equals="false" abstract="false" bound="true" />
+     </cbf:elementBinding>
+
+    
+ </cbf:binding>
+     

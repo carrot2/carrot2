@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN" "http://java.sun.com/j2ee/dtds/web-app_2_2.dtd">
+<web-app>
+
+  <!-- WEBAPP INFO SECTION -->
+
+  <display-name>Snippet Generators</display-name>
+  <description>Snippet Generators for Carrot2.</description>
+
+  <!-- SERVLETS -->
+
+  <servlet> <!-- Random Snippet Generator service -->
+    <servlet-name>Random Snippet Generator</servlet-name>
+    <servlet-class>com.dawidweiss.carrot.input.InputRequestProcessorServlet</servlet-class>
+    <init-param>
+        <param-name>inputRequestProcessor</param-name>
+        <param-value>com.dawidweiss.carrot.input.snippetgenerator.RandomSnippetGenerator</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <!-- SERVLET MAPPINGS -->
+
+  <servlet-mapping>
+    <servlet-name>Random Snippet Generator</servlet-name>
+    <url-pattern>/service/random</url-pattern>
+  </servlet-mapping>
+
+</web-app>

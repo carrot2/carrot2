@@ -1,0 +1,9 @@
+
+1. Compile a release with "ant release". The WAR archive with SnippetReader is automatically
+copied to {carrot2 root}/runtime/webapps.
+
+2. Start runtime Carrot2 environment (Tomcat): {carrot2 root}/runtime/bin/catalina run
+The server should be up and running in a couple of seconds.
+
+3. Verify the service by pointing your browser at: http://localhost:8080/SnippetReader 
+If you see the welcome page, everything went ok.

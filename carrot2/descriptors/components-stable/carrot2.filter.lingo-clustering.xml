@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<service xmlns      = "http://www.dawidweiss.com/projects/carrot/componentDescriptor" 
+         framework  = "Carrot2"
+>
+
+    <component id               = "carrot2.filter.default-lingo-clustering"
+               type             = "filter"
+               serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-lingo-clustering/service/DefaultLsiClusterer"
+               infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-lingo-clustering"
+    >
+    </component>
+
+    <component id               = "carrot2.filter.multilingual-lingo-clustering"
+               type             = "filter"
+               serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-lingo-clustering/service/MultilingualLsiClusterer"
+               infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-lingo-clustering"
+    >
+    </component>
+
+</service>

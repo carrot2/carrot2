@@ -1,0 +1,308 @@
+    
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!-- #  Carrot2 main build/ clean script.                                     -->
+<!-- #                                                                        -->
+<!-- #  Override deployment.port/ deployment.host and distribution.dir in     -->
+<!-- #  your local properties file to match your runtime environment's        -->
+<!-- #  webapps directory location, for example                               -->
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+<project name="Carrot2" default="help" basedir="." >
+
+  <!-- ## This is your local override file that is never 
+       ## checked in to the CVS -->
+  <property file="local-build.properties" />
+
+  <!-- ## global properties ### -->
+  <property name="build.compiler"  value="modern" />
+
+  <!-- ## override these properties in your local property
+       ## file if you want to change your deployment
+       ## host (these replace tokens in descriptors)
+       ## You can override distribution.dir to point to your tomcat's webapps
+       ## folder, for example. -->
+  <property name="deployment.port" value="8080" />
+  <property name="deployment.host" value="localhost" />
+
+  <property name="distribution.dir" value="tmp/dist" />
+  <property name="javadoc.dir"      value="tmp/javadoc" />
+
+  <!-- ##################################### -->
+  <!-- ### {{{ initialize                ### -->
+  <!-- ##################################### -->
+  <target name="init">
+    <mkdir dir="${distribution.dir}" />
+    <mkdir dir="${javadoc.dir}" />
+  </target>
+  <!-- }}} -->
+  
+  <!-- ##################################### -->
+  <!-- ### {{{ CLEAN                     ### -->
+  <!-- ##################################### -->
+  <target name="clean" description="Clean up all temporary files.">
+    <!-- clean subprojects -->
+    <echo level="info" message="#### Cleaning up components..." />
+
+    <!-- Common lib (local clean) -->
+    <ant antfile="build.xml" dir="components/carrot2-shared-lib" inheritall="false" target="clean" />
+    <!-- Controllers -->
+    <ant antfile="build.xml" dir="components/controllers/carrot2-web-controller" inheritall="false" target="clean" />
+    <!-- filters -->
+    <ant antfile="build.xml" dir="components/filters/clustering/ahc-clustering" inheritall="false" target="clean" />
+    <ant antfile="build.xml" dir="components/filters/clustering/lingo-clustering" inheritall="false" target="clean" />
+    <ant antfile="build.xml" dir="components/filters/clustering/stc-clustering" inheritall="false" target="clean" />
+    <ant antfile="build.xml" dir="components/filters/diagnostic/stream-interceptor" inheritall="false" target="clean" />
+    <ant antfile="build.xml" dir="components/filters/linguistic/pl-eng-stemming" inheritall="false" target="clean" />
+    <ant antfile="build.xml" dir="components/filters/pruning/text-only" inheritall="false" target="clean" />
+    <ant antfile="build.xml" dir="components/inputs/snippet-generator" inheritall="false" target="clean" />
+    <ant antfile="build.xml" dir="components/inputs/snippet-reader" inheritall="false" target="clean" />
+    <ant antfile="build.xml" dir="components/inputs/verbatim-input" inheritall="false" target="clean" />
+    <ant antfile="build.xml" dir="components/outputs/xslt-renderer" inheritall="false" target="clean" />
+
+    <echo level="info" message="#### Cleaning up local build directory" />
+    
+    <delete dir="tmp" failonerror="false" includeemptydirs="true" quiet="true" />
+  </target>
+  <!-- }}} -->
+
+
+  <!-- ##################################### -->
+  <!-- ### {{{ builds the shared library ### -->
+  <!-- ##################################### -->
+  <target name="carrot2-shared-lib" 
+          description="Builds and copies the shared library to /lib folder.">
+
+    <!-- build shared library to shared libraries directory -->
+    <ant antfile="build.xml" dir="components/carrot2-shared-lib" inheritall="false" target="build">
+        <property name="distribution.dir" location="lib" />
+    </ant>
+  </target>
+  <!-- }}} -->
+
+  
+  <!-- ########################################################### -->
+  <!-- ### {{{ builds components separately and as a whole     ### -->
+  <!-- ########################################################### -->
+  <target name="build.webcontroller" depends="init"> <!-- {{{ -->
+    <echo>
+
+    #### Building: carrot2 controller ####
+
+    </echo>
+    <ant antfile="build.xml" target="build" dir="components/controllers/carrot2-web-controller" inheritall="false">
+        <property name="deployment.port" value="${deployment.port}" />
+        <property name="deployment.host" value="${deployment.host}" />
+        <property name="distribution.dir" location="${distribution.dir}" />
+        <property name="javadoc.dir"     location="${javadoc.dir}" />
+        <property name="descriptors.dir" location="descriptors" />
+    </ant>
+  </target> <!-- }}} -->
+
+  <target name="build.ahc-clustering" depends="init"> <!-- {{{ -->
+    <echo>
+
+    #### Building: AHC clustering filter ####
+
+    </echo>
+    <ant antfile="build.xml" target="build" dir="components/filters/clustering/ahc-clustering" inheritall="false">
+        <property name="distribution.dir" location="${distribution.dir}" />
+        <property name="javadoc.dir"     location="${javadoc.dir}" />
+    </ant>
+  </target> <!-- }}} -->
+
+  <target name="build.lingo-clustering" depends="init"> <!-- {{{ -->
+    <echo>
+
+    #### Building: LINGO clustering filter ####
+
+    </echo>
+    <ant antfile="build.xml" target="build" dir="components/filters/clustering/lingo-clustering" inheritall="false">
+        <property name="distribution.dir" location="${distribution.dir}" />
+        <property name="javadoc.dir"     location="${javadoc.dir}" />
+    </ant>
+  </target> <!-- }}} -->
+
+  <target name="build.stc-clustering" depends="init"> <!-- {{{ -->
+    <echo>
+
+    #### Building: STC clustering filter ####
+
+    </echo>
+    <ant antfile="build.xml" target="build" dir="components/filters/clustering/stc-clustering" inheritall="false">
+        <property name="distribution.dir" location="${distribution.dir}" />
+        <property name="javadoc.dir"     location="${javadoc.dir}" />
+    </ant>
+  </target> <!-- }}} -->
+
+  <target name="build.stream-interceptors" depends="init"> <!-- {{{ -->
+    <echo>
+
+    #### Building: stream-interceptors filter ####
+
+    </echo>
+    <ant antfile="build.xml" target="build" dir="components/filters/diagnostic/stream-interceptor" inheritall="false">
+        <property name="distribution.dir" location="${distribution.dir}" />
+        <property name="javadoc.dir"     location="${javadoc.dir}" />
+    </ant>
+  </target> <!-- }}} -->
+
+  <target name="build.pl-eng-stemming" depends="init"> <!-- {{{ -->
+    <echo>
+
+    #### Building: Lametyzator and Porter stemming filters ####
+
+    </echo>
+    <ant antfile="build.xml" target="build" dir="components/filters/linguistic/pl-eng-stemming" inheritall="false">
+        <property name="distribution.dir" location="${distribution.dir}" />
+        <property name="javadoc.dir"     location="${javadoc.dir}" />
+    </ant>
+  </target> <!-- }}} -->
+
+  <target name="build.text-only" depends="init"> <!-- {{{ -->
+    <echo>
+
+    #### Building: text-only pruning filter ####
+
+    </echo>
+    <ant antfile="build.xml" target="build" dir="components/filters/pruning/text-only" inheritall="false">
+        <property name="distribution.dir" location="${distribution.dir}" />
+        <property name="javadoc.dir"     location="${javadoc.dir}" />
+    </ant>
+  </target> <!-- }}} -->
+
+  <target name="build.snippet-generator" depends="init"> <!-- {{{ -->
+    <echo>
+
+    #### Building: Snippet generator input component ####
+
+    </echo>
+    <ant antfile="build.xml" target="build" dir="components/inputs/snippet-generator" inheritall="false">
+        <property name="distribution.dir" location="${distribution.dir}" />
+        <property name="javadoc.dir"     location="${javadoc.dir}" />
+    </ant>
+  </target> <!-- }}} -->
+
+  <target name="build.snippet-reader" depends="init"> <!-- {{{ -->
+    <echo>
+
+    #### Building: Snippet reader input component ####
+
+    </echo>
+    <ant antfile="build.xml" target="build" dir="components/inputs/snippet-reader" inheritall="false">
+        <property name="distribution.dir" location="${distribution.dir}" />
+        <property name="javadoc.dir"     location="${javadoc.dir}" />
+    </ant>
+  </target> <!-- }}} -->
+
+  <target name="build.verbatim-input" depends="init"> <!-- {{{ -->
+    <echo>
+
+    #### Building: Verbatim Input component ####
+
+    </echo>
+    <ant antfile="build.xml" target="build" dir="components/inputs/verbatim-input" inheritall="false">
+        <property name="distribution.dir" location="${distribution.dir}" />
+        <property name="javadoc.dir"     location="${javadoc.dir}" />
+    </ant>
+  </target> <!-- }}} -->
+  
+  <target name="build.xslt-renderer" depends="init"> <!-- {{{ -->
+    <echo>
+
+    #### Building: XSLT Renderer output component ####
+
+    </echo>
+    <ant antfile="build.xml" target="build" dir="components/outputs/xslt-renderer" inheritall="false">
+        <property name="distribution.dir" location="${distribution.dir}" />
+        <property name="javadoc.dir"     location="${javadoc.dir}" />
+    </ant>
+  </target> <!-- }}} -->
+
+  
+  <target name="build" description="Builds all known Carrot2 components."
+          depends="
+            build.webcontroller,
+            build.ahc-clustering,
+            build.lingo-clustering,
+            build.stc-clustering,
+            build.stream-interceptors,
+            build.pl-eng-stemming,
+            build.text-only,
+            build.snippet-generator,
+            build.snippet-reader,
+            build.verbatim-input,
+            build.xslt-renderer
+            ">
+  </target>
+
+
+  <!-- ##################################### -->
+  <!-- ### {{{ reformats sources         ### -->
+  <!-- ##################################### -->
+  <target name="reformat">
+    <available classname="de.hunsicker.jalopy.plugin.ant.AntPlugin" property="jalopy.available" value="true" />
+    <taskdef name="jalopy" classname="de.hunsicker.jalopy.plugin.ant.AntPlugin" />
+    <fail message="Jalopy's ANT plugin must be in classpath." unless="jalopy.available" />
+    
+    <jalopy fileformat="unix"
+            convention="misc/jalopy/carrot2.jalopy.xml"
+            history="file"
+            historymethod="adler32"
+            loglevel="info"
+            threads="1">
+      <fileset dir="components">
+        <include name="carrot2-shared-lib/**/*.java" />
+        <exclude name="carrot2-shared-lib/tmp/**" />
+        
+        <include name="controllers/carrot2-web-controller/**/*.java" />
+        <include name="filters/clustering/ahc-clustering/**/*.java" />
+        <include name="filters/clustering/lingo-clustering/**/*.java" />
+        <include name="filters/clustering/stc-clustering/**/*.java" />
+        <include name="filters/diagnostics/stream-interceptor/**/*.java" />
+        <include name="filters/linguistic/pl-eng-stemming/**/*.java" />
+        <include name="filters/pruning/text-only/**/*.java" />
+        <include name="inputs/verbatim-input/**/*.java" />
+        <include name="inputs/snippet-generator/**/*.java" />
+        <include name="inputs/snippet-reader/**/*.java" />
+        <include name="outputs/xslt-renderer/**/*.java" />
+      </fileset>
+    </jalopy>
+  </target>
+  
+  <!-- }}} -->
+  
+
+
+  <!-- ##################################### -->
+  <!-- ### {{{ HELP ON THIS FILE             ### -->
+  <!-- ##################################### -->
+  <target name="help" description="Displays help on available targets.">
+    <echo>
+
+    Project name: ${ant.project.name}
+    (c) Dawid Weiss, Poznan University of Technology.
+
+    Current JDK: ${ant.java.version}
+    Basedir    : ${basedir}
+    
+    Distribution dir: ${distribution.dir}
+    Javadoc dir     : ${javadoc.dir}    
+    -----------------------------------------------------
+
+    Public targets:
+        format             - reformat source files with Jalopy (this task
+                             only for project admins!)
+        carrot2-shared-lib - builds the shared library and
+                             copies it to /lib folder. This task
+                             should only be used if the library
+                             changes.
+        cleanall           - cleans all temporary files
+        build              - build all components
+
+    Please refer to documentation for more information.
+    </echo>
+  </target>
+  <!-- }}} -->
+
+</project>
+

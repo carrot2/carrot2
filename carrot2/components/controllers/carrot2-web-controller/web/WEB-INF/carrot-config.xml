@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--
+  ## Carrot2 Configuration.
+  ##
+  ## Specify "reloadable" attribute to "true" if you want this configuration to be
+  ## reloaded upon a GET request to "{context-path}/reload" URL.
+  -->
+<carrot2-config reloadable="true">
+
+    <!--
+      ## specify a context-relative directory from where default component descriptions
+      ## are going to be loaded
+      -->
+    <components contextDir="/WEB-INF/components" />
+
+    <!--
+      ## specify a context-relative directory from where default processes
+      ## are going to be loaded
+      -->
+    <processes contextDir="/WEB-INF/processes" />
+    
+    <!--
+      ## Specify the context-relative cache configuration file
+      -->
+    <cache config="/WEB-INF/cache-config.xml" />
+    
+    <!-- 
+      ## Guards
+      -->
+    <guards contextDir="/WEB-INF/guards" />
+
+</carrot2-config>

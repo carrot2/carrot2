@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Extension-Name: Carrot2 Common Java Classes
+Implementation-Title: Carrot2 Common Java Classes
+Implementation-Vendor: Poznan University of Technology

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<service xmlns      = "http://www.dawidweiss.com/projects/carrot/componentDescriptor" 
+         framework  = "Carrot2"
+>
+
+    <component id               = "carrot2.filter.stc.full-stc"
+               type             = "filter"
+               serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-stc-clustering/service/fullstc"
+               infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-stc-clustering"
+    >
+    </component>
+
+	<!-- this one is not yet available -->
+
+    <component id               = "carrot2.filter.stc.base-clusters"
+               type             = "filter"
+               serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-stc-clustering/service/baseclusters"
+               infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-stc-clustering"
+    >
+    </component>
+
+</service>

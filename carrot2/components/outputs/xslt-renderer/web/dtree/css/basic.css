@@ -1,0 +1,114 @@
+
+/*
+ * A CSS stylesheet for Carrot2 results organized into hierarchical groups. 
+ *
+ * Written by Dawid Weiss
+ */
+
+
+/* HTML and BODY section --------------------------------------------- {{{ */
+
+html {
+    padding:        0pt;
+    margin:         0pt;
+}
+
+body {
+    margin-top:     0em;
+    margin-bottom:  0em;
+    margin-left:    0pt;
+    margin-right:   0pt;
+    
+    font-family:    Verdana, Arial, sans-serif;
+    font-size:      10pt;
+}
+
+table {
+    font-family:    Verdana, Arial, sans-serif;
+    font-size:      10pt;
+}
+
+hr {
+    margin-top:     .6em;
+    margin-bottom:  .6em;
+    margin-left:    0pt;
+    margin-right:   0pt;
+    border:         1px solid gray;
+    background:     gray; /* This is for Mozilla */
+}
+
+a {
+   text-decoration: none;
+}
+
+a:hover {
+   text-decoration: underline;
+}
+
+/*#treePlaceholder {
+   width:           250px;
+}*/
+
+/* ------------------------------------------------------------------- }}} */
+
+
+/* TREE ELEMENTS ----------------------------------------------------- {{{ */
+
+td.groupIN {
+    padding-left: 4px;
+    font-size:    10pt;
+    width: 99%;
+}
+
+td.groupTN {
+    padding-left: 4px;
+    font-size:    8pt;
+    font-style:   oblique;
+    width: 99%;
+}
+
+td.groupSelected {
+    padding-left: 4px;
+    font-size:    10pt;
+    font-weight:   bold;
+}
+
+span.sn {
+    width:        20pt;
+    padding-right: 5pt;
+    text-align:   left;
+    
+    font-size: 8pt;
+    color: black;
+    font-weight: normal;
+}
+
+p.st {
+    margin: 0px;
+    padding: 0px;
+    font-weight: bold;
+    color: blue;
+}
+
+p.sb { 
+    margin: 0px;
+    margin-left: 20pt;
+    padding: 0px;
+    padding-right: 10%;
+    font-size: 8pt;
+}
+
+p.su { 
+    margin-top: 0px;
+    margin-bottom: 1em;
+    margin-left: 20pt;
+    margin-right: 0px;
+    padding: 0px;
+    font-size: 8pt;
+    color: green;
+}
+
+
+/* ------------------------------------------------------------------- }}} */
+
+
