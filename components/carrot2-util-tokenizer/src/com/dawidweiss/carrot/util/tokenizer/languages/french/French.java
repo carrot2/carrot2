@@ -42,7 +42,7 @@ public class French extends StemmedLanguageBase {
         String resourceName = "/com/dawidweiss/carrot/util/tokenizer/languages/french/stopwords.fr";
         try {
 			stopwords = LanguageBase.loadStopwords(
-			    French.class.getResourceAsStream(resourceName));
+                    resourceName, French.class.getResourceAsStream(resourceName));
 		} catch (IOException e) {
             throw new RuntimeException("Could not load the required " +
                     "resource: " + resourceName);

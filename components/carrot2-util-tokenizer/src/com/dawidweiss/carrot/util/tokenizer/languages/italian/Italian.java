@@ -42,7 +42,7 @@ public class Italian extends StemmedLanguageBase {
         String resourceName = "/com/dawidweiss/carrot/util/tokenizer/languages/italian/stopwords.it";
         try {
 			stopwords = LanguageBase.loadStopwords(
-			    Italian.class.getResourceAsStream(resourceName));
+                    resourceName, Italian.class.getResourceAsStream(resourceName));
 		} catch (IOException e) {
             throw new RuntimeException("Could not load the required " +
                     "resource: " + resourceName);
