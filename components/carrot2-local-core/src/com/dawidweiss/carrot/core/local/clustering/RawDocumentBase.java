@@ -68,12 +68,18 @@ public abstract class RawDocumentBase implements RawDocument {
 		return null;
 	}
 
-	/**
-	 * @return Should return the snippet of this document. The default
-     * implementation returns <code>null</code>.
+	/* (non-Javadoc)
+	 * @see com.dawidweiss.carrot.core.local.clustering.RawDocument#getSnippet()
 	 */
-	protected String getSnippet() {
-		return null;
+	public String getSnippet() {
+		if (properties != null)
+		{
+		    return (String) properties.get(PROPERTY_SNIPPET);
+		}
+		else
+		{
+		    return null;
+		}
 	}
 
 	/**
