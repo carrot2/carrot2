@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE component SYSTEM "../../etc/component-dependency.dtd" >
+
+<component
+    name="carrot2-input-local-cache"
+    description="Carrot2 Input Component reading files from a local cache (for debugging/ testing)">
+
+    <provides>
+        <files build-path-exclude="true" prefix="tmp/dist">
+            <file location="carrot2-input-local-cache.jar" />
+        </files>
+        <build>
+            <ant file="build.xml" target="build"/>
+        </build>
+    </provides>
+
+    <dependency name="log4j" />
+    <dependency name="junit" profile="test" />
+    <dependency name="dom4j" />
+    
+    <dependency name="carrot2-util-put" />
+    <dependency name="carrot2-local-core" />
+    
+    <dependency name="carrot2-license" />
+</component>
