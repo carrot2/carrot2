@@ -46,9 +46,16 @@
             </li>
 
             <li>
-						Ngo Chi Lang: <i>A tolerance rough set approach to clustering web search results</i>,            
+			Ngo Chi Lang: <i>A tolerance rough set approach to clustering web search results</i>,            
             Faculty of Mathematics, Informatics and Mechanics, Warsaw University, 2004,
             [in English, <a href="http://www.cs.put.poznan.pl/dweiss/carrot-bin/chi-lang-ngo-2004.pdf">PDF, 1.3MB</a>]
+            </li>
+            
+            <li>
+			Laust Rud Jensen: <i>A reuse repository with automated synonym support and cluster generation</i>,            
+            Department of Computer Science at the Faculty of Science, University of Aarhus,
+            Denmark, 2004,
+            [in English, <a href="http://www.cs.put.poznan.pl/dweiss/carrot-bin/rud-2004-reuse-support-system.pdf">PDF, 1.4MB</a>]
             </li>
         </ul>
 
