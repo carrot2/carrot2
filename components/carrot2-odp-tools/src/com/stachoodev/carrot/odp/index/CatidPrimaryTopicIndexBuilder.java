@@ -34,17 +34,20 @@ import com.stachoodev.carrot.odp.*;
  * @author stachoo
  */
 public class CatidPrimaryTopicIndexBuilder extends DefaultHandler implements
-    PrimaryTopicIndexBuilder
+    PrimaryTopicIndexBuilder, ObservableTopicIndexBuilder
 {
     /** Maximum depth of file system directory structure */
     private int maxDepth;
-    private static final int DEFAULT_MAX_DEPTH = 4;
+    private static final int DEFAULT_MAX_DEPTH = 6;
 
     /** Topic serializer */
     private TopicSerializer topicSerializer;
 
     /** Location in which the index data is to be stored */
     private String dataLocationPath;
+
+    /** Listeners */
+    private List topicIndexBuilderListeners;
 
     /** Currently processed ODP category */
     private MutableTopic currentTopic;
@@ -75,11 +78,11 @@ public class CatidPrimaryTopicIndexBuilder extends DefaultHandler implements
      * 
      * @param dataLocationPath location in which the index data is to be stored.
      */
-    public CatidPrimaryTopicIndexBuilder(String dataLocationPath)
+    public CatidPrimaryTopicIndexBuilder()
     {
-        this.dataLocationPath = dataLocationPath;
         this.maxDepth = DEFAULT_MAX_DEPTH;
-        this.topicSerializer = new CompressedTopicSerializer();
+        this.topicSerializer = ODPIndex.getTopicSerializer();
+        this.topicIndexBuilderListeners = new ArrayList();
     }
 
     /*
@@ -87,8 +90,10 @@ public class CatidPrimaryTopicIndexBuilder extends DefaultHandler implements
      * 
      * @see com.stachoodev.carrot.odp.index.PrimaryTopicIndexBuilder#create(java.io.InputStream)
      */
-    public PrimaryTopicIndex create(InputStream inputStream) throws IOException
+    public PrimaryTopicIndex create(InputStream inputStream,
+        String indexDataLocation) throws IOException
     {
+        this.dataLocationPath = indexDataLocation;
         indexEntries = new ArrayList();
         splitList = new ArrayList();
 
@@ -159,6 +164,9 @@ public class CatidPrimaryTopicIndexBuilder extends DefaultHandler implements
         // Add to index entries
         indexEntries.add(new SimplePrimaryTopicIndex.IndexEntry(topic
             .getCatid(), path.toString()));
+
+        // Fire the event
+        fireTopicIndexed();
     }
 
     /**
@@ -390,5 +398,37 @@ public class CatidPrimaryTopicIndexBuilder extends DefaultHandler implements
     public void setTopicSerializer(TopicSerializer topicSerializer)
     {
         this.topicSerializer = topicSerializer;
+    }
+
+    /* (non-Javadoc)
+     * @see com.stachoodev.carrot.odp.index.ObservableTopicIndexBuilder#addTopicIndexBuilderListener(com.stachoodev.carrot.odp.index.TopicIndexBuilderListener)
+     */
+    public void addTopicIndexBuilderListener(TopicIndexBuilderListener listener)
+    {
+        topicIndexBuilderListeners.add(listener);
+    }
+
+    /* (non-Javadoc)
+     * @see com.stachoodev.carrot.odp.index.ObservableTopicIndexBuilder#removeTopicIndexBuilderListener(com.stachoodev.carrot.odp.index.TopicIndexBuilderListener)
+     */
+    public void removeTopicIndexBuilderListener(
+        TopicIndexBuilderListener listener)
+    {
+        topicIndexBuilderListeners.remove(listener);
+    }
+
+    /**
+     * Fires the {@link TopicIndexBuilderListener#topicIndexed()}method on all
+     * registered listeners.
+     */
+    protected void fireTopicIndexed()
+    {
+        for (Iterator iter = topicIndexBuilderListeners.iterator(); iter
+            .hasNext();)
+        {
+            TopicIndexBuilderListener listener = (TopicIndexBuilderListener) iter
+                .next();
+            listener.topicIndexed();
+        }
     }
 }
