@@ -229,11 +229,11 @@ FORMATTING: @{component.path}
     <property name="distribution.dir.remote"      location="${distribution.dir}/remote" />
     <property name="distribution.dir.remote.libs" location="${distribution.dir}/remote-libs" />
 
-	<mkdir dir="${distribution.dir.remote}" />
+    <mkdir dir="${distribution.dir.remote}" />
 
-	<property name="carrot2.cvs.dir" location="." />
-    <ant target="bootstrap"
-         antfile="components/master.xml" inheritall="true" inheritrefs="true">
+    <property name="carrot2.cvs.dir" location="." />
+    <ant target="bootstrap" dir="components"
+         antfile="master.xml" inheritall="true" inheritrefs="true">
     </ant>
 
     <path id="bootstrap">
@@ -255,9 +255,11 @@ FORMATTING: @{component.path}
         <include name="components/*/*.dep.xml" />
         <include name="components/*/lib/*.dep.xml" />        
     </fileset>
-    
+
     <!-- Invoke the remote controller's build file to update it. -->
-    <ant antfile="components/carrot2-remote-controller/build.xml" inheritall="false" inheritrefs="false" />
+    <ant antfile="build.xml"
+    	 dir="components/carrot2-remote-controller"
+    	 inheritall="false" inheritrefs="false" />
 
     <bringToDate componentDescriptor="etc/all-remote.dep.xml"
                  dependenciesOnly="true" profile="">
