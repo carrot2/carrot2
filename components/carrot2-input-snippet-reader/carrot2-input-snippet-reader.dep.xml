@@ -19,6 +19,11 @@
 	<dependency name="carrot2-util-common" />
 	<dependency name="carrot2-local-core" />
     <dependency name="jdom" />
+    
+    <!-- These two could probably be combined into one? -->
+    <dependency name="dom4j" />
+    <dependency name="jaxen" />
+    
     <dependency name="gnu-regexp" />
 	<dependency name="carrot2-util-remote" />
 
