@@ -449,7 +449,7 @@ public class SearchResultsClusteringBenchmark
             {
                 Map parameters = new HashMap();
                 parameters.put(Lingo.PARAMETER_QUALITY_LEVEL, new Integer(1));
-                return new LingoLocalFilterComponent(parameters);
+                return new LingoReloadedLocalFilterComponent(parameters);
             }
         };
         localController.addLocalComponentFactory("filter.lingo-nmf-1",
@@ -462,7 +462,7 @@ public class SearchResultsClusteringBenchmark
             {
                 Map parameters = new HashMap();
                 parameters.put(Lingo.PARAMETER_QUALITY_LEVEL, new Integer(2));
-                return new LingoLocalFilterComponent(parameters);
+                return new LingoReloadedLocalFilterComponent(parameters);
             }
         };
         localController.addLocalComponentFactory("filter.lingo-nmf-2",
@@ -479,7 +479,7 @@ public class SearchResultsClusteringBenchmark
                 parameters.put(Lingo.PARAMETER_MATRIX_FACTORIZATION_FACTORY,
                     matrixFactorizationFactory);
                 parameters.put(Lingo.PARAMETER_QUALITY_LEVEL, new Integer(3));
-                return new LingoLocalFilterComponent(parameters);
+                return new LingoReloadedLocalFilterComponent(parameters);
             }
         };
         localController.addLocalComponentFactory("filter.lingo-nmf-3",
@@ -496,7 +496,7 @@ public class SearchResultsClusteringBenchmark
                 parameters.put(Lingo.PARAMETER_MATRIX_FACTORIZATION_FACTORY,
                     matrixFactorizationFactory);
                 parameters.put(Lingo.PARAMETER_QUALITY_LEVEL, new Integer(3));
-                return new LingoLocalFilterComponent(parameters);
+                return new LingoReloadedLocalFilterComponent(parameters);
             }
         };
         localController.addLocalComponentFactory("filter.lingo-nmf-kl-3",
@@ -515,7 +515,7 @@ public class SearchResultsClusteringBenchmark
                 parameters.put(Lingo.PARAMETER_MATRIX_FACTORIZATION_FACTORY,
                     matrixFactorizationFactory);
                 parameters.put(Lingo.PARAMETER_QUALITY_LEVEL, new Integer(1));
-                return new LingoLocalFilterComponent(parameters);
+                return new LingoReloadedLocalFilterComponent(parameters);
             }
         };
         localController.addLocalComponentFactory("filter.lingo-nmf-km-1",
@@ -534,7 +534,7 @@ public class SearchResultsClusteringBenchmark
                 parameters.put(Lingo.PARAMETER_MATRIX_FACTORIZATION_FACTORY,
                     matrixFactorizationFactory);
                 parameters.put(Lingo.PARAMETER_QUALITY_LEVEL, new Integer(3));
-                return new LingoLocalFilterComponent(parameters);
+                return new LingoReloadedLocalFilterComponent(parameters);
             }
         };
         localController.addLocalComponentFactory("filter.lingo-nmf-km-3",
@@ -553,7 +553,7 @@ public class SearchResultsClusteringBenchmark
                 parameters.put(Lingo.PARAMETER_MATRIX_FACTORIZATION_FACTORY,
                     matrixFactorizationFactory);
                 parameters.put(Lingo.PARAMETER_QUALITY_LEVEL, new Integer(3));
-                return new LingoLocalFilterComponent(parameters);
+                return new LingoReloadedLocalFilterComponent(parameters);
             }
         };
         localController.addLocalComponentFactory("filter.lingo-km-3",
@@ -569,7 +569,7 @@ public class SearchResultsClusteringBenchmark
                 parameters.put(Lingo.PARAMETER_MATRIX_FACTORIZATION_FACTORY,
                     matrixFactorizationFactory);
                 parameters.put(Lingo.PARAMETER_QUALITY_LEVEL, new Integer(1));
-                return new LingoLocalFilterComponent(parameters);
+                return new LingoReloadedLocalFilterComponent(parameters);
             }
         };
         localController.addLocalComponentFactory("filter.lingo-lnmf-1",
@@ -585,7 +585,7 @@ public class SearchResultsClusteringBenchmark
                 parameters.put(Lingo.PARAMETER_MATRIX_FACTORIZATION_FACTORY,
                     matrixFactorizationFactory);
                 parameters.put(Lingo.PARAMETER_QUALITY_LEVEL, new Integer(3));
-                return new LingoLocalFilterComponent(parameters);
+                return new LingoReloadedLocalFilterComponent(parameters);
             }
         };
         localController.addLocalComponentFactory("filter.lingo-lnmf-3",
@@ -603,7 +603,7 @@ public class SearchResultsClusteringBenchmark
                     matrixFactorizationFactory);
                 parameters.put(Lingo.PARAMETER_QUALITY_LEVEL, new Integer(3));
 
-                return new LingoLocalFilterComponent(parameters);
+                return new LingoReloadedLocalFilterComponent(parameters);
             }
         };
         localController.addLocalComponentFactory("filter.lingo-svd-3",
