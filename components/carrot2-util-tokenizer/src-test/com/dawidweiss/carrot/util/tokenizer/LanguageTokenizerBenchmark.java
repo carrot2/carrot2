@@ -39,33 +39,39 @@ public class LanguageTokenizerBenchmark
     /**
      *  
      */
-    public LanguageTokenizerBenchmark()
+    public LanguageTokenizerBenchmark(boolean benchmarkLanguageTokenizers)
     {
         queries = new HashMap();
         queries.put("xx", Arrays
             .asList(new String []
             { "derbyshire", "wales", "south yorkshire", "sweat shop",
              "workforce" }));
-        queries.put("en", Arrays
-            .asList(new String []
+        if (benchmarkLanguageTokenizers)
+        {
+            queries.put("en", Arrays.asList(new String []
             { "derbyshire", "wales", "south yorkshire", "sweat shop",
              "workforce" }));
-        queries.put("es", Arrays.asList(new String []
-        { "periodicos", "violencia", "responsabilidad", "Económicas",
-         "terrorismo" }));
-        queries.put("pl", Arrays.asList(new String []
-        { "miś", "urząd", "uczelnia", "nabór", "szkoła" }));
-        queries.put("fr", Arrays.asList(new String []
-        { "bureautique", "publicités", "productivité ", "Académie de Lyon",
-         "Mobilité" }));
-        queries.put("de", Arrays.asList(new String []
-        { "Entwicklung", "aufbereitung", "Zahnärzte", "Gesundheit",
-         "zusammenarbeit" }));
-        queries.put("nl", Arrays.asList(new String []
-        { "werkgever", "cijfer", "scherpschutter", "voorkeur", "wederzijds" }));
-        queries.put("it", Arrays.asList(new String []
-        { "relazione tecnica", "Pubblico Incanto", "costruzione della strada",
-         "Procedura Aperta", "Aggiornamento" }));
+            queries.put("es", Arrays.asList(new String []
+            { "periodicos", "violencia", "responsabilidad", "Económicas",
+             "terrorismo" }));
+            queries.put("pl", Arrays.asList(new String []
+            { "miś", "urząd", "uczelnia", "nabór", "szkoła" }));
+            queries.put("fr", Arrays.asList(new String []
+            { "bureautique", "publicités", "productivité ", "Académie de Lyon",
+             "Mobilité" }));
+            queries.put("de", Arrays.asList(new String []
+            { "Entwicklung", "aufbereitung", "Zahnärzte", "Gesundheit",
+             "zusammenarbeit" }));
+            queries.put("nl", Arrays
+                .asList(new String []
+                { "werkgever", "cijfer", "scherpschutter", "voorkeur",
+                 "wederzijds" }));
+            queries
+                .put("it", Arrays.asList(new String []
+                { "relazione tecnica", "Pubblico Incanto",
+                 "costruzione della strada", "Procedura Aperta",
+                 "Aggiornamento" }));
+        }
 
         CachedQueriesStore store = new CachedQueriesStore(
             new File(
@@ -94,11 +100,11 @@ public class LanguageTokenizerBenchmark
 
             // Warm up
             System.out.println("Warming up...");
-            processQueries(languageCode, queryStrings, 20);
+            processQueries(languageCode, queryStrings, 50);
 
             // Measure
             System.out.println("Testing ...");
-            double performance = processQueries(languageCode, queryStrings, 50);
+            double performance = processQueries(languageCode, queryStrings, 400);
 
             System.out.println(performance + " snippets/s\n");
         }
@@ -157,7 +163,7 @@ public class LanguageTokenizerBenchmark
     public static void main(String [] args) throws ProcessingException,
         InterruptedException, IOException
     {
-        LanguageTokenizerBenchmark benchmark = new LanguageTokenizerBenchmark();
+        LanguageTokenizerBenchmark benchmark = new LanguageTokenizerBenchmark(false);
 
         benchmark.runPerformance();
     }
