@@ -6,4 +6,3 @@ CVS_RSH=ssh
 export CVS_RSH
 
 /home/dweiss/carrot2/deploy/cron/update-demo.sh
-

@@ -8,15 +8,8 @@
 
 cd /home/dweiss/carrot2/deploy
 
-JAVA_HOME=/usr/java/j2sdk
 JAVACMD=${JAVA_HOME}/bin/java
-ANT_HOME=/usr/java/ant
-PATH=${PATH}:/home/dweiss/xep
-
-export PATH
-export JAVA_HOME
 export JAVACMD
-export ANT_HOME
 
 for counter in `seq 1 40`; do
     if ant -f build.docs.xml cvsupdate; then
