@@ -6,7 +6,7 @@ package com.stachoodev.carrot.filter.lingo.model;
 import java.util.*;
 
 import com.dawidweiss.carrot.core.local.linguistic.tokens.*;
-import com.dawidweiss.carrot.util.common.*;
+import com.stachoodev.util.common.*;
 
 /**
  * A class that wraps around any
