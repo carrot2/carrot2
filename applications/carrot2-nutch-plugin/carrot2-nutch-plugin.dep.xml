@@ -11,8 +11,10 @@
     description="Components for the Nutch Clustering Plugin">
     
     <dependency name="carrot2-local-core" />
-    <dependency name="carrot2-util-tokenizer" />
-	<dependency name="carrot2-filter-case-normalizer" />
-    <dependency name="carrot2-filter-lingo-reloaded" />
+
+	<dependency name="carrot2-util-tokenizer" />
+	<!-- <dependency name="carrot2-filter-case-normalizer" /> -->
+
+    <dependency name="carrot2-filter-lingo" in-profile="local" />
 
 </component>

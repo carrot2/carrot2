@@ -6,5 +6,7 @@
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/jdom-b10.jar"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/log4j-1.2.8.jar"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/servlet.jar"/>
+	<classpathentry kind="src" path="/carrot2-local-core"/>
+	<classpathentry kind="src" path="/carrot2-util-tokenizer"/>
 	<classpathentry kind="output" path="tmp/build/WEB-INF/classes"/>
 </classpath>
