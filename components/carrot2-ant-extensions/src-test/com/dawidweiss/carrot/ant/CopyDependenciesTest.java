@@ -15,6 +15,14 @@ public class CopyDependenciesTest extends BuildFileTest {
         configureProject("ant-tests/copyDependencies.xml");
     }
 
+    public void testProjectReferencesOneProjectWithTwoProfiles() {
+        try {
+            executeTarget("proj_reference_two_profiles");
+        } finally {
+            System.out.println(super.getLog());
+        }
+    }
+    
     public void testCopyTest() {
         try {
             executeTarget("copytest");
@@ -30,5 +38,4 @@ public class CopyDependenciesTest extends BuildFileTest {
             System.out.println(super.getLog());
         }
     }
-
 }

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>   
+<!DOCTYPE component PUBLIC "-//Carrot2//DTD Component Dependency Descriptor V1.0//EN" "http://www.cs.put.poznan.pl/dweiss/carrot/component-dependency.dtd" >
+
+<component name="proj_reference_two_profiles">
+
+    <dependency name="referenced_project" in-profile="a" />
+    <dependency name="referenced_project" in-profile="b" />
+
+</component>
