@@ -17,20 +17,24 @@
         <fileset dir="${grokker.sdk}" includes="lib/*.jar" />
     </path>
     
-	<target name="build">
-		<property name="copy.dependencies" value="true" />
+    <target name="build" depends="sdk.info,build.sdk.ok">
+    </target>
+    
+    <target name="sdk.info" unless="grokker.sdk">
+        <echo>
+Grokker plugin cannot be built due to missing SDK.
 
-        <fail unless="grokker.sdk">
-###
-Specify 'grokker.sdk' property pointing to your Grokker SDK installation.
-You can put this property in a 'local.properties' file in this folder. For
-example:
+Specify 'grokker.sdk' property pointing to your Grokker SDK
+installation. You can put this property in a
+'local.properties' file in this folder. For example:
 
 # Local settings
 grokker.sdk=g:/Repositories/groxis/Grokker-2.2-SDK
-
-###
-        </fail>
+        </echo>
+    </target>
+    
+	<target name="build.sdk.ok" if="grokker.sdk">
+		<property name="copy.dependencies" value="true" />
         
 		<ant target="build.${type}"
              antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" inheritrefs="true">

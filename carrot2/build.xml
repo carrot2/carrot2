@@ -17,10 +17,11 @@
   <property name="deployment.host" value="localhost" />
   <property name="distribution.dir" value="tmp" />
 
+  
   <target name="javadoc">
   	<description>
 	Renders JavaDoc documentation of all the
-	components included in 'apply-to-defaults'
+	components included in 'apply-to-components'
 	target.
 	</description>
 
@@ -38,13 +39,13 @@ JAVADOC: @{component.path}
         />
       </sequential>
     </macrodef>
-    <antcall target="apply-to-defaults" />
+    <antcall target="apply-to-components" />
   </target>
 
 
   <target name="build">
   	<description>
-	Builds all components included in 'apply-to-defaults'
+	Builds all components included in 'apply-to-components'
 	target.
 	</description>
 
@@ -62,7 +63,38 @@ BUILDING: @{component.path}
         />
       </sequential>
     </macrodef>
-    <antcall target="apply-to-defaults" />
+    <antcall target="apply-to-components" />
+    
+    <macrodef name="application-apply">
+        <attribute name="application.path" />
+        <sequential>
+            <component-apply component.path="@{application.path}" />
+        </sequential>
+    </macrodef>
+    <antcall target="apply-to-applications" />
+    
+  </target>
+  
+  
+  
+  <target name="dist">
+    <delete dir="dist" failonerror="false" />
+    
+    <mkdir dir="dist" />
+    <mkdir dir="dist/remote/webapps" />
+    <mkdir dir="dist/remote/shared/lib" />
+    <mkdir dir="dist/remote/conf" />
+    <mkdir dir="dist/local" />
+    
+    <ant antfile="build.xml" dir="." inheritall="false" inheritrefs="false" target="remote">
+        <property name="distribution.dir.remote" location="dist/remote/webapps" />
+        <property name="distribution.dir.remote.libs" location="dist/remote/shared/lib" />
+    </ant>
+    <copy todir="dist/remote">
+        <fileset dir="etc/conf-tomcat">
+            <include name="**/*" />
+        </fileset>
+    </copy>
   </target>
   
   
@@ -70,7 +102,7 @@ BUILDING: @{component.path}
   <target name="clean">
   	<description>
 	Cleans intermediate files of all
-	components included in 'apply-to-defaults'
+	components included in 'apply-to-components'
 	target.
 	</description>
 
@@ -86,16 +118,25 @@ CLEANING: @{component.path}
         />
       </sequential>
     </macrodef>
-    <antcall target="apply-to-defaults" />
+    <antcall target="apply-to-components" />
+    
+    <macrodef name="application-apply">
+        <attribute name="application.path" />
+        <sequential>
+            <component-apply component.path="@{application.path}" />
+        </sequential>
+    </macrodef>
+    <antcall target="apply-to-applications" />
     
     <delete dir="tmp" />
+    <delete dir="dist" />
   </target>
 
 
   <target name="test">
   	<description>
 	Runs test task for all
-	components included in 'apply-to-defaults'
+	components included in 'apply-to-components'
 	target.
 	</description>
 
@@ -111,19 +152,25 @@ TESTING: @{component.path}
         />
       </sequential>
     </macrodef>
-    <antcall target="apply-to-defaults" />
+    <antcall target="apply-to-components" />
   </target>
 
 
-  <target name="apply-to-defaults">
+  <target name="apply-to-applications">
+    <application-apply application.path="applications/carrot2-clustering-benchmark" />
+    <application-apply application.path="applications/carrot2-grokker-clusterizer" />
+    <application-apply application.path="applications/carrot2-lucene-example" />
+    <application-apply application.path="applications/carrot2-nutch-plugin" />
+  </target>
+  
+  
+  <target name="apply-to-components">
   	<description>
 	Add components that compile here.
 	</description>
 
     <component-apply component.path="components/carrot2-ant-extensions" />
-
     <component-apply component.path="components/carrot2-local-core" />
-
     <component-apply component.path="components/carrot2-util-common" />
     <component-apply component.path="components/carrot2-util-put" />
     <component-apply component.path="components/carrot2-util-remote" />
@@ -144,9 +191,6 @@ TESTING: @{component.path}
     <component-apply component.path="components/carrot2-stemmer-snowball" />
 
     <component-apply component.path="components/carrot2-input-snippet-reader" />
-    <component-apply component.path="components/carrot2-input-egothor" />
-    <component-apply component.path="components/carrot2-input-nutch" />
-    <component-apply component.path="components/carrot2-input-tree-snippet-miner" />
     <component-apply component.path="components/carrot2-input-verbatim" />
 
     <component-apply component.path="components/carrot2-filter-case-normalizer" />
@@ -161,7 +205,6 @@ TESTING: @{component.path}
     <component-apply component.path="components/carrot2-output-xsltrenderer" />
 
     <component-apply component.path="components/carrot2-remote-controller" />
-
   </target>
 
 
