@@ -231,6 +231,15 @@ public class ResolvedScriptedProcess
         return true;
     }
 
+	public String getScript()
+	{
+		return script;
+	}
+	
+	public String getScriptLanguage()
+	{
+		return language;
+	}
 
     public String getDefaultDescription()
     {

@@ -12,29 +12,18 @@
         name="<%= Carrot2InitServlet.CARROT_PROCESSINGCHAINS_LOADER %>"
         scope="application"
         property="processDefinitions">
-        <%  String pname = StrutsHelpers.getMessageOrDefault(pageContext, p.getId(), p.getId()); %>
-        <li><b><%= pname %></b>
+        <%  String pname = StrutsHelpers.getMessageOrDefault(pageContext, p.getId(), p.getDefaultDescription()); %>
+        <li><b><%= pname %></b><br/>Id:&nbsp;<tt><%= p.getId() %></tt>
             <table width="100%" border="0" cellspacing="2" cellpadding="0" style="margin-left: 10%; margin-top: 10px; margin-bottom: 10px; padding-left: 10px; border-left: solid 10px gray;">
-                <% if (p instanceof ResolvedProcessingChain) {
-                   ResolvedProcessingChain rp = (ResolvedProcessingChain) p;
-                %>
+                <% if (p instanceof ResolvedScriptedProcess) { %>
                     <tr>
-                        <td width="50px;"><bean:message key="blocks.components.input" />: </td><td><%=
-                            StrutsHelpers.getMessage(pageContext, rp.getInputComponent().getId())%></td>
-                    </tr>
-                        <logic:iterate id="filter" type="ComponentDescriptor" name="p" property="filterComponents">
-                            <tr>
-                            <td><bean:message key="blocks.components.filter" />: </td><td><%= StrutsHelpers.getMessage(pageContext,
-                                                filter.getId())%></td>
-                            </tr>
-                        </logic:iterate>
-                    <tr>
-                        <td><bean:message key="blocks.components.output" />: </td><td><%= StrutsHelpers.getMessage(pageContext,
-                                                    rp.getOutputComponent().getId()) %></td>
-                    </tr>
-                <% } else if (p instanceof ResolvedScriptedProcess) { %>
-                    <tr>
-                        <td colspan="2"><i>This is a scripted process.</i></td>
+                        <td colspan="2">
+                        	<i>This is a scripted process.</i>
+                        	<br/>
+							<html:link page="/showProcess.jsp"
+									   paramId="process" paramName="p" paramProperty="id">
+							        <bean:message key="links.showProcessScript" /></html:link>
+                        </td>
                     </tr>
                 <% }; %>
             </table>

@@ -9,6 +9,19 @@
 <history>
 
     <changelist>
+        <date>2003-10-05</date>
+        <committer>dawid</committer>
+        <change component="carrot2.controller.carrot2-web" type="new">
+        Components page now has links to process details page, where
+        one can see the script that drives the process.
+        </change>
+        <change component="carrot2.controller.carrot2-web" type="bugfix">
+        Components page referred to no longer existing class causing compilation
+        errors.
+        </change>
+    </changelist>
+
+    <changelist>
         <date>2003-09-30</date>
         <committer>dawid</committer>
         <change component="carrot2.controller.carrot2-web" type="new">
