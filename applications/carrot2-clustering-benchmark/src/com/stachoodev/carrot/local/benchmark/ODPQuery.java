@@ -112,6 +112,46 @@ public class ODPQuery
     }
 
     /**
+     * @param separationLevel
+     * @param queryText
+     * @return
+     */
+    public static ODPQuery createLocalCache(String queryText)
+    {
+        ODPQuery query = new ODPQuery();
+
+        query.queryText = queryText;
+        query.topics = -1;
+        query.outlierCount = -1;
+        query.outlierSize = -1;
+        query.separation = -1;
+        query.balanced = false;
+        query.type = "Cache-" + queryText.replace(' ', '-');
+
+        return query;
+    }
+
+    /**
+     * @param separationLevel
+     * @param queryText
+     * @return
+     */
+    public static ODPQuery createLocalCache(String file, String queryText)
+    {
+        ODPQuery query = new ODPQuery();
+
+        query.queryText = file;
+        query.topics = -1;
+        query.outlierCount = -1;
+        query.outlierSize = -1;
+        query.separation = -1;
+        query.balanced = false;
+        query.type = "Cache-" + queryText.replace(' ', '-');
+
+        return query;
+    }
+
+    /**
      * @param queryText
      */
     private void setQueryText(String queryText)
@@ -227,7 +267,7 @@ public class ODPQuery
         else
         {
             info.put("Outlier Count", "");
-        }   
+        }
 
         if (outlierSize != -1)
         {
