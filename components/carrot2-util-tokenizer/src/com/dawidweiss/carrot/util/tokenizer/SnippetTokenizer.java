@@ -14,9 +14,9 @@ import com.dawidweiss.carrot.util.tokenizer.parser.*;
 
 /**
  * A utility class for tokenizing document snippets. Note: no support is
- * provided for tokenizing document content as yet.
- * TODO: document's properties should be copied (e.g. language)
- * TODO: store the original document as some property
+ * provided for tokenizing document content as yet. TODO: all document's
+ * properties should be copied (not just the ones that are defined in
+ * RawDocument)
  * 
  * @author stachoo
  */
@@ -53,19 +53,34 @@ public class SnippetTokenizer
      */
     public TokenizedDocument tokenize(RawDocument rawDocument)
     {
+        // Borrow tokenizer
         LanguageTokenizer languageTokenizer = borrowLanguageTokenzer((String) rawDocument
             .getProperty(RawDocument.PROPERTY_LANGUAGE));
 
+        // Tokenize
         TokenSequence titleTokenSequence = tokenize(rawDocument.getTitle(),
             languageTokenizer);
         TokenSequence snippetTokenSequence = tokenize(rawDocument.getSnippet(),
             languageTokenizer);
 
+        // Return tokenizer
         returnLanguageTokenizer((String) rawDocument
             .getProperty(RawDocument.PROPERTY_LANGUAGE), languageTokenizer);
 
-        return new TokenizedDocumentSnippet(titleTokenSequence,
-            snippetTokenSequence);
+        TokenizedDocumentSnippet tokenizedDocumentSnippet = new TokenizedDocumentSnippet(
+            titleTokenSequence, snippetTokenSequence);
+
+        // Set reference to the original raw document
+        tokenizedDocumentSnippet.setProperty(
+            TokenizedDocument.PROPERTY_RAW_DOCUMENT, rawDocument);
+
+        // Set some properties (all should be copied!)
+        tokenizedDocumentSnippet.setProperty(TokenizedDocument.PROPERTY_URL,
+            rawDocument.getProperty(RawDocument.PROPERTY_URL));
+        tokenizedDocumentSnippet.setProperty(
+            TokenizedDocument.PROPERTY_LANGUAGE, rawDocument
+                .getProperty(RawDocument.PROPERTY_LANGUAGE));
+        return tokenizedDocumentSnippet;
     }
 
     /**
