@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE component SYSTEM "../../etc/component-dependency.dtd" >
 
 <component
@@ -31,7 +31,7 @@
 	<dependency name="carrot2-local-core" />
     <dependency name="jama" />
     <dependency name="log4j" />
-    <dependency name="colt" />
+    <dependency name="violinstrings" />
 
 	<dependency name="carrot2-util-remote" 	profile="remote" />
     <dependency name="jdom"                 profile="remote" />
