@@ -56,7 +56,6 @@ public class HttpMultiPageReader
 
     public byte [] getFirstResultsPage(String query, int resultsNeeded, String encoding, Element pageInfo) throws IOException
     {
-        String inputEncoding = encoding;
         String outputEncoding = encoding;
     
             // load the first page of the results.

@@ -24,8 +24,13 @@ import org.put.util.io.FileHelper;
 import org.put.util.net.http.*;
 import org.put.util.text.HtmlHelper;
 import org.put.util.xml.JDOMHelper;
+
+import com.dawidweiss.carrot.util.HTMLTextStripper;
+import com.dawidweiss.carrot.util.XMLSerializerHelper;
+
 import gnu.regexp.RE;
 import java.io.*;
+import java.net.URL;
 import java.util.Vector;
 
 
@@ -38,6 +43,8 @@ public class WebSnippetReader
     Element config;
     HttpMultiPageReader reader;
     RegExpSnippetExtractor extractor;
+    String baseURL;
+    String relativeBaseURL;
 
     /**
      * Initializes this snippet reader to use some service. The configuration is a JDOM XML
@@ -47,6 +54,16 @@ public class WebSnippetReader
         throws Exception
     {
         config = configuration;
+
+        URL serviceURL = new URL(JDOMHelper.getStringFromJDOM("/service/request/service#url", configuration, true));
+        baseURL = serviceURL.getProtocol() + "://" + serviceURL.getHost() + ( serviceURL.getPort() == -1 ? "" : ":" + serviceURL.getPort()) + "/";
+        relativeBaseURL = JDOMHelper.getStringFromJDOM("/service/request/service#url", configuration, true);
+        if (relativeBaseURL.lastIndexOf('/') > 0) {
+            relativeBaseURL = relativeBaseURL.substring(0,relativeBaseURL.lastIndexOf('/') + 1); 
+        }
+        
+        log.debug("Base service URL: " + baseURL);
+        log.debug("Base relative service URL: " + relativeBaseURL);
 
         FormActionInfo actionInfo = new FormActionInfo(
                 JDOMHelper.getElement("/service/request", config)
@@ -115,6 +132,8 @@ public class WebSnippetReader
                         int nourl = 0;
                         int nosummary = 0;
                         int recognized = 0;
+                        HTMLTextStripper htmlStripper = HTMLTextStripper.getInstance();
+                        XMLSerializerHelper xmlSerializer = XMLSerializerHelper.getInstance();
 
                         public void snippetHasNoTitle()
                         {
@@ -157,21 +176,29 @@ public class WebSnippetReader
                                     outputStream.write(
                                         "<document id=\"" + recognized + "\">\n\t<title>"
                                     );
-                                    outputStream.write(
-                                        xmlencode(HtmlHelper.removeHtmlTags(s.getTitle()))
-                                    );
+                                    xmlSerializer.writeValidXmlText(outputStream,
+                                        htmlStripper.htmlToText(s.getTitle()),false);
                                     outputStream.write("</title>\n");
 
-                                    outputStream.write("\t<url>");
-                                    outputStream.write(xmlencode(s.getDocumentURL()));
-                                    outputStream.write("</url>\n");
+                                    outputStream.write("\t<url><![CDATA[");
+                                    String docUrl = s.getDocumentURL();
+                                    if (docUrl.startsWith("/")) {
+                                        outputStream.write( baseURL );
+                                        outputStream.write( docUrl );
+                                    } else if (docUrl.indexOf(':') < 0) {
+                                        outputStream.write( relativeBaseURL );
+                                        outputStream.write(docUrl);
+                                    } else {
+                                        outputStream.write(docUrl);
+                                    }
+                                    outputStream.write("]]></url>\n");
 
                                     if (s.getSummary() != null)
                                     {
                                         outputStream.write("\t<snippet>");
-                                        outputStream.write(
-                                            xmlencode(HtmlHelper.removeHtmlTags(s.getSummary()))
-                                        );
+                                        xmlSerializer.writeValidXmlText(outputStream,
+                                            htmlStripper.htmlToText(s.getSummary()),false);
+
                                         outputStream.write("</snippet>\n");
                                     }
 
@@ -182,12 +209,6 @@ public class WebSnippetReader
                                     throw new RuntimeException("IOException when saving result.");
                                 }
                             }
-                        }
-
-
-                        private String xmlencode(String x)
-                        {
-                            return "<![CDATA[" + x + "]]>";
                         }
                     }
                 );
