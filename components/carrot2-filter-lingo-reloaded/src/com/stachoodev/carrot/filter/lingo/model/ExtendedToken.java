@@ -9,13 +9,12 @@ import com.dawidweiss.carrot.util.common.*;
 /**
  * A class that wraps around any
  * {@link com.dawidweiss.carrot.core.local.linguistic.tokens.Token}and adds to
- * it support for storing/retrieving properties. 
+ * it support for storing/retrieving properties.
  * 
  * @author stachoo
  */
 public class ExtendedToken implements Token, PropertyProvider
 {
-
     /** Token delegate */
     private Token token;
 
@@ -30,6 +29,12 @@ public class ExtendedToken implements Token, PropertyProvider
 
     /** Inverse document frequency factor */
     public static final String PROPERTY_IDF = "idf";
+
+    /**
+     * If present, for a generalized (i.e. stemmed) extended token returns all
+     * original variants as a list of {@link ExtendedToken}s.
+     */
+    public static final String PROPERTY_ORIGINAL_TOKENS = "originalTokens";
 
     /**
      * Creates an ExtendedToken wrapped around the provided
@@ -178,7 +183,9 @@ public class ExtendedToken implements Token, PropertyProvider
         return token.hashCode() + propertyHelper.hashCode();
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see com.dawidweiss.carrot.core.local.linguistic.tokens.Token#getImage()
      */
     public String getImage()
