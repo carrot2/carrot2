@@ -23,8 +23,8 @@ import com.stachoodev.util.common.*;
  * {@link com.stachoodev.carrot.odp.index.AllKnownTopicIndexBuilders}for given
  * ODP content file.
  * 
- * TODO: skip topics without external pages?
  * TODO: topic filtering - too small topics, letter catetories (e.g. Domains/A)
+ * TODO: switch from input arguments to properties
  * 
  * @author Stanislaw Osinski
  * @version $Revision$
@@ -54,9 +54,10 @@ public class ODPIndexer implements TopicIndexBuilderListener
     /**
      * @param maxDepth
      * @throws IOException
+     * @throws ClassNotFoundException
      */
     public void index(String contentFileLocation, Map properties)
-        throws IOException
+        throws IOException, ClassNotFoundException
     {
         InputStream odpData = new FileInputStream(contentFileLocation);
         index(odpData, properties);
@@ -65,8 +66,10 @@ public class ODPIndexer implements TopicIndexBuilderListener
     /**
      * @param odpData
      * @throws IOException
+     * @throws ClassNotFoundException
      */
-    public void index(InputStream odpData) throws IOException
+    public void index(InputStream odpData) throws IOException,
+        ClassNotFoundException
     {
         index(odpData, new HashMap());
     }
@@ -74,10 +77,12 @@ public class ODPIndexer implements TopicIndexBuilderListener
     /**
      * @param odpData
      * @throws IOException
+     * @throws ClassNotFoundException
      */
-    public void index(InputStream odpData, Map properties) throws IOException
+    public void index(InputStream odpData, Map properties) throws IOException,
+        ClassNotFoundException
     {
-        // Create the primary index first
+        // Get the primary index builder
         PrimaryTopicIndexBuilder primaryIndexBuilder = AllKnownTopicIndexBuilders
             .getPrimaryTopicIndexBuilder();
         PropertyHelper.setProperties(primaryIndexBuilder, properties);
@@ -87,42 +92,56 @@ public class ODPIndexer implements TopicIndexBuilderListener
                 .addTopicIndexBuilderListener(this);
         }
 
+        // Initialise the topic serializer
+        TopicSerializer topicSerializer = ODPIndex.getTopicSerializer();
+        topicSerializer.initialize(indexDataLocation);
+
+        // Initialise topic index builders
+        Map topicIndexBuilders = AllKnownTopicIndexBuilders
+            .getTopicIndexBuilders();
+        for (Iterator iter = topicIndexBuilders.values().iterator(); iter
+            .hasNext();)
+        {
+            TopicIndexBuilder topicIndexBuilder = (TopicIndexBuilder) iter
+                .next();
+            topicIndexBuilder.initialize();
+        }
+
+        // Create the primary index and topic indices
         start = System.currentTimeMillis();
         PrimaryTopicIndex primaryIndex = primaryIndexBuilder.create(odpData,
-            indexDataLocation);
+            topicSerializer, topicIndexBuilders.values());
         long stop = System.currentTimeMillis();
-
         displayProgressMessage(stop);
 
         odpData.close();
+        topicSerializer.dispose();
 
         // Serialize the primary index
-        ODPIndex.getTopicIndexSerializer().serialize(
-            primaryIndex,
-            indexDataLocation + System.getProperty("file.separator")
-                + ODPIndex.PRIMARY_TOPIC_INDEX_NAME);
+        displayMessage("Serializing primary topic index...");
+        OutputStream out = new FileOutputStream(indexDataLocation
+            + System.getProperty("file.separator")
+            + ODPIndex.PRIMARY_TOPIC_INDEX_NAME);
+        primaryIndex.serialize(out);
+        out.close();
 
-        // Now create the rest of the indices required by the ODPIndex
-        List indexNames = ODPIndex.getTopicIndexNames();
-        for (Iterator iter = indexNames.iterator(); iter.hasNext();)
+        // Serialize the topic indices
+        for (Iterator iter = topicIndexBuilders.keySet().iterator(); iter
+            .hasNext();)
         {
             String name = (String) iter.next();
-            TopicIndexBuilder topicIndexBuilder = AllKnownTopicIndexBuilders
-                .getTopicIndexBuilder(name);
-            if (topicIndexBuilder == null)
-            {
-                System.err.println("WARNING: no builder found for index '"
-                    + name + "'");
-                continue;
-            }
+            displayMessage("Serializing topic index: " + name + "...");
 
-            TopicIndex topicIndex = topicIndexBuilder.create(primaryIndex);
-            ODPIndex.getTopicIndexSerializer()
-                .serialize(
-                    topicIndex,
-                    indexDataLocation + System.getProperty("file.separator")
-                        + name);
+            TopicIndexBuilder topicIndexBuilder = (TopicIndexBuilder) topicIndexBuilders
+                .get(name);
+
+            out = new FileOutputStream(indexDataLocation
+                + System.getProperty("file.separator") + name);
+            topicIndexBuilder.getTopicIndex().serialize(out);
+            out.close();
         }
+
+        displayMessage("Done");
     }
 
     /**
@@ -143,6 +162,17 @@ public class ODPIndexer implements TopicIndexBuilderListener
         }
     }
 
+    /**
+     * @param message
+     */
+    private void displayMessage(String message)
+    {
+        if (progressIndication)
+        {
+            System.out.println(message);
+        }
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -152,7 +182,7 @@ public class ODPIndexer implements TopicIndexBuilderListener
     {
         topicsIndexed++;
         long stop = System.currentTimeMillis();
-        if (topicsIndexed % 100 == 0)
+        if (topicsIndexed % 1000 == 0)
         {
             displayProgressMessage(stop);
         }
@@ -171,22 +201,19 @@ public class ODPIndexer implements TopicIndexBuilderListener
     /**
      * @param args
      * @throws IOException
+     * @throws ClassNotFoundException
      */
-    public static void main(String [] args) throws IOException
+    public static void main(String [] args) throws IOException,
+        ClassNotFoundException
     {
         if (args.length != 2 && args.length != 3)
         {
             System.out
-                .println("Usage: ODPIndexer odp-raw-rdf-file odp-index-dir [max-depth]");
+                .println("Usage: ODPIndexer odp-raw-rdf-file odp-index-dir");
             return;
         }
 
         Map properties = new HashMap();
-        if (args.length == 3)
-        {
-            properties.put(CatidPrimaryTopicIndexBuilder.PROPERTY_MAX_DEPTH,
-                Integer.valueOf(args[2]));
-        }
 
         ODPIndexer odpIndexer = new ODPIndexer(args[1]);
 

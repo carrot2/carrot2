@@ -25,7 +25,7 @@ public interface Topic
      * 
      * @return
      */
-    public abstract String getCatid();
+    public abstract int getCatid();
 
     /**
      * Returns this MutableTopic's <code>id</code>.

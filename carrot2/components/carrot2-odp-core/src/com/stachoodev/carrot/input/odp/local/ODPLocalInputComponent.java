@@ -176,14 +176,15 @@ public class ODPLocalInputComponent extends ProfiledLocalInputComponentBase
                 ExternalPage externalPage = (ExternalPage) iterator.next();
 
                 RawDocumentSnippet rawDocumentSnippet = new RawDocumentSnippet(
-                    Integer.toString(id++), externalPage.getTitle(), externalPage
-                        .getDescription(), null, -1);
-                rawDocumentSnippet
-                    .setProperty(PROPERTY_CATID, topic.getCatid());
+                    Integer.toString(id++), externalPage.getTitle(),
+                    externalPage.getDescription(), null, -1);
+                rawDocumentSnippet.setProperty(PROPERTY_CATID, Integer
+                    .toString(topic.getCatid()));
                 rawDocumentConsumer.addDocument(rawDocumentSnippet);
 
                 rawCluster.addDocument(rawDocumentSnippet);
-                rawCluster.setProperty(PROPERTY_CATID, topic.getCatid());
+                rawCluster.setProperty(PROPERTY_CATID, Integer.toString(topic
+                    .getCatid()));
             }
 
             rawClusters.add(rawCluster);

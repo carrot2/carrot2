@@ -34,6 +34,16 @@ public class MutableExternalPage implements ExternalPage, Serializable
     }
 
     /**
+     * @param title
+     * @param description
+     */
+    public MutableExternalPage(String title, String description)
+    {
+        this.title = title;
+        this.description = description;
+    }
+    
+    /**
      * Returns this MutableExternalPage's <code>description</code>.
      * 
      * @return

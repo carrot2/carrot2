@@ -11,7 +11,9 @@
 package com.stachoodev.carrot.odp.index;
 
 import java.io.*;
+import java.util.*;
 
+import com.stachoodev.carrot.odp.*;
 import com.stachoodev.util.common.*;
 
 /**
@@ -28,11 +30,16 @@ public interface PrimaryTopicIndexBuilder extends PropertyProvider
      * 
      * @param inputStream an {@link InputStream}associated with the ODP RDF
      *            content file to be indexed.
-     * @param indexDataLocation the location at which all index data can be
-     *            stored
+     * @param topicSerializer a {@link TopicSerializer}to be used to store
+     *            topic data
+     * @param topicIndexBuilders a collection of {@link TopicIndexBuilder}s to
+     *            be executed after a primary index entry has been created for a
+     *            topic
      * @throws IOException
+     * @throws ClassNotFoundException
      * @return
      */
     public PrimaryTopicIndex create(InputStream inputStream,
-        String indexDataLocation) throws IOException;
+        TopicSerializer topicSerializer, Collection topicIndexBuilders)
+        throws IOException, ClassNotFoundException;
 }

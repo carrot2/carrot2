@@ -12,6 +12,7 @@ package com.stachoodev.carrot.odp.index;
 
 import java.io.*;
 import java.util.*;
+import java.util.zip.*;
 
 /**
  * An array-based implementation of the
@@ -42,15 +43,22 @@ public class SimplePrimaryTopicIndex implements PrimaryTopicIndex, Serializable
         this.indexEntries = indexEntries;
     }
 
+    /**
+     *  
+     */
+    public SimplePrimaryTopicIndex()
+    {
+    }
+
     /*
      * (non-Javadoc)
      * 
      * @see com.stachoodev.carrot.odp.index.PrimaryTopicIndex#getLocation(java.lang.String)
      */
-    public String getLocation(String id)
+    public Location getLocation(int id)
     {
         int index = Collections.binarySearch(indexEntries, new IndexEntry(id,
-            ""));
+            null));
         if (index < 0)
         {
             return null;
@@ -69,26 +77,6 @@ public class SimplePrimaryTopicIndex implements PrimaryTopicIndex, Serializable
     public Iterator getAllLocations()
     {
         return new LocationIterator(indexEntries.iterator());
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.stachoodev.carrot.odp.index.TopicIndex#getLocations(java.lang.Object)
-     */
-    public List getLocations(Object query)
-    {
-        String location = getLocation(query.toString());
-
-        if (location == null)
-        {
-            return new ArrayList(0);
-        }
-        else
-        {
-            return Arrays.asList(new String []
-            { location });
-        }
     }
 
     /*
@@ -173,16 +161,16 @@ public class SimplePrimaryTopicIndex implements PrimaryTopicIndex, Serializable
     public static class IndexEntry implements Comparable, Serializable
     {
         /** Location entry */
-        private String location;
+        private Location location;
 
         /** Catid entry */
-        private String id;
+        private int id;
 
         /**
          * @param catid
          * @param location
          */
-        public IndexEntry(String id, String location)
+        public IndexEntry(int id, Location location)
         {
             this.id = id;
             this.location = location;
@@ -194,7 +182,7 @@ public class SimplePrimaryTopicIndex implements PrimaryTopicIndex, Serializable
          * 
          * @return
          */
-        public String getId()
+        public int getId()
         {
             return id;
         }
@@ -205,7 +193,7 @@ public class SimplePrimaryTopicIndex implements PrimaryTopicIndex, Serializable
          * 
          * @return
          */
-        public String getLocation()
+        public Location getLocation()
         {
             return location;
         }
@@ -232,7 +220,7 @@ public class SimplePrimaryTopicIndex implements PrimaryTopicIndex, Serializable
                 return false;
             }
 
-            return id.equals(((IndexEntry) obj).id)
+            return id == ((IndexEntry) obj).id
                 && location.equals(((IndexEntry) obj).location);
         }
 
@@ -247,7 +235,60 @@ public class SimplePrimaryTopicIndex implements PrimaryTopicIndex, Serializable
             // anyway
             IndexEntry entry = (IndexEntry) o;
 
-            return id.compareTo(entry.id);
+            if (id > entry.id)
+            {
+                return 1;
+            }
+            else if (id < entry.id)
+            {
+                return -1;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.stachoodev.carrot.odp.index.TopicIndex#serialize(java.io.OutputStream)
+     */
+    public void serialize(OutputStream outputStream) throws IOException
+    {
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(
+            new GZIPOutputStream(outputStream));
+        objectOutputStream.writeInt(indexEntries.size());
+        for (Iterator iter = indexEntries.iterator(); iter.hasNext();)
+        {
+            IndexEntry indexEntry = (IndexEntry) iter.next();
+            indexEntry.getLocation().serialize(objectOutputStream);
+            objectOutputStream.writeInt(indexEntry.getId());
+        }
+        objectOutputStream.close();
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.stachoodev.carrot.odp.index.TopicIndex#deserialize(java.io.InputStream)
+     */
+    public void deserialize(InputStream inputStream,
+        LocationFactory locationFactory) throws IOException
+    {
+        ObjectInputStream objectInputStream = new ObjectInputStream(
+            new GZIPInputStream(inputStream));
+        int size = objectInputStream.readInt();
+        indexEntries = new ArrayList(size);
+
+        for (int i = 0; i < size; i++)
+        {
+            Location location = locationFactory.createLocation();
+            location.deserialize(objectInputStream);
+
+            indexEntries.add(new IndexEntry(objectInputStream.readInt(),
+                location));
         }
     }
 }

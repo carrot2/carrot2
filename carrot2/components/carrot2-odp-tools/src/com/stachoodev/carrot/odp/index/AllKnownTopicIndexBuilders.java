@@ -34,7 +34,7 @@ public class AllKnownTopicIndexBuilders
         indexBuilders = new HashMap();
         primaryTopicIndexBuilder = new CatidPrimaryTopicIndexBuilder();
 
-        // No extra indices defined yet
+        indexBuilders.put("path", new PathTopicIndexBuilder());
     }
 
     /** No instantiation */
@@ -61,5 +61,13 @@ public class AllKnownTopicIndexBuilders
     public static PrimaryTopicIndexBuilder getPrimaryTopicIndexBuilder()
     {
         return primaryTopicIndexBuilder;
+    }
+    
+    /**
+     * @return
+     */
+    public static Map getTopicIndexBuilders()
+    {
+        return indexBuilders;
     }
 }

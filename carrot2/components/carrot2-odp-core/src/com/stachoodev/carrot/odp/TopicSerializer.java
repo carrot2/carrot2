@@ -12,6 +12,8 @@ package com.stachoodev.carrot.odp;
 
 import java.io.*;
 
+import com.stachoodev.carrot.odp.index.*;
+
 /**
  * Defines the interface for serializing/deserializing ODP topics.
  * 
@@ -21,17 +23,35 @@ import java.io.*;
 public interface TopicSerializer
 {
     /**
-     * @param topic
-     * @param location
+     * Initializes the serializer.
+     * 
+     * @param location location of the data files.
      * @throws IOException
      */
-    public void serialize(Topic topic, String location) throws IOException;
+    public void initialize(String dataLocation) throws IOException;
 
     /**
-     * @param location
-     * @return @throws IOException
-     * @throws ClassNotFoundException
+     * Disposes the serializer. At this point e.g. data files can be closed.
+     * 
+     * @throws IOException
      */
-    public Topic deserialize(String location) throws IOException,
-        ClassNotFoundException;
+    public void dispose() throws IOException;
+
+    /**
+     * Serializes a single topic.
+     * 
+     * @param topic topic to be serialized
+     * @return location the index can used to retrieve the topic
+     * @throws IOException
+     */
+    public Location serialize(Topic topic) throws IOException;
+
+    /**
+     * Deserializes a single topic.
+     * 
+     * @param location location from which the topic is to be deserialized
+     * @return deserialized topic
+     * @throws IOException
+     */
+    public Topic deserialize(Location location) throws IOException;
 }

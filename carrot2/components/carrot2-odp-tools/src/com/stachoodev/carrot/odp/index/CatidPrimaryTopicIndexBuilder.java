@@ -13,12 +13,10 @@ package com.stachoodev.carrot.odp.index;
 import java.io.*;
 import java.util.*;
 
-import javax.xml.parsers.*;
-
+import org.dom4j.io.*;
 import org.xml.sax.*;
 import org.xml.sax.helpers.*;
 
-import com.dawidweiss.carrot.util.common.*;
 import com.stachoodev.carrot.odp.*;
 import com.stachoodev.util.common.*;
 
@@ -38,8 +36,8 @@ import com.stachoodev.util.common.*;
  * 
  * This index builder is <b>not </b> thread-safe.
  * 
- * TODO: storing topics in separate zip files was a BAD idea. Re-implement
- * this based on random access files, maybe JDK1.4 channels
+ * TODO: storing topics in separate zip files was a BAD idea. Re-implement this
+ * based on random access files, maybe JDK1.4 channels
  * 
  * @author Stanislaw Osinski
  * @version $Revision$
@@ -50,21 +48,8 @@ public class CatidPrimaryTopicIndexBuilder extends DefaultHandler implements
     /** Stores properties of this indexer */
     private PropertyHelper propertyHelper;
 
-    /**
-     * A property that determines the maximum depth of the undrlying physical
-     * directory structure created for this index. Values of this property must
-     * be of type {@link Integer}.
-     */
-    public static final String PROPERTY_MAX_DEPTH = "maxdepth";
-
-    /** Default maximum depth */
-    private static final int DEFAULT_MAX_DEPTH = 6;
-
     /** Topic serializer */
     private TopicSerializer topicSerializer;
-
-    /** Location in which the index data is to be stored */
-    private String dataLocationPath;
 
     /** Listeners */
     private List topicIndexBuilderListeners;
@@ -81,17 +66,8 @@ public class CatidPrimaryTopicIndexBuilder extends DefaultHandler implements
     /** Entries of this index */
     private List indexEntries;
 
-    /**
-     * Mapping between ODP 'path' elements (keys) and filesystem directory names
-     * (values)
-     */
-    private Map pathElements;
-
-    /** The maximum path element code */
-    private int maxPathElementCode;
-
-    /** A helper list for splitting ODP paths */
-    private List splitList;
+    /** Piggyback topic index builders */
+    private Collection topicIndexBuilders;
 
     /**
      * Creates a new CatidPrimaryTopicIndexBuilder.
@@ -100,7 +76,6 @@ public class CatidPrimaryTopicIndexBuilder extends DefaultHandler implements
      */
     public CatidPrimaryTopicIndexBuilder()
     {
-        this.topicSerializer = ODPIndex.getTopicSerializer();
         this.topicIndexBuilderListeners = new ArrayList();
         this.propertyHelper = new PropertyHelper();
     }
@@ -111,29 +86,24 @@ public class CatidPrimaryTopicIndexBuilder extends DefaultHandler implements
      * @see com.stachoodev.carrot.odp.index.PrimaryTopicIndexBuilder#create(java.io.InputStream)
      */
     public PrimaryTopicIndex create(InputStream inputStream,
-        String indexDataLocation) throws IOException
+        TopicSerializer topicSerializer, Collection topicIndexBuilders)
+        throws IOException, ClassNotFoundException
     {
-        this.dataLocationPath = indexDataLocation;
+        this.topicIndexBuilders = topicIndexBuilders;
+        this.topicSerializer = topicSerializer;
 
         // Reset fields
         indexEntries = new ArrayList();
-        splitList = new ArrayList();
         currentTopic = null;
         currentExternalPage = null;
         stringBuffer = null;
-        pathElements = new HashMap();
-        maxPathElementCode = 0;
 
         // Initialize SAX
-        SAXParserFactory factory = SAXParserFactory.newInstance();
         try
         {
-            SAXParser parser = factory.newSAXParser();
-            parser.parse(inputStream, this);
-        }
-        catch (ParserConfigurationException e)
-        {
-            throw new RuntimeException("Cannot initialize SAXParser", e);
+            XMLReader xmlReader = new SAXReader().getXMLReader();
+            xmlReader.setContentHandler(this);
+            xmlReader.parse(new InputSource(inputStream));
         }
         catch (SAXException e)
         {
@@ -152,44 +122,29 @@ public class CatidPrimaryTopicIndexBuilder extends DefaultHandler implements
      */
     private void index(Topic topic) throws IOException
     {
-        String id = topic.getId();
-
-        int maxDepth = getIntProperty(PROPERTY_MAX_DEPTH, DEFAULT_MAX_DEPTH);
-
-        // Build the file system path
-        StringBuffer path = new StringBuffer();
-        StringUtils.split(id, '/', splitList);
-
-        int i = 0;
-        for (Iterator iter = splitList.iterator(); iter.hasNext()
-            && i < maxDepth; i++)
+        // Omit empty topics
+        if (topic.getExternalPages().size() == 0)
         {
-            String element = (String) iter.next();
-            String pathElement;
-            if (pathElements.containsKey(element))
-            {
-                pathElement = (String) pathElements.get(element);
-            }
-            else
-            {
-                pathElement = Integer.toString(maxPathElementCode++);
-                pathElements.put(element, pathElement);
-            }
-
-            path.append(pathElement);
-            path.append(System.getProperty("file.separator"));
+            return;
         }
 
-        // Add file name
-        path.append(topic.getCatid());
-
         // Serialize the topic
-        topicSerializer.serialize(topic, new File(dataLocationPath, path
-            .toString()).getAbsolutePath());
+        Location location = topicSerializer.serialize(topic);
 
         // Add to index entries
         indexEntries.add(new SimplePrimaryTopicIndex.IndexEntry(topic
-            .getCatid(), path.toString()));
+            .getCatid(), location));
+
+        // Let the piggyback topic index builders
+        if (topicIndexBuilders != null)
+        {
+            for (Iterator iter = topicIndexBuilders.iterator(); iter.hasNext();)
+            {
+                TopicIndexBuilder topicIndexBuilder = (TopicIndexBuilder) iter
+                    .next();
+                topicIndexBuilder.index(topic);
+            }
+        }
 
         // Fire the event
         fireTopicIndexed();
@@ -275,14 +230,14 @@ public class CatidPrimaryTopicIndexBuilder extends DefaultHandler implements
         }
 
         // ExternalPage/Title element
-        if (elementName.equals("d:Title"))
+        if (elementName.equals("Title"))
         {
             stringBuffer = new StringBuffer();
             return;
         }
 
         // ExternalPage/Description element
-        if (elementName.equals("d:Description"))
+        if (elementName.equals("Description"))
         {
             stringBuffer = new StringBuffer();
             return;
@@ -319,7 +274,7 @@ public class CatidPrimaryTopicIndexBuilder extends DefaultHandler implements
         if (elementName.equals("catid"))
         {
             // Current stringBuffer is the contents of catid
-            currentTopic.setCatid(stringBuffer.toString());
+            currentTopic.setCatid(Integer.parseInt(stringBuffer.toString()));
             return;
         }
 
@@ -332,7 +287,7 @@ public class CatidPrimaryTopicIndexBuilder extends DefaultHandler implements
         }
 
         // ExternalPage/Title element
-        if (elementName.equals("d:Title"))
+        if (elementName.equals("Title"))
         {
             // Current stringBuffer is the contents of Title
             currentExternalPage.setTitle(stringBuffer.toString());
@@ -340,7 +295,7 @@ public class CatidPrimaryTopicIndexBuilder extends DefaultHandler implements
         }
 
         // ExternalPage/Description element
-        if (elementName.equals("d:Description"))
+        if (elementName.equals("Description"))
         {
             // Current stringBuffer is the contents of Description
             currentExternalPage.setDescription(stringBuffer.toString());

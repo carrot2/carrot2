@@ -10,7 +10,7 @@
  */
 package com.stachoodev.carrot.odp.index;
 
-import java.util.*;
+import java.io.*;
 
 /**
  * Defines the interface of an ODP topic index.
@@ -21,13 +21,29 @@ import java.util.*;
 public interface TopicIndex
 {
     /**
-     * Returns a list of {@link String}s denoting relative locations of files
-     * containing topics specified in the query. If no locations have been
-     * identified for given query, a non- <code>null</code> empty list must be
-     * returned.
+     * Returns an iterator of identifiers of files containing topics specified
+     * in the query. The identifiers can be used to fetch ODP topics from the
+     * primary index. If no ids have been identified for given query, the
+     * iterator must be empty.
      * 
      * @param query
      * @return
      */
-    public List getLocations(Object query);
+    public IdIterator getIds(Object query);
+
+    /**
+     * Serializes this index to the {@link OutputStream}given.
+     * 
+     * @param outputStream
+     * @throws IOException
+     */
+    public void serialize(OutputStream outputStream) throws IOException;
+
+    /**
+     * Deserializes contents of this index from the {@link InputStream}given.
+     * 
+     * @param inputStream
+     * @throws IOException
+     */
+    public void deserialize(InputStream inputStream) throws IOException;
 }

@@ -30,20 +30,17 @@ public class ODPIndex
 {
     /** An instance of TopicSerializer */
     private static final TopicSerializer topicSerializer;
-
-    /** An instance of TopicIndexSerializer */
-    private static final TopicIndexSerializer topicIndexSerializer;
+    private static final LocationFactory locationFactory;
 
     /** The PrimaryTopicIndex */
-    private static PrimaryTopicIndex primaryTopicIndex;
+    private static PrimaryTopicIndex primaryTopicIndex = new SimplePrimaryTopicIndex();
     public static final String PRIMARY_TOPIC_INDEX_NAME = "primary";
 
     /** A map of all available topic indices (values) arranged by name (key) */
     private static final Map topicIndices;
-    private static final List topicIndexNames;
-    private static final String [] indexNames = new String [] {
-    // No extra indices as yet
-    };
+
+    /** */
+    private static final Map uninitializedTopicIndices;
 
     /** Location of all the data */
     private static String dataLocation;
@@ -51,10 +48,14 @@ public class ODPIndex
     /** Initialize some stuff here */
     static
     {
-        topicSerializer = new ZipFilesTopicSerializer();
-        topicIndexSerializer = new ZipFileTopicIndexSerializer();
+        RandomAccessTopicSerializer randomAccessTopicSerializer = new RandomAccessTopicSerializer(
+            (byte) 36);
+        topicSerializer = randomAccessTopicSerializer;
+        locationFactory = randomAccessTopicSerializer;
         topicIndices = new HashMap();
-        topicIndexNames = Arrays.asList(indexNames);
+
+        uninitializedTopicIndices = new HashMap();
+        uninitializedTopicIndices.put("path", new PathTopicIndex());
     }
 
     /**
@@ -74,7 +75,7 @@ public class ODPIndex
      * @throws IOException
      */
     public static synchronized void initialize(String indexDataLocation)
-        throws IOException, ClassNotFoundException
+        throws IOException
     {
         if (dataLocation == null)
         {
@@ -84,11 +85,13 @@ public class ODPIndex
                     "indexDataLocation must not be null");
             }
 
+            topicSerializer.initialize(indexDataLocation);
             dataLocation = new File(indexDataLocation).getAbsolutePath();
-            primaryTopicIndex = (PrimaryTopicIndex) topicIndexSerializer
-                .deserialize(dataLocation
-                    + System.getProperty("file.separator")
-                    + PRIMARY_TOPIC_INDEX_NAME);
+            FileInputStream fileInputStream = new FileInputStream(dataLocation
+                + System.getProperty("file.separator")
+                + PRIMARY_TOPIC_INDEX_NAME);
+            primaryTopicIndex.deserialize(fileInputStream, locationFactory);
+            fileInputStream.close();
         }
         else
         {
@@ -99,9 +102,12 @@ public class ODPIndex
     /**
      * Disposes of the current ODP index. It can be initialized from another
      * file system location by the {@link #initialize(String)}method.
+     * 
+     * @throws IOException
      */
-    public static void dispose()
+    public static void dispose() throws IOException
     {
+        topicSerializer.dispose();
         dataLocation = null;
     }
 
@@ -132,17 +138,6 @@ public class ODPIndex
     }
 
     /**
-     * Returns names of all available ODP indices. The list does not include the
-     * primary index (see {@link #getPrimaryTopicIndex()}.
-     * 
-     * @return
-     */
-    public static List getTopicIndexNames()
-    {
-        return topicIndexNames;
-    }
-
-    /**
      * The ODPIndex must be initialized (see {@link #initialize(String)})
      * before calling this method.
      * 
@@ -163,15 +158,23 @@ public class ODPIndex
                 TopicIndex topicIndex = null;
                 try
                 {
-                    topicIndex = topicIndexSerializer
-                        .deserialize(getAbsoluteLocation(name));
+                    topicIndex = (TopicIndex) uninitializedTopicIndices
+                        .get(name);
+                    if (topicIndex != null)
+                    {
+                        FileInputStream fileInputStream = new FileInputStream(
+                            dataLocation + System.getProperty("file.separator")
+                                + name);
+                        topicIndex.deserialize(fileInputStream);
+                        fileInputStream.close();
+                        System.gc();
+                        System.gc();
+                        System.gc();
+                        System.gc();
+                        System.gc();
+                    }
                 }
                 catch (IOException ignored)
-                {
-                    // We will store null to indicate that the index is not
-                    // available
-                }
-                catch (ClassNotFoundException ignored)
                 {
                     // We will store null to indicate that the index is not
                     // available
@@ -195,16 +198,6 @@ public class ODPIndex
     }
 
     /**
-     * Returns the {@link TopicIndexSerializer}used by this singleton.
-     * 
-     * @return
-     */
-    public static TopicIndexSerializer getTopicIndexSerializer()
-    {
-        return topicIndexSerializer;
-    }
-
-    /**
      * A convenience method to deserializes an ODP topic from given relative
      * location. In case of any problems
      * <code>null<code> will be returned. The ODPIndex must be initialized (see
@@ -213,38 +206,15 @@ public class ODPIndex
      * @param location
      * @return
      */
-    public static Topic getTopic(String location)
+    public static Topic getTopic(Location location)
     {
         try
         {
-            return topicSerializer.deserialize(getAbsoluteLocation(location));
+            return topicSerializer.deserialize(location);
         }
         catch (IOException e)
         {
             return null;
         }
-        catch (ClassNotFoundException e)
-        {
-            return null;
-        }
-    }
-
-    /**
-     * Returns the absolute location for given relative location. The ODPIndex
-     * must be initialized (see {@link #initialize(String)}) before calling
-     * this method.
-     * 
-     * @param relativeLocation
-     * @return
-     */
-    public static String getAbsoluteLocation(String relativeLocation)
-    {
-        if (dataLocation == null)
-        {
-            throw new RuntimeException("ODPIndex not initialized");
-        }
-
-        return dataLocation + System.getProperty("file.separator")
-            + relativeLocation;
     }
 }

@@ -57,13 +57,13 @@ public class CatidTopicMixerTest extends TestCase
             + "      <Topic r:id='Top/World/Polska/Komputery2'>"
             + "        <catid>32461</catid>"
             + "      </Topic>"
-            + "      <Topic r:id='Top/World/Polska/Komputery2'>"
+            + "      <Topic r:id='Top/World/Polska/Komputery3'>"
             + "        <catid>32462</catid>"
             + "      </Topic>"
             + "      <ExternalPage about='http://www.gust.org.pl/'>"
             + "        <d:Title>GUST</d:Title>"
             + "        <d:Description>Grupa użytkowników systemu Tex.</d:Description>"
-            + "        <topic>Top/World/Polska/Komputery2</topic>"
+            + "        <topic>Top/World/Polska/Komputery3</topic>"
             + "      </ExternalPage>" + "    </RDF>";
 
         InputStream odpInputStream = new ByteArrayInputStream(odpInput
@@ -107,7 +107,7 @@ public class CatidTopicMixerTest extends TestCase
     {
         MutableExternalPage mutableExternalPage;
         MutableTopic topic01 = new MutableTopic("Top/World/Polska/Komputery");
-        topic01.setCatid("32460");
+        topic01.setCatid(32460);
 
         mutableExternalPage = new MutableExternalPage();
         mutableExternalPage.setTitle("Polska Strona Ogonkowa");
@@ -130,7 +130,7 @@ public class CatidTopicMixerTest extends TestCase
     {
         MutableExternalPage mutableExternalPage;
         MutableTopic topic01 = new MutableTopic("Top/World/Polska/Komputery");
-        topic01.setCatid("32460");
+        topic01.setCatid(32460);
 
         mutableExternalPage = new MutableExternalPage();
         mutableExternalPage.setTitle("Polska Strona Ogonkowa");
@@ -138,13 +138,18 @@ public class CatidTopicMixerTest extends TestCase
             .setDescription("Co zrobić aby zobaczyć w tekstach polskie litery: informacje, fonty, programy.");
         topic01.addExternalPage(mutableExternalPage);
 
-        MutableTopic topic02 = new MutableTopic("Top/World/Polska/Komputery2");
-        topic02.setCatid("32461");
+        MutableTopic topic02 = new MutableTopic("Top/World/Polska/Komputery3");
+        topic02.setCatid(32462);
+        mutableExternalPage = new MutableExternalPage();
+        mutableExternalPage.setTitle("GUST");
+        mutableExternalPage
+            .setDescription("Grupa użytkowników systemu Tex.");
+        topic02.addExternalPage(mutableExternalPage);
 
         List expectedTopics = Arrays.asList(new Topic []
         { topic01, topic02 });
 
-        List topics = topicMixer.mix("32460 32461");
+        List topics = topicMixer.mix("32460 32462");
 
         assertEquals("Equal topic lists", expectedTopics, topics);
     }
@@ -156,7 +161,7 @@ public class CatidTopicMixerTest extends TestCase
     {
         MutableExternalPage mutableExternalPage;
         MutableTopic topic01 = new MutableTopic("Top/World/Polska/Komputery");
-        topic01.setCatid("32460");
+        topic01.setCatid(32460);
 
         mutableExternalPage = new MutableExternalPage();
         mutableExternalPage.setTitle("Polska Strona Ogonkowa");

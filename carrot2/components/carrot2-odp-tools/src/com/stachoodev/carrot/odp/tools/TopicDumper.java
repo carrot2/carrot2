@@ -40,9 +40,9 @@ public class TopicDumper
         int i = 0;
         for (Iterator paths = primaryIndex.getAllLocations(); paths.hasNext();)
         {
-            Topic topic = ODPIndex.getTopic((String) paths.next());
+            Topic topic = ODPIndex.getTopic((Location) paths.next());
             Object [] line = new Object [3];
-            line[0] = topic.getCatid();
+            line[0] = Integer.toString(topic.getCatid());
             line[1] = new Integer(topic.getExternalPages().size());
             line[2] = topic.getId();
 
