@@ -82,9 +82,6 @@ public class FreqSubtreeMiner
         {
             maxExpansion = ex;
             maxSize = ex.getTreeSize();
-            System.out.println("Max: " + maxSize);
-//            System.out.println("Max: " + ex);
-//            printResult(ex);
         }
     }
 
@@ -159,7 +156,6 @@ public class FreqSubtreeMiner
                                           getName());
         }
         dictionary.put(rootNodeDict.getName(), rootNodeDict);
-        System.out.println(dictionary);
 
         // only 100% support
         setMinSupport(START_SUPPORT);
@@ -168,7 +164,7 @@ public class FreqSubtreeMiner
         while (e.hasMoreElements())
         {
             TreeExpansion toEnum = (TreeExpansion)e.nextElement();
-            System.out.println("Enumerating: " + toEnum);
+
             if ( (maxExpansion == null) ||
                 ( ( (DictNodeOccurence)dictionary.get(toEnum.getName())).
                  getMaxOccurences() -

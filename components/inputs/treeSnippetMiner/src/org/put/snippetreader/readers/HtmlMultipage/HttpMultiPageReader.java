@@ -10,14 +10,11 @@ package org.put.snippetreader.readers.HtmlMultipage;
 
 import java.io.*;
 import java.util.*;
-import org.put.util.exception.*;
 import org.jdom.Element;
 import org.put.util.net.http.*;
 import gnu.regexp.REException;
 
 import org.put.util.xml.JDOMHelper;
-import org.put.util.text.HtmlHelper;
-import org.put.util.exception.*;
 import org.put.util.io.FileHelper;
 import org.apache.log4j.Logger;
 

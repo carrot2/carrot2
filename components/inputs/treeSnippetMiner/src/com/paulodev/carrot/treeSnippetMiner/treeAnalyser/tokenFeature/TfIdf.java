@@ -162,14 +162,6 @@ public class TfIdf
             }
         }
 
-/*        for (int i = 0; i < terms.length; i++)
-        {
-            System.out.print(terms[i].term + "(" + Math.round(terms[i].Entrophy * 100.0)/100.0 + ")    \t");
-            for (int j =0; j < documents.length; j++)
-                System.out.print( Math.round(DTMatrix[j][i]*100.0)/100.0 + "\t");
-            System.out.println();
-        }*/
-
         double res = 0;
         for (int i = 0; i < documents.length; i++)
         {

@@ -163,7 +163,6 @@ public class TreeExpansionElementOccurence
             if (parent != null)
             {
                 parent.setBound(bound);
-//            System.out.println("Mam granicę dla: " + node.getPosition() + " " + node.getName() + "=" + bound);
             }
             return true;
         }
