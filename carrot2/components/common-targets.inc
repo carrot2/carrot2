@@ -32,6 +32,8 @@
         </ant>
     </target>
 
+	<!-- an alias for dependencies-->
+    <target name="deps" depends="dependencies" />
     <target name="dependencies">
         <ant target="dependencies"
              antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" inheritrefs="true">

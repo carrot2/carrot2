@@ -70,7 +70,7 @@
     <condition property="tmp:dep.file.available" value="true">
         <available file="${component.descriptor}" type="file" />
     </condition>
-    
+
     <!-- Check if we need to copy dependencies -->
     <condition property="ok.copy.dependencies" value="true">
         <and>
@@ -146,18 +146,14 @@
   
   <target name="discover.classpath" depends="discover.classpath:autodependency,discover.classpath:empty">
   </target>
-  
-  <target name="dependencies" depends="prepare">
-  	<echo>
-Component descriptor:
-${component.descriptor}
 
-Project dependencies:
-  	
-${string:component.dependencies}
-  	</echo>
+  <target name="_deps_uptodate" unless="no.bringing.dependencies.uptodate">
+    <bringToDate componentDescriptor="${component.descriptor}" dependenciesOnly="true" profile="${profile}">
+        <dependencies refid="dependencies" />
+        <dependencies refid="local.dependencies" />
+    </bringToDate>
   </target>
-
+  
   <target name="discover.classpath:autodependency" if="tmp:dep.file.available">
     <fileset id="dependencies" dir="${carrot2.cvs.dir}">
         <include name="lib/**/*.dep.xml" />
@@ -171,11 +167,8 @@ ${string:component.dependencies}
     <fileset id="local.dependencies" dir="${project.dir}">
 		<include name="lib/*.dep.xml" />
     </fileset>
-    
-    <bringToDate componentDescriptor="${component.descriptor}" dependenciesOnly="true" profile="${profile}">
-        <dependencies refid="dependencies" />
-        <dependencies refid="local.dependencies" />
-    </bringToDate>
+
+	<antcall target="_deps_uptodate" />
 
     <dependencyPath id="classpath.dependencies"
         componentDescriptor="${component.descriptor}" profile="${profile}">
@@ -240,7 +233,26 @@ ${string:component.dependencies}
   </target>
   <!-- }}} -->
 
+  <!-- ##################################### -->
+  <!-- ### {{{ DEPENDENCIES task         ### -->
+  <!-- ##################################### -->
+
+  <target name="dependencies" depends="depsoff,prepare">
+  	<echo>
+Component descriptor:
+${component.descriptor}
+
+Project dependencies:
+  	
+${string:component.dependencies}
+  	</echo>
+  </target>
   
+  <target name="depsoff">
+  	<property name="no.bringing.dependencies.uptodate" value="true" />
+  </target>
+
+
   <!-- ##################################### -->
   <!-- ### {{{ JAR TYPE BUILD            ### -->
   <!-- ##################################### -->
