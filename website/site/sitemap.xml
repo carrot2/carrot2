@@ -31,6 +31,12 @@
     <section id="sf" location="http://sourceforge.net/projects/carrot2/">
         <name lng="en">Carrot2 at SourceForge</name>
         <name lng="pl">Carrot2 na SourceForge</name>
+        
+        <section id="sf" location="http://sourceforge.net/mail/?group_id=85379">
+            <name lng="en">Mailing lists</name>
+            <name lng="pl">Grupy dyskusyjne</name>
+        </section>
+        
     </section>
 
     <section id="docs" location="/developers/index.xml">

@@ -11,51 +11,50 @@
 	<title lng="en">User gain</title>
 	<title lng="pl">Korzyści</title>
 
-            <lang:pl>
-            <frame>
-            Ta strona jeszcze nie została przepisana na język polski. Proszę
-            przełączyć się na <a href="/architecture/usergain.xml?lang=en">wersję angielską</a>.
-            </frame>
-            </lang:pl>            
+    <lang:pl>
+    <frame>
+    Ta strona tylko w wersji angielskiej, przepraszamy.
+    </frame>
+    </lang:pl>            
 
-            <chapter level="1">
-                <title>What a researcher may gain from <carrot-text/>?</title>
-                <p>
-                A number of scientific papers concerning search results processing have been published.
-                Each and every author had to go through the same tedious (and quite fruitless) tasks
-                of building a search engine wrapper, incorporating stemming/ light language processing
-                algorithms, and finally displaying a result of the algorithm in some form.
-                </p>
-                <p>
-                In our opinion this is highly reduntant work and most of the components (wrappers, processing,
-                displaying) can be reused. Thus, we think <carrot-text/> gives a number of possible 
-                shortcuts for those willing to work with search result clustering or any other form
-                of textual data processing (we envision some applications of information retrieval could also
-                applied easily using the architecture we proposed):
-                <ul>
-                    <li><b>Reusable components</b> - for a certain application, a standard data exchange
-                    format can be proposed, which makes components using this format replaceable and reusable.
-                    We proposed such data exchange format for application in search results clustering -- 
-                    an XML-based query and search result.
-                    </li>
-                    <li><b>Platform and language independency</b> - data transmission protocol in <carrot-text/>
-                    is fixed to HTTP POST. Almost any programming language can be adopted to work as a web server
-                    or in web-server enabled mode (via CGI for instance). This allows for true independency of
-                    components within the architecture -- they can be physically distributed and running
-                    on different hardware platforms for instance. Also, the language of implementation does not matter,
-                    so for research objectives slower, but more elegant languages can be used (Prolog, Lisp, Java?),
-                    while for production systems, if ever, the code can be rewritten for performance and the component
-                    reused without any changes to other parts of the system.
-                    </li>
-                    <li><b>Start your experiments fast</b> - because <carrot-text/> comes with a set of template
-                    component classes and utilities in Java, a researches can almost immediately set up his/ her own
-                    component within the framework and start working on specific thing he wants to deal with.
-                    </li>
-                    <li><b>OpenSource</b> - <carrot-text/> is an open source initiative. It is available free of charge
-                    and the code base can be modified to be adjusted to one's needs.
-                    </li>
-                </ul>
-                </p>
-            </chapter>
+    <chapter level="1">
+        <title>What a researcher may gain from <carrot-text/>?</title>
+        <p>
+        A number of scientific papers concerning search results processing have been published.
+        Each and every author had to go through the same tedious (and quite fruitless) tasks
+        of building a search engine wrapper, incorporating stemming/ light language processing
+        algorithms, and finally displaying a result of the algorithm in some form.
+        </p>
+        <p>
+        In our opinion this is highly reduntant work and most of the components (wrappers, processing,
+        displaying) can be reused. Thus, we think <carrot-text/> gives a number of possible 
+        shortcuts for those willing to work with search result clustering or any other form
+        of textual data processing (we envision some applications of information retrieval could also
+        applied easily using the architecture we proposed):
+        <ul>
+            <li><b>Reusable components</b> - for a certain application, a standard data exchange
+            format can be proposed, which makes components using this format replaceable and reusable.
+            We proposed such data exchange format for application in search results clustering -- 
+            an XML-based query and search result.
+            </li>
+            <li><b>Platform and language independency</b> - data transmission protocol in <carrot-text/>
+            is fixed to HTTP POST. Almost any programming language can be adopted to work as a web server
+            or in web-server enabled mode (via CGI for instance). This allows for true independency of
+            components within the architecture -- they can be physically distributed and running
+            on different hardware platforms for instance. Also, the language of implementation does not matter,
+            so for research objectives slower, but more elegant languages can be used (Prolog, Lisp, Java?),
+            while for production systems, if ever, the code can be rewritten for performance and the component
+            reused without any changes to other parts of the system.
+            </li>
+            <li><b>Start your experiments fast</b> - because <carrot-text/> comes with a set of template
+            component classes and utilities in Java, a researches can almost immediately set up his/ her own
+            component within the framework and start working on specific thing he wants to deal with.
+            </li>
+            <li><b>OpenSource</b> - <carrot-text/> is an open source initiative. It is available free of charge
+            and the code base can be modified to be adjusted to one's needs.
+            </li>
+        </ul>
+        </p>
+    </chapter>
 	
 </page>

@@ -59,8 +59,52 @@
         <title lng="en">The news!</title>
         <title lng="pl">Nowinki</title>
 
-	    <include file="news/news.xml" />
-	
+        <p>
+        <lang:pl>
+        Wszelkie komunikaty i dyskuje rozgłaszane są za pośrednictwem
+        (publicznej) listy e-mailowej z serwera SourceForge:
+        </lang:pl>
+        <lang:en>
+        All news and messages are spread via mailing list at SourceForge:
+        </lang:en>
+        <a href="http://lists.sourceforge.net/lists/listinfo/carrot2-developers">carrot2-developers@lists.sourceforge.net</a>.
+        </p>
+	</chapter>
+
+    <chapter level="1">
+        <title lng="en">Example applications</title>
+        <title lng="pl">Przykładowe zastosowania</title>
+
+        <p>
+        <lang:pl>
+        Przykładowy ekran z własnego interfejsu systemu Carrot<sup>2</sup>, którego wersja 
+        demonstracyjna dostępna jest on-line pod adresem:
+        </lang:pl>
+        <lang:en>
+        A sample screen shot from an on-line demo of Carrot's own Web meta-searching interface, accessible at:
+        </lang:en>
+        <a href="http://carrot.cs.put.poznan.pl/carrot2-web-controller">http://carrot.cs.put.poznan.pl/carrot2-web-controller</a>.        
+        </p>
+        
+        <p>
+        <illustration alt="Carrot2 demo screenshot" src="/gfx/screen/carrot2-demo-screenshot.gif">
+            <description>Results of query <i>Pink Floyd</i>, clustered using Carrot<sup>2</sup></description>
+        </illustration>
+        </p>
+        
+        <!--
+        <p>
+        <lang:pl>
+        Przykładowy ekran z zastosowania projektu Carrot<sup>2</sup> jako komponentu grupującego
+        wyniki wyszukiwania w wyszukiwarce <a href="http://www.egothor.org">Egothor</a>.
+        </lang:pl>
+        <lang:en>
+        Here is a screen shot of application of Carrot<sup>2</sup>'s components as
+        a clustering engine in <a href="http://www.egothor.org">Egothor</a>
+        search engine.
+        </lang:en>
+        </p>
+        -->
 	</chapter>
 
 

@@ -10,33 +10,59 @@
 	<title lng="en">Download</title>
 
     <chapter level="1">
-        <title>Download binaries</title>
-        
-            <p>
-            <a href="http://www.cs.put.poznan.pl/dweiss/carrot-bin/carrot2-bin-0.1.zip">Carrot<sup>2</sup>, version: <b>0.1</b>, 13/06/2003</a> (current)
-            </p>
-
-            <p>
-            <a href="http://www.cs.put.poznan.pl/dweiss/carrot-bin/carrot2-bin-0.1-RC3.zip">Carrot<sup>2</sup>, version: <b>0.1-RC3</b>, 27/05/2003</a>
-            </p>
-
-            <p>
-            <a href="http://www.cs.put.poznan.pl/dweiss/carrot-bin/carrot2-bin-0.1-RC2.zip">Carrot<sup>2</sup>, version: <b>0.1-RC2</b>, 13/05/2003</a>
-            </p>
-
-            <p>
-            Carrot<sup>2</sup>, version: <b>0.1-RC1</b>, 29/04/2003 (no longer available)
-            </p>
-        
+        <title>Download prepackaged demo binaries</title>
+        <p>
+        Binary releases moved to SourceForge.
+        </p>
+        <p>
+        <a href="http://sourceforge.net/project/showfiles.php?group_id=85379">http://sourceforge.net/project/showfiles.php?group_id=85379</a>
+        </p>
     </chapter>
 
     <chapter level="1">
         <title>Source code releases</title>
 
         <p>
-        Please use the CVS access to acquire source code.
+        Please use anonymous CVS access to acquire source code, connection details
+        are given here.
         </p>
-        
+        <p>
+        <a href="http://sourceforge.net/cvs/?group_id=85379">http://sourceforge.net/cvs/?group_id=85379</a>
+        </p>
+        <p style="text-align: left;">
+        Alternatively a tarball with CVS contents (refreshed nightly) can be found
+        at this address:
+        </p>
+        <p>
+        <a href="http://carrot2.sourceforge.net/download/carrot2-cvs-nightly.tar.gz">http://carrot2.sourceforge.net/download/carrot2-cvs-nightly.tar.gz</a>
+        </p>
+        <p>
+        <i>If you don't know what <tt>.tar.gz</tt> extension is, then this pack is probably not for you.</i> 
+        </p>
+    </chapter>
+
+    <chapter level="1">
+        <title>Preconfigured runtime environment</title>
+        <p>
+        This is a preconfigured Tomcat environment for use with Carrot<sup>2</sup> components. Just download
+        the component WARs, throw them in the <tt>context-components</tt> directory of this runtime and start Tomcat!
+        </p>
+        <p>
+        <a href="http://carrot2.sourceforge.net/download/carrot2-cvs-nightly.tar.gz">http://carrot2.sourceforge.net/download/tomcat-carrot-runtime.tgz</a>
+        </p>
+    </chapter>
+     
+    <chapter level="1">
+        <title>Nightly component binaries</title>
+        <p>
+        These binaries (WAR files) are provided as part of the nightly
+        demo/ integration build. <b>We cannot guarantee these files will work</b> because
+        they are development shapshots. These binaries are provided mostly for use
+        in other projects (i.e. Egothor).
+        </p>
+        <p>
+        <a href="http://carrot.cs.put.poznan.pl/static/download/nightly">http://carrot.cs.put.poznan.pl/static/download/nightly</a>
+        </p>
     </chapter>
 
 </page>

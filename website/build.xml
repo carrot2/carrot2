@@ -59,6 +59,20 @@ and php's safe_mode must be turned off.
   <!-- }}} -->
 
   
+  <!-- ######################################################### -->
+  <!-- ### {{{ Assembles a Java WAR structure of the web page### -->
+  <!-- ###                           (for previewing mostly) ### -->
+  <!-- ######################################################### -->
+  <target name="build.war" depends="prepare"
+          description="Assembles a WAR structure of the web page.">
+          
+    <delete failonerror="false" quiet="true" file="${distribution.dir}/carrot2-website.war" />
+    <copy file="renderer-sin/java/sin-java-base.zip" tofile="${distribution.dir}/carrot2-website.war" />
+    <zip basedir="${build.dir}" compress="true" update="true" zipfile="${distribution.dir}/carrot2-website.war" />
+  </target>
+  <!-- }}} -->
+
+  
   <!-- ##################################### -->
   <!-- ### {{{ HELP ON THIS FILE         ### -->
   <!-- ##################################### -->

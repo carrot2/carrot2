@@ -4,6 +4,7 @@
 <xsl:import href="sin-generic-base.xsl" />
 <xsl:include href="sin-html-markup.xsl" />
 <xsl:include href="sin-i18n.xsl" />
+<xsl:include href="sin-illustration.xsl" />
 <xsl:include href="carrot2_sitemap.xsl" />
 <xsl:include href="carrot2_elements.xsl" />
 
@@ -50,7 +51,15 @@
                     <xsl:call-template name="sitemap-hierarchical">
                         <xsl:with-param name="level" select="'2'" />
                         <xsl:with-param name="topSection" select="'carrot2'" />
-                    </xsl:call-template>                
+                    </xsl:call-template>
+                    
+                    <div style="margin-top: 30px; margin-left: 15px;">
+                    <span style="color: #e0e0e0; font-size: 9px;">Hosted by:<br/></span>
+                    <a href="http://sourceforge.net/"><img src="http://sourceforge.net/sflogo.php?group_id=85379&amp;type=1" width="88" height="31" border="0" alt="SourceForge.net Logo" /></a><br/><br/>
+
+                    <span style="color: #e0e0e0; font-size: 9px;">Developed at:<br/></span>
+                    <a href="http://www.cs.put.poznan.pl"><img src="{concat($base, '/logo_pp.gif')}" border="0" alt="Poznan University of Technology Logo" /></a>                    
+                    </div>
                 </td>
                 <td align="left" valign="top" rowspan="2">
                     <xsl:apply-templates />
@@ -80,66 +89,6 @@
     </div>
 </xsl:if></xsl:template>
 
-
-<xsl:template match="illustration"><xsl:if test="not(@lng) or $lang=@lng">
-    <xsl:choose>
-        <xsl:when test="@float"><xsl:call-template name="pasteIllustration" /></xsl:when>
-        <xsl:otherwise>
-            <div style="text-align: center;"><xsl:call-template name="pasteIllustration" /></div>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:if></xsl:template>
-
-
-<xsl:template name="pasteIllustration">
-    <table class="figure" width="1%">
-    <xsl:if test="@float">
-        <xsl:attribute name="style">
-            <xsl:choose>
-                <xsl:when test="@float='right'">float: right; margin-right: 0em;</xsl:when>
-                <xsl:otherwise>float: left; margin-left: 0em;</xsl:otherwise>
-            </xsl:choose>
-        </xsl:attribute>
-    </xsl:if>
-    <tr><td class="pic" align="center" valign="top">
-        <xsl:choose>
-            <xsl:when test="@thumb">
-                <a>
-                    <xsl:attribute name="href">
-                        <xsl:call-template name="rewriteImgURL">
-                            <xsl:with-param name="href" select="@src" />
-                        </xsl:call-template>
-                    </xsl:attribute>
-                    <img border="0">
-                    <xsl:copy-of select="@alt"/>
-                    <xsl:attribute name="src">
-                        <xsl:call-template name="rewriteImgURL">
-                            <xsl:with-param name="href" select="@thumb" />
-                        </xsl:call-template>
-                    </xsl:attribute>
-                    </img>
-                </a>
-            </xsl:when>
-            <xsl:otherwise>
-                <img>
-                <xsl:copy-of select="@alt"/>
-                <xsl:attribute name="src">
-                    <xsl:call-template name="rewriteImgURL">
-                        <xsl:with-param name="href" select="@src" />
-                    </xsl:call-template>
-                </xsl:attribute>
-                </img>
-            </xsl:otherwise>
-        </xsl:choose>
-        </td>
-    </tr>
-    <xsl:if test="description">
-        <xsl:for-each select="description[not(@lng) or $lang=@lng]">
-        <tr><td class="desc" align="left" valign="top"><table cellspacing="0" cellpadding="0" border="0"><tr><td width="100%"><xsl:apply-templates /></td></tr></table></td></tr>
-        </xsl:for-each>
-    </xsl:if>
-    </table>
-</xsl:template>
 
 <!-- ################################### -->
 <!-- {{{ I80N -->
