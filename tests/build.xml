@@ -121,10 +121,12 @@
     </pathconvert>
 
     <junit dir="${build}/conf" fork="true" printsummary="true" errorproperty="junit.error" failureproperty="junit.failure">
+	    <jvmarg value="-Djava.endorsed.dirs=lib"/>
+
         <formatter type="xml"/>
         <classpath refid="compile.classpath" />
         <classpath location="${build}" />
-        <sysproperty key="log4j.configuration" value="file://${tmp:loggingSettings}"/>
+        <sysproperty key="log4j.configuration" value="file:///${tmp:loggingSettings}"/>
 
 		<batchtest todir="${build}/junit-temp">
 			<fileset dir="${build}">
