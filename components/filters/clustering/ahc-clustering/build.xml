@@ -95,7 +95,7 @@
   <!-- ##################################### -->
   <target name="build" depends="prepare,compile" >
 
-	<war warfile="${distribution.dir}/${dist.name}.war" webxml="${build.dir}/WEB-INF/web.xml">
+	<war update="false" warfile="${distribution.dir}/${dist.name}.war" webxml="${build.dir}/WEB-INF/web.xml">
 		<fileset dir="${build.dir}">
 			<exclude name="WEB-INF/web.xml" />
 			<exclude name="WEB-INF/classes/**" />

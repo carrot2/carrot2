@@ -89,7 +89,7 @@
     </copy>
 
     <!-- copy libraries -->    
-    <copy toDir="${build.dir}/lib">
+    <copy toDir="${build.dir}/WEB-INF/lib">
         <fileset dir="lib" includes="**/*.jar" />
     </copy>
     
@@ -140,12 +140,12 @@
         </filterset>
     </copy>
 
-	<war warfile="${distribution.dir}/${dist.name}.war" 
+	<war update="false" warfile="${distribution.dir}/${dist.name}.war" 
          webxml="${build.dir}/WEB-INF/web.xml.secure">
 		<fileset dir="${build.dir}">
 			<exclude name="WEB-INF/classes/**" />
             <exclude name="WEB-INF/web.xml**" />
-            <exclude name="lib/**" />
+            <exclude name="WEB-INF/lib/**" />
 		</fileset>
 
         <lib dir="lib">
