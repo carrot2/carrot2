@@ -14,6 +14,8 @@
 
 package com.dawidweiss.carrot.util.common;
 
+import java.util.*;
+
 
 /**
  * Various utility classes.
@@ -238,5 +240,54 @@ bigloop:
 
         return output.toString();
     }
+
+
+    /**
+     * Splits the <code>string</code> into parts delimited by
+     * <code>delimiter</code> and stores the parts as {@link String}s in the
+     * provided <code>list</code>. Note: substrings can be delimited by any
+     * number of delimiter characters.
+     * 
+     * @param string
+     * @param delimiter
+     * @param substrings
+     * @return the <code>substrings</code> list, for convenience only
+     */
+    public static List split(String string, char delimiter, List substrings)
+    {
+        substrings.clear();
+        string = string.trim();
     
+        int i = 0;
+        int j = string.indexOf(delimiter);
+    
+        while (j >= 0)
+        {
+            substrings.add(string.substring(i, j));
+            
+            i = j + 1;
+            while (string.charAt(i) == delimiter)
+            {
+                i++;
+            }
+            
+            j = string.indexOf(delimiter, i);
+        }
+    
+        substrings.add(string.substring(i));
+        
+        return substrings;
+    }
+ 
+    /**
+     * @param a
+     * @param formatType as in the {@link java.text.MessageFormat}class
+     * @return
+     */
+    public static String toString(Double a, String formatType)
+    {
+        return java.text.MessageFormat.format("{0,number," + formatType + "}",
+            new Object []
+            { a });
+    }
 }
