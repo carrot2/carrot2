@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<!DOCTYPE component SYSTEM "../../../etc/component-dependency.dtd" > 
+<component
+    name="looks"
+    description="JGoodies Looks LookAndFeel, http://www.jgoodies.com/">
+	<provides>
+		<files>
+			<file location="looks-1.2.2.jar" />
+			<file location="looks.LICENSE" />
+		</files>
+	</provides>
+</component>

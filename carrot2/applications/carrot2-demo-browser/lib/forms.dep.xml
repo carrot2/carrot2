@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<!DOCTYPE component SYSTEM "../../../etc/component-dependency.dtd" > 
+<component
+    name="forms"
+    description="JGoodies Forms Layout, http://www.jgoodies.com/">
+	<provides>
+		<files>
+			<file location="forms-1.0.5.jar" />
+			<file location="forms.LICENSE" />
+		</files>
+	</provides>
+</component>
