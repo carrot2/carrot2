@@ -2,19 +2,15 @@ CVS root
 |
 +---bin                             > shell scripts invoking common tools.
 +---components                      > source code of components
-|   +---carrot2-shared-lib          > Common Java component and utility classes 
-|   +---controllers                 > Controller components
-|   |   \---carrot2-web-controller  > Example controller (web-based)
-|   +---filters                     > Filter components
-|   |   +---{name}                  > filter component named {name}
-|   +---inputs                      > Input components
-|   |   +---{name}                  > input component named {name}
-|   \---outputs                     > Output components
-|       +---{name}                  > output component named {name}
-+---descriptors                     > Component descriptors copied to the runtime
-|   +---components-experimental     > experimental (unstable)
-|   \---components-release          > release-quality (stable)
+|   +---carrot2-remote-controller   > Example remote components controller
+|   |                                 (Web application)
+|   +---{name}                      > other components
++---etc                             > extra miscellaneous files for build and
+|                                     deployment
 +---lib                             > library dependencies that at least 
 |                                     two components share.
++---remote-descriptors              > Remote component descriptors copied
+|                                     to the remote controller's web application
+|                                     at build-time.
 \---schema                          > XML Schema files describing input/output
-                                    > formats.
+                                      formats.

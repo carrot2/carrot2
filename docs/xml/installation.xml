@@ -526,7 +526,7 @@ ant -Ddeployment.port=80 -Ddeployment.host=myhost.com build.webcontroller
             
             <listitem>
             <para>
-            Point your browser at: <literal>http://localhost:8080/carrot2-web-controller</literal>.
+            Point your browser at: <literal>http://localhost:8080/carrot2-remote-controller</literal>.
             You should see the controller component's main page:
             </para>
 
