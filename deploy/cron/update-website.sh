@@ -22,7 +22,7 @@ for counter in `seq 1 10`; do
         echo "Website update ok."
         break;
     else
-        echo "Website update failed. Sleeping 60 seconds."
+        echo "Website update failed. Sleeping."
         sleep 60
     fi
     if (($counter == 10)); then

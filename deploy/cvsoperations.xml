@@ -26,7 +26,7 @@
     <target name="cvs.update.module" depends="check.required.properties">
         <echo message="### Updating module: ${module.name}" />
         <cvs cvsroot="${cvs.root}" 
-            command        = "-q -n update -P ${module.name}"
+            command        = "-q -n update -P -d ${module.name}"
             dest           = "${checkout.dir}"
             failonerror    = "true"
             passfile       = "${cvs.pass}" />
