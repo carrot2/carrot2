@@ -117,6 +117,14 @@ public class ExtendedTokenSequence implements TokenSequence, PropertyProvider
         return propertyHelper.setIntProperty(propertyName, value);
     }
 
+    /**
+     * @return
+     */
+    public String getFullInfo()
+    {
+        return tokenSequence.toString() + " [" + propertyHelper.toString() + "]";
+    }
+    
     /*
      * (non-Javadoc)
      * 
