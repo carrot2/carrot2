@@ -109,14 +109,16 @@ public class SnippetTokenizer
      * @param rawDocument
      * @return
      */
-    public TokenizedDocument tokenize(RawDocument rawDocument,
+    public TokenizedDocument tokenizeOnePass(RawDocument rawDocument,
         LanguageTokenizer languageTokenizer)
     {
         // Tokenize
         stringBuffer.delete(0, stringBuffer.length());
-        stringBuffer.append(rawDocument.getTitle());
+        String title = (rawDocument.getTitle() != null ? rawDocument.getTitle() : "");
+        stringBuffer.append(title);
         stringBuffer.append(" 4a7z2f6q3 ");
-        stringBuffer.append(rawDocument.getSnippet());
+        String snippet = (rawDocument.getSnippet() != null ? rawDocument.getSnippet() : "");
+        stringBuffer.append(snippet);
 
         int tokenCount = 0;
         languageTokenizer.restartTokenizationOn(new StringReader(stringBuffer
@@ -166,6 +168,36 @@ public class SnippetTokenizer
         return tokenizedDocumentSnippet;
     }
 
+    /**
+     * Tokenizes a single {@link RawDocument}into a
+     * {@link TokenizedDocumentSnippet}.
+     * 
+     * @param rawDocument
+     * @return
+     */
+    public TokenizedDocument tokenize(RawDocument rawDocument,
+        LanguageTokenizer languageTokenizer)
+    {
+        TokenSequence titleTokenSequence = tokenize(rawDocument.getTitle(), languageTokenizer);
+        TokenSequence snippetTokenSequence = tokenize(rawDocument.getSnippet(), languageTokenizer);
+        
+        TokenizedDocumentSnippet tokenizedDocumentSnippet = new TokenizedDocumentSnippet(
+            titleTokenSequence, snippetTokenSequence);
+
+        // Set reference to the original raw document
+        tokenizedDocumentSnippet.setProperty(
+            TokenizedDocument.PROPERTY_RAW_DOCUMENT, rawDocument);
+
+        // Set some properties (all should be copied!)
+        tokenizedDocumentSnippet.setProperty(TokenizedDocument.PROPERTY_URL,
+            rawDocument.getProperty(RawDocument.PROPERTY_URL));
+        tokenizedDocumentSnippet.setProperty(
+            TokenizedDocument.PROPERTY_LANGUAGE, rawDocument
+                .getProperty(RawDocument.PROPERTY_LANGUAGE));
+
+        return tokenizedDocumentSnippet;
+    }
+    
     /**
      * Helps to avoid tokenizer borrow/return thrashing.
      * 
