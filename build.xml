@@ -311,7 +311,7 @@
                              copies it to /lib folder. This task
                              should only be used if the library
                              changes.
-        cleanall           - cleans all temporary files
+        clean              - cleans all temporary files
         build              - build all components
 
     Please refer to documentation for more information.

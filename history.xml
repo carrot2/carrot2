@@ -9,6 +9,21 @@
 <history>
 
     <changelist>
+        <date>2003-11-23</date>
+        <committer>dawid</committer>
+        <change component="carrot2-shared-lib" type="bugfix">
+        The query format has been changed to what it actually was:
+        the 'search' root element was not used anywhere.
+        </change>
+        <change component="global" type="refactoring">
+        All build files now replace WARs instead of updating them.
+        </change>
+        <change component="carrot2.controller.carrot2-web" type="bugfix">
+        WAR file contained duplicated libraries.
+        </change>
+    </changelist>
+
+    <changelist>
         <date>2003-10-08</date>
         <committer>dawid</committer>
         <change component="carrot2.controller.carrot2-web" type="bugfix">

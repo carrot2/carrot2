@@ -1,0 +1,9 @@
+
+--
+
+Massimo Miccoli reports:
+
+Users of  Debian Woody distribution and Tomcat4  must give write permission
+to tomcat4 users on  /var/lib/tomcat4/webapps
+so Carrot2 can work.  Is not a  true solution for security reason, but it
+work.
