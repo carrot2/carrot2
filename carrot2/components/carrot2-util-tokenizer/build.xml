@@ -15,24 +15,6 @@
 
 	<!-- Tasks specific to the project -->
 	
-    <target name="javacc">
-		<description>
-Generate tokenizer classes using javacc. These classes need not
-be regenerated on each build. They are part of the CVS distribution
-and only need to be changed if the parser file changed.
-		</description>
-
-        <fail unless="javacc.home">
-ERROR: javacc.home property must be available and must point to javacc home dir.
-You can define this property in a file 'local.properties' that is ignored 
-by the CVS in this project.
-		</fail>
-
-	    <javacc target="src/com/dawidweiss/carrot/util/tokenizer/parser/javacc/JavaCCWordBasedParserImpl.jj"
-	          javacchome="${javacc.home}"
-	          outputdirectory="src/com/dawidweiss/carrot/util/tokenizer/parser/javacc"/>
-    </target>
-
 	<target name="jflex">
 		<!-- JFlex task definition -->
 		<taskdef classname="JFlex.anttask.JFlexTask" name="jflex">
