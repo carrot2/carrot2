@@ -13,6 +13,7 @@ package com.stachoodev.carrot.local.benchmark;
 import java.io.*;
 import java.util.*;
 
+import com.chilang.carrot.filter.cluster.local.*;
 import com.dawidweiss.carrot.core.local.*;
 import com.dawidweiss.carrot.core.local.profiling.*;
 import com.dawidweiss.carrot.filter.langguesser.*;
@@ -100,6 +101,12 @@ public class SearchResultsClusteringBenchmark
      */
     private void addProcesses(LocalController localController) throws Exception
     {
+        // ODP -> RoughKMeans -> Output
+        LocalProcessBase roughKMeans = new LocalProcessBase("input.odp",
+            "output.cluster-consumer", new String []
+            { "filter.rough-k-means" }, "ODP -> RoughKMeans", "");
+        localController.addProcess("rough-k-means", roughKMeans);
+
         // ODP -> Guesser -> STC -> Output
         LocalProcessBase stc = new LocalProcessBase("input.odp",
             "output.cluster-consumer", new String []
@@ -264,6 +271,10 @@ public class SearchResultsClusteringBenchmark
             public LocalComponent getInstance()
             {
                 Map parameters = new HashMap();
+                NonnegativeMatrixFactorizationEDFactory matrixFactorizationFactory = new NonnegativeMatrixFactorizationEDFactory();
+                matrixFactorizationFactory.setK(15);
+                parameters.put(Lingo.PARAMETER_MATRIX_FACTORIZATION_FACTORY,
+                    matrixFactorizationFactory);
                 parameters.put(Lingo.PARAMETER_QUALITY_LEVEL, new Integer(3));
                 return new LingoLocalFilterComponent(parameters);
             }
@@ -279,7 +290,7 @@ public class SearchResultsClusteringBenchmark
                 Map parameters = new HashMap();
                 LocalNonnegativeMatrixFactorizationFactory matrixFactorizationFactory = new LocalNonnegativeMatrixFactorizationFactory();
                 KMeansSeedingStrategyFactory seeding = new KMeansSeedingStrategyFactory();
-                seeding.setMaxIterations(5);
+                seeding.setMaxIterations(3);
                 matrixFactorizationFactory.setSeedingFactory(seeding);
                 parameters.put(Lingo.PARAMETER_MATRIX_FACTORIZATION_FACTORY,
                     matrixFactorizationFactory);
@@ -298,7 +309,7 @@ public class SearchResultsClusteringBenchmark
                 Map parameters = new HashMap();
                 LocalNonnegativeMatrixFactorizationFactory matrixFactorizationFactory = new LocalNonnegativeMatrixFactorizationFactory();
                 KMeansSeedingStrategyFactory seeding = new KMeansSeedingStrategyFactory();
-                seeding.setMaxIterations(8);
+                seeding.setMaxIterations(3);
                 matrixFactorizationFactory.setSeedingFactory(seeding);
                 parameters.put(Lingo.PARAMETER_MATRIX_FACTORIZATION_FACTORY,
                     matrixFactorizationFactory);
@@ -388,6 +399,17 @@ public class SearchResultsClusteringBenchmark
         };
         localController
             .addLocalComponentFactory("filter.stc", stcFilterFactory);
+
+        // Rough KMeans clustering filter component
+        LocalComponentFactory roughKMeansFilterFactory = new LocalComponentFactoryBase()
+        {
+            public LocalComponent getInstance()
+            {
+                return new RoughKMeansLocalFilterComponent();
+            }
+        };
+        localController.addLocalComponentFactory("filter.rough-k-means",
+            roughKMeansFilterFactory);
 
         // Cluster consumer output component
         LocalComponentFactory clusterConsumerOutputFactory = new LocalComponentFactoryBase()
