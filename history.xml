@@ -8,6 +8,15 @@
 
 <history>
     <changelist>
+        <date>2004-02-04</date>
+        <committer>dawid</committer>
+        <change component="global" type="new">
+        Added Nutch input adapter. Snippet generation is not
+        working properly (because of Nutch's API limitations).
+        </change>
+    </changelist>
+
+    <changelist>
         <date>2004-01-19</date>
         <committer>dawid</committer>
         <change component="carrot2.controller.carrot2-web" type="bugfix">
