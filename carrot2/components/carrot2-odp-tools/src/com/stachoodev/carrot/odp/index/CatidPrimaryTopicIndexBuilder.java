@@ -13,7 +13,9 @@ import javax.xml.parsers.*;
 import org.xml.sax.*;
 import org.xml.sax.helpers.*;
 
+import com.dawidweiss.carrot.util.common.*;
 import com.stachoodev.carrot.odp.*;
+import com.stachoodev.util.common.*;
 
 /**
  * Builds a {@link CatidPrimaryTopicIndexBuilder}based on the ODP Topic's
@@ -36,8 +38,17 @@ import com.stachoodev.carrot.odp.*;
 public class CatidPrimaryTopicIndexBuilder extends DefaultHandler implements
     PrimaryTopicIndexBuilder, ObservableTopicIndexBuilder
 {
-    /** Maximum depth of file system directory structure */
-    private int maxDepth;
+    /** Stores properties of this indexer */
+    private PropertyHelper propertyHelper;
+
+    /**
+     * A property that determines the maximum depth of the undrlying physical
+     * directory structure created for this index. Values of this property must
+     * be of type {@link Integer}.
+     */
+    public static final String PROPERTY_MAX_DEPTH = "maxdepth";
+
+    /** Default maximum depth */
     private static final int DEFAULT_MAX_DEPTH = 6;
 
     /** Topic serializer */
@@ -80,9 +91,9 @@ public class CatidPrimaryTopicIndexBuilder extends DefaultHandler implements
      */
     public CatidPrimaryTopicIndexBuilder()
     {
-        this.maxDepth = DEFAULT_MAX_DEPTH;
         this.topicSerializer = ODPIndex.getTopicSerializer();
         this.topicIndexBuilderListeners = new ArrayList();
+        this.propertyHelper = new PropertyHelper();
     }
 
     /*
@@ -94,9 +105,13 @@ public class CatidPrimaryTopicIndexBuilder extends DefaultHandler implements
         String indexDataLocation) throws IOException
     {
         this.dataLocationPath = indexDataLocation;
+
+        // Reset fields
         indexEntries = new ArrayList();
         splitList = new ArrayList();
-
+        currentTopic = null;
+        currentExternalPage = null;
+        stringBuffer = null;
         pathElements = new HashMap();
         maxPathElementCode = 0;
 
@@ -130,9 +145,11 @@ public class CatidPrimaryTopicIndexBuilder extends DefaultHandler implements
     {
         String id = topic.getId();
 
+        int maxDepth = getIntProperty(PROPERTY_MAX_DEPTH, DEFAULT_MAX_DEPTH);
+
         // Build the file system path
         StringBuffer path = new StringBuffer();
-        split(id, '/', splitList);
+        StringUtils.split(id, '/', splitList);
 
         int i = 0;
         for (Iterator iter = splitList.iterator(); iter.hasNext()
@@ -167,28 +184,6 @@ public class CatidPrimaryTopicIndexBuilder extends DefaultHandler implements
 
         // Fire the event
         fireTopicIndexed();
-    }
-
-    /**
-     * @param string
-     * @param delimiter
-     * @param substrings
-     */
-    private void split(String string, char delimiter, List substrings)
-    {
-        substrings.clear();
-
-        int i = 0;
-        int j = string.indexOf(delimiter);
-
-        while (j >= 0)
-        {
-            substrings.add(string.substring(i, j));
-            i = j + 1;
-            j = string.indexOf(delimiter, i);
-        }
-
-        substrings.add(string.substring(i));
     }
 
     /*
@@ -371,26 +366,6 @@ public class CatidPrimaryTopicIndexBuilder extends DefaultHandler implements
     }
 
     /**
-     * Returns the maximum depth of file system directory structure.
-     * 
-     * @return
-     */
-    public int getMaxDepth()
-    {
-        return maxDepth;
-    }
-
-    /**
-     * Sets the maximum depth of file system directory structure.
-     * 
-     * @param maxDepth
-     */
-    public void setMaxDepth(int maxDepth)
-    {
-        this.maxDepth = maxDepth;
-    }
-
-    /**
      * Sets this CatidPrimaryTopicIndexBuilder's <code>topicSerializer</code>.
      * 
      * @param topicSerializer
@@ -400,7 +375,9 @@ public class CatidPrimaryTopicIndexBuilder extends DefaultHandler implements
         this.topicSerializer = topicSerializer;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see com.stachoodev.carrot.odp.index.ObservableTopicIndexBuilder#addTopicIndexBuilderListener(com.stachoodev.carrot.odp.index.TopicIndexBuilderListener)
      */
     public void addTopicIndexBuilderListener(TopicIndexBuilderListener listener)
@@ -408,7 +385,9 @@ public class CatidPrimaryTopicIndexBuilder extends DefaultHandler implements
         topicIndexBuilderListeners.add(listener);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see com.stachoodev.carrot.odp.index.ObservableTopicIndexBuilder#removeTopicIndexBuilderListener(com.stachoodev.carrot.odp.index.TopicIndexBuilderListener)
      */
     public void removeTopicIndexBuilderListener(
@@ -430,5 +409,68 @@ public class CatidPrimaryTopicIndexBuilder extends DefaultHandler implements
                 .next();
             listener.topicIndexed();
         }
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.stachoodev.util.common.PropertyProvider#getDoubleProperty(java.lang.String)
+     */
+    public double getDoubleProperty(String propertyName, double defaultValue)
+    {
+        return propertyHelper.getDoubleProperty(propertyName, defaultValue);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.stachoodev.util.common.PropertyProvider#getIntProperty(java.lang.String)
+     */
+    public int getIntProperty(String propertyName, int defaultValue)
+    {
+        return propertyHelper.getIntProperty(propertyName, defaultValue);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.stachoodev.util.common.PropertyProvider#getProperty(java.lang.String)
+     */
+    public Object getProperty(String propertyName)
+    {
+        return propertyHelper.getProperty(propertyName);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.stachoodev.util.common.PropertyProvider#setDoubleProperty(java.lang.String,
+     *      double)
+     */
+    public Object setDoubleProperty(String propertyName, double value)
+    {
+        return propertyHelper.setDoubleProperty(propertyName, value);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.stachoodev.util.common.PropertyProvider#setIntProperty(java.lang.String,
+     *      int)
+     */
+    public Object setIntProperty(String propertyName, int value)
+    {
+        return propertyHelper.setIntProperty(propertyName, value);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.stachoodev.util.common.PropertyProvider#setProperty(java.lang.String,
+     *      java.lang.Object)
+     */
+    public Object setProperty(String propertyName, Object property)
+    {
+        return propertyHelper.setProperty(propertyName, property);
     }
 }

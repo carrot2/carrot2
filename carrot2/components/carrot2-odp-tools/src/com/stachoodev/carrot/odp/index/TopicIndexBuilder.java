@@ -3,12 +3,14 @@
  */
 package com.stachoodev.carrot.odp.index;
 
+import com.stachoodev.util.common.*;
+
 /**
  * Defines the interface of an ODP topic index builder.
  * 
  * @author stachoo
  */
-public interface TopicIndexBuilder
+public interface TopicIndexBuilder extends PropertyProvider
 {
     /**
      * Creates a {@link TopicIndex}based on given

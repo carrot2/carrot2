@@ -7,12 +7,14 @@ package com.stachoodev.carrot.odp.index;
 
 import java.io.*;
 
+import com.stachoodev.util.common.*;
+
 /**
  * Defines the interface of an ODP primary topic index.
  * 
  * @author stachoo
  */
-public interface PrimaryTopicIndexBuilder
+public interface PrimaryTopicIndexBuilder extends PropertyProvider
 {
     /**
      * Creates a {@link PrimaryTopicIndex}for given ODP RDF content data. This
