@@ -1,3 +1,7 @@
+www
+pl
+ul
+tel
 hab
 prof
 inż
