@@ -10,8 +10,6 @@
  */
 package com.dawidweiss.carrot.core.local.linguistic.tokens;
 
-import java.util.*;
-
 import com.stachoodev.util.common.*;
 
 /**
@@ -48,6 +46,17 @@ public class ExtendedToken implements Token, PropertyProvider
      */
     public static final String PROPERTY_ORIGINAL_TOKENS = "originalTokens";
 
+    /** */
+    public static final String PROPERTY_MOST_FREQUENT_ORIGINAL_TOKEN = "mfot";
+
+    /**
+     *  
+     */
+    public ExtendedToken()
+    {
+        this(null);
+    }
+
     /**
      * Creates an ExtendedToken wrapped around the provided
      * {@link com.dawidweiss.carrot.core.local.linguistic.tokens.Token}.
@@ -72,7 +81,16 @@ public class ExtendedToken implements Token, PropertyProvider
     {
         return token;
     }
-    
+
+    /**
+     * @param token
+     */
+    public void setToken(Token token)
+    {
+        this.token = token;
+        propertyHelper.clear();
+    }
+
     /**
      * @return
      */
@@ -81,16 +99,10 @@ public class ExtendedToken implements Token, PropertyProvider
         ExtendedTokenSequence extendedTokenSequence = asShallowTokenSequence(this);
 
         // Convert original tokens as well
-        List originalTokens = (List) getProperty(PROPERTY_ORIGINAL_TOKENS);
-        List originalTokenSequences = new ArrayList();
-        for (Iterator tokens = originalTokens.iterator(); tokens.hasNext();)
-        {
-            ExtendedToken originalToken = (ExtendedToken) tokens.next();
-            originalTokenSequences.add(asShallowTokenSequence(originalToken));
-        }
-        extendedTokenSequence.setProperty(
-            ExtendedTokenSequence.PROPERTY_ORIGINAL_TOKEN_SEQUENCES,
-            originalTokenSequences);
+        extendedTokenSequence
+            .setProperty(
+                ExtendedTokenSequence.PROPERTY_MOST_FREQUENT_ORIGINAL_TOKEN_SEQUENCE,
+                asShallowTokenSequence((Token) getProperty(PROPERTY_MOST_FREQUENT_ORIGINAL_TOKEN)));
 
         return extendedTokenSequence;
     }
@@ -101,8 +113,7 @@ public class ExtendedToken implements Token, PropertyProvider
      * @param extendedToken
      * @return
      */
-    private ExtendedTokenSequence asShallowTokenSequence(
-        ExtendedToken extendedToken)
+    private ExtendedTokenSequence asShallowTokenSequence(Token extendedToken)
     {
         ExtendedTokenSequence extendedTokenSequence = new ExtendedTokenSequence(
             new MutableTokenSequence(extendedToken));
@@ -202,7 +213,15 @@ public class ExtendedToken implements Token, PropertyProvider
      */
     public String toString()
     {
-        return token.toString();
+        if (propertyHelper.getProperty(PROPERTY_MOST_FREQUENT_ORIGINAL_TOKEN) != null)
+        {
+            return propertyHelper.getProperty(
+                PROPERTY_MOST_FREQUENT_ORIGINAL_TOKEN).toString();
+        }
+        else
+        {
+            return token.toString();
+        }
     }
 
     /*
@@ -228,8 +247,10 @@ public class ExtendedToken implements Token, PropertyProvider
         }
         else
         {
-            return token.equals(((ExtendedToken) arg).token)
-                && propertyHelper.equals(((ExtendedToken) arg).propertyHelper);
+            boolean c1 = token.equals(((ExtendedToken) arg).token);
+            boolean c2 = propertyHelper
+                .equals(((ExtendedToken) arg).propertyHelper);
+            return c1 && c2;
 
         }
     }
