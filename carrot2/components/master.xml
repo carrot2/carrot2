@@ -26,7 +26,7 @@
     Set this property to any other value to collect separate carrot2 dependencies
     indstead of a single JAR file.
     -->
-  <property name="single.jar"       value="true" />
+  <property name="single.jar"       value="false" />
 
   <!-- ## global properties ### -->
 
