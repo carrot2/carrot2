@@ -1,0 +1,35 @@
+* When light-speed implementation is needed, TDMatrixBuildingStrategy, 
+  FeatureSelectionStrategy and PhraseExtractionStrategy can be implemented in 
+  one class, reusing common information created during each of the processes.
+  
+* FeatureSelectionStrategy interface is meant to return single words found in 
+  the input. In case more complex features are needed, a similar interface, 
+  called e.g. FeatureExtractionStrategy can be created.
+  
+* Multilingual implementations of the FeatureSelectionStrategy,
+  TdMatrixBuildingStrategy and PhraseExtractionStrategy interfaces are possible, 
+  but delayed for the time being:
+  
+  	- FeatureSelectionStrategy: in the frequency information include only 
+  	  those occurrences that are not stop-words in the context of their enclosing 
+  	  document (e.g. treat the word 'ale' as a stop word in Polish documents, 
+  	  but not in English ones). Thus, it is possible that a word that is a 
+  	  stop word in one language will be included on the list because it is a 
+  	  frequent non-stop-word in one or more other languages.
+  	  
+  	- TdMatrixBuildingStrategy: for each document mark occurrences of terms that
+  	  are non-stop-words in the document's language. E.g. for a Polish document
+  	  the word 'ale' will have a zero weight, but for an English document 
+  	  containing that word the corresponding weight will not be zero.
+  	  
+  	- PhraseExtractionStrategy: discover phrases separately for each language to
+  	  avoid sequences beginning/ending in stopwords. Merge the lists afterwards
+  	  to aggregate common 'international' phrases.
+  	  
+* Stemming of Phrases: 
+	- define classes of equivalence among term codes based on stemming information
+	- return a group of equivalent phrases with one aggregated frequency
+
+* Improved language guessing
+	- for extremely short strings it seems that the stop word method would 
+	  perfom better. In case of draws - let the trigram method decide.

@@ -1,0 +1,182 @@
+/*
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
+ */
+package com.stachoodev.carrot.filter.normalizer;
+
+import junit.framework.*;
+
+import com.dawidweiss.carrot.core.local.clustering.*;
+import com.dawidweiss.carrot.util.tokenizer.*;
+
+/**
+ * Unit tests for the
+ * {@link com.stachoodev.carrot.filter.normalizer.CaseNormalizer}class.
+ * 
+ * @author Stanislaw Osinski
+ * @version $Revision$
+ */
+public class CaseNormalizerTest extends TestCase
+{
+    /** A helper tokenized document factory */
+    private SnippetTokenizer snippetTokenizer;
+
+    /** The case normalizer under tests */
+    private CaseNormalizer caseNormalizer;
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see junit.framework.TestCase#setUp()
+     */
+    protected void setUp() throws Exception
+    {
+        super.setUp();
+        snippetTokenizer = new SnippetTokenizer();
+        caseNormalizer = new CaseNormalizer();
+    }
+
+    /**
+     *  
+     */
+    public void testCapitalizationEn()
+    {
+        TokenizedDocument document = snippetTokenizer
+            .tokenize(new RawDocumentSnippet("A simple title",
+                "a Simple snippet Of THE document", "en"));
+        TokenizedDocument normalizedDocument = snippetTokenizer
+            .tokenize(new RawDocumentSnippet("a Simple Title",
+                "a Simple Snippet of the Document", "en"));
+
+        // Clear raw document references, which would break equality
+        document.setProperty(TokenizedDocument.PROPERTY_RAW_DOCUMENT, null);
+        normalizedDocument.setProperty(TokenizedDocument.PROPERTY_RAW_DOCUMENT,
+            null);
+
+        caseNormalizer.addDocument(document);
+        caseNormalizer.getNormalizedDocuments();
+        assertEquals("Correct capitalization", normalizedDocument, document);
+    }
+
+    /**
+     *  
+     */
+    public void testCapitalizationPl()
+    {
+        TokenizedDocument document = snippetTokenizer
+            .tokenize(new RawDocumentSnippet("Prosty tytuł",
+                "Ale mały wycineczek Z dokumentu", "pl"));
+        TokenizedDocument normalizedDocument = snippetTokenizer
+            .tokenize(new RawDocumentSnippet("Prosty Tytuł",
+                "ale Mały Wycineczek z Dokumentu", "pl"));
+
+        // Clear raw document references, which would break equality
+        document.setProperty(TokenizedDocument.PROPERTY_RAW_DOCUMENT, null);
+        normalizedDocument.setProperty(TokenizedDocument.PROPERTY_RAW_DOCUMENT,
+            null);
+
+        caseNormalizer.addDocument(document);
+        caseNormalizer.getNormalizedDocuments();
+        assertEquals("Correct capitalization", normalizedDocument, document);
+    }
+
+    /**
+     *  
+     */
+    public void testCapitalizationEnPl()
+    {
+        TokenizedDocument document01 = snippetTokenizer
+            .tokenize(new RawDocumentSnippet("Prosty on tytuł",
+                "Ale mały wycineczek Z dokumentu for", "pl"));
+        TokenizedDocument document02 = snippetTokenizer
+            .tokenize(new RawDocumentSnippet("Title",
+                "John likes ale on rocks for", "en"));
+        TokenizedDocument normalizedDocument01 = snippetTokenizer
+            .tokenize(new RawDocumentSnippet("Prosty on Tytuł",
+                "ale Mały Wycineczek z Dokumentu For", "pl"));
+        TokenizedDocument normalizedDocument02 = snippetTokenizer
+            .tokenize(new RawDocumentSnippet("Title",
+                "John Likes Ale on Rocks for", "en"));
+
+        // Clear raw document references, which would break equality
+        document01.setProperty(TokenizedDocument.PROPERTY_RAW_DOCUMENT, null);
+        normalizedDocument01.setProperty(
+            TokenizedDocument.PROPERTY_RAW_DOCUMENT, null);
+        document02.setProperty(TokenizedDocument.PROPERTY_RAW_DOCUMENT, null);
+        normalizedDocument02.setProperty(
+            TokenizedDocument.PROPERTY_RAW_DOCUMENT, null);
+
+        caseNormalizer.addDocument(document01);
+        caseNormalizer.addDocument(document02);
+        caseNormalizer.getNormalizedDocuments();
+        assertEquals("Correct capitalization", normalizedDocument01, document01);
+        assertEquals("Correct capitalization", normalizedDocument02, document02);
+    }
+
+    /**
+     *  
+     */
+    public void testAcronyms()
+    {
+        TokenizedDocument document = snippetTokenizer
+            .tokenize(new RawDocumentSnippet("MySQL database",
+                "MySQL query . on mysql website", "en"));
+        TokenizedDocument normalizedDocument = snippetTokenizer
+            .tokenize(new RawDocumentSnippet("MySQL Database",
+                "MySQL Query . on MySQL Website", "en"));
+
+        // Clear raw document references, which would break equality
+        document.setProperty(TokenizedDocument.PROPERTY_RAW_DOCUMENT, null);
+        normalizedDocument.setProperty(TokenizedDocument.PROPERTY_RAW_DOCUMENT,
+            null);
+
+        caseNormalizer.addDocument(document);
+        caseNormalizer.getNormalizedDocuments();
+        assertEquals("Correct capitalization", normalizedDocument, document);
+    }
+
+    /**
+     *  
+     */
+    public void testRepeatedCalls()
+    {
+        TokenizedDocument document01 = snippetTokenizer
+            .tokenize(new RawDocumentSnippet("Prosty on tytuł",
+                "Ale mały wycineczek Z dokumentu", "pl"));
+        TokenizedDocument normalizedDocument01 = snippetTokenizer
+            .tokenize(new RawDocumentSnippet("Prosty on Tytuł",
+                "ale Mały Wycineczek z Dokumentu", "pl"));
+
+        // Clear raw document references, which would break equality
+        document01.setProperty(TokenizedDocument.PROPERTY_RAW_DOCUMENT, null);
+        normalizedDocument01.setProperty(
+            TokenizedDocument.PROPERTY_RAW_DOCUMENT, null);
+
+        caseNormalizer.addDocument(document01);
+        caseNormalizer.getNormalizedDocuments();
+        assertEquals("Correct capitalization", normalizedDocument01, document01);
+        caseNormalizer.clear();
+
+        TokenizedDocument document02 = snippetTokenizer
+            .tokenize(new RawDocumentSnippet("Title",
+                "John likes ale on rocks", "en"));
+        TokenizedDocument normalizedDocument02 = snippetTokenizer
+            .tokenize(new RawDocumentSnippet("Title",
+                "John Likes Ale on Rocks", "en"));
+
+        // Clear raw document references, which would break equality
+        document02.setProperty(TokenizedDocument.PROPERTY_RAW_DOCUMENT, null);
+        normalizedDocument02.setProperty(
+            TokenizedDocument.PROPERTY_RAW_DOCUMENT, null);
+
+        caseNormalizer.addDocument(document02);
+        caseNormalizer.getNormalizedDocuments();
+        assertEquals("Correct capitalization", normalizedDocument02, document02);
+    }
+}
