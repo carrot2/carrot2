@@ -3,25 +3,26 @@
  */
 package com.dawidweiss.carrot.core.local.clustering;
 
+import com.stachoodev.util.common.*;
+
 /**
  * @author stachoo
  */
-public class RawDocumentSnippet extends RawDocumentBase
+public class RawDocumentSnippet extends RawDocumentBase implements Cloneable
 {
     /** Document title */
     private String title;
 
-    /** Document snippet */
-    private String snippet;
-
     /**
+     * Creates a new RawDocumentSnippet with given title and description.
+     * 
      * @param title
      * @param snippet
      */
     public RawDocumentSnippet(String title, String snippet)
     {
         this.title = title;
-        this.snippet = snippet;
+        setProperty(PROPERTY_SNIPPET, snippet);
     }
 
     /**
@@ -67,20 +68,80 @@ public class RawDocumentSnippet extends RawDocumentBase
     /*
      * (non-Javadoc)
      * 
-     * @see com.dawidweiss.carrot.core.local.clustering.RawDocument#getSnippet()
+     * @see java.lang.Object#toString()
      */
-    public String getSnippet()
+    public String toString()
     {
-        return snippet;
+        return "[" + title + "] " + getSnippet().toString();
     }
 
     /*
      * (non-Javadoc)
      * 
-     * @see java.lang.Object#toString()
+     * @see java.lang.Object#equals(java.lang.Object)
      */
-    public String toString()
+    public boolean equals(Object obj)
     {
-        return "[" + title + "] " + snippet;
+        if (obj == this)
+        {
+            return true;
+        }
+
+        if (obj == null)
+        {
+            return false;
+        }
+
+        if (obj.getClass() != getClass())
+        {
+            return false;
+        }
+
+        RawDocumentSnippet otherSnippet = (RawDocumentSnippet) obj;
+        boolean result = true;
+        if (title != null)
+        {
+            result = result && title.equals(otherSnippet.title);
+        }
+        if (otherSnippet != null)
+        {
+            result = result && getSnippet().equals(otherSnippet.getSnippet());
+        }
+
+        return result && propertyHelper.equals(otherSnippet.propertyHelper);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#hashCode()
+     */
+    public int hashCode()
+    {
+        // Try with the title first
+        if (title != null)
+        {
+            return title.hashCode();
+        }
+
+        // Snippet?
+        if (getSnippet() != null)
+        {
+            return getSnippet().hashCode();
+        }
+
+        return propertyHelper.hashCode();
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#clone()
+     */
+    public Object clone() throws CloneNotSupportedException
+    {
+        RawDocumentSnippet obj = new RawDocumentSnippet(title, null);
+        obj.propertyHelper = (PropertyHelper) propertyHelper.clone();
+        return obj;
     }
 }

@@ -30,7 +30,7 @@ public abstract class RawDocumentBase implements RawDocument, PropertyProvider
     {
         propertyHelper = new PropertyHelper();
     }
-    
+
     /*
      * (non-Javadoc)
      * 
@@ -51,7 +51,9 @@ public abstract class RawDocumentBase implements RawDocument, PropertyProvider
         return (String) propertyHelper.getProperty(PROPERTY_URL);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see com.dawidweiss.carrot.util.common.PropertyProvider#getProperty(java.lang.String)
      */
     public Object getProperty(String name)
@@ -59,8 +61,11 @@ public abstract class RawDocumentBase implements RawDocument, PropertyProvider
         return propertyHelper.getProperty(name);
     }
 
-    /* (non-Javadoc)
-     * @see com.dawidweiss.carrot.util.common.PropertyProvider#setProperty(java.lang.String, java.lang.Object)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.dawidweiss.carrot.util.common.PropertyProvider#setProperty(java.lang.String,
+     *      java.lang.Object)
      */
     public Object setProperty(String propertyName, Object value)
     {
@@ -72,9 +77,9 @@ public abstract class RawDocumentBase implements RawDocument, PropertyProvider
      * 
      * @see com.dawidweiss.carrot.util.common.PropertyProvider#getDoubleProperty(java.lang.String)
      */
-    public double getDoubleProperty(String propertyName)
+    public double getDoubleProperty(String propertyName, double defaultValue)
     {
-        return propertyHelper.getDoubleProperty(propertyName);
+        return propertyHelper.getDoubleProperty(propertyName,  defaultValue);
     }
 
     /*
@@ -82,9 +87,9 @@ public abstract class RawDocumentBase implements RawDocument, PropertyProvider
      * 
      * @see com.dawidweiss.carrot.util.common.PropertyProvider#getIntProperty(java.lang.String)
      */
-    public int getIntProperty(String propertyName)
+    public int getIntProperty(String propertyName, int defaultValue)
     {
-        return propertyHelper.getIntProperty(propertyName);
+        return propertyHelper.getIntProperty(propertyName, defaultValue);
     }
 
     /*
