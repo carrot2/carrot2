@@ -151,7 +151,6 @@ TESTING: @{component.path}
 
     <component-apply component.path="components/carrot2-filter-case-normalizer" />
     <component-apply component.path="components/carrot2-filter-lingo" />
-    <component-apply component.path="components/carrot2-filter-lingo-reloaded" />
     <component-apply component.path="components/carrot2-filter-ahc" />
     <component-apply component.path="components/carrot2-filter-fuzzyants" />
     <component-apply component.path="components/carrot2-filter-stc" />

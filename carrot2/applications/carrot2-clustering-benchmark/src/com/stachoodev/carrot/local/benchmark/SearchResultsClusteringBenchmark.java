@@ -23,7 +23,6 @@ import com.dawidweiss.carrot.filter.stc.local.*;
 import com.dawidweiss.carrot.input.localcache.*;
 import com.dawidweiss.carrot.util.tokenizer.*;
 import com.dawidweiss.carrot.util.tokenizer.languages.*;
-import com.stachoodev.carrot.filter.lingo.algorithm.*;
 import com.stachoodev.carrot.filter.lingo.local.*;
 import com.stachoodev.carrot.filter.normalizer.local.*;
 import com.stachoodev.carrot.input.odp.local.*;
@@ -102,17 +101,11 @@ public class SearchResultsClusteringBenchmark
 //                "outlier-level-3",
 //                "catid: 209353 592083 327 196267 240856 27078 303 27074 283016 27075 1139293 27073 1244841");
 
-        querySet.add(ODPQuery.createLocalCache("file:applications/carrot2-clustering-benchmark/etc/query-cache/6f67758f7770b321", "politechnika poznańska"));
-        querySet.add(ODPQuery.createLocalCache("file:applications/carrot2-clustering-benchmark/etc/query-cache/3b20bcbe3147a5d8", "ronnie snooker 100snip"));
-        querySet.add(ODPQuery.createLocalCache("file:applications/carrot2-clustering-benchmark/etc/query-cache/7363b71742a5f026", "ronnie snooker 200snip"));
-        
-        querySet.add(ODPQuery.createLocalCache("file:applications/carrot2-clustering-benchmark/etc/query-cache/9539b3f9f86226db", "sheffield 50snip"));
-        querySet.add(ODPQuery.createLocalCache("file:applications/carrot2-clustering-benchmark/etc/query-cache/e15c0492391c553e", "sheffield 100snip"));
-        querySet.add(ODPQuery.createLocalCache("file:applications/carrot2-clustering-benchmark/etc/query-cache/e236a2ef413a7722", "sheffield 150snip"));
-        querySet.add(ODPQuery.createLocalCache("file:applications/carrot2-clustering-benchmark/etc/query-cache/47c2e5af97110a75", "sheffield 200snip"));
-        querySet.add(ODPQuery.createLocalCache("file:applications/carrot2-clustering-benchmark/etc/query-cache/3b1e1d61dee9b46", "data mining 200snip"));
-        querySet.add(ODPQuery.createLocalCache("file:applications/carrot2-clustering-benchmark/etc/query-cache/608f996e428748b1", "carrot2 200snip"));
-        querySet.add(ODPQuery.createLocalCache("file:applications/carrot2-clustering-benchmark/etc/query-cache/3751e4974ee9c29d", "part of speech tagging java 200snip"));
+        querySet.add(ODPQuery.createLocalCache("file:etc/query-cache/9539b3f9f86226db", "sheffield 50snip"));
+        querySet.add(ODPQuery.createLocalCache("file:etc/query-cache/e15c0492391c553e", "sheffield 100snip"));
+        querySet.add(ODPQuery.createLocalCache("file:etc/query-cache/e236a2ef413a7722", "sheffield 150snip"));
+        querySet.add(ODPQuery.createLocalCache("file:etc/query-cache/47c2e5af97110a75", "sheffield 200snip"));
+        querySet.add(ODPQuery.createLocalCache("file:etc/query-cache/3b1e1d61dee9b46", "data mining 200snip"));
         querySet.add(ODPQuery.createLocalCache("data mining"));
         querySet.add(ODPQuery.createLocalCache("clustering"));
         querySet.add(ODPQuery.createLocalCache("george bush"));
@@ -132,10 +125,6 @@ public class SearchResultsClusteringBenchmark
         querySet.add(ODPQuery.createLocalCache("IEEE"));
         querySet.add(ODPQuery.createLocalCache("sheffield"));
         querySet.add(ODPQuery.createLocalCache("snooker"));
-        querySet.add(ODPQuery.createLocalCache("carrot2"));
-        querySet.add(ODPQuery.createLocalCache("search results clustering"));
-        querySet.add(ODPQuery.createLocalCache("search results clustering algorithm"));
-        
       
 //        // Balanced size, separation level 1
 //        querySet.add(ODPQuery.createSeparationTest(1, true, "catid: 365639 287192"));
@@ -367,11 +356,10 @@ public class SearchResultsClusteringBenchmark
             "input.local-cache",    
             "output.cluster-consumer",
             new String []
-            { "filter.language-guesser", "filter.tokenizer",
-             "filter.case-normalizer", "filter.lingo-nmf-3" },
-            "ODP -> Language Guesser -> Tokenizer -> Case Normalizer -> LingoNMF-3",
+            { "filter.oldLingo" },
+            "ODP -> Old Lingo",
             "");
-        localController.addProcess("lingo-nmf-3-cache", lingoNMF3);
+        localController.addProcess("lingo", lingoNMF3);
 
 //        // ODP -> Guesser -> Tokenizer -> LingoNMF -> Output
 //        LocalProcessBase lingoNMFKL3 = new LocalProcessBase(
@@ -471,7 +459,7 @@ public class SearchResultsClusteringBenchmark
         {
             private CachedQueriesStore store = new CachedQueriesStore(
                 new File(
-                    "D:\\Dev\\Eclipse\\workspace\\carrot2\\applications\\carrot2-clustering-benchmark\\etc\\query-cache"));
+                    "etc\\query-cache"));
             
             public LocalComponent getInstance()
             {
@@ -486,7 +474,7 @@ public class SearchResultsClusteringBenchmark
             public LocalComponent getInstance()
             {
                 return new RawDocumentLanguageDetection(LanguageGuesserFactory
-                    .getLanguageGuesser(AllKnownLanguages.getLanguageCodes()));
+                    .getLanguageGuesser(Arrays.asList(AllKnownLanguages.getLanguageCodes())));
             }
         };
         localController.addLocalComponentFactory("filter.language-guesser",
@@ -540,22 +528,17 @@ public class SearchResultsClusteringBenchmark
 //        localController.addLocalComponentFactory("filter.lingo-nmf-2",
 //            lingoNMF2FilterFactory);
 
-        // Lingo NMF filter component
-        LocalComponentFactory lingoNMF3FilterFactory = new LocalComponentFactoryBase()
+        // old Lingo filter component
+        LocalComponentFactory oldLingoFilterFactory = new LocalComponentFactoryBase()
         {
             public LocalComponent getInstance()
             {
                 Map parameters = new HashMap();
-//                NonnegativeMatrixFactorizationEDFactory matrixFactorizationFactory = new NonnegativeMatrixFactorizationEDFactory();
-//                matrixFactorizationFactory.setK(20);
-//                parameters.put(LingoWeb.PARAMETER_MATRIX_FACTORIZATION_FACTORY,
-//                    matrixFactorizationFactory);
-//                parameters.put(LingoWeb.PARAMETER_QUALITY_LEVEL, new Integer(3));
-                return new LingoWebLocalFilterComponent(parameters);
+                return new LingoLocalFilterComponent();
             }
         };
-        localController.addLocalComponentFactory("filter.lingo-nmf-3",
-            lingoNMF3FilterFactory);
+        localController.addLocalComponentFactory("filter.oldLingo",
+            oldLingoFilterFactory);
 
 //        // Lingo NMF-KL filter component
 //        LocalComponentFactory lingoNMFKL3FilterFactory = new LocalComponentFactoryBase()
