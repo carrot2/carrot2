@@ -29,8 +29,10 @@
             componentDescriptor="deps/proj_copydeps/master/master.dep.xml"
             todir="tmp/copydeps"
             >
-			<dependencies dir="deps/proj_copydeps">
+			<dependencies>
+				<fileset dir="deps/proj_copydeps">
 				<include name="**/*.dep.xml" />
+				</fileset>
 			</dependencies>
         </copyDependencies>
         

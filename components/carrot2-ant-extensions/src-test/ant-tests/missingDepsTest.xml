@@ -23,12 +23,16 @@
 	</target>
 	
 	<target name="dotest">
-		<fileset id="dep1" dir="missingDepsTest/missingDepsTest_projb">
+		<path id="dep1">
+		<fileset dir="missingDepsTest/missingDepsTest_projb">
 			<include name="*.dep.xml" />
 		</fileset>
-		<fileset id="dep2" dir="missingDepsTest/missingDepsTest_projc">
+		</path>
+		<path id="dep2">
+		<fileset dir="missingDepsTest/missingDepsTest_projc">
 			<include name="*.dep.xml" />
 		</fileset>
+		</path>
 
 		<printDependencies componentDescriptor="missingDepsTest/missingDepsTest_proja/a.dep.xml"
 			file="tmp/dependencies.txt" property="tmp:dependencies:string">

@@ -9,17 +9,18 @@
  */
 package com.dawidweiss.carrot.ant;
 
-import org.apache.tools.ant.*;
+import java.io.File;
+import java.util.HashMap;
+import java.util.LinkedList;
+
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.types.FileSet;
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
+import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.util.FileUtils;
 
 import com.dawidweiss.carrot.ant.deps.ComponentDependency;
 import com.dawidweiss.carrot.ant.deps.ComponentDependencyUtils;
-
-import java.io.File;
-import java.util.*;
-import java.util.LinkedList;
 
 
 /**
@@ -84,12 +85,12 @@ public class BringToDate extends Task {
     }
 
     /**
-     * Crates a new fileset with a set of dependency files to scan.
+     * Crates a new path with a set of dependency files to scan.
      */
-    public FileSet createDependencies() {
-        FileSet newFileset = new FileSet();
-        dependencies.add(newFileset);
-        return newFileset;
+    public Path createDependencies() {
+        Path newPath = new Path(getProject());
+        dependencies.add(newPath);
+        return newPath;
     }
 
     /**
@@ -122,6 +123,7 @@ public class BringToDate extends Task {
     public void execute() throws BuildException {
         
         checkParameters();
+        this.dependencies = Utils.convertPathDependencies(getProject(), dependencies);
 
         FileUtils futils = FileUtils.newFileUtils();
         try {

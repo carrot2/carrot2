@@ -32,5 +32,15 @@
 			<property name="profile" value="profiled" />
 		</ant>
 	</target>
+	
+	<target name="test3" depends="prepare">
+		<description>
+			Tests the ability to provide non-existing paths
+			and paths out of project scope for *.dep.xml files.
+		</description>
+
+		<ant antfile="deps/proj_i/build.xml" inheritall="false"
+				target="test" />
+	</target>	
     
 </project>

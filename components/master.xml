@@ -28,6 +28,8 @@
   <property name="tomcat.username"  value="carrot" />
   <property name="tomcat.password"  value="" />
 
+  <property name="extra.dependencies.path" value="" />
+
   <!--
     Set this property to any other value to collect separate carrot2 dependencies
     indstead of a single JAR file.
@@ -87,11 +89,20 @@
   </target>
   
   <target name="check.bootstrap">
+    <available classname="org.apache.xml.resolver.tools.CatalogResolver" property="resolver.available" />
+    <fail unless="resolver.available">
+#
+# URI RESOLVER NOT AVAILABLE. Please download Apache Resolver JAR and place it in
+# ANT's lib folder.
+#
+# http://xml.apache.org/commons/components/resolver/
+#
+    </fail>
+  
     <!-- Set to true if bootstrap jar is available. -->
     <condition property="tmp:bootstrap.available" value="true">
         <or>
-            <available file="${carrot2.cvs.dir}/components/carrot2-ant-extensions/tmp/dist/carrot2-ant-extensions.jar" type="file" />
-            <available file="${carrot2.cvs.dir}/components/carrot2-ant-extensions/tmp/build/carrot2-ant-extensions-tmp-bootstrap.jar" type="file" />
+            <available file="${carrot2.cvs.dir}/components/carrot2-ant-extensions/tmp/carrot2-ant-extensions.jar" type="file" />
         </or>
     </condition>
   </target>
@@ -119,20 +130,20 @@
   </target>
 
   <target name="bootstrap" depends="check.bootstrap" unless="tmp:bootstrap.available">
-    <ant target="bootstrap"
-        antfile="build.xml"
-        dir="${carrot2.cvs.dir}/components/carrot2-ant-extensions"
-        inheritall="false" />
+    <fail>
+##########################################################
+#   
+# Please run 'ant bootstrap' on the main build file first.
+#
+##########################################################
+    </fail>
   </target>
 
   <target name="custom.tasks">
     <!-- Define custom ANT tasks and types -->
     <path id="bootstrap">
-        <fileset dir="${carrot2.cvs.dir}/components/carrot2-ant-extensions/tmp/dist">
+        <fileset dir="${carrot2.cvs.dir}/components/carrot2-ant-extensions/tmp">
             <include name="*.jar" />
-        </fileset>
-        <fileset dir="${carrot2.cvs.dir}/components/carrot2-ant-extensions/tmp/build">
-            <include name="*tmp-bootstrap.jar" />
         </fileset>
     </path>
 
@@ -164,36 +175,35 @@
   <target name="_deps_uptodate" unless="no.bringing.dependencies.uptodate">
     <bringToDate componentDescriptor="${component.descriptor}" dependenciesOnly="true" profile="${profile}">
         <dependencies refid="dependencies" />
-        <dependencies refid="local.dependencies" />
     </bringToDate>
   </target>
   
   <target name="discover.classpath:autodependency" if="tmp:dep.file.available">
-    <fileset id="dependencies" dir="${carrot2.cvs.dir}">
-        <include name="lib/**/*.dep.xml" />
-        <include name="components/*/*.dep.xml" />
-        <include name="components/*/lib/*.dep.xml" />        
-
-        <include name="components-private/*/*.dep.xml" />
-        <include name="components-private/*/lib/*.dep.xml" />        
-    </fileset>
-
-    <fileset id="local.dependencies" dir="${project.dir}">
-		<include name="lib/*.dep.xml" />
-    </fileset>
+    <path id="dependencies">
+        <fileset dir="${carrot2.cvs.dir}">
+            <include name="lib/**/*.dep.xml" />
+            <include name="components/*/*.dep.xml" />
+            <include name="components/*/lib/*.dep.xml" />        
+    
+            <include name="components-private/*/*.dep.xml" />
+            <include name="components-private/*/lib/*.dep.xml" />        
+        </fileset>
+        <fileset dir="${project.dir}">
+            <include name="lib/*.dep.xml" />
+        </fileset>
+        <path path="${extra.dependencies.path}" />
+    </path>
 
 	<antcall target="_deps_uptodate" />
 
     <dependencyPath id="classpath.dependencies"
         componentDescriptor="${component.descriptor}" profile="${profile}">
         <dependencies refid="dependencies" />
-        <dependencies refid="local.dependencies" />
     </dependencyPath>
 
     <printDependencies componentDescriptor="${component.descriptor}"
                        property="string:component.dependencies" profile="${profile}">
         <dependencies refid="dependencies" />
-        <dependencies refid="local.dependencies" />
     </printDependencies>
   </target>
 
@@ -213,7 +223,6 @@
         profile="${profile}"
         todir="${libs.dir}">
         <dependencies refid="dependencies" />
-        <dependencies refid="local.dependencies" />
     </copyDependencies>
     <echo message="done." />
     

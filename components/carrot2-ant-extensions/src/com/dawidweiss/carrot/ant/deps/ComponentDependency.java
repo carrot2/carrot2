@@ -16,6 +16,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
+import org.apache.xml.resolver.tools.CatalogResolver;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -79,6 +80,11 @@ public class ComponentDependency {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder;
             builder = factory.newDocumentBuilder();
+            
+            CatalogResolver catalog = new CatalogResolver();
+            catalog.getCatalog().parseCatalog(this.getClass().getResource("/res/catalog.xml"));
+            catalog.getCatalog().parseAllCatalogs();
+            builder.setEntityResolver(catalog);
     
             Document dependency = null;
             dependency = builder.parse(file);

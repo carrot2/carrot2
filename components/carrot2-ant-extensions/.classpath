@@ -14,5 +14,6 @@
 	<classpathentry kind="var" path="ANT_HOME/lib/ant-nodeps.jar"/>
 	<classpathentry kind="var" path="ANT_HOME/lib/ant-xalan1.jar"/>
 	<classpathentry kind="var" path="ANT_HOME/lib/junit.jar"/>
+	<classpathentry kind="lib" path="lib/resolver.jar"/>
 	<classpathentry kind="output" path="tmp/build/classes"/>
 </classpath>

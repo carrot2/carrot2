@@ -1,0 +1,12 @@
+
+<component name="i">
+
+	<provides>
+		<files>
+			<file location="build.xml" />
+		</files>
+	</provides>
+	
+    <dependency name="xx" />
+
+</component>

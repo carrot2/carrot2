@@ -12,9 +12,11 @@
 		<typedef name="dependencyPath"
 			classname="com.dawidweiss.carrot.ant.DependencyPath" />
 		
-		<fileset id="dependencies" dir="..">
+		<path id="dependencies">
+		<fileset dir="..">
 			<include name="**/*.dep.xml" />
 		</fileset>
+		</path>
 		
 		<bringToDate componentDescriptor="f.dep.xml" dependenciesOnly="true"
 			profile="${profile}">
