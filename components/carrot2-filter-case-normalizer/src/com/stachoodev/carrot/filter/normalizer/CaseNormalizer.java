@@ -40,8 +40,6 @@ import com.dawidweiss.carrot.util.tokenizer.parser.*;
  * No support is provided for the full text of documents. This class is <b>not
  * </b> thread-safe.
  * 
- * TODO: use "fast" map
- * 
  * @author Stanislaw Osinski
  * @version $Revision$
  */
@@ -175,6 +173,9 @@ public class CaseNormalizer
         // Each map has tokens (from text) as keys, and their normalized
         // versions as values
         Map normalizedTokens = new HashMap();
+        int variantCount = 0;
+        int tokenCount = 0;
+        int maxVariantCount = 0;
 
         // Normalize tokens first
         for (Iterator tokensIter = tokensForLanguage.keySet().iterator(); tokensIter
@@ -202,8 +203,13 @@ public class CaseNormalizer
 
                 Map originalTokens = (Map) originalTokensForLang.get(token);
                 normalizeTokens((StringTypedToken) token, originalTokens,
-                    locale);
-                normalizedTokensForLang.putAll(originalTokens);
+                    locale, normalizedTokensForLang);
+                tokenCount++;
+                if (originalTokens.size() > maxVariantCount)
+                {
+                    maxVariantCount = originalTokens.size();
+                }
+                variantCount += originalTokens.size();
             }
         }
 
@@ -259,7 +265,7 @@ public class CaseNormalizer
      * @return
      */
     private void normalizeTokens(StringTypedToken lowerCaseToken,
-        Map originalTokens, Locale locale)
+        Map originalTokens, Locale locale, Map normalizedTokens)
     {
         // If stop word, replace all variants with a lower case version
         if ((lowerCaseToken.getType() & TypedToken.TOKEN_FLAG_STOPWORD) != 0)
@@ -268,7 +274,7 @@ public class CaseNormalizer
                 .hasNext();)
             {
                 Object key = iter.next();
-                originalTokens.put(key, lowerCaseToken);
+                normalizedTokens.put(key, lowerCaseToken);
             }
             return;
         }
@@ -334,7 +340,7 @@ public class CaseNormalizer
         for (Iterator iter = originalTokens.keySet().iterator(); iter.hasNext();)
         {
             Object key = iter.next();
-            originalTokens.put(key, lowerCaseToken);
+            normalizedTokens.put(key, lowerCaseToken);
         }
         return;
     }
