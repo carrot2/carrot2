@@ -13,7 +13,9 @@ package com.stachoodev.carrot.filter.normalizer;
 import junit.framework.*;
 
 import com.dawidweiss.carrot.core.local.clustering.*;
+import com.dawidweiss.carrot.core.local.linguistic.*;
 import com.dawidweiss.carrot.util.tokenizer.*;
+import com.dawidweiss.carrot.util.tokenizer.languages.polish.*;
 
 /**
  * Unit tests for the
@@ -30,6 +32,22 @@ public class CaseNormalizerTest extends TestCase
     /** The case normalizer under tests */
     private CaseNormalizer caseNormalizer;
 
+    /** Polish language to be used */
+    private Polish polishLanguage;
+
+    /** Polish LanguageTokenizer */
+    private LanguageTokenizer polishTokenizer;
+
+    /**
+     * 
+     */
+    public CaseNormalizerTest()
+    {
+        snippetTokenizer = new SnippetTokenizer();
+        caseNormalizer = new CaseNormalizer();
+        polishLanguage = new PolishWithLametyzator();
+    }
+    
     /*
      * (non-Javadoc)
      * 
@@ -38,10 +56,18 @@ public class CaseNormalizerTest extends TestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        snippetTokenizer = new SnippetTokenizer();
-        caseNormalizer = new CaseNormalizer();
+        polishTokenizer = polishLanguage.borrowTokenizer();
     }
 
+    /* (non-Javadoc)
+     * @see junit.framework.TestCase#tearDown()
+     */
+    protected void tearDown() throws Exception
+    {
+        super.tearDown();
+        polishLanguage.returnTokenizer(polishTokenizer);
+    }
+    
     /**
      *  
      */
@@ -104,10 +130,10 @@ public class CaseNormalizerTest extends TestCase
     {
         TokenizedDocument document = snippetTokenizer
             .tokenize(new RawDocumentSnippet("Prosty tytuł",
-                "Ale mały wycineczek Z dokumentu", "pl"));
+                "Ale mały wycineczek Z dokumentu"), polishTokenizer);
         TokenizedDocument normalizedDocument = snippetTokenizer
             .tokenize(new RawDocumentSnippet("Prosty Tytuł",
-                "ale Mały Wycineczek z Dokumentu", "pl"));
+                "ale Mały Wycineczek z Dokumentu"), polishTokenizer);
 
         // Clear raw document references, which would break equality
         document.setProperty(TokenizedDocument.PROPERTY_RAW_DOCUMENT, null);
@@ -126,13 +152,13 @@ public class CaseNormalizerTest extends TestCase
     {
         TokenizedDocument document01 = snippetTokenizer
             .tokenize(new RawDocumentSnippet("Prosty on tytuł",
-                "Ale mały wycineczek Z dokumentu for", "pl"));
+                "Ale mały wycineczek Z dokumentu for"), polishTokenizer);
         TokenizedDocument document02 = snippetTokenizer
             .tokenize(new RawDocumentSnippet("Title",
                 "John likes ale on rocks for", "en"));
         TokenizedDocument normalizedDocument01 = snippetTokenizer
             .tokenize(new RawDocumentSnippet("Prosty on Tytuł",
-                "ale Mały Wycineczek z Dokumentu For", "pl"));
+                "ale Mały Wycineczek z Dokumentu For"), polishTokenizer);
         TokenizedDocument normalizedDocument02 = snippetTokenizer
             .tokenize(new RawDocumentSnippet("Title",
                 "John Likes Ale on Rocks for", "en"));
@@ -181,10 +207,10 @@ public class CaseNormalizerTest extends TestCase
     {
         TokenizedDocument document01 = snippetTokenizer
             .tokenize(new RawDocumentSnippet("Prosty on tytuł",
-                "Ale mały wycineczek Z dokumentu", "pl"));
+                "Ale mały wycineczek Z dokumentu"), polishTokenizer);
         TokenizedDocument normalizedDocument01 = snippetTokenizer
             .tokenize(new RawDocumentSnippet("Prosty on Tytuł",
-                "ale Mały Wycineczek z Dokumentu", "pl"));
+                "ale Mały Wycineczek z Dokumentu"), polishTokenizer);
 
         // Clear raw document references, which would break equality
         document01.setProperty(TokenizedDocument.PROPERTY_RAW_DOCUMENT, null);
