@@ -10,8 +10,10 @@
  */
 package com.stachoodev.matrix.factorization.seeding;
 
+import com.stachoodev.colt.function.*;
+
+import cern.colt.function.*;
 import cern.colt.matrix.*;
-import cern.jet.random.engine.*;
 
 /**
  * Random matrix factorization seeding.
@@ -23,14 +25,14 @@ public class RandomSeedingStrategy implements SeedingStrategy
 {
 
     /** Colt's random number generator */
-    private DRand random;
+    private DoubleFunction random;
 
     /**
      * Creates RandomSeedingStrategy with seed based on current time.
      */
     public RandomSeedingStrategy()
     {
-        random = new DRand(new java.util.Date());
+        random = new RandomDoubleFunction(new java.util.Date().getTime());
     }
 
     /**
@@ -40,7 +42,7 @@ public class RandomSeedingStrategy implements SeedingStrategy
      */
     public RandomSeedingStrategy(int seed)
     {
-        random = new DRand(seed);
+        random = new RandomDoubleFunction(seed);
     }
 
     /*
