@@ -438,7 +438,7 @@ public class SAPhraseExtractionTest extends TestCase
         LanguageTokenizer languageTokenizer)
     {
         // Create a sequence of token stems
-        TokenSequence tokenSequence = snippetTokenizer.tokenize(
+        TokenSequence tokenSequence = SnippetTokenizer.tokenize(
             stemmedSequence, languageTokenizer);
         MutableTokenSequence tokenStemSequence = new MutableTokenSequence();
         for (int t = 0; t < tokenSequence.getLength(); t++)
@@ -453,7 +453,7 @@ public class SAPhraseExtractionTest extends TestCase
 
         // Create the original token sequence
         MutableTokenSequence originalExtendedTokenSequence = new MutableTokenSequence();
-        TokenSequence tokenized = snippetTokenizer.tokenize(originalSequence,
+        TokenSequence tokenized = SnippetTokenizer.tokenize(originalSequence,
             languageTokenizer);
         for (int i = 0; i < tokenized.getLength(); i++)
         {
