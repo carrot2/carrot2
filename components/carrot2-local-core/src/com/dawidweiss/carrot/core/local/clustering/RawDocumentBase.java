@@ -8,7 +8,7 @@
 
 package com.dawidweiss.carrot.core.local.clustering;
 
-import com.dawidweiss.carrot.util.common.*;
+import com.stachoodev.util.common.*;
 
 /**
  * An abstract implementation of some of the basic methods of the {@link
