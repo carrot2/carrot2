@@ -23,7 +23,7 @@ import com.stachoodev.carrot.filter.lingo.algorithm.*;
  * @author Stanislaw Osinski
  * @version $Revision$
  */
-public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
+public class LingoReloadedLocalFilterComponent extends ProfiledLocalFilterComponentBase
     implements TokenizedDocumentsConsumer, RawClustersProducer,
     LocalFilterComponent
 {
@@ -54,7 +54,7 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
     /**
      * Creates a new Lingo filter with default parameters.
      */
-    public LingoLocalFilterComponent()
+    public LingoReloadedLocalFilterComponent()
     {
         lingo = new Lingo();
     }
@@ -65,7 +65,7 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
      * 
      * @param parameters
      */
-    public LingoLocalFilterComponent(Map parameters)
+    public LingoReloadedLocalFilterComponent(Map parameters)
     {
         lingo = new Lingo(parameters);
     }
