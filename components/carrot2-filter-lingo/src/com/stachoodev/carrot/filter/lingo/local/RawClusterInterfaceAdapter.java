@@ -74,6 +74,9 @@ public final class RawClusterInterfaceAdapter extends RawClusterBase {
 
             RawDocument rawDocument = (RawDocument) this.originalDocuments.get(
             		Integer.parseInt((String) id));
+            rawDocument.setProperty(
+                SnippetInterfaceAdapter.PROPERTY_CLUSTER_MEMBER_SCORE,
+                new Double(cluster.getSnippetScore(i)));
 
             documents.set(i, rawDocument);
         }

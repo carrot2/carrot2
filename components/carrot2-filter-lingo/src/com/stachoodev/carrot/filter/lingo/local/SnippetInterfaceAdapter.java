@@ -24,6 +24,12 @@ public final class SnippetInterfaceAdapter extends Snippet implements RawDocumen
 	private final RawDocument document;
 	private final RawDocumentBase base;
 
+    /**
+     * Returns an instance of {@link Double}being the score of this document as
+     * a member of a cluster.
+     */
+    public static final String PROPERTY_CLUSTER_MEMBER_SCORE = "mscore";
+
 	/**
 	 * Creates a new wrapper around an existing <code>document</code>.
 	 */
@@ -88,7 +94,7 @@ public final class SnippetInterfaceAdapter extends Snippet implements RawDocumen
 	 * @see com.dawidweiss.carrot.core.local.clustering.RawDocument#getScore()
 	 */
 	public float getScore() {
-		return base.getScore();
+		return (float) base.getDoubleProperty(PROPERTY_CLUSTER_MEMBER_SCORE, -1);
 	}
 
 }
