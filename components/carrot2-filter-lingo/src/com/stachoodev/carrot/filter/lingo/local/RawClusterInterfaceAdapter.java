@@ -33,6 +33,7 @@ public final class RawClusterInterfaceAdapter extends RawClusterBase {
 	RawClusterInterfaceAdapter(Cluster cluster, List originalDocuments) {
 		this.originalDocuments = originalDocuments;
 		this.cluster = cluster;
+        setScore(cluster.getScore());
 		if (cluster.isJunk())
 			super.setProperty( RawCluster.PROPERTY_JUNK_CLUSTER, Boolean.TRUE );
 	}
