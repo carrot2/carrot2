@@ -10,8 +10,6 @@
  */
 package com.stachoodev.carrot.local.benchmark.report;
 
-import java.util.*;
-
 import org.dom4j.*;
 
 import com.dawidweiss.carrot.core.local.linguistic.tokens.*;
@@ -19,8 +17,8 @@ import com.dawidweiss.carrot.util.common.*;
 
 /**
  * Converts
- * {@link com.dawidweiss.carrot.core.local.linguistic.tokens.ExtendedTokenSequence}s to
- * XML elements.
+ * {@link com.dawidweiss.carrot.core.local.linguistic.tokens.ExtendedTokenSequence}
+ * s to XML elements.
  * 
  * @author Stanislaw Osinski
  * @version $Revision$
@@ -38,20 +36,8 @@ public class ExtendedTokenSequenceElementFactory implements ElementFactory
         Element tokenSequenceElement = DocumentHelper
             .createElement("token-sequence");
 
-        // Try to get the most frequent _real_ phrase, which should be more
-        // human-friendly
-        List originalSequences = (List) extendedTokenSequence
-            .getProperty(ExtendedTokenSequence.PROPERTY_ORIGINAL_TOKEN_SEQUENCES);
-        if (originalSequences != null && originalSequences.size() > 0)
-        {
-            tokenSequenceElement.addElement("image").addText(
-                originalSequences.get(0).toString());
-        }
-        else
-        {
-            tokenSequenceElement.addElement("image").addText(
-                extendedTokenSequence.toString());
-        }
+        tokenSequenceElement.addElement("image").addText(
+            extendedTokenSequence.toString());
 
         tokenSequenceElement.addElement("tf").addText(
             StringUtils.toString(new Double(extendedTokenSequence

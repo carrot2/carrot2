@@ -10,15 +10,14 @@
  */
 package com.stachoodev.carrot.local.benchmark.report;
 
-import java.util.*;
-
 import org.dom4j.*;
 
 import com.dawidweiss.carrot.core.local.linguistic.tokens.*;
 import com.dawidweiss.carrot.util.common.*;
 
 /**
- * Converts {@link com.dawidweiss.carrot.core.local.linguistic.tokens.ExtendedToken}s to
+ * Converts
+ * {@link com.dawidweiss.carrot.core.local.linguistic.tokens.ExtendedToken}s to
  * XML elements.
  * 
  * @author Stanislaw Osinski
@@ -36,18 +35,7 @@ public class ExtendedTokenElementFactory implements ElementFactory
         ExtendedToken extendedToken = (ExtendedToken) object;
         Element tokenElement = DocumentHelper.createElement("token");
 
-        List originalTokens = (List) extendedToken
-            .getProperty(ExtendedToken.PROPERTY_ORIGINAL_TOKENS);
-        if (originalTokens != null && originalTokens.size() > 0)
-        {
-            tokenElement.addElement("image").addText(
-                originalTokens.get(0).toString());
-        }
-        else
-        {
-            tokenElement.addElement("image").addText(
-                extendedToken.getToken().getImage());
-        }
+        tokenElement.addElement("image").addText(extendedToken.toString());
 
         tokenElement.addElement("tf").addText(
             StringUtils.toString(new Double(extendedToken.getDoubleProperty(

@@ -39,7 +39,7 @@ public class RawDocumentElementFactory implements ElementFactory
 
         if (rawDocument.getId() != null)
         {
-            rawDocumentElement.addAttribute("id", (String) rawDocument.getId());
+            rawDocumentElement.addAttribute("id", rawDocument.getId().toString());
         }
 
         if (rawDocument.getTitle() != null)
@@ -74,11 +74,11 @@ public class RawDocumentElementFactory implements ElementFactory
                 (String) rawDocument.getProperty(RawDocument.PROPERTY_URL));
         }
 
-        if (rawDocument.getProperty(Lingo.PROPERTY_CLUSTER_MEMBER_SCORE) != null)
+        if (rawDocument.getProperty(LingoWeb.PROPERTY_CLUSTER_MEMBER_SCORE) != null)
         {
             rawDocumentElement.addElement("member-score").addText(
                 StringUtils.toString((Double) rawDocument
-                    .getProperty(Lingo.PROPERTY_CLUSTER_MEMBER_SCORE), "#.##"));
+                    .getProperty(LingoWeb.PROPERTY_CLUSTER_MEMBER_SCORE), "#.##"));
         }
 
         if (rawDocument.getProperty(RawDocumentsProducer.PROPERTY_CATID) != null)

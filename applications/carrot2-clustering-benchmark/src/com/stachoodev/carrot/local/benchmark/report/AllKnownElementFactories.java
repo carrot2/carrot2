@@ -50,6 +50,9 @@ public class AllKnownElementFactories
         factories.put(ExtendedTokenSequence.class,
             new ExtendedTokenSequenceElementFactory());
         factories.put(Topic.class, new TopicElementFactory());
+        factories.put(DoubleMatrix2DWrapper.class,
+            new DoubleMatrix2DWrapperElementFactory());
+
     }
 
     /**
