@@ -25,7 +25,7 @@ public class MutableTopic implements Topic, Serializable
     private String id;
 
     /** This topic's catid attribute */
-    private String catid;
+    private int catid;
 
     /** A list of this page's external pages */
     private List externalPages;
@@ -47,7 +47,7 @@ public class MutableTopic implements Topic, Serializable
      * 
      * @return
      */
-    public String getCatid()
+    public int getCatid()
     {
         return catid;
     }
@@ -57,7 +57,7 @@ public class MutableTopic implements Topic, Serializable
      * 
      * @param catid
      */
-    public void setCatid(String catid)
+    public void setCatid(int catid)
     {
         this.catid = catid;
     }

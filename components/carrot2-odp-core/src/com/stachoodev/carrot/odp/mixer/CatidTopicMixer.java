@@ -66,7 +66,16 @@ public class CatidTopicMixer implements TopicMixer
         {
             String catid = (String) iter.next();
 
-            String location = primaryIndex.getLocation(catid);
+            Location location;
+            
+            try
+            {
+                location = primaryIndex.getLocation(Integer.parseInt(catid));
+            }
+            catch (NumberFormatException e)
+            {
+                continue;
+            }
             Topic topic = null;
             if (location != null)
             {

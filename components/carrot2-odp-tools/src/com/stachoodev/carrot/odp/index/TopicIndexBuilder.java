@@ -10,7 +10,7 @@
  */
 package com.stachoodev.carrot.odp.index;
 
-import com.stachoodev.util.common.*;
+import com.stachoodev.carrot.odp.*;
 
 /**
  * Defines the interface of an ODP topic index builder.
@@ -18,14 +18,25 @@ import com.stachoodev.util.common.*;
  * @author Stanislaw Osinski
  * @version $Revision$
  */
-public interface TopicIndexBuilder extends PropertyProvider
+public interface TopicIndexBuilder
 {
     /**
-     * Creates a {@link TopicIndex}based on given
-     * {@link PrimaryTopicIndex}.
+     * Called before any topics are added to the index.
+     */
+    public void initialize();
+
+    /**
+     * Adds a topic to the index.
      * 
-     * @param primaryCategoryIndex
+     * @param topic to be added
+     */
+    public void index(Topic topic);
+
+    /**
+     * Returns the final index, called after all topics have been added to the
+     * index.
+     * 
      * @return
      */
-    public TopicIndex create(PrimaryTopicIndex primaryCategoryIndex);
+    public TopicIndex getTopicIndex();
 }

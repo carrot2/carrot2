@@ -10,6 +10,7 @@
  */
 package com.stachoodev.carrot.odp.index;
 
+import java.io.*;
 import java.util.*;
 
 /**
@@ -17,35 +18,34 @@ import java.util.*;
  * special properties:
  * 
  * <ul>
- * <li>it is created for some <i>primary key </i> of the ODP data, e.g. the
- * contents of the <code>catid</code> element,
+ * <li>it is created for some integer <i>primary key </i> of the ODP data, e.g.
+ * the contents of the <code>catid</code> element,
  * <li>during the process of creating the primary index, the appropriate
  * {@link PrimaryIndexBuilder}will also store the content of the ODP database
  * in a way matching the file locations returned by the
  * {@link PrimaryTopicIndex}it builds, thus,
  * <li>for a single ODP database only one {@link PrimaryTopicIndex}can be
  * created
- * <li>{@link TopicIndexBuilder}s will utilize a
- * {@link PrimaryTopicIndex}to access the ODP database and calculate all
- * data it needs, thus
- * <li>a {@link PrimaryTopicIndex}must be built before building any other
- * indices
+ * <li>{@link TopicIndexBuilder}s will utilize a {@link PrimaryTopicIndex}to
+ * access the ODP database and calculate all data it needs, thus
+ * <li>a {@link PrimaryTopicIndex}must be built before or together with any
+ * other indices
  * </ul>
  * 
  * @author Stanislaw Osinski
  * @version $Revision$
  */
-public interface PrimaryTopicIndex extends TopicIndex
+public interface PrimaryTopicIndex
 {
     /**
-     * Returns the relative location of the file corresponding to the category
+     * Returns the location of the data block corresponding to the category
      * identified by <code>id</code>. If no category has been found for given
      * <code>id</code>,<code>null</code> should be returned.
      * 
      * @param id
      * @return
      */
-    public String getLocation(String id);
+    public Location getLocation(int id);
 
     /**
      * Returns an iterator for all file locations stored by this index. If the
@@ -54,4 +54,21 @@ public interface PrimaryTopicIndex extends TopicIndex
      * @return
      */
     public Iterator getAllLocations();
+
+    /**
+     * Serializes this index to the {@link OutputStream}given.
+     * 
+     * @param outputStream
+     * @throws IOException
+     */
+    public void serialize(OutputStream outputStream) throws IOException;
+
+    /**
+     * Deserializes contents of this index from the {@link InputStream}given.
+     * 
+     * @param inputStream
+     * @throws IOException
+     */
+    public void deserialize(InputStream inputStream,
+        LocationFactory locationFactory) throws IOException;
 }
