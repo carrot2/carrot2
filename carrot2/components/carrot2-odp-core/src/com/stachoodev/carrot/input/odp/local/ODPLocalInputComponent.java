@@ -1,7 +1,12 @@
 /*
- * ODPLocalInputComponent.java
- * 
- * Created on 2004-06-28
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
 package com.stachoodev.carrot.input.odp.local;
 
@@ -18,7 +23,7 @@ import com.stachoodev.carrot.odp.mixer.*;
  * Directory Project. In order for this component to work, the
  * {@link com.stachoodev.carrot.odp.ODPIndex}must be properly initialized. The
  * original ODP <code>catid</code> is added to each document, see
- * {@link #PROPERTY_ODP_CATID}.
+ * {@link com.dawidweiss.carrot.core.local.clustering.RawDocumentsProducer#PROPERTY_CATID}.
  * 
  * <p>
  * 
@@ -28,17 +33,12 @@ import com.stachoodev.carrot.odp.mixer.*;
  * and query format specifications refer to the implementations of the
  * {@link com.stachoodev.carrot.odp.mixer.TopicMixer}interface.
  * 
- * @author stachoo
+ * @author Stanislaw Osinski
+ * @version $Revision$
  */
 public class ODPLocalInputComponent extends ProfiledLocalInputComponentBase
     implements RawDocumentsProducer, LocalComponent
 {
-    /**
-     * This property stores the id of the ODP topic (<code>catid</code>) to
-     * which the document originally belonged.
-     */
-    public final static String PROPERTY_ODP_CATID = "catid";
-
     /** Capabilities required from the next component in the chain */
     private final static Set SUCCESSOR_CAPABILITIES = new HashSet(Arrays
         .asList(new Object []
@@ -132,6 +132,71 @@ public class ODPLocalInputComponent extends ProfiledLocalInputComponentBase
 
         startTimer();
 
+        // Get the requested topics
+        List topics = getTopics();
+
+        // Store topics in the profile
+        if (profile != null)
+        {
+            profile.addProfileEntry("odp-topics", new ProfileEntry(
+                "ODP Topics", null, Collections.unmodifiableList(topics)));
+        }
+
+        // Count the actual number of documents and convert to a list of
+        // RawClusters
+        int documentCount = 0;
+        for (Iterator iter = topics.iterator(); iter.hasNext();)
+        {
+            Topic topic = (Topic) iter.next();
+            documentCount += topic.getExternalPages().size();
+        }
+
+        // Pass the actual document count
+        requestContext.getRequestParameters().put(
+            LocalInputComponent.PARAM_TOTAL_MATCHING_DOCUMENTS,
+            new Integer(documentCount));
+
+        // We have to stop the timer before the call to the next component's
+        // method. Otherwise, we would time the whole chain.
+        stopTimer();
+
+        // Add all topics to the consumer and create a list of original
+        // RawClusters to be stored in the request context
+        List rawClusters = new ArrayList();
+        for (Iterator iter = topics.iterator(); iter.hasNext();)
+        {
+            Topic topic = (Topic) iter.next();
+            RawClusterBase rawCluster = new RawClusterBase();
+            List externalPages = topic.getExternalPages();
+
+            for (Iterator iterator = externalPages.iterator(); iterator
+                .hasNext();)
+            {
+                ExternalPage externalPage = (ExternalPage) iterator.next();
+
+                RawDocumentSnippet rawDocumentSnippet = new RawDocumentSnippet(
+                    externalPage.getTitle(), externalPage.getDescription());
+                rawDocumentSnippet
+                    .setProperty(PROPERTY_CATID, topic.getCatid());
+                rawDocumentConsumer.addDocument(rawDocumentSnippet);
+
+                rawCluster.addDocument(rawDocumentSnippet);
+                rawCluster.setProperty(PROPERTY_CATID, topic.getCatid());
+            }
+
+            rawClusters.add(rawCluster);
+        }
+
+        // Pass the original documents as a structure of clusters
+        requestContext.getRequestParameters().put(
+            RawDocumentsProducer.PARAM_ORIGINAL_RAW_CLUSTERS, rawClusters);
+    }
+
+    /**
+     * @return @throws ProcessingException
+     */
+    private List getTopics() throws ProcessingException
+    {
         // Parse the query
         int colonPos = query.indexOf(':');
         if (colonPos == -1)
@@ -153,41 +218,7 @@ public class ODPLocalInputComponent extends ProfiledLocalInputComponentBase
 
         // Get topics
         List topics = mixer.mix(mixerQuery);
-
-        // Count the actual number of documents
-        int documentCount = 0;
-        for (Iterator iter = topics.iterator(); iter.hasNext();)
-        {
-            Topic topic = (Topic) iter.next();
-            documentCount += topic.getExternalPages().size();
-        }
-
-        // Pass the actual document count
-        requestContext.getRequestParameters().put(
-            LocalInputComponent.PARAM_TOTAL_MATCHING_DOCUMENTS,
-            new Integer(documentCount));
-
-        // We have to stop the timer before the call to the next component's
-        // method. Otherwise, we would time the whole chain.
-        stopTimer();
-
-        // Add all topics to the consumer
-        for (Iterator iter = topics.iterator(); iter.hasNext();)
-        {
-            Topic topic = (Topic) iter.next();
-            List externalPages = topic.getExternalPages();
-
-            for (Iterator iterator = externalPages.iterator(); iterator
-                .hasNext();)
-            {
-                ExternalPage externalPage = (ExternalPage) iterator.next();
-                RawDocumentSnippet rawDocumentSnippet = new RawDocumentSnippet(
-                    externalPage.getTitle(), externalPage.getDescription());
-                rawDocumentSnippet.setProperty(PROPERTY_ODP_CATID, topic
-                    .getCatid());
-                rawDocumentConsumer.addDocument(rawDocumentSnippet);
-            }
-        }
+        return topics;
     }
 
     /*

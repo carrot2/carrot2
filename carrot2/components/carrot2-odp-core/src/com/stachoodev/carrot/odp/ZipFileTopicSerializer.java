@@ -1,7 +1,12 @@
 /*
- * ZipFileTopicSerializer.java
- * 
- * Created on 2004-06-26
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
 package com.stachoodev.carrot.odp;
 
@@ -11,12 +16,8 @@ import java.util.zip.*;
 /**
  * Serializes an ODP topic as a single ZIP compressed file.
  * 
- * TODO: Could store more categories in one file with more entries in it
- * (fileName = catid % someConstant, entries = catids). However, you can't add
- * entries to an existing zip file, so we would need to rewrite the file every
- * time a new category is added.
- * 
- * @author stachoo
+ * @author Stanislaw Osinski
+ * @version $Revision$
  */
 public class ZipFileTopicSerializer implements TopicSerializer
 {
