@@ -155,6 +155,8 @@ bigloop:
      * @return A word with removed html tags.
      */
     public static String removeMarkup(String word) {
+	    if (word == null) return null;
+
         final char[] chars = word.toCharArray();
         int i = 0;
         int j = 0;
