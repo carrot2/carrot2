@@ -5,6 +5,7 @@
 # runs a carrot2 demo
 #
 
+
 cd /home/dweiss/carrot2/deploy
 
 JAVACMD=${JAVA_HOME}/bin/java
