@@ -10,7 +10,7 @@
     <property name="runtime.logs" location="${runtime.env}/context-logs/test-report" />
     <property name="distribution.dir" location="${runtime.logs}" />
 
-    <property name="test.url" value="http://carrot.cs.put.poznan.pl:2001/carrot2-web-controller" />
+    <property name="test.url" value="http://carrot.cs.put.poznan.pl:2001/carrot2-remote-controller" />
 
     <!-- 
       ## Prepare checkout directory and cvs environment.
