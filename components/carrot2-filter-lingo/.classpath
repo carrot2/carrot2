@@ -8,10 +8,10 @@
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/log4j-1.2.8.jar"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/junit-3.8.1.jar"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/servlet.jar"/>
-	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/violinstrings-1.0.2.jar"/>
 	<classpathentry kind="src" path="/carrot2-util-common"/>
 	<classpathentry kind="src" path="/carrot2-local-core"/>
 	<classpathentry kind="src" path="/carrot2-util-put"/>
 	<classpathentry kind="src" path="/carrot2-util-remote"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/colt-1.0.3.jar"/>
 	<classpathentry kind="output" path="tmp/build/WEB-INF/classes"/>
 </classpath>

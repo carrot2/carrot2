@@ -4,7 +4,8 @@
 package com.dawidweiss.carrot.core.local.clustering;
 
 import com.dawidweiss.carrot.core.local.linguistic.tokens.*;
-import com.dawidweiss.carrot.util.common.*;
+import com.dawidweiss.carrot.util.common.PropertyHelper;
+import com.dawidweiss.carrot.util.common.PropertyProvider;
 
 /**
  * An abstract implementation of the {@link TokenizedDocument}interface.
