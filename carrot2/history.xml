@@ -8,6 +8,22 @@
 
 <history>
     <changelist>
+        <date>2004-02-09</date>
+        <committer>dawid</committer>
+        
+        <change component="carrot2-shared-lib" type="change">
+        The tokenizer now recognizes numeric types and a wider range of url (and
+        www addresses).
+        </change>
+
+        <change component="carrot2.input.snippet-reader" type="bugfix">
+        HTML entities were emitted to the XML stream in the CDATA block.
+        It is now fixed.
+        </change>
+
+    </changelist>
+
+    <changelist>
         <date>2004-02-08</date>
         <committer>dawid</committer>
 
