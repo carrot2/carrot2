@@ -13,8 +13,6 @@ package com.stachoodev.carrot.local.benchmark.report;
 import org.dom4j.*;
 
 import com.dawidweiss.carrot.core.local.clustering.*;
-import com.dawidweiss.carrot.util.common.*;
-import com.stachoodev.carrot.filter.lingo.algorithm.*;
 
 /**
  * Converts {@link com.dawidweiss.carrot.core.local.clustering.RawDocument}s
@@ -72,13 +70,6 @@ public class RawDocumentElementFactory implements ElementFactory
         {
             rawDocumentElement.addElement("url").addText(
                 (String) rawDocument.getProperty(RawDocument.PROPERTY_URL));
-        }
-
-        if (rawDocument.getProperty(LingoWeb.PROPERTY_CLUSTER_MEMBER_SCORE) != null)
-        {
-            rawDocumentElement.addElement("member-score").addText(
-                StringUtils.toString((Double) rawDocument
-                    .getProperty(LingoWeb.PROPERTY_CLUSTER_MEMBER_SCORE), "#.##"));
         }
 
         if (rawDocument.getProperty(RawDocumentsProducer.PROPERTY_CATID) != null)
