@@ -149,7 +149,7 @@ public class PrintDependencies extends Task {
                 }
 			});
 
-            for (int i=0;i<dependencies.length-1;i++) {
+            for (int i=0;i<dependencies.length;i++) {
                 ComponentDependency dependency = dependencies[i];
                 
                 if (dependency.getName().equals( component.getName() )) {
