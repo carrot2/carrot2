@@ -75,9 +75,9 @@ public class ExtendedTokenSequence implements TokenSequence, PropertyProvider
      * @param propertName
      * @return
      */
-    public double getDoubleProperty(String propertName)
+    public double getDoubleProperty(String propertName, double defaultValue)
     {
-        return propertyHelper.getDoubleProperty(propertName);
+        return propertyHelper.getDoubleProperty(propertName, defaultValue);
     }
 
     /**
@@ -100,9 +100,9 @@ public class ExtendedTokenSequence implements TokenSequence, PropertyProvider
      * @param propertName
      * @return
      */
-    public int getIntProperty(String propertyName)
+    public int getIntProperty(String propertyName, int defaultValue)
     {
-        return propertyHelper.getIntProperty(propertyName);
+        return propertyHelper.getIntProperty(propertyName, defaultValue);
     }
 
     /**

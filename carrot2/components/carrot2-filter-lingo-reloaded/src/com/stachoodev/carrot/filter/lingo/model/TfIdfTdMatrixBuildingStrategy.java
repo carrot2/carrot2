@@ -93,7 +93,7 @@ public class TfIdfTdMatrixBuildingStrategy implements TdMatrixBuildingStrategy
             {
                 selectedToken.setDoubleProperty(ExtendedToken.PROPERTY_IDF,
                     Math.log(tokenizedDocuments.size()
-                        / token.getDoubleProperty(ExtendedToken.PROPERTY_DF)));
+                        / token.getDoubleProperty(ExtendedToken.PROPERTY_DF, 0)));
             }
             else
             {
@@ -114,7 +114,7 @@ public class TfIdfTdMatrixBuildingStrategy implements TdMatrixBuildingStrategy
             {
                 tdMatrix.setQuick(t, d, tdMatrix.getQuick(t, d)
                     * ((ExtendedToken) selectedFeatures.get(t))
-                        .getDoubleProperty(ExtendedToken.PROPERTY_IDF));
+                        .getDoubleProperty(ExtendedToken.PROPERTY_IDF, 0));
 
             }
         }

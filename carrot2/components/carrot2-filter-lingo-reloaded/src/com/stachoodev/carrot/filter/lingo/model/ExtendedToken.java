@@ -126,9 +126,9 @@ public class ExtendedToken implements Token, PropertyProvider
      * @param propertName
      * @return
      */
-    public double getDoubleProperty(String propertyName)
+    public double getDoubleProperty(String propertyName, double defaultValue)
     {
-        return propertyHelper.getDoubleProperty(propertyName);
+        return propertyHelper.getDoubleProperty(propertyName, defaultValue);
     }
 
     /**
@@ -151,9 +151,9 @@ public class ExtendedToken implements Token, PropertyProvider
      * @param propertyName
      * @return
      */
-    public int getIntProperty(String propertyName)
+    public int getIntProperty(String propertyName, int defaultValue)
     {
-        return propertyHelper.getIntProperty(propertyName);
+        return propertyHelper.getIntProperty(propertyName, defaultValue);
     }
 
     /**

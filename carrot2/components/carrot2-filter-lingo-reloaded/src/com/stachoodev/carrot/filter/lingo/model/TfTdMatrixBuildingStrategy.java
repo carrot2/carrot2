@@ -89,7 +89,7 @@ public class TfTdMatrixBuildingStrategy implements TdMatrixBuildingStrategy
                     ExtendedToken extendedToken = (ExtendedToken) tokenFrequencies
                         .get(selectedToken.toString());
                     tdMatrix.set(term, d, extendedToken
-                        .getDoubleProperty(ExtendedToken.PROPERTY_TF));
+                        .getDoubleProperty(ExtendedToken.PROPERTY_TF, 0));
                 }
             }
         }
