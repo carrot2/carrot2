@@ -36,17 +36,16 @@ public class StringUtils
         }
 
         int capitalizedCount = 0;
-        char [] chars = string.toCharArray();
 
-        for (int i = 0; i < chars.length; i++)
+        for (int i = 0; i < string.length(); i++)
         {
-            if (Character.isUpperCase(chars[i]))
+            if (Character.isUpperCase(string.charAt(i)))
             {
                 capitalizedCount++;
             }
         }
 
-        return (double) capitalizedCount / (double) chars.length;
+        return (double) capitalizedCount / (double) string.length();
     }
 
 
@@ -266,6 +265,8 @@ bigloop:
      * <code>delimiter</code> and stores the parts as {@link String}s in the
      * provided <code>list</code>. Note: substrings can be delimited by any
      * number of delimiter characters.
+     * 
+     * TODO: replace calls to this method with String.split() (JDK1.4)
      * 
      * @param string
      * @param delimiter
