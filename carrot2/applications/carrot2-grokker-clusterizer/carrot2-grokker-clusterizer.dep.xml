@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE component SYSTEM "../../etc/component-dependency.dtd" >
+
+<component
+    name="carrot2-grokker-clusterizer"
+    description="Carrot2 Clusterizer for Grokker">
+
+    <provides>
+        <build>
+            <ant file="build.xml" target="build" />
+        </build>
+    </provides>
+
+    <dependency name="carrot2-local-core" />
+	<dependency name="carrot2-util-tokenizer" />
+    <dependency name="carrot2-filter-lingo" in-profile="local" />
+
+</component>
