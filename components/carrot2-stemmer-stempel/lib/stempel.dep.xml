@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE component SYSTEM "../../../etc/component-dependency.dtd" >
+
+<component
+    name="stempel"
+    description="Stempel -- an algorithmic stemmer for Polish, http://www.getopt.org/stempel/">
+    
+    <provides>
+        <files>
+            <file location="stempel-1.0.jar" />
+            <file location="stempel.LICENSE" />
+        </files>
+    </provides>
+
+</component>
