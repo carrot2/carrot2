@@ -8,7 +8,7 @@
 
 cd /home/dweiss/carrot2/deploy
 
-JAVA_HOME=/usr/java/j2sdk1.4.1_02
+JAVA_HOME=/usr/java/j2sdk
 JAVACMD=${JAVA_HOME}/bin/java
 ANT_HOME=/usr/java/ant
 PATH=${PATH}:/home/dweiss/xep
