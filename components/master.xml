@@ -494,6 +494,28 @@ ${string:component.dependencies}
   <!-- }}} -->
 
   <!-- ##################################### -->
+  <!-- ### {{{ DEP TYPE BUILD            ### -->
+  <!-- ##################################### -->
+
+  <target name="build.deptype" depends="bootstrap, custom.tasks, discover.classpath">
+    <bringToDate componentDescriptor="${component.descriptor}"
+                 dependenciesOnly="true" profile="">
+        <dependencies refid="dependencies" />
+    </bringToDate>
+	
+	<mkdir dir="${distribution.dir}" />
+
+    <copyDependencies
+        componentDescriptor="${component.descriptor}"
+        profile=""
+        todir="${distribution.dir}">
+        <dependencies refid="dependencies" />
+    </copyDependencies>
+  </target>
+  <!-- }}} -->
+
+  
+  <!-- ##################################### -->
   <!-- ### {{{ CLASS EXEC HOOK           ### -->
   <!-- ##################################### -->  
   <target name="run.class" depends="prepare">
