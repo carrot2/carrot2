@@ -1,5 +1,12 @@
 /*
- * SAPhraseExtractionStrategy.java Created on 2004-06-15
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
 package com.stachoodev.carrot.filter.lingo.model;
 
@@ -18,24 +25,27 @@ import com.stachoodev.util.common.*;
  * Semantic, Hierarchical, Online Clustering of Web Search Results Proceedings
  * of the 6th Asia Pacific Web Conference (APWEB), Hangzhou, China, April 2004".
  * The enhancements are:
+ * 
  * <ul>
  * <li>if the input documents are stemmed, the algorithm returns <i>generalized
  * frequent phrases </i>, i.e. phrases consisting of stems, along with the
  * corresponding original phrases and their frequencies. A list of original
  * phrases is stored under the
- * {@link com.stachoodev.carrot.filter.lingo.model.ExtendedTokenSequence#PROPERTY_ORIGINAL_TOKEN_SEQUENCES}
+ * {@link com.dawidweiss.carrot.core.local.linguistic.tokens.ExtendedTokenSequence#PROPERTY_ORIGINAL_TOKEN_SEQUENCES}
  * property of the generalized phrase.
  * <li>if stop words information is present the returned phrases will be
  * trimmed of the trailing stop words
  * <li>phrase frequencies are correctly calculated
  * </ul>
+ * 
  * Note: This class is <b>not </b> thread-safe. <br>
  * Note: This class is <b>not </b> multilingual. Expect strange results when
  * applied to multilingual data (i.e. tokens with inconsistent stopword markers)
  * 
  * TODO: the algorithm not quite works for phrases of length 1
  * 
- * @author stachoo
+ * @author Stanislaw Osinski
+ * @version $Revision$
  */
 public class SAPhraseExtractionStrategy implements PhraseExtractionStrategy
 {
@@ -513,6 +523,17 @@ public class SAPhraseExtractionStrategy implements PhraseExtractionStrategy
 
     }
 
+    /**
+     * 
+     */
+    public void clear()
+    {
+        documentsIntWrapper = null;
+        documentsIntWrapperReversed = null;
+        dualLcpSuffixArray = null;
+        dualLcpSuffixArrayReversed = null;
+    }
+    
     /**
      * Represents a general substring. Contains information on the substring's
      * boundaries and absolute frequency.
