@@ -62,4 +62,13 @@ public class NNIDoubleFactory2D extends DoubleFactory2D
             return super.make(rows, columns);
         }
     }
+    
+    /**
+     * @param A
+     * @return
+     */
+    public static DoubleMatrix2D asNNIMatrix(DoubleMatrix2D A)
+    {
+        return nni.make(A.rows(), A.columns()).assign(A);
+    }
 }
