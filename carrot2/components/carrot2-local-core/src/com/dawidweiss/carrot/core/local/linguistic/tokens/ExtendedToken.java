@@ -248,8 +248,12 @@ public class ExtendedToken implements Token, PropertyProvider
         else
         {
             boolean c1 = token.equals(((ExtendedToken) arg).token);
-            boolean c2 = propertyHelper
-                .equals(((ExtendedToken) arg).propertyHelper);
+            boolean c2 = true;
+            if (propertyHelper != null)
+            {
+                c2 = propertyHelper
+                    .equals(((ExtendedToken) arg).propertyHelper);
+            }
             return c1 && c2;
 
         }
@@ -262,7 +266,8 @@ public class ExtendedToken implements Token, PropertyProvider
      */
     public int hashCode()
     {
-        return token.hashCode() + propertyHelper.hashCode();
+        return token.hashCode()
+            + (propertyHelper != null ? propertyHelper.hashCode() : 0);
     }
 
     /*
