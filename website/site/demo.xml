@@ -14,7 +14,7 @@
         
         <p>
         Nightly snapshots of <carrot-text /> are available at:
-        <a href="http://ophelia.cs.put.poznan.pl:2001">http://ophelia.cs.put.poznan.pl:2001</a>. Because
+        <a href="http://carrot.cs.put.poznan.pl">http://carrot.cs.put.poznan.pl</a>. Because
         nightly snapshots are what they are (automatic checkouts from the CVS), there is no warranty this
         link will be active at all.
         </p>
