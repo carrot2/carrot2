@@ -1,20 +1,33 @@
 /*
- * SnippetTokenizerLocalFilterComponent.java
- * 
- * Created on 2004-06-29
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
 package com.dawidweiss.carrot.util.tokenizer;
 
+import java.io.*;
 import java.util.*;
 
 import com.dawidweiss.carrot.core.local.*;
 import com.dawidweiss.carrot.core.local.clustering.*;
+import com.dawidweiss.carrot.core.local.linguistic.*;
+import com.dawidweiss.carrot.core.local.linguistic.tokens.*;
 import com.dawidweiss.carrot.core.local.profiling.*;
+import com.dawidweiss.carrot.util.tokenizer.languages.*;
+import com.dawidweiss.carrot.util.tokenizer.parser.*;
 
 /**
  * Note: there is no support for tokenizing document content yet.
  * 
- * @author stachoo
+ * TODO: refactor SnippetTokenizer and delegate calls from this filter to it
+ * 
+ * @author Stanislaw Osinski
+ * @version $Revision$
  */
 public class SnippetTokenizerLocalFilterComponent extends
     ProfiledLocalFilterComponentBase implements RawDocumentsConsumer,
@@ -28,18 +41,24 @@ public class SnippetTokenizerLocalFilterComponent extends
     /** This component's capabilities */
     private final static Set CAPABILITIES_COMPONENT = new HashSet(Arrays
         .asList(new Object []
-        { RawDocumentsConsumer.class }));
+        { RawDocumentsConsumer.class, TokenizedDocumentsProducer.class }));
 
     /** Capabilities required from the next component in the chain */
     private final static Set CAPABILITIES_SUCCESSOR = new HashSet(Arrays
         .asList(new Object []
         { TokenizedDocumentsConsumer.class }));
 
-    /** Raw clusters consumer */
+    /** Tokenized documents consumer */
     private TokenizedDocumentsConsumer tokenizedDocumentsConsumer;
 
-    /** A utility class that does the job */
-    private SnippetTokenizer snippetTokenizer;
+    /** A map of lazily initialized tokenizers for different languages */
+    private Map tokenizers;
+
+    /** Generic tokenizer */
+    private WordBasedParser genericTokenizer;
+
+    /** Tokenizer buffer size */
+    private static final int TOKEN_BUFFER_SIZE = 64;
 
     /*
      * (non-Javadoc)
@@ -50,23 +69,7 @@ public class SnippetTokenizerLocalFilterComponent extends
         throws InstantiationException
     {
         super.init(context);
-        snippetTokenizer = new SnippetTokenizer();
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#startProcessing(com.dawidweiss.carrot.core.local.RequestContext)
-     */
-    public void startProcessing(RequestContext requestContext)
-        throws ProcessingException
-    {
-        super.startProcessing(requestContext);
-        if (requestContext instanceof ProfiledRequestContext)
-        {
-            profile = ((ProfiledRequestContext) requestContext)
-                .getProfile(this);
-        }
+        tokenizers = new HashMap();
     }
 
     /*
@@ -77,9 +80,9 @@ public class SnippetTokenizerLocalFilterComponent extends
     public void addDocument(RawDocument doc) throws ProcessingException
     {
         startTimer();
-        TokenizedDocument tokenizedDocument = snippetTokenizer.tokenize(doc);
+        TokenizedDocument tokenizedDocument = tokenize(doc);
         stopTimer();
-        
+
         tokenizedDocumentsConsumer.addDocument(tokenizedDocument);
     }
 
@@ -134,6 +137,36 @@ public class SnippetTokenizerLocalFilterComponent extends
         super.flushResources();
         tokenizedDocumentsConsumer = null;
         profile = null;
+
+        returnTokenizers();
+    }
+
+    /**
+     *  
+     */
+    private void returnTokenizers()
+    {
+        // Return all language tokenizers
+        for (Iterator iter = tokenizers.keySet().iterator(); iter.hasNext();)
+        {
+            String lang = (String) iter.next();
+            Language language = AllKnownLanguages.getLanguageForIsoCode(lang);
+            LanguageTokenizer tokenizer = (LanguageTokenizer) tokenizers
+                .get(lang);
+            if (language != null)
+            {
+                tokenizer.reuse();
+                language.returnTokenizer(tokenizer);
+            }
+        }
+        tokenizers.clear();
+
+        // Reuse and return the generic tokenizer
+        if (genericTokenizer != null)
+        {
+            genericTokenizer.reuse();
+            WordBasedParserFactory.returnParser(genericTokenizer);
+        }
     }
 
     /*
@@ -144,5 +177,108 @@ public class SnippetTokenizerLocalFilterComponent extends
     public String getName()
     {
         return "Tokenizer";
+    }
+
+    /**
+     * @param lang
+     * @return
+     */
+    protected LanguageTokenizer getLanguageTokenizer(String lang)
+    {
+        if (lang == null)
+        {
+            // We don't need to be thread-safe here, do we?
+            if (genericTokenizer == null)
+            {
+                genericTokenizer = WordBasedParserFactory.borrowParser();
+            }
+
+            return genericTokenizer;
+        }
+        else
+        {
+            if (!tokenizers.containsKey(lang))
+            {
+                Language language = AllKnownLanguages
+                    .getLanguageForIsoCode(lang);
+
+                if (language == null)
+                {
+                    return getLanguageTokenizer(null);
+                }
+                else
+                {
+                    tokenizers.put(lang, language.borrowTokenizer());
+                }
+            }
+
+            return (LanguageTokenizer) tokenizers.get(lang);
+        }
+    }
+
+    /**
+     * Tokenizes a single {@link RawDocument}into a
+     * {@link TokenizedDocumentSnippet}.
+     * 
+     * @param rawDocument
+     * @return
+     */
+    protected TokenizedDocument tokenize(RawDocument rawDocument)
+    {
+        // Get tokenizer
+        LanguageTokenizer languageTokenizer = getLanguageTokenizer((String) rawDocument
+            .getProperty(RawDocument.PROPERTY_LANGUAGE));
+
+        // Tokenize
+        TokenSequence titleTokenSequence = tokenize(rawDocument.getTitle(),
+            languageTokenizer);
+        TokenSequence snippetTokenSequence = tokenize(rawDocument.getSnippet(),
+            languageTokenizer);
+
+        TokenizedDocumentSnippet tokenizedDocumentSnippet = new TokenizedDocumentSnippet(
+            titleTokenSequence, snippetTokenSequence);
+
+        // Set reference to the original raw document
+        tokenizedDocumentSnippet.setProperty(
+            TokenizedDocument.PROPERTY_RAW_DOCUMENT, rawDocument);
+
+        // Set some properties (all should be copied!)
+        tokenizedDocumentSnippet.setProperty(TokenizedDocument.PROPERTY_URL,
+            rawDocument.getProperty(RawDocument.PROPERTY_URL));
+        tokenizedDocumentSnippet.setProperty(
+            TokenizedDocument.PROPERTY_LANGUAGE, rawDocument
+                .getProperty(RawDocument.PROPERTY_LANGUAGE));
+
+        return tokenizedDocumentSnippet;
+    }
+
+    /**
+     * @param rawText
+     * @param languageTokenizer
+     * @return
+     */
+    protected TokenSequence tokenize(String rawText,
+        LanguageTokenizer languageTokenizer)
+    {
+        if (rawText == null)
+        {
+            return new MutableTokenSequence();
+        }
+        
+        int tokenCount = 0;
+        com.dawidweiss.carrot.core.local.linguistic.tokens.Token [] tokens = new com.dawidweiss.carrot.core.local.linguistic.tokens.Token [TOKEN_BUFFER_SIZE];
+        MutableTokenSequence tokenSequence = new MutableTokenSequence();
+
+        // Build the TokenSequence
+        languageTokenizer.restartTokenizationOn(new StringReader(rawText));
+        while ((tokenCount = languageTokenizer.getNextTokens(tokens, 0)) != 0)
+        {
+            for (int t = 0; t < tokenCount; t++)
+            {
+                tokenSequence.addToken(tokens[t]);
+            }
+        }
+
+        return tokenSequence;
     }
 }
