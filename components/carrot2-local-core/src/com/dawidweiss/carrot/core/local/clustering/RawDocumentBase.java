@@ -32,6 +32,20 @@ public abstract class RawDocumentBase implements RawDocument, PropertyProvider
     {
         propertyHelper = new PropertyHelper();
     }
+
+    /**
+     * Creates a new raw document.
+     * 
+     * @param url
+     * @param title
+     * @param snippet
+     */
+    public RawDocumentBase( String url, String title, String snippet ) {
+        this();
+	    setProperty(PROPERTY_URL, url);
+	    setProperty(PROPERTY_TITLE, title);
+	    setProperty(PROPERTY_SNIPPET, snippet);
+    }
     
     /** 
      * Cloning constructor.
