@@ -70,7 +70,7 @@ public class ModelUtils
                             .get(token.toString());
                         originalExtendedToken.setDoubleProperty(propertyName,
                             originalExtendedToken
-                                .getDoubleProperty(propertyName)
+                                .getDoubleProperty(propertyName, 0)
                                 + multiplier);
                     }
                 }
@@ -86,7 +86,7 @@ public class ModelUtils
 
                 // Increase the frequency of the stemmed token
                 extendedToken.setDoubleProperty(propertyName, extendedToken
-                    .getDoubleProperty(propertyName)
+                    .getDoubleProperty(propertyName, 0)
                     + multiplier);
 
                 // Add/increase frequency of the original token
@@ -106,7 +106,7 @@ public class ModelUtils
                     originalExtendedToken = (ExtendedToken) (originalExtendedTokens)
                         .get(token.toString());
                     originalExtendedToken.setDoubleProperty(propertyName,
-                        originalExtendedToken.getDoubleProperty(propertyName)
+                        originalExtendedToken.getDoubleProperty(propertyName, 0)
                             + multiplier);
                 }
             }
@@ -198,7 +198,7 @@ public class ModelUtils
         else
         {
             while (((ExtendedToken) list.get(index))
-                .getDoubleProperty(frequencyProperty) >= frequencyThreshold)
+                .getDoubleProperty(frequencyProperty, 0) >= frequencyThreshold)
             {
                 index++;
             }

@@ -90,7 +90,7 @@ public class SAPhraseExtractionStrategyTest extends TestCase
                 { tokenSequence }), tokenSequenceList);
         assertEquals("One frequent phrase frequency", 2.0,
                 ((ExtendedTokenSequence) tokenSequenceList.get(0))
-                        .getDoubleProperty(ExtendedTokenSequence.PROPERTY_TF),
+                        .getDoubleProperty(ExtendedTokenSequence.PROPERTY_TF, 0),
                 0);
     }
 
@@ -136,11 +136,11 @@ public class SAPhraseExtractionStrategyTest extends TestCase
                 { tokenSequenceAB, tokenSequenceQRS }), tokenSequenceList);
         assertEquals("One frequent phrase frequency", 3.0,
                 ((ExtendedTokenSequence) tokenSequenceList.get(0))
-                        .getDoubleProperty(ExtendedTokenSequence.PROPERTY_TF),
+                        .getDoubleProperty(ExtendedTokenSequence.PROPERTY_TF, 0),
                 0);
         assertEquals("One frequent phrase frequency", 2.0,
                 ((ExtendedTokenSequence) tokenSequenceList.get(1))
-                        .getDoubleProperty(ExtendedTokenSequence.PROPERTY_TF),
+                        .getDoubleProperty(ExtendedTokenSequence.PROPERTY_TF, 0),
                 0);
     }
 
@@ -178,7 +178,7 @@ public class SAPhraseExtractionStrategyTest extends TestCase
                 { tokenSequenceNiceTitle }), tokenSequenceList);
         assertEquals("Stop word stripping frequency", 3.0,
                 ((ExtendedTokenSequence) tokenSequenceList.get(0))
-                        .getDoubleProperty(ExtendedTokenSequence.PROPERTY_TF),
+                        .getDoubleProperty(ExtendedTokenSequence.PROPERTY_TF, 0),
                 0);
     }
 
@@ -226,11 +226,11 @@ public class SAPhraseExtractionStrategyTest extends TestCase
                 tokenSequenceList);
         assertEquals("Stop word stripping frequency", 3.0,
                 ((ExtendedTokenSequence) tokenSequenceList.get(0))
-                        .getDoubleProperty(ExtendedTokenSequence.PROPERTY_TF),
+                        .getDoubleProperty(ExtendedTokenSequence.PROPERTY_TF, 0),
                 0);
         assertEquals("Stop word stripping frequency", 2.0,
                 ((ExtendedTokenSequence) tokenSequenceList.get(1))
-                        .getDoubleProperty(ExtendedTokenSequence.PROPERTY_TF),
+                        .getDoubleProperty(ExtendedTokenSequence.PROPERTY_TF, 0),
                 0);
     }
 
