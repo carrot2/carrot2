@@ -57,6 +57,7 @@ public class SimpleCaseNormalizer implements CaseNormalizer
     public SimpleCaseNormalizer()
     {
         this.capitalizeNonStopWords = true;
+        documents = new ArrayList();
     }
 
     /**
@@ -69,6 +70,7 @@ public class SimpleCaseNormalizer implements CaseNormalizer
      */
     public SimpleCaseNormalizer(boolean capitalizeNonStopWords)
     {
+        this();
         this.capitalizeNonStopWords = capitalizeNonStopWords;
     }
 
