@@ -35,7 +35,7 @@ public class QueryInputComponent
      * Sends a query to an input component.
      *
      * @param inputComponentServiceURL An URL to where the input component service point is.
-     * @param query The query
+     * @param queryString The query
      * @param resultsRequested Number of requested results. This should be reasonably low
      *
      * @return An InputStream to what the component returned.

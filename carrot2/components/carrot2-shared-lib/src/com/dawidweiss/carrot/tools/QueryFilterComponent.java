@@ -38,9 +38,9 @@ public class QueryFilterComponent
     /**
      * Sends a query to an component.
      *
-     * @param inputComponentServiceURL An URL to where the component service point is (must accept
+     * @param componentServiceURL An URL to where the component service point is (must accept
      *        HTTP POST)
-     * @param carrotRequestStream The data stream to be sent in a POST request as
+     * @param carrotRequest The data stream to be sent in a POST request as
      *        "carrot-xchange-data" parameter.
      * @param params Configuration params for the filter component.
      *
