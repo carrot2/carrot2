@@ -83,7 +83,10 @@
   <target name="check.bootstrap">
     <!-- Set to true if bootstrap jar is available. -->
     <condition property="tmp:bootstrap.available" value="true">
+        <or>
             <available file="${carrot2.cvs.dir}/components/carrot2-ant-extensions/tmp/dist/carrot2-ant-extensions.jar" type="file" />
+            <available file="${carrot2.cvs.dir}/components/carrot2-ant-extensions/tmp/build/carrot2-ant-extensions-tmp-bootstrap.jar" type="file" />
+        </or>
     </condition>
   </target>
   <!-- }}} -->
@@ -119,7 +122,12 @@
   <target name="custom.tasks">
     <!-- Define custom ANT tasks and types -->
     <path id="bootstrap">
-        <fileset dir="${carrot2.cvs.dir}/components/carrot2-ant-extensions/tmp/dist" includes="*.jar" />
+        <fileset dir="${carrot2.cvs.dir}/components/carrot2-ant-extensions/tmp/dist">
+            <include name="*.jar" />
+        </fileset>
+        <fileset dir="${carrot2.cvs.dir}/components/carrot2-ant-extensions/tmp/build">
+            <include name="*tmp-bootstrap.jar" />
+        </fileset>
     </path>
 
     <taskdef name="bringToDate" 
