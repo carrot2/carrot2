@@ -1,5 +1,42 @@
 TODO:
 
+* Investigate a query in Polish: miś
+
+* (Other Topics) as the only subcluster
+
+* words that may not be stopwords, but are not allowed to form cluster labels alone
+
+* mgr, dr, hab, prof in Polish results
+
+* higher score when a word occurs in the title
+
+* skip content in parentheses?
+
+* first length-normalisation and then idf scaling?
+
+* switch to df cutoff in term selection?
+
+* case normalisation: LaTeX Tutorial vs. LaTeX Rubber
+
+* problems with snippet readers?
+
+* repeated labels across passes (Digital Library Framevork vs. _dLibra_
+  Digital Library Framework)
+
+* is a hyphen a sentence separator?
+
+* Gawronka PLFOTO group - assignment bug?
+
+* eliminate groups with identical content?
+
+* cluster label longer than 2 characters?
+
+* choose which word cannot be omitted (use tf-df)
+
+* incorporate the search engine's ranking to the cluster ranking
+
+* national characters -> english spelling: Stanis�aw -> Stanislaw
+
 * Have look at JADE, which may offer a nice performance boost
 
 * FeatureSelectionStrategy interface is meant to return single words found in 
@@ -33,6 +70,12 @@ TODO:
 * Improved language guessing
 	- for extremely short strings it seems that the stop word method would 
 	  perfom better. In case of draws - let the trigram method decide.
+	  
+	- it would be nice to have the documents _first_ tokenised and only then
+	  language-recognised. This is because the n-grams would be calculated only
+	  for non-noise content (or the tokenisation would be performed only once).
+	  This would involve splitting the tokenisation and stemming/stopword marking
+	  into two separate filters.
 
 * Tokenizer improvements
     - improve tokenizer:
@@ -52,3 +95,11 @@ DONE:
   FeatureSelectionStrategy and PhraseExtractionStrategy can be implemented in 
   one class, reusing common information created during each of the processes.
   
+* tokenizer: "Of- Speech"
+
+* "on-line" as a stop-word?
+
+* month names -> stopwords?
+  
+* (Ronnie) O'Sullivan (apostrophe treatment)
+
