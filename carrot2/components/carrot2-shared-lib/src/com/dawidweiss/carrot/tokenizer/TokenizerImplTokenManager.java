@@ -91,14 +91,12 @@ public class TokenizerImplTokenManager
 
     private final int jjMoveNfa_0(int startState, int curPos)
     {
-        int [] nextStates;
         int startsAt = 0;
         jjnewStateCnt = 75;
 
         int i = 1;
         jjstateSet[0] = startState;
 
-        int j;
         int kind = 0x7fffffff;
 
         for (;;)
@@ -2081,8 +2079,6 @@ MatchLoop:
 
     public final Token getNextToken()
     {
-        int kind;
-        Token specialToken = null;
         Token matchedToken;
         int curPos = 0;
 

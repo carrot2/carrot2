@@ -187,8 +187,6 @@ public class HTMLNode
     {
         log.debug("Assigning children to: " + getName());
 
-        int mxIndex = -1;
-
         if (endIndex < startIndex)
         {
             return;
@@ -410,7 +408,6 @@ public class HTMLNode
     public String toString()
     {
         StringBuffer sb; // Stores the string to be returned.
-        Enumeration list; // List of node's attributes or children.
 
         // Get a new StringBuffer.
         sb = new StringBuffer();
@@ -818,7 +815,6 @@ public class HTMLNode
         Enumeration list; // List of this node's children.
         Object curr; // Current object from the list.
         HTMLNode prev = null; // Stores last found HTMLNode.
-        boolean returnPrev = true; // True when child has been found.
 
         // Return nothing if this node has no children.
         if (children == null)

@@ -29,7 +29,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -129,7 +128,7 @@ public class FilterRequestProcessorServlet
         // parse POST stream until 'carrot-xchange-data' parameter is encountered.
         // all parameters before that one are preserved in a hashmap.
         ServletInputStream postedData = req.getInputStream();
-        Locale responseLocale = req.getLocale();
+        // Locale responseLocale = req.getLocale();
 
         // detect POST message type? We currently don't support multipart POSTs. Only
         // application/x-www-form-urlencoded forms are allowed.

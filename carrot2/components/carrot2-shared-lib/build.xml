@@ -116,7 +116,6 @@
   <!-- ### {{{ Build adapters JAR        ### -->
   <!-- ##################################### -->
   <target name="adapters" depends="compile" description="Builds a JAR with adapter classes">
-
 	  <jar
 	        compress="true"
 	        jarfile="${distribution.dir}/carrot2-adapters.jar"
