@@ -1,0 +1,8 @@
+
+php_flag short_open_tag off
+
+RewriteEngine on
+RewriteBase /dweiss/carrot
+RewriteRule ^$ index.php/index.xml
+RewriteRule ^xml/(.+)(.xml)$ index.php/$1.xml
+

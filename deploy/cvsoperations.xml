@@ -1,0 +1,52 @@
+
+
+<project name="cvsoperations" default="help">
+
+    <target name="check.required.properties">
+        <fail message="'module.name' must be specified." unless="module.name" />
+        <fail message="'cvs.root' must be specified." unless="cvs.root" />
+        <fail message="'checkout.dir' must be specified." unless="checkout.dir" />
+        <fail message="'cvs.pass' must be specified." unless="cvs.pass" />
+        <available file="${checkout.dir}/${module.name}"
+                   property="tmp:module.checked.out" type="dir" value="true" />
+    </target>
+
+    
+    <target name="cvs.checkout.module" depends="check.required.properties"
+            unless="tmp:module.checked.out">
+        <echo message="### Checking out module: ${module.name}" />
+        <cvs cvsroot="${cvs.root}" 
+            command        = "-Q checkout -r HEAD ${module.name}"
+            dest           = "${checkout.dir}"
+            failonerror    = "true"
+            passfile       = "${cvs.pass}" />
+    </target>
+
+
+    <target name="cvs.update.module" depends="check.required.properties">
+        <echo message="### Updating module: ${module.name}" />
+        <cvs cvsroot="${cvs.root}" 
+            command        = "-q -n update -P ${module.name}"
+            dest           = "${checkout.dir}"
+            failonerror    = "true"
+            passfile       = "${cvs.pass}" />
+    </target>
+
+
+    <target name="cvs.checkout_or_update.module" 
+            depends="check.required.properties,cvs.checkout.module,cvs.update.module">
+    </target>
+
+    
+    <target name="help">
+    <echo>
+    A set of CVS targets invoked by other scripts. Required
+    variables:
+    
+    module.name   - the module to do operation on.
+    cvs.root      - full cvsroot path
+    checkout.dir  - checkout directory
+    cvs.pass      - cvs passwords file
+    </echo>
+    </target>
+</project>
