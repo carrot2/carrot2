@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<!DOCTYPE component SYSTEM "../etc/component-dependency.dtd" > 
+<component
+    name="format"
+    description="printf style formatting for Java, http://horstmann.com">
+	<provides>
+		<files>
+			<file location="format.jar" />
+			<file location="format.LICENSE" />
+		</files>
+	</provides>
+</component>
