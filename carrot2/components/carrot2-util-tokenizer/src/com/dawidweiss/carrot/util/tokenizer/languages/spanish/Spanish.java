@@ -39,12 +39,12 @@ public class Spanish extends StemmedLanguageBase {
      * Load stopwords from an associated resource.
      */
     static {
-        String resourceName = "stopwords.es";
+        String resourceName = "/com/dawidweiss/carrot/util/tokenizer/languages/spanish/stopwords.es";
         try {
 			stopwords = LanguageBase.loadStopwords(
 			    Spanish.class.getResourceAsStream(resourceName));
 		} catch (IOException e) {
-            throw new RuntimeException("Could not load the required" +
+            throw new RuntimeException("Could not load the required " +
                     "resource: " + resourceName);
 		}
     }

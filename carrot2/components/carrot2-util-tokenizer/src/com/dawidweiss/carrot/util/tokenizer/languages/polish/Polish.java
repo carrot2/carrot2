@@ -38,7 +38,7 @@ public class Polish extends StemmedLanguageBase {
      * Load stopwords from an associated resource.
      */
     static {
-        String resourceName = "stopwords.pl";
+        String resourceName = "/com/dawidweiss/carrot/util/tokenizer/languages/polish/stopwords.pl";
         try {
 			stopwords = LanguageBase.loadStopwords(
 			    Polish.class.getResourceAsStream(resourceName));
