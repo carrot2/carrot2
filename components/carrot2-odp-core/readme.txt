@@ -25,3 +25,14 @@ http://www.man.poznan.pl/~stachoo/carrot/odp-cshpark.zip
 
 To use the index simply unzip the file onto a folder on local drive, and point
 the tools requiring an ODP index to that folder.
+
+If you wish to build your own index, use the run the 
+com.stachoodev.carrot.odp.tools.ODPIndexer class with two parameters:
+
+ODPIndexer odp-xml-input-file index-location
+
+Note: it is now possible to index the whole ODP contents (the big ~2G XML file)
+on a reasonable PC with a reasonable amount of RAM (512MB+) within tens of 
+minutes. However, in the present implementation, for the whole ODP database,
+the primary topic index will take about 50MB of RAM during runtime, and the path
+index will take another 50MB. With parts of the ODP the overhead is much smaller.
