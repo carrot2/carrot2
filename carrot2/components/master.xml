@@ -54,7 +54,7 @@
     <condition property="ok:carrot2.cvs.dir" value="true">
         <and>
             <available file="${carrot2.cvs.dir}/lib" type="dir" />
-            <available file="${carrot2.cvs.dir}/history.xml" type="file" />
+            <available file="${carrot2.cvs.dir}/carrot2.LICENSE" type="file" />
         </and>
     </condition>
     <fail message="'carrot2.cvs.dir' property must be set properly: ${carrot2.cvs.dir}" unless="ok:carrot2.cvs.dir" />
