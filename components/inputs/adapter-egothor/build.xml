@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="Egothor Input Component Adapter for Carrot2" default="help" basedir="." >
+
+  <!-- ## place your local properties (egothor.dir) here -->
+  <property file="local.properties" />
+
+  <!-- ## these are overrioden by master build file ### -->
+
+  <property name="distribution.dir" location="tmp/dist" />
+  <property name="javadoc.dir"      location="tmp/javadoc" />
+  <property name="carrot2.cvs.dir"  location="../../.." />
+
+  <!-- ## global properties ### -->
+
+  <property name="build.dir"        location="tmp/build" />
+  <property name="build.compiler"   value="modern" /> 
+  <property name="dist.name"        value="carrot2-adapter-egothor" />
+
+  <!-- ## local properties ### -->
+
+  <property name="src.path"            location="src" />
+  <property name="javac.optimize"      value="off" />
+  <property name="javac.debug"         value="on" />
+
+  <!-- ##################################### -->
+  <!-- ### {{{ CLEAN                     ### -->
+  <!-- ##################################### -->
+  <target name="clean" description="Removes compiled classes and distribution files.">
+    <delete failonerror="false" includeemptydirs="true" quiet="true">
+        <fileset dir="tmp" />
+    </delete>
+  </target>
+  <!-- }}} -->
+
+  
+  <!-- ##################################### -->
+  <!-- ### {{{ PREPARE                   ### -->
+  <!-- ##################################### -->
+
+  <target name="check-egothor-available">
+    <condition property="cond:egothor.available" value="true">
+        <and>
+            <available file="${egothor.dir}" type="dir" />
+            <available classname="org.egothor.query.Executor">
+                <classpath>
+                    <fileset dir="${egothor.dir}" includes="WEB-INF/lib/*.jar" />
+                </classpath>
+            </available>
+        </and>
+    </condition>
+  </target>
+  
+  <target name="prepare" depends="check-egothor-available, generate.dependency.path" if="cond:egothor.available">
+    <mkdir dir="${distribution.dir}"  />
+    <mkdir dir="${build.dir}"  />
+  </target>
+  <!-- }}} -->
+
+  <!-- ##################################### -->
+  <!-- ### {{{ DEPENDENCY analysis       ### -->
+  <!-- ##################################### -->
+  <property name="component.descriptor" location="adapter-egothor.dep.xml" />
+  
+  <target name="define.dependency.task">
+    <taskdef resource="com/dawidweiss/carrot/ant/dependencies.antlib.xml">
+        <classpath location="${carrot2.cvs.dir}/lib/carrot2-shared-lib.jar" />
+    </taskdef>
+  </target>
+
+  <target name="generate.dependency.path" depends="define.dependency.task">
+    <dependencylist
+        property="component.dep"
+        fileListId="component.dep.flist"
+        componentDescriptor="${component.descriptor}"
+        verbose="false"
+    >
+        <dependencies dir="${carrot2.cvs.dir}/lib">
+            <include name="*.dep.xml" />
+        </dependencies>
+    </dependencylist>
+    <path id="classpath.dependencies">
+        <filelist refid="component.dep.flist" />
+    </path>
+  </target>
+
+  <target name="show.dependencies" depends="define.dependency.task">
+    <dependencylist componentDescriptor="${component.descriptor}" verbose="on">
+        <dependencies dir="${carrot2.cvs.dir}/lib">
+            <include name="*.dep.xml" />
+        </dependencies>
+    </dependencylist>
+  </target>
+  
+  <target name="collect.dependencies" depends="prepare">
+    <dependencylist componentDescriptor="${component.descriptor}" verbose="on"
+                    fileListId="component.dep.flist">
+        <dependencies dir="${carrot2.cvs.dir}/lib">
+            <include name="*.dep.xml" />
+        </dependencies>
+    </dependencylist>
+
+    <copyfilelist todir="${distribution.dir}">
+        <filelist refid="component.dep.flist" />
+    </copyfilelist>
+  </target>
+  <!-- }}} -->
+
+  <!-- ##################################### -->
+  <!-- ### {{{ COMPILE SOURCE FILES      ### -->
+  <!-- ##################################### -->
+
+  <target name="compile" depends="prepare,egothor-info" if="cond:egothor.available">
+    <javac destdir     = "${build.dir}"
+           debug       = "${java.debug}"
+           optimize    = "${java.optimize}"
+           deprecation = "on"
+           includeantruntime = "false"
+           includejavaruntime = "false"
+    >
+        <!-- add source code paths. -->
+        <src path="${src.path}" />
+        <exclude name="**/*Test.java"/>
+        <classpath refid="classpath.dependencies" />
+        <classpath location="${carrot2.cvs.dir}/lib/compile-time-only/servlet.jar" />
+        <classpath>
+            <fileset dir="${egothor.dir}" includes="WEB-INF/lib/*.jar" />
+            <pathelement location="${egothor.dir}/WEB-INF/classes" />
+        </classpath>
+    </javac>
+
+    <!-- copy any non-java files (resources) from the source path. -->
+    <copy toDir="${build.dir}">
+       <fileset dir="${src.path}">
+         <exclude name="**/*.java"/>
+       </fileset>
+    </copy>    
+  </target>
+  
+  <target name="egothor-info" unless="cond:egothor.available">
+    <echo>
+WARNING: Egothor installation directory is not available.
+Specify Egothor's WebApp installation directory location in 'egothor.dir'
+property.
+    </echo>
+  </target>
+  <!-- }}} -->
+
+
+  <!-- ##################################### -->
+  <!-- ### {{{ build jar file            ### -->
+  <!-- ##################################### -->
+  <target name="build" depends="compile" if="cond:egothor.available">
+    <tstamp />
+	<jar update="false" jarfile="${distribution.dir}/${dist.name}.jar">
+		<fileset dir="${build.dir}" />
+        <manifest>
+            <attribute name="Assembly-date" value="${DSTAMP} ${TSTAMP}"/>
+        </manifest>		
+	</jar>
+  </target>
+  <!-- }}} -->
+
+
+  <!-- ##################################### -->
+  <!-- ### {{{ HELP ON THIS FILE         ### -->
+  <!-- ##################################### -->
+  <target name="help" description="Displays help on available targets.">
+    <echo>
+    Project name: ${ant.project.name}
+
+    Current JDK: ${ant.java.version}
+    Basedir    : ${basedir}
+    -----------------------------------------------------
+
+    Available targets:
+
+    clean     Removes all temporary files.
+    compile   Compiles the project.
+    build     Builds WAR file
+    </echo>
+  </target>
+  <!-- }}} -->
+
+</project>
+
