@@ -11,9 +11,9 @@
 package com.stachoodev.suffixarrays;
 
 /**
- * A suffix array that has two Longest Common Prefix arrays. Apart from the
- * usual LCP array, it has a super LCP array, which describes generalized
- * prefixes of the string.
+ * A suffix array that has two suffix arrays and two Longest Common Prefix
+ * arrays. Apart from the usual suffix and LCP arrays, it has a super-versions
+ * of these, which are generated for the generalised versions of the symbols.
  * 
  * @author Stanislaw Osinski
  * @version $Revision$
@@ -24,17 +24,34 @@ public class DualLcpSuffixArray extends LcpSuffixArray
     protected int [] superLcpArray;
 
     /**
+     * Super Suffix array. Contains suffixes sorted according to the generalized
+     * symbol sequences
+     */
+    protected int [] superSuffixArray;
+
+    /**
      * @param suffixArray
      * @param lcpArray
      */
     public DualLcpSuffixArray(int [] suffixArray, int [] lcpArray,
-        int [] secondaryLcpArray)
+        int [] superSuffixArray, int [] superLcpArray)
     {
         super(suffixArray, lcpArray);
 
-        this.superLcpArray = secondaryLcpArray;
+        this.superSuffixArray = superSuffixArray;
+        this.superLcpArray = superLcpArray;
     }
 
+    /**
+     * Returns the super suffix array;
+     * 
+     * @return 
+     */
+    public int [] getSuperSuffixArray()
+    {
+        return superSuffixArray;
+    }
+    
     /**
      * Returns the super LCP array.
      * 
