@@ -9,15 +9,10 @@
 	<classpathentry kind="var" path="ANT_HOME/lib/ant-apache-resolver.jar"/>
 	<classpathentry kind="var" path="ANT_HOME/lib/ant-commons-logging.jar"/>
 	<classpathentry kind="var" path="ANT_HOME/lib/ant-commons-net.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-jakarta-log4j.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-jakarta-oro.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-jakarta-regexp.jar"/>
 	<classpathentry kind="var" path="ANT_HOME/lib/ant-junit.jar"/>
 	<classpathentry kind="var" path="ANT_HOME/lib/ant-launcher.jar"/>
 	<classpathentry kind="var" path="ANT_HOME/lib/ant-nodeps.jar"/>
 	<classpathentry kind="var" path="ANT_HOME/lib/ant-xalan1.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-xalan2.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/commons-net-1.1.0.jar"/>
 	<classpathentry kind="var" path="ANT_HOME/lib/junit.jar"/>
 	<classpathentry kind="output" path="tmp/build/classes"/>
 </classpath>
