@@ -157,7 +157,7 @@ public class ModelUtils
     /**
      * @param tokenSequence
      * @param frequencyMap
-     * @param storeOriginalForms TODO
+     * @param storeOriginalForms
      */
     public static void addToFrequencyMap(TokenSequence tokenSequence,
         String propertyName, Map frequencyMap, double multiplier,

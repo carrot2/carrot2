@@ -42,7 +42,8 @@ import com.stachoodev.util.common.*;
  * Note: This class is <b>not </b> multilingual. Expect strange results when
  * applied to multilingual data (i.e. tokens with inconsistent stopword markers)
  * 
- * TODO: the algorithm not quite works for phrases of length 1
+ * TODO: the algorithm not quite works for phrases of length 1 
+ * TODO: for some reason not all sequences have non-null original sentences property
  * 
  * @author Stanislaw Osinski
  * @version $Revision$
@@ -405,7 +406,7 @@ public class SAPhraseExtractionStrategy implements PhraseExtractionStrategy
         }
 
         /**
-         * 
+         *  
          */
         private void updatePrimary(boolean caseC)
         {
@@ -524,7 +525,7 @@ public class SAPhraseExtractionStrategy implements PhraseExtractionStrategy
     }
 
     /**
-     * 
+     *  
      */
     public void clear()
     {
@@ -533,7 +534,7 @@ public class SAPhraseExtractionStrategy implements PhraseExtractionStrategy
         dualLcpSuffixArray = null;
         dualLcpSuffixArrayReversed = null;
     }
-    
+
     /**
      * Represents a general substring. Contains information on the substring's
      * boundaries and absolute frequency.
