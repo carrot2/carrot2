@@ -12,6 +12,7 @@ package com.dawidweiss.carrot.ant;
 import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.ArrayList;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
@@ -106,21 +107,32 @@ public class DependencyPath extends Path {
 		}
 
         File [] providedFiles = component.getAllProvidedFiles( components, profile, true );
-        String [] result = new String [ providedFiles.length ];
+        ArrayList result = new ArrayList(providedFiles.length);
         for (int i=0;i<providedFiles.length;i++) {
             log(providedFiles[i].toString(), Project.MSG_VERBOSE);
             if (!providedFiles[i].isAbsolute()) {
                 throw new BuildException("Resolved dependency file not absolute: "
                     + providedFiles[i]);
             }
-            if (providedFiles[i].getName().endsWith(".jar")
-                && !providedFiles[i].exists()) {
+            // JDK1.5 does not accept files that are not JARs or directories in the
+            // classpath.
+            if (providedFiles[i].exists()==false) {
                 log("Classpath object does not exist: "
                     + providedFiles[i].getAbsolutePath(), Project.MSG_WARN);
+            } else {
+	            if (providedFiles[i].getName().toLowerCase().endsWith(".jar")) {
+		            result.add( providedFiles[i].getAbsolutePath() );
+	            } else if (providedFiles[i].isDirectory()) {
+		            result.add( providedFiles[i].getAbsolutePath() );
+	            } else {
+		            // we don't know what it is, so ignore it.
+	                log("Classpath object ignored (not a JAR or a directory): "
+	                    + providedFiles[i].getAbsolutePath(), Project.MSG_DEBUG);
+	            }
             }
-            result[i] = providedFiles[i].getAbsolutePath();
         }
-        return result;
+        
+        return (String []) result.toArray( new String[ result.size() ] );
 	}
 
 }
