@@ -215,12 +215,24 @@
     </ant>
   </target> <!-- }}} -->
 
+  <target name="build.fuzzyAnts" depends="init"> <!-- {{{ -->
+    <echo>
+
+    #### Building: Fuzzy Ants filter ####
+
+    </echo>
+    <ant antfile="build.xml" target="build" dir="components/filters/clustering/fuzzyAnts" inheritall="false">
+        <property name="distribution.dir" location="${distribution.dir}" />
+        <property name="javadoc.dir"     location="${javadoc.dir}" />
+    </ant>
+  </target> <!-- }}} -->
   
   <target name="build" description="Builds all known Carrot2 components."
           depends="
             build.webcontroller,
             build.ahc-clustering,
             build.lingo-clustering,
+            build.fuzzyAnts,
             build.stc-clustering,
             build.stream-interceptors,
             build.pl-eng-stemming,
@@ -237,31 +249,32 @@
   <!-- ### {{{ reformats sources         ### -->
   <!-- ##################################### -->
   <target name="reformat">
-    <available classname="de.hunsicker.jalopy.plugin.ant.AntPlugin" property="jalopy.available" value="true" />
-    <taskdef name="jalopy" classname="de.hunsicker.jalopy.plugin.ant.AntPlugin" />
-    <fail message="Jalopy's ANT plugin must be in classpath." unless="jalopy.available" />
-    
+	<property file="${user.home}/jalopy.properties" />
+	<fail unless="jalopy.home">
+	Define 'jalopy.home'.
+	</fail>	
+
+    <taskdef name="jalopy" 
+		classname="de.hunsicker.jalopy.plugin.ant.AntPlugin">
+		<classpath>
+			<fileset dir="${jalopy.home}" includes="lib/*.jar" />
+		</classpath>
+	</taskdef>
+
+	<fail unless="component.src.dir">
+	Give 'component.src.dir' property.
+	</fail>
+
     <jalopy fileformat="unix"
             convention="misc/jalopy/carrot2.jalopy.xml"
+            destdir="tmp/code_formatted"
+			encoding="UTF-8"
             history="file"
             historymethod="adler32"
             loglevel="info"
             threads="1">
-      <fileset dir="components">
-        <include name="carrot2-shared-lib/**/*.java" />
-        <exclude name="carrot2-shared-lib/tmp/**" />
-        
-        <include name="controllers/carrot2-web-controller/**/*.java" />
-        <include name="filters/clustering/ahc-clustering/**/*.java" />
-        <include name="filters/clustering/lingo-clustering/**/*.java" />
-        <include name="filters/clustering/stc-clustering/**/*.java" />
-        <include name="filters/diagnostics/stream-interceptor/**/*.java" />
-        <include name="filters/linguistic/pl-eng-stemming/**/*.java" />
-        <include name="filters/pruning/text-only/**/*.java" />
-        <include name="inputs/verbatim-input/**/*.java" />
-        <include name="inputs/snippet-generator/**/*.java" />
-        <include name="inputs/snippet-reader/**/*.java" />
-        <include name="outputs/xslt-renderer/**/*.java" />
+      <fileset dir="${component.src.dir}">
+      	<include name="**/*.java" />
       </fileset>
     </jalopy>
   </target>

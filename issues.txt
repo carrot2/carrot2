@@ -13,4 +13,21 @@ work.
 
 2.
 
-TreeSnippetMiner component has a bug where it falls into an infinite busy loop.
+Reported by: Haris Papadopoulos 
+
+>> com.dawidweiss.carrot.filter.FilterRequestProcessorServlet - An 
+>> internal component error occurred in processor 
+>> com.stachoodev.carrot.filter.cluster.MultilingualLsiClustererRequestProcessor: 
+>> java.lang.VerifyError: Cannot inherit from final class
+>> java.lang.VerifyError: Cannot inherit from final class
+>>    at java.lang.ClassLoader.defineClass0(Native Method)
+>>    at java.lang.ClassLoader.defineClass(ClassLoader.java:502)
+>>    at 
+
+Tomcat 4.1.10
+
+OK, I did some search my self and I made it work. The problem is that 
+somehow my Tomcat can not work with xercesImpl.jar which I put in 
+WEB-INF/lib of carrot web app. I removed it, so that Tomcat could use 
+its own xml parser. 
+
