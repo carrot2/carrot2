@@ -4,6 +4,8 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/log4j-1.2.8.jar"/>
 	<classpathentry exported="true" kind="src" path="/carrot2-util-common"/>
-	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/commons-pool-1.1.jar"/>
+	<classpathentry exported="true" kind="var" path="CARROT2_CHECKOUT_BASE/lib/commons-pool-1.1.jar"/>
+	<classpathentry exported="true" kind="var" path="CARROT2_CHECKOUT_BASE/lib/commons-collections-3.0.jar"/>
+	<classpathentry exported="true" kind="var" path="CARROT2_CHECKOUT_BASE/lib/commons-logging.jar"/>
 	<classpathentry kind="output" path="tmp/build/classes"/>
 </classpath>
