@@ -30,7 +30,7 @@ import com.stachoodev.carrot.filter.lingo.common.MultilingualClusteringContext;
  * @version $Revision$
  */
 public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
-    implements RawDocumentsConsumer, RawClustersProducer, LocalFilterComponent
+    implements RawDocumentsConsumer, RawClustersProducer, RawDocumentsProducer, LocalFilterComponent
 {
     /** Documents to be clustered */
     private ArrayList documents;
@@ -49,6 +49,9 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
 
     /** Raw clusters consumer */
     private RawClustersConsumer rawClustersConsumer;
+    
+    /** Raw documents consumer */
+    private RawDocumentsConsumer rawDocumentsConsumer;
     
     /**
      *  Request params.
@@ -119,6 +122,9 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
     {
         super.setNext(next);
         rawClustersConsumer = (RawClustersConsumer) next;
+        if (next instanceof RawDocumentsConsumer) {
+            rawDocumentsConsumer = (RawDocumentsConsumer) next;
+        }
     }
 
     /*
@@ -130,6 +136,7 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
 
         documents = null;
         rawClustersConsumer = null;
+        rawDocumentsConsumer = null;
         requestParams = null;
     }
 
@@ -150,6 +157,9 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
     public void addDocument(RawDocument doc) throws ProcessingException
     {
         documents.add( new SnippetInterfaceAdapter(Integer.toString(documents.size()), doc));
+        if (rawDocumentsConsumer != null) {
+            rawDocumentsConsumer.addDocument(doc);
+        }
     }
 
     /*
@@ -163,7 +173,6 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
 
         // Prepare data
         MultilingualClusteringContext clusteringContext = new MultilingualClusteringContext(new HashMap());
-
         
         Language [] languages = this.languages;
         
