@@ -9,6 +9,18 @@
 <history>
 
     <changelist>
+        <date>2003-10-08</date>
+        <committer>dawid</committer>
+        <change component="carrot2.controller.carrot2-web" type="bugfix">
+        Verbatim queries are no longer preserved in session and thus don't cause
+        weird errors when serialized.
+        </change>
+        <change component="carrot2-shared-lib" type="new">
+        A couple of unused variables removed, QueryFilterComponent refined to support input parameters.
+        </change>
+    </changelist>
+
+    <changelist>
         <date>2003-10-05</date>
         <committer>dawid</committer>
         <change component="carrot2.controller.carrot2-web" type="new">
