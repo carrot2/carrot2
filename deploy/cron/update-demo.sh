@@ -18,6 +18,21 @@ export JAVA_HOME
 export JAVACMD
 export ANT_HOME
 
+for counter in `seq 1 10`; do
+    if ant -f build.demo.xml cvsupdate; \
+    then
+        echo "CVS Update ok."
+        break
+    else
+        echo "CVS Update failed. Sleeping 60 secs."
+        sleep 60
+    fi
+    if (($counter == 10)); then
+        echo "Problems updating CVS of the demo..." | mail -s "Demo CVS update problem." dawid.weiss@cs.put.poznan.pl  
+        exit
+    fi    
+done
+
 if ant -Dno.cvsupdate=true -f build.demo.xml \
        -listener org.apache.tools.ant.XmlLogger \
        -DMailLogger.properties.file=cron/build.demo.logger \

@@ -17,12 +17,22 @@ export JAVA_HOME
 export JAVACMD
 export ANT_HOME
 
-if ant -f build.website.xml \
+for counter in `seq 1 10`; do
+    if ant -f build.website.xml cvsupdate; then
+        echo "Website update ok."
+        break;
+    else
+        echo "Website update failed. Sleeping 60 seconds."
+        sleep 60
+    fi
+    if (($counter == 10)); then
+        echo "Problems updating CVS of the website..." | mail -s "Website CVS update problem." dawid.weiss@cs.put.poznan.pl  
+        exit
+    fi
+done
+
+ant -f build.website.xml \
        -DMailLogger.properties.file=cron/build.website.logger \
        -logger org.apache.tools.ant.listener.MailLogger \
-       publish; then
-    echo "Website update ok."
-else
-    echo "Website update failed."
-fi
+       publish
 

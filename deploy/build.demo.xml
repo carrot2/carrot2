@@ -13,15 +13,25 @@
     <property name="deployment.port" value="2001" />
     <property name="deployment.host" value="localhost" />
 
+    <property name="cvs.update.timestamp" location="tmp/.demo.update.mark" />
+    
     <!-- 
       ## Prepare checkout directory and cvs environment.
       -->
-    <target name="prepare" depends="cvsupdate">
+      
+    <target name="vars">
         <mkdir dir="${checkout.dir}" />
         <mkdir dir="${build.dir}" />
+        <tstamp>
+            <format property="deploy.time" pattern="MM/dd/yyyy HH:mm z" locale="en"/>
+        </tstamp>
+        <touch file="${cvs.update.timestamp}" />
+    </target>
+      
+    <target name="prepare" depends="vars,cvsupdate">
     </target>
 
-    <target name="cvsupdate" unless="no.cvsupdate">
+    <target name="cvsupdate" unless="no.cvsupdate" depends="vars">
         <cvspass cvsroot="${cvs.root}" password="" passfile="${cvs.pass}"/>
 
         <ant antfile="cvsoperations.xml" target="cvs.checkout_or_update.module" inheritall="false">
@@ -30,6 +40,7 @@
             <property name="module.name" value="${module.name}" />
             <property name="cvs.root" value="${cvs.root}" />
         </ant>
+        <echo message="${deploy.time}" file="${cvs.update.timestamp}" append="false" />
     </target>
 
     <!-- 
@@ -96,12 +107,25 @@
         />
         <delete failonerror="false" includeemptydirs="true" quiet="true"
                 file="log.xml" />
+        <mkdir dir="${runtime.env}/context-logs/test-report" />
+        <copy overwrite="true" todir="${runtime.env}/context-logs/test-report">
+            <fileset dir="demo/no-logs-info" includes="**/*" />
+        </copy>
     </target>
     
     <!-- 
       ## Copies necessary files and starts tomcat again.
       -->
-    <target name="start.tomcat.success">
+    <target name="start.tomcat.success" depends="vars">
+        <loadfile srcfile="${cvs.update.timestamp}" property="cvs.update.timestamp.value" />
+        <copy includeemptydirs="true" overwrite="true"
+              file="demo/root/index.success.html"
+              tofile="${runtime.env}/context-root-success/index.html" filtering="true">
+            <filterset>
+                <filter token="cvs.update.timestamp.value" value="${cvs.update.timestamp.value}"/>
+                <filter token="code.build.timestamp.value" value="${deploy.time}" />
+            </filterset>        
+        </copy>
         <ant antfile="tomcat.xml" dir="." target="start.tomcat">
             <property name="catalina.home" location="${runtime.env}" />
         </ant>
@@ -110,7 +134,16 @@
     <!-- 
       ## Copies necessary files and starts tomcat again.
       -->
-    <target name="start.tomcat.failure">
+    <target name="start.tomcat.failure" depends="vars">
+        <loadfile srcfile="${cvs.update.timestamp}" property="cvs.update.timestamp.value" />
+        <copy includeemptydirs="true" overwrite="true"
+              file="demo/root/index.failure.html"
+              tofile="${runtime.env}/context-root-failure/index.html" filtering="true">
+            <filterset>
+                <filter token="cvs.update.timestamp.value" value="${cvs.update.timestamp.value}"/>
+                <filter token="code.build.timestamp.value" value="${deploy.time}" />
+            </filterset>        
+        </copy>
         <ant antfile="tomcat.xml" dir="." target="start.tomcat">
             <property name="catalina.home" location="${runtime.env}" />
             <property name="catalina.config" location="${runtime.env}/conf/server.buildfailure.xml" />
