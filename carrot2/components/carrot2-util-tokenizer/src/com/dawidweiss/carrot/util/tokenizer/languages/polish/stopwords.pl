@@ -9,6 +9,7 @@ hab
 prof
 inż
 dr
+i
 u
 aby
 albo
