@@ -16,6 +16,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
+import org.apache.xml.resolver.CatalogManager;
 import org.apache.xml.resolver.tools.CatalogResolver;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -81,6 +82,9 @@ public class ComponentDependency {
             DocumentBuilder builder;
             builder = factory.newDocumentBuilder();
             
+            // switch off annoying messages...
+            CatalogManager.getStaticManager().setIgnoreMissingProperties(true);
+
             CatalogResolver catalog = new CatalogResolver();
             catalog.getCatalog().parseCatalog(this.getClass().getResource("/res/catalog.xml"));
             catalog.getCatalog().parseAllCatalogs();
