@@ -427,8 +427,15 @@ public class XsltRendererServlet
 
         transformer.setParameter(
             "base.url",
-            request.getScheme() + "://" + sname + ":" + request.getServerPort()
-            + request.getContextPath()
+        	// BUGFIX: We temporarily remove full URL as it is troublesome when
+        	// you have a proxy -- the URLs returned are pointing to the actual
+        	// server, not the proxy.
+        	// The workaround is to return full path (from the root of the server),
+        	// the browser should rewrite the URL using the proxy's address. One
+        	// problem that remains is that the proxy and the server must have identically
+        	// aligned paths to the component.
+            // request.getScheme() + "://" + sname + ":" + request.getServerPort() +
+            request.getContextPath()
         );
 
         if (params != null)
