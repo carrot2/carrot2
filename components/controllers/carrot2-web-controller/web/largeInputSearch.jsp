@@ -7,8 +7,8 @@
 
 <%@include file="jsp-tmpl/prolog.txt" %>
 
-<!-- ### Initialize query bean (session scope) ### -->
-<jsp:useBean id="queryBean" scope="session" class="com.dawidweiss.carrot.controller.carrot2.struts.forms.QueryForm" />
+<!-- ### Initialize query bean (request scope) ### -->
+<jsp:useBean id="queryBean" scope="request" class="com.dawidweiss.carrot.controller.carrot2.struts.forms.QueryForm" />
 <jsp:setProperty name="queryBean" property="*" />
 <%
     if (!queryBean.isInitialized()) queryBean.initialize(application);
