@@ -37,9 +37,12 @@ public class Parameter
             return value;
     }
 
-
     // accessors
 
     public boolean isMapped() { return mapped; }
     public String  getName()   { return name; }
+    
+    public String toString() {
+        return getName() + " -> " + (isMapped() ? "{" + value + "}" : value ); 
+    }
 }
