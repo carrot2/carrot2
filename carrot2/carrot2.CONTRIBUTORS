@@ -3,10 +3,11 @@
 #
 # [*] -- not active.
 #
-# Name; Duties; Active from
+# First name, surname name; Duties; Active from; Institution
 
-Dawid Weiss; Project administrator, various components, core; 2002
-Stanisław Osiński; Lingo clustering component; 2003
-Michał Wróblewski [*]; AHC clustering components; 2003
-Paweł Kowalik [*]; Inductive search engine wrapper; 2003
-Steven Schockaert; Fuzzy Ants clustering Component; 2004
+Dawid Weiss; Project administrator, various components, core; 2002; Poznan University of Technology, Poland
+Stanisław, Osiński; Lingo clustering component; 2003; Poznan University of Technology, Poland
+Michał, Wróblewski [*]; AHC clustering components; 2003; Poznan University of Technology, Poland
+Paweł, Kowalik [*]; Inductive search engine wrapper; 2003; Poznan University of Technology, Poland
+Steven, Schockaert; Fuzzy Ants clustering component; 2004; University of Gent, Belgium
+Lang [,] Ngo Chi; Fuzzy Rough set clustering component; 2004; Warsaw University, Poland
