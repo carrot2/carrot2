@@ -74,20 +74,12 @@
             <xsl:text disable-output-escaping="yes"><![CDATA["></sc' + 'ript>');
             }
             else
-            if (navigator.family == "ie4" && navigator.version >=5 && navigator.OS != "mac")
+            // if (navigator.family == "ie4" && navigator.version >=5 && navigator.OS != "mac")
             {
                 document.write('<script type="text/javascript" language="JavaScript" src="]]></xsl:text><xsl:value-of select="concat($dtree.url,'/js/explorer-specific.js')" />
 
             <xsl:text disable-output-escaping="yes"><![CDATA["></sc' + 'ript>');
-            }
-            else
-            {
-            	alert("Browser type not supported: " + navigator.family + ", " + navigator.version);
-                // Unsupported browser. Display the information.
-                location.href = "]]></xsl:text><xsl:value-of select="concat($dtree.url, '/unsupported-browser.html')" /><xsl:text disable-output-escaping="yes"><![CDATA[";
-            }
-            ]]>
-            </xsl:text>
+            }]]></xsl:text>
         </script>
 
         <script type="text/javascript" language="JavaScript">
