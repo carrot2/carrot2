@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE component SYSTEM "../../../etc/component-dependency.dtd" >
+
+<component
+    name="lucene"
+    description="Lucene Full Text Search Engine, http://jakarta.apache.org/lucene">
+
+    <provides>
+        <files>
+            <file location="lucene-1.5-rc1-dev.jar" />
+            <file location="lucene.LICENSE" />
+        </files>
+    </provides>
+
+</component>
+
