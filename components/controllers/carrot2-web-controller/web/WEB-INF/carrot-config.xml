@@ -30,12 +30,13 @@
     <!-- 
       ## Specify other properties that the controller should know about.
       ##
-      ## request-history   (true|false|<missing>)
+      ## request-history   (int|<missing>)
       ##   Enables request history to be recorded and displayed in the
-      ##   controller. This is a privacy issue :) 
+      ##   controller. The value specifies number of history entries to
+      ##   be remembered.
       -->
     <properties>
-    	<property name="request-history" value="true" />
+    	<property name="request-history" value="15" />
     </properties>
 
     <!--

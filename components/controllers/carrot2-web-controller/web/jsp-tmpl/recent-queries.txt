@@ -1,0 +1,38 @@
+<%
+	QueryProcessor loader = (QueryProcessor) application.getAttribute(Carrot2InitServlet.CARROT_PROCESSOR_KEY);
+	RequestHistory history = loader.getRequestHistory();
+
+	if (history != null) {
+	    int num = 20;
+		Query [] queries = new Query [num];
+		ProcessDefinition [] processes = new ProcessDefinition [num];
+		int real = history.getHistory(num, queries, processes);
+
+		if (real == 0) {%>
+		<span style="color: red;">Lucky you! No previous queries!</span>
+		<%
+		}
+
+		for (int i=0;i<real;i++) {
+			Query q = queries[i];
+			ProcessDefinition p = processes[i];
+			
+			%><nobr>
+			<a href="<%= response.encodeURL(
+                            request.getContextPath() + "/index.jsp?"
+                            + "query=" + org.put.util.net.URLEncoding.encode(q.getContent(), "UTF-8")
+                            + "&processingChain=" + org.put.util.net.URLEncoding.encode(p.getId(), "UTF-8")
+                            + "&resultsRequested=" + (q.hasRequestedResults() ? q.getRequestedResults() : 0)) %>" target="_top">
+			<%= org.put.util.text.HtmlHelper.escapeHtmlTags(q.getContent()) %>
+                        </a></nobr>
+            <div style="margin-bottom: 0.5em; font-size: 9px; color: #a0a0a0;">
+            (<%= q.getRequestedResults() %>, <%= StrutsHelpers.getMessageOrDefault(pageContext, p.getId(), p.getDefaultDescription()) %>)
+            </div>
+			<%
+		}
+	} else {
+	%>
+	<span style="color: red;">History not enabled.</span>
+	<%
+	}
+%>

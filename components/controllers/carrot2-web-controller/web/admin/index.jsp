@@ -13,6 +13,13 @@
             Admin panel will be here at some point ;)
             </nobr>
             </p>
+			
+            <p style="margin-top: 20px;">
+            Temporary admin options:
+            </p>
+            <p>
+            <a href="recent.jsp">A list of recent queries</a>
+            </p>
         </div>
     </td></tr>
     </table>

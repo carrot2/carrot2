@@ -61,6 +61,10 @@ public class Carrot2InitServlet
     /** Allows dynamic configuration reloading. Disable by default. */
     private boolean allowReloading = false;
 
+    /** Extra configuration properties */    
+    private HashMap properties = new HashMap(3);
+
+
     /**
      * Initialize Carrot2 environment.
      *
@@ -220,7 +224,38 @@ public class Carrot2InitServlet
                         processLoader.setDefaultProcess(process);
                     }
                 }
-                
+
+                // Set properties
+                List propertiesElementsList = root.getChildren("properties");
+                if (propertiesElementsList.size() > 1)
+                {
+                    throw new RuntimeException("errors.initialization.too-many-properties");
+                }
+                else
+                {
+                    if (propertiesElementsList.size() != 0)
+                    {
+                        propertiesElementsList = ((Element) propertiesElementsList.get(0)).getChildren();
+                        
+                        for (Iterator i = propertiesElementsList.iterator();i.hasNext();)
+                        { 
+                            Element propertyElement = (Element) i.next();
+                            if (!"property".equals(propertyElement.getName()))
+                            {
+                                throw new RuntimeException("errors.initialization.config-structure-error");
+                            }
+                           
+                            String propName = propertyElement.getAttributeValue("name");
+                            String value = propertyElement.getAttributeValue("value");
+                            if (propName == null || value == null)
+                            {
+                                throw new RuntimeException("errors.initialization.config-structure-error");
+                            }
+                            
+                            this.properties.put(propName, value);
+                        }
+                    }
+                }
 
                 //
                 // Instantiate caches and QueryProcessor
@@ -360,6 +395,19 @@ public class Carrot2InitServlet
                     Boolean.valueOf(root.getAttributeValue("fullDebugReport", "false"))
                            .booleanValue()
                 );
+                
+                //
+                // Check properties. 
+                //
+                
+                if (this.properties.containsKey("request-history"))
+                {
+                    int v = Integer.valueOf((String) properties.get("request-history")).intValue();
+                    if (v <= 0)
+                        throw new IllegalArgumentException("Request history must be greater than zero.");
+                    processor.setRequestHistory(new RequestHistory(v));
+                }
+
 
                 //
                 // Add processing chains to the application context.

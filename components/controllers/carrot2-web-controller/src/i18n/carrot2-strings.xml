@@ -66,6 +66,8 @@
             <guards-dir-unavailable>Guards directory does not exist or cannot be read</guards-dir-unavailable>
             <too-many-default-processes>Too many default processes specified. Only one element allowed.</too-many-default-processes>
             <missing-default-context>The default context cannot be found.</missing-default-context>
+            <too-many-properties>Only one 'property' element is allowed.</too-many-properties>
+            <config-structure-error>Configuration file structure error.</config-structure-error>
         </initialization>
         <forms>
             <missing-field>Missing value in field: {0}</missing-field>
@@ -133,17 +135,43 @@
 
 
     <blocks>
+    	<recent-queries>
+            <lang:en>
+    		<head>Recent queries</head>
+            </lang:en>
+            <lang:pl>
+    		<head>Ostatnio wydane zapytania</head>
+            </lang:pl>
+    	</recent-queries>
     	<welcome>
             <lang:en>
+            	<head>Welcome</head>
                 <info><![CDATA[
-                Welcome! If you don't know what to do now<br/>
+                <p>
+				Carrot<sup>2</sup> is a system for clustering textual data. This demo
+				clusters results acquired from various search engines, similarly to
+				the commercial <a href="http://www.vivisimo.com">Vivisimo</a> meta
+				search engine.
+				</p>
+                <p>
+                If you don't know what to do now,
                 <a target="_top" href="whatis.jsp">click here for help</a>.
+                </p>
                 ]]></info>
             </lang:en>
             <lang:pl>
+            	<head>Witamy</head>
                 <info><![CDATA[
-                Witamy! Jeśli nie wiesz co teraz zrobić<br/>
+                <p>
+				Carrot<sup>2</sup> jest systemem grupującym dane tekstowe.
+				Niniejsza wersja demonstracyjna grupuje wyniki z wyszukiwarek
+				internetowych, podobnie jak czyni to serwis
+				<a href="http://www.vivisimo.com">Vivisimo</a>.
+				</p>
+                <p>
+                Jeśli nie wiesz co teraz zrobić,
                 <a target="_top" href="whatis.jsp">tutaj znajduje się mała pomoc</a>.
+                </p>
                 ]]></info>
             </lang:pl>
     	</welcome>

@@ -8,6 +8,17 @@
 
 <history>
     <changelist>
+        <date>2003-11-26</date>
+        <committer>dawid</committer>
+        <change component="carrot2.controller.carrot2-web" type="new">
+        Recent queries list added (queries history).
+        </change>
+        <change component="carrot2.controller.carrot2-web" type="new">
+        Short help added to the welcome page.
+        </change>
+	</changelist>
+
+    <changelist>
         <date>2003-11-24</date>
         <committer>dawid</committer>
         <change component="carrot2.controller.carrot2-web" type="new">
