@@ -1,1 +1,0 @@
-Shared libraries reused by Java components.

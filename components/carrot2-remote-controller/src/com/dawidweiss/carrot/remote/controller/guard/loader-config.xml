@@ -1,0 +1,14 @@
+<loader>
+    <!-- input xml validation -->
+    <validation>false</validation>
+    
+    <!-- fail on unrecognized properties? -->
+    <fail-on-unrecognized-properties>true</fail-on-unrecognized-properties>
+    
+    <!-- interface mappings? -->
+    <interface-mappings>
+        <element-name>guard</element-name>
+        <interface-name>com.dawidweiss.carrot.remote.controller.guard.QueryGuard</interface-name>
+    </interface-mappings>
+
+</loader>

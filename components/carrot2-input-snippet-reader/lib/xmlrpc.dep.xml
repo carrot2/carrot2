@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE component SYSTEM "../../../etc/component-dependency.dtd" >
+
+<component
+    name="xmlrpc"
+    description="Apache XML-RPC protocol implementation">
+
+    <provides>
+        <files>
+            <file location="xmlrpc-1.2-b1.jar" />
+            <file location="xmlrpc.LICENSE" />
+        </files>
+    </provides>
+</component>

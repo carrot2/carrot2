@@ -1,7 +1,0 @@
-
-<component name="colt">
-    <!-- Files that this component is composed of -->
-    <file location="colt.jar" />
-
-    <dependency name="xerces" />
-</component>

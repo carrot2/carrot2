@@ -1,0 +1,56 @@
+package com.dawidweiss.carrot.ant.deps;
+
+import java.io.File;
+
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.taskdefs.Ant;
+import org.apache.tools.ant.taskdefs.Property;
+import org.apache.tools.ant.util.FileUtils;
+import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
+
+/**
+ */
+public class AntBuildElement implements BuildTask {
+
+    private String target;
+	private String file;
+	private File base;
+
+	public AntBuildElement(Project project, File base, Element configElement) throws SAXException {
+        this.base = base;
+
+        // configure
+        this.file = configElement.getAttribute("file");
+        this.target = configElement.getAttribute("target");
+
+        if (file == null)
+            throw new SAXException("file attribute is required.");
+    }
+
+	public void execute(Project project, String profile) {
+        Ant task = (Ant) project.createTask("ant");
+        if (task == null) {
+            throw new BuildException("ant task must be available.");
+        }
+        
+        FileUtils futils = FileUtils.newFileUtils();
+        File buildFile = futils.resolveFile(base, file);
+        task.setAntfile(buildFile.getAbsolutePath());
+        task.setDir(buildFile.getParentFile());
+        task.setInheritAll(false);
+        task.setProject(project);
+        if (this.target != null && !"".equals(target))
+            task.setTarget(target);
+
+        if (profile != null) {
+            Property p = task.createProperty();
+            p.setName("com.dawidweiss.carrot.ant.deps.profile");
+            p.setValue(profile);
+        }
+
+        task.execute();
+	}
+
+}

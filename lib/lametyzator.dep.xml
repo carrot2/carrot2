@@ -1,8 +1,0 @@
-<!--
-     A dependency descriptor. This has to be updated manually
-     when new JARs are required.
-   -->
-<component name="lametyzator">
-	<file location="FSA.jar" />
-	<file location="lametyzator.jar" />
-</component>

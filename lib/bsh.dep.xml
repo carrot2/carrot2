@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<!DOCTYPE component SYSTEM "../etc/component-dependency.dtd" > 
+<component
+    name="beanshell"
+    description="BeanShell 2.0b1, http://www.beanshell.org">
+	<provides>
+		<files>
+			<file location="bsh-2.0b1.jar" />
+			<file location="bsh.LICENSE" />
+		</files>
+	</provides>
+</component>

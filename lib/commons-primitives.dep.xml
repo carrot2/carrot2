@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<!DOCTYPE component SYSTEM "../etc/component-dependency.dtd" > 
+<component
+    name="commons-primitives"
+    description="Jakarta Commons Primitives 1.0, http://jakarta.apache.org/commons/primitives">
+	<provides>
+		<files>
+			<file location="commons-primitives-1.0.jar" />
+			<file location="commons-primitives.LICENSE" />
+		</files>
+	</provides>
+</component>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE component SYSTEM "../../../etc/component-dependency.dtd" >
+
+<component
+    name="egothor"
+    description="Egothor Search Engine, http://www.egothor.org">
+
+    <provides>
+        <files>
+            <file location="egothor-1.2.5-RC-I.jar" />
+            <file location="egothor.LICENSE" />
+        </files>
+    </provides>
+
+</component>
+

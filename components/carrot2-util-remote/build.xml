@@ -1,0 +1,56 @@
+
+<project name="Carrot2 Remote Utilities" default="build">
+
+    <property name="project.dir"      location="${basedir}" />
+    <property name="carrot2.cvs.dir"  location="../.." />
+
+    <property name="dist.name" value="carrot2-util-remote" />
+    <property name="component.descriptor" location="carrot2-util-remote.dep.xml" />
+
+    <property name="type"       	  value="jartype" />
+    <property name="tests.available"  value="true"    />
+
+    <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
+
+	<!-- custom component's targets -->
+	
+	<target name="xmlbinding">
+		<description>
+		Regenerates Castor binding code.
+		</description>
+
+        <path id="classpath.dependencies">
+        	<fileset dir="lib" includes="*.jar" />
+        	<fileset dir="${carrot2.cvs.dir}" includes="lib/*.jar" />
+        </path>
+
+		<java classname="org.exolab.castor.builder.SourceGenerator"
+		      failonerror="true">
+            <classpath refid="classpath.dependencies"/>
+              
+		    <arg value="-i" /><arg file="${carrot2.cvs.dir}/schema/component-descriptor.xsd"/>
+		    <arg value="-f"/><arg value="-dest"/><arg file="src" />
+		    <arg line="-verbose" /> 
+		    <arg value="-binding-file"/><arg file="xml-binding/component-descriptor-binding.xml" />
+		</java>
+	
+        <java classname="org.exolab.castor.builder.SourceGenerator"
+              failonerror="true">
+            <classpath refid="classpath.dependencies" />
+            <arg value="-i" /><arg file="${carrot2.cvs.dir}/schema/mime-types/x-carrot-clustering-input-query.xsd"/>
+            <arg value="-f"/><arg value="-dest"/><arg file="src" />
+            <arg line="-verbose" />
+            <arg value="-binding-file"/><arg file="xml-binding/query-binding.xml" />
+        </java>
+        
+        <java classname="org.exolab.castor.builder.SourceGenerator"
+                failonerror="true">
+            <classpath refid="classpath.dependencies" />
+            <arg value="-i" /><arg file="${carrot2.cvs.dir}/schema/process-descriptor.xsd"/>
+            <arg value="-f"/><arg value="-dest"/><arg file="src" />
+            <arg line="-verbose" />
+            <arg value="-binding-file"/><arg file="xml-binding/process-descriptor-binding.xml" />
+        </java>
+	</target>
+
+</project>

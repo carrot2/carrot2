@@ -1,0 +1,26 @@
+
+<project name="Carrot2 Remote Nutch Adapter" default="build">
+    
+    <property name="project.dir"      location="${basedir}" />
+    <property name="carrot2.cvs.dir"  location="../.." />
+
+    <property name="dist.name" value="carrot2-input-nutch-remote" />
+
+    <property name="component.descriptor" location="carrot2-input-nutch.dep.xml" />
+    <property name="profile" value="remote" />
+
+    <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
+
+    <patternset id="src.patternset">
+        <exclude name="**/local/**" />
+    </patternset>
+
+    <path id="classpath.local">
+        <fileset dir="lib" includes="*.jar" />
+    </path>
+
+    <!-- common template tasks. -->
+
+	<property name="type" value="jartype" />
+
+</project>

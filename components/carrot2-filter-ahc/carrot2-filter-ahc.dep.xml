@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE component SYSTEM "../../etc/component-dependency.dtd" >
+
+<component
+    name="carrot2-filter-ahc"
+    description="Carrot2 AHC Clustering filter">
+
+    <!-- to be written.
+    <provides profile="local">
+        <files build-path-exclude="true" prefix="tmp/dist">
+            <file location="carrot2-filter-ahc-local.jar" />
+        </files>
+        <build>
+            <ant file="build.local.xml" target="build" />
+        </build>
+    </provides>
+    -->
+
+    <provides profile="remote">
+        <files build-path-exclude="true" prefix="tmp/dist">
+            <file location="carrot2-filter-ahc.war" />
+        </files>
+        <build>
+            <ant file="build.remote.xml" target="build" />
+        </build>
+    </provides>
+
+	<!-- Carrot2 components -->
+    <dependency name="carrot2-license" />
+	<dependency name="carrot2-util-common"  />
+
+	<dependency name="carrot2-util-remote" 	profile="remote" />
+
+</component>

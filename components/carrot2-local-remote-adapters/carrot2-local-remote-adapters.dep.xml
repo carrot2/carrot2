@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE component SYSTEM "../../etc/component-dependency.dtd" >
+
+<component
+    name="carrot2-local-remote-adapters"
+    description="Carrot2 Local Interface - Remote Component Adapters">
+    
+    <provides>
+        <files build-path-exclude="true" prefix="tmp/dist">
+            <file location="carrot2-local-remote-adapters.jar" />
+        </files>
+        <build>
+            <ant file="build.xml" target="build"/>
+        </build>
+    </provides>
+
+    <!-- Carrot2 components -->
+    <dependency name="carrot2-local-core" />
+    <dependency name="carrot2-util-common" />
+    <dependency name="carrot2-license" />
+
+    <!-- Libraries -->
+    <dependency name="log4j" />
+    <dependency name="commons-collections" />
+    <dependency name="commons-pool" />
+    <dependency name="xml-apis" />
+    
+    <dependency name="jdom" />
+    <dependency name="carrot2-util-put" />
+
+</component>

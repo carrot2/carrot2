@@ -1,5 +1,12 @@
-
-<component name="commons-collections">
-    <!-- Files that this component is composed of -->
-	<file location="commons-collections.jar" />
+<?xml version="1.0" ?>
+<!DOCTYPE component SYSTEM "../etc/component-dependency.dtd" > 
+<component
+    name="commons-collections"
+    description="Jakarta Commons Collections 3.0, http://jakarta.apache.org/commons/collections">
+	<provides>
+		<files>
+			<file location="commons-collections-3.0.jar" />
+			<file location="commons-collections.LICENSE" />
+		</files>
+	</provides>
 </component>

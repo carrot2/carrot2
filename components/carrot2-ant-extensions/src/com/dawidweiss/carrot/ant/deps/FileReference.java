@@ -1,0 +1,63 @@
+package com.dawidweiss.carrot.ant.deps;
+
+import java.io.File;
+
+import org.apache.tools.ant.util.FileUtils;
+
+/**
+ */
+public class FileReference {
+    private static FileUtils futils = FileUtils.newFileUtils(); 
+
+    private File absolute;
+    private String relative;
+    private File base;
+
+    public FileReference(File base, String relative) {
+        this(base, new File( base, relative));
+    }
+
+	public FileReference(File base, File file) 
+        throws IllegalArgumentException {
+        if (!base.isAbsolute()) {
+            throw new IllegalArgumentException("Base must be an" +
+                " absolute reference: " + base.getPath());
+        }
+        String stripped = futils.removeLeadingPath(base, file);
+        if (new File(stripped).isAbsolute()) {
+            throw new IllegalArgumentException("File "
+                + base.getAbsolutePath() + " cannot be " +
+                    "a leading path of: " + file.getAbsolutePath());
+        }
+        
+        this.base = base;
+        this.relative = stripped;
+		this.absolute = futils.resolveFile(base, relative);
+	}
+
+    public File getAbsoluteFile() {
+        return absolute;
+    }
+    
+    public String getRelative() {
+        return this.relative;
+    }
+    
+    public File getBase() {
+        return this.base;
+    }
+
+	public boolean equals(Object obj) {
+		if (obj instanceof FileReference) {
+            return  ((FileReference) obj).getAbsoluteFile().equals(this.getAbsoluteFile());
+        }
+        return false;
+	}
+
+	/* 
+	 */
+	public int hashCode() {
+		return this.absolute.hashCode();
+	}
+
+}

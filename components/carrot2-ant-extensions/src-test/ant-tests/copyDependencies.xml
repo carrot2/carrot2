@@ -1,0 +1,46 @@
+
+<project name="copy-dependencies" default="all">
+
+    <target name="all" depends="nocopytest">
+
+    </target>
+
+    <target name="prepare">
+        <taskdef name="bringToDate" 
+        	classname="com.dawidweiss.carrot.ant.BringToDate" />
+		<typedef name="dependencyPath"
+			classname="com.dawidweiss.carrot.ant.DependencyPath" />
+        <taskdef name="copyDependencies" 
+            classname="com.dawidweiss.carrot.ant.CopyDependencies" />
+
+		<subant target="prepare">
+			<fileset dir="deps" includes="**/build.xml"/>
+        </subant>
+    </target>
+
+	<target name="nocopytest" depends="prepare">
+		<description>
+			Check the nocopy attribute on dependency.
+		</description>
+
+        <delete dir="tmp/copydeps" />
+        <mkdir dir="tmp/copydeps" />
+        <copyDependencies
+            componentDescriptor="deps/proj_copydeps/master/master.dep.xml"
+            todir="tmp/copydeps"
+            >
+			<dependencies dir="deps/proj_copydeps">
+				<include name="**/*.dep.xml" />
+			</dependencies>
+        </copyDependencies>
+        
+		<condition property="tmp:cond:test:1" value="true">
+			<available file="tmp/copydeps/test.txt" type="file" />
+		</condition>
+		<fail if="tmp:cond:test:1">
+			Error. File copied even though nocopy was set.
+		</fail>
+	</target>
+
+    
+</project>

@@ -1,0 +1,16 @@
+
+<component name="a">
+
+	<provides>
+		<files prefix="tmp/dist">
+			<file location="a-out.txt" />
+		</files>
+		<build>
+			<ant file="build.xml" target="build" />
+		</build>
+	</provides>
+
+    <dependency name="b" />
+	<dependency name="c" profile="test" />
+
+</component>

@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<!DOCTYPE component SYSTEM "../etc/component-dependency.dtd" > 
+<component
+    name="bsf"
+    description="Bean Scripting Framework 2.3, http://jakarta.apache.org/bsf/">
+	<provides>
+		<files>
+			<file location="bsf.jar" />
+			<file location="bsf.LICENSE" />
+		</files>
+	</provides>
+</component>

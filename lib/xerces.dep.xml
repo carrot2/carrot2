@@ -1,6 +1,16 @@
+<?xml version="1.0" ?>
+<!DOCTYPE component SYSTEM "../etc/component-dependency.dtd" >
+<component
+    name="xerces"
+    description="Xerces Java XML Parser, http://xml.apache.org/xerces2-j/index.html">
 
-<component name="xerces">
-    <!-- Files that this component is composed of -->
-    <file location="xercesImpl.jar" />
-    <file location="xml-apis.jar" />
+	<provides>
+		<files>
+			<file location="xercesImpl-2.4.0.jar" />
+			<file location="xerces.LICENSE" />
+		</files>
+	</provides>
+
+    <dependency name="xml-apis" />
+
 </component>

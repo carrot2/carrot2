@@ -1,6 +1,7 @@
 
 Carrot2 Project
-See the license file for legal information.
+
+See the license file for legal information (carrot2.LICENSE)
 
 
 INFORMATION
@@ -11,13 +12,14 @@ especially for the reason of clustering search results from
 search engines (but not only).
 
 See more at:
+http://www.cs.put.poznan.pl/dweiss/carrot
 http://carrot.cs.put.poznan.pl
 
 
 ACQUIRING BINARY RELEASE
 ========================
 
-It is advised that you grap a binary release of the Carrot2 components from the 
+It is advised that you grab a binary release of the Carrot2 components from the 
 nightly build drop-off zone at:
 
 http://carrot.cs.put.poznan.pl/static/download/nightly/
@@ -27,33 +29,72 @@ BUILDING FROM SOURCES
 =====================
 
 In order to build Carrot2's components, you must have ANT in your path. We use 
-ANT 1.6, lower versions are not supported but may work.
+ANT 1.6, previous versions are not supported but may work.
 
-This command should build all the components for you and place them in tmp/dist.
+Carrot2 components can work in two architecture designs: as remote components
+using HTTP and as local Java components.
+
+a) Building only remote components
+
+This command should build all the components for you and place them in a 
+directory pointed to by an ANT property 'distribution.dir.remote'.
+
+Any libraries, or local components, required by remote components are copied to 
+a directory  pointed to by an ANT property 'distribution.dir.remote.libs'. 
+Search engine adapters for Egothor and Nutch are also copied there.
+
+Default values of these properties point at: 'tmp/remote' and 'tmp/remote-libs'.
+
+b) Building all components and applications
+
+All components can be compiled using the following ANT command:
 
 ant build
 
+Components are placed in their respective directories, under 'tmp/dist' folder.
+Their required components and libraries are listed in an *.info file found
+together with the resulting WAR or JAR file.
 
-THE WEB CONTROLLER COMPONENT
-============================
 
-The web controller component for Carrot2 uses the rest of the components to 
+THE REMOTE CONTROLLER COMPONENT (FORMER WEB CONTROLLER)
+=======================================================
+
+The remote controller component for Carrot2 uses the rest of the components to 
 process user queries. The controller looks for services offered by components 
 using 'descriptors'. Sample component descriptors (and process descriptors that 
-bind them together) can be found in 'descriptors' folder. You should adjust the 
-host and port in these descriptors to match your configuration (localhost for 
-local deployment). You can also override these properties at build-time using 
-the following variables:
+bind them together) can be found in 'remote-descriptors' folder. 
 
-ant -Ddeployment.port=80 -Ddeployment.host=myhost.com build.webcontroller
+YOU SHOULD ADJUST THE DEFAULT HOST AND PORT IN THESE DESCRIPTORS TO MATCH YOUR 
+DEPLOYMENT CONFIGURATION.
+
+You can also override these properties at build-time using the following 
+variables:
+
+deployment.port   -- the port to deploy components on
+deployment.host   -- the host to deploy components on
+
+For example:
+
+ant -q clean
+ant -Ddeployment.port=80 -Ddeployment.host=myhost.com -q remote
+
+Builds all remote components and a remote controller that binds process descriptors
+to 'myhost.com:80'.
 
 
 TEST SUITE AND DOCUMENTATION
 ============================
 
-Tests suite and documentation are available as a separate CVS checkout, or on-
-line at:
+Class and method tests for all modules that support 'test' target can
+be executed by invoking the following ANT targets:
 
+ant -q build
+ant -q test
+
+External tests suite (HTTPUnit tests) and documentation are available as a 
+separate CVS checkout.
+
+See the results of the most recent tests on-line at:
 http://carrot.cs.put.poznan.pl
 
 
@@ -69,7 +110,7 @@ This e-mailing list will keep you up to date with changes:
 
 carrot2-news@lists.sourceforge.net
 
-Other inquiries can be directed to project coordinator:
+Other inquiries can be directed to the project's coordinator:
 
 Dawid Weiss <dawid.weiss@cs.put.poznan.pl>
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE history SYSTEM "schema/history.dtd">
+<!DOCTYPE history SYSTEM "etc/history.dtd">
 
 <!--
     History of major (and minor) changes to Carrot2 codebase.
@@ -8,14 +8,113 @@
 
 <history>
     <changelist>
-        <date>2004-04-19</date>
+        <date>2004-06-01</date>
+        <committer>dawid</committer>
+        
+        <change component="global" type="refactor">
+        New folders layout and build system.
+        </change>
+	  </changelist>	
+
+    <changelist>
+        <date>2004-04-30</date>
+        <committer>dawid</committer>
+        
+        <change component="global" type="refactor">
+        Test app refactored. A couple of bugs fixed.
+        </change>
+	  </changelist>	
+
+    <changelist>
+        <date>2004-04-23</date>
+        <committer>dawid</committer>
+        
+        <change component="carrot2.local.controller" type="new">
+        Added support for loading component factory definitions from
+        XML and BeanShell.
+        </change>
+
+        <change component="global" type="refactor">
+        Incorporated several patches and RFEs from Andrzej.
+        </change>
+	  </changelist>	
+
+    <changelist>
+        <date>2004-04-01</date>
         <committer>dawid</committer>
         
         <change component="global" type="new">
-        New clustering component added: Steven Schockaert's
-        Fuzzy Ants clustering component has been integrated into
-        the build process. The code is mostly written in Dutch,
-        but we hope Steven will work on it :)
+		Added initial support for concrete Language implementations: polish and english.
+		removed dependencies to stemmer-porter component.
+        </change>
+	  </changelist>	
+
+    <changelist>
+        <date>2004-03-31</date>
+        <committer>dawid</committer>
+        
+        <change component="global" type="refactoring">
+        Component folder names renamed to use a common
+        naming convention.
+        </change>
+
+        <change component="global" type="new">
+        tokenizer redesigned. language identification component
+        now available as local component.
+        </change>
+	</changelist>	
+
+    <changelist>
+        <date>2004-03-27</date>
+        <committer>dawid</committer>
+        
+        <change component="global" type="refactoring">
+        Build files reshaped again. This time they include
+        generic targets from another file.
+        </change>
+
+        <change component="global" type="new">
+        Nutch added (with local component too).
+        </change>
+	</changelist>	
+
+    <changelist>
+        <date>2004-03-24</date>
+        <committer>dawid</committer>
+        
+        <change component="global" type="refactoring">
+        New components moved to the new folders/build structure:
+        common classes library for remote components, Lingo clustering
+        component.
+        </change>
+
+        <change component="global" type="new">
+        Test application added -- combines Lingo and Egothor.
+        </change>
+
+    </changelist>
+
+
+    <changelist>
+        <date>2004-03-14</date>
+        <committer>dawid</committer>
+        
+        <change component="global" type="refactoring">
+        Directories layout change. Components now flattened in 'components'
+        directory.
+        </change>
+        
+        <change component="global" type="new">
+        New ANT tasks for managing components and dependencies.
+        </change>
+        
+        <change component="global" type="refactoring">
+        Build files simplified: one master file controls build
+        process of all components.
+        </change>
+        
+        <change component="global" type="new">
+        New core interfaces for local communication between components.
         </change>
     </changelist>
 
@@ -535,12 +634,12 @@
         <committer>dawid</committer>
 
         <change type="refactoring" component="global" scheduled="2002-10-27">
-            Add licence header to Java files in SnippetReader - all other source
+            Add license header to Java files in SnippetReader - all other source
             files have been reparsed and a header file has been added to them as well.
         </change>
 
         <change type="refactoring" component="global">
-            Added a licence file (BSD derivative) to the project. Look in /docs/legal.
+            Added a license file (BSD derivative) to the project. Look in /docs/legal.
         </change>
 
     </changelist>

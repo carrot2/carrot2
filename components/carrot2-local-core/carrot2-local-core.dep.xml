@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE component SYSTEM "../../etc/component-dependency.dtd" >
+
+<component
+    name="carrot2-local-core"
+    description="Carrot2 Core (Local Interfaces)">
+    
+    <provides>
+        <files build-path-exclude="true" prefix="tmp/dist">
+            <file location="carrot2-local-core.jar" />
+        </files>
+        <build>
+            <ant file="build.xml" target="build"/>
+        </build>
+    </provides>
+
+    <dependency name="log4j" />
+    <dependency name="carrot2-license" />
+</component>

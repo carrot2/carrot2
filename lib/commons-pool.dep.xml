@@ -1,6 +1,14 @@
-<component name="commons-pool">
-    <!-- Files that this component is composed of -->
-    <file location="commons-pool-1.1.jar" />
+<?xml version="1.0" ?>
+<!DOCTYPE component SYSTEM "../etc/component-dependency.dtd" > 
+<component
+    name="commons-pool"
+    description="Jakarta Commons Pool 1.1, http://jakarta.apache.org/commons/pool">
+	<provides>
+		<files>
+			<file location="commons-pool-1.1.jar" />
+			<file location="commons-pool.LICENSE" />
+		</files>
+	</provides>
     
-	<dependency name="commons-collections" />
+    <dependency name="commons-collections" />
 </component>

@@ -1,0 +1,77 @@
+
+<project name="Carrot2 Remote Controller Component" default="build">
+    
+    <property name="project.dir"      location="${basedir}" />
+    <property name="carrot2.cvs.dir"  location="../.." />
+
+    <property name="dist.name" value="carrot2-remote-controller" />
+    <property name="component.descriptor" location="carrot2-remote-controller.dep.xml" />
+    
+    <!-- ## global properties ### -->
+    
+    <property name="descriptors.dir"  location="${carrot2.cvs.dir}/remote-descriptors" />
+    <property name="deployment.port"  value="8080" />
+    <property name="deployment.host"  value="localhost" />
+    
+
+    <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
+
+    <target name="clean">
+        <ant target="clean" antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" />
+        <delete>
+        	<fileset dir="${project.dir}/web/WEB-INF">
+        		<include name="lib/**" />
+        		<include name="classes/**" />
+        		<include name="components/**" />
+        		<include name="processes/**" />
+        	</fileset>
+        </delete>
+    </target>
+
+
+    <target name="build">
+    
+        <!-- Copy component and process descriptors to the 'web' folder. They are
+             ignored by the CVS by default, so no harm is done. -->
+
+        <echo>
+####
+Using host/port binding: ${deployment.host}:${deployment.port}
+Adjust these global properties if change is needed:
+   deployment.host, deployment.port
+####
+        </echo>
+
+        <filterset begintoken="@" endtoken="@" id="deployment.info">
+            <filter token="DEPLOY_HOST" value="${deployment.host}"/>
+            <filter token="DEPLOY_PORT" value="${deployment.port}"/>
+        </filterset>
+
+        <!-- copy descriptors -->
+        <mkdir dir="${project.dir}/web/WEB-INF/components"/>
+        <mkdir dir="${project.dir}/web/WEB-INF/processes" />
+        <mkdir dir="${project.dir}/web/WEB-INF/lib" />
+
+        <copy overwrite="true" flatten="true" todir="${project.dir}/web/WEB-INF/components" filtering="true">
+            <fileset dir="${descriptors.dir}" includes="components*/*.xml" />
+            <filterset refid="deployment.info" />
+        </copy>
+        <copy overwrite="true" flatten="true" todir="${project.dir}/web/WEB-INF/processes" filtering="true">
+            <fileset dir="${descriptors.dir}" includes="processes*/*.xml" />
+            <filterset refid="deployment.info" />
+        </copy>
+        <copy overwrite="true" flatten="true" todir="${project.dir}/web/WEB-INF/lib" filtering="false">
+            <fileset dir="${project.dir}/lib">
+                <exclude name="*.dep.xml" />
+            </fileset>
+        </copy>
+
+             
+        <!-- Build the webapp -->
+             
+        <ant target="build.wartype"
+             antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" inheritrefs="true">
+        </ant>
+    </target>
+    
+</project>

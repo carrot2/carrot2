@@ -1,0 +1,129 @@
+
+HOW TO USE THE MASTER BUILD FILE
+--------------------------------
+
+1. Write your build file in your component's directory.
+
+
+2. Define these properties:
+
+    <property name="project.dir"      location="${basedir}" />
+
+	This is where your project directory really is. Usually just
+	the same as ${basedir}.
+
+    <property name="carrot2.cvs.dir"  location="../.." />
+    
+    This is where the head of Carrot2 CVS checkout lives. Files
+    are referenced from ${carrot2.cvs.dir}/etc and possibly
+    from other directories.
+
+    <property name="dist.name"        value="carrot2-common-utils" />
+
+	What will your component be named like. This value is usually
+	the name of a JAR or WAR file created by master targets.
+
+
+3. Other properties and their default values. 
+
+Master build file has some default properties that you may override, but 
+usually you would not want to:
+
+  <property name="build.dir"        location="${project.dir}/tmp/build" />
+  
+  Temporary directory where intermediate stuff will be assembled.
+  
+  <property name="distribution.dir" location="${project.dir}/tmp/dist" />
+  
+  A directory for final build files (JARs, WARs).
+  
+  <property name="javadoc.dir"      location="${project.dir}/tmp/javadoc" />
+  
+  JavaDOC documentation. 
+
+  <property name="src.path"         location="${project.dir}/src" />
+  
+  Default source directory.
+  
+  <property name="src-test.path"    location="${project.dir}/src-test" />
+  
+  Tests source directory.
+  
+  <property name="src.webapp.path"  location="${project.dir}/web" />
+  
+  Web Application files directory.
+
+  <property name="component.descriptor" location="${project.dir}/${dist.name}.dep.xml" />
+  
+  Component descriptor location. This is quite important, because classpath for
+  all the required components is automatically assembled. Plus, if a required
+  component  has not been built yet, its build file will be invoked automatically.
+
+  <property name="profile"          value="" />
+  
+  The profile to use for component descriptor parsing.
+
+  <property name="build.compiler"   value="modern" />
+
+  Self-explanatory.  
+  
+  <property name="javac.optimize"   value="off" />
+  
+  Self-explanatory.  
+  
+  <property name="javac.debug"      value="on" />
+  
+  Self-explanatory.  
+
+  <property name="include.ant.runtime" value="false" />
+
+  Whether to include ANT's runtime in the javac task.
+
+
+4. Import the default targets and override paths, if needed:
+
+Import the default set of targets using:
+
+    <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
+
+Set the build type property:
+
+	<!-- profile of dependency file parsing. -->
+	<property name="profile"		  value="local" />
+	
+	<!-- build type (only if 'build' target is not overriden locally) -->
+    <property name="type"       	  value="jartype" />
+    
+Possible values: jartype, wartype. If tests are available, you can also
+set this:
+    
+    <property name="tests.available"  value="true"    />
+
+You can also override default targets of course. Usually modifying paths 
+is enough. For example:
+
+    <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
+
+    <patternset id="src.patternset">
+        <include name="**/local/**" />
+    </patternset>
+
+    <path id="classpath.local">
+        <fileset dir="lib" includes="*.jar" />
+    </path>
+
+    <!-- common template tasks. -->
+    <property name="type"       	  value="jartype" />
+    <property name="tests.available"  value="true"    />
+
+
+5. Copying dependencies and merging Carrot2 components into a single
+JAR file.
+
+Using dependency descriptors together with the master build file has an 
+additional benefit: declaring 'copy.dependencies' property for 'build' target 
+copies all of the required components to a directory "dep-[component name]". 
+
+By default, any referenced Carrot2 components will be repacked into a single JAR 
+file. To leave separate JAR files for components, change the value of 
+'single.jar' property to 'false'.

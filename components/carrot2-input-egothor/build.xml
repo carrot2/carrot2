@@ -1,0 +1,14 @@
+
+<project name="Carrot2 Egothor Adapter" default="build">
+    <property name="project.dir"      location="${basedir}" />
+    <property name="carrot2.cvs.dir"  location="../.." />
+    <property name="dist.name" value="carrot2-input-egothor-local" />
+    <property name="component.descriptor" location="carrot2-input-egothor.dep.xml" />
+
+    <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
+
+	<target name="build">
+		<ant antfile="build.remote.xml" inheritall="false" />
+	</target>    
+
+</project>

@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<!DOCTYPE component SYSTEM "../etc/component-dependency.dtd" > 
+<component
+    name="xml-apis"
+    description="Java XML APIs, http://java.sun.com/xml/jaxp/index.jsp">
+	<provides>
+		<files>
+			<file location="xml-apis.jar" />
+		</files>
+	</provides>
+</component>

@@ -1,8 +1,0 @@
-<!--
-     A dependency descriptor. This has to be updated manually
-     when new JARs are required.
-   -->
-<component name="struts">
-	<file location="struts.jar" />
-	<dependency name="commons-beanutils" />
-</component>

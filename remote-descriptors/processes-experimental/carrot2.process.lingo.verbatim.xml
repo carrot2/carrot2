@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process
+    xmlns="http://www.dawidweiss.com/projects/carrot/processDescriptor"
+    id="carrot2.process.lingo.verbatim"
+    description="Verbatim input, LINGO, Dynamic Tree"
+>
+    <processing-script language="beanshell"><![CDATA[
+    
+    InputStream is;
+
+    is = controller.invokeInputComponent( "carrot2.input.verbatim-input", query );
+    
+    Map lingoOptions = new HashMap();
+    lingoOptions.put("language.english", "com.dawidweiss.carrot.util.tokenizer.languages.english.English");
+    lingoOptions.put("language.polish", "com.dawidweiss.carrot.util.tokenizer.languages.polish.Polish");
+    lingoOptions.put("lsi.threshold.clusterAssignment", "0.150");
+    lingoOptions.put("lsi.threshold.candidateCluster",  "0.775");
+    is = controller.invokeFilterComponent( "carrot2.filter.multilingual-lingo-clustering", is, lingoOptions );
+
+    Map dtreeOptions = new HashMap();
+    dtreeOptions.put("dtree.css", "compact");
+    dtreeOptions.put("param.output.terminal.nodes", "true" );
+    dtreeOptions.put("param.max.open.level", "0");
+    dtreeOptions.put("param.max.subgroup.snippets.included", "3" );
+    dtreeOptions.put("param.no.terminal.groups.expansion", "true" );
+    dtreeOptions.put("param.snippets.sorting.type", "ORDER_SCORE_ATTRIBUTE");
+
+    is = controller.invokeOutputComponent( "carrot2.output.xslt-renderer.dynamic-tree", is, dtreeOptions );
+    
+    controller.sendResponse( is ); 
+    
+    ]]>
+    </processing-script>
+</process>
+

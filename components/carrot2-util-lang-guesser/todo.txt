@@ -1,0 +1,4 @@
+
+Gather input text and recalculate trigrams for larger samples:
+
+http://www.wordtheque.com/

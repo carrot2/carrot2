@@ -1,0 +1,25 @@
+
+
+/* Javadoc style sheet for Carrot2 project */
+
+/* Page background color */
+body { 
+    background-color: white;
+}
+
+table {
+}
+
+/* Table colors */
+.TableHeadingColor     { background: #CCCCFF } /* Dark mauve */
+.TableSubHeadingColor  { background: #EEEEFF } /* Light mauve */
+.TableRowColor         { background: #FFFFFF } /* White */
+
+/* Navigation bar fonts and colors */
+.NavBarCell1    { background-color:#EEEEFF; }/* Light mauve */
+.NavBarCell1Rev { background-color:#00008B; }/* Dark Blue */
+.NavBarFont1    { color:#000000; }
+.NavBarFont1Rev { color:#FFFFFF; }
+
+.NavBarCell2    { background-color:#e0e0e0;}
+.NavBarCell3    { background-color:#e8e8e8;}

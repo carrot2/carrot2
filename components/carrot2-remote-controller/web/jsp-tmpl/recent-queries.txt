@@ -1,0 +1,42 @@
+<%
+	QueryProcessor loader = (QueryProcessor) application.getAttribute(Carrot2InitServlet.CARROT_PROCESSOR_KEY);
+	RequestHistory history = loader.getRequestHistory();
+
+	if (history != null) {
+		Query [] queries = new Query [num];
+		ProcessDefinition [] processes = new ProcessDefinition [num];
+		long [] tstamps = new long [num];
+		int real = history.getHistory(num, queries, processes, tstamps);
+		
+		java.text.SimpleDateFormat dformat = new java.text.SimpleDateFormat("HH:mm:ss");
+
+		if (real == 0) {%>
+		<span style="color: red;"><bean:message key="blocks.recent-queries.empty"/></span>
+		<%
+		}
+
+		com.dawidweiss.carrot.util.common.XMLSerializerHelper serializer = com.dawidweiss.carrot.util.common.XMLSerializerHelper.getInstance();
+		for (int i=0;i<real;i++) {
+			Query q = queries[i];
+			ProcessDefinition p = processes[i];
+
+			%><nobr>
+			<a href="<%= response.encodeURL(
+                            request.getContextPath() + "/index.jsp?"
+                            + "query=" + URLEncoding.encode(q.getContent(), "UTF-8")
+                            + "&processingChain=" + URLEncoding.encode(p.getId(), "UTF-8")
+                            + "&resultsRequested=" + (q.hasRequestedResults() ? q.getRequestedResults() : 0)) %>" target="_top">
+			<%= serializer.toValidXmlText(q.getContent(), false) %>
+                        </a></nobr>
+            <div style="margin-bottom: 0.5em; font-size: 9px; color: #a0a0a0;">
+            <b><%= dformat.format( new java.util.Date(tstamps[i])) %></b>&nbsp;
+            (<%= q.getRequestedResults() %>, <%= StrutsHelpers.getMessageOrDefault(pageContext, p.getId(), p.getDefaultDescription()) %>)
+            </div>
+			<%
+		}
+	} else {
+	%>
+	<span style="color: red;">History not enabled.</span>
+	<%
+	}
+%>

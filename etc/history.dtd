@@ -1,0 +1,34 @@
+
+<!ELEMENT history (changelist*,releasetag*)* >
+
+<!ELEMENT changelist (date, committer, change+) >
+
+<!ELEMENT releasetag (#PCDATA) >
+<!ATTLIST releasetag tag CDATA #REQUIRED >
+<!ATTLIST releasetag cvstag CDATA #REQUIRED >
+<!ATTLIST releasetag date CDATA #REQUIRED >
+
+<!ELEMENT date (#PCDATA) >
+<!ELEMENT committer (#PCDATA) >
+
+<!ELEMENT change (#PCDATA) >
+<!ATTLIST change type (bugfix | new | refactoring | change) #REQUIRED >
+<!ATTLIST change component (
+          carrot2.output.xslt-renderer
+        | carrot2.input.treesnippetminer
+        | carrot2.controller.carrot2-web
+        | carrot2.local.controller
+        | carrot2-shared-lib
+        | carrot2.filter.lingo-clusterer
+        | carrot2.output.xslt-renderer.dynamic-tree
+        | carrot2.filter.text-only
+        | carrot2.filter.stc
+        | carrot2.input.random-generator
+        | distribution
+        | runtime.environment
+        | tests.external
+        | global
+        | carrot2.input.snippet-reader
+        | documentation
+        ) #REQUIRED >
+<!ATTLIST change scheduled CDATA #IMPLIED >

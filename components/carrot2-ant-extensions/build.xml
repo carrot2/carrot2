@@ -1,0 +1,55 @@
+
+<project name="Carrot2 ANT Extensions bootstrap build file."
+		 default="build">
+
+    <property name="project.dir"      location="${basedir}" />
+    <property name="carrot2.cvs.dir"  location="../.." />
+    <property name="dist.name"        value="carrot2-ant-extensions" />
+
+    <property name="type"       	  value="jartype" />
+    <property name="tests.available"  value="true"    />
+    <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
+
+    <!-- bootstrap build -->
+    
+    <target name="bootstrap">
+		<echo>
+Bootstrapping ANT extension tasks.
+		</echo>
+
+        <mkdir dir="tmp/build/bootstrap" />
+        <javac destdir     = "tmp/build/bootstrap"
+               debug       = "true"
+               optimize    = "false"
+               deprecation = "on"
+               includeantruntime = "true"
+               includejavaruntime = "false"
+        >
+            <src path="src" />
+        </javac>
+
+        <mkdir dir="tmp/dist" />
+        <jar compress="true" jarfile="tmp/dist/${dist.name}.jar">
+            <fileset dir="tmp/build/bootstrap" />
+            <manifest>
+                <attribute name="Built-By"   value="${user.name}"/>
+            </manifest>
+        </jar>
+
+        <antcall target="build" />
+    </target>
+
+    <!-- common template tasks. -->
+
+    <target name="build">
+        <property name="include.ant.runtime" value="true" />
+        <ant target="build.jartype" antfile="../master.xml" inheritall="true" inheritrefs="true" />
+    </target>
+
+    <target name="test">
+        <property name="profile" value="test" />
+        <property name="include.ant.runtime" value="true" />
+        <ant target="build.testtype" antfile="../master.xml" inheritall="true" inheritrefs="true" />
+    </target>
+
+</project>
