@@ -10,8 +10,7 @@ import com.dawidweiss.carrot.core.local.linguistic.tokens.*;
 
 /**
  * Document-frequency term selection strategy, chooses terms that appear in more
- * than a certain number of documents. TODO: return not only stems but also the
- * original tokens (like in phrase extraction)
+ * than a certain number of documents.
  * 
  * @author stachoo
  */
@@ -28,9 +27,6 @@ public class DfFeatureSelectionStrategy implements FeatureSelectionStrategy
 
     /** */
     private short filterMask;
-    private static short DEFAULT_FILTER_MASK = TypedToken.TOKEN_FLAG_STOPWORD
-        | TypedToken.TOKEN_TYPE_SYMBOL | TypedToken.TOKEN_TYPE_UNKNOWN
-        | TypedToken.TOKEN_TYPE_PUNCTUATION;
 
     /**
      * @param dfThreshold
@@ -56,7 +52,7 @@ public class DfFeatureSelectionStrategy implements FeatureSelectionStrategy
     {
         this.dfThreshold = dfThreshold;
         this.titleTokenDfMultiplier = titleTokenDfMultiplier;
-        this.filterMask = DEFAULT_FILTER_MASK;
+        this.filterMask = FeatureSelectionStrategy.DEFAULT_FILTER_MASK;
     }
 
     /*
