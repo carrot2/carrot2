@@ -1,5 +1,12 @@
 /*
- * MatrixUtils.java Created on 2004-05-11
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
 package com.stachoodev.matrix;
 
@@ -10,7 +17,8 @@ import cern.colt.matrix.*;
 /**
  * Provides a set of useful Colt DoubleMatrix2D shorthands and utility methods.
  * 
- * @author stachoo
+ * @author Stanislaw Osinski
+ * @version $Revision$
  */
 public class MatrixUtils
 {
@@ -166,6 +174,32 @@ public class MatrixUtils
     }
 
     /**
+     * Computers sparesness of matrix <code>A</code> as a fraction of non-zero
+     * elements to the total number of elements.
+     * 
+     * @param A
+     * @return sparseness of <code>A</code>, which is a value between 0.0
+     *         (all elements are zero) and 1.0 (all elements are non-zero)
+     */
+    public static double computeSparseness(DoubleMatrix2D A)
+    {
+        int count = 0;
+
+        for (int r = 0; r < A.rows(); r++)
+        {
+            for (int c = 0; c < A.columns(); c++)
+            {
+                if (A.getQuick(r, c) != 0)
+                {
+                    count++;
+                }
+            }
+        }
+
+        return count / (double) (A.rows() * A.columns());
+    }
+
+    /**
      * Compares two matrices. Matrices are considered equal if they are of the
      * same size, and the absolute difference between their corresponding
      * elements is not greater than <code>delta</code>.
@@ -199,40 +233,142 @@ public class MatrixUtils
     }
 
     /**
-     * Calculates maximum elements in each column of matrix A. When calculating
-     * maximum values for each column this version should perform better than
-     * scannning each column separately.
+     * Finds the first minimum element in each column of matrix A. When
+     * calculating minimum values for each column this version should perform
+     * better than scannning each column separately.
      * 
      * @param A
-     * @return for each column of A the index of the maximum element
+     * @param indices an array of <code>A.columns()</code> integers in which
+     *            indices of the first minimum element will be stored. If this
+     *            parameter is <code>null<code> a new array will be allocated.
+     * @param minValues an array of <code>A.columns()</code> doubles in which
+     *  		  values of each column's minimum elements will be stored. If 
+     * 			  this parameter is <code>null<code> a new array will be 
+     *            allocated. 
+     * 
+     * @return for each column of A the index of the minimum element
      */
-    public static int [] maxInColumn(DoubleMatrix2D A)
+    public static int [] minInColumns(DoubleMatrix2D A, int [] indices,
+        double [] minValues)
     {
+        if (indices == null)
+        {
+            indices = new int [A.columns()];
+        }
+
         if (A.columns() == 0 || A.rows() == 0)
         {
-            return new int [0];
+            return indices;
         }
-        
-        int [] indices = new int [A.columns()];
-        double [] max = new double[A.columns()];
+
+        if (minValues == null)
+        {
+            minValues = new double [A.columns()];
+        }
         
         for (int c = 0; c < A.columns(); c++)
         {
-            max[c] = A.getQuick(0, c);
+            minValues[c] = A.getQuick(0, c);
         }
-        
+        Arrays.fill(indices, 0);
+
         for (int r = 1; r < A.rows(); r++)
         {
             for (int c = 0; c < A.columns(); c++)
             {
-                if (A.getQuick(r, c) > max[c])
+                if (A.getQuick(r, c) < minValues[c])
                 {
-                    max[c] = A.getQuick(r, c);
+                    minValues[c] = A.getQuick(r, c);
                     indices[c] = r;
                 }
             }
         }
-        
+
         return indices;
+    }
+
+    /**
+     * Finds the first maximum element in each column of matrix A. When
+     * calculating maximum values for each column this version should perform
+     * better than scannning each column separately.
+     * 
+     * @param A
+     * @param indices an array of <code>A.columns()</code> integers in which
+     *            indices of the first maximum element will be stored. If this
+     *            parameter is <code>null<code> a new array will be allocated.
+     * @param maxValues an array of <code>A.columns()</code> doubles in which
+     *  		  values of each column's maximum elements will be stored. If 
+     * 			  this parameter is <code>null<code> a new array will be 
+     *            allocated. 
+     * 
+     * @return for each column of A the index of the maximum element
+     */
+    public static int [] maxInColumns(DoubleMatrix2D A, int [] indices,
+        double [] maxValues)
+    {
+        if (indices == null)
+        {
+            indices = new int [A.columns()];
+        }
+
+        if (A.columns() == 0 || A.rows() == 0)
+        {
+            return indices;
+        }
+
+        if (maxValues == null)
+        {
+            maxValues = new double [A.columns()];
+        }
+
+        for (int c = 0; c < A.columns(); c++)
+        {
+            maxValues[c] = A.getQuick(0, c);
+        }
+        Arrays.fill(indices, 0);
+
+        for (int r = 1; r < A.rows(); r++)
+        {
+            for (int c = 0; c < A.columns(); c++)
+            {
+                if (A.getQuick(r, c) > maxValues[c])
+                {
+                    maxValues[c] = A.getQuick(r, c);
+                    indices[c] = r;
+                }
+            }
+        }
+
+        return indices;
+    }
+
+    /**
+     * Finds the index of the first maximum element in given row of
+     * <code>A</code>
+     * 
+     * @param A the matrix to search
+     * @param row the row to search
+     * @return index of the first maxiumum element or -1 if the input matrix is
+     *         <code>null</code> or has zero size.
+     */
+    public static int maxInRow(DoubleMatrix2D A, int row)
+    {
+        if (A == null && A.rows() == 0 || A.columns() == 0 || row >= A.rows())
+        {
+            return -1;
+        }
+
+        int index = 0;
+        double max = A.getQuick(row, index);
+        for (int c = 1; c < A.columns(); c++)
+        {
+            if (max < A.getQuick(row, c))
+            {
+                max = A.getQuick(row, c);
+                index = c;
+            }
+        }
+
+        return index;
     }
 }

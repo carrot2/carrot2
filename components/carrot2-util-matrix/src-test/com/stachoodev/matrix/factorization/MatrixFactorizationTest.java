@@ -1,15 +1,26 @@
 /*
- * MatrixFactorizationTest.java Created on 2004-05-09
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
 package com.stachoodev.matrix.factorization;
 
 import junit.framework.*;
+import junitx.framework.*;
 import cern.colt.matrix.*;
+import cern.colt.matrix.impl.*;
+
 import com.stachoodev.matrix.*;
 import com.stachoodev.matrix.factorization.seeding.*;
 
 /**
- * @author stachoo
+ * @author Stanislaw Osinski
+ * @version $Revision$
  */
 public class MatrixFactorizationTest extends TestCase
 {
@@ -31,7 +42,53 @@ public class MatrixFactorizationTest extends TestCase
     { 0.00, 0.00, 0.83, 0.83, 0.00, 0.00, 0.00 } });
 
     /**
-     * 
+     *  
+     */
+    public void testNativeSVD()
+    {
+        NNIInterface.suppressNNI(false);
+        if (NNIInterface.isNativeLapackAvailable())
+        {
+            PartialSingularValueDecompositionFactory factory = new PartialSingularValueDecompositionFactory();
+            factory.setK(2);
+
+            PartialSingularValueDecomposition factorization = (PartialSingularValueDecomposition) factory
+                .factorize(A);
+
+            DoubleMatrix2D expectedU = NNIDoubleFactory2D.nni
+                .make(new double [] []
+                {
+                { 0, -0.752646 },
+                { 0.651927, 0 },
+                { 0.651927, 0 },
+                { 0.387277, 0 },
+                { 0, -0.658425 } });
+
+            DoubleMatrix2D expectedV = NNIDoubleFactory2D.nni
+                .make(new double [] []
+                {
+                { 0.557873, 0 },
+                { 0.562741, 0 },
+                { 2.775558E-017, -0.619628 },
+                { -8.326673E-017, -0.619628 },
+                { 0.23542, 0 },
+                { 0.562741, 0 },
+                { -2.220446E-016, -0.48179 } });
+
+            double [] expectedS = new double []
+            { 1.6450472, 1.5621864 };
+
+            assertTrue("U matrix", MatrixUtils.equals(expectedU, factorization
+                .getU(), DELTA));
+            assertTrue("V matrix", MatrixUtils.equals(expectedV, factorization
+                .getV(), DELTA));
+            ArrayAssert.assertEquals("S array", expectedS, factorization
+                .getSingularValues(), DELTA);
+        }
+    }
+
+    /**
+     *  
      */
     public void testNMFED()
     {
@@ -65,7 +122,41 @@ public class MatrixFactorizationTest extends TestCase
     }
 
     /**
-     * 
+     *  
+     */
+    public void testKMeans()
+    {
+        KMeansMatrixFactorizationFactory factory = new KMeansMatrixFactorizationFactory();
+        setParameters(factory);
+
+        DoubleMatrix2D expectedU = NNIDoubleFactory2D.nni.make(new double [] []
+        {
+        { 0, 0.424 },
+        { 0.245, 0.284 },
+        { 0.245, 0.284 },
+        { 0.86, 0 },
+        { 0, 0.332 } });
+
+        DoubleMatrix2D expectedV = NNIDoubleFactory2D.nni.make(new double [] []
+        {
+        { 1, 0 },
+        { 0, 1 },
+        { 0, 1 },
+        { 0, 1 },
+        { 1, 0 },
+        { 0, 1 },
+        { 0, 1 } });
+
+        MatrixFactorization factorization = factory.factorize(A);
+
+        assertTrue("U matrix", MatrixUtils.equals(expectedU, factorization
+            .getU(), DELTA));
+        assertTrue("V matrix", MatrixUtils.equals(expectedV, factorization
+            .getV(), DELTA));
+    }
+
+    /**
+     *  
      */
     public void testOrderedNMFED()
     {
@@ -100,7 +191,7 @@ public class MatrixFactorizationTest extends TestCase
     }
 
     /**
-     * 
+     *  
      */
     public void testNMFKL()
     {
@@ -134,7 +225,7 @@ public class MatrixFactorizationTest extends TestCase
     }
 
     /**
-     * 
+     *  
      */
     public void testLNMF()
     {

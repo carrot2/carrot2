@@ -1,5 +1,12 @@
 /*
- * MatrixFactorizationBenchmark.java Created on 2004-05-09
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
 package com.stachoodev.matrix.factorization;
 
@@ -14,12 +21,13 @@ import cern.colt.matrix.impl.*;
 /**
  * Benchmarks the matrix factorisation algorithms.
  * 
- * @author stachoo
+ * @author Stanislaw Osinski
+ * @version $Revision$
  */
 public class MatrixFactorizationBenchmark
 {
     /** Used to calculate the number of rows of the test matrix */
-    private static final double ROWS_COLUMNS_RATIO = 4.0;
+    private static final double ROWS_COLUMNS_RATIO = 2.8;
 
     /** Used to calculate k based on the number of columns */
     private static final double COLUMNS_K_RATIO = 4;
@@ -29,8 +37,8 @@ public class MatrixFactorizationBenchmark
 
     /** Iterative matrix factorizations under tests */
     private IterativeMatrixFactorizationFactory [] factories = new IterativeMatrixFactorizationFactory []
-    { // new KMeansMatrixFactorizationFactory(),
-     //new NonnegativeMatrixFactorizationEDFactory(),
+    { new KMeansMatrixFactorizationFactory(),
+     new NonnegativeMatrixFactorizationEDFactory(),
      new NonnegativeMatrixFactorizationKLFactory(),
      new LocalNonnegativeMatrixFactorizationFactory(), };
 
@@ -46,12 +54,16 @@ public class MatrixFactorizationBenchmark
     }
 
     /**
-     * 
+     *  
      */
     public void benchmarkExecutionTime()
     {
         int [] columnCounts = new int []
-        { 50, 100, 150, 200, 300, 400, 500 };
+        { 50, 100, 150, 200, 300, 400 };
+
+        // Output header
+        resultsPrintStream
+            .println("Algorithm\tMode\tTerms\tDocuments\tClusters\tIterations\tTime");
 
         for (int i = 0; i < factories.length; i++)
         {
@@ -100,7 +112,6 @@ public class MatrixFactorizationBenchmark
                 }
             }
         }
-
     }
 
     /**

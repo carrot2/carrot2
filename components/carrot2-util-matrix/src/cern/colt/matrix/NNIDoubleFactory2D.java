@@ -1,5 +1,12 @@
 /*
- * NNIDoubleFactory2D.java Created on 2004-06-12
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
 package cern.colt.matrix;
 
@@ -8,9 +15,11 @@ import cern.colt.matrix.impl.*;
 /**
  * A factory for convenient construction of 2D matrices backed by the NNI
  * interface. Use the <code>nni</code> static field to obtain the instance of
- * the NNI matrix factory. For more details on using this factory see @link cern.colt.matrix.DoubleFactory2D.
+ * the NNI matrix factory. For more details on using this factory see
+ * {@link cern.colt.matrix.DoubleFactory2D}.
  * 
- * @author stachoo
+ * @author Stanislaw Osinski
+ * @version $Revision$
  */
 public class NNIDoubleFactory2D extends DoubleFactory2D
 {
@@ -25,7 +34,7 @@ public class NNIDoubleFactory2D extends DoubleFactory2D
      * 
      * @see cern.colt.matrix.DoubleFactory2D#make(double[][])
      */
-    public DoubleMatrix2D make(double[][] values)
+    public DoubleMatrix2D make(double [][] values)
     {
         if (this == nni)
         {

@@ -1,7 +1,12 @@
 /*
- * LocalControllerBase.java
- * 
- * Created on 2004-06-28
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
 package com.dawidweiss.carrot.core.local;
 
@@ -21,14 +26,12 @@ import org.apache.commons.pool.impl.*;
  * TODO: implement {@link #isComponentSequenceCompatible(String, String)}
  * properly
  * 
- * @author stachoo
+ * @author Stanislaw Osinski
+ * @version $Revision$
  */
 public class LocalControllerBase implements LocalController,
     LocalControllerContext
 {
-    /** Stores local component factories */
-    protected Map componentFactories;
-
     /** Stores local component pools */
     protected Map componentPools;
 
@@ -41,8 +44,7 @@ public class LocalControllerBase implements LocalController,
     public LocalControllerBase()
     {
         componentPools = new HashMap();
-        componentFactories = new HashMap();
-        processes = new HashMap();
+        processes = new LinkedHashMap();
     }
 
     /*
@@ -64,7 +66,6 @@ public class LocalControllerBase implements LocalController,
             }
         };
 
-        componentFactories.put(componentId, factory);
         componentPools.put(componentId, new GenericObjectPool(
             poolableObjectFactory, 5));
     }
@@ -202,7 +203,7 @@ public class LocalControllerBase implements LocalController,
      */
     public boolean isComponentFactoryAvailable(String key)
     {
-        return componentFactories.containsKey(key);
+        return componentPools.containsKey(key);
     }
 
     /*

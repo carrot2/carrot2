@@ -1,5 +1,12 @@
 /*
- * IterativeMatrixFactorizationBase.java Created on 2004-06-20
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
 package com.stachoodev.matrix.factorization;
 
@@ -11,25 +18,29 @@ import cern.jet.math.*;
 import com.stachoodev.matrix.factorization.seeding.*;
 
 /**
- * @author stachoo
+ * @author Stanislaw Osinski
+ * @version $Revision$
  */
 public abstract class IterativeMatrixFactorizationBase extends
-    MatrixFactorizationBase
+    MatrixFactorizationBase implements IterativeMatrixFactorization
 {
     /** The desired number of base vectors */
     protected int k;
-    protected static int DEFAULT_K = 30;
+    protected static int DEFAULT_K = 15;
 
     /** The maximum number of iterations the algorithm is allowed to run */
     protected int maxIterations;
-    protected static final int DEFAULT_MAX_ITERATIONS = 50;
+    protected static final int DEFAULT_MAX_ITERATIONS = 15;
 
     /**
      * If the percentage decrease in approximation error becomes smaller than
-     * <code>stopThreshold</code>, the algorithm will stop
+     * <code>stopThreshold</code>, the algorithm will stop. Note: calculation
+     * of approximation error is quite costly. Setting the threshold to -1 turns
+     * off approximation error calculation and hence makes the algorithm do the
+     * maximum number of iterations.
      */
     protected double stopThreshold;
-    protected static double DEFAULT_STOP_THRESHOLD = 0.0;
+    protected static double DEFAULT_STOP_THRESHOLD = -1.0;
 
     /** Seeding strategy */
     protected SeedingStrategy seedingStrategy;
@@ -40,8 +51,11 @@ public abstract class IterativeMatrixFactorizationBase extends
     protected boolean ordered;
     protected static final boolean DEFAULT_ORDERED = false;
 
-    /** Approximation error */
+    /** Currnet approximation error */
     protected double approximationError;
+
+    /** Approximation errors during subsequent iterations */
+    protected double [] approximationErrors;
 
     /** Iteration counter */
     protected int iterationsCompleted;
@@ -61,6 +75,9 @@ public abstract class IterativeMatrixFactorizationBase extends
         this.stopThreshold = DEFAULT_STOP_THRESHOLD;
         this.seedingStrategy = DEFAULT_SEEDING_STRATEGY;
         this.ordered = DEFAULT_ORDERED;
+        this.approximationErrors = null;
+        this.approximationError = -1;
+        this.iterationsCompleted = 0;
     }
 
     /**
@@ -89,18 +106,26 @@ public abstract class IterativeMatrixFactorizationBase extends
      */
     protected boolean updateApproximationError()
     {
+        if (approximationErrors == null)
+        {
+            approximationErrors = new double [maxIterations + 1];
+        }
+
         // Approximation error
         double newApproximationError = Algebra.DEFAULT.normF(U.zMult(V, null,
             1, 0, false, true).assign(A, Functions.minus));
+        approximationErrors[iterationsCompleted] = newApproximationError;
 
-        if (approximationError - newApproximationError < stopThreshold)
+        if ((approximationError - newApproximationError) / approximationError < stopThreshold)
         {
             approximationError = newApproximationError;
             return true;
         }
-
-        approximationError = newApproximationError;
-        return false;
+        else
+        {
+            approximationError = newApproximationError;
+            return false;
+        }
     }
 
     /**
@@ -186,7 +211,10 @@ public abstract class IterativeMatrixFactorizationBase extends
     /**
      * Sets the algorithms <code>stopThreshold</code>. If the percentage
      * decrease in approximation error becomes smaller than
-     * <code>stopThreshold</code>, the algorithm will stop.
+     * <code>stopThreshold</code>, the algorithm will stop. Note: calculation
+     * of approximation error is quite costly. Setting the threshold to -1 turns
+     * off calculation of the approximation error and hence makes the algorithm
+     * do the maximum allowed number of iterations.
      * 
      * @param
      */
@@ -195,20 +223,35 @@ public abstract class IterativeMatrixFactorizationBase extends
         this.stopThreshold = stopThreshold;
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Returns final approximation error or -1 if the approximation error
+     * calculation has been turned off (see {@link #setMaxIterations(int)}.
      * 
-     * @see com.stachoodev.matrix.factorization.MatrixFactorization#getApproximationError()
+     * @return final approximation error or -1
      */
     public double getApproximationError()
     {
         return approximationError;
     }
 
+    /**
+     * Returns an array of approximation errors during after subsequent
+     * iterations of the algorithm. Element 0 of the array contains the
+     * approximation error before the first iteration. The array is
+     * <code>null</code> if the approximation error calculation has been
+     * turned off (see {@link #setMaxIterations(int)}.
+     * 
+     * @return
+     */
+    public double [] getApproximationErrors()
+    {
+        return approximationErrors;
+    }
+
     /*
      * (non-Javadoc)
      * 
-     * @see com.stachoodev.matrix.factorization.MatrixFactorization#getIterationsCompleted()
+     * @see com.stachoodev.matrix.factorization.IterativeMatrixFactorization#getIterationsCompleted()
      */
     public int getIterationsCompleted()
     {

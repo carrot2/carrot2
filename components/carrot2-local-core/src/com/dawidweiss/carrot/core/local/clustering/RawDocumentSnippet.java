@@ -1,12 +1,25 @@
 /*
- * RawDocumentSnippet.java Created on 2004-06-17
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
 package com.dawidweiss.carrot.core.local.clustering;
 
 import com.stachoodev.util.common.*;
 
 /**
- * @author stachoo
+ * An implementation of the
+ * {@link com.dawidweiss.carrot.core.local.clustering.RawDocument}interface
+ * suitable for storing document references, so called snippets, returned by a
+ * search engine. Does <b>not </b> provide document content.
+ * 
+ * @author Stanislaw Osinski
+ * @version $Revision$
  */
 public class RawDocumentSnippet extends RawDocumentBase implements Cloneable
 {
@@ -119,13 +132,13 @@ public class RawDocumentSnippet extends RawDocumentBase implements Cloneable
     public int hashCode()
     {
         // Try with the title first
-        if (title != null)
+        if (title != null && !title.equals(""))
         {
             return title.hashCode();
         }
 
         // Snippet?
-        if (getSnippet() != null)
+        if (getSnippet() != null && !getSnippet().equals(""))
         {
             return getSnippet().hashCode();
         }

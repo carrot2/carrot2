@@ -1,10 +1,13 @@
 /*
- * Carrot2 Project Copyright (C) 2002-2004, Dawid Weiss Portions (C)
- * Contributors listed in carrot2.CONTRIBUTORS file. All rights reserved. Refer
- * to the full license file "carrot2.LICENSE" in the root folder of the CVS
- * checkout or at: http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
-
 package com.stachoodev.suffixarrays;
 
 import com.stachoodev.suffixarrays.wrapper.*;
@@ -15,6 +18,9 @@ import com.stachoodev.suffixarrays.wrapper.*;
  * The complexity of suffix-sorting is O(N^2logN) and that of LCP finding is
  * O(N^2), which does not present any substantial difference in efficiency when
  * applied to small-scale problems, such as search results clustering.
+ * 
+ * @author Stanislaw Osinski
+ * @version $Revision$
  */
 public class QSLcpSuffixSortingStrategy implements LcpSuffixSortingStrategy
 {
@@ -24,15 +30,15 @@ public class QSLcpSuffixSortingStrategy implements LcpSuffixSortingStrategy
     public LcpSuffixArray lcpSuffixSort(IntWrapper intWrapper)
     {
         int [] suffixData = intWrapper.asIntArray();
-        int [] suffixArray = new int[suffixData.length - 1];
-        int [] lcpArray = new int[suffixData.length];
+        int [] suffixArray = new int [suffixData.length - 1];
+        int [] lcpArray = new int [suffixData.length];
 
         SuffixArraysUtils.qsSuffixSort(suffixArray, suffixData);
 
         if (intWrapper instanceof TypeAwareIntWrapper)
         {
             SuffixArraysUtils.naiveLcp(suffixArray, lcpArray, suffixData, 0,
-                    (TypeAwareIntWrapper)intWrapper);
+                (TypeAwareIntWrapper) intWrapper);
         }
         else
         {

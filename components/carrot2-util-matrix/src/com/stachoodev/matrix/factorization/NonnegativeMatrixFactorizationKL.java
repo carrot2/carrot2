@@ -1,5 +1,12 @@
 /*
- * NNINonnegativeMatrixFactorizationKL.java Created on 2004-01-18
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
 package com.stachoodev.matrix.factorization;
 
@@ -14,7 +21,8 @@ import cern.jet.math.*;
  * implementation preforms Non-negative Matrix Factorization by minimisation of
  * Kullback-Leibler divergence between A and UV' using multiplicative updating.
  * 
- * @author stachoo
+ * @author Stanislaw Osinski
+ * @version $Revision$
  */
 public class NonnegativeMatrixFactorizationKL extends
     IterativeMatrixFactorizationBase
@@ -77,7 +85,7 @@ public class NonnegativeMatrixFactorizationKL extends
         DoubleDoubleFunction invDiv = Functions.swapArgs(Functions.div);
         DoubleFunction plusEps = Functions.plus(eps);
 
-        if (stopThreshold > 0)
+        if (stopThreshold >= 0)
         {
             updateApproximationError();
         }
@@ -101,7 +109,7 @@ public class NonnegativeMatrixFactorizationKL extends
             MatrixUtils.normaliseColumnL1(U, work);
 
             iterationsCompleted++;
-            if (stopThreshold > 0)
+            if (stopThreshold >= 0)
             {
                 if (updateApproximationError())
                 {
