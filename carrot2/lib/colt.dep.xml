@@ -2,11 +2,15 @@
 <!DOCTYPE component SYSTEM "../etc/component-dependency.dtd" > 
 <component
     name="colt"
-    description="Colt 1.0.3, http://hoschek.home.cern.ch/hoschek/colt/">
+    description="Colt 1.0.3, trimmed version, http://hoschek.home.cern.ch/hoschek/colt/">
 	<provides>
 		<files>
-			<file location="colt-1.0.3.jar" />
+			<file location="colt-1.0.3-trimmed.jar" />
 			<file location="colt.LICENSE" />
 		</files>
 	</provides>
+
+    <dependency name="jal" />
+    <dependency name="format" />
+    <dependency name="violinstrings" />
 </component>
