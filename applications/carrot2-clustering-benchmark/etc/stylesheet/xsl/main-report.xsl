@@ -6,7 +6,9 @@
     TODO:
       (04/07/01) grouping by process or query?
   -->
-   
+
+  <xsl:variable name="include-fields">Query,Documents,Filter Time,Coverage,Avg Cont</xsl:variable>
+
   <!-- Root element -->
   <xsl:template match="report">
     <html>
@@ -68,7 +70,7 @@
           <div class="result">
             <table class="result">
               <tr>
-                <xsl:for-each select="/report/results/result[1]/entry[not(@key = 'Process' or contains(@key,'Std Dev') or contains(@key, 'Max') or contains(@key, 'Min'))]">
+                <xsl:for-each select="/report/results/result[1]/entry[contains($include-fields, @key)]">
                   <th><xsl:value-of select="@key"/></th>
                 </xsl:for-each>
                 <th/> <!-- Details -->
@@ -76,7 +78,7 @@
               <xsl:for-each select="/report/results/result">
                 <xsl:if test="entry[@key = 'Process'] = $process-id">
                   <tr>
-                    <xsl:apply-templates select="entry[not(@key = 'Process' or contains(@key,'Std Dev') or contains(@key, 'Max') or contains(@key, 'Min'))]"/>
+                    <xsl:apply-templates select="entry[contains($include-fields, @key)]"/>
                     <td class="result-value">
                       <a>
                         <xsl:attribute name="href"><xsl:value-of select="entry[@key = 'Process']"/>-<xsl:value-of select="entry[@key = 'Query']"/>.html</xsl:attribute>
