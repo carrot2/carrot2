@@ -23,6 +23,9 @@ import com.stachoodev.util.common.*;
  * {@link com.stachoodev.carrot.odp.index.AllKnownTopicIndexBuilders}for given
  * ODP content file.
  * 
+ * TODO: skip topics without external pages?
+ * TODO: topic filtering - too small topics, letter catetories (e.g. Domains/A)
+ * 
  * @author Stanislaw Osinski
  * @version $Revision$
  */
