@@ -43,6 +43,7 @@ public class QueryProcessor
     private QueryGuard queryGuard;
     private boolean fullDebugInfo;
     private RequestHistory requestHistory;
+    private boolean useHistory = true;
 
 
     /**
@@ -73,6 +74,11 @@ public class QueryProcessor
         return requestHistory;
     }
     
+	public void setUseHistory(boolean useHistory) {
+		log.debug("Using history of queries: " + useHistory);
+		this.useHistory = useHistory;
+	}
+
 
     /**
      * This is for debugging purposes only.
@@ -131,7 +137,7 @@ public class QueryProcessor
                 output.write(new String(os.toByteArray(), "UTF-8"));
 
                 // handle request history.
-                if (requestHistory != null && !process.isHidden())
+                if (useHistory && requestHistory != null && !process.isHidden())
                     requestHistory.push(query, process);
             }
             else
