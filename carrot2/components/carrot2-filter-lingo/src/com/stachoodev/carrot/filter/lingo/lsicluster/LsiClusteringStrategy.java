@@ -174,7 +174,11 @@ public class LsiClusteringStrategy implements ClusteringStrategy {
         }
 
         timeLogger.start();
-        prepareData();
+        if (!prepareData())
+        {
+            logger.warn("No clusters created");
+            return new Cluster[0];
+        }
         timeLogger.logElapsedAndStart(logger, "prepareData()");
         createReducedRepresentation();
         timeLogger.logElapsedAndStart(logger, "createReducedRepresentation()");
@@ -202,8 +206,9 @@ public class LsiClusteringStrategy implements ClusteringStrategy {
 
     /**
      * Prepares intermediate clustering data (term-document matrix).
+     * @return
      */
-    protected void prepareData() {
+    protected boolean prepareData() {
         snippets = clusteringContext.getPreprocessedSnippets();
         features = clusteringContext.getFeatures();
 
@@ -227,17 +232,28 @@ public class LsiClusteringStrategy implements ClusteringStrategy {
         phraseCount = features.length - nonStopTermCount - stopTermCount;
         firstPhraseIndex = nonStopTermCount + stopTermCount;
 
+        if (phraseCount == 0)
+        {
+            return false;
+        }
+        
         // Create TD matrix
         TdMatrixBuildingStrategy tdMatrixBuildingStrategy = new TfidfTdMatrixBuildingStrategy(2,
                 250 * 150);
 
         double[][] matrix = tdMatrixBuildingStrategy.buildTdMatrix(clusteringContext);
+        if (matrix.length == 0 || matrix[0].length == 0)
+        {
+            return false;
+        }
         tdMatrix = new Matrix(matrix);
 
         MatrixUtils.normalizeColumnLengths(tdMatrix);
 
         termCount = tdMatrix.getRowDimension();
         docCount = tdMatrix.getColumnDimension();
+        
+        return true;
     }
 
     /**
