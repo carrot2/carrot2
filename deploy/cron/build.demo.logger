@@ -3,10 +3,8 @@ MailLogger.mailhost=libra.cs.put.poznan.pl
 MailLogger.from=dawid.weiss@cs.put.poznan.pl
 
 MailLogger.failure.notify=true
-MailLogger.failure.to=dawid.weiss@cs.put.poznan.pl
+MailLogger.failure.to=dawid.weiss@cs.put.poznan.pl,carrot2-integ-builds@lists.sourceforge.net
 MailLogger.failure.subject=[Carrot2] Nightly demo compilation failed.
-
-# Add this list in the future - carrot2-integ-builds@lists.sourceforge.net
 
 MailLogger.success.notify=false
 MailLogger.success.to=dawid.weiss@cs.put.poznan.pl
