@@ -17,15 +17,6 @@
     </init-param>
     <load-on-startup>40</load-on-startup>
   </servlet>
-  <servlet>
-    <servlet-name>TreeSnippetReader</servlet-name>
-    <servlet-class>com.paulodev.carrot.input.treeExtractor.SnippetReaderServlet</servlet-class>
-    <init-param>
-      <param-name>searchEngineDescriptors</param-name>
-      <param-value>/searchEngines</param-value>
-    </init-param>
-    <load-on-startup>50</load-on-startup>
-  </servlet>
   <servlet-mapping>
     <servlet-name>SnippetReader</servlet-name>
     <url-pattern>/extractor/*</url-pattern>
@@ -33,9 +24,5 @@
   <servlet-mapping>
     <servlet-name>FakeService</servlet-name>
     <url-pattern>/fakeservice/*</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>TreeSnippetReader</servlet-name>
-    <url-pattern>/treeExtractor/*</url-pattern>
   </servlet-mapping>
 </web-app>

@@ -53,7 +53,7 @@
                  be extracted -->
             <number-of-matched-documents>
                 <regexpression>
-                    <match><![CDATA[of about[^S]*S]]></match>
+                    <match><![CDATA[of( about)?[^S]{0,20}Search]]></match>
                     <replace regexp="[^0123456789]*" with="" />
                 </regexpression>
             </number-of-matched-documents>

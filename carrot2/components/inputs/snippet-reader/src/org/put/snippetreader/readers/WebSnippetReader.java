@@ -340,7 +340,15 @@ public class WebSnippetReader
                     )
                 );
 
-            final byte [] fullInput = FileHelper.readFullyAndCloseInput(is);
+            byte [] fullInput;
+            
+            if (is == null) {
+                fullInput = reader.getFirstResultsPage(query, 80, encoding, JDOMHelper.getElement(
+                    "/service/response/pageinfo", config));
+            } else {
+                fullInput = FileHelper.readFullyAndCloseInput(is);
+            }
+
             final String fullInputString = new String(
                     fullInput,
                     JDOMHelper.getStringFromJDOM("/service/response#encoding", config, false)
@@ -504,13 +512,26 @@ public class WebSnippetReader
                 encoding = "iso8859-1";
             }
 
-            InputStream is = reader.getQueryResults(
-                    query, 80, encoding, JDOMHelper.getElement(
-                        "/service/response/pageinfo", config
-                    )
-                );
+            InputStream is = null;
+            
+            try
+            {
+                is = reader.getQueryResults(
+                        query, 80, encoding, JDOMHelper.getElement(
+                            "/service/response/pageinfo", config
+                        )
+                    );
+            }
+            catch (Exception e1)
+            {
+            }
 
-            fullInput = FileHelper.readFullyAndCloseInput(is);
+            if (is == null) {
+                fullInput = reader.getFirstResultsPage(query, 80, encoding, JDOMHelper.getElement(
+                    "/service/response/pageinfo", config));
+            } else {
+                fullInput = FileHelper.readFullyAndCloseInput(is);
+            }
 
             stream.append(
                 new String(

@@ -54,6 +54,31 @@ public class HttpMultiPageReader
         this.queryParameters = queryParameters;
     }
 
+    public byte [] getFirstResultsPage(String query, int resultsNeeded, String encoding, Element pageInfo) throws IOException
+    {
+        String inputEncoding = encoding;
+        String outputEncoding = encoding;
+    
+            // load the first page of the results.
+            Map mappings = new HashMap();
+            mappings.put("query.string", query);
+            mappings.put("query.startFrom", "0");
+    
+            InputStream pageInputStream = submitter.submit(
+                    queryParameters, mappings, outputEncoding
+                );
+    
+            if (pageInputStream == null)
+            {
+                throw new IOException("Null returned from the submitter (HTTP request failed)");
+            }
+    
+            // load the page entirely.
+            byte [] pageBytes = FileHelper.readFully(pageInputStream);
+            return pageBytes;
+    }
+
+
     public Enumeration getQueryResultsPages(
         String query, int resultsNeeded, String encoding, Element pageInfo
     )
@@ -139,7 +164,8 @@ public class HttpMultiPageReader
                         "Page was not recognized. Neither results nor no-results tokens were found."
                     );
                     throw new Exception(
-                        "Snippet parser problems. Please notify system administrator."
+                        "Snippet parser problems (Neither results nor no-results tokens were found)."
+                        + " Please notify system administrator."
                     );
                 }
             }
