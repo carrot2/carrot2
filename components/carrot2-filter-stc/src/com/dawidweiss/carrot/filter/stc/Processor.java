@@ -156,7 +156,7 @@ public class Processor
     }
 
 
-    private final List splitIntoSentences(String snippet)
+    public static final List splitIntoSentences(String snippet)
     {
         char [] chars = snippet.toLowerCase().toCharArray();
         List sentence = new ArrayList(10);
