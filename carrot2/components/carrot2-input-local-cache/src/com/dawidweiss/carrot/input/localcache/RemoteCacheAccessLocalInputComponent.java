@@ -56,6 +56,8 @@ public class RemoteCacheAccessLocalInputComponent extends
      */
 	private CachedQueriesStore store;
 
+    /** Current request context */
+    private RequestContext requestContext;
     
     /**
      * Creates a new instance of the component with no lookup directories
@@ -110,6 +112,7 @@ public class RemoteCacheAccessLocalInputComponent extends
         super.flushResources();
         query = null;
         rawDocumentConsumer = null;
+        requestContext = null;
     }
 
     /*
@@ -137,7 +140,10 @@ public class RemoteCacheAccessLocalInputComponent extends
         throws ProcessingException
     {
         super.startProcessing(requestContext);
-       
+
+        // Store the current context
+        this.requestContext = requestContext;
+        
         // parse the query and see what it is.
         String query = this.query.trim();
         
@@ -154,7 +160,18 @@ public class RemoteCacheAccessLocalInputComponent extends
         }
     }
 
-	/**
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.dawidweiss.carrot.core.local.LocalComponent#getName()
+     */
+    public String getName()
+    {
+        return "Cache Input";
+    }
+
+    /**
 	 * @param query2
 	 */
 	private void handleRawQuery(String query) throws ProcessingException {
@@ -182,6 +199,7 @@ public class RemoteCacheAccessLocalInputComponent extends
     	try {
 			SAXReader reader = new SAXReader();
 			Element root = reader.read( zcq.getData() ).getRootElement();
+
 			pushAsLocalData( root );
 		} catch (Exception e) {
 			throw new ProcessingException("Problems opening cached query.",e);
@@ -197,6 +215,7 @@ public class RemoteCacheAccessLocalInputComponent extends
     		throw new ProcessingException("There is no store to dump. Initialize the component with a store.");
     	
     	List cachedQueries = store.getCachedQueries();
+
     	int id = 0;
     	for (Iterator i = cachedQueries.iterator(); i.hasNext(); id++) {
     		ZIPCachedQuery zcq = (ZIPCachedQuery) i.next();
@@ -231,6 +250,16 @@ public class RemoteCacheAccessLocalInputComponent extends
 
 	private void pushAsLocalData(Element root) throws ProcessingException {
 		List documents = root.elements("document");
+
+        // Pass the actual document count
+        requestContext.getRequestParameters().put(
+            LocalInputComponent.PARAM_TOTAL_MATCHING_DOCUMENTS,
+            new Integer(documents.size()));
+
+        // Pass the query
+        requestContext.getRequestParameters().put(
+            LocalInputComponent.PARAM_QUERY, root.element("query").getText());
+
 		int id = 0;
 		for (Iterator i = documents.iterator(); i.hasNext(); id++) {
 			Element docElem = (Element) i.next();
