@@ -10,6 +10,7 @@
 
 package com.dawidweiss.carrot.core.local;
 
+import java.util.HashMap;
 import java.util.Set;
 
 /**
@@ -24,6 +25,8 @@ import java.util.Set;
  */
 public abstract class LocalComponentBase implements LocalComponent
 {
+    private final HashMap properties = new HashMap();
+    
     /**
      * Provides an empty implementation.
      * 
@@ -111,6 +114,19 @@ public abstract class LocalComponentBase implements LocalComponent
      */
     public void setProperty(String key, String value)
     {
+        this.properties.put(key,value);
+    }
+
+    /**
+     * Retrieves a property previously set in the component
+     * using {@link #setProperty(String, String)}.
+     * 
+     * @param key Key
+     * @return Returns a string, or a <code>null</code> if the property
+     * has no binding.
+     */
+    protected String getProperty(String key) {
+	    return (String) this.properties.get(key);
     }
 
     /**
