@@ -1,0 +1,76 @@
+
+1. Download and deploy an Egothor WebApp installation from
+www.egothor.org. 
+
+Once you're able to access Egothor via your favorite Web browser, you're set to 
+add a Carrot2 adapter.
+
+Refer to Egothor's manual for configuring search contexts.
+
+2. Build the adapter, you should find a JAR file in tmp/dist directory:
+
+carrot2-adapter-egothor.jar
+
+3. Copy the adapter JAR to Egothor's WebApp deployment folder substituting 
+"DEPLOYED-EGOTHOR-DIR" a path that matches your local configuration.
+
+${DEPLOYED-EGOTHOR-DIR}/WEB-INF/lib
+
+Also, include the JARs that 'show.dependencies' target in the build file indicates.
+These JARs can also be collected in the distribution directory by typing:
+
+ant collect.dependencies
+
+4. Add and configure Carrot2 adapter servlet by adding the following section to 
+Egothor's web application deployment file (${DEPLOYED-EGOTHOR-DIR}/WEB-INF/web.xml):
+
+
+<!-- Carrot2 Input Component Servlet -->
+    <servlet>
+        <servlet-name>
+            Egothor To Carrot2 Input Component
+        </servlet-name>
+
+        <servlet-class>
+            com.dawidweiss.carrot.input.egothor.EgothorToCarrot2Servlet
+        </servlet-class>
+        
+        <!-- these control how big snippets will
+             be output by default -->
+    	<init-param>
+    	    <param-name>max-context-sentences</param-name>
+    	    <param-value>3</param-value>
+    	</init-param>
+    	<init-param>
+    	    <param-name>window-size</param-name>
+    	    <param-value>7</param-value>
+    	</init-param>
+    	
+    	<!-- this controls how big the default result is -->
+    	<init-param>
+    	    <param-name>default-results-number</param-name>
+    	    <param-value>100</param-value>
+    	</init-param>
+
+        <!-- Do not remove this configuration element. -->
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+<!-- EOF: Carrot2 Input Component Servlet -->
+
+Finally, add servlet's mapping to some URL. For example:
+
+    <!-- Servlet mappings -->
+    <servlet-mapping>
+        <servlet-name>Egothor To Carrot2 Input Component</servlet-name>
+        <url-pattern>/e2c</url-pattern>
+    </servlet-mapping>
+
+
+NOTE: The web.xml file has a strictly defined order of defined elements (in a 
+DTD file). If uncertain, use a validating XML editor like JEdit (www.jedit.org).
+
+5. One Egothor instance can expose more than one search context. Selection of a 
+search context via the adapter can be made by passing a named HTTP POST
+argument to it before the query: 
+
+search-context=<search context to use>
