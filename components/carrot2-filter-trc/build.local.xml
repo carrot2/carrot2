@@ -1,20 +1,20 @@
 
-<project name="Carrot2 TRC Clustering Filter (Remote)" default="build">
+<project name="Carrot2 TRC Clustering Filter (Local)" default="build">
     
     <property name="project.dir"      location="${basedir}" />
     <property name="carrot2.cvs.dir"  location="../.." />
 
     <property name="dist.name" value="carrot2-filter-trc" />
 
-    <property name="profile" value="remote" />
+    <property name="profile" value="local" />
     <property name="component.descriptor" location="carrot2-filter-trc.dep.xml" />
 
     <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
 
-	<property name="type" value="wartype" />
+	<property name="type" value="jartype" />
 
     <patternset id="src.patternset">
-        <exclude name="**/local/*.java" />
+        <exclude name="**/*RequestProcessor.java" />
     </patternset>
 
 </project>
