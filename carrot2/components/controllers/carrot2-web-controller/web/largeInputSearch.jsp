@@ -37,6 +37,9 @@
                 <html:link target="_parent" page="/search.jsp"><bean:message key="links.smallinputsearch"/></html:link>
                 &nbsp;
                 <html:link target="_parent" page="/demo.jsp"><bean:message key="links.demo"/></html:link>
+                &nbsp;
+                &nbsp;
+                <html:link target="_top" forward="whatis"><bean:message key="links.whatis"/></html:link>
                 </nobr>
                 </td>
             </tr>

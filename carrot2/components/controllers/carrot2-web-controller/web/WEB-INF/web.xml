@@ -42,6 +42,11 @@
     <load-on-startup>10</load-on-startup>
   </servlet>
   <servlet>
+    <servlet-name>jsp_preload_6</servlet-name>
+    <jsp-file>/welcome.jsp</jsp-file>
+    <load-on-startup>10</load-on-startup>
+  </servlet>
+  <servlet>
     <servlet-name>struts-action</servlet-name>
     <servlet-class>com.dawidweiss.util.struts.ForcedRequestEncodingActionServlet</servlet-class>
     <init-param>

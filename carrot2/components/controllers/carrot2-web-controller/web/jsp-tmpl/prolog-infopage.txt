@@ -10,6 +10,8 @@
             <div class="menu">
             [<html:link forward="main" target="_top"><bean:message key="links.enter"/></html:link>]
             <br/>
+            [<html:link forward="whatis" target="_top"><bean:message key="links.whatis"/></html:link>]
+            <br/>
             <br/>
             [<html:link page="/components.jsp" target="_top"><bean:message key="links.components"/></html:link>]
             <br/>

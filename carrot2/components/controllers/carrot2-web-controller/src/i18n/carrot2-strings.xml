@@ -7,6 +7,7 @@
             <components>components</components>
             <admin>admin</admin>
             <demo>demonstration</demo>
+            <whatis>what is carrot?</whatis>
 
             <english>english</english>
             <polish>polski</polish>
@@ -20,6 +21,7 @@
             <components>komponenty</components>
             <admin>administracja</admin>
             <demo>demonstracja</demo>
+            <whatis>czym jest Carrot?</whatis>
 
             <english>angielski</english>
             <polish>polski</polish>
@@ -131,6 +133,28 @@
 
 
     <blocks>
+    	<welcome>
+            <lang:en>
+                <info><![CDATA[
+                Welcome! If you don't know what to do now<br/>
+                <a target="_top" href="whatis.jsp">click here for help</a>.
+                ]]></info>
+            </lang:en>
+            <lang:pl>
+                <info><![CDATA[
+                Witamy! Jeśli nie wiesz co teraz zrobić<br/>
+                <a target="_top" href="whatis.jsp">tutaj znajduje się mała pomoc</a>.
+                ]]></info>
+            </lang:pl>
+    	</welcome>
+    	<whatis>
+            <lang:en>
+                <whatis><![CDATA[What is Carrot<sup>2</sup>?]]></whatis>
+            </lang:en>
+            <lang:pl>
+                <whatis><![CDATA[Czym jest Carrot<sup>2</sup>?]]></whatis>
+            </lang:pl>
+    	</whatis>
         <wait>
             <lang:en>
                 <please-wait><![CDATA[&hellip;please wait&hellip;]]></please-wait>

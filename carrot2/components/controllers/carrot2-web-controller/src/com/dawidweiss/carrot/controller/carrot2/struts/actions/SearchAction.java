@@ -116,6 +116,11 @@ public class SearchAction
                     request.setAttribute(PROCESSING_RESULTS_KEY, buffer);
                 }
             }
+            else
+            {
+                // no query -- show 'void' page.
+                return mapping.findForward("welcome");
+            }
         }
         catch (Throwable t)
         {

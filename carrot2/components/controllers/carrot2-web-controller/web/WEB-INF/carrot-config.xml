@@ -27,6 +27,17 @@
       -->
     <default-process id="carrot2.process.lingo-google-en" />
     
+    <!-- 
+      ## Specify other properties that the controller should know about.
+      ##
+      ## request-history   (true|false|<missing>)
+      ##   Enables request history to be recorded and displayed in the
+      ##   controller. This is a privacy issue :) 
+      -->
+    <properties>
+    	<property name="request-history" value="true" />
+    </properties>
+
     <!--
       ## Specify the context-relative cache configuration file
       -->
