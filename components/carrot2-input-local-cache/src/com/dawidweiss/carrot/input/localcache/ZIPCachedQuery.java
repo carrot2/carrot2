@@ -115,9 +115,14 @@ class ZIPCachedQuery {
 
 							while (tokenizer.hasMoreTokens()) {
                                 String param = tokenizer.nextToken();
-								String key = param.substring(0, param.indexOf('='));
-								String value = param.substring(param.indexOf('=')+1);
-								optionalParams.put(key, value);
+                                if (param.indexOf('=') < 0) {
+	                                // If no '=', consider the parameter empty.
+	                                optionalParams.put(param, "");
+                                } else {
+									String key = param.substring(0, param.indexOf('='));
+									String value = param.substring(param.indexOf('=')+1);
+									optionalParams.put(key, value);
+								}
 							}
 							this.optionalParams = optionalParams;
 						} else {
