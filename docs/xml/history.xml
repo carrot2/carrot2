@@ -9,6 +9,19 @@
 ]>
 
 <revhistory>
+
+    <revision>
+        <revnumber>0.19</revnumber>
+        <date>24 Feb 2004</date>
+        <authorinitials>dw</authorinitials>
+        <revdescription>
+            <para>
+            Replaced old installation instructions with a step-by-step
+            guide on how to build and deploy Carrot from sources.
+            </para>
+        </revdescription>
+    </revision>
+
     <revision>
         <revnumber>0.18</revnumber>
         <date>16 Feb 2004</date>

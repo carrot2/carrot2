@@ -415,48 +415,166 @@ ant -Ddeployment.port=80 -Ddeployment.host=myhost.com build.webcontroller
         <title>Deploying &carrot; on &tomcat;</title>
         <!-- {{{ -->
         <para>
-        This section provides essential steps leading to installing &carrot; on &tomcat; web server. 
-        It is assumed here that &java; (JDK) is already installed.
+        This section provides essential steps leading to building
+        &carrot; from sources and installing a demo Web controller on &tomcat;
+        Web server.
         </para>
         
-        <itemizedlist>
-            <listitem>
-                <para>
-                    Download and unpack &tomcat; web server from <ulink url="http://jakarta.apache.org/tomcat/" />.
-                    At the moment of writing, we suggest stable release 4.1.24.
-                </para>
+        <para>
+        It is assumed here that &java; (JDK) is already installed.
+        </para>
+
+        <simplesect>
+            <title>Requirements</title>
+            
+            <itemizedlist>
+                <listitem>Java Development Kit, version 1.4 (at least)</listitem>
+                <listitem>&ant;, version 1.6.0 (at least)</listitem>
+                <listitem>&tomcat; Web Server, version 4.1.x (we suggest the newest available)</listitem>
+                <listitem>&cvs; client software, for example &wincvs; or &tortoisecvs;</listitem>
+            </itemizedlist>
+        </simplesect>
+
+        <simplesect>
+            <title>Step-by-step guide</title>
+
+        <orderedlist>
+            <listitem><para>
+            Create a folder for the repository. Let this folder be 
+            <filename>c:\carrot</filename> in our example.
+            </para></listitem>
+            
+            <listitem><para>
+            Check out the source code from Sourceforge.
+            </para>
+
+            <note>This is a huge download (approx. 18 MB).</note>
+
+            <para>           
+	        Go to <filename>c:\carrot</filename> and type in command-line mode:
+            </para>
+            
+            <screen>cvs -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/carrot2 login</screen>
+            
+            <para>
+            When prompted for a password for anonymous, simply press the <literal>Enter</literal> key.
+            Now type:
+            </para>
+	        
+            <screen>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/carrot2 export -r HEAD carrot2</screen>
+
+            <para>
+	This may take a while and will checkout all of Carrot2 source code
+	into directory <filename>c:\carrot\carrot2</filename>.
+            </para>
             </listitem>
+            
             <listitem>
-                <para>
-                    Copy shared libraries from <filename>lib</filename> folder of the &cvs; distribution
-                    to <filename>shared/lib</filename> of your tomcat installation. Alternatively,
-                    you can download a ZIPped pack of shared libraries from the 
-                    nightly binaries dropoff zone
-                    (<ulink url="http://carrot.cs.put.poznan.pl/static/download/nightly/" />).
-                </para>
+            <para>
+                Compiling components and the Web Controller.
+            </para>
+            <para>Go to <filename>c:\carrot\carrot2</filename> and type:</para>
+
+            <screen>ant build</screen>
+
+            <note><para>
+            You must have &ant; properly installed and configured. The build process must
+            end with a <computeroutput>BUILD SUCCESSFUL</computeroutput> message.
+            </para>
+            </note>
             </listitem>
+            
             <listitem>
-                <para>
-                    Build the controller component specifying the deployment host
-                    and port so that component descriptors point at valid &url;s.
-                    Copy the controller component to <filename>webapps</filename>
-                    folder of &tomcat;.
-                </para>
+            <para>
+            Install components in &tomcat;. We assume that you unpacked &tomcat; to
+            directory <filename>c:\tomcat</filename> and that the server configuration allows self-deployable
+            Web Application Archives (it does by default). We also assume Tomcat will
+            be listening for requests on port 8080 (it is by default).
+            </para>
+            
+            <important><para>
+            Make sure no other applications are using ports 8080 or 8005
+            (default &tomcat; service port). You may need to alter &tomcat;'s configuration
+            in <filename>/conf/server.xml</filename> and change these ports settings.
+            If you change deployment port from 8080 to something else,
+            you will have to rebuild the controller component with different 
+            host/ port settings &mdash; refer to 
+            <link linkend="sect:deployment-port-settings">next section for details</link>.
+            </para>
+            </important>
+            
+            <para>
+	        Copy the created components from: <filename>c:\carrot\carrot2\tmp\dist\*.war</filename>
+        	to <filename>c:\tomcat\webapps\</filename>
+            </para>
+            <para>
+            Copy the required libraries from: <filename>c:\carrot\carrot2\lib\*.jar</filename>
+            to <filename>c:\tomcat\shared\lib</filename>
+            </para>
             </listitem>
+            
             <listitem>
-                <para>
-                    Copy all <filename>*.war</filename> files (components) 
-                    to <filename>webapps</filename> folder of your &tomcat;. The components
-                    will be automatically deployed when &tomcat; is started next time.
-                </para>
+            <para>
+        	Start Tomcat using <filename>c:\tomcat\bin\startup.bat</filename>.
+            </para>
+            <para>
+            The process of deploying Web applications may take a while, depending on the
+            machine used. Eventually, Tomcat window should read:
+            </para>
+            <screen>INFO: Starting Coyote HTTP/1.1 on port 8080</screen>
             </listitem>
+            
             <listitem>
-                <para>
-                    You may also want to configure &log4j; so that messages from &carrot; components are
-                    properly saved somewhere. Create and edit <filename>conf/log4j.properties</filename>
-                    in your &tomcat; installation. Type the following:
-                </para>
-                <informalexample><programlisting><![CDATA[# Default logging sink.
+            <para>
+            Point your browser at: <literal>http://localhost:8080/carrot2-web-controller</literal>.
+            You should see the controller component's main page:
+            </para>
+
+            <pasteFigure src="carrot-query.png" width="5in">
+            Carrot web controller query page
+            </pasteFigure>
+
+            <para>
+            <emphasis>
+        	And you are ready to test your local Carrot2 installation!
+            </emphasis>
+            </para>
+	        
+            <para>
+            Just select a process (input, filter, output component combination) and
+            type a query. Press <literal>Search</literal> &mdash; results should appear in the lower frame
+            within a couple of seconds.
+	        </para>
+            
+            <para>
+            You may want to try &quot;demo&quot; queries first &mdash; these require no connection
+            to the Internet.
+            </para>
+            </listitem>            
+        </orderedlist>
+        </simplesect>
+        
+        <simplesect id="sect:deployment-port-settings">
+            <title>Changing default port and host binding.</title>
+            
+            <para>
+            By default, the controller component compiles component descriptors
+            with <literal>localhost:8080</literal> &url;s. To change the default
+            setting, rebuild the controller component passing special
+            properties to it:
+            </para>
+
+            <screen>ant -Ddeployment.port=80 -Ddeployment.host=myhost.com build.webcontroller</screen>
+        </simplesect>
+
+        <simplesect id="">
+            <title>Configuring Log4j logging sink</title>
+            <para>
+            You may also want to configure &log4j; so that messages from &carrot; components are
+            properly saved somewhere. Create and edit <filename>conf/log4j.properties</filename>
+            in your &tomcat; installation. Type the following:
+            </para>
+            <informalexample><programlisting><![CDATA[# Default logging sink.
 log4j.rootLogger=DEBUG,global.file
 
 # global.file appender (/logs/carrot2.log)
@@ -466,35 +584,9 @@ log4j.appender.global.file.File=TRANSLATE_CONTEXT::/logs/carrot2.log
 log4j.appender.global.file.Append=true
 log4j.appender.global.file.layout=org.apache.log4j.PatternLayout
 log4j.appender.global.file.layout.ConversionPattern=%d %-5p [%t] %c{2} -- %m%n]]></programlisting>
-                </informalexample>
-            </listitem>
-            <listitem>
-                <para>
-                <emphasis>Make sure your port number 8080 is not already taken by some other application</emphasis>. Then
-                start &tomcat; using the startup script appropriate for your platform (either <filename>bin/startup.bat</filename>
-                or <filename>bin/startup.sh</filename>. Wait until message <computeroutput>INFO: Starting Coyote HTTP/1.1 on port 8080</computeroutput>
-                shows up on the console. This may take even a couple of minutes because WAR applications must be deployed
-                and <acronym>JSP</acronym> files compiled.
-                </para>
-            </listitem>
-            <listitem>
-                <para>
-                Open a web browser (&javascript; must be enabled, Internet Explorer or Mozilla is recommended) and point
-                it to <ulink url="http://localhost:8080/carrot2-web-controller" />, you should see &carrot;'s query page like below.
-                </para>
-                <pasteFigure src="carrot-query.png" width="5in">
-                Carrot web controller query page
-                </pasteFigure>
-                <para>
-                Now follow <computeroutput>Demo</computeroutput> link on the top of the query page and select any
-                of the cached preconfigured queries. A clustered result should be available within seconds (please
-                allow for the components to initialize if queried for the first time).
-                </para>
-                <pasteFigure src="carrot-sample.png" width="5in">
-                Sample demo clustered result
-                </pasteFigure>
-            </listitem>
-        </itemizedlist>
+            </informalexample>
+
+        </simplesect>
         <!-- }}} -->
     </section>
     
