@@ -209,16 +209,6 @@ public class LsiClusteringStrategy
         }
 
         // The SVD
-        
-        // dump the matrix.
-        try {
-        java.io.ObjectOutputStream os = new java.io.ObjectOutputStream (new java.io.FileOutputStream("f:\\matrix"));
-        os.writeObject(tdMatrix);
-        os.close();
-        }
-        catch (Exception e) {
-        }
-        
 
         SingularValueDecomposition svd = tdMatrix.svd();
 
