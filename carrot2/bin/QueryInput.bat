@@ -17,4 +17,4 @@ goto setupArgs
 :doneStart
 
 
-java -Djava.ext.dirs=%CARROT_BIN_PATH%../runtime/shared/lib com.dawidweiss.carrot.tools.QueryInputComponent %CMD_LINE_ARGS%
+java -Djava.ext.dirs=%CARROT_BIN_PATH%../tmp/dist;%CARROT_BIN_PATH%../lib com.dawidweiss.carrot.tools.QueryInputComponent %CMD_LINE_ARGS%

@@ -17,4 +17,4 @@ goto setupArgs
 :doneStart
 
 
-java -Djava.ext.dirs=%CARROT_BIN_PATH%../runtime/shared/lib com.icl.saxon.StyleSheet %CARROT_BIN_PATH%..\history.xml %CARROT_BIN_PATH%history2plain.xsl
+xsltproc %CARROT_BIN_PATH%history2plain.xsl %CARROT_BIN_PATH%..\history.xml 
