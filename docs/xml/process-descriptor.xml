@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE section PUBLIC 
     "-//Dawid Weiss//DTD DocBook V3.1-Based Extension for XML and graphics inclusion//EN" 
-    "carrot-docbook-extensions.dtd">
+    "http://www.cs.put.poznan.pl/dweiss/dtd/dweiss-docbook-extensions.dtd" [
+<!ENTITY % isopub SYSTEM "iso-pub.ent"> 
+%isopub;
+<!ENTITY % local SYSTEM "local-entities.ent">
+%local;
+]>
 
 <section id="sect:process-descriptor">
     <title>Process descriptor</title>
@@ -72,5 +77,5 @@
         present in the &cvs; for details.
         </para>
     </section>
-    
+
 </section>

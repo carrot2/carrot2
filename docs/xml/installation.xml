@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE section PUBLIC 
     "-//Dawid Weiss//DTD DocBook V3.1-Based Extension for XML and graphics inclusion//EN" 
-    "carrot-docbook-extensions.dtd">
+    "http://www.cs.put.poznan.pl/dweiss/dtd/dweiss-docbook-extensions.dtd" [
+<!ENTITY % isopub SYSTEM "iso-pub.ent"> 
+%isopub;
+<!ENTITY % local SYSTEM "local-entities.ent">
+%local;
+]>
 
 <section id="sect:installation">
     <title>Installation of &carrot;</title>
@@ -108,7 +113,7 @@ ant -Ddeployment.port=80 -Ddeployment.host=myhost.com build.webcontroller
         </para>
         <para>
         Nightly binaries are available at:
-        <ulink href="http://carrot.cs.put.poznan.pl/static/download/nightly/" />.
+        <ulink url="http://carrot.cs.put.poznan.pl/static/download/nightly/" />.
         </para>
     </section>
    
@@ -128,6 +133,8 @@ ant -Ddeployment.port=80 -Ddeployment.host=myhost.com build.webcontroller
         </para>
         
         <section id="sect:cache">
+            <title>Query response caches and their configuration</title>
+
             <!-- {{{ -->
             <para>
                 <filename>cache-config.xml</filename> is a configuration file for the internal cache of the
@@ -290,11 +297,12 @@ ant -Ddeployment.port=80 -Ddeployment.host=myhost.com build.webcontroller
                     <filename>descriptor-templates</filename>
                     cover the data formats accepted by the components released in the distribution.
                     </para>
-                    <tip>
+                    <tip><para>
                     The &url; of a component must be available to the controller, but not necessarily to the 
                     &quot;outside world&quot;. Web application container (such as Tomcat) can be configured in such a way
                     to allow local connections (from the controller), but refuse any attempts to connect to components
                     directly.
+                    </para>
                     </tip>
                     <para>
                     When deploying your &carrot; installation, modify &url; of the components replacing <replaceable>host</replaceable>
@@ -423,7 +431,8 @@ ant -Ddeployment.port=80 -Ddeployment.host=myhost.com build.webcontroller
                     Copy shared libraries from <filename>lib</filename> folder of the &cvs; distribution
                     to <filename>shared/lib</filename> of your tomcat installation. Alternatively,
                     you can download a ZIPped pack of shared libraries from the 
-                    nightly binaries dropoff zone (<ulink href="http://carrot.cs.put.poznan.pl/static/download/nightly/" />).
+                    nightly binaries dropoff zone
+                    (<ulink url="http://carrot.cs.put.poznan.pl/static/download/nightly/" />).
                 </para>
             </listitem>
             <listitem>

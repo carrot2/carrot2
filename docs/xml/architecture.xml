@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE chapter PUBLIC 
-    "-//Dawid Weiss//DTD DocBook V3.1-Based Extension for XML and graphics inclusion//EN" 
-    "carrot-docbook-extensions.dtd">
+    "-//Dawid Weiss//DTD DocBook V3.1-Based Extension for XML and graphics inclusion//EN"
+    "http://www.cs.put.poznan.pl/dweiss/dtd/dweiss-docbook-extensions.dtd" [
+<!ENTITY % isopub SYSTEM "iso-pub.ent"> 
+%isopub;
+<!ENTITY % local SYSTEM "local-entities.ent">
+%local;
+]>
   
 <chapter id="chapter:architecture">
     <title>Architecture</title>
