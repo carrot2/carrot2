@@ -1,7 +1,5 @@
 /*
- * TfTdMatrixBuildingStrategy.java
- * 
- * Created on 2004-05-21
+ * TfTdMatrixBuildingStrategy.java Created on 2004-05-21
  */
 package com.stachoodev.carrot.filter.lingo.model;
 
@@ -46,7 +44,7 @@ public class TfTdMatrixBuildingStrategy implements TdMatrixBuildingStrategy
      * @param factory2D
      */
     public TfTdMatrixBuildingStrategy(double titleTokenTfMultiplier,
-            DoubleFactory2D doubleFactory2D)
+        DoubleFactory2D doubleFactory2D)
     {
         this.titleTokenTfMultiplier = titleTokenTfMultiplier;
         this.doubleFactory2D = doubleFactory2D;
@@ -59,40 +57,56 @@ public class TfTdMatrixBuildingStrategy implements TdMatrixBuildingStrategy
      *      java.util.List)
      */
     public DoubleMatrix2D getTdMatrix(List tokenizedDocuments,
-            List selectedFeatures)
+        List selectedFeatures)
     {
         DoubleMatrix2D tdMatrix = doubleFactory2D.make(selectedFeatures.size(),
-                tokenizedDocuments.size());
+            tokenizedDocuments.size());
         HashMap tokenFrequencies = new HashMap();
 
         // For each document
         for (int d = 0; d < tokenizedDocuments.size(); d++)
         {
             TokenizedDocument document = (TokenizedDocument) tokenizedDocuments
-                    .get(d);
+                .get(d);
 
             // Count term frequencies
             tokenFrequencies.clear();
             ModelUtils.addToFrequencyMap(document.getTitle(),
-                    ExtendedToken.PROPERTY_TF, tokenFrequencies,
-                    titleTokenTfMultiplier);
+                ExtendedToken.PROPERTY_TF, tokenFrequencies,
+                titleTokenTfMultiplier, (short)0);
             ModelUtils.addToFrequencyMap((TokenSequence) document
-                    .getProperty(TokenizedDocument.PROPERTY_SNIPPET),
-                    ExtendedToken.PROPERTY_TF, tokenFrequencies, 1);
+                .getProperty(TokenizedDocument.PROPERTY_SNIPPET),
+                ExtendedToken.PROPERTY_TF, tokenFrequencies, 1, (short)0);
 
             // Put them into the matrix
             for (int term = 0; term < selectedFeatures.size(); term++)
             {
                 ExtendedToken selectedToken = (ExtendedToken) selectedFeatures
-                        .get(term);
+                    .get(term);
 
                 if (tokenFrequencies.containsKey(selectedToken.toString()))
                 {
                     ExtendedToken extendedToken = (ExtendedToken) tokenFrequencies
-                            .get(selectedToken.toString());
+                        .get(selectedToken.toString());
                     tdMatrix.set(term, d, extendedToken
-                            .getDoubleProperty(ExtendedToken.PROPERTY_TF));
+                        .getDoubleProperty(ExtendedToken.PROPERTY_TF));
                 }
+            }
+        }
+
+        // Add TF information to the selected features if it's not there
+        for (int r = 0; r < tdMatrix.rows(); r++)
+        {
+            ExtendedToken extendedToken = (ExtendedToken) selectedFeatures.get(r);
+            if (extendedToken.getProperty(ExtendedToken.PROPERTY_TF) == null)
+            {
+                double tf = 0;
+                for (int c = 0; c < tdMatrix.columns(); c++)
+                {
+                    tf += tdMatrix.getQuick(r, c);
+                }
+                (extendedToken).setDoubleProperty(
+                    ExtendedToken.PROPERTY_TF, tf);
             }
         }
 
