@@ -20,9 +20,11 @@ import com.dawidweiss.carrot.util.tokenizer.languages.polish.*;
  */
 public class PolishWithLametyzator extends Polish
 {
+    /* (non-Javadoc)
+     * @see com.dawidweiss.carrot.util.tokenizer.languages.LanguageBase#createStemmerInstance()
+     */
     protected Stemmer createStemmerInstance()
     {
-        // TODO Auto-generated method stub
         return new Lametyzator();
     }
 }
