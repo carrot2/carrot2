@@ -111,11 +111,12 @@ class ZIPCachedQuery {
 							String urlEncoded = new String(URLEncoding
 									.decode(encoded), "UTF-8");
 							StringTokenizer tokenizer = new StringTokenizer(
-									urlEncoded, "&=", false);
+									urlEncoded, "&", false);
 
 							while (tokenizer.hasMoreTokens()) {
-								String key = tokenizer.nextToken();
-								String value = tokenizer.nextToken();
+                                String param = tokenizer.nextToken();
+								String key = param.substring(0, param.indexOf('='));
+								String value = param.substring(param.indexOf('=')+1);
 								optionalParams.put(key, value);
 							}
 							this.optionalParams = optionalParams;
