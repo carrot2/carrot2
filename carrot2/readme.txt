@@ -27,3 +27,11 @@ ant -Ddeployment.port=80 -Ddeployment.host=myhost.com build.webcontroller
 
 Tests suite and documentation is available as a separate CVS checkout,
 or on-line.
+
+---
+
+Subscribe to project mailing lists to keep up to date with changes:
+
+carrot2-developers@lists.sourceforge.net
+carrot2-cvscommits@lists.sourceforge.net
+
