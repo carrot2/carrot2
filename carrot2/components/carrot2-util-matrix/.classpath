@@ -3,7 +3,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="src-test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/colt-1.0.3.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/colt-1.0.3-trimmed.jar"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/nni.jar"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/junit-3.8.1.jar"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/junit-addons-1.4.jar"/>
