@@ -4,6 +4,7 @@
 package com.stachoodev.matrix.factorization;
 
 import cern.colt.matrix.*;
+import cern.colt.matrix.doublealgo.*;
 import cern.colt.matrix.linalg.*;
 import cern.jet.math.*;
 
@@ -21,7 +22,7 @@ public abstract class IterativeMatrixFactorizationBase extends
 
     /** The maximum number of iterations the algorithm is allowed to run */
     protected int maxIterations;
-    protected static int DEFAULT_MAX_ITERATIONS = 50;
+    protected static final int DEFAULT_MAX_ITERATIONS = 50;
 
     /**
      * If the percentage decrease in approximation error becomes smaller than
@@ -30,16 +31,23 @@ public abstract class IterativeMatrixFactorizationBase extends
     protected double stopThreshold;
     protected static double DEFAULT_STOP_THRESHOLD = 0.0;
 
+    /** Seeding strategy */
+    protected SeedingStrategy seedingStrategy;
+    protected static final SeedingStrategy DEFAULT_SEEDING_STRATEGY = new RandomSeedingStrategy(
+        0);
+
+    /** Order base vectors according to their 'activity'? */
+    protected boolean ordered;
+    protected static final boolean DEFAULT_ORDERED = false;
+
     /** Approximation error */
     protected double approximationError;
 
     /** Iteration counter */
     protected int iterationsCompleted;
 
-    /** Seeding strategy */
-    protected SeedingStrategy seedingStrategy;
-    protected static SeedingStrategy DEFAULT_SEEDING_STRATEGY = new RandomSeedingStrategy(
-        0);
+    /** Sorting aggregates */
+    protected double [] aggregates;
 
     /**
      * @param A
@@ -52,6 +60,7 @@ public abstract class IterativeMatrixFactorizationBase extends
         this.maxIterations = DEFAULT_MAX_ITERATIONS;
         this.stopThreshold = DEFAULT_STOP_THRESHOLD;
         this.seedingStrategy = DEFAULT_SEEDING_STRATEGY;
+        this.ordered = DEFAULT_ORDERED;
     }
 
     /**
@@ -92,6 +101,34 @@ public abstract class IterativeMatrixFactorizationBase extends
 
         approximationError = newApproximationError;
         return false;
+    }
+
+    /**
+     * Orders U and V matrices according to the 'activity' of base vectors.
+     */
+    protected void order()
+    {
+        DoubleMatrix2D VT = V.viewDice();
+        aggregates = new double [VT.rows()];
+
+        for (int i = 0; i < aggregates.length; i++)
+        {
+            // we take -aggregate to do descending sorting
+            aggregates[i] = -VT.viewRow(i).aggregate(Functions.plus,
+                Functions.square);
+        }
+
+        // Need to make a copy of aggregates because they get sorted as well
+        double [] aggregatesCopy = (double []) aggregates.clone();
+
+        V = Sorting.quickSort.sort(VT, aggregates).viewDice();
+        U = Sorting.quickSort.sort(U.viewDice(), aggregatesCopy).viewDice();
+
+        // Revert back to positive values of aggregates
+        for (int i = 0; i < aggregates.length; i++)
+        {
+            aggregates[i] = -aggregates[i];
+        }
     }
 
     /**
@@ -176,5 +213,37 @@ public abstract class IterativeMatrixFactorizationBase extends
     public int getIterationsCompleted()
     {
         return iterationsCompleted;
+    }
+
+    /**
+     * Returns <code>true</code> when the factorization is set to generate an
+     * ordered basis.
+     * 
+     * @return
+     */
+    public boolean isOrdered()
+    {
+        return ordered;
+    }
+
+    /**
+     * Set to <code>true</code> to generate an ordered basis.
+     * 
+     * @param ordered
+     */
+    public void setOrdered(boolean ordered)
+    {
+        this.ordered = ordered;
+    }
+
+    /**
+     * Returns column aggregates for a sorted factorization, and
+     * <code>null</code> for an unsorted factorization.
+     * 
+     * @return
+     */
+    public double [] getAggregates()
+    {
+        return aggregates;
     }
 }

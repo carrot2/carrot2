@@ -102,6 +102,11 @@ public class NonnegativeMatrixFactorizationED extends
                 }
             }
         }
+        
+        if (ordered)
+        {
+            order();
+        }
     }
 
     /*

@@ -7,6 +7,8 @@ import cern.colt.matrix.*;
 import com.stachoodev.matrix.factorization.seeding.*;
 
 /**
+ * TODO: refactor - get constants from factorization interfaces.
+ * 
  * @author stachoo
  */
 public abstract class IterativeMatrixFactorizationFactory implements
@@ -26,6 +28,7 @@ public abstract class IterativeMatrixFactorizationFactory implements
 
     /** The algorithm's stop threshold */
     protected double stopThreshold;
+
     /** The default stop threshold */
     protected final static int DEFAULT_STOP_THRESHOLD = 0;
 
@@ -42,6 +45,10 @@ public abstract class IterativeMatrixFactorizationFactory implements
     /** The default MatrixFactory to be used */
     protected final static DoubleFactory2D DEFAULT_DOUBLE_FACTORY_2D = NNIDoubleFactory2D.nni;
 
+    /** Order base vectors according to their 'activity'? */
+    protected boolean ordered;
+    protected static final boolean DEFAULT_ORDERED = false;
+
     /**
      * 
      */
@@ -52,6 +59,7 @@ public abstract class IterativeMatrixFactorizationFactory implements
         this.stopThreshold = DEFAULT_STOP_THRESHOLD;
         this.seedingFactory = DEFAULT_SEEDING_FACTORY;
         this.doubleFactory2D = DEFAULT_DOUBLE_FACTORY_2D;
+        this.ordered = DEFAULT_ORDERED;
     }
 
     /**
@@ -162,5 +170,26 @@ public abstract class IterativeMatrixFactorizationFactory implements
     public void setDoubleFactory2D(DoubleFactory2D doubleFactory2D)
     {
         this.doubleFactory2D = doubleFactory2D;
+    }
+
+    /**
+     * Returns <code>true</code> when the factorization is set to generate an
+     * ordered basis.
+     * 
+     * @return
+     */
+    public boolean isOrdered()
+    {
+        return ordered;
+    }
+
+    /**
+     * Set to <code>true</code> to generate an ordered basis.
+     * 
+     * @param ordered
+     */
+    public void setOrdered(boolean ordered)
+    {
+        this.ordered = ordered;
     }
 }

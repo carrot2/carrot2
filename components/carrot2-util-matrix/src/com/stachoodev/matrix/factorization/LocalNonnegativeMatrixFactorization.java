@@ -111,6 +111,11 @@ public class LocalNonnegativeMatrixFactorization extends
                 }
             }
         }
+        
+        if (ordered)
+        {
+            order();
+        }
     }
 
     /*

@@ -25,6 +25,7 @@ public class NonnegativeMatrixFactorizationEDFactory extends
         factorization.setStopThreshold(stopThreshold);
         factorization.setSeedingStrategy(createSeedingStrategy());
         factorization.setDoubleFactory2D(getDoubleFactory2D());
+        factorization.setOrdered(ordered);
 
         factorization.compute();
 
