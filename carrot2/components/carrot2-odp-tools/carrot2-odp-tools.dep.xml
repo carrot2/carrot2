@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE component SYSTEM "../../etc/component-dependency.dtd" >
+
+<component
+    name="carrot2-odp-tools"
+    description="Carrot2 Open Directory Project Interface Tools">
+    
+    <provides>
+        <files build-path-exclude="true" prefix="tmp/dist">
+            <file location="carrot2-odp-tools.jar" />
+        </files>
+        <build>
+            <ant file="build.xml" target="build" />
+        </build>
+    </provides>
+
+    <dependency name="carrot2-odp-core" />
+    <dependency name="carrot2-util-common" />
+    <dependency name="carrot2-license" />
+    <dependency name="junit" profile="test" />
+</component>

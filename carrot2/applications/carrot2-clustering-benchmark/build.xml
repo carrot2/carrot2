@@ -1,0 +1,71 @@
+<project name="Carrot2 Clustering Benchmark Application" default="build">
+
+	<property name="project.dir"      location="${basedir}" />
+	<property name="carrot2.cvs.dir"  location="../.." />
+	<property name="dist.name"        value="carrot2-clustering-benchmark" />
+
+	<property name="type"       	  value="jartype" />
+
+	<property name="distribution.dir" location="${project.dir}/tmp/dist" />
+
+	<!-- Where to put reports -->
+	<property name="reports.dir" 	  value="report" />
+
+	<import file="${carrot2.cvs.dir}/components/common-targets.inc" />
+
+	<target name="build">
+		<property name="copy.dependencies" value="true" />
+
+		<ant target="build.${type}"
+             antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" inheritrefs="true">
+		</ant>
+	</target>
+
+	<target name="html-report" depends="xml-report">
+		<description>Transforms benchmarking reports to HTML</description>
+
+		<!-- Main report -->
+		<xslt 	basedir="${basedir}/${reports.dir}/xml" 
+				destdir="${basedir}/${reports.dir}/html" 
+				style="${basedir}/etc/stylesheet/xsl/main-report.xsl">
+			<include name="report.xml"/>
+		</xslt>
+
+		<!-- Detailed reports -->
+		<xslt 	basedir="${basedir}/${reports.dir}/xml" 
+				destdir="${basedir}/${reports.dir}/html" 
+				style="${basedir}/etc/stylesheet/xsl/detailed-report.xsl">
+			<include name="*.xml"/>
+			<exclude name="report.xml"/>
+		</xslt>
+
+		<!-- Copy resources -->
+		<copy todir="${basedir}/${reports.dir}/html/img">
+			<fileset dir="${basedir}/etc/stylesheet/img"/>
+		</copy>
+		<copy todir="${basedir}/${reports.dir}/html/css">
+			<fileset dir="${basedir}/etc/stylesheet/css"/>
+		</copy>
+		<copy todir="${basedir}/${reports.dir}/html/js">
+			<fileset dir="${basedir}/etc/stylesheet/js"/>
+		</copy>
+	</target>
+	
+	<target name="xml-report">
+		<description>Executes all benchmarks and writes the XML results in the ${reports.dir} directory</description>
+
+		<fail message="A path to an ODP index must be provided in the 'odp.index.dir' property" unless="odp.index.dir"/>
+		<mkdir dir="${basedir}/${reports.dir}/xml"/>
+		<java fork="true" 
+				classname="com.stachoodev.carrot.local.benchmark.SearchResultsClusteringBenchmark">
+			<sysproperty key="odp.index.dir" value="${odp.index.dir}"/>
+			<sysproperty key="report.dir" value="${basedir}/${reports.dir}/xml"/>
+			<classpath>
+				<fileset dir="${distribution.dir}">
+					<include name="**/*.jar"/>
+				</fileset>
+			</classpath>
+		</java>
+	</target>
+	
+</project>
