@@ -20,7 +20,7 @@
         <mkdir dir="${checkout.dir}" />
         <mkdir dir="${build.dir}" />
     </target>
-    
+
     <target name="cvsupdate" unless="no.cvsupdate">
         <cvspass cvsroot="${cvs.root}" password="" passfile="${cvs.pass}"/>
 
@@ -75,6 +75,11 @@
                 <exclude name=".cvsignore" />
             </fileset>
         </delete>
+        <delete failonerror="false" includeemptydirs="true" quiet="true">
+            <fileset dir="${runtime.env}/context-logs">
+                <exclude name=".cvsignore" />
+            </fileset>
+        </delete>
     </target>
 
     <target name="copy.webapps">
@@ -83,6 +88,16 @@
         </copy>
     </target>
 
+    <target name="copy.logs">
+        <style destdir="${runtime.env}/context-logs"
+           in="log.xml"
+           out="${runtime.env}/context-logs/build-log.html"
+           style="misc/log2html.xsl"
+        />
+        <delete failonerror="false" includeemptydirs="true" quiet="true"
+                file="log.xml" />
+    </target>
+    
     <!-- 
       ## Copies necessary files and starts tomcat again.
       -->
