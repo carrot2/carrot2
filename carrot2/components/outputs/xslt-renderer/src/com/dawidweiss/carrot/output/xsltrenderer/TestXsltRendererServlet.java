@@ -17,7 +17,6 @@ package com.dawidweiss.carrot.output.xsltrenderer;
 
 import com.dawidweiss.carrot.tools.QueryFilterComponent;
 import java.io.FileInputStream;
-import java.io.StringReader;
 import java.net.URL;
 
 
@@ -34,10 +33,6 @@ public class TestXsltRendererServlet
 
         String requestFile = "F:\\Repositories\\ophelia\\carrot2\\test\\sample results\\logika.xml";
 
-        String request = new String(
-                org.put.util.io.FileHelper.readFully(new FileInputStream(requestFile))
-            );
-
         int loops = 0;
 
         org.put.util.time.ElapsedTimeTimer timer = new org.put.util.time.ElapsedTimeTimer();
@@ -50,7 +45,8 @@ public class TestXsltRendererServlet
             org.put.util.time.ElapsedTimeTimer timeri = new org.put.util.time.ElapsedTimeTimer();
             avgt.restart();
             org.put.util.io.FileHelper.readFully(
-                queryTool.queryInputComponent(service, new StringReader(request))
+                queryTool.queryInputComponent(service, new java.util.HashMap(),
+                    new FileInputStream(requestFile))
             );
 
             tot += avgt.elapsed();
