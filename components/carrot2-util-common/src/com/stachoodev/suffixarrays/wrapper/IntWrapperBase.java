@@ -10,7 +10,7 @@ package com.stachoodev.suffixarrays.wrapper;
 /**
  * A base class for int wrappers.
  */
-public abstract class AbstractIntWrapper implements IntWrapper
+public abstract class IntWrapperBase implements IntWrapper
 {
 
     /** Integer data */
@@ -19,7 +19,7 @@ public abstract class AbstractIntWrapper implements IntWrapper
     /**
      * Creates an empty IntWrapper with a null intData array.
      */
-    protected AbstractIntWrapper()
+    protected IntWrapperBase()
     {
         // do nothing
     }
@@ -30,7 +30,7 @@ public abstract class AbstractIntWrapper implements IntWrapper
      * 
      * @param intData
      */
-    protected AbstractIntWrapper(int [] intData)
+    protected IntWrapperBase(int [] intData)
     {
         this.intData = intData;
     }
