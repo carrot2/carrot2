@@ -21,7 +21,9 @@ public class AllKnownRawClustersMetrics
 {
     /** An array of all available clusters metrics */
     public static RawClustersMetric [] metrics = new RawClustersMetric []
-    { new ContaminationRawClustersMetric(), new CoverageRawClustersMetric() };
+    { new ContaminationRawClustersMetric(),
+     new TopicCoverageRawClustersMetric(),
+     new SnippetCoverageRawClustersMetric() };
 
     /**
      * Returns an array of all known implementation of the
