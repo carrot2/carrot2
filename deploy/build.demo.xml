@@ -49,6 +49,11 @@
     <target name="clean">
         <delete dir="${build.dir}" failonerror="false"
                 includeemptydirs="true" quiet="true" />
+        <ant antfile="${checkout.dir}/${module.name}/build.xml"
+             dir="${checkout.dir}/${module.name}" inheritall="false"
+             target="clean">
+             <property name="distribution.dir" location="${build.dir}" />
+        </ant>
     </target>
 
     <!-- 

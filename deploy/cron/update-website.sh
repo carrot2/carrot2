@@ -20,6 +20,7 @@ export ANT_HOME
 for counter in `seq 1 40`; do
     if ant -f build.website.xml cvsupdate; then
         echo "Website update ok."
+	echo "Website updated: " `date` >>/home/dweiss/carrot2/logs-cron/website-successes.log
         break;
     else
         echo "Website update failed. Sleeping."
