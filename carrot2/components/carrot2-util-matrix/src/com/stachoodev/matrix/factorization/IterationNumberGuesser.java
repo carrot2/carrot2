@@ -157,7 +157,7 @@ public class IterationNumberGuesser
             {
                 int iterations = (int) (columns * coefficients[0]
                     + factory.getK() * coefficients[1] + coefficients[2]);
-                factory.setMaxIterations(iterations);
+                factory.setMaxIterations((int) (iterations * 0.6));
 
                 return true;
             }
