@@ -39,12 +39,12 @@ public class Dutch extends StemmedLanguageBase {
      * Load stopwords from an associated resource.
      */
     static {
-        String resourceName = "stopwords.nl";
+        String resourceName = "/com/dawidweiss/carrot/util/tokenizer/languages/dutch/stopwords.nl";
         try {
 			stopwords = LanguageBase.loadStopwords(
 			    Dutch.class.getResourceAsStream(resourceName));
 		} catch (IOException e) {
-            throw new RuntimeException("Could not load the required" +
+            throw new RuntimeException("Could not load the required " +
                     "resource: " + resourceName);
 		}
     }
