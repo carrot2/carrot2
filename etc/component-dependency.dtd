@@ -44,7 +44,7 @@
     Static objects only contain 'files' element as a child of 'provides'.
   -->
   
-<!ELEMENT provides (files, build*) >
+<!ELEMENT provides (files?, build*) >
 
 <!ATTLIST provides profile NMTOKEN #IMPLIED >
 
