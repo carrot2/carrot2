@@ -1,4 +1,3 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<search xmlns="http://www.dawidweiss.com/projects/carrot/clustering/query">
-	<query requested-results="20">bandyta movie soundtrack</query>
-</search>
+<query xmlns="http://www.dawidweiss.com/projects/carrot/clustering/query"
+	   requested-results="20">bandyta movie soundtrack</query>
