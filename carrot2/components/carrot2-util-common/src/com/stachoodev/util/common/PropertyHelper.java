@@ -12,6 +12,8 @@ package com.stachoodev.util.common;
 
 import java.util.*;
 
+import org.apache.commons.collections.map.*;
+
 /**
  * Helps to implement properties of various objects such as
  * {@link com.dawidweiss.carrot.core.local.linguistic.tokens.ExtendedToken}. The property
@@ -24,7 +26,7 @@ import java.util.*;
 public class PropertyHelper implements PropertyProvider, Cloneable
 {
     /** Property container */
-    private HashMap properties;
+    private Map properties;
 
     /**
      * @return
@@ -140,7 +142,7 @@ public class PropertyHelper implements PropertyProvider, Cloneable
         {
             if (properties == null)
             {
-                properties = new HashMap();
+                properties = new Flat3Map();
             }
 
             return properties.put(propertyName, property);
@@ -355,7 +357,11 @@ public class PropertyHelper implements PropertyProvider, Cloneable
         PropertyHelper propertyHelper = new PropertyHelper();
 
         // Make a shallow copy of the properties
-        propertyHelper.properties = (HashMap) properties.clone();
+        if (properties != null)
+        {
+            propertyHelper.properties = new Flat3Map();
+            propertyHelper.properties.putAll(properties);
+        }
 
         return propertyHelper;
     }
