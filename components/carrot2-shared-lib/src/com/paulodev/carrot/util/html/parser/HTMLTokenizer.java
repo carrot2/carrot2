@@ -149,7 +149,6 @@ public class HTMLTokenizer
     {
         StringBuffer data; // Stores current token's data.
         int idx; // The index of the next separator.
-        int i; // Loop variable.
 
         // Get a buffer for the current token.
         if (old != null)

@@ -160,7 +160,6 @@ public class TagToken
     public String toString()
     {
         StringBuffer sb; // Stores the string to be returned.
-        Enumeration list; // List of node's arguments or children.
 
         // Get a new StringBuffer.
         sb = new StringBuffer();
