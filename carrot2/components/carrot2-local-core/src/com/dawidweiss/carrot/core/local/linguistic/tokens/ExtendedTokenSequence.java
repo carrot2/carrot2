@@ -39,6 +39,13 @@ public class ExtendedTokenSequence implements TokenSequence, PropertyProvider
     public static final String PROPERTY_ORIGINAL_TOKEN_SEQUENCES = "originalTS";
 
     /**
+     * For a generalized (i.e. stemmed) token sequence returns the original
+     * phrase that is most frequent. When there is no one phrase that is most
+     * frequent an arbitrary original phrase will be returned
+     */
+    public static final String PROPERTY_MOST_FREQUENT_ORIGINAL_TOKEN_SEQUENCE = "MForiginalTS";
+
+    /**
      * Creates an ExtendedTokenSequence wrapped around the provided
      * {@link TokenSequence}.
      * 
@@ -129,9 +136,10 @@ public class ExtendedTokenSequence implements TokenSequence, PropertyProvider
      */
     public String getFullInfo()
     {
-        return tokenSequence.toString() + " [" + propertyHelper.toString() + "]";
+        return tokenSequence.toString() + " [" + propertyHelper.toString()
+            + "]";
     }
-    
+
     /*
      * (non-Javadoc)
      * 
@@ -172,7 +180,16 @@ public class ExtendedTokenSequence implements TokenSequence, PropertyProvider
      */
     public String toString()
     {
-        return tokenSequence.toString();
+        if (propertyHelper
+            .getProperty(PROPERTY_MOST_FREQUENT_ORIGINAL_TOKEN_SEQUENCE) != null)
+        {
+            return propertyHelper.getProperty(
+                PROPERTY_MOST_FREQUENT_ORIGINAL_TOKEN_SEQUENCE).toString();
+        }
+        else
+        {
+            return tokenSequence.toString();
+        }
     }
 
     /*
@@ -198,10 +215,11 @@ public class ExtendedTokenSequence implements TokenSequence, PropertyProvider
         }
         else
         {
-            return tokenSequence
-                .equals(((ExtendedTokenSequence) obj).tokenSequence)
-                && propertyHelper
-                    .equals(((ExtendedTokenSequence) obj).propertyHelper);
+            boolean c1 = tokenSequence
+                .equals(((ExtendedTokenSequence) obj).tokenSequence);
+            boolean c2 = propertyHelper
+                .equals(((ExtendedTokenSequence) obj).propertyHelper);
+            return c1 && c2;
         }
     }
 
