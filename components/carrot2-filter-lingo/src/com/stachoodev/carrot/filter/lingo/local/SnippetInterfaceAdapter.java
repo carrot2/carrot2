@@ -27,7 +27,7 @@ public final class SnippetInterfaceAdapter extends Snippet implements RawDocumen
 	/**
 	 * Creates a new wrapper around an existing <code>document</code>.
 	 */
-	public SnippetInterfaceAdapter(String id, RawDocument document) {
+	public SnippetInterfaceAdapter(String id, final RawDocument document) {
 		super(id, document.getTitle(), document.getSnippet());
 		this.document = document;
 
@@ -36,12 +36,13 @@ public final class SnippetInterfaceAdapter extends Snippet implements RawDocumen
             super.setLanguage((String) lang);
         }
 		
-		this.base = new RawDocumentBase() {
-			public Object getId() {
-				return SnippetInterfaceAdapter.this.document.getId();
-			}
+		this.base = new RawDocumentBase(document) {
+
+            public Object getId() {
+                return document.getId();
+            }
+		
 		};
-        base.setProperty(PROPERTY_SNIPPET, document.getSnippet());
 	}
 
 	//

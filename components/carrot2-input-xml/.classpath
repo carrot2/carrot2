@@ -11,5 +11,7 @@
 	<classpathentry kind="src" path="/carrot2-local-core"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/servlet.jar"/>
 	<classpathentry kind="src" path="/carrot2-util-remote"/>
+	<classpathentry kind="src" path="/carrot2-filter-lingo"/>
+	<classpathentry kind="src" path="/carrot2-util-tokenizer"/>
 	<classpathentry kind="output" path="tmp/build/classes"/>
 </classpath>

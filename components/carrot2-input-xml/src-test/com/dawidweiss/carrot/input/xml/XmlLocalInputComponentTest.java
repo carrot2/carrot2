@@ -9,8 +9,14 @@ import com.dawidweiss.carrot.core.local.LocalComponentFactoryBase;
 import com.dawidweiss.carrot.core.local.LocalControllerBase;
 import com.dawidweiss.carrot.core.local.LocalProcessBase;
 import com.dawidweiss.carrot.core.local.ProcessingException;
+import com.dawidweiss.carrot.core.local.clustering.RawCluster;
+import com.dawidweiss.carrot.core.local.clustering.RawDocument;
+import com.dawidweiss.carrot.core.local.impl.ClustersConsumerOutputComponent;
 import com.dawidweiss.carrot.core.local.impl.DocumentsConsumerOutputComponent;
+import com.dawidweiss.carrot.core.local.linguistic.Language;
 import com.dawidweiss.carrot.input.xml.XmlLocalInputComponent;
+import com.dawidweiss.carrot.util.tokenizer.languages.english.English;
+import com.stachoodev.carrot.filter.lingo.local.LingoLocalFilterComponent;
 
 import junit.framework.TestCase;
 
@@ -161,6 +167,76 @@ public class XmlLocalInputComponentTest extends TestCase {
         // there should be 4 documents in the result.
         assertEquals(4, results.size());
 	}
+	
+	public void testRssTransformationWithLingo() throws Exception {
+		LocalControllerBase controller;
+		
+        // Some output component
+        LocalComponentFactory outputFactory = new LocalComponentFactoryBase()
+        {
+            public LocalComponent getInstance()
+            {
+                return new ClustersConsumerOutputComponent();
+            }
+        };
+        
+		// Clustering component here.
+		LocalComponentFactory lingoFactory = new LocalComponentFactoryBase() {
+			public LocalComponent getInstance()
+			{
+				HashMap defaults = new HashMap();
+				
+				// These are adjustments settings for the clustering algorithm...
+				// You can play with them, but the values below are our 'best guess'
+				// settings that we acquired experimentally.
+				defaults.put("lsi.threshold.clusterAssignment", "0.150");
+				defaults.put("lsi.threshold.candidateCluster",  "0.775");
+
+				// Lingo uses stemmers and stop words from the languages below.
+				return new LingoLocalFilterComponent(
+					new Language[]
+					{ 
+						new English() 
+					}, defaults);
+			}
+		};
+        
+        LocalComponentFactory inputFactory = new LocalComponentFactoryBase()
+        {
+            public LocalComponent getInstance()
+            {
+                return new XmlLocalInputComponent();
+            }
+        };        
+
+        // Register with the controller
+        controller = new LocalControllerBase();
+        controller.addLocalComponentFactory("output", outputFactory);
+        controller.addLocalComponentFactory("input", inputFactory);
+		controller.addLocalComponentFactory("lingo", lingoFactory);        
+
+        // Create and register the process
+        LocalProcessBase process = new LocalProcessBase();
+        process.setInput("input");
+        process.addFilter("lingo");
+        process.setOutput("output");
+        controller.addProcess("testprocess", process);
+        
+        // first check the precached result:
+        String query = "";
+        HashMap params = new HashMap();
+        params.put("source", this.getClass().getResource("rss-bbc.xml"));
+        params.put("xslt", this.getClass().getResource("rss.xsl"));
+        ClustersConsumerOutputComponent.Result output =
+			(ClustersConsumerOutputComponent.Result) controller.query("testprocess", query, params).getQueryResult();
+
+        RawDocument rd = (RawDocument) ((RawCluster) output.clusters.get(0)).getDocuments().get(0);
+        assertNotNull(rd.getUrl());
+        assertNotNull(rd.getId());
+        assertNotNull(rd.getSnippet());
+        // there should be a 100 results:
+        assertTrue(output.clusters.size() > 0);
+	}	
 
 	public void testRssTransformation() throws Exception {
         LocalControllerBase controller = setUpController();

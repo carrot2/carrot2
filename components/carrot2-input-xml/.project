@@ -3,6 +3,7 @@
 	<name>carrot2-input-xml</name>
 	<comment></comment>
 	<projects>
+		<project>carrot2-filter-lingo</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
