@@ -152,6 +152,7 @@ więc
 wszystko
 wśród
 właśnie
+z
 za
 zaś
 ze
