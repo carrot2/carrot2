@@ -12,11 +12,8 @@ import com.dawidweiss.carrot.controller.carrot2.xmlbinding.query.*;
 import com.paulodev.carrot.treeExtractor.readers.SnippetReader;
 
 /**
- * <p>Description: Servlet for tree analysis-based snippet extractor</p>
- * <p>Copyright: Copyright (c) 2002 Dawid Weiss, Institute of Computing Science, Poznan University of Technology</p>
- * <p>Company: Institute of Computing Science, Poznan University of Technology</p>
  * @author Paweł Kowalik
- * @version 1.0
+ * @author Dawid Weiss
  */
 
 public class SnippetReaderServlet
@@ -133,8 +130,13 @@ public class SnippetReaderServlet
       }
       catch (Exception e) {
         log.error("Exception when processing request.", e);
-        res.getOutputStream().write( ("<H3>Error: </H3><br><code>" + e.toString() +
-                                      "</code>").getBytes());
+        if (res.isCommitted()==false) {
+            // send error code
+            res.resetBuffer();
+            res.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                "Could not process request: " + e.toString());
+        }
+        return; 
       }
     }
   }
