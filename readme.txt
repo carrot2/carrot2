@@ -36,6 +36,8 @@ using HTTP and as local Java components.
 
 a) Building only remote components
 
+ant -q remote
+
 This command should build all the components for you and place them in a 
 directory pointed to by an ANT property 'distribution.dir.remote'.
 
@@ -54,6 +56,15 @@ ant build
 Components are placed in their respective directories, under 'tmp/dist' folder.
 Their required components and libraries are listed in an *.info file found
 together with the resulting WAR or JAR file.
+
+c) Assembling a 'custom' component set.
+
+To assemble a 'custom' component set, a build file and a dependency file
+are needed. Follow example applications (e.g. applications/carrot2-lucene-example).
+A build that copies all required dependencies looks like this (build.xml in the
+application's folder):
+
+ant -Dcopy.dependencies=true
 
 
 THE REMOTE CONTROLLER COMPONENT (FORMER WEB CONTROLLER)
