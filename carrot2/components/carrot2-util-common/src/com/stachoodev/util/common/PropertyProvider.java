@@ -4,71 +4,89 @@
 package com.stachoodev.util.common;
 
 /**
- * Defines a number of method for getting/setting named properties.
+ * Defines the interface of a class capable of storing named properties of
+ * arbitrary types. Utility methods are also defined for accessing
+ * <code>int</code> and <code>double</code> primitives.
+ * 
+ * A default implementation of this interface, as well as some utility methods
+ * are provided by the {@link com.stachoodev.util.common.PropertyHelper}class.
  * 
  * @author stachoo
  */
 public interface PropertyProvider
 {
     /**
-     * Returns an <code>int</code> property.
+     * Returns an <code>int</code> value of a named property
+     * <code>propertyName</code>. If there is no such property in this
+     * provider or it cannot be converted to an <code>int</code> value, the
+     * <code>defaultValue</code> will be returned.
      * 
-     * @param propertyName
-     * @throws {@link NullPointerException}when there is no such property in
-     *             the map. Use {@link #getProperty(String)}to check property
-     *             existence.
-     * @throws {@link ClassCastException}when the object stored under given
-     *             property name is not an instance if {@link Integer}.
-     * @return
+     * @param propertyName Name of the property
+     * @param defaultValue Default value returned when the requested property
+     *            does not exist or when it cannot be converted into an
+     *            <code>int</code> value.
+     * @return <code>int</code> value of the property or the default value
      */
-    public abstract int getIntProperty(String propertyName);
+    public abstract int getIntProperty(String propertyName, int defaultValue);
 
     /**
-     * Sets an <code>int</code> property.
+     * Adds a named property of type <code>int</code> to this provider. If the
+     * provider contained some mapping for given <code>propertyName</code>,
+     * the previous value will be returned and replaced by the new value.
      * 
-     * @param propertyName
-     * @param value
-     * @return
+     * @param propertyName Name of the property
+     * @param value Value of the property
+     * @return previous value of the <code>propertyName</code> property or
+     *         <code>null</code>
      */
     public abstract Object setIntProperty(String propertyName, int value);
 
     /**
-     * Returns a <code>double</code> property.
+     * Returns a <code>double</code> value of a named property
+     * <code>propertyName</code>. If there is no such property in this
+     * provider or it cannot be converted to a <code>double</code> value, the
+     * <code>defaultValue</code> will be returned.
      * 
-     * @param propertyName
-     * @throws {@link NullPointerException}when there is no such property in
-     *             the map. Use {@link #getProperty(String)}to check property
-     *             existence.
-     * @throws {@link ClassCastException}when the object stored under given
-     *             property name is not an instance if {@link Double}.
-     * @return
+     * @param propertyName Name of the property
+     * @param defaultValue Default value returned when the requested property
+     *            does not exist or when it cannot be converted into a
+     *            <code>double</code> value.
+     * @return <code>double</code> value of the property or the default value
      */
-    public abstract double getDoubleProperty(String propertyName);
+    public abstract double getDoubleProperty(String propertyName,
+        double defaultValue);
 
     /**
-     * Sets a <code>double</code> property.
+     * Adds a named property of type <code>double</code> to this provider. If
+     * the provider contained some mapping for given <code>propertyName</code>,
+     * the previous value will be returned and replaced by the new value.
      * 
-     * @param propertyName
-     * @param value
-     * @return
+     * @param propertyName Name of the property
+     * @param value Value of the property
+     * @return previous value of the <code>propertyName</code> property or
+     *         <code>null</code>
      */
     public abstract Object setDoubleProperty(String propertyName, double value);
 
     /**
-     * Returns a named property.
+     * Returns an <code>Object</code> value of a named property
+     * <code>propertyName</code>. If there is no such property in this
+     * provider <code>null</code> will be returned.
      * 
-     * @param propertyName
-     * @return
+     * @param propertyName Name of the property
+     * @return <code>Object</code> value of the property or <code>null</code>
      */
     public abstract Object getProperty(String propertyName);
 
     /**
-     * Sets a named property.
+     * Adds a named property to this provider. If the provider contained some
+     * mapping for given <code>propertyName</code>, the previous value will
+     * be returned and replaced by the new value.
      * 
-     * @param propertyName
-     * @param property
-     * @return previous value stored under given <code>propertyName</code> or
-     *         <code>null</code>.
+     * @param propertyName Name of the property
+     * @param value Value of the property
+     * @return previous value of the <code>propertyName</code> property or
+     *         <code>null</code>
      */
-    public abstract Object setProperty(String propertyName, Object property);
+    public abstract Object setProperty(String propertyName, Object value);
 }

@@ -13,79 +13,81 @@ import java.util.*;
  * 
  * @author stachoo
  */
-public class PropertyHelper implements PropertyProvider
+public class PropertyHelper implements PropertyProvider, Cloneable
 {
     /** Property container */
-    private Map properties;
+    private HashMap properties;
 
-    /**
+    /*
+     * (non-Javadoc)
      * 
+     * @see com.stachoodev.util.common.PropertyProvider#getIntProperty(java.lang.String,
+     *      int)
      */
-    public PropertyHelper()
+    public int getIntProperty(String propertyName, int defaultValue)
     {
+        try
+        {
+            return ((Integer) getProperty(propertyName)).intValue();
+        }
+        catch (NullPointerException e)
+        {
+            return defaultValue;
+        }
+        catch (ClassCastException e)
+        {
+            return defaultValue;
+        }
     }
 
-    /**
-     * Returns an <code>int</code> property.
+    /*
+     * (non-Javadoc)
      * 
-     * @param propertyName
-     * @throws {@link NullPointerException}when there is no such property in
-     *             the map. Use {@link #getProperty(String)}to check property
-     *             existence.
-     * @throws {@link ClassCastException}when the object stored under given
-     *             property name is not an instance if {@link Integer}.
-     * @return
-     */
-    public int getIntProperty(String propertyName)
-    {
-        return ((Integer) getProperty(propertyName)).intValue();
-    }
-
-    /**
-     * Sets an <code>int</code> property.
-     * 
-     * @param propertyName
-     * @param value
-     * @return
+     * @see com.stachoodev.util.common.PropertyProvider#setIntProperty(java.lang.String,
+     *      int)
      */
     public Object setIntProperty(String propertyName, int value)
     {
         return setProperty(propertyName, new Integer(value));
     }
 
-    /**
-     * Returns a <code>double</code> property.
+    /*
+     * (non-Javadoc)
      * 
-     * @param propertyName
-     * @throws {@link NullPointerException}when there is no such property in
-     *             the map. Use {@link #getProperty(String)}to check property
-     *             existence.
-     * @throws {@link ClassCastException}when the object stored under given
-     *             property name is not an instance if {@link Double}.
-     * @return
+     * @see com.stachoodev.util.common.PropertyProvider#getDoubleProperty(java.lang.String,
+     *      double)
      */
-    public double getDoubleProperty(String propertyName)
+    public double getDoubleProperty(String propertyName, double defaultValue)
     {
-        return ((Double) getProperty(propertyName)).doubleValue();
+        try
+        {
+            return ((Double) getProperty(propertyName)).doubleValue();
+        }
+        catch (NullPointerException e)
+        {
+            return defaultValue;
+        }
+        catch (ClassCastException e)
+        {
+            return defaultValue;
+        }
     }
 
-    /**
-     * Sets a <code>double</code> property.
+    /*
+     * (non-Javadoc)
      * 
-     * @param propertyName
-     * @param value
-     * @return
+     * @see com.stachoodev.util.common.PropertyProvider#setDoubleProperty(java.lang.String,
+     *      double)
      */
     public Object setDoubleProperty(String propertyName, double value)
     {
         return setProperty(propertyName, new Double(value));
     }
 
-    /**
-     * Returns a named property.
+    /*
+     * (non-Javadoc)
      * 
-     * @param propertyName
-     * @return
+     * @see com.stachoodev.util.common.PropertyProvider#getProperty(java.lang.String)
      */
     public Object getProperty(String propertyName)
     {
@@ -99,13 +101,11 @@ public class PropertyHelper implements PropertyProvider
         }
     }
 
-    /**
-     * Sets a named property.
+    /*
+     * (non-Javadoc)
      * 
-     * @param propertyName
-     * @param property
-     * @return previous value stored under given <code>propertyName</code> or
-     *         <code>null</code>.
+     * @see com.stachoodev.util.common.PropertyProvider#setProperty(java.lang.String,
+     *      java.lang.Object)
      */
     public Object setProperty(String propertyName, Object property)
     {
@@ -133,7 +133,9 @@ public class PropertyHelper implements PropertyProvider
         }
         else
         {
-            return super.hashCode();
+            // Assume that empty property helpers are equal, so return a
+            // constant value
+            return 31;
         }
     }
 
@@ -166,20 +168,45 @@ public class PropertyHelper implements PropertyProvider
             }
             else
             {
-                return super.equals(obj);
+                // Assume empty property helpers are equal so return true
+                return true;
             }
         }
     }
 
     /**
-     * Returns a {@link Comparator}for given <code>double</code> property.
+     * Copies all content of the <code>properties</code> to the
+     * <code>propertyProvider</code>. The Map's keys will be treated as
+     * property names and its values as property values.
      * 
-     * @param propertyName
-     * @param descending
+     * @param propertyProvider The {@link PropertyProvider}to which the
+     *            properties will be copied
+     * @param properties The {@link Map}from which the properties will be
+     *            copied
+     */
+    public static void setProperties(PropertyProvider propertyProvider,
+        Map properties)
+    {
+        for (Iterator iter = properties.keySet().iterator(); iter.hasNext();)
+        {
+            Object key = iter.next();
+            propertyProvider.setProperty(key.toString(), properties.get(key));
+        }
+    }
+
+    /**
+     * Returns a {@link Comparator}for given <code>double</code> property. If
+     * there is no property <code>propertyName</code> in either of the
+     * compared {@link PropertyProvider}s, the result is unpredictable.
+     * 
+     * @param propertyName Name of the property which will be compared by the
+     *            returned {@link Comparator}
+     * @param reverse if <code>true</code> the 'reverse' comparator will be
+     *            returned, e.g. it will yield descending sorting.
      * @return
      */
     public static Comparator getComparatorForDoubleProperty(
-        final String propertyName, final boolean descending)
+        final String propertyName, final boolean reverse)
     {
         return new Comparator()
         {
@@ -201,15 +228,15 @@ public class PropertyHelper implements PropertyProvider
                 PropertyProvider propertyStore1 = (PropertyProvider) o1;
                 PropertyProvider propertyStore2 = (PropertyProvider) o2;
 
-                if ((propertyStore1.getDoubleProperty(propertyName) < propertyStore2
-                    .getDoubleProperty(propertyName))
-                    ^ descending)
+                if ((propertyStore1.getDoubleProperty(propertyName, 0) < propertyStore2
+                    .getDoubleProperty(propertyName, 0))
+                    ^ reverse)
                 {
                     return -1;
                 }
-                else if ((propertyStore1.getDoubleProperty(propertyName) > propertyStore2
-                    .getDoubleProperty(propertyName))
-                    ^ descending)
+                else if ((propertyStore1.getDoubleProperty(propertyName, 0) > propertyStore2
+                    .getDoubleProperty(propertyName, 0))
+                    ^ reverse)
                 {
                     return 1;
                 }
@@ -221,12 +248,15 @@ public class PropertyHelper implements PropertyProvider
         };
     }
 
-
     /**
-     * Returns a {@link Comparator}for given <code>int</code> property.
+     * Returns a {@link Comparator}for given <code>int</code> property. If
+     * there is no property <code>propertyName</code> in either of the
+     * compared {@link PropertyProvider}s, the result is unpredictable.
      * 
-     * @param propertyName
-     * @param descending
+     * @param propertyName Name of the property which will be compared by the
+     *            returned {@link Comparator}
+     * @param reverse if <code>true</code> the 'reverse' comparator will be
+     *            returned, e.g. it will yield descending sorting.
      * @return
      */
     public static Comparator getComparatorForIntProperty(
@@ -252,14 +282,14 @@ public class PropertyHelper implements PropertyProvider
                 PropertyProvider propertyStore1 = (PropertyProvider) o1;
                 PropertyProvider propertyStore2 = (PropertyProvider) o2;
 
-                if ((propertyStore1.getDoubleProperty(propertyName) < propertyStore2
-                    .getDoubleProperty(propertyName))
+                if ((propertyStore1.getDoubleProperty(propertyName, 0) < propertyStore2
+                    .getDoubleProperty(propertyName, 0))
                     ^ descending)
                 {
                     return -1;
                 }
-                else if ((propertyStore1.getDoubleProperty(propertyName) > propertyStore2
-                    .getDoubleProperty(propertyName))
+                else if ((propertyStore1.getDoubleProperty(propertyName, 0) > propertyStore2
+                    .getDoubleProperty(propertyName, 0))
                     ^ descending)
                 {
                     return 1;
@@ -287,5 +317,19 @@ public class PropertyHelper implements PropertyProvider
         {
             return "[empty]";
         }
+    }
+
+    /**
+     * Creates a <b>shallow </b> copy of this PropertyHelper.
+     *  
+     */
+    public Object clone() throws CloneNotSupportedException
+    {
+        PropertyHelper propertyHelper = new PropertyHelper();
+
+        // Make a shallow copy of the properties
+        propertyHelper.properties = (HashMap) properties.clone();
+
+        return propertyHelper;
     }
 }
