@@ -18,7 +18,7 @@ export JAVA_HOME
 export JAVACMD
 export ANT_HOME
 
-for counter in `seq 1 10`; do
+for counter in `seq 1 40`; do
     if ant -f build.docs.xml cvsupdate; then
         echo "Docs update ok."
         break;
@@ -26,7 +26,7 @@ for counter in `seq 1 10`; do
         echo "Docs update failed. Sleeping 60 seconds."
         sleep 60
     fi
-    if (($counter == 10)); then
+    if (($counter == 40)); then
         echo "Problems updating CVS of the docs..." | mail -s "Docs CVS update problem." dawid.weiss@cs.put.poznan.pl  
         exit
     fi

@@ -17,7 +17,7 @@ export JAVA_HOME
 export JAVACMD
 export ANT_HOME
 
-for counter in `seq 1 10`; do
+for counter in `seq 1 40`; do
     if ant -f build.website.xml cvsupdate; then
         echo "Website update ok."
         break;
@@ -25,7 +25,7 @@ for counter in `seq 1 10`; do
         echo "Website update failed. Sleeping."
         sleep 60
     fi
-    if (($counter == 10)); then
+    if (($counter == 40)); then
         echo "Problems updating CVS of the website..." | mail -s "Website CVS update problem." dawid.weiss@cs.put.poznan.pl  
         exit
     fi

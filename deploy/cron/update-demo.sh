@@ -61,7 +61,10 @@ then
     ant -f build.demo.xml clean.webapps
     ant -f build.demo.xml copy.logs
     ant -f build.demo.xml copy.webapps
-    # run tomcat in the background, wait and test it immediately
+    # copy webapps to nightly binaries folder.
+    rm -f /carrot/www/static/download/nightly/*.war
+    cp /home/dweiss/carrot2/runtime/context-webapps/*.war /carrot/www/static/download/nightly/
+    # run tomcat in the background, wait and test it after a couple of minutes
     (ant -f build.demo.xml start.tomcat.success)&
     sleep 360
     if ant -f build.tests.xml build
