@@ -13,9 +13,6 @@
     <property name="tests.available"  value="true"    />
     <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
 
-	<!-- JFlex task definition -->
-	<taskdef classname="JFlex.anttask.JFlexTask" name="jflex" />
-	
 	<!-- Tasks specific to the project -->
 	
     <target name="javacc">
@@ -37,6 +34,11 @@ by the CVS in this project.
     </target>
 
 	<target name="jflex">
+		<!-- JFlex task definition -->
+		<taskdef classname="JFlex.anttask.JFlexTask" name="jflex">
+			<classpath location="${carrot2.cvs.dir}/lib/compile-time/JFlex.jar" />
+		</taskdef>
+
 		<jflex file="src/com/dawidweiss/carrot/util/tokenizer/parser/jflex/JFlexWordBasedParserImpl.jflex"
 			outdir="src/com/dawidweiss/carrot/util/tokenizer/parser/jflex/"/>
 	</target>
