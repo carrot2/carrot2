@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE component SYSTEM "../../etc/component-dependency.dtd" >
+
+<component
+    name="carrot2-filter-trc"
+    description="Carrot2 TRC Clustering filter">
+
+    <!-- to be written.
+    <provides profile="local">
+        <files build-path-exclude="true" prefix="tmp/dist">
+            <file location="carrot2-filter-stc.jar" />
+        </files>
+        <build>
+            <ant file="build.local.xml" target="build" />
+        </build>
+    </provides>
+    -->
+
+    <provides profile="remote">
+        <files build-path-exclude="true" prefix="tmp/dist">
+            <file location="carrot2-filter-trc.war" />
+        </files>
+        <build>
+            <ant file="build.remote.xml" target="build" />
+        </build>
+    </provides>
+
+	<!-- Carrot2 components -->
+    <dependency name="carrot2-license" />
+	<dependency name="carrot2-util-remote" 	profile="remote" />
+	<dependency name="colt" />
+    <dependency name="carrot2-util-put" />
+    <dependency name="commons-collections" />
+
+</component>
