@@ -31,9 +31,10 @@ public class CatidPrimaryTopicIndexBuilderTest extends TestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        temporaryDirectory = createTemporaryDirectory();
+        temporaryDirectory = TempUtils.createTemporaryDirectory("cpibtest");
         indexBuilder = new CatidPrimaryTopicIndexBuilder();
-        indexBuilder.setMaxDepth(4);
+        indexBuilder.setIntProperty(
+            CatidPrimaryTopicIndexBuilder.PROPERTY_MAX_DEPTH, 4);
         indexBuilder.setTopicSerializer(new ZipFileTopicSerializer());
     }
 
@@ -44,7 +45,7 @@ public class CatidPrimaryTopicIndexBuilderTest extends TestCase
      */
     protected void tearDown() throws Exception
     {
-        deleteDirectory(temporaryDirectory);
+        TempUtils.deleteDirectory(temporaryDirectory);
         super.tearDown();
     }
 
@@ -88,7 +89,8 @@ public class CatidPrimaryTopicIndexBuilderTest extends TestCase
         PrimaryTopicIndex expectedIndex = createPrimaryTopicIndex(new String [] []
         {
         { "2", "0/1/2" } });
-        PrimaryTopicIndex index = indexBuilder.create(odpInputStream, temporaryDirectory.getPath());
+        PrimaryTopicIndex index = indexBuilder.create(odpInputStream,
+            temporaryDirectory.getPath());
 
         assertEquals("Equal indices", expectedIndex, index);
     }
@@ -122,7 +124,8 @@ public class CatidPrimaryTopicIndexBuilderTest extends TestCase
         PrimaryTopicIndex expectedIndex = createPrimaryTopicIndex(new String [] []
         {
         { "32460", "0/1/2/3/32460" } });
-        PrimaryTopicIndex index = indexBuilder.create(odpInputStream, temporaryDirectory.getPath());
+        PrimaryTopicIndex index = indexBuilder.create(odpInputStream,
+            temporaryDirectory.getPath());
 
         assertEquals("Equal indices", expectedIndex, index);
     }
@@ -170,7 +173,8 @@ public class CatidPrimaryTopicIndexBuilderTest extends TestCase
         {
         { "32460", "0/1/2/3/32460" },
         { "32461", "0/1/2/4/32461" } });
-        PrimaryTopicIndex index = indexBuilder.create(odpInputStream, temporaryDirectory.getPath());
+        PrimaryTopicIndex index = indexBuilder.create(odpInputStream,
+            temporaryDirectory.getPath());
 
         assertEquals("Equal indices", expectedIndex, index);
     }
@@ -184,18 +188,13 @@ public class CatidPrimaryTopicIndexBuilderTest extends TestCase
             + "    <RDF xmlns:r='http://www.w3.org/TR/RDF/'"
             + "         xmlns:d='http://purl.org/dc/elements/1.0/'"
             + "         xmlns='http://dmoz.org/rdf'>"
-            + "      <Topic r:id='Top/Arts'>"
-            + "        <catid>1</catid>"
-            + "      </Topic>"
-            + "      <Topic r:id='Top/Arts/C1/C2'>"
-            + "        <catid>2</catid>"
-            + "      </Topic>"
+            + "      <Topic r:id='Top/Arts'>" + "        <catid>1</catid>"
+            + "      </Topic>" + "      <Topic r:id='Top/Arts/C1/C2'>"
+            + "        <catid>2</catid>" + "      </Topic>"
             + "      <Topic r:id='Top/Arts/C1/C2/C3/C4/C5'>"
-            + "        <catid>3</catid>"
-            + "      </Topic>"
+            + "        <catid>3</catid>" + "      </Topic>"
             + "      <Topic r:id='Top/Arts/C1/C2/C3/C4/C5/C6'>"
-            + "        <catid>4</catid>"
-            + "      </Topic>" + "    </RDF>";
+            + "        <catid>4</catid>" + "      </Topic>" + "    </RDF>";
 
         InputStream odpInputStream = new ByteArrayInputStream(odpInput
             .getBytes("UTF8"));
@@ -206,7 +205,8 @@ public class CatidPrimaryTopicIndexBuilderTest extends TestCase
         { "2", "0/1/2/3/2" },
         { "3", "0/1/2/3/3" },
         { "4", "0/1/2/3/4" } });
-        PrimaryTopicIndex index = indexBuilder.create(odpInputStream, temporaryDirectory.getPath());
+        PrimaryTopicIndex index = indexBuilder.create(odpInputStream,
+            temporaryDirectory.getPath());
 
         assertEquals("Equal indices", expectedIndex, index);
     }
@@ -228,7 +228,8 @@ public class CatidPrimaryTopicIndexBuilderTest extends TestCase
         InputStream odpInputStream = new ByteArrayInputStream(odpInput
             .getBytes("UTF8"));
 
-        PrimaryTopicIndex index = indexBuilder.create(odpInputStream, temporaryDirectory.getPath());
+        PrimaryTopicIndex index = indexBuilder.create(odpInputStream,
+            temporaryDirectory.getPath());
 
         MutableTopic topic01 = new MutableTopic("Top/World/Polska/Komputery");
         topic01.setCatid("32460");
@@ -282,7 +283,8 @@ public class CatidPrimaryTopicIndexBuilderTest extends TestCase
         InputStream odpInputStream = new ByteArrayInputStream(odpInput
             .getBytes("UTF8"));
 
-        PrimaryTopicIndex index = indexBuilder.create(odpInputStream, temporaryDirectory.getPath());
+        PrimaryTopicIndex index = indexBuilder.create(odpInputStream,
+            temporaryDirectory.getPath());
 
         MutableExternalPage mutableExternalPage;
         MutableTopic topic01 = new MutableTopic("Top/World/Polska/Komputery");
@@ -346,52 +348,5 @@ public class CatidPrimaryTopicIndexBuilderTest extends TestCase
         PrimaryTopicIndex index = new SimplePrimaryTopicIndex(indexEntries);
 
         return index;
-    }
-
-    /**
-     * @return
-     */
-    private File createTemporaryDirectory()
-    {
-        Random random = new Random();
-        File temporaryDirectory;
-
-        do
-        {
-            temporaryDirectory = new File(System.getProperty("java.io.tmpdir")
-                + System.getProperty("file.separator") + "cptibtest"
-                + random.nextInt());
-        }
-        while (temporaryDirectory.exists());
-
-        temporaryDirectory.mkdirs();
-
-        return temporaryDirectory;
-    }
-
-    /**
-     * @param directory
-     */
-    private void deleteDirectory(File directory)
-    {
-        if (directory == null || !directory.exists())
-        {
-            return;
-        }
-
-        File [] files = directory.listFiles();
-        for (int i = 0; i < files.length; i++)
-        {
-            if (files[i].isFile())
-            {
-                files[i].delete();
-            }
-            else if (files[i].isDirectory())
-            {
-                deleteDirectory(files[i]);
-            }
-        }
-
-        directory.delete();
     }
 }
