@@ -50,7 +50,7 @@ public class RoughKMeansLocalFilterComponent extends
     /** This component's capabilities */
     private final static Set CAPABILITIES_COMPONENT = new HashSet(Arrays
         .asList(new Object []
-        { RawDocumentsConsumer.class, RawClustersProducer.class }));
+        { RawDocumentsConsumer.class, RawClustersProducer.class, RawDocumentsProducer.class }));
 
     /** Capabilities required from the next component in the chain */
     private final static Set CAPABILITIES_SUCCESSOR = new HashSet(Arrays
@@ -60,6 +60,9 @@ public class RoughKMeansLocalFilterComponent extends
     /** Raw clusters consumer */
     private RawClustersConsumer rawClustersConsumer;
 
+    /** Documents consumer. */
+    private RawDocumentsConsumer rawDocumentsConsumer;
+    
     /**
      *  
      */
@@ -91,6 +94,9 @@ public class RoughKMeansLocalFilterComponent extends
         snippetDocument.setUrl(doc.getUrl());
         snippetDocument.setDescription(doc.getSnippet());
         documentReferences.add(snippetDocument);
+        if (rawDocumentsConsumer != null) {
+            rawDocumentsConsumer.addDocument(doc);
+        }
 
         rawDocuments.add(doc);
 
@@ -149,6 +155,9 @@ public class RoughKMeansLocalFilterComponent extends
     {
         super.setNext(next);
         rawClustersConsumer = (RawClustersConsumer) next;
+        if (next instanceof RawDocumentsConsumer) {
+            this.rawDocumentsConsumer = (RawDocumentsConsumer) next;
+        }
     }
 
     /*
@@ -163,6 +172,7 @@ public class RoughKMeansLocalFilterComponent extends
         documentReferences.clear();
         rawDocuments.clear();
         rawClustersConsumer = null;
+        rawDocumentsConsumer = null;
     }
 
     /*
