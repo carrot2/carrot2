@@ -163,6 +163,7 @@ public class ODPLocalInputComponent extends ProfiledLocalInputComponentBase
         // Add all topics to the consumer and create a list of original
         // RawClusters to be stored in the request context
         List rawClusters = new ArrayList();
+        int id = 0;
         for (Iterator iter = topics.iterator(); iter.hasNext();)
         {
             Topic topic = (Topic) iter.next();
@@ -175,7 +176,8 @@ public class ODPLocalInputComponent extends ProfiledLocalInputComponentBase
                 ExternalPage externalPage = (ExternalPage) iterator.next();
 
                 RawDocumentSnippet rawDocumentSnippet = new RawDocumentSnippet(
-                    externalPage.getTitle(), externalPage.getDescription());
+                    Integer.toString(id++), externalPage.getTitle(), externalPage
+                        .getDescription(), null, -1);
                 rawDocumentSnippet
                     .setProperty(PROPERTY_CATID, topic.getCatid());
                 rawDocumentConsumer.addDocument(rawDocumentSnippet);
