@@ -6,7 +6,7 @@ package com.stachoodev.carrot.filter.lingo.algorithm;
 import java.util.*;
 
 import com.dawidweiss.carrot.core.local.clustering.*;
-import com.dawidweiss.carrot.util.common.*;
+import com.stachoodev.util.common.*;
 
 /**
  * @author stachoo
@@ -47,7 +47,7 @@ public class LingoRawCluster implements RawCluster, PropertyProvider
      */
     public double getScore()
     {
-        return propertyHelper.getDoubleProperty(PROPERTY_SCORE);
+        return propertyHelper.getDoubleProperty(PROPERTY_SCORE, -1);
     }
 
     /**
@@ -158,9 +158,9 @@ public class LingoRawCluster implements RawCluster, PropertyProvider
      * 
      * @see com.dawidweiss.carrot.util.common.PropertyProvider#getIntProperty(java.lang.String)
      */
-    public int getIntProperty(String propertyName)
+    public int getIntProperty(String propertyName, int defaultValue)
     {
-        return propertyHelper.getIntProperty(propertyName);
+        return propertyHelper.getIntProperty(propertyName, defaultValue);
     }
 
     /*
@@ -179,9 +179,9 @@ public class LingoRawCluster implements RawCluster, PropertyProvider
      * 
      * @see com.dawidweiss.carrot.util.common.PropertyProvider#getDoubleProperty(java.lang.String)
      */
-    public double getDoubleProperty(String propertyName)
+    public double getDoubleProperty(String propertyName, double defaultValue)
     {
-        return propertyHelper.getDoubleProperty(propertyName);
+        return propertyHelper.getDoubleProperty(propertyName, defaultValue);
     }
 
     /*

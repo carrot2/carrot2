@@ -11,16 +11,50 @@ import cern.colt.matrix.doublealgo.*;
 
 import com.dawidweiss.carrot.core.local.clustering.*;
 import com.dawidweiss.carrot.core.local.linguistic.tokens.*;
-import com.dawidweiss.carrot.util.common.*;
 import com.stachoodev.carrot.filter.lingo.model.*;
 import com.stachoodev.matrix.*;
 import com.stachoodev.matrix.factorization.*;
+import com.stachoodev.util.common.*;
 
 /**
  * @author stachoo
  */
 public class Lingo
 {
+    /**
+     * Returns an instance of {@link Double}being the score of this document as
+     * a member of a cluster.
+     */
+    public static final String PROPERTY_CLUSTER_MEMBER_SCORE = "mscore";
+
+    /**
+     * Determines the feature selection strategy to be used by this instance of
+     * Lingo. The value of this parameter must implement
+     * {@link FeatureSelectionStrategy}.
+     */
+    public static final String PARAMETER_FEATURE_SELECTION_STRATEGY = "feature-selection";
+
+    /**
+     * Determines the phrase extraction strategy to be used by this instance of
+     * Lingo. The value of this parameter must implement
+     * {@link PhraseExtractionStrategy}.
+     */
+    public static final String PARAMETER_PHRASE_EXTRACTION_STRATEGY = "phrase-extraction";
+
+    /**
+     * Determines the term-document matrix building strategy to be used by this
+     * instance of Lingo. The value of this parameter must implement
+     * {@link TdMatrixBuildingStrategy}.
+     */
+    public static final String PARAMETER_TD_MATRIX_BUILDING_STRATEGY = "tdmatrix-building";
+
+    /**
+     * Determines matrix factorization strategy to be used by this instance of
+     * Lingo. The value of this parameter must implement
+     * {@link MatrixFactorizationFactory}.
+     */
+    public static final String PARAMETER_MATRIX_FACTORIZATION_FACTORY = "matrix-factorization";
+
     /** A list of tokenized documents */
     private List tokenizedDocuments;
 
@@ -54,9 +88,6 @@ public class Lingo
     /** Label score property */
     private static final String PROPERTY_LABEL_SCORE = "lscore";
 
-    /** Document in a cluster score */
-    private static final String PROPERTY_CLUSTER_MEMBER_SCORE = "mscore";
-
     /** Cluster label vectors */
     private DoubleMatrix2D labelVectors;
 
@@ -68,15 +99,65 @@ public class Lingo
      */
     public Lingo()
     {
-        this.featureSelectionStrategy = new TfFeatureSelectionStrategy();
-        this.tdMatrixBuildingStrategy = new TfIdfTdMatrixBuildingStrategy();
-        this.phraseExtractionStrategy = new SAPhraseExtractionStrategy();
+        this(new HashMap());
+    }
 
-        this.matrixFactorizationFactory = new NonnegativeMatrixFactorizationEDFactory();
-        ((IterativeMatrixFactorizationFactory) matrixFactorizationFactory)
-            .setMaxIterations(50);
-        ((IterativeMatrixFactorizationFactory) matrixFactorizationFactory)
-            .setOrdered(true);
+    /**
+     * Creates an instance of Lingo with given parameters. See descriptions of
+     * constants for possible parameter names and values.
+     * 
+     * @param parameters
+     */
+    public Lingo(Map parameters)
+    {
+        // Set feature selection
+        if (parameters.get(PARAMETER_FEATURE_SELECTION_STRATEGY) != null)
+        {
+            this.featureSelectionStrategy = (FeatureSelectionStrategy) parameters
+                .get(PARAMETER_FEATURE_SELECTION_STRATEGY);
+        }
+        else
+        {
+            this.featureSelectionStrategy = new TfFeatureSelectionStrategy();
+        }
+
+        // Set phrase extraction
+        if (parameters.get(PARAMETER_PHRASE_EXTRACTION_STRATEGY) != null)
+        {
+            this.phraseExtractionStrategy = (PhraseExtractionStrategy) parameters
+                .get(PARAMETER_PHRASE_EXTRACTION_STRATEGY);
+        }
+        else
+        {
+            this.phraseExtractionStrategy = new SAPhraseExtractionStrategy();
+        }
+
+        // Set td matrix building
+        if (parameters.get(PARAMETER_TD_MATRIX_BUILDING_STRATEGY) != null)
+        {
+            this.tdMatrixBuildingStrategy = (TdMatrixBuildingStrategy) parameters
+                .get(PARAMETER_TD_MATRIX_BUILDING_STRATEGY);
+        }
+        else
+        {
+            this.tdMatrixBuildingStrategy = new TfIdfTdMatrixBuildingStrategy();
+        }
+
+        // Set matrix factorization
+        if (parameters.get(PARAMETER_MATRIX_FACTORIZATION_FACTORY) != null)
+        {
+            this.matrixFactorizationFactory = (MatrixFactorizationFactory) parameters
+                .get(PARAMETER_MATRIX_FACTORIZATION_FACTORY);
+        }
+        else
+        {
+            this.matrixFactorizationFactory = new NonnegativeMatrixFactorizationEDFactory();
+            ((IterativeMatrixFactorizationFactory) matrixFactorizationFactory)
+                .setMaxIterations(15);
+            ((IterativeMatrixFactorizationFactory) matrixFactorizationFactory)
+                .setOrdered(true);
+        }
+
     }
 
     /**
@@ -99,7 +180,7 @@ public class Lingo
     }
 
     /**
-     * 
+     *  
      */
     private boolean prepare()
     {
@@ -180,21 +261,17 @@ public class Lingo
                             .get(token.toString());
 
                         // Weight of a single token in the phrase
-                        double weight = extendedToken
-                            .getDoubleProperty(ExtendedToken.PROPERTY_TF);
-                        if (extendedToken
-                            .getProperty(ExtendedToken.PROPERTY_IDF) != null)
-                        {
-                            weight *= extendedToken
-                                .getDoubleProperty(ExtendedToken.PROPERTY_IDF);
-                        }
+                        double weight = extendedToken.getDoubleProperty(
+                            ExtendedToken.PROPERTY_TF, 0);
+                        weight *= extendedToken.getDoubleProperty(
+                            ExtendedToken.PROPERTY_IDF, 1);
                         length += weight * weight;
-                        phraseVector[extendedToken
-                            .getIntProperty(ExtendedToken.PROPERTY_INDEX)] = weight;
+                        phraseVector[extendedToken.getIntProperty(
+                            ExtendedToken.PROPERTY_INDEX, -1)] = weight;
 
                         // Cosine between a column of U an the phrase vector
-                        cosine += U.getQuick(extendedToken
-                            .getIntProperty(ExtendedToken.PROPERTY_INDEX), c)
+                        cosine += U.getQuick(extendedToken.getIntProperty(
+                            ExtendedToken.PROPERTY_INDEX, -1), c)
                             * weight;
                     }
                 }
@@ -209,17 +286,10 @@ public class Lingo
                 // Compare
                 if (cosine >= cosines[c])
                 {
-                    if (phrase.getProperty(PROPERTY_LABEL_SCORE) != null)
+                    if (phrase.getDoubleProperty(PROPERTY_LABEL_SCORE, -2) < cosine)
                     {
-                        if (phrase.getDoubleProperty(PROPERTY_LABEL_SCORE) < cosine)
-                        {
-                            phrase.setDoubleProperty(PROPERTY_LABEL_SCORE,
-                                cosine);
-                        }
-                    }
-                    else
-                    {
-                        phrase.setDoubleProperty(PROPERTY_LABEL_SCORE, cosine);
+                        phrase.setDoubleProperty(PROPERTY_LABEL_SCORE,
+                            cosine);
                     }
                     cosines[c] = cosine;
                     candidateLabels[c] = phrase;
@@ -238,7 +308,7 @@ public class Lingo
         for (int i = 0; i < cosines.length; i++)
         {
             cosines[i] = -candidateLabels[i]
-                .getDoubleProperty(PROPERTY_LABEL_SCORE);
+                .getDoubleProperty(PROPERTY_LABEL_SCORE, 0);
         }
 
         labelVectors = Sorting.mergeSort.sort(labelVectors.viewDice(), cosines);
@@ -291,7 +361,7 @@ public class Lingo
     }
 
     /**
-     * 
+     *  
      */
     private List createClusters()
     {
@@ -320,6 +390,23 @@ public class Lingo
                     RawDocument rawDocument = (RawDocument) ((TokenizedDocument) tokenizedDocuments
                         .get(r))
                         .getProperty(TokenizedDocument.PROPERTY_RAW_DOCUMENT);
+
+                    // If the rawDocument has already some member score it means
+                    // it has already been assigned to some cluster. To preserve
+                    // different member scores we need to clone the raw document
+                    if (rawDocument.getProperty(PROPERTY_CLUSTER_MEMBER_SCORE) != null
+                        && (rawDocument instanceof RawDocumentSnippet))
+                    {
+                        try
+                        {
+                            rawDocument = (RawDocument) ((RawDocumentSnippet) rawDocument)
+                                .clone();
+                        }
+                        catch (CloneNotSupportedException ignored)
+                        {
+                        }
+                    }
+
                     cluster.addDocument(rawDocument);
                     rawDocument.setProperty(PROPERTY_CLUSTER_MEMBER_SCORE,
                         new Double(cos.getQuick(r, c)));
@@ -341,7 +428,7 @@ public class Lingo
             // Set score for the cluster (will be normalized later)
             double score = cluster.getDocuments().size()
                 * ((ExtendedTokenSequence) clusterLabels.get(c))
-                    .getDoubleProperty(PROPERTY_LABEL_SCORE);
+                    .getDoubleProperty(PROPERTY_LABEL_SCORE, 1);
             cluster.setScore(score);
             if (maxScore < score)
             {
@@ -367,7 +454,7 @@ public class Lingo
         LingoRawCluster singletons = new LingoRawCluster();
         singletons.addLabel("(Singletons)");
         singletons.setScore(0.002);
-        for (int i = 0; i < clusters.size(); i++)
+        for (int i = 0; i < clusters.size();)
         {
             LingoRawCluster cluster = (LingoRawCluster) clusters.get(i);
             if (cluster.getDocuments().size() == 1)
@@ -376,12 +463,15 @@ public class Lingo
                     .get(0));
                 clusters.remove(i);
             }
+            else
+            {
+                i++;
+            }
         }
         if (singletons.getDocuments().size() > 0)
         {
             clusters.add(singletons);
         }
-        clusters.add(singletons);
 
         // Create the other topics group
         LingoRawCluster otherTopics = new LingoRawCluster();
