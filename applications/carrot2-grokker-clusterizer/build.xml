@@ -1,7 +1,7 @@
 <project name="Grokker clusterizer plugin" default="build">
 
 	<property file="local.properties" />
-
+    
 	<property name="project.dir"      location="${basedir}" />
 	<property name="carrot2.cvs.dir"  location="../.." />
 
@@ -20,6 +20,18 @@
 	<target name="build">
 		<property name="copy.dependencies" value="true" />
 
+        <fail unless="grokker.sdk">
+###
+Specify 'grokker.sdk' property pointing to your Grokker SDK installation.
+You can put this property in a 'local.properties' file in this folder. For
+example:
+
+# Local settings
+grokker.sdk=g:/Repositories/groxis/Grokker-2.2-SDK
+
+###
+        </fail>
+        
 		<ant target="build.${type}"
              antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" inheritrefs="true">
 		</ant>
