@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<service xmlns     = "http://www.dawidweiss.com/projects/carrot/componentDescriptor" 
+         framework = "Carrot2"
+>
+
+    <!-- Snippet Reader service, Google pl wrapper input component -->
+    <component id               = "carrot2.input.tree-snippet-reader.google-pl"
+               type             = "input"
+               serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-snippet-reader/treeExtractor/google-pl"
+               infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-snippet-reader">
+        <acceptedFormat>
+            <mime>application/x-carrot-clustering-input-query</mime>
+        </acceptedFormat>
+        <producedFormat>
+            <mime>application/x-carrot-clustering-plain-response</mime>
+        </producedFormat>
+    </component>
+    <!-- Snippet Reader service, Google wrapper input component -->
+    <component id               = "carrot2.input.tree-snippet-reader.google"
+               type             = "input"
+               serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-snippet-reader/treeExtractor/google"
+               infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-snippet-reader">
+        <acceptedFormat>
+            <mime>application/x-carrot-clustering-input-query</mime>
+        </acceptedFormat>
+        <producedFormat>
+            <mime>application/x-carrot-clustering-plain-response</mime>
+        </producedFormat>
+    </component>
+    <!-- Snippet Reader service, Szukacz pl wrapper input component -->
+    <component id               = "carrot2.input.tree-snippet-reader.szukacz-pl"
+               type             = "input"
+               serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-snippet-reader/treeExtractor/szukacz-pl"
+               infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-snippet-reader">
+        <acceptedFormat>
+            <mime>application/x-carrot-clustering-input-query</mime>
+        </acceptedFormat>
+        <producedFormat>
+            <mime>application/x-carrot-clustering-plain-response</mime>
+        </producedFormat>
+    </component>
+</service>

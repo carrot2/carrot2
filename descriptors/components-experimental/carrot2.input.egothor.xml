@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<service xmlns      = "http://www.dawidweiss.com/projects/carrot/componentDescriptor" 
+         framework  = "Carrot2"
+>
+
+    <!-- XSLT processor -->
+
+    <component id               = "carrot2.input.egothor.dundee"
+               type             = "input"
+               serviceURL       = "http://egothor.dundee.ac.uk/egothor/c2.jsp"
+               infoURL          = "http://egothor.sourceforge.net/"
+    >
+        <acceptedFormat>
+            <mime>application/x-carrot-clustering-input-query</mime>
+        </acceptedFormat>
+        <producedFormat>
+            <mime>application/x-carrot-clustering-plain-response</mime>
+        </producedFormat>
+    </component>
+    
+
+    <component id               = "carrot2.input.egothor.cs-only"
+               type             = "input"
+               serviceURL       = "http://egothor.dundee.ac.uk/egothor-put/c2.jsp"
+               infoURL          = "http://egothor.sourceforge.net/"
+    >
+        <acceptedFormat>
+            <mime>application/x-carrot-clustering-input-query</mime>
+        </acceptedFormat>
+        <producedFormat>
+            <mime>application/x-carrot-clustering-plain-response</mime>
+        </producedFormat>
+    </component>
+
+</service>

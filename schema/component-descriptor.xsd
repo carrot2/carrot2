@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+  xmlns="http://www.dawidweiss.com/projects/carrot/componentDescriptor"
+  elementFormDefault="qualified" 
+  targetNamespace="http://www.dawidweiss.com/projects/carrot/componentDescriptor"
+>
+
+    <xs:element name="service">
+        <xs:annotation>
+            <xs:documentation>
+Service must be the root element of the component descriptor file.
+One service may incorporate several components.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="component"
+                            maxOccurs="unbounded" minOccurs="1"/>
+            </xs:sequence>
+            <xs:attribute name="framework" type="xs:string"
+                          use="required" fixed="Carrot2"/>
+        </xs:complexType>
+    </xs:element>
+
+    
+    <xs:element name="component">
+        <xs:annotation>
+            <xs:documentation>
+Components define a single data processing facility in Carrot2
+architecture. Components consume input stream data and produce
+some output data stream. Both input and output formats are declared
+as MIME types.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="acceptedFormat" type="streamFormat"
+                            minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="producedFormat" type="streamFormat"
+                            minOccurs="0" maxOccurs="unbounded" />
+            </xs:sequence>
+    
+            <xs:attribute name="id"  type="xs:string" use="required"/>
+            <xs:attribute name="type"  type="ComponentType" use="required" />
+            <xs:attribute name="serviceURL" type="xs:anyURI" use="required"/>
+            <xs:attribute name="configurationURL" type="xs:anyURI"
+                          use="optional"/>
+            <xs:attribute name="infoURL" type="xs:anyURI" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+
+    <xs:complexType name="streamFormat">
+        <xs:annotation>
+            <xs:documentation>
+Data stream format declaration consists of a MIME type and optional restrictions
+about when this data format is accepted or produced by the component.
+Restrictions may for example indicate that the data format is only accepted when
+certain POST header parameter is set to a predefined constant value.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="mime" minOccurs="1" maxOccurs="1"
+                        type="xs:string"/>
+            <xs:element name="restrictions" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="postParam" maxOccurs="unbounded">
+                            <xs:complexType>
+                                <xs:attribute name="name"  type="xs:string"
+                                              use="required"/>
+                                <xs:attribute name="value" type="xs:string"
+                                              use="required"/>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    
+    <xs:simpleType name="ComponentType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="input"/>
+            <xs:enumeration value="output"/>
+            <xs:enumeration value="filter"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>

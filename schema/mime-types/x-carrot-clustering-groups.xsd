@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:redefine schemaLocation="x-carrot-clustering-plain-response.xsd ">
+        <xs:annotation><xs:documentation>
+        Extend the plain search result with information about groups.
+        </xs:documentation></xs:annotation>
+        <xs:complexType name="searchresult">
+            <xs:complexContent>
+                <xs:extension base="searchresult">
+                    <xs:sequence>
+                        <xs:element name="group" type="group" 
+                                    maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:redefine>
+
+    <xs:complexType name="group">
+        <xs:annotation><xs:documentation>
+        This is the definition of a group. Each group consists of an
+        optional title, which consists of phrases, and an obligatory list
+        of references to document elements, defined earlier in the document.
+        </xs:documentation></xs:annotation>
+        <xs:sequence>
+            <xs:element name="title" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="phrase" type="xs:string"
+                                    maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="document" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:attribute name="refid" type="xs:IDREF" use="required"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

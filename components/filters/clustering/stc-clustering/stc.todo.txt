@@ -1,0 +1,7 @@
+
++ wazne: frazy oceniane nie tylko na podstawie czestosci, ale takze na podstawie
+wystepujacych w nich slow - szczegolnie doklejki typu logika "rozmyta", "klasyczna"
+
++ grupy sa czesto mylace, bowiem czlowiek mysli w kategoriach podzbiorow rozlacznych jesli widzi hierarchie. byc
+moze drilling po "grafie skupien" bylby lepszy?
+

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="Carrot2 XSLT Renderer Output Component" default="help" basedir="." >
+
+  <!-- ## these are overrioden my master build file ### -->
+
+  <property name="distribution.dir" location="tmp/dist" />
+  <property name="javadoc.dir"      location="tmp/javadoc" />
+  <property name="carrot2.cvs.dir"  location="../../.." />
+
+  <!-- ## global properties ### -->
+
+  <property name="build.dir"        location="tmp/build" />
+  <property name="build.compiler"   value="modern" /> 
+  <property name="dist.name"        value="carrot2-xslt-renderer" />
+
+  <!-- ## local properties ### -->
+
+  <property name="src.path"            location="src" />
+  <property name="src.webapp.path"     location="web" />
+  <property name="javac.optimize"      value="off" />
+  <property name="javac.debug"         value="on" />
+
+  <!-- ## classpath for compiling classes ## -->
+
+  <path id="carrot.shared.libs">
+    <!-- all jars runtime/shared/lib -->
+    <fileset dir="${carrot2.cvs.dir}/lib">  
+      <include name="**/*.jar"/>
+    </fileset>
+  </path>
+
+  <!-- ## project classpath ### -->
+  <path id="compile.classpath">
+    <path refid="carrot.shared.libs" />
+  </path>
+
+  <!-- ##################################### -->
+  <!-- ### {{{ CLEAN                     ### -->
+  <!-- ##################################### -->
+  <target name="clean" description="Removes compiled classes and distribution files.">
+    <delete failonerror="false" includeemptydirs="true" quiet="true">
+        <fileset dir="tmp" />
+    </delete>
+  </target>
+  <!-- }}} -->
+
+  
+  <!-- ##################################### -->
+  <!-- ### {{{ PREPARE                   ### -->
+  <!-- ##################################### -->
+
+  <target name="prepare">
+    <mkdir dir="${distribution.dir}"  />
+    <mkdir dir="${build.dir}"  />
+    <mkdir dir="${javadoc.dir}" />
+    <mkdir dir="${build.dir}/WEB-INF/classes" />
+    <mkdir dir="${build.dir}/WEB-INF/lib" />        
+  </target>
+  <!-- }}} -->
+
+
+  <!-- ##################################### -->
+  <!-- ### {{{ COMPILE SOURCE FILES      ### -->
+  <!-- ##################################### -->
+
+  <target name="compile" depends="prepare" >
+    <javac destdir     = "${build.dir}/WEB-INF/classes"
+           debug       = "${java.debug}"
+           optimize    = "${java.optimize}"
+           deprecation = "on"
+           includeantruntime = "false"
+           includejavaruntime = "false"
+           classpathref = "compile.classpath"
+    >
+        <!-- add source code paths. -->
+        <src path="${src.path}" />
+        <exclude name="**/*Test.java"/>
+    </javac>
+
+    <!-- copy any non-java files (resources) from the source path. -->
+    <copy toDir="${build.dir}/WEB-INF/classes">
+       <fileset dir="${src.path}">
+         <exclude name="**/*.java"/>
+       </fileset>
+    </copy>
+    
+    <!-- copy webapp resources -->
+    <copy filtering="false" flatten="false" includeemptydirs="true" todir="${build.dir}">
+        <fileset dir="${src.webapp.path}" />
+    </copy>
+    
+  </target>
+  <!-- }}} -->
+
+
+  <!-- ##################################### -->
+  <!-- ### {{{ build war file            ### -->
+  <!-- ##################################### -->
+  <target name="build" depends="compile" >
+
+	<war warfile="${distribution.dir}/${dist.name}.war" webxml="${build.dir}/WEB-INF/web.xml">
+		<fileset dir="${build.dir}">
+			<exclude name="WEB-INF/web.xml" />
+			<exclude name="WEB-INF/classes/**" />
+			<exclude name="WEB-INF/lib/**" />
+		</fileset>
+		
+		<classes dir="${build.dir}/WEB-INF/classes">
+          <exclude name="**/*Test"/>
+		</classes>
+	</war>
+
+  </target>
+  <!-- }}} -->
+
+
+  <!-- ##################################### -->
+  <!-- ### {{{ HELP ON THIS FILE         ### -->
+  <!-- ##################################### -->
+  <target name="help" description="Displays help on available targets.">
+    <echo>
+    Project name: ${ant.project.name}
+
+    Current JDK: ${ant.java.version}
+    Basedir    : ${basedir}
+    -----------------------------------------------------
+
+    Available targets:
+
+    clean     Removes all temporary files.
+    compile   Compiles the project.
+    build     Builds WAR file
+    </echo>
+  </target>
+  <!-- }}} -->
+
+</project>

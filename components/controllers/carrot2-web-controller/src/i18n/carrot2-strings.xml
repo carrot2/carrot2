@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages default-lang="en" xmlns:lang="Languages">
+
+    <links>
+        <lang:en>
+            <enter>main page</enter>
+            <components>components</components>
+            <admin>admin</admin>
+            <demo>demonstration</demo>
+
+            <english>english</english>
+            <polish>polski</polish>
+            <largeinputsearch>large query</largeinputsearch>
+            <smallinputsearch>regular query</smallinputsearch>
+        </lang:en>
+        <lang:pl>
+            <enter>strona główna</enter>
+            <components>komponenty</components>
+            <admin>administracja</admin>
+            <demo>demonstracja</demo>
+
+            <english>angielski</english>
+            <polish>polski</polish>
+            <largeinputsearch>duże zapytanie</largeinputsearch>
+            <smallinputsearch>normalne zapytanie</smallinputsearch>
+        </lang:pl>
+    </links>
+
+    <forms>
+        <login>
+            <lang:en>Login</lang:en>
+            <lang:pl>Zaloguj się</lang:pl>
+        </login>
+        <search>
+            <lang:en>Search</lang:en>
+            <lang:pl>Szukaj</lang:pl>
+        </search>
+        <process-chain>
+            <lang:en>Process query using</lang:en>
+            <lang:pl>Przetwarzaj przy pomocy</lang:pl>
+        </process-chain>
+        <requested-results>
+            <lang:en>Download results</lang:en>
+            <lang:pl>Pobrać wyników</lang:pl>
+        </requested-results>
+    </forms>
+
+    <errors>
+        <runtime>
+            <processor-missing>Carrot2 query processor missing</processor-missing>
+            <no-processes-defined><![CDATA[
+            No processing chains have been loaded or defined. Carrot<sup>2</sup> needs
+            them to process a query. Please consult the documentation of the project.
+            ]]></no-processes-defined>
+            <processing-chain-not-found>The processing chain you requested could not be found</processing-chain-not-found>
+        </runtime>
+        <initialization>
+            <missing-config>Carrot2 configuration file missing.</missing-config>
+            <cache-config-missing>Cache configuration file missing.</cache-config-missing>
+            <guards-dir-unavailable>Guards directory does not exist or cannot be read</guards-dir-unavailable>
+        </initialization>
+        <forms>
+            <missing-field>Missing value in field: {0}</missing-field>
+            <incorrect-value>Incorrect value in field: {0}</incorrect-value>
+        </forms>
+        <header>&lt;div class="errors" &gt;&lt;h2&gt;There were errors, correct them first&lt;/h2&gt;</header>
+        <footer>&lt;/div&gt;</footer>
+
+        <processing-errors>
+            <lang:en>
+                <head>Processing error</head>
+                <unknown><![CDATA[
+                The query and configuration you requested could not be processed for the reasons
+                listed below. We apologize for inconvenience. If you believe this indicates a fault
+                in Carrot, please report a bug.
+                ]]></unknown>
+            </lang:en>
+            <lang:pl>
+                <head>Błąd przetwarzania</head>
+                <unknown><![CDATA[
+                Zapytanie i aktualna configuracja spowodowała wystąpienie błędu przetwarzania
+                podanego poniżej. Przepraszamy za niedogodności. Jeśli uważasz, iż jest to błąd w systemie Carrot<sup>2</sup>, proszę wypełnij
+                formularz błędu.
+                ]]></unknown>
+            </lang:pl>
+        </processing-errors>
+    </errors>
+
+    <guard>
+        <lang:pl>
+            <hits-limit-exceeded>Przekroczona maksymalna liczba zapytań do tego komponentu</hits-limit-exceeded>
+            <component-blocked>Komponent został zablokowany i nie może być używany. Być może dostępne są zapytania do tego kompnentu w pamięci podręcznej.</component-blocked>
+        </lang:pl>
+        <lang:en>
+            <hits-limit-exceeded>Maximum query requests for some component in the processing chain reached</hits-limit-exceeded>
+            <component-blocked>This component has been blocked and cannot be used. There may be cached queries to this component available (see the demo).</component-blocked>
+        </lang:en>
+    </guard>
+
+    <carrot>
+        <info>
+            <short><!-- {{{ -->
+                <lang:en>
+                    <![CDATA[
+                    Carrot<sup>2</sup> is a modular framework for retrieving, processing and visualization
+                    of search results.
+                    ]]>
+                </lang:en>
+                <lang:pl>
+                    <![CDATA[
+                    Carrot<sup>2</sup> jest modularnym systemem pozyskiwania, przetwarzania i wizualizacji
+                    wyników uzyskanych z wyszukiwarek internetowych.
+                    ]]>
+                </lang:pl>
+            </short><!-- }}} -->
+
+            <developed-at><!-- {{{ -->
+                <lang:en>Developed at Laboratory of Inteligent Decision Support Systems, Institute of Computing Science, Poznan University of Technology, Poland.
+                </lang:en>
+                <lang:pl>Program napisany w Zakładzie Inteligentnych Systemów Wspomagania Decyzji Instytutu Informatyki Politechniki Poznańskiej.
+                </lang:pl>
+            </developed-at><!-- }}} -->
+        </info>
+    </carrot>
+
+
+    <blocks>
+        <wait>
+            <lang:en>
+                <please-wait><![CDATA[&hellip;please wait&hellip;]]></please-wait>
+            </lang:en>
+            <lang:pl>
+                <please-wait><![CDATA[&hellip;proszę czekać&hellip;]]></please-wait>
+            </lang:pl>
+        </wait>
+        <demo>
+            <snippets>
+                <lang:en>snippets</lang:en>
+                <lang:pl>snipetów</lang:pl>
+            </snippets>
+            <cachedfor>
+                <lang:en>Queries cached for input component:</lang:en>
+                <lang:pl>Zapytania w pamięci podręcznej dla komponentu:</lang:pl>
+            </cachedfor>
+            <intro>
+                <lang:en><![CDATA[
+                This page contains a list of precached queries (those for which the response has been saved to the local
+                disk). <b>Any process in the system</b> utilizing a given input component and asking for a given query
+                will receive cached response (transparently).
+                ]]></lang:en>
+                <lang:pl><![CDATA[
+                Ta strona zawiera listę zapytań, które znajdują się w pamięci podręcznej na dysku
+                lokalnym serwera. <b>Każdy proces</b> korzystający z danego komponentu wejściowego
+                otrzyma w pierwszej kolejności dane z pamięci cache (co jest przydatne, np. w przypadku
+                braku dostępu do sieci).
+                ]]></lang:pl>
+            </intro>
+            <scripted>
+                <lang:en>
+                This is a scripted process. It is impossible to fully determine input
+                component for such processes; it may but does not have to utilize cached
+                input.
+                </lang:en>
+                <lang:pl>
+                To jest proces napisany przy pomocy skryptu. Sprawdzenie czy
+                korzysta on z danego komponentu nie jest w pełni możliwe. Może się zdażyć, iż
+                komponent nie będzie korzystał z pamięci podręcznej.
+                </lang:pl>
+            </scripted>
+        </demo>
+        <components>
+            <lang:en>
+                <processing-chains>Query processing chains</processing-chains>
+                <input>Input</input>
+                <output>Output</output>
+                <filter>Filter</filter>
+                <components>Components available</components>
+                <input-components>Input components</input-components>
+                <output-components>Output components</output-components>
+                <filter-components>Filter components</filter-components>
+                <configuration>Configure</configuration>
+                <information>More information</information>
+            </lang:en>
+            <lang:pl>
+                <processing-chains>Procesy przetwarzania zapytań</processing-chains>
+                <input>Wejście</input>
+                <output>Wyjście</output>
+                <filter>Filtr</filter>
+                <components>Dostępne komponenty</components>
+                <input-components>Wejściowe</input-components>
+                <output-components>Wyjściowe</output-components>
+                <filter-components>Filtry</filter-components>
+                <configuration>Konfiguruj</configuration>
+                <information>Informacje dodatkowe</information>
+            </lang:pl>
+        </components>
+    </blocks>
+    
+    <pages>
+    	<largeinput>
+    		<warning>
+	    		<lang:en><![CDATA[
+	    			Large input query is useful and applicable only to special input component types, such as
+	                <i>verbatim</i> input component.]]>
+	            </lang:en>
+	    		<lang:pl><![CDATA[
+	    			Uwaga: ekran dużych zapytań jest istotny i użyteczny jedynie w wypadku specyficznych komponentów
+	    			wejściowych (jak np. komponent <i>verbatim</i>).]]>
+	            </lang:pl>
+            </warning>
+    	</largeinput>
+    </pages>
+
+</messages>

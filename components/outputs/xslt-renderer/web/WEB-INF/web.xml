@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
+<web-app>
+  <display-name>Carrot-output-XSLTRenderer</display-name>
+  <description>A simple XSLT rendering servlet for processing results in Carrot data exchange format.</description>
+  <servlet>
+    <servlet-name>XsltRenderer</servlet-name>
+    <servlet-class>com.dawidweiss.carrot.output.xsltrenderer.XsltRendererServlet</servlet-class>
+    <init-param>
+      <param-name>xslt.transformer.factory</param-name>
+      <param-value>com.icl.saxon.TransformerFactoryImpl</param-value>
+    </init-param>
+    <init-param>
+      <param-name>default</param-name>
+      <param-value>dtree</param-value>
+    </init-param>
+    <init-param>
+      <param-name>stylesheetsDir</param-name>
+      <param-value>/stylesheets</param-value>
+    </init-param>
+    <init-param>
+      <param-name>reload</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <init-param>
+      <param-name>log4j.properties</param-name>
+      <param-value>/WEB-INF/log4j.properties</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>XsltRenderer</servlet-name>
+    <url-pattern>/service/*</url-pattern>
+  </servlet-mapping>
+</web-app>

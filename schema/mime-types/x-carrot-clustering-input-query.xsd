@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://www.dawidweiss.com/projects/carrot/clustering/query"
+    elementFormDefault="qualified"
+    targetNamespace="http://www.dawidweiss.com/projects/carrot/clustering/query"
+>
+    <xs:element name="search">
+        <xs:annotation>
+            <xs:documentation>Search element is a container for user queries.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="query" type="queryType" minOccurs="1" maxOccurs="1" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:complexType name="queryType">
+        <xs:annotation>
+            <xs:documentation>The body of user query
+            (unrestricted text).</xs:documentation>
+        </xs:annotation>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attribute name="requested-results" type="xs:int"
+                                  use="optional" default="100">
+                        <xs:annotation>
+                            <xs:documentation>
+The number of requested results for the query. The default value of this element
+may be different than the one present in this schema and depends on the settings
+of the controller component.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:simpleContent>
+    </xs:complexType>
+
+</xs:schema>
