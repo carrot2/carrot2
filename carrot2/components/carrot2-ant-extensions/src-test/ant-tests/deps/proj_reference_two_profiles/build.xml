@@ -1,0 +1,57 @@
+
+<project name="a" default="test">
+
+	<target name="prepare">
+        <delete dir="tmp2" />
+    </target>
+		
+	<target name="test">
+	    <taskdef name="bringToDate" 
+	     	classname="com.dawidweiss.carrot.ant.BringToDate" />
+		<typedef name="dependencyPath"
+			classname="com.dawidweiss.carrot.ant.DependencyPath" />
+	    <taskdef name="printDependencies" 
+	        classname="com.dawidweiss.carrot.ant.PrintDependencies" />
+	    <taskdef name="copyDependencies" 
+	        classname="com.dawidweiss.carrot.ant.CopyDependencies" />
+
+		<path id="user.path">
+			<fileset dir="../proj_referenced_project">
+				<include name="*.dep.xml" />
+			</fileset>
+		</path>
+		
+	    <printDependencies componentDescriptor="proj_reference_two_profiles.dep.xml"
+	                       property="string:component.dependencies"
+	    				   profile="">
+			<dependencies refid="user.path" />
+	    </printDependencies>
+		<echo>${string:component.dependencies}</echo>
+		
+		<condition property="path.ok" value="true">
+			<and>
+				<contains string="${string:component.dependencies}" substring="in profile: 'a'" />
+				<contains string="${string:component.dependencies}" substring="in profile: 'b'" />
+			</and>
+		</condition>
+		<fail unless="path.ok" >
+			Printed dependency path is missing at least one profile. 
+			${string:component.dependencies}
+		</fail>
+
+		<mkdir dir="tmp2" />
+	    <copyDependencies componentDescriptor="proj_reference_two_profiles.dep.xml"
+	    				   todir="tmp2" 
+	    				   profile="">
+			<dependencies refid="user.path" />
+	    </copyDependencies>
+		
+		<available file="tmp2/a.txt" property="a.av" value="true" />
+		<available file="tmp2/b.txt" property="b.av" value="true" />
+		
+		<fail unless="a.av">Missing a.txt file</fail>
+		<fail unless="b.av">Missing b.txt file</fail>
+		
+	</target>
+
+</project>

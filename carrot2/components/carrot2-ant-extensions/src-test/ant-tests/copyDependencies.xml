@@ -70,6 +70,14 @@
 		</fail>
 	</target>
 
-    
+	<target name="proj_reference_two_profiles" depends="prepare">
+		<description>
+			Tests the ability to reference a single component
+			in to different profiles.
+		</description>
+
+		<ant antfile="deps/proj_reference_two_profiles/build.xml" inheritall="false"
+				target="test" />
+	</target>	    
 
 </project>

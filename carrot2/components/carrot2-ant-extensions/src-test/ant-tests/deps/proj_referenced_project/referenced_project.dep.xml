@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>   
+<!DOCTYPE component PUBLIC "-//Carrot2//DTD Component Dependency Descriptor V1.0//EN" "http://www.cs.put.poznan.pl/dweiss/carrot/component-dependency.dtd" >
+
+<component name="referenced_project">
+
+    <provides profile="a">
+        <files>
+			<file location="a.txt" />
+        </files>
+    </provides>
+
+    <provides profile="b">
+        <files>
+			<file location="b.txt" />
+        </files>
+    </provides>
+
+</component>
