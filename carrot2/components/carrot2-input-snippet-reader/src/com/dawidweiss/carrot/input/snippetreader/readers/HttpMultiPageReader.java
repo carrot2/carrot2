@@ -146,7 +146,13 @@ public class HttpMultiPageReader {
                         RESULTS_PER_PAGE, pageInfo).getText());
 
             if (resultsFound != null) {
-                long results = Long.parseLong(resultsFound);
+                long results = 0;
+                try {
+					results = Long.parseLong(resultsFound);                	
+                } catch (NumberFormatException e) {
+                	throw new IOException("Could not parse results number: "
+                		+ resultsFound);
+                }
 
                 if (resultsNeeded > results) {
                     resultsNeeded = (int) results;
