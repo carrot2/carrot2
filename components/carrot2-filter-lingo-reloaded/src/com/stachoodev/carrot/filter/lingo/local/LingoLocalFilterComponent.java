@@ -1,7 +1,12 @@
 /*
- * LingoLocalFilterComponent.java
- * 
- * Created on 2004-06-29
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
 package com.stachoodev.carrot.filter.lingo.local;
 
@@ -13,13 +18,16 @@ import com.dawidweiss.carrot.core.local.profiling.*;
 import com.stachoodev.carrot.filter.lingo.algorithm.*;
 
 /**
- * @author stachoo
+ * Clustering filter component using the Lingo algorithm.
+ * 
+ * @author Stanislaw Osinski
+ * @version $Revision$
  */
 public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
     implements TokenizedDocumentsConsumer, RawClustersProducer,
     LocalFilterComponent
 {
-    /** Document to be clustered */
+    /** Documents to be clustered */
     private List tokenizedDocuments;
 
     /** And instance of Lingo algorithm */
@@ -33,7 +41,7 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
     /** This component's capabilities */
     private final static Set CAPABILITIES_COMPONENT = new HashSet(Arrays
         .asList(new Object []
-        { TokenizedDocumentsConsumer.class }));
+        { TokenizedDocumentsConsumer.class, RawClustersProducer.class }));
 
     /** Capabilities required from the next component in the chain */
     private final static Set CAPABILITIES_SUCCESSOR = new HashSet(Arrays
@@ -44,7 +52,7 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
     private RawClustersConsumer rawClustersConsumer;
 
     /**
-     * 
+     * Creates a new Lingo filter with default parameters.
      */
     public LingoLocalFilterComponent()
     {
@@ -52,13 +60,16 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
     }
 
     /**
+     * Creates a new Lingo filter with default given parameter map. See
+     * {@link Lingo}for a list of possible parameters.
+     * 
      * @param parameters
      */
     public LingoLocalFilterComponent(Map parameters)
     {
         lingo = new Lingo(parameters);
     }
-    
+
     /*
      * (non-Javadoc)
      * 
@@ -122,6 +133,7 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
         super.flushResources();
 
         tokenizedDocuments.clear();
+        lingo.clear();
         rawClustersConsumer = null;
     }
 
@@ -156,6 +168,7 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
         // Unfortunately, Lingo does not support incremental processing, so we
         // need to wait for all documents to come before we start processing
         startTimer();
+        lingo.setProfile(profile);
         List clusters = lingo.cluster(tokenizedDocuments);
         for (Iterator iter = clusters.iterator(); iter.hasNext();)
         {
