@@ -10,6 +10,7 @@
 
 	<target name="build">
 		<ant antfile="build.remote.xml" inheritall="false" />
+		<ant antfile="build.local.xml" inheritall="false" />
 	</target>    
 
 </project>

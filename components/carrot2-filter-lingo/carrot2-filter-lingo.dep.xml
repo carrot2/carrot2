@@ -13,6 +13,17 @@
             <ant file="build.remote.xml" target="build" />
         </build>
     </provides>
+	
+
+    <provides profile="local">
+        <files build-path-exclude="true" prefix="tmp/dist">
+            <file location="carrot2-filter-lingo.jar" />
+        </files>
+        <build>
+            <ant file="build.local.xml" target="build" />
+        </build>
+    </provides>
+	
 
 	<!-- Carrot2 components -->
     <dependency name="carrot2-license" />

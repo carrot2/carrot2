@@ -1,0 +1,21 @@
+
+<project name="Carrot2 Lingo Clustering Filter (Local)" default="build">
+    
+    <property name="project.dir"      location="${basedir}" />
+    <property name="carrot2.cvs.dir"  location="../.." />
+
+    <property name="dist.name" value="carrot2-filter-lingo" />
+
+    <property name="profile" value="local" />
+    <property name="component.descriptor" location="carrot2-filter-lingo.dep.xml" />
+
+    <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
+
+	<property name="type" value="jartype" />
+
+    <patternset id="src.patternset">
+		<!-- exclude remote classes interfaces -->
+        <exclude name="**/lingo/*.java" />
+    </patternset>
+
+</project>
