@@ -24,3 +24,9 @@
 #DEFAULT (echo ""; id; echo %s; date; cat) >> $CVSROOT/CVSROOT/commitlog
 # or
 #DEFAULT (echo ""; id; echo %{sVv}; date; cat) >> $CVSROOT/CVSROOT/commitlog
+
+carrot2 /usr/lib/cvs/contrib/log -s -f /dev/null -m dawid.weiss@cs.put.poznan.pl %s
+deploy /usr/lib/cvs/contrib/log -s -f /dev/null -m dawid.weiss@cs.put.poznan.pl %s
+docs /usr/lib/cvs/contrib/log -s -f /dev/null -m dawid.weiss@cs.put.poznan.pl %s
+tests /usr/lib/cvs/contrib/log -s -f /dev/null -m dawid.weiss@cs.put.poznan.pl %s
+website /usr/lib/cvs/contrib/log -s -f /dev/null -m dawid.weiss@cs.put.poznan.pl %s
