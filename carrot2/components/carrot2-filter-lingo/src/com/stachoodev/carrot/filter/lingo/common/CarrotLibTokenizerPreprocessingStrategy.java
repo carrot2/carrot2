@@ -18,7 +18,8 @@ import com.dawidweiss.carrot.core.local.linguistic.Language;
 import com.dawidweiss.carrot.core.local.linguistic.Stemmer;
 import com.dawidweiss.carrot.util.common.StringUtils;
 
-import com.stachoodev.carrot.filter.lingo.tokenizer.Tokenizer;
+import com.stachoodev.carrot.filter.lingo.tokenizer.*;
+import com.stachoodev.carrot.filter.lingo.tokenizer.JavaCCTokenizer;
 
 import org.apache.log4j.Logger;
 
@@ -72,7 +73,7 @@ public final class CarrotLibTokenizerPreprocessingStrategy
      * @see com.stachoodev.carrot.filter.lingo.common.PreprocessingStrategy#preprocess(com.stachoodev.carrot.filter.lingo.common.Snippet)
      */
     public Snippet[] preprocess(AbstractClusteringContext clusteringContext) {
-        Tokenizer tokenizer = Tokenizer.getTokenizer();
+        Tokenizer tokenizer = JFlexTokenizer.getTokenizer();
 
         Snippet[] snippets = clusteringContext.getSnippets();
         Snippet[] preprocessedSnippets = new Snippet[snippets.length];
