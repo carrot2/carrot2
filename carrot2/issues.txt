@@ -31,3 +31,9 @@ somehow my Tomcat can not work with xercesImpl.jar which I put in
 WEB-INF/lib of carrot web app. I removed it, so that Tomcat could use 
 its own xml parser. 
 
+3. Tomcat 5.XX and query encoding problems.
+
+You must enforce proper decoding of URI parameters in the connector. You
+can do it by adding this attribute to the connector spec. in servlet.xml
+
+UseBodyEncodingForURI="true"
