@@ -18,13 +18,14 @@ export JAVA_HOME
 export JAVACMD
 export ANT_HOME
 
+# update the code
 for counter in `seq 1 10`; do
     if ant -f build.demo.xml cvsupdate; \
     then
-        echo "CVS Update ok."
+        echo "Code CVS Update ok."
         break
     else
-        echo "CVS Update failed. Sleeping 60 secs."
+        echo "Code CVS Update failed. Sleeping 60 secs."
         sleep 60
     fi
     if (($counter == 10)); then
@@ -32,6 +33,22 @@ for counter in `seq 1 10`; do
         exit
     fi    
 done
+# update the tests (if possible)
+for counter in `seq 1 10`; do
+    if ant -f build.tests.xml cvsupdate; \
+    then
+        echo "Tests CVS Update ok."
+        break
+    else
+        echo "Tests CVS Update failed. Sleeping 60 secs."
+        sleep 60
+    fi
+    if (($counter == 10)); then
+        echo "Problems updating CVS of the tests..." | mail -s "Tests CVS update problem." dawid.weiss@cs.put.poznan.pl
+        # run tests anyway...
+    fi    
+done
+
 
 if ant -Dno.cvsupdate=true -f build.demo.xml \
        -listener org.apache.tools.ant.XmlLogger \
@@ -44,7 +61,16 @@ then
     ant -f build.demo.xml clean.webapps
     ant -f build.demo.xml copy.logs
     ant -f build.demo.xml copy.webapps
-    ant -f build.demo.xml start.tomcat.success
+    # run tomcat in the background, wait and test it immediately
+    (ant -f build.demo.xml start.tomcat.success)&
+    sleep 360
+    if ant -f build.tests.xml build
+    then
+        echo "Tests finished ok."
+    else
+        echo "Tests failed. mail info to admin"
+        echo "Some of the tests failed..." | mail -s "Tests failed." dawid.weiss@cs.put.poznan.pl
+    fi
 else
     # stop tomcat first, restart it in 'failure' mode.
     ant -f build.demo.xml stop.tomcat
