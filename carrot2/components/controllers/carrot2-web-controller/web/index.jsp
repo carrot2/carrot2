@@ -1,12 +1,20 @@
-<%@page contentType="text/html; charset=UTF-8" %>
+<%@page contentType="text/html; charset=UTF-8" 
+        errorPage="/error.jsp"
+%>
 
 <%@include file="jsp-tmpl/prolog-base.txt" %>
 
-<jsp:useBean id="queryBean" scope="session" class="com.dawidweiss.carrot.controller.carrot2.struts.forms.QueryForm" />
+<jsp:useBean id="queryBean" scope="request" class="com.dawidweiss.carrot.controller.carrot2.struts.forms.QueryForm" />
 <jsp:setProperty name="queryBean" property="*" />
 <%
     if (!queryBean.isInitialized())
         queryBean.initialize(application);
+
+	String qry = queryBean.getQuery();
+	if (qry.length() > 1000) {
+		// assume it was a verbatim query and forget it.
+		queryBean.setQuery("");
+	}
 
     // calculate query params.
     StringBuffer buf = new StringBuffer();
