@@ -3,6 +3,8 @@
 <project name="Carrot2 main build file" default="help">
 
   <property file="local-build.properties" />
+  
+  <property name="release.number"   value="1.0-RC1" />
 
   <property name="build.compiler"   value="modern" />
   <property name="javac.optimize"   value="off" />
@@ -95,6 +97,21 @@ BUILDING: @{component.path}
             <include name="**/*" />
         </fileset>
     </copy>
+    
+    <ant antfile="build.xml" dir="applications/carrot2-demo-browser"
+        inheritall="false" inheritrefs="false" target="build" />
+    <copy todir="dist/local">
+        <fileset dir="applications/carrot2-demo-browser/tmp/dist" />
+        <fileset dir="applications/carrot2-demo-browser">
+            <include name="readme*" />
+        </fileset>
+    </copy>
+    
+    <zip basedir="dist/local" 
+        zipfile="dist/carrot2-local-demo-${release.number}.zip" />
+    <zip basedir="dist/remote" 
+        zipfile="dist/carrot2-remote-demo-${release.number}.zip" />
+
   </target>
   
   
