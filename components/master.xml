@@ -22,6 +22,7 @@
   <property name="component.descriptor" location="${project.dir}/${dist.name}.dep.xml" />
   <property name="profile"          value="" />
   
+  <property file="${user.home}/.carrot.properties" />
   <property file="${carrot2.cvs.dir}/local-build.properties" />
 
   <property name="tomcat.url"       value="http://localhost:8080/manager" />
@@ -429,7 +430,9 @@ Tomcat:      ${tomcat.url}
     ### Webapp directory not present in the project: ${src-webapp.path}
     </fail>
     <copy toDir="${build.dir}/type-war">
-        <fileset dir="${src-webapp.path}" />
+        <fileset dir="${src-webapp.path}">
+          <exclude name="WEB-INF/web.xml.template"/>
+        </fileset>
     </copy>
 
     <!-- Create a timestamp of the newest source file. -->

@@ -2,6 +2,7 @@
 
 <project name="Carrot2 main build file" default="help">
 
+  <property file="${user.home}/.carrot.properties" />
   <property file="local-build.properties" />
   
   <property name="release.number"   value="1.0-RC1" />
