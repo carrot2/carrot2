@@ -78,6 +78,8 @@ public class RawClustersMetricsLocalOutputComponent extends
      */
     public void endProcessing() throws ProcessingException
     {
+        startTimer();
+
         List originalRawClusters = (List) requestContext.getRequestParameters()
             .get(RawDocumentsProducer.PARAM_ORIGINAL_RAW_CLUSTERS);
 
@@ -93,6 +95,8 @@ public class RawClustersMetricsLocalOutputComponent extends
                 metricsValues.putAll(metricValues);
             }
         }
+        
+        stopTimer();
 
         super.endProcessing();
     }
