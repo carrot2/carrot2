@@ -35,13 +35,14 @@
                 <lang:pl>Rozbity na rozdziały</lang:pl>
             </a>
             </li>
-
+<!--
             <li>
             <a href="http://www.cs.put.poznan.pl/dweiss/carrot/manual/carrot2-developers-manual.pdf">
                 <lang:en>PDF file generated using <a href="http://www.renderx.com">RenderX's</a> <a href="http://xep.xattic.com/">XEP</a>.</lang:en>
-                <lang:pl>Rozbity na rozdziały</lang:pl>
+                <lang:pl>Plik PDF utworzony przy pomocy XEPa</lang:pl>
             </a>
             </li>
+-->
         </ul>
         
     </chapter>
