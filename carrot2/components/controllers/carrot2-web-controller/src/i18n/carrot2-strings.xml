@@ -42,8 +42,8 @@
             <lang:pl>Szukaj</lang:pl>
         </search>
         <process-chain>
-            <lang:en>Process query using</lang:en>
-            <lang:pl>Przetwarzaj przy pomocy</lang:pl>
+            <lang:en>Process</lang:en>
+            <lang:pl>Proces</lang:pl>
         </process-chain>
         <requested-results>
             <lang:en>Download results</lang:en>
@@ -138,9 +138,11 @@
     	<recent-queries>
             <lang:en>
     		<head>Recent queries</head>
+    		<empty>Lucky you! No previous queries!</empty>
             </lang:en>
             <lang:pl>
     		<head>Ostatnio wydane zapytania</head>
+    		<empty>Szczęściarz! Nie było poprzednich zapytań!</empty>
             </lang:pl>
     	</recent-queries>
     	<welcome>

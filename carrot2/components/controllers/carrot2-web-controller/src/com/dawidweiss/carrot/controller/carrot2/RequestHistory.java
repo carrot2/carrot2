@@ -11,6 +11,7 @@ public final class RequestHistory
 {
     private final Query [] queries;
     private final ProcessDefinition [] processes;
+    private final long [] tstamp;
     private final int max;
     private int position;
     private int last;  
@@ -25,12 +26,14 @@ public final class RequestHistory
         last = 0;
         queries = new Query [ length + 1 ];
         processes = new ProcessDefinition [ length + 1 ];
+        tstamp = new long [ length + 1 ];
         max = length + 1;
     }
 
     public void push(Query query, ProcessDefinition process)
     {
         synchronized (this) {
+            tstamp[position] = System.currentTimeMillis();
             queries[position] = query;
             processes[position] = process;
             position = (position + 1) % max;
@@ -39,6 +42,27 @@ public final class RequestHistory
             }
         }
     }
+
+    public final int getHistory(int max, Query [] query, ProcessDefinition [] process, long [] tstamps)
+    {
+        final int localmax = this.max; 
+        synchronized (this) {
+            int from = last;
+            int k = 0;
+            
+            while (from != position && max > 0) {
+                query[k] = this.queries[from];
+                process[k] = this.processes[from];
+                tstamps[k] = this.tstamp[from];
+                
+                max--;
+                k++;
+                from = (from + 1) % localmax;
+            }
+            return k;
+        }
+    }
+
 
     public int getHistory(int max, Query [] query, ProcessDefinition [] process)
     {
@@ -49,7 +73,7 @@ public final class RequestHistory
             
             while (from != position && max > 0) {
                 query[k] = this.queries[from];
-                process[k] = this.processes[from]; 
+                process[k] = this.processes[from];
                 
                 max--;
                 k++;

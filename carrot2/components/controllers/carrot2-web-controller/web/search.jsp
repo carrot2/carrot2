@@ -80,7 +80,7 @@
                 <select style="font-size: 10px" name="resultsRequested">
                 	<%
                 	int j = queryBean.getResultsRequested();
-                	for (int i=50;i<=400;i+=50) {
+                	for (int i=50;i<=200;i+=50) {
                 		boolean selected = (j>=i && j<i+50);
                 		%><option value="<%= i %>" <%= selected ? "SELECTED" : "" %> ><%= i %></option><%
                 	}
