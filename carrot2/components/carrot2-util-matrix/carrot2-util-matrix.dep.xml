@@ -19,5 +19,6 @@
     <dependency name="carrot2-util-common" />
     <dependency name="carrot2-license" />
     <dependency name="junit" profile="test" />
+    <dependency name="junit-addons" profile="test" />
     
 </component>
