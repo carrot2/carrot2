@@ -544,6 +544,9 @@ ${string:component.dependencies}
         <!-- HACK: we pass javac in classpath because some test cases invoke ant
              in an in-process mode, which skips classpath initialization. -->
         <classpath location="${env.JAVA_HOME}/lib/tools.jar" />
+        <classpath>
+            <fileset dir="${carrot2.cvs.dir}/lib/compile-time" includes="resolver.jar" />
+        </classpath>
         
         <sysproperty key="log4j.configuration" value="file:///${tmp:loggingSettings}"/>
 
