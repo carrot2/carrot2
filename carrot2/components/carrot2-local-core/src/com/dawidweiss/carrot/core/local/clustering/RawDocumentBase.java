@@ -56,6 +56,16 @@ public abstract class RawDocumentBase implements RawDocument, PropertyProvider
     /*
      * (non-Javadoc)
      * 
+     * @see com.dawidweiss.carrot.core.local.clustering.RawDocument#getTitle()
+     */
+    public String getTitle()
+    {
+        return (String) propertyHelper.getProperty(PROPERTY_TITLE);
+    }
+	
+    /*
+     * (non-Javadoc)
+     * 
      * @see com.dawidweiss.carrot.util.common.PropertyProvider#getProperty(java.lang.String)
      */
     public Object getProperty(String name)
