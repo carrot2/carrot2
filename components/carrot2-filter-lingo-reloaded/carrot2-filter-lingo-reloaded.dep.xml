@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE component SYSTEM "../../etc/component-dependency.dtd" >
 
 <component
@@ -39,6 +39,12 @@
     <dependency name="servlets-api"         profile="remote" nocopy="true" />
 	<dependency name="carrot2-util-put"     profile="remote" />
 
+
+	<dependency name="carrot2-util-remote" 	profile="test" />
+	<dependency name="carrot2-language-guesser"         profile="test" />
+	<dependency name="carrot2-filter-case-normalizer" 	profile="test" />
+    <dependency name="servlets-api"         profile="test" nocopy="true" />
+    <dependency name="jdom"                 profile="test" />
     <dependency name="junit" profile="test" />
     <dependency name="junit-addons" profile="test" />
 </component>
