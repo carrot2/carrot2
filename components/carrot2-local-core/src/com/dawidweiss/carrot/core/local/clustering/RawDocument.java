@@ -112,6 +112,14 @@ public interface RawDocument {
     public String getUrl();
 
     /**
+     * Convenience method for accessing {@link #PROPERTY_SNIPPET}.
+     *
+     * @return Returns the value corresponding to {@link #PROPERTY_SNIPPET}
+     *         property.
+     */
+    public String getSnippet();
+
+    /**
      * @return Returns the title of this document  as a {@link
      *         java.lang.String} object.
      */
