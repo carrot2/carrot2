@@ -29,10 +29,7 @@ BUILDING FROM SOURCES
 =====================
 
 In order to build Carrot2's components, you must have ANT in your path. We use 
-ANT 1.6.2, previous versions are not supported but may work. Apache Resolver library
-must be present in ANT's classpath. The resolver JAR can be downloaded from:
-
-http://xml.apache.org/commons/components/resolver/
+ANT 1.6.2, previous versions are not supported but may work. 
 
 Carrot2 components can work in two architecture designs: as remote components
 using HTTP and as local Java components.

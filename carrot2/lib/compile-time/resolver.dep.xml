@@ -1,0 +1,9 @@
+
+<component name="resolver" description="Apache Resolver, http://xml.apache.org/commons/components/resolver/">
+	<provides>
+		<files>
+			<file location="resolver.jar" />
+			<file location="resolver.LICENSE" />
+		</files>
+	</provides>
+</component>

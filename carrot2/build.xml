@@ -312,6 +312,7 @@ FORMATTING: @{component.path}
 
     <path id="bootstrap">
         <fileset dir="components/carrot2-ant-extensions/tmp" includes="*.jar" />
+        <fileset dir="lib/compile-time" includes="resolver.jar" />
     </path>
 
     <taskdef name="bringToDate" 

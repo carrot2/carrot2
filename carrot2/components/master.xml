@@ -89,16 +89,6 @@
   </target>
   
   <target name="check.bootstrap">
-    <available classname="org.apache.xml.resolver.tools.CatalogResolver" property="resolver.available" />
-    <fail unless="resolver.available">
-#
-# URI RESOLVER NOT AVAILABLE. Please download Apache Resolver JAR and place it in
-# ANT's lib folder.
-#
-# http://xml.apache.org/commons/components/resolver/
-#
-    </fail>
-  
     <!-- Set to true if bootstrap jar is available. -->
     <condition property="tmp:bootstrap.available" value="true">
         <or>
@@ -145,6 +135,7 @@
         <fileset dir="${carrot2.cvs.dir}/components/carrot2-ant-extensions/tmp">
             <include name="*.jar" />
         </fileset>
+        <fileset dir="${carrot2.cvs.dir}/lib/compile-time" includes="resolver.jar" />        
     </path>
 
     <taskdef name="bringToDate" 
@@ -548,7 +539,6 @@ ${string:component.dependencies}
         <formatter type="xml"/>
         <classpath refid="classpath.dependencies" />
         <classpath location="${build.dir}/${build.type}" />
-
         <classpath refid="classpath.local" />
 
         <!-- HACK: we pass javac in classpath because some test cases invoke ant
