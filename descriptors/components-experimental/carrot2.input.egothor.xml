@@ -4,19 +4,19 @@
          framework  = "Carrot2"
 >
 
+	<!--
+	is dundee source obsolete?
     <component id               = "carrot2.input.egothor.dundee"
                type             = "input"
                serviceURL       = "http://www.egothor.dundee.ac.uk/egothor-somis/c2.jsp"
                infoURL          = "http://www.egothor.org/"
     />
-    
+    -->
 
     <component id               = "carrot2.input.egothor.cs-only"
                type             = "input"
-               serviceURL       = "http://carrot.cs.put.poznan.pl/crawler/c2.jsp"
+               serviceURL       = "http://carrot.cs.put.poznan.pl/egothor/e2c"
                infoURL          = "http://www.egothor.org/"
     />
-
-
 
 </service>
