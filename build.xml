@@ -148,7 +148,8 @@ TESTING: @{component.path}
     <component-apply component.path="components/carrot2-filter-fuzzyants" />
     <component-apply component.path="components/carrot2-filter-stc" />
     <component-apply component.path="components/carrot2-filter-stemmer" />
-    
+    <component-apply component.path="components/carrot2-filter-trc" />
+
     <component-apply component.path="components/carrot2-filter-stream-interceptor" />
     <component-apply component.path="components/carrot2-output-xsltrenderer" />
 
