@@ -26,16 +26,21 @@ public class RawDocumentSnippet extends RawDocumentBase implements Cloneable
     /** Document title */
     private String title;
 
+    /** Document id */
+    private Object id;
+
+    /** Document score */
+    private float score;
+
     /**
-     * Creates a new RawDocumentSnippet with given title and description.
+     * Creates a new RawDocumentSnippet with given title and snippet.
      * 
      * @param title
      * @param snippet
      */
     public RawDocumentSnippet(String title, String snippet)
     {
-        this.title = title;
-        setProperty(PROPERTY_SNIPPET, snippet);
+        this(null, title, snippet, null, -1);
     }
 
     /**
@@ -48,6 +53,26 @@ public class RawDocumentSnippet extends RawDocumentBase implements Cloneable
         setProperty(RawDocument.PROPERTY_LANGUAGE, language);
     }
 
+    /**
+     * Creates a new RawDocumentSnippet with given id, title, snippet url and
+     * score.
+     * 
+     * @param id
+     * @param title
+     * @param snippet
+     * @param url
+     * @param score
+     */
+    public RawDocumentSnippet(Object id, String title, String snippet,
+        String url, float score)
+    {
+        this.id = id;
+        this.title = title;
+        this.score = score;
+        propertyHelper.setProperty(PROPERTY_URL, url);
+        propertyHelper.setProperty(PROPERTY_SNIPPET, snippet);
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -55,7 +80,7 @@ public class RawDocumentSnippet extends RawDocumentBase implements Cloneable
      */
     public Object getId()
     {
-        return null;
+        return id;
     }
 
     /*
@@ -65,7 +90,17 @@ public class RawDocumentSnippet extends RawDocumentBase implements Cloneable
      */
     public String getUrl()
     {
-        return null;
+        return (String) getProperty(PROPERTY_URL);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.dawidweiss.carrot.core.local.clustering.RawDocument#getScore()
+     */
+    public float getScore()
+    {
+        return score;
     }
 
     /*
@@ -111,12 +146,19 @@ public class RawDocumentSnippet extends RawDocumentBase implements Cloneable
         }
 
         RawDocumentSnippet otherSnippet = (RawDocumentSnippet) obj;
+
+        // Try the id first
+        if (id != null && otherSnippet.id != null)
+        {
+            return id.equals(otherSnippet.id);
+        }
+
         boolean result = true;
         if (title != null)
         {
             result = result && title.equals(otherSnippet.title);
         }
-        if (otherSnippet != null)
+        if (getSnippet() != null)
         {
             result = result && getSnippet().equals(otherSnippet.getSnippet());
         }
@@ -131,6 +173,12 @@ public class RawDocumentSnippet extends RawDocumentBase implements Cloneable
      */
     public int hashCode()
     {
+        // Try the id first
+        if (id != null)
+        {
+            return id.hashCode();
+        }
+        
         // Try with the title first
         if (title != null && !title.equals(""))
         {
@@ -153,7 +201,7 @@ public class RawDocumentSnippet extends RawDocumentBase implements Cloneable
      */
     public Object clone() throws CloneNotSupportedException
     {
-        RawDocumentSnippet obj = new RawDocumentSnippet(title, null);
+        RawDocumentSnippet obj = new RawDocumentSnippet(id, title, null, null, score);
         obj.propertyHelper = (PropertyHelper) propertyHelper.clone();
         return obj;
     }
