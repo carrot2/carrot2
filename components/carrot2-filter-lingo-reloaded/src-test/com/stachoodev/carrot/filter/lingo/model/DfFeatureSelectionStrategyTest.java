@@ -7,7 +7,6 @@ import java.util.*;
 
 import com.dawidweiss.carrot.core.local.clustering.*;
 import com.dawidweiss.carrot.util.tokenizer.*;
-import com.dawidweiss.carrot.util.tokenizer.parser.*;
 import com.stachoodev.carrot.filter.lingo.model.DfFeatureSelectionStrategy;
 import com.stachoodev.carrot.filter.lingo.model.ExtendedToken;
 import com.stachoodev.carrot.filter.lingo.model.FeatureSelectionStrategy;
@@ -93,7 +92,8 @@ public class DfFeatureSelectionStrategyTest extends TestCase
             3, titleDfMultiplier);
 
         // Expected output
-        ExtendedToken a = createTokenStem("a", titleDfMultiplier + 1);
+        ExtendedToken a = ModelTestUtils.createTokenStem(0,
+            ExtendedToken.PROPERTY_DF, "a", titleDfMultiplier + 1);
 
         List expectedTokenList = Arrays.asList(new ExtendedToken []
         { a });
@@ -123,15 +123,65 @@ public class DfFeatureSelectionStrategyTest extends TestCase
             3, titleDfMultiplier);
 
         // Expected output
-        ExtendedToken a = createTokenStem("a", 2 * titleDfMultiplier);
-        ExtendedToken b = createTokenStem("b", titleDfMultiplier + 1);
-        ExtendedToken e = createTokenStem("e", 3);
+        ExtendedToken a = ModelTestUtils.createTokenStem(0,
+            ExtendedToken.PROPERTY_DF, "a", 2 * titleDfMultiplier);
+        ExtendedToken b = ModelTestUtils.createTokenStem(1,
+            ExtendedToken.PROPERTY_DF, "b", titleDfMultiplier + 1);
+        ExtendedToken e = ModelTestUtils.createTokenStem(2,
+            ExtendedToken.PROPERTY_DF, "e", 3);
 
         List expectedTokenList = Arrays.asList(new ExtendedToken []
         { a, b, e });
 
         List selectedTokenList = featureSelectionStrategy
             .getSelectedFeatures(documentList);
+        assertEquals("More tokens in selected terms list", expectedTokenList,
+            selectedTokenList);
+    }
+
+    /**
+     *  
+     */
+    public void testFiltering()
+    {
+        TokenizedDocument document1 = snippetTokenizer
+            .tokenize(new RawDocumentSnippet("a title of a document",
+                "a snippet of a document", "en"));
+        TokenizedDocument document2 = snippetTokenizer
+            .tokenize(new RawDocumentSnippet("another title of a document",
+                "another snippet of a document", "en"));
+        TokenizedDocument document3 = snippetTokenizer
+            .tokenize(new RawDocumentSnippet("sentence separators",
+                "one . two . ! three . . . ", "en"));
+        List documentList = Arrays.asList(new TokenizedDocument []
+        { document1, document2, document3 });
+
+        FeatureSelectionStrategy featureSelectionStrategy = new DfFeatureSelectionStrategy(
+            2, 1);
+
+        // Expected output
+        ExtendedToken titl = ModelTestUtils.createTokenStem(0,
+            ExtendedToken.PROPERTY_DF, "titl", 2.0,
+            new String []
+            { "title"}, new double []
+            { 2.0 });
+        ExtendedToken document = ModelTestUtils.createTokenStem(1,
+            ExtendedToken.PROPERTY_DF, "document", 2.0,
+            new String []
+            { "document" }, new double []
+            { 2.0 });
+        ExtendedToken snippet = ModelTestUtils.createTokenStem(2,
+            ExtendedToken.PROPERTY_DF, "snippet", 2.0,
+            new String []
+            { "snippet" }, new double []
+            { 2.0 });
+
+        List expectedTokenList = Arrays.asList(new ExtendedToken []
+        { titl, document, snippet});
+
+        List selectedTokenList = featureSelectionStrategy
+            .getSelectedFeatures(documentList);
+
         assertEquals("More tokens in selected terms list", expectedTokenList,
             selectedTokenList);
     }
@@ -157,15 +207,18 @@ public class DfFeatureSelectionStrategyTest extends TestCase
             3, titleDfMultiplier);
 
         // Expected output
-        ExtendedToken titl = createTokenStem("titl", 2 * titleDfMultiplier,
+        ExtendedToken titl = ModelTestUtils.createTokenStem(0,
+            ExtendedToken.PROPERTY_DF, "titl", 2 * titleDfMultiplier,
             new String []
             { "titled", "title", "titles" }, new double []
             { titleDfMultiplier, titleDfMultiplier, 2.0 });
-        ExtendedToken identicalStem = createTokenStem("identical01stem",
+        ExtendedToken identicalStem = ModelTestUtils.createTokenStem(1,
+            ExtendedToken.PROPERTY_DF, "identical01stem",
             titleDfMultiplier + 2, new String []
             { "identical01stem" }, new double []
             { titleDfMultiplier + 2 });
-        ExtendedToken c = createTokenStem("c", titleDfMultiplier + 1,
+        ExtendedToken c = ModelTestUtils.createTokenStem(2,
+            ExtendedToken.PROPERTY_DF, "c", titleDfMultiplier + 1,
             new String []
             { "c" }, new double []
             { titleDfMultiplier + 1 });
@@ -175,53 +228,8 @@ public class DfFeatureSelectionStrategyTest extends TestCase
 
         List selectedTokenList = featureSelectionStrategy
             .getSelectedFeatures(documentList);
-        
+
         assertEquals("More tokens in selected terms list", expectedTokenList,
             selectedTokenList);
-    }
-
-    /**
-     * @param stem
-     * @param stemDf
-     * @param originalTokens
-     * @param originalDf
-     * @return
-     */
-    private ExtendedToken createTokenStem(String stem, double stemDf,
-        String [] originalTokens, double [] originalDf)
-    {
-        StringTypedToken token = new StringTypedToken();
-        token.assign(stem, (short) 0);
-        ExtendedToken extendedTokenStem = new ExtendedToken(
-            new TokenStem(token));
-        extendedTokenStem.setDoubleProperty(ExtendedToken.PROPERTY_DF, stemDf);
-
-        List originalExtendedTokens = new ArrayList(originalTokens.length);
-        for (int i = 0; i < originalTokens.length; i++)
-        {
-            StringTypedToken originalToken = new StringTypedToken();
-            originalToken.assign(originalTokens[i], (short) 0);
-            ExtendedToken originalExtendedToken = new ExtendedToken(
-                originalToken);
-            originalExtendedToken.setDoubleProperty(ExtendedToken.PROPERTY_DF,
-                originalDf[i]);
-            originalExtendedTokens.add(originalExtendedToken);
-        }
-        extendedTokenStem.setProperty(ExtendedToken.PROPERTY_ORIGINAL_TOKENS,
-            originalExtendedTokens);
-
-        return extendedTokenStem;
-    }
-
-    /**
-     * @param stem
-     * @param stemDf
-     * @return
-     */
-    private ExtendedToken createTokenStem(String stem, double stemDf)
-    {
-        return createTokenStem(stem, stemDf, new String []
-        { stem }, new double []
-        { stemDf });
     }
 }
