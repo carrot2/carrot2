@@ -16,6 +16,7 @@
 
     <dependency name="log4j" />
     <dependency name="junit" profile="test" />
+    <dependency name="junit-addons" profile="test" />
     <dependency name="carrot2-license" />
     
 </component>
