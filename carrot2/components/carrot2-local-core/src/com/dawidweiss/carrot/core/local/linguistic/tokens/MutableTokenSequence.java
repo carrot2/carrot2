@@ -22,6 +22,9 @@ public class MutableTokenSequence implements TokenSequence
 {
     /** Tokens */
     private List tokens;
+    
+    /** String image of this MutableTokenSequence */
+    private String image;
 
     /**
      * Creates an empty MutableTokenSequence.
@@ -77,7 +80,7 @@ public class MutableTokenSequence implements TokenSequence
     {
         tokens.set(index, token);
     }
-    
+
     /*
      * (non-Javadoc)
      * 
@@ -182,15 +185,19 @@ public class MutableTokenSequence implements TokenSequence
      */
     public String toString()
     {
-        StringBuffer stringBuffer = new StringBuffer();
-
-        for (Iterator tokensIter = tokens.iterator(); tokensIter.hasNext();)
+        if (image == null)
         {
-            Token token = (Token) tokensIter.next();
-            token.appendTo(stringBuffer);
-            stringBuffer.append(" ");
+            StringBuffer stringBuffer = new StringBuffer();
+            for (Iterator tokensIter = tokens.iterator(); tokensIter.hasNext();)
+            {
+                Token token = (Token) tokensIter.next();
+                token.appendTo(stringBuffer);
+                stringBuffer.append(" ");
+            }
+            
+            image = stringBuffer.toString();
         }
 
-        return stringBuffer.toString();
+        return image;
     }
 }
