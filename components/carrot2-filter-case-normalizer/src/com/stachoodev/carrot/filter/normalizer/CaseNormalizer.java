@@ -202,7 +202,9 @@ public class CaseNormalizer
     private void normalizeTokenSequence(MutableTokenSequence tokenSequence,
         Map normalizedTokens)
     {
-        if (tokenSequence == null)
+        // TODO: normalizedTokens should not be null but it is for some
+        // reason when clustering web contsnt
+        if (tokenSequence == null || normalizedTokens == null)
         {
             return;
         }
@@ -210,6 +212,7 @@ public class CaseNormalizer
         for (int t = 0; t < tokenSequence.getLength(); t++)
         {
             TypedToken token = (TypedToken) tokenSequence.getTokenAt(t);
+
             StringTypedToken normalizedToken = (StringTypedToken) normalizedTokens
                 .get(token);
 
