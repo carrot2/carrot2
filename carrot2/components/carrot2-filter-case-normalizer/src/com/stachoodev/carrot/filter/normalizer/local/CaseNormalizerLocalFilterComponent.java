@@ -20,21 +20,8 @@ import com.stachoodev.carrot.filter.normalizer.*;
 /**
  * Brings the case of all tokens in all input tokenized documents's titles and
  * snippets to one common form. This process can be thought of as 'stemming for
- * case'. A home-grown heuristic algorithm is used, which does the following:
- * 
- * <ul>
- * <li>transforms all stop words to lower case
- * <li>detects acronyms and chooses the most frequent capitalization (e.g.
- * MySQL)
- * <li>transforms all remaining non stop words to a capitalized form
- * </ul>
- * 
- * All input tokens must be subclasses of
- * {@link com.dawidweiss.carrot.util.tokenizer.parser.StringTypedToken}
- * interface. The input documents will get <b>modified </b>--their tokens will
- * get overwritten with case-normalized versions. Token types will be preserved.
- * No support is provided for the full text of documents. This class is <b>not
- * </b> thread-safe.
+ * case'. Two different alorithms can be used here, see implementations of
+ * {@link com.stachoodev.carrot.filter.normalizer.CaseNormalizer}. 
  * 
  * @author Stanislaw Osinski
  * @version $Revision$
@@ -64,6 +51,24 @@ public class CaseNormalizerLocalFilterComponent extends
     /** Normalization engine */
     private CaseNormalizer caseNormalizer;
 
+    /**
+     * Creates the case normalizer filter with the default instance of 
+     * {@link SimpleCaseNormalizer} algorithm.
+     */
+    public CaseNormalizerLocalFilterComponent()
+    {
+        caseNormalizer = new SimpleCaseNormalizer();
+    }
+    
+    /**
+     * Creates the case normalizer filter with given implementation of
+     * @link CaseNormalizer.
+     */
+    public CaseNormalizerLocalFilterComponent(CaseNormalizer caseNormalizer)
+    {
+        this.caseNormalizer = caseNormalizer;
+    }
+    
     /*
      * (non-Javadoc)
      * 
@@ -73,7 +78,6 @@ public class CaseNormalizerLocalFilterComponent extends
         throws InstantiationException
     {
         super.init(context);
-        caseNormalizer = new CaseNormalizer();
     }
 
     /*
