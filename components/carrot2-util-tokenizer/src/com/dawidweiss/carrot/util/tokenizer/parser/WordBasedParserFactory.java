@@ -13,7 +13,6 @@ package com.dawidweiss.carrot.util.tokenizer.parser;
 import org.apache.commons.pool.*;
 import org.apache.commons.pool.impl.*;
 
-import com.dawidweiss.carrot.util.tokenizer.parser.javacc.*;
 import com.dawidweiss.carrot.util.tokenizer.parser.jflex.*;
 
 /**
@@ -27,9 +26,6 @@ import com.dawidweiss.carrot.util.tokenizer.parser.jflex.*;
  */
 public class WordBasedParserFactory
 {
-    /** JavaCC-generated parser. Slow not recommended */
-    public static final WordBasedParserFactory JavaCC = new WordBasedParserFactory().new JavaCCWordBasedParserFactory();
-
     /** JFlex-generated parser. Fast and recommended */
     public static final WordBasedParserFactory JFlex = new WordBasedParserFactory().new JFlexWordBasedParserFactory();
 
@@ -72,25 +68,6 @@ public class WordBasedParserFactory
         catch (Exception e)
         {
             throw new RuntimeException("Cannot return a parser", e);
-        }
-    }
-
-    /**
-     * @author Stanislaw Osinski
-     * @version $Revision$
-     */
-    private class JavaCCWordBasedParserFactory extends WordBasedParserFactory
-    {
-        public JavaCCWordBasedParserFactory()
-        {
-            parserPool = new SoftReferenceObjectPool(
-                new BasePoolableObjectFactory()
-                {
-                    public Object makeObject() throws Exception
-                    {
-                        return new JavaCCWordBasedParser();
-                    }
-                });
         }
     }
 
