@@ -29,7 +29,7 @@ insert-file.x-carrot-clustering-plain-linguistic.example=${carrot2.cvs.dir}/sche
 # component-descriptors.xml
 
 insert-file.component-descriptor.schema=${carrot2.cvs.dir}/schema/component-descriptor.xsd
-insert-file.component-descriptor.example=${carrot2.cvs.dir}/descriptors/components-stable/carrot2.output.xslt-renderer.dynamic-tree.xml
+insert-file.component-descriptor.example=${carrot2.cvs.dir}/remote-descriptors/components-stable/carrot2.output.xslt-renderer.dynamic-tree.xml
 
 # cache and cache examples.
 
