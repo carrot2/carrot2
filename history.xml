@@ -8,6 +8,14 @@
 
 <history>
     <changelist>
+        <date>2003-11-27</date>
+        <committer>dawid</committer>
+        <change component="carrot2.controller.carrot2-web" type="new">
+        Recent queries now contains dates. Queries limited to 200 snippets.
+        </change>
+	</changelist>
+
+    <changelist>
         <date>2003-11-26</date>
         <committer>dawid</committer>
         <change component="carrot2.controller.carrot2-web" type="new">
