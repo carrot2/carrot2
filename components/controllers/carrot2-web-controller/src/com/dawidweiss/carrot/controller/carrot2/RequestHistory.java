@@ -47,17 +47,19 @@ public final class RequestHistory
     {
         final int localmax = this.max; 
         synchronized (this) {
-            int from = last;
+            int from = position;
             int k = 0;
             
-            while (from != position && max > 0) {
+            while (from != last && max > 0) {
+            	from = from - 1;
+            	if (from == -1) from = this.max-1;
+
                 query[k] = this.queries[from];
                 process[k] = this.processes[from];
                 tstamps[k] = this.tstamp[from];
                 
                 max--;
                 k++;
-                from = (from + 1) % localmax;
             }
             return k;
         }
@@ -68,16 +70,18 @@ public final class RequestHistory
     {
         final int localmax = this.max; 
         synchronized (this) {
-            int from = last;
+            int from = position;
             int k = 0;
             
-            while (from != position && max > 0) {
+            while (from != last && max > 0) {
+            	from = from - 1;
+            	if (from == -1) from = this.max-1;
+
                 query[k] = this.queries[from];
                 process[k] = this.processes[from];
                 
                 max--;
                 k++;
-                from = (from + 1) % localmax;
             }
             return k;
         }
