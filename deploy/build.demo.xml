@@ -91,6 +91,14 @@
                 <exclude name=".cvsignore" />
             </fileset>
         </delete>
+        <delete failonerror="false" includeemptydirs="true" quiet="true">
+            <fileset dir="${runtime.env}">
+                <include name="work/**/*.*" />
+                <include name="temp/**/*.*" />
+                <include name="logs/**/*.*" />
+                <exclude name="**/.cvsignore" />
+            </fileset>
+        </delete>
     </target>
 
     <target name="copy.webapps">
