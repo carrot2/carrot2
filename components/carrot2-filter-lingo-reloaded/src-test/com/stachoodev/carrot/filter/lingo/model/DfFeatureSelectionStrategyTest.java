@@ -1,20 +1,28 @@
 /*
- * DfFeatureSelectionStrategyTest.java Created on 2004-05-16
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
 package com.stachoodev.carrot.filter.lingo.model;
 
 import java.util.*;
 
 import com.dawidweiss.carrot.core.local.clustering.*;
+import com.dawidweiss.carrot.core.local.linguistic.tokens.*;
 import com.dawidweiss.carrot.util.tokenizer.*;
 import com.stachoodev.carrot.filter.lingo.model.DfFeatureSelectionStrategy;
-import com.stachoodev.carrot.filter.lingo.model.ExtendedToken;
 import com.stachoodev.carrot.filter.lingo.model.FeatureSelectionStrategy;
 
 import junit.framework.*;
 
 /**
- * @author stachoo
+ * @author Stanislaw Osinski
+ * @version $Revision$
  */
 public class DfFeatureSelectionStrategyTest extends TestCase
 {
@@ -63,7 +71,7 @@ public class DfFeatureSelectionStrategyTest extends TestCase
     public void testNoTokens()
     {
         TokenizedDocument document1 = snippetTokenizer
-            .tokenize(new RawDocumentSnippet("a b", "a d e"));
+            .tokenize(new RawDocumentSnippet("aa bb", "aa dd ee"));
         List documentList = Arrays.asList(new TokenizedDocument []
         { document1 });
 
@@ -80,9 +88,9 @@ public class DfFeatureSelectionStrategyTest extends TestCase
     {
         // Input documents
         TokenizedDocument document1 = snippetTokenizer
-            .tokenize(new RawDocumentSnippet("a b", "a c"));
+            .tokenize(new RawDocumentSnippet("aa bb", "aa cc"));
         TokenizedDocument document2 = snippetTokenizer
-            .tokenize(new RawDocumentSnippet("e e", "a d e"));
+            .tokenize(new RawDocumentSnippet("ee ee", "aa dd ee"));
         List documentList = Arrays.asList(new TokenizedDocument []
         { document1, document2 });
 
@@ -93,7 +101,7 @@ public class DfFeatureSelectionStrategyTest extends TestCase
 
         // Expected output
         ExtendedToken a = ModelTestUtils.createTokenStem(0,
-            ExtendedToken.PROPERTY_DF, "a", titleDfMultiplier + 1);
+            ExtendedToken.PROPERTY_DF, "aa", titleDfMultiplier + 1);
 
         List expectedTokenList = Arrays.asList(new ExtendedToken []
         { a });
@@ -110,11 +118,11 @@ public class DfFeatureSelectionStrategyTest extends TestCase
     public void testMoreTokens()
     {
         TokenizedDocument document1 = snippetTokenizer
-            .tokenize(new RawDocumentSnippet("a b", "e d"));
+            .tokenize(new RawDocumentSnippet("aa bb", "ee dd"));
         TokenizedDocument document2 = snippetTokenizer
-            .tokenize(new RawDocumentSnippet("a", "e d"));
+            .tokenize(new RawDocumentSnippet("aa", "ee dd"));
         TokenizedDocument document3 = snippetTokenizer
-            .tokenize(new RawDocumentSnippet("c", "e b e"));
+            .tokenize(new RawDocumentSnippet("cc", "ee bb ee"));
         List documentList = Arrays.asList(new TokenizedDocument []
         { document1, document2, document3 });
 
@@ -124,11 +132,11 @@ public class DfFeatureSelectionStrategyTest extends TestCase
 
         // Expected output
         ExtendedToken a = ModelTestUtils.createTokenStem(0,
-            ExtendedToken.PROPERTY_DF, "a", 2 * titleDfMultiplier);
+            ExtendedToken.PROPERTY_DF, "aa", 2 * titleDfMultiplier);
         ExtendedToken b = ModelTestUtils.createTokenStem(1,
-            ExtendedToken.PROPERTY_DF, "b", titleDfMultiplier + 1);
+            ExtendedToken.PROPERTY_DF, "bb", titleDfMultiplier + 1);
         ExtendedToken e = ModelTestUtils.createTokenStem(2,
-            ExtendedToken.PROPERTY_DF, "e", 3);
+            ExtendedToken.PROPERTY_DF, "ee", 3);
 
         List expectedTokenList = Arrays.asList(new ExtendedToken []
         { a, b, e });
@@ -193,12 +201,12 @@ public class DfFeatureSelectionStrategyTest extends TestCase
     {
         TokenizedDocument document1 = snippetTokenizer
             .tokenize(new RawDocumentSnippet("title identical01stem",
-                "c body titles", "en"));
+                "cc body titles", "en"));
         TokenizedDocument document2 = snippetTokenizer
             .tokenize(new RawDocumentSnippet("titled",
                 "identical01stem body bodys bodied titles", "en"));
         TokenizedDocument document3 = snippetTokenizer
-            .tokenize(new RawDocumentSnippet("c", "c identical01stem c", "en"));
+            .tokenize(new RawDocumentSnippet("cc", "cc identical01stem cc", "en"));
         List documentList = Arrays.asList(new TokenizedDocument []
         { document1, document2, document3 });
 
@@ -218,9 +226,9 @@ public class DfFeatureSelectionStrategyTest extends TestCase
             { "identical01stem" }, new double []
             { titleDfMultiplier + 2 });
         ExtendedToken c = ModelTestUtils.createTokenStem(2,
-            ExtendedToken.PROPERTY_DF, "c", titleDfMultiplier + 1,
+            ExtendedToken.PROPERTY_DF, "cc", titleDfMultiplier + 1,
             new String []
-            { "c" }, new double []
+            { "cc" }, new double []
             { titleDfMultiplier + 1 });
 
         List expectedTokenList = Arrays.asList(new ExtendedToken []
