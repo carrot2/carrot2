@@ -10,10 +10,10 @@ package com.paulodev.carrot.treeSnippetMiner.treeAnalyser.tokenFeature;
  */
 
 import java.util.*;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import com.paulodev.carrot.treeSnippetMiner.treeAnalyser.snippetTokenizer.Token;
 import com.paulodev.carrot.treeExtractor.extractors.TreeExtractor;
-import java.net.*;
 import java.io.*;
 
 public class IsURLCalc
@@ -25,17 +25,14 @@ public class IsURLCalc
 
     public double innerCalcValue(Token t, Vector strings) {
         int urlCount = 0;
-        System.out.println("Checking URLs: ");
         for (int i = 0; i < strings.size(); i++) {
             String toCheck = ((String)strings.get(i)).toLowerCase();
             try
             {
                 toCheck = TreeExtractor.clearURL(toCheck);
                 URL temp = new URL(toCheck);
-                System.out.print(".");
                 HttpURLConnection res = (HttpURLConnection) temp.openConnection();
-                res.setFollowRedirects(false);
-//                res.getContent();
+                HttpURLConnection.setFollowRedirects(false);
                 urlCount++;
             }
             catch (IOException ex1)
@@ -43,7 +40,6 @@ public class IsURLCalc
                 // not an URL :(
             }
         }
-        System.out.println(" done");
         return (double) urlCount / (double) strings.size();
     }
 }

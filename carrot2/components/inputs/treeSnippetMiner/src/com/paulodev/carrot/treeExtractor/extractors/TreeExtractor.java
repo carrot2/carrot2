@@ -13,6 +13,8 @@ import java.util.*;
 import org.apache.log4j.*;
 import org.jdom.*;
 import org.put.util.xml.*;
+
+import com.paulodev.carrot.treeExtractor.extractors.SearchItem.SearchItemOccurence;
 import com.paulodev.carrot.util.html.parser.*;
 import java.net.*;
 
@@ -289,23 +291,23 @@ public class TreeExtractor
                         SearchItemOccurence)en.nextElement();
                     BuilderHelper bh = (BuilderHelper)items.get(oc.
                         getSearchItem().getName());
-                    if (oc.getKind() == oc.KIND_ATTRIBUTE)
+                    if (oc.getKind() == SearchItemOccurence.KIND_ATTRIBUTE)
                     {
                         bh.value = bh.value +
                             akt.matchNode.getAttribute(oc.getField().
                             toLowerCase());
                     }
-                    else if (oc.getKind() == oc.KIND_BEGINAFTER)
+                    else if (oc.getKind() == SearchItemOccurence.KIND_BEGINAFTER)
                     {
                         bh.started = akt.matchNode;
                         bh.after = true;
                     }
-                    else if (oc.getKind() == oc.KIND_BEGINON)
+                    else if (oc.getKind() == SearchItemOccurence.KIND_BEGINON)
                     {
                         bh.started = akt.matchNode;
                         bh.after = false;
                     }
-                    else if (oc.getKind() == oc.KIND_ENDBEFORE && bh.started != null)
+                    else if (oc.getKind() == SearchItemOccurence.KIND_ENDBEFORE && bh.started != null)
                     {
                         StringBuffer sb = new StringBuffer();
                         traverseTree2(bh.started, !bh.after, akt.matchNode, false,
@@ -315,7 +317,7 @@ public class TreeExtractor
                         bh.started = akt.matchNode;
                         bh.after = true;
                     }
-                    else if (oc.getKind() == oc.KIND_INSIDE)
+                    else if (oc.getKind() == SearchItemOccurence.KIND_INSIDE)
                     {
                         akt.matchNode.hide();
                         bh.value = bh.value + akt.matchNode.toString();
