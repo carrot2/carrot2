@@ -8,4 +8,12 @@
     <property name="tests.available"  value="true"    />
 
     <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
+    
+    
+    <target name="benchmark">
+        <ant target="run.class"
+             antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" inheritrefs="true">
+             <property name="run.class.name" value="com.stachoodev.matrix.factorization.MatrixFactorizationBenchmark" />
+        </ant>
+    </target>
 </project>
