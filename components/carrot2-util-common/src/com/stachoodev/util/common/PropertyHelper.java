@@ -34,6 +34,17 @@ public class PropertyHelper implements PropertyProvider, Cloneable
         return properties;
     }
     
+    /**
+     * 
+     */
+    public void clear()
+    {
+        if (properties != null)
+        {
+            properties.clear();
+        }
+    }
+    
     /*
      * (non-Javadoc)
      * 
