@@ -98,18 +98,6 @@ the configuration of input/ output data formats for this component.
     
 
     <xs:complexType name="component-specification">
-        <xs:sequence>
-            <xs:element name="acceptInput" minOccurs="0" maxOccurs="1">
-                <xs:complexType>
-                    <xs:attribute name="mime" type="xs:string" use="required" />
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="produceOutput" minOccurs="0" maxOccurs="1">
-                <xs:complexType>
-                    <xs:attribute name="mime" type="xs:string" use="required" />
-                </xs:complexType>
-            </xs:element>
-        </xs:sequence>
         <xs:attribute name="componentId" type="xs:NCName" use="required" />
     </xs:complexType>
 

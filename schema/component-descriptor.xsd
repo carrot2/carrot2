@@ -36,13 +36,6 @@ as MIME types.
         </xs:annotation>
 
         <xs:complexType>
-            <xs:sequence>
-                <xs:element name="acceptedFormat" type="streamFormat"
-                            minOccurs="0" maxOccurs="unbounded" />
-                <xs:element name="producedFormat" type="streamFormat"
-                            minOccurs="0" maxOccurs="unbounded" />
-            </xs:sequence>
-    
             <xs:attribute name="id"  type="xs:string" use="required"/>
             <xs:attribute name="type"  type="ComponentType" use="required" />
             <xs:attribute name="serviceURL" type="xs:anyURI" use="required"/>
