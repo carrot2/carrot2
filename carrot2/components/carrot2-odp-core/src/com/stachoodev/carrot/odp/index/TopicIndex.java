@@ -15,7 +15,8 @@ public interface TopicIndex
     /**
      * Returns a list of {@link String}s denoting relative locations of files
      * containing topics specified in the query. If no locations have been
-     * identified for given query, <code>null</code> will be returned.
+     * identified for given query, a non- <code>null</code> empty list must be
+     * returned.
      * 
      * @param query
      * @return
