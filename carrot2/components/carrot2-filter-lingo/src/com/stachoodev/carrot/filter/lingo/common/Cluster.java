@@ -357,4 +357,8 @@ public class Cluster implements Comparable {
     public void setOtherTopics(boolean b) {
         otherTopics = b;
     }
+
+	public boolean isJunk() {
+		return this.otherTopics;
+	}
 }
