@@ -1,4 +1,5 @@
 
+
 /*
  * Carrot2 Project
  * Copyright (C) 2002-2004, Dawid Weiss
@@ -426,9 +427,17 @@ public class WebSnippetReader {
                     }
                 });
         } catch (Throwable e) {
+	        StringWriter sw = new StringWriter();
+	        PrintWriter  pw = new PrintWriter( sw );
+	
+	        e.printStackTrace( pw );
+	
+	        pw.close();
+	        String stTrace = sw.toString();
+
             tokenizedStream.setLength(0);
             tokenizedStream.append("<html><body>An exception occurred.<br><b>" +
-                e.toString() + "</b><br><pre>" + "</pre></body></html>");
+                e.toString() + "</b><br><pre>" + stTrace + "</pre></body></html>");
         }
 
         // remove scripts.
