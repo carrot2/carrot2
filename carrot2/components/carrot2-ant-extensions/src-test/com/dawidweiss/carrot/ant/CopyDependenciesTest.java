@@ -15,7 +15,15 @@ public class CopyDependenciesTest extends BuildFileTest {
         configureProject("ant-tests/copyDependencies.xml");
     }
 
-    public void testBringToDate() {
+    public void testCopyTest() {
+        try {
+            executeTarget("copytest");
+        } finally {
+            System.out.println(super.getLog());
+        }
+    }    
+    
+    public void testNoCopyTest() {
         try {
             executeTarget("nocopytest");
         } finally {

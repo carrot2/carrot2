@@ -2,6 +2,9 @@
 <component name="sub">
 
 	<provides>
+		<files>
+			<file location="test2.txt" />
+		</files>
 	</provides>
 
 	<dependency name="subsub" nocopy="true" />
