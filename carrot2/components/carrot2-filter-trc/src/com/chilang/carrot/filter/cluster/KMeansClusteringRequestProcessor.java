@@ -76,9 +76,9 @@ public class KMeansClusteringRequestProcessor
             double membershipThreshold = Double.parseDouble((String)StringUtils.getCarrotParameter(params, "similarity.threshold"));
             Similarity similarity = SimilarityFactory.getCosine();
             Object carrotParameter = StringUtils.getCarrotParameter(params, "phrase.used");
-            System.out.println("carrot parameter "+carrotParameter);
+            // System.out.println("carrot parameter "+carrotParameter);
             boolean usePhrase = Boolean.valueOf((String)carrotParameter).booleanValue();
-            System.out.println("Use phrases "+usePhrase);
+            // System.out.println("Use phrases "+usePhrase);
             Clusterer clusterer = new KClusterer(numberOfClusters, membershipThreshold, similarity, usePhrase);
 
             clusterer.setContext(context);
