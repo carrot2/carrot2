@@ -1,5 +1,0 @@
-
-This component has not been checked with the newer Nutch builds. It may work,
-but may not. Let us know.
-
-
