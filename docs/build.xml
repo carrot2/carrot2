@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<project name="Carrot2 Documentation" default="help" basedir="." >
+<project name="Carrot2 Documentation" default="html.chunked" basedir="." >
 
     <!-- Include local properties, if present. -->
     <property file="local.properties" />
@@ -58,6 +58,27 @@
              <property name="manual.name" value="${manual.name}" />
         </ant>
     </target>
+    
+    <!-- Renders a PDF version of the manual -->
+    <target name="pdf" depends="check.required-properties, prepare, assemble-parts">
+        <description>
+        This task will render a PDF version of the manual to 'distribution.dir'
+        </description>
+        
+        <!-- run styler to produce single html version -->
+        <mkdir dir="${build.dir}/styled" />
+        <ant antfile="${docbook.styler}" inheritall="false" target="pdf.fop"
+        	 dir="${build.dir}/styled">
+        	 <property name="ant.docbook.styler.dir" location="${docbook.styler.base}" />
+        	 <property name="basedir" location="${docbook.styler.base}" />
+             <property name="docbook.xml.dir" location="${build.dir}/assembled" />
+             <property name="docbook.resources.dir" location="figures-bitmap" />
+             <property name="distribution.dir" location="${distribution.dir}" />
+             <property name="build.dir" location="${build.dir}/styled" />
+             <property name="index.name"  value="${manual.name}" />
+             <property name="manual.name" value="${manual.name}" />
+        </ant>
+    </target>    
    
     
     <!-- Prepare output directories -->

@@ -428,10 +428,10 @@ ant -Ddeployment.port=80 -Ddeployment.host=myhost.com build.webcontroller
             <title>Requirements</title>
             
             <itemizedlist>
-                <listitem>Java Development Kit, version 1.4 (at least)</listitem>
-                <listitem>&ant;, version 1.6.0 (at least)</listitem>
-                <listitem>&tomcat; Web Server, version 4.1.x (we suggest the newest available)</listitem>
-                <listitem>&cvs; client software, for example &wincvs; or &tortoisecvs;</listitem>
+                <listitem><para>Java Development Kit, version 1.4 (at least)</para></listitem>
+                <listitem><para>&ant;, version 1.6.0 (at least)</para></listitem>
+                <listitem><para>&tomcat; Web Server, version 4.1.x (we suggest the newest available)</para></listitem>
+                <listitem><para>&cvs; client software, for example &wincvs; or &tortoisecvs;</para></listitem>
             </itemizedlist>
         </simplesect>
 
