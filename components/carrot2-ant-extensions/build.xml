@@ -26,6 +26,9 @@ Bootstrapping ANT extension tasks.
                includejavaruntime = "false"
         >
             <src path="src" />
+            <classpath>
+                <fileset dir="${carrot2.cvs.dir}/lib/compile-time" includes="resolver.jar" />
+            </classpath>
         </javac>
         <copy todir="tmp/build/bootstrap/res">
             <fileset dir="${carrot2.cvs.dir}/etc">

@@ -1,6 +1,5 @@
 
-<component name="carrot2-ant-extensions" 
-		   description="Custom ANT extensions (dependencies).">
+<component name="carrot2-ant-extensions" description="Custom ANT extensions (dependencies).">
 
     <provides>
         <files build-path-exclude="true" prefix="tmp/dist">
@@ -12,6 +11,7 @@
     </provides>
 
     <dependency name="junit" profile="test" />
+    <dependency name="resolver" />
     <dependency name="carrot2-license" />
     
 </component>
