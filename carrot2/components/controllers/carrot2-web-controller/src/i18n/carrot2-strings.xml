@@ -62,6 +62,8 @@
             <missing-config>Carrot2 configuration file missing.</missing-config>
             <cache-config-missing>Cache configuration file missing.</cache-config-missing>
             <guards-dir-unavailable>Guards directory does not exist or cannot be read</guards-dir-unavailable>
+            <too-many-default-processes>Too many default processes specified. Only one element allowed.</too-many-default-processes>
+            <missing-default-context>The default context cannot be found.</missing-default-context>
         </initialization>
         <forms>
             <missing-field>Missing value in field: {0}</missing-field>

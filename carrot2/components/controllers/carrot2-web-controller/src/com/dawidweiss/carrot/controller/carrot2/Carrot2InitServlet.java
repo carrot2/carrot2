@@ -199,6 +199,28 @@ public class Carrot2InitServlet
                         new File(context.getRealPath(e.getAttribute("contextDir").getValue()))
                     );
                 }
+                
+                // Set the default process to use.
+                List defaultProcess = root.getChildren("default-process");
+                if (defaultProcess.size() > 1)
+                {
+                    throw new RuntimeException("errors.initialization.too-many-default-processes");
+                }
+                else
+                {
+                    if (defaultProcess.size() != 0)
+                    {
+                        String processId = ((Element) defaultProcess.get(0)).getAttributeValue("id");
+                        log.debug("Setting default process to: " + processId);
+                        ProcessDefinition process = processLoader.findProcessDefinition(processId);
+                        if (process == null)
+                        {
+                            throw new RuntimeException("errors.initialization.missing-default-context");
+                        }
+                        processLoader.setDefaultProcess(process);
+                    }
+                }
+                
 
                 //
                 // Instantiate caches and QueryProcessor

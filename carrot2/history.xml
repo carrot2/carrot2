@@ -7,6 +7,13 @@
 -->
 
 <history>
+    <changelist>
+        <date>2003-11-24</date>
+        <committer>dawid</committer>
+        <change component="carrot2.controller.carrot2-web" type="new">
+        Default process can be now specified in WebApp configuration.
+        </change>
+	</changelist>
 
     <changelist>
         <date>2003-11-23</date>

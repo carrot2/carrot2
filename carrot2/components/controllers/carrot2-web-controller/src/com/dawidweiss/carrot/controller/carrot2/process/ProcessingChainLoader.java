@@ -39,6 +39,10 @@ public class ProcessingChainLoader
 
     /** If true, supports reloading (and anchors) */
     private final boolean reloading = true;
+    
+    /** This is the default process, or null if there is no default process. */
+    private ProcessDefinition defaultProcess = null;
+
 
     /**
      * Creates an instance of ProcessLoader with a given set of components, which it can reference.
@@ -333,4 +337,26 @@ public class ProcessingChainLoader
 
         return (ProcessDefinition) processesByNameKey.get(nameKey);
     }
+    
+    
+    /**
+     * Sets the default process to use.
+     */
+    public void setDefaultProcess(ProcessDefinition process)
+    {
+        if (process == null)
+            throw new IllegalArgumentException("Default process must not be null.");
+        if (this.findProcessDefinition(process.getId()) != process)
+            throw new IllegalArgumentException("The default process must be loaded by this loader.");
+        this.defaultProcess = process;
+    }
+    
+
+	/**
+	 * @return Returns the default process or <code>null</code> if the default
+     * process cannot be found.
+	 */
+	public ProcessDefinition getDefaultProcess() {
+		return defaultProcess;
+	}
 }
