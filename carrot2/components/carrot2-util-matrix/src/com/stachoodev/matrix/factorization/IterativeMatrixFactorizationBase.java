@@ -146,8 +146,10 @@ public abstract class IterativeMatrixFactorizationBase extends
         // Need to make a copy of aggregates because they get sorted as well
         double [] aggregatesCopy = (double []) aggregates.clone();
 
-        V = Sorting.quickSort.sort(VT, aggregates).viewDice();
-        U = Sorting.quickSort.sort(U.viewDice(), aggregatesCopy).viewDice();
+        V = NNIDoubleFactory2D.asNNIMatrix(Sorting.quickSort.sort(VT,
+            aggregates).viewDice());
+        U = NNIDoubleFactory2D.asNNIMatrix(Sorting.quickSort.sort(U.viewDice(),
+            aggregatesCopy).viewDice());
 
         // Revert back to positive values of aggregates
         for (int i = 0; i < aggregates.length; i++)
