@@ -15,6 +15,7 @@ import java.util.*;
 import com.dawidweiss.carrot.core.local.clustering.*;
 import com.dawidweiss.carrot.core.local.linguistic.tokens.*;
 import com.dawidweiss.carrot.util.common.*;
+import com.dawidweiss.carrot.util.tokenizer.languages.*;
 import com.dawidweiss.carrot.util.tokenizer.parser.*;
 
 /**
@@ -50,7 +51,7 @@ public class SimpleCaseNormalizer implements CaseNormalizer
 
     /** Do we capitalize non-stop-words? */
     private boolean capitalizeNonStopWords;
-    
+
     /**
      * Creates a new case normalizer with non-stop-words capitalization.
      */
@@ -153,23 +154,33 @@ public class SimpleCaseNormalizer implements CaseNormalizer
                 continue;
             }
 
+            String image = token.getImage();
+            String stem = null;
+            if (token instanceof StemmedToken)
+            {
+                stem = ((StemmedToken) token).getStem();
+            }
+
             if (capitalizeNonStopWords)
             {
                 if ((token.getType() & TypedToken.TOKEN_FLAG_STOPWORD) != 0)
                 {
-                    token.assign(token.getImage().toLowerCase(locale), token
-                        .getType());
+                    token.assign(image.toLowerCase(locale), token.getType());
                 }
                 else
                 {
-                    token.assign(StringUtils.capitalize(token.getImage(),
-                        locale), token.getType());
+                    token.assign(StringUtils.capitalize(image, locale), token
+                        .getType());
                 }
             }
             else
             {
-                token.assign(token.getImage().toLowerCase(locale), token
-                    .getType());
+                token.assign(image.toLowerCase(locale), token.getType());
+            }
+
+            if (stem != null && token instanceof MutableStemmedToken)
+            {
+                ((MutableStemmedToken) token).setStem(stem);
             }
         }
     }
