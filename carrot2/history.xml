@@ -8,6 +8,18 @@
 
 <history>
     <changelist>
+        <date>2004-04-19</date>
+        <committer>dawid</committer>
+        
+        <change component="global" type="new">
+        New clustering component added: Steven Schockaert's
+        Fuzzy Ants clustering component has been integrated into
+        the build process. The code is mostly written in Dutch,
+        but we hope Steven will work on it :)
+        </change>
+    </changelist>
+
+    <changelist>
         <date>2004-02-21</date>
         <committer>dawid</committer>
         
