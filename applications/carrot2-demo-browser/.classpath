@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="/carrot2-util-common"/>
+	<classpathentry kind="src" path="/carrot2-util-put"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/log4j-1.2.8.jar"/>
+	<classpathentry kind="src" path="/carrot2-local-core"/>
+	<classpathentry kind="src" path="/carrot2-util-tokenizer"/>
+	<classpathentry kind="src" path="/carrot2-filter-lingo"/>
+	<classpathentry kind="lib" path="lib/forms-1.0.5.jar"/>
+	<classpathentry kind="lib" path="lib/looks-1.2.2.jar"/>
+	<classpathentry kind="src" path="/carrot2-input-snippet-reader"/>
+	<classpathentry kind="src" path="/carrot2-input-local-cache"/>
+	<classpathentry kind="src" path="/carrot2-filter-trc"/>
+	<classpathentry kind="output" path="tmp/build/classes"/>
+</classpath>
