@@ -11,15 +11,7 @@
                serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-snippet-reader/extractor/carrot2/alltheweb"
                configurationURL = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-snippet-reader/query.jsp?service=alltheweb&amp;submit=Edit+configuration"
                infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-snippet-reader"
-    >
-        <acceptedFormat>
-            <mime>application/x-carrot-clustering-input-query</mime>
-        </acceptedFormat>
-        <producedFormat>
-            <mime>application/x-carrot-clustering-plain-response</mime>
-        </producedFormat>
-    </component>
-
+    />
 
 
 </service>

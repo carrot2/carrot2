@@ -8,8 +8,7 @@
                type             = "filter"
                serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-stc-clustering/service/fullstc"
                infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-stc-clustering"
-    >
-    </component>
+    />
 
 	<!-- this one is not yet available -->
 
@@ -17,7 +16,6 @@
                type             = "filter"
                serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-stc-clustering/service/baseclusters"
                infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-stc-clustering"
-    >
-    </component>
+    />
 
 </service>

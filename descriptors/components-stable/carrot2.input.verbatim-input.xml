@@ -10,10 +10,6 @@
                type             = "input"
                serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-verbatim-input/service"
                infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-verbatim-input"
-    >
-        <acceptedFormat>
-            <mime>application/x-carrot-clustering-input-query</mime>
-        </acceptedFormat>
-    </component>
+    />
 
 </service>

@@ -8,14 +8,12 @@
                type             = "filter"
                serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-stream-interceptors/service/StreamInterceptor"
                infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-stream-interceptors"
-    >
-    </component>
+    />
 
     <component id               = "carrot2.filter.diagnostic.carrot2-stream-interceptor"
                type             = "filter"
                serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-stream-interceptors/service/Carrot2StreamInterceptor"
                infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-stream-interceptors"
-    >
-    </component>
+    />
 
 </service>
