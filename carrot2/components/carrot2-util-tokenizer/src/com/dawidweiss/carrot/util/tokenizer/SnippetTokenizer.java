@@ -98,6 +98,39 @@ public class SnippetTokenizer
     }
 
     /**
+     * Tokenizes a single {@link RawDocument}into a
+     * {@link TokenizedDocumentSnippet}.
+     * 
+     * @param rawDocument
+     * @return
+     */
+    public TokenizedDocument tokenize(RawDocument rawDocument,
+        LanguageTokenizer languageTokenizer)
+    {
+        // Tokenize
+        TokenSequence titleTokenSequence = tokenize(rawDocument.getTitle(),
+            languageTokenizer);
+        TokenSequence snippetTokenSequence = tokenize(rawDocument.getSnippet(),
+            languageTokenizer);
+
+        TokenizedDocumentSnippet tokenizedDocumentSnippet = new TokenizedDocumentSnippet(
+            titleTokenSequence, snippetTokenSequence);
+
+        // Set reference to the original raw document
+        tokenizedDocumentSnippet.setProperty(
+            TokenizedDocument.PROPERTY_RAW_DOCUMENT, rawDocument);
+
+        // Set some properties (all should be copied!)
+        tokenizedDocumentSnippet.setProperty(TokenizedDocument.PROPERTY_URL,
+            rawDocument.getProperty(RawDocument.PROPERTY_URL));
+        tokenizedDocumentSnippet.setProperty(
+            TokenizedDocument.PROPERTY_LANGUAGE, rawDocument
+                .getProperty(RawDocument.PROPERTY_LANGUAGE));
+
+        return tokenizedDocumentSnippet;
+    }
+
+    /**
      * Tokenizes raw text into a {@link MutableTokenSequence}. If
      * <code>lang</code> is not null, an attempt will be made to find and use
      * a dedicated tokenizer.
@@ -122,7 +155,7 @@ public class SnippetTokenizer
      * @param languageTokenizer
      * @return
      */
-    private TokenSequence tokenize(String rawText,
+    public TokenSequence tokenize(String rawText,
         LanguageTokenizer languageTokenizer)
     {
         int tokenCount = 0;
