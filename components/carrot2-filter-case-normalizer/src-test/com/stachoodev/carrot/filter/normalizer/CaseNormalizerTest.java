@@ -66,6 +66,39 @@ public class CaseNormalizerTest extends TestCase
 
     /**
      *  
+    public void testUnknownLanguage()
+    {
+        TokenizedDocument document01 = snippetTokenizer
+            .tokenize(new RawDocumentSnippet("A simple title",
+                "a Simple snippet Of THE document"));
+        TokenizedDocument document02 = snippetTokenizer
+            .tokenize(new RawDocumentSnippet("A simple title",
+                "a Simple snippet Of THE document", "en"));
+        TokenizedDocument normalizedDocument01 = snippetTokenizer
+            .tokenize(new RawDocumentSnippet("a Simple Title",
+                "a Simple Snippet of the Document"));
+        TokenizedDocument normalizedDocument02 = snippetTokenizer
+            .tokenize(new RawDocumentSnippet("a Simple Title",
+                "a Simple Snippet of the Document", "en"));
+
+        // Clear raw document references, which would break equality
+        document01.setProperty(TokenizedDocument.PROPERTY_RAW_DOCUMENT, null);
+        normalizedDocument01.setProperty(
+            TokenizedDocument.PROPERTY_RAW_DOCUMENT, null);
+        document02.setProperty(TokenizedDocument.PROPERTY_RAW_DOCUMENT, null);
+        normalizedDocument02.setProperty(
+            TokenizedDocument.PROPERTY_RAW_DOCUMENT, null);
+
+        caseNormalizer.addDocument(document01);
+        caseNormalizer.addDocument(document02);
+        caseNormalizer.getNormalizedDocuments();
+        assertEquals("Correct capitalization", normalizedDocument01, document01);
+        assertEquals("Correct capitalization", normalizedDocument02, document02);
+    }
+     */
+
+    /**
+     *  
      */
     public void testCapitalizationPl()
     {
