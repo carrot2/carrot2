@@ -12,6 +12,8 @@
             <polish>polski</polish>
             <largeinputsearch>large query</largeinputsearch>
             <smallinputsearch>regular query</smallinputsearch>
+            
+            <showProcessScript>show script</showProcessScript>
         </lang:en>
         <lang:pl>
             <enter>strona główna</enter>
@@ -23,6 +25,8 @@
             <polish>polski</polish>
             <largeinputsearch>duże zapytanie</largeinputsearch>
             <smallinputsearch>normalne zapytanie</smallinputsearch>
+            
+            <showProcessScript>pokaż skrypt</showProcessScript>
         </lang:pl>
     </links>
 
