@@ -16,7 +16,7 @@
             unless="tmp:module.checked.out">
         <echo message="### Checking out module: ${module.name}" />
         <cvs cvsroot="${cvs.root}" 
-            command        = "-Q checkout -r HEAD ${module.name}"
+            command        = "-z3 -Q checkout -r HEAD ${module.name}"
             dest           = "${checkout.dir}"
             failonerror    = "true"
             passfile       = "${cvs.pass}" />
@@ -26,7 +26,7 @@
     <target name="cvs.update.module" depends="check.required.properties">
         <echo message="### Updating module: ${module.name}" />
         <cvs cvsroot="${cvs.root}" 
-            command        = "-q update -P -d ${module.name}"
+            command        = "-z3 -q update -P -d ${module.name}"
             dest           = "${checkout.dir}"
             failonerror    = "true"
             passfile       = "${cvs.pass}" />

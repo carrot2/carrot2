@@ -4,7 +4,7 @@
     <property name="checkout.dir" location="tmp/checkouts" />
     <property name="cvs.pass" location="${user.home}/.cvspass" />
     <property name="module.name" value="tests" />
-    <property name="cvs.root" value=":pserver:anonymous@cvs.sourceforge.net:/cvsroot/carrot2" />
+    <property name="cvs.root" value=":ext:dawidweiss@cvs.sourceforge.net:/cvsroot/carrot2" />
 
     <property name="runtime.env" location="../runtime" />
     <property name="runtime.logs" location="${runtime.env}/context-logs/test-report" />
