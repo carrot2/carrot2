@@ -1,7 +1,12 @@
 /*
- * ZipUtilsTest.java
- * 
- * Created on 2004-06-27
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
 package com.stachoodev.util.common;
 
@@ -12,7 +17,8 @@ import java.util.zip.*;
 import junit.framework.*;
 
 /**
- * @author stachoo
+ * @author Stanislaw Osinski
+ * @version $Revision$
  */
 public class ZipUtilsTest extends TestCase
 {
@@ -56,7 +62,7 @@ public class ZipUtilsTest extends TestCase
         Enumeration entries = zipFile.entries();
         ZipEntry entry;
         InputStream input;
-        
+
         entry = (ZipEntry) entries.nextElement();
         assertEquals("Entry01 name", "entry01", entry.getName());
         input = zipFile.getInputStream(entry);
@@ -85,10 +91,10 @@ public class ZipUtilsTest extends TestCase
     /**
      * @param input
      * @param data
-     * @return
-     * @throws IOException
+     * @return @throws IOException
      */
-    private boolean compareContent(InputStream input, byte [] data) throws IOException
+    private boolean compareContent(InputStream input, byte [] data)
+        throws IOException
     {
         byte [] buffer = new byte [16];
         int bytesRead;
@@ -106,7 +112,7 @@ public class ZipUtilsTest extends TestCase
             }
             totalBytesRead += bytesRead;
         }
-        
+
         return totalBytesRead == data.length;
     }
 }

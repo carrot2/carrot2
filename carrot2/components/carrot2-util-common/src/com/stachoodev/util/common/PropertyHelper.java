@@ -1,5 +1,12 @@
 /*
- * PropertyHelper.java Created on 2004-06-17
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
 package com.stachoodev.util.common;
 
@@ -7,17 +14,26 @@ import java.util.*;
 
 /**
  * Helps to implement properties of various objects such as
- * {@link com.stachoodev.carrot.filter.lingo.model.ExtendedToken}. The property
+ * {@link com.dawidweiss.carrot.core.local.linguistic.tokens.ExtendedToken}. The property
  * container is initialized in a lazy manner (i.e. when the first request for
  * setting a value is received).
  * 
- * @author stachoo
+ * @author Stanislaw Osinski
+ * @version $Revision$
  */
 public class PropertyHelper implements PropertyProvider, Cloneable
 {
     /** Property container */
     private HashMap properties;
 
+    /**
+     * @return
+     */
+    public Map getProperties()
+    {
+        return properties;
+    }
+    
     /*
      * (non-Javadoc)
      * 

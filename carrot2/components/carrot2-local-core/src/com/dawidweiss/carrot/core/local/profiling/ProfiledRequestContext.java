@@ -1,7 +1,12 @@
 /*
- * ProfiledRequestContext.java
- * 
- * Created on 2004-06-29
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
 package com.dawidweiss.carrot.core.local.profiling;
 
@@ -16,7 +21,8 @@ import com.dawidweiss.carrot.core.local.*;
  * Each component in the processing chain will have a separate instance of
  * {@link Profile}obtainable by a call to {@link #getProfile(LocalComponent)}.
  * 
- * @author stachoo
+ * @author Stanislaw Osinski
+ * @version $Revision$
  */
 public class ProfiledRequestContext extends RequestContextBase
 {

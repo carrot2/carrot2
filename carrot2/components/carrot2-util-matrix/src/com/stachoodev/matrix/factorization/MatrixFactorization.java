@@ -1,17 +1,24 @@
 /*
- * MatrixFactorization.java
- * 
- * Created on 2004-05-09
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
 package com.stachoodev.matrix.factorization;
 
 import cern.colt.matrix.*;
 
 /**
- * For an m x n matrix A and given k, computes an m x k matrix U and k x n
- * matrix V' such that A ~= UV'.
+ * For an <i>m </i> &times; <i>n </i> matrix <i>A </i> and given <i>k </i>,
+ * computes an <i>m </i> &times; <i>k </i> matrix <i>U </i> and <i>k </i>
+ * &times; <i>n </i> matrix <i>V' </i> such that <i>A ~= UV' </i>.
  * 
- * @author stachoo
+ * @author Stanislaw Osinski
+ * @version $Revision$
  */
 public interface MatrixFactorization
 {

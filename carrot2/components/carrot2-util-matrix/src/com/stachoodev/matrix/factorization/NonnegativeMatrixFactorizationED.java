@@ -1,5 +1,12 @@
 /*
- * NNINonnegativeMatrixFactorizationED.java Created on 2004-01-18
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
 package com.stachoodev.matrix.factorization;
 
@@ -12,7 +19,8 @@ import cern.jet.math.*;
  * implementation preforms Non-negative Matrix Factorization by minimisation of
  * Euclidean Distance between A and UV' using multiplicative updating.
  * 
- * @author stachoo
+ * @author Stanislaw Osinski
+ * @version $Revision$
  */
 public class NonnegativeMatrixFactorizationED extends
     IterativeMatrixFactorizationBase
@@ -68,12 +76,12 @@ public class NonnegativeMatrixFactorizationED extends
         DoubleMatrix2D VT2 = doubleFactory2D.make(A.columns(), k);
         DoubleFunction plusEps = Functions.plus(eps);
 
-        if (stopThreshold > 0)
+        if (stopThreshold >= 0)
         {
             updateApproximationError();
         }
 
-        for (iterationsCompleted = 0; iterationsCompleted < maxIterations; iterationsCompleted++)
+        for (int i = 0; i < maxIterations; i++)
         {
             // Update V
             U.zMult(U, T, 1, 0, true, false); // T <- U'U
@@ -94,7 +102,7 @@ public class NonnegativeMatrixFactorizationED extends
             U.assign(UT1, Functions.mult); // U <- U .* UT1
 
             iterationsCompleted++;
-            if (stopThreshold > 0)
+            if (stopThreshold >= 0)
             {
                 if (updateApproximationError())
                 {

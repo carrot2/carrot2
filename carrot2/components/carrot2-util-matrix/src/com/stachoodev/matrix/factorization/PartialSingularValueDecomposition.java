@@ -1,5 +1,12 @@
 /*
- * PartialSingularValueDecomposition.java Created on 2004-06-10
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
 package com.stachoodev.matrix.factorization;
 
@@ -9,11 +16,16 @@ import cern.colt.matrix.impl.*;
 import cern.colt.matrix.linalg.*;
 
 /**
- * @author stachoo
+ * @author Stanislaw Osinski
+ * @version $Revision$
  */
-public class PartialSingularValueDecomposition extends
-    MatrixFactorizationBase implements MatrixFactorization
+public class PartialSingularValueDecomposition extends MatrixFactorizationBase
+    implements MatrixFactorization
 {
+    /** The desired number of base vectors */
+    protected int k;
+    protected static int DEFAULT_K = -1;
+
     /**
      * Work array
      */
@@ -36,6 +48,8 @@ public class PartialSingularValueDecomposition extends
     public PartialSingularValueDecomposition(DoubleMatrix2D A)
     {
         super(A);
+
+        this.k = DEFAULT_K;
     }
 
     /*
@@ -67,6 +81,13 @@ public class PartialSingularValueDecomposition extends
             }
 
             S = svd.getSingularValues();
+
+            if (k > 0 && k < S.length)
+            {
+                U = U.viewPart(0, 0, U.rows(), k);
+                V = V.viewPart(0, 0, V.rows(), k);
+                S = cern.colt.Arrays.trimToCapacity(S, k);
+            }
         }
         else
         {
@@ -104,6 +125,22 @@ public class PartialSingularValueDecomposition extends
 
             // LAPACK calculates V' instead of V so need to do a deep transpose
             NNIDenseDoubleMatrix2D.deepTranspose((DenseDoubleMatrix2D) V);
+
+            if (k > 0 && k < S.length)
+            {
+                // Return an NNI dense matrix so that native operations are
+                // possible
+                DenseDoubleMatrix2D Uk = (DenseDoubleMatrix2D) NNIDoubleFactory2D.nni
+                    .make(U.rows(), k);
+                DenseDoubleMatrix2D Vk = (DenseDoubleMatrix2D) NNIDoubleFactory2D.nni
+                    .make(V.rows(), k);
+                Uk.assign(U.viewPart(0, 0, U.rows(), k));
+                Vk.assign(V.viewPart(0, 0, V.rows(), k));
+
+                U = Uk;
+                V = Vk;
+                S = cern.colt.Arrays.trimToCapacity(S, k);
+            }
         }
     }
 
@@ -155,5 +192,35 @@ public class PartialSingularValueDecomposition extends
     public String toString()
     {
         return "nni-SVD";
+    }
+
+    /**
+     * Returns singular values of the matrix. 
+     * 
+     * @return
+     */
+    public double [] getSingularValues()
+    {
+        return S;
+    }
+    
+    /**
+     * Sets the number of base vectors <i>k </i>.
+     * 
+     * @param k the number of base vectors
+     */
+    public void setK(int k)
+    {
+        this.k = k;
+    }
+
+    /**
+     * Returns the number of base vectors <i>k </i>.
+     * 
+     * @return
+     */
+    public int getK()
+    {
+        return k;
     }
 }

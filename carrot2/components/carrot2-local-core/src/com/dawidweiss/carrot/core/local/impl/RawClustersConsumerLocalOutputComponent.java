@@ -1,7 +1,12 @@
 /*
- * RawClustersConsumerLocalOutputComponent.java
- * 
- * Created on 2004-06-29
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
 package com.dawidweiss.carrot.core.local.impl;
 
@@ -14,7 +19,8 @@ import com.dawidweiss.carrot.core.local.clustering.*;
  * Collects {@link com.dawidweiss.carrot.core.local.clustering.RawCluster}s
  * producesd by its predecessor and returns them as a {@link java.util.List}.
  * 
- * @author stachoo
+ * @author Stanislaw Osinski
+ * @version $Revision$
  */
 public class RawClustersConsumerLocalOutputComponent extends
     LocalOutputComponentBase implements RawClustersConsumer
@@ -30,7 +36,7 @@ public class RawClustersConsumerLocalOutputComponent extends
         { RawDocumentsConsumer.class }));
 
     /** Raw clusters */
-    private List rawClusters;
+    protected List rawClusters;
 
     /*
      * (non-Javadoc)

@@ -1,5 +1,12 @@
 /*
- * MutableTokenSequence.java Created on 2004-06-15
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
 package com.dawidweiss.carrot.core.local.linguistic.tokens;
 
@@ -8,7 +15,8 @@ import java.util.*;
 /**
  * A dynamically constructed token sequence.
  * 
- * @author stachoo
+ * @author Stanislaw Osinski
+ * @version $Revision$
  */
 public class MutableTokenSequence implements TokenSequence
 {
@@ -61,6 +69,15 @@ public class MutableTokenSequence implements TokenSequence
         tokens.addAll(Arrays.asList(tokenArray));
     }
 
+    /**
+     * @param index
+     * @param token
+     */
+    public void setTokenAt(int index, Token token)
+    {
+        tokens.set(index, token);
+    }
+    
     /*
      * (non-Javadoc)
      * 

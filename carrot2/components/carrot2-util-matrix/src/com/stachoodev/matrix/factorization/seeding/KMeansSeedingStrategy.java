@@ -1,7 +1,12 @@
 /*
- * KMeansSeedingStrategy.java
- * 
- * Created on 2004-05-12
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
 package com.stachoodev.matrix.factorization.seeding;
 
@@ -9,13 +14,16 @@ import com.stachoodev.matrix.factorization.*;
 import cern.colt.matrix.*;
 
 /**
- * @author stachoo
+ * Matrix seeding based on the k-means algorithms.
+ * 
+ * @author Stanislaw Osinski
+ * @version $Revision$
  */
 public class KMeansSeedingStrategy implements SeedingStrategy
 {
     /** The maximum number of KMeans iterations */
     private int maxIterations;
-    private static final int DEFAULT_MAX_ITERATIONS = 10;
+    private static final int DEFAULT_MAX_ITERATIONS = 5;
 
     /**
      * Creates the KMeansSeedingStrategy.

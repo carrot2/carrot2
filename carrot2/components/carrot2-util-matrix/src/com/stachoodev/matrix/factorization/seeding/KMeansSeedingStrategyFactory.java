@@ -1,16 +1,25 @@
 /*
- * KMeansSeedingStrategyFactory.java Created on 2004-06-20
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
 package com.stachoodev.matrix.factorization.seeding;
 
 /**
  * Seeding based on a k-means clustering algorithm.
- * @author stachoo
+ * 
+ * @author Stanislaw Osinski
+ * @version $Revision$
  */
 public class KMeansSeedingStrategyFactory implements SeedingStrategyFactory
 {
     /** The default maximum number of iterations */
-    private static int DEFAULT_MAX_ITERATIONS = 20;
+    private static int DEFAULT_MAX_ITERATIONS = 5;
 
     /**
      * The maximum number of iterations the k-means algorithm is allowed to
@@ -26,7 +35,7 @@ public class KMeansSeedingStrategyFactory implements SeedingStrategyFactory
     public SeedingStrategy createSeedingStrategy()
     {
         KMeansSeedingStrategy seeding = new KMeansSeedingStrategy(maxIterations);
-        
+
         return seeding;
     }
 
@@ -50,5 +59,15 @@ public class KMeansSeedingStrategyFactory implements SeedingStrategyFactory
     public void setMaxIterations(int maxIterations)
     {
         this.maxIterations = maxIterations;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    public String toString()
+    {
+        return "KM";
     }
 }

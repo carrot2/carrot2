@@ -1,5 +1,12 @@
 /*
- * IterativeMatrixFactorizationFactory.java Created on 2004-06-17
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
 package com.stachoodev.matrix.factorization;
 
@@ -9,7 +16,8 @@ import com.stachoodev.matrix.factorization.seeding.*;
 /**
  * TODO: refactor - get constants from factorization interfaces.
  * 
- * @author stachoo
+ * @author Stanislaw Osinski
+ * @version $Revision$
  */
 public abstract class IterativeMatrixFactorizationFactory implements
     MatrixFactorizationFactory
@@ -18,7 +26,7 @@ public abstract class IterativeMatrixFactorizationFactory implements
     protected int k;
 
     /** The default number of base vectors */
-    protected final static int DEFAULT_K = 20;
+    protected final static int DEFAULT_K = 15;
 
     /** The maximum number of iterations the algorithm is allowed to complete */
     protected int maxIterations;
@@ -30,7 +38,7 @@ public abstract class IterativeMatrixFactorizationFactory implements
     protected double stopThreshold;
 
     /** The default stop threshold */
-    protected final static int DEFAULT_STOP_THRESHOLD = 0;
+    protected final static double DEFAULT_STOP_THRESHOLD = -1;
 
     /** Matrix seeding strategy factory */
     protected SeedingStrategyFactory seedingFactory;

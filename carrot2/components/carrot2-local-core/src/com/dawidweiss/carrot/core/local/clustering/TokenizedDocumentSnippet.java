@@ -1,5 +1,12 @@
 /*
- * TokenizedDocumentBase.java Created on 2004-06-15
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
 package com.dawidweiss.carrot.core.local.clustering;
 
@@ -9,7 +16,8 @@ import com.dawidweiss.carrot.core.local.linguistic.tokens.*;
  * Represents a tokenized snippet of a document. Does <b>not </b> provide
  * document's content.
  * 
- * @author stachoo
+ * @author Stanislaw Osinski
+ * @version $Revision$
  */
 public class TokenizedDocumentSnippet extends TokenizedDocumentBase
 {
@@ -102,5 +110,85 @@ public class TokenizedDocumentSnippet extends TokenizedDocumentBase
     public float getScore()
     {
         return score;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    public String toString()
+    {
+        String title = "";
+        if (getTitle() != null)
+        {
+            title = getTitle().toString();
+        }
+
+        String snippet = "";
+        if (getSnippet() != null)
+        {
+            snippet = getSnippet().toString();
+        }
+        
+        return "[" + title + "] " + snippet;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    public boolean equals(Object obj)
+    {
+        if (obj == this)
+        {
+            return true;
+        }
+
+        if (obj == null)
+        {
+            return false;
+        }
+
+        if (obj.getClass() != getClass())
+        {
+            return false;
+        }
+
+        TokenizedDocumentSnippet otherSnippet = (TokenizedDocumentSnippet) obj;
+        boolean result = true;
+        if (title != null)
+        {
+            result = result && title.equals(otherSnippet.title);
+        }
+        if (otherSnippet != null)
+        {
+            result = result && getSnippet().equals(otherSnippet.getSnippet());
+        }
+
+        return result && propertyHelper.equals(otherSnippet.propertyHelper);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#hashCode()
+     */
+    public int hashCode()
+    {
+        // Try with the title first
+        if (title != null && title.getLength() > 0)
+        {
+            return title.hashCode();
+        }
+
+        // Snippet?
+        if (getSnippet() != null && getSnippet().getLength() > 0)
+        {
+            return getSnippet().hashCode();
+        }
+
+        return propertyHelper.hashCode();
     }
 }

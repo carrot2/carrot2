@@ -1,13 +1,23 @@
 /*
- * KMeansMatrixFactorization.java Created on 2004-05-11
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
 package com.stachoodev.matrix.factorization;
+
+import com.stachoodev.matrix.*;
 
 import cern.colt.matrix.*;
 import cern.jet.math.*;
 
 /**
- * @author stachoo
+ * @author Stanislaw Osinski
+ * @version $Revision$
  */
 public class KMeansMatrixFactorization extends
     IterativeMatrixFactorizationBase
@@ -42,8 +52,12 @@ public class KMeansMatrixFactorization extends
         V = doubleFactory2D.make(n, k);
 
         // Initialize the centroids with some document vectors
-        U = A.viewPart(0, 0, A.rows(), k).copy();
+        U = doubleFactory2D.make(A.rows(), k);
+        U.assign(A.viewPart(0, 0, A.rows(), k));
 
+        int [] minIndices = new int[D.columns()];
+        double [] minValues = new double[D.columns()];
+        
         for (iterationsCompleted = 0; iterationsCompleted < maxIterations; iterationsCompleted++)
         {
             // Calculate cosine distances
@@ -53,24 +67,12 @@ public class KMeansMatrixFactorization extends
             U.assign(0);
 
             // For each object
-            for (int d = 0; d < D.columns(); d++)
+            MatrixUtils.minInColumns(D, minIndices, minValues);
+            for (int i = 0; i < minIndices.length; i++)
             {
-                // Find the closest centroid
-                int closestCentroid = 0;
-                double min = D.getQuick(0, d);
-                for (int c = 1; c < D.rows(); c++)
-                {
-                    if (D.getQuick(c, d) < min)
-                    {
-                        min = D.getQuick(c, d);
-                        closestCentroid = c;
-                    }
-                }
-
-                // Assign object to that centroid
-                V.setQuick(d, closestCentroid, 1);
+                V.setQuick(i, minIndices[i], 1);
             }
-
+            
             // Update centroids
             for (int c = 0; c < V.columns(); c++)
             {
@@ -99,8 +101,6 @@ public class KMeansMatrixFactorization extends
             }
 
         }
-
-        updateApproximationError();
     }
 
     /*
