@@ -348,6 +348,18 @@ public class Lingo
         DoubleMatrix2D U = matrixFactorization.getU();
         MatrixUtils.normaliseColumnL2(U, null);
 
+        double [] aggregates = null;
+        if (matrixFactorization instanceof IterativeMatrixFactorizationBase)
+        {
+            aggregates = ((IterativeMatrixFactorizationBase) matrixFactorization)
+                .getAggregates();
+        }
+        else if (matrixFactorization instanceof PartialSingularValueDecomposition)
+        {
+            aggregates = ((PartialSingularValueDecomposition) matrixFactorization)
+                .getSingularValues();
+        }
+
         // For each base vector determine which phrase or single term describes
         // it best. Cosine similarity will be used. To save memory, no phrase
         // matrix will be created
@@ -436,10 +448,12 @@ public class Lingo
                 // Compare
                 if (cosine >= cosines[c])
                 {
-                    if (phrase.getDoubleProperty(PROPERTY_LABEL_SCORE, -2) < cosine)
+                    double clusterScore = cosine;
+                    if (aggregates != null)
                     {
-                        phrase.setDoubleProperty(PROPERTY_LABEL_SCORE, cosine);
+                        clusterScore *= aggregates[c];
                     }
+                    phrase.setDoubleProperty(PROPERTY_LABEL_SCORE, cosine);
                     cosines[c] = cosine;
                     candidateLabels[c] = phrase;
 
@@ -526,10 +540,21 @@ public class Lingo
             RawClusterBase cluster = new RawClusterBase();
 
             // Add label
-            cluster
-                .addLabel(((List) ((ExtendedTokenSequence) clusterLabels.get(c))
-                    .getProperty(ExtendedTokenSequence.PROPERTY_ORIGINAL_TOKEN_SEQUENCES))
-                    .get(0).toString());
+            List originalTokenSequences = (List) ((ExtendedTokenSequence) clusterLabels
+                .get(c))
+                .getProperty(ExtendedTokenSequence.PROPERTY_ORIGINAL_TOKEN_SEQUENCES);
+            
+            // TODO: in theory we should not get null original sequences here
+            // but it seems there is a bug the phrase extraction algorithm
+            // and we actually do
+            if (originalTokenSequences != null)
+            {
+                cluster.addLabel((originalTokenSequences).get(0).toString());
+            }
+            else
+            {
+                cluster.addLabel(clusterLabels.get(c).toString());
+            }
 
             // Add documents
             int d = 0;
