@@ -45,6 +45,9 @@ public class ExtendedTokenSequence implements TokenSequence, PropertyProvider
      */
     public static final String PROPERTY_MOST_FREQUENT_ORIGINAL_TOKEN_SEQUENCE = "MForiginalTS";
 
+    /** */
+    public static final String PROPERTY_PSEUDO_TF = "ptf";
+
     /**
      * Creates an ExtendedTokenSequence wrapped around the provided
      * {@link TokenSequence}.
