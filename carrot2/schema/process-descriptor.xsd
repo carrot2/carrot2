@@ -17,7 +17,6 @@ or a fully-fledged scripted program.
 
         <xs:complexType>
             <xs:choice maxOccurs="1" minOccurs="1">
-                <xs:element ref="processing-chain"  maxOccurs="1" minOccurs="0" />
                 <xs:element ref="processing-script" maxOccurs="1" minOccurs="0" />
             </xs:choice>
             <xs:attribute name="id" type="xs:ID" use="required" />
@@ -43,62 +42,6 @@ and components), which the script may utilize to produce the final output.
                 </xs:extension>
             </xs:simpleContent>
         </xs:complexType>
-    </xs:element>
-    
-
-    <xs:element name="processing-chain">
-        <xs:annotation>
-            <xs:documentation>
-This element defines a processing chain for Carrot2 controller component. A
-processing chain consists of the specification of components used to process
-data, starting at the input component, through filter components and ending
-at an output component.
-            </xs:documentation>
-        </xs:annotation>
-
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element ref="input"
-                            maxOccurs="1" minOccurs="1"/>
-                <xs:element ref="filter"
-                            maxOccurs="unbounded" minOccurs="0" />
-                <xs:element ref="output"
-                            maxOccurs="1" minOccurs="1" />
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-
-    
-    <xs:element name="input" type="component-specification">
-        <xs:annotation>
-            <xs:documentation>
-This element defines the input component used for the processing chain and
-the configuration of input/ output data formats for this component.
-            </xs:documentation>
-        </xs:annotation>
-    </xs:element>
-
-
-    <xs:element name="filter" type="component-specification">
-        <xs:annotation>
-            <xs:documentation>
-            Same as input, only for filter components
-            </xs:documentation>
-        </xs:annotation>
-    </xs:element>
-
-
-    <xs:element name="output" type="component-specification">
-        <xs:annotation>
-            <xs:documentation>
-            Same as input, only for output component
-            </xs:documentation>
-        </xs:annotation>
-    </xs:element>
-    
-
-    <xs:complexType name="component-specification">
-        <xs:attribute name="componentId" type="xs:NCName" use="required" />
-    </xs:complexType>
+    </xs:element>    
 
 </xs:schema>

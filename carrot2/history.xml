@@ -8,6 +8,16 @@
 
 <history>
     <changelist>
+        <date>2004-02-16</date>
+        <committer>dawid</committer>
+        
+        <change component="carrot2-shared-lib" type="change">
+        Removed process chain specification from process schema.
+        </change>
+    </changelist>
+
+
+    <changelist>
         <date>2004-02-10</date>
         <committer>dawid</committer>
         
