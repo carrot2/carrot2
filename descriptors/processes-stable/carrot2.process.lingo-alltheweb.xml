@@ -27,7 +27,7 @@
     dtreeOptions.put("param.max.open.level", "0");
     dtreeOptions.put("param.max.subgroup.snippets.included", "3" );
     dtreeOptions.put("param.no.terminal.groups.expansion", "true" );
-    dtreeOptions.put("param.snippets.sorting.type", "ORDER_SCORE_ATTRIBUTE");
+    dtreeOptions.put("param.snippets.sorting.type", "ORDER_DOCUMENTS_ORDER");
 
     is = controller.invokeOutputComponent( "carrot2.output.xslt-renderer.dynamic-tree", is, dtreeOptions );
     
