@@ -15,23 +15,22 @@
 package com.dawidweiss.carrot.controller.carrot2.process;
 
 
-import com.dawidweiss.carrot.controller.carrot2.*;
-import com.dawidweiss.carrot.controller.carrot2.components.*;
-import com.dawidweiss.carrot.controller.carrot2.guard.*;
-import com.dawidweiss.carrot.controller.carrot2.process.cache.*;
-import com.dawidweiss.carrot.controller.carrot2.process.scripted.*;
-import com.dawidweiss.carrot.controller.carrot2.xmlbinding.componentDescriptor.*;
-import com.dawidweiss.carrot.controller.carrot2.xmlbinding.componentDescriptor.types.*;
+import com.dawidweiss.carrot.controller.carrot2.components.ComponentsLoader;
+import com.dawidweiss.carrot.controller.carrot2.guard.QueryGuard;
+import com.dawidweiss.carrot.controller.carrot2.process.cache.Cache;
+import com.dawidweiss.carrot.controller.carrot2.xmlbinding.componentDescriptor.ComponentDescriptor;
+import com.dawidweiss.carrot.controller.carrot2.xmlbinding.componentDescriptor.types.ComponentType;
 import com.dawidweiss.carrot.controller.carrot2.xmlbinding.processDescriptor.ProcessDescriptor;
 import com.dawidweiss.carrot.controller.carrot2.xmlbinding.query.Query;
-import org.apache.bsf.*;
-import org.apache.log4j.*;
-import org.put.util.net.http.*;
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import org.apache.bsf.BSFException;
+import org.apache.bsf.BSFManager;
+import org.apache.log4j.Logger;
+import java.io.OutputStream;
+import java.util.List;
+import java.util.Map;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 
 /**
@@ -87,6 +86,80 @@ public class ResolvedScriptedProcess
         this.componentsLoader = componentsLoader;
     }
 
+    /**
+     * Applies the process to a given query, isolating components and trying to figure out what is
+     * going wrong with the processing.
+     */
+    public DebugQueryExecutionInfo applyProcessWithDebug(
+        Query query, OutputStream output, Map requestParameters, Cache cache, QueryGuard queryGuard,
+        HttpSession session, HttpServletRequest request, ServletContext context
+    )
+    {
+        BSFManager manager = new BSFManager();
+
+        // declare global beans.
+        try
+        {
+            manager.declareBean(
+                "query", new QueryBean(query),
+                com.dawidweiss.carrot.controller.carrot2.process.scripted.Query.class
+            );
+        }
+        catch (BSFException e1)
+        {
+            DebugQueryExecutionInfo tmp = new DebugQueryExecutionInfo(log);
+            tmp.startCapturingLog4j();
+            log.error("Cannot declare query bean.", e1);
+            tmp.finish();
+            return tmp;
+        }
+
+        DebugControllerBean controller = new DebugControllerBean(
+                output, cache, queryGuard, session, request, context, componentsLoader
+            );
+        controller.setDoCacheInput(false);
+        controller.setUseCachedInput(true);
+
+        try
+        {
+            manager.declareBean(
+                "controller", controller,
+                com.dawidweiss.carrot.controller.carrot2.process.scripted.Controller.class
+            );
+        }
+        catch (BSFException e2)
+        {
+            DebugControllerBean.log.error("Could not declare controller bean.", e2);
+            DebugQueryExecutionInfo tmp = controller.getDebugInfo();
+            tmp.finish();
+            return tmp;
+        }
+
+        // execute the script.
+        try
+        {
+            manager.exec(language, "Process script: " + descriptor.getId(), 0, 0, script);
+        }
+        catch (BSFException e)
+        {
+            Throwable t = e;
+            if (e.getTargetException() != null)
+            {
+                t = e.getTargetException();
+            }
+            DebugControllerBean.log.error("Error executing script.", t);
+        }
+        finally
+        {
+            // close any opened input streams.
+            controller.dispose();
+            DebugQueryExecutionInfo debugInfo = controller.getDebugInfo();
+            debugInfo.finish();
+            return debugInfo;
+        }
+    }
+
+
     public void applyProcess(
         Query query, OutputStream output, Map requestParameters, Cache cache, QueryGuard queryGuard,
         HttpSession session, HttpServletRequest request, ServletContext context
@@ -102,7 +175,7 @@ public class ResolvedScriptedProcess
         );
 
         ControllerBean controller = new ControllerBean(
-                output, cache, queryGuard, session, request, context
+                output, cache, queryGuard, session, request, context, componentsLoader
             );
         controller.setDoCacheInput(false);
         controller.setUseCachedInput(true);
@@ -228,411 +301,5 @@ public class ResolvedScriptedProcess
         }
 
         return controller;
-    }
-
-    private final boolean DUMP_INTERMEDIATE_STREAMS = false;
-    private final File DUMPDIR = new File("h:\\dump");
-    private final int [] counter = new int[1];
-
-    /**
-     * This class implements the Controller interface made available to BSF beans in charge of a
-     * process.
-     */
-    private class ControllerBean
-        implements com.dawidweiss.carrot.controller.carrot2.process.scripted.Controller
-    {
-        private final OutputStream output;
-        private boolean cached;
-        private boolean writeToCache;
-        private Cache cache;
-        private QueryGuard queryGuard;
-        private List toDispose = new LinkedList();
-        private HttpSession session;
-        private HttpServletRequest request;
-        private ServletContext context;
-
-        public ControllerBean(
-            OutputStream output, Cache cacher, QueryGuard queryGuard, HttpSession session,
-            HttpServletRequest request, ServletContext context
-        )
-        {
-            this.output = output;
-            this.cache = cacher;
-            this.queryGuard = queryGuard;
-            this.session = session;
-            this.request = request;
-            this.context = context;
-        }
-
-        public void setDoCacheInput(boolean newValue)
-        {
-            this.writeToCache = newValue;
-        }
-
-
-        public boolean getDoCacheInput()
-        {
-            return this.writeToCache;
-        }
-
-
-        public void setUseCachedInput(boolean newValue)
-        {
-            this.cached = newValue;
-        }
-
-
-        public boolean getUseCachedInput()
-        {
-            return this.cached;
-        }
-
-
-        public InputStream invokeInputComponent(
-            String componentId,
-            com.dawidweiss.carrot.controller.carrot2.process.scripted.Query query
-        )
-            throws IOException, ComponentFailureException
-        {
-            return invokeInputComponent(componentId, query, null);
-        }
-
-
-        public InputStream invokeInputComponent(
-            String componentId,
-            com.dawidweiss.carrot.controller.carrot2.process.scripted.Query query,
-            Map optionalParams
-        )
-            throws IOException, ComponentFailureException
-        {
-            log.debug("start: " + componentId);
-
-            ComponentDescriptor component = componentsLoader.findComponent(componentId);
-
-            FormActionInfo actionInfo = new FormActionInfo(
-                    new URL(component.getServiceURL()), "post"
-                );
-            FormParameters queryArgs = new FormParameters();
-            HTTPFormSubmitter submitter = new HTTPFormSubmitter(actionInfo);
-
-            java.io.InputStream inputStream = null;
-
-            com.dawidweiss.carrot.controller.carrot2.xmlbinding.query.Query q = new com.dawidweiss.carrot.controller.carrot2.xmlbinding.query.Query();
-
-            try
-            {
-                q.setContent(query.getQuery());
-                q.setRequestedResults(
-                    (query.getNumberOfExceptedResults() == 0) ? 100
-                                                              : query.getNumberOfExceptedResults()
-                );
-
-                if (this.cached)
-                {
-                    inputStream = cache.getInputFor(q, componentId, optionalParams);
-                    log.debug("Using cache: " + ((inputStream == null) ? "no"
-                                                                       : "yes")
-                    );
-                }
-
-                if (inputStream == null)
-                {
-                    // nah, no cached input... check with the guard and query input component
-                    if (queryGuard != null)
-                    {
-                        String permission;
-
-                        if (
-                            (permission = queryGuard.allowInputComponent(
-                                        q, component, session, request, context
-                                    )) != null
-                        )
-                        {
-                            throw new GuardVetoException(component, "guard." + permission);
-                        }
-                    }
-
-                    StringWriter sw = new StringWriter();
-                    q.marshal(sw);
-                    log.debug("Sending query: " + sw.toString());
-
-                    Parameter queryRequestXml = new Parameter(
-                            "carrot-request", sw.getBuffer().toString(), false
-                        );
-                    addOptionalParams(optionalParams, queryArgs);
-                    queryArgs.addParameter(queryRequestXml);
-                    inputStream = submitter.submit(queryArgs, null, "UTF-8");
-
-                    if (writeToCache && (inputStream != null))
-                    {
-                        log.debug("Caching output for query.");
-                        inputStream = cache.cacheInputFor(
-                                inputStream, q, componentId, optionalParams
-                            );
-                    }
-                }
-            }
-            catch (GuardVetoException ex)
-            {
-                // close the input stream
-                if (inputStream != null)
-                {
-                    try
-                    {
-                        inputStream.close();
-                    }
-                    catch (IOException e)
-                    {
-                        log.warn("Could not close input.");
-                    }
-                }
-
-                throw ex;
-            }
-            catch (Exception ex)
-            {
-                if (inputStream != null)
-                {
-                    try
-                    {
-                        inputStream.close();
-                    }
-                    catch (IOException e)
-                    {
-                        log.warn("Could not close input.");
-                    }
-                }
-
-                log.error("Could not process the query.", ex);
-                throw new ComponentFailureException(
-                    component,
-                    "Could not process query because of the following reason: " + ex.toString()
-                );
-            }
-
-            if (inputStream == null)
-            {
-                QueryProcessor.generateNoOutputFailure(component, submitter);
-            }
-
-            if (DUMP_INTERMEDIATE_STREAMS)
-            {
-                inputStream = dumpStream(inputStream);
-            }
-
-            toDispose.add(inputStream);
-
-            log.debug("finished: " + componentId);
-
-            return inputStream;
-        }
-
-
-        public InputStream invokeFilterComponent(String componentId, InputStream data)
-            throws IOException, ComponentFailureException
-        {
-            return invokeFilterOrOutputComponent(componentId, data, null);
-        }
-
-
-        public InputStream invokeFilterComponent(
-            String componentId, InputStream data, Map optionalParams
-        )
-            throws IOException, ComponentFailureException
-        {
-            return invokeFilterOrOutputComponent(componentId, data, optionalParams);
-        }
-
-
-        public InputStream invokeOutputComponent(String componentId, InputStream data)
-            throws IOException, ComponentFailureException
-        {
-            return invokeFilterOrOutputComponent(componentId, data, null);
-        }
-
-
-        public InputStream invokeOutputComponent(
-            String componentId, InputStream data, Map optionalParams
-        )
-            throws IOException, ComponentFailureException
-        {
-            return invokeFilterOrOutputComponent(componentId, data, optionalParams);
-        }
-
-
-        public void sendResponse(InputStream data)
-            throws IOException
-        {
-            byte [] buffer = new byte[8000];
-            int i;
-
-            while ((i = data.read(buffer)) > 0)
-            {
-                this.output.write(buffer, 0, i);
-            }
-        }
-
-
-        public void dispose()
-        {
-            for (Iterator i = toDispose.iterator(); i.hasNext();)
-            {
-                InputStream is = (InputStream) i.next();
-
-                try
-                {
-                    is.close();
-                }
-                catch (IOException e)
-                {
-                    log.warn("Cannot dispose of input stream: " + e.toString());
-                }
-            }
-
-            toDispose.clear();
-        }
-
-
-        private final InputStream invokeFilterOrOutputComponent(
-            String componentId, InputStream data, Map optionalParams
-        )
-            throws IOException, ComponentFailureException
-        {
-            log.debug("Start: Invoking filter/output component: " + componentId);
-
-            ComponentDescriptor component = componentsLoader.findComponent(componentId);
-
-			if (component == null)
-				throw new IOException("Could not find component of id: "
-                    + componentId);
-
-            FormActionInfo actionInfo = new FormActionInfo(
-                    new URL(component.getServiceURL()), "post"
-                );
-            HTTPFormSubmitter submitter = new HTTPFormSubmitter(actionInfo);
-            FormParameters queryArgs = new FormParameters();
-
-            addOptionalParams(optionalParams, queryArgs);
-            queryArgs.addParameter(new Parameter("carrot-xchange-data", data, false));
-
-            if (queryGuard != null)
-            {
-                String permission;
-
-                if (
-                    (permission = queryGuard.allowFilterComponent(
-                                component, session, request, context
-                            )) != null
-                )
-                {
-                    throw new GuardVetoException(component, "guard." + permission);
-                }
-            }
-
-            InputStream inputStream = submitter.submit(queryArgs, null, "UTF-8");
-
-            if (inputStream == null)
-            {
-                QueryProcessor.generateNoOutputFailure(component, submitter);
-            }
-
-            if (DUMP_INTERMEDIATE_STREAMS)
-            {
-                Class t = inputStream.getClass();
-                inputStream = dumpStream(inputStream);
-            }
-
-            toDispose.add(inputStream);
-
-            log.debug("End: Invoking filter/output component: " + componentId);
-
-            return inputStream;
-        }
-
-
-        private final InputStream dumpStream(InputStream is)
-        {
-            // this implementation dumps the input stream without any delays.
-            byte [] bytes;
-
-            try
-            {
-                bytes = org.put.util.io.FileHelper.readFully(is);
-
-                synchronized (counter)
-                {
-                    try
-                    {
-                        OutputStream os = new FileOutputStream(
-                                new File(DUMPDIR, "carrot_dump_" + counter[0])
-                            );
-                        log.debug("Dumping intermediate stream #" + counter[0]);
-                        counter[0]++;
-                        os.write(bytes);
-                        os.close();
-                    }
-                    catch (FileNotFoundException e)
-                    {
-                        throw new RuntimeException("Cannot dump the debugging stream.");
-                    }
-                }
-            }
-            catch (IOException e)
-            {
-                throw new RuntimeException("Stream IO error.");
-            }
-
-            return new ByteArrayInputStream(bytes);
-        }
-    }
-
-    private final void addOptionalParams(Map optionalParams, FormParameters queryArgs)
-    {
-        if (optionalParams != null)
-        {
-            for (Iterator i = optionalParams.keySet().iterator(); i.hasNext();)
-            {
-                Object key = i.next();
-                Object value = optionalParams.get(key);
-
-                if (value instanceof Object [])
-                {
-                    Object [] values = (Object []) value;
-
-                    for (int j = 0; j < values.length; j++)
-                    {
-                        queryArgs.addParameter(
-                            new Parameter(key.toString(), values[j].toString(), false)
-                        );
-                    }
-                }
-                else
-                {
-                    queryArgs.addParameter(new Parameter(key.toString(), value.toString(), false));
-                }
-            }
-        }
-    }
-
-    private static class QueryBean
-        implements com.dawidweiss.carrot.controller.carrot2.process.scripted.Query
-    {
-        private final transient Query query;
-
-        public QueryBean(Query query)
-        {
-            this.query = query;
-        }
-
-        public final String getQuery()
-        {
-            return query.getContent();
-        }
-
-
-        public final int getNumberOfExceptedResults()
-        {
-            return query.getRequestedResults();
-        }
     }
 }

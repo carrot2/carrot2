@@ -15,11 +15,9 @@
 package com.mwroblewski.carrot.filter.ahcfilter.groups;
 
 
-import java.util.Vector;
-
-import org.apache.log4j.Logger;
-
 import com.mwroblewski.carrot.utils.MathUtils;
+import org.apache.log4j.Logger;
+import java.util.Vector;
 
 
 /**

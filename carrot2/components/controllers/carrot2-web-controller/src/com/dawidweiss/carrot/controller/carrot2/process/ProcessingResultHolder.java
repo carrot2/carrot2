@@ -23,9 +23,11 @@ import java.util.*;
  */
 public class ProcessingResultHolder
 {
+    private DebugQueryExecutionInfo debugInfo;
     private boolean erraneous;
     private List exceptions;
     private Map attributes;
+
 
     /**
      * Construct a new empty ResultHolder object.
@@ -92,4 +94,15 @@ public class ProcessingResultHolder
     {
         attributes.put(key, value);
     }
+
+    public void setDebugInfo(DebugQueryExecutionInfo debugInfo)
+    {
+        this.debugInfo = debugInfo;
+    }
+
+    public DebugQueryExecutionInfo getDebugInfo()
+    {
+        return debugInfo;
+    }
+
 }

@@ -15,12 +15,10 @@
 package com.mwroblewski.carrot.filter.ahcfilter;
 
 
-import java.util.*;
-
-import org.jdom.Element;
-
 import com.mwroblewski.carrot.filter.ahcfilter.groups.Group;
 import com.mwroblewski.carrot.lexical.LexicalElement;
+import org.jdom.Element;
+import java.util.*;
 
 
 public class AHCFilterData
@@ -61,6 +59,7 @@ public class AHCFilterData
         termsWeights = new float[docsList.size()][terms.length];
 
         Iterator termsIterator = termsList.iterator();
+
         for (i = 0; termsIterator.hasNext(); i++)
         {
             Element termElement = (Element) termsIterator.next();

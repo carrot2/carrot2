@@ -15,12 +15,10 @@
 package com.stachoodev.carrot.filter.cluster;
 
 
+import com.stachoodev.carrot.filter.cluster.common.*;
+import org.jdom.Element;
 import java.text.NumberFormat;
 import java.util.*;
-
-import org.jdom.Element;
-
-import com.stachoodev.carrot.filter.cluster.common.*;
 
 
 /**

@@ -15,14 +15,12 @@
 package com.mwroblewski.carrot.filter.ahcfilter.ahc;
 
 
-import java.util.LinkedList;
-
-import org.apache.log4j.Logger;
-
 import com.mwroblewski.carrot.filter.ahcfilter.ahc.dendrogram.DendrogramItem;
 import com.mwroblewski.carrot.filter.ahcfilter.ahc.dendrogram.DendrogramLeaf;
 import com.mwroblewski.carrot.filter.ahcfilter.ahc.linkage.LinkageMethod;
 import com.mwroblewski.carrot.filter.ahcfilter.ahc.stop.StopCondition;
+import org.apache.log4j.Logger;
+import java.util.LinkedList;
 
 
 /**

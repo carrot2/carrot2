@@ -15,13 +15,11 @@
 package com.mwroblewski.carrot.filter.ahcfilter.ahc.dendrogram.visualisation;
 
 
+import com.mwroblewski.carrot.filter.ahcfilter.ahc.dendrogram.*;
+import org.apache.log4j.Logger;
 import java.awt.*;
 import java.util.Iterator;
 import java.util.LinkedList;
-
-import org.apache.log4j.Logger;
-
-import com.mwroblewski.carrot.filter.ahcfilter.ahc.dendrogram.*;
 
 
 /**

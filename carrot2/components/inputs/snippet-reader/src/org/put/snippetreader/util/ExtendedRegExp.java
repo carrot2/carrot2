@@ -15,11 +15,9 @@
 package org.put.snippetreader.util;
 
 
-import gnu.regexp.*;
-
-import java.util.*;
-
 import org.jdom.Element;
+import gnu.regexp.*;
+import java.util.*;
 
 
 public class ExtendedRegExp

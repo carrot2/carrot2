@@ -15,11 +15,6 @@
 package org.put.snippetreader.readers.HtmlMultipage;
 
 
-import gnu.regexp.REException;
-
-import java.io.*;
-import java.util.*;
-
 import org.apache.log4j.Logger;
 import org.jdom.Element;
 import org.put.snippetreader.util.ExtendedRegExp;
@@ -27,6 +22,9 @@ import org.put.util.io.FileHelper;
 import org.put.util.net.http.FormParameters;
 import org.put.util.net.http.HTTPFormSubmitter;
 import org.put.util.xml.JDOMHelper;
+import gnu.regexp.REException;
+import java.io.*;
+import java.util.*;
 
 
 /**

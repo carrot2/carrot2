@@ -87,8 +87,8 @@ public class TfidfTdMatrixBuildingStrategy
 
             for (int doc = 0; doc < snippetIndices.length; doc++)
             {
-                tdMatrix[term][snippetIndices[doc]] = features[term].getSnippetTf()[snippetIndices[doc]] // tf
-                    * features[term].getIdf(); // idf
+                tdMatrix[term][snippetIndices[doc]] = features[term].getSnippetTf()[snippetIndices[doc]] * features[term]
+                    .getIdf(); // idf
             }
         }
 

@@ -15,11 +15,6 @@
 package org.put.snippetreader.readers;
 
 
-import gnu.regexp.RE;
-
-import java.io.*;
-import java.util.Vector;
-
 import org.apache.log4j.Logger;
 import org.jdom.Element;
 import org.put.snippetreader.extractors.regexp.*;
@@ -29,6 +24,9 @@ import org.put.util.io.FileHelper;
 import org.put.util.net.http.*;
 import org.put.util.text.HtmlHelper;
 import org.put.util.xml.JDOMHelper;
+import gnu.regexp.RE;
+import java.io.*;
+import java.util.Vector;
 
 
 /**

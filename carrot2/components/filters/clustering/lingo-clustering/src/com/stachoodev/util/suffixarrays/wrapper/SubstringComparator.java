@@ -55,8 +55,11 @@ public class SubstringComparator
             return 0;
         }
 
-        for (int i = 0; i < (((s2To - s2From) < (s1To - s1From)) ? (s2To - s2From)
-                                                                     : (s1To - s1From)); i++)
+        for (
+            int i = 0;
+                i < (((s2To - s2From) < (s1To - s1From)) ? (s2To - s2From)
+                                                             : (s1To - s1From)); i++
+        )
         {
             if (intData[s1From + i] < intData[s2From + i])
             {

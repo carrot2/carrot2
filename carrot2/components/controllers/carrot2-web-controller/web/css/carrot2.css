@@ -89,6 +89,41 @@ OPTGROUP OPTION {
 	color: black;
 }
 
+.debug {
+    color: #808080;
+}
+
+.info {
+    color: black;
+    background-color: #E0FFDF;
+    font-weight: bold;
+}
+.warn {
+    color: black;
+    background-color: #CBCBF0;
+    font-weight: bold;
+}
+.error {
+    color: white;
+    background-color: #FF1515;
+    font-weight: bold;
+}
+.fatal {
+    color: white;
+    background-color: #FF1515;
+    font-weight: bold;
+}
+.throwable {
+    color: #909090;
+    background-color: #f5f5f5;    
+}
+
+span.throwablehead {
+    color: red;
+    background-color: #f5f5f5;    
+}
+
+
 /**********************************/
 /* LISTS                          */
 /**********************************/

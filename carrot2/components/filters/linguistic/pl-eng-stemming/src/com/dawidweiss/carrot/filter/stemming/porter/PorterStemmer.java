@@ -15,7 +15,6 @@
 package com.dawidweiss.carrot.filter.stemming.porter;
 
 
-
 import com.dawidweiss.carrot.filter.stemming.DirectStemmer;
 import com.dawidweiss.carrot.filter.stemming.StemmerServlet;
 
@@ -105,11 +104,11 @@ public class PorterStemmer
        a consonant sequence and v a vowel sequence, and <..> indicates arbitrary
        presence,
     
-                <c><v>       gives 0
-                <c>vc<v>     gives 1
-                <c>vcvc<v>   gives 2
-                <c>vcvcvc<v> gives 3
-                ....
+                   <c><v>       gives 0
+                   <c>vc<v>     gives 1
+                   <c>vcvc<v>   gives 2
+                   <c>vcvcvc<v> gives 3
+                   ....
      */
     private final int m()
     {
@@ -211,8 +210,8 @@ public class PorterStemmer
        and also if the second c is not w,x or y. this is used when trying to
        restore an e at the end of a short word. e.g.
     
-                cav(e), lov(e), hop(e), crim(e), but
-                snow, box, tray.
+                   cav(e), lov(e), hop(e), crim(e), but
+                   snow, box, tray.
     
      */
     private final boolean cvc(int i)
@@ -287,23 +286,23 @@ public class PorterStemmer
 
     /* step1() gets rid of plurals and -ed or -ing. e.g.
     
-                 caresses  ->  caress
-                 ponies    ->  poni
-                 ties      ->  ti
-                 caress    ->  caress
-                 cats      ->  cat
+                    caresses  ->  caress
+                    ponies    ->  poni
+                    ties      ->  ti
+                    caress    ->  caress
+                    cats      ->  cat
     
-                 feed      ->  feed
-                 agreed    ->  agree
-                 disabled  ->  disable
+                    feed      ->  feed
+                    agreed    ->  agree
+                    disabled  ->  disable
     
-                 matting   ->  mat
-                 mating    ->  mate
-                 meeting   ->  meet
-                 milling   ->  mill
-                 messing   ->  mess
+                    matting   ->  mat
+                    mating    ->  mate
+                    meeting   ->  meet
+                    milling   ->  mill
+                    messing   ->  mess
     
-                 meetings  ->  meet
+                    meetings  ->  meet
     
      */
     private final void step1()

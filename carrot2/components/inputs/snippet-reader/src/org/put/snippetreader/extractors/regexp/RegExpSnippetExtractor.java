@@ -16,7 +16,6 @@ package org.put.snippetreader.extractors.regexp;
 
 
 import gnu.regexp.*;
-
 import java.io.IOException;
 import java.io.Reader;
 

@@ -15,12 +15,10 @@
 package com.mwroblewski.carrot.filter.termsfilter;
 
 
-import java.util.*;
-
-import org.apache.log4j.Logger;
-
 import com.dawidweiss.carrot.util.StringUtils;
 import com.mwroblewski.carrot.lexical.Phrase;
+import org.apache.log4j.Logger;
+import java.util.*;
 
 
 /**

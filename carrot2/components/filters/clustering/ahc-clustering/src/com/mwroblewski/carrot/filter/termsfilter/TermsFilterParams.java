@@ -15,10 +15,9 @@
 package com.mwroblewski.carrot.filter.termsfilter;
 
 
+import com.mwroblewski.carrot.filter.termsfilter.weighing.TermsWeighing;
 import java.util.LinkedList;
 import java.util.Map;
-
-import com.mwroblewski.carrot.filter.termsfilter.weighing.TermsWeighing;
 
 
 /**

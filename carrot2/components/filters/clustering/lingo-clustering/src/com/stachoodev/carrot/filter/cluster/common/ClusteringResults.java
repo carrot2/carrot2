@@ -15,9 +15,8 @@
 package com.stachoodev.carrot.filter.cluster.common;
 
 
-import java.util.Properties;
-
 import com.stachoodev.util.suffixarrays.wrapper.Substring;
+import java.util.Properties;
 
 
 /**

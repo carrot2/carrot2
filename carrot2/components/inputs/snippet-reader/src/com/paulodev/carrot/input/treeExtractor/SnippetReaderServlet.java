@@ -15,19 +15,16 @@
 package com.paulodev.carrot.input.treeExtractor;
 
 
-import java.io.*;
-import java.util.HashMap;
-
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.http.*;
-
+import com.dawidweiss.carrot.controller.carrot2.xmlbinding.query.Query;
+import com.paulodev.carrot.input.treeExtractor.readers.SnippetReader;
 import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.input.SAXBuilder;
-
-import com.dawidweiss.carrot.controller.carrot2.xmlbinding.query.Query;
-import com.paulodev.carrot.input.treeExtractor.readers.SnippetReader;
+import java.io.*;
+import java.util.HashMap;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.*;
 
 
 /**

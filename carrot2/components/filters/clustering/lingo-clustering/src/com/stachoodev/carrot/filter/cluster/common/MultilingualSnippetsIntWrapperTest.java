@@ -15,11 +15,10 @@
 package com.stachoodev.carrot.filter.cluster.common;
 
 
-import java.util.HashMap;
-import java.util.HashSet;
-
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
+import java.util.HashMap;
+import java.util.HashSet;
 
 
 /**

@@ -9,6 +9,28 @@
 <history>
 
     <changelist>
+        <date>2003-09-30</date>
+        <committer>dawid</committer>
+        <change component="carrot2.controller.carrot2-web" type="new">
+        When query processing fails, the query is re-run and a verbose log
+        of activities (including intermediate stream dumps) is displayed.
+        </change>
+    </changelist>
+
+    <changelist>
+        <date>2003-09-29</date>
+        <committer>dawid</committer>
+        <change component="global" type="refactoring">
+        Component descriptor has been stripped of input and output MIME type specification
+        as they were in no practical use. The MIME type may come back in the future though.
+        </change>
+        <change component="global" type="refactoring">
+        Process specification in XML has been removed. Only scripted processes are valid
+        from now on.
+        </change>
+    </changelist>
+
+    <changelist>
         <date>2003-09-18</date>
         <committer>dawid</committer>
         

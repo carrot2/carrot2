@@ -15,12 +15,10 @@
 package com.stachoodev.carrot.filter.cluster.lsicluster;
 
 
-import java.util.Arrays;
-
 import Jama.Matrix;
-
 import com.stachoodev.carrot.filter.cluster.common.*;
 import com.stachoodev.util.matrix.MatrixUtils;
+import java.util.Arrays;
 
 
 /**
@@ -84,19 +82,19 @@ public class DummyClusteringStrategy
    SingularValueDecomposition svd = tdMatrix.svd();
 
 
-   Matrix U = null;
-   Matrix V = null;
-   if (transposed)
-   {
-       V = svd.getU();
-       U = svd.getV();
-       tdMatrix = tdMatrix.transpose();
-   }
-   else
-   {
-       U = svd.getU();
-       V = svd.getV();
-   }
+      Matrix U = null;
+      Matrix V = null;
+      if (transposed)
+      {
+          V = svd.getU();
+          U = svd.getV();
+          tdMatrix = tdMatrix.transpose();
+      }
+      else
+      {
+          U = svd.getU();
+          V = svd.getV();
+      }
  */
 //		tdMatrix.print(4, 2);
         V.getMatrix(0, V.getRowDimension() - 1, 0, clusterCount - 1).print(5, 2);

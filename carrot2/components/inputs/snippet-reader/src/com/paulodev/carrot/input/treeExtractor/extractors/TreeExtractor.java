@@ -15,15 +15,13 @@
 package com.paulodev.carrot.input.treeExtractor.extractors;
 
 
-import java.util.*;
-
+import com.paulodev.carrot.input.treeExtractor.extractors.htmlParser.HTMLNode;
+import com.paulodev.carrot.input.treeExtractor.extractors.htmlParser.HTMLTree;
 import org.apache.log4j.Logger;
 import org.jdom.Element;
 import org.put.util.text.HtmlHelper;
 import org.put.util.xml.JDOMHelper;
-
-import com.paulodev.carrot.input.treeExtractor.extractors.htmlParser.HTMLNode;
-import com.paulodev.carrot.input.treeExtractor.extractors.htmlParser.HTMLTree;
+import java.util.*;
 
 
 public class TreeExtractor

@@ -15,9 +15,8 @@
 package com.stachoodev.carrot.filter.cluster.lsicluster;
 
 
-import junit.framework.TestCase;
-
 import com.stachoodev.carrot.filter.cluster.common.*;
+import junit.framework.TestCase;
 
 
 /**

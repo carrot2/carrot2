@@ -15,14 +15,11 @@
 package com.stachoodev.carrot.filter.cluster.common;
 
 
-import java.util.*;
-
-import org.apache.log4j.Logger;
-
 import ViolinStrings.Strings;
-
 import com.stachoodev.carrot.filter.cluster.lsicluster.LsiClusteringStrategy;
 import com.stachoodev.util.log.TimeLogger;
+import org.apache.log4j.Logger;
+import java.util.*;
 
 
 /**

@@ -15,19 +15,17 @@
 package com.paulodev.carrot.input.treeExtractor.readers;
 
 
-import java.io.InputStream;
-import java.io.Writer;
-import java.util.Enumeration;
-
+import com.paulodev.carrot.input.treeExtractor.extractors.TreeExtractor;
+import com.paulodev.carrot.input.treeExtractor.extractors.htmlParser.HTMLTokenizer;
+import com.paulodev.carrot.input.treeExtractor.extractors.htmlParser.HTMLTree;
 import org.apache.log4j.Logger;
 import org.jdom.Element;
 import org.put.snippetreader.readers.HtmlMultipage.HttpMultiPageReader;
 import org.put.util.net.http.*;
 import org.put.util.xml.JDOMHelper;
-
-import com.paulodev.carrot.input.treeExtractor.extractors.TreeExtractor;
-import com.paulodev.carrot.input.treeExtractor.extractors.htmlParser.HTMLTokenizer;
-import com.paulodev.carrot.input.treeExtractor.extractors.htmlParser.HTMLTree;
+import java.io.InputStream;
+import java.io.Writer;
+import java.util.Enumeration;
 
 
 public class SnippetReader

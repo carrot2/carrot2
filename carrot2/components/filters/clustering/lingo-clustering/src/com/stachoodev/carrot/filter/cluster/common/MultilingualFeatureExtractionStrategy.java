@@ -15,15 +15,13 @@
 package com.stachoodev.carrot.filter.cluster.common;
 
 
-import java.util.*;
-
-import org.apache.log4j.Logger;
-
 import com.dawidweiss.carrot.util.StringUtils;
 import com.stachoodev.util.log.TimeLogger;
 import com.stachoodev.util.suffixarrays.*;
 import com.stachoodev.util.suffixarrays.wrapper.Substring;
 import com.stachoodev.util.suffixarrays.wrapper.SubstringComparator;
+import org.apache.log4j.Logger;
+import java.util.*;
 
 
 /**

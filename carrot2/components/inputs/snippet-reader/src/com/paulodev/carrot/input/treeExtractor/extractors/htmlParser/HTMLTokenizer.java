@@ -29,12 +29,11 @@
 package com.paulodev.carrot.input.treeExtractor.extractors.htmlParser;
 
 
+import org.put.util.io.FileHelper;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.Vector;
-
-import org.put.util.io.FileHelper;
 
 
 /**

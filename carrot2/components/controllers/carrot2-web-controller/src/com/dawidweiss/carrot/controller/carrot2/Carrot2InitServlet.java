@@ -334,6 +334,10 @@ public class Carrot2InitServlet
                 // Instantiate QueryProcessor
                 QueryProcessor processor = new QueryProcessor(cache, guard);
                 context.setAttribute(Carrot2InitServlet.CARROT_PROCESSOR_KEY, processor);
+                processor.setFullDebugInfo(
+                    Boolean.valueOf(root.getAttributeValue("fullDebugReport", "false"))
+                           .booleanValue()
+                );
 
                 //
                 // Add processing chains to the application context.

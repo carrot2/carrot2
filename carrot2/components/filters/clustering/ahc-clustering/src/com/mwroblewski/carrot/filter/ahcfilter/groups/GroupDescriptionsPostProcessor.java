@@ -15,10 +15,9 @@
 package com.mwroblewski.carrot.filter.ahcfilter.groups;
 
 
+import com.mwroblewski.carrot.lexical.*;
 import java.util.Collections;
 import java.util.Vector;
-
-import com.mwroblewski.carrot.lexical.*;
 
 
 /**

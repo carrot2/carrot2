@@ -30,7 +30,7 @@ public class MockQuery
     }
 
 
-    public int getNumberOfExceptedResults()
+    public int getNumberOfExpectedResults()
     {
         return 100;
     }

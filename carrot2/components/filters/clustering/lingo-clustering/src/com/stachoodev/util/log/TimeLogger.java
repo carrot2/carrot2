@@ -15,9 +15,8 @@
 package com.stachoodev.util.log;
 
 
-import java.text.NumberFormat;
-
 import org.apache.log4j.Logger;
+import java.text.NumberFormat;
 
 
 /**

@@ -15,11 +15,10 @@
 package com.stachoodev.util.suffixarrays;
 
 
-import junit.framework.AssertionFailedError;
-import junit.framework.TestCase;
-
 import com.stachoodev.util.suffixarrays.wrapper.IntWrapper;
 import com.stachoodev.util.suffixarrays.wrapper.StringIntWrapper;
+import junit.framework.AssertionFailedError;
+import junit.framework.TestCase;
 
 
 /**

@@ -15,15 +15,12 @@
 package com.stachoodev.carrot.filter.cluster.common;
 
 
-import gnu.regexp.RE;
-import gnu.regexp.REException;
-
-import java.util.*;
-
-import org.apache.log4j.Logger;
-
 import com.dawidweiss.carrot.filter.stemming.DirectStemmer;
 import com.dawidweiss.carrot.util.StringUtils;
+import org.apache.log4j.Logger;
+import gnu.regexp.RE;
+import gnu.regexp.REException;
+import java.util.*;
 
 
 /**

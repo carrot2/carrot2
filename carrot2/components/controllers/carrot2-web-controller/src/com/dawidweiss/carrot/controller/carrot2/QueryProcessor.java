@@ -40,7 +40,14 @@ public class QueryProcessor
     private final Logger log = Logger.getLogger(QueryProcessor.class);
     private Cache cache;
     private QueryGuard queryGuard;
+    private boolean fullDebugInfo;
 
+    /**
+     * Create a new QueryProcessor with a given cache and query guard.
+     *
+     * @param cache
+     * @param guard
+     */
     public QueryProcessor(Cache cache, QueryGuard guard)
     {
         this.cache = cache;
@@ -74,46 +81,6 @@ public class QueryProcessor
         log.debug("Active guard: " + queryGuard);
     }
 
-    private static class CacheOnlyGuard
-        implements QueryGuard
-    {
-        QueryGuard previous;
-
-        public CacheOnlyGuard(QueryGuard previous)
-        {
-            this.previous = previous;
-        }
-
-        public String allowInputComponent(
-            Query q, ComponentDescriptor component, HttpSession session, HttpServletRequest request,
-            ServletContext context
-        )
-        {
-            return "cache-only-guard";
-        }
-
-
-        public String allowFilterComponent(
-            ComponentDescriptor component, HttpSession session, HttpServletRequest request,
-            ServletContext context
-        )
-        {
-            if (previous == null)
-            {
-                return null;
-            }
-            else
-            {
-                return previous.allowFilterComponent(component, session, request, context);
-            }
-        }
-
-
-        public String toString()
-        {
-            return "CacheOnlyGuard [" + previous + "]";
-        }
-    }
 
     /**
      * Processes a query using the given Process and query parameters.
@@ -123,9 +90,6 @@ public class QueryProcessor
         HttpServletRequest request, ServletContext context
     )
     {
-        HTTPFormSubmitter submitter = null;
-        ComponentDescriptor component = null;
-
         try
         {
             log.debug(
@@ -134,118 +98,7 @@ public class QueryProcessor
                                                        : query.getContent()) + "]"
             );
 
-            if (process instanceof ResolvedProcessingChain)
-            {
-                ResolvedProcessingChain processingChain = (ResolvedProcessingChain) process;
-
-                // Submit initial request to the Input Component.
-                component = processingChain.getInputComponent();
-
-                FormActionInfo actionInfo;
-                FormParameters queryArgs;
-
-                InputStream inputStream = null;
-
-                if ((inputStream = this.cache.getInputFor(query, component.getId(), null)) != null)
-                {
-                    log.debug("Using cached query.");
-                }
-                else
-                {
-                    actionInfo = new FormActionInfo(new URL(component.getServiceURL()), "post");
-                    queryArgs = new FormParameters();
-                    submitter = new HTTPFormSubmitter(actionInfo);
-
-                    StringWriter sw = new StringWriter();
-                    query.marshal(sw);
-
-                    Parameter queryRequestXml = new Parameter(
-                            "carrot-request", sw.getBuffer().toString(), false
-                        );
-
-                    queryArgs.addParameter(queryRequestXml);
-
-                    if (queryGuard != null)
-                    {
-                        String permission;
-
-                        if (
-                            (permission = queryGuard.allowInputComponent(
-                                        query, component, session, request, context
-                                    )) != null
-                        )
-                        {
-                            throw new GuardVetoException(component, "guard." + permission);
-                        }
-                    }
-
-                    inputStream = submitter.submit(queryArgs, null, "UTF-8");
-                }
-
-                if (inputStream == null)
-                {
-                    generateNoOutputFailure(component, submitter);
-                }
-
-                // Do the filters chain now.
-                ComponentDescriptor [] filters = processingChain.getFilterComponents();
-
-                for (int i = 0; i < filters.length; i++)
-                {
-                    component = filters[i];
-                    actionInfo = new FormActionInfo(new URL(component.getServiceURL()), "post");
-                    queryArgs = new FormParameters();
-                    queryArgs.addParameter(
-                        new Parameter("carrot-xchange-data", inputStream, false)
-                    );
-                    submitter = new HTTPFormSubmitter(actionInfo);
-
-                    if (queryGuard != null)
-                    {
-                        String permission;
-
-                        if (
-                            (permission = queryGuard.allowFilterComponent(
-                                        component, session, request, context
-                                    )) != null
-                        )
-                        {
-                            throw new GuardVetoException(component, "guard." + permission);
-                        }
-                    }
-
-                    inputStream = submitter.submit(queryArgs, null, "UTF-8");
-
-                    if (inputStream == null)
-                    {
-                        generateNoOutputFailure(component, submitter);
-                    }
-                }
-
-                // do the output component
-                component = processingChain.getOutputComponent();
-                actionInfo = new FormActionInfo(new URL(component.getServiceURL()), "post");
-                queryArgs = new FormParameters();
-                queryArgs.addParameter(
-                    new Parameter(
-                        "carrot-xchange-data", new InputStreamReader(inputStream, "UTF-8"), false
-                    )
-                );
-                submitter = new HTTPFormSubmitter(actionInfo);
-                inputStream = submitter.submit(queryArgs, null, "UTF-8");
-
-                if (inputStream == null)
-                {
-                    generateNoOutputFailure(component, submitter);
-                }
-
-                output.write(
-                    new String(
-                        org.put.util.io.FileHelper.readFullyAndCloseInput(inputStream), "UTF-8"
-                    )
-                );
-            }
-            else if (process instanceof ResolvedScriptedProcess)
+            if (process instanceof ResolvedScriptedProcess)
             {
                 ByteArrayOutputStream os = new ByteArrayOutputStream();
                 Map requestParams = new HashMap();
@@ -260,7 +113,7 @@ public class QueryProcessor
             else
             {
                 throw new RuntimeException(
-                    "Process type not supported." + process.getClass().getName()
+                    "Process type not supported: " + process.getClass().getName()
                 );
             }
         }
@@ -278,10 +131,30 @@ public class QueryProcessor
         {
             log.warn("Error processing query.", e);
 
+            // if full-debug on, re-run the query and log all the information carefully.
+            if (fullDebugInfo)
+            {
+                if (process instanceof ResolvedScriptedProcess)
+                {
+                    ByteArrayOutputStream os = new ByteArrayOutputStream();
+                    Map requestParams = new HashMap();
+                    DebugQueryExecutionInfo debugInfo = ((ResolvedScriptedProcess) process).applyProcessWithDebug(
+                        query, os, requestParams, cache, queryGuard, session, request, context
+                    );
+
+                    // TODO: nasty - caching is not necessary here, it should
+                    // be implemented as a direct stream copy.
+                    ProcessingResultHolder result = new ProcessingResultHolder();
+                    result.setErraneous(true);
+                    result.addException(e);
+                    result.setDebugInfo( debugInfo );
+                    return result;
+                }
+            }
+
             ProcessingResultHolder result = new ProcessingResultHolder();
             result.setErraneous(true);
             result.addException(e);
-
             return result;
         }
 
@@ -327,6 +200,58 @@ public class QueryProcessor
             throw new ComponentFailureException(
                 component, "No output from component. Reason unknown."
             );
+        }
+    }
+
+
+    /**
+     * If set to <code>true</code>, the query processor will re-run erroneous queries and assemble
+     * a detailed error report. This operation is slowing down the server significantly as all
+     * queries must be executed separately and twice.
+     */
+    public void setFullDebugInfo(boolean value)
+    {
+        this.fullDebugInfo = value;
+    }
+
+    private static class CacheOnlyGuard
+        implements QueryGuard
+    {
+        QueryGuard previous;
+
+        public CacheOnlyGuard(QueryGuard previous)
+        {
+            this.previous = previous;
+        }
+
+        public String allowInputComponent(
+            Query q, ComponentDescriptor component, HttpSession session, HttpServletRequest request,
+            ServletContext context
+        )
+        {
+            return "cache-only-guard";
+        }
+
+
+        public String allowFilterComponent(
+            ComponentDescriptor component, HttpSession session, HttpServletRequest request,
+            ServletContext context
+        )
+        {
+            if (previous == null)
+            {
+                return null;
+            }
+            else
+            {
+                return previous.allowFilterComponent(component, session, request, context);
+            }
+        }
+
+
+        public String toString()
+        {
+            return "CacheOnlyGuard [" + previous + "]";
         }
     }
 }

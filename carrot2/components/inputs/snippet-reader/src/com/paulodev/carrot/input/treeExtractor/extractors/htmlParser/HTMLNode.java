@@ -341,6 +341,7 @@ public class HTMLNode
     public String toString()
     {
         StringBuffer sb; // Stores the string to be returned.
+
         // Get a new StringBuffer.
         sb = new StringBuffer();
 
