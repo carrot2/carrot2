@@ -17,7 +17,7 @@ tmp/dist
 ---
 
 Web controller component for Carrot2 uses a set of component and process
-descriptors found in 'descrioptors' folder. You should adjust the host
+descriptors found in 'descriptors' folder. You should adjust the host
 and port in these descriptors by either manually changing them inside
 descriptor files, or overriding build variables like this:
 
