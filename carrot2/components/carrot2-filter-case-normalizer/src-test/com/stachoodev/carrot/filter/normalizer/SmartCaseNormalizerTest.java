@@ -14,6 +14,7 @@ import junit.framework.*;
 
 import com.dawidweiss.carrot.core.local.clustering.*;
 import com.dawidweiss.carrot.core.local.linguistic.*;
+import com.dawidweiss.carrot.core.local.linguistic.tokens.*;
 import com.dawidweiss.carrot.util.tokenizer.*;
 import com.dawidweiss.carrot.util.tokenizer.languages.polish.*;
 
@@ -89,7 +90,36 @@ public class SmartCaseNormalizerTest extends TestCase
         caseNormalizer.getNormalizedDocuments();
         assertEquals("Correct capitalization", normalizedDocument, document);
     }
+    
+    /**
+     *  
+     */
+    public void testStemPreserving()
+    {
+        TokenizedDocument document = snippetTokenizer
+            .tokenize(new RawDocumentSnippet("Dancing Dance DANCES",
+                "", "en"));
 
+        // Clear raw document references, which would break equality
+        document.setProperty(TokenizedDocument.PROPERTY_RAW_DOCUMENT, null);
+
+        caseNormalizer.addDocument(document);
+        caseNormalizer.getNormalizedDocuments();
+        
+        assertNotNull("Stem preserved", ((StemmedToken) document.getTitle()
+            .getTokenAt(0)).getStem());
+        assertEquals("Stem preserved", ((StemmedToken) document.getTitle()
+            .getTokenAt(0)).getStem().toString(), "danc");
+        assertNotNull("Stem preserved", ((StemmedToken) document.getTitle()
+            .getTokenAt(1)).getStem());
+        assertEquals("Stem preserved", ((StemmedToken) document.getTitle()
+            .getTokenAt(1)).getStem().toString(), "danc");
+        assertNotNull("Stem preserved", ((StemmedToken) document.getTitle()
+            .getTokenAt(2)).getStem());
+        assertEquals("Stem preserved", ((StemmedToken) document.getTitle()
+            .getTokenAt(2)).getStem().toString(), "danc");
+    }
+    
     /**
      *  
      */
