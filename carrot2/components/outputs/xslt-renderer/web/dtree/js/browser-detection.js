@@ -1,25 +1,3 @@
-/*
- * $Log$
- * Revision 1.1  2003/09/19 10:20:42  dawidweiss
- * Initial revision
- *
- * Revision 1.1.1.1  2003/09/19 08:15:49  dweiss
- * Initial import of restructured project repository.
- *
- * Revision 1.1  2003/01/22 16:35:28  dweiss
- * Pierwsza wersja dynamic tree. ma jeszcze troche bugow!
- *
- * Revision 1.9  2002/07/22 14:06:21  bc6ix
- * fix license path, change version reporting to use 2 digits for each level
- *
- * Revision 1.8  2002/07/07 08:23:07  bc6ix
- * fix line endings
- *
- * Revision 1.7  2002/05/14 16:52:52  bc6ix
- * use CVS Log for revision history
- *
- *
- */
 
 /* ***** BEGIN LICENSE BLOCK *****
  * Licensed under Version: MPL 1.1/GPL 2.0/LGPL 2.1
