@@ -181,7 +181,8 @@ public class ZIPCachedQuery
 
         try
         {
-            is = new BufferedInputStream(new GZIPInputStream(new FileInputStream(this.file)));
+            is = new BufferedInputStream(new GZIPInputStream(
+                        new FileInputStream(this.file)));
 
             int dataOffset = 0;
             ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -228,20 +229,24 @@ public class ZIPCachedQuery
 
                         if (encoded.length > 0)
                         {
-                            Map optionalParams = new HashMap();
-                            String urlEncoded = new String(URLEncoding.decode(encoded), "UTF-8");
-                            StringTokenizer tokenizer = new StringTokenizer(
-                                    urlEncoded, "&=", false
-                                );
+							Map optionalParams = new HashMap();
+							String urlEncoded = new String(URLEncoding
+									.decode(encoded), "UTF-8");
+							StringTokenizer tokenizer = new StringTokenizer(
+									urlEncoded, "&", false);
 
-                            while (tokenizer.hasMoreTokens())
-                            {
-                                String key = tokenizer.nextToken();
-                                String value = tokenizer.nextToken();
-                                optionalParams.put(key, value);
-                            }
-
-                            this.optionalParams = optionalParams;
+							while (tokenizer.hasMoreTokens()) {
+                                String param = tokenizer.nextToken();
+                                if (param.indexOf('=') < 0) {
+	                                // If no '=', consider the parameter empty.
+	                                optionalParams.put(param, "");
+                                } else {
+									String key = param.substring(0, param.indexOf('='));
+									String value = param.substring(param.indexOf('=')+1);
+									optionalParams.put(key, value);
+								}
+							}
+							this.optionalParams = optionalParams;
                         }
                         else
                         {
