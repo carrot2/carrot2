@@ -10,7 +10,7 @@
     <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
     
     
-    <target name="benchmark">
+    <target name="benchmark" depends="test">
         <ant target="run.class"
              antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" inheritrefs="true">
              <property name="run.class.name" value="com.stachoodev.matrix.factorization.MatrixFactorizationBenchmark" />
