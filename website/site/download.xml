@@ -48,7 +48,7 @@
         the component WARs, throw them in the <tt>context-components</tt> directory of this runtime and start Tomcat!
         </p>
         <p>
-        <a href="http://carrot2.sourceforge.net/download/carrot2-cvs-nightly.tar.gz">http://carrot2.sourceforge.net/download/tomcat-carrot-runtime.tgz</a>
+        <a href="http://carrot2.sourceforge.net/download/tomcat-carrot-runtime.tgz">http://carrot2.sourceforge.net/download/tomcat-carrot-runtime.tgz</a>
         </p>
     </chapter>
      
