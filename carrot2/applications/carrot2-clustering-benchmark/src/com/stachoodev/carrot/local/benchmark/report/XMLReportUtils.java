@@ -1,7 +1,12 @@
 /*
- * XMLReportUtils.java
- * 
- * Created on 2004-06-30
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
 package com.stachoodev.carrot.local.benchmark.report;
 
@@ -9,15 +14,24 @@ import java.util.*;
 
 import org.dom4j.*;
 
+import com.dawidweiss.carrot.util.common.*;
+
 /**
- * @author stachoo
+ * Various utility methods for XML reports.
+ * 
+ * @author Stanislaw Osinski
+ * @version $Revision$
  */
 public class XMLReportUtils
 {
     /**
-     * @param list
-     * @param listElementName
-     * @param entryElementName
+     * Creates an element for a {@link List}
+     * 
+     * @param list data for the element
+     * @param listElementName name for the list element
+     * @param entryElementName name for a single list element. The name will
+     *            only be used if no {@link ElementFactory}is available for the
+     *            a particular list element.
      * @return
      */
     public static Element createListElement(List list, String listElementName,
@@ -54,11 +68,14 @@ public class XMLReportUtils
     }
 
     /**
-     * @param map
-     * @param mapElementName
-     * @param entryElementName
-     * @param keyAttributeName
-     * @param valueElementName
+     * Creates an element for a {@link Map}.
+     * 
+     * @param map data for the element
+     * @param mapElementName name for the map element
+     * @param entryElementName name for a single map entry element. The name
+     *            will only be used if no {@link ElementFactory}is available
+     *            for the a particular map entry.
+     * @param keyAttributeName name for a single map key attribute
      * @return
      */
     public static Element createMapElement(Map map, String mapElementName,
@@ -81,8 +98,17 @@ public class XMLReportUtils
             }
             else
             {
-                entryElement = mapElement.addElement(entryElementName).addText(
-                    value.toString());
+                // Try primitives
+                if (value instanceof Double)
+                {
+                    entryElement = mapElement.addElement(entryElementName)
+                        .addText(StringUtils.toString((Double) value, "#.##"));
+                }
+                else
+                {
+                    entryElement = mapElement.addElement(entryElementName)
+                        .addText(value.toString());
+                }
             }
 
             // Add key attribute

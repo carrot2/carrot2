@@ -45,6 +45,28 @@ img {
 }
 
 /**
+ * Main report
+ */
+span.process-name {
+  font-weight:      bold;
+  padding-left:     5px;
+}
+
+div.result {
+  margin-left:      4px;
+  border:           0px;
+  border-left:      1px;
+  border-style:     solid;
+  border-color:     #a0a0a0;
+  padding-left:     10px;
+  margin-bottom:    10px;
+  padding-top:      3px;
+}
+
+table.reault {
+  width:            auto;
+}
+/**
  * General info
  */
 
@@ -93,6 +115,11 @@ span.cluster-label-size {
   font-weight:      bold;
 }
 
+span.cluster-label-extras {
+  font-weight:      normal;
+  color:            #90a8d0;
+}
+
 div.raw-document {
   margin-bottom:    3px;
 }
@@ -104,7 +131,7 @@ span.document-title {
 span.document-snippet {
 }
 
-span.document-extra {
+span.document-extras {
   color:            #a0a0a0;
 }
 
@@ -120,14 +147,9 @@ div.indent {
 }
 
 /**
- * Main report
+ * Profiles
  */
-span.process-name {
-  font-weight:      bold;
-  padding-left:     5px;
-}
-
-div.result {
+div.profile {
   margin-left:      4px;
   border:           0px;
   border-left:      1px;
@@ -138,6 +160,35 @@ div.result {
   padding-top:      3px;
 }
 
-table.reault {
+span.profile-label {
+  font-weight:      bold;
+  padding-left:     5px;
+}
+
+div.all-profiles {
+  margin-top:       30px;
+}
+
+table.profile-data {
   width:            auto;
 }
+
+th.profile-key {
+  text-align:       right;
+  padding-right:    5px;
+  vertical-align:   bottom;
+}
+
+td.profile-key {
+  font-weight:      bold;
+  text-align:       right;
+  padding-right:    5px;
+  vertical-align:   top;
+}
+
+td.profile-value {
+  vertical-align:   top;
+  padding-right:    10px;
+}
+
+

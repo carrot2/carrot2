@@ -1,16 +1,29 @@
 /*
- * AllKnownElementFactories.java
- * 
- * Created on 2004-06-30
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
 package com.stachoodev.carrot.local.benchmark.report;
 
 import java.util.*;
 
 import com.dawidweiss.carrot.core.local.clustering.*;
+import com.dawidweiss.carrot.core.local.linguistic.tokens.*;
+import com.dawidweiss.carrot.core.local.profiling.*;
+import com.stachoodev.carrot.odp.*;
 
 /**
- * @author stachoo
+ * Provides access to all known implementations of the
+ * {@link com.stachoodev.carrot.local.benchmark.report.ElementFactory}
+ * interface.
+ * 
+ * @author Stanislaw Osinski
+ * @version $Revision$
  */
 public class AllKnownElementFactories
 {
@@ -28,9 +41,15 @@ public class AllKnownElementFactories
     static
     {
         factories = new HashMap();
-        
+
         factories.put(RawCluster.class, new RawClusterElementFactory());
         factories.put(RawDocument.class, new RawDocumentElementFactory());
+        factories.put(Profile.class, new ProfileElementFactory());
+        factories.put(ProfileEntry.class, new ProfileEntryElementFactory());
+        factories.put(ExtendedToken.class, new ExtendedTokenElementFactory());
+        factories.put(ExtendedTokenSequence.class,
+            new ExtendedTokenSequenceElementFactory());
+        factories.put(Topic.class, new TopicElementFactory());
     }
 
     /**
@@ -43,14 +62,16 @@ public class AllKnownElementFactories
     public static ElementFactory getElementFactory(Class c)
     {
         ElementFactory elementFactory = (ElementFactory) factories.get(c);
-        
+
         if (elementFactory == null)
         {
             // Try interface matches
-            for (Iterator classesIter = factories.keySet().iterator(); classesIter.hasNext();)
+            for (Iterator classesIter = factories.keySet().iterator(); classesIter
+                .hasNext();)
             {
                 Class cl = (Class) classesIter.next();
-                if (cl.isAssignableFrom(c)){
+                if (cl.isAssignableFrom(c))
+                {
                     elementFactory = (ElementFactory) factories.get(cl);
                     break;
                 }
