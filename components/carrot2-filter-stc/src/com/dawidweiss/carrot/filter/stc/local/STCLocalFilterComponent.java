@@ -62,7 +62,7 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
     private Map tokenizers;
 
     /** Generic tokenizer */
-    private WordBasedParser genericTokenizer;
+    private WordBasedParserBase genericTokenizer;
 
     /** Tokenizer buffer size */
     private static final int TOKEN_BUFFER_SIZE = 64;
@@ -301,7 +301,7 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
         if (genericTokenizer != null)
         {
             genericTokenizer.reuse();
-            WordBasedParserFactory.returnParser(genericTokenizer);
+            WordBasedParserFactory.Default.returnParser(genericTokenizer);
         }
     }
 
@@ -341,7 +341,7 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
             // We don't need to be thread-safe here, do we?
             if (genericTokenizer == null)
             {
-                genericTokenizer = WordBasedParserFactory.borrowParser();
+                genericTokenizer = WordBasedParserFactory.Default.borrowParser();
             }
 
             return genericTokenizer;
