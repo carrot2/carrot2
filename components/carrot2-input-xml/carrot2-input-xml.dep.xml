@@ -31,6 +31,11 @@
     <dependency name="carrot2-license" />
     
     <dependency name="junit" profile="test" />
+    <dependency name="carrot2-filter-lingo"   profile="test" in-profile="local" />
+    <dependency name="carrot2-util-tokenizer" profile="test" />
+    <dependency name="carrot2-util-tokenizer" profile="test" />
+    <dependency name="servlets-api"           profile="test" />
+    <dependency name="carrot2-util-remote"    profile="test" />
 
 	<dependency name="carrot2-util-remote" 	            profile="remote" />
     <dependency name="servlets-api"                     profile="remote" nocopy="true" />
