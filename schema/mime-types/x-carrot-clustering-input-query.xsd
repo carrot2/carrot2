@@ -5,17 +5,7 @@
     elementFormDefault="qualified"
     targetNamespace="http://www.dawidweiss.com/projects/carrot/clustering/query"
 >
-    <xs:element name="search">
-        <xs:annotation>
-            <xs:documentation>Search element is a container for user queries.
-            </xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="query" type="queryType" minOccurs="1" maxOccurs="1" />
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
+    <xs:element name="query" type="queryType" />
     
     <xs:complexType name="queryType">
         <xs:annotation>

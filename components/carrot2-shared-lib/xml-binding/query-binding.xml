@@ -14,10 +14,6 @@
 
      <!-- Specific bindings -->
      
-     <cbf:elementBinding name="search">
-     	<cbf:java-class name="QueryContainer" final="false" equals="false" abstract="false" bound="false" />
-     </cbf:elementBinding>
-     
      <cbf:elementBinding name="query">
         <cbf:java-class name="Query" final="false" equals="false" abstract="false" bound="true" />
      </cbf:elementBinding>
