@@ -13,6 +13,7 @@ package com.carrot.input.lucene;
 import java.io.*;
 import java.util.*;
 
+import org.apache.log4j.*;
 import org.apache.lucene.analysis.*;
 import org.apache.lucene.document.*;
 import org.apache.lucene.queryParser.*;
@@ -33,6 +34,9 @@ import com.dawidweiss.carrot.core.local.profiling.*;
 public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
     implements RawDocumentsProducer
 {
+    /** Logger */
+    private final Logger logger = Logger.getLogger(this.getClass());
+
     /** The default number of requested results */
     public static final int DEFAULT_REQUESTED_RESULTS = 100;
 
@@ -207,21 +211,22 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
             startAt = 0;
         }
 
+        long start = System.currentTimeMillis();
         startTimer();
         
         // Create a boolean query that combines all fields  
         BooleanQuery booleanQuery = new BooleanQuery();
         for (int i = 0; i < searchFields.length; i++)
         {
-            Query queryComponent = QueryParser.parse(query, searchFields[i], analyzer);
+            QueryParser queryParser = new QueryParser(searchFields[i], analyzer);
+            queryParser.setOperator(QueryParser.DEFAULT_OPERATOR_AND);
+            Query queryComponent = queryParser.parse(query);
             booleanQuery.add(queryComponent, false, false);
         }
 
         // Perform query
         Hits hits = searcher.search(booleanQuery);
         int endAt = Math.min(hits.length(), startAt + requestedDocuments);
-
-        stopTimer();
 
         // Pass the actual document count
         requestContext.getRequestParameters().put(
@@ -232,7 +237,8 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
         requestContext.getRequestParameters().put(
             LocalInputComponent.PARAM_QUERY, query);
 
-        // Push results
+        // Get results from the index
+        List documents = new ArrayList(endAt - startAt);
         for (int i = startAt; i < endAt; i++)
         {
             Document doc = hits.doc(i);
@@ -240,6 +246,18 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
             RawDocumentSnippet rawDocument = new RawDocumentSnippet(
                 new Integer(hits.id(i)), doc.get(titleField), doc
                     .get(summaryField), doc.get(urlField), hits.score(i));
+            documents.add(rawDocument);
+        }
+        
+        long stop = System.currentTimeMillis();
+        stopTimer();
+
+        logger.info("Lucene search: " + (stop - start) + " ms");
+        
+        // Push results
+        for (Iterator iter = documents.iterator(); iter.hasNext();)
+        {
+            RawDocument rawDocument = (RawDocument) iter.next();
             rawDocumentConsumer.addDocument(rawDocument);
         }
     }
