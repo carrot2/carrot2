@@ -21,7 +21,7 @@
 		</ant>
 	</target>
 
-	<target name="html-report" depends="xml-report">
+	<target name="render-html">
 		<description>Transforms benchmarking reports to HTML</description>
 
 		<!-- Main report -->
@@ -51,6 +51,10 @@
 		</copy>
 	</target>
 	
+	<target name="html-report" depends="xml-report, render-html">
+		<description>Transforms benchmarking reports to HTML</description>
+	</target>
+		
 	<target name="xml-report">
 		<description>Executes all benchmarks and writes the XML results in the ${reports.dir} directory</description>
 
