@@ -67,6 +67,41 @@ public class MatrixFactorizationTest extends TestCase
     /**
      * 
      */
+    public void testOrderedNMFED()
+    {
+        NonnegativeMatrixFactorizationEDFactory factory = new NonnegativeMatrixFactorizationEDFactory();
+        setParameters(factory);
+        factory.setOrdered(true);
+
+        DoubleMatrix2D expectedU = NNIDoubleFactory2D.nni.make(new double [] []
+        {
+        { 0.99592, 6.1201e-011 },
+        { 6.9024e-070, 1.3886 },
+        { 8.2856e-070, 1.3886 },
+        { 7.4263e-066, 0.82488 },
+        { 0.87124, 5.8999e-011 } });
+
+        DoubleMatrix2D expectedV = NNIDoubleFactory2D.nni.make(new double [] []
+        {
+        { 1.0265e-069, 0.43087 },
+        { 8.1702e-070, 0.43463 },
+        { 0.73153, 9.7187e-012 },
+        { 0.73153, 9.7187e-012 },
+        { 3.9668e-063, 0.18182 },
+        { 7.7853e-070, 0.43463 },
+        { 0.5688, 8.5895e-012 } });
+
+        MatrixFactorization factorization = factory.factorize(A);
+
+        assertTrue("U matrix", MatrixUtils.equals(expectedU, factorization
+            .getU(), DELTA));
+        assertTrue("V matrix", MatrixUtils.equals(expectedV, factorization
+            .getV(), DELTA));
+    }
+
+    /**
+     * 
+     */
     public void testNMFKL()
     {
         NonnegativeMatrixFactorizationKLFactory factory = new NonnegativeMatrixFactorizationKLFactory();
@@ -141,6 +176,7 @@ public class MatrixFactorizationTest extends TestCase
         factory.setMaxIterations(MAX_ITERATIONS);
         factory.setStopThreshold(STOP_THRESHOLD);
         factory.setSeedingFactory(new ConstantSeedingStrategyFactory());
+        factory.setOrdered(false);
     }
 
     /** Returns constant matrices of fixed size */
