@@ -126,9 +126,11 @@
     </copy>
     
     <!-- copy libraries -->
+    <!-- no libraries at the moment.
     <copy filtering="false" flatten="true" includeemptydirs="true" todir="${build.dir}/WEB-INF/lib">
         <fileset dir="lib" includes="**/*.jar" />
     </copy>
+    -->
   </target>
   <!-- }}} -->
 
@@ -149,7 +151,7 @@
           <exclude name="**/*Test"/>
 		</classes>
 
-        <lib dir="lib" />
+        <lib dir="${build.dir}/WEB-INF/lib" />
 	</war>
 
   </target>
