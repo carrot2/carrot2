@@ -161,6 +161,7 @@ TESTING: @{component.path}
     <application-apply application.path="applications/carrot2-grokker-clusterizer" />
     <application-apply application.path="applications/carrot2-lucene-example" />
     <application-apply application.path="applications/carrot2-nutch-plugin" />
+    <application-apply application.path="applications/carrot2-demo-browser" />
   </target>
   
   
