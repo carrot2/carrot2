@@ -82,7 +82,7 @@
         </para>
 
         <para>
-        This command should build all the components for you and place them in tmp/dist.
+        This command should build all the components for you:
         <screen>
 ant build
         </screen>
@@ -100,6 +100,17 @@ ant -Ddeployment.port=80 -Ddeployment.host=myhost.com build.webcontroller
         <para>        
         Adjust the parameters to match your deployment configuration.
         </para>
+		
+		<important>
+			<para>
+			The default <literal>build</literal> target builds components in their
+			respective directories. If you want to collect all components and JARs
+			they depend on, use <literal>remote</literal>. target (or better refer to the
+			<filename>readme.txt</filename> file in the head directory of the 
+			source distribution).
+			</para>
+		</important>
+		
     </section>
 
     
@@ -448,7 +459,7 @@ ant -Ddeployment.port=80 -Ddeployment.host=myhost.com build.webcontroller
             Check out the source code from Sourceforge.
             </para>
 
-            <note>This is a huge download (approx. 18 MB).</note>
+            <note><para>This is a huge download (approx. 18 MB).</para></note>
 
             <para>           
 	        Go to <filename>c:\carrot</filename> and type in command-line mode:
@@ -567,7 +578,7 @@ ant -Ddeployment.port=80 -Ddeployment.host=myhost.com build.webcontroller
             <screen>ant -Ddeployment.port=80 -Ddeployment.host=myhost.com build.webcontroller</screen>
         </simplesect>
 
-        <simplesect id="">
+        <simplesect id="loggingsink">
             <title>Configuring Log4j logging sink</title>
             <para>
             You may also want to configure &log4j; so that messages from &carrot; components are
