@@ -1,6 +1,9 @@
 
 php_flag short_open_tag off
 
+ErrorDocument 404 /dweiss/carrot/index.php/notfound.xml
+ErrorDocument 403 /dweiss/carrot/index.php/notfound.xml
+
 RewriteEngine on
 RewriteBase /dweiss/carrot
 RewriteRule ^$ index.php/index.xml
