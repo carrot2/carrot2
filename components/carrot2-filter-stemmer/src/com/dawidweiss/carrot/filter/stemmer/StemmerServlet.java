@@ -53,12 +53,11 @@ public class StemmerServlet
      */
     public StemmerServlet()
     {
-        List languageCodes = AllKnownLanguages.getLanguageCodes();
-        for (Iterator codes = languageCodes.iterator(); codes.hasNext();)
+        String [] languageCodes = AllKnownLanguages.getLanguageCodes();
+        for (int i = 0; i < languageCodes.length; i++)
         {
-            String code = (String) codes.next();
-            this.languages.put(code, AllKnownLanguages
-                .getLanguageForIsoCode(code));
+            this.languages.put(languageCodes[i], AllKnownLanguages
+                .getLanguageForIsoCode(languageCodes[i]));
         }
     }
 
