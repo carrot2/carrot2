@@ -56,9 +56,9 @@ public abstract class TokenizedDocumentBase implements TokenizedDocument,
      * 
      * @see com.dawidweiss.carrot.util.common.PropertyProvider#getDoubleProperty(java.lang.String)
      */
-    public double getDoubleProperty(String propertyName)
+    public double getDoubleProperty(String propertyName, double defaultValue)
     {
-        return propertyHelper.getDoubleProperty(propertyName);
+        return propertyHelper.getDoubleProperty(propertyName, defaultValue);
     }
 
     /*
@@ -66,9 +66,9 @@ public abstract class TokenizedDocumentBase implements TokenizedDocument,
      * 
      * @see com.dawidweiss.carrot.util.common.PropertyProvider#getIntProperty(java.lang.String)
      */
-    public int getIntProperty(String propertyName)
+    public int getIntProperty(String propertyName, int defaultValue)
     {
-        return propertyHelper.getIntProperty(propertyName);
+        return propertyHelper.getIntProperty(propertyName, defaultValue);
     }
 
     /*
