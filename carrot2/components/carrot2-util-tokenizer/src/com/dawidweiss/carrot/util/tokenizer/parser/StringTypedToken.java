@@ -66,8 +66,9 @@ public class StringTypedToken implements TypedToken {
     public boolean equals(Object arg) {
         if (arg instanceof StringTypedToken) {
             return image.equals(((StringTypedToken) arg).image);
-        } else 
+        } else { 
             return false;
+        }
     }
 
     /**
@@ -77,4 +78,12 @@ public class StringTypedToken implements TypedToken {
         return image.hashCode();
     }
     
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    public String toString() {
+        return image;
+    }
 }
