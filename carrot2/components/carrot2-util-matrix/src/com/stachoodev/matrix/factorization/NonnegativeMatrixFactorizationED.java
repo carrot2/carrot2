@@ -87,7 +87,7 @@ public class NonnegativeMatrixFactorizationED extends
             U.zMult(U, T, 1, 0, true, false); // T <- U'U
             A.zMult(U, VT1, 1, 0, true, false); // VT1 <- A'U
             V.zMult(T, VT2); // VT2 <- VT
-            VT1.assign(plusEps);
+            VT1.assign(plusEps);	// TODO: shift this to the dividing function?
             VT2.assign(plusEps);
             VT1.assign(VT2, Functions.div); // VT1 <- VT1 ./ VT2
             V.assign(VT1, Functions.mult); // V <- V .* VT1
