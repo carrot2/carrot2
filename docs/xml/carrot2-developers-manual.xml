@@ -27,12 +27,13 @@
         <copyright>
             <year>2002</year>
             <year>2003</year>
+            <year>2004</year>
             <holder>Dawid Weiss, Carrot Developers, Poznań University of Technology</holder>
         </copyright>
     
-    <!--
+		<!--
         <releaseinfo>Release (CVS Id): $Id$</releaseinfo>
-	-->
+        -->
 
         <include file="history.xml"/>
     </bookinfo>
@@ -43,6 +44,8 @@
     <include file="architecture.xml" />
     <include file="contributing.xml" />
     <include file="component-descriptors.xml" />
+
+    <include file="local-interfaces.xml" />
 
     <include file="carrot-applications.xml" />
     <include file="mime-types.xml" />

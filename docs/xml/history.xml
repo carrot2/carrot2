@@ -11,6 +11,19 @@
 <revhistory>
 
     <revision>
+        <revnumber>0.20</revnumber>
+        <date>31 May 2004</date>
+        <authorinitials>dw</authorinitials>
+        <revdescription>
+            <para>
+            Added a chapter about design issues and solutions for
+            binding components using local Java interfaces.
+            </para>
+        </revdescription>
+    </revision>
+
+
+    <revision>
         <revnumber>0.19</revnumber>
         <date>24 Feb 2004</date>
         <authorinitials>dw</authorinitials>
