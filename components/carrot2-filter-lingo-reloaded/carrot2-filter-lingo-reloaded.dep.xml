@@ -25,26 +25,27 @@
 
 	<!-- Carrot2 components -->
 	<dependency name="carrot2-util-common" />
-    <dependency name="carrot2-util-matrix" />
-    <dependency name="carrot2-util-tokenizer" />
+  <dependency name="carrot2-util-matrix" />
+  <dependency name="carrot2-util-tokenizer" />
 	<dependency name="commons-primitives" />
 	<dependency name="carrot2-local-core" />
-    <dependency name="carrot2-license" />
-    <dependency name="log4j" />
+  <dependency name="carrot2-license" />
+  <dependency name="log4j" />
     
 	<dependency name="carrot2-filter-case-normalizer" 	profile="remote" />
-	<dependency name="carrot2-language-guesser"         profile="remote" />
-	<dependency name="carrot2-util-remote" 	profile="remote" />
-    <dependency name="jdom"                 profile="remote" />
-    <dependency name="servlets-api"         profile="remote" nocopy="true" />
-	<dependency name="carrot2-util-put"     profile="remote" />
+ 	<dependency name="carrot2-language-guesser"         profile="remote" />
+	<dependency name="carrot2-util-remote" 	            profile="remote" />
+  <dependency name="jdom"                             profile="remote" />
+  <dependency name="servlets-api"                     profile="remote" nocopy="true" />
+	<dependency name="carrot2-util-put"                 profile="remote" />
 
 
-	<dependency name="carrot2-util-remote" 	profile="test" />
+	<dependency name="carrot2-util-remote" 	            profile="test" />
 	<dependency name="carrot2-language-guesser"         profile="test" />
 	<dependency name="carrot2-filter-case-normalizer" 	profile="test" />
-    <dependency name="servlets-api"         profile="test" nocopy="true" />
-    <dependency name="jdom"                 profile="test" />
-    <dependency name="junit" profile="test" />
-    <dependency name="junit-addons" profile="test" />
+	<dependency name="carrot2-stemmer-lametyzator" 	    profile="test" />
+  <dependency name="servlets-api"                     profile="test" nocopy="true" />
+  <dependency name="jdom"                             profile="test" />
+  <dependency name="junit"                            profile="test" />
+  <dependency name="junit-addons"                     profile="test" />
 </component>
