@@ -26,11 +26,6 @@ public class TfIdfTdMatrixBuildingStrategy implements TdMatrixBuildingStrategy
     private double titleTokenTfMultiplier;
     private static double DEFAULT_TITLE_TOKEN_TF_MULTIPLIER = 2.5;
 
-    /** */
-    private short filterMask;
-    private static short DEFAULT_FILTER_MASK = TypedToken.TOKEN_FLAG_STOPWORD
-        | TypedToken.TOKEN_TYPE_PUNCTUATION | TypedToken.TOKEN_TYPE_SYMBOL;
-
     /**
      * Creates a TfTdMatrixBuildingStrategy that uses
      * {@link DoubleFactoy2D.sparse}to create the term-document matrix.
@@ -56,7 +51,6 @@ public class TfIdfTdMatrixBuildingStrategy implements TdMatrixBuildingStrategy
     {
         this.titleTokenTfMultiplier = titleTokenTfMultiplier;
         this.doubleFactory2D = doubleFactory2D;
-        this.filterMask = DEFAULT_FILTER_MASK;
     }
 
     /*
@@ -81,11 +75,11 @@ public class TfIdfTdMatrixBuildingStrategy implements TdMatrixBuildingStrategy
             tokensUsed.clear();
             ModelUtils.addToFrequencyMap(document.getTitle(),
                 ExtendedToken.PROPERTY_DF, tokenFrequencies, 1, tokensUsed,
-                filterMask);
+                (short)0);
             ModelUtils.addToFrequencyMap((TokenSequence) document
                 .getProperty(TokenizedDocument.PROPERTY_SNIPPET),
                 ExtendedToken.PROPERTY_DF, tokenFrequencies, 1, tokensUsed,
-                filterMask);
+                (short)0);
         }
 
         // Calculate the idf factor
