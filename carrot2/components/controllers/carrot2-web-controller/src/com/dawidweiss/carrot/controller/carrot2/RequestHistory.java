@@ -66,7 +66,7 @@ public final class RequestHistory
     }
 
 
-    public int getHistory(int max, Query [] query, ProcessDefinition [] process)
+    public final int getHistory(int max, Query [] query, ProcessDefinition [] process)
     {
         final int localmax = this.max; 
         synchronized (this) {

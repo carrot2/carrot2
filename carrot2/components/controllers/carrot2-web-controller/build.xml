@@ -85,7 +85,11 @@
     
     <!-- copy web application's resources -->
     <copy filtering="false" flatten="false" includeemptydirs="true" todir="${build.dir}">
-        <fileset dir="${src.webapp.path}" />
+        <fileset dir="${src.webapp.path}">
+			<exclude name="WEB-INF/classes/**" />
+            <exclude name="WEB-INF/web.xml**" />
+            <exclude name="WEB-INF/lib/**" />
+        </fileset>
     </copy>
 
     <!-- copy libraries -->    

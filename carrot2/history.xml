@@ -8,6 +8,17 @@
 
 <history>
     <changelist>
+        <date>2004-01-19</date>
+        <committer>dawid</committer>
+        <change component="carrot2.controller.carrot2-web" type="bugfix">
+        Recent queries bug (order and not appearing queries) hopefully fixed.
+        </change>
+        <change component="global" type="bugfix">
+        A couple of build-system-related bug fixes.
+        </change>
+	</changelist>
+
+    <changelist>
         <date>2003-11-27</date>
         <committer>dawid</committer>
         <change component="carrot2.controller.carrot2-web" type="new">
