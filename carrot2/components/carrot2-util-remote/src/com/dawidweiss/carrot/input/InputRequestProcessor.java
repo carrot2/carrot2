@@ -16,6 +16,10 @@ import com.dawidweiss.carrot.util.AbstractRequestProcessor;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.io.Writer;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -83,6 +87,30 @@ public abstract class InputRequestProcessor
 
     // ------------------------------------------------------- protected section
 
+    /**
+     * Converts query request parameters from a map of string arrays
+     * to normal strings (if the array is of size 1).
+     */
+    protected Map extractParameters( HttpServletRequest request ) {
+        HashMap dupl = new HashMap();
+        Map params = request.getParameterMap();
+        for (Iterator i = params.keySet().iterator(); i.hasNext();) {
+            String name = (String) i.next();
+            Object value = params.get(name);
+            if (value instanceof String[]) {
+                String [] v = (String[]) value;
+                if (v.length==1) {
+                    dupl.put(name, v[0]);
+                } else {
+                    dupl.put(name, v);
+                }
+            } else {
+                dupl.put(name,value);
+            }
+        }
+        return dupl;
+    }
+    
     /**
      * Process the query. Override this method and return a result for the query and requested
      * number of documents.
