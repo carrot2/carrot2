@@ -60,6 +60,7 @@
             userid="dweiss"
             password="${www.cs.put.poznan.pl}"
             verbose="yes"
+            newer="false"
             ignoreNoncriticalErrors="true">
             <fileset dir="${build.dir}">
                 <include name="**/*" />
