@@ -236,7 +236,8 @@ public class SnippetTokenizerLocalFilterComponent extends
             languageTokenizer);
 
         TokenizedDocumentSnippet tokenizedDocumentSnippet = new TokenizedDocumentSnippet(
-            titleTokenSequence, snippetTokenSequence);
+            rawDocument.getId(), titleTokenSequence, snippetTokenSequence,
+            rawDocument.getUrl(), rawDocument.getScore());
 
         // Set reference to the original raw document
         tokenizedDocumentSnippet.setProperty(
@@ -264,7 +265,7 @@ public class SnippetTokenizerLocalFilterComponent extends
         {
             return new MutableTokenSequence();
         }
-        
+
         int tokenCount = 0;
         com.dawidweiss.carrot.core.local.linguistic.tokens.Token [] tokens = new com.dawidweiss.carrot.core.local.linguistic.tokens.Token [TOKEN_BUFFER_SIZE];
         MutableTokenSequence tokenSequence = new MutableTokenSequence();
