@@ -14,6 +14,7 @@ import java.util.*;
 
 import com.dawidweiss.carrot.core.local.*;
 import com.dawidweiss.carrot.core.local.clustering.*;
+import com.dawidweiss.carrot.core.local.profiling.*;
 
 /**
  * Collects {@link com.dawidweiss.carrot.core.local.clustering.RawCluster}s
@@ -23,7 +24,7 @@ import com.dawidweiss.carrot.core.local.clustering.*;
  * @version $Revision$
  */
 public class RawClustersConsumerLocalOutputComponent extends
-    LocalOutputComponentBase implements RawClustersConsumer
+    ProfiledLocalOutputComponentBase implements RawClustersConsumer
 {
     /** Capabilities required from the previous component in the chain */
     private final static Set CAPABILITIES_PREDECESSOR = new HashSet(Arrays
