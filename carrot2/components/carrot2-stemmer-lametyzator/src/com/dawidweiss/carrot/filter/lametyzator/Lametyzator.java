@@ -55,11 +55,11 @@ public class Lametyzator implements Stemmer {
             if (fsa != null)
                 return;
 
-            InputStream fsaStream = this.getClass().getResourceAsStream("polski.fsa");
+            InputStream fsaStream = this.getClass().getResourceAsStream("/res/polski.fsa");
 
             if (fsaStream == null) {
                 throw new RuntimeException(
-                    "Cannot load the required FSA dictionary 'polski.fsa'");
+                    "Cannot load the required FSA dictionary '/res/polski.fsa'");
             }
 
             try {
