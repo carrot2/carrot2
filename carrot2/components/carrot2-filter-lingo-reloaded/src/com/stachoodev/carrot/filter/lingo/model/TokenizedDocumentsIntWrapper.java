@@ -19,7 +19,7 @@ import com.stachoodev.suffixarrays.wrapper.*;
  * 
  * @author stachoo
  */
-public class TokenizedDocumentsIntWrapper extends AbstractIntWrapper implements
+public class TokenizedDocumentsIntWrapper extends IntWrapperBase implements
         TypeAwareIntWrapper, MaskableIntWrapper
 {
     /** A bidirectional map of tokens (keys) and their integer codes (values) */
