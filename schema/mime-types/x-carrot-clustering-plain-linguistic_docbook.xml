@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE appendix PUBLIC 
-    "-//Dawid Weiss//DTD DocBook V3.1-Based Extension for XML and graphics inclusion//EN" 
-    "carrot-docbook-extensions.dtd">
-  
+<!DOCTYPE section PUBLIC 
+    "-//Dawid Weiss//DTD DocBook V3.1-Based Extension for XML and graphics inclusion//EN"
+    "http://www.cs.put.poznan.pl/dweiss/dtd/dweiss-docbook-extensions.dtd" [
+
+<!ENTITY % local SYSTEM "local-entities.ent">
+%local;
+]>
 <section id="sect:mime:x-carrot-clustering-plain-linguistic">
     <title>Embedded linguistic information: <computeroutput>application/x-carrot-clustering-plain-linguistic</computeroutput></title>
 
