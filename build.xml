@@ -128,6 +128,7 @@ TESTING: @{component.path}
     <component-apply component.path="components/carrot2-util-put" />
     <component-apply component.path="components/carrot2-util-remote" />
     <component-apply component.path="components/carrot2-util-tokenizer" />
+    <component-apply component.path="components/carrot2-util-matrix" />
     <component-apply component.path="components/carrot2-util-lang-guesser" />
 
     <component-apply component.path="components/carrot2-local-remote-adapters" />
@@ -142,6 +143,7 @@ TESTING: @{component.path}
     <component-apply component.path="components/carrot2-input-verbatim" />
 
     <component-apply component.path="components/carrot2-filter-lingo" />
+    <component-apply component.path="components/carrot2-filter-lingo-reloaded" />
     <component-apply component.path="components/carrot2-filter-ahc" />
     <component-apply component.path="components/carrot2-filter-fuzzyants" />
     <component-apply component.path="components/carrot2-filter-stc" />
