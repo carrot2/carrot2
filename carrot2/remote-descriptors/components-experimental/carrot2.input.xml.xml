@@ -6,8 +6,8 @@
 
     <component id               = "carrot2.input.xml"
                type             = "input"
-               serviceURL       = "http://localhost:8080/carrot2-input-xml/service"
-               infoURL          = "http://localhost:8080/carrot2-input-xml/"
+               serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-input-xml/service"
+               infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-input-xml/"
     />
 
 </service>
