@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<!DOCTYPE component SYSTEM "../etc/component-dependency.dtd" > 
+<component
+    name="dom4j"
+    description="dom4j Flexible XML framework for Java, http://www.dom4j.org/">
+	<provides>
+		<files>
+			<file location="dom4j-1.5-beta-2.jar" />
+			<file location="dom4j.LICENSE" />
+		</files>
+	</provides>
+</component>
+
