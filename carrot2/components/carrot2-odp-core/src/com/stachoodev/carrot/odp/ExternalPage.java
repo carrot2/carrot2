@@ -31,4 +31,11 @@ public interface ExternalPage
      * @return
      */
     public abstract String getTitle();
+    
+    /**
+     * Returns this ExternalPage's <code>url</code>.
+     * 
+     * @return
+     */
+    public abstract String getUrl();
 }
