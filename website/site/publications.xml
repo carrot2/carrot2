@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<page section="publications" xmlns:lang="http://www.cs.put.poznan.pl/dweiss/index.php/projects/sin/lang">
+	<!-- Page info section -->
+	<languages>
+		<lng id="en">English</lng>
+		<default id="en"/>
+	</languages>
+
+	<title lng="en">Publications</title>
+
+    <chapter level="1">
+        <title>Carrot<sup>2</sup> articles and publications</title>
+        
+        <ul>
+            <li>
+                Stanisław Osiński: <i>An Algorithm for Clustering of Web Search Results</i>, Master thesis,
+                Poznań University of Technology, 2003,
+                [in English, <a href="http://www.cs.put.poznan.pl/dweiss/carrot-bin/osinski-2003-lingo.pdf">PDF, 4.7MB</a>]
+            </li>
+            <li>
+                Michał Wróblewski: <i>A Hierarchical WWW Pages Clustering Algorithm Based on the Vector Space Model</i>, Master thesis,
+                Poznań University of Technology, 2003,
+                [in English, <a href="http://www.cs.put.poznan.pl/dweiss/carrot-bin/wroblewski-2003-ahc.pdf">PDF, 8.5MB</a>]
+            </li>
+        </ul>
+
+    </chapter>
+
+</page>
