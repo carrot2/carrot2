@@ -11,6 +11,7 @@ import com.dawidweiss.carrot.core.local.clustering.RawDocument;
 import com.dawidweiss.carrot.core.local.clustering.RawDocumentsConsumer;
 import com.dawidweiss.carrot.core.local.clustering.RawDocumentsProducer;
 import com.dawidweiss.carrot.core.local.linguistic.LanguageGuesser;
+import com.dawidweiss.carrot.core.local.profiling.*;
 
 /**
  * An local component that adds a language code
@@ -23,7 +24,7 @@ import com.dawidweiss.carrot.core.local.linguistic.LanguageGuesser;
  * @author Dawid Weiss
  * @version $Revision$
  */
-public class RawDocumentLanguageDetection extends LocalFilterComponentBase
+public class RawDocumentLanguageDetection extends ProfiledLocalFilterComponentBase
     implements RawDocumentsProducer, RawDocumentsConsumer {
     
     /**
@@ -87,7 +88,9 @@ public class RawDocumentLanguageDetection extends LocalFilterComponentBase
 	 * @see com.dawidweiss.carrot.core.local.clustering.RawDocumentsConsumer#addDocument(com.dawidweiss.carrot.core.local.clustering.RawDocument)
 	 */
 	public void addDocument(RawDocument doc) throws ProcessingException {
-        resetBuffer();
+	    startTimer();
+	    
+	    resetBuffer();
         // concatenate title and snippet first.
 
         String title = doc.getTitle();
@@ -109,6 +112,8 @@ public class RawDocumentLanguageDetection extends LocalFilterComponentBase
             }
         }
 
+        stopTimer();
+        
         // pass the document reference...
         this.rawDocumentConsumer.addDocument(doc);
 	}
@@ -180,4 +185,12 @@ public class RawDocumentLanguageDetection extends LocalFilterComponentBase
 	public Set getRequiredSuccessorCapabilities() {
         return CAPABILITIES_SUCCESSOR;
 	}
+
+	/* (non-Javadoc)
+     * @see com.dawidweiss.carrot.core.local.LocalComponent#getName()
+     */
+    public String getName()
+    {
+        return "Language Guesser";
+    }
 }
