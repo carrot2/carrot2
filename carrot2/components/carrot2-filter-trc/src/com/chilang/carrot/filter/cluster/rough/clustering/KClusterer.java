@@ -5,21 +5,13 @@
  */
 package com.chilang.carrot.filter.cluster.rough.clustering;
 
-import com.chilang.carrot.filter.cluster.rough.Snippet;
-import com.chilang.carrot.filter.cluster.rough.CommonFactory;
 import com.chilang.carrot.filter.cluster.rough.data.IRContext;
 import com.chilang.carrot.filter.cluster.rough.measure.Similarity;
 import com.chilang.carrot.filter.cluster.rough.measure.SimilarityFactory;
 import com.chilang.util.ArrayUtils;
 import com.chilang.util.MatrixUtils;
 
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Map;
-
-import cern.colt.matrix.DoubleMatrix2D;
-import cern.colt.matrix.DoubleFactory2D;
 
 
 /**

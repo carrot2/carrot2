@@ -8,7 +8,6 @@ package com.chilang.carrot.filter.cluster;
 import com.chilang.util.JDOMWrapper;
 import com.chilang.carrot.filter.cluster.rough.clustering.Cluster;
 import com.chilang.carrot.filter.cluster.rough.data.SnippetDocument;
-import com.chilang.util.JDOMWrapper;
 import org.jdom.Element;
 
 import java.util.ArrayList;

@@ -13,7 +13,6 @@ import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.doublealgo.Statistic;
 import cern.jet.math.Functions;
 import com.chilang.carrot.filter.cluster.rough.measure.Similarity;
-import com.chilang.util.ArrayUtils;
 import com.chilang.util.MatrixUtils;
 
 

@@ -9,7 +9,6 @@ import com.chilang.carrot.filter.cluster.rough.data.IRContext;
 import com.chilang.carrot.filter.cluster.rough.CommonFactory;
 import com.chilang.carrot.filter.cluster.rough.trsm.RoughSpace;
 import com.chilang.carrot.filter.cluster.rough.measure.Similarity;
-import com.chilang.carrot.filter.cluster.rough.measure.SimilarityFactory;
 
 
 /**

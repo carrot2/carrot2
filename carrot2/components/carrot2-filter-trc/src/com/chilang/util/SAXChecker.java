@@ -1,7 +1,6 @@
 package com.chilang.util;
 
 import org.xml.sax.*;
-import org.xml.sax.helpers.XMLReaderFactory;
 import org.xml.sax.helpers.DefaultHandler;
 
 import javax.xml.parsers.SAXParser;

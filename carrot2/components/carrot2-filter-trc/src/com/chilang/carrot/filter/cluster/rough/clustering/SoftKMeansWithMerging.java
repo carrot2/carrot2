@@ -11,8 +11,6 @@ import cern.colt.matrix.DoubleMatrix2D;
 import cern.jet.math.Functions;
 import com.chilang.carrot.filter.cluster.InterDocumentSimilarity;
 import com.chilang.carrot.filter.cluster.rough.measure.Similarity;
-import com.chilang.carrot.filter.cluster.InterDocumentSimilarity;
-import com.chilang.util.ArrayUtils;
 
 public class SoftKMeansWithMerging extends SoftKMeansAlgorithm {
 
