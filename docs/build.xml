@@ -28,6 +28,7 @@
         <!-- run styler to produce single html version -->
         <mkdir dir="${build.dir}/styled" />
         <ant antfile="${docbook.styler}" inheritall="false" target="html.single">
+        	 <property name="basedir" location="${docbook.styler.base}" />
              <property name="docbook.xml.dir" location="${build.dir}/assembled" />
              <property name="docbook.resources.dir" location="figures-bitmap" />
              <property name="distribution.dir" location="${distribution.dir}" />
@@ -47,6 +48,7 @@
         <!-- run styler to produce single html version -->
         <mkdir dir="${build.dir}/styled" />
         <ant antfile="${docbook.styler}" inheritall="false" target="html.chunked">
+        	 <property name="basedir" location="${docbook.styler.base}" />
              <property name="docbook.xml.dir" location="${build.dir}/assembled" />
              <property name="docbook.resources.dir" location="figures-bitmap" />
              <property name="distribution.dir" location="${distribution.dir}" />
@@ -122,9 +124,9 @@
         <fail message="### You must set property 'docbook.styler' to point at docbook styler build file. Download styler from: http://www.cs.put.poznan.pl/dweiss/xml/projects/ant-docbook-styler/index.xml"
               unless="tmp:styler.ok" />
               
-        <dirname file="${docbook.styler}" property="tmp:docbook.styler.base" />
+        <dirname file="${docbook.styler}" property="docbook.styler.base" />
         <path id="ant-extensions">
-            <fileset dir="${tmp:docbook.styler.base}/ant-extensions" includes="**/*.jar" />
+            <fileset dir="${docbook.styler.base}/ant-extensions" includes="**/*.jar" />
         </path>
     </target>
 
