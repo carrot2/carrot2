@@ -4,11 +4,6 @@
 package com.stachoodev.carrot.filter.lingo.model;
 
 import java.util.*;
-import java.util.Map;
-import java.util.Set;
-
-import org.apache.commons.collections.*;
-import org.apache.commons.collections.map.*;
 
 import com.dawidweiss.carrot.core.local.linguistic.tokens.*;
 import com.dawidweiss.carrot.util.common.*;
@@ -18,7 +13,6 @@ import com.dawidweiss.carrot.util.common.*;
  */
 public class ModelUtils
 {
-
     /**
      * @param tokenSequence
      * @param frequencyMap
@@ -112,8 +106,7 @@ public class ModelUtils
                     originalExtendedToken = (ExtendedToken) (originalExtendedTokens)
                         .get(token.toString());
                     originalExtendedToken.setDoubleProperty(propertyName,
-                        originalExtendedToken
-                            .getDoubleProperty(propertyName)
+                        originalExtendedToken.getDoubleProperty(propertyName)
                             + multiplier);
                 }
             }
@@ -149,22 +142,29 @@ public class ModelUtils
      * @param frequencyMap
      */
     public static void addToFrequencyMap(TokenSequence tokenSequence,
-        String propertyName, Map frequencyMap, double multiplier)
+        String propertyName, Map frequencyMap, double multiplier,
+        short filterMask)
     {
         addToFrequencyMap(tokenSequence, propertyName, frequencyMap,
-            multiplier, null, (short) 0);
+            multiplier, null, filterMask);
     }
 
     /**
-     * Converts a list of tokens to an {@link OrderedMap}, in which tokens are
-     * values
+     * Converts a list of tokens to a {@link Map}, in which tokens are values
+     * and token.toString() are keys.
      * 
      * @param tokenList
      * @return
      */
-    public static OrderedMap convertTokenList(List tokenList)
+    public static Map tokenListAsMap(List tokenList)
     {
-        OrderedMap orderedMap = new LinkedMap();
+        Map orderedMap = new HashMap();
+
+        for (Iterator tokens = tokenList.iterator(); tokens.hasNext();)
+        {
+            Token token = (Token) tokens.next();
+            orderedMap.put(token.toString(), token);
+        }
 
         return orderedMap;
     }
@@ -206,10 +206,17 @@ public class ModelUtils
 
         List finalList = list.subList(0, index - 1);
 
+        // Add position of the token on the feature list
         // Convert original token hash maps into sorted lists
+        int i = 0;
         for (Iterator tokens = finalList.iterator(); tokens.hasNext();)
         {
             ExtendedToken token = (ExtendedToken) tokens.next();
+
+            // Add index
+            token.setIntProperty(ExtendedToken.PROPERTY_INDEX, i++);
+
+            // Convert the hashmap into a list
             Map originalTokenMap = (Map) token
                 .getProperty(ExtendedToken.PROPERTY_ORIGINAL_TOKENS);
             List tokenList = new ArrayList(originalTokenMap.values());
