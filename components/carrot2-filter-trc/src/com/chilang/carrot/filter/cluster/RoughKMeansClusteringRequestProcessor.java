@@ -76,10 +76,10 @@ public class RoughKMeansClusteringRequestProcessor
             double membershipThreshold = Double.parseDouble((String)StringUtils.getCarrotParameter(params, "similarity.threshold"));
             int cooccurrenceThreshold = Integer.parseInt((String)StringUtils.getCarrotParameter(params, "cooccurrence.threshold"));
             Object carrotParameter = StringUtils.getCarrotParameter(params, "phrase.used");
-            System.out.println("carrot parameter "+carrotParameter);
+            //System.out.println("carrot parameter "+carrotParameter);
             boolean usePhrase = Boolean.valueOf((String)carrotParameter).booleanValue();
 
-            System.out.println("Use phrases "+usePhrase);
+            //System.out.println("Use phrases "+usePhrase);
             Similarity similarity = SimilarityFactory.getCosine();
 
             Clusterer clusterer = new RoughClusterer(numberOfClusters,
