@@ -1,5 +1,12 @@
 /*
- * FeatureSelectionStrategy.java Created on 2004-05-14
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
 package com.stachoodev.carrot.filter.lingo.model;
 
@@ -10,7 +17,11 @@ import com.dawidweiss.carrot.core.local.linguistic.tokens.*;
 /**
  * Defines the interface of an algorithm performing feature selection.
  * 
- * @author stachoo
+ * TODO: switching to an ordered Map instead of the list would increase
+ * performance in a few places
+ * 
+ * @author Stanislaw Osinski
+ * @version $Revision$
  */
 public interface FeatureSelectionStrategy
 {

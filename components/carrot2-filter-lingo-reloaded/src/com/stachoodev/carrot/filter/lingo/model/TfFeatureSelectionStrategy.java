@@ -1,5 +1,12 @@
 /*
- * DfFeatureSelectionStrategy.java Created on 2004-05-14
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
 package com.stachoodev.carrot.filter.lingo.model;
 
@@ -9,7 +16,8 @@ import com.dawidweiss.carrot.core.local.clustering.*;
 import com.dawidweiss.carrot.core.local.linguistic.tokens.*;
 
 /**
- * @author stachoo
+ * @author Stanislaw Osinski
+ * @version $Revision$
  */
 public class TfFeatureSelectionStrategy implements FeatureSelectionStrategy
 {
@@ -34,20 +42,20 @@ public class TfFeatureSelectionStrategy implements FeatureSelectionStrategy
     }
 
     /**
-     * @param dfThreshold
+     * @param tfThreshold
      */
-    public TfFeatureSelectionStrategy(double dfThreshold)
+    public TfFeatureSelectionStrategy(double tfThreshold)
     {
-        this(dfThreshold, DEFAULT_TITLE_TOKEN_TF_MULTIPLIER);
+        this(tfThreshold, DEFAULT_TITLE_TOKEN_TF_MULTIPLIER);
     }
 
     /**
-     * @param dfThreshold
+     * @param tfThreshold
      */
-    public TfFeatureSelectionStrategy(double dfThreshold,
+    public TfFeatureSelectionStrategy(double tfThreshold,
         double titleTokenDfMultiplier)
     {
-        this.tfThreshold = dfThreshold;
+        this.tfThreshold = tfThreshold;
         this.titleTokenTfMultiplier = titleTokenDfMultiplier;
         this.filterMask = FeatureSelectionStrategy.DEFAULT_FILTER_MASK;
     }
@@ -69,10 +77,10 @@ public class TfFeatureSelectionStrategy implements FeatureSelectionStrategy
 
             ModelUtils.addToFrequencyMap(document.getTitle(),
                 ExtendedToken.PROPERTY_TF, tokenFrequencies,
-                titleTokenTfMultiplier, filterMask);
+                titleTokenTfMultiplier, filterMask, true);
             ModelUtils.addToFrequencyMap((TokenSequence) document
                 .getProperty(TokenizedDocument.PROPERTY_SNIPPET),
-                ExtendedToken.PROPERTY_TF, tokenFrequencies, 1, filterMask);
+                ExtendedToken.PROPERTY_TF, tokenFrequencies, 1, filterMask, true);
         }
 
         return ModelUtils.frequencyMapToList(tokenFrequencies,

@@ -1,5 +1,12 @@
 /*
- * DfFeatureSelectionStrategy.java Created on 2004-05-14
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
 package com.stachoodev.carrot.filter.lingo.model;
 
@@ -12,11 +19,11 @@ import com.dawidweiss.carrot.core.local.linguistic.tokens.*;
  * Document-frequency term selection strategy, chooses terms that appear in more
  * than a certain number of documents.
  * 
- * @author stachoo
+ * @author Stanislaw Osinski
+ * @version $Revision$
  */
 public class DfFeatureSelectionStrategy implements FeatureSelectionStrategy
 {
-
     /** */
     private double dfThreshold;
     private static double DEFAULT_DF_THRESHOLD = 2;
@@ -74,11 +81,11 @@ public class DfFeatureSelectionStrategy implements FeatureSelectionStrategy
 
             ModelUtils.addToFrequencyMap(document.getTitle(),
                 ExtendedToken.PROPERTY_DF, tokenFrequencies,
-                titleTokenDfMultiplier, tokensUsed, filterMask);
+                titleTokenDfMultiplier, tokensUsed, filterMask, true);
             ModelUtils.addToFrequencyMap((TokenSequence) document
                 .getProperty(TokenizedDocument.PROPERTY_SNIPPET),
                 ExtendedToken.PROPERTY_DF, tokenFrequencies, 1, tokensUsed,
-                filterMask);
+                filterMask, true);
         }
 
         return ModelUtils.frequencyMapToList(tokenFrequencies,
