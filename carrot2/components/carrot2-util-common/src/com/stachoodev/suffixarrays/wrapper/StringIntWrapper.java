@@ -10,7 +10,7 @@ package com.stachoodev.suffixarrays.wrapper;
 /**
  * An IntWrapper for single Strings.
  */
-public class StringIntWrapper extends AbstractIntWrapper
+public class StringIntWrapper extends IntWrapperBase
 {
 
     /** The original string data */
