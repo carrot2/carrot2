@@ -22,6 +22,9 @@ public class TfFeatureSelectionStrategy implements FeatureSelectionStrategy
     private double titleTokenTfMultiplier;
     private static double DEFAULT_TITLE_TOKEN_TF_MULTIPLIER = 2.5;
 
+    /** */
+    private short filterMask;
+
     /**
      * @param dfThreshold
      */
@@ -46,6 +49,7 @@ public class TfFeatureSelectionStrategy implements FeatureSelectionStrategy
     {
         this.tfThreshold = dfThreshold;
         this.titleTokenTfMultiplier = titleTokenDfMultiplier;
+        this.filterMask = FeatureSelectionStrategy.DEFAULT_FILTER_MASK;
     }
 
     /*
@@ -65,10 +69,10 @@ public class TfFeatureSelectionStrategy implements FeatureSelectionStrategy
 
             ModelUtils.addToFrequencyMap(document.getTitle(),
                 ExtendedToken.PROPERTY_TF, tokenFrequencies,
-                titleTokenTfMultiplier);
+                titleTokenTfMultiplier, filterMask);
             ModelUtils.addToFrequencyMap((TokenSequence) document
                 .getProperty(TokenizedDocument.PROPERTY_SNIPPET),
-                ExtendedToken.PROPERTY_TF, tokenFrequencies, 1);
+                ExtendedToken.PROPERTY_TF, tokenFrequencies, 1, filterMask);
         }
 
         return ModelUtils.frequencyMapToList(tokenFrequencies,
