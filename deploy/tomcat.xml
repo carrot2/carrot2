@@ -25,7 +25,11 @@
             description="Stops tomcat. Define at least 'catalina.home' property.">
         <echo message="Starting Tomcat (Catalina) in ${catalina.home}"/>
 
-        <java classname="org.apache.catalina.startup.Bootstrap" fork="yes">
+        <java classname="org.apache.catalina.startup.Bootstrap" fork="yes"
+          output="/home/dweiss/carrot2/logs-cron/catalina-stdout.log"
+          error="/home/dweiss/carrot2/logs-cron/catalina-stderr.log"
+          append="true"
+        >
             <jvmarg value="-Dcatalina.home=${tomcat.home}"/>
             <arg value="-config"/>
             <arg value="${tomcat.config}"/>

@@ -49,6 +49,16 @@ for counter in `seq 1 10`; do
     fi    
 done
 
+# stop tomcat.
+ant -f build.demo.xml stop.tomcat
+
+# zip tomcat logs.
+mkdir -p /home/dweiss/carrot2/logs-tomcat
+zip -r /home/dweiss/carrot2/logs-tomcat/tomcat-logs-`date +%Y-%m-%d_%H-%M` /home/dweiss/carrot2/runtime/logs/*
+
+ant -f build.demo.xml clean.webapps
+ant -f build.demo.xml copy.logs
+
 
 if ant -Dno.cvsupdate=true -f build.demo.xml \
        -listener org.apache.tools.ant.XmlLogger \
@@ -57,13 +67,17 @@ if ant -Dno.cvsupdate=true -f build.demo.xml \
        build; \
 then
     # stop tomcat first, restart it in 'success' mode.
-    ant -f build.demo.xml stop.tomcat
-    ant -f build.demo.xml clean.webapps
-    ant -f build.demo.xml copy.logs
     ant -f build.demo.xml copy.webapps
+
     # copy webapps to nightly binaries folder.
     rm -f /carrot/www/static/download/nightly/*.war
+    rm -f /carrot/www/static/download/nightly/*.zip
     cp /home/dweiss/carrot2/runtime/context-webapps/*.war /carrot/www/static/download/nightly/
+    zip /carrot/www/static/download/nightly/shared-libraries.zip /home/dweiss/carrot2/runtime/shared/lib/*.jar
+
+    # override  webapps if needed.
+    cp -f /home/dweiss/carrot2/override-modules/*.war /home/dweiss/carrot2/runtime/context-webapps/
+
     # run tomcat in the background, wait and test it after a couple of minutes
     (ant -f build.demo.xml start.tomcat.success)&
     sleep 360
@@ -76,9 +90,6 @@ then
     fi
 else
     # stop tomcat first, restart it in 'failure' mode.
-    ant -f build.demo.xml stop.tomcat
-    ant -f build.demo.xml clean.webapps
-    ant -f build.demo.xml copy.logs
     ant -f build.demo.xml start.tomcat.failure
 fi
 
