@@ -642,8 +642,15 @@ public class TreeExtractor
                                       (TreeNode) node.SubNodes.firstElement(),
                                       parent, minLevel, maxLevel, startAt,
                                       t.getAllNodes().size());
+
+        int forceBreakInfiniteLoop = 5000;
         while (!done) {
             boolean good;
+            
+            forceBreakInfiniteLoop--;
+            if (forceBreakInfiniteLoop==0)
+                throw new RuntimeException("Infinite loop?");
+            
             if (good = act.doFind(true)) {
                 if (!act.toFind.optional)
                     lastIndex = act.getMatchIndex();
