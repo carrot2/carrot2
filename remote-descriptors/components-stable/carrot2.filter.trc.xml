@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<service xmlns      = "http://www.dawidweiss.com/projects/carrot/componentDescriptor" 
+         framework  = "Carrot2"
+>
+
+    <component id               = "carrot2.filter.trc.rough-cluster"
+               type             = "filter"
+               serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-filter-trc/service/rough"
+               infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-filter-trc"
+    >
+    </component>
+    
+    <component id               = "carrot2.filter.trc.base-cluster"
+               type             = "filter"
+               serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-filter-trc/service/base"
+               infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-filter-trc"
+    >
+    </component>
+
+    <component id               = "carrot2.filter.trc.kmeans-cluster"
+               type             = "filter"
+               serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-filter-trc/service/kmeans"
+               infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-filter-trc"
+    >
+    </component>
+
+    <component id               = "carrot2.filter.trc.rough-kmeans-cluster"
+               type             = "filter"
+               serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-filter-trc/service/rough-kmeans"
+               infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-filter-trc"
+    >
+    </component>
+
+</service>
