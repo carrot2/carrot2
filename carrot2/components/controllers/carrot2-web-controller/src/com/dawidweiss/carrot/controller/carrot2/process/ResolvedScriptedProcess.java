@@ -246,6 +246,14 @@ public class ResolvedScriptedProcess
         return descriptor.getDescription();
     }
 
+    /**
+     * @return Should return <code>true</code> if this process is not to be explicitly shown
+     *         in the user interface.
+     */
+    public boolean isHidden() {
+    	return descriptor.hasHidden() && descriptor.getHidden();
+    }
+
 
     /**
      * For scripted processes this method is rather a heuristic. It may return false even if the

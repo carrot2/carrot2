@@ -248,6 +248,9 @@ public class ProcessingChainLoader
                 ProcessDefinition p = (ProcessDefinition) i.next();
                 String key;
 
+                if (p.isHidden())
+                	continue;
+
                 if (
                     p instanceof ResolvedScriptedProcess
                         && (((ResolvedScriptedProcess) p).getInputComponentId() != null)
@@ -259,7 +262,7 @@ public class ProcessingChainLoader
                 {
                     key = "other";
                 }
-
+                
                 if (processGroups.get(key) == null)
                 {
                     processGroups.put(key, new ArrayList());
