@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE component SYSTEM "../../etc/component-dependency.dtd" >
+
+<component
+    name="carrot2-stemmer-stempel"
+    description="Carrot2 Stempel Stemmer (Polish)">
+    
+    <provides>
+        <files build-path-exclude="true" prefix="tmp/dist">
+            <file location="carrot2-stemmer-stempel.jar" />
+        </files>
+        <build>
+            <ant file="build.xml" target="build" />
+        </build>
+    </provides>
+
+	<!-- Carrot2 components -->
+	<dependency name="carrot2-local-core" />
+    <dependency name="carrot2-license" />
+    <dependency name="stempel" />
+
+</component>
