@@ -9,14 +9,7 @@
                type             = "filter"
                serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-pl-eng-stemming/service?stemmer=com.dawidweiss.carrot.filter.stemming.porter.PorterStemmer&amp;stopwords=stopwords-en.lst"
                infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-pl-eng-stemming"
-    >
-        <acceptedFormat>
-            <mime>application/x-carrot-clustering-plain-response</mime>
-        </acceptedFormat>
-        <producedFormat>
-            <mime>application/x-carrot-clustering-plain-linguistic</mime>
-        </producedFormat>
-    </component>
+    />
 
 
     <!-- Polish stemmer -->
@@ -24,13 +17,6 @@
                type             = "filter"
                serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-pl-eng-stemming/service?stemmer=com.dawidweiss.carrot.filter.stemming.lametyzator.Lametyzator&amp;stopwords=stopwords-pl.lst"
                infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-pl-eng-stemming"
-    >
-        <acceptedFormat>
-            <mime>application/x-carrot-clustering-plain-response</mime>
-        </acceptedFormat>
-        <producedFormat>
-            <mime>application/x-carrot-clustering-plain-linguistic</mime>
-        </producedFormat>
-    </component>
+    />
 
 </service>

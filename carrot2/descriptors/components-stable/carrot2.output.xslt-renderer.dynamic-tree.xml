@@ -10,16 +10,6 @@
                type             = "output"
                serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-xslt-renderer/service?stylesheet=dtree"
                infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-xslt-renderer"
-    >
-        <acceptedFormat>
-            <mime>application/x-carrot-clustering-plain-response</mime>
-        </acceptedFormat>
-        <acceptedFormat>
-            <mime>application/x-carrot-clustering-groups</mime>
-        </acceptedFormat>
-        <producedFormat>
-            <mime>text/html</mime>
-        </producedFormat>
-    </component>
+    />
 
 </service>
