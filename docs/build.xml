@@ -32,7 +32,8 @@
              <property name="docbook.resources.dir" location="figures-bitmap" />
              <property name="distribution.dir" location="${distribution.dir}" />
              <property name="build.dir" location="${build.dir}/styled" />
-             <property name="manual.name" value="${manual.name}" />
+             <property name="manual.name" value="${manual.name}-single" />
+             <property name="index.name"  value="${manual.name}" />
         </ant>
     </target>
     
@@ -52,7 +53,7 @@
              <property name="build.dir" location="${build.dir}/styled" />
              <property name="index.name"  value="${manual.name}" />
              <!-- To avoid collisions with single html version of the manual -->
-             <property name="manual.name" value="index" />
+             <property name="manual.name" value="${manual.name}" />
         </ant>
     </target>
    
@@ -62,6 +63,12 @@
         <mkdir dir="${build.dir}"/>
         <mkdir dir="${distribution.dir}" />
     </target>
+
+	<!-- Clean temporary files -->
+    <target name="clean">
+	    <delete dir="tmp" failonerror="false" includeemptydirs="true" quiet="true" />
+    </target>
+
     
     <!-- Utility targets -->
 
