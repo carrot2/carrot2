@@ -29,15 +29,12 @@ public class SnippetDescription {
     protected RegularExpression snippetMatch;
 
     protected RegularExpression titleStart;
-
     protected RegularExpression titleEnd;
 
     protected RegularExpression urlStart;
-
     protected RegularExpression urlEnd;
 
     protected RegularExpression summaryStart;
-
     protected RegularExpression summaryEnd;
 
     /**

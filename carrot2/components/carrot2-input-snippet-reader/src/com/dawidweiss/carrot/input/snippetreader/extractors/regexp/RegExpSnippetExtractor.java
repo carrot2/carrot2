@@ -27,7 +27,7 @@ public class RegExpSnippetExtractor {
     /**
      * The snippet description this object operates on.
      */
-    SnippetDescription snippetDescription;
+    private final SnippetDescription snippetDescription;
 
     /**
      * Prevent instantiation with no arguments
