@@ -8,6 +8,16 @@
 
 <history>
     <changelist>
+        <date>2004-02-08</date>
+        <committer>dawid</committer>
+
+        <change component="global" type="new">
+        Added an Egothor Search Engine input component adapter.
+        The code has been moved from the Egothor project.
+        </change>
+    </changelist>
+
+    <changelist>
         <date>2004-02-06</date>
         <committer>dawid</committer>
 
