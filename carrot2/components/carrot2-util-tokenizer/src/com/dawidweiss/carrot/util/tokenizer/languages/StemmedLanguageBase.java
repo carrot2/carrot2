@@ -10,6 +10,8 @@
  */
 package com.dawidweiss.carrot.util.tokenizer.languages;
 
+import java.util.*;
+
 import com.dawidweiss.carrot.core.local.linguistic.LanguageTokenizer;
 import com.dawidweiss.carrot.core.local.linguistic.Stemmer;
 
@@ -55,10 +57,10 @@ public abstract class StemmedLanguageBase extends LanguageBase {
             throw new RuntimeException("borrowStemmer() must not return null.");
         if (getStopwords() != null) {
             return new StemmingTokenizerWrapper(
-                    createTokenizerInstanceInternal(), stemmerInstance, getStopwords());
+                    new Locale(getIsoCode()), createTokenizerInstanceInternal(), stemmerInstance, getStopwords());
         } else {
             return new StemmingTokenizerWrapper(
-                    createTokenizerInstanceInternal(), stemmerInstance);
+                    new Locale(getIsoCode()), createTokenizerInstanceInternal(), stemmerInstance);
         }
     }
 

@@ -19,6 +19,7 @@ import com.dawidweiss.carrot.core.local.linguistic.tokens.StemmedToken;
 import com.dawidweiss.carrot.core.local.linguistic.tokens.TypedToken;
 import com.dawidweiss.carrot.util.common.pools.ReusableObjectsFactory;
 import com.dawidweiss.carrot.util.common.pools.SoftReusableObjectsPool;
+import com.dawidweiss.carrot.util.tokenizer.parser.jflex.*;
 
 import junit.framework.TestCase;
 
@@ -47,7 +48,7 @@ public class WordBasedParserTest
     }
     
     public void testBasicTokenization() {
-        WordBasedParser parser = new WordBasedParser();
+        WordBasedParserBase parser = new JFlexWordBasedParser();
         String TEST = "Abecadło 10 dweiss@man.poznan.pl, chyba.";
         parser.restartTokenizationOn(new StringReader(TEST));
         
@@ -70,6 +71,29 @@ public class WordBasedParserTest
         parser.reuse();
     }
 
+    public void testAdvancedTokenization() {
+        WordBasedParserBase parser = new JFlexWordBasedParser();
+        String TEST = "hyphen-term hyphen- term";
+        parser.restartTokenizationOn(new StringReader(TEST));
+        
+        com.dawidweiss.carrot.core.local.linguistic.tokens.Token [] tokens 
+            = new com.dawidweiss.carrot.core.local.linguistic.tokens.Token[20];
+        
+        int howmany = parser.getNextTokens(tokens, 0);
+
+        assertTokensEqual(tokens, new TokenImage []
+        { 
+              new TokenImage("hyphen-term", TypedToken.TOKEN_TYPE_TERM),
+              new TokenImage("hyphen", TypedToken.TOKEN_TYPE_TERM),
+              new TokenImage("-", TypedToken.TOKEN_TYPE_PUNCTUATION),
+              new TokenImage("term", TypedToken.TOKEN_TYPE_TERM) 
+        });
+        
+        assertEquals( 4, howmany);
+        
+        parser.reuse();
+    }
+
     private void assertTokensEqual(com.dawidweiss.carrot.core.local.linguistic.tokens.Token [] tokens, TokenImage [] images) {
         StringBuffer buf = new StringBuffer();
         for (int i=0;i<images.length;i++) {
@@ -85,7 +109,7 @@ public class WordBasedParserTest
 		public String getStem() {
             return this.getImage();
 		}
-    };
+    }
     
     public void testTokenizationWithFactory() {        
         SoftReusableObjectsPool pool = new SoftReusableObjectsPool(
@@ -98,7 +122,7 @@ public class WordBasedParserTest
                     }, 10, 10
                 );
 
-        WordBasedParser parser = new WordBasedParser(pool);
+        WordBasedParserBase parser = new JFlexWordBasedParser(pool);
         String TEST = "Abecadło 10 dweiss@man.poznan.pl, chyba.";
         parser.restartTokenizationOn(new StringReader(TEST));
 

@@ -17,9 +17,9 @@ import com.dawidweiss.carrot.core.local.linguistic.Stemmer;
 import com.dawidweiss.carrot.core.local.linguistic.tokens.Token;
 import com.dawidweiss.carrot.core.local.linguistic.tokens.TypedToken;
 
+import java.util.*;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 
 
 /**
@@ -34,6 +34,9 @@ import java.util.Set;
  */
 final class StemmingTokenizerWrapper implements LanguageTokenizer {
 
+    /** Locale instance corresponding to the tokenizer's language */
+    private final Locale locale;
+    
     /** The wrapped tokenizer instance */
     private final LanguageTokenizer tokenizer;
     
@@ -46,33 +49,35 @@ final class StemmingTokenizerWrapper implements LanguageTokenizer {
     /**
      * Creates a new wrapper tokenizer with a stemmer, but no stopwords.
      * The underlying tokenizer must return instances of {@link MutableStemmedToken}.
-     * 
+     * @param locale 
      * @param tokenizer A tokenizer instance that will be wrapped.
      * @param stemmerInstance A stemmer instance used for stemming tokens' images.
      */
-    public StemmingTokenizerWrapper(LanguageTokenizer tokenizer, Stemmer stemmer) {
+    public StemmingTokenizerWrapper(Locale locale, LanguageTokenizer tokenizer, Stemmer stemmer) {
         this.tokenizer = tokenizer;
         this.stemmer = stemmer;
         this.stopwords = null;
+        this.locale = locale;
     }
 
     /**
      * Creates a new wrapper tokenizer with a stemmer and a set of stopwords.
      * The underlying tokenizer must return instances of {@link MutableStemmedToken}
      * also implementing {@link TypedToken}.
-     * 
+     * @param locale 
      * @param tokenizer A tokenizer instance that will be wrapped.
      * @param stemmerInstance A stemmer instance used for stemming tokens' images.
      */
-    public StemmingTokenizerWrapper(LanguageTokenizer tokenizer, Stemmer stemmer, Set stopwords) {
+    public StemmingTokenizerWrapper(Locale locale, LanguageTokenizer tokenizer, Stemmer stemmer, Set stopwords) {
         this.tokenizer = tokenizer;
         this.stemmer = stemmer;
+        this.locale = locale;
 
         // process stopwords to their stems.
         this.stopwords = new HashSet();
         for (Iterator i = stopwords.iterator(); i.hasNext(); ) {
             String word = (String) i.next();
-            String stem = stemmer.getStem(word.toLowerCase().toCharArray(), 0, word.length());
+            String stem = stemmer.getStem(word.toLowerCase(locale).toCharArray(), 0, word.length());
             if (stem == null) 
                 this.stopwords.add( word );
             else
@@ -111,13 +116,35 @@ final class StemmingTokenizerWrapper implements LanguageTokenizer {
             for (int i=startAt;i<startAt+count;i++) {
                 MutableStemmedToken token = ((MutableStemmedToken) array[i]);
                 String image = token.getImage();
-                char [] charray = image.toCharArray();
+                
+                String lowCaseImage = image.toLowerCase(locale);
+                
+                // Perform stemming on the lower case word and take the
+                // appropriate substring of the original word. In many cases
+                // this will retain the original letter case.
+                // However, 1) some stemmers (e.g. Lametyzator) don't simply
+                // return a substring of the original word, 2) in some languages
+                // upper case <-> lower case mapping is not n <-> n, in terms
+                // of string length.
+                char [] charray = lowCaseImage.toCharArray();
                 String stem = stemmer.getStem(charray, 0, charray.length);
-                token.setStem(stem);
-
+                if (stem != null)
+                {
+                    int index = lowCaseImage.indexOf(stem);
+                    if (index >= 0)
+                    {
+                        token.setStem(image.substring(index, index
+                            + stem.length()));
+                    }
+                    else
+                    {
+                        token.setStem(stem);
+                    }
+                }
+                
                 if (this.stopwords != null) {
-                    if ((stem == null && stopwords.contains(image.toLowerCase()))
-                        || (stem != null && stopwords.contains(stem.toLowerCase()))) {
+                    if ((stem == null && stopwords.contains(lowCaseImage))
+                        || (stem != null && stopwords.contains(stem))) {
                         // attempt to set the stopword flag for this token
                         try {
                             token.setType( (short) (token.getType() | TypedToken.TOKEN_FLAG_STOPWORD) );
@@ -134,5 +161,4 @@ final class StemmingTokenizerWrapper implements LanguageTokenizer {
         
         return count;
     }
-
 }

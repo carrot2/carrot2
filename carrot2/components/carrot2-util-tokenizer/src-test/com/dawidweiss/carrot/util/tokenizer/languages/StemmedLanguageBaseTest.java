@@ -1,17 +1,13 @@
 package com.dawidweiss.carrot.util.tokenizer.languages;
 
-import java.io.StringReader;
+import java.io.*;
 
-import com.dawidweiss.carrot.core.local.linguistic.LanguageTokenizer;
-import com.dawidweiss.carrot.core.local.linguistic.Stemmer;
-import com.dawidweiss.carrot.core.local.linguistic.tokens.StemmedToken;
-import com.dawidweiss.carrot.core.local.linguistic.tokens.Token;
-import com.dawidweiss.carrot.filter.snowball.SnowballStemmersFactory;
-import com.dawidweiss.carrot.util.tokenizer.parser.WordBasedParser;
-import com.dawidweiss.carrot.util.common.pools.ReusableObjectsFactory;
-import com.dawidweiss.carrot.util.common.pools.SoftReusableObjectsPool;
+import junit.framework.*;
 
-import junit.framework.TestCase;
+import com.dawidweiss.carrot.core.local.linguistic.*;
+import com.dawidweiss.carrot.core.local.linguistic.tokens.*;
+import com.dawidweiss.carrot.filter.snowball.*;
+import com.dawidweiss.carrot.util.tokenizer.parser.*;
 
 /**
  * Tests of the {@link StemmedLanguageBase} base class. 
@@ -23,16 +19,7 @@ public class StemmedLanguageBaseTest extends TestCase{
     
     private final static class TestLanguage extends StemmedLanguageBase {
         protected LanguageTokenizer createTokenizerInstanceInternal() {
-            return new WordBasedParser(
-                    new SoftReusableObjectsPool(
-                    		new ReusableObjectsFactory() {
-                                public void createNewObjects( Object [] objects ) {
-                                    final int max = objects.length;
-                                    for (int i=0;i<max;i++) {
-                                        objects[i] = new MutableStemmedToken();
-                                    }
-                            }
-                    }, 100,100));
+            return WordBasedParserFactory.Default.borrowParser();
         }
 
         /**
@@ -70,7 +57,6 @@ public class StemmedLanguageBaseTest extends TestCase{
             for (int i=0;i<num;i++) {
                 assertTrue( tokens[i] != null );
                 assertTrue( tokens[i] instanceof StemmedToken );
-                System.out.println( ((StemmedToken) tokens[i]).getStem());
             }
         } finally {
             language.returnTokenizer(tokenizer);

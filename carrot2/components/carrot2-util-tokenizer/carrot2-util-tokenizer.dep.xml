@@ -23,9 +23,9 @@
 
     <!-- Libraries -->
     <dependency name="log4j" />
-	<dependency name="commons-pool" />
+	  <dependency name="commons-pool" />
 
-	<!-- Test profile -->
+    <!-- Test profile -->
     <dependency name="junit" profile="test" />
-
+    <dependency name="carrot2-input-local-cache" profile="test" />
 </component>

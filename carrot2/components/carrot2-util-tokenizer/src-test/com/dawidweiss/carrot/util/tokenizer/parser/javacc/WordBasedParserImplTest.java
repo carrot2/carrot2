@@ -1,5 +1,3 @@
-
-
 /*
  * Carrot2 Project
  * Copyright (C) 2002-2004, Dawid Weiss
@@ -10,15 +8,11 @@
  * of CVS checkout or at: 
  * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
+package com.dawidweiss.carrot.util.tokenizer.parser.javacc;
 
+import java.io.*;
 
-package com.dawidweiss.carrot.util.tokenizer.parser;
-
-
-import java.io.StringReader;
-
-import junit.framework.TestCase;
-
+import junit.framework.*;
 
 /**
  * Test JavaCC tokenizer definition and the Carrot2 wrapper.
@@ -71,36 +65,36 @@ public class WordBasedParserImplTest
 
             switch (type)
             {
-                case WordBasedParserImplConstants.EMAIL:
+                case JavaCCWordBasedParserImplConstants.EMAIL:
                     typeName = "EMAIL";
                     break;
 
-                case WordBasedParserImplConstants.ACRONYM:
+                case JavaCCWordBasedParserImplConstants.ACRONYM:
                     typeName = "ACRONYM";
                     break;
 
-                case WordBasedParserImplConstants.TERM:
+                case JavaCCWordBasedParserImplConstants.TERM:
                     typeName = "TERM";
                     break;
 
-                case WordBasedParserImplConstants.HYPHTERM:
+                case JavaCCWordBasedParserImplConstants.HYPHTERM:
                     typeName = "HYPHTERM";
                     break;
 
-                case WordBasedParserImplConstants.URL:
+                case JavaCCWordBasedParserImplConstants.URL:
                     typeName = "URL";
 
                     break;
 
-                case WordBasedParserImplConstants.SENTENCEMARKER:
+                case JavaCCWordBasedParserImplConstants.SENTENCEMARKER:
                     typeName = "SENTENCEMARKER";
 
                     break;
-                case WordBasedParserImplConstants.PUNCTUATION:
+                case JavaCCWordBasedParserImplConstants.PUNCTUATION:
                     typeName = "PUNCTUATION";
                     break;
                     
-                case WordBasedParserImplConstants.NUMERIC:
+                case JavaCCWordBasedParserImplConstants.NUMERIC:
                     typeName = "NUMERIC";
                     break;
 
@@ -117,13 +111,13 @@ public class WordBasedParserImplTest
         String test = " simple terms simpleterm 9numterm numerm99x \"quoted string\"";
         TokenImage [] tokens = 
         {
-            new TokenImage("simple", WordBasedParserImplConstants.TERM),
-            new TokenImage("terms", WordBasedParserImplConstants.TERM),
-            new TokenImage("simpleterm", WordBasedParserImplConstants.TERM),
-            new TokenImage("9numterm", WordBasedParserImplConstants.TERM),
-            new TokenImage("numerm99x", WordBasedParserImplConstants.TERM),
-            new TokenImage("quoted", WordBasedParserImplConstants.TERM),
-            new TokenImage("string", WordBasedParserImplConstants.TERM)
+            new TokenImage("simple", JavaCCWordBasedParserImplConstants.TERM),
+            new TokenImage("terms", JavaCCWordBasedParserImplConstants.TERM),
+            new TokenImage("simpleterm", JavaCCWordBasedParserImplConstants.TERM),
+            new TokenImage("9numterm", JavaCCWordBasedParserImplConstants.TERM),
+            new TokenImage("numerm99x", JavaCCWordBasedParserImplConstants.TERM),
+            new TokenImage("quoted", JavaCCWordBasedParserImplConstants.TERM),
+            new TokenImage("string", JavaCCWordBasedParserImplConstants.TERM)
         };
 
         compareTokenArrays(test, tokens);
@@ -135,12 +129,12 @@ public class WordBasedParserImplTest
         String test = "e-mails dweiss@go2.pl dawid.weiss@go2.com.pl bubu@some-host.com me@me.org bubu99@yahoo.com";
         TokenImage [] tokens = 
         {
-            new TokenImage("e-mails", WordBasedParserImplConstants.HYPHTERM),
-            new TokenImage("dweiss@go2.pl", WordBasedParserImplConstants.EMAIL),
-            new TokenImage("dawid.weiss@go2.com.pl", WordBasedParserImplConstants.EMAIL),
-            new TokenImage("bubu@some-host.com", WordBasedParserImplConstants.EMAIL),
-            new TokenImage("me@me.org", WordBasedParserImplConstants.EMAIL),
-            new TokenImage("bubu99@yahoo.com", WordBasedParserImplConstants.EMAIL)
+            new TokenImage("e-mails", JavaCCWordBasedParserImplConstants.HYPHTERM),
+            new TokenImage("dweiss@go2.pl", JavaCCWordBasedParserImplConstants.EMAIL),
+            new TokenImage("dawid.weiss@go2.com.pl", JavaCCWordBasedParserImplConstants.EMAIL),
+            new TokenImage("bubu@some-host.com", JavaCCWordBasedParserImplConstants.EMAIL),
+            new TokenImage("me@me.org", JavaCCWordBasedParserImplConstants.EMAIL),
+            new TokenImage("bubu99@yahoo.com", JavaCCWordBasedParserImplConstants.EMAIL)
         };
 
         compareTokenArrays(test, tokens);
@@ -154,23 +148,23 @@ public class WordBasedParserImplTest
             + " ftp://ftp.server www.google.com   not.an.url   go2.pl/mail http://www.digimine.com/usama/datamine/.";
         TokenImage [] tokens = 
         {
-            new TokenImage("urls", WordBasedParserImplConstants.TERM),
-            new TokenImage("http://www.google.com", WordBasedParserImplConstants.URL),
+            new TokenImage("urls", JavaCCWordBasedParserImplConstants.TERM),
+            new TokenImage("http://www.google.com", JavaCCWordBasedParserImplConstants.URL),
             new TokenImage(
-                "http://www.cs.put.poznan.pl/index.jsp?query=term&query2=term", WordBasedParserImplConstants.URL), 
-            new TokenImage("ftp://ftp.server", WordBasedParserImplConstants.URL),
-            new TokenImage("www.google.com", WordBasedParserImplConstants.URL),
+                "http://www.cs.put.poznan.pl/index.jsp?query=term&query2=term", JavaCCWordBasedParserImplConstants.URL), 
+            new TokenImage("ftp://ftp.server", JavaCCWordBasedParserImplConstants.URL),
+            new TokenImage("www.google.com", JavaCCWordBasedParserImplConstants.URL),
             
-            new TokenImage("not", WordBasedParserImplConstants.TERM),
-            new TokenImage(".", WordBasedParserImplConstants.SENTENCEMARKER),
-            new TokenImage("an", WordBasedParserImplConstants.TERM),
-            new TokenImage(".", WordBasedParserImplConstants.SENTENCEMARKER),
-            new TokenImage("url", WordBasedParserImplConstants.TERM),
+            new TokenImage("not", JavaCCWordBasedParserImplConstants.TERM),
+            new TokenImage(".", JavaCCWordBasedParserImplConstants.SENTENCEMARKER),
+            new TokenImage("an", JavaCCWordBasedParserImplConstants.TERM),
+            new TokenImage(".", JavaCCWordBasedParserImplConstants.SENTENCEMARKER),
+            new TokenImage("url", JavaCCWordBasedParserImplConstants.TERM),
             
-            new TokenImage("go2.pl/mail", WordBasedParserImplConstants.URL),
+            new TokenImage("go2.pl/mail", JavaCCWordBasedParserImplConstants.URL),
             
-            new TokenImage("http://www.digimine.com/usama/datamine/", WordBasedParserImplConstants.URL),
-            new TokenImage(".", WordBasedParserImplConstants.SENTENCEMARKER)
+            new TokenImage("http://www.digimine.com/usama/datamine/", JavaCCWordBasedParserImplConstants.URL),
+            new TokenImage(".", JavaCCWordBasedParserImplConstants.SENTENCEMARKER)
         };
 
         compareTokenArrays(test, tokens);
@@ -182,14 +176,14 @@ public class WordBasedParserImplTest
         String test = " acronyms I.B.M. S.C. z o.o. AT&T garey&johnson&willet";
         TokenImage [] tokens = 
         {
-            new TokenImage("acronyms", WordBasedParserImplConstants.TERM),
-            new TokenImage("I.B.M.", WordBasedParserImplConstants.ACRONYM),
-            new TokenImage("S.C.", WordBasedParserImplConstants.ACRONYM),
+            new TokenImage("acronyms", JavaCCWordBasedParserImplConstants.TERM),
+            new TokenImage("I.B.M.", JavaCCWordBasedParserImplConstants.ACRONYM),
+            new TokenImage("S.C.", JavaCCWordBasedParserImplConstants.ACRONYM),
             
-            new TokenImage("z", WordBasedParserImplConstants.TERM), new TokenImage("o.o.", WordBasedParserImplConstants.ACRONYM),
+            new TokenImage("z", JavaCCWordBasedParserImplConstants.TERM), new TokenImage("o.o.", JavaCCWordBasedParserImplConstants.ACRONYM),
             
-            new TokenImage("AT&T", WordBasedParserImplConstants.ACRONYM),
-            new TokenImage("garey&johnson&willet", WordBasedParserImplConstants.ACRONYM),
+            new TokenImage("AT&T", JavaCCWordBasedParserImplConstants.ACRONYM),
+            new TokenImage("garey&johnson&willet", JavaCCWordBasedParserImplConstants.ACRONYM),
         };
 
         compareTokenArrays(test, tokens);
@@ -200,15 +194,15 @@ public class WordBasedParserImplTest
         String test = " numeric 127 0 12.87 12,12 12-2003/23 term2003 2003term ";
         TokenImage [] tokens = 
         {
-            new TokenImage("numeric", WordBasedParserImplConstants.TERM),
+            new TokenImage("numeric", JavaCCWordBasedParserImplConstants.TERM),
 
-            new TokenImage("127", WordBasedParserImplConstants.NUMERIC),
-            new TokenImage("0", WordBasedParserImplConstants.NUMERIC),
-            new TokenImage("12.87", WordBasedParserImplConstants.NUMERIC),
-            new TokenImage("12,12", WordBasedParserImplConstants.NUMERIC),
-            new TokenImage("12-2003/23", WordBasedParserImplConstants.NUMERIC),
-            new TokenImage("term2003", WordBasedParserImplConstants.TERM),
-            new TokenImage("2003term", WordBasedParserImplConstants.TERM)
+            new TokenImage("127", JavaCCWordBasedParserImplConstants.NUMERIC),
+            new TokenImage("0", JavaCCWordBasedParserImplConstants.NUMERIC),
+            new TokenImage("12.87", JavaCCWordBasedParserImplConstants.NUMERIC),
+            new TokenImage("12,12", JavaCCWordBasedParserImplConstants.NUMERIC),
+            new TokenImage("12-2003/23", JavaCCWordBasedParserImplConstants.NUMERIC),
+            new TokenImage("term2003", JavaCCWordBasedParserImplConstants.TERM),
+            new TokenImage("2003term", JavaCCWordBasedParserImplConstants.TERM)
             
         };
 
@@ -219,13 +213,13 @@ public class WordBasedParserImplTest
      * Convert token types to generic TypedToken values and recompare.
      */
     private static void compareTokenArrays(String test, TokenImage [] expectedTokens) {
-        WordBasedParserImpl parser = new WordBasedParserImpl(new StringReader(test)); 
+        JavaCCWordBasedParserImpl parser = new JavaCCWordBasedParserImpl(new StringReader(test)); 
 
         int i = 0;
         while (true) {
             Token t;
             t = parser.getNextToken();
-            if (t.kind == WordBasedParserImplConstants.EOF)
+            if (t.kind == JavaCCWordBasedParserImplConstants.EOF)
                 break;
 
             int expectedType = expectedTokens[i].type;

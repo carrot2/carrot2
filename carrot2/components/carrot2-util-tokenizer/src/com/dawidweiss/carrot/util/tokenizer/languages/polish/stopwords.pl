@@ -1,3 +1,6 @@
+mgr
+godz
+zł
 www
 pl
 ul

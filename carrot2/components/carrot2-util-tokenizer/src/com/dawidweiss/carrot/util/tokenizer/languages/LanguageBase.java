@@ -24,7 +24,8 @@ import org.apache.commons.pool.impl.SoftReferenceObjectPool;
 import com.dawidweiss.carrot.core.local.linguistic.Language;
 import com.dawidweiss.carrot.core.local.linguistic.LanguageTokenizer;
 import com.dawidweiss.carrot.core.local.linguistic.Stemmer;
-import com.dawidweiss.carrot.util.tokenizer.parser.WordBasedParser;
+import com.dawidweiss.carrot.util.tokenizer.parser.*;
+import com.dawidweiss.carrot.util.tokenizer.parser.WordBasedParserBase;
 
 
 /**
@@ -70,7 +71,7 @@ public abstract class LanguageBase
             {
                 return createTokenizerInstance();
             }
-        };
+        }
 
     /** 
      * A nested class that implements {@link PoolableObjectFactory} interface
@@ -86,7 +87,7 @@ public abstract class LanguageBase
                 }
                 return instance;
             }
-        };
+        }
         
     /**
      * Default empty constructor.
@@ -101,12 +102,12 @@ public abstract class LanguageBase
      * 
      * <p>Override this method, if a specific implementation of 
      * {@link LanguageTokenizer} is to be used. The default
-     * implementation returns an instance of {@link WordBasedParser}.
+     * implementation returns an instance of {@link WordBasedParserBase}.
      * 
      * @return An instance of {@link LanguageTokenizer}.
      */
     protected LanguageTokenizer createTokenizerInstance() {
-        return new WordBasedParser();
+        return WordBasedParserFactory.Default.borrowParser();
     }
 
     /**

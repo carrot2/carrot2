@@ -23,7 +23,7 @@ import junit.framework.*;
 public class SnippetTokenizerTest extends TestCase
 {
     /** A helper tokenizer */
-    private SnippetTokenizer snippetTokenizer;
+    private SnippetTokenizer snippetTokenizer = new SnippetTokenizer();
 
     /*
      * (non-Javadoc)
@@ -33,11 +33,21 @@ public class SnippetTokenizerTest extends TestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        snippetTokenizer = new SnippetTokenizer();
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see junit.framework.TestCase#tearDown()
+     */
+    protected void tearDown() throws Exception
+    {
+        super.tearDown();
+        snippetTokenizer.clear();
     }
 
     /**
-     * 
+     *  
      */
     public void testEmpty()
     {
@@ -49,7 +59,7 @@ public class SnippetTokenizerTest extends TestCase
     }
 
     /**
-     * 
+     *  
      */
     public void testNonEmpty()
     {
@@ -65,7 +75,7 @@ public class SnippetTokenizerTest extends TestCase
     }
 
     /**
-     * 
+     *  
      */
     public void testPropertyCopying()
     {
