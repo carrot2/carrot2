@@ -27,10 +27,18 @@
                 <td align="left" valign="bottom">
                 <nobr>
                 <html:link target="_parent" page="/components.jsp"><bean:message key="links.components" /></html:link>
+                &nbsp;
                 <html:link target="_parent" page="/admin/index.jsp"><bean:message key="links.admin"/></html:link>
+                &nbsp;
                 <html:link target="_parent" page="/largeInputSearch.jsp"><bean:message key="links.largeinputsearch"/></html:link>
                 &nbsp;
+                &nbsp;
+                &nbsp;
+                &nbsp;
                 <html:link target="_parent" page="/demo.jsp"><bean:message key="links.demo"/></html:link>
+                &nbsp;
+                &nbsp;
+                <html:link target="_top" forward="whatis"><bean:message key="links.whatis"/></html:link>
                 </nobr>
                 </td>
             </tr>

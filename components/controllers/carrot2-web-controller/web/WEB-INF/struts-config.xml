@@ -21,6 +21,7 @@
         <forward   name="main"                path="/index.jsp" />
         <forward   name="search"              path="/search.jsp" />
         <forward   name="runtimeError"        path="/error.jsp" />
+        <forward   name="whatis"              path="/whatis.jsp" />
     </global-forwards>
 
     <action-mappings>
@@ -43,6 +44,7 @@
         >
             <forward name="visualize" path="/output.jsp" />
             <forward name="processingError"  path="/processingError.jsp" />
+            <forward name="welcome" path="/welcome.jsp" />
         </action>
 
         <action

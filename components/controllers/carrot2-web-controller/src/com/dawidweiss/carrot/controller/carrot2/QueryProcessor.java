@@ -21,6 +21,7 @@ import com.dawidweiss.carrot.controller.carrot2.process.cache.Cache;
 import com.dawidweiss.carrot.controller.carrot2.process.scripted.ComponentFailureException;
 import com.dawidweiss.carrot.controller.carrot2.xmlbinding.componentDescriptor.*;
 import com.dawidweiss.carrot.controller.carrot2.xmlbinding.query.*;
+
 import org.apache.log4j.Logger;
 import org.put.util.net.http.*;
 import java.io.*;
@@ -41,18 +42,37 @@ public class QueryProcessor
     private Cache cache;
     private QueryGuard queryGuard;
     private boolean fullDebugInfo;
+    private RequestHistory requestHistory;
+
 
     /**
      * Create a new QueryProcessor with a given cache and query guard.
-     *
-     * @param cache
-     * @param guard
      */
     public QueryProcessor(Cache cache, QueryGuard guard)
     {
         this.cache = cache;
         this.queryGuard = guard;
     }
+    
+    
+    /**
+     * Sets request history memory.
+     */
+    public void setRequestHistory(RequestHistory history)
+    {
+        if (this.requestHistory != null)
+            throw new IllegalStateException("Request history can be set only once.");
+        this.requestHistory = history;
+    }
+    
+    
+    /**
+     * Returns request history object or null.
+     */
+    public RequestHistory getRequestHistory() {
+        return requestHistory;
+    }
+    
 
     /**
      * This is for debugging purposes only.
@@ -109,6 +129,10 @@ public class QueryProcessor
                 // TODO: nasty - caching is not necessary here, it should
                 // be implemented as a direct stream copy.
                 output.write(new String(os.toByteArray(), "UTF-8"));
+                
+                // handle request history.
+                if (requestHistory != null)
+                    requestHistory.push(query, process);
             }
             else
             {

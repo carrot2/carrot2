@@ -33,17 +33,17 @@ TABLE {
 
 A {
 	color:	   	 #646AB4;
-	text-decoration: underline;
+	text-decoration: none;
 	font-weight: 	 normal;
 }
 
 A:visited {
-	text-decoration: underline;
+	text-decoration: none;
 	color:		 #B46464;
 }
 
 A:hover {
-	text-decoration: none;
+	text-decoration: underline;
 	color:		 red;
 }
 
