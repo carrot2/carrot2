@@ -7,13 +7,8 @@ package com.dawidweiss.carrot.util.tokenizer.languages;
 import java.util.*;
 
 import com.dawidweiss.carrot.core.local.linguistic.Language;
-import com.dawidweiss.carrot.util.tokenizer.languages.dutch.Dutch;
-import com.dawidweiss.carrot.util.tokenizer.languages.english.English;
-import com.dawidweiss.carrot.util.tokenizer.languages.french.French;
-import com.dawidweiss.carrot.util.tokenizer.languages.german.German;
-import com.dawidweiss.carrot.util.tokenizer.languages.italian.Italian;
-import com.dawidweiss.carrot.util.tokenizer.languages.polish.Polish;
-import com.dawidweiss.carrot.util.tokenizer.languages.spanish.Spanish;
+
+import org.apache.log4j.Logger;
 
 /**
  * A factory that allows access to all known languages implemented in this
@@ -24,6 +19,7 @@ import com.dawidweiss.carrot.util.tokenizer.languages.spanish.Spanish;
  */
 public class AllKnownLanguages
 {
+	private final static Logger logger = Logger.getLogger(AllKnownLanguages.class);
 
     /** All known languages */
     private static Language [] languageArray;
@@ -34,21 +30,29 @@ public class AllKnownLanguages
     /** Initialize the data */
     static
     {
-        languageArray = new Language[]
-        { 
-         	new English(), 
-         	new Polish(), 
-         	new Dutch(), 
-         	new French(), 
-         	new German(),
-         	new Italian(), 
-         	new Spanish() 
-        };
+    	// Load them dynamically. Removing some JARs will not hurt
+    	// this class then.
+    	String [] languageArray = new String [] {
+    		"com.dawidweiss.carrot.util.tokenizer.languages.dutch.Dutch",
+			"com.dawidweiss.carrot.util.tokenizer.languages.english.English",
+			"com.dawidweiss.carrot.util.tokenizer.languages.french.French",
+			"com.dawidweiss.carrot.util.tokenizer.languages.german.German",
+			"com.dawidweiss.carrot.util.tokenizer.languages.italian.Italian",
+			"com.dawidweiss.carrot.util.tokenizer.languages.polish.Polish",
+			"com.dawidweiss.carrot.util.tokenizer.languages.spanish.Spanish"
+    	};
 
         languages = new HashMap();
         for (int i = 0; i < languageArray.length; i++)
         {
-            languages.put(languageArray[i].getIsoCode(), languageArray[i]);
+        	String langClazz = languageArray[i];
+        	try {
+        		Language lang = (Language) AllKnownLanguages.class.getClassLoader().loadClass(
+        			langClazz).newInstance();
+	            languages.put(lang.getIsoCode(), lang);
+        	} catch (Throwable t) {
+        		logger.warn("Could not instantiate language: " + langClazz, t);
+        	}
         }
     }
 
