@@ -15,12 +15,6 @@ Instructions on how to build these libraries are provided on the NNI home page:
 
 http://www.math.uib.no/~bjornoh/mtj/nni/
 
-Two sets of Windows DLL I've compiled under Cygwin are available from here:
+Currently, the nni-lib/ contains the following precompiled libraries:
 
-P4 1024kB L2 cache SSE2: 
-
-http://www.man.poznan.pl/~stachoo/nni-lib/nni-win32-p4-sse2-1024l2c.zip
-
-P4 512kB L2 cache SSE2:
-
-http://www.man.poznan.pl/~stachoo/nni-lib/nni-win32-p4-sse2-512l2c.zip
+nni-win32-pIII-sse1.zip - Windows NT/2000/XP, Pentium III Celeron
