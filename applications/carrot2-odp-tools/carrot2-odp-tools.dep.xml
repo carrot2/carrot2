@@ -17,6 +17,7 @@
     <dependency name="carrot2-odp-core" />
     <dependency name="carrot2-util-common" />
     <dependency name="carrot2-license" />
+    <dependency name="carrot2-input-lucene" />
     <dependency name="dom4j" />
     <dependency name="junit" profile="test" />
 </component>

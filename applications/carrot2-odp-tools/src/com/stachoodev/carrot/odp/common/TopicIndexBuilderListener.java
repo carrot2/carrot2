@@ -8,7 +8,7 @@
  * in the root folder of the CVS checkout or at:
  * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
-package com.stachoodev.carrot.odp.index;
+package com.stachoodev.carrot.odp.common;
 
 /**
  * An interface for listening to events related to creating ODP indices.

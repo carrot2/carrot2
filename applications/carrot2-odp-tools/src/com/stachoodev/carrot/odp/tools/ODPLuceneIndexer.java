@@ -14,22 +14,14 @@ import java.io.*;
 import java.util.*;
 
 import com.dawidweiss.carrot.util.common.*;
-import com.stachoodev.carrot.odp.*;
-import com.stachoodev.carrot.odp.index.*;
-import com.stachoodev.util.common.*;
+import com.stachoodev.carrot.odp.common.*;
+import com.stachoodev.carrot.odp.lucene.*;
 
 /**
- * A tool that creates all indexes registered with
- * {@link com.stachoodev.carrot.odp.index.AllKnownTopicIndexBuilders}for given
- * ODP content file.
- * 
- * TODO: topic filtering - too small topics, letter catetories (e.g. Domains/A)
- * TODO: switch from input arguments to properties
- * 
  * @author Stanislaw Osinski
  * @version $Revision$
  */
-public class ODPIndexer implements TopicIndexBuilderListener
+public class ODPLuceneIndexer implements TopicIndexBuilderListener
 {
     /** The number of topics indexed so far */
     private int topicsIndexed;
@@ -46,7 +38,7 @@ public class ODPIndexer implements TopicIndexBuilderListener
     /**
      * @param contentFileLocation
      */
-    public ODPIndexer(String indexDataLocation)
+    public ODPLuceneIndexer(String indexDataLocation)
     {
         this.indexDataLocation = indexDataLocation;
     }
@@ -83,64 +75,18 @@ public class ODPIndexer implements TopicIndexBuilderListener
         ClassNotFoundException
     {
         // Get the primary index builder
-        PrimaryTopicIndexBuilder primaryIndexBuilder = AllKnownTopicIndexBuilders
-            .getPrimaryTopicIndexBuilder();
-        PropertyHelper.setProperties(primaryIndexBuilder, properties);
-        if (primaryIndexBuilder instanceof ObservableTopicIndexBuilder)
-        {
-            ((ObservableTopicIndexBuilder) primaryIndexBuilder)
-                .addTopicIndexBuilderListener(this);
-        }
-
-        // Initialise the topic serializer
-        TopicSerializer topicSerializer = ODPIndex.getTopicSerializer();
-        topicSerializer.initialize(indexDataLocation);
-
-        // Initialise topic index builders
-        Map topicIndexBuilders = AllKnownTopicIndexBuilders
-            .getTopicIndexBuilders();
-        for (Iterator iter = topicIndexBuilders.values().iterator(); iter
-            .hasNext();)
-        {
-            TopicIndexBuilder topicIndexBuilder = (TopicIndexBuilder) iter
-                .next();
-            topicIndexBuilder.initialize();
-        }
+        LuceneIndexBuilder luceneIndexBuilder = new LuceneIndexBuilder();
+        luceneIndexBuilder.addTopicIndexBuilderListener(this);
 
         // Create the primary index and topic indices
         start = System.currentTimeMillis();
-        PrimaryTopicIndex primaryIndex = primaryIndexBuilder.create(odpData,
-            topicSerializer, topicIndexBuilders.values());
+        luceneIndexBuilder.index(odpData, indexDataLocation);
         long stop = System.currentTimeMillis();
         displayProgressMessage(stop);
 
+        displayMessage("Closing index...");
+        luceneIndexBuilder.close();
         odpData.close();
-        topicSerializer.dispose();
-
-        // Serialize the primary index
-        displayMessage("Serializing primary topic index...");
-        OutputStream out = new FileOutputStream(indexDataLocation
-            + System.getProperty("file.separator")
-            + ODPIndex.PRIMARY_TOPIC_INDEX_NAME);
-        primaryIndex.serialize(out);
-        out.close();
-
-        // Serialize the topic indices
-        for (Iterator iter = topicIndexBuilders.keySet().iterator(); iter
-            .hasNext();)
-        {
-            String name = (String) iter.next();
-            displayMessage("Serializing topic index: " + name + "...");
-
-            TopicIndexBuilder topicIndexBuilder = (TopicIndexBuilder) topicIndexBuilders
-                .get(name);
-
-            out = new FileOutputStream(indexDataLocation
-                + System.getProperty("file.separator") + name);
-            topicIndexBuilder.getTopicIndex().serialize(out);
-            out.close();
-        }
-
         displayMessage("Done");
     }
 
@@ -182,7 +128,7 @@ public class ODPIndexer implements TopicIndexBuilderListener
     {
         topicsIndexed++;
         long stop = System.currentTimeMillis();
-        if (topicsIndexed % 1000 == 0)
+        if (topicsIndexed % 100 == 0)
         {
             displayProgressMessage(stop);
         }
@@ -206,18 +152,28 @@ public class ODPIndexer implements TopicIndexBuilderListener
     public static void main(String [] args) throws IOException,
         ClassNotFoundException
     {
-        if (args.length != 2 && args.length != 3)
+        String odpSrcFile = System.getProperty("odp.src.file");
+        String luceneIndexDir = System.getProperty("odp.lucene.index.dir");
+
+        if (odpSrcFile == null)
         {
-            System.out
-                .println("Usage: ODPIndexer odp-raw-rdf-file odp-index-dir");
+            System.err
+                .println("Please provide a path to an ODP RDF file in the 'odp.src.file' property");
+            return;
+        }
+
+        if (luceneIndexDir == null)
+        {
+            System.err
+                .println("Please provide a path for the Lucene index in the 'odp.lucene.index.dir' property");
             return;
         }
 
         Map properties = new HashMap();
 
-        ODPIndexer odpIndexer = new ODPIndexer(args[1]);
+        ODPLuceneIndexer odpIndexer = new ODPLuceneIndexer(luceneIndexDir);
 
         odpIndexer.setProgressIndication(true);
-        odpIndexer.index(args[0], properties);
+        odpIndexer.index(odpSrcFile, properties);
     }
 }

@@ -8,7 +8,8 @@
  * in the root folder of the CVS checkout or at:
  * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
-package com.stachoodev.carrot.odp.index;
+package com.stachoodev.carrot.odp.common;
+
 
 /**
  * Enables the index builder to provide information about the progress of
