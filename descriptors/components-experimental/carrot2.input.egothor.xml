@@ -9,7 +9,7 @@
     <component id               = "carrot2.input.egothor.dundee"
                type             = "input"
                serviceURL       = "http://egothor.dundee.ac.uk/egothor/c2.jsp"
-               infoURL          = "http://egothor.sourceforge.net/"
+               infoURL          = "http://www.egothor.org/"
     >
         <acceptedFormat>
             <mime>application/x-carrot-clustering-input-query</mime>
@@ -22,8 +22,8 @@
 
     <component id               = "carrot2.input.egothor.cs-only"
                type             = "input"
-               serviceURL       = "http://egothor.dundee.ac.uk/egothor-put/c2.jsp"
-               infoURL          = "http://egothor.sourceforge.net/"
+               serviceURL       = "http://carrot.cs.put.poznan.pl/crawler/c2.jsp"
+               infoURL          = "http://www.egothor.org/"
     >
         <acceptedFormat>
             <mime>application/x-carrot-clustering-input-query</mime>
@@ -32,5 +32,7 @@
             <mime>application/x-carrot-clustering-plain-response</mime>
         </producedFormat>
     </component>
+
+
 
 </service>
