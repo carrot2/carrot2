@@ -25,7 +25,7 @@ import com.dawidweiss.carrot.util.tokenizer.languages.*;
  * @author Stanislaw Osinski
  * @version $Revision$
  */
-public class CaseNormalizerBenchmark
+public class SmartCaseNormalizerBenchmark
 {
     /** */
     private String [] queries;
@@ -43,13 +43,13 @@ public class CaseNormalizerBenchmark
     private LocalFilterComponent snippetTokenizer;
 
     /** */
-    private CaseNormalizer caseNormalizer;
+    private SmartCaseNormalizer caseNormalizer;
 
     /**
      * @throws InstantiationException
      *  
      */
-    public CaseNormalizerBenchmark() throws InstantiationException
+    public SmartCaseNormalizerBenchmark() throws InstantiationException
     {
         queries = new String []
         { "derbyshire", "wales", "south yorkshire", "sweat shop", "workforce",
@@ -79,7 +79,7 @@ public class CaseNormalizerBenchmark
         localInputComponent.init(null);
 
         // The case normalizer under tests
-        caseNormalizer = new CaseNormalizer();
+        caseNormalizer = new SmartCaseNormalizer();
     }
 
     /**
@@ -154,7 +154,7 @@ public class CaseNormalizerBenchmark
     public static void main(String [] args) throws ProcessingException,
         InterruptedException, IOException, InstantiationException
     {
-        CaseNormalizerBenchmark benchmark = new CaseNormalizerBenchmark();
+        SmartCaseNormalizerBenchmark benchmark = new SmartCaseNormalizerBenchmark();
 
         benchmark.runPerformance();
     }

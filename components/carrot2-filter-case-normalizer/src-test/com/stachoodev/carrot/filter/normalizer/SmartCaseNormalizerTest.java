@@ -19,18 +19,18 @@ import com.dawidweiss.carrot.util.tokenizer.languages.polish.*;
 
 /**
  * Unit tests for the
- * {@link com.stachoodev.carrot.filter.normalizer.CaseNormalizer}class.
+ * {@link com.stachoodev.carrot.filter.normalizer.SmartCaseNormalizer}class.
  * 
  * @author Stanislaw Osinski
  * @version $Revision$
  */
-public class CaseNormalizerTest extends TestCase
+public class SmartCaseNormalizerTest extends TestCase
 {
     /** A helper tokenized document factory */
     private SnippetTokenizer snippetTokenizer;
 
     /** The case normalizer under tests */
-    private CaseNormalizer caseNormalizer;
+    private SmartCaseNormalizer caseNormalizer;
 
     /** Polish language to be used */
     private Polish polishLanguage;
@@ -41,10 +41,10 @@ public class CaseNormalizerTest extends TestCase
     /**
      * 
      */
-    public CaseNormalizerTest()
+    public SmartCaseNormalizerTest()
     {
         snippetTokenizer = new SnippetTokenizer();
-        caseNormalizer = new CaseNormalizer();
+        caseNormalizer = new SmartCaseNormalizer();
         polishLanguage = new PolishWithLametyzator();
     }
     
@@ -92,6 +92,7 @@ public class CaseNormalizerTest extends TestCase
 
     /**
      *  
+     */
     public void testUnknownLanguage()
     {
         TokenizedDocument document01 = snippetTokenizer
@@ -99,19 +100,21 @@ public class CaseNormalizerTest extends TestCase
                 "a Simple snippet Of THE document"));
         TokenizedDocument document02 = snippetTokenizer
             .tokenize(new RawDocumentSnippet("A simple title",
-                "a Simple snippet Of THE document", "en"));
+                "a Simple snippet Of THE document"));
         TokenizedDocument normalizedDocument01 = snippetTokenizer
-            .tokenize(new RawDocumentSnippet("a Simple Title",
-                "a Simple Snippet of the Document"));
+            .tokenize(new RawDocumentSnippet("A Simple Title",
+                "A Simple Snippet Of THE Document"));
         TokenizedDocument normalizedDocument02 = snippetTokenizer
-            .tokenize(new RawDocumentSnippet("a Simple Title",
-                "a Simple Snippet of the Document", "en"));
+            .tokenize(new RawDocumentSnippet("A Simple Title",
+                "A Simple Snippet Of THE Document"));
 
         // Clear raw document references, which would break equality
         document01.setProperty(TokenizedDocument.PROPERTY_RAW_DOCUMENT, null);
+        document01.setProperty(TokenizedDocument.PROPERTY_LANGUAGE, null);
         normalizedDocument01.setProperty(
             TokenizedDocument.PROPERTY_RAW_DOCUMENT, null);
         document02.setProperty(TokenizedDocument.PROPERTY_RAW_DOCUMENT, null);
+        document02.setProperty(TokenizedDocument.PROPERTY_LANGUAGE, null);
         normalizedDocument02.setProperty(
             TokenizedDocument.PROPERTY_RAW_DOCUMENT, null);
 
@@ -121,7 +124,6 @@ public class CaseNormalizerTest extends TestCase
         assertEquals("Correct capitalization", normalizedDocument01, document01);
         assertEquals("Correct capitalization", normalizedDocument02, document02);
     }
-     */
 
     /**
      *  
