@@ -62,7 +62,17 @@ public class Carrot2ChunkInterceptor
 
         if ((outputDir = servletConfig.getInitParameter("intercepted.streams.folder")) == null)
         {
-            if ((outputDir = System.getProperty("catalina.base")) == null)
+	        outputDir = System.getProperty("resin.home");
+	        if (outputDir == null)
+	        {
+		        outputDir = System.getProperty("catalina.home");
+		        if (outputDir == null)
+		        {
+			        outputDir = System.getProperty("catalina.base");
+		        }
+	        }
+	        
+            if (outputDir == null)
             {
                 throw new java.lang.IllegalArgumentException(
                     "Could not locate output directory for intercepted streams."
