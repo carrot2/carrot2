@@ -76,7 +76,7 @@ public class SimplePrimaryTopicIndex implements PrimaryTopicIndex, Serializable
 
         if (location == null)
         {
-            return null;
+            return new ArrayList(0);
         }
         else
         {
