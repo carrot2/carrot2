@@ -24,6 +24,17 @@ public class MutableTokenSequence implements TokenSequence
     }
 
     /**
+     * Creates a MutableTokenSequence with one initial token
+     * 
+     * @param token
+     */
+    public MutableTokenSequence(Token token)
+    {
+        this();
+        addToken(token);
+    }
+
+    /**
      * Creates a MutableTokenSequence with some initial tokens
      * 
      * @param tokens
