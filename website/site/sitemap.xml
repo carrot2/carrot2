@@ -47,13 +47,7 @@
             <name lng="en">CVS access info</name>
             <name lng="pl">Dostęp do CVS</name>
         </section>
-        
-<!--        
-        <section location="http://www.cs.put.poznan.pl/dweiss/carrot/manual/apc.html">
-            <name lng="en">Changes history</name>
-            <name lng="pl">Historia zmian</name>
-        </section>
--->
+
     </section>
 
     <section id="demo" location="/demo.xml">
@@ -69,11 +63,6 @@
     <section id="download" location="/download.xml">
         <name lng="en">Download</name>
         <name lng="pl">Pobierz</name>
-        
-        <section id="" location="http://www.cs.put.poznan.pl/dweiss/carrot/manual/carrot2-installation-manual.html">
-            <name lng="en">Installation instructions</name>
-            <name lng="pl">Instalacja</name>
-        </section>
     </section>
 
     <section id="authors" location="/authors.xml">
