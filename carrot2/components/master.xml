@@ -21,6 +21,12 @@
 
   <property name="component.descriptor" location="${project.dir}/${dist.name}.dep.xml" />
   <property name="profile"          value="" />
+  
+  <property file="${carrot2.cvs.dir}/local-build.properties" />
+
+  <property name="tomcat.url"       value="http://localhost:8080/manager" />
+  <property name="tomcat.username"  value="carrot" />
+  <property name="tomcat.password"  value="" />
 
   <!--
     Set this property to any other value to collect separate carrot2 dependencies
@@ -343,6 +349,45 @@ ${string:component.dependencies}
   <!-- ### {{{ WAR TYPE BUILD            ### -->
   <!-- ##################################### -->
 
+  <target name="tomcat.deploy">
+    <condition property="ok:deploy" value="true">
+		<equals arg1="${type}" arg2="wartype"/>
+    </condition>
+    <fail message="Build type not 'wartype'. Can't deploy." unless="ok:deploy" />
+
+	<antcall target="build.wartype" inheritrefs="true" />
+	
+	<echo>
+Deploying:   ${distribution.dir}/${dist.name}.war
+Remote path: /${dist.name}
+Tomcat:      ${tomcat.url}
+	</echo>
+	
+    <path id="tomcat.tasks">
+        <fileset dir="${carrot2.cvs.dir}/lib/tomcat-ant">
+            <include name="*.jar" />
+        </fileset>
+	</path>
+	
+    <taskdef name="deploy"    classname="org.apache.catalina.ant.DeployTask">
+		<classpath refid="tomcat.tasks" />
+	</taskdef>
+	<taskdef name="undeploy"  classname="org.apache.catalina.ant.UndeployTask">
+		<classpath refid="tomcat.tasks" />
+	</taskdef>
+
+    <undeploy url="${tomcat.url}" 
+		username="${tomcat.username}"
+		password="${tomcat.password}"
+        path="/${dist.name}" failonerror="false" />
+
+    <deploy url="${tomcat.url}" 
+		username="${tomcat.username}"
+		password="${tomcat.password}"
+        path="/${dist.name}"
+		war="${distribution.dir}/${dist.name}.war"/>
+  </target>
+  
   <target name="build.wartype" depends="prepare,build.wartype.internal,copy.dependencies">
   </target>
 

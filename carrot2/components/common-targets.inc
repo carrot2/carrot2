@@ -31,6 +31,12 @@
              antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" inheritrefs="true">
         </ant>
     </target>
+	
+	<target name="tomcat.deploy">
+		<ant target="tomcat.deploy"
+			antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" inheritrefs="true">
+		</ant>
+	</target>
 
 	<!-- an alias for dependencies-->
     <target name="deps" depends="dependencies" />
