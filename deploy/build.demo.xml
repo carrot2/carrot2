@@ -11,7 +11,7 @@
     <property name="runtime.webapps" location="${runtime.env}/context-webapps" />
 
     <property name="deployment.port" value="2001" />
-    <property name="deployment.host" value="localhost" />
+    <property name="deployment.host" value="carrot.cs.put.poznan.pl" />
 
     <property name="cvs.update.timestamp" location="tmp/.demo.update.mark" />
     
