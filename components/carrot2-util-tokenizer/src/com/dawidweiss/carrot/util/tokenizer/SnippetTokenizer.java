@@ -181,10 +181,11 @@ public class SnippetTokenizer
      */
     private LanguageTokenizer borrowLanguageTokenzer(String isoCode)
     {
+        LanguageTokenizer languageTokenizer;
         if (isoCode == null)
         {
             // Default to a generic tokenizer
-            return WordBasedParserFactory.borrowParser();
+            languageTokenizer = WordBasedParserFactory.borrowParser();
         }
         else
         {
@@ -193,14 +194,21 @@ public class SnippetTokenizer
             if (language == null)
             {
                 // Default to a generic tokenizer
-                return WordBasedParserFactory.borrowParser();
+                languageTokenizer = WordBasedParserFactory.borrowParser();
             }
             else
             {
                 // Borrow a specific tokenizer
-                return language.borrowTokenizer();
+                languageTokenizer = language.borrowTokenizer();
             }
         }
+        
+        // In theory we should be reusing the tokenize before returning it to
+        // the pool, but then the tokens would be invalid even before the clients
+        // could get hold of them.
+        languageTokenizer.reuse();
+        
+        return languageTokenizer;
     }
 
     /**
