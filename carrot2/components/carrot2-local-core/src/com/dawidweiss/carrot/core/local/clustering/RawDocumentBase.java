@@ -32,6 +32,25 @@ public abstract class RawDocumentBase implements RawDocument, PropertyProvider
     {
         propertyHelper = new PropertyHelper();
     }
+    
+    /** 
+     * Cloning constructor.
+     */ 
+    public RawDocumentBase( RawDocument r ) {
+	    this();
+	    
+	    if (r instanceof RawDocumentBase) {
+		    try {
+		    	this.propertyHelper = (PropertyHelper) ((RawDocumentBase)r).propertyHelper.clone();
+	    	} catch (CloneNotSupportedException e) {
+		    	throw new RuntimeException();
+	    	}
+	    } else {
+		    setProperty(PROPERTY_URL, r.getProperty(PROPERTY_URL));
+		    setProperty(PROPERTY_SNIPPET, r.getProperty(PROPERTY_SNIPPET));
+		    setProperty(PROPERTY_TITLE, r.getProperty(PROPERTY_TITLE));
+	    } 
+    }
 
     /*
      * (non-Javadoc)
