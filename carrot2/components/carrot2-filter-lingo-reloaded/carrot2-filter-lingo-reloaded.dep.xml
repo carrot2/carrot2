@@ -5,12 +5,21 @@
     name="carrot2-filter-lingo-reloaded"
     description="Carrot2 Lingo Reloaded Clustering Filter">
 
-    <provides>
+    <provides profile="local">
         <files build-path-exclude="true" prefix="tmp/dist">
             <file location="carrot2-filter-lingo-reloaded.jar" />
         </files>
         <build>
-            <ant file="build.xml" target="build" />
+            <ant file="build.local.xml" target="build" />
+        </build>
+    </provides>
+
+    <provides profile="remote">
+        <files build-path-exclude="true" prefix="tmp/dist">
+            <file location="carrot2-filter-lingo-reloaded.war" />
+        </files>
+        <build>
+            <ant file="build.remote.xml" target="build" />
         </build>
     </provides>
 
@@ -23,6 +32,13 @@
     <dependency name="carrot2-license" />
     <dependency name="log4j" />
     
+	<dependency name="carrot2-filter-case-normalizer" 	profile="remote" />
+	<dependency name="carrot2-language-guesser"         profile="remote" />
+	<dependency name="carrot2-util-remote" 	profile="remote" />
+    <dependency name="jdom"                 profile="remote" />
+    <dependency name="servlets-api"         profile="remote" nocopy="true" />
+	<dependency name="carrot2-util-put"     profile="remote" />
+
     <dependency name="junit" profile="test" />
     <dependency name="junit-addons" profile="test" />
 </component>
