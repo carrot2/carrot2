@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE component SYSTEM "../etc/component-dependency.dtd" >
+
+<component
+    name="violinstrings"
+    description="Violin Strings, http://vigna.dsi.unimi.it/ViolinStrings/">
+
+    <provides>
+        <files>
+            <file location="violinstrings-1.0.2.jar" />
+            <file location="violinstrings.LICENSE" />
+        </files>
+    </provides>
+
+</component>
+
