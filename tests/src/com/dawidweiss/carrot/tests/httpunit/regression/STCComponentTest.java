@@ -15,7 +15,7 @@
 package com.dawidweiss.carrot.tests.httpunit.regression;
 
 
-import com.dawidweiss.carrot.tests.httpunit.AbstractTestCase;
+import com.dawidweiss.carrot.tests.httpunit.TestCaseBase;
 import java.io.IOException;
 
 
@@ -24,7 +24,7 @@ import java.io.IOException;
  * is normally not active.
  */
 public class STCComponentTest
-    extends AbstractTestCase
+    extends TestCaseBase
 {
     private int RETRIES = 20;
 

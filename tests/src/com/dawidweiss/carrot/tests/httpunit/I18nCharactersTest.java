@@ -25,7 +25,7 @@ import java.net.MalformedURLException;
  *
  */
 public class I18nCharactersTest
-    extends AbstractTestCase
+    extends TestCaseBase
 {
     public I18nCharactersTest(String s)
         throws IOException, ClassNotFoundException

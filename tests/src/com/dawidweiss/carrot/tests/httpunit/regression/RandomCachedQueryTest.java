@@ -15,7 +15,7 @@
 package com.dawidweiss.carrot.tests.httpunit.regression;
 
 
-import com.dawidweiss.carrot.tests.httpunit.AbstractTestCase;
+import com.dawidweiss.carrot.tests.httpunit.TestCaseBase;
 import com.meterware.httpunit.*;
 import org.xml.sax.SAXException;
 import java.io.IOException;
@@ -27,7 +27,7 @@ import java.util.*;
  * Tests whether Carrot2 controller has been successfully started.
  */
 public class RandomCachedQueryTest
-    extends AbstractTestCase
+    extends TestCaseBase
 {
     private static final int REPEATS = 60 * 60;
 

@@ -32,13 +32,13 @@ import java.net.URL;
 /**
  * An abstract test case with configuration and certain utility methods.
  */
-public abstract class AbstractTestCase
+public abstract class TestCaseBase
     extends TestCase
 {
     protected final Logger log = Logger.getLogger(this.getClass());
     private final TestsConfiguration configuration;
 
-    public AbstractTestCase(String s)
+    public TestCaseBase(String s)
         throws IOException, ClassNotFoundException
     {
         super(s);
@@ -94,7 +94,7 @@ public abstract class AbstractTestCase
 
         log.debug("Setting cache-only mode to on...");
 
-        String cacheoff = getControllerURL() + "/debug.jsp?usecacheonly=true";
+        String cacheoff = getControllerURL() + "/debug.jsp?usecacheonly=true&history=false";
         WebConversation wc = new WebConversation();
         wc.getResponse(cacheoff);
     }
@@ -105,7 +105,7 @@ public abstract class AbstractTestCase
     {
         super.tearDown();
 
-        String cacheon = getControllerURL() + "/debug.jsp?usecacheonly=false";
+        String cacheon = getControllerURL() + "/debug.jsp?usecacheonly=false&history=true";
         WebConversation wc = new WebConversation();
         wc.getResponse(cacheon);
     }
