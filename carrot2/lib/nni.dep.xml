@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<!DOCTYPE component SYSTEM "../etc/component-dependency.dtd" > 
+<component
+    name="nni"
+    description="Native Numerical Interface http://www.math.uib.no/~bjornoh/mtj/nni/">
+	<provides>
+		<files>
+			<file location="nni.jar" />
+			<file location="nni.LICENSE" />
+		</files>
+	</provides>
+</component>
+
