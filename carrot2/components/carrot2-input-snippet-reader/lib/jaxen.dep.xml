@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE component SYSTEM "../../../etc/component-dependency.dtd" >
+
+<component
+    name="jaxen"
+    description="Jaxen project, XPath support for Dom4J">
+
+    <provides>
+        <files>
+            <file location="jaxen-core.jar" />
+            <file location="jaxen-dom4j.jar" />
+            <file location="saxpath.jar" />
+            <file location="jaxen.LICENSE" />
+        </files>
+    </provides>
+</component>
