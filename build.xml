@@ -280,6 +280,7 @@ FORMATTING: @{component.path}
             <exclude name="*.war" />
             <exclude name="carrot*.LICENSE" />
             <exclude name="carrot*.CONTRIBUTORS" />
+            <include name="*.jar" />
         </fileset>
     </move>
   </target>
