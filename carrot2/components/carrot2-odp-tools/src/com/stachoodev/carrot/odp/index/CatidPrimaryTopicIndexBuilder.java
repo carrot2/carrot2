@@ -38,6 +38,9 @@ import com.stachoodev.util.common.*;
  * 
  * This index builder is <b>not </b> thread-safe.
  * 
+ * TODO: storing topics in separate zip files was a BAD idea. Re-implement
+ * this based on random access files, maybe JDK1.4 channels
+ * 
  * @author Stanislaw Osinski
  * @version $Revision$
  */
