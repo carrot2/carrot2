@@ -8,7 +8,7 @@
   -->
 
 <component
-    name="all remote components"
+    name="AllRemoteComponents"
     description="All Carrot2 Remote Components">
     
     <!-- Dual components (local and remote), so remote profile enforced -->
@@ -17,6 +17,7 @@
     <dependency name="carrot2-filter-fuzzyants" in-profile="remote" />
     <dependency name="carrot2-filter-lingo" in-profile="remote" />
     <dependency name="carrot2-filter-stc" in-profile="remote" />
+    <dependency name="carrot2-filter-trc" in-profile="remote" />
 
     <dependency name="carrot2-input-egothor" in-profile="remote" />
     <dependency name="carrot2-input-nutch" in-profile="remote" />
