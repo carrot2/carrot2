@@ -74,7 +74,9 @@ public class RawDocumentElementWrapper
         }
         if (RawDocument.PROPERTY_URL.equals(propertyName)) {
             return getUrl();
-        } else if (RawDocument.PROPERTY_SNIPPET.equals(propertyName)) {
+        } else if (RawDocument.PROPERTY_TITLE.equals(propertyName)) {
+			return getTitle();
+		} else if (RawDocument.PROPERTY_SNIPPET.equals(propertyName)) {
             return getSnippet();
         }
         return null;

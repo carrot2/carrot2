@@ -23,9 +23,6 @@ import com.stachoodev.util.common.*;
  */
 public class RawDocumentSnippet extends RawDocumentBase implements Cloneable
 {
-    /** Document title */
-    private String title;
-
     /** Document id */
     private Object id;
 
@@ -67,8 +64,8 @@ public class RawDocumentSnippet extends RawDocumentBase implements Cloneable
         String url, float score)
     {
         this.id = id;
-        this.title = title;
         this.score = score;
+        propertyHelper.setProperty(PROPERTY_TITLE, title);
         propertyHelper.setProperty(PROPERTY_URL, url);
         propertyHelper.setProperty(PROPERTY_SNIPPET, snippet);
     }
@@ -106,21 +103,11 @@ public class RawDocumentSnippet extends RawDocumentBase implements Cloneable
     /*
      * (non-Javadoc)
      * 
-     * @see com.dawidweiss.carrot.core.local.clustering.RawDocument#getTitle()
-     */
-    public String getTitle()
-    {
-        return title;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
      * @see java.lang.Object#toString()
      */
     public String toString()
     {
-        return "[" + title + "] " + getSnippet().toString();
+        return "[" + getTitle() + "] " + getSnippet().toString();
     }
 
     /*
@@ -154,9 +141,9 @@ public class RawDocumentSnippet extends RawDocumentBase implements Cloneable
         }
 
         boolean result = true;
-        if (title != null)
+        if (getTitle() != null)
         {
-            result = result && title.equals(otherSnippet.title);
+            result = result && getTitle().equals(otherSnippet.getTitle());
         }
         if (getSnippet() != null)
         {
@@ -180,9 +167,9 @@ public class RawDocumentSnippet extends RawDocumentBase implements Cloneable
         }
         
         // Try with the title first
-        if (title != null && !title.equals(""))
+        if (getTitle() != null && !getTitle().equals(""))
         {
-            return title.hashCode();
+            return getTitle().hashCode();
         }
 
         // Snippet?
@@ -201,7 +188,7 @@ public class RawDocumentSnippet extends RawDocumentBase implements Cloneable
      */
     public Object clone() throws CloneNotSupportedException
     {
-        RawDocumentSnippet obj = new RawDocumentSnippet(id, title, null, null, score);
+        RawDocumentSnippet obj = new RawDocumentSnippet(id, getTitle(), null, null, score);
         obj.propertyHelper = (PropertyHelper) propertyHelper.clone();
         return obj;
     }

@@ -51,6 +51,17 @@ public interface RawDocument {
 
     /**
      * Document property that, if available, yields a {@link java.lang.String}
+     * object with the title of the document.
+     * 
+     * <p>
+     * The value returned for this property is of type {@link
+     * java.lang.String}.
+     * </p>
+     */
+    public final static String PROPERTY_TITLE = "title";
+
+    /**
+     * Document property that, if available, yields a {@link java.lang.String}
      * object with the Uniform Resource Locator (URL) of this document.
      * 
      * <p>
@@ -120,8 +131,10 @@ public interface RawDocument {
     public String getSnippet();
 
     /**
-     * @return Returns the title of this document  as a {@link
-     *         java.lang.String} object.
+	 * Convenience method for accessing {@link #PROPERTY_TITLE}.
+	 *
+     * @return Returns the value corresponding to {@link #PROPERTY_TITLE}
+     *         property.
      */
     public String getTitle();
     
