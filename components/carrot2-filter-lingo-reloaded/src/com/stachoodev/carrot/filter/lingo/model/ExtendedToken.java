@@ -3,6 +3,8 @@
  */
 package com.stachoodev.carrot.filter.lingo.model;
 
+import java.util.*;
+
 import com.dawidweiss.carrot.core.local.linguistic.tokens.*;
 import com.dawidweiss.carrot.util.common.*;
 
@@ -30,6 +32,9 @@ public class ExtendedToken implements Token, PropertyProvider
     /** Inverse document frequency factor */
     public static final String PROPERTY_IDF = "idf";
 
+    /** The index of this token on the selected features list */
+    public static final String PROPERTY_INDEX = "idx";
+
     /**
      * If present, for a generalized (i.e. stemmed) extended token returns all
      * original variants as a list of {@link ExtendedToken}s.
@@ -49,6 +54,45 @@ public class ExtendedToken implements Token, PropertyProvider
         // we don't expect ExtendedTokens not defining any properties, hence
         // no lazy initalization of the property container
         this.propertyHelper = new PropertyHelper();
+    }
+
+    /**
+     * @return
+     */
+    public ExtendedTokenSequence asTokenSequence()
+    {
+        ExtendedTokenSequence extendedTokenSequence = asShallowTokenSequence(this);
+
+        // Convert original tokens as well
+        List originalTokens = (List) getProperty(PROPERTY_ORIGINAL_TOKENS);
+        List originalTokenSequences = new ArrayList();
+        for (Iterator tokens = originalTokens.iterator(); tokens.hasNext();)
+        {
+            ExtendedToken originalToken = (ExtendedToken) tokens.next();
+            originalTokenSequences.add(asShallowTokenSequence(originalToken));
+        }
+        extendedTokenSequence.setProperty(
+            ExtendedTokenSequence.PROPERTY_ORIGINAL_TOKEN_SEQUENCES,
+            originalTokenSequences);
+
+        return extendedTokenSequence;
+    }
+
+    /**
+     * Does not copy original tokens onto original token sequences
+     * 
+     * @param extendedToken
+     * @return
+     */
+    private ExtendedTokenSequence asShallowTokenSequence(
+        ExtendedToken extendedToken)
+    {
+        ExtendedTokenSequence extendedTokenSequence = new ExtendedTokenSequence(
+            new MutableTokenSequence(extendedToken));
+        extendedTokenSequence.setProperty(ExtendedTokenSequence.PROPERTY_TF,
+            getProperty(PROPERTY_TF));
+
+        return extendedTokenSequence;
     }
 
     /**
