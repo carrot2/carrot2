@@ -33,7 +33,8 @@ public class TopicElementFactory implements ElementFactory
         Element topicElement = DocumentHelper.createElement("odp-topic");
 
         topicElement.addElement("id").addText(topic.getId());
-        topicElement.addElement("catid").addText(topic.getCatid());
+        topicElement.addElement("catid").addText(
+            Integer.toString(topic.getCatid()));
         topicElement.addElement("size").addText(
             Integer.toString(topic.getExternalPages().size()));
 
