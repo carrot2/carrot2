@@ -15,6 +15,7 @@
 <!ATTLIST change type (bugfix | new | refactoring | change) #REQUIRED >
 <!ATTLIST change component (
           carrot2.output.xslt-renderer
+        | carrot2.input.treesnippetminer
         | carrot2.controller.carrot2-web
         | carrot2-shared-lib
         | carrot2.filter.lingo-clusterer

@@ -8,6 +8,17 @@
 
 <history>
     <changelist>
+        <date>2004-02-21</date>
+        <committer>dawid</committer>
+        
+        <change component="carrot2.input.treesnippetminer" type="bugfix">
+        This is a workaround (but may be permament, since Pawel is no longer
+        an active developer) fixing the infinite loop by simply throwing
+        an exception when such condition takes place.
+        </change>
+    </changelist>
+
+    <changelist>
         <date>2004-02-16</date>
         <committer>dawid</committer>
         
