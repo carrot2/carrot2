@@ -37,7 +37,7 @@ public class Stempel implements Stemmer {
         try {
         	this.stempel = new org.getopt.stempel.Stemmer();
 		} catch (Exception e) {
-            throw new RuntimeException("Could not load the required resource: polski.fsa");
+            throw new RuntimeException("Could not load Stempel stemmer.");
 		}
     }
 
