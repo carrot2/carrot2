@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
+<web-app>
+  <servlet>
+    <servlet-name>SinProcessor</servlet-name>
+    <servlet-class>com.dawidweiss.sin.SinServlet</servlet-class>
+    <init-param>
+      <param-name>SIN_DECLARATIONS_FILE</param-name>
+      <param-value>default.properties</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SinProcessor</servlet-name>
+    <url-pattern>*.xml</url-pattern>
+  </servlet-mapping>
+</web-app>
