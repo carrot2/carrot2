@@ -28,8 +28,10 @@ public class AllKnownLanguages
 	private final static Logger logger = Logger.getLogger(AllKnownLanguages.class);
 
     /** A list of supported language codes */
-    private static List languageCodes;
+    private static String [] languageCodes;
 
+    private static Language [] languageArray;
+    
     /** A mapping between ISO codes and Language instances */
     private static Map languages;
 
@@ -38,7 +40,7 @@ public class AllKnownLanguages
     {
     	// Load them dynamically. Removing some JARs will not hurt
     	// this class then.
-    	String [] languageArray = new String [] {
+    	String [] languageClasses = new String [] {
     		"com.dawidweiss.carrot.util.tokenizer.languages.dutch.Dutch",
 			"com.dawidweiss.carrot.util.tokenizer.languages.english.English",
 			"com.dawidweiss.carrot.util.tokenizer.languages.french.French",
@@ -49,19 +51,22 @@ public class AllKnownLanguages
     	};
 
         languages = new HashMap();
-        languageCodes = new ArrayList(languageArray.length);
-        for (int i = 0; i < languageArray.length; i++)
+        languageCodes = new String[languageClasses.length];
+        for (int i = 0; i < languageClasses.length; i++)
         {
-        	String langClazz = languageArray[i];
+        	String langClazz = languageClasses[i];
         	try {
         		Language lang = (Language) AllKnownLanguages.class.getClassLoader().loadClass(
         			langClazz).newInstance();
 	            languages.put(lang.getIsoCode(), lang);
-                languageCodes.add(lang.getIsoCode());
+                languageCodes[i] = lang.getIsoCode();
         	} catch (Throwable t) {
         		logger.warn("Could not instantiate language: " + langClazz, t);
         	}
         }
+        
+        languageArray = (Language []) languages.values().toArray(
+            new Language [languages.size()]);
     }
 
     /** Disallow instantiation */
@@ -72,9 +77,17 @@ public class AllKnownLanguages
     /**
      * @return
      */
-    public static final List getLanguageCodes()
+    public static final String [] getLanguageCodes()
     {
         return languageCodes;
+    }
+    
+    /**
+     * @return 
+     */
+    public static Language [] getLanguages()
+    {
+        return languageArray;
     }
     
     /**
