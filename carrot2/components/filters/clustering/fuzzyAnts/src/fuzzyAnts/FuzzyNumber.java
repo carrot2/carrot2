@@ -29,7 +29,7 @@ import java.util.Set;
 public class FuzzyNumber
 {
     private int basis; // support is a subset of [0,basis-1]
-    private double [] lidmaatschap; //membership values
+    private double [] membership; //membership values
     private Set supp; //set representing the support of the fuzzy set
 
     /*
@@ -38,20 +38,20 @@ public class FuzzyNumber
     public FuzzyNumber(int basis, int m1, int m2, int m3)
     {
         this.basis = basis;
-        lidmaatschap = new double[basis];
+        membership = new double[basis];
         supp = new HashSet();
 
         if (m1 != m2)
         {
             for (int i = m1; i <= m2; i++)
             {
-                lidmaatschap[i] = ((double) (i - m1)) / (m2 - m1);
+                membership[i] = ((double) (i - m1)) / (m2 - m1);
                 supp.add(new Integer(i));
             }
         }
         else
         {
-            lidmaatschap[m1] = 1;
+            membership[m1] = 1;
             supp.add(new Integer(m1));
         }
 
@@ -59,13 +59,13 @@ public class FuzzyNumber
         {
             for (int i = m2; i <= m3; i++)
             {
-                lidmaatschap[i] = ((double) (m3 - i)) / (m3 - m2);
+                membership[i] = ((double) (m3 - i)) / (m3 - m2);
                 supp.add(new Integer(i));
             }
         }
         else
         {
-            lidmaatschap[m2] = 1;
+            membership[m2] = 1;
             supp.add(new Integer(m2));
         }
     }
@@ -75,20 +75,20 @@ public class FuzzyNumber
     {
         this.basis = basis;
         supp = new HashSet();
-        lidmaatschap = new double[basis];
+        membership = new double[basis];
     }
 
 
     public FuzzyNumber(FuzzyNumber f)
     {
         basis = f.basis;
-        lidmaatschap = new double[basis];
+        membership = new double[basis];
         supp = f.supp;
 
         for (Iterator it = supp.iterator(); it.hasNext();)
         {
             int i = ((Integer) it.next()).intValue();
-            lidmaatschap[i] = f.lidmaatschap[i];
+            membership[i] = f.membership[i];
         }
     }
 
@@ -96,13 +96,13 @@ public class FuzzyNumber
     public FuzzyNumber(FuzzyNumber f, double m)
     {
         basis = f.basis;
-        lidmaatschap = new double[basis];
+        membership = new double[basis];
         supp = f.supp;
 
         for (Iterator it = supp.iterator(); it.hasNext();)
         {
             int i = ((Integer) it.next()).intValue();
-            lidmaatschap[i] = Math.min(f.lidmaatschap[i], m);
+            membership[i] = Math.min(f.membership[i], m);
         }
     }
 
@@ -114,7 +114,7 @@ public class FuzzyNumber
         for (Iterator it = supp.iterator(); it.hasNext();)
         {
             int i = ((Integer) it.next()).intValue();
-            lidmaatschap[i] = Math.min(k, lidmaatschap[i]);
+            membership[i] = Math.min(k, membership[i]);
         }
     }
 
@@ -136,7 +136,7 @@ public class FuzzyNumber
             for (Iterator it = supp.iterator(); it.hasNext();)
             {
                 int i = ((Integer) it.next()).intValue();
-                lidmaatschap[i] = Math.max(lidmaatschap[i], f.lidmaatschap(i));
+                membership[i] = Math.max(membership[i], f.membership(i));
             }
         }
         catch (Exception e)
@@ -157,8 +157,8 @@ public class FuzzyNumber
         for (Iterator it = supp.iterator(); it.hasNext();)
         {
             int i = ((Integer) (it.next())).intValue();
-            teller += (lidmaatschap[i] * i);
-            noemer += lidmaatschap[i];
+            teller += (membership[i] * i);
+            noemer += membership[i];
         }
 
         return (int) (teller / noemer);
@@ -174,7 +174,7 @@ public class FuzzyNumber
     /*
      * Membership value for "i"
      */
-    public double lidmaatschap(int i)
+    public double membership(int i)
     {
         try
         {
@@ -183,7 +183,7 @@ public class FuzzyNumber
                 throw new Exception();
             }
 
-            return lidmaatschap[i];
+            return membership[i];
         }
         catch (Exception e)
         {

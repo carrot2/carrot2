@@ -23,25 +23,24 @@ import java.util.*;
  *
  * @author Steven Schockaert
  */
-abstract class Hoop
+abstract class Heap
 {
-    protected ArrayList documenten;
-    protected int aantal;
+    protected ArrayList documents;
+    protected int count;
     protected boolean changed = true;
-    private int versteIndex = -1;
-    private double gemAfst = -1;
-    private double maxAfst = -1;
+    private int worstIndex = -1;
+    private double avgDissim = -1;
+    private double maxDissim = -1;
 
-    public abstract Document geefCentrum();
-
+    public abstract Document getCentrum();
 
     /*
      * add document "k" to the heap
      */
-    public Hoop add(Document k)
+    public Heap add(Document k)
     {
-        documenten.add(k);
-        aantal++;
+        documents.add(k);
+        count++;
         changed = true;
 
         return this;
@@ -51,10 +50,10 @@ abstract class Hoop
     /*
      * add all documents in "k" to the heap
      */
-    public Hoop addHoop(Hoop k)
+    public Heap addHeap(Heap k)
     {
-        documenten.addAll(k.documenten);
-        aantal += k.geefAantal();
+        documents.addAll(k.documents);
+        count += k.getNumber();
         changed = true;
 
         return this;
@@ -64,10 +63,10 @@ abstract class Hoop
     /*
      * Remove the document that is the most dissimilar from the centre of the heap
      */
-    public Document verwijderVersteDocument()
+    public Document removeWorstDocument()
     {
-        Document k = (Document) documenten.remove(geefVersteIndex());
-        aantal--;
+        Document k = (Document) documents.remove(getWorstIndex());
+        count--;
         changed = true;
 
         return k;
@@ -77,32 +76,32 @@ abstract class Hoop
     /*
      * Returns the document that is the most dissimilar from the centre of the heap
      */
-    public Document geefVersteDocument()
+    public Document getWorstDocument()
     {
-        return (Document) documenten.get(geefVersteIndex());
+        return (Document) documents.get(getWorstIndex());
     }
 
 
     /*
      * Returns the index of the document that is the most dissimilar from the centre of the heap
      */
-    protected int geefVersteIndex()
+    protected int getWorstIndex()
     {
         if (changed)
         {
-            bepaalWaarden();
+           getValues();
         }
 
-        return versteIndex;
+        return worstIndex;
     }
 
 
     /*
      * Returns the similarity between the centre of this heap and the centre of "h"
      */
-    public double similariteit(Hoop h)
+    public double similariteit(Heap h)
     {
-        return 1 - geefAfstandTotCentrum(h.geefCentrum());
+        return 1 - getDissimilarityWithCentrum(h.getCentrum());
     }
 
 
@@ -111,47 +110,47 @@ abstract class Hoop
      */
     public double similariteit(Document d)
     {
-        return 1 - geefAfstandTotCentrum(d);
+        return 1 - getDissimilarityWithCentrum(d);
     }
 
 
     /*
      * Calculate the centre, average similarity, maximal similarity ,...
      */
-    private void bepaalWaarden()
+    private void getValues()
     {
         try
         {
-            if (aantal == 0)
+            if (count == 0)
             {
                 throw new Exception("0 elementen");
             }
 
-            Document centrum = geefCentrum();
-            double maxAfstand = -1;
-            double totAfstand = 0;
-            int verste = -1;
+            Document centrum = getCentrum();
+            double maxDissimilarity = -1;
+            double withDissimilarity = 0;
+            int worst = -1;
 
-            for (ListIterator i = documenten.listIterator(); i.hasNext();)
+            for (ListIterator i = documents.listIterator(); i.hasNext();)
             {
                 Document huidig = (Document) i.next();
-                totAfstand += huidig.afstand(centrum);
+                withDissimilarity += huidig.dissimilarity(centrum);
 
-                if (huidig.afstand(centrum) > maxAfstand)
+                if (huidig.dissimilarity(centrum) > maxDissimilarity)
                 {
-                    maxAfstand = huidig.afstand(centrum);
-                    verste = i.previousIndex();
+                    maxDissimilarity = huidig.dissimilarity(centrum);
+                    worst = i.previousIndex();
                 }
             }
 
-            maxAfst = maxAfstand;
-            gemAfst = (totAfstand / aantal);
-            versteIndex = verste;
+            maxDissim = maxDissimilarity;
+            avgDissim = (withDissimilarity / count);
+            worstIndex = worst;
             changed = false;
         }
         catch (Exception e)
         {
-            System.err.println("fout in bepaalWaarden: " + e.toString());
+            System.err.println("fout in getValues: " + e.toString());
         }
     }
 
@@ -159,57 +158,57 @@ abstract class Hoop
     /*
      * Returns the maximal dissimilarity between a document of the heap and the centre of the heap
      */
-    public double geefMaximumAfstand()
+    public double getMaximumDissimilarity()
     {
         if (changed)
         {
-            bepaalWaarden();
+            getValues();
         }
 
-        return maxAfst;
+        return maxDissim;
     }
 
 
     /*
      * Returns the minimal similarity between a document of the heap and the centre of the heap
      */
-    public double geefMinimumSimilariteit()
+    public double getMinimumSimilarity()
     {
-        return 1 - geefMaximumAfstand();
+        return 1 - getMaximumDissimilarity();
     }
 
 
     /*
      * Returns the average dissimilarity between a document of the heap and the centre of the heap
      */
-    public double geefGemiddeldeAfstand()
+    public double getAverageDissimilarity()
     {
         if (changed)
         {
-            bepaalWaarden();
+            getValues();
         }
 
-        return gemAfst;
+        return avgDissim;
     }
 
 
     /*
      * Returns the average similarity between a document of the heap and the centre of the heap
      */
-    public double geefGemiddeldeSimilariteit()
+    public double getAverageSimilarity()
     {
-        return 1 - geefGemiddeldeAfstand();
+        return 1 - getAverageDissimilarity();
     }
 
 
     /*
      * Returns the dissimilarity between the centre of this heap and "d"
      */
-    public double geefAfstandTotCentrum(Document d)
+    public double getDissimilarityWithCentrum(Document d)
     {
-        Document c = geefCentrum();
+        Document c = getCentrum();
 
-        return d.afstand(c);
+        return d.dissimilarity(c);
     }
 
 
@@ -218,24 +217,24 @@ abstract class Hoop
      */
     public boolean isLeeg()
     {
-        return aantal == 0;
+        return count == 0;
     }
 
 
     /*
      * returns the number of documents in the heap
      */
-    public int geefAantal()
+    public int getNumber()
     {
-        return aantal;
+        return count;
     }
 
 
     /*
      * returns all documents in the heap
      */
-    public ArrayList geefDocumenten()
+    public ArrayList getDocuments()
     {
-        return documenten;
+        return documents;
     }
 }

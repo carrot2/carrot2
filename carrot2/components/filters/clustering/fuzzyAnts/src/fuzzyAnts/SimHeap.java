@@ -19,45 +19,45 @@ import java.util.*;
 
 
 /**
- * Extension of "Hoop" which implements how to calculate the centre of a heap
+ * Extension of "Heap" which implements how to calculate the centre of a heap
  * @author Steven Schockaert
  */
-class SimHoop
-    extends Hoop
+class SimHeap
+    extends Heap
 {
-    protected LijstBordModel bm;
+    protected ListBordModel bm;
     protected Document centrum;
 
-    public SimHoop(LijstBordModel bm)
+    public SimHeap(ListBordModel bm)
     {
         this.bm = bm;
-        aantal = 0;
-        documenten = new ArrayList();
+        count = 0;
+        documents = new ArrayList();
     }
 
     /*
      * The centre of the heap is the document whose leader value is greatest
      */
-    public Document geefCentrum()
+    public Document getCentrum()
     {
         if (centrum != null)
         {
             return centrum;
         }
 
-        ListIterator it = documenten.listIterator();
+        ListIterator it = documents.listIterator();
         centrum = (Document) it.next();
 
-        double leiderwaarde = bm.leiderwaarde(centrum.geefIndex());
+        double leadervalue = bm.leadervalue(centrum.getIndex());
 
         for (; it.hasNext();)
         {
             Document doc = (Document) it.next();
-            double w = bm.leiderwaarde(doc.geefIndex());
+            double w = bm.leadervalue(doc.getIndex());
 
-            if (leiderwaarde < w)
+            if (leadervalue < w)
             {
-                leiderwaarde = w;
+                leadervalue = w;
                 centrum = doc;
             }
         }
@@ -66,7 +66,7 @@ class SimHoop
     }
 
 
-    public Hoop add(Document k)
+    public Heap add(Document k)
     {
         centrum = null;
 
@@ -74,18 +74,18 @@ class SimHoop
     }
 
 
-    public Hoop addHoop(Hoop k)
+    public Heap addHeap(Heap k)
     {
         centrum = null;
 
-        return super.addHoop(k);
+        return super.addHeap(k);
     }
 
 
-    public Document verwijderVersteDocument()
+    public Document removeWorstDocument()
     {
         centrum = null;
 
-        return super.verwijderVersteDocument();
+        return super.removeWorstDocument();
     }
 }

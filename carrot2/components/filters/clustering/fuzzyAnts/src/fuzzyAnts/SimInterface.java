@@ -25,14 +25,14 @@ import java.util.*;
  */
 public interface SimInterface
 {
-    public double similariteit(int i1, int i2);
+    public double similarity(int i1, int i2);
 
 
-    public double leiderwaarde(int i);
+    public double leadervalue(int i);
 
 
-    public Set geefIndices();
+    public Set getIndices();
 
 
-    public int geefAantal();
+    public int getNumber();
 }

@@ -33,72 +33,72 @@ public abstract class Clustering
     implements Constants
 {
     protected SnippetParser parser;
-    protected List groepen;
-    protected Set alleDocIndices;
-    protected double [] documentGewichten;
-    protected List documenten;
+    protected List groups;
+    protected Set allDocIndices;
+    protected double [] documentWeights;
+    protected List documents;
     protected List meta;
     protected List query;
-    protected boolean stopwoorden;
-    protected int gewichtSchema;
-    protected int diepte;
-    protected int minHoopSize = 4;
+    protected boolean stopwords;
+    protected int weightSchema;
+    protected int depth;
+    protected int minHeapSize = 4;
     protected double minDocScore = 0.30;
 
     public Clustering(
-        int diepte, List documenten, List meta, List query, boolean stopwoorden, int gewichtSchema
+        int depth, List documents, List meta, List query, boolean stopwords, int weightSchema
     )
     {
-        this.documenten = documenten;
+        this.documents = documents;
         this.meta = meta;
         this.query = query;
-        this.stopwoorden = stopwoorden;
-        this.gewichtSchema = gewichtSchema;
-        this.diepte = diepte;
+        this.stopwords = stopwords;
+        this.weightSchema = weightSchema;
+        this.depth = depth;
 
-        documentGewichten = new double[documenten.size()];
+        documentWeights = new double[documents.size()];
 
-        for (int i = 0; i < documentGewichten.length; i++)
+        for (int i = 0; i < documentWeights.length; i++)
         {
-            documentGewichten[i] = 1;
+            documentWeights[i] = 1;
         }
 
-        parser = new SnippetParser(documenten, meta, query, stopwoorden, gewichtSchema);
+        parser = new SnippetParser(documents, meta, query, stopwords, weightSchema);
     }
 
 
     public Clustering(
-        int diepte, List documenten, List meta, List query, boolean stopwoorden, int gewichtSchema,
-        double [] documentGewichten
+        int depth, List documents, List meta, List query, boolean stopwords, int weightSchema,
+        double [] documentWeights
     )
     {
-        this.documenten = documenten;
+        this.documents = documents;
         this.meta = meta;
         this.query = query;
-        this.stopwoorden = stopwoorden;
-        this.gewichtSchema = gewichtSchema;
-        this.diepte = diepte;
-        this.documentGewichten = documentGewichten;
-        parser = new SnippetParser(documenten, meta, query, stopwoorden, gewichtSchema);
+        this.stopwords = stopwords;
+        this.weightSchema = weightSchema;
+        this.depth = depth;
+        this.documentWeights = documentWeights;
+        parser = new SnippetParser(documents, meta, query, stopwords, weightSchema);
     }
 
     /*
      *  the actual clustering process
      */
-    protected abstract void bepaalOplossing();
+    protected abstract void getSolution();
 
 
     /*
      * Returns a list with all documents with weight greater than "minDocScore". The weights of all documents are
      * passed as an argument.
      */
-    protected java.util.List bepaalDocumenten(double [] gewichten)
+    protected java.util.List getDocuments(double [] weights)
     {
         ArrayList res = new ArrayList();
 
-        for (int i = 0; i < gewichten.length; i++)
+        for (int i = 0; i < weights.length; i++)
         {
-            if (gewichten[i] > minDocScore)
+            if (weights[i] > minDocScore)
             {
                 res.add(new Integer(i));
             }
@@ -109,16 +109,16 @@ public abstract class Clustering
 
 
     /*
-     * Returns a restriction of "documenten" wich only contains those documents whose index is included in "docIndices"
+     * Returns a restriction of "documents" wich only contains those documents whose index is included in "docIndices"
      */
-    protected ArrayList beperkDocumenten(List docIndices)
+    protected ArrayList restrictDocuments(List docIndices)
     {
         ArrayList res = new ArrayList();
 
         for (Iterator it = docIndices.iterator(); it.hasNext();)
         {
             int index = ((Integer) it.next()).intValue();
-            res.add(documenten.get(index));
+            res.add(documents.get(index));
         }
 
         return res;
@@ -126,10 +126,10 @@ public abstract class Clustering
 
 
     /*
-     * Returns a restriction of the array of weights "gewichten" which only contains those weights corresponding with
+     * Returns a restriction of the array of weights "weights" which only contains those weights corresponding with
      * documents whose index is included in "docIndices"
      */
-    protected double [] beperkGewichten(double [] gewichten, List docIndices)
+    protected double [] restrictWeights(double [] weights, List docIndices)
     {
         double [] res = new double[docIndices.size()];
         int i = 0;
@@ -137,7 +137,7 @@ public abstract class Clustering
         for (Iterator it = docIndices.iterator(); it.hasNext();)
         {
             int index = ((Integer) it.next()).intValue();
-            res[i++] = gewichten[index];
+            res[i++] = weights[index];
         }
 
         return res;
@@ -145,59 +145,59 @@ public abstract class Clustering
 
 
     /*
-     * Adds a new subcluster to the result. The label is chosen, based on the term with index "sterksteIndex".
+     * Adds a new subcluster to the result. The label is chosen, based on the term with index "bestIndex".
      */
-    protected void addSubGroep(int sterksteIndex, Clustering subCluster, Collection docIndices)
+    protected void addSubGroup(int bestIndex, Clustering subCluster, Collection docIndices)
     {
-        Element groep = new Element("group");
-        List subGroepen = subCluster.geefGroepen();
+        Element group = new Element("group");
+        List subGroups = subCluster.getGroups();
 
-        if (subGroepen.size() > 0)
+        if (subGroups.size() > 0)
         {
-            for (ListIterator it = subGroepen.listIterator(); it.hasNext();)
+            for (ListIterator it = subGroups.listIterator(); it.hasNext();)
             {
-                Element subGroep = (Element) it.next();
-                groep.addContent(subGroep);
+                Element subGroup = (Element) it.next();
+                group.addContent(subGroup);
             }
 
             Element title = new Element("title");
-            String label = bepaalLabel(sterksteIndex, docIndices);
+            String label = getLabel(bestIndex, docIndices);
             Element phrase = new Element("phrase");
             phrase.setText(label);
             title.addContent(phrase);
-            groep.addContent(title);
-            groepen.add(groep);
+            group.addContent(title);
+            groups.add(group);
         }
     }
 
 
     /*
-     * Adds a cluster to the result. The label is chosen, based on the term with index "sterksteIndex".
+     * Adds a cluster to the result. The label is chosen, based on the term with index "bestIndex".
      */
-    protected void addDocumentenGroep(int sterksteIndex, List docIndices)
+    protected void addDocumentsGroup(int bestIndex, List docIndices)
     {
         if (docIndices.size() > 0)
         {
-            Element groep = new Element("group");
+            Element group = new Element("group");
 
             for (Iterator it = docIndices.iterator(); it.hasNext();)
             {
                 int index = ((Integer) it.next()).intValue();
-                Element e = (Element) documenten.get(index);
+                Element e = (Element) documents.get(index);
                 String id = e.getAttributeValue("id");
                 Element doc = new Element("document");
                 doc.setAttribute("refid", id);
-                doc.setAttribute("score", "" + documentGewichten[index]);
-                groep.addContent(doc);
+                doc.setAttribute("score", "" + documentWeights[index]);
+                group.addContent(doc);
             }
 
             Element title = new Element("title");
-            String label = bepaalLabel(sterksteIndex, docIndices);
+            String label = getLabel(bestIndex, docIndices);
             Element phrase = new Element("phrase");
             phrase.setText(label);
             title.addContent(phrase);
-            groep.addContent(title);
-            groepen.add(groep);
+            group.addContent(title);
+            groups.add(group);
         }
     }
 
@@ -205,11 +205,11 @@ public abstract class Clustering
     /*
      * Adds the cluster "Other..." which contains documents that belong to no other cluster.
      */
-    protected void addAndere(Set docIndices)
+    protected void addOther(Set docIndices)
     {
         ArrayList indices = new ArrayList();
 
-        for (int i = 0; i < documenten.size(); i++)
+        for (int i = 0; i < documents.size(); i++)
         {
             indices.add(new Integer(i));
         }
@@ -218,17 +218,17 @@ public abstract class Clustering
 
         if (indices.size() > 0)
         {
-            Element groep = new Element("group");
+            Element group = new Element("group");
 
             for (Iterator it = indices.iterator(); it.hasNext();)
             {
                 int index = ((Integer) it.next()).intValue();
-                Element e = (Element) documenten.get(index);
+                Element e = (Element) documents.get(index);
                 String id = e.getAttributeValue("id");
                 Element doc = new Element("document");
                 doc.setAttribute("refid", id);
-                doc.setAttribute("score", "" + documentGewichten[index]);
-                groep.addContent(doc);
+                doc.setAttribute("score", "" + documentWeights[index]);
+                group.addContent(doc);
             }
 
             Element title = new Element("title");
@@ -236,8 +236,8 @@ public abstract class Clustering
             Element phrase = new Element("phrase");
             phrase.setText(label);
             title.addContent(phrase);
-            groep.addContent(title);
-            groepen.add(groep);
+            group.addContent(title);
+            groups.add(group);
         }
     }
 
@@ -245,11 +245,11 @@ public abstract class Clustering
     /*
      * Used for passing the result of the clustering to e.g. an instance of the class "FuzzyAnts"
      */
-    public List geefGroepen()
+    public List getGroups()
     {
-        bepaalOplossing();
+        getSolution();
 
-        return groepen;
+        return groups;
     }
 
 
@@ -257,11 +257,11 @@ public abstract class Clustering
      * Determination of the label, based on an index of a term and a document collection. A softer variant of completion
      * in the sense of Zhang and Dong is used.
      */
-    protected String bepaalLabel(int sterksteIndex, Collection docIndices)
+    protected String getLabel(int bestIndex, Collection docIndices)
     {
         try
         {
-            return parser.compleet(parser.origineleTerm(sterksteIndex), docIndices);
+            return parser.complete(parser.originalTerm(bestIndex), docIndices);
         }
         catch (Exception e)
         {

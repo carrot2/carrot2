@@ -24,15 +24,15 @@ package fuzzyAnts;
 class Document
 {
     protected int index = -1;
-    protected LijstBordModel bm;
+    protected ListBordModel bm;
 
-    public Document(int index, LijstBordModel bm)
+    public Document(int index, ListBordModel bm)
     {
         this.index = index;
         this.bm = bm;
     }
 
-    public int geefIndex()
+    public int getIndex()
     {
         return index;
     }
@@ -41,13 +41,13 @@ class Document
     /*
      * Returns the similarity between this document and the document "d"
      */
-    public double similariteit(Document d)
+    public double similarity(Document d)
     {
         try
         {
             Document md = (Document) d;
 
-            return bm.similariteit(index, md.index);
+            return bm.similarity(index, md.index);
         }
         catch (Exception e)
         {
@@ -61,9 +61,9 @@ class Document
     /*
      * Returns the dissimilarity between this document and the document "d"
      */
-    public double afstand(Document d)
+    public double dissimilarity(Document d)
     {
-        return 1 - similariteit(d);
+        return 1 - similarity(d);
     }
 
 

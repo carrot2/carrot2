@@ -25,65 +25,65 @@ package fuzzyAnts;
 import java.util.*;
 
 
-public class LabelBoom
+public class LabelTree
 {
-    int aantal;
+    int count;
     HashMap nodes;
 
-    public LabelBoom()
+    public LabelTree()
     {
-        aantal = 0;
+        count = 0;
         nodes = new HashMap();
     }
 
     /*
      * Add a sequence of terms
      */
-    public void add(List termen)
+    public void add(List terms)
     {
-        aantal++;
+        count++;
 
-        if (termen.size() > 0)
+        if (terms.size() > 0)
         {
-            String t = (String) termen.get(0);
-            termen.remove(0);
+            String t = (String) terms.get(0);
+            terms.remove(0);
 
             if (nodes.containsKey(t))
             {
-                LabelBoom sub = (LabelBoom) nodes.get(t);
-                sub.add(termen);
+                LabelTree sub = (LabelTree) nodes.get(t);
+                sub.add(terms);
             }
             else
             {
-                LabelBoom sub = new LabelBoom();
-                sub.add(termen);
+                LabelTree sub = new LabelTree();
+                sub.add(terms);
                 nodes.put(t, sub);
             }
         }
     }
 
 
-    public int geefAantal()
+    public int getNumber()
     {
-        return aantal;
+        return count;
     }
 
 
     /*
-     * Returns the longest sequence of terms that occured at least 0.75* "totaalAantal" times
+     * Returns the longest sequence of terms that occured at least 0.75* "totalNumber" times
      */
-    public String geefCompleet(int totaalAantal)
+    public String getComplete(int totalNumber)
     {
-        if (aantal > Math.max(0.75 * totaalAantal, 3))
+        if (count > Math.max(0.75 * totalNumber, 3))
         {
             for (Iterator it = nodes.keySet().iterator(); it.hasNext();)
             {
                 String t = (String) it.next();
-                LabelBoom sub = (LabelBoom) nodes.get(t);
+                LabelTree sub = (LabelTree) nodes.get(t);
 
-                if (sub.geefAantal() > (0.60 * totaalAantal))
+                if (sub.getNumber() > (0.60 * totalNumber))
                 {
-                    return (t + " " + sub.geefCompleet(totaalAantal));
+                    return (t + " " + sub.getComplete(totalNumber));
                 }
             }
         }
@@ -93,20 +93,20 @@ public class LabelBoom
 
 
     /*
-     * Returns the longest sequence of terms that occured at least 0.75* "totaalAantal" times in reverse order
+     * Returns the longest sequence of terms that occured at least 0.75* "totalNumber" times in reverse order
      */
-    public String geefReverseCompleet(int totaalAantal)
+    public String getReverseComplete(int totalNumber)
     {
-        if (aantal > Math.max(0.75 * totaalAantal, 3))
+        if (count > Math.max(0.75 * totalNumber, 3))
         {
             for (Iterator it = nodes.keySet().iterator(); it.hasNext();)
             {
                 String t = (String) it.next();
-                LabelBoom sub = (LabelBoom) nodes.get(t);
+                LabelTree sub = (LabelTree) nodes.get(t);
 
-                if (sub.geefAantal() > (0.60 * totaalAantal))
+                if (sub.getNumber() > (0.60 * totalNumber))
                 {
-                    return (sub.geefReverseCompleet(totaalAantal) + " " + t);
+                    return (sub.getReverseComplete(totalNumber) + " " + t);
                 }
             }
         }

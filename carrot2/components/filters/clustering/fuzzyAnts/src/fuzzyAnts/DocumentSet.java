@@ -33,14 +33,14 @@ public class DocumentSet
 
     //Used for "caching" similarity values and leader values 
     HashMap sim;
-    HashMap leider;
+    HashMap leader;
 
     public DocumentSet(Set indices, SnippetParser parser)
     {
         this.indices = indices;
         this.parser = parser;
         sim = new HashMap();
-        leider = new HashMap();
+        leader = new HashMap();
     }
 
     /*
@@ -48,40 +48,40 @@ public class DocumentSet
      * the fuzzy ant based clustering algorithm: the document with highest leader value is chosen as
      * the centre.
      */
-    public double leiderwaarde(int i)
+    public double leadervalue(int i)
     {
-        if (leider.containsKey(new Integer(i)))
+        if (leader.containsKey(new Integer(i)))
         {
-            return ((Double) leider.get(new Integer(i))).doubleValue();
+            return ((Double) leader.get(new Integer(i))).doubleValue();
         }
 
-        Map doc = parser.geefDocument(i);
-        double som = 0;
+        Map doc = parser.getDocument(i);
+        double sum = 0;
 
         for (Iterator it = doc.keySet().iterator(); it.hasNext();)
         {
             int termIndex = ((Integer) it.next()).intValue();
-            double termWaarde = ((Double) doc.get(new Integer(termIndex))).doubleValue();
-            double leiderWaarde = parser.leiderwaarde(termIndex);
-            som += (termWaarde * leiderWaarde);
+            double termValue = ((Double) doc.get(new Integer(termIndex))).doubleValue();
+            double leaderValue = parser.leadervalue(termIndex);
+            sum += (termValue * leaderValue);
         }
 
-        leider.put(new Integer(i), new Double(som));
+        leader.put(new Integer(i), new Double(sum));
 
-        return som;
+        return sum;
     }
 
 
     /*
      * returns the similarity between the documents with indices i and j
      */
-    public double similariteit(int i, int j)
+    public double similarity(int i, int j)
     {
         try
         {
-            if (sim.containsKey(new Paar(i, j)))
+            if (sim.containsKey(new Pair(i, j)))
             {
-                Object o = sim.get(new Paar(i, j));
+                Object o = sim.get(new Pair(i, j));
                 Double d = (Double) o;
                 double w = d.doubleValue();
 
@@ -89,21 +89,21 @@ public class DocumentSet
             }
             else
             {
-                double teller = parser.somRuwDocMin(i, j);
+                double numerator = parser.sumRoughDocMin(i, j);
                 double w = 0;
 
-                if (teller < 0.00001)
+                if (numerator < 0.00001)
                 {
                     w = 0;
                 }
                 else
                 {
-                    double noemer = parser.somRuwDoc(i);
-                    w = teller / noemer;
+                    double denominator = parser.sumRoughDoc(i);
+                    w = numerator / denominator;
                 }
 
                 Double d = new Double(w);
-                sim.put(new Paar(i, j), d);
+                sim.put(new Pair(i, j), d);
 
                 return w;
             }
@@ -121,7 +121,7 @@ public class DocumentSet
      * returns a set containing the indices of all the documents in this "Document Set".
      *
      */
-    public Set geefIndices()
+    public Set getIndices()
     {
         return indices;
     }
@@ -130,20 +130,20 @@ public class DocumentSet
     /*
      * returns the number of documents in this "Document Set"
      */
-    public int geefAantal()
+    public int getNumber()
     {
         return indices.size();
     }
 
     /*
-     * Used for caching (objects of this class are stored in the HashMaps "sim" and "leider"
+     * Used for caching (objects of this class are stored in the HashMaps "sim" and "leader"
      */
-    class Paar
+    class Pair
     {
         int index1;
         int index2;
 
-        public Paar(int index1, int index2)
+        public Pair(int index1, int index2)
         {
             this.index1 = index1;
             this.index2 = index2;
@@ -151,12 +151,12 @@ public class DocumentSet
 
         public boolean equals(Object o)
         {
-            if (!(o instanceof Paar))
+            if (!(o instanceof Pair))
             {
                 return false;
             }
 
-            Paar p = (Paar) o;
+            Pair p = (Pair) o;
 
             return ((index1 == p.index1) && (index2 == p.index2));
         }

@@ -23,49 +23,49 @@ import java.util.*;
  *
  * @author Steven Schockaert
  */
-public class LijstBordModel
+public class ListBordModel
     implements Constants
 {
-    protected ArrayList hopen;
-    protected ArrayList objecten;
-    protected ArrayList mieren;
+    protected ArrayList heaps;
+    protected ArrayList objects;
+    protected ArrayList ants;
     protected Random rand;
     protected Map parameters;
     protected SimInterface docset;
 
-    public LijstBordModel(SimInterface docset, Map parameters)
+    public ListBordModel(SimInterface docset, Map parameters)
     {
         this.parameters = parameters;
         this.docset = docset;
-        hopen = new ArrayList();
-        objecten = new ArrayList();
-        mieren = new ArrayList();
+        heaps = new ArrayList();
+        objects = new ArrayList();
+        ants = new ArrayList();
         rand = new Random();
 
-        Set indices = docset.geefIndices();
+        Set indices = docset.getIndices();
 
         for (Iterator it = indices.iterator(); it.hasNext();)
         {
             int i = ((Integer) it.next()).intValue();
             Document doc = new Document(i, this);
-            hopen.add((new SimHoop(this)).add(doc));
-            objecten.add(doc);
+            heaps.add((new SimHeap(this)).add(doc));
+            objects.add(doc);
         }
 
-        addMier();
+        addAnt();
     }
 
     /*
      * calculates a solution
      */
-    public ArrayList berekenOplossing()
+    public ArrayList getSolution()
     {
-        int aantalstappen = Integer.parseInt(
-                (String) ((LinkedList) parameters.get("aantalstappen")).get(0)
+        int numberOfIterations  = Integer.parseInt(
+                (String) ((LinkedList) parameters.get("numberOfIterations")).get(0)
             );
-        skip(objecten.size() * aantalstappen);
+        skip(objects.size() * numberOfIterations);
 
-        return geefHopen();
+        return getHeaps();
     }
 
 
@@ -74,13 +74,13 @@ public class LijstBordModel
      */
     private void skip(int n)
     {
-        Mier m;
+        Ant m;
 
         for (int k = 0; k < n; k++)
         {
-            for (ListIterator i = mieren.listIterator(); i.hasNext();)
+            for (ListIterator i = ants.listIterator(); i.hasNext();)
             {
-                m = (Mier) i.next();
+                m = (Ant) i.next();
                 m.move();
             }
         }
@@ -90,9 +90,9 @@ public class LijstBordModel
     /*
      * Returns the heap with index "i"
      */
-    public Hoop geefHoop(int i)
+    public Heap getHeap(int i)
     {
-        return (Hoop) hopen.get(i);
+        return (Heap) heaps.get(i);
     }
 
 
@@ -102,12 +102,12 @@ public class LijstBordModel
      */
     public Document takeDocument(int i)
     {
-        Hoop h = (Hoop) hopen.get(i);
-        Document doc = h.verwijderVersteDocument();
+        Heap h = (Heap) heaps.get(i);
+        Document doc = h.removeWorstDocument();
 
-        if (h.geefAantal() == 0)
+        if (h.getNumber() == 0)
         {
-            hopen.remove(i);
+            heaps.remove(i);
         }
 
         return doc;
@@ -117,10 +117,10 @@ public class LijstBordModel
     /*
      * Take away the heap with index "i" from the list of heaps
      */
-    public Hoop takeHoop(int i)
+    public Heap takeHeap(int i)
     {
-        Hoop h = (Hoop) hopen.get(i);
-        hopen.remove(i);
+        Heap h = (Heap) heaps.get(i);
+        heaps.remove(i);
 
         return h;
     }
@@ -129,75 +129,75 @@ public class LijstBordModel
     /*
      * Add the document with index "i" to the heap "k"
      */
-    public void drop(Hoop k, int i)
+    public void drop(Heap k, int i)
     {
-        Hoop h = (Hoop) hopen.get(i);
-        h.addHoop(k);
+        Heap h = (Heap) heaps.get(i);
+        h.addHeap(k);
     }
 
 
     /*
      * Add the heap "h" to the list of heaps
      */
-    public void nieuweHoop(Hoop h)
+    public void newHeap(Heap h)
     {
-        hopen.add(h);
+        heaps.add(h);
     }
 
 
     /*
      * returns the number of heaps in the list of heaps
      */
-    public int aantalLijstHopen()
+    public int numberOfListHeaps()
     {
-        return hopen.size();
+        return heaps.size();
     }
 
 
     /*
      * Add another (fuzzy) ant to the population of (fuzzy) ants
      */
-    protected void addMier()
+    protected void addAnt()
     {
-        mieren.add(new LijstMier(this, parameters));
+        ants.add(new ListAnt(this, parameters));
     }
 
 
     /*
      * Returns the similarity between the documents with indices "i1" and "i2"
      */
-    public double similariteit(int i1, int i2)
+    public double similarity(int i1, int i2)
     {
-        return docset.similariteit(i1, i2);
+        return docset.similarity(i1, i2);
     }
 
 
     /*
      * Returns the leader value of the document with index "i"
      */
-    public double leiderwaarde(int i)
+    public double leadervalue(int i)
     {
-        return docset.leiderwaarde(i);
+        return docset.leadervalue(i);
     }
 
 
     /*
      * Returns the number of documents
      */
-    public int geefTotaalAantal()
+    public int getTotalNumber()
     {
-        return docset.geefAantal();
+        return docset.getNumber();
     }
 
 
     /*
      * Returns a list with all heaps, including those carried by the ants
      */
-    public ArrayList geefHopen()
+    public ArrayList getHeaps()
     {
         ArrayList l = new ArrayList();
-        l.addAll(hopen);
-        l.addAll(geefMierHopen());
+        l.addAll(heaps);
+        l.addAll(getAntHeaps());
 
         return l;
     }
@@ -206,13 +206,13 @@ public class LijstBordModel
     /*
      * Returns a list with the heaps carried by the ants
      */
-    private ArrayList geefMierHopen()
+    private ArrayList getAntHeaps()
     {
         ArrayList res = new ArrayList();
 
-        for (ListIterator it = mieren.listIterator(); it.hasNext();)
+        for (ListIterator it = ants.listIterator(); it.hasNext();)
         {
-            LijstMier m = (LijstMier) it.next();
+            ListAnt m = (ListAnt) it.next();
             res.add(m.getObject());
         }
 
