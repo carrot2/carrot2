@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<service>
+    <request encoding="UTF-8">
+        <service  url="http://www.google.com/search"  method="get" />
+
+	<parameters>
+            <parameter name="q"       mapto="query.string" />
+            <parameter name="start"   mapto="query.startFrom" />
+            <parameter name="num"     value="50" />
+            <parameter name="ie"      value="UTF-8" />
+            <parameter name="oe"      value="UTF-8" />
+            <parameter name="lr"        value="lang_eng" />
+        </parameters>
+
+        <!-- override the http-headers you need here -->
+        <http-overrides>
+            <header name="User-Agent">Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)</header>
+            <header name="Accept-Charset">UTF-8</header>
+        </http-overrides>
+    </request>
+
+    <response encoding="UTF-8">
+        <pageinfo>
+            <expected-results-per-page>50</expected-results-per-page>
+        </pageinfo>
+    </response>
+</service>

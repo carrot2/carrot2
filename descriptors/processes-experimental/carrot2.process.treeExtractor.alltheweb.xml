@@ -2,9 +2,8 @@
 
 <process
     xmlns="http://www.dawidweiss.com/projects/carrot/processDescriptor"
-    id="carrot2.process.treeExtractor.google"
-    description="Google (TSM), LINGO, Dynamic Tree"
->
+    id="carrot2.process.treeExtractor.alltheweb"
+    description="AllTheWeb (TSM), LINGO, Dynamic Tree">
     <processing-script language="beanshell"><![CDATA[
     
     InputStream is;
@@ -12,7 +11,7 @@
     controller.setUseCachedInput(true);
     controller.setDoCacheInput(true);
 
-    is = controller.invokeInputComponent( "carrot2.input.tree-snippet-reader.google", query );
+    is = controller.invokeInputComponent( "carrot2.input.tree-snippet-reader.alltheweb", query );
 
     Map lingoOptions = new HashMap();
     lingoOptions.put("stemmer.english", "com.dawidweiss.carrot.filter.stemming.porter.PorterStemmer");

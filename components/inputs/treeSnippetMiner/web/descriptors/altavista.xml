@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<service>
+    <request encoding="UTF-8">
+        <service  url="http://www.altavista.com/web/results"  method="get" />
+	<parameters>
+            <parameter name="q"       mapto="query.string" />
+            <parameter name="stq"	   mapto="query.startFrom" />
+            <parameter name="avkw"	   value="xytx" />
+            <parameter name="kls"		   value="0" />
+            <parameter name="kgs"		   value="0" />
+        </parameters>
+    </request>
+    <response encoding="UTF-8">
+        <pageinfo>
+            <expected-results-per-page>10</expected-results-per-page>
+        </pageinfo>
+    </response>
+</service>
