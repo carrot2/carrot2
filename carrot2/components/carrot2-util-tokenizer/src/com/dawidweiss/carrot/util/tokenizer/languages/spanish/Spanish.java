@@ -42,7 +42,7 @@ public class Spanish extends StemmedLanguageBase {
         String resourceName = "/com/dawidweiss/carrot/util/tokenizer/languages/spanish/stopwords.es";
         try {
 			stopwords = LanguageBase.loadStopwords(
-			    Spanish.class.getResourceAsStream(resourceName));
+                    resourceName, Spanish.class.getResourceAsStream(resourceName));
 		} catch (IOException e) {
             throw new RuntimeException("Could not load the required " +
                     "resource: " + resourceName);

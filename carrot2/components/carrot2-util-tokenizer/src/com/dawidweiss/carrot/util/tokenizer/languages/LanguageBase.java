@@ -20,6 +20,7 @@ import java.util.Set;
 
 import org.apache.commons.pool.BasePoolableObjectFactory;
 import org.apache.commons.pool.impl.SoftReferenceObjectPool;
+import org.apache.log4j.Logger;
 
 import com.dawidweiss.carrot.core.local.linguistic.Language;
 import com.dawidweiss.carrot.core.local.linguistic.LanguageTokenizer;
@@ -41,6 +42,8 @@ import com.dawidweiss.carrot.util.tokenizer.parser.WordBasedParserBase;
 public abstract class LanguageBase
     implements Language
 {
+    private final static Logger logger = Logger.getLogger(LanguageBase.class);
+    
     /** A soft-reference, unbounded pool of tokenizers. */
     private SoftReferenceObjectPool tokenizersPool;
 
@@ -247,11 +250,13 @@ public abstract class LanguageBase
     /**
      * A utility method to load stop words from a resource.
      */
-    protected static Set loadStopwords(InputStream stream) throws IOException {
+    protected static Set loadStopwords(String resourceName, InputStream stream) throws IOException {
+        logger.debug("Loading stopwords for: " + resourceName);
         
-        if (stream == null)
+        if (stream == null) {
             throw new IOException("Stream handle must not be null " +
-                    "(resource does not exist?)");
+                    "(resource '" + resourceName + "' does not exist?)");
+        }
 
         Set set = new HashSet();
         BufferedReader reader = new BufferedReader(
@@ -270,6 +275,7 @@ public abstract class LanguageBase
             reader.close();
         }
 
+        logger.debug("Finished loading: " + resourceName);
         return set;
     }
 }

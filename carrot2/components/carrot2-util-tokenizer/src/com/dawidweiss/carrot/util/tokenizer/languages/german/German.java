@@ -42,7 +42,7 @@ public class German extends StemmedLanguageBase {
         String resourceName = "/com/dawidweiss/carrot/util/tokenizer/languages/german/stopwords.de";
         try {
 			stopwords = LanguageBase.loadStopwords(
-			    German.class.getResourceAsStream(resourceName));
+                    resourceName, German.class.getResourceAsStream(resourceName));
 		} catch (IOException e) {
             throw new RuntimeException("Could not load the required" +
                     "resource: " + resourceName);
