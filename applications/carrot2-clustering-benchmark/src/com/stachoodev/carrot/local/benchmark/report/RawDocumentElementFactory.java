@@ -1,7 +1,12 @@
 /*
- * RawDocumentElementFactory.java
- * 
- * Created on 2004-06-30
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
 package com.stachoodev.carrot.local.benchmark.report;
 
@@ -12,7 +17,11 @@ import com.dawidweiss.carrot.util.common.*;
 import com.stachoodev.carrot.filter.lingo.algorithm.*;
 
 /**
- * @author stachoo
+ * Converts {@link com.dawidweiss.carrot.core.local.clustering.RawDocument}s
+ * into XML elements.
+ * 
+ * @author Stanislaw Osinski
+ * @version $Revision$
  */
 public class RawDocumentElementFactory implements ElementFactory
 {
@@ -70,6 +79,13 @@ public class RawDocumentElementFactory implements ElementFactory
             rawDocumentElement.addElement("member-score").addText(
                 StringUtils.toString((Double) rawDocument
                     .getProperty(Lingo.PROPERTY_CLUSTER_MEMBER_SCORE), "#.##"));
+        }
+
+        if (rawDocument.getProperty(RawDocumentsProducer.PROPERTY_CATID) != null)
+        {
+            rawDocumentElement.addElement("catid").addText(
+                (String) rawDocument
+                    .getProperty(RawDocumentsProducer.PROPERTY_CATID));
         }
 
         return rawDocumentElement;

@@ -6,7 +6,12 @@
     TODO:
       (04/06/30) support for multiple cluster labels
   -->
-   
+
+  <xsl:import href="lingo.xsl"/>
+  <xsl:import href="odp.xsl"/>
+
+  <xsl:output indent="no"/>
+
   <!-- Root element -->
   <xsl:template match="report">
     <html>
@@ -28,6 +33,8 @@
             </td>
           </tr>
         </table>
+
+        <xsl:apply-templates select="profiles"/>
       </body>
     </html>
   </xsl:template>
@@ -59,9 +66,17 @@
     <div class="label">
       <a href="#">
         <img src="img/tree.png"/>
-        <span class="cluster-label-text"><xsl:value-of select="labels/label[1]"/></span>
+        <span class="cluster-label-text"><xsl:apply-templates select="labels"/></span>
         <xsl:text> </xsl:text>
         <span class="cluster-label-size">(<xsl:value-of select="size"/>)</span>
+        <xsl:if test="properties/property[@key = 'contamination']">
+          <xsl:text> </xsl:text>
+          <span class="cluster-label-extras">[<xsl:value-of select="properties/property[@key = 'contamination']"/>]</span>
+        </xsl:if>
+        <xsl:if test="properties/property[@key = 'cluscatid']">
+          <xsl:text> </xsl:text>
+          <span class="cluster-label-extras">[<xsl:value-of select="properties/property[@key = 'cluscatid']"/>]</span>
+        </xsl:if>
       </a>
     </div>
     <div class="content">
@@ -72,6 +87,13 @@
     </div>
   </xsl:template>
 
+  <xsl:template match="raw-cluster/labels">
+    <xsl:if test="label"><xsl:value-of select="label[1]"/><xsl:for-each select="label[position() > 1]">,<xsl:text> </xsl:text><xsl:value-of select="."/></xsl:for-each></xsl:if>
+  </xsl:template>
+
+<!--   <xsl:template match="labels/label[1]"><xsl:value-of select="."/></xsl:template> -->
+<!--   <xsl:template match="labels/label[position() > 1]">,<xsl:text> </xsl:text><xsl:value-of select="."/></xsl:template> -->
+
   <!-- A single raw document -->
   <xsl:template match="raw-document">
     <div class="raw-document">
@@ -80,15 +102,76 @@
       <span class="document-snippet"><xsl:value-of select="snippet"/></span>
       <xsl:if test="lang">
         <xsl:text> </xsl:text>
-        <span class="document-extra">[<xsl:value-of select="lang"/>]</span>
+        <span class="document-extras">[<xsl:value-of select="lang"/>]</span>
       </xsl:if>
       <xsl:if test="member-score">
         <xsl:text> </xsl:text>
-        <span class="document-extra">[<xsl:value-of select="member-score"/>]</span>
+        <span class="document-extras">[<xsl:value-of select="member-score"/>]</span>
+      </xsl:if>
+      <xsl:if test="catid">
+        <xsl:text> </xsl:text>
+        <span class="document-extras">[<xsl:value-of select="catid"/>]</span>
       </xsl:if>
     </div>
   </xsl:template>
 
+  <!-- List of profiles -->
+  <xsl:template match="profiles">
+    <div class="all-profiles">
+      <xsl:apply-templates/>
+    </div>
+  </xsl:template>
+
+  <!-- A single profile -->
+  <xsl:template match="profile">
+    <xsl:if test="profile-entry">
+      <div class="label">
+        <a href="#">
+          <img src="img/tree.png"/>
+          <span class="profile-label"><xsl:value-of select="@component"/></span>
+        </a>
+      </div>
+      <div class="content">
+        <div class="profile">
+          <xsl:apply-templates/>
+        </div>
+      </div>
+    </xsl:if>
+  </xsl:template>
+
+  <!-- A single profile entry -->
+  <xsl:template match="profile-entry">
+    <div class="label">
+      <a href="#">
+        <img src="img/tree.png"/>
+        <span class="profile-label"><xsl:value-of select="name"/></span>
+      </a>
+    </div>
+    <div class="content">
+      <div class="profile">
+        <xsl:apply-templates/>
+      </div>
+    </div>
+  </xsl:template>
+
+  <!-- Generic data container -->
+  <xsl:template match="profile-entry/data">
+    <table class="profile-data">
+      <xsl:apply-templates/>
+    </table>
+  </xsl:template>
+
+  <!-- Generic data entry -->
+  <xsl:template match="data/entry">
+    <tr>
+      <xsl:if test="@key">
+        <td class="profile-key"><xsl:value-of select="@key"/></td>
+      </xsl:if>
+      <td class="profile-value"><xsl:value-of select="."/></td>
+    </tr>
+  </xsl:template>
+
   <!-- Suppress the rest -->
-  <xsl:template match="*"/>
+  <xsl:template match="name"/>
+  <xsl:template match="description"/>
 </xsl:stylesheet>

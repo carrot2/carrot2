@@ -64,28 +64,28 @@
             <span class="process-name"><xsl:value-of select="$process-id"/>
           </span></a>
         </div>
-        <div class="content">
+        <div class="content-nc">
           <div class="result">
             <table class="result">
               <tr>
-                <xsl:for-each select="/report/results/result[1]/entry[not(@key = 'Process')]">
+                <xsl:for-each select="/report/results/result[1]/entry[not(@key = 'Process' or contains(@key,'Std Dev') or contains(@key, 'Max') or contains(@key, 'Min'))]">
                   <th><xsl:value-of select="@key"/></th>
                 </xsl:for-each>
                 <th/> <!-- Details -->
               </tr>
-              <tr>
-                <xsl:for-each select="/report/results/result">
-                  <xsl:if test="entry[@key = 'Process'] = $process-id">
-                    <xsl:apply-templates select="entry[not(@key = 'Process')]"/>
+              <xsl:for-each select="/report/results/result">
+                <xsl:if test="entry[@key = 'Process'] = $process-id">
+                  <tr>
+                    <xsl:apply-templates select="entry[not(@key = 'Process' or contains(@key,'Std Dev') or contains(@key, 'Max') or contains(@key, 'Min'))]"/>
                     <td class="result-value">
                       <a>
                         <xsl:attribute name="href"><xsl:value-of select="entry[@key = 'Process']"/>-<xsl:value-of select="entry[@key = 'Query']"/>.html</xsl:attribute>
                         details &#187;&#187;
                       </a>
                     </td>
-                  </xsl:if>
-                </xsl:for-each>
-              </tr>
+                  </tr>
+                </xsl:if>
+              </xsl:for-each>
             </table>
           </div>
         </div>

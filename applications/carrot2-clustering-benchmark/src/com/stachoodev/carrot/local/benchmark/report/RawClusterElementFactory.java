@@ -1,7 +1,12 @@
 /*
- * RawClusterElementFactory.java
- * 
- * Created on 2004-06-30
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
 package com.stachoodev.carrot.local.benchmark.report;
 
@@ -11,10 +16,13 @@ import org.dom4j.*;
 
 import com.dawidweiss.carrot.core.local.clustering.*;
 import com.dawidweiss.carrot.util.common.*;
-import com.stachoodev.carrot.filter.lingo.algorithm.*;
 
 /**
- * @author stachoo
+ * Converts {@link com.dawidweiss.carrot.core.local.clustering.RawCluster}s
+ * into XML elements.
+ * 
+ * @author Stanislaw Osinski
+ * @version $Revision$
  */
 public class RawClusterElementFactory implements ElementFactory
 {
@@ -33,16 +41,27 @@ public class RawClusterElementFactory implements ElementFactory
             Integer.toString(clusterSize(rawCluster)));
 
         // Cluster score
-        if (rawCluster.getProperty(LingoRawCluster.PROPERTY_SCORE) != null)
+        if (rawCluster.getProperty(RawCluster.PROPERTY_SCORE) != null)
         {
             rawClusterElement.addElement("score").addText(
                 StringUtils.toString((Double) rawCluster
-                    .getProperty(LingoRawCluster.PROPERTY_SCORE), "#.##"));
+                    .getProperty(RawCluster.PROPERTY_SCORE), "#.##"));
         }
 
         // Labels
         rawClusterElement.add(XMLReportUtils.createListElement(rawCluster
             .getClusterDescription(), "labels", "label"));
+
+        // Properties
+        if (rawCluster instanceof RawClusterBase)
+        {
+            Map properties = ((RawClusterBase) rawCluster).getProperties();
+            if (properties != null)
+            {
+                rawClusterElement.add(XMLReportUtils.createMapElement(
+                    properties, "properties", "property", "key"));
+            }
+        }
 
         // Subclusters
         if (rawCluster.getSubclusters() != null)
