@@ -129,9 +129,9 @@ public class QueryProcessor
                 // TODO: nasty - caching is not necessary here, it should
                 // be implemented as a direct stream copy.
                 output.write(new String(os.toByteArray(), "UTF-8"));
-                
+
                 // handle request history.
-                if (requestHistory != null)
+                if (requestHistory != null && !process.isHidden())
                     requestHistory.push(query, process);
             }
             else
