@@ -20,8 +20,11 @@ public interface PrimaryTopicIndexBuilder
      * 
      * @param inputStream an {@link InputStream}associated with the ODP RDF
      *            content file to be indexed.
+     * @param indexDataLocation the location at which all index data can be
+     *            stored
      * @throws IOException
      * @return
      */
-    public PrimaryTopicIndex create(InputStream inputStream) throws IOException;
+    public PrimaryTopicIndex create(InputStream inputStream,
+        String indexDataLocation) throws IOException;
 }
