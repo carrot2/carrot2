@@ -70,7 +70,7 @@ public class TfidfTdMatrixBuildingStrategy
         int size = 0;
 
         while (
-            !features[rows].isStopWord() && (features[rows].getTf() >= minimumTd)
+            features.length > rows && !features[rows].isStopWord() && (features[rows].getTf() >= minimumTd)
                 && ((maximumSize < 1) || (size <= maximumSize))
         )
         {

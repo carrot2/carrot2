@@ -14,27 +14,12 @@
 
 package com.stachoodev.carrot.filter.cluster.common;
 
-
-import com.stachoodev.util.suffixarrays.wrapper.Substring;
-import java.util.Properties;
-
-
 /**
- *
+ * @author Stanislaw Osinski
  */
 public class ClusteringResults
 {
-    /** */
     private Cluster [] clusters;
-
-    /** */
-    private Substring [] keywords;
-
-    /** */
-    private Properties techInfo;
-
-    /** */
-    private double [][] termTermMatrix;
 
     /**
      * Method ClusteringResults.
@@ -43,29 +28,6 @@ public class ClusteringResults
      */
     public ClusteringResults(Cluster [] clusters)
     {
-        this(clusters, null);
-    }
-
-
-    /**
-     * Method ClusteringResults.
-     *
-     * @param keywords
-     */
-    public ClusteringResults(Substring [] keywords)
-    {
-        this(null, keywords);
-    }
-
-
-    /**
-     * Method ClusteringResults.
-     *
-     * @param keywords
-     */
-    public ClusteringResults(Cluster [] clusters, Substring [] keywords)
-    {
-        this.keywords = keywords;
         this.clusters = clusters;
     }
 
@@ -79,58 +41,4 @@ public class ClusteringResults
         return clusters;
     }
 
-
-    /**
-     * Returns the keywords.
-     *
-     * @return Substring[]
-     */
-    public Substring [] getKeywords()
-    {
-        return keywords;
-    }
-
-
-    /**
-     * Returns the techInfo.
-     *
-     * @return Properties
-     */
-    public Properties getTechInfo()
-    {
-        return techInfo;
-    }
-
-
-    /**
-     * Sets the techInfo.
-     *
-     * @param techInfo The techInfo to set
-     */
-    public void setTechInfo(Properties techInfo)
-    {
-        this.techInfo = techInfo;
-    }
-
-
-    /**
-     * Returns the termTermMatrix.
-     *
-     * @return double[][]
-     */
-    public double [][] getTermTermMatrix()
-    {
-        return termTermMatrix;
-    }
-
-
-    /**
-     * Sets the termTermMatrix.
-     *
-     * @param termTermMatrix The termTermMatrix to set
-     */
-    public void setTermTermMatrix(double [][] termTermMatrix)
-    {
-        this.termTermMatrix = termTermMatrix;
-    }
 }

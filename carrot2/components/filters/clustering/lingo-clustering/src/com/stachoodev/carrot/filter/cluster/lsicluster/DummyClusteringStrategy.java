@@ -61,15 +61,10 @@ public class DummyClusteringStrategy
         MatrixUtils.normalizeColumnLengths(tdMatrix);
 
         int termCount = tdMatrix.getRowDimension();
-        int docCount = tdMatrix.getColumnDimension();
         int clusterCount = 2;
-
-        // Check dimensions
-        boolean transposed = false;
 
         if (tdMatrix.getColumnDimension() > tdMatrix.getRowDimension())
         {
-            transposed = true;
             tdMatrix = tdMatrix.transpose();
         }
 

@@ -3,7 +3,7 @@
 /*
  * Carrot2 Project
  * Copyright (C) 2002-2003, Dawid Weiss
- * Portions (C) Contributors listen in carrot2.CONTRIBUTORS file.
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
  * All rights reserved.
  * 
  * Refer to full text of the licence "carrot2.LICENCE" in the root folder
@@ -20,11 +20,7 @@ import java.util.*;
 
 
 /**
- * @author stachoo To change this generated comment go to  Window>Preferences>Java>Code
- *         Generation>Code Template
- */
-/**
- * @author stachoo
+ * @author Stanisław Osiński
  */
 public abstract class AbstractClusteringContext
 {
@@ -43,9 +39,6 @@ public abstract class AbstractClusteringContext
     /** Features describing the documents */
     protected Feature [] features;
 
-    /** Additional information that specific  algorithms may wish to store. */
-    protected HashMap additionalData;
-
     /** Clustering strategy */
     protected ClusteringStrategy clusteringStrategy;
 
@@ -61,7 +54,6 @@ public abstract class AbstractClusteringContext
     public AbstractClusteringContext()
     {
         snippets = new ArrayList();
-        additionalData = new HashMap();
         strongWords = new HashSet();
         parameters = new HashMap();
     }
@@ -80,42 +72,6 @@ public abstract class AbstractClusteringContext
     public void addSnippet(Snippet snippet)
     {
         snippets.add(snippet);
-    }
-
-
-    /**
-     * Method putData.
-     *
-     * @param key
-     * @param data
-     */
-    public void putData(Object key, Object data)
-    {
-        additionalData.put(key, data);
-    }
-
-
-    /**
-     * Method getData.
-     *
-     * @param key
-     *
-     * @return Object
-     */
-    public Object getData(Object key)
-    {
-        return additionalData.get(key);
-    }
-
-
-    /**
-     * Method removeData.
-     *
-     * @param key
-     */
-    public void removeData(Object key)
-    {
-        additionalData.remove(key);
     }
 
 
@@ -225,16 +181,7 @@ public abstract class AbstractClusteringContext
      */
     public Object getParameter(Object key)
     {
-        LinkedList param = (LinkedList) parameters.get(key);
-
-        if (param != null)
-        {
-            return (String) param.get(0);
-        }
-        else
-        {
-            return null;
-        }
+        return parameters.get(key);
     }
 
 

@@ -94,15 +94,12 @@ public class LsiClusteringStrategy
         TimeLogger timeLogger = new TimeLogger();
 
         // Init parameters
-        if (clusteringContext.getParameter("lsi.threshold.clusterAssignment") != null)
+        Object value;
+        if ( (value = clusteringContext.getParameter("lsi.threshold.clusterAssignment")) != null)
         {
-            String value = (String) clusteringContext.getParameter(
-                    "lsi.threshold.clusterAssignment"
-                );
-
             try
             {
-                clusterAssignmentThreshold = Double.parseDouble(value);
+                clusterAssignmentThreshold = Double.parseDouble(unwrapString(value));
             }
             catch (NumberFormatException e)
             {
@@ -111,15 +108,11 @@ public class LsiClusteringStrategy
             }
         }
 
-        if (clusteringContext.getParameter("lsi.threshold.candidateCluster") != null)
+        if ((value = clusteringContext.getParameter("lsi.threshold.candidateCluster")) != null)
         {
-            String value = (String) clusteringContext.getParameter(
-                    "lsi.threshold.candidateCluster"
-                );
-
             try
             {
-                candidateClusterThreshold = Double.parseDouble(value);
+                candidateClusterThreshold = Double.parseDouble(unwrapString(value));
             }
             catch (NumberFormatException e)
             {
@@ -144,6 +137,16 @@ public class LsiClusteringStrategy
         return new ClusteringResults(finalClusters);
     }
 
+    /**
+     * Unwraps a String out of a list, if needed.
+     */
+    private String unwrapString(Object value) {
+        if (value instanceof List) {    
+            return (String) ((List) value).get(0);
+        } else {
+            return (String) value;
+        }
+    }
 
     /**
      * Prepares intermediate clustering data (term-document matrix).
@@ -178,7 +181,7 @@ public class LsiClusteringStrategy
 
         // Create TD matrix
         TdMatrixBuildingStrategy tdMatrixBuildingStrategy = new TfidfTdMatrixBuildingStrategy(
-                2, 400 * 200
+                2, 250 * 150
             );
 
         tdMatrix = new Matrix(tdMatrixBuildingStrategy.buildTdMatrix(clusteringContext));
@@ -206,6 +209,17 @@ public class LsiClusteringStrategy
         }
 
         // The SVD
+        
+        // dump the matrix.
+        try {
+        java.io.ObjectOutputStream os = new java.io.ObjectOutputStream (new java.io.FileOutputStream("f:\\matrix"));
+        os.writeObject(tdMatrix);
+        os.close();
+        }
+        catch (Exception e) {
+        }
+        
+
         SingularValueDecomposition svd = tdMatrix.svd();
 
         if (transposed)

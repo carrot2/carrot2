@@ -96,7 +96,9 @@ public abstract class AbstractSnippetsIntWrapper
             {
                 if (documents[i].length() > 0)
                 {
-                    stringBuffer.append(" | ");
+                    stringBuffer.append(' ');
+                    stringBuffer.append(DOCUMENT_DELIMITER);
+                    stringBuffer.append(' ');
                     stringBuffer.append(documents[i]);
                 }
             }
