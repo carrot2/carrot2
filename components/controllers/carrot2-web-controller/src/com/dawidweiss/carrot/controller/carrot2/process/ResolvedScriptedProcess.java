@@ -153,10 +153,10 @@ public class ResolvedScriptedProcess
         {
             // close any opened input streams.
             controller.dispose();
-            DebugQueryExecutionInfo debugInfo = controller.getDebugInfo();
-            debugInfo.finish();
-            return debugInfo;
         }
+        DebugQueryExecutionInfo debugInfo = controller.getDebugInfo();
+        debugInfo.finish();
+        return debugInfo;
     }
 
 
