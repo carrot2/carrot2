@@ -37,9 +37,9 @@ public class MatrixFactorizationBenchmark
 
     /** Iterative matrix factorizations under tests */
     private IterativeMatrixFactorizationFactory [] factories = new IterativeMatrixFactorizationFactory []
-    { new KMeansMatrixFactorizationFactory(),
+    { //new KMeansMatrixFactorizationFactory(),
      new NonnegativeMatrixFactorizationEDFactory(),
-     new NonnegativeMatrixFactorizationKLFactory(),
+     //new NonnegativeMatrixFactorizationKLFactory(),
      new LocalNonnegativeMatrixFactorizationFactory(), };
 
     /** Where to write the results */
@@ -71,7 +71,7 @@ public class MatrixFactorizationBenchmark
 
             // Set paremeters
             factory.setMaxIterations(10);
-            factory.setStopThreshold(0);
+            factory.setStopThreshold(-1);
 
             DoubleMatrix2D A;
             MatrixFactorization factorization;
