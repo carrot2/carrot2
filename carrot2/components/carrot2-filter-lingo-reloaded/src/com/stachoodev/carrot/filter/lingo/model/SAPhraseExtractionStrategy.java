@@ -6,9 +6,9 @@ package com.stachoodev.carrot.filter.lingo.model;
 import java.util.*;
 
 import com.dawidweiss.carrot.core.local.linguistic.tokens.*;
-import com.dawidweiss.carrot.util.common.*;
 import com.stachoodev.suffixarrays.*;
 import com.stachoodev.suffixarrays.wrapper.*;
+import com.stachoodev.util.common.*;
 
 /**
  * Discovers frequent phrases (sequences of words longer than one word appearing
