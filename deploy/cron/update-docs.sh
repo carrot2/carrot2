@@ -27,6 +27,7 @@ done
 
 ant -f build.docs.xml \
        -DMailLogger.properties.file=cron/build.website.logger \
+       -Ddocbook.styler=/usr/java/ant-docbook-styler/ant-build-docbook.xml \
        -logger org.apache.tools.ant.listener.MailLogger \
        publish
 

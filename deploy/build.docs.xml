@@ -36,18 +36,25 @@
       ## and deploy to the Web server.
       -->
     <target name="build" depends="clean, prepare">
-        <!-- htmls first -->        
+        <!-- htmls first -->
         <ant antfile="${checkout.dir}/${module.name}/build.xml" 
              dir="${checkout.dir}/${module.name}" inheritall="false" 
-             target="html">
+             target="html.single">
             <property name="distribution.dir" location="${build.dir}" />
         </ant>
-        <!-- now PDF version -->
+
+        <ant antfile="${checkout.dir}/${module.name}/build.xml" 
+             dir="${checkout.dir}/${module.name}" inheritall="false" 
+             target="html.chunked">
+            <property name="distribution.dir" location="${build.dir}" />
+        </ant>
+        <!-- now PDF version 
         <ant antfile="${checkout.dir}/${module.name}/build.xml" 
              dir="${checkout.dir}/${module.name}" inheritall="false" 
              target="pdf:xep">
             <property name="distribution.dir" location="${build.dir}" />
         </ant>
+        -->
     </target>
 
     <target name="publish" depends="build">
