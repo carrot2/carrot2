@@ -6,7 +6,7 @@
 
     <component id               = "carrot2.input.egothor.dundee"
                type             = "input"
-               serviceURL       = "http://egothor.dundee.ac.uk/egothor/c2.jsp"
+               serviceURL       = "http://www.egothor.dundee.ac.uk/egothor-somis/c2.jsp"
                infoURL          = "http://www.egothor.org/"
     />
     
