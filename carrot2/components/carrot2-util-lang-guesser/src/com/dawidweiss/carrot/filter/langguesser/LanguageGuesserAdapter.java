@@ -49,7 +49,7 @@ public class LanguageGuesserAdapter
 	public String guessLanguage(char[] charArray, int offset, int length) {
 	    // TODO: this should be replaced with a more reliable
 	    // statistical test of sample length.
-	    final int MINIMAL_SAMPLE_LENGTH = 80;
+	    final int MINIMAL_SAMPLE_LENGTH = 40;
 	    if (length < MINIMAL_SAMPLE_LENGTH) {
 	        return null;
 	    }
