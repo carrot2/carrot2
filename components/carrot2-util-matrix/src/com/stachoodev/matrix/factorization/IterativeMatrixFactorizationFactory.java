@@ -55,7 +55,7 @@ public abstract class IterativeMatrixFactorizationFactory implements
 
     /** Order base vectors according to their 'activity'? */
     protected boolean ordered;
-    protected static final boolean DEFAULT_ORDERED = false;
+    protected static final boolean DEFAULT_ORDERED = true;
 
     /**
      * 
