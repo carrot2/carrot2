@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="src-test"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/colt-1.0.3.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/nni.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/junit-3.8.1.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/junit-addons-1.4.jar"/>
+	<classpathentry kind="src" path="/carrot2-util-common"/>
+	<classpathentry kind="output" path="tmp/build/WEB-INF/classes"/>
+</classpath>
