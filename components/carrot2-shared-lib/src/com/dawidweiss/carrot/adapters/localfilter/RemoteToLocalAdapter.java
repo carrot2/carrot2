@@ -22,6 +22,9 @@ import org.put.util.net.http.FormActionInfo;
 import org.put.util.net.http.FormParameters;
 import org.put.util.net.http.HTTPFormSubmitter;
 import org.put.util.net.http.Parameter;
+
+import com.dawidweiss.carrot.util.XMLSerializerHelper;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -82,6 +85,7 @@ public class RemoteToLocalAdapter
         // append <query tag?
         int id = 0;
         ArrayList hitsArray = new ArrayList();
+        XMLSerializerHelper xmlSerializer = XMLSerializerHelper.getInstance(); 
 
         while (hits.hasNext())
         {
@@ -95,7 +99,7 @@ public class RemoteToLocalAdapter
             if (title != null)
             {
                 requestXml.append("<title>");
-                requestXml.append(org.put.util.xml.XMLHelper.escapeElementEntities(title));
+                requestXml.append(xmlSerializer.toValidXmlText(title, false));
                 requestXml.append("</title>");
             }
 
@@ -107,7 +111,7 @@ public class RemoteToLocalAdapter
             }
 
             requestXml.append("<url>");
-            requestXml.append(org.put.util.xml.XMLHelper.escapeElementEntities(url));
+            requestXml.append(xmlSerializer.toValidXmlText(url, false));
             requestXml.append("</url>");
 
             String snippet = hit.getSnippet();
@@ -115,7 +119,7 @@ public class RemoteToLocalAdapter
             if (snippet != null)
             {
                 requestXml.append("<snippet>");
-                requestXml.append(org.put.util.xml.XMLHelper.escapeElementEntities(snippet));
+                requestXml.append(xmlSerializer.toValidXmlText(snippet, false));
                 requestXml.append("</snippet>");
             }
 
