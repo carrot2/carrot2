@@ -41,6 +41,7 @@ public final class SnippetInterfaceAdapter extends Snippet implements RawDocumen
 				return SnippetInterfaceAdapter.this.document.getId();
 			}
 		};
+        base.setProperty(PROPERTY_SNIPPET, document.getSnippet());
 	}
 
 	//
