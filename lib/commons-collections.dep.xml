@@ -1,0 +1,5 @@
+
+<component name="commons-collections">
+    <!-- Files that this component is composed of -->
+	<file location="commons-collections.jar" />
+</component>

@@ -1,0 +1,6 @@
+<component name="commons-pool">
+    <!-- Files that this component is composed of -->
+    <file location="commons-pool-1.1.jar" />
+    
+	<dependency name="commons-collections" />
+</component>

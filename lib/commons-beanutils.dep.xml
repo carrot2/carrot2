@@ -2,7 +2,7 @@
 <component name="commons-beanutils">
     <!-- Files that this component is composed of -->
 	<file location="commons-beanutils.jar" />
-
 	<file location="commons-logging.jar" />
-	<file location="commons-collections.jar" />
+	
+	<dependency name="commons-collections" />
 </component>
