@@ -51,6 +51,25 @@ public class IterationNumberGuesser
          RandomSeedingStrategyFactory.class, new Integer(3) }), new double []
         { -0.0186, 0.8222, 17.3555 });
 
+        // TODO: for the time being the values have been just C&P'd from NMF-ED
+        /** NMF-KL, Random seeding, level 1 */
+        allKnownCoefficients.put(Arrays.asList(new Object []
+        { NonnegativeMatrixFactorizationKLFactory.class,
+         RandomSeedingStrategyFactory.class, new Integer(1) }), new double []
+        { -0.0166, 0.3333, 8.0000 });
+
+        /** NMF-KL, Random seeding, level 2 */
+        allKnownCoefficients.put(Arrays.asList(new Object []
+        { NonnegativeMatrixFactorizationKLFactory.class,
+         RandomSeedingStrategyFactory.class, new Integer(2) }), new double []
+        { -0.0175, 0.6, 12.0 });
+
+        /** NMF-KL, Random seeding, level 3 */
+        allKnownCoefficients.put(Arrays.asList(new Object []
+        { NonnegativeMatrixFactorizationKLFactory.class,
+         RandomSeedingStrategyFactory.class, new Integer(3) }), new double []
+        { -0.0186, 0.8222, 17.3555 });
+
         /** NMF-ED, KMeans seeding, level 1 */
         allKnownCoefficients.put(Arrays.asList(new Object []
         { NonnegativeMatrixFactorizationEDFactory.class,
