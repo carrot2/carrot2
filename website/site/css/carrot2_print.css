@@ -1,0 +1,86 @@
+
+/**********************************/
+/* PAGE	BODY                      */
+/**********************************/
+
+	BODY.page {
+		background-color:	#F9F2E7;
+		color:			black;
+	
+		margin-right: 	0px;
+		margin-bottom: 	0px;
+		margin-top:		0px;
+		margin-left: 	0px;
+		padding-left: 	0px;
+		padding-right: 	0px;
+		padding-top: 	0px;
+		padding-bottom:	0px;
+		
+		font-family: 	Verdana, Helvetica, Arial,	Sans-serif;
+		font-size: 		10pt;
+	}
+	   
+	TABLE {
+		font-family: 	Verdana, Helvetica, Arial,	Sans-serif;
+		font-size: 		10pt;
+		color:          black;
+	}
+
+	
+/**********************************/
+/* MEDIA                          */
+/**********************************/
+	
+	SPAN.screenonly {
+		display: none;
+	}
+	
+	SPAN.printonly {
+		display: block;
+	}
+	
+	TD.screenonly {
+		display: none;
+	}
+    
+    #control-panel {
+        display: none;
+    }
+
+	
+
+/**********************************/
+/* LINKS                          */
+/**********************************/
+
+	A {
+		text-decoration: none;
+		font-weight: 	 normal;
+		color:           black;
+	}
+	
+	A:visited {
+		text-decoration: none;
+		font-weight: 	 normal;
+		color:           black;
+	}
+	
+	A:hover {
+		text-decoration: none;
+		font-weight: 	 normal;
+		color:           black;
+	}
+
+
+/**********************************/
+/* Styles                         */
+/**********************************/
+
+   DIV.copyright_print {
+   		text-align: center;
+   		margin: 	0px;
+		padding: 	0px;
+   		font-size: 	9pt;
+		color:      black;
+   }
+

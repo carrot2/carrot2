@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<page section="demo" xmlns:lang="http://www.cs.put.poznan.pl/dweiss/index.php/projects/sin/lang">
+	<!-- Page info section -->
+	<languages>
+		<lng id="en">English</lng>
+		<default id="en"/>
+	</languages>
+
+	<title lng="en">Online demos</title>
+
+    <chapter level="1">
+        <title>Nightly builds</title>
+        
+        <p>
+        Nightly snapshots of <carrot-text /> are available at:
+        <a href="http://ophelia.cs.put.poznan.pl:2001">http://ophelia.cs.put.poznan.pl:2001</a>. Because
+        nightly snapshots are what they are (automatic checkouts from the CVS), there is no warranty this
+        link will be active at all.
+        </p>
+        
+    </chapter>
+
+    <chapter level="1">
+        <title>Stable (more or less) builds</title>
+        
+        <p>
+        There are no online stable builds at the moment. We're approaching stable release though, so check out
+        this web site soon! Also, there may be sneak previews in the form of <a href="/download.xml"> binary releases</a>. 
+        </p>
+        
+    </chapter>
+
+</page>

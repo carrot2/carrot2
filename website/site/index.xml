@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<page section="carrot2" xmlns:lang="http://www.cs.put.poznan.pl/dweiss/index.php/projects/sin/lang">
+	<!-- Page info section -->
+	<languages>
+		<lng id="en">English</lng>
+		<lng id="pl">Polski</lng>
+		<default id="en"/>
+	</languages>
+
+	<title lng="en"><carrot-text/></title>
+	<title lng="pl"><carrot-text/></title>
+
+    <chapter level="1">
+        <title lng="en"><carrot-text/> project</title>
+        <title lng="pl">Projekt <carrot-text/></title>
+        
+        <lang:en>
+        <p>
+        <carrot-text/> is a research framework for experimenting with automated querying of
+        various data sources (such as search engines), processing search results and
+        their visualization.
+        </p><p>
+        Under the term &quot;research&quot;, we understand that the architecture
+        of the system is oriented mostly toward flexibility, sometimes at
+        a price of performance losses. Mechanisms such as
+        data exchange via XML language, dynamically loaded components
+        accessible via HTTP protocol, the use of Java as primary language
+        of implementation -- they all make the system very easy to tailor
+        to one's needs.
+        </p><p>
+        <carrot-text/> was primarily built with search results clustering in mind, but it can
+        be easily configured to do other, interesting things.         
+        </p>
+        </lang:en>
+        <lang:pl>
+        <p>
+        <carrot-text/>jest modułowym systemem przetwarzania rezultatów wyszukiwania danych w wyszukiwarkach internetowych,
+        choć może być użyty również do innych typów danych.
+        </p><p>
+        Architektura systemu jest zorientowana głównie na prostote rozbudowy i ponownego użycia jego
+        istniejących elementów składowych, czasem kosztem efektywności (dlatego właśnie <carrot-text/>
+        jest systemem <i>naukowym</i> :).
+        </p>
+        <p>
+        System był zbudowany pierwotnie do przetwarzania danych z wyszukiwarek internetowych, ale może
+        być również użyty w innych celach.
+        </p>
+        <p>
+        <frame>
+        Strony internetowe projektu są w większości w języku angielskim ponieważ ciężko jest utrzymać ich spójność
+        z aktualnym stanem systemu nawet dla jednego języka dokumentacji. Przepraszamy za niedogodności.
+        </frame>
+        </p>
+        </lang:pl>
+    </chapter>
+
+    <chapter level="1">
+        <title lng="en">The news!</title>
+        <title lng="pl">Nowinki</title>
+
+	    <include file="news/news.xml" />
+	
+	</chapter>
+
+
+</page>

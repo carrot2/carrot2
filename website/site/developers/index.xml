@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<page section="docs" xmlns:lang="http://www.cs.put.poznan.pl/dweiss/index.php/projects/sin/lang">
+	<!-- Page info section -->
+	<languages>
+		<lng id="en">English</lng>
+		<lng id="pl">Polski</lng>
+		<default id="en"/>
+	</languages>
+
+    <chapter level="1">
+        <title lng="en">Documentation</title>
+        <title lng="pl">Dokumentacja</title>
+        
+        <lang:en>
+        Full architecture overview, data exchange formats, specifications, guidelines 
+        and other useful information can be found in the Developers Manual document.
+        </lang:en>
+        <lang:pl>
+        Opis architektury systemu, formaty wymiany danych i inne informacje można znaleźć w dokumentacji
+        poniżej.
+        </lang:pl>
+        
+        <ul>
+            <li>
+            <a href="manual/index-singlehtml.html">
+                <lang:en>Single HTML page (quite large)</lang:en>
+                <lang:pl>Pojedynczy dokument HTML (spory)</lang:pl>
+            </a>
+            </li>
+            
+            <li>
+            <a href="manual/index.html">
+                <lang:en>Split into sections</lang:en>
+                <lang:pl>Rozbity na rozdziały</lang:pl>
+            </a>
+            </li>
+
+            <li>
+            <a href="manual/manual.pdf">
+                <lang:en>PDF file generated using <a href="http://www.renderx.com">RenderX's</a> <a href="http://xep.xattic.com/">XEP</a>.</lang:en>
+                <lang:pl>Rozbity na rozdziały</lang:pl>
+            </a>
+            </li>
+        </ul>
+        
+    </chapter>
+
+</page>

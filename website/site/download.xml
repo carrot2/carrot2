@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<page section="demo" xmlns:lang="http://www.cs.put.poznan.pl/dweiss/index.php/projects/sin/lang">
+	<!-- Page info section -->
+	<languages>
+		<lng id="en">English</lng>
+		<default id="en"/>
+	</languages>
+
+	<title lng="en">Download</title>
+
+    <chapter level="1">
+        <title>Download binaries</title>
+        
+            <p>
+            <a href="http://www.cs.put.poznan.pl/dweiss/carrot-bin/carrot2-bin-0.1.zip">Carrot<sup>2</sup>, version: <b>0.1</b>, 13/06/2003</a> (current)
+            </p>
+
+            <p>
+            <a href="http://www.cs.put.poznan.pl/dweiss/carrot-bin/carrot2-bin-0.1-RC3.zip">Carrot<sup>2</sup>, version: <b>0.1-RC3</b>, 27/05/2003</a>
+            </p>
+
+            <p>
+            <a href="http://www.cs.put.poznan.pl/dweiss/carrot-bin/carrot2-bin-0.1-RC2.zip">Carrot<sup>2</sup>, version: <b>0.1-RC2</b>, 13/05/2003</a>
+            </p>
+
+            <p>
+            Carrot<sup>2</sup>, version: <b>0.1-RC1</b>, 29/04/2003 (no longer available)
+            </p>
+        
+    </chapter>
+
+    <chapter level="1">
+        <title>Source code releases</title>
+
+        <p>
+        Please use the CVS access to acquire source code.
+        </p>
+        
+    </chapter>
+
+</page>
