@@ -50,4 +50,34 @@
       <td class="profile-value"><xsl:value-of select="tf"/></td>
     </tr>
   </xsl:template>
+
+  <!-- Matrix formatting -->
+  <xsl:template match="matrix">
+    <table>
+      <tr>
+        <td/>
+        <xsl:apply-templates select="column-labels"/>
+      </tr>
+      <xsl:apply-templates select="body/row"/>
+    </table>
+  </xsl:template>
+
+  <xsl:template match="column-labels/label">
+    <td class="profile-key">
+      <xsl:value-of select="."/>
+    </td>
+  </xsl:template>
+
+  <xsl:template match="body/row">
+    <tr>
+      <td class="profile-key"><xsl:value-of select="label"/></td>
+      <xsl:apply-templates select="values/v"/>
+    </tr>
+  </xsl:template>
+
+  <xsl:template match="values/v">
+    <td>
+      <xsl:value-of select="."/>
+    </td>
+  </xsl:template>
 </xsl:stylesheet>
