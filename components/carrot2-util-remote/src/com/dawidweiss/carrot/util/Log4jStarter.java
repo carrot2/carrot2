@@ -33,18 +33,15 @@ public class Log4jStarter
     /** Singleton instance of Log4jStarter */
     private static Log4jStarter log4jStarter;
 
-    /* Static initialization of Log4j */
+    /** Performs static initialization of Log4j at startup. */
     static
     {
         getLog4jStarter();
     }
 
-    // ------------------------------------------------- hide public constructor
     private Log4jStarter()
     {
     }
-
-    // ---------------------------------------------------------- factory method
 
     /**
      * Call this class to acquire an instance of Log4jStarter.
@@ -68,12 +65,20 @@ public class Log4jStarter
 
                 // and attempt to override it with the properties user
                 // might have defined in tomcat's /conf/log4j.properties
-                String catalinaBase = System.getProperty("catalina.base");
+                String containerBase = System.getProperty("resin.home");
+                if (containerBase == null) {
+                    // try another choice:
+                    containerBase = System.getProperty("catalina.base");
+                    if (containerBase == null) {
+                        // try another choice:
+                        containerBase = System.getProperty("resin.home");
+                    }
+                }
 
-                if (catalinaBase != null)
+                if (containerBase != null)
                 {
                     File confFile = new File(
-                            catalinaBase, "conf" + File.separator + "log4j.properties"
+                            containerBase, "conf" + File.separator + "log4j.properties"
                         );
 
                     if (confFile.exists() && confFile.canRead())
@@ -85,7 +90,7 @@ public class Log4jStarter
                         {
                             is = new FileInputStream(confFile);
                             p.load(is);
-                            convertRelativeLog4jProperties(p, new File(catalinaBase));
+                            convertRelativeLog4jProperties(p, new File(containerBase));
                             log4jStarter.initializeLog4j(p);
 
                             Logger.getLogger(Log4jStarter.class).info(
@@ -124,8 +129,6 @@ public class Log4jStarter
         }
     }
 
-
-    // ---------------------------------------------------------- public methods
 
     /**
      * Performs "standard" initialization of log4j. As for now, disables all logging.
