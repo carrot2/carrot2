@@ -26,7 +26,7 @@ for counter in `seq 1 40`; do
 done
 
 ant -f build.docs.xml \
-       -DMailLogger.properties.file=cron/build.website.logger \
+       -DMailLogger.properties.file=cron/build.docs.logger \
        -Dcarrot2.cvs.dir=/home/dweiss/carrot2/deploy/tmp/checkouts/carrot2 \
        -Ddocbook.styler=/usr/java/ant-docbook-styler/ant-build-docbook.xml \
        -logger org.apache.tools.ant.listener.MailLogger \
