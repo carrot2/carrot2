@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 Project
  * Copyright (C) 2002-2004, Dawid Weiss
@@ -22,28 +21,31 @@ import com.dawidweiss.carrot.core.local.clustering.RawDocumentsConsumer;
 import java.util.*;
 import java.util.ArrayList;
 
-
 /**
  * An utility implementation of an output component that implements {@link
- * RawDocumentsConsumer} interface and collects  {@link RawDocument} objects
- * to an array returned at the end of processing.
- *
+ * RawDocumentsConsumer} interface and collects {@link RawDocument}objects to
+ * an array returned at the end of processing.
+ * 
  * @author Dawid Weiss
  * @version $Revision$
  */
 public class DocumentsConsumerOutputComponent extends LocalOutputComponentBase
-    implements LocalOutputComponent, RawDocumentsConsumer {
+    implements LocalOutputComponent, RawDocumentsConsumer,
+    TokenizedDocumentsConsumer
+{
     /**
      * Capabilities exposed by this component.
      */
-    private static final Set CAPABILITIES_COMPONENT = new HashSet(Arrays.asList(
-                new Object[] { RawDocumentsConsumer.class }));
+    private static final Set CAPABILITIES_COMPONENT = new HashSet(Arrays
+        .asList(new Object []
+        { RawDocumentsConsumer.class, TokenizedDocumentsConsumer.class }));
 
     /**
      * Capabilities required of the predecessor of this component.
      */
-    private static final Set CAPABILITIES_PREDECESSOR = new HashSet(Arrays.asList(
-                new Object[] { RawDocumentsProducer.class }));
+    private static final Set CAPABILITIES_PREDECESSOR = new HashSet(Arrays
+        .asList(new Object []
+        { RawDocumentsProducer.class, TokenizedDocumentsConsumer.class }));
 
     /**
      * An array where documents received from the predecessor component are
@@ -52,10 +54,11 @@ public class DocumentsConsumerOutputComponent extends LocalOutputComponentBase
     private ArrayList documents = new ArrayList();
 
     /**
-     * Returns an instance of {@link java.util.ArrayList} with references to
-     * {@link RawDocument} instances.
+     * Returns an instance of {@link java.util.ArrayList}with references to
+     * {@link RawDocument}instances.
      */
-    public Object getResult() {
+    public Object getResult()
+    {
         return new ArrayList(this.documents);
     }
 
@@ -63,27 +66,30 @@ public class DocumentsConsumerOutputComponent extends LocalOutputComponentBase
      * Provides an empty implementation.
      */
     public void startProcessing(RequestContext requestContext)
-        throws ProcessingException {
+        throws ProcessingException
+    {
     }
 
     /**
      * Provides an empty implementation
      */
-    public void endProcessing() throws ProcessingException {
+    public void endProcessing() throws ProcessingException
+    {
     }
 
     /**
      * Adds a document to the list of documents to be returned as the result.
      */
-    public void addDocument(RawDocument doc) throws ProcessingException {
+    public void addDocument(RawDocument doc) throws ProcessingException
+    {
         documents.add(doc);
     }
 
     /**
-     * Clears clusters and documents lists and prepares the component for
-     * reuse.
+     * Clears clusters and documents lists and prepares the component for reuse.
      */
-    public void flushResources() {
+    public void flushResources()
+    {
         super.flushResources();
         documents.clear();
     }
@@ -91,14 +97,26 @@ public class DocumentsConsumerOutputComponent extends LocalOutputComponentBase
     /**
      * @see com.dawidweiss.carrot.core.local.LocalComponent#getComponentCapabilities()
      */
-    public Set getComponentCapabilities() {
+    public Set getComponentCapabilities()
+    {
         return CAPABILITIES_COMPONENT;
     }
 
     /**
      * @see com.dawidweiss.carrot.core.local.LocalComponent#getRequiredPredecessorCapabilities()
      */
-    public Set getRequiredPredecessorCapabilities() {
+    public Set getRequiredPredecessorCapabilities()
+    {
         return CAPABILITIES_PREDECESSOR;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.dawidweiss.carrot.core.local.clustering.TokenizedDocumentsConsumer#addDocument(com.dawidweiss.carrot.core.local.clustering.TokenizedDocument)
+     */
+    public void addDocument(TokenizedDocument doc) throws ProcessingException
+    {
+        documents.add(doc);
     }
 }
