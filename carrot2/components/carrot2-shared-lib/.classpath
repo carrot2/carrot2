@@ -21,5 +21,7 @@
     <classpathentry kind="var" path="CARROT2_CVS/lib/xml-apis.jar"/>
     <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.apache.ant_1.5.3/ant.jar"/>
     <classpathentry kind="var" path="CARROT2_CVS/lib/compile-time-only/junit.jar"/>
+    <classpathentry kind="var"
+        path="CARROT2_CVS/lib/commons-pool-1.1.jar" sourcepath="CARROT2_CVS/lib-src/commons-pool"/>
     <classpathentry kind="output" path="tmp/build/classes"/>
 </classpath>
