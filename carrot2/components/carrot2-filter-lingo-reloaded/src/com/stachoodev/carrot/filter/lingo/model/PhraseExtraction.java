@@ -23,18 +23,14 @@ import com.dawidweiss.carrot.core.local.linguistic.tokens.*;
  * @author Stanislaw Osinski
  * @version $Revision$
  */
-public interface PhraseExtractionStrategy
+public interface PhraseExtraction
 {
-
     /**
-     * For a given list of
-     * {@link com.dawidweiss.carrot.core.local.clustering.TokenizedDocument}s
-     * returns a list of selected {@link ExtendedTokenSequence}s.
+     * For given {@link ModelBuilderContext}returns a {@link List}of
+     * {@link ExtendedTokenSequence}s.
      * 
-     * @param tokenizedDocuments a list of
-     *            {@link com.dawidweiss.carrot.core.local.clustering.TokenizedDocument}
-     *            objects
-     * @return list of selected token sequences
+     * @param context data source for the extraction process
+     * @return list of extracted phrases
      */
-    List getExtractedPhrases(List tokenizedDocuments);
+    public List getExtractedPhrases(ModelBuilderContext context);
 }

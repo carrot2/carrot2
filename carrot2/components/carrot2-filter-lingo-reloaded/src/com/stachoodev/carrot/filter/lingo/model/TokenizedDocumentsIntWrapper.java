@@ -16,6 +16,9 @@ import org.apache.commons.collections.*;
 import org.apache.commons.collections.bidimap.*;
 import org.apache.commons.collections.primitives.*;
 
+import cern.colt.list.*;
+import cern.colt.map.*;
+
 import com.dawidweiss.carrot.core.local.clustering.*;
 import com.dawidweiss.carrot.core.local.linguistic.tokens.*;
 import com.stachoodev.suffixarrays.wrapper.*;
@@ -28,7 +31,7 @@ import com.stachoodev.suffixarrays.wrapper.*;
  * @version $Revision$
  */
 public class TokenizedDocumentsIntWrapper extends IntWrapperBase implements
-        TypeAwareIntWrapper, MaskableIntWrapper
+    TypeAwareIntWrapper, MaskableIntWrapper
 {
     /** A bidirectional map of tokens (keys) and their integer codes (values) */
     private BidiMap tokens;
@@ -42,6 +45,12 @@ public class TokenizedDocumentsIntWrapper extends IntWrapperBase implements
      */
     private Map tokenStems;
 
+    /** Query words */
+    private String [] queryWords;
+
+    /** Integer codes of query words */
+    private OpenIntIntHashMap queryWordCodes;
+
     /** Current maximum integer code for a token */
     private int maxTokenCode;
 
@@ -50,30 +59,74 @@ public class TokenizedDocumentsIntWrapper extends IntWrapperBase implements
 
     /** Token types to filter out */
     private static final short TOKEN_FILTER_MASK = TypedToken.TOKEN_TYPE_SYMBOL
-            | TypedToken.TOKEN_TYPE_UNKNOWN;
+        | TypedToken.TOKEN_TYPE_UNKNOWN | TypedToken.TOKEN_TYPE_PUNCTUATION;
+
+    /** Segment codes */
+    public static final short SEGMENT_TITLE = 0;
+    public static final short SEGMENT_SNIPPET = 1;
+    public static final short SEGMENT_DOCUMENT_DELIMITER = 2;
+    public static final short SEGMENT_TERMINATOR = 3;
+
+    /**
+     * Stores the association between document segments (title, snippet) and
+     * position in the internal int codes array
+     */
+    private ShortList segments;
+
+    /** */
+    private IntList documentIndices;
 
     /**
      * @param tokenizedDocuments
      */
     public TokenizedDocumentsIntWrapper(List tokenizedDocuments)
     {
+        this(tokenizedDocuments, null);
+    }
+
+    /**
+     * @param tokenizedDocuments
+     */
+    public TokenizedDocumentsIntWrapper(List tokenizedDocuments,
+        String [] queryWords)
+    {
+        this.queryWords = queryWords;
+        if (queryWords != null)
+        {
+            queryWordCodes = new OpenIntIntHashMap(queryWords.length);
+        }
+
         maxTokenCode = -MaskableIntWrapper.SECONDARY_OFFSET;
         maxSentenceDelimiterCode = -1;
+
         tokens = new DualHashBidiMap();
         stems = new HashMap();
         tokenStems = new HashMap();
+        segments = new ArrayShortList();
+        documentIndices = new ArrayIntList();
 
         createIntData(tokenizedDocuments);
     }
 
     /**
-     * Returns a token associated with given code or <code>null</code> when
+     * @param intData
+     */
+    private TokenizedDocumentsIntWrapper(int [] intData, BidiMap tokens,
+        Map tokenStems)
+    {
+        this.intData = intData;
+        this.tokens = tokens;
+        this.tokenStems = tokenStems;
+    }
+
+    /**
+     * Returns the token associated with given code or <code>null</code> when
      * there is no token for given code.
      * 
      * @param code
      * @return
      */
-    public TypedToken getTokenForCode(int code)
+    public final TypedToken getTokenForCode(int code)
     {
         return (TypedToken) tokens.getKey(new Integer(code));
     }
@@ -88,7 +141,7 @@ public class TokenizedDocumentsIntWrapper extends IntWrapperBase implements
     public TokenStem getTokenStemForCode(int code)
     {
         Integer maskedCode = new Integer(code
-                & MaskableIntWrapper.SECONDARY_MASK);
+            & MaskableIntWrapper.SECONDARY_MASK);
         TokenStem tokenStem;
 
         if (tokenStems.containsValue(maskedCode))
@@ -104,28 +157,92 @@ public class TokenizedDocumentsIntWrapper extends IntWrapperBase implements
         return tokenStem;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see com.stachoodev.suffixarrays.wrapper.TypeAwareIntWrapper#isStopWord(int)
      */
-    public boolean isStopWord(int code)
+    public final boolean isStopWord(int code)
     {
         return (getTokenForCode(code).getType() & TypedToken.TOKEN_FLAG_STOPWORD) != 0;
     }
 
     /**
+     * @param code
+     * @return
+     */
+    public final boolean isIndexableToken(int code)
+    {
+        return code >= 0;
+    }
+
+    /**
+     * @param code
+     * @return
+     */
+    public boolean isQueryWord(int code)
+    {
+        if (queryWordCodes != null)
+        {
+            return queryWordCodes.containsKey(code
+                & MaskableIntWrapper.SECONDARY_MASK);
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /**
+     * @return
+     */
+    public IntArrayList getQueryWordCodes()
+    {
+        if (queryWordCodes != null)
+        {
+            return queryWordCodes.keys();
+        }
+        else
+        {
+            return null;
+        }
+    }
+    
+    /**
+     * @param position
+     * @return
+     */
+    public final short getSegmentForPosition(int position)
+    {
+        return segments.get(position);
+    }
+
+    /**
+     * @param position
+     * @return
+     */
+    public final int getDocumentIndexForPosition(int position)
+    {
+        return documentIndices.get(position);
+    }
+    
+    /**
      * @param tokenizedDocuments
      */
     protected void createIntData(List tokenizedDocuments)
     {
+        // TODO: replace with Colt's int list?
         IntList intDataList = new ArrayIntList();
 
+        int documentIndex = 0;
         for (Iterator documents = tokenizedDocuments.iterator(); documents
-                .hasNext();)
+            .hasNext();)
         {
             TokenizedDocument document = (TokenizedDocument) documents.next();
 
             TokenSequence tokenSequence = document.getTitle();
-            addToDataList(intDataList, tokenSequence);
+            addToDataList(intDataList, tokenSequence, SEGMENT_TITLE,
+                documentIndex);
 
             // Document delimiter - prevents phrases from crossing document
             // boundaries
@@ -133,10 +250,13 @@ public class TokenizedDocumentsIntWrapper extends IntWrapperBase implements
             {
                 maxSentenceDelimiterCode -= MaskableIntWrapper.SECONDARY_OFFSET;
                 intDataList.add(maxSentenceDelimiterCode);
+                segments.add(SEGMENT_DOCUMENT_DELIMITER);
+                documentIndices.add(documentIndex);
             }
 
             tokenSequence = document.getSnippet();
-            addToDataList(intDataList, tokenSequence);
+            addToDataList(intDataList, tokenSequence, SEGMENT_SNIPPET,
+                documentIndex);
 
             // Document delimiter - prevents phrases from crossing document
             // boundaries
@@ -144,11 +264,18 @@ public class TokenizedDocumentsIntWrapper extends IntWrapperBase implements
             {
                 maxSentenceDelimiterCode -= MaskableIntWrapper.SECONDARY_OFFSET;
                 intDataList.add(maxSentenceDelimiterCode);
+                segments.add(SEGMENT_DOCUMENT_DELIMITER);
+                documentIndices.add(documentIndex);
             }
+
+            documentIndex++;
         }
 
+        segments.add(SEGMENT_TERMINATOR);
+        documentIndices.add(-1);
+
         // Create intData
-        intData = new int[intDataList.size() + 1];
+        intData = new int [intDataList.size() + 1];
         for (int i = 0; i < intDataList.size(); i++)
         {
             intData[i] = intDataList.get(i);
@@ -160,19 +287,24 @@ public class TokenizedDocumentsIntWrapper extends IntWrapperBase implements
      * @param intDataList
      * @param tokenSequence
      */
-    private void addToDataList(IntList intDataList, TokenSequence tokenSequence)
+    private void addToDataList(IntList intDataList,
+        TokenSequence tokenSequence, short segment, int documentIndex)
     {
         for (int t = 0; t < tokenSequence.getLength(); t++)
         {
             int tokenCode;
             TypedToken token = (TypedToken) tokenSequence.getTokenAt(t);
 
-            if ((token.getType() & TOKEN_FILTER_MASK) != 0)
+            if ((token.getType() & TOKEN_FILTER_MASK) != 0
+                && (token.getType() & TypedToken.TOKEN_FLAG_SENTENCE_DELIM) == 0)
             {
                 continue;
             }
 
-            if ((token.getType() & TypedToken.TOKEN_TYPE_PUNCTUATION) != 0)
+            // Here we can use either TOKEN_FLAG_SENTENCE_DELIM or
+            // TOKEN_TYPE_PUNCTUATION. The earlier may prove more robust
+            // in noisy text.
+            if ((token.getType() & TypedToken.TOKEN_FLAG_SENTENCE_DELIM) != 0)
             {
                 // Sentence delimiter - prevents phrases from crossing
                 // sentence boundaries
@@ -198,12 +330,11 @@ public class TokenizedDocumentsIntWrapper extends IntWrapperBase implements
                         tokenCode = ((Integer) stems.get(stem)).intValue() + 1;
 
                         // Is the slot big enough?
-                        if (tokenCode
-                                % MaskableIntWrapper.SECONDARY_OFFSET == 0)
+                        if (tokenCode % MaskableIntWrapper.SECONDARY_OFFSET == 0)
                         {
                             // More than 32 different forms for the same stem?
                             throw new RuntimeException(
-                                    "The value of DualLcpSuffixSortingStrategy.SECONDARY_BITS is too small");
+                                "The value of DualLcpSuffixSortingStrategy.SECONDARY_BITS is too small");
                         }
                     }
                     else
@@ -219,10 +350,38 @@ public class TokenizedDocumentsIntWrapper extends IntWrapperBase implements
                     maxTokenCode += MaskableIntWrapper.SECONDARY_OFFSET;
                     tokenCode = maxTokenCode;
                 }
+
+                // Check if the token matches any of the query words
+                if (queryWords != null)
+                {
+                    String image = token.toString();
+                    for (int i = 0; i < queryWords.length; i++)
+                    {
+                        if (image.equalsIgnoreCase(queryWords[i]))
+                        {
+                            queryWordCodes.put(tokenCode
+                                & MaskableIntWrapper.SECONDARY_MASK, tokenCode
+                                & MaskableIntWrapper.SECONDARY_MASK);
+                        }
+                    }
+                }
+
                 tokens.put(token, new Integer(tokenCode));
             }
 
             intDataList.add(tokenCode);
+            segments.add(segment);
+            documentIndices.add(documentIndex);
         }
+    }
+
+    /**
+     * @return
+     */
+    public TokenizedDocumentsIntWrapper shallowCopy()
+    {
+        TokenizedDocumentsIntWrapper clone = new TokenizedDocumentsIntWrapper(
+            (int []) this.intData.clone(), this.tokens, this.tokenStems);
+        return clone;
     }
 }

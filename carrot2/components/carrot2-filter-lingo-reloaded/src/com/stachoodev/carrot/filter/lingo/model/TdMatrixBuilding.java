@@ -10,8 +10,6 @@
  */
 package com.stachoodev.carrot.filter.lingo.model;
 
-import java.util.*;
-
 import cern.colt.matrix.*;
 
 /**
@@ -21,7 +19,7 @@ import cern.colt.matrix.*;
  * @author Stanislaw Osinski
  * @version $Revision$
  */
-public interface TdMatrixBuildingStrategy
+public interface TdMatrixBuilding
 {
     /**
      * TdMatrixBuildingStrategy can set a non-null value of this property for a
@@ -36,10 +34,8 @@ public interface TdMatrixBuildingStrategy
      * {@link com.dawidweiss.carrot.core.local.clustering.TokenizedDocument}s
      * and a list of selected features builds a term-document matrix.
      * 
-     * @param tokenizedDocuments
-     * @param selectedFeatures
+     * @param context data source for the algorithm
      * @return term-document matrix
      */
-    public DoubleMatrix2D getTdMatrix(List tokenizedDocuments,
-        List selectedFeatures);
+    public DoubleMatrix2D getTdMatrix(ModelBuilderContext context);
 }

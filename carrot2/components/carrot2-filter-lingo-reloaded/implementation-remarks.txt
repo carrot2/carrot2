@@ -1,7 +1,7 @@
-* When light-speed implementation is needed, TDMatrixBuildingStrategy, 
-  FeatureSelectionStrategy and PhraseExtractionStrategy can be implemented in 
-  one class, reusing common information created during each of the processes.
-  
+TODO:
+
+* Have look at JADE, which may offer a nice performance boost
+
 * FeatureSelectionStrategy interface is meant to return single words found in 
   the input. In case more complex features are needed, a similar interface, 
   called e.g. FeatureExtractionStrategy can be created.
@@ -25,11 +25,30 @@
   	- PhraseExtractionStrategy: discover phrases separately for each language to
   	  avoid sequences beginning/ending in stopwords. Merge the lists afterwards
   	  to aggregate common 'international' phrases.
+
+  	- Wouldn't it be enough to have separate codes for the same word? Not really.
+  	  Ideally, Polish 'ale' would be different the English one, but 'Microsoft' 
+  	  should have the same code no matter the context document's language
   	  
+* Improved language guessing
+	- for extremely short strings it seems that the stop word method would 
+	  perfom better. In case of draws - let the trigram method decide.
+
+* Tokenizer improvements
+    - improve tokenizer:
+      - HTML entities: remove (e.g. &quot;), convert to characters (e.g. &amp;)
+      - treat (letter|digit)*(.(letter|digit)*)* as an URL. To be a sentence 
+        separator the period must be followed by a white space
+    - nasty heuristic: a cluster label must be at least x (e.g. 3) characters long
+      and can't consist of numbers only
+      
+DONE:
+
 * Stemming of Phrases: 
 	- define classes of equivalence among term codes based on stemming information
 	- return a group of equivalent phrases with one aggregated frequency
 
-* Improved language guessing
-	- for extremely short strings it seems that the stop word method would 
-	  perfom better. In case of draws - let the trigram method decide.
+* When light-speed implementation is needed, TDMatrixBuildingStrategy, 
+  FeatureSelectionStrategy and PhraseExtractionStrategy can be implemented in 
+  one class, reusing common information created during each of the processes.
+  

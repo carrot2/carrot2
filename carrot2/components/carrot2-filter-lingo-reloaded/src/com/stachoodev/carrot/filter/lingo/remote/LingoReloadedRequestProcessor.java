@@ -156,7 +156,7 @@ public class LingoReloadedRequestProcessor extends
                 doc.setAttribute("refid", rawDocument.getId().toString());
                 doc.setAttribute("score", StringUtils.toString(
                     (Double) rawDocument
-                        .getProperty(Lingo.PROPERTY_CLUSTER_MEMBER_SCORE),
+                        .getProperty(LingoWeb.PROPERTY_CLUSTER_MEMBER_SCORE),
                     "#.##"));
                 group.addContent(doc);
             }
@@ -245,12 +245,12 @@ public class LingoReloadedRequestProcessor extends
             public LocalComponent getInstance()
             {
                 Map parameters = new HashMap();
-                NonnegativeMatrixFactorizationEDFactory matrixFactorizationFactory = new NonnegativeMatrixFactorizationEDFactory();
-                matrixFactorizationFactory.setK(20);
-                parameters.put(Lingo.PARAMETER_MATRIX_FACTORIZATION_FACTORY,
-                    matrixFactorizationFactory);
-                parameters.put(Lingo.PARAMETER_QUALITY_LEVEL, new Integer(3));
-                return new LingoReloadedLocalFilterComponent(parameters);
+//                NonnegativeMatrixFactorizationEDFactory matrixFactorizationFactory = new NonnegativeMatrixFactorizationEDFactory();
+//                matrixFactorizationFactory.setK(20);
+//                parameters.put(LingoWeb.PARAMETER_MATRIX_FACTORIZATION_FACTORY,
+//                    matrixFactorizationFactory);
+//                parameters.put(LingoWeb.PARAMETER_QUALITY_LEVEL, new Integer(3));
+                return new LingoWebLocalFilterComponent(parameters);
             }
         };
         localController.addLocalComponentFactory("filter.lingo-nmf-2",

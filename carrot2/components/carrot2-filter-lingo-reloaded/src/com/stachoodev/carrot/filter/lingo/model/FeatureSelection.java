@@ -17,32 +17,31 @@ import com.dawidweiss.carrot.core.local.linguistic.tokens.*;
 /**
  * Defines the interface of an algorithm performing feature selection.
  * 
- * TODO: switching to an ordered Map instead of the list would increase
- * performance in a few places
- * 
  * @author Stanislaw Osinski
  * @version $Revision$
  */
-public interface FeatureSelectionStrategy
+public interface FeatureSelection
 {
     /**
      * Defines token types that will be skipped during the selection process.
      * These are: stop words, symbols, punctuation marks and tokens of an
      * unknown type.
+     * 
+     * Note: we don't index numerical tokens here, but detect them in phrases.
+     * This clever thick will let a number appear only accompanied by some
+     * non-numeric token(s).
      */
     public static short DEFAULT_FILTER_MASK = TypedToken.TOKEN_FLAG_STOPWORD
         | TypedToken.TOKEN_TYPE_SYMBOL | TypedToken.TOKEN_TYPE_UNKNOWN
-        | TypedToken.TOKEN_TYPE_PUNCTUATION;
+        | TypedToken.TOKEN_TYPE_NUMERIC | TypedToken.TOKEN_TYPE_PUNCTUATION;
 
     /**
      * Returns a list of {@link ExtendedToken}s selected by the algorithm.
      * Tokens must be sorted decreasingly according to the utility measure used
      * by the selection algorithm.
      * 
-     * @param tokenizedDocuments a list of
-     *            {@link com.dawidweiss.carrot.core.local.clustering.TokenizedDocument}
-     *            objects
+     * @param context data source for the algorithm
      * @return list of selected tokens
      */
-    public List getSelectedFeatures(List tokenizedDocuments);
+    public List getSelectedFeatures(ModelBuilderContext context);
 }
