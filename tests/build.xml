@@ -1,0 +1,172 @@
+   
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!-- # Carrot2 tests                                                          -->
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+<project name="Carrot2 tests" default="help"  basedir="." >
+
+  <!-- your local properties, as desired -->
+  <property file="local-build.properties" />
+
+  <!-- ##################################### -->
+  <!-- ### {{{ PROPERTIES                ### -->
+  <!-- ##################################### -->
+
+  <property name="build"               location="tmp/build" />
+  <property name="distribution.dir"    location="tmp/results" />
+  <property name="build.compiler"      value="modern" />
+  <property name="lib"                 value="lib" />
+  
+  <!-- ## override if you want to test hosts other than localhost. -->
+  <property name="test.url"            value="http://localhost:8080/carrot2-web-controller" />
+
+  <!-- }}} -->
+
+  <!-- ##################################### -->
+  <!-- ### {{{ PREPARE PATHS             ### -->
+  <!-- ##################################### -->
+
+  <!-- Compilation-time classpath -->
+  <path id="compile.classpath">
+    <fileset dir="${lib}" includes="**/*.jar" />
+  </path>
+
+  <!-- }}} -->
+
+  <!-- ##################################### -->
+  <!-- ### {{{ CLEAN                     ### -->
+  <!-- ##################################### -->
+
+  <target name="clean">
+    <delete dir="tmp" failonerror="false" quiet="true" />
+    <delete failonerror="false" quiet="true">
+      <fileset dir="." includes="**/*~,**/.#*,**/*.ior" defaultexcludes="no" />
+    </delete>
+  </target>
+
+  <!-- }}} -->
+
+  <!-- ##################################### -->
+  <!-- ### {{{ PREPARE                   ### -->
+  <!-- ##################################### -->
+
+  <target name="prepare">
+    <mkdir dir="${build}" />
+    <mkdir dir="${distribution.dir}" />
+  </target>
+  <!-- }}} -->
+
+  <!-- ##################################### -->
+  <!-- ### {{{ COMPILE SOURCES           ### -->
+  <!-- ##################################### -->
+
+  <target name="compile" depends="prepare" description="Compile test cases">
+    <!-- compile project sources -->
+    <javac destdir     = "${build}"
+           debug       = "on"
+           optimize    = "off"
+           deprecation = "off"
+           classpathref= "compile.classpath">
+        <src location="src" />
+    </javac>
+
+    <pathconvert targetos="unix" property="tmp:safepath">
+        <path location="${build}/junit-execution-log4j-log.html" />
+    </pathconvert>
+    
+    <filterset begintoken="@" endtoken="@" id="deployment.info">
+        <filter token="CARROT2_TEST_URL" value="${test.url}"/>
+        <filter token="LOGPATH"       value="${tmp:safepath}" />
+    </filterset>
+
+    <!-- copy any non-java files from source directories -->
+    <copy toDir="${build}" includeemptydirs="false" filtering="false">
+       <fileset dir="src" excludes="**/*.java" />
+    </copy>
+
+    <mkdir dir="${build}/conf" />
+    <copy toDir="${build}/conf" includeemptydirs="false" filtering="true" overwrite="true">
+       <fileset dir="conf" includes="**/*" />
+       <filterset refid="deployment.info" />
+    </copy>
+
+  </target>
+  <!-- }}} -->
+
+  <!-- ##################################### -->
+  <!-- ### {{{ RUN TEST CASES            ### -->
+  <!-- ##################################### -->
+
+  <target name="regression.include" if="regression.tests">
+    <property name="excluded.tests" value="NoTestsExcluded" />
+  </target>
+  
+  <target name="regression.exclude" unless="regression.tests">
+    <property name="excluded.tests" value="**/regression/*Test.class" />
+  </target>
+
+  <target name="test" depends="clean,prepare,compile,regression.include,regression.exclude" description="Runs external test cases">
+    <echo>
+    ##############################################
+    MAKE SURE CARROT2 RUNS AT THIS URL:
+    ${test.url}
+    ##############################################
+    </echo>
+    
+    <mkdir dir="${build}/junit-temp"/>
+    <mkdir dir="${distribution.dir}"/>
+
+    <pathconvert property="tmp:loggingSettings" pathSep=",">
+        <path><pathelement location="${build}/conf/log4j.properties" /></path>
+    </pathconvert>
+
+    <junit dir="${build}/conf" fork="true" printsummary="true" errorproperty="junit.error" failureproperty="junit.failure">
+        <formatter type="xml"/>
+        <classpath refid="compile.classpath" />
+        <classpath location="${build}" />
+        <sysproperty key="log4j.configuration" value="file://${tmp:loggingSettings}"/>
+
+		<batchtest todir="${build}/junit-temp">
+			<fileset dir="${build}">
+				<include name="com/dawidweiss/carrot/tests/httpunit/**/*Test.class" />
+				<exclude name="${excluded.tests}" />
+			</fileset>
+		</batchtest>
+    </junit>
+
+    <junitreport todir="${distribution.dir}">
+        <fileset dir="${build}/junit-temp"><include name="*.xml"/></fileset>
+        <report styledir="misc" format="frames" todir="${distribution.dir}"/>
+    </junitreport>
+
+    <copy file="${build}/junit-execution-log4j-log.html"
+          tofile="${distribution.dir}/junit-execution-log4j-log.html" overwrite="true" />
+    <copy toDir="${distribution.dir}">
+        <fileset dir="misc" includes="**/*.gif" />
+    </copy>
+
+    <fail message="External tests failed" if="junit.error" />
+    <fail message="External tests failed" if="junit.failure" />
+  </target>
+
+  <!-- }}} -->
+
+  <!-- ##################################### -->
+  <!-- ### {{{ HELP ON THIS FILE         ### -->
+  <!-- ##################################### -->
+  <target name="help" description="Displays help on available targets.">
+    <echo>
+${ant.project.name} build file for ANT tool.
+(c) Poznan University of Technology, OPHELIA Project.
+
+Current JDK: ${ant.java.version}
+Basedir    : ${basedir}
+-----------------------------------------------------
+
+Type ant -projecthelp for more information.
+    </echo>
+  </target>
+  <!-- }}} -->
+
+</project>
+

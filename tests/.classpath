@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+    <classpathentry kind="src" path="src"/>
+    <classpathentry kind="lib" path="lib/js.jar"/>
+    <classpathentry kind="lib" path="lib/servlet.jar"/>
+    <classpathentry kind="lib" path="lib/Tidy.jar"/>
+    <classpathentry kind="lib" path="lib/httpunit.jar"/>
+    <classpathentry kind="lib" path="lib/junit.jar"/>
+    <classpathentry kind="lib" path="lib/nekohtml.jar"/>
+    <classpathentry kind="lib" path="lib/xercesImpl.jar"/>
+    <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+    <classpathentry kind="lib" path="lib/commons-beanutils.jar"/>
+    <classpathentry kind="lib" path="lib/commons-collections.jar"/>
+    <classpathentry kind="lib" path="lib/commons-logging.jar"/>
+    <classpathentry kind="lib" path="lib/log4j-1.2.7.jar"/>
+    <classpathentry kind="lib" path="lib/put-utils.jar"/>
+    <classpathentry kind="lib" path="lib/jdom.jar"/>
+    <classpathentry kind="lib" path="lib/xml-apis.jar"/>
+    <classpathentry kind="output" path="tmp/build"/>
+</classpath>
