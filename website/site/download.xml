@@ -10,16 +10,6 @@
 	<title lng="en">Download</title>
 
     <chapter level="1">
-        <title>Download prepackaged demo binaries</title>
-        <p>
-        Binary releases moved to SourceForge.
-        </p>
-        <p>
-        <a href="http://sourceforge.net/project/showfiles.php?group_id=85379">http://sourceforge.net/project/showfiles.php?group_id=85379</a>
-        </p>
-    </chapter>
-
-    <chapter level="1">
         <title>Source code releases</title>
 
         <p>
@@ -42,17 +32,6 @@
     </chapter>
 
     <chapter level="1">
-        <title>Preconfigured runtime environment</title>
-        <p>
-        This is a preconfigured Tomcat environment for use with Carrot<sup>2</sup> components. Just download
-        the component WARs, throw them in the <tt>context-components</tt> directory of this runtime and start Tomcat!
-        </p>
-        <p>
-        <a href="http://carrot2.sourceforge.net/download/tomcat-carrot-runtime.tgz">http://carrot2.sourceforge.net/download/tomcat-carrot-runtime.tgz</a>
-        </p>
-    </chapter>
-     
-    <chapter level="1">
         <title>Nightly component binaries</title>
         <p>
         These binaries (WAR files) are provided as part of the nightly
@@ -62,6 +41,13 @@
         </p>
         <p>
         <a href="http://carrot.cs.put.poznan.pl/static/download/nightly">http://carrot.cs.put.poznan.pl/static/download/nightly</a>
+        </p>
+    </chapter>
+    
+    <chapter level="1">
+        <title>Installation instructions</title>
+        <p>
+        Installation instructions can be found in the Developers Manual.
         </p>
     </chapter>
 
