@@ -33,6 +33,8 @@ import com.stachoodev.suffixarrays.wrapper.*;
  * Note: This class is <b>not </b> multilingual. Expect strange results when
  * applied to multilingual data (i.e. tokens with inconsistent stopword markers)
  * 
+ * TODO: the algorithm not quite works for phrases of length 1
+ * 
  * @author stachoo
  */
 public class SAPhraseExtractionStrategy implements PhraseExtractionStrategy
