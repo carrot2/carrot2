@@ -19,8 +19,6 @@
     <dependency name="carrot2-filter-stc" in-profile="remote" />
     <dependency name="carrot2-filter-trc" in-profile="remote" />
 
-    <dependency name="carrot2-input-egothor" in-profile="remote" />
-    <dependency name="carrot2-input-nutch" in-profile="remote" />
     <dependency name="carrot2-input-snippet-reader" in-profile="remote" />
     <dependency name="carrot2-input-verbatim" />
     <dependency name="carrot2-input-xml" in-profile="remote" />
@@ -28,7 +26,6 @@
     <!-- Only remote components -->
     <dependency name="carrot2-filter-stemmer" />
     <dependency name="carrot2-filter-stream-interceptor" />
-    <dependency name="carrot2-input-tree-snippet-miner" />
     <dependency name="carrot2-output-xsltrenderer" />
     <dependency name="carrot2-remote-controller" />
 

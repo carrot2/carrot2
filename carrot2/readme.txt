@@ -57,7 +57,13 @@ Components are placed in their respective directories, under 'tmp/dist' folder.
 Their required components and libraries are listed in an *.info file found
 together with the resulting WAR or JAR file.
 
-c) Assembling a 'custom' component set.
+c) Assembling a 'distribution'.
+
+A distribution contains a binary distribution of remote components that is
+'tomcat-ready', that is simply copy the contents of the ZIP file over to a 
+Tomcat installation and everything should be fine.
+
+d) Assembling a 'custom' component set.
 
 To assemble a 'custom' component set, a build file and a dependency file
 are needed. Follow example applications (e.g. applications/carrot2-lucene-example).
