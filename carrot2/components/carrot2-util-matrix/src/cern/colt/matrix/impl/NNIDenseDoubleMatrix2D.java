@@ -45,10 +45,10 @@ public class NNIDenseDoubleMatrix2D extends DenseDoubleMatrix2D
      * @param columnStride
      */
     public NNIDenseDoubleMatrix2D(int rows, int columns, double [] elements,
-            int rowZero, int columnZero, int rowStride, int columnStride)
+        int rowZero, int columnZero, int rowStride, int columnStride)
     {
         super(rows, columns, elements, rowZero, columnZero, rowStride,
-                columnStride);
+            columnStride);
     }
 
     /*
@@ -58,7 +58,7 @@ public class NNIDenseDoubleMatrix2D extends DenseDoubleMatrix2D
      *      cern.colt.matrix.DoubleMatrix1D, double, double, boolean)
      */
     public DoubleMatrix1D zMult(DoubleMatrix1D y, DoubleMatrix1D z,
-            double alpha, double beta, boolean transposeA)
+        double alpha, double beta, boolean transposeA)
     {
         return super.zMult(y, z, alpha, beta, transposeA);
 
@@ -76,8 +76,18 @@ public class NNIDenseDoubleMatrix2D extends DenseDoubleMatrix2D
      * </ul>
      */
     public DoubleMatrix2D zMult(DoubleMatrix2D B, DoubleMatrix2D C,
-            double alpha, double beta, boolean transposeA, boolean transposeB)
+        double alpha, double beta, boolean transposeA, boolean transposeB)
     {
+        // A workaround for a bug in DenseDoubleMatrix2D
+        // If B is a SelectedDenseDoubleMatrix the implementation of this method
+        // throws a ClassCastException. The workaround is to swap and transpose
+        // the arguments and then transpose the result
+        if (B instanceof SelectedDenseDoubleMatrix2D)
+        {
+            return B.zMult(this, C, alpha, beta, !transposeB, !transposeA)
+                .viewDice();
+        }
+
         // Check the sizes
         int rowsB = (transposeB ? B.columns : B.rows);
         int columnsB = (transposeB ? B.rows : B.columns);
@@ -100,23 +110,23 @@ public class NNIDenseDoubleMatrix2D extends DenseDoubleMatrix2D
         if (rowsB != columnsA)
         {
             throw new IllegalArgumentException(
-                    "Matrix2D inner dimensions must agree:" + toStringShort()
-                            + ", " + B.toStringShort());
+                "Matrix2D inner dimensions must agree:" + toStringShort()
+                    + ", " + B.toStringShort());
         }
 
         if (rowsC != rowsA || columnsC != columnsB)
         {
             throw new IllegalArgumentException("Incompatibile result matrix: "
-                    + toStringShort() + ", " + B.toStringShort() + ", "
-                    + C.toStringShort());
+                + toStringShort() + ", " + B.toStringShort() + ", "
+                + C.toStringShort());
         }
 
         // Need native BLAS, dense matrices and no views to operate
         // Default to Colt's implementation otherwise
         if (!NNIInterface.isNativeBlasAvailable()
-                || (!(B instanceof DenseDoubleMatrix2D))
-                || (!(C instanceof DenseDoubleMatrix2D)) || !isNoView
-                || !B.isNoView || !C.isNoView)
+            || (!(B instanceof DenseDoubleMatrix2D))
+            || (!(C instanceof DenseDoubleMatrix2D)) || !isNoView
+            || !B.isNoView || !C.isNoView)
         {
             return super.zMult(B, C, alpha, beta, transposeA, transposeB);
         }
@@ -128,9 +138,9 @@ public class NNIDenseDoubleMatrix2D extends DenseDoubleMatrix2D
 
         // Multiply
         BLAS.gemm(BLAS.RowMajor, transposeA ? BLAS.Trans : BLAS.NoTrans,
-                transposeB ? BLAS.Trans : BLAS.NoTrans, C.rows(), C.columns(),
-                columnsA, alpha, dataA, Math.max(1, columns), dataB, Math.max(
-                        1, B.columns()), beta, dataC, Math.max(1, C.columns()));
+            transposeB ? BLAS.Trans : BLAS.NoTrans, C.rows(), C.columns(),
+            columnsA, alpha, dataA, Math.max(1, columns), dataB, Math.max(1, B
+                .columns()), beta, dataC, Math.max(1, C.columns()));
 
         return C;
     }
@@ -167,8 +177,8 @@ public class NNIDenseDoubleMatrix2D extends DenseDoubleMatrix2D
      */
     public static void deepTranspose(DenseDoubleMatrix2D A)
     {
-        double [] data = A.elements; 
-        
+        double [] data = A.elements;
+
         int from = 2;
         int to = 0;
         double store = data[from];
@@ -179,14 +189,20 @@ public class NNIDenseDoubleMatrix2D extends DenseDoubleMatrix2D
             temp = data[to];
             data[to] = store;
             store = temp;
-            
+
             from = to;
         }
         while (from != 2);
-        
+
         int tmp;
-    	tmp = A.rows; A.rows = A.columns; A.columns = tmp;
-    	tmp = A.rowStride; A.rowStride = A.columnStride; A.columnStride = tmp;
-    	tmp = A.rowZero; A.rowZero = A.columnZero; A.columnZero = tmp;
+        tmp = A.rows;
+        A.rows = A.columns;
+        A.columns = tmp;
+        tmp = A.rowStride;
+        A.rowStride = A.columnStride;
+        A.columnStride = tmp;
+        tmp = A.rowZero;
+        A.rowZero = A.columnZero;
+        A.columnZero = tmp;
     }
 }
