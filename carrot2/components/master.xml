@@ -494,6 +494,28 @@ ${string:component.dependencies}
   <!-- }}} -->
 
   <!-- ##################################### -->
+  <!-- ### {{{ CLASS EXEC HOOK           ### -->
+  <!-- ##################################### -->  
+  <target name="run.class" depends="prepare">
+    <fail unless="run.class.name">
+    Set 'run.class.name' property to run a class with the project's classpath.
+    </fail>
+  	<java classname="${run.class.name}" fork="true" failonerror="false">
+        <classpath refid="classpath.dependencies" />
+        <classpath location="${build.dir}/${build.type}" />
+        <classpath location="${build.dir}/type-test" />
+        <classpath location="${build.dir}/type-jar" />
+
+        <classpath refid="classpath.local" />
+
+        <!-- HACK: we pass javac in classpath because some test cases invoke ant
+             in an in-process mode, which skips classpath initialization. -->
+        <classpath location="${env.JAVA_HOME}/lib/tools.jar" />
+    </java>
+  </target>
+  <!-- }}} -->
+
+  <!-- ##################################### -->
   <!-- ### {{{ JAVADOC BUILD             ### -->
   <!-- ##################################### -->  
   <target name="javadoc" depends="javadoc.on, javadoc.internal" />
