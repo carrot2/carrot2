@@ -5,6 +5,15 @@
     name="carrot2-input-snippet-reader"
     description="Carrot2 Snippet Reader (RegExp-based Search Engine Wrapper)">
 
+    <provides profile="local">
+        <files build-path-exclude="true" prefix="tmp/dist">
+            <file location="carrot2-input-snippet-reader-local.jar" />
+        </files>
+        <build>
+            <ant file="build.local.xml" target="build" />
+        </build>
+    </provides>
+
     <provides profile="remote">
         <files build-path-exclude="true" prefix="tmp/dist">
             <file location="carrot2-input-snippet-reader.war" />
