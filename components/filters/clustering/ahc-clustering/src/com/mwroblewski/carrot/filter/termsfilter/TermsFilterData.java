@@ -15,12 +15,10 @@
 package com.mwroblewski.carrot.filter.termsfilter;
 
 
-import java.util.*;
-
-import org.jdom.Element;
-
 import com.mwroblewski.carrot.lexical.LexicalElement;
 import com.mwroblewski.carrot.utils.FrequencyHashMap;
+import org.jdom.Element;
+import java.util.*;
 
 
 /**

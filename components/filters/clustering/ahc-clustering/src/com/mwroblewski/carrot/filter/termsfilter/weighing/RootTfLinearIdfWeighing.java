@@ -15,8 +15,6 @@
 package com.mwroblewski.carrot.filter.termsfilter.weighing;
 
 
-
-
 /**
  * @author Micha� Wr�blewski
  */

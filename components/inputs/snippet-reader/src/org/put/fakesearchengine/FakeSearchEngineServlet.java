@@ -15,14 +15,12 @@
 package org.put.fakesearchengine;
 
 
+import org.put.util.io.FileHelper;
 import java.io.*;
 import java.util.zip.GZIPOutputStream;
-
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.put.util.io.FileHelper;
 
 
 /**

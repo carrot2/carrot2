@@ -15,12 +15,10 @@
 package com.stachoodev.carrot.filter.cluster.lsicluster;
 
 
-import java.util.HashMap;
-
-import junit.framework.TestCase;
-
 import com.dawidweiss.carrot.filter.stemming.porter.PorterStemmer;
 import com.stachoodev.carrot.filter.cluster.common.*;
+import junit.framework.TestCase;
+import java.util.HashMap;
 
 
 /**

@@ -20,14 +20,12 @@
 package com.stachoodev.carrot.filter.cluster.common;
 
 
-import java.io.*;
-import java.util.*;
-
-import org.apache.log4j.Logger;
-
 import com.dawidweiss.carrot.filter.stemming.DirectStemmer;
 import com.stachoodev.carrot.filter.cluster.lsicluster.LsiClusteringStrategy;
 import com.stachoodev.util.log.TimeLogger;
+import org.apache.log4j.Logger;
+import java.io.*;
+import java.util.*;
 
 
 /**

@@ -18,7 +18,6 @@ package com.mwroblewski.carrot.filter.ahcfilter.ahc.dendrogram.visualisation;
 import java.awt.Canvas;
 import java.awt.Graphics;
 import java.util.LinkedList;
-
 import javax.swing.JFrame;
 
 

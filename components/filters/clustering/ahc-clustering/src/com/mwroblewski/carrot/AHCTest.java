@@ -15,16 +15,15 @@
 package com.mwroblewski.carrot;
 
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.util.*;
-
 import com.mwroblewski.carrot.filter.ahcfilter.ahc.AHC;
 import com.mwroblewski.carrot.filter.ahcfilter.ahc.dendrogram.*;
 import com.mwroblewski.carrot.filter.ahcfilter.ahc.dendrogram.visualisation.DendrogramFrame;
 import com.mwroblewski.carrot.filter.ahcfilter.ahc.linkage.SingleLinkage;
 import com.mwroblewski.carrot.filter.ahcfilter.ahc.similarity.EuclideanSimilarity;
 import com.mwroblewski.carrot.filter.ahcfilter.ahc.similarity.SimilarityMeasure;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.*;
 
 
 /**
@@ -130,8 +129,8 @@ public class AHCTest
         LinkedList trees = ahc.group();
 
         new DendrogramFrame(
-                trees, similarities, sim.minSimilarity(), sim.maxSimilarity(), 200, 200
-            );
+            trees, similarities, sim.minSimilarity(), sim.maxSimilarity(), 200, 200
+        );
 
         System.out.println(toString((DendrogramNode) trees.get(0), 0.2f, false));
     }

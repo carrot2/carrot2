@@ -15,6 +15,7 @@
 package com.mwroblewski.carrot.filter.ahcfilter.ahc.stop;
 
 
+
 /**
  */
 import java.util.LinkedList;

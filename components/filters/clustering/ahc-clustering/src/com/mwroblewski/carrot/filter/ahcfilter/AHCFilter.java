@@ -15,15 +15,6 @@
 package com.mwroblewski.carrot.filter.ahcfilter;
 
 
-import java.io.InputStream;
-import java.util.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.log4j.Logger;
-import org.jdom.Element;
-
 import com.dawidweiss.carrot.filter.FilterRequestProcessor;
 import com.mwroblewski.carrot.filter.ahcfilter.ahc.AHC;
 import com.mwroblewski.carrot.filter.ahcfilter.ahc.dendrogram.*;
@@ -33,6 +24,12 @@ import com.mwroblewski.carrot.filter.ahcfilter.ahc.stop.StopCondition;
 import com.mwroblewski.carrot.filter.ahcfilter.groups.*;
 import com.mwroblewski.carrot.lexical.LexicalElement;
 import com.mwroblewski.carrot.utils.LogUtils;
+import org.apache.log4j.Logger;
+import org.jdom.Element;
+import java.io.InputStream;
+import java.util.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 
 /**

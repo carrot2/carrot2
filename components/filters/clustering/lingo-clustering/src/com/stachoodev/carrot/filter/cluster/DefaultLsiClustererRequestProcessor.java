@@ -15,16 +15,13 @@
 package com.stachoodev.carrot.filter.cluster;
 
 
-import java.io.InputStream;
-import java.util.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.stachoodev.carrot.filter.cluster.common.*;
 import org.jdom.Element;
 import org.put.util.xml.JDOMHelper;
-
-import com.stachoodev.carrot.filter.cluster.common.*;
+import java.io.InputStream;
+import java.util.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 
 /**

@@ -33,7 +33,8 @@ public class SearchAction
     extends Action
 {
     public static final String PROCESSING_RESULTS_KEY = "queryResults";
-    public static final String PROCESSING_ERRORS_KEY = "processingErrors";
+    public static final String PROCESSING_ERRORS_KEY  = "processingErrors";
+    public static final String DEBUGINFO_KEY          = "debugInfo";
 
     /**
      * Redirect query processing to internal application controller. Compile query object and
@@ -105,6 +106,10 @@ public class SearchAction
                 {
                     // error occurred during processing.
                     request.setAttribute(PROCESSING_ERRORS_KEY, result.getExceptions());
+                    request.setAttribute(DEBUGINFO_KEY, result.getDebugInfo());
+                    ActionForward fwd = mapping.findForward("processingError");
+                    fwd.setRedirect(false);
+                    return fwd;
                 }
                 else
                 {

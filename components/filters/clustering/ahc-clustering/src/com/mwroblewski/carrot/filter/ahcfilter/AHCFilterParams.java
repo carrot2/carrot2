@@ -15,12 +15,11 @@
 package com.mwroblewski.carrot.filter.ahcfilter;
 
 
-import java.util.LinkedList;
-import java.util.Map;
-
 import com.mwroblewski.carrot.filter.ahcfilter.ahc.linkage.LinkageMethod;
 import com.mwroblewski.carrot.filter.ahcfilter.ahc.similarity.SimilarityMeasure;
 import com.mwroblewski.carrot.filter.ahcfilter.ahc.stop.StopCondition;
+import java.util.LinkedList;
+import java.util.Map;
 
 
 /**
@@ -73,7 +72,7 @@ public class AHCFilterParams
         /*       Class stopConditionClass =
            Class.forName((String) params.get("stopCondition"));
         
-                   return (StopCondition) stopConditionClass.newInstance();*/
+                      return (StopCondition) stopConditionClass.newInstance();*/
 
         //return new GroupingThresholdReachedCondition(getTreeCreatingThreshold());
         return null;

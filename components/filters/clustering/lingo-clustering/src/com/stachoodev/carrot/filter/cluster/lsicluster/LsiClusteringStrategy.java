@@ -15,17 +15,14 @@
 package com.stachoodev.carrot.filter.cluster.lsicluster;
 
 
-import java.util.*;
-
-import org.apache.log4j.Logger;
-
 import Jama.Matrix;
 import Jama.SingularValueDecomposition;
-
 import com.stachoodev.carrot.filter.cluster.common.*;
 import com.stachoodev.util.arrays.ArrayUtils;
 import com.stachoodev.util.log.TimeLogger;
 import com.stachoodev.util.matrix.MatrixUtils;
+import org.apache.log4j.Logger;
+import java.util.*;
 
 
 /**

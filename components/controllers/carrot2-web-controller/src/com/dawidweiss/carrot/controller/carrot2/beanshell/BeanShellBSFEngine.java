@@ -240,25 +240,25 @@ public class BeanShellBSFEngine
    will use the CodeBuffer utility to produce an example (Test) class that
    turns around and invokes the BSF Manager to call the script again.
 
-       I assume a truly compileable language would return a real implementation
-       class adapter here?  But in source code form?  Would't it be more likely
-       to generate bytecode?
+          I assume a truly compileable language would return a real implementation
+          class adapter here?  But in source code form?  Would't it be more likely
+          to generate bytecode?
 
-       And shouldn't a non-compileable language simply return a standard
-       precompiled adapter to itself?  The indirection of building a source
-       class to call the scripting engine (possibly through the interpreter)
-       seems kind of silly.
+          And shouldn't a non-compileable language simply return a standard
+          precompiled adapter to itself?  The indirection of building a source
+          class to call the scripting engine (possibly through the interpreter)
+          seems kind of silly.
  */
 /*
    public void compileApply (String source, int lineNo, int columnNo,
        Object funcBody, Vector paramNames, Vector arguments, CodeBuffer cb)
        throws BSFException;
 
-       public void compileExpr (String source, int lineNo, int columnNo,
-           Object expr, CodeBuffer cb) throws BSFException;
+          public void compileExpr (String source, int lineNo, int columnNo,
+              Object expr, CodeBuffer cb) throws BSFException;
 
-       public void compileScript (String source, int    lineNo,    int columnNo,
-           Object script, CodeBuffer cb) throws BSFException;
+          public void compileScript (String source, int    lineNo,    int columnNo,
+              Object script, CodeBuffer cb) throws BSFException;
  */
     public void declareBean(BSFDeclaredBean bean)
         throws BSFException

@@ -15,9 +15,8 @@
 package com.stachoodev.carrot.filter.cluster.common;
 
 
-import java.util.*;
-
 import com.stachoodev.util.arrays.ArrayUtils;
+import java.util.*;
 
 
 /**

@@ -15,13 +15,11 @@
 package com.dawidweiss.carrot.filter.stemming.lametyzator;
 
 
-import java.io.IOException;
-import java.io.InputStream;
-
+import com.dawidweiss.carrot.filter.stemming.DirectStemmer;
 import org.put.fsa.FSA;
 import org.put.linguistics.stemming.fsa.FSAStemmer;
-
-import com.dawidweiss.carrot.filter.stemming.DirectStemmer;
+import java.io.IOException;
+import java.io.InputStream;
 
 
 /**

@@ -15,16 +15,14 @@
 package com.dawidweiss.carrot.filter.textonly;
 
 
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.SAXParser;
-
-import org.xml.sax.InputSource;
-import org.xml.sax.XMLReader;
 
 
 /**

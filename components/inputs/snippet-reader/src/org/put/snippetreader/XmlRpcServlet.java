@@ -15,16 +15,8 @@
 package org.put.snippetreader;
 
 
-import java.io.*;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.*;
-
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.dawidweiss.carrot.controller.carrot2.xmlbinding.query.Query;
+import com.dawidweiss.carrot.util.Log4jStarter;
 import org.apache.log4j.Logger;
 import org.apache.xmlrpc.XmlRpc;
 import org.apache.xmlrpc.XmlRpcServer;
@@ -34,9 +26,14 @@ import org.jdom.input.SAXBuilder;
 import org.put.snippetreader.readers.WebSnippetReader;
 import org.put.util.exception.ExceptionHelper;
 import org.put.util.io.FileHelper;
-
-import com.dawidweiss.carrot.controller.carrot2.xmlbinding.query.Query;
-import com.dawidweiss.carrot.util.Log4jStarter;
+import java.io.*;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.*;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 
 /**

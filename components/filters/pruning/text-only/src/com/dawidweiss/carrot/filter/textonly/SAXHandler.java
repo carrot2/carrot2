@@ -15,15 +15,12 @@
 package com.dawidweiss.carrot.filter.textonly;
 
 
-import java.io.*;
-import java.util.ArrayList;
-
-import javax.xml.parsers.SAXParser;
-
+import com.dawidweiss.carrot.tokenizer.Tokenizer;
 import org.apache.log4j.Logger;
 import org.xml.sax.*;
-
-import com.dawidweiss.carrot.tokenizer.Tokenizer;
+import java.io.*;
+import java.util.ArrayList;
+import javax.xml.parsers.SAXParser;
 
 
 /**
@@ -331,7 +328,7 @@ public class SAXHandler
         x.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
         x.write(sw.toString());
         x.close();
-        
+
         System.err.print(timer.toString());
     }
 }

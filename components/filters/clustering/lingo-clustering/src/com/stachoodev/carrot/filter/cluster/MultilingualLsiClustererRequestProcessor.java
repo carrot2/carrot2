@@ -20,19 +20,16 @@
 package com.stachoodev.carrot.filter.cluster;
 
 
-import java.io.File;
-import java.io.InputStream;
-import java.util.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.dawidweiss.carrot.filter.stemming.DirectStemmer;
+import com.stachoodev.carrot.filter.cluster.common.*;
 import org.apache.log4j.Logger;
 import org.jdom.Element;
 import org.put.util.xml.JDOMHelper;
-
-import com.dawidweiss.carrot.filter.stemming.DirectStemmer;
-import com.stachoodev.carrot.filter.cluster.common.*;
+import java.io.File;
+import java.io.InputStream;
+import java.util.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 
 /**

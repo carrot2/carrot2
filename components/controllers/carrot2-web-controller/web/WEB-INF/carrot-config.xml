@@ -6,7 +6,7 @@
   ## Specify "reloadable" attribute to "true" if you want this configuration to be
   ## reloaded upon a GET request to "{context-path}/reload" URL.
   -->
-<carrot2-config reloadable="true">
+<carrot2-config reloadable="true" fullDebugReport="true">
 
     <!--
       ## specify a context-relative directory from where default component descriptions

@@ -15,12 +15,10 @@
 package com.stachoodev.util.matrix;
 
 
+import Jama.Matrix;
+import com.dawidweiss.carrot.util.StringUtils;
 import java.io.PrintWriter;
 import java.text.NumberFormat;
-
-import Jama.Matrix;
-
-import com.dawidweiss.carrot.util.StringUtils;
 
 
 /**

@@ -42,6 +42,7 @@
             validate="false"
         >
             <forward name="visualize" path="/output.jsp" />
+            <forward name="processingError"  path="/processingError.jsp" />
         </action>
 
         <action

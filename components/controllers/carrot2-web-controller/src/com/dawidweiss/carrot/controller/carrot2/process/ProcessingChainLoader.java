@@ -163,13 +163,7 @@ public class ProcessingChainLoader
 
             ProcessDefinition process;
 
-            if (p.getProcessingChain() != null)
-            {
-                // resolve the processing chain binding against the currently known
-                // components.
-                process = new ResolvedProcessingChain(this.getComponentLoader(), p);
-            }
-            else if (p.getProcessingScript() != null)
+            if (p.getProcessingScript() != null)
             {
                 process = new ResolvedScriptedProcess(this.getComponentLoader(), p);
             }
@@ -256,10 +250,6 @@ public class ProcessingChainLoader
                 )
                 {
                     key = ((ResolvedScriptedProcess) p).getInputComponentId();
-                }
-                else if (p instanceof ResolvedProcessingChain)
-                {
-                    key = ((ResolvedProcessingChain) p).getInputComponent().getId();
                 }
                 else
                 {

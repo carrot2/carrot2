@@ -15,9 +15,8 @@
 package com.mwroblewski.carrot.filter.ahcfilter.groups;
 
 
-import java.util.*;
-
 import org.jdom.Element;
+import java.util.*;
 
 
 /**
@@ -291,31 +290,31 @@ public class Group
 
         /*StringBuffer result = new StringBuffer("");
         
-                   result.append("---------------\n");
-                   result.append("Similarity: " + similarity + "\n");
+                      result.append("---------------\n");
+                      result.append("Similarity: " + similarity + "\n");
         
-                   result.append("Title: ");
-                   for (int i = 0; i < phrases.size(); i++)
-                   {
-                       result.append((String) phrases.elementAt(i) + " ");
-                   }
-                   result.append("\n");
+                      result.append("Title: ");
+                      for (int i = 0; i < phrases.size(); i++)
+                      {
+                          result.append((String) phrases.elementAt(i) + " ");
+                      }
+                      result.append("\n");
         
-                   result.append("Documents: ");
-                   for (int i = 0; i < documentIDs.size(); i++)
-                   {
-                       result.append((String) documentIDs.elementAt(i) + " ");
-                   }
-                   result.append("\n");
+                      result.append("Documents: ");
+                      for (int i = 0; i < documentIDs.size(); i++)
+                      {
+                          result.append((String) documentIDs.elementAt(i) + " ");
+                      }
+                      result.append("\n");
         
-                   result.append("Subgroups:\n");
-                   // invoking recursively for subgroups
-                   for (int i = 0; i < subgroups.size(); i++)
-                   {
-                       result.append(((Group) subgroups.elementAt(i)).toString());
-                   }
-                   result.append("---------------\n");
+                      result.append("Subgroups:\n");
+                      // invoking recursively for subgroups
+                      for (int i = 0; i < subgroups.size(); i++)
+                      {
+                          result.append(((Group) subgroups.elementAt(i)).toString());
+                      }
+                      result.append("---------------\n");
         
-                   return result.toString();*/
+                      return result.toString();*/
     }
 }

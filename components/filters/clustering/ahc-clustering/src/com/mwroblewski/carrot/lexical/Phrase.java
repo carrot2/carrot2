@@ -15,10 +15,9 @@
 package com.mwroblewski.carrot.lexical;
 
 
+import org.jdom.Element;
 import java.util.StringTokenizer;
 import java.util.Vector;
-
-import org.jdom.Element;
 
 
 /**

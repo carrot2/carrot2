@@ -33,8 +33,6 @@ package com.paulodev.carrot.input.treeExtractor.extractors.htmlParser;
  * Company: Institute of Computing Science, Poznan University of Technology
  * </p>
  */
-
-
 public interface HTMLTokenWriter
 {
     public void openingTag(StringBuffer sb);

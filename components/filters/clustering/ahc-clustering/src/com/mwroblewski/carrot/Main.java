@@ -15,18 +15,15 @@
 package com.mwroblewski.carrot;
 
 
-import java.io.*;
-import java.util.*;
-
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.http.*;
-
-import org.apache.log4j.Logger;
-
 import com.dawidweiss.carrot.filter.FilterRequestProcessor;
 import com.mwroblewski.carrot.filter.ahcfilter.AHCFilter;
 import com.mwroblewski.carrot.filter.termsfilter.TermsFilter;
+import org.apache.log4j.Logger;
+import java.io.*;
+import java.util.*;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.*;
 
 
 /**

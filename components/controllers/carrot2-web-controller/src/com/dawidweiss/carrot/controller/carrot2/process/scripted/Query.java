@@ -24,5 +24,5 @@ public interface Query
     public String getQuery();
 
 
-    public int getNumberOfExceptedResults();
+    public int getNumberOfExpectedResults();
 }

@@ -15,6 +15,10 @@
 package com.dawidweiss.carrot.output.xsltrenderer;
 
 
+import com.dawidweiss.carrot.util.CommonComponentInitializationServlet;
+import com.dawidweiss.carrot.util.http.PostRequestElement;
+import com.dawidweiss.carrot.util.http.PostRequestParametersIterator;
+import org.apache.log4j.Logger;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FilenameFilter;
@@ -28,7 +32,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
-
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
@@ -42,12 +45,6 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-
-import org.apache.log4j.Logger;
-
-import com.dawidweiss.carrot.util.CommonComponentInitializationServlet;
-import com.dawidweiss.carrot.util.http.PostRequestElement;
-import com.dawidweiss.carrot.util.http.PostRequestParametersIterator;
 
 
 /**
@@ -92,8 +89,9 @@ public class XsltRendererServlet
         {
             try
             {
-                tFactory = (TransformerFactory) 
-                    this.getClass().getClassLoader().loadClass(servletConfig.getInitParameter("xslt.transformer.factory")
+                tFactory = (TransformerFactory) this.getClass().getClassLoader()
+                                                    .loadClass(
+                        servletConfig.getInitParameter("xslt.transformer.factory")
                     ).newInstance();
             }
             catch (Exception e)

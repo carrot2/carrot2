@@ -38,17 +38,20 @@ public class MockController
     {
         return cachesInput;
     }
-    ;
+
+
     public boolean getSentsResponse()
     {
         return sentResponse;
     }
-    ;
+
+
     public boolean getUsesCachedInput()
     {
         return usesCachedInput;
     }
-    ;
+
+
     public List getUsedInputs()
     {
         return this.usedInputs;

@@ -15,11 +15,10 @@
 package com.dawidweiss.carrot.output.xsltrenderer;
 
 
+import com.dawidweiss.carrot.tools.QueryFilterComponent;
 import java.io.FileInputStream;
 import java.io.StringReader;
 import java.net.URL;
-
-import com.dawidweiss.carrot.tools.QueryFilterComponent;
 
 
 /**
