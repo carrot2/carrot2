@@ -1,6 +1,12 @@
 /*
- * Created on 2004-04-02 To change the template for this generated file go to
- * Window - Preferences - Java - Code Generation - Code and Comments
+ * Carrot2 Project
+ * Copyright (C) 2002-2004, Dawid Weiss
+ * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the CVS checkout or at:
+ * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
 package com.dawidweiss.carrot.util.tokenizer.languages;
 
@@ -54,6 +60,8 @@ public class AllKnownLanguages
         		logger.warn("Could not instantiate language: " + langClazz, t);
         	}
         }
+        Collection langs = languages.values();
+        AllKnownLanguages.languageArray = (Language []) langs.toArray( new Language [ langs.size() ] );
     }
 
     /** Disallow instantiation */
