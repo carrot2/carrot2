@@ -1,7 +1,7 @@
 packages cern.colt* , cern.jet*, cern.clhep
 
 	Written by Wolfgang Hoschek. Check the Colt home page for more info.
-	Copyright Š 1999 CERN - European Organization for Nuclear Research.
+	Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 	Permission to use, copy, modify, distribute and sell this software and its
 	documentation for any purpose is hereby granted without fee, provided that
 	the above copyright notice appear in all copies and that both that
@@ -9,22 +9,6 @@ packages cern.colt* , cern.jet*, cern.clhep
 	documentation. CERN makes no representations about the suitability of this
 	software for any purpose. It is provided "as is" without expressed or
 	implied warranty.
-
-package corejava
-
-	Written by Cay S. Horstmann & Gary Cornell.  Copyright Š 1997 Sun
-	Microsystems Inc. All Rights Reserved.  Cay S. Horstmann & Gary Cornell,
-	Core Java Published By Sun Microsystems Press/Prentice-Hall Copyright (C)
-	1997 Sun Microsystems Inc. All Rights Reserved. Permission to use, copy,
-	modify, and distribute this software and its documentation for
-	NON-COMMERCIAL purposes and without fee is hereby granted provided that
-	this copyright notice appears in all copies. THE AUTHORS AND PUBLISHER MAKE
-	NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE SOFTWARE,
-	EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED
-	WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR
-	NON-INFRINGEMENT. THE AUTHORS AND PUBLISHER SHALL NOT BE LIABLE FOR ANY
-	DAMAGES SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING OR
-	DISTRIBUTING THIS SOFTWARE OR ITS DERIVATIVES.
 
 package com.imsl.math
 
@@ -42,14 +26,6 @@ package com.imsl.math
 	INDIRECT, SPECIAL, CONSEQUENTIAL, PUNITIVE, AND EXEMPLARY DAMAGES, EVEN IF
 	ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
 
- 
-
-package edu.cornell.lassp.houle.RngPack
-
-    Written by Paul Houle. Check the RngPack home page for more info.
-    Copyright Š 1997, 1998 honeylocust media systems.
-    This package is released free under the GNU public license.
-
 package edu.oswego.cs.dl.util.concurrent
 
 	Written by Doug Lea. Check the util.concurrent home page for more info.
@@ -66,41 +42,3 @@ packages hep.aida.*
 	military applications is expressly forbidden. The software and
 	documentation made available under the terms of this license are provided
 	with no warranty.
-
-packages jal*
-
-	Written by Matthew Austern and Alexander Stepanov. Check the JAL home page
-	for more info.  Copyright Š 1996 Silicon Graphics, Inc.  Permission to use,
-	copy, modify, distribute and sell this software and its documentation for
-	any purpose is hereby granted without fee, provided that the above
-	copyright notice appear in all copies and that both that copyright notice
-	and this permission notice appear in supporting documentation. Silicon
-	Graphics makes no representations about the suitability of this software
-	for any purpose. It is provided "as is" without expressed or implied
-	warranty.
-
-package ViolinStrings
-
-	Written by Michael Schmeling. Check the ViolinStrings home page for more
-	info. (C) 1998 Michael Schmeling.  This software is provided 'as-is',
-	without any express or implied warranty. In no event will the author be
-	held liable for any damages arising from the use of this software.
-	Permission is granted to anyone to use this software for any purpose,
-	including commercial applications, and to alter it and redistribute it
-	freely, subject to the following restrictions:
-
-	   1. The origin of this software must not be misrepresented; you must not
-	   claim that you wrote the original software. If you use this software in
-	   a product, an acknowledgment in the product documentation would be
-	   appreciated but is not required.
-
-	   2. Altered source versions must be plainly marked as such, and must not
-	   be misrepresented as being the original software.
-
-	   3. Altered version of the source code or the class files must be stored
-	   with a different Java package name, so that users can clearly
-	   distinguish those altered versions from the original software and can
-	   use them safely together with the original software.
-
-	   4. This notice may not be removed or altered from any source
-	   distribution.
