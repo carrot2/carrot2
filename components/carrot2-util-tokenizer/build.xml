@@ -12,6 +12,9 @@
     <property name="type"       	  value="jartype" />
     <property name="tests.available"  value="true"    />
     <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
+
+	<!-- JFlex task definition -->
+	<taskdef classname="JFlex.anttask.JFlexTask" name="jflex" />
 	
 	<!-- Tasks specific to the project -->
 	
@@ -28,9 +31,14 @@ You can define this property in a file 'local.properties' that is ignored
 by the CVS in this project.
 		</fail>
 
-	    <javacc target="src/com/dawidweiss/carrot/tokenizer/parser/WordBasedParserImpl.jj"
+	    <javacc target="src/com/dawidweiss/carrot/util/tokenizer/parser/javacc/JavaCCWordBasedParserImpl.jj"
 	          javacchome="${javacc.home}"
-	          outputdirectory="src/com/dawidweiss/carrot/tokenizer/parser"/>
+	          outputdirectory="src/com/dawidweiss/carrot/util/tokenizer/parser/javacc"/>
     </target>
 
+	<target name="jflex">
+		<jflex file="src/com/dawidweiss/carrot/util/tokenizer/parser/jflex/JFlexWordBasedParserImpl.jflex"
+			outdir="src/com/dawidweiss/carrot/util/tokenizer/parser/jflex/"/>
+	</target>
+	
 </project>

@@ -10,18 +10,13 @@
  */
 package com.dawidweiss.carrot.util.tokenizer.languages.italian;
 
-import java.io.IOException;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 
-import com.dawidweiss.carrot.core.local.linguistic.LanguageTokenizer;
-import com.dawidweiss.carrot.core.local.linguistic.Stemmer;
-import com.dawidweiss.carrot.filter.snowball.SnowballStemmersFactory;
-import com.dawidweiss.carrot.util.common.pools.ReusableObjectsFactory;
-import com.dawidweiss.carrot.util.common.pools.SoftReusableObjectsPool;
-import com.dawidweiss.carrot.util.tokenizer.languages.LanguageBase;
-import com.dawidweiss.carrot.util.tokenizer.languages.MutableStemmedToken;
-import com.dawidweiss.carrot.util.tokenizer.languages.StemmedLanguageBase;
-import com.dawidweiss.carrot.util.tokenizer.parser.WordBasedParser;
+import com.dawidweiss.carrot.core.local.linguistic.*;
+import com.dawidweiss.carrot.filter.snowball.*;
+import com.dawidweiss.carrot.util.tokenizer.languages.*;
+import com.dawidweiss.carrot.util.tokenizer.parser.*;
 
 /**
  * An implementation of {@link Language} interface
@@ -72,22 +67,9 @@ public class Italian extends StemmedLanguageBase {
 	 * @see com.dawidweiss.carrot.util.tokenizer.languages.StemmedLanguageBase#createTokenizerInstanceInternal()
 	 */
 	protected LanguageTokenizer createTokenizerInstanceInternal() {
-        // these constants may seem like off-the top of one's head
-        // but they are a result of some testing and experimenting
-        // with the soft pool.
-        final int HARD_TOKENS_POOL_SIZE = 500;
-        final int SOFT_TOKENS_POOL_INCREMENT = 500;
-        
-        return new WordBasedParser(
-                new SoftReusableObjectsPool(
-                        new ReusableObjectsFactory() {
-                            public void createNewObjects( Object [] objects ) {
-                                final int max = objects.length;
-                                for (int i=0;i<max;i++) {
-                                    objects[i] = new MutableStemmedToken();
-                                }
-                            }
-                        }, HARD_TOKENS_POOL_SIZE, SOFT_TOKENS_POOL_INCREMENT));
+        // TODO: This tokenizer is never returned to the pool, but actually
+        // all languages could share the same tokenizer pool
+        return WordBasedParserFactory.Default.borrowParser();
 	}
 
 	/**

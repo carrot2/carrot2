@@ -21,17 +21,49 @@ import com.dawidweiss.carrot.util.tokenizer.parser.*;
 
 /**
  * A utility class for tokenizing document snippets. Note: no support is
- * provided for tokenizing document content as yet. TODO: all document's
- * properties should be copied (not just the ones that are defined in
- * RawDocument)
+ * provided for tokenizing document content as yet. This class is not
+ * thread-safe.
+ * 
+ * TODO: all document's properties should be copied (not just the ones that are
+ * defined in RawDocument)
  * 
  * @author Stanislaw Osinski
  * @version $Revision$
  */
 public class SnippetTokenizer
 {
+    /** */
+    private Map tokenizers;
+
+    /** */
+    private LanguageTokenizer genericTokenizer;
+
+    /** */
+    private static com.dawidweiss.carrot.core.local.linguistic.tokens.Token [] tokens;
+
+    /** */
+    private static StringBuffer stringBuffer;
+
     /** Token buffer size */
-    private static final int TOKEN_BUFFER_SIZE = 64;
+    private static final int TOKEN_BUFFER_SIZE = 256;
+
+    /**
+     *  
+     */
+    public SnippetTokenizer()
+    {
+        tokenizers = new HashMap();
+        stringBuffer = new StringBuffer(512);
+        tokens = new com.dawidweiss.carrot.core.local.linguistic.tokens.Token [TOKEN_BUFFER_SIZE];
+    }
+
+    /**
+     *  
+     */
+    public void clear()
+    {
+        returnTokenizers();
+    }
 
     /**
      * Tokenizes a list of {@link RawDocument}s into a list of
@@ -42,11 +74,6 @@ public class SnippetTokenizer
      */
     public List tokenize(List rawDocuments)
     {
-        // TODO: does it make sense to optimize this like this:
-        // 1) create a copy of the document list
-        // 2) sort the list according the the language
-        // 3) tokenize each part of the list using the same instance of
-        //    language tokenizer
         List tokenizedDocuments = new ArrayList();
         for (Iterator documents = rawDocuments.iterator(); documents.hasNext();)
         {
@@ -58,43 +85,21 @@ public class SnippetTokenizer
     }
 
     /**
-     * Tokenizes a single {@link RawDocument}into a
-     * {@link TokenizedDocumentSnippet}.
+     * Internal version helps to avoid continuous re-allocation of string and
+     * token buffers.
      * 
      * @param rawDocument
+     * @param stringBuffer
+     * @param tokens
      * @return
      */
     public TokenizedDocument tokenize(RawDocument rawDocument)
     {
         // Borrow tokenizer
-        LanguageTokenizer languageTokenizer = borrowLanguageTokenzer((String) rawDocument
+        LanguageTokenizer languageTokenizer = getLanguageTokenizer((String) rawDocument
             .getProperty(RawDocument.PROPERTY_LANGUAGE));
 
-        // Tokenize
-        TokenSequence titleTokenSequence = tokenize(rawDocument.getTitle(),
-            languageTokenizer);
-        TokenSequence snippetTokenSequence = tokenize(rawDocument.getSnippet(),
-            languageTokenizer);
-
-        // Return tokenizer
-        returnLanguageTokenizer((String) rawDocument
-            .getProperty(RawDocument.PROPERTY_LANGUAGE), languageTokenizer);
-
-        TokenizedDocumentSnippet tokenizedDocumentSnippet = new TokenizedDocumentSnippet(
-            titleTokenSequence, snippetTokenSequence);
-
-        // Set reference to the original raw document
-        tokenizedDocumentSnippet.setProperty(
-            TokenizedDocument.PROPERTY_RAW_DOCUMENT, rawDocument);
-
-        // Set some properties (all should be copied!)
-        tokenizedDocumentSnippet.setProperty(TokenizedDocument.PROPERTY_URL,
-            rawDocument.getProperty(RawDocument.PROPERTY_URL));
-        tokenizedDocumentSnippet.setProperty(
-            TokenizedDocument.PROPERTY_LANGUAGE, rawDocument
-                .getProperty(RawDocument.PROPERTY_LANGUAGE));
-
-        return tokenizedDocumentSnippet;
+        return tokenize(rawDocument, languageTokenizer);
     }
 
     /**
@@ -108,10 +113,41 @@ public class SnippetTokenizer
         LanguageTokenizer languageTokenizer)
     {
         // Tokenize
-        TokenSequence titleTokenSequence = tokenize(rawDocument.getTitle(),
-            languageTokenizer);
-        TokenSequence snippetTokenSequence = tokenize(rawDocument.getSnippet(),
-            languageTokenizer);
+        stringBuffer.delete(0, stringBuffer.length());
+        stringBuffer.append(rawDocument.getTitle());
+        stringBuffer.append(" 4a7z2f6q3 ");
+        stringBuffer.append(rawDocument.getSnippet());
+
+        int tokenCount = 0;
+        languageTokenizer.restartTokenizationOn(new StringReader(stringBuffer
+            .toString()));
+
+        // Build the tokenized documents
+        MutableTokenSequence titleTokenSequence = new MutableTokenSequence();
+        MutableTokenSequence snippetTokenSequence = null;
+        while ((tokenCount = languageTokenizer.getNextTokens(tokens, 0)) != 0)
+        {
+            for (int t = 0; t < tokenCount; t++)
+            {
+                if (tokens[t].toString().equals("4a7z2f6q3"))
+                {
+                    if (snippetTokenSequence == null)
+                    {
+                        snippetTokenSequence = new MutableTokenSequence();
+                    }
+                    continue;
+                }
+
+                if (snippetTokenSequence == null)
+                {
+                    titleTokenSequence.addToken(tokens[t]);
+                }
+                else
+                {
+                    snippetTokenSequence.addToken(tokens[t]);
+                }
+            }
+        }
 
         TokenizedDocumentSnippet tokenizedDocumentSnippet = new TokenizedDocumentSnippet(
             titleTokenSequence, snippetTokenSequence);
@@ -131,33 +167,20 @@ public class SnippetTokenizer
     }
 
     /**
-     * Tokenizes raw text into a {@link MutableTokenSequence}. If
-     * <code>lang</code> is not null, an attempt will be made to find and use
-     * a dedicated tokenizer.
-     * 
-     * @param rawText
-     * @param lang
-     * @return
-     */
-    public TokenSequence tokenize(String rawText, String lang)
-    {
-        LanguageTokenizer languageTokenizer = borrowLanguageTokenzer(lang);
-        TokenSequence tokenSequence = tokenize(rawText, languageTokenizer);
-        returnLanguageTokenizer(lang, languageTokenizer);
-
-        return tokenSequence;
-    }
-
-    /**
      * Helps to avoid tokenizer borrow/return thrashing.
      * 
      * @param rawText
      * @param languageTokenizer
      * @return
      */
-    public TokenSequence tokenize(String rawText,
+    public static TokenSequence tokenize(String rawText,
         LanguageTokenizer languageTokenizer)
     {
+        if (rawText == null || rawText.length() == 0)
+        {
+            return new MutableTokenSequence();
+        }
+
         int tokenCount = 0;
         com.dawidweiss.carrot.core.local.linguistic.tokens.Token [] tokens = new com.dawidweiss.carrot.core.local.linguistic.tokens.Token [TOKEN_BUFFER_SIZE];
         MutableTokenSequence tokenSequence = new MutableTokenSequence();
@@ -176,69 +199,69 @@ public class SnippetTokenizer
     }
 
     /**
-     * @param isoCode can be <code>null</code>
+     * @param lang
      * @return
      */
-    private LanguageTokenizer borrowLanguageTokenzer(String isoCode)
+    protected LanguageTokenizer getLanguageTokenizer(String lang)
     {
-        LanguageTokenizer languageTokenizer;
-        if (isoCode == null)
+        if (lang == null)
         {
-            // Default to a generic tokenizer
-            languageTokenizer = WordBasedParserFactory.borrowParser();
+            // We don't need to be thread-safe here, do we?
+            if (genericTokenizer == null)
+            {
+                genericTokenizer = WordBasedParserFactory.Default
+                    .borrowParser();
+            }
+
+            return genericTokenizer;
         }
         else
         {
-            Language language = AllKnownLanguages
-                .getLanguageForIsoCode(isoCode);
-            if (language == null)
+            if (!tokenizers.containsKey(lang))
             {
-                // Default to a generic tokenizer
-                languageTokenizer = WordBasedParserFactory.borrowParser();
+                Language language = AllKnownLanguages
+                    .getLanguageForIsoCode(lang);
+
+                if (language == null)
+                {
+                    return getLanguageTokenizer(null);
+                }
+                else
+                {
+                    tokenizers.put(lang, language.borrowTokenizer());
+                }
             }
-            else
-            {
-                // Borrow a specific tokenizer
-                languageTokenizer = language.borrowTokenizer();
-            }
+
+            return (LanguageTokenizer) tokenizers.get(lang);
         }
-        
-        // In theory we should be reusing the tokenize before returning it to
-        // the pool, but then the tokens would be invalid even before the clients
-        // could get hold of them.
-        languageTokenizer.reuse();
-        
-        return languageTokenizer;
     }
 
     /**
-     * @param isoCode
-     * @param languageTokenizer
+     *  
      */
-    private void returnLanguageTokenizer(String isoCode,
-        LanguageTokenizer languageTokenizer)
+    private void returnTokenizers()
     {
-        if (isoCode == null)
+        // Return all language tokenizers
+        for (Iterator iter = tokenizers.keySet().iterator(); iter.hasNext();)
         {
-            // Defaulted to a generic tokenizer
-            WordBasedParserFactory
-                .returnParser((WordBasedParser) languageTokenizer);
+            String lang = (String) iter.next();
+            Language language = AllKnownLanguages.getLanguageForIsoCode(lang);
+            LanguageTokenizer tokenizer = (LanguageTokenizer) tokenizers
+                .get(lang);
+            if (language != null)
+            {
+                tokenizer.reuse();
+                language.returnTokenizer(tokenizer);
+            }
         }
-        else
+        tokenizers.clear();
+
+        // Reuse and return the generic tokenizer
+        if (genericTokenizer != null)
         {
-            Language language = AllKnownLanguages
-                .getLanguageForIsoCode(isoCode);
-            if (language == null)
-            {
-                // Defaulted to a generic tokenizer
-                WordBasedParserFactory
-                    .returnParser((WordBasedParser) languageTokenizer);
-            }
-            else
-            {
-                // Borrowed a specific tokenizer
-                language.returnTokenizer(languageTokenizer);
-            }
+            genericTokenizer.reuse();
+            WordBasedParserFactory.Default
+                .returnParser((WordBasedParserBase) genericTokenizer);
         }
     }
 }
