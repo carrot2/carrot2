@@ -1,8 +1,0 @@
-
-This component has been deprecated because it contains a
-serious bug that causes infinite busy loop to appear in
-some input configuration. 
-
-This bug will not be fixed (no active developers).
-
-Use at your own risk.
