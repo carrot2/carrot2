@@ -49,9 +49,9 @@ public class ZipFileTopicIndexSerializer implements TopicIndexSerializer
     {
         ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(
             location));
-        ObjectInputStream input = new ObjectInputStream(zipInputStream);
         
         zipInputStream.getNextEntry();
+        ObjectInputStream input = new ObjectInputStream(zipInputStream);
         TopicIndex topicIndex = (TopicIndex) input.readObject();
 
         input.close();
