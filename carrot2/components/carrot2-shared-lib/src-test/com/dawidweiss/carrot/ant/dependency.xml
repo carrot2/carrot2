@@ -1,0 +1,4 @@
+<component name="mycomponent">
+    <dependency name="a" />
+    <dependency name="b" />
+</component>

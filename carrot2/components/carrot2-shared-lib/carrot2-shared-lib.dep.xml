@@ -1,0 +1,13 @@
+<!--
+     A dependency descriptor. This has to be updated manually
+     when new JARs are required.
+   -->
+<component name="carrot2-shared-lib">
+	<provides file="carrot2-shared-lib.jar" />
+
+    <dependency name="dweiss-utils" />
+    <dependency name="castor" />
+    <dependency name="jdom" />
+    <dependency name="put-utils" />
+    <dependency name="log4j" />
+</component>

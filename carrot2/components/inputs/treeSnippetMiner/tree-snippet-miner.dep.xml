@@ -1,0 +1,10 @@
+<!--
+     A dependency descriptor. This has to be updated manually
+     when new JARs are required.
+   -->
+<component name="tree-snippet-miner">
+    <dependency name="carrot2-shared-lib" />
+    
+	<!-- this could be removed in favor of jdk 1.4? -->
+	<dependency name="gnu-regexp" />    
+</component>

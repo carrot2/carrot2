@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<antlib>
+   <!-- Creates a dependency list -->
+   <typedef name="dependencylist" classname="com.dawidweiss.carrot.ant.GetDependenciesTask" />
+   
+   <!-- copies a filelist to some directory -->
+   <typedef name="copyfilelist" classname="com.dawidweiss.carrot.ant.CopyFileList" />
+</antlib>

@@ -1,0 +1,6 @@
+
+<component name="xerces">
+    <!-- Files that this component is composed of -->
+    <file location="xercesImpl.jar" />
+    <file location="xml-apis.jar" />
+</component>

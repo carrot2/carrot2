@@ -1,0 +1,7 @@
+<!--
+     A dependency descriptor. This has to be updated manually
+     when new JARs are required.
+   -->
+<component name="stream-interceptor">
+    <dependency name="carrot2-shared-lib" />
+</component>

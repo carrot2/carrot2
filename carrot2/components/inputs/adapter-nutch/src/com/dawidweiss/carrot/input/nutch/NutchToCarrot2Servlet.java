@@ -40,6 +40,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.dawidweiss.carrot.util.XMLSerializerHelper;
+
 /**
  * Nutch search engine adapter that accepts queries in 
  * Carrot<sup>2</sup> format and returns an XML result
@@ -74,12 +76,6 @@ public class NutchToCarrot2Servlet extends HttpServlet {
      */
     private int defaultResultsNumber = DEFAULT_REQUESTED_RESULTS;
     
-    /**
-     * A private instance of the serializer (small performance
-     * gain over static method invocation).
-     */
-    private final XMLSerializerHelper xmlSerializer = 
-        new XMLSerializerHelper();
 
     /**
      *  Initialize the servlet, acquire XML parser instance.
@@ -218,6 +214,10 @@ public class NutchToCarrot2Servlet extends HttpServlet {
             }
         }
 
+        // the serializer is not thread-safe, but could also be pooled, just
+        // just as the objects above.
+        XMLSerializerHelper xmlSerializer = XMLSerializerHelper.getInstance();
+
         // Perform a Nutch search with the acquired query.
         NutchBean nutchBean = NutchBean.get(
             super.getServletContext());
@@ -237,14 +237,12 @@ public class NutchToCarrot2Servlet extends HttpServlet {
         out.write("<query requested-results=\"");
         out.write(Integer.toString(requestedResults));
         out.write("\">");
-        out.write(
-            xmlSerializer.escapeElementEntities(queryBuffer.toString()));
+        xmlSerializer.writeValidXmlText(out, queryBuffer.toString(), false);
         out.write("</query>\n\n");
 
         // Should summarizer be used in thread-safe mode like this?
         Summarizer summarizer = new Summarizer();
         for (int i = 0; i < length; i++) {
-          Hit hit = show[i];
           HitDetails detail = details[i];
           String title = detail.getValue("title");
           String url = detail.getValue("url");
@@ -260,7 +258,7 @@ public class NutchToCarrot2Servlet extends HttpServlet {
           
           // emit the title.
           out.write("<title>");
-          out.write( xmlSerializer.escapeElementEntities(title));
+          xmlSerializer.writeValidXmlText(out, title, false);
           out.write("</title>\n");
 
           // emit the URL.          
@@ -270,10 +268,9 @@ public class NutchToCarrot2Servlet extends HttpServlet {
           out.write("]]></url>\n");
 
           // emit the summary (if exists)
-          // extract summaries. We can't use the same method as
-          // in Nutch's search.jsp -- getSummary(details, query); -- because
-          // it returns encoded HTML entities and we want to emit them
-          // as UTF-8
+          //
+          // THIS IS CURRENTLY BROKEN (OUTPUTS RAW PAGE CONTENTS). No API 
+          // in Nutch to access the text of the page.
           byte [] content = nutchBean.getContent(details[i]);
           Summary summary = summarizer.getSummary(
               new String(content, "UTF-8"), query);
@@ -282,7 +279,7 @@ public class NutchToCarrot2Servlet extends HttpServlet {
           if (fragments.length > 0) {
               out.write("<snippet>");
               for (int j=0;j<fragments.length;j++) {
-                  out.write( xmlSerializer.escapeElementEntities(fragments[j].getText()));
+                  xmlSerializer.writeValidXmlText(out, fragments[j].getText(), false);
               }
               out.write("</snippet>\n");
           }

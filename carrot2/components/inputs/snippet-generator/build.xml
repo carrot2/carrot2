@@ -21,20 +21,6 @@
   <property name="javac.optimize"      value="off" />
   <property name="javac.debug"         value="on" />
 
-  <!-- ## classpath for compiling classes ## -->
-
-  <path id="carrot.shared.libs">
-    <!-- all jars runtime/shared/lib -->
-    <fileset dir="${carrot2.cvs.dir}/lib">  
-      <include name="**/*.jar"/>
-    </fileset>
-  </path>
-
-  <!-- ## project classpath ### -->
-  <path id="compile.classpath">
-    <path refid="carrot.shared.libs" />
-  </path>
-
   <!-- ##################################### -->
   <!-- ### {{{ CLEAN                     ### -->
   <!-- ##################################### -->
@@ -50,7 +36,7 @@
   <!-- ### {{{ PREPARE                   ### -->
   <!-- ##################################### -->
 
-  <target name="prepare">
+  <target name="prepare" depends="generate.dependency.path">
     <mkdir dir="${distribution.dir}"  />
     <mkdir dir="${build.dir}"  />
     <mkdir dir="${javadoc.dir}" />
@@ -59,6 +45,56 @@
   </target>
   <!-- }}} -->
 
+  <!-- ##################################### -->
+  <!-- ### {{{ DEPENDENCY analysis       ### -->
+  <!-- ##################################### -->
+  <property name="component.descriptor" location="snippet-generator.dep.xml" />
+  
+  <target name="define.dependency.task">
+    <taskdef resource="com/dawidweiss/carrot/ant/dependencies.antlib.xml">
+        <classpath location="${carrot2.cvs.dir}/lib/carrot2-shared-lib.jar" />
+    </taskdef>
+  </target>
+
+  <target name="generate.dependency.path" depends="define.dependency.task">
+    <dependencylist
+        property="component.dep"
+        fileListId="component.dep.flist"
+        componentDescriptor="${component.descriptor}"
+        verbose="false"
+    >
+        <dependencies dir="${carrot2.cvs.dir}/lib">
+            <include name="*.dep.xml" />
+        </dependencies>
+    </dependencylist>
+    <path id="classpath.dependencies">
+        <filelist refid="component.dep.flist" />
+    </path>
+  </target>
+
+  <target name="show.dependencies" depends="define.dependency.task">
+    <dependencylist componentDescriptor="${component.descriptor}" verbose="on">
+        <dependencies dir="${carrot2.cvs.dir}/lib">
+            <include name="*.dep.xml" />
+        </dependencies>
+    </dependencylist>
+  </target>
+  
+  <target name="collect.dependencies" depends="prepare">
+    <dependencylist componentDescriptor="${component.descriptor}" verbose="on"
+                    fileListId="component.dep.flist">
+        <dependencies dir="${carrot2.cvs.dir}/lib">
+            <include name="*.dep.xml" />
+        </dependencies>
+    </dependencylist>
+
+    <copyfilelist todir="${distribution.dir}">
+        <filelist refid="component.dep.flist" />
+    </copyfilelist>
+  </target>
+  <!-- }}} -->
+
+  
 
   <!-- ##################################### -->
   <!-- ### {{{ COMPILE SOURCE FILES      ### -->
@@ -71,8 +107,9 @@
            deprecation = "on"
            includeantruntime = "false"
            includejavaruntime = "false"
-           classpathref = "compile.classpath"
     >
+        <classpath refid="classpath.dependencies" />
+        <classpath location="${carrot2.cvs.dir}/lib/compile-time-only/servlet.jar" />
         <!-- add source code paths. -->
         <src path="${src.path}" />
         <exclude name="**/*Test.java"/>
