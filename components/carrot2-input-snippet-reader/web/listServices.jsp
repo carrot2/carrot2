@@ -1,4 +1,7 @@
-<%@ page import="org.apache.xmlrpc.*,org.put.snippetreader.*,org.put.util.text.HtmlHelper,gnu.regexp.*,java.util.*"
+<%@ page import="org.apache.xmlrpc.*,
+				 com.dawidweiss.carrot.input.snippetreader.remote.*,
+                 gnu.regexp.*,
+                 java.util.*"
          session="false"
          contentType="text/html; charset=utf-8"
 %>
@@ -145,7 +148,7 @@
         <h1>List of registered XMLRPC services</h1>
         <ol>
         <%
-            XmlRpcClientLite client = new XmlRpcClientLite( org.put.snippetreader.XmlRpcServlet.getSnippetReaderServiceURL(request));
+            XmlRpcClientLite client = new XmlRpcClientLite( XmlRpcServlet.getSnippetReaderServiceURL(request));
             Vector services = (Vector) client.execute("_meta.getVerboseServicesList", new Vector());
 
             for (int i=0;i<services.size();i++)
@@ -166,7 +169,7 @@
                             Object o = e.next();
                             if ("Carrot2".equals(o)) {
                                 s.put(o, "Supports Carrot2 under URL: "
-                                      + org.put.snippetreader.XmlRpcServlet.getSnippetReaderServiceURL(request)
+                                      + XmlRpcServlet.getSnippetReaderServiceURL(request)
                                       + "/carrot2/" + service);
                             }
                             %><tr><td><b><%= o %></b></td><td><%= s.get(o) %></td></tr><%

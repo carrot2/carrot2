@@ -1,5 +1,11 @@
 <%@ page contentType="text/html; charset=UTF-8"
-         import="java.net.URL,com.dawidweiss.carrot.util.net.http.*,org.apache.xmlrpc.*,org.put.util.text.HtmlHelper,gnu.regexp.*,java.util.*"
+         import="java.net.URL,
+         		 com.dawidweiss.carrot.util.net.http.*,
+         		 com.dawidweiss.carrot.input.snippetreader.remote.*,
+         		 com.dawidweiss.carrot.util.common.*,
+         		 org.apache.xmlrpc.*,
+         		 gnu.regexp.*,
+         		 java.util.*"
          session="false"
 %><%
     request.setCharacterEncoding("UTF-8");
@@ -23,7 +29,7 @@
 <pre>
 Choose the service to query : <select name="service">
 <%
-            XmlRpcClientLite client = new XmlRpcClientLite( org.put.snippetreader.XmlRpcServlet.getSnippetReaderServiceURL(request));
+            XmlRpcClientLite client = new XmlRpcClientLite( XmlRpcServlet.getSnippetReaderServiceURL(request));
             Vector services = (Vector) client.execute("_meta.getServicesList", new Vector());
 
             for (int i=0;i<services.size();i++)
@@ -88,6 +94,7 @@ How many results are needed?: <select name="needed">
         {
             String method  = "getSnippets";
 
+try {
             Vector result = (Vector) client.execute( service + "." + method, v);
 
             out.println("<ol>");
@@ -99,6 +106,9 @@ How many results are needed?: <select name="needed">
                 out.print( "<p></li>" );
              }
             out.println("</ol>");
+         } catch (Throwable t) {
+         	t.printStackTrace();
+         }
         }
         else
         if ("Get match-highlighted source".equals(request.getParameter("submit")))
@@ -120,23 +130,24 @@ How many results are needed?: <select name="needed">
 
             int MAX_PER_LINE = 90;
             int last = 0;
+        	XMLSerializerHelper serializer = XMLSerializerHelper.getInstance();
             for (int i=0;i<source.length();i++)
             {
                 if (source.charAt(i) == '\n')
                 {
-                    out.print( HtmlHelper.escapeHtmlTags( source.substring(last,i+1)));
+                	serializer.writeValidXmlText(out, source.substring(last,i+1), false);
                     last = i+1;
                 }
                 if (i - last > MAX_PER_LINE)
                 {
-                    out.print( HtmlHelper.escapeHtmlTags( source.substring(last,i+1)));
+                	serializer.writeValidXmlText(out, source.substring(last,i+1), false);
                     out.println("<SPAN style=\"background-color: yellow;\">&nbsp;</span>");
                     last = i+1;
                 }
             }
             if (last < source.length())
             {
-                    out.print( HtmlHelper.escapeHtmlTags( source.substring(last,source.length())));
+                	serializer.writeValidXmlText(out, source.substring(last,source.length()), false);
             }
             out.print("</pre>");
         }
@@ -152,23 +163,24 @@ How many results are needed?: <select name="needed">
 
                 int MAX_PER_LINE = 90;
                 int last = 0;
+	        	XMLSerializerHelper serializer = XMLSerializerHelper.getInstance();
                 for (int i=0;i<source.length();i++)
                 {
                     if (source.charAt(i) == '\n')
                     {
-                        buf.append( HtmlHelper.escapeHtmlTags( source.substring(last,i+1)));
+			        	buf.append(serializer.toValidXmlText(source.substring(last,i+1), false));
                         last = i+1;
                     }
                     if (i - last > MAX_PER_LINE)
                     {
-                        buf.append( HtmlHelper.escapeHtmlTags( source.substring(last,i+1)));
+			        	buf.append(serializer.toValidXmlText(source.substring(last,i+1), false));
                         buf.append("<SPAN style=\"background-color: yellow;\">&nbsp;</span>\n");
                         last = i+1;
                     }
                 }
                 if (last < source.length())
                 {
-                        buf.append( HtmlHelper.escapeHtmlTags( source.substring(last,source.length())));
+			        	buf.append(serializer.toValidXmlText(source.substring(last,source.length()), false));
                 }
 
                 // marg tags.
@@ -211,7 +223,7 @@ How many results are needed?: <select name="needed">
         else
         if ("Get Carrot2XML".equals( request.getParameter("submit")))
         {
-            String url = org.put.snippetreader.XmlRpcServlet.getSnippetReaderServiceURL(request) + "/carrot2/" + service;
+            String url = XmlRpcServlet.getSnippetReaderServiceURL(request) + "/carrot2/" + service;
 
             FormActionInfo    actionInfo = new FormActionInfo(new URL(url), "post");
             FormParameters    queryParameters = new FormParameters();
@@ -230,14 +242,16 @@ How many results are needed?: <select name="needed">
 
             java.io.InputStream z = submitter.submit( queryParameters, null, "UTF-8" );
 
+        	XMLSerializerHelper serializer = XMLSerializerHelper.getInstance();
             out.print("<tt>");
-            out.print( HtmlHelper.escapeHtmlTags((String)parameter.getValue(null)) );
+        	serializer.writeValidXmlText(out, (String) parameter.getValue(null), false);
             out.print("</tt>");
 
             out.print("<hr>");
 
             out.print("<textarea style=\"width=95%; height=45em;\">");
-            out.print( HtmlHelper.escapeHtmlTags( new String(org.put.util.io.FileHelper.readFullyAndCloseInput(z), "UTF-8") ));
+            serializer.writeValidXmlText(out, new String(StreamUtils.readFullyAndCloseInput(z), "iso8859-1"), false);
+            
             out.print("</textarea>");
         }
     }

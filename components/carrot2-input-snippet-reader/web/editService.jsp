@@ -1,4 +1,9 @@
-<%@ page import="org.apache.xmlrpc.*,java.util.*,org.put.util.text.HtmlHelper,gnu.regexp.*"
+<%@ page import="org.apache.xmlrpc.*,
+                 java.util.*,
+                 gnu.regexp.*,
+                 com.dawidweiss.carrot.input.snippetreader.remote.*,
+                 com.dawidweiss.carrot.util.common.*
+                 "
          session="false"
          contentType="text/html; charset=utf-8"
 %>
@@ -16,11 +21,12 @@
 <input type="submit" name="submit" value="Update configuration"><br>
 <textarea style="width=95%; height=45em;" name="config"><%
     // read service's xml.
-    XmlRpcClientLite client = new XmlRpcClientLite( org.put.snippetreader.XmlRpcServlet.getSnippetReaderServiceURL(request));
+    XmlRpcClientLite client = new XmlRpcClientLite( XmlRpcServlet.getSnippetReaderServiceURL(request));
     Vector v = new Vector();
     v.add( request.getParameter("service"));
     String conf = (String) client.execute("_meta.getServiceConfig", v);
-    out.print( HtmlHelper.escapeHtmlTags(conf));
+    XMLSerializerHelper serializer = XMLSerializerHelper.getInstance();
+    serializer.writeValidXmlText(out, conf, false);
 %></textarea>
 </form>
 	</body>
