@@ -119,7 +119,7 @@ public class FormParameters
                 else
                 if (paramElement.getAttribute(PARAMETER_MAPTO) != null)
                 {
-                    addParameter( new Parameter( pname, paramElement.getAttribute(PARAMETER_MAPTO).getValue(), true));
+                    addParameter(new Parameter( pname, paramElement.getAttribute(PARAMETER_MAPTO).getValue(), true));
                 }
                 else
                 {
@@ -127,6 +127,21 @@ public class FormParameters
                 }
             }
         }
+    }
+    
+    /**
+     * Returns a stringified version of this form parameters (for
+     * debugging purposes mostly).
+     */
+    public String toString() {
+        StringBuffer buf = new StringBuffer();
+        for (Iterator i = parameters.iterator(); i.hasNext() ;) {
+            Parameter p = (Parameter) i.next();
+            buf.append("[");
+            buf.append(p);
+            buf.append("]\n");
+        }
+        return buf.toString();
     }
 }
 
