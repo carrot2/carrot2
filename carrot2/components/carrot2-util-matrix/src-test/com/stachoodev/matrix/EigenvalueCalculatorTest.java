@@ -44,7 +44,7 @@ public class EigenvalueCalculatorTest extends TestCase
         Arrays.sort(expectedEigenvalues);
 
         double [] eigenvalues = EigenvalueCalculator
-            .computeEigenvaluesSymmetricalNNI((DenseDoubleMatrix2D) Asym);
+            .computeEigenvaluesSymmetrical((DenseDoubleMatrix2D) Asym);
         Arrays.sort(eigenvalues);
 
         ArrayAssert.assertEquals("Equal real eigenvalues", expectedEigenvalues,
@@ -56,6 +56,11 @@ public class EigenvalueCalculatorTest extends TestCase
      */
     public void testAsymmetrical()
     {
+	    if (NNIInterface.isNativeLapackAvailable()==false) {
+		    // IF NNI is not available, skip this test.
+		    return;
+	    }
+
         double [] eigenvalues = EigenvalueCalculator
             .computeEigenvaluesNNI((DenseDoubleMatrix2D) A);
         Arrays.sort(eigenvalues);
