@@ -16,4 +16,5 @@
 
     <dependency name="log4j" />
     <dependency name="carrot2-license" />
+    <dependency name="carrot2-util-common" />
 </component>
