@@ -6,7 +6,8 @@
     <property name="module.name" value="carrot2" />
     <property name="cvs.root" value=":ext:dawidweiss@cvs.sourceforge.net:/cvsroot/carrot2" />
 
-    <property name="build.dir" location="tmp/build.demo" />
+    <property name="build.dir" location="tmp/build.demo/components" />
+    <property name="build.dir.libs" location="tmp/build.demo/libs" />
     <property name="runtime.env" location="../runtime" />
     <property name="runtime.webapps" location="${runtime.env}/context-webapps" />
 
@@ -22,6 +23,7 @@
     <target name="vars">
         <mkdir dir="${checkout.dir}" />
         <mkdir dir="${build.dir}" />
+	<mkdir dir="${build.dir.libs}" />
         <tstamp>
             <format property="deploy.time" pattern="MM/dd/yyyy HH:mm z" locale="en"/>
         </tstamp>
@@ -52,7 +54,8 @@
         <ant antfile="${checkout.dir}/${module.name}/build.xml"
              dir="${checkout.dir}/${module.name}" inheritall="false"
              target="clean">
-             <property name="distribution.dir" location="${build.dir}" />
+             <property name="distribution.dir.remote" location="${build.dir}" />
+             <property name="distribution.dir.remote.libs" location="${build.dir.libs}" />	     
         </ant>
     </target>
 
@@ -62,8 +65,9 @@
     <target name="build.components">
         <ant antfile="${checkout.dir}/${module.name}/build.xml" 
              dir="${checkout.dir}/${module.name}" inheritall="false" 
-             target="build">
-            <property name="distribution.dir" location="${build.dir}" />
+             target="remote">
+            <property name="distribution.dir.remote" location="${build.dir}" />
+	    <property name="distribution.dir.remote.libs" location="${build.dir.libs}" />
             <property name="deployment.port" value="${deployment.port}" />
             <property name="deployment.host" value="${deployment.host}" />
         </ant>
@@ -116,7 +120,7 @@
             <fileset dir="${build.dir}" includes="**/*.war" />
         </copy>
         <copy overwrite="true" todir="${runtime.env}/shared/lib">
-            <fileset dir="${checkout.dir}/carrot2/lib" includes="*.*" />
+            <fileset dir="${build.dir.libs}" includes="*.*" />
         </copy>
     </target>
 
@@ -177,7 +181,7 @@
       -->
     <target name="customize.controller">
         <!-- Customize the controller application -->
-        <property name="controller.name" value="carrot2-web-controller" />
+        <property name="controller.name" value="carrot2-remote-controller" />
         <property name="controller.war" location="${build.dir}/${controller.name}.war" />
         
         <available file="${controller.war}" property="tmp:controller.available" type="file" value="true" />
