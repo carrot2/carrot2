@@ -107,6 +107,14 @@ public interface TokenizedDocument {
     public String getUrl();
 
     /**
+     * Convenience method for accessing {@link #PROPERTY_SNIPPET}.
+     *
+     * @return Returns the value corresponding to {@link #PROPERTY_SNIPPET}
+     *         property.
+     */
+    public TokenSequence getSnippet();
+
+    /**
      * @return Returns the title of this document  as a {@link TokenSequence}
      *         object.
      */
