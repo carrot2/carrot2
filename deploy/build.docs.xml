@@ -49,13 +49,11 @@
             <property name="distribution.dir" location="${build.dir}" />
         </ant>
 
-        <!-- now PDF version 
         <ant antfile="${checkout.dir}/${module.name}/build.xml" 
              dir="${checkout.dir}/${module.name}" inheritall="false" 
-             target="pdf:xep">
+             target="pdf">
             <property name="distribution.dir" location="${build.dir}" />
         </ant>
-        -->
     </target>
 
     <target name="publish" depends="build">
