@@ -33,7 +33,6 @@
   <!-- ## project classpath ### -->
   <path id="compile.classpath">
     <path refid="carrot.shared.libs" />
-    <fileset dir="lib" includes="**/*.jar" />
   </path>
 
   <!-- ##################################### -->
@@ -56,7 +55,6 @@
     <mkdir dir="${build.dir}"  />
     <mkdir dir="${javadoc.dir}" />
     <mkdir dir="${build.dir}/WEB-INF/classes" />
-    <mkdir dir="${build.dir}/WEB-INF/lib" />        
   </target>
   <!-- }}} -->
 
@@ -90,12 +88,7 @@
     <copy filtering="false" flatten="false" includeemptydirs="true" todir="${build.dir}">
         <fileset dir="${src.webapp.path}" />
     </copy>
-    
-    <!-- copy libraries resources -->
-    <copy filtering="false" flatten="true" includeemptydirs="true" todir="${build.dir}/WEB-INF/lib">
-        <fileset dir="lib" includes="**/*.jar" />
-    </copy>
-    
+        
   </target>
   <!-- }}} -->
 
@@ -109,14 +102,12 @@
 		<fileset dir="${build.dir}">
 			<exclude name="WEB-INF/web.xml" />
 			<exclude name="WEB-INF/classes/**" />
-			<exclude name="WEB-INF/lib/**" />
 		</fileset>
 		
 		<classes dir="${build.dir}/WEB-INF/classes">
           <exclude name="**/*Test"/>
 		</classes>
         
-        <lib dir="${build.dir}/WEB-INF/lib" />
 	</war>
 
   </target>
