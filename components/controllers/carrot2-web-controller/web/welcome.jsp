@@ -26,6 +26,9 @@
 			</b><br/><br/>
 			
 			<!-- Recent queries block -->
+			<%
+				int num = 12;
+			%>
 			<%@include file="jsp-tmpl/recent-queries.txt" %>
 			
 			</div>

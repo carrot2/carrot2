@@ -9,6 +9,9 @@
 <h1><bean:message key="blocks.recent-queries.head"/></h1>
 
 <div style="margin-left: 2em;">
+<%
+	int num = 20;
+%>
 <%@include file="../jsp-tmpl/recent-queries.txt" %>
 </div>
 

@@ -3,20 +3,22 @@
 	RequestHistory history = loader.getRequestHistory();
 
 	if (history != null) {
-	    int num = 20;
 		Query [] queries = new Query [num];
 		ProcessDefinition [] processes = new ProcessDefinition [num];
-		int real = history.getHistory(num, queries, processes);
+		long [] tstamps = new long [num];
+		int real = history.getHistory(num, queries, processes, tstamps);
+		
+		java.text.SimpleDateFormat dformat = new java.text.SimpleDateFormat("HH:mm:ss");
 
 		if (real == 0) {%>
-		<span style="color: red;">Lucky you! No previous queries!</span>
+		<span style="color: red;"><bean:message key="blocks.recent-queries.empty"/></span>
 		<%
 		}
 
 		for (int i=real-1;i>=0;i--) {
 			Query q = queries[i];
 			ProcessDefinition p = processes[i];
-			
+
 			%><nobr>
 			<a href="<%= response.encodeURL(
                             request.getContextPath() + "/index.jsp?"
@@ -26,6 +28,7 @@
 			<%= org.put.util.text.HtmlHelper.escapeHtmlTags(q.getContent()) %>
                         </a></nobr>
             <div style="margin-bottom: 0.5em; font-size: 9px; color: #a0a0a0;">
+            <b><%= dformat.format( new java.util.Date(tstamps[i])) %></b>&nbsp;
             (<%= q.getRequestedResults() %>, <%= StrutsHelpers.getMessageOrDefault(pageContext, p.getId(), p.getDefaultDescription()) %>)
             </div>
 			<%
