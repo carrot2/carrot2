@@ -1,20 +1,26 @@
 package Jama;
 import Jama.util.*;
 
-   /** Singular Value Decomposition.
-   <P>
-   For an m-by-n matrix A with m >= n, the singular value decomposition is
-   an m-by-n orthogonal matrix U, an n-by-n diagonal matrix S, and
-   an n-by-n orthogonal matrix V so that A = U*S*V'.
-   <P>
-   The singular values, sigma[k] = S[k][k], are ordered so that
-   sigma[0] >= sigma[1] >= ... >= sigma[n-1].
-   <P>
-   The singular value decompostion always exists, so the constructor will
-   never fail.  The matrix condition number and the effective numerical
-   rank can be computed from this decomposition.
-   */
+/*
+This is a patched version that prevents underfull busy infinite loop
+problem. 
 
+Sent to me by Jiazheng Shi to whom I would like to express my gratitude.
+*/
+
+/** Singular Value Decomposition.
+<P>
+For an m-by-n matrix A with m >= n, the singular value decomposition is
+an m-by-n orthogonal matrix U, an n-by-n diagonal matrix S, and
+an n-by-n orthogonal matrix V so that A = U*S*V'.
+<P>
+The singular values, sigma[k] = S[k][k], are ordered so that
+sigma[0] >= sigma[1] >= ... >= sigma[n-1].
+<P>
+The singular value decompostion always exists, so the constructor will
+never fail.  The matrix condition number and the effective numerical
+rank can be computed from this decomposition.
+*/
 public class SingularValueDecomposition implements java.io.Serializable {
 
 /* ------------------------
@@ -37,8 +43,8 @@ public class SingularValueDecomposition implements java.io.Serializable {
    @serial column dimension.
    */
    private int m, n;
-   
-   private final static int MAX_ITER = 600;
+
+   private final static int MAX_ITER = 6000;
 
 /* ------------------------
    Constructor
@@ -249,6 +255,7 @@ public class SingularValueDecomposition implements java.io.Serializable {
       int pp = p-1;
       int iter = 0;
       double eps = Math.pow(2.0,-52.0);
+      double tiny = Math.pow(2.0,-966.0);
       while (p > 0) {
          int k,kase;
 
@@ -271,7 +278,8 @@ public class SingularValueDecomposition implements java.io.Serializable {
             if (k == -1) {
                break;
             }
-            if (Math.abs(e[k]) <= eps*(Math.abs(s[k]) + Math.abs(s[k+1]))) {
+            if (Math.abs(e[k]) <=
+                  tiny + eps*(Math.abs(s[k]) + Math.abs(s[k+1]))) {
                e[k] = 0.0;
                break;
             }
@@ -286,8 +294,7 @@ public class SingularValueDecomposition implements java.io.Serializable {
                }
                double t = (ks != p ? Math.abs(e[ks]) : 0.) + 
                           (ks != k+1 ? Math.abs(e[ks-1]) : 0.);
-                
-               if (Math.abs(s[ks]) <= eps*t)  {
+               if (Math.abs(s[ks]) <= tiny + eps*t)  {
                   s[ks] = 0.0;
                   break;
                }
