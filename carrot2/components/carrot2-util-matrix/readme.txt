@@ -17,5 +17,6 @@ http://www.math.uib.no/~bjornoh/mtj/nni/
 
 Currently, the nni-lib/ contains the following precompiled libraries:
 
+nni-linux-pIII-sse1.zip - Linux, Pentium III (Coppermine)
 nni-win32-pIII-sse1.zip - Windows NT/2000/XP, Pentium III Celeron
 nni-win32-pentiumm.zip  - Windows NT/2000/XP, Pentium M (Centrino)
