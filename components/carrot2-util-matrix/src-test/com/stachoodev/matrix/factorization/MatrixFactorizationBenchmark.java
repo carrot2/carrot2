@@ -123,7 +123,7 @@ public class MatrixFactorizationBenchmark
     {
         DoubleMatrix2D matrix = NNIDoubleFactory2D.nni.make(t, d);
         Random random = new Random(0);
-        double termsPerDocument = 0.2 + 0.05 * random.nextDouble();
+        double termsPerDocument = 0.01 + 0.01 * random.nextDouble();
 
         for (int i = 0; i < d; i++)
         {
