@@ -15,7 +15,6 @@
     </provides>
 
     <dependency name="log4j" />
-    <dependency name="colt" />
     <dependency name="commons-collections" />
     <dependency name="junit" profile="test" />
     <dependency name="junit-addons" profile="test" />
