@@ -73,7 +73,7 @@ public class LanguageGuesserFactory {
         ClassLoader loader = LanguageGuesserFactory.class.getClassLoader();
         try {
 			props.load(
-			        loader.getResourceAsStream("trigrams/languages.properties"));
+			        loader.getResourceAsStream("/trigrams/languages.properties"));
 		} catch (IOException e) {
             throw new RuntimeException("Could not load the required language.properties resource.");
 		}
@@ -86,7 +86,7 @@ public class LanguageGuesserFactory {
         while (tokenizer.hasMoreTokens()) {
         	String langCode = tokenizer.nextToken().trim();
             // check that the resource indeed exists.
-            InputStream is = loader.getResourceAsStream("trigrams/" + langCode + ".tri");
+            InputStream is = loader.getResourceAsStream("/trigrams/" + langCode + ".tri");
             if (is == null)
                 throw new RuntimeException("Trigrams resource does not exist for language: "
                         + langCode);
