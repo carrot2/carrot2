@@ -68,8 +68,8 @@ public class CaseNormalizerBenchmark
         // Initialise the local components
         localInputComponent = new RemoteCacheAccessLocalInputComponent(store);
         languageGuesser = new RawDocumentLanguageDetection(
-            LanguageGuesserFactory.getLanguageGuesser(AllKnownLanguages
-                .getLanguageCodes()));
+            LanguageGuesserFactory.getLanguageGuesser(Arrays
+                .asList(AllKnownLanguages.getLanguageCodes())));
         languageGuesser.init(null);
         
         snippetTokenizer = new SnippetTokenizerLocalFilterComponent();
@@ -90,11 +90,11 @@ public class CaseNormalizerBenchmark
     {
         // Warm up
         System.out.println("Warming up...");
-        processQueries(2);
+        processQueries(3);
 
         // Measure
         System.out.println("Testing ...");
-        double performance = processQueries(5);
+        double performance = processQueries(7);
 
         System.out.println(performance + " snippets/s\n");
     }
@@ -111,7 +111,7 @@ public class CaseNormalizerBenchmark
         {
             for (int i = 0; i < queries.length; i++)
             {
-                System.out.println("Query: " + queries[i]);
+//                System.out.println("Query: " + queries[i]);
                 String query = queries[i];
                 localInputComponent.setQuery(query);
                 localInputComponent.setNext(languageGuesser);
