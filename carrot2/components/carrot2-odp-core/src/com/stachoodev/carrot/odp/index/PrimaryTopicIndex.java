@@ -27,7 +27,7 @@ import java.util.*;
  * 
  * @author stachoo
  */
-public interface PrimaryTopicIndex
+public interface PrimaryTopicIndex extends TopicIndex
 {
     /**
      * Returns the relative location of the file corresponding to the category

@@ -5,6 +5,7 @@
  */
 package com.stachoodev.carrot.odp.index;
 
+import java.io.*;
 import java.util.*;
 
 /**
@@ -13,7 +14,7 @@ import java.util.*;
  * 
  * @author stachoo
  */
-public class SimplePrimaryTopicIndex implements PrimaryTopicIndex
+public class SimplePrimaryTopicIndex implements PrimaryTopicIndex, Serializable
 {
     /** An ordered list of IndexEntries */
     private List indexEntries;
@@ -62,6 +63,26 @@ public class SimplePrimaryTopicIndex implements PrimaryTopicIndex
     public Iterator getAllLocations()
     {
         return new LocationIterator(indexEntries.iterator());
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.stachoodev.carrot.odp.index.TopicIndex#getLocations(java.lang.Object)
+     */
+    public List getLocations(Object query)
+    {
+        String location = getLocation(query.toString());
+
+        if (location == null)
+        {
+            return null;
+        }
+        else
+        {
+            return Arrays.asList(new String []
+            { location });
+        }
     }
 
     /*
@@ -143,7 +164,7 @@ public class SimplePrimaryTopicIndex implements PrimaryTopicIndex
      * 
      * @author stachoo
      */
-    public static class IndexEntry implements Comparable
+    public static class IndexEntry implements Comparable, Serializable
     {
         /** Location entry */
         private String location;
