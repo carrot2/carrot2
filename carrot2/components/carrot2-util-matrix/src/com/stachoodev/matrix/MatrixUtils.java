@@ -53,7 +53,7 @@ public class MatrixUtils
         // outer loop. To do that we need a temporaty double vector
         if (work == null || work.length != A.columns())
         {
-            work = new double[A.columns()];
+            work = new double [A.columns()];
         }
         else
         {
@@ -68,13 +68,13 @@ public class MatrixUtils
                 work[c] += A.getQuick(r, c) * A.getQuick(r, c);
             }
         }
-        
+
         // Take the square root
         for (int c = 0; c < A.columns(); c++)
         {
             work[c] = Math.sqrt(work[c]);
         }
-        
+
         // Normalise
         for (int r = A.rows() - 1; r >= 0; r--)
         {
@@ -108,7 +108,7 @@ public class MatrixUtils
         // outer loop. To do that we need a temporaty double vector
         if (work == null || work.length != A.columns())
         {
-            work = new double[A.columns()];
+            work = new double [A.columns()];
         }
         else
         {
@@ -123,7 +123,7 @@ public class MatrixUtils
                 work[c] += A.getQuick(r, c);
             }
         }
-        
+
         // Normalise
         for (int r = A.rows() - 1; r >= 0; r--)
         {
@@ -132,7 +132,7 @@ public class MatrixUtils
                 A.setQuick(r, c, A.getQuick(r, c) / work[c]);
             }
         }
-        
+
         return A;
     }
 
@@ -196,5 +196,43 @@ public class MatrixUtils
         }
 
         return true;
+    }
+
+    /**
+     * Calculates maximum elements in each column of matrix A. When calculating
+     * maximum values for each column this version should perform better than
+     * scannning each column separately.
+     * 
+     * @param A
+     * @return for each column of A the index of the maximum element
+     */
+    public static int [] maxInColumn(DoubleMatrix2D A)
+    {
+        if (A.columns() == 0 || A.rows() == 0)
+        {
+            return new int [0];
+        }
+        
+        int [] indices = new int [A.columns()];
+        double [] max = new double[A.columns()];
+        
+        for (int c = 0; c < A.columns(); c++)
+        {
+            max[c] = A.getQuick(0, c);
+        }
+        
+        for (int r = 1; r < A.rows(); r++)
+        {
+            for (int c = 0; c < A.columns(); c++)
+            {
+                if (A.getQuick(r, c) > max[c])
+                {
+                    max[c] = A.getQuick(r, c);
+                    indices[c] = r;
+                }
+            }
+        }
+        
+        return indices;
     }
 }
