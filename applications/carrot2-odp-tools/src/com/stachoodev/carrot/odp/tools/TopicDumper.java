@@ -118,7 +118,7 @@ public class TopicDumper
                 }
                 else
                 {
-                    return ((Integer) l1[1]).compareTo(l2[1]);
+                    return ((Integer) l1[1]).compareTo((Integer)l2[1]);
                 }
             }
         });
