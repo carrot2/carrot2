@@ -188,6 +188,7 @@
 	  >
 	    <fileset dir="${build.dir}/classes">
 	    	<include name="com/dawidweiss/carrot/adapters/**" />
+            <include name="com/dawidweiss/carrot/util/XMLSerializerHelper*.*" />
 	    	<exclude name="com/dawidweiss/carrot/adapters/Test*" />
 	    	<exclude name="com/dawidweiss/carrot/adapters/*.xml" />
 	    </fileset>
