@@ -30,50 +30,49 @@ public class DocumentClustering
     extends Clustering
     implements Constants
 {
-    private final double UITGEBREIDEQUERYFACTOR = 0.5;
+    private final double EXTENDEDQUERYFACTOR = 0.5;
     private Map params;
 
     public DocumentClustering(
-        int diepte, List documenten, List meta, List query, boolean stopwoorden, int gewichtSchema,
+        int depth, List documents, List meta, List query, boolean stopwords, int weightSchema,
         Map params
     )
     {
-        super(diepte, documenten, meta, query, stopwoorden, gewichtSchema);
+        super(depth, documents, meta, query, stopwords, weightSchema);
         this.params = params;
     }
 
 
     public DocumentClustering(
-        int diepte, List documenten, List meta, List query, boolean stopwoorden, int gewichtSchema,
-        Map params, double [] documentGewichten
+        int depth, List documents, List meta, List query, boolean stopwords, int weightSchema,
+        Map params, double [] documentWeights
     )
     {
-        super(diepte, documenten, meta, query, stopwoorden, gewichtSchema, documentGewichten);
+        super(depth, documents, meta, query, stopwords, weightSchema, documentWeights);
         this.params = params;
     }
 
     /*
      * The actual clustering process.
      */
-    protected void bepaalOplossing()
+    protected void getSolution()
     {
-        groepen = new ArrayList();
-
-        DocumentSet s = new DocumentSet(parser.geefNietNulIndices(), parser);
-        LijstBordModel bm = new LijstBordModel(s, params);
-        alleDocIndices = new HashSet();
+	groups=new ArrayList();
+	DocumentSet s = new DocumentSet(parser.getNonZeroIndices(), parser);
+        ListBordModel bm = new ListBordModel(s, params);
+        allDocIndices = new HashSet();
 
         //Execution of the fuzzy ant based clustering algorithm
-        java.util.List mierRes = bm.berekenOplossing();
+        java.util.List antRes = bm.getSolution();
         java.util.List centra = new ArrayList();
 
-        for (ListIterator it1 = mierRes.listIterator(); it1.hasNext();)
+        for (ListIterator it1 = antRes.listIterator(); it1.hasNext();)
         {
-            Hoop h = (Hoop) it1.next();
+            Heap h = (Heap) it1.next();
 
-            if (h.geefAantal() >= minHoopSize)
+            if (h.getNumber() >= minHeapSize)
             {
-                centra.add(h.geefCentrum());
+                centra.add(h.getCentrum());
             }
         }
 
@@ -84,38 +83,38 @@ public class DocumentClustering
         for (ListIterator it1 = fcmRes.listIterator(); it1.hasNext();)
         {
             Map m = (Map) it1.next();
-            double [] nieuweDocGewichten = new double[documentGewichten.length];
+            double [] newDocWeights = new double[documentWeights.length];
 
             for (Iterator it2 = m.keySet().iterator(); it2.hasNext();)
             {
                 int index = ((Integer) it2.next()).intValue();
-                double waarde = ((Double) m.get(new Integer(index))).doubleValue();
-                nieuweDocGewichten[index] = Math.min(documentGewichten[index], waarde);
+                double value = ((Double) m.get(new Integer(index))).doubleValue();
+                newDocWeights[index] = Math.min(documentWeights[index], value);
             }
 
-            Map termenSom = termenSom(m);
-            int sterksteTerm = geefSterksteTerm(termenSom);
-            java.util.List docIndices = bepaalDocumenten(nieuweDocGewichten);
-            alleDocIndices.addAll(docIndices);
+            Map termSum = getTermSum(m);
+            int bestTerm = getBestTerm(termSum);
+            java.util.List docIndices = getDocuments(newDocWeights);
+            allDocIndices.addAll(docIndices);
 
             //recursive application if the number of documents in the cluster is greater than 25 and depth of the recursion
             //is less than 2 (starting with 0 -> 3 levels of recursion)
-            if ((docIndices.size() > 25) && (diepte < 2))
+            if ((docIndices.size() > 25) && (depth < 2))
             {
                 DocumentClustering subClusters = new DocumentClustering(
-                        diepte + 1, beperkDocumenten(docIndices), meta,
-                        uitgebreideQuery(sterksteTerm, termenSom), stopwoorden, gewichtSchema,
-                        params, beperkGewichten(nieuweDocGewichten, docIndices)
+                        depth + 1, restrictDocuments(docIndices), meta,
+                        extendedQuery(bestTerm, termSum), stopwords, weightSchema,
+                        params, restrictWeights(newDocWeights, docIndices)
                     );
-                addSubGroep(sterksteTerm, subClusters, docIndices);
+                addSubGroup(bestTerm, subClusters, docIndices);
             }
             else
             {
-                addDocumentenGroep(sterksteTerm, docIndices);
+                addDocumentsGroup(bestTerm, docIndices);
             }
         }
 
-        addAndere(alleDocIndices);
+        addOther(allDocIndices);
     }
 
 
@@ -131,7 +130,7 @@ public class DocumentClustering
             res.add(new HashMap());
         }
 
-        for (int j = 0; j < documentGewichten.length; j++)
+        for (int j = 0; j < documentWeights.length; j++)
         {
             int pos = checkZero(j, centra);
 
@@ -140,9 +139,9 @@ public class DocumentClustering
                 for (int i = 0; i < centra.size(); i++)
                 {
                     Map cluster = (Map) res.get(i);
-                    int centrumIndex = ((Document) centra.get(i)).geefIndex();
+                    int centrumIndex = ((Document) centra.get(i)).getIndex();
                     cluster.put(
-                        new Integer(j), new Double(berekenLidmaatschap(centrumIndex, j, centra))
+                        new Integer(j), new Double(getMembershipValue(centrumIndex, j, centra))
                     );
                 }
             }
@@ -161,9 +160,9 @@ public class DocumentClustering
     {
         for (int i = 0; i < centra.size(); i++)
         {
-            int centrumIndex = ((Document) centra.get(i)).geefIndex();
+            int centrumIndex = ((Document) centra.get(i)).getIndex();
 
-            if (parser.ruwDocNT(docIndex, centrumIndex) > 0.9999)
+            if (parser.roughDocNT(docIndex, centrumIndex) > 0.9999)
             {
                 return i;
             }
@@ -173,74 +172,74 @@ public class DocumentClustering
     }
 
 
-    private double berekenLidmaatschap(int centrIndex, int docIndex, java.util.List centra)
+    private double getMembershipValue(int centrIndex, int docIndex, java.util.List centra)
     {
-        double dik = 1 - parser.ruwDocNT(docIndex, centrIndex);
-        double som = 0;
+        double dik = 1 - parser.roughDocNT(docIndex, centrIndex);
+        double sum = 0;
 
         for (ListIterator it = centra.listIterator(); it.hasNext();)
         {
-            int j = ((Document) it.next()).geefIndex();
-            double djk = 1 - parser.ruwDocNT(docIndex, j);
-            som += Math.pow(dik / djk, 2.0 / (M - 1.0));
+            int j = ((Document) it.next()).getIndex();
+            double djk = 1 - parser.roughDocNT(docIndex, j);
+            sum += Math.pow(dik / djk, 2.0 / (M - 1.0));
         }
 
-        return 1.0 / som;
+        return 1.0 / sum;
     }
 
 
     /*
-     * Returns a Map containing a weighted sum for all terms. The weights are passed as the parameter "clusterGewichten".
+     * Returns a Map containing a weighted sum for all terms. The weights are passed as the parameter "clusterWeights".
      */
-    private Map termenSom(Map clusterGewichten)
+    private Map getTermSum(Map clusterWeights)
     {
         try
         {
-            Map termSom = new HashMap();
+            Map termSum = new HashMap();
 
-            for (int i = 0; i < documentGewichten.length; i++)
+            for (int i = 0; i < documentWeights.length; i++)
             {
-                double clusterWaarde;
+                double clusterValue;
 
-                if (clusterGewichten.containsKey(new Integer(i)))
+                if (clusterWeights.containsKey(new Integer(i)))
                 {
-                    clusterWaarde = ((Double) clusterGewichten.get(new Integer(i))).doubleValue();
+                    clusterValue = ((Double) clusterWeights.get(new Integer(i))).doubleValue();
                 }
                 else
                 {
-                    clusterWaarde = 0;
+                    clusterValue = 0;
                 }
 
-                if ((clusterWaarde * documentGewichten[i]) > 0.05)
+                if ((clusterValue * documentWeights[i]) > 0.05)
                 {
-                    Map termIndices = parser.geefDocument(i);
+                    Map termIndices = parser.getDocument(i);
 
                     for (Iterator it2 = termIndices.keySet().iterator(); it2.hasNext();)
                     {
                         Integer termIndex = ((Integer) it2.next());
-                        double termGewicht = ((Double) termIndices.get(termIndex)).doubleValue();
+                        double termWeight = ((Double) termIndices.get(termIndex)).doubleValue();
 
-                        if (termSom.containsKey(termIndex))
+                        if (termSum.containsKey(termIndex))
                         {
-                            double oudeWaarde = ((Double) termSom.get(termIndex)).doubleValue();
-                            double nieuweWaarde = oudeWaarde
-                                + (clusterWaarde * documentGewichten[i] * termGewicht);
-                            termSom.put(termIndex, new Double(nieuweWaarde));
+                            double oudeValue = ((Double) termSum.get(termIndex)).doubleValue();
+                            double newValue = oudeValue
+                                + (clusterValue * documentWeights[i] * termWeight);
+                            termSum.put(termIndex, new Double(newValue));
                         }
                         else
                         {
-                            double nieuweWaarde = clusterWaarde * documentGewichten[i] * termGewicht;
+                            double newValue = clusterValue * documentWeights[i] * termWeight;
 
-                            if (nieuweWaarde > 0.05)
+                            if (newValue > 0.05)
                             {
-                                termSom.put(termIndex, new Double(nieuweWaarde));
+                                termSum.put(termIndex, new Double(newValue));
                             }
                         }
                     }
                 }
             }
 
-            return termSom;
+            return termSum;
         }
         catch (Exception e)
         {
@@ -252,19 +251,19 @@ public class DocumentClustering
 
 
     /*
-     * Returns the term-index with the heighest weight. Weights are passed as the parameter "termSom"
+     * Returns the term-index with the heighest weight. Weights are passed as the parameter "termSum"
      */
-    private int geefSterksteTerm(Map termSom)
+    private int getBestTerm(Map termSum)
     {
         try
         {
             int maxIndex = -1;
             double maxVal = -1;
 
-            for (Iterator it = termSom.keySet().iterator(); it.hasNext();)
+            for (Iterator it = termSum.keySet().iterator(); it.hasNext();)
             {
                 Integer termIndex = ((Integer) it.next());
-                double w = ((Double) termSom.get(termIndex)).doubleValue();
+                double w = ((Double) termSum.get(termIndex)).doubleValue();
 
                 if (w > maxVal)
                 {
@@ -286,25 +285,25 @@ public class DocumentClustering
 
 
     /*
-     * For recursive application, all terms whose weight is greater than "UITGEBREIDEQUERYFACTOR" times the weight of
+     * For recursive application, all terms whose weight is greater than "EXTENDEDQUERYFACTOR" times the weight of
      * the term with maximal weight, are considered as query terms.
      */
-    protected ArrayList uitgebreideQuery(int maxIndex, Map termSom)
+    protected ArrayList extendedQuery(int maxIndex, Map termSum)
     {
         ArrayList res = new ArrayList();
         res.addAll(query);
 
-        double maxValue = ((Double) termSom.get(new Integer(maxIndex))).doubleValue();
+        double maxValue = ((Double) termSum.get(new Integer(maxIndex))).doubleValue();
 
-        for (Iterator it = termSom.keySet().iterator(); it.hasNext();)
+        for (Iterator it = termSum.keySet().iterator(); it.hasNext();)
         {
             int termIndex = ((Integer) it.next()).intValue();
-            double termWaarde = ((Double) termSom.get(new Integer(termIndex))).doubleValue();
+            double termValue = ((Double) termSum.get(new Integer(termIndex))).doubleValue();
 
-            if (termWaarde > (UITGEBREIDEQUERYFACTOR * maxValue))
+            if (termValue > (EXTENDEDQUERYFACTOR * maxValue))
             {
                 Element e = new Element("query");
-                e.setText(parser.origineleTerm(termIndex));
+                e.setText(parser.originalTerm(termIndex));
                 res.add(e);
             }
         }

@@ -29,52 +29,52 @@ import javax.servlet.http.*;
 public class SnippetParser
     implements Constants
 {
-    private List origineleDocumenten; //original snippets in String-representation
+    private List originalDocuments; //original snippets in String-representation
     private HashMap stemming; // translation: original term -> stemmed term
     private HashMap inverseStemming; // translation: stemmed term -> original ters 
-    private HashSet stopwoorden; //set of stopwords, stemmed and in lowercase
-    private HashSet queryTermen; //set of query terms, stemmed and in lowercase
+    private HashSet stopwords; //set of stopwords, stemmed and in lowercase
+    private HashSet queryTerms; //set of query terms, stemmed and in lowercase
     private HashMap [] snippets; //representation of the snippets as multiset, implemented as a HashMap
     private HashMap term2index; //translation: stemmed term -> term-index
-    private HashMap termen; //translation: term-index -> original term 
+    private HashMap terms; //translation: term-index -> original term 
     private HashMap df; //mapping: term-index -> document frequency (used for IDF-weighting)
-    private HashMap specifiekereTermen; //mapping term-index -> indices of more specific terms
-    private HashMap leiderwaarde; //mapping term-index -> leader value of the term
-    private int aantalDocumenten; // number of documents
-    private int aantalTermen; //number of terms
-    private HashMap [] termGewichten; //contains for each snippet a HashMap term-weights
-    private HashMap [] ruwGewichten; //idem, but for the upper approximation of a snippet
-    private HashMap [] docGewichten; ///contains for each term a HashMap with snippet-weights
-    private HashSet nulIndices; // set of snippet-indices that contain no term at all
-    private HashSet nietNulIndices; // set of snippet-indices that contain at least 1 term
-    private boolean stemmingGewenst = true; // true = stemming should be applied
-    private boolean verwijderStopwoorden; // true = stopwords should be removed
-    private int gewichtSchema; //  contains the used weighting scheme (binary, TF or TF-IDF)
+    private HashMap narrowTerms; //mapping term-index -> indices of more specific terms
+    private HashMap leadervalue; //mapping term-index -> leader value of the term
+    private int numberOfDocuments; // number of documents
+    private int numberOfTerms; //number of terms
+    private HashMap [] termWeights; //contains for each snippet a HashMap term-weights
+    private HashMap [] roughWeights; //idem, but for the upper approximation of a snippet
+    private HashMap [] docWeights; ///contains for each term a HashMap with snippet-weights
+    private HashSet zeroIndices; // set of snippet-indices that contain no term at all
+    private HashSet nonZeroIndices; // set of snippet-indices that contain at least 1 term
+    private boolean stemmingDesired = true; // true = stemming should be applied
+    private boolean removeStopwords; // true = stopwords should be removed
+    private int weightSchema; //  contains the used weighting scheme (binary, TF or TF-IDF)
     private final int MINTERMSUPP = 3;
     private final int TERMSPECSUPP = 1;
-    private final double COMPLEET = 0.75;
+    private final double COMPLETE = 0.75;
 
-    public SnippetParser(ArrayList documenten, ArrayList meta, ArrayList query)
+    public SnippetParser(ArrayList documents, ArrayList meta, ArrayList query)
     {
-        this(documenten, meta, query, true, TFIDF);
+        this(documents, meta, query, true, TFIDF);
     }
 
 
     public SnippetParser(
-        List documenten, List meta, List query, boolean verwijderStopwoorden, int gewichtSchema
+        List documents, List meta, List query, boolean removeStopwords, int weightSchema
     )
     {
         try
         {
-            this.verwijderStopwoorden = verwijderStopwoorden;
-            this.gewichtSchema = gewichtSchema;
-            bepaalStemming(meta);
+            this.removeStopwords = removeStopwords;
+            this.weightSchema = weightSchema;
+            calculateStemming(meta);
             parseQuery(query);
-            parseSnippets(documenten);
-            aantalDocumenten = snippets.length;
-            aantalTermen = df.size();
-            bepaalGewichten();
-            bepaalNietNulIndices();
+            parseSnippets(documents);
+            numberOfDocuments = snippets.length;
+            numberOfTerms = df.size();
+            calculateWeights();
+            calculateNonZeroIndices();
         }
         catch (Exception e)
         {
@@ -85,39 +85,39 @@ public class SnippetParser
     /*
      * Applies stemming to to snippets
      */
-    private void bepaalStemming(List meta)
+    private void calculateStemming(List meta)
     {
         stemming = new HashMap();
         inverseStemming = new HashMap();
-        stopwoorden = new HashSet();
+        stopwords = new HashSet();
 
-        if (stemmingGewenst)
+        if (stemmingDesired)
         {
             for (ListIterator it = meta.listIterator(); it.hasNext();)
             {
                 Element e = (Element) it.next();
-                String origineel = e.getAttributeValue("t");
-                String gestemd = e.getAttributeValue("s");
-                String stopwoord = e.getAttributeValue("sw");
+                String original = e.getAttributeValue("t");
+                String stemmed = e.getAttributeValue("s");
+                String stopword = e.getAttributeValue("sw");
 
-                if (stopwoord != null)
+                if (stopword != null)
                 {
-                    stopwoorden.add(gestemd);
+                    stopwords.add(stemmed);
                 }
 
-                stemming.put(origineel, gestemd);
+                stemming.put(original, stemmed);
 
-                if (inverseStemming.containsKey(gestemd))
+                if (inverseStemming.containsKey(stemmed))
                 {
-                    HashSet l = (HashSet) inverseStemming.get(gestemd);
-                    l.add(origineel);
-                    inverseStemming.put(gestemd, l);
+                    HashSet l = (HashSet) inverseStemming.get(stemmed);
+                    l.add(original);
+                    inverseStemming.put(stemmed, l);
                 }
                 else
                 {
                     HashSet l = new HashSet();
-                    l.add(origineel);
-                    inverseStemming.put(gestemd, l);
+                    l.add(original);
+                    inverseStemming.put(stemmed, l);
                 }
             }
         }
@@ -129,7 +129,7 @@ public class SnippetParser
      */
     private void parseQuery(List query)
     {
-        queryTermen = new HashSet();
+        queryTerms = new HashSet();
 
         for (Iterator it = query.listIterator(); it.hasNext();)
         {
@@ -141,21 +141,36 @@ public class SnippetParser
 
                 for (; queryList.hasMoreTokens();)
                 {
-                    String woord = queryList.nextToken();
+                    StringBuffer buf = new StringBuffer(queryList.nextToken());
+
+		    if ((buf.charAt(0) == '"') || (buf.charAt(0) == '+'))
+			{
+			    buf.deleteCharAt(0);
+			}
+
+		    if (buf.length() > 0)
+			{
+			    if (buf.charAt(buf.length() - 1) == '"')
+				{
+				    buf.deleteCharAt(buf.length() - 1);
+				}
+			}
+
+		    String woord = buf.toString();
 
                     if (stemming.containsKey(woord))
-                    {
+			{
                         String s = (String) (stemming.get(woord));
-                        queryTermen.add(s.toLowerCase());
+                        queryTerms.add(s.toLowerCase());
                     }
                     else if (stemming.containsKey(woord.toLowerCase()))
                     {
                         String s = (String) (stemming.get(woord.toLowerCase()));
-                        queryTermen.add(s.toLowerCase());
+                        queryTerms.add(s.toLowerCase());
                     }
                     else
                     {
-                        queryTermen.add(woord.toLowerCase());
+                        queryTerms.add(woord.toLowerCase());
                     }
                 }
             }
@@ -166,51 +181,51 @@ public class SnippetParser
     /*
      * snippets are parsed
      */
-    private void parseSnippets(List documenten)
+    private void parseSnippets(List documents)
     {
         int termIndex = 0;
         term2index = new HashMap();
-        termen = new HashMap();
+        terms = new HashMap();
         df = new HashMap();
-        origineleDocumenten = new ArrayList();
-        snippets = new HashMap[documenten.size()];
+        originalDocuments = new ArrayList();
+        snippets = new HashMap[documents.size()];
 
-        for (int i = 0; i < documenten.size(); i++)
+        for (int i = 0; i < documents.size(); i++)
         {
-            Element snippet = ((Element) documenten.get(i)).getChild("snippet");
-            Element title = ((Element) documenten.get(i)).getChild("title");
-            StringBuffer tekst = new StringBuffer();
+            Element snippet = ((Element) documents.get(i)).getChild("snippet");
+            Element title = ((Element) documents.get(i)).getChild("title");
+            StringBuffer text = new StringBuffer();
 
             if (title != null)
             {
-                tekst.append(title.getText());
-                tekst.append(" ");
+                text.append(title.getText());
+                text.append(" ");
             }
 
             if (snippet != null)
             {
-                tekst.append(snippet.getText());
+                text.append(snippet.getText());
             }
 
             snippets[i] = new HashMap();
 
-            StringTokenizer st = new StringTokenizer(tekst.toString());
-            StringBuffer origineleString = new StringBuffer(tekst.toString());
+            StringTokenizer st = new StringTokenizer(text.toString());
+            StringBuffer originalString = new StringBuffer(text.toString());
 
-            for (int j = 0; j < origineleString.length(); j++)
+            for (int j = 0; j < originalString.length(); j++)
             {
-                char ch = origineleString.charAt(j);
+                char ch = originalString.charAt(j);
 
                 if (
                     (ch == ',') || (ch == ')') || (ch == '(') || (ch == ';') || (ch == '.')
                         || (ch == '!') || (ch == '?') || (ch == ':')
                 )
                 {
-                    origineleString.setCharAt(j, ' ');
+                    originalString.setCharAt(j, ' ');
                 }
             }
 
-            origineleDocumenten.add(origineleString.toString());
+            originalDocuments.add(originalString.toString());
 
             for (; st.hasMoreTokens();)
             {
@@ -246,26 +261,26 @@ public class SnippetParser
 
                 s = buf.toString();
 
-                String origineleS = s;
+                String originalS = s;
 
                 if (stemming.containsKey(s))
                 {
                     s = (String) stemming.get(s.toString());
                 }
 
-                boolean geldigwoord = true;
+                boolean validWord = true;
 
                 if (s.length() < 2)
                 {
-                    geldigwoord = false;
+                    validWord = false;
                 }
-                else if (queryTermen.contains(s))
+                else if (queryTerms.contains(s))
                 {
-                    geldigwoord = false;
+                    validWord = false;
                 }
-                else if (verwijderStopwoorden && stopwoorden.contains(s))
+                else if (removeStopwords && stopwords.contains(s))
                 {
-                    geldigwoord = false;
+                    validWord = false;
                 }
                 else
                 {
@@ -273,14 +288,14 @@ public class SnippetParser
                     {
                         if (!Character.isLetter(s.charAt(k)))
                         {
-                            geldigwoord = false;
+                            validWord = false;
 
                             break;
                         }
                     }
                 }
 
-                if (geldigwoord)
+                if (validWord)
                 {
                     if (snippets[i].containsKey(s))
                     {
@@ -296,12 +311,12 @@ public class SnippetParser
                     if (term2index.containsKey(s))
                     {
                         int index = ((Integer) term2index.get(s)).intValue();
-                        int waarde = ((Integer) df.get(new Integer(index))).intValue();
-                        df.put(new Integer(index), new Integer(waarde + 1));
+                        int value = ((Integer) df.get(new Integer(index))).intValue();
+                        df.put(new Integer(index), new Integer(value + 1));
                     }
                     else
                     {
-                        termen.put(new Integer(termIndex), origineleS);
+                        terms.put(new Integer(termIndex), originalS);
                         term2index.put(s, new Integer(termIndex));
                         df.put(new Integer(termIndex), new Integer(1));
                         termIndex++;
@@ -315,21 +330,21 @@ public class SnippetParser
     /*
      * term-weights in each snippet are calculated
      */
-    private void bepaalGewichten()
+    private void calculateWeights()
     {
-        termGewichten = new HashMap[aantalDocumenten];
-        docGewichten = new HashMap[aantalTermen];
+        termWeights = new HashMap[numberOfDocuments];
+        docWeights = new HashMap[numberOfTerms];
 
-        for (int i = 0; i < aantalTermen; i++)
+        for (int i = 0; i < numberOfTerms; i++)
         {
-            docGewichten[i] = new HashMap();
+            docWeights[i] = new HashMap();
         }
 
-        for (int i = 0; i < aantalDocumenten; i++)
+        for (int i = 0; i < numberOfDocuments; i++)
         {
-            termGewichten[i] = new HashMap();
+            termWeights[i] = new HashMap();
 
-            double som = 0;
+            double sum = 0;
 
             for (Iterator it = snippets[i].keySet().iterator(); it.hasNext();)
             {
@@ -337,49 +352,49 @@ public class SnippetParser
                 int termIndex = ((Integer) term2index.get(term)).intValue();
                 int freq = ((Integer) snippets[i].get(term)).intValue();
                 int idf = ((Integer) df.get(new Integer(termIndex))).intValue();
-                double waarde = 0;
+                double value = 0;
 
                 if (idf >= MINTERMSUPP)
                 {
-                    if (gewichtSchema == BINAIR)
+                    if (weightSchema == BINARY)
                     {
-                        waarde = (freq > 0) ? 1
+                        value = (freq > 0) ? 1
                                             : 0;
                     }
-                    else if (gewichtSchema == TF)
+                    else if (weightSchema == TF)
                     {
-                        waarde = freq;
+                        value = freq;
                     }
-                    else if (gewichtSchema == TFIDF)
+                    else if (weightSchema == TFIDF)
                     {
-                        waarde = freq * Math.log(aantalDocumenten / idf);
+                        value = freq * Math.log(numberOfDocuments / idf);
                     }
                     else
                     {
-                        System.err.println("FOUTIEF GEWICHTSCHEMA");
+                        System.err.println("WRONG WEIGHTSCHEMA");
                     }
                 }
 
-                som += (waarde * waarde);
-                termGewichten[i].put(new Integer(termIndex), new Double(waarde));
+                sum += (value * value);
+                termWeights[i].put(new Integer(termIndex), new Double(value));
 
-                if (gewichtSchema == BINAIR)
+                if (weightSchema == BINARY)
                 {
-                    docGewichten[termIndex].put(new Integer(i), new Double(waarde));
+                    docWeights[termIndex].put(new Integer(i), new Double(value));
                 }
             }
 
-            if (gewichtSchema != BINAIR)
+            if (weightSchema != BINARY)
             { // normalisation -> all weigths in [0,1]
-                som = Math.sqrt(som);
+                sum = Math.sqrt(sum);
 
-                for (Iterator it = termGewichten[i].keySet().iterator(); it.hasNext();)
+                for (Iterator it = termWeights[i].keySet().iterator(); it.hasNext();)
                 {
                     Integer termIndex = (Integer) it.next();
-                    double waarde = ((Double) termGewichten[i].get(termIndex)).doubleValue();
-                    waarde /= som;
-                    termGewichten[i].put(termIndex, new Double(waarde));
-                    docGewichten[termIndex.intValue()].put(new Integer(i), new Double(waarde));
+                    double value = ((Double) termWeights[i].get(termIndex)).doubleValue();
+                    value /= sum;
+                    termWeights[i].put(termIndex, new Double(value));
+                    docWeights[termIndex.intValue()].put(new Integer(i), new Double(value));
                 }
             }
         }
@@ -389,20 +404,20 @@ public class SnippetParser
     /*
      * Determine the indices of the document that contain no term at all
      */
-    private void bepaalNietNulIndices()
+    private void calculateNonZeroIndices()
     {
-        nulIndices = new HashSet();
-        nietNulIndices = new HashSet();
+        zeroIndices = new HashSet();
+        nonZeroIndices = new HashSet();
 
-        for (int i = 0; i < termGewichten.length; i++)
+        for (int i = 0; i < termWeights.length; i++)
         {
-            if (termGewichten[i].size() == 0)
+            if (termWeights[i].size() == 0)
             {
-                nulIndices.add(new Integer(i));
+                zeroIndices.add(new Integer(i));
             }
             else
             {
-                nietNulIndices.add(new Integer(i));
+                nonZeroIndices.add(new Integer(i));
             }
         }
     }
@@ -411,43 +426,43 @@ public class SnippetParser
     /*
      * Calculate the upper approximation of the snippets in the sense of rough set theory
      */
-    public void bepaalRuwGewichten()
+    public void calculateRoughWeights()
     {
-        ruwGewichten = new HashMap[aantalDocumenten];
+        roughWeights = new HashMap[numberOfDocuments];
 
-        for (int i = 0; i < aantalDocumenten; i++)
+        for (int i = 0; i < numberOfDocuments; i++)
         {
-            HashMap ruwTermen = new HashMap();
+            HashMap roughTerms = new HashMap();
 
-            for (Iterator it1 = termGewichten[i].keySet().iterator(); it1.hasNext();)
+            for (Iterator it1 = termWeights[i].keySet().iterator(); it1.hasNext();)
             {
-                //itereer over alle termen in het document i
+                //itererate over all terms in the document i
                 int term = ((Integer) it1.next()).intValue();
-                double termWaarde = ((Double) termGewichten[i].get(new Integer(term))).doubleValue();
-                HashMap spec = specifiekereTermen(term);
+                double termValue = ((Double) termWeights[i].get(new Integer(term))).doubleValue();
+                HashMap spec = narrowTerms(term);
 
                 for (Iterator it2 = spec.keySet().iterator(); it2.hasNext();)
                 {
-                    //itereer over alle termen die specifieker zijn dan term
-                    int nieuweTerm = ((Integer) it2.next()).intValue();
-                    double oudeWaarde = 0;
+                    //iterate over all terms which are more specific than "term"
+                    int newTerm = ((Integer) it2.next()).intValue();
+                    double oldValue = 0;
 
-                    if (ruwTermen.containsKey(new Integer(nieuweTerm)))
+                    if (roughTerms.containsKey(new Integer(newTerm)))
                     {
-                        oudeWaarde = ((Double) ruwTermen.get(new Integer(nieuweTerm))).doubleValue();
+                        oldValue = ((Double) roughTerms.get(new Integer(newTerm))).doubleValue();
                     }
 
-                    double specWaarde = ((Double) spec.get(new Integer(nieuweTerm))).doubleValue();
-                    double nieuweWaarde = Math.min(termWaarde, specWaarde);
+                    double specValue = ((Double) spec.get(new Integer(newTerm))).doubleValue();
+                    double newValue = Math.min(termValue, specValue);
 
-                    if (nieuweWaarde > oudeWaarde)
+                    if (newValue > oldValue)
                     {
-                        ruwTermen.put(new Integer(nieuweTerm), new Double(nieuweWaarde));
+                        roughTerms.put(new Integer(newTerm), new Double(newValue));
                     }
                 }
             }
 
-            ruwGewichten[i] = ruwTermen;
+            roughWeights[i] = roughTerms;
         }
     }
 
@@ -455,19 +470,19 @@ public class SnippetParser
     /*
      * Calculate the leader value of the term "t"
      */
-    public double leiderwaarde(int t)
+    public double leadervalue(int t)
     {
-        if (leiderwaarde == null)
+        if (leadervalue == null)
         {
-            leiderwaarde = new HashMap();
+            leadervalue = new HashMap();
         }
 
-        if (leiderwaarde.keySet().contains(new Integer(t)))
+        if (leadervalue.keySet().contains(new Integer(t)))
         {
-            return ((Double) leiderwaarde.get(new Integer(t))).intValue();
+            return ((Double) leadervalue.get(new Integer(t))).intValue();
         }
 
-        HashMap spec = specifiekereTermen(t);
+        HashMap spec = narrowTerms(t);
         double res = 0;
 
         for (Iterator it = spec.keySet().iterator(); it.hasNext();)
@@ -476,7 +491,7 @@ public class SnippetParser
             res += ((Double) spec.get(index)).doubleValue();
         }
 
-        leiderwaarde.put(new Integer(t), new Double(res));
+        leadervalue.put(new Integer(t), new Double(res));
 
         return res;
     }
@@ -485,63 +500,63 @@ public class SnippetParser
     /*
      * Determine the terms that are more specific than "t"
      */
-    private HashMap specifiekereTermen(int t)
+    private HashMap narrowTerms(int t)
     {
-        if (specifiekereTermen == null)
+        if (narrowTerms == null)
         {
-            specifiekereTermen = new HashMap();
+            narrowTerms = new HashMap();
         }
 
-        if (specifiekereTermen.keySet().contains(new Integer(t)))
+        if (narrowTerms.keySet().contains(new Integer(t)))
         {
-            return (HashMap) specifiekereTermen.get(new Integer(t));
+            return (HashMap) narrowTerms.get(new Integer(t));
         }
 
-        HashSet universum = new HashSet();
-        HashMap resultaat = new HashMap();
+        HashSet universe = new HashSet();
+        HashMap result = new HashMap();
 
-        for (Iterator it = docGewichten[t].keySet().iterator(); it.hasNext();)
+        for (Iterator it = docWeights[t].keySet().iterator(); it.hasNext();)
         {
             int doc = ((Integer) it.next()).intValue();
-            universum.addAll(termGewichten[doc].keySet());
+            universe.addAll(termWeights[doc].keySet());
         }
 
-        for (Iterator it = universum.iterator(); it.hasNext();)
+        for (Iterator it = universe.iterator(); it.hasNext();)
         {
             Integer termIndex = (Integer) it.next();
 
             if (t == termIndex.intValue())
             {
-                resultaat.put(termIndex, new Double(1));
+                result.put(termIndex, new Double(1));
             }
             else
             {
-                double specWaarde = specifiekerTerm(termIndex.intValue(), t);
+                double specValue = narrowTerm(termIndex.intValue(), t);
 
-                if (specWaarde > 0.30)
+                if (specValue > 0.30)
                 {
-                    resultaat.put(termIndex, new Double(specWaarde));
+                    result.put(termIndex, new Double(specValue));
                 }
             }
         }
 
-        specifiekereTermen.put(new Integer(t), resultaat);
+        narrowTerms.put(new Integer(t), result);
 
-        return resultaat;
+        return result;
     }
 
 
     /*
      * Calculate to which extend "t1" is more specific than "t2"
      */
-    private double specifiekerTerm(int t1, int t2)
+    private double narrowTerm(int t1, int t2)
     {
-        double som = somTerm(t1);
-        double somMin = somTermMin(t1, t2);
+        double sum = sumTerm(t1);
+        double sumMin = sumTermMin(t1, t2);
 
-        if ((som > 0) && (somMin >= TERMSPECSUPP))
+        if ((sum > 0) && (sumMin >= TERMSPECSUPP))
         {
-            return somMin / som;
+            return sumMin / sum;
         }
         else
         {
@@ -553,11 +568,11 @@ public class SnippetParser
     /*
      * calculates the sum over all document of the minimum of the weight of "t1" and the weight of "t2" in that document
      */
-    public double somTermMin(int t1, int t2)
+    public double sumTermMin(int t1, int t2)
     {
-        double som = 0;
-        Set s1 = docGewichten[t1].keySet();
-        Set s2 = docGewichten[t2].keySet();
+        double sum = 0;
+        Set s1 = docWeights[t1].keySet();
+        Set s2 = docWeights[t2].keySet();
         Set s = (s1.size() > s2.size()) ? s2
                                         : s1;
 
@@ -567,31 +582,31 @@ public class SnippetParser
             double w1 = 0;
             double w2 = 0;
 
-            if (docGewichten[t1].containsKey(index))
+            if (docWeights[t1].containsKey(index))
             {
-                w1 = ((Double) docGewichten[t1].get(index)).doubleValue();
+                w1 = ((Double) docWeights[t1].get(index)).doubleValue();
             }
 
-            if (docGewichten[t2].containsKey(index))
+            if (docWeights[t2].containsKey(index))
             {
-                w2 = ((Double) docGewichten[t2].get(index)).doubleValue();
+                w2 = ((Double) docWeights[t2].get(index)).doubleValue();
             }
 
-            som += Math.min(w1, w2);
+            sum += Math.min(w1, w2);
         }
 
-        return som;
+        return sum;
     }
 
 
     /*
      * calculates the sum over all terms of the minimum of the weight of that term in "d1" and in "d2"
      */
-    public double somDocMin(int d1, int d2)
+    public double sumDocMin(int d1, int d2)
     {
-        double som = 0;
-        Set s1 = termGewichten[d1].keySet();
-        Set s2 = termGewichten[d2].keySet();
+        double sum = 0;
+        Set s1 = termWeights[d1].keySet();
+        Set s2 = termWeights[d2].keySet();
         Set s = (s1.size() > s2.size()) ? s2
                                         : s1;
 
@@ -601,36 +616,36 @@ public class SnippetParser
             double w1 = 0;
             double w2 = 0;
 
-            if (termGewichten[d1].containsKey(index))
+            if (termWeights[d1].containsKey(index))
             {
-                w1 = ((Double) termGewichten[d1].get(index)).doubleValue();
+                w1 = ((Double) termWeights[d1].get(index)).doubleValue();
             }
 
-            if (termGewichten[d2].containsKey(index))
+            if (termWeights[d2].containsKey(index))
             {
-                w2 = ((Double) termGewichten[d2].get(index)).doubleValue();
+                w2 = ((Double) termWeights[d2].get(index)).doubleValue();
             }
 
-            som += Math.min(w1, w2);
+            sum += Math.min(w1, w2);
         }
 
-        return som;
+        return sum;
     }
 
 
     /*
-     * same as "somDocMin" but for the upper approximation
+     * same as "sumDocMin" but for the upper approximation
      */
-    public double somRuwDocMin(int d1, int d2)
+    public double sumRoughDocMin(int d1, int d2)
     {
-        if (ruwGewichten == null)
+        if (roughWeights == null)
         {
-            bepaalRuwGewichten();
+            calculateRoughWeights();
         }
 
-        double som = 0;
-        Set s1 = ruwGewichten[d1].keySet();
-        Set s2 = ruwGewichten[d2].keySet();
+        double sum = 0;
+        Set s1 = roughWeights[d1].keySet();
+        Set s2 = roughWeights[d2].keySet();
         Set s = (s1.size() > s2.size()) ? s2
                                         : s1;
 
@@ -640,31 +655,31 @@ public class SnippetParser
             double w1 = 0;
             double w2 = 0;
 
-            if (ruwGewichten[d1].containsKey(index))
+            if (roughWeights[d1].containsKey(index))
             {
-                w1 = ((Double) ruwGewichten[d1].get(index)).doubleValue();
+                w1 = ((Double) roughWeights[d1].get(index)).doubleValue();
             }
 
-            if (ruwGewichten[d2].containsKey(index))
+            if (roughWeights[d2].containsKey(index))
             {
-                w2 = ((Double) ruwGewichten[d2].get(index)).doubleValue();
+                w2 = ((Double) roughWeights[d2].get(index)).doubleValue();
             }
 
-            som += Math.min(w1, w2);
+            sum += Math.min(w1, w2);
         }
 
-        return som;
+        return sum;
     }
 
 
     /*
      * calculates the sum over all document of the maximum of the weight of "t1" and the weight of "t2" in that document
      */
-    public double somTermMax(int t1, int t2)
+    public double sumTermMax(int t1, int t2)
     {
-        double som = 0;
-        HashSet s = new HashSet(docGewichten[t1].keySet());
-        s.addAll(docGewichten[t2].keySet());
+        double sum = 0;
+        HashSet s = new HashSet(docWeights[t1].keySet());
+        s.addAll(docWeights[t2].keySet());
 
         for (Iterator it = s.iterator(); it.hasNext();)
         {
@@ -672,31 +687,31 @@ public class SnippetParser
             double w1 = 0;
             double w2 = 0;
 
-            if (docGewichten[t1].containsKey(index))
+            if (docWeights[t1].containsKey(index))
             {
-                w1 = ((Double) docGewichten[t1].get(index)).doubleValue();
+                w1 = ((Double) docWeights[t1].get(index)).doubleValue();
             }
 
-            if (docGewichten[t2].containsKey(index))
+            if (docWeights[t2].containsKey(index))
             {
-                w2 = ((Double) docGewichten[t2].get(index)).doubleValue();
+                w2 = ((Double) docWeights[t2].get(index)).doubleValue();
             }
 
-            som += Math.max(w1, w2);
+            sum += Math.max(w1, w2);
         }
 
-        return som;
+        return sum;
     }
 
 
     /*
      * calculates the sum over all terms of the maximum of the weight of that term in "d1" and in "d2"
      */
-    public double somDocMax(int d1, int d2)
+    public double sumDocMax(int d1, int d2)
     {
-        double som = 0;
-        HashSet s = new HashSet(termGewichten[d1].keySet());
-        s.addAll(termGewichten[d2].keySet());
+        double sum = 0;
+        HashSet s = new HashSet(termWeights[d1].keySet());
+        s.addAll(termWeights[d2].keySet());
 
         for (Iterator it = s.iterator(); it.hasNext();)
         {
@@ -704,36 +719,36 @@ public class SnippetParser
             double w1 = 0;
             double w2 = 0;
 
-            if (termGewichten[d1].containsKey(index))
+            if (termWeights[d1].containsKey(index))
             {
-                w1 = ((Double) termGewichten[d1].get(index)).doubleValue();
+                w1 = ((Double) termWeights[d1].get(index)).doubleValue();
             }
 
-            if (termGewichten[d2].containsKey(index))
+            if (termWeights[d2].containsKey(index))
             {
-                w2 = ((Double) termGewichten[d2].get(index)).doubleValue();
+                w2 = ((Double) termWeights[d2].get(index)).doubleValue();
             }
 
-            som += Math.max(w1, w2);
+            sum += Math.max(w1, w2);
         }
 
-        return som;
+        return sum;
     }
 
 
     /*
-     * same as "somDocMax" but for the upper approximation
+     * same as "sumDocMax" but for the upper approximation
      */
-    public double somRuwDocMax(int d1, int d2)
+    public double sumRoughDocMax(int d1, int d2)
     {
-        if (ruwGewichten == null)
+        if (roughWeights == null)
         {
-            bepaalRuwGewichten();
+            calculateRoughWeights();
         }
 
-        double som = 0;
-        HashSet s = new HashSet(ruwGewichten[d1].keySet());
-        s.addAll(ruwGewichten[d2].keySet());
+        double sum = 0;
+        HashSet s = new HashSet(roughWeights[d1].keySet());
+        s.addAll(roughWeights[d2].keySet());
 
         for (Iterator it = s.iterator(); it.hasNext();)
         {
@@ -741,115 +756,115 @@ public class SnippetParser
             double w1 = 0;
             double w2 = 0;
 
-            if (ruwGewichten[d1].containsKey(index))
+            if (roughWeights[d1].containsKey(index))
             {
-                w1 = ((Double) ruwGewichten[d1].get(index)).doubleValue();
+                w1 = ((Double) roughWeights[d1].get(index)).doubleValue();
             }
 
-            if (ruwGewichten[d2].containsKey(index))
+            if (roughWeights[d2].containsKey(index))
             {
-                w2 = ((Double) ruwGewichten[d2].get(index)).doubleValue();
+                w2 = ((Double) roughWeights[d2].get(index)).doubleValue();
             }
 
-            som += Math.max(w1, w2);
+            sum += Math.max(w1, w2);
         }
 
-        return som;
+        return sum;
     }
 
 
     /*
      * calculates the sum over all documents of the weight of the term "t"
      */
-    public double somTerm(int t)
+    public double sumTerm(int t)
     {
-        double som = 0;
-        HashSet s = new HashSet(docGewichten[t].keySet());
+        double sum = 0;
+        HashSet s = new HashSet(docWeights[t].keySet());
 
         for (Iterator it = s.iterator(); it.hasNext();)
         {
             Integer index = ((Integer) it.next());
             double w = 0;
 
-            if (docGewichten[t].containsKey(index))
+            if (docWeights[t].containsKey(index))
             {
                 ;
             }
 
-            w = ((Double) docGewichten[t].get(index)).doubleValue();
+            w = ((Double) docWeights[t].get(index)).doubleValue();
 
-            som += w;
+            sum += w;
         }
 
-        return som;
+        return sum;
     }
 
 
     /*
      * calculates the sum over all terms of the weight of the document "d"
      */
-    public double somDoc(int d)
+    public double sumDoc(int d)
     {
-        double som = 0;
-        Set s = termGewichten[d].keySet();
+        double sum = 0;
+        Set s = termWeights[d].keySet();
 
         for (Iterator it = s.iterator(); it.hasNext();)
         {
             Integer index = ((Integer) it.next());
             double w = 0;
 
-            if (termGewichten[d].containsKey(index))
+            if (termWeights[d].containsKey(index))
             {
                 ;
             }
 
-            w = ((Double) termGewichten[d].get(index)).doubleValue();
-            som += w;
+            w = ((Double) termWeights[d].get(index)).doubleValue();
+            sum += w;
         }
 
-        return som;
+        return sum;
     }
 
 
     /*
-     * same as "somDoc" but for the upper approximation
+     * same as "sumDoc" but for the upper approximation
      */
-    public double somRuwDoc(int d)
+    public double sumRoughDoc(int d)
     {
-        if (ruwGewichten == null)
+        if (roughWeights == null)
         {
-            bepaalRuwGewichten();
+            calculateRoughWeights();
         }
 
-        double som = 0;
-        Set s = ruwGewichten[d].keySet();
+        double sum = 0;
+        Set s = roughWeights[d].keySet();
 
         for (Iterator it = s.iterator(); it.hasNext();)
         {
             Integer index = ((Integer) it.next());
             double w = 0;
 
-            if (ruwGewichten[d].containsKey(index))
+            if (roughWeights[d].containsKey(index))
             {
                 ;
             }
 
-            w = ((Double) ruwGewichten[d].get(index)).doubleValue();
-            som += w;
+            w = ((Double) roughWeights[d].get(index)).doubleValue();
+            sum += w;
         }
 
-        return som;
+        return sum;
     }
 
 
     /*
      * returns the weight of "term" in "doc"
      */
-    public double gewicht(int doc, int term)
+    public double weight(int doc, int term)
     {
-        if (termGewichten[doc].containsKey(new Integer(term)))
+        if (termWeights[doc].containsKey(new Integer(term)))
         {
-            return ((Double) termGewichten[doc].get(new Integer(term))).doubleValue();
+            return ((Double) termWeights[doc].get(new Integer(term))).doubleValue();
         }
         else
         {
@@ -861,29 +876,29 @@ public class SnippetParser
     /*
      * returns the number of terms
      */
-    public int aantalTermen()
+    public int numberOfTerms()
     {
-        return aantalTermen;
+        return numberOfTerms;
     }
 
 
     /*
      * returns the original term that corresponds with the index "t"
      */
-    public String origineleTerm(int t)
+    public String originalTerm(int t)
     {
-        return (String) termen.get(new Integer(t));
+        return (String) terms.get(new Integer(t));
     }
 
 
     /*
      * returns a set with all document-indices
      */
-    public Set geefAlleIndices()
+    public Set getAllIndices()
     {
         HashSet s = new HashSet();
 
-        for (int i = 0; i < aantalDocumenten; i++)
+        for (int i = 0; i < numberOfDocuments; i++)
         {
             s.add(new Integer(i));
         }
@@ -895,25 +910,25 @@ public class SnippetParser
     /*
      * returns a set with the indices of all documents containing at least 1 term
      */
-    public Set geefNietNulIndices()
+    public Set getNonZeroIndices()
     {
-        return nietNulIndices;
+        return nonZeroIndices;
     }
 
 
     /*
      * returns a set with all term-indices
      */
-    public Set geefTermIndices()
+    public Set getTermIndices()
     {
         HashSet s = new HashSet();
 
         for (Iterator it = df.keySet().iterator(); it.hasNext();)
         {
             Integer index = (Integer) it.next();
-            int aantal = ((Integer) df.get(index)).intValue();
+            int number = ((Integer) df.get(index)).intValue();
 
-            if (aantal >= MINTERMSUPP)
+            if (number >= MINTERMSUPP)
             {
                 s.add(index);
             }
@@ -926,41 +941,41 @@ public class SnippetParser
     /*
      * Return a term->weight mapping for the document with index "index"
      */
-    public Map geefDocument(int index)
+    public Map getDocument(int index)
     {
-        return termGewichten[index];
+        return termWeights[index];
     }
 
 
     /*
      * idem, for upper approximation
      */
-    public Map geefRuwDocument(int index)
+    public Map getRoughDocument(int index)
     {
-        if (ruwGewichten == null)
+        if (roughWeights == null)
         {
-            bepaalRuwGewichten();
+            calculateRoughWeights();
         }
 
-        return ruwGewichten[index];
+        return roughWeights[index];
     }
 
 
     /*
      * Returns the extend to which document "i" is more specific than document "j"
      */
-    public double ruwDocNT(int i, int j)
+    public double roughDocNT(int i, int j)
     {
-        if (ruwGewichten == null)
+        if (roughWeights == null)
         {
-            bepaalRuwGewichten();
+            calculateRoughWeights();
         }
 
-        double som = somRuwDoc(i);
+        double sum = sumRoughDoc(i);
 
-        if (som > 0)
+        if (sum > 0)
         {
-            return somRuwDocMin(i, j) / som;
+            return sumRoughDocMin(i, j) / sum;
         }
         else
         {
@@ -974,11 +989,11 @@ public class SnippetParser
      */
     public double termRT(int i, int j)
     {
-        double som = somTermMax(i, j);
+        double sum = sumTermMax(i, j);
 
-        if (som > 0)
+        if (sum > 0)
         {
-            return somTermMin(i, j) / som;
+            return sumTermMin(i, j) / sum;
         }
         else
         {
@@ -990,15 +1005,15 @@ public class SnippetParser
     /*
      * implements a softer variant of the completion of the term "term", in the sense of Zhang and Dong
      */
-    public String compleet(String term, Collection indices)
+    public String complete(String term, Collection indices)
     {
-        LabelBoom links = new LabelBoom();
-        LabelBoom rechts = new LabelBoom();
-        int totaalAantal = 0;
+        LabelTree links = new LabelTree();
+        LabelTree rechts = new LabelTree();
+        int totalNumber = 0;
 
         for (Iterator it1 = indices.iterator(); it1.hasNext();)
         {
-            String s = (String) origineleDocumenten.get(((Integer) it1.next()).intValue());
+            String s = (String) originalDocuments.get(((Integer) it1.next()).intValue());
             StringTokenizer tok = new StringTokenizer(s);
             LinkedList tokList = new LinkedList();
 
@@ -1013,7 +1028,7 @@ public class SnippetParser
 
                 if (huidig.equals(term))
                 {
-                    totaalAantal++;
+                    totalNumber++;
                     links.add(reverse(tokList.subList(Math.max(0, i - 6), i)));
                     rechts.add(
                         tokList.subList(
@@ -1024,10 +1039,10 @@ public class SnippetParser
             }
         }
 
-        String l = links.geefReverseCompleet(totaalAantal);
-        String r = rechts.geefCompleet(totaalAantal);
+        String l = links.getReverseComplete(totalNumber);
+        String r = rechts.getComplete(totalNumber);
 
-        if (totaalAantal > 3)
+        if (totalNumber > 3)
         {
             return (l + " " + term + " " + r);
         }

@@ -22,7 +22,7 @@ import java.util.*;
  * Abstract representation of an ant
  * @author Steven Schockaert
  */
-abstract class Mier
+abstract class Ant
     implements Constants
 {
     protected int n1;
@@ -32,7 +32,7 @@ abstract class Mier
     Random rand;
     Map parameters;
 
-    public Mier(Map parameters)
+    public Ant(Map parameters)
     {
         this.parameters = parameters;
         rand = new Random();
@@ -43,7 +43,7 @@ abstract class Mier
     }
 
 
-    public Mier(Mier m)
+    public Ant(Ant m)
     {
         parameters = m.parameters;
         rand = new Random();
@@ -56,10 +56,10 @@ abstract class Mier
         FuzzyNumber f1, int w1, FuzzyNumber f2, int w2, FuzzyNumber f3, FuzzyNumber res
     )
     {
-        if ((f1.lidmaatschap(w1) > 0) && (f2.lidmaatschap(w2) > 0))
+        if ((f1.membership(w1) > 0) && (f2.membership(w2) > 0))
         {
             FuzzyNumber temp = new FuzzyNumber(
-                    f3, Math.min(f1.lidmaatschap(w1), f2.lidmaatschap(w2))
+                    f3, Math.min(f1.membership(w1), f2.membership(w2))
                 );
             res.max(temp);
         }
@@ -71,9 +71,9 @@ abstract class Mier
      */
     public static void infer(FuzzyNumber f1, int w1, FuzzyNumber f2, FuzzyNumber res)
     {
-        if (f1.lidmaatschap(w1) > 0)
+        if (f1.membership(w1) > 0)
         {
-            FuzzyNumber temp = new FuzzyNumber(f2, f1.lidmaatschap(w1));
+            FuzzyNumber temp = new FuzzyNumber(f2, f1.membership(w1));
             res.max(temp);
         }
     }

@@ -52,18 +52,18 @@ public class FuzzyAnts
             java.util.List query = new ArrayList(root.getChildren("query"));
 
             //determine parameter values
-            bepaalParameters();
+            getParameters();
 
             //obtain clusters
             DocumentClustering opl = new DocumentClustering(
-                    0, children, meta, query, true, BINAIR, params
+                    0, children, meta, query, true, BINARY, params
                 );
-            List groepen = opl.geefGroepen();
+            List groups = opl.getGroups();
 
-            for (ListIterator it = groepen.listIterator(); it.hasNext();)
+            for (ListIterator it = groups.listIterator(); it.hasNext();)
             {
-                Element groep = (Element) it.next();
-                root.addContent(groep);
+                Element group = (Element) it.next();
+                root.addContent(group);
             }
 
             //store result
@@ -76,7 +76,7 @@ public class FuzzyAnts
     }
 
 
-    public void bepaalParameters()
+    public void getParameters()
     {
         String p1 = "50";
         String p2 = "50";
@@ -109,6 +109,6 @@ public class FuzzyAnts
         params.put("m2", l);
         l = new LinkedList();
         l.add(p8);
-        params.put("aantalstappen", l);
+        params.put("numberOfIterations", l);
     }
 }
