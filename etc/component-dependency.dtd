@@ -28,6 +28,7 @@
 <!ATTLIST dependency name NMTOKEN #REQUIRED >
 <!ATTLIST dependency profile NMTOKEN #IMPLIED >
 <!ATTLIST dependency nocopy (true|false) "false" >
+<!ATTLIST dependency in-profile NMTOKEN #IMPLIED >
 
 
 <!--
