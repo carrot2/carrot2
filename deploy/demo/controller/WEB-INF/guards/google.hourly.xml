@@ -1,4 +1,4 @@
-<guard class="com.dawidweiss.carrot.controller.carrot2.guard.HourlyLimitGuard">
+<guard class="com.dawidweiss.carrot.remote.controller.guard.HourlyLimitGuard">
 
     <component-prefix>carrot2.input.snippet-reader.google</component-prefix>
     
