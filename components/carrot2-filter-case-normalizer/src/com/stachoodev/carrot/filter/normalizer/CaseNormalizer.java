@@ -12,9 +12,12 @@ package com.stachoodev.carrot.filter.normalizer;
 
 import java.util.*;
 
+import org.apache.commons.collections.map.*;
+
 import com.dawidweiss.carrot.core.local.clustering.*;
 import com.dawidweiss.carrot.core.local.linguistic.tokens.*;
 import com.dawidweiss.carrot.util.common.*;
+import com.dawidweiss.carrot.util.common.pools.*;
 import com.dawidweiss.carrot.util.tokenizer.languages.*;
 import com.dawidweiss.carrot.util.tokenizer.parser.*;
 
@@ -37,6 +40,8 @@ import com.dawidweiss.carrot.util.tokenizer.parser.*;
  * No support is provided for the full text of documents. This class is <b>not
  * </b> thread-safe.
  * 
+ * TODO: use "fast" map
+ * 
  * @author Stanislaw Osinski
  * @version $Revision$
  */
@@ -49,14 +54,12 @@ public class CaseNormalizer
     public static short DEFAULT_FILTER_MASK = TypedToken.TOKEN_TYPE_SYMBOL
         | TypedToken.TOKEN_TYPE_UNKNOWN | TypedToken.TOKEN_TYPE_PUNCTUATION;
 
-    /** Language stored in a token */
-    private static final String PROPERTY_LOCALE = "lang";
-
     /**
-     * Maps lower case ExtendedTokens (key) to Maps of ExtendedTokens with the
-     * original forms (keys) and their frequencies (values)
+     * Maps Locale instances (key) to Maps of tokens in the respective language.
+     * Each map Maps lower case ExtendedTokens (key) to Maps of ExtendedTokens
+     * with the original forms (keys) and their frequencies (values).
      */
-    private Map tokens;
+    private Map tokensForLanguage;
 
     /** Stores the original documents */
     private List documents;
@@ -64,13 +67,35 @@ public class CaseNormalizer
     /** Set to true after the normalization has been finished */
     private boolean normalizationFinished;
 
+    /** HashMap pool (we use one hash map per token type here) */
+    private SoftReusableObjectsPool hashMapPool;
+
+    /**
+     * A map of locale instances. An interesting fact: retrieving locales from
+     * a HashMap instead of creating new instances _slows down_ the code by 20%
+     * on the client JVM, but is faster on a server JVM (Sun/Windows)
+     */
+    private Map locales;
+
     /**
      * Creates a new case normalizer.
      */
     public CaseNormalizer()
     {
-        tokens = new HashMap();
+        tokensForLanguage = new HashMap();
+        locales = new HashMap();
         documents = new ArrayList();
+
+        hashMapPool = new SoftReusableObjectsPool(new ReusableObjectsFactory()
+        {
+            public void createNewObjects(Object [] objects)
+            {
+                for (int i = 0; i < objects.length; i++)
+                {
+                    objects[i] = new Flat3Map();
+                }
+            }
+        }, 2500, 500);
     }
 
     /**
@@ -79,8 +104,9 @@ public class CaseNormalizer
      */
     public void clear()
     {
-        tokens.clear();
+        tokensForLanguage.clear();
         documents.clear();
+        hashMapPool.reuse();
         normalizationFinished = false;
     }
 
@@ -102,10 +128,15 @@ public class CaseNormalizer
         documents.add(document);
 
         Locale locale = null;
-        if (document.getProperty(TokenizedDocument.PROPERTY_LANGUAGE) != null)
+        String languageCode = (String) document
+            .getProperty(TokenizedDocument.PROPERTY_LANGUAGE);
+
+        locale = (Locale) locales.get(languageCode);
+        if (locale == null)
         {
-            locale = new Locale((String) document
-                .getProperty(TokenizedDocument.PROPERTY_LANGUAGE));
+            locale = new Locale((languageCode != null ? languageCode
+                : "unknown"));
+            locales.put(languageCode, locale);
         }
 
         addTokenSequence(document.getTitle(), locale);
@@ -146,32 +177,34 @@ public class CaseNormalizer
         Map normalizedTokens = new HashMap();
 
         // Normalize tokens first
-        for (Iterator tokensIter = tokens.keySet().iterator(); tokensIter
+        for (Iterator tokensIter = tokensForLanguage.keySet().iterator(); tokensIter
             .hasNext();)
         {
-            ExtendedToken extendedToken = (ExtendedToken) tokensIter.next();
+            Locale locale = (Locale) tokensIter.next();
+            Map originalTokensForLang = (Map) tokensForLanguage.get(locale);
 
-            Map normalizedTokensForLang;
-            Locale locale = (Locale) extendedToken.getProperty(PROPERTY_LOCALE);
-            if (locale == null)
+            for (Iterator iter = originalTokensForLang.keySet().iterator(); iter
+                .hasNext();)
             {
-                locale = new Locale("unknown");
-            }
-            if (!normalizedTokens.containsKey(locale))
-            {
-                normalizedTokensForLang = new HashMap();
-                normalizedTokens.put(locale, normalizedTokensForLang);
-            }
-            else
-            {
-                normalizedTokensForLang = (Map) normalizedTokens.get(locale);
-            }
-            Map originalTokens = (Map) tokens.get(extendedToken);
+                Token token = (Token) iter.next();
 
-            normalizeTokens((StringTypedToken) extendedToken.getToken(),
-                originalTokens, locale);
+                Map normalizedTokensForLang;
+                if (!normalizedTokens.containsKey(locale))
+                {
+                    normalizedTokensForLang = new HashMap();
+                    normalizedTokens.put(locale, normalizedTokensForLang);
+                }
+                else
+                {
+                    normalizedTokensForLang = (Map) normalizedTokens
+                        .get(locale);
+                }
 
-            normalizedTokensForLang.putAll(originalTokens);
+                Map originalTokens = (Map) originalTokensForLang.get(token);
+                normalizeTokens((StringTypedToken) token, originalTokens,
+                    locale);
+                normalizedTokensForLang.putAll(originalTokens);
+            }
         }
 
         for (int d = 0; d < documents.size(); d++)
@@ -179,12 +212,8 @@ public class CaseNormalizer
             TokenizedDocument document = (TokenizedDocument) documents.get(d);
             String lang = (String) document
                 .getProperty(TokenizedDocument.PROPERTY_LANGUAGE);
-            if (lang == null)
-            {
-                lang = "unknown";
-            }
-            Map normalizedTokensForLang = (Map) normalizedTokens
-                .get(new Locale(lang));
+            Map normalizedTokensForLang = (Map) normalizedTokens.get(locales
+                .get(lang));
 
             normalizeTokenSequence((MutableTokenSequence) document.getTitle(),
                 normalizedTokensForLang);
@@ -203,7 +232,7 @@ public class CaseNormalizer
         Map normalizedTokens)
     {
         // TODO: normalizedTokens should not be null but it is for some
-        // reason when clustering web contsnt
+        // reason when clustering web content
         if (tokenSequence == null || normalizedTokens == null)
         {
             return;
@@ -342,54 +371,37 @@ public class CaseNormalizer
                 lowerCaseToken = new StringTypedToken();
             }
 
-            if (locale != null)
-            {
-                lowerCaseToken.assign(originalToken.toString().toLowerCase(
-                    locale), originalToken.getType());
-            }
-            else
-            {
-                lowerCaseToken.assign(originalToken.toString().toLowerCase(),
-                    originalToken.getType());
-            }
+            lowerCaseToken.assign(originalToken.toString().toLowerCase(locale),
+                originalToken.getType());
 
             if (originalToken instanceof StemmedToken)
             {
                 String stem = ((StemmedToken) originalToken).getStem();
                 if (stem != null)
                 {
-                    if (locale != null)
-                    {
-                        ((MutableStemmedToken) lowerCaseToken).setStem(stem
-                            .toLowerCase(locale));
-                    }
-                    else
-                    {
-                        ((MutableStemmedToken) lowerCaseToken).setStem(stem
-                            .toLowerCase());
-                    }
+                    ((MutableStemmedToken) lowerCaseToken).setStem(stem
+                        .toLowerCase(locale));
                 }
             }
 
-            // Must store language with each lower case token in order to
-            // differentiate e.g. 'ale' (Polish stopword) from 'ale' (English).
-            ExtendedToken lowerCaseExtendedToken = new ExtendedToken(
-                lowerCaseToken);
-            if (locale != null)
+            Map tokens = (Map) tokensForLanguage.get(locale);
+            if (tokens == null)
             {
-                lowerCaseExtendedToken.setProperty(PROPERTY_LOCALE, locale);
+                tokens = new HashMap();
+                tokensForLanguage.put(locale, tokens);
             }
 
             // Get the map of original forms
             Map originalTokens;
-            if (tokens.containsKey(lowerCaseExtendedToken))
+            if (tokens.containsKey(lowerCaseToken))
             {
-                originalTokens = (Map) tokens.get(lowerCaseExtendedToken);
+                originalTokens = (Map) tokens.get(lowerCaseToken);
             }
             else
             {
-                originalTokens = new HashMap();
-                tokens.put(lowerCaseExtendedToken, originalTokens);
+                originalTokens = (Map) hashMapPool.acquireObject();
+                originalTokens.clear();
+                tokens.put(lowerCaseToken, originalTokens);
             }
 
             // Add/increase the frequency of the original token
