@@ -15,6 +15,7 @@ import java.util.*;
 
 import com.chilang.carrot.filter.cluster.local.*;
 import com.dawidweiss.carrot.core.local.*;
+import com.dawidweiss.carrot.core.local.clustering.*;
 import com.dawidweiss.carrot.core.local.profiling.*;
 import com.dawidweiss.carrot.filter.langguesser.*;
 import com.dawidweiss.carrot.filter.stc.local.*;
@@ -45,10 +46,10 @@ public class SearchResultsClusteringBenchmark
     private LocalController localController;
 
     /** A map of queries (values) and their ids (keys) */
-    private Map queries;
+    private Set queries;
 
     /** The warm-up query */
-    private String warmUpQuery;
+    private String [] warmUpQueries;
 
     /**
      * @throws ClassNotFoundException
@@ -60,7 +61,7 @@ public class SearchResultsClusteringBenchmark
         ODPIndex.initialize(odpIndexLocation);
 
         // Prepare queries
-        queries = new LinkedHashMap();
+        queries = new LinkedHashSet();
         addQueries(queries);
 
         // Prepare the controller and clustering algorithms
@@ -71,129 +72,196 @@ public class SearchResultsClusteringBenchmark
     }
 
     /**
-     * @param queryMap
+     * @param querySet
      */
-    private void addQueries(Map queryMap)
+    private void addQueries(Set querySet)
     {
-        warmUpQuery = "catid: 42951";
-//        queryMap.put("separation-level-1",
-//            "catid: 791558 905697 5843791 96938 26950 43585 468909");
-//        queryMap.put("separation-level-2",
-//            "catid: 337874 48435 171000 783469 289730 26975 210325");
-//        queryMap
-//            .put(
-//                "separation-level-3",
-//                "catid: 209353 592083 327 196267 240856 27078 303 27074 283016 27075 1139293 27073");
-//        queryMap.put("separation-level-4",
-//            "catid: 136387 504694 86425 96057 92335");
-//        queryMap.put("separation-level-5",
-//            "catid: 58029 449902 292594 115111 382391 110783 452210");
+        warmUpQueries = new String []
+        { "catid: 354439 5809",
+         "catid: 791558 905697 5843791 96938 26950 43585 468909",
+         "catid: 78928",
+         "catid: 339598 570229 212801 32496 232622 114095 365576 870296",
+         "catid: 337874 48435 171000 783469 289730 26975 210325" };
 //        queryMap.put("ai-nn-people", "catid: 354439 5809");
-//        queryMap.put("polska-level-1",
+//		queryMap.put("polska-level-1",
 //            "catid: 339598 570229 212801 32496 232622 114095 365576 870296");
 //        queryMap
 //            .put(
 //                "outlier-level-3",
 //                "catid: 209353 592083 327 196267 240856 27078 303 27074 283016 27075 1139293 27073 1244841");
-       
+
         // Balanced size, separation level 1
-        queryMap.put("cats-2-bal-t-sep-1", "catid: 365639 287192");
-        queryMap.put("cats-3-bal-t-sep-1", "catid: 185352 7698 26775");
-        queryMap.put("cats-4-bal-t-sep-1", "catid: 6253 58375 8568 26954");
-        queryMap.put("cats-5-bal-t-sep-1", "catid: 41312 188623 7430 241 26948");
-        queryMap.put("cats-6-bal-t-sep-1", "catid: 325060 5462 84469 41436 93022 792595");
-        queryMap.put("cats-7-bal-t-sep-1", "catid: 899171 81121 98602 240716 468908 8830 27075");
-        queryMap.put("cats-8-bal-t-sep-1", "catid: 254684 1270973 817696 92618 472689 221 27160 283374");
-        
+        querySet.add(ODPQuery.createSeparationTest(1, true, "catid: 365639 287192"));
+        querySet.add(ODPQuery.createSeparationTest(1, true, "catid: 185352 7698 26775"));
+        querySet.add(ODPQuery.createSeparationTest(1, true, "catid: 6253 58375 8568 26954"));
+        querySet.add(ODPQuery.createSeparationTest(1, true, "catid: 41312 188623 7430 241 26948"));
+        querySet.add(ODPQuery.createSeparationTest(1, true, "catid: 325060 5462 84469 41436 93022 792595"));
+        querySet.add(ODPQuery.createSeparationTest(1, true, "catid: 899171 81121 98602 240716 468908 8830 27075"));
+        querySet.add(ODPQuery.createSeparationTest(1, true, "catid: 254684 1270973 817696 92618 472689 221 27160 283374"));
+
         // Unbalanced size (+/- 50%), separation level 1
-        queryMap.put("cats-2-bal-f-sep-1", "catid: 69395 7210");
-        queryMap.put("cats-3-bal-f-sep-1", "catid: 58083 472742 48499");
-        queryMap.put("cats-4-bal-f-sep-1", "catid: 398551 435847 109413 41938");
-        queryMap.put("cats-5-bal-f-sep-1", "catid: 280473 196121 185 119014 423185");
-        queryMap.put("cats-6-bal-f-sep-1", "catid: 205549 7450 41300 6621 26841 505967");
-        queryMap.put("cats-7-bal-f-sep-1", "catid: 276670 7207 472697 52215 5800938 41936 26963");
-        queryMap.put("cats-8-bal-f-sep-1", "catid: 399658 280285 295 486788 26839 175622 129488 254784");
+        querySet.add(ODPQuery.createSeparationTest(1, false, "catid: 69395 7210"));
+        querySet.add(ODPQuery.createSeparationTest(1, false, "catid: 58083 472742 48499"));
+        querySet.add(ODPQuery.createSeparationTest(1, false, "catid: 398551 435847 109413 41938"));
+        querySet.add(ODPQuery.createSeparationTest(1, false, "catid: 280473 196121 185 119014 423185"));
+        querySet.add(ODPQuery.createSeparationTest(1, false, "catid: 205549 7450 41300 6621 26841 505967"));
+        querySet.add(ODPQuery.createSeparationTest(1, false, "catid: 276670 7207 472697 52215 5800938 41936 26963"));
+        querySet.add(ODPQuery.createSeparationTest(1, false, "catid: 399658 280285 295 486788 26839 175622 129488 254784"));
 
         // Balanced size, separation level 2
-        queryMap.put("cats-2-bal-t-sep-2", "catid: 27082 282106");
-        queryMap.put("cats-3-bal-t-sep-2", "catid: 198214 83564 58419");
-        queryMap.put("cats-4-bal-t-sep-2", "catid: 8372 401 272162 58779");
-        queryMap.put("cats-5-bal-t-sep-2", "catid: 58123 887744 5339 82155 437987");
-        queryMap.put("cats-6-bal-t-sep-2", "catid: 69478 577433 26881 26946 106806 96023");
-        queryMap.put("cats-7-bal-t-sep-2", "catid: 8421 40632 178528 140175 59800 350389 540280");
-        queryMap.put("cats-8-bal-t-sep-2", "catid: 6122 4902 110507 133 452210 5431 589495 198647");
+        querySet.add(ODPQuery.createSeparationTest(2, true, "catid: 27082 282106"));
+        querySet.add(ODPQuery.createSeparationTest(2, true, "catid: 198214 83564 58419"));
+        querySet.add(ODPQuery.createSeparationTest(2, true, "catid: 8372 401 272162 58779"));
+        querySet.add(ODPQuery.createSeparationTest(2, true, "catid: 58123 887744 5339 82155 437987"));
+        querySet.add(ODPQuery.createSeparationTest(2, true, "catid: 69478 577433 26881 26946 106806 96023"));
+        querySet.add(ODPQuery.createSeparationTest(2, true, "catid: 8421 40632 178528 140175 59800 350389 540280"));
+        querySet.add(ODPQuery.createSeparationTest(2, true, "catid: 6122 4902 110507 133 452210 5431 589495 198647"));
 
         // Unbalanced size (+/- 50%), separation level 2
-        queryMap.put("cats-2-bal-f-sep-2", "catid: 6620 5307");
-        queryMap.put("cats-3-bal-f-sep-2", "catid: 5822171 7460 7706");
-        queryMap.put("cats-4-bal-f-sep-2", "catid: 198926 123154 349908 95762");
-        queryMap.put("cats-5-bal-f-sep-2", "catid: 6378 6163 6055 452806 4918");
-        queryMap.put("cats-6-bal-f-sep-2", "catid: 8888 220801 8090 707465 40022 43581");
-        queryMap.put("cats-7-bal-f-sep-2", "catid: 7322 7455 53786 1257637 392525 8887 7606");
-        queryMap.put("cats-8-bal-f-sep-2", "catid: 292999 317940 1157346 57931 4808 6142 4993 1243179");
+        querySet.add(ODPQuery.createSeparationTest(2, false, "catid: 6620 5307"));
+        querySet.add(ODPQuery.createSeparationTest(2, false, "catid: 5822171 7460 7706"));
+        querySet.add(ODPQuery.createSeparationTest(2, false, "catid: 198926 123154 349908 95762"));
+        querySet.add(ODPQuery.createSeparationTest(2, false, "catid: 6378 6163 6055 452806 4918"));
+        querySet.add(ODPQuery.createSeparationTest(2, false, "catid: 8888 220801 8090 707465 40022 43581"));
+        querySet.add(ODPQuery.createSeparationTest(2, false, "catid: 7322 7455 53786 1257637 392525 8887 7606"));
+        querySet.add(ODPQuery.createSeparationTest(2, false, "catid: 292999 317940 1157346 57931 4808 6142 4993 1243179"));
 
         // Balanced size, separation level 3
-        queryMap.put("cats-2-bal-t-sep-3", "catid: 48472 26621");
-        queryMap.put("cats-3-bal-t-sep-3", "catid: 197724 5465 332889");
-        queryMap.put("cats-4-bal-t-sep-3", "catid: 429194 397702 791675 5347");
-        queryMap.put("cats-5-bal-t-sep-3", "catid: 145491 5877762 287353 69526 112582");
-        queryMap.put("cats-6-bal-t-sep-3", "catid: 53264 812644 8955 52128 110835 8872");
-        queryMap.put("cats-7-bal-t-sep-3", "catid: 128323 841187 320908 413656 791254 382727 392113");
-        queryMap.put("cats-8-bal-t-sep-3", "catid: 108421 452582 6099 285920 124090 5451 459492 6072");
+        querySet.add(ODPQuery.createSeparationTest(3, true, "catid: 48472 26621"));
+        querySet.add(ODPQuery.createSeparationTest(3, true, "catid: 197724 5465 332889"));
+        querySet.add(ODPQuery.createSeparationTest(3, true, "catid: 429194 397702 791675 5347"));
+        querySet.add(ODPQuery.createSeparationTest(3, true, "catid: 145491 5877762 287353 69526 112582"));
+        querySet.add(ODPQuery.createSeparationTest(3, true, "catid: 53264 812644 8955 52128 110835 8872"));
+        querySet.add(ODPQuery.createSeparationTest(3, true, "catid: 128323 841187 320908 413656 791254 382727 392113"));
+        querySet.add(ODPQuery.createSeparationTest(3, true, "catid: 108421 452582 6099 285920 124090 5451 459492 6072"));
 
         // Unbalanced size (+/- 50%), separation level 3
-        queryMap.put("cats-2-bal-f-sep-3", "catid: 59328 585483");
-        queryMap.put("cats-3-bal-f-sep-3", "catid: 851854 472726 473433");
-        queryMap.put("cats-4-bal-f-sep-3", "catid: 26914 388662 80718 1211428");
-        queryMap.put("cats-5-bal-f-sep-3", "catid: 811341 287353 396899 80887 320");
-        queryMap.put("cats-6-bal-f-sep-3", "catid: 559969 1274009 359908 7667 110037 51052");
-        queryMap.put("cats-7-bal-f-sep-3", "catid: 170719 895110 4916 57507 5404 85675 4918");
-        queryMap.put("cats-8-bal-f-sep-3", "catid: 592083 327 868131 196267 27078 303 240856 210326");
+        querySet.add(ODPQuery.createSeparationTest(3, false, "catid: 59328 585483"));
+        querySet.add(ODPQuery.createSeparationTest(3, false, "catid: 851854 472726 473433"));
+        querySet.add(ODPQuery.createSeparationTest(3, false, "catid: 26914 388662 80718 1211428"));
+        querySet.add(ODPQuery.createSeparationTest(3, false, "catid: 811341 287353 396899 80887 320"));
+        querySet.add(ODPQuery.createSeparationTest(3, false, "catid: 559969 1274009 359908 7667 110037 51052"));
+        querySet.add(ODPQuery.createSeparationTest(3, false, "catid: 170719 895110 4916 57507 5404 85675 4918"));
+        querySet.add(ODPQuery.createSeparationTest(3, false, "catid: 592083 327 868131 196267 27078 303 240856 210326"));
 
         // Unbalanced size, separation level 4
-        queryMap.put("cats-2-bal-f-sep-4", "catid: 57882 6083");
-        queryMap.put("cats-3-bal-f-sep-4", "catid: 185352 5779 463882");
-        queryMap.put("cats-4-bal-f-sep-4", "catid: 178332 26974 223614 26962");
-        queryMap.put("cats-5-bal-f-sep-4", "catid: 6524 530870 6476 5954 6012");
-        queryMap.put("cats-6-bal-f-sep-4", "catid: 904305 200591 216495 43371 5871416 347409");
-        queryMap.put("cats-7-bal-f-sep-4", "catid: 5878175 8345 80915 112077 8335 421910 8417");
-        queryMap.put("cats-8-bal-f-sep-4", "catid: 6163 57964 6198 399658 80614 6244 6238 6181");
+        querySet.add(ODPQuery.createSeparationTest(4, false, "catid: 57882 6083"));
+        querySet.add(ODPQuery.createSeparationTest(4, false, "catid: 185352 5779 463882"));
+        querySet.add(ODPQuery.createSeparationTest(4, false, "catid: 178332 26974 223614 26962"));
+        querySet.add(ODPQuery.createSeparationTest(4, false, "catid: 6524 530870 6476 5954 6012"));
+        querySet.add(ODPQuery.createSeparationTest(4, false, "catid: 904305 200591 216495 43371 5871416 347409"));
+        querySet.add(ODPQuery.createSeparationTest(4, false, "catid: 5878175 8345 80915 112077 8335 421910 8417"));
+        querySet.add(ODPQuery.createSeparationTest(4, false, "catid: 6163 57964 6198 399658 80614 6244 6238 6181"));
 
         // Unbalanced size, separation level 5
-        queryMap.put("cats-2-bal-f-sep-5", "catid: 7700 215778");
-        queryMap.put("cats-3-bal-f-sep-5", "catid: 5866 5867 5868");
-        queryMap.put("cats-4-bal-f-sep-5", "catid: 116067 6474 122008 6472");
-        queryMap.put("cats-5-bal-f-sep-5", "catid: 6523 142289 6524 107353 395536");
-        queryMap.put("cats-6-bal-f-sep-5", "catid: 71085 5830352 793306 96550 71084 71111");
-        queryMap.put("cats-7-bal-f-sep-5", "catid: 418653 418651 431700 116277 280883 139063 144344");
-        queryMap.put("cats-8-bal-f-sep-5", "catid: 452210 504547 382391 58001 449575 531880 435644 420716");
+        querySet.add(ODPQuery.createSeparationTest(5, false, "catid: 7700 215778"));
+        querySet.add(ODPQuery.createSeparationTest(5, false, "catid: 5866 5867 5868"));
+        querySet.add(ODPQuery.createSeparationTest(5, false, "catid: 116067 6474 122008 6472"));
+        querySet.add(ODPQuery.createSeparationTest(5, false, "catid: 6523 142289 6524 107353 395536"));
+        querySet.add(ODPQuery.createSeparationTest(5, false, "catid: 71085 5830352 793306 96550 71084 71111"));
+        querySet.add(ODPQuery.createSeparationTest(5, false, "catid: 418653 418651 431700 116277 280883 139063 144344"));
+        querySet.add(ODPQuery.createSeparationTest(5, false, "catid: 452210 504547 382391 58001 449575 531880 435644 420716"));
 
         // Unbalanced size, separation level 6
-        queryMap.put("cats-2-bal-f-sep-6", "catid: 58008 1174851");
-        queryMap.put("cats-3-bal-f-sep-6", "catid: 335064 448461 448462");
-        queryMap.put("cats-4-bal-f-sep-6", "catid: 432203 432201 432200 781635");
-        queryMap.put("cats-5-bal-f-sep-6", "catid: 84491 57479 96503 110519 84479");
-        queryMap.put("cats-6-bal-f-sep-6", "catid: 6296 6297 5815462 6298 6301 5815457");
-        queryMap.put("cats-7-bal-f-sep-6", "catid: 1188811 6543 535289 533908 1140685 900626 1227509");
-        queryMap.put("cats-8-bal-f-sep-6", "catid: 901623 392036 203972 58004 58031 110219 504547 906183");
+        querySet.add(ODPQuery.createSeparationTest(6, false, "catid: 58008 1174851"));
+        querySet.add(ODPQuery.createSeparationTest(6, false, "catid: 335064 448461 448462"));
+        querySet.add(ODPQuery.createSeparationTest(6, false, "catid: 432203 432201 432200 781635"));
+        querySet.add(ODPQuery.createSeparationTest(6, false, "catid: 84491 57479 96503 110519 84479"));
+        querySet.add(ODPQuery.createSeparationTest(6, false, "catid: 6296 6297 5815462 6298 6301 5815457"));
+        querySet.add(ODPQuery.createSeparationTest(6, false, "catid: 1188811 6543 535289 533908 1140685 900626 1227509"));
+        querySet.add(ODPQuery.createSeparationTest(6, false, "catid: 901623 392036 203972 58004 58031 110219 504547 906183"));
 
         // A single outlier of different sizes
-        queryMap.put("sep-3-on-1-os-100", "catid: 429194 397702 791675 5347 556802");
-        queryMap.put("sep-3-on-1-os-50", "catid: 429194 397702 791675 5347 1257774");
-        queryMap.put("sep-3-on-1-os-40", "catid: 429194 397702 791675 5347 783404");
-        queryMap.put("sep-3-on-1-os-30", "catid: 429194 397702 791675 5347 94505");
-        queryMap.put("sep-3-on-1-os-20", "catid: 429194 397702 791675 5347 1126382");
-        queryMap.put("sep-3-on-1-os-15", "catid: 429194 397702 791675 5347 349824");
-        queryMap.put("sep-3-on-1-os-10", "catid: 429194 397702 791675 5347 59498");
+        querySet.add(ODPQuery.createOutlierTest(3, 1, 100, "catid: 429194 397702 791675 5347 556802"));
+        querySet.add(ODPQuery.createOutlierTest(3, 1, 50, "catid: 429194 397702 791675 5347 1257774"));
+        querySet.add(ODPQuery.createOutlierTest(3, 1, 40, "catid: 429194 397702 791675 5347 783404"));
+        querySet.add(ODPQuery.createOutlierTest(3, 1, 30, "catid: 429194 397702 791675 5347 94505"));
+        querySet.add(ODPQuery.createOutlierTest(3, 1, 20, "catid: 429194 397702 791675 5347 1126382"));
+        querySet.add(ODPQuery.createOutlierTest(3, 1, 15, "catid: 429194 397702 791675 5347 349824"));
+        querySet.add(ODPQuery.createOutlierTest(3, 1, 10, "catid: 429194 397702 791675 5347 59498"));
 
         // Two outliers of different sizes
-        queryMap.put("sep-3-on-2-os-100", "catid: 145491 5877762 287353 69526 112582 7433 8417");
-        queryMap.put("sep-3-on-2-os-50", "catid: 145491 5877762 287353 69526 112582 904279 783380");
-        queryMap.put("sep-3-on-2-os-40", "catid: 145491 5877762 287353 69526 112582 921041 933088");
-        queryMap.put("sep-3-on-2-os-30", "catid: 145491 5877762 287353 69526 112582 201009 8764");
-        queryMap.put("sep-3-on-2-os-20", "catid: 145491 5877762 287353 69526 112582 276657 26619");
-        queryMap.put("sep-3-on-2-os-15", "catid: 145491 5877762 287353 69526 112582 793986 209358");
-        queryMap.put("sep-3-on-2-os-10", "catid: 145491 5877762 287353 69526 112582 568954 1131193");
+        querySet.add(ODPQuery.createOutlierTest(3, 2, 100, "catid: 145491 5877762 287353 69526 112582 7433 8417"));
+        querySet.add(ODPQuery.createOutlierTest(3, 2, 50, "catid: 145491 5877762 287353 69526 112582 904279 783380"));
+        querySet.add(ODPQuery.createOutlierTest(3, 2, 40, "catid: 145491 5877762 287353 69526 112582 921041 933088"));
+        querySet.add(ODPQuery.createOutlierTest(3, 2, 30, "catid: 145491 5877762 287353 69526 112582 201009 8764"));
+        querySet.add(ODPQuery.createOutlierTest(3, 2, 20, "catid: 145491 5877762 287353 69526 112582 276657 26619"));
+        querySet.add(ODPQuery.createOutlierTest(3, 2, 15, "catid: 145491 5877762 287353 69526 112582 793986 209358"));
+        querySet.add(ODPQuery.createOutlierTest(3, 2, 10, "catid: 145491 5877762 287353 69526 112582 568954 1131193"));
+
+        // Performance test - will take A WHILE
+        for(int i = 0; false && i < 10; i++)
+        {
+	        // 50 snippets
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 55724"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 55734"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 41938"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 108888"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 818536"));
+	        
+	        // 100 snippets
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 55724 5007"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 55734 58083"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 41938 4831"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 108888 403109"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 818536 231738"));
+	        
+	        // 150 snippets
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 55724 5007 88529"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 55734 58083 185352"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 41938 4831 5867041"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 108888 403109 453843"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 818536 231738 487242"));
+	        
+	        // 200 snippets
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 55724 5007 88529 5867041"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 55734 58083 185352 299143"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 41938 4831 5867041 43543"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 108888 403109 453843 363083"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 818536 231738 487242 299143"));
+	        
+	        // 250 snippets
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 55724 5007 88529 5867041 818536"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 55734 58083 185352 299143 5007"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 41938 4831 5867041 43543 185352"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 108888 403109 453843 363083 4831"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 818536 231738 487242 299143 403109"));
+	        
+	        // 300 snippets
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 55724 5007 88529 5867041 818536 1121492"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 55734 58083 185352 299143 5007 271547"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 41938 4831 5867041 43543 185352 108888"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 108888 403109 453843 363083 4831 304224"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 818536 231738 487242 299143 403109 202114"));
+	        
+	        // 350 snippets
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 55724 5007 88529 5867041 818536 1121492 1243317"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 55734 58083 185352 299143 5007 271547 88529"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 41938 4831 5867041 43543 185352 108888 453843"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 108888 403109 453843 363083 4831 304224 7698"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 818536 231738 487242 299143 403109 202114 29944"));
+	        
+	        // 400 snippets
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 55724 5007 88529 5867041 818536 1121492 1243317 58083"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 55734 58083 185352 299143 5007 271547 88529 231738"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 41938 4831 5867041 43543 185352 108888 453843 5854"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 108888 403109 453843 363083 4831 304224 7698 299143"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 818536 231738 487242 299143 403109 202114 29944 7321"));
+	        
+	        // 450 snippets
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 55724 5007 88529 5867041 818536 1121492 1243317 58083 8603"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 55734 58083 185352 299143 5007 271547 88529 231738 550048"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 41938 4831 5867041 43543 185352 108888 453843 5854 425150"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 108888 403109 453843 363083 4831 304224 7698 299143 200101"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 818536 231738 487242 299143 403109 202114 29944 7321 844985"));
+	        
+	        // 500 snippets
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 55724 5007 88529 5867041 818536 1121492 1243317 58083 8603 166565"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 55734 58083 185352 299143 5007 271547 88529 231738 550048 111107"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 41938 4831 5867041 43543 185352 108888 453843 5854 425150 700343"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 108888 403109 453843 363083 4831 304224 7698 299143 200101 41938"));
+	        querySet.add(ODPQuery.createPerformanceTest("catid: 818536 231738 487242 299143 403109 202114 29944 7321 844985 4831"));
+        }
     }
 
     /**
@@ -226,8 +294,19 @@ public class SearchResultsClusteringBenchmark
         localController.addProcess("lingo-nmf-1", lingoNMF1);
 
         // ODP -> Guesser -> Tokenizer -> LingoNMF -> Output
-        LocalProcessBase lingoNMF3 = new LocalProcessBase(
+        LocalProcessBase lingoNMF2 = new LocalProcessBase(
             "input.odp",
+            "output.cluster-consumer",
+            new String []
+            { "filter.language-guesser", "filter.tokenizer",
+             "filter.case-normalizer", "filter.lingo-nmf-2" },
+            "ODP -> Language Guesser -> Tokenizer -> Case Normalizer -> LingoNMF-2",
+            "");
+        localController.addProcess("lingo-nmf-2", lingoNMF2);
+
+        // ODP -> Guesser -> Tokenizer -> LingoNMF -> Output
+        LocalProcessBase lingoNMF3 = new LocalProcessBase(
+            "input.odp",	
             "output.cluster-consumer",
             new String []
             { "filter.language-guesser", "filter.tokenizer",
@@ -235,6 +314,17 @@ public class SearchResultsClusteringBenchmark
             "ODP -> Language Guesser -> Tokenizer -> Case Normalizer -> LingoNMF-3",
             "");
         localController.addProcess("lingo-nmf-3", lingoNMF3);
+
+        // ODP -> Guesser -> Tokenizer -> LingoNMF -> Output
+        LocalProcessBase lingoNMFKL3 = new LocalProcessBase(
+            "input.odp",
+            "output.cluster-consumer",
+            new String []
+            { "filter.language-guesser", "filter.tokenizer",
+             "filter.case-normalizer", "filter.lingo-nmf-kl-3" },
+            "ODP -> Language Guesser -> Tokenizer -> Case Normalizer -> LingoNMFKL-3",
+            "");
+        localController.addProcess("lingo-nmf-kl-3", lingoNMFKL3);
 
         // ODP -> Guesser -> Tokenizer -> LingoNMF -> Output
         LocalProcessBase lingoNMFKM1 = new LocalProcessBase(
@@ -366,6 +456,19 @@ public class SearchResultsClusteringBenchmark
             lingoNMF1FilterFactory);
 
         // Lingo NMF filter component
+        LocalComponentFactory lingoNMF2FilterFactory = new LocalComponentFactoryBase()
+        {
+            public LocalComponent getInstance()
+            {
+                Map parameters = new HashMap();
+                parameters.put(Lingo.PARAMETER_QUALITY_LEVEL, new Integer(2));
+                return new LingoLocalFilterComponent(parameters);
+            }
+        };
+        localController.addLocalComponentFactory("filter.lingo-nmf-2",
+            lingoNMF2FilterFactory);
+
+        // Lingo NMF filter component
         LocalComponentFactory lingoNMF3FilterFactory = new LocalComponentFactoryBase()
         {
             public LocalComponent getInstance()
@@ -381,6 +484,23 @@ public class SearchResultsClusteringBenchmark
         };
         localController.addLocalComponentFactory("filter.lingo-nmf-3",
             lingoNMF3FilterFactory);
+
+        // Lingo NMF-KL filter component
+        LocalComponentFactory lingoNMFKL3FilterFactory = new LocalComponentFactoryBase()
+        {
+            public LocalComponent getInstance()
+            {
+                Map parameters = new HashMap();
+                NonnegativeMatrixFactorizationKLFactory matrixFactorizationFactory = new NonnegativeMatrixFactorizationKLFactory();
+                matrixFactorizationFactory.setK(15);
+                parameters.put(Lingo.PARAMETER_MATRIX_FACTORIZATION_FACTORY,
+                    matrixFactorizationFactory);
+                parameters.put(Lingo.PARAMETER_QUALITY_LEVEL, new Integer(3));
+                return new LingoLocalFilterComponent(parameters);
+            }
+        };
+        localController.addLocalComponentFactory("filter.lingo-nmf-kl-3",
+            lingoNMFKL3FilterFactory);
 
         // Lingo NMF filter component
         LocalComponentFactory lingoNMFKM1FilterFactory = new LocalComponentFactoryBase()
@@ -553,21 +673,24 @@ public class SearchResultsClusteringBenchmark
             // Let the algorithm process one query to 'warm up' before we
             // start timing. This is to reduce the influence of initialisation
             // of JITs, caches, etc. on timings.
-            localController.query(processId, warmUpQuery, new HashMap());
+            for (int i = 0; i < warmUpQueries.length; i++)
+            {
+                localController.query(processId, warmUpQueries[i], new HashMap());
+            }
 
             // Execute each query
-            for (Iterator queryIdIter = queries.keySet().iterator(); queryIdIter
+            for (Iterator queriesIter = queries.iterator(); queriesIter
                 .hasNext();)
             {
-                String queryId = (String) queryIdIter.next();
-                String query = (String) queries.get(queryId);
+                ODPQuery query = (ODPQuery) queriesIter.next();
+                String queryId = query.toString();
 
                 System.out.println(processId + ": " + queryId);
 
                 // Execute the query
                 long start = System.currentTimeMillis();
                 ProcessingResult result = localController.query(processId,
-                    query, new HashMap());
+                    query.getQueryText(), new HashMap());
                 long stop = System.currentTimeMillis();
 
                 // Unwrap results
@@ -582,10 +705,28 @@ public class SearchResultsClusteringBenchmark
                 // Contribute to the main report
                 Map mainInfo = new LinkedHashMap();
                 mainInfo.put("Process", processId);
-                mainInfo.put("Query", queryId);
+                query.addToMap(mainInfo);
                 mainInfo.put("Documents", requestContext.getRequestParameters()
                     .get(LocalInputComponent.PARAM_TOTAL_MATCHING_DOCUMENTS));
-                mainInfo.put("Total time", Long.toString(stop - start) + " ms");
+                int nonJunkClusters = 0;
+                for (Iterator iterator = clusters.iterator(); iterator
+                    .hasNext();)
+                {
+                    RawCluster cluster = (RawCluster) iterator.next();
+                    if (cluster.getProperty(RawCluster.PROPERTY_JUNK_CLUSTER) == null)
+                    {
+                        nonJunkClusters++;
+                    }
+                }
+                mainInfo.put("Clusters", new Integer(nonJunkClusters));
+                mainInfo.put("Total Time", Long.toString(stop - start) + " ms");
+                long filterTime = 0;
+                for (int p = 1; p < profiles.size() - 1; p++)
+                {
+                    filterTime += ((Profile) profiles.get(p))
+                        .getTotalTimeElapsed();
+                }
+                mainInfo.put("Filter Time", Long.toString(filterTime) + " ms");
                 mainInfo.putAll(metrics);
                 results.add(mainInfo);
 
@@ -635,7 +776,7 @@ public class SearchResultsClusteringBenchmark
         info.put("Date", new Date().toString());
         info.put("Processes", Integer.toString(localController.getProcessIds()
             .size()));
-        info.put("Queries", Integer.toString(queries.keySet().size()));
+        info.put("Queries", Integer.toString(queries.size()));
         info.put("Total time", Long.toString(mainStop - mainStart) + " ms");
         mainReport.addMap(info, "General information", "info", "entry", "key");
 
