@@ -13,13 +13,12 @@
     <classpathentry kind="var" path="CARROT2_CVS/lib/colt.jar"/>
     <classpathentry kind="var" path="CARROT2_CVS/lib/dweiss-utils.jar"/>
     <classpathentry kind="var" path="CARROT2_CVS/lib/gnu-regexp-1.1.4.jar"/>
-    <classpathentry kind="var" path="CARROT2_CVS/lib/jaxp.jar"/>
     <classpathentry kind="var" path="CARROT2_CVS/lib/saxon.jar"/>
     <classpathentry kind="var" path="CARROT2_CVS/lib/struts.jar"/>
     <classpathentry kind="var" path="CARROT2_CVS/lib/xercesImpl.jar"/>
     <classpathentry kind="var" path="CARROT2_CVS/lib/xml-apis.jar"/>
-    <classpathentry kind="var" path="CARROT2_CVS/lib/junit.jar"/>
     <classpathentry kind="var" path="CARROT2_CVS/lib/carrot2-shared-lib.jar"/>
     <classpathentry kind="lib" path="lib/xmlrpc-1.1.jar"/>
+    <classpathentry kind="var" path="CARROT2_CVS/lib/compile-time-only/junit.jar"/>
     <classpathentry kind="output" path="tmp/build/WEB-INF/classes"/>
 </classpath>

@@ -324,6 +324,13 @@ public class XmlRpcServlet
                 catch (Exception e)
                 {
                     log.error("Exception when processing request.", e);
+                    if (res.isCommitted()==false) {
+                        // send error code
+                        res.resetBuffer();
+                        res.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                            "Could not process request: " + e.toString());
+                    }
+                    return;
                 }
             }
         }
