@@ -123,6 +123,8 @@
 	  >
 	    <fileset dir="${build.dir}/classes">
 	    	<include name="com/dawidweiss/carrot/adapters/**" />
+	    	<exclude name="com/dawidweiss/carrot/adapters/Test*" />
+	    	<exclude name="com/dawidweiss/carrot/adapters/*.xml" />
 	    </fileset>
 	  </jar>
   </target>
