@@ -14,8 +14,6 @@ package com.stachoodev.carrot.filter.lingo.tokenizer;
 
 import java.io.*;
 
-import com.dawidweiss.carrot.core.local.linguistic.tokens.*;
-
 
 /**
  * Tokenizer class splits a string into tokens like word, e-mail address, web

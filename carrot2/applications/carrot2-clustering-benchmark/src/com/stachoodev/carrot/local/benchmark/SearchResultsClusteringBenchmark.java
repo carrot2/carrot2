@@ -13,13 +13,11 @@ package com.stachoodev.carrot.local.benchmark;
 import java.io.*;
 import java.util.*;
 
-import com.chilang.carrot.filter.cluster.local.*;
 import com.dawidweiss.carrot.core.local.*;
 import com.dawidweiss.carrot.core.local.clustering.*;
 import com.dawidweiss.carrot.core.local.impl.*;
 import com.dawidweiss.carrot.core.local.profiling.*;
 import com.dawidweiss.carrot.filter.langguesser.*;
-import com.dawidweiss.carrot.filter.stc.local.*;
 import com.dawidweiss.carrot.input.localcache.*;
 import com.dawidweiss.carrot.util.tokenizer.*;
 import com.dawidweiss.carrot.util.tokenizer.languages.*;
@@ -27,10 +25,7 @@ import com.stachoodev.carrot.filter.lingo.local.*;
 import com.stachoodev.carrot.filter.normalizer.local.*;
 import com.stachoodev.carrot.input.odp.local.*;
 import com.stachoodev.carrot.local.benchmark.report.*;
-import com.stachoodev.carrot.odp.*;
 import com.stachoodev.carrot.output.local.metrics.*;
-import com.stachoodev.matrix.factorization.*;
-import com.stachoodev.matrix.factorization.seeding.*;
 
 /**
  * Benchmarks search results clustering algorithms available in Carrot2 using
