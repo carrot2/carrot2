@@ -1,20 +1,12 @@
-    
-<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-<!-- #  Carrot2 main build/ clean script.                                     -->
-<!-- #                                                                        -->
-<!-- #  Override deployment.port/ deployment.host and distribution.dir in     -->
-<!-- #  your local properties file to match your runtime environment's        -->
-<!-- #  webapps directory location, for example                               -->
-<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<?xml version="1.0" encoding="UTF-8" ?>
 
-<project name="Carrot2" default="help" basedir="." >
+<project name="Carrot2 main build file" default="help">
 
-  <!-- ## This is your local override file that is never 
-       ## checked in to the CVS -->
   <property file="local-build.properties" />
 
-  <!-- ## global properties ### -->
-  <property name="build.compiler"  value="modern" />
+  <property name="build.compiler"   value="modern" />
+  <property name="javac.optimize"   value="off" />
+  <property name="javac.debug"      value="on" />
 
   <!-- ## override these properties in your local property
        ## file if you want to change your deployment
@@ -23,237 +15,165 @@
        ## folder, for example. -->
   <property name="deployment.port" value="8080" />
   <property name="deployment.host" value="localhost" />
+  <property name="distribution.dir" value="tmp" />
 
-  <property name="distribution.dir" value="tmp/dist" />
-  <property name="javadoc.dir"      value="tmp/javadoc" />
+  <target name="javadoc">
+  	<description>
+	Renders JavaDoc documentation of all the
+	components included in 'apply-to-defaults'
+	target.
+	</description>
 
-  <!-- ##################################### -->
-  <!-- ### {{{ initialize                ### -->
-  <!-- ##################################### -->
-  <target name="init">
-    <mkdir dir="${distribution.dir}" />
-    <mkdir dir="${javadoc.dir}" />
+    <macrodef name="component-apply">
+      <attribute name="component.path"/>
+      <sequential>
+        <echo>
+################################################################
+JAVADOC: @{component.path}
+################################################################
+        </echo>
+        <ant antfile="build.xml"
+             dir="@{component.path}" inheritall="false"
+             target="javadoc"
+        />
+      </sequential>
+    </macrodef>
+    <antcall target="apply-to-defaults" />
   </target>
-  <!-- }}} -->
+
+
+  <target name="build">
+  	<description>
+	Builds all components included in 'apply-to-defaults'
+	target.
+	</description>
+
+    <macrodef name="component-apply">
+      <attribute name="component.path"/>
+      <sequential>
+        <echo>
+################################################################
+BUILDING: @{component.path}
+################################################################
+        </echo>
+        <ant antfile="build.xml"
+             dir="@{component.path}" inheritall="false"
+             target="build"
+        />
+      </sequential>
+    </macrodef>
+    <antcall target="apply-to-defaults" />
+  </target>
   
-  <!-- ##################################### -->
-  <!-- ### {{{ CLEAN                     ### -->
-  <!-- ##################################### -->
-  <target name="clean" description="Clean up all temporary files.">
-    <!-- clean subprojects -->
-    <echo level="info" message="#### Cleaning up components..." />
+  
+  
+  <target name="clean">
+  	<description>
+	Cleans intermediate files of all
+	components included in 'apply-to-defaults'
+	target.
+	</description>
 
-    <!-- filters -->
-    <subant target="clean" inheritall="false">
-        <fileset dir="components">
-            <include name="**/build.xml" />
-        </fileset>
-    </subant>
-
-    <echo level="info" message="#### Cleaning up local build directory" />
+    <macrodef name="component-apply">
+      <attribute name="component.path"/>
+      <sequential>
+        <echo>
+CLEANING: @{component.path}
+        </echo>
+        <ant antfile="build.xml"
+             dir="@{component.path}" inheritall="false"
+             target="clean"
+        />
+      </sequential>
+    </macrodef>
+    <antcall target="apply-to-defaults" />
     
-    <delete dir="tmp" failonerror="false" includeemptydirs="true" quiet="true" />
-  </target>
-  <!-- }}} -->
-
-
-  <!-- ##################################### -->
-  <!-- ### {{{ builds the shared library ### -->
-  <!-- ##################################### -->
-  <target name="carrot2-shared-lib" 
-          description="Builds and copies the shared library to /lib folder.">
-
-    <!-- build shared library to shared libraries directory -->
-    <ant antfile="build.xml" dir="components/carrot2-shared-lib" inheritall="false" target="clean" />
-    <ant antfile="build.xml" dir="components/carrot2-shared-lib" inheritall="false" target="build">
-    </ant>
-    <copy file="components/carrot2-shared-lib/tmp/dist/carrot2-shared-lib.jar"
-          tofile="lib/carrot2-shared-lib.jar" overwrite="true" />
-    <!-- copy the dependency specification -->
-    <copy file="components/carrot2-shared-lib/carrot2-shared-lib.dep.xml"
-        tofile="lib/carrot2-shared-lib.dep.xml" overwrite="true" />
-  </target>
-  <!-- }}} -->
-
-  
-  <!-- ########################################################### -->
-  <!-- ### {{{ builds components separately and as a whole     ### -->
-  <!-- ########################################################### -->
-  <target name="build.webcontroller" depends="init"> <!-- {{{ -->
-    <echo>
-
-    #### Building: carrot2 controller ####
-
-    </echo>
-    <ant antfile="build.xml" target="build" dir="components/controllers/carrot2-web-controller" inheritall="false">
-        <property name="deployment.port" value="${deployment.port}" />
-        <property name="deployment.host" value="${deployment.host}" />
-        <property name="distribution.dir" location="${distribution.dir}" />
-        <property name="javadoc.dir"     location="${javadoc.dir}" />
-        <property name="descriptors.dir" location="descriptors" />
-    </ant>
-  </target> <!-- }}} -->
-
-  <target name="build.ahc-clustering" depends="init"> <!-- {{{ -->
-    <echo>
-
-    #### Building: AHC clustering filter ####
-
-    </echo>
-    <ant antfile="build.xml" target="build" dir="components/filters/clustering/ahc-clustering" inheritall="false">
-        <property name="distribution.dir" location="${distribution.dir}" />
-        <property name="javadoc.dir"     location="${javadoc.dir}" />
-    </ant>
-  </target> <!-- }}} -->
-
-  <target name="build.lingo-clustering" depends="init"> <!-- {{{ -->
-    <echo>
-
-    #### Building: LINGO clustering filter ####
-
-    </echo>
-    <ant antfile="build.xml" target="build" dir="components/filters/clustering/lingo-clustering" inheritall="false">
-        <property name="distribution.dir" location="${distribution.dir}" />
-        <property name="javadoc.dir"     location="${javadoc.dir}" />
-    </ant>
-  </target> <!-- }}} -->
-
-  <target name="build.stc-clustering" depends="init"> <!-- {{{ -->
-    <echo>
-
-    #### Building: STC clustering filter ####
-
-    </echo>
-    <ant antfile="build.xml" target="build" dir="components/filters/clustering/stc-clustering" inheritall="false">
-        <property name="distribution.dir" location="${distribution.dir}" />
-        <property name="javadoc.dir"     location="${javadoc.dir}" />
-    </ant>
-  </target> <!-- }}} -->
-
-  <target name="build.stream-interceptors" depends="init"> <!-- {{{ -->
-    <echo>
-
-    #### Building: stream-interceptors filter ####
-
-    </echo>
-    <ant antfile="build.xml" target="build" dir="components/filters/diagnostic/stream-interceptor" inheritall="false">
-        <property name="distribution.dir" location="${distribution.dir}" />
-        <property name="javadoc.dir"     location="${javadoc.dir}" />
-    </ant>
-  </target> <!-- }}} -->
-
-  <target name="build.pl-eng-stemming" depends="init"> <!-- {{{ -->
-    <echo>
-
-    #### Building: Lametyzator and Porter stemming filters ####
-
-    </echo>
-    <ant antfile="build.xml" target="build" dir="components/filters/linguistic/pl-eng-stemming" inheritall="false">
-        <property name="distribution.dir" location="${distribution.dir}" />
-        <property name="javadoc.dir"     location="${javadoc.dir}" />
-    </ant>
-  </target> <!-- }}} -->
-
-  <target name="build.snippet-generator" depends="init"> <!-- {{{ -->
-    <echo>
-
-    #### Building: Snippet generator input component ####
-
-    </echo>
-    <ant antfile="build.xml" target="build" dir="components/inputs/snippet-generator" inheritall="false">
-        <property name="distribution.dir" location="${distribution.dir}" />
-        <property name="javadoc.dir"     location="${javadoc.dir}" />
-    </ant>
-  </target> <!-- }}} -->
-
-  <target name="build.snippet-reader" depends="init"> <!-- {{{ -->
-    <echo>
-
-    #### Building: Snippet reader input component ####
-
-    </echo>
-    <ant antfile="build.xml" target="build" dir="components/inputs/snippet-reader" inheritall="false">
-        <property name="distribution.dir" location="${distribution.dir}" />
-        <property name="javadoc.dir"     location="${javadoc.dir}" />
-    </ant>
-  </target> <!-- }}} -->
-
-  <target name="build.treeSnippetMiner" depends="init"> <!-- {{{ -->
-    <echo>
-
-    #### Building: Tree Snippet Miner input component ####
-
-    </echo>
-    <ant antfile="build.xml" target="build" dir="components/inputs/treeSnippetMiner" inheritall="false">
-        <property name="distribution.dir" location="${distribution.dir}" />
-        <property name="javadoc.dir"     location="${javadoc.dir}" />
-    </ant>
-  </target> <!-- }}} -->
-
-
-  <target name="build.verbatim-input" depends="init"> <!-- {{{ -->
-    <echo>
-
-    #### Building: Verbatim Input component ####
-
-    </echo>
-    <ant antfile="build.xml" target="build" dir="components/inputs/verbatim-input" inheritall="false">
-        <property name="distribution.dir" location="${distribution.dir}" />
-        <property name="javadoc.dir"     location="${javadoc.dir}" />
-    </ant>
-  </target> <!-- }}} -->
-  
-  <target name="build.xslt-renderer" depends="init"> <!-- {{{ -->
-    <echo>
-
-    #### Building: XSLT Renderer output component ####
-
-    </echo>
-    <ant antfile="build.xml" target="build" dir="components/outputs/xslt-renderer" inheritall="false">
-        <property name="distribution.dir" location="${distribution.dir}" />
-        <property name="javadoc.dir"     location="${javadoc.dir}" />
-    </ant>
-  </target> <!-- }}} -->
-
-  <target name="build.fuzzyAnts" depends="init"> <!-- {{{ -->
-    <echo>
-
-    #### Building: Fuzzy Ants filter ####
-
-    </echo>
-    <ant antfile="build.xml" target="build" dir="components/filters/clustering/fuzzyAnts" inheritall="false">
-        <property name="distribution.dir" location="${distribution.dir}" />
-        <property name="javadoc.dir"     location="${javadoc.dir}" />
-    </ant>
-  </target> <!-- }}} -->
-  
-  <target name="build" description="Builds all known Carrot2 components."
-          depends="
-            build.webcontroller,
-            build.ahc-clustering,
-            build.lingo-clustering,
-            build.fuzzyAnts,
-            build.stc-clustering,
-            build.stream-interceptors,
-            build.pl-eng-stemming,
-            build.snippet-generator,
-            build.snippet-reader,
-            build.treeSnippetMiner,
-            build.verbatim-input,
-            build.xslt-renderer
-            ">
+    <delete dir="tmp" />
   </target>
 
 
-  <!-- ##################################### -->
-  <!-- ### {{{ reformats sources         ### -->
-  <!-- ##################################### -->
-  <target name="reformat">
+  <target name="test">
+  	<description>
+	Runs test task for all
+	components included in 'apply-to-defaults'
+	target.
+	</description>
+
+    <macrodef name="component-apply">
+      <attribute name="component.path"/>
+      <sequential>
+        <echo>
+TESTING: @{component.path}
+        </echo>
+        <ant antfile="build.xml"
+             dir="@{component.path}" inheritall="false"
+             target="test"
+        />
+      </sequential>
+    </macrodef>
+    <antcall target="apply-to-defaults" />
+  </target>
+
+
+  <target name="apply-to-defaults">
+  	<description>
+	Add components that compile here.
+	</description>
+
+    <component-apply component.path="components/carrot2-ant-extensions" />
+
+    <component-apply component.path="components/carrot2-local-core" />
+
+    <component-apply component.path="components/carrot2-util-common" />
+    <component-apply component.path="components/carrot2-util-put" />
+    <component-apply component.path="components/carrot2-util-remote" />
+    <component-apply component.path="components/carrot2-util-tokenizer" />
+    <component-apply component.path="components/carrot2-util-lang-guesser" />
+
+    <component-apply component.path="components/carrot2-local-remote-adapters" />
+
+    <component-apply component.path="components/carrot2-stemmer-lametyzator" />
+    <component-apply component.path="components/carrot2-stemmer-snowball" />
+
+    <component-apply component.path="components/carrot2-input-snippet-reader" />
+    <component-apply component.path="components/carrot2-input-egothor" />
+    <component-apply component.path="components/carrot2-input-nutch" />
+    <component-apply component.path="components/carrot2-input-tree-snippet-miner" />
+    <component-apply component.path="components/carrot2-input-verbatim" />
+
+    <component-apply component.path="components/carrot2-filter-lingo" />
+    <component-apply component.path="components/carrot2-filter-ahc" />
+    <component-apply component.path="components/carrot2-filter-fuzzyants" />
+    <component-apply component.path="components/carrot2-filter-stc" />
+    <component-apply component.path="components/carrot2-filter-stemmer" />
+    
+    <component-apply component.path="components/carrot2-filter-stream-interceptor" />
+    <component-apply component.path="components/carrot2-output-xsltrenderer" />
+
+    <component-apply component.path="components/carrot2-remote-controller" />
+
+  </target>
+
+
+  <target name="pretty.print">
+  	<description>
+	Pretty-printing of source code. 
+	FOR USE ONLY BY PACKAGE MAINTAINER
+	</description>
+	
 	<property file="${user.home}/jalopy.properties" />
 	<fail unless="jalopy.home">
 	Define 'jalopy.home'.
-	</fail>	
+	</fail>
 
+	<condition property="cond:is.maintainer">
+		<equals arg1="${user.name}" arg2="dawid weiss" casesensitive="false" trim="true" />
+	</condition>
+
+	<fail unless="cond:is.maintainer">
+	### ERROR: TARGET FOR USE ONLY BY PACKAGE MAINTAINER.
+	</fail>
+	
     <taskdef name="jalopy" 
 		classname="de.hunsicker.jalopy.plugin.ant.AntPlugin">
 		<classpath>
@@ -261,58 +181,135 @@
 		</classpath>
 	</taskdef>
 
-	<fail unless="component.src.dir">
-	Give 'component.src.dir' property.
+    <macrodef name="component-apply">
+      <attribute name="component.path"/>
+      <sequential>
+        <echo>
+FORMATTING: @{component.path}
+        </echo>
+        <property name="convention" value="etc/codeconvention/carrot2-sun.jalopy.xml" />
+
+		<mkdir dir="tmp/@{component.path}" />
+		<jalopy convention="${convention}"
+				destdir="tmp/@{component.path}"
+				history="file"
+				force="true"
+				encoding="UTF-8"
+				historymethod="adler32"
+				loglevel="info"
+				threads="1">
+			<fileset dir="@{component.path}">
+				<!-- <include name="**/com/dawidweiss/**/*.java" /> -->
+				<include name="**/*.java" />
+			</fileset>
+		</jalopy>
+
+      </sequential>
+    </macrodef>
+
+	<fail unless="component">
+
+	Define 'component' property with the name of the
+	component (a folder name in components/*).
+
 	</fail>
 
-    <jalopy fileformat="unix"
-            convention="misc/jalopy/carrot2.jalopy.xml"
-            destdir="tmp/code_formatted"
-			encoding="UTF-8"
-            history="file"
-            historymethod="adler32"
-            loglevel="info"
-            threads="1">
-      <fileset dir="${component.src.dir}">
-      	<include name="**/*.java" />
-      </fileset>
-    </jalopy>
-  </target>
-  
-  <!-- }}} -->
-  
+	<component-apply component.path="${component}" />
+
+  </target>  
 
 
-  <!-- ##################################### -->
-  <!-- ### {{{ HELP ON THIS FILE             ### -->
-  <!-- ##################################### -->
-  <target name="help" description="Displays help on available targets.">
-    <echo>
+  <target name="remote">
+    <description>
+    Collects all remote Web components into 'distribution.dir.remote'
+    directory and their required JARs into 'distribution.dir.remote.libs'
+    directory.
+    </description>
 
-    Project name: ${ant.project.name}
-    (c) Dawid Weiss, Poznan University of Technology.
+    <property name="distribution.dir.remote"      location="${distribution.dir}/remote" />
+    <property name="distribution.dir.remote.libs" location="${distribution.dir}/remote-libs" />
 
-    Current JDK: ${ant.java.version}
-    Basedir    : ${basedir}
+	<mkdir dir="${distribution.dir.remote}" />
+
+	<property name="carrot2.cvs.dir" location="." />
+    <ant target="bootstrap"
+         antfile="components/master.xml" inheritall="true" inheritrefs="true">
+    </ant>
+
+    <path id="bootstrap">
+        <fileset dir="components/carrot2-ant-extensions/tmp/dist" includes="*.jar" />
+    </path>
+
+    <taskdef name="bringToDate" 
+        classname="com.dawidweiss.carrot.ant.BringToDate">
+        <classpath refid="bootstrap" />
+    </taskdef>
+
+    <taskdef name="copyDependencies"
+        classname="com.dawidweiss.carrot.ant.CopyDependencies">
+        <classpath refid="bootstrap" />
+    </taskdef>
+
+    <fileset id="dependencies" dir=".">
+        <include name="lib/**/*.dep.xml" />
+        <include name="components/*/*.dep.xml" />
+        <include name="components/*/lib/*.dep.xml" />        
+    </fileset>
     
-    Distribution dir: ${distribution.dir}
-    Javadoc dir     : ${javadoc.dir}    
-    -----------------------------------------------------
+    <!-- Invoke the remote controller's build file to update it. -->
+    <ant antfile="components/carrot2-remote-controller/build.xml" inheritall="false" inheritrefs="false" />
 
-    Public targets:
-        format             - reformat source files with Jalopy (this task
-                             only for project admins!)
-        carrot2-shared-lib - builds the shared library and
-                             copies it to /lib folder. This task
-                             should only be used if the library
-                             changes.
-        clean              - cleans all temporary files
-        build              - build all components
+    <bringToDate componentDescriptor="etc/all-remote.dep.xml"
+                 dependenciesOnly="true" profile="">
+        <dependencies refid="dependencies" />
+    </bringToDate>
 
-    Please refer to documentation for more information.
+    <copyDependencies
+        componentDescriptor="etc/all-remote.dep.xml"
+        profile=""
+        todir="${distribution.dir.remote}">
+        <dependencies refid="dependencies" />
+    </copyDependencies>
+
+    <mkdir dir="${distribution.dir.remote.libs}" />
+    <move todir="${distribution.dir.remote.libs}">
+        <fileset dir="${distribution.dir.remote}">
+            <exclude name="libs/**" />
+            <exclude name="*.war" />
+            <exclude name="carrot*.LICENSE" />
+            <exclude name="carrot*.CONTRIBUTORS" />
+        </fileset>
+    </move>
+  </target>
+
+  <target name="help">
+    <echo>
+Available targets:
+
+build   - builds all components in all profiles.
+
+clean   - cleans intermediate files.
+
+javadoc - creates JavaDoc documentation.
+
+remote  - builds all remote components, and
+          copies them to a directory pointed
+          to by 'distribution.dir.remote'. Libraries
+          are copied to 'distribution.dir.remote.libs'.
+          Default values for these properties
+          are 'tmp/remote' and 'tmp/remote-libs'.
+
+Available properties (passed using -Dproperty=true)
+
+copy.dependencies  - Creates a subfolder in a distribution
+       directory of a component with all components and
+       libraries that it requires. Only suggested for use
+       with 'build' target.
+
+single.jar - used in conjunction with 'copy.dependencies'.
+       if 'true', Carrot2 components are repacked into a
+       single JAR. 'true' by default.
     </echo>
   </target>
-  <!-- }}} -->
 
 </project>
-

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE component SYSTEM "../../etc/component-dependency.dtd" >
+
+<component
+    name="carrot2-filter-lingo"
+    description="Carrot2 Lingo Clustering filter">
+
+    <provides profile="remote">
+        <files build-path-exclude="true" prefix="tmp/dist">
+            <file location="carrot2-filter-lingo.war" />
+        </files>
+        <build>
+            <ant file="build.remote.xml" target="build" />
+        </build>
+    </provides>
+
+	<!-- Carrot2 components -->
+    <dependency name="carrot2-license" />
+	<dependency name="carrot2-util-common" />
+	<dependency name="carrot2-local-core" />
+    <dependency name="jama" />
+    <dependency name="log4j" />
+    <dependency name="violinstrings" />
+
+	<dependency name="carrot2-util-remote" 	profile="remote" />
+    <dependency name="jdom"                 profile="remote" />
+    <dependency name="servlets-api"         profile="remote" nocopy="true" />
+	<dependency name="carrot2-util-put"     profile="remote" />
+
+    <!-- These components are not required during the compilation, but
+         are usually included at runtime via parameters (Language/ stemming/ stopwords) -->
+    <dependency name="carrot2-util-tokenizer" profile="remote" />
+    
+</component>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<service xmlns     = "http://www.dawidweiss.com/projects/carrot/componentDescriptor" 
+         framework = "Carrot2"
+>
+
+    <!-- Snippet Reader service, Google pl wrapper input component -->
+    <component id               = "carrot2.input.tree-snippet-reader.google-pl"
+               type             = "input"
+               serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-input-tree-snippet-miner/treeExtractor/google-pl"
+    />
+
+    <!-- Snippet Reader service, Google wrapper input component -->
+    <component id               = "carrot2.input.tree-snippet-reader.google"
+               type             = "input"
+               serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-input-tree-snippet-miner/treeExtractor/google"
+    />
+
+    <!-- Snippet Reader service, AllTheWeb pl wrapper input component -->
+    <component id               = "carrot2.input.tree-snippet-reader.alltheweb"
+               type             = "input"
+               serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-input-tree-snippet-miner/treeExtractor/alltheweb"
+    />
+
+    <!-- Snippet Reader service, Netoskop.pl wrapper input component -->
+    <component id               = "carrot2.input.tree-snippet-reader.netoskop-pl"
+               type             = "input"
+               serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-input-tree-snippet-miner/treeExtractor/netoskop-pl"
+    />
+</service>

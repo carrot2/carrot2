@@ -1,0 +1,534 @@
+
+<!--
+  ## A generic template for building a Carrot2 component.
+  -->
+<project name="Component Build File Template" default="help">
+
+  <property name="undefined.value" value="__UNDEFINED_VALUE__" />
+
+  <!-- ## these are overriden by master build file ### -->
+  <property name="project.dir"      value="${undefined.value}" />
+  <property name="carrot2.cvs.dir"  value="${undefined.value}" />
+  <property name="dist.name"        value="${undefined.value}" />
+
+  <property name="build.dir"        location="${project.dir}/tmp/build" />
+  <property name="distribution.dir" location="${project.dir}/tmp/dist" />
+  <property name="javadoc.dir"      location="${project.dir}/tmp/javadoc" />
+
+  <property name="src.path"         location="${project.dir}/src" />
+  <property name="src-test.path"    location="${project.dir}/src-test" />
+  <property name="src-webapp.path"  location="${project.dir}/web" />
+
+  <property name="component.descriptor" location="${project.dir}/${dist.name}.dep.xml" />
+  <property name="profile"          value="" />
+
+  <!--
+    Set this property to any other value to collect separate carrot2 dependencies
+    indstead of a single JAR file.
+    -->
+  <property name="single.jar"       value="true" />
+
+  <!-- ## global properties ### -->
+
+  <property name="build.compiler"   value="modern" />
+  <property name="javac.optimize"   value="off" />
+  <property name="javac.debug"      value="on" />
+
+  <property name="include.ant.runtime" value="false" />
+
+  
+  <!-- ##################################### -->
+  <!-- ### CHECK REQUIRED PROPERTIES     ### -->
+  <!-- ##################################### -->
+  <target name="check.properties"> <!-- {{{ -->
+    <condition property="ok:project.dir" value="true">
+        <and>
+            <not>
+                <equals arg1="${project.dir}" arg2="${undefined.value}"/>
+            </not>
+            <available file="${src.path}" type="dir" />
+        </and>
+    </condition>
+    <fail message="'project.dir' property must be initialized properly." unless="ok:project.dir" />
+
+    <condition property="ok:carrot2.cvs.dir" value="true">
+        <and>
+            <available file="${carrot2.cvs.dir}/lib" type="dir" />
+            <available file="${carrot2.cvs.dir}/history.xml" type="file" />
+        </and>
+    </condition>
+    <fail message="'carrot2.cvs.dir' property must be set properly: ${carrot2.cvs.dir}" unless="ok:carrot2.cvs.dir" />
+
+    <condition property="ok:dist.name" value="true">
+        <not>
+            <equals arg1="${dist.name}" arg2="${undefined.value}"/>
+        </not>
+    </condition>
+    <fail message="'dist.name' property must be set." unless="ok:dist.name" />
+
+    <!-- Set to true if dependency file is available. -->
+    <condition property="tmp:dep.file.available" value="true">
+        <available file="${component.descriptor}" type="file" />
+    </condition>
+    
+    <!-- Check if we need to copy dependencies -->
+    <condition property="ok.copy.dependencies" value="true">
+        <and>
+        <isset property="copy.dependencies" />
+        <isset property="tmp:dep.file.available" />
+        </and>
+    </condition>
+  </target>
+  
+  <target name="check.bootstrap">
+    <!-- Set to true if bootstrap jar is available. -->
+    <condition property="tmp:bootstrap.available" value="true">
+            <available file="${carrot2.cvs.dir}/components/carrot2-ant-extensions/tmp/dist/carrot2-ant-extensions.jar" type="file" />
+    </condition>
+  </target>
+  <!-- }}} -->
+
+
+  <!-- ##################################### -->
+  <!-- ### {{{ CLEAN                     ### -->
+  <!-- ##################################### -->
+  <target name="clean" depends="check.properties"
+    description="Removes local temporary files.">
+    <delete failonerror="false" includeemptydirs="true" quiet="true">
+        <fileset dir="${project.dir}/tmp" />
+    </delete>
+  </target>
+  <!-- }}} -->
+
+  
+  <!-- ##################################### -->
+  <!-- ### {{{ PREPARE                   ### -->
+  <!-- ##################################### -->
+  <target name="prepare" depends="check.properties, bootstrap, custom.tasks, discover.classpath">
+    <mkdir dir="${distribution.dir}"  />
+    <mkdir dir="${javadoc.dir}" />
+  </target>
+
+  <target name="bootstrap" depends="check.bootstrap" unless="tmp:bootstrap.available">
+    <ant target="bootstrap"
+        antfile="build.xml"
+        dir="${carrot2.cvs.dir}/components/carrot2-ant-extensions"
+        inheritall="false" />
+  </target>
+
+  <target name="custom.tasks">
+    <!-- Define custom ANT tasks and types -->
+    <path id="bootstrap">
+        <fileset dir="${carrot2.cvs.dir}/components/carrot2-ant-extensions/tmp/dist" includes="*.jar" />
+    </path>
+
+    <taskdef name="bringToDate" 
+        classname="com.dawidweiss.carrot.ant.BringToDate">
+        <classpath refid="bootstrap" />
+    </taskdef>
+    <typedef name="dependencyPath"
+        classname="com.dawidweiss.carrot.ant.DependencyPath">
+        <classpath refid="bootstrap" />
+    </typedef>
+    <taskdef name="mostRecentFileDate" 
+        classname="com.dawidweiss.carrot.ant.MostRecentFileDate">
+        <classpath refid="bootstrap" />
+    </taskdef>    
+    <taskdef name="printDependencies" 
+        classname="com.dawidweiss.carrot.ant.PrintDependencies">
+        <classpath refid="bootstrap" />
+    </taskdef>
+    <taskdef name="copyDependencies"
+        classname="com.dawidweiss.carrot.ant.CopyDependencies">
+        <classpath refid="bootstrap" />
+    </taskdef>
+  </target>
+  
+  <target name="discover.classpath" depends="discover.classpath:autodependency,discover.classpath:empty">
+  </target>
+
+  <target name="discover.classpath:autodependency" if="tmp:dep.file.available">
+    <fileset id="dependencies" dir="${carrot2.cvs.dir}">
+        <include name="lib/**/*.dep.xml" />
+        <include name="components/*/*.dep.xml" />
+        <include name="components/*/lib/*.dep.xml" />        
+
+        <include name="components-private/*/*.dep.xml" />
+        <include name="components-private/*/lib/*.dep.xml" />        
+    </fileset>
+
+    <fileset id="local.dependencies" dir="${project.dir}">
+		<include name="lib/*.dep.xml" />
+    </fileset>
+    
+    <bringToDate componentDescriptor="${component.descriptor}" dependenciesOnly="true" profile="${profile}">
+        <dependencies refid="dependencies" />
+        <dependencies refid="local.dependencies" />
+    </bringToDate>
+
+    <dependencyPath id="classpath.dependencies"
+        componentDescriptor="${component.descriptor}" profile="${profile}">
+        <dependencies refid="dependencies" />
+        <dependencies refid="local.dependencies" />
+    </dependencyPath>
+
+    <printDependencies componentDescriptor="${component.descriptor}"
+                       property="string:component.dependencies" profile="${profile}">
+        <dependencies refid="dependencies" />
+        <dependencies refid="local.dependencies" />
+    </printDependencies>
+  </target>
+
+  <target name="discover.classpath:empty" unless="tmp:dep.file.available">
+    <path id="classpath.dependencies" />
+    <property name="string:component.dependencies" value="(no dependency file, unknown)" />
+  </target>
+  
+  <target name="copy.dependencies" depends="prepare" if="ok.copy.dependencies">
+    <property name="dist.extension" value="" />
+    <property name="libs.dir" location="${distribution.dir}/deps-${dist.name}${dist.extension}" />
+
+    <delete dir="${libs.dir}" failonerror="false" />
+    <mkdir dir="${libs.dir}" />
+    <copyDependencies
+        componentDescriptor="${component.descriptor}"
+        profile="${profile}"
+        todir="${libs.dir}">
+        <dependencies refid="dependencies" />
+        <dependencies refid="local.dependencies" />
+    </copyDependencies>
+    
+    <condition property="merge.carrot2.components" value="true">
+        <equals arg1="${single.jar}" arg2="true" casesensitive="false" />
+    </condition>
+    <antcall target="merge.carrot2.components" />
+  </target>
+
+  <target name="merge.carrot2.components" if="merge.carrot2.components">
+    <!-- Merge the used Carrot2 components into a single JAR-->
+    <property name="tmp:c2merge.dir" value="${libs.dir}/_tmp_c2merge" />
+    <delete dir="${tmp:c2merge.dir}" failonerror="false" />
+    <unjar dest="${tmp:c2merge.dir}">
+        <fileset dir="${libs.dir}">
+            <include name="carrot2-*.jar"/>
+        </fileset>
+    </unjar>
+    <delete failonerror="false">
+        <fileset dir="${libs.dir}">
+            <include name="carrot2-*.jar" />
+        </fileset>
+    </delete>
+    <jar destfile="${libs.dir}/carrot2-merged-components.jar" basedir="${tmp:c2merge.dir}"
+         update="false">
+        <manifest>
+            <attribute name="Information"
+                       value="This file contains several Carrot2 components repacked to a single JAR file. Do not reuse."/>
+        </manifest>
+    </jar>
+    <delete dir="${tmp:c2merge.dir}" failonerror="false" />
+  </target>
+  <!-- }}} -->
+
+  
+  <!-- ##################################### -->
+  <!-- ### {{{ JAR TYPE BUILD            ### -->
+  <!-- ##################################### -->
+
+  <target name="build.jartype" depends="prepare,build.jartype.internal,copy.dependencies">
+  </target>
+
+  <target name="build.jartype.internal" depends="prepare">
+    <property name="dist.extension" value="-jar" />
+
+    <tstamp>
+      <format property="build.tstamp" pattern="dd/MM/yyyy HH:mm Z" />
+    </tstamp>
+
+    <mkdir dir="${build.dir}/type-jar" />
+    <javac destdir     = "${build.dir}/type-jar"
+           debug       = "${javac.debug}"
+           optimize    = "${javac.optimize}"
+           deprecation = "on"
+           includeantruntime = "${include.ant.runtime}"
+           includejavaruntime = "false"
+           encoding	   = "UTF-8"
+    >
+        <classpath refid="classpath.dependencies" />
+        <classpath refid="classpath.local" />
+        <src path="${src.path}" />
+        <patternset refid="src.patternset" />
+    </javac>
+
+    <!-- copy any non-java files (resources) from the source path. -->
+    <copy toDir="${build.dir}/type-jar">
+       <fileset dir="${src.path}">
+         <exclude name="**/*.java"/>
+         <patternset refid="src.patternset" />
+       </fileset>
+    </copy>
+    
+    <!-- Create a timestamp of the newest source file. -->
+    <mostRecentFileDate 
+        millisProperty="tmp:last-modified"
+        dateProperty="tmp:last-modified-date"
+        exceptionOnEmpty="true">
+        <format pattern="dd/MM/yyyy HH:mm Z" />
+        <fileset dir="${src.path}" includes="**/*.java" />
+    </mostRecentFileDate>
+    
+    <!-- Create information file. -->
+    <mkdir dir="${build.dir}/type-jar/META-INF" />
+    <delete file="${build.dir}/type-jar/META-INF/component-info.txt" failonerror="false" />
+    <echo file="${build.dir}/type-jar/META-INF/component-info.txt">
+Component: ${dist.name}
+Profile:   ${profile}
+
+Built by             : ${user.name}
+Build time           : ${build.tstamp}
+Freshest source file : ${tmp:last-modified-date}
+
+${string:component.dependencies}
+    </echo>
+
+    <copy file="${build.dir}/type-jar/META-INF/component-info.txt"
+          tofile="${distribution.dir}/${dist.name}.jar.info" overwrite="true" />
+
+    <jar compress="true" jarfile="${distribution.dir}/${dist.name}.jar">
+        <fileset dir="${build.dir}/type-jar">
+            <patternset refid="src.patternset" />
+        </fileset>
+        <manifest>
+            <attribute name="Built-By"   value="${user.name}"/>
+            <attribute name="Build-Time" value="${build.tstamp}" />
+            <attribute name="Freshest-Source-File" value="${tmp:last-modified-date}" />            
+        </manifest>
+    </jar>
+  </target>
+  <!-- }}} -->
+
+  <!-- ##################################### -->
+  <!-- ### {{{ WAR TYPE BUILD            ### -->
+  <!-- ##################################### -->
+
+  <target name="build.wartype" depends="prepare,build.wartype.internal,copy.dependencies">
+  </target>
+
+  <target name="build.wartype.internal" depends="prepare">
+    <property name="dist.extension" value="-war" />
+  
+    <tstamp>
+      <format property="build.tstamp" pattern="dd/MM/yyyy HH:mm Z" />
+    </tstamp>
+
+    <mkdir dir="${build.dir}/type-war/WEB-INF/classes" />
+    <mkdir dir="${build.dir}/type-war/WEB-INF/lib" />
+
+    <javac destdir     = "${build.dir}/type-war/WEB-INF/classes"
+           debug       = "${javac.debug}"
+           optimize    = "${javac.optimize}"
+           deprecation = "on"
+           includeantruntime = "${include.ant.runtime}"
+           includejavaruntime = "false"
+           encoding	   = "UTF-8"
+    >
+        <classpath refid="classpath.dependencies" />
+        <classpath refid="classpath.local" />
+        <src path="${src.path}" />
+        <patternset refid="src.patternset" />
+    </javac>
+
+    <!-- copy any non-java files (resources) from the source path. -->
+    <copy toDir="${build.dir}/type-war/WEB-INF/classes">
+       <fileset dir="${src.path}">
+         <exclude name="**/*.java"/>
+         <patternset refid="src.patternset" />
+       </fileset>
+    </copy>
+    
+    <!-- copy webapp resources from the source path -->
+    <available file="${src-webapp.path}" type="dir" property="cond:webapp.available" />
+    <fail unless="cond:webapp.available">
+    ### Webapp directory not present in the project: ${src-webapp.path}
+    </fail>
+    <copy toDir="${build.dir}/type-war">
+        <fileset dir="${src-webapp.path}" />
+    </copy>
+
+    <!-- Create a timestamp of the newest source file. -->
+    <mostRecentFileDate 
+        millisProperty="tmp:last-modified"
+        dateProperty="tmp:last-modified-date"
+        exceptionOnEmpty="true">
+        <format pattern="dd/MM/yyyy HH:mm Z" />
+        <fileset dir="${src.path}" includes="**/*.java" />
+        <fileset dir="${src-webapp.path}" includes="**/*.*" />
+    </mostRecentFileDate>
+
+    <!-- Create information file. -->
+    <mkdir dir="${build.dir}/type-war/META-INF" />
+    <delete file="${build.dir}/type-war/META-INF/component-info.txt" failonerror="false" />
+    <echo file="${build.dir}/type-war/META-INF/component-info.txt">
+Component: ${dist.name}
+Profile:   ${profile}
+
+Built by             : ${user.name}
+Build time           : ${build.tstamp}
+Freshest source file : ${tmp:last-modified-date}
+
+${string:component.dependencies}
+    </echo>
+
+    <copy file="${build.dir}/type-war/META-INF/component-info.txt"
+          tofile="${distribution.dir}/${dist.name}.war.info" overwrite="true" />
+
+    <manifest file="${build.dir}/type-war/META-INF/MANIFEST.MF" mode="replace">
+        <attribute name="Built-By"   value="${user.name}"/>
+        <attribute name="Build-Time" value="${build.tstamp}" />
+        <attribute name="Freshest-Source-File" value="${tmp:last-modified-date}" />            
+    </manifest>
+
+    <zip compress="true" zipfile="${distribution.dir}/${dist.name}.war">
+        <fileset dir="${build.dir}/type-war" />
+    </zip>
+
+  </target>
+  <!-- }}} -->
+
+
+  <!-- ##################################### -->
+  <!-- ### {{{ TEST TYPE BUILD           ### -->
+  <!-- ##################################### -->
+
+  <target name="build.testtype" depends="prepare">
+    <tstamp>
+      <format property="build.tstamp" pattern="MM/dd/yyyy HH:mm Z" />
+    </tstamp>
+    
+    <property name="build.type" value="type-test" />
+
+    <mkdir dir="${build.dir}/${build.type}" />
+    <javac destdir     = "${build.dir}/${build.type}"
+           debug       = "${javac.debug}"
+           optimize    = "${javac.optimize}"
+           deprecation = "on"
+           includeantruntime = "${include.ant.runtime}"
+           includejavaruntime = "false"
+           encoding	   = "UTF-8"
+    >
+        <classpath refid="classpath.local" />
+        <patternset refid="src.patternset" />
+        <classpath refid="classpath.dependencies" />
+        <src path="${src.path}" />
+        <src path="${src-test.path}" />
+    </javac>
+
+    <!-- copy any non-java files (resources) from the source path. -->
+    <copy toDir="${build.dir}/${build.type}">
+       <fileset dir="${src.path}">
+         <exclude name="**/*.java" />
+       </fileset>
+       <fileset dir="${src-test.path}">
+         <exclude name="**/*.java" />
+       </fileset>
+    </copy>
+    
+    <!-- Run local tests. -->
+    <delete dir="${build.dir}/junit-temp" failonerror="false" />
+    <mkdir dir="${build.dir}/junit-temp"/>
+    <delete dir="${build.dir}/junit-report" failonerror="false" />
+    <mkdir dir="${build.dir}/junit-report"/>
+
+    <pathconvert targetos="unix" property="tmp:safepath">
+        <path location="${build.dir}/junit-temp/junit-log4j-log.html" />
+    </pathconvert>
+    <copy file="${carrot2.cvs.dir}/etc/test-log4j.properties"
+          tofile="${build.dir}/junit-temp/test-log4j.properties"
+          includeemptydirs="false" filtering="true" overwrite="true">
+        <filterset begintoken="@" endtoken="@" id="deployment.info">
+            <filter token="LOGPATH"       value="${tmp:safepath}" />
+        </filterset>
+    </copy>
+    <pathconvert property="tmp:loggingSettings" pathSep=",">
+        <path><pathelement location="${build.dir}/junit-temp/test-log4j.properties" /></path>
+    </pathconvert>
+    <touch file="${build.dir}/junit-temp/junit-log4j-log.html" />
+
+    <property environment="env"/>
+
+    <junit dir="${build.dir}/${build.type}" fork="true" printsummary="true"
+        errorproperty="junit.error" failureproperty="junit.failure">
+
+        <formatter type="xml"/>
+        <classpath refid="classpath.dependencies" />
+        <classpath location="${build.dir}/${build.type}" />
+
+        <classpath refid="classpath.local" />
+
+        <!-- HACK: we pass javac in classpath because some test cases invoke ant
+             in an in-process mode, which skips classpath initialization. -->
+        <classpath location="${env.JAVA_HOME}/lib/tools.jar" />
+        
+        <sysproperty key="log4j.configuration" value="file:///${tmp:loggingSettings}"/>
+
+		<batchtest todir="${build.dir}/junit-temp">
+			<fileset dir="${build.dir}/${build.type}">
+				<include name="**/*Test.class" />
+                <exclude name="org/apache/**" />
+			</fileset>
+		</batchtest>
+    </junit>
+
+    <junitreport todir="${build.dir}/junit-report">
+        <fileset dir="${build.dir}/junit-temp">
+            <include name="*.xml"/>
+        </fileset>
+        <report format="frames" todir="${build.dir}/junit-report"/>
+    </junitreport>
+
+    <copy file="${build.dir}/junit-temp/junit-log4j-log.html"
+          tofile="${build.dir}/junit-report/junit-log4j-log.html" overwrite="true" />
+
+    <fail message="External tests failed. See ${build.dir}/junit-report for report." if="junit.error" />
+    <fail message="External tests failed. See ${build.dir}/junit-report for report." if="junit.failure" />
+  </target>
+  <!-- }}} -->
+
+  <!-- ##################################### -->
+  <!-- ### {{{ JAVADOC BUILD             ### -->
+  <!-- ##################################### -->  
+  <target name="javadoc" depends="javadoc.on, javadoc.internal" />
+
+  <target name="javadoc.on">
+    <property name="javadoc.on" value="true" />
+    <property name="javadoc.packages" value="com.dawidweiss.carrot.*" />
+  </target>
+
+  <target name="javadoc.internal" if="javadoc.on" depends="prepare">
+    <delete dir="${javadoc.dir}" failonerror="false" />
+    <mkdir dir="${javadoc.dir}" />
+
+    <javadoc packagenames     = "${javadoc.packages}"
+             destdir          = "${javadoc.dir}"
+             protected        = "true"
+             version          = "false"
+             use              = "true"
+             doctitle         = "${ant.project.name}"
+             header           = "${ant.project.name}"
+             footer           = "Please refer to project documentation at &lt;br&gt;&lt;a href=http://www.cs.put.poznan.pl/dweiss/carrot&gt;http://www.cs.put.poznan.pl/dweiss/carrot&lt;/a&gt;"
+             bottom           = "&lt;center&gt;Copyright (c) Copyright (C) 2002-2004, Dawid Weiss &lt;/center&gt;"
+             failonerror      = "true"
+             stylesheetfile   = "${carrot2.cvs.dir}/etc/javadoc/stylesheet.css"
+    >
+        <classpath refid="classpath.dependencies" />
+        <fileset dir="${src.path}"> 
+        	<patternset refid="src.patternset" />
+        </fileset>
+    </javadoc>
+  </target>
+  <!-- }}} -->
+  
+  <target name="help">
+    <echo>Not for separate use.</echo>
+  </target>
+
+</project>

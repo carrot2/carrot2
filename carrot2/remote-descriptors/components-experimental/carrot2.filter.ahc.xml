@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<service xmlns      = "http://www.dawidweiss.com/projects/carrot/componentDescriptor" 
+         framework  = "Carrot2"
+>
+
+    <component id               = "carrot2.filter.ahc.ahc"
+               type             = "filter"
+               serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-filter-ahc/service/AHC"
+               infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-filter-ahc"
+    >
+    </component>
+
+    <component id               = "carrot2.filter.ahc.termsfilter"
+               type             = "filter"
+               serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-filter-ahc/service/TermsFilter"
+               infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-filter-ahc"
+    >
+    </component>
+
+</service>

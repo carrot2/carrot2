@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE component SYSTEM "../../../etc/component-dependency.dtd" >
+
+<component
+    name="struts"
+    description="Struts, http://jakarta.apache.org/struts/">
+
+    <provides>
+        <files>
+            <file location="struts.jar" />
+            <file location="struts.LICENSE" />
+        </files>
+    </provides>
+
+</component>
+

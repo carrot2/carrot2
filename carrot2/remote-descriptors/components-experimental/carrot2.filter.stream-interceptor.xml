@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<service xmlns      = "http://www.dawidweiss.com/projects/carrot/componentDescriptor" 
+         framework  = "Carrot2"
+>
+
+    <component id               = "carrot2.filter.diagnostic.stream-interceptor"
+               type             = "filter"
+               serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-filter-stream-interceptor/service/StreamInterceptor"
+               infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-filter-stream-interceptor"
+    />
+
+    <component id               = "carrot2.filter.diagnostic.carrot2-stream-interceptor"
+               type             = "filter"
+               serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-filter-stream-interceptor/service/Carrot2StreamInterceptor"
+               infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-filter-stream-interceptor"
+    />
+
+</service>

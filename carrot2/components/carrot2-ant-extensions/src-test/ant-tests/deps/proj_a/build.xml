@@ -1,0 +1,11 @@
+
+<project name="a" default="build">
+	<target name="prepare">
+		<delete dir="tmp" />
+	</target>
+
+	<target name="build">
+		<mkdir dir="tmp/dist" />
+		<touch file="tmp/dist/a-out.txt" />
+	</target>
+</project>

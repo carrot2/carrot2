@@ -1,0 +1,29 @@
+
+<project name="bring-to-date" default="test">
+
+    <target name="prepare">
+        <taskdef name="printDependencies" 
+        	classname="com.dawidweiss.carrot.ant.PrintDependencies" />
+        <delete dir="tmp" />
+		<mkdir dir="tmp"/>
+    </target>
+
+	<target name="test" depends="prepare">
+		<printDependencies componentDescriptor="deps/proj_a/a.dep.xml"
+			file="tmp/dependencies.txt" property="tmp:dependencies:string">
+			<dependencies dir="deps">
+				<include name="**/*.dep.xml" />
+			</dependencies>
+		</printDependencies>
+		<available property="tmp:dep:ok" value="ok" file="tmp/dependencies.txt" type="file" />
+		<fail unless="tmp:dep:ok">
+			Printing dependencies failed.
+		</fail>
+		
+		<fail unless="tmp:dependencies:string">
+			Property not set.
+		</fail>
+
+	</target>
+    
+</project>

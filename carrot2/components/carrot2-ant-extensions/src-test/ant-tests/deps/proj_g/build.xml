@@ -1,0 +1,30 @@
+
+<project name="g" default="build">
+	<target name="prepare">
+		<delete dir="tmp" failonerror="false"/>
+	</target>
+
+	<target name="build">
+		<mkdir dir="tmp/dist" />
+		<mkdir dir="tmp/classes" />
+
+		<copy todir="src" includeemptydirs="false">
+			<fileset dir="src">
+			  <exclude name="**/*.java"/>
+			</fileset>
+			<mapper type="glob" from="*.java.ext" to="*.java"/>
+		</copy>
+
+		<javac srcdir="src"
+         destdir="tmp/classes"
+         debug="on"
+  		/>
+  		
+  		<jar destfile="tmp/dist/G.jar" basedir="tmp/classes"/>
+  		
+		<delete>
+			<fileset dir="src" includes="**/*.java" />
+		</delete>
+  		
+	</target>
+</project>

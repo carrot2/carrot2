@@ -1,7 +1,0 @@
-<!--
-     This is mostly for adapters. They only use
-     utility functions.
-   -->
-<component name="carrot2-shared-lib-only">
-	<provides file="carrot2-shared-lib.jar" />
-</component>

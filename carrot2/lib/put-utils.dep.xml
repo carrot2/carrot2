@@ -1,7 +1,0 @@
-
-<component name="put-utils">
-    <!-- Files that this component is composed of -->
-    <file location="put-utils.jar" />
-    
-    <dependency name="commons-beanutils" />
-</component>

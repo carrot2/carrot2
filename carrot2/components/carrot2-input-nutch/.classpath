@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/servlet.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/junit-3.8.1.jar"/>
+	<classpathentry kind="lib" path="lib/nutch-2003-11-17.jar"/>
+	<classpathentry kind="src" path="/carrot2-local-core"/>
+	<classpathentry kind="src" path="/carrot2-util-common"/>
+	<classpathentry kind="output" path="tmp/build/classes"/>
+</classpath>

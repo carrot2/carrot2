@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<service xmlns     = "http://www.dawidweiss.com/projects/carrot/componentDescriptor" 
+         framework = "Carrot2"
+>
+
+    <!-- Snippet Reader service, Google wrapper input component -->
+
+    <component id               = "carrot2.input.snippet-reader.google"
+               type             = "input"
+               serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-input-snippet-reader/extractor/carrot2/google"
+               configurationURL = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-input-snippet-reader/query.jsp?service=google&amp;submit=Edit+configuration"
+               infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-input-snippet-reader"
+    />
+
+
+    <component id               = "carrot2.input.snippet-reader.google.pl"
+               type             = "input"
+               serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-input-snippet-reader/extractor/carrot2/google-pl"
+               configurationURL = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-input-snippet-reader/query.jsp?service=google-pl&amp;submit=Edit+configuration"
+               infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-input-snippet-reader"
+    />
+
+
+    <component id               = "carrot2.input.snippet-reader.google.cs-only"
+               type             = "input"
+               serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-input-snippet-reader/extractor/carrot2/google-cs"
+               configurationURL = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-input-snippet-reader/query.jsp?service=google-cs&amp;submit=Edit+configuration"
+               infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-input-snippet-reader"
+    />
+
+</service>

@@ -1,5 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE component SYSTEM "../etc/component-dependency.dtd" >
 
-<component name="gnu-regexp">
-    <!-- Files that this component is composed of -->
-    <file location="gnu-regexp-1.1.4.jar" />
+<component
+    name="gnu-regexp"
+    description="GNU Regular Expression package (GNU-REGEXP). LGPL license.">
+
+    <provides>
+        <files>
+            <file location="gnu-regexp-1.1.4.jar" />
+            <file location="gnu-regexp.LICENSE" />
+        </files>
+    </provides>
 </component>

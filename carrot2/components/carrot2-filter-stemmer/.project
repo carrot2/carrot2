@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>carrot2-filter-stemmer</name>
+	<comment>Carrot2 Stemming Component (for remote components architecture)</comment>
+	<projects>
+		<project>carrot2-local-core</project>
+		<project>carrot2-util-common</project>
+		<project>carrot2-util-lang-guesser</project>
+		<project>carrot2-util-remote</project>
+		<project>carrot2-util-tokenizer</project>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
+</projectDescription>

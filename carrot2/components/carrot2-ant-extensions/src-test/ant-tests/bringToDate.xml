@@ -1,0 +1,58 @@
+
+<project name="bring-to-date" default="test">
+
+    <target name="prepare">
+        <taskdef name="bringToDate" 
+        	classname="com.dawidweiss.carrot.ant.BringToDate" />
+		<typedef name="dependencyPath"
+			classname="com.dawidweiss.carrot.ant.DependencyPath" />
+
+		<subant target="prepare">
+			<fileset dir="deps" includes="**/build.xml"/>
+        </subant>
+    </target>
+
+	<target name="test" depends="prepare">
+		<description>
+			Simple dependency check.
+		</description>
+		<bringToDate componentDescriptor="deps/proj_a/a.dep.xml">
+			<dependencies dir="deps">
+				<include name="**/*.dep.xml" />
+			</dependencies>
+		</bringToDate>
+		<!-- Output of project b should be present. -->
+		<condition property="tmp:cond:test:1" value="true">
+			<available file="deps/proj_b/tmp/b-out.txt" type="file" />
+		</condition>
+		<fail unless="tmp:cond:test:1">
+			Error. File not created.
+		</fail>
+	</target>
+
+	<target name="test2" depends="prepare">
+		<description>
+			Profile dependency check.
+		</description>
+		<!-- This is no circular dependency, since d depends
+			on e only in profile 'test' -->
+		<bringToDate componentDescriptor="deps/proj_d_dep_on_e/d.dep.xml">
+			<dependencies dir="deps">
+				<include name="**/*.dep.xml" />
+			</dependencies>
+		</bringToDate>
+	</target>
+
+	<target name="test3" depends="prepare">
+		<description>
+			This should end in a circular dependency exception.
+		</description>
+		<bringToDate componentDescriptor="deps/proj_d_dep_on_e/d.dep.xml"
+			profile="test">
+			<dependencies dir="deps">
+				<include name="**/*.dep.xml" />
+			</dependencies>
+		</bringToDate>
+	</target>
+    
+</project>

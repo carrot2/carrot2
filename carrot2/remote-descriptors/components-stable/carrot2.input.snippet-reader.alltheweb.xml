@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<service xmlns     = "http://www.dawidweiss.com/projects/carrot/componentDescriptor" 
+         framework = "Carrot2"
+>
+
+    <!-- Snippet Reader service, AllTheWeb wrapper input component -->
+
+    <component id               = "carrot2.input.snippet-reader.alltheweb"
+               type             = "input"
+               serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-input-snippet-reader/extractor/carrot2/alltheweb"
+               configurationURL = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-input-snippet-reader/query.jsp?service=alltheweb&amp;submit=Edit+configuration"
+               infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-input-snippet-reader"
+    />
+
+
+</service>

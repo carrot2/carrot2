@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE component SYSTEM "../../../etc/component-dependency.dtd" >
+
+<component
+    name="fsa"
+    description="Finite State Automatons Java reader (FSA library)">
+    
+    <provides>
+        <files>
+            <file location="FSA.jar" />
+            <file location="FSA.LICENSE" />
+        </files>
+    </provides>
+
+</component>

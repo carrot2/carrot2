@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<service xmlns     = "http://www.dawidweiss.com/projects/carrot/componentDescriptor" 
+         framework = "Carrot2"
+>
+
+    <component id               = "carrot2.filter.stemming"
+               type             = "filter"
+               serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-filter-stemmer/service"
+               infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-filter-stemmer"
+    />
+
+
+    <!-- English stemmer -->
+    <component id               = "carrot2.filter.stemming.en.porter"
+               type             = "filter"
+               serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-filter-stemmer/service?languages=en"
+               infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-filter-stemmer"
+    />
+
+
+    <!-- Polish stemmer -->
+    <component id               = "carrot2.filter.stemming.pl.lametyzator"
+               type             = "filter"
+               serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-filter-stemmer/service?languages=pl"
+               infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-filter-stemmer"
+    />
+
+</service>

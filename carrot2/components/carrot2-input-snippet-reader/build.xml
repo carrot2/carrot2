@@ -1,0 +1,15 @@
+
+<project name="Carrot2 Snippet Reader Input Component" default="build">
+
+    <property name="project.dir"      location="${basedir}" />
+    <property name="carrot2.cvs.dir"  location="../.." />
+    <property name="component.descriptor" location="carrot2-input-snippet-reader.dep.xml" />
+    <property name="dist.name" value="carrot2-input-snippet-reader" />
+
+    <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
+
+	<target name="build">
+		<ant antfile="build.remote.xml" inheritall="false" />
+	</target>    
+
+</project>

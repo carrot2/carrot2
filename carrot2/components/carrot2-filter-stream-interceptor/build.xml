@@ -1,0 +1,15 @@
+
+<project name="Carrot2 Stream Interceptor Diagnostic Filter (Remote)" default="build">
+    
+    <property name="project.dir"      location="${basedir}" />
+    <property name="carrot2.cvs.dir"  location="../.." />
+
+    <property name="dist.name" value="carrot2-filter-stream-interceptor" />
+
+    <property name="component.descriptor" location="carrot2-filter-stream-interceptor.dep.xml" />
+
+    <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
+
+	<property name="type" value="wartype" />
+
+</project>

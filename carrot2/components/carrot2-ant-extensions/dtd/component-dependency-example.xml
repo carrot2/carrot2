@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE component SYSTEM "component-dependency.dtd" >
+
+<component name="myComponent" description="This is myComponent, see http://www.mycomponent.org">
+
+	<provides>
+		<files prefix="tmp/dist">
+			<file location="a-out.txt" />
+		</files>
+		<build>
+			<ant file="build.xml" target="build" />
+		</build>
+	</provides>
+
+    <dependency name="b" />
+	<dependency name="c" profile="test" />
+</component>

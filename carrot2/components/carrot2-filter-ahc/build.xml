@@ -1,0 +1,16 @@
+
+<project name="Carrot2 AHC Clustering Filter" default="build">
+
+    <property name="project.dir"      location="${basedir}" />
+    <property name="carrot2.cvs.dir"  location="../.." />
+    <property name="component.descriptor" location="carrot2-filter-ahc.dep.xml" />
+    <property name="dist.name" value="carrot2-filter-ahc" />
+
+    <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
+
+	<target name="build">
+		<!-- <ant antfile="build.local.xml" inheritall="false"/> -->
+		<ant antfile="build.remote.xml" inheritall="false" />
+	</target>    
+
+</project>

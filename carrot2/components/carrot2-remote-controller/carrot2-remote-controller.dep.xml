@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE component SYSTEM "../../etc/component-dependency.dtd" >
+
+<component
+    name="carrot2-remote-controller"
+    description="Carrot2 Remote Controller">
+
+    <provides>
+        <files build-path-exclude="true" prefix="tmp/dist">
+            <file location="carrot2-remote-controller.war" />
+        </files>
+        <build>
+            <ant file="build.xml" target="build" />
+        </build>
+    </provides>
+
+	<!-- Carrot2 components -->
+    <dependency name="carrot2-license" />
+
+	<dependency name="carrot2-util-common" />
+	<dependency name="carrot2-util-remote" />
+	<dependency name="carrot2-util-put" />
+
+	<dependency name="commons-beanutils" />
+    
+	<dependency name="jdom" />
+	<dependency name="log4j" />
+
+	<dependency name="servlets-api" nocopy="true" />
+
+	<dependency name="bsf" />
+	<dependency name="beanshell" />
+
+	<dependency name="struts" nocopy="true" />
+	
+</component>

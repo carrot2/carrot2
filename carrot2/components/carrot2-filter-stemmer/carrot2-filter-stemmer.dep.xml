@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE component SYSTEM "../../etc/component-dependency.dtd" >
+
+<component
+    name="carrot2-filter-stemmer"
+    description="Carrot2 Stemming Component (for remote components architecture)">
+
+    <provides>
+        <files build-path-exclude="true" prefix="tmp/dist">
+            <file location="carrot2-filter-stemmer.war" />
+        </files>
+        <build>
+            <ant file="build.xml" target="build" />
+        </build>
+    </provides>
+
+	<!-- Carrot2 components -->
+    <dependency name="carrot2-license" />
+	<dependency name="carrot2-util-common" />
+	<dependency name="carrot2-util-remote" />
+
+	<dependency name="carrot2-util-tokenizer" />
+	<dependency name="carrot2-language-guesser" />
+	<dependency name="carrot2-local-core" />
+
+	<dependency name="jdom" />
+
+</component>

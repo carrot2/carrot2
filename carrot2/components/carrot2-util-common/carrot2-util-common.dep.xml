@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE component SYSTEM "../../etc/component-dependency.dtd" >
+
+<component
+    name="carrot2-util-common"
+    description="Carrot2 Common Utilities">
+    
+    <provides>
+        <files build-path-exclude="true" prefix="tmp/dist">
+            <file location="carrot2-util-common.jar" />
+        </files>
+        <build>
+            <ant file="build.xml" target="build" />
+        </build>
+    </provides>
+
+    <dependency name="log4j" />
+    <dependency name="junit" profile="test" />
+    <dependency name="carrot2-license" />
+    
+</component>

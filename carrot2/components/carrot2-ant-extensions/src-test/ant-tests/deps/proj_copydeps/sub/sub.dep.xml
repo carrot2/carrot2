@@ -1,0 +1,9 @@
+
+<component name="sub">
+
+	<provides>
+	</provides>
+
+	<dependency name="subsub" nocopy="true" />
+
+</component>

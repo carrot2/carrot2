@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<!DOCTYPE component SYSTEM "../etc/component-dependency.dtd" > 
+<component
+    name="carrot2-license"
+    description="Carrot2 Framework License. http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE">
+	<provides>
+		<files prefix="..">
+			<file location="carrot2.CONTRIBUTORS" />
+			<file location="carrot2.LICENSE" />
+		</files>
+	</provides>
+</component>

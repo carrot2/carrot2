@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<!DOCTYPE component SYSTEM "../../../etc/component-dependency.dtd" > 
+<component
+    name="castor"
+    description="CASTOR Open Source Data Binding Framework, http://www.castor.org/">
+	<provides>
+		<files>
+			<file location="castor-0.9.4.2-xml.jar" />
+		</files>
+	</provides>
+
+    <dependency name="xerces" />
+
+</component>

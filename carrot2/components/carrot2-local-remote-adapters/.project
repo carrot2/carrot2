@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>carrot2-local-remote-adapters</name>
+	<comment>Carrot2 Local To Remote Adapters</comment>
+	<projects>
+		<project>carrot2-local-core</project>
+		<project>carrot2-util-common</project>
+		<project>carrot2-util-put</project>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
+</projectDescription>

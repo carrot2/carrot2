@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<service xmlns      = "http://www.dawidweiss.com/projects/carrot/componentDescriptor" 
+         framework  = "Carrot2"
+>
+
+
+<component id = "carrot2.filter.fuzzyAnts"
+               type             = "filter"
+               serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-filter-fuzzyants/service/FuzzyAnts"
+               infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-filter-fuzzyants"
+>
+</component>
+
+</service>

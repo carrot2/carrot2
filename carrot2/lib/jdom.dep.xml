@@ -1,5 +1,12 @@
-
-<component name="jdom">
-    <!-- Files that this component is composed of -->
-    <file location="jdom.jar" />
+<?xml version="1.0" ?>
+<!DOCTYPE component SYSTEM "../etc/component-dependency.dtd" > 
+<component
+    name="jdom"
+    description="JDOM XML Wrapper Beta 10, http://www.jdom.org/">
+	<provides>
+		<files>
+			<file location="jdom-b10.jar" />
+			<file location="jdom.LICENSE" />
+		</files>
+	</provides>
 </component>

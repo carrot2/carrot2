@@ -1,0 +1,77 @@
+
+<!-- 
+     Component element is the root element of a component
+     descriptor file.
+     
+     It contains component's name (identifier used in other
+     descriptors), and an informative description used when printing
+     dependencies to an 'info' file.
+  -->
+<!ELEMENT component (provides*, dependency*) >
+
+<!ATTLIST component name NMTOKEN #REQUIRED >
+<!ATTLIST component description CDATA #IMPLIED >
+
+<!-- 
+     A dependency to a named component. Only the name of the
+     required component is given here - its location is to be
+     specified in the build file using nested search paths (filesets).
+     
+     Dependencies may contain an additional 'profile' attribute.
+     A dependency is followed only if the profile specified at
+     compilation time is equal to the profile of a dependency, or the
+     dependency has no explicit profile.
+  -->
+
+<!ELEMENT dependency EMPTY >
+
+<!ATTLIST dependency name NMTOKEN #REQUIRED >
+<!ATTLIST dependency profile NMTOKEN #IMPLIED >
+
+
+<!--
+    Provides element specifies the objects provided by this component. These
+    objects may be either dynamic (created by the component's build file),
+    or static (libraries, JARs etc).
+
+    Dynamic objects usually contain 'build' element as a child of
+    'provides'. Build element is executed ONLY if some of the objects
+    are not found. Whether the state of the objects is up-to-date is
+    not detected.
+
+    Static objects only contain 'files' element as a child of 'provides'.
+  -->
+  
+<!ELEMENT provides (files, build*) >
+
+<!ATTLIST provides profile NMTOKEN #IMPLIED >
+
+<!-- 
+    Files element contains a list of relative paths (resolved
+    against the component dependency file) to objects provided
+    by the component. Files element may have an optional 'prefix'
+    attribute, which specifies path prefix inserted between
+    component dependency file and the object's relative path.
+    The prefix may be used to ignore path segments leading to 
+    a temporary build directory, for example.
+  -->
+<!ELEMENT files (file+) >
+<!ATTLIST files prefix CDATA #IMPLIED >
+
+<!ELEMENT file EMPTY >
+<!ATTLIST file location CDATA #REQUIRED >
+
+<!-- 
+    Build element specifies actions that need to be performed
+    to create provided objects if they are missing.
+  -->
+<!ELEMENT build (ant)+ >
+
+<!--
+    ANT task is a build action that executes ANT build file
+    relative to component descriptor's path/
+  -->
+<!ELEMENT ant EMPTY >
+<!ATTLIST ant file CDATA #REQUIRED >
+<!ATTLIST ant target CDATA #IMPLIED >
+

@@ -1,0 +1,41 @@
+
+<project name="most-recent-file-date-test" default="test">
+    
+    <target name="prepare">
+        <taskdef name="mostRecentFileDate" classname="com.dawidweiss.carrot.ant.MostRecentFileDate" />
+        <delete dir="tmp" />
+        <mkdir dir="tmp" />
+    </target>
+
+	<target name="test" depends="prepare">
+        
+        <touch file="tmp/file1.txt" millis="1000" />
+        <touch file="tmp/file2.txt" millis="2000" />
+        <touch file="tmp/file3.tmp" millis="3000" />
+        
+        <mostRecentFileDate millisProperty="lastModified" dateProperty="lastModifiedDate">
+            <fileset dir="tmp" includes="*.txt" />
+        </mostRecentFileDate>
+        
+        <condition property="test.ok">
+            <equals arg1="${lastModified}" arg2="2000" />
+        </condition>
+        <fail unless="test.ok">
+        	Last modified (millis) not set.
+        </fail>
+        
+        <condition property="test.ok2">
+        	<isset property="lastModifiedDate" />
+        </condition>
+        <fail unless="test.ok2">
+        	Last modified (date) not set.
+        </fail>
+	</target>
+    
+    <target name="test2" depends="prepare">
+        <mostRecentFileDate millisProperty="lastModified" 
+				exceptionOnEmpty="true">
+            <fileset dir="tmp" includes="*.txt" />
+        </mostRecentFileDate>
+    </target>
+</project>
