@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.dawidweiss.carrot.core.local.LocalComponent;
-import com.dawidweiss.carrot.core.local.LocalFilterComponentBase;
 import com.dawidweiss.carrot.core.local.ProcessingException;
 import com.dawidweiss.carrot.core.local.clustering.RawDocument;
 import com.dawidweiss.carrot.core.local.clustering.RawDocumentsConsumer;
