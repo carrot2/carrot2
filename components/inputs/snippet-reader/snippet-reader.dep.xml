@@ -1,0 +1,15 @@
+<!--
+     A dependency descriptor. This has to be updated manually
+     when new JARs are required.
+   -->
+<component name="snippet-reader">
+    <dependency name="carrot2-shared-lib" />
+    
+    <!-- this could be replaced with jdk's -->
+    <dependency name="gnu-regexp" />
+    
+    <!-- this could be removed? only aelfred is used out of this -->
+    <dependency name="saxon" />
+    
+    <file location="lib/xmlrpc-1.1.jar" />
+</component>

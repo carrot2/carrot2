@@ -1,0 +1,7 @@
+
+<component name="castor">
+    <!-- Files that this component is composed of -->
+    <file location="castor-0.9.4.2-xml.jar" />
+
+    <dependency name="xerces" />
+</component>

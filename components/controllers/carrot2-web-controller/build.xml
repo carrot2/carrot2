@@ -2,7 +2,7 @@
 
 <project name="Carrot2 Web Controller Component" default="help" basedir="." >
 
-  <!-- ## these are overrioden my master build file ### -->
+  <!-- ## these are overrioden by the master build file ### -->
 
   <property name="distribution.dir" location="tmp/dist" />
   <property name="javadoc.dir"      location="tmp/javadoc" />
@@ -26,29 +26,62 @@
   <property name="javac.optimize"      value="off" />
   <property name="javac.debug"         value="on" />
 
-  <!-- ## classpath for compiling classes ## -->
-
-  <path id="carrot.shared.libs">
-    <!-- all jars runtime/shared/lib -->
-    <fileset dir="${carrot2.cvs.dir}/lib">  
-      <include name="**/*.jar"/>
-    </fileset>
-  </path>
-
   <!-- ## project classpath ### -->
-
-  <path id="compile.classpath">
-    <fileset dir="lib">
-      <include name="**/*.jar" />
-    </fileset>
-    <path refid="carrot.shared.libs" />
-  </path>
 
   <filterset begintoken="@" endtoken="@" id="deployment.info">
     <filter token="DEPLOY_HOST" value="${deployment.host}"/>
     <filter token="DEPLOY_PORT" value="${deployment.port}"/>
   </filterset>
+
+  <!-- ##################################### -->
+  <!-- ### {{{ DEPENDENCY analysis       ### -->
+  <!-- ##################################### -->
+  <property name="component.descriptor" location="carrot2-web-controller.dep.xml" />
   
+  <target name="define.dependency.task">
+    <taskdef resource="com/dawidweiss/carrot/ant/dependencies.antlib.xml">
+        <classpath location="${carrot2.cvs.dir}/lib/carrot2-shared-lib.jar" />
+    </taskdef>
+  </target>
+
+  <target name="generate.dependency.path" depends="define.dependency.task">
+    <dependencylist
+        property="component.dep"
+        fileListId="component.dep.flist"
+        componentDescriptor="${component.descriptor}"
+        verbose="false"
+    >
+        <dependencies dir="${carrot2.cvs.dir}/lib">
+            <include name="*.dep.xml" />
+        </dependencies>
+    </dependencylist>
+    <path id="classpath.dependencies">
+        <filelist refid="component.dep.flist" />
+    </path>
+  </target>
+
+  <target name="show.dependencies" depends="define.dependency.task">
+    <dependencylist componentDescriptor="${component.descriptor}" verbose="on">
+        <dependencies dir="${carrot2.cvs.dir}/lib">
+            <include name="*.dep.xml" />
+        </dependencies>
+    </dependencylist>
+  </target>
+  
+  <target name="collect.dependencies" depends="prepare">
+    <dependencylist componentDescriptor="${component.descriptor}" verbose="on"
+                    fileListId="component.dep.flist">
+        <dependencies dir="${carrot2.cvs.dir}/lib">
+            <include name="*.dep.xml" />
+        </dependencies>
+    </dependencylist>
+
+    <copyfilelist todir="${distribution.dir}">
+        <filelist refid="component.dep.flist" />
+    </copyfilelist>
+  </target>
+  <!-- }}} -->
+
   <!-- ##################################### -->
   <!-- ### {{{ CLEAN                     ### -->
   <!-- ##################################### -->
@@ -64,7 +97,7 @@
   <!-- ##################################### -->
   <!-- ### {{{ PREPARE                   ### -->
   <!-- ##################################### -->
-  <target name="prepare">
+  <target name="prepare" depends="generate.dependency.path">
     <mkdir dir="${build.dir}/WEB-INF/classes"  />
     <mkdir dir="${build.dir}/WEB-INF/lib" />
     <mkdir dir="${build.dir}/WEB-INF/components"/>
@@ -97,6 +130,31 @@
         <fileset dir="lib" includes="**/*.jar" />
     </copy>
     
+    <!-- copy struts and dependencies because it is needed to be declared locally for some reason... -->
+    <dependencylist componentDescriptor="${carrot2.cvs.dir}/lib/struts.dep.xml"
+                    fileListId="struts.dep.flist">
+        <dependencies dir="${carrot2.cvs.dir}/lib">
+            <include name="*.dep.xml" />
+        </dependencies>
+    </dependencylist>
+
+	<mkdir dir="${build.dir}/WEB-INF/lib" />
+    <copyfilelist todir="${build.dir}/WEB-INF/lib">
+        <filelist refid="struts.dep.flist" />
+    </copyfilelist>
+
+    <dependencylist componentDescriptor="${carrot2.cvs.dir}/lib/put-utils.dep.xml"
+                    fileListId="struts.dep.flist">
+        <dependencies dir="${carrot2.cvs.dir}/lib">
+            <include name="*.dep.xml" />
+        </dependencies>
+    </dependencylist>
+
+	<mkdir dir="${build.dir}/WEB-INF/lib" />
+    <copyfilelist todir="${build.dir}/WEB-INF/lib">
+        <filelist refid="struts.dep.flist" />
+    </copyfilelist>
+    
   </target>
   <!-- }}} -->
 
@@ -112,9 +170,9 @@
            deprecation = "on"
            includeantruntime = "false"
            includejavaruntime = "false"
-           classpathref = "compile.classpath"
     >
-        <!-- add source code paths. -->
+        <classpath refid="classpath.dependencies" />
+        <classpath location="${carrot2.cvs.dir}/lib/compile-time-only/servlet.jar" />
         <src path="${src.path}" />
     </javac>
 
@@ -152,7 +210,8 @@
             <exclude name="WEB-INF/lib/**" />
 		</fileset>
 
-        <lib dir="lib">
+        <lib dir="${build.dir}/WEB-INF/lib">
+        	<include name="*.jar" />
         </lib>
 
 		<classes dir="${build.dir}/WEB-INF/classes" />

@@ -8,6 +8,39 @@
 
 <history>
     <changelist>
+        <date>2004-02-06</date>
+        <committer>dawid</committer>
+
+        <change component="carrot2.filter.text-only" type="refactoring">
+        The text-only component has been removed. If you ever need it,
+        get it from the CVS history.
+        </change>
+        
+        <change component="global" type="refactoring">
+        Build files have changed, so ANT1.6 is now a requirement.
+        </change>
+
+        <change component="global" type="new">
+        Added a new ANT task to manage JAR interdependencies in the project.
+        Now you can easily collect all JARs that a component requires, plus
+        only these JARs are used at compile-time. Try using these targets
+        on build files of components: 'ant show.dependencies' (shows
+        all required components and JAR files),
+        'ant collect.dependencies' (copies the required JARs to the distribution.dir folder).
+        </change>
+    </changelist>
+
+    <changelist>
+        <date>2004-02-05</date>
+        <committer>dawid</committer>
+        <change component="carrot2-shared-lib" type="new">
+        Added a new XML Serializer that takes into
+        account invalid XML characters and ignores them.
+        The performance of it can still be improved, but it can wait.
+        </change>
+    </changelist>
+
+    <changelist>
         <date>2004-02-04</date>
         <committer>dawid</committer>
         <change component="global" type="new">

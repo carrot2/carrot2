@@ -1,0 +1,5 @@
+
+<component name="jdom">
+    <!-- Files that this component is composed of -->
+    <file location="jdom.jar" />
+</component>

@@ -43,22 +43,12 @@
     <!-- clean subprojects -->
     <echo level="info" message="#### Cleaning up components..." />
 
-    <!-- Common lib (local clean) -->
-    <ant antfile="build.xml" dir="components/carrot2-shared-lib" inheritall="false" target="clean" />
-    <!-- Controllers -->
-    <ant antfile="build.xml" dir="components/controllers/carrot2-web-controller" inheritall="false" target="clean" />
     <!-- filters -->
-    <ant antfile="build.xml" dir="components/filters/clustering/ahc-clustering" inheritall="false" target="clean" />
-    <ant antfile="build.xml" dir="components/filters/clustering/lingo-clustering" inheritall="false" target="clean" />
-    <ant antfile="build.xml" dir="components/filters/clustering/stc-clustering" inheritall="false" target="clean" />
-    <ant antfile="build.xml" dir="components/filters/diagnostic/stream-interceptor" inheritall="false" target="clean" />
-    <ant antfile="build.xml" dir="components/filters/linguistic/pl-eng-stemming" inheritall="false" target="clean" />
-    <ant antfile="build.xml" dir="components/filters/pruning/text-only" inheritall="false" target="clean" />
-    <ant antfile="build.xml" dir="components/inputs/snippet-generator" inheritall="false" target="clean" />
-    <ant antfile="build.xml" dir="components/inputs/snippet-reader" inheritall="false" target="clean" />
-    <ant antfile="build.xml" dir="components/inputs/treeSnippetMiner" inheritall="false" target="clean" />
-    <ant antfile="build.xml" dir="components/inputs/verbatim-input" inheritall="false" target="clean" />
-    <ant antfile="build.xml" dir="components/outputs/xslt-renderer" inheritall="false" target="clean" />
+    <subant target="clean" inheritall="false">
+        <fileset dir="components">
+            <include name="**/build.xml" />
+        </fileset>
+    </subant>
 
     <echo level="info" message="#### Cleaning up local build directory" />
     
@@ -74,9 +64,13 @@
           description="Builds and copies the shared library to /lib folder.">
 
     <!-- build shared library to shared libraries directory -->
+    <ant antfile="build.xml" dir="components/carrot2-shared-lib" inheritall="false" target="clean" />
     <ant antfile="build.xml" dir="components/carrot2-shared-lib" inheritall="false" target="build">
         <property name="distribution.dir" location="lib" />
     </ant>
+    <!-- copy the dependency specification -->
+    <copy file="components/carrot2-shared-lib/carrot2-shared-lib.dep.xml"
+        tofile="lib/carrot2-shared-lib.dep.xml" overwrite="true" />
   </target>
   <!-- }}} -->
 
@@ -159,18 +153,6 @@
     </ant>
   </target> <!-- }}} -->
 
-  <target name="build.text-only" depends="init"> <!-- {{{ -->
-    <echo>
-
-    #### Building: text-only pruning filter ####
-
-    </echo>
-    <ant antfile="build.xml" target="build" dir="components/filters/pruning/text-only" inheritall="false">
-        <property name="distribution.dir" location="${distribution.dir}" />
-        <property name="javadoc.dir"     location="${javadoc.dir}" />
-    </ant>
-  </target> <!-- }}} -->
-
   <target name="build.snippet-generator" depends="init"> <!-- {{{ -->
     <echo>
 
@@ -241,7 +223,6 @@
             build.stc-clustering,
             build.stream-interceptors,
             build.pl-eng-stemming,
-            build.text-only,
             build.snippet-generator,
             build.snippet-reader,
             build.treeSnippetMiner,

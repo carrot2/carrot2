@@ -14,20 +14,12 @@
   <property name="build.compiler"   value="modern" /> 
   <property name="lib.name"         value="carrot2-shared-lib.jar" />
 
-  <!-- ## classpath for compiling classes ## -->
-  <path id="carrot.shared.libs">
-    <!-- all jars runtime/shared/lib -->
-    <fileset dir="${carrot2.cvs.dir}/lib">
-      <include name="**/*.jar"/>
-      <exclude name="**/${lib.name}" />
-    </fileset>
-  </path>
-
 
   <!-- ##################################### -->
   <!-- ### {{{ PREPARE directories       ### -->
   <!-- ##################################### -->
-  <target name="prepare" description="Prepare build directories.">
+  <target name="prepare" description="Prepare build directories."
+          depends="compile.ant.tasks, generate.dependency.path">
     <mkdir dir="${build.dir}/classes" />
     <mkdir dir="${build.dir}/src-xml-binding-generated" />
     <mkdir dir="${distribution.dir}" />
@@ -54,7 +46,7 @@
     <mkdir  dir="${build.dir}/src-xml-binding-generated" />
 
     <java classname="org.exolab.castor.builder.SourceGenerator"
-          classpathref="carrot.shared.libs" failonerror="true" fork="true">
+          classpathref="classpath.dependencies" failonerror="true" fork="true">
         <arg value="-i" /><arg file="${carrot2.cvs.dir}/schema/component-descriptor.xsd"/>
         <arg value="-dest"/><arg file="${build.dir}/src-xml-binding-generated" />
         <arg line="-verbose" /> 
@@ -62,7 +54,7 @@
     </java>
 
     <java classname="org.exolab.castor.builder.SourceGenerator"
-          classpathref="carrot.shared.libs" failonerror="true" fork="true">
+          classpathref="classpath.dependencies" failonerror="true" fork="true">
         <arg value="-i" /><arg file="${carrot2.cvs.dir}/schema/mime-types/x-carrot-clustering-input-query.xsd"/>
         <arg value="-dest"/><arg file="${build.dir}/src-xml-binding-generated" />
         <arg line="-verbose" />
@@ -70,43 +62,116 @@
     </java>
 
     <java classname="org.exolab.castor.builder.SourceGenerator"
-          classpathref="carrot.shared.libs" failonerror="true" fork="true">
+          classpathref="classpath.dependencies" failonerror="true" fork="true">
         <arg value="-i" /><arg file="${carrot2.cvs.dir}/schema/process-descriptor.xsd"/>
         <arg value="-dest"/><arg file="${build.dir}/src-xml-binding-generated" />
         <arg line="-verbose" />
         <arg value="-binding-file"/><arg file="xml-binding/process-descriptor-binding.xml" />
     </java>
-
   </target>
   <!-- }}} -->
 
   <!-- ##################################### -->
+  <!-- ### {{{ DEPENDENCY analysis       ### -->
+  <!-- ##################################### -->
+  <property name="component.descriptor" location="carrot2-shared-lib.dep.xml" />
+  
+  <target name="define.dependency.task">
+    <taskdef resource="com/dawidweiss/carrot/ant/dependencies.antlib.xml">
+        <classpath location="${build.dir}/classes" />
+    </taskdef>
+  </target>
+
+  <target name="generate.dependency.path" depends="define.dependency.task">
+    <dependencylist
+        property="component.dep"
+        fileListId="component.dep.flist"
+        componentDescriptor="${component.descriptor}"
+        verbose="false"
+    >
+        <dependencies dir="${carrot2.cvs.dir}/lib">
+            <include name="*.dep.xml" />
+        </dependencies>
+    </dependencylist>
+    <path id="classpath.dependencies">
+        <filelist refid="component.dep.flist" />
+    </path>
+  </target>
+
+  <target name="show.dependencies" depends="define.dependency.task">
+    <dependencylist componentDescriptor="${component.descriptor}" verbose="on">
+        <dependencies dir="${carrot2.cvs.dir}/lib">
+            <include name="*.dep.xml" />
+        </dependencies>
+    </dependencylist>
+  </target>
+  
+  <target name="collect.dependencies" depends="prepare">
+    <dependencylist componentDescriptor="${component.descriptor}" verbose="on"
+                    fileListId="component.dep.flist">
+        <dependencies dir="${carrot2.cvs.dir}/lib">
+            <include name="*.dep.xml" />
+        </dependencies>
+    </dependencylist>
+
+    <copyfilelist todir="${distribution.dir}">
+        <filelist refid="component.dep.flist" />
+    </copyfilelist>
+  </target>
+  <!-- }}} -->
+  
+  <!-- ##################################### -->
   <!-- ### {{{ COMPILE project           ### -->
   <!-- ##################################### -->
+  <target name="compile.ant.tasks">
+    <mkdir dir="${build.dir}/classes" />
+    <!-- copy any non-java files (resources) from the source path. -->
+    <copy toDir="${build.dir}/classes">
+       <fileset dir="src">
+         <include name="com/dawidweiss/carrot/ant/**/*.*" />
+         <exclude name="**/*.java"/>
+       </fileset>
+    </copy>
+
+    <!-- Compile ANT tasks first. -->
+    <javac
+            destdir="${build.dir}/classes"
+            failonerror="true"
+            includeantruntime="true"
+            includejavaruntime="false"
+            debug="true"
+            optimize="false"
+            srcdir="src"
+            deprecation="true"
+    >
+            <include name="com/dawidweiss/carrot/ant/*.java" />
+    </javac>
+  </target>
+  
   <target name="compile" depends="prepare, xmlbinding" description="Compiles all Java classes.">
+    <!-- copy any non-java files (resources) from the source path. -->
+    <copy toDir="${build.dir}/classes">
+       <fileset dir="src">
+         <exclude name="**/*.java"/>
+       </fileset>
+    </copy>
 
     <javac 
             destdir="${build.dir}/classes"
             failonerror="true"
             includeantruntime="false"
             includejavaruntime="false"
-            classpathref="carrot.shared.libs"
             debug="true"
             optimize="false"
     >
+        <classpath refid="classpath.dependencies" />
+        <classpath>
+            <fileset dir="${carrot2.cvs.dir}/lib" includes="compile-time-only/servlet.jar" />
+        </classpath>
         <src path="src" />
         <src path="${build.dir}/src-xml-binding-generated" />
+        <exclude name="com/dawidweiss/carrot/ant/*.java" />
     </javac>
-    
-    <!-- copy any non-java files (resources) from the source path. -->
-    <copy toDir="${build.dir}/classes">
-       <fileset dir="src">
-         <exclude name="**/*.java"/>
-       </fileset>
-       <fileset dir="${build.dir}/classes">
-         <include name="**/*.properties" />
-       </fileset>
-    </copy>
 
   </target>
   <!-- }}} -->
@@ -153,14 +218,13 @@
   <!-- ### {{{ JAVADOC project           ### -->
   <!-- ##################################### -->
 
-  <target name="javadoc" depends="compile" description="Builds a JAR and copies it to the runtime environment.">
+  <target name="javadoc" depends="prepare" description="Builds a JAR and copies it to the runtime environment.">
 
     <delete dir="${javadoc.dir}" failonerror="false" />
     <mkdir dir="${javadoc.dir}" />
 
     <javadoc packagenames     = "com.dawidweiss.carrot.*"
              destdir          = "${javadoc.dir}"
-             classpathref     = "carrot.shared.libs"
              public           = "true"
              version          = "false"
              use              = "true"
@@ -171,8 +235,13 @@
              failonerror      = "true"
              stylesheetfile   = "${carrot2.cvs.dir}/misc/javadoc/stylesheet.css"
     >
-        <sourcepath path="src"/>
+        <classpath refid="classpath.dependencies" />
+        <classpath>
+            <fileset dir="${carrot2.cvs.dir}/lib" includes="compile-time-only/servlet.jar" />
+        </classpath>
+        <sourcepath path="src" />
         <sourcepath path="${build.dir}/src-xml-binding-generated" />
+        <excludepackage name="com.dawidweiss.carrot.ant" />
     </javadoc>
   </target>
   <!-- }}} -->
