@@ -20,7 +20,7 @@
 	<dependency name="carrot2-local-core" />
     <dependency name="jama" />
     <dependency name="log4j" />
-    <dependency name="violinstrings" />
+    <dependency name="colt" />
 
 	<dependency name="carrot2-util-remote" 	profile="remote" />
     <dependency name="jdom"                 profile="remote" />
