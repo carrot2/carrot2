@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE component SYSTEM "../../etc/component-dependency.dtd" >
+
+<!--
+	This pseudo-component descriptor assembles stuff needed for
+	a clustering plugin for Nutch search engine.
+  -->
+
+<component
+    name="Lucene Integration Example"
+    description="Carrot2-Lucene Integration Example">
+    
+    <dependency name="carrot2-local-core" />
+	<dependency name="carrot2-util-tokenizer" />
+    <dependency name="carrot2-filter-lingo" in-profile="local" />
+    <dependency name="lucene" />
+    <dependency name="lucene-demos" />
+
+</component>

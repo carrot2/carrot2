@@ -1,0 +1,14 @@
+<project name="Lucene Integration Example" default="build">
+
+	<property name="project.dir"      location="${basedir}" />
+	<property name="carrot2.cvs.dir"  location="../.." />
+
+	<property name="type"       	  value="jartype" />
+	<property name="dist.name"        value="carrot2-lucene-example" />
+
+	<property name="distribution.dir" location="${project.dir}/tmp/dist" />
+	<property name="component.descriptor" location="carrot2-lucene-example.dep.xml" />
+
+    <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
+
+</project>
