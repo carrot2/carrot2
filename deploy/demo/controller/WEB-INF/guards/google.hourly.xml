@@ -1,0 +1,11 @@
+<guard class="com.dawidweiss.carrot.controller.carrot2.guard.HourlyLimitGuard">
+
+    <component-prefix>carrot2.input.snippet-reader.google</component-prefix>
+    
+    <!-- each query =~ 2 hits -->
+    <hourly-limit>50</hourly-limit>
+    
+    <!-- counter reset period (in seconds) -->
+    <counter-reset-period>360</counter-reset-period>
+
+</guard>
