@@ -1,3 +1,4 @@
+o.o.
 mgr
 godz
 zł
