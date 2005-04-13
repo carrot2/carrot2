@@ -16,8 +16,8 @@
 
     <dependency name="colt" />
     <dependency name="nni" />
-    <dependency name="carrot2-util-common" />
     <dependency name="carrot2-license" />
+    <dependency name="carrot2-util-common" profile="test"/>
     <dependency name="junit" profile="test" />
     <dependency name="junit-addons" profile="test" />
     
