@@ -20,13 +20,13 @@ import cern.colt.matrix.impl.*;
 import com.stachoodev.matrix.factorization.*;
 
 /**
- * Quickly checks if the native NNI libraries can be loaded and what the
+ * Quickly checks if the native BLAS libraries can be loaded and what the
  * performance gain is.
  * 
  * @author Stanislaw Osinski
  * @version $Revision$
  */
-public class NNIQuickCheck
+public class BLASQuickCheck
 {
     /** Used to calculate the number of rows of the test matrix */
     private static final double ROWS_COLUMNS_RATIO = 2.8;
@@ -40,7 +40,7 @@ public class NNIQuickCheck
     /**
      * 
      */
-    public NNIQuickCheck()
+    public BLASQuickCheck()
     {
     }
     
@@ -50,9 +50,9 @@ public class NNIQuickCheck
     public void go()
     {
         NNIInterface.suppressNNI(false);
-        if (NNIInterface.isNativeBlasAvailable() && NNIInterface.isNativeLapackAvailable())
+        if (NNIInterface.isNativeBlasAvailable())
         {
-            resultsPrintStream.println("NNI native libraries available.");
+            resultsPrintStream.println("Native BLAS routines available.");
             resultsPrintStream.println("Warming up...");
             benchmarkExecutionTime(true);
             resultsPrintStream.println("Benchmarking...");
@@ -60,7 +60,8 @@ public class NNIQuickCheck
         }   
         else
         {
-            resultsPrintStream.println("NNI native libraries unavailable.");
+            resultsPrintStream.println("Native BLAS routines not available.");
+            resultsPrintStream.println("Nothing to benchmark.");
         }
         resultsPrintStream.println("Done.");
     }
@@ -87,7 +88,7 @@ public class NNIQuickCheck
         if (!warmUp)
         {
             resultsPrintStream
-                .println("Algorithm\tMode\tTerms\tDocuments\tClusters\tIterations\tTime");
+                .println("Algorithm\tMode\tTerms\tDocs\tGroups\tIters\tTime [ms]");
         }
 
         IterativeMatrixFactorizationFactory factory = new NonnegativeMatrixFactorizationEDFactory();
@@ -135,7 +136,7 @@ public class NNIQuickCheck
             if (!warmUp)
             {
                 resultsPrintStream.println(factorization.toString() + "\t"
-                    + "NNI" + "\t" + A.rows() + "\t" + A.columns() + "\t"
+                    + "Native" + "\t" + A.rows() + "\t" + A.columns() + "\t"
                     + factory.getK() + "\t" + factory.getMaxIterations()
                     + "\t" + elapsedNative);
                 
@@ -189,6 +190,6 @@ public class NNIQuickCheck
      */
     public static void main(String [] args)
     {
-        new NNIQuickCheck().go();
+        new BLASQuickCheck().go();
     }
 }
