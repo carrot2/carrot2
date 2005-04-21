@@ -5,5 +5,5 @@
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/log4j-1.2.8.jar"/>
 	<classpathentry kind="src" path="/carrot2-local-core"/>
 	<classpathentry exported="true" kind="var" path="CARROT2_CHECKOUT_BASE/lib/lucene-1.5-rc1-dev.jar"/>
-	<classpathentry kind="output" path="tmp/classes"/>
+	<classpathentry kind="output" path="tmp/eclipse/classes"/>
 </classpath>

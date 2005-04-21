@@ -10,5 +10,5 @@
 	<classpathentry kind="lib" path="lib/castor-0.9.4.2-xml.jar"/>
 	<classpathentry kind="src" path="/carrot2-util-common"/>
 	<classpathentry kind="src" path="/carrot2-util-put"/>
-	<classpathentry kind="output" path="tmp/build/classes"/>
+	<classpathentry kind="output" path="tmp/eclipse/classes"/>
 </classpath>

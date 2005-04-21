@@ -10,5 +10,5 @@
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/commons-collections-3.0.jar"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/commons-logging.jar"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/commons-primitives-1.0.jar"/>
-	<classpathentry kind="output" path="tmp/build/classes"/>
+	<classpathentry kind="output" path="tmp/eclipse/classes"/>
 </classpath>
