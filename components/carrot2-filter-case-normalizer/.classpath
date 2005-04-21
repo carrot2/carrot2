@@ -10,5 +10,5 @@
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/commons-primitives-1.0.jar"/>
 	<classpathentry kind="src" path="/carrot2-local-core"/>
 	<classpathentry kind="src" path="/carrot2-util-tokenizer"/>
-	<classpathentry kind="output" path="tmp/build/WEB-INF/classes"/>
+	<classpathentry kind="output" path="tmp/eclipse/classes"/>
 </classpath>

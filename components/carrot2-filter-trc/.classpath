@@ -11,5 +11,5 @@
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/colt-1.0.3-trimmed.jar"/>
 	<classpathentry kind="src" path="/carrot2-local-core"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/commons-collections-3.0.jar"/>
-	<classpathentry kind="output" path="tmp/build/WEB-INF/classes"/>
+	<classpathentry kind="output" path="tmp/eclipse/classes"/>
 </classpath>

@@ -13,5 +13,5 @@
 	<classpathentry kind="src" path="/carrot2-util-remote"/>
 	<classpathentry kind="src" path="/carrot2-filter-lingo"/>
 	<classpathentry kind="src" path="/carrot2-util-tokenizer"/>
-	<classpathentry kind="output" path="tmp/build/classes"/>
+	<classpathentry kind="output" path="tmp/eclipse/classes"/>
 </classpath>

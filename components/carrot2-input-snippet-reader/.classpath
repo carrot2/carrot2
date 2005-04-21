@@ -18,5 +18,5 @@
 	<classpathentry kind="lib" path="lib/jaxen-core.jar"/>
 	<classpathentry kind="lib" path="lib/jaxen-dom4j.jar"/>
 	<classpathentry kind="lib" path="lib/saxpath.jar"/>
-	<classpathentry kind="output" path="tmp/build/WEB-INF/classes"/>
+	<classpathentry kind="output" path="tmp/eclipse/classes"/>
 </classpath>

@@ -19,5 +19,5 @@
 	<classpathentry kind="src" path="/carrot2-odp-core"/>
 	<classpathentry kind="src" path="/carrot2-output-cluster-metrics"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/colt-1.0.3-trimmed.jar"/>
-	<classpathentry kind="output" path="tmp/build/classes"/>
+	<classpathentry kind="output" path="tmp/eclipse/classes"/>
 </classpath>

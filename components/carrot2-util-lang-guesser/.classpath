@@ -5,5 +5,5 @@
 	<classpathentry kind="src" path="src-test"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/junit-3.8.1.jar"/>
 	<classpathentry kind="src" path="/carrot2-local-core"/>
-	<classpathentry kind="output" path="tmp/build/classes"/>
+	<classpathentry kind="output" path="tmp/eclipse/classes"/>
 </classpath>

@@ -13,5 +13,5 @@
 	<classpathentry kind="src" path="/carrot2-stemmer-lametyzator"/>
 	<classpathentry kind="src" path="/carrot2-stemmer-stempel"/>
 	<classpathentry kind="src" path="/carrot2-input-local-cache"/>
-	<classpathentry kind="output" path="tmp/build/classes"/>
+	<classpathentry kind="output" path="tmp/eclipse/classes"/>
 </classpath>
