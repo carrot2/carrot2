@@ -228,6 +228,12 @@ public class WebSnippetReader {
             Enumeration pgs = reader.getQueryResultsPages(query, snippetsNeeded,
                     encoding,
                     JDOMHelper.getElement("/service/response/pageinfo", config));
+             
+            // Fix for bugzilla: 1185408,
+            // http://sourceforge.net/tracker/index.php?func=detail&aid=1185408&group_id=85379&atid=576012
+            if (pgs == null) {
+            	return res;
+            }
 
             if (out_RawPages != null) {
 		        Vector newPgs = new Vector();
