@@ -11,36 +11,45 @@
 package com.dawidweiss.carrot.util;
 
 
-public class EscapeString
-{
+/**
+ * Escapes a string so that is is ready to be "pasted" into
+ * Javascript code (as the content of a quoted string).
+ * 
+ * @author Dawid Weiss
+ */
+public final class EscapeString {
 
-    public EscapeString()
-    {
+    private EscapeString() {
     }
 
-    public static String escapeString(String s)
-    {
+    public static String escapeString(String s) {
         int i = 0;
         int j = 0;
         int max = s.length();
         char chars[] = new char[max * 2];
-        while(i < max) 
-        {
+        while(i < max) {
             char x = s.charAt(i++);
-            switch(x)
-            {
-            case 9: // '\t'
-            case 10: // '\n'
-            case 13: // '\r'
-            case 34: // '"'
-                chars[j++] = '\\';
-                chars[j++] = x;
-                break;
-
-            default:
-                chars[j++] = x;
-                break;
+            switch(x) {
+                case 9: // '\t'
+                    x = 't';
+                    break;
+                case 10: // '\n'
+                    x = 'n';
+                    break;
+                case 13: // '\r'
+                    x = 'r';
+                    break;
+                case '\\': // '\\'
+                    x = '\\';
+                    break;
+                case 34: // '"'
+                    break;
+                default:
+                    chars[j++] = x;
+                    continue;
             }
+            chars[j++] = '\\';
+            chars[j++] = x;
         }
         return new String(chars, 0, j);
     }
