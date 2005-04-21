@@ -75,6 +75,15 @@
 
         String componentId   = ((CachedQuery)queries.get(0)).getComponentId();
         String componentName = StrutsHelpers.getMessageOrDefault(pageContext, componentId, componentId);
+        
+        ComponentDescriptor component = loader.getComponentLoader().findComponent(componentId);
+    
+        if (component == null) {
+        	%>
+        	<!-- Null component with this identifier?: <%= componentId %> -->
+        	<%
+        	continue;
+        }
 
         %>
         <div style="margin: 10 0 0 0; background-color: #e0e0e0;"><bean:message key="blocks.demo.cachedfor" /></div>
@@ -100,8 +109,6 @@
             %>
             <div style="font-size: 9px; margin: 5 0 0 0; padding: 0px;">
             <%
-
-            ComponentDescriptor component = loader.getComponentLoader().findComponent(componentId);
             for (Iterator k = loader.getProcessDefinitions().iterator(); k.hasNext();)
             {
                 ProcessDefinition p = (ProcessDefinition) k.next();
