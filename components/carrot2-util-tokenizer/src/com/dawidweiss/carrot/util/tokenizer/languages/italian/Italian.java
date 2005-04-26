@@ -17,6 +17,7 @@ import com.dawidweiss.carrot.core.local.linguistic.*;
 import com.dawidweiss.carrot.filter.snowball.*;
 import com.dawidweiss.carrot.util.tokenizer.languages.*;
 import com.dawidweiss.carrot.util.tokenizer.parser.*;
+import com.stachoodev.util.common.*;
 
 /**
  * An implementation of {@link Language} interface
@@ -41,7 +42,7 @@ public class Italian extends StemmedLanguageBase {
     static {
         String resourceName = "/com/dawidweiss/carrot/util/tokenizer/languages/italian/stopwords.it";
         try {
-			stopwords = LanguageBase.loadStopwords(
+			stopwords = WordLoadingUtils.loadWordSet(
                     resourceName, Italian.class.getResourceAsStream(resourceName));
 		} catch (IOException e) {
             throw new RuntimeException("Could not load the required " +
