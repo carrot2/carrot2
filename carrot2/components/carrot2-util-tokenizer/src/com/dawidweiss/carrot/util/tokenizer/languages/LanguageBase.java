@@ -11,22 +11,13 @@
 package com.dawidweiss.carrot.util.tokenizer.languages;
 
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
-import org.apache.commons.pool.BasePoolableObjectFactory;
-import org.apache.commons.pool.impl.SoftReferenceObjectPool;
-import org.apache.log4j.Logger;
+import org.apache.commons.pool.*;
+import org.apache.commons.pool.impl.*;
 
-import com.dawidweiss.carrot.core.local.linguistic.Language;
-import com.dawidweiss.carrot.core.local.linguistic.LanguageTokenizer;
-import com.dawidweiss.carrot.core.local.linguistic.Stemmer;
+import com.dawidweiss.carrot.core.local.linguistic.*;
 import com.dawidweiss.carrot.util.tokenizer.parser.*;
-import com.dawidweiss.carrot.util.tokenizer.parser.WordBasedParserBase;
 
 
 /**
@@ -42,8 +33,6 @@ import com.dawidweiss.carrot.util.tokenizer.parser.WordBasedParserBase;
 public abstract class LanguageBase
     implements Language
 {
-    private final static Logger logger = Logger.getLogger(LanguageBase.class);
-    
     /** A soft-reference, unbounded pool of tokenizers. */
     private SoftReferenceObjectPool tokenizersPool;
 
@@ -245,37 +234,4 @@ public abstract class LanguageBase
 	protected void setStopwords(Set stopwords) {
 	    this.stopwords = stopwords;
 	}
-    
-    
-    /**
-     * A utility method to load stop words from a resource.
-     */
-    protected static Set loadStopwords(String resourceName, InputStream stream) throws IOException {
-        logger.debug("Loading stopwords for: " + resourceName);
-        
-        if (stream == null) {
-            throw new IOException("Stream handle must not be null " +
-                    "(resource '" + resourceName + "' does not exist?)");
-        }
-
-        Set set = new HashSet();
-        BufferedReader reader = new BufferedReader(
-                new InputStreamReader( stream, "UTF-8" ));
-        try {
-        	String line;
-            while ( (line = reader.readLine()) != null) {
-                line = line.trim();
-                if (line.startsWith("#"))
-                    continue;
-                if ("".equals(line))
-                    continue;
-                set.add(line);
-            }
-         } finally {
-            reader.close();
-        }
-
-        logger.debug("Finished loading: " + resourceName);
-        return set;
-    }
 }
