@@ -130,7 +130,7 @@ function emulateHTMLModel() { // {{{
 
 function emulateAllModel() { // {{{
 	var allGetter = function () {
-		var a = this.getElementsByTagName("*");
+		var a = document.getElementsByTagName("*");
 		var node = this;
 		a.tags = function (sTagName) {
 			return node.getElementsByTagName(sTagName);
@@ -141,6 +141,7 @@ function emulateAllModel() { // {{{
 	HTMLElement.prototype.__defineGetter__("all", allGetter);
 	// }}}
 }
+
 
 function extendElementModel() { // {{{
 	HTMLElement.prototype.__defineGetter__("parentElement", function () {
