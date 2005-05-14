@@ -1,19 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="src" path="/carrot2-util-remote"/>
-	<classpathentry kind="src" path="/carrot2-util-put"/>
-	<classpathentry kind="lib" path="lib/struts.jar"/>
-	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/bsf.jar"/>
-	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/bsh-2.0b1.jar"/>
-	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/jdom-b10.jar"/>
-	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/log4j-1.2.8.jar"/>
-	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/servlet.jar"/>
-	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/components/carrot2-util-remote/lib/castor-0.9.4.2-xml.jar"/>
-	<classpathentry kind="src" path="/carrot2-util-common"/>
-	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/commons-beanutils.jar"/>
-	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/commons-collections-3.0.jar"/>
-	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/commons-logging.jar"/>
+	<classpathentry kind="src" path="src">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="/carrot2-util-remote">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="/carrot2-util-put">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/struts.jar">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/bsf.jar">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/bsh-2.0b1.jar">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/jdom-b10.jar">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/log4j-1.2.8.jar">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/servlet.jar">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/components/carrot2-util-remote/lib/castor-0.9.4.2-xml.jar">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="/carrot2-util-common">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/commons-beanutils.jar">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/commons-collections-3.1-patched.jar">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/commons-logging.jar">
+		<attributes>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="tmp/eclipse/classes"/>
 </classpath>
