@@ -2,10 +2,10 @@
 <!DOCTYPE component SYSTEM "../etc/component-dependency.dtd" > 
 <component
     name="commons-collections"
-    description="Jakarta Commons Collections 3.0, http://jakarta.apache.org/commons/collections">
+    description="Jakarta Commons Collections 3.1, http://jakarta.apache.org/commons/collections">
 	<provides>
 		<files>
-			<file location="commons-collections-3.0.jar" />
+			<file location="commons-collections-3.1-patched.jar" />
 			<file location="commons-collections.LICENSE" />
 		</files>
 	</provides>
