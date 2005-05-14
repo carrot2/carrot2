@@ -218,11 +218,9 @@ public class ExtendedTokenSequence implements TokenSequence, PropertyProvider
         }
         else
         {
-            boolean c1 = tokenSequence
-                .equals(((ExtendedTokenSequence) obj).tokenSequence);
-            boolean c2 = propertyHelper
+            return tokenSequence
+                .equals(((ExtendedTokenSequence) obj).tokenSequence) && propertyHelper
                 .equals(((ExtendedTokenSequence) obj).propertyHelper);
-            return c1 && c2;
         }
     }
 
