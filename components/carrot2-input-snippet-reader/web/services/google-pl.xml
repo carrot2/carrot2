@@ -91,10 +91,10 @@
              -->
             <url>
                <start consume="true">
-                   <regexp><![CDATA[<!--m-->(<span class=w>.*?</span> )?<a href=]]></regexp>
+                   <regexp><![CDATA[<!--m-->(<span class=w>.*?</span> )?<a href=(")?]]></regexp>
                </start>
                <end   consume="true">
-                   <regexp><![CDATA[>]]></regexp>
+                   <regexp><![CDATA[(")?>]]></regexp>
                </end>
             </url>
 
