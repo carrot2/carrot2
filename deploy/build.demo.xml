@@ -65,6 +65,9 @@
     <target name="build.components">
         <ant antfile="${checkout.dir}/${module.name}/build.xml" 
              dir="${checkout.dir}/${module.name}" inheritall="false" 
+             target="bootstrap"/>
+        <ant antfile="${checkout.dir}/${module.name}/build.xml" 
+             dir="${checkout.dir}/${module.name}" inheritall="false" 
              target="remote">
             <property name="distribution.dir.remote" location="${build.dir}" />
 	    <property name="distribution.dir.remote.libs" location="${build.dir.libs}" />
