@@ -47,6 +47,7 @@
              dir="${checkout.dir}/${module.name}" inheritall="false" 
              target="html.chunked">
             <property name="distribution.dir" location="${build.dir}" />
+            <property name="manual.name" value="carrot2-developers-manual" />
         </ant>
 
         <ant antfile="${checkout.dir}/${module.name}/build.xml" 
