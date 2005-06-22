@@ -217,6 +217,16 @@ public class XmlLocalInputComponent extends
         TransformerFactory tf = TransformerFactory.newInstance(); 
         try {
             Transformer transformer = tf.newTransformer(new StreamSource(xslt));
+            
+            // Register request attributes as parameters for the transformer.
+            for (Iterator i = params.keySet().iterator(); i.hasNext(); ) {
+                String key = (String) i.next();
+                Object value = params.get(key);
+                if (value instanceof String) {
+                    transformer.setParameter(key, value);
+                }
+            }
+            
             DocumentResult dom = new DocumentResult();
             transformer.transform(new StreamSource(source), dom);
             

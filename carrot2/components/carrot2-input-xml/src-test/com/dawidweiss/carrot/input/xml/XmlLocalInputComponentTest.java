@@ -7,6 +7,7 @@ import com.dawidweiss.carrot.core.local.LocalComponent;
 import com.dawidweiss.carrot.core.local.LocalComponentFactory;
 import com.dawidweiss.carrot.core.local.LocalComponentFactoryBase;
 import com.dawidweiss.carrot.core.local.LocalControllerBase;
+import com.dawidweiss.carrot.core.local.LocalInputComponent;
 import com.dawidweiss.carrot.core.local.LocalProcessBase;
 import com.dawidweiss.carrot.core.local.ProcessingException;
 import com.dawidweiss.carrot.core.local.clustering.RawCluster;
@@ -251,13 +252,14 @@ public class XmlLocalInputComponentTest extends TestCase {
         // there should be a 100 results:
         assertTrue(results.size() > 0);
 	}
-	
+
 	public void testIndeedTransformation() throws Exception {
         LocalControllerBase controller = setUpController();
 
         // first check the precached result:
         String query = "";
         HashMap params = new HashMap();
+
         params.put("source", this.getClass().getResource("test2.xml"));
         params.put("xslt", this.getClass().getResource("test2.xsl"));
         List results = (List) controller.query("testprocess", query, params).getQueryResult();
@@ -265,6 +267,21 @@ public class XmlLocalInputComponentTest extends TestCase {
         // there should be some results
         assertTrue(results.size() > 0);
 	}
+	
+	public void testParameterPassingToStylesheet() throws Exception {
+        LocalControllerBase controller = setUpController();
+
+        String query = "query";
+        HashMap params = new HashMap();
+        
+        params.put(LocalInputComponent.PARAM_QUERY, "value!");
+        params.put("custom.param", "value!");
+
+        params.put("source", this.getClass().getResourceAsStream("testParam.xml"));
+        params.put("xslt", this.getClass().getResourceAsStream("testParam.xsl"));
+        List results = (List) controller.query("testprocess", query, params).getQueryResult();
+        // there should be no error in the transformation.
+	}	
 	
     public void testSubstitute() {
         XmlLocalInputComponent c = new XmlLocalInputComponent();
@@ -321,7 +338,5 @@ public class XmlLocalInputComponentTest extends TestCase {
         expected = "http://www.google.com/q=x+%2Bx";
         result = c.substituteParams(url, params);
         assertEquals(expected, result);        
-        
     }
-    
 }

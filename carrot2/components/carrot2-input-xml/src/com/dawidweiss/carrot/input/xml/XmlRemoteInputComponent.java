@@ -1,5 +1,4 @@
 
-
 /*
  * Carrot2 Project
  * Copyright (C) 2002-2005, Dawid Weiss
