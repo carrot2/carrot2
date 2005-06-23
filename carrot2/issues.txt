@@ -34,7 +34,7 @@ its own xml parser.
 3. Tomcat 5.XX and query encoding problems.
 
 You must enforce proper decoding of URI parameters in the connector. You
-can do it by adding this attribute to the connector spec. in servlet.xml
+can do it by adding this attribute to the connector spec. in server.xml
 
 UseBodyEncodingForURI="true"
 
