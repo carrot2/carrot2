@@ -25,8 +25,8 @@
 
                     <url>
                         <xsl:choose>
-                            <xsl:when test="url">
-                                <xsl:value-of select="url" />
+                            <xsl:when test="link">
+                                <xsl:value-of select="link" />
                             </xsl:when>
                             <xsl:otherwise>
                                 <!-- Make up an URL. -->
