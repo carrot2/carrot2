@@ -13,7 +13,7 @@ import com.dawidweiss.carrot.core.local.linguistic.LanguageGuesser;
 import com.dawidweiss.carrot.core.local.profiling.*;
 
 /**
- * An local component that adds a predefined language code
+ * A local component that adds a predefined language code
  * to the properties of a document. No real recognition is performed.
  * 
  * <p>The component implements {@link RawDocumentConsumer}
@@ -44,11 +44,6 @@ public class RawDocumentDummyLanguageDetection extends ProfiledLocalFilterCompon
     private static final Set CAPABILITIES_PREDECESSOR = new HashSet(Arrays.asList(
                 new Object[] { RawDocumentsProducer.class, }));
 
-    /**
-     * A constant with the maximum size of the detection buffer.
-     */
-    public final static int MAX_DETECTION_BUFFER_SIZE = 500;
-    
     /**
      * The successor component, consumer of
      * documents accepted by this component.
