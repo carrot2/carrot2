@@ -4,6 +4,8 @@
     <property name="project.dir"      location="${basedir}" />
     <property name="carrot2.cvs.dir"  location="../.." />
 
+    <property file="${user.home}/.carrot.properties" />
+
     <property name="dist.name" value="carrot2-remote-controller" />
     <property name="component.descriptor" location="carrot2-remote-controller.dep.xml" />
     
