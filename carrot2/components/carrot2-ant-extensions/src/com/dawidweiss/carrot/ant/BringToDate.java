@@ -21,11 +21,12 @@ import org.apache.tools.ant.util.FileUtils;
 
 import com.dawidweiss.carrot.ant.deps.ComponentDependency;
 import com.dawidweiss.carrot.ant.deps.ComponentDependencyUtils;
+import com.dawidweiss.carrot.ant.deps.ComponentInProfile;
 
 
 /**
  * An ANT task that brings to date all depending
- * components (if they provide
+ * components.
  */
 public class BringToDate extends Task {
 
@@ -135,26 +136,25 @@ public class BringToDate extends Task {
             components.put(component.getName(), component);
             ComponentDependencyUtils.loadComponentDependencies( futils, getProject(), this.dependencies, components);
 
-            ComponentDependency [] dependencies = component
-                .getAllRequiredComponentDependencies( components, profile );
+            ComponentInProfile [] dependencies = component
+                .getAllRequiredComponentDependencies(components, profile);
+            
+            ComponentInProfile self = new ComponentInProfile(component, profile);
 
             // and check/ execute any of the 'provided/build' elements
             // on them.
             for (int i=0;i<dependencies.length;i++) {
-                ComponentDependency dependency =
-                    dependencies[i];
+                final ComponentInProfile dependency = dependencies[i];
 
-                if (dependenciesOnly && dependency.equals(component)) {
+                if (dependenciesOnly && dependency.equals(self)) {
                     continue;
                 }
-                log("Checking dependency: " + dependency.getName(), 
-                    Project.MSG_INFO);
-                dependency.bringUpToDate(getProject(), dependency.getActiveProfile());
-            }
 
+                log("Checking dependency: " + dependency, Project.MSG_INFO);
+                dependency.component.bringUpToDate(getProject(), dependency.profile);
+            }
         } catch (Throwable e) {
             throw new BuildException(e);
         }
     }
-
 }
