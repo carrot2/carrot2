@@ -10,21 +10,18 @@
  */
 package com.stachoodev.carrot.filter.normalizer;
 
-import com.dawidweiss.carrot.core.local.linguistic.*;
-import com.dawidweiss.carrot.filter.lametyzator.*;
-import com.dawidweiss.carrot.util.tokenizer.languages.polish.*;
+import com.dawidweiss.carrot.core.local.linguistic.Stemmer;
+import com.dawidweiss.carrot.filter.stempelator.Stempelator;
+import com.dawidweiss.carrot.util.tokenizer.languages.polish.Polish;
 
 /**
  * @author Stanislaw Osinski
  * @version $Revision$
  */
-public class PolishWithLametyzator extends Polish
+public class PolishWithStempelator extends Polish
 {
-    /* (non-Javadoc)
-     * @see com.dawidweiss.carrot.util.tokenizer.languages.LanguageBase#createStemmerInstance()
-     */
     protected Stemmer createStemmerInstance()
     {
-        return new Lametyzator();
+        return new Stempelator();
     }
 }

@@ -2,7 +2,8 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/FSA.jar"/>
 	<classpathentry kind="src" path="/carrot2-local-core"/>
+	<classpathentry kind="lib" path="lib/stempel-1.0-dw.jar"/>
+	<classpathentry kind="lib" path="lib/stempelator-1.0.jar"/>
 	<classpathentry kind="output" path="tmp/eclipse/classes"/>
 </classpath>

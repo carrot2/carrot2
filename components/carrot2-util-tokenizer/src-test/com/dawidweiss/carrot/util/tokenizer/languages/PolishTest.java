@@ -32,5 +32,4 @@ public class PolishTest extends LanguageImplTestBase {
                 {"mrocznie", "mrocznia"}
         };
     }
-
 }

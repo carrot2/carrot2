@@ -20,7 +20,7 @@
     <dependency name="carrot2-license" />
     
     <dependency name="junit" profile="test" />
-    <dependency name="carrot2-stemmer-lametyzator" profile="test" />
+    <dependency name="carrot2-stemmer-stempelator" profile="test" />
     <dependency name="carrot2-language-guesser" profile="test" />
     <dependency name="carrot2-util-tokenizer" profile="test" />
     <dependency name="carrot2-input-local-cache" profile="test" />

@@ -204,7 +204,7 @@ TESTING: @{component.path}
 
     <component-apply component.path="components/carrot2-local-remote-adapters" />
 
-    <component-apply component.path="components/carrot2-stemmer-lametyzator" />
+    <component-apply component.path="components/carrot2-stemmer-stempelator" />
     <component-apply component.path="components/carrot2-stemmer-stempel" />
     <component-apply component.path="components/carrot2-stemmer-snowball" />
 

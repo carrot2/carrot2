@@ -46,7 +46,7 @@ public class SmartCaseNormalizerTest extends TestCase
     {
         snippetTokenizer = new SnippetTokenizer();
         caseNormalizer = new SmartCaseNormalizer();
-        polishLanguage = new PolishWithLametyzator();
+        polishLanguage = new PolishWithStempelator();
     }
     
     /*
