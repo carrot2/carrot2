@@ -32,12 +32,6 @@ public class ComponentDependency {
 
     private Project project;
 
-
-    /**
-     * Currently active profile for this dependency.
-     */
-    private String activeProfile;
-
 	/**
      * A more verbose description of the component,
      * used when printing summaries.
@@ -47,8 +41,10 @@ public class ComponentDependency {
 	/** Name of this component. */
     private String name;
 
-    /** A dependency list (Dependency objects) of this 
-     * component. */
+    /** 
+     * A dependency list (Dependency objects) of this 
+     * component. 
+     */
     private ArrayList dependencies = new ArrayList();
 
     /** A list of objects this component provides 
@@ -159,36 +155,37 @@ public class ComponentDependency {
     }
 
     /**
-     * Gather all ComponentDependency objects required by this
+     * Collect all {@link ComponentDependency} objects required by this
      * component.
+     * 
      * @param componentsMap Name-to-ComponentDependency objects
      * map used to resolve named dependencies.
      * @return An array of ComponentDependency objects, sorted topologically from
      * left to right (rightmost objects without dependencies).
      */
-    public ComponentDependency [] getAllRequiredComponentDependencies(Map componentsMap, String profile)
+    public ComponentInProfile [] getAllRequiredComponentDependencies(Map componentsMap, String profile)
         throws BuildException {
         return getAllRequiredComponentDependencies(componentsMap, profile, false);
     }
 
     /**
-     * Gather all ComponentDependency objects required by this
+     * Collect all ComponentDependency objects required by this
      * component.
+     * 
      * @param componentsMap Name-to-ComponentDependency objects
      * map used to resolve named dependencies.
      * @return An array of ComponentDependency objects, sorted topologically from
      * left to right (rightmost objects without dependencies).
      */
-	public ComponentDependency [] getAllRequiredComponentDependencies(Map componentsMap, String profile, boolean nocopy)
-        throws BuildException
-    {
-        String root = this.getName();
-        List   ret  = new ArrayList();
-        tsort( root, componentsMap, new HashMap(), new Stack(), ret, profile, nocopy );
+	public ComponentInProfile [] getAllRequiredComponentDependencies(Map componentsMap, String profile, boolean nocopy)
+        throws BuildException {
+        ComponentInProfile root = new ComponentInProfile(this, profile);
+        ArrayList dependencyList = new ArrayList();
+        tsort(root, componentsMap, new HashMap(), new Stack(), dependencyList, nocopy);
 
-        ComponentDependency [] deps = new ComponentDependency [ ret.size() ];
-        ret.toArray( deps );
-        return deps;
+        ComponentInProfile [] dependencyArray = new ComponentInProfile [ dependencyList.size() ];
+        dependencyList.toArray(dependencyArray);
+        return dependencyArray;
     }
 
     private static final String VISITING = "VISITING";
@@ -197,73 +194,76 @@ public class ComponentDependency {
     /**
      * Topological sort of the dependencies. This code borrowed
      * from the ANT project source.
+     *
      * @author duncan@x180.com
      */
-    private final static void tsort(String root, Map targets,
+    private final static void tsort(ComponentInProfile root, Map targets,
                              Map state, Stack visiting,
-                             List ret, String profile, boolean nocopy)
+                             ArrayList ret, boolean nocopy)
         throws BuildException {
         state.put(root, VISITING);
         visiting.push(root);
 
-        ComponentDependency target = (ComponentDependency) targets.get(root);
-
-        // Make sure we exist
-        if (target == null) {
-            StringBuffer sb = new StringBuffer("Component `");
-            sb.append(root);
-            sb.append("' does not exist. ");
-            visiting.pop();
-            if (!visiting.empty()) {
-                String parent = (String) visiting.peek();
-                sb.append("It is used from `");
-                sb.append(parent);
-                sb.append("'.");
-            }
-            throw new BuildException(new String(sb));
-        }
-
-        target.activeProfile = profile;
-
-        for (Iterator en = target.getDependencyElements().iterator(); en.hasNext();) {
-            DependencyElement dep = (DependencyElement) en.next();
+        for (Iterator en = root.component.getDependencyElements().iterator(); en.hasNext();) {
+            final DependencyElement dep = (DependencyElement) en.next();
 
             // skip profiles that don't match.
-            if (dep.getProfile() != null && (profile == null || !profile.equals(dep.getProfile()))) {
+            if (dep.getProfile() != null && (root.profile == null || !root.profile.equals(dep.getProfile()))) {
                 continue;
             } 
 
             // skip dependencies if nocopy attribute is set.
-            if (nocopy && dep.isNoCopy())
+            if (nocopy && dep.isNoCopy()) {
                 continue;
+            }
+            
+            ComponentDependency depComponent = (ComponentDependency) targets.get(dep.getName());
 
-            String cur = dep.getName();
-            String m = (String) state.get(cur);
+            // If the target does not exist, throw an exception.
+            if (depComponent == null) {
+                StringBuffer sb = new StringBuffer("Component '");
+                sb.append(dep.getName());
+                sb.append("' does not exist. ");
+                visiting.pop();
+                if (!visiting.empty()) {
+                    sb.append("It is used from: '");
+                    sb.append(root);
+                    sb.append("'.");
+                }
+                throw new BuildException(sb.toString());
+            }
+            
+            ComponentInProfile dependency = new ComponentInProfile(depComponent, dep.getInProfile());
 
+            String m = (String) state.get(dependency);
             if (m == null) {
                 // Not been visited
-                tsort(cur, targets, state, visiting, ret, dep.getInProfile(), nocopy);
+                tsort(dependency, targets, state, visiting, ret, nocopy);
             } else if (m == VISITING) {
                 // Currently visiting this node, so have a cycle
                 StringBuffer sb = new StringBuffer("Circular dependency: ");
-                sb.append(cur);
-                String c;
+                sb.append(dependency);
+                ComponentInProfile c;
                 do {
-                    c = (String) visiting.pop();
+                    c = (ComponentInProfile) visiting.pop();
                     sb.append(" <- ");
                     sb.append(c);
-                } while (!c.equals(cur));
-                throw new BuildException(new String(sb));
+                } while (!c.equals(dependency));
+                throw new BuildException(sb.toString());
+            } else if (m == VISITED) {
+                // Ignore this state.
+            } else {
+                throw new RuntimeException("Unreachable state: " + m);
             }
         }
 
-        String p = (String) visiting.pop();
+        ComponentInProfile p = (ComponentInProfile) visiting.pop();
         if (root != p) {
             throw new RuntimeException("Unexpected internal error: expected to "
                 + "pop " + root + " but got " + p);
         }
         state.put(root, VISITED);
-        ret.add(target);
+        ret.add(root);
     }
 
 
@@ -307,15 +307,18 @@ public class ComponentDependency {
      * Duplicates are removed.
 	 */
 	public File[] getAllProvidedFiles(HashMap components, String currentProfile, boolean buildPath) {
-        ComponentDependency [] resolvedComponents = getAllRequiredComponentDependencies(components, currentProfile);
+        ComponentInProfile [] resolvedComponents = getAllRequiredComponentDependencies(components, currentProfile);
         HashSet result = new HashSet();
+        
+        ComponentInProfile self = new ComponentInProfile(this, currentProfile);
 
-        for (int i=0; i<resolvedComponents.length;i++) {
-            if (resolvedComponents[i].getName().equals( this.name ))
+        for (int i=0; i<resolvedComponents.length; i++) {
+            if (resolvedComponents[i].equals(self)) {
                 continue;
+            }
 
             result.addAll(
-                Arrays.asList(resolvedComponents[i].getAllProvidedFiles(components, resolvedComponents[i].activeProfile, false)));
+                Arrays.asList(resolvedComponents[i].component.getAllProvidedFiles(components, resolvedComponents[i].profile, false)));
         }
         result.addAll(getProvidedFiles(currentProfile, buildPath));
 
@@ -368,17 +371,20 @@ public class ComponentDependency {
 	 * @return
 	 */
 	public FileReference[] getAllProvidedFileReferences(HashMap components, String currentProfile, boolean buildPath, boolean nocopy) {
-        ComponentDependency [] resolvedComponents = 
+        ComponentInProfile [] resolvedComponents =  
             getAllRequiredComponentDependencies(components, currentProfile, nocopy);
         HashMap result = new HashMap();
+        
+        ComponentInProfile self = new ComponentInProfile(this, currentProfile);
 
-        for (int i=0; i<resolvedComponents.length;i++) {
-            if (resolvedComponents[i].getName().equals( this.name ))
+        for (int i=0; i<resolvedComponents.length; i++) {
+            if (resolvedComponents[i].equals(self)) {
                 continue;
+            }
             
-            FileReference [] refs = resolvedComponents[i].getAllProvidedFileReferences(components, 
-            	resolvedComponents[i].activeProfile, false, nocopy);
-            for (int j=0;j<refs.length;j++) {
+            FileReference [] refs = resolvedComponents[i].component.getAllProvidedFileReferences(
+                    components, resolvedComponents[i].profile, false, nocopy);
+            for (int j=0; j<refs.length; j++) {
                 File absf = refs[j].getAbsoluteFile();
                 if (!result.containsKey(absf)) {
                     result.put( absf, refs[j]);
@@ -399,13 +405,4 @@ public class ComponentDependency {
         result.values().toArray(filesArray);
         return filesArray;
 	}
-    
-    
-	/**
-	 * @return
-	 */
-	public String getActiveProfile() {
-		return activeProfile;
-	}
-
 }

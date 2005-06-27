@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.taskdefs.Copy;
 import org.apache.tools.ant.taskdefs.Mkdir;
@@ -139,12 +140,12 @@ public class CopyDependencies extends Task {
             for (int i=0;i<refs.length;i++) {
                 if (!refs[i].getAbsoluteFile().exists()) {
                     log("WARNING: file does not exist: "
-                        + refs[i].getAbsoluteFile() + ", skipping.");
+                        + refs[i].getAbsoluteFile() + ", skipping.", Project.MSG_WARN);
                     continue;
                 }
                 File toFile = futils.resolveFile(toDir, refs[i].getRelative());
                 File dir = toFile.getParentFile();
-                
+
                 Mkdir mkdirTask = (Mkdir) getProject().createTask("mkdir");
                 mkdirTask.setProject(getProject());
                 mkdirTask.setDir(dir);
@@ -161,5 +162,4 @@ public class CopyDependencies extends Task {
             throw new BuildException(e);
         }
     }
-
 }

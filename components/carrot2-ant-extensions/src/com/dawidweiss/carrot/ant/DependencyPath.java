@@ -92,9 +92,9 @@ public class DependencyPath extends Path {
             component = 
 			    new ComponentDependency(getProject(), componentDescriptor);
 		} catch (Exception e) {
-            throw new BuildException("Could not create Component Dependency.", e);
+            throw new BuildException("Could not create component descriptor.", e);
 		}
-        
+
         // load all dependencies pointed to by embedded filesets.
         HashMap components = new HashMap();
         components.put(component.getName(), component);
@@ -108,7 +108,7 @@ public class DependencyPath extends Path {
 
         File [] providedFiles = component.getAllProvidedFiles( components, profile, true );
         ArrayList result = new ArrayList(providedFiles.length);
-        for (int i=0;i<providedFiles.length;i++) {
+        for (int i=0; i < providedFiles.length; i++) {
             getProject().log(providedFiles[i].toString(), Project.MSG_VERBOSE);
             if (!providedFiles[i].isAbsolute()) {
                 throw new BuildException("Resolved dependency file not absolute: "
@@ -127,12 +127,11 @@ public class DependencyPath extends Path {
 	            } else {
 		            // we don't know what it is, so ignore it.
 	                log("Classpath object ignored (not a JAR or a directory): "
-	                    + providedFiles[i].getAbsolutePath(), Project.MSG_DEBUG);
+	                    + providedFiles[i].getAbsolutePath(), Project.MSG_VERBOSE);
 	            }
             }
         }
-        
+
         return (String []) result.toArray( new String[ result.size() ] );
 	}
-
 }

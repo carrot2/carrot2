@@ -139,5 +139,4 @@ public class ProvidesElement {
             return java.util.Collections.EMPTY_LIST;
         }
 	}
-
 }

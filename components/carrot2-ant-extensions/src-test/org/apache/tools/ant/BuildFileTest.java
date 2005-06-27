@@ -476,6 +476,4 @@ public abstract class BuildFileTest extends TestCase {
             fullLogBuffer.append("\n");
         }
     }
-
-
 }

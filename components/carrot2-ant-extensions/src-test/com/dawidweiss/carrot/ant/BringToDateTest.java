@@ -28,7 +28,11 @@ public class BringToDateTest extends BuildFileTest {
     }
 
     public void testCircularDependency() {
-        super.expectBuildException("test3", "Circular dependency");
+        try {
+        	super.expectBuildException("test3", "Circular dependency");
+        } finally {
+            System.err.println(super.getFullLog());
+        }
     }
 
 }

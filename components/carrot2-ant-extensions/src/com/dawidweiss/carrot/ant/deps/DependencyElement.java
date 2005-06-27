@@ -56,17 +56,10 @@ public class DependencyElement {
         }
     }
 
-
-	/**
-	 * @return
-	 */
 	public String getName() {
 		return name;
 	}
 
-	/**
-	 * @return
-	 */
 	public String getProfile() {
 		return profile;
 	}

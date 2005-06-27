@@ -17,6 +17,7 @@ import org.apache.tools.ant.util.FileUtils;
 
 import com.dawidweiss.carrot.ant.deps.ComponentDependency;
 import com.dawidweiss.carrot.ant.deps.ComponentDependencyUtils;
+import com.dawidweiss.carrot.ant.deps.ComponentInProfile;
 
 
 /**
@@ -136,8 +137,9 @@ public class PrintDependencies extends Task {
             components.put(component.getName(), component);
             ComponentDependencyUtils.loadComponentDependencies( futils, getProject(), this.dependencies, components);
 
-            ComponentDependency [] dependencies = component
-                .getAllRequiredComponentDependencies( components, profile );
+            ComponentInProfile [] dependencies = component
+                .getAllRequiredComponentDependencies(components, profile);
+            ComponentInProfile self = new ComponentInProfile(component, profile);
 
             StringBuffer buf = new StringBuffer();
             buf.append("Component '" + component.getDescription() + "'\n\n");
@@ -146,22 +148,23 @@ public class PrintDependencies extends Task {
 
 			Arrays.sort(dependencies, new Comparator() {
                 public int compare(Object o1, Object o2) {
-                	ComponentDependency d1 = (ComponentDependency) o1;
-                	ComponentDependency d2 = (ComponentDependency) o2;
-                	return d1.getDescription().compareToIgnoreCase(d2.getDescription());
+                	ComponentInProfile d1 = (ComponentInProfile) o1;
+                	ComponentInProfile d2 = (ComponentInProfile) o2;
+                	return d1.component.getDescription().compareToIgnoreCase(
+                            d2.component.getDescription());
                 }
 			});
 
-            for (int i=0;i<dependencies.length;i++) {
-                ComponentDependency dependency = dependencies[i];
+            for (int i=0; i<dependencies.length; i++) {
+                ComponentInProfile dependency = dependencies[i];
                 
-                if (dependency.getName().equals( component.getName() )) {
+                if (dependency.equals(self)) {
                 	continue;
                 }
-                
-                buf.append("   - " + dependency.getDescription());
-                if (dependency.getActiveProfile() != null) {
-                	buf.append(" [in profile: '" + dependency.getActiveProfile() + "']"); 
+
+                buf.append("   - " + dependency.component.getDescription());
+                if (dependency.profile != null) {
+                	buf.append(" [in profile: '" + dependency.profile + "']"); 
                 }
                 buf.append("\n");
             }

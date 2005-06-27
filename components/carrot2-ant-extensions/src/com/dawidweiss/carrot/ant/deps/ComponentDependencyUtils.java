@@ -19,7 +19,6 @@ public final class ComponentDependencyUtils {
 		super();
 	}
 
-
     public static void loadComponentDependencies(FileUtils futils, 
         Project project, List listOfFileSetsWithDependencies, 
         HashMap components)
@@ -51,5 +50,4 @@ public final class ComponentDependencyUtils {
             }
         }
     }
-
 }
