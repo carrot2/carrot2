@@ -81,12 +81,11 @@ public class Polish extends StemmedLanguageBase {
 	}
 
     /** 
-     * Return an instance of an Polish stemmer (Stempel stemmer is used).
+     * Return an instance of a Polish stemmer.
      *  
      * @see com.dawidweiss.carrot.util.tokenizer.languages.LanguageBase#createStemmerInstance()
      */
     protected Stemmer createStemmerInstance() {
-		return new com.dawidweiss.carrot.filter.stempel.Stempel();
+		return new com.dawidweiss.carrot.filter.stempelator.Stempelator();
     }
-
 }

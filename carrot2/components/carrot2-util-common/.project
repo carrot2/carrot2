@@ -3,7 +3,6 @@
 	<name>carrot2-util-common</name>
 	<comment>carrot2-util-common</comment>
 	<projects>
-		<project>carrot2-local-core</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

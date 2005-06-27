@@ -10,16 +10,26 @@
  */
 package com.stachoodev.carrot.filter.normalizer;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
-import com.dawidweiss.carrot.core.local.*;
-import com.dawidweiss.carrot.core.local.clustering.*;
-import com.dawidweiss.carrot.core.local.impl.*;
-import com.dawidweiss.carrot.filter.langguesser.*;
-import com.dawidweiss.carrot.input.localcache.*;
-import com.dawidweiss.carrot.util.tokenizer.*;
-import com.dawidweiss.carrot.util.tokenizer.languages.*;
+import com.dawidweiss.carrot.core.local.LocalFilterComponent;
+import com.dawidweiss.carrot.core.local.LocalInputComponent;
+import com.dawidweiss.carrot.core.local.LocalOutputComponent;
+import com.dawidweiss.carrot.core.local.ProcessingException;
+import com.dawidweiss.carrot.core.local.RequestContextBase;
+import com.dawidweiss.carrot.core.local.clustering.TokenizedDocument;
+import com.dawidweiss.carrot.core.local.impl.DocumentsConsumerOutputComponent;
+import com.dawidweiss.carrot.filter.langguesser.LanguageGuesserFactory;
+import com.dawidweiss.carrot.filter.langguesser.RawDocumentLanguageDetection;
+import com.dawidweiss.carrot.input.localcache.CachedQueriesStore;
+import com.dawidweiss.carrot.input.localcache.RemoteCacheAccessLocalInputComponent;
+import com.dawidweiss.carrot.util.tokenizer.SnippetTokenizerLocalFilterComponent;
+import com.dawidweiss.carrot.util.tokenizer.languages.AllKnownLanguages;
 
 /**
  * @author Stanislaw Osinski

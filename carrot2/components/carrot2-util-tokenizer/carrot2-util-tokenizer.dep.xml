@@ -19,11 +19,11 @@
     <dependency name="carrot2-util-common" />
     <dependency name="carrot2-license" />
     <dependency name="carrot2-snowball-stemmers" />
-    <dependency name="carrot2-stemmer-stempel" />
+    <dependency name="carrot2-stemmer-stempelator" />
 
     <!-- Libraries -->
     <dependency name="log4j" />
-	  <dependency name="commons-pool" />
+	<dependency name="commons-pool" />
 
     <!-- Test profile -->
     <dependency name="junit" profile="test" />

@@ -4,8 +4,6 @@
 	<comment>carrot2-util-tokenizer Component</comment>
 	<projects>
 		<project>carrot2-local-core</project>
-		<project>carrot2-stemmer-lametyzator</project>
-		<project>carrot2-stemmer-snowball</project>
 		<project>carrot2-util-common</project>
 	</projects>
 	<buildSpec>

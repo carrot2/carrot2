@@ -1,0 +1,13 @@
+
+http://getopt.org/stempel/
+--------------------------
+
+License
+
+Most of the code is covered by {Egothor Open Source License}, an Apache-style 
+license. The rest of the code is covered by the Apache License 2.0.
+
+The Open Source distribution contains pre-built stemmer tables trained with a 
+random well-balanced sample of up to 2000 sets. Other tables are available 
+commercially for a modest price - please contact Andrzej Bialecki <ab AT getopt 
+DOT org> for more details.
