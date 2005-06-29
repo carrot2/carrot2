@@ -214,26 +214,26 @@ public class LsiClusteringStrategy implements ClusteringStrategy {
 
         // Count the non-stop words
         nonStopTermCount = 0;
-
-        while ((nonStopTermCount < features.length) &&
-                !features[nonStopTermCount].isStopWord()) {
-            nonStopTermCount++;
-        }
-
-        // Count the stop-words
         stopTermCount = 0;
 
-        while (((nonStopTermCount + stopTermCount) < features.length) &&
-                features[nonStopTermCount + stopTermCount].isStopWord()) {
-            stopTermCount++;
+        for (int i = 0; i < features.length; i++) {
+            if (features[i].getPhraseFeatureIndices() != null) {
+                // All terms later on are phrases.
+                break;
+            } else {
+	            if (features[nonStopTermCount].isStopWord()) {
+	                stopTermCount++;                
+	            } else {
+	                nonStopTermCount++;
+	            }
+            }
         }
 
         // Count the phrases
         phraseCount = features.length - nonStopTermCount - stopTermCount;
         firstPhraseIndex = nonStopTermCount + stopTermCount;
 
-        if (phraseCount == 0)
-        {
+        if (phraseCount == 0) {
             return false;
         }
         
@@ -242,8 +242,7 @@ public class LsiClusteringStrategy implements ClusteringStrategy {
                 250 * 150);
 
         double[][] matrix = tdMatrixBuildingStrategy.buildTdMatrix(clusteringContext);
-        if (matrix.length == 0 || matrix[0].length == 0)
-        {
+        if (matrix.length == 0 || matrix[0].length == 0) {
             return false;
         }
         tdMatrix = new Matrix(matrix);
