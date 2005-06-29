@@ -22,10 +22,11 @@
 			Printing dependencies failed.
 		</fail>
 		
+		<echo>${tmp:dependencies:string}</echo>
+
 		<fail unless="tmp:dependencies:string">
 			Property not set.
 		</fail>
-
 	</target>
     
 </project>
