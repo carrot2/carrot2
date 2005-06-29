@@ -1,5 +1,9 @@
 package com.dawidweiss.carrot.ant.deps;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * This class represents a dependency on a particular
  * component in the given profile. If {@link #profile}
@@ -8,6 +12,8 @@ package com.dawidweiss.carrot.ant.deps;
 public class ComponentInProfile {
     public final ComponentDependency component;
     public final String profile;
+    
+    private ArrayList dependencies = new ArrayList(); 
     
     public ComponentInProfile(ComponentDependency component, String profile) {
         this.component = component;
@@ -36,5 +42,20 @@ public class ComponentInProfile {
     public String toString() {
         return "'" + component.getName() + "'"
             + (profile != null ? " (profile: " + profile + ")": "");
+    }
+
+    /**
+     * Adds a dependency to this component-profile pair. 
+     */
+    void addDependency(ComponentInProfile dependency) {
+        this.dependencies.add(dependency);
+    }
+    
+    /**
+     * Returns a list of {@link ComponentInProfile} objects
+     * this component depends in the current profile. 
+     */
+    public List getDependencies() {
+        return Collections.unmodifiableList(dependencies);
     }
 }

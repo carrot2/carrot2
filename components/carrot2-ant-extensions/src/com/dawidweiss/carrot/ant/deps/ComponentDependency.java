@@ -237,7 +237,7 @@ public class ComponentDependency {
 
             String m = (String) state.get(dependency);
             if (m == null) {
-                // Not been visited
+                // Not visited yet
                 tsort(dependency, targets, state, visiting, ret, nocopy);
             } else if (m == VISITING) {
                 // Currently visiting this node, so have a cycle
@@ -255,6 +255,7 @@ public class ComponentDependency {
             } else {
                 throw new RuntimeException("Unreachable state: " + m);
             }
+            root.addDependency(dependency);
         }
 
         ComponentInProfile p = (ComponentInProfile) visiting.pop();
