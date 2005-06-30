@@ -1,0 +1,11 @@
+
+<component name="c">
+	<provides>
+		<files prefix="tmp">
+			<file location="c.jar" />
+		</files>
+		<build>
+			<ant file="build.xml" target="build" />
+		</build>
+	</provides>
+</component>
