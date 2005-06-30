@@ -2,8 +2,8 @@ package com.dawidweiss.carrot.ant.deps;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.tools.ant.BuildException;
@@ -19,11 +19,14 @@ public class ProvidesElement {
 
     private File base;
     private FilesElement files;
-    private List builds = new LinkedList(); /* of BuildElement */
+    private ArrayList builds = new ArrayList();
+    private ArrayList conditions = new ArrayList(); 
     private String profile;
+    private ComponentDependency component;
 
-	public ProvidesElement(Project project, File base, Element configElement) throws Exception {
+	public ProvidesElement(Project project, File base, Element configElement, ComponentDependency component) throws Exception {
         this.base = base;
+        this.component = component;
 
         this.profile = configElement.getAttribute("profile");
         if (profile != null && "".equals(profile.trim()))
@@ -37,12 +40,14 @@ public class ProvidesElement {
                 case Node.ELEMENT_NODE:
                     if ("files".equals(n.getNodeName())) {
                         this.files = new FilesElement(base, (Element) n);
-                    } 
-                    else if ("build".equals(n.getNodeName())) {
+                    } else if ("build".equals(n.getNodeName())) {
                         builds.add(new BuildElement(project, base, (Element) n));
-                    } else
+                    } else if ("check-newer".equals(n.getNodeName())) {
+                        conditions.add(new CheckNewerElement(project, base, (Element) n));
+                    } else {
                         throw new SAXException("Unexpected node: "
                             + n.getNodeName());
+                    }
                 break;
                 case Node.TEXT_NODE:
                     if (!n.getNodeValue().trim().equals("")) {
@@ -64,30 +69,46 @@ public class ProvidesElement {
      * if it exists. 
 	 */
 	public void bringUpToDate(Project project, String currentProfile) throws BuildException {
-        boolean force = false;
+        boolean rebuild = false;
 
         if (files != null) {
-            if (files.allFilesExist()) {
-                force = false;
-            } else {
+            if (files.allFilesExist() == false) {
                 // not all files exist. rebuild.
-                force = true;
-                project.log("Component has missing files, REBUILDING.", Project.MSG_INFO);
+                project.log("Component [" + component.getName() + "] has missing files, rebuilding.", Project.MSG_INFO);
+                rebuild = true;
+            } else {
+                for (Iterator i = conditions.iterator(); i.hasNext();) {
+                    Object o = i.next();
+                    if (o instanceof CheckNewerElement) {
+                        // Check the most recently modified file.
+                        long sourceTimestamp = ((CheckNewerElement) o).getMostRecentFileTimestamp();
+                        long targetTimestamp = files.getMostRecentFileTimestamp();
+                        if (sourceTimestamp > targetTimestamp) {
+                            project.log("Component [" + component.getName() + "] needs to be rebuilt (timestamps source: "
+                                    + new Date(sourceTimestamp) + ", target: " + new Date(targetTimestamp) + "), rebuilding.");
+                            rebuild = true;
+                            break;
+                        }
+                    } else {
+                        throw new BuildException("Unknown condition: " + o.getClass());
+                    }
+                }
             }
         } else {
-            // no files. don't force builds, but
-            // if such entries exist, perform them.
-            force = false;
+            // Component provides no files. Perform builds unconditionally.
+            rebuild = true;
         }
         
         // make a rebuild.
-        for (Iterator i = builds.iterator();i.hasNext();) {
-            BuildElement build = (BuildElement) i.next();
-            build.build( project, force, currentProfile );
+        if (rebuild) {
+	        for (Iterator i = builds.iterator(); i.hasNext();) {
+	            BuildElement build = (BuildElement) i.next();
+	            build.build(project, currentProfile);
+	        }
         }
         
         // check if we have all the files now.
-        if (files != null && false==files.allFilesExist()) {
+        if (files != null && false == files.allFilesExist()) {
             File [] missingFiles = files.getMissingFiles();
             StringBuffer buf = new StringBuffer();
 
@@ -102,18 +123,10 @@ public class ProvidesElement {
         }
 	}
     
-	/**
-	 * @return
-	 */
 	public String getProfile() {
 		return profile;
 	}
 
-
-    /**
-     * @param currentProfile
-     * @return
-     */
     public List getProvidedFileReferences(String currentProfile, boolean buildPath) {
         if (this.files != null) {
             return files.getAllFileReferences(buildPath);
@@ -122,11 +135,6 @@ public class ProvidesElement {
         }
     }
 
-
-	/**
-	 * @param currentProfile
-	 * @return
-	 */
 	public List getProvidedFiles(String currentProfile, boolean buildPath) {
         if (this.files != null) {
             List l = getProvidedFileReferences(currentProfile, buildPath);

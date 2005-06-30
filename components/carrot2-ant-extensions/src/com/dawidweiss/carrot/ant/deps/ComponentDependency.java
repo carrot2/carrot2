@@ -112,7 +112,7 @@ public class ComponentDependency {
                     case Node.ELEMENT_NODE:
                         if ("provides".equals(n.getNodeName())) {
                             this.provides.add(
-                                new ProvidesElement(project, this.file.getParentFile(), (Element) n));
+                                new ProvidesElement(project, this.file.getParentFile(), (Element) n, this));
                         } else if ("dependency".equals(n.getNodeName())) {
                             this.dependencies.add(
                                 new DependencyElement(
@@ -135,8 +135,7 @@ public class ComponentDependency {
             }
             this.project = project;
         } catch (Exception e) {
-            throw new Exception("Problems parsing component descriptor: "
-                + file);
+            throw new Exception("Problems parsing component descriptor: " + file, e);
         }
     }
 

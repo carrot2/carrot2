@@ -21,12 +21,6 @@ import org.apache.tools.ant.util.FileUtils;
  * modified file in a provided <code>FileSet</code>.
  * The timestamp is expressed in milliseconds since
  * Jan 1, 1970.
- * 
- * Example of use:
- * <pre>
- * 
- * </pre>
- *  
  */
 public class MostRecentFileDate
     extends Task 
@@ -42,6 +36,18 @@ public class MostRecentFileDate
     
     /** Name of the property to set. */
     private String millisProperty;
+    
+    /**
+     * If <code>true</code>, the result is stored in {@link #lastModified}
+     * field.
+     */
+    private boolean storeInField;
+    
+    /**
+     * If {@link #storeInField} is <code>true</code>, this field
+     * will contain the result of this task after invoking {@link #execute()}.
+     */
+    private long lastModified;
 
     /** 
      *  If <code>true</code> an exception is thrown
@@ -49,6 +55,25 @@ public class MostRecentFileDate
      */
     private boolean exceptionOnEmpty;
 
+    /**
+     * A simple inner class for providing custom date format.
+     */
+    public static class CustomFormat {
+
+        private String pattern;
+
+        public void setPattern(String pattern) {
+            this.pattern = pattern;
+        }
+
+        public String getFormatted(long millis) {
+            if (this.pattern == null)
+                throw new BuildException("Pattern attribute must be provided");
+            SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+            return sdf.format(new Date(millis));
+        }
+    }
+    
     /**
      * If set to true, the task will throw an exception
      * if there are no files included in all of the 
@@ -81,9 +106,19 @@ public class MostRecentFileDate
     public void setDateProperty(String name) {
         this.dateProperty = name;
     }
+    
+    /**
+     * Sets {@link #storeInField}.
+     */
+    public void setStoreInField(boolean v) {
+        this.storeInField = v;
+    }
+    
+    public long getLastModified() {
+        return lastModified;
+    }
 
-    public CustomFormat createFormat()
-    {
+    public CustomFormat createFormat() {
         if (format != null)
             throw new BuildException("Only one format child element is allowed.");
 
@@ -101,7 +136,7 @@ public class MostRecentFileDate
             throw new BuildException("At least one embedded FileSet is required.");
         }
         
-        if (this.millisProperty == null && this.dateProperty == null) {
+        if (this.millisProperty == null && this.dateProperty == null && storeInField == false) {
             throw new BuildException("dateProperty or millisProperty attribute must be provided.");
         }
     }
@@ -125,7 +160,7 @@ public class MostRecentFileDate
         // modification date accordingly.
         for (Iterator fsIterator = this.fileSets.iterator(); fsIterator.hasNext(); ) {
             FileSet fs = (FileSet) fsIterator.next();
-            
+
             DirectoryScanner ds = fs.getDirectoryScanner(getProject());
             File fromDir = fs.getDir(getProject());
             String [] srcFiles = ds.getIncludedFiles();
@@ -173,26 +208,9 @@ public class MostRecentFileDate
                 }
                 getProject().setNewProperty(this.dateProperty, out);
             }
+            if (this.storeInField) {
+                this.lastModified = lastModifiedDate;
+            }
         }
 	}
-    
-    public class CustomFormat
-    {
-
-        public void setPattern(String pattern)
-        {
-            this.pattern = pattern;
-        }
-
-        public String getFormatted(long millis) {
-            if (this.pattern == null)
-                throw new BuildException("Pattern attribute must be provided");
-            SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-            return sdf.format(new Date(millis));
-        }
-
-        private String pattern;
-    }
-
-
 }

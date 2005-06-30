@@ -12,18 +12,12 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-/**
- */
 public class FilesElement {
 
 	private boolean buildPathExclude;
 	private File base;
     private List files = new LinkedList();
 
-	/**
-	 * @param base
-	 * @param element
-	 */
 	public FilesElement(File base, Element configElement)
         throws Exception {
         this.base = base;
@@ -75,21 +69,15 @@ public class FilesElement {
         return files;
     }
 
-	/**
-	 * @return
-	 */
 	public boolean allFilesExist() {
         return getMissingFiles().length == 0;
 	}
 
-	/**
-	 * @return
-	 */
 	public List getAllFileReferences(boolean buildPath) {
         if (this.buildPathExclude && buildPath)
             return Collections.EMPTY_LIST;
 
-        FileReference [] files = new FileReference [ this.files.size() ];
+        FileReference [] files = new FileReference [this.files.size()];
         int j = 0;
         for (Iterator i = this.files.iterator(); i.hasNext(); ) {
             FileElement file = (FileElement) i.next();
@@ -99,4 +87,22 @@ public class FilesElement {
         return java.util.Arrays.asList(files);
 	}
 
+    /**
+     * @return Returns the date of the most recently modified target file.
+     */
+    public long getMostRecentFileTimestamp() {
+        long timestamp = Long.MIN_VALUE;
+
+        for (Iterator i = files.iterator(); i.hasNext(); ) {
+            FileElement file = (FileElement) i.next();
+            File f = file.getFileReference().getAbsoluteFile();
+            if (f.exists()) {
+                timestamp = Math.max(f.lastModified(), timestamp);
+            }
+        }
+        if (timestamp == Long.MIN_VALUE) {
+            throw new RuntimeException("No files to check timestamps.");
+        }
+        return timestamp;
+    }
 }
