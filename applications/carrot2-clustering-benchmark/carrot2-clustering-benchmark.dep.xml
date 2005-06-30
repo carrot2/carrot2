@@ -9,6 +9,9 @@
         <build>
             <ant file="build.xml" target="build" />
         </build>
+		<check-newer>
+			<fileset dir="src" />
+		</check-newer>
     </provides>
 
 	<!-- Required components -->

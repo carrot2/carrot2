@@ -12,6 +12,10 @@
         <build>
             <ant file="build.xml" target="build" />
         </build>
+		<check-newer>
+            <fileset dir="src" />
+            <fileset dir="xml-binding" />
+        </check-newer>
     </provides>
 
 	<!-- Carrot2 components -->
