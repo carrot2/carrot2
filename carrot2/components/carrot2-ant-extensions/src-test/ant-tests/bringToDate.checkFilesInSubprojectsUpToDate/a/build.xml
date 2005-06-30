@@ -1,0 +1,43 @@
+
+<project name="a" default="build">
+	<target name="clean">
+		<delete dir="tmp" />
+	</target>
+
+	<target name="deps">
+       <taskdef name="bringToDate" 
+        	classname="com.dawidweiss.carrot.ant.BringToDate" />
+		<typedef name="dependencyPath"
+			classname="com.dawidweiss.carrot.ant.DependencyPath" />
+		
+		<path id="dependencies">
+            <fileset dir="..">
+                <include name="**/*.dep.xml" />
+            </fileset>
+		</path>
+
+		<bringToDate componentDescriptor="a.dep.xml" dependenciesOnly="true" profile="">
+			<dependencies refid="dependencies" />
+		</bringToDate>
+
+		<dependencyPath id="path.dependencies"
+			componentDescriptor="a.dep.xml" profile="">
+			<dependencies refid="dependencies" />
+		</dependencyPath>
+	</target>
+
+	<target name="build" depends="deps">
+		<mkdir dir="tmp/classes" />
+
+		<copy todir="src" includeemptydirs="false">
+			<fileset dir="src" />
+			<mapper type="glob" from="*.java.ext" to="*.java"/>
+		</copy>
+
+		<javac srcdir="src" destdir="tmp/classes" debug="on">
+  			<classpath refid="path.dependencies" />
+  		</javac>
+
+  		<jar destfile="tmp/a.jar" basedir="tmp/classes"/>
+	</target>
+</project>
