@@ -12,6 +12,11 @@
         <build>
             <ant file="build.xml" target="build" />
         </build>
+		<check-newer>
+			<fileset dir="src" />
+			<fileset dir="nni-lib" />
+			<fileset dir="src-matlab" />
+		</check-newer>
     </provides>
 
     <dependency name="colt" />

@@ -12,6 +12,10 @@
         <build>
             <ant file="build.remote.xml" target="build" />
         </build>
+		<check-newer>
+			<fileset dir="src" />
+			<fileset dir="web" />
+		</check-newer>
     </provides>
 	
 
@@ -22,6 +26,10 @@
         <build>
             <ant file="build.local.xml" target="build" />
         </build>
+		<check-newer>
+			<fileset dir="src" />
+			<fileset dir="web" />
+		</check-newer>
     </provides>
 	
 

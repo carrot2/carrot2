@@ -9,6 +9,10 @@
         <build>
             <ant file="build.xml" target="build" />
         </build>
+		<check-newer>
+			<fileset dir="src" />
+			<fileset dir="etc" />
+		</check-newer>
     </provides>
 
     <dependency name="carrot2-local-core" />
