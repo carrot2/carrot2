@@ -55,7 +55,7 @@
             <not>
                 <equals arg1="${project.dir}" arg2="${undefined.value}"/>
             </not>
-            <available file="${src.path}" type="dir" />
+            <available file="${project.dir}" type="dir" />
         </and>
     </condition>
     <fail message="'project.dir' property must be initialized properly." unless="ok:project.dir" />
