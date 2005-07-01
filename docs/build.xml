@@ -4,6 +4,7 @@
 
     <!-- Include local properties, if present. -->
     <property file="local.properties" />
+    <property file="${user.home}/carrot.properties" />
 
     <!-- Override these properties -->
     <property name="carrot2.cvs.dir"         location="../carrot2" />
