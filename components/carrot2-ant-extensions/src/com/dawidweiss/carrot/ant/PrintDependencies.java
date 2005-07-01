@@ -180,11 +180,15 @@ public class PrintDependencies extends Task {
 	                	continue;
 	                }
 	                indent(buf, 1);
-	                buf.append((i+1) + ") " + dependency.component.getDescription());
-                	buf.append(" [" + dependency.component.getName() + "]"); 
+	                buf.append(i+1);
+	                buf.append(") ");
+
+                	buf.append("[" + dependency.component.getName() + "]");
 	                if (dependency.profile != null) {
-	                	buf.append(" [in profile: '" + dependency.profile + "']"); 
+	                	buf.append(" [in profile: '" + dependency.profile + "']");
 	                }
+	                buf.append(" ");
+	                buf.append(dependency.component.getDescription());
 	                buf.append("\n");
 	            }
             }
