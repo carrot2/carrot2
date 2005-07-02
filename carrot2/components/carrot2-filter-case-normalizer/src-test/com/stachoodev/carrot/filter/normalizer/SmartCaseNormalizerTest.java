@@ -16,7 +16,7 @@ import com.dawidweiss.carrot.core.local.clustering.*;
 import com.dawidweiss.carrot.core.local.linguistic.*;
 import com.dawidweiss.carrot.core.local.linguistic.tokens.*;
 import com.dawidweiss.carrot.util.tokenizer.*;
-import com.dawidweiss.carrot.util.tokenizer.languages.polish.*;
+import com.dawidweiss.carrot.util.tokenizer.languages.*;
 
 /**
  * Unit tests for the
@@ -33,9 +33,6 @@ public class SmartCaseNormalizerTest extends TestCase
     /** The case normalizer under tests */
     private SmartCaseNormalizer caseNormalizer;
 
-    /** Polish language to be used */
-    private Polish polishLanguage;
-
     /** Polish LanguageTokenizer */
     private LanguageTokenizer polishTokenizer;
 
@@ -46,7 +43,6 @@ public class SmartCaseNormalizerTest extends TestCase
     {
         snippetTokenizer = new SnippetTokenizer();
         caseNormalizer = new SmartCaseNormalizer();
-        polishLanguage = new PolishWithStempelator();
     }
     
     /*
@@ -57,7 +53,7 @@ public class SmartCaseNormalizerTest extends TestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        polishTokenizer = polishLanguage.borrowTokenizer();
+        polishTokenizer = AllKnownLanguages.getLanguageForIsoCode("pl").borrowTokenizer();
     }
 
     /* (non-Javadoc)
@@ -66,7 +62,7 @@ public class SmartCaseNormalizerTest extends TestCase
     protected void tearDown() throws Exception
     {
         super.tearDown();
-        polishLanguage.returnTokenizer(polishTokenizer);
+        AllKnownLanguages.getLanguageForIsoCode("pl").returnTokenizer(polishTokenizer);
     }
     
     /**

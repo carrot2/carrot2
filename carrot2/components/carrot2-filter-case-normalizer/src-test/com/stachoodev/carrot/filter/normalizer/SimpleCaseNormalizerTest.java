@@ -46,7 +46,7 @@ public class SimpleCaseNormalizerTest extends TestCase
     {
         snippetTokenizer = new SnippetTokenizer();
         caseNormalizer = new SimpleCaseNormalizer();
-        polishLanguage = new PolishWithStempelator();
+        polishLanguage = new Polish();
     }
     
     /*
