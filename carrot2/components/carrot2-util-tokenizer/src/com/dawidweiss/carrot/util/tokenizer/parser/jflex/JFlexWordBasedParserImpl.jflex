@@ -53,5 +53,8 @@ URL_PATH   = ("/" {SYMBOL})+ ("." {SYMBOL})? ("/")? ("?" {SYMBOL} ((";" | ":" | 
 
 "," | "'" | ":" | "-"                                        { return PUNCTUATION; }
 
+/** Ignore HTML entities */
+"&" [a-zA-Z0-9#]+ ";"                                         { ; }
+
 /** Ignore the rest */
 . |	{WHITESPACE}		                                     { ; }
