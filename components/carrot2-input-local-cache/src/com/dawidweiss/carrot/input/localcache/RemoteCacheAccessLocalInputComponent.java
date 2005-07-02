@@ -251,17 +251,31 @@ public class RemoteCacheAccessLocalInputComponent extends
 	private void pushAsLocalData(Element root) throws ProcessingException {
 		List documents = root.elements("document");
 
+        int matchingDocuments = documents.size();
+        Map params = requestContext.getRequestParameters();
+        if (params.containsKey(LocalInputComponent.PARAM_REQUESTED_RESULTS))
+        {
+            int requestedResults;
+            requestedResults = Integer.parseInt(params.get(
+                LocalInputComponent.PARAM_REQUESTED_RESULTS).toString());
+            
+            if (requestedResults < matchingDocuments)
+            {
+                matchingDocuments = requestedResults;
+            }
+        }
+        
         // Pass the actual document count
         requestContext.getRequestParameters().put(
             LocalInputComponent.PARAM_TOTAL_MATCHING_DOCUMENTS,
-            new Integer(documents.size()));
+            new Integer(matchingDocuments));
 
         // Pass the query
         requestContext.getRequestParameters().put(
             LocalInputComponent.PARAM_QUERY, root.element("query").getText());
 
 		int id = 0;
-		for (Iterator i = documents.iterator(); i.hasNext(); id++) {
+		for (Iterator i = documents.iterator(); i.hasNext() && id < matchingDocuments; id++) {
 			Element docElem = (Element) i.next();
 
 			String url = docElem.elementText("url");
