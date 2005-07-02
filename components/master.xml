@@ -106,7 +106,9 @@
   <target name="clean" depends="check.properties"
     description="Removes local temporary files.">
     <delete failonerror="false" includeemptydirs="true" quiet="true">
-        <fileset dir="${project.dir}/tmp" />
+        <fileset dir="${project.dir}/tmp">
+          <exclude name="eclipse/**/*"/>
+        </fileset>
     </delete>
   </target>
   <!-- }}} -->
