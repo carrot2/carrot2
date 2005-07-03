@@ -48,19 +48,6 @@ public class JFlexWordBasedParser extends WordBasedParserBase
     }
 
     /**
-     * Creates an instance of the parser that uses a custom pool of token
-     * objects. The pool <b>must </b> return objects subclassing
-     * {@link StringTypedToken}class.
-     * 
-     * @param pool An unbounded pool of objects implementing at least
-     *            {@link StringTypedToken}interface.
-     */
-    public JFlexWordBasedParser(ReusableObjectsPool pool)
-    {
-        super(pool);
-    }
-
-    /**
      * Returns the next token from the parsing data. The token value is returned
      * from the method, while the type of the token, as defined in
      * {@link com.dawidweiss.carrot.core.local.linguistic.tokens.TypedToken},
