@@ -13,15 +13,12 @@
 package com.dawidweiss.carrot.util.tokenizer.parser;
 
 
-import java.io.StringReader;
+import java.io.*;
 
-import com.dawidweiss.carrot.core.local.linguistic.tokens.StemmedToken;
-import com.dawidweiss.carrot.core.local.linguistic.tokens.TypedToken;
-import com.dawidweiss.carrot.util.common.pools.ReusableObjectsFactory;
-import com.dawidweiss.carrot.util.common.pools.SoftReusableObjectsPool;
+import junit.framework.*;
+
+import com.dawidweiss.carrot.core.local.linguistic.tokens.*;
 import com.dawidweiss.carrot.util.tokenizer.parser.jflex.*;
-
-import junit.framework.TestCase;
 
 
 /**
@@ -103,49 +100,4 @@ public class WordBasedParserTest
             assertEquals("Types not equal: ", images[i].type, ((TypedToken) tokens[i]).getType());
         }
     }
-    
-    private static class StemmedTypedToken extends StringTypedToken
-        implements StemmedToken {
-		public String getStem() {
-            return this.getImage();
-		}
-    }
-    
-    public void testTokenizationWithFactory() {        
-        SoftReusableObjectsPool pool = new SoftReusableObjectsPool(
-                    new ReusableObjectsFactory() {
-						public void createNewObjects(Object[] objects) {
-                            for (int i=0;i<objects.length;i++) {
-                                objects[i] = new StemmedTypedToken(); 
-                            }
-						}
-                    }, 10, 10
-                );
-
-        WordBasedParserBase parser = new JFlexWordBasedParser(pool);
-        String TEST = "Abecadło 10 dweiss@man.poznan.pl, chyba.";
-        parser.restartTokenizationOn(new StringReader(TEST));
-
-        com.dawidweiss.carrot.core.local.linguistic.tokens.Token [] tokens 
-            = new com.dawidweiss.carrot.core.local.linguistic.tokens.Token[20];
-        
-        parser.getNextTokens(tokens, 0);
-
-        assertTokensEqual( tokens, new TokenImage [] {
-            new TokenImage("Abecadło", TypedToken.TOKEN_TYPE_TERM),
-            new TokenImage("10", TypedToken.TOKEN_TYPE_NUMERIC),
-            new TokenImage("dweiss@man.poznan.pl", TypedToken.TOKEN_TYPE_SYMBOL),
-            new TokenImage(",", TypedToken.TOKEN_TYPE_PUNCTUATION),
-            new TokenImage("chyba", TypedToken.TOKEN_TYPE_TERM),
-            new TokenImage(".", TypedToken.TOKEN_TYPE_PUNCTUATION | TypedToken.TOKEN_FLAG_SENTENCE_DELIM)
-        });
-        
-        
-        assertTrue( tokens[0] instanceof TypedToken );
-        assertTrue( tokens[0] instanceof StemmedTypedToken );
-        
-        parser.reuse();
-
-    }
-    
 }

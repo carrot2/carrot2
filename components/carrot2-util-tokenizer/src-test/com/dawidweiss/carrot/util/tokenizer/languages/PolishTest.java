@@ -29,7 +29,7 @@ public class PolishTest extends LanguageImplTestBase {
     protected String [][] getWordsToCompare() {
         return new String [][] {
                 {"okropnymi", "okropny"},
-                {"mrocznie", "mrocznia"}
+                {"mrocznie", "mroczny"}
         };
     }
 }

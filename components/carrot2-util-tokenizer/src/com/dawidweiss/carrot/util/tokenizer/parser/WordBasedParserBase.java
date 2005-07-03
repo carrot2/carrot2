@@ -34,22 +34,6 @@ public abstract class WordBasedParserBase implements LanguageTokenizer
     protected final short [] tokenTypeHolder = new short [1];
 
     /**
-     * A reusable, unbounded pool of token objects.
-     */
-    protected final ReusableObjectsPool pool;
-
-    /**
-     * Minimal size for the 'hard' part of the reusable pool, if empty
-     * constructor is used.
-     */
-    protected final static int DEFAULT_POOL_MIN_HARD_SIZE = 5000;
-
-    /**
-     * Pool block increment size, if empty constructor is used.
-     */
-    protected final static int DEFAULT_POOL_SOFT_INCREMENT = 1000;
-
-    /**
      * Public constructor creates a new instance of the parser. <b>Reuse
      * tokenizer objects </b> instead of recreating them.
      * 
@@ -61,30 +45,6 @@ public abstract class WordBasedParserBase implements LanguageTokenizer
      */
     public WordBasedParserBase()
     {
-        this(new SoftReusableObjectsPool(new ReusableObjectsFactory()
-        {
-            public void createNewObjects(Object [] objects)
-            {
-                final int max = objects.length;
-                for (int i = 0; i < max; i++)
-                {
-                    objects[i] = new MutableStemmedToken();
-                }
-            }
-        }, DEFAULT_POOL_MIN_HARD_SIZE, DEFAULT_POOL_SOFT_INCREMENT));
-    }
-
-    /**
-     * Creates an instance of the parser that uses a custom pool of token
-     * objects. The pool <b>must </b> return objects subclassing
-     * {@link StringTypedToken}class.
-     * 
-     * @param pool An unbounded pool of objects implementing at least
-     *            {@link StringTypedToken}interface.
-     */
-    public WordBasedParserBase(ReusableObjectsPool pool)
-    {
-        this.pool = pool;
     }
 
     /**
@@ -94,7 +54,6 @@ public abstract class WordBasedParserBase implements LanguageTokenizer
      */
     public void reuse()
     {
-        pool.reuse();
     }
 
     /**
@@ -139,7 +98,7 @@ public abstract class WordBasedParserBase implements LanguageTokenizer
                     break;
                 }
 
-                token = (StringTypedToken) pool.acquireObject();
+                token = new MutableStemmedToken();
                 token.assign(image, tokenTypeHolder[0]);
                 array[startAt] = token;
                 count++;
