@@ -4,14 +4,13 @@ import java.io.UnsupportedEncodingException;
 
 
 /**
- * A replacement for pre JDK1.4 URLEncoder/ URLDecoder classes, which did not
+ * A replacement for pre-JDK1.4 URLEncoder/ URLDecoder classes, which did not
  * take encodings into account when converting to URL-encoded scheme.
  *
  * Highly optimized version. If you can think of any other performace gains, let me know:
- * dweiss@cs.put.poznan.pl
+ * dawid.weiss@cs.put.poznan.pl
  */
-public final class URLEncoding
-{
+public final class URLEncoding {
     /** Character-to-value conversion tables */
     private final static short hexConversion[];
 
@@ -22,16 +21,11 @@ public final class URLEncoding
         for (int i=0;i<256;i++) {
             if (i>='0' && i<='9') {
                 hexConversion[i] = (short) (i-'0');
-            }
-            else
-            if (i>='a' && i<='f') {
+            } else if (i>='a' && i<='f') {
                 hexConversion[i] = (short) (i - 'a' + 10);
-            }
-            else
-            if (i>='A' && i<='F') {
+            } else if (i>='A' && i<='F') {
                 hexConversion[i] = (short) (i - 'A' + 10);
-            }
-            else hexConversion[i] = -1;      // Error detection.
+            } else hexConversion[i] = -1;      // Error detection.
         };
     }
 
@@ -43,8 +37,7 @@ public final class URLEncoding
     static {
         byte [] byteToHex = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
         encodableBytes = new short [256];
-        for (int i=0;i<encodableBytes.length;i++)
-        {
+        for (int i=0;i<encodableBytes.length;i++) {
             if ( i >= '0' && i <= '9' )
                 encodableBytes[i] = (short) i;
             else
@@ -54,8 +47,7 @@ public final class URLEncoding
             if ( i >= 'A' && i <= 'Z' )
                 encodableBytes[i] = (short) i;
             else
-            switch (i)
-            {
+            switch (i) {
                 case ' ':
                     encodableBytes[i] = '+';
                     break;
@@ -80,8 +72,7 @@ public final class URLEncoding
     /**
      * Prevents class instantiation.
      */
-    private URLEncoding()
-    {
+    private URLEncoding() {
     }
 
 
@@ -93,8 +84,7 @@ public final class URLEncoding
      * @param bytes The URL-encoded array of bytes.
      * @return A decoded array of bytes.
      */
-    public final static byte [] decode(byte [] bytes)
-    {
+    public final static byte [] decode(byte [] bytes) {
         byte result [] = (byte []) bytes.clone();
         byte [] trimmedResult = new byte[ decodeInPlace( result ) ];
         System.arraycopy(result, 0, trimmedResult, 0, trimmedResult.length);
@@ -109,19 +99,15 @@ public final class URLEncoding
      * @param bytes The URL-encoded array of bytes.
      * @return The length of the output decoded subarray.
      */
-    public final static int decodeInPlace(byte [] bytes)
-    {
+    public final static int decodeInPlace(byte [] bytes) {
         int i=0;
         int j=0;
         final int length = bytes.length;
         int decoded;
-        try
-        {
-            while (i<length)
-            {
+        try {
+            while (i<length) {
                 byte c = bytes[i];
-                switch (c)
-                {
+                switch (c) {
                     case '+': bytes[j] = ' ';
                               break;
                     case '%': decoded = (hexConversion[bytes[++i]] << 4) | hexConversion[bytes[++i]];
@@ -134,9 +120,7 @@ public final class URLEncoding
                 i++;
                 j++;
             }
-        }
-        catch (ArrayIndexOutOfBoundsException e)
-        {
+        } catch (ArrayIndexOutOfBoundsException e) {
             throw new IllegalArgumentException("Incomplete trailing '%' sequence.");
         }
         return j;
@@ -167,13 +151,11 @@ public final class URLEncoding
 
         int i = from;
         short encoded;
-        while (i<to)
-        {
+        while (i<to) {
             encoded = encodableBytes[ source[i++] & 0xff ];
-            if (encoded <= 0xff)
+            if (encoded <= 0xff) {
                 output[length++] = (byte) encoded;
-            else
-            {
+            } else {
                 // output encoded byte
                 output[length++] = '%';
                 output[length++] = (byte) ( encoded >>> 8 );
@@ -188,8 +170,7 @@ public final class URLEncoding
     /**
      * URL-encodes a sequence of bytes.
      */
-    public static byte [] encode(byte [] bytes)
-    {
+    public static byte [] encode(byte [] bytes) {
         // The encoded table may consume at most 3 times the input
         byte [] tmp = new byte[ bytes.length * 3 ];
         int length = encodeToArray( bytes, 0, bytes.length, tmp );
@@ -204,9 +185,8 @@ public final class URLEncoding
      * to the specified encoding prior to applying the URL-encoding routine.
      */
     public static String encode(String s, String enc)
-	throws UnsupportedEncodingException
-    {
-        return new String( encode(s.getBytes(enc)), "iso8859-1" );
+		throws UnsupportedEncodingException {
+        return new String(encode(s.getBytes(enc)), "iso8859-1");
     }
 
 
@@ -215,8 +195,8 @@ public final class URLEncoding
      * into a String according to the specified character encoding.
      */
     public static String decode(String s, String enc)
-	throws UnsupportedEncodingException {
-        return new String( decode( s.getBytes("iso8859-1")), enc);
+		throws UnsupportedEncodingException {
+        return new String(decode( s.getBytes("iso8859-1")), enc);
     }
 }
 

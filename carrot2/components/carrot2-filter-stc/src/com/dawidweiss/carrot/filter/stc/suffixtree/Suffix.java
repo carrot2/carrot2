@@ -1,13 +1,11 @@
 package com.dawidweiss.carrot.filter.stc.suffixtree;
 
-
 /**
  * A suffix object which is used ONLY internally in class SuffixTree.
- *
+ * 
  * @author Dawid Weiss
  */
-public class Suffix
-{
+public class Suffix {
 
     /** This Suffix's container tree */
     protected SuffixTree container;
@@ -25,56 +23,45 @@ public class Suffix
      * Public constructor.
      */
     public Suffix(SuffixTree container, Node originNode, int firstElementIndex,
-                  int lastElementIndex)
-    {
-        this.container         = container;
-        this.originNode        = originNode;
+            int lastElementIndex) {
+        this.container = container;
+        this.originNode = originNode;
         this.firstElementIndex = firstElementIndex;
-        this.lastElementIndex  = lastElementIndex;
+        this.lastElementIndex = lastElementIndex;
     }
 
-
     /**
-     *  Returns true when this suffix ends in an explicit node.
+     * Returns true when this suffix ends in an explicit node.
      */
-    public boolean isExplicit()
-    {
-        return (firstElementIndex > lastElementIndex) ? true
-                                                      : false;
+    public boolean isExplicit() {
+        return (firstElementIndex > lastElementIndex) ? true : false;
     }
 
-
     /**
-     *  Returns true when this suffix ends in an implicit node (see: path compression)
+     * Returns true when this suffix ends in an implicit node (see: path
+     * compression)
      */
-    public boolean isImplicit()
-    {
-        return (firstElementIndex <= lastElementIndex) ? true
-                                                       : false;
+    public boolean isImplicit() {
+        return (firstElementIndex <= lastElementIndex) ? true : false;
     }
 
-
     /**
-     *  Performs canonization of this suffix - we slide down the tree until we're
-     *  in the closest node to the end of the collection.
+     * Performs canonization of this suffix - we slide down the tree until we're
+     * in the closest node to the end of the collection.
      */
-    public void canonize()
-    {
-        if (!isExplicit())
-        {
-            Edge edge     = originNode.findEdgeMatchingFirstElement(
-                container.getCurrentElement().get(firstElementIndex));
-            int  edgeSpan = edge.lastElementIndex - edge.firstElementIndex;
+    public void canonize() {
+        if (!isExplicit()) {
+            Edge edge = originNode.findEdgeMatchingFirstElement(container
+                    .getCurrentElement().get(firstElementIndex));
+            int edgeSpan = edge.lastElementIndex - edge.firstElementIndex;
 
-            while (edgeSpan <= (lastElementIndex - firstElementIndex))
-            {
+            while (edgeSpan <= (lastElementIndex - firstElementIndex)) {
                 firstElementIndex = firstElementIndex + edgeSpan + 1;
-                originNode        = edge.endNode;
+                originNode = edge.endNode;
 
-                if (firstElementIndex <= lastElementIndex)
-                {
-                    edge     = originNode.findEdgeMatchingFirstElement(
-                        container.getCurrentElement().get(firstElementIndex));
+                if (firstElementIndex <= lastElementIndex) {
+                    edge = originNode.findEdgeMatchingFirstElement(container
+                            .getCurrentElement().get(firstElementIndex));
                     edgeSpan = edge.lastElementIndex - edge.firstElementIndex;
                 }
                 ;
@@ -82,6 +69,4 @@ public class Suffix
         }
     }
 }
-
-
 
