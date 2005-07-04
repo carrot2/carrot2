@@ -12,7 +12,7 @@ package com.stachoodev.suffixarrays.wrapper;
 
 /**
  * An integer wrapper that is capable of representing groups of symbols. The
- * {@link #SECONDARY_BITS}lowest order bits represent different types of
+ * {@link #SECONDARY_BITS} lowest order bits represent different types of
  * symbols within one group (e.g. variants of the same stem), while the
  * remaining bits represent distinct groups.
  * 
