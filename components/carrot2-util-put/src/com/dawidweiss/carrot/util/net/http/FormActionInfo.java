@@ -111,9 +111,6 @@ public class FormActionInfo
     }
 
 
-    // ------------------------------------------------------- protected section
-
-
     /**
      * Initializes this object using an XML Element.
      * @param qr JDOM's Element with initialization parameters.
@@ -147,6 +144,3 @@ public class FormActionInfo
         }
     }
 }
-
-
-

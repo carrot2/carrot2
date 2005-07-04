@@ -75,8 +75,7 @@ public class MultilingualLsiClustererRequestProcessor
             clusteringContext.setLanguages(languages);
 
             // Snippets			
-            List documentList = JDOMHelper.getElements("searchresult/document",
-                    root);
+            List documentList = JDOMHelper.getElements("searchresult/document", root);
 
             if (documentList == null) {
                 // save the output.
