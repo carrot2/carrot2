@@ -2,6 +2,8 @@ package com.dawidweiss.carrot.grokker;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -12,11 +14,10 @@ import org.apache.log4j.PropertyConfigurator;
 
 import com.dawidweiss.carrot.core.local.clustering.RawCluster;
 import com.dawidweiss.carrot.core.local.clustering.RawDocument;
+import com.groxis.product.grokker.GrokkerApplicationManager;
 import com.groxis.support.plugins.AbstractGenerator;
 import com.groxis.support.plugins.categorizer.CategorizerEngine;
 import com.groxis.support.plugins.facade.CategorizerFacade;
-
-import com.groxis.product.grokker.GrokkerApplicationManager;
 
 
 /**
@@ -28,8 +29,14 @@ import com.groxis.product.grokker.GrokkerApplicationManager;
  * @author Dawid Weiss
  */
 public class CarrotSPI extends AbstractGenerator implements CategorizerEngine {
-
     private final static Logger logger;
+
+    /**
+     * For each {@link RawCluster} returned by Carrot2 we store its path in Grokker's
+     * notation (<code>/cluster/subcluster</code>). The path for each cluster is
+     * stored as a property of this name. 
+     */
+    private final static String PROPERTY_GROKKER_CLUSTER_PATH = "grokker.cluster-path";
 
 	static {
 		// a static block that initializes log4j sink.
@@ -69,6 +76,64 @@ public class CarrotSPI extends AbstractGenerator implements CategorizerEngine {
 
     private Clusterer clusterer;
     
+    /**
+     * A comparator used to order cluster categories in the order of their
+     * "importance". 
+     * 
+     * Use any of the predefined comparators:
+     * {@link #scorePropertyComparator}.
+     * 
+     * If <code>null</code>, the categories are ordered in their original order
+     * of traversal:
+     * <pre> 
+     * /first
+     * /first/sub1
+     * /first/sub2
+     * /second
+     * /second/sub
+     * ...
+     * </pre>
+     */
+    private Comparator comparator;
+
+    /**
+     * A comparator used to order cluster categories in the order of their
+     * decreasing scores (sub categories from different parents may be interleaved,
+     * although it shouldn't b),
+     * for example:
+     * <pre>
+     * /first
+     * /first/sub1
+     * /second
+     * /first/sub2
+     * /second/sub
+     * </pre>
+     * 
+     * All clusters must have {@link RawCluster#PROPERTY_SCORE} property set, otherwise
+     * a runtime exception is thrown.
+     */
+    private Comparator scorePropertyComparator = new Comparator() {
+		public int compare(Object arg0, Object arg1) {
+            final RawCluster a = (RawCluster) arg0;
+            final RawCluster b = (RawCluster) arg1;
+
+            final Double aScore = (Double) a.getProperty(RawCluster.PROPERTY_SCORE);
+            final Double bScore = (Double) b.getProperty(RawCluster.PROPERTY_SCORE);
+            if (aScore == null || bScore == null) { 
+                throw new RuntimeException("Cluster score comparator requires PROPERTY_SCORE for each cluster.");
+            }
+
+            final double av = aScore.doubleValue();
+            final double bv = bScore.doubleValue();
+            
+            if (av < bv) {
+                return 1;
+            } else if (av > bv) {
+                return -1;
+            } else return 0;
+		}
+    };
+    
 	/**
      * Initialization method (grokker) 
      */
@@ -106,14 +171,20 @@ public class CarrotSPI extends AbstractGenerator implements CategorizerEngine {
 	}
 
     /**
-     * This is where the clustering takes place.
+     * This method categorizes input documents and additionaly
+     * returns the information about the order of categories (sorted
+     * according to their score).
+     * 
+     * @return <code>String[][]</code>, where the zero index contains
+     * clustered documents (as in {@link #categorize(String[], Object)}) and
+     * the first index contains an array of strings with category paths.
      */
-	public String[] categorize(String[] documents, Object params) {
+    public String[][] categorizeInOrder(String[] documents, Object params) {
         logger.info("Clustering started.");
-        
+
         // In the first step, build document wrappers around the provided
         // documents. We also create 'dummy' URLs on the way because these URLs are
-	    // required by Carrot's API.
+        // required by Carrot's API.
         ArrayList docs = new ArrayList(documents.length);
         for (int i=0;i<documents.length;i++) {
             docs.add( new DocumentAdapter(i, "http://dummy.url/", null, documents[i]) );
@@ -134,32 +205,49 @@ public class CarrotSPI extends AbstractGenerator implements CategorizerEngine {
         List clusters = clusterer.clusterHits(docs, query);
         long stop = System.currentTimeMillis();
         logger.info("Lingo Reloaded clustering time: " + (stop - start) + " ms");
-        
-        String [] paths = convertToPaths( clusters, documents );
-        logger.info("Clustering finished.");
+
+        String [][] paths = convertToPaths(clusters, documents);
+        logger.info("Clustering finished, postprocessing " + (stop - System.currentTimeMillis()) + " ms");
+
         return paths;
+    }
+    
+    /**
+     * This is where the clustering takes place.
+     */
+	public String[] categorize(String[] documents, Object params) {
+        return categorizeInOrder(documents, params)[0];
 	}
     
     /**
      * Conversion from Carrot data structures to Grokker's paths.
      */
-    protected String [] convertToPaths( List clusters, String [] documents) {
+    protected String [][] convertToPaths(List clusters, String [] documents) {
         // retrieve the result and convert it to path-like format
         // used by Grokker.
-        String [] paths = new String[ documents.length ];
-        
+        String [] paths = new String[documents.length];
+
         // Create a reusable string buffer.
         StringBuffer tmpbuf = new StringBuffer();
-        constructPaths( clusters, paths, "", tmpbuf);
-        
-        return paths;
+        ArrayList allClusters = new ArrayList();
+        constructPaths(clusters, paths, "", tmpbuf, allClusters);
+
+        String [] categories = new String[allClusters.size()];
+        if (comparator != null) {
+        	Collections.sort(allClusters, comparator);
+        }
+        for (int i=0; i<allClusters.size(); i++) {
+            categories[i] = (String) ((RawCluster) allClusters.get(i)).getProperty(PROPERTY_GROKKER_CLUSTER_PATH);
+        }
+
+        return new String[][] {paths, categories};
     }
-    
+
     /**
      * This methods recursively descends through all the generated clusters and appends
      * paths to <code>paths</code> table that corresponds to documents. 
      */
-    private final void constructPaths(List clusters, String [] paths, String prefix, StringBuffer tmpbuf) {
+    private final void constructPaths(List clusters, String [] paths, String prefix, StringBuffer tmpbuf, ArrayList allClusters) {
         for (Iterator i = clusters.iterator(); i.hasNext();) {
             RawCluster rawCluster = (RawCluster) i.next();
 
@@ -212,22 +300,35 @@ public class CarrotSPI extends AbstractGenerator implements CategorizerEngine {
                 
                 // add the cluster label to id-th document.
                 if (paths[id] != null) {
-                    tmpbuf.append( paths[id] );
+                    tmpbuf.append(paths[id]);
                     tmpbuf.append(CategorizerFacade.PATH_SEPARATOR);
                 }
-                tmpbuf.append( prefix );
+                tmpbuf.append(prefix);
                 tmpbuf.append(clusterLabel);
                 paths[id] = tmpbuf.toString();
             }
-            
+
+            // Set cluster label and add it to a list of all clusters.
+            rawCluster.setProperty(PROPERTY_GROKKER_CLUSTER_PATH, prefix + clusterLabel);
+            final String currentClusterPath = prefix + clusterLabel + CategorizerFacade.SEPARATOR;
+            allClusters.add(rawCluster);
+
             // Traverse subclusters
             List subclusters = rawCluster.getSubclusters();
             if (subclusters != null && subclusters.size() > 0) {
-                constructPaths(subclusters, paths, prefix + clusterLabel + CategorizerFacade.SEPARATOR, tmpbuf);
+                constructPaths(subclusters, paths, currentClusterPath, tmpbuf, allClusters);
             }
         }
     }
-    
+
+    /**
+     * Enables the use of {@link #scorePropertyComparator} for ordering output
+     * category labels. 
+     */
+    public void setUseScoreComparator() {
+        this.comparator = scorePropertyComparator;
+    }
+
     public boolean useInlineTaxonomy() {
         return false;
     }    
