@@ -103,7 +103,7 @@ public class Clusterer {
 
         if (query != null) {
             requestParams.put(
-                RawDocumentsProducerLocalInputComponent.PARAM_QUERY,
+                LocalInputComponent.PARAM_QUERY,
                 query);
         }
 		requestParams.put(
