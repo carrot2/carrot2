@@ -1,8 +1,9 @@
 package com.dawidweiss.carrot.grokker;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
+import com.dawidweiss.carrot.core.local.clustering.RawCluster;
 import com.dawidweiss.carrot.core.local.clustering.RawClusterBase;
 import com.dawidweiss.carrot.core.local.clustering.RawDocument;
 import com.dawidweiss.carrot.core.local.clustering.RawDocumentBase;
@@ -19,7 +20,7 @@ public class CarrotSPITest extends junit.framework.TestCase {
 	public CarrotSPITest(String s) {
 		super(s);
 	}
-    
+
     public void testPathConversion() {
         CarrotSPI s = new CarrotSPI();
         s.initialize();
@@ -65,7 +66,10 @@ public class CarrotSPITest extends junit.framework.TestCase {
         clusters.add(first);
         clusters.add(second);
         
-        String paths [] = s.convertToPaths(clusters, documents );
+        String result [][] = s.convertToPaths(clusters, documents);
+        String paths [] = result[0];
+        String categories [] = result[1];
+
         assertEquals("first" 
                     + CategorizerFacade.PATH_SEPARATOR
                     + "second"
@@ -74,8 +78,83 @@ public class CarrotSPITest extends junit.framework.TestCase {
         assertEquals("first", paths[1]);
         assertEquals("second", paths[2]);
         assertEquals("second" + CategorizerFacade.SEPARATOR + "third", paths[3]);
+
+        assertEquals("first", categories[0]);
+        assertEquals("second", categories[1]);
+        assertEquals("second" + CategorizerFacade.SEPARATOR + "third", categories[2]);
     }
     
+    public void testPathConversionWithScoreSorting() {
+        CarrotSPI s = new CarrotSPI();
+        s.initialize();
+        
+        final String [] documents = new String [] { "a", "b", "c", "d" };
+        
+        RawDocumentBase [] rd = new RawDocumentBase[ documents.length ];
+        for (int i=0;i<documents.length;i++) {
+            final int j = i;
+            rd[i] = new RawDocumentBase() {
+                {
+                    this.setProperty(RawDocument.PROPERTY_TITLE, documents[j]);
+                    this.setProperty(RawDocument.PROPERTY_URL, "url://" + documents[j]);
+                }
+                public Object getId() {
+                    return new Integer(j);
+                }
+            };
+        }
+
+        RawDocumentBase a = rd[0];
+        RawDocumentBase b = rd[1];
+        RawDocumentBase c = rd[2];
+        RawDocumentBase d = rd[3];
+
+        List clusters = new ArrayList();
+        RawClusterBase c1 = new RawClusterBase();
+        RawClusterBase c2 = new RawClusterBase();
+        RawClusterBase c3 = new RawClusterBase();
+        RawClusterBase c4 = new RawClusterBase();
+        RawClusterBase c5 = new RawClusterBase();
+        
+        c1.addLabel("c1");
+        c2.addLabel("c2");
+        c3.addLabel("c3");
+        c4.addLabel("c4");
+        c5.addLabel("c5");
+
+        c1.addDocument(a);
+        c1.addDocument(b);
+        c2.addDocument(a);
+        c2.addDocument(c);
+        c3.addDocument(a);
+        c3.addDocument(d);
+        c4.addDocument(d);
+        c5.addDocument(c);
+
+        clusters.add(c1);
+        clusters.add(c2);
+        c1.addSubcluster(c3);
+        c2.addSubcluster(c4);
+        c2.addSubcluster(c5);
+
+        c1.setDoubleProperty(RawCluster.PROPERTY_SCORE, 1);
+        c2.setDoubleProperty(RawCluster.PROPERTY_SCORE, 0.9);
+        c3.setDoubleProperty(RawCluster.PROPERTY_SCORE, 0.6);
+        c4.setDoubleProperty(RawCluster.PROPERTY_SCORE, 0.7);
+        c5.setDoubleProperty(RawCluster.PROPERTY_SCORE, 0.4);
+
+        s.setUseScoreComparator();
+        String result [][] = s.convertToPaths(clusters, documents);
+        String paths [] = result[0];
+        String categories [] = result[1];
+
+        assertEquals("c1", categories[0]);
+        assertEquals("c2", categories[1]);
+        assertEquals("c2" + CategorizerFacade.SEPARATOR + "c4", categories[2]);
+        assertEquals("c1" + CategorizerFacade.SEPARATOR + "c3", categories[3]);
+        assertEquals("c2" + CategorizerFacade.SEPARATOR + "c5", categories[4]);
+    }
+
     public void testClusterizeMethod() {
         CarrotSPI s = new CarrotSPI();
         s.initialize();
@@ -85,16 +164,17 @@ public class CarrotSPITest extends junit.framework.TestCase {
         String[] dyn_paragraphs = (String[]) input.toArray( new String[ input.size() ] );
         String[] dyn_query_words = { "programmer" }; 
 
-        String [] cats = s.categorize(dyn_paragraphs, dyn_query_words);
+        String[][] cats = s.categorizeInOrder(dyn_paragraphs, dyn_query_words);
 
         assertNotNull(cats);
-        assertEquals(dyn_paragraphs.length, cats.length);
-        
-        for (int i=0;i<cats.length;i++) {
-            System.out.println(dyn_paragraphs[i] + "\n\t:: " + cats[i]);
-        }
+        assertEquals(dyn_paragraphs.length, cats[0].length);
+        assertTrue(cats[1].length > 1);
+
+        // [dw] Enable this to see categories assigned to test documents
+        // for (int i=0; i<cats[0].length; i++) {
+        //     System.out.println(dyn_paragraphs[i] + "\n\t:: " + cats[0][i]);
+        // }
     }
-    
     
     private List populate() {
         ArrayList input = new ArrayList();
