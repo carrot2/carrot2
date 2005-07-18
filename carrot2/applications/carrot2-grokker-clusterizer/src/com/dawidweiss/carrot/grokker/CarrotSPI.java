@@ -240,6 +240,18 @@ public class CarrotSPI extends AbstractGenerator implements CategorizerEngine {
             categories[i] = (String) ((RawCluster) allClusters.get(i)).getProperty(PROPERTY_GROKKER_CLUSTER_PATH);
         }
 
+        // Dump some debugging information
+        if (logger.isEnabledFor(Priority.DEBUG)) {
+        	StringBuffer buf = new StringBuffer();
+        	buf.append("Cluster paths (sorted): \n");
+	        for (int i=0; i<categories.length; i++) {
+	        	buf.append("   ");
+	            buf.append(categories[i]);
+	            buf.append("\n");
+	        }
+        	logger.debug(buf.toString());
+        }
+
         return new String[][] {paths, categories};
     }
 
@@ -266,7 +278,7 @@ public class CarrotSPI extends AbstractGenerator implements CategorizerEngine {
                 }
             }
             
-            // Dump some loggin information
+            // Dump some debugging information
             if (logger.isEnabledFor(Priority.DEBUG)) {
                 String logInfo = (rawCluster.getProperty(RawCluster.PROPERTY_JUNK_CLUSTER) == null ? "[cluster] " : "[junk] ")
                     + "current path: " + prefix + (prefix.length() == 0 ? tmpbuf.toString() : prefix + " / " + tmpbuf.toString());
