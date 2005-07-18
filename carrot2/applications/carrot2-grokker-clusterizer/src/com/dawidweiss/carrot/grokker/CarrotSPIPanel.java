@@ -9,7 +9,7 @@ import javax.swing.JLabel;
 import com.groxis.support.plugins.AbstractPanel;
 
 /**
- * Scarce user interface for this plugin at the moment :)
+ * Displays a nice Carrot2 logo
  * 
  * @author Dawid Weiss
  * @version $Revision$
@@ -27,7 +27,7 @@ public class CarrotSPIPanel extends AbstractPanel {
 		setLayout(new BorderLayout());
         
         ImageIcon img = new ImageIcon(
-                this.getClass().getResource("/resources/Carrot2-horiz.png"));
+                this.getClass().getClassLoader().getResource("resources/Carrot2-horiz.png"));
         JLabel banner = new JLabel(img);
         this.add(banner, BorderLayout.CENTER);
         
