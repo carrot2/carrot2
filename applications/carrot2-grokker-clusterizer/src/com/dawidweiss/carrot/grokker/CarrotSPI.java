@@ -207,7 +207,7 @@ public class CarrotSPI extends AbstractGenerator implements CategorizerEngine {
         logger.info("Lingo Reloaded clustering time: " + (stop - start) + " ms");
 
         String [][] paths = convertToPaths(clusters, documents);
-        logger.info("Clustering finished, postprocessing " + (stop - System.currentTimeMillis()) + " ms");
+        logger.info("Clustering finished, postprocessing " + (System.currentTimeMillis() - stop) + " ms");
 
         return paths;
     }
