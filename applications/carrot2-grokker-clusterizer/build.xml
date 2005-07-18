@@ -1,9 +1,12 @@
-<project name="Grokker clusterizer plugin" default="build">
+<project name="Carrot2 Grokker Plugin" default="build">
 
+    <property file="${user.home}/.carrot.properties" />
 	<property file="local.properties" />
     
 	<property name="project.dir"      location="${basedir}" />
 	<property name="carrot2.cvs.dir"  location="../.." />
+        <property name="tests.available"  value="true" />
+
 
 	<property name="type"       	  value="jartype" />
 	<property name="dist.name"        value="carrot2-grokker-clusterizer" />

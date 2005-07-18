@@ -18,5 +18,7 @@
     <dependency name="carrot2-local-core" />
 	<dependency name="carrot2-util-tokenizer" />
     <dependency name="carrot2-filter-lingo" in-profile="local" />
+    <dependency name="log4j" />
+    <dependency name="junit" profile="test" />
 
 </component>

@@ -88,7 +88,7 @@ public class Clusterer {
 				"");
 
 		try {
-			controller.addProcess("lucene-lingo-example", luceneLingoExample);
+			controller.addProcess("lingo-example", luceneLingoExample);
 		} catch (Exception e) {
 			throw new RuntimeException("Could not assemble clustering process.", e);
 		}
@@ -116,7 +116,7 @@ public class Clusterer {
 			// rewrite the input component so that it uses Lucene and actually
 			// produces result in response to the query written below.
 			ProcessingResult result = 
-				controller.query("lucene-lingo-example", query, requestParams);
+				controller.query("lingo-example", query, requestParams);
 
 			ClustersConsumerOutputComponent.Result output =
 				(ClustersConsumerOutputComponent.Result) result.getQueryResult();
