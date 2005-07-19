@@ -61,6 +61,7 @@
 			<fileset dir="bringToDate.checkFilesInSubprojectsUpToDate/c/src" />
 			<mapper type="glob" from="*.java.post" to="*.java"/>
 		</copy>
+		<sleep seconds="4" />
 		<touch>
 			<fileset dir="bringToDate.checkFilesInSubprojectsUpToDate/c/src" />
 		</touch>
