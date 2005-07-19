@@ -25,9 +25,9 @@ public class WordLoadingUtils
     private final static Logger logger = Logger
         .getLogger(WordLoadingUtils.class);
 
-    
     /**
-     * A utility method to load stop words from a resource.
+     * A utility method to load a set of words from a resource. Each line is
+     * treated as one word. Lines beginning with '#' are ignored.
      * 
      * @param resourceName
      * @param stream
@@ -39,9 +39,10 @@ public class WordLoadingUtils
     {
         return loadWordSet(resourceName, stream, false);
     }
-    
+
     /**
-     * A utility method to load stop words from a resource.
+     * A utility method to load a set of words from a resource. Each line is
+     * treated as one word. Lines beginning with '#' are ignored.
      * 
      * @param resourceName
      * @param stream
@@ -69,10 +70,15 @@ public class WordLoadingUtils
             {
                 line = line.trim();
                 if (line.startsWith("#"))
+                {
                     continue;
+                }
+
                 if ("".equals(line))
+                {
                     continue;
-                
+                }
+
                 if (convertToLowerCase)
                 {
                     set.add(line.toLowerCase());
@@ -89,6 +95,76 @@ public class WordLoadingUtils
         }
 
         logger.debug("Finished loading: " + resourceName);
+        return set;
+    }
+
+    /**
+     * @param resourceName
+     * @param stream
+     * @param convertToLowerCase
+     * @return
+     * @throws IOException
+     */
+    public static Set loadPhraseSet(String resourceName, InputStream stream,
+        boolean convertToLowerCase) throws IOException
+    {
+        logger.debug("Loading word list for: " + resourceName);
+
+        if (stream == null)
+        {
+            throw new IOException("Stream handle must not be null "
+                + "(resource '" + resourceName + "' does not exist?)");
+        }
+
+        Set set = new HashSet();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(
+            stream, "UTF-8"));
+        
+        try
+        {
+            String line;
+            List words = new ArrayList();
+            while ((line = reader.readLine()) != null)
+            {
+                line = line.trim();
+                if (line.startsWith("#"))
+                {
+                    continue;
+                }
+
+                if ("".equals(line))
+                {
+                    continue;
+                }
+
+                // Yes, I know StringTokenizer is slow. I use it here to avoid
+                // extra dependencies. This method will most probably be called
+                // only in the initialization phase anyway.
+                StringTokenizer stringTokenizer = new StringTokenizer(line);
+                
+                while (stringTokenizer.hasMoreTokens())
+                {
+                    if (convertToLowerCase)
+                    {
+                        words.add(stringTokenizer.nextToken().toLowerCase());
+                    }
+                    else
+                    {
+                        words.add(stringTokenizer.nextToken());
+                    }
+                }
+                
+                set.add(words.toArray(new String[words.size()]));
+                words.clear();
+            }
+        }
+        finally
+        {
+            reader.close();
+        }
+
+        logger.debug("Finished loading: " + resourceName);
+
         return set;
     }
 }
