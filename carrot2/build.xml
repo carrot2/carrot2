@@ -19,6 +19,7 @@
   <property name="deployment.port" value="8080" />
   <property name="deployment.host" value="localhost" />
   <property name="distribution.dir" value="tmp" />
+  <property name="tests.report.dir" value="tmp/junit-report" />
 
   
   <target name="javadoc">
@@ -45,7 +46,7 @@ JAVADOC: @{component.path}
     <antcall target="apply-to-components" />
   </target>
 
-
+  
   <target name="build">
   	<description>
 	Builds all components included in 'apply-to-components'
@@ -173,6 +174,18 @@ TESTING: @{component.path}
     <antcall target="apply-to-components" />
   </target>
 
+  
+  <target name="test.report">
+    <delete dir="${tests.report.dir}" failonerror="false" />
+    <mkdir dir="${tests.report.dir}" />
+    <junitreport todir="${tests.report.dir}">
+        <fileset dir="components">
+            <include name="**/tmp/build/junit-temp/TEST-*.xml"/>
+        </fileset>
+        <report format="frames" todir="${tests.report.dir}"/>
+    </junitreport>
+  </target>
+  
 
   <target name="apply-to-applications">
     <application-apply application.path="applications/carrot2-clustering-benchmark" />
