@@ -34,6 +34,9 @@ public class ExtendedToken implements Token, PropertyProvider
     /** Term frequency across the whole collection */
     public static final String PROPERTY_TF = "tf";
 
+    /** Weighted term frequency across the whole collection */
+    public static final String PROPERTY_WEIGHTED_TF = "wtf";
+
     /** Inverse document frequency factor */
     public static final String PROPERTY_IDF = "idf";
 
@@ -118,7 +121,7 @@ public class ExtendedToken implements Token, PropertyProvider
         ExtendedTokenSequence extendedTokenSequence = new ExtendedTokenSequence(
             new MutableTokenSequence(extendedToken));
         extendedTokenSequence.setProperty(ExtendedTokenSequence.PROPERTY_TF,
-            getProperty(PROPERTY_TF));
+            getProperty(PROPERTY_WEIGHTED_TF));
 
         return extendedTokenSequence;
     }
