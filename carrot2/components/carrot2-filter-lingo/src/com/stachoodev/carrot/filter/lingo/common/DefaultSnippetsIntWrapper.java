@@ -41,13 +41,19 @@ public class DefaultSnippetsIntWrapper extends AbstractSnippetsIntWrapper {
      * @param documents
      */
     public DefaultSnippetsIntWrapper(Snippet[] documents, HashSet stopWords) {
-        super(documents);
         this.stopWords = stopWords;
+        
+        String[] strings = new String[documents.length];
+        for (int i = 0; i < documents.length; i++) {
+            strings[i] = documents[i].getText();
+        }
+
+        setDocuments(strings);
     }
 
     /**
      * @param document document data. Sentences MUST be period-delimited, with
-     *        a space character preceeding and succeeding the period.
+     *        a space character preceding and succeeding the period.
      *        Subsequent words MUST be separated by a single space character.
      */
     public DefaultSnippetsIntWrapper(String[] documents) {
@@ -56,7 +62,7 @@ public class DefaultSnippetsIntWrapper extends AbstractSnippetsIntWrapper {
 
     /**
      * @param document document data. Sentences MUST be period-delimited, with
-     *        a space character preceeding and succeeding the period.
+     *        a space character preceding and succeeding the period.
      *        Subsequent words MUST be separated by a single space character.
      */
     public DefaultSnippetsIntWrapper(String[] documents, HashSet stopWords) {

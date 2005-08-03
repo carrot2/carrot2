@@ -61,25 +61,7 @@ public abstract class AbstractSnippetsIntWrapper extends AbstractIntWrapper {
      *
      */
     public AbstractSnippetsIntWrapper() {
-        this(new Snippet[0]);
-    }
-
-    /**
-     * Method SnippetsIntWrapper.
-     *
-     * @param documents
-     */
-    public AbstractSnippetsIntWrapper(Snippet[] documents) {
-        super();
-        this.documentCount = documents.length;
-
-        String[] strings = new String[documents.length];
-
-        for (int i = 0; i < documents.length; i++) {
-            strings[i] = documents[i].getText();
-        }
-
-        setDocuments(strings);
+        setDocuments(new String[0]);
     }
 
     /**
@@ -89,6 +71,7 @@ public abstract class AbstractSnippetsIntWrapper extends AbstractIntWrapper {
      */
     protected void setDocuments(String[] documents) {
         if (documents.length > 0) {
+            documentCount = documents.length;
             StringBuffer stringBuffer = new StringBuffer(documents[0]);
 
             for (int i = 1; i < documents.length; i++) {
