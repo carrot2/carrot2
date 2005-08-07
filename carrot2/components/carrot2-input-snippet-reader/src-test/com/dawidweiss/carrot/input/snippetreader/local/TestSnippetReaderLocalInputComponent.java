@@ -2,7 +2,11 @@ package com.dawidweiss.carrot.input.snippetreader.local;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -12,6 +16,7 @@ import com.dawidweiss.carrot.core.local.LocalComponentFactory;
 import com.dawidweiss.carrot.core.local.LocalComponentFactoryBase;
 import com.dawidweiss.carrot.core.local.LocalControllerBase;
 import com.dawidweiss.carrot.core.local.LocalProcessBase;
+import com.dawidweiss.carrot.core.local.clustering.RawDocument;
 import com.dawidweiss.carrot.core.local.impl.DocumentsConsumerOutputComponent;
 
 /**
@@ -52,7 +57,7 @@ public class TestSnippetReaderLocalInputComponent extends junit.framework.TestCa
         return controller;
 	}
 	
-	public void testStoreDumpQuery() throws Exception {
+	public void testApacheAntQuery() throws Exception {
         // input component factory
         LocalComponentFactory inputFactory = new LocalComponentFactoryBase()
         {
@@ -72,14 +77,31 @@ public class TestSnippetReaderLocalInputComponent extends junit.framework.TestCa
         };
 
         LocalControllerBase controller = setUpController( inputFactory );
-        String query = "data mining";
+        String query = "apache ant";
         List results = (List) controller.query("testprocess", query, new HashMap()).getQueryResult();
 
         // the results should contain some documents.
-        assertTrue("Results acquired from Google for 'data mining'"
+        assertTrue("Results acquired from Google"
                 + ":" + results.size(), results.size() > 0);
-        log.debug("Results acquired for 'data mining' from Google: "
+        log.debug("Results acquired from Google: "
                 + results.size());
-	}	
-    
+
+        HashSet urls = new HashSet();
+        for (Iterator i = results.iterator(); i.hasNext(); ) {
+            RawDocument rd = (RawDocument) i.next();
+            // Check the URL.
+            try {
+                new URL(rd.getUrl());
+            } catch (MalformedURLException e) {
+                fail("Snippet reader failure (malformed URL): "
+                        + rd.toString());
+            }
+            urls.add(rd.getUrl());
+            log.debug(rd.getUrl());
+        }
+        assertTrue(urls.contains("http://ant.apache.org/"));
+        assertTrue(urls.contains("http://ant.apache.org/manual/"));
+        assertTrue(urls.contains("http://ant-contrib.sourceforge.net/"));
+        assertTrue(urls.contains("http://www.freshports.org/devel/apache-ant/"));
+	}
 }
