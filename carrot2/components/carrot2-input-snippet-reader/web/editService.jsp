@@ -19,7 +19,7 @@
 <form action="updateService.jsp" method="post">
 <input type="hidden" name="service" value="<%= request.getParameter("service") %>">
 <input type="submit" name="submit" value="Update configuration"><br>
-<textarea style="width=95%; height=45em;" name="config"><%
+<textarea cols="120" rows="30" name="config"><%
     // read service's xml.
     XmlRpcClientLite client = new XmlRpcClientLite( XmlRpcServlet.getSnippetReaderServiceURL(request));
     Vector v = new Vector();
