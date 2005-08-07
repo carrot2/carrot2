@@ -66,5 +66,4 @@ public class SearchServiceTest extends TestCase {
         String pageContent = new String(page, "UTF-8");
         assertTrue(pageContent.indexOf("ant.apache.org") > 0);
     }
-
 }
