@@ -43,6 +43,8 @@ URL_PATH   = ("/" {SYMBOL})+ ("." {SYMBOL})? ("/")? ("?" {SYMBOL} ((";" | ":" | 
 
 ({LETTER} "." ({LETTER} ".")+) | ({TERM} ("&" {TERM})+)      { return ACRONYM; }
 
+{LETTER} "." 												 { return TERM; }
+
 {TERM} ( "-" {TERM})+                                        { return HYPHTERM; }
 
 {TERM}                                                       { return TERM; }
