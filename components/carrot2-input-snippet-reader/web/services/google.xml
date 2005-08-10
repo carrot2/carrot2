@@ -100,7 +100,7 @@
              -->
             <summary>
                <start consume="true">
-                   <regexp><![CDATA[</a>(.*?<a.*?</a>.*?)?<br>]]></regexp>
+                   <regexp><![CDATA[</a><br>(([\n\r]|.)*?File [fF]ormat.*?<br>)?]]></regexp>
                </start>
                <end   consume="true">
                    <regexp><![CDATA[<br><font]]></regexp>
