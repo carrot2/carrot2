@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="src-test"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/log4j-1.2.11.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/junit-3.8.1.jar"/>
+	<classpathentry kind="src" path="/carrot2-util-common"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/commons-collections-3.1-patched.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/commons-logging.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/commons-primitives-1.0.jar"/>
+	<classpathentry kind="src" path="/carrot2-local-core"/>
+	<classpathentry kind="src" path="/carrot2-util-tokenizer"/>
+	<classpathentry kind="src" path="/carrot2-stemmer-stempelator"/>
+	<classpathentry kind="src" path="/carrot2-input-local-cache"/>
+	<classpathentry kind="src" path="/carrot2-util-lang-guesser"/>
+	<classpathentry kind="output" path="tmp/eclipse/classes"/>
+</classpath>
