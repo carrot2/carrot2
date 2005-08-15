@@ -8,9 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.Priority;
-import org.apache.log4j.PropertyConfigurator;
+import org.apache.log4j.*;
 
 import com.dawidweiss.carrot.core.local.clustering.RawCluster;
 import com.dawidweiss.carrot.core.local.clustering.RawDocument;
@@ -241,7 +239,7 @@ public class CarrotSPI extends AbstractGenerator implements CategorizerEngine {
         }
 
         // Dump some debugging information
-        if (logger.isEnabledFor(Priority.DEBUG)) {
+        if (logger.isEnabledFor(Level.DEBUG)) {
         	StringBuffer buf = new StringBuffer();
         	buf.append("Cluster paths (sorted): \n");
 	        for (int i=0; i<categories.length; i++) {
@@ -279,7 +277,7 @@ public class CarrotSPI extends AbstractGenerator implements CategorizerEngine {
             }
             
             // Dump some debugging information
-            if (logger.isEnabledFor(Priority.DEBUG)) {
+            if (logger.isEnabledFor(Level.DEBUG)) {
                 String logInfo = (rawCluster.getProperty(RawCluster.PROPERTY_JUNK_CLUSTER) == null ? "[cluster] " : "[junk] ")
                     + "current path: " + prefix + (prefix.length() == 0 ? tmpbuf.toString() : prefix + " / " + tmpbuf.toString());
                 logger.debug( logInfo );
