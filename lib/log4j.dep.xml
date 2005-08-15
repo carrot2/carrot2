@@ -2,10 +2,10 @@
 <!DOCTYPE component SYSTEM "../etc/component-dependency.dtd" > 
 <component
     name="log4j"
-    description="Log4J Logging framework 1.2.8, http://logging.apache.org/log4j/docs/">
+    description="Log4J Logging framework 1.2.11, http://logging.apache.org/log4j/docs/">
 	<provides>
 		<files>
-			<file location="log4j-1.2.8.jar" />
+			<file location="log4j-1.2.11.jar" />
 			<file location="log4j.LICENSE" />
 		</files>
 	</provides>
