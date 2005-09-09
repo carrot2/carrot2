@@ -237,6 +237,15 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
         requestContext.getRequestParameters().put(
             LocalInputComponent.PARAM_QUERY, query);
 
+        // This improves document fetching when document count is > 100
+        // The reason for this is 'specific' implementation of Lucene's
+        // Hits class. The number 100 is hardcoded in Hits.
+        int trash = 0; 
+        if (endAt > 100)
+        {
+            trash = hits.id(endAt);
+        }
+        
         // Get results from the index
         List documents = new ArrayList(endAt - startAt);
         for (int i = startAt; i < endAt; i++)
@@ -248,6 +257,9 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
                     .get(summaryField), doc.get(urlField), hits.score(i));
             documents.add(rawDocument);
         }
+        
+        // Must do this. Otherwise the optimizer would remove the call we want
+        trash = trash + 1; 
         
         long stop = System.currentTimeMillis();
         stopTimer();
