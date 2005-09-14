@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE component PUBLIC "-//Carrot2//DTD Component Dependency Descriptor V1.0//EN"
+	"http://www.cs.put.poznan.pl/dweiss/carrot/component-dependency.dtd" >
+
+<component
+    name="carrot2-local-controller"
+    description="Carrot2 Local Controller Component">
+    
+    <provides>
+        <files build-path-exclude="true" prefix="tmp/dist">
+            <file location="carrot2-local-controller.jar" />
+        </files>
+        <build>
+            <ant file="build.xml" target="build" />
+        </build>
+    </provides>
+
+    <!-- Carrot2 components -->
+    <dependency name="carrot2-local-core" />
+    <dependency name="carrot2-util-common" />
+    <dependency name="carrot2-license" />
+
+    <!-- Libraries -->
+    <dependency name="log4j" />
+    <dependency name="commons-collections" />
+    <dependency name="commons-pool" />
+    <dependency name="beanshell" />
+
+    <dependency name="jdom" />
+
+    <dependency name="junit" profile="test" />
+</component>
+

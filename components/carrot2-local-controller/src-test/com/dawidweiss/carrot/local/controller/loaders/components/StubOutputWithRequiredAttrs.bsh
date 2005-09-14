@@ -1,0 +1,27 @@
+
+import com.dawidweiss.carrot.core.local.*;
+import com.dawidweiss.carrot.local.controller.*;
+import com.dawidweiss.carrot.local.controller.StubOutputComponent;
+
+factory = new LocalComponentFactoryBase() {
+    public LocalComponent getInstance() {
+	    LocalComponent c = new StubOutputComponent();
+	    c.setRequiredContextAttribute("integer-key", new Integer(25));
+	    c.setRequiredContextAttribute("string-key", "25");
+		return c;
+    }
+    
+    public String getName() {
+        return "name";
+    }
+    
+    public String getDescription() {
+        return "description";
+    }
+    
+};
+	
+return new LoadedComponentFactory(
+	/* id */ "stub-output-with-required-attrs", 
+	factory, 
+	/* pool size */ 5);
