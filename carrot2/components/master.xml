@@ -31,6 +31,10 @@
 
   <property name="extra.dependencies.path" value="" />
 
+  <!-- Bytecode compatibility level -->
+  <property name="bytecode.compatibility" value="1.2" />
+  <property name="source.compatibility" value="1.2" />
+
   <!--
     Set this property to any other value to collect separate carrot2 dependencies
     indstead of a single JAR file.
@@ -294,6 +298,7 @@ ${string:component.dependencies}
            includeantruntime = "${include.ant.runtime}"
            includejavaruntime = "false"
            encoding	   = "UTF-8"
+           source="${source.compatibility}" target="${bytecode.compatibility}"
     >
         <classpath refid="classpath.dependencies" />
         <classpath refid="classpath.local" />
@@ -411,6 +416,7 @@ Tomcat:      ${tomcat.url}
            includeantruntime = "${include.ant.runtime}"
            includejavaruntime = "false"
            encoding	   = "UTF-8"
+           source="${source.compatibility}" target="${bytecode.compatibility}"
     >
         <classpath refid="classpath.dependencies" />
         <classpath refid="classpath.local" />
@@ -497,6 +503,7 @@ ${string:component.dependencies}
            includeantruntime = "${include.ant.runtime}"
            includejavaruntime = "false"
            encoding	   = "UTF-8"
+           source="${source.compatibility}" target="${bytecode.compatibility}"
     >
         <classpath refid="classpath.local" />
         <patternset refid="src.patternset" />
