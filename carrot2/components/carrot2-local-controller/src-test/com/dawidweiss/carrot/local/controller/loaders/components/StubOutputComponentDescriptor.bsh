@@ -1,0 +1,59 @@
+
+import com.dawidweiss.carrot.core.local.*;
+import com.dawidweiss.carrot.local.controller.*;
+import com.dawidweiss.carrot.local.controller.StubOutputComponent;
+
+/*
+
+THIS APPROACH WORKS THE FIRST TIME IT IS EXECUTED,
+SO IT MAY BE USED IN 'PRODUCTION' WHERE COMPONENTS
+ARE LOADED ONLY ONCE.
+
+HOWEVER, FOR TESTS WE LOAD COMPONENT DEFINITIONS
+MANY TIMES AND
+DUE TO PROBLEMS WITH BEANSHELL'S CLASSLOADER
+MANAGEMENT, IT FAILS WITH DUPLICATED CLASS DEFINITION
+ON SUCCESSIVE RUNS.
+
+public class MyFactory implements LocalComponentFactory {
+    public LocalComponent getInstance() {
+	    LocalComponent c = new StubOutputComponent();
+	    c.setProperty("property", "value");
+		return c;
+    }
+};
+
+// return a new instance of the 'extended' factory, that contains
+// information about its id, pool size etc.
+
+return new LoadedComponentFactory(
+	"stub-output-bsh", 
+	new MyFactory(), 
+	5);
+
+*/
+
+/*
+ * THIS APPROACH ALWAYS WORKS.
+ */
+
+factory = new LocalComponentFactory() {
+    public LocalComponent getInstance() {
+	    LocalComponent c = new StubOutputComponent();
+	    c.setProperty("property", "value");
+		return c;
+    }
+    
+    public String getName() {
+        return "name";
+    }
+    
+    public String getDescription() {
+        return "description";
+    }
+};
+	
+return new LoadedComponentFactory(
+	/* id */ "stub-output-bsh", 
+	factory, 
+	/* pool size */ 5);

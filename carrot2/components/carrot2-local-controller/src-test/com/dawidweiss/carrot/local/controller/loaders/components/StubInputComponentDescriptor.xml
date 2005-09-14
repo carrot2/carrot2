@@ -1,0 +1,5 @@
+<local-component-factory 
+	id="stub-input"
+	pool-size="5"
+	component-class="com.dawidweiss.carrot.local.controller.StubInputComponent">
+</local-component-factory> 

@@ -35,21 +35,27 @@ public class AllKnownLanguages
     /** A mapping between ISO codes and Language instances */
     private static Map languages;
 
+    /**
+     * Classes implementing {@link Language} interface. We instantiate
+     * them dynamically to avoid errors if some of them are not available.
+     */
+    final static String [] languageClasses = new String [] {
+        "com.dawidweiss.carrot.util.tokenizer.languages.dutch.Dutch",
+        "com.dawidweiss.carrot.util.tokenizer.languages.english.English",
+        "com.dawidweiss.carrot.util.tokenizer.languages.french.French",
+        "com.dawidweiss.carrot.util.tokenizer.languages.german.German",
+        "com.dawidweiss.carrot.util.tokenizer.languages.italian.Italian",
+        "com.dawidweiss.carrot.util.tokenizer.languages.polish.Polish",
+        "com.dawidweiss.carrot.util.tokenizer.languages.spanish.Spanish",
+        "com.dawidweiss.carrot.util.tokenizer.languages.danish.Danish",
+        "com.dawidweiss.carrot.util.tokenizer.languages.finnish.Finnish",
+        "com.dawidweiss.carrot.util.tokenizer.languages.norwegian.Norwegian",
+        "com.dawidweiss.carrot.util.tokenizer.languages.swedish.Swedish"
+    };
+    
     /** Initialize the data */
     static
     {
-    	// Load them dynamically. Removing some JARs will not hurt
-    	// this class then.
-    	String [] languageClasses = new String [] {
-    		"com.dawidweiss.carrot.util.tokenizer.languages.dutch.Dutch",
-			"com.dawidweiss.carrot.util.tokenizer.languages.english.English",
-			"com.dawidweiss.carrot.util.tokenizer.languages.french.French",
-			"com.dawidweiss.carrot.util.tokenizer.languages.german.German",
-			"com.dawidweiss.carrot.util.tokenizer.languages.italian.Italian",
-			"com.dawidweiss.carrot.util.tokenizer.languages.polish.Polish",
-			"com.dawidweiss.carrot.util.tokenizer.languages.spanish.Spanish"
-    	};
-
         languages = new HashMap();
         languageCodes = new String[languageClasses.length];
         for (int i = 0; i < languageClasses.length; i++)
@@ -74,17 +80,11 @@ public class AllKnownLanguages
     {
     }
 
-    /**
-     * @return
-     */
     public static final String [] getLanguageCodes()
     {
         return languageCodes;
     }
     
-    /**
-     * @return 
-     */
     public static Language [] getLanguages()
     {
         return languageArray;

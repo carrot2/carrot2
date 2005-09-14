@@ -1,0 +1,43 @@
+
+import com.dawidweiss.carrot.core.local.*;
+import com.dawidweiss.carrot.local.controller.*;
+
+/*
+
+THIS APPROACH WORKS THE FIRST TIME IT IS EXECUTED,
+SO IT MAY BE USED IN 'PRODUCTION' WHERE COMPONENTS
+ARE LOADED ONLY ONCE.
+
+HOWEVER, FOR TESTS WE LOAD COMPONENT DEFINITIONS
+MANY TIMES AND DUE TO PROBLEMS WITH BEANSHELL'S CLASSLOADER
+MANAGEMENT, IT FAILS WITH DUPLICATED CLASS DEFINITION
+ON SUCCESSIVE RUNS.
+
+*/
+
+public class MyProcess extends LocalProcessBase {
+	public MyProcess() {
+		super(
+			"stub-input",
+			"stub-output-with-required-attrs",
+			new String [] { "stub-filter" }
+		);
+	}
+	
+    protected void beforeProcessingStartsHook(RequestContext context, LocalComponent[] components) {
+    	Map params = context.getRequestParameters();
+    	params.put("integer-key", new Integer(25));
+    	params.put("string-key", "25");
+    }
+
+    protected void afterProcessingEndedHook(RequestContext context, LocalComponent[] components) {
+    }
+
+    protected void afterProcessingStartedHook(RequestContext context, LocalComponent[] components) {
+    }
+};
+
+// return a new instance of the scripted process.
+
+return new LoadedProcess( "bshprocess", new MyProcess() );
+

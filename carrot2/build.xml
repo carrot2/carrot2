@@ -211,7 +211,7 @@ TESTING: @{component.path}
     <component-apply component.path="components/carrot2-util-lang-guesser" />
     <component-apply component.path="components/carrot2-input-xml" />
     <component-apply component.path="components/carrot2-input-local-cache" />
-    
+
     <component-apply component.path="components/carrot2-odp-core" />
     <component-apply component.path="components/carrot2-output-cluster-metrics" />
 
@@ -236,6 +236,7 @@ TESTING: @{component.path}
     <component-apply component.path="components/carrot2-output-xsltrenderer" />
 
     <component-apply component.path="components/carrot2-remote-controller" />
+    <component-apply component.path="components/carrot2-local-controller" />
   </target>
 
 

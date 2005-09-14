@@ -68,7 +68,7 @@ public interface RequestContext
         throws MissingComponentException, IllegalStateException, Exception;
 
     /**
-     * Called by the {@link LocalController}after processing this request has
+     * Called by the {@link LocalController} after processing this request has
      * been completed (no matter whether successfully or not). After the dispose
      * method has been called, it is not possible to get component instances
      * using the {@link #getComponentInstance(String)} method.
