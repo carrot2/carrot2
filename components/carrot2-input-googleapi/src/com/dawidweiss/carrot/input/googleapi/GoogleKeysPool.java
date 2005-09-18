@@ -121,7 +121,21 @@ public class GoogleKeysPool {
 	 * @param key The key.
 	 */
 	public void addKey(final String key) {
-		final GoogleApiKey newKey = new GoogleApiKey(key);
+		addKey(key, null);
+	}
+
+	/**
+	 * Adds a single named key to the pool.
+	 *
+	 * @param key The key.
+	 */
+	public void addKey(final String key, final String name) {
+		GoogleApiKey newKey;
+		if (name == null) {
+			newKey = new GoogleApiKey(key);
+		} else {
+			newKey = new GoogleApiKey(key, name);
+		}
 		synchronized (this) {
 			availableKeys.add(newKey);
 		}
@@ -152,7 +166,7 @@ public class GoogleKeysPool {
 					throw new IOException("Key file is incorrect: first line is empty: "
 							+ keys[i].getAbsolutePath());
 				}
-				addKey(line.trim());
+				addKey(line.trim(), keys[i].getName());
 			} finally {
 				reader.close();
 			}

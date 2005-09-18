@@ -22,9 +22,12 @@ import com.dawidweiss.carrot.core.local.impl.DocumentsConsumerOutputComponent;
 public class GoogleApiInputComponentTest extends junit.framework.TestCase {
     private final static Logger log = Logger.getLogger(GoogleApiInputComponentTest.class);
 
+    static {
+        BasicConfigurator.configure();
+    }
+    
     public GoogleApiInputComponentTest(String s) {
         super(s);
-        BasicConfigurator.configure();
     }
     
 	protected LocalControllerBase setUpController(LocalComponentFactory inputFactory) throws Exception {
@@ -50,7 +53,57 @@ public class GoogleApiInputComponentTest extends junit.framework.TestCase {
 
         return controller;
 	}
+
+	public void testXXQuery() throws Exception {
+		for (int i = 0; i < 100; i++) {
+			testApacheAntQuery();
+		}
+	}
 	
+	public void testMediumQuery() throws Exception {
+    	final GoogleKeysPool pool = new GoogleKeysPool();
+    	pool.addKeys(new File("keypool"), ".key");
+
+        LocalComponentFactory inputFactory = new LocalComponentFactoryBase() {
+            public LocalComponent getInstance() {
+                return new GoogleApiInputComponent(pool);
+            }
+        };
+
+        LocalControllerBase controller = setUpController(inputFactory);
+        String query = "dawid weiss ant styler docbook poznan";
+        final long start = System.currentTimeMillis();
+        List results = (List) controller.query("testprocess", query, new HashMap()).getQueryResult();
+        final long end = System.currentTimeMillis();
+        log.info("GoogleAPI query time: " + (end - start) + " ms.");
+
+        // the results should contain some documents.
+        assertTrue("Results acquired from Google"
+                + ":" + results.size(), results.size() > 0 && results.size() < 100);
+	}
+	
+	public void testEmptyQuery() throws Exception {
+    	final GoogleKeysPool pool = new GoogleKeysPool();
+    	pool.addKeys(new File("keypool"), ".key");
+
+        LocalComponentFactory inputFactory = new LocalComponentFactoryBase() {
+            public LocalComponent getInstance() {
+                return new GoogleApiInputComponent(pool);
+            }
+        };
+
+        LocalControllerBase controller = setUpController(inputFactory);
+        String query = "duiogig oiudgisugviw siug iugw iusviuwg";
+        final long start = System.currentTimeMillis();
+        List results = (List) controller.query("testprocess", query, new HashMap()).getQueryResult();
+        final long end = System.currentTimeMillis();
+        log.info("GoogleAPI query time: " + (end - start) + " ms.");
+
+        // the results should contain some documents.
+        assertTrue("Results acquired from Google"
+                + ":" + results.size(), results.size() == 0);
+	}
+
 	public void testApacheAntQuery() throws Exception {
     	final GoogleKeysPool pool = new GoogleKeysPool();
     	pool.addKeys(new File("keypool"), ".key");
@@ -84,10 +137,12 @@ public class GoogleApiInputComponentTest extends junit.framework.TestCase {
                         + rd.toString());
             }
             urls.add(rd.getUrl());
-            log.debug(rd.getUrl());
         }
+
         assertTrue(urls.contains("http://ant.apache.org/"));
         assertTrue(urls.contains("http://ant-contrib.sourceforge.net/"));
         assertTrue(urls.contains("http://www.freshports.org/devel/apache-ant/"));
+        
+        assertEquals(100, results.size());
 	}
 }
