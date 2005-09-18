@@ -23,6 +23,7 @@ public class GoogleApiInputComponent extends LocalInputComponentBase
 	implements RawDocumentsProducer {
 	
 	private final static int MAXIMUM_RESULTS = 200;
+	private final static int EXPECTED_RESULTS_PER_KEY = 10;
 
 	private static Logger log = Logger.getLogger(GoogleApiInputComponent.class);
 
@@ -86,36 +87,112 @@ public class GoogleApiInputComponent extends LocalInputComponentBase
 
 		    log.info("First query using GoogleAPI (" + at + "):" + query);
 		    SearchResult result = doSearch(query, at);
+		    pushResults(at, result.results);
 
 		    // Ok, now we know how large the result set is and how many remaining
 		    // chunks we need to download.
-	        while (true) {
-		        pushResults(at, result.results);
+		    remaining -= result.results.length;
+		    if (remaining <= 0) {
+		    	// Ok, nothing more to do.
+		    	return;
+		    }
+		    
+		    final int buckets = remaining / EXPECTED_RESULTS_PER_KEY 
+		    	+ (remaining % EXPECTED_RESULTS_PER_KEY == 0 ? 0 : 1);
+		    final SearchResult [] results = new SearchResult[buckets];
 
-	        	remaining -= result.results.length;
-	        	at += result.results.length;
+		    class Counter {
+		    	int releaseCount;
 
-	        	// If last received results < max available results, interrupt.
-	        	if (result.results.length < result.keyExpectedSize) {
-	        		log.warn("Google API key returned less results then expected (expected: "
-	        				+ result.keyExpectedSize + ", got: " + result.results.length + ")");
-	        		break;
-	        	}
-	        	if (remaining <= 0) {
-	        		break;
-	        	}
+		    	public Counter(int releaseCount) {
+		    		this.releaseCount = releaseCount;
+		    	}
+		    	
+		    	public void done() {
+		    		synchronized (this) {
+		    			if (releaseCount > 0) {
+			    			releaseCount--;
+		    			}
+		    			if (releaseCount == 0) {
+		    				this.notifyAll();
+		    			}
+		    		}
+		    	}
 
-			    log.info("Consecutive query using GoogleAPI (" + at + "):" + query);
-	        	result = doSearch(query, at);
-	        }
-	    } catch (Exception e) {
+		    	public void blockUntilZero() throws InterruptedException {
+		    		synchronized (this) {
+		    			if (releaseCount > 0) {
+	    					this.wait();
+	    					// Assert counter is null.
+	    					if (releaseCount != 0) {
+	    						throw new RuntimeException("Counter is not zero.");
+	    					}
+		    			}
+		    		}
+		    	}
+		    }
+		    
+        	class Loader extends Thread {
+        		final int index;
+        		final int at;
+        		final Counter counter;
+
+        		public Loader(final int index, final int at, final Counter wakeup) {
+        			this.index = index;
+        			this.at = at;
+        			this.counter = wakeup;
+        		}
+
+        		public void run() {
+        			try {
+	        			SearchResult result;
+	        			try {
+	        				log.info("Consecutive GoogleAPI query start (" + at + "):" + query);
+	        				result = doSearch(query, at);
+	        			} catch (Throwable t) {
+	        				result = new SearchResult(t);
+	        			}
+	        			results[index] = result;
+        			} finally {
+        				log.info("Consecutive GoogleAPI query finished (" + at + "):" + query);
+        				counter.done();
+        			}
+        		}
+        	};
+
+		    Counter c = new Counter(buckets);
+        	for (int i = 0; i < buckets; i++) {
+	        	remaining -= EXPECTED_RESULTS_PER_KEY;
+	        	at += EXPECTED_RESULTS_PER_KEY;
+
+	        	new Loader(i, at, c).start();
+        	}
+        	if (remaining > 0) {
+        		throw new RuntimeException("Assertion failed: remaining should be > 0: " + remaining);
+        	}
+        	c.blockUntilZero();
+
+        	// Check if there were any processing exceptions.
+        	for (int i = 0; i < buckets; i++) {
+        		final SearchResult sr = results[i];
+        		if (sr == null) {
+        			throw new ProcessingException("One of GoogleAPI threads did not leave any result.");
+        		}
+        		if (sr.error != null) {
+        			// Rethrow exception from background thread.
+        			throw sr.error;
+        		}
+        		// Otherwise push the result
+        		pushResults(sr.at, sr.results);
+        	}
+	    } catch (Throwable e) {
 	    	if (e instanceof ProcessingException) {
 	    		throw (ProcessingException) e;
 	    	}
 	        throw new ProcessingException("Could not process query.", e);
 	    }
     }
-    
+
     private SearchResult doSearch(final String query, final int at) throws Exception {
     	while (true) {
 		    GoogleApiKey key = keyPool.borrowKey();
@@ -123,11 +200,10 @@ public class GoogleApiInputComponent extends LocalInputComponentBase
 		    try {
 		        GoogleSearch s = new GoogleSearch();
 		        s.setKey(key.getKey());
-		        final int expectedResultSize = key.getMaxResults();
 	
 		        s.setQueryString(query);
 		        s.setStartResult(at);
-		        s.setMaxResults(expectedResultSize);
+		        s.setMaxResults(EXPECTED_RESULTS_PER_KEY);
 		        s.setFilter(true); /* Similar results filtering */
 		        s.setSafeSearch(false);
 	
@@ -138,8 +214,8 @@ public class GoogleApiInputComponent extends LocalInputComponentBase
 	
 		        final int totalEstimated = r.getEstimatedTotalResultsCount();
 		        results = r.getResultElements();
-		        
-		        return new SearchResult(results, totalEstimated, expectedResultSize);
+
+		        return new SearchResult(results, at, totalEstimated);
 		    } catch (Throwable t) {
 		    	// Something wrong with the key probably.
 		    	key.setInvalid(true);
@@ -152,7 +228,7 @@ public class GoogleApiInputComponent extends LocalInputComponentBase
 		    }
     	}
 	}
-
+    
 	private final void pushResults(final int at, final GoogleSearchResultElement [] results) throws ProcessingException {
     	for (int i = 0; i < results.length; i++) {
     		final Integer id = new Integer(at + i);

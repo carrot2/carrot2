@@ -1,5 +1,6 @@
 package com.dawidweiss.carrot.input.googleapi;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
@@ -52,7 +53,7 @@ public class GoogleApiInputComponentTest extends junit.framework.TestCase {
 	
 	public void testApacheAntQuery() throws Exception {
     	final GoogleKeysPool pool = new GoogleKeysPool();
-    	pool.addKey("3DGj62Z6EyXyo0U3k0kbwSKu4aG/xAqo", 10);
+    	pool.addKeys(new File("keypool"), ".key");
 
         LocalComponentFactory inputFactory = new LocalComponentFactoryBase() {
             public LocalComponent getInstance() {
@@ -62,7 +63,10 @@ public class GoogleApiInputComponentTest extends junit.framework.TestCase {
 
         LocalControllerBase controller = setUpController(inputFactory);
         String query = "apache ant";
+        final long start = System.currentTimeMillis();
         List results = (List) controller.query("testprocess", query, new HashMap()).getQueryResult();
+        final long end = System.currentTimeMillis();
+        log.info("GoogleAPI query time: " + (end - start) + " ms.");
 
         // the results should contain some documents.
         assertTrue("Results acquired from Google"

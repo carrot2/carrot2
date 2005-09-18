@@ -8,7 +8,6 @@ package com.dawidweiss.carrot.input.googleapi;
  */
 class GoogleApiKey {
 	private final String key;
-	private final int maxResults;
 
 	private boolean invalid;
 
@@ -16,9 +15,8 @@ class GoogleApiKey {
 	 * Creates a google API key and maximum results this
 	 * key may serve.
 	 */
-	public GoogleApiKey(String key, int maxResults) {
+	public GoogleApiKey(String key) {
 		this.key = key;
-		this.maxResults = maxResults;
 		this.invalid = false;
 	}
 
@@ -27,10 +25,6 @@ class GoogleApiKey {
 			throw new IllegalStateException("This key is currently disabled.");
 		}
 		return key;
-	}
-
-	public final int getMaxResults() {
-		return maxResults;
 	}
 
 	public void setInvalid(boolean flag) {
