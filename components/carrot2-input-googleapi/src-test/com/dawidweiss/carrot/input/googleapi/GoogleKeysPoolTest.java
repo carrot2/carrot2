@@ -13,10 +13,10 @@ public class GoogleKeysPoolTest extends TestCase {
 	}
 
 	public void testWaitingKeyComparator() {
-		GoogleKeysPool.WaitingKey wk1 = new GoogleKeysPool.WaitingKey(30, new GoogleApiKey("abc", 10));
-		GoogleKeysPool.WaitingKey wk2 = new GoogleKeysPool.WaitingKey(20, new GoogleApiKey("abc", 10));
-		GoogleKeysPool.WaitingKey wk3 = new GoogleKeysPool.WaitingKey(20, new GoogleApiKey("def", 10));
-		GoogleKeysPool.WaitingKey wk4 = new GoogleKeysPool.WaitingKey(10, new GoogleApiKey("def", 10));
+		GoogleKeysPool.WaitingKey wk1 = new GoogleKeysPool.WaitingKey(30, new GoogleApiKey("abc"));
+		GoogleKeysPool.WaitingKey wk2 = new GoogleKeysPool.WaitingKey(20, new GoogleApiKey("abc"));
+		GoogleKeysPool.WaitingKey wk3 = new GoogleKeysPool.WaitingKey(20, new GoogleApiKey("def"));
+		GoogleKeysPool.WaitingKey wk4 = new GoogleKeysPool.WaitingKey(10, new GoogleApiKey("def"));
 		TreeSet ts = new TreeSet();
 		ts.add(wk1);
 		ts.add(wk2);
@@ -28,10 +28,10 @@ public class GoogleKeysPoolTest extends TestCase {
 		i.next();
 		assertEquals(wk1, i.next());
 	}
-	
+
 	public void testBorrowKey() throws Exception {
 		GoogleKeysPool gkp = new GoogleKeysPool();
-		gkp.addKey("abc", 10);
+		gkp.addKey("abc");
 
 		GoogleApiKey key = gkp.borrowKey();
 		assertNotNull(key);
@@ -42,8 +42,8 @@ public class GoogleKeysPoolTest extends TestCase {
 	
 	public void testBorrowKey2() throws Exception {
 		GoogleKeysPool gkp = new GoogleKeysPool();
-		gkp.addKey("abc", 10);
-		gkp.addKey("def", 10);
+		gkp.addKey("abc");
+		gkp.addKey("def");
 
 		GoogleApiKey key1 = gkp.borrowKey();
 		assertNotNull(key1);
@@ -55,7 +55,7 @@ public class GoogleKeysPoolTest extends TestCase {
 
 	public void testReturnKeyLock() throws Exception {
 		final GoogleKeysPool gkp = new GoogleKeysPool();
-		gkp.addKey("abc", 10);
+		gkp.addKey("abc");
 
 		final GoogleApiKey key1 = gkp.borrowKey();
 		assertNotNull(key1);
@@ -82,8 +82,8 @@ public class GoogleKeysPoolTest extends TestCase {
 
 	public void testHasActiveKeys() throws Exception {
 		GoogleKeysPool gkp = new GoogleKeysPool();
-		gkp.addKey("abc", 10);
-		gkp.addKey("def", 10);
+		gkp.addKey("abc");
+		gkp.addKey("def");
 
 		assertTrue(gkp.hasActiveKeys());
 

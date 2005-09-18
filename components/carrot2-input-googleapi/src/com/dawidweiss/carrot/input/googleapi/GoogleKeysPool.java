@@ -1,5 +1,11 @@
 package com.dawidweiss.carrot.input.googleapi;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -109,10 +115,47 @@ public class GoogleKeysPool {
 		}
 	}
 
-	public void addKey(final String key, int maxResults) {
-		final GoogleApiKey newKey = new GoogleApiKey(key, maxResults);
+	/**
+	 * Adds a single key to the pool.
+	 *
+	 * @param key The key.
+	 */
+	public void addKey(final String key) {
+		final GoogleApiKey newKey = new GoogleApiKey(key);
 		synchronized (this) {
 			availableKeys.add(newKey);
+		}
+	}
+
+	/**
+	 * Adds all keys from files in the given folder. A key file
+	 * is a plain text file. The key must be the only entry on the
+	 * first line.
+	 *
+	 * @param dir The directory to scan.
+	 * @param extension File extension. Only files ending with this
+	 * 			extension will be considered keys.
+	 */
+	public void addKeys(File dir, final String extension) throws IOException {
+		File [] keys = dir.listFiles(new FilenameFilter() {
+			public boolean accept(File dir, String fileName) {
+				return fileName.endsWith(extension);
+			}
+		});
+		for (int i = 0; i < keys.length; i++) {
+			BufferedReader reader = new BufferedReader(
+					new InputStreamReader(
+							new FileInputStream(keys[i]), "UTF-8"));
+			try {
+				String line = reader.readLine();
+				if (line == null || "".equals(line.trim())) {
+					throw new IOException("Key file is incorrect: first line is empty: "
+							+ keys[i].getAbsolutePath());
+				}
+				addKey(line.trim());
+			} finally {
+				reader.close();
+			}
 		}
 	}
 }
