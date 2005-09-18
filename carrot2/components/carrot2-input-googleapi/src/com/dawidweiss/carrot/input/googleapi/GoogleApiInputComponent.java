@@ -16,6 +16,7 @@ import com.dawidweiss.carrot.core.local.clustering.RawDocumentBase;
 import com.dawidweiss.carrot.core.local.clustering.RawDocumentsConsumer;
 import com.dawidweiss.carrot.core.local.clustering.RawDocumentsProducer;
 import com.google.soap.search.GoogleSearch;
+import com.google.soap.search.GoogleSearchFault;
 import com.google.soap.search.GoogleSearchResult;
 import com.google.soap.search.GoogleSearchResultElement;
 
@@ -87,7 +88,14 @@ public class GoogleApiInputComponent extends LocalInputComponentBase
 
 		    log.info("First query using GoogleAPI (" + at + "):" + query);
 		    SearchResult result = doSearch(query, at);
+
+		    if (result == null || result.totalEstimated == 0) {
+		    	// Nothing more.
+		    	return;
+		    }
 		    pushResults(at, result.results);
+
+		    remaining = Math.min(result.totalEstimated, remaining);
 
 		    // Ok, now we know how large the result set is and how many remaining
 		    // chunks we need to download.
@@ -131,7 +139,7 @@ public class GoogleApiInputComponent extends LocalInputComponentBase
 		    		}
 		    	}
 		    }
-		    
+
         	class Loader extends Thread {
         		final int index;
         		final int at;
@@ -144,17 +152,21 @@ public class GoogleApiInputComponent extends LocalInputComponentBase
         		}
 
         		public void run() {
+        			int acquired = -1;
         			try {
 	        			SearchResult result;
 	        			try {
 	        				log.info("Consecutive GoogleAPI query start (" + at + "):" + query);
 	        				result = doSearch(query, at);
+	        				acquired = result.results.length;
 	        			} catch (Throwable t) {
 	        				result = new SearchResult(t);
 	        			}
 	        			results[index] = result;
         			} finally {
-        				log.info("Consecutive GoogleAPI query finished (" + at + "):" + query);
+        				log.info("Consecutive GoogleAPI query finished (" + at + ":"
+        						+ acquired
+        						+ "):" + query);
         				counter.done();
         			}
         		}
@@ -200,32 +212,52 @@ public class GoogleApiInputComponent extends LocalInputComponentBase
 		    try {
 		        GoogleSearch s = new GoogleSearch();
 		        s.setKey(key.getKey());
-	
+
 		        s.setQueryString(query);
 		        s.setStartResult(at);
 		        s.setMaxResults(EXPECTED_RESULTS_PER_KEY);
-		        s.setFilter(true); /* Similar results filtering */
+		        s.setFilter(false); /* Similar results filtering */
 		        s.setSafeSearch(false);
-	
+
 		        // s.setLanguageRestricts(); /* Language restricts -- lang_pl */
 		        // s.setRestrict(); /* Location restricts -- countryPL */
 	
 		        GoogleSearchResult r = s.doSearch();
+
+		        if (r.getStartIndex() != at + 1) {
+		        	return null;
+		        }
 	
 		        final int totalEstimated = r.getEstimatedTotalResultsCount();
 		        results = r.getResultElements();
 
 		        return new SearchResult(results, at, totalEstimated);
 		    } catch (Throwable t) {
-		    	// Something wrong with the key probably.
-		    	key.setInvalid(true);
-		    	if (keyPool.hasActiveKeys() == false) {
-		    		// No more active keys in the pool. Just bail out with an exception.
-		    		throw new ProcessingException("No more Google API keys available (please donate!)");
+		    	if (t instanceof GoogleSearchFault) {
+		    		final String msg = ((GoogleSearchFault) t).getMessage();
+		    		if (msg.indexOf("exceeded") >= 0) {
+		    			// Limit exceeded.
+		    			key.setInvalid(true);
+		    			log.info("Key limit exceeded: " + key.getName());
+		    		} else if (msg.indexOf("Unsupported response content type") >= 0) {
+		    			// This indicates temporary Google failure.
+		    			log.info("Temporary GoogleAPI failure on key: " + key.getName());
+		    			continue;
+		    		} else {
+		    			log.warn("Unhandled GoogleAPI exception on key: " + key.getName(), t);
+		    			key.setInvalid(true);
+		    		}
+		    	} else {
+		    		log.warn("Unhandled doSearch exception on key: " + key.getName(), t);
 		    	}
 		    } finally {
 		    	keyPool.returnKey(key);
 		    }
+
+	    	if (keyPool.hasActiveKeys() == false) {
+	    		// No more active keys in the pool. Just bail out with an exception.
+	    		throw new ProcessingException("No more Google API keys available (please donate!)");
+	    	}
     	}
 	}
     

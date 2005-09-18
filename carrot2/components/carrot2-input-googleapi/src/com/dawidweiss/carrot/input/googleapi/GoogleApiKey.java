@@ -8,6 +8,7 @@ package com.dawidweiss.carrot.input.googleapi;
  */
 class GoogleApiKey {
 	private final String key;
+	private final String name;
 
 	private boolean invalid;
 
@@ -16,7 +17,12 @@ class GoogleApiKey {
 	 * key may serve.
 	 */
 	public GoogleApiKey(String key) {
+		this(key, "[gapi:" + key.substring(0, key.length()/2) + "..." + "]");
+	}
+
+	public GoogleApiKey(String key, String name) {
 		this.key = key;
+		this.name = name;
 		this.invalid = false;
 	}
 
@@ -25,6 +31,13 @@ class GoogleApiKey {
 			throw new IllegalStateException("This key is currently disabled.");
 		}
 		return key;
+	}
+	
+	/**
+	 * Returns the name of this key.
+	 */
+	public String getName() {
+		return name;
 	}
 
 	public void setInvalid(boolean flag) {
