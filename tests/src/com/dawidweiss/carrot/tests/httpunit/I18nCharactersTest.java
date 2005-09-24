@@ -50,8 +50,8 @@ public class I18nCharactersTest
             // BEFORE submitting them. This forms invalid URLs, but
             // it at least allows testing...
             String url = getControllerURL().toExternalForm() + "/index.jsp?query="
-                + org.put.util.net.URLEncoding.encode("s\u0142owi\u0144ski", "UTF-8")
-                + "&processingChain=carrot2.process.lingo-google-cs-only&resultsRequested=100";
+                + org.put.util.net.URLEncoding.encode("Roman S\u0142owi\u0144ski", "UTF-8")
+                + "&processingChain=carrot2.process.lingo-googleapi-en&resultsRequested=100";
 
             log.debug("Query: " + url);
 
