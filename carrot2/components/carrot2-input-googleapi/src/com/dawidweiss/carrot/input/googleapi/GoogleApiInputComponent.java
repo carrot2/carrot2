@@ -15,6 +15,7 @@ import com.dawidweiss.carrot.core.local.clustering.RawDocument;
 import com.dawidweiss.carrot.core.local.clustering.RawDocumentBase;
 import com.dawidweiss.carrot.core.local.clustering.RawDocumentsConsumer;
 import com.dawidweiss.carrot.core.local.clustering.RawDocumentsProducer;
+import com.dawidweiss.carrot.util.common.StringUtils;
 import com.google.soap.search.GoogleSearch;
 import com.google.soap.search.GoogleSearchFault;
 import com.google.soap.search.GoogleSearchResult;
@@ -266,7 +267,10 @@ public class GoogleApiInputComponent extends LocalInputComponentBase
     		final Integer id = new Integer(at + i);
     		final GoogleSearchResultElement result = results[i];
 
-            final RawDocument rdoc = new RawDocumentBase(result.getURL(), result.getTitle(), result.getSnippet()) {
+            final RawDocument rdoc = new RawDocumentBase(
+                    result.getURL(), 
+                    StringUtils.removeMarkup(result.getTitle()), 
+                    StringUtils.removeMarkup(result.getSnippet())) {
                 public Object getId() {
                     return id;
                 }

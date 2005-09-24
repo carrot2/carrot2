@@ -15,6 +15,7 @@ import com.dawidweiss.carrot.core.local.LocalComponent;
 import com.dawidweiss.carrot.core.local.LocalComponentFactory;
 import com.dawidweiss.carrot.core.local.LocalComponentFactoryBase;
 import com.dawidweiss.carrot.core.local.LocalControllerBase;
+import com.dawidweiss.carrot.core.local.LocalInputComponent;
 import com.dawidweiss.carrot.core.local.LocalProcessBase;
 import com.dawidweiss.carrot.core.local.clustering.RawDocument;
 import com.dawidweiss.carrot.core.local.impl.DocumentsConsumerOutputComponent;
@@ -29,7 +30,7 @@ public class GoogleApiInputComponentTest extends junit.framework.TestCase {
     public GoogleApiInputComponentTest(String s) {
         super(s);
     }
-    
+
 	protected LocalControllerBase setUpController(LocalComponentFactory inputFactory) throws Exception {
 		LocalControllerBase controller;
 		
@@ -108,6 +109,36 @@ public class GoogleApiInputComponentTest extends junit.framework.TestCase {
                 + ":" + results.size(), results.size() == 0);
 	}
 
+    public void testResultsRequested() throws Exception {
+        final GoogleKeysPool pool = new GoogleKeysPool();
+        pool.addKeys(new File("keypool"), ".key");
+
+        if (pool.getKeysTotal() == 0) {
+            log.error("No available google api keys.");
+            return;
+        }
+
+        LocalComponentFactory inputFactory = new LocalComponentFactoryBase() {
+            public LocalComponent getInstance() {
+                return new GoogleApiInputComponent(pool);
+            }
+        };
+
+        LocalControllerBase controller = setUpController(inputFactory);
+        String query = "apache";
+        final long start = System.currentTimeMillis();
+        HashMap reqContext = new HashMap();
+        reqContext.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, new Integer(50));
+        List results = (List) controller.query("testprocess", query, reqContext).getQueryResult();
+        final long end = System.currentTimeMillis();
+        log.info("GoogleAPI query time: " + (end - start) + " ms.");
+
+        // the results should contain some documents.
+        log.debug("Results acquired from Google: " + results.size());
+        assertEquals("Results acquired from Google is 50?"
+                + ":" + results.size(), 50, results.size());
+    }    
+    
 	public void testApacheAntQuery() throws Exception {
     	final GoogleKeysPool pool = new GoogleKeysPool();
     	pool.addKeys(new File("keypool"), ".key");
