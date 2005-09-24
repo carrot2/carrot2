@@ -79,9 +79,9 @@ public class StringUtils {
      */
     public static String trim(String s, char c) {
         StringBuffer b = new StringBuffer(s);
-        if (b.charAt(0) == c)
+        if (b.length() > 0 && b.charAt(0) == c)
             b.deleteCharAt(0);
-        if (b.charAt(b.length()-1) == c)
+        if (b.length() > 0 && b.charAt(b.length()-1) == c)
             b.deleteCharAt(b.length() -1);
         return b.toString();
     }
