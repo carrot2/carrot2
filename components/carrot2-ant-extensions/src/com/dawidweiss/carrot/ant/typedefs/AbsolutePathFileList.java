@@ -27,7 +27,6 @@ import java.util.ArrayList;
 public class AbsolutePathFileList
     extends FileList
 {
-    private String error;
     private ArrayList files = new ArrayList();
 
     public AbsolutePathFileList()
@@ -71,7 +70,7 @@ public class AbsolutePathFileList
     /**
      * Forbid attribute.
      */
-    public void setDir(File arg0)
+    public void setDir(File dir)
         throws BuildException
     {
         throw new RuntimeException("This type does not accept dir attribute.");
@@ -81,13 +80,12 @@ public class AbsolutePathFileList
     /**
      * @see org.apache.tools.ant.types.FileList#getFiles(org.apache.tools.ant.Project)
      */
-    public String [] getFiles(Project arg0)
+    public String [] getFiles(Project project)
     {
         String [] filesAsStrings = new String[files.size()];
         files.toArray(filesAsStrings);
 
-        try
-        {
+        try {
             File absRoot = getDir(getProject()).getCanonicalFile();
             FileUtils futils = FileUtils.newFileUtils();
 
@@ -106,9 +104,8 @@ public class AbsolutePathFileList
 
                 filesAsStrings[i] = path.getPath();
             }
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
+            throw new RuntimeException("IOException while scanning the path.", e);
         }
 
         return filesAsStrings;

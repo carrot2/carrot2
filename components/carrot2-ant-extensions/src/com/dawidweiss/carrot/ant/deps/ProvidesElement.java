@@ -17,7 +17,6 @@ import org.xml.sax.SAXException;
  */
 public class ProvidesElement {
 
-    private File base;
     private FilesElement files;
     private ArrayList builds = new ArrayList();
     private ArrayList conditions = new ArrayList(); 
@@ -25,7 +24,6 @@ public class ProvidesElement {
     private ComponentDependency component;
 
 	public ProvidesElement(Project project, File base, Element configElement, ComponentDependency component) throws Exception {
-        this.base = base;
         this.component = component;
 
         this.profile = configElement.getAttribute("profile");
@@ -41,7 +39,7 @@ public class ProvidesElement {
                     if ("files".equals(n.getNodeName())) {
                         this.files = new FilesElement(base, (Element) n);
                     } else if ("build".equals(n.getNodeName())) {
-                        builds.add(new BuildElement(project, base, (Element) n));
+                        builds.add(new BuildElement(base, (Element) n));
                     } else if ("check-newer".equals(n.getNodeName())) {
                         conditions.add(new CheckNewerElement(project, base, (Element) n));
                     } else {
@@ -127,7 +125,7 @@ public class ProvidesElement {
 		return profile;
 	}
 
-    public List getProvidedFileReferences(String currentProfile, boolean buildPath) {
+    public List getProvidedFileReferences(boolean buildPath) {
         if (this.files != null) {
             return files.getAllFileReferences(buildPath);
         } else {
@@ -135,9 +133,9 @@ public class ProvidesElement {
         }
     }
 
-	public List getProvidedFiles(String currentProfile, boolean buildPath) {
+	public List getProvidedFiles(boolean buildPath) {
         if (this.files != null) {
-            List l = getProvidedFileReferences(currentProfile, buildPath);
+            List l = getProvidedFileReferences(buildPath);
             List nl = new ArrayList( l.size() );
             for (Iterator i = l.iterator(); i.hasNext();) {
                 nl.add( ((FileReference) i.next()).getAbsoluteFile());

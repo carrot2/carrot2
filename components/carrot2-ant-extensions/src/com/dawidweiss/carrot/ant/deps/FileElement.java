@@ -22,9 +22,6 @@ public class FileElement {
         this.file = new File(this.base, location);
     }
 
-	/**
-	 * @return
-	 */
 	public FileReference getFileReference() {
         return new FileReference(base, file);
 	}

@@ -30,8 +30,6 @@ import org.xml.sax.SAXException;
  */
 public class ComponentDependency {
 
-    private Project project;
-
 	/**
      * A more verbose description of the component,
      * used when printing summaries.
@@ -133,7 +131,6 @@ public class ComponentDependency {
                             + n.getNodeName());
                 }
             }
-            this.project = project;
         } catch (Exception e) {
             throw new Exception("Problems parsing component descriptor: " + file, e);
         }
@@ -327,9 +324,6 @@ public class ComponentDependency {
         return files;
 	}
 
-	/**
-	 * @param profile
-	 */
 	private List getProvidedFiles(String currentProfile, boolean buildPath) {
         ArrayList result = new ArrayList();
         for (Iterator i = provides.iterator(); i.hasNext();)
@@ -339,7 +333,7 @@ public class ComponentDependency {
             if (provides.getProfile() != null && (currentProfile == null || !currentProfile.equals(provides.getProfile()))) {
                 continue;
             } 
-            result.addAll(provides.getProvidedFiles(currentProfile, buildPath));
+            result.addAll(provides.getProvidedFiles(buildPath));
         }
         return result;
 	}
@@ -353,23 +347,15 @@ public class ComponentDependency {
             if (provides.getProfile() != null && (currentProfile == null || !currentProfile.equals(provides.getProfile()))) {
                 continue;
             } 
-            result.addAll(provides.getProvidedFileReferences(currentProfile, buildPath));
+            result.addAll(provides.getProvidedFileReferences(buildPath));
         }
         return result;
     }
 
-	/**
-	 * @return
-	 */
 	public String getDescription() {
 		return this.description == null ? this.name : this.description;
 	}
 
-    /**
-	 * @param components
-	 * @param profile
-	 * @return
-	 */
 	public FileReference[] getAllProvidedFileReferences(HashMap components, String currentProfile, boolean buildPath, boolean nocopy) {
         ComponentInProfile [] resolvedComponents =  
             getAllRequiredComponentDependencies(components, currentProfile, nocopy);

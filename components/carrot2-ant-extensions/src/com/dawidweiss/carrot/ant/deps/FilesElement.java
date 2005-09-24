@@ -15,12 +15,10 @@ import org.xml.sax.SAXException;
 public class FilesElement {
 
 	private boolean buildPathExclude;
-	private File base;
     private List files = new LinkedList();
 
 	public FilesElement(File base, Element configElement)
         throws Exception {
-        this.base = base;
 
         String prefix = configElement.getAttribute("prefix");
         if (prefix == null) {

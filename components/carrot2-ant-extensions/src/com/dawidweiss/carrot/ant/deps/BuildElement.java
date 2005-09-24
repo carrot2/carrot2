@@ -12,15 +12,11 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-/**
- */
 public class BuildElement {
-	private File base;
     private List execs = new ArrayList();
 
-	public BuildElement(Project project, File base, Element configElement) 
+	public BuildElement(File base, Element configElement) 
         throws Exception {
-        this.base = base;
         
         // configure
         NodeList list = configElement.getChildNodes();
@@ -29,7 +25,7 @@ public class BuildElement {
             switch (n.getNodeType()) {
                 case Node.ELEMENT_NODE:
                     if ("ant".equals(n.getNodeName())) {
-                        execs.add( new AntBuildElement(project, base, (Element) n) );
+                        execs.add(new AntBuildElement(base, (Element) n));
                     }
                     else
                         throw new SAXException("Unexpected node: "
@@ -51,9 +47,6 @@ public class BuildElement {
     
 	/**
      * Perform the build.
-     * 
-	 * @param force Force build, even if other conditions would indicate
-     *              it is not necessary.
 	 */
 	public void build(Project project, String profile) throws BuildException {
         for (Iterator i = execs.iterator();i.hasNext();) {

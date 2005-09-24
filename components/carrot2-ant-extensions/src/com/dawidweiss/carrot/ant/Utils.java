@@ -25,7 +25,7 @@ public class Utils {
         LinkedList output = new LinkedList();
         FileUtils futils = FileUtils.newFileUtils();
         for (Iterator i = deps.iterator(); i.hasNext(); ) {
-            Object x = (Object) i.next();
+            Object x = i.next();
             if (x instanceof FileSet) {
                 output.add(x);
             } else if (x instanceof Path) {

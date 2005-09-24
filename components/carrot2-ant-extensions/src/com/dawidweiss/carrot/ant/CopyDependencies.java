@@ -29,11 +29,6 @@ public class CopyDependencies extends Task {
      */
     private File toDir;
 
-    /**
-     * Whether to overwrite existing files.
-     */
-    private boolean overwrite;
-
 	/**
      * The component info file of the component
      * for which dependencies are to be retrieved.
@@ -50,12 +45,6 @@ public class CopyDependencies extends Task {
 
     /** Profile for dependency traversal. */
     private String profile;
-
-    /**
-     * Public empty constructor
-     */
-    public CopyDependencies() {
-    }
 
     /**
      * Set the profile for dependency traversal.

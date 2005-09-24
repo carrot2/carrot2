@@ -28,10 +28,6 @@ public class DependencyElement {
      */
     private String inprofile;
 
-	/**
-	 * @param file
-	 * @param element
-	 */
 	public DependencyElement(File file, Element configElement) 
         throws Exception {
         this.base = file;
