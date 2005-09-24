@@ -172,4 +172,10 @@ public class GoogleKeysPool {
 			}
 		}
 	}
+    
+    public int getKeysTotal() {
+        synchronized (this) {
+            return inactiveKeys.size() + availableKeys.size();
+        }
+    }
 }

@@ -54,15 +54,14 @@ public class GoogleApiInputComponentTest extends junit.framework.TestCase {
         return controller;
 	}
 
-	public void testXXQuery() throws Exception {
-		for (int i = 0; i < 100; i++) {
-			testApacheAntQuery();
-		}
-	}
-	
 	public void testMediumQuery() throws Exception {
     	final GoogleKeysPool pool = new GoogleKeysPool();
     	pool.addKeys(new File("keypool"), ".key");
+        
+        if (pool.getKeysTotal() == 0) {
+            log.error("No available google api keys.");
+            return;
+        }
 
         LocalComponentFactory inputFactory = new LocalComponentFactoryBase() {
             public LocalComponent getInstance() {
@@ -86,6 +85,11 @@ public class GoogleApiInputComponentTest extends junit.framework.TestCase {
     	final GoogleKeysPool pool = new GoogleKeysPool();
     	pool.addKeys(new File("keypool"), ".key");
 
+        if (pool.getKeysTotal() == 0) {
+            log.error("No available google api keys.");
+            return;
+        }
+        
         LocalComponentFactory inputFactory = new LocalComponentFactoryBase() {
             public LocalComponent getInstance() {
                 return new GoogleApiInputComponent(pool);
@@ -107,6 +111,11 @@ public class GoogleApiInputComponentTest extends junit.framework.TestCase {
 	public void testApacheAntQuery() throws Exception {
     	final GoogleKeysPool pool = new GoogleKeysPool();
     	pool.addKeys(new File("keypool"), ".key");
+
+        if (pool.getKeysTotal() == 0) {
+            log.error("No available google api keys.");
+            return;
+        }
 
         LocalComponentFactory inputFactory = new LocalComponentFactoryBase() {
             public LocalComponent getInstance() {
