@@ -22,6 +22,7 @@
     <dependency name="carrot2-input-snippet-reader" in-profile="remote" />
     <dependency name="carrot2-input-verbatim" />
     <dependency name="carrot2-input-xml" in-profile="remote" />
+    <dependency name="carrot2-input-googleapi" in-profile="remote" />
 
     <!-- Only remote components -->
     <dependency name="carrot2-filter-stemmer" />
