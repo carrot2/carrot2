@@ -88,9 +88,9 @@ public abstract class LocalComponentBase implements LocalComponent
         if (value == null)
         {
             return defaultValue;
-        }
-        else
-        {
+        } else if (value instanceof Number) {
+            return ((Number) value).intValue();
+        } else {
             try
             {
                 return Integer.parseInt((String) value);
