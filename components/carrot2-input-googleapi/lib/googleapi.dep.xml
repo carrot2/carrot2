@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<!DOCTYPE component PUBLIC "-//Carrot2//DTD Component Dependency Descriptor V1.0//EN" "http://www.cs.put.poznan.pl/dweiss/carrot/component-dependency.dtd" >
+<component name="googleapi" description="Google API, http://www.google.com/apis/">
+	<provides>
+		<files>
+			<file location="googleapi.jar" />
+            <file location="googleapi.LICENSE" />
+            <file location="googleapi-activation.LICENSE" />
+            <file location="googleapi-apache-soap.LICENSE" />
+            <file location="googleapi-crimson.LICENSE" />
+            <file location="googleapi-javamail.LICENSE" />
+		</files>
+	</provides>
+</component>
