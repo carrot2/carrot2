@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <project name="Carrot2 main build file" default="help">
-
   <property file="${user.home}/.carrot.properties" />
   <property file="local-build.properties" />
-  
+
   <property name="release.number"   value="1.0-RC1" />
 
   <property name="build.compiler"   value="modern" />
@@ -210,6 +209,7 @@ TESTING: @{component.path}
     <component-apply component.path="components/carrot2-util-matrix" />
     <component-apply component.path="components/carrot2-util-lang-guesser" />
     <component-apply component.path="components/carrot2-input-xml" />
+    <component-apply component.path="components/carrot2-input-googleapi" />
     <component-apply component.path="components/carrot2-input-local-cache" />
 
     <component-apply component.path="components/carrot2-odp-core" />
@@ -351,7 +351,10 @@ FORMATTING: @{component.path}
     <!-- Invoke the remote controller's build file to update it. -->
     <ant antfile="build.xml"
     	 dir="components/carrot2-remote-controller"
-    	 inheritall="false" inheritrefs="false" />
+    	 inheritall="false" inheritrefs="false">
+    	 <property name="deployment.host" value="${deployment.host}"/>
+    	 <property name="deployment.port" value="${deployment.port}"/>
+    </ant>
 
     <bringToDate componentDescriptor="etc/all-remote.dep.xml"
                  dependenciesOnly="true" profile="">
