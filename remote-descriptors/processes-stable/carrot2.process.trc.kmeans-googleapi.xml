@@ -2,26 +2,26 @@
 
 <process
     xmlns="http://www.dawidweiss.com/projects/carrot/processDescriptor"
-    id="carrot2.process.trc.phrase-kmeans-google"
-    description="Google, Phrase-KMeans, Dynamic Tree"
+    id="carrot2.process.trc.kmeans-googleapi"
+    description="Google, KMeans, Dynamic Tree"
 >
     <processing-script language="beanshell"><![CDATA[
-
+    
     controller.setUseCachedInput(true);
     controller.setDoCacheInput(true);
 
     InputStream is;
 
-    is = controller.invokeInputComponent( "carrot2.input.snippet-reader.google", query );
-
+    is = controller.invokeInputComponent( "carrot2.input.googleapi", query );
+    
     Map options = new HashMap();
 
     options.put("clusters.initial", "30");
     options.put("similarity.threshold",  "0.25");
-    options.put("phrase.used",  "true");
+    options.put("phrase.used",  "false");
 
     is = controller.invokeFilterComponent( "carrot2.filter.trc.kmeans-cluster", is, options );
-
+    
     Map dtreeOptions = new HashMap();
     dtreeOptions.put("dtree.css", "compact");
     dtreeOptions.put("param.output.terminal.nodes", "true" );
@@ -31,8 +31,8 @@
     dtreeOptions.put("param.snippets.sorting.type", "ORDER_DOCUMENTS_ORDER");
 
     is = controller.invokeOutputComponent( "carrot2.output.xslt-renderer.dynamic-tree", is, dtreeOptions );
-    controller.sendResponse( is );
-
+    controller.sendResponse( is ); 
+    
     ]]>
     </processing-script>
 </process>

@@ -2,25 +2,27 @@
 
 <process
     xmlns="http://www.dawidweiss.com/projects/carrot/processDescriptor"
-    id="carrot2.process.lingo-google-en"
-    description="Google, LINGO, Dynamic Tree"
+    id="carrot2.process.trc.phrase-rough-kmeans-googleapi"
+    description="GoogleAPI, Phrase-Rough-KMeans, Dynamic Tree"
 >
     <processing-script language="beanshell"><![CDATA[
-    
+
     controller.setUseCachedInput(true);
     controller.setDoCacheInput(true);
 
     InputStream is;
 
-    is = controller.invokeInputComponent( "carrot2.input.snippet-reader.google", query );
-    
-    Map lingoOptions = new HashMap();
-    lingoOptions.put("language.english", "com.dawidweiss.carrot.util.tokenizer.languages.english.English");
-    lingoOptions.put("language.polish", "com.dawidweiss.carrot.util.tokenizer.languages.polish.Polish");
-    lingoOptions.put("lsi.threshold.clusterAssignment", "0.150");
-    lingoOptions.put("lsi.threshold.candidateCluster",  "0.775");
-    is = controller.invokeFilterComponent( "carrot2.filter.multilingual-lingo-clustering", is, lingoOptions );
-    
+    is = controller.invokeInputComponent( "carrot2.input.googlapi", query );
+
+    Map options = new HashMap();
+
+    options.put("clusters.initial", "40");
+    options.put("similarity.threshold",  "0.3");
+    options.put("cooccurrence.threshold",  "5");
+    options.put("phrase.used",  "true");
+
+    is = controller.invokeFilterComponent( "carrot2.filter.trc.rough-kmeans-cluster", is, options );
+
     Map dtreeOptions = new HashMap();
     dtreeOptions.put("dtree.css", "compact");
     dtreeOptions.put("param.output.terminal.nodes", "true" );
@@ -30,9 +32,8 @@
     dtreeOptions.put("param.snippets.sorting.type", "ORDER_DOCUMENTS_ORDER");
 
     is = controller.invokeOutputComponent( "carrot2.output.xslt-renderer.dynamic-tree", is, dtreeOptions );
-    
-    controller.sendResponse( is ); 
-    
+    controller.sendResponse( is );
+
     ]]>
     </processing-script>
 </process>

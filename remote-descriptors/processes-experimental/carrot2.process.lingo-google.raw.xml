@@ -2,8 +2,8 @@
 
 <process
     xmlns="http://www.dawidweiss.com/projects/carrot/processDescriptor"
-    id="carrot2.process.lingo-google-en.raw"
-    description="Google, LINGO, RAW output"
+    id="carrot2.process.lingo-googleapi-en.raw"
+    description="GoogleAPI, LINGO, RAW output"
     hidden="true"
 >
 	  <!-- This is a RAW and hidden process added to experiment with carrot2 sidebar. -->
@@ -16,7 +16,7 @@
 
     InputStream is;
 
-    is = controller.invokeInputComponent( "carrot2.input.snippet-reader.google", query );
+    is = controller.invokeInputComponent( "carrot2.input.googleapi", query );
     
     Map lingoOptions = new HashMap();
     lingoOptions.put("language.english", "com.dawidweiss.carrot.util.tokenizer.languages.english.English");

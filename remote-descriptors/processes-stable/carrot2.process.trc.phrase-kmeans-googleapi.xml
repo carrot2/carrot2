@@ -2,19 +2,25 @@
 
 <process
     xmlns="http://www.dawidweiss.com/projects/carrot/processDescriptor"
-    id="carrot2.process.stc-full.google-cs-only"
-    description="Google (*.cs.put.poznan.pl only), English stemming, STC, Dynamic Tree"
+    id="carrot2.process.trc.phrase-kmeans-googleapi"
+    description="GoogleAPI, Phrase-KMeans, Dynamic Tree"
 >
     <processing-script language="beanshell"><![CDATA[
-    
+
     controller.setUseCachedInput(true);
     controller.setDoCacheInput(true);
 
     InputStream is;
 
-    is = controller.invokeInputComponent( "carrot2.input.snippet-reader.google.cs-only", query );
-    is = controller.invokeFilterComponent( "carrot2.filter.stemming", is );
-    is = controller.invokeFilterComponent( "carrot2.filter.stc.full-stc", is );
+    is = controller.invokeInputComponent( "carrot2.input.googleapi", query );
+
+    Map options = new HashMap();
+
+    options.put("clusters.initial", "30");
+    options.put("similarity.threshold",  "0.25");
+    options.put("phrase.used",  "true");
+
+    is = controller.invokeFilterComponent( "carrot2.filter.trc.kmeans-cluster", is, options );
 
     Map dtreeOptions = new HashMap();
     dtreeOptions.put("dtree.css", "compact");
@@ -23,10 +29,10 @@
     dtreeOptions.put("param.max.subgroup.snippets.included", "3" );
     dtreeOptions.put("param.no.terminal.groups.expansion", "true" );
     dtreeOptions.put("param.snippets.sorting.type", "ORDER_DOCUMENTS_ORDER");
+
     is = controller.invokeOutputComponent( "carrot2.output.xslt-renderer.dynamic-tree", is, dtreeOptions );
-    
-    controller.sendResponse( is ); 
-    
+    controller.sendResponse( is );
+
     ]]>
     </processing-script>
 </process>
