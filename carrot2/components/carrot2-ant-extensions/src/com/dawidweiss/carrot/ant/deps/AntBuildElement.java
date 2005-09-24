@@ -10,15 +10,13 @@ import org.apache.tools.ant.util.FileUtils;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
-/**
- */
 public class AntBuildElement implements BuildTask {
 
     private String target;
 	private String file;
 	private File base;
 
-	public AntBuildElement(Project project, File base, Element configElement) throws SAXException {
+	public AntBuildElement(File base, Element configElement) throws SAXException {
         this.base = base;
 
         // configure

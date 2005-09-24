@@ -364,7 +364,6 @@ public abstract class BuildFileTest extends TestCase {
      * assuming a vm working directory. The resource path must be
      * relative to the package name or absolute from the root path.
      * @param resource the resource to retrieve its url.
-     * @throws AssertionFailureException if resource is not found.
      */
     protected URL getResource(String resource){
         URL url = getClass().getResource(resource);

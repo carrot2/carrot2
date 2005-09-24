@@ -44,9 +44,6 @@ public class BringToDate extends Task {
      */
     private LinkedList dependencies = new LinkedList();
 
-    /** Dumps a verbose info about dependencies. */
-    private boolean verbose;
-
     /** Profile for dependency traversal. */
     private String profile;
     
@@ -56,12 +53,6 @@ public class BringToDate extends Task {
      * dependencies during its own build phase.
      */
     private boolean dependenciesOnly;
-
-    /**
-     * Public empty constructor
-     */
-    public BringToDate() {
-    }
 
     public void setDependenciesOnly(boolean flag) {
         this.dependenciesOnly = flag;
@@ -92,13 +83,6 @@ public class BringToDate extends Task {
         Path newPath = new Path(getProject());
         dependencies.add(newPath);
         return newPath;
-    }
-
-    /**
-     * If true, verbose info is printed during dependency tracking.
-     */
-    public void setVerbose(boolean b) {
-        this.verbose = b;
     }
 
     /**

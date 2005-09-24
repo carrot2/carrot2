@@ -22,12 +22,10 @@ import com.dawidweiss.carrot.ant.MostRecentFileDate;
  */
 public class CheckNewerElement {
 
-    private File base;
     private ArrayList filesets = new ArrayList();
     private Project project;
 
 	public CheckNewerElement(Project project, File base, Element configElement) throws Exception {
-        this.base = base;
         this.project = project;
         
         FileUtils futils = FileUtils.newFileUtils();

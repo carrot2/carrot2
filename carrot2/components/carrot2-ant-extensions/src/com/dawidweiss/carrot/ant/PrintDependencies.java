@@ -56,12 +56,6 @@ public class PrintDependencies extends Task {
 
     /** Profile for dependency traversal. */
     private String profile;
-    
-    /**
-     * Public empty constructor
-     */
-    public PrintDependencies() {
-    }
 
     /**
      * Set the profile for dependency traversal.
