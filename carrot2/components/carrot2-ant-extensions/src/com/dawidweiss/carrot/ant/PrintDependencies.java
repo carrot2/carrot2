@@ -247,7 +247,7 @@ public class PrintDependencies extends Task {
     	                    dumpInternal(buf, indent+1, cip);
     	                }
                     }
-                };
+                }
 
                 Dumper dumper = new Dumper();
                 dumper.dump(buf, 1, self);

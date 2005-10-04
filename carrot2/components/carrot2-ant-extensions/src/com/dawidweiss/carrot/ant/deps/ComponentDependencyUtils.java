@@ -42,7 +42,7 @@ public final class ComponentDependencyUtils {
                         throw new BuildException("Component name duplicated: " +
                             dep.getFile() + " and " +
                             ((ComponentDependency) components.get(dep.getName())).getFile());
-                    };
+                    }
                     // just silently ignore -- it is the same file.
                 } else {
                     components.put(dep.getName(), dep);
