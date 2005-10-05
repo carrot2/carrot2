@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<request encoding="UTF-8">
+    <service url="http://api.search.yahoo.com/WebSearchService/V1/webSearch" 
+             method="post" />
+
+    <!-- 
+      Specify any other parameters which will be sent to the service
+      If "value" attribute is defined, the parameter will have the
+      value copied verbatim from this file. If "mapto" attribute
+      is defined, the value will be copied from the runtime environment
+      of the application (e.g. query.string will default to the current
+      query string).
+
+      Available maps:
+
+      query.string
+      query.startFrom
+    -->
+    <parameters>
+        <parameter name="query"   mapto="query.string" />
+        <parameter name="start"   mapto="query.startFrom" />
+        <parameter name="results" mapto="query.results" />
+
+        <parameter name="appid"   value="carrotsearch" />
+
+        <parameter name="language" value="pl" />
+
+        <!--
+        <parameter name="adult_ok" value="" />
+        <parameter name="similar_ok" value="" />
+
+        <parameter name="country"  value="en" />
+        <parameter name="site"     value="www.cs.put.poznan.pl" />
+        -->
+    </parameters>
+
+    <!-- override the http-headers you need here -->
+    <http-overrides>
+        <header name="User-Agent">Carrot2 Input Component</header>
+        <header name="Accept-Charset">UTF-8</header>
+    </http-overrides>
+</request>
