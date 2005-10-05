@@ -25,7 +25,7 @@
       ## element will cause a random (the first?) process
       ## to become the default.
       -->
-    <default-process id="carrot2.process.lingo-googleapi-en" />
+    <default-process id="carrot2.process.lingo-yahooapi" />
 
     <!-- 
       ## Specify other properties that the controller should know about.
