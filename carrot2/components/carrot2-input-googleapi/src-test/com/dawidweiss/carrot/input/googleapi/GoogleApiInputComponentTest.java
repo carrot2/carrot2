@@ -8,7 +8,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
 import com.dawidweiss.carrot.core.local.LocalComponent;
@@ -23,10 +22,6 @@ import com.dawidweiss.carrot.core.local.impl.DocumentsConsumerOutputComponent;
 public class GoogleApiInputComponentTest extends junit.framework.TestCase {
     private final static Logger log = Logger.getLogger(GoogleApiInputComponentTest.class);
 
-    static {
-        BasicConfigurator.configure();
-    }
-    
     public GoogleApiInputComponentTest(String s) {
         super(s);
     }
