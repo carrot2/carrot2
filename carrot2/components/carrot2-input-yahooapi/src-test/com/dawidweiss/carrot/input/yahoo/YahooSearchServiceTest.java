@@ -1,9 +1,5 @@
 package com.dawidweiss.carrot.input.yahoo;
 
-import com.dawidweiss.carrot.input.yahoo.YahooSearchResult;
-import com.dawidweiss.carrot.input.yahoo.YahooSearchService;
-import com.dawidweiss.carrot.input.yahoo.YahooSearchServiceDescriptor;
-
 import junit.framework.TestCase;
 
 /**

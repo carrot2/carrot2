@@ -17,9 +17,6 @@ import com.dawidweiss.carrot.core.local.LocalInputComponent;
 import com.dawidweiss.carrot.core.local.LocalProcessBase;
 import com.dawidweiss.carrot.core.local.clustering.RawDocument;
 import com.dawidweiss.carrot.core.local.impl.DocumentsConsumerOutputComponent;
-import com.dawidweiss.carrot.input.yahoo.YahooApiInputComponent;
-import com.dawidweiss.carrot.input.yahoo.YahooSearchService;
-import com.dawidweiss.carrot.input.yahoo.YahooSearchServiceDescriptor;
 
 public class YahooApiInputComponentTest extends junit.framework.TestCase {
     private final static Logger log = Logger.getLogger(YahooApiInputComponentTest.class);

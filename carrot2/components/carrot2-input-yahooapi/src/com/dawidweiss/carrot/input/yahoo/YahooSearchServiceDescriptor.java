@@ -68,10 +68,10 @@ public class YahooSearchServiceDescriptor {
     }
 
     /**
-     * Creates a {@link HTTPFormSubmitter} for submitting the form.
+     * Returns form action info associated with this service.
      */
-    public HTTPFormSubmitter getHttpSubmitter() {
-        return new HTTPFormSubmitter(formActionInfo);
+    public FormActionInfo getFormActionInfo() {
+        return formActionInfo;
     }
     
     /**
