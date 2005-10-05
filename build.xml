@@ -210,6 +210,7 @@ TESTING: @{component.path}
     <component-apply component.path="components/carrot2-util-lang-guesser" />
     <component-apply component.path="components/carrot2-input-xml" />
     <component-apply component.path="components/carrot2-input-googleapi" />
+    <component-apply component.path="components/carrot2-input-yahooapi" />
     <component-apply component.path="components/carrot2-input-local-cache" />
 
     <component-apply component.path="components/carrot2-odp-core" />

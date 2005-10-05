@@ -23,6 +23,7 @@
     <dependency name="carrot2-input-verbatim" />
     <dependency name="carrot2-input-xml" in-profile="remote" />
     <dependency name="carrot2-input-googleapi" in-profile="remote" />
+    <dependency name="carrot2-input-yahooapi" in-profile="remote" />
 
     <!-- Only remote components -->
     <dependency name="carrot2-filter-stemmer" />
