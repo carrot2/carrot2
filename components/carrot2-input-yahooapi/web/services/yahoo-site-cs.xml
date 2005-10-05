@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <request encoding="UTF-8">
-    <service url="http://api.search.yahoo.com/WebSearchService/V1/webSearch"
-    		 method="post" />
+    <service url="http://api.search.yahoo.com/WebSearchService/V1/webSearch" 
+             method="post" />
 
     <!-- 
       Specify any other parameters which will be sent to the service
@@ -20,17 +20,11 @@
     <parameters>
         <parameter name="query"   mapto="query.string" />
         <parameter name="start"   mapto="query.startFrom" />
+        <parameter name="results" mapto="query.results" />
 
         <parameter name="appid"   value="carrotsearch" />
-        <parameter name="results" value="100" />
-        <!--
-        <parameter name="adult_ok" value="" />
-        <parameter name="similar_ok" value="" />
-        
-        <parameter name="language" value="en" />
-        <parameter name="country"  value="en" />
-        <parameter name="site"     value="www.cs.put.poznan.pl" />
-        -->
+
+        <parameter name="site"    value="put.poznan.pl" />
     </parameters>
 
     <!-- override the http-headers you need here -->
