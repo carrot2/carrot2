@@ -37,7 +37,7 @@
 
     <!-- override the http-headers you need here -->
     <http-overrides>
-        <header name="User-Agent">Carrot2 Input Component</header>
+        <header name="User-Agent">Mozilla/5.0 (X11; U; Linux i686; en-US; rv:0.9.7) Gecko/20011221</header>
         <header name="Accept-Charset">UTF-8</header>
     </http-overrides>
 </request>

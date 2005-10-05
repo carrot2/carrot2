@@ -11,5 +11,7 @@
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/servlet.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-remote"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/jdom-b10.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/commons-codec-1.3.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/commons-httpclient-3.0-rc3.jar"/>
 	<classpathentry kind="output" path="tmp/eclipse/classes"/>
 </classpath>
