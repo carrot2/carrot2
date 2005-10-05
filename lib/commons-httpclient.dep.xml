@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<!DOCTYPE component SYSTEM "../etc/component-dependency.dtd" > 
+<component
+    name="commons-httpclient"
+    description="Jakarta Commons HTTP Client 3.0, http://jakarta.apache.org/commons/httpclient/">
+	<provides>
+		<files>
+			<file location="commons-httpclient-3.0-rc3.jar" />
+			<file location="commons-httpclient.LICENSE" />
+		</files>
+	</provides>
+	<dependency name="commons-logging" />
+	<dependency name="commons-codec" />
+</component>
