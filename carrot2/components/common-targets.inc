@@ -12,6 +12,10 @@
     <target name="clean">
         <ant target="clean" antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" />
     </target>
+
+    <target name="cleanall">
+        <ant target="cleanall" antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" />
+    </target>
     
     <target name="tests.run" if="tests.available">
     	<property name="profile" value="test" />
