@@ -116,7 +116,7 @@ BUILDING: @{component.path}
   </target>
   
   
-  
+
   <target name="clean">
   	<description>
 	Cleans intermediate files of all
@@ -133,6 +133,41 @@ CLEANING: @{component.path}
         <ant antfile="build.xml"
              dir="@{component.path}" inheritall="false"
              target="clean"
+        />
+      </sequential>
+    </macrodef>
+    <antcall target="apply-to-components" />
+    
+    <macrodef name="application-apply">
+        <attribute name="application.path" />
+        <sequential>
+            <component-apply component.path="@{application.path}" />
+        </sequential>
+    </macrodef>
+    <antcall target="apply-to-applications" />
+    
+    <delete dir="tmp" />
+    <delete dir="dist" />
+  </target>
+
+
+
+  <target name="cleanall">
+  	<description>
+	Cleans all intermediate files of all
+	components included in 'apply-to-components'
+	target.
+	</description>
+
+    <macrodef name="component-apply">
+      <attribute name="component.path"/>
+      <sequential>
+        <echo>
+CLEANING: @{component.path}
+        </echo>
+        <ant antfile="build.xml"
+             dir="@{component.path}" inheritall="false"
+             target="cleanall"
         />
       </sequential>
     </macrodef>
@@ -192,6 +227,7 @@ TESTING: @{component.path}
     <application-apply application.path="applications/carrot2-lucene-example" />
     <application-apply application.path="applications/carrot2-nutch-plugin" />
     <application-apply application.path="applications/carrot2-demo-browser" />
+    <application-apply application.path="applications/carrot2-odp-tools" />
   </target>
   
   
@@ -209,6 +245,7 @@ TESTING: @{component.path}
     <component-apply component.path="components/carrot2-util-matrix" />
     <component-apply component.path="components/carrot2-util-lang-guesser" />
     <component-apply component.path="components/carrot2-input-xml" />
+    <component-apply component.path="components/carrot2-input-lucene" />
     <component-apply component.path="components/carrot2-input-googleapi" />
     <component-apply component.path="components/carrot2-input-yahooapi" />
     <component-apply component.path="components/carrot2-input-local-cache" />

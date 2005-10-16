@@ -117,6 +117,18 @@
   </target>
   <!-- }}} -->
 
+
+  <!-- ##################################### -->
+  <!-- ### {{{ CLEANALL                  ### -->
+  <!-- ##################################### -->
+  <target name="cleanall" depends="check.properties"
+    description="Removes all local temporary files.">
+    <delete failonerror="true" includeemptydirs="true" quiet="true">
+        <fileset dir="${project.dir}/tmp" defaultexcludes="false" />
+    </delete>
+  </target>
+  <!-- }}} -->
+
   
   <!-- ##################################### -->
   <!-- ### {{{ PREPARE                   ### -->
@@ -127,10 +139,19 @@
   </target>
 
   <target name="bootstrap" depends="check.bootstrap" unless="tmp:bootstrap.available">
+    <echo>
+##########################################################
+#   
+# Running 'ant bootstrap' on the main build file first.
+#
+##########################################################
+    </echo>
+    <ant antfile="${carrot2.cvs.dir}/build.xml" dir="${carrot2.cvs.dir}"
+    	inheritall="false" target="bootstrap" />
     <fail>
 ##########################################################
 #   
-# Please run 'ant bootstrap' on the main build file first.
+# Bootstrap classes compiled. Rerun the build.
 #
 ##########################################################
     </fail>

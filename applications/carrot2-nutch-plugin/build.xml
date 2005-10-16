@@ -20,4 +20,5 @@
 		<delete dir="tmp" />
 	</target>
 
+	<target name="cleanall" depends="clean" />
 </project>
