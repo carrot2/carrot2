@@ -10,23 +10,26 @@
  */
 package com.dawidweiss.carrot.core.local;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import org.apache.commons.pool.*;
-import org.apache.commons.pool.impl.*;
+import org.apache.commons.pool.BasePoolableObjectFactory;
+import org.apache.commons.pool.ObjectPool;
+import org.apache.commons.pool.PoolableObjectFactory;
+import org.apache.commons.pool.impl.GenericObjectPool;
 
 /**
- * A complete (modulo TODOs below) base implementation of the
+ * A complete base implementation of the
  * {@link com.dawidweiss.carrot.core.local.LocalController}interface. Also
  * implements the {@link LocalControllerContext}interface.
- * 
- * <p>
- * 
- * TODO: implement {@link #explainIncompatibility(String, String)}properly
- * TODO: implement {@link #isComponentSequenceCompatible(String, String)}
- * properly
- * 
+ *
  * @author Stanislaw Osinski
+ * @author Dawid Weiss
+ * 
  * @version $Revision$
  */
 public class LocalControllerBase implements LocalController,
@@ -39,6 +42,40 @@ public class LocalControllerBase implements LocalController,
     protected Map processes;
 
     /**
+     * Default implementation of the {@link ProcessingResult} interface.
+     * 
+     * @author stachoo
+     */
+    protected static class Result implements ProcessingResult
+    {
+        /** Query result */
+        private Object result;
+
+        /** Request context for this query */
+        private RequestContext requestContext;
+
+        /**
+         * @param queryResult
+         * @param requestContext
+         */
+        public Result(Object queryResult, RequestContext requestContext)
+        {
+            this.result = queryResult;
+            this.requestContext = requestContext;
+        }
+
+        public Object getQueryResult()
+        {
+            return result;
+        }
+
+        public RequestContext getRequestContext()
+        {
+            return requestContext;
+        }
+    }    
+    
+    /**
      * Creates a new instance of the controller.
      */
     public LocalControllerBase()
@@ -47,16 +84,15 @@ public class LocalControllerBase implements LocalController,
         processes = new LinkedHashMap();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalController#addLocalComponentFactory(java.lang.String,
-     *      com.dawidweiss.carrot.core.local.LocalComponentFactory)
-     */
     public void addLocalComponentFactory(String componentId,
         final LocalComponentFactory factory)
     {
-        PoolableObjectFactory poolableObjectFactory = new BasePoolableObjectFactory()
+        if (componentPools.containsKey(componentId)) {
+            throw new DuplicatedKeyException("Component factory with " +
+                    "this id already exists: " + componentId);
+        }
+        
+        final PoolableObjectFactory poolableObjectFactory = new BasePoolableObjectFactory()
         {
             public Object makeObject() throws Exception
             {
@@ -68,6 +104,14 @@ public class LocalControllerBase implements LocalController,
 
         componentPools.put(componentId, new GenericObjectPool(
             poolableObjectFactory, 5));
+    }
+    
+    /**
+     * @return Returns an array of names of component factories.
+     */
+    public final String[] getComponentFactoryNames() {
+        final Set keys = this.componentPools.keySet();
+        return (String[]) keys.toArray(new String[keys.size()]);
     }
 
     /**
@@ -107,12 +151,6 @@ public class LocalControllerBase implements LocalController,
         ((ObjectPool) componentPools.get(componentId)).returnObject(component);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalController#query(java.lang.String,
-     *      java.lang.String, java.util.Map)
-     */
     public ProcessingResult query(String processId, String query,
         Map requestParameters) throws MissingProcessException, Exception
     {
@@ -139,56 +177,6 @@ public class LocalControllerBase implements LocalController,
         return new Result(queryResult, requestContext);
     }
 
-    /**
-     * Default implementation of the {@link ProcessingResult}interface.
-     * 
-     * @author stachoo
-     */
-    protected static class Result implements ProcessingResult
-    {
-        /** Query result */
-        private Object result;
-
-        /** Request context for this query */
-        private RequestContext requestContext;
-
-        /**
-         * @param queryResult
-         * @param requestContext
-         */
-        public Result(Object queryResult, RequestContext requestContext)
-        {
-            this.result = queryResult;
-            this.requestContext = requestContext;
-        }
-
-        /*
-         * (non-Javadoc)
-         * 
-         * @see com.dawidweiss.carrot.core.local.ProcessingResult#getQueryResult()
-         */
-        public Object getQueryResult()
-        {
-            return result;
-        }
-
-        /*
-         * (non-Javadoc)
-         * 
-         * @see com.dawidweiss.carrot.core.local.ProcessingResult#getRequestContext()
-         */
-        public RequestContext getRequestContext()
-        {
-            return requestContext;
-        }
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalController#addProcess(java.lang.String,
-     *      com.dawidweiss.carrot.core.local.LocalProcess)
-     */
     public void addProcess(String processId, LocalProcess localProcess)
         throws Exception
     {
@@ -196,21 +184,11 @@ public class LocalControllerBase implements LocalController,
         processes.put(processId, localProcess);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalControllerContext#isComponentFactoryAvailable(java.lang.String)
-     */
     public boolean isComponentFactoryAvailable(String key)
     {
         return componentPools.containsKey(key);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalControllerContext#getComponentClass(java.lang.String)
-     */
     public Class getComponentClass(String componentId)
         throws MissingComponentException, Exception
     {
@@ -228,46 +206,55 @@ public class LocalControllerBase implements LocalController,
         return componentClass;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalControllerContext#isComponentSequenceCompatible(java.lang.String,
-     *      java.lang.String)
-     */
     public boolean isComponentSequenceCompatible(String keyComponentFrom,
         String keyComponentTo) throws MissingComponentException, Exception
     {
-        // TODO: implement this properly
-        return true;
+        LocalComponent from = null;
+        LocalComponent to = null;
+
+        try {
+            from = this.borrowComponent(keyComponentFrom);
+            to = this.borrowComponent(keyComponentTo);
+
+            return CapabilityMatchVerifier.isCompatible(from, to);
+        } finally {
+            if (from != null) {
+                this.returnComponent(keyComponentFrom, from);
+            }
+
+            if (to != null) {
+                this.returnComponent(keyComponentTo, to);
+            }
+        }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalControllerContext#explainIncompatibility(java.lang.String,
-     *      java.lang.String)
-     */
-    public String explainIncompatibility(String from, String to)
+    public String explainIncompatibility(String keyComponentFrom, String keyComponentTo)
         throws MissingComponentException, Exception
     {
-        return "No explanation yet, sorry.";
-    }
+        LocalComponent from = null;
+        LocalComponent to = null;
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalController#getProcessNames()
-     */
+        try {
+            from = this.borrowComponent(keyComponentFrom);
+            to = this.borrowComponent(keyComponentTo);
+
+            return CapabilityMatchVerifier.explain(from, to);
+        } finally {
+            if (from != null) {
+                this.returnComponent(keyComponentFrom, from);
+            }
+
+            if (to != null) {
+                this.returnComponent(keyComponentTo, to);
+            }
+        }
+    }
+    
     public List getProcessIds()
     {
         return new ArrayList(processes.keySet());
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalController#getProcessName(java.lang.String)
-     */
     public String getProcessName(String processId)
         throws MissingProcessException
     {
@@ -280,11 +267,6 @@ public class LocalControllerBase implements LocalController,
         return process.getName();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalController#getProcessDescription(java.lang.String)
-     */
     public String getProcessDescription(String processId)
         throws MissingProcessException
     {
@@ -297,11 +279,6 @@ public class LocalControllerBase implements LocalController,
         return process.getDescription();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalController#getComponentName(java.lang.String)
-     */
     public String getComponentName(String componentId)
         throws MissingComponentException, Exception
     {
@@ -312,11 +289,6 @@ public class LocalControllerBase implements LocalController,
         return name;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalController#getComponentDescription(java.lang.String)
-     */
     public String getComponentDescription(String componentId)
         throws MissingComponentException, Exception
     {

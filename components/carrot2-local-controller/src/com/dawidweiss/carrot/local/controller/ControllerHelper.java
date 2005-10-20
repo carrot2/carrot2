@@ -14,11 +14,13 @@
 
 package com.dawidweiss.carrot.local.controller;
 
+import com.dawidweiss.carrot.core.local.DuplicatedKeyException;
 import com.dawidweiss.carrot.local.controller.loaders.BeanShellFactoryDescriptionLoader;
 import com.dawidweiss.carrot.local.controller.loaders.BeanShellProcessLoader;
 import com.dawidweiss.carrot.local.controller.loaders.ComponentInitializationException;
 import com.dawidweiss.carrot.local.controller.loaders.XmlFactoryDescriptionLoader;
 import com.dawidweiss.carrot.local.controller.loaders.XmlProcessLoader;
+import com.dawidweiss.carrot.core.local.LocalController;
 
 import java.io.*;
 
@@ -330,8 +332,10 @@ public class ControllerHelper {
             ComponentFactoryLoader cl = (ComponentFactoryLoader) componentFactoryLoaders.get(loaderExtension);
             LoadedComponentFactory loaded = cl.load(data);
 
-            controller.addComponentFactory(loaded.getId(), loaded.getFactory(),
-                loaded.getPoolSize());
+            // Current unused, but we might add it to the controller in the
+            // future.
+            final int poolSize = loaded.getPoolSize();
+            controller.addLocalComponentFactory(loaded.getId(), loaded.getFactory());
         } finally {
             try {
                 data.close();

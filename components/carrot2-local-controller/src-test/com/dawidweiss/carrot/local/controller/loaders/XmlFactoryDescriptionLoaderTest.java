@@ -85,10 +85,5 @@ public class XmlFactoryDescriptionLoaderTest extends junit.framework.TestCase {
 
         assertTrue(Arrays.asList(controller.getComponentFactoryNames())
                          .contains("stub-output"));
-
-        LocalComponentFactory factory = controller.getFactory("stub-output");
-        assertEquals("name", factory.getName());
-        assertEquals("description", factory.getDescription());
     }
-    
 }

@@ -16,8 +16,11 @@ package com.dawidweiss.carrot.local.controller;
 
 import java.io.File;
 import java.io.FileFilter;
-
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+
+import com.dawidweiss.carrot.core.local.ProcessingResult;
 
 
 /**
@@ -136,12 +139,11 @@ public class ControllerHelperTest extends junit.framework.TestCase {
         cl.addProcess(controller, ControllerHelper.EXT_PROCESS_LOADER_XML,
             this.getClass().getResourceAsStream("loaders/processes/xml-process.xml"));
 
-        assertTrue(Arrays.asList(controller.getProcessNames()).contains("xmlprocess"));
+        assertTrue(controller.getProcessIds().contains("xmlprocess"));
 
-        Object result = controller.query("xmlprocess", "query",
-                java.util.Collections.EMPTY_MAP);
+        ProcessingResult result = controller.query("xmlprocess", "query", new HashMap());
         assertEquals("i:begin,f:begin,o:begin,i:end,f:end,o:end,",
-            result.toString());
+            result.getQueryResult().toString());
     }
 
     /*
@@ -160,7 +162,7 @@ public class ControllerHelperTest extends junit.framework.TestCase {
         cl.addComponentFactoriesFromDirectory(controller, file);
         cl.addProcess(controller, process);
 
-        assertTrue(Arrays.asList(controller.getProcessNames()).contains("xmlprocess"));
+        assertTrue(controller.getProcessIds().contains("xmlprocess"));
     }
 
     /*
@@ -178,7 +180,7 @@ public class ControllerHelperTest extends junit.framework.TestCase {
         cl.addComponentFactoriesFromDirectory(controller, file);
         cl.addProcessesFromDirectory(controller, processDir);
 
-        assertTrue(Arrays.asList(controller.getProcessNames()).contains("xmlprocess"));
+        assertTrue(controller.getProcessIds().contains("xmlprocess"));
     }
 
     /*
@@ -202,7 +204,8 @@ public class ControllerHelperTest extends junit.framework.TestCase {
                 }
             });
 
-        assertTrue(Arrays.asList(controller.getProcessNames()).contains("xmlprocess"));
-        assertFalse(Arrays.asList(controller.getProcessNames()).contains("bshprocess"));
+        List processes = controller.getProcessIds();
+        assertTrue(processes.contains("xmlprocess"));
+        assertFalse(processes.contains("bshprocess"));
     }
 }

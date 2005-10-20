@@ -14,13 +14,12 @@
 
 package com.dawidweiss.carrot.local.controller.loaders;
 
+import java.util.Arrays;
+
 import com.dawidweiss.carrot.core.local.LocalComponent;
-import com.dawidweiss.carrot.core.local.LocalComponentFactory;
 import com.dawidweiss.carrot.local.controller.ControllerHelper;
 import com.dawidweiss.carrot.local.controller.LocalController;
 import com.dawidweiss.carrot.local.controller.StubOutputComponent;
-
-import java.util.Arrays;
 
 
 /**
@@ -28,22 +27,11 @@ import java.util.Arrays;
  */
 public class BeanShellFactoryDescriptionLoaderTest
     extends junit.framework.TestCase {
-    /**
-     * Creates a new BeanShellFactoryDescriptionLoaderTest object.
-     */
-    public BeanShellFactoryDescriptionLoaderTest() {
-        super();
-    }
 
-    /**
-     * Creates a new BeanShellFactoryDescriptionLoaderTest object.
-     */
     public BeanShellFactoryDescriptionLoaderTest(String s) {
         super(s);
     }
 
-    /*
-     */
     public void testLoadingComponentFromBSHStream() throws Exception {
         LocalController controller = new LocalController();
         ControllerHelper cl = new ControllerHelper();
@@ -54,8 +42,6 @@ public class BeanShellFactoryDescriptionLoaderTest
                          .contains("stub-output-bsh"));
     }
 
-    /*
-     */
     public void testPropertiesHaveBeenSetInBeanShellLoader()
         throws Exception {
         LocalController controller = new LocalController();
@@ -84,9 +70,5 @@ public class BeanShellFactoryDescriptionLoaderTest
 
         assertTrue(Arrays.asList(controller.getComponentFactoryNames())
                          .contains("stub-output-bsh"));
-
-        LocalComponentFactory factory = controller.getFactory("stub-output-bsh");
-        assertEquals("name", factory.getName());
-        assertEquals("description", factory.getDescription());
     }
 }
