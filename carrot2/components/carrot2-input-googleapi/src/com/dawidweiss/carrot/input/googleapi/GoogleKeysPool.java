@@ -156,21 +156,23 @@ public class GoogleKeysPool {
 				return fileName.endsWith(extension);
 			}
 		});
-		for (int i = 0; i < keys.length; i++) {
-			BufferedReader reader = new BufferedReader(
-					new InputStreamReader(
-							new FileInputStream(keys[i]), "UTF-8"));
-			try {
-				String line = reader.readLine();
-				if (line == null || "".equals(line.trim())) {
-					throw new IOException("Key file is incorrect: first line is empty: "
-							+ keys[i].getAbsolutePath());
-				}
-				addKey(line.trim(), keys[i].getName());
-			} finally {
-				reader.close();
-			}
-		}
+        if (keys != null) {
+    		for (int i = 0; i < keys.length; i++) {
+    			BufferedReader reader = new BufferedReader(
+    					new InputStreamReader(
+    							new FileInputStream(keys[i]), "UTF-8"));
+    			try {
+    				String line = reader.readLine();
+    				if (line == null || "".equals(line.trim())) {
+    					throw new IOException("Key file is incorrect: first line is empty: "
+    							+ keys[i].getAbsolutePath());
+    				}
+    				addKey(line.trim(), keys[i].getName());
+    			} finally {
+    				reader.close();
+    			}
+    		}
+        }
 	}
     
     public int getKeysTotal() {
