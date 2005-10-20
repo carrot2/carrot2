@@ -81,7 +81,6 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
     	this.defaults = parameters;
     }
 
-
     /*
      * @see com.dawidweiss.carrot.core.local.LocalComponent#init(com.dawidweiss.carrot.core.local.LocalControllerContext)
      */
