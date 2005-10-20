@@ -1,5 +1,6 @@
 package com.dawidweiss.carrot.input.yahoo;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -42,6 +43,17 @@ public class YahooApiInputComponent extends LocalInputComponentBase
      */
     private YahooSearchService service;
 
+    public YahooApiInputComponent() {
+        final YahooSearchServiceDescriptor descriptor = new YahooSearchServiceDescriptor();
+        try {
+            descriptor.initializeFromXML(this.getClass().getClassLoader().getResourceAsStream("resource/yahoo.xml"));
+        } catch (IOException e) {
+            throw new RuntimeException("Could not find default Yahoo service descriptor.");
+        }
+        final YahooSearchService service = new YahooSearchService(descriptor);
+        this.service = service;
+    }
+
 	public YahooApiInputComponent(YahooSearchService service) {
         this.service = service;
 	}
@@ -66,6 +78,10 @@ public class YahooApiInputComponent extends LocalInputComponentBase
     public void startProcessing(RequestContext requestContext) 
     	throws ProcessingException {
 
+        if (service == null) {
+            throw new ProcessingException("Yahoo API service not set.");
+        }
+        
     	try {
 	    	requestContext.getRequestParameters().put(
                     LocalInputComponent.PARAM_QUERY, this.query);

@@ -16,7 +16,7 @@ public class YahooSearchServiceTest extends TestCase {
 
     public void testNoResultsQuery() throws Exception {
         YahooSearchServiceDescriptor descriptor = new YahooSearchServiceDescriptor();
-        descriptor.initializeFromXML(this.getClass().getResourceAsStream("yahoo.xml"));
+        descriptor.initializeFromXML(this.getClass().getResourceAsStream("yahoo-site-cs.xml"));
 
         YahooSearchService service = new YahooSearchService(descriptor); 
         YahooSearchResult [] result = service.query("duiogig oiudgisugviw siug iugw iusviuwg", 255);
@@ -25,7 +25,7 @@ public class YahooSearchServiceTest extends TestCase {
 
 	public void testLargerQuery() throws Exception {
         YahooSearchServiceDescriptor descriptor = new YahooSearchServiceDescriptor();
-        descriptor.initializeFromXML(this.getClass().getResourceAsStream("yahoo.xml"));
+        descriptor.initializeFromXML(this.getClass().getResourceAsStream("yahoo-site-cs.xml"));
 
         YahooSearchService service = new YahooSearchService(descriptor); 
         YahooSearchResult [] result = service.query("apache", 255);
