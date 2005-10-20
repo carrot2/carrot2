@@ -45,7 +45,7 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
 
     /** Capabilities required from the next component in the chain */
     private final static Set CAPABILITIES_SUCCESSOR = new HashSet(Arrays
-        .asList(new Object [] { RawClustersProducer.class }));
+        .asList(new Object [] { RawClustersConsumer.class }));
 
     /** Raw clusters consumer */
     private RawClustersConsumer rawClustersConsumer;
