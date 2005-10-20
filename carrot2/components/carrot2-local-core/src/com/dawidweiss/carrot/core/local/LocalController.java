@@ -50,9 +50,12 @@ public interface LocalController
      * 
      * @param componentId
      * @param factory
+     * @throws DuplicatedKeyException Thrown when <code>componentId</code> already
+     *      exists in the controller.
      */
     public void addLocalComponentFactory(String componentId,
-        final LocalComponentFactory factory);
+        final LocalComponentFactory factory)
+        throws DuplicatedKeyException;
 
     /**
      * Adds a local process to the controller and associates the process with

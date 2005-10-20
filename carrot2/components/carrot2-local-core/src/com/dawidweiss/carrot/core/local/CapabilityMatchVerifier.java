@@ -1,7 +1,7 @@
 
 /*
  * Carrot2 Project
- * Copyright (C) 2002-2004, Dawid Weiss
+ * Copyright (C) 2002-2005, Dawid Weiss
  * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
  * All rights reserved.
  *
@@ -12,9 +12,8 @@
  * Sponsored by: CCG, Inc.
  */
 
-package com.dawidweiss.carrot.local.controller;
+package com.dawidweiss.carrot.core.local;
 
-import com.dawidweiss.carrot.core.local.LocalComponent;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -30,7 +29,8 @@ import java.util.Set;
  *
  * @see com.dawidweiss.carrot.core.local.LocalComponent
  */
-public final class CapabilityMatchVerifier {
+final class CapabilityMatchVerifier {
+
     /**
      * No instantiation of this class, static utility  methods only.
      */

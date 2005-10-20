@@ -100,15 +100,15 @@ public class PlainComponentFactory extends LocalComponentFactoryBase {
         } catch (InstantiationException e) {
             throw new RuntimeException(
                 "Could not instantiate component factory: " +
-                componentClass.getName());
+                componentClass.getName(), e);
         } catch (IllegalAccessException e) {
             throw new RuntimeException(
                 "Could not instantiate component factory because of restricted access " +
-                "to class:" + componentClass.getName());
+                "to class:" + componentClass.getName(), e);
         } catch (ClassCastException e) {
             throw new RuntimeException("Class: does not implement " +
                 LocalComponentFactory.class.getName() + ": " +
-                componentClass.getName());
+                componentClass.getName(), e);
         }
 
         // initialize with a beanshell script?

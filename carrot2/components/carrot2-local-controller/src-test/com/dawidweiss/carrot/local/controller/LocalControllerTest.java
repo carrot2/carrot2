@@ -1,7 +1,7 @@
 
 /*
  * Carrot2 Project
- * Copyright (C) 2002-2004, Dawid Weiss
+ * Copyright (C) 2002-2005, Dawid Weiss
  * Portions (C) Contributors listed in carrot2.CONTRIBUTORS file.
  * All rights reserved.
  *
@@ -14,39 +14,33 @@
 
 package com.dawidweiss.carrot.local.controller;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import com.dawidweiss.carrot.core.local.DuplicatedKeyException;
 import com.dawidweiss.carrot.core.local.LocalComponent;
 import com.dawidweiss.carrot.core.local.LocalFilterComponent;
 import com.dawidweiss.carrot.core.local.LocalInputComponent;
 import com.dawidweiss.carrot.core.local.LocalProcessBase;
-
-import java.util.*;
-import java.util.List;
-import java.util.Set;
+import com.dawidweiss.carrot.core.local.ProcessingResult;
 
 
 /**
  * Local controller tests.
  */
 public class LocalControllerTest extends junit.framework.TestCase {
-    /*
-     */
-    public LocalControllerTest() {
-        super();
-    }
 
-    /*
-     */
     public LocalControllerTest(String s) {
         super(s);
     }
 
-    /*
-     */
     public void testCorrectComponentFactoryAddition() throws Exception {
         LocalController controller = new LocalController();
 
         StubInputComponentFactory factory = new StubInputComponentFactory();
-        controller.addComponentFactory("key", factory, 5);
+        controller.addLocalComponentFactory("key", factory);
         assertTrue(controller.isComponentFactoryAvailable("key"));
 
         LocalComponent instance = null;
@@ -58,30 +52,26 @@ public class LocalControllerTest extends junit.framework.TestCase {
         assertNotNull(instance);
     }
 
-    /*
-     */
     public void testDuplicatedKeyInComponentFactoryAddition()
         throws Exception {
         LocalController controller = new LocalController();
 
         StubInputComponentFactory factory = new StubInputComponentFactory();
-        controller.addComponentFactory("key", factory, 5);
+        controller.addLocalComponentFactory("key", factory);
 
         try {
-            controller.addComponentFactory("key", factory, 5);
+            controller.addLocalComponentFactory("key", factory);
             fail("Should have failed.");
         } catch (DuplicatedKeyException e) {
             // this is expected behavior.
         }
     }
 
-    /*
-     */
     public void testContextPassedOnInitialize() throws Exception {
         LocalController controller = new LocalController();
 
         StubInputComponentFactory factory = new StubInputComponentFactory();
-        controller.addComponentFactory("key", factory, 5);
+        controller.addLocalComponentFactory("key", factory);
 
         List l = factory.getCreatedInstances();
 
@@ -91,17 +81,15 @@ public class LocalControllerTest extends junit.framework.TestCase {
         }
     }
 
-    /*
-     */
     public void testProcessAddition() throws Exception {
         LocalController controller = new LocalController();
 
-        controller.addComponentFactory("input",
-            new StubInputComponentFactory(), 5);
-        controller.addComponentFactory("filter",
-            new StubFilterComponentFactory(), 5);
-        controller.addComponentFactory("output",
-            new StubOutputComponentFactory(), 5);
+        controller.addLocalComponentFactory("input",
+            new StubInputComponentFactory());
+        controller.addLocalComponentFactory("filter",
+            new StubFilterComponentFactory());
+        controller.addLocalComponentFactory("output",
+            new StubOutputComponentFactory());
 
         LocalProcessBase process = new LocalProcessBase();
         process.setInput("input");
@@ -112,8 +100,6 @@ public class LocalControllerTest extends junit.framework.TestCase {
         controller.addProcess("process", process);
     }
 
-    /*
-     */
     public void testProcessAdditionAndQuerying() throws Exception {
         LocalController controller = new LocalController();
 
@@ -134,7 +120,7 @@ public class LocalControllerTest extends junit.framework.TestCase {
 
         controller.addProcess("process", process);
 
-        Object result = controller.query("process", "query",
+        ProcessingResult result = controller.query("process", "query",
                 java.util.Collections.EMPTY_MAP);
 
         // check the expected output: every component
@@ -142,11 +128,9 @@ public class LocalControllerTest extends junit.framework.TestCase {
         System.out.println(result.toString());
 
         assertEquals("i:begin,f1:begin,f2:begin,o:begin,i:end,f1:end,f2:end,o:end,",
-            result.toString());
+            result.getQueryResult().toString());
     }
 
-    /*
-     */
     public void testVerifierIncompatibleComponents() throws Exception {
         LocalController controller = new LocalController();
 
@@ -179,8 +163,6 @@ public class LocalControllerTest extends junit.framework.TestCase {
         }
     }
 
-    /*
-     */
     public void testVerifierCompatibleComponents() throws Exception {
         LocalController controller = new LocalController();
 

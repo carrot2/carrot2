@@ -45,7 +45,7 @@ public class DocumentsConsumerOutputComponent extends LocalOutputComponentBase
      */
     private static final Set CAPABILITIES_PREDECESSOR = new HashSet(Arrays
         .asList(new Object []
-        { RawDocumentsProducer.class, TokenizedDocumentsConsumer.class }));
+        { RawDocumentsProducer.class }));
 
     /**
      * An array where documents received from the predecessor component are

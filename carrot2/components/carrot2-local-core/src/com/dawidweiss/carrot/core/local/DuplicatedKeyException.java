@@ -12,7 +12,7 @@
  * Sponsored by: CCG, Inc.
  */
 
-package com.dawidweiss.carrot.local.controller;
+package com.dawidweiss.carrot.core.local;
 
 /**
  * Thrown when addition of a key-value pair failed because the key already
@@ -21,7 +21,7 @@ package com.dawidweiss.carrot.local.controller;
  * @author Dawid Weiss
  * @version $Revision$
  */
-public class DuplicatedKeyException extends Exception {
+public class DuplicatedKeyException extends RuntimeException {
     /**
      * Creates a new exception object.
      */
