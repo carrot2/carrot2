@@ -5,17 +5,13 @@ import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
-import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
@@ -24,9 +20,8 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import javax.swing.text.EditorKit;
+
+import org.jdesktop.jdic.browser.WebBrowser;
 
 import com.dawidweiss.carrot.core.local.clustering.RawDocument;
 import com.dawidweiss.carrot.core.local.impl.ClustersConsumerOutputComponent;
@@ -41,18 +36,16 @@ import com.jgoodies.uif_lite.panel.SimpleInternalFrame;
  * @author Dawid Weiss
  */
 public class ResultsTab extends JPanel {
-
     private final static String MAIN_CARD = "main";
     private final static String PROGRESS_CARD = "progress";
 
     private String query;
     private String processId;
-    private JEditorPane documentsView;
+    private WebBrowser browserView;
     private RawClustersTree clustersTree;
     private Result result;
     private JPanel cards;
     private JLabel progressInfo;
-    
     
     private class SelfRemoveAction implements ActionListener {
         public void actionPerformed(ActionEvent actionEvent) {
@@ -112,14 +105,11 @@ public class ResultsTab extends JPanel {
         clustersTree.addTreeSelectionListener(
                 new RawClustersTreeSelectionListener(this));
 
-        this.documentsView = new JEditorPane();
-        documentsView.setContentType("text/html");
-        documentsView.setEditable(false);
-        documentsView.setBorder(BorderFactory.createEmptyBorder());
+        this.browserView = new WebBrowser();
 
         JScrollPane scrollerRight = new JScrollPane();
         scrollerRight.setBorder(BorderFactory.createEmptyBorder());
-        scrollerRight.getViewport().add(documentsView);
+        scrollerRight.getViewport().add(browserView);
 
         // create 'progress' card.
         JPanel progressPane = new JPanel();
@@ -166,7 +156,7 @@ public class ResultsTab extends JPanel {
                 + "</pre>"
                 + "</body></html>");
     }
-    
+
     /**
      * Updates the HTML view component with the provided HTML.
      * MUST BE INVOKED FROM AN AWT THREAD.
@@ -175,19 +165,7 @@ public class ResultsTab extends JPanel {
         if (!SwingUtilities.isEventDispatchThread())
             throw new IllegalStateException("Invoke updateDocumentsView() from AWT thread only.");
 
-        Document doc = documentsView.getDocument();
-        try {
-            doc.remove(doc.getStartPosition().getOffset(), doc.getLength());
-
-	        EditorKit kit = documentsView.getEditorKit();
-	        kit.read(new StringReader(htmlContent), doc, 0);
-	
-	        documentsView.setCaretPosition(0);        
-        } catch (BadLocationException e) {
-            throw new RuntimeException("Unexpected exception: " + e);
-        } catch (IOException e) {
-            // not possible with a string reader.
-        }
+        this.browserView.setContent(htmlContent);
     }
 
     /**
@@ -196,9 +174,6 @@ public class ResultsTab extends JPanel {
     public void showInfo(final String htmlContent) {
         Runnable task = new Runnable() {
             public void run() {
-                JComponent docView = documentsView;
-                ResultsTab.this.removeAll();
-                ResultsTab.this.add(new JScrollPane(docView));
                 updateDocumentsView(htmlContent);
                 ((CardLayout)cards.getLayout()).show(cards, MAIN_CARD);
             }
@@ -248,11 +223,11 @@ public class ResultsTab extends JPanel {
     public String getHtmlForDocuments(List documents) {
         StringBuffer buffer = new StringBuffer();
 
-        buffer.append("<html><body style=\"margin: 2px; font-family: Arial, Helvetica; font-size: 9px;\">");
+        buffer.append("<html><body style=\"font-size: 10pt; font-family: Arial, Helvetica, sans-serif;\">");
 
         for (Iterator i = documents.iterator(); i.hasNext();) {
             RawDocument doc = (RawDocument) i.next();
-            buffer.append("<font color=blue><b>");
+            buffer.append("<a href=\"" + doc.getUrl() + "\"><b>");
 
             if ((doc.getTitle() == null) || (doc.getTitle().length() == 0)) {
                 buffer.append(doc.getUrl());
@@ -260,7 +235,7 @@ public class ResultsTab extends JPanel {
                 buffer.append(doc.getTitle());
             }
 
-            buffer.append("</b></font>");
+            buffer.append("</b></a>");
 
             if (doc.getProperty(RawDocument.PROPERTY_LANGUAGE) != null) {
                 buffer.append(" [" +
@@ -294,6 +269,10 @@ public class ResultsTab extends JPanel {
             }
         };
         Browser.runAwtTask(task);
-    }    
+    }
 
+    protected void finalize() throws Throwable {
+        super.finalize();
+        this.browserView.dispose();
+    }    
 }

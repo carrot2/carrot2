@@ -5,9 +5,8 @@ Build from sources
 ------------------
 
 ant -q build
-cd tmp/dist
 
 Run the binary
 --------------
 
-java -Djava.ext.dirs=deps-carrot2-demo-browser-jar -cp carrot2-demo-browser.jar com.dawidweiss.carrot2.browser.Browser
+Use "demo" scripts provided in the main folder.

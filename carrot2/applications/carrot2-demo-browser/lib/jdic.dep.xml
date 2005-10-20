@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<!DOCTYPE component SYSTEM "../../../etc/component-dependency.dtd" > 
+<component
+    name="jdic"
+    description="Java Desktop Integration Components (JDIC), https://jdic.dev.java.net/">
+	<provides>
+		<files>
+			<file location="jdic.jar" />
+
+			<file location="jdic_windows/IeEmbed.exe" />
+			<file location="jdic_windows/jdic.dll" />
+			<file location="jdic_windows/jdic_stub.jar" />
+			<file location="jdic_windows/MozEmbed.exe" />
+			<file location="jdic_windows/tray.dll" />
+
+			<file location="jdic_linux/libjdic.so" />
+			<file location="jdic_linux/libmozembed-linux-gtk1.2.so" />
+			<file location="jdic_linux/libmozembed-linux-gtk2.so" />
+			<file location="jdic_linux/libtray.so" />
+			<file location="jdic_linux/mozembed-linux-gtk1.2" />
+			<file location="jdic_linux/mozembed-linux-gtk2" />
+		</files>
+	</provides>
+</component>
+

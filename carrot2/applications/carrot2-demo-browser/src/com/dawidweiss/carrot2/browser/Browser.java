@@ -1,12 +1,18 @@
 package com.dawidweiss.carrot2.browser;
 
-import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Vector;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -15,22 +21,26 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
+import com.dawidweiss.carrot.core.local.DuplicatedKeyException;
+import com.dawidweiss.carrot.core.local.LocalComponent;
+import com.dawidweiss.carrot.core.local.LocalComponentFactory;
+import com.dawidweiss.carrot.core.local.LocalComponentFactoryBase;
 import com.dawidweiss.carrot.core.local.LocalController;
 import com.dawidweiss.carrot.core.local.LocalControllerBase;
 import com.dawidweiss.carrot.core.local.MissingProcessException;
 import com.dawidweiss.carrot.core.local.ProcessingResult;
 import com.dawidweiss.carrot.core.local.impl.ClustersConsumerOutputComponent;
+import com.dawidweiss.carrot.local.controller.ControllerHelper;
+import com.dawidweiss.carrot.local.controller.loaders.ComponentInitializationException;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.plaf.Options;
@@ -43,12 +53,13 @@ import com.jgoodies.plaf.Options;
  */
 public class Browser {
     
+    private static final Color BANNER_COLOR = new Color(0xe0, 0xe0, 0xf0);
+
     /* UI elements */
     private JTabbedPane tabbedPane;
     private JTextField  queryField;
     private JComboBox   processComboBox;
     private JComboBox   sizeComboBox;
-    private JFrame 		frame;
 
     /**
      * Default query sizes.
@@ -59,7 +70,10 @@ public class Browser {
     
     /** Local Carrot2 controller */
     private LocalController controller;
-    
+
+    /** Combo box model with currently selected process ids. */
+    private ProcessComboModel processComboModel;
+
     
     /**
      * A query processing thread. 
@@ -84,7 +98,7 @@ public class Browser {
                 tab.showProgress("Executing process...");
                 HashMap requestParams = new HashMap();
                 ProcessingResult result = controller.query(processId, query, requestParams);
-                
+
                 // get at the clustered result?
                 Object queryResult = result.getQueryResult();
                 tab.showProgress("Rendering results...");
@@ -108,29 +122,64 @@ public class Browser {
             }
         }
     }
-    
+
+    private final class ProcessComboModel extends DefaultComboBoxModel {
+        private final List processIds;
+        private final List processNames;
+        int selected = 0;
+
+        public ProcessComboModel(List processIds, List processNames) {
+            this.processIds = processIds;
+            this.processNames = processNames;
+        }
+
+        public void setSelectedItem(Object anItem) {
+            selected = processNames.indexOf(anItem);
+        }
+
+        public Object getSelectedItem() {
+            return processNames.get(selected);
+        }
+
+        public int getSize() {
+            return processIds.size();
+        }
+
+        public Object getElementAt(int index) {
+            return processNames.get(index);
+        }
+        
+        public String getSelectedProcessId() {
+            return (String) processIds.get(selected);
+        }
+    }
+
     /**
      * A listener for new queries.
      */
     private class NewQueryListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             // make sure all required data is available.
-            int results = Integer.parseInt((String) sizeComboBox.getSelectedItem());
-            String processId = (String) processComboBox.getSelectedItem();
+            String processId = processComboModel.getSelectedProcessId();
             String query = queryField.getText();
             if (processId == null) {
                 JOptionPane.showMessageDialog(queryField, "Select a process first.");
             } else {
-                // ready to process the query
-                disableUI();
-                // display a tab with results.
-                ResultsTab tab = addTab(query, processId);
-
-                Thread processingThread = new ProcessingThread(tab, query, processId);
-                processingThread.start();
+                try {
+                    // ready to process the query
+                    disableUI();
+                    // display a tab with results.
+                    ResultsTab tab = addTab(query, processId);
+                    Thread processingThread = new ProcessingThread(tab, query, processId);
+                    processingThread.start();
+                } catch (Throwable t) {
+                    JOptionPane.showMessageDialog(queryField, "Exception executing query: \n"
+                            + t.toString());
+                    enableUI();
+                }
             }
         }
-    };
+    }
     
     
     private ResultsTab addTab(String query, String processId) {
@@ -151,21 +200,42 @@ public class Browser {
      * Builds the main split between top panel and tabbed pane
      * with results.
      */
-    private JComponent buildMainPanel(JFrame frame) {
-        this.frame = frame;
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BorderLayout());
-        
+    private JComponent buildMainPanel() {
+        final JPanel mainPanel = new JPanel();
+        final GridBagLayout layout = new GridBagLayout();
+        mainPanel.setLayout(layout);
+        GridBagConstraints cc = new GridBagConstraints();
+
+        final JComponent topPanel = buildTopPanel();
+        cc = new GridBagConstraints(
+                0, 0,
+                1, 1,
+                0, 0,
+                GridBagConstraints.CENTER,
+                GridBagConstraints.HORIZONTAL,
+                new Insets(0,0,2,0), 
+                0, 0);
+        layout.setConstraints(topPanel, cc);
+        mainPanel.add(topPanel, cc);
+
         tabbedPane = new JTabbedPane();
-        tabbedPane.setTabPlacement(JTabbedPane.TOP);
+        tabbedPane.setBorder(BorderFactory.createEmptyBorder());
+        tabbedPane.setTabPlacement(SwingConstants.TOP);
         tabbedPane.setPreferredSize(new Dimension(300,300));
         tabbedPane.putClientProperty(Options.EMBEDDED_TABS_KEY, Boolean.TRUE);
-        tabbedPane.putClientProperty(Options.NO_CONTENT_BORDER_KEY, Boolean.TRUE);
-        mainPanel.add(tabbedPane, BorderLayout.CENTER);
+        tabbedPane.putClientProperty(Options.NO_CONTENT_BORDER_KEY, Boolean.FALSE);
         tabbedPane.setBorder(BorderFactory.createEmptyBorder());
 
-        JComponent topPanel = buildTopPanel();
-        mainPanel.add(topPanel, BorderLayout.NORTH);
+        cc = new GridBagConstraints(
+                0, 1,
+                1, 1,
+                1, 1,
+                GridBagConstraints.CENTER,
+                GridBagConstraints.BOTH,
+                new Insets(0,0,0,0), 
+                0, 0);
+        layout.setConstraints(tabbedPane, cc);
+        mainPanel.add(tabbedPane);
 
         return mainPanel;
     }
@@ -175,6 +245,8 @@ public class Browser {
      */
     private JComponent buildTopPanel() {
         JPanel topPanel = new JPanel();
+        topPanel.setBackground(BANNER_COLOR);
+        topPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.DARK_GRAY));
         FormLayout layout = new FormLayout(
                 // columns
                 "4px, fill:max(pref;550px):grow, 8px, center:pref, 4px",
@@ -199,6 +271,7 @@ public class Browser {
      */
     private JComponent buildQueryForm() {
         JPanel topPanel = new JPanel();
+        topPanel.setOpaque(false);
         FormLayout layout = new FormLayout(
                 // columns
                 "right:pref,4px,fill:min:grow",
@@ -218,6 +291,7 @@ public class Browser {
         
         // build details panel.
         JPanel detailsPanel = new JPanel();
+        detailsPanel.setOpaque(false);
         layout = new FormLayout(
                 "right:pref,4px,fill:max(200;pref),16px,right:default,max(pref;60px)",
                 "pref");
@@ -247,16 +321,60 @@ public class Browser {
             
             // create local controller.
             this.controller = new LocalControllerBase();
+            ControllerHelper cl = new ControllerHelper();
 
-            ProcessesAndComponents.addComponentFactories(controller);
-            ProcessesAndComponents.addProcesses(controller);
-            
-            final Vector processes = new Vector(controller.getProcessIds());
+            final File componentsDir = new File("components");
+            if (componentsDir.isDirectory() == false) {
+                throw new RuntimeException("Components directory not found: "
+                        + componentsDir.getAbsolutePath());
+            }
+            final File processesDir = new File("processes");
+            if (processesDir.isDirectory() == false) {
+                throw new RuntimeException("Components directory not found: "
+                        + componentsDir.getAbsolutePath());
+            }
+
+            //
+            // Add predefined components
+            //
+            LocalComponentFactory clusterConsumerOutputFactory = new LocalComponentFactoryBase() {
+                public LocalComponent getInstance() {
+                    return new ClustersConsumerOutputComponent();
+                }
+            };
+            controller.addLocalComponentFactory("output-demo-tab", 
+                clusterConsumerOutputFactory);
+
+            //
+            // Add scripted/ custom components and processes
+            //
+            try {
+                cl.addComponentFactoriesFromDirectory(controller, componentsDir);
+                cl.addProcessesFromDirectory(controller, processesDir);
+            } catch (DuplicatedKeyException e) {
+                throw new RuntimeException("Identifiers of components and processes must be unique.", e);
+            } catch (ComponentInitializationException e) {
+                throw new RuntimeException("Cannot initialize component.", e);
+            } catch (Exception e) {
+                throw new RuntimeException("Unhandled exception when initializing components and processes.", e);
+            }
+
+            final List processIds = controller.getProcessIds();
+            final List processNames = new ArrayList(processIds.size());
+            for (Iterator i = processIds.iterator(); i.hasNext();) {
+                try {
+                    processNames.add(controller.getProcessName((String) i.next()));
+                } catch (MissingProcessException e) {
+                    throw new Error("Process identifier not associated with any name?", e);
+                }
+            }
+            this.processComboModel = new ProcessComboModel(processIds, processNames);
+
             // replace the combo box's model.
-            Runnable task = new Runnable() {
+            final Runnable task = new Runnable() {
                 public void run() {
                     processComboBox.setModel(
-                            new DefaultComboBoxModel(processes));
+                            processComboModel);
                 }
             };
             runAwtTask(task);
@@ -282,8 +400,7 @@ public class Browser {
                 sizeComboBox.setEnabled(onOff);
             }
         }
-    };
-    
+    }
     
     /**
      * Disables interactive user interface elements.
@@ -332,38 +449,13 @@ public class Browser {
         JFrame frame = new JFrame();
         frame.setTitle("Carrot2 Browser");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        JComponent panel = browser.buildMainPanel(frame);
+        JComponent panel = browser.buildMainPanel();
         frame.getContentPane().add(panel);
-        frame.setJMenuBar(browser.buildMenuBar());
         
         // Create processes and add them to the user interface.
         browser.createLocalController();
         
         frame.pack();
         frame.setVisible(true);        
-    }
-
-    private JMenuBar buildMenuBar() {
-        JMenuBar mb = new JMenuBar();
-        mb.setBorderPainted(false);
-
-        JMenu mainMenu = new JMenu("Application");
-
-        JMenuItem aboutItem = new JMenuItem("About...");
-        aboutItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent av) {
-                JOptionPane.showMessageDialog(frame, new AboutPanel());
-            }});
-        JMenuItem exitItem = new JMenuItem("Exit");
-        exitItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent av) {
-                frame.dispose();
-            }});
-        
-        mainMenu.add(aboutItem);
-        mainMenu.add(exitItem);
-        
-        mb.add(mainMenu);        
-        return mb;
     }
 }

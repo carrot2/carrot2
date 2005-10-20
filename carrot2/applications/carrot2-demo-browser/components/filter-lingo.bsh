@@ -1,0 +1,29 @@
+
+import com.stachoodev.carrot.filter.lingo.local.LingoLocalFilterComponent;
+import com.dawidweiss.carrot.core.local.*;
+import com.dawidweiss.carrot.local.controller.*;
+import com.dawidweiss.carrot.core.local.linguistic.*;
+import com.dawidweiss.carrot.util.tokenizer.languages.english.*;
+
+factory = new LocalComponentFactoryBase() {
+    public LocalComponent getInstance() {
+    	final HashMap params = new HashMap();
+    	final Language [] languages = new Language [] {
+    		new English()
+    	};
+    	return new LingoLocalFilterComponent(languages, params);
+    }
+
+    public String getName() {
+        return "Lingo";
+    }
+
+    public String getDescription() {
+        return "OSS Lingo";
+    }
+};
+
+return new LoadedComponentFactory(
+	/* id */ "filter-lingo", 
+	factory, 
+	/* pool size */ 5);
