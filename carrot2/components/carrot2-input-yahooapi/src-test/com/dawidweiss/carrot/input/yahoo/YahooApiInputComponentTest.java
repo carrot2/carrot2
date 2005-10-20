@@ -26,12 +26,9 @@ public class YahooApiInputComponentTest extends junit.framework.TestCase {
     }
 
     public void testSiteQuery() throws Exception {
-        final YahooSearchServiceDescriptor descriptor = new YahooSearchServiceDescriptor();
-        descriptor.initializeFromXML(this.getClass().getResourceAsStream("yahoo-site-cs.xml"));
-        final YahooSearchService service = new YahooSearchService(descriptor);
         final LocalComponentFactory inputFactory = new LocalComponentFactoryBase() {
             public LocalComponent getInstance() {
-                return new YahooApiInputComponent(service);
+                return new YahooApiInputComponent();
             }
         };
 
@@ -71,12 +68,9 @@ public class YahooApiInputComponentTest extends junit.framework.TestCase {
 	}
 
 	public void testMediumQuery() throws Exception {
-        final YahooSearchServiceDescriptor descriptor = new YahooSearchServiceDescriptor();
-        descriptor.initializeFromXML(this.getClass().getResourceAsStream("yahoo.xml"));
-        final YahooSearchService service = new YahooSearchService(descriptor);
         final LocalComponentFactory inputFactory = new LocalComponentFactoryBase() {
             public LocalComponent getInstance() {
-                return new YahooApiInputComponent(service);
+                return new YahooApiInputComponent();
             }
         };
 
@@ -93,12 +87,9 @@ public class YahooApiInputComponentTest extends junit.framework.TestCase {
 	}
 	
 	public void testEmptyQuery() throws Exception {
-        final YahooSearchServiceDescriptor descriptor = new YahooSearchServiceDescriptor();
-        descriptor.initializeFromXML(this.getClass().getResourceAsStream("yahoo.xml"));
-        final YahooSearchService service = new YahooSearchService(descriptor);
         final LocalComponentFactory inputFactory = new LocalComponentFactoryBase() {
             public LocalComponent getInstance() {
-                return new YahooApiInputComponent(service);
+                return new YahooApiInputComponent();
             }
         };
 
@@ -115,12 +106,9 @@ public class YahooApiInputComponentTest extends junit.framework.TestCase {
 	}
 
     public void testResultsRequested() throws Exception {
-        final YahooSearchServiceDescriptor descriptor = new YahooSearchServiceDescriptor();
-        descriptor.initializeFromXML(this.getClass().getResourceAsStream("yahoo.xml"));
-        final YahooSearchService service = new YahooSearchService(descriptor);
         final LocalComponentFactory inputFactory = new LocalComponentFactoryBase() {
             public LocalComponent getInstance() {
-                return new YahooApiInputComponent(service);
+                return new YahooApiInputComponent();
             }
         };
 
@@ -140,12 +128,9 @@ public class YahooApiInputComponentTest extends junit.framework.TestCase {
     }    
     
 	public void testApacheAntQuery() throws Exception {
-        final YahooSearchServiceDescriptor descriptor = new YahooSearchServiceDescriptor();
-        descriptor.initializeFromXML(this.getClass().getResourceAsStream("yahoo.xml"));
-        final YahooSearchService service = new YahooSearchService(descriptor);
         final LocalComponentFactory inputFactory = new LocalComponentFactoryBase() {
             public LocalComponent getInstance() {
-                return new YahooApiInputComponent(service);
+                return new YahooApiInputComponent();
             }
         };
 

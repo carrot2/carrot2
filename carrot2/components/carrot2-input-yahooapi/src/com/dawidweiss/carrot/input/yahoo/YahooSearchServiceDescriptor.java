@@ -28,7 +28,6 @@ public class YahooSearchServiceDescriptor {
      * {@link #initializeFromXML(InputStream)}.
      */
     public YahooSearchServiceDescriptor() {
-        
     }
 
     /**
