@@ -3,6 +3,7 @@ package com.dawidweiss.carrot2.browser;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.PrintWriter;
@@ -107,10 +108,6 @@ public class ResultsTab extends JPanel {
 
         this.browserView = new WebBrowser();
 
-        JScrollPane scrollerRight = new JScrollPane();
-        scrollerRight.setBorder(BorderFactory.createEmptyBorder());
-        scrollerRight.getViewport().add(browserView);
-
         // create 'progress' card.
         JPanel progressPane = new JPanel();
         FormLayout fm = new FormLayout(
@@ -124,9 +121,20 @@ public class ResultsTab extends JPanel {
         pindic.setIndeterminate(true);
         progressPane.add(pindic, cc.xy(2,4));
 
+        final JPanel subPanel = new JPanel(new BorderLayout()) {
+            public Dimension getMinimumSize() {
+                return new Dimension(0,0);
+            }
+
+            public Dimension getPreferredSize() {
+                return super.getMinimumSize();
+            }
+        };
+
+        subPanel.add(browserView, BorderLayout.CENTER);
         JSplitPane splitPane = new JSplitPane(
                 JSplitPane.HORIZONTAL_SPLIT,
-                scrollerLeft, scrollerRight);
+                scrollerLeft, subPanel);
         splitPane.setDividerLocation(300);
         
         this.cards = new JPanel(new CardLayout());
