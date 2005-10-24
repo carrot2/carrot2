@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -62,9 +63,11 @@ public class SwingDemoGui implements DemoGuiDelegate {
     private JTextField  queryField;
     private JComboBox   processComboBox;
     private JComboBox   sizeComboBox;
+    private JButton     processSettingsButton;
 
     /** A combo model for displaying process names */
     private MapComboModel processComboModel;
+
 
     /**
      * A listener for new queries.
@@ -98,6 +101,7 @@ public class SwingDemoGui implements DemoGuiDelegate {
                 queryField.setEnabled(onOff);
                 processComboBox.setEnabled(onOff);
                 sizeComboBox.setEnabled(onOff);
+                processSettingsButton.setEnabled(onOff);
             }
         }
     }
@@ -138,8 +142,8 @@ public class SwingDemoGui implements DemoGuiDelegate {
         // replace the combo box's model.
         final Runnable task = new Runnable() {
             public void run() {
-                processComboBox.setModel(
-                        processComboModel);
+                processComboBox.setModel(processComboModel);
+                processComboBox.setSelectedIndex(0);
                 queryField.requestFocus();
             }
         };
@@ -299,21 +303,38 @@ public class SwingDemoGui implements DemoGuiDelegate {
         
         // build details panel.
         final FormLayout layout2 = new FormLayout(
-                "right:pref,4px,fill:max(200;pref),16px,right:default,max(pref;60px)",
+                "right:pref,4px,fill:max(200;pref),min,16px,right:default,max(pref;60px)",
                 "pref");
         JPanel detailsPanel = new JPanel(layout2);
         detailsPanel.setOpaque(false);
         topPanel.add(detailsPanel, cc.xywh(3,3,1,1, CellConstraints.RIGHT, CellConstraints.DEFAULT));
-        
+
+        this.processSettingsButton = new JButton("Settings");
+        processSettingsButton.setToolTipText("Displays process settings window. Disabled if no settings.");
+        this.processSettingsButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                final String processId = (String) processComboModel.getSelectedKey();
+                demoContext.getSettingsObject(processId).showSettings();
+            }
+        });
+        detailsPanel.add(processSettingsButton, cc.xy(4,1, CellConstraints.DEFAULT, CellConstraints.FILL));
+
         detailsPanel.add(new JLabel("Process:"), cc.xy(1,1));
         this.processComboBox = new JComboBox();
         this.processComboBox.setToolTipText("A chain of components used to process the query.");
-        detailsPanel.add(processComboBox, cc.xy(3,1));
-        detailsPanel.add(new JLabel("Results:"), cc.xy(5,1));
+        this.processComboBox.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                final String processId = (String) processComboModel.getSelectedKey();
+                processSettingsButton.setVisible(demoContext.getSettingsObject(processId).hasSettings());
+            }
+        });
+        detailsPanel.add(processComboBox, cc.xy(3,1, CellConstraints.DEFAULT, CellConstraints.FILL));
+
+        detailsPanel.add(new JLabel("Results:"), cc.xy(6,1));
         this.sizeComboBox = new JComboBox(defaultSizes);
         this.sizeComboBox.setToolTipText("Number of results to acquire from the input source.");
         this.sizeComboBox.setSelectedItem("100");
-        detailsPanel.add(sizeComboBox, cc.xy(6,1));
+        detailsPanel.add(sizeComboBox, cc.xy(7,1, CellConstraints.DEFAULT, CellConstraints.FILL));
 
         return topPanel;
     }

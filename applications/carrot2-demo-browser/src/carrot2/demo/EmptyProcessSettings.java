@@ -16,4 +16,12 @@ public final class EmptyProcessSettings implements ProcessSettings {
     public HashMap getRequestParams() {
         return new HashMap();
     }
+
+    public boolean hasSettings() {
+        return false;
+    }
+
+    public void showSettings() {
+        throw new RuntimeException("No settings.");
+    }
 }

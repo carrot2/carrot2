@@ -9,6 +9,9 @@ import java.util.HashMap;
  * @author Dawid Weiss
  */
 public interface ProcessSettings {
-    boolean isConfigured();
-    HashMap getRequestParams();
+    public boolean hasSettings();
+    public void showSettings();
+    public boolean isConfigured();
+
+    public HashMap getRequestParams();
 }
