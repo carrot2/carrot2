@@ -1,0 +1,5 @@
+<local-component-factory 
+	id="output-clustersConsumer" 
+	pool-size="5"
+	component-class="com.dawidweiss.carrot.core.local.impl.ClustersConsumerOutputComponent">
+</local-component-factory> 

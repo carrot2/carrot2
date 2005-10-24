@@ -1,4 +1,4 @@
-package com.dawidweiss.carrot2.browser;
+package carrot2.demo.swing;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -37,16 +37,16 @@ public class ToolbarButton
     /**
      * Constructs a toolbar button.
      */
-    public ToolbarButton( Icon iconEnabled, Icon iconDisabled )
+    public ToolbarButton(Icon iconEnabled, Icon iconDisabled)
     {
-        super( iconDisabled );
+        super(iconDisabled);
         
         this.iconEnabled = iconEnabled;
         this.iconDisabled = iconDisabled;
 
         setFocusPainted(false);
         setBorderPainted(false);
-        addMouseListener( rolloverMouseListener );
+        addMouseListener(rolloverMouseListener);
         this.setContentAreaFilled(false);
     }
 }
