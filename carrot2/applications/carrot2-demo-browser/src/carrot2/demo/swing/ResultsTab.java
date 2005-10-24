@@ -83,13 +83,13 @@ public class ResultsTab extends JPanel {
 
         buildSplit();
     }
-    
+
     private void buildSplit() {
         this.setLayout(new BorderLayout());
 
-        SimpleInternalFrame all = new SimpleInternalFrame("Query: "
-                + ("".equals(query) ? "<empty>" : query)
-                + " (process: " + processId + ")");
+        SimpleInternalFrame all = new SimpleInternalFrame(
+                "[" + demoContext.getProcessIdToProcessNameMap().get(processId) + "] "
+                + ("".equals(query) ? "<empty>" : query));
         JToolBar toolbar = new JToolBar();
         ToolbarButton closeButton = new ToolbarButton(
                 new ImageIcon(this.getClass().getResource("remove.gif")),
