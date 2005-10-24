@@ -5,7 +5,7 @@
 
   <input component-key="input-yahooapi" />
   <filter component-key="filter-lingo" />
-  <output component-key="output-demo-tab" />
+  <output component-key="output-clustersConsumer" />
 
   <!-- 
        these parameters are injected in the request context

@@ -1,4 +1,4 @@
-package com.dawidweiss.carrot2.browser;
+package carrot2.demo.swing;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -24,6 +25,10 @@ import javax.swing.SwingUtilities;
 
 import org.jdesktop.jdic.browser.WebBrowser;
 
+import carrot2.demo.DemoContext;
+import carrot2.demo.ProcessSettings;
+
+import com.dawidweiss.carrot.core.local.ProcessingResult;
 import com.dawidweiss.carrot.core.local.clustering.RawDocument;
 import com.dawidweiss.carrot.core.local.impl.ClustersConsumerOutputComponent;
 import com.dawidweiss.carrot.core.local.impl.ClustersConsumerOutputComponent.Result;
@@ -42,11 +47,15 @@ public class ResultsTab extends JPanel {
 
     private String query;
     private String processId;
+    private int requestedResults;
+
     private WebBrowser browserView;
     private RawClustersTree clustersTree;
     private Result result;
     private JPanel cards;
     private JLabel progressInfo;
+    private DemoContext demoContext;
+    private ProcessSettings processSettings;
     
     private class SelfRemoveAction implements ActionListener {
         public void actionPerformed(ActionEvent actionEvent) {
@@ -61,13 +70,16 @@ public class ResultsTab extends JPanel {
                 }
                 last = last.getParent();
             }        
-            
         }
     }
 
-    public ResultsTab(String query, String processId) {
+    public ResultsTab(String query, DemoContext demoContext, ProcessSettings settings, String processId, int requestedResults) {
         this.query = query;
         this.processId = processId;
+        this.requestedResults = requestedResults;
+
+        this.demoContext = demoContext;
+        this.processSettings = settings;
 
         buildSplit();
     }
@@ -186,7 +198,7 @@ public class ResultsTab extends JPanel {
                 ((CardLayout)cards.getLayout()).show(cards, MAIN_CARD);
             }
         };
-        Browser.runAwtTask(task);
+        SwingTask.runNow(task);
     }
 
     /**
@@ -204,7 +216,7 @@ public class ResultsTab extends JPanel {
                 ((CardLayout)cards.getLayout()).show(cards, MAIN_CARD);
             }
         };
-        Browser.runAwtTask(task);
+        SwingTask.runNow(task);
     }
 
     /**
@@ -222,7 +234,7 @@ public class ResultsTab extends JPanel {
                 ((CardLayout)cards.getLayout()).show(cards, MAIN_CARD);
             }
         };
-        Browser.runAwtTask(task);
+        SwingTask.runNow(task);
     }
     
     /**
@@ -276,11 +288,39 @@ public class ResultsTab extends JPanel {
                 progressInfo.setText(string);
             }
         };
-        Browser.runAwtTask(task);
+        SwingTask.runNow(task);
     }
 
     protected void finalize() throws Throwable {
         super.finalize();
         this.browserView.dispose();
+    }
+
+    /**
+     * Performs the query in a separate thread and displays the result.
+     */
+    public void performQuery() {
+        try {
+            showProgress("Executing process...");
+            HashMap requestParams = processSettings.getRequestParams();
+            ProcessingResult result = demoContext.getController().query(processId, query, requestParams);
+
+            // get at the clustered result?
+            Object queryResult = result.getQueryResult();
+            showProgress("Rendering results...");
+            if (queryResult instanceof ClustersConsumerOutputComponent.Result) {
+                ClustersConsumerOutputComponent.Result output =
+                    (ClustersConsumerOutputComponent.Result) result.getQueryResult();
+
+                // Ok, we have the clusters. We also have the documents.
+                // Show them.
+                showResults(output);
+            } else {
+                // don't know what to do with the result... Just inform about it.
+                showInfo("<html><body><h1>Query processed</h1><p>The result object is not interpretable, however.</p></body></html>");
+            }
+        } catch (Exception e) {
+            showError(e);
+        }
     }    
 }

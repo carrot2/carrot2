@@ -1,4 +1,4 @@
-package com.dawidweiss.carrot2.browser;
+package carrot2.demo.swing;
 
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
