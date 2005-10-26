@@ -1,6 +1,5 @@
 <local-component-factory 
 	id="stub-output"
-	pool-size="5"
 	component-class="com.dawidweiss.carrot.local.controller.StubOutputComponent">
 
      <name>name</name>

@@ -36,23 +36,15 @@ public class LoadedComponentFactory {
     private String id;
 
     /**
-     * Size of the pool for objects created by this factory
-     */
-    private int poolSize;
-
-    /**
      * Creates a new LoadedComponentFactory object.
      *
      * @param id The identifier to use when adding this factory to a
      *        controller.
      * @param factory An initialized {@link LocalComponentFactory} object.
-     * @param poolSize Size of the pool for objects created by this factory.
      */
-    public LoadedComponentFactory(String id, LocalComponentFactory factory,
-        int poolSize) {
+    public LoadedComponentFactory(String id, LocalComponentFactory factory) {
         this.id = id;
         this.factory = factory;
-        this.poolSize = poolSize;
     }
 
     /**
@@ -67,13 +59,5 @@ public class LoadedComponentFactory {
      */
     public String getId() {
         return id;
-    }
-
-    /**
-     * @return Returns the maximum pool size for objects created by this
-     *         factory.
-     */
-    public int getPoolSize() {
-        return poolSize;
     }
 }

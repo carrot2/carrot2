@@ -14,6 +14,9 @@
 
 package com.dawidweiss.carrot.local.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.dawidweiss.carrot.core.local.LocalProcess;
 
 
@@ -36,12 +39,26 @@ public class LoadedProcess {
     private LocalProcess process;
 
     /**
+     * Any extra process attributes.
+     */
+    private final Map attributes;
+    
+    /**
      * Creates a new loaded process instance.
      *
      * @param id The id of the process.
      * @param process Initialized process instance.
      */
     public LoadedProcess(String id, LocalProcess process) {
+        this(id, process, new HashMap());
+    }
+    
+    /**
+     * Creates a new loaded process instance with
+     * a set of custom attributes (the map is referenced, not copied). 
+     */
+    public LoadedProcess(String id, LocalProcess process, Map attributes) {
+        this.attributes = attributes;
         this.id = id;
         this.process = process;
     }
@@ -58,5 +75,12 @@ public class LoadedProcess {
      */
     public LocalProcess getProcess() {
         return process;
+    }
+
+    /**
+     * @return Returns a map of loaded attributes (never null).
+     */
+    public Map getAttributes() {
+        return attributes;
     }
 }

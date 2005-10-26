@@ -37,7 +37,8 @@ public class MyProcess extends LocalProcessBase {
     }
 };
 
+HashMap attributes = new HashMap();
+attributes.put("attribute", "value");
+
 // return a new instance of the scripted process.
-
-return new LoadedProcess( "bshprocess", new MyProcess() );
-
+return new LoadedProcess("bshprocess", new MyProcess(), attributes);

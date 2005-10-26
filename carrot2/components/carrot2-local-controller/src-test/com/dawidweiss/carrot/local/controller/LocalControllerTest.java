@@ -21,6 +21,7 @@ import java.util.Set;
 
 import com.dawidweiss.carrot.core.local.DuplicatedKeyException;
 import com.dawidweiss.carrot.core.local.LocalComponent;
+import com.dawidweiss.carrot.core.local.LocalControllerBase;
 import com.dawidweiss.carrot.core.local.LocalFilterComponent;
 import com.dawidweiss.carrot.core.local.LocalInputComponent;
 import com.dawidweiss.carrot.core.local.LocalProcessBase;
@@ -37,7 +38,7 @@ public class LocalControllerTest extends junit.framework.TestCase {
     }
 
     public void testCorrectComponentFactoryAddition() throws Exception {
-        LocalController controller = new LocalController();
+        LocalControllerBase controller = new LocalControllerBase();
 
         StubInputComponentFactory factory = new StubInputComponentFactory();
         controller.addLocalComponentFactory("key", factory);
@@ -54,7 +55,7 @@ public class LocalControllerTest extends junit.framework.TestCase {
 
     public void testDuplicatedKeyInComponentFactoryAddition()
         throws Exception {
-        LocalController controller = new LocalController();
+        LocalControllerBase controller = new LocalControllerBase();
 
         StubInputComponentFactory factory = new StubInputComponentFactory();
         controller.addLocalComponentFactory("key", factory);
@@ -68,7 +69,7 @@ public class LocalControllerTest extends junit.framework.TestCase {
     }
 
     public void testContextPassedOnInitialize() throws Exception {
-        LocalController controller = new LocalController();
+        LocalControllerBase controller = new LocalControllerBase();
 
         StubInputComponentFactory factory = new StubInputComponentFactory();
         controller.addLocalComponentFactory("key", factory);
@@ -82,7 +83,7 @@ public class LocalControllerTest extends junit.framework.TestCase {
     }
 
     public void testProcessAddition() throws Exception {
-        LocalController controller = new LocalController();
+        LocalControllerBase controller = new LocalControllerBase();
 
         controller.addLocalComponentFactory("input",
             new StubInputComponentFactory());
@@ -101,18 +102,18 @@ public class LocalControllerTest extends junit.framework.TestCase {
     }
 
     public void testProcessAdditionAndQuerying() throws Exception {
-        LocalController controller = new LocalController();
+        LocalControllerBase controller = new LocalControllerBase();
 
-        controller.addComponentFactory("input",
-            new StubInputComponentFactory(), 5);
-        controller.addComponentFactory("filter1",
-            new StubFilterComponentFactory("f1"), 5);
-        controller.addComponentFactory("filter2",
-            new StubFilterComponentFactory("f2"), 5);
-        controller.addComponentFactory("output",
-            new StubOutputComponentFactory(), 5);
+        controller.addLocalComponentFactory("input",
+            new StubInputComponentFactory());
+        controller.addLocalComponentFactory("filter1",
+            new StubFilterComponentFactory("f1"));
+        controller.addLocalComponentFactory("filter2",
+            new StubFilterComponentFactory("f2"));
+        controller.addLocalComponentFactory("output",
+            new StubOutputComponentFactory());
 
-        LocalProcessBase process = new LocalProcessBase();
+        final LocalProcessBase process = new LocalProcessBase();
         process.setInput("input");
         process.setOutput("output");
         process.addFilter("filter1");
@@ -132,22 +133,22 @@ public class LocalControllerTest extends junit.framework.TestCase {
     }
 
     public void testVerifierIncompatibleComponents() throws Exception {
-        LocalController controller = new LocalController();
+        LocalControllerBase controller = new LocalControllerBase();
 
         Set a = new HashSet();
         Set b = new HashSet();
         a.add("capabilityA");
         b.add("capabilityB");
 
-        controller.addComponentFactory("input",
-            new StubInputComponentFactory(), 5);
-        controller.addComponentFactory("filter1",
-            new StubFilterComponentFactory("f1", a, Collections.EMPTY_SET, b), 5);
-        controller.addComponentFactory("filter2",
+        controller.addLocalComponentFactory("input",
+            new StubInputComponentFactory());
+        controller.addLocalComponentFactory("filter1",
+            new StubFilterComponentFactory("f1", a, Collections.EMPTY_SET, b));
+        controller.addLocalComponentFactory("filter2",
             new StubFilterComponentFactory("f2", Collections.EMPTY_SET, a,
-                Collections.EMPTY_SET), 5);
-        controller.addComponentFactory("output",
-            new StubOutputComponentFactory(), 5);
+                Collections.EMPTY_SET));
+        controller.addLocalComponentFactory("output",
+            new StubOutputComponentFactory());
 
         LocalProcessBase process = new LocalProcessBase();
         process.setInput("input");
@@ -164,21 +165,21 @@ public class LocalControllerTest extends junit.framework.TestCase {
     }
 
     public void testVerifierCompatibleComponents() throws Exception {
-        LocalController controller = new LocalController();
+        LocalControllerBase controller = new LocalControllerBase();
 
         Set a = new HashSet();
         Set b = new HashSet();
         a.add("capabilityA");
         b.add("capabilityB");
 
-        controller.addComponentFactory("input",
-            new StubInputComponentFactory(), 5);
-        controller.addComponentFactory("filter1",
-            new StubFilterComponentFactory("f1", a, Collections.EMPTY_SET, b), 5);
-        controller.addComponentFactory("filter2",
-            new StubFilterComponentFactory("f2", b, a, Collections.EMPTY_SET), 5);
-        controller.addComponentFactory("output",
-            new StubOutputComponentFactory(), 5);
+        controller.addLocalComponentFactory("input",
+            new StubInputComponentFactory());
+        controller.addLocalComponentFactory("filter1",
+            new StubFilterComponentFactory("f1", a, Collections.EMPTY_SET, b));
+        controller.addLocalComponentFactory("filter2",
+            new StubFilterComponentFactory("f2", b, a, Collections.EMPTY_SET));
+        controller.addLocalComponentFactory("output",
+            new StubOutputComponentFactory());
 
         LocalProcessBase process = new LocalProcessBase();
         process.setInput("input");
@@ -193,21 +194,21 @@ public class LocalControllerTest extends junit.framework.TestCase {
      */
     public void testSetNextInvocationContract()
         throws DuplicatedKeyException, Exception {
-        LocalController controller = new LocalController();
+        LocalControllerBase controller = new LocalControllerBase();
 
         Set a = new HashSet();
         Set b = new HashSet();
         a.add("capabilityA");
         b.add("capabilityB");
 
-        controller.addComponentFactory("input",
-            new StubInputComponentFactory(), 5);
-        controller.addComponentFactory("filter1",
-            new StubFilterComponentFactory("f1", a, Collections.EMPTY_SET, b), 5);
-        controller.addComponentFactory("filter2",
-            new StubFilterComponentFactory("f2", b, a, Collections.EMPTY_SET), 5);
-        controller.addComponentFactory("output",
-            new StubOutputComponentFactory(), 5);
+        controller.addLocalComponentFactory("input",
+            new StubInputComponentFactory());
+        controller.addLocalComponentFactory("filter1",
+            new StubFilterComponentFactory("f1", a, Collections.EMPTY_SET, b));
+        controller.addLocalComponentFactory("filter2",
+            new StubFilterComponentFactory("f2", b, a, Collections.EMPTY_SET));
+        controller.addLocalComponentFactory("output",
+            new StubOutputComponentFactory());
 
         final boolean[] states = new boolean[2];
 

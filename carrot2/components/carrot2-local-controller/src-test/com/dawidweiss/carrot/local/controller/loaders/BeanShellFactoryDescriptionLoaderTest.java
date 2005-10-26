@@ -17,8 +17,8 @@ package com.dawidweiss.carrot.local.controller.loaders;
 import java.util.Arrays;
 
 import com.dawidweiss.carrot.core.local.LocalComponent;
+import com.dawidweiss.carrot.core.local.LocalControllerBase;
 import com.dawidweiss.carrot.local.controller.ControllerHelper;
-import com.dawidweiss.carrot.local.controller.LocalController;
 import com.dawidweiss.carrot.local.controller.StubOutputComponent;
 
 
@@ -33,24 +33,22 @@ public class BeanShellFactoryDescriptionLoaderTest
     }
 
     public void testLoadingComponentFromBSHStream() throws Exception {
-        LocalController controller = new LocalController();
+        LocalControllerBase controller = new LocalControllerBase();
         ControllerHelper cl = new ControllerHelper();
         cl.addComponentFactory(controller, "bsh",
             this.getClass().getResourceAsStream("components/StubOutputComponentDescriptor.bsh"));
 
-        assertTrue(Arrays.asList(controller.getComponentFactoryNames())
-                         .contains("stub-output-bsh"));
+        assertTrue(controller.isComponentFactoryAvailable("stub-output-bsh"));
     }
 
     public void testPropertiesHaveBeenSetInBeanShellLoader()
         throws Exception {
-        LocalController controller = new LocalController();
+        LocalControllerBase controller = new LocalControllerBase();
         ControllerHelper cl = new ControllerHelper();
         cl.addComponentFactory(controller, "bsh",
             this.getClass().getResourceAsStream("components/StubOutputComponentDescriptor.bsh"));
 
-        assertTrue(Arrays.asList(controller.getComponentFactoryNames())
-                         .contains("stub-output-bsh"));
+        assertTrue(controller.isComponentFactoryAvailable("stub-output-bsh"));
 
         LocalComponent component = controller.borrowComponent("stub-output-bsh");
         assertNotNull(component);
@@ -59,16 +57,12 @@ public class BeanShellFactoryDescriptionLoaderTest
             ((StubOutputComponent) component).getProperty("property"));
     }
 
-    /*
-     */
     public void testNameAndDescriptionHasBeenSetInBeanShellLoader()
         throws Exception {
-        LocalController controller = new LocalController();
+        LocalControllerBase controller = new LocalControllerBase();
         ControllerHelper cl = new ControllerHelper();
         cl.addComponentFactory(controller, "bsh",
             this.getClass().getResourceAsStream("components/StubOutputComponentDescriptor.bsh"));
-
-        assertTrue(Arrays.asList(controller.getComponentFactoryNames())
-                         .contains("stub-output-bsh"));
+        assertTrue(controller.isComponentFactoryAvailable("stub-output-bsh"));
     }
 }

@@ -14,17 +14,21 @@
 
 package com.dawidweiss.carrot.local.controller;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+
 import com.dawidweiss.carrot.core.local.DuplicatedKeyException;
+import com.dawidweiss.carrot.core.local.LocalController;
 import com.dawidweiss.carrot.local.controller.loaders.BeanShellFactoryDescriptionLoader;
 import com.dawidweiss.carrot.local.controller.loaders.BeanShellProcessLoader;
 import com.dawidweiss.carrot.local.controller.loaders.ComponentInitializationException;
 import com.dawidweiss.carrot.local.controller.loaders.XmlFactoryDescriptionLoader;
 import com.dawidweiss.carrot.local.controller.loaders.XmlProcessLoader;
-import com.dawidweiss.carrot.core.local.LocalController;
-
-import java.io.*;
-
-import java.util.*;
 
 
 /**
@@ -157,16 +161,18 @@ public class ControllerHelper {
     }
 
     /**
-     * Adds a local process to the local controller, the process definition is
-     * read from a data stream using a loader matching the provided extension.
+     * Creates a local process definition
+     * read from a data stream using a process loader matching the
+     * provided file extension.
      * 
      * <p>
      * The stream is always closed when this method returns.
      * </p>
      *
      * @param controller The controller to add the process to.
-     * @param loaderExtension The extension of a loader to use.
+     * @param loaderExtension The file extension of a loader to use.
      * @param data Data stream.
+     * @return Returns the loaded process definition.
      *
      * @throws IOException Thrown if an i/o exception occurs.
      * @throws LoaderExtensionUnknownException Thrown if there is no loader
@@ -177,8 +183,7 @@ public class ControllerHelper {
      * @throws Exception Thrown if the process has been loaded and initialized,
      *         but adding it to a controller failed.
      */
-    public void addProcess(LocalController controller, String loaderExtension,
-        InputStream data)
+    public LoadedProcess loadProcess(final String loaderExtension, final InputStream data)
         throws LoaderExtensionUnknownException, IOException, 
             DuplicatedKeyException, Exception {
         try {
@@ -187,25 +192,24 @@ public class ControllerHelper {
                     "Loader unknown for extension: " + loaderExtension);
             }
 
-            ProcessLoader cl = (ProcessLoader) processLoaders.get(loaderExtension);
-            LoadedProcess loaded = cl.load(data);
-
-            controller.addProcess(loaded.getId(), loaded.getProcess());
+            final ProcessLoader cl = (ProcessLoader) processLoaders.get(loaderExtension);
+            final LoadedProcess loaded = cl.load(data);
+            return loaded;
         } finally {
             try {
                 data.close();
             } catch (IOException e) {
+                // Ignore closing exception.
             }
         }
     }
 
     /**
-     * Adds a local process to the local controller, the process definition is
-     * read from a file. The extension of the file is used to find the
-     * appropriate loader.
+     * Creates a local process definition read from a file.
+     * The extension of the file is used to find the appropriate loader.
      *
-     * @param controller The controller to add the process to.
      * @param file The file to load the process from.
+     * @return Returns the loaded process definition.
      *
      * @throws IOException Thrown if an i/o exception occurs.
      * @throws LoaderExtensionUnknownException Thrown if there is no loader
@@ -217,17 +221,18 @@ public class ControllerHelper {
      * @throws Exception Thrown if the process has been loaded and initialized,
      *         but adding it to a controller failed.
      */
-    public void addProcess(LocalController controller, File file)
+    public LoadedProcess loadProcess(File file)
         throws FileNotFoundException, LoaderExtensionUnknownException, 
             IOException, DuplicatedKeyException, Exception {
         String extension = getExtension(file);
-        addProcess(controller, extension, new FileInputStream(file));
+        return loadProcess(extension, new FileInputStream(file));
     }
 
     /**
-     * Applies {@link #addProcess(LocalController controller, File file)}
-     * method to all files in the directory. <b>Only recognized loaders</b>
-     * (file extensions) will trigger component load attempt.
+     * Applies {@link #loadProcess(File file)}
+     * method to all files in the directory and adds them to the provided controller.
+     * <b>Only recognized loaders</b> (file extensions) will trigger component
+     * load attempt.
      *
      * @param controller The controller to add the process to.
      * @param directory The directory to scan. Subdirectories are not
@@ -250,7 +255,8 @@ public class ControllerHelper {
 
         for (int i = 0; i < files.length; i++) {
             try {
-                addProcess(controller, files[i]);
+                final LoadedProcess loadedProcess = loadProcess(files[i]);
+                controller.addProcess(loadedProcess.getId(), loadedProcess.getProcess());
             } catch (FileNotFoundException e) {
                 // file has been apparently deleted between list()
                 // and its access time. ok, ignore it.
@@ -263,9 +269,10 @@ public class ControllerHelper {
     }
 
     /**
-     * Applies {@link #addProcess(LocalController controller, File file)}
+     * Applies {@link #loadProcess(File file)}
      * method to all files in the directory that return <code>true</code> from
-     * the provided file name selector filter.
+     * the provided file name selector filter and adds processes to the given
+     * controller.
      *
      * @param controller The controller to add the process to.
      * @param directory The directory to scan. Subdirectories are not
@@ -290,7 +297,8 @@ public class ControllerHelper {
 
         for (int i = 0; i < files.length; i++) {
             try {
-                addProcess(controller, files[i]);
+                final LoadedProcess loadedProcess = loadProcess(files[i]);
+                controller.addProcess(loadedProcess.getId(), loadedProcess.getProcess());
             } catch (FileNotFoundException e) {
                 // file has been apparently deleted between list()
                 // and its access time. ok, ignore it.
@@ -313,8 +321,6 @@ public class ControllerHelper {
      * @throws IOException Thrown if an i/o exception occurs.
      * @throws LoaderExtensionUnknownException Thrown if there is no loader
      *         associated with the provided extension.
-     * @throws InstantiationException Thrown if factory has been loaded, but
-     *         components instantiation failed in the controller.
      * @throws DuplicatedKeyException Thrown if the controller already has a
      *         component factory mapped to the identifier of the newly loaded
      *         factory.
@@ -332,9 +338,6 @@ public class ControllerHelper {
             ComponentFactoryLoader cl = (ComponentFactoryLoader) componentFactoryLoaders.get(loaderExtension);
             LoadedComponentFactory loaded = cl.load(data);
 
-            // Current unused, but we might add it to the controller in the
-            // future.
-            final int poolSize = loaded.getPoolSize();
             controller.addLocalComponentFactory(loaded.getId(), loaded.getFactory());
         } finally {
             try {
