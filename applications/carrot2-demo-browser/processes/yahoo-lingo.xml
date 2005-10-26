@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<local-process id="xmlprocess">
+<local-process id="yahoo-lingo">
   <name>YahooAPI-Lingo</name>
   <description>Search Yahoo, cluster using Lingo</description>
 
@@ -7,12 +7,6 @@
   <filter component-key="filter-lingo" />
   <output component-key="output-clustersConsumer" />
 
-  <!-- 
-       these parameters are injected in the request context
-       on every request. See the documentation for a list
-       of allowed type conversions. The default type is java.lang.String
-	   
-	   <param key="integer-key" value="25" type="java.lang.Integer" />
-	   <param key="string-key" value="25" />
-    -->
+  <attribute  key="process.settings.class" 
+	          value="carrot2.demo.settings.LingoClassicSettings" />
 </local-process>

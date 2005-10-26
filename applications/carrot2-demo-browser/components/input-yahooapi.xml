@@ -1,5 +1,4 @@
 <local-component-factory 
 	id="input-yahooapi"
-	pool-size="5"
 	component-class="com.dawidweiss.carrot.input.yahoo.YahooApiInputComponent">
 </local-component-factory> 

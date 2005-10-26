@@ -1,7 +1,7 @@
 /**
  * 
  */
-package carrot2.demo.swing;
+package carrot2.demo.swing.util;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -16,7 +16,7 @@ import javax.swing.DefaultComboBoxModel;
  * 
  * @author Dawid Weiss
  */
-final class MapComboModel extends DefaultComboBoxModel {
+public final class MapComboModel extends DefaultComboBoxModel {
     private final List ids;
     private final List values;
     int selected = 0;
@@ -52,5 +52,9 @@ final class MapComboModel extends DefaultComboBoxModel {
 
     public Object getSelectedKey() {
         return ids.get(selected);
+    }
+    
+    public Object getSelectedValue() {
+        return getSelectedItem();
     }
 }

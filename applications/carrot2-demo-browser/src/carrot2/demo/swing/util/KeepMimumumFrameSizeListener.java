@@ -1,4 +1,4 @@
-package carrot2.demo.swing;
+package carrot2.demo.swing.util;
 
 import java.awt.Dimension;
 import java.awt.event.ComponentAdapter;

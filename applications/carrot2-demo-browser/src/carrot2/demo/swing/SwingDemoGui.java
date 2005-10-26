@@ -27,6 +27,9 @@ import javax.swing.WindowConstants;
 import carrot2.demo.DemoContext;
 import carrot2.demo.DemoGuiDelegate;
 import carrot2.demo.ProcessSettings;
+import carrot2.demo.swing.util.KeepMimumumFrameSizeListener;
+import carrot2.demo.swing.util.MapComboModel;
+import carrot2.demo.swing.util.SwingTask;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -68,7 +71,6 @@ public class SwingDemoGui implements DemoGuiDelegate {
     /** A combo model for displaying process names */
     private MapComboModel processComboModel;
 
-
     /**
      * A listener for new queries.
      */
@@ -105,7 +107,7 @@ public class SwingDemoGui implements DemoGuiDelegate {
             }
         }
     }
-        
+
     /**
      * Creates a new object attached to a demo context. Call {@link #display()} to display
      * the demo frame.
@@ -175,8 +177,9 @@ public class SwingDemoGui implements DemoGuiDelegate {
             } else if (tabName.length() > 20) {
                 tabName = tabName.substring(0, 20) + "...";
             }
-            final ResultsTab resultsTab = new ResultsTab(query, demoContext, settings, processId, requestedResults);
+            final ResultsTab resultsTab = new ResultsTab(query, demoContext, settings.createClone(), processId, requestedResults);
             tabbedPane.addTab(tabName, resultsTab);
+            tabbedPane.setSelectedIndex(tabbedPane.getTabCount()-1);
             tabbedPane.setToolTipTextAt(tabbedPane.getTabCount()-1, query);
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
@@ -314,7 +317,7 @@ public class SwingDemoGui implements DemoGuiDelegate {
         this.processSettingsButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 final String processId = (String) processComboModel.getSelectedKey();
-                demoContext.getSettingsObject(processId).showSettings();
+                demoContext.getSettingsObject(processId).showDefaultSettings(frame);
             }
         });
         detailsPanel.add(processSettingsButton, cc.xy(4,1, CellConstraints.DEFAULT, CellConstraints.FILL));

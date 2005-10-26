@@ -22,6 +22,14 @@ public final class EmptyProcessSettings implements ProcessSettings {
     }
 
     public void showSettings() {
-        throw new RuntimeException("No settings.");
+        throw new RuntimeException("Should not be invoked.");
+    }
+
+    public void showDefaultSettings(Object guiContainer) {
+        throw new RuntimeException("Should not be invoked.");
+    }
+
+    public ProcessSettings createClone() {
+        return this;
     }
 }
