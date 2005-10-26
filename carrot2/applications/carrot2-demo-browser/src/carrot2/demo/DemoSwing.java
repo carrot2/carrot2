@@ -1,7 +1,5 @@
 package carrot2.demo;
 
-import org.apache.log4j.BasicConfigurator;
-
 import carrot2.demo.swing.SwingDemoGui;
 
 /**
@@ -11,7 +9,6 @@ import carrot2.demo.swing.SwingDemoGui;
  */
 public class DemoSwing {
     public static void main(String[] args) {
-        BasicConfigurator.configure();
         final DemoContext carrotDemo = new DemoContext();
         final SwingDemoGui demoGui = new SwingDemoGui(carrotDemo); 
         demoGui.display();

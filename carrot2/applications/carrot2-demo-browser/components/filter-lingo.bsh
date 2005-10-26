@@ -25,5 +25,4 @@ factory = new LocalComponentFactoryBase() {
 
 return new LoadedComponentFactory(
 	/* id */ "filter-lingo", 
-	factory, 
-	/* pool size */ 5);
+	factory);

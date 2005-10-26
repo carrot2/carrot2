@@ -27,6 +27,8 @@ import org.jdesktop.jdic.browser.WebBrowser;
 
 import carrot2.demo.DemoContext;
 import carrot2.demo.ProcessSettings;
+import carrot2.demo.swing.util.SwingTask;
+import carrot2.demo.swing.util.ToolbarButton;
 
 import com.dawidweiss.carrot.core.local.ProcessingResult;
 import com.dawidweiss.carrot.core.local.clustering.RawDocument;

@@ -1,10 +1,14 @@
-package carrot2.demo.swing;
+package carrot2.demo.swing.util;
 
 import java.lang.reflect.InvocationTargetException;
-
 import javax.swing.SwingUtilities;
 
-public class SwingTask {
+public final class SwingTask {
+
+    private SwingTask() {
+        // No instances.
+    }
+    
     /**
      * Attempts to invoke a task from AWT thread as soon
      * as possible (possibly immediately). 
