@@ -16,4 +16,9 @@
   <param key="integer-key" value="25" type="java.lang.Integer" />
   <param key="string-key" value="25" />
 
+  <!--
+	   Attributes are available from LoadedProcess when it is returned
+ 	   from ControllerHelper.
+	-->
+  <attribute key="attribute" value="value" />
 </local-process>

@@ -20,6 +20,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import com.dawidweiss.carrot.core.local.LocalController;
+import com.dawidweiss.carrot.core.local.LocalControllerBase;
 import com.dawidweiss.carrot.core.local.ProcessingResult;
 
 
@@ -28,29 +30,18 @@ import com.dawidweiss.carrot.core.local.ProcessingResult;
  * and processes from a serialized form).
  */
 public class ControllerHelperTest extends junit.framework.TestCase {
-    /*
-     */
-    public ControllerHelperTest() {
-        super();
-    }
 
-    /*
-     */
     public ControllerHelperTest(String s) {
         super(s);
     }
 
-    /*
-     */
     public void testLoadingComponentFromXMLStream() throws Exception {
-        LocalController controller = new LocalController();
+        LocalControllerBase controller = new LocalControllerBase();
         ControllerHelper cl = new ControllerHelper();
         cl.addComponentFactory(controller,
             ControllerHelper.EXT_COMPONENT_FACTORY_LOADER_XML,
             this.getClass().getResourceAsStream("loaders/components/StubOutputComponentDescriptor.xml"));
-
-        assertTrue(Arrays.asList(controller.getComponentFactoryNames())
-                         .contains("stub-output"));
+        assertTrue(controller.isComponentFactoryAvailable("stub-output"));
     }
 
     /*
@@ -68,15 +59,12 @@ public class ControllerHelperTest extends junit.framework.TestCase {
                 ". Run tests in test classes directory.");
         }
 
-        LocalController controller = new LocalController();
+        LocalControllerBase controller = new LocalControllerBase();
         ControllerHelper cl = new ControllerHelper();
         cl.addComponentFactory(controller, file);
-        assertTrue(Arrays.asList(controller.getComponentFactoryNames())
-                         .contains("stub-output"));
+        assertTrue(controller.isComponentFactoryAvailable("stub-output"));
     }
 
-    /*
-     */
     public void testLoadingComponentFromDirectory() throws Exception {
         // an easy way to descent to the right package...
         File dir = new File(this.getClass().getName().replace('.', '/')).getParentFile();
@@ -88,17 +76,13 @@ public class ControllerHelperTest extends junit.framework.TestCase {
                 ". Run tests in test classes directory.");
         }
 
-        LocalController controller = new LocalController();
+        LocalControllerBase controller = new LocalControllerBase();
         ControllerHelper cl = new ControllerHelper();
         cl.addComponentFactoriesFromDirectory(controller, file);
-        assertTrue(Arrays.asList(controller.getComponentFactoryNames())
-                         .contains("stub-output"));
-        assertTrue(Arrays.asList(controller.getComponentFactoryNames())
-                         .contains("stub-output-bsh"));
+        assertTrue(controller.isComponentFactoryAvailable("stub-output"));
+        assertTrue(controller.isComponentFactoryAvailable("stub-output-bsh"));
     }
 
-    /*
-     */
     public void testLoadingComponentFromDirectoryWithFilter()
         throws Exception {
         // an easy way to descent to the right package...
@@ -111,7 +95,7 @@ public class ControllerHelperTest extends junit.framework.TestCase {
                 ". Run tests in test classes directory.");
         }
 
-        LocalController controller = new LocalController();
+        LocalControllerBase controller = new LocalControllerBase();
         ControllerHelper cl = new ControllerHelper();
         cl.addComponentFactoriesFromDirectory(controller, file,
             new FileFilter() {
@@ -125,19 +109,18 @@ public class ControllerHelperTest extends junit.framework.TestCase {
                           .contains("stub-output-bsh"));
     }
 
-    /*
-     */
     public void testLoadingProcessesFromStream() throws Exception {
         // an easy way to descent to the right package...
         File dir = new File(this.getClass().getName().replace('.', '/')).getParentFile();
         File file = new File(dir, "loaders" + File.separator + "components");
 
-        LocalController controller = new LocalController();
+        LocalController controller = new LocalControllerBase();
         ControllerHelper cl = new ControllerHelper();
 
         cl.addComponentFactoriesFromDirectory(controller, file);
-        cl.addProcess(controller, ControllerHelper.EXT_PROCESS_LOADER_XML,
+        LoadedProcess loadedProcess = cl.loadProcess(ControllerHelper.EXT_PROCESS_LOADER_XML,
             this.getClass().getResourceAsStream("loaders/processes/xml-process.xml"));
+        controller.addProcess(loadedProcess.getId(), loadedProcess.getProcess());
 
         assertTrue(controller.getProcessIds().contains("xmlprocess"));
 
@@ -146,27 +129,24 @@ public class ControllerHelperTest extends junit.framework.TestCase {
             result.getQueryResult().toString());
     }
 
-    /*
-     */
     public void testLoadingProcessesFromFile() throws Exception {
         // an easy way to descent to the right package...
         File dir = new File(this.getClass().getName().replace('.', '/')).getParentFile();
         File file = new File(dir, "loaders" + File.separator + "components");
-        File process = new File(dir,
+        File processFile = new File(dir,
                 "loaders" + File.separator + "processes" + File.separator +
                 "xml-process.xml");
 
-        LocalController controller = new LocalController();
+        LocalControllerBase controller = new LocalControllerBase();
         ControllerHelper cl = new ControllerHelper();
 
         cl.addComponentFactoriesFromDirectory(controller, file);
-        cl.addProcess(controller, process);
+        final LoadedProcess loadedProcess = cl.loadProcess(processFile);
+        controller.addProcess(loadedProcess.getId(), loadedProcess.getProcess());
 
         assertTrue(controller.getProcessIds().contains("xmlprocess"));
     }
 
-    /*
-     */
     public void testLoadingProcessesFromDirectory() throws Exception {
         // an easy way to descent to the right package...
         File dir = new File(this.getClass().getName().replace('.', '/')).getParentFile();
@@ -174,7 +154,7 @@ public class ControllerHelperTest extends junit.framework.TestCase {
         File processDir = new File(dir, "loaders" + File.separator +
                 "processes");
 
-        LocalController controller = new LocalController();
+        LocalControllerBase controller = new LocalControllerBase();
         ControllerHelper cl = new ControllerHelper();
 
         cl.addComponentFactoriesFromDirectory(controller, file);
@@ -183,8 +163,6 @@ public class ControllerHelperTest extends junit.framework.TestCase {
         assertTrue(controller.getProcessIds().contains("xmlprocess"));
     }
 
-    /*
-     */
     public void testLoadingProcessesFromDirectoryWithFilter()
         throws Exception {
         // an easy way to descent to the right package...
@@ -193,7 +171,7 @@ public class ControllerHelperTest extends junit.framework.TestCase {
         File processDir = new File(dir, "loaders" + File.separator +
                 "processes");
 
-        LocalController controller = new LocalController();
+        LocalControllerBase controller = new LocalControllerBase();
         ControllerHelper cl = new ControllerHelper();
 
         cl.addComponentFactoriesFromDirectory(controller, file);

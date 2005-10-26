@@ -14,21 +14,18 @@
 
 package com.dawidweiss.carrot.local.controller.loaders;
 
-import com.dawidweiss.carrot.local.controller.ComponentFactoryLoader;
-import com.dawidweiss.carrot.local.controller.LoadedComponentFactory;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Modifier;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import org.jdom.Element;
 import org.jdom.JDOMException;
-
 import org.jdom.input.SAXBuilder;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import java.lang.reflect.Modifier;
-
-import java.util.HashMap;
-import java.util.Iterator;
+import com.dawidweiss.carrot.local.controller.ComponentFactoryLoader;
+import com.dawidweiss.carrot.local.controller.LoadedComponentFactory;
 
 
 /**
@@ -58,7 +55,6 @@ import java.util.Iterator;
  * <pre>
  * &lt;local-component-factory 
  * 	id="stub-output"
- * 	pool-size="5"
  * 	component-class="com.dawidweiss.carrot.local.controller.StubOutputComponent"&gt;
  * 
  *      &lt;name&gt;Stub Output Component&lt;/name&gt;
@@ -111,15 +107,6 @@ public class XmlFactoryDescriptionLoader implements ComponentFactoryLoader {
                 throw new IOException(
                     "Malformed stream: missing 'component-class' attribute");
             }
-
-            String poolSizeString = root.getAttributeValue("pool-size");
-
-            if (poolSizeString == null) {
-                throw new IOException(
-                    "Malformed stream: missing 'pool-size' attribute.");
-            }
-
-            int poolSize = Integer.parseInt(poolSizeString);
 
             String initBeanshell = null;
             Element elem = root.getChild("init-beanshell");
@@ -183,7 +170,7 @@ public class XmlFactoryDescriptionLoader implements ComponentFactoryLoader {
             PlainComponentFactory factory = new PlainComponentFactory(componentClazz,
                     initBeanshell, defaults, name, description);
 
-            return new LoadedComponentFactory(id, factory, poolSize);
+            return new LoadedComponentFactory(id, factory);
         } catch (JDOMException e) {
             throw new IOException("Corrupted or incorrect XML stream: " +
                 e.toString());

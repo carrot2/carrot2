@@ -92,9 +92,8 @@ public class BeanShellProcessLoader implements ProcessLoader {
         interpreter.getClassManager().reset();
 
         try {
-            LoadedProcess process = (LoadedProcess) interpreter.eval(new InputStreamReader(
+            final LoadedProcess process = (LoadedProcess) interpreter.eval(new InputStreamReader(
                         dataStream, "UTF-8"));
-
             if (process == null) {
                 throw new InstantiationException(
                     "BeanShell script must return an instance of" +

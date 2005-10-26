@@ -16,8 +16,10 @@ package com.dawidweiss.carrot.local.controller.loaders;
 
 import java.io.File;
 
+import com.dawidweiss.carrot.core.local.LocalController;
+import com.dawidweiss.carrot.core.local.LocalControllerBase;
 import com.dawidweiss.carrot.local.controller.ControllerHelper;
-import com.dawidweiss.carrot.local.controller.LocalController;
+import com.dawidweiss.carrot.local.controller.LoadedProcess;
 
 
 /**
@@ -35,12 +37,15 @@ public class XmlProcessLoaderTest extends junit.framework.TestCase {
         File file = new File(dir, "components");
         File processDir = new File(dir, "processes");
 
-        LocalController controller = new LocalController();
-        ControllerHelper cl = new ControllerHelper();
+        final LocalController controller = new LocalControllerBase();
+        final ControllerHelper cl = new ControllerHelper();
 
         cl.addComponentFactoriesFromDirectory(controller, file);
-        cl.addProcess(controller, new File(processDir, "xml-process.xml"));
+        final LoadedProcess process = cl.loadProcess(new File(processDir, "xml-process.xml"));
 
-        assertTrue(controller.getProcessIds().contains("xmlprocess"));
+        assertTrue(process != null);
+        assertEquals("xmlprocess", process.getId());
+        assertEquals("name", process.getProcess().getName());
+        assertEquals("value", process.getAttributes().get("attribute"));
     }
 }

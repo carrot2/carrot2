@@ -23,5 +23,4 @@ factory = new LocalComponentFactoryBase() {
 	
 return new LoadedComponentFactory(
 	/* id */ "stub-output-with-required-attrs", 
-	factory, 
-	/* pool size */ 5);
+	factory);

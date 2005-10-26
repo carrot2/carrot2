@@ -51,7 +51,7 @@ import java.io.UnsupportedEncodingException;
  *     }
  * };
  * 	
- * return new LoadedComponentFactory("stub-output", factory, 5); 
+ * return new LoadedComponentFactory("stub-output", factory); 
  * </pre>   
  * </p>
  * 
@@ -73,7 +73,7 @@ public class BeanShellFactoryDescriptionLoader implements ComponentFactoryLoader
      */
     public LoadedComponentFactory load(InputStream dataStream) 
         throws IOException, ComponentInitializationException {
-        Interpreter interpreter = new Interpreter();
+        final Interpreter interpreter = new Interpreter();
         interpreter.getClassManager().reset();
 
         try {

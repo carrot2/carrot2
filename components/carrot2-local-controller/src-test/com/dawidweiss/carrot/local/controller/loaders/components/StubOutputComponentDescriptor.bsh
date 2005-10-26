@@ -28,8 +28,7 @@ public class MyFactory implements LocalComponentFactory {
 
 return new LoadedComponentFactory(
 	"stub-output-bsh", 
-	new MyFactory(), 
-	5);
+	new MyFactory());
 
 */
 
@@ -55,5 +54,4 @@ factory = new LocalComponentFactory() {
 	
 return new LoadedComponentFactory(
 	/* id */ "stub-output-bsh", 
-	factory, 
-	/* pool size */ 5);
+	factory);
