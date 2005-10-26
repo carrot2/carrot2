@@ -153,7 +153,10 @@ public class XmlProcessLoader implements ProcessLoader {
             }
 
             // Parse extra process attributes.
-            final Map attributes = extractRequestParameters(root.getChildren("attribute"));
+            Map attributes = extractRequestParameters(root.getChildren("attribute"));
+            if (attributes == null) {
+                attributes = new HashMap();
+            }
             return new LoadedProcess(id, process, attributes);
         } catch (JDOMException e) {
             throw new IOException("Malformed stream: XML corrupted: " + e);

@@ -20,7 +20,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 import com.dawidweiss.carrot.core.local.DuplicatedKeyException;
 import com.dawidweiss.carrot.core.local.LocalController;
@@ -229,8 +232,48 @@ public class ControllerHelper {
     }
 
     /**
-     * Applies {@link #loadProcess(File file)}
-     * method to all files in the directory and adds them to the provided controller.
+     * Loads all processes in a directory and returns an array of {@link LoadedProcess}.
+     * <b>Only recognized loaders</b> (file extensions) will trigger component
+     * load attempt.
+     *
+     * @param directory The directory to scan. Subdirectories are not
+     *        traversed.
+     *
+     * @return Returns a list of {@link LoadedProcess} objects.
+     * @throws IOException Thrown if an i/o exception occurs.
+     * @throws DuplicatedKeyException Thrown if the controller already has a
+     *         component factory mapped to the identifier of the newly loaded
+     *         factory.
+     * @throws Exception Thrown if some process has been loaded and
+     *         initialized, but adding it to a controller failed.
+     */
+    public List loadProcessesFromDirectory(File directory)
+        throws IOException, DuplicatedKeyException, Exception {
+        final File[] files = directory.listFiles(new FileFilter() {
+                    public boolean accept(File pathname) {
+                        return processLoaders.containsKey(getExtension(pathname));
+                    }
+                });
+
+        final ArrayList loadedProcesses = new ArrayList();
+        for (int i = 0; i < files.length; i++) {
+            try {
+                final LoadedProcess loadedProcess = loadProcess(files[i]);
+                loadedProcesses.add(loadedProcess);
+            } catch (FileNotFoundException e) {
+                // file has been apparently deleted between list()
+                // and its access time. ok, ignore it.
+            } catch (LoaderExtensionUnknownException e) {
+                // This is impossible, because we checked
+                // that the loader knows the extension of this file.
+                throw new RuntimeException("Impossible state reached.");
+            }
+        }
+        return loadedProcesses;
+    }
+    
+    /**
+     * Loads all processes in a directory and adds them to a given controller.
      * <b>Only recognized loaders</b> (file extensions) will trigger component
      * load attempt.
      *
@@ -245,26 +288,12 @@ public class ControllerHelper {
      * @throws Exception Thrown if some process has been loaded and
      *         initialized, but adding it to a controller failed.
      */
-    public void addProcessesFromDirectory(LocalController controller,
-        File directory) throws IOException, DuplicatedKeyException, Exception {
-        File[] files = directory.listFiles(new FileFilter() {
-                    public boolean accept(File pathname) {
-                        return processLoaders.containsKey(getExtension(pathname));
-                    }
-                });
-
-        for (int i = 0; i < files.length; i++) {
-            try {
-                final LoadedProcess loadedProcess = loadProcess(files[i]);
-                controller.addProcess(loadedProcess.getId(), loadedProcess.getProcess());
-            } catch (FileNotFoundException e) {
-                // file has been apparently deleted between list()
-                // and its access time. ok, ignore it.
-            } catch (LoaderExtensionUnknownException e) {
-                // This is impossible, because we checked
-                // that the loader knows the extension of this file.
-                throw new RuntimeException("Impossible state reached.");
-            }
+    public void addProcessesFromDirectory(LocalController controller, File directory)
+        throws IOException, DuplicatedKeyException, Exception {
+        final List loadedProcesses = loadProcessesFromDirectory(directory);
+        for (Iterator i = loadedProcesses.iterator(); i.hasNext();) {
+            final LoadedProcess lp = (LoadedProcess) i.next();
+            controller.addProcess(lp.getId(), lp.getProcess());
         }
     }
 
