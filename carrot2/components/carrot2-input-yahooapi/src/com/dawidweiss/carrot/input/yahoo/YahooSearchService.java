@@ -13,6 +13,7 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpConstants;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.HttpVersion;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
@@ -84,6 +85,8 @@ public class YahooSearchService {
                 // be implemented nicer perhaps.
                 FormParameters parameters = descriptor.getFormParameters();
                 PostMethod postMethod = new PostMethod(formActionInfo.getServiceURL().toExternalForm());
+                postMethod.setRequestHeader("Content-type", "application/x-www-form-urlencoded; charset=UTF-8");
+
                 try {
                     HashMap httpHeaders = formActionInfo.getHttpHeaders();
                     for (Iterator i = httpHeaders.keySet().iterator(); i.hasNext();) {

@@ -25,6 +25,25 @@ public class YahooApiInputComponentTest extends junit.framework.TestCase {
         super(s);
     }
 
+    public void testJanWeglarzQuery() throws Exception {
+        final LocalComponentFactory inputFactory = new LocalComponentFactoryBase() {
+            public LocalComponent getInstance() {
+                return new YahooApiInputComponent();
+            }
+        };
+
+        LocalControllerBase controller = setUpController(inputFactory);
+        String query = "Jan Węglarz";
+        final long start = System.currentTimeMillis();
+        List results = (List) controller.query("testprocess", query, new HashMap()).getQueryResult();
+        final long end = System.currentTimeMillis();
+        log.info("Yahoo query time: " + (end - start) + " ms.");
+
+        // the results should contain some documents.
+        assertEquals("Results acquired from Yahoo"
+                + ":" + results.size(), 100, results.size());
+    }
+
     public void testSiteQuery() throws Exception {
         final LocalComponentFactory inputFactory = new LocalComponentFactoryBase() {
             public LocalComponent getInstance() {
