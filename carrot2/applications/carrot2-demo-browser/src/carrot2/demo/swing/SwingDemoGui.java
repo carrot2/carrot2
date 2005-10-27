@@ -7,21 +7,23 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 
+import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
@@ -194,6 +196,7 @@ public class SwingDemoGui implements DemoGuiDelegate {
                         resultsTab.performQuery();
                     } finally {
                         enableUI();
+                        queryField.requestFocus();
                     }
                 }
             }.start();
@@ -203,7 +206,7 @@ public class SwingDemoGui implements DemoGuiDelegate {
             enableUI();
         }
     }
-    
+
     /**
      * Disables interactive user interface elements.
      */
@@ -246,6 +249,21 @@ public class SwingDemoGui implements DemoGuiDelegate {
         tabbedPane.putClientProperty(Options.EMBEDDED_TABS_KEY, Boolean.TRUE);
         tabbedPane.putClientProperty(Options.NO_CONTENT_BORDER_KEY, Boolean.FALSE);
         tabbedPane.setBorder(BorderFactory.createEmptyBorder());
+
+        final AbstractAction closeTabAction = new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                if (tabbedPane.getTabCount() > 0) {
+                    final int selected = tabbedPane.getSelectedIndex();
+                    if (selected >= 0) {
+                        tabbedPane.remove(selected);
+                    }
+                }
+            }
+        };
+        final Object delTabKey = "deltab";
+        tabbedPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_W, InputEvent.CTRL_DOWN_MASK), delTabKey);
+        tabbedPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_F4, InputEvent.CTRL_DOWN_MASK), delTabKey);
+        tabbedPane.getActionMap().put(delTabKey, closeTabAction);
 
         cc = new GridBagConstraints(
                 0, 1,
