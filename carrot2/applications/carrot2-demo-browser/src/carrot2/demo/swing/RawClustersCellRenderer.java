@@ -28,26 +28,8 @@ public class RawClustersCellRenderer extends DefaultTreeCellRenderer {
         super.getTreeCellRendererComponent(tree, "", selected, expanded, leaf, row, hasFocus);
         
         if (value instanceof RawCluster) {
-            RawCluster rc = (RawCluster) value;
-            List description = rc.getClusterDescription();
-
-            StringBuffer buf = new StringBuffer();
-            for (Iterator i = description.iterator(); i.hasNext();) {
-                String phrase = (String) i.next();
-
-                if ((buf.length() + phrase.length()) > MAX_CLUSTER_DESCRIPTION_WIDTH) {
-                    buf.append(phrase.substring(0,
-                            MAX_CLUSTER_DESCRIPTION_WIDTH - buf.length()));
-                    buf.append("...");
-                    break;
-                } else {
-                    if (buf.length() > 0) {
-                        buf.append("; ");
-                    }
-
-                    buf.append(phrase);
-                }
-            }
+            final RawCluster rc = (RawCluster) value;
+            String label = getLabel(rc, MAX_CLUSTER_DESCRIPTION_WIDTH);
 
             List subs = rc.getSubclusters();
             if (rc.getProperty(RawCluster.PROPERTY_JUNK_CLUSTER) != null) {
@@ -63,11 +45,34 @@ public class RawClustersCellRenderer extends DefaultTreeCellRenderer {
 	                setIcon(clusterIcon);                
 	            }
             }
-            setText(buf.toString());
+            setText(label);
         } else if (value instanceof String) {
-            setText( (String) value );
+            setText((String) value);
         }
 
         return this;
+    }
+
+    public static String getLabel(RawCluster rc, final int maxClusterDescriptionWidth) {
+        List description = rc.getClusterDescription();
+
+        StringBuffer buf = new StringBuffer();
+        for (Iterator i = description.iterator(); i.hasNext();) {
+            String phrase = (String) i.next();
+
+            if ((buf.length() + phrase.length()) > maxClusterDescriptionWidth) {
+                buf.append(phrase.substring(0,
+                        maxClusterDescriptionWidth - buf.length()));
+                buf.append("...");
+                break;
+            } else {
+                if (buf.length() > 0) {
+                    buf.append("; ");
+                }
+
+                buf.append(phrase);
+            }
+        }
+        return buf.toString();
     }
 }
