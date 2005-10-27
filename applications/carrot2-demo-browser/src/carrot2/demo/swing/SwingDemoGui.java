@@ -181,7 +181,7 @@ public class SwingDemoGui implements DemoGuiDelegate {
             tabbedPane.addTab(tabName, resultsTab);
             tabbedPane.setSelectedIndex(tabbedPane.getTabCount()-1);
             tabbedPane.setToolTipTextAt(tabbedPane.getTabCount()-1, query);
-            SwingUtilities.invokeLater(new Runnable() {
+            new Thread() {
                 public void run() {
                     try {
                         resultsTab.performQuery();
@@ -189,7 +189,7 @@ public class SwingDemoGui implements DemoGuiDelegate {
                         enableUI();
                     }
                 }
-            });
+            }.start();
         } catch (Throwable t) {
             JOptionPane.showMessageDialog(queryField, "Exception executing query: \n"
                     + t.toString());
