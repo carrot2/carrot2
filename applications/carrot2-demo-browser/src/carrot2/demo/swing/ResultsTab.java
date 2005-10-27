@@ -6,6 +6,9 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.HashMap;
@@ -15,6 +18,7 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
@@ -121,6 +125,7 @@ public class ResultsTab extends JPanel {
                 new RawClustersTreeSelectionListener(this));
 
         this.browserView = new WebBrowser();
+        this.browserView.setFocusable(false);
 
         // create 'progress' card.
         JPanel progressPane = new JPanel();
@@ -187,7 +192,21 @@ public class ResultsTab extends JPanel {
         if (!SwingUtilities.isEventDispatchThread())
             throw new IllegalStateException("Invoke updateDocumentsView() from AWT thread only.");
 
-        this.browserView.setContent(htmlContent);
+        try {
+            // TODO: This can be refactored to use browser listener to detect
+            // if the file has been loaded.
+            // BUGFIX: We dump the HTML to an external file because setContent
+            // method does not convert (or detect) characters properly.
+            final File tempFile = File.createTempFile("c2tmphtml", "html");
+            tempFile.deleteOnExit();
+            final FileOutputStream fos = new FileOutputStream(tempFile);
+            fos.write(htmlContent.getBytes("UTF-8"));
+            fos.close();
+            this.browserView.setURL(tempFile.toURL());
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Cannot create temporary file for HTML.");
+        }
     }
 
     /**
@@ -227,26 +246,36 @@ public class ResultsTab extends JPanel {
      */
     private void showAllDocuments() {
         if (result == null) return;
-        final String html = getHtmlForDocuments(result.documents);
+        final String html = getHtmlForDocuments(result.documents, null);
 
         Runnable task = new Runnable() {
             public void run() {
                 ResultsTab.this.clustersTree.clearSelection();
-                updateDocumentsView( html );
+                updateDocumentsView(html);
                 ((CardLayout)cards.getLayout()).show(cards, MAIN_CARD);
             }
         };
         SwingTask.runNow(task);
     }
-    
+
     /**
      * This method converts a set of raw documents to a string.
      */
-    public String getHtmlForDocuments(List documents) {
-        StringBuffer buffer = new StringBuffer();
+    public String getHtmlForDocuments(List documents, String clusterLabel) {
+        final StringBuffer buffer = new StringBuffer();
 
-        buffer.append("<html><body style=\"font-size: 10pt; font-family: Arial, Helvetica, sans-serif;\">");
+        buffer.append("<html>");
+        buffer.append("<meta><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"></meta>\n");
+        buffer.append("<body style=\"font-size: 10pt; font-family: Arial, Helvetica, sans-serif;\">");
 
+        if (clusterLabel != null) {
+            buffer.append("<div style=\"color: white; font-weight: bold; background-color: #5588BE;" +
+                    " border-bottom: 1px solid #303030; padding-bottom: 4px; padding-top: 4px;\">");
+            buffer.append(clusterLabel);
+            buffer.append("</div>");
+            buffer.append("<br/>");
+        }
+        
         for (Iterator i = documents.iterator(); i.hasNext();) {
             RawDocument doc = (RawDocument) i.next();
             buffer.append("<a href=\"" + doc.getUrl() + "\"><b>");

@@ -24,7 +24,9 @@ public class RawClustersTreeSelectionListener implements TreeSelectionListener {
         Object selected = ((JTree) tse.getSource()).getLastSelectedPathComponent();
         if (selected instanceof RawCluster) {
             // change documents view.
-            final String html = tab.getHtmlForDocuments(((RawCluster) selected).getDocuments());
+            final RawCluster rc = (RawCluster) selected;
+            final String html = tab.getHtmlForDocuments(rc.getDocuments(),
+                    RawClustersCellRenderer.getLabel(rc, Integer.MAX_VALUE));
             tab.updateDocumentsView(html);
         }
     }
