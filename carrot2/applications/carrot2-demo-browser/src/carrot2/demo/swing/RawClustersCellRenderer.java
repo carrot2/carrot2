@@ -13,8 +13,8 @@ import com.dawidweiss.carrot.core.local.clustering.RawCluster;
 
 
 public class RawClustersCellRenderer extends DefaultTreeCellRenderer {
-    private final static int MAX_CLUSTER_DESCRIPTION_WIDTH = 30;
-    
+    private final static int MAX_CLUSTER_DESCRIPTION_WIDTH = 80;
+
     private static Icon clusterIconJunk = new ImageIcon(
             RawClustersCellRenderer.class.getResource("junk-cluster.gif"));
     private static Icon subclustersIconJunk = new ImageIcon(
