@@ -24,9 +24,10 @@
 
         <parameter name="appid"   value="carrotsearch" />
 
+        <parameter name="similar_ok" value="1" />
+
         <!--
         <parameter name="adult_ok" value="" />
-        <parameter name="similar_ok" value="" />
 
         <parameter name="language" value="en" />
         <parameter name="country"  value="en" />
