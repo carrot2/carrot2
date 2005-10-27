@@ -13,6 +13,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -131,22 +132,28 @@ public class SwingDemoGui implements DemoGuiDelegate {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.getContentPane().add(buildMainPanel());
         frame.pack();
-        frame.setVisible(true);
 
         // Prevent from resizing below preferred size.
         frame.addComponentListener(new KeepMimumumFrameSizeListener(frame.getPreferredSize()));
 
         disableUI();
-        // Now initialize the application.
-        this.demoContext.initialize();
-        this.processComboModel = new MapComboModel(this.demoContext.getProcessIdToProcessNameMap());
-
+        queryField.setText("Please wait...");
+        frame.setVisible(true);
+        
         // replace the combo box's model.
         final Runnable task = new Runnable() {
             public void run() {
-                processComboBox.setModel(processComboModel);
-                processComboBox.setSelectedIndex(0);
-                queryField.requestFocus();
+                try {
+                    // Now initialize the application.
+                    demoContext.initialize();
+
+                    processComboModel = new MapComboModel(demoContext.getProcessIdToProcessNameMap());
+                    processComboBox.setModel(processComboModel);
+                    processComboBox.setSelectedIndex(0);
+                    queryField.setText("");
+                    queryField.requestFocus();
+                } finally {
+                }
             }
         };
         SwingTask.runNow(task);
