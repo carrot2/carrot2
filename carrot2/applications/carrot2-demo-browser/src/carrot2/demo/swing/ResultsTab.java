@@ -14,9 +14,12 @@ import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -31,6 +34,7 @@ import org.jdesktop.jdic.browser.WebBrowser;
 
 import carrot2.demo.DemoContext;
 import carrot2.demo.ProcessSettings;
+import carrot2.demo.ProcessSettingsListener;
 import carrot2.demo.swing.util.SwingTask;
 import carrot2.demo.swing.util.ToolbarButton;
 
@@ -62,7 +66,8 @@ public class ResultsTab extends JPanel {
     private JLabel progressInfo;
     private DemoContext demoContext;
     private ProcessSettings processSettings;
-    
+    private WorkerThread workerThread;
+
     private class SelfRemoveAction implements ActionListener {
         public void actionPerformed(ActionEvent actionEvent) {
             // find the tabbedpane we belong to.
@@ -75,7 +80,74 @@ public class ResultsTab extends JPanel {
                     break;
                 }
                 last = last.getParent();
-            }        
+            }
+
+            cleanup();
+        }
+    }
+    
+    private class WorkerThread extends Thread {
+        private boolean done = false;
+        private Map requestParams;
+
+        public void run() {
+            while (!done) {
+                final Map rqParamsCopy;
+                synchronized (this) {
+                    rqParamsCopy = requestParams;
+                    requestParams = null;
+                }
+                if (rqParamsCopy != null) {
+                    try {
+                        ProcessingResult result = demoContext.getController().query(processId, query, rqParamsCopy);
+
+                        Object queryResult = result.getQueryResult();
+                        if (queryResult instanceof ClustersConsumerOutputComponent.Result) {
+                            ClustersConsumerOutputComponent.Result output =
+                                (ClustersConsumerOutputComponent.Result) result.getQueryResult();
+
+                            // Ok, we have the clusters. We also have the documents.
+                            // Show them.
+                            showResults(output);
+                        } else {
+                            // don't know what to do with the result... Just inform about it.
+                            showInfo("<html><body><h1>Query processed</h1><p>The result object is not interpretable, however.</p></body></html>");
+                        }
+                    } catch (Throwable e) {
+                        showInfo("<html><body><h1>Exception executing query.</h1></body></html>");
+                        JOptionPane.showMessageDialog(ResultsTab.this, "Exception executing query: "
+                                + e.toString());
+                        e.printStackTrace();
+                    }
+                }
+
+                synchronized (this) {
+                    if (requestParams == null) {
+                        // Nothing to do. Go to sleep.
+                        try {
+                            this.wait();
+                        } catch (InterruptedException e) {
+                            // If interrupted, return.
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
+        public void dispose() {
+            synchronized (this) {
+                done = true;
+                this.notify();
+            }
+        }
+
+        public void runQuery(Map requestParams) {
+            synchronized (this) {
+                // Copy request params to local.
+                this.requestParams = requestParams;
+                this.notify();
+            }
         }
     }
 
@@ -86,6 +158,9 @@ public class ResultsTab extends JPanel {
 
         this.demoContext = demoContext;
         this.processSettings = settings;
+
+        this.workerThread = new WorkerThread();
+        workerThread.start();
 
         buildSplit();
     }
@@ -116,13 +191,35 @@ public class ResultsTab extends JPanel {
         toolbar.add(closeButton);
         all.setToolBar(toolbar);
 
-        JScrollPane scrollerLeft = new JScrollPane();
-
+        final JScrollPane clustersTreeScroller = new JScrollPane();
         this.clustersTree = new RawClustersTree();
-        scrollerLeft.getViewport().add(clustersTree);
-        scrollerLeft.setBorder(BorderFactory.createEmptyBorder());
+        clustersTreeScroller.getViewport().add(clustersTree);
+        clustersTreeScroller.setBorder(BorderFactory.createEmptyBorder());
         clustersTree.addTreeSelectionListener(
                 new RawClustersTreeSelectionListener(this));
+
+        final JPanel leftPanel = new JPanel(new BorderLayout());
+        leftPanel.add(clustersTreeScroller, BorderLayout.CENTER);
+
+        if (this.processSettings.hasSettings()) {
+            final JPanel settingsContainer = new JPanel(new BorderLayout(0, 4));
+            settingsContainer.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
+            final JComponent settingsComponent = processSettings.getSettingsComponent();
+            settingsContainer.add(settingsComponent, BorderLayout.CENTER);
+            final JButton updateButton = new JButton("Refresh");
+            updateButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    performQuery();
+                }
+            });
+            this.processSettings.addListener(new ProcessSettingsListener() {
+                public void settingsChanged(ProcessSettings settings) {
+                    performQuery();
+                }
+            });
+            settingsContainer.add(updateButton, BorderLayout.SOUTH);
+            leftPanel.add(settingsContainer, BorderLayout.SOUTH);
+        }
 
         this.browserView = new WebBrowser();
         this.browserView.setFocusable(false);
@@ -149,11 +246,11 @@ public class ResultsTab extends JPanel {
                 return super.getMinimumSize();
             }
         };
-
         subPanel.add(browserView, BorderLayout.CENTER);
+        
         JSplitPane splitPane = new JSplitPane(
                 JSplitPane.HORIZONTAL_SPLIT,
-                scrollerLeft, subPanel);
+                leftPanel, subPanel);
         splitPane.setDividerLocation(300);
         
         this.cards = new JPanel(new CardLayout());
@@ -322,36 +419,26 @@ public class ResultsTab extends JPanel {
         SwingTask.runNow(task);
     }
 
+    private void cleanup() {
+        synchronized (this) {
+            if (workerThread != null) {
+                workerThread.dispose();
+                workerThread = null;
+            }
+            if (browserView != null) {
+                // TODO: Dispose doesn't seem to work properly.
+                // this.browserView.dispose();
+                this.browserView = null;
+            }
+        }
+    }
+    
     protected void finalize() throws Throwable {
-        super.finalize();
-        this.browserView.dispose();
+        cleanup();
     }
 
-    /**
-     * Performs the query in a separate thread and displays the result.
-     */
     public void performQuery() {
-        try {
-            showProgress("Executing process...");
-            HashMap requestParams = processSettings.getRequestParams();
-            ProcessingResult result = demoContext.getController().query(processId, query, requestParams);
-
-            // get at the clustered result?
-            Object queryResult = result.getQueryResult();
-            showProgress("Rendering results...");
-            if (queryResult instanceof ClustersConsumerOutputComponent.Result) {
-                ClustersConsumerOutputComponent.Result output =
-                    (ClustersConsumerOutputComponent.Result) result.getQueryResult();
-
-                // Ok, we have the clusters. We also have the documents.
-                // Show them.
-                showResults(output);
-            } else {
-                // don't know what to do with the result... Just inform about it.
-                showInfo("<html><body><h1>Query processed</h1><p>The result object is not interpretable, however.</p></body></html>");
-            }
-        } catch (Exception e) {
-            showError(e);
-        }
-    }    
+        HashMap requestParams = processSettings.getRequestParams();
+        workerThread.runQuery(requestParams);
+    }
 }

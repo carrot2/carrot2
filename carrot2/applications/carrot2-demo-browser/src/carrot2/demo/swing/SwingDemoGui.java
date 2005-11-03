@@ -1,6 +1,7 @@
 package carrot2.demo.swing;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -190,16 +191,12 @@ public class SwingDemoGui implements DemoGuiDelegate {
             tabbedPane.addTab(tabName, resultsTab);
             tabbedPane.setSelectedIndex(tabbedPane.getTabCount()-1);
             tabbedPane.setToolTipTextAt(tabbedPane.getTabCount()-1, query);
-            new Thread() {
-                public void run() {
-                    try {
-                        resultsTab.performQuery();
-                    } finally {
-                        enableUI();
-                        queryField.requestFocus();
-                    }
-                }
-            }.start();
+            try {
+                resultsTab.performQuery();
+            } finally {
+                enableUI();
+                queryField.requestFocus();
+            }
         } catch (Throwable t) {
             JOptionPane.showMessageDialog(queryField, "Exception executing query: \n"
                     + t.toString());
@@ -342,7 +339,11 @@ public class SwingDemoGui implements DemoGuiDelegate {
         this.processSettingsButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 final String processId = (String) processComboModel.getSelectedKey();
-                demoContext.getSettingsObject(processId).showDefaultSettings(frame);
+                final ProcessSettings settings = demoContext.getSettingsObject(processId);
+
+                JOptionPane.showMessageDialog(frame, 
+                        new Object[] {settings.getSettingsComponent()}, "Default settings", 
+                        JOptionPane.PLAIN_MESSAGE);
             }
         });
         detailsPanel.add(processSettingsButton, cc.xy(4,1, CellConstraints.DEFAULT, CellConstraints.FILL));
