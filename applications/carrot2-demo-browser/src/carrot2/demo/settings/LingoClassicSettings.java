@@ -1,11 +1,13 @@
 package carrot2.demo.settings;
 
-import java.awt.Component;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Vector;
 
-import javax.swing.JOptionPane;
+import javax.swing.JComponent;
 
 import carrot2.demo.ProcessSettings;
+import carrot2.demo.ProcessSettingsListener;
 
 import com.stachoodev.carrot.filter.lingo.lsicluster.LsiConstants;
 
@@ -16,7 +18,8 @@ import com.stachoodev.carrot.filter.lingo.lsicluster.LsiConstants;
  * @author Dawid Weiss
  */
 public class LingoClassicSettings implements ProcessSettings {
-    private HashMap params; 
+    private HashMap params;
+    private Vector listeners = new Vector();
 
     public LingoClassicSettings() {
         params = new HashMap();
@@ -37,26 +40,41 @@ public class LingoClassicSettings implements ProcessSettings {
     public void showSettings() {
     }
 
-    public void showDefaultSettings(Object guiContainer) {
-        final LingoSettingsDialog dlg = new LingoSettingsDialog(params);
-        int result = JOptionPane.showConfirmDialog((Component) guiContainer, 
-                new Object[] {dlg}, "Lingo settings", 
-                JOptionPane.OK_CANCEL_OPTION,
-                JOptionPane.PLAIN_MESSAGE);
-        if (result == JOptionPane.OK_OPTION) {
-            this.params = dlg.getParams();
-        }
-    }
-
     public boolean isConfigured() {
         return true;
     }
 
     public HashMap getRequestParams() {
-        return new HashMap(params);
+        synchronized (this) {
+            return new HashMap(params);
+        }
     }
 
     public ProcessSettings createClone() {
-        return new LingoClassicSettings(params);
+        synchronized (this) {
+            return new LingoClassicSettings(params);
+        }
+    }
+
+    public JComponent getSettingsComponent() {
+        LingoSettingsDialog dlg = new LingoSettingsDialog(this);
+        return dlg;
+    }
+
+    public void setRequestParams(HashMap params) {
+        synchronized (this) {
+            this.params = params;
+            fireParamsUpdated();
+        }
+    }
+
+    private void fireParamsUpdated() {
+        for (Iterator i = listeners.iterator(); i.hasNext(); ) {
+            ((ProcessSettingsListener) i.next()).settingsChanged(this); 
+        }
+    }
+
+    public void addListener(ProcessSettingsListener listener) {
+        this.listeners.add(listener);
     }
 }

@@ -2,6 +2,8 @@ package carrot2.demo;
 
 import java.util.HashMap;
 
+import javax.swing.JComponent;
+
 /**
  * Empty project settings with no extra configuration.
  * 
@@ -21,15 +23,14 @@ public final class EmptyProcessSettings implements ProcessSettings {
         return false;
     }
 
-    public void showSettings() {
-        throw new RuntimeException("Should not be invoked.");
-    }
-
-    public void showDefaultSettings(Object guiContainer) {
-        throw new RuntimeException("Should not be invoked.");
-    }
-
     public ProcessSettings createClone() {
         return this;
+    }
+
+    public JComponent getSettingsComponent() {
+        throw new RuntimeException("Should not be invoked.");
+    }
+
+    public void addListener(ProcessSettingsListener listener) {
     }
 }
