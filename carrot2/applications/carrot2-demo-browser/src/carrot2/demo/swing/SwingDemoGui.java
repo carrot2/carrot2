@@ -252,7 +252,8 @@ public class SwingDemoGui implements DemoGuiDelegate {
                 if (tabbedPane.getTabCount() > 0) {
                     final int selected = tabbedPane.getSelectedIndex();
                     if (selected >= 0) {
-                        tabbedPane.remove(selected);
+                        ResultsTab tab = (ResultsTab) tabbedPane.getComponent(selected);
+                        tab.cleanup();
                     }
                 }
             }
