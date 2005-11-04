@@ -57,6 +57,8 @@ import com.jgoodies.plaf.LookUtils;
  * be displayed as selected.
  * 
  * @author Karsten Lentzsch
+ * @author Dawid Weiss (title bar coloring)
+ * 
  * @version $Revision$
  * 
  * @see    javax.swing.JInternalFrame
@@ -284,7 +286,7 @@ public class SimpleInternalFrame extends JPanel {
      */
     private JPanel buildHeader(JLabel label, JToolBar bar) {
         gradientPanel =
-            new GradientPanel(new BorderLayout(), getHeaderBackground());
+            new GradientPanel(new BorderLayout(), getDefaultHeaderBackground());
         label.setOpaque(false);
 
         gradientPanel.add(label, BorderLayout.WEST);
@@ -302,7 +304,7 @@ public class SimpleInternalFrame extends JPanel {
      * Updates the header.
      */
     private void updateHeader() {
-        gradientPanel.setBackground(getHeaderBackground());
+        gradientPanel.setBackground(getDefaultHeaderBackground());
         gradientPanel.setOpaque(isSelected());
         titleLabel.setForeground(getTextForeground(isSelected()));
         headerPanel.repaint();
@@ -363,7 +365,7 @@ public class SimpleInternalFrame extends JPanel {
      * 
      * @return the color of the header's background
      */
-    protected Color getHeaderBackground() {
+    public Color getDefaultHeaderBackground() {
         Color c =
             UIManager.getColor("SimpleInternalFrame.activeTitleBackground");
         if (c != null)
@@ -375,6 +377,9 @@ public class SimpleInternalFrame extends JPanel {
             : UIManager.getColor("InternalFrame.activeTitleBackground");
     }
 
+    public void setHeaderBackground(Color color) {
+        this.gradientPanel.setBackground(color);
+    }
 
     // Helper Classes *******************************************************
 

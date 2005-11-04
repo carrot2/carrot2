@@ -2,6 +2,7 @@ package carrot2.demo.swing;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -30,6 +31,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 
+import org.apache.log4j.Logger;
 import org.jdesktop.jdic.browser.WebBrowser;
 
 import carrot2.demo.DemoContext;
@@ -67,21 +69,11 @@ public class ResultsTab extends JPanel {
     private DemoContext demoContext;
     private ProcessSettings processSettings;
     private WorkerThread workerThread;
+    private SimpleInternalFrame internalFrame;
+    private String defaultTitle;
 
     private class SelfRemoveAction implements ActionListener {
         public void actionPerformed(ActionEvent actionEvent) {
-            // find the tabbedpane we belong to.
-            Component last = ResultsTab.this;
-            while (last != null)
-            {
-                if (last.getParent() instanceof JTabbedPane)
-                {
-                    ((JTabbedPane) last.getParent()).remove(last);
-                    break;
-                }
-                last = last.getParent();
-            }
-
             cleanup();
         }
     }
@@ -99,6 +91,7 @@ public class ResultsTab extends JPanel {
                 }
                 if (rqParamsCopy != null) {
                     try {
+                        changeTitle("Processing...", true);
                         ProcessingResult result = demoContext.getController().query(processId, query, rqParamsCopy);
 
                         Object queryResult = result.getQueryResult();
@@ -118,6 +111,8 @@ public class ResultsTab extends JPanel {
                         JOptionPane.showMessageDialog(ResultsTab.this, "Exception executing query: "
                                 + e.toString());
                         e.printStackTrace();
+                    } finally {
+                        changeTitle(defaultTitle, false);                        
                     }
                 }
 
@@ -133,6 +128,7 @@ public class ResultsTab extends JPanel {
                     }
                 }
             }
+            Logger.getLogger(ResultsTab.class).debug("Tab thread ended.");
         }
 
         public void dispose() {
@@ -162,15 +158,15 @@ public class ResultsTab extends JPanel {
         this.workerThread = new WorkerThread();
         workerThread.start();
 
+        this.defaultTitle = "[" + demoContext.getProcessIdToProcessNameMap().get(processId) + "] " + ("".equals(query) ? "<empty>" : query);
+        
         buildSplit();
     }
 
     private void buildSplit() {
         this.setLayout(new BorderLayout());
 
-        SimpleInternalFrame all = new SimpleInternalFrame(
-                "[" + demoContext.getProcessIdToProcessNameMap().get(processId) + "] "
-                + ("".equals(query) ? "<empty>" : query));
+        this.internalFrame = new SimpleInternalFrame(defaultTitle);
         JToolBar toolbar = new JToolBar();
         ToolbarButton closeButton = new ToolbarButton(
                 new ImageIcon(this.getClass().getResource("remove.gif")),
@@ -189,7 +185,7 @@ public class ResultsTab extends JPanel {
                 });
         toolbar.add(homeButton);
         toolbar.add(closeButton);
-        all.setToolBar(toolbar);
+        internalFrame.setToolBar(toolbar);
 
         final JScrollPane clustersTreeScroller = new JScrollPane();
         this.clustersTree = new RawClustersTree();
@@ -256,10 +252,10 @@ public class ResultsTab extends JPanel {
         this.cards = new JPanel(new CardLayout());
         cards.add(splitPane, MAIN_CARD);
         cards.add(progressPane, PROGRESS_CARD);
-        all.add(cards);
+        internalFrame.add(cards);
         ((CardLayout)cards.getLayout()).show(cards, PROGRESS_CARD);
 
-        this.add(all, BorderLayout.CENTER);        
+        this.add(internalFrame, BorderLayout.CENTER);        
     }
 
     /**
@@ -408,6 +404,21 @@ public class ResultsTab extends JPanel {
 
         return buffer.toString();
     }
+    
+    public void changeTitle(final String title, final boolean alert) {
+        Runnable task = new Runnable() {
+            public void run() {
+                internalFrame.setTitle(title);
+                if (alert) {
+                    internalFrame.setHeaderBackground(Color.RED);
+                } else {
+                    internalFrame.setHeaderBackground(
+                            internalFrame.getDefaultHeaderBackground());
+                }
+            }
+        };
+        SwingTask.runNow(task);
+    }
 
     public void showProgress(final String string) {
         Runnable task = new Runnable() {
@@ -419,8 +430,21 @@ public class ResultsTab extends JPanel {
         SwingTask.runNow(task);
     }
 
-    private void cleanup() {
+    public void cleanup() {
         synchronized (this) {
+            // find the tabbedpane we belong to.
+            Component last = this;
+            while (last != null)
+            {
+                if (last.getParent() instanceof JTabbedPane)
+                {
+                    ((JTabbedPane) last.getParent()).remove(last);
+                    break;
+                }
+                last = last.getParent();
+            }
+            
+            // Cleanup resources
             if (workerThread != null) {
                 workerThread.dispose();
                 workerThread = null;
