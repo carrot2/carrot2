@@ -194,7 +194,7 @@ public class RemoteCacheAccessLocalInputComponent extends
     	
     	ZIPCachedQuery zcq = store.getQuery( query, component );
     	if (zcq == null) 
-    		throw new ProcessingException("No cached query of this name/ component identifier combination.");
+    		throw new ProcessingException("No cached query for: " + query + "/" + component);
 		
     	try {
 			SAXReader reader = new SAXReader();
