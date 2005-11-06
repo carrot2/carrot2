@@ -29,12 +29,12 @@ public class RawClustersConsumerLocalOutputComponent extends
     /** Capabilities required from the previous component in the chain */
     private final static Set CAPABILITIES_PREDECESSOR = new HashSet(Arrays
         .asList(new Object []
-        { RawDocumentsProducer.class }));
+        { RawClustersProducer.class }));
 
     /** This component's capabilities */
     private final static Set CAPABILITIES_COMPONENT = new HashSet(Arrays
         .asList(new Object []
-        { RawDocumentsConsumer.class }));
+        { RawClustersConsumer.class }));
 
     /** Raw clusters */
     protected List rawClusters;
