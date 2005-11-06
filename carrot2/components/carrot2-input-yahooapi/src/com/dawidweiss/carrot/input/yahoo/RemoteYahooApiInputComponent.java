@@ -144,7 +144,7 @@ public class RemoteYahooApiInputComponent
                 
                 output.write("<searchresult>\n");
                 output.write("<query requested-results=\"" + requestedResultsNumber + "\">");
-                serializer.toValidXmlText(query, false);
+                output.write(serializer.toValidXmlText(query, false));
                 output.write("</query>\n");
 
                 int id = 0;
