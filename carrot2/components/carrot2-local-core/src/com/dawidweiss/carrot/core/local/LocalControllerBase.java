@@ -10,17 +10,10 @@
  */
 package com.dawidweiss.carrot.core.local;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-import org.apache.commons.pool.BasePoolableObjectFactory;
-import org.apache.commons.pool.ObjectPool;
-import org.apache.commons.pool.PoolableObjectFactory;
-import org.apache.commons.pool.impl.GenericObjectPool;
+import org.apache.commons.pool.*;
+import org.apache.commons.pool.impl.*;
 
 /**
  * A complete base implementation of the
@@ -102,8 +95,21 @@ public class LocalControllerBase implements LocalController,
             }
         };
 
+        GenericObjectPool.Config config = new GenericObjectPool.Config();
+        config.whenExhaustedAction = GenericObjectPool.WHEN_EXHAUSTED_GROW;
+        config.maxWait = 0; // irrelevant
+        config.maxActive = 0; // irrelevant
+        config.maxIdle = 5;
+        config.timeBetweenEvictionRunsMillis = 1000 * 60 * 4;
+        config.minEvictableIdleTimeMillis = 1000 * 60 * 5;
+        config.minIdle = 0;
+        config.numTestsPerEvictionRun = 5;
+        config.testOnBorrow = false;
+        config.testOnReturn = false;
+        config.testWhileIdle = false;
+        
         componentPools.put(componentId, new GenericObjectPool(
-            poolableObjectFactory, 5));
+            poolableObjectFactory, config));
     }
     
     /**
