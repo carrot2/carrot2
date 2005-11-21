@@ -13,7 +13,7 @@ import com.stachoodev.util.common.WordLoadingUtils;
 
 /**
  * An implementation of {@link Language} interface
- * for Swedish.
+ * for Portuguese.
  */
 public class Portuguese extends StemmedLanguageBase {
 
