@@ -50,6 +50,8 @@ public class AllKnownLanguages
         "com.dawidweiss.carrot.util.tokenizer.languages.danish.Danish",
         "com.dawidweiss.carrot.util.tokenizer.languages.finnish.Finnish",
         "com.dawidweiss.carrot.util.tokenizer.languages.norwegian.Norwegian",
+        "com.dawidweiss.carrot.util.tokenizer.languages.portuguese.Portuguese",
+        "com.dawidweiss.carrot.util.tokenizer.languages.russian.Russian",
         "com.dawidweiss.carrot.util.tokenizer.languages.swedish.Swedish"
     };
     

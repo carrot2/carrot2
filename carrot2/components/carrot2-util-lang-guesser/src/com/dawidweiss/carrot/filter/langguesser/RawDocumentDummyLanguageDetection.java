@@ -1,133 +1,178 @@
 package com.dawidweiss.carrot.filter.langguesser;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
-import com.dawidweiss.carrot.core.local.LocalComponent;
-import com.dawidweiss.carrot.core.local.ProcessingException;
-import com.dawidweiss.carrot.core.local.clustering.RawDocument;
-import com.dawidweiss.carrot.core.local.clustering.RawDocumentsConsumer;
-import com.dawidweiss.carrot.core.local.clustering.RawDocumentsProducer;
-import com.dawidweiss.carrot.core.local.linguistic.LanguageGuesser;
+import com.dawidweiss.carrot.core.local.*;
+import com.dawidweiss.carrot.core.local.clustering.*;
 import com.dawidweiss.carrot.core.local.profiling.*;
 
 /**
- * A local component that adds a predefined language code
- * to the properties of a document. No real recognition is performed.
+ * A local component that adds a predefined language code to the properties of a
+ * document. No real recognition is performed.
  * 
- * <p>The component implements {@link RawDocumentConsumer}
- * and {@link RawDocumentProducer}, so basically, it acts
- * as a filter between two other components. 
+ * <p>
+ * The component implements {@link RawDocumentConsumer} and
+ * {@link RawDocumentProducer}, so basically, it acts as a filter between two
+ * other components.
  * 
  * @author Stanislaw Osinski
  * @version $Revision$
  */
-public class RawDocumentDummyLanguageDetection extends ProfiledLocalFilterComponentBase
-    implements RawDocumentsProducer, RawDocumentsConsumer {
-    
+public class RawDocumentDummyLanguageDetection extends
+    ProfiledLocalFilterComponentBase implements RawDocumentsProducer,
+    RawDocumentsConsumer
+{
+    /** */
+    public static final String PARAM_LANGUAGE_CODE_TO_SET = "lang-code";
+
+    /** */
+    public static final String DEFAULT_LANGUAGE_CODE_TO_SET = "en";
+
     /**
      * Capabilities exposed by this component.
      */
-    private static final Set CAPABILITIES_COMPONENT = new HashSet(Arrays.asList(
-                new Object[] { RawDocumentsProducer.class, RawDocumentsConsumer.class }));
+    private static final Set CAPABILITIES_COMPONENT = new HashSet(Arrays
+        .asList(new Object []
+        {
+            RawDocumentsProducer.class, RawDocumentsConsumer.class
+        }));
 
     /**
      * Capabilities required of the successor of this component.
      */
-    private static final Set CAPABILITIES_SUCCESSOR = new HashSet(Arrays.asList(
-                new Object[] { RawDocumentsConsumer.class, }));
+    private static final Set CAPABILITIES_SUCCESSOR = new HashSet(Arrays
+        .asList(new Object []
+        {
+            RawDocumentsConsumer.class,
+        }));
 
     /**
      * Capabilities required of the predecessor of this component.
      */
-    private static final Set CAPABILITIES_PREDECESSOR = new HashSet(Arrays.asList(
-                new Object[] { RawDocumentsProducer.class, }));
+    private static final Set CAPABILITIES_PREDECESSOR = new HashSet(Arrays
+        .asList(new Object []
+        {
+            RawDocumentsProducer.class,
+        }));
 
     /**
-     * The successor component, consumer of
-     * documents accepted by this component.
+     * The successor component, consumer of documents accepted by this
+     * component.
      */
-	private RawDocumentsConsumer rawDocumentConsumer;
-    
+    private RawDocumentsConsumer rawDocumentConsumer;
+
     /** Language code to be added to the documents */
     private String languageCode;
-    
+
     /**
-     * Public contructor requires an instance of {@link LanguageGuesser}
-     * interface that is used for language detection.
-     * @param languageGuesser A language guesser instance.
+     * Creates
+     * 
+     * @param languageCode
      */
-    public RawDocumentDummyLanguageDetection(String languageCode) {
+    public RawDocumentDummyLanguageDetection()
+    {
+    }
+
+    /**
+     * @param languageCode
+     */
+    public RawDocumentDummyLanguageDetection(String languageCode)
+    {
         this.languageCode = languageCode;
     }
-    
-	/**
-     * New document to process: identify language and
-     * add a new property to the document.
+
+    /**
+     * New document to process: identify language and add a new property to the
+     * document.
      * 
-	 * @see com.dawidweiss.carrot.core.local.clustering.RawDocumentsConsumer#addDocument(com.dawidweiss.carrot.core.local.clustering.RawDocument)
-	 */
-	public void addDocument(RawDocument doc) throws ProcessingException {
-	    startTimer();
+     * @see com.dawidweiss.carrot.core.local.clustering.RawDocumentsConsumer#addDocument(com.dawidweiss.carrot.core.local.clustering.RawDocument)
+     */
+    public void addDocument(RawDocument doc) throws ProcessingException
+    {
+        startTimer();
         doc.setProperty(RawDocument.PROPERTY_LANGUAGE, languageCode);
         stopTimer();
-        
+
         // pass the document reference...
         this.rawDocumentConsumer.addDocument(doc);
-	}
-    
-    
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.dawidweiss.carrot.core.local.profiling.ProfiledLocalFilterComponentBase#startProcessing(com.dawidweiss.carrot.core.local.RequestContext)
+     */
+    public void startProcessing(RequestContext requestContext)
+        throws ProcessingException
+    {
+        languageCode = (String) requestContext.getRequestParameters().get(
+            PARAM_LANGUAGE_CODE_TO_SET);
+        if (languageCode == null)
+        {
+            languageCode = DEFAULT_LANGUAGE_CODE_TO_SET;
+        }
+        super.startProcessing(requestContext);
+    }
+
     /**
-     * Sets the successor component for the duration of the current request.
-     * The component should implement <code>RawDocumentsConsumer</code>
-     * interface.
-     *
+     * Sets the successor component for the duration of the current request. The
+     * component should implement <code>RawDocumentsConsumer</code> interface.
+     * 
      * @param next The successor component.
      */
-    public void setNext(LocalComponent next) {
+    public void setNext(LocalComponent next)
+    {
         super.setNext(next);
 
-        if (next instanceof RawDocumentsConsumer) {
+        if (next instanceof RawDocumentsConsumer)
+        {
             this.rawDocumentConsumer = (RawDocumentsConsumer) next;
-        } else {
+        }
+        else
+        {
             throw new IllegalArgumentException("Successor should implement: "
-                        + RawDocumentsConsumer.class.getName());
+                + RawDocumentsConsumer.class.getName());
         }
     }
 
-   /**
-    * Performs a cleanup before the object is reused.
-    *
-    * @see com.dawidweiss.carrot.core.local.LocalComponent.flushResources()
-    */
-   public void flushResources() {
-       super.flushResources();
-       this.rawDocumentConsumer = null;
-   }
-    
-	/*
-	 * @see com.dawidweiss.carrot.core.local.LocalComponent#getComponentCapabilities()
-	 */
-	public Set getComponentCapabilities() {
-        return CAPABILITIES_COMPONENT;
-	}
-	
-    /*
-	 * @see com.dawidweiss.carrot.core.local.LocalComponent#getRequiredPredecessorCapabilities()
-	 */
-	public Set getRequiredPredecessorCapabilities() {
-        return CAPABILITIES_PREDECESSOR;
-	}
-	
-    /* 
-	 * @see com.dawidweiss.carrot.core.local.LocalComponent#getRequiredSuccessorCapabilities()
-	 */
-	public Set getRequiredSuccessorCapabilities() {
-        return CAPABILITIES_SUCCESSOR;
-	}
+    /**
+     * Performs a cleanup before the object is reused.
+     * 
+     * @see com.dawidweiss.carrot.core.local.LocalComponent.flushResources()
+     */
+    public void flushResources()
+    {
+        super.flushResources();
+        this.rawDocumentConsumer = null;
+    }
 
-	/* (non-Javadoc)
+    /*
+     * @see com.dawidweiss.carrot.core.local.LocalComponent#getComponentCapabilities()
+     */
+    public Set getComponentCapabilities()
+    {
+        return CAPABILITIES_COMPONENT;
+    }
+
+    /*
+     * @see com.dawidweiss.carrot.core.local.LocalComponent#getRequiredPredecessorCapabilities()
+     */
+    public Set getRequiredPredecessorCapabilities()
+    {
+        return CAPABILITIES_PREDECESSOR;
+    }
+
+    /*
+     * @see com.dawidweiss.carrot.core.local.LocalComponent#getRequiredSuccessorCapabilities()
+     */
+    public Set getRequiredSuccessorCapabilities()
+    {
+        return CAPABILITIES_SUCCESSOR;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see com.dawidweiss.carrot.core.local.LocalComponent#getName()
      */
     public String getName()
