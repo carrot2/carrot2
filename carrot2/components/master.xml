@@ -384,8 +384,6 @@ ${string:component.dependencies}
     </condition>
     <fail message="Build type not 'wartype'. Can't deploy." unless="ok:deploy" />
 
-	<antcall target="build.wartype" inheritrefs="true" />
-	
 	<echo>
 Deploying:   ${distribution.dir}/${dist.name}.war
 Remote path: /${dist.name}
@@ -500,7 +498,6 @@ ${string:component.dependencies}
     <zip compress="true" zipfile="${distribution.dir}/${dist.name}.war">
         <fileset dir="${build.dir}/type-war" />
     </zip>
-
   </target>
   <!-- }}} -->
 
