@@ -1,4 +1,4 @@
-package com.dawidweiss.carrot.filter.langguesser;
+package com.dawidweiss.carrot.core.local.impl;
 
 import java.util.*;
 
