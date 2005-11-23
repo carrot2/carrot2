@@ -65,8 +65,8 @@ public class JThreshold extends JPanel {
     }
 
     public void setValue(double value) {
-        this.slider.setValue(value);
-        this.spinner.setValue(value);
+        this.slider.setValue(new Double(value));
+        this.spinner.setValue(new Double(value));
     }
 
     public void addChangeListener(ChangeListener listener) {
