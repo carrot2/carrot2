@@ -143,7 +143,7 @@
                     TNode(
                         &quot;<xsl:value-of select="@id" />&quot;,
                         &quot;<xsl:value-of select="jscriptext:escape-string(normalize-space(title))" />&quot;,
-                        &quot;<xsl:value-of select="normalize-space(url)" />&quot;,
+                        &quot;<xsl:value-of select="jscriptext:escape-string(normalize-space(url))" />&quot;,
                         &quot;<xsl:value-of select="jscriptext:escape-string(normalize-space(snippet))" />&quot;);
                 </xsl:for-each>
 
