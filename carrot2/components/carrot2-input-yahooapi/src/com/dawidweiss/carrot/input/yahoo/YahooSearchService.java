@@ -13,16 +13,19 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpConstants;
+import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.HttpVersion;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.NameValuePair;
+import org.apache.commons.httpclient.URI;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
+import com.dawidweiss.carrot.util.common.StreamUtils;
 import com.dawidweiss.carrot.util.net.http.FormActionInfo;
 import com.dawidweiss.carrot.util.net.http.FormParameters;
 import com.dawidweiss.carrot.util.net.http.Parameter;
@@ -82,45 +85,80 @@ public class YahooSearchService {
                 mappedParameters.put("query.results", Long.toString(perQueryResults));
 
                 // Convert from FormActionInfo/FormParameters to HttpClient. This could
-                // be implemented nicer perhaps.
-                FormParameters parameters = descriptor.getFormParameters();
-                PostMethod postMethod = new PostMethod(formActionInfo.getServiceURL().toExternalForm());
-                postMethod.setRequestHeader("Content-type", "application/x-www-form-urlencoded; charset=UTF-8");
+                // be implemented in a nicer way perhaps.
+                final String method = descriptor.getFormActionInfo().getMethod();
+                final FormParameters parameters = descriptor.getFormParameters();
+                final HttpMethodBase httpMethod;
+                if ("GET".equalsIgnoreCase(method)) {
+                    httpMethod = new GetMethod();
+                } else {
+                    httpMethod = new PostMethod();
+                }
+                final String url = formActionInfo.getServiceURL().toExternalForm();
+                httpMethod.setURI(new URI(url, false));
+                httpMethod.setRequestHeader("Content-type", "application/x-www-form-urlencoded; charset=UTF-8");
 
                 try {
                     HashMap httpHeaders = formActionInfo.getHttpHeaders();
                     for (Iterator i = httpHeaders.keySet().iterator(); i.hasNext();) {
                         String header = (String) i.next();
                         String value = (String) httpHeaders.get(header);
-                        postMethod.addRequestHeader(new Header(header, value));
+                        httpMethod.addRequestHeader(new Header(header, value));
                     }
-                    postMethod.addRequestHeader(new Header("Accept-Encoding", "gzip"));
+                    httpMethod.addRequestHeader(new Header("Accept-Encoding", "gzip"));
     
                     // Now convert parameters.
+                    ArrayList nameValues = new ArrayList();
                     for (Iterator i = parameters.getParametersIterator(); i.hasNext();) {
                         final Parameter p = (Parameter) i.next();
                         final String name = p.getName();
                         final Object value = p.getValue(mappedParameters);
                         if (value instanceof String) {
-                            postMethod.addParameter(new NameValuePair(name, (String) value));
+                            nameValues.add(new NameValuePair(name, (String) value));
                         } else {
                             throw new RuntimeException("Only String mapped parameters supported.");
                         }
                     }
+
+                    if ("GET".equalsIgnoreCase(method)) {
+                        final NameValuePair [] nameValueArray = (NameValuePair [])
+                            nameValues.toArray(new NameValuePair[nameValues.size()]);
+                        ((GetMethod) httpMethod).setQueryString(nameValueArray);
+                        System.out.println(((GetMethod) httpMethod).getURI());
+                    } else {
+                        for (int i = 0; i < nameValues.size(); i++) {
+                            ((PostMethod) httpMethod).addParameter((NameValuePair) nameValues.get(i));
+                        }
+                    }
                     
-                    int statusCode = client.executeMethod(postMethod);
+                    int statusCode = client.executeMethod(httpMethod);
                     if (statusCode == HttpStatus.SC_OK) {
-                        is = postMethod.getResponseBodyAsStream();
-                        Header encoded = postMethod.getResponseHeader("Content-Encoding");
+                        is = httpMethod.getResponseBodyAsStream();
+                        Header encoded = httpMethod.getResponseHeader("Content-Encoding");
                         if (encoded != null && "gzip".equals(encoded.getValue())) {
                             is = new GZIPInputStream(is);
                         }
                         reader.parse(new InputSource(is));
                         is.close();
                         is = null;
+                    } else {
+                        is = httpMethod.getResponseBodyAsStream();
+                        Header encoded = httpMethod.getResponseHeader("Content-Encoding");
+                        if (encoded != null && "gzip".equals(encoded.getValue())) {
+                            is = new GZIPInputStream(is);
+                        }
+                        final byte [] message = StreamUtils.readFully(is);
+                        throw new IOException("Yahoo returned HTTP Error: "
+                                + statusCode + ", HTTP payload: "
+                                + new String(message, "iso8859-1"));
                     }
                 } finally {
-                    postMethod.releaseConnection();
+                    httpMethod.releaseConnection();
+                }
+                
+                if (handler.isErraneous()) {
+                    throw new IOException("Yahoo service error: "
+                            + handler.getErrorText());
                 }
 
                 if (handler.firstResultPosition != startFrom && handler.resultsReturned > 0) {

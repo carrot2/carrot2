@@ -31,8 +31,13 @@ public final class YahooResponseHandler implements ContentHandler {
     private String clickurl;
     private StringBuffer buffer = new StringBuffer();
 
+    /** An error occurred. */
+    private boolean error;
+    private StringBuffer errorText;
+
     public YahooResponseHandler(ArrayList result) {
         this.result = result;
+        this.error = false;
     }
 
     public void startDocument() throws SAXException {
@@ -69,11 +74,20 @@ public final class YahooResponseHandler implements ContentHandler {
             if (tmp != null) {
                 this.firstResultPosition = Integer.parseInt(tmp);
             }
+        } else if (stack.size() == 0 && "Error".equals(localName)) {
+            this.error = true;
+            errorText = new StringBuffer();
+        } else if (stack.size() > 1 && error) {
+            errorText.append(localName + ": ");
         }
         stack.add(localName);
     }
 
     public void endElement(String uri, String localName, String qname) throws SAXException {
+        if (error) {
+            errorText.append(buffer);
+            errorText.append("\n");
+        }
         if (stack.size() == 2 && "Result".equals(localName)) {
             // New result parsed. Push it.
             result.add(new YahooSearchResult(url, title, summary, clickurl));
@@ -113,5 +127,13 @@ public final class YahooResponseHandler implements ContentHandler {
     }
 
     public void skippedEntity(String entity) throws SAXException {
+    }
+
+    public boolean isErraneous() {
+        return error;
+    }
+
+    public String getErrorText() {
+        return errorText.toString();
     }
 }

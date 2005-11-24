@@ -83,9 +83,9 @@ public class YahooSearchServiceDescriptor {
     }
 
     /**
-     * Returns maximum results per query. Currently hardcoded 100.
+     * Returns maximum results per query. Currently hardcoded at 50.
      */
     public int getMaxResultsPerQuery() {
-        return 100;
+        return 50;
     }
 }
