@@ -21,7 +21,7 @@
         <parameter name="query"   mapto="query.string" />
         <parameter name="start"   mapto="query.startFrom" />
         <parameter name="results" mapto="query.results" />
-		<parameter name="ei"      value="UTF-8" />
+        <parameter name="ei"      value="UTF-8" />
 
         <parameter name="appid"   value="carrotsearch" />
 
