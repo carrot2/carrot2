@@ -2,7 +2,7 @@
 
 <request encoding="UTF-8">
     <service url="http://api.search.yahoo.com/WebSearchService/V1/webSearch" 
-             method="post" />
+             method="get" />
 
     <!-- 
       Specify any other parameters which will be sent to the service
@@ -21,6 +21,7 @@
         <parameter name="query"   mapto="query.string" />
         <parameter name="start"   mapto="query.startFrom" />
         <parameter name="results" mapto="query.results" />
+		<parameter name="ei"      value="UTF-8" />
 
         <parameter name="appid"   value="carrotsearch" />
 
