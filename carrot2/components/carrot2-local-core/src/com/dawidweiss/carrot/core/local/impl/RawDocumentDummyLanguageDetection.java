@@ -1,10 +1,16 @@
 package com.dawidweiss.carrot.core.local.impl;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
-import com.dawidweiss.carrot.core.local.*;
-import com.dawidweiss.carrot.core.local.clustering.*;
-import com.dawidweiss.carrot.core.local.profiling.*;
+import com.dawidweiss.carrot.core.local.LocalComponent;
+import com.dawidweiss.carrot.core.local.ProcessingException;
+import com.dawidweiss.carrot.core.local.RequestContext;
+import com.dawidweiss.carrot.core.local.clustering.RawDocument;
+import com.dawidweiss.carrot.core.local.clustering.RawDocumentsConsumer;
+import com.dawidweiss.carrot.core.local.clustering.RawDocumentsProducer;
+import com.dawidweiss.carrot.core.local.profiling.ProfiledLocalFilterComponentBase;
 
 /**
  * A local component that adds a predefined language code to the properties of a
@@ -62,16 +68,14 @@ public class RawDocumentDummyLanguageDetection extends
     private RawDocumentsConsumer rawDocumentConsumer;
 
     /** Language code to be added to the documents */
-    private String languageCode;
+    private final String languageCode;
 
-    /**
-     * Creates
-     * 
-     * @param languageCode
+    /** 
+     * Language code set for the duration of one query (either an override
+     * using {@link #PARAM_LANGUAGE_CODE_TO_SET}, taken from the context,
+     * or the {@link #languageCode} set in the constructor). 
      */
-    public RawDocumentDummyLanguageDetection()
-    {
-    }
+    private String currentLanguageCode;
 
     /**
      * @param languageCode
@@ -90,7 +94,7 @@ public class RawDocumentDummyLanguageDetection extends
     public void addDocument(RawDocument doc) throws ProcessingException
     {
         startTimer();
-        doc.setProperty(RawDocument.PROPERTY_LANGUAGE, languageCode);
+        doc.setProperty(RawDocument.PROPERTY_LANGUAGE, currentLanguageCode);
         stopTimer();
 
         // pass the document reference...
@@ -105,11 +109,14 @@ public class RawDocumentDummyLanguageDetection extends
     public void startProcessing(RequestContext requestContext)
         throws ProcessingException
     {
-        languageCode = (String) requestContext.getRequestParameters().get(
-            PARAM_LANGUAGE_CODE_TO_SET);
-        if (languageCode == null)
-        {
-            languageCode = DEFAULT_LANGUAGE_CODE_TO_SET;
+        // If there's an override of the default language in the context,
+        // use it. Otherwise, take the default set in the constructor.
+        final String languageCodeForQuery = (String) requestContext
+            .getRequestParameters().get(PARAM_LANGUAGE_CODE_TO_SET);
+        if (languageCodeForQuery != null) {
+            this.currentLanguageCode = languageCodeForQuery;
+        } else {
+            this.currentLanguageCode = this.languageCode;
         }
         super.startProcessing(requestContext);
     }
@@ -144,6 +151,7 @@ public class RawDocumentDummyLanguageDetection extends
     {
         super.flushResources();
         this.rawDocumentConsumer = null;
+        this.currentLanguageCode = null;
     }
 
     /*
