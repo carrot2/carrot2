@@ -174,6 +174,7 @@ public class YahooSearchService {
                     }
                 }
                 resultsLeft -= handler.resultsReturned;
+                startFrom += handler.resultsReturned;
             }
         } catch (ParserConfigurationException e) {
             throw new RuntimeException("Problems setting up XML parser: " + e.toString(), e);
