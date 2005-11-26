@@ -25,7 +25,7 @@
         <parameter name="appid"   value="carrotsearch" />
 
 		<parameter name="ei"      value="UTF-8" />
-        <parameter name="similar_ok" value="1" />
+        <parameter name="similar_ok" value="0" />
 
         <!--
         <parameter name="adult_ok" value="" />

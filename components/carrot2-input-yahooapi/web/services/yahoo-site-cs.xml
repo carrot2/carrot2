@@ -23,7 +23,7 @@
         <parameter name="results" mapto="query.results" />
 
 		<parameter name="ei"      value="UTF-8" />
-        <parameter name="similar_ok" value="1" />
+        <parameter name="similar_ok" value="0" />
 
         <parameter name="appid"   value="carrotsearch" />
 
