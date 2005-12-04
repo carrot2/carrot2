@@ -361,7 +361,7 @@ ${string:component.dependencies}
     <copy file="${build.dir}/type-jar/META-INF/${dist.name}.jar.info"
           tofile="${distribution.dir}/${dist.name}.jar.info" overwrite="true" />
 
-    <jar compress="true" jarfile="${distribution.dir}/${dist.name}.jar">
+    <jar update="false" compress="true" jarfile="${distribution.dir}/${dist.name}.jar">
         <fileset dir="${build.dir}/type-jar">
             <patternset refid="src.patternset" />
         </fileset>
