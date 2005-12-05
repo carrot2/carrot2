@@ -119,7 +119,78 @@ public class WordLoadingUtils
         Set set = new HashSet();
         BufferedReader reader = new BufferedReader(new InputStreamReader(
             stream, "UTF-8"));
-        
+
+        try
+        {
+            String line;
+            List words = new ArrayList();
+            while ((line = reader.readLine()) != null)
+            {
+                line = line.trim();
+                if (line.startsWith("#"))
+                {
+                    continue;
+                }
+
+                if ("".equals(line))
+                {
+                    continue;
+                }
+
+                // Yes, I know StringTokenizer is slow. I use it here to avoid
+                // extra dependencies. This method will most probably be called
+                // only in the initialization phase anyway.
+                StringTokenizer stringTokenizer = new StringTokenizer(line);
+
+                while (stringTokenizer.hasMoreTokens())
+                {
+                    if (convertToLowerCase)
+                    {
+                        words.add(stringTokenizer.nextToken().toLowerCase());
+                    }
+                    else
+                    {
+                        words.add(stringTokenizer.nextToken());
+                    }
+                }
+
+                set.add(words.toArray(new String [words.size()]));
+                words.clear();
+            }
+        }
+        finally
+        {
+            reader.close();
+        }
+
+        logger.debug("Finished loading: " + resourceName);
+
+        return set;
+    }
+
+    /**
+     * @param resourceName
+     * @param stream
+     * @param convertToLowerCase
+     * @return
+     * @throws IOException
+     */
+    public static Set loadParameterizedPhraseSet(String resourceName,
+        InputStream stream, boolean convertToLowerCase, int parameterCount)
+        throws IOException
+    {
+        logger.debug("Loading word list for: " + resourceName);
+
+        if (stream == null)
+        {
+            throw new IOException("Stream handle must not be null "
+                + "(resource '" + resourceName + "' does not exist?)");
+        }
+
+        Set set = new HashSet();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(
+            stream, "UTF-8"));
+
         try
         {
             String line;
@@ -142,6 +213,13 @@ public class WordLoadingUtils
                 // only in the initialization phase anyway.
                 StringTokenizer stringTokenizer = new StringTokenizer(line);
                 
+                double [] parameters = new double [parameterCount];
+                for (int i = 0; i < parameterCount; i++)
+                {
+                    parameters[i] = Double.parseDouble(stringTokenizer
+                        .nextToken());
+                }
+
                 while (stringTokenizer.hasMoreTokens())
                 {
                     if (convertToLowerCase)
@@ -153,8 +231,12 @@ public class WordLoadingUtils
                         words.add(stringTokenizer.nextToken());
                     }
                 }
+
+                Object [] pair = new Object[2];
+                pair[0] = parameters;
+                pair[1] = words.toArray(new String [words.size()]); 
                 
-                set.add(words.toArray(new String[words.size()]));
+                set.add(pair);
                 words.clear();
             }
         }
