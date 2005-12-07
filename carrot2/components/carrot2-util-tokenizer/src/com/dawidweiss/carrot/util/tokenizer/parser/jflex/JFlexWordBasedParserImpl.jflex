@@ -47,6 +47,10 @@ URL_PATH   = ("/" {SYMBOL})+ ("." {SYMBOL})? ("/")? ("?" {SYMBOL} ((";" | ":" | 
 
 {TERM} ( "-" {TERM})+                                        { return HYPHTERM; }
 
+{TERM} "'" {LETTER}{1,2}                                     { return TERM; }
+
+{TERM} "s'"                                                  { return TERM; }
+
 {TERM}                                                       { return TERM; }
 
 {SYMBOL}("."{SYMBOL})*                                       { return FILE;}

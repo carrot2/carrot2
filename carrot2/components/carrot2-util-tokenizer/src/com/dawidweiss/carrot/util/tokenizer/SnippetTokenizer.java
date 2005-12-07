@@ -99,9 +99,27 @@ public class SnippetTokenizer
         LanguageTokenizer languageTokenizer = getLanguageTokenizer((String) rawDocument
             .getProperty(RawDocument.PROPERTY_LANGUAGE));
 
-        return tokenize(rawDocument, languageTokenizer);
+        return tokenize(rawDocument, languageTokenizer, -1);
     }
 
+    /**
+     * Internal version helps to avoid continuous re-allocation of string and
+     * token buffers.
+     * 
+     * @param rawDocument
+     * @param stringBuffer
+     * @param tokens
+     * @return
+     */
+    public TokenizedDocument tokenize(RawDocument rawDocument, int maxLength)
+    {
+        // Borrow tokenizer
+        LanguageTokenizer languageTokenizer = getLanguageTokenizer((String) rawDocument
+            .getProperty(RawDocument.PROPERTY_LANGUAGE));
+        
+        return tokenize(rawDocument, languageTokenizer, maxLength);
+    }
+    
     /**
      * Tokenizes a single {@link RawDocument}into a
      * {@link TokenizedDocumentSnippet}.
@@ -178,8 +196,21 @@ public class SnippetTokenizer
     public TokenizedDocument tokenize(RawDocument rawDocument,
         LanguageTokenizer languageTokenizer)
     {
-        TokenSequence titleTokenSequence = tokenize(rawDocument.getTitle(), languageTokenizer);
-        TokenSequence snippetTokenSequence = tokenize(rawDocument.getSnippet(), languageTokenizer);
+        return tokenize(rawDocument, languageTokenizer, -1);
+    }
+    
+    /**
+     * Tokenizes a single {@link RawDocument}into a
+     * {@link TokenizedDocumentSnippet}.
+     * 
+     * @param rawDocument
+     * @return
+     */
+    public TokenizedDocument tokenize(RawDocument rawDocument,
+        LanguageTokenizer languageTokenizer, int maxLength)
+    {
+        TokenSequence titleTokenSequence = tokenize(rawDocument.getTitle(), languageTokenizer, maxLength);
+        TokenSequence snippetTokenSequence = tokenize(rawDocument.getSnippet(), languageTokenizer, maxLength);
         
         TokenizedDocumentSnippet tokenizedDocumentSnippet = new TokenizedDocumentSnippet(
             titleTokenSequence, snippetTokenSequence);
@@ -201,16 +232,25 @@ public class SnippetTokenizer
     /**
      * Helps to avoid tokenizer borrow/return thrashing.
      * 
-     * TODO: [DW] Well, the _point_ of having borrow/return
-     * was to implement a pool of tokenizers. If it's not practical,
-     * we should just move to this method and that's it.
-     * 
      * @param rawText
      * @param languageTokenizer
      * @return
      */
     public static TokenSequence tokenize(String rawText,
         LanguageTokenizer languageTokenizer)
+    {
+        return tokenize(rawText, languageTokenizer, -1);
+    }
+    
+    /**
+     * Helps to avoid tokenizer borrow/return thrashing.
+     * 
+     * @param rawText
+     * @param languageTokenizer
+     * @return
+     */
+    public static TokenSequence tokenize(String rawText,
+        LanguageTokenizer languageTokenizer, int maxLength)
     {
         if (rawText == null || rawText.length() == 0)
         {
@@ -228,6 +268,13 @@ public class SnippetTokenizer
             for (int t = 0; t < tokenCount; t++)
             {
                 tokenSequence.addToken(tokens[t]);
+                if (maxLength != -1)
+                {
+                    if (--maxLength == 0)
+                    {
+                        return tokenSequence;
+                    }
+                }
             }
         }
 
