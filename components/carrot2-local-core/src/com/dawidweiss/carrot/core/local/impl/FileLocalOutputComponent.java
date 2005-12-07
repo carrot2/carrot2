@@ -26,7 +26,7 @@ public class FileLocalOutputComponent extends LocalOutputComponentBase
     implements RawClustersConsumer
 {
     /** Data source path (directory or file) */
-    public static final String PARAM_OUTPUT_FILE = "output-path";
+    public static final String PARAM_OUTPUT_DIR = "output-dir";
 
     /** Capabilities required from the previous component in the chain */
     private final static Set CAPABILITIES_PREDECESSOR = new HashSet(Arrays
@@ -46,7 +46,10 @@ public class FileLocalOutputComponent extends LocalOutputComponentBase
     private RequestContext requestContext;
 
     /** */
-    private File outputFile;
+    private File outputDir;
+
+    /** */
+    private File defaultOutputDir;
 
     /** */
     private List rawClusters;
@@ -56,6 +59,26 @@ public class FileLocalOutputComponent extends LocalOutputComponentBase
      */
     public FileLocalOutputComponent()
     {
+    }
+
+    /**
+     * @param file
+     */
+    public FileLocalOutputComponent(File outputDir)
+    {
+        if (outputDir == null)
+        {
+            throw new IllegalArgumentException(
+                "PARAM_OUTPUT_DIR parameter of type java.io.File must be set");
+        }
+
+        if (!outputDir.isDirectory())
+        {
+            throw new IllegalArgumentException(
+                "File provided in the PARAM_OUTPUT_DIR parameter must be a directory");
+        }
+
+        this.defaultOutputDir = outputDir;
     }
 
     /*
@@ -99,27 +122,9 @@ public class FileLocalOutputComponent extends LocalOutputComponentBase
         addClusters(root, rawClusters);
 
         // Determine file name
-        File finalOutput;
-        if (outputFile.isDirectory())
-        {
-            File inputFile = (File) requestContext.getRequestParameters().get(
-                FileLocalInputComponent.PARAM_INPUT_FILE);
-
-            String fileName = null;
-            if (inputFile != null)
-            {
-                fileName = inputFile.getName();
-            }
-            else
-            {
-                fileName = Integer.toString(new Random().nextInt()) + ".xml";
-            }
-            finalOutput = new File(outputFile, fileName);
-        }
-        else
-        {
-            finalOutput = outputFile;
-        }
+        String query = (String) requestContext.getRequestParameters().get(
+            LocalInputComponent.PARAM_QUERY);
+        File finalOutput = new File(outputDir, query);
 
         // Write result to the file
         try
@@ -247,10 +252,39 @@ public class FileLocalOutputComponent extends LocalOutputComponentBase
 
         Element titleElement = groupElement.addElement("title");
         List titlePhrases = rawCluster.getClusterDescription();
+        Double score = null;
+        if (rawCluster.getProperty("label-score") != null)
+        {
+            score = (Double) rawCluster.getProperty("label-score");
+        }
+
         for (Iterator it = titlePhrases.iterator(); it.hasNext();)
         {
             String phrase = (String) it.next();
-            titleElement.addElement("phrase").addText(phrase);
+            Element phraseElement = titleElement.addElement("phrase");
+            phraseElement.addText(phrase);
+            if (score != null)
+            {
+                phraseElement.addAttribute("score", score.toString());
+            }
+            break;
+        }
+
+        // Add synonyms
+        List synonymLabels = (List) rawCluster.getProperty("label-synonyms");
+        List synonymScores = (List) rawCluster
+            .getProperty("label-synonym-scores");
+        if (synonymLabels != null)
+        {
+            for (int i = 0; i < synonymLabels.size(); i++)
+            {
+                String label = (String) synonymLabels.get(i);
+                Double synonymScore = (Double) synonymScores.get(i);
+                
+                Element phraseElement = titleElement.addElement("phrase");
+                phraseElement.addText(label);
+                phraseElement.addAttribute("score", synonymScore.toString());
+            }
         }
 
         // Add documents
@@ -275,14 +309,24 @@ public class FileLocalOutputComponent extends LocalOutputComponentBase
         throws ProcessingException
     {
         // Get source path from the request context
-        if (!requestContext.getRequestParameters().containsKey(
-            PARAM_OUTPUT_FILE))
+        outputDir = (File) requestContext.getRequestParameters().get(
+            PARAM_OUTPUT_DIR);
+        if (outputDir == null)
+        {
+            outputDir = defaultOutputDir;
+        }
+
+        if (outputDir == null)
         {
             throw new ProcessingException(
-                "PARAM_OUTPUT_FILE parameter must be set");
+                "PARAM_OUTPUT_DIR parameter of type java.io.File must be set");
         }
-        outputFile = (File) requestContext.getRequestParameters().get(
-            PARAM_OUTPUT_FILE);
+
+        if (!outputDir.isDirectory())
+        {
+            throw new ProcessingException(
+                "File provided in the PARAM_OUTPUT_DIR parameter must be a directory");
+        }
 
         rawClusters = new ArrayList();
 
@@ -300,7 +344,7 @@ public class FileLocalOutputComponent extends LocalOutputComponentBase
     public void flushResources()
     {
         super.flushResources();
-        outputFile = null;
+        outputDir = null;
         requestContext = null;
         rawClusters = null;
     }

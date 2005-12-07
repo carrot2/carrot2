@@ -25,7 +25,7 @@ import com.dawidweiss.carrot.core.local.clustering.*;
 public class FileLocalInputComponent extends LocalInputComponentBase
 {
     /** Data source path (directory or file) */
-    public static final String PARAM_INPUT_FILE = "input-file";
+    public static final String PARAM_INPUT_DIR = "input-dir";
 
     /** Capabilities required from the next component in the chain */
     private final static Set SUCCESSOR_CAPABILITIES = new HashSet(Arrays
@@ -51,13 +51,34 @@ public class FileLocalInputComponent extends LocalInputComponentBase
     private RequestContext requestContext;
 
     /** */
-    private File sourceFile;
+    private File inputDir;
 
+    /** */
+    private File defaultInputDir;
+    
     /**
-     * @param file
+     * 
      */
     public FileLocalInputComponent()
     {
+    }
+
+    /**
+     * 
+     */
+    public FileLocalInputComponent(File inputDir)
+    {
+        if (inputDir == null)
+        {
+            throw new IllegalArgumentException("inputDir must not be null");
+        }
+
+        if (!inputDir.isDirectory())
+        {
+            throw new IllegalArgumentException("inputDir must be a directory");
+        }
+        
+        this.defaultInputDir = inputDir;
     }
 
     /*
@@ -115,14 +136,24 @@ public class FileLocalInputComponent extends LocalInputComponentBase
         throws ProcessingException
     {
         // Get source path from the request context
-        if (!requestContext.getRequestParameters()
-            .containsKey(PARAM_INPUT_FILE))
+        inputDir = (File) requestContext.getRequestParameters().get(
+            PARAM_INPUT_DIR);
+        if (inputDir == null)
+        {
+            inputDir = defaultInputDir;
+        }
+        
+        if (inputDir == null)
         {
             throw new ProcessingException(
-                "PARAM_INPUT_FILE parameter must be set");
+                "PARAM_INPUT_DIR parameter of type java.io.File must be set");
         }
-        sourceFile = (File) requestContext.getRequestParameters().get(
-            PARAM_INPUT_FILE);
+
+        if (!inputDir.isDirectory())
+        {
+            throw new ProcessingException(
+                "File provided in the PARAM_INPUT_DIR parameter must be a directory");
+        }
 
         // Pass the query for the following components
         requestContext.getRequestParameters().put(
@@ -133,16 +164,18 @@ public class FileLocalInputComponent extends LocalInputComponentBase
         // Store the current context
         this.requestContext = requestContext;
 
-        if (!sourceFile.isFile() || !sourceFile.canRead())
+        File inputFile = new File(inputDir, query);
+
+        if (!inputFile.isFile() || !inputFile.canRead())
         {
             throw new ProcessingException("Cannot read file: "
-                + sourceFile.getAbsolutePath());
+                + inputFile.getAbsolutePath());
         }
 
         try
         {
             SAXReader reader = new SAXReader();
-            Element root = reader.read(sourceFile).getRootElement();
+            Element root = reader.read(inputFile).getRootElement();
             pushAsLocalData(root);
         }
         catch (Exception e)
@@ -211,7 +244,7 @@ public class FileLocalInputComponent extends LocalInputComponentBase
     {
         super.flushResources();
         query = null;
-        sourceFile = null;
+        inputDir = null;
         requestContext = null;
         rawDocumentConsumer = null;
     }

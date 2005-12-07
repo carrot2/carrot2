@@ -31,22 +31,35 @@ public class SnippetTokenizerLocalFilterComponent extends
     /** Capabilities required from the previous component in the chain */
     private final static Set CAPABILITIES_PREDECESSOR = new HashSet(Arrays
         .asList(new Object []
-        { RawDocumentsProducer.class }));
+        {
+            RawDocumentsProducer.class
+        }));
 
     /** This component's capabilities */
     private final static Set CAPABILITIES_COMPONENT = new HashSet(Arrays
         .asList(new Object []
-        { RawDocumentsConsumer.class, TokenizedDocumentsProducer.class }));
+        {
+            RawDocumentsConsumer.class, TokenizedDocumentsProducer.class
+        }));
 
     /** Capabilities required from the next component in the chain */
     private final static Set CAPABILITIES_SUCCESSOR = new HashSet(Arrays
         .asList(new Object []
-        { TokenizedDocumentsConsumer.class }));
+        {
+            TokenizedDocumentsConsumer.class
+        }));
 
     /** Tokenized documents consumer */
     private TokenizedDocumentsConsumer tokenizedDocumentsConsumer;
 
+    /** */
     private SnippetTokenizer snippetTokenizer;
+
+    /** */
+    private RequestContext requestContext;
+
+    /** */
+    public final static String PARAMETER_MAX_TOKENS_TO_READ = "max-tokens";
 
     /*
      * (non-Javadoc)
@@ -63,12 +76,35 @@ public class SnippetTokenizerLocalFilterComponent extends
     /*
      * (non-Javadoc)
      * 
+     * @see com.dawidweiss.carrot.core.local.profiling.ProfiledLocalFilterComponentBase#startProcessing(com.dawidweiss.carrot.core.local.RequestContext)
+     */
+    public void startProcessing(RequestContext requestContext)
+        throws ProcessingException
+    {
+        super.startProcessing(requestContext);
+        this.requestContext = requestContext;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see com.dawidweiss.carrot.core.local.clustering.RawDocumentsConsumer#addDocument(com.dawidweiss.carrot.core.local.clustering.RawDocument)
      */
     public void addDocument(RawDocument doc) throws ProcessingException
     {
         startTimer();
-        TokenizedDocument tokenizedDocument = snippetTokenizer.tokenize(doc);
+        final Integer maxTokens = (Integer) requestContext
+            .getRequestParameters().get(PARAMETER_MAX_TOKENS_TO_READ);
+        TokenizedDocument tokenizedDocument;
+        if (maxTokens != null)
+        {
+            tokenizedDocument = snippetTokenizer.tokenize(doc, maxTokens
+                .intValue());
+        }
+        else
+        {
+            tokenizedDocument = snippetTokenizer.tokenize(doc);
+        }
         stopTimer();
 
         tokenizedDocumentsConsumer.addDocument(tokenizedDocument);
@@ -125,6 +161,7 @@ public class SnippetTokenizerLocalFilterComponent extends
         super.flushResources();
         tokenizedDocumentsConsumer = null;
         profile = null;
+        requestContext = null;
 
         snippetTokenizer.clear();
     }
