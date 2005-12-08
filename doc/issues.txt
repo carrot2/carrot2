@@ -2,18 +2,18 @@
 KNOWN ISSUES
 ------------
 
-1.
 
-Massimo Miccoli reports:
+
+1. Massimo Miccoli reports:
 
 Users of  Debian Woody distribution and Tomcat4  must give write permission
 to tomcat4 users on  /var/lib/tomcat4/webapps
 so Carrot2 can work.  Is not a  true solution for security reason, but it
 work.
 
-2.
 
-Reported by: Haris Papadopoulos 
+
+2. Reported by: Haris Papadopoulos 
 
 >> com.dawidweiss.carrot.filter.FilterRequestProcessorServlet - An 
 >> internal component error occurred in processor 
@@ -31,12 +31,16 @@ somehow my Tomcat can not work with xercesImpl.jar which I put in
 WEB-INF/lib of carrot web app. I removed it, so that Tomcat could use 
 its own xml parser. 
 
+
+
 3. Tomcat 5.XX and query encoding problems.
 
 You must enforce proper decoding of URI parameters in the connector. You
 can do it by adding this attribute to the connector spec. in server.xml
 
 UseBodyEncodingForURI="true"
+
+
 
 4. Deploying Carrot2 on Jonas (version 4.1)
 
