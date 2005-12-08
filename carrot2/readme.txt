@@ -8,10 +8,10 @@ INFORMATION
 ===========
 
 Carrot2 is a component-based data processing framework, created
-especially for the reason of clustering search results from
-search engines (but not only).
+primarily for clustering search results from search engines (but not only).
 
 See more at:
+
 http://www.cs.put.poznan.pl/dweiss/carrot
 http://carrot.cs.put.poznan.pl
 
@@ -19,20 +19,26 @@ http://carrot.cs.put.poznan.pl
 ACQUIRING BINARY RELEASE
 ========================
 
-It is advised that you grab a binary release of the Carrot2 components from the 
+You can grab a binary release of the Carrot2 components from the 
 nightly build drop-off zone at:
 
 http://carrot.cs.put.poznan.pl/static/download/nightly/
+
+Prebuilt demo applications are also available on SourceForge's file
+download area:
+
+http://sourceforge.net/projects/carrot2/
 
 
 BUILDING FROM SOURCES
 =====================
 
-In order to build Carrot2's components, you must have ANT in your path. We use 
-ANT 1.6.2, previous versions are not supported but may work. 
+In order to build Carrot2's components, you must have ANT in your path. We try to
+ensure the build file works flawlessly with the newest ANT available.
 
-Carrot2 components can work in two architecture designs: as remote components
-using HTTP and as local Java components.
+Carrot2 components can work in two architecture designs: 
+	- as remote components using HTTP/XML for communication,
+	- as local Java components.
 
 0) Build 'bootstrap' tasks
 
@@ -140,3 +146,6 @@ Other inquiries can be directed to the project's coordinator:
 
 Dawid Weiss <dawid.weiss@cs.put.poznan.pl>
 
+Commercial consulting is offered by a spin-off company Carrot Search:
+
+info@carrot-search.com

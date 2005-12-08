@@ -1,0 +1,4 @@
+
+The project manual is at:
+
+http://www.cs.put.poznan.pl/dweiss/carrot/
