@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<!DOCTYPE component SYSTEM "../etc/component-dependency.dtd" > 
+<!DOCTYPE component PUBLIC "-//Carrot2//DTD Component Dependency Descriptor V1.0//EN" "http://www.cs.put.poznan.pl/dweiss/carrot/component-dependency.dtd" >
 <component
     name="bsf"
     description="Bean Scripting Framework 2.3, http://jakarta.apache.org/bsf/">

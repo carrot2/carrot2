@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<!DOCTYPE component SYSTEM "../etc/component-dependency.dtd" >
+<!DOCTYPE component PUBLIC "-//Carrot2//DTD Component Dependency Descriptor V1.0//EN" "http://www.cs.put.poznan.pl/dweiss/carrot/component-dependency.dtd" >
 <component
     name="xerces"
     description="Xerces Java XML Parser, http://xml.apache.org/xerces2-j/index.html">
