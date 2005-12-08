@@ -15,7 +15,7 @@ import carrot2.demo.swing.util.JThreshold;
 import com.stachoodev.carrot.filter.lingo.lsicluster.LsiConstants;
 
 /**
- * A Swing dialog for Lingo.
+ * Settings dialog for Lingo classic.
  * 
  * @author Dawid Weiss
  */

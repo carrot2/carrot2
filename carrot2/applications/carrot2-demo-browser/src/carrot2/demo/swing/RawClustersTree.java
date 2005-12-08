@@ -1,7 +1,6 @@
 package carrot2.demo.swing;
 
-import javax.swing.BorderFactory;
-import javax.swing.JTree;
+import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
@@ -21,9 +20,9 @@ public class RawClustersTree extends JTree {
         
         setShowsRootHandles(true);
         setRootVisible(false);
-        putClientProperty("JTree.lineStyle", "None");
         setCellRenderer(new RawClustersCellRenderer());
         getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         setEditable(false);        
+        ToolTipManager.sharedInstance().registerComponent(this);
     }
 }
