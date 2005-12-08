@@ -6,6 +6,9 @@
     description="Carrot2 Demo Browser Application">
 
     <provides>
+        <files prefix="tmp/dist">
+            <file location="carrot2-demo-browser.jar" />
+        </files>
         <build>
             <ant file="build.xml" target="build" />
         </build>

@@ -11,7 +11,7 @@
     <property name="type"       value="jartype" />
 
     <property name="distribution.dir" location="${project.dir}/tmp/dist" />
-    
+
     <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
 
     <target name="build">
