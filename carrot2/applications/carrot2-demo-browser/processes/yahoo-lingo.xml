@@ -4,6 +4,7 @@
   <description>Search Yahoo, cluster using Lingo</description>
 
   <input component-key="input-yahooapi" />
+  <filter component-key="filter-rawdocument-enumerator" />
   <filter component-key="filter-lingo" />
   <output component-key="output-clustersConsumer" />
 
