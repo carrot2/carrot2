@@ -8,7 +8,7 @@ import javax.swing.JSlider;
 
 
 /**
- * A threshold slider.
+ * A threshold slider for double values.
  * 
  * @author Dawid Weiss
  */
@@ -16,11 +16,15 @@ public class JDoubleSlider extends JSlider {
     private final MessageFormat labelFormat = new MessageFormat("{0,number,#.##}");
     private RangeScaler scaler;
 
+    private double tickScale;
+    
     public JDoubleSlider(double min, double max, double minorTicks, double majorTicks) {
         this.scaler = new RangeScaler(min, max, 0, 1000);
 
         super.setMinimum(scaler.getIntMin());
         super.setMaximum(scaler.getIntMax());
+
+        tickScale = Math.min(minorTicks, majorTicks);
 
         setMinorTickSpacing(scaler.scale(minorTicks));
         setMajorTickSpacing(scaler.scale(majorTicks));
@@ -36,7 +40,14 @@ public class JDoubleSlider extends JSlider {
     }
 
     public double getDoubleValue() {
-        return scaler.from(super.getValue());
+        double value = scaler.from(super.getValue());
+
+        if (getSnapToTicks()) {
+            final double n = Math.round(value / tickScale);
+            value = tickScale * n;
+        }
+
+        return Math.round(value * 100.0) / 100.0;
     }
 
     private Hashtable createLabels(int min, int max, int step) {
