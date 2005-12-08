@@ -33,4 +33,11 @@ public final class EmptyProcessSettings implements ProcessSettings {
 
     public void addListener(ProcessSettingsListener listener) {
     }
+
+    public void setLiveUpdate(boolean liveUpdate) {
+    }
+
+    public boolean isLiveUpdate() {
+        return false;
+    }
 }
