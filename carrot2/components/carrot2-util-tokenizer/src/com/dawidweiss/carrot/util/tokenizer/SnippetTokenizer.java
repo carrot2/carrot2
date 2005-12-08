@@ -70,7 +70,6 @@ public class SnippetTokenizer
      * {@link TokenizedDocumentSnippet}s.
      * 
      * @param rawDocuments
-     * @return
      */
     public List tokenize(List rawDocuments)
     {
@@ -89,9 +88,6 @@ public class SnippetTokenizer
      * token buffers.
      * 
      * @param rawDocument
-     * @param stringBuffer
-     * @param tokens
-     * @return
      */
     public TokenizedDocument tokenize(RawDocument rawDocument)
     {
@@ -107,9 +103,6 @@ public class SnippetTokenizer
      * token buffers.
      * 
      * @param rawDocument
-     * @param stringBuffer
-     * @param tokens
-     * @return
      */
     public TokenizedDocument tokenize(RawDocument rawDocument, int maxLength)
     {
@@ -125,7 +118,6 @@ public class SnippetTokenizer
      * {@link TokenizedDocumentSnippet}.
      * 
      * @param rawDocument
-     * @return
      */
     public TokenizedDocument tokenizeOnePass(RawDocument rawDocument,
         LanguageTokenizer languageTokenizer)
@@ -191,7 +183,6 @@ public class SnippetTokenizer
      * {@link TokenizedDocumentSnippet}.
      * 
      * @param rawDocument
-     * @return
      */
     public TokenizedDocument tokenize(RawDocument rawDocument,
         LanguageTokenizer languageTokenizer)
@@ -204,7 +195,6 @@ public class SnippetTokenizer
      * {@link TokenizedDocumentSnippet}.
      * 
      * @param rawDocument
-     * @return
      */
     public TokenizedDocument tokenize(RawDocument rawDocument,
         LanguageTokenizer languageTokenizer, int maxLength)
@@ -234,7 +224,6 @@ public class SnippetTokenizer
      * 
      * @param rawText
      * @param languageTokenizer
-     * @return
      */
     public static TokenSequence tokenize(String rawText,
         LanguageTokenizer languageTokenizer)
@@ -247,7 +236,6 @@ public class SnippetTokenizer
      * 
      * @param rawText
      * @param languageTokenizer
-     * @return
      */
     public static TokenSequence tokenize(String rawText,
         LanguageTokenizer languageTokenizer, int maxLength)
@@ -281,15 +269,11 @@ public class SnippetTokenizer
         return tokenSequence;
     }
 
-    /**
-     * @param lang
-     * @return
-     */
     protected LanguageTokenizer getLanguageTokenizer(String lang)
     {
         if (lang == null)
         {
-            // We don't need to be thread-safe here, do we?
+            // TODO: We don't need to be thread-safe here, do we?
             if (genericTokenizer == null)
             {
                 genericTokenizer = WordBasedParserFactory.Default
@@ -319,9 +303,6 @@ public class SnippetTokenizer
         }
     }
 
-    /**
-     *  
-     */
     private void returnTokenizers()
     {
         // Return all language tokenizers
