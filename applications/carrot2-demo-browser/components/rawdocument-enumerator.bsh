@@ -1,0 +1,16 @@
+
+import com.dawidweiss.carrot.core.local.*;
+import com.dawidweiss.carrot.core.local.impl.*;
+import com.dawidweiss.carrot.local.controller.*;
+
+factory = new LocalComponentFactoryBase()
+{
+    public LocalComponent getInstance()
+    {
+        return new RawDocumentEnumerator();
+    }
+};
+
+return new LoadedComponentFactory(
+	/* id */ "filter-rawdocument-enumerator", 
+	factory);
