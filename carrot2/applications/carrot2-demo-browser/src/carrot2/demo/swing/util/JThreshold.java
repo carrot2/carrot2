@@ -1,5 +1,6 @@
 package carrot2.demo.swing.util;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -51,6 +52,9 @@ public class JThreshold extends JPanel {
         this.add(slider);
         
         this.spinner = new JSpinner();
+        final Dimension prefSize = spinner.getPreferredSize();
+        prefSize.width = Math.max(prefSize.width, 50);
+        this.spinner.setPreferredSize(prefSize);
         this.spinner.setModel(new SpinnerNumberModel(min, min, max, minorTicks));
         this.spinner.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
@@ -62,6 +66,10 @@ public class JThreshold extends JPanel {
         cc = new GridBagConstraints(1, 1, 1, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.NONE, new Insets(0,0,0,0), 0, 0);
         layout.setConstraints(spinner, cc);
         this.add(spinner);
+    }
+    
+    public void setSnapToTicks(boolean flag) {
+        slider.setSnapToTicks(flag);
     }
 
     public void setValue(double value) {
