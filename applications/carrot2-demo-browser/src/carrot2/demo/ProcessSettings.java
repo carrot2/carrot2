@@ -46,4 +46,8 @@ public interface ProcessSettings {
      * Adds a change listener to this process settings.
      */
     public void addListener(ProcessSettingsListener listener);
+    
+    public void setLiveUpdate(boolean liveUpdate);
+    
+    public boolean isLiveUpdate();
 }

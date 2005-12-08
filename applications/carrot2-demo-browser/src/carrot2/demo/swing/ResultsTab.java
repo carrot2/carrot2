@@ -5,6 +5,7 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -12,7 +13,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +26,7 @@ import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -41,8 +48,10 @@ import carrot2.demo.swing.util.SwingTask;
 import carrot2.demo.swing.util.ToolbarButton;
 
 import com.dawidweiss.carrot.core.local.ProcessingResult;
+import com.dawidweiss.carrot.core.local.clustering.RawCluster;
 import com.dawidweiss.carrot.core.local.clustering.RawDocument;
 import com.dawidweiss.carrot.core.local.impl.ClustersConsumerOutputComponent;
+import com.dawidweiss.carrot.core.local.impl.RawDocumentEnumerator;
 import com.dawidweiss.carrot.core.local.impl.ClustersConsumerOutputComponent.Result;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -197,26 +206,6 @@ public class ResultsTab extends JPanel {
         final JPanel leftPanel = new JPanel(new BorderLayout());
         leftPanel.add(clustersTreeScroller, BorderLayout.CENTER);
 
-        if (this.processSettings.hasSettings()) {
-            final JPanel settingsContainer = new JPanel(new BorderLayout(0, 4));
-            settingsContainer.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
-            final JComponent settingsComponent = processSettings.getSettingsComponent();
-            settingsContainer.add(settingsComponent, BorderLayout.CENTER);
-            final JButton updateButton = new JButton("Refresh");
-            updateButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    performQuery();
-                }
-            });
-            this.processSettings.addListener(new ProcessSettingsListener() {
-                public void settingsChanged(ProcessSettings settings) {
-                    performQuery();
-                }
-            });
-            settingsContainer.add(updateButton, BorderLayout.SOUTH);
-            leftPanel.add(settingsContainer, BorderLayout.SOUTH);
-        }
-
         this.browserView = new WebBrowser();
         this.browserView.setFocusable(false);
 
@@ -244,6 +233,37 @@ public class ResultsTab extends JPanel {
         };
         subPanel.add(browserView, BorderLayout.CENTER);
         
+        if (this.processSettings.hasSettings()) {
+            final JPanel settingsContainer = new JPanel(new BorderLayout(0, 4));
+            settingsContainer.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
+            final JComponent settingsComponent = processSettings.getSettingsComponent();
+            settingsContainer.add(settingsComponent, BorderLayout.CENTER);
+            final JButton updateButton = new JButton("Refresh");
+            updateButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    performQuery();
+                }
+            });
+            final JCheckBox liveUpdate = new JCheckBox("Live update");
+            liveUpdate.setSelected(processSettings.isLiveUpdate());
+            liveUpdate.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    processSettings.setLiveUpdate(liveUpdate.isSelected());
+                }
+            });
+            this.processSettings.addListener(new ProcessSettingsListener() {
+                public void settingsChanged(ProcessSettings settings) {
+                    performQuery();
+                }
+            });
+            JPanel buttons = new JPanel();
+            buttons.setLayout(new FlowLayout(FlowLayout.LEFT));
+            buttons.add(liveUpdate);
+            buttons.add(updateButton);
+            settingsContainer.add(buttons, BorderLayout.SOUTH);
+            subPanel.add(settingsContainer, BorderLayout.AFTER_LINE_ENDS);
+        }
+
         JSplitPane splitPane = new JSplitPane(
                 JSplitPane.HORIZONTAL_SPLIT,
                 leftPanel, subPanel);
@@ -339,12 +359,23 @@ public class ResultsTab extends JPanel {
      */
     private void showAllDocuments() {
         if (result == null) return;
-        final String html = getHtmlForDocuments(result.documents, null);
+        
+        final StringBuffer html = new StringBuffer(50000);
+
+        appendHtmlHeader(html);
+        
+        if (result.documents != null && result.documents.size() > 0) {
+            appendHtmlForDocuments(html, result.documents, false);
+        } else {
+            // Build document list from clusters.
+            appendHtmlForDocuments(html, collectDocuments(result.clusters), true);
+        }
+        appendHtmlTrailer(html);
 
         Runnable task = new Runnable() {
             public void run() {
                 ResultsTab.this.clustersTree.clearSelection();
-                updateDocumentsView(html);
+                updateDocumentsView(html.toString());
                 ((CardLayout)cards.getLayout()).show(cards, MAIN_CARD);
             }
         };
@@ -352,33 +383,45 @@ public class ResultsTab extends JPanel {
     }
 
     /**
-     * This method converts a set of raw documents to a string.
+     * A comparator for {@link RawDocument}s which compares their addition sequence number.
      */
-    public String getHtmlForDocuments(List documents, String clusterLabel) {
-        final StringBuffer buffer = new StringBuffer();
+    private final static Comparator DOCUMENT_SEQ_COMPARATOR = new Comparator() {
+        public int compare(final Object o1, final Object o2) {
+            final RawDocument rc1 = (RawDocument) o1;
+            final RawDocument rc2 = (RawDocument) o2;
 
-        buffer.append("<html>");
-        buffer.append("<meta><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"></meta>\n");
-        buffer.append("<body style=\"font-size: 10pt; font-family: Arial, Helvetica, sans-serif;\">");
+            final int rci1 = ((Integer) rc1.getProperty(RawDocumentEnumerator.DOCUMENT_SEQ_NUMBER)).intValue();
+            final int rci2 = ((Integer) rc2.getProperty(RawDocumentEnumerator.DOCUMENT_SEQ_NUMBER)).intValue();
 
-        if (clusterLabel != null) {
-            buffer.append("<div style=\"color: white; font-weight: bold; background-color: #5588BE;" +
-                    " border-bottom: 1px solid #303030; padding-bottom: 4px; padding-top: 4px;\">");
-            buffer.append(clusterLabel);
-            buffer.append("</div>");
-            buffer.append("<br/>");
+            return rci1 - rci2;
         }
-        
+    };
+
+    public StringBuffer appendHtmlForDocuments(StringBuffer buffer, Collection documents, boolean resortDocuments) {
+        if (resortDocuments) {
+            // Re-sort documents according to their addition sequence.
+            final ArrayList docsCopy = new ArrayList(documents);
+            Collections.sort(docsCopy, DOCUMENT_SEQ_COMPARATOR);
+            documents = docsCopy;
+        }
+
         for (Iterator i = documents.iterator(); i.hasNext();) {
-            RawDocument doc = (RawDocument) i.next();
+            final RawDocument doc = (RawDocument) i.next();
+
+            final Object seqNum = doc.getProperty(RawDocumentEnumerator.DOCUMENT_SEQ_NUMBER);
+            if (seqNum != null) {
+                buffer.append("<span style=\"font-size: 8px\">(");
+                buffer.append(seqNum);
+                buffer.append(") </span>");
+            }
+            
             buffer.append("<a href=\"" + doc.getUrl() + "\"><b>");
 
             if ((doc.getTitle() == null) || (doc.getTitle().length() == 0)) {
-                buffer.append(doc.getUrl());
+                buffer.append("(no title)");
             } else {
                 buffer.append(doc.getTitle());
             }
-
             buffer.append("</b></a>");
 
             if (doc.getProperty(RawDocument.PROPERTY_LANGUAGE) != null) {
@@ -400,9 +443,65 @@ public class ResultsTab extends JPanel {
             buffer.append("</font><br><br>");
         }
 
-        buffer.append("</ol></body></html>");
+        return buffer;
+    }
+
+    private void appendHtmlHeader(StringBuffer buffer) {
+        buffer.append("<html>");
+        buffer.append("<meta><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"></meta>\n");
+        buffer.append("<body style=\"font-size: 10pt; font-family: Arial, Helvetica, sans-serif;\">");
+    }
+
+    private void appendHtmlTrailer(StringBuffer buffer) {
+        buffer.append("</body></html>");
+    }
+
+    /**
+     * This method converts a set of raw documents to a string.
+     */
+    public String getHtmlFor(final RawCluster rc) {
+        final StringBuffer buffer = new StringBuffer();
+
+        appendHtmlHeader(buffer);
+
+        final String clusterLabel = RawClustersCellRenderer.getLabel(rc, Integer.MAX_VALUE);
+
+        if (clusterLabel != null) {
+            buffer.append("<div style=\"color: white; font-weight: bold; background-color: #5588BE;" +
+                    " border-bottom: 1px solid #303030; padding-bottom: 4px; padding-top: 4px;\">");
+            buffer.append(clusterLabel);
+            buffer.append("</div>");
+            buffer.append("<br/>");
+        }
+
+        final ArrayList clusters = new ArrayList();
+        clusters.add(rc);
+        final HashSet documents = collectDocuments(clusters);
+
+        appendHtmlForDocuments(buffer, documents, rc.getSubclusters().size() > 0);
+        appendHtmlTrailer(buffer);
 
         return buffer.toString();
+    }
+
+    private HashSet collectDocuments(final Collection clusterCollection) {
+        final HashSet documents = new HashSet();
+        final ArrayList clusters = new ArrayList(clusterCollection);
+        while (!clusters.isEmpty()) {
+            final RawCluster subCluster = (RawCluster) clusters.remove(clusters.size()-1);
+
+            final List clusterDocuments = subCluster.getDocuments();
+            if (clusterDocuments != null) {
+                documents.addAll(clusterDocuments);
+            }
+
+            final List subclusters = subCluster.getSubclusters();
+            if (subclusters != null) {
+                clusters.addAll(subclusters);
+            }
+        }
+
+        return documents;
     }
     
     public void changeTitle(final String title, final boolean alert) {

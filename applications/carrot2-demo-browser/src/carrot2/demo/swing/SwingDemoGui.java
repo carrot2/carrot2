@@ -47,7 +47,7 @@ import com.jgoodies.plaf.Options;
 public class SwingDemoGui implements DemoGuiDelegate {
 
     /** Search banner color. */
-    private static final Color BANNER_COLOR = new Color(0xe0, 0xe0, 0xf0);
+    private static final Color BANNER_COLOR = new Color(0xe0, 0xe0, 0xe0);
 
     /**
      * Default allowed query sizes (might not be important in case
@@ -273,6 +273,7 @@ public class SwingDemoGui implements DemoGuiDelegate {
                 0, 0);
         layout.setConstraints(tabbedPane, cc);
         mainPanel.add(tabbedPane);
+        mainPanel.setPreferredSize(new Dimension(1000, 800));
 
         return mainPanel;
     }

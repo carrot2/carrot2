@@ -1,25 +1,19 @@
 package carrot2.demo.settings;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Vector;
+import java.util.*;
 
-import javax.swing.JComponent;
+import javax.swing.*;
 
-import carrot2.demo.ProcessSettings;
-import carrot2.demo.ProcessSettingsListener;
+import carrot2.demo.*;
 
-import com.stachoodev.carrot.filter.lingo.lsicluster.LsiConstants;
+import com.stachoodev.carrot.filter.lingo.lsicluster.*;
 
 /**
- * Settings class for Lingo classic with a generic
- * input (Yahoo for example).
+ * Settings class for Lingo classic with a generic input.
  * 
  * @author Dawid Weiss
  */
-public class LingoClassicSettings implements ProcessSettings {
-    private HashMap params;
-    private Vector listeners = new Vector();
+public class LingoClassicSettings extends ProcessSettingsBase implements ProcessSettings {
 
     public LingoClassicSettings() {
         params = new HashMap();
@@ -44,12 +38,6 @@ public class LingoClassicSettings implements ProcessSettings {
         return true;
     }
 
-    public HashMap getRequestParams() {
-        synchronized (this) {
-            return new HashMap(params);
-        }
-    }
-
     public ProcessSettings createClone() {
         synchronized (this) {
             return new LingoClassicSettings(params);
@@ -59,22 +47,5 @@ public class LingoClassicSettings implements ProcessSettings {
     public JComponent getSettingsComponent() {
         LingoSettingsDialog dlg = new LingoSettingsDialog(this);
         return dlg;
-    }
-
-    public void setRequestParams(HashMap params) {
-        synchronized (this) {
-            this.params = params;
-            fireParamsUpdated();
-        }
-    }
-
-    private void fireParamsUpdated() {
-        for (Iterator i = listeners.iterator(); i.hasNext(); ) {
-            ((ProcessSettingsListener) i.next()).settingsChanged(this); 
-        }
-    }
-
-    public void addListener(ProcessSettingsListener listener) {
-        this.listeners.add(listener);
     }
 }
