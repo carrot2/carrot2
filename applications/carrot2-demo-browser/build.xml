@@ -1,11 +1,14 @@
 
 <project name="Carrot2 Demo Browser" default="build">
 
+    <property file="${user.home}/.carrot.properties" />
+    <property file="local.properties" />
+
     <property name="project.dir"      location="${basedir}" />
     <property name="carrot2.cvs.dir"  location="../.." />
     <property name="dist.name"        value="carrot2-demo-browser" />
 
-	<property name="type"       value="jartype" />
+    <property name="type"       value="jartype" />
 
     <property name="distribution.dir" location="${project.dir}/tmp/dist" />
     
@@ -18,6 +21,5 @@
         <ant target="build.${type}"
              antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" inheritrefs="true">
         </ant>
-    </target>    
-    
+    </target>
 </project>
