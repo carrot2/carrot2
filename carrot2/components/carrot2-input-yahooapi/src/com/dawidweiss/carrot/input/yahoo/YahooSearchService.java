@@ -124,7 +124,6 @@ public class YahooSearchService {
                         final NameValuePair [] nameValueArray = (NameValuePair [])
                             nameValues.toArray(new NameValuePair[nameValues.size()]);
                         ((GetMethod) httpMethod).setQueryString(nameValueArray);
-                        System.out.println(((GetMethod) httpMethod).getURI());
                     } else {
                         for (int i = 0; i < nameValues.size(); i++) {
                             ((PostMethod) httpMethod).addParameter((NameValuePair) nameValues.get(i));
