@@ -19,7 +19,7 @@ import com.dawidweiss.carrot.core.local.profiling.*;
 /**
  * Note: there is no support for tokenizing document content yet.
  * 
- * TODO: refactor SnippetTokenizer and delegate calls from this filter to it
+ * TODO: Refactor SnippetTokenizer and delegate calls from this filter to it
  * 
  * @author Stanislaw Osinski
  * @version $Revision$
@@ -57,15 +57,10 @@ public class SnippetTokenizerLocalFilterComponent extends
 
     /** */
     private RequestContext requestContext;
-
+    
     /** */
     public final static String PARAMETER_MAX_TOKENS_TO_READ = "max-tokens";
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#init(com.dawidweiss.carrot.core.local.LocalControllerContext)
-     */
     public void init(LocalControllerContext context)
         throws InstantiationException
     {
@@ -73,11 +68,6 @@ public class SnippetTokenizerLocalFilterComponent extends
         snippetTokenizer = new SnippetTokenizer();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.profiling.ProfiledLocalFilterComponentBase#startProcessing(com.dawidweiss.carrot.core.local.RequestContext)
-     */
     public void startProcessing(RequestContext requestContext)
         throws ProcessingException
     {
@@ -85,77 +75,48 @@ public class SnippetTokenizerLocalFilterComponent extends
         this.requestContext = requestContext;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.clustering.RawDocumentsConsumer#addDocument(com.dawidweiss.carrot.core.local.clustering.RawDocument)
-     */
     public void addDocument(RawDocument doc) throws ProcessingException
     {
         startTimer();
         final Integer maxTokens = (Integer) requestContext
             .getRequestParameters().get(PARAMETER_MAX_TOKENS_TO_READ);
-        TokenizedDocument tokenizedDocument;
+
+        final TokenizedDocument tokenizedDocument;
         if (maxTokens != null)
         {
-            tokenizedDocument = snippetTokenizer.tokenize(doc, maxTokens
-                .intValue());
+            tokenizedDocument = snippetTokenizer.tokenize(doc, maxTokens.intValue());
         }
         else
         {
             tokenizedDocument = snippetTokenizer.tokenize(doc);
         }
+
         stopTimer();
 
         tokenizedDocumentsConsumer.addDocument(tokenizedDocument);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#getComponentCapabilities()
-     */
     public Set getComponentCapabilities()
     {
         return CAPABILITIES_COMPONENT;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#getRequiredSuccessorCapabilities()
-     */
     public Set getRequiredSuccessorCapabilities()
     {
         return CAPABILITIES_SUCCESSOR;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#getRequiredPredecessorCapabilities()
-     */
     public Set getRequiredPredecessorCapabilities()
     {
         return CAPABILITIES_PREDECESSOR;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalFilterComponent#setNext(com.dawidweiss.carrot.core.local.LocalComponent)
-     */
     public void setNext(LocalComponent next)
     {
         super.setNext(next);
         tokenizedDocumentsConsumer = (TokenizedDocumentsConsumer) next;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#flushResources()
-     */
     public void flushResources()
     {
         super.flushResources();
@@ -166,11 +127,6 @@ public class SnippetTokenizerLocalFilterComponent extends
         snippetTokenizer.clear();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#getName()
-     */
     public String getName()
     {
         return "Tokenizer";
