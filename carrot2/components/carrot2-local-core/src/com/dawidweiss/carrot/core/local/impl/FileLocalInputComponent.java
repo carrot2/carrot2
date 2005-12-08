@@ -127,11 +127,6 @@ public class FileLocalInputComponent extends LocalInputComponentBase
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalInputComponentBase#startProcessing(com.dawidweiss.carrot.core.local.RequestContext)
-     */
     public void startProcessing(RequestContext requestContext)
         throws ProcessingException
     {
@@ -184,10 +179,6 @@ public class FileLocalInputComponent extends LocalInputComponentBase
         }
     }
 
-    /**
-     * @param root
-     * @throws ProcessingException
-     */
     private void pushAsLocalData(Element root) throws ProcessingException
     {
         List documents = root.elements("document");
@@ -220,16 +211,33 @@ public class FileLocalInputComponent extends LocalInputComponentBase
         }
 
         int id = 0;
-        for (Iterator i = documents.iterator(); i.hasNext()
-            && id < matchingDocuments; id++)
+        for (Iterator i = documents.iterator(); 
+            i.hasNext() && id < matchingDocuments; id++)
         {
-            Element docElem = (Element) i.next();
+            final Element docElem = (Element) i.next();
 
-            String url = docElem.elementText("url");
-            String title = docElem.elementText("title");
-            String snippet = docElem.elementText("snippet");
+            final String url;
+            if (docElem.element("url") != null) {
+                url = docElem.elementText("url");                
+            } else {
+                url = "nourl://document-id-" + id;
+            }
 
-            RawDocument document = new RawDocumentSnippet(new Integer(id),
+            final String title;
+            if (docElem.element("title") != null) {
+                title = docElem.elementText("title");                
+            } else {
+                title = null;                
+            }
+
+            final String snippet;
+            if (docElem.element("snippet") != null) {
+                snippet = docElem.elementText("snippet");                
+            } else {
+                snippet = null;                
+            }
+
+            final RawDocument document = new RawDocumentSnippet(new Integer(id),
                 title, snippet, url, 0);
             this.rawDocumentConsumer.addDocument(document);
         }
