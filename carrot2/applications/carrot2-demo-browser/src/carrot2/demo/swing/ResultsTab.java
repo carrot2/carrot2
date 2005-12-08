@@ -37,6 +37,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
 import org.apache.log4j.Logger;
 import org.jdesktop.jdic.browser.WebBrowser;
@@ -234,7 +235,7 @@ public class ResultsTab extends JPanel {
         subPanel.add(browserView, BorderLayout.CENTER);
         
         if (this.processSettings.hasSettings()) {
-            final JPanel settingsContainer = new JPanel(new BorderLayout(0, 4));
+            final JPanel settingsContainer = new JPanel(new BorderLayout(0, 8));
             settingsContainer.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
             final JComponent settingsComponent = processSettings.getSettingsComponent();
             settingsContainer.add(settingsComponent, BorderLayout.CENTER);
@@ -257,11 +258,16 @@ public class ResultsTab extends JPanel {
                 }
             });
             JPanel buttons = new JPanel();
+            buttons.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, UIManager.getColor("controlShadow")));
             buttons.setLayout(new FlowLayout(FlowLayout.LEFT));
             buttons.add(liveUpdate);
             buttons.add(updateButton);
             settingsContainer.add(buttons, BorderLayout.SOUTH);
-            subPanel.add(settingsContainer, BorderLayout.AFTER_LINE_ENDS);
+
+            final JPanel spacer = new JPanel(new BorderLayout());
+            spacer.add(settingsContainer, BorderLayout.SOUTH);
+            spacer.add(new JPanel(), BorderLayout.CENTER);
+            subPanel.add(spacer, BorderLayout.EAST);
         }
 
         JSplitPane splitPane = new JSplitPane(
