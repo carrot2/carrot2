@@ -2,15 +2,18 @@ package carrot2.demo.cache;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
-import com.dawidweiss.carrot.core.local.LocalComponent;
-import com.dawidweiss.carrot.core.local.LocalComponentBase;
+import com.dawidweiss.carrot.core.local.LocalInputComponent;
 import com.dawidweiss.carrot.core.local.LocalInputComponentBase;
 import com.dawidweiss.carrot.core.local.ProcessingException;
 import com.dawidweiss.carrot.core.local.RequestContext;
+import com.dawidweiss.carrot.core.local.clustering.RawDocument;
 import com.dawidweiss.carrot.core.local.clustering.RawDocumentsConsumer;
 import com.dawidweiss.carrot.core.local.clustering.RawDocumentsProducer;
+import com.dawidweiss.carrot.core.local.impl.ClustersConsumerOutputComponent;
+import com.dawidweiss.carrot.core.local.impl.ClustersConsumerOutputComponent.Result;
 
 public class RawDocumentProducerCacheWrapper extends LocalInputComponentBase {
 
@@ -25,13 +28,25 @@ public class RawDocumentProducerCacheWrapper extends LocalInputComponentBase {
     /**
      * The wrapped component.
      */
-    private LocalComponent wrapped;
-
+    private LocalInputComponent wrapped;
+    
+    /** Next query */
     private String query;
-
+    
+    /**
+     * Consumer for {@link com.dawidweiss.carrot.core.local.clustering.RawDocument}s.
+     */
+    private ClustersConsumerOutputComponent consumer; 
+    
+    /** 
+     * A flag indicating the first call (true -- not cached) and then the 
+     * replay rounds (false) 
+     */
     private boolean firstCall;
 
-    public RawDocumentProducerCacheWrapper(LocalComponent wrappedComponent) {
+	private Result cachedResult;
+
+    public RawDocumentProducerCacheWrapper(LocalInputComponent wrappedComponent) {
         // Make sure the wrapped component implements
         // the required capability.
         final Set caps = wrappedComponent.getComponentCapabilities();
@@ -49,28 +64,48 @@ public class RawDocumentProducerCacheWrapper extends LocalInputComponentBase {
     public Set getRequiredPredecessorCapabilities() {
         return java.util.Collections.EMPTY_SET;
     }
-
-    /**
-     * Provides an implementation that has no capabilities (an empty set).
-     */
-    public Set getComponentCapabilities()
-    {
-        return java.util.Collections.EMPTY_SET;
+    
+    public Set getComponentCapabilities() {
+        return COMPONENT_CAPABILITIES;
     }
     
     public void startProcessing(RequestContext requestContext) throws ProcessingException {
-        if (firstCall) {
+    	super.startProcessing(requestContext);
 
-            firstCall = false;
-        } else {
-            // Playback the first call from cache.
+        if (firstCall) {
+        	this.consumer = new ClustersConsumerOutputComponent();
+        	wrapped.setNext(consumer);
+        	wrapped.setQuery(query);
+        	wrapped.startProcessing(requestContext);
         }
     }
 
     public void endProcessing() throws ProcessingException {
+        if (firstCall) {
+        	this.wrapped.endProcessing();
+
+        	// Ok, save the result 
+        	final ClustersConsumerOutputComponent.Result result = 
+        		(ClustersConsumerOutputComponent.Result) this.consumer.getResult();
+
+        	this.wrapped.flushResources();
+
+        	this.cachedResult = result; 
+    		firstCall = false;
+        }
+
+        // Playback RawDocuments from cache.
+        final RawDocumentsConsumer nextComponent = (RawDocumentsConsumer) super.next; 
+        for (Iterator i = this.cachedResult.documents.iterator(); i.hasNext();) {
+        	final RawDocument doc = (RawDocument) i.next();
+        	nextComponent.addDocument(doc);
+        }
+
+        super.endProcessing();
     }
 
     public void flushResources() {
+    	super.flushResources();
         this.query = null;
     }
 
