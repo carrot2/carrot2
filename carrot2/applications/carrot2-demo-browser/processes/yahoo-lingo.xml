@@ -3,7 +3,7 @@
   <name>YahooAPI-Lingo</name>
   <description>Search Yahoo, cluster using Lingo</description>
 
-  <input component-key="input-yahooapi" />
+  <input  component-key="input-cached-yahooapi" />
   <filter component-key="filter-rawdocument-enumerator" />
   <filter component-key="filter-lingo" />
   <output component-key="output-clustersConsumer" />
