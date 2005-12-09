@@ -1,13 +1,12 @@
 
-import com.stachoodev.carrot.filter.lingo.local.LingoLocalFilterComponent;
 import com.dawidweiss.carrot.core.local.*;
 import com.dawidweiss.carrot.local.controller.*;
+import carrot2.demo.cache.*;
 
 factory = new LocalComponentFactoryBase() {
     public LocalComponent getInstance() {
 		return new RawDocumentProducerCacheWrapper(
 			new com.dawidweiss.carrot.input.yahoo.YahooApiInputComponent());
-    	// return new com.dawidweiss.carrot.input.yahoo.YahooApiInputComponent();
     }
 };
 
