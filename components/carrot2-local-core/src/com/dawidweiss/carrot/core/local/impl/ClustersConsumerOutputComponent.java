@@ -102,7 +102,6 @@ public class ClustersConsumerOutputComponent extends LocalOutputComponentBase
             Result.this.documents = Collections.unmodifiableList(new ArrayList(
                         documents));
             Result.this.context = new HashMap(contextParams);
-            
         }
     }
 
