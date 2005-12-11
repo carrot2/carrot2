@@ -36,13 +36,14 @@ final class CacheEntry {
     public int hashCode() {
         final int hashCode = 
             (query != null ? query.hashCode() : 0) ^ input.getClass().hashCode();
-        return hashCode; 
+        return hashCode;
     }
-    
+
     /**
      * Return a stringified form.
      */
     public String toString() {
-        return "[CacheEntry " + input.getClass().getName() + "/ " + (query != null ? query : "<null>") + "]";
+        return "[CacheEntry " + input.getClass().getName()
+            + "@" + input.getClass().hashCode() + "/ " + (query != null ? query : "<null>") + "]";
     }
 }
