@@ -91,12 +91,13 @@ public class RawDocumentProducerCacheWrapper extends LocalInputComponentBase {
 
         if (result == null) {
             // Requires caching.
+            this.currentlyCaching = true;
+
             this.consumer = new ClustersConsumerOutputComponent();
             wrapped.setNext(consumer);
             wrapped.setQuery(query);
             wrapped.startProcessing(requestContext);
             this.cachedResult = null;
-            this.currentlyCaching = true;
         } else {
             // Already cached.
             this.cachedResult = result;
