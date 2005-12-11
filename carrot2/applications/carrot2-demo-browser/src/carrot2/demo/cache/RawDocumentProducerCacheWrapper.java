@@ -49,6 +49,9 @@ public class RawDocumentProducerCacheWrapper extends LocalInputComponentBase {
 
     /** Current query. */
     private String query;
+    
+    /** <code>true</code> if caching the wrapped delegate is in progress at the moment. */
+    private boolean currentlyCaching;
 
     /**
      * Consumer for {@link com.dawidweiss.carrot.core.local.clustering.RawDocument}s.
@@ -65,6 +68,7 @@ public class RawDocumentProducerCacheWrapper extends LocalInputComponentBase {
                     + RawDocumentsProducer.class);
         }
         this.wrapped = wrappedComponent;
+        this.currentlyCaching = false;
     }
 
     public Set getRequiredSuccessorCapabilities() {
@@ -92,14 +96,16 @@ public class RawDocumentProducerCacheWrapper extends LocalInputComponentBase {
             wrapped.setQuery(query);
             wrapped.startProcessing(requestContext);
             this.cachedResult = null;
+            this.currentlyCaching = true;
         } else {
             // Already cached.
             this.cachedResult = result;
+            this.currentlyCaching = false;
         }
     }
 
     public void endProcessing() throws ProcessingException {
-        if (this.cachedResult == null) {
+        if (currentlyCaching) {
             // Caching in progress, finish it.
             this.wrapped.endProcessing();
 
@@ -107,7 +113,6 @@ public class RawDocumentProducerCacheWrapper extends LocalInputComponentBase {
             final ClustersConsumerOutputComponent.Result result = 
                 (ClustersConsumerOutputComponent.Result) this.consumer.getResult();
 
-            this.wrapped.flushResources();
             this.cachedResult = result;
 
             cache.put(new CacheEntry(wrapped, query), this.cachedResult);
@@ -124,12 +129,26 @@ public class RawDocumentProducerCacheWrapper extends LocalInputComponentBase {
     }
 
     public void flushResources() {
-    	super.flushResources();
+        if (currentlyCaching) {
+            this.wrapped.flushResources();
+        }
+
         this.query = null;
         this.cachedResult = null;
+        this.currentlyCaching = false;
+
+        super.flushResources();
     }
 
     public void setQuery(String query) {
         this.query = query;
+    }
+
+    public void processingErrorOccurred() {
+        if (currentlyCaching) {
+            this.wrapped.processingErrorOccurred();
+        }
+
+        super.processingErrorOccurred();
     }
 }
