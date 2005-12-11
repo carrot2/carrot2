@@ -173,8 +173,7 @@ public class JFlexWordBasedParserImplTest
             
             new TokenImage("go2.pl/mail", JFlexWordBasedParserImpl.FULL_URL),
             
-            new TokenImage("http://www.digimine.com/usama/datamine/", JFlexWordBasedParserImpl.FULL_URL),
-            new TokenImage(".", JFlexWordBasedParserImpl.SENTENCEMARKER)
+            new TokenImage("http://www.digimine.com/usama/datamine/.", JFlexWordBasedParserImpl.FULL_URL),
         };
 
         compareTokenArrays(test, tokens);
@@ -216,6 +215,19 @@ public class JFlexWordBasedParserImplTest
             
         };
 
+        compareTokenArrays(test, tokens);
+    }
+    
+    public void test_Tokenizer_NASTY_URL_1()
+    {
+        String test = "http://r.office.microsoft.com/r/rlidLiveMeeting?p1=7&amp;p2=en_US&amp;p3=LMInfo&amp;p4=DownloadWindowsConsole " +
+                      "https://www.livemeeting.com/cc/askme/join?id=58937J&amp;role=present&amp;pw=mNjC%27%25%3D%218";
+        TokenImage [] tokens = 
+        {
+            new TokenImage("http://r.office.microsoft.com/r/rlidLiveMeeting?p1=7&amp;p2=en_US&amp;p3=LMInfo&amp;p4=DownloadWindowsConsole", JFlexWordBasedParserImpl.FULL_URL),
+            new TokenImage("https://www.livemeeting.com/cc/askme/join?id=58937J&amp;role=present&amp;pw=mNjC%27%25%3D%218", JFlexWordBasedParserImpl.FULL_URL),
+        };
+        
         compareTokenArrays(test, tokens);
     }
     
