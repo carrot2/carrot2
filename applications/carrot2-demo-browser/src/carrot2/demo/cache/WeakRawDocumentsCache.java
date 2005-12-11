@@ -30,6 +30,8 @@ final class WeakRawDocumentsCache implements RawDocumentsCache {
         if (result != null) {
             logger.info("Returning cached data for: " + entry);
             updateRecent(entry);
+        } else {
+            logger.info("Not in cache: " + entry);
         }
         return result;
     }
@@ -41,10 +43,15 @@ final class WeakRawDocumentsCache implements RawDocumentsCache {
     }
 
     private void updateRecent(CacheEntry entry) {
-        hardCache.remove(entry);
-        hardCache.addFirst(entry);
-        while (hardCache.size() > hardCacheSize) {
-            hardCache.removeLast();
+        final int index = hardCache.indexOf(entry);
+        if (index >= 0) {
+            final CacheEntry cachedKey = (CacheEntry) hardCache.remove(index);
+            hardCache.addFirst(cachedKey);
+        } else {
+            hardCache.addFirst(entry);
+            while (hardCache.size() > hardCacheSize) {
+                hardCache.removeLast();
+            }
         }
         if (logger.isDebugEnabled()) {
             logger.debug("Hard cache: " + hardCache);
