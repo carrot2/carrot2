@@ -23,6 +23,11 @@ public class RawClustersCellRenderer extends DefaultTreeCellRenderer {
     private static Icon subclustersIcon = new ImageIcon(RawClustersCellRenderer.class
             .getResource("cluster-subclusters.gif"));
 
+    /**
+     * 
+     */
+    static final String PROPERTY_SEARCH_MATCHES = "contains-search-term";
+
     public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded,
             boolean leaf, int row, boolean hasFocus) {
         super.getTreeCellRendererComponent(tree, "", selected, expanded, leaf, row, hasFocus);
@@ -44,6 +49,17 @@ public class RawClustersCellRenderer extends DefaultTreeCellRenderer {
                 } else {
                     setIcon(clusterIcon);
                 }
+            }
+            
+            final Integer searchMatches = (Integer) rc.getProperty(PROPERTY_SEARCH_MATCHES);
+            if (searchMatches != null)
+            {
+                setFont(new Font(getFont().getName(), Font.BOLD, getFont().getSize()));
+                label += " {" + searchMatches.toString() + "}";
+            }
+            else
+            {
+                setFont(new Font(getFont().getName(), Font.PLAIN, getFont().getSize()));
             }
             setText(label);
 
@@ -78,13 +94,13 @@ public class RawClustersCellRenderer extends DefaultTreeCellRenderer {
             }
         }
 
-        buf.append(" (");
-        buf.append(getClusterSize(rc));
-        buf.append(')');
+//        buf.append(" (");
+//        buf.append(getClusterSize(rc));
+//        buf.append(')');
 
-        buf.append(" [");
+        buf.append(" (");
         buf.append(getUniqueClusterSize(rc));
-        buf.append(']');
+        buf.append(')');
 
         return buf.toString();
     }

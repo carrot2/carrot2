@@ -23,6 +23,7 @@
 	<dependency name="forms" />
     <dependency name="junit" />
     <dependency name="jdic" />
+    <dependency name="lucene" />
 
     <dependency name="carrot2-util-common" />
     <dependency name="carrot2-util-put" />

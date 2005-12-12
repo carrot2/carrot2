@@ -33,10 +33,16 @@ import com.dawidweiss.carrot.core.local.impl.ClustersConsumerOutputComponent.Res
  * 
  * @author Dawid Weiss
  */
-public class RawDocumentProducerCacheWrapper extends LocalInputComponentBase {
+public class RawDocumentProducerCacheWrapper2 extends LocalInputComponentBase {
 
     /** */
     public static final String PARAM_INDEX_CONTENT = "index-content";
+    
+    /** */
+    public static final String PARAM_INDEX_QUERY = "index-query";
+    
+    /** */
+    public static final String PARAM_INDEX_QUERY_RESULTS = "index-query-results";
     
     /** Capabilities required from the next component in the chain */
     private final static Set SUCCESSOR_CAPABILITIES = new HashSet(
@@ -58,19 +64,20 @@ public class RawDocumentProducerCacheWrapper extends LocalInputComponentBase {
     /** Current query. */
     private String query;
     
-    /** <code>true</code> if caching the wrapped delegate is in progress at the moment. */
-    private boolean currentlyCaching;
-
     /** Current request context */
     private RequestContext requestContext;
     
+    /** <code>true</code> if caching the wrapped delegate is in progress at the moment. */
+    private boolean currentlyCaching;
+    
+
     /**
      * Consumer for {@link com.dawidweiss.carrot.core.local.clustering.RawDocument}s.
      */
     private ClustersConsumerOutputComponent consumer; 
 	private Result cachedResult;
 
-    public RawDocumentProducerCacheWrapper(LocalInputComponent wrappedComponent) {
+    public RawDocumentProducerCacheWrapper2(LocalInputComponent wrappedComponent) {
         // Make sure the wrapped component implements
         // the required capability.
         final Set caps = wrappedComponent.getComponentCapabilities();
@@ -96,20 +103,19 @@ public class RawDocumentProducerCacheWrapper extends LocalInputComponentBase {
     
     public void startProcessing(RequestContext requestContext) throws ProcessingException {
     	super.startProcessing(requestContext);
-    	this.requestContext = requestContext;
-        
+
+        this.requestContext = requestContext;
         final ClustersConsumerOutputComponent.Result result
             = cache.get(new CacheEntry(wrapped, query));
 
         if (result == null) {
             // Requires caching.
-            this.currentlyCaching = true;
-
             this.consumer = new ClustersConsumerOutputComponent();
             wrapped.setNext(consumer);
             wrapped.setQuery(query);
             wrapped.startProcessing(requestContext);
             this.cachedResult = null;
+            this.currentlyCaching = true;
         } else {
             // Already cached.
             this.cachedResult = result;
@@ -125,11 +131,11 @@ public class RawDocumentProducerCacheWrapper extends LocalInputComponentBase {
             // Ok, save the result 
             final ClustersConsumerOutputComponent.Result result = 
                 (ClustersConsumerOutputComponent.Result) this.consumer.getResult();
-
-            this.cachedResult = result;
-
+            
             // Build Lucene index
             buildLuceneIndex(result);
+
+            this.cachedResult = result;
 
             cache.put(new CacheEntry(wrapped, query), this.cachedResult);
         }
@@ -168,6 +174,7 @@ public class RawDocumentProducerCacheWrapper extends LocalInputComponentBase {
 
         this.query = null;
         this.cachedResult = null;
+        this.requestContext = null;
         this.currentlyCaching = false;
         this.requestContext = null;
 

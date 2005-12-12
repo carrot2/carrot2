@@ -249,4 +249,87 @@ public class WordLoadingUtils
 
         return set;
     }
+
+
+    /**
+     * @param resourceName
+     * @param stream
+     * @param convertToLowerCase
+     * @return
+     * @throws IOException
+     */
+    public static List loadPhraseSetsList(String resourceName,
+        InputStream stream, boolean convertToLowerCase)
+        throws IOException
+    {
+        logger.debug("Loading word list for: " + resourceName);
+
+        if (stream == null)
+        {
+            throw new IOException("Stream handle must not be null "
+                + "(resource '" + resourceName + "' does not exist?)");
+        }
+
+        List phraseSetsList = new ArrayList();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(
+            stream, "UTF-8"));
+
+        try
+        {
+            String line;
+            List phrase = new ArrayList();
+            while ((line = reader.readLine()) != null)
+            {
+                Set phraseSet = new HashSet();
+                
+                line = line.trim();
+                if (line.startsWith("#"))
+                {
+                    continue;
+                }
+
+                if ("".equals(line))
+                {
+                    continue;
+                }
+
+                // Yes, I know StringTokenizer is slow. I use it here to avoid
+                // extra dependencies. This method will most probably be called
+                // only in the initialization phase anyway.
+                StringTokenizer stringTokenizer = new StringTokenizer(line, ",");
+                
+                while (stringTokenizer.hasMoreTokens())
+                {
+                    String phraseString;
+                    if (convertToLowerCase)
+                    {
+                        phraseString = stringTokenizer.nextToken().toLowerCase();
+                    }
+                    else
+                    {
+                        phraseString = stringTokenizer.nextToken();
+                    }
+                    
+                    StringTokenizer phraseTokenizer = new StringTokenizer(phraseString);
+                    while (phraseTokenizer.hasMoreTokens())
+                    {
+                        phrase.add(phraseTokenizer.nextToken());
+                    }
+                    
+                    phraseSet.add(phrase.toArray(new String [phrase.size()]));
+                    phrase.clear();
+                }
+                
+                phraseSetsList.add(phraseSet);
+            }
+        }
+        finally
+        {
+            reader.close();
+        }
+
+        logger.debug("Finished loading: " + resourceName);
+
+        return phraseSetsList;
+    }
 }

@@ -13,38 +13,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JToolBar;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
+import javax.swing.*;
 
 import org.apache.log4j.Logger;
+import org.apache.lucene.store.*;
 import org.jdesktop.jdic.browser.WebBrowser;
 
 import carrot2.demo.DemoContext;
 import carrot2.demo.ProcessSettings;
 import carrot2.demo.ProcessSettingsListener;
+import carrot2.demo.cache.*;
+import carrot2.demo.index.*;
 import carrot2.demo.swing.util.SwingTask;
 import carrot2.demo.swing.util.ToolbarButton;
 
@@ -64,13 +45,16 @@ import com.jgoodies.uif_lite.panel.SimpleInternalFrame;
  * @author Dawid Weiss
  */
 public class ResultsTab extends JPanel {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     private final static String MAIN_CARD = "main";
     private final static String PROGRESS_CARD = "progress";
 
     private String query;
     private String processId;
-    private int requestedResults;
-
+    
     private WebBrowser browserView;
     private RawClustersTree clustersTree;
     private Result result;
@@ -81,6 +65,14 @@ public class ResultsTab extends JPanel {
     private WorkerThread workerThread;
     private SimpleInternalFrame internalFrame;
     private String defaultTitle;
+    
+    private JTextField clusterSearchField;
+    private Directory indexDirectory;
+    private List lastResultClusters;
+
+    /** */
+    private final static Logger logger = Logger
+        .getLogger(ResultsTab.class);
 
     private class SelfRemoveAction implements ActionListener {
         public void actionPerformed(ActionEvent actionEvent) {
@@ -160,8 +152,6 @@ public class ResultsTab extends JPanel {
     public ResultsTab(String query, DemoContext demoContext, ProcessSettings settings, String processId, int requestedResults) {
         this.query = query;
         this.processId = processId;
-        this.requestedResults = requestedResults;
-
         this.demoContext = demoContext;
         this.processSettings = settings;
 
@@ -206,6 +196,31 @@ public class ResultsTab extends JPanel {
 
         final JPanel leftPanel = new JPanel(new BorderLayout());
         leftPanel.add(clustersTreeScroller, BorderLayout.CENTER);
+        
+        final JPanel clusterSearchPanel = new JPanel();
+        clusterSearchPanel.setLayout(new BorderLayout());
+        clusterSearchField = new JTextField();
+        clusterSearchPanel.add(clusterSearchField, BorderLayout.CENTER);
+        JButton clusterSearchButton = new JButton("Search");
+        clusterSearchPanel.add(clusterSearchButton, BorderLayout.LINE_END);
+        matchedDocumentsLabel = new JLabel(" ");
+        clusterSearchPanel.add(matchedDocumentsLabel, BorderLayout.PAGE_END);
+        leftPanel.add(clusterSearchPanel, BorderLayout.PAGE_END);
+        
+        clusterSearchField.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                addClusterHighlightingInfo();
+                ResultsTab.this.clustersTree.setModel(new RawClustersTreeModel(
+                    lastResultClusters));
+            } 
+        });
+        clusterSearchButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                addClusterHighlightingInfo();
+                ResultsTab.this.clustersTree.setModel(new RawClustersTreeModel(
+                    lastResultClusters));
+            } 
+        });
 
         this.browserView = new WebBrowser();
         this.browserView.setFocusable(false);
@@ -224,6 +239,11 @@ public class ResultsTab extends JPanel {
         progressPane.add(pindic, cc.xy(2,4));
 
         final JPanel subPanel = new JPanel(new BorderLayout()) {
+            /**
+             * 
+             */
+            private static final long serialVersionUID = 1L;
+
             public Dimension getMinimumSize() {
                 return new Dimension(0,0);
             }
@@ -345,7 +365,15 @@ public class ResultsTab extends JPanel {
      * Displays the result of clustering -- clusters and 
      * documents.
      */
-    public void showResults(final ClustersConsumerOutputComponent.Result output) {
+    private void showResults(final ClustersConsumerOutputComponent.Result output) {
+        if (indexDirectory == null)
+        {
+            indexDirectory = (Directory) output.context
+                .get(RawDocumentProducerCacheWrapper.PARAM_INDEX_CONTENT);
+        }
+        this.lastResultClusters = output.clusters;
+        addClusterHighlightingInfo();
+        
         Runnable task = new Runnable() {
             public void run() {
                 result = output;
@@ -360,8 +388,156 @@ public class ResultsTab extends JPanel {
     }
 
     /**
-     * Displays all documents in the result, regardless of the cluster they are in.
-     *
+     * @param rawClusters
+     */
+    private void addClusterHighlightingInfo()
+    {
+        String clusterSearchQuery = clusterSearchField.getText();
+        if (indexDirectory == null || clusterSearchQuery == null)
+        {
+            return;
+        }
+
+        if (clusterSearchQuery.trim().length() == 0)
+        {
+            // Just clear the results
+            clearClusterSearchInfo();
+            displayMatchedDocumentsCount(-1);
+            return;
+        }
+        
+        try
+        {
+            String [] documentIds = RawDocumentsLuceneIndexSearcher.search(
+                indexDirectory, clusterSearchQuery);
+            
+            displayMatchedDocumentsCount(documentIds.length);
+            updateClusterSearchInfo(new HashSet(Arrays.asList(documentIds)));
+        }
+        catch (IOException e)
+        {
+            logger.warn("Error while searching Lucene index", e);
+            return;
+        }
+    }
+
+    private void displayMatchedDocumentsCount(final int count)
+    {
+        Runnable task = new Runnable() {
+            public void run() {
+                if (count >= 0)
+                {
+                    matchedDocumentsLabel.setText("Matched documents: " + count);
+                }
+                else
+                {
+                    matchedDocumentsLabel.setText(" ");
+                }
+            }
+        };
+        SwingTask.runNow(task);
+    }
+    
+    /**
+     * @param clusterSearchResult
+     */
+    private void updateClusterSearchInfo(Set clusterSearchResult)
+    {
+        if (lastResultClusters == null)
+        {
+            return;
+        }
+        
+        clearClusterSearchInfo();
+        
+        for (Iterator iter = lastResultClusters.iterator(); iter.hasNext();)
+        {
+            RawCluster rawCluster = (RawCluster) iter.next();
+            updateClusterSearchInfo(clusterSearchResult, rawCluster);
+        }
+    }
+
+    /**
+     * 
+     */
+    private void clearClusterSearchInfo()
+    {
+        for (Iterator iter = lastResultClusters.iterator(); iter.hasNext();)
+        {
+            RawCluster rawCluster = (RawCluster) iter.next();
+            clearClusterSearchInfo(rawCluster);
+        }
+    }
+
+    /**
+     * @param clusterSearchResult
+     * @param rawCluster
+     * @return
+     */
+    private int updateClusterSearchInfo(Set clusterSearchResult, RawCluster rawCluster)
+    {
+        // Depth-first tree search here
+        List subclusters = rawCluster.getSubclusters();
+        if (subclusters == null || subclusters.size() == 0)
+        {
+            List rawDocuments = rawCluster.getDocuments();
+            int searchMatches = 0;
+            for (Iterator iter = rawDocuments.iterator(); iter.hasNext();)
+            {
+                RawDocument rawDocument = (RawDocument) iter.next();
+                if (clusterSearchResult.contains(rawDocument.getId().toString()))
+                {
+                    searchMatches++;
+                }
+            }
+
+            if (searchMatches > 0)
+            {
+                rawCluster.setProperty(RawClustersCellRenderer.PROPERTY_SEARCH_MATCHES, new Integer(searchMatches));
+            }
+            
+            return searchMatches;
+        }
+        else
+        {
+            int searchMatches = 0;
+            for (Iterator iter = subclusters.iterator(); iter.hasNext();)
+            {
+                RawCluster subcluster = (RawCluster) iter.next();
+                searchMatches += updateClusterSearchInfo(
+                    clusterSearchResult, subcluster);
+            }
+            
+            if (searchMatches > 0)
+            {
+                rawCluster.setProperty(RawClustersCellRenderer.PROPERTY_SEARCH_MATCHES, new Integer(searchMatches));
+            }
+            
+            return searchMatches;
+        }
+    }
+    
+    /**
+     * @param rawCluster
+     */
+    private void clearClusterSearchInfo(RawCluster rawCluster)
+    {
+        rawCluster.setProperty(RawClustersCellRenderer.PROPERTY_SEARCH_MATCHES, null);
+        List subclusters = rawCluster.getSubclusters();
+        if (subclusters != null)
+        {
+            for (Iterator iter = subclusters.iterator(); iter.hasNext();)
+            {
+                RawCluster subcluster = (RawCluster) iter.next();
+                clearClusterSearchInfo(subcluster);
+            }
+        }
+    }
+    
+    /**
+     * Displays all documents in the result, regardless of the cluster they are
+     * in.
+     * 
      */
     private void showAllDocuments() {
         if (result == null) return;
@@ -402,6 +578,7 @@ public class ResultsTab extends JPanel {
             return rci1 - rci2;
         }
     };
+    private JLabel matchedDocumentsLabel;
 
     public StringBuffer appendHtmlForDocuments(StringBuffer buffer, Collection documents, boolean resortDocuments) {
         if (resortDocuments) {
@@ -416,7 +593,7 @@ public class ResultsTab extends JPanel {
 
             final Object seqNum = doc.getProperty(RawDocumentEnumerator.DOCUMENT_SEQ_NUMBER);
             if (seqNum != null) {
-                buffer.append("<span style=\"font-size: 8px\">(");
+                buffer.append("<span style=\"font-size: 10px\">(");
                 buffer.append(seqNum);
                 buffer.append(") </span>");
             }
