@@ -273,7 +273,7 @@ public class SwingDemoGui implements DemoGuiDelegate {
                 0, 0);
         layout.setConstraints(tabbedPane, cc);
         mainPanel.add(tabbedPane);
-        mainPanel.setPreferredSize(new Dimension(1000, 800));
+        mainPanel.setPreferredSize(new Dimension(800, 600));
 
         return mainPanel;
     }
