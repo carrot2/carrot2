@@ -3,6 +3,7 @@
 	<name>carrot2-demo-browser</name>
 	<comment></comment>
 	<projects>
+		<project>carrot2-filter-trc</project>
 		<project>carrot2-local-core</project>
 		<project>carrot2-util-common</project>
 	</projects>
