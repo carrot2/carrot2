@@ -8,7 +8,6 @@ carrot2-filter-ahc
 carrot2-filter-fuzzyants
 carrot2-filter-lingo
 carrot2-filter-stc
-carrot2-filter-trc
 
 - Add these clustering algorithms to the demo application:
 
@@ -16,7 +15,6 @@ carrot2-filter-ahc
 carrot2-filter-fuzzyants
 carrot2-filter-lingo
 carrot2-filter-stc
-carrot2-filter-trc
 
 - Remove obsolete/ unused components
 
