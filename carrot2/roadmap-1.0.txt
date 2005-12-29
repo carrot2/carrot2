@@ -31,6 +31,9 @@ carrot2-filter-stc
 
 - Remove dependency on jdom and replace it with dom4j.
 
+- Create a separate project (carrot2-util-local?) for utils related to local
+  interfaces
+
 - Review master ANT build file -- generate JavaDocs.
 
 - Ensure all tests pass. Ensure the demo application works.
