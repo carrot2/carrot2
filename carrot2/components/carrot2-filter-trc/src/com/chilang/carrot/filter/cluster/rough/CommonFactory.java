@@ -31,6 +31,7 @@ public class CommonFactory {
     }
 
     public static StopWordsSet createStopWordsSet() {
+        // TODO: Hardcoded path and only english stopwords used.
         return new StopWordsSet("stopwords/stopwords-en.txt");
     }
 
@@ -64,5 +65,4 @@ public class CommonFactory {
     public static RoughSpace createRoughSpace(int[][] documentTermFrequency, int cooccurenceThreshold, double inclusionThreshold) {
         return new TermRoughSpace(documentTermFrequency, cooccurenceThreshold, inclusionThreshold);
     }
-
 }
