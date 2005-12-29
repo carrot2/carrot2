@@ -1,14 +1,19 @@
 package carrot2.demo.swing;
 
-import java.awt.*;
-import java.text.*;
-import java.util.*;
+import java.awt.Component;
+import java.awt.Font;
+import java.text.NumberFormat;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
-import javax.swing.*;
-import javax.swing.tree.*;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JTree;
+import javax.swing.tree.DefaultTreeCellRenderer;
 
-import com.dawidweiss.carrot.core.local.clustering.*;
+import com.dawidweiss.carrot.core.local.clustering.RawCluster;
 
 public class RawClustersCellRenderer extends DefaultTreeCellRenderer {
     private final static int MAX_CLUSTER_DESCRIPTION_WIDTH = 80;
@@ -23,9 +28,6 @@ public class RawClustersCellRenderer extends DefaultTreeCellRenderer {
     private static Icon subclustersIcon = new ImageIcon(RawClustersCellRenderer.class
             .getResource("cluster-subclusters.gif"));
 
-    /**
-     * 
-     */
     static final String PROPERTY_SEARCH_MATCHES = "contains-search-term";
 
     public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded,
@@ -94,28 +96,11 @@ public class RawClustersCellRenderer extends DefaultTreeCellRenderer {
             }
         }
 
-//        buf.append(" (");
-//        buf.append(getClusterSize(rc));
-//        buf.append(')');
-
         buf.append(" (");
         buf.append(getUniqueClusterSize(rc));
         buf.append(')');
 
         return buf.toString();
-    }
-
-    private static int getClusterSize(RawCluster rawCluster) {
-        int size = rawCluster.getDocuments().size();
-
-        if (rawCluster.getSubclusters() != null) {
-            for (Iterator iter = rawCluster.getSubclusters().iterator(); iter.hasNext();) {
-                RawCluster subcluster = (RawCluster) iter.next();
-                size += getClusterSize(subcluster);
-            }
-        }
-
-        return size;
     }
 
     private static int getUniqueClusterSize(RawCluster rawCluster) {
@@ -147,10 +132,12 @@ public class RawClustersCellRenderer extends DefaultTreeCellRenderer {
         numberFormat.setMinimumFractionDigits(2);
         numberFormat.setMaximumFractionDigits(2);
 
-        toolTipText.append("<b>cluster score: ");
-        toolTipText.append(numberFormat.format(((Double) rawCluster.getProperty(RawCluster.PROPERTY_SCORE))
-                .doubleValue()));
-        toolTipText.append("</b><br>");
+        final Double clusterScore = (Double) rawCluster.getProperty(RawCluster.PROPERTY_SCORE);
+        if (clusterScore != null) {
+            toolTipText.append("<b>cluster score: ");
+            toolTipText.append(numberFormat.format(clusterScore.doubleValue()));
+            toolTipText.append("</b><br>");
+        }
 
         if (synonymLabels != null) {
             for (int i = 0; i < synonymLabels.size(); i++) {
