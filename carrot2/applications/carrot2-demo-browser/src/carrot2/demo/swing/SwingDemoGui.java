@@ -17,6 +17,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -159,7 +160,11 @@ public class SwingDemoGui implements DemoGuiDelegate {
                 }
             }
         };
-        SwingTask.runNow(task);
+        try {
+            SwingTask.runNow(task);
+        } catch (Throwable t) {
+            SwingUtils.showExceptionDialog(frame, "Initialization exception.", t);
+        }
 
         enableUI();
     }
