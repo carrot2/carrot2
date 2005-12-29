@@ -64,6 +64,4 @@ public interface IRContext {
     String getSnippetTermWeightAsString(int snippetId);
 
     String getQuery();
-
-
 }
