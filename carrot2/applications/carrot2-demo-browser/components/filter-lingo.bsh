@@ -5,6 +5,9 @@ import com.dawidweiss.carrot.local.controller.*;
 import com.dawidweiss.carrot.core.local.linguistic.*;
 import com.dawidweiss.carrot.util.tokenizer.languages.english.*;
 
+//
+// Component factory is a dynamic Beanshell class
+//
 factory = new LocalComponentFactoryBase() {
     public LocalComponent getInstance() {
     	final HashMap params = new HashMap();
@@ -15,14 +18,11 @@ factory = new LocalComponentFactoryBase() {
     }
 
     public String getName() {
-        return "Lingo";
-    }
-
-    public String getDescription() {
-        return "OSS Lingo";
+        return "Lingo Classic (Open Source)";
     }
 };
 
-return new LoadedComponentFactory(
-	/* id */ "filter-lingo", 
-	factory);
+//
+// Return the ID of the component and its factory.
+//
+return new LoadedComponentFactory("filter-lingo", factory);

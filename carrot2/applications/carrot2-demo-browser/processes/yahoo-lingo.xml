@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+
 <local-process id="yahoo-lingo">
-  <name>YahooAPI-Lingo</name>
-  <description>Search Yahoo, cluster using Lingo</description>
+  <name>Yahoo Search API -- Lingo Classic Clusterer</name>
 
   <input  component-key="input-cached-yahooapi" />
   <filter component-key="filter-rawdocument-enumerator" />
   <filter component-key="filter-lingo" />
   <output component-key="output-clustersConsumer" />
 
-  <attribute  key="process.settings.class" 
-	          value="carrot2.demo.settings.LingoClassicSettings" />
+  <attribute key="process.settings.class" 
+	         value="carrot2.demo.settings.LingoClassicSettings" />
 </local-process>
