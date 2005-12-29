@@ -3,13 +3,18 @@ import com.dawidweiss.carrot.core.local.*;
 import com.dawidweiss.carrot.local.controller.*;
 import carrot2.demo.cache.*;
 
+//
+// Component factory is a dynamic Beanshell class
+//
 factory = new LocalComponentFactoryBase() {
     public LocalComponent getInstance() {
+    	// Wrap Yahoo API component with the cache
 		return new RawDocumentProducerCacheWrapper(
 			new com.dawidweiss.carrot.input.yahoo.YahooApiInputComponent());
     }
 };
 
-return new LoadedComponentFactory(
-	/* id */ "input-cached-yahooapi", 
-	factory);
+//
+// Return the ID of the component and its factory.
+//
+return new LoadedComponentFactory("input-cached-yahooapi", factory);

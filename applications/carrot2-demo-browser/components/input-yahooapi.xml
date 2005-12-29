@@ -1,4 +1,0 @@
-<local-component-factory 
-	id="input-yahooapi"
-	component-class="com.dawidweiss.carrot.input.yahoo.YahooApiInputComponent">
-</local-component-factory> 
