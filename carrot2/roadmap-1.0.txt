@@ -1,0 +1,38 @@
+
+A roadmap to release 1.0
+------------------------
+
+- Add local interfaces to: 
+
+carrot2-filter-ahc
+carrot2-filter-fuzzyants
+carrot2-filter-lingo
+carrot2-filter-stc
+carrot2-filter-trc
+
+- Add these clustering algorithms to the demo application:
+
+carrot2-filter-ahc
+carrot2-filter-fuzzyants
+carrot2-filter-lingo
+carrot2-filter-stc
+carrot2-filter-trc
+
+- Remove obsolete/ unused components
+
+- Alter all *.java files and add license statement to those originating
+  from the project. Leave other licenses unchanged, clean up IDE junk.
+
+- Unify coding style.
+
+- Review documentation, esure it corresponds to reality.
+
+- Review remote component descriptors.
+
+- Remove components-private and remove from .cvsignore
+
+- Remove dependency on jdom and replace it with dom4j.
+
+- Review master ANT build file -- generate JavaDocs.
+
+- Ensure all tests pass. Ensure the demo application works.
