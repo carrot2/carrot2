@@ -10,19 +10,39 @@
  */
 package com.chilang.carrot.filter.cluster.local;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
-import com.chilang.carrot.filter.cluster.rough.clustering.*;
-import com.chilang.carrot.filter.cluster.rough.data.*;
-import com.chilang.carrot.filter.cluster.rough.measure.*;
-import com.dawidweiss.carrot.core.local.*;
-import com.dawidweiss.carrot.core.local.clustering.*;
-import com.dawidweiss.carrot.core.local.profiling.*;
+import com.chilang.carrot.filter.cluster.rough.clustering.Clusterer;
+import com.chilang.carrot.filter.cluster.rough.clustering.RoughClusterer;
+import com.chilang.carrot.filter.cluster.rough.clustering.XCluster;
+import com.chilang.carrot.filter.cluster.rough.data.IRContext;
+import com.chilang.carrot.filter.cluster.rough.data.SnippetDocument;
+import com.chilang.carrot.filter.cluster.rough.data.WebIRContext;
+import com.chilang.carrot.filter.cluster.rough.measure.SimilarityFactory;
+import com.dawidweiss.carrot.core.local.LocalComponent;
+import com.dawidweiss.carrot.core.local.LocalControllerContext;
+import com.dawidweiss.carrot.core.local.LocalFilterComponent;
+import com.dawidweiss.carrot.core.local.LocalInputComponent;
+import com.dawidweiss.carrot.core.local.ProcessingException;
+import com.dawidweiss.carrot.core.local.RequestContext;
+import com.dawidweiss.carrot.core.local.clustering.RawCluster;
+import com.dawidweiss.carrot.core.local.clustering.RawClusterBase;
+import com.dawidweiss.carrot.core.local.clustering.RawClustersConsumer;
+import com.dawidweiss.carrot.core.local.clustering.RawClustersProducer;
+import com.dawidweiss.carrot.core.local.clustering.RawDocument;
+import com.dawidweiss.carrot.core.local.clustering.RawDocumentsConsumer;
+import com.dawidweiss.carrot.core.local.clustering.RawDocumentsProducer;
+import com.dawidweiss.carrot.core.local.profiling.ProfiledLocalFilterComponentBase;
 
 /**
  * A local interface to the RoughKMeans clustering algorithm. Parts copied &
- * pasted from the remote interface.
- * 
+ * pasted from the remote interface {@link RoughClusterer}.
+ *
  * @author Stanislaw Osinski
  * @version $Revision$
  */
@@ -31,7 +51,7 @@ public class RoughKMeansLocalFilterComponent extends
     RawClustersProducer, LocalFilterComponent
 {
     /**
-     * Set for each clustered {@link RawDocument}instance to a {@link Double}
+     * Set for each clustered {@link RawDocument} instance to a {@link Double}
      * equal to the score of the document as a member of a cluster.
      */
     public static final String PROPERTY_CLUSTER_MEMBER_SCORE = "mscore";
@@ -55,33 +75,16 @@ public class RoughKMeansLocalFilterComponent extends
     /** Capabilities required from the next component in the chain */
     private final static Set CAPABILITIES_SUCCESSOR = new HashSet(Arrays
         .asList(new Object []
-        { RawClustersProducer.class }));
+        { RawClustersConsumer.class }));
 
     /** Raw clusters consumer */
     private RawClustersConsumer rawClustersConsumer;
 
     /** Documents consumer. */
     private RawDocumentsConsumer rawDocumentsConsumer;
-    
-    /**
-     *  
-     */
-    public RoughKMeansLocalFilterComponent()
-    {
-    }
 
-    /**
-     * @param parameters
-     */
-    public RoughKMeansLocalFilterComponent(Map parameters)
-    {
-    }
+    private String query;
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.clustering.RawDocumentsConsumer#addDocument(com.dawidweiss.carrot.core.local.clustering.RawDocument)
-     */
     public void addDocument(RawDocument doc) throws ProcessingException
     {
         startTimer();
@@ -103,11 +106,6 @@ public class RoughKMeansLocalFilterComponent extends
         stopTimer();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#init(com.dawidweiss.carrot.core.local.LocalControllerContext)
-     */
     public void init(LocalControllerContext context)
         throws InstantiationException
     {
@@ -116,41 +114,21 @@ public class RoughKMeansLocalFilterComponent extends
         documentReferences = new ArrayList();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#getComponentCapabilities()
-     */
     public Set getComponentCapabilities()
     {
         return CAPABILITIES_COMPONENT;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#getRequiredSuccessorCapabilities()
-     */
     public Set getRequiredSuccessorCapabilities()
     {
         return CAPABILITIES_SUCCESSOR;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#getRequiredPredecessorCapabilities()
-     */
     public Set getRequiredPredecessorCapabilities()
     {
         return CAPABILITIES_PREDECESSOR;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalFilterComponent#setNext(com.dawidweiss.carrot.core.local.LocalComponent)
-     */
     public void setNext(LocalComponent next)
     {
         super.setNext(next);
@@ -160,11 +138,6 @@ public class RoughKMeansLocalFilterComponent extends
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#flushResources()
-     */
     public void flushResources()
     {
         super.flushResources();
@@ -175,30 +148,28 @@ public class RoughKMeansLocalFilterComponent extends
         rawDocumentsConsumer = null;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#startProcessing(com.dawidweiss.carrot.core.local.RequestContext)
-     */
     public void startProcessing(RequestContext requestContext)
         throws ProcessingException
     {
         super.startProcessing(requestContext);
+        
+        String query = (String) requestContext.getRequestParameters().get(
+                LocalInputComponent.PARAM_QUERY);
+        if (query == null || "".equals(query.trim())) {
+            query = " ";
+        }
+        this.query = query;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#endProcessing()
-     */
     public void endProcessing() throws ProcessingException
     {
         startTimer();
 
-        IRContext context = new WebIRContext(" ", documentReferences);
+        final IRContext context = new WebIRContext(query, documentReferences);
 
         // Parameter values taken from the remote descriptor
         // carrot2.process.trc.phrase-rough-kmeans-google
+        // TODO: Add parameters as configuration options via request context.
         int numberOfClusters = 15;
         double membershipThreshold = 0.3;
         int cooccurrenceThreshold = 5;
@@ -238,10 +209,8 @@ public class RoughKMeansLocalFilterComponent extends
         }
 
         // Check for the junk clusters
-        RawClusterBase junk = (RawClusterBase) rawClusters.get(rawClusters
-            .size() - 1);
-        if (junk.getClusterDescription().get(0).toString().equalsIgnoreCase(
-            "other"))
+        RawClusterBase junk = (RawClusterBase) rawClusters.get(rawClusters.size() - 1);
+        if (junk.getClusterDescription().get(0).toString().equalsIgnoreCase("other"))
         {
             junk.setProperty(RawCluster.PROPERTY_JUNK_CLUSTER, Boolean.TRUE);
         }
@@ -258,11 +227,6 @@ public class RoughKMeansLocalFilterComponent extends
         super.endProcessing();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#getName()
-     */
     public String getName()
     {
         return "RoughKMeans";
