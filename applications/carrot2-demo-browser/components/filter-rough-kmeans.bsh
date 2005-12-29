@@ -1,0 +1,24 @@
+
+import com.stachoodev.carrot.filter.lingo.local.LingoLocalFilterComponent;
+import com.dawidweiss.carrot.core.local.*;
+import com.dawidweiss.carrot.local.controller.*;
+import com.dawidweiss.carrot.core.local.linguistic.*;
+import com.dawidweiss.carrot.util.tokenizer.languages.english.*;
+
+//
+// Component factory is a dynamic Beanshell class
+//
+factory = new LocalComponentFactoryBase() {
+    public LocalComponent getInstance() {
+    	return new com.chilang.carrot.filter.cluster.local.RoughKMeansLocalFilterComponent();
+    }
+
+    public String getName() {
+        return "Rough KMeans";
+    }
+};
+
+//
+// Return the ID of the component and its factory.
+//
+return new LoadedComponentFactory("filter-rough-kmeans", factory);
