@@ -110,9 +110,7 @@ public class ResultsTab extends JPanel {
                         }
                     } catch (Throwable e) {
                         showInfo("<html><body><h1>Exception executing query.</h1></body></html>");
-                        JOptionPane.showMessageDialog(ResultsTab.this, "Exception executing query: "
-                                + e.toString());
-                        e.printStackTrace();
+                        SwingUtils.showExceptionDialog(ResultsTab.this, "Exception executing query.", e);
                     } finally {
                         changeTitle(defaultTitle, false);                        
                     }
