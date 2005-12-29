@@ -23,7 +23,7 @@ carrot2-filter-stc
 
 - Unify coding style.
 
-- Review documentation, esure it corresponds to reality.
+- Review documentation, ensure it corresponds to reality.
 
 - Review remote component descriptors.
 
@@ -34,3 +34,7 @@ carrot2-filter-stc
 - Review master ANT build file -- generate JavaDocs.
 
 - Ensure all tests pass. Ensure the demo application works.
+
+- Public Relations
+    - redirect www.carrot2.org to the O/S website
+    - add new publications to the O/S website
