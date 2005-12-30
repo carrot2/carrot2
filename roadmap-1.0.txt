@@ -27,8 +27,6 @@ carrot2-filter-stc
 
 - Review remote component descriptors.
 
-- Remove components-private and remove from .cvsignore
-
 - Remove dependency on jdom and replace it with dom4j.
 
 - Create a separate project (carrot2-util-local?) for utils related to local

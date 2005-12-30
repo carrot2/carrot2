@@ -205,9 +205,6 @@
             <include name="components/*/lib/*.dep.xml" />        
 
             <include name="applications/carrot2-demo-browser/**/*.dep.xml" />
-    
-            <include name="components-private/*/*.dep.xml" />
-            <include name="components-private/*/lib/*.dep.xml" />        
         </fileset>
         <fileset dir="${project.dir}">
             <include name="lib/*.dep.xml" />
