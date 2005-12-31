@@ -12,18 +12,19 @@
 
 package com.stachoodev.carrot.filter.lingo;
 
-import com.dawidweiss.carrot.util.jdom.JDOMHelper;
-
-import com.stachoodev.carrot.filter.lingo.common.*;
-
-import org.jdom.Element;
-
 import java.io.InputStream;
-
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.dom4j.Element;
+
+import com.dawidweiss.carrot.util.Dom4jUtils;
+import com.stachoodev.carrot.filter.lingo.common.Cluster;
+import com.stachoodev.carrot.filter.lingo.common.DefaultClusteringContext;
 
 
 /**
@@ -58,8 +59,7 @@ public class DefaultLsiClustererRequestProcessor
             clusteringContext.setParameters(params);
 
             // Snippets			
-            List documentList = JDOMHelper.getElements("searchresult/document",
-                    root);
+            List documentList = root.selectNodes("document");
 
             if (documentList == null) {
                 // save the output.
@@ -68,25 +68,24 @@ public class DefaultLsiClustererRequestProcessor
                 return;
             }
 
-            JDomClusterStructureHelpers.addSnippets(clusteringContext,
+            ClusterStructureHelpers.addSnippets(clusteringContext,
                 documentList);
 
             // Query
-            clusteringContext.setQuery(root.getChildText("query"));
+            clusteringContext.setQuery(root.elementText("query"));
 
             // Linguistic data
-            List linguisticData = JDOMHelper.getElements("searchresult/l", root);
+            List linguisticData = root.selectNodes("l");
 
             if (linguisticData != null) {
                 for (Iterator i = linguisticData.iterator(); i.hasNext();) {
                     Element document = (Element) i.next();
 
-                    clusteringContext.addStem(document.getAttributeValue("t"),
-                        document.getAttributeValue("s"));
+                    clusteringContext.addStem(document.attributeValue("t"),
+                        document.attributeValue("s"));
 
-                    if (document.getAttributeValue("sw") != null) {
-                        clusteringContext.addStopWord(document.getAttributeValue(
-                                "t"));
+                    if (document.attributeValue("sw") != null) {
+                        clusteringContext.addStopWord(document.attributeValue("t"));
                     }
                 }
             }
@@ -95,11 +94,11 @@ public class DefaultLsiClustererRequestProcessor
             Cluster[] clusters = clusteringContext.cluster();
 
             // detect any group elements and remove them
-            root.removeChildren("group");
+            Dom4jUtils.removeChildren(root, "group");
 
             // Create the output XML
             for (int i = 0; i < clusters.length; i++) {
-                JDomClusterStructureHelpers.addToElement(root, clusters[i]);
+                ClusterStructureHelpers.addToElement(root, clusters[i]);
             }
 
             // save the output.
