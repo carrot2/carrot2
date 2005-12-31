@@ -1,7 +1,6 @@
 package carrot2.demo.swing;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -17,7 +16,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -192,7 +190,7 @@ public class SwingDemoGui implements DemoGuiDelegate {
             } else if (tabName.length() > 20) {
                 tabName = tabName.substring(0, 20) + "...";
             }
-            final ResultsTab resultsTab = new ResultsTab(query, demoContext, settings.createClone(), processId, requestedResults);
+            final ResultsTab resultsTab = new ResultsTab(frame, query, demoContext, settings.createClone(), processId, requestedResults);
             tabbedPane.addTab(tabName, resultsTab);
             tabbedPane.setSelectedIndex(tabbedPane.getTabCount()-1);
             tabbedPane.setToolTipTextAt(tabbedPane.getTabCount()-1, query);

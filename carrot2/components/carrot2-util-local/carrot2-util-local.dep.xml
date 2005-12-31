@@ -17,6 +17,7 @@
         </check-newer>
     </provides>
 
+    <dependency name="carrot2-local-core" />
     <dependency name="carrot2-license" />
 
     <dependency name="log4j" />

@@ -19,5 +19,6 @@
 	<classpathentry exported="true" kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/junit-3.8.1.jar"/>
 	<classpathentry exported="true" kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/junit-addons-1.4.jar"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/lucene-1.5-rc1-dev.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-matrix"/>
 	<classpathentry kind="output" path="tmp/eclipse/classes"/>
 </classpath>
