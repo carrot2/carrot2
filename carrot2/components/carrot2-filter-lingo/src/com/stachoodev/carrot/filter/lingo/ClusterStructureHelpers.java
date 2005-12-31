@@ -12,20 +12,24 @@
 
 package com.stachoodev.carrot.filter.lingo;
 
-import com.stachoodev.carrot.filter.lingo.common.*;
-
-import org.jdom.Element;
-
 import java.text.NumberFormat;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
 
-import java.util.*;
+import org.dom4j.DocumentFactory;
+import org.dom4j.Element;
+
+import com.stachoodev.carrot.filter.lingo.common.AbstractClusteringContext;
+import com.stachoodev.carrot.filter.lingo.common.Cluster;
+import com.stachoodev.carrot.filter.lingo.common.Snippet;
 
 
 /**
- * Helper class for cluster-jdom operations.
+ * Helper class for cluster-serialized form operations.
  */
-public class JDomClusterStructureHelpers {
-    /** DOCUMENT ME! */
+class ClusterStructureHelpers {
+
     private static final NumberFormat numberFormat;
 
     static {
@@ -34,10 +38,7 @@ public class JDomClusterStructureHelpers {
         numberFormat.setMinimumFractionDigits(2);
     }
 
-    /**
-     * Creates a new JDomClusterStructureHelpers object.
-     */
-    private JDomClusterStructureHelpers() {
+    private ClusterStructureHelpers() {
     }
 
     /**
@@ -49,10 +50,10 @@ public class JDomClusterStructureHelpers {
         for (Iterator i = documentList.iterator(); i.hasNext();) {
             Element document = (Element) i.next();
 
-            String title = document.getChildText("title");
-            String snippet = document.getChildText("snippet");
+            String title = document.elementText("title");
+            String snippet = document.elementText("snippet");
 
-            clusteringContext.addSnippet(new Snippet(document.getAttributeValue(
+            clusteringContext.addSnippet(new Snippet(document.attributeValue(
                         "id"), title, snippet));
         }
     }
@@ -66,37 +67,38 @@ public class JDomClusterStructureHelpers {
             return;
         }
 
-        Element group = new Element("group");
+        final DocumentFactory factory = new DocumentFactory();
+        Element group = factory.createElement("group");
 
         if (cluster.isOtherTopics()) {
-            group.setAttribute("othertopics", "yes");
+            group.addAttribute("othertopics", "yes");
         }
 
-        Element title = new Element("title");
+        Element title = factory.createElement("title");
         String[] labels = cluster.getLabels();
 
         if (labels != null) {
             for (int k = 0; k < labels.length; k++) {
-                Element phrase = new Element("phrase");
+                Element phrase = factory.createElement("phrase");
                 phrase.setText(labels[k]);
-                title.addContent(phrase);
+                title.add(phrase);
             }
         } else {
-            Element phrase = new Element("phrase");
+            Element phrase = factory.createElement("phrase");
             phrase.setText("Group");
-            title.addContent(phrase);
+            title.add(phrase);
         }
 
-        group.addContent(title);
+        group.add(title);
 
         Snippet[] clusterDocuments = cluster.getSnippets();
 
         for (int k = 0; k < clusterDocuments.length; k++) {
-            Element doc = new Element("document");
-            doc.setAttribute("refid", clusterDocuments[k].getSnippetId());
-            doc.setAttribute("score",
+            Element doc = factory.createElement("document");
+            doc.addAttribute("refid", clusterDocuments[k].getSnippetId());
+            doc.addAttribute("score",
                 numberFormat.format(cluster.getSnippetScore(k)));
-            group.addContent(doc);
+            group.add(doc);
         }
 
         Cluster[] clusters = cluster.getClusters();
@@ -105,6 +107,6 @@ public class JDomClusterStructureHelpers {
             addToElement(group, clusters[i]);
         }
 
-        rootGroup.addContent(group);
+        rootGroup.add(group);
     }
 }

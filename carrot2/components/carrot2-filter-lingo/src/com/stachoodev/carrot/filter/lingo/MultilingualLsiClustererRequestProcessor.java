@@ -12,22 +12,24 @@
 
 package com.stachoodev.carrot.filter.lingo;
 
-import com.dawidweiss.carrot.core.local.linguistic.Language;
-import com.dawidweiss.carrot.util.jdom.JDOMHelper;
-
-import com.stachoodev.carrot.filter.lingo.common.*;
-
-import org.apache.log4j.Logger;
-
-import org.jdom.Element;
-
 import java.io.InputStream;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
+import org.dom4j.Element;
+
+import com.dawidweiss.carrot.core.local.linguistic.Language;
+import com.dawidweiss.carrot.util.Dom4jUtils;
+import com.stachoodev.carrot.filter.lingo.common.Cluster;
+import com.stachoodev.carrot.filter.lingo.common.MultilingualClusteringContext;
 
 
 /**
@@ -75,7 +77,7 @@ public class MultilingualLsiClustererRequestProcessor
             clusteringContext.setLanguages(languages);
 
             // Snippets			
-            List documentList = JDOMHelper.getElements("searchresult/document", root);
+            List documentList = root.selectNodes("document");
 
             if (documentList == null) {
                 // save the output.
@@ -84,21 +86,21 @@ public class MultilingualLsiClustererRequestProcessor
                 return;
             }
 
-            JDomClusterStructureHelpers.addSnippets(clusteringContext,
+            ClusterStructureHelpers.addSnippets(clusteringContext,
                 documentList);
 
             // Query
-            clusteringContext.setQuery(root.getChildText("query"));
+            clusteringContext.setQuery(root.elementText("query"));
 
             // Cluster !
             Cluster[] clusters = clusteringContext.cluster();
 
             // detect any group elements and remove them
-            root.removeChildren("group");
+            Dom4jUtils.removeChildren(root, "group");
 
             // Create the output XML
             for (int i = 0; i < clusters.length; i++) {
-                JDomClusterStructureHelpers.addToElement(root, clusters[i]);
+                ClusterStructureHelpers.addToElement(root, clusters[i]);
             }
 
             // save the output.
