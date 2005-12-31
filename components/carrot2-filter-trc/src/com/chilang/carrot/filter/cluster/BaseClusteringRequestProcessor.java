@@ -5,6 +5,17 @@
  */
 package com.chilang.carrot.filter.cluster;
 
+import java.io.InputStream;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
+import org.dom4j.Element;
+
 import com.chilang.carrot.filter.cluster.rough.clustering.AbstractClusterer;
 import com.chilang.carrot.filter.cluster.rough.clustering.Cluster;
 import com.chilang.carrot.filter.cluster.rough.clustering.KMeansBaselineClusterer;
@@ -13,16 +24,7 @@ import com.chilang.carrot.filter.cluster.rough.data.WebIRContext;
 import com.chilang.carrot.filter.cluster.rough.measure.CosineCoefficient;
 import com.chilang.carrot.filter.cluster.rough.measure.Similarity;
 import com.chilang.util.StringUtils;
-import org.apache.log4j.Logger;
-import org.jdom.Element;
-import com.dawidweiss.carrot.util.jdom.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.InputStream;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import com.dawidweiss.carrot.util.Dom4jUtils;
 
 
 /**
@@ -52,10 +54,8 @@ public class BaseClusteringRequestProcessor
             // parse input data (must be UTF-8 encoded).
             Element root = parseXmlStream(carrotData, "UTF-8");
 
-
-
             // Snippets
-            List documentList = JDOMHelper.getElements("searchresult/document", root);
+            List documentList = root.elements("document");
             if (documentList == null) {
                 // save the output.
                 serializeXmlStream(root, response.getOutputStream(), "UTF-8");
@@ -84,7 +84,7 @@ public class BaseClusteringRequestProcessor
             Cluster[] clusters = clusterer.getClusters();
 
             // detect any group elements and remove them
-            root.removeChildren("group");
+            Dom4jUtils.removeChildren(root, "group");
 
             // Create the output XML
 //            for (int i = 0; i < clusters.length; i++) {
