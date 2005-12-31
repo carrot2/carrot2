@@ -90,32 +90,18 @@ public class XmlLocalInputComponent extends
     public XmlLocalInputComponent() {
     }
 
-    /*
-     * @see com.dawidweiss.carrot.core.local.LocalInputComponent#setQuery(java.lang.String)
-     */
     public void setQuery(String query) {
         this.query = query;
     }
 
-    /*
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#getComponentCapabilities()
-     */
     public Set getComponentCapabilities() {
         return COMPONENT_CAPABILITIES;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#getRequiredSuccessorCapabilities()
-     */
     public Set getRequiredSuccessorCapabilities() {
         return SUCCESSOR_CAPABILITIES;
     }
 
-    /*
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#flushResources()
-     */
     public void flushResources() {
         super.flushResources();
         query = null;
@@ -123,9 +109,6 @@ public class XmlLocalInputComponent extends
         requestContext = null;
     }
 
-    /*
-     * @see com.dawidweiss.carrot.core.local.LocalInputComponent#setNext(com.dawidweiss.carrot.core.local.LocalComponent)
-     */
     public void setNext(LocalComponent next) {
         super.setNext(next);
         if (next instanceof RawDocumentsConsumer) {
@@ -135,11 +118,6 @@ public class XmlLocalInputComponent extends
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#startProcessing(com.dawidweiss.carrot.core.local.RequestContext)
-     */
     public void startProcessing(RequestContext requestContext)
             throws ProcessingException {
         super.startProcessing(requestContext);
