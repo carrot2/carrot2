@@ -29,12 +29,19 @@ carrot2-filter-stc
 
 - Remove dependency on jdom and replace it with dom4j.
 
+- Remove dependency on castor.
+
+- Remove Google descriptors from snippet reader (and from the demo applications). Replace
+them with Yahoo API (and GoogleAPI).
+
 - Create a separate project (carrot2-util-local?) for utils related to local
   interfaces
 
 - Review master ANT build file -- generate JavaDocs.
 
 - Ensure all tests pass. Ensure the demo application works.
+
+- Nightly deploy must include unit tests (currently only external tests are run).
 
 - Public Relations
     - redirect www.carrot2.org to the O/S website
