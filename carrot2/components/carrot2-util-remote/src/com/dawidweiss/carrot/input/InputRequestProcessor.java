@@ -123,6 +123,5 @@ public abstract class InputRequestProcessor
      */
     protected abstract void processQuery(
         String query, int requestedNumberOfResults, Writer outputXml, HttpServletRequest request
-    )
-        throws Exception;
+    ) throws Exception;
 }
