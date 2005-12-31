@@ -62,14 +62,14 @@ public class XmlRemoteInputComponent
                 // see if the xslt is a named xslt stored in the webapp?
                 Map map = extractParameters(request);
 
-                String xslt = (String) request.getParameter("xslt");
+                String xslt = request.getParameter("xslt");
                 if (xslt!=null) {
                     String translated = this.getServletConfig().getServletContext().getRealPath(xslt);
                     if (new File(translated).isFile() && new File(translated).canRead()) {
                         map.put("xslt", new File(translated).toURL());
                     }
                 }
-                String source = (String) request.getParameter("source");
+                String source = request.getParameter("source");
                 if (source!=null) {
                     String translated = this.getServletConfig().getServletContext().getRealPath(source);
                     if (new File(translated).isFile() && new File(translated).canRead()) {
