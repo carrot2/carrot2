@@ -15,11 +15,11 @@
 package com.mwroblewski.carrot.lexical;
 
 
-import org.jdom.Element;
+import org.dom4j.Element;
 
 
 /**
- * @author Micha� Wr�blewski
+ * @author Michał Wróblewski
  */
 public abstract class LexicalElement
 {
@@ -31,7 +31,7 @@ public abstract class LexicalElement
 
     public static LexicalElement fromXML(Element element)
     {
-        String type = element.getAttributeValue("type");
+        String type = element.attributeValue("type");
 
         if (type.equals(Phrase.TYPE))
         {

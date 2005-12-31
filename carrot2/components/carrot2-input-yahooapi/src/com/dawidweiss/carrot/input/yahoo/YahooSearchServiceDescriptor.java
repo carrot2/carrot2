@@ -4,12 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 
-import com.dawidweiss.carrot.util.jdom.JDOMHelper;
 import com.dawidweiss.carrot.util.net.http.FormActionInfo;
 import com.dawidweiss.carrot.util.net.http.FormParameters;
 import com.dawidweiss.carrot.util.net.http.HTTPFormSubmitter;
@@ -49,18 +48,17 @@ public class YahooSearchServiceDescriptor {
      */
     public void initializeFromXML(InputStream xmlStream) throws IOException {
         Document doc;
+        final SAXReader reader = new SAXReader(false);
         try {
-            final SAXBuilder builder = new SAXBuilder(false);
-            doc = builder.build(xmlStream);
-        } catch (JDOMException e) {
-            throw new IOException("Can't parse input stream: " + e.toString());
+            doc = reader.read(xmlStream);
+        } catch (DocumentException e) {
+            throw new IOException("Description parsing error: " + e.toString());
         }
+
         final Element configuration = doc.getRootElement();
 
-        FormActionInfo formActionInfo = new FormActionInfo(JDOMHelper.getElement(
-                    "/request", configuration));
-        FormParameters formParameters = new FormParameters(JDOMHelper.getElement(
-                    "/request/parameters", configuration));
+        FormActionInfo formActionInfo = new FormActionInfo(configuration);
+        FormParameters formParameters = new FormParameters(configuration.element("parameters"));
 
         this.formActionInfo = formActionInfo;
         this.formParameters = formParameters;

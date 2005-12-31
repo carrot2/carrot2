@@ -12,21 +12,25 @@
 
 package com.dawidweiss.carrot.input.snippetreader.readers;
 
-import com.dawidweiss.carrot.input.snippetreader.util.ExtendedRegExp;
-import com.dawidweiss.carrot.util.common.StreamUtils;
-import com.dawidweiss.carrot.util.jdom.JDOMHelper;
-import com.dawidweiss.carrot.util.net.http.FormParameters;
-import com.dawidweiss.carrot.util.net.http.HTTPFormSubmitter;
-
-import org.apache.log4j.Logger;
-
-import org.jdom.Element;
-
 import gnu.regexp.REException;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.SequenceInputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Vector;
 
-import java.util.*;
+import org.apache.log4j.Logger;
+import org.dom4j.Element;
+
+import com.dawidweiss.carrot.input.snippetreader.util.ExtendedRegExp;
+import com.dawidweiss.carrot.util.common.StreamUtils;
+import com.dawidweiss.carrot.util.net.http.FormParameters;
+import com.dawidweiss.carrot.util.net.http.HTTPFormSubmitter;
 
 
 /**
@@ -37,19 +41,11 @@ import java.util.*;
 public class HttpMultiPageReader {
     private static final Logger log = Logger.getLogger(HttpMultiPageReader.class);
 
-    protected static final String PAGE_INFO = "pageinfo";
+    protected static final String RESULTS_MATCHED = "number-of-matched-documents/regexpression";
 
-    protected static final String EXPECTED_RESULTS_PER_PAGE = PAGE_INFO +
-        "/results-per-page";
+    protected static final String NO_RESULTS_MARKER = "no-results-marker/regexpression";
 
-    protected static final String RESULTS_MATCHED = PAGE_INFO +
-        "/number-of-matched-documents/regexpression";
-
-    protected static final String NO_RESULTS_MARKER = PAGE_INFO +
-        "/no-results-marker/regexpression";
-
-    protected static final String RESULTS_PER_PAGE = PAGE_INFO +
-        "/expected-results-per-page";
+    protected static final String RESULTS_PER_PAGE = "expected-results-per-page";
 
     protected HTTPFormSubmitter submitter;
 
@@ -138,12 +134,12 @@ public class HttpMultiPageReader {
             String page = new String(pageBytes, inputEncoding);
 
             // find out how many results there is on the page.
-            ExtendedRegExp expr = new ExtendedRegExp(JDOMHelper.getElement(
-                        RESULTS_MATCHED, pageInfo));
+            ExtendedRegExp expr = new ExtendedRegExp(
+                    (Element) pageInfo.selectSingleNode(RESULTS_MATCHED));
             String resultsFound = expr.getProcessedMatch(page);
             Vector outputPages = new Vector();
-            int resultsPerPage = Integer.parseInt(JDOMHelper.getElement(
-                        RESULTS_PER_PAGE, pageInfo).getText());
+            int resultsPerPage = Integer.parseInt(
+                    ((Element) pageInfo.selectSingleNode(RESULTS_PER_PAGE)).getText());
 
             if (resultsFound != null) {
                 long results = 0;
@@ -182,8 +178,7 @@ public class HttpMultiPageReader {
                 return outputPages.elements();
             } else {
                 // no actual snippets marker. check whether no-results can be found.
-                expr = new ExtendedRegExp(JDOMHelper.getElement(
-                            NO_RESULTS_MARKER, pageInfo));
+                expr = new ExtendedRegExp((Element) pageInfo.selectSingleNode(NO_RESULTS_MARKER));
 
                 if (expr.getProcessedMatch(page) != null) {
                     log.debug("No results were found.");

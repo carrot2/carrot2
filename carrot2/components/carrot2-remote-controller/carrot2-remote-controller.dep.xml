@@ -27,7 +27,7 @@
 
 	<dependency name="commons-beanutils" />
     
-	<dependency name="jdom" />
+	<dependency name="dom4j" />
 	<dependency name="log4j" />
 
 	<dependency name="servlets-api" nocopy="true" />

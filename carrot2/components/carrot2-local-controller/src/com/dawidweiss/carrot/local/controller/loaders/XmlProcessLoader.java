@@ -23,9 +23,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 
 import com.dawidweiss.carrot.core.local.LocalComponent;
 import com.dawidweiss.carrot.core.local.LocalProcess;
@@ -76,45 +76,45 @@ public class XmlProcessLoader implements ProcessLoader {
      */
     public LoadedProcess load(InputStream dataStream) throws IOException {
         // Parse the XML stream
-        final SAXBuilder builder = new SAXBuilder();
+        final SAXReader builder = new SAXReader();
         builder.setValidation(false);
 
         try {
-            final Element root = builder.build(dataStream).getRootElement();
+            final Element root = builder.read(dataStream).getRootElement();
             if (!"local-process".equals(root.getName())) {
                 throw new IOException("Malformed stream: root note should " +
                     "be 'local-process'");
             }
 
-            final String id = root.getAttributeValue("id");
+            final String id = root.attributeValue("id");
             if (id == null) {
                 throw new IOException("Malformed stream: missing id attribute.");
             }
 
-            if (root.getChildren("input").size() != 1) {
+            if (root.elements("input").size() != 1) {
                 throw new IOException(
                     "Exactly one 'input' element is expected.");
             }
-            final String input = root.getChild("input").getAttributeValue("component-key");
+            final String input = root.element("input").attributeValue("component-key");
             if (input == null) {
                 throw new IOException(
                     "Required attribute missing on 'input' element: component-key");
             }
 
-            if (root.getChildren("output").size() != 1) {
+            if (root.elements("output").size() != 1) {
                 throw new IOException(
                     "Exactly one 'output' element is expected.");
             }
-            final String output = root.getChild("output").getAttributeValue("component-key");
+            final String output = root.element("output").attributeValue("component-key");
             if (output == null) {
                 throw new IOException(
                     "Required attribute missing on 'output' element: component-key");
             }
 
             final ArrayList filters = new ArrayList();
-            for (Iterator i = root.getChildren("filter").iterator(); i.hasNext();) {
+            for (Iterator i = root.elements("filter").iterator(); i.hasNext();) {
                 final Element filterElement = (Element) i.next();
-                final String filterId = filterElement.getAttributeValue("component-key");
+                final String filterId = filterElement.attributeValue("component-key");
                 if (filterId == null) {
                     throw new IOException(
                         "Required attribute missing on 'filter' element: component-key");
@@ -123,16 +123,16 @@ public class XmlProcessLoader implements ProcessLoader {
             }
 
             String name = null;
-            Element nameElement = root.getChild("name");
+            Element nameElement = root.element("name");
             if (nameElement!= null)
                 name = nameElement.getTextTrim();
             
             String description = null;
-            Element descriptionElement = root.getChild("description");
+            Element descriptionElement = root.element("description");
             if (descriptionElement!= null)
                 description = descriptionElement.getTextTrim();
 
-            final Map defaultRequestParameters = extractRequestParameters(root.getChildren("param"));
+            final Map defaultRequestParameters = extractRequestParameters(root.elements("param"));
             final LocalProcessBase process;
             if (defaultRequestParameters != null) {
                 process = new LocalProcessBase(input, output,
@@ -153,12 +153,12 @@ public class XmlProcessLoader implements ProcessLoader {
             }
 
             // Parse extra process attributes.
-            Map attributes = extractRequestParameters(root.getChildren("attribute"));
+            Map attributes = extractRequestParameters(root.elements("attribute"));
             if (attributes == null) {
                 attributes = new HashMap();
             }
             return new LoadedProcess(id, process, attributes);
-        } catch (JDOMException e) {
+        } catch (DocumentException e) {
             throw new IOException("Malformed stream: XML corrupted: " + e);
         }
     }
@@ -181,9 +181,9 @@ public class XmlProcessLoader implements ProcessLoader {
 
         for (Iterator i = list.iterator(); i.hasNext();) {
             Element param = (Element) i.next();
-            String key = param.getAttributeValue("key");
-            Object value = param.getAttributeValue("value");
-            String type = param.getAttributeValue("type");
+            String key = param.attributeValue("key");
+            Object value = param.attributeValue("value");
+            String type = param.attributeValue("type");
 
             if (key == null) {
                 throw new IOException(

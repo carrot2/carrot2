@@ -7,9 +7,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
-import org.apache.commons.beanutils.*;
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.MethodUtils;
+import org.apache.commons.beanutils.PropertyUtils;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 
 
 /*
@@ -99,24 +109,16 @@ public class Loader
     public Object load(InputStream XMLStream)
         throws IOException
     {
-        // first prototype we use JDOM. Ideally a SAX-based solution
-        // would be needed here.
-
-        try
-        {
-            org.jdom.Element root =
-                new org.jdom.input.SAXBuilder(validation)
-                    .build(XMLStream).getRootElement();
-
-            return configureObject( root, null );
+        Element root;
+        try {
+            root = new SAXReader(validation).read(XMLStream).getRootElement();
+        } catch (DocumentException e) {
+            throw new IOException("Can't load descriptor: " + e.toString());
         }
-        catch (org.jdom.JDOMException e)
-        {
-            throw new IOException("Cannot load components: " + e.toString());
-        }
+        return configureObject( root, null );
     }
 
-    private final Object configureObject( org.jdom.Element node, Object parent )
+    private final Object configureObject(Element node, Object parent)
         throws IOException
     {
         String nodeName = node.getName();
@@ -124,13 +126,13 @@ public class Loader
         Object object = null;
 
         // check if the node has 'refid' attribute. if yes, try the repository first.
-        if (node.getAttribute("refid")!=null)
+        if (node.attribute("refid") != null)
         {
-            if (!node.getChildren().isEmpty())
+            if (!node.elements().isEmpty())
                 throw new IOException("Referenced node " + nodeName
                     + " cannot be redefined or contain new attributes.");
 
-            String refid = node.getAttributeValue("refid");
+            String refid = node.attributeValue("refid");
             if (!objectsRepository.containsKey(refid))
                 throw new IOException("Referenced node " + nodeName + "with ID equal to "
                     + refid + " does not exist.");
@@ -146,12 +148,12 @@ public class Loader
                 InterfaceMapping imapping = (InterfaceMapping) mapping;
 
                 // load interface instance from class attribute,
-                if (node.getAttribute("class")==null)
+                if (node.attribute("class")==null)
                     throw new IOException("Missing class attribute in mapping for interface "
                         + imapping.getInterfaceName());
 
                 String interfaceInstanceClassName =
-                    node.getAttribute("class").getValue().trim();
+                    node.attribute("class").getValue().trim();
                 try
                 {
                     Class interfaceInstance = Thread.currentThread().getContextClassLoader().loadClass(
@@ -215,12 +217,12 @@ public class Loader
         if (object != null)
         {
             // now descend to children nodes and create/ populate them.
-            List children = node.getChildren();
+            List children = node.elements();
             HashMap props = new HashMap();
 
             for (Iterator i = children.iterator();i.hasNext();)
             {
-                org.jdom.Element child = (org.jdom.Element) i.next();
+                Element child = (Element) i.next();
                 Object value = configureObject( child, object );
 
                 String key = toJavaNameConvention(child.getName(),false);
@@ -327,9 +329,9 @@ public class Loader
                     throw new IOException(s);
             }
 
-            if (node.getAttribute("id") != null)
+            if (node.attribute("id") != null)
             {
-                String key = node.getAttributeValue("id");
+                String key = node.attributeValue("id");
                 if (objectsRepository.containsKey(key))
                     throw new IOException("Node IDs must be unique.");
 
@@ -344,7 +346,7 @@ public class Loader
             // check if this element has any children - if yes, throw an exception -
             // unrecognized complex node. If no, check if its body can be treated
             // as property's value and populate parent with it.
-            if (!node.getChildren().isEmpty())
+            if (!node.elements().isEmpty())
                 throw new IOException("Don't know how to instantiate node: "
                     + node.getName());
             if ("".equals( node.getText() ))

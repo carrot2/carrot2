@@ -12,7 +12,7 @@
 
 package com.dawidweiss.carrot.input.snippetreader.extractors.regexp;
 
-import org.jdom.Element;
+import org.dom4j.Element;
 
 
 /**
@@ -56,12 +56,12 @@ class RegularExpression {
                 "Regular Expression cannot be instantiated from null Element.");
         }
 
-        if (regExpXmlElement.getAttribute(XML_ATTR_REGEXP) != null) {
-            regExp = regExpXmlElement.getAttribute(XML_ATTR_REGEXP).getValue();
+        if (regExpXmlElement.attribute(XML_ATTR_REGEXP) != null) {
+            regExp = regExpXmlElement.attributeValue(XML_ATTR_REGEXP);
         }
 
-        if (regExpXmlElement.getChild(XML_ATTR_REGEXP) != null) {
-            regExp = regExpXmlElement.getChild(XML_ATTR_REGEXP).getText();
+        if (regExpXmlElement.element(XML_ATTR_REGEXP) != null) {
+            regExp = regExpXmlElement.elementText(XML_ATTR_REGEXP);
         }
 
         if (regExp == null) {
@@ -69,9 +69,8 @@ class RegularExpression {
                 "XML Element does not contain required attributes.");
         }
 
-        if (regExpXmlElement.getAttribute(XML_ATTR_CONSUME) != null) {
-            if ("true".equalsIgnoreCase(regExpXmlElement.getAttribute(
-                            XML_ATTR_CONSUME).getValue())) {
+        if (regExpXmlElement.attribute(XML_ATTR_CONSUME) != null) {
+            if ("true".equalsIgnoreCase(regExpXmlElement.attributeValue(XML_ATTR_CONSUME))) {
                 consumeToken = true;
             }
         }

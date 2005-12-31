@@ -2,10 +2,11 @@ package com.dawidweiss.carrot.util.net.http;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ListIterator;
 
-import org.jdom.Element;
-import com.dawidweiss.carrot.util.jdom.JDOMHelper;
+import org.dom4j.Element;
 
 
 /**
@@ -13,8 +14,7 @@ import com.dawidweiss.carrot.util.jdom.JDOMHelper;
  * and HTTP method (POST/ GET) must be specified. Additional HTTP headers may also be
  * specified.
  *
- * This object can be initialized using JDOM's XML Element. The XML structure
- * is explained in the constructor below.
+ * This object can be initialized using DOM4J's XML Element.
  *
  * @author Dawid Weiss
  */
@@ -36,7 +36,7 @@ public class FormActionInfo
 
 
     /**
-     * Initialize using JDOM's XML fragment. The XML must follow this structure:
+     * Initialize using DOM4j XML fragment. The XML must follow this structure:
      *
      * <PRE>
      * &lt;request&gt;
@@ -58,9 +58,8 @@ public class FormActionInfo
      *  &lt;/request&gt;
      * </PRE>
      *
-     * @param initFromXML JDOM's Element with initialization parameters.
+     * @param initFromXML DOM4j Element with initialization parameters.
      *        See the example XML configuration file.
-     * @throws WrappedException
      */
     public FormActionInfo(Element initFromXML)
         throws MalformedURLException
@@ -113,22 +112,18 @@ public class FormActionInfo
 
     /**
      * Initializes this object using an XML Element.
-     * @param qr JDOM's Element with initialization parameters.
+     * @param qr DOM4j's Element with initialization parameters.
      */
     protected void initInstanceFromXML(Element qr)
             throws MalformedURLException
     {
-        final String SERVICE_URL_ATT    = "/request/service#url";
-        final String SERVICE_METHOD_ATT = "/request/service#method";
-        final String HTTP_HEADER_NODE   = "/request/http-overrides/header";
-        final String HTTP_HEADER_NAME   = "name";
+        if (!"request".equals(qr.getName())) throw new RuntimeException("Expected 'request' element.");
 
-        serviceURL    = new URL(JDOMHelper.getStringFromJDOM(SERVICE_URL_ATT, qr, true));
-        serviceMethod = JDOMHelper.getStringFromJDOM(SERVICE_METHOD_ATT, qr, true);
+        serviceURL    = new URL(qr.selectSingleNode("service/@url").getText());
+        serviceMethod = qr.selectSingleNode("service/@method").getText();
 
         // retrieve http header overrides
-        List httpHeaders = JDOMHelper.getElements(HTTP_HEADER_NODE, qr);
-
+        final List httpHeaders = qr.selectNodes("http-overrides/header");
         if (httpHeaders != null)
         {
             for (ListIterator param = httpHeaders.listIterator(); param.hasNext(); )
@@ -136,7 +131,7 @@ public class FormActionInfo
                 Element paramElement = (Element) param.next();
 
                 // get the name of the parameter
-                String header = paramElement.getAttribute(HTTP_HEADER_NAME).getValue();
+                String header = paramElement.attributeValue("name");
                 String value  = paramElement.getText();
 
                 this.httpHeaders.put(header, value);

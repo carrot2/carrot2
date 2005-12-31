@@ -20,9 +20,9 @@ import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 
 import com.dawidweiss.carrot.local.controller.ComponentFactoryLoader;
 import com.dawidweiss.carrot.local.controller.LoadedComponentFactory;
@@ -84,24 +84,24 @@ public class XmlFactoryDescriptionLoader implements ComponentFactoryLoader {
     public LoadedComponentFactory load(InputStream dataStream)
         throws IOException, ComponentInitializationException {
         // parse the XML stream
-        SAXBuilder builder = new SAXBuilder();
+        SAXReader builder = new SAXReader();
         builder.setValidation(false);
 
         try {
-            Element root = builder.build(dataStream).getRootElement();
+            Element root = builder.read(dataStream).getRootElement();
 
             if (!"local-component-factory".equals(root.getName())) {
                 throw new IOException("Malformed stream: root note should " +
                     "be 'local-component-factory'");
             }
 
-            String id = root.getAttributeValue("id");
+            String id = root.attributeValue("id");
 
             if (id == null) {
                 throw new IOException("Malformed stream: missing id attribute.");
             }
 
-            String componentClass = root.getAttributeValue("component-class");
+            String componentClass = root.attributeValue("component-class");
 
             if (componentClass == null) {
                 throw new IOException(
@@ -109,21 +109,21 @@ public class XmlFactoryDescriptionLoader implements ComponentFactoryLoader {
             }
 
             String initBeanshell = null;
-            Element elem = root.getChild("init-beanshell");
+            Element elem = root.element("init-beanshell");
 
             if (elem != null) {
                 initBeanshell = elem.getText();
             }
 
             HashMap defaults = new HashMap();
-            elem = root.getChild("init-properties");
+            elem = root.element("init-properties");
 
             if (elem != null) {
-                Iterator i = elem.getChildren("property").iterator();
+                Iterator i = elem.elements("property").iterator();
 
                 while (i.hasNext()) {
                     Element propertyElement = (Element) i.next();
-                    String name = propertyElement.getAttributeValue("name");
+                    String name = propertyElement.attributeValue("name");
                     String value = propertyElement.getTextTrim();
 
                     if (name == null) {
@@ -140,12 +140,12 @@ public class XmlFactoryDescriptionLoader implements ComponentFactoryLoader {
             }
             
             String name = null;
-            Element nameElement = root.getChild("name");
+            Element nameElement = root.element("name");
             if (nameElement != null)
                 name = nameElement.getTextTrim();
 
             String description = null;
-            Element descriptionElement = root.getChild("description");
+            Element descriptionElement = root.element("description");
             if (descriptionElement != null)
                 description = descriptionElement.getTextTrim();
 
@@ -171,7 +171,7 @@ public class XmlFactoryDescriptionLoader implements ComponentFactoryLoader {
                     initBeanshell, defaults, name, description);
 
             return new LoadedComponentFactory(id, factory);
-        } catch (JDOMException e) {
+        } catch (DocumentException e) {
             throw new IOException("Corrupted or incorrect XML stream: " +
                 e.toString());
         }

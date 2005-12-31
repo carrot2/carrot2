@@ -20,7 +20,6 @@
 
 	<!-- Carrot2 components -->
     <dependency name="carrot2-license" />
+    <dependency name="dom4j" />
 	<dependency name="carrot2-util-remote" 	profile="remote" />
-	<dependency name="jdom" />
-
 </component>

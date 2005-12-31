@@ -11,26 +11,31 @@
 package com.dawidweiss.carrot.filter;
 
 
-import com.dawidweiss.carrot.util.AbstractRequestProcessor;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
-import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.SAXReader;
+import org.dom4j.io.XMLWriter;
+
+import com.dawidweiss.carrot.util.AbstractRequestProcessor;
 
 
 /**
  * A filter request processor class. This is an abstract scheleton class which should be overriden
  * to include some processing. <code>processFilterRequest</code> gets called in response to user
- * query, override it as needed. Convenience methods for serializing input data to JDOM's object
+ * query, override it as needed. Convenience methods for serializing input data to XML object
  * structure also exist. Please note that for optimum performance, you should override
  * <code>processFilterRequest</code> and start processing as soon as possible, not waiting for the
  * full XML to be available.
@@ -55,18 +60,21 @@ public abstract class FilterRequestProcessor
     )
         throws Exception;
 
-
-    // ------------------------------------------------------- protected section
-
     /**
      * Convenience method for parsing XML stream.
      */
     protected Element parseXmlStream(InputStream stream, String encoding)
-        throws IOException, JDOMException, UnsupportedEncodingException
+        throws IOException, UnsupportedEncodingException
     {
-        SAXBuilder builder = new SAXBuilder();
+        final SAXReader reader = new SAXReader();
+        reader.setValidation(false);
 
-        return builder.build(new InputStreamReader(stream, encoding)).getRootElement();
+        try {
+            return reader.read(
+                    new InputStreamReader(stream, encoding)).getRootElement();
+        } catch (DocumentException e) {
+            throw new IOException("Error parsing XML: " + e.toString());
+        }
     }
 
 
@@ -74,11 +82,21 @@ public abstract class FilterRequestProcessor
      * Convenience method for serializing XML stream.
      */
     protected void serializeXmlStream(Element root, OutputStream stream, String encoding)
-        throws JDOMException, IOException
+        throws IOException
     {
-        Format format = Format.getRawFormat();
+        final OutputFormat format = new OutputFormat();
         format.setEncoding(encoding);
-        XMLOutputter out = new XMLOutputter(format);
-        out.output(root, stream);
+        format.setIndent(true);
+        format.setIndentSize(2);
+        final XMLWriter writer = new XMLWriter(stream, format);
+
+        writer.write(root);
+    }
+    
+    public static void removeChildren(Element element, String childrenNames) {
+        List list = element.elements(childrenNames);
+        for (Iterator i = list.iterator(); i.hasNext();) {
+            element.remove(((Element) i.next())); 
+        }
     }
 }

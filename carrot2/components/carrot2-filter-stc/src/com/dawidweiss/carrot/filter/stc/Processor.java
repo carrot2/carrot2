@@ -15,15 +15,40 @@
 package com.dawidweiss.carrot.filter.stc;
 
 
-import com.dawidweiss.carrot.filter.stc.algorithm.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.xml.parsers.SAXParser;
+
 import org.apache.log4j.Logger;
-import org.jdom.Element;
-import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
-import org.xml.sax.*;
-import java.io.*;
-import java.util.*;
-import javax.xml.parsers.*;
+import org.dom4j.DocumentFactory;
+import org.dom4j.Element;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.XMLWriter;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.XMLReader;
+
+import com.dawidweiss.carrot.filter.stc.algorithm.BaseCluster;
+import com.dawidweiss.carrot.filter.stc.algorithm.Cluster;
+import com.dawidweiss.carrot.filter.stc.algorithm.DocReference;
+import com.dawidweiss.carrot.filter.stc.algorithm.ImmediateStemmer;
+import com.dawidweiss.carrot.filter.stc.algorithm.STCEngine;
+import com.dawidweiss.carrot.filter.stc.algorithm.StopWordsDetector;
 
 
 /**
@@ -45,12 +70,10 @@ public class Processor
         this.output = w;
     }
 
-
     private final void addToProcessing(Document document)
     {
         this.documents.add(document);
     }
-
 
     private final void finalProcessing()
         throws SAXException
@@ -110,14 +133,15 @@ public class Processor
             List clusters = stcEngine.getClusters();
             int max = 20;
 
+            final DocumentFactory factory = new DocumentFactory();
             for (Iterator i = clusters.iterator(); i.hasNext() && (max > 0); max--)
             {
                 Cluster b = (Cluster) i.next();
 
                 // dump cluster group.
-                Element group = new Element("group");
-                Element title = new Element("title");
-                group.addContent(title);
+                Element group = factory.createElement("group");
+                Element title = factory.createElement("title");
+                group.add(title);
 
                 List phrases = b.getPhrases();
                 int maxPhr = 3;
@@ -126,23 +150,24 @@ public class Processor
                 {
                     BaseCluster.Phrase p = (BaseCluster.Phrase) j.next();
 
-                    Element phrase = new Element("phrase");
+                    Element phrase = factory.createElement("phrase");
                     phrase.setText(p.userFriendlyTerms().trim());
-                    title.addContent(phrase);
+                    title.add(phrase);
                 }
 
                 for (Iterator j = b.documents.iterator(); j.hasNext();)
                 {
                     int docIndex = ((Integer) j.next()).intValue();
 
-                    Element reference = new Element("document");
-                    reference.setAttribute("refid", ((Document) documents.get(docIndex)).id);
-                    group.addContent(reference);
+                    Element reference = factory.createElement("document");
+                    reference.addAttribute("refid", ((Document) documents.get(docIndex)).id);
+                    group.add(reference);
                 }
 
-                Format format = Format.getRawFormat();
-                XMLOutputter outputter = new XMLOutputter(format);
-                outputter.output(group, output);
+                OutputFormat format = OutputFormat.createCompactFormat();
+                format.setEncoding("UTF-8");
+                XMLWriter outputter = new XMLWriter(output, format);
+                outputter.write(group);
             }
         }
         catch (IOException e)

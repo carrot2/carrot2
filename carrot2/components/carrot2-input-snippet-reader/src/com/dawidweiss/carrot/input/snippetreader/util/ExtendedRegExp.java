@@ -12,11 +12,16 @@
 
 package com.dawidweiss.carrot.input.snippetreader.util;
 
-import org.jdom.Element;
+import gnu.regexp.RE;
+import gnu.regexp.REException;
+import gnu.regexp.REMatch;
+import gnu.regexp.REMatchEnumeration;
 
-import gnu.regexp.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
 
-import java.util.*;
+import org.dom4j.Element;
 
 
 /**
@@ -33,17 +38,16 @@ public class ExtendedRegExp {
     /**
      * Creates a new ExtendedRegExp object.
      */
-    public ExtendedRegExp(Element jdomReDescription) throws REException {
-        match = new RE(jdomReDescription.getChild(RE_MATCH).getText());
+    public ExtendedRegExp(Element reDescription) throws REException {
+        match = new RE(reDescription.element(RE_MATCH).getText());
         replacements = new LinkedList();
 
-        List rt = jdomReDescription.getChildren(RE_REPLACE);
+        List rt = reDescription.elements(RE_REPLACE);
 
         for (ListIterator li = rt.listIterator(); li.hasNext();) {
             Element repentry = (Element) li.next();
-            replacements.add(new RE(repentry.getAttribute(RE_REPLACE_REGEXP)
-                                            .getValue()));
-            replacements.add(repentry.getAttribute(RE_REPLACE_WITH).getValue());
+            replacements.add(new RE(repentry.attributeValue(RE_REPLACE_REGEXP)));
+            replacements.add(repentry.attributeValue(RE_REPLACE_WITH));
         }
     }
 

@@ -15,13 +15,21 @@
 package com.dawidweiss.util.struts;
 
 
-import org.apache.log4j.Logger;
-import org.apache.struts.util.*;
-import org.jdom.*;
-import org.jdom.input.*;
-import java.io.*;
+import java.io.InputStream;
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.StringTokenizer;
+import java.util.WeakHashMap;
+
+import org.apache.log4j.Logger;
+import org.apache.struts.util.MessageResources;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 
 
 /**
@@ -185,9 +193,6 @@ public class XmlMessageResources
         return (format.format(args));
     }
 
-
-    /* ------------------------------------------------------------------ private section */
-
     /**
      * Returns a text message for the specified key, for the specified Locale. A null string result
      * will be returned by this method if no relevant message resource is found for this key or
@@ -259,11 +264,11 @@ public class XmlMessageResources
             return;
         }
 
-        SAXBuilder reader = new SAXBuilder(false);
+        SAXReader reader = new SAXReader(false);
 
         try
         {
-            Element root = reader.build(resource).getRootElement();
+            Element root = reader.read(resource).getRootElement();
 
             if ("messages".equalsIgnoreCase(root.getName()) == false)
             {
@@ -272,15 +277,14 @@ public class XmlMessageResources
                 return;
             }
 
-            if (root.getAttribute("default-lang") == null)
+            if (root.attribute("default-lang") == null)
             {
                 log.error("The root element must contain attribute 'default-lang'.");
 
                 return;
             }
 
-            String thisFileDefaultLanguage = root.getAttribute("default-lang").getValue().trim()
-                                                 .toLowerCase();
+            String thisFileDefaultLanguage = root.attributeValue("default-lang").trim().toLowerCase();
 
             if (defaultXmlLanguage == null)
             {
@@ -311,12 +315,11 @@ public class XmlMessageResources
             language = element.getName().toLowerCase();
         }
 
-        List p = element.getChildren();
-
+        List p = element.elements();
         if ((p != null) && (p.size() > 0))
         {
             // internal node.
-            for (Iterator i = element.getChildren().iterator(); i.hasNext();)
+            for (Iterator i = p.iterator(); i.hasNext();)
             {
                 Element child = (Element) i.next();
                 String subKey = currentKey;

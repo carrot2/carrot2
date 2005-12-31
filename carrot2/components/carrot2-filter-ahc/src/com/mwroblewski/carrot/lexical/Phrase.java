@@ -15,13 +15,15 @@
 package com.mwroblewski.carrot.lexical;
 
 
-import org.jdom.Element;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import org.dom4j.DocumentFactory;
+import org.dom4j.Element;
+
 
 /**
- * @author Micha� Wr�blewski
+ * @author Michał Wróblewski
  */
 public class Phrase
     extends LexicalElement
@@ -37,7 +39,7 @@ public class Phrase
 
     protected Phrase(Element element)
     {
-        String stem = element.getAttributeValue("stem");
+        String stem = element.attributeValue("stem");
         StringTokenizer stemTokenizer = new StringTokenizer(stem, " ");
         Vector stems = new Vector();
 
@@ -168,9 +170,10 @@ public class Phrase
 
     public Element toXML()
     {
-        Element phrase = new Element("term");
-        phrase.setAttribute("type", TYPE);
-        phrase.setAttribute("stem", toString());
+        final DocumentFactory factory = new DocumentFactory();
+        Element phrase = factory.createElement("term");
+        phrase.addAttribute("type", TYPE);
+        phrase.addAttribute("stem", toString());
 
         return phrase;
     }

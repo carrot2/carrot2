@@ -15,10 +15,15 @@
 package fuzzyAnts;
 
 
-import org.jdom.Element;
-import java.io.*;
-import java.util.*;
-import javax.servlet.http.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Set;
+
+import org.dom4j.DocumentFactory;
+import org.dom4j.Element;
 
 
 /**
@@ -149,7 +154,8 @@ public abstract class Clustering
      */
     protected void addSubGroup(int bestIndex, Clustering subCluster, Collection docIndices)
     {
-        Element group = new Element("group");
+        final DocumentFactory factory = new DocumentFactory();
+        Element group = factory.createElement("group");
         List subGroups = subCluster.getGroups();
 
         if (subGroups.size() > 0)
@@ -157,15 +163,15 @@ public abstract class Clustering
             for (ListIterator it = subGroups.listIterator(); it.hasNext();)
             {
                 Element subGroup = (Element) it.next();
-                group.addContent(subGroup);
+                group.add(subGroup);
             }
 
-            Element title = new Element("title");
+            Element title = factory.createElement("title");
             String label = getLabel(bestIndex, docIndices);
-            Element phrase = new Element("phrase");
+            Element phrase = factory.createElement("phrase");
             phrase.setText(label);
-            title.addContent(phrase);
-            group.addContent(title);
+            title.add(phrase);
+            group.add(title);
             groups.add(group);
         }
     }
@@ -176,27 +182,28 @@ public abstract class Clustering
      */
     protected void addDocumentsGroup(int bestIndex, List docIndices)
     {
+        final DocumentFactory factory = new DocumentFactory();
         if (docIndices.size() > 0)
         {
-            Element group = new Element("group");
+            Element group = factory.createElement("group");
 
             for (Iterator it = docIndices.iterator(); it.hasNext();)
             {
                 int index = ((Integer) it.next()).intValue();
                 Element e = (Element) documents.get(index);
-                String id = e.getAttributeValue("id");
-                Element doc = new Element("document");
-                doc.setAttribute("refid", id);
-                doc.setAttribute("score", "" + documentWeights[index]);
-                group.addContent(doc);
+                String id = e.attributeValue("id");
+                Element doc = factory.createElement("document");
+                doc.addAttribute("refid", id);
+                doc.addAttribute("score", "" + documentWeights[index]);
+                group.add(doc);
             }
 
-            Element title = new Element("title");
+            Element title = factory.createElement("title");
             String label = getLabel(bestIndex, docIndices);
-            Element phrase = new Element("phrase");
+            Element phrase = factory.createElement("phrase");
             phrase.setText(label);
-            title.addContent(phrase);
-            group.addContent(title);
+            title.add(phrase);
+            group.add(title);
             groups.add(group);
         }
     }
@@ -207,6 +214,7 @@ public abstract class Clustering
      */
     protected void addOther(Set docIndices)
     {
+        final DocumentFactory factory = new DocumentFactory();
         ArrayList indices = new ArrayList();
 
         for (int i = 0; i < documents.size(); i++)
@@ -218,25 +226,25 @@ public abstract class Clustering
 
         if (indices.size() > 0)
         {
-            Element group = new Element("group");
+            Element group = factory.createElement("group");
 
             for (Iterator it = indices.iterator(); it.hasNext();)
             {
                 int index = ((Integer) it.next()).intValue();
                 Element e = (Element) documents.get(index);
-                String id = e.getAttributeValue("id");
-                Element doc = new Element("document");
-                doc.setAttribute("refid", id);
-                doc.setAttribute("score", "" + documentWeights[index]);
-                group.addContent(doc);
+                String id = e.attributeValue("id");
+                Element doc = factory.createElement("document");
+                doc.addAttribute("refid", id);
+                doc.addAttribute("score", "" + documentWeights[index]);
+                group.add(doc);
             }
 
-            Element title = new Element("title");
+            Element title = factory.createElement("title");
             String label = "Other...";
-            Element phrase = new Element("phrase");
+            Element phrase = factory.createElement("phrase");
             phrase.setText(label);
-            title.addContent(phrase);
-            group.addContent(title);
+            title.add(phrase);
+            group.add(title);
             groups.add(group);
         }
     }

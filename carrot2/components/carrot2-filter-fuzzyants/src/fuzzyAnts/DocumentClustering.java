@@ -15,10 +15,16 @@
 package fuzzyAnts;
 
 
-import org.jdom.Element;
-import java.io.*;
-import java.util.*;
-import javax.servlet.http.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+
+import org.dom4j.DocumentFactory;
+import org.dom4j.Element;
 
 
 /**
@@ -295,6 +301,7 @@ public class DocumentClustering
 
         double maxValue = ((Double) termSum.get(new Integer(maxIndex))).doubleValue();
 
+        final DocumentFactory factory = new DocumentFactory();
         for (Iterator it = termSum.keySet().iterator(); it.hasNext();)
         {
             int termIndex = ((Integer) it.next()).intValue();
@@ -302,7 +309,7 @@ public class DocumentClustering
 
             if (termValue > (EXTENDEDQUERYFACTOR * maxValue))
             {
-                Element e = new Element("query");
+                Element e = factory.createElement("query");
                 e.setText(parser.originalTerm(termIndex));
                 res.add(e);
             }

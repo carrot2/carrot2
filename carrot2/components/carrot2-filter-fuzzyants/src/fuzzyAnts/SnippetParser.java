@@ -15,10 +15,19 @@
 package fuzzyAnts;
 
 
-import org.jdom.Element;
-import java.io.*;
-import java.util.*;
-import javax.servlet.http.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.StringTokenizer;
+
+import org.dom4j.Element;
 
 
 /**
@@ -96,9 +105,9 @@ public class SnippetParser
             for (ListIterator it = meta.listIterator(); it.hasNext();)
             {
                 Element e = (Element) it.next();
-                String original = e.getAttributeValue("t");
-                String stemmed = e.getAttributeValue("s");
-                String stopword = e.getAttributeValue("sw");
+                String original = e.attributeValue("t");
+                String stemmed = e.attributeValue("s");
+                String stopword = e.attributeValue("sw");
 
                 if (stopword != null)
                 {
@@ -192,8 +201,8 @@ public class SnippetParser
 
         for (int i = 0; i < documents.size(); i++)
         {
-            Element snippet = ((Element) documents.get(i)).getChild("snippet");
-            Element title = ((Element) documents.get(i)).getChild("title");
+            Element snippet = ((Element) documents.get(i)).element("snippet");
+            Element title = ((Element) documents.get(i)).element("title");
             StringBuffer text = new StringBuffer();
 
             if (title != null)

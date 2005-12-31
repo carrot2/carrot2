@@ -12,32 +12,37 @@
 
 package com.dawidweiss.carrot.input.snippetreader.remote;
 
-import com.dawidweiss.carrot.controller.carrot2.xmlbinding.query.Query;
-import com.dawidweiss.carrot.input.snippetreader.readers.WebSnippetReader;
-import com.dawidweiss.carrot.util.Log4jStarter;
-import com.dawidweiss.carrot.util.common.StreamUtils;
-
-import org.apache.log4j.Logger;
-
-import org.apache.xmlrpc.XmlRpc;
-import org.apache.xmlrpc.XmlRpcServer;
-
-import org.jdom.Document;
-import org.jdom.JDOMException;
-
-import org.jdom.input.SAXBuilder;
-
-import java.io.*;
-
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.StringReader;
+import java.io.Writer;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-
-import java.util.*;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.Vector;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
+import org.apache.xmlrpc.XmlRpc;
+import org.apache.xmlrpc.XmlRpcServer;
+import org.dom4j.Document;
+import org.dom4j.io.SAXReader;
+
+import com.dawidweiss.carrot.controller.carrot2.xmlbinding.query.Query;
+import com.dawidweiss.carrot.input.snippetreader.readers.WebSnippetReader;
+import com.dawidweiss.carrot.util.Log4jStarter;
+import com.dawidweiss.carrot.util.common.StreamUtils;
 
 
 /**
@@ -123,18 +128,10 @@ public class XmlRpcServlet extends javax.servlet.http.HttpServlet {
 
             if (f != null) {
                 // attempt to parse the XML. As for now there's no validation, but maybe in the future..
-                SAXBuilder builder = new SAXBuilder();
-                Document config;
+                SAXReader builder = new SAXReader();
                 builder.setValidation(false);
 
-                try {
-                    config = builder.build(new StringReader(newConfigXml));
-                } catch (JDOMException e) {
-                    StringBuffer msg = new StringBuffer();
-                    msg.append("Service XML does not parse correctly.\n");
-                    msg.append(e.getMessage());
-                    throw new Exception(msg.toString(), e);
-                }
+                final Document config = builder.read(new StringReader(newConfigXml));
 
                 // update the service engine.
                 WebSnippetReader snippetReaderService = new WebSnippetReader(config.getRootElement());
@@ -202,10 +199,9 @@ public class XmlRpcServlet extends javax.servlet.http.HttpServlet {
             for (int i = 0; i < services.length; i++) {
                 try {
                     // add an instance of this class as default handler
-                    SAXBuilder builder = new SAXBuilder();
-                    Document config;
+                    SAXReader builder = new SAXReader();
                     builder.setValidation(false);
-                    config = builder.build(services[i]);
+                    final Document config = builder.read(services[i]);
 
                     WebSnippetReader snippetReaderService = new WebSnippetReader(config.getRootElement());
 

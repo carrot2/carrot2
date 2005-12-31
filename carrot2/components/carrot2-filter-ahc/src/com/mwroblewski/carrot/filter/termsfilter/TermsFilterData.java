@@ -15,10 +15,17 @@
 package com.mwroblewski.carrot.filter.termsfilter;
 
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.StringTokenizer;
+import java.util.Vector;
+
+import org.dom4j.Element;
+
+import com.dawidweiss.carrot.util.Dom4jUtils;
 import com.mwroblewski.carrot.lexical.LexicalElement;
 import com.mwroblewski.carrot.utils.FrequencyHashMap;
-import org.jdom.Element;
-import java.util.*;
 
 
 /**
@@ -26,7 +33,7 @@ import java.util.*;
  * for reading and writing data from/to XML document. Each object of this class is associated with
  * one filter's XML root document and performs it's methods on this document.
  *
- * @author Micha� Wr�blewski
+ * @author Michał Wróblewski
  */
 public class TermsFilterData
 {
@@ -67,7 +74,7 @@ public class TermsFilterData
         List docsList;
 
         this.root = root;
-        docsList = root.getChildren("document");
+        docsList = root.elements("document");
 
         // loading snippets & titles
         snippets = new String[docsList.size()];
@@ -80,9 +87,9 @@ public class TermsFilterData
         {
             Element document = (Element) docsIterator.next();
 
-            Element snippet = document.getChild("snippet");
-            Element title = document.getChild("title");
-            ids[i] = document.getAttributeValue("id");
+            Element snippet = document.element("snippet");
+            Element title = document.element("title");
+            ids[i] = document.attributeValue("id");
 
             if (snippet != null)
             {
@@ -108,27 +115,27 @@ public class TermsFilterData
         inverseStemsMap = new FrequencyHashMap();
         stopWordsMap = new HashMap();
 
-        Iterator stemsIterator = root.getChildren("l").iterator();
+        Iterator stemsIterator = root.elements("l").iterator();
 
         while (stemsIterator.hasNext())
         {
             Element lexicalElement = (Element) stemsIterator.next();
 
-            String term = lexicalElement.getAttributeValue("t");
-            String stem = lexicalElement.getAttributeValue("s");
+            String term = lexicalElement.attributeValue("t");
+            String stem = lexicalElement.attributeValue("s");
 
             // adding a new stemmed form of this term
             addStem(term, stem);
 
             // adding information whether this term is a stop-word
-            if (lexicalElement.getAttribute("sw") != null)
+            if (lexicalElement.attribute("sw") != null)
             {
                 stopWordsMap.put(term, new Boolean(true));
             }
         }
 
         // loadind query element
-        Element queryElement = root.getChild("query");
+        Element queryElement = root.element("query");
 
         stemmedQuery = "";
         stemmedQueryVector = new Vector();
@@ -168,8 +175,7 @@ public class TermsFilterData
      * Loads a list of snippets from associated filter's XML document. Snippets are created as a
      * concatenation of both <code>&lt;snippet&gt;</code> and <code>&lt;title&gt;</code>
      * subelements of all <code>&lt;document&gt;</code> subelements contained in the
-     * <code>&lt;searchresult&gt;</code> element. Then they are cleaned using the {@link
-     * FilterData#cleanSnippet} method.
+     * <code>&lt;searchresult&gt;</code> element.
      *
      * @return array containing snippets extracted from documents
      */
@@ -186,7 +192,7 @@ public class TermsFilterData
 
 
     /**
-     * Obtains a stemmed form of given term from {@link FilterData.stemsMap}.
+     * Obtains a stemmed form of given term from {@link TermsFilterData#stemsMap}.
      *
      * @param term term for which we want to obtain a stem
      *
@@ -225,13 +231,13 @@ public class TermsFilterData
 
     public void removeGroups()
     {
-        root.removeChildren("group");
+        Dom4jUtils.removeChildren(root, "group");
     }
 
 
     public void removeLexicalInformation()
     {
-        root.removeChildren("l");
+        Dom4jUtils.removeChildren(root, "l");
     }
 
 
@@ -249,10 +255,6 @@ public class TermsFilterData
      * the <code>termWeights</code> array
      * </li>
      * </ul>
-     * 
-     *
-     * @param terms terms
-     * @param termWeights their weights
      */
     public void saveLexicalElements(Vector lexicalElements, float [][] termsWeights)
     {
@@ -264,21 +266,21 @@ public class TermsFilterData
 
             // adding information about inflected form of this lexical element
             String form = (String) inverseStemsMap.get(lexicalElement.toString());
-            term.setAttribute("form", form);
+            term.addAttribute("form", form);
 
             // saving weights of this lexical element in documents
             for (int j = 0; j < termsWeights[0].length; j++)
             {
                 if (termsWeights[i][j] > 0)
                 {
-                    Element docElement = new Element("doc");
-                    docElement.setAttribute("id", ids[j]);
-                    docElement.setAttribute("weight", termsWeights[i][j] + "");
-                    term.addContent(docElement);
+                    
+                    Element docElement = term.addElement("doc");
+                    docElement.addAttribute("id", ids[j]);
+                    docElement.addAttribute("weight", termsWeights[i][j] + "");
                 }
             }
 
-            root.addContent(term);
+            root.add(term);
         }
     }
 }

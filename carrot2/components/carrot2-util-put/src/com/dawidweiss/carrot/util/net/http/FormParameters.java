@@ -1,9 +1,11 @@
 package com.dawidweiss.carrot.util.net.http;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
 
-import org.jdom.Element;
-import com.dawidweiss.carrot.util.jdom.JDOMHelper;
+import org.dom4j.Element;
 
 
 /**
@@ -21,23 +23,14 @@ import com.dawidweiss.carrot.util.jdom.JDOMHelper;
  * <li>Constants - all other types are converted to strings using <code>.toString</code>
  * </ul>
  *
- * This class can be initialized using JDOM's XML Element. The XML must follow the structure below:
+ * This class can be initialized using DOM4j XML Element.
  *
  * @author Dawid Weiss
  */
 public class FormParameters
 {
     /** All parameters of this form in the order they were added. */
-    protected List    parameters      = new LinkedList();
-
-
-    /**
-     * Use parameter constructors to acquire objects of this class.
-     */
-    public FormParameters()
-    {
-    }
-
+    protected List parameters = new LinkedList();
 
     /**
      * Initialize using JDOM's XML fragment.
@@ -48,6 +41,11 @@ public class FormParameters
         initInstanceFromXML(initFromXML);
     }
 
+    /**
+     * Create empty form parameters.
+     */
+    public FormParameters() {
+    }
 
     /**
      * Returns an iterator of parameter names.
@@ -57,7 +55,6 @@ public class FormParameters
         return parameters.iterator();
     }
 
-
     /**
      * Adds a parameter to the set.
      */
@@ -65,10 +62,6 @@ public class FormParameters
     {
         parameters.add( param );
     }
-
-
-    // ------------------------------------------------------- protected section
-
 
     /**
      * Initializes this object using an XML Element.
@@ -94,14 +87,12 @@ public class FormParameters
      */
     protected void initInstanceFromXML(Element qr)
     {
-        final String PARAMETER_NODE     = "/parameters/parameter";
         final String PARAMETER_NAME     = "name";
         final String PARAMETER_VALUE    = "value";
         final String PARAMETER_MAPTO    = "mapto";
 
         // retrieve query parameters
-        List parameters = JDOMHelper.getElements(PARAMETER_NODE, qr);
-
+        final List parameters = qr.selectNodes("parameter");
         if (parameters != null)
         {
             for (ListIterator param = parameters.listIterator(); param.hasNext(); )
@@ -109,17 +100,17 @@ public class FormParameters
                 Element paramElement = (Element) param.next();
 
                 // get the name of the parameter
-                String pname = paramElement.getAttribute(PARAMETER_NAME).getValue();
+                String pname = paramElement.attributeValue(PARAMETER_NAME);
 
                 // check whether constant-valued
-                if (paramElement.getAttribute(PARAMETER_VALUE) != null)
+                if (paramElement.attribute(PARAMETER_VALUE) != null)
                 {
-                    addParameter(new Parameter( pname, paramElement.getAttribute(PARAMETER_VALUE).getValue(), false));
+                    addParameter(new Parameter(pname, paramElement.attributeValue(PARAMETER_VALUE), false));
                 }
                 else
-                if (paramElement.getAttribute(PARAMETER_MAPTO) != null)
+                if (paramElement.attribute(PARAMETER_MAPTO) != null)
                 {
-                    addParameter(new Parameter( pname, paramElement.getAttribute(PARAMETER_MAPTO).getValue(), true));
+                    addParameter(new Parameter(pname, paramElement.attributeValue(PARAMETER_MAPTO), true));
                 }
                 else
                 {
@@ -144,6 +135,3 @@ public class FormParameters
         return buf.toString();
     }
 }
-
-
-

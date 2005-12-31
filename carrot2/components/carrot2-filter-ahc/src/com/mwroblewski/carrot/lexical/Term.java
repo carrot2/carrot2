@@ -15,11 +15,12 @@
 package com.mwroblewski.carrot.lexical;
 
 
-import org.jdom.Element;
+import org.dom4j.DocumentFactory;
+import org.dom4j.Element;
 
 
 /**
- * @author Micha� Wr�blewski
+ * @author Michał Wróblewski
  */
 public class Term
     extends LexicalElement
@@ -35,7 +36,7 @@ public class Term
 
     protected Term(Element element)
     {
-        stem = element.getAttributeValue("stem");
+        stem = element.attributeValue("stem");
     }
 
     public String toString()
@@ -46,9 +47,10 @@ public class Term
 
     public Element toXML()
     {
-        Element term = new Element("term");
-        term.setAttribute("type", TYPE);
-        term.setAttribute("stem", stem);
+        final DocumentFactory factory = new DocumentFactory();
+        Element term = factory.createElement("term");
+        term.addAttribute("type", TYPE);
+        term.addAttribute("stem", stem);
 
         return term;
     }
