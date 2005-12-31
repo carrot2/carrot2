@@ -9,5 +9,7 @@
 			<file location="dom4j.LICENSE" />
 		</files>
 	</provides>
+	
+    <dependency name="jaxen" />
 </component>
 
