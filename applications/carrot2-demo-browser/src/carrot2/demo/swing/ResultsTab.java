@@ -1,11 +1,6 @@
 package carrot2.demo.swing;
 
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -14,6 +9,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.*;
+import java.util.List;
 
 import javax.swing.*;
 
@@ -69,6 +65,8 @@ public class ResultsTab extends JPanel {
     private JTextField clusterSearchField;
     private Directory indexDirectory;
     private List lastResultClusters;
+    
+    private BenchmarkDialog benchmarkDialog;
 
     /** */
     private final static Logger logger = Logger
@@ -147,12 +145,13 @@ public class ResultsTab extends JPanel {
         }
     }
 
-    public ResultsTab(String query, DemoContext demoContext, ProcessSettings settings, String processId, int requestedResults) {
+    public ResultsTab(Frame owner, String query, DemoContext demoContext, ProcessSettings settings, String processId, int requestedResults) {
         this.query = query;
         this.processId = processId;
         this.demoContext = demoContext;
         this.processSettings = settings;
-
+        this.benchmarkDialog = new BenchmarkDialog(owner, demoContext, query, processId, settings);
+        
         this.workerThread = new WorkerThread();
         workerThread.start();
 
@@ -181,6 +180,17 @@ public class ResultsTab extends JPanel {
                         showAllDocuments();
                     }
                 });
+        ToolbarButton benchmarkButton = new ToolbarButton(
+            new ImageIcon(this.getClass().getResource("benchmark.gif")),
+            new ImageIcon(this.getClass().getResource("benchmark_dis.gif")));
+        benchmarkButton.setToolTipText("Benchmark this algorithm with current settings");
+        benchmarkButton.addActionListener(
+            new ActionListener() {
+                public void actionPerformed(ActionEvent arg0) {
+                    benchmarkDialog.show();
+                }
+            });
+        toolbar.add(benchmarkButton);
         toolbar.add(homeButton);
         toolbar.add(closeButton);
         internalFrame.setToolBar(toolbar);

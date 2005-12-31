@@ -1,6 +1,7 @@
 package carrot2.demo;
 
 import carrot2.demo.swing.SwingDemoGui;
+import cern.colt.matrix.impl.*;
 
 /**
  * Carrot2 demo in Swing.
