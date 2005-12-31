@@ -1,22 +1,38 @@
 package com.dawidweiss.carrot.local.remoteadapters;
 
-import java.io.*;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
-import com.dawidweiss.carrot.util.net.http.*;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 
-import com.dawidweiss.carrot.core.local.*;
-import com.dawidweiss.carrot.core.local.clustering.*;
+import com.dawidweiss.carrot.core.local.LocalComponent;
+import com.dawidweiss.carrot.core.local.LocalFilterComponent;
+import com.dawidweiss.carrot.core.local.LocalFilterComponentBase;
+import com.dawidweiss.carrot.core.local.LocalInputComponent;
+import com.dawidweiss.carrot.core.local.ProcessingException;
+import com.dawidweiss.carrot.core.local.RequestContext;
+import com.dawidweiss.carrot.core.local.clustering.RawClustersConsumer;
+import com.dawidweiss.carrot.core.local.clustering.RawClustersProducer;
+import com.dawidweiss.carrot.core.local.clustering.RawDocument;
+import com.dawidweiss.carrot.core.local.clustering.RawDocumentsConsumer;
+import com.dawidweiss.carrot.core.local.clustering.RawDocumentsProducer;
 import com.dawidweiss.carrot.util.common.XMLSerializerHelper;
+import com.dawidweiss.carrot.util.net.http.FormActionInfo;
+import com.dawidweiss.carrot.util.net.http.FormParameters;
+import com.dawidweiss.carrot.util.net.http.HTTPFormSubmitter;
+import com.dawidweiss.carrot.util.net.http.Parameter;
 
 
 public class RemoteRawDocumentsToClustersFilterComponent
@@ -123,7 +139,7 @@ public class RemoteRawDocumentsToClustersFilterComponent
                 
                 if (this.clustersConsumer!=null) {
                     clustersConsumer.addCluster(
-                        new ClusterJdomElementWrapper(group));
+                        new ClusterElementWrapper(group));
                 }
             }
 
@@ -136,7 +152,7 @@ public class RemoteRawDocumentsToClustersFilterComponent
         }
     }
 
-    protected final List queryFilterComponent() throws UnsupportedEncodingException, JDOMException, IOException {
+    protected final List queryFilterComponent() throws UnsupportedEncodingException, IOException {
         FormActionInfo actionInfo = new FormActionInfo(this.remoteComponentUrl, "post");
         FormParameters queryArgs = new FormParameters();
         HTTPFormSubmitter submitter = new HTTPFormSubmitter(actionInfo);
@@ -191,10 +207,15 @@ public class RemoteRawDocumentsToClustersFilterComponent
             }
 
             // parse the result and construct a list of clusters.
-            SAXBuilder builder = new SAXBuilder();
-            Element root = builder.build(new InputStreamReader(is, "UTF-8")).getRootElement();
+            SAXReader builder = new SAXReader();
+            Element root;
+            try {
+                root = builder.read(new InputStreamReader(is, "UTF-8")).getRootElement();
+            } catch (DocumentException e) {
+                throw new IOException("Cannot parse response: " + e.toString());
+            }
 
-            List groups = root.getChildren("group");
+            List groups = root.elements("group");
             return groups;
         } finally {
             if (is!=null)

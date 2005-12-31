@@ -1,15 +1,18 @@
 package com.dawidweiss.carrot.local.remoteadapters;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
-import org.jdom.Element;
+import org.dom4j.Element;
 
 import com.dawidweiss.carrot.core.local.clustering.RawCluster;
 
 
-public class ClusterJdomElementWrapper
+class ClusterElementWrapper
     implements RawCluster
 {
     /**
@@ -23,22 +26,20 @@ public class ClusterJdomElementWrapper
 
     private final Element node;
 
-    public ClusterJdomElementWrapper(Element node)
+    public ClusterElementWrapper(Element node)
     {
         this.node = node;
     }
 
     public List getClusterDescription()
     {
-        Element title = node.getChild("title");
-
+        Element title = node.element("title");
         if (title == null)
         {
             return NO_TITLE;
         }
 
-        List phrases = title.getChildren("phrase");
-
+        List phrases = title.elements("phrase");
         String [] titlePhrases = new String[phrases.size()];
         int j = 0;
 
@@ -53,8 +54,7 @@ public class ClusterJdomElementWrapper
 
     public List getSubclusters()
     {
-        List groups = node.getChildren("group");
-
+        List groups = node.elements("group");
         if (groups.size() == 0)
         {
             return null;
@@ -65,7 +65,7 @@ public class ClusterJdomElementWrapper
         for (Iterator i = groups.iterator(); i.hasNext();)
         {
             Element group = (Element) i.next();
-            clusters.add(new ClusterJdomElementWrapper(group));
+            clusters.add(new ClusterElementWrapper(group));
         }
 
         return clusters;
@@ -77,7 +77,7 @@ public class ClusterJdomElementWrapper
      */
     public List getDocuments()
     {
-        List groups = node.getChildren("document");
+        List groups = node.elements("document");
 
         if (groups.size() == 0)
         {
@@ -90,8 +90,7 @@ public class ClusterJdomElementWrapper
         {
             Element doc = (Element) i.next();
 
-            String value = doc.getAttributeValue("refid");
-
+            String value = doc.attributeValue("refid");
             if (value == null)
             {
                 throw new RuntimeException("Missing 'refid' attribute in the clustered XML.");

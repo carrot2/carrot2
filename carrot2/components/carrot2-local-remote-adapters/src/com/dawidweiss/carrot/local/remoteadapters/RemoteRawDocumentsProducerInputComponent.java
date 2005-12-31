@@ -1,23 +1,32 @@
 package com.dawidweiss.carrot.local.remoteadapters;
 
-import java.io.*;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
-import com.dawidweiss.carrot.util.net.http.*;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 
-import com.dawidweiss.carrot.core.local.*;
+import com.dawidweiss.carrot.core.local.LocalComponent;
 import com.dawidweiss.carrot.core.local.LocalInputComponent;
+import com.dawidweiss.carrot.core.local.LocalInputComponentBase;
+import com.dawidweiss.carrot.core.local.ProcessingException;
+import com.dawidweiss.carrot.core.local.RequestContext;
 import com.dawidweiss.carrot.core.local.clustering.RawDocumentsConsumer;
 import com.dawidweiss.carrot.core.local.clustering.RawDocumentsProducer;
 import com.dawidweiss.carrot.util.common.XMLSerializerHelper;
+import com.dawidweiss.carrot.util.net.http.FormActionInfo;
+import com.dawidweiss.carrot.util.net.http.FormParameters;
+import com.dawidweiss.carrot.util.net.http.HTTPFormSubmitter;
+import com.dawidweiss.carrot.util.net.http.Parameter;
 
 
 public class RemoteRawDocumentsProducerInputComponent
@@ -88,8 +97,8 @@ public class RemoteRawDocumentsProducerInputComponent
             InputStream is = queryRemoteSource(this.query, resultsRequested);
 
             // now parse the input stream.
-            SAXBuilder builder = new SAXBuilder();
-            Element root = builder.build(
+            SAXReader builder = new SAXReader();
+            Element root = builder.read(
                 new InputStreamReader(is, "UTF-8")).getRootElement();
 
             // unwrap the results
@@ -97,7 +106,7 @@ public class RemoteRawDocumentsProducerInputComponent
                 throw new ProcessingException("Search result XML not starting with 'searchresult' element.");
             }
             
-            List children = root.getChildren();
+            List children = root.elements();
             boolean debugUnknownAttrs = 
                 log.isEnabledFor(org.apache.log4j.Level.DEBUG);
             for (Iterator i = children.iterator(); i.hasNext(); ) {
@@ -106,7 +115,7 @@ public class RemoteRawDocumentsProducerInputComponent
                     // pass raw document node.
                     if (rawDocumentConsumer != null)
                         rawDocumentConsumer.addDocument(
-                            new RawDocumentElementWrapper( elem ));
+                            new RawDocumentElementWrapper(elem));
                 } 
                 else if ("group".equals(elem.getName())) {
                     
@@ -122,7 +131,7 @@ public class RemoteRawDocumentsProducerInputComponent
             throw new ProcessingException("Could not query remote component atL "
                 + this.remoteComponentUrl.toExternalForm(), e);
         }
-        catch (JDOMException e)
+        catch (DocumentException e)
         {
             throw new ProcessingException("Result XML parsing exception.", e);
         }

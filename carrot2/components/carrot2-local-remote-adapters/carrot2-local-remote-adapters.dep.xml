@@ -28,7 +28,7 @@
     <dependency name="commons-pool" />
     <dependency name="xml-apis" />
     
-    <dependency name="jdom" />
+    <dependency name="dom4j" />
     <dependency name="carrot2-util-put" />
 
 </component>

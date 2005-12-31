@@ -2,7 +2,8 @@ package com.dawidweiss.carrot.local.remoteadapters;
 
 import java.util.HashMap;
 
-import org.jdom.Element;
+import org.dom4j.Element;
+
 import com.dawidweiss.carrot.core.local.clustering.RawDocument;
 
 
@@ -29,7 +30,7 @@ public class RawDocumentElementWrapper
     }
 
     public Object getId() {
-        return documentElement.getAttributeValue("id");
+        return documentElement.attributeValue("id");
     }
 
     /**
@@ -37,7 +38,7 @@ public class RawDocumentElementWrapper
      */
     public String getUrl()
     {
-        return documentElement.getChildText("url");
+        return documentElement.elementText("url");
     }
 
     /**
@@ -45,7 +46,7 @@ public class RawDocumentElementWrapper
      */
     public String getTitle()
     {
-        return documentElement.getChildText("title");
+        return documentElement.elementText("title");
     }
 
     /**
@@ -53,7 +54,7 @@ public class RawDocumentElementWrapper
      */
     public String getSnippet()
     {
-        return documentElement.getChildText("snippet");
+        return documentElement.elementText("snippet");
     }
 
     /**
