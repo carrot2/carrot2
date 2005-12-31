@@ -15,11 +15,19 @@
 package fuzzyAnts;
 
 
-import com.dawidweiss.carrot.filter.*;
-import org.jdom.Element;
-import java.io.*;
-import java.util.*;
-import javax.servlet.http.*;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.dom4j.Element;
+
+import com.dawidweiss.carrot.filter.FilterRequestProcessor;
 
 
 /**
@@ -46,24 +54,23 @@ public class FuzzyAnts
 
             root = parseXmlStream(carrotData, "UTF-8");
 
-            java.util.List ch = root.getChildren("document");
+            java.util.List ch = root.elements("document");
             java.util.List children = new ArrayList(ch);
-            java.util.List meta = new ArrayList(root.getChildren("l"));
-            java.util.List query = new ArrayList(root.getChildren("query"));
+            java.util.List meta = new ArrayList(root.elements("l"));
+            java.util.List query = new ArrayList(root.elements("query"));
 
             //determine parameter values
             getParameters();
 
             //obtain clusters
             DocumentClustering opl = new DocumentClustering(
-                    0, children, meta, query, true, BINARY, params
-                );
+                    0, children, meta, query, true, BINARY, params);
             List groups = opl.getGroups();
 
             for (ListIterator it = groups.listIterator(); it.hasNext();)
             {
                 Element group = (Element) it.next();
-                root.addContent(group);
+                root.add(group);
             }
 
             //store result

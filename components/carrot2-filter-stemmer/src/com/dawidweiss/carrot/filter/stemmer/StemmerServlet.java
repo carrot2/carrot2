@@ -16,8 +16,23 @@
 package com.dawidweiss.carrot.filter.stemmer;
 
 
+import java.io.InputStream;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.log4j.Logger;
-import org.jdom.Element;
+import org.dom4j.DocumentFactory;
+import org.dom4j.Element;
 
 import com.dawidweiss.carrot.core.local.linguistic.Language;
 import com.dawidweiss.carrot.core.local.linguistic.LanguageGuesser;
@@ -28,12 +43,6 @@ import com.dawidweiss.carrot.core.local.linguistic.tokens.Token;
 import com.dawidweiss.carrot.core.local.linguistic.tokens.TypedToken;
 import com.dawidweiss.carrot.filter.langguesser.LanguageGuesserFactory;
 import com.dawidweiss.carrot.util.tokenizer.languages.AllKnownLanguages;
-
-import java.io.*;
-import java.util.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 
 /**
@@ -75,7 +84,7 @@ public class StemmerServlet
         throws Exception
     {
         // parse input data (must be UTF-8 encoded).
-        Element root = parseXmlStream(carrotData, "UTF-8");
+        final Element root = parseXmlStream(carrotData, "UTF-8");
 
         // Create a hashmap with stemmed terms.
         HashSet terms = new HashSet();
@@ -108,29 +117,31 @@ public class StemmerServlet
         // for every //document element, process it's contents - title and snippet subelements
         ArrayList stemmedTerms = new ArrayList(100);
 
-        List documents = root.getChildren();
-        ArrayList children = new ArrayList(documents);
-        root.getChildren().clear();
+        final Element newRoot = new DocumentFactory().createElement(root.getName());
+        final List documents = root.elements();
 
-        for (int i = 0; i < children.size(); i++)
+        for (Iterator i = documents.iterator(); i.hasNext();)
         {
-            Element current = (Element) children.get(i);
+            final Element current = (Element) i.next();
+            current.detach();
 
             if ("document".equals(current.getName()))
             {
                 // check if it's only a reference perhaps
-                if (current.getAttribute("refid") == null)
+                if (current.attribute("refid") == null)
                 {
                     String concat = null;
                     
                     // not a reference.
-                    Element title = current.getChild("title");
-                    Element snippet = current.getChild("snippet");
-                    
-                    if (title != null)
+                    final Element title = current.element("title");
+                    final Element snippet = current.element("snippet");
+
+                    if (title != null) {
                         concat = title.getText();
-                    if (snippet != null)
+                    }
+                    if (snippet != null) {
                         concat = (concat == null ? "" : concat + " ") + snippet.getText();
+                    }
 
                     char [] chars = concat.toCharArray();
                     String language = defaultLanguage;
@@ -140,7 +151,7 @@ public class StemmerServlet
                     Language lang = null;
 
                     if (language != null) {
-                        current.setAttribute("lang",language);
+                        current.addAttribute("lang", language);
                         lang = (Language) this.languages.get(language);
                         
                         if (title != null)
@@ -156,18 +167,18 @@ public class StemmerServlet
 
                     for (int j = 0; j < stemmedTerms.size(); j++)
                     {
-                        root.addContent((Element) stemmedTerms.get(j));
+                        newRoot.add((Element) stemmedTerms.get(j));
                     }
 
                     stemmedTerms.clear();
                 }
             }
 
-            root.addContent(current);
+            newRoot.add(current);
         }
 
         // save the output.
-        serializeXmlStream(root, response.getOutputStream(), "UTF-8");
+        serializeXmlStream(newRoot, response.getOutputStream(), "UTF-8");
     }
 
     private List splitLanguages(String languages) {
@@ -189,6 +200,8 @@ public class StemmerServlet
     private final void process(
         Element node, HashSet terms, Language lang, List newTerms)
     {
+        final DocumentFactory factory = new DocumentFactory();
+
         Token [] tokens = new Token [ 30 ];
         StringBuffer buffer = new StringBuffer(20);
 
@@ -237,15 +250,15 @@ public class StemmerServlet
                                 }
 
                                 if (stem != null && (isStopWord || !image.equals(stem))) {
-                                    Element stemmedForm = new Element("l");
+                                    Element stemmedForm = factory.createElement("l");
                                     newTerms.add(stemmedForm);
 
-                                    stemmedForm.setAttribute("t", image);
-                                    stemmedForm.setAttribute("s", stem);
-                                    stemmedForm.setAttribute("lang", lang.getIsoCode());
-                                    
+                                    stemmedForm.addAttribute("t", image);
+                                    stemmedForm.addAttribute("s", stem);
+                                    stemmedForm.addAttribute("lang", lang.getIsoCode());
+
                                     if (isStopWord) {
-                                        stemmedForm.setAttribute("sw", "");
+                                        stemmedForm.addAttribute("sw", "");
                                     }
                                 }
                             } catch (ClassCastException e) {

@@ -25,7 +25,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.BasicConfigurator;
-import org.jdom.output.XMLOutputter;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.SAXWriter;
+import org.dom4j.io.XMLWriter;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
@@ -74,9 +76,10 @@ public class CacheRotator
                 node.insertBefore(child, node.getFirstChild());
 
                 StringWriter sw = new StringWriter();
-                new XMLOutputter().output(
-                    new org.jdom.input.DOMBuilder().build(document.getDocumentElement()), sw
-                );
+                OutputFormat fmt = OutputFormat.createCompactFormat();
+                fmt.setEncoding("UTF-8");
+                final XMLWriter writer = new XMLWriter(sw, fmt);
+                writer.write(document.getDocumentElement());
 
                 MemoryCachedQuery mq = new MemoryCachedQuery(
                         q.getQuery(), q.getComponentId(), q.getOptionalParams(),

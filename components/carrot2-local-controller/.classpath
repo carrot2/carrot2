@@ -10,6 +10,6 @@
 	<classpathentry kind="src" path="/carrot2-util-common"/>
 	<classpathentry kind="src" path="/carrot2-local-core"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/bsh-2.0b1.jar"/>
-	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/jdom-b10.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/dom4j-1.5.jar"/>
 	<classpathentry kind="output" path="tmp/build/classes"/>
 </classpath>

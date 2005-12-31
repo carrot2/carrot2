@@ -15,12 +15,16 @@
 package com.mwroblewski.carrot.filter.ahcfilter.groups;
 
 
-import org.jdom.Element;
-import java.util.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Vector;
+
+import org.dom4j.DocumentFactory;
+import org.dom4j.Element;
 
 
 /**
- * @author Micha� Wr�blewski
+ * @author Michał Wróblewski
  */
 class GroupSizeComparator
     implements Comparator
@@ -232,38 +236,39 @@ public class Group
 
     public Element toXML()
     {
-        Element group = new Element("group");
+        final DocumentFactory factory = new DocumentFactory();
+        Element group = factory.createElement("group");
 
         // creating group's <title> subelement
-        Element title = new Element("title");
-        Element phrase = new Element("phrase");
-        phrase.addContent(similarity + "");
+        Element title = factory.createElement("title");
+        Element phrase = factory.createElement("phrase");
+        phrase.addText(Float.toString(similarity));
 
         for (int i = 0; i < phrases.size(); i++)
         {
-            phrase = new Element("phrase");
-            phrase.addContent((String) phrases.elementAt(i));
-            title.addContent(phrase);
+            phrase = factory.createElement("phrase");
+            phrase.addText((String) phrases.elementAt(i));
+            title.add(phrase);
         }
 
         if (showDebugGroupDescription)
         {
             for (int i = 0; i < debugPhrases.size(); i++)
             {
-                phrase = new Element("phrase");
-                phrase.addContent("|" + (String) debugPhrases.elementAt(i) + "|");
-                title.addContent(phrase);
+                phrase = factory.createElement("phrase");
+                phrase.addText("|" + (String) debugPhrases.elementAt(i) + "|");
+                title.add(phrase);
             }
         }
 
-        group.addContent(title);
+        group.add(title);
 
         // creating group's <document> subelements
         for (int i = 0; i < documentIDs.size(); i++)
         {
-            Element document = new Element("document");
-            document.setAttribute("refid", (String) documentIDs.elementAt(i));
-            group.addContent(document);
+            Element document = factory.createElement("document");
+            document.addAttribute("refid", (String) documentIDs.elementAt(i));
+            group.add(document);
         }
 
         // creating group's <group> subelements
@@ -272,7 +277,7 @@ public class Group
         for (int i = 0; i < subgroups.size(); i++)
         {
             Element subgroup = ((Group) subgroups.elementAt(i)).toXML();
-            group.addContent(subgroup);
+            group.add(subgroup);
         }
 
         return group;

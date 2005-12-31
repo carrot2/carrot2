@@ -15,25 +15,37 @@
 package com.mwroblewski.carrot.filter.ahcfilter;
 
 
-import com.dawidweiss.carrot.filter.FilterRequestProcessor;
-import com.mwroblewski.carrot.filter.ahcfilter.ahc.AHC;
-import com.mwroblewski.carrot.filter.ahcfilter.ahc.dendrogram.*;
-import com.mwroblewski.carrot.filter.ahcfilter.ahc.linkage.LinkageMethod;
-import com.mwroblewski.carrot.filter.ahcfilter.ahc.similarity.SimilarityMeasure;
-import com.mwroblewski.carrot.filter.ahcfilter.ahc.stop.StopCondition;
-import com.mwroblewski.carrot.filter.ahcfilter.groups.*;
-import com.mwroblewski.carrot.lexical.LexicalElement;
-import com.mwroblewski.carrot.utils.LogUtils;
-import org.apache.log4j.Logger;
-import org.jdom.Element;
 import java.io.InputStream;
-import java.util.*;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Vector;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+import org.dom4j.Element;
+
+import com.dawidweiss.carrot.filter.FilterRequestProcessor;
+import com.mwroblewski.carrot.filter.ahcfilter.ahc.AHC;
+import com.mwroblewski.carrot.filter.ahcfilter.ahc.dendrogram.DendrogramItem;
+import com.mwroblewski.carrot.filter.ahcfilter.ahc.dendrogram.DendrogramLeaf;
+import com.mwroblewski.carrot.filter.ahcfilter.ahc.dendrogram.DendrogramNode;
+import com.mwroblewski.carrot.filter.ahcfilter.ahc.linkage.LinkageMethod;
+import com.mwroblewski.carrot.filter.ahcfilter.ahc.similarity.SimilarityMeasure;
+import com.mwroblewski.carrot.filter.ahcfilter.ahc.stop.StopCondition;
+import com.mwroblewski.carrot.filter.ahcfilter.groups.Group;
+import com.mwroblewski.carrot.filter.ahcfilter.groups.GroupCreator;
+import com.mwroblewski.carrot.filter.ahcfilter.groups.GroupDescriptor;
+import com.mwroblewski.carrot.filter.ahcfilter.groups.GroupPostProcessor;
+import com.mwroblewski.carrot.lexical.LexicalElement;
+import com.mwroblewski.carrot.utils.LogUtils;
+
 
 /**
- * @author Micha� Wr�blewski
+ * @author Michał Wróblewski
  */
 public class AHCFilter
     extends FilterRequestProcessor

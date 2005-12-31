@@ -27,6 +27,6 @@
 	<dependency name="carrot2-language-guesser" />
 	<dependency name="carrot2-local-core" />
 
-	<dependency name="jdom" />
+	<dependency name="dom4j" />
 
 </component>

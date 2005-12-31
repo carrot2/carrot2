@@ -1,5 +1,4 @@
 
-
 /*
  * Carrot2 Project
  * Copyright (C) 2002-2005, Dawid Weiss
@@ -13,28 +12,35 @@
 
 package com.dawidweiss.carrot.input.snippetreader.readers;
 
-import com.dawidweiss.carrot.input.snippetreader.extractors.regexp.*;
+import gnu.regexp.RE;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.SequenceInputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.net.URL;
+import java.util.Enumeration;
+import java.util.Vector;
+
+import org.apache.log4j.Logger;
+import org.dom4j.Element;
+
+import com.dawidweiss.carrot.input.snippetreader.extractors.regexp.RegExpSnippetExtractor;
+import com.dawidweiss.carrot.input.snippetreader.extractors.regexp.SimpleSnippet;
+import com.dawidweiss.carrot.input.snippetreader.extractors.regexp.SnippetDescription;
+import com.dawidweiss.carrot.input.snippetreader.extractors.regexp.SnippetExtractorCallback;
 import com.dawidweiss.carrot.util.HTMLTextStripper;
 import com.dawidweiss.carrot.util.common.StreamUtils;
 import com.dawidweiss.carrot.util.common.StringUtils;
 import com.dawidweiss.carrot.util.common.XMLSerializerHelper;
-import com.dawidweiss.carrot.util.jdom.JDOMHelper;
 import com.dawidweiss.carrot.util.net.http.FormActionInfo;
 import com.dawidweiss.carrot.util.net.http.FormParameters;
 import com.dawidweiss.carrot.util.net.http.HTTPFormSubmitter;
-
-import org.apache.log4j.Logger;
-
-import org.jdom.Element;
-
-import gnu.regexp.RE;
-
-import java.io.*;
-
-import java.net.URL;
-
-import java.util.Enumeration;
-import java.util.Vector;
 
 
 /**
@@ -53,21 +59,24 @@ public class WebSnippetReader {
     private String baseURL;
 
     private String relativeBaseURL;
+    private String requestEncoding;
+    private String responseEncoding;
+
+    private float warnLevel;
 
     /**
      * Initializes this snippet reader to use some service. The configuration
-     * is a JDOM XML structure.
+     * is a DOM4j XML structure.
      */
-    public WebSnippetReader(Element configuration) throws Exception {
-        config = configuration;
+    public WebSnippetReader(final Element configuration) throws Exception {
+        this.config = configuration;
 
-        URL serviceURL = new URL(JDOMHelper.getStringFromJDOM(
-                    "/service/request/service#url", configuration, true));
+        URL serviceURL = new URL(
+                configuration.selectSingleNode("request/service/@url").getText());
         baseURL = serviceURL.getProtocol() + "://" + serviceURL.getHost() +
             ((serviceURL.getPort() == -1) ? "" : (":" + serviceURL.getPort())) +
             "/";
-        relativeBaseURL = JDOMHelper.getStringFromJDOM("/service/request/service#url",
-                configuration, true);
+        relativeBaseURL = configuration.selectSingleNode("request/service/@url").getText();
 
         if (relativeBaseURL.lastIndexOf('/') > 0) {
             relativeBaseURL = relativeBaseURL.substring(0,
@@ -77,15 +86,33 @@ public class WebSnippetReader {
         log.debug("Base service URL: " + baseURL);
         log.debug("Base relative service URL: " + relativeBaseURL);
 
-        FormActionInfo actionInfo = new FormActionInfo(JDOMHelper.getElement(
-                    "/service/request", config));
-        FormParameters queryParameters = new FormParameters(JDOMHelper.getElement(
-                    "/service/request/parameters", config));
+        FormActionInfo actionInfo = new FormActionInfo(configuration.element("request"));
+        FormParameters queryParameters = new FormParameters(configuration.element("request").element("parameters"));
         HTTPFormSubmitter submitter = new HTTPFormSubmitter(actionInfo);
 
         reader = new HttpMultiPageReader(submitter, queryParameters);
         extractor = new RegExpSnippetExtractor(new SnippetDescription(
-                    JDOMHelper.getElement("/service/response/snippet", config)));
+                configuration.element("response").element("snippet")));
+        
+        final Element request = config.element("request");
+        final Element response = config.element("response");
+
+        String encoding;
+        if (request.attribute("encoding") != null) {
+            encoding = request.attributeValue("encoding");
+        } else {
+            encoding = "iso8859-1";
+        }
+        this.requestEncoding = encoding;
+
+        if (response.attribute("encoding") != null) {
+            encoding = response.attributeValue("encoding");
+        } else {
+            encoding = "iso8859-1";
+        }
+        this.responseEncoding = encoding;
+        
+        this.warnLevel = Float.parseFloat(config.selectSingleNode("response/pageinfo/warn-when-below").getText());
     }
 
     /**
@@ -100,25 +127,12 @@ public class WebSnippetReader {
             "\"><![CDATA[" + query + "]]></query>\n");
 
         try {
-            String encoding;
-
-            if ((encoding = JDOMHelper.getStringFromJDOM(
-                            "/service/request#encoding", config, false)) == null) {
-                encoding = "iso8859-1";
-            }
-
             InputStream is = reader.getQueryResults(query, snippetsNeeded,
-                    encoding,
-                    JDOMHelper.getElement("/service/response/pageinfo", config));
+                    requestEncoding, (Element) config.selectSingleNode("response/pageinfo"));
 
             if (is != null) {
-                final float warnLevel = Float.parseFloat(JDOMHelper.getStringFromJDOM(
-                            "/service/response/pageinfo/warn-when-below",
-                            config, true));
-
-                extractor.extractSnippets(new InputStreamReader(is,
-                        JDOMHelper.getStringFromJDOM(
-                            "/service/response#encoding", config, false)),
+                extractor.extractSnippets(
+                    new InputStreamReader(is, responseEncoding),
                     new SnippetExtractorCallback() {
                         int notitle = 0;
                         int nourl = 0;
@@ -126,21 +140,21 @@ public class WebSnippetReader {
                         int recognized = 0;
                         HTMLTextStripper htmlStripper = HTMLTextStripper.getInstance();
                         XMLSerializerHelper xmlSerializer = XMLSerializerHelper.getInstance();
-
+    
                         public void snippetHasNoTitle() {
                             notitle++;
                         }
-
+    
                         public void snippetHasNoURL() {
                             nourl++;
                         }
-
+    
                         public boolean acceptSnippetWithEmptySummary() {
                             nosummary++;
-
+    
                             return true;
                         }
-
+    
                         public void snippetRecognized(SimpleSnippet s) {
                             if (s == null) {
                                 if (recognized < (snippetsNeeded * warnLevel)) {
@@ -158,11 +172,11 @@ public class WebSnippetReader {
                                         htmlStripper.htmlToText(s.getTitle()),
                                         false);
                                     outputStream.write("</title>\n");
-
+    
                                     outputStream.write("\t<url><![CDATA[");
-
+    
                                     String docUrl = s.getDocumentURL();
-
+    
                                     if (docUrl.startsWith("/")) {
                                         outputStream.write(baseURL);
                                         outputStream.write(docUrl);
@@ -172,18 +186,18 @@ public class WebSnippetReader {
                                     } else {
                                         outputStream.write(docUrl);
                                     }
-
+    
                                     outputStream.write("]]></url>\n");
-
+    
                                     if (s.getSummary() != null) {
                                         outputStream.write("\t<snippet>");
                                         xmlSerializer.writeValidXmlText(outputStream,
                                             htmlStripper.htmlToText(
                                                 s.getSummary()), false);
-
+    
                                         outputStream.write("</snippet>\n");
                                     }
-
+    
                                     outputStream.write("</document>\n");
                                 } catch (IOException e) {
                                     throw new RuntimeException(
@@ -218,17 +232,9 @@ public class WebSnippetReader {
         final Vector res = new Vector();
 
         try {
-            String encoding;
-
-            if ((encoding = JDOMHelper.getStringFromJDOM(
-                            "/service/request#encoding", config, false)) == null) {
-                encoding = "iso8859-1";
-            }
-
             Enumeration pgs = reader.getQueryResultsPages(query, snippetsNeeded,
-                    encoding,
-                    JDOMHelper.getElement("/service/response/pageinfo", config));
-             
+                    requestEncoding, (Element) config.selectSingleNode("response/pageinfo"));
+
             // Fix for bugzilla: 1185408,
             // http://sourceforge.net/tracker/index.php?func=detail&aid=1185408&group_id=85379&atid=576012
             if (pgs == null) {
@@ -256,13 +262,8 @@ public class WebSnippetReader {
                 return res;
             }
 
-            final float warnLevel = Float.parseFloat(JDOMHelper.getStringFromJDOM(
-                        "/service/response/pageinfo/warn-when-below", config,
-                        true));
-
-            extractor.extractSnippets(new InputStreamReader(is,
-                    JDOMHelper.getStringFromJDOM("/service/response#encoding",
-                        config, false)),
+            extractor.extractSnippets(
+                new InputStreamReader(is, responseEncoding),
                 new SnippetExtractorCallback() {
                     int notitle = 0;
                     int nourl = 0;
@@ -322,29 +323,18 @@ public class WebSnippetReader {
         final StringBuffer tokenizedStream = new StringBuffer();
 
         try {
-            String encoding;
-
-            if ((encoding = JDOMHelper.getStringFromJDOM(
-                            "/service/request#encoding", config, false)) == null) {
-                encoding = "iso8859-1";
-            }
-
-            InputStream is = reader.getQueryResults(query, 80, encoding,
-                    JDOMHelper.getElement("/service/response/pageinfo", config));
+            InputStream is = reader.getQueryResults(query, 80, requestEncoding,
+                    (Element) config.selectSingleNode("response/pageinfo"));
 
             byte[] fullInput;
-
             if (is == null) {
-                fullInput = reader.getFirstResultsPage(query, 80, encoding,
-                        JDOMHelper.getElement("/service/response/pageinfo",
-                            config));
+                fullInput = reader.getFirstResultsPage(query, 80, requestEncoding,
+                        (Element) config.selectSingleNode("response/pageinfo"));
             } else {
                 fullInput = StreamUtils.readFullyAndCloseInput(is);
             }
 
-            final String fullInputString = new String(fullInput,
-                    JDOMHelper.getStringFromJDOM("/service/response#encoding",
-                        config, false));
+            final String fullInputString = new String(fullInput, responseEncoding);
 
             extractor.extractSnippets(new StringReader(fullInputString),
                 new SnippetExtractorCallback() {
@@ -470,33 +460,21 @@ public class WebSnippetReader {
         byte[] fullInput;
 
         try {
-            String encoding;
-
-            if ((encoding = JDOMHelper.getStringFromJDOM(
-                            "/service/request#encoding", config, false)) == null) {
-                encoding = "iso8859-1";
-            }
-
             InputStream is = null;
-
             try {
-                is = reader.getQueryResults(query, 80, encoding,
-                        JDOMHelper.getElement("/service/response/pageinfo",
-                            config));
+                is = reader.getQueryResults(query, 80, requestEncoding,
+                        (Element) config.selectSingleNode("response/pageinfo"));
             } catch (Exception e1) {
             }
 
             if (is == null) {
-                fullInput = reader.getFirstResultsPage(query, 80, encoding,
-                        JDOMHelper.getElement("/service/response/pageinfo",
-                            config));
+                fullInput = reader.getFirstResultsPage(query, 80, requestEncoding,
+                        (Element) config.selectSingleNode("response/pageinfo"));
             } else {
                 fullInput = StreamUtils.readFullyAndCloseInput(is);
             }
 
-            stream.append(new String(fullInput,
-                    JDOMHelper.getStringFromJDOM("/service/response#encoding",
-                        config, true)));
+            stream.append(new String(fullInput, responseEncoding));
         } catch (Throwable e) {
             stream.setLength(0);
             stream.append("<html><body>An exception occurred.<br><b>" +

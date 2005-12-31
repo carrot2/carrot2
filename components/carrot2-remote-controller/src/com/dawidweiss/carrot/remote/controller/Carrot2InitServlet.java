@@ -15,23 +15,43 @@
 package com.dawidweiss.carrot.remote.controller;
 
 
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.apache.log4j.Logger;
+import org.dom4j.Element;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.SAXReader;
+import org.dom4j.io.XMLWriter;
+import org.exolab.castor.xml.Unmarshaller;
+
 import bsh.util.BeanShellBSFEngine;
 
-import com.dawidweiss.carrot.remote.controller.components.*;
-import com.dawidweiss.carrot.remote.controller.guard.*;
-import com.dawidweiss.carrot.remote.controller.process.*;
-import com.dawidweiss.carrot.remote.controller.cache.*;
-import com.dawidweiss.carrot.remote.controller.util.*;
+import com.dawidweiss.carrot.remote.controller.cache.AbstractFilesystemCachedQueriesContainer;
+import com.dawidweiss.carrot.remote.controller.cache.Cache;
+import com.dawidweiss.carrot.remote.controller.cache.CachedQueriesContainer;
+import com.dawidweiss.carrot.remote.controller.components.ComponentsLoader;
+import com.dawidweiss.carrot.remote.controller.guard.QueryGuard;
+import com.dawidweiss.carrot.remote.controller.guard.QueryGuardsSet;
+import com.dawidweiss.carrot.remote.controller.process.ProcessDefinition;
+import com.dawidweiss.carrot.remote.controller.process.ProcessingChainLoader;
+import com.dawidweiss.carrot.remote.controller.util.Loader;
 import com.dawidweiss.carrot.util.Log4jStarter;
-import org.apache.log4j.*;
-import org.exolab.castor.xml.Unmarshaller;
-import org.jdom.*;
-import org.jdom.input.*;
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.xml.parsers.*;
 
 
 /**
@@ -160,13 +180,11 @@ public class Carrot2InitServlet
                 config = configurationFile;
 
                 // load the XML configuration resource.
-                SAXBuilder configBuilder = new SAXBuilder(false);
-                Element root = configBuilder.build(configurationFile).getRootElement();
+                SAXReader configBuilder = new SAXReader(false);
+                Element root = configBuilder.read(configurationFile).getRootElement();
 
-                if (
-                    (root.getAttribute("reloadable") != null)
-                        && "true".equalsIgnoreCase(root.getAttribute("reloadable").getValue())
-                )
+                if ((root.attribute("reloadable") != null)
+                        && "true".equalsIgnoreCase(root.attribute("reloadable").getValue()))
                 {
                     this.allowReloading = true;
                 }
@@ -180,31 +198,30 @@ public class Carrot2InitServlet
 
                 // load the default set of components
                 ComponentsLoader componentLoader = new ComponentsLoader();
-                List defaultComponents = root.getChildren("components");
-
+                List defaultComponents = root.elements("components");
                 for (Iterator i = defaultComponents.iterator(); i.hasNext();)
                 {
                     Element e = (Element) i.next();
                     componentLoader.addComponentsFromDirectory(
-                        new File(context.getRealPath(e.getAttribute("contextDir").getValue()))
+                        new File(context.getRealPath(e.attribute("contextDir").getValue()))
                     );
                 }
 
                 // load the default set of processing chains and associate them
                 // with components loaded.
                 ProcessingChainLoader processLoader = new ProcessingChainLoader(componentLoader);
-                List defaultProcesses = root.getChildren("processes");
+                List defaultProcesses = root.elements("processes");
 
                 for (Iterator i = defaultProcesses.iterator(); i.hasNext();)
                 {
                     Element e = (Element) i.next();
                     processLoader.addProcessesFromDirectory(
-                        new File(context.getRealPath(e.getAttribute("contextDir").getValue()))
+                        new File(context.getRealPath(e.attribute("contextDir").getValue()))
                     );
                 }
                 
                 // Set the default process to use.
-                List defaultProcess = root.getChildren("default-process");
+                List defaultProcess = root.elements("default-process");
                 if (defaultProcess.size() > 1)
                 {
                     throw new RuntimeException("errors.initialization.too-many-default-processes");
@@ -213,7 +230,7 @@ public class Carrot2InitServlet
                 {
                     if (defaultProcess.size() != 0)
                     {
-                        String processId = ((Element) defaultProcess.get(0)).getAttributeValue("id");
+                        String processId = ((Element) defaultProcess.get(0)).attributeValue("id");
                         log.debug("Setting default process to: " + processId);
                         ProcessDefinition process = processLoader.findProcessDefinition(processId);
                         if (process == null)
@@ -225,7 +242,7 @@ public class Carrot2InitServlet
                 }
 
                 // Set properties
-                List propertiesElementsList = root.getChildren("properties");
+                List propertiesElementsList = root.elements("properties");
                 if (propertiesElementsList.size() > 1)
                 {
                     throw new RuntimeException("errors.initialization.too-many-properties");
@@ -234,7 +251,7 @@ public class Carrot2InitServlet
                 {
                     if (propertiesElementsList.size() != 0)
                     {
-                        propertiesElementsList = ((Element) propertiesElementsList.get(0)).getChildren();
+                        propertiesElementsList = ((Element) propertiesElementsList.get(0)).elements();
                         
                         for (Iterator i = propertiesElementsList.iterator();i.hasNext();)
                         { 
@@ -244,8 +261,8 @@ public class Carrot2InitServlet
                                 throw new RuntimeException("errors.initialization.config-structure-error");
                             }
                            
-                            String propName = propertyElement.getAttributeValue("name");
-                            String value = propertyElement.getAttributeValue("value");
+                            String propName = propertyElement.attributeValue("name");
+                            String value = propertyElement.attributeValue("value");
                             if (propName == null || value == null)
                             {
                                 throw new RuntimeException("errors.initialization.config-structure-error");
@@ -261,12 +278,12 @@ public class Carrot2InitServlet
                 //
                 Cache cache;
 
-                Element cacheConfig = root.getChild("cache");
+                Element cacheConfig = root.element("cache");
 
-                if ((cacheConfig != null) && (cacheConfig.getAttribute("config") != null))
+                if ((cacheConfig != null) && (cacheConfig.attribute("config") != null))
                 {
                     File cacheConfigFile = new File(
-                            context.getRealPath(cacheConfig.getAttribute("config").getValue())
+                            context.getRealPath(cacheConfig.attribute("config").getValue())
                         );
 
                     if (!cacheConfigFile.exists() || !cacheConfigFile.canRead())
@@ -322,16 +339,16 @@ public class Carrot2InitServlet
                 //
                 QueryGuard guard = null;
 
-                Element guardDirElement = root.getChild("guards");
+                Element guardDirElement = root.element("guards");
 
                 if (
                     (guardDirElement != null)
-                        && (guardDirElement.getAttribute("contextDir") != null)
+                        && (guardDirElement.attribute("contextDir") != null)
                 )
                 {
                     File guardsDir = new File(
                             context.getRealPath(
-                                guardDirElement.getAttribute("contextDir").getValue()
+                                guardDirElement.attribute("contextDir").getValue()
                             )
                         );
 
@@ -391,7 +408,7 @@ public class Carrot2InitServlet
                 QueryProcessor processor = new QueryProcessor(cache, guard);
                 context.setAttribute(Carrot2InitServlet.CARROT_PROCESSOR_KEY, processor);
                 processor.setFullDebugInfo(
-                    Boolean.valueOf(root.getAttributeValue("fullDebugReport", "false"))
+                    Boolean.valueOf(root.attributeValue("fullDebugReport", "false"))
                            .booleanValue()
                 );
                 

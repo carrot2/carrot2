@@ -15,6 +15,21 @@
 package com.mwroblewski.carrot.filter.termsfilter;
 
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Vector;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
+import org.dom4j.Element;
+
 import com.dawidweiss.carrot.filter.FilterRequestProcessor;
 import com.dawidweiss.carrot.tokenizer.Tokenizer;
 import com.dawidweiss.carrot.util.common.StringUtils;
@@ -22,12 +37,6 @@ import com.mwroblewski.carrot.filter.termsfilter.weighing.TermsWeighing;
 import com.mwroblewski.carrot.lexical.Phrase;
 import com.mwroblewski.carrot.lexical.Term;
 import com.mwroblewski.carrot.utils.LogUtils;
-import org.apache.log4j.Logger;
-import org.jdom.Element;
-import java.io.*;
-import java.util.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 
 /**

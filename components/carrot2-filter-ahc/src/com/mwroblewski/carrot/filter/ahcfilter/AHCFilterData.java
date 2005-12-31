@@ -15,10 +15,17 @@
 package com.mwroblewski.carrot.filter.ahcfilter;
 
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
+
+import org.dom4j.Element;
+
+import com.dawidweiss.carrot.util.Dom4jUtils;
 import com.mwroblewski.carrot.filter.ahcfilter.groups.Group;
 import com.mwroblewski.carrot.lexical.LexicalElement;
-import org.jdom.Element;
-import java.util.*;
 
 
 public class AHCFilterData
@@ -35,8 +42,8 @@ public class AHCFilterData
     {
         this.root = root;
 
-        List docsList = root.getChildren("document");
-        List termsList = root.getChildren("term");
+        List docsList = root.elements("document");
+        List termsList = root.elements("term");
 
         // loading documents data
         docIDs = new String[docsList.size()];
@@ -49,7 +56,7 @@ public class AHCFilterData
         for (i = 0; docsIterator.hasNext(); i++)
         {
             Element document = (Element) docsIterator.next();
-            docIDs[i] = document.getAttributeValue("id");
+            docIDs[i] = document.attributeValue("id");
             inverseDocIDsMap.put(docIDs[i], new Integer(i));
         }
 
@@ -67,17 +74,17 @@ public class AHCFilterData
             terms[i] = lexicalElement;
 
             // loading term's inflected form
-            termsForms[i] = termElement.getAttributeValue("form");
+            termsForms[i] = termElement.attributeValue("form");
 
             // loading term's weights
-            Iterator docWeightsIterator = termElement.getChildren("doc").iterator();
+            Iterator docWeightsIterator = termElement.elements("doc").iterator();
 
             while (docWeightsIterator.hasNext())
             {
                 Element docWeight = (Element) docWeightsIterator.next();
-                String docID = docWeight.getAttributeValue("id");
+                String docID = docWeight.attributeValue("id");
                 int docNo = ((Integer) inverseDocIDsMap.get(docID)).intValue();
-                float weight = Float.parseFloat(docWeight.getAttributeValue("weight"));
+                float weight = Float.parseFloat(docWeight.attributeValue("weight"));
 
                 // attention - rows in termsWeights correspond to documents,
                 // columns to terms !!!
@@ -118,14 +125,14 @@ public class AHCFilterData
 
     public void removeLexicalElements()
     {
-        root.removeChildren("term");
-        root.removeChildren("phrase");
+        Dom4jUtils.removeChildren(root, "term");
+        Dom4jUtils.removeChildren(root, "phrase");
     }
 
 
     public void removeQuery()
     {
-        root.removeChildren("query");
+        Dom4jUtils.removeChildren(root, "query");
     }
 
 
@@ -136,7 +143,7 @@ public class AHCFilterData
 
         for (int i = 0; i < subgroups.size(); i++)
         {
-            root.addContent(((Group) subgroups.elementAt(i)).toXML());
+            root.add(((Group) subgroups.elementAt(i)).toXML());
         }
     }
 }

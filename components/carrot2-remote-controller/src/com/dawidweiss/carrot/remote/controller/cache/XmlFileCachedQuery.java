@@ -28,13 +28,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentFactory;
+import org.dom4j.Element;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.SAXReader;
+import org.dom4j.io.XMLWriter;
 import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.ValidationException;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
-import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
 
 import com.dawidweiss.carrot.controller.carrot2.xmlbinding.query.Query;
 import com.dawidweiss.carrot.util.common.StreamUtils;
@@ -56,23 +57,20 @@ class XmlFileCachedQuery
     public static void createEntry(File cachedFileName, CachedQuery cachedQuery)
         throws IOException
     {
-        XMLOutputter outputter = new XMLOutputter();
-        Format format = Format.getRawFormat();
-        format.setEncoding("UTF-8");
-
-        Element root = new Element("cached-query");
-
-        Element query = new Element("query");
-        root.addContent(query);
+        final DocumentFactory factory = new DocumentFactory();
+        
+        Element root = factory.createElement("cached-query");
+        Element query = factory.createElement("query");
+        root.add(query);
 
         try
         {
             StringWriter sw = new StringWriter();
             cachedQuery.getQuery().marshal(sw);
 
-            Element qroot = new SAXBuilder(false).build(new StringReader(sw.toString()))
-                                                 .getRootElement();
-            query.addContent(qroot);
+            Element qroot = new SAXReader(false).read(new StringReader(sw.toString())).getRootElement();
+            qroot.detach();
+            query.add(qroot);
         }
         catch (ValidationException e)
         {
@@ -82,19 +80,19 @@ class XmlFileCachedQuery
         {
             throw new IOException("Cannot marshal Query object: " + e.toString());
         }
-        catch (JDOMException e)
+        catch (DocumentException e)
         {
-            throw new IOException("Cannot convert Query object to JDOM: " + e.toString());
+            throw new IOException("Cannot convert Query object to DOM4j: " + e.toString());
         }
 
-        Element componentId = new Element("componentId");
-        root.addContent(componentId);
+        Element componentId = factory.createElement("componentId");
+        root.add(componentId);
         componentId.setText(cachedQuery.getComponentId());
 
         if (cachedQuery.getOptionalParams() != null)
         {
-            Element params = new Element("params");
-            root.addContent(params);
+            Element params = factory.createElement("params");
+            root.add(params);
 
             Map paramsMap = cachedQuery.getOptionalParams();
 
@@ -102,23 +100,26 @@ class XmlFileCachedQuery
             {
                 Object key = i.next();
                 Object value = paramsMap.get(key);
-                Element param = new Element("param");
-                params.addContent(param);
-                param.setAttribute((String) key, (String) value);
+                Element param = factory.createElement("param");
+                params.add(param);
+                param.addAttribute((String) key, (String) value);
             }
         }
 
-        Element data = new Element("stream");
-        root.addContent(data);
+        Element data = factory.createElement("stream");
+        root.add(data);
 
         byte [] bytes = StreamUtils.readFullyAndCloseInput(cachedQuery.getData());
         data.setText(new String(URLEncoding.encode(bytes), "iso8859-1"));
 
         OutputStream os = new FileOutputStream(cachedFileName);
-
         try
         {
-            outputter.output(root, os);
+            OutputFormat fmt = OutputFormat.createCompactFormat();
+            fmt.setEncoding("UTF-8");
+            final XMLWriter outputter = new XMLWriter(os, fmt);
+
+            outputter.write(root);
         }
         finally
         {
@@ -134,25 +135,23 @@ class XmlFileCachedQuery
     {
         this.file = cacheFileName;
 
-        SAXBuilder reader = new SAXBuilder(false);
-
+        SAXReader reader = new SAXReader(false);
         try
         {
-            Element root = reader.build(cacheFileName).getRootElement();
+            Element root = reader.read(cacheFileName).getRootElement();
 
             if (root.getName().equals("cached-query"))
             {
-                Element query = root.getChild("query");
-
+                Element query = root.element("query");
                 if (query == null)
                 {
                     throw new IOException("Query subelement required.");
                 }
 
                 // deserialize query.
-                XMLOutputter outputter = new XMLOutputter();
                 StringWriter sw = new StringWriter();
-                outputter.output((Element) query.getChildren().get(0), sw);
+                XMLWriter outputter = new XMLWriter(sw);
+                outputter.write((Element) query.elements().get(0));
 
                 try
                 {
@@ -169,7 +168,7 @@ class XmlFileCachedQuery
                     );
                 }
 
-                Element componentId = root.getChild("componentId");
+                Element componentId = root.element("componentId");
 
                 if (componentId == null)
                 {
@@ -178,7 +177,7 @@ class XmlFileCachedQuery
 
                 this.componentId = componentId.getText();
 
-                Element optionalParams = root.getChild("params");
+                Element optionalParams = root.element("params");
 
                 if (optionalParams == null)
                 {
@@ -186,20 +185,19 @@ class XmlFileCachedQuery
                 }
                 else
                 {
-                    List params = optionalParams.getChildren("param");
+                    List params = optionalParams.elements("param");
                     this.optionalParams = new HashMap(params.size());
 
                     for (Iterator i = params.iterator(); i.hasNext();)
                     {
                         Element p = (Element) i.next();
                         this.optionalParams.put(
-                            p.getAttribute("key").getValue(), p.getAttribute("value").getValue()
+                            p.attribute("key").getValue(), p.attribute("value").getValue()
                         );
                     }
                 }
 
-                Element data = root.getChild("stream");
-
+                Element data = root.element("stream");
                 if (data == null)
                 {
                     throw new IOException("No cached data stream.");
@@ -213,7 +211,7 @@ class XmlFileCachedQuery
                 throw new IOException("File is not a cached query.");
             }
         }
-        catch (JDOMException e)
+        catch (DocumentException e)
         {
             throw new IOException(
                 "Cannot deserialize cached query: " + cacheFileName.getAbsolutePath()

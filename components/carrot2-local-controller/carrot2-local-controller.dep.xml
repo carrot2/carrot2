@@ -26,7 +26,7 @@
     <dependency name="commons-pool" />
     <dependency name="beanshell" />
 
-    <dependency name="jdom" />
+    <dependency name="dom4j" />
 
     <dependency name="junit" profile="test" />
 </component>

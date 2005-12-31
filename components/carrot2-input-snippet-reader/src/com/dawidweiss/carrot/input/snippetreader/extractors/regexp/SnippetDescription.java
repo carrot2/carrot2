@@ -12,9 +12,7 @@
 
 package com.dawidweiss.carrot.input.snippetreader.extractors.regexp;
 
-import org.jdom.Element;
-
-import com.dawidweiss.carrot.util.jdom.JDOMHelper;
+import org.dom4j.Element;
 
 
 /**
@@ -48,8 +46,6 @@ public class SnippetDescription {
      * Initialize using an XML Element.
      *
      * @param snippetDescription
-     *
-     * @throws WrappedException
      */
     public SnippetDescription(Element snippetDescription) {
         this();
@@ -58,8 +54,6 @@ public class SnippetDescription {
 
     /**
      * Returns a regular expression token matching an entire snippet.
-     *
-     * @return
      */
     public RegularExpression getSnippetMatch() {
         return snippetMatch;
@@ -67,8 +61,6 @@ public class SnippetDescription {
 
     /**
      * Returns a regular expression token matching the start of a title.
-     *
-     * @return
      */
     public RegularExpression getTitleStartMatch() {
         return titleStart;
@@ -76,8 +68,6 @@ public class SnippetDescription {
 
     /**
      * Returns a regular expression token matching the end of a title.
-     *
-     * @return
      */
     public RegularExpression getTitleEndMatch() {
         return titleEnd;
@@ -85,8 +75,6 @@ public class SnippetDescription {
 
     /**
      * Returns a regular expression token matching the start of an URL.
-     *
-     * @return
      */
     public RegularExpression getURLStartMatch() {
         return urlStart;
@@ -94,8 +82,6 @@ public class SnippetDescription {
 
     /**
      * Returns a regular expression token matching the end of an URL.
-     *
-     * @return
      */
     public RegularExpression getURLEndMatch() {
         return urlEnd;
@@ -103,8 +89,6 @@ public class SnippetDescription {
 
     /**
      * Returns a regular expression token matching the start of a summary.
-     *
-     * @return
      */
     public RegularExpression getSummaryStartMatch() {
         return summaryStart;
@@ -112,8 +96,6 @@ public class SnippetDescription {
 
     /**
      * Returns a regular expression token matching the end of a summary.
-     *
-     * @return
      */
     public RegularExpression getSummaryEndMatch() {
         return summaryEnd;
@@ -168,38 +150,16 @@ public class SnippetDescription {
      * </pre>
      *
      * @param snippet The root Element of the description.
-     *
-     * @throws WrappedException
      */
     protected void initInstanceFromXML(Element snippet) {
-        final String SNIPPET_NODE = "snippet";
-        final String SNIPPET_MATCH_ALL = SNIPPET_NODE + "/match";
-        final String TITLE_START = SNIPPET_NODE + "/title/start";
-        final String TITLE_END = SNIPPET_NODE + "/title/end";
-        final String URL_START = SNIPPET_NODE + "/url/start";
-        final String URL_END = SNIPPET_NODE + "/url/end";
-        final String SUMMARY_START = SNIPPET_NODE + "/summary/start";
-        final String SUMMARY_END = SNIPPET_NODE + "/summary/end";
+        snippetMatch = new RegularExpression(snippet.element("match"));
 
-        try {
-            snippetMatch = new RegularExpression(JDOMHelper.getElement(
-                        SNIPPET_MATCH_ALL, snippet));
-            titleStart = new RegularExpression(JDOMHelper.getElement(
-                        TITLE_START, snippet));
-            titleEnd = new RegularExpression(JDOMHelper.getElement(TITLE_END,
-                        snippet));
-            urlStart = new RegularExpression(JDOMHelper.getElement(URL_START,
-                        snippet));
-            urlEnd = new RegularExpression(JDOMHelper.getElement(URL_END,
-                        snippet));
-            summaryStart = new RegularExpression(JDOMHelper.getElement(
-                        SUMMARY_START, snippet));
-            summaryEnd = new RegularExpression(JDOMHelper.getElement(
-                        SUMMARY_END, snippet));
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException("Could not create SnippetDescription: some parameters missing.",
-                e);
-        }
+        titleStart = new RegularExpression((Element) snippet.selectSingleNode("title/start"));
+        titleEnd = new RegularExpression((Element) snippet.selectSingleNode("title/end"));
+        urlStart = new RegularExpression((Element) snippet.selectSingleNode("url/start"));
+        urlEnd = new RegularExpression((Element) snippet.selectSingleNode("title/end"));
+        summaryStart = new RegularExpression((Element) snippet.selectSingleNode("summary/start"));
+        summaryEnd = new RegularExpression((Element) snippet.selectSingleNode("summary/end"));
 
         valid = true;
     }

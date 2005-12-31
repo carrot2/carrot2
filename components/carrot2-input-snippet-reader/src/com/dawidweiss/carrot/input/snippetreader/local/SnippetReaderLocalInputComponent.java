@@ -16,9 +16,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
-import org.jdom.Document;
-import org.jdom.input.SAXBuilder;
+import org.dom4j.Document;
+import org.dom4j.io.SAXReader;
 
 import com.dawidweiss.carrot.core.local.LocalComponent;
 import com.dawidweiss.carrot.core.local.LocalControllerContext;
@@ -42,8 +41,6 @@ import com.dawidweiss.carrot.input.snippetreader.readers.WebSnippetReader;
 public class SnippetReaderLocalInputComponent extends
     LocalInputComponentBase implements RawDocumentsProducer
 {
-	private static Logger log = Logger.getLogger(SnippetReaderLocalInputComponent.class);
-
     /** Capabilities required from the next component in the chain */
     private final static Set SUCCESSOR_CAPABILITIES = new HashSet(Arrays
         .asList(new Object []
@@ -59,9 +56,6 @@ public class SnippetReaderLocalInputComponent extends
 
     /** Current RawDocumentsConsumer to feed */
     private RawDocumentsConsumer rawDocumentConsumer;
-
-    /** Current request context */
-    private RequestContext requestContext;
     
     /** 
      * Snippet reader (configured component that reads snippets from an external
@@ -86,11 +80,10 @@ public class SnippetReaderLocalInputComponent extends
             throw new IllegalStateException("This component can be initialized once, or via query parameters at runtime.");
 
         // add an instance of this class as default handler
-        SAXBuilder builder = new SAXBuilder();
-        Document config;
+        SAXReader builder = new SAXReader();
         builder.setValidation(false);
 
-        config = builder.build(is);
+        final Document config = builder.read(is);
         snippetReader = new WebSnippetReader(config.getRootElement());
     }
 
@@ -114,7 +107,6 @@ public class SnippetReaderLocalInputComponent extends
         super.flushResources();
         query = null;
         rawDocumentConsumer = null;
-        requestContext = null;
     }
 
     public void setNext(LocalComponent next)
@@ -132,9 +124,6 @@ public class SnippetReaderLocalInputComponent extends
         // Number of requested results and the "start at" parameter.
         int resultsRequested = super.getIntFromRequestContext(requestContext,
                 LocalInputComponent.PARAM_REQUESTED_RESULTS, 100);
-
-        int startAt = super.getIntFromRequestContext(requestContext,
-                LocalInputComponent.PARAM_START_AT, 0);
 
         try {
             final Vector v = snippetReader.getSnippets(query, resultsRequested);
