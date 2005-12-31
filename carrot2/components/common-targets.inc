@@ -17,18 +17,24 @@
         <ant target="cleanall" antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" />
     </target>
     
-    <target name="tests.run" if="tests.available">
+    <target name="tests.run" if="tests.available.true">
     	<property name="profile" value="test" />
         <ant target="build.testtype"
              antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" inheritrefs="true">
         </ant>
     </target>
 
-	<target name="tests.info" unless="tests.available">
+	<target name="tests.info" unless="tests.available.true">
     	<echo message="This component has no tests." />
 	</target>
 
-    <target name="test" depends="tests.run,tests.info" />
+    <target name="test">
+    	<condition property="tests.available.true" value="true">
+    		<equals arg1="true" arg2="${tests.available}" casesensitive="false" trim="true" />
+    	</condition>
+    	<antcall target="tests.run" />
+    	<antcall target="tests.info" />
+    </target>
 
     <target name="build">
         <ant target="build.${type}"
