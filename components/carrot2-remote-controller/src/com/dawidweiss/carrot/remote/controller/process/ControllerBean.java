@@ -117,6 +117,10 @@ public class ControllerBean
         log.debug("start: " + componentId);
 
         ComponentDescriptor component = componentsLoader.findComponent(componentId);
+        
+        if (component == null) {
+            throw new IOException("Component does not exist: " + componentId);
+        }
 
         FormActionInfo actionInfo = new FormActionInfo(new URL(component.getServiceURL()), "post");
         FormParameters queryArgs = new FormParameters();
