@@ -5,15 +5,15 @@
  */
 package com.chilang.carrot.filter.cluster;
 
-import com.chilang.util.JDOMWrapper;
-import com.chilang.carrot.filter.cluster.rough.clustering.Cluster;
-import com.chilang.carrot.filter.cluster.rough.data.SnippetDocument;
-import org.jdom.Element;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+
+import org.dom4j.Element;
+
+import com.chilang.carrot.filter.cluster.rough.clustering.Cluster;
+import com.chilang.carrot.filter.cluster.rough.data.SnippetDocument;
 
 
 
@@ -24,14 +24,8 @@ import java.util.List;
 public abstract class AbstractClusteringRequestProcessor
         extends com.dawidweiss.carrot.filter.FilterRequestProcessor
 {
-
-    /**
-	 *
-	 */
 	public AbstractClusteringRequestProcessor()
     {
-        // Double formatter
-
     }
 
     //TODO change to SAX parsing, so incremental processing is possible
@@ -39,15 +33,13 @@ public abstract class AbstractClusteringRequestProcessor
         Collection snips = new ArrayList();
         for (Iterator i = documentList.iterator(); i.hasNext(); )
 		{
-
 			Element document = (Element) i.next();
 
-            SnippetDocument doc = new SnippetDocument(document.getAttributeValue("id"));
-            doc.setTitle(document.getChildText("title"));
-            doc.setUrl(document.getChildText("url"));
-            doc.setDescription(document.getChildText("snippet"));
+            SnippetDocument doc = new SnippetDocument(document.attributeValue("id"));
+            doc.setTitle(document.elementText("title"));
+            doc.setUrl(document.elementText("url"));
+            doc.setDescription(document.elementText("snippet"));
 			snips.add(doc);
-
 		}
         return snips;
     }
@@ -56,13 +48,8 @@ public abstract class AbstractClusteringRequestProcessor
     /**
      * Add clustering results (clusters) under given DOM root element.
      * The resulting/modified element is returned.
-     * @param root
-     * @param clusters
      */
     protected void addClusteringResult(Element root, Cluster[] clusters) {
-        JDOMWrapper wrapper = new ClusterWrapper(clusters, root);
-        root = wrapper.asElement();
+        new ClusterWrapper(clusters, root).asElement();
     }
-
-
 }

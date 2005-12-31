@@ -5,22 +5,28 @@
  */
 package com.chilang.carrot.filter.cluster;
 
+import java.text.NumberFormat;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
+
+import org.dom4j.DocumentFactory;
+import org.dom4j.Element;
+
 import com.chilang.carrot.filter.cluster.rough.Snippet;
 import com.chilang.carrot.filter.cluster.rough.clustering.Cluster;
 import com.chilang.carrot.filter.cluster.rough.data.Term;
-import com.chilang.util.JDOMWrapper;
-import org.jdom.Element;
-
-import java.text.NumberFormat;
-import java.util.*;
 
 
 /**
  * Wrapper for clustering results (collection of clusters)
  * to produce Carrot-XML
- *
  */
-public class ClusterWrapper implements JDOMWrapper{
+public class ClusterWrapper {
 
     private static final NumberFormat numberFormat;
     static {
@@ -31,18 +37,20 @@ public class ClusterWrapper implements JDOMWrapper{
 
     Cluster[] clusters;
     Element root;
+
     /**
      * Construct a wrapper for a set of clusters
      * @param clusters
      */
     public ClusterWrapper(Cluster[] clusters) {
         this.clusters = clusters;
-        this.root = new Element("");
+        this.root = new DocumentFactory().createElement("searchresult");
     }
+
     /**
      * Construct a wrapper for a set of clusters under given element
      * @param clusters set of clusters
-     * @param root JDOM element under which cluster elements will be exported
+     * @param root DOM4J element under which cluster elements will be exported
      */
     public ClusterWrapper(Cluster[] clusters, Element root) {
         this.clusters = clusters;
@@ -50,45 +58,42 @@ public class ClusterWrapper implements JDOMWrapper{
     }
 
     public Element asElement() {
-        for(int i=0; i <clusters.length; i++) {
-            root.addContent(convertToElement(clusters[i]));
+        for(int i=0; i < clusters.length; i++) {
+            root.add(convertToElement(clusters[i]));
         }
         return root;
     }
 
     private static Element convertToElement(Cluster cluster) {
-        Element group = new Element("group");
-
-
-		Element title = new Element("title");
+        final DocumentFactory factory = new DocumentFactory();
+        Element group = factory.createElement("group");
+		Element title = factory.createElement("title");
 		Map labels = extractTopPhrases(cluster.getRepresentativeTerm(), 3);
 		if (labels != null)
 		{
-
 			for (Iterator k = labels.keySet().iterator(); k.hasNext(); )
 			{
-//                System.out.println(labels[k]);
-				Element phrase = new Element("phrase");
+				Element phrase = factory.createElement("phrase");
                 Term t = (Term) k.next();
 				phrase.setText(t.getOriginalTerm() /*+"-"+numberFormat.format(labels[k].getWeight())*/);
-				title.addContent(phrase);
+				title.add(phrase);
 			}
 		}
 		else
 		{
-			Element phrase = new Element("phrase");
+			Element phrase = factory.createElement("phrase");
 			phrase.setText("Group");
-			title.addContent(phrase);
+			title.add(phrase);
 		}
-		group.addContent(title);
+		group.add(title);
 
 		Snippet[] clusterDocuments = (Snippet[])cluster.getMembers();
 		for (int k = 0; k < clusterDocuments.length; k++)
 		{
-			Element doc = new Element("document");
-			doc.setAttribute("refid", String.valueOf(clusterDocuments[k].getId()));
-			doc.setAttribute("score", numberFormat.format((cluster.getMembership().getWeight(clusterDocuments[k].getInternalId()))));
-			group.addContent(doc);
+			Element doc = factory.createElement("document");
+			doc.addAttribute("refid", String.valueOf(clusterDocuments[k].getId()));
+			doc.addAttribute("score", numberFormat.format((cluster.getMembership().getWeight(clusterDocuments[k].getInternalId()))));
+			group.add(doc);
 		}
         return group;
     }
@@ -116,5 +121,4 @@ public class ClusterWrapper implements JDOMWrapper{
 
         return topPhrases;
     }
-
 }

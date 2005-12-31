@@ -5,25 +5,27 @@
  */
 package com.chilang.carrot.filter.cluster;
 
+import java.io.InputStream;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
+import org.dom4j.Element;
+
 import com.chilang.carrot.filter.cluster.rough.XClusterWrapper;
 import com.chilang.carrot.filter.cluster.rough.clustering.Clusterer;
 import com.chilang.carrot.filter.cluster.rough.clustering.KClusterer;
 import com.chilang.carrot.filter.cluster.rough.data.IRContext;
 import com.chilang.carrot.filter.cluster.rough.data.WebIRContext;
-import com.chilang.carrot.filter.cluster.rough.measure.SimilarityFactory;
 import com.chilang.carrot.filter.cluster.rough.measure.Similarity;
+import com.chilang.carrot.filter.cluster.rough.measure.SimilarityFactory;
 import com.chilang.util.StringUtils;
 import com.chilang.util.Timer;
-import org.apache.log4j.Logger;
-import org.jdom.Element;
-import com.dawidweiss.carrot.util.jdom.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.InputStream;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import com.dawidweiss.carrot.util.Dom4jUtils;
 
 
 /**
@@ -57,14 +59,14 @@ public class KMeansClusteringRequestProcessor
 
 
             // Snippets
-            List documentList = JDOMHelper.getElements("searchresult/document", root);
+            List documentList = root.elements("document");
             if (documentList == null) {
                 // save the output.
                 serializeXmlStream(root, response.getOutputStream(), "UTF-8");
                 return;
             }
 
-            String query = JDOMHelper.getElement("searchresult/query", root).getText();
+            String query = root.elementText("query");
             log.debug("query : "+query);
             Collection snips = getSnippets(documentList);
 
@@ -88,8 +90,7 @@ public class KMeansClusteringRequestProcessor
             clusterer.cluster();
 
             // detect any group elements and remove them
-            root.removeChildren("group");
-
+            Dom4jUtils.removeChildren(root, "group");
 
             root = new XClusterWrapper(clusterer.getClusters(), root).asElement();
 
