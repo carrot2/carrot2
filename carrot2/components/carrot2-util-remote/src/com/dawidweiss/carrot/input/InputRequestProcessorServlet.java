@@ -127,13 +127,19 @@ public class InputRequestProcessorServlet
         }
         catch (Throwable ex)
         {
-            org.apache.log4j.Logger.getLogger(this.getClass()).warn(
+            org.apache.log4j.Logger.getLogger(this.getClass()).error(
                 "An internal component error occurred.", ex
             );
-            response.sendError(
-                HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                "An internal component error occurred: " + ex.toString()
-            );
+            try {
+                response.sendError(
+                    HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                    "An internal component error occurred: " + ex.toString()
+                );
+            } catch (IllegalStateException e) {
+                // When response has been committed, an exception is thrown. Ignore.
+                org.apache.log4j.Logger.getLogger(this.getClass()).warn(
+                        "Could not send HTTP error (response comitted).");
+            }
 
             return;
         }
