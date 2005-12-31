@@ -12,7 +12,7 @@
 
     InputStream is;
 
-    is = controller.invokeInputComponent( "carrot2.input.googlapi", query );
+    is = controller.invokeInputComponent( "carrot2.input.googleapi", query );
 
     Map options = new HashMap();
 
