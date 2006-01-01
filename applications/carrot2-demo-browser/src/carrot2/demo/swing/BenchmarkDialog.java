@@ -13,6 +13,7 @@ package carrot2.demo.swing;
 import java.awt.*;
 import java.awt.event.*;
 import java.text.*;
+import java.util.*;
 
 import javax.swing.*;
 import javax.swing.border.*;
@@ -43,6 +44,9 @@ public class BenchmarkDialog
     private ProcessSettings processSettings;
 
     /** */
+    private int requestedResults;
+
+    /** */
     private Frame owner;
     private JProgressBar progressBar;
     private JButton stopButton;
@@ -60,13 +64,14 @@ public class BenchmarkDialog
      * 
      */
     public BenchmarkDialog(Frame owner, DemoContext demoContext, String query,
-        String processId, ProcessSettings processSettings)
+        String processId, ProcessSettings processSettings, int requestedResults)
     {
         this.demoContext = demoContext;
         this.query = query;
         this.processId = processId;
         this.processSettings = processSettings;
         this.owner = owner;
+        this.requestedResults = requestedResults;
     }
 
     /*
@@ -356,10 +361,14 @@ public class BenchmarkDialog
             try
             {
                 // Warmup
+                final HashMap requestParams = processSettings
+                    .getRequestParams();
+                requestParams.put(LocalInputComponent.PARAM_REQUESTED_RESULTS,
+                    Integer.toString(requestedResults));
                 for (int i = 0; i < warmupCycles && running; i++)
                 {
                     demoContext.getController().query(processId, query,
-                        processSettings.getRequestParams());
+                        requestParams);
                     updateResults(i, "Warming up...", "n/a", "n/a", "n/a",
                         "n/a");
                 }
@@ -378,7 +387,7 @@ public class BenchmarkDialog
                 {
                     start = System.currentTimeMillis();
                     demoContext.getController().query(processId, query,
-                        processSettings.getRequestParams());
+                        requestParams);
                     stop = System.currentTimeMillis();
 
                     updateStats(stop - start);

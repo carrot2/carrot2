@@ -25,7 +25,7 @@ import carrot2.demo.index.*;
 import carrot2.demo.swing.util.SwingTask;
 import carrot2.demo.swing.util.ToolbarButton;
 
-import com.dawidweiss.carrot.core.local.ProcessingResult;
+import com.dawidweiss.carrot.core.local.*;
 import com.dawidweiss.carrot.core.local.clustering.RawCluster;
 import com.dawidweiss.carrot.core.local.clustering.RawDocument;
 import com.dawidweiss.carrot.core.local.impl.ClustersConsumerOutputComponent;
@@ -68,6 +68,8 @@ public class ResultsTab extends JPanel {
     
     private BenchmarkDialog benchmarkDialog;
 
+    private int requestedResults;
+    
     /** */
     private final static Logger logger = Logger
         .getLogger(ResultsTab.class);
@@ -92,6 +94,7 @@ public class ResultsTab extends JPanel {
                 if (rqParamsCopy != null) {
                     try {
                         changeTitle("Processing...", true);
+                        rqParamsCopy.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, Integer.toString(requestedResults));
                         ProcessingResult result = demoContext.getController().query(processId, query, rqParamsCopy);
 
                         Object queryResult = result.getQueryResult();
@@ -145,18 +148,24 @@ public class ResultsTab extends JPanel {
         }
     }
 
-    public ResultsTab(Frame owner, String query, DemoContext demoContext, ProcessSettings settings, String processId, int requestedResults) {
+    public ResultsTab(Frame owner, String query, DemoContext demoContext,
+        ProcessSettings settings, String processId, int requestedResults)
+    {
         this.query = query;
         this.processId = processId;
         this.demoContext = demoContext;
         this.processSettings = settings;
-        this.benchmarkDialog = new BenchmarkDialog(owner, demoContext, query, processId, settings);
-        
+        this.requestedResults = requestedResults;
+        this.benchmarkDialog = new BenchmarkDialog(owner, demoContext, query,
+            processId, settings, requestedResults);
+
         this.workerThread = new WorkerThread();
         workerThread.start();
 
-        this.defaultTitle = "[" + demoContext.getProcessIdToProcessNameMap().get(processId) + "] " + ("".equals(query) ? "<empty>" : query);
-        
+        this.defaultTitle = "["
+            + demoContext.getProcessIdToProcessNameMap().get(processId) + "] "
+            + ("".equals(query) ? "<empty>" : query);
+
         buildSplit();
     }
 

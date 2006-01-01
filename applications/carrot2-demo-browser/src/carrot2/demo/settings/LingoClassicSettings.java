@@ -23,7 +23,7 @@ public class LingoClassicSettings extends ProcessSettingsBase implements Process
                 Double.toString(LsiConstants.DEFAULT_CANDIDATE_CLUSTER_THRESHOLD));
     }
 
-    private LingoClassicSettings(HashMap params) {
+    private LingoClassicSettings(Map params) {
         this.params = new HashMap(params);
     }
 
