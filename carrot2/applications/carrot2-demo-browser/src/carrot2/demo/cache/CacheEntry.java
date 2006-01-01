@@ -10,10 +10,12 @@ import com.dawidweiss.carrot.core.local.LocalInputComponent;
 final class CacheEntry {
     private final LocalInputComponent input;
     private final String query;
+    private final int requestedResults;
 
-    public CacheEntry(LocalInputComponent input, String query) {
+    public CacheEntry(LocalInputComponent input, String query, int requestedResults) {
         this.input = input;
         this.query = query;
+        this.requestedResults = requestedResults;
     }
 
     /**
@@ -25,7 +27,7 @@ final class CacheEntry {
         if (other instanceof CacheEntry) {
             final CacheEntry otherEntry = (CacheEntry) other;
             return ((this.query == null && otherEntry.query == null)
-                    || (query.equals(otherEntry.query)
+                    || (query.equals(otherEntry.query) && requestedResults == otherEntry.requestedResults
                         && input.getClass().equals(otherEntry.input.getClass()))); 
         } else return false;
     }
@@ -35,7 +37,7 @@ final class CacheEntry {
      */
     public int hashCode() {
         final int hashCode = 
-            (query != null ? query.hashCode() : 0) ^ input.getClass().hashCode();
+            (query != null ? query.hashCode() : 0) ^ input.getClass().hashCode() ^ requestedResults;
         return hashCode;
     }
 
@@ -44,6 +46,6 @@ final class CacheEntry {
      */
     public String toString() {
         return "[CacheEntry " + input.getClass().getName()
-            + "@" + input.getClass().hashCode() + "/ " + (query != null ? query : "<null>") + "]";
+            + "@" + input.getClass().hashCode() + "/ " + (query != null ? query : "<null>") + "/" + requestedResults + "]";
     }
 }

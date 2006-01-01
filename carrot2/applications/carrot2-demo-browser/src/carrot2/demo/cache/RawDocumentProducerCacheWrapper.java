@@ -97,9 +97,16 @@ public class RawDocumentProducerCacheWrapper extends LocalInputComponentBase {
     public void startProcessing(RequestContext requestContext) throws ProcessingException {
     	super.startProcessing(requestContext);
     	this.requestContext = requestContext;
+        int requestedResults = 0;
+        final Object requestedResultsParam = requestContext.getRequestParameters().get(
+            LocalInputComponent.PARAM_REQUESTED_RESULTS);
+        if (requestedResultsParam != null)
+        {
+            requestedResults = Integer.parseInt(requestedResultsParam.toString());
+        }
         
         final ClustersConsumerOutputComponent.Result result
-            = cache.get(new CacheEntry(wrapped, query));
+            = cache.get(new CacheEntry(wrapped, query, requestedResults));
 
         if (result == null) {
             // Requires caching.
@@ -131,7 +138,15 @@ public class RawDocumentProducerCacheWrapper extends LocalInputComponentBase {
             // Build Lucene index
             buildLuceneIndex(result);
 
-            cache.put(new CacheEntry(wrapped, query), this.cachedResult);
+            int requestedResults = 0;
+            final Object requestedResultsParam = requestContext.getRequestParameters().get(
+                LocalInputComponent.PARAM_REQUESTED_RESULTS);
+            if (requestedResultsParam != null)
+            {
+                requestedResults = Integer.parseInt(requestedResultsParam.toString());
+            }
+
+            cache.put(new CacheEntry(wrapped, query, requestedResults), this.cachedResult);
         }
 
         requestContext.getRequestParameters().put(PARAM_INDEX_CONTENT,

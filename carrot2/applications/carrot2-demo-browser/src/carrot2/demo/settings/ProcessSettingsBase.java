@@ -25,7 +25,7 @@ public abstract class ProcessSettingsBase implements ProcessSettings
 {
     private boolean liveUpdate = true;
 
-    protected HashMap params;
+    protected Map params;
     protected Vector listeners = new Vector();
 
     public boolean hasSettings() {
@@ -55,7 +55,7 @@ public abstract class ProcessSettingsBase implements ProcessSettings
         this.listeners.add(listener);
     }
 
-    public void setRequestParams(HashMap params) {
+    public void setRequestParams(Map params) {
         synchronized (this) {
             this.params = params;
             if (liveUpdate) {
