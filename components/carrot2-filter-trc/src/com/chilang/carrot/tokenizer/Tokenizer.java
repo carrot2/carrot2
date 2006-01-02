@@ -1,12 +1,6 @@
-/*
- * Copyright 2002 Dawid Weiss. All rights reserved.
- * Please refer to licence file in docs/legal/carrot2.LICENCE
- *
- * $Id$
- *
- * v1.2 Ngo Chi Lang, 08/2003
- *   - add phrase delimiter (",", ";")
- */
+
+// Generated file. Do not edit by hand.
+
 package com.chilang.carrot.tokenizer;
 
 import java.io.StringReader;

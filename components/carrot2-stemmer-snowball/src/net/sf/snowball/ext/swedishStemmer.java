@@ -1,4 +1,5 @@
-// This file was generated automatically by the Snowball to Java compiler
+
+// Generated file. Do not edit by hand.
 
 package net.sf.snowball.ext;
 import net.sf.snowball.SnowballProgram;
