@@ -432,5 +432,4 @@ extern void debug(struct SN_env * z, int number, int line_count)
 }
 */
 
-};
-
+}
