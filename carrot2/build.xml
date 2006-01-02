@@ -239,6 +239,7 @@ TESTING: @{component.path}
     <component-apply component.path="components/carrot2-ant-extensions" />
     <component-apply component.path="components/carrot2-local-core" />
     <component-apply component.path="components/carrot2-util-common" />
+    <component-apply component.path="components/carrot2-util-local" />
     <component-apply component.path="components/carrot2-util-put" />
     <component-apply component.path="components/carrot2-util-remote" />
     <component-apply component.path="components/carrot2-util-tokenizer" />

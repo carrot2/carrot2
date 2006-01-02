@@ -32,9 +32,6 @@ carrot2-filter-stc
 - Remove Google descriptors from snippet reader (and from the demo applications). Replace
 them with Yahoo API (and GoogleAPI).
 
-- Create a separate project (carrot2-util-local?) for utils related to local
-  interfaces
-
 - Review master ANT build file -- generate JavaDocs.
 
 - Ensure all tests pass. Ensure the demo application works.
