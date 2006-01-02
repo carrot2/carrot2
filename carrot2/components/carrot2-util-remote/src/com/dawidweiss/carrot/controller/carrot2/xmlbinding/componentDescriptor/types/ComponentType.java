@@ -1,9 +1,5 @@
-/*
- * This class was automatically generated with 
- * <a href="http://www.castor.org">Castor 0.9.4.2</a>, using an XML
- * Schema.
- * $Id$
- */
+
+// Generated file. Do not edit by hand.
 
 package com.dawidweiss.carrot.controller.carrot2.xmlbinding.componentDescriptor.types;
 
