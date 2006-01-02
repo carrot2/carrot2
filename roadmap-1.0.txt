@@ -16,9 +16,6 @@ carrot2-filter-fuzzyants
 carrot2-filter-lingo
 carrot2-filter-stc
 
-- Alter all *.java files and add license statement to those originating
-  from the project. Leave other licenses unchanged, clean up IDE junk.
-
 - Unify coding style.
 
 - Review documentation, ensure it corresponds to reality.
