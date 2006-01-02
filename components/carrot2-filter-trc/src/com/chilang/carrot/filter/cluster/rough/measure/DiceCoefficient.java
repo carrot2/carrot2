@@ -1,8 +1,3 @@
-/**
- * 
- * @author chilang
- * Created 2003-07-24, 07:47:02.
- */
 package com.chilang.carrot.filter.cluster.rough.measure;
 
 import com.chilang.carrot.filter.cluster.rough.clustering.Clusterable;
@@ -53,6 +48,6 @@ public class DiceCoefficient implements Similarity {
     }
 
     public double measure(double[] vector1, double[] vector2) {
-        return 0;  //To change body of implemented methods use Options | File Templates.
+        return 0;
     }
 }

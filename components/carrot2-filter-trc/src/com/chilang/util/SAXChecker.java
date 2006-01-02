@@ -40,7 +40,7 @@ public class SAXChecker {
        + args[0]
       );
     } catch (ParserConfigurationException e) {
-        e.printStackTrace();  //To change body of catch statement use Options | File Templates.
+        e.printStackTrace(); 
     }
 
   }

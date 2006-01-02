@@ -1,8 +1,3 @@
-/**
- * 
- * @author chilang
- * Created 2003-08-18, 12:45:47.
- */
 package com.chilang.carrot.filter.cluster.rough.filter.ngram;
 
 import com.chilang.carrot.tokenizer.ITokenizer;

@@ -1,8 +1,3 @@
-/**
- *
- * @author chilang
- * Created 2003-12-15, 00:21:06.
- */
 package com.chilang.carrot.filter.cluster.rough.weighting;
 
 import cern.colt.bitvector.BitVector;

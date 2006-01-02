@@ -1,10 +1,3 @@
-/**
- * Created by IntelliJ IDEA.
- * User: chilang
- * Date: 2003-07-17
- * Time: 03:00:57
- * To change this template use Options | File Templates.
- */
 package com.chilang.carrot.filter.cluster.rough.trsm;
 
 import cern.colt.bitvector.BitVector;

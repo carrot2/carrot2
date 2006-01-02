@@ -1,8 +1,3 @@
-/**
- * 
- * @author chilang
- * Created 2003-08-22, 01:58:01.
- */
 package com.chilang.carrot.tokenizer;
 
 /**

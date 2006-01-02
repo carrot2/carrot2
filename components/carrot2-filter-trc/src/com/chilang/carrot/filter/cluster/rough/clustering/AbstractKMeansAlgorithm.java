@@ -1,8 +1,3 @@
-/**
- * 
- * @author chilang
- * Created 2003-12-15, 01:53:31.
- */
 package com.chilang.carrot.filter.cluster.rough.clustering;
 
 import com.chilang.util.Timer;

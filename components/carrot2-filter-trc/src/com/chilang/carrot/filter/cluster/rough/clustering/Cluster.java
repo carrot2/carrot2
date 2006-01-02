@@ -1,8 +1,3 @@
-/**
- * 
- * @author chilang
- * Created 2003-07-23, 16:15:45.
- */
 package com.chilang.carrot.filter.cluster.rough.clustering;
 
 import com.chilang.carrot.filter.cluster.rough.FeatureVector;

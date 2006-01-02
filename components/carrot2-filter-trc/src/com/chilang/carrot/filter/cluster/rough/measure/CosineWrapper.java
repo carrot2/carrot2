@@ -1,8 +1,3 @@
-/**
- * 
- * @author chilang
- * Created 2004-01-11, 21:36:39.
- */
 package com.chilang.carrot.filter.cluster.rough.measure;
 
 import cern.colt.matrix.DoubleMatrix1D;

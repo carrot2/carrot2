@@ -1,8 +1,3 @@
-/**
- * 
- * @author chilang
- * Created 2004-01-11, 01:31:45.
- */
 package com.chilang.util;
 
 

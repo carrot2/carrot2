@@ -1,8 +1,3 @@
-/**
- * 
- * @author chilang
- * Created 2003-07-24, 12:23:07.
- */
 package com.chilang.carrot.filter.cluster.rough.clustering;
 
 import com.chilang.carrot.filter.cluster.rough.FeatureVector;
@@ -16,7 +11,7 @@ public class ClusterRepresentative implements Clusterable {
     protected FeatureVector features;
 
     public int getIdentifier() {
-        return id;  //To change body of implemented methods use Options | File Templates.
+        return id;
     }
 
     public String toString() {

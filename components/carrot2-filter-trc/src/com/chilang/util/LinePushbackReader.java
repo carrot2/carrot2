@@ -1,8 +1,3 @@
-/**
- * 
- * @author chilang
- * Created 2003-11-11, 15:41:13.
- */
 package com.chilang.util;
 
 import java.io.*;

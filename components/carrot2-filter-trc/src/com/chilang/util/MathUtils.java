@@ -1,8 +1,3 @@
-/**
- * 
- * @author chilang
- * Created 2003-07-27, 11:19:46.
- */
 package com.chilang.util;
 
 public class MathUtils {

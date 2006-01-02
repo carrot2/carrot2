@@ -1,8 +1,3 @@
-/**
- * 
- * @author chilang
- * Created 2004-01-15, 18:58:57.
- */
 package com.chilang.util;
 
 import java.util.Comparator;

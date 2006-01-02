@@ -10,9 +10,6 @@
  * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
 
-/**
- * Multilingual LSI clusterer.
- */
 package com.stachoodev.carrot.filter.lingo.common;
 
 import com.dawidweiss.carrot.core.local.linguistic.Language;
