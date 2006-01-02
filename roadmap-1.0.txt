@@ -38,6 +38,9 @@ them with Yahoo API (and GoogleAPI).
 
 - Upgrade Beanshell or patch BSF engine class to return wrapped BSH Exception
 
+- Introduce a special profile to the carrot2-demo-browser, so that it can be
+  built without dependencies of some clustering algorithms (TRC/STC/AHC)
+
 - Public Relations
 	- move O/S website from www.cs.put.poznan.pl/dweiss/carrot to www.carrot2.org
     - add new publications to the O/S website
