@@ -23,7 +23,6 @@
 
 	<dependency name="carrot2-util-common" />
 	<dependency name="carrot2-util-remote" />
-	<dependency name="carrot2-util-put" />
 
 	<dependency name="commons-beanutils" />
     

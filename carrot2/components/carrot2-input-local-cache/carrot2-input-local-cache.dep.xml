@@ -20,8 +20,8 @@
     <dependency name="log4j" />
     <dependency name="junit" profile="test" />
     <dependency name="dom4j" />
-    
-    <dependency name="carrot2-util-put" />
+
+    <dependency name="carrot2-util-common" />
     <dependency name="carrot2-local-core" />
     
     <dependency name="carrot2-license" />

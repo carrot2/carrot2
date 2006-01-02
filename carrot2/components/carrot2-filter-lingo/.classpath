@@ -9,7 +9,6 @@
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/servlet.jar"/>
 	<classpathentry kind="src" path="/carrot2-util-common"/>
 	<classpathentry kind="src" path="/carrot2-local-core"/>
-	<classpathentry kind="src" path="/carrot2-util-put"/>
 	<classpathentry kind="src" path="/carrot2-util-remote"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/colt-1.0.3-trimmed.jar"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/violinstrings-1.0.2.jar"/>

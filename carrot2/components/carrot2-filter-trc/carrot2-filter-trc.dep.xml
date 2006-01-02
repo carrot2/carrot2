@@ -33,10 +33,10 @@
 
 	<!-- Carrot2 components -->
     <dependency name="carrot2-license" />
-	<dependency name="carrot2-util-remote" 	profile="remote" />
-	<dependency name="carrot2-local-core" 	profile="local" />
+    <dependency name="carrot2-util-common" />
 	<dependency name="colt" />
-    <dependency name="carrot2-util-put" />
     <dependency name="commons-collections" />
 
+	<dependency name="carrot2-util-remote" 	profile="remote" />
+	<dependency name="carrot2-local-core" 	profile="local" />
 </component>

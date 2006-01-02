@@ -16,8 +16,6 @@ carrot2-filter-fuzzyants
 carrot2-filter-lingo
 carrot2-filter-stc
 
-- Remove obsolete/ unused components
-
 - Alter all *.java files and add license statement to those originating
   from the project. Leave other licenses unchanged, clean up IDE junk.
 
@@ -41,5 +39,5 @@ them with Yahoo API (and GoogleAPI).
 - Upgrade Beanshell or patch BSF engine class to return wrapped BSH Exception
 
 - Public Relations
-    - redirect www.carrot2.org to the O/S website
+	- move O/S website from www.cs.put.poznan.pl/dweiss/carrot to www.carrot2.org
     - add new publications to the O/S website

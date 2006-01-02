@@ -8,7 +8,6 @@
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/components/carrot2-util-remote/lib/castor-0.9.4.2-xml.jar"/>
 	<classpathentry kind="src" path="/carrot2-util-common"/>
 	<classpathentry kind="src" path="/carrot2-local-core"/>
-	<classpathentry kind="src" path="/carrot2-util-put"/>
 	<classpathentry kind="src" path="/carrot2-util-remote"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/gnu-regexp-1.1.4.jar"/>
 	<classpathentry kind="lib" path="lib/xmlrpc-1.1.jar"/>

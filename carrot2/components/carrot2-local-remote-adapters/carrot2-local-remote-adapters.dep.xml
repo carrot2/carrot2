@@ -29,6 +29,5 @@
     <dependency name="xml-apis" />
     
     <dependency name="dom4j" />
-    <dependency name="carrot2-util-put" />
 
 </component>
