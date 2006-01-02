@@ -4,7 +4,6 @@
 	<comment>carrot2-util-remote</comment>
 	<projects>
 		<project>carrot2-util-common</project>
-		<project>carrot2-util-put</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

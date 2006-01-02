@@ -5,7 +5,6 @@
 	<projects>
 		<project>carrot2-local-core</project>
 		<project>carrot2-util-common</project>
-		<project>carrot2-util-put</project>
 		<project>carrot2-util-remote</project>
 	</projects>
 	<buildSpec>

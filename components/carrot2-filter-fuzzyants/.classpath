@@ -7,7 +7,6 @@
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/servlet.jar"/>
 	<classpathentry kind="src" path="/carrot2-util-common"/>
 	<classpathentry kind="src" path="/carrot2-local-core"/>
-	<classpathentry kind="src" path="/carrot2-util-put"/>
 	<classpathentry kind="src" path="/carrot2-util-remote"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/dom4j-1.5.jar"/>
 	<classpathentry kind="output" path="tmp/eclipse/classes"/>

@@ -26,7 +26,6 @@
     <dependency name="lucene" />
 
     <dependency name="carrot2-util-common" />
-    <dependency name="carrot2-util-put" />
     <dependency name="carrot2-local-core" />
     <dependency name="carrot2-util-tokenizer" />
     

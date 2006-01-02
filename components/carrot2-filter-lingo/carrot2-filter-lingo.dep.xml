@@ -44,7 +44,6 @@
 	<dependency name="carrot2-util-remote" 	profile="remote" />
     <dependency name="dom4j"                profile="remote" />
     <dependency name="servlets-api"         profile="remote" nocopy="true" />
-	<dependency name="carrot2-util-put"     profile="remote" />
 
     <!-- These components are not required during the compilation, but
          are usually included at runtime via parameters (Language/ stemming/ stopwords) -->
