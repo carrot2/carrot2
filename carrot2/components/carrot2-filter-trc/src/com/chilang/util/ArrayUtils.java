@@ -1,8 +1,3 @@
-/**
- * 
- * @author chilang
- * Created 2003-08-12, 18:52:30.
- */
 package com.chilang.util;
 
 import cern.colt.bitvector.BitVector;

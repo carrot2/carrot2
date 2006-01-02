@@ -1,8 +1,3 @@
-/**
- * 
- * @author chilang
- * Created 2003-07-17, 22:44:57.
- */
 package com.chilang.carrot.filter.cluster.rough.trsm;
 
 import com.chilang.carrot.filter.cluster.rough.data.SnippetDocument;
@@ -162,7 +157,7 @@ public class SnippetReader extends org.xml.sax.helpers.DefaultHandler {
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (FactoryConfigurationError factoryConfigurationError) {
-            factoryConfigurationError.printStackTrace();  //To change body of catch statement use Options | File Templates.
+            factoryConfigurationError.printStackTrace();
         }
 
 

@@ -1,8 +1,3 @@
-/**
- * 
- * @author chilang
- * Created 2003-12-29, 18:53:11.
- */
 package com.chilang.carrot.filter.cluster.rough;
 
 import java.text.NumberFormat;

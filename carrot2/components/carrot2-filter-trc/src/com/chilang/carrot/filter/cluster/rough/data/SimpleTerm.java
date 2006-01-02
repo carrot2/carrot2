@@ -1,10 +1,3 @@
-/**
- * Created by IntelliJ IDEA.
- * User: chilang
- * Date: 2003-07-17
- * Time: 04:07:22
- * To change this template use Options | File Templates.
- */
 package com.chilang.carrot.filter.cluster.rough.data;
 
 import java.text.NumberFormat;

@@ -1,8 +1,3 @@
-/**
- * 
- * @author chilang
- * Created 2003-07-24, 07:00:08.
- */
 package com.chilang.carrot.filter.cluster.rough.measure;
 
 import com.chilang.carrot.filter.cluster.rough.clustering.Clusterable;

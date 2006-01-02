@@ -1,8 +1,3 @@
-/**
- * 
- * @author chilang
- * Created 2003-07-25, 23:54:32.
- */
 package com.chilang.carrot.filter.cluster;
 
 import java.io.InputStream;

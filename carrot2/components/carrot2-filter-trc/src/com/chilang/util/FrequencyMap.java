@@ -1,8 +1,3 @@
-/**
- * 
- * @author chilang
- * Created 2003-09-11, 00:11:08.
- */
 package com.chilang.util;
 
 import java.util.Map;

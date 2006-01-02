@@ -1,8 +1,3 @@
-/**
- * 
- * @author chilang
- * Created 2003-07-22, 18:03:32.
- */
 package com.chilang.carrot.filter.cluster.rough.data;
 
 import com.chilang.carrot.filter.cluster.rough.Snippet;

@@ -1,8 +1,3 @@
-/**
- * 
- * @author chilang
- * Created 2004-01-16, 00:09:22.
- */
 package com.chilang.carrot.filter.cluster.rough.clustering;
 
 import cern.colt.matrix.DoubleFactory2D;

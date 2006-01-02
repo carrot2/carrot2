@@ -1,8 +1,3 @@
-/**
- * 
- * @author chilang
- * Created 2003-07-25, 23:39:52.
- */
 package com.chilang.carrot.filter.cluster;
 
 import java.util.ArrayList;

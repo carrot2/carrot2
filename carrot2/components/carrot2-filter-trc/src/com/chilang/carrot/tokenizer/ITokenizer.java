@@ -1,8 +1,3 @@
-/**
- * 
- * @author chilang
- * Created 2003-08-18, 13:03:09.
- */
 package com.chilang.carrot.tokenizer;
 
 public interface ITokenizer {

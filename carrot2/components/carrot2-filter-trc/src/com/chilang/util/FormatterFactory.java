@@ -1,8 +1,3 @@
-/**
- * 
- * @author chilang
- * Created 2004-01-12, 01:23:54.
- */
 package com.chilang.util;
 
 import java.text.NumberFormat;

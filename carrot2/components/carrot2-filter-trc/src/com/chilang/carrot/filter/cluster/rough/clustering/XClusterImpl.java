@@ -1,8 +1,3 @@
-/**
- * 
- * @author chilang
- * Created 2003-12-30, 01:53:27.
- */
 package com.chilang.carrot.filter.cluster.rough.clustering;
 
 public class XClusterImpl implements XCluster {

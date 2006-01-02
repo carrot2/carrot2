@@ -1,8 +1,3 @@
-/**
- * 
- * @author chilang
- * Created 2003-07-22, 18:03:32.
- */
 package com.chilang.carrot.filter.cluster.rough.data;
 
 import com.chilang.carrot.filter.cluster.rough.filter.StopWordFilter;
@@ -33,6 +28,6 @@ public class StemmedTermExtractor implements TermExtractor {
     }
 
     public Object extractFromSnippet(Document document) {
-        return null;  //To change body of implemented methods use Options | File Templates.
+        return null;
     }
 }

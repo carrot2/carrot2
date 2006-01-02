@@ -1,8 +1,3 @@
-/**
- * 
- * @author chilang
- * Created 2003-12-30, 01:11:30.
- */
 package com.chilang.carrot.filter.cluster.rough.clustering;
 
 import com.chilang.carrot.filter.cluster.rough.data.IRContext;

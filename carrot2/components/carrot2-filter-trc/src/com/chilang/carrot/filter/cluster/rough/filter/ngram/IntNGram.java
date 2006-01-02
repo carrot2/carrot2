@@ -1,8 +1,3 @@
-/**
- * 
- * @author chilang
- * Created 2003-08-23, 15:49:21.
- */
 package com.chilang.carrot.filter.cluster.rough.filter.ngram;
 
 import com.chilang.util.ArrayUtils;

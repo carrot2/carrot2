@@ -1,8 +1,3 @@
-/**
- * 
- * @author chilang
- * Created 2003-09-15, 13:23:39.
- */
 package com.chilang.util;
 
 import java.util.Random;

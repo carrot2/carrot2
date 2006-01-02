@@ -1,8 +1,3 @@
-/**
- * 
- * @author chilang
- * Created 2004-01-11, 01:32:37.
- */
 package com.chilang.util;
 
 import java.lang.reflect.Array;
