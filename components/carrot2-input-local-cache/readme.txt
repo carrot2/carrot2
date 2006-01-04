@@ -28,7 +28,7 @@ the component.
 3) Raw queries to a store: just type a query.
 
 Example: "salsa"
-Example: "salsa component:component:carrot2.input.snippet-reader.google"
+Example: "salsa component:carrot2.input.snippet-reader.google"
 
 Raw queries will be sought in the queries store used to initialize the component.
 If a raw query is found, its result from any component is returned. If the cache
