@@ -17,7 +17,7 @@ import java.util.List;
 
 
 /**
- * Class representing a single document reference obtained from Google.
+ * Class representing a single document reference.
  */
 public class DocReference
 {
