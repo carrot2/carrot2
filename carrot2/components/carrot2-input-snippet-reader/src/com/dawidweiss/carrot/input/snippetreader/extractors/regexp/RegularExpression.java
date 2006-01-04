@@ -20,36 +20,17 @@ import org.dom4j.Element;
  * indicator whether the match should be consumed, or included in the result.
  */
 class RegularExpression {
-    /**
-     * Field XML_ATTR_REGEXP
-     */
     public static final String XML_ATTR_REGEXP = "regexp";
-
-    /**
-     * Field XML_ATTR_CONSUME
-     */
     public static final String XML_ATTR_CONSUME = "consume";
 
-    protected String regExp;
+    private String regExp;
+    private boolean consumeToken;
 
-    protected boolean consumeToken;
-
-    /**
-     * Constructor RegularExpression
-     *
-     * @param regExp
-     * @param consume
-     */
     public RegularExpression(String regExp, boolean consume) {
         this.regExp = regExp;
         this.consumeToken = consume;
     }
 
-    /**
-     * Constructor RegularExpression
-     *
-     * @param regExpXmlElement
-     */
     public RegularExpression(Element regExpXmlElement) {
         if (regExpXmlElement == null) {
             throw new IllegalArgumentException(
@@ -76,20 +57,10 @@ class RegularExpression {
         }
     }
 
-    /**
-     * Method getRegExp
-     *
-     * @return
-     */
     public String getRegExp() {
         return regExp;
     }
 
-    /**
-     * Method isConsumeToken
-     *
-     * @return
-     */
     public boolean isConsumeToken() {
         return consumeToken;
     }
