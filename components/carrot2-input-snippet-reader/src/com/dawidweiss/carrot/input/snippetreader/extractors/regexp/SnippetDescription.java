@@ -102,52 +102,8 @@ public class SnippetDescription {
     }
 
     /**
-     * Initializes this object using an XML Element. The DOM structure must
-     * contain at least the following elements (this is an example of wrapping
-     * Google).
-     * <pre>
-     *   &lt;!-- test file snippet extraction --&gt;
-     *   &lt;snippet&gt;
-     *       &lt;!-- this should match the entire snippet --&gt;
-     *       &lt;match consumer="false"&gt;
-     *           &lt;regexp&gt;&lt;![CDATA[&lt;dt&gt;.*?&lt;/dt&gt;\n&lt;dd&gt;.*?&lt;br&gt;.*?&lt;span.*?&lt;br&gt;&lt;/dd&gt;]]&gt;&lt;/regexp&gt;
-     *       &lt;/match&gt;
-     *       &lt;!-- This will cut out only the title.
-     *            start and end matches give indexes in a snippet string, which are
-     *            then used to cut out a substring.
-     *         --&gt;
-     *       &lt;title&gt;
-     *           &lt;start consume="true"&gt;
-     *               &lt;regexp&gt;&lt;![CDATA[&lt;a.*?&lt;b&gt;]]&gt;&lt;/regexp&gt;
-     *           &lt;/start&gt;
-     *           &lt;end   consume="true"&gt;
-     *               &lt;regexp&gt;&lt;![CDATA[&lt;/b&gt;]]&gt;&lt;/regexp&gt;
-     *           &lt;/end&gt;
-     *       &lt;/title&gt;
-     * 
-     *       &lt;!-- This will cut out the url of the snippet.
-     *         --&gt;
-     *       &lt;url&gt;
-     *           &lt;start consume="true"&gt;
-     *               &lt;regexp&gt;&lt;![CDATA[href="]]&gt;&lt;/regexp&gt;
-     *           &lt;/start&gt;
-     *           &lt;end   consume="true"&gt;
-     *               &lt;regexp&gt;&lt;![CDATA["]]&gt;&lt;/regexp&gt;
-     *           &lt;/end&gt;
-     *       &lt;/url&gt;
-     * 
-     *       &lt;!-- This will cut out the summary of a snippet.
-     *         --&gt;
-     *       &lt;summary&gt;
-     *           &lt;start consume="true"&gt;
-     *               &lt;regexp&gt;&lt;![CDATA[&lt;dd&gt;]]&gt;&lt;/regexp&gt;
-     *           &lt;/start&gt;
-     *           &lt;end   consume="true"&gt;
-     *               &lt;regexp&gt;&lt;![CDATA[&lt;br&gt;]]&gt;&lt;/regexp&gt;
-     *           &lt;/end&gt;
-     *       &lt;/summary&gt;
-     *   &lt;/snippet&gt;
-     * </pre>
+     * Initializes this object using an XML Element. See descriptors in
+     * the component's folder for examples.
      *
      * @param snippet The root Element of the description.
      */
