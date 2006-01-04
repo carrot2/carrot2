@@ -17,6 +17,8 @@ import gnu.regexp.*;
 import java.io.IOException;
 import java.io.Reader;
 
+import org.apache.log4j.Logger;
+
 
 /**
  * Extracts snippets from an InputStream.
@@ -24,6 +26,8 @@ import java.io.Reader;
  * @author Dawid Weiss
  */
 public class RegExpSnippetExtractor {
+    private final static Logger log = Logger.getLogger(RegExpSnippetExtractor.class);
+
     /**
      * The snippet description this object operates on.
      */
@@ -103,7 +107,6 @@ public class RegExpSnippetExtractor {
                 if (title == null) {
                     // invalid snippet: no title found.
                     callback.snippetHasNoTitle();
-
                     continue;
                 }
 
@@ -116,9 +119,10 @@ public class RegExpSnippetExtractor {
                         snippetDescription.getURLEndMatch().isConsumeToken());
 
                 if (url == null) {
+                    log.debug("No URL matched in snippet: " + fullSnippet);
+
                     // invalid snippet: no url found.
                     callback.snippetHasNoURL();
-
                     continue;
                 }
 
