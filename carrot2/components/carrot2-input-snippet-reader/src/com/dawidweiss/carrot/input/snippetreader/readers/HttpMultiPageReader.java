@@ -137,6 +137,8 @@ public class HttpMultiPageReader {
             ExtendedRegExp expr = new ExtendedRegExp(
                     (Element) pageInfo.selectSingleNode(RESULTS_MATCHED));
             String resultsFound = expr.getProcessedMatch(page);
+            log.debug("Results number token content: " + resultsFound);
+
             Vector outputPages = new Vector();
             int resultsPerPage = Integer.parseInt(
                     ((Element) pageInfo.selectSingleNode(RESULTS_PER_PAGE)).getText());
