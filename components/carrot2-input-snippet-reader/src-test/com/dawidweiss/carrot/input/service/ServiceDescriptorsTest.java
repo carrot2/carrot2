@@ -2,15 +2,17 @@ package com.dawidweiss.carrot.input.service;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 
 import junit.framework.TestCase;
 
-import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
 import com.dawidweiss.carrot.core.local.*;
+import com.dawidweiss.carrot.core.local.clustering.RawDocument;
 import com.dawidweiss.carrot.core.local.impl.DocumentsConsumerOutputComponent;
 import com.dawidweiss.carrot.input.snippetreader.local.SnippetReaderLocalInputComponent;
 
@@ -82,7 +84,17 @@ public class ServiceDescriptorsTest extends TestCase {
                 + results.size());
 
         // Ensure we got some results.
-        assertTrue("Expected more then 50 results, was: " + results.size(),
-                results.size() > 50);
+        assertTrue("Expected more then 50 results, was: " + results.size(), results.size() > 50);
+        
+        for (int i = 0; i < results.size(); i++) {
+            final RawDocument doc = (RawDocument) results.get(i);
+            assertNotNull("Title should not be null.", doc.getTitle());
+            assertNotNull("URL should not be null.", doc.getUrl());
+            try {
+                new URL(doc.getUrl()).toExternalForm();
+            } catch (MalformedURLException e) {
+                fail("URL not parseable: " + doc.getUrl());
+            }
+        }
     }
 }
