@@ -173,8 +173,6 @@ public class RegExpSnippetExtractor {
      *        subexpression?
      * @param consumeEnd Consume the regular expression at the end of
      *        subexpression?
-     *
-     * @return
      */
     protected String extractSubExpression(String expression, RE startMarker,
         RE endMarker, boolean consumeStart, boolean consumeEnd) {
