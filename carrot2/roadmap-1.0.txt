@@ -24,9 +24,6 @@ carrot2-filter-stc
 
 - Remove dependency on castor.
 
-- Remove Google descriptors from snippet reader (and from the demo applications). Replace
-them with Yahoo API (and GoogleAPI).
-
 - Review master ANT build file -- generate JavaDocs.
 
 - Ensure all tests pass. Ensure the demo application works.
