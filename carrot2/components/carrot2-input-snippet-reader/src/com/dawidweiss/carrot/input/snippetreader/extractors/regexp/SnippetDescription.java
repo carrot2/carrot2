@@ -113,7 +113,7 @@ public class SnippetDescription {
         titleStart = new RegularExpression((Element) snippet.selectSingleNode("title/start"));
         titleEnd = new RegularExpression((Element) snippet.selectSingleNode("title/end"));
         urlStart = new RegularExpression((Element) snippet.selectSingleNode("url/start"));
-        urlEnd = new RegularExpression((Element) snippet.selectSingleNode("title/end"));
+        urlEnd = new RegularExpression((Element) snippet.selectSingleNode("url/end"));
         summaryStart = new RegularExpression((Element) snippet.selectSingleNode("summary/start"));
         summaryEnd = new RegularExpression((Element) snippet.selectSingleNode("summary/end"));
 
