@@ -30,7 +30,7 @@
 
             <number-of-matched-documents>
                 <regexpression>
-                    <match><![CDATA[of [^R]*R]]></match>
+                    <match><![CDATA[class="ofSoMany".+?</span>]]></match>
                     <replace regexp="[^0123456789]*" with="" />
                 </regexpression>
             </number-of-matched-documents>
@@ -67,10 +67,10 @@
              -->
             <url>
                <start consume="true">
-                   <regexp><![CDATA[class="resURL">]]></regexp>
+                   <regexp><![CDATA[<a class="res" href="]]></regexp>
                </start>
                <end   consume="true">
-                   <regexp><![CDATA[</span>]]></regexp>
+                   <regexp><![CDATA["]]></regexp>
                </end>
             </url>
 
@@ -78,10 +78,10 @@
              -->
             <summary>
                <start consume="true">
-                   <regexp><![CDATA[resTitle"><a.*?<br.*?>]]></regexp>
+                   <regexp><![CDATA[<span class="resTeaser">]]></regexp>
                </start>
                <end   consume="true">
-                   <regexp><![CDATA[<br.*?>]]></regexp>
+                   <regexp><![CDATA[</span>]]></regexp>
                </end>
             </summary>
         </snippet>
