@@ -48,6 +48,12 @@
 		</ant>
 	</target>
 
+	<target name="tomcat.undeploy">
+		<ant target="tomcat.undeploy"
+			antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" inheritrefs="true">
+		</ant>
+	</target>
+
 	<!-- an alias for dependencies-->
     <target name="deps" depends="dependencies" />
     <target name="dependencies">
