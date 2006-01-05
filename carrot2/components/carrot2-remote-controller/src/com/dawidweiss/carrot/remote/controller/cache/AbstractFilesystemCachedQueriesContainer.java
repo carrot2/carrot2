@@ -15,14 +15,7 @@ package com.dawidweiss.carrot.remote.controller.cache;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import org.apache.log4j.Logger;
 
@@ -391,6 +384,17 @@ public abstract class AbstractFilesystemCachedQueriesContainer
         synchronized (this.cache)
         {
             listeners.remove(l);
+        }
+    }
+
+    public void clear() {
+        synchronized (this.cache)
+        {
+            log.info("Clearing cache.");
+            for (Iterator i = getCachedElementSignatures(); i.hasNext();) {
+                final Object signature = i.next();
+                this.expungeFromCache(signature);
+            }
         }
     }
 }

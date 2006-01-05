@@ -13,36 +13,22 @@
 package com.dawidweiss.carrot.remote.controller;
 
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.*;
+import javax.servlet.http.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.log4j.Logger;
 import org.dom4j.Element;
-import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
-import org.dom4j.io.XMLWriter;
 import org.exolab.castor.xml.Unmarshaller;
 
 import bsh.util.BeanShellBSFEngine;
 
-import com.dawidweiss.carrot.remote.controller.cache.AbstractFilesystemCachedQueriesContainer;
-import com.dawidweiss.carrot.remote.controller.cache.Cache;
-import com.dawidweiss.carrot.remote.controller.cache.CachedQueriesContainer;
+import com.dawidweiss.carrot.remote.controller.cache.*;
 import com.dawidweiss.carrot.remote.controller.components.ComponentsLoader;
 import com.dawidweiss.carrot.remote.controller.guard.QueryGuard;
 import com.dawidweiss.carrot.remote.controller.guard.QueryGuardsSet;
@@ -303,8 +289,7 @@ public class Carrot2InitServlet
 
                     org.w3c.dom.NodeList nlist = document.getElementsByTagName("container");
 
-                    cache = new Cache();
-
+                    final ArrayList containers = new ArrayList();
                     for (int i = 0; i < nlist.getLength(); i++)
                     {
                         org.w3c.dom.Node container = nlist.item(i);
@@ -315,7 +300,7 @@ public class Carrot2InitServlet
                         Class clazz = this.getClass().getClassLoader().loadClass(implementation);
                         CachedQueriesContainer cqc = (CachedQueriesContainer) Unmarshaller
                             .unmarshal(clazz, container);
-                        cache.addContainer(cqc);
+                        containers.add(cqc);
 
                         if (cqc instanceof AbstractFilesystemCachedQueriesContainer)
                         {
@@ -324,13 +309,12 @@ public class Carrot2InitServlet
                             );
                         }
                     }
+                    cache = new Cache(containers);
                 }
                 else
                 {
                     cache = new Cache();
                 }
-
-                cache.configure();
 
                 //
                 // Instantiate QueryGuard(s)

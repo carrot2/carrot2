@@ -282,4 +282,11 @@ public class QueryProcessor
             return "CacheOnlyGuard [" + previous + "]";
         }
     }
+
+    /**
+     * Clear cache content.
+     */
+    public void clearCache() {
+        this.cache.clear();
+    }
 }

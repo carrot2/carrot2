@@ -308,4 +308,16 @@ public class XmlFileCachedQueriesContainer
             listeners.remove(l);
         }
     }
+
+
+    public void clear() {
+        synchronized (this.cache)
+        {
+            log.info("Clearing cache.");
+            for (Iterator i = getCachedElementSignatures(); i.hasNext();) {
+                final Object signature = i.next();
+                this.expungeFromCache(signature);
+            }
+        }
+    }
 }
