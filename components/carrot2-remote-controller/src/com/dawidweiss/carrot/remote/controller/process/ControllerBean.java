@@ -13,31 +13,24 @@
 package com.dawidweiss.carrot.remote.controller.process;
 
 
-import com.dawidweiss.carrot.remote.controller.QueryProcessor;
-import com.dawidweiss.carrot.remote.controller.components.ComponentsLoader;
-import com.dawidweiss.carrot.remote.controller.guard.GuardVetoException;
-import com.dawidweiss.carrot.remote.controller.guard.QueryGuard;
-import com.dawidweiss.carrot.remote.controller.cache.Cache;
-import com.dawidweiss.carrot.remote.controller.process.scripted.ComponentFailureException;
-import com.dawidweiss.carrot.controller.carrot2.xmlbinding.componentDescriptor.ComponentDescriptor;
-import org.apache.log4j.Logger;
-import com.dawidweiss.carrot.util.net.http.FormActionInfo;
-import com.dawidweiss.carrot.util.net.http.FormParameters;
-import com.dawidweiss.carrot.util.net.http.HTTPFormSubmitter;
-import com.dawidweiss.carrot.util.net.http.Parameter;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.StringWriter;
+import java.io.*;
 import java.net.URL;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import org.apache.log4j.Logger;
+
+import com.dawidweiss.carrot.controller.carrot2.xmlbinding.componentDescriptor.ComponentDescriptor;
+import com.dawidweiss.carrot.remote.controller.QueryProcessor;
+import com.dawidweiss.carrot.remote.controller.cache.Cache;
+import com.dawidweiss.carrot.remote.controller.components.ComponentsLoader;
+import com.dawidweiss.carrot.remote.controller.guard.GuardVetoException;
+import com.dawidweiss.carrot.remote.controller.guard.QueryGuard;
+import com.dawidweiss.carrot.remote.controller.process.scripted.ComponentFailureException;
+import com.dawidweiss.carrot.util.net.http.*;
 
 
 /**
@@ -49,7 +42,7 @@ public class ControllerBean
 {
     private final Logger log = Logger.getLogger(ControllerBean.class);
     private final OutputStream output;
-    private boolean cached;
+    private boolean useCachedInput;
     private boolean writeToCache;
     private Cache cache;
     private QueryGuard queryGuard;
@@ -87,13 +80,13 @@ public class ControllerBean
 
     public void setUseCachedInput(boolean newValue)
     {
-        this.cached = newValue;
+        this.useCachedInput = newValue;
     }
 
 
     public boolean getUseCachedInput()
     {
-        return this.cached;
+        return this.useCachedInput;
     }
 
 
@@ -114,8 +107,8 @@ public class ControllerBean
     {
         log.debug("start: " + componentId);
 
-        ComponentDescriptor component = componentsLoader.findComponent(componentId);
-        
+        final ComponentDescriptor component = componentsLoader.findComponent(componentId);
+
         if (component == null) {
             throw new IOException("Component does not exist: " + componentId);
         }
@@ -133,10 +126,9 @@ public class ControllerBean
             q.setContent(query.getQuery());
             q.setRequestedResults(
                 (query.getNumberOfExpectedResults() == 0) ? 100
-                                                          : query.getNumberOfExpectedResults()
-            );
+                                                          : query.getNumberOfExpectedResults());
 
-            if (this.cached)
+            if (this.useCachedInput)
             {
                 inputStream = cache.getInputFor(q, componentId, optionalParams);
                 log.debug("Using cache: " + ((inputStream == null) ? "no"
