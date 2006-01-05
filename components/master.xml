@@ -377,18 +377,33 @@ ${string:component.dependencies}
   <!-- ### {{{ WAR TYPE BUILD            ### -->
   <!-- ##################################### -->
 
-  <target name="tomcat.deploy">
+  <target name="tomcat.deploy" depends="tomcat.undeploy">
+    <deploy url="${tomcat.url}" 
+		username="${tomcat.username}"
+		password="${tomcat.password}"
+        path="/${dist.name}"
+		war="${distribution.dir}/${dist.name}.war"/>
+  </target>
+  
+  <target name="tomcat.undeploy" depends="tomcat.tasks">
+    <undeploy url="${tomcat.url}" 
+		username="${tomcat.username}"
+		password="${tomcat.password}"
+        path="/${dist.name}" failonerror="false" />
+  </target>  
+  
+  <target name="tomcat.tasks">
     <condition property="ok:deploy" value="true">
 		<equals arg1="${type}" arg2="wartype"/>
     </condition>
-    <fail message="Build type not 'wartype'. Can't deploy." unless="ok:deploy" />
+    <fail message="Build type not 'wartype'. Can't undeploy." unless="ok:deploy" />
 
 	<echo>
-Deploying:   ${distribution.dir}/${dist.name}.war
+Un/Deploying:   ${distribution.dir}/${dist.name}.war
 Remote path: /${dist.name}
 Tomcat:      ${tomcat.url}
 	</echo>
-	
+
     <path id="tomcat.tasks">
         <fileset dir="${carrot2.cvs.dir}/lib/tomcat-ant">
             <include name="*.jar" />
@@ -401,17 +416,6 @@ Tomcat:      ${tomcat.url}
 	<taskdef name="undeploy"  classname="org.apache.catalina.ant.UndeployTask">
 		<classpath refid="tomcat.tasks" />
 	</taskdef>
-
-    <undeploy url="${tomcat.url}" 
-		username="${tomcat.username}"
-		password="${tomcat.password}"
-        path="/${dist.name}" failonerror="false" />
-
-    <deploy url="${tomcat.url}" 
-		username="${tomcat.username}"
-		password="${tomcat.password}"
-        path="/${dist.name}"
-		war="${distribution.dir}/${dist.name}.war"/>
   </target>
   
   <target name="build.wartype" depends="prepare,build.wartype.internal,copy.dependencies">
