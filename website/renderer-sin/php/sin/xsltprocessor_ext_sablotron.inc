@@ -10,7 +10,7 @@ require_once("./sin/functions.inc");
  * A global variable SABCMD_PATH must point to Sablotron executable.
  *
  */
-class XSLTProcessor
+class sin_XSLTProcessor
 {
 	var $params;
 

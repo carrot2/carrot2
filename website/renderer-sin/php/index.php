@@ -1,15 +1,20 @@
 <?php
 
-$ENGINE_VERSION	= "$Id$";
+$ENGINE_VERSION	= '$Id$';
 
 require_once("sin/autodeploy.inc");
-require_once("sin/declarations.inc");
+if (is_file("sin/declarations.local.inc")) {
+	require_once("sin/declarations.local.inc");
+} else {
+	require_once("sin/declarations.inc");
+}
 require_once("sin/functions.inc");
 
 if ($PROCESSOR_CLASS == "") {
 	print("Processor class missing.");
 	exit;
 }
+
 require_once($PROCESSOR_CLASS); 
 
 header("Content-Type: text/html;");
@@ -39,8 +44,12 @@ if (is_dir( $GLOBALS["PAGES_REAL_DIR"] . $page ))
 	}
 }
 
+// Initialize the XSLT processor class.
+$processor = new sin_XSLTProcessor();
+$processor->initialize();
+
 // Security checkpoint
-if (isPageSecure( $page, $processor )==FALSE)
+if (isPageSecure($page, $processor)==FALSE)
 {
 	if (debugMode()) print("<h3>Page URL is insecure: " . $page);
 	$page = "/engine_pages/securityWarning.xml";
@@ -63,11 +72,6 @@ foreach ($_GET as $key => $value)
 		$queryString = $queryString . urlencode($key) . "=" . urlencode($value);
 	}
 
-
-// Initialize the XSLT processor class.
-$processor = new XSLTProcessor();
-$processor->initialize();
-
 // Add required variables for the XSLT stylesheets.
 $processor->addParam("engineBaseURL",   $BASE_URL );
 $processor->addParam("engineScriptURL", $BASE_URL . "/" . $ENGINE_SCRIPT );
@@ -81,13 +85,16 @@ $processor->addParam("queryString",     $queryString );
 $processor->addParam("lastUpdate",      date ("d-m-Y H:i:s", filemtime( $PAGES_REAL_DIR . $page )));   
 $processor->addParam("currentDate",     date ("Y-m-d", time()));   
 $processor->addParam("engineVersion",   $ENGINE_VERSION);
-$processor->addParam("requestedLang",   $_GET["lang"]);
+
+if (isset($_GET['lang'])) {
+    $processor->addParam("requestedLang", $_GET['lang']);
+}
 
 // Add any HTTP GET params that have been passed to the script.
 foreach ($_GET as $key => $value)
 	if ($key != 'lang')
 		$processor->addParam($key, $value);
-
+        
 // Load the first five lines of the input file and check if there is directive
 // on which stylesheet should be applied. Default stylesheet is used if no
 // directive is found. We're using regexp to find the directive, because it 
@@ -95,7 +102,7 @@ foreach ($_GET as $key => $value)
 $stylesheet = "";
 $fd 		= fopen ($PAGES_REAL_DIR . $page, "r");
 $maxlines 	= 5;
-while (!feof ($fd) && maxlines>=0) {
+while (!feof ($fd) && $maxlines>=0) {
     $buffer = fgets($fd, 4096);
     $maxlines--;
     // is it the stylesheet directive?

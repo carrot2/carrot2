@@ -7,7 +7,7 @@ require_once("./sin/functions.inc");
 /*
  * XSLT Processor class for XSLTPROC (invoked as an external shell process!).
  */
-class XSLTProcessor
+class sin_XSLTProcessor
 {
 	var $params;
 
