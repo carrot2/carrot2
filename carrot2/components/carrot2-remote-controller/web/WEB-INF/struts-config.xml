@@ -26,6 +26,13 @@
 
     <action-mappings>
         <action
+            path="/admin/cacheclear"
+            type="com.dawidweiss.carrot.remote.controller.struts.actions.CacheClearAction"
+        >
+            <forward name="ok" path="/admin/cacheCleared.jsp"/>
+        </action>
+
+        <action
             path="/reconfig"
             type="com.dawidweiss.carrot.remote.controller.struts.actions.ReconfigureAction"
             name="configurationBean"
