@@ -24,8 +24,7 @@ public interface CachedQueriesContainer
     /**
      * Invoked when all properties have been set to ensure the component is valid.
      */
-    public void configure()
-        throws RuntimeException;
+    public void configure();
 
 
     public Iterator getCachedElementSignatures();
@@ -46,5 +45,12 @@ public interface CachedQueriesContainer
     public void removeCacheListener(CacheListener l);
 
 
-    public /* CacheListener */ Iterator getCacheListeners();
+    /**
+     * Returns an iterator of {@link CacheListener} objects.
+     */
+    public Iterator getCacheListeners();
+
+
+    /** Clears all queries in this cache container if it is read-write */
+    public void clear();
 }

@@ -32,17 +32,21 @@ public class MemoryCachedQueriesContainer
     implements CachedQueriesContainer
 {
     private static final Logger log = Logger.getLogger(MemoryCachedQueriesContainer.class);
-    private long sizeLimit = 1024 * 1024; //  1mb limit default
+    
+    /**
+     * Maximum cache limit after which cache entries are discarded.
+     */
+    private final static long SIZE_LIMIT = 1024 * 1024; //  1mb limit default
+
+    /**
+     * Current cache size (total amount of memory consumed by cached queries). 
+     */
     private long currentSize = 0;
+
     private HashMap cache = new HashMap();
     private LinkedList lru = new LinkedList();
-    private List listeners = new LinkedList();
 
-    public void setSizeLimit(int limit)
-    {
-        log.debug("Setting memory limit to " + limit);
-        this.sizeLimit = limit;
-    }
+    private List listeners = new LinkedList();
 
 
     public void configure()
@@ -120,7 +124,7 @@ public class MemoryCachedQueriesContainer
 
     private void checkLimits()
     {
-        while ((this.currentSize > this.sizeLimit) && (this.cache.size() > 0))
+        while ((this.currentSize > SIZE_LIMIT) && (this.cache.size() > 0))
         {
             // pick the victim amd remove it.
             Object signature = lru.getLast();
@@ -168,6 +172,17 @@ public class MemoryCachedQueriesContainer
         synchronized (this.cache)
         {
             listeners.remove(l);
+        }
+    }
+
+
+    public void clear() {
+        synchronized (this.cache) {
+            log.info("Clearing cache.");
+
+            this.cache.clear();
+            this.lru.clear();
+            this.currentSize = 0;
         }
     }
 }

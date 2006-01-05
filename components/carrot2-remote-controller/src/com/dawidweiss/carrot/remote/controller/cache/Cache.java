@@ -15,10 +15,7 @@ package com.dawidweiss.carrot.remote.controller.cache;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.log4j.Logger;
 
@@ -26,71 +23,67 @@ import com.dawidweiss.carrot.controller.carrot2.xmlbinding.query.Query;
 
 
 /**
- * Caches queries to input components.
+ * A cache of results of queries sent to input components. The entire output
+ * stream is cached.
+ * 
+ * @author Dawid Weiss
  */
 public class Cache
 {
     private static final Logger log = Logger.getLogger(Cache.class);
-    private CachedQueriesContainer [] containers;
-    private List containersList = new ArrayList();
+    private final CachedQueriesContainer [] containers;
 
-    public Cache()
-    {
+    public Cache() {
+        this(Collections.EMPTY_LIST);
     }
 
-    public void addContainer(CachedQueriesContainer c)
-    {
-        log.debug("Adding cache container: " + c.getClass().getName());
-        containersList.add(c);
+    public Cache(List containers) {
+        this.containers = configure(containers);
     }
 
-
-    public void configure()
+    private static CachedQueriesContainer [] configure(List containersList)
     {
-        if (this.containersList == null)
-        {
-            throw new RuntimeException("Add containers before calling configure().");
-        }
-
         // reverse the order of containers.
-        Collections.reverse(containersList);
-
-        this.containers = new CachedQueriesContainer[containersList.size()];
-        containersList.toArray(containers);
+        final ArrayList copy = new ArrayList(containersList);
+        Collections.reverse(copy);
+        final CachedQueriesContainer [] containers = new CachedQueriesContainer[copy.size()];
+        copy.toArray(containers);
 
         for (int i = 0; i < containers.length; i++)
         {
             containers[i].configure();
+            log.debug("Cache container configured: " + containers[i]);
 
             if (i >= 1)
             {
-                containers[i].addCacheListener(new CachedQueryRotator(i));
+                containers[i].addCacheListener(new CachedQueryRotator(containers[i-1]));
             }
         }
 
         log.info("Cache(s) initialized and configured (" + containers.length + ") in chain.");
+
+        return containers;
     }
 
     /**
      * Reacts to an overfull state in cachedquery containers by moving the 'overful' elements from
      * one container to another.
      */
-    public class CachedQueryRotator
+    public static class CachedQueryRotator
         implements CacheListener
     {
-        private final int associatedContainerPosition;
+        private final CachedQueriesContainer nextContainer;
 
-        public CachedQueryRotator(int associatedContainerPosition)
+        public CachedQueryRotator(CachedQueriesContainer nextContainer)
         {
-            this.associatedContainerPosition = associatedContainerPosition;
+            this.nextContainer = nextContainer;
         }
 
         public void elementRemovedFromCache(CachedQuery q)
         {
-            log.debug("Degrading cached query to lower container...");
-
             // move the element down container list
-            containers[associatedContainerPosition - 1].addToCache(q);
+            log.debug("Degrading cached query to lower container...");
+            nextContainer.addToCache(q);
         }
     }
 
@@ -207,5 +200,14 @@ public class Cache
         // cache by other threads, but it is not a big problem - the two
         // copies will just coexist.
         containers[containers.length - 1].addToCache(q);
+    }
+    
+    /**
+     * Clears the content of read-write cache containers.
+     */
+    public void clear() {
+        for (int i = containers.length - 1; i >= 0; i--) {
+            containers[i].clear();
+        }
     }
 }
