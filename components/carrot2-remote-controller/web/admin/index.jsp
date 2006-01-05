@@ -8,17 +8,14 @@
         <%@include file="/jsp-tmpl/logo-infopage.txt" %>
 
         <div style="text-align: justify; margin-top: 10px; margin-bottom: 10px; width: 400px; border-top: solid 1px gray; border-bottom: solid 1px gray; padding: 10px;">
-            <p style="text-align: center;">
-            <nobr>
-            Admin panel will be here at some point ;)
-            </nobr>
-            </p>
-			
             <p style="margin-top: 20px;">
-            Temporary admin options:
+            Admin options:
             </p>
             <p>
-            <a href="recent.jsp">A list of recent queries</a>
+            <html:link target="_top" page="/admin/recent.jsp">A list of recent queries</html:link>
+            </p>
+            <p>
+            <html:link target="_top" page="/admin/cacheclear.do">Clear cached queries</html:link>
             </p>
         </div>
     </td></tr>
