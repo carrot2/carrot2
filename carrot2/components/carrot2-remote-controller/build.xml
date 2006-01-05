@@ -15,6 +15,8 @@
     <property name="deployment.port"  value="8080" />
     <property name="deployment.host"  value="localhost" />
     
+    <property name="type" value="wartype" />
+    
 
     <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
 
