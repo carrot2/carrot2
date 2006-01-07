@@ -20,10 +20,6 @@ carrot2-filter-stc
 
 - Review documentation, ensure it corresponds to reality.
 
-- Review remote component descriptors.
-
-- Remove dependency on castor.
-
 - Review master ANT build file -- generate JavaDocs.
 
 - Ensure all tests pass. Ensure the demo application works.
