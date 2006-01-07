@@ -13,14 +13,10 @@
 package com.dawidweiss.carrot.remote.controller.cache;
 
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.TreeSet;
+import java.io.*;
+import java.util.*;
 
-import com.dawidweiss.carrot.controller.carrot2.xmlbinding.query.Query;
+import com.dawidweiss.carrot.controller.carrot2.xmlbinding.Query;
 import com.dawidweiss.carrot.util.net.URLEncoding;
 
 

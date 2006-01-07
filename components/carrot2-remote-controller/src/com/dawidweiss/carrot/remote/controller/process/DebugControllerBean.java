@@ -13,34 +13,26 @@
 package com.dawidweiss.carrot.remote.controller.process;
 
 
-import com.dawidweiss.carrot.remote.controller.QueryProcessor;
-import com.dawidweiss.carrot.remote.controller.components.ComponentsLoader;
-import com.dawidweiss.carrot.remote.controller.guard.GuardVetoException;
-import com.dawidweiss.carrot.remote.controller.guard.QueryGuard;
-import com.dawidweiss.carrot.remote.controller.cache.Cache;
-import com.dawidweiss.carrot.remote.controller.process.scripted.ComponentFailureException;
-import com.dawidweiss.carrot.controller.carrot2.xmlbinding.componentDescriptor.ComponentDescriptor;
-import com.dawidweiss.carrot.util.common.StreamUtils;
-import com.dawidweiss.carrot.util.net.http.FormActionInfo;
-import com.dawidweiss.carrot.util.net.http.FormParameters;
-import com.dawidweiss.carrot.util.net.http.HTTPFormSubmitter;
-import com.dawidweiss.carrot.util.net.http.Parameter;
-
-import org.apache.log4j.Logger;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.StringWriter;
+import java.io.*;
 import java.net.URL;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import org.apache.log4j.Logger;
+
+import com.dawidweiss.carrot.controller.carrot2.xmlbinding.ComponentDescriptor;
+import com.dawidweiss.carrot.controller.carrot2.xmlbinding.Query;
+import com.dawidweiss.carrot.remote.controller.QueryProcessor;
+import com.dawidweiss.carrot.remote.controller.cache.Cache;
+import com.dawidweiss.carrot.remote.controller.components.ComponentsLoader;
+import com.dawidweiss.carrot.remote.controller.guard.GuardVetoException;
+import com.dawidweiss.carrot.remote.controller.guard.QueryGuard;
+import com.dawidweiss.carrot.remote.controller.process.scripted.ComponentFailureException;
+import com.dawidweiss.carrot.util.common.StreamUtils;
+import com.dawidweiss.carrot.util.net.http.*;
 
 
 /**
@@ -139,15 +131,11 @@ public class DebugControllerBean
 
         java.io.InputStream inputStream = null;
 
-        com.dawidweiss.carrot.controller.carrot2.xmlbinding.query.Query q = new com.dawidweiss.carrot.controller.carrot2.xmlbinding.query.Query();
-
         try
         {
-            q.setContent(query.getQuery());
-            q.setRequestedResults(
-                (query.getNumberOfExpectedResults() == 0) ? 100
-                                                          : query.getNumberOfExpectedResults()
-            );
+            final int requestedResults = 
+                (query.getNumberOfExpectedResults() == 0) ? 100 : query.getNumberOfExpectedResults();
+            final Query q = new Query(query.getQuery(), requestedResults, true);
 
             if (this.cached)
             {

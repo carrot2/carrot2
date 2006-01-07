@@ -23,7 +23,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
-import com.dawidweiss.carrot.controller.carrot2.xmlbinding.componentDescriptor.ComponentDescriptor;
+import com.dawidweiss.carrot.controller.carrot2.xmlbinding.ComponentDescriptor;
+import com.dawidweiss.carrot.controller.carrot2.xmlbinding.Query;
 import com.dawidweiss.carrot.remote.controller.QueryProcessor;
 import com.dawidweiss.carrot.remote.controller.cache.Cache;
 import com.dawidweiss.carrot.remote.controller.components.ComponentsLoader;
@@ -119,14 +120,11 @@ public class ControllerBean
 
         java.io.InputStream inputStream = null;
 
-        com.dawidweiss.carrot.controller.carrot2.xmlbinding.query.Query q = new com.dawidweiss.carrot.controller.carrot2.xmlbinding.query.Query();
-
         try
         {
-            q.setContent(query.getQuery());
-            q.setRequestedResults(
-                (query.getNumberOfExpectedResults() == 0) ? 100
-                                                          : query.getNumberOfExpectedResults());
+            final int requestedResults = 
+                (query.getNumberOfExpectedResults() == 0) ? 100 : query.getNumberOfExpectedResults();
+            final Query q = new Query(query.getQuery(), requestedResults, true);
 
             if (this.useCachedInput)
             {

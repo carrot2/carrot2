@@ -13,7 +13,7 @@
 package com.dawidweiss.carrot.remote.controller.process;
 
 
-import com.dawidweiss.carrot.controller.carrot2.xmlbinding.componentDescriptor.ComponentDescriptor;
+import com.dawidweiss.carrot.controller.carrot2.xmlbinding.ComponentDescriptor;
 
 
 /**

@@ -24,7 +24,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.BasicConfigurator;
 import org.dom4j.io.OutputFormat;
-import org.dom4j.io.SAXWriter;
 import org.dom4j.io.XMLWriter;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
@@ -35,10 +34,6 @@ import org.xml.sax.SAXException;
  */
 public class CacheRotator
 {
-    public CacheRotator()
-    {
-    }
-
     public void addQueryForAll(CachedQueriesContainer from, CachedQueriesContainer to)
         throws ParserConfigurationException, IOException, SAXException
     {

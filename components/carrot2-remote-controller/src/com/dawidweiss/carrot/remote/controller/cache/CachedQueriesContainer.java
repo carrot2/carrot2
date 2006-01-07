@@ -15,6 +15,8 @@ package com.dawidweiss.carrot.remote.controller.cache;
 
 import java.util.Iterator;
 
+import org.dom4j.Element;
+
 
 /**
  * Cache container interface. Containters hold cached queries.
@@ -53,4 +55,9 @@ public interface CachedQueriesContainer
 
     /** Clears all queries in this cache container if it is read-write */
     public void clear();
+
+    /**
+     * Configure container using DOM4J XML (each container will have its specific configuration settings). 
+     */
+    public void setConfiguration(Element container);
 }

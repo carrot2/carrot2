@@ -5,7 +5,7 @@ import org.apache.bsf.*;
 import java.util.Vector;
 
 /**
- * A test case for the {@link bsh.util.BeanShellBSFEngine}.
+ * A test case for the {@link bsh.util.C2BeanShellBSFEngine}.
  * 
  * @author Pat Niemeyer
  * @author Dawid Weiss

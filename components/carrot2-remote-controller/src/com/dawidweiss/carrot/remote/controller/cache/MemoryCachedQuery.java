@@ -17,7 +17,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.Map;
 
-import com.dawidweiss.carrot.controller.carrot2.xmlbinding.query.Query;
+import com.dawidweiss.carrot.controller.carrot2.xmlbinding.Query;
 
 
 /**

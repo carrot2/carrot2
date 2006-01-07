@@ -13,14 +13,12 @@
 package com.dawidweiss.carrot.remote.controller.cache;
 
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import com.dawidweiss.carrot.controller.carrot2.xmlbinding.query.Query;
+import com.dawidweiss.carrot.controller.carrot2.xmlbinding.Query;
 
 
 class QueryCacherProxy

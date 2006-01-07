@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.*;
 
 import org.apache.log4j.Logger;
+import org.dom4j.Element;
 
 
 /**
@@ -103,7 +104,7 @@ public abstract class AbstractFilesystemCachedQueriesContainer
     }
 
 
-    public void setUseSystemTemp(boolean flag)
+    public void setUseSystemTemp()
     {
         String tempDir = System.getProperty("java.io.tmpdir");
 
@@ -395,6 +396,26 @@ public abstract class AbstractFilesystemCachedQueriesContainer
                 final Object signature = i.next();
                 this.expungeFromCache(signature);
             }
+        }
+    }
+    
+    public void setConfiguration(Element container) {
+        if (container.element("size-limit") != null) {
+            this.sizeLimit = Integer.parseInt(container.element("size-limit").getTextTrim());
+        }
+        if (container.element("use-system-temp") != null) {
+            if (Boolean.parseBoolean(container.element("use-system-temp").getTextTrim())) {
+                this.setUseSystemTemp();
+            }
+        }
+        if (container.element("read-only") != null) {
+            if (Boolean.parseBoolean(container.element("read-only").getTextTrim())) {
+                this.setReadOnly(true);
+            }
+        }
+        if (container.element("context-relative-dir") != null) {
+            final String crd = container.elementText("context-relative-dir");
+            this.setContextRelativeDir(crd);
         }
     }
 }

@@ -13,11 +13,13 @@
 package com.dawidweiss.carrot.remote.controller.components;
 
 
-import com.dawidweiss.carrot.controller.carrot2.xmlbinding.componentDescriptor.*;
-import com.dawidweiss.carrot.controller.carrot2.xmlbinding.componentDescriptor.types.*;
-import org.apache.log4j.Logger;
 import java.io.*;
 import java.util.*;
+
+import org.apache.log4j.Logger;
+
+import com.dawidweiss.carrot.controller.carrot2.xmlbinding.ComponentDescriptor;
+import com.dawidweiss.carrot.controller.carrot2.xmlbinding.Service;
 
 
 /**
@@ -75,9 +77,9 @@ public class ComponentsLoader
             {
                 Service service = Service.unmarshal(new FileReader(files[i]));
 
-                for (Enumeration j = service.enumerateComponentDescriptor(); j.hasMoreElements();)
+                for (Iterator j = service.getComponentDescriptors().iterator(); j.hasNext();)
                 {
-                    ComponentDescriptor c = (ComponentDescriptor) j.nextElement();
+                    ComponentDescriptor c = (ComponentDescriptor) j.next();
 
                     if (addComponent(c))
                     {
@@ -114,24 +116,21 @@ public class ComponentsLoader
             return false;
         }
 
-        switch (c.getType().getType())
+        switch (c.getType())
         {
-            case ComponentType.INPUT_TYPE:
+            case ComponentDescriptor.INPUT_TYPE:
                 log.debug("Added input component: " + c.getId());
                 inputs.add(c);
-
                 break;
 
-            case ComponentType.OUTPUT_TYPE:
+            case ComponentDescriptor.OUTPUT_TYPE:
                 log.debug("Added output component: " + c.getId());
                 outputs.add(c);
-
                 break;
 
-            case ComponentType.FILTER_TYPE:
+            case ComponentDescriptor.FILTER_TYPE:
                 log.debug("Added filter component: " + c.getId());
                 filters.add(c);
-
                 break;
 
             default:

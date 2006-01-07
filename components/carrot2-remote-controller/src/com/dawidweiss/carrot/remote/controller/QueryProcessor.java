@@ -17,8 +17,7 @@ import com.dawidweiss.carrot.remote.controller.guard.*;
 import com.dawidweiss.carrot.remote.controller.process.*;
 import com.dawidweiss.carrot.remote.controller.cache.Cache;
 import com.dawidweiss.carrot.remote.controller.process.scripted.ComponentFailureException;
-import com.dawidweiss.carrot.controller.carrot2.xmlbinding.componentDescriptor.*;
-import com.dawidweiss.carrot.controller.carrot2.xmlbinding.query.*;
+import com.dawidweiss.carrot.controller.carrot2.xmlbinding.*;
 
 import org.apache.log4j.Logger;
 import com.dawidweiss.carrot.util.net.http.*;
@@ -27,7 +26,6 @@ import java.net.*;
 import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
-import javax.servlet.http.HttpServletResponse;
 
 
 /**

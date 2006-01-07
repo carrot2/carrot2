@@ -1,7 +1,7 @@
 <%@page contentType="text/html; charset=UTF-8"
         errorPage="/error.jsp"
         import="com.dawidweiss.carrot.remote.controller.*,
-                com.dawidweiss.carrot.controller.carrot2.xmlbinding.query.Query,
+                com.dawidweiss.carrot.controller.carrot2.xmlbinding.Query,
                 com.dawidweiss.carrot.remote.controller.process.*,
                 com.dawidweiss.carrot.util.net.*,
                 com.dawidweiss.carrot.remote.controller.struts.StrutsHelpers"

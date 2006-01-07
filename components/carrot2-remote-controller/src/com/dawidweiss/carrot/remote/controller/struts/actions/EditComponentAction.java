@@ -13,12 +13,15 @@
 package com.dawidweiss.carrot.remote.controller.struts.actions;
 
 
-import com.dawidweiss.carrot.remote.controller.*;
-import com.dawidweiss.carrot.remote.controller.process.*;
-import com.dawidweiss.carrot.remote.controller.struts.forms.*;
-import com.dawidweiss.carrot.controller.carrot2.xmlbinding.componentDescriptor.ComponentDescriptor;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.struts.action.*;
-import javax.servlet.http.*;
+
+import com.dawidweiss.carrot.controller.carrot2.xmlbinding.ComponentDescriptor;
+import com.dawidweiss.carrot.remote.controller.Carrot2InitServlet;
+import com.dawidweiss.carrot.remote.controller.process.ProcessingChainLoader;
+import com.dawidweiss.carrot.remote.controller.struts.forms.ComponentForm;
 
 
 /**

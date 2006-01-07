@@ -13,26 +13,15 @@
 package com.dawidweiss.carrot.remote.controller.cache;
 
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 import org.apache.log4j.Logger;
+import org.dom4j.io.SAXReader;
 
-import com.dawidweiss.carrot.controller.carrot2.xmlbinding.query.Query;
+import com.dawidweiss.carrot.controller.carrot2.xmlbinding.Query;
 import com.dawidweiss.carrot.util.net.URLEncoding;
 
 
@@ -208,9 +197,9 @@ public class ZIPCachedQuery
                         try
                         {
                             this.query = Query.unmarshal(
-                                    new StringReader(
+                                    new SAXReader().read(new StringReader(
                                         new String(URLEncoding.decode(encoded), "UTF-8")
-                                    )
+                                    )).getRootElement()
                                 );
                         }
                         catch (Exception e)

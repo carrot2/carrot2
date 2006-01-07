@@ -21,6 +21,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.dom4j.Element;
 
 import com.dawidweiss.carrot.util.common.StreamUtils;
 
@@ -36,7 +37,7 @@ public class MemoryCachedQueriesContainer
     /**
      * Maximum cache limit after which cache entries are discarded.
      */
-    private final static long SIZE_LIMIT = 1024 * 1024; //  1mb limit default
+    private final static int DEFAULT_SIZE_LIMIT = 1024 * 1024; //  1mb limit default
 
     /**
      * Current cache size (total amount of memory consumed by cached queries). 
@@ -48,6 +49,7 @@ public class MemoryCachedQueriesContainer
 
     private List listeners = new LinkedList();
 
+    private int sizeLimit = DEFAULT_SIZE_LIMIT;
 
     public void configure()
     {
@@ -124,7 +126,7 @@ public class MemoryCachedQueriesContainer
 
     private void checkLimits()
     {
-        while ((this.currentSize > SIZE_LIMIT) && (this.cache.size() > 0))
+        while ((this.currentSize > sizeLimit) && (this.cache.size() > 0))
         {
             // pick the victim amd remove it.
             Object signature = lru.getLast();
@@ -183,6 +185,13 @@ public class MemoryCachedQueriesContainer
             this.cache.clear();
             this.lru.clear();
             this.currentSize = 0;
+        }
+    }
+
+
+    public void setConfiguration(Element container) {
+        if (container.element("size-limit") != null) {
+            this.sizeLimit = Integer.parseInt(container.element("size-limit").getTextTrim());
         }
     }
 }

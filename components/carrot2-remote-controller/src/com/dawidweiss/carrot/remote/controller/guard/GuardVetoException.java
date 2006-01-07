@@ -14,7 +14,7 @@ package com.dawidweiss.carrot.remote.controller.guard;
 
 
 import com.dawidweiss.carrot.remote.controller.process.scripted.ComponentFailureException;
-import com.dawidweiss.carrot.controller.carrot2.xmlbinding.componentDescriptor.*;
+import com.dawidweiss.carrot.controller.carrot2.xmlbinding.*;
 
 
 public class GuardVetoException

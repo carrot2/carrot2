@@ -13,8 +13,7 @@
 package com.dawidweiss.carrot.remote.controller.guard;
 
 
-import com.dawidweiss.carrot.controller.carrot2.xmlbinding.componentDescriptor.*;
-import com.dawidweiss.carrot.controller.carrot2.xmlbinding.query.*;
+import com.dawidweiss.carrot.controller.carrot2.xmlbinding.*;
 import org.apache.log4j.*;
 import javax.servlet.*;
 import javax.servlet.http.*;

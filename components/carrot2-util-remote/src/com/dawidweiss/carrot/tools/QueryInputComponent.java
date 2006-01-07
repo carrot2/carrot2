@@ -13,17 +13,11 @@
 package com.dawidweiss.carrot.tools;
 
 
-import com.dawidweiss.carrot.controller.carrot2.xmlbinding.query.Query;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
+import java.io.*;
 import java.net.URL;
 
-import com.dawidweiss.carrot.util.net.http.FormActionInfo;
-import com.dawidweiss.carrot.util.net.http.FormParameters;
-import com.dawidweiss.carrot.util.net.http.HTTPFormSubmitter;
-import com.dawidweiss.carrot.util.net.http.Parameter;
+import com.dawidweiss.carrot.controller.carrot2.xmlbinding.Query;
+import com.dawidweiss.carrot.util.net.http.*;
 
 
 /**
@@ -51,19 +45,9 @@ public class QueryInputComponent
         FormParameters queryArgs = new FormParameters();
         HTTPFormSubmitter submitter = new HTTPFormSubmitter(actionInfo);
 
-        StringWriter sw = new StringWriter();
-
-        try
-        {
-            Query query = new Query();
-            query.setContent(queryString);
-            query.setRequestedResults(resultsRequested);
-            query.marshal(sw);
-        }
-        catch (Exception e)
-        {
-            throw new IOException("Castor marshalling exception: " + e.toString());
-        }
+        final StringWriter sw = new StringWriter();
+        Query query = new Query(queryString, resultsRequested, true);
+        query.marshal(sw);
 
         Parameter queryRequestXml = new Parameter(
                 "carrot-request", sw.getBuffer().toString(), false

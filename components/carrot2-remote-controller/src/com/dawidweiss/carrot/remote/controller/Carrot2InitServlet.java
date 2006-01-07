@@ -18,15 +18,13 @@ import java.util.*;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.bsf.BSFManager;
 import org.apache.log4j.Logger;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
-import org.exolab.castor.xml.Unmarshaller;
 
-import bsh.util.BeanShellBSFEngine;
+import bsh.util.C2BeanShellBSFEngine;
 
 import com.dawidweiss.carrot.remote.controller.cache.*;
 import com.dawidweiss.carrot.remote.controller.components.ComponentsLoader;
@@ -79,8 +77,8 @@ public class Carrot2InitServlet
         super.init(servletConfig);
 
         // Install beanshell support.
-        org.apache.bsf.BSFManager.registerScriptingEngine(
-            "beanshell", BeanShellBSFEngine.class.getName(), new String [] { "bsh" }
+        BSFManager.registerScriptingEngine(
+            "beanshell", C2BeanShellBSFEngine.class.getName(), new String [] { "bsh" }
         );
 
         String configFileName = servletConfig.getInitParameter("config");
@@ -280,26 +278,16 @@ public class Carrot2InitServlet
                     }
 
                     // parse the cache specification XML.
-                    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-                    factory.setNamespaceAware(true);
-                    factory.setValidating(false);
-
-                    DocumentBuilder builder = factory.newDocumentBuilder();
-                    org.w3c.dom.Document document = builder.parse(cacheConfigFile);
-
-                    org.w3c.dom.NodeList nlist = document.getElementsByTagName("container");
-
-                    final ArrayList containers = new ArrayList();
-                    for (int i = 0; i < nlist.getLength(); i++)
+                    final SAXReader reader = new SAXReader();
+                    final Element cacheConfigRoot = reader.read(cacheConfigFile).getRootElement();
+                    final List containers = new ArrayList();
+                    for (Iterator i = cacheConfigRoot.elements("container").iterator(); i.hasNext();)
                     {
-                        org.w3c.dom.Node container = nlist.item(i);
-                        String implementation = container.getAttributes()
-                                                         .getNamedItem("implementation")
-                                                         .getNodeValue();
-
-                        Class clazz = this.getClass().getClassLoader().loadClass(implementation);
-                        CachedQueriesContainer cqc = (CachedQueriesContainer) Unmarshaller
-                            .unmarshal(clazz, container);
+                        final Element container = (Element) i.next();
+                        final String implementation = container.attributeValue("implementation");
+                        final Class clazz = this.getClass().getClassLoader().loadClass(implementation);
+                        final CachedQueriesContainer cqc = (CachedQueriesContainer) clazz.newInstance();
+                        cqc.setConfiguration(container);
                         containers.add(cqc);
 
                         if (cqc instanceof AbstractFilesystemCachedQueriesContainer)

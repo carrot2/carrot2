@@ -2,7 +2,7 @@
         errorPage="/error.jsp"
         import="
         com.dawidweiss.carrot.remote.controller.process.*,
-        com.dawidweiss.carrot.controller.carrot2.xmlbinding.componentDescriptor.*,
+        com.dawidweiss.carrot.controller.carrot2.xmlbinding.*,
         java.util.Iterator,
         com.dawidweiss.carrot.remote.controller.Carrot2InitServlet,
         com.dawidweiss.carrot.*,
