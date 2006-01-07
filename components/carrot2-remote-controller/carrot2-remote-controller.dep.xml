@@ -35,5 +35,6 @@
 	<dependency name="beanshell" />
 
 	<dependency name="struts" nocopy="true" />
-	
+
+	<dependency name="junit" profile="test" />
 </component>
