@@ -16,6 +16,7 @@
     <property name="deployment.host"  value="localhost" />
     
     <property name="type" value="wartype" />
+    <property name="tests.available" value="true" />
     
 
     <import file="${carrot2.cvs.dir}/components/common-targets.inc" />

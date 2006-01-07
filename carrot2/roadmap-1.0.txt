@@ -30,8 +30,6 @@ carrot2-filter-stc
 
 - Nightly deploy must include unit tests (currently only external tests are run).
 
-- Upgrade Beanshell or patch BSF engine class to return wrapped BSH Exception
-
 - Introduce a special profile to the carrot2-demo-browser, so that it can be
   built without dependencies of some clustering algorithms (TRC/STC/AHC)
 
