@@ -13,18 +13,12 @@
 package com.dawidweiss.carrot.remote.controller.cache;
 
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
 import org.apache.log4j.Logger;
 
-import com.dawidweiss.carrot.controller.carrot2.xmlbinding.query.Query;
+import com.dawidweiss.carrot.controller.carrot2.xmlbinding.Query;
 
 
 /**

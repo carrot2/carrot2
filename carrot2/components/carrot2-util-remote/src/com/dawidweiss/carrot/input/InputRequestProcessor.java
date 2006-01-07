@@ -13,17 +13,18 @@
 package com.dawidweiss.carrot.input;
 
 
-import com.dawidweiss.carrot.controller.carrot2.xmlbinding.query.Query;
-import com.dawidweiss.carrot.util.AbstractRequestProcessor;
-import java.io.OutputStreamWriter;
-import java.io.StringReader;
-import java.io.Writer;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
+
+import com.dawidweiss.carrot.controller.carrot2.xmlbinding.Query;
+import com.dawidweiss.carrot.util.AbstractRequestProcessor;
 
 
 /**
@@ -42,11 +43,12 @@ public abstract class InputRequestProcessor
     {
         try
         {
-            String carrotRequest = request.getParameter("carrot-request");
+            final String carrotRequest = request.getParameter("carrot-request");
+            final SAXReader reader = new SAXReader();
+            final Element root = reader.read(new StringReader(carrotRequest)).getRootElement();
 
-            Query query = Query.unmarshal(new StringReader(carrotRequest));
-
-            Writer outputXml = new OutputStreamWriter(response.getOutputStream(), "UTF-8");
+            final Query query = Query.unmarshal(root);
+            final Writer outputXml = new OutputStreamWriter(response.getOutputStream(), "UTF-8");
 
             try
             {
@@ -67,27 +69,28 @@ public abstract class InputRequestProcessor
                 }
             }
         }
-        catch (org.exolab.castor.xml.MarshalException e)
+        catch (Exception e)
         {
-            response.sendError(
-                HttpServletResponse.SC_BAD_REQUEST,
-                "Query could not be unmarshalled: " + e.toString()
-            );
-            org.apache.log4j.Logger.getLogger(this.getClass()).info(
-                "Query could not be unmarshalled.", e
-            );
-        }
-        catch (org.exolab.castor.xml.ValidationException e)
-        {
-            response.sendError(
-                HttpServletResponse.SC_BAD_REQUEST, "Query does not validate: " + e.toString()
-            );
-            org.apache.log4j.Logger.getLogger(this.getClass()).warn("Query does not validate.", e);
+            if (e instanceof DocumentException
+                    || e instanceof IllegalArgumentException) {
+                org.apache.log4j.Logger.getLogger(this.getClass()).info(
+                        "Query could not be unmarshalled.", e
+                    );
+                response.sendError(
+                    HttpServletResponse.SC_BAD_REQUEST,
+                    "Query could not be unmarshalled: " + e.toString()
+                );
+            } else {
+                org.apache.log4j.Logger.getLogger(this.getClass()).info(
+                        "Internal error occurred: ", e
+                );
+                response.sendError(
+                        HttpServletResponse.SC_BAD_REQUEST,
+                        "Internal error occurred: " + e.toString()
+                    );
+            }
         }
     }
-
-
-    // ------------------------------------------------------- protected section
 
     /**
      * Converts query request parameters from a map of string arrays

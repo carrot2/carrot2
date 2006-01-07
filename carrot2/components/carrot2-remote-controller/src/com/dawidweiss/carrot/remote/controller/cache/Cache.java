@@ -19,7 +19,7 @@ import java.util.*;
 
 import org.apache.log4j.Logger;
 
-import com.dawidweiss.carrot.controller.carrot2.xmlbinding.query.Query;
+import com.dawidweiss.carrot.controller.carrot2.xmlbinding.Query;
 
 
 /**

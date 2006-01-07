@@ -13,11 +13,13 @@
 package com.dawidweiss.carrot.remote.controller.process;
 
 
-import com.dawidweiss.carrot.remote.controller.components.*;
-import com.dawidweiss.carrot.controller.carrot2.xmlbinding.processDescriptor.*;
-import org.apache.log4j.Logger;
 import java.io.*;
 import java.util.*;
+
+import org.apache.log4j.Logger;
+
+import com.dawidweiss.carrot.controller.carrot2.xmlbinding.ProcessDescriptor;
+import com.dawidweiss.carrot.remote.controller.components.ComponentsLoader;
 
 
 /**

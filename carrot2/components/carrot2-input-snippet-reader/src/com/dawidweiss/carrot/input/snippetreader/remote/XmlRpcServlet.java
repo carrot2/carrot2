@@ -12,21 +12,10 @@
  */
 package com.dawidweiss.carrot.input.snippetreader.remote;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.StringReader;
-import java.io.Writer;
+import java.io.*;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.Vector;
+import java.util.*;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -39,7 +28,7 @@ import org.apache.xmlrpc.XmlRpcServer;
 import org.dom4j.Document;
 import org.dom4j.io.SAXReader;
 
-import com.dawidweiss.carrot.controller.carrot2.xmlbinding.query.Query;
+import com.dawidweiss.carrot.controller.carrot2.xmlbinding.Query;
 import com.dawidweiss.carrot.input.snippetreader.readers.WebSnippetReader;
 import com.dawidweiss.carrot.util.Log4jStarter;
 import com.dawidweiss.carrot.util.common.StreamUtils;
@@ -257,8 +246,7 @@ public class XmlRpcServlet extends javax.servlet.http.HttpServlet {
                     // process request. Let container parse POST parameters (they're not streams anyway).
                     String reqxml = req.getParameter("carrot-request");
 
-                    Query query = null; /* JBuilder complains about uninitialized variable if we do a direct assignment here. */
-                    query = Query.unmarshal(new StringReader(reqxml));
+                    Query query = Query.unmarshal(new SAXReader().read(new StringReader(reqxml)).getRootElement());
 
                     OutputStream output = res.getOutputStream();
                     Writer w = new OutputStreamWriter(output, "UTF-8");

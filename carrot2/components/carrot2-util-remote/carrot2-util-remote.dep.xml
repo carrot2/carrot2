@@ -24,7 +24,6 @@
 
     <dependency name="log4j" />
     <dependency name="dom4j" />
-    <dependency name="castor" />
 
     <dependency name="servlets-api" nocopy="true" />
 

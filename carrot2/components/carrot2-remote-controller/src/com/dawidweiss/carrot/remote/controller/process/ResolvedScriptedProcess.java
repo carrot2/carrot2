@@ -13,22 +13,22 @@
 package com.dawidweiss.carrot.remote.controller.process;
 
 
-import com.dawidweiss.carrot.remote.controller.components.ComponentsLoader;
-import com.dawidweiss.carrot.remote.controller.guard.QueryGuard;
-import com.dawidweiss.carrot.remote.controller.cache.Cache;
-import com.dawidweiss.carrot.controller.carrot2.xmlbinding.componentDescriptor.ComponentDescriptor;
-import com.dawidweiss.carrot.controller.carrot2.xmlbinding.componentDescriptor.types.ComponentType;
-import com.dawidweiss.carrot.controller.carrot2.xmlbinding.processDescriptor.ProcessDescriptor;
-import com.dawidweiss.carrot.controller.carrot2.xmlbinding.query.Query;
-import org.apache.bsf.BSFException;
-import org.apache.bsf.BSFManager;
-import org.apache.log4j.Logger;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import org.apache.bsf.BSFException;
+import org.apache.bsf.BSFManager;
+import org.apache.log4j.Logger;
+
+import com.dawidweiss.carrot.controller.carrot2.xmlbinding.*;
+import com.dawidweiss.carrot.remote.controller.cache.Cache;
+import com.dawidweiss.carrot.remote.controller.components.ComponentsLoader;
+import com.dawidweiss.carrot.remote.controller.guard.QueryGuard;
 
 
 /**
@@ -57,7 +57,7 @@ public class ResolvedScriptedProcess
         this.script = descriptor.getProcessingScript().getContent();
         this.language = descriptor.getProcessingScript().getLanguage();
 
-        if (org.apache.bsf.BSFManager.isLanguageRegistered(language) == false)
+        if (BSFManager.isLanguageRegistered(language) == false)
         {
             throw new IllegalArgumentException("Script language not supported: " + language);
         }
@@ -94,6 +94,7 @@ public class ResolvedScriptedProcess
     )
     {
         BSFManager manager = new BSFManager();
+        manager.setClassLoader(Thread.currentThread().getContextClassLoader());
 
         // declare global beans.
         try
@@ -165,6 +166,7 @@ public class ResolvedScriptedProcess
         throws Throwable
     {
         BSFManager manager = new BSFManager();
+        manager.setClassLoader(Thread.currentThread().getContextClassLoader());
 
         // declare global beans.
         manager.declareBean(
@@ -259,13 +261,13 @@ public class ResolvedScriptedProcess
      */
     public boolean usesComponent(ComponentDescriptor descriptor)
     {
-        switch (descriptor.getType().getType())
+        switch (descriptor.getType())
         {
-            case ComponentType.INPUT_TYPE:
+            case ComponentDescriptor.INPUT_TYPE:
                 return this.mockExecutionInfo.getUsedInputs().contains(descriptor.getId());
 
-            case ComponentType.OUTPUT_TYPE:
-            case ComponentType.FILTER_TYPE:
+            case ComponentDescriptor.OUTPUT_TYPE:
+            case ComponentDescriptor.FILTER_TYPE:
 
                 if (this.script.indexOf('"' + descriptor.getId() + '"') >= 0)
                 {
@@ -287,6 +289,7 @@ public class ResolvedScriptedProcess
         throws Throwable
     {
         BSFManager manager = new BSFManager();
+        manager.setClassLoader(Thread.currentThread().getContextClassLoader());
 
         // declare global beans.
         manager.declareBean(

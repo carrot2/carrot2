@@ -12,8 +12,8 @@
  */
 package com.dawidweiss.carrot.remote.controller;
 
+import com.dawidweiss.carrot.controller.carrot2.xmlbinding.Query;
 import com.dawidweiss.carrot.remote.controller.process.ProcessDefinition;
-import com.dawidweiss.carrot.controller.carrot2.xmlbinding.query.Query;
 
 
 /**
@@ -28,7 +28,6 @@ public final class RequestHistory
     private int position;
     private int last;  
     
-
     /**
      * Creates a new request history with some predefined length.
      */
@@ -57,7 +56,6 @@ public final class RequestHistory
 
     public final int getHistory(int max, Query [] query, ProcessDefinition [] process, long [] tstamps)
     {
-        final int localmax = this.max; 
         synchronized (this) {
             int from = position;
             int k = 0;
@@ -80,7 +78,6 @@ public final class RequestHistory
 
     public final int getHistory(int max, Query [] query, ProcessDefinition [] process)
     {
-        final int localmax = this.max; 
         synchronized (this) {
             int from = position;
             int k = 0;
@@ -98,5 +95,4 @@ public final class RequestHistory
             return k;
         }
     }
-
 }

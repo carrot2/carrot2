@@ -13,15 +13,21 @@
 package com.dawidweiss.carrot.remote.controller.struts.actions;
 
 
-import com.dawidweiss.carrot.remote.controller.*;
-import com.dawidweiss.carrot.remote.controller.process.*;
-import com.dawidweiss.carrot.remote.controller.struts.forms.*;
-import com.dawidweiss.carrot.controller.carrot2.xmlbinding.query.*;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.struts.action.*;
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+
+import com.dawidweiss.carrot.controller.carrot2.xmlbinding.Query;
+import com.dawidweiss.carrot.remote.controller.Carrot2InitServlet;
+import com.dawidweiss.carrot.remote.controller.QueryProcessor;
+import com.dawidweiss.carrot.remote.controller.process.*;
+import com.dawidweiss.carrot.remote.controller.struts.forms.QueryForm;
 
 
 /**
@@ -91,9 +97,8 @@ public class SearchAction
                 // We currently buffer all the output. Sucky solution, but
                 // works as for now.
                 StringWriter buffer = new StringWriter();
-                Query query = new Query();
-                query.setContent(qform.getQuery());
-                query.setRequestedResults(qform.getResultsRequested());
+
+                Query query = new Query(qform.getQuery(), qform.getResultsRequested(), true);
 
                 ProcessingResultHolder result = processor.process(
                         processingChain, query, buffer, request.getSession(true), request,
