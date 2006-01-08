@@ -187,7 +187,7 @@ public class ComponentDependency {
      */
 	public ComponentInProfile [] getAllRequiredComponentDependencies(Map componentsMap, String profile, boolean nocopy)
         throws BuildException {
-        ComponentInProfile root = new ComponentInProfile(this, profile);
+        ComponentInProfile root = new ComponentInProfile(this, profile, false);
         ArrayList dependencyList = new ArrayList();
         tsort(root, componentsMap, new HashMap(), new Stack(), dependencyList, nocopy);
 
@@ -240,8 +240,8 @@ public class ComponentDependency {
                 }
                 throw new BuildException(sb.toString());
             }
-            
-            ComponentInProfile dependency = new ComponentInProfile(depComponent, dep.getInProfile());
+
+            ComponentInProfile dependency = new ComponentInProfile(depComponent, dep.getInProfile(), dep.isNoCopy());
 
             String m = (String) state.get(dependency);
             if (m == null) {
@@ -319,7 +319,7 @@ public class ComponentDependency {
         ComponentInProfile [] resolvedComponents = getAllRequiredComponentDependencies(components, currentProfile);
         HashSet result = new HashSet();
         
-        ComponentInProfile self = new ComponentInProfile(this, currentProfile);
+        ComponentInProfile self = new ComponentInProfile(this, currentProfile, false);
 
         for (int i=0; i<resolvedComponents.length; i++) {
             if (resolvedComponents[i].equals(self)) {
@@ -373,7 +373,7 @@ public class ComponentDependency {
             getAllRequiredComponentDependencies(components, currentProfile, nocopy);
         HashMap result = new HashMap();
         
-        ComponentInProfile self = new ComponentInProfile(this, currentProfile);
+        ComponentInProfile self = new ComponentInProfile(this, currentProfile, false);
 
         for (int i=0; i<resolvedComponents.length; i++) {
             if (resolvedComponents[i].equals(self)) {

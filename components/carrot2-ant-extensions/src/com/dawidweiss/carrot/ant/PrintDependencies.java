@@ -135,7 +135,6 @@ public class PrintDependencies extends Task {
      * them if possible.
      */
     public void execute() throws BuildException {
-        
         checkParameters();
         this.dependencies = Utils.convertPathDependencies(getProject(), dependencies);
 
@@ -152,7 +151,7 @@ public class PrintDependencies extends Task {
             ComponentInProfile [] dependencies = component
                 .getAllRequiredComponentDependencies(components, profile);
             
-            ComponentInProfile self = new ComponentInProfile(component, profile);
+            ComponentInProfile self = new ComponentInProfile(component, profile, false);
             // Locate yourself again to get access to all dependencies.
             for (int i = 0; i<dependencies.length; i++) {
                 if (dependencies[i].equals(self)) {
@@ -192,6 +191,9 @@ public class PrintDependencies extends Task {
 	                if (dependency.profile != null) {
 	                	buf.append(" [in profile: '" + dependency.profile + "']");
 	                }
+                    if (dependency.noCopy) {
+                        buf.append(" [not copied, compile-time dependency]");
+                    }
 	                buf.append(" ");
 	                buf.append(dependency.component.getDescription());
 	                buf.append("\n");
@@ -240,6 +242,10 @@ public class PrintDependencies extends Task {
     	                if (component.profile != null) {
     	                	buf.append(" [in profile: '" + component.profile + "']"); 
     	                }
+                        if (component.noCopy) {
+                            buf.append(" [not copied, compile-time dependency]");
+                            
+                        }
     	                buf.append("\n");
 
 	                    while (indent + 1 >= columns.size()) {
@@ -252,11 +258,13 @@ public class PrintDependencies extends Task {
 		                    else if (v == ENDLINE) columns.set(indent-1, NOLINE);
 	                    }
 
-    	                for (Iterator i = component.getDependencies().iterator(); i.hasNext();) {
-    	                    ComponentInProfile cip = (ComponentInProfile) i.next();
-    	                    columns.set(indent, i.hasNext() ? INLINE : ENDLINE);
-    	                    dumpInternal(buf, indent+1, cip);
-    	                }
+                        if (component.noCopy == false) {
+        	                for (Iterator i = component.getDependencies().iterator(); i.hasNext();) {
+        	                    ComponentInProfile cip = (ComponentInProfile) i.next();
+        	                    columns.set(indent, i.hasNext() ? INLINE : ENDLINE);
+        	                    dumpInternal(buf, indent+1, cip);
+        	                }
+                        }
                     }
                 }
 
