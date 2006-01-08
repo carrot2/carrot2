@@ -31,6 +31,7 @@
     
     <dependency name="carrot2-filter-lingo" in-profile="local" />
     <dependency name="carrot2-filter-trc" in-profile="local" />
+    <dependency name="carrot2-filter-stc" in-profile="local" />
 
     <dependency name="carrot2-input-snippet-reader" in-profile="local"/>
     <dependency name="carrot2-input-local-cache" in-profile="local"/>

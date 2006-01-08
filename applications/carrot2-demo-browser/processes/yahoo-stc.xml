@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<local-process id="yahoo-stc">
+  <name>Yahoo Search API -- Suffix Tree Clusterer</name>
+
+  <input  component-key="input-cached-yahooapi" />
+  <filter component-key="filter-rawdocument-enumerator" />
+  <filter component-key="filter-stc" />
+  <output component-key="output-clustersConsumer" />
+
+  <!--
+  <attribute key="process.settings.class" 
+	         value="carrot2.demo.settings.LingoClassicSettings" />
+  -->
+</local-process>
