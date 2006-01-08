@@ -20,6 +20,8 @@
   <property name="distribution.dir" value="tmp" />
   <property name="tests.report.dir" value="tmp/junit-report" />
 
+  <import file="${carrot2.cvs.dir}/components/carrot2-ant-extensions/bootstrap.xml" />
+
 
 
   <target name="javadoc">
@@ -281,7 +283,7 @@ TESTING: @{component.path}
 
 
 
-  <target name="license" description="Update/ add licensing info to source code files. ONLY FOR PACKAGE MAINTAINER.">
+  <target name="license" depends="bootstrap" description="Update/ add licensing info to source code files. ONLY FOR PACKAGE MAINTAINER.">
 	<condition property="cond:is.maintainer">
 		<equals arg1="${user.name}" arg2="dawid weiss" casesensitive="false" trim="true" />
 	</condition>
@@ -289,14 +291,6 @@ TESTING: @{component.path}
 	<fail unless="cond:is.maintainer">
 	### ERROR: TARGET FOR USE ONLY BY PACKAGE MAINTAINER.
 	</fail>
-
-    <taskdef name="licenseList"  classname="com.dawidweiss.carrot.ant.LicenseList">
-		<classpath refid="bootstrap" />
-	</taskdef>
-
-    <taskdef name="licenseReplace"  classname="com.dawidweiss.carrot.ant.LicenseReplace">
-		<classpath refid="bootstrap" />
-	</taskdef>
 
     <loadfile encoding="UTF-8" property="carrot2.license" srcfile="etc/codeconvention/header.txt" />
     <loadfile encoding="UTF-8" property="carrot2.ccg.license" srcfile="etc/codeconvention/header-ccg.txt" />
@@ -334,7 +328,7 @@ TESTING: @{component.path}
             <exclude name="**/tmp/**" />
         </fileset>
     </licenseList>
-  </target>  
+  </target>
 
 
   <target name="pretty.print">
@@ -400,13 +394,7 @@ FORMATTING: @{component.path}
 
 
 
-  <target name="bootstrap">
-    <ant target="bootstrap" antfile="build.xml" dir="components/carrot2-ant-extensions" inheritall="false" />  
-  </target>
-
-
-
-  <target name="remote">
+  <target name="remote" depends="bootstrap">
     <description>
     Collects all remote Web components into 'distribution.dir.remote'
     directory and their required JARs into 'distribution.dir.remote.libs'
@@ -419,24 +407,6 @@ FORMATTING: @{component.path}
     <mkdir dir="${distribution.dir.remote}" />
 
     <property name="carrot2.cvs.dir" location="." />
-    <ant target="bootstrap" dir="components"
-         antfile="master.xml" inheritall="true" inheritrefs="true">
-    </ant>
-
-    <path id="bootstrap">
-        <fileset dir="components/carrot2-ant-extensions/tmp" includes="*.jar" />
-        <fileset dir="lib/compile-time" includes="resolver.jar" />
-    </path>
-
-    <taskdef name="bringToDate" 
-        classname="com.dawidweiss.carrot.ant.BringToDate">
-        <classpath refid="bootstrap" />
-    </taskdef>
-
-    <taskdef name="copyDependencies"
-        classname="com.dawidweiss.carrot.ant.CopyDependencies">
-        <classpath refid="bootstrap" />
-    </taskdef>
 
     <path id="dependencies">
         <fileset dir=".">

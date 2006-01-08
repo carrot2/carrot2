@@ -48,8 +48,14 @@
   <property name="javac.debug"      value="on" />
 
   <property name="include.ant.runtime" value="false" />
-
   
+  <import file="${carrot2.cvs.dir}/components/carrot2-ant-extensions/bootstrap.xml" />
+
+  <!-- Load ant-contrib task library -->
+  <taskdef resource="net/sf/antcontrib/antlib.xml">
+    <classpath location="${carrot2.cvs.dir}/lib/ant-extensions/ant-contrib.jar" />
+  </taskdef>
+
   <!-- ##################################### -->
   <!-- ### CHECK REQUIRED PROPERTIES     ### -->
   <!-- ##################################### -->
@@ -92,15 +98,6 @@
         </and>
     </condition>
   </target>
-  
-  <target name="check.bootstrap">
-    <!-- Set to true if bootstrap jar is available. -->
-    <condition property="tmp:bootstrap.available" value="true">
-        <or>
-            <available file="${carrot2.cvs.dir}/components/carrot2-ant-extensions/tmp/carrot2-ant-extensions.jar" type="file" />
-        </or>
-    </condition>
-  </target>
   <!-- }}} -->
 
 
@@ -133,59 +130,9 @@
   <!-- ##################################### -->
   <!-- ### {{{ PREPARE                   ### -->
   <!-- ##################################### -->
-  <target name="prepare" depends="check.properties, bootstrap, custom.tasks, discover.classpath">
+  <target name="prepare" depends="check.properties, bootstrap, discover.classpath">
     <mkdir dir="${distribution.dir}"  />
     <mkdir dir="${javadoc.dir}" />
-  </target>
-
-  <target name="bootstrap" depends="check.bootstrap" unless="tmp:bootstrap.available">
-    <echo>
-##########################################################
-#   
-# Running 'ant bootstrap' on the main build file first.
-#
-##########################################################
-    </echo>
-    <ant antfile="${carrot2.cvs.dir}/build.xml" dir="${carrot2.cvs.dir}"
-    	inheritall="false" target="bootstrap" />
-    <fail>
-##########################################################
-#   
-# Bootstrap classes compiled. Rerun the build.
-#
-##########################################################
-    </fail>
-  </target>
-
-  <target name="custom.tasks">
-    <!-- Define custom ANT tasks and types -->
-    <path id="bootstrap">
-        <fileset dir="${carrot2.cvs.dir}/components/carrot2-ant-extensions/tmp">
-            <include name="*.jar" />
-        </fileset>
-        <fileset dir="${carrot2.cvs.dir}/lib/compile-time" includes="resolver.jar" />        
-    </path>
-
-    <taskdef name="bringToDate" 
-        classname="com.dawidweiss.carrot.ant.BringToDate">
-        <classpath refid="bootstrap" />
-    </taskdef>
-    <typedef name="dependencyPath"
-        classname="com.dawidweiss.carrot.ant.DependencyPath">
-        <classpath refid="bootstrap" />
-    </typedef>
-    <taskdef name="mostRecentFileDate" 
-        classname="com.dawidweiss.carrot.ant.MostRecentFileDate">
-        <classpath refid="bootstrap" />
-    </taskdef>    
-    <taskdef name="printDependencies" 
-        classname="com.dawidweiss.carrot.ant.PrintDependencies">
-        <classpath refid="bootstrap" />
-    </taskdef>
-    <taskdef name="copyDependencies"
-        classname="com.dawidweiss.carrot.ant.CopyDependencies">
-        <classpath refid="bootstrap" />
-    </taskdef>
   </target>
   
   <target name="discover.classpath" depends="discover.classpath:autodependency,discover.classpath:empty">
@@ -405,9 +352,7 @@ Tomcat:      ${tomcat.url}
 	</echo>
 
     <path id="tomcat.tasks">
-        <fileset dir="${carrot2.cvs.dir}/lib/tomcat-ant">
-            <include name="*.jar" />
-        </fileset>
+        <pathelement location="${carrot2.cvs.dir}/lib/ant-extensions/catalina-ant.jar" />
 	</path>
 	
     <taskdef name="deploy"    classname="org.apache.catalina.ant.DeployTask">
@@ -542,7 +487,7 @@ ${string:component.dependencies}
          <exclude name="**/*.java" />
        </fileset>
     </copy>
-    
+
     <!-- Run local tests. -->
     <delete dir="${build.dir}/junit-temp" failonerror="false" />
     <mkdir dir="${build.dir}/junit-temp"/>
@@ -610,7 +555,7 @@ ${string:component.dependencies}
   <!-- ### {{{ DEP TYPE BUILD            ### -->
   <!-- ##################################### -->
 
-  <target name="build.deptype" depends="bootstrap, custom.tasks, discover.classpath">
+  <target name="build.deptype" depends="bootstrap, discover.classpath">
     <bringToDate componentDescriptor="${component.descriptor}"
                  dependenciesOnly="true" profile="">
         <dependencies refid="dependencies" />

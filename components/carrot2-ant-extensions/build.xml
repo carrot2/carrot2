@@ -1,6 +1,5 @@
 
-<project name="Carrot2 ANT Extensions bootstrap build file."
-		 default="build">
+<project name="Carrot2 ANT Extensions bootstrap build file." default="build">
 
     <property name="project.dir"      location="${basedir}" />
     <property name="carrot2.cvs.dir"  location="../.." />
@@ -9,42 +8,6 @@
     <property name="type"       	  value="jartype" />
     <property name="tests.available"  value="true"    />
     <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
-
-    <!-- bootstrap build -->
-    
-    <target name="bootstrap">
-		<echo>
-Bootstrapping ANT extension tasks.
-		</echo>
-
-        <mkdir dir="tmp/build/bootstrap" />
-        <javac destdir     = "tmp/build/bootstrap"
-               debug       = "true"
-               optimize    = "false"
-               deprecation = "on"
-               includeantruntime = "true"
-               includejavaruntime = "false"
-        >
-            <src path="src" />
-            <classpath>
-                <fileset dir="${carrot2.cvs.dir}/lib/compile-time" includes="resolver.jar" />
-            </classpath>
-        </javac>
-        <copy todir="tmp/build/bootstrap/res">
-            <fileset dir="${carrot2.cvs.dir}/etc">
-                <include name="catalog.xml" />
-                <include name="component-dependency.dtd" />
-            </fileset>
-        </copy>
-
-        <mkdir dir="tmp/dist" />
-        <jar compress="true" jarfile="tmp/${dist.name}.jar">
-            <fileset dir="tmp/build/bootstrap" />
-            <manifest>
-                <attribute name="Built-By"   value="${user.name}"/>
-            </manifest>
-        </jar>
-    </target>
 
     <!-- common template tasks. -->
 
@@ -58,5 +21,4 @@ Bootstrapping ANT extension tasks.
         <property name="include.ant.runtime" value="true" />
         <ant target="build.testtype" antfile="../master.xml" inheritall="true" inheritrefs="true" />
     </target>
-
 </project>
