@@ -18,10 +18,11 @@ import org.apache.commons.pool.impl.*;
 import com.dawidweiss.carrot.util.tokenizer.parser.jflex.*;
 
 /**
- * Returns instances of word based parsers. Use concrete factories
- * {@link #JavaCC}and {@link #JFlex}to obtain parsers based on code generated
- * by JavaCC an JFlex, respectively. The {@link #Default}factory returns
- * JFlex-based parsers as they are much faster.
+ * Returns instances of word based parsers. Use concrete factory
+ * ({@link #JFlex}) to obtain parsers.
+ * 
+ * The {@link #Default} factory returns JFlex-based parsers as
+ * they are much faster.
  * 
  * @author Stanislaw Osinski
  * @version $Revision$
@@ -43,9 +44,6 @@ public class WordBasedParserFactory
         // No public constructor
     }
 
-    /**
-     * @return
-     */
     public WordBasedParserBase borrowParser()
     {
         try
