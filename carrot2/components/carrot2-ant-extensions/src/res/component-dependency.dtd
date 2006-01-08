@@ -44,7 +44,7 @@
     Static objects only contain 'files' element as a child of 'provides'.
   -->
   
-<!ELEMENT provides (files?, build*) >
+<!ELEMENT provides (files?, build*, check-newer?) >
 
 <!ATTLIST provides profile NMTOKEN #IMPLIED >
 
@@ -79,3 +79,17 @@
 <!ATTLIST ant file CDATA #REQUIRED >
 <!ATTLIST ant target CDATA #IMPLIED >
 
+<!--
+    If present, this element will trigger a check if any of the
+    provided component's files are older then any of the files
+    contained in the given filesets. If so, a rebuild is invoked.
+  -->
+<!ELEMENT check-newer (fileset+) >
+
+<!--
+    An ANT-like fileset. Currently the fileset only supports
+    a subset of ANT attributes. The fileset EXCLUDES ANT's default
+    excludes from the list.
+  -->
+<!ELEMENT fileset EMPTY >
+<!ATTLIST fileset dir CDATA #REQUIRED >

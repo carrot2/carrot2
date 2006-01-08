@@ -1,0 +1,67 @@
+<project name="bootstrap task" default="_failure">
+    <property name="bootstrap.dir" location="${carrot2.cvs.dir}/components/carrot2-ant-extensions/tmp/bootstrap" />
+
+    <target name="_failure">
+        <fail>Bootstrap is intended for inclusion only.</fail>
+    </target>
+
+    <target name="_bootstrap.compile">
+        <mkdir dir="${bootstrap.dir}" />
+        <javac destdir     = "${bootstrap.dir}"
+               debug       = "true"
+               optimize    = "false"
+               deprecation = "on"
+               includeantruntime = "true"
+               includejavaruntime = "false"
+        >
+            <src path="${carrot2.cvs.dir}/components/carrot2-ant-extensions/src" />
+            <classpath>
+                <fileset dir="${carrot2.cvs.dir}/lib/compile-time" includes="resolver.jar" />
+            </classpath>
+        </javac>
+
+        <mkdir dir="${bootstrap.dir}/res" />
+        <copy todir="${bootstrap.dir}/res">
+            <fileset dir="${carrot2.cvs.dir}/etc">
+                <include name="catalog.xml" />
+                <include name="component-dependency.dtd" />
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="bootstrap" depends="_bootstrap.compile">
+        <path id="bootstrap">
+            <pathelement location="${bootstrap.dir}" />
+            <fileset dir="${carrot2.cvs.dir}/lib/compile-time" includes="resolver.jar" />        
+        </path>
+
+        <taskdef name="bringToDate" 
+            classname="com.dawidweiss.carrot.ant.BringToDate">
+            <classpath refid="bootstrap" />
+        </taskdef>
+        <typedef name="dependencyPath"
+            classname="com.dawidweiss.carrot.ant.DependencyPath">
+            <classpath refid="bootstrap" />
+        </typedef>
+        <taskdef name="mostRecentFileDate" 
+            classname="com.dawidweiss.carrot.ant.MostRecentFileDate">
+            <classpath refid="bootstrap" />
+        </taskdef>    
+        <taskdef name="printDependencies" 
+            classname="com.dawidweiss.carrot.ant.PrintDependencies">
+            <classpath refid="bootstrap" />
+        </taskdef>
+        <taskdef name="copyDependencies"
+            classname="com.dawidweiss.carrot.ant.CopyDependencies">
+            <classpath refid="bootstrap" />
+        </taskdef>
+        <taskdef name="licenseList"
+            classname="com.dawidweiss.carrot.ant.LicenseList">
+            <classpath refid="bootstrap" />
+        </taskdef>
+        <taskdef name="licenseReplace"
+            classname="com.dawidweiss.carrot.ant.LicenseReplace">
+            <classpath refid="bootstrap" />
+        </taskdef>
+    </target>
+</project>
