@@ -21,31 +21,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 
-import javax.swing.AbstractAction;
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
-import javax.swing.KeyStroke;
-import javax.swing.SwingConstants;
-import javax.swing.UIManager;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 
 import carrot2.demo.DemoContext;
 import carrot2.demo.DemoGuiDelegate;
 import carrot2.demo.ProcessSettings;
-import carrot2.demo.swing.util.KeepMimumumFrameSizeListener;
-import carrot2.demo.swing.util.MapComboModel;
-import carrot2.demo.swing.util.SwingTask;
+import carrot2.demo.swing.util.*;
 
+import com.dawidweiss.carrot.util.common.StreamUtils;
+import com.jgoodies.forms.debug.FormDebugPanel;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.plaf.Options;
@@ -327,9 +313,9 @@ public class SwingDemoGui implements DemoGuiDelegate {
     private JComponent buildQueryForm() {
         final FormLayout layout = new FormLayout(
                 // columns
-                "right:pref,4px,fill:min:grow",
+                "right:pref,4px,fill:min:grow,4px,right:min",
                 // rows
-                "pref, 2px, pref");
+                "pref:grow, 2px, pref");
         final JPanel topPanel = new JPanel(layout);
         topPanel.setOpaque(false);
 
@@ -342,14 +328,33 @@ public class SwingDemoGui implements DemoGuiDelegate {
         queryField.setToolTipText("The query to be sent to the input component (syntax depends on the input).");
         queryField.addActionListener(new NewQueryListener());
         topPanel.add(queryField, cc.xywh(3,1,1,1));
-        
+
+        try {
+            final Icon searchIcon = new ImageIcon(StreamUtils.readFullyAndCloseInput(
+                    this.getClass().getResourceAsStream("search.png")));
+            final Icon searchSelectedIcon = new ImageIcon(StreamUtils.readFullyAndCloseInput(
+                    this.getClass().getResourceAsStream("searchSelected.png")));
+            final JButton searchButton = new JButton();
+            searchButton.setIcon(searchIcon);
+            searchButton.setPressedIcon(searchSelectedIcon);
+            searchButton.setContentAreaFilled(false);
+            searchButton.setBorder(BorderFactory.createEmptyBorder());
+            searchButton.setBorderPainted(false);
+            searchButton.setPreferredSize(new Dimension(searchIcon.getIconWidth(), searchIcon.getIconHeight()));
+            topPanel.add(searchButton, cc.xywh(5,1,1,1));
+
+            searchButton.addActionListener(new NewQueryListener());
+        } catch (IOException e1) {
+            throw new RuntimeException("Could not read the required icon.", e1);
+        }
+
         // build details panel.
         final FormLayout layout2 = new FormLayout(
                 "right:pref,4px,fill:max(200;pref),min,16px,right:default,max(pref;60px)",
                 "pref");
         JPanel detailsPanel = new JPanel(layout2);
         detailsPanel.setOpaque(false);
-        topPanel.add(detailsPanel, cc.xywh(3,3,1,1, CellConstraints.RIGHT, CellConstraints.DEFAULT));
+        topPanel.add(detailsPanel, cc.xywh(3,3,3,1, CellConstraints.RIGHT, CellConstraints.DEFAULT));
 
         this.processSettingsButton = new JButton("Settings");
         processSettingsButton.setToolTipText("Displays process settings window. Disabled if no settings.");
