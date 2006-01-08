@@ -8,15 +8,27 @@
     <property name="carrot2.cvs.dir"  location="../.." />
     <property name="dist.name"        value="carrot2-demo-browser" />
 
-    <property name="type"       value="jartype" />
-
+    <property name="type" value="jartype" />
     <property name="distribution.dir" location="${project.dir}/tmp/dist" />
 
     <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
 
-    <target name="build">
+	<target name="build" depends="build.full" />
+
+    <target name="build.full">
         <property name="copy.dependencies" value="true" />
         <property name="single.jar" value="false" />
+		<property name="profile" value="full" />
+
+        <ant target="build.${type}"
+             antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" inheritrefs="true">
+        </ant>
+    </target>
+	
+    <target name="build.stripped">
+        <property name="copy.dependencies" value="true" />
+        <property name="single.jar" value="false" />
+		<property name="profile" value="stripped" />
 
         <ant target="build.${type}"
              antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" inheritrefs="true">
