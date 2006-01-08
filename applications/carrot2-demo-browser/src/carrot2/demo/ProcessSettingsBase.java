@@ -10,13 +10,12 @@
  * in the root folder of the repository checkout or at:
  * http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE
  */
-package carrot2.demo.settings;
+package carrot2.demo;
 
 import java.util.*;
 
-import javax.swing.*;
+import javax.swing.JComponent;
 
-import carrot2.demo.*;
 
 /**
  * Base class for process settings.
