@@ -25,7 +25,7 @@ import java.util.*;
 
 
 /**
- * @author Micha� Wr�blewski
+ * @author Michał Wróblewski
  */
 public class AHCTest
 {
