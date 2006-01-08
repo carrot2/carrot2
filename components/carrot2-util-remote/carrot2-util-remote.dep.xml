@@ -14,7 +14,6 @@
         </build>
 		<check-newer>
             <fileset dir="src" />
-            <fileset dir="xml-binding" />
         </check-newer>
     </provides>
 
