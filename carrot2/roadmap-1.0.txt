@@ -22,9 +22,6 @@ carrot2-filter-fuzzyants
 
 - Nightly deploy must include unit tests (currently only external tests are run).
 
-- Introduce a special profile to the carrot2-demo-browser, so that it can be
-  built without dependencies of some clustering algorithms (TRC/STC/AHC)
-
 - Public Relations
 	- move O/S website from www.cs.put.poznan.pl/dweiss/carrot to www.carrot2.org
     - add new publications to the O/S website
