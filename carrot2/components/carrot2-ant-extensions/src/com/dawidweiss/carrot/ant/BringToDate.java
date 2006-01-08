@@ -126,7 +126,7 @@ public class BringToDate extends Task {
             ComponentInProfile [] dependencies = component
                 .getAllRequiredComponentDependencies(components, profile);
             
-            ComponentInProfile self = new ComponentInProfile(component, profile);
+            ComponentInProfile self = new ComponentInProfile(component, profile, false);
 
             // and check/ execute any of the 'provided/build' elements
             // on them.

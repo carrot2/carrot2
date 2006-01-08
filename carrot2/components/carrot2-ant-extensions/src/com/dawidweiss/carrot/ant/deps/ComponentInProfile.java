@@ -24,12 +24,14 @@ import java.util.List;
 public class ComponentInProfile {
     public final ComponentDependency component;
     public final String profile;
+    public final boolean noCopy; 
     
-    private ArrayList dependencies = new ArrayList(); 
+    private ArrayList dependencies = new ArrayList();
     
-    public ComponentInProfile(ComponentDependency component, String profile) {
+    public ComponentInProfile(ComponentDependency component, String profile, boolean noCopyFlag) {
         this.component = component;
         this.profile = profile;
+        this.noCopy = noCopyFlag;
     }
 
     public boolean equals(Object o) {
