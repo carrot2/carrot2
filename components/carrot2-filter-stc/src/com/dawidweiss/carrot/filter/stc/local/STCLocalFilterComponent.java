@@ -12,25 +12,25 @@
  */
 package com.dawidweiss.carrot.filter.stc.local;
 
-import java.io.*;
+import java.io.StringReader;
 import java.util.*;
 
 import com.dawidweiss.carrot.core.local.*;
 import com.dawidweiss.carrot.core.local.clustering.*;
-import com.dawidweiss.carrot.core.local.linguistic.*;
+import com.dawidweiss.carrot.core.local.linguistic.Language;
+import com.dawidweiss.carrot.core.local.linguistic.LanguageTokenizer;
 import com.dawidweiss.carrot.core.local.linguistic.tokens.*;
-import com.dawidweiss.carrot.core.local.profiling.*;
-import com.dawidweiss.carrot.filter.stc.*;
+import com.dawidweiss.carrot.core.local.profiling.ProfiledLocalFilterComponentBase;
+import com.dawidweiss.carrot.filter.stc.Processor;
 import com.dawidweiss.carrot.filter.stc.algorithm.*;
 import com.dawidweiss.carrot.filter.stc.algorithm.Cluster;
-import com.dawidweiss.carrot.util.tokenizer.languages.*;
-import com.dawidweiss.carrot.util.tokenizer.parser.*;
 
 /**
  * A local interface to the STC clustering algorithms. Parts copied & pasted
  * from the remote interface.
  * 
  * @author Stanislaw Osinski
+ * @author Dawid Weiss
  * @version $Revision$
  */
 public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
@@ -55,16 +55,10 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
     /** Capabilities required from the next component in the chain */
     private final static Set CAPABILITIES_SUCCESSOR = new HashSet(Arrays
         .asList(new Object []
-        { RawClustersProducer.class }));
+        { RawClustersConsumer.class }));
 
     /** Raw clusters consumer */
     private RawClustersConsumer rawClustersConsumer;
-
-    /** A map of lazily initialized tokenizers for different languages */
-    private Map tokenizers;
-
-    /** Generic tokenizer */
-    private WordBasedParserBase genericTokenizer;
 
     /** Tokenizer buffer size */
     private static final int TOKEN_BUFFER_SIZE = 64;
@@ -76,108 +70,86 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
     private Map stems;
 
     /**
-     *  
+     * The default language (used to acquire a tokenizer instance).
      */
-    public STCLocalFilterComponent()
-    {
-    }
+    private Language defaultLanguage;
 
     /**
-     * @param parameters
+     * The current process language (either default or overriden).
      */
-    public STCLocalFilterComponent(Map parameters)
-    {
-    }
+    private Language language;
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.clustering.RawDocumentsConsumer#addDocument(com.dawidweiss.carrot.core.local.clustering.RawDocument)
+    /**
+     * The current tokenizer.
      */
+    private LanguageTokenizer tokenizer;
+
+    /**
+     * Create the component configured to process documents written
+     * in the given language.
+     */
+    public STCLocalFilterComponent(Language defaultLanguage) {
+        this.defaultLanguage = defaultLanguage; 
+    }
+    
     public void addDocument(RawDocument doc) throws ProcessingException
     {
         startTimer();
 
         rawDocuments.add(doc);
 
-        DocReference documentReference = new DocReference((String) doc
-            .getProperty(RawDocument.PROPERTY_URL), doc.getTitle(), (doc
-            .getSnippet() == null) ? java.util.Collections.EMPTY_LIST
-            : Processor.splitIntoSentences(doc.getSnippet()), doc.getSnippet());
+        DocReference documentReference = new DocReference(
+                (String) doc.getProperty(RawDocument.PROPERTY_URL),
+                doc.getTitle(),
+                (doc.getSnippet() == null)
+                        ? java.util.Collections.EMPTY_LIST
+                        : Processor.splitIntoSentences(doc.getSnippet()), doc.getSnippet());
         documentReferences.add(documentReference);
 
-        // Add to stems and stop words
-        addStemsAndStopWords(doc);
-
+        addStemsAndStopWords(doc.getTitle(), tokenizer);
+        addStemsAndStopWords(doc.getSnippet(), tokenizer);
+        
         stopTimer();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#init(com.dawidweiss.carrot.core.local.LocalControllerContext)
-     */
     public void init(LocalControllerContext context)
         throws InstantiationException
     {
         super.init(context);
-        tokenizers = new HashMap();
         rawDocuments = new ArrayList();
         documentReferences = new ArrayList();
         stopWords = new HashSet();
         stems = new HashMap();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#getComponentCapabilities()
-     */
     public Set getComponentCapabilities()
     {
         return CAPABILITIES_COMPONENT;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#getRequiredSuccessorCapabilities()
-     */
     public Set getRequiredSuccessorCapabilities()
     {
         return CAPABILITIES_SUCCESSOR;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#getRequiredPredecessorCapabilities()
-     */
     public Set getRequiredPredecessorCapabilities()
     {
         return CAPABILITIES_PREDECESSOR;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalFilterComponent#setNext(com.dawidweiss.carrot.core.local.LocalComponent)
-     */
     public void setNext(LocalComponent next)
     {
         super.setNext(next);
         rawClustersConsumer = (RawClustersConsumer) next;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#flushResources()
-     */
     public void flushResources()
     {
         super.flushResources();
-        returnTokenizers();
+
+        language.returnTokenizer(tokenizer);
+        language = null;
+        tokenizer = null;
 
         documentReferences.clear();
         rawDocuments.clear();
@@ -186,22 +158,15 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
         rawClustersConsumer = null;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#startProcessing(com.dawidweiss.carrot.core.local.RequestContext)
-     */
     public void startProcessing(RequestContext requestContext)
         throws ProcessingException
     {
         super.startProcessing(requestContext);
+        
+        this.language = defaultLanguage;
+        this.tokenizer = language.borrowTokenizer();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#endProcessing()
-     */
     public void endProcessing() throws ProcessingException
     {
         startTimer();
@@ -224,12 +189,22 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
         });
 
         stcEngine.createSuffixTree();
-        stcEngine.createBaseClusters(2.0f, 1, 1.0f, 300, 2);
+        
+        final float minBaseClusterScore = 2.0f;
+        final int ignoreWordIfInFewerDocs = 2;
+        final float ignoreWordIfInHigherDocsPercent = 0.9f;
+        final int maxBaseClusters = 300;
+        final int minBaseClusterSize = 2;
+        final float mergeThreshold = 0.6f;
 
-        stcEngine.createMergedClusters(0.6f);
+        stcEngine.createBaseClusters(minBaseClusterScore, ignoreWordIfInFewerDocs,
+                ignoreWordIfInHigherDocsPercent, maxBaseClusters, minBaseClusterSize);
+
+        stcEngine.createMergedClusters(mergeThreshold);
 
         List clusters = stcEngine.getClusters();
-        int max = 15;
+        final int MAX_GROUPS = 15;
+        int max = MAX_GROUPS;
 
         // Convert STC's clusters to the local interfaces' format
         List rawClusters = new ArrayList();
@@ -256,7 +231,7 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
 
             rawClusters.add(rawCluster);
         }
-
+        
         // Don't want to time the following components, so stop here
         stopTimer();
 
@@ -269,49 +244,11 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
         super.endProcessing();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#getName()
-     */
     public String getName()
     {
         return "STC";
     }
 
-    /**
-     *  
-     */
-    private void returnTokenizers()
-    {
-        // Return all language tokenizers
-        for (Iterator iter = tokenizers.keySet().iterator(); iter.hasNext();)
-        {
-            String lang = (String) iter.next();
-            Language language = AllKnownLanguages.getLanguageForIsoCode(lang);
-            LanguageTokenizer tokenizer = (LanguageTokenizer) tokenizers
-                .get(lang);
-            if (language != null)
-            {
-                tokenizer.reuse();
-                language.returnTokenizer(tokenizer);
-            }
-        }
-        tokenizers.clear();
-
-        // Reuse and return the generic tokenizer
-        if (genericTokenizer != null)
-        {
-            genericTokenizer.reuse();
-            WordBasedParserFactory.Default.returnParser(genericTokenizer);
-        }
-    }
-
-    /**
-     * @param rawText
-     * @param languageTokenizer
-     * @return
-     */
     protected TokenSequence tokenize(String rawText,
         LanguageTokenizer languageTokenizer)
     {
@@ -332,60 +269,7 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
         return tokenSequence;
     }
 
-    /**
-     * @param lang
-     * @return
-     */
-    protected LanguageTokenizer getLanguageTokenizer(String lang)
-    {
-        if (lang == null)
-        {
-            // We don't need to be thread-safe here, do we?
-            if (genericTokenizer == null)
-            {
-                genericTokenizer = WordBasedParserFactory.Default.borrowParser();
-            }
-
-            return genericTokenizer;
-        }
-        else
-        {
-            if (!tokenizers.containsKey(lang))
-            {
-                Language language = AllKnownLanguages
-                    .getLanguageForIsoCode(lang);
-
-                if (language == null)
-                {
-                    return getLanguageTokenizer(null);
-                }
-                else
-                {
-                    tokenizers.put(lang, language.borrowTokenizer());
-                }
-            }
-
-            return (LanguageTokenizer) tokenizers.get(lang);
-        }
-    }
-
-    /**
-     * @param rawDocument
-     */
-    private void addStemsAndStopWords(RawDocument rawDocument)
-    {
-        LanguageTokenizer tokenizer = getLanguageTokenizer((String) rawDocument
-            .getProperty(RawDocument.PROPERTY_LANGUAGE));
-
-        addStemsAndStopWords(rawDocument.getTitle(), tokenizer);
-        addStemsAndStopWords(rawDocument.getSnippet(), tokenizer);
-    }
-
-    /**
-     * @param tokenSequence
-     */
-    private void addStemsAndStopWords(String rawText,
-        LanguageTokenizer tokenizer)
+    private void addStemsAndStopWords(String rawText, LanguageTokenizer tokenizer)
     {
         if (rawText == null)
         {
@@ -410,6 +294,5 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
                 }
             }
         }
-
     }
 }
