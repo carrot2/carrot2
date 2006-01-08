@@ -23,17 +23,17 @@ import java.util.Vector;
  * @author Pat Niemeyer
  * @author Dawid Weiss
  */
-public class BeanShellBSFEngineTest extends junit.framework.TestCase {
+public class C2BeanShellBSFEngineTest extends junit.framework.TestCase {
 
     private BSFManager mgr;
     
     static {
         final String [] extensions = { "bsh" };
         BSFManager.registerScriptingEngine( 
-            "beanshell", "bsh.util.BeanShellBSFEngine", extensions );
+            "beanshell", C2BeanShellBSFEngine.class.getName(), extensions );
     }
 
-    public BeanShellBSFEngineTest(String s) {
+    public C2BeanShellBSFEngineTest(String s) {
         super(s);
     }
     
