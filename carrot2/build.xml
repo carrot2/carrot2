@@ -18,7 +18,7 @@
   <property name="deployment.port" value="8080" />
   <property name="deployment.host" value="localhost" />
   <property name="distribution.dir" value="tmp" />
-  <property name="tests.report.dir" value="tmp/junit-report" />
+  <property name="tests.report.dir" value="tmp/test-report" />
 
   <import file="${carrot2.cvs.dir}/components/carrot2-ant-extensions/bootstrap.xml" />
 
@@ -196,28 +196,41 @@ CLEANING: @{component.path}
 	target.
 	</description>
 
+    <property name="tests.failure.marker" location=".test-failure" />
+
     <macrodef name="component-apply">
       <attribute name="component.path"/>
       <sequential>
         <echo>
 TESTING: @{component.path}
         </echo>
-        <ant antfile="build.xml"
-             dir="@{component.path}" inheritall="false"
-             target="test"
-        />
+        <ant antfile="build.xml" dir="@{component.path}" inheritall="false" target="test">
+            <property name="tests.failure.marker" location="${tests.failure.marker}" />
+        </ant>
       </sequential>
     </macrodef>
+
+    <delete failonerror="false" file="${tests.failure.marker}" />
     <antcall target="apply-to-components" />
+    
+    <!-- Generate one report for all components -->
+    <antcall target="test.report" />
+
+    <if>
+        <available file="${tests.failure.marker}" type="file" />
+        <then>
+            <fail>Component tests failed.</fail>
+        </then>
+    </if>
   </target>
 
-  
+
   <target name="test.report">
     <delete dir="${tests.report.dir}" failonerror="false" />
     <mkdir dir="${tests.report.dir}" />
     <junitreport todir="${tests.report.dir}">
-        <fileset dir="components">
-            <include name="**/tmp/build/junit-temp/TEST-*.xml"/>
+        <fileset dir=".">
+            <include name="**/junit-temp/TEST-*.xml"/>
         </fileset>
         <report format="frames" todir="${tests.report.dir}"/>
     </junitreport>
@@ -248,6 +261,7 @@ TESTING: @{component.path}
     <component-apply component.path="components/carrot2-util-tokenizer" />
     <component-apply component.path="components/carrot2-util-matrix" />
     <component-apply component.path="components/carrot2-util-lang-guesser" />
+
     <component-apply component.path="components/carrot2-input-xml" />
     <component-apply component.path="components/carrot2-input-lucene" />
     <component-apply component.path="components/carrot2-input-googleapi" />
