@@ -20,9 +20,12 @@
   <property name="distribution.dir" value="tmp" />
   <property name="tests.report.dir" value="tmp/test-report" />
 
+  <!-- Load ant-contrib task library -->
+  <taskdef resource="net/sf/antcontrib/antlib.xml">
+    <classpath location="${carrot2.cvs.dir}/lib/ant-extensions/ant-contrib.jar" />
+  </taskdef>
+
   <import file="${carrot2.cvs.dir}/components/carrot2-ant-extensions/bootstrap.xml" />
-
-
 
   <target name="javadoc">
   	<description>

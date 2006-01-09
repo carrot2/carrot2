@@ -547,17 +547,25 @@ ${string:component.dependencies}
     <copy file="${build.dir}/junit-temp/junit-log4j-log.html"
           tofile="${build.dir}/junit-report/junit-log4j-log.html" overwrite="true" />
 
-    <if>
-        <isset property="tests.failure.marker" />
-        <then>
-            <touch file="${tests.failure.marker}" />
-            <echo level="error">Some of the tests failed in ${build.dir}/junit-report/</echo>
-        </then>
-        <else>
-            <fail message="External tests failed. See ${build.dir}/junit-report for report." if="junit.error" />
-            <fail message="External tests failed. See ${build.dir}/junit-report for report." if="junit.failure" />
-        </else>
-    </if>
+	<if>
+		<or>
+			<isset property="junit.failure" />
+			<isset property="junit.error" />
+		</or>
+		<then>
+		    <if>
+		        <isset property="tests.failure.marker" />
+		        <then>
+		            <touch file="${tests.failure.marker}" />
+		            <echo level="error">Some of the tests failed in ${build.dir}/junit-report/</echo>
+		        </then>
+		        <else>
+		            <fail message="External tests failed. See ${build.dir}/junit-report for report." if="junit.error" />
+		            <fail message="External tests failed. See ${build.dir}/junit-report for report." if="junit.failure" />
+		        </else>
+		    </if>
+		</then>
+	</if>
   </target>
   <!-- }}} -->
 
