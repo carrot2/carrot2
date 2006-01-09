@@ -404,12 +404,12 @@ public abstract class AbstractFilesystemCachedQueriesContainer
             this.sizeLimit = Integer.parseInt(container.element("size-limit").getTextTrim());
         }
         if (container.element("use-system-temp") != null) {
-            if (Boolean.parseBoolean(container.element("use-system-temp").getTextTrim())) {
+            if (Boolean.valueOf(container.element("use-system-temp").getTextTrim()).booleanValue()) {
                 this.setUseSystemTemp();
             }
         }
         if (container.element("read-only") != null) {
-            if (Boolean.parseBoolean(container.element("read-only").getTextTrim())) {
+            if (Boolean.valueOf(container.element("read-only").getTextTrim()).booleanValue()) {
                 this.setReadOnly(true);
             }
         }
