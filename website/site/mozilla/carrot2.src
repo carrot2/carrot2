@@ -1,6 +1,4 @@
-# Search file for carrot.cs.put.poznan.pl
-#
-# Creation:  Dawid Weiss, 12/10/2004
+# Search descriptor for Mozilla browser, www.carrot2.org
 
 <search 
 	name = "Carrot2"
@@ -8,17 +6,16 @@
 	method = "get"
 	action = "http://carrot.cs.put.poznan.pl/carrot2-remote-controller/newsearch.do"
     queryEncoding="utf-8"
-    queryCharset="utf-8"
-	>
+    queryCharset="utf-8">
 
 <input name="query" user>
-<input name="processingChain" value="carrot2.process.lingo-google-en">
+<input name="processingChain" value="carrot2.process.lingo-yahooapi">
 <input name="resultsRequested" value="100">
 
 </search>
 
-<BROWSER
-      update="http://www.cs.put.poznan.pl/dweiss/carrot/site/mozilla/carrot2.src" 
-      updateIcon="http://www.cs.put.poznan.pl/dweiss/carrot/site/mozilla/carrot2.gif" 
+<browser
+      update="http://www.carrot2.org/website/site/mozilla/carrot2.src" 
+      updateIcon="http://www.carrot2.org/website/site/mozilla/carrot2.gif" 
       updateCheckDays="3"
 >

@@ -1,64 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<page section="publications"
-      xmlns:lang="http://www.cs.put.poznan.pl/dweiss/index.php/projects/sin/lang">
-	<!-- Page info section -->
-	<languages>
-		<lng id="en">English</lng>
-		<default id="en"/>
-	</languages>
-
-	<title lng="en">Publications</title>
+<page section="publications">
+	<title><carrot-text />Publications</title>
 
     <chapter level="1">
-        <title>Carrot<sup>2</sup> articles and publications</title>
-        
+        <title><carrot-text /> articles and publications</title>
+
         <ul>
 			<li>Stanisław Osiński: <i>Dimensionality Reduction Techniques for Search Results Clustering</i>,
 				Master thesis, Department of Computer Science, The University of Sheffield, UK
-				<a href="http://www.cs.put.poznan.pl/dweiss/carrot-bin/osinski04-dimensionality.pdf">PDF, 1.5MB</a>
+				<a href="http://www.carrot2.org/publications/osinski04-dimensionality.pdf">PDF, 1.5MB</a>
 			</li>
-		
+
             <li>
                 Paweł Kowalik: <i>Wspomaganie tworzenia analizatorów stron wyników z internetowych systemów wyszukujących</i>
                 (<i>Automated support for search engine wrapper induction.</i>), Master thesis,
                 Poznań University of Technology, 2003,
-                [in Polish, <a href="http://www.cs.put.poznan.pl/dweiss/carrot-bin/kowalik-2003-wrapit.pdf">PDF, 3.2MB</a>]
+                [in Polish, <a href="http://www.carrot2.org/publications/kowalik-2003-wrapit.pdf">PDF, 3.2MB</a>]
             </li>
-            
+
             <li>
                 Stanisław Osiński: <i>An Algorithm for Clustering of Web Search Results</i>, Master thesis,
                 Poznań University of Technology, 2003,
-                [in English, <a href="http://www.cs.put.poznan.pl/dweiss/carrot-bin/osinski-2003-lingo.pdf">PDF, 4.7MB</a>]
+                [in English, <a href="http://www.carrot2.org/publications/osinski-2003-lingo.pdf">PDF, 4.7MB</a>]
             </li>
-            
+
             <li>
                 Michał Wróblewski: <i>A Hierarchical WWW Pages Clustering Algorithm Based on the Vector Space Model</i>, Master thesis,
                 Poznań University of Technology, 2003,
-                [in English, <a href="http://www.cs.put.poznan.pl/dweiss/carrot-bin/wroblewski-2003-ahc.pdf">PDF, 8.5MB</a>]
+                [in English, <a href="http://www.carrot2.org/publications/wroblewski-2003-ahc.pdf">PDF, 8.5MB</a>]
             </li>
 
             <li>
             Steven Schockaert: <i>Het Clusteren van Zoekresultaten met behulp van Vaagmieren
 					 (Clustering of Search Results using Fuzzy Ants)</i>, Master thesis, University of 
 					 Ghent, 2004,
-					 [in Dutch, <a href="http://www.cs.put.poznan.pl/dweiss/carrot-bin/schockaert-2004-vaagmieren.pdf">PDF, 3.5MB</a>]
+					 [in Dutch, <a href="http://www.carrot2.org/publications/schockaert-2004-vaagmieren.pdf">PDF, 3.5MB</a>]
             </li>
 
             <li>
 			Ngo Chi Lang: <i>A tolerance rough set approach to clustering web search results</i>,            
             Faculty of Mathematics, Informatics and Mechanics, Warsaw University, 2004,
-            [in English, <a href="http://www.cs.put.poznan.pl/dweiss/carrot-bin/chi-lang-ngo-2004.pdf">PDF, 1.3MB</a>]
+            [in English, <a href="http://www.carrot2.org/publications/chi-lang-ngo-2004.pdf">PDF, 1.3MB</a>]
             </li>
-            
+
             <li>
 			Laust Rud Jensen: <i>A reuse repository with automated synonym support and cluster generation</i>,            
             Department of Computer Science at the Faculty of Science, University of Aarhus,
             Denmark, 2004,
-            [in English, <a href="http://www.cs.put.poznan.pl/dweiss/carrot-bin/rud-2004-reuse-support-system.pdf">PDF, 1.4MB</a>]
+            [in English, <a href="http://www.carrot2.org/publications/rud-2004-reuse-support-system.pdf">PDF, 1.4MB</a>]
             </li>
         </ul>
-
     </chapter>
-
 </page>

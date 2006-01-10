@@ -1,21 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<page section="architecture" xmlns:lang="http://www.cs.put.poznan.pl/dweiss/index.php/projects/sin/lang">
-	<!-- Page info section -->
-	<languages>
-		<lng id="en">English</lng>
-		<lng id="pl">Polski</lng>
-		<default id="en"/>
-	</languages>
-
+<page section="architecture">
 	<title lng="en">Architecture</title>
-	<title lng="pl">Architektura</title>
-
-    <lang:pl>
-    <frame>
-    Ta strona tylko w wersji angielskiej, przepraszamy.
-    </frame>
-    </lang:pl>            
 
     <chapter level="1">
         <title>Architecture</title>

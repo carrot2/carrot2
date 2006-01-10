@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<page section="demo" xmlns:lang="http://www.cs.put.poznan.pl/dweiss/index.php/projects/sin/lang">
-	<!-- Page info section -->
-	<languages>
-		<lng id="en">English</lng>
-		<default id="en"/>
-	</languages>
-
-	<title lng="en">Download</title>
+<page section="demo">
+	<title>Download</title>
 
     <chapter level="1">
         <title>Source code releases</title>
@@ -19,16 +13,6 @@
         <p>
         <a href="http://sourceforge.net/cvs/?group_id=85379">http://sourceforge.net/cvs/?group_id=85379</a>
         </p>
-        <p style="text-align: left;">
-        Alternatively a tarball with CVS contents (refreshed nightly) can be found
-        at this address:
-        </p>
-        <p>
-        <a href="http://carrot2.sourceforge.net/download/carrot2-cvs-nightly.tar.gz">http://carrot2.sourceforge.net/download/carrot2-cvs-nightly.tar.gz</a>
-        </p>
-        <p>
-        <i>If you don't know what <tt>.tar.gz</tt> extension is, then this pack is probably not for you.</i> 
-        </p>
     </chapter>
 
     <chapter level="1">
@@ -36,18 +20,17 @@
         <p>
         These binaries (WAR files) are provided as part of the nightly
         demo/ integration build. <b>We cannot guarantee these files will work</b> because
-        they are development shapshots. These binaries are provided mostly for use
-        in other projects (i.e. Egothor).
+        they are development shapshots.
         </p>
         <p>
         <a href="http://carrot.cs.put.poznan.pl/static/download/nightly">http://carrot.cs.put.poznan.pl/static/download/nightly</a>
         </p>
     </chapter>
-    
+
     <chapter level="1">
         <title>Installation instructions</title>
         <p>
-        Installation instructions can be found in the Developers Manual.
+        Installation instructions can be found in the <a href="http://www.carrot2.org/manual">developers manual</a>.
         </p>
     </chapter>
 

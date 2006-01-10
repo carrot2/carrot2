@@ -2,7 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
 
-<xsl:template match="download"><xsl:if test="not(@lng) or $lang=@lng">
+<xsl:template match="download">
 	<table class="download">
 		<xsl:attribute name="style">
 			<xsl:choose>
@@ -38,7 +38,7 @@
 		</td>
 	</tr>
 	</table>
-</xsl:if></xsl:template>
+</xsl:template>
 
 
 <xsl:template match="carrot-text">Carrot<sup>2</sup></xsl:template>
@@ -79,11 +79,6 @@
 <div class="frame"><xsl:apply-templates /></div>
 </xsl:template>
 
-
-<xsl:template match="*[namespace-uri() = 'http://www.cs.put.poznan.pl/dweiss/index.php/projects/sin/lang']">
-<xsl:if test="local-name() = $lang"><xsl:apply-templates/></xsl:if>
-</xsl:template>
-
 <xsl:variable name="showNews">
 	<xsl:call-template name="rewriteURL">
 		<xsl:with-param name="href" select="'/news/index.xml'" />
@@ -105,13 +100,11 @@
 </xsl:template>
 
 <xsl:template match="news">
-	<xsl:if test="not(@lng) or $lang=@lng">
 		<p>
 		<span style="font-size: 80%; font-weight: bold;">(<xsl:value-of select="@date"/>)</span>
 		<br/>
 			<xsl:apply-templates select="head" />
 		</p>
-	</xsl:if>
 </xsl:template>
 
 <xsl:template match="head">

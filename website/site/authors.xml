@@ -1,138 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<page section="authors" xmlns:lang="http://www.cs.put.poznan.pl/dweiss/index.php/projects/sin/lang">
-	<!-- Page info section -->
-	<languages>
-		<lng id="en">English</lng>
-		<lng id="pl">Polski</lng>
-		<default id="en"/>
-	</languages>
-
+<page section="authors">
 	<title lng="en">Authors</title>
-	<title lng="pl">Autorzy</title>
-
-            <lang:en>            
             <chapter level="1">
                 <title>Authors</title>
 
                 <p>
                 The first version of Carrot was originally written by Dawid Weiss.
-                It has evolved from a pretty closed search results clustering system into an open,
-                modular framework for pipelined data processing. These changes were significant enough to justify the change of project's name to
-                <carrot-text/>. Currently there are a number of people involved either in direct development of the system, or
-                its sub-components. A list of all involved individuals is given below.
+                It has evolved from a pretty closed search results clustering system
+                into an open, modular framework for pipelined data processing. These changes were
+                significant enough to justify the change of project's name to
+                <carrot-text/>. Currently the core development is performed by Dawid Weiss and
+                Stanisław Osiński, although many other contributions have been added to the project (thanks!). 
                 </p>
-    
-                <ul>
-                    <li><b>Dawid Weiss</b>,
-                        e-mail: <a href="mailto:dawid.weiss@cs.put.poznan.pl">dawid.weiss@cs.put.poznan.pl</a><br/>
-                        <i>System designer and Carrot<sup>2</sup> architecture coordinator, controller components and
-                           project environment (shared libs, deployment, build framework), STC clustering component</i>
-                    </li>
-    
-                    <li><b>Jerzy Stefanowski</b>,
-                        e-mail: <a href="mailto:jerzy.stefanowski@cs.put.poznan.pl">jerzy.stefanowski@cs.put.poznan.pl</a><br/>
-                        <i>Project supervisor, research mentor.</i>
-                    </li>
-    
-                    <li><b>Stanisław Osiński</b>
-                        <br/>
-                        <i>Component designer, developer (LSI clustering component)</i>
-                    </li>
-    
-                    <li><b>Paweł Kowalik</b>
-                        <br/>
-                        <i>Component designer, developer (search engine wrappers induction algorithms)</i>
-                    </li>
-    
-                    <li><b>Michał Wróblewski</b>
-                        <br/>
-                        <i>Component designer, developer (AHC clustering algorithms)</i>
-                    </li>
-                </ul>
-                
-                <p>
-                Various people contributed to the project:
-                </p>
-                
-                <ul>
-                    <li><a href="http://www.walachnia.com"><b>Radosław Walachnia</b></a>, designed our new logo
-                    </li>
-                    <li><a href="http://www.egothor.org"><b>Leo Galambos</b></a>, author of the Egothor 
-                    project, constantly supports us with fresh ideas and includes Carrot components in his
-                    own project!
-                    </li>
-                </ul>
-                
-                
             </chapter>
-            </lang:en>
-
-            <lang:pl>
-            <chapter level="1">
-                <title>Autorzy</title>
-
-                <p>
-                Pierwsza wersja Carrota został pierwotnie napisany przez Dawida Weissa.
-                Od tego czasu system uległ poważnym zmianom, które przekształciły go w otwarte,
-                modularne środowisko do potokowego przetwarzania danych. Zmiany te były na tyle
-                duże, by uzasanić nową nazwę - <carrot-text/>. Obecnie w prace nad systemem
-                zaangażowane są następujące osoby:
-                </p>
-
-                <ul>
-                    <li><b>Dawid Weiss</b>,
-                        e-mail: <a href="mailto:dawid.weiss@cs.put.poznan.pl">dawid.weiss@cs.put.poznan.pl</a><br/>
-                        <i>Koncept, projekt i wykonanie głównego trzonu architektury Carrota<sup>2</sup>. Koordynacja zadań.</i>
-                    </li>
-    
-                    <li><b>Jerzy Stefanowski</b>,
-                        e-mail: <a href="mailto:jerzy.stefanowski@cs.put.poznan.pl">jerzy.stefanowski@cs.put.poznan.pl</a><br/>
-                        <i>Nadzór naukowy i dydaktyczny nad projektem.</i>
-                    </li>
-    
-                    <li><b>Stanisław Osiński</b>
-                        <br/>
-                        <i>Autor komponentów.</i>
-                    </li>
-    
-                    <li><b>Paweł Kowalik</b>
-                        <br/>
-                        <i>Autor komponentów.</i>
-                    </li>
-    
-                    <li><b>Michał Wróblewski</b>
-                        <br/>
-                        <i>Autor komponentów.</i>
-                    </li>
-                </ul>
-            </chapter>
-            </lang:pl>
-
 
             <chapter level="1">
                 <title lng="en">OpenSource projects acknowledgement</title>
-                <title lng="pl">Podziękowania dla autorów innych projektów</title> 
 
-                <lang:en>
                 <p>Carrot is mainly written in Java programming language, because of it's great flexibility
-                and numerous supporting technologies. We would like to acknowledge the following projects, which
-                we found very helpful:</p>
-                </lang:en>
-                <lang:pl>
-                <p>Carrot jest napisany głównie w Javie. W jego powstaniu użyto wiele projektów
-                OpenSource, których autorom niniejszym chcemy bardzo podziękować:</p>
-                </lang:pl>
-                <ul>
-                    <li>Jakarta STRUTS package</li>
-                    <li>JDOM</li>
-                    <li>Tomcat</li>
-                    <li>The COLT project</li>
-                    <li>Crimson</li>
-                    <li>GNU regexp package</li>
-                    <li>Saxon XML parser</li>
-                </ul>
-
+                and numerous supporting technologies. Carrot also uses several open source projects -- we would
+                like to thank all the contributors and supporters of free and open source software.</p>
             </chapter>            
-
 </page>

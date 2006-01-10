@@ -1,24 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<page section="usergain" xmlns:lang="http://www.cs.put.poznan.pl/dweiss/index.php/projects/sin/lang">
-	<!-- Page info section -->
-	<languages>
-		<lng id="en">English</lng>
-		<lng id="pl">Polski</lng>
-		<default id="en"/>
-	</languages>
-
-	<title lng="en">User gain</title>
-	<title lng="pl">Korzyści</title>
-
-    <lang:pl>
-    <frame>
-    Ta strona tylko w wersji angielskiej, przepraszamy.
-    </frame>
-    </lang:pl>            
+<page section="usergain">
+	<title>Motivation</title>
 
     <chapter level="1">
-        <title>What a researcher may gain from <carrot-text/>?</title>
+        <title>What may a business gain from <carrot-text/>?</title>
+        
+        <p>
+        Text clustering and especially search results clustering is a hot topic nowadays.
+        <carrot-text/> provides a production-ready infrastructure and quality for such applications
+        at the very convenient legal terms of the BSD license. 
+        </p>
+        
+        <p>
+        We are very proud of our open source offering -- it meets the industry standards
+        concerning code quality and stability. If 
+        additional performance or tuning expertise is needed, a spin-off company <a href="http://www.carrot-search.com">Carrot
+        Search</a> provides both (a commercial clustering component seamlessly integrating with the open source framework
+        and consulting/ tuning services).
+        </p>
+    </chapter>
+
+    <chapter level="1">
+        <title>What may a researcher gain from <carrot-text/>?</title>
         <p>
         A number of scientific papers concerning search results processing have been published.
         Each and every author had to go through the same tedious (and quite fruitless) tasks
@@ -56,5 +60,5 @@
         </ul>
         </p>
     </chapter>
-	
+
 </page>

@@ -10,7 +10,7 @@
 
 <xsl:output method="html" indent="no" encoding="UTF-8" />
 
-<xsl:template match="page"><xsl:if test="not(@lng) or $lang=@lng">
+<xsl:template match="page">
     <xsl:text disable-output-escaping="yes">&lt;!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"&gt;</xsl:text>
     <xsl:variable name="base"><xsl:call-template name="rewriteImgURL"><xsl:with-param name="href" select="'/gfx/carrot2'" /></xsl:call-template></xsl:variable>
     <html>
@@ -31,7 +31,7 @@
 
             <title>
                 <xsl:choose>
-                    <xsl:when test="title"><xsl:apply-templates select="title[not(@lng) or @lng=$lang]/text()" /></xsl:when>
+                    <xsl:when test="title"><xsl:apply-templates select="title" /></xsl:when>
                     <xsl:otherwise>Carrot<sup>2</sup></xsl:otherwise>
                 </xsl:choose>
             </title>
@@ -68,35 +68,34 @@
             </table>
         </body>
     </html>
-</xsl:if>
 </xsl:template>
 
 
 <xsl:template match="page/title"></xsl:template>
 
 
-<xsl:template match="chapter"><xsl:if test="not(@lng) or $lang=@lng">
+<xsl:template match="chapter">
     <xsl:apply-templates select="*[name()='title']" />
     <div class="chapter_nested_{count(ancestor::chapter)}">
         <xsl:apply-templates select="*[name()!='title']" />
     </div>
-</xsl:if></xsl:template>
+</xsl:template>
 
 
-<xsl:template match="chapter/title"><xsl:if test="not(@lng) or $lang=@lng">
+<xsl:template match="chapter/title">
     <div class="chapter_nested_{count(ancestor::chapter)-1}_title">
         <xsl:apply-templates />
     </div>
-</xsl:if></xsl:template>
+</xsl:template>
 
 
 <!-- ################################### -->
 <!-- {{{ I80N -->
 <!-- ################################### -->
 
-<xsl:template match="stub"><xsl:if test="not(@lng) or $lang=@lng">
+<xsl:template match="stub">
 <xsl:apply-templates />
-</xsl:if></xsl:template>
+</xsl:template>
 
 <!-- }}} -->
 
