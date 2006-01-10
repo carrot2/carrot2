@@ -10,6 +10,7 @@
     <property name="build.dir.libs" location="tmp/build.demo/libs" />
     <property name="runtime.env" location="../runtime" />
     <property name="runtime.webapps" location="${runtime.env}/context-webapps" />
+    <property name="tests.report.dir" location="${runtime.env}/context-logs/unit-tests"/>
 
     <property name="deployment.port" value="2001" />
     <property name="deployment.host" value="carrot.cs.put.poznan.pl" />
@@ -73,6 +74,11 @@
 	    <property name="distribution.dir.remote.libs" location="${build.dir.libs}" />
             <property name="deployment.port" value="${deployment.port}" />
             <property name="deployment.host" value="${deployment.host}" />
+        </ant>
+        <mkdir dir="${tests.report.dir}" />
+        <ant antfile="${checkout.dir}/${module.name}/build.xml"
+             dir="${checkout.dir}/${module.name}" inheritall="false" target="test">
+            <property name="tests.report.dir" location="${tests.report.dir}" />
         </ant>
     </target>
     
