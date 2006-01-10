@@ -9,67 +9,53 @@
 <name><carrot-black/></name>
 
     <section id="intro">
-        <name lng="en">Introduction</name>
-        <name lng="pl">Wstęp</name>
+        <name>Introduction</name>
 
         <section id="carrot2" location="/index.xml">
-            <name lng="en">The system</name>
-            <name lng="pl">System</name>
+            <name>The system</name>
         </section>
 
         <section id="architecture" location="/architecture/index.xml">
-            <name lng="en">Architecture</name>
-            <name lng="pl">Architektura</name>
+            <name>Architecture</name>
         </section>
         
         <section id="usergain"   location="/architecture/usergain.xml">
-            <name lng="en">The gain</name>
-            <name lng="pl">Korzyści</name>
+            <name>Gains</name>
         </section>
     </section>
-    
+
     <section id="sf" location="http://sourceforge.net/projects/carrot2/">
-        <name lng="en">Carrot2 at SourceForge</name>
-        <name lng="pl">Carrot2 na SourceForge</name>
+        <name>Carrot2 at SourceForge</name>
         
         <section id="sf" location="http://sourceforge.net/mail/?group_id=85379">
-            <name lng="en">Mailing lists</name>
-            <name lng="pl">Grupy dyskusyjne</name>
+            <name>Mailing lists</name>
         </section>
         
     </section>
 
     <section id="docs" location="/developers/index.xml">
-        <name lng="en">Developers manual</name>
-        <name lng="pl">Dokumentacja</name>
+        <name>Developers manual</name>
         
         <section location="http://sourceforge.net/cvs/?group_id=85379">
-            <name lng="en">CVS access info</name>
-            <name lng="pl">Dostęp do CVS</name>
+            <name>CVS access info</name>
         </section>
 
     </section>
 
     <section id="demo" location="/demo.xml">
-        <name lng="en">Demo</name>
-        <name lng="pl">Demonstracja</name>
+        <name>Demo</name>
     </section>
 
     <section id="publications" location="/publications.xml">
-        <name lng="en">Publications</name>
-        <name lng="pl">Publikacje</name>
+        <name>Publications</name>
     </section>
 
     <section id="download" location="/download.xml">
-        <name lng="en">Download</name>
-        <name lng="pl">Pobierz</name>
+        <name>Download</name>
     </section>
 
     <section id="authors" location="/authors.xml">
-        <name lng="en">Authors</name>
-        <name lng="pl">Autorzy</name>
+        <name>Authors</name>
     </section>
-
 </section>
-	
 </sitemap>

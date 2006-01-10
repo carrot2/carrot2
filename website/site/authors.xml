@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <page section="authors">
-	<title lng="en">Authors</title>
+	<title>Authors</title>
             <chapter level="1">
                 <title>Authors</title>
 
@@ -16,7 +16,7 @@
             </chapter>
 
             <chapter level="1">
-                <title lng="en">OpenSource projects acknowledgement</title>
+                <title>OpenSource projects acknowledgement</title>
 
                 <p>Carrot is mainly written in Java programming language, because of it's great flexibility
                 and numerous supporting technologies. Carrot also uses several open source projects -- we would

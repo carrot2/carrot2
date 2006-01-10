@@ -25,7 +25,7 @@
     </chapter>
 
     <chapter level="1">
-        <title lng="en">The news!</title>
+        <title>The news!</title>
 
         <p>
         All news and messages are spread via mailing list at SourceForge:
@@ -34,7 +34,7 @@
 	</chapter>
 
     <chapter level="1">
-        <title lng="en">Example applications</title>
+        <title>Example applications</title>
 
         <p>
         A sample screen shot from an on-line demo of Carrot's own Web meta-searching interface, accessible at:

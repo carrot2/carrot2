@@ -57,14 +57,14 @@
 </xsl:template>
 
 
-<xsl:template match="p|span"><xsl:if test="not($lang) or not(@lng) or $lang=@lng">
+<xsl:template match="p|span">
  	<xsl:copy>
 		<xsl:if test="@style|@class">
 				<xsl:copy-of select="@style|@class" />
 		</xsl:if>
 		<xsl:apply-templates />
 	</xsl:copy>
-</xsl:if></xsl:template>
+</xsl:template>
 
 
 <!-- ################################################################### -->

@@ -2,12 +2,11 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
 
-<xsl:template match="section/name"><xsl:if test="not(@lng) or $lang=@lng">
+<xsl:template match="section/name">
 <xsl:apply-templates />
-</xsl:if></xsl:template>
+</xsl:template>
 
 <xsl:template name="control-panel">
-	<xsl:if test="not(@lng) or $lang=@lng">
 		<div id="control-panel" style="position: absolute; left: 0px; top: 0px; margin-top: 0px; padding-left: 0px; padding-right: 0px;">
 			<table cellspacing="0" cellpadding="0"><tr>
 			<!-- apply templates to the department string -->
@@ -44,7 +43,6 @@
 			</td>
 			</tr></table>
 		</div>
-	</xsl:if>
 </xsl:template>
 
 <xsl:template name="sitemap-hierarchical">
@@ -106,7 +104,7 @@
 
 
 <xsl:template match="location|desc">
-	<xsl:if test="not(@lng) or $lang=@lng"><xsl:apply-templates /></xsl:if>
+	<xsl:apply-templates />
 </xsl:template>
 
 
