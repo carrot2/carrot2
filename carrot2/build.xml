@@ -323,9 +323,7 @@ TESTING: @{component.path}
         <!-- Order matters - first come, first served. -->
         <header contains="Sponsored by: CCG, Inc." 
                 replacement="${carrot2.ccg.license}" />
-        <header contains="http://www.cs.put.poznan.pl/dweiss/carrot2.LICENSE"
-                replacement="${carrot2.license}" />
-        <header contains="http://www.cs.put.poznan.pl/dweiss/carrot2.LICENCE"
+        <header contains="http://www.carrot2.org/carrot2.LICENSE"
                 replacement="${carrot2.license}" />
 
         <!-- Replace generated headers with a simple statement -->
