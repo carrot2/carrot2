@@ -47,6 +47,7 @@
     <copy todir="${distribution.dir}" includeemptydirs="true">
         <fileset dir="renderer-sin/php">
             <include name="**/*" />
+            <include name=".htaccess" />
         </fileset>
     </copy>
     <echo>
