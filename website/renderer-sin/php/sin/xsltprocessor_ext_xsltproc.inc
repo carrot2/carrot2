@@ -7,7 +7,7 @@ require_once("./sin/functions.inc");
 /*
  * XSLT Processor class for XSLTPROC (invoked as an external shell process!).
  */
-class sin_XSLTProcessor
+class XSLTProcessor
 {
 	var $params;
 
@@ -21,6 +21,10 @@ class sin_XSLTProcessor
 		if (debugMode()) print "<p><b>addParam:</b> " . " Name: " . $name . " Value: " . $value;
 		$this->params[$name] = $value;
 	}
+
+    function setBase($base)
+    {
+    }
 	
 	function addFileUrlParam($name,$value)
 	{
