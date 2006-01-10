@@ -46,6 +46,6 @@ public class DendrogramFrame
         // showing of complete frame
         this.setSize(width, height);
         getContentPane().add(treeCanvas);
-        show();
+        setVisible(true);
     }
 }
