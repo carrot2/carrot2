@@ -52,13 +52,14 @@
         <property file="${user.home}/.pwds" />
 
         <ftp
-            remotedir="public_html/carrot"
-            server="libra.cs.put.poznan.pl"
+            remotedir="carrot2.org/website"
+            server="ftp.carrot2.org"
             skipfailedtransfers="false"
-            userid="dweiss"
-            password="${www.cs.put.poznan.pl}"
+            userid="dweiss.carrot"
+            password="${ftp.carrot2.org}"
             verbose="yes"
             newer="false"
+            passive="true"
             ignoreNoncriticalErrors="true">
             <fileset dir="${build.dir}">
                 <include name="**/*" />
