@@ -4,8 +4,8 @@
     <property name="checkout.dir" location="tmp/checkouts" />
     <property name="cvs.pass" location="${user.home}/.cvspass" />
     <property name="module.name" value="website" />
-    <property name="cvs.root" value=":pserver:anonymous@cvs.sourceforge.net:/cvsroot/carrot2" />
-    
+    <property name="cvs.root" value=":ext:dawidweiss@cvs.sourceforge.net:/cvsroot/carrot2" />
+
     <property name="build.dir" location="tmp/build.website" />
 
     <!-- 
