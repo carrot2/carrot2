@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/ssh-agent /bin/bash
 
 . /etc/bash.common.rc
 

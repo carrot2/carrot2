@@ -41,11 +41,6 @@
              target="build.php">
             <property name="distribution.dir" location="${build.dir}" />
         </ant>
-
-        <copy filtering="false" includeemptydirs="true" todir="${build.dir}"
-              overwrite="true">
-            <fileset dir="website-libra" includes="**/*" />
-        </copy>
     </target>
 
     <target name="publish" depends="build">
