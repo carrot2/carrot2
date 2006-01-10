@@ -142,24 +142,4 @@ public class CacheRotator
             }
         }
     }
-
-
-    public static void main(String [] args)
-        throws Exception
-    {
-        BasicConfigurator.configure();
-
-        CacheRotator rotator = new CacheRotator();
-
-        AbstractFilesystemCachedQueriesContainer from = new ZIPCachedQueriesContainer();
-        from.setReadOnly(true);
-        from.setAbsoluteDir("f:\\from");
-        from.configure();
-
-        AbstractFilesystemCachedQueriesContainer to = new ZIPCachedQueriesContainer();
-        to.setAbsoluteDir("f:\\to");
-        to.configure();
-
-        rotator.addQueryForAll(from, to);
-    }
 }
