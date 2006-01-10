@@ -31,6 +31,7 @@
           append="true"
         >
             <jvmarg value="-Dcatalina.home=${tomcat.home}"/>
+            <jvmarg value="-Dgoogleapi.keypool=${tomcat.home}/keypool"/>
             <arg value="-config"/>
             <arg value="${tomcat.config}"/>
             <arg value="start"/>
