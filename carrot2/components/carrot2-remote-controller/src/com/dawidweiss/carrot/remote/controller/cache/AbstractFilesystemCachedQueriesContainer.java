@@ -45,16 +45,16 @@ public abstract class AbstractFilesystemCachedQueriesContainer
 
     public void configure()
     {
-        if (this.dir == null)
-        {
-            throw new RuntimeException("Filesystem directory for cached files not set.");
-        }
-
         if (isContextRelative)
         {
             throw new RuntimeException(
                 "Set servlet context path to resolve the context-relative dir: " + dir
             );
+        }
+
+        if (this.dir == null)
+        {
+            throw new RuntimeException("Filesystem directory for cached files not set.");
         }
 
         if (this.sizeLimit <= 0)
@@ -417,6 +417,13 @@ public abstract class AbstractFilesystemCachedQueriesContainer
         if (container.element("context-relative-dir") != null) {
             final String crd = container.elementText("context-relative-dir");
             this.setContextRelativeDir(crd);
+        }
+        if (container.element("absolute-dir") != null) {
+            final File crd = new File(container.elementText("absolute-dir"));
+            if (false == crd.isDirectory()) {
+                log.warn("Cache folder does not exist: " + crd.getAbsolutePath());
+            }
+            this.setAbsoluteDir(crd);
         }
     }
 }
