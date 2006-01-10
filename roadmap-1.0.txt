@@ -20,8 +20,6 @@ carrot2-filter-fuzzyants
 
 - Ensure all tests pass. Ensure the demo application works.
 
-- Nightly deploy must include unit tests (currently only external tests are run).
-
 - Public Relations
 	- move O/S website from www.cs.put.poznan.pl/dweiss/carrot to www.carrot2.org
     - add new publications to the O/S website
