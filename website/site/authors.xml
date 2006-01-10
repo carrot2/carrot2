@@ -11,7 +11,8 @@
                 into an open, modular framework for pipelined data processing. These changes were
                 significant enough to justify the change of project's name to
                 <carrot-text/>. Currently the core development is performed by Dawid Weiss and
-                Stanisław Osiński, although many other contributions have been added to the project (thanks!). 
+                Stanisław Osiński, although many other contributors donated their work and
+                patches back to the project (their list is in the CVS). 
                 </p>
             </chapter>
 

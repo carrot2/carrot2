@@ -25,11 +25,15 @@
     </chapter>
 
     <chapter level="1">
-        <title>The news!</title>
+        <title>Feedback and news</title>
 
         <p>
-        All news and messages are spread via mailing list at SourceForge:
+        All news and other messages are distributed using a mailing list at SourceForge:
         <a href="http://lists.sourceforge.net/lists/listinfo/carrot2-developers">carrot2-developers@lists.sourceforge.net</a>.
+        </p>
+
+        <p>
+        Please direct your questions or concerns to the mailing list (subscription is required to limit spam).
         </p>
 	</chapter>
 

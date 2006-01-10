@@ -8,19 +8,15 @@
 <section id="carrot2" location="/index.xml">
 <name><carrot-black/></name>
 
-    <section id="intro">
-        <name>Introduction</name>
-
-        <section id="carrot2" location="/index.xml">
-            <name>The system</name>
-        </section>
+    <section id="intro" location="/index.xml">
+        <name>Home</name>
 
         <section id="architecture" location="/architecture/index.xml">
             <name>Architecture</name>
         </section>
         
         <section id="usergain"   location="/architecture/usergain.xml">
-            <name>Gains</name>
+            <name>Motivation and benefits</name>
         </section>
     </section>
 
