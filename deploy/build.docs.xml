@@ -61,11 +61,12 @@
         <property file="${user.home}/.pwds" />
 
         <ftp
-            remotedir="public_html/carrot/manual"
-            server="libra.cs.put.poznan.pl"
+            remotedir="carrot2.org/manual"
+            server="ftp.carrot2.org"
             skipfailedtransfers="false"
-            userid="dweiss"
-            password="${www.cs.put.poznan.pl}"
+            passive="true"
+            userid="dweiss.carrot"
+            password="${ftp.carrot2.org}"
             verbose="yes"
             newer="false"
             ignoreNoncriticalErrors="true">
