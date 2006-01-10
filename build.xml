@@ -25,7 +25,7 @@
     <classpath location="${carrot2.cvs.dir}/lib/ant-extensions/ant-contrib.jar" />
   </taskdef>
 
-  <property name="carrot2.cvs.dir} location="${basedir}" />
+  <property name="carrot2.cvs.dir" location="${basedir}" />
   <import file="${carrot2.cvs.dir}/components/carrot2-ant-extensions/bootstrap.xml" />
 
   <target name="javadoc">
