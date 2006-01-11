@@ -347,68 +347,6 @@ TESTING: @{component.path}
   </target>
 
 
-  <target name="pretty.print">
-  	<description>
-	Pretty-printing of source code. 
-	FOR USE ONLY BY PACKAGE MAINTAINER
-	</description>
-	
-	<property file="${user.home}/jalopy.properties" />
-	<fail unless="jalopy.home">
-	Define 'jalopy.home'.
-	</fail>
-
-	<condition property="cond:is.maintainer">
-		<equals arg1="${user.name}" arg2="dawid weiss" casesensitive="false" trim="true" />
-	</condition>
-
-	<fail unless="cond:is.maintainer">
-	### ERROR: TARGET FOR USE ONLY BY PACKAGE MAINTAINER.
-	</fail>
-	
-    <taskdef name="jalopy" 
-		classname="de.hunsicker.jalopy.plugin.ant.AntPlugin">
-		<classpath>
-			<fileset dir="${jalopy.home}" includes="lib/*.jar" />
-		</classpath>
-	</taskdef>
-
-    <macrodef name="component-apply">
-      <attribute name="component.path"/>
-      <sequential>
-        <echo>
-FORMATTING: @{component.path}
-        </echo>
-        <property name="convention" value="etc/codeconvention/carrot2-sun.jalopy.xml" />
-
-		<mkdir dir="tmp/@{component.path}" />
-		<jalopy convention="${convention}"
-				destdir="tmp/@{component.path}"
-				history="file"
-				force="true"
-				encoding="UTF-8"
-				historymethod="adler32"
-				loglevel="info"
-				threads="1">
-			<fileset dir="@{component.path}">
-				<!-- <include name="**/com/dawidweiss/**/*.java" /> -->
-				<include name="**/*.java" />
-			</fileset>
-		</jalopy>
-
-      </sequential>
-    </macrodef>
-
-	<fail unless="component">
-
-	Define 'component' property with the name of the
-	component (a folder name in components/*).
-
-	</fail>
-	<component-apply component.path="${component}" />
-  </target>  
-
-
 
   <target name="remote" depends="bootstrap">
     <description>
