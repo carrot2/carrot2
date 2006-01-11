@@ -178,7 +178,7 @@ CLEANING: @{component.path}
       </sequential>
     </macrodef>
     <antcall target="apply-to-components" />
-    
+
     <macrodef name="application-apply">
         <attribute name="application.path" />
         <sequential>
