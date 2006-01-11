@@ -634,12 +634,14 @@ ${string:component.dependencies}
              use              = "true"
              doctitle         = "${ant.project.name}"
              header           = "${ant.project.name}"
-             footer           = "Please refer to project documentation at &lt;br&gt;&lt;a href=http://www.cs.put.poznan.pl/dweiss/carrot&gt;http://www.cs.put.poznan.pl/dweiss/carrot&lt;/a&gt;"
-             bottom           = "&lt;center&gt;Copyright (c) Copyright (C) 2002-2005, Dawid Weiss, Stanislaw Osinski &lt;/center&gt;"
+             footer           = "Please refer to project documentation at &lt;br&gt;&lt;a href=http://www.carrot2.org&gt;http://www.carrot2.org&lt;/a&gt;"
+             bottom           = "&lt;center&gt;Copyright (c) Copyright (C) Dawid Weiss, Stanislaw Osinski &lt;/center&gt;"
              failonerror      = "true"
              stylesheetfile   = "${carrot2.cvs.dir}/etc/javadoc/stylesheet.css"
     >
         <classpath refid="classpath.dependencies" />
+        <classpath refid="classpath.local" />
+
         <fileset dir="${src.path}"> 
         	<patternset refid="src.patternset" />
         </fileset>
