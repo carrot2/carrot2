@@ -2,6 +2,19 @@
 A roadmap to release 1.0
 ------------------------
 
+- Add settings class for STC to the demo application and their interpretation in the local component interface
+
+- Review documentation, ensure it corresponds to reality.
+
+- Ensure all tests pass. Ensure the demo application works.
+
+- Public Relations
+    - add new publications to the O/S website
+
+
+Suggested tasks delayed until release 1.1
+-----------------------------------------
+
 - Add local interfaces to: 
 
 carrot2-filter-ahc
@@ -13,14 +26,3 @@ carrot2-filter-ahc
 carrot2-filter-fuzzyants
 
 - Unify coding style.
-
-- Review documentation, ensure it corresponds to reality.
-
-- Review master ANT build file -- generate JavaDocs.
-
-- Ensure all tests pass. Ensure the demo application works.
-
-- Public Relations
-    - add new publications to the O/S website
-
-- Add settings class for STC to the demo application and their interpretation in the local component interface
