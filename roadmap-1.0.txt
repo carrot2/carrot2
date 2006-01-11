@@ -21,7 +21,6 @@ carrot2-filter-fuzzyants
 - Ensure all tests pass. Ensure the demo application works.
 
 - Public Relations
-	- move O/S website from www.cs.put.poznan.pl/dweiss/carrot to www.carrot2.org
     - add new publications to the O/S website
 
 - Add settings class for STC to the demo application and their interpretation in the local component interface
