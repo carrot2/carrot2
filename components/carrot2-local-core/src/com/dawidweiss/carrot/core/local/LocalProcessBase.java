@@ -149,7 +149,7 @@ public class LocalProcessBase implements LocalProcess {
      * queries.
      * </p>
      *
-     * @throws An exception is thrown if any error occurred (a component
+     * @throws Exception An exception is thrown if any error occurred (a component
      *         factory is not available for some component, components are not
      *         compatible).
      *
@@ -243,19 +243,19 @@ public class LocalProcessBase implements LocalProcess {
      * time of execution of a query.
      * </li>
      * <li>
-     * {@link #beforeProcessingStartsHook(RequestContext context,
-     * LocalComponent[] )} An empty hook method that can be overriden to
+     * {@link #beforeProcessingStartsHook(RequestContext, LocalComponent[])}
+     * An empty hook method that can be overriden to
      * perform component customization before the processing starts.
      * </li>
      * <li>
-     * {@link #afterProcessingStartedHook(RequestContext context,
-     * LocalComponent[])} An empty hook method invoked after the call to
+     * {@link #afterProcessingStartedHook(RequestContext, LocalComponent[])}
+     * An empty hook method invoked after the call to
      * {@link LocalComponent#startProcessing(RequestContext)} method, but
      * before a call to {@link LocalComponent#endProcessing()} method.
      * </li>
      * <li>
-     * {@link #afterProcessingEndedHook(RequestContext context,
-     * LocalComponent[])} An empty hook method invoked after the call to
+     * {@link #afterProcessingEndedHook(RequestContext, LocalComponent[])}
+     * An empty hook method invoked after the call to
      * {@link LocalComponent#endProcessing()} method.
      * </li>
      * </ul>

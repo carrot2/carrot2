@@ -13,16 +13,10 @@
 
 package com.dawidweiss.carrot.core.local.impl;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
-import com.dawidweiss.carrot.core.local.LocalComponent;
-import com.dawidweiss.carrot.core.local.ProcessingException;
-import com.dawidweiss.carrot.core.local.RequestContext;
-import com.dawidweiss.carrot.core.local.clustering.RawDocument;
-import com.dawidweiss.carrot.core.local.clustering.RawDocumentsConsumer;
-import com.dawidweiss.carrot.core.local.clustering.RawDocumentsProducer;
+import com.dawidweiss.carrot.core.local.*;
+import com.dawidweiss.carrot.core.local.clustering.*;
 import com.dawidweiss.carrot.core.local.profiling.ProfiledLocalFilterComponentBase;
 
 /**
@@ -30,8 +24,8 @@ import com.dawidweiss.carrot.core.local.profiling.ProfiledLocalFilterComponentBa
  * document. No real recognition is performed.
  * 
  * <p>
- * The component implements {@link RawDocumentConsumer} and
- * {@link RawDocumentProducer}, so basically, it acts as a filter between two
+ * The component implements {@link RawDocumentsConsumer} and
+ * {@link RawDocumentsProducer}, so basically, it acts as a filter between two
  * other components.
  * 
  * @author Stanislaw Osinski
@@ -158,7 +152,7 @@ public class RawDocumentDummyLanguageDetection extends
     /**
      * Performs a cleanup before the object is reused.
      * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent.flushResources()
+     * @see LocalComponent#flushResources()
      */
     public void flushResources()
     {

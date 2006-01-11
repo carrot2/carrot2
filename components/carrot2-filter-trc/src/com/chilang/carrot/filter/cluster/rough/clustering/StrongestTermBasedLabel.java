@@ -59,7 +59,6 @@ public class StrongestTermBasedLabel implements ClusterLabelGenerator {
      * 
      * @param clusterVector vector of term weights in a cluster
      * @param m             
-     * @return 
      */
     protected String[] getStrongestTerm(double[] clusterVector, int m) {
         int[] sorted = ArrayUtils.getSortedIndices(clusterVector);

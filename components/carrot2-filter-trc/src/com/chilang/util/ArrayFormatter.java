@@ -40,7 +40,6 @@ public class ArrayFormatter implements StringFormatter{
     /**
      * Create string representation of given array using defined separators
      * @param array
-     * @return
      */
     public String toString(Object array) {
         StringBuffer buf = new StringBuffer();

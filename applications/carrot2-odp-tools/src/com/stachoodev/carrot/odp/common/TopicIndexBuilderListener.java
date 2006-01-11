@@ -23,8 +23,6 @@ public interface TopicIndexBuilderListener
 {
     /**
      * This method will be called every time a topic has been indexed.
-     * 
-     * @param 
      */
     public void topicIndexed();
 }

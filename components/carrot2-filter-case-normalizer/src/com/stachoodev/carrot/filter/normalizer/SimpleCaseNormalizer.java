@@ -93,7 +93,6 @@ public class SimpleCaseNormalizer implements CaseNormalizer
      * 
      * @throws IllegalStateException when an attempt is made to add documents
      *             after the {@link #getNormalizedDocuments()}has been called.
-     * @param document
      */
     public void addDocument(TokenizedDocument document)
     {
@@ -142,9 +141,6 @@ public class SimpleCaseNormalizer implements CaseNormalizer
             locale);
     }
 
-    /**
-     * @param normalizedTokens
-     */
     private void normalizeTokenSequence(MutableTokenSequence tokenSequence,
         Locale locale)
     {

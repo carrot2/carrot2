@@ -417,9 +417,6 @@ public class ResultsTab extends JPanel {
         SwingTask.runNow(task);
     }
 
-    /**
-     * @param rawClusters
-     */
     private void addClusterHighlightingInfo()
     {
         String clusterSearchQuery = clusterSearchField.getText();
@@ -499,11 +496,6 @@ public class ResultsTab extends JPanel {
         }
     }
 
-    /**
-     * @param clusterSearchResult
-     * @param rawCluster
-     * @return
-     */
     private int updateClusterSearchInfo(Set clusterSearchResult, RawCluster rawCluster)
     {
         // Depth-first tree search here

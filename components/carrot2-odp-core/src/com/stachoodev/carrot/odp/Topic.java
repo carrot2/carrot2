@@ -26,21 +26,18 @@ public interface Topic
     /**
      * Returns this MutableTopic's <code>catid</code>.
      * 
-     * @return
      */
     public abstract int getCatid();
 
     /**
      * Returns this MutableTopic's <code>id</code>.
      * 
-     * @return
      */
     public abstract String getId();
 
     /**
      * Returns a list of this MutableTopic's external pages.
      * 
-     * @return
      */
     public abstract List getExternalPages();
 }

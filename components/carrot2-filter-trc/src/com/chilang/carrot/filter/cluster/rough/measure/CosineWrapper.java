@@ -27,7 +27,6 @@ public class CosineWrapper implements  Statistic.VectorVectorFunction  {
      * When numerator part (Sum(x[i] * y[i]) is 0, returns 0;
      * @param x
      * @param y
-     * @return
      */
     public double apply(DoubleMatrix1D x, DoubleMatrix1D y) {
         double nominator =  x.aggregate(y, Functions.plus, Functions.mult );

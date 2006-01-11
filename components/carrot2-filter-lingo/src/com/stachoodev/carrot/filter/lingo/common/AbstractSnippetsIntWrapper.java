@@ -130,23 +130,14 @@ public abstract class AbstractSnippetsIntWrapper extends AbstractIntWrapper {
         return result;
     }
 
-    /**
-     * @return
-     */
     public int[] getStopWordCodes() {
         return stopWordCodes;
     }
 
-    /**
-     *
-     */
     public int getDocumentCount() {
         return documentCount;
     }
 
-    /**
-     * @return
-     */
     public int getDistinctWordCount() {
         return distinctWordCount;
     }

@@ -24,13 +24,11 @@ public interface XCluster {
 
     /**
      * Return cluster's size (number of members)
-     * @return
      */
     public int size();
 
     /**
      * Return cluster label/description
-     * @return
      */
     public String[] getLabel();
 
@@ -56,7 +54,6 @@ public interface XCluster {
 
         /**
          * Return member snippet
-         * @return
          */
         public Snippet getSnippet() {
             return snippet;
@@ -64,7 +61,6 @@ public interface XCluster {
 
         /**
          * Return degree of membership to cluster
-         * @return
          */
         public double getMembership() {
             return membership;

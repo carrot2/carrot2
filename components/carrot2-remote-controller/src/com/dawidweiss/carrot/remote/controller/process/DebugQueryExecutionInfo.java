@@ -74,7 +74,6 @@ public class DebugQueryExecutionInfo
 	}
     
 	/**
-	 * @return
 	 */
 	public String getDebugLogAsHTML()
     {

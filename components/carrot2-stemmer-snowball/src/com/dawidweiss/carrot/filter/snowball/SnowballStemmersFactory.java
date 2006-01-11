@@ -23,13 +23,11 @@ import java.util.Iterator;
 
 
 /**
- * A factory of Snowball stemmer adapters implementing {@link Stemmer}
+ * A factory of Snowball (http://snowball.tartarus.org) stemmer adapters implementing {@link Stemmer}
  * interface.
  *
  * @author Dawid Weiss
  * @version $Revision$
- *
- * @see <a href="http://snowball.tartarus.org">http://snowball.tartarus.org</a>
  */
 public class SnowballStemmersFactory {
     /**

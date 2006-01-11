@@ -68,7 +68,6 @@ public class NNIDoubleFactory2D extends DoubleFactory2D
     
     /**
      * @param A
-     * @return
      */
     public static DoubleMatrix2D asNNIMatrix(DoubleMatrix2D A)
     {

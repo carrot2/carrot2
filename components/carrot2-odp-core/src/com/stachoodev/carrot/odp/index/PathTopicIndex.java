@@ -36,8 +36,6 @@ public class PathTopicIndex implements TopicIndex, Serializable
 
     /**
      * Creates an empty instance of the index.
-     * 
-     * @param indexEntries
      */
     public PathTopicIndex()
     {
@@ -146,10 +144,6 @@ public class PathTopicIndex implements TopicIndex, Serializable
 
     }
 
-    /**
-     * @param path
-     * @return
-     */
     private IndexEntry lookUp(String [] pathElements, int pos, IndexEntry entry)
     {
         if (entry == null)
@@ -272,10 +266,6 @@ public class PathTopicIndex implements TopicIndex, Serializable
         /** Path entry */
         private String pathElement;
 
-        /**
-         * @param catid
-         * @param id
-         */
         public IndexEntry(String pathElement, int id)
         {
             this.pathElement = pathElement;
@@ -285,7 +275,6 @@ public class PathTopicIndex implements TopicIndex, Serializable
         /**
          * Returns this PathTopicIndex.IndexEntry's <code>path</code>.
          * 
-         * @return
          */
         public String getPathElement()
         {
@@ -294,7 +283,6 @@ public class PathTopicIndex implements TopicIndex, Serializable
 
         /**
          * @param pathElement
-         * @return
          */
         public IndexEntry getChildEntry(String pathElement)
         {
@@ -321,7 +309,6 @@ public class PathTopicIndex implements TopicIndex, Serializable
         /**
          * @param pathElement
          * @param id
-         * @return
          */
         public IndexEntry createChildEntry(String pathElement, int id)
         {
@@ -335,7 +322,6 @@ public class PathTopicIndex implements TopicIndex, Serializable
         }
 
         /**
-         * @return
          */
         public Iterator childEntries()
         {
@@ -353,7 +339,6 @@ public class PathTopicIndex implements TopicIndex, Serializable
          * Returns this CatidPrimaryTopicIndexBuilder.CatidIndexEntry's
          * <code>id</code>.
          * 
-         * @return
          */
         public int getId()
         {
@@ -361,11 +346,6 @@ public class PathTopicIndex implements TopicIndex, Serializable
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.stachoodev.carrot.odp.index.TopicIndex#serialize(java.io.OutputStream)
-     */
     public void serialize(OutputStream outputStream) throws IOException
     {
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(
@@ -374,11 +354,6 @@ public class PathTopicIndex implements TopicIndex, Serializable
         objectOutputStream.close();
     }
 
-    /**
-     * @param objectOutputStream
-     * @param topEntry2
-     * @throws IOException
-     */
     private void serializeIndexEntry(IndexEntry indexEntry,
         ObjectOutputStream objectOutputStream) throws IOException
     {
@@ -402,11 +377,6 @@ public class PathTopicIndex implements TopicIndex, Serializable
         objectOutputStream.writeInt(indexEntry.getId());
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.stachoodev.carrot.odp.index.TopicIndex#deserialize(java.io.InputStream)
-     */
     public void deserialize(InputStream inputStream) throws IOException
     {
         ObjectInputStream objectInputStream = new ObjectInputStream(
@@ -414,11 +384,6 @@ public class PathTopicIndex implements TopicIndex, Serializable
         topEntry = deserializeIndexEntry(objectInputStream);
     }
 
-    /**
-     * @param indexEntry
-     * @param objectInputStream
-     * @throws IOException
-     */
     private IndexEntry deserializeIndexEntry(ObjectInputStream objectInputStream)
         throws IOException
     {

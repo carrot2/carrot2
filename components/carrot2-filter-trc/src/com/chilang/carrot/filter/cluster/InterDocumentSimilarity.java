@@ -44,7 +44,6 @@ public class InterDocumentSimilarity {
     /**
      * Return number of unique entries in similarity matrix
      * (i.e. cells in matrix upper diagonal)
-     * @return
      */
     public int size() {
         return (similarityMatrix.size() - similarityMatrix.rows()) / 2;
@@ -52,7 +51,6 @@ public class InterDocumentSimilarity {
 
     /**
      * Return number of non-zero entries (only from upper diagonal)
-     * @return
      */
     public int nonZero() {
         return similarityMatrix.cardinality() / 2;
@@ -60,7 +58,6 @@ public class InterDocumentSimilarity {
 
     /**
      * Return internal representation as matrix
-     * @return
      */
     public DoubleMatrix2D getInternalMatrix() {
         return similarityMatrix;
@@ -69,7 +66,6 @@ public class InterDocumentSimilarity {
 
     /**
      * Get entries (only upper diagonal) of matrix as an array
-     * @return
      */
     public DoubleMatrix1D getAsSeries() {
         return MatrixUtils.upperDiagonalToVector(similarityMatrix);
@@ -101,9 +97,6 @@ public class InterDocumentSimilarity {
 
     /**
      * Return entries between range (min, max]
-     * @param min
-     * @param max
-     * @return
      */
     public int[][] getSimilarWithinRange(double min, double max) {
         int size = similarityMatrix.columns();

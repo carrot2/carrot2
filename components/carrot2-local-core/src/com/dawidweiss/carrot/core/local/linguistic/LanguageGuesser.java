@@ -19,14 +19,12 @@ package com.dawidweiss.carrot.core.local.linguistic;
  * 
  * @author Dawid Weiss
  * @version $Revision$
- *
- * @see <a
- *      href="http://www.ics.uci.edu/pub/ietf/http/related/iso639.txt">http://www.ics.uci.edu/pub/ietf/http/related/iso639.txt</a>
  */
 public interface LanguageGuesser {
     /**
      * Detects the language of a fragment of a character array. The returned
-     * value is an ISO-639 language code.
+     * value is an ISO-639 language code (<a href="http://www.ics.uci.edu/pub/ietf/http/related/iso639.txt">see here
+     * for more</a>).
      * 
      * @param charArray The character array to analyze.
      * @param offset    Start index of the fragment to analyze (inclusive).
@@ -34,9 +32,6 @@ public interface LanguageGuesser {
      *
      * @return The methods returns an ISO language code, or <code>null</code>
      *         if language could not be guessed.
-     *
-     * @see <a
-     *      href="http://www.ics.uci.edu/pub/ietf/http/related/iso639.txt">http://www.ics.uci.edu/pub/ietf/http/related/iso639.txt</a>
      */
     public String guessLanguage(char [] charArray, int offset, int length);
 }

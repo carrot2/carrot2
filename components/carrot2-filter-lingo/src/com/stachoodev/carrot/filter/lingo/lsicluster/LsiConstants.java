@@ -41,7 +41,7 @@ public class LsiConstants {
     	= "lsi.threshold.clusterAssignment";
     
     /** 
-     * Default value of the {@link CLUSTER_ASSIGNMENT_THRESHOLD}.
+     * Default value of the {@link #CLUSTER_ASSIGNMENT_THRESHOLD}.
      */
     public final static double DEFAULT_CLUSTER_ASSIGNMENT_THRESHOLD = 0.225;
 
@@ -56,7 +56,7 @@ public class LsiConstants {
     	= "lsi.threshold.candidateCluster";
     
     /**
-     * Default value of the {@link  CANDIDATE_CLUSTER_THRESHOLD}.
+     * Default value of the {@link #CANDIDATE_CLUSTER_THRESHOLD}.
      */
     public final static double DEFAULT_CANDIDATE_CLUSTER_THRESHOLD = 0.775;
     

@@ -70,9 +70,6 @@ public class DefaultFeatureExtractionStrategy
     /** DOCUMENT ME! */
     private HashMap inflected;
 
-    /**
-     * @see com.stachoodev.carrot.filter.lingo.common.FeatureExtractionStrategy#extractFeatures(com.stachoodev.carrot.filter.lingo.common.ClusteringContext)
-     */
     public Feature[] extractFeatures(
         AbstractClusteringContext clusteringContext) {
         this.stopWords = ((DefaultClusteringContext) clusteringContext).getStopWords();

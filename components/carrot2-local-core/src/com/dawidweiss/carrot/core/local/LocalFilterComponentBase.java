@@ -43,7 +43,7 @@ public abstract class LocalFilterComponentBase extends LocalComponentBase
 
     /**
      * <code>true</code> indicates that the processing has started. This flag
-     * is used to lock the value of {@link next} field.
+     * is used to lock the value of {@link #next} field.
      */
     private boolean processingStarted;
 

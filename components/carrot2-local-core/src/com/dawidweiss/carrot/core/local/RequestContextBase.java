@@ -16,7 +16,8 @@ package com.dawidweiss.carrot.core.local;
 import java.util.*;
 
 /**
- * A complete base implementation of the {@link RequestConext}interface used by
+ * A complete base implementation of the {@link com.dawidweiss.carrot.core.local.RequestContext}
+ * interface used by
  * the {@link com.dawidweiss.carrot.core.local.LocalControllerBase}.
  * 
  * @author Stanislaw Osinski

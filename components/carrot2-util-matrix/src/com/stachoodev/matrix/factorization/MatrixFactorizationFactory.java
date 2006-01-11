@@ -25,7 +25,6 @@ public interface MatrixFactorizationFactory
      * Factorizes matrix <code>A</code>.
      * 
      * @param A
-     * @return
      */
     public MatrixFactorization factorize(DoubleMatrix2D A);
 }

@@ -27,9 +27,6 @@ public interface ElementFactory
      * Converts the <code>object</code> to a corresponding XML element.
      * Implementations will usually narrow down the reference to some more
      * concrete type.
-     * 
-     * @param object
-     * @return
      */
     public Element createElement(Object object);
 }

@@ -26,7 +26,6 @@ public class ArrayUtils
      * array is returned for convenience.
      * 
      * @param array
-     * @return
      */
     public static int [] reverse(int [] array)
     {
@@ -47,7 +46,6 @@ public class ArrayUtils
      * array is returned for convenience.
      * 
      * @param array
-     * @return
      */
     public static double [] reverse(double [] array)
     {

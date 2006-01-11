@@ -29,7 +29,6 @@ public interface DualLcpSuffixSortingStrategy
      * and secondary LCP information.
      * 
      * @param intWrapper
-     * @return
      */
     public DualLcpSuffixArray dualLcpSuffixSort(MaskableIntWrapper intWrapper);
 }

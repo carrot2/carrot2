@@ -20,12 +20,10 @@ import com.dawidweiss.carrot.core.local.linguistic.Stemmer;
 
 /**
  * An implementation of a heuristic (dictionary-driven and stempel-based) stemming 
- * engine for the Polish language.
+ * engine for the Polish language (<a href="http://www.cs.put.poznan.pl/dweiss/xml/projects/lametyzator/index.xml?lang=en">http://www.cs.put.poznan.pl/dweiss/xml/projects/lametyzator/index.xml">See here</a>).
  *
  * @author Dawid Weiss
  * @version $Revision$
- *
- * @see <a href="http://www.cs.put.poznan.pl/dweiss/xml/projects/lametyzator/index.xml?lang=en">http://www.cs.put.poznan.pl/dweiss/xml/projects/lametyzator/index.xml</a>
  */
 public class Stempelator implements Stemmer {
     private static com.dawidweiss.stemmers.Stempelator instance;

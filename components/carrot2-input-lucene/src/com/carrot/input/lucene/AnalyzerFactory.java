@@ -26,7 +26,6 @@ public interface AnalyzerFactory
     /**
      * Creates an instance of a Lucene Analyzer.
      * 
-     * @return
      */
     public Analyzer getInstance();
 }

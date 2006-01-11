@@ -61,9 +61,6 @@ public class AllKnownElementFactories
     /**
      * Returns a {@link ElementFactory}for given class or <code>null</code>
      * if no appropriate factory is available.
-     * 
-     * @param c
-     * @return
      */
     public static ElementFactory getElementFactory(Class c)
     {

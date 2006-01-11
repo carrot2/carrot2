@@ -34,7 +34,6 @@ public interface FeatureVector {
 
     /**
      * Return size of vector
-     * @return
      */
     public int size();
 

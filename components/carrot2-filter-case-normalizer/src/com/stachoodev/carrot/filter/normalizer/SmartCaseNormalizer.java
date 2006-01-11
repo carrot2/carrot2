@@ -116,7 +116,6 @@ public class SmartCaseNormalizer implements CaseNormalizer
      * 
      * @throws IllegalStateException when an attempt is made to add documents
      *             after the {@link #getNormalizedDocuments()}has been called.
-     * @param document
      */
     public void addDocument(TokenizedDocument document)
     {
@@ -162,9 +161,6 @@ public class SmartCaseNormalizer implements CaseNormalizer
         return documents;
     }
 
-    /**
-     * @return
-     */
     private void normalizeDocuments()
     {
         if (normalizationFinished)
@@ -263,10 +259,6 @@ public class SmartCaseNormalizer implements CaseNormalizer
         }
     }
 
-    /**
-     * @param originalTokens
-     * @return
-     */
     private void normalizeTokens(StringTypedToken lowerCaseToken,
         Map originalTokens, Locale locale, Map normalizedTokens)
     {

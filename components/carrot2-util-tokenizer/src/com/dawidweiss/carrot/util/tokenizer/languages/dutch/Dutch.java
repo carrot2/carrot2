@@ -65,9 +65,6 @@ public class Dutch extends StemmedLanguageBase {
      * Creates a new instance of a {@link LanguageTokenizer} for 
      * this language.
      * 
-     * <p>The tokenizer is a {@link WordBasedTokenizer} with an internal
-     * soft pool for tokens.
-     * 
 	 * @see com.dawidweiss.carrot.util.tokenizer.languages.StemmedLanguageBase#createTokenizerInstanceInternal()
 	 */
 	protected LanguageTokenizer createTokenizerInstanceInternal() {

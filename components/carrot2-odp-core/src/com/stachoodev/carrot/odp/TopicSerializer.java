@@ -28,7 +28,7 @@ public interface TopicSerializer
     /**
      * Initializes the serializer.
      * 
-     * @param location location of the data files.
+     * @param dataLocation location of the data files.
      * @throws IOException
      */
     public void initialize(String dataLocation) throws IOException;

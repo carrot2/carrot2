@@ -23,7 +23,6 @@ public interface ClusterLabelGenerator {
     /**
      * Generate label for a cluster identified by an id
      * @param id
-     * @return
      */
     public String[] getLabel(int id);
 }

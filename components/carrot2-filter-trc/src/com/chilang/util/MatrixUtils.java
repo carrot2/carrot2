@@ -139,7 +139,6 @@ public class MatrixUtils {
      * Return string representation of given matrix.
      * (for display output)
      * @param m
-     * @return
      */
     public static String toString(int[][] m) {
         StringBuffer b = new StringBuffer();
@@ -152,7 +151,6 @@ public class MatrixUtils {
     /**
      * Return string representation of non-zero indices of given matrix
      * @param m
-     * @return
      */
     public static String nonZeroIndicesAsString(int[][] m) {
         StringBuffer b = new StringBuffer();
@@ -174,7 +172,6 @@ public class MatrixUtils {
     /**
      * Return string representation of given matrix.
      * @param m
-     * @return
      */
     public static String toString(double[][] m) {
         StringBuffer b = new StringBuffer();
@@ -199,7 +196,6 @@ public class MatrixUtils {
      * @param rows
      * @param cols
      * @param maxValue
-     * @return
      */
     public static int[][] generateRandom(int rows, int cols, int maxValue) {
         Random rand = new Random(System.currentTimeMillis());
@@ -217,7 +213,6 @@ public class MatrixUtils {
      * Return a vector that is an aggregated sum of selected rows
      * @param matrix
      * @param selectedRowIndices indices of selected rows
-     * @return
      */
     public static int[] sumSelectedRows(int[][] matrix, int[] selectedRowIndices) {
         int cols = matrix[0].length;
@@ -253,7 +248,6 @@ public class MatrixUtils {
     /**
      * Count number of non-zero entries
      * @param matrix
-     * @return
      */
     public static int countNonZeroes(int[][] matrix) {
         int rows = matrix.length, cols = matrix[0].length;
@@ -270,7 +264,6 @@ public class MatrixUtils {
     /**
      * Return a vector that is an aggregated sum of all rows in the matrix
      * @param matrix
-     * @return
      */
     public static int[] sumRows(int[][] matrix) {
         int cols = matrix[0].length;
@@ -393,7 +386,6 @@ public class MatrixUtils {
         /**
          * Apply and return int value for a double argument
          * @param value
-         * @return
          */
         public int apply(double value);
     }
@@ -421,7 +413,6 @@ public class MatrixUtils {
      * Generate random matrix of given size
      * @param rows
      * @param cols
-     * @return
      */
     public static double[][] randomMatrix(int rows, int cols) {
         double[][] rs = new double[rows][cols];
@@ -441,7 +432,6 @@ public class MatrixUtils {
         /**
          * Apply function to argument
          * @param argument
-         * @return
          */
         public boolean apply(int argument);
     }
@@ -470,7 +460,6 @@ public class MatrixUtils {
         /**
          * Apply function to argumnet
          * @param argument
-         * @return
          */
         public boolean apply(double argument);
     }
@@ -631,7 +620,6 @@ public class MatrixUtils {
      * @param rangeStart
      * @param rangeEnd
      * @param division
-     * @return
      */
     public static int[] histogramSpread(DynamicBin1D values, double rangeStart, double rangeEnd, int division) {
         DoubleArrayList sorted = values.sortedElements();
@@ -697,7 +685,6 @@ public class MatrixUtils {
      * Check if two matrix has equal values
      * @param a
      * @param b
-     * @return
      */
     public static boolean isEquals(double[][] a, double[][] b) {
         if ((a == null) || (b == null))

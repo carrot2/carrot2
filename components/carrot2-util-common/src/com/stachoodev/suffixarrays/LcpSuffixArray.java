@@ -43,7 +43,6 @@ public class LcpSuffixArray
     /**
      * Returns the suffix array.
      * 
-     * @return
      */
     public int [] getSuffixArray()
     {
@@ -53,7 +52,6 @@ public class LcpSuffixArray
     /**
      * Returns the LCP array.
      * 
-     * @return
      */
     public int [] getLcpArray()
     {

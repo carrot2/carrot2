@@ -62,9 +62,6 @@ public class RawDocumentElementWrapper
         return documentElement.elementText("title");
     }
 
-    /**
-     * @see com.dawidweiss.carrot.core.local.clustering.RawDocument#getContent()
-     */
     public String getSnippet()
     {
         return documentElement.elementText("snippet");
@@ -98,7 +95,7 @@ public class RawDocumentElementWrapper
 
     /**
      * Sets a named property for this document.
-     * @see com.dawidweiss.carrot.core.local.clustering.RawDocument#setProperty(java.lang.String)
+     * @see com.dawidweiss.carrot.core.local.clustering.RawDocument#setProperty(String, Object)
      */
     public Object setProperty(String propertyName, Object value) {
         synchronized (this) {

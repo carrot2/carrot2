@@ -47,8 +47,6 @@ public class DoubleMatrix2DWrapper
     
     /**
      * Returns this DoubleMatrix2DWrapper's <code>matrix</code>.
-     * 
-     * @return 
      */
     public DoubleMatrix2D getMatrix()
     {
@@ -57,8 +55,6 @@ public class DoubleMatrix2DWrapper
     
     /**
      * Returns this DoubleMatrix2DWrapper's <code>rowLabels</code>.
-     * 
-     * @return 
      */
     public List getRowLabels()
     {
@@ -67,8 +63,6 @@ public class DoubleMatrix2DWrapper
     
     /**
      * Returns this DoubleMatrix2DWrapper's <code>columnLabels</code>.
-     * 
-     * @return 
      */
     public List getColumnLabels()
     {

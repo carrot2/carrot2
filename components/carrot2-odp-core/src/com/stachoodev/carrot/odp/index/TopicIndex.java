@@ -30,7 +30,6 @@ public interface TopicIndex
      * iterator must be empty.
      * 
      * @param query
-     * @return
      */
     public IdIterator getIds(Object query);
 

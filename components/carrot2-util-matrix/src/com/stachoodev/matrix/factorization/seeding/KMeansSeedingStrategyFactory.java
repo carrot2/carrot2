@@ -46,7 +46,6 @@ public class KMeansSeedingStrategyFactory implements SeedingStrategyFactory
      * Returns the maximum number of iterations the k-means algorithm is allowed
      * to perform.
      * 
-     * @return
      */
     public int getMaxIterations()
     {

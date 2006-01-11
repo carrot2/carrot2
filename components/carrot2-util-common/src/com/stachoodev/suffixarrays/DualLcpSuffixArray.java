@@ -48,7 +48,6 @@ public class DualLcpSuffixArray extends LcpSuffixArray
     /**
      * Returns the super suffix array;
      * 
-     * @return 
      */
     public int [] getSuperSuffixArray()
     {
@@ -58,7 +57,6 @@ public class DualLcpSuffixArray extends LcpSuffixArray
     /**
      * Returns the super LCP array.
      * 
-     * @return
      */
     public int [] getSuperLcpArray()
     {

@@ -44,7 +44,7 @@ public abstract class LanguageBase
 
     /** 
      * A set of stopwords for this language. The set
-     * contains {@link java.util.String} entries.
+     * contains {@link java.lang.String} entries.
      */
     private Set stopwords;
 
@@ -111,7 +111,7 @@ public abstract class LanguageBase
      * 
      * <p>Override this method, if a specific implementation of 
      * {@link Stemmer} is to be used. The default implementation
-     * sets a flag in the superclass which causes {@link borrowTokenizer}
+     * sets a flag in the superclass which causes {@link #borrowTokenizer}
      * to always return <code>null</code>.
      * 
      * @return Overriden methods should return an instance of {@link Stemmer}.
@@ -161,8 +161,7 @@ public abstract class LanguageBase
     }
 
     /**
-     * @return Returns the tokenizer object back to the
-     * pool. 
+     * Returns the tokenizer object back to the pool. 
      * 
      * @see Language#returnTokenizer(LanguageTokenizer)
      */
@@ -232,7 +231,7 @@ public abstract class LanguageBase
 	 * <code>stopwords</code> will be returned from
 	 * {@link #getStopwords()}.
 	 * 
-	 * @param stopwords A set of {@link java.util.String} objects.
+	 * @param stopwords A set of {@link java.lang.String} objects.
 	 */
 	protected void setStopwords(Set stopwords) {
 	    this.stopwords = stopwords;

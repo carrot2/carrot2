@@ -34,7 +34,6 @@ public class WordLoadingUtils
      * 
      * @param resourceName
      * @param stream
-     * @return
      * @throws IOException
      */
     public static Set loadWordSet(String resourceName, InputStream stream)
@@ -49,7 +48,6 @@ public class WordLoadingUtils
      * 
      * @param resourceName
      * @param stream
-     * @return
      * @throws IOException
      */
     public static Set loadWordSet(String resourceName, InputStream stream,
@@ -105,7 +103,6 @@ public class WordLoadingUtils
      * @param resourceName
      * @param stream
      * @param convertToLowerCase
-     * @return
      * @throws IOException
      */
     public static Set loadPhraseSet(String resourceName, InputStream stream,
@@ -175,7 +172,6 @@ public class WordLoadingUtils
      * @param resourceName
      * @param stream
      * @param convertToLowerCase
-     * @return
      * @throws IOException
      */
     public static Set loadParameterizedPhraseSet(String resourceName,
@@ -258,7 +254,6 @@ public class WordLoadingUtils
      * @param resourceName
      * @param stream
      * @param convertToLowerCase
-     * @return
      * @throws IOException
      */
     public static List loadPhraseSetsList(String resourceName,

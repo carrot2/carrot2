@@ -32,14 +32,8 @@ package org.apache.lucene.misc;
  */
 
 import java.io.*;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
-import java.util.jar.Attributes;
-import java.util.jar.JarEntry;
-import java.util.jar.JarInputStream;
+import java.util.*;
+import java.util.jar.*;
 
 /**
  * TrigramLanguageGuesser implements language guessing based on trigrams
@@ -110,11 +104,9 @@ public class TrigramLanguageGuesser implements LanguageGuesser {
      * Construct a LanguageGuesser based on an existing map
      * of ISO language codes to Trigram objects.
      * 
-     * @see http://ftp.ics.uci.edu/pub/ietf/http/related/iso639.txt
      * @param languagesAndTrigrams a map of language code (string) to
      *  Trigram object.
      * @throws LanguageGuesserException if an error occured
-     * @param languagesAndTrigrams
      */
     public TrigramLanguageGuesser(Map languagesAndTrigrams) 
     throws LanguageGuesserException {
@@ -148,7 +140,6 @@ public class TrigramLanguageGuesser implements LanguageGuesser {
 	 *
 	 * This method is thread-safe.
 	 *
-	 * @see org.apache.lucene.misc.LanguageGuesserFactory#supportedLanguages()
 	 * @return an array of at least two ISO-639 code
 	 */
 	public String[] supportedLanguages() {
@@ -173,7 +164,6 @@ public class TrigramLanguageGuesser implements LanguageGuesser {
 	 * If no trigrams can be read from r, this method will return a
 	 * LanguageGuesserException
 	 *
-	 * @see org.apache.lucene.misc.LanguageGuesserFactory#guessLanguage(Reader)
 	 * @param r the reader the language will be guessed from
 	 * @return an ISO-639 Code from the recognized languages
 	 * @throws LanguageGuesserException if this TrigramLanguageGuesser cannot

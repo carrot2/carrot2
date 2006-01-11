@@ -30,7 +30,6 @@ public interface LcpSuffixSortingStrategy
      * information.
      * 
      * @param intWrapper
-     * @return
      */
     public LcpSuffixArray lcpSuffixSort(IntWrapper intWrapper);
 }

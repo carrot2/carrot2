@@ -29,7 +29,6 @@ public class SuffixArraysUtils
      * @param suffixA start position of the first suffix
      * @param suffixB start position of the second suffix
      * @param suffixData suffix data terminated with a -1 value.
-     * @return
      */
     public static int compareSuffixes(int suffixA, int suffixB,
         int [] suffixData)
@@ -82,7 +81,6 @@ public class SuffixArraysUtils
      * @param suffixA start position of the first suffix
      * @param suffixB start position of the second suffix
      * @param suffixData suffix data terminated with a -1 value.
-     * @return
      */
     public static int compareSuffixes(int suffixA, int suffixB,
         int [] suffixData, int secondaryBits)
@@ -127,7 +125,6 @@ public class SuffixArraysUtils
      * @param suffixA start position of the first suffix
      * @param suffixB start position of the second suffix
      * @param suffixData suffix data terminated with a -1 value.
-     * @return
      */
     public static int compareSuffixes(int suffixA, int suffixB,
         int length, int [] suffixData, int secondaryBits)

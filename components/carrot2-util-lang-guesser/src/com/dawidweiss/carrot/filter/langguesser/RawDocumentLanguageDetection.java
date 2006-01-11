@@ -29,8 +29,8 @@ import com.dawidweiss.carrot.core.local.profiling.*;
  * An local component that adds a language code
  * to the properties of a document. 
  * 
- * <p>The component implements {@link RawDocumentConsumer}
- * and {@link RawDocumentProducer}, so basically, it acts
+ * <p>The component implements {@link RawDocumentsConsumer}
+ * and {@link RawDocumentsProducer}, so basically, it acts
  * as a filter between two other components. 
  * 
  * @author Dawid Weiss
@@ -170,7 +170,7 @@ public class RawDocumentLanguageDetection extends ProfiledLocalFilterComponentBa
    /**
     * Performs a cleanup before the object is reused.
     *
-    * @see com.dawidweiss.carrot.core.local.LocalComponent.flushResources()
+    * @see com.dawidweiss.carrot.core.local.LocalComponent#flushResources()
     */
    public void flushResources() {
        super.flushResources();

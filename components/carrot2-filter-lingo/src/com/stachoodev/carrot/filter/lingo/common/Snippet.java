@@ -49,9 +49,6 @@ public class Snippet {
 
     /**
      * Creates a new document.
-     *
-     * @param id the identifier of the new document
-     * @param text text of the new document
      */
     public Snippet(String id, String title, String body) {
         this(id, title, body,
@@ -60,9 +57,6 @@ public class Snippet {
 
     /**
      * Creates a new document.
-     *
-     * @param id the identifier of the new document
-     * @param text text of the new document
      */
     public Snippet(String id, String title, String body, String language) {
         if (title == null) {
@@ -142,8 +136,6 @@ public class Snippet {
 
     /**
      * Returns document language.
-     *
-     * @return
      */
     public String getLanguage() {
         return language;
@@ -158,11 +150,6 @@ public class Snippet {
         language = string;
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
     public String toString() {
         StringBuffer stringBuffer = new StringBuffer();
 
@@ -178,16 +165,10 @@ public class Snippet {
         return stringBuffer.toString();
     }
 
-    /**
-     * @return
-     */
     public String getLocation() {
         return location;
     }
 
-    /**
-     * @param string
-     */
     public void setLocation(String string) {
         location = string;
     }

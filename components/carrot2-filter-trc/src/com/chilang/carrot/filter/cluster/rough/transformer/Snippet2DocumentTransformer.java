@@ -52,7 +52,6 @@ public class Snippet2DocumentTransformer implements Transformer {
      * First argument is modified.
      * @param map1
      * @param map2
-     * @return
      */
     private Map merge(Map map1, Map map2) {
         for (Iterator iter = map2.keySet().iterator(); iter.hasNext(); ) {

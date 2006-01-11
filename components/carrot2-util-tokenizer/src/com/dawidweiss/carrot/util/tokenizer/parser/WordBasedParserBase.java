@@ -30,8 +30,7 @@ import com.dawidweiss.carrot.util.tokenizer.languages.*;
 public abstract class WordBasedParserBase implements LanguageTokenizer
 {
     /**
-     * Temporary variable for holding token type passed from the
-     * {@link WordBasedParserImpl}.
+     * Temporary variable for holding token type.
      */
     protected final short [] tokenTypeHolder = new short [1];
 

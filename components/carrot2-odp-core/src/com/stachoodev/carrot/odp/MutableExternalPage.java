@@ -63,7 +63,6 @@ public class MutableExternalPage implements ExternalPage, Serializable
     /**
      * Returns this MutableExternalPage's <code>description</code>.
      * 
-     * @return
      */
     public String getDescription()
     {
@@ -83,7 +82,6 @@ public class MutableExternalPage implements ExternalPage, Serializable
     /**
      * Returns this MutableExternalPage's <code>title</code>.
      * 
-     * @return
      */
     public String getTitle()
     {
@@ -103,7 +101,6 @@ public class MutableExternalPage implements ExternalPage, Serializable
     /**
      * Returns this MutableExternalPage's <code>url</code>.
      * 
-     * @return
      */
     public String getUrl()
     {

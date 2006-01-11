@@ -267,7 +267,6 @@ public class PathTopicIndexTest extends TestCase
 
     /**
      * @param Ids
-     * @return
      */
     private List iteratorToList(IdIterator iter)
     {
@@ -281,7 +280,6 @@ public class PathTopicIndexTest extends TestCase
     
     /**
      * @param array
-     * @return
      */
     private List arrayToList(int [] array)
     {

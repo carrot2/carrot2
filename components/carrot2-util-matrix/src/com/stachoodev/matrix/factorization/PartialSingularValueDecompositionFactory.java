@@ -63,7 +63,6 @@ public class PartialSingularValueDecompositionFactory implements
     /**
      * Returns the number of base vectors <i>k </i>.
      * 
-     * @return
      */
     public int getK()
     {

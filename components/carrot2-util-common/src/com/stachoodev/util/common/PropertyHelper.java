@@ -15,11 +15,10 @@ package com.stachoodev.util.common;
 
 import java.util.*;
 
-import org.apache.commons.collections.map.*;
+import org.apache.commons.collections.map.Flat3Map;
 
 /**
- * Helps to implement properties of various objects such as
- * {@link com.dawidweiss.carrot.core.local.linguistic.tokens.ExtendedToken}. The property
+ * Helps to implement properties of various objects. The property
  * container is initialized in a lazy manner (i.e. when the first request for
  * setting a value is received).
  * 
@@ -32,7 +31,6 @@ public class PropertyHelper implements PropertyProvider, Cloneable
     private Map properties;
 
     /**
-     * @return
      */
     public Map getProperties()
     {
@@ -235,7 +233,6 @@ public class PropertyHelper implements PropertyProvider, Cloneable
      *            returned {@link Comparator}
      * @param reverse if <code>true</code> the 'reverse' comparator will be
      *            returned, e.g. it will yield descending sorting.
-     * @return
      */
     public static Comparator getComparatorForDoubleProperty(
         final String propertyName, final boolean reverse)
@@ -287,9 +284,8 @@ public class PropertyHelper implements PropertyProvider, Cloneable
      * 
      * @param propertyName Name of the property which will be compared by the
      *            returned {@link Comparator}
-     * @param reverse if <code>true</code> the 'reverse' comparator will be
+     * @param descending if <code>true</code> the 'reverse' comparator will be
      *            returned, e.g. it will yield descending sorting.
-     * @return
      */
     public static Comparator getComparatorForIntProperty(
         final String propertyName, final boolean descending)

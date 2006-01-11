@@ -112,9 +112,6 @@ public class MultilingualLsiClustererRequestProcessor
         }
     }
 
-    /**
-     * @param stemmerClasses
-     */
     private Language [] getLanguages(Map parameters) {
         ArrayList languages = new ArrayList();
 

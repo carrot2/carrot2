@@ -79,9 +79,9 @@ public class XMLReport
      * 
      * @param map the map to be added
      * @param description description of the map, or <code>null</code>
-     * @param elementName name of the map's tag
+     * @param mapElementName name of the map's tag
      * @param keyAttributeName name of the attribute representing map's keys
-     * @param valueElementName name of the element representing map's values
+     * @param entryElementName name of the element representing map's values
      */
     public void addMap(Map map, String description, String mapElementName,
         String entryElementName, String keyAttributeName)

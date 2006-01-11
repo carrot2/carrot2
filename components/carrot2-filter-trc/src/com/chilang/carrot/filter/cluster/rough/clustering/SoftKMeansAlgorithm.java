@@ -153,7 +153,6 @@ public class SoftKMeansAlgorithm extends AbstractKMeansAlgorithm {
     /**
      * Create centroid from vector indices
      * @param vectorIndices
-     * @return
      */
     private DoubleMatrix1D createCentroid(int[] vectorIndices) {
         DoubleMatrix2D clusterObjects = objectMatrix.viewSelection(vectorIndices, null);

@@ -46,7 +46,6 @@ public class DocumentApproximationSpace {
     /**
      * Get IDF factor (inverse document frequency) for given term
      * @param i term id
-     * @return
      */
     protected double getIDF(int i) {
         return 0;

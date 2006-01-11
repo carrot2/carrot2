@@ -25,7 +25,6 @@ public class ExternalPageDocument
 {
     /**
      * @param externalPage
-     * @return
      */
     public static Document Document(ExternalPage externalPage)
     {

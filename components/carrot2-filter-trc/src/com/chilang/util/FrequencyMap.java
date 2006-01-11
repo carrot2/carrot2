@@ -84,7 +84,6 @@ public class FrequencyMap {
 
     /**
      * Return internal map
-     * @return
      */
     public Map getInternalMap() {
         return entries;
@@ -122,7 +121,6 @@ public class FrequencyMap {
 
     /**
      * Return set of keys
-     * @return
      */
     public Set keySet() {
         return entries.keySet();

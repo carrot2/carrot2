@@ -16,9 +16,7 @@ package com.stachoodev.carrot.odp.index;
 import java.util.*;
 
 /**
- * Stores {@link com.stachoodev.carrot.odp.index.TopicIndexBuilder}s
- * corresponding to names of indices returned by
- * {@link com.stachoodev.carrot.odp.ODPIndex#getTopicIndexNames()}.
+ * Stores {@link com.stachoodev.carrot.odp.index.TopicIndexBuilder}s.
  * 
  * @author Stanislaw Osinski
  * @version $Revision$
@@ -49,7 +47,6 @@ public class AllKnownTopicIndexBuilders
      * Returns the {@link TopicIndexBuilder}for given index name.
      * 
      * @param indexName
-     * @return
      */
     public static TopicIndexBuilder getTopicIndexBuilder(String indexName)
     {
@@ -59,7 +56,6 @@ public class AllKnownTopicIndexBuilders
     /**
      * Returns the {@link PrimaryTopicIndexBuilder}.
      * 
-     * @return
      */
     public static PrimaryTopicIndexBuilder getPrimaryTopicIndexBuilder()
     {
@@ -67,7 +63,6 @@ public class AllKnownTopicIndexBuilders
     }
     
     /**
-     * @return
      */
     public static Map getTopicIndexBuilders()
     {

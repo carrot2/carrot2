@@ -20,12 +20,10 @@ package com.stachoodev.util.common;
 public interface IntIterator
 {
     /**
-     * @return
      */
     public boolean hasNext();
     
     /**
-     * @return
      */
     public int next();
 }

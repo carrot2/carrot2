@@ -57,11 +57,6 @@ public class ODPQuery
     {
     }
 
-    /**
-     * @param separationLevel
-     * @param query
-     * @return
-     */
     public static ODPQuery createSeparationTest(int separationLevel,
         boolean balanced, String queryText)
     {
@@ -75,11 +70,6 @@ public class ODPQuery
         return query;
     }
 
-    /**
-     * @param separationLevel
-     * @param queryText
-     * @return
-     */
     public static ODPQuery createOutlierTest(int separationLevel,
         int outlierCount, int outlierSize, String queryText)
     {
@@ -95,11 +85,6 @@ public class ODPQuery
         return query;
     }
 
-    /**
-     * @param separationLevel
-     * @param queryText
-     * @return
-     */
     public static ODPQuery createPerformanceTest(String queryText)
     {
         ODPQuery query = new ODPQuery();
@@ -114,11 +99,6 @@ public class ODPQuery
         return query;
     }
 
-    /**
-     * @param separationLevel
-     * @param queryText
-     * @return
-     */
     public static ODPQuery createLocalCache(String queryText)
     {
         ODPQuery query = new ODPQuery();
@@ -134,11 +114,6 @@ public class ODPQuery
         return query;
     }
 
-    /**
-     * @param separationLevel
-     * @param queryText
-     * @return
-     */
     public static ODPQuery createLocalCache(String file, String queryText)
     {
         ODPQuery query = new ODPQuery();
@@ -220,8 +195,6 @@ public class ODPQuery
 
     /**
      * Returns this ODPQuery's <code>queryText</code>.
-     * 
-     * @return
      */
     public String getQueryText()
     {

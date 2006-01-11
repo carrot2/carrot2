@@ -85,9 +85,6 @@ class ClusterElementWrapper
     }
 
 
-    /**
-     * @see com.dawidweiss.carrot.adapters.localfilter.Cluster#getHits()
-     */
     public List getDocuments()
     {
         List groups = node.elements("document");
@@ -136,7 +133,8 @@ class ClusterElementWrapper
 
     /**
      * Sets the value of a named property.
-     * @see com.dawidweiss.carrot.core.local.clustering.RawDocument#setProperty(java.lang.String)
+     * 
+     * @see com.dawidweiss.carrot.core.local.clustering.RawDocument#setProperty(String, Object)
      */
     public Object setProperty(String propertyName, Object value) {
         synchronized (this) {

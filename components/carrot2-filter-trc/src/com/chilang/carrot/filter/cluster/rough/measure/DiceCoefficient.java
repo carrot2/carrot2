@@ -25,7 +25,6 @@ public class DiceCoefficient implements Similarity {
      *                     (SUM[k=1..N](w_kj1^2) + SUM[k=1..N](w_kj2^2)
      * @param obj1
      * @param obj2
-     * @return
      */
     public double measure(Clusterable obj1, Clusterable obj2) {
         /*Clusterable[] doc = { obj1, obj2};

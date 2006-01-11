@@ -67,7 +67,6 @@ public abstract class AbstractKMeansAlgorithm {
      * Return clusters as a form of binary matrix
      * (n rows-objects * k colums-clusters)
      * Cell[i,j] = 1 iff object i belongs to cluster j
-     * @return
      */
     public abstract int[][] getClusters();
 
@@ -75,7 +74,6 @@ public abstract class AbstractKMeansAlgorithm {
     /**
      * Return cluster membership matrix
      * Colums = cluster membership vector
-     * @return
      */
     public abstract double[][] getMembership();
 
@@ -83,27 +81,23 @@ public abstract class AbstractKMeansAlgorithm {
     /**
      * Return cluster's representation vector as a matrix
      * Rows = vectors
-     * @return
      */
     public abstract double[][] getClusterRepresentation();
 
 
     /**
      * Return indices of unclassified objects
-     * @return
      */
     public abstract int[] getUnclassified();
 
     /**
      * Return centroid of unclassified objects
-     * @return
      */
     public abstract double[] getUnclassifiedCentroid();
 
     /**
      * Return membership vector for unclassified objects;
      * Length of vector = number of unclassified object
-     * @return
      */
     public abstract double[] getUnclassifiedMembership();
 

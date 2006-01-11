@@ -54,8 +54,6 @@ public class ExtendedTokenSequence implements TokenSequence, PropertyProvider
     /**
      * Creates an ExtendedTokenSequence wrapped around the provided
      * {@link TokenSequence}.
-     * 
-     * @param token
      */
     public ExtendedTokenSequence(TokenSequence tokenSequence)
     {
@@ -68,7 +66,6 @@ public class ExtendedTokenSequence implements TokenSequence, PropertyProvider
      * Gets a value of a named property associated with this ExtendedToken.
      * 
      * @param propertyName
-     * @return
      */
     public Object getProperty(String propertyName)
     {
@@ -80,7 +77,6 @@ public class ExtendedTokenSequence implements TokenSequence, PropertyProvider
      * 
      * @param propertyName
      * @param value
-     * @return
      */
     public Object setProperty(String propertyName, Object value)
     {
@@ -93,7 +89,6 @@ public class ExtendedTokenSequence implements TokenSequence, PropertyProvider
      * appropriate object casting succeeds.
      * 
      * @param propertName
-     * @return
      */
     public double getDoubleProperty(String propertName, double defaultValue)
     {
@@ -105,7 +100,6 @@ public class ExtendedTokenSequence implements TokenSequence, PropertyProvider
      * 
      * @param propertyName
      * @param value
-     * @return
      */
     public Object setDoubleProperty(String propertyName, double value)
     {
@@ -116,9 +110,6 @@ public class ExtendedTokenSequence implements TokenSequence, PropertyProvider
      * Returns a named <code>int</code> value associated with this Extended
      * Token. It is the responsibility of the programmer to assure that the
      * appropriate object casting succeeds.
-     * 
-     * @param propertName
-     * @return
      */
     public int getIntProperty(String propertyName, int defaultValue)
     {
@@ -130,7 +121,6 @@ public class ExtendedTokenSequence implements TokenSequence, PropertyProvider
      * 
      * @param propertyName
      * @param value
-     * @return
      */
     public Object setIntProperty(String propertyName, int value)
     {
@@ -138,7 +128,6 @@ public class ExtendedTokenSequence implements TokenSequence, PropertyProvider
     }
 
     /**
-     * @return
      */
     public String getFullInfo()
     {

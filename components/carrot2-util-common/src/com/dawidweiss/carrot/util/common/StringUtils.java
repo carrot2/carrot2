@@ -79,7 +79,6 @@ public class StringUtils
     /**
      * @param string
      * @param width
-     * @return
      */
     public static String addLeftPadding(String string, int width)
     {
@@ -303,7 +302,6 @@ bigloop:
     /**
      * @param a
      * @param formatType as in the {@link java.text.MessageFormat}class
-     * @return
      */
     public static String toString(Double a, String formatType)
     {

@@ -50,9 +50,6 @@ public class ProfiledLocalFilterComponentBase extends LocalFilterComponentBase
      * Stops measuring time spent by the component on processing the query.
      * 
      * @return time elapsed since the <b>last </b> call to {@link #startTimer()}.
-     *         To get the total elapsed time for this profile use
-     *         {@link #getTotalTimeElapsed()}. With no profilling -1 will be
-     *         returned.
      */
     protected long stopTimer()
     {

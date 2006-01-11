@@ -82,7 +82,6 @@ public class ProfiledRequestContext extends RequestContextBase
      * according to the order of components in the chain. The ordering behaviour
      * depends on the implementation of {@link LocalProcessBase}.
      * 
-     * @return
      */
     public List getProfiles()
     {
