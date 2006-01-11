@@ -37,7 +37,6 @@ public class ArrayUtils {
      * Create String representation of given array using specified Formatter
      * @param array array of objects
      * @param itemFormatter convert object to String (kind of external toString())
-     * @return
      */
     public static String toString(Object[] array, StringFormatter itemFormatter) {
         StringBuffer buf = new StringBuffer();
@@ -54,7 +53,6 @@ public class ArrayUtils {
     /**
      * Return string representation of given array
      * @param array
-     * @return
      */
     public static String toString(Object array) {
         if (array == null)
@@ -102,7 +100,6 @@ public class ArrayUtils {
     /**
      * Calculate mean of the array
      * @param arr
-     * @return
      */
     public static double mean(int[] arr) {
         int acc = 0;
@@ -142,7 +139,6 @@ public class ArrayUtils {
      * Extract a column from matrix
      * @param colNum
      * @param matrix
-     * @return
      */
     public static int[] extractColumn(int colNum, int[][] matrix) {
         int[] column = new int[matrix.length];
@@ -251,7 +247,6 @@ public class ArrayUtils {
      * (where "0" - unset bit, "1" set bit, lenght of string = vector length).
      * For e.g "01011" -> {0,1,0,1,1}
      * @param bitString
-     * @return
      */
     public static BitVector constructFromString(String bitString) {
         int length = bitString.length();
@@ -327,7 +322,6 @@ public class ArrayUtils {
     /**
      * Get non-zero indices of a vector represented as an int array
      * @param vector
-     * @return
      */
     public static int[] getNonZeroIndices(int[] vector) {
         int size = vector.length;
@@ -345,7 +339,6 @@ public class ArrayUtils {
     /**
      * Get non-zero indices of a vector represented as an double array
      * @param vector
-     * @return
      */
     public static int[] getNonZeroIndices(double[] vector) {
         int size = vector.length;
@@ -437,7 +430,6 @@ public class ArrayUtils {
      * Calculate aggregated sum
      * sum[i] = arr[i] + arr[i+1]+ ...+ a[n]
      * @param arr
-     * @return
      */
     public static int[] aggregatedSum(int[] arr) {
         int[] agg = new int[arr.length];
@@ -479,7 +471,6 @@ public class ArrayUtils {
     /**
      * Find min value
      * @param vector
-     * @return
      */
     public static double min(double[] vector) {
         double min = Double.MAX_VALUE;
@@ -502,7 +493,6 @@ public class ArrayUtils {
     /**
      * Find max value of vector attribute
      * @param vector
-     * @return
      */
     public static double max(double[] vector) {
         double max = Double.MIN_VALUE;
@@ -525,7 +515,6 @@ public class ArrayUtils {
     /**
      * Calculate vector length
      * @param vector
-     * @return
      */
     public static double length(double[] vector) {
         double acc = 0;

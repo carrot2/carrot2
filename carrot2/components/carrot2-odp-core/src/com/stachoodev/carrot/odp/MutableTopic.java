@@ -35,9 +35,6 @@ public class MutableTopic implements Topic, Serializable
 
     /**
      * Crates a new MutableTopic.
-     * 
-     * @param id
-     * @param catid
      */
     public MutableTopic(String id)
     {
@@ -48,7 +45,6 @@ public class MutableTopic implements Topic, Serializable
     /**
      * Returns this MutableTopic's <code>catid</code>.
      * 
-     * @return
      */
     public int getCatid()
     {
@@ -68,7 +64,6 @@ public class MutableTopic implements Topic, Serializable
     /**
      * Returns this MutableTopic's <code>id</code>.
      * 
-     * @return
      */
     public String getId()
     {
@@ -78,7 +73,6 @@ public class MutableTopic implements Topic, Serializable
     /**
      * Returns a list of this MutableTopic's external pages.
      * 
-     * @return
      */
     public List getExternalPages()
     {

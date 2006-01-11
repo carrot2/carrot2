@@ -23,25 +23,15 @@ import org.apache.lucene.analysis.standard.*;
  */
 public class RawDocumentsLuceneIndexBase
 {
-    /** */
     protected static final String [] SEARCH_FIELDS = new String []
     {
         "title", "body"
     };
     
-    /**
-     * @return
-     */
     protected static Analyzer createPorterAnalyzer()
     {
         return new StandardAnalyzer()
         {
-            /*
-             * (non-Javadoc)
-             * 
-             * @see org.apache.lucene.analysis.Analyzer#tokenStream(java.lang.String,
-             *      java.io.Reader)
-             */
             public TokenStream tokenStream(String fieldName, Reader reader)
             {
                 return new PorterStemFilter(super

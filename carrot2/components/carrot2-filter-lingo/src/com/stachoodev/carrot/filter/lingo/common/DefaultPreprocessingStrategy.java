@@ -56,9 +56,6 @@ public class DefaultPreprocessingStrategy implements PreprocessingStrategy {
         this.sentenceDelimiters = sentenceDelimiters;
     }
 
-    /**
-     * @see com.stachoodev.carrot.filter.lingo.common.PreprocessingStrategy#preprocess(com.stachoodev.carrot.filter.lingo.common.Snippet)
-     */
     public Snippet[] preprocess(AbstractClusteringContext clusteringContext) {
         Snippet[] snippets = clusteringContext.getSnippets();
         Snippet[] preprocessedSnippets = new Snippet[snippets.length];
@@ -73,13 +70,6 @@ public class DefaultPreprocessingStrategy implements PreprocessingStrategy {
         return preprocessedSnippets;
     }
 
-    /**
-     * Method clean.
-     *
-     * @param string
-     *
-     * @return String
-     */
     protected Snippet preprocess(Snippet snippet) {
         Snippet s = new Snippet(snippet.getSnippetId(),
                 preprocess(snippet.getTitle(), true),
@@ -89,11 +79,6 @@ public class DefaultPreprocessingStrategy implements PreprocessingStrategy {
         return s;
     }
 
-    /**
-     * @param stringBuffer
-     * @param stems
-     * @param text
-     */
     private String preprocess(String text, boolean isTitle) {
         StringBuffer stringBuffer = new StringBuffer();
         StringTokenizer stringTokenizer = new StringTokenizer(text);

@@ -13,7 +13,10 @@
 
 package com.stachoodev.carrot.metrics;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+
+import com.dawidweiss.carrot.core.local.clustering.RawCluster;
 
 /**
  * Defines the interface of an algorithm computing some cluster metric.
@@ -26,7 +29,7 @@ public interface RawClustersMetric
     /**
      * Computes some cluster metric for given <code>rawClusters</code> list.
      * Original partitioning is also available in the form of a list of
-     * {@link RawCluster}instances.
+     * {@link RawCluster} instances.
      * 
      * @param rawClusters clusters for which the metric will be computed
      * @param originalRawClusters original partitioning of the input data

@@ -43,7 +43,6 @@ public class SimilarityFactory {
      * Cell(i,j) contains similarity between i-th and j-th vector
      * @param vectors set of vectors (rows)
      * @param similarity similarity measure
-     * @return
      */
     public static double[][] distance(double[][] vectors, Similarity similarity) {
         int size = vectors.length;

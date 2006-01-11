@@ -200,7 +200,6 @@ public class PartialSingularValueDecomposition extends MatrixFactorizationBase
     /**
      * Returns singular values of the matrix. 
      * 
-     * @return
      */
     public double [] getSingularValues()
     {
@@ -220,7 +219,6 @@ public class PartialSingularValueDecomposition extends MatrixFactorizationBase
     /**
      * Returns the number of base vectors <i>k </i>.
      * 
-     * @return
      */
     public int getK()
     {

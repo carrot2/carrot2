@@ -39,7 +39,6 @@ public interface TopicIndexBuilder
      * Returns the final index, called after all topics have been added to the
      * index.
      * 
-     * @return
      */
     public TopicIndex getTopicIndex();
 }

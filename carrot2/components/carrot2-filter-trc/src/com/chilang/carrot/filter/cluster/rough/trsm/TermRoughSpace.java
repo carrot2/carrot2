@@ -140,7 +140,6 @@ public class TermRoughSpace implements RoughSpace{
     /**
      * Return weighted upper approximation of specified object
      * @param id
-     * @return
      */
     public Object getWeightedUpperApproximation(int id) {
        return new SparseFeatureVector(weightingScheme.getUpperWeight()[id]);

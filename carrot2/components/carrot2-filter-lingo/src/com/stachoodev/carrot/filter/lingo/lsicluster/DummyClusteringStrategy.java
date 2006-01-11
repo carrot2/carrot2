@@ -21,13 +21,8 @@ import com.stachoodev.carrot.filter.lingo.util.matrix.MatrixUtils;
 import java.util.Arrays;
 
 
-/**
- *
- */
 public class DummyClusteringStrategy implements ClusteringStrategy {
-    /**
-     * @see com.stachoodev.carrot.filter.lingo.common.ClusteringStrategy#cluster(com.stachoodev.carrot.filter.lingo.common.ClusteringContext)
-     */
+
     public Cluster[] cluster(AbstractClusteringContext clusteringContext) {
         Snippet[] snippets = clusteringContext.getSnippets();
         Feature[] features = clusteringContext.getFeatures();

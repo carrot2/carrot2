@@ -26,7 +26,6 @@ public class CommonEntityResolver implements HTMLEntityResolver {
     /**
      * Resolve most common entities to its form
      * @param entity
-     * @return
      */
     public String resolve(String entity) {
         for (int i=0; i<ENTITIES.length; i++) {

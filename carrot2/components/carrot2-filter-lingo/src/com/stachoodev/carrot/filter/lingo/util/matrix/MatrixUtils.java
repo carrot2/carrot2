@@ -114,14 +114,6 @@ public class MatrixUtils {
         return len = Math.sqrt(len);
     }
 
-    /**
-     * Method getColumnVector2Norm.
-     *
-     * @param m
-     * @param c
-     *
-     * @return double
-     */
     public static double getRowVector2Norm(Matrix m, int r) {
         double len = 0;
 
@@ -132,14 +124,6 @@ public class MatrixUtils {
         return len = Math.sqrt(len);
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param m DOCUMENT ME!
-     * @param printWriter DOCUMENT ME!
-     * @param numberFormat DOCUMENT ME!
-     * @param width DOCUMENT ME!
-     */
     public static void print(Matrix m, PrintWriter printWriter,
         NumberFormat numberFormat, int width) {
         // Column header

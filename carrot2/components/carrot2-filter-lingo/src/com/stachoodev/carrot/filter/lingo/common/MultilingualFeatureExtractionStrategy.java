@@ -59,9 +59,6 @@ public class MultilingualFeatureExtractionStrategy
     /** DOCUMENT ME! */
     private HashSet strongWords;
 
-    /**
-     * @see com.stachoodev.carrot.filter.lingo.common.FeatureExtractionStrategy#extractFeatures(com.stachoodev.carrot.filter.lingo.common.ClusteringContext)
-     */
     public Feature[] extractFeatures(
         AbstractClusteringContext clusteringContext) {
         this.queryWords = clusteringContext.getQueryWords();

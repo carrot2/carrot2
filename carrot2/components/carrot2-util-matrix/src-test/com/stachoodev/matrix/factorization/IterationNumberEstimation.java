@@ -171,11 +171,6 @@ public class IterationNumberEstimation
         }
     }
 
-    /**
-     * @param t
-     * @param d
-     * @return
-     */
     private void fill(DoubleMatrix2D A, double sparseness, double sparsenessDev)
     {
         Random random = new Random();

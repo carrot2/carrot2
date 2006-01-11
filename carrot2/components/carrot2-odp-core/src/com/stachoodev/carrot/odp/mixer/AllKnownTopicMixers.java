@@ -46,7 +46,6 @@ public class AllKnownTopicMixers
      * name or <code>null</code> if no topic is associated with given name.
      * 
      * @param name
-     * @return
      */
     public static TopicMixer getTopicMixer(String name)
     {
@@ -57,7 +56,6 @@ public class AllKnownTopicMixers
      * Returns an iterator of {@link String}s representing the names of all
      * available topic mixers.
      * 
-     * @return
      */
     public static Iterator getAllTopicMixerNames()
     {

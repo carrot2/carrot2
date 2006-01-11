@@ -21,7 +21,6 @@ public class FileUtils {
     /**
      * List XML files from given directory
      * @param path
-     * @return
      */
     public static File[] listXMLFiles(String path) {
         File dir = new File(path);

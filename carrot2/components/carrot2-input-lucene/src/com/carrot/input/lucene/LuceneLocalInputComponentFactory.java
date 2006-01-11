@@ -67,20 +67,12 @@ public class LuceneLocalInputComponentFactory extends LocalComponentFactoryBase
      */
     public static final AnalyzerFactory DEFAULT_ANALYZER_FACTORY = PorterAnalyzerFactory.INSTANCE;
     
-    /**
-     * @param indexDirectory
-     * @throws IOException
-     */
     public LuceneLocalInputComponentFactory(String indexDirectory)
         throws IOException
     {
         this(IndexReader.open(indexDirectory));
     }
 
-    /**
-     * @param indexDirectory
-     * @throws IOException
-     */
     public LuceneLocalInputComponentFactory(IndexReader indexReader)
         throws IOException
     {

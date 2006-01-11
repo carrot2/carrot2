@@ -37,8 +37,6 @@ public class RandomSeedingStrategyFactory implements SeedingStrategyFactory
 
     /**
      * Creates the factory with given seed value.
-     * 
-     * @param i
      */
     public RandomSeedingStrategyFactory(int seed)
     {
@@ -70,7 +68,6 @@ public class RandomSeedingStrategyFactory implements SeedingStrategyFactory
     /**
      * Returns the random seed to be used.
      * 
-     * @return
      */
     public int getSeed()
     {
@@ -92,7 +89,6 @@ public class RandomSeedingStrategyFactory implements SeedingStrategyFactory
     /**
      * Returns true if the current system time is used to generate seed.
      * 
-     * @return
      */
     public boolean getDateSeed()
     {

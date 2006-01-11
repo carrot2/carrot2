@@ -22,7 +22,6 @@ public interface ApproximateWeightingScheme {
 
     /**
      * Get weight matrix for upper approximation of documents
-     * @return
      */
     public double[][] getUpperWeight();
 }

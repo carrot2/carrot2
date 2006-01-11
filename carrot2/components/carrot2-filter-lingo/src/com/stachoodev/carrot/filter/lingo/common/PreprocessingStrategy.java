@@ -14,16 +14,6 @@
 package com.stachoodev.carrot.filter.lingo.common;
 
 
-/**
- *
- */
 public interface PreprocessingStrategy {
-    /**
-     * Method preprocess.
-     *
-     * @param snippets
-     *
-     * @return Snippet[]
-     */
     public Snippet[] preprocess(AbstractClusteringContext clusteringContext);
 }

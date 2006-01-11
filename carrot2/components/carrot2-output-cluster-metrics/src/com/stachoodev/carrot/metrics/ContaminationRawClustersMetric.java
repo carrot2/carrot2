@@ -176,7 +176,6 @@ public class ContaminationRawClustersMetric implements RawClustersMetric
     /**
      * @param h
      * @param k
-     * @return
      */
     private int computeA(int [][] h, int k)
     {

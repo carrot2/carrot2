@@ -54,7 +54,7 @@ final class StemmingTokenizerWrapper implements LanguageTokenizer {
      * The underlying tokenizer must return instances of {@link MutableStemmedToken}.
      * @param locale 
      * @param tokenizer A tokenizer instance that will be wrapped.
-     * @param stemmerInstance A stemmer instance used for stemming tokens' images.
+     * @param stemmer A stemmer instance used for stemming tokens' images.
      */
     public StemmingTokenizerWrapper(Locale locale, LanguageTokenizer tokenizer, Stemmer stemmer) {
         this.tokenizer = tokenizer;
@@ -69,7 +69,7 @@ final class StemmingTokenizerWrapper implements LanguageTokenizer {
      * also implementing {@link TypedToken}.
      * @param locale 
      * @param tokenizer A tokenizer instance that will be wrapped.
-     * @param stemmerInstance A stemmer instance used for stemming tokens' images.
+     * @param stemmer A stemmer instance used for stemming tokens' images.
      */
     public StemmingTokenizerWrapper(Locale locale, LanguageTokenizer tokenizer, Stemmer stemmer, Set stopwords) {
         this.tokenizer = tokenizer;

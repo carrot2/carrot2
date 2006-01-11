@@ -53,7 +53,7 @@ public class DefaultSnippetsIntWrapper extends AbstractSnippetsIntWrapper {
     }
 
     /**
-     * @param document document data. Sentences MUST be period-delimited, with
+     * @param documents document data. Sentences MUST be period-delimited, with
      *        a space character preceding and succeeding the period.
      *        Subsequent words MUST be separated by a single space character.
      */
@@ -62,7 +62,7 @@ public class DefaultSnippetsIntWrapper extends AbstractSnippetsIntWrapper {
     }
 
     /**
-     * @param document document data. Sentences MUST be period-delimited, with
+     * @param documents document data. Sentences MUST be period-delimited, with
      *        a space character preceding and succeeding the period.
      *        Subsequent words MUST be separated by a single space character.
      */

@@ -45,7 +45,6 @@ public interface CaseNormalizer
      * 
      * @throws IllegalStateException when an attempt is made to add documents
      *             after the {@link #getNormalizedDocuments()}has been called.
-     * @param document
      */
     public void addDocument(TokenizedDocument document);
 

@@ -38,19 +38,11 @@ public class ODPLuceneIndexer implements TopicIndexBuilderListener
     /** Progress reporting flag */
     private boolean progressIndication;
 
-    /**
-     * @param contentFileLocation
-     */
     public ODPLuceneIndexer(String indexDataLocation)
     {
         this.indexDataLocation = indexDataLocation;
     }
 
-    /**
-     * @param maxDepth
-     * @throws IOException
-     * @throws ClassNotFoundException
-     */
     public void index(String contentFileLocation, Map properties)
         throws IOException, ClassNotFoundException
     {

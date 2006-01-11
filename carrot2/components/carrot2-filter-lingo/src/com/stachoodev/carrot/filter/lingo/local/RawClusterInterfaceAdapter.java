@@ -32,10 +32,6 @@ public final class RawClusterInterfaceAdapter extends RawClusterBase {
 	private List originalDocuments;
 	private Cluster cluster;
 	
-	/**
-	 * @param cluster
-	 * @param documents
-	 */
 	RawClusterInterfaceAdapter(Cluster cluster, List originalDocuments) {
 		this.originalDocuments = originalDocuments;
 		this.cluster = cluster;
@@ -44,16 +40,10 @@ public final class RawClusterInterfaceAdapter extends RawClusterBase {
 			super.setProperty( RawCluster.PROPERTY_JUNK_CLUSTER, Boolean.TRUE );
 	}
 
-	/*
-	 * @see com.dawidweiss.carrot.core.local.clustering.RawCluster#getClusterDescription()
-	 */
 	public List getClusterDescription() {
         return cluster.getLabelsAsList();
 	}
 
-	/*
-	 * @see com.dawidweiss.carrot.core.local.clustering.RawCluster#getSubclusters()
-	 */
 	public List getSubclusters() {
         ArrayList subclusters = (ArrayList) cluster.getClustersAsList().clone();
 
@@ -69,9 +59,6 @@ public final class RawClusterInterfaceAdapter extends RawClusterBase {
         return subclusters;
 	}
 
-	/*
-	 * @see com.dawidweiss.carrot.core.local.clustering.RawCluster#getDocuments()
-	 */
 	public List getDocuments() {
         ArrayList documents = (ArrayList) cluster.getSnippetsAsArray().clone();
 
@@ -89,5 +76,4 @@ public final class RawClusterInterfaceAdapter extends RawClusterBase {
 
         return documents;
 	}
-
 }

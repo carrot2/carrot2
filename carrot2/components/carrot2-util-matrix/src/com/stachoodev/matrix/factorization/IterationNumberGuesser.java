@@ -136,7 +136,6 @@ public class IterationNumberGuesser
      * @param factory
      * @param A
      * @param qualityLevel
-     * @return
      */
     public static boolean setEstimatedIterationsNumber(
         IterativeMatrixFactorizationFactory factory, DoubleMatrix2D A,

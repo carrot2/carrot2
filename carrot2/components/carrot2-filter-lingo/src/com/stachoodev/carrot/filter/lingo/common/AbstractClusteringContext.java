@@ -152,35 +152,18 @@ public abstract class AbstractClusteringContext {
         return queryWords;
     }
 
-    /**
-     * Sets the query.
-     *
-     * @param query The query to set
-     */
     public void setQuery(String query) {
         this.query = query;
     }
 
-    /**
-     * @param map
-     */
     public void setParameters(Map map) {
         parameters = map;
     }
 
-    /**
-     * @param key
-     *
-     * @return
-     */
     public Object getParameter(Object key) {
         return parameters.get(key);
     }
 
-    /**
-     * @param key
-     * @param parameter
-     */
     public void setParameter(Object key, Object parameter) {
         parameters.put(key, parameter);
     }

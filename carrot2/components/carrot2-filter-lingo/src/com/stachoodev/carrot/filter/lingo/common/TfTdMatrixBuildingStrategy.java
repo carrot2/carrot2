@@ -57,9 +57,6 @@ public class TfTdMatrixBuildingStrategy implements TdMatrixBuildingStrategy {
         this.maximumSize = maximumSize;
     }
 
-    /**
-     * @see com.stachoodev.carrot.filter.lingo.common.TdMatrixBuildingStrategy#buildTdMatrix(com.stachoodev.carrot.filter.lingo.common.ClusteringContext)
-     */
     public double[][] buildTdMatrix(AbstractClusteringContext clusteringContext) {
         Feature[] features = clusteringContext.getFeatures();
 

@@ -31,17 +31,11 @@ import com.dawidweiss.carrot.util.common.XMLSerializerHelper;
 public class ColorizedPatternLayout
     extends PatternLayout
 {
-    /**
-     * 
-     */
     public ColorizedPatternLayout()
     {
         super();
     }
 
-    /**
-     * @param arg0
-     */
     public ColorizedPatternLayout(String v)
     {
         super(v);

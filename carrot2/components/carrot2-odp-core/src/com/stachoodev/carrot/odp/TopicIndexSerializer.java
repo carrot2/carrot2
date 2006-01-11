@@ -40,7 +40,7 @@ public interface TopicIndexSerializer
      * 
      * @param location
      * @return @throws IOException
-     * @throws ClassNotFoundExceptionClassNotFoundException
+     * @throws ClassNotFoundException
      */
     public TopicIndex deserialize(String location) throws IOException,
         ClassNotFoundException;

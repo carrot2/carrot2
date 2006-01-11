@@ -277,18 +277,10 @@ public class MultilingualSnippetsIntWrapper extends AbstractSnippetsIntWrapper {
         }
     }
 
-    /**
-     * @param language
-     *
-     * @return
-     */
     public AbstractSnippetsIntWrapper getWrapperForLanguage(String language) {
         return (AbstractSnippetsIntWrapper) snippetIntWrappers.get(language);
     }
 
-    /**
-     * @return
-     */
     public String[] getLanguageNames() {
         return (String[]) snippetIntWrappers.keySet().toArray(new String[snippetIntWrappers.keySet()
                                                                                            .size()]);

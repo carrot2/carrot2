@@ -161,7 +161,6 @@ public class NNIDenseDoubleMatrix2D extends DenseDoubleMatrix2D
      * protected and there is no other way of getting hold of it.
      * 
      * @param A
-     * @return
      */
     public static double [] getDoubleData(DenseDoubleMatrix2D A)
     {
@@ -173,7 +172,6 @@ public class NNIDenseDoubleMatrix2D extends DenseDoubleMatrix2D
      * protected.
      * 
      * @param A
-     * @return
      */
     public static boolean isView(DenseDoubleMatrix2D A)
     {

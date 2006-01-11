@@ -50,7 +50,6 @@ public class StringUtils {
      * between two set" of words : i.e. = |w1 * w2|/w1
      * @param words the larger set of words
      * @param subset
-     * @return
      */
     public static double overlap(String[] words, String[] subset) {
         //brute force version

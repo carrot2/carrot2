@@ -40,7 +40,6 @@ public abstract class MatrixFactorizationBase implements
      * By default RandomMatrixFactorizationSeeding will be used.
      * 
      * @param A matrix to be factorized
-     * @param k the desired number of base vectors
      */
     public MatrixFactorizationBase(DoubleMatrix2D A)
     {
@@ -51,7 +50,6 @@ public abstract class MatrixFactorizationBase implements
     /**
      * Returns the matrix factory used when creating the result matrices.
      * 
-     * @return
      */
     public DoubleFactory2D getDoubleFactory2D()
     {

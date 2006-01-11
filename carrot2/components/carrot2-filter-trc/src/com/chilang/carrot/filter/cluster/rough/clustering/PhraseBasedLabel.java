@@ -164,7 +164,6 @@ public class PhraseBasedLabel implements ClusterLabelGenerator {
      * @param originalMap
      * @param keyPredicate
      * @param valuePredicate
-     * @return
      */
     public static SortedMap filteredMap(SortedMap originalMap, Predicate keyPredicate, Predicate valuePredicate) {
         SortedMap map = new TreeMap(originalMap.comparator());

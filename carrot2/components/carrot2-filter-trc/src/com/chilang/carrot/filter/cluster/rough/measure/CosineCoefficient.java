@@ -30,7 +30,6 @@ public class CosineCoefficient implements Similarity/*, Statistic.VectorVectorFu
      * When numerator part (Sum(x[i] * y[i]) is 0, returns 0;
      * @param x
      * @param y
-     * @return
      */
 //    public double apply(DoubleMatrix1D x, DoubleMatrix1D y) {
 //        double nominator =  x.aggregate(y, F.plus, F.mult );
@@ -49,7 +48,6 @@ public class CosineCoefficient implements Similarity/*, Statistic.VectorVectorFu
      *                     sqrt(SUM[k=1..N](w_kj1^2)) * sqrt(SUM[k=1..N](w_kj2^2))
      * @param obj1
      * @param obj2
-     * @return
      */
     public double measure(Clusterable obj1, Clusterable obj2) {
         return distanceUsingSparseVector(obj1, obj2);

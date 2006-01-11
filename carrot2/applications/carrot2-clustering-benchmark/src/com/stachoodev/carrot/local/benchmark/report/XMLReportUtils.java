@@ -35,7 +35,6 @@ public class XMLReportUtils
      * @param entryElementName name for a single list element. The name will
      *            only be used if no {@link ElementFactory}is available for the
      *            a particular list element.
-     * @return
      */
     public static Element createListElement(List list, String listElementName,
         String entryElementName)
@@ -79,7 +78,6 @@ public class XMLReportUtils
      *            will only be used if no {@link ElementFactory}is available
      *            for the a particular map entry.
      * @param keyAttributeName name for a single map key attribute
-     * @return
      */
     public static Element createMapElement(Map map, String mapElementName,
         String entryElementName, String keyAttributeName)

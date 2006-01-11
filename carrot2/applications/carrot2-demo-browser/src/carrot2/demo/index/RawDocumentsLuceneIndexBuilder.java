@@ -63,7 +63,6 @@ public class RawDocumentsLuceneIndexBuilder extends RawDocumentsLuceneIndexBase
 
     /**
      * @param rawDocument
-     * @return
      */
     private static Document createDocument(RawDocument rawDocument)
     {

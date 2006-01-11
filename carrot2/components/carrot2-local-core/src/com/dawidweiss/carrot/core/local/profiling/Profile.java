@@ -130,7 +130,6 @@ public class Profile
      * Returns a {@link ProfileEntry}for given <code>entryId</code>.
      * 
      * @param entryId
-     * @return
      */
     public ProfileEntry getProfileEntry(String entryId)
     {

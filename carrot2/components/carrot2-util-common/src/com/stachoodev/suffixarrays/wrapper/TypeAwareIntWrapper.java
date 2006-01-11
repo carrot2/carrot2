@@ -26,7 +26,6 @@ public interface TypeAwareIntWrapper extends IntWrapper
     /**
      * Checs if the token with given code is a stop word.
      * 
-     * @param token integer code
      * @return true if token corresponding to the given code is a stop word
      * @throws NullPointerException when token with the given code does not
      *             exist

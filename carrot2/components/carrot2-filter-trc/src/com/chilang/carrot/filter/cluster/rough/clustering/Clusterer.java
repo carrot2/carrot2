@@ -33,7 +33,6 @@ public interface Clusterer {
 
     /**
      * Return resulting clusters
-     * @return
      */
     public XCluster[] getClusters();
 

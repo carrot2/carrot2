@@ -221,71 +221,38 @@ public class Feature {
         this.snippetTf = snippetTf;
     }
 
-    /**
-     * @return double
-     */
     public double getIdf() {
         return idf;
     }
 
-    /**
-     * Sets the idf.
-     *
-     * @param idf The idf to set
-     */
     public void setIdf(double idf) {
         this.idf = idf;
     }
 
-    /**
-     * Sets the text.
-     *
-     * @param text The text to set
-     */
     public void setText(String text) {
         this.text = text;
     }
 
-    /**
-     * @return boolean
-     */
     public boolean isStrong() {
         return strong;
     }
 
-    /**
-     * Sets the strong.
-     *
-     * @param strong The strong to set
-     */
     public void setStrong(boolean strong) {
         this.strong = strong;
     }
 
-    /**
-     * @return
-     */
     public boolean isQueryWord() {
         return queryWord;
     }
 
-    /**
-     * @param b
-     */
     public void setQueryWord(boolean b) {
         queryWord = b;
     }
 
-    /**
-     * @return
-     */
     public String getLanguage() {
         return language;
     }
 
-    /**
-     * @param string
-     */
     public void setLanguage(String string) {
         language = string;
     }

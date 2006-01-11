@@ -132,9 +132,6 @@ public class BenchmarkDialog
 
     }
 
-    /**
-     * @param value
-     */
     private void updateResults(final int value, final String message,
         final String avg, final String stdDev, final String min,
         final String max)
@@ -153,9 +150,6 @@ public class BenchmarkDialog
         });
     }
 
-    /**
-     * 
-     */
     private void benchmarkFinished()
     {
         SwingTask.runNow(new Runnable()
@@ -169,9 +163,6 @@ public class BenchmarkDialog
         });
     }
 
-    /**
-     * 
-     */
     private JPanel buildUI()
     {
         JPanel mainPanel = new JPanel();
@@ -187,9 +178,6 @@ public class BenchmarkDialog
         return mainPanel;
     }
 
-    /**
-     * @return
-     */
     private JPanel buildContentPanel()
     {
         JPanel contentPanel = new JPanel();
@@ -278,10 +266,6 @@ public class BenchmarkDialog
         return contentPanel;
     }
 
-    /**
-     * @param label
-     * @param text
-     */
     private JLabel makeBoldLabel(String text)
     {
         JLabel label = new JLabel(text);
@@ -291,9 +275,6 @@ public class BenchmarkDialog
         return label;
     }
 
-    /**
-     * @return
-     */
     private JPanel buildButtonPanel()
     {
         JPanel buttonPanel = new JPanel();
@@ -325,13 +306,10 @@ public class BenchmarkDialog
         /** */
         private int warmupCycles;
 
-        /** */
         private int benchmarkCycles;
 
-        /** */
         private boolean running = false;
 
-        /** */
         double avg = 0;
         double stdDev = 0;
         double min = 10e9;
@@ -340,8 +318,6 @@ public class BenchmarkDialog
         double sumSquares = 0;
         int count = 0;
 
-        /**
-         */
         public BenchmarkThread(int warmupCycles, int benchmarkCycles)
         {
             this.warmupCycles = warmupCycles;
@@ -349,11 +325,6 @@ public class BenchmarkDialog
             this.running = false;
         }
 
-        /*
-         * (non-Javadoc)
-         * 
-         * @see java.lang.Thread#run()
-         */
         public void run()
         {
             NumberFormat format = NumberFormat.getNumberInstance();
@@ -417,9 +388,6 @@ public class BenchmarkDialog
             }
         }
 
-        /**
-         * 
-         */
         private void updateStats(long time)
         {
             count++;
@@ -433,17 +401,11 @@ public class BenchmarkDialog
             stdDev = Math.sqrt(sumSquares / count - avg * avg);
         }
 
-        /**
-         * 
-         */
         public void cancel()
         {
             running = false;
         }
 
-        /**
-         * @return
-         */
         public boolean isRunning()
         {
             return running;

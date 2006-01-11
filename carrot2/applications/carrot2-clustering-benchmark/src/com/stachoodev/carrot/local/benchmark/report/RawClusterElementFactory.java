@@ -86,9 +86,6 @@ public class RawClusterElementFactory implements ElementFactory
     /**
      * Calculates real size of a cluster including documents in all nested
      * subclusters.
-     * 
-     * @param rawCluster
-     * @return
      */
     private int clusterSize(RawCluster rawCluster)
     {

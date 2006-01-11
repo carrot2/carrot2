@@ -57,9 +57,6 @@ public class MultilingualClusteringContext extends AbstractClusteringContext {
      */
     public static final String UNIDENTIFIED_LANGUAGE_NAME = "unidentified";
 
-    /**
-     * @param dataDir
-     */
     public MultilingualClusteringContext(Map params) {
         if (params != null) {
             super.setParameters(params);
@@ -144,8 +141,6 @@ public class MultilingualClusteringContext extends AbstractClusteringContext {
      * Reads a set of stop words and returns it as a HashSet
      *
      * @param stopWordsFile
-     *
-     * @return
      */
     private HashSet readStopWordsSet(InputStream stopWordsFile)
         throws IOException {
@@ -245,30 +240,18 @@ public class MultilingualClusteringContext extends AbstractClusteringContext {
         this.clusteringStrategy = clusteringStrategy;
     }
 
-    /**
-     * @return
-     */
     public HashMap getInflectedSets() {
         return inflectedSets;
     }
 
-    /**
-     * @return
-     */
     public HashMap getStopWordSets() {
         return stopWordSets;
     }
 
-    /**
-     * @return
-     */
     public HashMap getStemSets() {
         return stemSets;
     }
 
-    /**
-     * @param map
-     */
     public void setLanguages(Language[] languages) {
         HashMap map = new HashMap();
         stopWordSets = new HashMap();
@@ -298,18 +281,10 @@ public class MultilingualClusteringContext extends AbstractClusteringContext {
         this.languages = map;
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
     public Map getLanguages() {
         return this.languages;
     }
 
-    /**
-     * @return
-     */
     public HashMap getNonStopWordSets() {
         return nonStopWordSets;
     }

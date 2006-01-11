@@ -96,7 +96,6 @@ public abstract class IterativeMatrixFactorizationBase extends
     /**
      * Returns the number of base vectors <i>k </i>.
      * 
-     * @return
      */
     public int getK()
     {
@@ -164,7 +163,6 @@ public abstract class IterativeMatrixFactorizationBase extends
     /**
      * Returns current {@link SeedingStrategy}.
      * 
-     * @return
      */
     public SeedingStrategy getSeedingStrategy()
     {
@@ -206,7 +204,6 @@ public abstract class IterativeMatrixFactorizationBase extends
      * decrease in approximation error becomes smaller than
      * <code>stopThreshold</code>, the algorithm will stop.
      * 
-     * @return
      */
     public double getStopThreshold()
     {
@@ -220,8 +217,6 @@ public abstract class IterativeMatrixFactorizationBase extends
      * of approximation error is quite costly. Setting the threshold to -1 turns
      * off calculation of the approximation error and hence makes the algorithm
      * do the maximum allowed number of iterations.
-     * 
-     * @param
      */
     public void setStopThreshold(double stopThreshold)
     {
@@ -246,7 +241,6 @@ public abstract class IterativeMatrixFactorizationBase extends
      * <code>null</code> if the approximation error calculation has been
      * turned off (see {@link #setMaxIterations(int)}.
      * 
-     * @return
      */
     public double [] getApproximationErrors()
     {
@@ -267,7 +261,6 @@ public abstract class IterativeMatrixFactorizationBase extends
      * Returns <code>true</code> when the factorization is set to generate an
      * ordered basis.
      * 
-     * @return
      */
     public boolean isOrdered()
     {
@@ -288,7 +281,6 @@ public abstract class IterativeMatrixFactorizationBase extends
      * Returns column aggregates for a sorted factorization, and
      * <code>null</code> for an unsorted factorization.
      * 
-     * @return
      */
     public double [] getAggregates()
     {

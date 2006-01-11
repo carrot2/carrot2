@@ -120,7 +120,6 @@ public class MatrixFactorizationBenchmark
     /**
      * @param t
      * @param d
-     * @return
      */
     private DoubleMatrix2D createRandomTdMatrix(int t, int d)
     {

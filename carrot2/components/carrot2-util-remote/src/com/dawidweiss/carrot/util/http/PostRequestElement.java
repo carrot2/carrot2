@@ -167,8 +167,6 @@ public class PostRequestElement
      * Returns the value of this parameter as a string, decoding it from URL encoding and
      * converting to a string using the encoding specified in constructor.
      *
-     * @return A string with the value of this parameter.
-     *
      * @throws IOException If an IO exception occurred while reading the value.
      * @throws IllegalStateException If the parameter has been invalidated.
      */

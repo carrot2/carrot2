@@ -169,10 +169,6 @@ public class SimplePrimaryTopicIndex implements PrimaryTopicIndex, Serializable
         /** Catid entry */
         private int id;
 
-        /**
-         * @param catid
-         * @param location
-         */
         public IndexEntry(int id, Location location)
         {
             this.id = id;
@@ -182,8 +178,6 @@ public class SimplePrimaryTopicIndex implements PrimaryTopicIndex, Serializable
         /**
          * Returns this CatidPrimaryTopicIndexBuilder.CatidIndexEntry's
          * <code>catid</code>.
-         * 
-         * @return
          */
         public int getId()
         {
@@ -193,8 +187,6 @@ public class SimplePrimaryTopicIndex implements PrimaryTopicIndex, Serializable
         /**
          * Returns this CatidPrimaryTopicIndexBuilder.CatidIndexEntry's
          * <code>location</code>.
-         * 
-         * @return
          */
         public Location getLocation()
         {
@@ -227,11 +219,6 @@ public class SimplePrimaryTopicIndex implements PrimaryTopicIndex, Serializable
                 && location.equals(((IndexEntry) obj).location);
         }
 
-        /*
-         * (non-Javadoc)
-         * 
-         * @see java.lang.Comparable#compareTo(java.lang.Object)
-         */
         public int compareTo(Object o)
         {
             // Don't bother checking type - we would throw ClassCastException

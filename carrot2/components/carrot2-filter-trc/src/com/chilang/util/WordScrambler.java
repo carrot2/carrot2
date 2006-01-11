@@ -27,7 +27,6 @@ public class WordScrambler {
      * Scramble word.
      *
      * @param word
-     * @return
      */
     public static String scramble(String word) {
 
@@ -54,7 +53,6 @@ public class WordScrambler {
     /**
      * Apply scrambling on the whole text
      * @param text
-     * @return
      */
     public static String scrambleText(String text) {
         StringTokenizer tokenizer = new StringTokenizer(text);

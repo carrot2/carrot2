@@ -45,7 +45,6 @@ public interface Term{
      * Return a map of (document id -> term frequency in that document).
      * Size of the map is the "document frequency" of term
      * (i.e. number of document in the corpus in which term occurs)
-     * @return
      */
     Map getTfMap();
 

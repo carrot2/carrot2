@@ -41,11 +41,6 @@ public class ArrayUtils {
         return stringBuffer.toString();
     }
 
-    /**
-     * @param array
-     *
-     * @return
-     */
     public static int[] clone(int[] array) {
         if (array == null) {
             return null;
@@ -58,11 +53,6 @@ public class ArrayUtils {
         return clone;
     }
 
-    /**
-     * @param array
-     *
-     * @return
-     */
     public static String[] clone(String[] array) {
         if (array == null) {
             return null;
@@ -96,8 +86,6 @@ public class ArrayUtils {
     /**
      * @param array
      * @param boundaries
-     *
-     * @return
      */
     public static int[][] split(int[] array, int[] boundaries) {
         int[][] split = new int[boundaries.length - 1][];
@@ -211,8 +199,6 @@ public class ArrayUtils {
 
     /**
      * @param array
-     *
-     * @return
      */
     public static double average(double[] array) {
         if ((array == null) || (array.length == 0)) {
@@ -230,8 +216,6 @@ public class ArrayUtils {
 
     /**
      * @param array
-     *
-     * @return
      */
     public static double stdDev(double[] array) {
         if ((array == null) || (array.length == 0)) {

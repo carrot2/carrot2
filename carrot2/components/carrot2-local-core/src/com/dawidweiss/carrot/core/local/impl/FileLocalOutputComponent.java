@@ -57,16 +57,10 @@ public class FileLocalOutputComponent extends LocalOutputComponentBase
     /** */
     private List rawClusters;
 
-    /**
-     * @param file
-     */
     public FileLocalOutputComponent()
     {
     }
 
-    /**
-     * @param file
-     */
     public FileLocalOutputComponent(File outputDir)
     {
         if (outputDir == null)

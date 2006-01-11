@@ -13,10 +13,9 @@
 
 package com.dawidweiss.carrot.util.tokenizer.languages;
 
-import java.util.*;
+import java.util.Locale;
 
-import com.dawidweiss.carrot.core.local.linguistic.LanguageTokenizer;
-import com.dawidweiss.carrot.core.local.linguistic.Stemmer;
+import com.dawidweiss.carrot.core.local.linguistic.*;
 
 
 /**
@@ -42,7 +41,7 @@ public abstract class StemmedLanguageBase extends LanguageBase {
 
     /**
      * Creates a new tokenizer using the internal
-     * {@link createTokenizerInstanceInternal()} method and
+     * {@link #createTokenizerInstanceInternal()} method and
      * wraps it with a tokenizer that applies stemming to
      * the returned tokens (or rather: their images). 
      * 

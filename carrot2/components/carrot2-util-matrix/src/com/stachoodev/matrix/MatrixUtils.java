@@ -426,7 +426,6 @@ public class MatrixUtils
     /**
      * @param A
      * @param sums
-     * @return
      */
     public static double [] sumRows(DoubleMatrix2D A, double [] sums)
     {

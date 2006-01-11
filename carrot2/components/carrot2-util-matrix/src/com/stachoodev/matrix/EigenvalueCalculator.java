@@ -31,7 +31,6 @@ public class EigenvalueCalculator
 {
     /**
      * @param A
-     * @return
      */
     public static double [] computeEigenvaluesSymmetrical(DoubleMatrix2D A)
     {
@@ -51,7 +50,6 @@ public class EigenvalueCalculator
     
     /**
      * @param A
-     * @return
      */
     public static double [] computeEigenvaluesSymmetricalNNI(
         DenseDoubleMatrix2D A)
@@ -141,7 +139,6 @@ public class EigenvalueCalculator
 
     /**
      * @param A
-     * @return
      */
     public static double [] computeEigenvaluesNNI(DenseDoubleMatrix2D A)
     {

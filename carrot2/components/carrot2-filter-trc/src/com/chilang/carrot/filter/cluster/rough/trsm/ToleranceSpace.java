@@ -36,7 +36,6 @@ public interface ToleranceSpace {
     /**
      * Return binary (n * n) matrix defining tolerance classes.
      * Cell[i,j] = 1 iff object i and j are in the same tolerance classes
-     * @return
      */
 //    public int[][] getToleranceMatrix();
 

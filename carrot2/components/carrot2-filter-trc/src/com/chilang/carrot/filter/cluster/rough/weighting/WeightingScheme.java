@@ -21,7 +21,6 @@ public interface WeightingScheme {
 
     /**
      * Return document * term weight matrix
-     * @return
      */
     public double[][] getTermWeight();
 }

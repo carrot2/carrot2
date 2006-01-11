@@ -81,7 +81,6 @@ public class ExtendedToken implements Token, PropertyProvider
     /**
      * Returns the underlying {@link Token}.
      * 
-     * @return
      */
     public Token getToken()
     {
@@ -98,7 +97,6 @@ public class ExtendedToken implements Token, PropertyProvider
     }
 
     /**
-     * @return
      */
     public ExtendedTokenSequence asTokenSequence()
     {
@@ -117,7 +115,6 @@ public class ExtendedToken implements Token, PropertyProvider
      * Does not copy original tokens onto original token sequences
      * 
      * @param extendedToken
-     * @return
      */
     private ExtendedTokenSequence asShallowTokenSequence(Token extendedToken)
     {
@@ -133,7 +130,6 @@ public class ExtendedToken implements Token, PropertyProvider
      * Gets a value of a named property associated with this ExtendedToken.
      * 
      * @param propertyName
-     * @return
      */
     public Object getProperty(String propertyName)
     {
@@ -142,10 +138,6 @@ public class ExtendedToken implements Token, PropertyProvider
 
     /**
      * Sets a named property for this ExtendedToken.
-     * 
-     * @param propertyName
-     * @param value
-     * @return
      */
     public Object setProperty(String propertyName, Object property)
     {
@@ -156,9 +148,6 @@ public class ExtendedToken implements Token, PropertyProvider
      * Returns a named <code>double</code> value associated with this
      * ExtendedToken. It is the responsibility of the programmer to assure that
      * the appropriate object casting succeeds.
-     * 
-     * @param propertName
-     * @return
      */
     public double getDoubleProperty(String propertyName, double defaultValue)
     {
@@ -170,7 +159,6 @@ public class ExtendedToken implements Token, PropertyProvider
      * 
      * @param propertyName
      * @param value
-     * @return
      */
     public Object setDoubleProperty(String propertyName, double value)
     {
@@ -183,7 +171,6 @@ public class ExtendedToken implements Token, PropertyProvider
      * the appropriate object casting succeeds.
      * 
      * @param propertyName
-     * @return
      */
     public int getIntProperty(String propertyName, int defaultValue)
     {
@@ -195,7 +182,6 @@ public class ExtendedToken implements Token, PropertyProvider
      * 
      * @param propertyName
      * @param value
-     * @return
      */
     public Object setIntProperty(String propertyName, int value)
     {

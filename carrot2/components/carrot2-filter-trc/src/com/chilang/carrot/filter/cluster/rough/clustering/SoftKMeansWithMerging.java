@@ -140,7 +140,6 @@ public class SoftKMeansWithMerging extends SoftKMeansAlgorithm {
          *
          * @param a
          * @param b
-         * @return
          */
         private int getMergedIndex(int a, int b) {
             //a,b has not been previously a part of merge

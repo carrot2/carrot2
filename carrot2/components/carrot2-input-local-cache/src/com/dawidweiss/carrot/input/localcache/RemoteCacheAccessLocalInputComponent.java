@@ -174,9 +174,6 @@ public class RemoteCacheAccessLocalInputComponent extends
         return "Cache Input";
     }
 
-    /**
-	 * @param query2
-	 */
 	private void handleRawQuery(String query) throws ProcessingException {
     	if (store == null)
     		throw new ProcessingException("There is no store to query. Initialize the component with a queries' store.");

@@ -61,15 +61,9 @@ public final class CarrotLibTokenizerPreprocessingStrategy
 
     protected Map inflectedFreqSets;
 
-    /**
-     * @see java.lang.Object#Object()
-     */
     public CarrotLibTokenizerPreprocessingStrategy() {
     }
 
-    /**
-     * @see com.stachoodev.carrot.filter.lingo.common.PreprocessingStrategy#preprocess(com.stachoodev.carrot.filter.lingo.common.Snippet)
-     */
     public Snippet[] preprocess(AbstractClusteringContext clusteringContext) {
         Tokenizer tokenizer = JFlexTokenizer.getTokenizer();
 
@@ -214,11 +208,6 @@ public final class CarrotLibTokenizerPreprocessingStrategy
         return preprocessedSnippet;
     }
 
-    /**
-     * @param snippet
-     *
-     * @return
-     */
     protected Snippet stemming(Snippet snippet) {
         Snippet stemmedSnippet = new Snippet(snippet.getSnippetId(),
                 stemming(snippet.getTitle(), snippet.getLanguage(), true),
@@ -229,11 +218,6 @@ public final class CarrotLibTokenizerPreprocessingStrategy
         return stemmedSnippet;
     }
 
-    /**
-     * @param text
-     * @param language
-     * @param strong
-     */
     private String stemming(String text, String langCode, boolean strong) {
         StringBuffer stringBuffer = new StringBuffer();
         StringTokenizer stringTokenizer = new StringTokenizer(text);
@@ -364,9 +348,6 @@ public final class CarrotLibTokenizerPreprocessingStrategy
         return stringBuffer.toString();
     }
 
-    /**
-     * @param snippet
-     */
     private String guessLanguage(String text) {
         StringTokenizer stringTokenizer = new StringTokenizer(text);
 

@@ -112,10 +112,6 @@ public class SmartCaseNormalizerBenchmark
         System.out.println(performance + " snippets/s\n");
     }
 
-    /**
-     * @param queryStrings
-     * @throws ProcessingException
-     */
     private double processQueries(int repeat) throws ProcessingException
     {
         int documentsProcessed = 0;

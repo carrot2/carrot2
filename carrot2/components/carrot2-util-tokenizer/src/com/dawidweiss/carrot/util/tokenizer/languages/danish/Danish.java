@@ -16,9 +16,7 @@ package com.dawidweiss.carrot.util.tokenizer.languages.danish;
 import java.io.IOException;
 import java.util.Set;
 
-import com.dawidweiss.carrot.core.local.linguistic.Language;
-import com.dawidweiss.carrot.core.local.linguistic.LanguageTokenizer;
-import com.dawidweiss.carrot.core.local.linguistic.Stemmer;
+import com.dawidweiss.carrot.core.local.linguistic.*;
 import com.dawidweiss.carrot.filter.snowball.SnowballStemmersFactory;
 import com.dawidweiss.carrot.util.tokenizer.languages.StemmedLanguageBase;
 import com.dawidweiss.carrot.util.tokenizer.parser.WordBasedParserFactory;
@@ -60,9 +58,6 @@ public class Danish extends StemmedLanguageBase {
 	/**
      * Creates a new instance of a {@link LanguageTokenizer} for 
      * this language.
-     * 
-     * <p>The tokenizer is a {@link WordBasedTokenizer} with an internal
-     * soft pool for tokens.
      * 
 	 * @see com.dawidweiss.carrot.util.tokenizer.languages.StemmedLanguageBase#createTokenizerInstanceInternal()
 	 */

@@ -46,7 +46,6 @@ public class CommonFactory {
     /**
      * Create context from given data file
      * @param datafile
-     * @return
      */
     public static IRContext createDefaultContext(String datafile) {
         SnippetReader reader = new SnippetReader(datafile);

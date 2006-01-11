@@ -22,13 +22,11 @@ public interface Cluster {
 
     /**
      * Return cluster size (number of cluster's members)
-     * @return
      */
     public int size();
 
     /**
      * Return cluster's members
-     * @return
      */
     public Snippet[] getMembers();
 
@@ -60,7 +58,6 @@ public interface Cluster {
 
     /**
      * Return description labels for cluster
-     * @return
      */
     String[] getLabels();
 

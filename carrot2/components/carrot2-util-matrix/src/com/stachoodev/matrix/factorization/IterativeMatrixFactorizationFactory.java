@@ -86,7 +86,6 @@ public abstract class IterativeMatrixFactorizationFactory implements
     /**
      * Returns the number of base vectors <i>k </i>.
      * 
-     * @return
      */
     public int getK()
     {
@@ -96,7 +95,6 @@ public abstract class IterativeMatrixFactorizationFactory implements
     /**
      * Returns {@link RandomSeedingStrategy}with constant seed.
      * 
-     * @return
      */
     protected SeedingStrategy createSeedingStrategy()
     {
@@ -106,7 +104,6 @@ public abstract class IterativeMatrixFactorizationFactory implements
     /**
      * Returns the maximum number of iterations used by this factory.
      * 
-     * @return
      */
     public int getMaxIterations()
     {
@@ -126,7 +123,6 @@ public abstract class IterativeMatrixFactorizationFactory implements
     /**
      * Returns the stop threshold used by this factory.
      * 
-     * @return
      */
     public double getStopThreshold()
     {
@@ -146,7 +142,6 @@ public abstract class IterativeMatrixFactorizationFactory implements
     /**
      * Returns the {@link SeedingStrategyFactory}used by this factory.
      * 
-     * @return
      */
     public SeedingStrategyFactory getSeedingFactory()
     {
@@ -166,7 +161,6 @@ public abstract class IterativeMatrixFactorizationFactory implements
     /**
      * Sets the {@link DoubleFactory2D}to be used to construct result matrices.
      * 
-     * @return
      */
     public DoubleFactory2D getDoubleFactory2D()
     {
@@ -187,7 +181,6 @@ public abstract class IterativeMatrixFactorizationFactory implements
      * Returns <code>true</code> when the factorization is set to generate an
      * ordered basis.
      * 
-     * @return
      */
     public boolean isOrdered()
     {

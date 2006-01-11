@@ -169,7 +169,6 @@ public class BLASQuickCheck
     /**
      * @param t
      * @param d
-     * @return
      */
     private DoubleMatrix2D createRandomTdMatrix(int t, int d)
     {

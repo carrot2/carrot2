@@ -41,10 +41,10 @@ public class LsiClusteringStrategy implements ClusteringStrategy {
      */
     protected double duplicateClustersThreshold = DUPLICATE_CLUSTERS_THRESHOLD;
 
-    /** @see LsiConstants.CLUSTER_ASSIGNMENT_THRESHOLD */
+    /** @see LsiConstants#CLUSTER_ASSIGNMENT_THRESHOLD */
     protected double clusterAssignmentThreshold = LsiConstants.DEFAULT_CLUSTER_ASSIGNMENT_THRESHOLD;
 
-    /** @see LsiConstants.DEFAULT_CANDIDATE_CLUSTER_THRESHOLD */
+    /** @see LsiConstants#DEFAULT_CANDIDATE_CLUSTER_THRESHOLD */
     protected double candidateClusterThreshold = LsiConstants.DEFAULT_CANDIDATE_CLUSTER_THRESHOLD;
 
     /**
@@ -141,9 +141,6 @@ public class LsiClusteringStrategy implements ClusteringStrategy {
     /** DOCUMENT ME! */
     protected double[] candidateClusterScores;
 
-    /**
-     * @see com.stachoodev.carrot.filter.lingo.common.ClusteringStrategy#cluster(com.stachoodev.carrot.filter.lingo.common.ClusteringContext)
-     */
     public Cluster[] cluster(AbstractClusteringContext clusteringContext) {
         this.clusteringContext = clusteringContext;
 
@@ -207,7 +204,6 @@ public class LsiClusteringStrategy implements ClusteringStrategy {
 
     /**
      * Prepares intermediate clustering data (term-document matrix).
-     * @return
      */
     protected boolean prepareData() {
         snippets = clusteringContext.getPreprocessedSnippets();

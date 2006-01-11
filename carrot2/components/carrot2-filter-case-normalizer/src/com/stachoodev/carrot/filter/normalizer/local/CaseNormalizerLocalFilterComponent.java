@@ -65,7 +65,6 @@ public class CaseNormalizerLocalFilterComponent extends
     
     /**
      * Creates the case normalizer filter with given implementation of
-     * @link CaseNormalizer.
      */
     public CaseNormalizerLocalFilterComponent(CaseNormalizer caseNormalizer)
     {

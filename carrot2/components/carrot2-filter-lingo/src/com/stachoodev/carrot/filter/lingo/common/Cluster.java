@@ -345,9 +345,6 @@ public class Cluster implements Comparable {
         return string.toString();
     }
 
-    /**
-     * @return
-     */
     public boolean isOtherTopics() {
         return otherTopics;
     }

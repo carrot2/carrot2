@@ -28,14 +28,9 @@ import org.apache.lucene.store.*;
 public class RawDocumentsLuceneIndexSearcher extends
     RawDocumentsLuceneIndexBase
 {
-    /** */
     private final static Logger logger = Logger
         .getLogger(RawDocumentsLuceneIndexSearcher.class);
 
-    /**
-     * @param rawDocuments
-     * @throws IOException
-     */
     public static String [] search(Directory indexDirectory, String query)
         throws IOException
     {

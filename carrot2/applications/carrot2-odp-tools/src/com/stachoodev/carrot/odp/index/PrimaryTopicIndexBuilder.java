@@ -40,7 +40,6 @@ public interface PrimaryTopicIndexBuilder extends PropertyProvider
      *            topic
      * @throws IOException
      * @throws ClassNotFoundException
-     * @return
      */
     public PrimaryTopicIndex create(InputStream inputStream,
         TopicSerializer topicSerializer, Collection topicIndexBuilders)

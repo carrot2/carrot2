@@ -72,10 +72,6 @@ public class ODPIndex
      * Initializes this singleton. Note that this method must be called before
      * any indices are retrieved. It can not be called more than once, uness the
      * index has been disposed of using the {@link #dispose()}method.
-     * 
-     * @param indexDataLocation
-     * @throws ClassNotFoundException
-     * @throws IOException
      */
     public static synchronized void initialize(String indexDataLocation)
         throws IOException
@@ -117,7 +113,6 @@ public class ODPIndex
     /**
      * Returns <code>true</code> when the ODPIndex has been initialized.
      * 
-     * @return
      */
     public static boolean isInitialized()
     {
@@ -128,7 +123,6 @@ public class ODPIndex
      * Returns the primary topic index. The ODPIndex must be initialized (see
      * {@link #initialize(String)}) before calling this method.
      * 
-     * @return
      */
     public static PrimaryTopicIndex getPrimaryTopicIndex()
     {
@@ -145,7 +139,6 @@ public class ODPIndex
      * before calling this method.
      * 
      * @param name
-     * @return
      */
     public static TopicIndex getTopicIndex(String name)
     {
@@ -193,7 +186,6 @@ public class ODPIndex
      * Returns the {@link TopicSerializer}that must be used to deserialize
      * topic objects from locations given by indices.
      * 
-     * @return
      */
     public static TopicSerializer getTopicSerializer()
     {
@@ -207,7 +199,6 @@ public class ODPIndex
      * {@link #initialize(String)}) before calling this method.
      * 
      * @param location
-     * @return
      */
     public static Topic getTopic(Location location)
     {

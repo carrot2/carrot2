@@ -29,11 +29,6 @@ public class ZipUtils
      * Adds a new entry to an existing Zip file. Important: A LOT of things can
      * go wrong during that operation, so don't use this method for important
      * data.
-     * 
-     * @param file
-     * @param entry
-     * @return 
-     * @throws IOException
      */
     public static ZipOutputStream append(File file, ZipEntry newEntry)
         throws IOException

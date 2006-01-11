@@ -171,7 +171,6 @@ public class ControllerHelper {
      * The stream is always closed when this method returns.
      * </p>
      *
-     * @param controller The controller to add the process to.
      * @param loaderExtension The file extension of a loader to use.
      * @param data Data stream.
      * @return Returns the loaded process definition.

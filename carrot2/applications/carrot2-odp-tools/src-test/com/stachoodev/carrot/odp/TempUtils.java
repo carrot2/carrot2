@@ -28,7 +28,6 @@ public class TempUtils
     /**
      * Creates a temporary directory with given prefix.
      * 
-     * @return
      */
     public static File createTemporaryDirectory(String prefix)
     {

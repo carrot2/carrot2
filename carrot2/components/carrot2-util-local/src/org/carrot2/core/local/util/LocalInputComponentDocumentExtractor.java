@@ -26,9 +26,6 @@ public class LocalInputComponentDocumentExtractor
     /** */
     private LocalController localController;
 
-    /**
-     * @param localInputComponent
-     */
     public LocalInputComponentDocumentExtractor(
         LocalComponentFactory localInputComponentFactory)
     {
@@ -65,7 +62,6 @@ public class LocalInputComponentDocumentExtractor
 
     /**
      * @param query
-     * @return
      */
     public List getDocuments(String query)
     {
@@ -75,7 +71,6 @@ public class LocalInputComponentDocumentExtractor
     /**
      * @param query
      * @param parameters
-     * @return
      */
     public List getDocuments(String query, Map parameters)
     {

@@ -24,21 +24,18 @@ public interface ExternalPage
     /**
      * Returns this ExternalPage's <code>description</code>.
      * 
-     * @return
      */
     public abstract String getDescription();
 
     /**
      * Returns this ExternalPage's <code>title</code>.
      * 
-     * @return
      */
     public abstract String getTitle();
     
     /**
      * Returns this ExternalPage's <code>url</code>.
      * 
-     * @return
      */
     public abstract String getUrl();
 }

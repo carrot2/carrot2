@@ -24,7 +24,6 @@ public interface SeedingStrategyFactory
 {
     /**
      * Creates a {@link SeedingStrategy}.
-     * @return
      */
     public SeedingStrategy createSeedingStrategy();
 }
