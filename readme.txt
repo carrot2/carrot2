@@ -16,18 +16,22 @@ http://www.carrot2.org
 http://carrot.cs.put.poznan.pl
 
 
-ACQUIRING BINARY RELEASE
+ACQUIRING A BINARY RELEASE
 ========================
+
+Prebuilt demo applications are also available on SourceForge's file
+download area:
+
+http://sourceforge.net/projects/carrot2/
 
 You can grab a binary release of the Carrot2 components from the 
 nightly build drop-off zone at:
 
 http://carrot.cs.put.poznan.pl/static/download/nightly/
 
-Prebuilt demo applications are also available on SourceForge's file
-download area:
-
-http://sourceforge.net/projects/carrot2/
+PLEASE NOTE that the above nightly builds are bare components with no
+documentation and explanations. They are also development head files, so
+they might be unstable.
 
 
 BUILDING FROM SOURCES
@@ -39,13 +43,6 @@ ensure the build file works flawlessly with the newest ANT available.
 Carrot2 components can work in two architecture designs: 
 	- as remote components using HTTP/XML for communication,
 	- as local Java components.
-
-0) Build 'bootstrap' tasks
-
-Carrot2 uses some ANT tasks that must be built prior to other
-tasks.
-
-ant -q bootstrap
 
 a) Building only remote components
 
