@@ -10,12 +10,4 @@
                infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-filter-stc"
     />
 
-	<!-- this one is not yet available -->
-
-    <component id               = "carrot2.filter.stc.base-clusters"
-               type             = "filter"
-               serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-filter-stc/service/baseclusters"
-               infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-filter-stc"
-    />
-
 </service>
