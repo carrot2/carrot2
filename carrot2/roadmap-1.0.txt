@@ -2,8 +2,6 @@
 A roadmap to release 1.0
 ------------------------
 
-- Add settings class for STC to the demo application and their interpretation in the local component interface
-
 - Review documentation, ensure it corresponds to reality.
 
 - Ensure all tests pass. Ensure the demo application works.
