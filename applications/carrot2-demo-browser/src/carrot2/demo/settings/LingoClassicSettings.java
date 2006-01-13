@@ -44,9 +44,6 @@ public class LingoClassicSettings extends ProcessSettingsBase implements Process
         return true;
     }
 
-    public void showSettings() {
-    }
-
     public boolean isConfigured() {
         return true;
     }
