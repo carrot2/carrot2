@@ -43,9 +43,8 @@ public class STCFullServlet extends
     public void processFilterRequest(InputStream carrotData,
             HttpServletRequest request, HttpServletResponse response,
             Map paramsBeforeData) throws Exception {
-        Processor p = new Processor();
-        SAXParser parser = javax.xml.parsers.SAXParserFactory.newInstance()
-                .newSAXParser();
+        Processor p = new Processor(paramsBeforeData);
+        SAXParser parser = javax.xml.parsers.SAXParserFactory.newInstance().newSAXParser();
         XMLReader reader = parser.getXMLReader();
 
         reader.setFeature("http://xml.org/sax/features/validation", false);

@@ -70,7 +70,6 @@ public class STCEngine
     public List getClusters()
     {
         clusters.removeGaps();
-        ;
 
         return clusters;
     }
