@@ -23,6 +23,7 @@ import com.dawidweiss.carrot.core.local.linguistic.LanguageTokenizer;
 import com.dawidweiss.carrot.core.local.linguistic.tokens.*;
 import com.dawidweiss.carrot.core.local.profiling.ProfiledLocalFilterComponentBase;
 import com.dawidweiss.carrot.filter.stc.Processor;
+import com.dawidweiss.carrot.filter.stc.StcParameters;
 import com.dawidweiss.carrot.filter.stc.algorithm.*;
 import com.dawidweiss.carrot.filter.stc.algorithm.Cluster;
 
@@ -84,6 +85,11 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
      * The current tokenizer.
      */
     private LanguageTokenizer tokenizer;
+
+    /**
+     * Current request's context.
+     */
+    private RequestContext requestContext;
 
     /**
      * Create the component configured to process documents written
@@ -157,12 +163,15 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
         stems.clear();
         stopWords.clear();
         rawClustersConsumer = null;
+        this.requestContext = null;
     }
 
     public void startProcessing(RequestContext requestContext)
         throws ProcessingException
     {
         super.startProcessing(requestContext);
+
+        this.requestContext = requestContext;
         
         this.language = defaultLanguage;
         this.tokenizer = language.borrowTokenizer();
@@ -190,22 +199,21 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
         });
 
         stcEngine.createSuffixTree();
-        
-        final float minBaseClusterScore = 2.0f;
-        final int ignoreWordIfInFewerDocs = 2;
-        final float ignoreWordIfInHigherDocsPercent = 0.9f;
-        final int maxBaseClusters = 300;
-        final int minBaseClusterSize = 2;
-        final float mergeThreshold = 0.6f;
 
-        stcEngine.createBaseClusters(minBaseClusterScore, ignoreWordIfInFewerDocs,
-                ignoreWordIfInHigherDocsPercent, maxBaseClusters, minBaseClusterSize);
+        final StcParameters params = StcParameters.fromMap(
+                this.requestContext.getRequestParameters());
 
-        stcEngine.createMergedClusters(mergeThreshold);
+        stcEngine.createBaseClusters(
+                params.getMinBaseClusterScore(),
+                params.getIgnoreWordIfInFewerDocs(),
+                params.getIgnoreWordIfInHigherDocsPercent(),
+                params.getMaxBaseClusters(),
+                params.getMinBaseClusterSize());
 
-        List clusters = stcEngine.getClusters();
-        final int MAX_GROUPS = 15;
-        int max = MAX_GROUPS;
+        stcEngine.createMergedClusters(params.getMergeThreshold());
+
+        final List clusters = stcEngine.getClusters();
+        int max = params.getMaxClusters();
 
         // Convert STC's clusters to the local interfaces' format
         List rawClusters = new ArrayList();

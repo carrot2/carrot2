@@ -14,55 +14,42 @@
 package com.dawidweiss.carrot.filter.stc;
 
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.StringWriter;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.xml.parsers.SAXParser;
+import java.util.*;
 
 import org.apache.log4j.Logger;
 import org.dom4j.DocumentFactory;
 import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.XMLReader;
+import org.xml.sax.*;
 
-import com.dawidweiss.carrot.filter.stc.algorithm.BaseCluster;
-import com.dawidweiss.carrot.filter.stc.algorithm.Cluster;
-import com.dawidweiss.carrot.filter.stc.algorithm.DocReference;
-import com.dawidweiss.carrot.filter.stc.algorithm.ImmediateStemmer;
-import com.dawidweiss.carrot.filter.stc.algorithm.STCEngine;
-import com.dawidweiss.carrot.filter.stc.algorithm.StopWordsDetector;
+import com.dawidweiss.carrot.filter.stc.algorithm.*;
 
 
 /**
  * SAX parser for Carrot2 search results data. Adds documents to processing while still parsing the
  * input.
+ * 
+ * @author Dawid Weiss
  */
 public class Processor
     extends org.xml.sax.helpers.DefaultHandler
 {
     private static final Logger log = Logger.getLogger(Processor.class);
+    
+    private final StcParameters params;
+
     private final Map stems = new HashMap();
     private final Set stopWords = new HashSet();
     private final List documents = new ArrayList();
     private Writer output;
     private boolean ignoreInput;
+
+    public Processor(Map params) {
+        this.params = StcParameters.fromMap(params);
+    }
 
     public void setOutput(Writer w)
     {
@@ -115,7 +102,12 @@ public class Processor
         );
 
         stcEngine.createSuffixTree();
-        stcEngine.createBaseClusters(2.0f, 1, 1.0f, 300, 2);
+        stcEngine.createBaseClusters(
+                params.getMinBaseClusterScore(),
+                params.getIgnoreWordIfInFewerDocs(),
+                params.getIgnoreWordIfInHigherDocsPercent(),
+                params.getMaxBaseClusters(),
+                params.getMinBaseClusterSize());
 
         /*
            List clusters = stcEngine.getBaseClusters();
@@ -125,12 +117,12 @@ public class Processor
                System.out.println( b.getScore() + " >> " + b.getPhrase().userFriendlyTerms());
            }
          */
-        stcEngine.createMergedClusters(0.6f);
+        stcEngine.createMergedClusters(params.getMergeThreshold());
 
         try
         {
             List clusters = stcEngine.getClusters();
-            int max = 20;
+            int max = params.getMaxClusters();
 
             final DocumentFactory factory = new DocumentFactory();
             for (Iterator i = clusters.iterator(); i.hasNext() && (max > 0); max--)
@@ -603,30 +595,5 @@ public class Processor
         }
 
         return str.toString();
-    }
-
-
-    public static void main(String [] args)
-        throws Exception
-    {
-        File f = new File("F:\\Repositories\\ophelia\\carrot2\\test\\sample results\\logika.xml");
-        Processor p = new Processor();
-        SAXParser parser = javax.xml.parsers.SAXParserFactory.newInstance().newSAXParser();
-        XMLReader reader = parser.getXMLReader();
-
-        System.err.println("Using: " + reader.getClass().getName());
-        reader.setFeature("http://xml.org/sax/features/validation", false);
-        reader.setFeature("http://xml.org/sax/features/namespaces", true);
-        reader.setErrorHandler(p);
-        reader.setContentHandler(p);
-
-        StringWriter sw = new StringWriter();
-        p.setOutput(sw);
-        reader.parse(new InputSource(new FileInputStream(f)));
-
-        Writer x = new OutputStreamWriter(new FileOutputStream("os.xml"), "UTF-8");
-        x.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-        x.write(sw.toString());
-        x.close();
     }
 }
