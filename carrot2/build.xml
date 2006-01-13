@@ -28,28 +28,52 @@
   <property name="carrot2.cvs.dir" location="${basedir}" />
   <import file="${carrot2.cvs.dir}/components/carrot2-ant-extensions/bootstrap.xml" />
 
+  
   <target name="javadoc">
-  	<description>
-	Renders JavaDoc documentation of all the
-	components included in 'apply-to-components'
-	target.
-	</description>
+    <property name="javadoc.dir" location="tmp/javadoc" />
 
-    <macrodef name="component-apply">
-      <attribute name="component.path"/>
-      <sequential>
-        <echo>
-################################################################
-JAVADOC: @{component.path}
-################################################################
-        </echo>
-        <ant antfile="build.xml"
-             dir="@{component.path}" inheritall="false"
-             target="javadoc"
-        />
-      </sequential>
-    </macrodef>
-    <antcall target="apply-to-components" />
+    <delete dir="${javadoc.dir}" />
+    <delete dir="tmp/src" />
+
+    <mkdir dir="tmp/src" />
+    <mkdir dir="${javadoc.dir}" />
+
+    <copy failonerror="true" filtering="false" overwrite="true" todir="tmp/src">
+        <fileset dir=".">
+            <include name="**/src/**/*.java" />
+        </fileset>
+        <chainedmapper>
+            <filtermapper><replacestring from="\" to="/"/></filtermapper>
+            <mapper type="regexp" from="^(.+)/src/(.+)" to="\2"/>
+        </chainedmapper>
+    </copy>
+
+    <javadoc
+             destdir          = "${javadoc.dir}"
+             protected        = "true"
+             version          = "false"
+             use              = "false"
+             doctitle         = "${ant.project.name}"
+             header           = "${ant.project.name}"
+             footer           = "Please refer to project documentation at &lt;br&gt;&lt;a href=http://www.carrot2.org&gt;http://www.carrot2.org&lt;/a&gt;"
+             bottom           = "&lt;center&gt;Copyright (c) Copyright (C) Dawid Weiss, Stanislaw Osinski &lt;/center&gt;"
+             failonerror      = "true"
+             stylesheetfile   = "${carrot2.cvs.dir}/etc/javadoc/stylesheet.css"
+             useexternalfile  = "true"
+    >
+        <classpath>
+            <fileset dir=".">
+                <include name="**/lib/*.jar" />
+                <include name="lib/**/*.jar" />
+            </fileset>
+        </classpath>
+
+        <fileset dir="tmp/src">
+            <include name="**/*.java" />
+        </fileset>
+    </javadoc>
+
+    <delete dir="tmp/src" />
   </target>
 
 
