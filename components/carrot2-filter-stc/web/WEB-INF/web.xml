@@ -16,23 +16,6 @@
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
-  <servlet>
-    <servlet-name>STC Base Clusters</servlet-name>
-    <servlet-class>com.dawidweiss.carrot.filter.FilterRequestProcessorServlet</servlet-class>
-    <init-param>
-      <param-name>log4j.properties</param-name>
-      <param-value>/WEB-INF/log4j.properties</param-value>
-    </init-param>
-    <init-param>
-      <param-name>filterRequestProcessor</param-name>
-      <param-value>com.dawidweiss.carrot.filter.stc.servlet.STCPhase1Servlet</param-value>
-    </init-param>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>STC Base Clusters</servlet-name>
-    <url-pattern>/service/baseclusters</url-pattern>
-  </servlet-mapping>
   <servlet-mapping>
     <servlet-name>Full STC</servlet-name>
     <url-pattern>/service/fullstc</url-pattern>
