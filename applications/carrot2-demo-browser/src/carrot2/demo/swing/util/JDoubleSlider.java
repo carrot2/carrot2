@@ -63,12 +63,25 @@ public class JDoubleSlider extends JSlider {
         return Math.round(value * 100.0) / 100.0;
     }
 
+    public boolean getSnapToTicks() {
+        return super.getSnapToTicks();
+    }
+
+    public void setSnapToTicks(boolean flag) {
+        super.setSnapToTicks(flag);
+        this.setLabelTable(createLabels(scaler.getIntMin(), scaler.getIntMax(), getMajorTickSpacing()));
+    }
+
     private Hashtable createLabels(int min, int max, int step) {
         final Hashtable table = new Hashtable();
 
-        
         for (int i = min; i <= max; i = i + step) {
-            final String label = labelFormat.format(new Object [] {new Double(scaler.from(i))});
+            double value = scaler.from(i);
+            if (getSnapToTicks()) {
+                final double n = Math.round(value / tickScale);
+                value = tickScale * n;
+            }
+            final String label = labelFormat.format(new Object [] {new Double(value)});
             table.put(new Integer(i), createLabel(label));
         }
 
