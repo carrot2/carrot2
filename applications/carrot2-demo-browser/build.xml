@@ -15,6 +15,26 @@
 
 	<target name="build" depends="build.full" />
 
+    <target name="dist" depends="clean,build.full">
+    	<copy todir="${distribution.dir}" filtering="true">
+			<filterchain>
+				<tokenfilter>
+				    <replacestring from="tmp\dist\" to="" />
+				    <replacestring from="tmp/dist/" to="" />
+				</tokenfilter>
+			</filterchain>
+    		<fileset dir=".">
+    			<include name="demo.*" />
+    		</fileset>
+    	</copy>
+    	<copy todir="${distribution.dir}">
+    		<fileset dir=".">
+    			<include name="components/**" />
+    			<include name="processes/**" />
+    		</fileset>
+    	</copy>
+    </target>
+
     <target name="build.full">
         <property name="copy.dependencies" value="true" />
         <property name="single.jar" value="false" />

@@ -4,7 +4,7 @@
   <property file="${user.home}/.carrot.properties" />
   <property file="local-build.properties" />
 
-  <property name="release.number"   value="1.0-RC1" />
+  <property name="release.number"   value="1.0-RC2" />
 
   <property name="build.compiler"   value="modern" />
   <property name="javac.optimize"   value="off" />
@@ -113,7 +113,7 @@ BUILDING: @{component.path}
 
   <target name="dist">
     <delete dir="dist" failonerror="false" />
-    
+
     <mkdir dir="dist" />
     <mkdir dir="dist/remote/webapps" />
     <mkdir dir="dist/remote/shared/lib" />
@@ -123,22 +123,24 @@ BUILDING: @{component.path}
     <ant antfile="build.xml" dir="." inheritall="false" inheritrefs="false" target="remote">
         <property name="distribution.dir.remote" location="dist/remote/webapps" />
         <property name="distribution.dir.remote.libs" location="dist/remote/shared/lib" />
+        <property name="deployment.port" value="8080" />
+        <property name="deployment.host" value="localhost" />
     </ant>
     <copy todir="dist/remote">
         <fileset dir="etc/conf-tomcat">
             <include name="**/*" />
         </fileset>
     </copy>
-    
+
     <ant antfile="build.xml" dir="applications/carrot2-demo-browser"
-        inheritall="false" inheritrefs="false" target="build" />
+        inheritall="false" inheritrefs="false" target="dist" />
     <copy todir="dist/local">
         <fileset dir="applications/carrot2-demo-browser/tmp/dist" />
         <fileset dir="applications/carrot2-demo-browser">
             <include name="readme*" />
         </fileset>
     </copy>
-    
+
     <zip basedir="dist/local" 
         zipfile="dist/carrot2-local-demo-${release.number}.zip" />
     <zip basedir="dist/remote" 
