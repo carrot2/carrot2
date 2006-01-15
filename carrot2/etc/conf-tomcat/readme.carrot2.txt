@@ -28,7 +28,19 @@ can do it by adding this attribute to the connector spec. in server.xml
 
 URIEncoding="utf-8"
 
-3. To access the "admin" link in Carrot2 controller, add a user with role "carrot-admin"
+3.
+
+For Google API input component, you need to define 'googleapi.keypool' system property
+pointing at a folder where GoogleAPI keys can be found. Each key file in that folder should
+have a ".key" extension and consist of a single GoogleAPI key (one per file).
+
+You can pass a JVM system property to Tomcat by defining CATALINA_OPTS:
+
+CATALINA_OPTS=-Dgoogleapi.keypool=[absolute-path]
+
+4.
+
+To access the "admin" link in Carrot2 controller, add a user with role "carrot-admin"
 to your tomcat users (/conf/tomcat-users.xml in Tomcat 5.x). For example:
 
 <role rolename="carrot-admin"/>
