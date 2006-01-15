@@ -7,7 +7,6 @@ A roadmap to release 1.0
 - Ensure all tests pass. 
 
 - Ensure the demo application works:
-    - switch to Swing HTML component when the native one cannot be initialized
 
 - Public Relations
     - add new publications to the O/S website
