@@ -16,7 +16,7 @@ import org.jdesktop.jdic.browser.*;
  * 
  * @author Dawid Weiss
  */
-public class HtmlDisplayWithJDIC extends HtmlDisplay {
+final class HtmlDisplayWithJDIC extends HtmlDisplay {
     private final static Logger log = Logger.getLogger(HtmlDisplayWithJDIC.class);
     private final WebBrowser browser;
 
