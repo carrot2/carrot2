@@ -16,29 +16,23 @@ package carrot2.demo.swing;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.*;
 import java.util.List;
 
 import javax.swing.*;
 
 import org.apache.log4j.Logger;
-import org.apache.lucene.store.*;
-import org.jdesktop.jdic.browser.WebBrowser;
+import org.apache.lucene.store.Directory;
 
-import carrot2.demo.DemoContext;
-import carrot2.demo.ProcessSettings;
-import carrot2.demo.ProcessSettingsListener;
-import carrot2.demo.cache.*;
-import carrot2.demo.index.*;
+import carrot2.demo.*;
+import carrot2.demo.cache.RawDocumentProducerCacheWrapper;
+import carrot2.demo.index.RawDocumentsLuceneIndexSearcher;
 import carrot2.demo.swing.util.SwingTask;
 import carrot2.demo.swing.util.ToolbarButton;
 
-import com.dawidweiss.carrot.core.local.*;
+import com.dawidweiss.carrot.core.local.LocalInputComponent;
+import com.dawidweiss.carrot.core.local.ProcessingResult;
 import com.dawidweiss.carrot.core.local.clustering.RawCluster;
 import com.dawidweiss.carrot.core.local.clustering.RawDocument;
 import com.dawidweiss.carrot.core.local.impl.ClustersConsumerOutputComponent;
@@ -54,12 +48,10 @@ import com.jgoodies.uif_lite.panel.SimpleInternalFrame;
  * @author Dawid Weiss
  */
 public class ResultsTab extends JPanel {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
     private final static String MAIN_CARD = "main";
     private final static String PROGRESS_CARD = "progress";
+    
+    private final static Logger logger = Logger.getLogger(ResultsTab.class);
 
     private String query;
     private String processId;
@@ -83,9 +75,7 @@ public class ResultsTab extends JPanel {
 
     private int requestedResults;
     
-    /** */
-    private final static Logger logger = Logger
-        .getLogger(ResultsTab.class);
+    private JLabel matchedDocumentsLabel;
 
     private class SelfRemoveAction implements ActionListener {
         public void actionPerformed(ActionEvent actionEvent) {
@@ -255,7 +245,28 @@ public class ResultsTab extends JPanel {
         // Create HTML view. The actual implementation is determined
         // by a target platform -- for Windows we use JDIC, for other
         // systems we just use Swing.
-        this.browserView = new HtmlDisplayWithJDIC();
+        String OS_NAME = System.getProperty("os.name");
+        if (OS_NAME != null) {
+            OS_NAME = OS_NAME.toLowerCase(Locale.US);
+        } else {
+            // Ooops, no such property? Try to determine the OS from file separator.
+            if (File.separatorChar == '\\') {
+                OS_NAME = "windows?";
+            } else {
+                OS_NAME = "unix?";
+            }
+        }
+
+        if ("true".equals(System.getProperty("use.java.browser")) || OS_NAME.indexOf("windows") == -1) {
+            this.browserView = new HtmlDisplayWithSwing();
+        } else {
+            try {
+                this.browserView = new HtmlDisplayWithJDIC();
+            } catch (Throwable t) {
+                logger.warn("Could not instantiate native browser component.", t);
+                this.browserView = new HtmlDisplayWithSwing();
+            }
+        }
 
         // create 'progress' card.
         JPanel progressPane = new JPanel();
@@ -271,11 +282,6 @@ public class ResultsTab extends JPanel {
         progressPane.add(pindic, cc.xy(2,4));
 
         final JPanel subPanel = new JPanel(new BorderLayout()) {
-            /**
-             * 
-             */
-            private static final long serialVersionUID = 1L;
-
             public Dimension getMinimumSize() {
                 return new Dimension(0,0);
             }
@@ -334,25 +340,6 @@ public class ResultsTab extends JPanel {
         ((CardLayout)cards.getLayout()).show(cards, PROGRESS_CARD);
 
         this.add(internalFrame, BorderLayout.CENTER);        
-    }
-
-    /**
-     * Shows error information.
-     */
-    public void showError(final Throwable e) {
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        e.printStackTrace(pw);
-        pw.flush();
-        final String stackTrace = sw.toString();
-
-        showInfo("<html><body>"
-                + "<h1>An exception occurred.</h1>"
-                + "<h2>" + e.toString() + "</h2>"
-                + "<br><br><pre>"
-                + stackTrace
-                + "</pre>"
-                + "</body></html>");
     }
 
     /**
@@ -551,18 +538,18 @@ public class ResultsTab extends JPanel {
      */
     private void showAllDocuments() {
         if (result == null) return;
-        
+
         final StringBuffer html = new StringBuffer(50000);
 
-        appendHtmlHeader(html);
-        
+        this.browserView.appendHtmlHeader(html);
+
         if (result.documents != null && result.documents.size() > 0) {
             appendHtmlForDocuments(html, result.documents, false);
         } else {
             // Build document list from clusters.
             appendHtmlForDocuments(html, collectDocuments(result.clusters), true);
         }
-        appendHtmlTrailer(html);
+        this.browserView.appendHtmlTrailer(html);
 
         Runnable task = new Runnable() {
             public void run() {
@@ -588,7 +575,6 @@ public class ResultsTab extends JPanel {
             return rci1 - rci2;
         }
     };
-    private JLabel matchedDocumentsLabel;
 
     public StringBuffer appendHtmlForDocuments(StringBuffer buffer, Collection documents, boolean resortDocuments) {
         if (resortDocuments) {
@@ -602,51 +588,11 @@ public class ResultsTab extends JPanel {
             final RawDocument doc = (RawDocument) i.next();
 
             final Object seqNum = doc.getProperty(RawDocumentEnumerator.DOCUMENT_SEQ_NUMBER);
-            if (seqNum != null) {
-                buffer.append("<span style=\"font-size: 10px\">(");
-                buffer.append(seqNum);
-                buffer.append(") </span>");
-            }
             
-            buffer.append("<a href=\"" + doc.getUrl() + "\"><b>");
-
-            if ((doc.getTitle() == null) || (doc.getTitle().length() == 0)) {
-                buffer.append("(no title)");
-            } else {
-                buffer.append(doc.getTitle());
-            }
-            buffer.append("</b></a>");
-
-            if (doc.getProperty(RawDocument.PROPERTY_LANGUAGE) != null) {
-                buffer.append(" [" +
-                    doc.getProperty(RawDocument.PROPERTY_LANGUAGE) + "]");
-            }
-
-            buffer.append("<br>");
-
-            String r = (String) doc.getProperty(RawDocument.PROPERTY_SNIPPET);
-
-            if (r != null) {
-                buffer.append(r);
-                buffer.append("<br>");
-            }
-
-            buffer.append("<font color=green>");
-            buffer.append(doc.getUrl());
-            buffer.append("</font><br><br>");
+            browserView.appendHtmlFor(buffer, seqNum, doc);
         }
 
         return buffer;
-    }
-
-    private void appendHtmlHeader(StringBuffer buffer) {
-        buffer.append("<html>");
-        buffer.append("<meta><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"></meta>\n");
-        buffer.append("<body style=\"font-size: 10pt; font-family: Arial, Helvetica, sans-serif;\">");
-    }
-
-    private void appendHtmlTrailer(StringBuffer buffer) {
-        buffer.append("</body></html>");
     }
 
     /**
@@ -655,7 +601,7 @@ public class ResultsTab extends JPanel {
     public String getHtmlFor(final RawCluster rc) {
         final StringBuffer buffer = new StringBuffer();
 
-        appendHtmlHeader(buffer);
+        browserView.appendHtmlHeader(buffer);
 
         final String clusterLabel = RawClustersCellRenderer.getLabel(rc, Integer.MAX_VALUE);
 
@@ -672,7 +618,8 @@ public class ResultsTab extends JPanel {
         final HashSet documents = collectDocuments(clusters);
 
         appendHtmlForDocuments(buffer, documents, rc.getSubclusters().size() > 0);
-        appendHtmlTrailer(buffer);
+
+        browserView.appendHtmlTrailer(buffer);
 
         return buffer.toString();
     }
