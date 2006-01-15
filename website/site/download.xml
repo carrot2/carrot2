@@ -30,7 +30,7 @@
     <chapter level="1">
         <title>Installation instructions</title>
         <p>
-        Installation instructions can be found in the <a href="http://www.carrot2.org/manual">developers manual</a>.
+        Short installation instructions are provided in the <tt>readme.txt</tt> file in the distribution.
         </p>
     </chapter>
 
