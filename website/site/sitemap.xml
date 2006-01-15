@@ -22,20 +22,18 @@
 
     <section id="sf" location="http://sourceforge.net/projects/carrot2/">
         <name>Carrot2 at SourceForge</name>
-        
+
         <section id="sf" location="http://sourceforge.net/mail/?group_id=85379">
             <name>Mailing lists</name>
         </section>
-        
+
+        <section location="http://sourceforge.net/cvs/?group_id=85379">
+            <name>CVS access</name>
+        </section>
     </section>
 
     <section id="docs" location="/developers/index.xml">
-        <name>Developers manual</name>
-        
-        <section location="http://sourceforge.net/cvs/?group_id=85379">
-            <name>CVS access info</name>
-        </section>
-
+        <name>Documentation</name>
     </section>
 
     <section id="demo" location="/demo.xml">
