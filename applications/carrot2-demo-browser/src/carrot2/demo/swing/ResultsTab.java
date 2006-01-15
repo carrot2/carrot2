@@ -64,7 +64,7 @@ public class ResultsTab extends JPanel {
     private String query;
     private String processId;
     
-    private WebBrowser browserView;
+    private HtmlDisplay browserView;
     private RawClustersTree clustersTree;
     private Result result;
     private JPanel cards;
@@ -252,8 +252,10 @@ public class ResultsTab extends JPanel {
             } 
         });
 
-        this.browserView = new WebBrowser();
-        this.browserView.setFocusable(false);
+        // Create HTML view. The actual implementation is determined
+        // by a target platform -- for Windows we use JDIC, for other
+        // systems we just use Swing.
+        this.browserView = new HtmlDisplayWithJDIC();
 
         // create 'progress' card.
         JPanel progressPane = new JPanel();
@@ -361,21 +363,7 @@ public class ResultsTab extends JPanel {
         if (!SwingUtilities.isEventDispatchThread())
             throw new IllegalStateException("Invoke updateDocumentsView() from AWT thread only.");
 
-        try {
-            // TODO: This can be refactored to use browser listener to detect
-            // if the file has been loaded.
-            // BUGFIX: We dump the HTML to an external file because setContent
-            // method does not convert (or detect) characters properly.
-            final File tempFile = File.createTempFile("c2tmphtml", "html");
-            tempFile.deleteOnExit();
-            final FileOutputStream fos = new FileOutputStream(tempFile);
-            fos.write(htmlContent.getBytes("UTF-8"));
-            fos.close();
-            this.browserView.setURL(tempFile.toURL());
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this,
-                    "Cannot create temporary file for HTML.");
-        }
+        this.browserView.setContent(htmlContent);
     }
 
     /**
