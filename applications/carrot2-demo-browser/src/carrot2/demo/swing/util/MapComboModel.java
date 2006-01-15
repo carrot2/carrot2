@@ -37,15 +37,19 @@ public final class MapComboModel extends DefaultComboBoxModel {
         this.values = new ArrayList(size);
         for (Iterator i = processIdToProcessNameMap.entrySet().iterator(); i.hasNext();) {
             final Map.Entry entry = (Map.Entry) i.next();
-            ids.add((String) entry.getKey());
-            values.add((String) entry.getValue());
+            ids.add(entry.getKey());
+            values.add(entry.getValue());
         }
     }
 
     public void setSelectedItem(Object anItem) {
         // We assume there is a small number of values,
         // so this inefficient lookup doesn't really matter.
-        selected = values.indexOf(anItem);
+        final int index = values.indexOf(anItem);
+        if (index == -1)
+            throw new IllegalArgumentException("Process description is not defined: "
+                    + anItem);
+        selected = index;
     }
 
     public Object getSelectedItem() {
