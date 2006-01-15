@@ -10,4 +10,5 @@
 
   <attribute key="process.settings.class" 
 	         value="carrot2.demo.settings.LingoClassicSettings" />
+  <attribute key="process.default" value="true" />
 </local-process>
