@@ -58,6 +58,7 @@ public class JIntThreshold extends JPanel {
         }
 
         if (majorTicks > 0) {
+            ticks = majorTicks;
             slider.setMajorTickSpacing(majorTicks);
         }
         
