@@ -9,33 +9,9 @@
 ]>
 
 <chapter id="chapter:mime-types">
-    <title><acronym>MIME</acronym> types and data stream formats in &carrot;</title>
-
-    <para>
-    &carrot; component descriptors used to include information about <acronym>MIME</acronym> types
-    of the data streams accepted and produced by the component. This specification
-    has been dropped because it was not used by any of the component writers. However,
-    we retained the file format specifications even if they cannot be verified at
-    runtime.
-    </para>
-    <para>
-    in this chapter. Please note that components may support other data formats, not necessarily
-    restricted to the list below (which is apt to be extended or modified according to our needs
-    anyway). 
-    </para>
-
-    <!-- data stream formats (defined in /docs/architecture/mime-types/*_docbook.xml) -->
-
-    <section>
-        <title>Data formats used in Search Results Clustering application</title>        
-        <!-- {{{ -->
-
+    <title>XML data stream formats for remote components</title>
         <include file="x-carrot-clustering-input-query_docbook.xml"/>    
         <include file="x-carrot-clustering-plain-response_docbook.xml"/>    
         <include file="x-carrot-clustering-groups_docbook.xml"/>    
         <include file="x-carrot-clustering-plain-linguistic_docbook.xml"/>    
-        
-        <!-- }}} -->
-    </section>
-
 </chapter>

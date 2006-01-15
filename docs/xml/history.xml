@@ -9,6 +9,16 @@
 ]>
 
 <revhistory>
+    <revision>
+        <revnumber>0.21</revnumber>
+        <date>15 Jan 2006</date>
+        <authorinitials>dw</authorinitials>
+        <revdescription>
+            <para>
+            Removing obsolete material. Updates for version 1.0.
+            </para>
+        </revdescription>
+    </revision>
 
     <revision>
         <revnumber>0.20</revnumber>
@@ -79,7 +89,7 @@
         <revdescription>
             <para>
             A lot of restructuring and rewriting of ugly parts. 
-            Added a big <link linkend="chapter:mime-types">section about &mime; types</link> used in 
+            Added a big section about &mime; types used in 
             search results clustering, added schema definitions and examples.
             </para>
         </revdescription>
@@ -92,9 +102,8 @@
         <revdescription>
             <para>
             Dropped support for full document descriptions within <sgmltag>&lt;group&gt;</sgmltag>
-            tag (see <xref linkend="sect:clustered-search-results-format" />).
-            Added linguistic information (<sgmltag>&lt;l/&gt;</sgmltag> tag) to SRC format and documentation
-            (see <xref linkend="sect:linguistic-information" />). 
+            tag.
+            Added linguistic information (<sgmltag>&lt;l/&gt;</sgmltag> tag) to SRC format and documentation. 
             </para>
         </revdescription>
     </revision>
@@ -113,7 +122,7 @@
         <date>10 Dec 2002</date>
         <authorinitials>dw</authorinitials>
         <revdescription><para>
-        A section <link linkend="sect:build-files">about build files</link> has been added.
+        A section about build files has been added.
         </para></revdescription>
     </revision>
 

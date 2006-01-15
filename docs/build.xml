@@ -15,8 +15,7 @@
     <property name="distribution.dir"        location="tmp/dist" />
     <property name="temp:docbook.ready.file" location="${build.dir}/docbook-ready-file.tmp"/>
     <property name="temp:fo.ready.file"      location="${build.dir}/fo-ready-file.tmp" />
-    <property name="manual.name"              value="carrot2-developers-manual" />
-    <property name="installation.manual.name" value="carrot2-installation-manual" />
+    <property name="manual.name"              value="carrot2-documentation" />
 
 
     <!-- Renders a single HTML manual -->

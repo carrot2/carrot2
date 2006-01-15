@@ -9,44 +9,35 @@
 %local; 
 
 ]>
-<chapter>
-    <title>Local Data Exchange in the &carrot; Framework &mdash; Design document assumptions and concepts</title>
+<chapter id="sect:local-interfaces">
+    <title>Local components architecture</title>
 
     <section>
     	<title>Introduction</title>
     	
     	<section>
     		<title>What are local interfaces?</title>
-    		
+
     		<para>
-            Under the term local interfaces 
-            stands a very general concept which we will use in this document to refer to any method of
-            combining &carrot; components that does not involve intermediate data transfers
-            via pipes, sockets or the network. 
+            <emphasis>Local interfaces</emphasis> are a way of combining &carrot; 
+            components in a processing chain using local method calls between these
+            components. Local interfaces are, in other words, a way of decreasing
+            the overhead introduced by serialization and network transport of data in 
+            the remote components architecture.
             </para>
-            <para>
-            Local interfaces can therefore be usually associated, or identify
-            direct method calls from one component to another (from one Java
-            method to another).
-    		</para>
     	</section>
-        
+
         <section>
             <title>Why local interfaces when we have the remote ones?</title>
             
             <para>
-            Currently used XML/HTTP pipeline was designed for flexibility, but lacks
-            efficiency. Local interfaces should yield a performance improvement that would
-            allow use of Carrot2 in production environment (and not only for
-            research).
-            </para>
-
-            <para>
-            Local interfaces allow embedding Carrot2 components and controller into other
-            applications, not necessarily networked, or servlet-container based.
+            The XML/HTTP pipeline was designed for flexibility, but lacks
+            efficiency. Local interfaces yield a performance improvement that
+            lets &carrot; components be used in production environment (and not only for
+            research). Additionally, local interfaces make it possible to embedd
+            &carrot; components in a non-networked application. 
             </para>
         </section>
-
     </section>
     
     <section>

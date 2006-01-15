@@ -22,12 +22,15 @@
 
         <para>
         Under the term &quot;research&quot;, we understand that the architecture
-        of the system is oriented mostly toward flexibility, sometimes at
-        a price of performance. Mechanisms such as
+        of the system is oriented mostly toward flexibility; mechanisms such as
         data exchange via XML language, distributed,
         dynamically accessible components, the use of Java as primary language
         of implementation &ndash; they all make the system quite easy to tailor
-        to one's needs.
+        to one's needs. Performance and flexibility are often on the opposite
+        ends of software design. &carrot; has a dual architecture. One design uses
+        remote components and data transferred between then using XML. The performance-oriented
+        design uses local Java processes where components exchange information using
+        direct method calls.
         </para>
         
         <para>

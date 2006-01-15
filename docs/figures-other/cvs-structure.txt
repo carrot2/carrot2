@@ -1,16 +1,17 @@
 CVS root
 |
 +---bin                             > shell scripts invoking common tools.
-+---components                      > source code of components
-|   +---carrot2-remote-controller   > Example remote components controller
-|   |                                 (Web application)
-|   +---{name}                      > other components
++---applications                    > demo applications and glue code to third-party
+|                                     projects
++---components                      > source code of all Carrot2 components
++---doc                             > Documentation, known bugs etc.
 +---etc                             > extra miscellaneous files for build and
 |                                     deployment
-+---lib                             > library dependencies that at least 
++---lib                             > Library dependencies that at least 
 |                                     two components share.
 +---remote-descriptors              > Remote component descriptors copied
 |                                     to the remote controller's web application
 |                                     at build-time.
-\---schema                          > XML Schema files describing input/output
-                                      formats.
++---schema                          > XML Schema files describing input/output
+|                                     formats.
++---build.xml                       > Master ANT build file

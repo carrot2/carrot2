@@ -1,14 +1,51 @@
-<!--
-     A dependency descriptor. This has to be updated manually
-     when new JARs are required.
-   -->
-<component name="carrot2-shared-lib">
-	<provides   file="carrot2-shared-lib.jar" />
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE component PUBLIC 
+    "-//Carrot2//DTD Component Dependency Descriptor V1.0//EN"
+    "http://www.carrot2.org/dtd/component-dependency.dtd" >
 
-    <dependency name="dweiss-utils" />
-    <dependency name="castor" />
-    <dependency name="jdom" />
-    <dependency name="put-utils" />
+<component
+    name="carrot2-filter-lingo"
+    description="Carrot2 Lingo Clustering filter">
+
+    <provides profile="remote">
+        <files build-path-exclude="true" prefix="tmp/dist">
+            <file location="carrot2-filter-lingo.war" />
+        </files>
+        <build>
+            <ant file="build.remote.xml" target="build" />
+        </build>
+        <check-newer>
+            <fileset dir="src" />
+            <fileset dir="web" />
+        </check-newer>
+    </provides>
+
+    <provides profile="local">
+        <files build-path-exclude="true" prefix="tmp/dist">
+            <file location="carrot2-filter-lingo.jar" />
+        </files>
+        <build>
+            <ant file="build.local.xml" target="build" />
+        </build>
+        <check-newer>
+            <fileset dir="src" />
+            <fileset dir="web" />
+        </check-newer>
+    </provides>
+
+    <!-- Carrot2 components -->
+    <dependency name="carrot2-license" />
+    <dependency name="carrot2-util-common" />
+    <dependency name="carrot2-local-core" />
+    <dependency name="jama" />
     <dependency name="log4j" />
-    <dependency name="gnu-regexp" />
+    <dependency name="violinstrings" />
+
+    <dependency name="carrot2-util-remote"  profile="remote" />
+    <dependency name="dom4j"                profile="remote" />
+    <dependency name="servlets-api"         profile="remote" nocopy="true" />
+
+    <!-- These components are not required during the compilation, but
+         are usually included at runtime via parameters (Language/ stemming/ stopwords) -->
+    <dependency name="carrot2-util-tokenizer" profile="remote" />
 </component>

@@ -9,8 +9,8 @@
 ]>
   
 <chapter id="chapter:architecture">
-    <title>Architecture</title>
-    
+    <title>Remote components architecture</title>
+
     <section id="sect:components-and-data-flow">
         <title>Components and data flow</title>
 
@@ -34,7 +34,7 @@
         the input components and then mediates in data exchange among filter components,
         eventually returning the final reasult back to the outside world
         using the output component. The last component is usually some sort of visualization
-        of the result (in case of search results clustering presentation of the discovered
+        of the result (in case of search results clustering, presentation of the discovered
         groups of documents).
         </para>
 
@@ -45,8 +45,7 @@
         formats (passed between components), but they can still use the controller
         component and any other part of the system. Obviously, components
         combined together into a processing chain must be able to interpret each other's
-        result, but this is accomplished by defining &xmlschema;s for particular
-        types of data.
+        result.
         </para>
 
         <para>
@@ -65,9 +64,8 @@
         
         <note>
             <para>
-            In the future, waterfall data exchange specification as described above
-            may be included in &carrot; &ndash; controller component will automatically
-            detect the components capable of using it. 
+            <link linkend="sect:local-interfaces">Local interfaces</link> are the performance-oriented design one can switch
+            to when remote components don't meet the speed requirements.
             </para>
         </note>
         <!-- }}} -->
@@ -83,30 +81,24 @@
         </para>
 
         <para>
-        At first, data exchange among &carrot;'s components was realized using
-        &xml; files transferred over the network using &http; protocol's &post;
-        method. This method is very well suitable for research application and
-        distribution of components but adds a great overhead to processing. Recently,
-        plans have been made to extend the current &carrot; specification with 
-        <emphasis>local</emphasis> binding possibility, so that all data is pipelined
-        locally without the cost of serialization and network transfers. 
+        Data exchange among &carrot;'s remote components is realized using
+        &xml; files transferred over the network using &post; method of the &http; protocol.
         </para>
-        
+
         <section id="sect:http-communication">
             <title>&http; &post; communication mode</title>
             <!-- {{{ -->
             
             <para>
-            HTTP protocol was the first method of communication among
-            components in &carrot; architecture.
-            The following points must be respected:
-    
+            &carrot;'s data is sent over &http; connection. The following
+            requirements must be fulfilled:
+
                 <itemizedlist>
                     <listitem>
                     <para>
                         The data stream (query for input components,
                         result stream for filters and outputs), should be sent
-                        as a parameter of a &http; &post; request.
+                        as <emphasis>a parameter</emphasis> of a &http; &post; request.
                         The parameter's name should be <parameter>carrot-request</parameter> 
                         for input components and  
                         <parameter>carrot-xchange-data</parameter> for
@@ -127,7 +119,8 @@
                     &http; &post; request parameters (&xml; files)
                     must be encoded using &utf8; character
                     encoding. &http; request/ response content type should also be
-                    set to &utf8;. 
+                    set to &utf8;, although since the XML file is a parameter of the
+                    &post; request, it must be properly escaped to conform to HTTP specification anyway.
                     </para>
                     </listitem>
                     
@@ -139,6 +132,14 @@
                     should be utilized to save network bandwidth.
                     </para>
                     </listitem>
+                    
+                    <listitem>
+                    <para>
+                    Successful processing should be indicated using standard
+                    &http; headers and return codes. In particular, erraneous execution
+                    should also be signalled to the caller (controller) using &http; error codes.
+                    </para>
+                    </listitem>
                 </itemizedlist>
             </para>
 
@@ -147,7 +148,7 @@
             a &http; &post; interface must also define at least one Uniform
             Resource Locator (&url;s) where their services will be accessible to
             other components. These service &url;s are then used in specifying
-            a <link linkend="sect:component-descriptor-file">component descriptor</link>.
+            a component descriptor file.
             </para>
 
             <para>
@@ -156,21 +157,19 @@
             chained component. In general, an empty, or corrupted response
             stream indicates such situation, but the controller may
             just propagate such empty response to components further down the chain.
-            However, if any component send an error &http; response header, the
+            However, if any component sends an error &http; response header, the
             controller component will interrupt any remaining processing and
             signal the problem to the outside environment (user).
             </para>
+            
+            <important>
+                <para>The guidelines above are applicable for all types of &http;
+                communication among the remote components. Particular component types
+                (such as filter or input components) have additional requirements
+                &emsp; see section <xref linkend="sect:input-component"/> and
+                <xref linkend="sect:filter-components" /></para>
+            </important>
 
-        </section>
-        <!-- }}} -->
-
-        <section id="sect:local-communication">
-            <title>Local communication mode</title>
-            <!-- {{{ -->
-            <para>
-            This mode of communication among components is still at the
-            planning stage.
-            </para>
         </section>
         <!-- }}} -->
     </section>    
@@ -186,20 +185,8 @@
         an error if it cannot parse and respond to the query.
         At the moment of writing, the only request format
         detected by the implemented input components is described 
-        in section <link linkend="sect:mime:x-carrot-clustering-input-query">
-        concerning Web Search queries</link>
-        and relates to <link linkend="sect:clustering-format">search result processing</link>
-        application of the &carrot; framework.
+        in section <xref linkend="sect:mime:x-carrot-clustering-input-query" />.
         </para>
-
-        <note>
-        <para>
-        Once there was a specification of accepted and returned 
-        streams encoded as &mime; types. This
-        specification has been dropped
-        due to lack of interest, but may be revived if needed.
-        </para>
-        </note>
         <!-- }}} -->
     </section>
     
@@ -211,29 +198,30 @@
         Filter components are used to transform one result data set into another. As
         mentioned in section <xref linkend="sect:components-and-data-flow"/>, the exact format
         of input and output data of a filter component is not specified by the
-        framework, but depends on the application (the controller only mediates in exchange
-        of otherwise binary data). The protocol of data exchange (local or &http;)
-        may impose some restrictions, which we describe below.
+        framework, but depends on the application.
         </para>
         
         <section>
             <title>Filter components and &http; data exchange</title>
 
             <para>
-            The data stream itself must be sent as a parameter of &http; &post; request named
-            <parameter>carrot-xchange-data</parameter>. This implies that binary data
-            streams must be encoded according to the &http; &post; specification. 
+            The XML data stream must be sent as a parameter of &http; &post; request named
+            <parameter>carrot-xchange-data</parameter>. 
             </para>
             
             <para>
             The same POST request, which carries &carrot; data can also contain other
             parameters, which can be used to customize processing done by the component.
-            These extensions, however, are specific to a given component and therefore not
-            subject to this specification. An example of a &http; &post; request specifying
+            It is important to send any extra &http; &post; parameters affecting the component
+            before <parameter>carrot-xchange-data</parameter> parameter is sent.
+            </para>
+            
+            <para>
+            An example of a valid &http; &post; request specifying
             optional parameter <parameter>myparameter</parameter> is shown in
             <xref linkend="listing:post-request"/>.    
             </para>
-            
+
             <example id="listing:post-request">
                 <title>
                 A fragment of a &post; request to a service running at &url;
@@ -243,13 +231,6 @@
                 <programlisting><![CDATA[@insert-file.head-of-post-request@]]></programlisting>
             </example>
         </section>
-        
-        <section>
-            <title>Filter components and local data exchange</title>
-            <para>
-            Details have not been established yet.
-            </para>
-        </section>        
         <!-- }}} -->
     </section>
     
@@ -260,33 +241,17 @@
         An output component type is responsible for converting the final data stream into
         some content, which can be returned to the outside environment. Output components
         may also perform additional tasks, not relevant to visualization of the result, like
-        dumping the result to a database or sending a confirmation e-mail. Usually, however,
+        dumping the result to a database or sending a confirmation e-mail. Usually 
         the output component will turn the raw data processed by input and filter components
-        into some content that can be interpreted by the user. 
+        into some content that can be interpreted by the user's browser.
         </para>
-        
-        <para>
-        There are also some issues specific to the data exchange mode, which we list in
-        sections below.
-        </para>
-        
-        <section>
-            <title>Output components and &http; data exchange mode</title>
+
+        <important>
             <para>
-            Output component should declare an appropriate <parameter>Content-type</parameter>
-            HTTP header for the response stream, according to the returned data stream's format.
-            This is very important, because the current implementation of the Web controller
-            component simply copies the result to the user's browser.
+            Output component should declare an appropriate &http; <parameter>Content-type</parameter>
+            header for the response stream (corresponding to the real nature of the returned data).
             </para>
-        </section>
-        
-        <section>
-            <title>Output components and local data exchange mode</title>
-            <para>
-            Details have not been established yet.
-            </para>
-        </section>
-        
+        </important>
         <!-- }}} -->
     </section>
 
@@ -302,15 +267,12 @@
         </para>
 
         <para>
-        Controllers should be organized so that they expose information about
-        <glossterm>processes</glossterm> of query processing. Such process encompasses a chain of
+        Controllers should expose information about
+        <glossterm>processes</glossterm>. A process is a chain of
         components, starting with an input, ending at some output and having filters in
-        between. For an example
-        of how this can be realized, see the <link linkend="sect:web-controller-component">Web controller
-        component</link>'s documentation.
+        between.
         </para>
         
         <!-- }}} -->
     </section>
-    
 </chapter>

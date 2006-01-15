@@ -2,12 +2,9 @@ public class MyClass
 {
     public static void main(String [] args)
     {
-        if (args.length == 0)
-        {
+        if (args.length == 0) {
             System.out.println("Pass any arguments.");
-        }
-        else
-        {
+        } else {
             System.out.println("Good boy!");
         }
     }
