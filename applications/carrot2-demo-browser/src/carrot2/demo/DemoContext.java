@@ -34,6 +34,7 @@ import com.dawidweiss.carrot.local.controller.loaders.ComponentInitializationExc
  */
 public class DemoContext {
     private final String PROCESS_SETTINGS_CLASS = "process.settings.class";
+    private final String PROCESS_DEFAULT = "process.default";
 
     /** Local Carrot2 controller */
     private LocalController controller = new LocalControllerBase();
@@ -41,6 +42,11 @@ public class DemoContext {
     /** Maps process identifiers to their user interface names. */
     private HashMap processIdToName;
 
+    /** 
+     * Default process ID in {@link #processIdToName}. 
+     */
+    private String defaultProcess;
+    
     /** 
      * A list of {@link com.dawidweiss.carrot.local.controller.LoadedProcess} objects
      * loaded from processes folder.
@@ -88,6 +94,9 @@ public class DemoContext {
                         throw new RuntimeException("Could not load process settings: "
                                 + processSettingsClass, e);
                     }
+                    if (lp.getAttributes().containsKey(PROCESS_DEFAULT)) {
+                        this.defaultProcess = lp.getId();
+                    }
                 }
                 controller.addProcess(lp.getId(), lp.getProcess());
             }
@@ -121,6 +130,14 @@ public class DemoContext {
      */
     public Map getProcessIdToProcessNameMap() {
         return processIdToName;
+    }
+    
+    /**
+     * An identifier of the  default process. If there is no default,
+     * <code>null</code> is returned. 
+     */
+    public String getDefaultProcessId() {
+        return this.defaultProcess;
     }
 
     /**

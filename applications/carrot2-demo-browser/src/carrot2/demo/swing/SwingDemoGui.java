@@ -26,6 +26,8 @@ import java.io.IOException;
 
 import javax.swing.*;
 
+import sun.util.logging.resources.logging;
+
 import carrot2.demo.DemoContext;
 import carrot2.demo.DemoGuiDelegate;
 import carrot2.demo.ProcessSettings;
@@ -150,7 +152,11 @@ public class SwingDemoGui implements DemoGuiDelegate {
 
                     processComboModel = new MapComboModel(demoContext.getProcessIdToProcessNameMap());
                     processComboBox.setModel(processComboModel);
-                    processComboBox.setSelectedIndex(0);
+                    if (demoContext.getDefaultProcessId() != null) {
+                        processComboBox.setSelectedItem(
+                                demoContext.getProcessIdToProcessNameMap().get(
+                                        demoContext.getDefaultProcessId()));
+                    }
                     queryField.setText("");
                     queryField.requestFocus();
                 } finally {
