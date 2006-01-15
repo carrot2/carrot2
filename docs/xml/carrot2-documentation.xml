@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC 
+    "-//Dawid Weiss//DTD DocBook V3.1-Based Extension for XML and graphics inclusion//EN" 
+    "http://www.cs.put.poznan.pl/dweiss/dtd/dweiss-docbook-extensions.dtd" [
+<!ENTITY % isopub SYSTEM "iso-pub.ent"> 
+%isopub;
+<!ENTITY % local SYSTEM "local-entities.ent">
+%local;
+]>
+
+<book>
+
+    <!-- chapters follow -->
+
+    <title>&carrot; Framework</title>
+
+    <bookinfo>
+        <authorgroup>
+            <author>
+                <firstname>Dawid</firstname>
+                <surname>Weiss</surname>
+            </author>
+        </authorgroup>
+        
+        <copyright>
+            <year>2002</year>
+            <year>2003</year>
+            <year>2004</year>
+            <year>2005</year>
+            <year>2006</year>
+            <holder>Dawid Weiss, Stanisław Osiński</holder>
+        </copyright>
+    
+		<!--
+        <releaseinfo>Release (CVS Id): $Id$</releaseinfo>
+        -->
+    </bookinfo>
+    
+    <!-- chapters follow -->
+
+    <include file="introduction.xml" />
+
+    <include file="architecture-remote.xml" />
+    <include file="architecture-local.xml" />
+    
+    <include file="mime-types.xml" />
+
+    <appendix>
+        <title>History of revisions of this document</title>
+    	<include file="history.xml" />
+    </appendix>
+</book>
