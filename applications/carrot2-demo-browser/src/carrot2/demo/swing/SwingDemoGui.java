@@ -159,6 +159,12 @@ public class SwingDemoGui implements DemoGuiDelegate {
                     }
                     queryField.setText("");
                     queryField.requestFocus();
+
+                    enableUI();
+                    JOptionPane.showMessageDialog(frame, 
+                            "This application is for tuning/ demonstration only.\n\n"
+                            + "The browser's component navigational capabilities\n(and rendering quality in case of pure Java"
+                            + " version)\nare far from perfect.", "Information", JOptionPane.INFORMATION_MESSAGE);
                 } finally {
                 }
             }
@@ -168,8 +174,6 @@ public class SwingDemoGui implements DemoGuiDelegate {
         } catch (Throwable t) {
             SwingUtils.showExceptionDialog(frame, "Initialization exception.", t);
         }
-
-        enableUI();
     }
 
     /**
