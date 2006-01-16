@@ -75,6 +75,9 @@
             <property name="deployment.port" value="${deployment.port}" />
             <property name="deployment.host" value="${deployment.host}" />
         </ant>
+    </target>
+
+    <target name="tests">
         <mkdir dir="${tests.report.dir}" />
         <ant antfile="${checkout.dir}/${module.name}/build.xml"
              dir="${checkout.dir}/${module.name}" inheritall="false" target="test">

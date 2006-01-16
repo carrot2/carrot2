@@ -72,12 +72,20 @@ then
     # override webapps if needed.
     cp -f /home/dweiss/carrot2/override-modules/*.war /home/dweiss/carrot2/runtime/context-webapps/
 
+    if ant -f build.demo.xml tests
+    then
+        echo "Unit tests finished ok."
+    else
+        echo "Unit tests failed. mail info to admin"
+        echo "Unit tests failed." | mail -s "Unit tests failed." dawid.weiss@cs.put.poznan.pl
+    fi
+
     # run tomcat in the background, wait and test it after a couple of minutes
     (ant -f build.demo.xml start.tomcat.success)&
     sleep 360
     if ant -f build.tests.xml build
     then
-        echo "Tests finished ok."
+        echo "External tests finished ok."
     else
         echo "Tests failed. mail info to admin"
         echo "Some of the tests failed..." | mail -s "Tests failed." dawid.weiss@cs.put.poznan.pl
