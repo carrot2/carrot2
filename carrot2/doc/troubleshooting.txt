@@ -1,0 +1,34 @@
+
+TROUBLESHOOTING
+===============
+
+Please check if the problem you're experiencing is listed below. If not,
+describe your problem and send your question to the developers mailing list.
+
+
+===============
+PROBLEM:
+	Corrupted national characters in the Web form (remote controller)
+
+WHERE:
+	Remote controller deployed on Tomcat5 (and possibly later) container.
+	
+DESCRIPTION:
+	National characters are UTF-8 encoded in Carrot2, but Tomcat decodes
+	them using local platform's encoding.
+	
+WORKAROUND:
+	Force correct decoding on the connector level. Add the following attribute
+	to the "Connector" section of Tomcat's master configuration file (server.xml):
+
+	URIEncoding="UTF-8"
+	
+	An example connector should look like this:
+	
+        <Connector port="8080"
+            maxThreads="25" minSpareThreads="5" maxSpareThreads="10"
+            minProcessors="5" maxProcessors="25" enableLookups="false"
+            redirectPort="8443" acceptCount="10" debug="0" connectionTimeout="20000" 
+            URIEncoding="UTF-8" />
+
+===============

@@ -1,14 +1,6 @@
 
-A roadmap to release 1.0
+A roadmap to release 1.1
 ------------------------
-
-- Ensure all tests pass. 
-
-- Ensure the demo application works:
-
-
-Suggested tasks delayed until release 1.1
------------------------------------------
 
 - Add local interfaces to: 
 
@@ -20,4 +12,4 @@ carrot2-filter-fuzzyants
 carrot2-filter-ahc
 carrot2-filter-fuzzyants
 
-- Unify coding style.
+- Unify coding style (reformat existing code)
