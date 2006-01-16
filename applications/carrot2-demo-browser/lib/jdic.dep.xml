@@ -3,7 +3,7 @@
 
 <component
     name="jdic"
-    description="Java Desktop Integration Components (JDIC), https://jdic.dev.java.net/">
+    description="Java Desktop Integration Components (JDIC), Version 0.9, Release 1, https://jdic.dev.java.net/">
 	<provides>
 		<files>
 			<file location="jdic.jar" />
