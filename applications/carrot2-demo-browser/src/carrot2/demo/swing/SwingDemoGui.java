@@ -13,28 +13,16 @@
 
 package carrot2.demo.swing;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
+import java.awt.*;
+import java.awt.event.*;
 import java.io.IOException;
 
 import javax.swing.*;
 
-import sun.util.logging.resources.logging;
-
-import carrot2.demo.DemoContext;
-import carrot2.demo.DemoGuiDelegate;
-import carrot2.demo.ProcessSettings;
+import carrot2.demo.*;
 import carrot2.demo.swing.util.*;
 
 import com.dawidweiss.carrot.util.common.StreamUtils;
-import com.jgoodies.forms.debug.FormDebugPanel;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.plaf.Options;
@@ -142,31 +130,24 @@ public class SwingDemoGui implements DemoGuiDelegate {
         disableUI();
         queryField.setText("Please wait...");
         frame.setVisible(true);
-        
+
         // replace the combo box's model.
         final Runnable task = new Runnable() {
             public void run() {
-                try {
-                    // Now initialize the application.
-                    demoContext.initialize();
+                // Now initialize the application.
+                demoContext.initialize();
 
-                    processComboModel = new MapComboModel(demoContext.getProcessIdToProcessNameMap());
-                    processComboBox.setModel(processComboModel);
-                    if (demoContext.getDefaultProcessId() != null) {
-                        processComboBox.setSelectedItem(
-                                demoContext.getProcessIdToProcessNameMap().get(
-                                        demoContext.getDefaultProcessId()));
-                    }
-                    queryField.setText("");
-                    queryField.requestFocus();
-
-                    enableUI();
-                    JOptionPane.showMessageDialog(frame, 
-                            "This application is for tuning/ demonstration only.\n\n"
-                            + "The browser's component navigational capabilities\n(and rendering quality in case of pure Java"
-                            + " version)\nare far from perfect.", "Information", JOptionPane.INFORMATION_MESSAGE);
-                } finally {
+                processComboModel = new MapComboModel(demoContext.getProcessIdToProcessNameMap());
+                processComboBox.setModel(processComboModel);
+                if (demoContext.getDefaultProcessId() != null) {
+                    processComboBox.setSelectedItem(
+                            demoContext.getProcessIdToProcessNameMap().get(
+                                    demoContext.getDefaultProcessId()));
                 }
+                queryField.setText("");
+                queryField.requestFocus();
+
+                enableUI();
             }
         };
         try {
