@@ -142,7 +142,7 @@ public class YahooSearchService {
                             ((PostMethod) httpMethod).addParameter((NameValuePair) nameValues.get(i));
                         }
                     }
-                    
+
                     int statusCode = client.executeMethod(httpMethod);
                     if (statusCode == HttpStatus.SC_OK) {
                         is = httpMethod.getResponseBodyAsStream();
@@ -178,7 +178,13 @@ public class YahooSearchService {
                 }
                 if (firstPass) {
                     // Correct the number of requested results to the maximum available.
-                    resultsLeft = Math.min(requestedResults, handler.totalResults);
+                    if (handler.totalResults < descriptor.getMaxResultsPerQuery()) {
+                        // Avoid a bug in Yahoo Search API which returns different total
+                        // number of results and the returned number of results.
+                        resultsLeft = 0;
+                    } else {
+                        resultsLeft = Math.min(requestedResults, handler.totalResults);
+                    }
                     firstPass = false;
                 } else {
                     if (handler.resultsReturned == 0) {
