@@ -16,7 +16,8 @@ package carrot2.demo.swing;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
@@ -52,6 +53,12 @@ public class ResultsTab extends JPanel {
     private final static String PROGRESS_CARD = "progress";
     
     private final static Logger logger = Logger.getLogger(ResultsTab.class);
+
+    /**
+     * If <code>true</code>, a warning about swing browser has been displayed
+     * and should not be displayed again.
+     */
+    private static boolean warningShown = false;
 
     private String query;
     private String processId;
@@ -387,6 +394,16 @@ public class ResultsTab extends JPanel {
                 ResultsTab.this.clustersTree.setModel(new RawClustersTreeModel(output.clusters));
                 showAllDocuments();
                 ((CardLayout)cards.getLayout()).show(cards, MAIN_CARD);
+                
+                if (browserView instanceof HtmlDisplayWithSwing) {
+                    if (warningShown  == false) {
+                        warningShown = true;
+                        JOptionPane.showMessageDialog(ResultsTab.this, 
+                                "This application is for tuning/ demonstration only.\n\n"
+                                + "The browser's component navigational capabilities and rendering quality\n"
+                                + "are very limited.", "Information", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
             }
         };
         SwingTask.runNow(task);
