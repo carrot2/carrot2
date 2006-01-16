@@ -13,13 +13,15 @@
 
 package carrot2.demo.settings;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
-import javax.swing.*;
+import javax.swing.JComponent;
 
-import carrot2.demo.*;
+import carrot2.demo.ProcessSettings;
+import carrot2.demo.ProcessSettingsBase;
 
-import com.stachoodev.carrot.filter.lingo.lsicluster.*;
+import com.stachoodev.carrot.filter.lingo.lsicluster.LsiConstants;
 
 /**
  * Settings class for Lingo classic with a generic input.

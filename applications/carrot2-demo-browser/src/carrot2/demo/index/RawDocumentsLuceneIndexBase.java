@@ -13,10 +13,10 @@
 
 package carrot2.demo.index;
 
-import java.io.*;
+import java.io.Reader;
 
 import org.apache.lucene.analysis.*;
-import org.apache.lucene.analysis.standard.*;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
 
 /**
  * @author Stanislaw Osinski

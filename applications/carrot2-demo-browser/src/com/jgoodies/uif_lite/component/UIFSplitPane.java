@@ -32,9 +32,7 @@ package com.jgoodies.uif_lite.component;
 
 import java.awt.Component;
 
-import javax.swing.JButton;
-import javax.swing.JSplitPane;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.SplitPaneUI;

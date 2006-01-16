@@ -13,10 +13,7 @@
 
 package carrot2.demo.swing.util;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.swing.DefaultComboBoxModel;
 
