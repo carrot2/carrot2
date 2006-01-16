@@ -1,0 +1,12 @@
+<resources>
+    <component resource="/components/filter-lingo.bsh" />
+    <component resource="/components/filter-rawdocument-enumerator.bsh" />
+    <component resource="/components/filter-rough-kmeans.bsh" />
+    <component resource="/components/filter-stc.bsh" />
+    <component resource="/components/input-cached-yahooapi.bsh" />
+    <component resource="/components/output-clustersConsumer.xml" />
+
+    <process resource="/processes/yahoo-lingo.xml" />
+    <process resource="/processes/yahoo-rough-kmeans.xml" />
+    <process resource="/processes/yahoo-stc.xml" />
+</resources>

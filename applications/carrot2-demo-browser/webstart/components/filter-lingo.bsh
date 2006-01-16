@@ -1,0 +1,8 @@
+
+import carrot2.demo.webstart.*;
+import com.dawidweiss.carrot.local.controller.LoadedComponentFactory;
+
+return new LoadedComponentFactory(
+	"filter-lingo",
+	WebStartComponentFactory.createLingo());
+
