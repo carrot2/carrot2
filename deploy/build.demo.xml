@@ -89,7 +89,7 @@
         	<classpath location="lib/WaitForServer.jar" />
         </taskdef>
 		<waitforserver url="http://${deployment.host}:${deployment.port}/carrot2-remote-controller/debug.jsp?status=true"
-			timeout="240" encoding="UTF-8" token="OK" />
+			timeout="240" encoding="UTF-8" token="UP" />
     </target>
     
     <!-- 
