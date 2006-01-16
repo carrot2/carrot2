@@ -1,4 +1,0 @@
-
-The project manual is at:
-
-http://www.carrot2.org/manual/
