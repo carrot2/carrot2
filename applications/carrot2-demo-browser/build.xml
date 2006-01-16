@@ -11,28 +11,48 @@
     <property name="type" value="jartype" />
     <property name="distribution.dir" location="${project.dir}/tmp/dist" />
 
+    <property name="distribution.zips.dir" location="${project.dir}/tmp/zips" />
+    <property name="distribution.zip.name" value="carrot2-local-demo.zip" /> 
+
     <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
 
 	<target name="build" depends="build.full" />
 
     <target name="dist" depends="clean,build.full">
-    	<copy todir="${distribution.dir}" filtering="true">
-			<filterchain>
-				<tokenfilter>
-				    <replacestring from="tmp\dist\" to="" />
-				    <replacestring from="tmp/dist/" to="" />
-				</tokenfilter>
-			</filterchain>
-    		<fileset dir=".">
-    			<include name="demo.*" />
-    		</fileset>
+        <filterchain id="cutout.tmp-dist">
+            <tokenfilter>
+                <replacestring from="tmp\dist\" to="" />
+                <replacestring from="tmp/dist/" to="" />
+            </tokenfilter>
+        </filterchain>
+
+    	<copy file="demo.bat" todir="${distribution.dir}" filtering="true">
+            <filterchain refid="cutout.tmp-dist" />
+    	</copy>
+    	<copy file="demo.sh" todir="${distribution.dir}" overwrite="true" filtering="true">
+            <filterchain refid="cutout.tmp-dist" />
+            <filterchain>
+                <deletecharacters chars="\r" />
+            </filterchain>
     	</copy>
     	<copy todir="${distribution.dir}">
     		<fileset dir=".">
     			<include name="components/**" />
     			<include name="processes/**" />
+                <include name="readme.txt" />
     		</fileset>
     	</copy>
+
+        <mkdir dir="${distribution.zips.dir}" />
+        <zip compress="true" duplicate="fail" update="false" whenempty="fail"
+            zipfile="${distribution.zips.dir}/${distribution.zip.name}">
+            <fileset dir="${distribution.dir}">
+                <exclude name="**/*.sh" />
+            </fileset>
+            <zipfileset dir="${distribution.dir}" filemode="755">
+                <include name="**/*.sh" />
+            </zipfileset>
+        </zip>
     </target>
 
     <target name="build.full">

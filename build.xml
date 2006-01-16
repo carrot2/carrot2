@@ -118,7 +118,6 @@ BUILDING: @{component.path}
     <mkdir dir="dist/remote/webapps" />
     <mkdir dir="dist/remote/shared/lib" />
     <mkdir dir="dist/remote/conf" />
-    <mkdir dir="dist/local" />
     
     <ant antfile="build.xml" dir="." inheritall="false" inheritrefs="false" target="remote">
         <property name="distribution.dir.remote" location="dist/remote/webapps" />
@@ -131,20 +130,14 @@ BUILDING: @{component.path}
             <include name="**/*" />
         </fileset>
     </copy>
-
-    <ant antfile="build.xml" dir="applications/carrot2-demo-browser"
-        inheritall="false" inheritrefs="false" target="dist" />
-    <copy todir="dist/local">
-        <fileset dir="applications/carrot2-demo-browser/tmp/dist" />
-        <fileset dir="applications/carrot2-demo-browser">
-            <include name="readme*" />
-        </fileset>
-    </copy>
-
-    <zip basedir="dist/local" 
-        zipfile="dist/carrot2-local-demo-${release.number}.zip" />
     <zip basedir="dist/remote" 
         zipfile="dist/carrot2-remote-demo-${release.number}.zip" />
+
+    <ant antfile="build.xml" dir="applications/carrot2-demo-browser"
+        inheritall="false" inheritrefs="false" target="dist">
+        <property name="distribution.zips.dir" location="dist" />
+        <property name="distribution.zip.name" value="carrot2-local-demo-${release.number}.zip" />
+    </ant>
   </target>
 
 
