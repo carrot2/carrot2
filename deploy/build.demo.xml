@@ -20,7 +20,6 @@
     <!-- 
       ## Prepare checkout directory and cvs environment.
       -->
-      
     <target name="vars">
         <mkdir dir="${checkout.dir}" />
         <mkdir dir="${build.dir}" />
@@ -83,6 +82,14 @@
              dir="${checkout.dir}/${module.name}" inheritall="false" target="test">
             <property name="tests.report.dir" location="${tests.report.dir}" />
         </ant>
+    </target>
+    
+    <target name="waitforserver">
+        <taskdef name="waitforserver" classname="com.dawidweiss.carrot.ant.WaitForServer">
+        	<classpath location="lib/WaitForServer.jar" />
+        </taskdef>
+		<waitforserver url="http://${deployment.host}:${deployment.port}/carrot2-remote-controller/debug.jsp?status=true"
+			timeout="240" encoding="UTF-8" token="OK" />
     </target>
     
     <!-- 

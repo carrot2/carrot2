@@ -82,7 +82,9 @@ then
 
     # run tomcat in the background, wait and test it after a couple of minutes
     (ant -f build.demo.xml start.tomcat.success)&
-    sleep 360
+
+	sleep 10
+    ant -f build.demo.xml waitforserver
     if ant -f build.tests.xml build
     then
         echo "External tests finished ok."
