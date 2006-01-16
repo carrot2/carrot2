@@ -20,5 +20,6 @@
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/lucene-1.5-rc1-dev.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-matrix"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-stc"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/dom4j-1.5.jar"/>
 	<classpathentry kind="output" path="tmp/eclipse/classes"/>
 </classpath>

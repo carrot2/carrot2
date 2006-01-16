@@ -14,6 +14,7 @@
 package carrot2.demo;
 
 import java.io.File;
+import java.net.URL;
 import java.util.*;
 
 import com.dawidweiss.carrot.core.local.*;
@@ -53,29 +54,82 @@ public class DemoContext {
     private HashMap loadedSettings = new HashMap();
     
     /**
+     * If <code>true</code>, initialization of components and processes
+     * is performed on local folders named <code>components</code> and
+     * <code>processes</code> (these folders must exist).
+     */
+    private boolean localDefinitionFolders;
+    
+    private URL [] processUrls;
+    private URL [] componentUrls;
+    
+    /**
+     * Creates a new demo context with initialization using local folders.
+     */
+    public DemoContext() {
+        this.localDefinitionFolders = true;
+    }
+
+    /**
+     * Creates a new demo context with initialization using URLs to
+     * component and process descriptors.
+    */
+    public DemoContext(URL [] components, URL [] processes) {
+        this.localDefinitionFolders = false;
+        this.componentUrls = components;
+        this.processUrls = processes;
+    }
+
+    /**
      * Initialize the demo context, create local controller 
      * and component factories.
      */
     public void initialize() {
-        final File componentsDir = new File("components");
-        if (componentsDir.isDirectory() == false) {
-            throw new RuntimeException("Components directory not found: "
-                    + componentsDir.getAbsolutePath());
-        }
-        final File processesDir = new File("processes");
-        if (processesDir.isDirectory() == false) {
-            throw new RuntimeException("Components directory not found: "
-                    + componentsDir.getAbsolutePath());
-        }
-
         final ControllerHelper cl = new ControllerHelper();
+
+        if (localDefinitionFolders) {
+            final File componentsDir = new File("components");
+            if (componentsDir.isDirectory() == false) {
+                throw new RuntimeException("Components directory not found: "
+                        + componentsDir.getAbsolutePath());
+            }
+            final File processesDir = new File("processes");
+            if (processesDir.isDirectory() == false) {
+                throw new RuntimeException("Components directory not found: "
+                        + componentsDir.getAbsolutePath());
+            }
+    
+            try {
+                cl.addComponentFactoriesFromDirectory(controller, componentsDir);
+                this.loadedProcesses = cl.loadProcessesFromDirectory(processesDir);
+            } catch (Exception e) {
+                throw new RuntimeException("Unhandled exception when initializing components and processes.", e);
+            }
+        } else {
+            try {
+                // Initialization from resource files.
+                for (int i = 0; i < componentUrls.length; i++) {
+                    final String external = componentUrls[i].toExternalForm();
+                    final int lastDotIndex = external.lastIndexOf('.');
+                    final String extension = external.substring(lastDotIndex+1);
+                    cl.addComponentFactory(controller, extension, componentUrls[i].openStream());
+                }
+                this.loadedProcesses = new ArrayList();
+                for (int i = 0; i < processUrls.length; i++) {
+                    final String external = processUrls[i].toExternalForm();
+                    final int lastDotIndex = external.lastIndexOf('.');
+                    final String extension = external.substring(lastDotIndex+1);
+                    loadedProcesses.add(cl.loadProcess(extension, processUrls[i].openStream()));
+                }
+            } catch (Exception e) {
+                throw new RuntimeException("Exception when initializing components and processes.", e);
+            }
+        }
 
         //
         // Add scripted/ custom components and processes
         //
         try {
-            cl.addComponentFactoriesFromDirectory(controller, componentsDir);
-            this.loadedProcesses = cl.loadProcessesFromDirectory(processesDir);
             for (Iterator i = loadedProcesses.iterator(); i.hasNext();) {
                 final LoadedProcess lp = (LoadedProcess) i.next();
                 if (lp.getAttributes().containsKey(PROCESS_SETTINGS_CLASS)) {

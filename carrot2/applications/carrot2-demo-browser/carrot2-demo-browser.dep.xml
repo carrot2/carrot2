@@ -35,6 +35,7 @@
     <dependency name="forms" />
     <dependency name="junit" />
     <dependency name="jdic" />
+    <dependency name="dom4j" />
     <dependency name="lucene" />
 
     <dependency name="carrot2-util-common" />
