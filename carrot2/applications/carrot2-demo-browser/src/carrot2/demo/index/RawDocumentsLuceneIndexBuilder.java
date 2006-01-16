@@ -13,16 +13,19 @@
 
 package carrot2.demo.index;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
 
-import org.apache.log4j.*;
-import org.apache.lucene.analysis.*;
-import org.apache.lucene.document.*;
-import org.apache.lucene.index.*;
-import org.apache.lucene.store.*;
+import org.apache.log4j.Logger;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.RAMDirectory;
 
-import com.dawidweiss.carrot.core.local.clustering.*;
+import com.dawidweiss.carrot.core.local.clustering.RawDocument;
 
 /**
  * @author Stanislaw Osinski

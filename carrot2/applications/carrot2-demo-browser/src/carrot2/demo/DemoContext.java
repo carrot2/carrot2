@@ -14,15 +14,9 @@
 package carrot2.demo;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import com.dawidweiss.carrot.core.local.DuplicatedKeyException;
-import com.dawidweiss.carrot.core.local.LocalController;
-import com.dawidweiss.carrot.core.local.LocalControllerBase;
-import com.dawidweiss.carrot.core.local.MissingProcessException;
+import com.dawidweiss.carrot.core.local.*;
 import com.dawidweiss.carrot.local.controller.ControllerHelper;
 import com.dawidweiss.carrot.local.controller.LoadedProcess;
 import com.dawidweiss.carrot.local.controller.loaders.ComponentInitializationException;

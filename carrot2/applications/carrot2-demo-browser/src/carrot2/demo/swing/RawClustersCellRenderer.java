@@ -16,14 +16,9 @@ package carrot2.demo.swing;
 import java.awt.Component;
 import java.awt.Font;
 import java.text.NumberFormat;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JTree;
+import javax.swing.*;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
 import com.dawidweiss.carrot.core.local.clustering.RawCluster;

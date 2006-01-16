@@ -13,14 +13,15 @@
 
 package carrot2.demo.index;
 
-import java.io.*;
+import java.io.IOException;
 
-import org.apache.log4j.*;
-import org.apache.lucene.analysis.*;
-import org.apache.lucene.index.*;
-import org.apache.lucene.queryParser.*;
+import org.apache.log4j.Logger;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.*;
-import org.apache.lucene.store.*;
+import org.apache.lucene.store.Directory;
 
 /**
  * @author Stanislaw Osinski

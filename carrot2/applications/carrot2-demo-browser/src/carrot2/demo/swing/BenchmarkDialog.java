@@ -15,16 +15,18 @@ package carrot2.demo.swing;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.text.*;
-import java.util.*;
+import java.text.NumberFormat;
+import java.util.HashMap;
 
 import javax.swing.*;
-import javax.swing.border.*;
+import javax.swing.border.TitledBorder;
 
-import carrot2.demo.*;
-import carrot2.demo.swing.util.*;
+import carrot2.demo.DemoContext;
+import carrot2.demo.ProcessSettings;
+import carrot2.demo.swing.util.SwingTask;
 
-import com.dawidweiss.carrot.core.local.*;
+import com.dawidweiss.carrot.core.local.LocalInputComponent;
+import com.dawidweiss.carrot.core.local.MissingProcessException;
 
 /**
  * @author Stanislaw Osinski

@@ -13,23 +13,15 @@
 
 package carrot2.demo.cache;
 
-import java.io.*;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.io.IOException;
+import java.util.*;
 
-import org.apache.lucene.store.*;
+import org.apache.lucene.store.Directory;
 
-import carrot2.demo.index.*;
+import carrot2.demo.index.RawDocumentsLuceneIndexBuilder;
 
-import com.dawidweiss.carrot.core.local.LocalInputComponent;
-import com.dawidweiss.carrot.core.local.LocalInputComponentBase;
-import com.dawidweiss.carrot.core.local.ProcessingException;
-import com.dawidweiss.carrot.core.local.RequestContext;
-import com.dawidweiss.carrot.core.local.clustering.RawDocument;
-import com.dawidweiss.carrot.core.local.clustering.RawDocumentsConsumer;
-import com.dawidweiss.carrot.core.local.clustering.RawDocumentsProducer;
+import com.dawidweiss.carrot.core.local.*;
+import com.dawidweiss.carrot.core.local.clustering.*;
 import com.dawidweiss.carrot.core.local.impl.ClustersConsumerOutputComponent;
 import com.dawidweiss.carrot.core.local.impl.ClustersConsumerOutputComponent.Result;
 

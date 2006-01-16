@@ -33,12 +33,7 @@ package com.jgoodies.uif_lite.component;
 import java.awt.Component;
 import java.awt.Insets;
 
-import javax.swing.AbstractButton;
-import javax.swing.Action;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
+import javax.swing.*;
 
 
 /**

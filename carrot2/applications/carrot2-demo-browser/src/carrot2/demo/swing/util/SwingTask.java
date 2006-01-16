@@ -14,6 +14,7 @@
 package carrot2.demo.swing.util;
 
 import java.lang.reflect.InvocationTargetException;
+
 import javax.swing.SwingUtilities;
 
 public final class SwingTask {
