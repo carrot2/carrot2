@@ -90,7 +90,13 @@ public class WaitForServer extends Task {
                 throw new BuildException("URL is malformed: " + url);
             } catch (IOException e) {
                 // Ignore exceptions until deadline passes.
-                log("Connection failed.", Project.MSG_DEBUG);
+                log("Connection to: " + url + " failed.", Project.MSG_DEBUG);
+            }
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                // Ignore.
             }
         }
         throw new BuildException("Could not connect to: " + url
