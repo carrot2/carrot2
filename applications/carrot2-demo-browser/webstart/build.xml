@@ -1,0 +1,13 @@
+<project name="webstart" default="signjars">
+	<property name="keystore.alias" value="carrot2.org" />
+	<property name="keystore.password" value="carrot2" />
+	<property name="keystore" value="carrot2.org.keystore" />
+
+	<target name="signjars">
+        <signjar alias="${keystore.alias}" storepass="${keystore.password}" keystore="${keystore}">
+        		<fileset dir=".">
+        			<include name="**/*.jar" />
+        		</fileset>
+       	</signjar>
+	</target>
+</project>
