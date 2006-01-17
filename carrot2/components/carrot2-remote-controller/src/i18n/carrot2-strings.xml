@@ -162,15 +162,15 @@
                 <links><![CDATA[
                 <b>More about the project</b><br/><br/>
                 <p>
-            		<a href="http://www.carrot2.org">http://www.carrot2.org</a><br/>
+            		<a target="_top" href="http://www.carrot2.org">http://www.carrot2.org</a><br/>
             			Carrot<sup>2</sup> home page
             	</p>
                 <p>
-					<a href="http://carrot.cs.put.poznan.pl">http://carrot.cs.put.poznan.pl</a><br/>
+					<a target="_top" href="http://carrot.cs.put.poznan.pl">http://carrot.cs.put.poznan.pl</a><br/>
             			Head-of-development demo and testing site
             	</p>
                 <p>
-            		<a href="http://sourceforge.net/projects/carrot2">http://sourceforge.net/projects/carrot2</a><br/>
+            		<a target="_top" href="http://sourceforge.net/projects/carrot2">http://sourceforge.net/projects/carrot2</a><br/>
             			Developement site at SourceForge
                 </p>
                 ]]></links>
@@ -191,15 +191,15 @@
                 <links><![CDATA[
                 <b>Informacje o projekcie</b><br/><br/>
                 <p>
-            		<a href="http://www.carrot2.org">http://www.carrot2.org</a><br/>
+            		<a target="_top" href="http://www.carrot2.org">http://www.carrot2.org</a><br/>
             			Strona domowa projektu
             	</p>
                 <p>
-            		<a href="http://carrot.cs.put.poznan.pl">http://carrot.cs.put.poznan.pl</a><br/>
+            		<a target="_top" href="http://carrot.cs.put.poznan.pl">http://carrot.cs.put.poznan.pl</a><br/>
             			Demonstracyjna wersja linii rozwojowej projektu
             	</p>
                 <p>
-            		<a href="http://sourceforge.net/projects/carrot2">http://sourceforge.net/projects/carrot2</a><br/>
+            		<a target="_top" href="http://sourceforge.net/projects/carrot2">http://sourceforge.net/projects/carrot2</a><br/>
             			Strona domowa na serwerze SourceForge
                 </p>
                 ]]></links>
