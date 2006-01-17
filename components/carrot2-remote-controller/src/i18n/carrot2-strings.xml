@@ -185,7 +185,7 @@
 				</p>
                 <p>
                 Jeśli nie wiesz co teraz zrobić,
-                <a target="_top" href="whatis.jsp">tutaj znajduje się mała pomoc (w języku angielskim)</a>.
+                <a target="_top" href="whatis.jsp">tutaj znajduje się mała pomoc.</a>.
                 </p>
                 ]]></info>
                 <links><![CDATA[
@@ -208,9 +208,90 @@
     	<whatis>
             <lang:en>
                 <whatis><![CDATA[What is Carrot<sup>2</sup>?]]></whatis>
+                <info><![CDATA[
+                    <p>
+                    Carrot<sup>2</sup> is a framework for processing textual information. This
+                    demo shows how the project is used for clustering search results into
+                    (hopefully) meaningful groups.
+                    </p>
+
+                    <p>
+                    The user interface is similar to a regular search engine. In addition
+                    to the query text box (where you can type your queries), there is a drop
+                    down list providing a selection of several <em>processes</em>. A process
+                    determines the data source (search engine to be used) and a clustering algorithm
+                    to be used to discover groups of similar documents in the search results.
+                    </p>
+
+                    <p style="text-align: center;">
+                    <img style="border: 1px solid black;" src="gfx/scr-process.gif" />
+                    </p>
+                    
+                    <p>
+                    Search result is shown in two panes. Initially, the right side contains verbatim 
+                    search results (snippets) returned from a search engine or some other data
+                    source (RSS feed, for example). The left side contains labelled groups of similar,
+                    related results. Selecting a group (using left mouse button) displays only documents
+                    inside this group. Groups may be hierarchical (use icons to unfold deeper levels).
+                    </p>
+
+                    <p style="text-align: center;">
+                    <img style="border: 1px solid black;" src="gfx/scr-groups.gif" />
+                    </p>
+
+                    <p>
+                    The process of discovering clusters depends on the clustering component 
+                    and is usually fully automated, so clusters
+                    may not be sensible. Please report successes as well as failures of the
+                    algorithm to help improve it in the future!
+                    </p>
+                ]]></info>
             </lang:en>
             <lang:pl>
                 <whatis><![CDATA[Czym jest Carrot<sup>2</sup>?]]></whatis>
+                <info><![CDATA[
+                    <p>
+                    Carrot<sup>2</sup> jest systemem do przetwarzania danych tekstowych. Niniejsza
+                    demonstracja pozwala na odnajdywanie podobnych grup dokumentów
+                    w wynikach wyszukiwania zwracanych przez popularne wyszukiwarki internetowe.
+                    </p>
+
+                    <p>
+                    Interfejs użytkownika aplikacji jest podobny do innych wyszukiwarek. W pole tekstowe
+                    wpisuje się <em>zapytanie</em>. Wybór konkretnej wyszukiwarki, a także algorytmu
+                    grupującego następuje poprzez wybranie <em>procesu</em> z listy wyboru poniżej pola
+                    tekstowego.
+                    </p>
+
+                    <p style="text-align: center;">
+                    <img style="border: 1px solid black;" src="gfx/scr-process.gif" />
+                    </p>
+                    
+                    <p>
+                    Wynik wyszukiwania jest przedstawiany w dwóch kolumnach. Początkowo w kolumnie po prawej stronie 
+                    są prezentowane wyniki wyszukiwania w dokładnie takiej kolejności, w jakiej zostały
+                    zwrócone przez wyszukiwarkę (lub inne źródło danych o dokumentach, na przykład strumień RSS).
+                    Kolumna po lewej stronie zawiera opisy grup powiązanych tematycznie dokumentów. Wybranie
+                    grupy (lewym przyciskiem myszki na etykiecie) powoduje pokazanie w prawej kolumnie 
+                    jedynie dokumentów zawartych w tej grupie. Grupy dokumentów mogą posiadać strukturę
+                    hierarchiczną (zależy to od algorytmu). Otwarcie lub zamknięcie grupy realizują
+                    ikony przy ich nazwach.
+                    </p>
+
+                    <p style="text-align: center;">
+                    <img style="border: 1px solid black;" src="gfx/scr-groups.gif" />
+                    </p>
+
+                    <p>
+                    Proces grupowania jest nienadzorowany i zależny od algorytmu. Etykiety grup mogą
+                    być czasem nonsensowne, a związek semantyczny dokumentów w grupie nieoczywisty.
+                    </p>
+
+                    <p>
+                    Liczymy na informację o sukcesach i porażkach algorytmów, które pomogą nam usprawnić
+                    program w przyszłości.
+                    </p>
+                ]]></info>
             </lang:pl>
     	</whatis>
         <wait>
