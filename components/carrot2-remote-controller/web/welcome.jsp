@@ -22,16 +22,7 @@
 		</td>
 		<td align="center" valign="top" width="50%">
 			<div style="text-align: left; margin-left: 10%; margin-right: 10%;">
-			<b>
-			<bean:message key="blocks.recent-queries.head"/>
-			</b><br/><br/>
-			
-			<!-- Recent queries block -->
-			<%
-				int num = 12;
-			%>
-			<%@include file="jsp-tmpl/recent-queries.txt" %>
-			
+			<bean:message key="blocks.welcome.links" />
 			</div>
 		</td>
 	</tr>
