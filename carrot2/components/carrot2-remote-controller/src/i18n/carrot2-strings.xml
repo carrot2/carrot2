@@ -151,30 +151,58 @@
                 <info><![CDATA[
                 <p>
 				Carrot<sup>2</sup> is a system for clustering textual data. This demo
-				clusters results acquired from various search engines, similarly to
-				the commercial <a href="http://www.vivisimo.com">Vivisimo</a> meta
-				search engine.
+				clusters results acquired from various popular search engines.
 				</p>
                 <p>
                 If you don't know what to do now,
                 <a target="_top" href="whatis.jsp">click here for help</a>.
                 </p>
                 ]]></info>
+
+                <links><![CDATA[
+                <b>More about the project</b><br/><br/>
+                <p>
+            		<a href="http://www.carrot2.org">http://www.carrot2.org</a><br/>
+            			Carrot<sup>2</sup> home page
+            	</p>
+                <p>
+					<a href="http://carrot.cs.put.poznan.pl">http://carrot.cs.put.poznan.pl</a><br/>
+            			Head-of-development demo and testing site
+            	</p>
+                <p>
+            		<a href="http://sourceforge.net/projects/carrot2">http://sourceforge.net/projects/carrot2</a><br/>
+            			Developement site at SourceForge
+                </p>
+                ]]></links>
             </lang:en>
             <lang:pl>
             	<head>Witamy</head>
                 <info><![CDATA[
                 <p>
 				Carrot<sup>2</sup> jest systemem grupującym dane tekstowe.
-				Niniejsza wersja demonstracyjna grupuje wyniki z wyszukiwarek
-				internetowych, podobnie jak czyni to serwis
-				<a href="http://www.vivisimo.com">Vivisimo</a>.
+				Niniejsza wersja demonstracyjna grupuje wyniki z popularnych wyszukiwarek
+				internetowych.
 				</p>
                 <p>
                 Jeśli nie wiesz co teraz zrobić,
-                <a target="_top" href="whatis.jsp">tutaj znajduje się mała pomoc</a>.
+                <a target="_top" href="whatis.jsp">tutaj znajduje się mała pomoc (w języku angielskim)</a>.
                 </p>
                 ]]></info>
+                <links><![CDATA[
+                <b>Informacje o projekcie</b><br/><br/>
+                <p>
+            		<a href="http://www.carrot2.org">http://www.carrot2.org</a><br/>
+            			Strona domowa projektu
+            	</p>
+                <p>
+            		<a href="http://carrot.cs.put.poznan.pl">http://carrot.cs.put.poznan.pl</a><br/>
+            			Demonstracyjna wersja linii rozwojowej projektu
+            	</p>
+                <p>
+            		<a href="http://sourceforge.net/projects/carrot2">http://sourceforge.net/projects/carrot2</a><br/>
+            			Strona domowa na serwerze SourceForge
+                </p>
+                ]]></links>
             </lang:pl>
     	</welcome>
     	<whatis>
