@@ -48,7 +48,7 @@
             </p>
 
             <illustration alt="Carrot2 demo screenshot" src="/gfx/screen/carrot2-demo-screenshot.gif">
-                <description>Results of query <i>Pink Floyd</i>, clustered using Carrot<sup>2</sup></description>
+                <description>Search result clustered using Carrot<sup>2</sup></description>
             </illustration>
         </chapter>
     </td>
