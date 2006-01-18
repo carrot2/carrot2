@@ -75,6 +75,24 @@ public class YahooApiInputComponentTest extends junit.framework.TestCase {
         assertTrue("Results acquired from Yahoo" + ":" + results.size(), results.size() > 0);
     }
 
+    public void testStartPositionIncorrect() throws Exception {
+        final LocalComponentFactory inputFactory = new LocalComponentFactoryBase() {
+            public LocalComponent getInstance() {
+                return new YahooApiInputComponent();
+            }
+        };
+
+        LocalControllerBase controller = setUpController(inputFactory);
+        String query = "webstart splash colors";
+        final long start = System.currentTimeMillis();
+        List results = (List) controller.query("testprocess", query, new HashMap()).getQueryResult();
+        final long end = System.currentTimeMillis();
+        log.info("YahooAPI query time: " + (end - start) + " ms.");
+
+        // the results should contain some documents.
+        assertTrue("Results acquired from Yahoo" + ":" + results.size(), results.size() > 0);
+    }
+    
 	protected LocalControllerBase setUpController(LocalComponentFactory inputFactory) throws Exception {
 		LocalControllerBase controller;
 		

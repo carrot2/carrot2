@@ -44,7 +44,7 @@ public class YahooSearchServiceTest extends TestCase {
         YahooSearchResult [] result = service.query("apache", 255);
         assertEquals(255, result.length);
 	}
-	
+    
 	public void testFewerThanMaxPerQuery() throws Exception {
 	    YahooSearchServiceDescriptor descriptor = new YahooSearchServiceDescriptor();
 	    descriptor.initializeFromXML(this.getClass().getResourceAsStream("yahoo-site-cs.xml"));

@@ -34,6 +34,7 @@ import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.log4j.Logger;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -49,6 +50,8 @@ import com.dawidweiss.carrot.util.net.http.Parameter;
  * @author Dawid Weiss
  */
 public class YahooSearchService {
+    private final static Logger log = Logger.getLogger(YahooSearchService.class);
+
     private YahooSearchServiceDescriptor descriptor;
 
     public YahooSearchService(YahooSearchServiceDescriptor descriptor) {
@@ -174,7 +177,8 @@ public class YahooSearchService {
                 }
 
                 if (handler.firstResultPosition != startFrom && handler.resultsReturned > 0) {
-                    throw new IOException("Assertion failed: returned startFrom different.");
+                    log.warn("Returned startFrom different then expected, expected=" 
+                            + startFrom + " got: " + handler.firstResultPosition);
                 }
                 if (firstPass) {
                     // Correct the number of requested results to the maximum available.
