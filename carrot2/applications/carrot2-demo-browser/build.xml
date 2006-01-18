@@ -18,6 +18,67 @@
 
 	<target name="build" depends="build.full" />
 
+
+
+    <target name="webstart" depends="clean,build.full">
+    	<property name="distribution.webstart" location="${project.dir}/tmp/webstart" />
+		<property name="keystore.alias" value="carrot2.org" />
+		<property name="keystore.password" value="carrot2" />
+		<property name="keystore" value="webstart/carrot2.org.keystore" />
+
+       	<java classname="bsh.Interpreter" dir="webstart" fork="true">
+       		<classpath>
+       			<fileset dir="${carrot2.cvs.dir}/lib" includes="*bsh*.jar" />
+       		</classpath>
+       		<arg file="webstart/create-resources.bsh" />
+       	</java>
+
+		<mkdir dir="${distribution.webstart}/lib" />
+       	<jar jarfile="${distribution.webstart}/lib/demo-resources.jar" update="false">
+       		<fileset dir="webstart">
+       			<include name="components/**" />
+       			<include name="processes/**" />
+       			<include name="demo-resources.xml" />
+       		</fileset>
+       	</jar>
+       	
+       	<delete file="webstart/demo-resources.xml" />
+
+       	<copy todir="${distribution.webstart}">
+       		<fileset dir="${distribution.dir}" />
+       	</copy>
+
+       	<delete>
+       		<fileset dir="${distribution.webstart}">
+       			<include name="**/*jdic*" />
+       			<include name="**/*jdic*/**" />
+       		</fileset>
+       	</delete>
+
+       	<copy todir="${distribution.webstart}">
+       		<fileset dir="webstart">
+       			<include name="lib/**" />
+       			<include name="img/**" />
+       			<include name="*.php" />
+       		</fileset>
+       	</copy>
+       	
+       	<java classname="bsh.Interpreter" dir="${distribution.webstart}" fork="true">
+       		<classpath>
+       			<fileset dir="${carrot2.cvs.dir}/lib" includes="*bsh*.jar" />
+       		</classpath>
+       		<arg file="webstart/create-files.bsh" />
+       	</java>
+
+        <signjar alias="${keystore.alias}" storepass="${keystore.password}" keystore="${keystore}">
+    		<fileset dir="${distribution.webstart}">
+    			<include name="**/*.jar" />
+    		</fileset>
+       	</signjar>
+    </target>
+
+
+
     <target name="dist" depends="clean,build.full">
         <filterchain id="cutout.tmp-dist">
             <tokenfilter>
@@ -55,6 +116,8 @@
         </zip>
     </target>
 
+
+
     <target name="build.full">
         <property name="copy.dependencies" value="true" />
         <property name="single.jar" value="false" />
@@ -65,6 +128,8 @@
         </ant>
     </target>
 	
+
+
     <target name="build.stripped">
         <property name="copy.dependencies" value="true" />
         <property name="single.jar" value="false" />
