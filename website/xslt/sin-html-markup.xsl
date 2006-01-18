@@ -34,6 +34,8 @@
 	<xsl:copy>
 		<xsl:copy-of select="@class"/>
 		<xsl:copy-of select="@alt"/>
+        <xsl:copy-of select="@width"/>
+        <xsl:copy-of select="@height"/>
 		<xsl:attribute name="src">
 			<xsl:call-template name="rewriteImgURL">
 				<xsl:with-param name="href" select="@src" />
@@ -52,8 +54,8 @@
 
      ################################################################### -->
 
-<xsl:template match="strong|i|br|ol|li|ul|br|sub|sup|b|wbr|tt|dd|dl|dt">
-	<xsl:copy><xsl:apply-templates /></xsl:copy>
+<xsl:template match="strong|i|br|ol|li|ul|br|sub|sup|b|wbr|tt|dd|dl|dt|table|tr|td|div">
+	<xsl:copy><xsl:copy-of select="@*"/><xsl:apply-templates /></xsl:copy>
 </xsl:template>
 
 

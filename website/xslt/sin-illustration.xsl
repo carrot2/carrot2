@@ -42,17 +42,13 @@ TABLE.figure TD.desc {
   -->
 
 <xsl:template match="illustration">
-	<xsl:choose>
-		<xsl:when test="@float"><xsl:call-template name="pasteIllustration" /></xsl:when>
-		<xsl:otherwise>
-			<div style="text-align: center;"><xsl:call-template name="pasteIllustration" /></div>
-		</xsl:otherwise>
-	</xsl:choose>
+<xsl:call-template name="pasteIllustration" />
 </xsl:template>
 
 <xsl:template name="pasteIllustration">
 	<table class="figure" width="1px" height="1px">
-	<xsl:if test="@float">
+    <xsl:choose>
+	<xsl:when test="@float">
 		<xsl:attribute name="style">
 			<xsl:choose>
 				<xsl:when test="@float='right'">float: right; margin-right: 0em; clear: both;</xsl:when>
@@ -60,7 +56,9 @@ TABLE.figure TD.desc {
 				<xsl:otherwise>float: left; margin-left: 0em; clear: both;</xsl:otherwise>
 			</xsl:choose>
 		</xsl:attribute>
-	</xsl:if>
+	</xsl:when>
+    </xsl:choose>
+
 	<tr><td class="pic" align="center" valign="top">
 		<xsl:choose>
 			<xsl:when test="@thumb">

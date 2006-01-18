@@ -52,22 +52,20 @@ SPAN.printonly {
 
 A {
 	color:	   		 #646AB4;
-	text-decoration: none;
 	font-weight: 	 normal;
 }
 
 A:visited {
-	text-decoration: none;
-	color:			 #B46464;
+	color:			 #B44444;
 }
 
 A:hover {
 	text-decoration: none;
 	color:			 black;
-	text-decoration: underline;
 }
 
 A.dept {
+	text-decoration: none;
 	color:	         #c0c0c0;
 }
 
@@ -82,7 +80,17 @@ A.dept:hover {
 	background-color: black;
 }
 
+A.menu {
+	text-decoration: none;
+}
 
+A.menu:hover {
+	text-decoration: underline;
+}
+
+A.none:hover, A.none:hover, A.none:visited {
+	text-decoration: none;
+}
 
 /**********************************/
 /* MISCELLANEOUS CLASSES          */

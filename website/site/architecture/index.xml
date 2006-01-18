@@ -11,10 +11,12 @@
        POST method specifically. This allows for great flexibility in adding new components,
        as the language of implementation and physical location may remain unknown.
     </p>
+
+    <illustration src="/gfx/carrot2/figures/components-dataflow.gif">
+        <description>1: A scenario of data flow in <carrot-text/> architecture</description>
+    </illustration>
+
     <p>
-        <illustration src="/gfx/carrot2/figures/components-dataflow.gif" float="right">
-            <description>1: A scenario of data flow in <carrot-text/> architecture</description>
-        </illustration>
     There are four component types in Carrot<sup>2</sup>:
         <ul>
             <li><b>Input</b> - This type of component accepts user query request (wrapped

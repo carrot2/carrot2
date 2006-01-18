@@ -74,7 +74,6 @@
 -->
 </xsl:template>
 
-
 <xsl:template match="frame">
 <div class="frame"><xsl:apply-templates /></div>
 </xsl:template>
@@ -87,7 +86,7 @@
 
 <xsl:template match="newslist">
 	<xsl:variable name="curts"><xsl:value-of select="number(substring($currentDate,1,4))*12*30+number(substring($currentDate,6,2))*30+number(substring($currentDate,9,2))"/></xsl:variable>
-	<xsl:variable name="nlist" select="news[(number($curts)-60) &lt; (number(substring(@date,1,4))*12*30+number(substring(@date,6,2))*30+number(substring(@date,9,2)))]" />
+	<xsl:variable name="nlist" select="news[(number($curts)-90) &lt; (number(substring(@date,1,4))*12*30+number(substring(@date,6,2))*30+number(substring(@date,9,2)))]" />
 
 	<xsl:choose>
 		<xsl:when test="count($nlist) &gt; 0">

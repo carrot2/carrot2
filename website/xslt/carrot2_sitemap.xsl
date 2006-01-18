@@ -109,7 +109,7 @@
 
 
 <xsl:template name="emitDeptName">
-	<xsl:param name="class" 	select="''" />
+	<xsl:param name="class" 	select="'menu'" />
 	<xsl:param name="dpt" 					/>
 
 	<xsl:variable name="linkLocation">

@@ -42,24 +42,18 @@
         <body class="page" leftmargin="0" topmargin="0">
             <xsl:call-template name="control-panel" />
             
-            <table cellspacing="0" cellpadding="0" border="0" width="100%" height="100%">
+            <table cellspacing="0" cellpadding="0" border="0" width="800" height="100%">
+            <tr><td width="180"><img src="{concat($gfxBaseURL,'/','empty.gif')}" width="180" height="1" /></td>
+                <td width="600"><img src="{concat($gfxBaseURL,'/','empty.gif')}" width="600" height="1" /></td></tr>
             <tr>
                 <!-- left pane -->
-                <td align="left" valign="top" width="180" style="max-width: 180px;">
+                <td align="left" valign="top" width="180">
                     <img style="margin-left: 15px; margin-bottom: 10px; margin-top: 10px;" src="{concat($base,'/Carrot2-infopage.gif')}" width="66" height="80" />
 
                     <xsl:call-template name="sitemap-hierarchical">
                         <xsl:with-param name="level" select="'2'" />
                         <xsl:with-param name="topSection" select="'carrot2'" />
                     </xsl:call-template>
-                    
-                    <div style="margin-top: 30px; margin-left: 15px;">
-                    <span style="color: #e0e0e0; font-size: 9px;">Hosted by:<br/></span>
-                    <a href="http://sourceforge.net/"><img src="http://sourceforge.net/sflogo.php?group_id=85379&amp;type=1" width="88" height="31" border="0" alt="SourceForge.net Logo" /></a><br/><br/>
-
-                    <span style="color: #e0e0e0; font-size: 9px;">Developed at:<br/></span>
-                    <a href="http://www.cs.put.poznan.pl"><img src="{concat($base, '/logo_pp.gif')}" border="0" alt="Poznan University of Technology Logo" /></a>                    
-                    </div>
                 </td>
                 <td align="left" valign="top" rowspan="2">
                     <xsl:apply-templates />

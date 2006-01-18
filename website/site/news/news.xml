@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <newslist>
+	<news date="2006-01-18">
+		<head>
+			Java Web Start version of the local demo is
+			<a href="http://www.carrot2.org/webstart">now available</a>.
+		</head>
+	</news>
+
+	<news date="2006-01-17">
+		<head>
+			Stable release and demos of version 1.0 is out. Check out the
+			download area at SourceForge.
+		</head>
+	</news>
+
     <news date="2003-07-17">
 		<head>
             <a href="http://www.at-web.de/newsletter/archiv/news107.htm">
