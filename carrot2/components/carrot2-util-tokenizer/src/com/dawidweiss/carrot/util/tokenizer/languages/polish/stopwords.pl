@@ -1,3 +1,7 @@
+gt
+lt
+nbsp
+quot
 o.o.
 mgr
 godz
