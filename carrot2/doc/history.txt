@@ -2,9 +2,18 @@
 Major functions and bug fixes
 -----------------------------
 
+[C]:	  #  Bugfix
+          +  new feature
+
 
 Version  [C] Information
 
-1.0       -  We're putting a label on the, otherwise stable for a long time, code. Release 1.0
+HEAD
+
+		  b  YahooAPI input occasionally threw an exception due to incorrect result from Yahoo.
+		     A workaround is not to throw an exception at all -- YahooAPI isn't stable enough to
+		     rely on it. 
+
+1.0          We're putting a label on the, otherwise stable for a long time, code. Release 1.0
              also brings a refactored local demo/tuning application and several minor technical
              enhancements.
