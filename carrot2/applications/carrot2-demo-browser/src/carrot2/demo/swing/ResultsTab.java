@@ -39,6 +39,7 @@ import com.dawidweiss.carrot.core.local.clustering.RawDocument;
 import com.dawidweiss.carrot.core.local.impl.ClustersConsumerOutputComponent;
 import com.dawidweiss.carrot.core.local.impl.RawDocumentEnumerator;
 import com.dawidweiss.carrot.core.local.impl.ClustersConsumerOutputComponent.Result;
+import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.uif_lite.panel.SimpleInternalFrame;
@@ -300,16 +301,15 @@ public class ResultsTab extends JPanel {
         subPanel.add(browserView, BorderLayout.CENTER);
         
         if (this.processSettings.hasSettings()) {
-            final JPanel settingsContainer = new JPanel(new BorderLayout(0, 8));
-            settingsContainer.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
             final JComponent settingsComponent = processSettings.getSettingsComponent();
-            settingsContainer.add(settingsComponent, BorderLayout.CENTER);
+
             final JButton updateButton = new JButton("Refresh");
             updateButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     performQuery();
                 }
             });
+
             final JCheckBox liveUpdate = new JCheckBox("Live update");
             liveUpdate.setSelected(processSettings.isLiveUpdate());
             liveUpdate.addActionListener(new ActionListener() {
@@ -317,22 +317,35 @@ public class ResultsTab extends JPanel {
                     processSettings.setLiveUpdate(liveUpdate.isSelected());
                 }
             });
+
             this.processSettings.addListener(new ProcessSettingsListener() {
                 public void settingsChanged(ProcessSettings settings) {
                     performQuery();
                 }
             });
-            JPanel buttons = new JPanel();
-            buttons.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, UIManager.getColor("controlShadow")));
-            buttons.setLayout(new FlowLayout(FlowLayout.LEFT));
-            buttons.add(liveUpdate);
-            buttons.add(updateButton);
-            settingsContainer.add(buttons, BorderLayout.SOUTH);
 
-            final JPanel spacer = new JPanel(new BorderLayout());
-            spacer.add(settingsContainer, BorderLayout.SOUTH);
-            spacer.add(new JPanel(), BorderLayout.CENTER);
-            subPanel.add(spacer, BorderLayout.EAST);
+            final JPanel liveUpdatePanel = new JPanel();
+            liveUpdatePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+            liveUpdatePanel.add(liveUpdate);
+            liveUpdatePanel.add(updateButton);
+
+            final CellConstraints cc2 = new CellConstraints();
+            final FormLayout settingsContainerLayout = new FormLayout(
+                    "fill:pref",
+                    "pref, top:default:grow, 8px, pref, fill:pref");
+            final PanelBuilder panelBuilder = new PanelBuilder(settingsContainerLayout);
+            panelBuilder.setBorder(BorderFactory.createEmptyBorder(2,4,2,4));
+
+            final JScrollPane scroller = new JScrollPane(settingsComponent,
+                    ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+                    ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            scroller.setBorder(BorderFactory.createEmptyBorder());
+            panelBuilder.addSeparator("Process settings", cc2.xy(1, 1));
+            panelBuilder.add(scroller, cc2.xy(1, 2));
+            panelBuilder.addSeparator("Update settings", cc2.xy(1, 4));
+            panelBuilder.add(liveUpdatePanel, cc2.xy(1, 5, CellConstraints.RIGHT, CellConstraints.BOTTOM));
+
+            subPanel.add(panelBuilder.getPanel(), BorderLayout.EAST);
         }
 
         JSplitPane splitPane = new JSplitPane(
@@ -457,9 +470,6 @@ public class ResultsTab extends JPanel {
         SwingTask.runNow(task);
     }
     
-    /**
-     * @param clusterSearchResult
-     */
     private void updateClusterSearchInfo(Set clusterSearchResult)
     {
         if (lastResultClusters == null)
@@ -476,9 +486,6 @@ public class ResultsTab extends JPanel {
         }
     }
 
-    /**
-     * 
-     */
     private void clearClusterSearchInfo()
     {
         for (Iterator iter = lastResultClusters.iterator(); iter.hasNext();)
@@ -530,10 +537,7 @@ public class ResultsTab extends JPanel {
             return searchMatches;
         }
     }
-    
-    /**
-     * @param rawCluster
-     */
+
     private void clearClusterSearchInfo(RawCluster rawCluster)
     {
         rawCluster.setProperty(RawClustersCellRenderer.PROPERTY_SEARCH_MATCHES, null);
@@ -551,7 +555,6 @@ public class ResultsTab extends JPanel {
     /**
      * Displays all documents in the result, regardless of the cluster they are
      * in.
-     * 
      */
     private void showAllDocuments() {
         if (result == null) return;

@@ -31,6 +31,10 @@ import carrot2.demo.swing.SwingUtils;
  * @author Dawid Weiss
  */
 public class DemoSwing {
+    
+    /**
+     * Demo Entry point.
+     */
     public static void main(String[] args) {
         final DemoContext carrotDemo;
 

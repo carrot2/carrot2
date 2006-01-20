@@ -15,14 +15,12 @@ package carrot2.demo.swing;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.IOException;
 
 import javax.swing.*;
 
 import carrot2.demo.*;
 import carrot2.demo.swing.util.*;
 
-import com.dawidweiss.carrot.util.common.StreamUtils;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.plaf.Options;
@@ -114,12 +112,14 @@ public class SwingDemoGui implements DemoGuiDelegate {
      */
     public void display() {
         try {
+            Options.setUseNarrowButtons(true);
             UIManager.setLookAndFeel("com.jgoodies.plaf.plastic.PlasticXPLookAndFeel");
         } catch (Exception e) {
             // Likely PlasticXP is not in the class path; ignore.
         }
 
         frame.setTitle("Carrot2 Demo");
+        frame.setIconImage(new ImageIcon(this.getClass().getResource("carrot2-icon.png")).getImage());
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.getContentPane().add(buildMainPanel());
         frame.pack();
@@ -305,7 +305,7 @@ public class SwingDemoGui implements DemoGuiDelegate {
     private JComponent buildQueryForm() {
         final FormLayout layout = new FormLayout(
                 // columns
-                "right:pref,4px,fill:min:grow,4px,right:min",
+                "right:pref,4px,fill:min:grow,2px,right:min",
                 // rows
                 "pref:grow, 2px, pref");
         final JPanel topPanel = new JPanel(layout);
@@ -319,34 +319,19 @@ public class SwingDemoGui implements DemoGuiDelegate {
         queryField = new JTextField();
         queryField.setToolTipText("The query to be sent to the input component (syntax depends on the input).");
         queryField.addActionListener(new NewQueryListener());
-        topPanel.add(queryField, cc.xywh(3,1,1,1));
+        topPanel.add(queryField, cc.xy(3,1, CellConstraints.FILL, CellConstraints.FILL));
 
-        try {
-            final Icon searchIcon = new ImageIcon(StreamUtils.readFullyAndCloseInput(
-                    this.getClass().getResourceAsStream("search.png")));
-            final Icon searchSelectedIcon = new ImageIcon(StreamUtils.readFullyAndCloseInput(
-                    this.getClass().getResourceAsStream("searchSelected.png")));
-            final JButton searchButton = new JButton();
-            searchButton.setIcon(searchIcon);
-            searchButton.setPressedIcon(searchSelectedIcon);
-            searchButton.setContentAreaFilled(false);
-            searchButton.setBorder(BorderFactory.createEmptyBorder());
-            searchButton.setBorderPainted(false);
-            searchButton.setPreferredSize(new Dimension(searchIcon.getIconWidth(), searchIcon.getIconHeight()));
-            topPanel.add(searchButton, cc.xywh(5,1,1,1));
-
-            searchButton.addActionListener(new NewQueryListener());
-        } catch (IOException e1) {
-            throw new RuntimeException("Could not read the required icon.", e1);
-        }
+        final JButton searchButton = new JButton("Search");
+        topPanel.add(searchButton, cc.xy(5,1, CellConstraints.FILL, CellConstraints.FILL));
+        searchButton.addActionListener(new NewQueryListener());
 
         // build details panel.
         final FormLayout layout2 = new FormLayout(
-                "right:pref,4px,fill:max(200;pref),min,16px,right:default,max(pref;60px)",
+                "right:pref,4px,fill:max(200;pref),2px,min,16px,right:default,max(pref;50px)",
                 "pref");
         JPanel detailsPanel = new JPanel(layout2);
         detailsPanel.setOpaque(false);
-        topPanel.add(detailsPanel, cc.xywh(3,3,3,1, CellConstraints.RIGHT, CellConstraints.DEFAULT));
+        topPanel.add(detailsPanel, cc.xywh(3,3,1,1, CellConstraints.RIGHT, CellConstraints.DEFAULT));
 
         this.processSettingsButton = new JButton("Settings");
         processSettingsButton.setToolTipText("Displays process settings window. Disabled if no settings.");
@@ -360,7 +345,7 @@ public class SwingDemoGui implements DemoGuiDelegate {
                         JOptionPane.PLAIN_MESSAGE);
             }
         });
-        detailsPanel.add(processSettingsButton, cc.xy(4,1, CellConstraints.DEFAULT, CellConstraints.FILL));
+        detailsPanel.add(processSettingsButton, cc.xy(5,1, CellConstraints.DEFAULT, CellConstraints.FILL));
 
         detailsPanel.add(new JLabel("Process:"), cc.xy(1,1));
         this.processComboBox = new JComboBox();
@@ -373,11 +358,11 @@ public class SwingDemoGui implements DemoGuiDelegate {
         });
         detailsPanel.add(processComboBox, cc.xy(3,1, CellConstraints.DEFAULT, CellConstraints.FILL));
 
-        detailsPanel.add(new JLabel("Results:"), cc.xy(6,1));
+        detailsPanel.add(new JLabel("Results:"), cc.xy(7,1));
         this.sizeComboBox = new JComboBox(defaultSizes);
         this.sizeComboBox.setToolTipText("Number of results to acquire from the input source.");
         this.sizeComboBox.setSelectedItem("100");
-        detailsPanel.add(sizeComboBox, cc.xy(7,1, CellConstraints.DEFAULT, CellConstraints.FILL));
+        detailsPanel.add(sizeComboBox, cc.xy(8,1, CellConstraints.DEFAULT, CellConstraints.FILL));
 
         return topPanel;
     }
