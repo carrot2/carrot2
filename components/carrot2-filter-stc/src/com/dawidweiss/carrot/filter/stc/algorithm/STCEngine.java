@@ -363,27 +363,22 @@ public class STCEngine
         {
             BaseCluster a;
             BaseCluster b;
-            long a_docCount;
-
+            
             a = (BaseCluster) baseClusters.elementAt(i);
-            a_docCount = a.getNode().getSuffixedDocumentsCount();
+            final long a_docCount = a.getNode().getSuffixedDocumentsCount();
 
             for (int j = 0; j < i; j++)
             {
                 b = (BaseCluster) baseClusters.elementAt(j);
 
-                double a_and_b_docCount;
-
-                a_and_b_docCount = a.getNode().getInternalDocumentsRepresentation()
+                final double a_and_b_docCount = a.getNode().getInternalDocumentsRepresentation()
                                     .numberOfSetBitsAfterAnd(
                         b.getNode().getInternalDocumentsRepresentation()
                     );
 
-                if (
-                    ((a_and_b_docCount / b.getNode().getSuffixedDocumentsCount()) > MERGE_THRESHOLD)
-                        && ((a_and_b_docCount / a_docCount) > MERGE_THRESHOLD)
-                )
-                {
+                // BUG: This check should be bidirectional (see Zamir's paper).
+                if (((a_and_b_docCount / b.getNode().getSuffixedDocumentsCount()) > MERGE_THRESHOLD)
+                        && ((a_and_b_docCount / a_docCount) > MERGE_THRESHOLD)) {
                     // add links to base cluster graph. This is actually redundant as we're adding two
                     // directed edges.
                     a.addLink(b);
@@ -399,10 +394,10 @@ public class STCEngine
         {
             if (((BaseCluster) baseClusters.elementAt(i)).merged == false)
             {
-                Cluster c = new Cluster();
-                Stack s = new Stack();
-
+                final Cluster c = new Cluster();
                 clusters.add(c);
+
+                final Stack s = new Stack();
                 s.push(baseClusters.elementAt(i));
 
                 while (!s.empty())
