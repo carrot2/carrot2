@@ -129,6 +129,8 @@ public class SwingDemoGui implements DemoGuiDelegate {
 
         disableUI();
         queryField.setText("Please wait...");
+        
+        SwingUtils.centerFrameOnScreen(frame);
         frame.setVisible(true);
 
         // replace the combo box's model.
