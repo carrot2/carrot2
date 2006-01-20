@@ -13,3 +13,6 @@ carrot2-filter-ahc
 carrot2-filter-fuzzyants
 
 - Unify coding style (reformat existing code)
+
+- Check out Unicode segmentation spec (info from Andrzej Zydroñ):
+http://www.unicode.org/reports/tr29/tr29-10.html
