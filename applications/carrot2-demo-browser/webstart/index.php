@@ -37,7 +37,6 @@
 		<description kind="tooltip">Carrot2 Demo</description>
 
 		<icon href="img/carrot2-64x64.gif" width="64" height="64" />
-		<icon href="img/carrot2-splash.gif" kind="splash" />
 
 		<offline-allowed />
 	</information>
@@ -60,7 +59,10 @@
 		<all-permissions/>
 	</security>
 
-	<application-desc main-class="carrot2.demo.DemoSwing">
-		<argument>--resource</argument> 
+	<application-desc main-class="carrot2.demo.DemoSplash">
+		<argument>/carrot2/demo/carrot2-splash.gif</argument>
+		<argument>4</argument>
+		<argument>carrot2.demo.DemoSwing</argument>
+		<argument>--resource</argument>
 	</application-desc>
 </jnlp>
