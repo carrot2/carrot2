@@ -71,11 +71,21 @@ public final class SwingUtils {
     /**
      * Dumps a {@link Throwable}'s stack trace to a string.
      */
-     private static String getStackTrace(Throwable e) {
-         final StringWriter sw = new StringWriter();
-         final PrintWriter  pw = new PrintWriter(sw);
-         e.printStackTrace(pw);
-         pw.close();
-         return sw.toString();
-     }
+    private static String getStackTrace(Throwable e) {
+        final StringWriter sw = new StringWriter();
+        final PrintWriter  pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+        pw.close();
+        return sw.toString();
+    }
+
+    /**
+     * Centers a {@link JFrame} on screen.
+     */
+    public static void centerFrameOnScreen(JFrame frame) {
+        final Dimension position = Toolkit.getDefaultToolkit().getScreenSize();
+        frame.setLocation(
+                (position.width - frame.getWidth())/2,
+                (position.height - frame.getHeight())/2);
+    }
 }
