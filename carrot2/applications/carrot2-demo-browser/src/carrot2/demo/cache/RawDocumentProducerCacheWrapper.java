@@ -154,8 +154,7 @@ public class RawDocumentProducerCacheWrapper extends LocalInputComponentBase {
             cache.put(new CacheEntry(wrapped, query, requestedResults), this.cachedResult);
         }
 
-        requestContext.getRequestParameters().put(PARAM_INDEX_CONTENT,
-            this.cachedResult.context.get(PARAM_INDEX_CONTENT));
+        requestContext.getRequestParameters().putAll(this.cachedResult.context);
         
         // Playback RawDocuments from cache.
         final RawDocumentsConsumer nextComponent = (RawDocumentsConsumer) super.next; 
