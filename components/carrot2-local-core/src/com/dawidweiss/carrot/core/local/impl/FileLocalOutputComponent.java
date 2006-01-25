@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -105,6 +104,22 @@ public class FileLocalOutputComponent extends LocalOutputComponentBase
      */
     public void endProcessing() throws ProcessingException
     {
+        // Determine file name
+        String query = (String) requestContext.getRequestParameters().get(
+            LocalInputComponent.PARAM_QUERY);
+        File finalOutput = new File(outputDir, query);
+
+        saveRawClusters(rawClusters, query, finalOutput, true);
+
+        super.endProcessing();
+    }
+
+    /**
+     * @throws ProcessingException
+     */
+    public static void saveRawClusters(List rawClusters, String query,
+        File outputFile, boolean saveClusters) throws ProcessingException
+    {
         // Prepare the XML
         Set documents = new HashSet();
         for (Iterator iter = rawClusters.iterator(); iter.hasNext();)
@@ -114,15 +129,23 @@ public class FileLocalOutputComponent extends LocalOutputComponentBase
         }
 
         Element root = DocumentHelper.createElement("searchresult");
-        addQuery(root);
-        addDocuments(root, documents);
-        addClusters(root, rawClusters);
+        addQuery(root, query);
+        addRawDocuments(root, documents);
+        if (saveClusters)
+        {
+            addClusters(root, rawClusters);
+        }        
+        writeToFile(root, outputFile);
+    }
 
-        // Determine file name
-        String query = (String) requestContext.getRequestParameters().get(
-            LocalInputComponent.PARAM_QUERY);
-        File finalOutput = new File(outputDir, query);
-
+    /**
+     * @param root
+     * @param finalOutput
+     * @throws ProcessingException
+     */
+    private static void writeToFile(Element root, File finalOutput)
+        throws ProcessingException
+    {
         // Write result to the file
         try
         {
@@ -146,18 +169,14 @@ public class FileLocalOutputComponent extends LocalOutputComponentBase
             throw new ProcessingException("Cannot write results: "
                 + e.getMessage());
         }
-
-        super.endProcessing();
     }
 
     /**
      * @param root
      */
-    private void addQuery(Element root)
+    private static void addQuery(Element root, String query)
     {
         Element queryElement = root.addElement("query");
-        final Object query = requestContext.getRequestParameters().get(
-            LocalInputComponent.PARAM_QUERY);
         if (query != null)
         {
             queryElement.addText(query.toString());
@@ -168,7 +187,7 @@ public class FileLocalOutputComponent extends LocalOutputComponentBase
      * @param rawCluster
      * @param documents
      */
-    private void collectRawDocuments(RawCluster rawCluster, Set documents)
+    private static void collectRawDocuments(RawCluster rawCluster, Set documents)
     {
         documents.addAll(rawCluster.getDocuments());
         List subclusters = rawCluster.getSubclusters();
@@ -186,7 +205,7 @@ public class FileLocalOutputComponent extends LocalOutputComponentBase
      * @param root
      * @param documents
      */
-    private void addDocuments(Element root, Set documents)
+    private static void addRawDocuments(Element root, Set documents)
     {
         for (Iterator it = documents.iterator(); it.hasNext();)
         {
@@ -220,7 +239,7 @@ public class FileLocalOutputComponent extends LocalOutputComponentBase
      * @param root
      * @param rawClusters
      */
-    private void addClusters(Element root, List rawClusters)
+    private static void addClusters(Element root, List rawClusters)
     {
         if (rawClusters == null)
         {
@@ -238,7 +257,7 @@ public class FileLocalOutputComponent extends LocalOutputComponentBase
      * @param root
      * @param rawCluster
      */
-    private void addCluster(Element root, RawCluster rawCluster)
+    private static void addCluster(Element root, RawCluster rawCluster)
     {
         Element groupElement = root.addElement("group");
         if (rawCluster.getProperty(RawCluster.PROPERTY_SCORE) != null)
@@ -277,7 +296,7 @@ public class FileLocalOutputComponent extends LocalOutputComponentBase
             {
                 String label = (String) synonymLabels.get(i);
                 Double synonymScore = (Double) synonymScores.get(i);
-                
+
                 Element phraseElement = titleElement.addElement("phrase");
                 phraseElement.addText(label);
                 phraseElement.addAttribute("score", synonymScore.toString());

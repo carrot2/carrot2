@@ -80,6 +80,7 @@ public class ResultsTab extends JPanel {
     private List lastResultClusters;
     
     private BenchmarkDialog benchmarkDialog;
+    private QuerySaveDialog querySaveDialog;
 
     private int requestedResults;
     
@@ -169,6 +170,8 @@ public class ResultsTab extends JPanel {
         this.requestedResults = requestedResults;
         this.benchmarkDialog = new BenchmarkDialog(owner, demoContext, query,
             processId, settings, requestedResults);
+        this.querySaveDialog = new QuerySaveDialog(owner, demoContext, query,
+            processId, requestedResults);
 
         this.workerThread = new WorkerThread();
         workerThread.start();
@@ -210,7 +213,18 @@ public class ResultsTab extends JPanel {
                     benchmarkDialog.show();
                 }
             });
+        ToolbarButton saveButton = new ToolbarButton(
+            new ImageIcon(this.getClass().getResource("save.gif")),
+            new ImageIcon(this.getClass().getResource("save_dis.gif")));
+        saveButton.setToolTipText("Save the documents of this query");
+        saveButton.addActionListener(
+            new ActionListener() {
+                public void actionPerformed(ActionEvent arg0) {
+                    querySaveDialog.show();
+                }
+            });
         toolbar.add(benchmarkButton);
+        toolbar.add(saveButton);
         toolbar.add(homeButton);
         toolbar.add(closeButton);
         internalFrame.setToolBar(toolbar);

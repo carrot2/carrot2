@@ -79,10 +79,8 @@ public class BenchmarkDialog
         this.requestedResults = requestedResults;
     }
 
-    /*
-     * (non-Javadoc)
+    /**
      * 
-     * @see java.awt.Dialog#show()
      */
     public void show()
     {
@@ -114,6 +112,8 @@ public class BenchmarkDialog
                 .getWidth() - dialog.getWidth()) / 2),
                 (int) (owner.getLocation().getY() + (owner.getHeight() - dialog
                     .getHeight()) / 2));
+            
+            SwingUtils.addEscapeKeyCloseAction(dialog);
         }
 
         dialog.setVisible(true);
