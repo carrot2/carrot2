@@ -15,7 +15,7 @@ package com.dawidweiss.carrot.input.xml;
 
 
 import org.apache.log4j.Logger;
-import org.dom4j.io.DocumentResult;
+import org.dom4j.Document;
 import org.dom4j.io.XMLWriter;
 
 import com.dawidweiss.carrot.core.local.ProcessingException;
@@ -29,6 +29,9 @@ import javax.servlet.http.*;
 
 /**
  * A remote component for the XML input.
+ * 
+ * @author Dawid Weiss
+ * @author Paul Dlug (identity XSLT patch)
  */
 public class XmlRemoteInputComponent
     extends com.dawidweiss.carrot.input.InputRequestProcessor
@@ -59,17 +62,22 @@ public class XmlRemoteInputComponent
 
             try {
                 local.setQuery(query);
-                // see if the xslt is a named xslt stored in the webapp?
-                Map map = extractParameters(request);
+                final Map map = extractParameters(request);
 
-                String xslt = request.getParameter("xslt");
-                if (xslt!=null) {
-                    String translated = this.getServletConfig().getServletContext().getRealPath(xslt);
-                    if (new File(translated).isFile() && new File(translated).canRead()) {
-                        map.put("xslt", new File(translated).toURL());
+                final String xslt = request.getParameter("xslt");
+                // Identify the XSLT file. It is either 'identity' (no transformation)
+                // or a named XSLT file.
+                if (xslt != null) {
+                    if ("identity".equals(xslt)) {
+                        map.put("xslt", xslt);
+                    } else {
+                        String translated = this.getServletConfig().getServletContext().getRealPath(xslt);
+                        if (new File(translated).isFile() && new File(translated).canRead()) {
+                            map.put("xslt", new File(translated).toURL());
+                        }
                     }
                 }
-                String source = request.getParameter("source");
+                final String source = request.getParameter("source");
                 if (source!=null) {
                     String translated = this.getServletConfig().getServletContext().getRealPath(source);
                     if (new File(translated).isFile() && new File(translated).canRead()) {
@@ -77,8 +85,8 @@ public class XmlRemoteInputComponent
                     }
                 }
 
-                DocumentResult result = local.performQuery(map);
-                new XMLWriter(output).write(result.getDocument());
+                final Document result = local.performQuery(map);
+                new XMLWriter(output).write(result);
             } catch (ProcessingException e) {
                 log.warn("Error processing request: " + e.toString(), e);
                 output.write("Error processing request: " + e.toString());

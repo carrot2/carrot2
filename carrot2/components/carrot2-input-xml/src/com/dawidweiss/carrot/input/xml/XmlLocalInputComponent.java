@@ -31,8 +31,11 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Logger;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.DocumentResult;
+import org.dom4j.io.SAXReader;
 
 import com.dawidweiss.carrot.core.local.*;
 import com.dawidweiss.carrot.core.local.clustering.*;
@@ -53,7 +56,10 @@ import com.dawidweiss.carrot.core.local.clustering.*;
  * 
  * <p>
  * Input XSLT file must be specified as an URL, File or InputStream object
- * in the 'xslt' parameter of the request context.
+ * in the 'xslt' parameter of the request context. Alternatively, the 'xslt'
+ * parameter may contain the String "identity" in which case the 'source'
+ * will be parsed directly and returned. This is used for components that
+ * directly output XML in the carrot2 format and do not require transformation.
  * </p>
  * 
  * <p>
@@ -63,6 +69,7 @@ import com.dawidweiss.carrot.core.local.clustering.*;
  * </p>
  * 
  * @author Dawid Weiss
+ * @author Paul Dlug (identity XSLT patch)
  * @version $Revision$
  */
 public class XmlLocalInputComponent extends
@@ -138,7 +145,7 @@ public class XmlLocalInputComponent extends
     /**
      * This is the actual workhorse. This method is also used by the remote component.
      */
-    protected DocumentResult performQuery(Map params) throws ProcessingException {
+    protected Document performQuery(Map params) throws ProcessingException {
         InputStream source = null;
         Object sourceOb = params.get("source");
         if (sourceOb == null) {
@@ -173,10 +180,20 @@ public class XmlLocalInputComponent extends
         }
 
         InputStream xslt = null;
-        Object xsltOb = params.get("xslt");
+        final Object xsltOb = params.get("xslt");
         if (xsltOb == null) {
-            throw new ProcessingException("xslt request parameter must be given (URL, File or InputStream).");
+            throw new ProcessingException("xslt request parameter must be given (URL, File, InputStream or identity).");
         }
+
+        if ("identity".equals(xsltOb)) {
+            try {
+                SAXReader xmlReader = new SAXReader();
+                return xmlReader.read(source);
+            } catch (DocumentException e) {
+                throw new ProcessingException("SAXReader parsing exception: " + e.toString());
+            }
+        }
+
         try {
             if (xsltOb instanceof InputStream) {
                 xslt = (InputStream) xsltOb;
@@ -212,7 +229,7 @@ public class XmlLocalInputComponent extends
             transformer.transform(new StreamSource(source), dom);
             
             // we have the DOM. do something with the result
-            return dom;
+            return dom.getDocument();
         } catch (TransformerConfigurationException e) {
             log.error(e);
             throw new ProcessingException("XSLT transformer configuration exception: " + e.toString());
@@ -229,8 +246,8 @@ public class XmlLocalInputComponent extends
      * By default, the transformed XML is considered to be consistent
      * with the Carrot2 search result XML specification.
      */
-    protected void resultDom(DocumentResult dom) throws ProcessingException {
-        pushAsLocalData( dom.getDocument().getRootElement() );
+    protected void resultDom(Document doc) throws ProcessingException {
+        pushAsLocalData( doc.getRootElement() );
     }
 
     /**
