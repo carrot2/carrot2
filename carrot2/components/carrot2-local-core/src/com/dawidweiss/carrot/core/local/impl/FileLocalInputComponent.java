@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -58,12 +57,11 @@ public class FileLocalInputComponent extends LocalInputComponentBase
 
     /** */
     private File defaultInputDir;
-    
-    /**
-     * 
-     */
-    public FileLocalInputComponent()
+
+    public static class QueryResult
     {
+        public String query;
+        public List rawDocuments;
     }
 
     /**
@@ -80,7 +78,7 @@ public class FileLocalInputComponent extends LocalInputComponentBase
         {
             throw new IllegalArgumentException("inputDir must be a directory");
         }
-        
+
         this.defaultInputDir = inputDir;
     }
 
@@ -140,7 +138,7 @@ public class FileLocalInputComponent extends LocalInputComponentBase
         {
             inputDir = defaultInputDir;
         }
-        
+
         if (inputDir == null)
         {
             throw new ProcessingException(
@@ -172,9 +170,36 @@ public class FileLocalInputComponent extends LocalInputComponentBase
 
         try
         {
-            SAXReader reader = new SAXReader();
-            Element root = reader.read(inputFile).getRootElement();
-            pushAsLocalData(root);
+            int requestedResults;
+            if (requestContext.getRequestParameters().containsKey(
+                LocalInputComponent.PARAM_REQUESTED_RESULTS))
+            {
+                requestedResults = Integer
+                    .parseInt(requestContext.getRequestParameters().get(
+                        LocalInputComponent.PARAM_REQUESTED_RESULTS).toString());
+            }
+            else
+            {
+                requestedResults = -1;
+            }
+            QueryResult queryResult = loadQueryResult(inputFile,
+                requestedResults);
+
+            // Pass the actual document count
+            requestContext.getRequestParameters().put(
+                LocalInputComponent.PARAM_TOTAL_MATCHING_DOCUMENTS,
+                new Integer(queryResult.rawDocuments.size()));
+
+            // Pass the query
+            requestContext.getRequestParameters().put(
+                LocalInputComponent.PARAM_QUERY, queryResult.query);
+
+            for (Iterator iter = queryResult.rawDocuments.iterator(); iter
+                .hasNext();)
+            {
+                RawDocument rawDocument = (RawDocument) iter.next();
+                rawDocumentConsumer.addDocument(rawDocument);
+            }
         }
         catch (Exception e)
         {
@@ -182,68 +207,77 @@ public class FileLocalInputComponent extends LocalInputComponentBase
         }
     }
 
-    private void pushAsLocalData(Element root) throws ProcessingException
+    public static QueryResult loadQueryResult(File inputFile,
+        int requestedResults) throws DocumentException
+    {
+        SAXReader reader = new SAXReader();
+        Element root = reader.read(inputFile).getRootElement();
+        QueryResult queryResult = extractQueryResult(root, requestedResults);
+        return queryResult;
+    }
+
+    public static QueryResult extractQueryResult(Element root,
+        int requestedResults)
     {
         List documents = root.elements("document");
 
         int matchingDocuments = documents.size();
-        Map params = requestContext.getRequestParameters();
-        if (params.containsKey(LocalInputComponent.PARAM_REQUESTED_RESULTS))
+        if (requestedResults > 0 && requestedResults < matchingDocuments)
         {
-            int requestedResults;
-            requestedResults = Integer.parseInt(params.get(
-                LocalInputComponent.PARAM_REQUESTED_RESULTS).toString());
-
-            if (requestedResults < matchingDocuments)
-            {
-                matchingDocuments = requestedResults;
-            }
+            matchingDocuments = requestedResults;
         }
 
-        // Pass the actual document count
-        requestContext.getRequestParameters().put(
-            LocalInputComponent.PARAM_TOTAL_MATCHING_DOCUMENTS,
-            new Integer(matchingDocuments));
+        QueryResult queryResult = new QueryResult();
+        queryResult.rawDocuments = new ArrayList(matchingDocuments);
 
         // Pass the query
         final Element queryElement = root.element("query");
         if (queryElement != null)
         {
-            requestContext.getRequestParameters().put(
-                LocalInputComponent.PARAM_QUERY, queryElement.getText());
+            queryResult.query = queryElement.getText();
         }
 
         int id = 0;
-        for (Iterator i = documents.iterator(); 
-            i.hasNext() && id < matchingDocuments; id++)
+        for (Iterator i = documents.iterator(); i.hasNext()
+            && id < matchingDocuments; id++)
         {
             final Element docElem = (Element) i.next();
 
             final String url;
-            if (docElem.element("url") != null) {
-                url = docElem.elementText("url");                
-            } else {
+            if (docElem.element("url") != null)
+            {
+                url = docElem.elementText("url");
+            }
+            else
+            {
                 url = "nourl://document-id-" + id;
             }
 
             final String title;
-            if (docElem.element("title") != null) {
-                title = docElem.elementText("title");                
-            } else {
-                title = null;                
+            if (docElem.element("title") != null)
+            {
+                title = docElem.elementText("title");
+            }
+            else
+            {
+                title = null;
             }
 
             final String snippet;
-            if (docElem.element("snippet") != null) {
-                snippet = docElem.elementText("snippet");                
-            } else {
-                snippet = null;                
+            if (docElem.element("snippet") != null)
+            {
+                snippet = docElem.elementText("snippet");
+            }
+            else
+            {
+                snippet = null;
             }
 
-            final RawDocument document = new RawDocumentSnippet(new Integer(id),
-                title, snippet, url, 0);
-            this.rawDocumentConsumer.addDocument(document);
+            queryResult.rawDocuments.add(new RawDocumentSnippet(
+                new Integer(id), title, snippet, url, 0));
         }
+
+        return queryResult;
     }
 
     /*
