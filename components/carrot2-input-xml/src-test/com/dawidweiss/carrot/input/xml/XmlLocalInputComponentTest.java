@@ -133,6 +133,19 @@ public class XmlLocalInputComponentTest extends TestCase {
         assertEquals(4, results.size());
 	}
 
+    public void testIdentityXslt() throws Exception {
+        LocalControllerBase controller = setUpController();
+
+        String query = "";
+        HashMap params = new HashMap();
+        params.put("source", this.getClass().getResource("test1.xml"));
+        params.put("xslt", "identity");
+        List results = (List) controller.query("testprocess", query, params).getQueryResult();
+        
+        // there should be 4 documents in the result.
+        assertEquals(4, results.size());
+    }
+
 	public void testTransformationWithReplaceableArgumentsInContext() throws Exception {
         LocalControllerBase controller = setUpController();
 
