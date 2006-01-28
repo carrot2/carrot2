@@ -20,7 +20,6 @@ public class DemoSplash {
      */
     private final static Object monitor = new Object();
     private static boolean waitCancelled = false;
-    private static volatile boolean splashFinished = false;
 
     public static void main(String [] args) {
         if (args.length < 3) {
@@ -95,7 +94,6 @@ public class DemoSplash {
             if (splashWindow != null) {
                 splashWindow.dispose();
             }
-            splashFinished = true;
         }
     }
 
@@ -149,7 +147,12 @@ public class DemoSplash {
         });
         
         try {
-            splashWindow.setAlwaysOnTop(true);
+            // Use reflection to find setAlwaysOnTop method (we want to compile
+            // on older JDKs)
+            // splashWindow.setAlwaysOnTop(true);
+            final Class clazz = java.awt.Window.class;
+            final Method method = clazz.getMethod("setAlwaysOnTop", new Class [] {Boolean.TYPE});
+            method.invoke(splashWindow, new Object [] {Boolean.TRUE});
         } catch (Throwable t) {
             // Ignore non-JDK1.5 method.
         }
