@@ -60,8 +60,7 @@ public abstract class FilterRequestProcessor
     public abstract void processFilterRequest(
         InputStream carrotData, HttpServletRequest request, HttpServletResponse response,
         Map paramsBeforeData
-    )
-        throws Exception;
+    ) throws Exception;
 
     /**
      * Convenience method for parsing XML stream.
@@ -80,7 +79,6 @@ public abstract class FilterRequestProcessor
         }
     }
 
-
     /**
      * Convenience method for serializing XML stream.
      */
@@ -95,7 +93,11 @@ public abstract class FilterRequestProcessor
 
         writer.write(root);
     }
-    
+
+    /**
+     * Convenience method for removing elements named <code>childrenNames</code>
+     * from a {@link Element} instance. 
+     */
     public static void removeChildren(Element element, String childrenNames) {
         List list = element.elements(childrenNames);
         for (Iterator i = list.iterator(); i.hasNext();) {
