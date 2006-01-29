@@ -176,7 +176,7 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
         // Prepare data
         MultilingualClusteringContext clusteringContext = new MultilingualClusteringContext(new HashMap());
         
-        Language [] languages = this.languages;
+        final Language [] languages = this.languages;
         
         // set the default parameters of the algorithm.
         // eh.. quick and dirty as always.
