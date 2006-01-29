@@ -31,18 +31,18 @@ import java.util.Map;
  * </p>
  * 
  * @author Dawid Weiss
- * @author stachoo
+ * @author Stanisław Osiński
  * 
  * @see LocalProcess#query(RequestContext, String)
  */
 public interface RequestContext
 {
     /**
-     * Returns a {@link Map}of parameters valid for the currently processed
+     * Returns a {@link Map} of parameters valid for the currently processed
      * query. The map can be modified by overriding existing entries, or adding
      * new ones.
      * 
-     * @return A {@link Map}object with request context parameters.
+     * @return A {@link Map} object with request context parameters.
      */
     public Map getRequestParameters();
 
