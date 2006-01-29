@@ -19,11 +19,13 @@ import com.dawidweiss.carrot.core.local.*;
 import com.dawidweiss.carrot.core.local.impl.*;
 
 /**
+ * Utility class that extracts processing result from an
+ * input component.
+ * 
  * @author Stanislaw Osinski
  */
 public class LocalInputComponentDocumentExtractor
 {
-    /** */
     private LocalController localController;
 
     public LocalInputComponentDocumentExtractor(
@@ -74,7 +76,7 @@ public class LocalInputComponentDocumentExtractor
      */
     public List getDocuments(String query, Map parameters)
     {
-        ProcessingResult result;
+        final ProcessingResult result;
         try
         {
             result = localController.query("document-extractor", query,
@@ -89,8 +91,6 @@ public class LocalInputComponentDocumentExtractor
             throw new RuntimeException(e);
         }
 
-        List documents = (List) result.getQueryResult();
-
-        return documents;
+        return (List) result.getQueryResult();
     }
 }
