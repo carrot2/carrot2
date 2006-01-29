@@ -24,7 +24,7 @@ import java.util.*;
 public class MutableTokenSequence implements TokenSequence
 {
     /** Tokens */
-    private List tokens;
+    private final List tokens;
     
     /** String image of this MutableTokenSequence */
     private String image;
@@ -59,68 +59,37 @@ public class MutableTokenSequence implements TokenSequence
         addTokens(tokens);
     }
 
-    /**
-     * @param token
-     */
     public void addToken(Token token)
     {
         tokens.add(token);
     }
 
-    /**
-     * @param tokenArray
-     */
     public void addTokens(Token [] tokenArray)
     {
         tokens.addAll(Arrays.asList(tokenArray));
     }
 
-    /**
-     * @param index
-     * @param token
-     */
     public void setTokenAt(int index, Token token)
     {
         tokens.set(index, token);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.linguistic.tokens.TokenSequence#getLength()
-     */
     public int getLength()
     {
         return tokens.size();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.linguistic.tokens.TokenSequence#getTokenAt(int)
-     */
     public Token getTokenAt(int index)
     {
         return (Token) tokens.get(index);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.linguistic.tokens.TokenSequence#copyTo(com.dawidweiss.carrot.core.local.linguistic.tokens.Token[],
-     *      int, int, int)
-     */
     public int copyTo(Token [] destination, int startAt,
         int destinationStartAt, int maxLength)
     {
         throw new RuntimeException("Not implemented yet");
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     public boolean equals(Object obj)
     {
         if (obj == this)
@@ -159,11 +128,6 @@ public class MutableTokenSequence implements TokenSequence
         return true;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#hashCode()
-     */
     public int hashCode()
     {
         int hash = 0;
@@ -181,11 +145,6 @@ public class MutableTokenSequence implements TokenSequence
         return hash;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString()
-     */
     public String toString()
     {
         if (image == null)
