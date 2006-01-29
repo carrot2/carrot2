@@ -53,7 +53,7 @@ public abstract class RawDocumentBase implements RawDocument, PropertyProvider
     /** 
      * Cloning constructor.
      */ 
-    public RawDocumentBase( RawDocument r ) {
+    public RawDocumentBase(RawDocument r) {
 	    this();
 	    
 	    if (r instanceof RawDocumentBase) {
@@ -169,7 +169,10 @@ public abstract class RawDocumentBase implements RawDocument, PropertyProvider
     {
         return -1;
     }
-    
+
+    /**
+     * Returns a stringified version of this raw document.
+     */
     public String toString()
     {
         return "[URL=" + getUrl() + ", title=" + getTitle() + ", snippet: " + getSnippet() + "]"; 
