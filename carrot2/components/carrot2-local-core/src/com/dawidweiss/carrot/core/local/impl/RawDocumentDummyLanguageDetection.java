@@ -35,10 +35,16 @@ public class RawDocumentDummyLanguageDetection extends
     ProfiledLocalFilterComponentBase implements RawDocumentsProducer,
     RawDocumentsConsumer
 {
-    /** */
+    /**
+     * Name of the context parameter which holds the default language
+     * set for all input documents. 
+     */
     public static final String PARAM_LANGUAGE_CODE_TO_SET = "lang-code";
 
-    /** */
+    /**
+     * Default language code to set if no {@link #PARAM_LANGUAGE_CODE_TO_SET}
+     * was provided in the context params. 
+     */
     public static final String DEFAULT_LANGUAGE_CODE_TO_SET = "en";
 
     /**
