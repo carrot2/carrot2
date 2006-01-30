@@ -64,8 +64,6 @@ public class KMeansClusteringRequestProcessor
             // parse input data (must be UTF-8 encoded).
             Element root = parseXmlStream(carrotData, "UTF-8");
 
-
-
             // Snippets
             List documentList = root.elements("document");
             if (documentList == null) {
@@ -103,7 +101,7 @@ public class KMeansClusteringRequestProcessor
             root = new XClusterWrapper(clusterer.getClusters(), root).asElement();
 
             log.debug("TOTAL TIME : "+timer.elapsedAsString());
-//             save the output.
+            // save the output.
             serializeXmlStream(root, response.getOutputStream(), "UTF-8");
         } catch (Exception e) {
             e.printStackTrace();
