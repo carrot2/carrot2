@@ -20,8 +20,8 @@ import com.dawidweiss.carrot.core.local.clustering.*;
 
 /**
  * Implements a dummy local input component, which sends all
- * {@link com.dawidweiss.carrot.core.local.clustering.RawDocument}s provided in
- * the {@link #PARAM_SOURCE_RAW_DOCUMENTS}request parameter.
+ * {@link com.dawidweiss.carrot.core.local.clustering.RawDocument}s 
+ * provided in the {@link #PARAM_SOURCE_RAW_DOCUMENTS} request parameter.
  * 
  * @author Stanislaw Osinski
  * @version $Revision$
