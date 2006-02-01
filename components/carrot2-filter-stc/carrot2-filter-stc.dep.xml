@@ -34,7 +34,15 @@
 	<!-- Carrot2 components -->
     <dependency name="carrot2-license" />
     <dependency name="dom4j" />
+	<dependency name="carrot2-util-tokenizer" />
+
+	<dependency name="carrot2-local-core" />
+
 	<dependency name="carrot2-util-remote" 	profile="remote" />
-	<dependency name="carrot2-local-core" 	profile="local" />
-	<dependency name="carrot2-util-tokenizer" 	profile="local" />
+	<dependency name="carrot2-filter-case-normalizer" profile="remote" />
+
+	<dependency name="mockobjects" profile="test" />
+	<dependency name="junit" profile="test" />
+	<dependency name="carrot2-util-remote" 	profile="test" />
+	<dependency name="carrot2-filter-case-normalizer" profile="test" />
 </component>

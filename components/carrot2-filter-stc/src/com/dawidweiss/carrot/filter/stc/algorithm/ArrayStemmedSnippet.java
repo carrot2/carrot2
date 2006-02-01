@@ -14,7 +14,7 @@
 package com.dawidweiss.carrot.filter.stc.algorithm;
 
 
-import com.dawidweiss.carrot.filter.stc.suffixtree.*;
+import com.dawidweiss.carrot.filter.stc.suffixtree.SuffixableElement;
 
 
 /**
