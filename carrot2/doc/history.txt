@@ -4,13 +4,18 @@ Major functions and bug fixes
 
 [C]:	  #  Bugfix
           +  new feature
-
+          o  minor feature, update or fix.
 
 Version  [C] Information
 
 HEAD
+          +  STC clustering component refactored. Adopted for the local pipeline 
+             (tokenizer, case normalization). Remote version uses embedded local
+             controller.
 
-		  b  YahooAPI input occasionally threw an exception due to incorrect result from Yahoo.
+          o  Added 'identity' XSLT argument to carrot2-input-xml.
+
+		  #  YahooAPI input occasionally threw an exception due to incorrect result from Yahoo.
 		     A workaround is not to throw an exception at all -- YahooAPI isn't stable enough to
 		     rely on it. 
 
