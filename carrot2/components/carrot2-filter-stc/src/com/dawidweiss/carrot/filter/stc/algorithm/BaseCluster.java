@@ -177,10 +177,15 @@ public final class BaseCluster
 
             for (Iterator i = terms.iterator(); i.hasNext();)
             {
-                StemmedTerm t = (StemmedTerm) i.next();
-
-                s.append(t.getTerm());
-                s.append(' ');
+                final StemmedTerm t = (StemmedTerm) i.next();
+                final String image = t.getTerm();
+                if (s.length() > 0 && 
+                        !(",".equals(image) || "?".equals(image)
+                                || "!".equals(image)
+                                || ";".equals(image))) {
+                    s.append(' ');
+                }
+                s.append(image);
             }
 
             return s.toString();

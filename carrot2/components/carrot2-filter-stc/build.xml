@@ -6,11 +6,12 @@
     <property name="component.descriptor" location="carrot2-filter-stc.dep.xml" />
     <property name="dist.name" value="carrot2-filter-stc" />
 
+	<property name="tests.available" value="true" />
+	
     <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
 
 	<target name="build">
 		<ant antfile="build.local.xml" inheritall="false"/>
 		<ant antfile="build.remote.xml" inheritall="false" />
-	</target>    
-
+	</target>
 </project>

@@ -14,8 +14,10 @@
 package com.dawidweiss.carrot.filter.stc.algorithm;
 
 
-import com.dawidweiss.carrot.filter.stc.suffixtree.*;
 import java.util.*;
+
+import com.dawidweiss.carrot.filter.stc.suffixtree.Edge;
+import com.dawidweiss.carrot.filter.stc.suffixtree.SuffixableElement;
 
 
 /**
@@ -66,7 +68,6 @@ public class STCEngine
         return baseClusters;
     }
 
-
     public List getClusters()
     {
         clusters.removeGaps();
@@ -74,11 +75,8 @@ public class STCEngine
         return clusters;
     }
 
-
     /**
      * Phase 1. Stemming of snippets
-     *
-     * @param stemmer GenericStemmer object.
      */
     public long stemSnippets(ImmediateStemmer stemmer, StopWordsDetector stopWords)
     {

@@ -20,25 +20,26 @@ import java.util.List;
 /**
  * Class representing a single document reference.
  */
-public class DocReference
+public final class DocReference
 {
     /** Document url */
-    String url;
+    private String url;
 
     /** Document title */
-    String title;
+    private String title;
 
     /** List of sentences (List) consisting of words (Strings) */
-    List snippet;
+    private List snippet;
 
     /** Stemmed snippet */
-    ArrayStemmedSnippet stemmedSnippet = null;
+    private ArrayStemmedSnippet stemmedSnippet = null;
 
     /** Original snippet string. Needed for later presentation */
-    String originalSnippet;
+    private String originalSnippet;
 
     /**
-     * Nah, you can't instantiate empty doc reference
+     * You can't instantiate empty doc reference outside of this
+     * package.
      */
     protected DocReference()
     {

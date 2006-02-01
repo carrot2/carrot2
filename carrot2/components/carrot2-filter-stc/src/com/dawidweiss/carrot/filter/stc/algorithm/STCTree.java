@@ -14,8 +14,9 @@
 package com.dawidweiss.carrot.filter.stc.algorithm;
 
 
+import java.util.ArrayList;
+
 import com.dawidweiss.carrot.filter.stc.suffixtree.*;
-import java.util.*;
 
 
 /**

@@ -13,16 +13,12 @@
 
 package com.dawidweiss.carrot.filter.stc.local;
 
-import java.io.StringReader;
 import java.util.*;
 
 import com.dawidweiss.carrot.core.local.*;
 import com.dawidweiss.carrot.core.local.clustering.*;
-import com.dawidweiss.carrot.core.local.linguistic.Language;
-import com.dawidweiss.carrot.core.local.linguistic.LanguageTokenizer;
 import com.dawidweiss.carrot.core.local.linguistic.tokens.*;
 import com.dawidweiss.carrot.core.local.profiling.ProfiledLocalFilterComponentBase;
-import com.dawidweiss.carrot.filter.stc.Processor;
 import com.dawidweiss.carrot.filter.stc.StcParameters;
 import com.dawidweiss.carrot.filter.stc.algorithm.*;
 import com.dawidweiss.carrot.filter.stc.algorithm.Cluster;
@@ -36,10 +32,10 @@ import com.dawidweiss.carrot.filter.stc.algorithm.Cluster;
  * @version $Revision$
  */
 public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
-    implements RawDocumentsConsumer, RawClustersProducer, LocalFilterComponent
+    implements TokenizedDocumentsConsumer, RawClustersProducer, LocalFilterComponent
 {
     /** Documents to be clustered */
-    private List rawDocuments;
+    private List documents;
 
     /** STC's document references */
     private List documentReferences;
@@ -47,12 +43,12 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
     /** Capabilities required from the previous component in the chain */
     private final static Set CAPABILITIES_PREDECESSOR = new HashSet(Arrays
         .asList(new Object []
-        { RawDocumentsProducer.class }));
+        { TokenizedDocumentsProducer.class }));
 
     /** This component's capabilities */
     private final static Set CAPABILITIES_COMPONENT = new HashSet(Arrays
         .asList(new Object []
-        { RawDocumentsConsumer.class, RawClustersProducer.class }));
+        { TokenizedDocumentsConsumer.class, RawClustersProducer.class }));
 
     /** Capabilities required from the next component in the chain */
     private final static Set CAPABILITIES_SUCCESSOR = new HashSet(Arrays
@@ -62,9 +58,6 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
     /** Raw clusters consumer */
     private RawClustersConsumer rawClustersConsumer;
 
-    /** Tokenizer buffer size */
-    private static final int TOKEN_BUFFER_SIZE = 64;
-
     /** Stop words */
     private Set stopWords;
 
@@ -72,49 +65,30 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
     private Map stems;
 
     /**
-     * The default language (used to acquire a tokenizer instance).
-     */
-    private Language defaultLanguage;
-
-    /**
-     * The current process language (either default or overriden).
-     */
-    private Language language;
-
-    /**
-     * The current tokenizer.
-     */
-    private LanguageTokenizer tokenizer;
-
-    /**
      * Current request's context.
      */
     private RequestContext requestContext;
 
     /**
-     * Create the component configured to process documents written
-     * in the given language.
+     * Implements {@link TokenizedDocumentsConsumer#addDocument(TokenizedDocument)}.
      */
-    public STCLocalFilterComponent(Language defaultLanguage) {
-        this.defaultLanguage = defaultLanguage; 
-    }
-    
-    public void addDocument(RawDocument doc) throws ProcessingException
+    public void addDocument(TokenizedDocument doc) throws ProcessingException
     {
         startTimer();
 
-        rawDocuments.add(doc);
+        documents.add(doc);
 
-        DocReference documentReference = new DocReference(
-                (String) doc.getProperty(RawDocument.PROPERTY_URL),
-                doc.getTitle(),
+        addStemsAndStopWords(doc.getTitle());
+        addStemsAndStopWords(doc.getSnippet());
+
+        final RawDocument rawDoc = (RawDocument) doc.getProperty(TokenizedDocument.PROPERTY_RAW_DOCUMENT);
+        final DocReference documentReference = new DocReference(
+                doc.getUrl(),
+                rawDoc.getTitle(),
                 (doc.getSnippet() == null)
                         ? java.util.Collections.EMPTY_LIST
-                        : Processor.splitIntoSentences(doc.getSnippet()), doc.getSnippet());
+                        : splitIntoSentences(doc.getSnippet()), rawDoc.getSnippet());
         documentReferences.add(documentReference);
-
-        addStemsAndStopWords(doc.getTitle(), tokenizer);
-        addStemsAndStopWords(doc.getSnippet(), tokenizer);
         
         stopTimer();
     }
@@ -123,7 +97,7 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
         throws InstantiationException
     {
         super.init(context);
-        rawDocuments = new ArrayList();
+        documents = new ArrayList();
         documentReferences = new ArrayList();
         stopWords = new HashSet();
         stems = new HashMap();
@@ -154,12 +128,8 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
     {
         super.flushResources();
 
-        language.returnTokenizer(tokenizer);
-        language = null;
-        tokenizer = null;
-
         documentReferences.clear();
-        rawDocuments.clear();
+        documents.clear();
         stems.clear();
         stopWords.clear();
         rawClustersConsumer = null;
@@ -170,18 +140,14 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
         throws ProcessingException
     {
         super.startProcessing(requestContext);
-
         this.requestContext = requestContext;
-        
-        this.language = defaultLanguage;
-        this.tokenizer = language.borrowTokenizer();
     }
 
     public void endProcessing() throws ProcessingException
     {
         startTimer();
 
-        STCEngine stcEngine = new STCEngine(documentReferences);
+        final STCEngine stcEngine = new STCEngine(documentReferences);
         stcEngine.stemSnippets(new ImmediateStemmer()
         {
             public String stemWord(String word)
@@ -234,8 +200,9 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
             for (Iterator j = b.documents.iterator(); j.hasNext();)
             {
                 int docIndex = ((Integer) j.next()).intValue();
-                rawCluster
-                    .addDocument((RawDocument) rawDocuments.get(docIndex));
+                final TokenizedDocument tokenizedDoc = (TokenizedDocument) documents.get(docIndex);
+                final RawDocument rawDoc = (RawDocument) tokenizedDoc.getProperty(TokenizedDocument.PROPERTY_RAW_DOCUMENT);
+                rawCluster.addDocument(rawDoc);
             }
 
             rawClusters.add(rawCluster);
@@ -258,37 +225,15 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
         return "STC";
     }
 
-    protected TokenSequence tokenize(String rawText,
-        LanguageTokenizer languageTokenizer)
+    /**
+     * Adds stems and stop words of <code>rawText</code> to internal data structures.
+     */
+    private TokenSequence addStemsAndStopWords(TokenSequence tokenSequence)
     {
-        int tokenCount = 0;
-        com.dawidweiss.carrot.core.local.linguistic.tokens.Token [] tokens = new com.dawidweiss.carrot.core.local.linguistic.tokens.Token [TOKEN_BUFFER_SIZE];
-        MutableTokenSequence tokenSequence = new MutableTokenSequence();
-
-        // Build the TokenSequence
-        languageTokenizer.restartTokenizationOn(new StringReader(rawText));
-        while ((tokenCount = languageTokenizer.getNextTokens(tokens, 0)) != 0)
+        final int maxTokenIndex = tokenSequence.getLength();
+        for (int t = 0; t < maxTokenIndex; t++)
         {
-            for (int t = 0; t < tokenCount; t++)
-            {
-                tokenSequence.addToken(tokens[t]);
-            }
-        }
-
-        return tokenSequence;
-    }
-
-    private void addStemsAndStopWords(String rawText, LanguageTokenizer tokenizer)
-    {
-        if (rawText == null)
-        {
-            return;
-        }
-
-        TokenSequence tokenSequence = tokenize(rawText, tokenizer);
-        for (int t = 0; t < tokenSequence.getLength(); t++)
-        {
-            TypedToken token = (TypedToken) tokenSequence.getTokenAt(t);
+            final TypedToken token = (TypedToken) tokenSequence.getTokenAt(t);
             if ((token.getType() & TypedToken.TOKEN_FLAG_STOPWORD) != 0)
             {
                 stopWords.add(token.getImage());
@@ -296,12 +241,41 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
 
             if (token instanceof StemmedToken)
             {
-                String stem = ((StemmedToken) token).getStem();
+                final String stem = ((StemmedToken) token).getStem();
                 if (stem != null)
                 {
                     stems.put(token.getImage(), stem);
                 }
             }
         }
+        
+        return tokenSequence;
     }
+
+    /**
+     * Splits a token sequence into a {@link List} of {@link List}s (sentences) of
+     * {@link String} objects (words). 
+     */
+    private static List splitIntoSentences(final TokenSequence tokens) {
+        final ArrayList sentences = new ArrayList(10);
+        final ArrayList currentSentence = new ArrayList();
+        currentSentence.ensureCapacity(10);
+
+        final int maxTokenIndex = tokens.getLength();
+        for (int i = 0; i < maxTokenIndex; i++) {
+            final TypedToken token = (TypedToken) tokens.getTokenAt(i);
+            final short tokenType = token.getType();
+            if ((tokenType & TypedToken.TOKEN_FLAG_SENTENCE_DELIM) != 0) {
+                if (currentSentence.size() > 0) {
+                    sentences.add(new ArrayList(currentSentence));
+                    currentSentence.clear();
+                }
+            } else {
+                // Skip punctuation?
+                // if ((tokenType & TypedToken.TOKEN_TYPE_PUNCTUATION) == 0)
+                currentSentence.add(token.getImage());
+            }
+        }
+        return sentences;
+    }    
 }
