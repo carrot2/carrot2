@@ -41,7 +41,7 @@ public class WebStartComponentFactory {
     public static LocalComponentFactoryBase createStc() {
         return new LocalComponentFactoryBase() {
             public LocalComponent getInstance() {
-                return new STCLocalFilterComponent(new English());
+                return new STCLocalFilterComponent();
             }
         };
     }
