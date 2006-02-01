@@ -26,6 +26,5 @@
 
     <dependency name="mockobjects" nocopy="true" />
     <dependency name="servlets-api" nocopy="true" />
-
-    <dependency name="junit" profile="test" />
+    <dependency name="junit" nocopy="true" />
 </component>
