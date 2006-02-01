@@ -1,0 +1,13 @@
+
+import com.dawidweiss.carrot.core.local.*;
+import com.dawidweiss.carrot.local.controller.*;
+import com.dawidweiss.carrot.util.tokenizer.*;
+
+factory = new LocalComponentFactoryBase() {
+    public LocalComponent getInstance() {
+        return new SnippetTokenizerLocalFilterComponent();
+    }
+};
+
+return new LoadedComponentFactory("filter-tokenizer", factory);
+
