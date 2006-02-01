@@ -49,4 +49,8 @@
          are usually included at runtime via parameters (Language/ stemming/ stopwords) -->
     <dependency name="carrot2-util-tokenizer" profile="remote" />
     
+	<dependency name="junit" profile="test" />
+	<dependency name="servlets-api" profile="test" nocopy="true" />
+	<dependency name="carrot2-util-remote" 	profile="test" />
+    <dependency name="dom4j"                profile="test" />
 </component>
