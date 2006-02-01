@@ -2,8 +2,8 @@
 
 <process
     xmlns="http://www.dawidweiss.com/projects/carrot/processDescriptor"
-    id="carrot2.process.stc-full.googleapi"
-    description="GoogleAPI, English stemming, STC, Dynamic Tree"
+    id="carrot2.process.stc-yahooapi"
+    description="YahooAPI, STC (en), Dynamic Tree"
 >
     <processing-script language="beanshell"><![CDATA[
     
@@ -12,9 +12,8 @@
 
     InputStream is;
 
-    is = controller.invokeInputComponent( "carrot2.input.googleapi", query );
-    is = controller.invokeFilterComponent( "carrot2.filter.stemming.en.porter", is );
-    is = controller.invokeFilterComponent( "carrot2.filter.stc.full-stc", is );
+    is = controller.invokeInputComponent( "carrot2.input.yahooapi", query );
+    is = controller.invokeFilterComponent( "carrot2.filter.stc-en", is );
 
     Map dtreeOptions = new HashMap();
     dtreeOptions.put("dtree.css", "compact");
@@ -25,8 +24,7 @@
     dtreeOptions.put("param.snippets.sorting.type", "ORDER_DOCUMENTS_ORDER");
     is = controller.invokeOutputComponent( "carrot2.output.xslt-renderer.dynamic-tree", is, dtreeOptions );
     
-    controller.sendResponse( is ); 
-    
+    controller.sendResponse( is );
     ]]>
     </processing-script>
 </process>
