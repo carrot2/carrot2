@@ -3,11 +3,9 @@
 <service xmlns      = "http://www.dawidweiss.com/projects/carrot/componentDescriptor" 
          framework  = "Carrot2"
 >
-
-    <component id               = "carrot2.filter.stc.full-stc"
+    <component id               = "carrot2.filter.stc-en"
                type             = "filter"
                serviceURL       = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-filter-stc/service/fullstc"
                infoURL          = "http://@DEPLOY_HOST@:@DEPLOY_PORT@/carrot2-filter-stc"
     />
-
 </service>
