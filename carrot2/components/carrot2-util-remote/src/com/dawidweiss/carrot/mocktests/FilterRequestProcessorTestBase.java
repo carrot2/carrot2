@@ -3,6 +3,9 @@ package com.dawidweiss.carrot.mocktests;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import junit.framework.TestCase;
 
 import org.dom4j.DocumentException;
@@ -62,11 +65,11 @@ public abstract class FilterRequestProcessorTestBase extends TestCase {
         return servlet;
     }
 
-    protected final MockHttpServletRequest getRequest() {
+    protected final HttpServletRequest getRequest() {
         return request;
     }
 
-    protected final MockHttpServletResponse getResponse() {
+    protected final HttpServletResponse getResponse() {
         return response;
     }
 
