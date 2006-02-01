@@ -8,5 +8,7 @@
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/servlet.jar"/>
 	<classpathentry kind="src" path="/carrot2-util-common"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/dom4j-1.5.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/mockobjects-core-0.09.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/mockobjects-jdk1.4-j2ee1.3-0.09.jar"/>
 	<classpathentry kind="output" path="tmp/eclipse/classes"/>
 </classpath>
