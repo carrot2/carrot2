@@ -24,8 +24,8 @@ import java.util.*;
 public class MutableTokenSequence implements TokenSequence
 {
     /** Tokens */
-    private final List tokens;
-    
+    private final ArrayList tokens;
+
     /** String image of this MutableTokenSequence */
     private String image;
 
@@ -84,10 +84,27 @@ public class MutableTokenSequence implements TokenSequence
         return (Token) tokens.get(index);
     }
 
-    public int copyTo(Token [] destination, int startAt,
-        int destinationStartAt, int maxLength)
+    public int copyTo(Token [] destination, int startAt, int destinationStartAt, int maxLength)
     {
-        throw new RuntimeException("Not implemented yet");
+        if (destinationStartAt < 0 || destinationStartAt >= destination.length) {
+            throw new IllegalArgumentException("Destination index out of bounds: "
+                    + destinationStartAt);
+        }
+        if (startAt < 0 || startAt >= this.tokens.size()) {
+            throw new IllegalArgumentException("Start at index out of bounds: " 
+                    + startAt);
+        }
+
+        final int howmuch = Math.min(maxLength, Math.min(this.tokens.size() - startAt, destination.length - destinationStartAt));
+        int indexFrom = startAt;
+        int indexTo = destinationStartAt;
+        for (int i = howmuch; i > 0; i--) {
+            destination[indexTo] = (Token) this.tokens.get(indexFrom);
+            indexTo++;
+            indexFrom++;
+        }
+
+        return howmuch; 
     }
 
     public boolean equals(Object obj)
