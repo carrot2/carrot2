@@ -1,6 +1,0 @@
-<container 
-  implementation="com.dawidweiss.carrot.controller.carrot2.process
-                           .cache.memory.MemoryCachedQueriesContainer">
-    <!-- capacity limit in bytes -->
-    <size-limit>1048576</size-limit>
-</container>

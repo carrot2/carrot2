@@ -1,5 +1,0 @@
-<Files xml>
-ForceType application/x-httpd-php
-</Files>
-
-DirectoryIndex index.html xml
