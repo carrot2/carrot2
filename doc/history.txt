@@ -9,6 +9,9 @@ Major functions and bug fixes
 Version  [C] Information
 
 HEAD
+
+1.0.1
+
           +  Added speed/ performance button to the demo application.
 
           #  Implemented a workaround for issues with long text sequences in cluster label
