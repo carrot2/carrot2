@@ -16,11 +16,3 @@ carrot2-filter-fuzzyants
 
 - Check out Unicode segmentation spec (info from Andrzej Zydroñ):
 http://www.unicode.org/reports/tr29/tr29-10.html
-
-- Fix word-wrapping bug in the results tree (xsltrenderer) - place a
-  non-breakable space between the last word of the cluster's label and the
-  number of documents in that cluster (example:
-  http://www.carrot2.org/resources/word-breaking.png)
-
-- Fix layout problems with very long URL. "overflow: hidden" CSS property may
-  turn out helpful here.

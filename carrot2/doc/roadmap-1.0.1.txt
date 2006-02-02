@@ -1,0 +1,11 @@
+
+A roadmap to release 1.0.1
+------------------------
+
+- Fix word-wrapping bug in the results tree (xsltrenderer) - place a
+  non-breakable space between the last word of the cluster's label and the
+  number of documents in that cluster (example:
+  http://www.carrot2.org/resources/word-breaking.png)
+
+- Fix layout problems with very long URL. "overflow: hidden" CSS property may
+  turn out helpful here.
