@@ -11,18 +11,19 @@
 package carrot2.demo.swing;
 
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.*;
 
+import carrot2.demo.DemoContext;
+
 import com.dawidweiss.carrot.core.local.*;
 import com.dawidweiss.carrot.core.local.impl.ClustersConsumerOutputComponent;
 import com.dawidweiss.carrot.core.local.impl.FileLocalOutputComponent;
-
-import carrot2.demo.DemoContext;
 
 /**
  * @author Stanislaw Osinski

@@ -2,7 +2,8 @@ package carrot2.demo;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.awt.event.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
