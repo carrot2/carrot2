@@ -154,8 +154,16 @@ public class RawDocumentProducerCacheWrapper extends LocalInputComponentBase {
             cache.put(new CacheEntry(wrapped, query, requestedResults), this.cachedResult);
         }
 
-        requestContext.getRequestParameters().putAll(this.cachedResult.context);
-        
+        // Copy cached context parameters over to the current context parameters
+        // We copy only these parameters which are not present in the current
+        // request context. Otherwise live update doesn't work (because the cached version
+        // of settings overwrites everything else).
+        final Map contextParams = requestContext.getRequestParameters(); 
+        final Map cachedParams = this.cachedResult.context;
+        final HashMap cachedKeys = new HashMap(cachedParams);
+        cachedKeys.keySet().removeAll(contextParams.keySet());
+        contextParams.putAll(cachedKeys);
+
         // Playback RawDocuments from cache.
         final RawDocumentsConsumer nextComponent = (RawDocumentsConsumer) super.next; 
         for (Iterator i = this.cachedResult.documents.iterator(); i.hasNext();) {
