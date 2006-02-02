@@ -52,9 +52,8 @@ function getDynamicTreeViewForNode( rootNode, maxOpenDepth ) // {{{
          +    ' onContextMenu="goToGroup(' + "'" + rootNode.id + "'" + '); return false;"'
          +    ' onMouseOver="return showStatus();"' + ' onMouseOut="return statusClear();"'
          +  '>'
-         +      rootNode.name
-            + ' (' + getOrderedSnippetsToLevel( rootNode, MAX_SUBGROUP_SNIPPET_DISPLAY ).length + ')'
-         +  '</a>'
+         +      rootNode.getName()
+            + '</a>&nbsp;&nbsp;<span class="cl_s">' + getOrderedSnippetsToLevel( rootNode, MAX_SUBGROUP_SNIPPET_DISPLAY ).length + '</span>'
        +  "</td>"
        +  "</tr>"
        ;
@@ -138,9 +137,8 @@ function getParentViewForNode(node, remainingLevels) // {{{
                  +    ' onContextMenu="goToGroup(' + "'" + parentnode.id + "'" + '); return false;"'
                  +    ' onMouseOver="return showStatus();"' + ' onMouseOut="return statusClear();"'
                  +  '>'
-                 +      parentnode.name
-                 + ' (' + getSubdocumentsNumber(parentnode) + ')'
-                 +  '</a>';
+                 +      parentnode.getName()
+                 + '</a>&nbsp;&nbsp;<span class="cl_s">' + getSubdocumentsNumber(parentnode) + '</span>';
         }
 
         html += "</td>";
@@ -183,8 +181,9 @@ function getViewForNode(node, remainingLevels) // {{{
         var hasSubnodes = ((OUTPUT_TERMINAL_NODES==true && arcs[subnode.id] != null) 
                             || (OUTPUT_TERMINAL_NODES==false && subnode.hasSubgroups));
         var isOpened    = (remainingLevels > 0);
-        if (OUTPUT_TERMINAL_NODES==true && NO_TERMINAL_GROUPS_EXPANSION && subnode.hasSubgroups!=true)
+        if (OUTPUT_TERMINAL_NODES==true && NO_TERMINAL_GROUPS_EXPANSION && subnode.hasSubgroups == false) {
             isOpened = false;
+        }
         
         var currentNodeId = nextNodeId++;
         
@@ -218,7 +217,7 @@ function getViewForNode(node, remainingLevels) // {{{
 
         if (subnode.type == TYPE_TN)
         {
-            html += '<a href="' + subnode.url + '" target="_top">' + subnode.name + '</a>';
+            html += '<a href="' + subnode.url + '" target="_top">' + subnode.getName() + '</a>';
         }
         else
         if (subnode.type == TYPE_IN)
@@ -228,9 +227,9 @@ function getViewForNode(node, remainingLevels) // {{{
                  +    ' onContextMenu="goToGroup(' + "'" + subnode.id + "'" + '); return false;"'
                  +    ' onMouseOver="return showStatus();"' + ' onMouseOut="return statusClear();"'
                  +  '>'
-                 +      subnode.name
-                    + ' (' + getOrderedSnippetsToLevel( subnode, MAX_SUBGROUP_SNIPPET_DISPLAY ).length + ')'
-                 +  '</a>';
+                 +      subnode.getName()
+                    + '</a>&nbsp;&nbsp;<span class="cl_s">' + getOrderedSnippetsToLevel( subnode, MAX_SUBGROUP_SNIPPET_DISPLAY ).length + '</span>'
+                 +  '';
         }
 
         html += "</td>";
@@ -517,7 +516,7 @@ function getSnippetsAsList( nodesArray ) // {{{
         html += '<table><tr><td class="nm">'
                 + node.relevanceOrderPosition + '</td>'
                 + '<td class="st">'
-                + '<a href="' + node.url + '" target="_top">' + node.name + '</a>'
+                + '<a href="' + node.url + '" target="_top">' + node.getName() + '</a>'
                 + '</td>'
                 + '<td class="si">'
                 + '<a href="' + node.url + '" target="_blank"><img src="' + IMAGE_BASE + '/nwin.gif" /></a>'

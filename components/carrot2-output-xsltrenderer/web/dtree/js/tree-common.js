@@ -119,14 +119,41 @@ function Node(id, name) // {{{
     this.id = id;
     this.name = name;
     this.parent = null;
+    this._fullname = name;
+    this._name = null; // lazy init.
+
+    this.getName = function() {
+        if (this._name == null) {
+            this._name = this.splitLongSequences(this._fullname);
+        }
+        return this._name;
+    };
+
+    // Ensures the text has word breaks in character sequences longer
+    // then the given input argument.
+    //
+    // This solution is a bit temporary -- we will have to rewrite
+    // it to a solution which uses frames someday, otherwise it is simply
+    // unsolvable.
+    this.splitLongSequences = function(text) {
+        var MAX_CHUNK_LENGTH = 30;
+        var newText = text.split(/[\ \t\n]/);
+        var i;
+        for (i = 0; i < newText.length; i++) {
+            if (newText[i].length > MAX_CHUNK_LENGTH) {
+                newText[i] = newText[i].replace(/([\/\=\?\-\.])/g, "$1<wbr/>");
+            }
+        }
+        return newText.join(" ");
+    }
 } // }}}
 
 
 // creates an Internal Node (representing groups)
-function INodeRoot( id, title) // {{{
+function INodeRoot(id, title) // {{{
 {
-    node = new INode( id, title );
-    roots[ roots.length ] = node;
+    node = new INode(id, title);
+    roots[roots.length] = node;
 
     if (arcs[syntheticRoot.id] == null)
         arcs[syntheticRoot.id] = new Array();
@@ -137,7 +164,7 @@ function INodeRoot( id, title) // {{{
 } // }}}
 
 
-function INode( id, title ) // {{{
+function INode(id, title) // {{{
 {
     node = new Node(id, title);
     node.type = TYPE_IN;
@@ -147,14 +174,15 @@ function INode( id, title ) // {{{
 
 
 // creates a Terminal Node (representing a document)
-function TNode( id, title, url, snippet ) // {{{
+function TNode(id, title, url, snippet) // {{{
 {
-    node = new Node( id, title);
+    node = new Node(id, title);
     node.type = TYPE_TN;
     node.snippet = snippet;
     node.url = url;
     node.relevanceOrderPosition = relevanceOrderPosition++;
     nodes[id] = node;
+    return node;
 } // }}}
 
 
