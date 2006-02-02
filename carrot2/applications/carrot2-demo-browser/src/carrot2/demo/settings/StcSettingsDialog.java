@@ -64,6 +64,12 @@ class StcSettingsDialog extends JPanel {
         builder.append(ThresholdHelper.createIntegerThreshold(settings, StcConstants.MAX_CLUSTERS,
                 "Max clusters:", 2, 30, 0, 4));
 
+        builder.appendSeparator("Label creation");
+        builder.append(ThresholdHelper.createDoubleThreshold(settings, StcConstants.MAX_PHRASE_OVERLAP,
+                "Max phrase overlap:", 0, 1, 0.1, 0.25));
+        builder.append(ThresholdHelper.createDoubleThreshold(settings, StcConstants.MOST_GENERAL_PHRASE_COVERAGE,
+                "Most general p. coverage:", 0, 1, 0.1, 0.25));
+
         this.add(builder.getPanel());
     }
 }
