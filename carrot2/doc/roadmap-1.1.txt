@@ -16,3 +16,7 @@ carrot2-filter-fuzzyants
 
 - Check out Unicode segmentation spec (info from Andrzej Zydroñ):
 http://www.unicode.org/reports/tr29/tr29-10.html
+
+- replace string concatenations with a stringbuffer in JavaScript?
+http://www.softwaresecretweapons.com/jspwiki/Wiki.jsp?page=JavascriptStringConcatenation
+

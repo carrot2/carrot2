@@ -9,6 +9,11 @@ Major functions and bug fixes
 Version  [C] Information
 
 HEAD
+          +  Added speed/ performance button to the demo application.
+
+          #  Implemented a workaround for issues with long text sequences in cluster label
+             display.
+
           +  STC clustering component refactored. Adopted for the local pipeline 
              (tokenizer, case normalization). Remote version uses embedded local
              controller.
