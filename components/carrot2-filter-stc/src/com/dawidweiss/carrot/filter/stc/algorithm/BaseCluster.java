@@ -27,10 +27,10 @@ public final class BaseCluster
      * Indicates whether this base cluster has become part of a merged cluster or is still
      * available.
      */
-    public boolean merged = false;
+    private boolean merged = false;
 
     /** A Node in suffix tree this BaseCluster is associated with. */
-    protected PhraseNode node;
+    private PhraseNode node;
 
     /**
      * Getter for node variable
@@ -110,106 +110,24 @@ public final class BaseCluster
     protected Phrase phrase = null;
 
     /**
-     * Getter for this node's phrase object
+     * Getter for this base cluster's phrase object
      */
     public Phrase getPhrase()
     {
         if (phrase == null)
         {
-            phrase = new Phrase();
+            phrase = new Phrase(this);
         }
 
         return phrase;
     }
 
-    /**
-     * Phrase class being a description of this base cluster.
-     */
-    public class Phrase
-    {
-        /**
-         * Percent of documents in a merged cluster this phrase exists in (in use in Cluster class)
-         */
-        public float coverage;
-
-        /** Most specific phrase flag. */
-        public boolean mostSpecific;
-
-        /** Most general phrase flag. */
-        public boolean mostGeneral;
-
-        /**
-         * Phrase selected for displaying. All phrases are initially marked as selected, pruning
-         * process turns this flag off.
-         */
-        public boolean selected;
-
-        /** Terms of this phrase */
-        protected Collection phrase;
-
-        /**
-         * Construction of Phrase objects allowed only within package
-         */
-        protected Phrase()
-        {
-            phrase = BaseCluster.this.getNode().getPhrase();
-            mostSpecific = true;
-            mostGeneral = true;
-            selected = true;
-        }
-
-        /**
-         * Returns the collection of phrase terms (StemmedTerm objects)
-         */
-        public Collection getTerms()
-        {
-            return phrase;
-        }
+    public void setMerged(boolean merged) {
+        this.merged = merged;
+    }
 
 
-        /**
-         * Returns the collection of phrase terms, formatted to a string.
-         */
-        public String userFriendlyTerms()
-        {
-            StringBuffer s = new StringBuffer();
-            Collection terms = getTerms();
-
-            for (Iterator i = terms.iterator(); i.hasNext();)
-            {
-                final StemmedTerm t = (StemmedTerm) i.next();
-                final String image = t.getTerm();
-                if (s.length() > 0 && 
-                        !(",".equals(image) || "?".equals(image)
-                                || "!".equals(image)
-                                || ";".equals(image))) {
-                    s.append(' ');
-                }
-                s.append(image);
-            }
-
-            return s.toString();
-        }
-
-
-        /**
-         * Returns the BaseCluster of this phrase
-         */
-        public BaseCluster getBaseCluster()
-        {
-            return BaseCluster.this;
-        }
-
-
-        public String toString()
-        {
-            return "[cid=" + BaseCluster.this.getNode().id + ",d="
-            + getNode().getSuffixedDocumentsCount() + ",c=" + coverage + ",("
-            + (selected ? "S "
-                        : "  ") + (mostSpecific ? "MS "
-                                                : "   ") + (mostGeneral ? "MG"
-                                                                        : "  ") + ") : "
-            + getTerms() + "]";
-        }
+    public boolean isMerged() {
+        return merged;
     }
 }

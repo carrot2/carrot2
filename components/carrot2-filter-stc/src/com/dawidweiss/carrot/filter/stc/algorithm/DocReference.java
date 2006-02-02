@@ -14,7 +14,10 @@
 package com.dawidweiss.carrot.filter.stc.algorithm;
 
 
-import java.util.List;
+import java.util.*;
+
+import com.dawidweiss.carrot.core.local.clustering.TokenizedDocument;
+import com.dawidweiss.carrot.core.local.linguistic.tokens.*;
 
 
 /**
@@ -25,61 +28,50 @@ public final class DocReference
     /** Document url */
     private String url;
 
-    /** Document title */
-    private String title;
-
-    /** List of sentences (List) consisting of words (Strings) */
-    private List snippet;
-
     /** Stemmed snippet */
-    private ArrayStemmedSnippet stemmedSnippet = null;
+    private final ArrayStemmedSnippet stemmedSnippet;
 
-    /** Original snippet string. Needed for later presentation */
-    private String originalSnippet;
-
-    /**
-     * You can't instantiate empty doc reference outside of this
-     * package.
-     */
-    protected DocReference()
+    public DocReference(TokenizedDocument document)
     {
+        this.url = document.getUrl();
+        final ArrayList snippet = new ArrayList();
+
+        if (document.getTitle() != null) {
+            snippet.addAll(splitIntoSentences(document.getTitle()));
+        }
+        if (document.getSnippet() != null) {
+            snippet.addAll(splitIntoSentences(document.getSnippet()));
+        }
+
+        this.stemmedSnippet = process(snippet);
     }
 
     /**
-     * The url of this document
+     * Splits a token sequence into a {@link List} of {@link List}s (sentences) of
+     * {@link String} objects (words). 
      */
-    public String getURLAsString()
-    {
-        return url;
-    }
+    private static List splitIntoSentences(final TokenSequence tokens) {
+        final ArrayList sentences = new ArrayList(10);
+        final ArrayList currentSentence = new ArrayList();
+        currentSentence.ensureCapacity(10);
 
-
-    /**
-     * The title of this document as determined by datasource
-     */
-    public String getTitle()
-    {
-        return title;
-    }
-
-
-    /**
-     * The url of this document
-     */
-    public List getSnippet()
-    {
-        return snippet;
-    }
-
-
-    /**
-     * Returns original snippet text
-     */
-    public String getUnprocessedSnippet()
-    {
-        return this.originalSnippet;
-    }
-
+        final int maxTokenIndex = tokens.getLength();
+        for (int i = 0; i < maxTokenIndex; i++) {
+            final TypedToken token = (TypedToken) tokens.getTokenAt(i);
+            final short tokenType = token.getType();
+            if ((tokenType & TypedToken.TOKEN_FLAG_SENTENCE_DELIM) != 0) {
+                if (currentSentence.size() > 0) {
+                    sentences.add(new ArrayList(currentSentence));
+                    currentSentence.clear();
+                }
+            } else {
+                // Skip punctuation?
+                // if ((tokenType & TypedToken.TOKEN_TYPE_PUNCTUATION) == 0)
+                currentSentence.add(token);
+            }
+        }
+        return sentences;
+    }    
 
     /**
      * Returns StemmedSnippet object, if any, or null. This DocReference object must be processed
@@ -90,28 +82,50 @@ public final class DocReference
         return this.stemmedSnippet;
     }
 
-
-    /**
-     * Sets the value of StemmedSnippet for this object.
-     */
-    public void setStemmedSnippet(ArrayStemmedSnippet s)
-    {
-        stemmedSnippet = s;
-    }
-
-    /**
-     * Legal constructor
-     */
-    public DocReference(String url, String title, List snippet, String originalSnippet)
-    {
-        this.url = url;
-        this.title = title;
-        this.snippet = snippet;
-        this.originalSnippet = originalSnippet;
-    }
-
     public String toString()
     {
-        return "(" + url + " : \"" + this.title + "\" : \"" + this.snippet + "\")";
+        return "(" + url + "\")";
+    }
+    
+    /**
+     * Processes a single {@link DocReference} into an array of
+     * {@link StemmedTerm}s.
+     */
+    private ArrayStemmedSnippet process(final ArrayList snippet)
+    {
+        int snippetWordsNumber = 0;
+
+        // count words and sentences, so that we know how big array we need to store
+        // stemmed data.
+        for (Iterator sentenceIterator = snippet.iterator(); sentenceIterator.hasNext();)
+        {
+            final List sentence = (List) sentenceIterator.next();
+            snippetWordsNumber += sentence.size();
+            // make room for special class denoting the end of the sentence.
+            snippetWordsNumber++;
+        }
+
+        final StemmedTerm [] stemmed = new StemmedTerm[snippetWordsNumber];
+
+        // look up words in existing stemming classes or create a new class and assign
+        // its code to that word.
+        int stemmedIndex = 0;
+        for (Iterator sentenceIterator = snippet.iterator(); sentenceIterator.hasNext();)
+        {
+            final List sentence = (List) sentenceIterator.next();
+
+            for (Iterator wordIterator = sentence.iterator(); wordIterator.hasNext();)
+            {
+                final Token token = (Token) wordIterator.next();
+                final StemmedTerm t = new StemmedTerm(token);
+                stemmed[stemmedIndex++] = t;
+            }
+
+            // mark end-of-sequence
+            stemmed[stemmedIndex++] = null;
+        }
+
+        // add fully stemmed snippet to DocReference
+        return new ArrayStemmedSnippet(stemmed);
     }
 }

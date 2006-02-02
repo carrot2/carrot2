@@ -107,7 +107,7 @@ public class StcConstants {
     public final static double DEFAULT_MERGE_THRESHOLD = 0.6f;
     
     /**
-     * Minimum number of merged clusters.
+     * Maximum number of merged clusters returned.
      * 
      * <p>Allowed range: integer, 1 -- inf., property type <code>String</code>
      *    (a numeric value)</p>
@@ -117,4 +117,29 @@ public class StcConstants {
 
     /** Default value of {@link #MAX_CLUSTERS}. */
     public final static int DEFAULT_MAX_CLUSTERS = 15;
+
+    /**
+     * Maximum overlap between phrases selected for cluster labels. If the overlap
+     * exceeds this level, one phrase is removed from the label.
+     * 
+     * <p>Allowed range: 0 -- 1, property type <code>String</code> (a numeric value)</p>
+     */
+    public final static String MAX_PHRASE_OVERLAP = "stc.max.phrase.overlap";
+
+    /**
+     * Default value of {@link #MAX_PHRASE_OVERLAP}.
+     */
+    public final static double DEFAULT_MAX_PHRASE_OVERLAP = 0.6d;
+
+    /**
+     * Minimum general phrase coverage to appear in cluster description.
+     * 
+     * <p>Allowed range: 0 -- 1, property type <code>String</code> (a numeric value)</p>
+     */
+    public static final String MOST_GENERAL_PHRASE_COVERAGE = "stc.most.general.phrase.coverage";
+    
+    /**
+     * Default value of {@link #MOST_GENERAL_PHRASE_COVERAGE}.
+     */
+    public static final double DEFAULT_MOST_GENERAL_PHRASE_COVERAGE = 0.2d; 
 }
