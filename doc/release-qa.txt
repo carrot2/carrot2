@@ -27,12 +27,32 @@ Quality Assurance [before a release]
 
 - Try the local application
 
-	cd dist
-	unzip *local*.zip
-	demo.bat (or demo.sh)       (make sure it launches properly)
+
+- Deploy remote applications on a clean Tomcat server, modify server.xml according
+to instructions in the readme.txt file. See if it works.
 
 
-- Deploy remote applications on a clean Tomcat server, see if they work.
+- Again check if there are no locally modified sources:
 
+	cvs -q -n -z3 up            (nothing should be printed)
 
-- 
+- Assign version number.
+	- place the release date in: doc/roadmap-VERSION.txt (if it is present).
+	- commit your changes.
+
+- Tag the repository:
+
+	cvs tag "VERSION_xxx" .
+
+- Create distributions from the tagged version of the repository.
+
+	ant -Drelease.number=VERSION -q clean cleanall dist
+
+- Publish distributions in SourceForge's file area
+
+- Compile the WebStart version.
+
+	cd applications/carrot2-demo-browser
+	ant -q clean webstart
+
+- Place the WebStart version on www.carrot2.org. Make sure it works.
