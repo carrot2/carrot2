@@ -20,3 +20,8 @@ http://www.unicode.org/reports/tr29/tr29-10.html
 - replace string concatenations with a stringbuffer in JavaScript?
 http://www.softwaresecretweapons.com/jspwiki/Wiki.jsp?page=JavascriptStringConcatenation
 
+- add lucene input source to the demo application
+
+- add a filter forcing UTF-8 on the request parameters (web controller)
+
+- modify xslt-output to work with frames? (ajax-based?)
