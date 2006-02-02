@@ -106,24 +106,25 @@
     </head>
 
     <body>
-        <table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0" layout="fixed">
-	        <col width="255" />
+        <table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td align="left" valign="top" height="10" 
-                    style="border-bottom: 1px solid #8B95B0; border-top: 1px solid #8B95B0; background-color: #E4EBFD; border-right: solid 1px gray; font-size: 9px; color: black; padding: 1px; ">
+                    style="width: 250px; border-bottom: 1px solid #8B95B0; border-top: 1px solid #8B95B0; background-color: #E4EBFD; border-right: solid 1px gray; font-size: 9px; color: black; padding: 1px; ">
                     <a class="clickable" onMouseOver="javascript:status='Back to top group'" onMouseOut="javascript:status=''" onClick="javascript:goToGroup(&quot;__SYNTHETIC_ROOT__&quot;);">
                         <img align="absmiddle" border="0" src="{concat( $param.image.base,'/icons/topgroup.gif' )}" /></a>
 
-                    <NOBR> Sort:
+                    <nobr> Sort:
                         [<a class="clickable" onMouseOver="javascript:status='Sort according to original results'" onMouseOut="javascript:status=''" onClick="javascript:ORDER_TYPE = ORDER_DOCUMENTS_ORDER; showDocumentsFromGroup(currentRootNodeId);">flat</a>]
                         [<a class="clickable" onMouseOver="javascript:status='Sort according to original results'" onMouseOut="javascript:status=''" onClick="javascript:ORDER_TYPE = ORDER_GROUP_DECLARATION_ORDER; showDocumentsFromGroup(currentRootNodeId);">group</a>]
-                        [<a class="clickable" onMouseOver="javascript:status='Sort according to original results'" onMouseOut="javascript:status=''" onClick="javascript:ORDER_TYPE = ORDER_SCORE_ATTRIBUTE; showDocumentsFromGroup(currentRootNodeId);">score</a>]</NOBR>
+                        [<a class="clickable" onMouseOver="javascript:status='Sort according to original results'" onMouseOut="javascript:status=''" onClick="javascript:ORDER_TYPE = ORDER_SCORE_ATTRIBUTE; showDocumentsFromGroup(currentRootNodeId);">score</a>]</nobr>
                 </td>
             </tr>
             <tr>
-                <td align="left" valign="top" style="border-right: dotted 1px gray;">
+                <td align="left" valign="top" style="width: 250px; padding-right: 5px; border-right: dotted 1px gray;">
                 <!-- This is a placeholder DIV section for the groups graph visualization -->
-                <div style="width: 250px;" id="treePlaceholder"></div>
+                <div id="treePlaceholder"></div>
+                <!-- This enforces minimum width of this column. A hack, but works on all browsers, and the CSS property doesn't -->
+                <img src="{concat($base.url,'/dtree/img/empty.gif')}" width="250" height="1" alt="" />
                 </td>
                 <td align="left" valign="top" rowspan="2">
                 <!-- This is a placeholder DIV section for a list of snippets from the selected group
@@ -132,7 +133,7 @@
                 </td>
             </tr>
         </table>
-        
+
         <script>
                 // Initialize graphics
                 preloadImages(&quot;<xsl:value-of select="$param.image.base" />&quot;, 

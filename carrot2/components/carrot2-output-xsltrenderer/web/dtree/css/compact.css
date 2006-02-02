@@ -58,7 +58,15 @@ a:active {
 }
 
 .clickable {
-   cursor:          hand;
+   cursor:          pointer;
+}
+
+.cl_s {
+   font-size:      10px;
+   font-weight: bold;
+   color:           #8080a0;
+   border-left: 1px solid #a0a0b0;
+   padding-left: 1px;
 }
 
 /* ------------------------------------------------------------------- }}} */
@@ -77,7 +85,7 @@ td.groupIN {
 }
 
 td.groupIN A {
-    cursor:         hand;
+    cursor:         pointer;
 }
 
 td.groupTN {
