@@ -2,4 +2,4 @@
 A roadmap to release 1.0.1
 ------------------------
 
-[testing for release]
+[released 02.02.2006]
