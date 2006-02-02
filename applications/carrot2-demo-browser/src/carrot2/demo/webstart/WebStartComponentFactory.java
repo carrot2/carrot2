@@ -6,11 +6,15 @@ import carrot2.demo.cache.RawDocumentProducerCacheWrapper;
 
 import com.dawidweiss.carrot.core.local.LocalComponent;
 import com.dawidweiss.carrot.core.local.LocalComponentFactoryBase;
+import com.dawidweiss.carrot.core.local.impl.RawDocumentDummyLanguageDetection;
 import com.dawidweiss.carrot.core.local.impl.RawDocumentEnumerator;
 import com.dawidweiss.carrot.core.local.linguistic.Language;
 import com.dawidweiss.carrot.filter.stc.local.STCLocalFilterComponent;
+import com.dawidweiss.carrot.util.tokenizer.SnippetTokenizerLocalFilterComponent;
 import com.dawidweiss.carrot.util.tokenizer.languages.english.English;
 import com.stachoodev.carrot.filter.lingo.local.LingoLocalFilterComponent;
+import com.stachoodev.carrot.filter.normalizer.SmartCaseNormalizer;
+import com.stachoodev.carrot.filter.normalizer.local.CaseNormalizerLocalFilterComponent;
 
 /**
  * A brute-force workaround for problems with security exceptions when Beanshell
@@ -21,6 +25,45 @@ import com.stachoodev.carrot.filter.lingo.local.LingoLocalFilterComponent;
  */
 public class WebStartComponentFactory {
 
+    /**
+     * <code>filter-tokenizer</code>
+     */
+    public static LocalComponentFactoryBase createTokenizer() {
+        final LocalComponentFactoryBase factory = new LocalComponentFactoryBase() {
+            public LocalComponent getInstance() {
+                return new SnippetTokenizerLocalFilterComponent();
+            }
+        };
+
+        return factory;
+    }
+
+    /**
+     * <code>filter-language-detection-xx</code>
+     */
+    public static LocalComponentFactoryBase createLanguageDetection(final String langCode) {
+        final LocalComponentFactoryBase factory = new LocalComponentFactoryBase() {
+            public LocalComponent getInstance() {
+                return new RawDocumentDummyLanguageDetection(langCode);
+            }
+        };
+
+        return factory;
+    }
+    
+    /**
+     * <code>filter-case-normalizer</code>
+     */
+    public static LocalComponentFactoryBase createCaseNormalizer() {
+        final LocalComponentFactoryBase factory = new LocalComponentFactoryBase() {
+            public LocalComponent getInstance() {
+                return new CaseNormalizerLocalFilterComponent(
+                    new SmartCaseNormalizer());
+            }
+        };
+        return factory;
+    }
+    
     /**
      * <code>input-cached-yahooapi</code>
      */

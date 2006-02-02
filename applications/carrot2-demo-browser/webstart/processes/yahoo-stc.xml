@@ -4,8 +4,13 @@
   <name>Yahoo Search API -- Suffix Tree Clusterer</name>
 
   <input  component-key="input-cached-yahooapi" />
+
   <filter component-key="filter-rawdocument-enumerator" />
+  <filter component-key="filter-language-detection-en" />
+  <filter component-key="filter-tokenizer" />
+  <filter component-key="filter-case-normalizer" />
   <filter component-key="filter-stc" />
+
   <output component-key="output-clustersConsumer" />
 
   <attribute key="process.settings.class" 
