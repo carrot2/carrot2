@@ -1,0 +1,38 @@
+
+Quality Assurance [before a release]
+-----------------
+
+- Make sure the local checkout is in sync with the server:
+
+	cvs -q -n -z3 up            (nothing should be printed)
+
+
+- Go to carrot root checkout and issue the following:
+
+	ant license                 (commit and repeat if license files have been saved)
+
+	ant -q cleanall clean
+
+	ant -q test                 (all tests must pass)
+	
+	ant -q build remote         (remote and local applications must build)
+
+	ant javadoc                 (no fatal errors)
+
+
+- Create a distribution for final testing, replacing "VERSION" with real release number.
+
+	ant -q -Drelease.number=VERSION dist
+
+
+- Try the local application
+
+	cd dist
+	unzip *local*.zip
+	demo.bat (or demo.sh)       (make sure it launches properly)
+
+
+- Deploy remote applications on a clean Tomcat server, see if they work.
+
+
+- 
