@@ -129,7 +129,7 @@ public class StcConstants {
     /**
      * Default value of {@link #MAX_PHRASE_OVERLAP}.
      */
-    public final static double DEFAULT_MAX_PHRASE_OVERLAP = 0.6d;
+    public final static double DEFAULT_MAX_PHRASE_OVERLAP = 0.3d;
 
     /**
      * Minimum general phrase coverage to appear in cluster description.
@@ -141,5 +141,5 @@ public class StcConstants {
     /**
      * Default value of {@link #MOST_GENERAL_PHRASE_COVERAGE}.
      */
-    public static final double DEFAULT_MOST_GENERAL_PHRASE_COVERAGE = 0.2d; 
+    public static final double DEFAULT_MOST_GENERAL_PHRASE_COVERAGE = 0.5d; 
 }
