@@ -78,16 +78,16 @@ public class ClustersConsumerOutputComponent extends LocalOutputComponentBase
          * An array where clusters received from the predecessor component are
          * stored.
          */
-        public List clusters = new ArrayList();
+        public final List clusters;
 
         /**
          * An array where documents received from the predecessor component are
          * stored.
          */
-        public List documents = new ArrayList();
+        public final List documents;
 
         /** A shallow copy of the context parameters. */
-        public Map context = null;
+        public final Map context;
 
         /**
          * Creates a new Result object.
@@ -96,11 +96,11 @@ public class ClustersConsumerOutputComponent extends LocalOutputComponentBase
          * @param documents An array of documents.
          */
         private Result(ArrayList clusters, ArrayList documents, Map contextParams) {
-            Result.this.clusters = Collections.unmodifiableList(new ArrayList(
+            this.clusters = Collections.unmodifiableList(new ArrayList(
                         clusters));
-            Result.this.documents = Collections.unmodifiableList(new ArrayList(
+            this.documents = Collections.unmodifiableList(new ArrayList(
                         documents));
-            Result.this.context = new HashMap(contextParams);
+            this.context = new HashMap(contextParams);
         }
     }
 
