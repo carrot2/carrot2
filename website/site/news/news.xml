@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <newslist>
+	<news date="2006-02-02">
+		<head>
+			Tweak and minor enhancements release: 1.0.1 is out. Check out the
+			download area at SourceForge or the
+			<a href="http://www.carrot2.org/webstart">WebStart version</a>.
+		</head>
+	</news>
+
 	<news date="2006-01-18">
 		<head>
 			Java Web Start version of the local demo is
