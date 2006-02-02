@@ -50,6 +50,8 @@
     <dependency name="carrot2-filter-trc" in-profile="local"   profile="stripped" nocopy="true" />
     <dependency name="carrot2-filter-stc" in-profile="local"   profile="stripped" nocopy="true" />
     <dependency name="carrot2-input-yahooapi" in-profile="local" profile="stripped" nocopy="true" />
+    <dependency name="carrot2-filter-case-normalizer" in-profile="local" profile="stripped" nocopy="true" />
+	
 
 	<!-- Full profile contains all demo components -->
 
@@ -57,5 +59,6 @@
     <dependency name="carrot2-filter-trc" in-profile="local"   profile="full" />
     <dependency name="carrot2-filter-stc" in-profile="local"   profile="full" />
     <dependency name="carrot2-input-yahooapi" in-profile="local" profile="full" />
+    <dependency name="carrot2-filter-case-normalizer" in-profile="local" profile="full" />
 </component>
 
