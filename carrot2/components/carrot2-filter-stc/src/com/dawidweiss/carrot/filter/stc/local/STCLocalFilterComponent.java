@@ -17,11 +17,10 @@ import java.util.*;
 
 import com.dawidweiss.carrot.core.local.*;
 import com.dawidweiss.carrot.core.local.clustering.*;
-import com.dawidweiss.carrot.core.local.linguistic.tokens.*;
 import com.dawidweiss.carrot.core.local.profiling.ProfiledLocalFilterComponentBase;
 import com.dawidweiss.carrot.filter.stc.StcParameters;
 import com.dawidweiss.carrot.filter.stc.algorithm.*;
-import com.dawidweiss.carrot.filter.stc.algorithm.Cluster;
+import com.dawidweiss.carrot.filter.stc.algorithm.MergedCluster;
 
 /**
  * A local interface to the STC clustering algorithms. Parts copied & pasted
@@ -58,12 +57,6 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
     /** Raw clusters consumer */
     private RawClustersConsumer rawClustersConsumer;
 
-    /** Stop words */
-    private Set stopWords;
-
-    /** Stems */
-    private Map stems;
-
     /**
      * Current request's context.
      */
@@ -78,18 +71,9 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
 
         documents.add(doc);
 
-        addStemsAndStopWords(doc.getTitle());
-        addStemsAndStopWords(doc.getSnippet());
-
-        final RawDocument rawDoc = (RawDocument) doc.getProperty(TokenizedDocument.PROPERTY_RAW_DOCUMENT);
-        final DocReference documentReference = new DocReference(
-                doc.getUrl(),
-                rawDoc.getTitle(),
-                (doc.getSnippet() == null)
-                        ? java.util.Collections.EMPTY_LIST
-                        : splitIntoSentences(doc.getSnippet()), rawDoc.getSnippet());
+        final DocReference documentReference = new DocReference(doc);
         documentReferences.add(documentReference);
-        
+
         stopTimer();
     }
 
@@ -99,8 +83,6 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
         super.init(context);
         documents = new ArrayList();
         documentReferences = new ArrayList();
-        stopWords = new HashSet();
-        stems = new HashMap();
     }
 
     public Set getComponentCapabilities()
@@ -130,8 +112,6 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
 
         documentReferences.clear();
         documents.clear();
-        stems.clear();
-        stopWords.clear();
         rawClustersConsumer = null;
         this.requestContext = null;
     }
@@ -148,58 +128,35 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
         startTimer();
 
         final STCEngine stcEngine = new STCEngine(documentReferences);
-        stcEngine.stemSnippets(new ImmediateStemmer()
-        {
-            public String stemWord(String word)
-            {
-                String x = (String) stems.get(word);
-
-                return ((x == null) ? word : x);
-            }
-        }, new StopWordsDetector()
-        {
-            public boolean isStopWord(String word)
-            {
-                return stopWords.contains(word);
-            }
-        });
-
         stcEngine.createSuffixTree();
 
         final StcParameters params = StcParameters.fromMap(
                 this.requestContext.getRequestParameters());
 
-        stcEngine.createBaseClusters(
-                params.getMinBaseClusterScore(),
-                params.getIgnoreWordIfInFewerDocs(),
-                params.getIgnoreWordIfInHigherDocsPercent(),
-                params.getMaxBaseClusters(),
-                params.getMinBaseClusterSize());
-
-        stcEngine.createMergedClusters(params.getMergeThreshold());
+        stcEngine.createBaseClusters(params);
+        stcEngine.createMergedClusters(params);
 
         final List clusters = stcEngine.getClusters();
         int max = params.getMaxClusters();
 
-        // Convert STC's clusters to the local interfaces' format
-        List rawClusters = new ArrayList();
+        // Convert STC's clusters to the format required by local interfaces.
+        final List rawClusters = new ArrayList();
         for (Iterator i = clusters.iterator(); i.hasNext() && (max > 0); max--)
         {
-            Cluster b = (Cluster) i.next();
-            RawClusterBase rawCluster = new RawClusterBase();
+            final MergedCluster b = (MergedCluster) i.next();
+            final RawClusterBase rawCluster = new RawClusterBase();
 
-            List phrases = b.getPhrases();
-            int maxPhr = 3;
-
+            int maxPhr = 3; // TODO: This should be a configuration parameter moved to STCEngine perhaps.
+            final List phrases = b.getDescriptionPhrases();
             for (Iterator j = phrases.iterator(); j.hasNext() && (maxPhr > 0); maxPhr--)
             {
-                BaseCluster.Phrase p = (BaseCluster.Phrase) j.next();
+                Phrase p = (Phrase) j.next();
                 rawCluster.addLabel(p.userFriendlyTerms().trim());
             }
 
-            for (Iterator j = b.documents.iterator(); j.hasNext();)
+            for (Iterator j = b.getDocuments().iterator(); j.hasNext();)
             {
-                int docIndex = ((Integer) j.next()).intValue();
+                final int docIndex = ((Integer) j.next()).intValue();
                 final TokenizedDocument tokenizedDoc = (TokenizedDocument) documents.get(docIndex);
                 final RawDocument rawDoc = (RawDocument) tokenizedDoc.getProperty(TokenizedDocument.PROPERTY_RAW_DOCUMENT);
                 rawCluster.addDocument(rawDoc);
@@ -224,58 +181,4 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
     {
         return "STC";
     }
-
-    /**
-     * Adds stems and stop words of <code>rawText</code> to internal data structures.
-     */
-    private TokenSequence addStemsAndStopWords(TokenSequence tokenSequence)
-    {
-        final int maxTokenIndex = tokenSequence.getLength();
-        for (int t = 0; t < maxTokenIndex; t++)
-        {
-            final TypedToken token = (TypedToken) tokenSequence.getTokenAt(t);
-            if ((token.getType() & TypedToken.TOKEN_FLAG_STOPWORD) != 0)
-            {
-                stopWords.add(token.getImage());
-            }
-
-            if (token instanceof StemmedToken)
-            {
-                final String stem = ((StemmedToken) token).getStem();
-                if (stem != null)
-                {
-                    stems.put(token.getImage(), stem);
-                }
-            }
-        }
-        
-        return tokenSequence;
-    }
-
-    /**
-     * Splits a token sequence into a {@link List} of {@link List}s (sentences) of
-     * {@link String} objects (words). 
-     */
-    private static List splitIntoSentences(final TokenSequence tokens) {
-        final ArrayList sentences = new ArrayList(10);
-        final ArrayList currentSentence = new ArrayList();
-        currentSentence.ensureCapacity(10);
-
-        final int maxTokenIndex = tokens.getLength();
-        for (int i = 0; i < maxTokenIndex; i++) {
-            final TypedToken token = (TypedToken) tokens.getTokenAt(i);
-            final short tokenType = token.getType();
-            if ((tokenType & TypedToken.TOKEN_FLAG_SENTENCE_DELIM) != 0) {
-                if (currentSentence.size() > 0) {
-                    sentences.add(new ArrayList(currentSentence));
-                    currentSentence.clear();
-                }
-            } else {
-                // Skip punctuation?
-                // if ((tokenType & TypedToken.TOKEN_TYPE_PUNCTUATION) == 0)
-                currentSentence.add(token.getImage());
-            }
-        }
-        return sentences;
-    }    
 }

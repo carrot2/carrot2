@@ -58,7 +58,8 @@ import java.util.*;
  * @author Dawid Weiss, (c) 1999 Poznan University of Technology, Institute of Computing
  *         Science.<BR> Jonathan Payne (original Vector class) (c) Sun Microsystems, Inc.<BR> Lee
  *         Boynton (original Vector class) (c) Sun Microsystems, Inc.
- * @version 0.9, 13 Apr 1999,<BR> 1.0, 18 Apr 1999, Rewritten documentation.<BR> 1.1,  2 May 2001, Synchronizations removed. List interface added, final keyword removed from methods.
+ * @version 0.9, 13 Apr 1999,<BR> 1.0, 18 Apr 1999, Rewritten documentation.<BR> 1.1,  2 May 2001,
+ * Synchronizations removed. List interface added, final keyword removed from methods.
  */
 final class FastVector
     extends AbstractList

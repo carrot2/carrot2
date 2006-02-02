@@ -16,26 +16,26 @@ package com.dawidweiss.carrot.filter.stc.algorithm;
 
 import java.util.*;
 
+import com.dawidweiss.carrot.filter.stc.StcParameters;
 import com.dawidweiss.carrot.filter.stc.suffixtree.ExtendedBitSet;
 
 
 /**
- * A cluster (after merging base clusters).
+ * A merged cluster (composition of {@link com.dawidweiss.carrot.filter.stc.algorithm.BaseCluster}s).
  */
-public class Cluster
-    implements Comparable
+public class MergedCluster implements Comparable
 {
     /** Merged base clusters list. */
-    protected ArrayList baseClusters = new ArrayList();
+    private ArrayList baseClusters = new ArrayList();
 
-    /** Score of all merged clusters. */
-    protected float score = 0;
+    /** Total score of all merged base clusters. */
+    private float score = 0;
 
-    /** Description phrases */
-    protected List phrases = null;
+    /** All description phrases of this cluster (without pruning) */
+    private List allPhrases;
 
     /** Number of documents in cluster */
-    public ExtendedBitSet documents = new ExtendedBitSet();
+    private final ExtendedBitSet documents = new ExtendedBitSet();
 
     /**
      * Getter for score variable
@@ -71,13 +71,18 @@ public class Cluster
         documents.or(b.getNode().getInternalDocumentsRepresentation());
     }
 
+    public void createDescription(final StcParameters parameters) {
+        this.allPhrases = this.createDescriptionPhrases(
+                parameters.getMaxPhraseOverlap(),
+                parameters.getMostGeneralPhraseCoverage());
+    }
 
     /**
      * Implementation of Comparable interface
      */
     public int compareTo(Object ob)
     {
-        float obScore = ((Cluster) ob).score;
+        float obScore = ((MergedCluster) ob).score;
 
         if (score < obScore)
         {
@@ -104,16 +109,33 @@ public class Cluster
 
 
     /**
-     * Retrieves the meaningful phrases describing this cluster
+     * Returns all phrases describing this cluster (union of phrases
+     * of base clusters).
      */
-    public List getPhrases()
+    public List getAllPhrases()
     {
-        if (phrases == null)
-        {
-            phrases = createDescriptionPhrases(0.6, 0.2);
-        }
+        return allPhrases;
+    }
 
-        return phrases;
+    /**
+     * Returns all phrases selected for the description. 
+     */
+    public List getDescriptionPhrases() {
+        final List all = getAllPhrases();
+
+        int max = 0;
+        for (;max < all.size(); max++) {
+            final Phrase phrase = (Phrase) all.get(max);
+            if (!phrase.isSelected()) {
+                break;
+            }
+        }
+        if (max == 0) {
+            // Prevent against clusters with no selected phrases
+            // (this should perhaps be an error?)
+            max = Math.min(1, all.size());
+        }
+        return all.subList(0, max);
     }
 
 
@@ -121,28 +143,26 @@ public class Cluster
      * Creates a list of meaningful (sometimes ;) phrases describing this cluster For the
      * heuristics used in this step refer to Oren Zamir and Oren Etzioni's article about Grouper.
      *
-     * @param OVERLAP_THRESHOLD Overlap threshold for step 2 of phrase pruning heuristic
-     * @param MIN_DIFFERENCE_THRESHOLD Minimal difference between coverage of most-general and
+     * @param maxPhraseOverlap Maximum overlap between selected description phrases (if exceeding,
+     *    the subphrase is removed from the selection). 
+     * @param minMostGeneralPhraseCoverage Minimal difference between coverage of most-general and
      *        most-specific phrases in order for most-general phrase to be displayed (phase 3 of
      *        pruning heuristic)
      */
-    public synchronized List createDescriptionPhrases(
-        double OVERLAP_THRESHOLD, double MIN_DIFFERENCE_THRESHOLD
-    )
+    private List createDescriptionPhrases(final double maxPhraseOverlap, final double minMostGeneralPhraseCoverage)
     {
-        ArrayList phrases = new ArrayList();
+        final ArrayList phrases = new ArrayList();
 
         // collect all possible choices first.
         for (Iterator l = getBaseClustersList().iterator(); l.hasNext();)
         {
             BaseCluster b = (BaseCluster) l.next();
-            BaseCluster.Phrase p = b.getPhrase();
+            Phrase p = b.getPhrase();
 
             phrases.add(p);
 
             // calculate coverage
-            p.coverage = (float) b.getNode().getSuffixedDocumentsCount() / documents
-                .numberOfSetBits();
+            p.setCoverage((float) b.getNode().getSuffixedDocumentsCount() / documents.numberOfSetBits());
         }
 
         // pruning step 2: removal of sub and super phrases
@@ -150,12 +170,11 @@ public class Cluster
         // we'll set them to false if the condition doesn't hold.
         for (int i = 0; i < phrases.size(); i++)
         {
-            BaseCluster.Phrase current = (BaseCluster.Phrase) phrases.get(i);
-
+            final Phrase current = (Phrase) phrases.get(i);
 phraseLoop: 
             for (int j = 0; j < phrases.size(); j++)
             {
-                BaseCluster.Phrase comp = (BaseCluster.Phrase) phrases.get(j);
+                Phrase comp = (Phrase) phrases.get(j);
 
                 if (i != j)
                 {
@@ -181,14 +200,14 @@ phraseLoop:
         // pruning step 3: Most general phrase with low coverage
         for (int i = 0; i < phrases.size(); i++)
         {
-            BaseCluster.Phrase current = (BaseCluster.Phrase) phrases.get(i);
+            Phrase current = (Phrase) phrases.get(i);
 
             if (current.mostGeneral)
             {
 notThisPhrase: 
                 for (int j = 0; j < phrases.size(); j++)
                 {
-                    BaseCluster.Phrase comp = (BaseCluster.Phrase) phrases.get(j);
+                    Phrase comp = (Phrase) phrases.get(j);
 
                     if ((i != j) && comp.mostSpecific)
                     {
@@ -208,9 +227,9 @@ notThisPhrase:
 
                         // does most-general phrase have at least 20% higher coverage? if not,
                         // don't display it.
-                        if ((current.coverage - comp.coverage) < MIN_DIFFERENCE_THRESHOLD)
+                        if ((current.getCoverage() - comp.getCoverage()) < minMostGeneralPhraseCoverage)
                         {
-                            current.selected = false;
+                            current.setSelected(false);
 
                             break;
                         }
@@ -222,11 +241,11 @@ notThisPhrase:
         // final pass and deletion of irrelevant phrases (neither ms nor mg).
         for (int i = 0; i < phrases.size(); i++)
         {
-            BaseCluster.Phrase current = (BaseCluster.Phrase) phrases.get(i);
+            Phrase current = (Phrase) phrases.get(i);
 
             if (!current.mostGeneral && !current.mostSpecific)
             {
-                current.selected = false;
+                current.setSelected(false);
             }
         }
 
@@ -235,15 +254,15 @@ notThisPhrase:
         // the first step of pruning, however proved not to work well.
         for (int i = 0; i < phrases.size(); i++)
         {
-            BaseCluster.Phrase current = (BaseCluster.Phrase) phrases.get(i);
+            Phrase current = (Phrase) phrases.get(i);
 
             for (int j = 0; j < phrases.size(); j++)
             {
-                BaseCluster.Phrase comp = (BaseCluster.Phrase) phrases.get(j);
+                Phrase comp = (Phrase) phrases.get(j);
 
                 if (
-                    (i != j) && current.selected && comp.selected
-                        && (current.coverage < comp.coverage)
+                    (i != j) && current.isSelected() && comp.isSelected()
+                        && (current.getCoverage() < comp.getCoverage())
                 )
                 {
                     // check words overlap.
@@ -265,33 +284,33 @@ notThisPhrase:
                         }
                     }
 
-                    // mark for removal if overlap exceeds 60%
-                    if ((overlap / total) > OVERLAP_THRESHOLD)
+                    // mark for removal if overlap exceeds the threshold
+                    if ((overlap / total) > maxPhraseOverlap)
                     {
-                        current.selected = false;
+                        current.setSelected(false);
                     }
                 }
             }
         }
 
-        // sort phrases. Selected with highest coverage first.
-        Object [] objects = phrases.toArray();
+        // Sort phrases. Selected with highest coverage first.
+        final Object [] objects = phrases.toArray();
         Arrays.sort(
             objects, 0, objects.length,
             new Comparator()
             {
                 public int compare(Object a, Object b)
                 {
-                    BaseCluster.Phrase pa = (BaseCluster.Phrase) a;
-                    BaseCluster.Phrase pb = (BaseCluster.Phrase) b;
+                    Phrase pa = (Phrase) a;
+                    Phrase pb = (Phrase) b;
 
-                    if ((pa.selected && pb.selected) || (!pa.selected && !pb.selected))
+                    if ((pa.isSelected() && pb.isSelected()) || (!pa.isSelected() && !pb.isSelected()))
                     {
-                        if (pa.coverage > pb.coverage)
+                        if (pa.getCoverage() > pb.getCoverage())
                         {
                             return -1;
                         }
-                        else if (pa.coverage < pb.coverage)
+                        else if (pa.getCoverage() < pb.getCoverage())
                         {
                             return 1;
                         }
@@ -302,7 +321,7 @@ notThisPhrase:
                     }
                     else
                     {
-                        if (pa.selected)
+                        if (pa.isSelected())
                         {
                             return -1;
                         }
@@ -316,5 +335,9 @@ notThisPhrase:
         );
 
         return java.util.Arrays.asList(objects);
+    }
+
+    public ExtendedBitSet getDocuments() {
+        return this.documents;
     }
 }

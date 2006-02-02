@@ -17,19 +17,55 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * A class for handling STC parameters and overriding them
- * with mapped values.
+ * A class for handling STC parameters and 
+ * overriding them with mapped values.
  * 
  * @author Dawid Weiss
  */
 public class StcParameters {
+    /**
+     * Minimal score of a potential base cluster in order to be added to
+     * base clusters.
+     */
     private double minBaseClusterScore;
+    
+    /**
+     * Ignore word if it exists in less documents (number, not percent!) than specified.
+     */
     private int ignoreWordIfInFewerDocs;
+    
+    /**
+     * A number between 0 and 1, if a word exists in more snippets than this ratio, it is ignored. 
+     */
     private double ignoreWordIfInHigherDocsPercent;
+
+    /**
+     * Trims the base cluster array after N-th position for the merging phase.
+     */
     private int maxBaseClusters;
+    
+    /**
+     * Minimal number of documents in a base cluster, if fewer, then the base cluster is removed
+     * before merging.
+     */
     private int minBaseClusterSize;
+
     private int maxClusters;
+    
+    /**
+     * Merge threshold for base cluster merging.
+     */
     private double mergeThreshold;
+
+    /**
+     * Maximum overlap of phrases selected to the cluster description.
+     */
+    private double maxPhraseOverlap;
+
+    /**
+     * Minimum general phrase coverage to appear in cluster description. 
+     */
+    private double mostGeneralPhraseCoverage;
 
     /**
      * Creates a new objects with default settings.
@@ -42,6 +78,8 @@ public class StcParameters {
         this.minBaseClusterSize = StcConstants.DEFAULT_MIN_BASE_CLUSTER_SIZE;
         this.maxClusters = StcConstants.DEFAULT_MAX_CLUSTERS;
         this.mergeThreshold = StcConstants.DEFAULT_MERGE_THRESHOLD;
+        this.maxPhraseOverlap = StcConstants.DEFAULT_MAX_PHRASE_OVERLAP;
+        this.mostGeneralPhraseCoverage = StcConstants.DEFAULT_MOST_GENERAL_PHRASE_COVERAGE;
     }
 
     public static StcParameters fromMap(Map map) {
@@ -106,6 +144,24 @@ public class StcParameters {
                 throw new RuntimeException("Illegal value range.");
             }
         }
+        
+        value = (String) map.get(StcConstants.MAX_PHRASE_OVERLAP);
+        if (value != null) {
+            params.maxPhraseOverlap = Double.parseDouble(value);
+            if (params.maxPhraseOverlap < 0.0d
+                    || params.maxPhraseOverlap > 1.0d) {
+                throw new RuntimeException("Illegal value range.");
+            }
+        }
+
+        value = (String) map.get(StcConstants.MOST_GENERAL_PHRASE_COVERAGE);
+        if (value != null) {
+            params.mostGeneralPhraseCoverage = Double.parseDouble(value);
+            if (params.mostGeneralPhraseCoverage < 0.0d
+                    || params.mostGeneralPhraseCoverage > 1.0d) {
+                throw new RuntimeException("Illegal value range.");
+            }
+        }
 
         return params;
     }
@@ -119,6 +175,8 @@ public class StcParameters {
         map.put(StcConstants.MERGE_THRESHOLD, Double.toString(getMergeThreshold()));
         map.put(StcConstants.MIN_BASE_CLUSTER_SCORE, Double.toString(getMinBaseClusterScore()));
         map.put(StcConstants.MIN_BASE_CLUSTER_SIZE, Integer.toString(getMinBaseClusterSize()));
+        map.put(StcConstants.MAX_PHRASE_OVERLAP, Double.toString(getMaxPhraseOverlap()));
+        map.put(StcConstants.MOST_GENERAL_PHRASE_COVERAGE, Double.toString(getMostGeneralPhraseCoverage()));
         return map;
     }
 
@@ -148,5 +206,13 @@ public class StcParameters {
 
     public float getMergeThreshold() {
         return (float) mergeThreshold;
+    }
+
+    public float getMaxPhraseOverlap() {
+        return (float) maxPhraseOverlap;
+    }
+
+    public float getMostGeneralPhraseCoverage() {
+        return (float) mostGeneralPhraseCoverage;
     }
 }

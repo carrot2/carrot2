@@ -23,10 +23,10 @@ import com.dawidweiss.carrot.filter.stc.suffixtree.SuffixableElement;
 public class ArrayStemmedSnippet
 {
     /** Snippet terms as an array. Sentences are separated with null values */
-    StemmedTerm [] snippet;
+    private final StemmedTerm [] snippet;
 
     /** Precalculated sentence boundaries */
-    StemmedSentence [] sentences;
+    private final StemmedSentence [] sentences;
 
     /**
      * Nested class representing a sentence in this snippet.

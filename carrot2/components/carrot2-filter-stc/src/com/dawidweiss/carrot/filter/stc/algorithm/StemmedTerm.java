@@ -13,42 +13,98 @@
 
 package com.dawidweiss.carrot.filter.stc.algorithm;
 
+import com.dawidweiss.carrot.core.local.linguistic.tokens.*;
 
 /**
  * Class representing a word after being stemmed.
  */
-public interface StemmedTerm
-{
-    /** unsupported operation exception if stemming is not available. */
-    public static final UnsupportedOperationException STEM_NOT_AVAILABLE = new UnsupportedOperationException(
-            "Stems are not available for the called stemmer."
-        );
+public class StemmedTerm {
+    /** original word */
+    private final String word;
+
+    /** Stemmed form */
+    private final String stemmed;
+
+    /** A flag indicating whether this term is on stop-list */
+    private final boolean stopword;
+
+    /**
+     * Public constructor wrapping a {@link Token}.
+     */
+    public StemmedTerm(Token token)
+    {
+        final TypedToken typedToken = (TypedToken) token;
+        final StemmedToken stemmedToken = (StemmedToken) token;
+        this.word = token.getImage();
+        this.stemmed = (stemmedToken.getStem() != null ? stemmedToken.getStem() : word);
+
+        final int tokenType = typedToken.getType();
+        if ((tokenType & TypedToken.TOKEN_FLAG_STOPWORD) != 0
+                || ((tokenType & TypedToken.TOKEN_FLAG_SENTENCE_DELIM) != 0)
+                || ((tokenType & TypedToken.MASK_TOKEN_TYPE) == TypedToken.TOKEN_TYPE_PUNCTUATION)) {
+            this.stopword = true;
+        } else {
+            this.stopword = false;
+        }
+    }
+
 
     /**
      * Indicates whether this term exists in the stop-list
      */
-    public boolean isStopWord();
+    public boolean isStopWord()
+    {
+        return stopword;
+    }
 
 
     /**
-     * Sets the stop-word flag to true or false. The result obtained from isStopWord must be
-     * consistent with this method.
+     * Overrides hashCode() method of Object class
      */
-    public void setStopWord(boolean value);
+    public int hashCode()
+    {
+        return stemmed.hashCode();
+    }
 
 
     /**
-     * Returns the original form of this term.
+     * Overrides equals() method of Object class
      */
-    public String getTerm();
+    public boolean equals(Object other)
+    {
+        if (other instanceof StemmedTerm) {
+            // possibility of optimization.
+            return stemmed.equals(((StemmedTerm) other).stemmed);
+        } else {
+            return false;
+        }
+    }
 
 
     /**
-     * Returns the stemmed form of original term.
-     *
-     * @throws UnsupportedOperationException when the object doesn't implement this interface
-     *         (stemmed form doesn't exist - only equals method is implemented).
+     * Implementation of Comparable interface
      */
-    public String getStemmed()
-        throws UnsupportedOperationException;
+    public int compareTo(Object p)
+    {
+        return stemmed.compareTo(((StemmedTerm) p).stemmed);
+    }
+
+
+    /**
+     * Returns string representation of this object
+     */
+    public String toString()
+    {
+        return "{" + (this.stopword ? "!"
+                                    : "") + this.word + "->" + stemmed + "}";
+    }
+
+
+    /**
+     * Implementation of StemmedTerm interface
+     */
+    public String getTerm()
+    {
+        return this.word;
+    }
 }

@@ -18,13 +18,14 @@ import com.dawidweiss.carrot.filter.stc.suffixtree.*;
 
 
 /**
- * Extends Generalized Suffix Tree in order to provide count of suffixed documents in each node.
+ * Extends Generalized Suffix Tree in order to provide count of suffixed
+ * documents in each node.
  */
 public class PhraseNode
     extends GSTNode
 {
     /** Suffixed documents */
-    ExtendedBitSet docs;
+    private final ExtendedBitSet docs;
 
     public ExtendedBitSet getInternalDocumentsRepresentation()
     {

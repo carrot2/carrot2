@@ -16,8 +16,8 @@ package com.dawidweiss.carrot.filter.stc.algorithm;
 
 import java.util.*;
 
+import com.dawidweiss.carrot.filter.stc.StcParameters;
 import com.dawidweiss.carrot.filter.stc.suffixtree.Edge;
-import com.dawidweiss.carrot.filter.stc.suffixtree.SuffixableElement;
 
 
 /**
@@ -76,53 +76,6 @@ public class STCEngine
     }
 
     /**
-     * Phase 1. Stemming of snippets
-     */
-    public long stemSnippets(ImmediateStemmer stemmer, StopWordsDetector stopWords)
-    {
-        long time = 0;
-        ImmediateReferenceStemmer refStemmer;
-        refStemmer = new ImmediateReferenceStemmer(stemmer);
-
-        // stem snippets
-        for (ListIterator z = snippets.listIterator(); z.hasNext();)
-        {
-            DocReference dr = (DocReference) z.next();
-
-            // stem snippet and update the time.
-            long tmp = System.currentTimeMillis();
-
-            refStemmer.process(dr);
-
-            time += (System.currentTimeMillis() - tmp);
-
-            // mark stop-words
-            ArrayStemmedSnippet ass = (dr.getStemmedSnippet());
-
-            for (int i = 0; i < ass.size(); i++)
-            {
-                SuffixableElement sentence = ass.getSentence(i);
-
-                for (int j = 0; j < sentence.size(); j++)
-                {
-                    if (sentence.get(j) instanceof StemmedTerm)
-                    {
-                        StemmedTerm t = (StemmedTerm) sentence.get(j);
-
-                        if (stopWords.isStopWord(t.getTerm()))
-                        {
-                            t.setStopWord(true);
-                        }
-                    }
-                }
-            }
-        }
-
-        return time;
-    }
-
-
-    /**
      * Phase 2. Creation of base clusters. [todo] An interface for the tree object should be
      * created at some time in the future. As for now only util.suffixtrees.GeneralizedSuffixTree
      * is used.
@@ -139,7 +92,6 @@ public class STCEngine
             // add sentence suffixes to suffix tree
             long tmp = System.currentTimeMillis();
             ArrayStemmedSnippet ass = dr.getStemmedSnippet();
-
             ass.trimEdgeStopWords();
 
             for (int i = 0; i < ass.size(); i++)
@@ -158,27 +110,15 @@ public class STCEngine
 
     /**
      * Phase 3. Create base clusters from the suffix tree.
-     *
-     * @param minBaseClusterScore minimal score of a potential base cluster in order to be added to
-     *        base clusters.
-     * @param ignoreWordIfInMorePercentOfDocumentsThan a number between 0 and 1, if a word exists
-     *        in more snippets than this ratio, it is ignored.
-     * @param ignoreWordIfInLessDocumentsThan ignore word if it exists in less documents (number,
-     *        not percent!) than specified.
-     * @param noMoreBaseClustersThan Trims the base cluster array after N-th position
-     * @param minimalGroupSize Minimal documents in a group, if less the base cluster is removed
      */
-    public long createBaseClusters(
-        float minBaseClusterScore, int ignoreWordIfInLessDocumentsThan,
-        float ignoreWordIfInMorePercentOfDocumentsThan, int noMoreBaseClustersThan,
-        int minimalGroupSize
-    )
+    public long createBaseClusters(final StcParameters params)
     {
-        float SCORE_THRESHOLD = minBaseClusterScore;
-        int STOPWORD_LESSTHAN = ignoreWordIfInLessDocumentsThan;
-        float STOPWORD_MORETHAN = ignoreWordIfInMorePercentOfDocumentsThan;
-        long time = System.currentTimeMillis();
-        Stack nodes = new Stack();
+        final float minBaseClusterScore = params.getMinBaseClusterScore();
+        final int ignoreIfInFewerDocs = params.getIgnoreWordIfInFewerDocs();
+        final float ignoreIfInHigherDocsPercent = params.getIgnoreWordIfInHigherDocsPercent();
+
+        final long time = System.currentTimeMillis();
+        final Stack nodes = new Stack();
 
         baseClusters = new FastVector(1000, 500);
 
@@ -197,9 +137,8 @@ public class STCEngine
         while (!nodes.empty())
         {
             PhraseNode current = (PhraseNode) nodes.pop();
-            int m;
-
-            if ((m = current.getSuffixedDocumentsCount()) > 1)
+            final int suffixedDocumentsCount = current.getSuffixedDocumentsCount();
+            if (suffixedDocumentsCount > 1)
             {
                 // push subnodes to the processing stack.
                 for (Iterator r = current.getEdgesIterator(); r.hasNext();)
@@ -224,72 +163,50 @@ public class STCEngine
                     (phrase.size() > 0)
                         && (((StemmedTerm) phrase.get(0)).isStopWord()
                         || ((StemmedTerm) phrase.get(phrase.size() - 1)).isStopWord())
-                )
-                {
+                ) {
                     continue;
                 }
 
                 // calculate effective phrase length (number of non stop-list words)
-                int mp = 0;
-
+                int effectivePhraseLength = 0;
                 for (Iterator z = phrase.iterator(); z.hasNext();)
                 {
-                    StemmedTerm term = (StemmedTerm) z.next();
-
-                    // in stop-list?
+                    final StemmedTerm term = (StemmedTerm) z.next();
+                    // is in stop-list?
                     if (term.isStopWord())
                     {
                         continue;
                     }
 
                     // in more than 40% or less than 3 documents in a collection?
-                    Edge wedge = suffixTree.getRootNode().findEdgeMatchingFirstElement(term);
-
+                    final Edge wedge = suffixTree.getRootNode().findEdgeMatchingFirstElement(term);
                     if (wedge != null)
                     {
                         // MUST ALWAYS BE != NULL, but just to make sure... :)
-                        int sec = ((PhraseNode) wedge.getEndNode()).getSuffixedDocumentsCount();
-
-                        if (
-                            (sec < STOPWORD_LESSTHAN)
-                                || (sec > (int) (STOPWORD_MORETHAN * snippets.size()))
-                        )
-                        {
+                        final int sec = ((PhraseNode) wedge.getEndNode()).getSuffixedDocumentsCount();
+                        if ((sec < ignoreIfInFewerDocs)
+                                || (sec > (int) (ignoreIfInHigherDocsPercent * snippets.size()))) {
                             continue;
                         }
                     }
 
-                    mp++;
+                    effectivePhraseLength++;
                 }
 
                 // effective length equals zero? Don't take this cluster.
-                if (mp == 0)
-                {
+                if (effectivePhraseLength == 0) {
                     continue;
                 }
 
-                // effective length of the phrase corrects the score.
-                float fmp;
+                // The phrase length is corrected with a function. The original
+                // STC algorithm uses linear gradient. I modify it here to penalize
+                // very long phrases (which usually denote repeated snippets). 
+                final float score = calculateModifiedBaseClusterScore(effectivePhraseLength, suffixedDocumentsCount);
+                // final float score = calculateOriginalBaseClusterScore(effectivePhraseLength, suffixedDocumentsCount);
 
-                if (mp == 1)
-                {
-                    fmp = 0.5f;
-                }
-                else if (mp >= 6)
-                {
-                    fmp = 1;
-                }
-                else
-                {
-                    fmp = (float) ((((float) (mp - 1) / (6 - 1)) * 0.5f) + 0.5);
-                }
-
-                // calculate base cluster's score
-                float score = m * fmp;
-
-                if (score > SCORE_THRESHOLD)
-                {
-                    baseClusters.add(new BaseCluster(current, score));
+                if (score > minBaseClusterScore) {
+                    final BaseCluster baseCluster = new BaseCluster(current, score);
+                    baseClusters.add(baseCluster);
                 }
             }
         }
@@ -320,8 +237,11 @@ public class STCEngine
             }
         );
 
+
         // take only N first base clusters and only those existing in more than
         // X documents
+        final int noMoreBaseClustersThan = params.getMaxBaseClusters();
+        final int minimalGroupSize = params.getMinBaseClusterSize();
         for (int i = 0; i < baseClusters.lastIndex(); i++)
         {
             if (
@@ -350,11 +270,78 @@ public class STCEngine
 
 
     /**
+     * Modified base cluster scoring formula.
+     * 
+     * A formula with an exponential penalty for phrases around the "optimum" expected
+     * phrase length. You can draw this score multiplier's characteristic
+     * with gnuplot. One word-phrases are always set to boost 0.5.
+     * <pre>
+     * reset
+     * set xrange [0:10]
+     * set yrange [0:]
+     * 
+     * set xlabel "Phrase length"
+     * set ylabel "Score multiplier"
+     * 
+     * set border 3
+     * set boxwidth 0.6
+     * set key off
+     * 
+     * set grid
+     * 
+     * set xtics border nomirror 1
+     * set ytics border nomirror
+     * set ticscale 1.0
+     * show tics
+     * 
+     * avg = 3
+     * dev = 2
+     * 
+     * plot exp(-(x - avg) * (x - avg) / (2 * dev * dev))
+     * 
+     * replot
+     * </pre>
+     */
+    private float calculateModifiedBaseClusterScore(final int effectivePhraseLength, final int documentCount) {
+        final double SINGLE_WORD_BOOST = 0.5f;
+        final int optimalPhraseLength = 3;
+        final int optimalPhraseLengthDev = 2;
+
+        final double boost;
+        if (effectivePhraseLength == 1) {
+            boost = SINGLE_WORD_BOOST;
+        } else {
+            final int tmp = effectivePhraseLength - optimalPhraseLength;
+            boost = Math.exp((-tmp * tmp) / (double) (2*optimalPhraseLengthDev*optimalPhraseLengthDev));
+        }
+
+        return (float) (boost * documentCount);
+    }
+
+    /**
+     * Calculates base cluster score using the original formula used in STC paper. 
+     */
+    private float calculateOriginalBaseClusterScore(final int effectivePhraseLength, final int documentCount) {
+        // Original STC base cluster scoring formula.
+        final double SINGLE_WORD_BOOST = 0.5f;
+        double boost;
+        if (effectivePhraseLength == 1) {
+            boost = SINGLE_WORD_BOOST;
+        } else if (effectivePhraseLength >= 6) {
+            boost = 1;
+        } else {
+            boost = (((float) (effectivePhraseLength - 1) / (6 - 1)) * 0.5f) + 0.5f;
+        }
+        return (float) boost * documentCount;
+    }
+
+    /**
      * Phase 4. Create merged clusters
      */
-    public long createMergedClusters(float MERGE_THRESHOLD)
+    public long createMergedClusters(final StcParameters parameters)
     {
-        long time = System.currentTimeMillis();
+        final float MERGE_THRESHOLD = parameters.getMergeThreshold();
+        final long time = System.currentTimeMillis();
 
         // Create links in base clusters graph
         for (int i = 1; i < baseClusters.size(); i++)
@@ -387,43 +374,42 @@ public class STCEngine
 
         // merge base clusters and create final clusters
         clusters = new FastVector();
-
         for (int i = 0; i < baseClusters.size(); i++)
         {
-            if (((BaseCluster) baseClusters.elementAt(i)).merged == false)
+            if (((BaseCluster) baseClusters.elementAt(i)).isMerged() == false)
             {
-                final Cluster c = new Cluster();
-                clusters.add(c);
+                final MergedCluster mergedCluster = new MergedCluster();
+                clusters.add(mergedCluster);
 
                 final Stack s = new Stack();
                 s.push(baseClusters.elementAt(i));
 
                 while (!s.empty())
                 {
-                    BaseCluster b = (BaseCluster) s.pop();
+                    BaseCluster baseCluster = (BaseCluster) s.pop();
 
-                    if (b.merged)
-                    {
+                    if (baseCluster.isMerged()) {
                         continue;
                     }
 
-                    b.merged = true;
+                    baseCluster.setMerged(true);
+                    mergedCluster.include(baseCluster);
 
-                    c.include(b);
-
-                    if (b.getNeighborsList() != null)
+                    if (baseCluster.getNeighborsList() != null)
                     {
-                        for (Iterator it = b.getNeighborsList().iterator(); it.hasNext();)
+                        for (Iterator it = baseCluster.getNeighborsList().iterator(); it.hasNext();)
                         {
-                            b = (BaseCluster) it.next();
+                            baseCluster = (BaseCluster) it.next();
 
-                            if (b.merged == false)
+                            if (baseCluster.isMerged() == false)
                             {
-                                s.push(b);
+                                s.push(baseCluster);
                             }
                         }
                     }
                 }
+                // Create merged cluster's description. 
+                mergedCluster.createDescription(parameters);
             }
         }
 
