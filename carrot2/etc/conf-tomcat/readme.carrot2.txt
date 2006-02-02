@@ -28,6 +28,14 @@ can do it by adding this attribute to the connector spec. in server.xml
 
 URIEncoding="utf-8"
 
+An example connector should look similar to this one:
+
+<Connector port="8080"
+    maxThreads="25" minSpareThreads="5" maxSpareThreads="10"
+    minProcessors="5" maxProcessors="25" enableLookups="false"
+    redirectPort="8443" acceptCount="10" debug="0" connectionTimeout="20000" 
+    URIEncoding="UTF-8" />
+
 3.
 
 For Google API input component, you need to define 'googleapi.keypool' system property
