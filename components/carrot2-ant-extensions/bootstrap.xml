@@ -13,6 +13,7 @@
                deprecation = "on"
                includeantruntime = "true"
                includejavaruntime = "false"
+			   encoding = "UTF-8"
         >
             <src path="${carrot2.cvs.dir}/components/carrot2-ant-extensions/src" />
             <classpath>
