@@ -17,67 +17,57 @@ import java.text.NumberFormat;
 
 
 /**
- * @author stachoo
+ * Represents a single feature (key word/phrase) found by Lingo in the input
+ * snippets.
+ * 
+ * @author Stanislaw Osinski
  */
 public class Feature {
-    /** */
 
-    /** DOCUMENT ME! */
+    /** A unique integer code of this feature */
     private int code;
 
-    /** */
-
-    /** DOCUMENT ME! */
+    /** String representation of this feature */
     private String text;
 
-    /** */
-
-    /** DOCUMENT ME! */
+    /** ISO code of the language to which Lingo believes this feature belongs */
     private String language;
 
-    /** */
-
-    /** DOCUMENT ME! */
+    /** The number of occurrences of this feature in all input snippets */
     private int tf;
 
-    /** */
-
-    /** DOCUMENT ME! */
+    /** Inverse-document frequency of this feature */
     private double idf;
 
-    /** */
-
-    /** DOCUMENT ME! */
+    /** Length (in words) of this feature */
     private int length;
 
-    /** */
-
-    /** DOCUMENT ME! */
+    /** True if this feature is a stop word */
     private boolean stopWord;
 
-    /** */
-
-    /** DOCUMENT ME! */
+    /** True if this feature is among query words */
     private boolean queryWord;
 
-    /** */
-
-    /** DOCUMENT ME! */
+    /** True if this feature appeared in some snippet's title */
     private boolean strong;
 
-    /** */
-
-    /** DOCUMENT ME! */
+    /**
+     * Used for phrase features only. An array pointing to features
+     * representing the phrase's individual words. 
+     */
     private int[] phraseFeatureIndices;
 
-    /** */
-
-    /** DOCUMENT ME! */
+    /**
+     * Indexes of snippets in which this feature was found. 
+     */
     private int[] snippetIndices;
 
-    /** */
-
-    /** DOCUMENT ME! */
+    /**
+     * The frequency of this feature across individual snippets. If the
+     * <code>n</code>-th element of this array is equal to <code>k</code>,
+     * it means that this feature appeared <code>k</code> times in snippet
+     * <code>n</code>.
+     */
     private int[] snippetTf;
 
     /**

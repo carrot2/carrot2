@@ -16,6 +16,7 @@ package com.stachoodev.carrot.filter.lingo.common;
 import com.dawidweiss.carrot.core.local.linguistic.Language;
 import com.dawidweiss.carrot.core.local.linguistic.Stemmer;
 
+import com.stachoodev.carrot.filter.lingo.local.LingoLocalFilterComponent;
 import com.stachoodev.carrot.filter.lingo.lsicluster.LsiClusteringStrategy;
 import com.stachoodev.carrot.filter.lingo.util.log.TimeLogger;
 
@@ -181,6 +182,13 @@ public class MultilingualClusteringContext extends AbstractClusteringContext {
      */
     void extractFeatures() {
         features = featureExtractionStrategy.extractFeatures(this);
+        
+        if (parameters
+            .get(LingoLocalFilterComponent.PARAMETER_LEAVE_FEATURES_IN_CONTEXT) != null)
+        {
+            parameters.put(LingoLocalFilterComponent.LINGO_EXTRACTED_FEATURES,
+                features);
+        }
     }
 
     /**
