@@ -19,6 +19,7 @@ import com.dawidweiss.carrot.core.local.*;
 import com.dawidweiss.carrot.core.local.clustering.*;
 import com.dawidweiss.carrot.core.local.linguistic.*;
 import com.dawidweiss.carrot.core.local.profiling.*;
+import com.stachoodev.carrot.filter.lingo.common.*;
 import com.stachoodev.carrot.filter.lingo.common.Cluster;
 import com.stachoodev.carrot.filter.lingo.common.MultilingualClusteringContext;
 
@@ -35,6 +36,22 @@ import com.stachoodev.carrot.filter.lingo.common.MultilingualClusteringContext;
 public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
     implements RawDocumentsConsumer, RawClustersProducer, RawDocumentsProducer, LocalFilterComponent
 {
+    /**
+     * If this parameter is not-null (e.g. Boolean.TRUE), Lingo will leave in
+     * the {@link RequestContext} an array of {@link Feature}s found in the
+     * input snippets. Use the {@link #LINGO_EXTRACTED_FEATURES} key to obtain
+     * the features from the context.
+     */
+    public static final String PARAMETER_LEAVE_FEATURES_IN_CONTEXT = "leave-features";
+
+    /**
+     * When the {@link #PARAMETER_LEAVE_FEATURES_IN_CONTEXT} request parameter
+     * is not-null, Lingo will leave under this key in the
+     * {@link RequestContext} an array of {@link Feature}s extracted while 
+     * clustering.
+     */
+    public static final String LINGO_EXTRACTED_FEATURES = "lingo-extracted-features";
+    
     /** Documents to be clustered */
     private ArrayList documents;
 
@@ -210,6 +227,10 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
             		new RawClusterInterfaceAdapter( clusters[i], documents ));
         }
 
+        // Copy features to the context parameters
+        requestParams.put(LINGO_EXTRACTED_FEATURES, current
+            .get(LINGO_EXTRACTED_FEATURES));
+        
         stopTimer();
 
         super.endProcessing();
