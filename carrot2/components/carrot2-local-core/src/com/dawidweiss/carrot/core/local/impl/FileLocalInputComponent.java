@@ -49,9 +49,6 @@ public class FileLocalInputComponent extends LocalInputComponentBase
     /** Current RawDocumentsConsumer to feed */
     private RawDocumentsConsumer rawDocumentConsumer;
 
-    /** Current request context */
-    private RequestContext requestContext;
-
     /** */
     private File inputDir;
 
@@ -62,6 +59,10 @@ public class FileLocalInputComponent extends LocalInputComponentBase
     {
         public String query;
         public List rawDocuments;
+    }
+
+    public FileLocalInputComponent()
+    {
     }
 
     /**
@@ -157,9 +158,6 @@ public class FileLocalInputComponent extends LocalInputComponentBase
 
         super.startProcessing(requestContext);
 
-        // Store the current context
-        this.requestContext = requestContext;
-
         File inputFile = new File(inputDir, query);
 
         if (!inputFile.isFile() || !inputFile.canRead())
@@ -191,8 +189,16 @@ public class FileLocalInputComponent extends LocalInputComponentBase
                 new Integer(queryResult.rawDocuments.size()));
 
             // Pass the query
-            requestContext.getRequestParameters().put(
-                LocalInputComponent.PARAM_QUERY, queryResult.query);
+            if (queryResult.query != null)
+            {
+                requestContext.getRequestParameters().put(
+                    LocalInputComponent.PARAM_QUERY, queryResult.query);
+            }
+            else
+            {
+                requestContext.getRequestParameters().put(
+                    LocalInputComponent.PARAM_QUERY, query);
+            }
 
             for (Iterator iter = queryResult.rawDocuments.iterator(); iter
                 .hasNext();)
@@ -290,7 +296,6 @@ public class FileLocalInputComponent extends LocalInputComponentBase
         super.flushResources();
         query = null;
         inputDir = null;
-        requestContext = null;
         rawDocumentConsumer = null;
     }
 }
