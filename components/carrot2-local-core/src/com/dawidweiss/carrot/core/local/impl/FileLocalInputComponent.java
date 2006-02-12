@@ -132,6 +132,111 @@ public class FileLocalInputComponent extends LocalInputComponentBase
     public void startProcessing(RequestContext requestContext)
         throws ProcessingException
     {
+        File inputFile = getInputFile(requestContext);
+
+        try
+        {
+            int requestedResults = getRequestedResultsCount(requestContext);
+
+            // Load query results from the file
+            SAXReader reader = new SAXReader();
+            Element root = reader.read(inputFile).getRootElement();
+
+            // Pass the actual document count
+            passQueryResult(root, requestContext, requestedResults);
+
+            // Pass additional information
+            passAdditionalInformation(root, requestContext);
+        }
+        catch (Exception e)
+        {
+            throw new ProcessingException("Problems opening source file: ", e);
+        }
+    }
+
+    /**
+     * @param requestContext
+     * @return
+     */
+    protected int getRequestedResultsCount(RequestContext requestContext)
+    {
+        int requestedResults;
+        if (requestContext.getRequestParameters().containsKey(
+            LocalInputComponent.PARAM_REQUESTED_RESULTS))
+        {
+            requestedResults = Integer.parseInt(requestContext
+                .getRequestParameters().get(
+                    LocalInputComponent.PARAM_REQUESTED_RESULTS).toString());
+        }
+        else
+        {
+            requestedResults = -1;
+        }
+        return requestedResults;
+    }
+
+    /**
+     * Invoked at the end of the {@link #startProcessing(RequestContext)} method
+     * to allow subclasses to pass some additional information to the next
+     * component in the chain. Implementation of this method in this class is
+     * empty.
+     * 
+     * @param root
+     * @param requestContext
+     */
+    protected void passAdditionalInformation(Element root,
+        RequestContext requestContext)
+    {
+    }
+
+    /**
+     * Passes the query result to the next component in the chain.
+     * 
+     * @param requestContext
+     * @param queryResult
+     * @throws ProcessingException
+     */
+    protected void passQueryResult(Element root, RequestContext requestContext,
+        int requestedResults) throws ProcessingException
+    {
+        // Extract documents
+        QueryResult queryResult = extractQueryResult(root, requestedResults);
+
+        requestContext.getRequestParameters().put(
+            LocalInputComponent.PARAM_TOTAL_MATCHING_DOCUMENTS,
+            new Integer(queryResult.rawDocuments.size()));
+
+        // Pass the query
+        if (queryResult.query != null)
+        {
+            requestContext.getRequestParameters().put(
+                LocalInputComponent.PARAM_QUERY, queryResult.query);
+        }
+        else
+        {
+            requestContext.getRequestParameters().put(
+                LocalInputComponent.PARAM_QUERY, query);
+        }
+
+        for (Iterator iter = queryResult.rawDocuments.iterator(); iter
+            .hasNext();)
+        {
+            RawDocument rawDocument = (RawDocument) iter.next();
+            rawDocumentConsumer.addDocument(rawDocument);
+        }
+    }
+
+    /**
+     * Returns the input {@link File} to read from.
+     * 
+     * @param requestContext
+     * @return
+     * @throws ProcessingException in case of problems determining the input
+     *             file
+     */
+    protected File getInputFile(RequestContext requestContext)
+        throws ProcessingException
+    {
         // Get source path from the request context
         inputDir = (File) requestContext.getRequestParameters().get(
             PARAM_INPUT_DIR);
@@ -165,52 +270,7 @@ public class FileLocalInputComponent extends LocalInputComponentBase
             throw new ProcessingException("Cannot read file: "
                 + inputFile.getAbsolutePath());
         }
-
-        try
-        {
-            int requestedResults;
-            if (requestContext.getRequestParameters().containsKey(
-                LocalInputComponent.PARAM_REQUESTED_RESULTS))
-            {
-                requestedResults = Integer
-                    .parseInt(requestContext.getRequestParameters().get(
-                        LocalInputComponent.PARAM_REQUESTED_RESULTS).toString());
-            }
-            else
-            {
-                requestedResults = -1;
-            }
-            QueryResult queryResult = loadQueryResult(inputFile,
-                requestedResults);
-
-            // Pass the actual document count
-            requestContext.getRequestParameters().put(
-                LocalInputComponent.PARAM_TOTAL_MATCHING_DOCUMENTS,
-                new Integer(queryResult.rawDocuments.size()));
-
-            // Pass the query
-            if (queryResult.query != null)
-            {
-                requestContext.getRequestParameters().put(
-                    LocalInputComponent.PARAM_QUERY, queryResult.query);
-            }
-            else
-            {
-                requestContext.getRequestParameters().put(
-                    LocalInputComponent.PARAM_QUERY, query);
-            }
-
-            for (Iterator iter = queryResult.rawDocuments.iterator(); iter
-                .hasNext();)
-            {
-                RawDocument rawDocument = (RawDocument) iter.next();
-                rawDocumentConsumer.addDocument(rawDocument);
-            }
-        }
-        catch (Exception e)
-        {
-            throw new ProcessingException("Problems opening source file: ", e);
-        }
+        return inputFile;
     }
 
     public static QueryResult loadQueryResult(File inputFile,

@@ -30,6 +30,12 @@ public class FileLocalOutputComponent extends LocalOutputComponentBase
     /** Data source path (directory or file) */
     public static final String PARAM_OUTPUT_DIR = "output-dir";
 
+    /**
+     * An optional instace of the {@link AdditionalInformationSerializer}
+     * interface.
+     */
+    public static final String PARAM_ADDITIONAL_INFORMATION_SERIALIZER = "additional-info-serializer";
+
     /** Capabilities required from the previous component in the chain */
     private final static Set CAPABILITIES_PREDECESSOR = new HashSet(Arrays
         .asList(new Object []
@@ -55,6 +61,23 @@ public class FileLocalOutputComponent extends LocalOutputComponentBase
 
     /** */
     private List rawClusters;
+
+    /**
+     * An object implementing this interface can be passed in the
+     * {@link FileLocalInputComponent#PARAM_ADDITIONAL_INFORMATION_SERIALIZER}
+     * request parameter in order to save some additional information to the
+     * output file.
+     * 
+     * @author Stanislaw Osinski
+     */
+    public static interface AdditionalInformationSerializer
+    {
+        public void setRequestContext(RequestContext requestContext);
+
+        public void flushResources();
+
+        public void addAdditionalInformation(Element root);
+    }
 
     public FileLocalOutputComponent()
     {
@@ -109,16 +132,23 @@ public class FileLocalOutputComponent extends LocalOutputComponentBase
             LocalInputComponent.PARAM_QUERY);
         File finalOutput = new File(outputDir, query);
 
-        saveRawClusters(rawClusters, query, finalOutput, true);
+        AdditionalInformationSerializer additionalInformationSerializer = (AdditionalInformationSerializer) requestContext
+            .getRequestParameters()
+            .get(PARAM_ADDITIONAL_INFORMATION_SERIALIZER);
+        additionalInformationSerializer.setRequestContext(requestContext);
+
+        saveRawClusters(rawClusters, query, finalOutput, true,
+            additionalInformationSerializer);
+        
+        additionalInformationSerializer.flushResources();
 
         super.endProcessing();
     }
 
-    /**
-     * @throws ProcessingException
-     */
     public static void saveRawClusters(List rawClusters, String query,
-        File outputFile, boolean saveClusters) throws ProcessingException
+        File outputFile, boolean saveClusters,
+        AdditionalInformationSerializer additionalInformationSerializer)
+        throws ProcessingException
     {
         // Prepare the XML
         Set documents = new HashSet();
@@ -134,7 +164,13 @@ public class FileLocalOutputComponent extends LocalOutputComponentBase
         if (saveClusters)
         {
             addClusters(root, rawClusters);
-        }        
+        }
+
+        if (additionalInformationSerializer != null)
+        {
+            additionalInformationSerializer.addAdditionalInformation(root);
+        }
+
         writeToFile(root, outputFile);
     }
 

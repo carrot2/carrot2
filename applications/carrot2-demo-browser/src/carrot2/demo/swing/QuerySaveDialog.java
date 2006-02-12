@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -27,6 +26,7 @@ import carrot2.demo.DemoContext;
 import com.dawidweiss.carrot.core.local.*;
 import com.dawidweiss.carrot.core.local.impl.ClustersConsumerOutputComponent;
 import com.dawidweiss.carrot.core.local.impl.FileLocalOutputComponent;
+import com.dawidweiss.carrot.core.local.impl.FileLocalOutputComponent.AdditionalInformationSerializer;
 
 /**
  * @author Stanislaw Osinski
@@ -218,8 +218,29 @@ public class QuerySaveDialog
                 processId, query, requestParams);
             java.util.List rawClusters = ((ClustersConsumerOutputComponent.Result) result
                 .getQueryResult()).clusters;
+
+            FileLocalOutputComponent.AdditionalInformationSerializer additionalInformationSerializer = (AdditionalInformationSerializer) result
+                .getRequestContext()
+                .getRequestParameters()
+                .get(
+                    FileLocalOutputComponent.PARAM_ADDITIONAL_INFORMATION_SERIALIZER);
+            if (additionalInformationSerializer != null)
+            {
+                additionalInformationSerializer.setRequestContext(result
+                    .getRequestContext());
+            }
+            
+            // In the future, clusters could be saved by a class whose name
+            // is specified in the process configuration file.
             FileLocalOutputComponent.saveRawClusters(rawClusters, query,
-                new File(fileName.getText()), saveClusters.isSelected());
+                new File(fileName.getText()), saveClusters.isSelected(),
+                additionalInformationSerializer);
+            
+            if (additionalInformationSerializer != null)
+            {
+                additionalInformationSerializer.flushResources();
+            }
+
             dialog.setVisible(false);
         }
         catch (MissingProcessException e1)
