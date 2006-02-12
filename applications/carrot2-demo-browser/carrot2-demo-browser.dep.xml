@@ -40,8 +40,6 @@
 
     <dependency name="carrot2-util-common" />
     <dependency name="carrot2-local-core" />
-    <dependency name="carrot2-util-tokenizer" />
-    <dependency name="carrot2-input-local-cache" in-profile="local" />
     <dependency name="carrot2-local-controller" />
 
 	<!-- Stripped profile contains component references for compilation time only -->
@@ -50,8 +48,9 @@
     <dependency name="carrot2-filter-trc" in-profile="local"   profile="stripped" nocopy="true" />
     <dependency name="carrot2-filter-stc" in-profile="local"   profile="stripped" nocopy="true" />
     <dependency name="carrot2-input-yahooapi" in-profile="local" profile="stripped" nocopy="true" />
-    <dependency name="carrot2-filter-case-normalizer" in-profile="local" profile="stripped" nocopy="true" />
-	
+    <dependency name="carrot2-util-tokenizer" profile="stripped" nocopy="true" />
+    <dependency name="carrot2-input-local-cache" in-profile="local" profile="stripped" nocopy="true" />
+	<dependency name="carrot2-filter-case-normalizer" in-profile="local" profile="stripped" nocopy="true" />
 
 	<!-- Full profile contains all demo components -->
 
@@ -59,6 +58,8 @@
     <dependency name="carrot2-filter-trc" in-profile="local"   profile="full" />
     <dependency name="carrot2-filter-stc" in-profile="local"   profile="full" />
     <dependency name="carrot2-input-yahooapi" in-profile="local" profile="full" />
-    <dependency name="carrot2-filter-case-normalizer" in-profile="local" profile="full" />
+    <dependency name="carrot2-util-tokenizer" profile="full" />
+    <dependency name="carrot2-input-local-cache" in-profile="local" profile="full" />
+	<dependency name="carrot2-filter-case-normalizer" in-profile="local" profile="full" />
 </component>
 
