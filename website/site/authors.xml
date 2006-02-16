@@ -6,12 +6,12 @@
                 <title>Authors</title>
 
                 <p>
-                The first version of Carrot was originally written by Dawid Weiss.
+                The first version of Carrot was originally written by <a href="http://www.cs.put.poznan.pl/dweiss/">Dawid Weiss</a>.
                 It has evolved from a pretty closed search results clustering system
                 into an open, modular framework for pipelined data processing. These changes were
                 significant enough to justify the change of project's name to
                 <carrot-text/>. Currently the core development is performed by Dawid Weiss and
-                Stanisław Osiński, although many other contributors donated their work and
+                <a href="http://www.man.poznan.pl/~stachoo/">Stanisław Osiński</a>, although many other contributors donated their work and
                 patches back to the project (their list is in the CVS). 
                 </p>
             </chapter>
