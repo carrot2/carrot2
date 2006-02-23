@@ -1,4 +1,4 @@
-CVS root
+repository root
 |
 +---bin                             > shell scripts invoking common tools.
 +---applications                    > demo applications and glue code to third-party
