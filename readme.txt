@@ -121,7 +121,7 @@ ant -q build
 ant -q test
 
 External tests suite (HTTPUnit tests) and documentation are available as a 
-separate CVS checkout.
+separate checkout.
 
 See the results of the most recent tests on-line at:
 http://carrot.cs.put.poznan.pl

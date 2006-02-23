@@ -4,7 +4,7 @@ Quality Assurance [before a release]
 
 - Make sure the local checkout is in sync with the server:
 
-	cvs -q -n -z3 up            (nothing should be printed)
+	svn stat -u                 (nothing should be printed)
 
 
 - Go to carrot root checkout and issue the following:
@@ -34,7 +34,7 @@ to instructions in the readme.txt file. See if it works.
 
 - Again check if there are no locally modified sources:
 
-	cvs -q -n -z3 up            (nothing should be printed)
+	svn stat -u                 (nothing should be printed)
 
 - Assign version number.
 	- place the release date in: doc/roadmap-VERSION.txt (if it is present).
@@ -42,7 +42,7 @@ to instructions in the readme.txt file. See if it works.
 
 - Tag the repository:
 
-	cvs tag "VERSION_xxx" .
+	svn copy . https://svn.sourceforge.net/svnroot/carrot2/tags/VERSION_xxx
 
 - Create distributions from the tagged version of the repository.
 
