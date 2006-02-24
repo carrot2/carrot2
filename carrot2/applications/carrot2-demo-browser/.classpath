@@ -22,5 +22,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-stc"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/dom4j-1.5.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-case-normalizer"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-haog"/>
 	<classpathentry kind="output" path="tmp/eclipse/classes"/>
 </classpath>

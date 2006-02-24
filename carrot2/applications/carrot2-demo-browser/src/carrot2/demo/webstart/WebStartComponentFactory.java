@@ -25,6 +25,7 @@ import com.dawidweiss.carrot.core.local.linguistic.Language;
 import com.dawidweiss.carrot.filter.stc.local.STCLocalFilterComponent;
 import com.dawidweiss.carrot.util.tokenizer.SnippetTokenizerLocalFilterComponent;
 import com.dawidweiss.carrot.util.tokenizer.languages.english.English;
+import com.kgolembniak.carrot.filter.haogstc.local.HAOGSTCLocalFilterComponent;
 import com.stachoodev.carrot.filter.lingo.local.LingoLocalFilterComponent;
 import com.stachoodev.carrot.filter.normalizer.SmartCaseNormalizer;
 import com.stachoodev.carrot.filter.normalizer.local.CaseNormalizerLocalFilterComponent;
@@ -135,6 +136,17 @@ public class WebStartComponentFactory {
                     new English()
                 };
                 return new LingoLocalFilterComponent(languages, params);
+            }
+        };
+    }
+    
+    /**
+     * <code>filter-haog-stc</code>
+     */
+    public static LocalComponentFactoryBase createHaogStc() {
+        return new LocalComponentFactoryBase() {
+            public LocalComponent getInstance() {
+                return new HAOGSTCLocalFilterComponent();
             }
         };
     }
