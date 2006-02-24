@@ -10,6 +10,8 @@ Version  [C] Information
 
 HEAD
 
+          +  Added initial version of HAOG clustering algorithm.
+
 1.0.1
 
           +  Added speed/ performance button to the demo application.
