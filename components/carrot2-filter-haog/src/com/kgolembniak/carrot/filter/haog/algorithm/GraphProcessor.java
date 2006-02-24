@@ -8,7 +8,8 @@ import com.dawidweiss.carrot.filter.stc.algorithm.BaseCluster;
 
 /**
  * Main class containing HAOG Algorithm described in:
- * Irmina Masłowska Doctoral Thesis "Hierarchical Clustering of Web Documents".
+ * Irmina Masłowska's Doctoral Thesis <i>Hierarchical Clustering of Web Documents</i>.
+ * 
  * @author Karol Gołembniak
  */
 public class GraphProcessor {
@@ -72,20 +73,21 @@ public class GraphProcessor {
 		nextLabel = graph.size()+1;
 		int initialGraphSize = graph.size();
 		int counter = 0;
-		while (graph.size()>0){
+		while (graph.size() > 0){
 			counter++;
 			removeLeaves(graph);
 			removeRoots(graph);
-			if (graph.size()>0){
+			if (graph.size() > 0){
 				processCycles(graph);
 			}
 
-			//safety lock - just in case
-			if (counter>initialGraphSize) {
-				throw new ProcessingException("Neverending loop");
+			// safety lock - just in case
+			if (counter > initialGraphSize) {
+				throw new ProcessingException("Neverending loop detected: "
+                        + graph);
 			}
 		}
-		
+
 		//After removing cycle we have moddified arcs, 
 		//now we have to restore all arcs
 		repairArcs(vertices);
