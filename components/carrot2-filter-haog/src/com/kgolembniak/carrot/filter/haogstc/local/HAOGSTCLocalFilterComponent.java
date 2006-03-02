@@ -57,6 +57,11 @@ public class HAOGSTCLocalFilterComponent extends ProfiledLocalFilterComponentBas
      * Current request's context.
      */
     private RequestContext requestContext;
+    
+    /**
+     * Parameters for cluster merging and cluster's description creation
+     */
+    private StcParameters params;
 
     public void init(LocalControllerContext context)
         throws InstantiationException
@@ -122,8 +127,8 @@ public class HAOGSTCLocalFilterComponent extends ProfiledLocalFilterComponentBas
         //STC part
         final STCEngine stcEngine = new STCEngine(documentReferences);
         stcEngine.createSuffixTree();
-        final StcParameters params = StcParameters.fromMap(
-                this.requestContext.getRequestParameters());
+        params = StcParameters.fromMap(
+        		this.requestContext.getRequestParameters());
 
         stcEngine.createBaseClusters(params);
     	final List clusters = stcEngine.getBaseClusters();
@@ -203,32 +208,21 @@ public class HAOGSTCLocalFilterComponent extends ProfiledLocalFilterComponentBas
 	private RawClusterBase createRCFromCV(CombinedVertex vertex) {
 		RawClusterBase rawCluster = new RawClusterBase();
 
-		Vertex subVertex;
-		Phrase phrase;
-		BaseCluster repCluster;
 		RawDocument rawDocument;
 		TokenizedDocument tokenizedDoc;		
-		List vertices = vertex.getVertices();
 		
-		//for all vertices combined by this vertex
-		for (int i1=0; i1<vertices.size(); i1++){
-			subVertex = (Vertex) vertices.get(i1);
-			repCluster = subVertex.getRepresentedCluster();
-			phrase = repCluster.getPhrase();
-			rawCluster.addLabel(phrase.userFriendlyTerms().trim());
-
-			ExtendedBitSet docSet = repCluster.getNode()
-				.getInternalDocumentsRepresentation();
-			//for all documents in node(cluster)
-			for (Iterator doc = docSet.iterator(); doc.hasNext();){
-				final int docIndex = ((Integer) doc.next()).intValue();
-				tokenizedDoc = (TokenizedDocument) documents.get(docIndex);
-	            rawDocument = (RawDocument) tokenizedDoc.getProperty(
-	            		TokenizedDocument.PROPERTY_RAW_DOCUMENT);
-				rawCluster.addDocument(rawDocument);
-			}
+		rawCluster.addLabel(vertex.getVertexDescription(params));
+		
+		ExtendedBitSet docSet = vertex.getDocuments();
+		//for all documents in node(cluster)
+		for (Iterator doc = docSet.iterator(); doc.hasNext();){
+			final int docIndex = ((Integer) doc.next()).intValue();
+			tokenizedDoc = (TokenizedDocument) documents.get(docIndex);
+	        rawDocument = (RawDocument) tokenizedDoc.getProperty(
+	        		TokenizedDocument.PROPERTY_RAW_DOCUMENT);
+        	rawCluster.addDocument(rawDocument);
 		}
-		
+
 		List successors = vertex.getSuccList();
 		RawClusterBase subCluster;
 		CombinedVertex successor;
@@ -256,6 +250,4 @@ public class HAOGSTCLocalFilterComponent extends ProfiledLocalFilterComponentBas
 		return rawCluster;
 	}
 
-
-	
 }
