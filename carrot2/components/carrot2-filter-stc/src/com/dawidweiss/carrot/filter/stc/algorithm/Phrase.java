@@ -109,7 +109,7 @@ public final class Phrase
      * Sets the phrase selection flag.
      * @see #selected
      */
-    void setSelected(boolean selected) {
+    public void setSelected(boolean selected) {
         this.selected = selected;
     }
 
@@ -117,7 +117,7 @@ public final class Phrase
      * Sets the documents coverage level in a {@link MergedCluster}.
      * @see #coverage
      */
-    void setCoverage(float coverage) {
+    public void setCoverage(float coverage) {
         this.coverage = coverage;
     }
 
@@ -125,15 +125,15 @@ public final class Phrase
      * Returns the documents coverage level in a {@link MergedCluster}.
      * @see #coverage
      */
-    float getCoverage() {
+    public float getCoverage() {
         return coverage;
     }
 
     /**
-     * Sets the phrase selection flag.
+     * Returns the phrase selection flag.
      * @see #selected
      */
-    boolean isSelected() {
+    public boolean isSelected() {
         return selected;
     }
 
