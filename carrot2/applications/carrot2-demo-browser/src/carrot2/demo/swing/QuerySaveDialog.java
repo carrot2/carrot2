@@ -22,6 +22,7 @@ import java.util.Map;
 import javax.swing.*;
 
 import carrot2.demo.DemoContext;
+import carrot2.demo.ProcessSettings;
 
 import com.dawidweiss.carrot.core.local.*;
 import com.dawidweiss.carrot.core.local.impl.ClustersConsumerOutputComponent;
@@ -46,6 +47,7 @@ public class QuerySaveDialog
     private int requestedResults;
     private JTextField fileName;
     private JCheckBox saveClusters;
+    private ProcessSettings processSettings;
 
     /**
      * @param owner
@@ -53,11 +55,12 @@ public class QuerySaveDialog
      * @param query
      */
     public QuerySaveDialog(Frame owner, DemoContext demoContext, String query,
-        String processId, int requestedResults)
+        String processId, ProcessSettings processSettings, int requestedResults)
     {
         this.demoContext = demoContext;
         this.query = query;
         this.owner = owner;
+        this.processSettings = processSettings;
         this.processId = processId;
         this.requestedResults = requestedResults;
     }
@@ -209,7 +212,7 @@ public class QuerySaveDialog
      */
     private void save()
     {
-        Map requestParams = new HashMap();
+        final HashMap requestParams = processSettings.getRequestParams();
         requestParams.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, Integer
             .toString(requestedResults));
         try
@@ -229,13 +232,13 @@ public class QuerySaveDialog
                 additionalInformationSerializer.setRequestContext(result
                     .getRequestContext());
             }
-            
+
             // In the future, clusters could be saved by a class whose name
             // is specified in the process configuration file.
             FileLocalOutputComponent.saveRawClusters(rawClusters, query,
                 new File(fileName.getText()), saveClusters.isSelected(),
                 additionalInformationSerializer);
-            
+
             if (additionalInformationSerializer != null)
             {
                 additionalInformationSerializer.flushResources();

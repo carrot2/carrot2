@@ -13,6 +13,7 @@
 
 package carrot2.demo;
 
+import java.awt.Frame;
 import java.util.HashMap;
 
 import javax.swing.JComponent;
@@ -35,8 +36,9 @@ public interface ProcessSettings {
     /**
      * Returns a GUI component which displays process settings
      * and lets the user play with them interactively.
+     * @param owner TODO
      */
-    public JComponent getSettingsComponent();
+    public JComponent getSettingsComponent(Frame owner);
 
     /**
      * Should return <code>true</code> if this component is configured

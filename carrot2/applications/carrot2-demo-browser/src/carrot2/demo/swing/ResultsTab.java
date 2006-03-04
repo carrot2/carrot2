@@ -64,6 +64,8 @@ public class ResultsTab extends JPanel {
     private String query;
     private String processId;
     
+    private Frame owner;
+    
     private HtmlDisplay browserView;
     private RawClustersTree clustersTree;
     private Result result;
@@ -163,6 +165,7 @@ public class ResultsTab extends JPanel {
     public ResultsTab(Frame owner, String query, DemoContext demoContext,
         ProcessSettings settings, String processId, int requestedResults)
     {
+        this.owner = owner;
         this.query = query;
         this.processId = processId;
         this.demoContext = demoContext;
@@ -171,7 +174,7 @@ public class ResultsTab extends JPanel {
         this.benchmarkDialog = new BenchmarkDialog(owner, demoContext, query,
             processId, settings, requestedResults);
         this.querySaveDialog = new QuerySaveDialog(owner, demoContext, query,
-            processId, requestedResults);
+            processId, settings, requestedResults);
 
         this.workerThread = new WorkerThread();
         workerThread.start();
@@ -230,7 +233,7 @@ public class ResultsTab extends JPanel {
         internalFrame.setToolBar(toolbar);
 
         final JScrollPane clustersTreeScroller = new JScrollPane();
-        this.clustersTree = new RawClustersTree();
+        this.clustersTree = new RawClustersTree(demoContext.getClusterInfoRenderer(processId));
         clustersTreeScroller.getViewport().add(clustersTree);
         clustersTreeScroller.setBorder(BorderFactory.createEmptyBorder());
         clustersTree.addTreeSelectionListener(
@@ -315,7 +318,7 @@ public class ResultsTab extends JPanel {
         subPanel.add(browserView, BorderLayout.CENTER);
         
         if (this.processSettings.hasSettings()) {
-            final JComponent settingsComponent = processSettings.getSettingsComponent();
+            final JComponent settingsComponent = processSettings.getSettingsComponent(owner);
 
             final JButton updateButton = new JButton("Refresh");
             updateButton.addActionListener(new ActionListener() {

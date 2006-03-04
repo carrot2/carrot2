@@ -16,22 +16,36 @@ package carrot2.demo.swing;
 import javax.swing.*;
 import javax.swing.tree.*;
 
+import carrot2.demo.ClusterInfoRenderer;
+
 /**
  * A tree of clusters
  * @author Dawid Weiss
  */
 public class RawClustersTree extends JTree {
+    /** */
+    private ClusterInfoRenderer clusterInfoRenderer;
+    
     public RawClustersTree() {
-        initializeGui();
+        this(null);
     }
     
+    /**
+     * @param clusterInfoRenderer
+     */
+    public RawClustersTree(ClusterInfoRenderer clusterInfoRenderer)
+    {
+        this.clusterInfoRenderer = clusterInfoRenderer;
+        initializeGui();
+    }
+
     private void initializeGui() {
         this.setBorder(BorderFactory.createEmptyBorder());
         this.setModel(new DefaultTreeModel(new DefaultMutableTreeNode("Wait, processing...")));
         
         setShowsRootHandles(true);
         setRootVisible(false);
-        setCellRenderer(new RawClustersCellRenderer());
+        setCellRenderer(new RawClustersCellRenderer(clusterInfoRenderer));
         getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         setEditable(false);        
         ToolTipManager.sharedInstance().registerComponent(this);

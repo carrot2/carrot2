@@ -139,7 +139,7 @@ public class FileLocalOutputComponent extends LocalOutputComponentBase
 
         saveRawClusters(rawClusters, query, finalOutput, true,
             additionalInformationSerializer);
-        
+
         additionalInformationSerializer.flushResources();
 
         super.endProcessing();
@@ -160,18 +160,52 @@ public class FileLocalOutputComponent extends LocalOutputComponentBase
 
         Element root = DocumentHelper.createElement("searchresult");
         addQuery(root, query);
-        addRawDocuments(root, documents);
+
+        List orderedDocuments = orderCollectedDocuments(documents);
+        addRawDocuments(root, orderedDocuments);
         if (saveClusters)
         {
             addClusters(root, rawClusters);
         }
 
-        if (additionalInformationSerializer != null)
+        if (saveClusters && additionalInformationSerializer != null)
         {
             additionalInformationSerializer.addAdditionalInformation(root);
         }
 
         writeToFile(root, outputFile);
+    }
+
+    private static List orderCollectedDocuments(Set documents)
+    {
+        List orderedDocuments = new ArrayList(documents);
+
+        Collections.sort(orderedDocuments, new Comparator()
+        {
+            public int compare(Object o1, Object o2)
+            {
+                RawDocument docA = (RawDocument) o1;
+                RawDocument docB = (RawDocument) o2;
+                Integer seqA = (Integer) docA
+                    .getProperty(RawDocumentEnumerator.DOCUMENT_SEQ_NUMBER);
+                Integer seqB = (Integer) docB
+                    .getProperty(RawDocumentEnumerator.DOCUMENT_SEQ_NUMBER);
+
+                if (seqA == null)
+                {
+                    return -1;
+                }
+
+                if (seqB == null)
+                {
+                    return 1;
+                }
+
+                return seqA.intValue() - seqB.intValue();
+            }
+        });
+
+        return orderedDocuments;
     }
 
     /**
@@ -183,12 +217,12 @@ public class FileLocalOutputComponent extends LocalOutputComponentBase
         throws ProcessingException
     {
         // Write result to the file
+        XMLWriter xmlWriter = null;
         try
         {
-            XMLWriter xmlWriter = new XMLWriter(new FileOutputStream(
-                finalOutput), new OutputFormat("  ", true));
+            xmlWriter = new XMLWriter(new FileOutputStream(finalOutput),
+                new OutputFormat("  ", true));
             xmlWriter.write(root);
-            xmlWriter.close();
         }
         catch (UnsupportedEncodingException e)
         {
@@ -204,6 +238,18 @@ public class FileLocalOutputComponent extends LocalOutputComponentBase
         {
             throw new ProcessingException("Cannot write results: "
                 + e.getMessage());
+        }
+        finally
+        {
+            try
+            {
+                xmlWriter.close();
+            }
+            catch (IOException e)
+            {
+                throw new ProcessingException("Cannot write results: "
+                    + e.getMessage());
+            }
         }
     }
 
@@ -241,7 +287,7 @@ public class FileLocalOutputComponent extends LocalOutputComponentBase
      * @param root
      * @param documents
      */
-    private static void addRawDocuments(Element root, Set documents)
+    private static void addRawDocuments(Element root, Collection documents)
     {
         for (Iterator it = documents.iterator(); it.hasNext();)
         {
@@ -249,8 +295,7 @@ public class FileLocalOutputComponent extends LocalOutputComponentBase
 
             Element documentElement = root.addElement("document");
 
-            documentElement.addAttribute("title", rawDocument.getId()
-                .toString());
+            documentElement.addAttribute("id", rawDocument.getId().toString());
 
             if (rawDocument.getTitle() != null)
             {
@@ -323,9 +368,10 @@ public class FileLocalOutputComponent extends LocalOutputComponentBase
         }
 
         // Add synonyms
-        List synonymLabels = (List) rawCluster.getProperty("label-synonyms");
+        List synonymLabels = (List) rawCluster
+            .getProperty("alternative-label-images");
         List synonymScores = (List) rawCluster
-            .getProperty("label-synonym-scores");
+            .getProperty("alternative-label-scores");
         if (synonymLabels != null)
         {
             for (int i = 0; i < synonymLabels.size(); i++)

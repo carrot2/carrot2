@@ -13,6 +13,7 @@
 
 package carrot2.demo.settings;
 
+import java.awt.Frame;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,7 +53,7 @@ public class StcSettings extends ProcessSettingsBase implements ProcessSettings 
         }
     }
 
-    public JComponent getSettingsComponent() {
+    public JComponent getSettingsComponent(Frame owner) {
         return new StcSettingsDialog(this);
     }
 }
