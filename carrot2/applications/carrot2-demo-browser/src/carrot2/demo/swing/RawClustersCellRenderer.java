@@ -85,18 +85,22 @@ public class RawClustersCellRenderer extends DefaultTreeCellRenderer {
                 setFont(new Font(getFont().getName(), Font.PLAIN, getFont().getSize()));
             }
             
-            final String prefix = clusterInfoRenderer.getClusterLabelPrefix(rc);
-            if (prefix != null)
+            if (clusterInfoRenderer != null)
             {
-                label = prefix + " " + label;
-            }
-            
-            final String suffix = clusterInfoRenderer.getClusterLabelSuffix(rc);
-            if (suffix != null)
-            {
-                label += " " + suffix;
-            }
-            
+                final String prefix = clusterInfoRenderer
+                    .getClusterLabelPrefix(rc);
+                if (prefix != null)
+                {
+                    label = prefix + " " + label;
+                }
+
+                final String suffix = clusterInfoRenderer
+                    .getClusterLabelSuffix(rc);
+                if (suffix != null)
+                {
+                    label += " " + suffix;
+                }
+            }            
             setText(label);
 
             final String toolTipText = createToolTipText((RawCluster) value);
