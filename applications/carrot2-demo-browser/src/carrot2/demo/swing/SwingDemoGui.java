@@ -343,7 +343,7 @@ public class SwingDemoGui implements DemoGuiDelegate {
                 final ProcessSettings settings = demoContext.getSettingsObject(processId);
 
                 JOptionPane.showMessageDialog(frame, 
-                        new Object[] {settings.getSettingsComponent()}, "Default settings", 
+                        new Object[] {settings.getSettingsComponent(frame)}, "Default settings", 
                         JOptionPane.PLAIN_MESSAGE);
             }
         });

@@ -13,6 +13,7 @@
 
 package carrot2.demo.settings;
 
+import java.awt.Frame;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,7 +57,7 @@ public class LingoClassicSettings extends ProcessSettingsBase implements Process
         }
     }
 
-    public JComponent getSettingsComponent() {
+    public JComponent getSettingsComponent(Frame owner) {
         LingoSettingsDialog dlg = new LingoSettingsDialog(this);
         return dlg;
     }

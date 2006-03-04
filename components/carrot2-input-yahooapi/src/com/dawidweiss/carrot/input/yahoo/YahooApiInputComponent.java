@@ -33,7 +33,7 @@ import com.dawidweiss.carrot.util.common.StringUtils;
 public class YahooApiInputComponent extends LocalInputComponentBase 
 	implements RawDocumentsProducer {
 
-	private final static int MAXIMUM_RESULTS = 400;
+	private final static int MAXIMUM_RESULTS = 1000;
 
 	private static Logger log = Logger.getLogger(YahooApiInputComponent.class);
 

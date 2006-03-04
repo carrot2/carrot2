@@ -15,11 +15,12 @@ package carrot2.demo.swing;
 
 import java.awt.Component;
 import java.awt.Font;
-import java.text.NumberFormat;
 import java.util.*;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeCellRenderer;
+
+import carrot2.demo.ClusterInfoRenderer;
 
 import com.dawidweiss.carrot.core.local.clustering.RawCluster;
 
@@ -38,6 +39,18 @@ public class RawClustersCellRenderer extends DefaultTreeCellRenderer {
 
     static final String PROPERTY_SEARCH_MATCHES = "contains-search-term";
 
+    private ClusterInfoRenderer clusterInfoRenderer;
+    
+    public RawClustersCellRenderer()
+    {
+        this(null);
+    }
+    
+    public RawClustersCellRenderer(ClusterInfoRenderer clusterInfoRenderer)
+    {
+        this.clusterInfoRenderer = clusterInfoRenderer;
+    }
+    
     public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded,
             boolean leaf, int row, boolean hasFocus) {
         super.getTreeCellRendererComponent(tree, "", selected, expanded, leaf, row, hasFocus);
@@ -71,10 +84,23 @@ public class RawClustersCellRenderer extends DefaultTreeCellRenderer {
             {
                 setFont(new Font(getFont().getName(), Font.PLAIN, getFont().getSize()));
             }
+            
+            final String prefix = clusterInfoRenderer.getClusterLabelPrefix(rc);
+            if (prefix != null)
+            {
+                label = prefix + " " + label;
+            }
+            
+            final String suffix = clusterInfoRenderer.getClusterLabelSuffix(rc);
+            if (suffix != null)
+            {
+                label += " " + suffix;
+            }
+            
             setText(label);
 
             final String toolTipText = createToolTipText((RawCluster) value);
-            if (toolTipText.trim().length() > 0) {
+            if (toolTipText != null) {
                 setToolTipText(toolTipText);
             }
         } else if (value instanceof String) {
@@ -127,42 +153,19 @@ public class RawClustersCellRenderer extends DefaultTreeCellRenderer {
         }
     }
 
-    private static String createToolTipText(RawCluster rawCluster) {
-        StringBuffer toolTipText = new StringBuffer();
-
-        toolTipText.append("<html><body>");
-
-        // ClusterMetadata.PROPERTY_LABEL_SYNONYMS
-        List synonymLabels = (List) rawCluster.getProperty("label-synonyms");
-        List synonymScores = (List) rawCluster.getProperty("label-synonym-scores");
-
-        NumberFormat numberFormat = NumberFormat.getNumberInstance();
-        numberFormat.setMinimumFractionDigits(2);
-        numberFormat.setMaximumFractionDigits(2);
-
-        final Double clusterScore = (Double) rawCluster.getProperty(RawCluster.PROPERTY_SCORE);
-        if (clusterScore != null) {
-            toolTipText.append("<b>cluster score: ");
-            toolTipText.append(numberFormat.format(clusterScore.doubleValue()));
-            toolTipText.append("</b><br>");
+    private String createToolTipText(RawCluster rawCluster) {
+        
+        if (clusterInfoRenderer != null)
+        {
+            StringBuffer toolTipText = new StringBuffer();
+            toolTipText.append("<html><body>");
+            toolTipText.append(clusterInfoRenderer.getHtmlClusterInfo(rawCluster));
+            toolTipText.append("</body></html>");
+            return toolTipText.toString();
         }
-
-        if (synonymLabels != null) {
-            for (int i = 0; i < synonymLabels.size(); i++) {
-                String label = (String) synonymLabels.get(i);
-                Double score = (Double) synonymScores.get(i);
-
-                toolTipText.append(label);
-                toolTipText.append(" (");
-                toolTipText.append(numberFormat.format(score.doubleValue()));
-                toolTipText.append(")");
-                if (i != synonymLabels.size() - 1) {
-                    toolTipText.append("<br>");
-                }
-            }
+        else
+        {
+            return null;
         }
-        toolTipText.append("</body></html>");
-
-        return toolTipText.toString();
     }
 }

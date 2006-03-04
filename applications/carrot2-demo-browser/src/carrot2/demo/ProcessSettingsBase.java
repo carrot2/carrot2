@@ -13,6 +13,7 @@
 
 package carrot2.demo;
 
+import java.awt.Frame;
 import java.util.*;
 
 import javax.swing.JComponent;
@@ -34,7 +35,7 @@ public abstract class ProcessSettingsBase implements ProcessSettings
         return false;
     }
 
-    public abstract JComponent getSettingsComponent();
+    public abstract JComponent getSettingsComponent(Frame owner);
 
     public abstract boolean isConfigured();
 

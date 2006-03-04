@@ -13,6 +13,7 @@
 
 package carrot2.demo;
 
+import java.awt.Frame;
 import java.util.HashMap;
 
 import javax.swing.JComponent;
@@ -40,7 +41,7 @@ public final class EmptyProcessSettings implements ProcessSettings {
         return this;
     }
 
-    public JComponent getSettingsComponent() {
+    public JComponent getSettingsComponent(Frame owner) {
         throw new RuntimeException("Should not be invoked.");
     }
 

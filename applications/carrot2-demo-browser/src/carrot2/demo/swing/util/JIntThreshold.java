@@ -132,4 +132,21 @@ public class JIntThreshold extends JPanel {
             }
         }
     }
+
+    /* (non-Javadoc)
+     * @see javax.swing.JComponent#getToolTipText()
+     */
+    public void setToolTipText(String text)
+    {
+        super.setToolTipText(text);
+        if (slider != null)
+        {
+            slider.setToolTipText(text);
+        }
+        
+        if (spinner != null)
+        {
+            spinner.setToolTipText(text);
+        }
+    }
 }

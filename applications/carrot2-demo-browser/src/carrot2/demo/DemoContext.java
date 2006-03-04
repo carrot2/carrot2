@@ -28,6 +28,7 @@ import com.dawidweiss.carrot.local.controller.loaders.ComponentInitializationExc
  * @author Dawid Weiss
  */
 public class DemoContext {
+    private final String CLUSTER_INFO_RENDERER_CLASS = "cluster.info.renderer.class";
     private final String PROCESS_SETTINGS_CLASS = "process.settings.class";
     private final String PROCESS_DEFAULT = "process.default";
 
@@ -47,11 +48,16 @@ public class DemoContext {
      * loaded from processes folder.
      */
     private List loadedProcesses;
-
+    
     /** 
      * A map of processid(String)-ProcessSettings objects.
      */
     private HashMap loadedSettings = new HashMap();
+    
+    /** 
+     * A map of processid(String)-ClusterInfoRenderer objects.
+     */
+    private HashMap loadedClusterInfoRenderers = new HashMap();
     
     /**
      * If <code>true</code>, initialization of components and processes
@@ -146,6 +152,20 @@ public class DemoContext {
                         this.defaultProcess = lp.getId();
                     }
                 }
+                if (lp.getAttributes().containsKey(CLUSTER_INFO_RENDERER_CLASS)) {
+                    final String clusterInfoRendererClass = (String) lp.getAttributes().get(CLUSTER_INFO_RENDERER_CLASS);
+                    try {
+                        final Class clazz = Thread.currentThread().getContextClassLoader().loadClass(clusterInfoRendererClass);
+                        final ClusterInfoRenderer cir = (ClusterInfoRenderer) clazz.newInstance();
+                        this.loadedClusterInfoRenderers.put(lp.getId(), cir);
+                    } catch (Exception e) {
+                        throw new RuntimeException("Could not load process settings: "
+                            + clusterInfoRendererClass, e);
+                    }
+                    if (lp.getAttributes().containsKey(PROCESS_DEFAULT)) {
+                        this.defaultProcess = lp.getId();
+                    }
+                }
                 controller.addProcess(lp.getId(), lp.getProcess());
             }
         } catch (DuplicatedKeyException e) {
@@ -197,6 +217,18 @@ public class DemoContext {
             return (ProcessSettings) loadedSettings.get(processId);
         } else {
             return new EmptyProcessSettings();
+        }
+    }
+    
+    /**
+     * Returns cluster information renderer object for the given process or
+     * <code>null</code> if no renderer is available for this process.
+     */
+    public ClusterInfoRenderer getClusterInfoRenderer(final String processId) {
+        if (this.loadedSettings.containsKey(processId)) {
+            return (ClusterInfoRenderer) loadedClusterInfoRenderers.get(processId);
+        } else {
+            return null;
         }
     }
 
