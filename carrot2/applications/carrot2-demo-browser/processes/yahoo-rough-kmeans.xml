@@ -6,6 +6,7 @@
   <input  component-key="input-cached-yahooapi" />
   <filter component-key="filter-rawdocument-enumerator" />
   <filter component-key="filter-rough-kmeans" />
+  <filter component-key="filter-file-save-interceptor" />
   <output component-key="output-clustersConsumer" />
 
 </local-process>

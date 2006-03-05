@@ -6,6 +6,7 @@
   <input  component-key="input-cached-yahooapi" />
   <filter component-key="filter-rawdocument-enumerator" />
   <filter component-key="filter-lingo" />
+  <filter component-key="filter-file-save-interceptor" />
   <output component-key="output-clustersConsumer" />
 
   <attribute key="process.settings.class" 
