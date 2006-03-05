@@ -10,6 +10,7 @@
   <filter component-key="filter-tokenizer" />
   <filter component-key="filter-case-normalizer" />
   <filter component-key="filter-haog-stc" />
+  <filter component-key="filter-file-save-interceptor" />
 
   <output component-key="output-clustersConsumer" />
 

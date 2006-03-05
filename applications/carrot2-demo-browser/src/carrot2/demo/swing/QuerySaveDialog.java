@@ -17,17 +17,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.*;
 
 import carrot2.demo.DemoContext;
 import carrot2.demo.ProcessSettings;
 
-import com.dawidweiss.carrot.core.local.*;
-import com.dawidweiss.carrot.core.local.impl.ClustersConsumerOutputComponent;
-import com.dawidweiss.carrot.core.local.impl.FileLocalOutputComponent;
-import com.dawidweiss.carrot.core.local.impl.FileLocalOutputComponent.AdditionalInformationSerializer;
+import com.dawidweiss.carrot.core.local.LocalInputComponent;
+import com.dawidweiss.carrot.core.local.impl.FileSaveInterceptorFilterComponent;
 
 /**
  * @author Stanislaw Osinski
@@ -212,47 +209,25 @@ public class QuerySaveDialog
      */
     private void save()
     {
+        // Initialize request parameters with current values
         final HashMap requestParams = processSettings.getRequestParams();
         requestParams.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, Integer
             .toString(requestedResults));
+
+        // Set destination file
+        requestParams.put(FileSaveInterceptorFilterComponent.PARAM_OUTPUT_FILE,
+            new File(fileName.getText()));
+
         try
         {
-            ProcessingResult result = demoContext.getController().query(
-                processId, query, requestParams);
-            java.util.List rawClusters = ((ClustersConsumerOutputComponent.Result) result
-                .getQueryResult()).clusters;
-
-            FileLocalOutputComponent.AdditionalInformationSerializer additionalInformationSerializer = (AdditionalInformationSerializer) result
-                .getRequestContext()
-                .getRequestParameters()
-                .get(
-                    FileLocalOutputComponent.PARAM_ADDITIONAL_INFORMATION_SERIALIZER);
-            if (additionalInformationSerializer != null)
-            {
-                additionalInformationSerializer.setRequestContext(result
-                    .getRequestContext());
-            }
-
-            // In the future, clusters could be saved by a class whose name
-            // is specified in the process configuration file.
-            FileLocalOutputComponent.saveRawClusters(rawClusters, query,
-                new File(fileName.getText()), saveClusters.isSelected(),
-                additionalInformationSerializer);
-
-            if (additionalInformationSerializer != null)
-            {
-                additionalInformationSerializer.flushResources();
-            }
-
+            // Just do processing as usual -- the interceptor component will
+            // save the results for us
+            demoContext.getController().query(processId, query, requestParams);
             dialog.setVisible(false);
         }
-        catch (MissingProcessException e1)
+        catch (Exception e)
         {
-            throw new RuntimeException(e1);
-        }
-        catch (Exception e1)
-        {
-            throw new RuntimeException(e1);
+            throw new RuntimeException(e);
         }
     }
 }
