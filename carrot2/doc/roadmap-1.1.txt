@@ -22,6 +22,4 @@ http://www.softwaresecretweapons.com/jspwiki/Wiki.jsp?page=JavascriptStringConca
 
 - add lucene input source to the demo application
 
-- add a filter forcing UTF-8 on the request parameters (web controller)
-
 - modify xslt-output to work with frames? (ajax-based?)
