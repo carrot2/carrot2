@@ -32,41 +32,19 @@
   <!-- Struts -->
 
   <servlet>
-    <servlet-name>struts-action</servlet-name>
-    <servlet-class>com.dawidweiss.util.struts.ForcedRequestEncodingActionServlet</servlet-class>
-    <init-param>
-      <param-name>debug</param-name>
-      <param-value>0</param-value>
-    </init-param>
-    <init-param>
-      <param-name>validate</param-name>
-      <param-value>true</param-value>
-    </init-param>
-    <init-param>
-      <param-name>factory</param-name>
-      <param-value>com.dawidweiss.util.struts.XmlMessageResourcesFactory</param-value>
-    </init-param>
-    <init-param>
-      <param-name>forcedRequestEncoding</param-name>
-      <param-value>UTF-8</param-value>
-    </init-param>
-    <init-param>
-      <param-name>detail</param-name>
-      <param-value>0</param-value>
-    </init-param>
-    <init-param>
-      <param-name>application</param-name>
-      <param-value>i18n/carrot2-strings.xml</param-value>
-    </init-param>
-    <init-param>
-      <param-name>config</param-name>
-      <param-value>/WEB-INF/struts-config.xml</param-value>
-    </init-param>
+    <servlet-name>ActionServlet</servlet-name>
+    <servlet-class>org.apache.struts.action.ActionServlet</servlet-class>
+    <init-param><param-name>debug</param-name><param-value>0</param-value></init-param>
+	<init-param><param-name>validate</param-name><param-value>true</param-value></init-param>
+    <init-param><param-name>factory</param-name><param-value>com.dawidweiss.util.struts.XmlMessageResourcesFactory</param-value></init-param>
+    <init-param><param-name>detail</param-name><param-value>0</param-value></init-param>
+    <init-param><param-name>application</param-name><param-value>i18n/carrot2-strings.xml</param-value></init-param>
+    <init-param><param-name>config</param-name><param-value>/WEB-INF/struts-config.xml</param-value></init-param>
     <load-on-startup>2</load-on-startup>
   </servlet>
 
   <servlet-mapping>
-    <servlet-name>struts-action</servlet-name>
+    <servlet-name>ActionServlet</servlet-name>
     <url-pattern>*.do</url-pattern>
   </servlet-mapping>
 
@@ -103,7 +81,7 @@
   <!-- Login configuration uses form-based authentication -->
   <login-config>
     <auth-method>BASIC</auth-method>
-    <realm-name>Carrot2 Configuration - Please log in</realm-name>
+    <realm-name>Carrot2 Configuration. Please log in.</realm-name>
   </login-config>
 
   <!-- Security roles referenced by this web application -->
@@ -113,7 +91,4 @@
     </description>
     <role-name>carrot-admin</role-name>
   </security-role>
-
-<!--  -->
-
 </web-app>
