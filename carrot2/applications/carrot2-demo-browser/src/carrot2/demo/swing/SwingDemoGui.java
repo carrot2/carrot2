@@ -34,14 +34,7 @@ public class SwingDemoGui implements DemoGuiDelegate {
 
     /** Search banner color. */
     private static final Color BANNER_COLOR = new Color(0xe0, 0xe0, 0xe0);
-
-    /**
-     * Default allowed query sizes (might not be important in case
-     * of certain processes).
-     */
-    private final static String [] defaultSizes = new String [] {
-            "50", "100", "150", "200", "400"
-    };
+    private SwingDemoGuiConfig config;
 
     /** Main demo object (application context). */
     private final DemoContext demoContext;
@@ -105,6 +98,7 @@ public class SwingDemoGui implements DemoGuiDelegate {
     public SwingDemoGui(DemoContext carrotDemo) {
         this.demoContext = carrotDemo;
         this.frame = new JFrame();
+        this.config = new SwingDemoGuiConfig("/config/browser-config.xml");
     }
 
     /**
@@ -268,7 +262,7 @@ public class SwingDemoGui implements DemoGuiDelegate {
                 0, 0);
         layout.setConstraints(tabbedPane, cc);
         mainPanel.add(tabbedPane);
-        mainPanel.setPreferredSize(new Dimension(800, 600));
+        mainPanel.setPreferredSize(new Dimension(config.mainWindowWidth, config.mainWindowHeight));
 
         return mainPanel;
     }
@@ -361,9 +355,9 @@ public class SwingDemoGui implements DemoGuiDelegate {
         detailsPanel.add(processComboBox, cc.xy(3,1, CellConstraints.DEFAULT, CellConstraints.FILL));
 
         detailsPanel.add(new JLabel("Results:"), cc.xy(7,1));
-        this.sizeComboBox = new JComboBox(defaultSizes);
+        this.sizeComboBox = new JComboBox(config.requestedResultCounts);
         this.sizeComboBox.setToolTipText("Number of results to acquire from the input source.");
-        this.sizeComboBox.setSelectedItem("100");
+        this.sizeComboBox.setSelectedItem(config.selectedResultCount);
         detailsPanel.add(sizeComboBox, cc.xy(8,1, CellConstraints.DEFAULT, CellConstraints.FILL));
 
         return topPanel;
