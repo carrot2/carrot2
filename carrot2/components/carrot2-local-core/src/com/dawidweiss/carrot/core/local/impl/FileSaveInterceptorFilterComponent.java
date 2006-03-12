@@ -36,6 +36,12 @@ public class FileSaveInterceptorFilterComponent extends
     /** Specifies the file to which the data should be saved */
     public static final String PARAM_OUTPUT_FILE = "output-file";
 
+    /**
+     * Specifies whether clusters should also be saved. Value of this parameter
+     * must be of type {@link Boolean}.
+     */
+    public static final String PARAM_SAVE_CLUSTERS = "save-clusters";
+
     /** Capabilities required from the previous component in the chain */
     private final static Set CAPABILITIES_PREDECESSOR = new HashSet(Arrays
         .asList(new Object []
@@ -222,6 +228,13 @@ public class FileSaveInterceptorFilterComponent extends
     private void addClusters(Element root, List rawClusters)
     {
         if (rawClusters == null)
+        {
+            return;
+        }
+
+        Object saveClusters = requestContext.getRequestParameters().get(
+            PARAM_SAVE_CLUSTERS);
+        if (saveClusters == null || !((Boolean) saveClusters).booleanValue())
         {
             return;
         }
