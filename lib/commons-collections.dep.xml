@@ -3,6 +3,9 @@
 <component
     name="commons-collections"
     description="Jakarta Commons Collections 3.1, http://jakarta.apache.org/commons/collections">
+    <!-- 
+    The patch fixes this bug: http://issues.apache.org/bugzilla/show_bug.cgi?id=34917
+    -->
 	<provides>
 		<files>
 			<file location="commons-collections-3.1-patched.jar" />
