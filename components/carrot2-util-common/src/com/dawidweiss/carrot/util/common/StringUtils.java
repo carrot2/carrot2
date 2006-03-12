@@ -104,6 +104,11 @@ public class StringUtils
         "&nbsp;", " ", "&amp;", "&", "&quot;", "\"", "&lt;", "<", "&gt;", ">", "&bull;", " "
     };
 
+    /*
+     * We may want to replace this method with:
+     * http://jakarta.apache.org/commons/lang/xref/org/apache/commons/lang/Entities.html
+     * at some point.
+     */
     public static String entitiesToCharacters(String str, boolean exceptionOnUnrecognized)
     {
         char [] converted = str.toCharArray();
