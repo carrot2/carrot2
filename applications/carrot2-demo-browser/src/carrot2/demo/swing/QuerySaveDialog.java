@@ -217,6 +217,9 @@ public class QuerySaveDialog
         // Set destination file
         requestParams.put(FileSaveInterceptorFilterComponent.PARAM_OUTPUT_FILE,
             new File(fileName.getText()));
+        requestParams.put(
+            FileSaveInterceptorFilterComponent.PARAM_SAVE_CLUSTERS,
+            new Boolean(saveClusters.isSelected()));
 
         try
         {
