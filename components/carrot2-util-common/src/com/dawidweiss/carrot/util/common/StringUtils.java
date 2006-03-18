@@ -101,7 +101,8 @@ public class StringUtils
 
     private static final String [] entities = 
     {
-        "&nbsp;", " ", "&amp;", "&", "&quot;", "\"", "&lt;", "<", "&gt;", ">", "&bull;", " "
+        "&nbsp;", " ", "&amp;", "&", "&quot;", "\"", "&lt;", "<", "&gt;", ">", "&bull;", " ",
+        "&#39;", "'"
     };
 
     /*
