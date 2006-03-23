@@ -10,6 +10,8 @@ Version  [C] Information
 
 HEAD
 
+1.0.2 (svn version: ??)
+
           +  Added initial version of HAOG clustering algorithm.
 
 1.0.1
