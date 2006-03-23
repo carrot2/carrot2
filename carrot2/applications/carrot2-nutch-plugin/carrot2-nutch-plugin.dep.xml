@@ -2,19 +2,15 @@
 <!DOCTYPE component PUBLIC "-//Carrot2//DTD Component Dependency Descriptor V1.0//EN" "http://www.carrot2.org/dtd/component-dependency.dtd" >
 
 <!--
-	This pseudo-component descriptor assembles stuff needed for
-	a clustering plugin for Nutch search engine.
+    This pseudo-component descriptor assembles stuff needed for
+    a clustering plugin for Nutch search engine.
   -->
 
 <component
     name="Nutch Clustering Plugin"
     description="Components for the Nutch Clustering Plugin">
-    
-    <dependency name="carrot2-local-core" />
 
-	<dependency name="carrot2-util-tokenizer" />
-	<!-- <dependency name="carrot2-filter-case-normalizer" /> -->
-
-    <dependency name="carrot2-filter-lingo" in-profile="local" />
-
+    <dependency name="carrot2-filter-lingo" in-profile="local"  />
+    <dependency name="carrot2-util-tokenizer"  />
+	<dependency name="carrot2-filter-case-normalizer" in-profile="local"  />
 </component>
