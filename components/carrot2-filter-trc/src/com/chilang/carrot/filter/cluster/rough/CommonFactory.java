@@ -13,18 +13,14 @@
 
 package com.chilang.carrot.filter.cluster.rough;
 
-import com.chilang.carrot.filter.cluster.rough.data.IRContext;
-import com.chilang.carrot.filter.cluster.rough.data.SimpleTermExtractor;
-import com.chilang.carrot.filter.cluster.rough.data.TermExtractor;
-import com.chilang.carrot.filter.cluster.rough.data.WebIRContext;
+import net.sf.snowball.ext.englishStemmer;
+
+import com.chilang.carrot.filter.cluster.rough.data.*;
 import com.chilang.carrot.filter.cluster.rough.filter.StopWordsSet;
 import com.chilang.carrot.filter.cluster.rough.filter.TermFilter;
-import com.chilang.carrot.filter.cluster.rough.filter.stemmer.PorterStemmer;
 import com.chilang.carrot.filter.cluster.rough.filter.stemmer.Stemmer;
 import com.chilang.carrot.filter.cluster.rough.transformer.Snippet2DocumentTransformer;
-import com.chilang.carrot.filter.cluster.rough.trsm.RoughSpace;
-import com.chilang.carrot.filter.cluster.rough.trsm.SnippetReader;
-import com.chilang.carrot.filter.cluster.rough.trsm.TermRoughSpace;
+import com.chilang.carrot.filter.cluster.rough.trsm.*;
 
 
 /**
@@ -35,7 +31,18 @@ public class CommonFactory {
     private CommonFactory() {}
 
     public static Stemmer createDefaultStemmer() {
-        return new PorterStemmer();
+        return new Stemmer() {
+            final englishStemmer stemmer = new englishStemmer();
+
+            public String stem(String word) {
+                stemmer.setCurrent(word);
+                if (stemmer.stem() == false) {
+                    return word;
+                }
+
+                return stemmer.getCurrent();
+            }
+        };
     }
 
     public static StopWordsSet createStopWordsSet() {
