@@ -37,6 +37,7 @@
 	<dependency name="colt" />
     <dependency name="commons-collections" />
 
+	<dependency name="carrot2-snowball-stemmers" />
 	<dependency name="carrot2-util-remote" 	profile="remote" />
 	<dependency name="carrot2-local-core" 	profile="local" />
 </component>
