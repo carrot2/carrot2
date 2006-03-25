@@ -77,4 +77,8 @@ public abstract class ProcessSettingsBase implements ProcessSettings
             fireParamsUpdated();
         }
     }
+    
+    public void dispose()
+    {
+    }
 }

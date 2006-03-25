@@ -54,4 +54,7 @@ public final class EmptyProcessSettings implements ProcessSettings {
     public boolean isLiveUpdate() {
         return false;
     }
+    
+    public void dispose() {
+    }
 }

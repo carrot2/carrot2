@@ -730,6 +730,11 @@ public class ResultsTab extends JPanel {
                 // this.browserView.dispose();
                 this.browserView = null;
             }
+            
+            if (processSettings != null) {
+                processSettings.dispose();
+                processSettings = null;
+            }
         }
     }
     
