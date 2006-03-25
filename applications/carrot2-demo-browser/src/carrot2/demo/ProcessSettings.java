@@ -65,4 +65,6 @@ public interface ProcessSettings {
     public void setLiveUpdate(boolean liveUpdate);
     
     public boolean isLiveUpdate();
+    
+    public void dispose();
 }
