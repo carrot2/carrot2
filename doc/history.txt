@@ -10,6 +10,11 @@ Version  [C] Information
 
 HEAD
 
+          #  The cache in demo application did not work properly for input components
+             with the same input component class customizable by parameters set in the constructor
+             (such as the opensearch). An explicit equivalence class object 
+             is now required in the RawDocumentProducerCacheWrapper.
+
           +  Added carrot2-input-opensearch input component, contributed by Julien Nioche.
 
 1.0.2     (svn version: 1000) I thought it's a good Subversion number to release

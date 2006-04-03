@@ -60,6 +60,9 @@ public class RawDocumentProducerCacheWrapper extends LocalInputComponentBase {
     /** The wrapped component. */
     private final LocalInputComponent wrapped;
 
+    /** Wrapped component's equivalence class identifier. */
+    private Object equivalenceClass;
+
     /** Current query. */
     private String query;
     
@@ -75,7 +78,18 @@ public class RawDocumentProducerCacheWrapper extends LocalInputComponentBase {
     private ClustersConsumerOutputComponent consumer; 
 	private Result cachedResult;
 
-    public RawDocumentProducerCacheWrapper(LocalInputComponent wrappedComponent) {
+
+    /**
+     * Creates a wrapper around a <code>wrappedComponent</code> with an equivalence class identified
+     * by <code>wrappedComponentClassId</code>
+     * 
+     * @param wrappedComponent Wrapped input component instance.
+     * @param wrappedComponentClassId Any object which implies an equivalence class between cached results from the
+     *      same component. We need this token because the wrapped component instance can change between subsequent
+     *      requests (same component factory, but different instances) and the input component's class may not be
+     *      enough (customizations such as service URL in the constructor).
+     */
+    public RawDocumentProducerCacheWrapper(LocalInputComponent wrappedComponent, Object wrappedComponentClassId) {
         // Make sure the wrapped component implements
         // the required capability.
         final Set caps = wrappedComponent.getComponentCapabilities();
@@ -84,7 +98,19 @@ public class RawDocumentProducerCacheWrapper extends LocalInputComponentBase {
                     + RawDocumentsProducer.class);
         }
         this.wrapped = wrappedComponent;
+        this.equivalenceClass = wrappedComponentClassId;
         this.currentlyCaching = false;
+    }
+
+    /**
+     * Create a wrapper around a <code>wrappedComponent</code> with the equivalence class identified by
+     * the wrapped component's class object.
+     * 
+     * @deprecated This method is deprecated, use explicit equivalence class
+     * constructor {@link #RawDocumentProducerCacheWrapper(LocalInputComponent, Object)}.
+     */
+    public RawDocumentProducerCacheWrapper(LocalInputComponent wrappedComponent) {
+        this(wrappedComponent, wrappedComponent.getClass());
     }
 
     public Set getRequiredSuccessorCapabilities() {
@@ -111,7 +137,7 @@ public class RawDocumentProducerCacheWrapper extends LocalInputComponentBase {
         }
         
         final ClustersConsumerOutputComponent.Result result
-            = cache.get(new CacheEntry(wrapped, query, requestedResults));
+            = cache.get(new CacheEntry(wrapped, equivalenceClass, query, requestedResults));
 
         if (result == null) {
             // Requires caching.
@@ -151,7 +177,7 @@ public class RawDocumentProducerCacheWrapper extends LocalInputComponentBase {
                 requestedResults = Integer.parseInt(requestedResultsParam.toString());
             }
 
-            cache.put(new CacheEntry(wrapped, query, requestedResults), this.cachedResult);
+            cache.put(new CacheEntry(wrapped, equivalenceClass, query, requestedResults), this.cachedResult);
         }
 
         // Copy cached context parameters over to the current context parameters
