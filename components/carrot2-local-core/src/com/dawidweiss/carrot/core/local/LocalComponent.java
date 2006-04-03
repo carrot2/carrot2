@@ -23,15 +23,15 @@ import java.util.Set;
  * cost present in the general Carrot2 framework design.
  * 
  * <p>
- * The {@link LocalComponent}interface is the superclass for all three types of
+ * The {@link LocalComponent} interface is the superclass for all three types of
  * local components:
  * 
  * <ul>
- * <li>{@link LocalInputComponent}-- components accepting user queries and
+ * <li>{@link LocalInputComponent} -- components accepting user queries and
  * producing initial data.</li>
- * <li>{@link LocalFilterComponent}-- components somehow altering or enriching
+ * <li>{@link LocalFilterComponent} -- components somehow altering or enriching
  * the data.</li>
- * <li>{@link LocalOutputComponent}-- components gathering the result or doing
+ * <li>{@link LocalOutputComponent} -- components gathering the result or doing
  * something with the result. For example, a visual component displaying the
  * data can implement this interface.</li>
  * </ul>
@@ -78,7 +78,7 @@ import java.util.Set;
  * </p>
  * 
  * <p>
- * Capabilities are {@link Set}objects, containing instances of any other Java
+ * Capabilities are {@link Set} objects, containing instances of any other Java
  * {@link Object}s. It up to the implementation to decide which objects
  * represent a capability. Usually, capabilities are simply interface names
  * converted to a {@link String}.
@@ -99,11 +99,11 @@ import java.util.Set;
  * <p>
  * The operation of a component may be customized using <i>properties </i>.
  * Properties passed to a component via
- * {@link #setProperty(String key, String value)}method are persistent, i.e.
+ * {@link #setProperty(String key, String value)} method are persistent, i.e.
  * they will be active if the component is reused. It is therefore reasonable to
- * set these properties in {@link LocalComponentFactory}at the time of
+ * set these properties in {@link LocalComponentFactory} at the time of
  * component's instantiation. Properties passed to the component in
- * {@link RequestContext}are volatile, i.e. they are valid only for the
+ * {@link RequestContext} are volatile, i.e. they are valid only for the
  * duration of the currently processed request.
  * </p>
  * 
@@ -245,7 +245,7 @@ public interface LocalComponent
      * 
      * <p>
      * It is reasonable to set the persistent properties of a component at the
-     * time of its instantiation (in the {@link LocalComponentFactory}object).
+     * time of its instantiation (in the {@link LocalComponentFactory} object).
      * </p>
      * 
      * @param key The key of the property to set.
