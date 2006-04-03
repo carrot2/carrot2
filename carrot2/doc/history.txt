@@ -10,6 +10,8 @@ Version  [C] Information
 
 HEAD
 
+          +  Added carrot2-input-opensearch input component, contributed by Julien Nioche.
+
 1.0.2     (svn version: 1000) I thought it's a good Subversion number to release
              a minor update. The update includes a few fixes to the demo application
              and will not be officially released on SourceForge (with this we will
