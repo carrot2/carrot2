@@ -22,11 +22,13 @@ import com.dawidweiss.carrot.core.local.LocalInputComponent;
  */
 final class CacheEntry {
     private final LocalInputComponent input;
+    private final Object equivalenceClass;
     private final String query;
     private final int requestedResults;
 
-    public CacheEntry(LocalInputComponent input, String query, int requestedResults) {
+    public CacheEntry(LocalInputComponent input, Object equivalenceClass, String query, int requestedResults) {
         this.input = input;
+        this.equivalenceClass = equivalenceClass;
         this.query = query;
         this.requestedResults = requestedResults;
     }
@@ -41,16 +43,16 @@ final class CacheEntry {
             final CacheEntry otherEntry = (CacheEntry) other;
             return ((this.query == null && otherEntry.query == null)
                     || (query.equals(otherEntry.query) && requestedResults == otherEntry.requestedResults
-                        && input.getClass().equals(otherEntry.input.getClass()))); 
+                        && equivalenceClass.equals(otherEntry.equivalenceClass))); 
         } else return false;
     }
 
     /**
-     * A hash code is a query's hash code XORed with input class' has code.
+     * A hash code is a query's hash code XORed with equivalence class' hash code.
      */
     public int hashCode() {
         final int hashCode = 
-            (query != null ? query.hashCode() : 0) ^ input.getClass().hashCode() ^ requestedResults;
+            (query != null ? query.hashCode() : 0) ^ equivalenceClass.hashCode() ^ requestedResults;
         return hashCode;
     }
 
@@ -59,6 +61,6 @@ final class CacheEntry {
      */
     public String toString() {
         return "[CacheEntry " + input.getClass().getName()
-            + "@" + input.getClass().hashCode() + "/ " + (query != null ? query : "<null>") + "/" + requestedResults + "]";
+            + "/(eqv:" + equivalenceClass + ")" + "/ " + (query != null ? query : "<null>") + "/" + requestedResults + "]";
     }
 }
