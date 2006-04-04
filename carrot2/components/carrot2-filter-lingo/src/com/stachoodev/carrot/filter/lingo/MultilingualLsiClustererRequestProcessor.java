@@ -39,9 +39,7 @@ import com.stachoodev.carrot.filter.lingo.common.MultilingualClusteringContext;
  */
 public class MultilingualLsiClustererRequestProcessor
     extends com.dawidweiss.carrot.filter.FilterRequestProcessor {
-    /**
-     * Logger
-     */
+
     protected static final Logger logger = Logger.getLogger(MultilingualLsiClustererRequestProcessor.class);
 
     /**
@@ -71,7 +69,7 @@ public class MultilingualLsiClustererRequestProcessor
             // Prepare data
             MultilingualClusteringContext clusteringContext = new MultilingualClusteringContext(new HashMap());
 
-            Language [] languages = getLanguages( params );
+            Language [] languages = getLanguages(params);
             
             // Parameters
             clusteringContext.setParameters(params);
@@ -83,7 +81,6 @@ public class MultilingualLsiClustererRequestProcessor
             if (documentList == null) {
                 // save the output.
                 serializeXmlStream(root, response.getOutputStream(), "UTF-8");
-
                 return;
             }
 

@@ -175,7 +175,7 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
      */
     public void addDocument(RawDocument doc) throws ProcessingException
     {
-        documents.add( new SnippetInterfaceAdapter(Integer.toString(documents.size()), doc));
+        documents.add(new SnippetInterfaceAdapter(Integer.toString(documents.size()), doc));
         if (rawDocumentsConsumer != null) {
             rawDocumentsConsumer.addDocument(doc);
         }
@@ -191,8 +191,8 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
         startTimer();
 
         // Prepare data
-        MultilingualClusteringContext clusteringContext = new MultilingualClusteringContext(new HashMap());
-        
+        final MultilingualClusteringContext clusteringContext = new MultilingualClusteringContext(new HashMap());
+
         final Language [] languages = this.languages;
         
         // set the default parameters of the algorithm.

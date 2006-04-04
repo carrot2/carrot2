@@ -95,8 +95,7 @@ public final class CarrotLibTokenizerPreprocessingStrategy
 
         for (int i = 0; i < preprocessedSnippets.length; i++) {
             if (!languageFreq.containsKey(preprocessedSnippets[i].getLanguage())) {
-                languageFreq.put(preprocessedSnippets[i].getLanguage(),
-                    new Integer(1));
+                languageFreq.put(preprocessedSnippets[i].getLanguage(), new Integer(1));
 
                 if ((maxLanguageFreq < 1) &&
                         !preprocessedSnippets[i].getLanguage().equals(MultilingualClusteringContext.UNIDENTIFIED_LANGUAGE_NAME)) {
