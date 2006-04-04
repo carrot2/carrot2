@@ -69,8 +69,7 @@ public class MultilingualClusteringContext extends AbstractClusteringContext {
         inflectedSets = new HashMap();
         setLanguages(new Language[0]);
 
-        nonStopWordSets.put(MultilingualClusteringContext.UNIDENTIFIED_LANGUAGE_NAME,
-            new HashSet());
+        nonStopWordSets.put(MultilingualClusteringContext.UNIDENTIFIED_LANGUAGE_NAME, new HashSet());
 
         Object value;
 

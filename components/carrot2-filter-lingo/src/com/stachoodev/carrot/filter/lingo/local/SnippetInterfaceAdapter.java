@@ -49,11 +49,9 @@ public final class SnippetInterfaceAdapter extends Snippet implements RawDocumen
         }
 		
 		this.base = new RawDocumentBase(document) {
-
             public Object getId() {
                 return document.getId();
             }
-		
 		};
 	}
 
