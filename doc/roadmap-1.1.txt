@@ -12,8 +12,7 @@ carrot2-filter-fuzzyants
 carrot2-filter-ahc
 carrot2-filter-fuzzyants
 
-- Add/integrate a donated input component for OpenSearch
-  (http://en.wikipedia.org/wiki/OpenSearch)
+- Add OpenSearch Descriptor support for carrot2-input-opensearch?
 
 - Unify coding style (reformat existing code)
 
