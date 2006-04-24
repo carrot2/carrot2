@@ -16,9 +16,9 @@ package com.dawidweiss.carrot.ant.deps;
 import org.apache.tools.ant.Project;
 
 /**
+ * Each build trigger stored in {@link BuildElement} 
+ * must implement this interface.
  */
-public interface BuildTask {
-
+interface BuildTask {
 	void execute(Project project, String profile);
-
 }

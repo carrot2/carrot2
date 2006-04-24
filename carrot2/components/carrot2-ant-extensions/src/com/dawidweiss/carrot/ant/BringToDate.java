@@ -24,7 +24,6 @@ import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.util.FileUtils;
 
 import com.dawidweiss.carrot.ant.deps.ComponentDependency;
-import com.dawidweiss.carrot.ant.deps.ComponentDependencyUtils;
 import com.dawidweiss.carrot.ant.deps.ComponentInProfile;
 
 
@@ -53,7 +52,7 @@ public class BringToDate extends Task {
     
     /**
      * If true, only dependencies will be brought up to date. This
-     * help to prevent recursion if a project wants to update all
+     * helps prevent recursion if a project wants to update all
      * dependencies during its own build phase.
      */
     private boolean dependenciesOnly;
@@ -122,7 +121,7 @@ public class BringToDate extends Task {
             // load all dependencies pointed to by embedded filesets.
             HashMap components = new HashMap();
             components.put(component.getName(), component);
-            ComponentDependencyUtils.loadComponentDependencies( futils, getProject(), this.dependencies, components);
+            Utils.loadComponentDependencies( futils, getProject(), this.dependencies, components);
 
             ComponentInProfile [] dependencies = component
                 .getAllRequiredComponentDependencies(components, profile);

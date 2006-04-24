@@ -25,10 +25,13 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-public class FilesElement {
+/**
+ * A list of {@link FileElement}s provided by the component.
+ */
+class FilesElement {
 
-	private boolean buildPathExclude;
-    private List files = new LinkedList();
+	private final boolean buildPathExclude;
+    private final List files = new LinkedList();
 
 	public FilesElement(File base, Element configElement)
         throws Exception {

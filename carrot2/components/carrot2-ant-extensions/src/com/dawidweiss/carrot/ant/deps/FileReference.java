@@ -18,6 +18,7 @@ import java.io.File;
 import org.apache.tools.ant.util.FileUtils;
 
 /**
+ * A file reference resolved from {@link FileElement}.
  */
 public class FileReference {
     private static FileUtils futils = FileUtils.newFileUtils(); 

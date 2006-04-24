@@ -31,7 +31,6 @@ import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.util.FileUtils;
 
 import com.dawidweiss.carrot.ant.deps.ComponentDependency;
-import com.dawidweiss.carrot.ant.deps.ComponentDependencyUtils;
 import com.dawidweiss.carrot.ant.deps.ComponentInProfile;
 
 
@@ -147,7 +146,7 @@ public class PrintDependencies extends Task {
             // load all dependencies pointed to by embedded filesets.
             HashMap components = new HashMap();
             components.put(component.getName(), component);
-            ComponentDependencyUtils.loadComponentDependencies(futils, getProject(), this.dependencies, components);
+            Utils.loadComponentDependencies(futils, getProject(), this.dependencies, components);
 
             ComponentInProfile [] dependencies = component
                 .getAllRequiredComponentDependencies(components, profile);

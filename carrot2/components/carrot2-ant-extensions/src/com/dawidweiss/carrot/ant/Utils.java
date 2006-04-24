@@ -14,21 +14,21 @@
 package com.dawidweiss.carrot.ant;
 
 import java.io.File;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.*;
 
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
+import org.apache.tools.ant.*;
 import org.apache.tools.ant.types.FileSet;
 import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.util.FileUtils;
+
+import com.dawidweiss.carrot.ant.deps.ComponentDependency;
 
 /**
  * Utility methods that didn't fit anywhere else.
  *  
  * @author Dawid Weiss
  */
-public class Utils {
+class Utils {
 
     /**
      * Converts all Path objects that point to directories to 
@@ -76,5 +76,37 @@ public class Utils {
                     + x.getClass().getName());
         }
         return output;
+    }
+
+    public static void loadComponentDependencies(FileUtils futils, 
+        Project project, List listOfFileSetsWithDependencies, 
+        HashMap components)
+        throws Exception
+    {
+        for (Iterator i = listOfFileSetsWithDependencies.iterator(); i.hasNext();) {
+            FileSet fs = (FileSet) i.next();
+            DirectoryScanner ds = fs.getDirectoryScanner(project);
+            File fromDir = fs.getDir(project);
+            String[] srcFiles = ds.getIncludedFiles();
+    
+            for (int j = 0; j < srcFiles.length; j++) {
+                ComponentDependency dep = 
+                    new ComponentDependency(
+                        project, futils.resolveFile(fromDir, srcFiles[j]).getCanonicalFile());
+    
+                if (components.containsKey(dep.getName())) {
+                    ComponentDependency existingDependency = (ComponentDependency) components.get(dep.getName());
+                    if (!existingDependency.getFile().getCanonicalPath().equals(
+                        dep.getFile().getCanonicalPath())) {
+                        throw new BuildException("Component name duplicated: " +
+                            dep.getFile() + " and " +
+                            ((ComponentDependency) components.get(dep.getName())).getFile());
+                    }
+                    // just silently ignore -- it is the same file.
+                } else {
+                    components.put(dep.getName(), dep);
+                }
+            }
+        }
     }
 }

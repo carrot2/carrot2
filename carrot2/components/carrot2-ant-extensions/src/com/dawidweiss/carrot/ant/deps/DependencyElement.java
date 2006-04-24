@@ -17,29 +17,43 @@ import java.io.File;
 import org.w3c.dom.Element;
 
 
-public class DependencyElement {
+/**
+ * A class which represents the <code>dependency</code>
+ * element in a <code>.dep.xml</code> file.
+ * 
+ * @author Dawid Weiss
+ */
+class DependencyElement {
 
+    /**
+     * Name of the dependent component.
+     */
     private String name;
 
     /**
-     * The profile with which to consider including
-     * this dependency.
+     * A dependency is parsed only if the current profile matches this
+     * field.
      */
 	private String profile;
-
-	private File base;
-    
-    /** 
-     *  If true, none of the files of this dependency, or its dependencies
-     *  are copied by CopyDependency task. 
-     */
-    private boolean nocopy;
     
     /**
-     * The profile with which to parse this dependency (in
-     * other words, a profile applied to its sub-dependencies).
+     * Each {@link ComponentDependency} may have an associated profile.
+     * This field indicates which profile we need from the dependent
+     * component. 
      */
     private String inprofile;
+
+    /**
+     * Base for resolving relative files.
+     */
+	private final File base;
+
+    /** 
+     * If <code>true</code>, none of the files of this dependency,
+     * or its dependencies are copied by 
+     * {@link com.dawidweiss.carrot.ant.CopyDependencies} task. 
+     */
+    private final boolean nocopy;
 
 	public DependencyElement(File file, Element configElement) 
         throws Exception {
@@ -80,10 +94,9 @@ public class DependencyElement {
     public boolean isNoCopy() {
         return this.nocopy;
     }
-    
+
     public String toString() {
 	    return "[dependency name=" + name + " profile=" + profile + " base="
 	    + base.getAbsolutePath() + " inprofile=" + inprofile + " nocopy=" + nocopy + "]";
     }
-
 }

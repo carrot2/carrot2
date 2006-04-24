@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * This class represents a dependency on a particular
- * component in the given profile. If {@link #profile}
+ * component in a given profile. If {@link #profile}
  * is <code>null</code> the default profile is assumed.
  */
 public class ComponentInProfile {

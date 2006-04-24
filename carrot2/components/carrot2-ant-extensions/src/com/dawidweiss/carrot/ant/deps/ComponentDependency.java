@@ -39,7 +39,11 @@ import org.xml.sax.SAXException;
 
 
 /**
- * A class that represents a component
+ * A class that represents a component and the information
+ * about its dependencies (other components it requires to
+ * build or run).
+ * 
+ * @author Dawid Weiss
  */
 public class ComponentDependency {
 
@@ -53,13 +57,15 @@ public class ComponentDependency {
     private String name;
 
     /** 
-     * A dependency list (Dependency objects) of this 
-     * component. 
+     * A dependency list {@link DependencyElement} 
+     * objects of this component. 
      */
     private ArrayList dependencies = new ArrayList();
 
-    /** A list of objects this component provides 
-     * (Provides objects) */
+    /** 
+     * A list of objects this component provides 
+     * (Provides objects) 
+     */
     private ArrayList provides = new ArrayList();
 
     /** A file pointer to this component's xml */

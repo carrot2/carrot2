@@ -24,7 +24,6 @@ import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.util.FileUtils;
 
 import com.dawidweiss.carrot.ant.deps.ComponentDependency;
-import com.dawidweiss.carrot.ant.deps.ComponentDependencyUtils;
 
 
 /**
@@ -104,7 +103,7 @@ public class DependencyPath extends Path {
         components.put(component.getName(), component);
         FileUtils futils = FileUtils.newFileUtils();
         try {
-			ComponentDependencyUtils.loadComponentDependencies( futils, getProject(), this.dependencies, components);
+			Utils.loadComponentDependencies( futils, getProject(), this.dependencies, components);
 		} catch (Exception e1) {
             throw new BuildException("Could not load dependencies: "
                 + e1.toString(), e1);
