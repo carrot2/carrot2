@@ -25,6 +25,13 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+/**
+ * A container for build triggers for a component.
+ * 
+ * @see AntBuildElement
+ * 
+ * @author Dawid Weiss
+ */
 public class BuildElement {
     private List execs = new ArrayList();
 

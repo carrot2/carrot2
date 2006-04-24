@@ -23,7 +23,12 @@ import org.apache.tools.ant.util.FileUtils;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
-public class AntBuildElement implements BuildTask {
+/**
+ * An build trigger for a component representing an ANT file. 
+ * 
+ * @author Dawid Weiss
+ */
+class AntBuildElement implements BuildTask {
 
     private String target;
 	private String file;

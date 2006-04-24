@@ -19,12 +19,13 @@ import org.apache.tools.ant.util.FileUtils;
 import org.w3c.dom.Element;
 
 /**
+ * A single file provided by the component.
  */
-public class FileElement {
-
-	private File base;
-	private File file;
+class FileElement {
     private static FileUtils futils = FileUtils.newFileUtils();
+
+	private final File base;
+	private final File file;
 
     public FileElement(File base, String localPrefix, Element configElement) 
      throws Exception {

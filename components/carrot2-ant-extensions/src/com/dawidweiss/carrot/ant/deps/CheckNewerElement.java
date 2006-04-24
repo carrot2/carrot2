@@ -33,7 +33,7 @@ import com.dawidweiss.carrot.ant.MostRecentFileDate;
  * If any of the fileset's files is newer then any of the target
  * files, build target is invoked. 
  */
-public class CheckNewerElement {
+class CheckNewerElement {
 
     private ArrayList filesets = new ArrayList();
     private Project project;

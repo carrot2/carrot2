@@ -170,6 +170,9 @@ public abstract class AbstractLicenseTask extends MatchingTask {
         }
     }
     
+    /**
+     * Write a string to file. The encoding is acquired from {@link #getEncoding()}.
+     */
     protected void writeFile(String string, File file) throws IOException {
         final byte [] content = string.getBytes(getEncoding());
         final FileOutputStream fos = new FileOutputStream(file);

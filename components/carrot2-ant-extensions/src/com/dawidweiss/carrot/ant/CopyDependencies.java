@@ -26,7 +26,6 @@ import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.util.FileUtils;
 
 import com.dawidweiss.carrot.ant.deps.ComponentDependency;
-import com.dawidweiss.carrot.ant.deps.ComponentDependencyUtils;
 import com.dawidweiss.carrot.ant.deps.FileReference;
 
 
@@ -133,7 +132,7 @@ public class CopyDependencies extends Task {
             // load all dependencies pointed to by embedded filesets.
             HashMap components = new HashMap();
             components.put(component.getName(), component);
-            ComponentDependencyUtils.loadComponentDependencies( futils, getProject(), this.dependencies, components);
+            Utils.loadComponentDependencies( futils, getProject(), this.dependencies, components);
 
             FileReference [] refs 
                 = component.getAllProvidedFileReferences(components, profile, true, true);
