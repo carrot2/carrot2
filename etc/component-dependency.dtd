@@ -44,7 +44,7 @@
     Static objects only contain 'files' element as a child of 'provides'.
   -->
   
-<!ELEMENT provides (files?, build*, check-newer?) >
+<!ELEMENT provides (files?, build*, check-newer?, meta*) >
 
 <!ATTLIST provides profile NMTOKEN #IMPLIED >
 
@@ -93,3 +93,12 @@
   -->
 <!ELEMENT fileset EMPTY >
 <!ATTLIST fileset dir CDATA #REQUIRED >
+
+<!--
+    A meta element carries a key and textual content. Metas are used
+    to associate extra information with the component, for example
+    proguard obfuscation info.
+  -->
+<!ELEMENT meta (#PCDATA) >
+<!ATTLIST meta type CDATA #REQUIRED >
+

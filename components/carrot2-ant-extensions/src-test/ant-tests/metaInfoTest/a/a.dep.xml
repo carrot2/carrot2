@@ -1,0 +1,8 @@
+
+<component name="a" description="proja">
+	<provides>
+		<meta type="proguard">a_meta/</meta>
+	</provides>
+	<dependency name="b" />
+	<dependency name="c" />
+</component>

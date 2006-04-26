@@ -375,6 +375,20 @@ public class ComponentDependency {
 		return this.description == null ? this.name : this.description;
 	}
 
+    /**
+     * Collects the meta headers of the given type for this component (dependencies not included).
+     */
+    public void collectMetas(List metas, String currentProfile, String type) {
+        final int s = provides.size();
+        for (int i = 0; i < s; i++) {
+            final ProvidesElement pe = (ProvidesElement) provides.get(i);
+            if (pe.getProfile() != null && (currentProfile == null || !currentProfile.equals(pe.getProfile()))) {
+                continue;
+            }
+            pe.collectMetas(metas, type);            
+        }
+    }
+
 	public FileReference[] getAllProvidedFileReferences(HashMap components, String currentProfile, boolean buildPath, boolean nocopy) {
         ComponentInProfile [] resolvedComponents =  
             getAllRequiredComponentDependencies(components, currentProfile, nocopy);

@@ -64,5 +64,9 @@
             classname="com.dawidweiss.carrot.ant.LicenseReplace">
             <classpath refid="bootstrap" />
         </taskdef>
+        <taskdef name="collectMeta" 
+            classname="com.dawidweiss.carrot.ant.CollectMeta">
+            <classpath refid="bootstrap" />
+        </taskdef>
     </target>
 </project>
