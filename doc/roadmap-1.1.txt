@@ -25,3 +25,8 @@ http://www.softwaresecretweapons.com/jspwiki/Wiki.jsp?page=JavascriptStringConca
 - add lucene input source to the demo application
 
 - modify xslt-output to work with frames? (ajax-based?)
+
+- refactor Language use (tokenization, stemming) in Lingo.
+
+- Highlight user search terms in document snippets in the demo application (reuse
+Lucene's highlighter?).
