@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process
+    xmlns="http://www.dawidweiss.com/projects/carrot/processDescriptor"
+    id="carrot2.process.haog-fi.googleapi"
+    description="GoogleAPI, HAOG-FI, Dynamic Tree"
+>
+    <processing-script language="beanshell"><![CDATA[
+    
+    controller.setUseCachedInput(true);
+    controller.setDoCacheInput(true);
+
+    InputStream is;
+
+    is = controller.invokeInputComponent( "carrot2.input.googleapi", query );
+    is = controller.invokeFilterComponent( "carrot2.filter.haog-fi", is );
+
+    Map dtreeOptions = new HashMap();
+    dtreeOptions.put("dtree.css", "compact");
+    dtreeOptions.put("param.output.terminal.nodes", "true" );
+    dtreeOptions.put("param.max.open.level", "0");
+    dtreeOptions.put("param.max.subgroup.snippets.included", "3" );
+    dtreeOptions.put("param.no.terminal.groups.expansion", "true" );
+    dtreeOptions.put("param.snippets.sorting.type", "ORDER_DOCUMENTS_ORDER");
+
+    is = controller.invokeOutputComponent( "carrot2.output.xslt-renderer.dynamic-tree", is, dtreeOptions );
+    
+    controller.sendResponse( is ); 
+    
+    ]]>
+    </processing-script>
+</process>
+
