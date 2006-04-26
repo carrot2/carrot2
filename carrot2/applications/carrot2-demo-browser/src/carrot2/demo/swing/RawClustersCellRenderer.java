@@ -119,18 +119,16 @@ public class RawClustersCellRenderer extends DefaultTreeCellRenderer {
 
         StringBuffer buf = new StringBuffer();
         for (Iterator i = description.iterator(); i.hasNext();) {
-            String phrase = (String) i.next();
+            final String phrase = (String) i.next();
+            if (buf.length() > 0) {
+                buf.append("; ");
+            }
+            buf.append(phrase);
 
-            if ((buf.length() + phrase.length()) > maxClusterDescriptionWidth) {
-                buf.append(phrase.substring(0, maxClusterDescriptionWidth - buf.length()));
+            if (buf.length() > maxClusterDescriptionWidth) {
+                buf.setLength(maxClusterDescriptionWidth - "...".length());
                 buf.append("...");
                 break;
-            } else {
-                if (buf.length() > 0) {
-                    buf.append("; ");
-                }
-
-                buf.append(phrase);
             }
         }
 
