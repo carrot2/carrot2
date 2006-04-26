@@ -6,7 +6,7 @@
     description="Carrot2 Demo Browser Application">
 
     <provides profile="stripped">
-        <files prefix="tmp/dist">
+        <files build-path-exclude="true" prefix="tmp/dist">
             <file location="carrot2-demo-browser.jar" />
         </files>
         <build>
@@ -18,7 +18,7 @@
     </provides>
 
     <provides profile="full">
-        <files prefix="tmp/dist">
+        <files build-path-exclude="true" prefix="tmp/dist">
             <file location="carrot2-demo-browser.jar" />
         </files>
         <build>
@@ -27,6 +27,23 @@
         <check-newer>
             <fileset dir="src" />
         </check-newer>
+
+		<meta type="proguard"><![CDATA[
+# (demo browser) 
+-keep class carrot2.demo.Demo* {
+    public static void main(java.lang.String[]);
+}
+
+-keep interface carrot2.demo.ProcessSettings {
+    public protected *;
+}
+
+-keep class * implements carrot2.demo.ProcessSettings {
+    public protected *;
+}
+
+-keepnames class carrot2.demo.swing.*
+		]]></meta>        
     </provides>
 
     <!-- Required components -->
@@ -41,6 +58,8 @@
     <dependency name="carrot2-util-common" />
     <dependency name="carrot2-local-core" />
     <dependency name="carrot2-local-controller" />
+    
+    <dependency name="proguard-base" />
 
 	<!-- Stripped profile contains component references for compilation time only -->
 

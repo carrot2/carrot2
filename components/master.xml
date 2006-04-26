@@ -575,10 +575,10 @@ ${string:component.dependencies}
 
   <target name="build.deptype" depends="bootstrap, discover.classpath">
     <bringToDate componentDescriptor="${component.descriptor}"
-                 dependenciesOnly="true" profile="">
+                 dependenciesOnly="true" profile="${profile}">
         <dependencies refid="dependencies" />
     </bringToDate>
-	
+
 	<mkdir dir="${distribution.dir}" />
 
     <copyDependencies
@@ -590,6 +590,22 @@ ${string:component.dependencies}
   </target>
   <!-- }}} -->
 
+
+  <!-- ##################################### -->
+  <!-- ### {{{ PROGUARD SECTION          ### -->
+  <!-- ##################################### -->  
+  <target name="proguard.collect" depends="bootstrap, discover.classpath">
+    <fail unless="proguard.rules.file">Specify destination file property for rules: proguard.rules.file</fail>
+
+    <!-- Collect proguard definitions from dependencies. -->
+    <collectMeta componentDescriptor="${component.descriptor}" type="proguard" 
+                 property="proguard.rules" profile="${profile}">
+        <dependencies refid="dependencies" />
+    </collectMeta>
+
+    <echo file="${proguard.rules.file}">${proguard.rules}</echo>
+  </target>
+  <!-- }}} -->
   
   <!-- ##################################### -->
   <!-- ### {{{ CLASS EXEC HOOK           ### -->

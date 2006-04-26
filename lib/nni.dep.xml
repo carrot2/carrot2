@@ -8,6 +8,12 @@
 			<file location="nni.jar" />
 			<file location="nni.LICENSE" />
 		</files>
+        <meta type="proguard"><![CDATA[
+# No obfuscation of Native Numerical Interfaces
+-keep class nni.* {
+    public protected *;
+}
+        ]]></meta>
 	</provides>
 </component>
 

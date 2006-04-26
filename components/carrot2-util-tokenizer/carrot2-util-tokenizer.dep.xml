@@ -15,6 +15,12 @@
 		<check-newer>
             <fileset dir="src" />
         </check-newer>
+        <meta type="proguard"><![CDATA[
+# Keep the implementation of all languages.
+-keep class com.dawidweiss.carrot.util.tokenizer.languages.** {
+    public protected static *;
+}
+        ]]></meta>
     </provides>
 
     <!-- Carrot2 components -->

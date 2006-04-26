@@ -15,6 +15,23 @@
 		<check-newer>
             <fileset dir="src" />
         </check-newer>
+        <meta type="proguard"><![CDATA[
+# Keep filter request processor and the processor servlet
+-keep class com.dawidweiss.carrot.filter.FilterRequestProcessorServlet
+
+-keep class * extends com.dawidweiss.carrot.filter.FilterRequestProcessor {
+    public protected <methods>;
+}
+
+# Keep any servlets and their subclasses
+-keep public class * implements javax.servlet.Servlet {
+    public protected *;
+}
+
+-keep class * extends javax.servlet.http.HttpServlet {
+    public protected *;
+}
+        ]]></meta>
     </provides>
 
 	<!-- Carrot2 components -->
