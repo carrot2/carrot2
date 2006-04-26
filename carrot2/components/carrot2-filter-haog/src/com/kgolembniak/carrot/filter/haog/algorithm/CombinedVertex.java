@@ -13,6 +13,7 @@
 
 package com.kgolembniak.carrot.filter.haog.algorithm;
 
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -25,6 +26,8 @@ import com.dawidweiss.carrot.filter.stc.algorithm.BaseCluster;
 import com.dawidweiss.carrot.filter.stc.algorithm.Phrase;
 import com.dawidweiss.carrot.filter.stc.algorithm.StemmedTerm;
 import com.dawidweiss.carrot.filter.stc.suffixtree.ExtendedBitSet;
+import com.kgolembniak.carrot.filter.fi.FIParameters;
+import com.kgolembniak.carrot.filter.fi.algorithm.Cluster;
 
 /**
  * Class representing vertex, which can consist other vertex. This is usefull
@@ -233,7 +236,7 @@ public class CombinedVertex extends Vertex{
 		String description = "";
 		for (int i1=0; i1<phrases.size(); i1++){
 			final Phrase phrase = (Phrase) phrases.get(i1);
-			description += phrase.userFriendlyTerms().trim();
+			description += phrase.userFriendlyTerms().trim() + " ";
 			//TODO get this parameter from params
 			if (i1>3) break;
 		}
@@ -241,6 +244,38 @@ public class CombinedVertex extends Vertex{
 		return description;
 	}	
 	
+	/**
+	 * This method returns description of vertex, which is displayed
+	 * to user.
+	 * @param params - Parameters used for description limiting
+	 * @return description of this vertex as String.
+	 */
+	public String getVertexDescription(FIParameters params) {
+		String description = "";
+		HashSet descriptions = new HashSet();
+		
+		Vertex vertex;
+		Cluster cluster;
+		for (int i1=0; i1<vertices.size(); i1++){
+			vertex = (Vertex) vertices.get(i1);
+			cluster = (Cluster) vertex.getRepresentedCluster();
+			descriptions.addAll(cluster.getDescription());
+		}
+		
+		int i1 = 0;
+		for (Iterator it = descriptions.iterator(); it.hasNext();){
+			description += (String) it.next();
+			i1++;
+			if (i1<params.getMaxDescPhraseLength()){
+				description += " ";
+			} else {
+				break;
+			}
+		}
+		
+		return description;
+	}	
+
 	/**
 	 * This method decides which phrase is more important and orders
 	 * phrases. This method is taken from  
@@ -257,7 +292,7 @@ public class CombinedVertex extends Vertex{
 		BaseCluster cluster;
 		Phrase phrase;
 		for (int i1=0; i1<vertices.size(); i1++){
-			cluster = ((Vertex) vertices.get(i1)).getRepresentedCluster();
+			cluster = (BaseCluster) ((Vertex) vertices.get(i1)).getRepresentedCluster();
 			phrase = cluster.getPhrase();
 			phrase.setCoverage(
 					(float) cluster.getNode().getSuffixedDocumentsCount() / 
@@ -404,7 +439,7 @@ public class CombinedVertex extends Vertex{
 		documents = new ExtendedBitSet();
 		BaseCluster cluster;
 		for (Iterator it = vertices.iterator(); it.hasNext();){
-			cluster = ((Vertex) it.next()).getRepresentedCluster();
+			cluster = (BaseCluster) ((Vertex) it.next()).getRepresentedCluster();
 			documents.or(cluster.getNode().getInternalDocumentsRepresentation());
 		}
 	}
