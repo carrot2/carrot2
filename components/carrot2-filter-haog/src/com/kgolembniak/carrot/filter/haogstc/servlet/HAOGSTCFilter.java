@@ -48,7 +48,7 @@ import com.stachoodev.carrot.filter.normalizer.local.CaseNormalizerLocalFilterCo
 
 /**
  * Remote filter implementing Hierarchical Arrangement of Overlapping
- * Groups.<br/>
+ * Groups based on STC clustering algorithm.<br/>
  * Implementation of this class is based on 
  * {@link #com.dawidweiss.carrot.filter.stc.servlet.STCFullServlet}
  * @author Karol Gołembniak
