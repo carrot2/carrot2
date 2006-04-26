@@ -1,0 +1,23 @@
+
+import com.dawidweiss.carrot.core.local.*;
+import com.dawidweiss.carrot.core.local.linguistic.*;
+import com.dawidweiss.carrot.local.controller.*;
+import com.dawidweiss.carrot.util.tokenizer.languages.english.*;
+
+//
+// Component factory is a dynamic Beanshell class
+//
+factory = new LocalComponentFactoryBase() {
+    public LocalComponent getInstance() {
+    	return new com.kgolembniak.carrot.filter.haogfi.local.HAOGFILocalFilterComponent();
+    }
+
+    public String getName() {
+        return "Hierarchical Arrangement of Overlapping Groups based on Frequent Itemsets";
+    }
+};
+
+//
+// Return the ID of the component and its factory.
+//
+return new LoadedComponentFactory("filter-haog-fi", factory);
