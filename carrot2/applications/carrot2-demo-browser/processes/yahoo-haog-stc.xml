@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<local-process id="yahoo-haog-stc">
+  <name>Yahoo Search API -- HAOG-STC Clusterer</name>
+
+  <input  component-key="input-cached-yahooapi" />
+
+  <filter component-key="filter-rawdocument-enumerator" />
+  <filter component-key="filter-language-detection-en" />
+  <filter component-key="filter-tokenizer" />
+  <filter component-key="filter-case-normalizer" />
+  <filter component-key="filter-haog-stc" />
+  <filter component-key="filter-file-save-interceptor" />
+
+  <output component-key="output-clustersConsumer" />
+
+  <attribute key="process.settings.class" 
+	         value="carrot2.demo.settings.HaogStcSettings" />
+</local-process>
