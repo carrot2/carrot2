@@ -107,4 +107,12 @@ public class StemmedTerm {
     {
         return this.word;
     }
+    
+    /**
+     * Returns steemed form of oryginal word
+     */
+    public String getStemmed()
+    {
+    	return this.stemmed;
+    }
 }
