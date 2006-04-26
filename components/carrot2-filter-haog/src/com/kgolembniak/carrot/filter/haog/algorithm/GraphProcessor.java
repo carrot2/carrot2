@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -17,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dawidweiss.carrot.core.local.ProcessingException;
-import com.dawidweiss.carrot.filter.stc.algorithm.BaseCluster;
 
 /**
  * Main class containing HAOG Algorithm described in:
@@ -31,49 +29,11 @@ public class GraphProcessor {
 	private List cycle;
 	private int nextLabel;
 	
-	public GraphProcessor(){
-		vertices = new ArrayList();
-	}
-	
 	/**
-	 * This method creates graph from a list of {@link BaseCluster}.
-	 * @param baseClusters - BaseCluster list.
-	 * @return list containing list of graph's vertices
+	 * Default constructor
 	 */
-	public List getGraphFromBCList(List baseClusters){
-		List graph = new ArrayList();
-		BaseCluster baseCluster;
-		Vertex vertex;
-		
-		//First we must create all vertices to make arcs between them.
-		for (int i1=0; i1<baseClusters.size(); i1++){
-			baseCluster = (BaseCluster) baseClusters.get(i1);
-			vertex = new Vertex(String.valueOf(baseCluster.getId()));
-			vertex.setRepresentedCluster(baseCluster);
-	 		graph.add(vertex);
-		}
-
-		//Now create arcs
-		BaseCluster neighbour;
-		Vertex neighbourVertex;
-		for (int i1=0; i1<baseClusters.size(); i1++){
-			baseCluster = (BaseCluster) baseClusters.get(i1);
-			List neighbours = baseCluster.getNeighborsList();
-			vertex = (Vertex) graph.get(i1);
-			
-			if (neighbours==null) {
-				continue;
-			}
-			
-			for (int i2=0; i2<neighbours.size(); i2++){
-				neighbour = (BaseCluster) neighbours.get(i2);
-				neighbourVertex = (Vertex) graph.get(neighbour.getId());
-				vertex.addSuccessor(neighbourVertex);
-				neighbourVertex.addPredecessor(vertex);
-			}
-		}
-		
-		return graph;
+	public GraphProcessor(){
+		this.vertices = new ArrayList();
 	}
 	
 	/**
@@ -332,5 +292,5 @@ public class GraphProcessor {
 		
 		return kernel;
 	}
-	
+
 }

@@ -16,8 +16,6 @@ package com.kgolembniak.carrot.filter.haog.algorithm;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dawidweiss.carrot.filter.stc.algorithm.BaseCluster;
-
 /**
  * Class representing vertex in graph.
  * @author Karol Gołembniak
@@ -44,9 +42,9 @@ public class Vertex {
 	 */
 	protected List basePredList;
 	/**
-	 * Base cluster represented by this vertex.
+	 * Cluster represented by this vertex.
 	 */
-	private BaseCluster representedCluster;
+	private Object representedCluster;
 	
 	public Vertex(String label){
 		this.label = label;
@@ -102,11 +100,11 @@ public class Vertex {
 		predList.remove(predecessor);
 	}
 
-	public BaseCluster getRepresentedCluster() {
+	public Object getRepresentedCluster() {
 		return representedCluster;
 	}
 
-	public void setRepresentedCluster(BaseCluster representedCluster) {
+	public void setRepresentedCluster(Object representedCluster) {
 		this.representedCluster = representedCluster;
 	}
 
