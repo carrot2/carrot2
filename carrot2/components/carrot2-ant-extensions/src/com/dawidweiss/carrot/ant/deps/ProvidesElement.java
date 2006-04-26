@@ -27,13 +27,28 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 /**
- * 
+ * A component can provide a set of files in a given profile (or in the default
+ * profile). Each set of provided files can also have a set of 
+ * conditions that trigger builds and meta information snippets.
  */
 class ProvidesElement {
+    /**
+     * Meta information snippet in a <code>meta</code> tag inside
+     * a <code>provides</code> element. 
+     */
+    final static class Meta {
+        final String type;
+        final String content;
+        public Meta(String type, String content) {
+            this.type = type;
+            this.content = content;
+        }
+    }
 
     private FilesElement files;
     private ArrayList builds = new ArrayList();
-    private ArrayList conditions = new ArrayList(); 
+    private ArrayList conditions = new ArrayList();
+    private ArrayList metas = new ArrayList();
     private String profile;
     private ComponentDependency component;
 
@@ -56,6 +71,11 @@ class ProvidesElement {
                         builds.add(new BuildElement(base, (Element) n));
                     } else if ("check-newer".equals(n.getNodeName())) {
                         conditions.add(new CheckNewerElement(project, base, (Element) n));
+                    } else if ("meta".equals(n.getNodeName())) {
+                        final Element e = (Element) n;
+                        final String type = e.getAttribute("type");
+                        final String value = e.getTextContent();
+                        metas.add(new Meta(type, value));
                     } else {
                         throw new SAXException("Unexpected node: "
                             + n.getNodeName());
@@ -159,4 +179,13 @@ class ProvidesElement {
             return java.util.Collections.EMPTY_LIST;
         }
 	}
+
+    void collectMetas(List outputMetas, String type) {
+        for (int i = 0; i < this.metas.size(); i++) {
+            final Meta m = (Meta) this.metas.get(i);
+            if (m.type.equals(type)) {
+                outputMetas.add(m.content);
+            }
+        }
+    }
 }

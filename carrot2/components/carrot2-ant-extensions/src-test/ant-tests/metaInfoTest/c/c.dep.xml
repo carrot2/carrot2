@@ -1,0 +1,7 @@
+
+<component name="c" description="projc">
+	<provides>
+		<meta type="proguard">c_meta/</meta>
+		<meta type="other2">other2</meta>
+	</provides>
+</component>
