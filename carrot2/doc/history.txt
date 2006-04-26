@@ -9,6 +9,7 @@ Major functions and bug fixes
 Version  [C] Information
 
 HEAD
+          +  Added proguard obfuscation infrastructure.
 
           #  The cache in demo application did not work properly for input components
              with the same input component class customizable by parameters set in the constructor

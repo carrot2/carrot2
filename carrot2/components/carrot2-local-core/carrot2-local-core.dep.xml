@@ -16,6 +16,20 @@
 		<check-newer>
 			<fileset dir="src" />
 		</check-newer>
+        <meta type="proguard"><![CDATA[
+# Keep Carrot2 core interfaces and classes that implement them.
+-keep class * extends com.dawidweiss.carrot.core.local.LocalComponent {
+    !private <methods>;
+    !private <fields>;
+    !private <init>(*);
+    !private <init>(*,*);
+    !private <init>(*,*,*);
+}
+
+-keep class com.dawidweiss.carrot.core.local.** {
+    public protected *;
+}
+        ]]></meta>
     </provides>
 
     <dependency name="log4j" />

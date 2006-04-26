@@ -8,6 +8,20 @@
 			<file location="log4j-1.2.11.jar" />
 			<file location="log4j.LICENSE" />
 		</files>
+        <meta type="proguard"><![CDATA[
+# Keep log4j's appenders and layout patterns.
+-keep class * implements org.apache.log4j.Appender {
+    public protected *;
+}
+
+-keep class * implements org.apache.log4j.Layout {
+    public protected *;
+}
+
+-keep class org.apache.log4j.Logger {
+    public protected *;
+}
+        ]]></meta>
 	</provides>
 </component>
 

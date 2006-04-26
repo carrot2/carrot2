@@ -15,6 +15,12 @@
 		<check-newer>
 			<fileset dir="src" />
 		</check-newer>
+        <meta type="proguard"><![CDATA[
+# Keep case normalizers
+-keep class * implements com.stachoodev.carrot.filter.normalizer.CaseNormalizer {
+    public protected <methods>;
+}
+        ]]></meta>
     </provides>
 
     <dependency name="carrot2-local-core" />

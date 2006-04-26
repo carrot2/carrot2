@@ -61,5 +61,4 @@
              antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" inheritrefs="true">
         </ant>
     </target>
-
 </project>
