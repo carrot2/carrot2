@@ -13,7 +13,7 @@ factory = new LocalComponentFactoryBase() {
     }
 
     public String getName() {
-        return "Hierarchical Arrangement of Overlapping Groups";
+        return "Hierarchical Arrangement of Overlapping Groups based on STC algorithm";
     }
 };
 
