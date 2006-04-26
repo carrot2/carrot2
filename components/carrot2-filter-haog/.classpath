@@ -11,5 +11,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-stc"/>
 	<classpathentry kind="src" path="/carrot2-util-tokenizer"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-case-normalizer"/>
+	<classpathentry kind="src" path="src-test"/>
+	<classpathentry sourcepath="JUNIT_SRC_HOME/junitsrc.zip" kind="var" path="JUNIT_HOME/junit.jar"/>
 	<classpathentry kind="output" path="tmp/eclipse/classes"/>
 </classpath>
