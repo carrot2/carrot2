@@ -32,9 +32,19 @@ public class FIConstants {
 	public final static String MIN_SUPPORT = "fi.minSupport";
 
 	/**
-	 * Default value for {@link MIN_SUPPORT} 
+	 * Default value for {@link #MIN_SUPPORT} 
 	 */
 	public final static double DEFAULT_MIN_SUPPORT = 0.1d;
+
+	/**
+	 * Maximal time for itemsets generation.
+	 */
+	public final static String MAX_ITEMSETS_GENERATION_TIME = "fi.maxItemSetsGenerationTime";
+
+	/**
+	 * Default value for {@link #MAX_ITEMSETS_GENERATION_TIME} 
+	 */
+	public static final int DEFAULT_MAX_ITEMSETS_GENERATION_TIME = 40;
 
 	/**
 	 * Too frequent words are not interesting, so they are ignored if they 
@@ -54,7 +64,7 @@ public class FIConstants {
 	public final static String LINK_TRESHOLD = "fi.linkTreshold";
 
 	/**
-	 * Default value for {@link LINK_TRESHOLD} 
+	 * Default value for {@link #LINK_TRESHOLD} 
 	 */
 	public final static double DEFAULT_LINK_TRESHOLD = 0.6d;
 
@@ -64,7 +74,7 @@ public class FIConstants {
 	public final static String MAX_PHRASE_LENGTH = "fi.maxPhraseLength";
 
 	/**
-	 * Default value for {@link MAX_PHRASE_LENGTH} 
+	 * Default value for {@link #MAX_PHRASE_LENGTH} 
 	 */
 	public final static int DEFAULT_MAX_PHRASE_LENGTH = 5;
 
@@ -74,7 +84,7 @@ public class FIConstants {
 	public final static String MAX_PRESENTED_CLUSTERS = "fi.maxPresentedCluster";
 
 	/**
-	 * Default value for {@link MAX_PRESENTED_CLUSTERS}
+	 * Default value for {@link #MAX_PRESENTED_CLUSTERS}
 	 */
 	public final static int DEFAULT_MAX_PRESENTED_CLUSTERS = 20;
 
@@ -84,7 +94,8 @@ public class FIConstants {
 	public final static String MIN_CLUSTER_SIZE = "fi.minClusterSize";
 	
 	/**
-	 * Default value for {@link MIN_CLUSTER_SIZE}
+	 * Default value for {@link #MIN_CLUSTER_SIZE}
 	 */
 	public final static int DEFAULT_MIN_CLUSTER_SIZE = 2;
+
 }

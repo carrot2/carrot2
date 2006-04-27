@@ -23,6 +23,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import org.omg.CORBA.TIMEOUT;
+
 import com.dawidweiss.carrot.core.local.clustering.TokenizedDocument;
 import com.dawidweiss.carrot.core.local.linguistic.tokens.TokenSequence;
 import com.dawidweiss.carrot.core.local.linguistic.tokens.TypedToken;
@@ -60,10 +62,6 @@ public class AprioriEngine {
 	 * Parameters for FI algorithm. 
 	 */
 	private FIParameters parameters;
-	/**
-	 * Minimum support for itemset.
-	 */
-	private double minSupport;
 	/**
 	 * Frequent sets generation start time.
 	 */
@@ -187,7 +185,7 @@ public class AprioriEngine {
 			itemSet.add(word);
 
 			final double support = getItemSetSupport(itemSet);
-			if (( support >= this.minSupport)&&
+			if (( support >= parameters.getMinSupport())&&
 				(support <= parameters.getIgnoreWordIfInHigherDocsPercent())){
 				previousItemSets.add(itemSet);
 				frequentItemSets.add(itemSet);
@@ -206,12 +204,12 @@ public class AprioriEngine {
 		ItemSet firstSet;
 		ItemSet secondSet;
 		ItemSet newSet;
-		for (int i1=0; i1<previousItemSets.size(); i1++){
+Timeout:for (int i1=0; i1<previousItemSets.size(); i1++){
 			firstSet = (ItemSet) previousItemSets.get(i1);
 			for (int i2=0; i2<previousItemSets.size(); i2++){
-				//TODO set this in settings
-				if (System.currentTimeMillis() - startTime > 40000){
-					break;
+				if (System.currentTimeMillis() - startTime > 
+					parameters.getMaxItemSetsGenerationTime() * 1000){
+					break Timeout;
 				}
 				if (i1!=i2){
 					secondSet = (ItemSet) previousItemSets.get(i2);
@@ -220,7 +218,7 @@ public class AprioriEngine {
 						newSet.addAll(firstSet);
 						newSet.add(secondSet.last());
 						if (previousItemSets.containsAll(newSet.getSubSets()) && 
-							getItemSetSupport(newSet) >= this.minSupport){
+							getItemSetSupport(newSet) >= parameters.getMinSupport()){
 							candidates.add(newSet);
 						}
 					}
@@ -413,12 +411,11 @@ public class AprioriEngine {
 	 */
 	public List getClusters(FIParameters params){
 		this.parameters = params;
-		this.minSupport = params.getMinSupport();
 
 		generateItemSets();
-
 		List clusters = createClusters();
 		clusters = connectClusters(clusters);
+		
 		return clusters;
 	}
 
