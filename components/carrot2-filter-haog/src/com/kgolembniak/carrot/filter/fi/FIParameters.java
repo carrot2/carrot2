@@ -30,6 +30,11 @@ public class FIParameters {
 	private double minSupport;
 	
 	/**
+	 * Maximal time for itemsets generation in seconds.
+	 */
+	private int maxItemSetsGenerationTime;
+	
+	/**
 	 * A word is ignored if it occures in more documents than this ratio.
 	 */
 	private double ignoreWordIfInHigherDocsPercent;
@@ -59,6 +64,7 @@ public class FIParameters {
 	 */
 	public FIParameters(){
 		this.minSupport = FIConstants.DEFAULT_MIN_SUPPORT; 
+		this.maxItemSetsGenerationTime = FIConstants.DEFAULT_MAX_ITEMSETS_GENERATION_TIME; 
 		this.ignoreWordIfInHigherDocsPercent = FIConstants.DEFAULT_IGNORED_WORD_IF_IN_MORE_DOCS; 
 		this.linkThreshold = FIConstants.DEFAULT_LINK_TRESHOLD;
 		this.maxDescPhraseLength = FIConstants.DEFAULT_MAX_PHRASE_LENGTH;
@@ -79,6 +85,15 @@ public class FIParameters {
         if (value != null) {
             params.minSupport = Double.parseDouble(value);
             if (params.minSupport < 0.0d || params.minSupport > 1.0d) {
+                throw new RuntimeException("Illegal value range.");
+            }
+        }
+
+        value = (String) map.get(FIConstants.MAX_ITEMSETS_GENERATION_TIME);
+        if (value != null) {
+            params.maxItemSetsGenerationTime = Integer.parseInt(value);
+            if (params.maxItemSetsGenerationTime < 0 || 
+            	params.maxItemSetsGenerationTime > 120) {
                 throw new RuntimeException("Illegal value range.");
             }
         }
@@ -134,6 +149,7 @@ public class FIParameters {
 	public Map toMap(){
 		Map map = new HashMap();
 		map.put(FIConstants.MIN_SUPPORT, Double.toString(minSupport));
+		map.put(FIConstants.MAX_ITEMSETS_GENERATION_TIME, Integer.toString(maxItemSetsGenerationTime));
 		map.put(FIConstants.IGNORED_WORD_IF_IN_MORE_DOCS, Double.toString(ignoreWordIfInHigherDocsPercent));
 		map.put(FIConstants.LINK_TRESHOLD, Double.toString(linkThreshold));
 		map.put(FIConstants.MAX_PHRASE_LENGTH, Integer.toString(maxDescPhraseLength));
@@ -148,6 +164,14 @@ public class FIParameters {
 	 */
 	public double getMinSupport() {
 		return minSupport;
+	}
+	
+	/**
+	 * Getter for {@link #maxItemSetsGenerationTime} parameter.
+	 * @return maximal itemset generation time
+	 */
+	public int getMaxItemSetsGenerationTime(){
+		return maxItemSetsGenerationTime;
 	}
 
 	/**
