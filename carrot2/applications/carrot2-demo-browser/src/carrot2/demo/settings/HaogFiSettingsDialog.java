@@ -42,7 +42,9 @@ class HaogFiSettingsDialog extends JPanel {
 
         builder.appendSeparator("Frequent sets generation");
         builder.append(ThresholdHelper.createDoubleThreshold(settings, FIConstants.MIN_SUPPORT,
-                "Minimum word support(affects processing time)(%):", 0, 1, 0.01, 0.25));
+                "Minimum word support(affects processing time):", 0, 1, 0.01, 0.25));
+        builder.append(ThresholdHelper.createIntegerThreshold(settings, FIConstants.MAX_ITEMSETS_GENERATION_TIME,
+                "Maximum time for itemsets generation:", 0, 120, 1, 20));
 
         builder.appendSeparator("Cluster processing");
         builder.append(ThresholdHelper.createDoubleThreshold(settings, FIConstants.LINK_TRESHOLD,
