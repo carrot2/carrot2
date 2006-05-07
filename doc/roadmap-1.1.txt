@@ -30,3 +30,6 @@ http://www.softwaresecretweapons.com/jspwiki/Wiki.jsp?page=JavascriptStringConca
 
 - Highlight user search terms in document snippets in the demo application (reuse
 Lucene's highlighter?).
+
+- Write a clustering plugin for Kneobase?
+  http://www.kneobase.com/en/kneobase
