@@ -92,6 +92,13 @@ public class ComponentDependency {
         try {
             // parse the dependency file.
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+            // TODO: validate xml before reading it.
+            // this requires adding a custom error handler and adding DTD info to all component
+            // descriptors (currently certain libs don't have it).
+            // factory.setValidating(true);
+            // factory.setErrorHandler(...);
+
             DocumentBuilder builder;
             builder = factory.newDocumentBuilder();
             
