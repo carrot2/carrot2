@@ -44,7 +44,7 @@ public class FIConstants {
 	/**
 	 * Default value for {@link #MAX_ITEMSETS_GENERATION_TIME} 
 	 */
-	public static final int DEFAULT_MAX_ITEMSETS_GENERATION_TIME = 40;
+	public static final int DEFAULT_MAX_ITEMSETS_GENERATION_TIME = 20;
 
 	/**
 	 * Too frequent words are not interesting, so they are ignored if they 
