@@ -14,16 +14,11 @@
 package com.dawidweiss.carrot.ant.deps;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
 /**
@@ -45,7 +40,7 @@ class ProvidesElement {
         }
     }
 
-    private FilesElement files;
+    private ArrayList files = new ArrayList();
     private ArrayList builds = new ArrayList();
     private ArrayList conditions = new ArrayList();
     private ArrayList metas = new ArrayList();
@@ -66,7 +61,7 @@ class ProvidesElement {
             switch (n.getNodeType()) {
                 case Node.ELEMENT_NODE:
                     if ("files".equals(n.getNodeName())) {
-                        this.files = new FilesElement(base, (Element) n);
+                        this.files.add(new FilesElement(base, (Element) n));
                     } else if ("build".equals(n.getNodeName())) {
                         builds.add(new BuildElement(base, (Element) n));
                     } else if ("check-newer".equals(n.getNodeName())) {
@@ -104,17 +99,22 @@ class ProvidesElement {
         boolean rebuild = false;
 
         if (files != null) {
-            if (files.allFilesExist() == false) {
+            if (allFilesExist() == false) {
                 // not all files exist. rebuild.
                 project.log("Component [" + component.getName() + "] has missing files, rebuilding.", Project.MSG_INFO);
                 rebuild = true;
             } else {
+                long targetTimestamp = Long.MIN_VALUE;
+                for (int i = 0; i < this.files.size(); i++) {
+                    final FilesElement felem = (FilesElement) files.get(i);
+                    targetTimestamp = Math.max(targetTimestamp, felem.getMostRecentFileTimestamp());
+                }
+
                 for (Iterator i = conditions.iterator(); i.hasNext();) {
                     Object o = i.next();
                     if (o instanceof CheckNewerElement) {
                         // Check the most recently modified file.
                         long sourceTimestamp = ((CheckNewerElement) o).getMostRecentFileTimestamp();
-                        long targetTimestamp = files.getMostRecentFileTimestamp();
                         if (sourceTimestamp > targetTimestamp) {
                             project.log("Component [" + component.getName() + "] needs to be rebuilt (timestamps source: "
                                     + new Date(sourceTimestamp) + ", target: " + new Date(targetTimestamp) + "), rebuilding.");
@@ -140,8 +140,8 @@ class ProvidesElement {
         }
         
         // check if we have all the files now.
-        if (files != null && false == files.allFilesExist()) {
-            File [] missingFiles = files.getMissingFiles();
+        if (files != null && false == allFilesExist()) {
+            File [] missingFiles = getMissingFiles();
             StringBuffer buf = new StringBuffer();
 
             buf.append("Not all files are available after build. " +
@@ -155,13 +155,51 @@ class ProvidesElement {
         }
 	}
     
-	public String getProfile() {
+    /**
+     * Returns <code>true</code> if all files in this provides element exist.
+     */
+	private boolean allFilesExist() {
+        if (this.files != null) {
+            for (int i = 0; i < this.files.size(); i++) {
+                final FilesElement felem = (FilesElement) files.get(i);
+                if (felem.allFilesExist() == false) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Returns a list of missing files.
+     */
+    private File[] getMissingFiles() {
+        final ArrayList files = new ArrayList();
+
+        if (this.files != null) {
+            for (int i = 0; i < this.files.size(); i++) {
+                final FilesElement felem = (FilesElement) files.get(i);
+                if (felem.allFilesExist() == false) {
+                    files.addAll(Arrays.asList(felem.getMissingFiles()));
+                }
+            }
+        }
+
+        return (File []) files.toArray(new File[files.size()]);
+    }
+
+    public String getProfile() {
 		return profile;
 	}
 
     public List getProvidedFileReferences(boolean buildPath) {
+        final ArrayList fileList = new ArrayList();
         if (this.files != null) {
-            return files.getAllFileReferences(buildPath);
+            for (int i = 0; i < this.files.size(); i++) {
+                final FilesElement felem = (FilesElement) files.get(i);
+                fileList.addAll(felem.getAllFileReferences(buildPath));
+            }
+            return fileList;
         } else {
             return java.util.Collections.EMPTY_LIST;
         }
