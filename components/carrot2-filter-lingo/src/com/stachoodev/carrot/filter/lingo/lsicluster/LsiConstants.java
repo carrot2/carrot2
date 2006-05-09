@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -13,51 +12,64 @@
 
 package com.stachoodev.carrot.filter.lingo.lsicluster;
 
-
 /**
- * Names of properties used to drive the algorithm and
- * their default values.
+ * Names of properties used to drive the algorithm and their default values.
  * 
  * @author Dawid Weiss
  * @version $Revision$
  */
-public class LsiConstants {
-    
+public class LsiConstants
+{
+
     /**
      * No instantiation of this class.
      */
-    private LsiConstants() {
+    private LsiConstants()
+    {
     }
-    
+
     /**
-     * Determines the similarity threshold that must be exceeded in
-     * order for a document to be added to a cluster. The larger the
-     * value, the less documents
-     * in a cluster and the larger assignment precission.
+     * Determines the similarity threshold that must be exceeded in order for a
+     * document to be added to a cluster. The larger the value, the less
+     * documents in a cluster and the larger assignment precission.
      * 
-     * <P>Range: 0.0 - 1.0, Property type: <code>java.lang.String</code> 
+     * <P>
+     * Range: 0.0 - 1.0, Property type: <code>java.lang.String</code>
      */
-    public final static String CLUSTER_ASSIGNMENT_THRESHOLD
-    	= "lsi.threshold.clusterAssignment";
-    
-    /** 
+    public final static String CLUSTER_ASSIGNMENT_THRESHOLD = "lsi.threshold.clusterAssignment";
+
+    /**
      * Default value of the {@link #CLUSTER_ASSIGNMENT_THRESHOLD}.
      */
     public final static double DEFAULT_CLUSTER_ASSIGNMENT_THRESHOLD = 0.225;
 
-    
     /**
-     * Determines the maximum number of candidate clusters. The larger the value, the more
-     * candidate clusters. 
+     * Determines the maximum number of candidate clusters. The larger the
+     * value, the more candidate clusters.
      * 
-     * <p>Range: 0.0 - 1.0, Property type: <code>java.lang.String</code> 
+     * <p>
+     * Range: 0.0 - 1.0, Property type: <code>java.lang.String</code>
      */
-    public final static String CANDIDATE_CLUSTER_THRESHOLD
-    	= "lsi.threshold.candidateCluster";
-    
+    public final static String CANDIDATE_CLUSTER_THRESHOLD = "lsi.threshold.candidateCluster";
+
     /**
      * Default value of the {@link #CANDIDATE_CLUSTER_THRESHOLD}.
      */
     public final static double DEFAULT_CANDIDATE_CLUSTER_THRESHOLD = 0.775;
-    
+
+    /**
+     * Determines the preferred number of clusters. Lingo will create not more
+     * than {@link #PREFERRED_CLUSTER_COUNT} clusters. It is not guaranteed,
+     * however, that exactly {@link #PREFERRED_CLUSTER_COUNT} will be produced.
+     * 
+     * <p>
+     * Range: 2 - infinity, Property type: <code>java.lang.Integer</code>
+     */
+    public final static String PREFERRED_CLUSTER_COUNT = "clusters.num";
+
+    /**
+     * Default value of the {@link #PREFERRED_CLUSTER_COUNT}.
+     */
+    public final static int DEFAULT_PREFERRED_CLUSTER_COUNT = -1;
+
 }
