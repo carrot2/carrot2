@@ -77,11 +77,6 @@ public class HAOGSTCLocalFilterComponent extends ProfiledLocalFilterComponentBas
      */
     private RequestContext requestContext;
     
-    /**
-     * Parameters for cluster merging and cluster's description creation
-     */
-    private StcParameters params;
-
     public void init(LocalControllerContext context)
         throws InstantiationException
     {
@@ -146,7 +141,8 @@ public class HAOGSTCLocalFilterComponent extends ProfiledLocalFilterComponentBas
         //STC part
         final STCEngine stcEngine = new STCEngine(documentReferences);
         stcEngine.createSuffixTree();
-        params = StcParameters.fromMap(
+        
+        final StcParameters params = StcParameters.fromMap(
         		this.requestContext.getRequestParameters());
 
         stcEngine.createBaseClusters(params);
