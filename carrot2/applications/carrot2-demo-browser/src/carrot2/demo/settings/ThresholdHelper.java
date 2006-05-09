@@ -38,9 +38,15 @@ public class ThresholdHelper {
         final HashMap params = settings.getRequestParams();
         final JIntThreshold comp = new JIntThreshold(label, min, max, minorTick, majorTick);
     
-        final int value = Integer.parseInt((String) params.get(key));
-        comp.setValue(value);
-    
+        final String paramValue = (String) params.get(key);
+        if (paramValue != null) {
+            final int value = Integer.parseInt(paramValue);
+            comp.setValue(value);
+        }
+        else {
+            comp.setValue(min);
+        }
+        
         comp.addChangeListener(new ChangeListener()
             {
                 public void stateChanged(ChangeEvent e)

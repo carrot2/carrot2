@@ -140,6 +140,8 @@ public class LsiClusteringStrategy implements ClusteringStrategy {
 
     /** DOCUMENT ME! */
     protected double[] candidateClusterScores;
+    
+    private int preferredClusterCount = -1;
 
     public Cluster[] cluster(AbstractClusteringContext clusteringContext) {
         this.clusteringContext = clusteringContext;
@@ -168,6 +170,16 @@ public class LsiClusteringStrategy implements ClusteringStrategy {
             } catch (NumberFormatException e) {
                 // Use the default
                 candidateClusterThreshold = LsiConstants.DEFAULT_CANDIDATE_CLUSTER_THRESHOLD;
+            }
+        }
+        
+        if ((value = clusteringContext.getParameter(
+            LsiConstants.PREFERRED_CLUSTER_COUNT)) != null) {
+            try {
+                preferredClusterCount = Integer.parseInt(unwrapString(
+                    value));
+            } catch (NumberFormatException e) {
+                // ignore
             }
         }
 
@@ -277,7 +289,37 @@ public class LsiClusteringStrategy implements ClusteringStrategy {
             V = svd.getV();
         }
 
+        determineClusterCount(svd);
+
+        U = U.getMatrix(0, U.getRowDimension() - 1, 0, candidateClusterCount -
+                1);
+        V = V.getMatrix(0, V.getRowDimension() - 1, 0, candidateClusterCount -
+                1);
+        S = svd.getS().getMatrix(0, candidateClusterCount - 1, 0,
+                candidateClusterCount - 1);
+
+        Q = new Matrix(U.getRowDimension(), U.getColumnDimension());
+    }
+
+    /**
+     * @param svd
+     */
+    private void determineClusterCount(SingularValueDecomposition svd)
+    {
         double[] singularValues = svd.getSingularValues();
+        if (preferredClusterCount > 1)
+        {
+            if (preferredClusterCount < singularValues.length)
+            {
+                candidateClusterCount = preferredClusterCount;
+            }
+            else
+            {
+                candidateClusterCount = singularValues.length;
+            }
+            return;
+        }
+        
         double denominator = 0;
 
         for (int i = 0; i < singularValues.length; i++) {
@@ -296,15 +338,6 @@ public class LsiClusteringStrategy implements ClusteringStrategy {
                 break;
             }
         }
-
-        U = U.getMatrix(0, U.getRowDimension() - 1, 0, candidateClusterCount -
-                1);
-        V = V.getMatrix(0, V.getRowDimension() - 1, 0, candidateClusterCount -
-                1);
-        S = svd.getS().getMatrix(0, candidateClusterCount - 1, 0,
-                candidateClusterCount - 1);
-
-        Q = new Matrix(U.getRowDimension(), U.getColumnDimension());
     }
 
     /**

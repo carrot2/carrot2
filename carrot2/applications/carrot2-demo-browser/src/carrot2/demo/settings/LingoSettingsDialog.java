@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -24,25 +23,33 @@ import com.stachoodev.carrot.filter.lingo.lsicluster.LsiConstants;
  * 
  * @author Dawid Weiss
  */
-final class LingoSettingsDialog extends JPanel {
+final class LingoSettingsDialog extends JPanel
+{
     private final LingoClassicSettings settings;
 
-    public LingoSettingsDialog(LingoClassicSettings settings) {
+    public LingoSettingsDialog(LingoClassicSettings settings)
+    {
         this.settings = settings;
         buildGui();
     }
 
-    private void buildGui() {
-        final DefaultFormBuilder builder = 
-            new DefaultFormBuilder(new FormLayout("pref", ""));
+    private void buildGui()
+    {
+        final DefaultFormBuilder builder = new DefaultFormBuilder(
+            new FormLayout("pref", ""));
 
         builder.appendSeparator("Lingo classic");
-        
-        builder.append(ThresholdHelper.createDoubleThreshold(settings, LsiConstants.CLUSTER_ASSIGNMENT_THRESHOLD,
-                "Cluster assignment threshold:", 0.01, 4, 0.1, 1.0));
-        builder.append(ThresholdHelper.createDoubleThreshold(settings, LsiConstants.CANDIDATE_CLUSTER_THRESHOLD,
-                "Candidate cluster threshold:", 0.05, 5, 0.1, 1.0));
-        
+
+        builder.append(ThresholdHelper.createDoubleThreshold(settings,
+            LsiConstants.CLUSTER_ASSIGNMENT_THRESHOLD,
+            "Cluster assignment threshold:", 0.01, 4, 0.1, 1.0));
+        builder.append(ThresholdHelper.createDoubleThreshold(settings,
+            LsiConstants.CANDIDATE_CLUSTER_THRESHOLD,
+            "Candidate cluster threshold:", 0.05, 5, 0.1, 1.0));
+        builder.append(ThresholdHelper.createIntegerThreshold(settings,
+            LsiConstants.PREFERRED_CLUSTER_COUNT, "Preferred cluster count",
+            -1, 100, 20, 10));
+
         this.add(builder.getPanel());
     }
 }
