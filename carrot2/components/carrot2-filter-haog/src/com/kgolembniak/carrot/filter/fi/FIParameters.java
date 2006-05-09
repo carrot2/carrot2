@@ -93,7 +93,7 @@ public class FIParameters {
         if (value != null) {
             params.maxItemSetsGenerationTime = Integer.parseInt(value);
             if (params.maxItemSetsGenerationTime < 0 || 
-            	params.maxItemSetsGenerationTime > 120) {
+            	params.maxItemSetsGenerationTime > 60) {
                 throw new RuntimeException("Illegal value range.");
             }
         }
