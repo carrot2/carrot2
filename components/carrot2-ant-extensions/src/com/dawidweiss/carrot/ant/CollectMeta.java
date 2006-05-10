@@ -147,9 +147,9 @@ public class CollectMeta extends Task {
             final ArrayList metas = new ArrayList();
             for (int i = 0; i < dependencies.length; i++) {
                 final ComponentDependency cd = dependencies[i].component;
-                cd.collectMetas(metas, profile, type);
+                cd.collectMetas(metas, dependencies[i].profile, type);
             }
-            
+
             final StringBuffer buf = new StringBuffer();
             for (int i = 0; i < metas.size(); i++) {
                 buf.append((String) metas.get(i));
