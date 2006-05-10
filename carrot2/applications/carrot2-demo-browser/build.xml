@@ -127,18 +127,13 @@
         </ant>
     </target>
 
-    
-    <target name="obfuscate">
-        <!-- 
-        We could move this target to common targets because it is quite generic. profile
-        is usually set in the build file somewhere anyway and the obf.distribution.dir
-        could be set as a parameter. Selection of JARs for obfuscation is by defining
-        filesets according to your needs.
-        -->
-        <property name="profile" value="full" />
-        <property name="obf.distribution.dir" location="tmp/dist-obfuscated" />
-        
+
+    <target name="obfuscate" depends="build.full">
         <!-- Prepare filesets of obfuscated/library files -->
+        <property name="obf.distribution.dir" location="tmp/dist-obfuscated" />
+        <property name="obf.jar.location" location="${obf.distribution.dir}/${dist.name}.jar" />
+        <property name="obf.leave.files" value="" /> <!-- any combination of: map seeds rules -->
+
         <fileset dir="${obf.distribution.dir}" id="library.jars">
             <include name="**/*.jar" />
             <exclude name="**/carrot2-*.jar" />
@@ -147,36 +142,8 @@
             <include name="**/carrot2-*.jar" />
         </fileset>
 
-        <property name="proguard.rules.file" location="${obf.distribution.dir}/${dist.name}.pro" />
-
-        <!-- Obfuscate in a separate folder. -->
-        <delete dir="${obf.distribution.dir}" failonerror="false" />
-        <copy todir="${obf.distribution.dir}">
-            <fileset dir="${distribution.dir}" />
-        </copy>
-
-        <!-- Collect rules for obfuscating and run proguard -->
-        <taskdef resource="proguard/ant/task.properties">
-            <classpath location="${carrot2.cvs.dir}/lib/proguard/proguard.jar" />
-        </taskdef>
-        <ant target="proguard.collect" 
+        <ant target="proguard.run" 
             antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" inheritrefs="true" />
-		<proguard configuration="${proguard.rules.file}" defaultpackage="c2" ignorewarnings="true" 
-            printmapping="${obf.distribution.dir}/${dist.name}.mapping"
-            printseeds="${obf.distribution.dir}/${dist.name}.seeds">
-                <injar refid="input.jars" />
-                <outjar file="tmp/obfuscated.jar"/>
-
-                <libraryjar dir="${java.home}/lib/rt.jar"/>
-                <libraryjar refid="library.jars" />
-		</proguard>
-
-        <!-- Remove input JARs used for obfuscation. -->
-        <delete>
-            <fileset refid="input.jars" />
-        </delete>
-        <!-- <delete file="${proguard.rules.file}" /> -->
-        <move file="tmp/obfuscated.jar" tofile="${obf.distribution.dir}/${dist.name}.jar" />
     </target>
 
 
