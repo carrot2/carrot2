@@ -595,7 +595,7 @@ ${string:component.dependencies}
   <!-- ### {{{ PROGUARD SECTION          ### -->
   <!-- ##################################### -->  
   <target name="proguard.collect" depends="bootstrap, discover.classpath">
-    <fail unless="proguard.rules.file">Specify destination file property for rules: proguard.rules.file</fail>
+    <fail unless="obf.rules.file">Specify destination file property for rules: proguard.rules.file</fail>
 
     <!-- Collect proguard definitions from dependencies. -->
     <collectMeta componentDescriptor="${component.descriptor}" type="proguard" 
@@ -603,8 +603,61 @@ ${string:component.dependencies}
         <dependencies refid="dependencies" />
     </collectMeta>
 
-    <echo file="${proguard.rules.file}">${proguard.rules}</echo>
+    <echo file="${obf.rules.file}">${proguard.rules}</echo>
   </target>
+
+  <target name="proguard.run">
+    <fail unless="obf.distribution.dir">Define obf.distribution.dir</fail>
+    <fail unless="obf.jar.location">Define obf.jar.location</fail>
+
+    <property name="obf.rules.file" location="${obf.distribution.dir}/${dist.name}.pro" />
+    <property name="obf.seeds.file" location="${obf.distribution.dir}/${dist.name}.seeds" />
+    <property name="obf.map.file" location="${obf.distribution.dir}/${dist.name}.map" />
+
+    <!-- This can be used to leave certain obfuscation files after running this target.
+         Put a string value containing substrings:
+         rules  - leaves the rules file.
+         seeds  - leaves the seeds file.
+         map    - leaves the map file.
+    -->
+    <property name="obf.leave.files" value="" />
+
+    <!-- Obfuscate in a separate folder. -->
+    <delete dir="${obf.distribution.dir}" failonerror="false" />
+    <copy todir="${obf.distribution.dir}">
+        <fileset dir="${distribution.dir}" />
+    </copy>
+
+    <!-- Collect rules for obfuscating and run proguard -->
+    <taskdef resource="proguard/ant/task.properties">
+        <classpath location="${carrot2.cvs.dir}/lib/proguard/proguard.jar" />
+    </taskdef>
+
+    <antcall inheritall="true" inheritrefs="true" target="proguard.collect" />
+
+    <proguard configuration="${obf.rules.file}" defaultpackage="c2" ignorewarnings="true" 
+        printmapping="${obf.map.file}" printseeds="${obf.seeds.file}">
+            <injar refid="input.jars" />
+            <outjar file="tmp/obfuscated.jar"/>
+
+            <libraryjar dir="${java.home}/lib/rt.jar"/>
+            <libraryjar refid="library.jars" />
+    </proguard>
+
+    <!-- Remove input JARs used for obfuscation. -->
+    <delete>
+        <fileset refid="input.jars" />
+    </delete>
+	<if><not><contains string="${obf.leave.files}" substring="rules" casesensitive="false" /></not>
+		<then><delete file="${obf.rules.file}" /></then></if>
+	<if><not><contains string="${obf.leave.files}" substring="seeds" casesensitive="false" /></not>
+		<then><delete file="${obf.seeds.file}" /></then></if>
+	<if><not><contains string="${obf.leave.files}" substring="map" casesensitive="false" /></not>
+		<then><delete file="${obf.map.file}" /></then></if>
+
+    <move file="tmp/obfuscated.jar" tofile="${obf.jar.location}" />
+  </target>
+  
   <!-- }}} -->
   
   <!-- ##################################### -->
