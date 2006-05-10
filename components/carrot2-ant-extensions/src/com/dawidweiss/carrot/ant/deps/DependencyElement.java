@@ -54,6 +54,14 @@ class DependencyElement {
      * {@link com.dawidweiss.carrot.ant.CopyDependencies} task. 
      */
     private final boolean nocopy;
+    
+    /** 
+     * If <code>true</code>, this dependency is not propagated upwards when
+     * this component is referred to. This is useful for components which become
+     * integrated with the component somehow (obfuscation) and shouldn't be copied 
+     * independently.
+     */
+    private final boolean noexport;
 
 	public DependencyElement(File file, Element configElement) 
         throws Exception {
@@ -71,12 +79,8 @@ class DependencyElement {
         if (name == null || "".equals(name))
             throw new Exception("name attribute is required.");
         
-        String nocopy = configElement.getAttribute("nocopy");
-        if (nocopy != null && Boolean.valueOf(nocopy).booleanValue()) {
-            this.nocopy = true;
-        } else {
-            this.nocopy = false;
-        }
+        this.nocopy = Boolean.valueOf(configElement.getAttribute("nocopy")).booleanValue();
+        this.noexport = Boolean.valueOf(configElement.getAttribute("noexport")).booleanValue();
     }
 
 	public String getName() {
@@ -95,8 +99,13 @@ class DependencyElement {
         return this.nocopy;
     }
 
+    public boolean isNoExport() {
+        return this.noexport;
+    }
+
     public String toString() {
 	    return "[dependency name=" + name + " profile=" + profile + " base="
-	    + base.getAbsolutePath() + " inprofile=" + inprofile + " nocopy=" + nocopy + "]";
+	    + base.getAbsolutePath() + " inprofile=" + inprofile + " nocopy=" + nocopy 
+        + " noexport=" + noexport + "]";
     }
 }
