@@ -50,7 +50,7 @@
 
     <dependency name="looks" />
     <dependency name="forms" />
-    <dependency name="junit" />
+    <dependency name="junit" noexport="true" nocopy="true" />
     <dependency name="jdic" />
     <dependency name="dom4j" />
     <dependency name="lucene" />
