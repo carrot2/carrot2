@@ -69,7 +69,7 @@ class ProvidesElement {
                     } else if ("meta".equals(n.getNodeName())) {
                         final Element e = (Element) n;
                         final String type = e.getAttribute("type");
-                        final String value = e.getTextContent();
+                        final String value = getTextContent(e);
                         metas.add(new Meta(type, value));
                     } else {
                         throw new SAXException("Unexpected node: "
@@ -91,7 +91,33 @@ class ProvidesElement {
 	}
     
     
-	/**
+    /**
+     * Collect text from a node.
+     */
+	private String getTextContent(Element e) {
+        final StringBuffer buf = new StringBuffer();
+        final NodeList nl = e.getChildNodes();
+        for (int i = 0; i < nl.getLength(); i++) {
+            final Node n = nl.item(i);
+            switch (n.getNodeType()) {
+                case Node.ELEMENT_NODE:
+                    buf.append(getTextContent((Element) n));
+                    break;
+                case Node.TEXT_NODE:
+                    buf.append(n.getNodeValue());
+                    break;
+                case Node.COMMENT_NODE:
+                case Node.PROCESSING_INSTRUCTION_NODE:
+                    continue;
+                default:
+                    throw new RuntimeException("Unexpected node: " + n.getNodeName());
+            }
+        }
+
+        return buf.toString();
+    }
+
+    /**
 	 * Brings the provided files to date using 'build' element,
      * if it exists. 
 	 */
