@@ -16,11 +16,20 @@
      A dependency to a named component. Only the name of the
      required component is given here - its location is to be
      specified in the build file using nested search paths (filesets).
+
+     A dependency is added to the set only if the 'profile' attribute equals
+     current compilation profile. An empty 'profile' attribute matches
+     any current profile.
      
-     Dependencies may contain an additional 'profile' attribute.
-     A dependency is followed only if the profile specified at
-     compilation time is equal to the profile of a dependency, or the
-     dependency has no explicit profile.
+     A component may request another component in a profile different to the 
+     current one using 'in-profile' attribute.
+     
+     When 'no-copy' attribute is set, ant target collect-dependencies will not
+     copy files from the dependency (although they will be included in the classpath
+     for compilation).
+     
+     The 'noexport' attribute keeps the dependency local to the component (it is
+     not exported if the component is referred from another one).
   -->
 
 <!ELEMENT dependency EMPTY >
@@ -28,6 +37,7 @@
 <!ATTLIST dependency name NMTOKEN #REQUIRED >
 <!ATTLIST dependency profile NMTOKEN #IMPLIED >
 <!ATTLIST dependency nocopy (true|false) "false" >
+<!ATTLIST dependency noexport (true|false) "false" >
 <!ATTLIST dependency in-profile NMTOKEN #IMPLIED >
 
 

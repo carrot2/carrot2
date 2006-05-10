@@ -203,7 +203,7 @@ public class ComponentDependency {
         throws BuildException {
         ComponentInProfile root = new ComponentInProfile(this, profile, false);
         ArrayList dependencyList = new ArrayList();
-        tsort(root, componentsMap, new HashMap(), new Stack(), dependencyList, nocopy);
+        tsort(root, componentsMap, new HashMap(), new Stack(), dependencyList, nocopy, true);
 
         ComponentInProfile [] dependencyArray = new ComponentInProfile [ dependencyList.size() ];
         dependencyList.toArray(dependencyArray);
@@ -221,7 +221,7 @@ public class ComponentDependency {
      */
     private final static void tsort(ComponentInProfile root, Map targets,
                              Map state, Stack visiting,
-                             ArrayList ret, boolean nocopy)
+                             ArrayList ret, boolean nocopy, boolean atroot)
         throws BuildException {
         state.put(root, VISITING);
         visiting.push(root);
@@ -238,7 +238,12 @@ public class ComponentDependency {
             if (nocopy && dep.isNoCopy()) {
                 continue;
             }
-            
+
+            // skip dependencies if noexport is set and it's not the root component.
+            if (atroot == false && dep.isNoExport()) {
+                continue;
+            }
+
             ComponentDependency depComponent = (ComponentDependency) targets.get(dep.getName());
 
             // If the target does not exist, throw an exception.
@@ -260,7 +265,7 @@ public class ComponentDependency {
             String m = (String) state.get(dependency);
             if (m == null) {
                 // Not visited yet
-                tsort(dependency, targets, state, visiting, ret, nocopy);
+                tsort(dependency, targets, state, visiting, ret, nocopy, false);
             } else if (m == VISITING) {
                 // Currently visiting this node, so have a cycle
                 StringBuffer sb = new StringBuffer("Circular dependency: ");
@@ -413,13 +418,13 @@ public class ComponentDependency {
             if (resolvedComponents[i].equals(self)) {
                 continue;
             }
-            
-            FileReference [] refs = resolvedComponents[i].component.getAllProvidedFileReferences(
-                    components, resolvedComponents[i].profile, false, nocopy);
-            for (int j=0; j<refs.length; j++) {
-                File absf = refs[j].getAbsoluteFile();
+
+            List files = resolvedComponents[i].component.getProvidedFileReferences(resolvedComponents[i].profile, false);
+            for (Iterator j = files.iterator(); j.hasNext();) {
+                FileReference fr = (FileReference) j.next();
+                File absf = fr.getAbsoluteFile();
                 if (!result.containsKey(absf)) {
-                    result.put( absf, refs[j]);
+                    result.put( absf, fr);
                 }
             }
         }
