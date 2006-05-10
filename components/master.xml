@@ -583,7 +583,7 @@ ${string:component.dependencies}
 
     <copyDependencies
         componentDescriptor="${component.descriptor}"
-        profile=""
+        profile="${profile}"
         todir="${distribution.dir}">
         <dependencies refid="dependencies" />
     </copyDependencies>
@@ -621,6 +621,12 @@ ${string:component.dependencies}
          map    - leaves the map file.
     -->
     <property name="obf.leave.files" value="" />
+
+    <available file="${java.home}/lib" property="rt.libs.available" type="dir" value="true" />
+    <fail unless="rt.libs.available">
+Runtime Java libraries are needed for obfuscation. They are not found in
+the default path: ${java.home}/lib
+    </fail>
 
     <!-- Obfuscate in a separate folder. -->
     <delete dir="${obf.distribution.dir}" failonerror="false" />
