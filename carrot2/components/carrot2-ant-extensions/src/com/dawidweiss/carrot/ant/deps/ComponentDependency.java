@@ -389,11 +389,17 @@ public class ComponentDependency {
         final int s = provides.size();
         for (int i = 0; i < s; i++) {
             final ProvidesElement pe = (ProvidesElement) provides.get(i);
-            if (pe.getProfile() != null && (currentProfile == null || !currentProfile.equals(pe.getProfile()))) {
-                continue;
+            if (profileMatches(pe.getProfile(), currentProfile)) {
+                pe.collectMetas(metas, type);            
             }
-            pe.collectMetas(metas, type);            
         }
+    }
+    
+    private final boolean profileMatches(String profile, String currentProfile) {
+        if (profile == null) profile = "";
+        if (currentProfile == null) currentProfile = "";
+
+        return profile.equals(currentProfile);
     }
 
 	public FileReference[] getAllProvidedFileReferences(HashMap components, String currentProfile, boolean buildPath, boolean nocopy) {

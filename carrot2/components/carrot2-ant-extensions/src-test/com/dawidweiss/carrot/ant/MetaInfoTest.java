@@ -35,4 +35,12 @@ public class MetaInfoTest extends BuildFileTest {
             System.out.println(super.getLog());
         }
     }
+    
+    public void testCollectMetaInProfile() {
+        try {
+            executeTarget("testCollectMetaInProfile");
+        } finally {
+            System.out.println(super.getLog());
+        }
+    }
 }

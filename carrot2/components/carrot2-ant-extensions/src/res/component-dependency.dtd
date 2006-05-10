@@ -36,26 +36,22 @@
     objects may be either dynamic (created by the component's build file),
     or static (libraries, JARs etc).
 
-    Dynamic objects usually contain 'build' element as a child of
-    'provides'. Build element is executed ONLY if some of the objects
-    are not found. Whether the state of the objects is up-to-date is
-    not detected.
-
-    Static objects only contain 'files' element as a child of 'provides'.
+    Dynamic objects will contain a 'build' element as a child of
+    'provides'. Build element is executed when some of the objects
+    specified in 'files' are not found or when 'check-newer' conditions
+    indicate a rebuild is necessary.
   -->
   
-<!ELEMENT provides (files?, build*, check-newer?) >
+<!ELEMENT provides (files*, build*, check-newer?, meta*) >
 
 <!ATTLIST provides profile NMTOKEN #IMPLIED >
 
 <!-- 
     Files element contains a list of relative paths (resolved
     against the component dependency file) to objects provided
-    by the component. Files element may have an optional 'prefix'
-    attribute, which specifies path prefix inserted between
-    component dependency file and the object's relative path.
-    The prefix may be used to ignore path segments leading to 
-    a temporary build directory, for example.
+    by the component. Each file's relative path is created
+    when dependencies are collected. To ignore path of the relative
+    path, use the 'prefix' attribute.
   -->
 <!ELEMENT files (file+) >
 <!ATTLIST files prefix CDATA #IMPLIED >
@@ -93,3 +89,12 @@
   -->
 <!ELEMENT fileset EMPTY >
 <!ATTLIST fileset dir CDATA #REQUIRED >
+
+<!--
+    A meta element carries a key and textual content. Metas are used
+    to associate extra information with the component, for example
+    proguard obfuscation info.
+  -->
+<!ELEMENT meta (#PCDATA) >
+<!ATTLIST meta type (proguard) #REQUIRED >
+
