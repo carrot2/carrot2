@@ -96,5 +96,5 @@
     proguard obfuscation info.
   -->
 <!ELEMENT meta (#PCDATA) >
-<!ATTLIST meta type CDATA #REQUIRED >
+<!ATTLIST meta type (proguard) #REQUIRED >
 
