@@ -14,16 +14,7 @@
 package com.kgolembniak.carrot.filter.fi.algorithm;
 
 import java.text.Collator;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-
-import org.omg.CORBA.TIMEOUT;
+import java.util.*;
 
 import com.dawidweiss.carrot.core.local.clustering.TokenizedDocument;
 import com.dawidweiss.carrot.core.local.linguistic.tokens.TokenSequence;
