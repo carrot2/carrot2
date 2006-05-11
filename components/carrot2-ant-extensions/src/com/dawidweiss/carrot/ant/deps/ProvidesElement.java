@@ -90,11 +90,10 @@ class ProvidesElement {
         }
 	}
     
-    
     /**
      * Collect text from a node.
      */
-	private String getTextContent(Element e) {
+	public static String getTextContent(Element e) {
         final StringBuffer buf = new StringBuffer();
         final NodeList nl = e.getChildNodes();
         for (int i = 0; i < nl.getLength(); i++) {
@@ -104,6 +103,7 @@ class ProvidesElement {
                     buf.append(getTextContent((Element) n));
                     break;
                 case Node.TEXT_NODE:
+                case Node.CDATA_SECTION_NODE:
                     buf.append(n.getNodeValue());
                     break;
                 case Node.COMMENT_NODE:
