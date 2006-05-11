@@ -5,7 +5,7 @@
 	</provides>
 
 	<provides profile="ac">
-		<meta type="proguard">a_meta_ac/</meta>
+		<meta type="proguard"><![CDATA[a_meta_ac/]]></meta>
 	</provides>
 	
 	<dependency name="b" />
