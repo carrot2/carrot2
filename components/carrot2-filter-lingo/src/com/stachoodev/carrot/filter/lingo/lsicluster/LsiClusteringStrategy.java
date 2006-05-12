@@ -307,7 +307,7 @@ public class LsiClusteringStrategy implements ClusteringStrategy {
     private void determineClusterCount(SingularValueDecomposition svd)
     {
         double[] singularValues = svd.getSingularValues();
-        if (preferredClusterCount > 1)
+        if (preferredClusterCount > 0)
         {
             if (preferredClusterCount < singularValues.length)
             {
