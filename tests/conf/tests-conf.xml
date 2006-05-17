@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<test-config>
-    <controller>
-        <url>@CARROT2_TEST_URL@</url>
-    </controller>
-</test-config>
