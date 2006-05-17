@@ -16,6 +16,7 @@ package com.dawidweiss.carrot.tests.httpunit;
 
 
 import com.dawidweiss.carrot.tests.config.TestsConfiguration;
+import com.meterware.httpunit.HttpUnitOptions;
 import com.meterware.httpunit.WebConversation;
 import junit.framework.*;
 import junit.framework.TestCase;
@@ -96,6 +97,7 @@ public abstract class TestCaseBase
 
         String cacheoff = getControllerURL() + "/debug.jsp?usecacheonly=true&history=false";
         WebConversation wc = new WebConversation();
+        HttpUnitOptions.setExceptionsThrownOnScriptError(false);
         wc.getResponse(cacheoff);
     }
 

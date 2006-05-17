@@ -182,7 +182,6 @@
   <target name="help" description="Displays help on available targets.">
     <echo>
 ${ant.project.name} build file for ANT tool.
-(c) Poznan University of Technology, OPHELIA Project.
 
 Current JDK: ${ant.java.version}
 Basedir    : ${basedir}

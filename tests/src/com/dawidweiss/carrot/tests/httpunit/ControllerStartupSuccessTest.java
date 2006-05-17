@@ -16,6 +16,7 @@ package com.dawidweiss.carrot.tests.httpunit;
 
 
 import com.meterware.httpunit.*;
+
 import org.xml.sax.SAXException;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -29,16 +30,22 @@ import java.util.List;
 public class ControllerStartupSuccessTest
     extends TestCaseBase
 {
+    private WebConversation wc;
+
     public ControllerStartupSuccessTest(String s)
         throws IOException, ClassNotFoundException
     {
         super(s);
     }
+    
+    public void setUp() {
+        this.wc = new WebConversation();
+        HttpUnitOptions.setExceptionsThrownOnScriptError(false);
+    }
 
     public void testStartPageExists()
         throws MalformedURLException, IOException, SAXException
     {
-        WebConversation wc = new WebConversation();
         WebResponse topFrame = wc.getResponse(getControllerURL().toExternalForm());
 
         // get the controller frame.
@@ -51,7 +58,6 @@ public class ControllerStartupSuccessTest
     public void testControllerPagesOk()
         throws MalformedURLException, IOException, SAXException
     {
-        WebConversation wc = new WebConversation();
         wc.getResponse(super.getControllerURL().toExternalForm());
 
         // get the controller frame.
@@ -72,8 +78,6 @@ public class ControllerStartupSuccessTest
     public void testUnhandledErrorPageDetection()
         throws MalformedURLException, IOException, SAXException
     {
-        WebConversation wc = new WebConversation();
-
         // request unexisting process
         WebResponse response = wc.getResponse(
                 super.getControllerURL().toExternalForm()
@@ -94,8 +98,6 @@ public class ControllerStartupSuccessTest
     public void testComponentErrorPageDetection()
         throws MalformedURLException, IOException, SAXException
     {
-        WebConversation wc = new WebConversation();
-
         // malformed request (verbatim output)
         WebResponse response = wc.getResponse(
                 super.getControllerURL().toExternalForm()

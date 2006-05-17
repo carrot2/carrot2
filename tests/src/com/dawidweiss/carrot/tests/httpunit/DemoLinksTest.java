@@ -15,6 +15,7 @@ package com.dawidweiss.carrot.tests.httpunit;
 
 
 import com.meterware.httpunit.*;
+
 import java.io.IOException;
 import java.net.URL;
 
@@ -35,13 +36,15 @@ public class DemoLinksTest extends TestCaseBase {
         public SingleDemoLink(String url) throws Exception {
             this.url = url;
         }
-        
+
         public void runBare() throws Exception {
             try {        
                 HttpUnitOptions.setScriptingEnabled(false);
                 HttpUnitOptions.setDefaultCharacterSet("UTF-8");
                 
-                WebConversation wc = new WebConversation();
+                final WebConversation wc = new WebConversation();
+                HttpUnitOptions.setExceptionsThrownOnScriptError(false);
+
                 WebResponse response = wc.getResponse(url);
 
                 assertTrue("Two frames in the response", response.getFrameNames().length == 2);
@@ -92,6 +95,7 @@ public class DemoLinksTest extends TestCaseBase {
             HttpUnitOptions.setDefaultCharacterSet("UTF-8");
             
             WebConversation wc = new WebConversation();
+            HttpUnitOptions.setExceptionsThrownOnScriptError(false);
             wc.getResponse(myself.getControllerURL().toExternalForm());
     
             WebLink [] links = wc.getFrameContents("controller").getMatchingLinks(

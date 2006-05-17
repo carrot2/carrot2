@@ -16,6 +16,7 @@ package com.dawidweiss.carrot.tests.httpunit;
 
 
 import com.meterware.httpunit.*;
+
 import org.xml.sax.SAXException;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -45,9 +46,10 @@ public class I18nCharactersTest
         try
         {
             WebConversation wc = new WebConversation();
+            HttpUnitOptions.setExceptionsThrownOnScriptError(false);
 
             // @TODO avoid httpunit bug by decoding query arguments
-            // BEFORE submitting them. This forms invalid URLs, but
+            // BEFORE submitting them. This creates invalid URLs, but
             // it at least allows testing...
             String url = getControllerURL().toExternalForm() + "/index.jsp?query="
                 + org.put.util.net.URLEncoding.encode("Roman S\u0142owi\u0144ski", "UTF-8")
