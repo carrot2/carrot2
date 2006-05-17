@@ -436,6 +436,11 @@ public class XsltRendererServlet
             // request.getScheme() + "://" + sname + ":" + request.getServerPort() +
             request.getContextPath()
         );
+        
+        final String ga = System.getProperty("google.analytics");
+        if (ga != null) {
+        	transformer.setParameter("googleanalytics", ga);
+        }
 
         if (params != null)
         {
