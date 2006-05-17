@@ -46,7 +46,7 @@ public class ControllerStartupSuccessTest
     public void testStartPageExists()
         throws MalformedURLException, IOException, SAXException
     {
-        WebResponse topFrame = wc.getResponse(getControllerURL().toExternalForm());
+        WebResponse topFrame = wc.getResponse(controllerURL);
 
         // get the controller frame.
         List frames = Arrays.asList(topFrame.getFrameNames());
@@ -58,7 +58,7 @@ public class ControllerStartupSuccessTest
     public void testControllerPagesOk()
         throws MalformedURLException, IOException, SAXException
     {
-        wc.getResponse(super.getControllerURL().toExternalForm());
+        wc.getResponse(controllerURL);
 
         // get the controller frame.
         WebResponse controllerFrame = wc.getFrameContents("controller");
@@ -80,7 +80,7 @@ public class ControllerStartupSuccessTest
     {
         // request unexisting process
         WebResponse response = wc.getResponse(
-                super.getControllerURL().toExternalForm()
+                controllerURL
                 + "/index.jsp?query=data%20mining&processingChain=carrot2.procss.lsi-alltheweb-en&resultsRequested=100"
             );
         assertTrue("Two frames in the response", response.getFrameNames().length == 2);
@@ -100,7 +100,7 @@ public class ControllerStartupSuccessTest
     {
         // malformed request (verbatim output)
         WebResponse response = wc.getResponse(
-                super.getControllerURL().toExternalForm()
+                controllerURL
                 + "/newsearch.do?query=data+mining&processingChain=carrot2.process.html-display.scoresort.x-carrot-clustering-groups&resultsRequested=100"
             );
         assertTrue("Two frames in the response", response.getFrameNames().length == 2);

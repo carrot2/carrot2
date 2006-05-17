@@ -51,7 +51,7 @@ public class I18nCharactersTest
             // @TODO avoid httpunit bug by decoding query arguments
             // BEFORE submitting them. This creates invalid URLs, but
             // it at least allows testing...
-            String url = getControllerURL().toExternalForm() + "/index.jsp?query="
+            String url = controllerURL + "/index.jsp?query="
                 + org.put.util.net.URLEncoding.encode("Roman S\u0142owi\u0144ski", "UTF-8")
                 + "&processingChain=carrot2.process.lingo-googleapi-en&resultsRequested=100";
 

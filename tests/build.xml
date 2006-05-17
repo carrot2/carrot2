@@ -122,6 +122,7 @@
 
     <junit dir="${build}/conf" fork="true" printsummary="true" errorproperty="junit.error" failureproperty="junit.failure">
 	    <jvmarg value="-Djava.endorsed.dirs=lib"/>
+	    <jvmarg value="-Dtest.url=${test.url}"/>
 
         <formatter type="xml"/>
         <classpath refid="compile.classpath" />

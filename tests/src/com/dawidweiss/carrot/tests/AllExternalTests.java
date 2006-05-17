@@ -15,11 +15,11 @@
 package com.dawidweiss.carrot.tests;
 
 
-import com.dawidweiss.carrot.tests.httpunit.ControllerStartupSuccessTest;
-import com.dawidweiss.carrot.tests.httpunit.DemoLinksTest;
-import com.dawidweiss.carrot.tests.httpunit.regression.RandomCachedQueryTest;
 import junit.framework.Test;
 import junit.framework.TestSuite;
+
+import com.dawidweiss.carrot.tests.httpunit.ControllerStartupSuccessTest;
+import com.dawidweiss.carrot.tests.httpunit.DemoLinksTest;
 
 
 /**
@@ -37,7 +37,6 @@ public class AllExternalTests
         super("All external test cases.");
         super.addTestSuite(ControllerStartupSuccessTest.class);
         super.addTestSuite(DemoLinksTest.class);
-        super.addTestSuite(RandomCachedQueryTest.class);
     }
 
     /**

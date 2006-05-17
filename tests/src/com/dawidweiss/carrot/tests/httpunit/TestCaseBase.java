@@ -15,19 +15,14 @@
 package com.dawidweiss.carrot.tests.httpunit;
 
 
-import com.dawidweiss.carrot.tests.config.TestsConfiguration;
+import java.io.IOException;
+
+import junit.framework.*;
+
+import org.apache.log4j.Logger;
+
 import com.meterware.httpunit.HttpUnitOptions;
 import com.meterware.httpunit.WebConversation;
-import junit.framework.*;
-import junit.framework.TestCase;
-import junit.framework.TestListener;
-import org.apache.log4j.Logger;
-import org.put.util.component.*;
-import org.put.util.config.ConfigUtils;
-import org.put.util.resource.*;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 
 
 /**
@@ -37,54 +32,17 @@ public abstract class TestCaseBase
     extends TestCase
 {
     protected final Logger log = Logger.getLogger(this.getClass());
-    private final TestsConfiguration configuration;
+
+    protected final String controllerURL;
 
     public TestCaseBase(String s)
         throws IOException, ClassNotFoundException
     {
         super(s);
 
-        ResourceLocator locator = new ResourceLocator();
-        locator.addLocation(ConfigUtils.getCurrentDirectoryLocator());
-        locator.addLocation(new ClassResourceLocator(TestsConfiguration.class, "", false));
-
-        String CONF_FILE_NAME = "tests-conf.xml";
-
-        if (locator.countMatchingResources(CONF_FILE_NAME) == 0)
-        {
-            throw new RuntimeException("No configuration file found.");
-        }
-
-        if (locator.countMatchingResources(CONF_FILE_NAME) > 1)
-        {
-            log.warn(
-                "Overriding configuration file's location to: "
-                + locator.getLookupLocations(CONF_FILE_NAME)[0]
-            );
-        }
-
-        InputStream [] locations = locator.resolveResource(CONF_FILE_NAME);
-
-        for (int i = 1; i < locations.length; i++)
-        {
-            locations[i].close();
-        }
-
-        try
-        {
-            Loader loader = Loader.loadLoader(
-                    TestsConfiguration.class.getResourceAsStream("loader-conf.xml")
-                );
-            configuration = (TestsConfiguration) loader.load(locations[0]);
-
-            log.debug(
-                "Configuration loaded. Controller at: "
-                + configuration.getControllerURL().toExternalForm()
-            );
-        }
-        finally
-        {
-            locations[0].close();
+        this.controllerURL = System.getProperty("test.url");
+        if (this.controllerURL == null) {
+            throw new RuntimeException("Define test.url property.");
         }
     }
 
@@ -95,7 +53,7 @@ public abstract class TestCaseBase
 
         log.debug("Setting cache-only mode to on...");
 
-        String cacheoff = getControllerURL() + "/debug.jsp?usecacheonly=true&history=false";
+        String cacheoff = controllerURL + "/debug.jsp?usecacheonly=true&history=false";
         WebConversation wc = new WebConversation();
         HttpUnitOptions.setExceptionsThrownOnScriptError(false);
         wc.getResponse(cacheoff);
@@ -107,15 +65,9 @@ public abstract class TestCaseBase
     {
         super.tearDown();
 
-        String cacheon = getControllerURL() + "/debug.jsp?usecacheonly=false&history=true";
+        String cacheon = controllerURL + "/debug.jsp?usecacheonly=false&history=true";
         WebConversation wc = new WebConversation();
         wc.getResponse(cacheon);
-    }
-
-
-    public URL getControllerURL()
-    {
-        return configuration.getControllerURL();
     }
 
 

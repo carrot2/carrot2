@@ -96,7 +96,7 @@ public class DemoLinksTest extends TestCaseBase {
             
             WebConversation wc = new WebConversation();
             HttpUnitOptions.setExceptionsThrownOnScriptError(false);
-            wc.getResponse(myself.getControllerURL().toExternalForm());
+            wc.getResponse(myself.controllerURL);
     
             WebLink [] links = wc.getFrameContents("controller").getMatchingLinks(
                     WebLink.MATCH_URL_STRING, "/demo.jsp"
@@ -118,7 +118,7 @@ public class DemoLinksTest extends TestCaseBase {
     
                     // Avoid a bug in HTTPUnit which prevents links from being rendered properly.
                     // this MAY result in incorrect URLs!
-                    URL controller = myself.getControllerURL();
+                    URL controller = new URL(myself.controllerURL);
     
                     String decodedURL = controller.getProtocol() + "://" + controller.getHost()
                         + ":" + controller.getPort() + links[i].getURLString();
