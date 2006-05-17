@@ -27,6 +27,10 @@
 <xsl:param    name="param.snippets.sorting.type"            select="'ORDER_GROUP_DECLARATION_ORDER'" />
 <xsl:param    name="param.score.attribute.name"             select="'score'" />    
 
+<!-- Google Analytics account -->
+<xsl:param    name="googleanalytics"                        select="''" />    
+
+
 <!-- DO NOT ATTEMPT TO SET THESE VARIABLES -->
 
 <xsl:variable name="dtree.url"     select="concat($base.url,'/dtree')" />
@@ -190,6 +194,14 @@
                 // Go to the top group.
                 goToGroup(&quot;__SYNTHETIC_ROOT__&quot;);
         </script>
+        
+        <xsl:if test="$googleanalytics != ''">
+			<script src="http://www.google-analytics.com/urchin.js" type="text/javascript" />
+			<script type="text/javascript">
+			_uacct = "<xsl:value-of select="$googleanalytics" />";
+			urchinTracker();
+			</script>
+        </xsl:if>
     </body>
 </html>
 <xsl:comment>Test comment, do not remove: *PAGE_RENDERED_CORRECTLY* </xsl:comment>
