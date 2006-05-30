@@ -234,11 +234,17 @@ public class CombinedVertex extends Vertex{
 		phrases = getVertexPhrases(params);
 
 		String description = "";
+		int i2 = 0;
 		for (int i1=0; i1<phrases.size(); i1++){
 			final Phrase phrase = (Phrase) phrases.get(i1);
-			description += phrase.userFriendlyTerms().trim() + " ";
-			//TODO get this parameter from params
-			if (i1>3) break;
+			final String str = phrase.userFriendlyTerms().trim();
+			//remove duplicated phrases
+			if (description.indexOf(str) == -1) {
+				description += str + " ";
+				i2++;
+				//TODO get this parameter from params
+				if (i2>3) break;
+			}
 		}
 		
 		return description;
