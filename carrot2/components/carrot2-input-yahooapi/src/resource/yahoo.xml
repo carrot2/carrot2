@@ -27,7 +27,6 @@
 
         <parameter name="similar_ok" value="0" />
 
-        <parameter name="language" value="en" />
         <!--
         <parameter name="adult_ok" value="" />
 
