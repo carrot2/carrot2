@@ -16,6 +16,7 @@ package com.kgolembniak.carrot.filter.haog.algorithm;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import com.dawidweiss.carrot.core.local.ProcessingException;
 import com.dawidweiss.carrot.core.local.clustering.RawClusterBase;
@@ -42,9 +43,9 @@ public class FIGraphRenderer implements GraphRenderer {
 	 */
 	private FIParameters params;
 	/**
-	 * Table used to check if document belongs to any cluster.
+	 * Set used to check if document belongs to any cluster.
 	 */
-	private boolean[] usedDocuments;
+	private Set usedDocuments;
 	
 	/**
      * This method creates output raw claster from internal results representation.
@@ -54,7 +55,7 @@ public class FIGraphRenderer implements GraphRenderer {
    	RawClustersConsumer consumer) throws ProcessingException {
     	this.params = (FIParameters) params;
     	this.documents = documents;
-    	this.usedDocuments = new boolean[documents.size()];
+    	this.usedDocuments = new HashSet(documents.size());
     	
     	CombinedVertex kernelVertex;
 		RawClusterBase rawCluster;
@@ -69,14 +70,17 @@ public class FIGraphRenderer implements GraphRenderer {
     	rawCluster.addLabel("Other");
     	RawDocument rawDocument;
     	TokenizedDocument tokenizedDoc;
-    	for (int i1=0; i1<documents.size(); i1++){
-    		if (!usedDocuments[i1]){
-    			tokenizedDoc = (TokenizedDocument) documents.get(i1);
-    	        rawDocument = (RawDocument) tokenizedDoc.getProperty(
-    	        		TokenizedDocument.PROPERTY_RAW_DOCUMENT);
-            	rawCluster.addDocument(rawDocument);
-    		}
+    	
+    	HashSet docs = new HashSet(this.documents);
+    	docs.removeAll(this.usedDocuments);
+    	
+    	for (Iterator it = docs.iterator(); it.hasNext();){
+			tokenizedDoc = (TokenizedDocument) it.next();
+	        rawDocument = (RawDocument) tokenizedDoc.getProperty(
+	        		TokenizedDocument.PROPERTY_RAW_DOCUMENT);
+        	rawCluster.addDocument(rawDocument);
     	}
+    	
 		consumer.addCluster(rawCluster);
 	}
 
@@ -105,7 +109,7 @@ public class FIGraphRenderer implements GraphRenderer {
 		//for all documents in node(cluster)
 		for (Iterator doc = docSet.iterator(); doc.hasNext();){
 			tokenizedDoc = (TokenizedDocument) doc.next();
-			usedDocuments[documents.indexOf(tokenizedDoc)] = true;
+			this.usedDocuments.add(tokenizedDoc);
 	        rawDocument = (RawDocument) tokenizedDoc.getProperty(
 	        		TokenizedDocument.PROPERTY_RAW_DOCUMENT);
         	rawCluster.addDocument(rawDocument);
