@@ -4,12 +4,10 @@ A roadmap to release 1.1
 
 - Add local interfaces to: 
 
-carrot2-filter-ahc
 carrot2-filter-fuzzyants
 
 - Add these clustering algorithms to the demo application:
 
-carrot2-filter-ahc
 carrot2-filter-fuzzyants
 
 - Add OpenSearch Descriptor support for carrot2-input-opensearch?
