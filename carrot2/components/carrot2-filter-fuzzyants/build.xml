@@ -5,12 +5,9 @@
     <property name="carrot2.cvs.dir"  location="../.." />
     <property name="component.descriptor" location="carrot2-filter-fuzzyants.dep.xml" />
     <property name="dist.name" value="carrot2-filter-fuzzyants" />
+    <property name="tests.available" value="true" />
 
     <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
 
-	<target name="build">
-		<!-- <ant antfile="build.local.xml" inheritall="false"/> -->
-		<ant antfile="build.remote.xml" inheritall="false" />
-	</target>    
-
+	<property name="type" value="jartype" />
 </project>

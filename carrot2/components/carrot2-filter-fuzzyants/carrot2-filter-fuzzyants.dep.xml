@@ -5,21 +5,25 @@
     name="carrot2-filter-fuzzyants"
     description="Carrot2 FuzzyAnts Clustering filter">
 
-    <provides profile="remote">
+    <provides>
         <files build-path-exclude="true" prefix="tmp/dist">
-            <file location="carrot2-filter-fuzzyants.war" />
+            <file location="carrot2-filter-fuzzyants.jar" />
         </files>
         <build>
-            <ant file="build.remote.xml" target="build" />
+            <ant file="build.xml" target="build" />
         </build>
 		<check-newer>
 			<fileset dir="src" />
-			<fileset dir="web" />
 		</check-newer>
     </provides>
 
 	<!-- Carrot2 components -->
     <dependency name="carrot2-license" />
-    <dependency name="dom4j" />
-	<dependency name="carrot2-util-remote" 	profile="remote" />
+    <dependency name="carrot2-local-core" />
+    <dependency name="carrot2-util-common" />
+    <dependency name="carrot2-util-tokenizer" />
+    
+    <dependency name="carrot2-filter-case-normalizer" profile="test" />
+    <dependency name="carrot2-input-xml" profile="test" in-profile="local" />
+    <dependency name="junit" profile="test" />
 </component>
