@@ -14,7 +14,6 @@
 package fuzzyAnts;
 
 
-import java.io.*;
 import java.util.*;
 
 
@@ -34,18 +33,12 @@ public class ListAnt
     protected Map heapPickup = new HashMap();
     protected Map drop = new HashMap();
 
-    public ListAnt(ListBordModel bm, Map parameters)
+    public ListAnt(ListBordModel bm, FuzzyAntsParameters parameters)
     {
         super(parameters);
         this.bm = bm;
     }
 
-
-    public ListAnt(ListAnt m)
-    {
-        super(m);
-        bm = m.getBM();
-    }
 
     /*
      * Creates a new (empty) heap
@@ -198,7 +191,7 @@ public class ListAnt
      */
     public void pickupHeap(double pr, int i)
     {
-        double value = ((double) Math.pow(pr, m1)) / (Math.pow(pr, m1) + Math.pow(0.50, m1));
+        double value = Math.pow(pr, m1) / (Math.pow(pr, m1) + Math.pow(0.50, m1));
         double threshold = rand.nextDouble();
 
         if (value > threshold)
@@ -213,7 +206,7 @@ public class ListAnt
      */
     public void pickupObject(double pr, int i)
     {
-        double value = ((double) Math.pow(pr, n1)) / (Math.pow(pr, n1) + Math.pow(0.50, n1));
+        double value = Math.pow(pr, n1) / (Math.pow(pr, n1) + Math.pow(0.50, n1));
         double threshold = rand.nextDouble();
 
         if (value > threshold)
@@ -322,7 +315,7 @@ public class ListAnt
                     int e = (obj.getNumber() == 1) ? n2
                                                     : m2;
                     double b = 0.50;
-                    double value = ((double) Math.pow(pdrop, e)) / (Math.pow(pdrop, e)
+                    double value = Math.pow(pdrop, e) / (Math.pow(pdrop, e)
                         + Math.pow(b, e));
 
                     if (r < value)

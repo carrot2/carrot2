@@ -29,10 +29,10 @@ public class ListBordModel
     protected ArrayList objects;
     protected ArrayList ants;
     protected Random rand;
-    protected Map parameters;
+    protected FuzzyAntsParameters parameters;
     protected SimInterface docset;
 
-    public ListBordModel(SimInterface docset, Map parameters)
+    public ListBordModel(SimInterface docset, FuzzyAntsParameters parameters)
     {
         this.parameters = parameters;
         this.docset = docset;
@@ -59,11 +59,8 @@ public class ListBordModel
      */
     public ArrayList getSolution()
     {
-        int numberOfIterations  = Integer.parseInt(
-                (String) ((LinkedList) parameters.get("numberOfIterations")).get(0)
-            );
+        int numberOfIterations  = parameters.getNumberOfIterations();
         skip(objects.size() * numberOfIterations);
-
         return getHeaps();
     }
 

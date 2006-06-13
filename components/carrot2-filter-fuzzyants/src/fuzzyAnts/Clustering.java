@@ -14,16 +14,9 @@
 package fuzzyAnts;
 
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Set;
+import java.util.*;
 
-import org.dom4j.DocumentFactory;
-import org.dom4j.Element;
-
+import com.dawidweiss.carrot.core.local.clustering.*;
 
 /**
  *
@@ -41,8 +34,7 @@ public abstract class Clustering
     protected Set allDocIndices;
     protected double [] documentWeights;
     protected List documents;
-    protected List meta;
-    protected List query;
+    protected String query;
     protected boolean stopwords;
     protected int weightSchema;
     protected int depth;
@@ -50,40 +42,34 @@ public abstract class Clustering
     protected double minDocScore = 0.30;
 
     public Clustering(
-        int depth, List documents, List meta, List query, boolean stopwords, int weightSchema
-    )
+        int depth, List /*<RawDocument>*/ documents, String query, boolean stopwords, int weightSchema)
     {
         this.documents = documents;
-        this.meta = meta;
         this.query = query;
         this.stopwords = stopwords;
         this.weightSchema = weightSchema;
         this.depth = depth;
 
         documentWeights = new double[documents.size()];
-
         for (int i = 0; i < documentWeights.length; i++)
         {
             documentWeights[i] = 1;
         }
 
-        parser = new SnippetParser(documents, meta, query, stopwords, weightSchema);
+        parser = new SnippetParser(documents, query, stopwords, weightSchema);
     }
 
 
     public Clustering(
-        int depth, List documents, List meta, List query, boolean stopwords, int weightSchema,
-        double [] documentWeights
-    )
+        int depth, List documents, String query, boolean stopwords, int weightSchema, double [] documentWeights)
     {
         this.documents = documents;
-        this.meta = meta;
         this.query = query;
         this.stopwords = stopwords;
         this.weightSchema = weightSchema;
         this.depth = depth;
         this.documentWeights = documentWeights;
-        parser = new SnippetParser(documents, meta, query, stopwords, weightSchema);
+        parser = new SnippetParser(documents, query, stopwords, weightSchema);
     }
 
     /*
@@ -117,7 +103,7 @@ public abstract class Clustering
      */
     protected ArrayList restrictDocuments(List docIndices)
     {
-        ArrayList res = new ArrayList();
+        final ArrayList res = new ArrayList();
 
         for (Iterator it = docIndices.iterator(); it.hasNext();)
         {
@@ -153,25 +139,19 @@ public abstract class Clustering
      */
     protected void addSubGroup(int bestIndex, Clustering subCluster, Collection docIndices)
     {
-        final DocumentFactory factory = new DocumentFactory();
-        Element group = factory.createElement("group");
-        List subGroups = subCluster.getGroups();
-
+        final List subGroups = subCluster.getGroups();
         if (subGroups.size() > 0)
         {
+            final RawClusterBase rawCluster = new RawClusterBase();
+
             for (ListIterator it = subGroups.listIterator(); it.hasNext();)
             {
-                Element subGroup = (Element) it.next();
-                group.add(subGroup);
+                rawCluster.addSubcluster((RawCluster) it.next());
             }
 
-            Element title = factory.createElement("title");
             String label = getLabel(bestIndex, docIndices);
-            Element phrase = factory.createElement("phrase");
-            phrase.setText(label);
-            title.add(phrase);
-            group.add(title);
-            groups.add(group);
+            rawCluster.addLabel(label);
+            groups.add(rawCluster);
         }
     }
 
@@ -181,29 +161,31 @@ public abstract class Clustering
      */
     protected void addDocumentsGroup(int bestIndex, List docIndices)
     {
-        final DocumentFactory factory = new DocumentFactory();
         if (docIndices.size() > 0)
         {
-            Element group = factory.createElement("group");
+            final RawClusterBase rawCluster = new RawClusterBase();
 
             for (Iterator it = docIndices.iterator(); it.hasNext();)
             {
-                int index = ((Integer) it.next()).intValue();
-                Element e = (Element) documents.get(index);
-                String id = e.attributeValue("id");
-                Element doc = factory.createElement("document");
-                doc.addAttribute("refid", id);
-                doc.addAttribute("score", "" + documentWeights[index]);
-                group.add(doc);
+                final int index = ((Integer) it.next()).intValue();
+                final TokenizedDocument td = (TokenizedDocument) documents.get(index);
+                final RawDocument rd = (RawDocument) td.getProperty(TokenizedDocument.PROPERTY_RAW_DOCUMENT);
+                final double score = documentWeights[index];
+                
+                rawCluster.addDocument(new RawDocumentBase(rd) {
+                    public Object getId() {
+                        return rd.getId();
+                    }
+
+                    public float getScore() {
+                        return (float) score;
+                    }                    
+                });
             }
 
-            Element title = factory.createElement("title");
-            String label = getLabel(bestIndex, docIndices);
-            Element phrase = factory.createElement("phrase");
-            phrase.setText(label);
-            title.add(phrase);
-            group.add(title);
-            groups.add(group);
+            final String label = getLabel(bestIndex, docIndices);
+            rawCluster.addLabel(label);
+            groups.add(rawCluster);
         }
     }
 
@@ -213,38 +195,36 @@ public abstract class Clustering
      */
     protected void addOther(Set docIndices)
     {
-        final DocumentFactory factory = new DocumentFactory();
-        ArrayList indices = new ArrayList();
-
-        for (int i = 0; i < documents.size(); i++)
-        {
+        final ArrayList indices = new ArrayList();
+        for (int i = 0; i < documents.size(); i++) {
             indices.add(new Integer(i));
         }
-
         indices.removeAll(docIndices);
 
         if (indices.size() > 0)
         {
-            Element group = factory.createElement("group");
+            final RawClusterBase rawCluster = new RawClusterBase();
 
-            for (Iterator it = indices.iterator(); it.hasNext();)
+            for (Iterator it = docIndices.iterator(); it.hasNext();)
             {
-                int index = ((Integer) it.next()).intValue();
-                Element e = (Element) documents.get(index);
-                String id = e.attributeValue("id");
-                Element doc = factory.createElement("document");
-                doc.addAttribute("refid", id);
-                doc.addAttribute("score", "" + documentWeights[index]);
-                group.add(doc);
+                final int index = ((Integer) it.next()).intValue();
+                final TokenizedDocument td = (TokenizedDocument) documents.get(index);
+                final RawDocument rd = (RawDocument) td.getProperty(TokenizedDocument.PROPERTY_RAW_DOCUMENT);
+                final double score = documentWeights[index];
+                
+                rawCluster.addDocument(new RawDocumentBase(rd) {
+                    public Object getId() {
+                        return rd.getId();
+                    }
+
+                    public float getScore() {
+                        return (float) score;
+                    }                    
+                });
             }
 
-            Element title = factory.createElement("title");
-            String label = "Other...";
-            Element phrase = factory.createElement("phrase");
-            phrase.setText(label);
-            title.add(phrase);
-            group.add(title);
-            groups.add(group);
+            rawCluster.addLabel("Other...");
+            groups.add(rawCluster);
         }
     }
 

@@ -28,6 +28,7 @@ interface Constants
     public final double PLOAD = 0.9;
     public final double PDROP = 0.003;
     public final double M = 1.3;
+
     public static final FuzzyNumber VERYLOW = new FuzzyNumber(101, 0, 0, 25);
     public static final FuzzyNumber LOW = new FuzzyNumber(101, 0, 25, 50);
     public static final FuzzyNumber MEDIUM = new FuzzyNumber(101, 25, 50, 75);

@@ -14,46 +14,32 @@
 package fuzzyAnts;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-
-import org.dom4j.DocumentFactory;
-import org.dom4j.Element;
+import java.util.*;
 
 
 /**
  * Extension of "Clustering" for snippet/document clustering.
  *
  * @author Steven Schockaert
+ * @author Dawid Weiss (converting to local interfaces).
  */
-public class DocumentClustering
-    extends Clustering
-    implements Constants
+public class DocumentClustering extends Clustering implements Constants
 {
     private final double EXTENDEDQUERYFACTOR = 0.5;
-    private Map params;
+    private FuzzyAntsParameters params;
 
     public DocumentClustering(
-        int depth, List documents, List meta, List query, boolean stopwords, int weightSchema,
-        Map params
-    )
+        int depth, List documents, String query, boolean stopwords, int weightSchema, FuzzyAntsParameters params)
     {
-        super(depth, documents, meta, query, stopwords, weightSchema);
+        super(depth, documents, query, stopwords, weightSchema);
         this.params = params;
     }
 
 
     public DocumentClustering(
-        int depth, List documents, List meta, List query, boolean stopwords, int weightSchema,
-        Map params, double [] documentWeights
-    )
+        int depth, List documents, String query, boolean stopwords, int weightSchema, FuzzyAntsParameters params, double [] documentWeights)
     {
-        super(depth, documents, meta, query, stopwords, weightSchema, documentWeights);
+        super(depth, documents, query, stopwords, weightSchema, documentWeights);
         this.params = params;
     }
 
@@ -62,8 +48,8 @@ public class DocumentClustering
      */
     protected void getSolution()
     {
-	groups=new ArrayList();
-	DocumentSet s = new DocumentSet(parser.getNonZeroIndices(), parser);
+    	groups = new ArrayList();
+    	DocumentSet s = new DocumentSet(parser.getNonZeroIndices(), parser);
         ListBordModel bm = new ListBordModel(s, params);
         allDocIndices = new HashSet();
 
@@ -107,7 +93,7 @@ public class DocumentClustering
             if ((docIndices.size() > 25) && (depth < 2))
             {
                 DocumentClustering subClusters = new DocumentClustering(
-                        depth + 1, restrictDocuments(docIndices), meta,
+                        depth + 1, restrictDocuments(docIndices),
                         extendedQuery(bestTerm, termSum), stopwords, weightSchema,
                         params, restrictWeights(newDocWeights, docIndices)
                     );
@@ -293,14 +279,12 @@ public class DocumentClustering
      * For recursive application, all terms whose weight is greater than "EXTENDEDQUERYFACTOR" times the weight of
      * the term with maximal weight, are considered as query terms.
      */
-    protected ArrayList extendedQuery(int maxIndex, Map termSum)
+    protected String extendedQuery(int maxIndex, Map termSum)
     {
-        ArrayList res = new ArrayList();
-        res.addAll(query);
+        final StringBuffer res = new StringBuffer(query);
 
         double maxValue = ((Double) termSum.get(new Integer(maxIndex))).doubleValue();
 
-        final DocumentFactory factory = new DocumentFactory();
         for (Iterator it = termSum.keySet().iterator(); it.hasNext();)
         {
             int termIndex = ((Integer) it.next()).intValue();
@@ -308,12 +292,11 @@ public class DocumentClustering
 
             if (termValue > (EXTENDEDQUERYFACTOR * maxValue))
             {
-                Element e = factory.createElement("query");
-                e.setText(parser.originalTerm(termIndex));
-                res.add(e);
+                if (res.length() > 0) res.append(" ");
+                res.append(parser.originalTerm(termIndex));
             }
         }
 
-        return res;
+        return res.toString();
     }
 }

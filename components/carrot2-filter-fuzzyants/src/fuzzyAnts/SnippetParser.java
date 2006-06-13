@@ -14,23 +14,16 @@
 package fuzzyAnts;
 
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.StringTokenizer;
+import java.util.*;
 
-import org.dom4j.Element;
+import com.dawidweiss.carrot.core.local.clustering.RawDocument;
+import com.dawidweiss.carrot.core.local.clustering.TokenizedDocument;
+import com.dawidweiss.carrot.core.local.linguistic.tokens.*;
 
 
 /**
- * Performs some lexical analysis of a snippet collection and defines some (fuzzy) relations between snippets and terms
+ * Performs some lexical analysis of a snippet collection and defines 
+ * some (fuzzy) relations between snippets and terms
  *
  * @author Steven Schockaert
  */
@@ -60,23 +53,21 @@ public class SnippetParser
     private int weightSchema; //  contains the used weighting scheme (binary, TF or TF-IDF)
     private final int MINTERMSUPP = 3;
     private final int TERMSPECSUPP = 1;
-    private final double COMPLETE = 0.75;
 
-    public SnippetParser(ArrayList documents, ArrayList meta, ArrayList query)
+    public SnippetParser(ArrayList documents, String query)
     {
-        this(documents, meta, query, true, TFIDF);
+        this(documents, query, true, TFIDF);
     }
 
 
     public SnippetParser(
-        List documents, List meta, List query, boolean removeStopwords, int weightSchema
-    )
+        List documents, String query, boolean removeStopwords, int weightSchema)
     {
         try
         {
             this.removeStopwords = removeStopwords;
             this.weightSchema = weightSchema;
-            calculateStemming(meta);
+            calculateStemming(documents);
             parseQuery(query);
             parseSnippets(documents);
             numberOfDocuments = snippets.length;
@@ -86,30 +77,40 @@ public class SnippetParser
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            throw new RuntimeException("Error when clustering.", e);
         }
     }
 
-    /*
-     * Applies stemming to to snippets
+    /**
+     * TODO: [DW] This is a hack. We fill in the data structures
+     * of the original implementation to avoid rewriting larger
+     * pieces of code. But in fact, the algorithm should utilize TokenizedDocuments
+     * directly.
      */
-    private void calculateStemming(List meta)
-    {
+    private void calculateStemming(List documents) {
         stemming = new HashMap();
         inverseStemming = new HashMap();
         stopwords = new HashSet();
+        
+        if (!stemmingDesired) return;
+        
+        for (Iterator j = documents.iterator(); j.hasNext();) {
+            final TokenizedDocument td = (TokenizedDocument) j.next();
+            final TokenSequenceIterator tokenIterator = new TokenSequenceIterator(
+                    new TokenSequence [] {td.getTitle(), td.getSnippet()});
 
-        if (stemmingDesired)
-        {
-            for (ListIterator it = meta.listIterator(); it.hasNext();)
-            {
-                Element e = (Element) it.next();
-                String original = e.attributeValue("t");
-                String stemmed = e.attributeValue("s");
-                String stopword = e.attributeValue("sw");
+            while (tokenIterator.hasNext()) {
+                final TypedToken token = (TypedToken) tokenIterator.nextToken();
+                final StemmedToken stemmedToken = (StemmedToken) token;
+                final short tokenType = token.getType();
 
-                if (stopword != null)
-                {
+                final String original = token.getImage();
+                String stemmed = stemmedToken.getStem();
+                if (stemmed == null) {
+                    stemmed = original;
+                }
+
+                if ((tokenType & TypedToken.TOKEN_FLAG_STOPWORD) != 0) {
                     stopwords.add(stemmed);
                 }
 
@@ -135,52 +136,40 @@ public class SnippetParser
     /*
      * Applies stemming to the query terms
      */
-    private void parseQuery(List query)
+    private void parseQuery(String query)
     {
         queryTerms = new HashSet();
 
-        for (Iterator it = query.listIterator(); it.hasNext();)
-        {
-            Element e = (Element) it.next();
+        final StringTokenizer queryList = new StringTokenizer(query);
+        for (; queryList.hasMoreTokens();) {
+            StringBuffer buf = new StringBuffer(queryList.nextToken());
+            if (buf.length() > 0) {
+    		    if ((buf.charAt(0) == '"') || (buf.charAt(0) == '+'))
+    			{
+    			    buf.deleteCharAt(0);
+    			}
 
-            if (e != null)
-            {
-                StringTokenizer queryList = new StringTokenizer(e.getText());
-
-                for (; queryList.hasMoreTokens();)
+                if (buf.length() > 0 && buf.charAt(buf.length() - 1) == '"')
                 {
-                    StringBuffer buf = new StringBuffer(queryList.nextToken());
-
-		    if ((buf.charAt(0) == '"') || (buf.charAt(0) == '+'))
-			{
-			    buf.deleteCharAt(0);
-			}
-
-		    if (buf.length() > 0)
-			{
-			    if (buf.charAt(buf.length() - 1) == '"')
-				{
-				    buf.deleteCharAt(buf.length() - 1);
-				}
-			}
-
-		    String woord = buf.toString();
-
-                    if (stemming.containsKey(woord))
-			{
-                        String s = (String) (stemming.get(woord));
-                        queryTerms.add(s.toLowerCase());
-                    }
-                    else if (stemming.containsKey(woord.toLowerCase()))
-                    {
-                        String s = (String) (stemming.get(woord.toLowerCase()));
-                        queryTerms.add(s.toLowerCase());
-                    }
-                    else
-                    {
-                        queryTerms.add(woord.toLowerCase());
-                    }
+                    buf.deleteCharAt(buf.length() - 1);
                 }
+            }
+
+		    final String woord = buf.toString();
+
+            if (stemming.containsKey(woord))
+            {
+                String s = (String) (stemming.get(woord));
+                queryTerms.add(s.toLowerCase());
+            }
+            else if (stemming.containsKey(woord.toLowerCase()))
+            {
+                String s = (String) (stemming.get(woord.toLowerCase()));
+                queryTerms.add(s.toLowerCase());
+            }
+            else
+            {
+                queryTerms.add(woord.toLowerCase());
             }
         }
     }
@@ -189,7 +178,7 @@ public class SnippetParser
     /*
      * snippets are parsed
      */
-    private void parseSnippets(List documents)
+    private void parseSnippets(List /*<TokenizedDocument>*/ documents)
     {
         int termIndex = 0;
         term2index = new HashMap();
@@ -198,26 +187,35 @@ public class SnippetParser
         originalDocuments = new ArrayList();
         snippets = new HashMap[documents.size()];
 
-        for (int i = 0; i < documents.size(); i++)
+        final Iterator docIter = documents.iterator();
+        for (int i = 0; docIter.hasNext(); i++)
         {
-            Element snippet = ((Element) documents.get(i)).element("snippet");
-            Element title = ((Element) documents.get(i)).element("title");
-            StringBuffer text = new StringBuffer();
+            final TokenizedDocument tokDoc = (TokenizedDocument) docIter.next();
+            final RawDocument rawDoc = (RawDocument) tokDoc.getProperty(TokenizedDocument.PROPERTY_RAW_DOCUMENT);
+            final StringBuffer text = new StringBuffer();
 
-            if (title != null)
-            {
-                text.append(title.getText());
+            if (rawDoc == null) {
+                throw new RuntimeException("This algorithm requires RawDocuments internally.");
+            }
+
+            final String title = rawDoc.getTitle();
+            final String snippet = rawDoc.getSnippet();
+
+            // [DW] the parsing routine is left intact as implemented by Steven.
+            
+            if (title != null) {
+                text.append(title);
                 text.append(" ");
             }
 
             if (snippet != null)
             {
-                text.append(snippet.getText());
+                text.append(snippet);
             }
 
             snippets[i] = new HashMap();
 
-            StringTokenizer st = new StringTokenizer(text.toString());
+            final StringTokenizer st = new StringTokenizer(text.toString());
             StringBuffer originalString = new StringBuffer(text.toString());
 
             for (int j = 0; j < originalString.length(); j++)
@@ -796,7 +794,7 @@ public class SnippetParser
 
             if (docWeights[t].containsKey(index))
             {
-                ;
+                // do nothing.
             }
 
             w = ((Double) docWeights[t].get(index)).doubleValue();
@@ -823,7 +821,7 @@ public class SnippetParser
 
             if (termWeights[d].containsKey(index))
             {
-                ;
+                // Do nothing.
             }
 
             w = ((Double) termWeights[d].get(index)).doubleValue();
@@ -854,7 +852,7 @@ public class SnippetParser
 
             if (roughWeights[d].containsKey(index))
             {
-                ;
+                // do nothing.
             }
 
             w = ((Double) roughWeights[d].get(index)).doubleValue();
@@ -1023,7 +1021,7 @@ public class SnippetParser
         {
             String s = (String) originalDocuments.get(((Integer) it1.next()).intValue());
             StringTokenizer tok = new StringTokenizer(s);
-            LinkedList tokList = new LinkedList();
+            ArrayList tokList = new ArrayList();
 
             for (; tok.hasMoreTokens();)
             {
@@ -1063,13 +1061,8 @@ public class SnippetParser
 
     private List reverse(List l)
     {
-        LinkedList res = new LinkedList();
-
-        for (ListIterator it = l.listIterator(); it.hasNext();)
-        {
-            res.add(0, it.next());
-        }
-
+        ArrayList res = new ArrayList(l);
+        Collections.reverse(res);
         return res;
     }
 }

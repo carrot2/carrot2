@@ -29,23 +29,14 @@ abstract class Ant
     protected int n2;
     protected int m2;
     Random rand;
-    Map parameters;
 
-    public Ant(Map parameters)
+    public Ant(FuzzyAntsParameters parameters)
     {
-        this.parameters = parameters;
         rand = new Random();
-        n1 = Integer.parseInt((String) ((LinkedList) parameters.get("n1")).get(0));
-        m1 = Integer.parseInt((String) ((LinkedList) parameters.get("m1")).get(0));
-        n2 = Integer.parseInt((String) ((LinkedList) parameters.get("n2")).get(0));
-        m2 = Integer.parseInt((String) ((LinkedList) parameters.get("m2")).get(0));
-    }
-
-
-    public Ant(Ant m)
-    {
-        parameters = m.parameters;
-        rand = new Random();
+        n1 = parameters.getN1();
+        m1 = parameters.getM1();
+        n2 = parameters.getN2();
+        m2 = parameters.getM2();
     }
 
     /*

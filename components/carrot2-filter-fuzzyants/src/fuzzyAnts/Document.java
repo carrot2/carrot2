@@ -44,18 +44,14 @@ class Document
     {
         try
         {
-            Document md = (Document) d;
-
-            return bm.similarity(index, md.index);
+            return bm.similarity(index, d.index);
         }
         catch (Exception e)
         {
             e.printStackTrace();
-
             return -1;
         }
     }
-
 
     /*
      * Returns the dissimilarity between this document and the document "d"
@@ -64,7 +60,6 @@ class Document
     {
         return 1 - similarity(d);
     }
-
 
     public boolean equals(Object o)
     {
