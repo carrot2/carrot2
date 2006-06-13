@@ -150,4 +150,15 @@ public class WebStartComponentFactory {
             }
         };
     }
+    
+    /**
+     * <code>filter-fuzzyants</code> 
+     */
+    public static LocalComponentFactoryBase createFuzzyAnts() {
+        return new LocalComponentFactoryBase() {
+            public LocalComponent getInstance() {
+                return new fuzzyAnts.FuzzyAntsLocalFilterComponent();
+            }
+        };
+    }
 }
