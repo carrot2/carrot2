@@ -67,6 +67,7 @@
     <dependency name="carrot2-filter-trc" in-profile="local"   profile="stripped" nocopy="true" />
     <dependency name="carrot2-filter-stc" in-profile="local"   profile="stripped" nocopy="true" />
     <dependency name="carrot2-filter-haog" in-profile="local"   profile="stripped" nocopy="true" />
+    <dependency name="carrot2-filter-fuzzyants" profile="stripped" nocopy="true" />
     <dependency name="carrot2-input-yahooapi" in-profile="local" profile="stripped" nocopy="true" />
     <dependency name="carrot2-util-tokenizer" profile="stripped" nocopy="true" />
     <dependency name="carrot2-input-local-cache" in-profile="local" profile="stripped" nocopy="true" />
@@ -78,6 +79,7 @@
     <dependency name="carrot2-filter-trc" in-profile="local"   profile="full" />
     <dependency name="carrot2-filter-stc" in-profile="local"   profile="full" />
     <dependency name="carrot2-filter-haog" in-profile="local"   profile="full" />
+    <dependency name="carrot2-filter-fuzzyants" profile="full" />
     <dependency name="carrot2-input-yahooapi" in-profile="local" profile="full" />
     <dependency name="carrot2-util-tokenizer" profile="full" />
     <dependency name="carrot2-input-local-cache" in-profile="local" profile="full" />
