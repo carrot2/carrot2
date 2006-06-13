@@ -9,6 +9,8 @@ Major functions and bug fixes
 Version  [C] Information
 
 HEAD
+          +  Local interface to FuzzyAnts added.
+
           +  Added proguard obfuscation infrastructure.
 
           #  The cache in demo application did not work properly for input components
