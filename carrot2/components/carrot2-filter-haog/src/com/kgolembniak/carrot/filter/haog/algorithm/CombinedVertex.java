@@ -322,10 +322,10 @@ public class CombinedVertex extends Vertex{
 						if (!secondPhrase.getTerms().contains(term)){
 							continue phraseLoop;
 						}
-						
-						firstPhrase.mostSpecific = false;
-						secondPhrase.mostGeneral = false;
 					}
+
+					firstPhrase.mostSpecific = false;
+					secondPhrase.mostGeneral = false;
 				}
 			}
 		}
@@ -345,12 +345,13 @@ public class CombinedVertex extends Vertex{
 								continue thisPhraseIsUseFull;
 							}
 							
-		                    if ((firstPhrase.getCoverage() - secondPhrase.getCoverage()) < 
+						}
+
+						if ((firstPhrase.getCoverage() - secondPhrase.getCoverage()) < 
 		                    	params.getMostGeneralPhraseCoverage()){
 		                    	firstPhrase.setSelected(false);
 		                        break;
-		                    }
-						}
+		                }
 					}
 				}
 			}
