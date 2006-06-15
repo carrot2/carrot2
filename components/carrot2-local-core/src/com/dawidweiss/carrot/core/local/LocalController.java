@@ -18,7 +18,7 @@ import java.util.*;
 /**
  * A container for local processes and local components. Local applications will
  * use this interface to set up all necessary processes and components as well
- * as to to execute queries.
+ * as to execute queries.
  * 
  * @author Stanislaw Osinski
  * @version $Revision$
