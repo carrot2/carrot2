@@ -22,11 +22,21 @@ import com.dawidweiss.carrot.core.local.*;
 import com.dawidweiss.carrot.core.local.clustering.*;
 
 /**
+ * Passes down the processing chain query results read from XML files in the
+ * Carrot<sup>2</sup> format. This component expects that the
+ * {@link LocalInputComponent#PARAM_QUERY} parameter contains the name of the
+ * data file to be loaded. Tha name must be relative to the local filesystem
+ * directory path provided in the constructor or in the {@link #PARAM_INPUT_DIR}
+ * parameter.
+ * 
  * @author Stanislaw Osinski
  */
 public class FileLocalInputComponent extends LocalInputComponentBase
 {
-    /** Data source path (directory or file) */
+    /**
+     * A path to the local filesystem directory to read the XML input files
+     * from.
+     */
     public static final String PARAM_INPUT_DIR = "input-dir";
 
     /** Capabilities required from the next component in the chain */
@@ -55,9 +65,18 @@ public class FileLocalInputComponent extends LocalInputComponentBase
     /** */
     private File defaultInputDir;
 
+    /**
+     * Represents a query result containing a list of {@link RawDocument}s and
+     * the query that returned these documents.
+     * 
+     * @author Stanislaw Osinski
+     */
     public static class QueryResult
     {
+        /** The query */
         public String query;
+
+        /** A list of {@link RawDocument}s returned for the query */
         public List rawDocuments;
     }
 
@@ -129,6 +148,11 @@ public class FileLocalInputComponent extends LocalInputComponentBase
         }
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.dawidweiss.carrot.core.local.LocalInputComponentBase#startProcessing(com.dawidweiss.carrot.core.local.RequestContext)
+     */
     public void startProcessing(RequestContext requestContext)
         throws ProcessingException
     {
@@ -155,10 +179,12 @@ public class FileLocalInputComponent extends LocalInputComponentBase
     }
 
     /**
+     * Returns the requested results count.
+     * 
      * @param requestContext
-     * @return
+     * @return the requested results count.
      */
-    protected int getRequestedResultsCount(RequestContext requestContext)
+    private int getRequestedResultsCount(RequestContext requestContext)
     {
         int requestedResults;
         if (requestContext.getRequestParameters().containsKey(
@@ -192,9 +218,10 @@ public class FileLocalInputComponent extends LocalInputComponentBase
     /**
      * Passes the query result to the next component in the chain.
      * 
+     * @param root root element of the input XML
      * @param requestContext
-     * @param queryResult
-     * @throws ProcessingException
+     * @param requestedResults the number of requested results
+     * @throws ProcessingException if an error occurs
      */
     protected void passQueryResult(Element root, RequestContext requestContext,
         int requestedResults) throws ProcessingException
@@ -230,7 +257,7 @@ public class FileLocalInputComponent extends LocalInputComponentBase
      * Returns the input {@link File} to read from.
      * 
      * @param requestContext
-     * @return
+     * @return the input {@link File} to read from
      * @throws ProcessingException in case of problems determining the input
      *             file
      */
@@ -273,6 +300,15 @@ public class FileLocalInputComponent extends LocalInputComponentBase
         return inputFile;
     }
 
+    /**
+     * Loads {@link QueryResult} from an XML file in the Carrot<sup>2</sup>
+     * format.
+     * 
+     * @param inputFile input file to load from
+     * @param requestedResults the number of results to load
+     * @return loaded query result
+     * @throws DocumentException if a parsing problem occurs
+     */
     public static QueryResult loadQueryResult(File inputFile,
         int requestedResults) throws DocumentException
     {
@@ -282,6 +318,14 @@ public class FileLocalInputComponent extends LocalInputComponentBase
         return queryResult;
     }
 
+    /**
+     * Parses an XML element in the Carrot<sup>2</sup> format into a
+     * {@link QueryResult}.
+     * 
+     * @param root XML element in the Carrot<sup>2</sup> format
+     * @param requestedResults the number of results to parse
+     * @return parsed query result
+     */
     public static QueryResult extractQueryResult(Element root,
         int requestedResults)
     {

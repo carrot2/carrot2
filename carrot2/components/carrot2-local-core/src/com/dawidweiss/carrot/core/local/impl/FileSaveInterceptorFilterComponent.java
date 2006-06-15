@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -250,8 +249,10 @@ public class FileSaveInterceptorFilterComponent extends
     }
 
     /**
+     * Creates an element representing the query.
+     * 
      * @param requestContext
-     * @return
+     * @return an element representing the query.
      */
     protected Element createQueryElement(RequestContext requestContext)
     {
@@ -265,8 +266,10 @@ public class FileSaveInterceptorFilterComponent extends
     }
 
     /**
+     * Creates an element representing a {@link RawCluster}.
+     * 
      * @param rawCluster
-     * @return
+     * @return an element representing the {@link RawCluster}.
      */
     protected Element createClusterElement(RawCluster rawCluster)
     {
@@ -298,8 +301,10 @@ public class FileSaveInterceptorFilterComponent extends
     }
 
     /**
+     * Creates an element representing a {@link RawCluster}'s title.
+     * 
      * @param rawCluster
-     * @return
+     * @return an element representing the {@link RawCluster}'s title.
      */
     protected Element createClusterTitleElement(RawCluster rawCluster)
     {
@@ -316,8 +321,10 @@ public class FileSaveInterceptorFilterComponent extends
     }
 
     /**
+     * Creates an element representing a {@link RawDocument}.
+     * 
      * @param rawDocument
-     * @return
+     * @return an element representing the {@link RawDocument}.
      */
     protected Element createDocumentElement(RawDocument rawDocument)
     {
