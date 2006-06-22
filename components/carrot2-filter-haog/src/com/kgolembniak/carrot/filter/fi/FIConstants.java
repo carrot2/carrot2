@@ -34,7 +34,7 @@ public class FIConstants {
 	/**
 	 * Default value for {@link #MIN_SUPPORT} 
 	 */
-	public final static double DEFAULT_MIN_SUPPORT = 0.1d;
+	public final static double DEFAULT_MIN_SUPPORT = 0.10d;
 
 	/**
 	 * Maximal time for itemsets generation.
@@ -44,7 +44,7 @@ public class FIConstants {
 	/**
 	 * Default value for {@link #MAX_ITEMSETS_GENERATION_TIME} 
 	 */
-	public static final int DEFAULT_MAX_ITEMSETS_GENERATION_TIME = 20;
+	public static final int DEFAULT_MAX_ITEMSETS_GENERATION_TIME = 5;
 
 	/**
 	 * Too frequent words are not interesting, so they are ignored if they 
@@ -66,7 +66,7 @@ public class FIConstants {
 	/**
 	 * Default value for {@link #LINK_TRESHOLD} 
 	 */
-	public final static double DEFAULT_LINK_TRESHOLD = 0.6d;
+	public final static double DEFAULT_LINK_TRESHOLD = 0.7d;
 
 	/**
 	 * Cluster label length is limited to number of words given by this parameter.  
@@ -86,7 +86,7 @@ public class FIConstants {
 	/**
 	 * Default value for {@link #MAX_PRESENTED_CLUSTERS}
 	 */
-	public final static int DEFAULT_MAX_PRESENTED_CLUSTERS = 20;
+	public final static int DEFAULT_MAX_PRESENTED_CLUSTERS = 100;
 
 	/**
 	 * Minimum number of documents in cluster. Smaller clusters are ignored.

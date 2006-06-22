@@ -126,7 +126,7 @@ public class FIParameters {
         value = (String) map.get(FIConstants.MAX_PRESENTED_CLUSTERS);
         if (value != null) {
             params.maxPresentedClusters = Integer.parseInt(value);
-            if (params.maxPresentedClusters < 1 || params.maxPresentedClusters > 50) {
+            if (params.maxPresentedClusters < 1 || params.maxPresentedClusters > 500) {
                 throw new RuntimeException("Illegal value range.");
             }
         }      
