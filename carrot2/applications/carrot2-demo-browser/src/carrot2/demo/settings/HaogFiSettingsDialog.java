@@ -50,7 +50,7 @@ class HaogFiSettingsDialog extends JPanel {
         builder.append(ThresholdHelper.createDoubleThreshold(settings, FIConstants.LINK_TRESHOLD,
                 "Link threshold:", 0, 1, 0.1, 0.25));
         builder.append(ThresholdHelper.createIntegerThreshold(settings, FIConstants.MAX_PRESENTED_CLUSTERS,
-                "Max presented clusters:", 2, 50, 0, 10));
+                "Max presented clusters:", 0, 500, 10, 100));
         builder.append(ThresholdHelper.createIntegerThreshold(settings, FIConstants.MIN_CLUSTER_SIZE,
                 "Min base cluster size:", 2, 30, 0, 10));
 
