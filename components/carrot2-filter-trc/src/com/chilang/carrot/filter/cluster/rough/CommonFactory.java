@@ -13,7 +13,7 @@
 
 package com.chilang.carrot.filter.cluster.rough;
 
-import net.sf.snowball.ext.englishStemmer;
+import org.tartarus.snowball.ext.englishStemmer;
 
 import com.chilang.carrot.filter.cluster.rough.data.*;
 import com.chilang.carrot.filter.cluster.rough.filter.StopWordsSet;

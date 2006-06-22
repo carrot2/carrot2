@@ -15,7 +15,7 @@ package com.dawidweiss.carrot.filter.snowball;
 
 import com.dawidweiss.carrot.core.local.linguistic.Stemmer;
 
-import net.sf.snowball.SnowballProgram;
+import org.tartarus.snowball.SnowballProgram;
 
 
 /**

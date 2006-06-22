@@ -15,8 +15,8 @@ package com.dawidweiss.carrot.filter.snowball;
 
 import com.dawidweiss.carrot.core.local.linguistic.Stemmer;
 
-import net.sf.snowball.SnowballProgram;
-import net.sf.snowball.ext.*;
+import org.tartarus.snowball.SnowballProgram;
+import org.tartarus.snowball.ext.*;
 
 import java.util.HashMap;
 import java.util.Iterator;
