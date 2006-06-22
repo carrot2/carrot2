@@ -66,6 +66,12 @@ public class StcParameters {
      * Minimum general phrase coverage to appear in cluster description. 
      */
     private double mostGeneralPhraseCoverage;
+    
+	/**
+	 * Labels containing more words than this ratio ate trimmed.
+	 * @author Karol Gołembniak
+	 */
+	private int maxDescPhraseLength;
 
     /**
      * Creates a new objects with default settings.
@@ -80,6 +86,7 @@ public class StcParameters {
         this.mergeThreshold = StcConstants.DEFAULT_MERGE_THRESHOLD;
         this.maxPhraseOverlap = StcConstants.DEFAULT_MAX_PHRASE_OVERLAP;
         this.mostGeneralPhraseCoverage = StcConstants.DEFAULT_MOST_GENERAL_PHRASE_COVERAGE;
+        this.maxDescPhraseLength = StcConstants.DEFAULT_MAX_PHRASE_LENGTH;
     }
 
     public static StcParameters fromMap(Map map) {
@@ -163,6 +170,14 @@ public class StcParameters {
             }
         }
 
+        value = (String) map.get(StcConstants.MAX_PHRASE_LENGTH);
+        if (value != null) {
+            params.maxDescPhraseLength = Integer.parseInt(value);
+            if (params.maxDescPhraseLength < 1 || params.maxDescPhraseLength > 10) {
+                throw new RuntimeException("Illegal value range.");
+            }
+        }      
+
         return params;
     }
     
@@ -177,6 +192,7 @@ public class StcParameters {
         map.put(StcConstants.MIN_BASE_CLUSTER_SIZE, Integer.toString(getMinBaseClusterSize()));
         map.put(StcConstants.MAX_PHRASE_OVERLAP, Double.toString(getMaxPhraseOverlap()));
         map.put(StcConstants.MOST_GENERAL_PHRASE_COVERAGE, Double.toString(getMostGeneralPhraseCoverage()));
+        map.put(StcConstants.MAX_PHRASE_LENGTH, Integer.toString(getMaxDescPhraseLength()));
         return map;
     }
 
@@ -215,4 +231,8 @@ public class StcParameters {
     public float getMostGeneralPhraseCoverage() {
         return (float) mostGeneralPhraseCoverage;
     }
+    
+	public int getMaxDescPhraseLength() {
+		return maxDescPhraseLength;
+	}
 }
