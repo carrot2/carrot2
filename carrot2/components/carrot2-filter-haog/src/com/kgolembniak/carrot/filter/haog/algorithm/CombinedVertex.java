@@ -245,8 +245,7 @@ public class CombinedVertex extends Vertex{
 				}
 				description += str;
 				i2++;
-				//TODO get this parameter from params
-				if (i2>3) break;
+				if (i2>=params.getMaxDescPhraseLength()) break;
 			} 				
 		}
 		
@@ -274,7 +273,7 @@ public class CombinedVertex extends Vertex{
 		int i1 = 0;
 		for (Iterator it = descriptions.iterator(); it.hasNext();){
 			if (i1>0) {
-				description += ", ";
+				description += " ";
 			}
 			description += (String) it.next();
 			i1++;
