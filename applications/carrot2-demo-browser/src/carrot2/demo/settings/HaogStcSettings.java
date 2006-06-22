@@ -22,6 +22,7 @@ import javax.swing.JComponent;
 import carrot2.demo.ProcessSettings;
 import carrot2.demo.ProcessSettingsBase;
 
+import com.dawidweiss.carrot.filter.stc.StcConstants;
 import com.dawidweiss.carrot.filter.stc.StcParameters;
 
 /**
@@ -33,6 +34,8 @@ public class HaogStcSettings extends ProcessSettingsBase implements ProcessSetti
 
     public HaogStcSettings() {
         this.params = new StcParameters().toMap();
+        //default value for HAOG-STC
+        this.params.put(StcConstants.MERGE_THRESHOLD, String.valueOf(0.75));
     }
 
     private HaogStcSettings(Map params) {
