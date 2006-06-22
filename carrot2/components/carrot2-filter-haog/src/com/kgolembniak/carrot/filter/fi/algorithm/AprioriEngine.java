@@ -315,7 +315,6 @@ Timeout:for (int i1=0; i1<previousItemSets.size(); i1++){
 	 * @return List of strings representing cluster's description.
 	 */
 	private List getClusterDescription(ItemSet itemSet, WordBasket basket) {
-		ArrayList stems = new ArrayList();
 		
 		Transaction transaction = null;
 		Transaction fitting = null;
@@ -324,35 +323,51 @@ Timeout:for (int i1=0; i1<previousItemSets.size(); i1++){
 			if ((transaction.getBasket() == basket) &&
 				(transaction.containsAll(itemSet))){
 				fitting = transaction;
-				if (stems.isEmpty()){
-					stems.addAll(transaction.getStems());
-				} else {
-					stems.retainAll(transaction.getStems());
-				}
 			}
 		}
-		
+
+/*
 		ArrayList description = new ArrayList();
 		if (fitting != null){
-			Map reverseMap = fitting.getReverseMap();
 			List sentence = fitting.getSentence();
-			int counter = itemSet.size();
-			boolean addWords = false;
-			String word;
+			Map reverseMap = fitting.getReverseMap();
+			String stem = null;
+			String word = null;
+			boolean addWord = false;
+			int foundWords = 0;
 			for (int i1=0; i1<sentence.size(); i1++){
 				word = (String) sentence.get(i1);
-				String stem = (String) reverseMap.get(word);
-				if (stem != null){
-					if (itemSet.contains(stem)){
-						addWords = true;
-						counter --;
-					}
-					if (addWords) {
-						description.add(word);
+				stem = (String) reverseMap.get(word);
+				if (foundWords>=itemSet.size()) {
+					addWord = false;
+				}
+				if ((stem!=null)&&(itemSet.contains(stem))){
+					foundWords++;
+					if (foundWords<=itemSet.size()) {
+						addWord = true;
 					}
 				}
-				if (counter == 0){
-					break;
+				if (addWord){
+					description.add(word);
+				}
+			}
+		} else {
+			description.addAll(basket.getDescriptionForItemSet(itemSet));
+		}
+		
+		return description;
+ */		
+		ArrayList description = new ArrayList();
+		if (fitting != null){
+			List sentence = fitting.getSentence();
+			Map reverseMap = fitting.getReverseMap();
+			String stem = null;
+			String word = null;
+			for (int i1=0; i1<sentence.size(); i1++){
+				word = (String) sentence.get(i1);
+				stem = (String) reverseMap.get(word);
+				if ((stem!=null)&&(itemSet.contains(stem))){
+					description.add(word);
 				}
 			}
 		} else {
