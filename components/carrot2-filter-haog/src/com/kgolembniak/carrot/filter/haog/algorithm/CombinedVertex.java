@@ -240,11 +240,14 @@ public class CombinedVertex extends Vertex{
 			final String str = phrase.userFriendlyTerms().trim();
 			//remove duplicated phrases
 			if (description.indexOf(str) == -1) {
-				description += str + " ";
+				if (i2>0) {
+					description += ", ";
+				}
+				description += str;
 				i2++;
 				//TODO get this parameter from params
 				if (i2>3) break;
-			}
+			} 				
 		}
 		
 		return description;
@@ -270,11 +273,12 @@ public class CombinedVertex extends Vertex{
 		
 		int i1 = 0;
 		for (Iterator it = descriptions.iterator(); it.hasNext();){
+			if (i1>0) {
+				description += ", ";
+			}
 			description += (String) it.next();
 			i1++;
-			if (i1<params.getMaxDescPhraseLength()){
-				description += " ";
-			} else {
+			if (i1 >= params.getMaxDescPhraseLength()){
 				break;
 			}
 		}
@@ -284,13 +288,12 @@ public class CombinedVertex extends Vertex{
 
 	/**
 	 * This method decides which phrase is more important and orders
-	 * phrases. This method is taken from  
-	 * {@link com.dawidweiss.carrot.filter.stc.algorithm.MergedCluster.createDescriptionPhrases()} 
+	 * phrases. Phrases contained in other are removed. 
 	 * @param params - Parameters needed to decide about phrase importance.
 	 * @return List of phrases ordered descending by their importance.
 	 */
 	private List getVertexPhrases(StcParameters params) {
-		ArrayList phrases = new ArrayList();
+		HashSet phrases = new HashSet();
 		if (documents==null){
 			getDocumentsFromBaseClusters();
 		}
@@ -308,13 +311,14 @@ public class CombinedVertex extends Vertex{
 		
 		Phrase firstPhrase;
 		Phrase secondPhrase;
-		for (int i1=0; i1<phrases.size(); i1++){
-			firstPhrase = (Phrase) phrases.get(i1);
+		HashSet removedPhrases = new HashSet();
+		for (Iterator it1 = phrases.iterator(); it1.hasNext();){
+			firstPhrase = (Phrase) it1.next();
 			
 			phraseLoop:
-			for (int i2=0; i2<phrases.size(); i2++){
-				if (i1!=i2){
-					secondPhrase = (Phrase) phrases.get(i2);
+			for (Iterator it2 = phrases.iterator(); it2.hasNext();){
+				secondPhrase = (Phrase) it2.next();
+				if (firstPhrase!=secondPhrase){
 					
 					List terms = firstPhrase.getTerms();
 					for (int i3=0; i3<terms.size(); i3++){
@@ -323,117 +327,33 @@ public class CombinedVertex extends Vertex{
 							continue phraseLoop;
 						}
 					}
-
-					firstPhrase.mostSpecific = false;
-					secondPhrase.mostGeneral = false;
+					
+					removedPhrases.add(firstPhrase);
 				}
 			}
 		}
 		
-		for (int i1=0; i1<phrases.size(); i1++){
-			firstPhrase = (Phrase) phrases.get(i1);
-			if (firstPhrase.mostGeneral) {
-				thisPhraseIsUseFull:
-				for (int i2=0; i2<phrases.size(); i2++){
-					secondPhrase = (Phrase) phrases.get(i2);
-					if ((i1!=i2)&&(secondPhrase.mostSpecific)) {
-						List terms = firstPhrase.getTerms();
-						for (int i3=0; i3<terms.size(); i3++){
-							final StemmedTerm term = (StemmedTerm) terms.get(i3);
-							if ((!term.isStopWord())&&
-								(!secondPhrase.getTerms().contains(term))){
-								continue thisPhraseIsUseFull;
-							}
-							
-						}
-
-						if ((firstPhrase.getCoverage() - secondPhrase.getCoverage()) < 
-		                    	params.getMostGeneralPhraseCoverage()){
-		                    	firstPhrase.setSelected(false);
-		                        break;
-		                }
-					}
-				}
-			}
-		}
-
-		for (int i1=0; i1<phrases.size(); i1++){
-			firstPhrase = (Phrase) phrases.get(i1);
-			for (int i2=0; i2<phrases.size(); i2++){
-				secondPhrase = (Phrase) phrases.get(i2);
-
-				if ((i1!=i2) && firstPhrase.isSelected() && 
-					secondPhrase.isSelected() && (firstPhrase.getCoverage() < 
-					secondPhrase.getCoverage())){
-
-                    float overlap = 0;
-                    float total = 0;
-					List terms = firstPhrase.getTerms();
-					for (int i3=0; i3<terms.size(); i3++){
-						final StemmedTerm term = (StemmedTerm) terms.get(i3); 
-						
-						if (!term.isStopWord()){
-							total += 1.0;
-							if (firstPhrase.getTerms().contains(term)) {
-								overlap += 1.0;
-							}
-						}
-					}
-
-					if ((overlap / total) > params.getMaxPhraseOverlap()){
-						firstPhrase.setSelected(false);
-                    }					
-				}
-			}
-		}
-
-		for (int i = 0; i < phrases.size(); i++){
-            Phrase current = (Phrase) phrases.get(i);
-            if (!current.mostGeneral && !current.mostSpecific){
-                current.setSelected(false);
-            }
-        }
+		phrases.removeAll(removedPhrases);
 		
         final Object [] objects = phrases.toArray();
         Arrays.sort(
             objects, 0, objects.length,
-            new Comparator()
-            {
-                public int compare(Object a, Object b)
-                {
+            new Comparator() {
+                public int compare(Object a, Object b) {
                     Phrase pa = (Phrase) a;
                     Phrase pb = (Phrase) b;
 
-                    if ((pa.isSelected() && pb.isSelected()) || (!pa.isSelected() && !pb.isSelected()))
-                    {
-                        if (pa.getCoverage() > pb.getCoverage())
-                        {
-                            return -1;
-                        }
-                        else if (pa.getCoverage() < pb.getCoverage())
-                        {
-                            return 1;
-                        }
-                        else
-                        {
-                            return 0;
-                        }
-                    }
-                    else
-                    {
-                        if (pa.isSelected())
-                        {
-                            return -1;
-                        }
-                        else
-                        {
-                            return 1;
-                        }
+                    if (pa.getCoverage() > pb.getCoverage()) {
+                        return -1;
+                    } else if (pa.getCoverage() < pb.getCoverage()){
+                        return 1;
+                    } else {
+                        return 0;
                     }
                 }
             }
         );
-
+		
         return java.util.Arrays.asList(objects);
 	}
 
