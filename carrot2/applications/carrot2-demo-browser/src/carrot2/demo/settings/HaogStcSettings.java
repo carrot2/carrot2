@@ -13,23 +13,23 @@
 
 package carrot2.demo.settings;
 
+import java.awt.Frame;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JComponent;
 
 import carrot2.demo.ProcessSettings;
+import carrot2.demo.ProcessSettingsBase;
 
 import com.dawidweiss.carrot.filter.stc.StcParameters;
 
 /**
  * Settings class for HAOG-STC with a generic input.
  * 
- * HAOG currently uses settings identical to STC, so we extend
- * from {@link carrot2.demo.settings.StcSettings} and return
- * {@link carrot2.demo.settings.StcSettingsDialog}.
+ * HAOG uses settings almoust identical to STC.
  */
-public class HaogStcSettings extends StcSettings implements ProcessSettings {
+public class HaogStcSettings extends ProcessSettingsBase implements ProcessSettings  {
 
     public HaogStcSettings() {
         this.params = new StcParameters().toMap();
@@ -46,6 +46,19 @@ public class HaogStcSettings extends StcSettings implements ProcessSettings {
     }
 
     public JComponent getSettingsComponent() {
-        return new StcSettingsDialog(this);
+        return new HaogStcSettingsDialog(this);
     }
+
+	public JComponent getSettingsComponent(Frame owner) {
+        return new HaogStcSettingsDialog(this);
+	}
+
+	public boolean isConfigured() {
+		return true;
+	}
+	
+	public boolean hasSettings() {
+        return true;
+    }
+
 }
