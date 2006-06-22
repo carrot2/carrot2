@@ -1,17 +1,6 @@
+/** Covered by Snowball license. */
 
-/*
- * Carrot2 project.
- *
- * Copyright (C) 2002-2006, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
- * All rights reserved.
- *
- * Refer to the full license file "carrot2.LICENSE"
- * in the root folder of the repository checkout or at:
- * http://www.carrot2.org/carrot2.LICENSE
- */
-
-package net.sf.snowball;
+package org.tartarus.snowball;
 import java.lang.reflect.InvocationTargetException;
 
 public class SnowballProgram {
@@ -65,7 +54,15 @@ public class SnowballProgram {
      */
     public String getCurrent()
     {
-	return current.toString();
+        String result = current.toString();
+        // Make a new StringBuffer.  If we reuse the old one, and a user of
+        // the library keeps a reference to the buffer returned (for example,
+        // by converting it to a String in a way which doesn't force a copy),
+        // the buffer size will not decrease, and we will risk wasting a large
+        // amount of memory.
+        // Thanks to Wolfram Esser for spotting this problem.
+        current = new StringBuffer();
+        return result;
     }
 
     // current string
@@ -355,7 +352,7 @@ public class SnowballProgram {
     protected int replace_s(int c_bra, int c_ket, String s)
     {
 	int adjustment = s.length() - (c_ket - c_bra);
-	current.replace(bra, ket, s);
+	current.replace(c_bra, c_ket, s);
 	limit += adjustment;
 	if (cursor >= c_ket) cursor += adjustment;
 	else if (cursor > c_bra) cursor = c_bra;

@@ -45,7 +45,8 @@ public class EnglishTest extends LanguageImplTestBase {
     protected String [][] getWordsToCompare() {
         return new String [][] {
                 {"pulps", "pulp"},
-                {"driving", "drive"}
+                {"driving", "drive"},
+                {"king's", "king"}
         };
     }
 
