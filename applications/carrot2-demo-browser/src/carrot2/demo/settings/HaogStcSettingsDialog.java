@@ -13,9 +13,6 @@
 
 package carrot2.demo.settings;
 
-import java.awt.Dimension;
-
-import javax.swing.Box;
 import javax.swing.JPanel;
 
 import com.dawidweiss.carrot.filter.stc.StcConstants;
@@ -60,9 +57,6 @@ class HaogStcSettingsDialog extends JPanel {
 
         builder.append(ThresholdHelper.createDoubleThreshold(settings, StcConstants.MERGE_THRESHOLD,
                 "Merge threshold:", 0, 1, 0.1, 0.25));
-        builder.append(Box.createRigidArea(new Dimension(0, 5)));
-        builder.append(ThresholdHelper.createIntegerThreshold(settings, StcConstants.MAX_CLUSTERS,
-                "Max clusters:", 2, 30, 0, 4));
 
         builder.appendSeparator("Label creation");
         builder.append(ThresholdHelper.createIntegerThreshold(settings, StcConstants.MAX_PHRASE_LENGTH,
