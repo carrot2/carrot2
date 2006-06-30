@@ -2,10 +2,9 @@
 <project name="bring-to-date" default="test">
 
     <target name="prepare">
-        <taskdef name="bringToDate" 
-        	classname="com.dawidweiss.carrot.ant.BringToDate" />
-		<typedef name="dependencyPath"
-			classname="com.dawidweiss.carrot.ant.DependencyPath" />
+        <taskdef resource="res/carrot2-antlib.xml">
+            <classpath location="../../tmp/build/bootstrap" />
+        </taskdef>
 
 		<subant target="prepare">
 			<fileset dir="deps" includes="**/build.xml"/>
@@ -30,17 +29,17 @@
 		</copy>
 
 		<bringToDate componentDescriptor="bringToDate.checkFilesInSubprojectsUpToDate/a/a.dep.xml">
-			<dependencies id="dependencies">
+			<dependencies id="dep.pre">
 				<fileset dir="bringToDate.checkFilesInSubprojectsUpToDate">
 					<include name="**/*.dep.xml" />
 				</fileset>
 			</dependencies>
 		</bringToDate>
 
-		<dependencyPath id="a.dependency"
+		<component-path id="a.dependency"
 			componentDescriptor="bringToDate.checkFilesInSubprojectsUpToDate/a/a.dep.xml" profile="">
-			<dependencies refid="dependencies" />
-		</dependencyPath>
+			<dependencies refid="dep.pre" />
+		</component-path>
 
 		<java classname="A" failonerror="true">
 			<classpath refid="a.dependency" />
@@ -67,7 +66,11 @@
 		</touch>
 
 		<bringToDate componentDescriptor="bringToDate.checkFilesInSubprojectsUpToDate/a/a.dep.xml">
-			<dependencies refid="dependencies" /> 
+			<dependencies id="dep.post">
+				<fileset dir="bringToDate.checkFilesInSubprojectsUpToDate">
+					<include name="**/*.dep.xml" />
+				</fileset>
+			</dependencies>
 		</bringToDate>
 
 		<java classname="A" failonerror="true">

@@ -13,16 +13,13 @@
 
 package com.dawidweiss.carrot.local.controller.loaders;
 
+import java.util.*;
+
 import bsh.EvalError;
 import bsh.Interpreter;
 
 import com.dawidweiss.carrot.core.local.LocalComponent;
 import com.dawidweiss.carrot.core.local.LocalComponentFactory;
-import com.dawidweiss.carrot.core.local.LocalComponentFactoryBase;
-
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 
 /**
@@ -33,7 +30,7 @@ import java.util.Map;
  * @author Dawid Weiss
  * @version $Revision$
  */
-public class PlainComponentFactory extends LocalComponentFactoryBase {
+public class PlainComponentFactory implements LocalComponentFactory {
     /**
      * BeanShell initialization script for new components.
      */
@@ -50,16 +47,6 @@ public class PlainComponentFactory extends LocalComponentFactoryBase {
     private final Class componentClass;
 
     /**
-     * Name of this factory. 
-     */
-    private final String name;
-    
-    /**
-     * Description of this factory. 
-     */
-    private final String description;
-
-    /**
      * Initializes the factory wrapper.
      *
      * @param componentClass Full class name of the component class. The component must have a
@@ -68,16 +55,12 @@ public class PlainComponentFactory extends LocalComponentFactoryBase {
      *                       or <code>null</code>.
      * @param defaults       A map of parameters used to initialize every created component,
      *                       or <code>null</code>.
-     * @param name           A string with a name of this factory, or <code>null</code>.
-     * @param description    A string with a description of this factory, or <code>null</code>.
      */
     public PlainComponentFactory(Class componentClass, String initBeanshell,
-        HashMap defaults, String name, String description) throws ComponentInitializationException {
+        HashMap defaults) throws ComponentInitializationException {
         this.initBeanShell = initBeanshell;
         this.defaults = defaults;
         this.componentClass = componentClass;
-        this.name = name;
-        this.description = description;
 
         try {
             getInstance();
@@ -137,18 +120,4 @@ public class PlainComponentFactory extends LocalComponentFactoryBase {
 
         return component;
     }
-    
-	/**
-	 * @see com.dawidweiss.carrot.core.local.LocalComponentFactory#getDescription()
-	 */
-	public String getDescription() {
-		return description;
-	}
-    
-	/**
-	 * @see com.dawidweiss.carrot.core.local.LocalComponentFactory#getName()
-	 */
-	public String getName() {
-		return name;
-	}
 }

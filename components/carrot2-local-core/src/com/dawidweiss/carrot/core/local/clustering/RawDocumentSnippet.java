@@ -13,7 +13,6 @@
 
 package com.dawidweiss.carrot.core.local.clustering;
 
-import com.stachoodev.util.common.*;
 
 /**
  * An implementation of the
@@ -63,14 +62,12 @@ public class RawDocumentSnippet extends RawDocumentBase implements Cloneable
      * @param url
      * @param score
      */
-    public RawDocumentSnippet(Object id, String title, String snippet,
-        String url, float score)
+    public RawDocumentSnippet(Object id, String title, String snippet, 
+            String url, float score)
     {
+        super(url, title, snippet);
         this.id = id;
         this.score = score;
-        propertyHelper.setProperty(PROPERTY_TITLE, title);
-        propertyHelper.setProperty(PROPERTY_URL, url);
-        propertyHelper.setProperty(PROPERTY_SNIPPET, snippet);
     }
 
     /*
@@ -153,7 +150,7 @@ public class RawDocumentSnippet extends RawDocumentBase implements Cloneable
             result = result && getSnippet().equals(otherSnippet.getSnippet());
         }
 
-        return result && propertyHelper.equals(otherSnippet.propertyHelper);
+        return result && super.getPropertyHelper().equals(otherSnippet.getPropertyHelper());
     }
 
     /*
@@ -181,7 +178,7 @@ public class RawDocumentSnippet extends RawDocumentBase implements Cloneable
             return getSnippet().hashCode();
         }
 
-        return propertyHelper.hashCode();
+        return super.getPropertyHelper().hashCode();
     }
 
     /*
@@ -192,7 +189,7 @@ public class RawDocumentSnippet extends RawDocumentBase implements Cloneable
     public Object clone() throws CloneNotSupportedException
     {
         RawDocumentSnippet obj = new RawDocumentSnippet(id, getTitle(), null, null, score);
-        obj.propertyHelper = (PropertyHelper) propertyHelper.clone();
+        obj.clonePropertiesFrom(this);
         return obj;
     }
 }

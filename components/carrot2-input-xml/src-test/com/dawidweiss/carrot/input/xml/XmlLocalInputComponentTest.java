@@ -16,23 +16,16 @@ package com.dawidweiss.carrot.input.xml;
 import java.util.HashMap;
 import java.util.List;
 
-import com.dawidweiss.carrot.core.local.LocalComponent;
-import com.dawidweiss.carrot.core.local.LocalComponentFactory;
-import com.dawidweiss.carrot.core.local.LocalComponentFactoryBase;
-import com.dawidweiss.carrot.core.local.LocalControllerBase;
-import com.dawidweiss.carrot.core.local.LocalInputComponent;
-import com.dawidweiss.carrot.core.local.LocalProcessBase;
-import com.dawidweiss.carrot.core.local.ProcessingException;
+import junit.framework.TestCase;
+
+import com.dawidweiss.carrot.core.local.*;
 import com.dawidweiss.carrot.core.local.clustering.RawCluster;
 import com.dawidweiss.carrot.core.local.clustering.RawDocument;
 import com.dawidweiss.carrot.core.local.impl.ClustersConsumerOutputComponent;
 import com.dawidweiss.carrot.core.local.impl.DocumentsConsumerOutputComponent;
 import com.dawidweiss.carrot.core.local.linguistic.Language;
-import com.dawidweiss.carrot.input.xml.XmlLocalInputComponent;
 import com.dawidweiss.carrot.util.tokenizer.languages.english.English;
 import com.stachoodev.carrot.filter.lingo.local.LingoLocalFilterComponent;
-
-import junit.framework.TestCase;
 
 /**
  * Tests the component. 
@@ -64,7 +57,7 @@ public class XmlLocalInputComponentTest extends TestCase {
 		LocalControllerBase controller;
 		
         // Some output component
-        LocalComponentFactory outputFactory = new LocalComponentFactoryBase()
+        LocalComponentFactory outputFactory = new LocalComponentFactory()
         {
             public LocalComponent getInstance()
             {
@@ -72,7 +65,7 @@ public class XmlLocalInputComponentTest extends TestCase {
             }
         };
         
-        LocalComponentFactory inputFactory = new LocalComponentFactoryBase()
+        LocalComponentFactory inputFactory = new LocalComponentFactory()
         {
             public LocalComponent getInstance()
             {
@@ -199,7 +192,7 @@ public class XmlLocalInputComponentTest extends TestCase {
 		LocalControllerBase controller;
 		
         // Some output component
-        LocalComponentFactory outputFactory = new LocalComponentFactoryBase()
+        LocalComponentFactory outputFactory = new LocalComponentFactory()
         {
             public LocalComponent getInstance()
             {
@@ -208,7 +201,7 @@ public class XmlLocalInputComponentTest extends TestCase {
         };
         
 		// Clustering component here.
-		LocalComponentFactory lingoFactory = new LocalComponentFactoryBase() {
+		LocalComponentFactory lingoFactory = new LocalComponentFactory() {
 			public LocalComponent getInstance()
 			{
 				HashMap defaults = new HashMap();
@@ -228,7 +221,7 @@ public class XmlLocalInputComponentTest extends TestCase {
 			}
 		};
         
-        LocalComponentFactory inputFactory = new LocalComponentFactoryBase()
+        LocalComponentFactory inputFactory = new LocalComponentFactory()
         {
             public LocalComponent getInstance()
             {

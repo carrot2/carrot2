@@ -1,4 +1,4 @@
-
+    
 <!--
   ## A generic template for building a Carrot2 component.
   -->
@@ -123,6 +123,18 @@
     <delete failonerror="true" includeemptydirs="true" quiet="true">
         <fileset dir="${project.dir}/tmp" defaultexcludes="false" />
     </delete>
+	<if>
+		<equals arg1="${type}" arg2="wartype" casesensitive="false" />
+		<then>
+			<echo>${type}</echo>
+			<delete failonerror="true" includeemptydirs="true" quiet="true">
+			    <fileset dir="${project.dir}" defaultexcludes="false">
+			    	<include name="web/WEB-INF/classes/**" />
+			    	<include name="web/WEB-INF/lib/**" />
+			    </fileset>
+			</delete>
+		</then>
+	</if>    
   </target>
   <!-- }}} -->
 
@@ -138,42 +150,40 @@
   <target name="discover.classpath" depends="discover.classpath:autodependency,discover.classpath:empty">
   </target>
 
-  <target name="_deps_uptodate" unless="no.bringing.dependencies.uptodate">
-    <bringToDate componentDescriptor="${component.descriptor}" dependenciesOnly="true" profile="${profile}">
-        <dependencies refid="dependencies" />
-    </bringToDate>
-  </target>
-  
-  <target name="discover.classpath:autodependency" if="tmp:dep.file.available">
-    <path id="dependencies">
-        <fileset dir="${carrot2.cvs.dir}">
-            <include name="lib/**/*.dep.xml" />
-            <include name="components/*/*.dep.xml" />
-            <include name="components/*/lib/*.dep.xml" />        
-
-            <include name="applications/carrot2-demo-browser/**/*.dep.xml" />
-        </fileset>
+  <target name="discover.classpath:autodependency" depends="bootstrap:dependencies" if="tmp:dep.file.available">
+    <dependency-path id="dependencies.local">
         <fileset dir="${project.dir}">
             <include name="lib/*.dep.xml" />
         </fileset>
-        <path path="${extra.dependencies.path}" />
-    </path>
+    </dependency-path>
 
-	<antcall target="_deps_uptodate" />
+    <if>
+        <not><isset property="no.bringing.dependencies.uptodate" /></not>
+        <then>
+            <bringToDate componentDescriptor="${component.descriptor}" dependenciesOnly="true" profile="${profile}">
+                <dependencies refid="dependencies" />
+                <dependencies refid="dependencies.local" />
+                <override property="cache:deps" />
+                <override reference="c2.tasks.classloader" />
+            </bringToDate>
+        </then>
+    </if>
 
-    <dependencyPath id="classpath.dependencies"
+    <component-path id="classpath.dependencies"
         componentDescriptor="${component.descriptor}" profile="${profile}">
         <dependencies refid="dependencies" />
-    </dependencyPath>
+        <dependencies refid="dependencies.local" />
+    </component-path>
 
     <printDependencies componentDescriptor="${component.descriptor}"
                        property="string:component.dependencies" profile="${profile}">
         <dependencies refid="dependencies" />
+        <dependencies refid="dependencies.local" />
     </printDependencies>
   </target>
 
   <target name="discover.classpath:empty" unless="tmp:dep.file.available">
-    <path id="classpath.dependencies" />
+    <dependency-path id="classpath.dependencies" />
     <property name="string:component.dependencies" value="(no dependency file, unknown)" />
   </target>
   
@@ -188,13 +198,16 @@
         profile="${profile}"
         todir="${libs.dir}">
         <dependencies refid="dependencies" />
+        <dependencies refid="dependencies.local" />
     </copyDependencies>
     <echo message="done." />
     
     <condition property="merge.carrot2.components" value="true">
         <equals arg1="${single.jar}" arg2="true" casesensitive="false" />
     </condition>
-    <antcall target="merge.carrot2.components" />
+    <antcall target="merge.carrot2.components" inheritAll="true"> 
+        <reference refid="dependencies" />
+    </antcall>
   </target>
 
   <target name="merge.carrot2.components" if="merge.carrot2.components">
@@ -363,10 +376,13 @@ Tomcat:      ${tomcat.url}
 	</taskdef>
   </target>
   
-  <target name="build.wartype" depends="prepare,build.wartype.internal,copy.dependencies">
+  <target name="build.wartype">
+    <property name="copy.dependencies" value="true" />
+    <property name="libs.dir" location="${build.dir}/type-war/WEB-INF/lib" />
+    <antcall target="build.wartype.internal" inheritall="true" inheritrefs="true" />
   </target>
 
-  <target name="build.wartype.internal" depends="prepare">
+  <target name="build.wartype.internal" depends="prepare,copy.dependencies">
     <property name="dist.extension" value="-war" />
   
     <tstamp>
@@ -406,7 +422,9 @@ Tomcat:      ${tomcat.url}
     </fail>
     <copy toDir="${build.dir}/type-war">
         <fileset dir="${src-webapp.path}">
-          <exclude name="WEB-INF/web.xml.template"/>
+          <exclude name="WEB-INF/web.xml.template" />
+          <exclude name="WEB-INF/lib" />
+          <exclude name="WEB-INF/classes" />
         </fileset>
     </copy>
 
@@ -577,6 +595,7 @@ ${string:component.dependencies}
     <bringToDate componentDescriptor="${component.descriptor}"
                  dependenciesOnly="true" profile="${profile}">
         <dependencies refid="dependencies" />
+        <dependencies refid="dependencies.local" />
     </bringToDate>
 
 	<mkdir dir="${distribution.dir}" />
@@ -586,6 +605,7 @@ ${string:component.dependencies}
         profile="${profile}"
         todir="${distribution.dir}">
         <dependencies refid="dependencies" />
+        <dependencies refid="dependencies.local" />
     </copyDependencies>
   </target>
   <!-- }}} -->
@@ -601,6 +621,7 @@ ${string:component.dependencies}
     <collectMeta componentDescriptor="${component.descriptor}" type="proguard" 
                  property="proguard.rules" profile="${profile}">
         <dependencies refid="dependencies" />
+        <dependencies refid="dependencies.local" />
     </collectMeta>
 
     <echo file="${obf.rules.file}">${proguard.rules}</echo>

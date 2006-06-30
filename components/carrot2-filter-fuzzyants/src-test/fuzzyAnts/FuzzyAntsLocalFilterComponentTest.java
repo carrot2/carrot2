@@ -1,3 +1,16 @@
+
+/*
+ * Carrot2 project.
+ *
+ * Copyright (C) 2002-2006, Dawid Weiss, Stanisław Osiński.
+ * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the repository checkout or at:
+ * http://www.carrot2.org/carrot2.LICENSE
+ */
+
 package fuzzyAnts;
 
 import java.io.File;
@@ -55,7 +68,7 @@ public class FuzzyAntsLocalFilterComponentTest extends TestCase {
 
         // Initialize an input component that takes the input XML file and pushes
         // documents from it to subsequent components.
-        final LocalComponentFactory inputFactory = new LocalComponentFactoryBase() {
+        final LocalComponentFactory inputFactory = new LocalComponentFactory() {
             public LocalComponent getInstance() {
                 return new XmlLocalInputComponent();
             }
@@ -64,14 +77,14 @@ public class FuzzyAntsLocalFilterComponentTest extends TestCase {
         controller.addLocalComponentFactory("input", inputFactory);
 
         // Add a factory of clustering components.
-        final LocalComponentFactory lingo3GFactory = new LocalComponentFactoryBase() {
+        final LocalComponentFactory lingo3GFactory = new LocalComponentFactory() {
             public LocalComponent getInstance() {
                 return new FuzzyAntsLocalFilterComponent();
             }
         };
         controller.addLocalComponentFactory("clusterer", lingo3GFactory);
 
-        final LocalComponentFactory languageGuesserFilterFactory = new LocalComponentFactoryBase() {
+        final LocalComponentFactory languageGuesserFilterFactory = new LocalComponentFactory() {
             public LocalComponent getInstance() {
                 // Default language is english.
                 return new RawDocumentDummyLanguageDetection("en");
@@ -80,7 +93,7 @@ public class FuzzyAntsLocalFilterComponentTest extends TestCase {
         controller.addLocalComponentFactory(
             "filter.dummy-language-guesser", languageGuesserFilterFactory);
 
-        final LocalComponentFactory snippetTokenizerFilterFactory = new LocalComponentFactoryBase() {
+        final LocalComponentFactory snippetTokenizerFilterFactory = new LocalComponentFactory() {
             public LocalComponent getInstance() {
                 return new SnippetTokenizerLocalFilterComponent();
             }
@@ -88,7 +101,7 @@ public class FuzzyAntsLocalFilterComponentTest extends TestCase {
         controller.addLocalComponentFactory("filter.tokenizer",
             snippetTokenizerFilterFactory);
 
-        final LocalComponentFactory caseNormalizerFilterFactory = new LocalComponentFactoryBase() {
+        final LocalComponentFactory caseNormalizerFilterFactory = new LocalComponentFactory() {
             public LocalComponent getInstance() {
                 return new CaseNormalizerLocalFilterComponent(
                     new SmartCaseNormalizer());
@@ -98,7 +111,7 @@ public class FuzzyAntsLocalFilterComponentTest extends TestCase {
             caseNormalizerFilterFactory);
 
         // Add a collector for the output clusters.
-        final LocalComponentFactory output = new LocalComponentFactoryBase() {
+        final LocalComponentFactory output = new LocalComponentFactory() {
             public LocalComponent getInstance() {
                 return new ClustersConsumerOutputComponent();
             }

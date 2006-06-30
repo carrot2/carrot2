@@ -20,16 +20,15 @@ import org.apache.commons.pool.impl.*;
 
 /**
  * A complete base implementation of the
- * {@link com.dawidweiss.carrot.core.local.LocalController}interface. Also
- * implements the {@link LocalControllerContext}interface.
+ * {@link com.dawidweiss.carrot.core.local.LocalController} interface. Also
+ * implements the {@link LocalControllerContext} interface.
  *
  * @author Stanislaw Osinski
  * @author Dawid Weiss
  * 
  * @version $Revision$
  */
-public class LocalControllerBase implements LocalController,
-    LocalControllerContext
+public class LocalControllerBase implements LocalController, LocalControllerContext
 {
     /** Stores local component pools */
     protected Map componentPools;

@@ -12,6 +12,16 @@ HEAD
           #  Snowball stemmers were quite old. King's was stemmed into King' for example. 
              Upgrade fixes that problem.
           
+          o  Build system improvements (speed).
+
+          +  Demo web application using local interfaces. Initial version.
+          
+          o  Core classes refactoring. Several classes removed or slightly redesigned to simplify 
+             code.
+
+          #  Snowball stemmers were quite old. King's was stemmed into King' for example. 
+             Upgrade fixes that problem.
+          
           +  Local interface to FuzzyAnts added.
 
           +  Added proguard obfuscation infrastructure.

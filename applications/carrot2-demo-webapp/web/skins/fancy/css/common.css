@@ -1,0 +1,53 @@
+body {
+  font-family:          Trebuchet MS, Tahoma, sans-serif;
+  font-size:            13px;
+  margin:               0px;
+  padding:              0px;
+}
+
+table {
+  border-collapse:      collapse;
+  font-family:          Trebuchet MS, Tahoma, sans-serif;
+  font-size:            13px;
+  margin:               0px;
+}
+
+input {
+  font-family:          Trebuchet MS, Tahoma, sans-serif;
+  font-size:            13px;
+}
+
+td {
+  padding: 0;
+}
+
+img {
+  border: 0;
+}
+
+a {
+  color: #1678C4;
+}
+
+a:hover {
+  color: #005393;
+}
+
+form {
+  margin: 0;
+}
+
+select {
+  font-family:          Trebuchet MS, Tahoma, sans-serif;
+  font-size:            13px;
+  margin-left:          5px;
+}
+
+label {
+  color: #808080;
+}
+
+* html label.inline-cb-label {
+  position: relative;
+  bottom: 3px;
+}

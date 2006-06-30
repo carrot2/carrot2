@@ -6,12 +6,7 @@
     <property name="project.dir"      location="${basedir}" />
     <property name="carrot2.cvs.dir"  location="../.." />
     <property name="dist.name"        value="carrot2-input-yahooapi" />
+    <property name="type" value="jartype" />
 
     <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
-
-	<target name="build">
-		<ant antfile="build.local.xml" inheritall="false"/>
-		<ant antfile="build.remote.xml" inheritall="false" />
-	</target>
-
 </project>

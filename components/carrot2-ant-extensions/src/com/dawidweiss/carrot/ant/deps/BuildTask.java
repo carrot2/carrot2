@@ -15,10 +15,12 @@ package com.dawidweiss.carrot.ant.deps;
 
 import org.apache.tools.ant.Project;
 
+import com.dawidweiss.carrot.ant.tasks.BringToDateTask;
+
 /**
  * Each build trigger stored in {@link BuildElement} 
  * must implement this interface.
  */
 interface BuildTask {
-	void execute(Project project, String profile);
+	void execute(Project project, String profile, BringToDateTask task);
 }

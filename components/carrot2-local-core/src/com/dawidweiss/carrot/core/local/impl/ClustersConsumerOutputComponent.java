@@ -44,13 +44,12 @@ public class ClustersConsumerOutputComponent extends LocalOutputComponentBase
                 }));
 
     /**
-     * Capabilities required of the predecessor component. Only {@link
-     * RawClustersProducer} is required, because we can thus neglect the fact
-     * that document references are not passed. Clusters have references to
-     * these documents anyway.
+     * Capabilities required of the predecessor component. No specific 
+     * requirements are needed (we can use this component together with
+     * {@link RawDocumentsProducer}s or {@link RawClustersProducer}s. 
      */
     private static final Set CAPABILITIES_PREDECESSOR = new HashSet(Arrays.asList(
-                new Object[] { RawClustersProducer.class }));
+                new Object[] { }));
 
     /**
      * An array where clusters received from the predecessor component are

@@ -5,7 +5,7 @@
         <fail>Bootstrap is intended for inclusion only.</fail>
     </target>
 
-    <target name="_bootstrap.compile">
+    <target name="bootstrap:compile">
         <mkdir dir="${bootstrap.dir}" />
         <javac destdir     = "${bootstrap.dir}"
                debug       = "true"
@@ -14,6 +14,7 @@
                includeantruntime = "true"
                includejavaruntime = "false"
 			   encoding = "UTF-8"
+               source="1.2" target="1.2"
         >
             <src path="${carrot2.cvs.dir}/components/carrot2-ant-extensions/src" />
             <classpath>
@@ -27,46 +28,44 @@
                 <include name="catalog.xml" />
                 <include name="component-dependency.dtd" />
             </fileset>
+            <fileset dir="${carrot2.cvs.dir}/components/carrot2-ant-extensions/src/res">
+                <include name="*antlib.xml" />
+            </fileset>
         </copy>
     </target>
 
-    <target name="bootstrap" depends="_bootstrap.compile">
+    <target name="bootstrap" depends="bootstrap:compile">
         <path id="bootstrap">
             <pathelement location="${bootstrap.dir}" />
             <fileset dir="${carrot2.cvs.dir}/lib/compile-time" includes="resolver.jar" />        
         </path>
 
-        <taskdef name="bringToDate" 
-            classname="com.dawidweiss.carrot.ant.BringToDate">
-            <classpath refid="bootstrap" />
-        </taskdef>
-        <typedef name="dependencyPath"
-            classname="com.dawidweiss.carrot.ant.DependencyPath">
-            <classpath refid="bootstrap" />
-        </typedef>
-        <taskdef name="mostRecentFileDate" 
-            classname="com.dawidweiss.carrot.ant.MostRecentFileDate">
-            <classpath refid="bootstrap" />
-        </taskdef>    
-        <taskdef name="printDependencies" 
-            classname="com.dawidweiss.carrot.ant.PrintDependencies">
-            <classpath refid="bootstrap" />
-        </taskdef>
-        <taskdef name="copyDependencies"
-            classname="com.dawidweiss.carrot.ant.CopyDependencies">
-            <classpath refid="bootstrap" />
-        </taskdef>
-        <taskdef name="licenseList"
-            classname="com.dawidweiss.carrot.ant.LicenseList">
-            <classpath refid="bootstrap" />
-        </taskdef>
-        <taskdef name="licenseReplace"
-            classname="com.dawidweiss.carrot.ant.LicenseReplace">
-            <classpath refid="bootstrap" />
-        </taskdef>
-        <taskdef name="collectMeta" 
-            classname="com.dawidweiss.carrot.ant.CollectMeta">
-            <classpath refid="bootstrap" />
-        </taskdef>
+        <taskdef resource="res/carrot2-antlib.xml" 
+            loaderref="c2.tasks.classloader" classpathref="bootstrap" />
+    </target>
+    
+    <target name="bootstrap:dependencies">
+        <property name="project.dir" value="." />
+        <!--
+          Part of the trickery of scanning "dependencies" path only once and caching the component
+          descriptors found on the classpath is to load the path in the topmost ant file (project)
+          and then pass it to subprojects to reuse. Unfortunately, because subprojects
+          redefine classloaders of custom tasks, the reference cannot be simply reused as-is
+          (at least I didn't find a way to do it). We thus serialize a map of descriptors
+          and pass them as a project property.
+          -->
+        <dependency-path id="dependencies" cacheProperty="cache:deps">
+            <fileset dir="${carrot2.cvs.dir}">
+                <include name="lib/**/*.dep.xml" />
+                <include name="components/*/*.dep.xml" />
+                <include name="components/*/lib/*.dep.xml" />        
+
+                <include name="applications/carrot2-demo-browser/**/*.dep.xml" />
+            </fileset>
+            <dependency-path path="${extra.dependencies.path}" />
+        </dependency-path>
+        <loadPath>
+            <dependencies refid="dependencies" />
+        </loadPath>
     </target>
 </project>

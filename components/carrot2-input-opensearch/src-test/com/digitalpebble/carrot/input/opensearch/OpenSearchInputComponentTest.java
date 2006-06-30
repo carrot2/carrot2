@@ -37,7 +37,7 @@ public class OpenSearchInputComponentTest extends junit.framework.TestCase {
      * Sends a sample query to icerocket's OpenSearch feed.
      */
     public void testIceRocket() throws Exception {
-        final LocalComponentFactory inputFactory = new LocalComponentFactoryBase() {
+        final LocalComponentFactory inputFactory = new LocalComponentFactory() {
             public LocalComponent getInstance() {
                 return new OpenSearchInputComponent("http://blogs.icerocket.com/search?q={searchTerms}&rss=1&os=1&p={startPage}&n={count}");
             }
@@ -61,7 +61,7 @@ public class OpenSearchInputComponentTest extends junit.framework.TestCase {
 		LocalControllerBase controller;
 		
         // Some output component
-        LocalComponentFactory outputFactory = new LocalComponentFactoryBase() {
+        LocalComponentFactory outputFactory = new LocalComponentFactory() {
             public LocalComponent getInstance() {
                 return new DocumentsConsumerOutputComponent();
             }

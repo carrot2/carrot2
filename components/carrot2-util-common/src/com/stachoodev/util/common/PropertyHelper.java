@@ -223,6 +223,29 @@ public class PropertyHelper implements PropertyProvider, Cloneable
             propertyProvider.setProperty(key.toString(), properties.get(key));
         }
     }
+    
+    /**
+     * Sets pairs of <code>String,Object</code> properties in a given
+     * {@link PropertyProvider}.
+     * 
+     * @param propertyProvider The {@link PropertyProvider}to which the
+     *            properties will be copied
+     * @param properties An array of two-element arrays, where the first
+     * element is a {@link String} and the second is an {@link Object}.
+     */
+    public static void setProperties(PropertyProvider propertyProvider, Object [][] properties) {
+        try {
+            for (int i = 0; i < properties.length; i++) {
+                final Object [] subarray = properties[i];
+                if (subarray.length != 2) {
+                    throw new IllegalArgumentException("An array of two-element arrays is required.");
+                }
+                propertyProvider.setProperty((String) subarray[0], subarray[1]);
+            }
+        } catch (ClassCastException ex) {
+            throw new IllegalArgumentException("Key is not a string.");
+        }
+    }
 
     /**
      * Returns a {@link Comparator}for given <code>double</code> property. If
@@ -348,20 +371,25 @@ public class PropertyHelper implements PropertyProvider, Cloneable
     }
 
     /**
-     * Creates a <b>shallow </b> copy of this PropertyHelper.
-     *  
+     * Creates a <b>shallow</b> copy of this object's properties map.
      */
     public Object clone() throws CloneNotSupportedException
     {
-        PropertyHelper propertyHelper = new PropertyHelper();
-
-        // Make a shallow copy of the properties
-        if (properties != null)
-        {
-            propertyHelper.properties = new Flat3Map();
-            propertyHelper.properties.putAll(properties);
-        }
-
+        final PropertyHelper propertyHelper = new PropertyHelper();
+        propertyHelper.copyFrom(this);
         return propertyHelper;
+    }
+
+    /**
+     * Copies properties from another {@link PropertyHelper}, replacing
+     * any existing properties if they overlap.
+     */
+    public void copyFrom(PropertyHelper other) {
+        if (other.properties != null) {
+            if (this.properties == null) {
+                this.properties = new Flat3Map();
+            }
+            this.properties.putAll(other.properties);
+        }
     }
 }

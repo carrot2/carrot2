@@ -13,17 +13,17 @@
 
 package com.dawidweiss.carrot.local.controller;
 
-import com.dawidweiss.carrot.core.local.LocalComponent;
-import com.dawidweiss.carrot.core.local.LocalComponentFactoryBase;
-
 import java.util.*;
+
+import com.dawidweiss.carrot.core.local.LocalComponent;
+import com.dawidweiss.carrot.core.local.LocalComponentFactory;
 
 
 /**
  * A stub implementation of a component factory that produces output
  * components
  */
-public class StubOutputComponentFactory extends LocalComponentFactoryBase {
+public class StubOutputComponentFactory implements LocalComponentFactory {
     /* */
     private List createdInstances = new ArrayList();
 

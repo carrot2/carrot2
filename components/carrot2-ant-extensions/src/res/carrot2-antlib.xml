@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<antlib>
+        <!-- types -->
+
+        <typedef name="dependency-path"
+            classname="com.dawidweiss.carrot.ant.types.DependencyPath" >
+        </typedef>
+
+        <typedef name="component-path"
+            classname="com.dawidweiss.carrot.ant.types.ComponentClasspath">
+        </typedef>
+
+        <!-- tasks -->
+
+        <typedef name="loadPath"
+            classname="com.dawidweiss.carrot.ant.tasks.LoadDependencyPath">
+        </typedef>
+        
+        <taskdef name="bringToDate" 
+            classname="com.dawidweiss.carrot.ant.tasks.BringToDateTask">
+        </taskdef>
+        
+        <taskdef name="mostRecentFileDate" 
+            classname="com.dawidweiss.carrot.ant.tasks.MostRecentFileDateTask">
+        </taskdef>
+        
+        <taskdef name="printDependencies" 
+            classname="com.dawidweiss.carrot.ant.tasks.PrintDependenciesTask">
+        </taskdef>
+        
+        <taskdef name="copyDependencies"
+            classname="com.dawidweiss.carrot.ant.tasks.CopyDependenciesTask">
+        </taskdef>
+        
+        <taskdef name="licenseList"
+            classname="com.dawidweiss.carrot.ant.tasks.LicenseListTask">
+        </taskdef>
+        
+        <taskdef name="licenseReplace"
+            classname="com.dawidweiss.carrot.ant.tasks.LicenseReplaceTask">
+        </taskdef>
+        
+        <taskdef name="collectMeta" 
+            classname="com.dawidweiss.carrot.ant.tasks.CollectMetaTask">
+        </taskdef>
+</antlib>

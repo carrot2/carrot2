@@ -3,7 +3,7 @@ import com.dawidweiss.carrot.core.local.*;
 import com.dawidweiss.carrot.core.local.impl.*;
 import com.dawidweiss.carrot.local.controller.*;
 
-factory = new LocalComponentFactoryBase() {
+factory = new LocalComponentFactory() {
     public LocalComponent getInstance() {
         return new RawDocumentDummyLanguageDetection("en");
     }

@@ -13,7 +13,10 @@
 
 package com.dawidweiss.carrot.local.controller;
 
+import java.util.Map;
+
 import com.dawidweiss.carrot.core.local.LocalComponentFactory;
+import com.stachoodev.util.common.PropertyProviderBase;
 
 
 /**
@@ -23,7 +26,7 @@ import com.dawidweiss.carrot.core.local.LocalComponentFactory;
  * @author Dawid Weiss
  * @version $Revision$
  */
-public class LoadedComponentFactory {
+public class LoadedComponentFactory extends PropertyProviderBase {
     /**
      * The factory instance.
      */
@@ -58,5 +61,12 @@ public class LoadedComponentFactory {
      */
     public String getId() {
         return id;
+    }
+    
+    /**
+     * Expose all properties.
+     */
+    public Map getProperties() {
+        return super.getProperties();
     }
 }

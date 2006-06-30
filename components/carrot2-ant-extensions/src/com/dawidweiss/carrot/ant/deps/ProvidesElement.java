@@ -14,6 +14,7 @@
 package com.dawidweiss.carrot.ant.deps;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.*;
 
 import org.apache.tools.ant.BuildException;
@@ -21,17 +22,19 @@ import org.apache.tools.ant.Project;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
+import com.dawidweiss.carrot.ant.tasks.BringToDateTask;
+
 /**
  * A component can provide a set of files in a given profile (or in the default
  * profile). Each set of provided files can also have a set of 
  * conditions that trigger builds and meta information snippets.
  */
-class ProvidesElement {
+class ProvidesElement implements Serializable {
     /**
      * Meta information snippet in a <code>meta</code> tag inside
      * a <code>provides</code> element. 
      */
-    final static class Meta {
+    final static class Meta implements Serializable {
         final String type;
         final String content;
         public Meta(String type, String content) {
@@ -121,7 +124,7 @@ class ProvidesElement {
 	 * Brings the provided files to date using 'build' element,
      * if it exists. 
 	 */
-	public void bringUpToDate(Project project, String currentProfile) throws BuildException {
+	public void bringUpToDate(Project project, String currentProfile, BringToDateTask task) throws BuildException {
         boolean rebuild = false;
 
         if (files != null) {
@@ -156,12 +159,12 @@ class ProvidesElement {
             // Component provides no files. Perform builds unconditionally.
             rebuild = true;
         }
-        
+
         // make a rebuild.
         if (rebuild) {
 	        for (Iterator i = builds.iterator(); i.hasNext();) {
 	            BuildElement build = (BuildElement) i.next();
-	            build.build(project, currentProfile);
+	            build.build(project, currentProfile, task);
 	        }
         }
         
@@ -204,7 +207,7 @@ class ProvidesElement {
 
         if (this.files != null) {
             for (int i = 0; i < this.files.size(); i++) {
-                final FilesElement felem = (FilesElement) files.get(i);
+                final FilesElement felem = (FilesElement) this.files.get(i);
                 if (felem.allFilesExist() == false) {
                     files.addAll(Arrays.asList(felem.getMissingFiles()));
                 }

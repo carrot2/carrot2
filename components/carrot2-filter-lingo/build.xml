@@ -7,12 +7,8 @@
     <property name="dist.name" value="carrot2-filter-lingo" />
 
     <property name="tests.available"  value="true"    />
+	<property name="type" value="jartype" />
 
     <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
-
-	<target name="build">
-		<ant antfile="build.remote.xml" inheritall="false" />
-		<ant antfile="build.local.xml" inheritall="false" />
-	</target>    
 
 </project>

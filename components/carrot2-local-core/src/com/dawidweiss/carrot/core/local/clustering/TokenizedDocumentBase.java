@@ -22,20 +22,8 @@ import com.stachoodev.util.common.*;
  * @author Stanislaw Osinski
  * @version $Revision$
  */
-public abstract class TokenizedDocumentBase implements TokenizedDocument,
-    PropertyProvider
+public abstract class TokenizedDocumentBase extends PropertyProviderBase implements TokenizedDocument
 {
-    /** Stores this document's properties */
-    protected PropertyHelper propertyHelper;
-
-    /**
-     * 
-     */
-    public TokenizedDocumentBase()
-    {
-        propertyHelper = new PropertyHelper();
-    }
-
     /*
      * (non-Javadoc)
      * 
@@ -43,64 +31,6 @@ public abstract class TokenizedDocumentBase implements TokenizedDocument,
      */
     public TokenSequence getSnippet()
     {
-        return (TokenSequence) propertyHelper.getProperty(PROPERTY_SNIPPET);
-    }
-
-    /**
-     * Provides a template of implementation of the named property getter.
-     */
-    public Object getProperty(String name)
-    {
-        return propertyHelper.getProperty(name);
-    }
-
-    /**
-     * Sets a value for a named property in this document.
-     */
-    public Object setProperty(String propertyName, Object value)
-    {
-        return propertyHelper.setProperty(propertyName, value);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.util.common.PropertyProvider#getDoubleProperty(java.lang.String)
-     */
-    public double getDoubleProperty(String propertyName, double defaultValue)
-    {
-        return propertyHelper.getDoubleProperty(propertyName, defaultValue);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.util.common.PropertyProvider#getIntProperty(java.lang.String)
-     */
-    public int getIntProperty(String propertyName, int defaultValue)
-    {
-        return propertyHelper.getIntProperty(propertyName, defaultValue);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.util.common.PropertyProvider#setDoubleProperty(java.lang.String,
-     *      double)
-     */
-    public Object setDoubleProperty(String propertyName, double value)
-    {
-        return propertyHelper.setDoubleProperty(propertyName, value);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.util.common.PropertyProvider#setIntProperty(java.lang.String,
-     *      int)
-     */
-    public Object setIntProperty(String propertyName, int value)
-    {
-        return propertyHelper.setIntProperty(propertyName, value);
+        return (TokenSequence) getProperty(PROPERTY_SNIPPET);
     }
 }

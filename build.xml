@@ -15,8 +15,6 @@
        ## host (these replace tokens in descriptors)
        ## You can override distribution.dir to point to your tomcat's webapps
        ## folder, for example. -->
-  <property name="deployment.port" value="8080" />
-  <property name="deployment.host" value="localhost" />
   <property name="distribution.dir" value="tmp" />
   <property name="tests.report.dir" value="tmp/test-report" />
 
@@ -28,7 +26,7 @@
   <property name="carrot2.cvs.dir" location="${basedir}" />
   <import file="${carrot2.cvs.dir}/components/carrot2-ant-extensions/bootstrap.xml" />
 
-  
+
   <target name="javadoc">
     <property name="javadoc.dir" location="tmp/javadoc" />
 
@@ -78,7 +76,7 @@
 
 
 
-  <target name="build">
+  <target name="build" depends="bootstrap,bootstrap:dependencies">
   	<description>
 	Builds all components included in 'apply-to-components'
 	target.
@@ -92,13 +90,18 @@
 BUILDING: @{component.path}
 ################################################################
         </echo>
-        <ant antfile="build.xml"
-             dir="@{component.path}" inheritall="false"
-             target="build"
-        />
+        <ant antfile="build.xml" dir="@{component.path}" inheritall="false" target="build">
+             <reference refid="dependencies" />
+             <reference refid="c2.tasks.classloader" />
+             <property name="cache:deps" value="${cache:deps}" />
+        </ant>
       </sequential>
     </macrodef>
-    <antcall target="apply-to-components" />
+    <antcall target="apply-to-components">
+         <reference refid="dependencies" />
+         <reference refid="c2.tasks.classloader" />
+         <param name="cache:deps" value="${cache:deps}" />
+    </antcall>
     
     <macrodef name="application-apply">
         <attribute name="application.path" />
@@ -106,30 +109,35 @@ BUILDING: @{component.path}
             <component-apply component.path="@{application.path}" />
         </sequential>
     </macrodef>
-    <antcall target="apply-to-applications" />
+    <antcall target="apply-to-applications">
+         <reference refid="dependencies" />
+         <reference refid="c2.tasks.classloader" />
+         <param name="cache:deps" value="${cache:deps}" />
+    </antcall>
   </target>
 
 
 
-  <target name="dist">
+  <target name="dist" depends="bootstrap,bootstrap:dependencies">
     <delete dir="dist" failonerror="false" />
 
     <mkdir dir="dist" />
     <mkdir dir="dist/remote/webapps" />
-    <mkdir dir="dist/remote/shared/lib" />
     <mkdir dir="dist/remote/conf" />
-    
-    <ant antfile="build.xml" dir="." inheritall="false" inheritrefs="false" target="remote">
-        <property name="distribution.dir.remote" location="dist/remote/webapps" />
-        <property name="distribution.dir.remote.libs" location="dist/remote/shared/lib" />
-        <property name="deployment.port" value="8080" />
-        <property name="deployment.host" value="localhost" />
-    </ant>
     <copy todir="dist/remote">
         <fileset dir="etc/conf-tomcat">
             <include name="**/*" />
         </fileset>
     </copy>
+    <ant antfile="build.xml" dir="applications/carrot2-demo-webapp"
+        inheritall="false" inheritrefs="false" target="build">
+        <reference refid="dependencies" />
+        <reference refid="c2.tasks.classloader" />
+        <property name="cache:deps" value="${cache:deps}" />
+    </ant>
+    <copy todir="dist/remote/webapps">
+    	<fileset dir="applications/carrot2-demo-webapp/tmp/dist" includes="*.war" />
+    </copy>    
     <zip basedir="dist/remote" 
         zipfile="dist/carrot2-remote-demo-${release.number}.zip" />
 
@@ -137,12 +145,15 @@ BUILDING: @{component.path}
         inheritall="false" inheritrefs="false" target="dist">
         <property name="distribution.zips.dir" location="dist" />
         <property name="distribution.zip.name" value="carrot2-local-demo-${release.number}.zip" />
+        <reference refid="dependencies" />
+        <reference refid="c2.tasks.classloader" />
+        <property name="cache:deps" value="${cache:deps}" />
     </ant>
   </target>
 
 
 
-  <target name="clean">
+  <target name="clean" >
   	<description>
 	Cleans intermediate files of all
 	components included in 'apply-to-components'
@@ -157,8 +168,7 @@ CLEANING: @{component.path}
         </echo>
         <ant antfile="build.xml"
              dir="@{component.path}" inheritall="false"
-             target="clean"
-        />
+             target="clean" />
       </sequential>
     </macrodef>
     <antcall target="apply-to-components" />
@@ -192,8 +202,7 @@ CLEANING: @{component.path}
         </echo>
         <ant antfile="build.xml"
              dir="@{component.path}" inheritall="false"
-             target="cleanall"
-        />
+             target="cleanall" />
       </sequential>
     </macrodef>
     <antcall target="apply-to-components" />
@@ -212,7 +221,7 @@ CLEANING: @{component.path}
 
 
 
-  <target name="test">
+  <target name="test" depends="bootstrap,bootstrap:dependencies">
   	<description>
 	Runs test task for all
 	components included in 'apply-to-components'
@@ -229,15 +238,26 @@ TESTING: @{component.path}
         </echo>
         <ant antfile="build.xml" dir="@{component.path}" inheritall="false" target="test">
             <property name="tests.failure.marker" location="${tests.failure.marker}" />
+            <reference refid="dependencies" />
+            <reference refid="c2.tasks.classloader" />
+            <property name="cache:deps" value="${cache:deps}" />
         </ant>
       </sequential>
     </macrodef>
 
     <delete failonerror="false" file="${tests.failure.marker}" />
-    <antcall target="apply-to-components" />
+    <antcall target="apply-to-components">
+         <reference refid="dependencies" />
+         <reference refid="c2.tasks.classloader" />
+         <param name="cache:deps" value="${cache:deps}" />
+    </antcall>
     
     <!-- Generate one report for all components -->
-    <antcall target="test.report" />
+    <antcall target="test.report">
+         <reference refid="dependencies" />
+         <reference refid="c2.tasks.classloader" />
+         <param name="cache:deps" value="${cache:deps}" />
+    </antcall>
 
     <if>
         <available file="${tests.failure.marker}" type="file" />
@@ -261,11 +281,10 @@ TESTING: @{component.path}
 
 
   <target name="apply-to-applications">
-    <application-apply application.path="applications/carrot2-clustering-benchmark" />
-    <application-apply application.path="applications/carrot2-grokker-clusterizer" />
+    <application-apply application.path="applications/carrot2-demo-browser" />
+    <application-apply application.path="applications/carrot2-demo-webapp" />
     <application-apply application.path="applications/carrot2-lucene-example" />
     <application-apply application.path="applications/carrot2-nutch-plugin" />
-    <application-apply application.path="applications/carrot2-demo-browser" />
     <application-apply application.path="applications/carrot2-odp-tools" />
   </target>
 
@@ -279,8 +298,6 @@ TESTING: @{component.path}
     <component-apply component.path="components/carrot2-ant-extensions" />
     <component-apply component.path="components/carrot2-local-core" />
     <component-apply component.path="components/carrot2-util-common" />
-    <component-apply component.path="components/carrot2-util-local" />
-    <component-apply component.path="components/carrot2-util-remote" />
     <component-apply component.path="components/carrot2-util-tokenizer" />
     <component-apply component.path="components/carrot2-util-matrix" />
     <component-apply component.path="components/carrot2-util-lang-guesser" />
@@ -293,29 +310,18 @@ TESTING: @{component.path}
     <component-apply component.path="components/carrot2-input-opensearch" />
 
     <component-apply component.path="components/carrot2-odp-core" />
-    <component-apply component.path="components/carrot2-output-cluster-metrics" />
-
-    <component-apply component.path="components/carrot2-local-remote-adapters" />
 
     <component-apply component.path="components/carrot2-stemmer-stempelator" />
     <component-apply component.path="components/carrot2-stemmer-stempel" />
     <component-apply component.path="components/carrot2-stemmer-snowball" />
 
-    <component-apply component.path="components/carrot2-input-snippet-reader" />
-    <component-apply component.path="components/carrot2-input-verbatim" />
-
     <component-apply component.path="components/carrot2-filter-case-normalizer" />
     <component-apply component.path="components/carrot2-filter-lingo" />
-    <component-apply component.path="components/carrot2-filter-ahc" />
     <component-apply component.path="components/carrot2-filter-fuzzyants" />
+    <component-apply component.path="components/carrot2-filter-haog" />
     <component-apply component.path="components/carrot2-filter-stc" />
-    <component-apply component.path="components/carrot2-filter-stemmer" />
     <component-apply component.path="components/carrot2-filter-trc" />
 
-    <component-apply component.path="components/carrot2-filter-stream-interceptor" />
-    <component-apply component.path="components/carrot2-output-xsltrenderer" />
-
-    <component-apply component.path="components/carrot2-remote-controller" />
     <component-apply component.path="components/carrot2-local-controller" />
   </target>
 
@@ -367,82 +373,19 @@ TESTING: @{component.path}
   </target>
 
 
-
-  <target name="remote" depends="bootstrap">
-    <description>
-    Collects all remote Web components into 'distribution.dir.remote'
-    directory and their required JARs into 'distribution.dir.remote.libs'
-    directory.
-    </description>
-
-    <property name="distribution.dir.remote"      location="${distribution.dir}/remote" />
-    <property name="distribution.dir.remote.libs" location="${distribution.dir}/remote-libs" />
-
-    <mkdir dir="${distribution.dir.remote}" />
-
-    <property name="carrot2.cvs.dir" location="." />
-
-    <path id="dependencies">
-        <fileset dir=".">
-            <include name="lib/**/*.dep.xml" />
-            <include name="components/*/*.dep.xml" />
-            <include name="components/*/lib/*.dep.xml" />
-        </fileset>
-        <path path="${extra.dependencies.path}" />
-    </path>
-
-    <!-- Invoke the remote controller's build file to update it. -->
-    <ant antfile="build.xml"
-    	 dir="components/carrot2-remote-controller"
-    	 inheritall="false" inheritrefs="false">
-    	 <property name="deployment.host" value="${deployment.host}"/>
-    	 <property name="deployment.port" value="${deployment.port}"/>
-    </ant>
-
-    <bringToDate componentDescriptor="etc/all-remote.dep.xml"
-                 dependenciesOnly="true" profile="">
-        <dependencies refid="dependencies" />
-    </bringToDate>
-
-    <copyDependencies
-        componentDescriptor="etc/all-remote.dep.xml"
-        profile=""
-        todir="${distribution.dir.remote}">
-        <dependencies refid="dependencies" />
-    </copyDependencies>
-
-    <mkdir dir="${distribution.dir.remote.libs}" />
-    <move todir="${distribution.dir.remote.libs}">
-        <fileset dir="${distribution.dir.remote}">
-            <exclude name="libs/**" />
-            <exclude name="*.war" />
-            <exclude name="carrot*.LICENSE" />
-            <exclude name="carrot*.CONTRIBUTORS" />
-            <include name="*.jar" />
-        </fileset>
-    </move>
-  </target>
-
-
-
   <target name="help">
     <echo>
 Available targets:
 
-build   - builds all components in all profiles.
+build     - builds all components in all profiles.
 
-clean   - cleans intermediate files.
+clean     - removes intermediate files. 
 
-javadoc - creates JavaDoc documentation.
+cleanall  - remove Eclipse files in addition to clean.
 
-remote  - builds all remote components, and
-          copies them to a directory pointed
-          to by 'distribution.dir.remote'. Libraries
-          are copied to 'distribution.dir.remote.libs'.
-          Default values for these properties
-          are 'tmp/remote' and 'tmp/remote-libs'.
+javadoc   - creates JavaDoc documentation.
 
-Available properties (passed using -Dproperty=true)
+Available properties (enabled with -Dproperty.name=true)
 
 copy.dependencies  - Creates a subfolder in a distribution
        directory of a component with all components and

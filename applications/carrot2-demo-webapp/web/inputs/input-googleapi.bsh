@@ -1,0 +1,20 @@
+import com.dawidweiss.carrot.core.local.*;
+import com.dawidweiss.carrot.local.controller.*;
+
+factory = new LocalComponentFactory() {
+    public LocalComponent getInstance() {
+		return new com.dawidweiss.carrot.input.googleapi.GoogleApiInputComponent();
+    }
+};
+
+LoadedComponentFactory loaded = 
+	new LoadedComponentFactory("input-googleapi", factory);
+
+loaded.setProperties(new String [][] {
+	{"tab.name", "Google"},
+	{"tab.description", "Search the Web with Google"},
+	{"tab.icon", "google.gif"},
+	{"tab.ignoreOnError", "true" }
+});
+
+return loaded;

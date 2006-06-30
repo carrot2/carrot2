@@ -98,7 +98,7 @@ public class ODPLocalInputComponentTest extends TestCase
     public void testCatidMixer() throws MissingProcessException, Exception
     {
         // ODP input component factory
-        LocalComponentFactory inputFactory = new LocalComponentFactoryBase()
+        LocalComponentFactory inputFactory = new LocalComponentFactory()
         {
             public LocalComponent getInstance()
             {
@@ -107,7 +107,7 @@ public class ODPLocalInputComponentTest extends TestCase
         };
 
         // Some output component
-        LocalComponentFactory outputFactory = new LocalComponentFactoryBase()
+        LocalComponentFactory outputFactory = new LocalComponentFactory()
         {
             public LocalComponent getInstance()
             {

@@ -14,6 +14,8 @@
 package com.dawidweiss.carrot.ant.deps;
 
 import java.io.File;
+import java.io.Serializable;
+
 import org.w3c.dom.Element;
 
 
@@ -23,7 +25,7 @@ import org.w3c.dom.Element;
  * 
  * @author Dawid Weiss
  */
-class DependencyElement {
+class DependencyElement implements Serializable {
 
     /**
      * Name of the dependent component.
@@ -51,7 +53,7 @@ class DependencyElement {
     /** 
      * If <code>true</code>, none of the files of this dependency,
      * or its dependencies are copied by 
-     * {@link com.dawidweiss.carrot.ant.CopyDependencies} task. 
+     * {@link com.dawidweiss.carrot.ant.tasks.CopyDependenciesTask} task. 
      */
     private final boolean nocopy;
     

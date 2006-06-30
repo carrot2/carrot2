@@ -6,7 +6,7 @@ import carrot2.demo.cache.*;
 //
 // Component factory is a dynamic Beanshell class
 //
-factory = new LocalComponentFactoryBase() {
+factory = new LocalComponentFactory() {
     public LocalComponent getInstance() {
     	// Wrap Yahoo API component with the cache
 		return new RawDocumentProducerCacheWrapper(

@@ -14,6 +14,9 @@
 package com.dawidweiss.carrot.ant.deps;
 
 import java.io.File;
+import java.io.Serializable;
+import java.util.Iterator;
+import java.util.List;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
@@ -23,12 +26,14 @@ import org.apache.tools.ant.util.FileUtils;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
+import com.dawidweiss.carrot.ant.tasks.BringToDateTask;
+
 /**
  * An build trigger for a component representing an ANT file. 
  * 
  * @author Dawid Weiss
  */
-class AntBuildElement implements BuildTask {
+class AntBuildElement implements BuildTask, Serializable {
 
     private String target;
 	private String file;
@@ -45,17 +50,26 @@ class AntBuildElement implements BuildTask {
             throw new SAXException("file attribute is required.");
     }
 
-	public void execute(Project project, String profile) {
-        Ant task = (Ant) project.createTask("ant");
+	public void execute(Project project, String profile, BringToDateTask toDateTask) {
+        final Ant task = (Ant) project.createTask("ant");
         if (task == null) {
-            throw new BuildException("ant task must be available.");
+            throw new BuildException("'ant' task must be available.");
         }
         
-        FileUtils futils = FileUtils.newFileUtils();
-        File buildFile = futils.resolveFile(base, file);
+        final FileUtils futils = FileUtils.newFileUtils();
+        final File buildFile = futils.resolveFile(base, file);
         task.setAntfile(buildFile.getAbsolutePath());
         task.setDir(buildFile.getParentFile());
         task.setInheritAll(false);
+        
+        final List overrides = toDateTask.getOverrides();
+        if (overrides.size() > 0) {
+            for (Iterator i = overrides.iterator(); i.hasNext();) {
+                final BringToDateTask.Override override = (BringToDateTask.Override) i.next();
+                override.doOverride(task, project);
+            }
+        }
+        
         task.setProject(project);
         if (this.target != null && !"".equals(target))
             task.setTarget(target);
@@ -68,5 +82,4 @@ class AntBuildElement implements BuildTask {
 
         task.execute();
 	}
-
 }

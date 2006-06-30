@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE component PUBLIC "-//Carrot2//DTD Component Dependency Descriptor V1.0//EN" "http://www.carrot2.org/dtd/component-dependency.dtd" >
+
+<component
+    name="carrot2-demo-webapp"
+    description="Carrot2 Demo Web Application">
+
+    <dependency name="carrot2-local-core" />
+    <dependency name="carrot2-util-common" />
+    <dependency name="carrot2-local-controller" />
+
+    <dependency name="carrot2-input-yahooapi" profile="demo" />
+    <dependency name="carrot2-input-googleapi" profile="demo" />
+
+    <dependency name="carrot2-filter-lingo" profile="demo" />
+    <dependency name="carrot2-util-tokenizer" profile="demo" />
+	<dependency name="carrot2-filter-case-normalizer" profile="demo" />
+
+
+    <dependency name="ehcache" />
+    <dependency name="dom4j" />
+    <dependency name="xerces" />
+
+    <dependency name="xslt-filter" />
+
+    <dependency name="servlets-api" nocopy="true" noexport="true" />
+</component>

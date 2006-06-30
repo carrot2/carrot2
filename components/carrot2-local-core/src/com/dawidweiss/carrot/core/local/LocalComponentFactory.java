@@ -32,17 +32,4 @@ public interface LocalComponentFactory {
      *         should be thrown.
      */
     public LocalComponent getInstance();
-    
-    
-    /**
-     * @return returns a name for components created by this factory, or
-     * <code>null</code> if name is not available.
-     */
-    public String getName();
- 
-    /**
-     * @return returns a description for components created by this factory
-     * or <code>null</code> if description is not available.
-     */
-    public String getDescription();
 }

@@ -31,9 +31,7 @@ public class DocumentAdapter extends RawDocumentBase {
 	 * Creates a new document with the given id, title and summary.
 	 */
 	public DocumentAdapter(int id, String url, String title, String summary) {
-		super.setProperty(RawDocument.PROPERTY_URL, url);
-		super.setProperty(RawDocument.PROPERTY_SNIPPET, summary);
-		super.setProperty(RawDocument.PROPERTY_TITLE, title);
+        super(url, title, summary);
 
 		this.id = new Integer(id);
 	}

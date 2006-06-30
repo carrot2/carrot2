@@ -5,29 +5,15 @@
     name="carrot2-input-xml"
     description="Carrot2 Input Component reading XML files and transforming them using XSLT">
 
-    <provides profile="local">
+    <provides>
         <files build-path-exclude="true" prefix="tmp/dist">
             <file location="carrot2-input-xml.jar" />
         </files>
         <build>
-            <ant file="build.local.xml" target="build"/>
+            <ant file="build.xml" target="build"/>
         </build>
 		<check-newer>
 			<fileset dir="src" />
-			<fileset dir="web" />
-		</check-newer>
-    </provides>
-
-    <provides profile="remote">
-        <files build-path-exclude="true" prefix="tmp/dist">
-            <file location="carrot2-input-xml.war" />
-        </files>
-        <build>
-            <ant file="build.remote.xml" target="build"/>
-        </build>
-		<check-newer>
-			<fileset dir="src" />
-			<fileset dir="web" />
 		</check-newer>
     </provides>
     
@@ -37,14 +23,9 @@
     <dependency name="carrot2-util-common" />
     <dependency name="carrot2-local-core" />
     <dependency name="carrot2-license" />
-    
+
     <dependency name="junit" profile="test" />
-    <dependency name="carrot2-filter-lingo"   profile="test" in-profile="local" />
-    <dependency name="carrot2-util-tokenizer" profile="test" />
+    <dependency name="carrot2-filter-lingo"   profile="test" />
     <dependency name="carrot2-util-tokenizer" profile="test" />
     <dependency name="servlets-api"           profile="test" />
-    <dependency name="carrot2-util-remote"    profile="test" />
-
-	<dependency name="carrot2-util-remote" 	            profile="remote" />
-    <dependency name="servlets-api"                     profile="remote" nocopy="true" />
 </component>

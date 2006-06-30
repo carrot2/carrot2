@@ -5,12 +5,12 @@
     name="carrot2-input-opensearch"
     description="Carrot2 Input Component using OpenSearch">
 
-    <provides profile="local">
+    <provides>
         <files build-path-exclude="true" prefix="tmp/dist">
             <file location="carrot2-input-opensearch.jar" />
         </files>
         <build>
-            <ant file="build.local.xml" target="build"/>
+            <ant file="build.xml" target="build"/>
         </build>
 		<check-newer>
 			<fileset dir="src" />
@@ -21,9 +21,9 @@
     <dependency name="rome" />
     <dependency name="log4j" />
 
-    <dependency name="junit" profile="test" />
-
     <dependency name="carrot2-util-common" />
     <dependency name="carrot2-local-core" />
     <dependency name="carrot2-license" />
+
+    <dependency name="junit" profile="test" />
 </component>

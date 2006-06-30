@@ -17,15 +17,11 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
-import com.dawidweiss.carrot.core.local.LocalComponent;
-import com.dawidweiss.carrot.core.local.LocalComponentFactory;
-import com.dawidweiss.carrot.core.local.LocalComponentFactoryBase;
-import com.dawidweiss.carrot.core.local.LocalControllerBase;
-import com.dawidweiss.carrot.core.local.LocalProcessBase;
+import junit.framework.TestCase;
+
+import com.dawidweiss.carrot.core.local.*;
 import com.dawidweiss.carrot.core.local.clustering.RawDocument;
 import com.dawidweiss.carrot.core.local.impl.DocumentsConsumerOutputComponent;
-
-import junit.framework.TestCase;
 
 /**
  * Tests some aspects of the cache input component.
@@ -47,7 +43,7 @@ public class RemoteCacheAccessLocalInputComponentTest extends TestCase {
 		LocalControllerBase controller;
 		
         // Some output component
-        LocalComponentFactory outputFactory = new LocalComponentFactoryBase()
+        LocalComponentFactory outputFactory = new LocalComponentFactory()
         {
             public LocalComponent getInstance()
             {
@@ -73,7 +69,7 @@ public class RemoteCacheAccessLocalInputComponentTest extends TestCase {
 
 	public void testDirectFileQuery() throws Exception {
         // ODP input component factory
-        LocalComponentFactory inputFactory = new LocalComponentFactoryBase()
+        LocalComponentFactory inputFactory = new LocalComponentFactory()
         {
             public LocalComponent getInstance()
             {
@@ -93,7 +89,7 @@ public class RemoteCacheAccessLocalInputComponentTest extends TestCase {
 
 	public void testStoreDumpQuery() throws Exception {
         // ODP input component factory
-        LocalComponentFactory inputFactory = new LocalComponentFactoryBase()
+        LocalComponentFactory inputFactory = new LocalComponentFactory()
         {
         	private CachedQueriesStore store = new CachedQueriesStore(new File("cached"));
         	
@@ -114,7 +110,7 @@ public class RemoteCacheAccessLocalInputComponentTest extends TestCase {
 
 	public void testStoreRawQuery() throws Exception {
         // ODP input component factory
-        LocalComponentFactory inputFactory = new LocalComponentFactoryBase()
+        LocalComponentFactory inputFactory = new LocalComponentFactory()
         {
         	private CachedQueriesStore store = new CachedQueriesStore(new File("cached"));
         	
@@ -137,7 +133,7 @@ public class RemoteCacheAccessLocalInputComponentTest extends TestCase {
 
 	public void testStoreRawQueryWithComponentId() throws Exception {
         // ODP input component factory
-        LocalComponentFactory inputFactory = new LocalComponentFactoryBase()
+        LocalComponentFactory inputFactory = new LocalComponentFactory()
         {
         	private CachedQueriesStore store = new CachedQueriesStore(new File("cached"));
         	

@@ -13,8 +13,7 @@
 
 package com.dawidweiss.carrot.ant.deps;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -37,6 +36,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.dawidweiss.carrot.ant.tasks.BringToDateTask;
+
 
 /**
  * A class that represents a component and the information
@@ -45,7 +46,7 @@ import org.xml.sax.SAXException;
  * 
  * @author Dawid Weiss
  */
-public class ComponentDependency {
+public class ComponentDependency implements Serializable {
 
 	/**
      * A more verbose description of the component,
@@ -71,8 +72,7 @@ public class ComponentDependency {
     /** A file pointer to this component's xml */
     private File file;
 
-    public ComponentDependency(Project project, File file)
-        throws Exception {
+    public ComponentDependency(Project project, File file) throws IOException {
         if (file == null) {
             throw new IllegalArgumentException("Dependency file must not be null.");
         }
@@ -158,7 +158,8 @@ public class ComponentDependency {
                 }
             }
         } catch (Exception e) {
-            throw new Exception("Problems parsing component descriptor: " + file, e);
+            throw new IOException("Problems parsing component descriptor " 
+                    + file + " (" + e + ")");
         }
     }
 
@@ -316,16 +317,16 @@ public class ComponentDependency {
 	 * Brings the component up-to-date, based on 'provides'
      * and build elements.
 	 */
-	public void bringUpToDate(Project project, String currentProfile) throws BuildException {
+	public void bringUpToDate(Project project, String currentProfile, BringToDateTask task) throws BuildException {
         for (Iterator p = this.provides.iterator(); p.hasNext();)
         {
-            ProvidesElement provides = (ProvidesElement) p.next();
+            final ProvidesElement provides = (ProvidesElement) p.next();
 
             if (provides.getProfile() != null && (currentProfile == null || !currentProfile.equals(provides.getProfile()))) {
                 continue;
             } 
 
-            provides.bringUpToDate(project, currentProfile);
+            provides.bringUpToDate(project, currentProfile, task);
         }
 	}
 
@@ -334,7 +335,7 @@ public class ComponentDependency {
      * in depending components).
      * Duplicates are removed.
 	 */
-	public File[] getAllProvidedFiles(HashMap components, String currentProfile, boolean buildPath) {
+	public File[] getAllProvidedFiles(Map components, String currentProfile, boolean buildPath) {
         ComponentInProfile [] resolvedComponents = getAllRequiredComponentDependencies(components, currentProfile);
         HashSet result = new HashSet();
         
@@ -407,7 +408,7 @@ public class ComponentDependency {
         return profile.equals(currentProfile);
     }
 
-	public FileReference[] getAllProvidedFileReferences(HashMap components, String currentProfile, boolean buildPath, boolean nocopy) {
+	public FileReference[] getAllProvidedFileReferences(Map components, String currentProfile, boolean buildPath, boolean nocopy) {
         ComponentInProfile [] resolvedComponents =  
             getAllRequiredComponentDependencies(components, currentProfile, nocopy);
         HashMap result = new HashMap();

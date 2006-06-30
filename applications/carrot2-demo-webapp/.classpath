@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="src" path="/carrot2-util-common"/>
+	<classpathentry exported="true" kind="src" path="/carrot2-local-core"/>
+	<classpathentry exported="true" kind="var" path="CARROT2_CHECKOUT_BASE/lib/log4j-1.2.11.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/dom4j-1.5.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/serializer.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/xercesImpl-2.7.1.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/xml-apis.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/servlet.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-local-controller"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/xalan-2.7.0.jar"/>
+	<classpathentry kind="lib" path="lib/ehcache-1.2.1RC.jar"/>
+	<classpathentry sourcepath="D:/repositories/prv-dweiss/projects/trunk/xslt-filter/src" kind="lib" path="lib/xslt-filter-0.93.jar"/>
+	<classpathentry kind="output" path="web/WEB-INF/classes"/>
+</classpath>

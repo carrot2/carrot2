@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="src" path="/carrot2-local-core"/>
+	<classpathentry exported="true" kind="src" path="/carrot2-filter-lingo"/>
+	<classpathentry exported="true" kind="src" path="/carrot2-util-tokenizer"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-local-controller"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-common"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/lucene-1.5-rc1-dev.jar"/>
+	<classpathentry kind="lib" path="lib/lucene-demos-1.5-rc1-dev.jar"/>
+	<classpathentry kind="output" path="tmp/eclipse"/>
+</classpath>

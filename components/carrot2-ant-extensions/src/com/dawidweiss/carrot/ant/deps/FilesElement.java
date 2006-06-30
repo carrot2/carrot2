@@ -14,6 +14,7 @@
 package com.dawidweiss.carrot.ant.deps;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -28,7 +29,7 @@ import org.xml.sax.SAXException;
 /**
  * A list of {@link FileElement}s provided by the component.
  */
-class FilesElement {
+class FilesElement implements Serializable {
 
 	private final boolean buildPathExclude;
     private final List files = new LinkedList();

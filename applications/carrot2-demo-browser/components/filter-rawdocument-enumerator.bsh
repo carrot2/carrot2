@@ -6,7 +6,7 @@ import com.dawidweiss.carrot.local.controller.*;
 //
 // Component factory is a dynamic Beanshell class
 //
-factory = new LocalComponentFactoryBase() {
+factory = new LocalComponentFactory() {
     public LocalComponent getInstance() {
         return new RawDocumentEnumerator();
     }

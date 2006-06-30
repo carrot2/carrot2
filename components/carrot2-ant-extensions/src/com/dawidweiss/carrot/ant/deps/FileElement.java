@@ -14,6 +14,7 @@
 package com.dawidweiss.carrot.ant.deps;
 
 import java.io.File;
+import java.io.Serializable;
 
 import org.apache.tools.ant.util.FileUtils;
 import org.w3c.dom.Element;
@@ -21,15 +22,14 @@ import org.w3c.dom.Element;
 /**
  * A single file provided by the component.
  */
-class FileElement {
-    private static FileUtils futils = FileUtils.newFileUtils();
-
+class FileElement implements Serializable {
 	private final File base;
 	private final File file;
 
     public FileElement(File base, String localPrefix, Element configElement) 
      throws Exception {
-        String location = configElement.getAttribute( "location" );
+        final FileUtils futils = FileUtils.newFileUtils();
+        final String location = configElement.getAttribute( "location" );
         if (location == null)
             throw new Exception("location attribute required.");
         this.base = futils.resolveFile(base, localPrefix);

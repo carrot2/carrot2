@@ -14,17 +14,18 @@
 package com.dawidweiss.carrot.lucene;
 
 import java.text.MessageFormat;
-import java.io.*;
 import java.util.*;
-import org.apache.lucene.analysis.*;
-import org.apache.lucene.document.*;
-import org.apache.lucene.index.*;
+
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.StopAnalyzer;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.*;
-import org.apache.lucene.queryParser.*;
-import org.apache.lucene.demo.*;
-import org.apache.lucene.demo.html.Entities;
-import com.dawidweiss.carrot.core.local.*;
-import com.dawidweiss.carrot.core.local.clustering.*;
+
+import com.dawidweiss.carrot.core.local.clustering.RawCluster;
+import com.dawidweiss.carrot.core.local.clustering.RawDocument;
 
 
 

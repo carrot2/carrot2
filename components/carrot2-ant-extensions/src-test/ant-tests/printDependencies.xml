@@ -2,8 +2,9 @@
 <project name="bring-to-date" default="test">
 
     <target name="prepare">
-        <taskdef name="printDependencies" 
-        	classname="com.dawidweiss.carrot.ant.PrintDependencies" />
+        <taskdef resource="res/carrot2-antlib.xml">
+            <classpath location="../../tmp/build/bootstrap" />
+        </taskdef>
         <delete dir="tmp" />
 		<mkdir dir="tmp"/>
     </target>

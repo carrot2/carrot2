@@ -14,35 +14,35 @@
 package com.dawidweiss.carrot.ant.deps;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.FileSet;
 import org.apache.tools.ant.util.FileUtils;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
-import com.dawidweiss.carrot.ant.MostRecentFileDate;
+import com.dawidweiss.carrot.ant.tasks.MostRecentFileDateTask;
 
 /**
  * A fileset to be checked against target files of a component.
  * If any of the fileset's files is newer then any of the target
  * files, build target is invoked. 
  */
-class CheckNewerElement {
-
-    private ArrayList filesets = new ArrayList();
-    private Project project;
+class CheckNewerElement implements Serializable {
+    final ArrayList files = new ArrayList();
+    private long lastModified;
 
 	public CheckNewerElement(Project project, File base, Element configElement) throws Exception {
-        this.project = project;
+        final FileUtils futils = FileUtils.newFileUtils();
+        final NodeList nlist = configElement.getChildNodes();
+        final MostRecentFileDateTask mrfd = new MostRecentFileDateTask();
+        mrfd.setProject(project);
+        mrfd.setStoreInField(true);
+        mrfd.setExceptionOnEmpty(true);
         
-        FileUtils futils = FileUtils.newFileUtils();
-        NodeList nlist = configElement.getChildNodes();
         for (int i = 0; i < nlist.getLength(); i++) {
             Node n = nlist.item(i);
             switch (n.getNodeType()) {
@@ -58,7 +58,7 @@ class CheckNewerElement {
                                     + dirFile.getAbsolutePath(), Project.MSG_WARN);
                         }
                         fs.setDir(dirFile);
-                        filesets.add(fs);
+                        mrfd.addFileset(fs);
                     } else {
                         throw new BuildException("Undefined node name: " + n.getNodeName());
                     }
@@ -75,18 +75,11 @@ class CheckNewerElement {
                         + n.getNodeName());
             }
         }
+        mrfd.execute();
+        this.lastModified = mrfd.getLastModified();
     }
 
     public long getMostRecentFileTimestamp() {
-        MostRecentFileDate mrfd = new MostRecentFileDate();
-        mrfd.setProject(project);
-        mrfd.setStoreInField(true);
-        mrfd.setExceptionOnEmpty(true);
-        for (Iterator i = filesets.iterator(); i.hasNext();) {
-            mrfd.addFileset((FileSet) i.next());
-        }
-        mrfd.execute();
-
-        return mrfd.getLastModified();
+        return lastModified;
     }
 }

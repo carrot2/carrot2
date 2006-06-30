@@ -1,0 +1,20 @@
+import com.dawidweiss.carrot.core.local.*;
+import com.dawidweiss.carrot.local.controller.*;
+
+factory = new LocalComponentFactory() {
+    public LocalComponent getInstance() {
+		return new com.dawidweiss.carrot.input.yahoo.YahooApiInputComponent();
+    }
+};
+
+LoadedComponentFactory loaded = 
+	new LoadedComponentFactory("input-yahooapi", factory);
+
+loaded.setProperties(new String [][] {
+	{"tab.name", "Yahoo!"},
+	{"tab.description", "Search the Web with Yahoo!"},
+	{"tab.icon", "yahoo.gif"},
+	{"tab.default", "true"}
+});
+
+return loaded;

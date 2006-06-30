@@ -2,8 +2,9 @@
 <project name="metainfo" default="testCollectMeta">
 
     <target name="prepare">
-        <taskdef name="collectMeta" 
-        	classname="com.dawidweiss.carrot.ant.CollectMeta" />
+        <taskdef resource="res/carrot2-antlib.xml">
+            <classpath location="../../tmp/build/bootstrap" />
+        </taskdef>
 
 		<subant target="prepare">
 			<fileset dir="metaInfoTest" includes="**/build.xml"/>

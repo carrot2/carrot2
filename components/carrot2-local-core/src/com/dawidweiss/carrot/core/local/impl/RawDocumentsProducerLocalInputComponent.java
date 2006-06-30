@@ -24,6 +24,7 @@ import com.dawidweiss.carrot.core.local.clustering.*;
  * provided in the {@link #PARAM_SOURCE_RAW_DOCUMENTS} request parameter.
  * 
  * @author Stanislaw Osinski
+ * @author Dawid Weiss
  * @version $Revision$
  */
 public class RawDocumentsProducerLocalInputComponent extends
@@ -46,7 +47,7 @@ public class RawDocumentsProducerLocalInputComponent extends
     private RawDocumentsConsumer rawDocumentConsumer;
 
     /**
-     * This property must be set to a {@link java.util.List}of
+     * This property must be set to a {@link java.util.List} or a {@link Iterator} over a list of
      * {@link com.dawidweiss.carrot.core.local.clustering.RawDocument}s to be
      * propagated down the processing chain.
      */
@@ -120,29 +121,30 @@ public class RawDocumentsProducerLocalInputComponent extends
     public void startProcessing(RequestContext requestContext)
         throws ProcessingException
     {
-        List rawDocuments = (List) requestContext.getRequestParameters().get(
-            PARAM_SOURCE_RAW_DOCUMENTS);
-        
-        // Pass the query for the following components
-        requestContext.getRequestParameters().put(
-            LocalInputComponent.PARAM_QUERY, query);
-
+        // Initialize the subsequent components
+        requestContext.getRequestParameters().put(LocalInputComponent.PARAM_QUERY, query);
         super.startProcessing(requestContext);
-        
-        if (rawDocuments == null)
-        {
-            throw new ProcessingException(
-                "The PARAM_SOURCE_RAW_DOCUMENTS request parameter must not be null");
-        }
 
-        // Pass the actual document count
-        requestContext.getRequestParameters().put(
-            LocalInputComponent.PARAM_TOTAL_MATCHING_DOCUMENTS,
-            new Integer(rawDocuments.size()));
+        final Object rawDocuments = requestContext.getRequestParameters().get(PARAM_SOURCE_RAW_DOCUMENTS);
+        if (rawDocuments == null)
+            throw new ProcessingException(
+                "The PARAM_SOURCE_RAW_DOCUMENTS request parameter must not be null.");
+
+        final Iterator iterator;
+        if (rawDocuments instanceof List) {
+            iterator = ((List) rawDocuments).iterator();
+            requestContext.getRequestParameters().put(
+                    LocalInputComponent.PARAM_TOTAL_MATCHING_DOCUMENTS,
+                    new Integer(((List) rawDocuments).size()));
+        } else if (rawDocuments instanceof Iterator) {
+            iterator = (Iterator) rawDocuments;
+        } else {
+            throw new ProcessingException("Unrecognized type of PARAM_SOURCE_RAW_DOCUMENTS (must be a list or an iterator)");
+        }
         
-        for (Iterator iter = rawDocuments.iterator(); iter.hasNext();)
+        while (iterator.hasNext())
         {
-            RawDocument rawDocument = (RawDocument) iter.next();
+            final RawDocument rawDocument = (RawDocument) iterator.next();
             rawDocumentConsumer.addDocument(rawDocument);
         }
     }

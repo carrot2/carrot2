@@ -12,7 +12,8 @@
 
     <dependency name="carrot2-local-core" />
 	<dependency name="carrot2-util-tokenizer" />
-    <dependency name="carrot2-filter-lingo" in-profile="local" />
+	<dependency name="carrot2-util-common" />
+    <dependency name="carrot2-filter-lingo" />
     <dependency name="lucene" />
     <dependency name="lucene-demos" />
 

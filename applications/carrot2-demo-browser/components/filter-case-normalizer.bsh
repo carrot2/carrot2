@@ -4,7 +4,7 @@ import com.dawidweiss.carrot.local.controller.*;
 import com.stachoodev.carrot.filter.normalizer.*;
 import com.stachoodev.carrot.filter.normalizer.local.*;
 
-factory = new LocalComponentFactoryBase() {
+factory = new LocalComponentFactory() {
     public LocalComponent getInstance() {
         return new CaseNormalizerLocalFilterComponent(
             new SmartCaseNormalizer());

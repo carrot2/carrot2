@@ -15,19 +15,11 @@ package com.dawidweiss.carrot.input.yahoo;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import org.apache.log4j.Logger;
 
-import com.dawidweiss.carrot.core.local.LocalComponent;
-import com.dawidweiss.carrot.core.local.LocalComponentFactory;
-import com.dawidweiss.carrot.core.local.LocalComponentFactoryBase;
-import com.dawidweiss.carrot.core.local.LocalControllerBase;
-import com.dawidweiss.carrot.core.local.LocalInputComponent;
-import com.dawidweiss.carrot.core.local.LocalProcessBase;
+import com.dawidweiss.carrot.core.local.*;
 import com.dawidweiss.carrot.core.local.clustering.RawDocument;
 import com.dawidweiss.carrot.core.local.impl.DocumentsConsumerOutputComponent;
 
@@ -39,7 +31,7 @@ public class YahooApiInputComponentTest extends junit.framework.TestCase {
     }
 
     public void testJanWeglarzQuery() throws Exception {
-        final LocalComponentFactory inputFactory = new LocalComponentFactoryBase() {
+        final LocalComponentFactory inputFactory = new LocalComponentFactory() {
             public LocalComponent getInstance() {
                 return new YahooApiInputComponent();
             }
@@ -58,7 +50,7 @@ public class YahooApiInputComponentTest extends junit.framework.TestCase {
     }
 
     public void testSiteQuery() throws Exception {
-        final LocalComponentFactory inputFactory = new LocalComponentFactoryBase() {
+        final LocalComponentFactory inputFactory = new LocalComponentFactory() {
             public LocalComponent getInstance() {
                 return new YahooApiInputComponent();
             }
@@ -76,7 +68,7 @@ public class YahooApiInputComponentTest extends junit.framework.TestCase {
     }
 
     public void testStartPositionIncorrect() throws Exception {
-        final LocalComponentFactory inputFactory = new LocalComponentFactoryBase() {
+        final LocalComponentFactory inputFactory = new LocalComponentFactory() {
             public LocalComponent getInstance() {
                 return new YahooApiInputComponent();
             }
@@ -97,7 +89,7 @@ public class YahooApiInputComponentTest extends junit.framework.TestCase {
 		LocalControllerBase controller;
 		
         // Some output component
-        LocalComponentFactory outputFactory = new LocalComponentFactoryBase() {
+        LocalComponentFactory outputFactory = new LocalComponentFactory() {
             public LocalComponent getInstance() {
                 return new DocumentsConsumerOutputComponent();
             }
@@ -118,7 +110,7 @@ public class YahooApiInputComponentTest extends junit.framework.TestCase {
 	}
 
 	public void testMediumQuery() throws Exception {
-        final LocalComponentFactory inputFactory = new LocalComponentFactoryBase() {
+        final LocalComponentFactory inputFactory = new LocalComponentFactory() {
             public LocalComponent getInstance() {
                 return new YahooApiInputComponent();
             }
@@ -137,7 +129,7 @@ public class YahooApiInputComponentTest extends junit.framework.TestCase {
 	}
 	
 	public void testEmptyQuery() throws Exception {
-        final LocalComponentFactory inputFactory = new LocalComponentFactoryBase() {
+        final LocalComponentFactory inputFactory = new LocalComponentFactory() {
             public LocalComponent getInstance() {
                 return new YahooApiInputComponent();
             }
@@ -156,7 +148,7 @@ public class YahooApiInputComponentTest extends junit.framework.TestCase {
 	}
 
     public void testResultsRequested() throws Exception {
-        final LocalComponentFactory inputFactory = new LocalComponentFactoryBase() {
+        final LocalComponentFactory inputFactory = new LocalComponentFactory() {
             public LocalComponent getInstance() {
                 return new YahooApiInputComponent();
             }
@@ -176,9 +168,9 @@ public class YahooApiInputComponentTest extends junit.framework.TestCase {
         assertEquals("Results acquired from Yahoo is 50?"
                 + ":" + results.size(), 50, results.size());
     }    
-    
+
 	public void testApacheAntQuery() throws Exception {
-        final LocalComponentFactory inputFactory = new LocalComponentFactoryBase() {
+        final LocalComponentFactory inputFactory = new LocalComponentFactory() {
             public LocalComponent getInstance() {
                 return new YahooApiInputComponent();
             }

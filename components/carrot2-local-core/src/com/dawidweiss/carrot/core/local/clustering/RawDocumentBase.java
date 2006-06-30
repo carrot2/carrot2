@@ -13,29 +13,21 @@
 
 package com.dawidweiss.carrot.core.local.clustering;
 
+import java.io.Serializable;
+
 import com.stachoodev.util.common.*;
 
 /**
  * An abstract implementation of some of the basic methods of the {@link
  * RawDocument} interface.
  * 
+ * Make sure all properties stored in subclasses of this class are serializable.
+ * 
  * @author Dawid Weiss
  * @author Stanislaw Osinski
  * @version $Revision$
  */
-public abstract class RawDocumentBase implements RawDocument, PropertyProvider
-{
-    /** Stores this document's properties */
-    protected PropertyHelper propertyHelper;
-
-    /**
-     * Initializes the internal property storage.
-     */
-    public RawDocumentBase()
-    {
-        propertyHelper = new PropertyHelper();
-    }
-
+public abstract class RawDocumentBase extends PropertyProviderBase implements RawDocument, Serializable {
     /**
      * Creates a new raw document.
      * 
@@ -44,7 +36,6 @@ public abstract class RawDocumentBase implements RawDocument, PropertyProvider
      * @param snippet
      */
     public RawDocumentBase(String url, String title, String snippet) {
-        this();
 	    setProperty(PROPERTY_URL, url);
 	    setProperty(PROPERTY_TITLE, title);
 	    setProperty(PROPERTY_SNIPPET, snippet);
@@ -54,14 +45,8 @@ public abstract class RawDocumentBase implements RawDocument, PropertyProvider
      * Cloning constructor.
      */ 
     public RawDocumentBase(RawDocument r) {
-	    this();
-	    
 	    if (r instanceof RawDocumentBase) {
-		    try {
-		    	this.propertyHelper = (PropertyHelper) ((RawDocumentBase)r).propertyHelper.clone();
-	    	} catch (CloneNotSupportedException e) {
-		    	throw new RuntimeException();
-	    	}
+            super.clonePropertiesFrom((RawDocumentBase) r);
 	    } else {
 		    setProperty(PROPERTY_URL, r.getProperty(PROPERTY_URL));
 		    setProperty(PROPERTY_SNIPPET, r.getProperty(PROPERTY_SNIPPET));
@@ -76,7 +61,7 @@ public abstract class RawDocumentBase implements RawDocument, PropertyProvider
      */
     public String getSnippet()
     {
-        return (String) propertyHelper.getProperty(PROPERTY_SNIPPET);
+        return (String) getProperty(PROPERTY_SNIPPET);
     }
 
     /*
@@ -86,7 +71,7 @@ public abstract class RawDocumentBase implements RawDocument, PropertyProvider
      */
     public String getUrl()
     {
-        return (String) propertyHelper.getProperty(PROPERTY_URL);
+        return (String) getProperty(PROPERTY_URL);
     }
 
     /*
@@ -96,72 +81,9 @@ public abstract class RawDocumentBase implements RawDocument, PropertyProvider
      */
     public String getTitle()
     {
-        return (String) propertyHelper.getProperty(PROPERTY_TITLE);
+        return (String) getProperty(PROPERTY_TITLE);
     }
 	
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.util.common.PropertyProvider#getProperty(java.lang.String)
-     */
-    public Object getProperty(String name)
-    {
-        return propertyHelper.getProperty(name);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.util.common.PropertyProvider#setProperty(java.lang.String,
-     *      java.lang.Object)
-     */
-    public Object setProperty(String propertyName, Object value)
-    {
-        return propertyHelper.setProperty(propertyName, value);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.util.common.PropertyProvider#getDoubleProperty(java.lang.String)
-     */
-    public double getDoubleProperty(String propertyName, double defaultValue)
-    {
-        return propertyHelper.getDoubleProperty(propertyName,  defaultValue);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.util.common.PropertyProvider#getIntProperty(java.lang.String)
-     */
-    public int getIntProperty(String propertyName, int defaultValue)
-    {
-        return propertyHelper.getIntProperty(propertyName, defaultValue);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.util.common.PropertyProvider#setDoubleProperty(java.lang.String,
-     *      double)
-     */
-    public Object setDoubleProperty(String propertyName, double value)
-    {
-        return propertyHelper.setDoubleProperty(propertyName, value);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.util.common.PropertyProvider#setIntProperty(java.lang.String,
-     *      int)
-     */
-    public Object setIntProperty(String propertyName, int value)
-    {
-        return propertyHelper.setIntProperty(propertyName, value);
-    }
-
     /**
      * @return Returns 'no score' constant.
      */

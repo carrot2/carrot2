@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="src" path="/carrot2-util-remote"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/dom4j-1.5.jar"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/log4j-1.2.11.jar"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/servlet.jar"/>
@@ -12,6 +11,5 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-case-normalizer"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/junit-3.8.1.jar"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/junit-addons-1.4.jar"/>
-	<classpathentry kind="src" path="src-test"/>
 	<classpathentry kind="output" path="tmp/eclipse/classes"/>
 </classpath>
