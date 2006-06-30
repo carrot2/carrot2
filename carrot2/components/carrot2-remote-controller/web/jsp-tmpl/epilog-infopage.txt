@@ -1,5 +1,0 @@
-        </td>
-    </tr>
-    </table>
-
-<%@include file="epilog.txt" %>

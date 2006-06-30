@@ -107,7 +107,8 @@ public class DemoContext {
     
             try {
                 cl.addComponentFactoriesFromDirectory(controller, componentsDir);
-                this.loadedProcesses = cl.loadProcessesFromDirectory(processesDir);
+                this.loadedProcesses = 
+                    Arrays.asList(cl.loadProcessesFromDirectory(processesDir));
             } catch (Exception e) {
                 throw new RuntimeException("Unhandled exception when initializing components and processes.", e);
             }

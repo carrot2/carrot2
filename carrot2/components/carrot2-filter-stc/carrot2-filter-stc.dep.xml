@@ -5,29 +5,15 @@
     name="carrot2-filter-stc"
     description="Carrot2 STC Clustering filter">
 
-    <provides profile="local">
+    <provides>
         <files build-path-exclude="true" prefix="tmp/dist">
             <file location="carrot2-filter-stc.jar" />
         </files>
         <build>
-            <ant file="build.local.xml" target="build" />
+            <ant file="build.xml" target="build" />
         </build>
 		<check-newer>
 			<fileset dir="src" />
-			<fileset dir="web" />
-		</check-newer>
-    </provides>
-
-    <provides profile="remote">
-        <files build-path-exclude="true" prefix="tmp/dist">
-            <file location="carrot2-filter-stc.war" />
-        </files>
-        <build>
-            <ant file="build.remote.xml" target="build" />
-        </build>
-		<check-newer>
-			<fileset dir="src" />
-			<fileset dir="web" />
 		</check-newer>
     </provides>
 
@@ -35,14 +21,5 @@
     <dependency name="carrot2-license" />
     <dependency name="dom4j" />
 	<dependency name="carrot2-util-tokenizer" />
-
 	<dependency name="carrot2-local-core" />
-
-	<dependency name="carrot2-util-remote" 	profile="remote" />
-	<dependency name="carrot2-filter-case-normalizer" profile="remote" />
-
-	<dependency name="mockobjects" profile="test" />
-	<dependency name="junit" profile="test" />
-	<dependency name="carrot2-util-remote" 	profile="test" />
-	<dependency name="carrot2-filter-case-normalizer" profile="test" />
 </component>

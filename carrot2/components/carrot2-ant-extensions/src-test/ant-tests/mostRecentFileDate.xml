@@ -2,7 +2,9 @@
 <project name="most-recent-file-date-test" default="test">
     
     <target name="prepare">
-        <taskdef name="mostRecentFileDate" classname="com.dawidweiss.carrot.ant.MostRecentFileDate" />
+        <taskdef resource="res/carrot2-antlib.xml">
+            <classpath location="../../tmp/build/bootstrap" />
+        </taskdef>
         <delete dir="tmp" />
         <mkdir dir="tmp" />
     </target>

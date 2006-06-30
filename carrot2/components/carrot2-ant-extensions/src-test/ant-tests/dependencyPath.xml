@@ -2,10 +2,9 @@
 <project name="bring-to-date" default="test">
 
     <target name="prepare">
-        <taskdef name="bringToDate" 
-        	classname="com.dawidweiss.carrot.ant.BringToDate" />
-		<typedef name="dependencyPath"
-			classname="com.dawidweiss.carrot.ant.DependencyPath" />
+        <taskdef resource="res/carrot2-antlib.xml">
+            <classpath location="../../tmp/build/bootstrap" />
+        </taskdef>
 
 		<subant target="prepare">
 			<fileset dir="deps" includes="**/build.xml"/>

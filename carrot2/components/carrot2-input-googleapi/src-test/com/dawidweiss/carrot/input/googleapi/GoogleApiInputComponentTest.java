@@ -16,19 +16,11 @@ package com.dawidweiss.carrot.input.googleapi;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import org.apache.log4j.Logger;
 
-import com.dawidweiss.carrot.core.local.LocalComponent;
-import com.dawidweiss.carrot.core.local.LocalComponentFactory;
-import com.dawidweiss.carrot.core.local.LocalComponentFactoryBase;
-import com.dawidweiss.carrot.core.local.LocalControllerBase;
-import com.dawidweiss.carrot.core.local.LocalInputComponent;
-import com.dawidweiss.carrot.core.local.LocalProcessBase;
+import com.dawidweiss.carrot.core.local.*;
 import com.dawidweiss.carrot.core.local.clustering.RawDocument;
 import com.dawidweiss.carrot.core.local.impl.DocumentsConsumerOutputComponent;
 
@@ -43,7 +35,7 @@ public class GoogleApiInputComponentTest extends junit.framework.TestCase {
 		LocalControllerBase controller;
 		
         // Some output component
-        LocalComponentFactory outputFactory = new LocalComponentFactoryBase() {
+        LocalComponentFactory outputFactory = new LocalComponentFactory() {
             public LocalComponent getInstance() {
                 return new DocumentsConsumerOutputComponent();
             }
@@ -72,7 +64,7 @@ public class GoogleApiInputComponentTest extends junit.framework.TestCase {
             return;
         }
 
-        LocalComponentFactory inputFactory = new LocalComponentFactoryBase() {
+        LocalComponentFactory inputFactory = new LocalComponentFactory() {
             public LocalComponent getInstance() {
                 return new GoogleApiInputComponent(pool);
             }
@@ -99,7 +91,7 @@ public class GoogleApiInputComponentTest extends junit.framework.TestCase {
             return;
         }
         
-        LocalComponentFactory inputFactory = new LocalComponentFactoryBase() {
+        LocalComponentFactory inputFactory = new LocalComponentFactory() {
             public LocalComponent getInstance() {
                 return new GoogleApiInputComponent(pool);
             }
@@ -126,7 +118,7 @@ public class GoogleApiInputComponentTest extends junit.framework.TestCase {
             return;
         }
 
-        LocalComponentFactory inputFactory = new LocalComponentFactoryBase() {
+        LocalComponentFactory inputFactory = new LocalComponentFactory() {
             public LocalComponent getInstance() {
                 return new GoogleApiInputComponent(pool);
             }
@@ -156,7 +148,7 @@ public class GoogleApiInputComponentTest extends junit.framework.TestCase {
             return;
         }
 
-        LocalComponentFactory inputFactory = new LocalComponentFactoryBase() {
+        LocalComponentFactory inputFactory = new LocalComponentFactory() {
             public LocalComponent getInstance() {
                 return new GoogleApiInputComponent(pool);
             }

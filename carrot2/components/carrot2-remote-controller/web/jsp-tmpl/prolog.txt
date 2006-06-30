@@ -1,3 +1,0 @@
-<%@include file="prolog-base.txt" %>
-
-<body>

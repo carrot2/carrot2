@@ -1,0 +1,28 @@
+
+<project name="Carrot2 Demo Web Application" default="build">
+
+    <property file="${user.home}/.carrot.properties" />
+    <property file="local.properties" />
+
+    <property name="project.dir"      location="${basedir}" />
+    <property name="carrot2.cvs.dir"  location="../.." />
+    <property name="dist.name"        value="carrot2-demo-webapp" />
+
+    <property name="type" value="wartype" />
+    <property name="distribution.dir" location="${project.dir}/tmp/dist" />
+    <property name="profile" value="demo" />
+
+    <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
+
+    <target name="jars" description="Updates JARS in WEB-INF/lib" depends="build">
+    	<mkdir dir="web/WEB-INF/lib" />
+
+        <delete>
+            <fileset dir="web/WEB-INF/lib" includes="*.jar" />
+        </delete>
+        
+        <unzip src="${distribution.dir}/${dist.name}.war" dest="web">
+            <patternset includes="WEB-INF/lib/*.jar" />
+        </unzip>
+    </target>
+</project>

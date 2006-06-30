@@ -26,7 +26,7 @@ import com.dawidweiss.carrot.core.local.*;
  * @author Stanislaw Osinski
  * @version $Revision$
  */
-public class LuceneLocalInputComponentFactory extends LocalComponentFactoryBase
+public class LuceneLocalInputComponentFactory implements LocalComponentFactory
 {
     /** Default title field name */
     public static final String DEFAULT_TITLE_FIELD = "title";

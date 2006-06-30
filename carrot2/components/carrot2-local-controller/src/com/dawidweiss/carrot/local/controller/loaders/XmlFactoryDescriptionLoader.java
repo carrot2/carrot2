@@ -166,8 +166,8 @@ public class XmlFactoryDescriptionLoader implements ComponentFactoryLoader {
                     "or is not public: " + componentClass);
             }
 
-            PlainComponentFactory factory = new PlainComponentFactory(componentClazz,
-                    initBeanshell, defaults, name, description);
+            PlainComponentFactory factory = 
+                new PlainComponentFactory(componentClazz, initBeanshell, defaults);
 
             return new LoadedComponentFactory(id, factory);
         } catch (DocumentException e) {

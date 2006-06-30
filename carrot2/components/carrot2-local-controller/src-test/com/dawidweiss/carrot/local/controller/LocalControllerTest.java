@@ -13,18 +13,9 @@
 
 package com.dawidweiss.carrot.local.controller;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-import com.dawidweiss.carrot.core.local.DuplicatedKeyException;
-import com.dawidweiss.carrot.core.local.LocalComponent;
-import com.dawidweiss.carrot.core.local.LocalControllerBase;
-import com.dawidweiss.carrot.core.local.LocalFilterComponent;
-import com.dawidweiss.carrot.core.local.LocalInputComponent;
-import com.dawidweiss.carrot.core.local.LocalProcessBase;
-import com.dawidweiss.carrot.core.local.ProcessingResult;
+import com.dawidweiss.carrot.core.local.*;
 
 
 /**

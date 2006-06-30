@@ -102,17 +102,6 @@ public class RawDocumentProducerCacheWrapper extends LocalInputComponentBase {
         this.currentlyCaching = false;
     }
 
-    /**
-     * Create a wrapper around a <code>wrappedComponent</code> with the equivalence class identified by
-     * the wrapped component's class object.
-     * 
-     * @deprecated This method is deprecated, use explicit equivalence class
-     * constructor {@link #RawDocumentProducerCacheWrapper(LocalInputComponent, Object)}.
-     */
-    public RawDocumentProducerCacheWrapper(LocalInputComponent wrappedComponent) {
-        this(wrappedComponent, wrappedComponent.getClass());
-    }
-
     public Set getRequiredSuccessorCapabilities() {
         return SUCCESSOR_CAPABILITIES; 
     }

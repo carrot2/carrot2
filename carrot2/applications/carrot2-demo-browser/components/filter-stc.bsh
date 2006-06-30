@@ -8,7 +8,7 @@ import com.dawidweiss.carrot.util.tokenizer.languages.english.*;
 //
 // Component factory is a dynamic Beanshell class
 //
-factory = new LocalComponentFactoryBase() {
+factory = new LocalComponentFactory() {
     public LocalComponent getInstance() {
     	return new STCLocalFilterComponent();
     }

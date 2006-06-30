@@ -5,8 +5,7 @@
     </path>
 
     <target name="javadoc">
-        <ant target="javadoc" antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" 
-        	inheritRefs="true" />
+        <ant target="javadoc" antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" inheritRefs="true" />
     </target>
 
     <target name="clean">
@@ -32,8 +31,16 @@
     	<condition property="tests.available.true" value="true">
     		<equals arg1="true" arg2="${tests.available}" casesensitive="false" trim="true" />
     	</condition>
-    	<antcall target="tests.run" />
-    	<antcall target="tests.info" />
+    	<antcall target="tests.run">
+            <reference refid="dependencies" />
+            <reference refid="c2.tasks.classloader" />
+            <param name="cache:deps" value="${cache:deps}" />
+        </antcall>
+    	<antcall target="tests.info">
+            <reference refid="dependencies" />
+            <reference refid="c2.tasks.classloader" />
+            <param name="cache:deps" value="${cache:deps}" />
+        </antcall>
     </target>
 
     <target name="build">

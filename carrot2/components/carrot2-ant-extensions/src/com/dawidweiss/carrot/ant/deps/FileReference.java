@@ -21,8 +21,6 @@ import org.apache.tools.ant.util.FileUtils;
  * A file reference resolved from {@link FileElement}.
  */
 public class FileReference {
-    private static FileUtils futils = FileUtils.newFileUtils(); 
-
     private File absolute;
     private String relative;
     private File base;
@@ -33,6 +31,7 @@ public class FileReference {
 
 	public FileReference(File base, File file) 
         throws IllegalArgumentException {
+        final FileUtils futils = FileUtils.newFileUtils(); 
         if (!base.isAbsolute()) {
             throw new IllegalArgumentException("Base must be an" +
                 " absolute reference: " + base.getPath());

@@ -13,26 +13,19 @@
 
 package com.dawidweiss.carrot.lucene;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.List;
-import java.util.Iterator;
+import java.util.*;
 
 import com.dawidweiss.carrot.core.local.*;
-import com.dawidweiss.carrot.core.local.clustering.RawCluster;
 import com.dawidweiss.carrot.core.local.impl.ClustersConsumerOutputComponent;
-import com.dawidweiss.carrot.util.tokenizer.SnippetTokenizerLocalFilterComponent;
-import com.stachoodev.carrot.filter.lingo.local.LingoLocalFilterComponent;
-import com.dawidweiss.carrot.core.local.impl.*;
-
+import com.dawidweiss.carrot.core.local.impl.RawDocumentsProducerLocalInputComponent;
+import com.dawidweiss.carrot.core.local.linguistic.Language;
 import com.dawidweiss.carrot.util.tokenizer.languages.dutch.Dutch;
 import com.dawidweiss.carrot.util.tokenizer.languages.english.English;
 import com.dawidweiss.carrot.util.tokenizer.languages.french.French;
 import com.dawidweiss.carrot.util.tokenizer.languages.german.German;
 import com.dawidweiss.carrot.util.tokenizer.languages.italian.Italian;
 import com.dawidweiss.carrot.util.tokenizer.languages.spanish.Spanish;
-import com.dawidweiss.carrot.core.local.linguistic.Language;
+import com.stachoodev.carrot.filter.lingo.local.LingoLocalFilterComponent;
 
 
 /**
@@ -65,7 +58,7 @@ public class Clusterer {
 	/** Adds the required component factories to a local Carrot2 controller. */
 	private void addComponentFactories() {
 		// Local nutch input component
-		LocalComponentFactory genericInputFactory = new LocalComponentFactoryBase() {
+		LocalComponentFactory genericInputFactory = new LocalComponentFactory() {
 			public LocalComponent getInstance() {
 				return new RawDocumentsProducerLocalInputComponent();
 			}
@@ -73,7 +66,7 @@ public class Clusterer {
 		controller.addLocalComponentFactory("input.generic", genericInputFactory);
 
 		// Cluster consumer output component
-		LocalComponentFactory clusterConsumerOutputFactory = new LocalComponentFactoryBase() {
+		LocalComponentFactory clusterConsumerOutputFactory = new LocalComponentFactory() {
 			public LocalComponent getInstance() {
 				return new ClustersConsumerOutputComponent();
 			}
@@ -82,7 +75,7 @@ public class Clusterer {
 			clusterConsumerOutputFactory);
 		
 		// Clustering component here.
-		LocalComponentFactory lingoFactory = new LocalComponentFactoryBase() {
+		LocalComponentFactory lingoFactory = new LocalComponentFactory() {
 			public LocalComponent getInstance()
 			{
 				HashMap defaults = new HashMap();

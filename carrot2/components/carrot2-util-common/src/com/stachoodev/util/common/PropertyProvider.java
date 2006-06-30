@@ -19,7 +19,7 @@ package com.stachoodev.util.common;
  * <code>int</code> and <code>double</code> primitives.
  * 
  * A default implementation of this interface, as well as some utility methods
- * are provided by the {@link com.stachoodev.util.common.PropertyHelper}class.
+ * are provided by the {@link com.stachoodev.util.common.PropertyHelper} class.
  * 
  * @author Stanislaw Osinski
  * @version $Revision$

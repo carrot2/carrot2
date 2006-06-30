@@ -14,6 +14,7 @@
 package com.dawidweiss.carrot.ant.deps;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -25,6 +26,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.dawidweiss.carrot.ant.tasks.BringToDateTask;
+
 /**
  * A container for build triggers for a component.
  * 
@@ -32,7 +35,7 @@ import org.xml.sax.SAXException;
  * 
  * @author Dawid Weiss
  */
-public class BuildElement {
+public class BuildElement implements Serializable {
     private List execs = new ArrayList();
 
 	public BuildElement(File base, Element configElement) 
@@ -68,10 +71,9 @@ public class BuildElement {
 	/**
      * Perform the build.
 	 */
-	public void build(Project project, String profile) throws BuildException {
+	public void build(Project project, String profile, BringToDateTask task) throws BuildException {
         for (Iterator i = execs.iterator();i.hasNext();) {
-            BuildTask task = (BuildTask) i.next();
-            task.execute(project, profile);
+            ((BuildTask) i.next()).execute(project, profile, task);
         }
 	}
 }

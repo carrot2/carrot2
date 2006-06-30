@@ -18,11 +18,12 @@ import java.util.HashMap;
 import carrot2.demo.cache.RawDocumentProducerCacheWrapper;
 
 import com.dawidweiss.carrot.core.local.LocalComponent;
-import com.dawidweiss.carrot.core.local.LocalComponentFactoryBase;
+import com.dawidweiss.carrot.core.local.LocalComponentFactory;
 import com.dawidweiss.carrot.core.local.impl.RawDocumentDummyLanguageDetection;
 import com.dawidweiss.carrot.core.local.impl.RawDocumentEnumerator;
 import com.dawidweiss.carrot.core.local.linguistic.Language;
 import com.dawidweiss.carrot.filter.stc.local.STCLocalFilterComponent;
+import com.dawidweiss.carrot.input.yahoo.YahooApiInputComponent;
 import com.dawidweiss.carrot.util.tokenizer.SnippetTokenizerLocalFilterComponent;
 import com.dawidweiss.carrot.util.tokenizer.languages.english.English;
 import com.kgolembniak.carrot.filter.haogstc.local.HAOGSTCLocalFilterComponent;
@@ -42,8 +43,8 @@ public class WebStartComponentFactory {
     /**
      * <code>filter-tokenizer</code>
      */
-    public static LocalComponentFactoryBase createTokenizer() {
-        final LocalComponentFactoryBase factory = new LocalComponentFactoryBase() {
+    public static LocalComponentFactory createTokenizer() {
+        final LocalComponentFactory factory = new LocalComponentFactory() {
             public LocalComponent getInstance() {
                 return new SnippetTokenizerLocalFilterComponent();
             }
@@ -55,8 +56,8 @@ public class WebStartComponentFactory {
     /**
      * <code>filter-language-detection-xx</code>
      */
-    public static LocalComponentFactoryBase createLanguageDetection(final String langCode) {
-        final LocalComponentFactoryBase factory = new LocalComponentFactoryBase() {
+    public static LocalComponentFactory createLanguageDetection(final String langCode) {
+        final LocalComponentFactory factory = new LocalComponentFactory() {
             public LocalComponent getInstance() {
                 return new RawDocumentDummyLanguageDetection(langCode);
             }
@@ -68,8 +69,8 @@ public class WebStartComponentFactory {
     /**
      * <code>filter-case-normalizer</code>
      */
-    public static LocalComponentFactoryBase createCaseNormalizer() {
-        final LocalComponentFactoryBase factory = new LocalComponentFactoryBase() {
+    public static LocalComponentFactory createCaseNormalizer() {
+        final LocalComponentFactory factory = new LocalComponentFactory() {
             public LocalComponent getInstance() {
                 return new CaseNormalizerLocalFilterComponent(
                     new SmartCaseNormalizer());
@@ -81,12 +82,12 @@ public class WebStartComponentFactory {
     /**
      * <code>input-cached-yahooapi</code>
      */
-    public static LocalComponentFactoryBase createCachedYahooApi() {
-        final LocalComponentFactoryBase factory = new LocalComponentFactoryBase() {
+    public static LocalComponentFactory createCachedYahooApi() {
+        final LocalComponentFactory factory = new LocalComponentFactory() {
             public LocalComponent getInstance() {
                 // Wrap Yahoo API component with the cache
                 return new RawDocumentProducerCacheWrapper(
-                        new com.dawidweiss.carrot.input.yahoo.YahooApiInputComponent());
+                        new YahooApiInputComponent(), YahooApiInputComponent.class);
             }
         };
         return factory;
@@ -95,8 +96,8 @@ public class WebStartComponentFactory {
     /**
      * <code>filter-stc</code>
      */
-    public static LocalComponentFactoryBase createStc() {
-        return new LocalComponentFactoryBase() {
+    public static LocalComponentFactory createStc() {
+        return new LocalComponentFactory() {
             public LocalComponent getInstance() {
                 return new STCLocalFilterComponent();
             }
@@ -106,8 +107,8 @@ public class WebStartComponentFactory {
     /**
      * <code>filter-rough-kmeans</code>
      */
-    public static LocalComponentFactoryBase createRoughKMeans() {
-        return new LocalComponentFactoryBase() {
+    public static LocalComponentFactory createRoughKMeans() {
+        return new LocalComponentFactory() {
             public LocalComponent getInstance() {
                 return new com.chilang.carrot.filter.cluster.local.RoughKMeansLocalFilterComponent();
             }
@@ -117,8 +118,8 @@ public class WebStartComponentFactory {
     /**
      * <code>filter-rawdocument-enumerator</code> 
      */
-    public static LocalComponentFactoryBase createRawdocumentEnumerator() {
-        return new LocalComponentFactoryBase() {
+    public static LocalComponentFactory createRawdocumentEnumerator() {
+        return new LocalComponentFactory() {
             public LocalComponent getInstance() {
                 return new RawDocumentEnumerator();
             }
@@ -128,8 +129,8 @@ public class WebStartComponentFactory {
     /**
      * <code>filter-lingo</code>
      */
-    public static LocalComponentFactoryBase createLingo() {
-        return new LocalComponentFactoryBase() {
+    public static LocalComponentFactory createLingo() {
+        return new LocalComponentFactory() {
             public LocalComponent getInstance() {
                 final HashMap params = new HashMap();
                 final Language [] languages = new Language [] {
@@ -143,8 +144,8 @@ public class WebStartComponentFactory {
     /**
      * <code>filter-haog-stc</code>
      */
-    public static LocalComponentFactoryBase createHaogStc() {
-        return new LocalComponentFactoryBase() {
+    public static LocalComponentFactory createHaogStc() {
+        return new LocalComponentFactory() {
             public LocalComponent getInstance() {
                 return new HAOGSTCLocalFilterComponent();
             }
@@ -154,8 +155,8 @@ public class WebStartComponentFactory {
     /**
      * <code>filter-fuzzyants</code> 
      */
-    public static LocalComponentFactoryBase createFuzzyAnts() {
-        return new LocalComponentFactoryBase() {
+    public static LocalComponentFactory createFuzzyAnts() {
+        return new LocalComponentFactory() {
             public LocalComponent getInstance() {
                 return new fuzzyAnts.FuzzyAntsLocalFilterComponent();
             }

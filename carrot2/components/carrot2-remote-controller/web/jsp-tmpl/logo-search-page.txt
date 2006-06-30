@@ -1,1 +1,0 @@
-<a target="_top" href="http://www.carrot2.org"><img border="0" src="<%= request.getContextPath() + "/gfx/Carrot2-search-page.gif" %>" alt="Carrot2" width="49" height="60"/></a>

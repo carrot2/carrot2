@@ -13,16 +13,8 @@
 
 package com.dawidweiss.carrot.input.googleapi;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.TreeSet;
+import java.io.*;
+import java.util.*;
 
 /**
  * A pool for Google API keys.
@@ -192,5 +184,41 @@ public class GoogleKeysPool {
         synchronized (this) {
             return inactiveKeys.size() + availableKeys.size();
         }
+    }
+
+    public final static String POOL_SYSPROPERTY = "googleapi.keypool";
+    private static GoogleKeysPool defaultPool;
+
+    /**
+     * Returns the default instance of a google keys pool, instantiated
+     * from a location given in the system property <code>googleapi.keypool</code>.
+     */
+    public static synchronized GoogleKeysPool getDefault() {
+        if (defaultPool == null) {
+            final String poolLocation = System.getProperty(POOL_SYSPROPERTY);
+            if (poolLocation != null) {
+                final GoogleKeysPool pool = new GoogleKeysPool();
+                final File keyPool = new File(poolLocation);
+                if (keyPool.exists() && keyPool.isDirectory()) {
+                    try {
+                        pool.addKeys(keyPool, ".key");
+                    } catch (IOException e) {
+                        throw new RuntimeException("Could not read google keys from:"
+                                + keyPool.getAbsolutePath(), e);
+                    }
+                }
+                if (pool.getKeysTotal() == 0) {
+                    throw new RuntimeException(
+                            "No available keys in: " 
+                            + keyPool.getAbsolutePath()
+                            + " (remember about *.key extension)");
+                }        
+                defaultPool = pool;
+            } else {
+                throw new RuntimeException("System property: "
+                        + POOL_SYSPROPERTY + " undefined.");
+            }
+        }
+        return defaultPool;
     }
 }

@@ -5,10 +5,7 @@
     <property name="component.descriptor" location="carrot2-filter-haog.dep.xml" />
     <property name="dist.name" value="carrot2-filter-haog" />
 
-    <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
+	<property name="type" value="jartype" />
 
-	<target name="build">
-		<ant antfile="build.local.xml" inheritall="false" />
-		<ant antfile="build.remote.xml" inheritall="false" />
-	</target>
+    <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
 </project>

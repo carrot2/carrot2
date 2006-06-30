@@ -23,7 +23,7 @@ import com.stachoodev.util.common.*;
  * @author Stanislaw Osinski
  * @version $Revision$
  */
-public class RawClusterBase implements RawCluster, PropertyProvider
+public class RawClusterBase extends PropertyProviderBase implements RawCluster
 {
     /** This cluster's labels */
     private List labels;
@@ -34,9 +34,6 @@ public class RawClusterBase implements RawCluster, PropertyProvider
     /** Documents belonging to this cluster */
     private List documents;
 
-    /** Properties of this cluster */
-    private PropertyHelper propertyHelper;
-
     /**
      * Creates a new cluster with no labels, no documents, no subclusters and no
      * properties;
@@ -46,7 +43,6 @@ public class RawClusterBase implements RawCluster, PropertyProvider
         this.labels = new ArrayList();
         this.documents = new ArrayList();
         this.subclusters = new ArrayList();
-        this.propertyHelper = new PropertyHelper();
     }
 
     /**
@@ -56,7 +52,7 @@ public class RawClusterBase implements RawCluster, PropertyProvider
      */
     public Map getProperties()
     {
-        return propertyHelper.getProperties();
+        return super.getProperties();
     }
 
     /**
@@ -67,7 +63,7 @@ public class RawClusterBase implements RawCluster, PropertyProvider
      */
     public double getScore()
     {
-        return propertyHelper.getDoubleProperty(RawCluster.PROPERTY_SCORE, -1);
+        return getDoubleProperty(RawCluster.PROPERTY_SCORE, -1);
     }
 
     /**
@@ -77,7 +73,7 @@ public class RawClusterBase implements RawCluster, PropertyProvider
      */
     public void setScore(double score)
     {
-        propertyHelper.setDoubleProperty(RawCluster.PROPERTY_SCORE, score);
+        setDoubleProperty(RawCluster.PROPERTY_SCORE, score);
     }
 
     /**
@@ -162,68 +158,4 @@ public class RawClusterBase implements RawCluster, PropertyProvider
     {
         return documents;
     }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.clustering.RawCluster#getProperty(java.lang.String)
-     */
-    public Object getProperty(String propertyName)
-    {
-        return propertyHelper.getProperty(propertyName);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.clustering.RawCluster#setProperty(java.lang.String,
-     *      java.lang.Object)
-     */
-    public Object setProperty(String propertyName, Object value)
-    {
-        return propertyHelper.setProperty(propertyName, value);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.util.common.PropertyProvider#getIntProperty(java.lang.String)
-     */
-    public int getIntProperty(String propertyName, int defaultValue)
-    {
-        return propertyHelper.getIntProperty(propertyName, defaultValue);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.util.common.PropertyProvider#setIntProperty(java.lang.String,
-     *      int)
-     */
-    public Object setIntProperty(String propertyName, int value)
-    {
-        return propertyHelper.setIntProperty(propertyName, value);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.util.common.PropertyProvider#getDoubleProperty(java.lang.String)
-     */
-    public double getDoubleProperty(String propertyName, double defaultValue)
-    {
-        return propertyHelper.getDoubleProperty(propertyName, defaultValue);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.util.common.PropertyProvider#setDoubleProperty(java.lang.String,
-     *      double)
-     */
-    public Object setDoubleProperty(String propertyName, double value)
-    {
-        return propertyHelper.setDoubleProperty(propertyName, value);
-    }
-
 }

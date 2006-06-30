@@ -24,6 +24,6 @@
     <dependency name="carrot2-util-tokenizer" />
     
     <dependency name="carrot2-filter-case-normalizer" profile="test" />
-    <dependency name="carrot2-input-xml" profile="test" in-profile="local" />
+    <dependency name="carrot2-input-xml" profile="test" />
     <dependency name="junit" profile="test" />
 </component>

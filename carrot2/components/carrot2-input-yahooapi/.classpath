@@ -8,7 +8,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-common"/>
 	<classpathentry kind="src" path="src-test"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/servlet.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-remote"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/commons-codec-1.3.jar"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/commons-httpclient-3.0-rc3.jar"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/dom4j-1.5.jar"/>

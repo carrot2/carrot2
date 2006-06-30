@@ -61,8 +61,8 @@ public class TokenizedDocumentSnippet extends TokenizedDocumentBase
         this.id = id;
         this.title = title;
         this.score = score;
-        propertyHelper.setProperty(PROPERTY_SNIPPET, snippet);
-        propertyHelper.setProperty(PROPERTY_URL, url);
+        setProperty(PROPERTY_SNIPPET, snippet);
+        setProperty(PROPERTY_URL, url);
     }
 
     /*
@@ -72,7 +72,7 @@ public class TokenizedDocumentSnippet extends TokenizedDocumentBase
      */
     public TokenSequence getSnippet()
     {
-        return (TokenSequence) propertyHelper.getProperty(PROPERTY_SNIPPET);
+        return (TokenSequence) getProperty(PROPERTY_SNIPPET);
     }
 
     /*
@@ -92,7 +92,7 @@ public class TokenizedDocumentSnippet extends TokenizedDocumentBase
      */
     public String getUrl()
     {
-        return (String) propertyHelper.getProperty(PROPERTY_URL);
+        return (String) getProperty(PROPERTY_URL);
     }
 
     /*
@@ -177,7 +177,7 @@ public class TokenizedDocumentSnippet extends TokenizedDocumentBase
             result = result && getSnippet().equals(otherSnippet.getSnippet());
         }
 
-        return result && propertyHelper.equals(otherSnippet.propertyHelper);
+        return result && super.getPropertyHelper().equals(otherSnippet.getPropertyHelper());
     }
 
     /*
@@ -205,6 +205,6 @@ public class TokenizedDocumentSnippet extends TokenizedDocumentBase
             return getSnippet().hashCode();
         }
 
-        return propertyHelper.hashCode();
+        return getPropertyHelper().hashCode();
     }
 }

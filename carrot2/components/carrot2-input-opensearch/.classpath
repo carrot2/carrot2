@@ -7,7 +7,6 @@
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/servlet.jar"/>
 	<classpathentry kind="src" path="/carrot2-util-common"/>
 	<classpathentry kind="src" path="/carrot2-local-core"/>
-	<classpathentry kind="src" path="/carrot2-util-remote"/>
 	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/rome-0.8.jar"/>
 	<classpathentry kind="lib" path="lib/rome-fetcher-0.7.jar"/>

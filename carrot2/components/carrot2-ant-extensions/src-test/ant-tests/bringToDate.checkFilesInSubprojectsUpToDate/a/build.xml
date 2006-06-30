@@ -5,25 +5,22 @@
 	</target>
 
 	<target name="deps">
-       <taskdef name="bringToDate" 
-        	classname="com.dawidweiss.carrot.ant.BringToDate" />
-		<typedef name="dependencyPath"
-			classname="com.dawidweiss.carrot.ant.DependencyPath" />
-		
-		<path id="dependencies">
+        <taskdef resource="res/carrot2-antlib.xml" />
+
+		<dependency-path id="dependencies">
             <fileset dir="..">
                 <include name="**/*.dep.xml" />
             </fileset>
-		</path>
+		</dependency-path>
 
 		<bringToDate componentDescriptor="a.dep.xml" dependenciesOnly="true" profile="">
 			<dependencies refid="dependencies" />
 		</bringToDate>
 
-		<dependencyPath id="path.dependencies"
+		<component-path id="path.dependencies"
 			componentDescriptor="a.dep.xml" profile="">
 			<dependencies refid="dependencies" />
-		</dependencyPath>
+		</component-path>
 	</target>
 
 	<target name="build" depends="deps">

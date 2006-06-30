@@ -1,0 +1,44 @@
+
+<Server port="9005" shutdown="DOWNMYFRIEND">
+
+  <!-- Comment these entries out to disable JMX MBeans support used for the administration web application -->
+  <Listener className="org.apache.catalina.mbeans.ServerLifecycleListener" />
+  <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
+  <Listener className="org.apache.catalina.storeconfig.StoreConfigLifecycleListener"/>
+
+  <!-- Global JNDI resources -->
+  <GlobalNamingResources>
+    <!-- Editable user database that can also be used by
+         UserDatabaseRealm to authenticate users -->
+    <Resource name="UserDatabase" auth="Container"
+              type="org.apache.catalina.UserDatabase"
+       description="User database that can be updated and saved"
+           factory="org.apache.catalina.users.MemoryUserDatabaseFactory"
+          pathname="conf/tomcat-users.xml" />
+  </GlobalNamingResources>
+
+  <Service name="Tomcat5">
+    <!-- Define a non-SSL HTTP/1.1 Connector on port 9080 -->
+    <Connector port="8080" maxThreads="100" minSpareThreads="15" maxSpareThreads="50"
+               enableLookups="false" redirectPort="8443" acceptCount="100" 
+			   connectionTimeout="20000" disableUploadTimeout="true" 
+			   URIEncoding="utf-8" />
+
+    <!-- Define the top level container in our container hierarchy -->
+    <Engine name="Eclipse" defaultHost="localhost">
+      <Realm className="org.apache.catalina.realm.UserDatabaseRealm" resourceName="UserDatabase"/>
+
+      <Host name="localhost" appBase="none" unpackWARs="false" autoDeploy="false" 
+            xmlValidation="false" xmlNamespaceAware="false">
+
+		<Logger className="org.apache.catalina.logger.SystemErrLogger" timestamp="true"/>
+
+        <Valve className="org.apache.catalina.valves.AccessLogValve"
+                 directory="logs"  prefix="access_log." suffix=".txt"
+                 pattern="common" resolveHosts="false" />
+
+			<Context path="" docBase="${application.home}/web" reloadable="true" />
+      </Host>
+    </Engine>
+  </Service>
+</Server>

@@ -5,29 +5,15 @@
     name="carrot2-filter-trc"
     description="Carrot2 TRC Clustering filter">
 
-    <provides profile="local">
+    <provides>
         <files build-path-exclude="true" prefix="tmp/dist">
             <file location="carrot2-filter-trc.jar" />
         </files>
         <build>
-            <ant file="build.local.xml" target="build" />
+            <ant file="build.xml" target="build" />
         </build>
 		<check-newer>
 			<fileset dir="src" />
-			<fileset dir="web" />
-		</check-newer>
-    </provides>
-
-    <provides profile="remote">
-        <files build-path-exclude="true" prefix="tmp/dist">
-            <file location="carrot2-filter-trc.war" />
-        </files>
-        <build>
-            <ant file="build.remote.xml" target="build" />
-        </build>
-		<check-newer>
-			<fileset dir="src" />
-			<fileset dir="web" />
 		</check-newer>
     </provides>
 
@@ -36,8 +22,7 @@
     <dependency name="carrot2-util-common" />
 	<dependency name="colt" />
     <dependency name="commons-collections" />
+	<dependency name="carrot2-local-core" />
 
 	<dependency name="carrot2-snowball-stemmers" />
-	<dependency name="carrot2-util-remote" 	profile="remote" />
-	<dependency name="carrot2-local-core" 	profile="local" />
 </component>

@@ -33,6 +33,10 @@ public class ComponentInProfile {
         this.component = component;
         this.profile = profile;
         this.noCopy = noCopyFlag;
+
+        if (this.component == null) {
+            throw new IllegalArgumentException();
+        }
     }
 
     public boolean equals(Object o) {
@@ -40,7 +44,7 @@ public class ComponentInProfile {
             final ComponentInProfile other = (ComponentInProfile) o;
             return this.component.equals(other.component) 
                 && ((this.profile == null && other.profile == null)
-                        || this.profile.equals(other.profile));
+                        || (this.profile != null && this.profile.equals(other.profile)));
         } else {
             return false;
         }

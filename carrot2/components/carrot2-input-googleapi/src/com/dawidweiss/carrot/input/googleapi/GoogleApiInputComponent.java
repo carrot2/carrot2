@@ -58,6 +58,15 @@ public class GoogleApiInputComponent extends LocalInputComponentBase
 
 	private GoogleKeysPool keyPool;
 
+    /**
+     * Creates a default {@link GoogleKeysPool}, using system
+     * property {@link GoogleKeysPool#POOL_SYSPROPERTY} to locate a folder
+     * with keys. Throws a runtime exception if not found.
+     */
+    public GoogleApiInputComponent() {
+        this(GoogleKeysPool.getDefault());
+    }
+    
 	public GoogleApiInputComponent(GoogleKeysPool keyPool) {
 		this.keyPool = keyPool;
 	}
