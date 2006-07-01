@@ -1,0 +1,23 @@
+
+import com.dawidweiss.carrot.core.local.*;
+import com.dawidweiss.carrot.core.local.linguistic.*;
+import com.dawidweiss.carrot.local.controller.*;
+import com.dawidweiss.carrot.util.tokenizer.languages.english.*;
+
+//
+// Component factory is a dynamic Beanshell class
+//
+factory = new LocalComponentFactory() {
+    public LocalComponent getInstance() {
+    	return new fuzzyAnts.FuzzyAntsLocalFilterComponent();
+    }
+
+    public String getName() {
+        return "FuzzyAnts";
+    }
+};
+
+//
+// Return the ID of the component and its factory.
+//
+return new LoadedComponentFactory("filter-fuzzyants", factory);

@@ -9,14 +9,18 @@
     <dependency name="carrot2-util-common" />
     <dependency name="carrot2-local-controller" />
 
+
     <dependency name="carrot2-input-yahooapi" profile="demo" />
     <dependency name="carrot2-input-googleapi" profile="demo" />
 
     <dependency name="carrot2-filter-lingo" profile="demo" />
     <dependency name="carrot2-filter-stc" profile="demo" />
+    <dependency name="carrot2-filter-fuzzyants" profile="demo" />
+    <dependency name="carrot2-filter-trc" profile="demo" />
+    <dependency name="carrot2-filter-haog" profile="demo" />
 
-    <dependency name="carrot2-util-tokenizer" profile="demo" />
 	<dependency name="carrot2-filter-case-normalizer" profile="demo" />
+    <dependency name="carrot2-util-tokenizer" profile="demo" />
 
 
     <dependency name="ehcache" />
