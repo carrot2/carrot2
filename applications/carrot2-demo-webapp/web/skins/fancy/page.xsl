@@ -30,7 +30,9 @@
   <xsl:template name="on-load">
     <xsl:text>javascript:initPage()</xsl:text>
   </xsl:template>
-    
+
+  <!-- Customize these templates by overriding their definitions -->
+
   <xsl:template name="custom-results-utils">
     <div id="results-utils">
       <a href="http://www.carrot2.org">Carrot2</a> |
@@ -41,6 +43,8 @@
   <xsl:template name="custom-logo">
     <img src="{$skinuri}/img/results-logo.gif" id="results-logo" />
   </xsl:template>
+  
+  <!-- end of customization block -->
 
   <xsl:template match="page">
     <xsl:apply-templates select="meta" />
