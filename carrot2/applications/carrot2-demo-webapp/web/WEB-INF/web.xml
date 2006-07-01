@@ -35,7 +35,7 @@
 
         <init-param>
         	<param-name>results.serializerFactory</param-name>
-        	<param-value>org.carrot2.webapp.serializers.XMLSerializersFactory</param-value>
+        	<param-value>org.carrot2.webapp.serializers.FancySerializersFactory</param-value>
         </init-param>
 
         <init-param>

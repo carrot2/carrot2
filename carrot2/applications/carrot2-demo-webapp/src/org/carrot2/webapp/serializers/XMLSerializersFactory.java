@@ -49,4 +49,8 @@ public class XMLSerializersFactory implements SerializersFactory {
     public RawClustersSerializer createRawClustersSerializer(HttpServletRequest request) {
         return new XMLClustersSerializer(request.getContextPath(), stylesheetsBase);
     }
+
+    protected final String getStylesheetsBase() {
+        return this.stylesheetsBase;
+    }
 }
