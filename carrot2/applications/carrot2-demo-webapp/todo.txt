@@ -1,9 +1,5 @@
 
-- add input switching JS
-- implement bitset-based document selection
-- add more inputs, clustering processes
 - decrease the number of synchronizations in the broadcaster
 - carrot2 o/s logo?
 - check on safari/ opera/ ie/ mozilla
-- xsltfilter in 1.5
 - stachoo: add a nice and user-friendly exception page
