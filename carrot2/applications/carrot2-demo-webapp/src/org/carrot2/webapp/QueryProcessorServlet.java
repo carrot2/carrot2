@@ -182,7 +182,7 @@ public final class QueryProcessorServlet extends HttpServlet {
     {
         final TabAlgorithm algorithmTab = searchRequest.getAlgorithm();
 
-        final String queryHash = searchRequest.getLongHashCode();
+        final String queryHash = searchRequest.getInputAndSizeHashCode();
         final Broadcaster bcaster;
 
         synchronized (getServletContext()) {
@@ -240,13 +240,14 @@ public final class QueryProcessorServlet extends HttpServlet {
                 props.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, 
                         Integer.toString(searchRequest.getInputSize()));
                 try {
+                    logger.info("Clustering results using: " + algorithmTab.getShortName());
                     final ProcessingResult result = 
                         algorithmsController.query(algorithmTab.getShortName(), 
                                 searchRequest.query, props);
                     final ClustersConsumerOutputComponent.Result collected =  
                         (ClustersConsumerOutputComponent.Result) result.getQueryResult();
                     final List clusters = collected.clusters; 
-                    final List documents = collected.documents;
+                    final List documents = bcaster.getDocuments();
 
                     final RawClustersSerializer serializer = serializerFactory.createRawClustersSerializer(request);
                     response.setContentType(serializer.getContentType());
@@ -390,7 +391,9 @@ public final class QueryProcessorServlet extends HttpServlet {
                     controller.addProcess(tabName, new LocalProcessBase(loaded.getId(), "collector", 
                             /* filters */ new String[] { "enumerator" } ));
                     settings.add(new TabSearchInput(tabName, tabDesc, otherProps));
-                    settings.setDefaultTabIndex(settings.getInputTabs().size() - 1);
+                    if (defaultTab) {
+                        settings.setDefaultTabIndex(settings.getInputTabs().size() - 1);
+                    }
                     logger.info("Added input tab: " + tabName + " (component: " + loaded.getId() + ")");
                 } catch (Exception e) {
                     if (ignoreOnError) {
@@ -464,7 +467,11 @@ public final class QueryProcessorServlet extends HttpServlet {
             for (int i = 0; i < processes.length; i++) {
                 final String shortName = processes[i].getProcess().getName();
                 final String description = processes[i].getProcess().getDescription();
+                final boolean defaultAlgorithm = "true".equals(processes[i].getAttributes().get("process.default"));
                 searchSettings.add(new TabAlgorithm(shortName, description));
+                if (defaultAlgorithm) {
+                    searchSettings.setDefaultAlgorithmIndex(searchSettings.getAlgorithms().size() - 1);
+                }
                 controller.addProcess(shortName, processes[i].getProcess());
                 logger.info("Added algorithm: " + shortName);
             }

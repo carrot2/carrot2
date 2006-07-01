@@ -36,6 +36,9 @@ public final class SearchSettings {
     /** Default tab index. */
     private int defaultTabIndex;
 
+    /** Default algorithm index. */
+    private int defaultAlgorithmIndex;
+
     /** Settings for a single search request. */
     public final class SearchRequest {
         /** The query for this request. Never null, but may be empty. */
@@ -50,8 +53,8 @@ public final class SearchSettings {
         /** Requested input size index. */
         public final int inputSizeIndex;
         
-        /** hashcode of this request */
-        public final String hashCode;
+        /** hashcode of the combination of inputTab and size */
+        public final String inputAndSizeHashCode;
 
         /** All options passed in the query */
         public final Map allRequestOpts;
@@ -84,10 +87,9 @@ public final class SearchSettings {
                     0, allowedInputSizes.length - 1);
 
             // calculate hash code.
-            this.hashCode = query + "//" 
-                + getInputTab().getShortName()
-                + "//" + getInputSize()
-                + "//" + getAlgorithm().getShortName();
+            this.inputAndSizeHashCode = query + "//" 
+                + getInputTab().getShortName() 
+                + "//" + getInputSize();
 
             // save remaining options.
             this.allRequestOpts = parameterMap;
@@ -111,10 +113,10 @@ public final class SearchSettings {
             return allowedInputSizes[inputSizeIndex];
         }
 
-        public String getLongHashCode() {
-            return hashCode;
+        public String getInputAndSizeHashCode() {
+            return inputAndSizeHashCode;
         }
-        
+
         public Map getRequestArguments() {
             return this.allRequestOpts;
         }
@@ -162,7 +164,7 @@ public final class SearchSettings {
      * Returns the index of the default algorithm.
      */
     protected int getDefaultAlgorithm() {
-        return 0;
+        return defaultAlgorithmIndex;
     }
 
     /**
@@ -217,5 +219,12 @@ public final class SearchSettings {
             throw new IllegalArgumentException();
         }
         this.defaultTabIndex = defaultTabIndex;
+    }
+
+    public void setDefaultAlgorithmIndex(int defaultAlgorithmIndex) {
+        if (defaultAlgorithmIndex < 0 || defaultAlgorithmIndex > this.algorithms.size()) {
+            throw new IllegalArgumentException();
+        }
+        this.defaultAlgorithmIndex = defaultAlgorithmIndex;
     }
 }
