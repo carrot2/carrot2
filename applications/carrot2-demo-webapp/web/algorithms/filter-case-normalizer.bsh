@@ -1,0 +1,14 @@
+
+import com.dawidweiss.carrot.core.local.*;
+import com.dawidweiss.carrot.local.controller.*;
+import com.stachoodev.carrot.filter.normalizer.*;
+import com.stachoodev.carrot.filter.normalizer.local.*;
+
+factory = new LocalComponentFactory() {
+    public LocalComponent getInstance() {
+        return new CaseNormalizerLocalFilterComponent(
+            new SmartCaseNormalizer());
+    }
+};
+
+return new LoadedComponentFactory("filter-case-normalizer",  factory);

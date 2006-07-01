@@ -13,6 +13,8 @@
     <dependency name="carrot2-input-googleapi" profile="demo" />
 
     <dependency name="carrot2-filter-lingo" profile="demo" />
+    <dependency name="carrot2-filter-stc" profile="demo" />
+
     <dependency name="carrot2-util-tokenizer" profile="demo" />
 	<dependency name="carrot2-filter-case-normalizer" profile="demo" />
 
