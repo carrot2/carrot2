@@ -57,6 +57,10 @@ public class AprioriEngine {
 	 * Frequent sets generation start time.
 	 */
 	private long startTime;
+	/**
+	 * Words used in frequent sets.
+	 */
+	private HashSet usedWords;
 	
 	/**
 	 * Default constructor. 
@@ -67,6 +71,7 @@ public class AprioriEngine {
 		this.frequentItemSets = new ArrayList();
 		this.previousItemSets = new ArrayList();
 		this.words = new HashSet();
+		this.usedWords = new HashSet();
 	}
 	
 	/**
@@ -76,6 +81,7 @@ public class AprioriEngine {
 		this.frequentItemSets.clear();
 		this.baskets.clear();
 		this.words.clear();
+		this.usedWords.clear();
 	}
 	
 	/**
@@ -180,6 +186,7 @@ public class AprioriEngine {
 				(support <= parameters.getIgnoreWordIfInHigherDocsPercent())){
 				previousItemSets.add(itemSet);
 				frequentItemSets.add(itemSet);
+				usedWords.addAll(itemSet);
 			}
 		}
 	}
@@ -211,6 +218,7 @@ Timeout:for (int i1=0; i1<previousItemSets.size(); i1++){
 						if (previousItemSets.containsAll(newSet.getSubSets()) && 
 							getItemSetSupport(newSet) >= parameters.getMinSupport()){
 							candidates.add(newSet);
+							usedWords.addAll(newSet);
 						}
 					}
 				}
@@ -326,48 +334,34 @@ Timeout:for (int i1=0; i1<previousItemSets.size(); i1++){
 			}
 		}
 
-/*
 		ArrayList description = new ArrayList();
 		if (fitting != null){
+			HashSet items = new HashSet(itemSet);
 			List sentence = fitting.getSentence();
 			Map reverseMap = fitting.getReverseMap();
 			String stem = null;
 			String word = null;
 			boolean addWord = false;
-			int foundWords = 0;
 			for (int i1=0; i1<sentence.size(); i1++){
 				word = (String) sentence.get(i1);
 				stem = (String) reverseMap.get(word);
-				if (foundWords>=itemSet.size()) {
-					addWord = false;
+				if (items.size()<=0) {
+					break;
 				}
-				if ((stem!=null)&&(itemSet.contains(stem))){
-					foundWords++;
-					if (foundWords<=itemSet.size()) {
+				if (stem!=null) {
+					if (items.contains(stem)) {
 						addWord = true;
+						items.remove(stem);
+						description.add(word);
+					} else {
+						if (addWord && (!usedWords.contains(stem))){
+							description.add(word);
+						}
 					}
-				}
-				if (addWord){
-					description.add(word);
-				}
-			}
-		} else {
-			description.addAll(basket.getDescriptionForItemSet(itemSet));
-		}
-		
-		return description;
- */		
-		ArrayList description = new ArrayList();
-		if (fitting != null){
-			List sentence = fitting.getSentence();
-			Map reverseMap = fitting.getReverseMap();
-			String stem = null;
-			String word = null;
-			for (int i1=0; i1<sentence.size(); i1++){
-				word = (String) sentence.get(i1);
-				stem = (String) reverseMap.get(word);
-				if ((stem!=null)&&(itemSet.contains(stem))){
-					description.add(word);
+				} else {
+					if (addWord && (!word.matches("[\\p{Punct}]"))) {
+						description.add(word);
+					}
 				}
 			}
 		} else {
