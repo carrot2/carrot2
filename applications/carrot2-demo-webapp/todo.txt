@@ -2,3 +2,4 @@
 - decrease the number of synchronizations in the broadcaster
 - check on safari/ opera/ ie/ mozilla
 - stachoo: add a nice and user-friendly exception page
+- stachoo: add tab image preloading
