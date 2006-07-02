@@ -50,6 +50,11 @@ public class CombinedVertex extends Vertex{
 	 */
 	private List phrases;
 	
+	/**
+	 * Description for this vertex.
+	 */
+	private String description;
+
 	public CombinedVertex(String label){
 		super(label);
 		vertices = new ArrayList();
@@ -231,6 +236,10 @@ public class CombinedVertex extends Vertex{
 	 * @return description of this vertex as String.
 	 */
 	public String getVertexDescription(StcParameters params) {
+		if (this.description!=null){
+			return this.description;
+		}
+		
 		phrases = getVertexPhrases(params);
 
 		String description = "";
@@ -249,6 +258,7 @@ public class CombinedVertex extends Vertex{
 			} 				
 		}
 		
+		this.description = description;
 		return description;
 	}	
 	
@@ -259,29 +269,65 @@ public class CombinedVertex extends Vertex{
 	 * @return description of this vertex as String.
 	 */
 	public String getVertexDescription(FIParameters params) {
-		String description = "";
-		HashSet descriptions = new HashSet();
+		if (this.description != null) {
+			return this.description; 
+		}
+		
+		ArrayList descriptions = new ArrayList();
 		
 		Vertex vertex;
 		Cluster cluster;
 		for (int i1=0; i1<vertices.size(); i1++){
 			vertex = (Vertex) vertices.get(i1);
 			cluster = (Cluster) vertex.getRepresentedCluster();
-			descriptions.addAll(cluster.getDescription());
+			descriptions.add(cluster.getDescription());
 		}
 		
-		int i1 = 0;
+		int i1=0;
+		boolean remove = false;
+		ArrayList firstDesc = null;
+		ArrayList secondDesc = null;
+		while (i1<descriptions.size()){
+			firstDesc = (ArrayList) descriptions.get(i1);
+			remove = false;
+			for (int i2=0; i2<descriptions.size(); i2++){
+				if (i1!=i2) {
+					secondDesc = (ArrayList) descriptions.get(i2);
+					if (secondDesc.containsAll(firstDesc)) {
+						remove = true;
+						break;
+					}
+				}
+			}
+			
+			if (remove) {
+				descriptions.remove(i1);
+			} else {
+				i1++;
+			}
+		}
+		
+		String description = "";
+		ArrayList phrases = null;
+		i1 = 0;
 		for (Iterator it = descriptions.iterator(); it.hasNext();){
 			if (i1>0) {
-				description += " ";
+				description += ", ";
 			}
-			description += (String) it.next();
+			phrases = (ArrayList) it.next();
+			for (int i2=0; i2<phrases.size(); i2++) {
+				if (i2>0) {
+					description += " ";
+				}
+				description += phrases.get(i2);
+			}
 			i1++;
 			if (i1 >= params.getMaxDescPhraseLength()){
 				break;
 			}
 		}
 		
+		this.description = description;
 		return description;
 	}	
 
