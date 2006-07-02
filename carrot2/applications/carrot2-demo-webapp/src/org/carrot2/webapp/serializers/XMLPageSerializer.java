@@ -89,8 +89,8 @@ public class XMLPageSerializer implements PageSerializer {
 
         // Emit action URLs
         final Element actionUrls = meta.addElement("action-urls");
-        actionUrls.addElement("new-search").setText(contextPath + "search");
-        final String uri = contextPath + "search?"
+        actionUrls.addElement("new-search").setText(contextPath + "/search");
+        final String uri = contextPath + "/search?"
             + QueryProcessorServlet.PARAM_Q + "=" + URLEncoding.encode(searchRequest.query, "UTF-8")
             + "&" + QueryProcessorServlet.PARAM_INPUT + "=" + searchRequest.inputTabIndex
             + "&" + QueryProcessorServlet.PARAM_ALG + "=" + searchRequest.algorithmIndex
