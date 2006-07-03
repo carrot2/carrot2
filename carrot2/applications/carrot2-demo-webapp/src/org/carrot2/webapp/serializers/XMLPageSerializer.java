@@ -62,6 +62,8 @@ public class XMLPageSerializer implements PageSerializer {
 
         doc.add(factory.createProcessingInstruction("skin-uri", 
                 contextPath + skinBase));
+        doc.add(factory.createProcessingInstruction("context-path", 
+                contextPath));
 
         doc.add(root);
 

@@ -1,5 +1,7 @@
 <project name="Common targets for inclusion in build files.">
 	<patternset id="src.patternset" />
+	<patternset id="war.patternset" />
+
     <path id="classpath.local">
         <fileset dir="${project.dir}" includes="lib/*.jar" />
     </path>

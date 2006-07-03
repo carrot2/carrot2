@@ -59,7 +59,7 @@
   <!-- ##################################### -->
   <!-- ### CHECK REQUIRED PROPERTIES     ### -->
   <!-- ##################################### -->
-  <target name="check.properties"> <!-- {{{ -->
+  <target name="check:properties"> <!-- {{{ -->
     <condition property="ok:project.dir" value="true">
         <and>
             <not>
@@ -77,13 +77,6 @@
         </and>
     </condition>
     <fail message="'carrot2.cvs.dir' property must be set properly: ${carrot2.cvs.dir}" unless="ok:carrot2.cvs.dir" />
-
-    <condition property="ok:dist.name" value="true">
-        <not>
-            <equals arg1="${dist.name}" arg2="${undefined.value}"/>
-        </not>
-    </condition>
-    <fail message="'dist.name' property must be set." unless="ok:dist.name" />
 
     <!-- Set to true if dependency file is available. -->
     <condition property="tmp:dep.file.available" value="true">
@@ -104,7 +97,7 @@
   <!-- ##################################### -->
   <!-- ### {{{ CLEAN                     ### -->
   <!-- ##################################### -->
-  <target name="clean" depends="check.properties"
+  <target name="clean" depends="check:properties"
     description="Removes local temporary files.">
     <delete failonerror="false" includeemptydirs="true" quiet="true">
         <fileset dir="${project.dir}/tmp">
@@ -118,7 +111,7 @@
   <!-- ##################################### -->
   <!-- ### {{{ CLEANALL                  ### -->
   <!-- ##################################### -->
-  <target name="cleanall" depends="check.properties"
+  <target name="cleanall" depends="check:properties"
     description="Removes all local temporary files.">
     <delete failonerror="true" includeemptydirs="true" quiet="true">
         <fileset dir="${project.dir}/tmp" defaultexcludes="false" />
@@ -142,7 +135,15 @@
   <!-- ##################################### -->
   <!-- ### {{{ PREPARE                   ### -->
   <!-- ##################################### -->
-  <target name="prepare" depends="check.properties, bootstrap, discover.classpath">
+  <target name="prepare" depends="check:properties, bootstrap, discover.classpath">
+    <condition property="ok:dist.name" value="true">
+        <not>
+            <equals arg1="${dist.name}" arg2="${undefined.value}"/>
+        </not>
+    </condition>
+    <fail message="'dist.name' property must be set." unless="ok:dist.name" />
+
+
     <mkdir dir="${distribution.dir}"  />
     <mkdir dir="${javadoc.dir}" />
   </target>
@@ -423,8 +424,9 @@ Tomcat:      ${tomcat.url}
     <copy toDir="${build.dir}/type-war">
         <fileset dir="${src-webapp.path}">
           <exclude name="WEB-INF/web.xml.template" />
-          <exclude name="WEB-INF/lib" />
-          <exclude name="WEB-INF/classes" />
+          <exclude name="WEB-INF/lib/**" />
+          <exclude name="WEB-INF/classes/**" />
+          <patternset refid="war.patternset" />
         </fileset>
     </copy>
 
