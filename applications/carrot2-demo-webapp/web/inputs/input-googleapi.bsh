@@ -13,6 +13,8 @@ LoadedComponentFactory loaded =
 loaded.setProperties(new String [][] {
 	{"tab.name", "Google"},
 	{"tab.description", "Search the Web with Google"},
+	{"tab.description.startup", "Carrot Clustering Engine will send your query to Google and automatically organize the results into thematic categories"},
+	{"tab.exampleQueries", "chips|tiger|salsa"},
 	{"tab.icon", "google.gif"},
 	{"tab.ignoreOnError", "true" }
 });

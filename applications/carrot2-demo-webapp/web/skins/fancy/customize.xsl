@@ -8,13 +8,18 @@
 
   <xsl:template name="custom-results-utils">
     <div id="results-utils">
-      <a href="http://www.carrot2.org">Carrot2</a> |
+      <a href="http://www.carrot2.org">Carrot2 project homepage</a> |
+      <a href="http://sf.net/projects/carrot2">Carrot2 @ sf.net</a> |
       <a href="http://www.carrot-search.com">Carrot Search</a>
     </div>
   </xsl:template>
     
-  <xsl:template name="custom-logo">
+  <xsl:template name="custom-results-logo">
     <img src="{$skinuri}/img/results-logo.gif" id="results-logo" />
   </xsl:template>
-
+    
+  <xsl:template name="custom-startup-logo">
+    <img src="{$skinuri}/img/startup-logo.gif" id="startup-logo" />
+  </xsl:template>
+  
 </xsl:stylesheet>

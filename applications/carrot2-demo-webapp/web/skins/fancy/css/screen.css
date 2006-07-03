@@ -290,7 +290,7 @@ input.hl {
 #startup-main-content {
   background-color: #F6F4EC;
   min-height: 140px;
-  padding-bottom: 10px;
+  padding-bottom: 0px;
 }
 
 * html #startup-main-content {
