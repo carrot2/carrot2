@@ -42,13 +42,13 @@
   <xsl:template match="meta">
     <table style="width: 100%; height: 100%">
       <tr>
-        <td style="padding-top: 20px">
+        <td style="padding-top: 10px">
           <xsl:call-template name="custom-results-utils" />
           <xsl:call-template name="custom-logo" />
 
           <table id="results-main">
             <tr>
-              <td id="startup-main-top-outer-left"><div style="width: 114px" /></td>
+              <td id="startup-main-top-outer-left"><div style="width: 124px" /></td>
 
               <td>
                 <xsl:for-each select="/page/meta/tabs/tab">
@@ -103,7 +103,7 @@
         <td>
           <div id="results-main-search" class="active-area" style="padding-top: 15px">
              <form action="{action-urls/new-search}" method="GET">
-             <table style="margin-left: 120px" id="search-area">
+             <table style="margin-left: 130px" id="search-area">
                <tr>
                  <td>
                    <table class="glow glow-small" style="background-color: white">
@@ -168,15 +168,23 @@
                    </select>
 
                    <!-- algorithm -->
-                   <label class="inline-cb-label" style="padding-left: 10px" for="alg-sel">Cluster with</label>
-                   <select id="alg-sel" name="{algorithms/@form-element}">
-                   <xsl:for-each select="algorithms/alg">
-                       <option value="{@id}">
-                           <xsl:if test="@selected"><xsl:copy-of select="@selected" /></xsl:if>
-                           <xsl:value-of select="short" /></option>
-                   </xsl:for-each>
-                   </select>
-                   
+                   <xsl:choose>
+                     <xsl:when test="count(algorithms/alg) > 1">
+                       <label class="inline-cb-label" style="padding-left: 10px" for="alg-sel">Cluster with</label>
+                       <select id="alg-sel" name="{algorithms/@form-element}">
+                       <xsl:for-each select="algorithms/alg">
+                           <option value="{@id}">
+                               <xsl:if test="@selected"><xsl:copy-of select="@selected" /></xsl:if>
+                               <xsl:value-of select="short" /></option>
+                       </xsl:for-each>
+                       </select>
+                     </xsl:when>
+                     <xsl:otherwise>
+                       <input type="hidden" name="{algorithms/@form-element}"
+                              value="{algorithms/alg[1]/@id}" />
+                     </xsl:otherwise>
+                   </xsl:choose>
+                                       
                    <!-- show/hide options -->
                    <input type="hidden" id="opts" name="opts" value="{$opts}" />
                  </td>

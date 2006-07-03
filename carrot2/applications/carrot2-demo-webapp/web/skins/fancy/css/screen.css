@@ -337,7 +337,7 @@ input.hl {
 
 #results-logo {
   position: absolute;
-  top: 18px;
+  top: 8px;
   left: 16px;
 }
 
@@ -398,4 +398,12 @@ table.progress td {
 
 #pgs-r {
   width: 100%;
+}
+
+#alg-sel {
+  width: 11.5em;	
+}
+
+#res-sel {
+  width: 7.5em;
 }
