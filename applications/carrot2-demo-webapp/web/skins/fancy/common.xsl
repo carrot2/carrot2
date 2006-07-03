@@ -2,7 +2,11 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
   <xsl:param name="divider" select="1" />
-  
+
+  <xsl:variable name="contextPath">
+    <xsl:value-of select="normalize-space(processing-instruction('context-path'))" />
+  </xsl:variable>
+
   <xsl:variable name="skinuri">
     <xsl:value-of select="normalize-space(processing-instruction('skin-uri'))" />
   </xsl:variable>

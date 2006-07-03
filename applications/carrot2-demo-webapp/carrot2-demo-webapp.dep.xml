@@ -5,10 +5,41 @@
     name="carrot2-demo-webapp"
     description="Carrot2 Demo Web Application">
 
+    <provides profile="war">
+        <files build-path-exclude="true" prefix="tmp/dist">
+            <file location="carrot2-webapp.war" />
+        </files>
+        <build>
+            <ant file="build.xml" target="build.war" />
+        </build>
+        <check-newer>
+            <fileset dir="web" />
+        </check-newer>        
+    </provides>
+
+    <provides profile="demo">
+        <files build-path-exclude="true" prefix="tmp/dist">
+            <file location="carrot2-demo-webapp.war" />
+        </files>
+        <build>
+            <ant file="build.xml" target="build.demo" />
+        </build>
+        <check-newer>
+            <fileset dir="src" />
+            <fileset dir="web" />
+        </check-newer>        
+    </provides>
+
+
     <dependency name="carrot2-local-core" />
     <dependency name="carrot2-util-common" />
     <dependency name="carrot2-local-controller" />
 
+    <dependency name="ehcache" />
+    <dependency name="dom4j" />
+    <dependency name="xerces" />
+    <dependency name="xslt-filter" />
+    <dependency name="servlets-api" nocopy="true" noexport="true" />
 
     <dependency name="carrot2-input-yahooapi" profile="demo" />
     <dependency name="carrot2-input-googleapi" profile="demo" />
@@ -19,15 +50,6 @@
     <dependency name="carrot2-filter-trc" profile="demo" />
     <dependency name="carrot2-filter-haog" profile="demo" />
 
-	<dependency name="carrot2-filter-case-normalizer" profile="demo" />
+    <dependency name="carrot2-filter-case-normalizer" profile="demo" />
     <dependency name="carrot2-util-tokenizer" profile="demo" />
-
-
-    <dependency name="ehcache" />
-    <dependency name="dom4j" />
-    <dependency name="xerces" />
-
-    <dependency name="xslt-filter" />
-
-    <dependency name="servlets-api" nocopy="true" noexport="true" />
 </component>

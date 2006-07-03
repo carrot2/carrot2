@@ -3,6 +3,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
   <xsl:import href="common.xsl" />
+  <xsl:import href="customize.xsl" />
 
   <xsl:strip-space elements="*"/>
 
@@ -31,19 +32,6 @@
     <xsl:text>javascript:initPage()</xsl:text>
   </xsl:template>
 
-  <!-- Customize these templates by overriding their definitions -->
-
-  <xsl:template name="custom-results-utils">
-    <div id="results-utils">
-      <a href="http://www.carrot2.org">Carrot2</a> |
-      <a href="http://www.carrot-search.com">Carrot Search</a>
-    </div>
-  </xsl:template>
-    
-  <xsl:template name="custom-logo">
-    <img src="{$skinuri}/img/results-logo.gif" id="results-logo" />
-  </xsl:template>
-  
   <!-- end of customization block -->
 
   <xsl:template match="page">

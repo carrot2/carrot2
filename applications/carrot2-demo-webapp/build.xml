@@ -1,20 +1,45 @@
 
-<project name="Carrot2 Demo Web Application" default="build">
+<project name="Carrot2 Demo Web Application" default="build.demo">
 
     <property file="${user.home}/.carrot.properties" />
     <property file="local.properties" />
 
     <property name="project.dir"      location="${basedir}" />
     <property name="carrot2.cvs.dir"  location="../.." />
-    <property name="dist.name"        value="carrot2-demo-webapp" />
 
     <property name="type" value="wartype" />
     <property name="distribution.dir" location="${project.dir}/tmp/dist" />
-    <property name="profile" value="demo" />
+    <property name="component.descriptor" location="carrot2-demo-webapp.dep.xml" />
 
     <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
 
-    <target name="jars" description="Updates JARS in WEB-INF/lib" depends="build">
+    <target name="build.demo" description="Builds a WAR file with open source components demo.">
+        <property name="dist.name" value="carrot2-demo-webapp" />
+        <property name="build.dir" location="${project.dir}/tmp/build.demo" />
+        <property name="profile" value="demo" />
+        <antcall target="build" inheritall="true"/>
+    </target>
+
+    <target name="build.war" description="Builds a plain WAR file (no components)">
+        <property name="dist.name" value="carrot2-webapp" />
+        <property name="build.dir" location="${project.dir}/tmp/build.war" />
+
+        <patternset id="war.patternset">
+            <exclude name="algorithms/*.bsh" />
+            <exclude name="algorithms/*.xml" />
+            <exclude name="inputs/*.bsh" />
+            <exclude name="inputs/*.xml" />
+        </patternset>
+
+        <property name="profile" value="war" />
+        <antcall target="build" inheritall="true">
+            <reference refid="war.patternset" />
+        </antcall>
+    </target>
+    
+    <target name="jars" description="Updates JARS in WEB-INF/lib" depends="build.demo">
+        <description>Copies JAR files to web/WEB-INF/lib (for Eclipse)</description>
+
     	<mkdir dir="web/WEB-INF/lib" />
 
         <delete>
