@@ -29,6 +29,7 @@ import com.dawidweiss.carrot.util.net.URLEncoding;
  * @author Dawid Weiss
  */
 public class XMLPageSerializer implements PageSerializer {
+    private static final String QUERY_SERVLET_PATH = "/search";
     private final DocumentFactory factory = DocumentFactory.getInstance();
     private final String skinBase;
     private final String contextPath;
@@ -91,8 +92,8 @@ public class XMLPageSerializer implements PageSerializer {
 
         // Emit action URLs
         final Element actionUrls = meta.addElement("action-urls");
-        actionUrls.addElement("new-search").setText(contextPath + "/search");
-        final String uri = contextPath + "/search?"
+        actionUrls.addElement("new-search").setText(contextPath + QUERY_SERVLET_PATH);
+        final String uri = contextPath + QUERY_SERVLET_PATH + "?"
             + QueryProcessorServlet.PARAM_Q + "=" + URLEncoding.encode(searchRequest.query, "UTF-8")
             + "&" + QueryProcessorServlet.PARAM_INPUT + "=" + searchRequest.inputTabIndex
             + "&" + QueryProcessorServlet.PARAM_ALG + "=" + searchRequest.algorithmIndex
@@ -124,6 +125,26 @@ public class XMLPageSerializer implements PageSerializer {
                 final Element propElem = tab.addElement("property");
                 propElem.addAttribute("key", (String) entry.getKey());
                 propElem.addAttribute("value", (String) entry.getValue());
+            }
+            
+            // Add example queries urls
+            String exampleQueriesString = ((String) inputTab.getOtherProperties().get(
+                "tab.exampleQueries"));
+            if (exampleQueriesString != null)
+            {
+                String [] exampleQueries = exampleQueriesString.split("\\|");
+                Element queriesElement = tab.addElement("example-queries");
+                for (int j = 0; j < exampleQueries.length; j++)
+                {
+                    Element query = queriesElement.addElement("example-query");
+                    final String url = contextPath + QUERY_SERVLET_PATH + "?"
+                        + QueryProcessorServlet.PARAM_Q + "="
+                        + URLEncoding.encode(exampleQueries[j], "UTF-8")
+                        + "&" + QueryProcessorServlet.PARAM_INPUT + "="
+                        + i;
+                    query.addAttribute("url", url);
+                    query.setText(exampleQueries[j]);
+                }
             }
         }
 

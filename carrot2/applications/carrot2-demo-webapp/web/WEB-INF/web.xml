@@ -50,4 +50,9 @@
         <servlet-name>QueryProcessor</servlet-name>
         <url-pattern>/search</url-pattern>
     </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>QueryProcessor</servlet-name>
+        <url-pattern>/search-xml</url-pattern>
+    </servlet-mapping>
 </web-app>

@@ -51,3 +51,11 @@ label {
   position: relative;
   bottom: 3px;
 }
+
+input.search-field:focus {
+  background-color: #ffffd8;
+}
+
+select:focus {
+  background-color: #ffffd8;
+}

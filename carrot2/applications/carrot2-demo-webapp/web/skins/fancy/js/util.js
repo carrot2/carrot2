@@ -12,28 +12,14 @@ function focus(elementId)
   }
 };
 
-function resize()
-{
-  var height = document.body.offsetHeight;
-  var width = document.body.offsetWidth;
-  var mainHeight = height - 180;
-  var mainWidth = width - 20;
-  if (mainHeight <= 0 || mainWidth <= 0)
-  {
-    return;
-  }
-  
-  var main = document.getElementById('results-main-content');
-  main.style.height = mainHeight + "px";
-  main.style.width = mainWidth + "px";
-};
-
 function switchTab(tabElemName, processId)
 {
   var main = document.getElementById(tabElemName);
-  hide("tab-" + main.value);
+  hideByIdFragment("-tab", "table");
+  hideByIdFragment("-desc", "div");
   main.value = processId;
-  show("tab-" + processId);
+  show(processId + "-tab");
+  show(processId + "-desc");
   focus('search-field');
 };
 
@@ -44,6 +30,7 @@ function showAdvanced()
   hide('adv-switch');
   show('sim-switch');
   document.getElementById('opts').value = 's';
+  focus('search-field');
 };
 
 function hideAdvanced()
@@ -53,6 +40,7 @@ function hideAdvanced()
   show('adv-switch');
   hide('sim-switch');
   document.getElementById('opts').value = 'h';
+  focus('search-field');
 };
 
 function show(elementId)
@@ -63,6 +51,18 @@ function show(elementId)
 function hide(elementId)
 {
   setElementVisible(elementId, false);
+}
+
+function hideByIdFragment(idFragment, tagName)
+{
+  var elems = document.getElementsByTagName(tagName);
+  for (var i = 0; i < elems.length; i++)
+  {
+    if (elems[i].id.indexOf(idFragment) >= 0)
+    {
+      hide(elems[i].id);
+    }
+  }
 }
 
 function setElementVisible(elementId, visible)
