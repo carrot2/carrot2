@@ -107,10 +107,6 @@
                 <exclude name="**/*.links" />
             </fileset>
 
-            <fileset dir="${carrot2.cvs.dir}/schema/mime-types">
-                <include name="*_docbook.xml" />
-            </fileset>
-
             <filterchain>
                 <filterreader classname="com.dawidweiss.ant.filters.ReplaceTokensWithFileContents">
                     <classpath refid="ant-extensions" />
@@ -131,7 +127,7 @@
                 <not>
                     <equals arg1="${carrot2.cvs.dir}" arg2="undefined" />
                 </not>
-                <available file="${carrot2.cvs.dir}/schema" type="dir" />
+                <available file="${carrot2.cvs.dir}/carrot2.LICENSE" type="file" />
             </and>
         </condition>
         <fail message="### Define 'carrot2.cvs.dir' property pointing at Carrot2 CVS checkout."

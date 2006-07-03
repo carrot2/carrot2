@@ -10,34 +10,32 @@
 
 <chapter id="chapter:introduction">
     <title>Introduction</title>
-    
+
     <section>
         <title>What is &carrot;?</title>
         
         <para>
-        &carrot; is a research framework for experimenting with automated querying of
-        various data sources (such as search engines), processing search results and
-        their visualization.
-        </para>
-
-        <para>
-        Under the term &quot;research&quot;, we understand that the architecture
-        of the system is oriented mostly toward flexibility; mechanisms such as
-        data exchange via XML language, distributed,
-        dynamically accessible components, the use of Java as primary language
-        of implementation &ndash; they all make the system quite easy to tailor
-        to one's needs. Performance and flexibility are often on the opposite
-        ends of software design. &carrot; has a dual architecture. One design uses
-        remote components and data transferred between then using XML. The performance-oriented
-        design uses local Java processes where components exchange information using
-        direct method calls.
+        &carrot; is an open source framework for search results clustering and
+        other text-mining applications. The project was initially written by Dawid Weiss and
+        Stanisław Osiński
+        for academic purposes, but evolved into a production-quality software comparable to
+        commercial products on the market.
         </para>
         
         <para>
-        &carrot; was primarily built with search results clustering in mind, but it can
-        be configured or adjusted to do other kinds of pipelined data processing. 
+        A spin-off commercial company &carrotsearch; provides even more efficient and scalable
+        search results clustering solutions based on (and smoothly integrated) with the open source 
+        code.
         </para>
-    
     </section>
-
+    
+    <section>
+        <title>About this manual</title>
+        
+        <para>This manual discusses the basic concepts behind internal &carrot; architecture. The project
+        is mainly developer-based and as such no verbose documentation is written as it would always
+        lag behind the codebase. If you have questions or concerns, it is best to contact
+        the authors via the official project mailing list and ask directly.
+        </para>
+    </section>
 </chapter>

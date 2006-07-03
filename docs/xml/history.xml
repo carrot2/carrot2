@@ -10,6 +10,17 @@
 
 <revhistory>
     <revision>
+        <revnumber>0.22</revnumber>
+        <date>3 Jul 2006</date>
+        <authorinitials>dw</authorinitials>
+        <revdescription>
+            <para>
+            Removing obsolete material after removal of remote interfaces.
+            </para>
+        </revdescription>
+    </revision>
+
+    <revision>
         <revnumber>0.21</revnumber>
         <date>15 Jan 2006</date>
         <authorinitials>dw</authorinitials>

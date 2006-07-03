@@ -39,11 +39,7 @@
     <!-- chapters follow -->
 
     <include file="introduction.xml" />
-
-    <include file="architecture-remote.xml" />
     <include file="architecture-local.xml" />
-    
-    <include file="mime-types.xml" />
 
     <appendix>
         <title>History of revisions of this document</title>

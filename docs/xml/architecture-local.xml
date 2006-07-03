@@ -10,7 +10,7 @@
 
 ]>
 <chapter id="sect:local-interfaces">
-    <title>Local components architecture</title>
+    <title>Architecture</title>
 
     <section>
     	<title>Introduction</title>
@@ -26,18 +26,6 @@
             the remote components architecture.
             </para>
     	</section>
-
-        <section>
-            <title>Why local interfaces when we have the remote ones?</title>
-            
-            <para>
-            The XML/HTTP pipeline was designed for flexibility, but lacks
-            efficiency. Local interfaces yield a performance improvement that
-            lets &carrot; components be used in production environment (and not only for
-            research). Additionally, local interfaces make it possible to embedd
-            &carrot; components in a non-networked application. 
-            </para>
-        </section>
     </section>
     
     <section>
