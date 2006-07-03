@@ -6,6 +6,8 @@
 
   <!-- Customize these templates by overriding their definitions -->
 
+  <xsl:param name="ga-code">UA-317750-3</xsl:param>
+  
   <xsl:template name="custom-results-utils">
     <div id="results-utils">
       <a href="http://www.carrot2.org">Carrot2 project homepage</a> |
