@@ -17,6 +17,7 @@
         <property name="dist.name" value="carrot2-demo-webapp" />
         <property name="build.dir" location="${project.dir}/tmp/build.demo" />
         <property name="profile" value="demo" />
+
         <antcall target="build" inheritall="true"/>
     </target>
 
