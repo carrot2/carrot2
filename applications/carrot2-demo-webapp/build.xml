@@ -13,11 +13,17 @@
 
     <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
 
-    <target name="build.demo" description="Builds a WAR file with open source components demo.">
-        <property name="dist.name" value="carrot2-demo-webapp" />
+    <target name="build" description="Builds a demo WAR file.">
+    	<property name="dist.name" value="carrot2-demo-webapp" />
         <property name="build.dir" location="${project.dir}/tmp/build.demo" />
         <property name="profile" value="demo" />
 
+        <ant target="build.${type}"
+             antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" inheritrefs="true">
+        </ant>
+    </target>
+
+    <target name="build.demo" description="Builds a WAR file with open source components demo.">
         <antcall target="build" inheritall="true"/>
     </target>
 
