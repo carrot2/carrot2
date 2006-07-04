@@ -17,11 +17,11 @@
   </xsl:template>
     
   <xsl:template name="custom-results-logo">
-    <img src="{$skinuri}/img/results-logo.gif" id="results-logo" />
+    <a href="{$contextPath}/"><img border="0" src="{$skinuri}/img/results-logo.gif" id="results-logo" /></a>
   </xsl:template>
     
   <xsl:template name="custom-startup-logo">
-    <img src="{$skinuri}/img/startup-logo.gif" id="startup-logo" />
+    <a href="{$contextPath}/"><img border="0" src="{$skinuri}/img/startup-logo.gif" id="startup-logo" /></a>
   </xsl:template>
   
 </xsl:stylesheet>
