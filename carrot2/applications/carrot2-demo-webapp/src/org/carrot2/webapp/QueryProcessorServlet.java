@@ -32,6 +32,7 @@ import com.dawidweiss.carrot.core.local.clustering.RawCluster;
 import com.dawidweiss.carrot.core.local.clustering.RawDocument;
 import com.dawidweiss.carrot.core.local.impl.*;
 import com.dawidweiss.carrot.local.controller.*;
+import com.dawidweiss.carrot.local.controller.loaders.BeanShellFactoryDescriptionLoader;
 
 /**
  * Query processor servlet.
@@ -341,6 +342,14 @@ public final class QueryProcessorServlet extends HttpServlet {
 
         final LocalControllerBase controller = new LocalControllerBase();
         final ControllerHelper helper = new ControllerHelper();
+        
+        // Register context path for beanshell scripts.
+        final ComponentFactoryLoader bshLoader = helper.getComponentFactoryLoader(ControllerHelper.EXT_COMPONENT_FACTORY_LOADER_BEANSHELL);
+        if (bshLoader != null) {
+            final HashMap globals = new HashMap();
+            globals.put("inputsDirFile", inputScripts);
+            ((BeanShellFactoryDescriptionLoader) bshLoader).setGlobals(globals);
+        }
 
         // Add an output sink component now.
         controller.addLocalComponentFactory("collector",
