@@ -14,20 +14,13 @@
 package com.dawidweiss.carrot.input.yahoo;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.io.InputStream;
+import java.util.*;
 
 import org.apache.log4j.Logger;
 
-import com.dawidweiss.carrot.core.local.LocalComponent;
-import com.dawidweiss.carrot.core.local.LocalInputComponent;
-import com.dawidweiss.carrot.core.local.LocalInputComponentBase;
-import com.dawidweiss.carrot.core.local.ProcessingException;
-import com.dawidweiss.carrot.core.local.RequestContext;
-import com.dawidweiss.carrot.core.local.clustering.RawDocumentBase;
-import com.dawidweiss.carrot.core.local.clustering.RawDocumentsConsumer;
-import com.dawidweiss.carrot.core.local.clustering.RawDocumentsProducer;
+import com.dawidweiss.carrot.core.local.*;
+import com.dawidweiss.carrot.core.local.clustering.*;
 import com.dawidweiss.carrot.util.common.StringUtils;
 
 public class YahooApiInputComponent extends LocalInputComponentBase 
@@ -56,6 +49,9 @@ public class YahooApiInputComponent extends LocalInputComponentBase
      */
     private YahooSearchService service;
 
+    /**
+     * Create an input component with the default service descriptor.
+     */
     public YahooApiInputComponent() {
         final YahooSearchServiceDescriptor descriptor = new YahooSearchServiceDescriptor();
         try {
@@ -65,6 +61,20 @@ public class YahooApiInputComponent extends LocalInputComponentBase
         }
         final YahooSearchService service = new YahooSearchService(descriptor);
         this.service = service;
+    }
+
+    /**
+     * Create a service descriptor from the input XML and use it. The input
+     * stream is always closed.
+     */
+    public YahooApiInputComponent(final InputStream serviceDescriptorXML) throws IOException {
+        try {
+            final YahooSearchServiceDescriptor descriptor = new YahooSearchServiceDescriptor();
+            descriptor.initializeFromXML(serviceDescriptorXML);
+            this.service = new YahooSearchService(descriptor);
+        } finally {
+            try { serviceDescriptorXML.close(); } catch (IOException e) {/* ignore */}
+        }
     }
 
 	public YahooApiInputComponent(YahooSearchService service) {
