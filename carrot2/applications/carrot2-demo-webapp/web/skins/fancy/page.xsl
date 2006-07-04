@@ -48,12 +48,12 @@
   <!-- Emit the main page -->
   <xsl:template match="meta" mode="no-query">
     <xsl:call-template name="custom-results-utils" />
+    <div><!-- empty --></div>
     <table id="startup-main">
       <tr>
-        <td id="startup-main-top-outer-left"><div style="width: 230px" /></td>
+        <td id="startup-main-top-outer-left"><xsl:call-template name="custom-startup-logo" /><div style="width: 230px" /></td>
         <td><xsl:call-template name="tabs" /></td>
         <td id="startup-main-top-outer-right" />
-        <xsl:call-template name="custom-startup-logo" />
       </tr>
     </table>
 

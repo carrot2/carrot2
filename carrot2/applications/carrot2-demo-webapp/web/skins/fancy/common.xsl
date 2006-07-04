@@ -16,7 +16,7 @@
 <html style="height: 100%" class="outside-back-color">
   <head>
     <title>Carrot Clustering Engine</title>
-    <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
+    
     <link rel="stylesheet" type="text/css" href="{$skinuri}/css/common.css" />
     <xsl:call-template name="head-insert" />
   </head>
