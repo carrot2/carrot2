@@ -23,8 +23,7 @@
         </ant>
     </target>
 
-    <target name="build.demo" description="Builds a WAR file with open source components demo.">
-        <antcall target="build" inheritall="true"/>
+    <target name="build.demo" depends="build" description="Builds a WAR file with open source components demo.">
     </target>
 
     <target name="build.war" description="Builds a plain WAR file (no components)">
