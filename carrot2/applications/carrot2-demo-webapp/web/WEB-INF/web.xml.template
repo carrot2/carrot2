@@ -12,7 +12,7 @@
         
         <init-param>
         	<param-name>template.caching</param-name>
-        	<param-value>false</param-value>
+        	<param-value>@XSLT_TEMPLATE_CACHING@</param-value>
             <description>If set to "true", the template will be compiled and reused. This
             is, however, annoying for development, so here it is false.</description>
         </init-param>
@@ -34,6 +34,11 @@
         </init-param>
 
         <init-param>
+        	<param-name>inputSize.default</param-name>
+        	<param-value>@INPUT_SIZE_DEFAULT@</param-value>
+        </init-param>
+
+        <init-param>
         	<param-name>results.serializerFactory</param-name>
         	<param-value>org.carrot2.webapp.serializers.FancySerializersFactory</param-value>
         </init-param>
@@ -49,10 +54,5 @@
     <servlet-mapping>
         <servlet-name>QueryProcessor</servlet-name>
         <url-pattern>/search</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>QueryProcessor</servlet-name>
-        <url-pattern>/search-xml</url-pattern>
     </servlet-mapping>
 </web-app>
