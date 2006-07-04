@@ -13,16 +13,15 @@
 
 package com.dawidweiss.carrot.local.controller.loaders;
 
+import java.io.*;
+import java.util.Iterator;
+import java.util.Map;
+
 import bsh.EvalError;
 import bsh.Interpreter;
 
 import com.dawidweiss.carrot.local.controller.LoadedProcess;
 import com.dawidweiss.carrot.local.controller.ProcessLoader;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 
 
 /**
@@ -81,24 +80,37 @@ import java.io.UnsupportedEncodingException;
  * @version $Revision$
  */
 public class BeanShellProcessLoader implements ProcessLoader {
+    
+    private Map globals;
+
+    /**
+     * Sets a map of global variables registered in the
+     * beanshell interpreter. Any previous value is replaced
+     * with the new one.
+     */
+    public void setGlobals(Map globalVars) {
+        this.globals = globalVars;
+    }
+    
     /**
      * Loads a process from the data stream. The stream is converted to
      * character data using UTF-8 encoding.
      */
     public LoadedProcess load(InputStream dataStream)
         throws IOException, InstantiationException {
-        Interpreter interpreter = new Interpreter();
+        final Interpreter interpreter = new Interpreter();
         interpreter.getClassManager().reset();
 
         try {
+            registerGlobals(this.globals, interpreter);
+
             final LoadedProcess process = (LoadedProcess) interpreter.eval(new InputStreamReader(
                         dataStream, "UTF-8"));
             if (process == null) {
                 throw new InstantiationException(
-                    "BeanShell script must return an instance of" +
-                    " LoadedProcess.");
+                    "BeanShell script must return an instance of " +
+                    LoadedProcess.class.getName() + ".");
             }
-
             return process;
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("UTF-8 must be supported.");
@@ -107,8 +119,26 @@ public class BeanShellProcessLoader implements ProcessLoader {
                 "Exception when parsing BeanShell script: " + e.toString());
         } catch (ClassCastException e) {
             throw new InstantiationException(
-                "BeanShell script must return an instance of" +
-                " LoadedProcess.");
+                    "BeanShell script must return an instance of " +
+                    LoadedProcess.class.getName() + ".");
+        }
+    }
+
+    /**
+     * Registers a map of variables in a beanshell interpreter.
+     */
+    final static void registerGlobals(Map map, Interpreter interpreter) 
+        throws EvalError
+    {
+        if (map != null) {
+            for (final Iterator i = map.entrySet().iterator(); i.hasNext();) {
+                final Map.Entry entry = (Map.Entry) i.next();
+                final Object key = entry.getKey();
+                final Object value = entry.getValue();
+                if (key instanceof String) {
+                    interpreter.set((String) key, value);
+                }
+            }
         }
     }
 }

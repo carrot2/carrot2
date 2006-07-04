@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.util.Map;
 
 
 /**
@@ -66,6 +67,17 @@ import java.io.UnsupportedEncodingException;
  * @version $Revision$
  */
 public class BeanShellFactoryDescriptionLoader implements ComponentFactoryLoader {
+    private Map globals;
+
+    /**
+     * Sets a map of global variables registered in the
+     * beanshell interpreter. Any previous value is replaced
+     * with the new one.
+     */
+    public void setGlobals(Map globalVars) {
+        this.globals = globalVars;
+    }
+    
     /**
      * Loads a component factory from the data stream. The stream is converted
      * to character data using UTF-8 encoding.
@@ -76,6 +88,8 @@ public class BeanShellFactoryDescriptionLoader implements ComponentFactoryLoader
         interpreter.getClassManager().reset();
 
         try {
+            BeanShellProcessLoader.registerGlobals(this.globals, interpreter);
+
             LoadedComponentFactory factory = (LoadedComponentFactory) interpreter.eval(new InputStreamReader(
                         dataStream, "UTF-8"));
 

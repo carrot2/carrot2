@@ -129,6 +129,14 @@ public class ControllerHelper {
 
         componentFactoryLoaders.put(loaderExtension, loader);
     }
+    
+    /**
+     * Returns a component factory loader with a given extension or
+     * <code>null</code> if no such extension is available.
+     */
+    public ComponentFactoryLoader getComponentFactoryLoader(String loaderExtension) {
+        return (ComponentFactoryLoader) this.componentFactoryLoaders.get(loaderExtension);
+    }
 
     /**
      * Maps a {@link ProcessLoader} to the given extension.
@@ -147,6 +155,14 @@ public class ControllerHelper {
         }
 
         processLoaders.put(loaderExtension, loader);
+    }
+    
+    /**
+     * Returns a registered process loader or <code>null</code>
+     * if no such loader exists.
+     */
+    public ProcessLoader getProcessLoader(String loaderExtension) {
+        return (ProcessLoader) processLoaders.get(loaderExtension);
     }
 
     /**
