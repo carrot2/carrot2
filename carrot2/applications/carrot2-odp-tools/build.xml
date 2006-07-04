@@ -1,4 +1,5 @@
 <project name="Carrot2 Open Directory Project Interface Core" default="build">
+    <property file="local.properties" />
 
     <property name="project.dir"      location="${basedir}" />
     <property name="carrot2.cvs.dir"  location="../.." />
