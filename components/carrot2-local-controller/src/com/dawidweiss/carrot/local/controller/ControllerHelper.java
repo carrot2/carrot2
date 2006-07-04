@@ -86,6 +86,17 @@ public class ControllerHelper {
     private HashMap processLoaders = new HashMap();
 
     /**
+     * A case-ignoring file comparator.
+     */
+    private final static Comparator filenameComparator = new Comparator() {
+        public int compare(Object o1, Object o2) {
+            final File f1 = (File) o1;
+            final File f2 = (File) o2;
+            return f1.getName().toLowerCase().compareTo(f2.getName().toLowerCase());
+        }
+    };
+
+    /**
      * Instantiates a new component loader utility class and adds the default
      * loaders to it.
      */
@@ -285,8 +296,9 @@ public class ControllerHelper {
     public LoadedProcess [] loadProcessesFromDirectory(File directory, FileFilter filter)
         throws IOException, DuplicatedKeyException, Exception {
         final File[] files = directory.listFiles(filter);
+        Arrays.sort(files, filenameComparator);
 
-        final ArrayList loadedProcesses = new ArrayList();
+        final ArrayList loadedProcesses = new ArrayList(files.length);
         for (int i = 0; i < files.length; i++) {
             try {
                 final LoadedProcess loadedProcess = loadProcess(files[i]);
@@ -465,6 +477,8 @@ public class ControllerHelper {
         throws IOException, ComponentInitializationException
     {
         final File[] files = directory.listFiles(getComponentFilter());
+        Arrays.sort(files, filenameComparator);
+
         final ArrayList list = new ArrayList(files.length);
         for (int i = 0; i < files.length; i++) {
             try {
