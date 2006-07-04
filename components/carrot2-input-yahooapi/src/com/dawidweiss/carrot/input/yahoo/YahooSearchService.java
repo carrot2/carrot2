@@ -62,13 +62,30 @@ public class YahooSearchService {
      * Searches Yahoo and retrieves a maximum of <code>requestedResults</code>
      * snippets. May throw an exception if service is no longer available.
      * 
+     * @throws IOException If an I/O exception occurred.
+     */ 
+    public YahooSearchResult [] query(final String query, final int requestedResults)
+        throws IOException 
+    {
+        final ArrayList result = new ArrayList();
+        this.query(query, requestedResults, new YahooSearchResultConsumer() {
+            public void add(YahooSearchResult sr) {
+                result.add(sr);
+            }
+        });
+        return (YahooSearchResult []) result.toArray(new YahooSearchResult [result.size()]);
+    }
+    
+    /**
+     * Searches Yahoo and retrieves a maximum of <code>requestedResults</code>
+     * snippets. May throw an exception if service is no longer available.
+     * 
      * @throws IOException If an I/O exception occurred. 
      */
-    public YahooSearchResult [] query(final String query, 
-            final int requestedResults) throws IOException {
-
-        final ArrayList result = new ArrayList(requestedResults); 
-
+    public void query(final String query, final int requestedResults, 
+            YahooSearchResultConsumer consumer) 
+        throws IOException
+    {
         final MultiThreadedHttpConnectionManager connectionManager = new MultiThreadedHttpConnectionManager();
         final HttpClient client = new HttpClient(connectionManager);
         client.getParams().setVersion(HttpVersion.HTTP_1_1);
@@ -82,7 +99,7 @@ public class YahooSearchService {
         boolean firstPass = true;
 
         try {
-            final YahooResponseHandler handler = new YahooResponseHandler(result);
+            final YahooResponseHandler handler = new YahooResponseHandler(consumer);
             final SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
             final XMLReader reader = parser.getXMLReader();
             reader.setFeature("http://xml.org/sax/features/validation", false);
@@ -205,7 +222,5 @@ public class YahooSearchService {
         } finally {
             connectionManager.shutdown();
         }
-
-        return (YahooSearchResult []) result.toArray(new YahooSearchResult [result.size()]);
     }
 }
