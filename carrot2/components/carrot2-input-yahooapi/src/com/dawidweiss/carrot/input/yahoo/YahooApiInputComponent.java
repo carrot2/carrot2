@@ -121,19 +121,21 @@ public class YahooApiInputComponent extends LocalInputComponentBase
 		    int results = Math.min(resultsRequested, MAXIMUM_RESULTS);
 
 		    log.info("Yahoo API query (" + results + "):" + query);
-            YahooSearchResult [] docs = service.query(query, results);
-            for (int i = 0; i < docs.length; i++) {
-                final int id = i;
-                rawDocumentConsumer.addDocument( 
+            final YahooSearchResultConsumer consumer = new YahooSearchResultConsumer() {
+                int id = 0;
+                public void add(final YahooSearchResult result) throws ProcessingException {
+                    rawDocumentConsumer.addDocument(
                         new RawDocumentBase(
-                                docs[i].url, 
-                                StringUtils.removeMarkup(docs[i].title), 
-                                StringUtils.removeMarkup(docs[i].summary)) {
+                                result.url, 
+                                StringUtils.removeMarkup(result.title), 
+                                StringUtils.removeMarkup(result.summary)) {
                             public Object getId() {
                                 return Integer.toString(id);
                             }
                         });
-            }
+                }
+            };
+            service.query(query, results, consumer);
 	    } catch (Throwable e) {
 	    	if (e instanceof ProcessingException) {
 	    		throw (ProcessingException) e;

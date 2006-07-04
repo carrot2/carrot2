@@ -20,18 +20,14 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
+import com.dawidweiss.carrot.core.local.ProcessingException;
+
 /**
  * Content handler for Yahoo search results.
  * 
  * @author Dawid Weiss
  */
 public final class YahooResponseHandler implements ContentHandler {
-
-    /**
-     * An array where {@link YahooSearchResult}s are stored.
-     */
-    private final ArrayList result;
-
     public long totalResults;
     public int firstResultPosition;
     public int resultsReturned;
@@ -48,9 +44,12 @@ public final class YahooResponseHandler implements ContentHandler {
     private boolean error;
     private StringBuffer errorText;
 
-    public YahooResponseHandler(ArrayList result) {
-        this.result = result;
+    /** A consumer for results */
+    private final YahooSearchResultConsumer consumer;
+
+    public YahooResponseHandler(YahooSearchResultConsumer consumer) {
         this.error = false;
+        this.consumer = consumer;
     }
 
     public void startDocument() throws SAXException {
@@ -103,7 +102,11 @@ public final class YahooResponseHandler implements ContentHandler {
         }
         if (stack.size() == 2 && "Result".equals(localName)) {
             // New result parsed. Push it.
-            result.add(new YahooSearchResult(url, title, summary, clickurl));
+            try {
+                consumer.add(new YahooSearchResult(url, title, summary, clickurl));
+            } catch (ProcessingException e) {
+                throw new SAXException("Could not add result to consumer.", e);
+            }
             cleanup();
         }
         if (stack.size() == 3 && "Result".equals(stack.get(1))) {
