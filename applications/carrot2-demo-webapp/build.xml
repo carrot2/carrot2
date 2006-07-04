@@ -11,6 +11,10 @@
     <property name="distribution.dir" location="${project.dir}/tmp/dist" />
     <property name="component.descriptor" location="carrot2-demo-webapp.dep.xml" />
 
+    <!-- Default values for webapp parameters -->
+    <property name="xsltFilter.template.caching" value="false" />
+    <property name="webapp.inputSize.default" value="100" />
+  
     <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
 
     <target name="build" description="Builds a demo WAR file.">
@@ -23,10 +27,11 @@
         </ant>
     </target>
 
-    <target name="build.demo" depends="build" description="Builds a WAR file with open source components demo.">
+    <target name="build.demo" depends="build,preprocess" description="Builds a WAR file with open source components demo.">
     </target>
 
-    <target name="build.war" description="Builds a plain WAR file (no components)">
+    <target name="build.war" description="Builds a plain WAR file (no components)"
+            depends="preprocess">
         <property name="dist.name" value="carrot2-webapp" />
         <property name="build.dir" location="${project.dir}/tmp/build.war" />
 
@@ -55,5 +60,23 @@
         <unzip src="${distribution.dir}/${dist.name}.war" dest="web">
             <patternset includes="WEB-INF/lib/*.jar" />
         </unzip>
+    </target>
+  
+    <target name="preprocess">
+        <echo>
+####
+Setting inputSize.default to: ${webapp.inputSize.default}
+Setting template.caching to: ${xsltFilter.template.caching}
+####
+        </echo>
+    
+        <filterset begintoken="@" endtoken="@" id="filter.webxml">
+            <filter token="INPUT_SIZE_DEFAULT" value="${webapp.inputSize.default}"/>
+            <filter token="XSLT_TEMPLATE_CACHING" value="${xsltFilter.template.caching}"/>
+        </filterset>
+    
+        <copy overwrite="true" file="web/WEB-INF/web.xml.template" tofile="web/WEB-INF/web.xml" filtering="true">
+            <filterset refid="filter.webxml"/>
+        </copy>
     </target>
 </project>

@@ -207,10 +207,8 @@
   <!-- Tabs -->
   <xsl:template name="tabs">
     <xsl:for-each select="/page/meta/tabs/tab">
-      <table class="all-tabs" id="{concat(@id, '-tab')}">
-        <xsl:if test="not(@selected)">
-            <xsl:attribute name="style">display: none;</xsl:attribute>
-        </xsl:if>
+      <table id="{concat(@id, '-tab')}">
+        <xsl:attribute name="style">width: <xsl:value-of select="$all-tabs-width" />;<xsl:if test="not(@selected)">display: none;</xsl:if></xsl:attribute>
         <xsl:variable name="tabId"><xsl:value-of select="@id" /></xsl:variable>
         <tr>
           <xsl:for-each select="/page/meta/tabs/tab">

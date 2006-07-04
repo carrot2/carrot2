@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -42,13 +41,17 @@ public class LuceneLocalInputComponentFactory implements LocalComponentFactory
      * {@link #DEFAULT_SUMMARY_FIELD}
      */
     public static final String [] DEFAULT_SEARCH_FIELDS = new String []
-    { DEFAULT_TITLE_FIELD, DEFAULT_SUMMARY_FIELD };
+    {
+        DEFAULT_TITLE_FIELD, DEFAULT_SUMMARY_FIELD
+    };
 
     /**
      * Lucene searcher. Searchers are thread-safe, so we can have a shared
      * instance for all component that we produce
      */
     private Searcher searcher;
+    private IndexReader indexReader;
+    private String indexDirectory;
 
     /** Lucene analyzer factory. */
     private AnalyzerFactory analyzerFactory;
@@ -66,11 +69,12 @@ public class LuceneLocalInputComponentFactory implements LocalComponentFactory
      * {@link PorterStemFilter}
      */
     public static final AnalyzerFactory DEFAULT_ANALYZER_FACTORY = PorterAnalyzerFactory.INSTANCE;
-    
+
     public LuceneLocalInputComponentFactory(String indexDirectory)
         throws IOException
     {
-        this(IndexReader.open(indexDirectory));
+        this((IndexReader) null);
+        this.indexDirectory = indexDirectory;
     }
 
     public LuceneLocalInputComponentFactory(IndexReader indexReader)
@@ -89,7 +93,8 @@ public class LuceneLocalInputComponentFactory implements LocalComponentFactory
     public LuceneLocalInputComponentFactory(String indexDirectory,
         AnalyzerFactory analyzerFactory) throws IOException
     {
-        this(IndexReader.open(indexDirectory), analyzerFactory);
+        this((IndexReader) null, analyzerFactory);
+        this.indexDirectory = indexDirectory;
     }
 
     /**
@@ -100,9 +105,9 @@ public class LuceneLocalInputComponentFactory implements LocalComponentFactory
     public LuceneLocalInputComponentFactory(IndexReader indexReader,
         AnalyzerFactory analyzerFactory)
     {
-        this(new IndexSearcher(indexReader), analyzerFactory,
-            DEFAULT_SEARCH_FIELDS, DEFAULT_TITLE_FIELD, DEFAULT_SUMMARY_FIELD,
-            DEFAULT_URL_FIELD);
+        this(null, analyzerFactory, DEFAULT_SEARCH_FIELDS, DEFAULT_TITLE_FIELD,
+            DEFAULT_SUMMARY_FIELD, DEFAULT_URL_FIELD);
+        this.indexReader = indexReader;
     }
 
     /**
@@ -111,8 +116,8 @@ public class LuceneLocalInputComponentFactory implements LocalComponentFactory
      * field names.
      */
     public LuceneLocalInputComponentFactory(Searcher searcher,
-        AnalyzerFactory analyzerFactory, String [] searchFields, String titleField,
-        String summaryField, String urlField)
+        AnalyzerFactory analyzerFactory, String [] searchFields,
+        String titleField, String summaryField, String urlField)
     {
         this.searcher = searcher;
         this.analyzerFactory = analyzerFactory;
@@ -129,7 +134,30 @@ public class LuceneLocalInputComponentFactory implements LocalComponentFactory
      */
     public LocalComponent getInstance()
     {
+        initSearcher();
         return new LuceneLocalInputComponent(searcher, analyzerFactory
             .getInstance(), searchFields, titleField, summaryField, urlField);
+    }
+
+    /**
+     * Lazily initialize the searcher.
+     */
+    private synchronized void initSearcher()
+    {
+        if (searcher == null)
+        {
+            if (indexReader == null)
+            {
+                try
+                {
+                    indexReader = IndexReader.open(indexDirectory);
+                }
+                catch (IOException e)
+                {
+                    throw new RuntimeException("Cannot initialize IndexReader");
+                }
+            }
+            searcher = new IndexSearcher(indexReader);
+        }
     }
 }

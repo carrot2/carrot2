@@ -10,10 +10,6 @@ body.fetching {
 
 /* Tabs */
 
-.all-tabs {
-  width: 300px;
-}
-
 .tab-active-lead-in {
   background-image: url('../img/tab-active-lead-in.gif');
   background-repeat: no-repeat;
@@ -37,6 +33,7 @@ body.fetching {
   color: #404040;
   vertical-align: middle;
   padding-top: 6px;
+  padding-right: 3px;
 }
 
 * html .tab-active-body {
@@ -53,6 +50,7 @@ body.fetching {
   color: #94938F;
   vertical-align: middle;
   padding-top: 6px;
+  padding-right: 3px;
 }
 
 * html .tab-passive-body {

@@ -95,8 +95,17 @@ public final class QueryProcessorServlet extends HttpServlet {
         final File algorithmScripts = new File(context.getRealPath("/algorithms"));
         this.algorithmsController = initializeAlgorithms(algorithmScripts, searchSettings);
 
+        int defaultInputSize = 100;
+        try {
+            defaultInputSize = Integer.parseInt(getServletConfig()
+                .getInitParameter("inputSize.default"));
+        }
+        catch (Exception e){
+            logger.warn("Could not parse inputSize.default: " + getServletConfig()
+                .getInitParameter("inputSize.default"));
+        }        
         searchSettings.setAllowedInputSizes(
-                new int [] {50, 100, 200, 400}, 100);
+                new int [] {50, 100, 200, 400}, defaultInputSize);
     }
 
     /**
@@ -407,7 +416,7 @@ public final class QueryProcessorServlet extends HttpServlet {
                 } catch (Exception e) {
                     if (ignoreOnError) {
                         // ignore exception.
-                        logger.warn("Skipping input tab (ignored exception: " + e.getMessage() + ")");
+                        logger.warn("Skipping input tab: " + tabName + " (ignored exception: " + e.getMessage() + ")");
                     } else {
                         // rethrow.
                         throw e;
