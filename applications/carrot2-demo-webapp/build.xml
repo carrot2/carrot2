@@ -17,7 +17,7 @@
   
     <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
 
-    <target name="build" description="Builds a demo WAR file.">
+    <target name="build" depends="preprocess" description="Builds a demo WAR file.">
     	<property name="dist.name" value="carrot2-demo-webapp" />
         <property name="build.dir" location="${project.dir}/tmp/build.demo" />
         <property name="profile" value="demo" />
@@ -27,7 +27,7 @@
         </ant>
     </target>
 
-    <target name="build.demo" depends="build,preprocess" description="Builds a WAR file with open source components demo.">
+    <target name="build.demo" depends="build" description="Builds a WAR file with open source components demo.">
     </target>
 
     <target name="build.war" description="Builds a plain WAR file (no components)"
