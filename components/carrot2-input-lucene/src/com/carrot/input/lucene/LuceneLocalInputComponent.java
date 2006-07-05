@@ -222,9 +222,9 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
         for (int i = 0; i < searchFields.length; i++)
         {
             QueryParser queryParser = new QueryParser(searchFields[i], analyzer);
-            queryParser.setOperator(QueryParser.DEFAULT_OPERATOR_AND);
+            queryParser.setDefaultOperator(QueryParser.AND_OPERATOR);
             Query queryComponent = queryParser.parse(query);
-            booleanQuery.add(queryComponent, false, false);
+            booleanQuery.add(queryComponent, BooleanClause.Occur.MUST);
         }
 
         // Perform query

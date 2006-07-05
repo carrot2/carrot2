@@ -5,7 +5,7 @@
     description="JAMA, a Java Matrix Package, http://math.nist.gov/javanumerics/jama/">
 	<provides>
 		<files>
-			<file location="Jama-1.0.1-patched.jar" />
+			<file location="Jama-1.0.2.jar" />
 			<file location="jama.LICENSE" />
 		</files>
 	</provides>

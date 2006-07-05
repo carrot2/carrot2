@@ -7,7 +7,7 @@
 	<classpathentry exported="true" kind="src" path="/carrot2-util-tokenizer"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-local-controller"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-common"/>
-	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/lucene-1.5-rc1-dev.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/lucene-core-2.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/lucene-demos-1.5-rc1-dev.jar"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>

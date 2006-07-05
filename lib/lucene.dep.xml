@@ -7,7 +7,7 @@
 
     <provides>
         <files>
-            <file location="lucene-1.5-rc1-dev.jar" />
+            <file location="lucene-core-2.0.0.jar" />
             <file location="lucene.LICENSE" />
         </files>
     </provides>

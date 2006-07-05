@@ -13,11 +13,13 @@
 
 package com.stachoodev.carrot.odp.index;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
-import com.stachoodev.carrot.odp.*;
-import com.stachoodev.carrot.odp.common.*;
+import com.stachoodev.carrot.odp.Topic;
+import com.stachoodev.carrot.odp.TopicSerializer;
+import com.stachoodev.carrot.odp.common.ODPAbstractSaxHandler;
 
 /**
  * Builds a {@link CatidPrimaryTopicIndexBuilder}based on the ODP Topic's

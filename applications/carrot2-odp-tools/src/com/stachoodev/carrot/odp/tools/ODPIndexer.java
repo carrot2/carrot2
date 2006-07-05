@@ -16,11 +16,13 @@ package com.stachoodev.carrot.odp.tools;
 import java.io.*;
 import java.util.*;
 
-import com.dawidweiss.carrot.util.common.*;
-import com.stachoodev.carrot.odp.*;
-import com.stachoodev.carrot.odp.common.*;
+import com.dawidweiss.carrot.util.common.StringUtils;
+import com.stachoodev.carrot.odp.ODPIndex;
+import com.stachoodev.carrot.odp.TopicSerializer;
+import com.stachoodev.carrot.odp.common.ObservableTopicIndexBuilder;
+import com.stachoodev.carrot.odp.common.TopicIndexBuilderListener;
 import com.stachoodev.carrot.odp.index.*;
-import com.stachoodev.util.common.*;
+import com.stachoodev.util.common.PropertyHelper;
 
 /**
  * A tool that creates all indexes registered with

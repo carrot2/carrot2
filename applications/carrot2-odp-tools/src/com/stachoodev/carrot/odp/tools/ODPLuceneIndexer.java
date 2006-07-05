@@ -14,11 +14,12 @@
 package com.stachoodev.carrot.odp.tools;
 
 import java.io.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.dawidweiss.carrot.util.common.*;
-import com.stachoodev.carrot.odp.common.*;
-import com.stachoodev.carrot.odp.lucene.*;
+import com.dawidweiss.carrot.util.common.StringUtils;
+import com.stachoodev.carrot.odp.common.TopicIndexBuilderListener;
+import com.stachoodev.carrot.odp.lucene.LuceneIndexBuilder;
 
 /**
  * @author Stanislaw Osinski

@@ -3,7 +3,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="src" path="/carrot2-util-common"/>
-	<classpathentry exported="true" kind="var" path="CARROT2_CHECKOUT_BASE/lib/log4j-1.2.11.jar"/>
+	<classpathentry exported="true" kind="var" path="CARROT2_CHECKOUT_BASE/lib/log4j-1.2.13.jar"/>
 	<classpathentry exported="true" kind="src" path="/carrot2-local-core"/>
 	<classpathentry exported="true" kind="src" path="/carrot2-util-tokenizer"/>
 	<classpathentry exported="true" kind="src" path="/carrot2-filter-lingo"/>
@@ -17,10 +17,10 @@
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-local-controller"/>
 	<classpathentry exported="true" kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/junit-3.8.1.jar"/>
 	<classpathentry exported="true" kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/junit-addons-1.4.jar"/>
-	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/lucene-1.5-rc1-dev.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/lucene-core-2.0.0.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-matrix"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-stc"/>
-	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/dom4j-1.5.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/dom4j-1.6.1.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-case-normalizer"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-haog"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-fuzzyants"/>

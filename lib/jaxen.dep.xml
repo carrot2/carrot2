@@ -7,9 +7,7 @@
 
     <provides>
         <files>
-            <file location="jaxen-core.jar" />
-            <file location="jaxen-dom4j.jar" />
-            <file location="saxpath.jar" />
+            <file location="jaxen-1.1-beta-6.jar" />
             <file location="jaxen.LICENSE" />
         </files>
     </provides>

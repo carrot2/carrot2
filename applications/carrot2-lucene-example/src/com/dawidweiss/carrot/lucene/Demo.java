@@ -72,7 +72,8 @@ public class Demo {
 
 		Query query = null;
 		try {
-			query = QueryParser.parse(queryString, "contents", analyzer);
+            final QueryParser parser = new QueryParser("contents", analyzer);
+			query = parser.parse(queryString);
 		} catch (ParseException e) {
 			System.err.println("Problems parsing query: " + e.toString());
 			return;
