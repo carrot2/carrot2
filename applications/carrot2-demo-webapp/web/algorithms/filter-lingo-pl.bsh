@@ -1,0 +1,28 @@
+
+import com.stachoodev.carrot.filter.lingo.local.LingoLocalFilterComponent;
+import com.dawidweiss.carrot.core.local.*;
+import com.dawidweiss.carrot.local.controller.*;
+import com.dawidweiss.carrot.core.local.linguistic.*;
+import com.dawidweiss.carrot.util.tokenizer.languages.polish.*;
+
+//
+// Component factory is a dynamic Beanshell class
+//
+factory = new LocalComponentFactory() {
+    public LocalComponent getInstance() {
+    	final HashMap params = new HashMap();
+    	final Language [] languages = new Language [] {
+    		new Polish()
+    	};
+    	return new LingoLocalFilterComponent(languages, params);
+    }
+
+    public String getName() {
+        return "Lingo Classic (Open Source), Polish";
+    }
+};
+
+//
+// Return the ID of the component and its factory.
+//
+return new LoadedComponentFactory("filter-lingo-pl", factory);

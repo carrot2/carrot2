@@ -7,7 +7,7 @@
   <!-- Customize these templates by overriding their definitions -->
 
   <xsl:param name="ga-code">UA-317750-3</xsl:param>
-  <xsl:param name="all-tabs-width">300px</xsl:param>
+  <xsl:param name="all-tabs-width">500px</xsl:param>
   
   <xsl:template name="custom-results-utils">
     <div id="results-utils">

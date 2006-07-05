@@ -1,0 +1,27 @@
+import com.dawidweiss.carrot.core.local.*;
+import com.dawidweiss.carrot.local.controller.*;
+import com.dawidweiss.carrot.input.yahoo.*;
+
+// This script requires a global variable 'inputsDirFile', which 
+// is registered by the webapp.
+
+factory = new LocalComponentFactory() {
+    public LocalComponent getInstance() {
+	    final File cfg = new File(inputsDirFile, "04-input-yahooapi-sejm.cfg");
+		return new YahooApiInputComponent(new FileInputStream(cfg));
+    }
+};
+
+LoadedComponentFactory loaded = 
+	new LoadedComponentFactory("input-yahooapi-sejm", factory);
+
+loaded.setProperties(new String [][] {
+	{"tab.name", "*.gov.pl"},
+	{"tab.description", "Search *.gov.pl (with Yahoo!)"},
+	{"tab.description.startup", "Carrot Clustering Engine will search *.gov.pl domains. Use a clustering with Polish stemmer for best results."},
+	{"tab.exampleQueries", "podatki|ustawy|pis"},
+	{"tab.icon", "sejm.gif"},
+	{"tab.default", "false"}
+});
+
+return loaded;
