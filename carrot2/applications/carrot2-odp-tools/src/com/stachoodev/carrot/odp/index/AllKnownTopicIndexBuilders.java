@@ -13,7 +13,8 @@
 
 package com.stachoodev.carrot.odp.index;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Stores {@link com.stachoodev.carrot.odp.index.TopicIndexBuilder}s.

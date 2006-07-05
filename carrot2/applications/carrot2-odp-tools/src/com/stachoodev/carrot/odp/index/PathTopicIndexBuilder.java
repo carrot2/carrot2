@@ -13,7 +13,7 @@
 
 package com.stachoodev.carrot.odp.index;
 
-import com.stachoodev.carrot.odp.*;
+import com.stachoodev.carrot.odp.Topic;
 
 /**
  * Builds the path-based ODP index.

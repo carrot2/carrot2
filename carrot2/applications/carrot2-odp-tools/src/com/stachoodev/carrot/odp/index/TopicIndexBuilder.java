@@ -13,7 +13,7 @@
 
 package com.stachoodev.carrot.odp.index;
 
-import com.stachoodev.carrot.odp.*;
+import com.stachoodev.carrot.odp.Topic;
 
 /**
  * Defines the interface of an ODP topic index builder.

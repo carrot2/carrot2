@@ -1,5 +1,5 @@
 
-<component name="resolver" description="Apache Resolver, http://xml.apache.org/commons/components/resolver/">
+<component name="resolver" description="Apache Resolver 1.1, http://xml.apache.org/commons/components/resolver/">
 	<provides>
 		<files>
 			<file location="resolver.jar" />

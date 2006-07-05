@@ -13,15 +13,17 @@
 
 package com.stachoodev.carrot.odp.lucene;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Iterator;
 
-import org.apache.lucene.analysis.*;
-import org.apache.lucene.index.*;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.index.IndexWriter;
 
 import com.carrot.input.lucene.PorterAnalyzerFactory;
-import com.stachoodev.carrot.odp.*;
-import com.stachoodev.carrot.odp.common.*;
+import com.stachoodev.carrot.odp.ExternalPage;
+import com.stachoodev.carrot.odp.Topic;
+import com.stachoodev.carrot.odp.common.ODPAbstractSaxHandler;
 
 /**
  * @author Stanislaw Osinski
@@ -51,7 +53,7 @@ public class LuceneIndexBuilder extends ODPAbstractSaxHandler
         
         // Initialize Lucene index first
         indexWriter = new IndexWriter(indexPath, analyzer, true);
-        indexWriter.mergeFactor = 100;
+        indexWriter.setMergeFactor(100);
         
         // Now go with parsing
         initalizeParser(rdfInputStream);

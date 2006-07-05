@@ -13,15 +13,17 @@
 
 package com.stachoodev.carrot.odp.common;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
-import org.dom4j.io.*;
+import org.dom4j.io.SAXReader;
 import org.xml.sax.*;
-import org.xml.sax.helpers.*;
+import org.xml.sax.helpers.DefaultHandler;
 
 import com.stachoodev.carrot.odp.*;
-import com.stachoodev.util.common.*;
+import com.stachoodev.util.common.PropertyHelper;
+import com.stachoodev.util.common.PropertyProvider;
 
 /**
  * @author Stanislaw Osinski

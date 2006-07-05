@@ -13,9 +13,10 @@
 
 package com.stachoodev.carrot.odp.lucene;
 
-import org.apache.lucene.document.*;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
 
-import com.stachoodev.carrot.odp.*;
+import com.stachoodev.carrot.odp.ExternalPage;
 
 /**
  * @author Stanislaw Osinski
@@ -31,17 +32,19 @@ public class ExternalPageDocument
         Document document = new Document();
 
         // URL: store, don't index
-        document.add(Field.UnIndexed("url",
-            (externalPage.getUrl() != null ? externalPage.getUrl() : "")));
+        document.add(
+                new Field("url", (externalPage.getUrl() != null ? externalPage.getUrl() : ""),
+                        Field.Store.YES, Field.Index.UN_TOKENIZED));
 
         // Title:
-        document.add(Field.Text("title",
-            (externalPage.getTitle() != null ? externalPage.getTitle() : "")));
+        document.add(
+                new Field("title", (externalPage.getTitle() != null ? externalPage.getTitle() : ""),
+                        Field.Store.YES, Field.Index.TOKENIZED));
 
         // Description:
-        document.add(Field.Text("summary",
-            (externalPage.getDescription() != null ? externalPage
-                .getDescription() : "")));
+        document.add(
+                new Field("summary", (externalPage.getDescription() != null ? externalPage.getDescription() : ""),
+                        Field.Store.YES, Field.Index.TOKENIZED));
 
         return document;
     }

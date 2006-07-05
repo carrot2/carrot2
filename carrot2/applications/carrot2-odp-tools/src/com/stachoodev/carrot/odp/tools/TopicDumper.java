@@ -16,8 +16,10 @@ package com.stachoodev.carrot.odp.tools;
 import java.io.*;
 import java.util.*;
 
-import com.stachoodev.carrot.odp.*;
-import com.stachoodev.carrot.odp.index.*;
+import com.stachoodev.carrot.odp.ODPIndex;
+import com.stachoodev.carrot.odp.Topic;
+import com.stachoodev.carrot.odp.index.Location;
+import com.stachoodev.carrot.odp.index.PrimaryTopicIndex;
 
 /**
  * Dumps some information (catid, size, path) about ODP topics to a file.

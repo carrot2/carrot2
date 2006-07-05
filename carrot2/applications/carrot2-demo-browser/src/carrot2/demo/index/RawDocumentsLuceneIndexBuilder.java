@@ -47,7 +47,7 @@ public class RawDocumentsLuceneIndexBuilder extends RawDocumentsLuceneIndexBase
 
         IndexWriter indexWriter = new IndexWriter(indexDirectory,
             porterAnalyzer, true);
-        indexWriter.mergeFactor = 100;
+        indexWriter.setMergeFactor(100);
 
         long start = System.currentTimeMillis();
         for (Iterator iter = rawDocuments.iterator(); iter.hasNext();)
@@ -78,17 +78,18 @@ public class RawDocumentsLuceneIndexBuilder extends RawDocumentsLuceneIndexBase
         }
 
         // Id: store, don't index
-        document.add(Field.UnIndexed("id", (rawDocument.getId().toString())));
+        document.add(
+                new Field("id", rawDocument.getId().toString(), Field.Store.YES, Field.Index.NO));
 
         // Title:
-        document.add(Field.Text(SEARCH_FIELDS[0],
-            (rawDocument.getTitle() != null ? rawDocument.getTitle() : "")));
+        document.add(
+                new Field(SEARCH_FIELDS[0], (rawDocument.getTitle() != null ? rawDocument.getTitle() : ""),
+                        Field.Store.YES, Field.Index.TOKENIZED));
 
         // Description:
-        document
-            .add(Field.Text(SEARCH_FIELDS[1],
-                (rawDocument.getSnippet() != null ? rawDocument.getSnippet()
-                    : "")));
+        document.add(
+                new Field(SEARCH_FIELDS[1], (rawDocument.getSnippet() != null ? rawDocument.getSnippet() : ""),
+                        Field.Store.YES, Field.Index.TOKENIZED));
 
         return document;
     }

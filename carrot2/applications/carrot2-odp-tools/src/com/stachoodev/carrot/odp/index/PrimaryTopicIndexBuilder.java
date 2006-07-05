@@ -13,11 +13,12 @@
 
 package com.stachoodev.carrot.odp.index;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Collection;
 
-import com.stachoodev.carrot.odp.*;
-import com.stachoodev.util.common.*;
+import com.stachoodev.carrot.odp.TopicSerializer;
+import com.stachoodev.util.common.PropertyProvider;
 
 /**
  * Defines the interface of an ODP primary topic index.

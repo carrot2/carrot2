@@ -47,7 +47,7 @@ public class RawDocumentsLuceneIndexSearcher extends
         {
             QueryParser queryParser = new QueryParser(SEARCH_FIELDS[i],
                 porterAnalyzer);
-            queryParser.setOperator(QueryParser.DEFAULT_OPERATOR_AND);
+            queryParser.setDefaultOperator(QueryParser.AND_OPERATOR);
             Query queryComponent = null;
             try
             {
@@ -57,7 +57,7 @@ public class RawDocumentsLuceneIndexSearcher extends
             {
                 new RuntimeException("Lucene query parse exception", e);
             }
-            booleanQuery.add(queryComponent, false, false);
+            booleanQuery.add(queryComponent, BooleanClause.Occur.MUST);
         }
 
         // Perform query
