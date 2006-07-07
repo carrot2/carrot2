@@ -1,3 +1,12 @@
+* html {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+* html #documents {
+  margin-right: 25px;
+}
+
 #documents {
   margin: 5px;
   margin-top: 1ex;

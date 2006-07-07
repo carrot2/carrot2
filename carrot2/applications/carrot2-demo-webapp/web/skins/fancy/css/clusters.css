@@ -1,3 +1,12 @@
+* html {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+* html table.cluster-tree {
+  margin-right: 25px;
+}
+
 table.cluster-tree {
   font-size:            12px;
 }

@@ -71,7 +71,7 @@
   <xsl:template match="meta" mode="query">
     <table style="width: 100%; height: 100%">
       <tr>
-        <td style="padding-top: 10px">
+        <td style="padding-top: 17px">
           <xsl:call-template name="custom-results-utils" />
           <xsl:call-template name="custom-results-logo" />
 
