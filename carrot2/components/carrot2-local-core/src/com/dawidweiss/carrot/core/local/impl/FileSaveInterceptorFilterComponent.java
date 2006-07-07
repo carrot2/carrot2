@@ -33,9 +33,9 @@ import com.dawidweiss.carrot.core.local.clustering.*;
  * 
  * @author Stanislaw Osinski
  */
-public class FileSaveInterceptorFilterComponent extends
-    LocalFilterComponentBase implements RawClustersConsumer,
-    RawClustersProducer
+public class FileSaveInterceptorFilterComponent 
+    extends LocalFilterComponentBase
+    implements RawClustersConsumer, RawClustersProducer, RawDocumentsConsumer
 {
     /** Specifies the file to which the data should be saved */
     public static final String PARAM_OUTPUT_FILE = "output-file";
@@ -55,7 +55,7 @@ public class FileSaveInterceptorFilterComponent extends
 
     /** This component's capabilities */
     private final static Set CAPABILITIES_COMPONENT = 
-        toSet(RawClustersConsumer.class, RawClustersProducer.class);
+        toSet(new Object [] {RawClustersConsumer.class, RawClustersProducer.class, RawDocumentsConsumer.class});
 
     /** Capabilities required from the next component in the chain */
     private final static Set CAPABILITIES_SUCCESSOR = toSet(RawClustersConsumer.class);
@@ -68,6 +68,9 @@ public class FileSaveInterceptorFilterComponent extends
 
     /** Temporal storage for clusters */
     private List rawClusters;
+
+    /** Temporal storage for documents */
+    private List rawDocuments;
 
     /** The stream we'll be saving to. */
     private OutputStream outputStream;
@@ -132,6 +135,8 @@ public class FileSaveInterceptorFilterComponent extends
             throw new ProcessingException("Stream or file is required (mutually exclusive).");
         }
 
+        rawClusters = new ArrayList();
+        rawDocuments = new ArrayList();
         if (outputFile != null) {
             if (outputFile.isDirectory()) {
                 throw new ProcessingException("Output file must not be a directory.");
@@ -141,13 +146,10 @@ public class FileSaveInterceptorFilterComponent extends
             } catch (FileNotFoundException e) {
                 throw new ProcessingException(e);
             }
-            rawClusters = new ArrayList();
         } else if (os != null) {
             outputStream = os;
-            rawClusters = new ArrayList();
         } else {
-            // nothing.
-            rawClusters = null;
+            // do nothing.
         }
     }
 
@@ -166,7 +168,10 @@ public class FileSaveInterceptorFilterComponent extends
             root.add(createQueryElement(requestContext));
 
             // Add documents
-            addDocuments(root, collectRawDocuments());
+            if (this.rawDocuments.size() == 0) {
+                this.rawDocuments = collectRawDocuments();                
+            }
+            addDocuments(root, this.rawDocuments);
 
             // Add clusters
             addClusters(root, rawClusters);
@@ -451,4 +456,9 @@ public class FileSaveInterceptorFilterComponent extends
         rawClustersConsumer.addCluster(cluster);
     }
 
+    public void addDocument(RawDocument doc) throws ProcessingException {
+        if (outputStream != null) {
+            rawDocuments.add(doc);
+        }
+    }
 }
