@@ -22,51 +22,30 @@ import com.dawidweiss.carrot.core.local.*;
 import com.dawidweiss.carrot.core.local.clustering.*;
 
 /**
- * Passes down the processing chain query results read from XML files in the
+ * Passes down the processing chain query results read from an XML stream in the
  * Carrot<sup>2</sup> format. 
  * 
- * This component expects that the {@link LocalInputComponent#PARAM_QUERY} parameter contains 
- * the name of the data file to be loaded. Tha name must be relative to the local filesystem
- * directory path provided in the constructor or in the {@link #PARAM_INPUT_DIR} parameter.
+ * This component expects that a request parameter called 
+ * {@link #XML_STREAM} initialized to an {@link java.io.InputStream} with
+ * XML data. 
  * 
- * @deprecated This file-based component seems to be a subclass of the 
- *             stream-oriented one. Can we rewrite it (subclass it) somehow? 
- * 
- * @author Stanislaw Osinski
+ * @author Dawid Weiss
  */
-public class FileLocalInputComponent extends LocalInputComponentBase
+public class XmlStreamInputComponent extends LocalInputComponentBase
 {
     /**
-     * A path to the local filesystem directory to read the XML input files
-     * from.
+     * An XML stream to read from.
      */
-    public static final String PARAM_INPUT_DIR = "input-dir";
+    public static final String XML_STREAM = "input:xml-stream";
+
 
     /** Capabilities required from the next component in the chain */
-    private final static Set SUCCESSOR_CAPABILITIES = new HashSet(Arrays
-        .asList(new Object []
-        {
-            RawDocumentsConsumer.class
-        }));
+    private final static Set SUCCESSOR_CAPABILITIES = 
+        toSet(RawDocumentsConsumer.class);
 
     /** This component's capabilities */
-    private final static Set COMPONENT_CAPABILITIES = new HashSet(Arrays
-        .asList(new Object []
-        {
-            RawDocumentsProducer.class
-        }));
-
-    /** Current query, for information only */
-    private String query;
-
-    /** Current RawDocumentsConsumer to feed */
-    private RawDocumentsConsumer rawDocumentConsumer;
-
-    /** */
-    private File inputDir;
-
-    /** */
-    private final File defaultInputDir;
+    private final static Set COMPONENT_CAPABILITIES = 
+        toSet(RawDocumentsProducer.class);
 
     /**
      * Represents a query result containing a list of {@link RawDocument}s and
@@ -74,7 +53,7 @@ public class FileLocalInputComponent extends LocalInputComponentBase
      * 
      * @author Stanislaw Osinski
      */
-    public static class QueryResult
+    public final static class QueryResult
     {
         /** The query */
         public String query;
@@ -82,41 +61,11 @@ public class FileLocalInputComponent extends LocalInputComponentBase
         /** A list of {@link RawDocument}s returned for the query */
         public List rawDocuments;
     }
-
-    public FileLocalInputComponent()
-    {
-        this.defaultInputDir = null;
-    }
-
-    public FileLocalInputComponent(File inputDir)
-    {
-        if (inputDir == null)
-        {
-            throw new IllegalArgumentException("inputDir must not be null");
-        }
-
-        if (!inputDir.isDirectory())
-        {
-            throw new IllegalArgumentException("inputDir must be a directory");
-        }
-
-        this.defaultInputDir = inputDir;
-    }
+    
+    /** Current RawDocumentsConsumer to feed */
+    private RawDocumentsConsumer rawDocumentConsumer;
 
     /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalInputComponent#setQuery(java.lang.String)
-     */
-    public void setQuery(String query)
-    {
-        this.query = query;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponentBase#getComponentCapabilities()
      */
     public Set getComponentCapabilities()
     {
@@ -124,9 +73,6 @@ public class FileLocalInputComponent extends LocalInputComponentBase
     }
 
     /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponentBase#getRequiredSuccessorCapabilities()
      */
     public Set getRequiredSuccessorCapabilities()
     {
@@ -134,7 +80,6 @@ public class FileLocalInputComponent extends LocalInputComponentBase
     }
 
     /*
-     * @see com.dawidweiss.carrot.core.local.LocalInputComponent#setNext(com.dawidweiss.carrot.core.local.LocalComponent)
      */
     public void setNext(LocalComponent next)
     {
@@ -150,22 +95,32 @@ public class FileLocalInputComponent extends LocalInputComponentBase
     }
 
     /*
-     * (non-Javadoc)
-     * 
-     * @see com.dawidweiss.carrot.core.local.LocalInputComponentBase#startProcessing(com.dawidweiss.carrot.core.local.RequestContext)
+     */
+    public void setQuery(String query) {
+        // discard query.
+    }
+
+    /*
      */
     public void startProcessing(RequestContext requestContext)
         throws ProcessingException
     {
-        File inputFile = getInputFile(requestContext);
+        super.startProcessing(requestContext);
+        
+        final InputStream is = (InputStream) requestContext.getRequestParameters().get(XML_STREAM);
+        if (is == null) {
+            throw new ProcessingException("This component expects a request context" +
+                    " parameter named: " + XML_STREAM);
+        }
 
         try
         {
-            int requestedResults = getRequestedResultsCount(requestContext);
+            final int requestedResults = getRequestedResultsCount(requestContext);
 
             // Load query results from the file
-            SAXReader reader = new SAXReader();
-            Element root = reader.read(inputFile).getRootElement();
+            // TODO: We don't need DOM4J for that, really.
+            final SAXReader reader = new SAXReader();
+            final Element root = reader.read(is).getRootElement();
 
             // Pass the actual document count
             passQueryResult(root, requestContext, requestedResults);
@@ -175,7 +130,15 @@ public class FileLocalInputComponent extends LocalInputComponentBase
         }
         catch (Exception e)
         {
-            throw new ProcessingException("Problems opening source file: ", e);
+            throw new ProcessingException("Problems parsing XML stream.", e);
+        } 
+        finally
+        {
+            try {
+                is.close();
+            } catch (IOException e) {
+                // ignore
+            }
         }
     }
 
@@ -234,71 +197,14 @@ public class FileLocalInputComponent extends LocalInputComponentBase
             LocalInputComponent.PARAM_TOTAL_MATCHING_DOCUMENTS,
             new Integer(queryResult.rawDocuments.size()));
 
-        // Pass the query
-        if (queryResult.query != null)
-        {
-            requestContext.getRequestParameters().put(
+        requestContext.getRequestParameters().put(
                 LocalInputComponent.PARAM_QUERY, queryResult.query);
-        }
-        else
-        {
-            requestContext.getRequestParameters().put(
-                LocalInputComponent.PARAM_QUERY, query);
-        }
 
-        for (Iterator iter = queryResult.rawDocuments.iterator(); iter
-            .hasNext();)
+        for (Iterator iter = queryResult.rawDocuments.iterator(); iter.hasNext();)
         {
-            RawDocument rawDocument = (RawDocument) iter.next();
+            final RawDocument rawDocument = (RawDocument) iter.next();
             rawDocumentConsumer.addDocument(rawDocument);
         }
-    }
-
-    /**
-     * Returns the input {@link File} to read from.
-     * 
-     * @param requestContext
-     * @return the input {@link File} to read from
-     * @throws ProcessingException in case of problems determining the input
-     *             file
-     */
-    protected File getInputFile(RequestContext requestContext)
-        throws ProcessingException
-    {
-        // Get source path from the request context
-        inputDir = (File) requestContext.getRequestParameters().get(
-            PARAM_INPUT_DIR);
-        if (inputDir == null)
-        {
-            inputDir = defaultInputDir;
-        }
-
-        if (inputDir == null)
-        {
-            throw new ProcessingException(
-                "PARAM_INPUT_DIR parameter of type java.io.File must be set");
-        }
-
-        if (!inputDir.isDirectory())
-        {
-            throw new ProcessingException(
-                "File provided in the PARAM_INPUT_DIR parameter must be a directory");
-        }
-
-        // Pass the query for the following components
-        requestContext.getRequestParameters().put(
-            LocalInputComponent.PARAM_QUERY, query);
-
-        super.startProcessing(requestContext);
-
-        File inputFile = new File(inputDir, query);
-
-        if (!inputFile.isFile() || !inputFile.canRead())
-        {
-            throw new ProcessingException("Cannot read file: "
-                + inputFile.getAbsolutePath());
-        }
-        return inputFile;
     }
 
     /**
@@ -316,35 +222,6 @@ public class FileLocalInputComponent extends LocalInputComponentBase
         final SAXReader reader = new SAXReader();
         final Element root = reader.read(inputStream).getRootElement();
         return extractQueryResult(root, requestedResults);
-    }
-
-    /**
-     * Loads {@link QueryResult} from an XML file in the Carrot<sup>2</sup>
-     * format.
-     * 
-     * @param inputFile input file to load from
-     * @param requestedResults the number of results to load
-     * @return loaded query result
-     * @throws DocumentException if a parsing problem occurs
-     */
-    public static QueryResult loadQueryResult(File inputFile,
-        int requestedResults) throws DocumentException
-    {
-        FileInputStream fis = null;
-        try {
-            fis = new FileInputStream(inputFile);
-            return loadQueryResult(fis, requestedResults);
-        } catch (FileNotFoundException e) {
-            throw new DocumentException(e);
-        } finally {
-            if (fis != null) {
-                try {
-                    fis.close();
-                } catch (IOException e) {
-                    // ignore
-                }
-            }
-        }
     }
 
     /**
@@ -427,8 +304,6 @@ public class FileLocalInputComponent extends LocalInputComponentBase
     public void flushResources()
     {
         super.flushResources();
-        query = null;
-        inputDir = null;
         rawDocumentConsumer = null;
     }
 }
