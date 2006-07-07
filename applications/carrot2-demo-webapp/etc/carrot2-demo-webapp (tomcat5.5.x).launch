@@ -10,7 +10,7 @@
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-config &quot;${workspace_loc:carrot2-demo-webapp/etc/tomcat5.5.x-config.xml}&quot; start"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="carrot2-demo-webapp"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dsun.io.useCanonCaches=false -Djava.endorsed.dirs=&quot;${tomcat5.home}/common/endorsed&quot; -Dcatalina.base=&quot;${tomcat5.home}&quot; -Dcatalina.home=&quot;${tomcat5.home}&quot; -Djava.io.tmpdir=&quot;${tomcat5.home}/temp&quot; -Dapplication.home=&quot;${workspace_loc:carrot2-demo-webapp}&quot; -Dlog4j.configuration=&quot;file:///${workspace_loc:carrot2-demo-webapp/etc/log4j.properties}&quot; -Dgoogleapi.keypool=&quot;${workspace_loc:carrot2-demo-webapp}/keypool&quot;"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dsun.io.useCanonCaches=false -Djava.endorsed.dirs=&quot;${tomcat5.home}/common/endorsed&quot; -Dcatalina.base=&quot;${tomcat5.home}&quot; -Dcatalina.home=&quot;${tomcat5.home}&quot; -Djava.io.tmpdir=&quot;${tomcat5.home}/temp&quot; -Dapplication.home=&quot;${workspace_loc:carrot2-demo-webapp}&quot; -Dlog4j.configuration=&quot;file:///${workspace_loc:carrot2-demo-webapp/etc/log4j.properties}&quot; -Dgoogleapi.keypool=&quot;${workspace_loc:carrot2-demo-webapp}/keypool&quot;&#13;&#10;-Dodp.index.location=&quot;${odp.index.location}&quot;"/>
 <listAttribute key="org.eclipse.debug.ui.favoriteGroups">
 <listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
 <listEntry value="org.eclipse.debug.ui.launchGroup.debug"/>

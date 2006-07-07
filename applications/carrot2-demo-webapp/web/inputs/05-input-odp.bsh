@@ -1,0 +1,27 @@
+import com.dawidweiss.carrot.core.local.*;
+import com.dawidweiss.carrot.core.local.impl.*;
+import com.dawidweiss.carrot.core.local.clustering.*;
+import com.dawidweiss.carrot.local.controller.*;
+import com.carrot.input.lucene.*;
+import carrot2.demo.cache.*;
+
+String indexPath = System.getProperty("odp.index.location");
+if (!(new File(indexPath).exists())) {
+	return null;
+}
+
+luceneFactory = new LuceneLocalInputComponentFactory(indexPath);
+
+loaded = new LoadedComponentFactory("input-odp", luceneFactory);
+
+loaded.setProperties(new String [][] {
+	{"tab.name", "ODP"},
+	{"tab.description", "Search Open Directory Project data"},
+	{"tab.description.startup", "Carrot Search Clustering Engine will search the Open Directory Project data for your keywords and organize the results into thematic categories"},
+	{"tab.exampleQueries", "photography|test|chips"},
+	{"tab.icon", "odp.gif"},
+	{"tab.default", "false"},
+	{"tab.ignoreOnError", "true" }
+});
+
+return loaded;

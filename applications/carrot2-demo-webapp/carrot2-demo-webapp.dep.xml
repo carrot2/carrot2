@@ -43,6 +43,7 @@
 
     <dependency name="carrot2-input-yahooapi" profile="demo" />
     <dependency name="carrot2-input-googleapi" profile="demo" />
+    <dependency name="carrot2-input-lucene" profile="demo" />
 
     <dependency name="carrot2-filter-lingo" profile="demo" />
     <dependency name="carrot2-filter-stc" profile="demo" />
