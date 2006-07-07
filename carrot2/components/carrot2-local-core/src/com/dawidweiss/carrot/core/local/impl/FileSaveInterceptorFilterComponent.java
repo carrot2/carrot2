@@ -29,6 +29,8 @@ import com.dawidweiss.carrot.core.local.clustering.*;
  * {@link #PARAM_OUTPUT_FILE} parameter has not been specified, this component
  * will simply pass the clusters to the next component down the chain.
  * 
+ * TODO: Rename this component to <code>SaveXmlFilterComponent</code>?
+ * 
  * @author Stanislaw Osinski
  */
 public class FileSaveInterceptorFilterComponent extends
@@ -38,6 +40,9 @@ public class FileSaveInterceptorFilterComponent extends
     /** Specifies the file to which the data should be saved */
     public static final String PARAM_OUTPUT_FILE = "output-file";
 
+    /** Specifies the output stream to which the data should be saved */
+    public static final String PARAM_OUTPUT_STREAM = "output-stream";
+
     /**
      * Specifies whether clusters should also be saved. Value of this parameter
      * must be of type {@link Boolean}.
@@ -45,25 +50,15 @@ public class FileSaveInterceptorFilterComponent extends
     public static final String PARAM_SAVE_CLUSTERS = "save-clusters";
 
     /** Capabilities required from the previous component in the chain */
-    private final static Set CAPABILITIES_PREDECESSOR = new HashSet(Arrays
-        .asList(new Object []
-        {
-            RawClustersProducer.class
-        }));
+    private final static Set CAPABILITIES_PREDECESSOR = 
+        toSet(RawClustersProducer.class);
 
     /** This component's capabilities */
-    private final static Set CAPABILITIES_COMPONENT = new HashSet(Arrays
-        .asList(new Object []
-        {
-            RawClustersConsumer.class, RawClustersProducer.class
-        }));
+    private final static Set CAPABILITIES_COMPONENT = 
+        toSet(RawClustersConsumer.class, RawClustersProducer.class);
 
     /** Capabilities required from the next component in the chain */
-    private final static Set CAPABILITIES_SUCCESSOR = new HashSet(Arrays
-        .asList(new Object []
-        {
-            RawClustersConsumer.class
-        }));
+    private final static Set CAPABILITIES_SUCCESSOR = toSet(RawClustersConsumer.class);
 
     /** Reference to the current request context */
     private RequestContext requestContext;
@@ -74,8 +69,8 @@ public class FileSaveInterceptorFilterComponent extends
     /** Temporal storage for clusters */
     private List rawClusters;
 
-    /** The file we'll be saving to */
-    private File outputFile;
+    /** The stream we'll be saving to. */
+    private OutputStream outputStream;
 
     /*
      * (non-Javadoc)
@@ -130,18 +125,29 @@ public class FileSaveInterceptorFilterComponent extends
         this.requestContext = requestContext;
 
         // Determine output file
-        outputFile = (File) requestContext.getRequestParameters().get(
-            PARAM_OUTPUT_FILE);
-
-        if (outputFile != null && outputFile.isDirectory())
-        {
-            // We need a file here
-            outputFile = null;
+        final OutputStream os = (OutputStream) requestContext.getRequestParameters().get(PARAM_OUTPUT_STREAM);
+        final File outputFile = (File) requestContext.getRequestParameters().get(PARAM_OUTPUT_FILE);
+        
+        if (os != null && outputFile != null) {
+            throw new ProcessingException("Stream or file is required (mutually exclusive).");
         }
 
-        if (outputFile != null)
-        {
+        if (outputFile != null) {
+            if (outputFile.isDirectory()) {
+                throw new ProcessingException("Output file must not be a directory.");
+            }
+            try {
+                outputStream = new FileOutputStream(outputFile);
+            } catch (FileNotFoundException e) {
+                throw new ProcessingException(e);
+            }
             rawClusters = new ArrayList();
+        } else if (os != null) {
+            outputStream = os;
+            rawClusters = new ArrayList();
+        } else {
+            // nothing.
+            rawClusters = null;
         }
     }
 
@@ -152,9 +158,9 @@ public class FileSaveInterceptorFilterComponent extends
      */
     public void endProcessing() throws ProcessingException
     {
-        if (outputFile != null)
+        if (outputStream != null)
         {
-            Element root = DocumentHelper.createElement("searchresult");
+            final Element root = DocumentHelper.createElement("searchresult");
 
             // Add query
             root.add(createQueryElement(requestContext));
@@ -169,13 +175,13 @@ public class FileSaveInterceptorFilterComponent extends
             addAdditionalInformation(root, requestContext);
 
             // Save to the file
-            Document document = DocumentHelper.createDocument(root);
+            final Document document = DocumentHelper.createDocument(root);
             XMLWriter xmlWriter = null;
             try
             {
-                xmlWriter = new XMLWriter(new FileOutputStream(outputFile),
-                    new OutputFormat("  ", true));
+                xmlWriter = new XMLWriter(outputStream, new OutputFormat("  ", true));
                 xmlWriter.write(document);
+                xmlWriter.close();
             }
             catch (Exception e)
             {
@@ -186,12 +192,11 @@ public class FileSaveInterceptorFilterComponent extends
             {
                 try
                 {
-                    xmlWriter.close();
+                    outputStream.close();
                 }
                 catch (IOException e)
                 {
-                    throw new ProcessingException("Cannot write results: "
-                        + e.getMessage());
+                    // ignore.
                 }
             }
         }
@@ -260,6 +265,9 @@ public class FileSaveInterceptorFilterComponent extends
 
         String query = (String) requestContext.getRequestParameters().get(
             LocalInputComponent.PARAM_QUERY);
+        if (query == null) {
+            query = "";
+        }
         element.setText(query);
 
         return element;
@@ -425,7 +433,7 @@ public class FileSaveInterceptorFilterComponent extends
         requestContext = null;
         rawClustersConsumer = null;
         rawClusters = null;
-        outputFile = null;
+        outputStream = null;
     }
 
     /*
@@ -435,7 +443,7 @@ public class FileSaveInterceptorFilterComponent extends
      */
     public void addCluster(RawCluster cluster) throws ProcessingException
     {
-        if (outputFile != null)
+        if (outputStream != null)
         {
             rawClusters.add(cluster);
         }

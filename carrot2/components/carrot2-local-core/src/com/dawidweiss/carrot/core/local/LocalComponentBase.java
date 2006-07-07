@@ -13,8 +13,7 @@
 
 package com.dawidweiss.carrot.core.local;
 
-import java.util.HashMap;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A reference implementation of a {@link LocalComponent}interface. This class
@@ -153,5 +152,19 @@ public abstract class LocalComponentBase implements LocalComponent
     public String getDescription()
     {
         return null;
+    }
+    
+    /** Converts input values to a set. */
+    protected final static Set toSet(Object arg1) {
+        return toSet(new Object [] { arg1 });
+    }
+
+    protected final static Set toSet(Object arg1, Object arg2) {
+        return toSet(new Object [] { arg1, arg2 });
+    }
+    
+    protected final static Set toSet(Object [] args) {
+        return Collections.unmodifiableSet(
+                new HashSet(Arrays.asList(args)));
     }
 }
