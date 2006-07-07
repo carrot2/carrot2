@@ -246,7 +246,7 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
         int trash = 0; 
         if (endAt > 100)
         {
-            trash = hits.id(endAt);
+            trash = hits.id(endAt-1);
         }
         
         // Get results from the index
@@ -262,6 +262,9 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
         }
         
         // Must do this. Otherwise the optimizer would remove the call we want
+        // TODO: [DW] No it shouldn't. it can only do it when hits.id() assumes
+        // no side effects, but this must be told explicitly, so the optimizer
+        // should never remove that method call.
         trash = trash + 1; 
         
         long stop = System.currentTimeMillis();
