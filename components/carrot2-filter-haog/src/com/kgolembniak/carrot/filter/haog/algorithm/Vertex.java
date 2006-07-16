@@ -115,4 +115,16 @@ public class Vertex {
 	protected List getBaseSuccList() {
 		return baseSuccList;
 	}
+	
+	public String toString(){
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("Vertex=[");
+		buffer.append("Label:" + this.label);
+		buffer.append(",BaseSuccessors:" + this.baseSuccList.size());
+		buffer.append(",BasePredeccessors:" + this.basePredList.size());
+		buffer.append(",Successors:" + this.succList.size());
+		buffer.append(",Predeccessors:" + this.predList.size());
+		buffer.append("]");
+		return buffer.toString();
+	}	
 }
