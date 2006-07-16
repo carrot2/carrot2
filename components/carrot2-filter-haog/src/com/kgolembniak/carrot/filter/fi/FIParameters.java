@@ -60,6 +60,11 @@ public class FIParameters {
 	private int maxPresentedClusters;
 	
 	/**
+	 * Holds way of creation final hierarchy 0-simple, 1-full
+	 */
+	private int hierarchyCreationWay;
+
+	/**
 	 * Constructor for this class. Sets default values for parameters.
 	 */
 	public FIParameters(){
@@ -70,6 +75,7 @@ public class FIParameters {
 		this.maxDescPhraseLength = FIConstants.DEFAULT_MAX_PHRASE_LENGTH;
 		this.maxPresentedClusters = FIConstants.DEFAULT_MAX_PRESENTED_CLUSTERS;
 		this.minClusterSize = FIConstants.DEFAULT_MIN_CLUSTER_SIZE;
+		this.hierarchyCreationWay = FIConstants.DEFAULT_HIERATCHY_CREATION_WAY;
 	}
 	
 	/**
@@ -139,6 +145,14 @@ public class FIParameters {
             }
         }      
         
+        value = (String) map.get(FIConstants.HIERATCHY_CREATION_WAY);
+        if (value != null) {
+            params.hierarchyCreationWay = Integer.parseInt(value);
+            if (params.hierarchyCreationWay < 0 || params.hierarchyCreationWay > 1) {
+                throw new RuntimeException("Illegal value range.");
+            }
+        }      
+
         return params;
     }
 	
@@ -155,6 +169,7 @@ public class FIParameters {
 		map.put(FIConstants.MAX_PHRASE_LENGTH, Integer.toString(maxDescPhraseLength));
 		map.put(FIConstants.MAX_PRESENTED_CLUSTERS, Integer.toString(maxPresentedClusters));
 		map.put(FIConstants.MIN_CLUSTER_SIZE, Integer.toString(minClusterSize));
+		map.put(FIConstants.HIERATCHY_CREATION_WAY, Integer.toString(hierarchyCreationWay));
 		return map;
 	}
 
@@ -214,4 +229,11 @@ public class FIParameters {
 		return minClusterSize;
 	}
 
+	/**
+	 * Getter for {@link #hierarchyCreationWay} parameter.
+	 * @return value defining hierarchy creation way 
+	 */
+	public int getHierarchyCreationWay() {
+		return hierarchyCreationWay;
+	}
 }
