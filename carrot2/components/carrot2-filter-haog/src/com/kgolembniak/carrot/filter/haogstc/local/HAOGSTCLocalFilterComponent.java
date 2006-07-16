@@ -35,6 +35,8 @@ import com.dawidweiss.carrot.filter.stc.algorithm.BaseCluster;
 import com.dawidweiss.carrot.filter.stc.algorithm.DocReference;
 import com.dawidweiss.carrot.filter.stc.algorithm.STCEngine;
 import com.kgolembniak.carrot.filter.haog.algorithm.STCGroupper;
+import com.kgolembniak.carrot.filter.haog.measure.Statistics;
+import com.kgolembniak.carrot.filter.stc.STCParameters;
 
 /**
  * Implementation of Hierarchical Arrangement of Overlapping Groups.
@@ -136,25 +138,34 @@ public class HAOGSTCLocalFilterComponent extends ProfiledLocalFilterComponentBas
 
     public void endProcessing() throws ProcessingException
     {
+    	//Uncomment this to get statistics
+    	//Statistics.getInstance().enable();
+        Statistics.getInstance().startMeasure();
         startTimer();
 
+        Statistics.getInstance().startTimer();
         //STC part
-        final STCEngine stcEngine = new STCEngine(documentReferences);
-        stcEngine.createSuffixTree();
-        
-        final StcParameters params = StcParameters.fromMap(
+        final STCParameters params = STCParameters.fromMap(
+        		this.requestContext.getRequestParameters());
+        final StcParameters stcParams = StcParameters.fromMap(
         		this.requestContext.getRequestParameters());
 
-        stcEngine.createBaseClusters(params);
-    	final List clusters = stcEngine.getBaseClusters();
+        Statistics.getInstance().startTimer();
+        final STCEngine stcEngine = new STCEngine(documentReferences);
+        stcEngine.createSuffixTree();
+        stcEngine.createBaseClusters(stcParams);
+        final List clusters = stcEngine.getBaseClusters();
+        Statistics.getInstance().endTimer("Cluster Creation Time");
 
         //HAOG part
         connectBaseClusters(clusters);
         STCGroupper groupper = 
         	new STCGroupper(clusters, documents, params, rawClustersConsumer);
         groupper.process();
+        Statistics.getInstance().endTimer("Processing Time");
    	
         stopTimer();
+        Statistics.getInstance().endMeasure();
 
         super.endProcessing();
     }
@@ -164,7 +175,7 @@ public class HAOGSTCLocalFilterComponent extends ProfiledLocalFilterComponentBas
      * A parameter MergeTreshold is used as a condition to connect clusters.
      */
     private void connectBaseClusters(List clusters){
-        final StcParameters params = StcParameters.fromMap(
+        final STCParameters params = STCParameters.fromMap(
                 this.requestContext.getRequestParameters());
     	final float CONNECT_CONDITION = params.getMergeThreshold();
     	
