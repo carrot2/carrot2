@@ -21,13 +21,13 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
-import com.dawidweiss.carrot.filter.stc.StcParameters;
 import com.dawidweiss.carrot.filter.stc.algorithm.BaseCluster;
 import com.dawidweiss.carrot.filter.stc.algorithm.Phrase;
 import com.dawidweiss.carrot.filter.stc.algorithm.StemmedTerm;
 import com.dawidweiss.carrot.filter.stc.suffixtree.ExtendedBitSet;
 import com.kgolembniak.carrot.filter.fi.FIParameters;
 import com.kgolembniak.carrot.filter.fi.algorithm.Cluster;
+import com.kgolembniak.carrot.filter.stc.STCParameters;
 
 /**
  * Class representing vertex, which can consist other vertex. This is usefull
@@ -54,10 +54,13 @@ public class CombinedVertex extends Vertex{
 	 * Description for this vertex.
 	 */
 	private String description;
+	
+	private boolean used;
 
 	public CombinedVertex(String label){
 		super(label);
-		vertices = new ArrayList();
+		this.used = false;
+		this.vertices = new ArrayList();
 	}
 
 	/**
@@ -66,6 +69,7 @@ public class CombinedVertex extends Vertex{
 	 */
 	public CombinedVertex(Vertex vertex){
 		super(vertex.label);
+		this.used = false;
 		this.vertices = new ArrayList();
 		this.vertices.add(vertex);
 		if (vertex instanceof CombinedVertex) {
@@ -235,7 +239,7 @@ public class CombinedVertex extends Vertex{
 	 * @param params - Parameters used for description limiting
 	 * @return description of this vertex as String.
 	 */
-	public String getVertexDescription(StcParameters params) {
+	public String getVertexDescription(STCParameters params) {
 		if (this.description!=null){
 			return this.description;
 		}
@@ -337,7 +341,7 @@ public class CombinedVertex extends Vertex{
 	 * @param params - Parameters needed to decide about phrase importance.
 	 * @return List of phrases ordered descending by their importance.
 	 */
-	private List getVertexPhrases(StcParameters params) {
+	private List getVertexPhrases(STCParameters params) {
 		HashSet phrases = new HashSet();
 		if (documents==null){
 			getDocumentsFromBaseClusters();
@@ -466,4 +470,23 @@ public class CombinedVertex extends Vertex{
 		System.out.println("]");
 	}
 
+	public String toString(){
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("CombinedVertex=[");
+		buffer.append("Label:" + this.label);
+		buffer.append(",BaseSuccessors:" + this.baseSuccList.size());
+		buffer.append(",BasePredeccessors:" + this.basePredList.size());
+		buffer.append(",Successors:" + this.succList.size());
+		buffer.append(",Predeccessors:" + this.predList.size());
+		buffer.append("]");
+		return buffer.toString();
+	}
+
+	public boolean isUsed() {
+		return used;
+	}
+
+	public void setUsed(boolean used) {
+		this.used = used;
+	}
 }
