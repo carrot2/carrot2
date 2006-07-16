@@ -97,5 +97,20 @@ public class FIConstants {
 	 * Default value for {@link #MIN_CLUSTER_SIZE}
 	 */
 	public final static int DEFAULT_MIN_CLUSTER_SIZE = 2;
+	
+	/**
+	 * Hierarchy in HAOG can be created in 2 ways:
+	 * <ul>
+	 * 	<li>simple - based on grandchaild checking (0)</li>
+	 * 	<li>full - with subgraph's kernel creation checking (1)</li>
+	 * </ul>
+	 * This parameter allow user to choose creation way.
+	 */
+	public final static String HIERATCHY_CREATION_WAY = "fi.hierarchyCreationWay";
+
+	/**
+	 * Default value for {@link #HIERATCHY_CREATION_WAY}
+	 */
+	public final static int DEFAULT_HIERATCHY_CREATION_WAY = 0;
 
 }
