@@ -13,9 +13,11 @@
 package com.kgolembniak.carrot.filter.haog.algorithm;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.dawidweiss.carrot.core.local.ProcessingException;
+import com.kgolembniak.carrot.filter.haog.measure.Statistics;
 
 /**
  * Main class containing HAOG Algorithm described in:
@@ -28,6 +30,7 @@ public class GraphProcessor {
 	private List vertices;
 	private List cycle;
 	private int nextLabel;
+	private int cyclesCount;
 	
 	/**
 	 * Default constructor
@@ -43,6 +46,7 @@ public class GraphProcessor {
 	 * @throws ProcessingException
 	 */
 	public List removeCycle(List graph) throws ProcessingException{
+		this.cyclesCount = 0;
 		nextLabel = graph.size()+1;
 		int initialGraphSize = graph.size();
 		int counter = 0;
@@ -61,6 +65,7 @@ public class GraphProcessor {
 			}
 		}
 
+		Statistics.getInstance().setValue("Number of cycles", new Integer(this.cyclesCount));
 		//After removing cycle we have moddified arcs, 
 		//now we have to restore all arcs
 		repairArcs(vertices);
@@ -104,6 +109,7 @@ public class GraphProcessor {
 		}
 
 		if (cycle.size()>0){
+			this.cyclesCount ++;
 			CombinedVertex combinedCycle = new CombinedVertex(String.valueOf(nextLabel));
 			nextLabel++;
 			combinedCycle.setVertices(cycle);
@@ -293,4 +299,27 @@ public class GraphProcessor {
 		return kernel;
 	}
 
+	/**
+	 * After finding kernel we could lost some predecessors, so we must restore 
+	 * it from successors.
+	 * @param subgraph
+	 * @return same list with repaired predecessors list
+	 */
+	public List repairPredLists(List subgraph){
+		for (Iterator it1 = subgraph.iterator(); it1.hasNext();) {
+			CombinedVertex firstVertex = (CombinedVertex) it1.next();
+			//We clear predecessors to fill it only with subgraph's vertices
+			firstVertex.getPredList().clear();
+			
+			for (Iterator it2 = subgraph.iterator(); it2.hasNext();) {
+				CombinedVertex secondVertex = (CombinedVertex) it2.next();
+				
+				if (secondVertex.getSuccList().contains(firstVertex)) {
+					firstVertex.addPredecessor(secondVertex);					
+				}
+			}
+		}
+		return subgraph;
+	}
+	
 }
