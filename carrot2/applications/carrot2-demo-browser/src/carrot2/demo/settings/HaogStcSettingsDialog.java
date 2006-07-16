@@ -15,9 +15,9 @@ package carrot2.demo.settings;
 
 import javax.swing.JPanel;
 
-import com.dawidweiss.carrot.filter.stc.StcConstants;
 import com.jgoodies.forms.builder.DefaultFormBuilder;
 import com.jgoodies.forms.layout.FormLayout;
+import com.kgolembniak.carrot.filter.stc.STCConstants;
 
 /**
  * A settings panel for {@link carrot2.demo.settings.HaogStcSettings}. 
@@ -38,29 +38,33 @@ class HaogStcSettingsDialog extends JPanel {
         
         builder.appendSeparator("Input preprocessing");
 
-        builder.append(ThresholdHelper.createIntegerThreshold(settings, StcConstants.IGNORED_WORD_IF_IN_FEWER_DOCS,
+        builder.append(ThresholdHelper.createIntegerThreshold(settings, STCConstants.IGNORED_WORD_IF_IN_FEWER_DOCS,
                 "Ignore word if in fewer docs:", 2, 10, 1, 1));
         builder.nextLine();
-        builder.append(ThresholdHelper.createDoubleThreshold(settings, StcConstants.IGNORED_WORD_IF_IN_MORE_DOCS,
+        builder.append(ThresholdHelper.createDoubleThreshold(settings, STCConstants.IGNORED_WORD_IF_IN_MORE_DOCS,
                 "Ignore word if in more docs (%):", 0, 1, 0.1, 0.25));
 
         builder.appendSeparator("Base clusters");
 
-        builder.append(ThresholdHelper.createIntegerThreshold(settings, StcConstants.MAX_BASE_CLUSTERS_COUNT,
+        builder.append(ThresholdHelper.createIntegerThreshold(settings, STCConstants.MAX_BASE_CLUSTERS_COUNT,
                 "Max base clusters:", 25, 500, 0, (500-25)/4));
-        builder.append(ThresholdHelper.createDoubleThreshold(settings, StcConstants.MIN_BASE_CLUSTER_SCORE,
+        builder.append(ThresholdHelper.createDoubleThreshold(settings, STCConstants.MIN_BASE_CLUSTER_SCORE,
                 "Min base cluster score:", 0, 10, 1, 1));
-        builder.append(ThresholdHelper.createIntegerThreshold(settings, StcConstants.MIN_BASE_CLUSTER_SIZE,
+        builder.append(ThresholdHelper.createIntegerThreshold(settings, STCConstants.MIN_BASE_CLUSTER_SIZE,
                 "Min base cluster size:", 2, 20, 0, 4));
 
         builder.appendSeparator("Merging and output");
 
-        builder.append(ThresholdHelper.createDoubleThreshold(settings, StcConstants.MERGE_THRESHOLD,
+        builder.append(ThresholdHelper.createDoubleThreshold(settings, STCConstants.MERGE_THRESHOLD,
                 "Merge threshold:", 0, 1, 0.1, 0.25));
 
         builder.appendSeparator("Label creation");
-        builder.append(ThresholdHelper.createIntegerThreshold(settings, StcConstants.MAX_PHRASE_LENGTH,
+        builder.append(ThresholdHelper.createIntegerThreshold(settings, STCConstants.MAX_PHRASE_LENGTH,
                 "Maximum label length :", 2, 10, 1, 1));
+        
+        builder.appendSeparator("HAOG hierarchy creation way");
+        builder.append(ThresholdHelper.createIntegerThreshold(settings, STCConstants.HIERATCHY_CREATION_WAY,
+                "Simple (grandchild)/Full (kernel):", 0, 1, 1, 1));
 
         this.add(builder.getPanel());
     }
