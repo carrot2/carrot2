@@ -25,6 +25,7 @@ import com.dawidweiss.carrot.core.local.clustering.RawDocument;
 import com.dawidweiss.carrot.core.local.clustering.TokenizedDocument;
 import com.kgolembniak.carrot.filter.fi.FIParameters;
 import com.kgolembniak.carrot.filter.fi.algorithm.Cluster;
+import com.kgolembniak.carrot.filter.haog.measure.Statistics;
 
 /**
  * This class renders {@link com.dawidweiss.carrot.core.local.clustering.RawCluster}
@@ -46,6 +47,18 @@ public class FIGraphRenderer implements GraphRenderer {
 	 * Set used to check if document belongs to any cluster.
 	 */
 	private Set usedDocuments;
+	/**
+	 * 
+	 */
+	private RawClustersConsumer consumer;
+	
+	private GraphProcessor processor;
+	
+	private int repeatedClusters;
+	
+	public FIGraphRenderer(){
+		processor = new GraphProcessor();
+	}
 	
 	/**
      * This method creates output raw claster from internal results representation.
@@ -55,18 +68,26 @@ public class FIGraphRenderer implements GraphRenderer {
    	RawClustersConsumer consumer) throws ProcessingException {
     	this.params = (FIParameters) params;
     	this.documents = documents;
+    	this.consumer = consumer;
     	this.usedDocuments = new HashSet(documents.size());
+    	this.repeatedClusters = 0;
     	
     	CombinedVertex kernelVertex;
 		RawClusterBase rawCluster;
 		//Reverse makes more complex cluster to be first on the list.
     	for (int i1=kernel.size()-1; i1>=0; i1--){
     		kernelVertex = (CombinedVertex) kernel.get(i1);
-    		rawCluster = createRCFromCV(kernelVertex);
-    		consumer.addCluster(rawCluster);
+    		if (this.params.getHierarchyCreationWay()==0) {
+        		rawCluster = createRCFromCVSimple(kernelVertex);
+    		} else {
+        		rawCluster = createRCFromCVFull(kernelVertex);
+    		}
+    		this.consumer.addCluster(rawCluster);
 		}
-    	
-    	rawCluster = new RawClusterBase();
+        Statistics.getInstance().setValue("Clusters repeated in hierarhy", 
+        		new Integer(this.repeatedClusters));
+
+		rawCluster = new RawClusterBase();
     	rawCluster.addLabel("Other");
     	RawDocument rawDocument;
     	TokenizedDocument tokenizedDoc;
@@ -74,6 +95,7 @@ public class FIGraphRenderer implements GraphRenderer {
     	HashSet docs = new HashSet(this.documents);
     	docs.removeAll(this.usedDocuments);
     	
+    	Statistics.getInstance().setValue("Documents not grupped", new Integer(docs.size()));
     	for (Iterator it = docs.iterator(); it.hasNext();){
 			tokenizedDoc = (TokenizedDocument) it.next();
 	        rawDocument = (RawDocument) tokenizedDoc.getProperty(
@@ -81,39 +103,52 @@ public class FIGraphRenderer implements GraphRenderer {
         	rawCluster.addDocument(rawDocument);
     	}
     	
-		consumer.addCluster(rawCluster);
+    	this.consumer.addCluster(rawCluster);
+	}
+    
+    /**
+     * This method converts internal algorithm representation of vertices
+     * to clusters suitalbe for displaying later. It uses kernel discovering 
+     * to decide to add cluster to hierarchy.
+     * @param vertex
+     * @return cluster
+     */
+    private RawClusterBase createRCFromCVFull(CombinedVertex vertex)
+    throws ProcessingException {
+		RawClusterBase rawCluster = new RawClusterBase();
+
+		getDocumentsForCluster(vertex, rawCluster);		
+		
+    	List subGraph = vertex.getSuccList();
+    	subGraph = processor.repairPredLists(subGraph);
+    	List subgraphKernel = processor.findKernel(subGraph);
+    	
+    	CombinedVertex subVertex = null;
+    	for (Iterator it = subgraphKernel.iterator(); it.hasNext();){
+    		subVertex = (CombinedVertex) it.next();
+    		if (subVertex.isUsed()) {
+    			repeatedClusters ++;
+    		} else {
+    			subVertex.setUsed(true);
+    		}
+    		RawClusterBase subCluster = createRCFromCVFull(subVertex);
+    		rawCluster.addSubcluster(subCluster);
+    	}
+    	
+		return rawCluster;
 	}
 
     /**
      * This method converts internal algorithm representation of vertices
-     * to clusters suitalbe for displaying later.
+     * to clusters suitalbe for displaying later. It uses simple grandchild 
+     * criterion to decide to add cluster to hierarchy.
      * @param vertex
      * @return cluster
      */
-	private RawClusterBase createRCFromCV(CombinedVertex vertex) {
+	private RawClusterBase createRCFromCVSimple(CombinedVertex vertex) {
 		RawClusterBase rawCluster = new RawClusterBase();
 
-		RawDocument rawDocument;
-		TokenizedDocument tokenizedDoc;		
-		rawCluster.addLabel(vertex.getVertexDescription(params));
-		
-		List vertices = vertex.getVertices();
-		Vertex childVertex;
-		HashSet docSet = new HashSet();
-		for (int i1=0; i1<vertices.size(); i1++){
-			childVertex = (Vertex) vertices.get(i1);
-			Cluster cluster = (Cluster) childVertex.getRepresentedCluster();
-			docSet.addAll(cluster.getDocuments());
-		}
-		
-		//for all documents in node(cluster)
-		for (Iterator doc = docSet.iterator(); doc.hasNext();){
-			tokenizedDoc = (TokenizedDocument) doc.next();
-			this.usedDocuments.add(tokenizedDoc);
-	        rawDocument = (RawDocument) tokenizedDoc.getProperty(
-	        		TokenizedDocument.PROPERTY_RAW_DOCUMENT);
-        	rawCluster.addDocument(rawDocument);
-		}
+		getDocumentsForCluster(vertex, rawCluster);
 
 		List successors = vertex.getSuccList();
 		RawClusterBase subCluster;
@@ -135,11 +170,45 @@ public class FIGraphRenderer implements GraphRenderer {
 			}
 			
 			if (belongsToKernel){
-				subCluster = createRCFromCV(successor);
+	    		if (successor.isUsed()) {
+	    			repeatedClusters ++;
+	    		} else {
+	    			successor.setUsed(true);
+	    		}
+				subCluster = createRCFromCVSimple(successor);
 				rawCluster.addSubcluster(subCluster);
 			}
 		}
 		return rawCluster;
 	}
 
+	/**
+	 * This method adds documents contained in given vertex to given cluster.
+	 * @param vertex - Vertex containing documents
+	 * @param rawCluster - Cluster to add documents to.
+	 */
+	private void getDocumentsForCluster(CombinedVertex vertex, RawClusterBase rawCluster) {
+		RawDocument rawDocument;
+		TokenizedDocument tokenizedDoc;		
+		rawCluster.addLabel(vertex.getVertexDescription(params));
+		
+		List vertices = vertex.getVertices();
+		Vertex childVertex;
+		HashSet docSet = new HashSet();
+		for (int i1=0; i1<vertices.size(); i1++){
+			childVertex = (Vertex) vertices.get(i1);
+			Cluster cluster = (Cluster) childVertex.getRepresentedCluster();
+			docSet.addAll(cluster.getDocuments());
+		}
+		
+		//for all documents in node(cluster)
+		for (Iterator doc = docSet.iterator(); doc.hasNext();){
+			tokenizedDoc = (TokenizedDocument) doc.next();
+			this.usedDocuments.add(tokenizedDoc);
+	        rawDocument = (RawDocument) tokenizedDoc.getProperty(
+	        		TokenizedDocument.PROPERTY_RAW_DOCUMENT);
+        	rawCluster.addDocument(rawDocument);
+		}
+	}
+	
 }
