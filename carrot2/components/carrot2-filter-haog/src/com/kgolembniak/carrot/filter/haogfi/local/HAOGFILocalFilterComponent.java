@@ -34,6 +34,7 @@ import com.dawidweiss.carrot.core.local.profiling.ProfiledLocalFilterComponentBa
 import com.kgolembniak.carrot.filter.fi.FIParameters;
 import com.kgolembniak.carrot.filter.fi.algorithm.AprioriEngine;
 import com.kgolembniak.carrot.filter.haog.algorithm.FIGroupper;
+import com.kgolembniak.carrot.filter.haog.measure.Statistics;
 
 /**
  * Implementation of Hierarchical Arrangement of Overlapping Groups based
@@ -132,19 +133,27 @@ public class HAOGFILocalFilterComponent extends ProfiledLocalFilterComponentBase
 
     public void endProcessing() throws ProcessingException
     {
+    	//Uncomment this to get statistics
+    	//Statistics.getInstance().enable();
+        Statistics.getInstance().startMeasure();
         startTimer();
 
+        Statistics.getInstance().startTimer();
         //FI Part
         FIParameters params = FIParameters.fromMap(
         		this.requestContext.getRequestParameters());
+        Statistics.getInstance().startTimer();
         List clusters = aprioriEngine.getClusters(params);
+        Statistics.getInstance().endTimer("Cluster Creation Time");
         
         //HAOG Part
         FIGroupper groupper = 
         	new FIGroupper(clusters, documents, params, rawClustersConsumer);
         groupper.process();
+        Statistics.getInstance().endTimer("Processing Time");
 
         stopTimer();
+        Statistics.getInstance().endMeasure();
 
         super.endProcessing();
     }
