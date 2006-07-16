@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dawidweiss.carrot.filter.stc.algorithm.BaseCluster;
+import com.kgolembniak.carrot.filter.haog.measure.Statistics;
 
 /**
  * This class contains algorithm for creation of graph from clusters generated
@@ -48,6 +49,7 @@ public class STCGraphCreator implements GraphCreator {
 		//Now create arcs
 		BaseCluster neighbour;
 		Vertex neighbourVertex;
+		int arcsCount = 0;
 		for (int i1=0; i1<baseClusters.size(); i1++){
 			baseCluster = (BaseCluster) baseClusters.get(i1);
 			List neighbours = baseCluster.getNeighborsList();
@@ -62,9 +64,11 @@ public class STCGraphCreator implements GraphCreator {
 				neighbourVertex = (Vertex) graph.get(neighbour.getId());
 				vertex.addSuccessor(neighbourVertex);
 				neighbourVertex.addPredecessor(vertex);
+				arcsCount ++;
 			}
 		}
 		
+		Statistics.getInstance().setValue("Arcs count", new Integer(arcsCount));
 		return graph;
 	}
 
