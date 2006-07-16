@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.kgolembniak.carrot.filter.fi.algorithm.Cluster;
+import com.kgolembniak.carrot.filter.haog.measure.Statistics;
 
 /**
  * This class contains algorithm for creation of graph from clusters generated
@@ -47,6 +48,7 @@ public class FIGraphCreator implements GraphCreator {
 		List neighbours;
 		Cluster neighbour;
 		Vertex successor;
+		int arcsCount = 0;
 		for (int i1=0; i1<graph.size(); i1++){
 			vertex = (Vertex) graph.get(i1);
 			cluster = (Cluster) vertex.getRepresentedCluster();
@@ -57,9 +59,11 @@ public class FIGraphCreator implements GraphCreator {
 				successor = (Vertex) graph.get(neighbour.getId().intValue());
 				vertex.addSuccessor(successor);
 				successor.addPredecessor(vertex);
+				arcsCount ++;
 			}
 		}
 		
+		Statistics.getInstance().setValue("Arcs count", new Integer(arcsCount));
 		return graph;
 	}
 
