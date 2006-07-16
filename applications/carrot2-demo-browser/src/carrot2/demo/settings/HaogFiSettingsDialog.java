@@ -58,6 +58,10 @@ class HaogFiSettingsDialog extends JPanel {
         builder.append(ThresholdHelper.createIntegerThreshold(settings, FIConstants.MAX_PHRASE_LENGTH,
                 "Maximum label length :", 2, 10, 1, 1));
 
+        builder.appendSeparator("HAOG hierarchy creation way");
+        builder.append(ThresholdHelper.createIntegerThreshold(settings, FIConstants.HIERATCHY_CREATION_WAY,
+                "Simple (grandchild)/Full (kernel):", 0, 1, 1, 1));
+
         this.add(builder.getPanel());
     }
 }
