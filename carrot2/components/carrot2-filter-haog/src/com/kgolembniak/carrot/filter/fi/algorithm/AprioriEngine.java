@@ -21,6 +21,7 @@ import com.dawidweiss.carrot.core.local.linguistic.tokens.TokenSequence;
 import com.dawidweiss.carrot.core.local.linguistic.tokens.TypedToken;
 import com.dawidweiss.carrot.util.tokenizer.languages.MutableStemmedToken;
 import com.kgolembniak.carrot.filter.fi.FIParameters;
+import com.kgolembniak.carrot.filter.haog.measure.Statistics;
 
 /**
  * Class containing main logic for Apriori based algorithm. It contains methods
@@ -414,8 +415,11 @@ Timeout:for (int i1=0; i1<previousItemSets.size(); i1++){
 
 		generateItemSets();
 		List clusters = createClusters();
+
+		Statistics.getInstance().startTimer();
 		clusters = connectClusters(clusters);
-		
+        Statistics.getInstance().endTimer("Cluster Connecting Time (Should be removed from FI cluster creation time, this time is haog part)");
+
 		return clusters;
 	}
 
