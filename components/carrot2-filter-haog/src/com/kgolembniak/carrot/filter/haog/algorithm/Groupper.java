@@ -17,6 +17,7 @@ import java.util.List;
 
 import com.dawidweiss.carrot.core.local.ProcessingException;
 import com.dawidweiss.carrot.core.local.clustering.RawClustersConsumer;
+import com.kgolembniak.carrot.filter.haog.measure.Statistics;
 
 public abstract class Groupper {
 	
@@ -86,9 +87,24 @@ public abstract class Groupper {
 	 * @throws ProcessingException
 	 */
 	public void process() throws ProcessingException{
+
+		Statistics.getInstance().setValue("Base clusters number", new Integer(clusters.size()));
+		Statistics.getInstance().startTimer();
+
+		Statistics.getInstance().startTimer();
 		List graph = creator.createGraph(clusters);
+		Statistics.getInstance().endTimer("Graph Creation Time");
+
+		Statistics.getInstance().startTimer();
 		List cleanGraph = processor.removeCycle(graph);
+		Statistics.getInstance().endTimer("Remove Cycle Time");
+
+		Statistics.getInstance().startTimer();
 		List kernel  = processor.findKernel(cleanGraph);
+		Statistics.getInstance().endTimer("Finding Kernel Time");
+		Statistics.getInstance().setValue("Kernel size", new Integer(kernel.size()));
+
+		Statistics.getInstance().endTimer("HAOG Time");
 		renderer.renderRawClusters(kernel, documents, parameters, consumer);
 	}
 }
