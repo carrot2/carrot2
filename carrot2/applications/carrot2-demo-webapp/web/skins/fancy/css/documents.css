@@ -9,7 +9,8 @@
 
 #documents {
   margin: 5px;
-  margin-top: 1ex;
+  margin-top: 0ex;
+  padding-top: 1ex;
 }
 
 table.d {
@@ -42,4 +43,9 @@ td.c {
 .u {
   color: #808080;
   overflow: hidden;
+}
+
+div#no-documents {
+  text-align: center;
+  padding-top: 5ex;
 }
