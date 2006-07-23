@@ -236,7 +236,7 @@ input.hl {
 
 #process-instr, #more-desc {
   margin-left: 1px; 
-  width: 400px;
+  width: 405px;
   color: #808080;
 }
 
@@ -267,7 +267,7 @@ input.hl {
 
 #startup-main {
   width: 100%;
-  margin-top: 150px;
+  margin-top: 120px;
 }
 
 #startup-main-top-outer-left {
@@ -304,7 +304,7 @@ input.hl {
 
 #startup-logo {
   position: absolute;
-  top: 125px;
+  top: 95px;
   left: 51px;
 }
 

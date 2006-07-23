@@ -87,6 +87,10 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer {
     }
 
     public void endResult() throws IOException {
+        if (sequence == 1) {
+            writer.write("<div id='no-documents'>Your query returned no documents.<br/>Please try a more general query.</div>");
+        }
+        
         writer.write(
                 "</div>\r\n" + 
                 "</body>\r\n" + 

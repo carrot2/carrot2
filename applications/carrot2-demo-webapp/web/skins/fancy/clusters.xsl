@@ -15,17 +15,24 @@
   </xsl:template>
 
   <xsl:template match="/searchresult[@type = 'clusters']">
-    <table class="cluster-tree">
-      <tr>
-        <td><img src="{$skinuri}/img/folder.gif" class="f" /></td>
-        <td class="text hl" style="padding-top: 0" colspan="2" id="ttop">
-          <a class="group" href="javascript:hl('top'); showAll()"><span class="label"><span class="text">
-          All results</span>&#160;<span class="size">(<xsl:value-of select="@totalResultsCount" />)</span></span></a>
-        </td>
-      </tr>
-
-      <xsl:apply-templates select="group" />
-    </table>
+    <xsl:if test="count(group) > 0">
+      <table class="cluster-tree">
+        <tr>
+          <td><img src="{$skinuri}/img/folder.gif" class="f" /></td>
+          <td class="text hl" style="padding-top: 0" colspan="2" id="ttop">
+            <a class="group" href="javascript:hl('top'); showAll()"><span class="label"><span class="text">
+            All results</span>&#160;<span class="size">(<xsl:value-of select="@totalResultsCount" />)</span></span></a>
+          </td>
+        </tr>
+  
+        <xsl:apply-templates select="group" />
+      </table>
+    </xsl:if>
+    <xsl:if test="count(group) = 0">
+      <div id="no-clusters">
+        No clusters created
+      </div>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="group">
