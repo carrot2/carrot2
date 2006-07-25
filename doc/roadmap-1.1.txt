@@ -1,6 +1,42 @@
 
-A roadmap to release 1.1
+A roadmap to release 2.0
 ------------------------
+
+Must have:
+
+- Unify package names (D)
+
+- Progress page for the webapp demo (D)
+
+- Make the demo webapp a start page for carrot2.org (S)
+
+- Add some basic information about the Carrot2 project to
+  the demo webapp startup page? (S)
+  
+- Website update (S)
+  - Make Carrot2 a Search Results Clustering Framework
+  - L&F update
+  - publications
+  - describe available algorithms
+  - projects using Carrot2
+    - CALO
+    - nutch plugin
+    
+- Exceeded Yahoo/Google limit/general exception handling (D)
+  
+- Do not deploy broken webapp to the official site (D)
+
+- Documentation
+  - What is Carrot2
+  - Getting source and building?
+  - Brief overview of the (local) architecture
+  - Brief example of using LocalController (+Lucene)
+  - For more information: use mailing list :)
+
+- Move command line applications from the commercial repository to
+  the OS repository (D)
+
+Nice to have:
 
 - Add OpenSearch Descriptor support for carrot2-input-opensearch?
 
@@ -9,16 +45,11 @@ A roadmap to release 1.1
 - Check out Unicode segmentation spec (info from Andrzej Zydroñ):
 http://www.unicode.org/reports/tr29/tr29-10.html
 
-- replace string concatenations with a stringbuffer in JavaScript?
-http://www.softwaresecretweapons.com/jspwiki/Wiki.jsp?page=JavascriptStringConcatenation
-
-- add lucene input source to the demo application
-
-- modify xslt-output to work with frames? (ajax-based?)
+- add lucene input source to the local demo application
 
 - refactor Language use (tokenization, stemming) in Lingo.
 
-- Highlight user search terms in document snippets in the demo application (reuse
+- Highlight user search terms in document snippets in the local demo application (reuse
 Lucene's highlighter?).
 
 - A plugin for SOLR?
