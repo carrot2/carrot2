@@ -9,6 +9,8 @@ Major functions and bug fixes
 Version  [C] Information
 
 HEAD
+          o  Progress page for the webapp demo (D).
+
           o  Updated JARs of projects used in Carrot2.
 
           #  Snowball stemmers were quite old. King's was stemmed into King' for example. 
