@@ -25,7 +25,7 @@
         </td>
         <td class="c">
           <div class="t">
-            <a>
+            <a target="_top">
               <xsl:attribute name="href"><xsl:value-of select="url" /></xsl:attribute>
               <xsl:apply-templates select="title" />
             </a>
