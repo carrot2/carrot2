@@ -49,27 +49,14 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer {
 
         if (isProcessing) {
             writer.write(
-                    "    <script type=\"text/javascript\" language=\"JavaScript\">\r\n" + 
-                    "    <!--\r\n" + 
-                    "    if (document.images)\r\n" + 
-                    "    {\r\n" + 
-                    "      preload_image = new Image(); \r\n" + 
-                    "      preload_image.src=\"" + base + "/img/progress.gif" + "\"; \r\n" + 
-                    "    }\r\n" + 
-                    "    //-->\r\n" + 
-                    "    </script>\r\n" + 
-                    "  " +
                     "</head>" +
-                    "<body style=\"height: 100%;\" onload=\"javascript:document.getElementById(\'progress\').style.display = \'none\'\">\r\n" + 
-                    "            <div id=\"progress\" style=\"text-align: center; color: gray; background-color: white; padding: 5px; border: 1px solid gray; z-index: 2; position: absolute; left: 10px; top: 10px;\">\r\n" + 
-                    "                <img alt=\"...\" src=\"" + base + "/img/progress.gif\" /><br/>(loading)\r\n" + 
-                    "            </div>"
-                    + "<div id=\"documents\" style=\"z-index: 1;\">");
+                    "<body style=\"height: 100%;\" onload=\"javascript:parent.document.getElementById(\'progress\').style.display = \'none\'\">\r\n" + 
+                    "<div id=\"documents\">");
             writer.flush();
         } else {
             writer.write(
                     "</head>" +
-                    "<body style=\"height: 100%\">" +
+                    "<body style=\"height: 100%\" onload=\"javascript:parent.document.getElementById(\'progress\').style.display = \'none\'\">" +
                     "<div id=\"documents\">");
         }
     }

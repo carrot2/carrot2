@@ -47,6 +47,29 @@
 
   <!-- Emit the main page -->
   <xsl:template match="meta" mode="no-query">
+    <script language="javascript">&lt;!--
+var preload = new Array();
+if (document.images)
+{
+  preload[0] = new Image();
+  preload[0].src = "<xsl:value-of select='$skinuri' />/img/progress.gif";
+  preload[1] = new Image();
+  preload[1].src = "<xsl:value-of select='$skinuri' />/img/tab-active-lead-in.gif";
+  preload[2] = new Image();
+  preload[2].src = "<xsl:value-of select='$skinuri' />/img/tab-active-lead-out.gif";
+  preload[3] = new Image();
+  preload[3].src = "<xsl:value-of select='$skinuri' />/img/tab-active-passive-link.gif";
+  preload[4] = new Image();
+  preload[4].src = "<xsl:value-of select='$skinuri' />/img/tab-passive-active-link.gif";
+  preload[5] = new Image();
+  preload[5].src = "<xsl:value-of select='$skinuri' />/img/tab-passive-lead-in.gif";
+  preload[6] = new Image();
+  preload[6].src = "<xsl:value-of select='$skinuri' />/img/tab-passive-lead-out.gif";
+  preload[7] = new Image();
+  preload[7].src = "<xsl:value-of select='$skinuri' />/img/tab-passive-passive-link.gif";
+}
+//--> </script>
+  
     <xsl:call-template name="custom-results-utils" />
     <div><!-- empty --></div>
     <table id="startup-main">
@@ -62,6 +85,13 @@
         <xsl:with-param name="table-style">margin-bottom: 10px</xsl:with-param>
       </xsl:call-template>
       <xsl:call-template name="input-descriptions" />
+<!-- 
+      <div style="width: 405px; border-bottom: 1px dotted #808080; margin-top: 15px" />
+
+      <div style="margin-top: 13px; padding-bottom: 20px; width: 405px; color: #808080; font-size: 11px">
+        <a href="#">About</a> | <a href="#">Download</a> | <a href="#">Source code</a> | <a href="#">Sponsors</a> | <a href="#">Contact us</a>
+      </div>
+ -->
     </div>    
 
     <xsl:call-template name="footer" />
@@ -98,7 +128,7 @@
           </div>
         </td>
       </tr>
-
+  
       <xsl:call-template name="iframes" />
 
       <tr>
@@ -107,6 +137,9 @@
         </td>
       </tr>
     </table>
+    <div id="progress">
+      <img alt="..." src="{$skinuri}/img/progress.gif" style="position: relative; top: 0.35ex; right: 0.5ex" /> Loading...
+    </div>
   </xsl:template>
 
   <!-- Search area -->
@@ -290,15 +323,6 @@
               <td class="c" id="results-main-content" style="height: 100%">
                 <table style="height: 100%; width: 100%">
                   <tr>
-                    <td colspan="2" class="reshead">
-                        Query: <b><xsl:value-of select="$query" /></b>
-                        -- Input: <b><xsl:value-of select="/page/meta/tabs/tab[@selected = 'selected']/short" />
-                                  (<xsl:value-of select="/page/meta/query-sizes/size[@selected = 'selected']" /> results)
-                                  </b>
-                        -- Clusterer: <b><xsl:value-of select="/page/meta/algorithms/alg[@selected = 'selected']/short" /></b>
-                    </td>
-                  </tr>
-                  <tr>
                     <td style="padding: 3px; width: 260px; border-right: 1px dotted #808080; height: 100%">
                       <iframe name="clusters" src="{$contextPath}{/page/meta/action-urls/query-clusters}" frameborder="no" height="100%" width="100%" style="border: 0" />
                     </td>
@@ -307,6 +331,17 @@
                       <iframe name="documents" src="{$contextPath}{/page/meta/action-urls/query-docs}" frameborder="no" height="100%" width="100%" style="border: 0" />
                     </td>
                   </tr>
+                  <xsl:if test="$display-status-line = 'true'">
+                    <tr>
+                      <td colspan="2" class="reshead">
+                          Query: <b><xsl:value-of select="$query" /></b>
+                          -- Input: <b><xsl:value-of select="/page/meta/tabs/tab[@selected = 'selected']/short" />
+                                    (<xsl:value-of select="/page/meta/query-sizes/size[@selected = 'selected']" /> results)
+                                    </b>
+                          -- Clusterer: <b><xsl:value-of select="/page/meta/algorithms/alg[@selected = 'selected']/short" /></b>
+                      </td>
+                    </tr>
+                  </xsl:if>
                 </table>
               
               </td>
