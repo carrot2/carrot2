@@ -90,7 +90,7 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer {
                 "<tr>\r\n" + 
                 "<td class=\"r\">" + sequence + "</td><td class=\"c\">\r\n" + 
                 "<div class=\"t\">" + 
-                "<a href=\"" + hurl + "\">" + xml.toValidXmlText(title, false)+ "</a>" + 
+                "<a target=\"_top\" href=\"" + hurl + "\">" + xml.toValidXmlText(title, false)+ "</a>" + 
                 "</div>\r\n" + 
                 "<div class=\"s\">" + xml.toValidXmlText(snippet, false) + "</div>\r\n" + 
                 "<div class=\"u\">" + hurl + "</div>\r\n" + 
