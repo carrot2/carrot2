@@ -49,12 +49,6 @@ be executed by invoking the following ANT targets:
 ant -q build
 ant -q test
 
-External tests suite (HTTPUnit tests) and documentation are available as a 
-separate checkout.
-
-See the results of the most recent tests on-line at:
-http://carrot.cs.put.poznan.pl
-
 
 CONTACT
 =======
@@ -62,15 +56,12 @@ CONTACT
 If you have questions or problems, subscribe to:
 
 carrot2-developers@lists.sourceforge.net
-carrot2-cvscommits@lists.sourceforge.net
 
-This e-mailing list will keep you up to date with changes:
+
+This e-mailing list will keep you up to date with major changes:
 
 carrot2-news@lists.sourceforge.net
 
-Other inquiries can be directed to the project's coordinator:
-
-Dawid Weiss <dawid.weiss@cs.put.poznan.pl>
 
 Commercial consulting is offered by a spin-off company Carrot Search:
 
