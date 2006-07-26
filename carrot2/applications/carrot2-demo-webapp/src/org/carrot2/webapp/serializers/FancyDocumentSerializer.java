@@ -33,7 +33,7 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer {
         return Constants.MIME_HTML_CHARSET_UTF;
     }
 
-    public void startResult(OutputStream os) throws IOException {
+    public void startResult(OutputStream os, boolean isProcessing) throws IOException {
         this.writer = new OutputStreamWriter(os, Constants.ENCODING_UTF);
         this.sequence = 1;
 
@@ -42,13 +42,36 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer {
                 "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\r\n" + 
                 "<html class=\"outside-back-color\" style=\"height: 100%\">\r\n" + 
                 "<head>\r\n" + 
-                "<META http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\r\n" + 
+                "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\r\n" + 
                 "<title>Carrot Clustering Engine</title>\r\n" + 
                 "<link href=\"" + base + "/css/common.css\" type=\"text/css\" rel=\"stylesheet\">\r\n" + 
-                "<link href=\"" + base + "/css/documents.css\" rel=\"stylesheet\">\r\n" + 
-                "</head>\r\n" + 
-                "<body style=\"height: 100%\">" + 
-                "<div id=\"documents\">");
+                "<link href=\"" + base + "/css/documents.css\" rel=\"stylesheet\">\r\n"); 
+
+        if (isProcessing) {
+            writer.write(
+                    "    <script type=\"text/javascript\" language=\"JavaScript\">\r\n" + 
+                    "    <!--\r\n" + 
+                    "    if (document.images)\r\n" + 
+                    "    {\r\n" + 
+                    "      preload_image = new Image(); \r\n" + 
+                    "      preload_image.src=\"" + base + "/img/progress.gif" + "\"; \r\n" + 
+                    "    }\r\n" + 
+                    "    //-->\r\n" + 
+                    "    </script>\r\n" + 
+                    "  " +
+                    "</head>" +
+                    "<body style=\"height: 100%;\" onload=\"javascript:document.getElementById(\'progress\').style.display = \'none\'\">\r\n" + 
+                    "            <div id=\"progress\" style=\"text-align: center; color: gray; background-color: white; padding: 5px; border: 1px solid gray; z-index: 2; position: absolute; left: 10px; top: 10px;\">\r\n" + 
+                    "                <img alt=\"...\" src=\"" + base + "/img/progress.gif\" /><br/>(loading)\r\n" + 
+                    "            </div>"
+                    + "<div id=\"documents\" style=\"z-index: 1;\">");
+            writer.flush();
+        } else {
+            writer.write(
+                    "</head>" +
+                    "<body style=\"height: 100%\">" +
+                    "<div id=\"documents\">");
+        }
     }
 
     public void write(RawDocument doc) throws IOException {

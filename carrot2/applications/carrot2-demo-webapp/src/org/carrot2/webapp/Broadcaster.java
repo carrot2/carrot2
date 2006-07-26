@@ -109,6 +109,12 @@ final class Broadcaster {
             documents.notifyAll();
         }
     }
+    
+    public boolean isProcessing() {
+        synchronized (documents) {
+            return false == this.processingEnded;
+        }
+    }
 
     public void attach() {
         useCount++;
