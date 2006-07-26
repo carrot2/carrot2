@@ -290,6 +290,15 @@
               <td class="c" id="results-main-content" style="height: 100%">
                 <table style="height: 100%; width: 100%">
                   <tr>
+                    <td colspan="2" class="reshead">
+                        Query: <b><xsl:value-of select="$query" /></b>
+                        -- Input: <b><xsl:value-of select="/page/meta/tabs/tab[@selected = 'selected']/short" />
+                                  (<xsl:value-of select="/page/meta/query-sizes/size[@selected = 'selected']" /> results)
+                                  </b>
+                        -- Clusterer: <b><xsl:value-of select="/page/meta/algorithms/alg[@selected = 'selected']/short" /></b>
+                    </td>
+                  </tr>
+                  <tr>
                     <td style="padding: 3px; width: 260px; border-right: 1px dotted #808080; height: 100%">
                       <iframe name="clusters" src="{$contextPath}{/page/meta/action-urls/query-clusters}" frameborder="no" height="100%" width="100%" style="border: 0" />
                     </td>
