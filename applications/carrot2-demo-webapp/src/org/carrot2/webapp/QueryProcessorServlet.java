@@ -266,8 +266,6 @@ public final class QueryProcessorServlet extends HttpServlet {
                         serializer.write((RawCluster) i.next());
                     }
                     serializer.endResult();
-
-                    // TODO: add clustering result to the cache?
                 } catch (Exception e) {
                     logger.warn("Error running input query.", e);
                 }
