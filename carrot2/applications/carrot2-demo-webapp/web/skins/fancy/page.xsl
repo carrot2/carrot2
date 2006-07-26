@@ -291,11 +291,11 @@
                 <table style="height: 100%; width: 100%">
                   <tr>
                     <td style="padding: 3px; width: 260px; border-right: 1px dotted #808080; height: 100%">
-                      <iframe name="clusters" src="{$contextPath}/busy/{/page/meta/action-urls/query-clusters}" frameborder="no" height="100%" width="100%" style="border: 0" />
+                      <iframe name="clusters" src="{$contextPath}{/page/meta/action-urls/query-clusters}" frameborder="no" height="100%" width="100%" style="border: 0" />
                     </td>
 
                     <td style="padding: 3px; height: 100%">
-                      <iframe name="documents" src="{$contextPath}/busy/{/page/meta/action-urls/query-docs}" frameborder="no" height="100%" width="100%" style="border: 0" />
+                      <iframe name="documents" src="{$contextPath}{/page/meta/action-urls/query-docs}" frameborder="no" height="100%" width="100%" style="border: 0" />
                     </td>
                   </tr>
                 </table>
