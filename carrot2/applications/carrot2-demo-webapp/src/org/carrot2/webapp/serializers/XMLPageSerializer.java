@@ -69,7 +69,7 @@ public class XMLPageSerializer implements PageSerializer {
         doc.add(root);
 
         // Attach the meta information block.
-        root.add(createMeta(factory, contextPath, searchSettings, searchRequest));
+        root.add(createMeta(factory, searchSettings, searchRequest));
 
         // Output the result.
         final XMLWriter xmlwriter = new XMLWriter(writer);
@@ -85,15 +85,14 @@ public class XMLPageSerializer implements PageSerializer {
      * algorithms and other info required to construct the final HTML page.   
      */
     private final Element createMeta(final DocumentFactory factory, 
-            final String contextPath,
             final SearchSettings searchSettings,
             final SearchRequest searchRequest) throws UnsupportedEncodingException {
         final Element meta = factory.createElement("meta");
 
         // Emit action URLs
         final Element actionUrls = meta.addElement("action-urls");
-        actionUrls.addElement("new-search").setText(contextPath + QUERY_SERVLET_PATH);
-        final String uri = contextPath + QUERY_SERVLET_PATH + "?"
+        actionUrls.addElement("new-search").setText(QUERY_SERVLET_PATH);
+        final String uri = QUERY_SERVLET_PATH + "?"
             + QueryProcessorServlet.PARAM_Q + "=" + URLEncoding.encode(searchRequest.query, "UTF-8")
             + "&" + QueryProcessorServlet.PARAM_INPUT + "=" + searchRequest.inputTabIndex
             + "&" + QueryProcessorServlet.PARAM_ALG + "=" + searchRequest.algorithmIndex
@@ -128,16 +127,16 @@ public class XMLPageSerializer implements PageSerializer {
             }
             
             // Add example queries urls
-            String exampleQueriesString = ((String) inputTab.getOtherProperties().get(
+            final String exampleQueriesString = ((String) inputTab.getOtherProperties().get(
                 "tab.exampleQueries"));
             if (exampleQueriesString != null)
             {
-                String [] exampleQueries = exampleQueriesString.split("\\|");
-                Element queriesElement = tab.addElement("example-queries");
+                final String [] exampleQueries = exampleQueriesString.split("\\|");
+                final Element queriesElement = tab.addElement("example-queries");
                 for (int j = 0; j < exampleQueries.length; j++)
                 {
-                    Element query = queriesElement.addElement("example-query");
-                    final String url = contextPath + QUERY_SERVLET_PATH + "?"
+                    final Element query = queriesElement.addElement("example-query");
+                    final String url = QUERY_SERVLET_PATH + "?"
                         + QueryProcessorServlet.PARAM_Q + "="
                         + URLEncoding.encode(exampleQueries[j], "UTF-8")
                         + "&" + QueryProcessorServlet.PARAM_INPUT + "="
