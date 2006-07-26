@@ -113,7 +113,7 @@
   <xsl:template name="search-area">
      <xsl:param name="table-style"></xsl:param>
 
-     <form action="{action-urls/new-search}" method="GET">
+     <form action="{$contextPath}{action-urls/new-search}" method="GET">
      <table style="{$table-style}" id="search-area">
        <tr>
          <td>
@@ -265,7 +265,7 @@
         <div class="example-queries">
           Example queries: 
           <xsl:for-each select="./example-queries/example-query">
-            <a href="{@url}"><xsl:value-of select="." /></a>
+            <a href="{$contextPath}{@url}"><xsl:value-of select="." /></a>
             <xsl:text> </xsl:text><xsl:if test="position() != last()">|</xsl:if><xsl:text> </xsl:text>
           </xsl:for-each>
         </div>
@@ -291,11 +291,11 @@
                 <table style="height: 100%; width: 100%">
                   <tr>
                     <td style="padding: 3px; width: 260px; border-right: 1px dotted #808080; height: 100%">
-                      <iframe name="clusters" src="{/page/meta/action-urls/query-clusters}" frameborder="no" height="100%" width="100%" style="border: 0" />
+                      <iframe name="clusters" src="{$contextPath}{/page/meta/action-urls/query-clusters}" frameborder="no" height="100%" width="100%" style="border: 0" />
                     </td>
 
                     <td style="padding: 3px; height: 100%">
-                      <iframe name="documents" src="{/page/meta/action-urls/query-docs}" frameborder="no" height="100%" width="100%" style="border: 0" />
+                      <iframe name="documents" src="{$contextPath}{/page/meta/action-urls/query-docs}" frameborder="no" height="100%" width="100%" style="border: 0" />
                     </td>
                   </tr>
                 </table>

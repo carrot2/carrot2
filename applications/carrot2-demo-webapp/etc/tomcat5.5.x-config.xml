@@ -37,7 +37,7 @@
                  directory="logs"  prefix="access_log." suffix=".txt"
                  pattern="common" resolveHosts="false" />
 
-			<Context path="" docBase="${application.home}/web" reloadable="true" />
+			<Context path="/demo" docBase="${application.home}/web" reloadable="true" />
       </Host>
     </Engine>
   </Service>
