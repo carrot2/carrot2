@@ -22,8 +22,6 @@ Must have:
     
 - Exceeded Yahoo/Google limit/general exception handling (D)
   
-- Do not deploy broken webapp to the official site (D)
-
 - Documentation
   - What is Carrot2
   - Getting source and building?
