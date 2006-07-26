@@ -172,7 +172,7 @@
            <label class="inline-cb-label" for="res-sel">Download</label> 
            <select id="res-sel" name="{query-sizes/@form-element}">
            <xsl:for-each select="query-sizes/size">
-               <option value="{position() - 1}">
+               <option value="{@id}">
                    <xsl:if test="@selected"><xsl:copy-of select="@selected" /></xsl:if>
                    <xsl:value-of select="text()" /> results</option>
            </xsl:for-each>

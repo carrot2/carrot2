@@ -94,9 +94,9 @@ public class XMLPageSerializer implements PageSerializer {
         actionUrls.addElement("new-search").setText(QUERY_SERVLET_PATH);
         final String uri = QUERY_SERVLET_PATH + "?"
             + QueryProcessorServlet.PARAM_Q + "=" + URLEncoding.encode(searchRequest.query, "UTF-8")
-            + "&" + QueryProcessorServlet.PARAM_INPUT + "=" + searchRequest.inputTabIndex
-            + "&" + QueryProcessorServlet.PARAM_ALG + "=" + searchRequest.algorithmIndex
-            + "&" + QueryProcessorServlet.PARAM_SIZE + "=" + searchRequest.inputSizeIndex;
+            + "&" + QueryProcessorServlet.PARAM_INPUT + "=" + URLEncoding.encode(searchRequest.getInputTab().getShortName(), "UTF-8")
+            + "&" + QueryProcessorServlet.PARAM_ALG + "=" + URLEncoding.encode(searchRequest.getAlgorithm().getShortName(), "UTF-8")
+            + "&" + QueryProcessorServlet.PARAM_SIZE + "=" + searchRequest.getInputSize();
         actionUrls.addElement("query-docs").setText(uri + "&type=d");
         actionUrls.addElement("query-clusters").setText(uri + "&type=c");
 
@@ -112,7 +112,7 @@ public class XMLPageSerializer implements PageSerializer {
         for (int i = 0; i < maxTab; i++) {
             final TabSearchInput inputTab = (TabSearchInput) inputTabs.get(i);
             final Element tab = tabs.addElement("tab");
-            tab.addAttribute("id", Integer.toString(i));
+            tab.addAttribute("id", inputTab.getShortName());
             if (searchRequest.inputTabIndex == i) {
                 tab.addAttribute("selected", "selected");
             }
@@ -140,7 +140,7 @@ public class XMLPageSerializer implements PageSerializer {
                         + QueryProcessorServlet.PARAM_Q + "="
                         + URLEncoding.encode(exampleQueries[j], "UTF-8")
                         + "&" + QueryProcessorServlet.PARAM_INPUT + "="
-                        + i;
+                        + URLEncoding.encode(inputTab.getShortName(), "UTF-8");
                     query.addAttribute("url", url);
                     query.setText(exampleQueries[j]);
                 }
@@ -155,7 +155,7 @@ public class XMLPageSerializer implements PageSerializer {
         for (int i = 0; i < maxAlg; i++) {
             final TabAlgorithm algo = (TabAlgorithm) algorithmsList.get(i);
             final Element algoElem = algorithms.addElement("alg");
-            algoElem.addAttribute("id", Integer.toString(i));
+            algoElem.addAttribute("id", algo.getShortName());
             if (searchRequest.algorithmIndex == i) {
                 algoElem.addAttribute("selected", "selected");
             }
@@ -169,6 +169,7 @@ public class XMLPageSerializer implements PageSerializer {
         qsizes.addAttribute("form-element", QueryProcessorServlet.PARAM_SIZE);
         for (int i = 0; i < allowedInputSizes.length; i++) {
             final Element sizeElem = qsizes.addElement("size");
+            sizeElem.addAttribute("id", Integer.toString(allowedInputSizes[i]));
             sizeElem.setText(Integer.toString(allowedInputSizes[i]));
             if (searchRequest.inputSizeIndex == i) {
                 sizeElem.addAttribute("selected", "selected");
