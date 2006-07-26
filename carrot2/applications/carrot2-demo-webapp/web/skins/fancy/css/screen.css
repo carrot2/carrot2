@@ -3,11 +3,6 @@ body {
   background-color: #E3DFD6;
 }
 
-body.fetching {
-  background-image: none;
-  background-color: white;
-}
-
 /* Tabs */
 
 .tab-active-lead-in {
@@ -192,9 +187,11 @@ table.glow .r {
 td.reshead {
   height: 10px; 
   padding-left: 5px; 
-  border-bottom: 1px solid gray; 
+  border-top: 1px dotted #808080; 
   font-size: 9px; 
-  background-color: #f0f0ff;
+  background-color: #F6F4EC;
+  color: #808080;
+  text-align: left;
 }
 
 /** Search controls */
@@ -208,12 +205,6 @@ input.search-field {
   width: 300px;
   border: 0;
   background: white;
-}
-
-input.search-field:focus {
-}
-
-select:focus {
 }
 
 td.sb {
@@ -381,35 +372,11 @@ td.more-icon {
 }
 
 /** Progress bar */
-td.pb {
-  padding: 2px;
-}
-
-table.progress {  
-  width: 250px;
-}
-
-table.progress td {
-  height: 15px;
-}
-
-#pgs-l {
-  width: 0%;
-}
-
-#pgs-m {
-  width: 0%;
-  background-color: #d8d8d8;
-}
-
-#pgs-r {
-  width: 100%;
-}
-
-#alg-sel {
-  width: 11.5em;	
-}
-
-#res-sel {
-  width: 7.5em;
+#progress {
+  text-align: center; 
+  color: gray; 
+  z-index: 2; 
+  position: absolute; 
+  top: 76px;
+  left: 670px;
 }

@@ -8,6 +8,7 @@
 
   <xsl:param name="ga-code">UA-317750-3</xsl:param>
   <xsl:param name="all-tabs-width">490px</xsl:param>
+  <xsl:param name="display-status-line">true</xsl:param>
   
   <xsl:template name="custom-results-utils">
     <div id="results-utils">
