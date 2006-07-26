@@ -18,6 +18,7 @@
         </init-param>
     </filter>
 
+	<!-- filter mappings -->
     <filter-mapping>
         <filter-name>xslt-filter</filter-name>
         <url-pattern>/search</url-pattern>
@@ -51,8 +52,19 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
 
+    <!-- progress servlet -->
+    <servlet>
+        <servlet-name>progress-servlet</servlet-name>
+        <servlet-class>org.carrot2.webapp.InProgressServlet</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>QueryProcessor</servlet-name>
         <url-pattern>/search</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>progress-servlet</servlet-name>
+        <url-pattern>/busy/*</url-pattern>
     </servlet-mapping>
 </web-app>
