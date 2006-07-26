@@ -84,6 +84,8 @@ function sel(refids)
       }
     }
   }
+  
+  parent.documents.scrollBy(0,-10000);
 }
 
 function showAll()
@@ -96,4 +98,5 @@ function showAll()
       documentElements[i].style.display = "block";
     }
   }
+  parent.documents.scrollBy(0,-10000);
 }
