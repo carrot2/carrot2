@@ -27,6 +27,10 @@ public final class SearchSettings {
     /** An array of {@link TabAlgorithm}s */
     final ArrayList algorithms = new ArrayList();
 
+    /** Lookup indexes for input tabs and algorithms. */
+    private final HashMap inputTabsIndex = new HashMap();
+    private final HashMap algorithmsIndex = new HashMap();
+
     /** Allowed input sizes */
     int [] allowedInputSizes;
 
@@ -72,19 +76,26 @@ public final class SearchSettings {
             }
 
             // Parse input tab.
-            this.inputTabIndex = parseInt(extract(parameterMap, QueryProcessorServlet.PARAM_INPUT),
-                    getDefaultSearchInputTab(),
-                    0, inputTabs.size() - 1);
+            this.inputTabIndex = lookupIndex(inputTabsIndex, extract(parameterMap, QueryProcessorServlet.PARAM_INPUT),
+                    getDefaultSearchInputTab());
 
             // Parse the algorithm
-            this.algorithmIndex = parseInt(extract(parameterMap, QueryProcessorServlet.PARAM_ALG), 
-                    getDefaultAlgorithm(),
-                    0, algorithms.size() - 1);
+            this.algorithmIndex = lookupIndex(algorithmsIndex, extract(parameterMap, QueryProcessorServlet.PARAM_ALG), 
+                    getDefaultAlgorithm());
 
             // Parse the input size
-            this.inputSizeIndex = parseInt(extract(parameterMap, QueryProcessorServlet.PARAM_SIZE), 
-                    getDefaultInputSizeIndex(),
-                    0, allowedInputSizes.length - 1);
+            final String value = extract(parameterMap, QueryProcessorServlet.PARAM_SIZE);
+            int tmp = getDefaultInputSizeIndex();
+            if (value != null) {
+                final int resNum = parseInt(value, 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
+                for (int i = allowedInputSizes.length - 1; i >= 0; i--) {
+                    if (allowedInputSizes[i] == resNum) {
+                        tmp = i;
+                        break;
+                    }
+                }
+            }
+            this.inputSizeIndex = tmp;
 
             // calculate hash code.
             this.inputAndSizeHashCode = query + "//" 
@@ -93,6 +104,12 @@ public final class SearchSettings {
 
             // save remaining options.
             this.allRequestOpts = parameterMap;
+        }
+
+        private int lookupIndex(HashMap index, String key, int defaultValue) {
+            final Integer value = (Integer) index.get(key);
+            if (value == null) return defaultValue;
+            else return value.intValue();
         }
 
         private String extract(Map parameterMap, String key) {
@@ -126,6 +143,7 @@ public final class SearchSettings {
      * Adds a search tab to the list of available tabs.
      */
     public void add(TabSearchInput tab) {
+        this.inputTabsIndex.put(tab.getShortName(), new Integer(inputTabs.size()));
         this.inputTabs.add(tab);
     } 
 
@@ -133,6 +151,7 @@ public final class SearchSettings {
      * Adds an algorithm to the settings.
      */
     public void add(TabAlgorithm algorithm) {
+        this.algorithmsIndex.put(algorithm.getShortName(), new Integer(algorithms.size()));
         this.algorithms.add(algorithm);
     } 
     

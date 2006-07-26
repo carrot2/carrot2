@@ -55,7 +55,8 @@ class XMLDocumentsSerializer implements RawDocumentsSerializer {
                 + skinBase + "/documents.xsl\" ?>\n");
 
         writer.write("<?skin-uri " + contextPath + skinBase + " ?>\n");
-        
+        writer.write("<?isProcessing " + isProcessing + "?>\n");
+
         writer.write("<searchresult type=\"documents\">\n");
     }
 
