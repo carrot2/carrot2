@@ -22,7 +22,7 @@ import org.apache.log4j.Logger;
 
 import com.dawidweiss.carrot.core.local.*;
 import com.dawidweiss.carrot.core.local.clustering.RawDocument;
-import com.dawidweiss.carrot.core.local.impl.DocumentsConsumerOutputComponent;
+import com.dawidweiss.carrot.core.local.impl.ArrayOutputComponent;
 
 public class GoogleApiInputComponentTest extends junit.framework.TestCase {
     private final static Logger log = Logger.getLogger(GoogleApiInputComponentTest.class);
@@ -37,7 +37,7 @@ public class GoogleApiInputComponentTest extends junit.framework.TestCase {
         // Some output component
         LocalComponentFactory outputFactory = new LocalComponentFactory() {
             public LocalComponent getInstance() {
-                return new DocumentsConsumerOutputComponent();
+                return new ArrayOutputComponent();
             }
         };
 
@@ -73,7 +73,8 @@ public class GoogleApiInputComponentTest extends junit.framework.TestCase {
         LocalControllerBase controller = setUpController(inputFactory);
         String query = "dawid weiss ant styler docbook poznan";
         final long start = System.currentTimeMillis();
-        List results = (List) controller.query("testprocess", query, new HashMap()).getQueryResult();
+        ArrayOutputComponent.Result all = (ArrayOutputComponent.Result) controller.query("testprocess", query, new HashMap()).getQueryResult();
+        List results = all.documents;
         final long end = System.currentTimeMillis();
         log.info("GoogleAPI query time: " + (end - start) + " ms.");
 
@@ -100,7 +101,7 @@ public class GoogleApiInputComponentTest extends junit.framework.TestCase {
         LocalControllerBase controller = setUpController(inputFactory);
         String query = "duiogig oiudgisugviw siug iugw iusviuwg";
         final long start = System.currentTimeMillis();
-        List results = (List) controller.query("testprocess", query, new HashMap()).getQueryResult();
+        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, new HashMap()).getQueryResult()).documents;
         final long end = System.currentTimeMillis();
         log.info("GoogleAPI query time: " + (end - start) + " ms.");
 
@@ -129,7 +130,7 @@ public class GoogleApiInputComponentTest extends junit.framework.TestCase {
         final long start = System.currentTimeMillis();
         HashMap reqContext = new HashMap();
         reqContext.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, new Integer(50));
-        List results = (List) controller.query("testprocess", query, reqContext).getQueryResult();
+        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, reqContext).getQueryResult()).documents;
         final long end = System.currentTimeMillis();
         log.info("GoogleAPI query time: " + (end - start) + " ms.");
 
@@ -157,7 +158,7 @@ public class GoogleApiInputComponentTest extends junit.framework.TestCase {
         LocalControllerBase controller = setUpController(inputFactory);
         String query = "apache ant";
         final long start = System.currentTimeMillis();
-        List results = (List) controller.query("testprocess", query, new HashMap()).getQueryResult();
+        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, new HashMap()).getQueryResult()).documents;
         final long end = System.currentTimeMillis();
         log.info("GoogleAPI query time: " + (end - start) + " ms.");
 

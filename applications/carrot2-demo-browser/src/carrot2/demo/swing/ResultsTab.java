@@ -36,9 +36,9 @@ import com.dawidweiss.carrot.core.local.LocalInputComponent;
 import com.dawidweiss.carrot.core.local.ProcessingResult;
 import com.dawidweiss.carrot.core.local.clustering.RawCluster;
 import com.dawidweiss.carrot.core.local.clustering.RawDocument;
-import com.dawidweiss.carrot.core.local.impl.ClustersConsumerOutputComponent;
+import com.dawidweiss.carrot.core.local.impl.ArrayOutputComponent;
 import com.dawidweiss.carrot.core.local.impl.RawDocumentEnumerator;
-import com.dawidweiss.carrot.core.local.impl.ClustersConsumerOutputComponent.Result;
+import com.dawidweiss.carrot.core.local.impl.ArrayOutputComponent.Result;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -112,9 +112,9 @@ public class ResultsTab extends JPanel {
                         ProcessingResult result = demoContext.getController().query(processId, query, rqParamsCopy);
 
                         Object queryResult = result.getQueryResult();
-                        if (queryResult instanceof ClustersConsumerOutputComponent.Result) {
-                            ClustersConsumerOutputComponent.Result output =
-                                (ClustersConsumerOutputComponent.Result) result.getQueryResult();
+                        if (queryResult instanceof ArrayOutputComponent.Result) {
+                            ArrayOutputComponent.Result output =
+                                (ArrayOutputComponent.Result) result.getQueryResult();
 
                             // Ok, we have the clusters. We also have the documents.
                             // Show them.
@@ -407,7 +407,7 @@ public class ResultsTab extends JPanel {
      * Displays the result of clustering -- clusters and 
      * documents.
      */
-    private void showResults(final ClustersConsumerOutputComponent.Result output) {
+    private void showResults(final ArrayOutputComponent.Result output) {
         if (indexDirectory == null)
         {
             indexDirectory = (Directory) output.context

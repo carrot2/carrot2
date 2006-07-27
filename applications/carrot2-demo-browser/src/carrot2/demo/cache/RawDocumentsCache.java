@@ -13,7 +13,7 @@
 
 package carrot2.demo.cache;
 
-import com.dawidweiss.carrot.core.local.impl.ClustersConsumerOutputComponent.Result;
+import com.dawidweiss.carrot.core.local.impl.ArrayOutputComponent.Result;
 
 /**
  * A cache for storing results of

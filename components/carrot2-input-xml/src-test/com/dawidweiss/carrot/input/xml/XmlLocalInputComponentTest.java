@@ -21,8 +21,7 @@ import junit.framework.TestCase;
 import com.dawidweiss.carrot.core.local.*;
 import com.dawidweiss.carrot.core.local.clustering.RawCluster;
 import com.dawidweiss.carrot.core.local.clustering.RawDocument;
-import com.dawidweiss.carrot.core.local.impl.ClustersConsumerOutputComponent;
-import com.dawidweiss.carrot.core.local.impl.DocumentsConsumerOutputComponent;
+import com.dawidweiss.carrot.core.local.impl.ArrayOutputComponent;
 import com.dawidweiss.carrot.core.local.linguistic.Language;
 import com.dawidweiss.carrot.util.tokenizer.languages.english.English;
 import com.stachoodev.carrot.filter.lingo.local.LingoLocalFilterComponent;
@@ -37,22 +36,6 @@ public class XmlLocalInputComponentTest extends TestCase {
         super(s);
     }
     
-	/** This is an example for you, Staszek -- check out how to get
-	 *  live results from Indeed. */
-	public void _testIndeedTransformationLive() throws Exception {
-        LocalControllerBase controller = setUpController();
-
-        // first check the precached result:
-        String query = "programmer";
-        HashMap params = new HashMap();
-        params.put("source", "http://www.indeed.com/apisearch?q=${query}&l=&start=0&limit=100&sort=&filter=on&key=81a6db2441b554fa20801098afd019&format=xml");
-        params.put("xslt", this.getClass().getResource("test2.xsl"));
-        List results = (List) controller.query("testprocess", query, params).getQueryResult();
-
-        // there should be a 100 results:
-        assertEquals(100, results.size());
-	}			    
-    
 	protected LocalControllerBase setUpController() throws Exception {
 		LocalControllerBase controller;
 		
@@ -61,7 +44,7 @@ public class XmlLocalInputComponentTest extends TestCase {
         {
             public LocalComponent getInstance()
             {
-                return new DocumentsConsumerOutputComponent();
+                return new ArrayOutputComponent();
             }
         };
         
@@ -93,7 +76,7 @@ public class XmlLocalInputComponentTest extends TestCase {
         String query = "";
         HashMap params = new HashMap();
         try {
-	        List results = (List) controller.query("testprocess", query, params).getQueryResult();
+            controller.query("testprocess", query, params).getQueryResult();
 	        fail();
         } catch (ProcessingException e) {
             // ok, this is expected.
@@ -107,7 +90,7 @@ public class XmlLocalInputComponentTest extends TestCase {
         HashMap params = new HashMap();
         params.put("source", this.getClass().getResourceAsStream("test1.xml"));
         params.put("xslt", this.getClass().getResourceAsStream("test1.xsl"));
-        List results = (List) controller.query("testprocess", query, params).getQueryResult();
+        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, params).getQueryResult()).documents;
         
         // there should be 4 documents in the result.
         assertEquals(4, results.size());
@@ -120,7 +103,7 @@ public class XmlLocalInputComponentTest extends TestCase {
         HashMap params = new HashMap();
         params.put("source", this.getClass().getResource("test1.xml"));
         params.put("xslt", this.getClass().getResource("test1.xsl"));
-        List results = (List) controller.query("testprocess", query, params).getQueryResult();
+        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, params).getQueryResult()).documents;
         
         // there should be 4 documents in the result.
         assertEquals(4, results.size());
@@ -133,7 +116,7 @@ public class XmlLocalInputComponentTest extends TestCase {
         HashMap params = new HashMap();
         params.put("source", this.getClass().getResource("test1.xml"));
         params.put("xslt", "identity");
-        List results = (List) controller.query("testprocess", query, params).getQueryResult();
+        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, params).getQueryResult()).documents;
         
         // there should be 4 documents in the result.
         assertEquals(4, results.size());
@@ -158,7 +141,7 @@ public class XmlLocalInputComponentTest extends TestCase {
         params.put("source", url);
         params.put("xslt", this.getClass().getResource("test1.xsl"));
         params.put("param", "dawidweiss");
-        List results = (List) controller.query("testprocess", query, params).getQueryResult();
+        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, params).getQueryResult()).documents;
 
         // there should be 4 documents in the result.
         assertEquals(4, results.size());
@@ -182,7 +165,7 @@ public class XmlLocalInputComponentTest extends TestCase {
         
         params.put("source", url);
         params.put("xslt", this.getClass().getResource("test1.xsl"));
-        List results = (List) controller.query("testprocess", query, params).getQueryResult();
+        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, params).getQueryResult()).documents;
 
         // there should be 4 documents in the result.
         assertEquals(4, results.size());
@@ -196,7 +179,7 @@ public class XmlLocalInputComponentTest extends TestCase {
         {
             public LocalComponent getInstance()
             {
-                return new ClustersConsumerOutputComponent();
+                return new ArrayOutputComponent();
             }
         };
         
@@ -247,8 +230,8 @@ public class XmlLocalInputComponentTest extends TestCase {
         HashMap params = new HashMap();
         params.put("source", this.getClass().getResource("rss-bbc.xml"));
         params.put("xslt", this.getClass().getResource("rss.xsl"));
-        ClustersConsumerOutputComponent.Result output =
-			(ClustersConsumerOutputComponent.Result) controller.query("testprocess", query, params).getQueryResult();
+        ArrayOutputComponent.Result output =
+			(ArrayOutputComponent.Result) controller.query("testprocess", query, params).getQueryResult();
 
         RawDocument rd = (RawDocument) ((RawCluster) output.clusters.get(0)).getDocuments().get(0);
         assertNotNull(rd.getUrl());
@@ -266,7 +249,7 @@ public class XmlLocalInputComponentTest extends TestCase {
         HashMap params = new HashMap();
         params.put("source", this.getClass().getResource("rss-bbc.xml"));
         params.put("xslt", this.getClass().getResource("rss.xsl"));
-        List results = (List) controller.query("testprocess", query, params).getQueryResult();
+        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, params).getQueryResult()).documents;
 
         // there should be a 100 results:
         assertTrue(results.size() > 0);
@@ -281,7 +264,7 @@ public class XmlLocalInputComponentTest extends TestCase {
 
         params.put("source", this.getClass().getResource("test2.xml"));
         params.put("xslt", this.getClass().getResource("test2.xsl"));
-        List results = (List) controller.query("testprocess", query, params).getQueryResult();
+        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, params).getQueryResult()).documents;
 
         // there should be some results
         assertTrue(results.size() > 0);
@@ -298,7 +281,7 @@ public class XmlLocalInputComponentTest extends TestCase {
 
         params.put("source", this.getClass().getResourceAsStream("testParam.xml"));
         params.put("xslt", this.getClass().getResourceAsStream("testParam.xsl"));
-        List results = (List) controller.query("testprocess", query, params).getQueryResult();
+        controller.query("testprocess", query, params).getQueryResult();
         // there should be no error in the transformation.
 	}	
 	

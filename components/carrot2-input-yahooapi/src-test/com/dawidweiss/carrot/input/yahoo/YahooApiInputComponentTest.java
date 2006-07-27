@@ -21,7 +21,7 @@ import org.apache.log4j.Logger;
 
 import com.dawidweiss.carrot.core.local.*;
 import com.dawidweiss.carrot.core.local.clustering.RawDocument;
-import com.dawidweiss.carrot.core.local.impl.DocumentsConsumerOutputComponent;
+import com.dawidweiss.carrot.core.local.impl.ArrayOutputComponent;
 
 public class YahooApiInputComponentTest extends junit.framework.TestCase {
     private final static Logger log = Logger.getLogger(YahooApiInputComponentTest.class);
@@ -40,7 +40,7 @@ public class YahooApiInputComponentTest extends junit.framework.TestCase {
         LocalControllerBase controller = setUpController(inputFactory);
         String query = "Jan Węglarz";
         final long start = System.currentTimeMillis();
-        List results = (List) controller.query("testprocess", query, new HashMap()).getQueryResult();
+        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, new HashMap()).getQueryResult()).documents;
         final long end = System.currentTimeMillis();
         log.info("Yahoo query time: " + (end - start) + " ms.");
 
@@ -59,7 +59,7 @@ public class YahooApiInputComponentTest extends junit.framework.TestCase {
         LocalControllerBase controller = setUpController(inputFactory);
         String query = "weiss";
         final long start = System.currentTimeMillis();
-        List results = (List) controller.query("testprocess", query, new HashMap()).getQueryResult();
+        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, new HashMap()).getQueryResult()).documents;
         final long end = System.currentTimeMillis();
         log.info("YahooAPI query time: " + (end - start) + " ms.");
 
@@ -77,7 +77,7 @@ public class YahooApiInputComponentTest extends junit.framework.TestCase {
         LocalControllerBase controller = setUpController(inputFactory);
         String query = "webstart splash colors";
         final long start = System.currentTimeMillis();
-        List results = (List) controller.query("testprocess", query, new HashMap()).getQueryResult();
+        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, new HashMap()).getQueryResult()).documents;
         final long end = System.currentTimeMillis();
         log.info("YahooAPI query time: " + (end - start) + " ms.");
 
@@ -91,7 +91,7 @@ public class YahooApiInputComponentTest extends junit.framework.TestCase {
         // Some output component
         LocalComponentFactory outputFactory = new LocalComponentFactory() {
             public LocalComponent getInstance() {
-                return new DocumentsConsumerOutputComponent();
+                return new ArrayOutputComponent();
             }
         };
 
@@ -119,7 +119,7 @@ public class YahooApiInputComponentTest extends junit.framework.TestCase {
         LocalControllerBase controller = setUpController(inputFactory);
         String query = "dawid weiss ant styler docbook poznan";
         final long start = System.currentTimeMillis();
-        List results = (List) controller.query("testprocess", query, new HashMap()).getQueryResult();
+        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, new HashMap()).getQueryResult()).documents;
         final long end = System.currentTimeMillis();
         log.info("YahooAPI query time: " + (end - start) + " ms.");
 
@@ -138,7 +138,7 @@ public class YahooApiInputComponentTest extends junit.framework.TestCase {
         LocalControllerBase controller = setUpController(inputFactory);
         String query = "duiogig oiudgisugviw siug iugw iusviuwg";
         final long start = System.currentTimeMillis();
-        List results = (List) controller.query("testprocess", query, new HashMap()).getQueryResult();
+        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, new HashMap()).getQueryResult()).documents;
         final long end = System.currentTimeMillis();
         log.info("Yahoo query time: " + (end - start) + " ms.");
 
@@ -159,7 +159,7 @@ public class YahooApiInputComponentTest extends junit.framework.TestCase {
         final long start = System.currentTimeMillis();
         HashMap reqContext = new HashMap();
         reqContext.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, new Integer(50));
-        List results = (List) controller.query("testprocess", query, reqContext).getQueryResult();
+        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, reqContext).getQueryResult()).documents;
         final long end = System.currentTimeMillis();
         log.info("Yahoo query time: " + (end - start) + " ms.");
 
@@ -179,7 +179,7 @@ public class YahooApiInputComponentTest extends junit.framework.TestCase {
         LocalControllerBase controller = setUpController(inputFactory);
         String query = "apache ant";
         final long start = System.currentTimeMillis();
-        List results = (List) controller.query("testprocess", query, new HashMap()).getQueryResult();
+        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, new HashMap()).getQueryResult()).documents;
         final long end = System.currentTimeMillis();
         log.info("Yahoo query time: " + (end - start) + " ms.");
 

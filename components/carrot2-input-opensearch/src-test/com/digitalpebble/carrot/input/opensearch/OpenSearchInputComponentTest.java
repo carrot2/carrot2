@@ -19,7 +19,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.dawidweiss.carrot.core.local.*;
-import com.dawidweiss.carrot.core.local.impl.DocumentsConsumerOutputComponent;
+import com.dawidweiss.carrot.core.local.impl.ArrayOutputComponent;
 
 /**
  * A test case for OpenSearch input component.
@@ -48,8 +48,8 @@ public class OpenSearchInputComponentTest extends junit.framework.TestCase {
         final long start = System.currentTimeMillis();
         final HashMap params = new HashMap();
         params.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, new Integer(50));
-        final List results = (List) controller.query(
-                "testprocess", query, params).getQueryResult();
+        final List results = ((ArrayOutputComponent.Result) controller.query(
+                "testprocess", query, params).getQueryResult()).documents;
         final long end = System.currentTimeMillis();
         log.info("Open Search query time: " + (end - start) + " ms.");
 
@@ -63,7 +63,7 @@ public class OpenSearchInputComponentTest extends junit.framework.TestCase {
         // Some output component
         LocalComponentFactory outputFactory = new LocalComponentFactory() {
             public LocalComponent getInstance() {
-                return new DocumentsConsumerOutputComponent();
+                return new ArrayOutputComponent();
             }
         };
 

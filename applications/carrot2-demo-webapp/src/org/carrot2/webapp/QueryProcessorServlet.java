@@ -263,8 +263,8 @@ public final class QueryProcessorServlet extends HttpServlet {
                     final ProcessingResult result = 
                         algorithmsController.query(algorithmTab.getShortName(), 
                                 searchRequest.query, props);
-                    final ClustersConsumerOutputComponent.Result collected =  
-                        (ClustersConsumerOutputComponent.Result) result.getQueryResult();
+                    final ArrayOutputComponent.Result collected =  
+                        (ArrayOutputComponent.Result) result.getQueryResult();
                     final List clusters = collected.clusters; 
                     final List documents = bcaster.getDocuments();
 
@@ -472,7 +472,7 @@ public final class QueryProcessorServlet extends HttpServlet {
         controller.addLocalComponentFactory("output-demo-webapp",
                 new LocalComponentFactory() {
                     public LocalComponent getInstance() {
-                        return new ClustersConsumerOutputComponent();
+                        return new ArrayOutputComponent();
                     }
                 }
         );
