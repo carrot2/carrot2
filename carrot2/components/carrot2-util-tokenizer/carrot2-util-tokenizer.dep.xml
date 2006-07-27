@@ -36,5 +36,4 @@
 
     <!-- Test profile -->
     <dependency name="junit" profile="test" />
-    <dependency name="carrot2-input-local-cache" profile="test" />
 </component>
