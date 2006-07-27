@@ -13,7 +13,7 @@
 
 package org.carrot2.filter.stc.algorithm;
 
-import com.dawidweiss.carrot.core.local.linguistic.tokens.*;
+import org.carrot2.core.linguistic.tokens.*;
 
 /**
  * Class representing a word after being stemmed.

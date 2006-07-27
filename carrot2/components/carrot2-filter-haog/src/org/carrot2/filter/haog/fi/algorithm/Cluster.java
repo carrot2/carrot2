@@ -18,7 +18,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.dawidweiss.carrot.core.local.clustering.TokenizedDocument;
+import org.carrot2.core.clustering.TokenizedDocument;
 
 /**
  * Class representing documents cluster.

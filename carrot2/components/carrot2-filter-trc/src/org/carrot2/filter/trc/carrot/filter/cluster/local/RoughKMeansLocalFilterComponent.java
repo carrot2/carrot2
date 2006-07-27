@@ -27,20 +27,20 @@ import org.carrot2.filter.trc.carrot.filter.cluster.rough.data.IRContext;
 import org.carrot2.filter.trc.carrot.filter.cluster.rough.data.SnippetDocument;
 import org.carrot2.filter.trc.carrot.filter.cluster.rough.data.WebIRContext;
 import org.carrot2.filter.trc.carrot.filter.cluster.rough.measure.SimilarityFactory;
-import com.dawidweiss.carrot.core.local.LocalComponent;
-import com.dawidweiss.carrot.core.local.LocalControllerContext;
-import com.dawidweiss.carrot.core.local.LocalFilterComponent;
-import com.dawidweiss.carrot.core.local.LocalInputComponent;
-import com.dawidweiss.carrot.core.local.ProcessingException;
-import com.dawidweiss.carrot.core.local.RequestContext;
-import com.dawidweiss.carrot.core.local.clustering.RawCluster;
-import com.dawidweiss.carrot.core.local.clustering.RawClusterBase;
-import com.dawidweiss.carrot.core.local.clustering.RawClustersConsumer;
-import com.dawidweiss.carrot.core.local.clustering.RawClustersProducer;
-import com.dawidweiss.carrot.core.local.clustering.RawDocument;
-import com.dawidweiss.carrot.core.local.clustering.RawDocumentsConsumer;
-import com.dawidweiss.carrot.core.local.clustering.RawDocumentsProducer;
-import com.dawidweiss.carrot.core.local.profiling.ProfiledLocalFilterComponentBase;
+import org.carrot2.core.LocalComponent;
+import org.carrot2.core.LocalControllerContext;
+import org.carrot2.core.LocalFilterComponent;
+import org.carrot2.core.LocalInputComponent;
+import org.carrot2.core.ProcessingException;
+import org.carrot2.core.RequestContext;
+import org.carrot2.core.clustering.RawCluster;
+import org.carrot2.core.clustering.RawClusterBase;
+import org.carrot2.core.clustering.RawClustersConsumer;
+import org.carrot2.core.clustering.RawClustersProducer;
+import org.carrot2.core.clustering.RawDocument;
+import org.carrot2.core.clustering.RawDocumentsConsumer;
+import org.carrot2.core.clustering.RawDocumentsProducer;
+import org.carrot2.core.profiling.ProfiledLocalFilterComponentBase;
 
 /**
  * A local interface to the RoughKMeans clustering algorithm. Parts copied &

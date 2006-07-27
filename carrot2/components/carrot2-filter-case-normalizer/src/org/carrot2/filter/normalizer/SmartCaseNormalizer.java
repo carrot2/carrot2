@@ -17,12 +17,16 @@ import java.util.*;
 
 import org.apache.commons.collections.map.*;
 
-import com.dawidweiss.carrot.core.local.clustering.*;
-import com.dawidweiss.carrot.core.local.linguistic.tokens.*;
+import org.carrot2.core.clustering.*;
+import org.carrot2.core.linguistic.tokens.*;
+import org.carrot2.util.StringUtils;
+import org.carrot2.util.pools.ReusableObjectsFactory;
+import org.carrot2.util.pools.SoftReusableObjectsPool;
+
 import com.dawidweiss.carrot.util.common.*;
 import com.dawidweiss.carrot.util.common.pools.*;
-import com.dawidweiss.carrot.util.tokenizer.languages.*;
-import com.dawidweiss.carrot.util.tokenizer.parser.*;
+import org.carrot2.util.tokenizer.languages.*;
+import org.carrot2.util.tokenizer.parser.*;
 
 /**
  * Brings the case of all tokens in all input tokenized documents's titles and
@@ -37,7 +41,7 @@ import com.dawidweiss.carrot.util.tokenizer.parser.*;
  * </ul>
  * 
  * All input tokens must be subclasses of
- * {@link com.dawidweiss.carrot.util.tokenizer.parser.StringTypedToken}
+ * {@link org.carrot2.util.tokenizer.parser.StringTypedToken}
  * interface. The input documents will get <b>modified </b>--their tokens will
  * get overwritten with case-normalized versions. Token types will be preserved.
  * No support is provided for the full text of documents. This class is <b>not

@@ -15,7 +15,7 @@ package org.carrot2.filter.normalizer;
 
 import java.util.*;
 
-import com.dawidweiss.carrot.core.local.clustering.*;
+import org.carrot2.core.clustering.*;
 
 /**
  * Brings the case of all tokens in all input tokenized documents's titles and
@@ -23,7 +23,7 @@ import com.dawidweiss.carrot.core.local.clustering.*;
  * case'.
  * 
  * All input tokens must be subclasses of
- * {@link com.dawidweiss.carrot.util.tokenizer.parser.StringTypedToken}
+ * {@link org.carrot2.util.tokenizer.parser.StringTypedToken}
  * interface. The input documents will get <b>modified </b>--their tokens will
  * get overwritten with case-normalized versions. Token types will be preserved.
  * No support is provided for the full text of documents. This class is <b>not

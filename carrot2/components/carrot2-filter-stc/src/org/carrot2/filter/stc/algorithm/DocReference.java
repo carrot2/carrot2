@@ -16,8 +16,8 @@ package org.carrot2.filter.stc.algorithm;
 
 import java.util.*;
 
-import com.dawidweiss.carrot.core.local.clustering.TokenizedDocument;
-import com.dawidweiss.carrot.core.local.linguistic.tokens.*;
+import org.carrot2.core.clustering.TokenizedDocument;
+import org.carrot2.core.linguistic.tokens.*;
 
 
 /**

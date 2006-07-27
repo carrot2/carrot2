@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.dawidweiss.carrot.core.local.linguistic.tokens.StemmedToken;
+import org.carrot2.core.linguistic.tokens.StemmedToken;
 
 /**
  * This class represents transaction. Transaction in case of snippets are

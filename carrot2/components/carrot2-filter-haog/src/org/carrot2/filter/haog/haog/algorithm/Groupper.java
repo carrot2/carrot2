@@ -15,8 +15,8 @@ package org.carrot2.filter.haog.haog.algorithm;
 
 import java.util.List;
 
-import com.dawidweiss.carrot.core.local.ProcessingException;
-import com.dawidweiss.carrot.core.local.clustering.RawClustersConsumer;
+import org.carrot2.core.ProcessingException;
+import org.carrot2.core.clustering.RawClustersConsumer;
 import org.carrot2.filter.haog.haog.measure.Statistics;
 
 public abstract class Groupper {

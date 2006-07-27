@@ -16,9 +16,9 @@ package org.carrot2.filter.lingo.local;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dawidweiss.carrot.core.local.clustering.RawCluster;
-import com.dawidweiss.carrot.core.local.clustering.RawClusterBase;
-import com.dawidweiss.carrot.core.local.clustering.RawDocument;
+import org.carrot2.core.clustering.RawCluster;
+import org.carrot2.core.clustering.RawClusterBase;
+import org.carrot2.core.clustering.RawDocument;
 import org.carrot2.filter.lingo.common.Cluster;
 import org.carrot2.filter.lingo.common.Snippet;
 

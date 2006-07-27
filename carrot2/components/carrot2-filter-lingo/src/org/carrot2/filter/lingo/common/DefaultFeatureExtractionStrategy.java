@@ -13,12 +13,12 @@
 
 package org.carrot2.filter.lingo.common;
 
-import com.dawidweiss.carrot.util.common.StringUtils;
 
 import org.carrot2.filter.lingo.util.log.TimeLogger;
 import org.carrot2.filter.lingo.util.suffixarrays.*;
 import org.carrot2.filter.lingo.util.suffixarrays.wrapper.Substring;
 import org.carrot2.filter.lingo.util.suffixarrays.wrapper.SubstringComparator;
+import org.carrot2.util.StringUtils;
 
 import org.apache.log4j.Logger;
 

@@ -15,9 +15,9 @@ package org.carrot2.filter.fuzzyAnts;
 
 import java.util.*;
 
-import com.dawidweiss.carrot.core.local.*;
-import com.dawidweiss.carrot.core.local.clustering.*;
-import com.dawidweiss.carrot.core.local.profiling.ProfiledLocalFilterComponentBase;
+import org.carrot2.core.*;
+import org.carrot2.core.clustering.*;
+import org.carrot2.core.profiling.ProfiledLocalFilterComponentBase;
 
 /**
  * A local interface to the FuzzyAnts clustering algorithm.

@@ -16,7 +16,7 @@ package org.carrot2.filter.fuzzyAnts;
 
 import java.util.*;
 
-import com.dawidweiss.carrot.core.local.clustering.*;
+import org.carrot2.core.clustering.*;
 
 /**
  *

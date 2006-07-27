@@ -16,17 +16,17 @@ package org.carrot2.filter.haog.haog.algorithm;
 import java.util.Iterator;
 import java.util.List;
 
-import com.dawidweiss.carrot.core.local.ProcessingException;
-import com.dawidweiss.carrot.core.local.clustering.RawClusterBase;
-import com.dawidweiss.carrot.core.local.clustering.RawClustersConsumer;
-import com.dawidweiss.carrot.core.local.clustering.RawDocument;
-import com.dawidweiss.carrot.core.local.clustering.TokenizedDocument;
+import org.carrot2.core.ProcessingException;
+import org.carrot2.core.clustering.RawClusterBase;
+import org.carrot2.core.clustering.RawClustersConsumer;
+import org.carrot2.core.clustering.RawDocument;
+import org.carrot2.core.clustering.TokenizedDocument;
 import org.carrot2.filter.stc.suffixtree.ExtendedBitSet;
 import org.carrot2.filter.haog.haog.measure.Statistics;
 import org.carrot2.filter.haog.stc.STCParameters;
 
 /**
- * This class renders {@link com.dawidweiss.carrot.core.local.clustering.RawCluster}
+ * This class renders {@link org.carrot2.core.clustering.RawCluster}
  * from vertices retrieved from STC based algorithm.
  * @see org.carrot2.filter.haog.haog.algorithm.GraphRenderer
  * @author Karol Gołembniak
