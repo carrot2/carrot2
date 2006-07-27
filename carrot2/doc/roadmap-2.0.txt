@@ -20,8 +20,6 @@ Must have:
     - CALO
     - nutch plugin
     
-- Exceeded Yahoo/Google limit/general exception handling (D)
-  
 - Documentation
   - What is Carrot2
   - Getting source and building?
