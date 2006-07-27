@@ -24,7 +24,7 @@ import carrot2.demo.DemoContext;
 import carrot2.demo.ProcessSettings;
 
 import com.dawidweiss.carrot.core.local.LocalInputComponent;
-import com.dawidweiss.carrot.core.local.impl.FileSaveInterceptorFilterComponent;
+import com.dawidweiss.carrot.core.local.impl.SaveXmlFilterComponent;
 
 /**
  * @author Stanislaw Osinski
@@ -215,10 +215,10 @@ public class QuerySaveDialog
             .toString(requestedResults));
 
         // Set destination file
-        requestParams.put(FileSaveInterceptorFilterComponent.PARAM_OUTPUT_FILE,
+        requestParams.put(SaveXmlFilterComponent.PARAM_OUTPUT_FILE,
             new File(fileName.getText()));
         requestParams.put(
-            FileSaveInterceptorFilterComponent.PARAM_SAVE_CLUSTERS,
+            SaveXmlFilterComponent.PARAM_SAVE_CLUSTERS,
             new Boolean(saveClusters.isSelected()));
 
         try
