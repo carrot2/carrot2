@@ -1,4 +1,4 @@
 <local-component-factory 
 	id="filter-file-save-interceptor" 
-	component-class="com.dawidweiss.carrot.core.local.impl.FileSaveInterceptorFilterComponent">
+	component-class="com.dawidweiss.carrot.core.local.impl.SaveXmlFilterComponent">
 </local-component-factory> 

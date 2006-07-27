@@ -29,11 +29,9 @@ import com.dawidweiss.carrot.core.local.clustering.*;
  * {@link #PARAM_OUTPUT_FILE} parameter has not been specified, this component
  * will simply pass the clusters to the next component down the chain.
  * 
- * TODO: Rename this component to <code>SaveXmlFilterComponent</code>?
- * 
  * @author Stanislaw Osinski
  */
-public class FileSaveInterceptorFilterComponent 
+public class SaveXmlFilterComponent 
     extends LocalFilterComponentBase
     implements RawClustersConsumer, RawClustersProducer, RawDocumentsConsumer
 {

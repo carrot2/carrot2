@@ -12,11 +12,13 @@
 
 package com.dawidweiss.carrot.core.local.impl;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
-import org.dom4j.*;
-import org.dom4j.io.*;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 
 import com.dawidweiss.carrot.core.local.*;
 import com.dawidweiss.carrot.core.local.clustering.*;
@@ -25,9 +27,11 @@ import com.dawidweiss.carrot.core.local.clustering.*;
  * Passes down the processing chain query results read from an XML stream in the
  * Carrot<sup>2</sup> format. 
  * 
- * This component expects that a request parameter called 
- * {@link #XML_STREAM} initialized to an {@link java.io.InputStream} with
- * XML data. 
+ * This component expects any of the following request parameters:
+ * <ul>
+ *   <li>{@link #XML_STREAM} initialized to an {@link java.io.InputStream} 
+ *    with XML data.</li>
+ * </ul>
  * 
  * @author Dawid Weiss
  */
@@ -37,7 +41,6 @@ public class XmlStreamInputComponent extends LocalInputComponentBase
      * An XML stream to read from.
      */
     public static final String XML_STREAM = "input:xml-stream";
-
 
     /** Capabilities required from the next component in the chain */
     private final static Set SUCCESSOR_CAPABILITIES = 
@@ -50,8 +53,6 @@ public class XmlStreamInputComponent extends LocalInputComponentBase
     /**
      * Represents a query result containing a list of {@link RawDocument}s and
      * the query that returned these documents.
-     * 
-     * @author Stanislaw Osinski
      */
     public final static class QueryResult
     {
@@ -64,6 +65,11 @@ public class XmlStreamInputComponent extends LocalInputComponentBase
     
     /** Current RawDocumentsConsumer to feed */
     private RawDocumentsConsumer rawDocumentConsumer;
+
+    /**
+     * Query issued to this component.
+     */
+    private String originalQuery;
 
     /*
      */
@@ -97,28 +103,26 @@ public class XmlStreamInputComponent extends LocalInputComponentBase
     /*
      */
     public void setQuery(String query) {
-        // discard query.
+        this.originalQuery = query;
+    }
+    
+    public String getQuery() {
+        return this.originalQuery;
     }
 
     /*
      */
-    public void startProcessing(RequestContext requestContext)
+    public final void startProcessing(RequestContext requestContext)
         throws ProcessingException
     {
         super.startProcessing(requestContext);
-        
-        final InputStream is = (InputStream) requestContext.getRequestParameters().get(XML_STREAM);
-        if (is == null) {
-            throw new ProcessingException("This component expects a request context" +
-                    " parameter named: " + XML_STREAM);
-        }
 
+        final InputStream is = getInputXML(requestContext);
         try
         {
             final int requestedResults = getRequestedResultsCount(requestContext);
 
             // Load query results from the file
-            // TODO: We don't need DOM4J for that, really.
             final SAXReader reader = new SAXReader();
             final Element root = reader.read(is).getRootElement();
 
@@ -174,11 +178,25 @@ public class XmlStreamInputComponent extends LocalInputComponentBase
      * @param root
      * @param requestContext
      */
-    protected void passAdditionalInformation(Element root,
-        RequestContext requestContext)
+    protected void passAdditionalInformation(Element root, RequestContext requestContext)
     {
     }
 
+    /**
+     * Callback method invoked from {@link #startProcessing(RequestContext)} and responsible
+     * for locating the input XML stream.
+     */
+    protected InputStream getInputXML(RequestContext requestContext) throws ProcessingException {
+        final InputStream is = (InputStream) requestContext.getRequestParameters().get(XML_STREAM);
+
+        if (is == null) {
+            throw new ProcessingException("This component expects parameters in the" +
+                    " request context. See JavaDoc.");
+        }
+        
+        return is;
+    }
+    
     /**
      * Passes the query result to the next component in the chain.
      * 
