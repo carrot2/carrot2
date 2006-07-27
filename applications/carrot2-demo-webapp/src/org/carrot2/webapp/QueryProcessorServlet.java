@@ -27,12 +27,12 @@ import org.apache.log4j.Logger;
 import org.carrot2.webapp.SearchSettings.SearchRequest;
 import org.carrot2.webapp.serializers.XMLSerializersFactory;
 
-import com.dawidweiss.carrot.core.local.*;
-import com.dawidweiss.carrot.core.local.clustering.RawCluster;
-import com.dawidweiss.carrot.core.local.clustering.RawDocument;
-import com.dawidweiss.carrot.core.local.impl.*;
-import com.dawidweiss.carrot.local.controller.*;
-import com.dawidweiss.carrot.local.controller.loaders.BeanShellFactoryDescriptionLoader;
+import org.carrot2.core.*;
+import org.carrot2.core.clustering.RawCluster;
+import org.carrot2.core.clustering.RawDocument;
+import org.carrot2.core.impl.*;
+import org.carrot2.core.controller.*;
+import org.carrot2.core.controller.loaders.BeanShellFactoryDescriptionLoader;
 
 /**
  * Query processor servlet.

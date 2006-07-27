@@ -15,12 +15,12 @@ package org.carrot2.webapp.serializers;
 
 import java.io.*;
 
+import org.carrot2.util.XMLSerializerHelper;
 import org.carrot2.webapp.Constants;
 import org.carrot2.webapp.RawDocumentsSerializer;
 
-import com.dawidweiss.carrot.core.local.clustering.RawDocument;
-import com.dawidweiss.carrot.core.local.impl.RawDocumentEnumerator;
-import com.dawidweiss.carrot.util.common.XMLSerializerHelper;
+import org.carrot2.core.clustering.RawDocument;
+import org.carrot2.core.impl.RawDocumentEnumerator;
 
 /**
  * A consumer of {@link RawDocument}s which serializes them to XML.

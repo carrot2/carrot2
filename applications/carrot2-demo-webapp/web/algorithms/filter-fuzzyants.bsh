@@ -1,8 +1,8 @@
 
-import com.dawidweiss.carrot.core.local.*;
-import com.dawidweiss.carrot.core.local.linguistic.*;
-import com.dawidweiss.carrot.local.controller.*;
-import com.dawidweiss.carrot.util.tokenizer.languages.english.*;
+import org.carrot2.core.*;
+import org.carrot2.core.linguistic.*;
+import org.carrot2.core.controller.*;
+import org.carrot2.util.tokenizer.languages.english.*;
 
 //
 // Component factory is a dynamic Beanshell class

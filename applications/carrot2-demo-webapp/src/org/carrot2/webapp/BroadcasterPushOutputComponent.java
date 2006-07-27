@@ -15,10 +15,10 @@ package org.carrot2.webapp;
 
 import java.util.*;
 
-import com.dawidweiss.carrot.core.local.ProcessingException;
-import com.dawidweiss.carrot.core.local.RequestContext;
-import com.dawidweiss.carrot.core.local.clustering.*;
-import com.dawidweiss.carrot.core.local.profiling.ProfiledLocalOutputComponentBase;
+import org.carrot2.core.ProcessingException;
+import org.carrot2.core.RequestContext;
+import org.carrot2.core.clustering.*;
+import org.carrot2.core.profiling.ProfiledLocalOutputComponentBase;
 
 /**
  * An output component for accepting {@link RawDocument}s

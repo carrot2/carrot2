@@ -1,6 +1,6 @@
 
-import com.dawidweiss.carrot.core.local.*;
-import com.dawidweiss.carrot.local.controller.*;
+import org.carrot2.core.*;
+import org.carrot2.core.controller.*;
 import carrot2.demo.cache.*;
 
 //
@@ -10,8 +10,8 @@ factory = new LocalComponentFactory() {
     public LocalComponent getInstance() {
     	// Wrap Yahoo API component with the cache
 		return new RawDocumentProducerCacheWrapper(
-			new com.dawidweiss.carrot.input.yahoo.YahooApiInputComponent(),
-				com.dawidweiss.carrot.input.yahoo.YahooApiInputComponent.class);
+			new org.carrot2.input.yahooapi.YahooApiInputComponent(),
+				org.carrot2.input.yahooapi.YahooApiInputComponent.class);
     }
 };
 
