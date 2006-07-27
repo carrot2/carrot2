@@ -1,8 +1,6 @@
 package org.carrot2.webapp.serializers;
 
 import java.io.*;
-import java.io.IOException;
-import java.io.OutputStream;
 
 import org.carrot2.webapp.Constants;
 import org.carrot2.webapp.RawDocumentsSerializer;
@@ -97,5 +95,22 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer {
                 "</html>");
         writer.flush();
         this.writer = null;
+    }
+
+    public void processingError(Throwable cause) throws IOException {
+        // Ignore processing exceptions.
+        writer.write(
+                "      <div style=\"margin-top: 5px; border: 1px dotted red; border-left: 5px solid red; padding: 4px; margin-left: 2px;\">\r\n" + 
+                "          <div style=\"font-size: 9px; color: gray; background-color: #ffe0e0;\">" + cause.getClass() + "</div>\r\n" + 
+                "          <pre style=\"font-size: 11px; color: black; font-weight: bold;\">\r\n" + 
+                "              " + cause.getMessage() + 
+                "          </pre>\r\n" + 
+                "      </div>\r\n"); 
+
+        if (cause.getCause() != null) {
+            processingError(cause.getCause());
+        }
+        
+        this.sequence = 0;
     }
 }

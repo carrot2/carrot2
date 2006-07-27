@@ -29,12 +29,14 @@ import com.dawidweiss.carrot.core.local.profiling.ProfiledLocalOutputComponentBa
 final class BroadcasterPushOutputComponent extends ProfiledLocalOutputComponentBase
     implements RawDocumentsConsumer
 {
-    public final static String BROADCASTER = "broadcaster.intance";
+    public final static String BROADCASTER = "broadcaster.instance";
 
     /** Broadcaster for {@link RawDocument}s */
     private Broadcaster broadcaster;
 
     public void startProcessing(RequestContext requestContext) throws ProcessingException {
+        super.startProcessing(requestContext);
+
         final Broadcaster broadcaster = (Broadcaster) requestContext.getRequestParameters().get(BROADCASTER);
         if (broadcaster == null) {
             throw new ProcessingException("A broadcaster object is required.");
@@ -43,14 +45,20 @@ final class BroadcasterPushOutputComponent extends ProfiledLocalOutputComponentB
     }
 
     public void endProcessing() throws ProcessingException {
+        super.endProcessing();
         broadcaster.endProcessing();
     }
 
     public void processingErrorOccurred() {
-        broadcaster.endProcessing();
+        super.processingErrorOccurred();
+
+        // broadcaster.endProcessing();
+        // The above is called from the fetcher thread (to allow passing the exception).
     }
 
     public void flushResources() {
+        super.flushResources();
+        
         this.broadcaster = null;
     }
 

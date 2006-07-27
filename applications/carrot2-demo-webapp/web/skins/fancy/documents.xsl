@@ -13,15 +13,25 @@
     
   <xsl:template match="searchresult[@type='documents']">
     <div id="documents">
-      <xsl:choose>
-          <xsl:when test="count(document) &gt; 0">
-              <xsl:apply-templates select="document" />
-          </xsl:when>
-          <xsl:otherwise>
-              <div id="no-documents">Your query returned no documents.<br/>Please try a more general query.</div>
-          </xsl:otherwise>
-      </xsl:choose>
+      <xsl:apply-templates />
+
+      <xsl:if test="count(document) = 0">
+          <div id="no-documents">Your query returned no documents.<br/>Please try a more general query.</div>
+      </xsl:if>
     </div>
+  </xsl:template>
+
+  <xsl:template match="exception">
+      <div style="margin-top: 5px; border: 1px dotted red; border-left: 5px solid red; padding: 4px; margin-left: 2px;">
+          <div style="font-size: 9px; color: gray; background-color: #ffe0e0;"><xsl:apply-templates select="class" /></div>
+          <pre style="font-size: 11px; color: black; font-weight: bold;">
+              <xsl:apply-templates select="message" />
+          </pre>
+      </div>
+
+      <xsl:if test="cause">
+          <xsl:apply-templates select="cause/exception" />
+      </xsl:if>
   </xsl:template>
 
   <xsl:template match="document">

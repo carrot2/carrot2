@@ -164,4 +164,8 @@ public final class XMLClustersSerializer implements RawClustersSerializer {
     	    collectRefids(subcluster, set);
     	}
     }
+
+    public void processingError(Throwable cause) throws IOException {
+        XMLDocumentsSerializer.formatProcessingError(this.writer, cause);
+    }
 }
