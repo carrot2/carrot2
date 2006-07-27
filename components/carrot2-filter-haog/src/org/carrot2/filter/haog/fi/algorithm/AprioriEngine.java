@@ -16,10 +16,10 @@ package org.carrot2.filter.haog.fi.algorithm;
 import java.text.Collator;
 import java.util.*;
 
-import com.dawidweiss.carrot.core.local.clustering.TokenizedDocument;
-import com.dawidweiss.carrot.core.local.linguistic.tokens.TokenSequence;
-import com.dawidweiss.carrot.core.local.linguistic.tokens.TypedToken;
-import com.dawidweiss.carrot.util.tokenizer.languages.MutableStemmedToken;
+import org.carrot2.core.clustering.TokenizedDocument;
+import org.carrot2.core.linguistic.tokens.TokenSequence;
+import org.carrot2.core.linguistic.tokens.TypedToken;
+import org.carrot2.util.tokenizer.languages.MutableStemmedToken;
 import org.carrot2.filter.haog.fi.FIParameters;
 import org.carrot2.filter.haog.haog.measure.Statistics;
 

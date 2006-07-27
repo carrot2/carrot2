@@ -13,8 +13,8 @@
 
 package org.carrot2.filter.lingo.local;
 
-import com.dawidweiss.carrot.core.local.clustering.RawDocument;
-import com.dawidweiss.carrot.core.local.clustering.RawDocumentBase;
+import org.carrot2.core.clustering.RawDocument;
+import org.carrot2.core.clustering.RawDocumentBase;
 import org.carrot2.filter.lingo.common.Snippet;
 
 /**
@@ -60,42 +60,42 @@ public final class SnippetInterfaceAdapter extends Snippet implements RawDocumen
 	//
 
 	/*
-	 * @see com.dawidweiss.carrot.core.local.clustering.RawDocument#getProperty(java.lang.String)
+	 * @see org.carrot2.core.clustering.RawDocument#getProperty(java.lang.String)
 	 */
 	public Object getProperty(String name) {
 		return base.getProperty(name);
 	}
 
 	/*
-	 * @see com.dawidweiss.carrot.core.local.clustering.RawDocument#setProperty(java.lang.String, java.lang.Object)
+	 * @see org.carrot2.core.clustering.RawDocument#setProperty(java.lang.String, java.lang.Object)
 	 */
 	public Object setProperty(String propertyName, Object value) {
 		return base.setProperty(propertyName, value);
 	}
 	
 	/*
-	 * @see com.dawidweiss.carrot.core.local.clustering.RawDocument#getId()
+	 * @see org.carrot2.core.clustering.RawDocument#getId()
 	 */
 	public Object getId() {
 		return base.getId();
 	}
 
 	/*
-	 * @see com.dawidweiss.carrot.core.local.clustering.RawDocument#getUrl()
+	 * @see org.carrot2.core.clustering.RawDocument#getUrl()
 	 */
 	public String getUrl() {
 		return base.getUrl();
 	}
 
 	/* 
-	 * @see com.dawidweiss.carrot.core.local.clustering.RawDocument#getSnippet()
+	 * @see org.carrot2.core.clustering.RawDocument#getSnippet()
 	 */
 	public String getSnippet() {
 		return base.getSnippet();
 	}
 
 	/*
-	 * @see com.dawidweiss.carrot.core.local.clustering.RawDocument#getScore()
+	 * @see org.carrot2.core.clustering.RawDocument#getScore()
 	 */
 	public float getScore() {
 		return (float) base.getDoubleProperty(PROPERTY_CLUSTER_MEMBER_SCORE, -1);

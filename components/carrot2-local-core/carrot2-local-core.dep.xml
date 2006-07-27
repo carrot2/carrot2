@@ -18,7 +18,7 @@
 		</check-newer>
         <meta type="proguard"><![CDATA[
 # Keep Carrot2 core interfaces and classes that implement them.
--keep class * extends com.dawidweiss.carrot.core.local.LocalComponent {
+-keep class * extends org.carrot2.core.LocalComponent {
     !private <methods>;
     !private <fields>;
     !private <init>(*);
@@ -26,7 +26,7 @@
     !private <init>(*,*,*);
 }
 
--keep class com.dawidweiss.carrot.core.local.** {
+-keep class org.carrot2.core.** {
     public protected *;
 }
         ]]></meta>

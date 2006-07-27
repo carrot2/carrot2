@@ -18,11 +18,11 @@
 		</check-newer>
         <meta type="proguard"><![CDATA[
 # Keep local controller utility classes used from BeanShell.
--keep class com.dawidweiss.carrot.local.controller.* {
+-keep class org.carrot2.core.controller.* {
     public protected static <methods>;
     public protected static <fields>;
 }
--keep class com.dawidweiss.carrot.local.controller.loaders.* {
+-keep class org.carrot2.core.controller.loaders.* {
     public protected static <methods>;
     public protected static <fields>;
 }

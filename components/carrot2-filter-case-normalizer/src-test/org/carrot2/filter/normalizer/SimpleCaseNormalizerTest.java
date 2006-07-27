@@ -17,11 +17,11 @@ import org.carrot2.filter.normalizer.SimpleCaseNormalizer;
 
 import junit.framework.*;
 
-import com.dawidweiss.carrot.core.local.clustering.*;
-import com.dawidweiss.carrot.core.local.linguistic.*;
-import com.dawidweiss.carrot.core.local.linguistic.tokens.*;
-import com.dawidweiss.carrot.util.tokenizer.*;
-import com.dawidweiss.carrot.util.tokenizer.languages.polish.*;
+import org.carrot2.core.clustering.*;
+import org.carrot2.core.linguistic.*;
+import org.carrot2.core.linguistic.tokens.*;
+import org.carrot2.util.tokenizer.*;
+import org.carrot2.util.tokenizer.languages.polish.*;
 
 /**
  * Unit tests for the

@@ -13,11 +13,11 @@
 
 package org.carrot2.filter.lingo.common;
 
-import com.dawidweiss.carrot.core.local.linguistic.Language;
-import com.dawidweiss.carrot.core.local.linguistic.Stemmer;
-import com.dawidweiss.carrot.util.common.StringUtils;
+import org.carrot2.core.linguistic.Language;
+import org.carrot2.core.linguistic.Stemmer;
 
 import org.carrot2.filter.lingo.tokenizer.*;
+import org.carrot2.util.StringUtils;
 
 import org.apache.log4j.Logger;
 

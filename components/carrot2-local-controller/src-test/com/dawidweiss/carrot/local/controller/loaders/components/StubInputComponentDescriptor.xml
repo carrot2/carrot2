@@ -1,4 +1,0 @@
-<local-component-factory 
-	id="stub-input"
-	component-class="com.dawidweiss.carrot.local.controller.StubInputComponent">
-</local-component-factory> 

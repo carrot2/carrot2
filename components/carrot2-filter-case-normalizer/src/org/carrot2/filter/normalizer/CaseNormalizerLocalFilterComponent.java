@@ -16,9 +16,9 @@ package org.carrot2.filter.normalizer;
 import java.util.*;
 
 
-import com.dawidweiss.carrot.core.local.*;
-import com.dawidweiss.carrot.core.local.clustering.*;
-import com.dawidweiss.carrot.core.local.profiling.*;
+import org.carrot2.core.*;
+import org.carrot2.core.clustering.*;
+import org.carrot2.core.profiling.*;
 
 /**
  * Brings the case of all tokens in all input tokenized documents's titles and
@@ -74,7 +74,7 @@ public class CaseNormalizerLocalFilterComponent extends
     /*
      * (non-Javadoc)
      * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#init(com.dawidweiss.carrot.core.local.LocalControllerContext)
+     * @see org.carrot2.core.LocalComponent#init(org.carrot2.core.LocalControllerContext)
      */
     public void init(LocalControllerContext context)
         throws InstantiationException
@@ -85,7 +85,7 @@ public class CaseNormalizerLocalFilterComponent extends
     /*
      * (non-Javadoc)
      * 
-     * @see com.dawidweiss.carrot.core.local.clustering.TokenizedDocumentsConsumer#addDocument(com.dawidweiss.carrot.core.local.clustering.TokenizedDocument)
+     * @see org.carrot2.core.clustering.TokenizedDocumentsConsumer#addDocument(org.carrot2.core.clustering.TokenizedDocument)
      */
     public void addDocument(TokenizedDocument doc) throws ProcessingException
     {
@@ -97,7 +97,7 @@ public class CaseNormalizerLocalFilterComponent extends
     /*
      * (non-Javadoc)
      * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#endProcessing()
+     * @see org.carrot2.core.LocalComponent#endProcessing()
      */
     public void endProcessing() throws ProcessingException
     {
@@ -116,7 +116,7 @@ public class CaseNormalizerLocalFilterComponent extends
     /*
      * (non-Javadoc)
      * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#getComponentCapabilities()
+     * @see org.carrot2.core.LocalComponent#getComponentCapabilities()
      */
     public Set getComponentCapabilities()
     {
@@ -126,7 +126,7 @@ public class CaseNormalizerLocalFilterComponent extends
     /*
      * (non-Javadoc)
      * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#getRequiredSuccessorCapabilities()
+     * @see org.carrot2.core.LocalComponent#getRequiredSuccessorCapabilities()
      */
     public Set getRequiredSuccessorCapabilities()
     {
@@ -136,7 +136,7 @@ public class CaseNormalizerLocalFilterComponent extends
     /*
      * (non-Javadoc)
      * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#getRequiredPredecessorCapabilities()
+     * @see org.carrot2.core.LocalComponent#getRequiredPredecessorCapabilities()
      */
     public Set getRequiredPredecessorCapabilities()
     {
@@ -146,7 +146,7 @@ public class CaseNormalizerLocalFilterComponent extends
     /*
      * (non-Javadoc)
      * 
-     * @see com.dawidweiss.carrot.core.local.LocalFilterComponent#setNext(com.dawidweiss.carrot.core.local.LocalComponent)
+     * @see org.carrot2.core.LocalFilterComponent#setNext(org.carrot2.core.LocalComponent)
      */
     public void setNext(LocalComponent next)
     {
@@ -157,7 +157,7 @@ public class CaseNormalizerLocalFilterComponent extends
     /*
      * (non-Javadoc)
      * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#flushResources()
+     * @see org.carrot2.core.LocalComponent#flushResources()
      */
     public void flushResources()
     {
@@ -170,7 +170,7 @@ public class CaseNormalizerLocalFilterComponent extends
     /*
      * (non-Javadoc)
      * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#getName()
+     * @see org.carrot2.core.LocalComponent#getName()
      */
     public String getName()
     {

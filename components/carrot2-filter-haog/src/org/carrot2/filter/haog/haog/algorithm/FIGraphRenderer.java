@@ -18,17 +18,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import com.dawidweiss.carrot.core.local.ProcessingException;
-import com.dawidweiss.carrot.core.local.clustering.RawClusterBase;
-import com.dawidweiss.carrot.core.local.clustering.RawClustersConsumer;
-import com.dawidweiss.carrot.core.local.clustering.RawDocument;
-import com.dawidweiss.carrot.core.local.clustering.TokenizedDocument;
+import org.carrot2.core.ProcessingException;
+import org.carrot2.core.clustering.RawClusterBase;
+import org.carrot2.core.clustering.RawClustersConsumer;
+import org.carrot2.core.clustering.RawDocument;
+import org.carrot2.core.clustering.TokenizedDocument;
 import org.carrot2.filter.haog.fi.FIParameters;
 import org.carrot2.filter.haog.fi.algorithm.Cluster;
 import org.carrot2.filter.haog.haog.measure.Statistics;
 
 /**
- * This class renders {@link com.dawidweiss.carrot.core.local.clustering.RawCluster}
+ * This class renders {@link org.carrot2.core.clustering.RawCluster}
  * from vertices retrieved from Apriori based algorithm.
  * @see org.carrot2.filter.haog.haog.algorithm.GraphRenderer
  * @author Karol Gołembniak

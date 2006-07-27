@@ -15,10 +15,10 @@ package org.carrot2.filter.lingo.local;
 
 import java.util.*;
 
-import com.dawidweiss.carrot.core.local.*;
-import com.dawidweiss.carrot.core.local.clustering.*;
-import com.dawidweiss.carrot.core.local.linguistic.*;
-import com.dawidweiss.carrot.core.local.profiling.*;
+import org.carrot2.core.*;
+import org.carrot2.core.clustering.*;
+import org.carrot2.core.linguistic.*;
+import org.carrot2.core.profiling.*;
 import org.carrot2.filter.lingo.common.*;
 import org.carrot2.filter.lingo.common.Cluster;
 import org.carrot2.filter.lingo.common.MultilingualClusteringContext;
@@ -102,7 +102,7 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
     }
 
     /*
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#init(com.dawidweiss.carrot.core.local.LocalControllerContext)
+     * @see org.carrot2.core.LocalComponent#init(org.carrot2.core.LocalControllerContext)
      */
     public void init(LocalControllerContext context)
         throws InstantiationException
@@ -111,7 +111,7 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
     }
 
     /*
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#getComponentCapabilities()
+     * @see org.carrot2.core.LocalComponent#getComponentCapabilities()
      */
     public Set getComponentCapabilities()
     {
@@ -119,7 +119,7 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
     }
 
     /*
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#getRequiredSuccessorCapabilities()
+     * @see org.carrot2.core.LocalComponent#getRequiredSuccessorCapabilities()
      */
     public Set getRequiredSuccessorCapabilities()
     {
@@ -127,7 +127,7 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
     }
 
     /*
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#getRequiredPredecessorCapabilities()
+     * @see org.carrot2.core.LocalComponent#getRequiredPredecessorCapabilities()
      */
     public Set getRequiredPredecessorCapabilities()
     {
@@ -135,7 +135,7 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
     }
 
     /*
-     * @see com.dawidweiss.carrot.core.local.LocalFilterComponent#setNext(com.dawidweiss.carrot.core.local.LocalComponent)
+     * @see org.carrot2.core.LocalFilterComponent#setNext(org.carrot2.core.LocalComponent)
      */
     public void setNext(LocalComponent next)
     {
@@ -147,7 +147,7 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
     }
 
     /*
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#flushResources()
+     * @see org.carrot2.core.LocalComponent#flushResources()
      */
     public void flushResources()
     {
@@ -160,7 +160,7 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
     }
 
     /*
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#startProcessing(com.dawidweiss.carrot.core.local.RequestContext)
+     * @see org.carrot2.core.LocalComponent#startProcessing(org.carrot2.core.RequestContext)
      */
     public void startProcessing(RequestContext requestContext)
         throws ProcessingException
@@ -171,7 +171,7 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
     }
 
     /*
-     * @see com.dawidweiss.carrot.core.local.clustering.TokenizedDocumentsConsumer#addDocument(com.dawidweiss.carrot.core.local.clustering.TokenizedDocument)
+     * @see org.carrot2.core.clustering.TokenizedDocumentsConsumer#addDocument(org.carrot2.core.clustering.TokenizedDocument)
      */
     public void addDocument(RawDocument doc) throws ProcessingException
     {
@@ -182,7 +182,7 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
     }
 
     /*
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#endProcessing()
+     * @see org.carrot2.core.LocalComponent#endProcessing()
      */
     public void endProcessing() throws ProcessingException
     {
@@ -239,7 +239,7 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
     /*
      * (non-Javadoc)
      * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#getName()
+     * @see org.carrot2.core.LocalComponent#getName()
      */
     public String getName()
     {

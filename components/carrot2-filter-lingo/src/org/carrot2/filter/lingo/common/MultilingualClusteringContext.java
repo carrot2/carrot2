@@ -13,8 +13,8 @@
 
 package org.carrot2.filter.lingo.common;
 
-import com.dawidweiss.carrot.core.local.linguistic.Language;
-import com.dawidweiss.carrot.core.local.linguistic.Stemmer;
+import org.carrot2.core.linguistic.Language;
+import org.carrot2.core.linguistic.Stemmer;
 
 import org.carrot2.filter.lingo.local.LingoLocalFilterComponent;
 import org.carrot2.filter.lingo.lsicluster.LsiClusteringStrategy;

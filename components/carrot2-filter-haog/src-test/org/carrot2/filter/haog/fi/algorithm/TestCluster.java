@@ -17,9 +17,9 @@ import java.util.ArrayList;
 
 import junit.framework.TestCase;
 
-import com.dawidweiss.carrot.core.local.clustering.RawDocumentSnippet;
-import com.dawidweiss.carrot.core.local.clustering.TokenizedDocument;
-import com.dawidweiss.carrot.util.tokenizer.SnippetTokenizer;
+import org.carrot2.core.clustering.RawDocumentSnippet;
+import org.carrot2.core.clustering.TokenizedDocument;
+import org.carrot2.util.tokenizer.SnippetTokenizer;
 
 public class TestCluster extends TestCase {
 	private Cluster firstCluster;

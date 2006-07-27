@@ -15,8 +15,8 @@ package org.carrot2.filter.haog.haog.algorithm;
 
 import java.util.List;
 
-import com.dawidweiss.carrot.core.local.ProcessingException;
-import com.dawidweiss.carrot.core.local.clustering.RawClustersConsumer;
+import org.carrot2.core.ProcessingException;
+import org.carrot2.core.clustering.RawClustersConsumer;
 
 /**
  * This class contains algorithm which creates {@link com.dawidweiss.carrot
@@ -26,7 +26,7 @@ import com.dawidweiss.carrot.core.local.clustering.RawClustersConsumer;
 public interface GraphRenderer {
 
 	/**
-	 * Creates {@link com.dawidweiss.carrot.core.local.clustering.RawCluster}
+	 * Creates {@link org.carrot2.core.clustering.RawCluster}
 	 * from given list of kernel vertices and adds them to {@link 
 	 * RawClustersConsumer}
 	 * @param kernel - Kernel of graph as a list of vetices.

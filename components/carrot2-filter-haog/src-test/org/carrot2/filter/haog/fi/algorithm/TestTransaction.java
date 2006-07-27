@@ -15,8 +15,8 @@ package org.carrot2.filter.haog.fi.algorithm;
 
 import junit.framework.TestCase;
 
-import com.dawidweiss.carrot.core.local.linguistic.tokens.TypedToken;
-import com.dawidweiss.carrot.util.tokenizer.languages.MutableStemmedToken;
+import org.carrot2.core.linguistic.tokens.TypedToken;
+import org.carrot2.util.tokenizer.languages.MutableStemmedToken;
 
 public class TestTransaction extends TestCase {
 	

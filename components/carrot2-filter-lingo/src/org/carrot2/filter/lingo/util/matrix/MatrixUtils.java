@@ -15,11 +15,12 @@ package org.carrot2.filter.lingo.util.matrix;
 
 import Jama.Matrix;
 
-import com.dawidweiss.carrot.util.common.StringUtils;
 
 import java.io.PrintWriter;
 
 import java.text.NumberFormat;
+
+import org.carrot2.util.StringUtils;
 
 
 /**

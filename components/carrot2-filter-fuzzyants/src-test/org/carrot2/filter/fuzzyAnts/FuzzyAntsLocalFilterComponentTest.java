@@ -22,14 +22,14 @@ import junit.framework.*;
 import org.carrot2.filter.fuzzyAnts.FuzzyAntsLocalFilterComponent;
 import org.carrot2.filter.normalizer.CaseNormalizerLocalFilterComponent;
 import org.carrot2.filter.normalizer.SmartCaseNormalizer;
+import org.carrot2.input.xml.XmlLocalInputComponent;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-import com.dawidweiss.carrot.core.local.*;
-import com.dawidweiss.carrot.core.local.clustering.*;
-import com.dawidweiss.carrot.core.local.impl.*;
-import com.dawidweiss.carrot.input.xml.XmlLocalInputComponent;
-import com.dawidweiss.carrot.util.tokenizer.SnippetTokenizerLocalFilterComponent;
+import org.carrot2.core.*;
+import org.carrot2.core.clustering.*;
+import org.carrot2.core.impl.*;
+import org.carrot2.util.tokenizer.SnippetTokenizerLocalFilterComponent;
 
 /**
  * A test of the FuzzyAnts clustering component.

@@ -15,7 +15,7 @@ package org.carrot2.filter.haog.haog.algorithm;
 
 import java.util.List;
 
-import com.dawidweiss.carrot.core.local.clustering.RawClustersConsumer;
+import org.carrot2.core.clustering.RawClustersConsumer;
 
 public class FIGroupper extends Groupper {
 	

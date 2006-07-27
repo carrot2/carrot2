@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.dawidweiss.carrot.core.local.ProcessingException;
+import org.carrot2.core.ProcessingException;
 import org.carrot2.filter.haog.haog.measure.Statistics;
 
 /**

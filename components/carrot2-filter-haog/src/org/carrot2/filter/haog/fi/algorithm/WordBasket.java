@@ -20,10 +20,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.dawidweiss.carrot.core.local.clustering.TokenizedDocument;
-import com.dawidweiss.carrot.core.local.linguistic.tokens.TokenSequence;
-import com.dawidweiss.carrot.core.local.linguistic.tokens.TypedToken;
-import com.dawidweiss.carrot.util.tokenizer.languages.MutableStemmedToken;
+import org.carrot2.core.clustering.TokenizedDocument;
+import org.carrot2.core.linguistic.tokens.TokenSequence;
+import org.carrot2.core.linguistic.tokens.TypedToken;
+import org.carrot2.util.tokenizer.languages.MutableStemmedToken;
 
 /**
  * This class represents basket in Apriori algorithm. In this special case it
