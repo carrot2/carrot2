@@ -43,7 +43,7 @@ class XMLDocumentsSerializer implements RawDocumentsSerializer {
         return Constants.MIME_XML_CHARSET_UTF;
     }
 
-    public void startResult(OutputStream os, boolean isProcessing) throws IOException {
+    public void startResult(OutputStream os) throws IOException {
         this.writer = new OutputStreamWriter(os, Constants.ENCODING_UTF);
 
         writer.write("<?xml version=\"1.0\" encoding=\"" + Constants.ENCODING_UTF + "\" ?>\n");
@@ -55,7 +55,6 @@ class XMLDocumentsSerializer implements RawDocumentsSerializer {
                 + skinBase + "/documents.xsl\" ?>\n");
 
         writer.write("<?skin-uri " + contextPath + skinBase + " ?>\n");
-        writer.write("<?isProcessing " + isProcessing + "?>\n");
 
         writer.write("<searchresult type=\"documents\">\n");
     }

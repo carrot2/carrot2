@@ -235,7 +235,7 @@ public final class QueryProcessorServlet extends HttpServlet {
                 //
                 final RawDocumentsSerializer serializer = serializerFactory.createRawDocumentSerializer(request);
                 response.setContentType(serializer.getContentType());
-                serializer.startResult(os, bcaster.isProcessing());
+                serializer.startResult(os);
                 while (docIterator.hasNext()) {
                     serializer.write((RawDocument) docIterator.next());
                 }

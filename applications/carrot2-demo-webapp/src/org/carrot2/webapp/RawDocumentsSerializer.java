@@ -25,13 +25,7 @@ import com.dawidweiss.carrot.core.local.clustering.RawDocument;
  */
 public interface RawDocumentsSerializer {
     public String getContentType();
-
-    /**
-     * @param os Output stream to write to.
-     * @param isProcessing If <code>true</code>, processing is still going on
-     * (the results are not likely to be available immediately).
-     */
-    public void startResult(OutputStream os, boolean isProcessing) throws IOException;
+    public void startResult(OutputStream os) throws IOException;
     public void write(RawDocument document) throws IOException;
     public void endResult() throws IOException;
 }

@@ -33,7 +33,7 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer {
         return Constants.MIME_HTML_CHARSET_UTF;
     }
 
-    public void startResult(OutputStream os, boolean isProcessing) throws IOException {
+    public void startResult(OutputStream os) throws IOException {
         this.writer = new OutputStreamWriter(os, Constants.ENCODING_UTF);
         this.sequence = 1;
 
@@ -45,20 +45,10 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer {
                 "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\r\n" + 
                 "<title>Carrot Clustering Engine</title>\r\n" + 
                 "<link href=\"" + base + "/css/common.css\" type=\"text/css\" rel=\"stylesheet\">\r\n" + 
-                "<link href=\"" + base + "/css/documents.css\" rel=\"stylesheet\">\r\n"); 
-
-        if (isProcessing) {
-            writer.write(
-                    "</head>" +
-                    "<body style=\"height: 100%;\" onload=\"javascript:parent.document.getElementById(\'progress\').style.display = \'none\'\">\r\n" + 
-                    "<div id=\"documents\">");
-            writer.flush();
-        } else {
-            writer.write(
-                    "</head>" +
-                    "<body style=\"height: 100%\" onload=\"javascript:parent.document.getElementById(\'progress\').style.display = \'none\'\">" +
-                    "<div id=\"documents\">");
-        }
+                "<link href=\"" + base + "/css/documents.css\" rel=\"stylesheet\">\r\n" + 
+                "</head>" +
+                "<body style=\"height: 100%;\" onload=\"javascript:parent.document.getElementById(\'progress\').style.display = \'none\'\">\r\n" + 
+                "<div id=\"documents\">");
     }
 
     public void write(RawDocument doc) throws IOException {
