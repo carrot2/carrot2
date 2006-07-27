@@ -18,11 +18,12 @@ import java.awt.Dimension;
 import javax.swing.Box;
 import javax.swing.JPanel;
 
+import org.carrot2.filter.fuzzyAnts.FuzzyAntsParameters;
+
 import com.dawidweiss.carrot.filter.stc.StcConstants;
 import com.jgoodies.forms.builder.DefaultFormBuilder;
 import com.jgoodies.forms.layout.FormLayout;
 
-import fuzzyAnts.FuzzyAntsParameters;
 
 /**
  * A settings panel for {@link carrot2.demo.settings.FuzzyAntsSettings}. 
