@@ -3,44 +3,44 @@
         <!-- types -->
 
         <typedef name="dependency-path"
-            classname="com.dawidweiss.carrot.ant.types.DependencyPath" >
+            classname="org.carrot2.ant.types.DependencyPath" >
         </typedef>
 
         <typedef name="component-path"
-            classname="com.dawidweiss.carrot.ant.types.ComponentClasspath">
+            classname="org.carrot2.ant.types.ComponentClasspath">
         </typedef>
 
         <!-- tasks -->
 
         <typedef name="loadPath"
-            classname="com.dawidweiss.carrot.ant.tasks.LoadDependencyPath">
+            classname="org.carrot2.ant.tasks.LoadDependencyPath">
         </typedef>
         
         <taskdef name="bringToDate" 
-            classname="com.dawidweiss.carrot.ant.tasks.BringToDateTask">
+            classname="org.carrot2.ant.tasks.BringToDateTask">
         </taskdef>
         
         <taskdef name="mostRecentFileDate" 
-            classname="com.dawidweiss.carrot.ant.tasks.MostRecentFileDateTask">
+            classname="org.carrot2.ant.tasks.MostRecentFileDateTask">
         </taskdef>
         
         <taskdef name="printDependencies" 
-            classname="com.dawidweiss.carrot.ant.tasks.PrintDependenciesTask">
+            classname="org.carrot2.ant.tasks.PrintDependenciesTask">
         </taskdef>
         
         <taskdef name="copyDependencies"
-            classname="com.dawidweiss.carrot.ant.tasks.CopyDependenciesTask">
+            classname="org.carrot2.ant.tasks.CopyDependenciesTask">
         </taskdef>
         
         <taskdef name="licenseList"
-            classname="com.dawidweiss.carrot.ant.tasks.LicenseListTask">
+            classname="org.carrot2.ant.tasks.LicenseListTask">
         </taskdef>
         
         <taskdef name="licenseReplace"
-            classname="com.dawidweiss.carrot.ant.tasks.LicenseReplaceTask">
+            classname="org.carrot2.ant.tasks.LicenseReplaceTask">
         </taskdef>
         
         <taskdef name="collectMeta" 
-            classname="com.dawidweiss.carrot.ant.tasks.CollectMetaTask">
+            classname="org.carrot2.ant.tasks.CollectMetaTask">
         </taskdef>
 </antlib>
