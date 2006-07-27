@@ -11,7 +11,7 @@ factory = new LocalComponentFactory() {
     	// Wrap Yahoo API component with the cache
 		return new RawDocumentProducerCacheWrapper(
 			new com.dawidweiss.carrot.input.yahoo.YahooApiInputComponent(),
-			com.dawidweiss.carrot.input.yahoo.YahooApiInputComponent.class);
+				com.dawidweiss.carrot.input.yahoo.YahooApiInputComponent.class);
     }
 };
 

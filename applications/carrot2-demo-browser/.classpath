@@ -9,7 +9,6 @@
 	<classpathentry exported="true" kind="src" path="/carrot2-filter-lingo"/>
 	<classpathentry exported="true" kind="lib" path="lib/forms-1.0.5.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/looks-1.2.2.jar"/>
-	<classpathentry exported="true" kind="src" path="/carrot2-input-local-cache"/>
 	<classpathentry exported="true" kind="src" path="/carrot2-filter-trc"/>
 	<classpathentry exported="true" kind="lib" path="lib/jdic_windows/jdic_stub.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jdic.jar"/>
