@@ -10,14 +10,17 @@
   <xsl:template name="head-insert">
     <link rel="stylesheet" href="{$skinuri}/css/documents.css" />
   </xsl:template>
-
-  <xsl:template name="on-load">
-    <xsl:text>javascript:parent.document.getElementById('progress').style.display = 'none';</xsl:text>
-  </xsl:template>
     
   <xsl:template match="searchresult[@type='documents']">
     <div id="documents">
-      <xsl:apply-templates select="document" />
+      <xsl:choose>
+          <xsl:when test="count(document) &gt; 0">
+              <xsl:apply-templates select="document" />
+          </xsl:when>
+          <xsl:otherwise>
+              <div id="no-documents">Your query returned no documents.<br/>Please try a more general query.</div>
+          </xsl:otherwise>
+      </xsl:choose>
     </div>
   </xsl:template>
 

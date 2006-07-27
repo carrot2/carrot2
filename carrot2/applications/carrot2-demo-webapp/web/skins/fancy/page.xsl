@@ -47,29 +47,27 @@
 
   <!-- Emit the main page -->
   <xsl:template match="meta" mode="no-query">
-    <script language="javascript">&lt;!--
-var preload = new Array();
-if (document.images)
-{
-  preload[0] = new Image();
-  preload[0].src = "<xsl:value-of select='$skinuri' />/img/progress.gif";
-  preload[1] = new Image();
-  preload[1].src = "<xsl:value-of select='$skinuri' />/img/tab-active-lead-in.gif";
-  preload[2] = new Image();
-  preload[2].src = "<xsl:value-of select='$skinuri' />/img/tab-active-lead-out.gif";
-  preload[3] = new Image();
-  preload[3].src = "<xsl:value-of select='$skinuri' />/img/tab-active-passive-link.gif";
-  preload[4] = new Image();
-  preload[4].src = "<xsl:value-of select='$skinuri' />/img/tab-passive-active-link.gif";
-  preload[5] = new Image();
-  preload[5].src = "<xsl:value-of select='$skinuri' />/img/tab-passive-lead-in.gif";
-  preload[6] = new Image();
-  preload[6].src = "<xsl:value-of select='$skinuri' />/img/tab-passive-lead-out.gif";
-  preload[7] = new Image();
-  preload[7].src = "<xsl:value-of select='$skinuri' />/img/tab-passive-passive-link.gif";
-}
-//--> </script>
-  
+    <script type="text/javascript" language="javascript">&lt;!--
+    var preload = new Array();
+    if (document.images)
+    {
+      var skinuri = "<xsl:value-of select='$skinuri' />";
+      var preload = ["/img/progress.gif", 
+                     "/img/tab-active-lead-in.gif", 
+                     "/img/tab-active-lead-out.gif",
+                     "/img/tab-active-passive-link.gif",
+                     "/img/tab-passive-active-link.gif",
+                     "/img/tab-passive-lead-in.gif",
+                     "/img/tab-passive-lead-out.gif",
+                     "/img/tab-passive-passive-link.gif" ];
+      for (i = 0; i &lt; preload.length; i++) {
+          var img = new Image();
+          img.src = skinuri + preload[i];
+          preload[i] = img;
+      }
+    }
+    //--> </script>
+
     <xsl:call-template name="custom-results-utils" />
     <div><!-- empty --></div>
     <table id="startup-main">
@@ -99,6 +97,7 @@ if (document.images)
 
   <!-- Emit the results page -->
   <xsl:template match="meta" mode="query">
+      
     <table style="width: 100%; height: 100%">
       <tr>
         <td style="padding-top: 17px">
@@ -137,9 +136,6 @@ if (document.images)
         </td>
       </tr>
     </table>
-    <div id="progress">
-      <img alt="..." src="{$skinuri}/img/progress.gif" style="position: relative; top: 0.35ex; right: 0.5ex" /> Loading...
-    </div>
   </xsl:template>
 
   <!-- Search area -->
@@ -329,6 +325,14 @@ if (document.images)
 
                     <td style="padding: 3px; height: 100%">
                       <iframe name="documents" src="{$contextPath}{/page/meta/action-urls/query-docs}" frameborder="no" height="100%" width="100%" style="border: 0" />
+                    </td>
+                  </tr>
+                  <tr id="progress">
+                    <td style="padding: 3px; width: 260px; border-right: 1px dotted #808080; color: gray; font-size: 12px; font-weight: bold;">
+                      <img alt="..." src="{$skinuri}/img/progress.gif" style="position: relative; top: 0.35ex;"/> Loading...
+                    </td>
+                    <td>
+
                     </td>
                   </tr>
                   <xsl:if test="$display-status-line = 'true'">

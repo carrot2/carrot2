@@ -370,13 +370,3 @@ td.more-icon {
   vertical-align: top;
   padding-right: 10px;
 }
-
-/** Progress bar */
-#progress {
-  text-align: center; 
-  color: gray; 
-  z-index: 2; 
-  position: absolute; 
-  top: 76px;
-  left: 670px;
-}
