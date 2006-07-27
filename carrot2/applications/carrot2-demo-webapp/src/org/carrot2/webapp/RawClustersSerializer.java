@@ -29,4 +29,5 @@ public interface RawClustersSerializer {
     public void startResult(OutputStream os, List rawDocumentsList) throws IOException;
     public void write(RawCluster cluster) throws IOException;
     public void endResult() throws IOException;
+    public void processingError(Throwable cause) throws IOException;
 }

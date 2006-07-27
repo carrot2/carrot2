@@ -90,4 +90,20 @@ class XMLDocumentsSerializer implements RawDocumentsSerializer {
         }
         writer = null;
     }
+
+    public void processingError(Throwable cause) throws IOException {
+        formatProcessingError(writer, cause);
+    }
+    
+    static void formatProcessingError(final Writer writer, final Throwable cause) throws IOException {
+        writer.write("<exception>");
+            writer.write("<class>" + cause.getClass().getName() + "</class>");
+            writer.write("<message>" + cause.getMessage() + "</message>");
+            if (cause.getCause() != null) {
+                writer.write("<cause>");
+                formatProcessingError(writer, cause.getCause());
+                writer.write("</cause>");
+            }
+        writer.write("</exception>");
+    }
 }

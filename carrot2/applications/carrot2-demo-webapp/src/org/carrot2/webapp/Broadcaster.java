@@ -37,6 +37,11 @@ final class Broadcaster {
     private int useCount;
 
     /**
+     * Processing error to signal to all consumers.
+     */
+    private Exception processingError;
+
+    /**
      * Implement a thread-blocking iterator on the document list if there are no
      * elements in the buffer.
      */
@@ -50,6 +55,9 @@ final class Broadcaster {
                         return true;
                     } else {
                         if (processingEnded) {
+                            if (processingError != null) {
+                                throw new BroadcasterException(processingError);
+                            }
                             return false;
                         } else {
                             // Go to sleep waiting for new elements
@@ -138,5 +146,16 @@ final class Broadcaster {
         if (this.processingEnded == false)
             throw new IllegalStateException("Broadcaster not finalized.");
         return this.documents;
+    }
+
+    public void endProcessingWithError(Exception e) {
+        synchronized (documents) {
+            if (this.processingEnded == true) {
+                throw new IllegalStateException();
+            }
+
+            this.processingError = e;
+            endProcessing();
+        }
     }
 }

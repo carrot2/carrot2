@@ -169,17 +169,19 @@ public final class QueryProcessorServlet extends HttpServlet {
             props.put(BroadcasterPushOutputComponent.BROADCASTER, bcaster);
             try {
                 tabsController.query(searchRequest.getInputTab().getShortName(), searchRequest.query, props);
-
-                try {
-                    // add documents to the cache
-                    ehcache.put(
-                            new net.sf.ehcache.Element(queryHash, 
-                                    new SearchResults(bcaster.getDocuments())));
-                } catch (CacheException e) {
-                    logger.error("Could not save results to cache.", e);
-                }
             } catch (Exception e) {
                 logger.warn("Error running input query.", e);
+                this.bcaster.endProcessingWithError(e);
+                return;
+            }
+
+            try {
+                // add documents to the cache
+                ehcache.put(
+                        new net.sf.ehcache.Element(queryHash, 
+                                new SearchResults(bcaster.getDocuments())));
+            } catch (CacheException e) {
+                logger.error("Could not save results to cache.", e);
             }
         }
     }
@@ -236,8 +238,12 @@ public final class QueryProcessorServlet extends HttpServlet {
                 final RawDocumentsSerializer serializer = serializerFactory.createRawDocumentSerializer(request);
                 response.setContentType(serializer.getContentType());
                 serializer.startResult(os);
-                while (docIterator.hasNext()) {
-                    serializer.write((RawDocument) docIterator.next());
+                try {
+                    while (docIterator.hasNext()) {
+                        serializer.write((RawDocument) docIterator.next());
+                    }
+                } catch (BroadcasterException e) {
+                    serializer.processingError(e.getCause());
                 }
                 serializer.endResult();
             } else {
@@ -249,6 +255,9 @@ public final class QueryProcessorServlet extends HttpServlet {
                         docIterator);
                 props.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, 
                         Integer.toString(searchRequest.getInputSize()));
+
+                final RawClustersSerializer serializer = serializerFactory.createRawClustersSerializer(request);
+                response.setContentType(serializer.getContentType());
                 try {
                     logger.info("Clustering results using: " + algorithmTab.getShortName());
                     final ProcessingResult result = 
@@ -259,15 +268,22 @@ public final class QueryProcessorServlet extends HttpServlet {
                     final List clusters = collected.clusters; 
                     final List documents = bcaster.getDocuments();
 
-                    final RawClustersSerializer serializer = serializerFactory.createRawClustersSerializer(request);
-                    response.setContentType(serializer.getContentType());
                     serializer.startResult(os, documents);
                     for (Iterator i = clusters.iterator(); i.hasNext();) {
                         serializer.write((RawCluster) i.next());
                     }
                     serializer.endResult();
+                } catch (BroadcasterException e) {
+                    // broadcaster exceptions are shown in the documents iframe,
+                    // so we simply emit no clusters.
+                    serializer.startResult(os, Collections.EMPTY_LIST);
+                    serializer.processingError(e);
+                    serializer.endResult();
                 } catch (Exception e) {
                     logger.warn("Error running input query.", e);
+                    serializer.startResult(os, Collections.EMPTY_LIST);
+                    serializer.processingError(e);
+                    serializer.endResult();
                 }
             }
         } finally {
