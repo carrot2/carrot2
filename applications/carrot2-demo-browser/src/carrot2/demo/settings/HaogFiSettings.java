@@ -19,10 +19,11 @@ import java.util.Map;
 
 import javax.swing.JComponent;
 
+import org.carrot2.filter.haog.fi.FIParameters;
+
 import carrot2.demo.ProcessSettings;
 import carrot2.demo.ProcessSettingsBase;
 
-import com.kgolembniak.carrot.filter.fi.FIParameters;
 
 /**
  * Settings class for HAOG-FI with a generic input.

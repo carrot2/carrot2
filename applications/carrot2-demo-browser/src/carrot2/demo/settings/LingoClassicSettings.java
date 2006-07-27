@@ -22,7 +22,7 @@ import javax.swing.JComponent;
 import carrot2.demo.ProcessSettings;
 import carrot2.demo.ProcessSettingsBase;
 
-import com.stachoodev.carrot.filter.lingo.lsicluster.LsiConstants;
+import org.carrot2.filter.lingo.lsicluster.LsiConstants;
 
 /**
  * Settings class for Lingo classic with a generic input.

@@ -15,9 +15,10 @@ package carrot2.demo.settings;
 
 import javax.swing.JPanel;
 
+import org.carrot2.filter.haog.stc.STCConstants;
+
 import com.jgoodies.forms.builder.DefaultFormBuilder;
 import com.jgoodies.forms.layout.FormLayout;
-import com.kgolembniak.carrot.filter.stc.STCConstants;
 
 /**
  * A settings panel for {@link carrot2.demo.settings.HaogStcSettings}. 

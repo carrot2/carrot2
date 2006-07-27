@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 
 import com.jgoodies.forms.builder.DefaultFormBuilder;
 import com.jgoodies.forms.layout.FormLayout;
-import com.stachoodev.carrot.filter.lingo.lsicluster.LsiConstants;
+import org.carrot2.filter.lingo.lsicluster.LsiConstants;
 
 /**
  * Settings dialog for Lingo classic.

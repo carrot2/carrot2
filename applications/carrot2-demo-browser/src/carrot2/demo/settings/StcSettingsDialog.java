@@ -18,7 +18,7 @@ import java.awt.Dimension;
 import javax.swing.Box;
 import javax.swing.JPanel;
 
-import com.dawidweiss.carrot.filter.stc.StcConstants;
+import org.carrot2.filter.stc.StcConstants;
 import com.jgoodies.forms.builder.DefaultFormBuilder;
 import com.jgoodies.forms.layout.FormLayout;
 

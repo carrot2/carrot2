@@ -1,5 +1,5 @@
 
-import com.dawidweiss.carrot.filter.stc.local.*;
+import org.carrot2.filter.stc.local.*;
 import com.dawidweiss.carrot.core.local.*;
 import com.dawidweiss.carrot.core.local.linguistic.*;
 import com.dawidweiss.carrot.local.controller.*;

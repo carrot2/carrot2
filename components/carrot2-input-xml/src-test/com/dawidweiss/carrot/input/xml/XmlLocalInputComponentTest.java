@@ -24,7 +24,7 @@ import com.dawidweiss.carrot.core.local.clustering.RawDocument;
 import com.dawidweiss.carrot.core.local.impl.ArrayOutputComponent;
 import com.dawidweiss.carrot.core.local.linguistic.Language;
 import com.dawidweiss.carrot.util.tokenizer.languages.english.English;
-import com.stachoodev.carrot.filter.lingo.local.LingoLocalFilterComponent;
+import org.carrot2.filter.lingo.local.LingoLocalFilterComponent;
 
 /**
  * Tests the component. 

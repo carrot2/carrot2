@@ -19,10 +19,11 @@ import java.util.Map;
 
 import javax.swing.JComponent;
 
+import org.carrot2.filter.haog.stc.STCParameters;
+
 import carrot2.demo.ProcessSettings;
 import carrot2.demo.ProcessSettingsBase;
 
-import com.kgolembniak.carrot.filter.stc.STCParameters;
 
 /**
  * Settings class for HAOG-STC with a generic input.
