@@ -19,7 +19,6 @@ import java.util.*;
 import com.dawidweiss.carrot.core.local.*;
 import com.dawidweiss.carrot.core.local.clustering.*;
 import com.dawidweiss.carrot.core.local.profiling.*;
-import com.stachoodev.carrot.filter.normalizer.*;
 
 /**
  * Brings the case of all tokens in all input tokenized documents's titles and
