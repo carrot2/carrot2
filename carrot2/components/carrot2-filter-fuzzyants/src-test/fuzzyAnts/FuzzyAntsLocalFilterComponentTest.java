@@ -113,7 +113,7 @@ public class FuzzyAntsLocalFilterComponentTest extends TestCase {
         // Add a collector for the output clusters.
         final LocalComponentFactory output = new LocalComponentFactory() {
             public LocalComponent getInstance() {
-                return new ClustersConsumerOutputComponent();
+                return new ArrayOutputComponent();
             }
         };
         controller.addLocalComponentFactory("output", output);
@@ -149,8 +149,8 @@ public class FuzzyAntsLocalFilterComponentTest extends TestCase {
             final ProcessingResult result = this.controller.query(PROCESS_ID, query, requestParameters);
 
             // The processing result contains clusters.
-            final ClustersConsumerOutputComponent.Result output =
-                (ClustersConsumerOutputComponent.Result) result.getQueryResult();
+            final ArrayOutputComponent.Result output =
+                (ArrayOutputComponent.Result) result.getQueryResult();
 
             final ArrayList flattenedClusters = new ArrayList();
             dump(output.clusters, flattenedClusters);

@@ -22,8 +22,8 @@ import carrot2.demo.index.RawDocumentsLuceneIndexBuilder;
 
 import com.dawidweiss.carrot.core.local.*;
 import com.dawidweiss.carrot.core.local.clustering.*;
-import com.dawidweiss.carrot.core.local.impl.ClustersConsumerOutputComponent;
-import com.dawidweiss.carrot.core.local.impl.ClustersConsumerOutputComponent.Result;
+import com.dawidweiss.carrot.core.local.impl.ArrayOutputComponent;
+import com.dawidweiss.carrot.core.local.impl.ArrayOutputComponent.Result;
 
 /**
  * A simple input component caching results from a
@@ -75,7 +75,7 @@ public class RawDocumentProducerCacheWrapper extends LocalInputComponentBase {
     /**
      * Consumer for {@link com.dawidweiss.carrot.core.local.clustering.RawDocument}s.
      */
-    private ClustersConsumerOutputComponent consumer; 
+    private ArrayOutputComponent consumer; 
 	private Result cachedResult;
 
 
@@ -125,14 +125,14 @@ public class RawDocumentProducerCacheWrapper extends LocalInputComponentBase {
             requestedResults = Integer.parseInt(requestedResultsParam.toString());
         }
         
-        final ClustersConsumerOutputComponent.Result result
+        final ArrayOutputComponent.Result result
             = cache.get(new CacheEntry(wrapped, equivalenceClass, query, requestedResults));
 
         if (result == null) {
             // Requires caching.
             this.currentlyCaching = true;
 
-            this.consumer = new ClustersConsumerOutputComponent();
+            this.consumer = new ArrayOutputComponent();
             wrapped.setNext(consumer);
             wrapped.setQuery(query);
             wrapped.startProcessing(requestContext);
@@ -150,8 +150,8 @@ public class RawDocumentProducerCacheWrapper extends LocalInputComponentBase {
             this.wrapped.endProcessing();
 
             // Ok, save the result 
-            final ClustersConsumerOutputComponent.Result result = 
-                (ClustersConsumerOutputComponent.Result) this.consumer.getResult();
+            final ArrayOutputComponent.Result result = 
+                (ArrayOutputComponent.Result) this.consumer.getResult();
 
             this.cachedResult = result;
 
@@ -193,7 +193,7 @@ public class RawDocumentProducerCacheWrapper extends LocalInputComponentBase {
      * @param result
      * @throws ProcessingException
      */
-    private void buildLuceneIndex(final ClustersConsumerOutputComponent.Result result) throws ProcessingException {
+    private void buildLuceneIndex(final ArrayOutputComponent.Result result) throws ProcessingException {
         try {
             Directory luceneIndex = RawDocumentsLuceneIndexBuilder.index(result.documents);
             result.context.put(PARAM_INDEX_CONTENT, luceneIndex);

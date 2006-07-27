@@ -111,7 +111,7 @@ public class ODPLocalInputComponentTest extends TestCase
         {
             public LocalComponent getInstance()
             {
-                return new DocumentsConsumerOutputComponent();
+                return new ArrayOutputComponent();
             }
         };
 
@@ -126,8 +126,8 @@ public class ODPLocalInputComponentTest extends TestCase
         process.setOutput("output");
         controller.addProcess("process.odp-test", process);
 
-        List results = (List) controller.query("process.odp-test",
-            "catid: 32460", new HashMap()).getQueryResult();
+        List results = ((ArrayOutputComponent.Result) controller.query("process.odp-test",
+            "catid: 32460", new HashMap()).getQueryResult()).documents;
 
         RawDocument document01 = new RawDocumentSnippet(
             "Polska Strona Ogonkowa",

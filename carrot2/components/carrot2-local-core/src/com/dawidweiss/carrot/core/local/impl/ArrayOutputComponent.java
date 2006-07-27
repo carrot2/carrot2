@@ -33,7 +33,7 @@ import java.util.List;
  * @author Dawid Weiss
  * @version $Revision$
  */
-public class ClustersConsumerOutputComponent extends LocalOutputComponentBase
+public class ArrayOutputComponent extends LocalOutputComponentBase
     implements LocalOutputComponent, RawClustersConsumer, RawDocumentsConsumer {
     /**
      * Capabilities exposed by this component.

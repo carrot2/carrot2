@@ -18,7 +18,7 @@ import java.util.WeakHashMap;
 
 import org.apache.log4j.Logger;
 
-import com.dawidweiss.carrot.core.local.impl.ClustersConsumerOutputComponent.Result;
+import com.dawidweiss.carrot.core.local.impl.ArrayOutputComponent.Result;
 
 /**
  * A cache based on weak references. However, last few requests
