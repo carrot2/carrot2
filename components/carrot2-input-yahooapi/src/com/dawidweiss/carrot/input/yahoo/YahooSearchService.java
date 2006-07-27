@@ -164,7 +164,7 @@ public class YahooSearchService {
                     }
 
                     int statusCode = client.executeMethod(httpMethod);
-                    if (statusCode == HttpStatus.SC_OK) {
+                    if (statusCode == HttpStatus.SC_OK || statusCode == HttpStatus.SC_SERVICE_UNAVAILABLE) {
                         is = httpMethod.getResponseBodyAsStream();
                         Header encoded = httpMethod.getResponseHeader("Content-Encoding");
                         if (encoded != null && "gzip".equals(encoded.getValue())) {
@@ -189,8 +189,7 @@ public class YahooSearchService {
                 }
                 
                 if (handler.isErraneous()) {
-                    throw new IOException("Yahoo service error: "
-                            + handler.getErrorText());
+                    throw new IOException("Yahoo service error: " + handler.getErrorText());
                 }
 
                 if (handler.firstResultPosition != startFrom && handler.resultsReturned > 0) {
