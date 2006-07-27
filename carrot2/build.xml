@@ -283,7 +283,6 @@ TESTING: @{component.path}
   <target name="apply-to-applications">
     <application-apply application.path="applications/carrot2-demo-browser" />
     <application-apply application.path="applications/carrot2-demo-webapp" />
-    <application-apply application.path="applications/carrot2-lucene-example" />
     <application-apply application.path="applications/carrot2-nutch-plugin" />
     <application-apply application.path="applications/carrot2-odp-tools" />
   </target>
@@ -306,7 +305,6 @@ TESTING: @{component.path}
     <component-apply component.path="components/carrot2-input-lucene" />
     <component-apply component.path="components/carrot2-input-googleapi" />
     <component-apply component.path="components/carrot2-input-yahooapi" />
-    <component-apply component.path="components/carrot2-input-local-cache" />
     <component-apply component.path="components/carrot2-input-opensearch" />
 
     <component-apply component.path="components/carrot2-odp-core" />

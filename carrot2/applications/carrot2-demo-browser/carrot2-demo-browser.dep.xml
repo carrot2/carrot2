@@ -70,7 +70,6 @@
     <dependency name="carrot2-filter-fuzzyants" profile="stripped" nocopy="true" />
     <dependency name="carrot2-input-yahooapi"  profile="stripped" nocopy="true" />
     <dependency name="carrot2-util-tokenizer" profile="stripped" nocopy="true" />
-    <dependency name="carrot2-input-local-cache"  profile="stripped" nocopy="true" />
 	<dependency name="carrot2-filter-case-normalizer"  profile="stripped" nocopy="true" />
 
 	<!-- Full profile contains all demo components -->
@@ -82,7 +81,6 @@
     <dependency name="carrot2-filter-fuzzyants" profile="full" />
     <dependency name="carrot2-input-yahooapi"  profile="full" />
     <dependency name="carrot2-util-tokenizer" profile="full" />
-    <dependency name="carrot2-input-local-cache"  profile="full" />
 	<dependency name="carrot2-filter-case-normalizer"  profile="full" />
 </component>
 
