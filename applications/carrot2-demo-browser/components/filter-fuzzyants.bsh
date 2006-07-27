@@ -9,7 +9,7 @@ import com.dawidweiss.carrot.util.tokenizer.languages.english.*;
 //
 factory = new LocalComponentFactory() {
     public LocalComponent getInstance() {
-    	return new fuzzyAnts.FuzzyAntsLocalFilterComponent();
+    	return new org.carrot2.filter.fuzzyAnts.FuzzyAntsLocalFilterComponent();
     }
 
     public String getName() {

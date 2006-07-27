@@ -15,6 +15,9 @@ package carrot2.demo.webstart;
 
 import java.util.HashMap;
 
+import org.carrot2.filter.normalizer.CaseNormalizerLocalFilterComponent;
+import org.carrot2.filter.normalizer.SmartCaseNormalizer;
+
 import carrot2.demo.cache.RawDocumentProducerCacheWrapper;
 
 import com.dawidweiss.carrot.core.local.LocalComponent;
@@ -28,8 +31,6 @@ import com.dawidweiss.carrot.util.tokenizer.SnippetTokenizerLocalFilterComponent
 import com.dawidweiss.carrot.util.tokenizer.languages.english.English;
 import com.kgolembniak.carrot.filter.haogstc.local.HAOGSTCLocalFilterComponent;
 import com.stachoodev.carrot.filter.lingo.local.LingoLocalFilterComponent;
-import com.stachoodev.carrot.filter.normalizer.SmartCaseNormalizer;
-import com.stachoodev.carrot.filter.normalizer.local.CaseNormalizerLocalFilterComponent;
 
 /**
  * A brute-force workaround for problems with security exceptions when Beanshell
@@ -158,7 +159,7 @@ public class WebStartComponentFactory {
     public static LocalComponentFactory createFuzzyAnts() {
         return new LocalComponentFactory() {
             public LocalComponent getInstance() {
-                return new fuzzyAnts.FuzzyAntsLocalFilterComponent();
+                return new org.carrot2.filter.fuzzyAnts.FuzzyAntsLocalFilterComponent();
             }
         };
     }

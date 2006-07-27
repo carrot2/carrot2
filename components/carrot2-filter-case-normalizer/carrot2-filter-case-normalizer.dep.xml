@@ -17,7 +17,7 @@
 		</check-newer>
         <meta type="proguard"><![CDATA[
 # Keep case normalizers
--keep class * implements com.stachoodev.carrot.filter.normalizer.CaseNormalizer {
+-keep class * implements org.carrot2.filter.normalizer.CaseNormalizer {
     public protected <methods>;
 }
         ]]></meta>
