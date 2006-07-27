@@ -11,13 +11,13 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package com.stachoodev.carrot.input.odp.local;
+package com.stachoodev.carrot.odp;
 
 import java.util.*;
 
-import com.dawidweiss.carrot.core.local.*;
-import com.dawidweiss.carrot.core.local.clustering.*;
-import com.dawidweiss.carrot.core.local.profiling.*;
+import org.carrot2.core.*;
+import org.carrot2.core.clustering.*;
+import org.carrot2.core.profiling.*;
 import com.stachoodev.carrot.odp.*;
 import com.stachoodev.carrot.odp.mixer.*;
 
@@ -26,7 +26,7 @@ import com.stachoodev.carrot.odp.mixer.*;
  * Directory Project. In order for this component to work, the
  * {@link com.stachoodev.carrot.odp.ODPIndex}must be properly initialized. The
  * original ODP <code>catid</code> is added to each document, see
- * {@link com.dawidweiss.carrot.core.local.clustering.RawDocumentsProducer#PROPERTY_CATID}.
+ * {@link org.carrot2.core.clustering.RawDocumentsProducer#PROPERTY_CATID}.
  * 
  * <p>
  * 
@@ -61,7 +61,7 @@ public class ODPLocalInputComponent extends ProfiledLocalInputComponentBase
     /*
      * (non-Javadoc)
      * 
-     * @see com.dawidweiss.carrot.core.local.LocalInputComponent#setQuery(java.lang.String)
+     * @see org.carrot2.core.LocalInputComponent#setQuery(java.lang.String)
      */
     public void setQuery(String query)
     {
@@ -71,7 +71,7 @@ public class ODPLocalInputComponent extends ProfiledLocalInputComponentBase
     /*
      * (non-Javadoc)
      * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#getComponentCapabilities()
+     * @see org.carrot2.core.LocalComponent#getComponentCapabilities()
      */
     public Set getComponentCapabilities()
     {
@@ -81,7 +81,7 @@ public class ODPLocalInputComponent extends ProfiledLocalInputComponentBase
     /*
      * (non-Javadoc)
      * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#getRequiredSuccessorCapabilities()
+     * @see org.carrot2.core.LocalComponent#getRequiredSuccessorCapabilities()
      */
     public Set getRequiredSuccessorCapabilities()
     {
@@ -91,7 +91,7 @@ public class ODPLocalInputComponent extends ProfiledLocalInputComponentBase
     /*
      * (non-Javadoc)
      * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#flushResources()
+     * @see org.carrot2.core.LocalComponent#flushResources()
      */
     public void flushResources()
     {
@@ -103,7 +103,7 @@ public class ODPLocalInputComponent extends ProfiledLocalInputComponentBase
     /*
      * (non-Javadoc)
      * 
-     * @see com.dawidweiss.carrot.core.local.LocalInputComponent#setNext(com.dawidweiss.carrot.core.local.LocalComponent)
+     * @see org.carrot2.core.LocalInputComponent#setNext(org.carrot2.core.LocalComponent)
      */
     public void setNext(LocalComponent next)
     {
@@ -121,7 +121,7 @@ public class ODPLocalInputComponent extends ProfiledLocalInputComponentBase
     /*
      * (non-Javadoc)
      * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#startProcessing(com.dawidweiss.carrot.core.local.RequestContext)
+     * @see org.carrot2.core.LocalComponent#startProcessing(org.carrot2.core.RequestContext)
      */
     public void startProcessing(RequestContext requestContext)
         throws ProcessingException
@@ -230,7 +230,7 @@ public class ODPLocalInputComponent extends ProfiledLocalInputComponentBase
     /*
      * (non-Javadoc)
      * 
-     * @see com.dawidweiss.carrot.core.local.LocalInputComponentBase#validate()
+     * @see org.carrot2.core.LocalInputComponentBase#validate()
      */
     protected void validate() throws ProcessingException
     {
@@ -251,7 +251,7 @@ public class ODPLocalInputComponent extends ProfiledLocalInputComponentBase
     /*
      * (non-Javadoc)
      * 
-     * @see com.dawidweiss.carrot.core.local.LocalComponent#getName()
+     * @see org.carrot2.core.LocalComponent#getName()
      */
     public String getName()
     {
