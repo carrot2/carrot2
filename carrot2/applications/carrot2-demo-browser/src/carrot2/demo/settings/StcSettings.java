@@ -22,7 +22,7 @@ import javax.swing.JComponent;
 import carrot2.demo.ProcessSettings;
 import carrot2.demo.ProcessSettingsBase;
 
-import com.dawidweiss.carrot.filter.stc.StcParameters;
+import org.carrot2.filter.stc.StcParameters;
 
 /**
  * Settings class for STC with a generic input.

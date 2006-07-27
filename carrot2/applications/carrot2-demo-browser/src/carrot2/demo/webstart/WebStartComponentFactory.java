@@ -15,6 +15,7 @@ package carrot2.demo.webstart;
 
 import java.util.HashMap;
 
+import org.carrot2.filter.haog.haogstc.local.HAOGSTCLocalFilterComponent;
 import org.carrot2.filter.normalizer.CaseNormalizerLocalFilterComponent;
 import org.carrot2.filter.normalizer.SmartCaseNormalizer;
 
@@ -25,12 +26,11 @@ import com.dawidweiss.carrot.core.local.LocalComponentFactory;
 import com.dawidweiss.carrot.core.local.impl.RawDocumentDummyLanguageDetection;
 import com.dawidweiss.carrot.core.local.impl.RawDocumentEnumerator;
 import com.dawidweiss.carrot.core.local.linguistic.Language;
-import com.dawidweiss.carrot.filter.stc.local.STCLocalFilterComponent;
+import org.carrot2.filter.stc.local.STCLocalFilterComponent;
 import com.dawidweiss.carrot.input.yahoo.YahooApiInputComponent;
 import com.dawidweiss.carrot.util.tokenizer.SnippetTokenizerLocalFilterComponent;
 import com.dawidweiss.carrot.util.tokenizer.languages.english.English;
-import com.kgolembniak.carrot.filter.haogstc.local.HAOGSTCLocalFilterComponent;
-import com.stachoodev.carrot.filter.lingo.local.LingoLocalFilterComponent;
+import org.carrot2.filter.lingo.local.LingoLocalFilterComponent;
 
 /**
  * A brute-force workaround for problems with security exceptions when Beanshell
@@ -111,7 +111,7 @@ public class WebStartComponentFactory {
     public static LocalComponentFactory createRoughKMeans() {
         return new LocalComponentFactory() {
             public LocalComponent getInstance() {
-                return new com.chilang.carrot.filter.cluster.local.RoughKMeansLocalFilterComponent();
+                return new org.carrot2.filter.trc.carrot.filter.cluster.local.RoughKMeansLocalFilterComponent();
             }
         };
     }

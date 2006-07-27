@@ -9,7 +9,7 @@ import com.dawidweiss.carrot.util.tokenizer.languages.english.*;
 //
 factory = new LocalComponentFactory() {
     public LocalComponent getInstance() {
-    	return new com.kgolembniak.carrot.filter.haogfi.local.HAOGFILocalFilterComponent();
+    	return new org.carrot2.filter.haog.haogfi.local.HAOGFILocalFilterComponent();
     }
 
     public String getName() {
