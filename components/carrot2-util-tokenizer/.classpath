@@ -11,7 +11,6 @@
 	<classpathentry kind="src" path="/carrot2-util-common"/>
 	<classpathentry kind="src" path="/carrot2-stemmer-snowball"/>
 	<classpathentry kind="src" path="/carrot2-stemmer-stempel"/>
-	<classpathentry kind="src" path="/carrot2-input-local-cache"/>
 	<classpathentry kind="src" path="/carrot2-stemmer-stempelator"/>
 	<classpathentry kind="output" path="tmp/eclipse/classes"/>
 </classpath>
