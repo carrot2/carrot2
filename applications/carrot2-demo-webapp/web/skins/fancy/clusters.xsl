@@ -9,6 +9,10 @@
 
   <xsl:param name="more-increment">8</xsl:param>
 
+  <xsl:template name="on-load">
+    <xsl:text>javascript:parent.setProgress(false);</xsl:text>
+  </xsl:template>
+
   <xsl:template name="head-insert">
     <link rel="stylesheet" href="{$skinuri}/css/clusters.css" />
     <script src="{$skinuri}/js/folding.js" language="javascript"></script>

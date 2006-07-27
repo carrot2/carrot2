@@ -79,7 +79,7 @@ function setElementVisible(elementId, visible)
       element.style.display = 'none';
     }
   }
-};
+}
 
 function insertNewProcess(processId)
 {
@@ -96,4 +96,13 @@ function insertNewProcess(processId)
   processes[1] = processId;
   switchProcess(1);
   focus('search-field');
-};
+}
+
+/* Disable/enable progress bar */
+function setProgress(enabled) {
+	if (enabled) {
+		show('progress');
+	} else {
+		hide('progress');
+	}
+}
