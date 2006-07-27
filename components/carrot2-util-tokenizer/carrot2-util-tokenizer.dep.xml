@@ -17,7 +17,7 @@
         </check-newer>
         <meta type="proguard"><![CDATA[
 # Keep the implementation of all languages.
--keep class com.dawidweiss.carrot.util.tokenizer.languages.** {
+-keep class org.carrot2.util.tokenizer.languages.** {
     public protected static *;
 }
         ]]></meta>
