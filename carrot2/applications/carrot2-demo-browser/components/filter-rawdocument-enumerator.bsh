@@ -1,7 +1,7 @@
 
-import com.dawidweiss.carrot.core.local.*;
-import com.dawidweiss.carrot.core.local.impl.*;
-import com.dawidweiss.carrot.local.controller.*;
+import org.carrot2.core.*;
+import org.carrot2.core.impl.*;
+import org.carrot2.core.controller.*;
 
 //
 // Component factory is a dynamic Beanshell class

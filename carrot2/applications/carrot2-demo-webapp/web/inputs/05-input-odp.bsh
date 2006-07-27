@@ -1,7 +1,7 @@
-import com.dawidweiss.carrot.core.local.*;
-import com.dawidweiss.carrot.core.local.impl.*;
-import com.dawidweiss.carrot.core.local.clustering.*;
-import com.dawidweiss.carrot.local.controller.*;
+import org.carrot2.core.*;
+import org.carrot2.core.impl.*;
+import org.carrot2.core.clustering.*;
+import org.carrot2.core.controller.*;
 import com.carrot.input.lucene.*;
 import carrot2.demo.cache.*;
 

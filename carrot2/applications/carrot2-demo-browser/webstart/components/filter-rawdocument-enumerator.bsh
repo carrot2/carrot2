@@ -1,6 +1,6 @@
 
 import carrot2.demo.webstart.*;
-import com.dawidweiss.carrot.local.controller.LoadedComponentFactory;
+import org.carrot2.core.controller.LoadedComponentFactory;
 
 return new LoadedComponentFactory(
 	"filter-rawdocument-enumerator",

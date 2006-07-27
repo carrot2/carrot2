@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
-import com.dawidweiss.carrot.core.local.clustering.RawCluster;
+import org.carrot2.core.clustering.RawCluster;
 
 /**
  * A serializer for {@link RawCluster}s.

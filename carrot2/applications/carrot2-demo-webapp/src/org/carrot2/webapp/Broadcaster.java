@@ -15,8 +15,8 @@ package org.carrot2.webapp;
 
 import java.util.*;
 
-import com.dawidweiss.carrot.core.local.ProcessingException;
-import com.dawidweiss.carrot.core.local.clustering.RawDocument;
+import org.carrot2.core.ProcessingException;
+import org.carrot2.core.clustering.RawDocument;
 
 /**
  * Broadcaster and synchronization point for threads utilizing

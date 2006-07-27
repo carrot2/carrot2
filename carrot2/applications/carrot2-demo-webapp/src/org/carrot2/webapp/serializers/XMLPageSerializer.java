@@ -16,12 +16,12 @@ package org.carrot2.webapp.serializers;
 import java.io.*;
 import java.util.*;
 
+import org.carrot2.util.URLEncoding;
 import org.carrot2.webapp.*;
 import org.carrot2.webapp.SearchSettings.SearchRequest;
 import org.dom4j.*;
 import org.dom4j.io.XMLWriter;
 
-import com.dawidweiss.carrot.util.net.URLEncoding;
 
 /**
  * A serializer for main search page.

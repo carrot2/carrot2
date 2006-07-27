@@ -16,7 +16,7 @@ package org.carrot2.webapp;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import com.dawidweiss.carrot.core.local.clustering.RawDocument;
+import org.carrot2.core.clustering.RawDocument;
 
 /**
  * A serializer for {@link RawDocument}s.
