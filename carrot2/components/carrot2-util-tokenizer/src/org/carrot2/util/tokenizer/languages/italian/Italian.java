@@ -13,17 +13,14 @@
 
 package org.carrot2.util.tokenizer.languages.italian;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.util.Set;
 
 import org.carrot2.core.linguistic.*;
 import org.carrot2.stemming.snowball.SnowballStemmersFactory;
 import org.carrot2.util.WordLoadingUtils;
-
-import com.dawidweiss.carrot.filter.snowball.*;
-import org.carrot2.util.tokenizer.languages.*;
-import org.carrot2.util.tokenizer.parser.*;
-import com.stachoodev.util.common.*;
+import org.carrot2.util.tokenizer.languages.StemmedLanguageBase;
+import org.carrot2.util.tokenizer.parser.WordBasedParserFactory;
 
 /**
  * An implementation of {@link Language} interface
@@ -46,14 +43,11 @@ public class Italian extends StemmedLanguageBase {
      * Load stopwords from an associated resource.
      */
     static {
-        String resourceName = "/com/dawidweiss/carrot/util/tokenizer/languages/italian/stopwords.it";
         try {
-			stopwords = WordLoadingUtils.loadWordSet(
-                    resourceName, Italian.class.getResourceAsStream(resourceName));
-		} catch (IOException e) {
-            throw new RuntimeException("Could not load the required " +
-                    "resource: " + resourceName);
-		}
+            stopwords = WordLoadingUtils.loadWordSet("stopwords.it");
+        } catch (IOException e) {
+            throw new RuntimeException("Could not initialize class.");
+        }
     }
 
     

@@ -13,11 +13,11 @@
 
 package org.carrot2.util.tokenizer.languages;
 
-import java.util.*;
-
-import org.carrot2.core.linguistic.Language;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.carrot2.core.linguistic.Language;
 
 /**
  * A factory that allows access to all known languages implemented in this

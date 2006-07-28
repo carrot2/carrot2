@@ -13,14 +13,17 @@
 
 package org.carrot2.util.tokenizer;
 
-import java.io.*;
+import java.io.StringReader;
 import java.util.*;
 
 import org.carrot2.core.clustering.*;
-import org.carrot2.core.linguistic.*;
-import org.carrot2.core.linguistic.tokens.*;
-import org.carrot2.util.tokenizer.languages.*;
-import org.carrot2.util.tokenizer.parser.*;
+import org.carrot2.core.linguistic.Language;
+import org.carrot2.core.linguistic.LanguageTokenizer;
+import org.carrot2.core.linguistic.tokens.MutableTokenSequence;
+import org.carrot2.core.linguistic.tokens.TokenSequence;
+import org.carrot2.util.tokenizer.languages.AllKnownLanguages;
+import org.carrot2.util.tokenizer.parser.WordBasedParserBase;
+import org.carrot2.util.tokenizer.parser.WordBasedParserFactory;
 
 /**
  * A utility class for tokenizing document snippets. Note: no support is

@@ -16,12 +16,9 @@ package org.carrot2.util.tokenizer.languages.portuguese;
 import java.io.IOException;
 import java.util.Set;
 
-import org.carrot2.core.linguistic.Language;
-import org.carrot2.core.linguistic.LanguageTokenizer;
-import org.carrot2.core.linguistic.Stemmer;
+import org.carrot2.core.linguistic.*;
 import org.carrot2.stemming.snowball.SnowballStemmersFactory;
 import org.carrot2.util.WordLoadingUtils;
-
 import org.carrot2.util.tokenizer.languages.StemmedLanguageBase;
 import org.carrot2.util.tokenizer.parser.WordBasedParserFactory;
 
@@ -40,14 +37,11 @@ public class Portuguese extends StemmedLanguageBase {
      * Load stopwords from an associated resource.
      */
     static {
-        String resourceName = "stopwords.pt";
         try {
-            stopwords = WordLoadingUtils.loadWordSet(
-                    resourceName, Portuguese.class.getResourceAsStream(resourceName));
-		} catch (IOException e) {
-            throw new RuntimeException("Could not load the required" +
-                    "resource: " + resourceName);
-		}
+            stopwords = WordLoadingUtils.loadWordSet("stopwords.pt");
+        } catch (IOException e) {
+            throw new RuntimeException("Could not initialize class.");
+        }
     }
 
     

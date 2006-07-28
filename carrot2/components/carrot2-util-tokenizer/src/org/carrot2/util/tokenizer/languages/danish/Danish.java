@@ -19,7 +19,6 @@ import java.util.Set;
 import org.carrot2.core.linguistic.*;
 import org.carrot2.stemming.snowball.SnowballStemmersFactory;
 import org.carrot2.util.WordLoadingUtils;
-
 import org.carrot2.util.tokenizer.languages.StemmedLanguageBase;
 import org.carrot2.util.tokenizer.parser.WordBasedParserFactory;
 
@@ -38,13 +37,10 @@ public class Danish extends StemmedLanguageBase {
      * Load stopwords from an associated resource.
      */
     static {
-        String resourceName = "stopwords.da";
         try {
-			stopwords = WordLoadingUtils.loadWordSet(
-                    resourceName, Danish.class.getResourceAsStream(resourceName));
+			stopwords = WordLoadingUtils.loadWordSet("stopwords.da");
 		} catch (IOException e) {
-            throw new RuntimeException("Could not load the required" +
-                    "resource: " + resourceName);
+            throw new RuntimeException("Could not initialize class.");
 		}
     }
 

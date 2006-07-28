@@ -14,15 +14,12 @@
 package org.carrot2.util.tokenizer.languages;
 
 import java.io.Reader;
+import java.util.*;
 
 import org.carrot2.core.linguistic.LanguageTokenizer;
 import org.carrot2.core.linguistic.Stemmer;
 import org.carrot2.core.linguistic.tokens.Token;
 import org.carrot2.core.linguistic.tokens.TypedToken;
-
-import java.util.*;
-import java.util.HashSet;
-import java.util.Iterator;
 
 
 /**

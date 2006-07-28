@@ -14,19 +14,12 @@
 package org.carrot2.util.tokenizer.languages;
 
 import java.io.StringReader;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
-import org.carrot2.core.linguistic.Language;
-import org.carrot2.core.linguistic.LanguageTokenizer;
-import org.carrot2.core.linguistic.Stemmer;
-import org.carrot2.core.linguistic.tokens.StemmedToken;
-import org.carrot2.core.linguistic.tokens.Token;
-import org.carrot2.core.linguistic.tokens.TypedToken;
+import java.util.*;
 
 import junit.framework.TestCase;
+
+import org.carrot2.core.linguistic.*;
+import org.carrot2.core.linguistic.tokens.*;
 
 /**
  * Base class for implementations of
