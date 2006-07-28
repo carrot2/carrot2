@@ -9,6 +9,9 @@ Major functions and bug fixes
 Version  [C] Information
 
 HEAD
+          o  Refactoring of package names. Carrot2 now uses org.carrot2.* packages.
+             THIS REFACTORING INCLUDES CORE CLASSES, so any code using C2 must be recompiled.
+
           o  Progress page for the webapp demo (D).
 
           o  Updated JARs of projects used in Carrot2.
