@@ -183,8 +183,6 @@ public class RawDocumentSnippet extends RawDocumentBase implements Cloneable
 
     /*
      * (non-Javadoc)
-     * 
-     * @see java.lang.Object#clone()
      */
     public Object clone() throws CloneNotSupportedException
     {

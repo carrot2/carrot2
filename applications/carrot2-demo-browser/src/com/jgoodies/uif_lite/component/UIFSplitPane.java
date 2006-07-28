@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003 JGoodies Karsten Lentzsch. All Rights Reserved.
+ * Copyright (c) 2000-2006 JGoodies Karsten Lentzsch. All Rights Reserved.
  *
  * Redistribution and use in source and binary forms, with or without 
  * modification, are permitted provided that the following conditions are met:
@@ -32,9 +32,10 @@ package com.jgoodies.uif_lite.component;
 
 import java.awt.Component;
 
-import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JSplitPane;
+import javax.swing.UIManager;
 import javax.swing.plaf.SplitPaneUI;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
 
@@ -52,12 +53,16 @@ import javax.swing.plaf.basic.BasicSplitPaneUI;
  */
 
 public final class UIFSplitPane extends JSplitPane {
-
+    
     /**
-     * Holds an empty border that is reused for the split pane itself
-     * and the divider.
+     * Holds the name of the bound property that tries to show or hide
+     * the split pane's divider border.
+     * 
+     * @see #isDividerBorderVisible()
+     * @see #setDividerBorderVisible(boolean)
      */
-    private static final Border EMPTY_BORDER = new EmptyBorder(0, 0, 0, 0);
+    public static final String PROPERTYNAME_DIVIDER_BORDER_VISIBLE = 
+        "dividerBorderVisible";
     
     /**
      * Determines whether the divider border shall be removed when
@@ -187,7 +192,7 @@ public final class UIFSplitPane extends JSplitPane {
              Component leftComponent,
              Component rightComponent) {
         UIFSplitPane split = new UIFSplitPane(orientation, leftComponent, rightComponent);
-        split.setBorder(EMPTY_BORDER);
+        split.setBorder(BorderFactory.createEmptyBorder());
         split.setOneTouchExpandable(false);
         return split;
     }
@@ -222,7 +227,9 @@ public final class UIFSplitPane extends JSplitPane {
         if (oldVisibility == newVisibility)
             return;
         dividerBorderVisible = newVisibility;
-        firePropertyChange("dividerBorderVisible", oldVisibility, newVisibility);
+        firePropertyChange(PROPERTYNAME_DIVIDER_BORDER_VISIBLE, 
+                           oldVisibility, 
+                           newVisibility);
     }
     
 
@@ -248,7 +255,7 @@ public final class UIFSplitPane extends JSplitPane {
         SplitPaneUI splitPaneUI = getUI();
         if (splitPaneUI instanceof BasicSplitPaneUI) {
             BasicSplitPaneUI basicUI = (BasicSplitPaneUI) splitPaneUI;
-            basicUI.getDivider().setBorder(EMPTY_BORDER);
+            basicUI.getDivider().setBorder(BorderFactory.createEmptyBorder());
         }
     }
     

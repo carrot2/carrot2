@@ -17,13 +17,16 @@ import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 
 import org.carrot2.demo.*;
 import org.carrot2.demo.swing.util.*;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.plaf.Options;
+import com.jgoodies.looks.LookUtils;
+import com.jgoodies.looks.Options;
 
 /**
  * Swing-based GUI for the Carrot2 demo.
@@ -106,8 +109,7 @@ public class SwingDemoGui implements DemoGuiDelegate {
      */
     public void display() {
         try {
-            Options.setUseNarrowButtons(true);
-            UIManager.setLookAndFeel("com.jgoodies.plaf.plastic.PlasticXPLookAndFeel");
+            configureUI();
         } catch (Exception e) {
             // Likely PlasticXP is not in the class path; ignore.
         }
@@ -150,6 +152,34 @@ public class SwingDemoGui implements DemoGuiDelegate {
             SwingTask.runNow(task);
         } catch (Throwable t) {
             SwingUtils.showExceptionDialog(frame, "Initialization exception.", t);
+        }
+    }
+
+    /**
+     * Configures the UI; tries to set the system look on Mac, 
+     * <code>WindowsLookAndFeel</code> on general Windows, and
+     * <code>Plastic3DLookAndFeel</code> on Windows XP and all other OS.<p>
+     * 
+     * The JGoodies Swing Suite's <code>ApplicationStarter</code>,
+     * <code>ExtUIManager</code>, and <code>LookChoiceStrategies</code>
+     * classes provide a much more fine grained algorithm to choose and
+     * restore a look and theme.
+     * 
+     * @author Karsten Lentzsch
+     */
+    private void configureUI() {
+        UIManager.put(Options.USE_SYSTEM_FONTS_APP_KEY, Boolean.TRUE);
+        Options.setDefaultIconSize(new Dimension(18, 18));
+
+        String lafName =
+            LookUtils.IS_OS_WINDOWS_XP
+                ? Options.getCrossPlatformLookAndFeelClassName()
+                : Options.getSystemLookAndFeelClassName();
+
+        try {
+            UIManager.setLookAndFeel(lafName);
+        } catch (Exception e) {
+            System.err.println("Can't set look & feel:" + e);
         }
     }
 
@@ -252,6 +282,10 @@ public class SwingDemoGui implements DemoGuiDelegate {
         tabbedPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_F4, InputEvent.CTRL_DOWN_MASK), delTabKey);
         tabbedPane.getActionMap().put(delTabKey, closeTabAction);
 
+        // this trick is needed so that we can enable/disable the tabbed pane
+        final JPanel tabbedPaneContainer = new JPanel(new BorderLayout());
+        tabbedPaneContainer.add(tabbedPane, BorderLayout.CENTER);
+        
         cc = new GridBagConstraints(
                 0, 1,
                 1, 1,
@@ -260,8 +294,8 @@ public class SwingDemoGui implements DemoGuiDelegate {
                 GridBagConstraints.BOTH,
                 new Insets(0,0,0,0), 
                 0, 0);
-        layout.setConstraints(tabbedPane, cc);
-        mainPanel.add(tabbedPane);
+        layout.setConstraints(tabbedPaneContainer, cc);
+        mainPanel.add(tabbedPaneContainer);
         mainPanel.setPreferredSize(new Dimension(config.mainWindowWidth, config.mainWindowHeight));
 
         return mainPanel;
@@ -345,6 +379,20 @@ public class SwingDemoGui implements DemoGuiDelegate {
 
         detailsPanel.add(new JLabel("Process:"), cc.xy(1,1));
         this.processComboBox = new JComboBox();
+        if (HtmlDisplay.isNativeBrowserUsed()) {
+            // QUICKFIX: native JDIC browser always overlaps
+            // the dropbox, so we hide it for a moment.
+            this.processComboBox.addPopupMenuListener(new PopupMenuListener() {
+                public void popupMenuCanceled(PopupMenuEvent e) {/* nothing */}
+                public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+                    tabbedPane.setVisible(true);
+                }
+    
+                public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+                    tabbedPane.setVisible(false);
+                }
+            });
+        }
         this.processComboBox.setToolTipText("A chain of components used to process the query.");
         this.processComboBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
