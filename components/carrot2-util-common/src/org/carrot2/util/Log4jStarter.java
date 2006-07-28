@@ -182,7 +182,7 @@ public class Log4jStarter
      * the following section of web.xml file:
      * <pre>
      * <servlet-name>Carrot2 Init Servlet</servlet-name>
-     * <servlet-class>com.dawidweiss.carrot.controller.carrot2.Carrot2InitServlet</servlet-class>
+     * <servlet-class>example.Carrot2InitServlet</servlet-class>
      * <init-param>
      *   <param-name>log4j.properties</param-name>
      *   <param-value>/WEB-INF/myapplication-log4j.properties</param-value>

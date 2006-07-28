@@ -21,8 +21,9 @@
     <dependency name="dom4j" />
     <dependency name="commons-collections" />
 
-    <dependency name="junit" profile="test" />
-    <dependency name="junit-addons" profile="test" />
+    <dependency name="junit" noexport="true" no-copy="true" />
+    <dependency name="junit-addons" noexport="true" no-copy="true" />
+
     <dependency name="carrot2-license" />
 
     <!-- Certain classes in the utils package need these modules,
