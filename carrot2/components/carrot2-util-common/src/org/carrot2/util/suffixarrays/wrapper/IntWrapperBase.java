@@ -46,8 +46,6 @@ public abstract class IntWrapperBase implements IntWrapper
 
     /*
      * (non-Javadoc)
-     * 
-     * @see com.stachoodev.util.suffixarrays.wrapper.IntWrapper#asIntArray()
      */
     public int [] asIntArray()
     {
@@ -56,8 +54,6 @@ public abstract class IntWrapperBase implements IntWrapper
 
     /*
      * (non-Javadoc)
-     * 
-     * @see com.stachoodev.util.suffixarrays.wrapper.IntWrapper#length()
      */
     public int length()
     {
@@ -66,8 +62,6 @@ public abstract class IntWrapperBase implements IntWrapper
 
     /*
      * (non-Javadoc)
-     * 
-     * @see com.stachoodev.util.suffixarrays.wrapper.IntWrapper#reverse()
      */
     public void reverse()
     {
