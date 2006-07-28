@@ -266,31 +266,7 @@ public class ResultsTab extends JPanel {
             } 
         });
 
-        // Create HTML view. The actual implementation is determined
-        // by a target platform -- for Windows we use JDIC, for other
-        // systems we just use Swing.
-        String OS_NAME = System.getProperty("os.name");
-        if (OS_NAME != null) {
-            OS_NAME = OS_NAME.toLowerCase(Locale.US);
-        } else {
-            // Ooops, no such property? Try to determine the OS from file separator.
-            if (File.separatorChar == '\\') {
-                OS_NAME = "windows?";
-            } else {
-                OS_NAME = "unix?";
-            }
-        }
-
-        if ("true".equals(System.getProperty("use.java.browser")) || OS_NAME.indexOf("windows") == -1) {
-            this.browserView = new HtmlDisplayWithSwing();
-        } else {
-            try {
-                this.browserView = new HtmlDisplayWithJDIC();
-            } catch (Throwable t) {
-                logger.warn("Could not instantiate native browser component.", t);
-                this.browserView = new HtmlDisplayWithSwing();
-            }
-        }
+        this.browserView = HtmlDisplay.newHtmlDisplay();
 
         // create 'progress' card.
         JPanel progressPane = new JPanel();

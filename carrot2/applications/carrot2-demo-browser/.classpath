@@ -7,8 +7,6 @@
 	<classpathentry exported="true" kind="src" path="/carrot2-local-core"/>
 	<classpathentry exported="true" kind="src" path="/carrot2-util-tokenizer"/>
 	<classpathentry exported="true" kind="src" path="/carrot2-filter-lingo"/>
-	<classpathentry exported="true" kind="lib" path="lib/forms-1.0.5.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/looks-1.2.2.jar"/>
 	<classpathentry exported="true" kind="src" path="/carrot2-filter-trc"/>
 	<classpathentry exported="true" kind="lib" path="lib/jdic_windows/jdic_stub.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jdic.jar"/>
@@ -23,5 +21,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-case-normalizer"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-haog"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-fuzzyants"/>
+	<classpathentry kind="lib" path="lib/forms-1.0.7.jar"/>
+	<classpathentry kind="lib" path="lib/looks-2.0.4.jar"/>
 	<classpathentry kind="output" path="tmp/eclipse/classes"/>
 </classpath>

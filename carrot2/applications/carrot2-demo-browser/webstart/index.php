@@ -4,7 +4,7 @@
 		header("Content-Type: application/x-java-jnlp-file");
 
         header("Cache-Control: public, max-age=0");
-        header("Pragma: x-kolecki-no-cache");
+        header("Pragma: x-no-cache");
 
         global $HTTP_SERVER_VARS;
 

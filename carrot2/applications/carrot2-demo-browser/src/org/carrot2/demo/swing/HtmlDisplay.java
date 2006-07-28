@@ -13,8 +13,12 @@
 
 package org.carrot2.demo.swing;
 
+import java.io.File;
+import java.util.Locale;
+
 import javax.swing.JPanel;
 
+import org.apache.log4j.Logger;
 import org.carrot2.core.clustering.RawDocument;
 
 /**
@@ -27,6 +31,33 @@ import org.carrot2.core.clustering.RawDocument;
  * @author Dawid Weiss
  */
 public abstract class HtmlDisplay extends JPanel {
+    private final static boolean useNativeBrowser;
+
+    static {
+        String osname = System.getProperty("os.name");
+        if (osname != null) {
+            osname = osname.toLowerCase(Locale.US);
+        } else {
+            // Ooops, no such property? Try to determine the OS from file separator.
+            if (File.separatorChar == '\\') {
+                osname = "windows?";
+            } else {
+                osname = "unix?";
+            }
+        }
+        
+        boolean nativeBrowser = (!"true".equals(System.getProperty("use.java.browser")) && osname.indexOf("windows") >= 0);
+        if (nativeBrowser) {
+            try {
+                new HtmlDisplayWithJDIC();
+            } catch (Throwable t) {
+                Logger.getLogger(HtmlDisplay.class).warn("Could not instantiate native browser component.", t);
+                nativeBrowser = false;
+            }
+        }
+        useNativeBrowser = nativeBrowser;
+    }
+
     public abstract void setContent(String htmlContent);
 
     protected void appendHtmlHeader(StringBuffer buffer) {
@@ -72,5 +103,20 @@ public abstract class HtmlDisplay extends JPanel {
         buffer.append("<font color=green>");
         buffer.append(doc.getUrl());
         buffer.append("</font><br><br>");
+    }
+
+    public static HtmlDisplay newHtmlDisplay() {
+        if (useNativeBrowser) {
+            try {
+                return new HtmlDisplayWithJDIC();
+            } catch (Throwable t) {
+                // Ignore, oh well.
+            }
+        }
+        return new HtmlDisplayWithSwing();
+    }
+
+    public static boolean isNativeBrowserUsed() {
+        return useNativeBrowser;
     }
 }

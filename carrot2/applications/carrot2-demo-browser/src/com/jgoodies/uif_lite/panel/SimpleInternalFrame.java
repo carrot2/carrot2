@@ -35,7 +35,7 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.AbstractBorder;
 
-import com.jgoodies.plaf.LookUtils;
+import com.jgoodies.looks.LookUtils;
 
 /** 
  * A <code>JPanel</code> subclass that has a drop shadow border and 
