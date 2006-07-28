@@ -22,21 +22,47 @@ import org.apache.log4j.Logger;
  * @author Stanislaw Osinski
  * @version $Revision$
  */
-public class WordLoadingUtils
+public final class WordLoadingUtils
 {
-    /** */
-    private final static Logger logger = Logger
-        .getLogger(WordLoadingUtils.class);
+    private final static Logger logger = Logger.getLogger(WordLoadingUtils.class);
+
+    private final static String RESOURCE_PREFIX = "resources/";
 
     /**
-     * A utility method to load a set of words from a resource. Each line is
-     * treated as one word. Lines beginning with '#' are ignored.
-     * 
-     * @param resourceName
-     * @param stream
-     * @throws IOException
+     * A utility method to load a language resource. The language resource
+     * is seeked in the following locations (first found is returned):
+     * <ul>
+     *  <li><code>resources/*</code> - a resource loaded using current thread's
+     *  context loader.</li>
+     *  <li><code>resources/*</code> - a resource loaded using this class's
+     *  loader.</li>
+     * </ul> 
      */
-    public static Set loadWordSet(String resourceName, InputStream stream)
+    public static Set loadWordSet(String resourceName)
+        throws IOException
+    {
+        InputStream is;
+
+        is = Thread.currentThread().getContextClassLoader()
+                .getResourceAsStream(RESOURCE_PREFIX + resourceName);
+
+        if (is == null) {
+            is = WordLoadingUtils.class
+                .getResourceAsStream(RESOURCE_PREFIX + resourceName);
+        }
+        
+        if (is == null) {
+            throw new IOException("Resource could not be found: " + resourceName);
+        }
+
+        return loadWordSet(resourceName, is);
+    }
+
+    /**
+     * A utility method to load a set of words from an input stream. Each line is
+     * treated as one word. Lines beginning with '#' are ignored.
+     */
+    private static Set loadWordSet(String resourceName, InputStream stream)
         throws IOException
     {
         return loadWordSet(resourceName, stream, false);
@@ -50,8 +76,9 @@ public class WordLoadingUtils
      * @param stream
      * @throws IOException
      */
-    public static Set loadWordSet(String resourceName, InputStream stream,
-        boolean convertToLowerCase) throws IOException
+    private static Set loadWordSet(String resourceName, 
+            InputStream stream, boolean convertToLowerCase) 
+        throws IOException
     {
         logger.debug("Loading word list for: " + resourceName);
 
@@ -105,7 +132,7 @@ public class WordLoadingUtils
      * @param convertToLowerCase
      * @throws IOException
      */
-    public static Set loadPhraseSet(String resourceName, InputStream stream,
+    private static Set loadPhraseSet(String resourceName, InputStream stream,
         boolean convertToLowerCase) throws IOException
     {
         logger.debug("Loading word list for: " + resourceName);
@@ -174,7 +201,7 @@ public class WordLoadingUtils
      * @param convertToLowerCase
      * @throws IOException
      */
-    public static Set loadParameterizedPhraseSet(String resourceName,
+    private static Set loadParameterizedPhraseSet(String resourceName,
         InputStream stream, boolean convertToLowerCase, int parameterCount)
         throws IOException
     {
@@ -256,7 +283,7 @@ public class WordLoadingUtils
      * @param convertToLowerCase
      * @throws IOException
      */
-    public static List loadPhraseSetsList(String resourceName,
+    private static List loadPhraseSetsList(String resourceName,
         InputStream stream, boolean convertToLowerCase)
         throws IOException
     {
