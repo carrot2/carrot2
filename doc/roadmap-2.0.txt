@@ -4,8 +4,6 @@ A roadmap to release 2.0
 
 Must have:
 
-- Unify package names (D)
-
 - Make the demo webapp a start page for carrot2.org (S)
 
 - Add some basic information about the Carrot2 project to
