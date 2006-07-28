@@ -13,10 +13,10 @@
 
 package org.carrot2.matrix;
 
-import nni.*;
-import cern.colt.matrix.*;
+import nni.LAPACK;
+import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.impl.*;
-import cern.colt.matrix.linalg.*;
+import cern.colt.matrix.linalg.EigenvalueDecomposition;
 
 /**
  * Calculates eigenvalues for given matrix. Uses Native Numerical Interface

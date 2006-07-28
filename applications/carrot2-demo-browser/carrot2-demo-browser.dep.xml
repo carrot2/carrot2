@@ -30,19 +30,19 @@
 
 		<meta type="proguard"><![CDATA[
 # (demo browser) 
--keep class carrot2.demo.Demo* {
+-keep class org.carrot2.demo.Demo* {
     public static void main(java.lang.String[]);
 }
 
--keep interface carrot2.demo.ProcessSettings {
+-keep interface org.carrot2.demo.ProcessSettings {
     public protected *;
 }
 
--keep class * implements carrot2.demo.ProcessSettings {
+-keep class * implements org.carrot2.demo.ProcessSettings {
     public protected *;
 }
 
--keepnames class carrot2.demo.swing.*
+-keepnames class org.carrot2.demo.swing.*
 		]]></meta>        
     </provides>
 

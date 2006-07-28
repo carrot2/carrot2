@@ -13,10 +13,8 @@
 
 package org.carrot2.core.clustering;
 
-import org.carrot2.core.linguistic.tokens.*;
+import org.carrot2.core.linguistic.tokens.TokenSequence;
 import org.carrot2.util.PropertyProviderBase;
-
-import com.stachoodev.util.common.*;
 
 /**
  * An abstract implementation of the {@link TokenizedDocument}interface.

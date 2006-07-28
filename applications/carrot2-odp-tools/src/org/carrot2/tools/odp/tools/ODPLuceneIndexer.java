@@ -117,8 +117,6 @@ public class ODPLuceneIndexer implements TopicIndexBuilderListener
 
     /*
      * (non-Javadoc)
-     * 
-     * @see com.stachoodev.carrot.odp.index.TopicIndexBuilderListener#topicIndexed()
      */
     public void topicIndexed()
     {

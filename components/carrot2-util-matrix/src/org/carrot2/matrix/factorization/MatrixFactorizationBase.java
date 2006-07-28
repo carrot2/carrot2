@@ -68,8 +68,6 @@ public abstract class MatrixFactorizationBase implements
 
     /*
      * (non-Javadoc)
-     * 
-     * @see com.stachoodev.matrix.factorization.MatrixFactorization#getU()
      */
     public DoubleMatrix2D getU()
     {
@@ -78,8 +76,6 @@ public abstract class MatrixFactorizationBase implements
 
     /*
      * (non-Javadoc)
-     * 
-     * @see com.stachoodev.matrix.factorization.MatrixFactorization#getV()
      */
     public DoubleMatrix2D getV()
     {

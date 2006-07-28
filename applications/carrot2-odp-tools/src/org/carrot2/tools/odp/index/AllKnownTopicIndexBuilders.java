@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Stores {@link com.stachoodev.carrot.odp.index.TopicIndexBuilder}s.
+ * Stores {@link TopicIndexBuilder}s.
  * 
  * @author Stanislaw Osinski
  * @version $Revision$

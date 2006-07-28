@@ -13,7 +13,7 @@
 
 package org.carrot2.core.clustering;
 
-import org.carrot2.core.linguistic.tokens.*;
+import org.carrot2.core.linguistic.tokens.TokenSequence;
 
 /**
  * Represents a tokenized snippet of a document. Does <b>not </b> provide

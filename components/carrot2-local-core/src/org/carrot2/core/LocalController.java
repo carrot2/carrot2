@@ -13,7 +13,8 @@
 
 package org.carrot2.core;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A container for local processes and local components. Local applications will

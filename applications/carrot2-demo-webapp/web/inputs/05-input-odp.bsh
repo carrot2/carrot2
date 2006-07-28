@@ -2,8 +2,8 @@ import org.carrot2.core.*;
 import org.carrot2.core.impl.*;
 import org.carrot2.core.clustering.*;
 import org.carrot2.core.controller.*;
-import com.carrot.input.lucene.*;
-import carrot2.demo.cache.*;
+import org.carrot2.input.lucene.*;
+import org.carrot2.demo.cache.*;
 
 String indexPath = System.getProperty("odp.index.location");
 if (!(new File(indexPath).exists())) {

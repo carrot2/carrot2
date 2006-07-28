@@ -15,13 +15,12 @@ package org.carrot2.filter.normalizer;
 
 import java.util.*;
 
-import org.carrot2.core.clustering.*;
+import org.carrot2.core.clustering.RawDocument;
+import org.carrot2.core.clustering.TokenizedDocument;
 import org.carrot2.core.linguistic.tokens.*;
 import org.carrot2.util.StringUtils;
-
-import com.dawidweiss.carrot.util.common.*;
-import org.carrot2.util.tokenizer.languages.*;
-import org.carrot2.util.tokenizer.parser.*;
+import org.carrot2.util.tokenizer.languages.MutableStemmedToken;
+import org.carrot2.util.tokenizer.parser.StringTypedToken;
 
 /**
  * A simple implementation of the

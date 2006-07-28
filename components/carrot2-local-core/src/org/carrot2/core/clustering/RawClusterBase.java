@@ -17,8 +17,6 @@ import java.util.*;
 
 import org.carrot2.util.PropertyProviderBase;
 
-import com.stachoodev.util.common.*;
-
 /**
  * A complete base implementation of the {@link RawCluster}interface.
  * 

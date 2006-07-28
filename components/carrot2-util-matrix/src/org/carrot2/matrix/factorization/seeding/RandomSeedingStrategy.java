@@ -13,10 +13,10 @@
 
 package org.carrot2.matrix.factorization.seeding;
 
-import com.stachoodev.colt.function.*;
+import cern.colt.function.DoubleFunction;
+import cern.colt.matrix.DoubleMatrix2D;
 
-import cern.colt.function.*;
-import cern.colt.matrix.*;
+import com.stachoodev.colt.function.RandomDoubleFunction;
 
 /**
  * Random matrix factorization seeding.
@@ -50,9 +50,6 @@ public class RandomSeedingStrategy implements SeedingStrategy
 
     /*
      * (non-Javadoc)
-     * 
-     * @see com.stachoodev.matrix.factorization.SeedingStrategy#seed(cern.colt.matrix.DoubleMatrix2D,
-     *      cern.colt.matrix.DoubleMatrix2D)
      */
     public void seed(DoubleMatrix2D A, DoubleMatrix2D U, DoubleMatrix2D V)
     {

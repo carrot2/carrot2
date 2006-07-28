@@ -13,15 +13,10 @@
 
 package org.carrot2.core.impl;
 
-import org.carrot2.core.*;
-import org.carrot2.core.LocalOutputComponent;
-import org.carrot2.core.clustering.*;
-import org.carrot2.core.clustering.RawClustersConsumer;
-import org.carrot2.core.clustering.RawDocumentsConsumer;
-
 import java.util.*;
-import java.util.ArrayList;
-import java.util.List;
+
+import org.carrot2.core.*;
+import org.carrot2.core.clustering.*;
 
 
 /**

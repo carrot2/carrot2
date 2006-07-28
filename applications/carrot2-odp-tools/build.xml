@@ -26,7 +26,7 @@
 		<fail message="Please provide a path to an ODP RDF file in the 'odp.src.file' property" unless="odp.src.file"/>
 		<fail message="Please provide a path for the Lucene index in the 'odp.lucene.index.dir' property" unless="odp.lucene.index.dir"/>
 		<mkdir dir="${odp.lucene.index.dir}"/>
-		<java fork="true" classname="com.stachoodev.carrot.odp.tools.ODPLuceneIndexer">
+		<java fork="true" classname="org.carrot2.tools.odp.tools.ODPLuceneIndexer">
 			<sysproperty key="odp.src.file" value="${odp.src.file}"/>
 			<sysproperty key="odp.lucene.index.dir" value="${odp.lucene.index.dir}"/>
 			<classpath>

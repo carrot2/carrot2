@@ -13,8 +13,8 @@
 
 package cern.colt.matrix.impl;
 
+import junit.framework.TestCase;
 import cern.colt.matrix.*;
-import junit.framework.*;
 
 /**
  * @author Stanislaw Osinski

@@ -21,7 +21,7 @@ import com.jgoodies.forms.builder.DefaultFormBuilder;
 import com.jgoodies.forms.layout.FormLayout;
 
 /**
- * A settings panel for {@link carrot2.demo.settings.HaogFiSettings}. 
+ * A settings panel for {@link org.carrot2.demo.settings.HaogFiSettings}. 
  *  
  * @author Karol Gołembniak
  */

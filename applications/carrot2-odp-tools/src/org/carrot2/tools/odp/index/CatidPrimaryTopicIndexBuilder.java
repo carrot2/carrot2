@@ -55,8 +55,6 @@ public class CatidPrimaryTopicIndexBuilder extends ODPAbstractSaxHandler impleme
 
     /*
      * (non-Javadoc)
-     * 
-     * @see com.stachoodev.carrot.odp.index.PrimaryTopicIndexBuilder#create(java.io.InputStream)
      */
     public PrimaryTopicIndex create(InputStream inputStream,
         TopicSerializer topicSerializer, Collection topicIndexBuilders)

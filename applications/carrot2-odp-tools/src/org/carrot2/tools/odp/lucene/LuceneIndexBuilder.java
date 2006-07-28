@@ -70,8 +70,6 @@ public class LuceneIndexBuilder extends ODPAbstractSaxHandler
     
     /*
      * (non-Javadoc)
-     * 
-     * @see com.stachoodev.carrot.odp.common.ODPAbstractSaxHandler#index(com.stachoodev.carrot.odp.Topic)
      */
     protected void index(Topic topic) throws IOException
     {

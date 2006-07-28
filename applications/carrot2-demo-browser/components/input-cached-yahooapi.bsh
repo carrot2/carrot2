@@ -1,7 +1,7 @@
 
 import org.carrot2.core.*;
 import org.carrot2.core.controller.*;
-import carrot2.demo.cache.*;
+import org.carrot2.demo.cache.*;
 
 //
 // Component factory is a dynamic Beanshell class

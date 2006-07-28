@@ -13,7 +13,7 @@
 
 package org.carrot2.core.profiling;
 
-import java.util.*;
+import java.util.Map;
 
 import org.carrot2.core.*;
 

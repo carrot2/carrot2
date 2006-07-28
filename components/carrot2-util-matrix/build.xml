@@ -13,7 +13,7 @@
     <target name="benchmark" depends="test">
         <ant target="run.class"
              antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" inheritrefs="true">
-             <property name="run.class.name" value="com.stachoodev.matrix.factorization.MatrixFactorizationBenchmark" />
+             <property name="run.class.name" value="org.carrot2.matrix.factorization.MatrixFactorizationBenchmark" />
         </ant>
     </target>
 </project>

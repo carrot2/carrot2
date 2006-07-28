@@ -13,7 +13,7 @@
 
 package cern.colt.matrix;
 
-import cern.colt.matrix.impl.*;
+import cern.colt.matrix.impl.NNIDenseDoubleMatrix2D;
 
 /**
  * A factory for convenient construction of 2D matrices backed by the NNI

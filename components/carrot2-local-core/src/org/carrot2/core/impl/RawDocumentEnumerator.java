@@ -13,16 +13,10 @@
 
 package org.carrot2.core.impl;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
-import org.carrot2.core.LocalComponent;
-import org.carrot2.core.ProcessingException;
-import org.carrot2.core.RequestContext;
-import org.carrot2.core.clustering.RawDocument;
-import org.carrot2.core.clustering.RawDocumentsConsumer;
-import org.carrot2.core.clustering.RawDocumentsProducer;
+import org.carrot2.core.*;
+import org.carrot2.core.clustering.*;
 import org.carrot2.core.profiling.ProfiledLocalFilterComponentBase;
 
 /**

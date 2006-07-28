@@ -13,10 +13,9 @@
 
 package org.carrot2.matrix;
 
-import org.carrot2.matrix.MatrixUtils;
-
-import cern.colt.matrix.*;
-import junit.framework.*;
+import junit.framework.TestCase;
+import cern.colt.matrix.DoubleFactory2D;
+import cern.colt.matrix.DoubleMatrix2D;
 
 /**
  * Unit tests for the MatrixUtils class.

@@ -13,18 +13,16 @@
 
 package org.carrot2.matrix.factorization;
 
+import junit.framework.TestCase;
+import junitx.framework.ArrayAssert;
+
 import org.carrot2.matrix.MatrixUtils;
-import org.carrot2.matrix.factorization.*;
 import org.carrot2.matrix.factorization.seeding.SeedingStrategy;
 import org.carrot2.matrix.factorization.seeding.SeedingStrategyFactory;
 
-import junit.framework.TestCase;
-import junitx.framework.ArrayAssert;
 import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.NNIDoubleFactory2D;
 import cern.colt.matrix.impl.NNIInterface;
-
-import com.stachoodev.matrix.factorization.*;
 
 /**
  * @author Stanislaw Osinski
@@ -302,8 +300,6 @@ public class MatrixFactorizationTest extends TestCase
 
         /*
          * (non-Javadoc)
-         * 
-         * @see com.stachoodev.matrix.factorization.seeding.SeedingStrategyFactory#createSeedingStrategy()
          */
         public SeedingStrategy createSeedingStrategy()
         {

@@ -13,7 +13,7 @@
 
 package org.carrot2.matrix.factorization;
 
-import cern.colt.matrix.*;
+import cern.colt.matrix.DoubleMatrix2D;
 
 /**
  * @author Stanislaw Osinski
@@ -24,8 +24,6 @@ public class LocalNonnegativeMatrixFactorizationFactory extends
 {
     /*
      * (non-Javadoc)
-     * 
-     * @see com.stachoodev.matrix.factorization.MatrixFactorizationFactory#factorize(cern.colt.matrix.DoubleMatrix2D)
      */
     public MatrixFactorization factorize(DoubleMatrix2D A)
     {

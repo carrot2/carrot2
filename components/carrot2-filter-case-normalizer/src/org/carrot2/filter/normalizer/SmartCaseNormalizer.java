@@ -15,18 +15,14 @@ package org.carrot2.filter.normalizer;
 
 import java.util.*;
 
-import org.apache.commons.collections.map.*;
-
-import org.carrot2.core.clustering.*;
+import org.apache.commons.collections.map.Flat3Map;
+import org.carrot2.core.clustering.TokenizedDocument;
 import org.carrot2.core.linguistic.tokens.*;
 import org.carrot2.util.StringUtils;
 import org.carrot2.util.pools.ReusableObjectsFactory;
 import org.carrot2.util.pools.SoftReusableObjectsPool;
-
-import com.dawidweiss.carrot.util.common.*;
-import com.dawidweiss.carrot.util.common.pools.*;
-import org.carrot2.util.tokenizer.languages.*;
-import org.carrot2.util.tokenizer.parser.*;
+import org.carrot2.util.tokenizer.languages.MutableStemmedToken;
+import org.carrot2.util.tokenizer.parser.StringTypedToken;
 
 /**
  * Brings the case of all tokens in all input tokenized documents's titles and

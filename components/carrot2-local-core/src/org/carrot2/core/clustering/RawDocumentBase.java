@@ -17,8 +17,6 @@ import java.io.Serializable;
 
 import org.carrot2.util.PropertyProviderBase;
 
-import com.stachoodev.util.common.*;
-
 /**
  * An abstract implementation of some of the basic methods of the {@link
  * RawDocument} interface.

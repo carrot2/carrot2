@@ -13,7 +13,8 @@
 
 package cern.colt.matrix.impl;
 
-import nni.*;
+import nni.BLAS;
+import nni.LAPACK;
 
 /**
  * @author Stanislaw Osinski

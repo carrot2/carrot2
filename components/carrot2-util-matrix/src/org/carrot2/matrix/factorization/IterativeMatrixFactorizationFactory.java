@@ -15,8 +15,8 @@ package org.carrot2.matrix.factorization;
 
 import org.carrot2.matrix.factorization.seeding.*;
 
-import cern.colt.matrix.*;
-import com.stachoodev.matrix.factorization.seeding.*;
+import cern.colt.matrix.DoubleFactory2D;
+import cern.colt.matrix.NNIDoubleFactory2D;
 
 /**
  * TODO: refactor - get constants from factorization interfaces.

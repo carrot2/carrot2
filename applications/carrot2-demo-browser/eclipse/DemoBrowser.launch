@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
-<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="carrot2.demo.DemoSplash"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="/carrot2/demo/carrot2-splash.gif 3 carrot2.demo.DemoSwing"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.carrot2.demo.DemoSplash"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="/carrot2/demo/carrot2-splash.gif 3 org.carrot2.demo.DemoSwing"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="carrot2-demo-browser"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Djava.library.path=${resource_loc:/carrot2-demo-browser/lib/jdic_windows} -Dlog4j.configuration=file:///${resource_loc:/carrot2-demo-browser/src/res/log4j.properties}"/>
 <listAttribute key="org.eclipse.debug.ui.favoriteGroups">

@@ -13,9 +13,9 @@
 
 package org.carrot2.matrix.factorization;
 
-import cern.colt.function.*;
-import cern.colt.matrix.*;
-import cern.jet.math.*;
+import cern.colt.function.DoubleFunction;
+import cern.colt.matrix.DoubleMatrix2D;
+import cern.jet.math.Functions;
 
 /**
  * A concrete implementation of the MatrixFacrorization interface. This
@@ -42,8 +42,6 @@ public class NonnegativeMatrixFactorizationED extends
 
     /*
      * (non-Javadoc)
-     * 
-     * @see com.stachoodev.matrix.factorization.MatrixFactorizationBase#compute()
      */
     public void compute()
     {

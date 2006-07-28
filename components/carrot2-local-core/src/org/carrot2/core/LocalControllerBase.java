@@ -16,7 +16,7 @@ package org.carrot2.core;
 import java.util.*;
 
 import org.apache.commons.pool.*;
-import org.apache.commons.pool.impl.*;
+import org.apache.commons.pool.impl.GenericObjectPool;
 
 /**
  * A complete base implementation of the

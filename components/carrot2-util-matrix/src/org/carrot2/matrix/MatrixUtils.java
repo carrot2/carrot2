@@ -13,10 +13,11 @@
 
 package org.carrot2.matrix;
 
-import java.util.*;
+import java.util.Arrays;
 
-import cern.colt.list.*;
-import cern.colt.matrix.*;
+import cern.colt.list.DoubleArrayList;
+import cern.colt.list.IntArrayList;
+import cern.colt.matrix.DoubleMatrix2D;
 
 /**
  * Provides a set of useful Colt DoubleMatrix2D shorthands and utility methods.

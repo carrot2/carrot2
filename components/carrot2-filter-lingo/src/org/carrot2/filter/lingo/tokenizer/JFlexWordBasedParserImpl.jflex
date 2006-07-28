@@ -1,4 +1,4 @@
-package com.stachoodev.carrot.filter.lingo.tokenizer;
+package org.carrot2.filter.lingo.tokenizer;
 %%
 
 %class JFlexWordBasedParserImpl

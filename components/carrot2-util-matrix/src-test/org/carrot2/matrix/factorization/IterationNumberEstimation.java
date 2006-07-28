@@ -17,16 +17,12 @@ import java.io.*;
 import java.util.Random;
 
 import org.carrot2.matrix.MatrixUtils;
-import org.carrot2.matrix.factorization.*;
 import org.carrot2.matrix.factorization.seeding.*;
 import org.carrot2.util.StringUtils;
 
 import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.NNIDoubleFactory2D;
 import cern.colt.matrix.linalg.Algebra;
-
-import com.stachoodev.matrix.factorization.*;
-import com.stachoodev.matrix.factorization.seeding.*;
 
 /**
  * @author Stanislaw Osinski

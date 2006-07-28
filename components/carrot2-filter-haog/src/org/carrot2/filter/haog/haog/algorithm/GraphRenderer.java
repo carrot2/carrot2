@@ -16,11 +16,13 @@ package org.carrot2.filter.haog.haog.algorithm;
 import java.util.List;
 
 import org.carrot2.core.ProcessingException;
+import org.carrot2.core.clustering.RawCluster;
 import org.carrot2.core.clustering.RawClustersConsumer;
 
 /**
- * This class contains algorithm which creates {@link com.dawidweiss.carrot
- * .core.local.clustering.RawCluster} from list of kernel vertices.
+ * This class contains algorithm which creates 
+ * {@link RawCluster}s from list of kernel vertices.
+ * 
  * @author Karol Gołembniak
  */
 public interface GraphRenderer {
