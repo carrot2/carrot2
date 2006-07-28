@@ -21,8 +21,8 @@
 			<classpath location="${carrot2.cvs.dir}/lib/compile-time/JFlex.jar" />
 		</taskdef>
 
-		<jflex file="src/com/dawidweiss/carrot/util/tokenizer/parser/jflex/JFlexWordBasedParserImpl.jflex"
-			outdir="src/com/dawidweiss/carrot/util/tokenizer/parser/jflex/"/>
+		<jflex file="src/org/carrot2/util/tokenizer/parser/jflex/JFlexWordBasedParserImpl.jflex"
+			outdir="src/org/carrot2/util/tokenizer/parser/jflex/"/>
 	</target>
 	
 </project>

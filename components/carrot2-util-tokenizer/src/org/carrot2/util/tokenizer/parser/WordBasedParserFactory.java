@@ -13,10 +13,10 @@
 
 package org.carrot2.util.tokenizer.parser;
 
-import org.apache.commons.pool.*;
-import org.apache.commons.pool.impl.*;
-
-import org.carrot2.util.tokenizer.parser.jflex.*;
+import org.apache.commons.pool.BasePoolableObjectFactory;
+import org.apache.commons.pool.ObjectPool;
+import org.apache.commons.pool.impl.SoftReferenceObjectPool;
+import org.carrot2.util.tokenizer.parser.jflex.JFlexWordBasedParser;
 
 /**
  * Returns instances of word based parsers. Use concrete factory

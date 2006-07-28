@@ -14,13 +14,14 @@
 package org.carrot2.util.tokenizer.languages;
 
 
-import java.util.*;
+import java.util.Set;
 
-import org.apache.commons.pool.*;
-import org.apache.commons.pool.impl.*;
-
+import org.apache.commons.pool.BasePoolableObjectFactory;
+import org.apache.commons.pool.PoolableObjectFactory;
+import org.apache.commons.pool.impl.SoftReferenceObjectPool;
 import org.carrot2.core.linguistic.*;
-import org.carrot2.util.tokenizer.parser.*;
+import org.carrot2.util.tokenizer.parser.WordBasedParserBase;
+import org.carrot2.util.tokenizer.parser.WordBasedParserFactory;
 
 
 /**

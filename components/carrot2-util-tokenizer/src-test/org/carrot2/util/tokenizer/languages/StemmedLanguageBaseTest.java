@@ -13,16 +13,16 @@
 
 package org.carrot2.util.tokenizer.languages;
 
-import java.io.*;
+import java.io.StringReader;
 
-import junit.framework.*;
+import junit.framework.TestCase;
 
-import org.carrot2.core.linguistic.*;
-import org.carrot2.core.linguistic.tokens.*;
+import org.carrot2.core.linguistic.LanguageTokenizer;
+import org.carrot2.core.linguistic.Stemmer;
+import org.carrot2.core.linguistic.tokens.StemmedToken;
+import org.carrot2.core.linguistic.tokens.Token;
 import org.carrot2.stemming.snowball.SnowballStemmersFactory;
-
-import com.dawidweiss.carrot.filter.snowball.*;
-import org.carrot2.util.tokenizer.parser.*;
+import org.carrot2.util.tokenizer.parser.WordBasedParserFactory;
 
 /**
  * Tests of the {@link StemmedLanguageBase} base class. 

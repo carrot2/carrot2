@@ -13,9 +13,10 @@
 
 package org.carrot2.util.tokenizer.parser.jflex;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.StringReader;
 
-import junit.framework.*;
+import junit.framework.TestCase;
 
 /**
  * Test JavaCC tokenizer definition and the Carrot2 wrapper.

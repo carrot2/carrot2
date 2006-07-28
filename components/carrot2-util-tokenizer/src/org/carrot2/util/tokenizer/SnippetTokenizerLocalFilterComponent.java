@@ -17,7 +17,7 @@ import java.util.*;
 
 import org.carrot2.core.*;
 import org.carrot2.core.clustering.*;
-import org.carrot2.core.profiling.*;
+import org.carrot2.core.profiling.ProfiledLocalFilterComponentBase;
 
 /**
  * Note: there is no support for tokenizing document content yet.

@@ -14,12 +14,12 @@
 package org.carrot2.util.tokenizer.parser;
 
 
-import java.io.*;
+import java.io.StringReader;
 
-import junit.framework.*;
+import junit.framework.TestCase;
 
-import org.carrot2.core.linguistic.tokens.*;
-import org.carrot2.util.tokenizer.parser.jflex.*;
+import org.carrot2.core.linguistic.tokens.TypedToken;
+import org.carrot2.util.tokenizer.parser.jflex.JFlexWordBasedParser;
 
 
 /**

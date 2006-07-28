@@ -13,9 +13,9 @@
 
 package org.carrot2.util.tokenizer;
 
-import org.carrot2.core.clustering.*;
+import junit.framework.TestCase;
 
-import junit.framework.*;
+import org.carrot2.core.clustering.*;
 
 /**
  * A simple SnippetTokenizer test.

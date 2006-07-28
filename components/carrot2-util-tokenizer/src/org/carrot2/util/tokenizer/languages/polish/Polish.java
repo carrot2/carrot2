@@ -13,15 +13,13 @@
 
 package org.carrot2.util.tokenizer.languages.polish;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.util.Set;
 
 import org.carrot2.core.linguistic.*;
 import org.carrot2.util.WordLoadingUtils;
-
-import org.carrot2.util.tokenizer.languages.*;
-import org.carrot2.util.tokenizer.parser.*;
-import com.stachoodev.util.common.*;
+import org.carrot2.util.tokenizer.languages.StemmedLanguageBase;
+import org.carrot2.util.tokenizer.parser.WordBasedParserFactory;
 
 /**
  * An implementation of {@link Language} interface
@@ -44,14 +42,11 @@ public class Polish extends StemmedLanguageBase {
      * Load stopwords from an associated resource.
      */
     static {
-        String resourceName = "/com/dawidweiss/carrot/util/tokenizer/languages/polish/stopwords.pl";
         try {
-			stopwords = WordLoadingUtils.loadWordSet(
-                    resourceName, Polish.class.getResourceAsStream(resourceName));
-		} catch (IOException e) {
-            throw new RuntimeException("Could not load the required" +
-                    "resource: " + resourceName);
-		}
+            stopwords = WordLoadingUtils.loadWordSet("stopwords.pl");
+        } catch (IOException e) {
+            throw new RuntimeException("Could not initialize class.");
+        }
     }
 
     

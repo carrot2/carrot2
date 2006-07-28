@@ -15,10 +15,10 @@ package org.carrot2.util.tokenizer.languages;
 
 import java.io.StringReader;
 
+import junit.framework.TestCase;
+
 import org.carrot2.core.linguistic.LanguageTokenizer;
 import org.carrot2.core.linguistic.tokens.Token;
-
-import junit.framework.TestCase;
 
 /**
  * Tests of the {@link LanguageBase} base class. 

@@ -13,13 +13,12 @@
 
 package org.carrot2.util.tokenizer.parser.jflex;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.Reader;
 
-import org.carrot2.core.linguistic.tokens.*;
+import org.carrot2.core.linguistic.tokens.TypedToken;
 import org.carrot2.util.pools.SoftReusableObjectsPool;
-
-import com.dawidweiss.carrot.util.common.pools.*;
-import org.carrot2.util.tokenizer.parser.*;
+import org.carrot2.util.tokenizer.parser.WordBasedParserBase;
 
 /**
  * Tokenizer class splits a string into tokens like word, e-mail address, web
