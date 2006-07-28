@@ -16,14 +16,11 @@ package org.carrot2.matrix.factorization;
 import java.io.PrintStream;
 import java.util.Random;
 
-import org.carrot2.matrix.factorization.*;
 import org.carrot2.util.ElapsedTimeTimer;
 
 import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.NNIDoubleFactory2D;
 import cern.colt.matrix.impl.NNIInterface;
-
-import com.stachoodev.matrix.factorization.*;
 
 /**
  * Benchmarks the matrix factorisation algorithms.

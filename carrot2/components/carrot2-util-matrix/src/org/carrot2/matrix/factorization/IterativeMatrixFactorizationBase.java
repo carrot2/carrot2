@@ -16,12 +16,11 @@ package org.carrot2.matrix.factorization;
 import org.carrot2.matrix.factorization.seeding.RandomSeedingStrategy;
 import org.carrot2.matrix.factorization.seeding.SeedingStrategy;
 
-import cern.colt.matrix.*;
-import cern.colt.matrix.doublealgo.*;
-import cern.colt.matrix.linalg.*;
-import cern.jet.math.*;
-
-import com.stachoodev.matrix.factorization.seeding.*;
+import cern.colt.matrix.DoubleMatrix2D;
+import cern.colt.matrix.NNIDoubleFactory2D;
+import cern.colt.matrix.doublealgo.Sorting;
+import cern.colt.matrix.linalg.Algebra;
+import cern.jet.math.Functions;
 
 /**
  * @author Stanislaw Osinski
@@ -252,8 +251,6 @@ public abstract class IterativeMatrixFactorizationBase extends
 
     /*
      * (non-Javadoc)
-     * 
-     * @see com.stachoodev.matrix.factorization.IterativeMatrixFactorization#getIterationsCompleted()
      */
     public int getIterationsCompleted()
     {

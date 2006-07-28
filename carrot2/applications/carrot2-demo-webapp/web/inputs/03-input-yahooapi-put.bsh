@@ -1,6 +1,6 @@
 import org.carrot2.core.*;
 import org.carrot2.core.controller.*;
-import com.dawidweiss.carrot.input.yahoo.*;
+import org.carrot2.input.yahooapi.*;
 
 // This script requires a global variable 'inputsDirFile', which 
 // is registered by the webapp.

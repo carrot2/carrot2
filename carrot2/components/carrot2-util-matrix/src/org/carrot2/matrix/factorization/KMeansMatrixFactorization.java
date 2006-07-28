@@ -15,10 +15,9 @@ package org.carrot2.matrix.factorization;
 
 import org.carrot2.matrix.MatrixUtils;
 
-import com.stachoodev.matrix.*;
-
-import cern.colt.matrix.*;
-import cern.jet.math.*;
+import cern.colt.matrix.DoubleMatrix2D;
+import cern.jet.math.Functions;
+import cern.jet.math.Mult;
 
 /**
  * @author Stanislaw Osinski
@@ -43,8 +42,6 @@ public class KMeansMatrixFactorization extends
 
     /*
      * (non-Javadoc)
-     * 
-     * @see com.stachoodev.matrix.factorization.MatrixFactorizationBase#compute()
      */
     public void compute()
     {

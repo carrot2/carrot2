@@ -15,12 +15,11 @@ package org.carrot2.core.impl;
 import java.io.*;
 import java.util.*;
 
+import org.carrot2.core.*;
+import org.carrot2.core.clustering.*;
 import org.dom4j.*;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
-
-import org.carrot2.core.*;
-import org.carrot2.core.clustering.*;
 
 /**
  * This component acts as an interceptor in the processing chain and saves

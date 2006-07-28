@@ -173,8 +173,6 @@ public class ODPIndexer implements TopicIndexBuilderListener
 
     /*
      * (non-Javadoc)
-     * 
-     * @see com.stachoodev.carrot.odp.index.TopicIndexBuilderListener#topicIndexed()
      */
     public void topicIndexed()
     {

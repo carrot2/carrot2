@@ -13,8 +13,9 @@
 
 package cern.colt.matrix.impl;
 
-import cern.colt.matrix.*;
-import nni.*;
+import nni.BLAS;
+import cern.colt.matrix.DoubleMatrix1D;
+import cern.colt.matrix.DoubleMatrix2D;
 
 /**
  * A very crude native implementation of Colt's @link cern.colt.matrix.DoubleMatrix2D 

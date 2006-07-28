@@ -13,15 +13,15 @@
 
 package org.carrot2.matrix;
 
-import java.util.*;
+import java.util.Arrays;
 
-import org.carrot2.matrix.EigenvalueCalculator;
-
-import junit.framework.*;
-import junitx.framework.*;
-import cern.colt.matrix.*;
-import cern.colt.matrix.impl.*;
-import cern.colt.matrix.linalg.*;
+import junit.framework.TestCase;
+import junitx.framework.ArrayAssert;
+import cern.colt.matrix.DoubleMatrix2D;
+import cern.colt.matrix.NNIDoubleFactory2D;
+import cern.colt.matrix.impl.DenseDoubleMatrix2D;
+import cern.colt.matrix.impl.NNIInterface;
+import cern.colt.matrix.linalg.EigenvalueDecomposition;
 
 /**
  * @author Stanislaw Osinski

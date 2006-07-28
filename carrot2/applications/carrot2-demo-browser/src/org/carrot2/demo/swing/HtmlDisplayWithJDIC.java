@@ -24,7 +24,7 @@ import org.apache.log4j.Logger;
 import org.jdesktop.jdic.browser.*;
 
 /**
- * An implementation of {@link carrot2.demo.swing.HtmlDisplay} using
+ * An implementation of {@link org.carrot2.demo.swing.HtmlDisplay} using
  * JDIC project's native component.
  * 
  * @author Dawid Weiss

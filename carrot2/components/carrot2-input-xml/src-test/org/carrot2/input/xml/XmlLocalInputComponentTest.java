@@ -131,17 +131,18 @@ public class XmlLocalInputComponentTest extends TestCase {
         
         String url = this.getClass().getResource("test1.xml").toExternalForm();
         // replace part of the path (a package name) with an attribute
-        if (url.indexOf("dawidweiss") >= 0) {
-            url = url.substring(0, url.indexOf("dawidweiss"))
+        if (url.indexOf("carrot2") >= 0) {
+            url = url.substring(0, url.indexOf("carrot2"))
             	+ "${param}"
-            	+ url.substring(url.indexOf("dawidweiss") + "dawidweiss".length());
+            	+ url.substring(url.indexOf("carrot2") + "carrot2".length());
         } else {
-            throw new RuntimeException("Wrong test setup!");
+            throw new RuntimeException("Wrong test setup? (url: "
+                    + url + ")");
         }
         
         params.put("source", url);
         params.put("xslt", this.getClass().getResource("test1.xsl"));
-        params.put("param", "dawidweiss");
+        params.put("param", "carrot2");
         List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, params).getQueryResult()).documents;
 
         // there should be 4 documents in the result.
@@ -151,15 +152,15 @@ public class XmlLocalInputComponentTest extends TestCase {
 	public void testTransformationWithReplaceableQuery() throws Exception {
         LocalControllerBase controller = setUpController();
 
-        String query = "dawidweiss";
+        String query = "carrot2";
         HashMap params = new HashMap();
         
         String url = this.getClass().getResource("test1.xml").toExternalForm();
         // replace part of the path (a package name) with an attribute
-        if (url.indexOf("dawidweiss") >= 0) {
-            url = url.substring(0, url.indexOf("dawidweiss"))
+        if (url.indexOf("carrot2") >= 0) {
+            url = url.substring(0, url.indexOf("carrot2"))
             	+ "${query}"
-            	+ url.substring(url.indexOf("dawidweiss") + "dawidweiss".length());
+            	+ url.substring(url.indexOf("carrot2") + "carrot2".length());
         } else {
             throw new RuntimeException("Wrong test setup!");
         }

@@ -718,7 +718,7 @@ the default path: ${java.home}/lib
 
   <target name="javadoc.on">
     <property name="javadoc.on" value="true" />
-    <property name="javadoc.packages" value="com.dawidweiss.carrot.*" />
+    <property name="javadoc.packages" value="org.carrot2.*" />
   </target>
 
   <target name="javadoc.internal" if="javadoc.on" depends="prepare">

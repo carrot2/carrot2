@@ -1,8 +1,7 @@
 
 import org.carrot2.core.*;
 import org.carrot2.core.controller.*;
-import com.stachoodev.carrot.filter.normalizer.*;
-import com.stachoodev.carrot.filter.normalizer.local.*;
+import org.carrot2.filter.normalizer.*;
 
 factory = new LocalComponentFactory() {
     public LocalComponent getInstance() {

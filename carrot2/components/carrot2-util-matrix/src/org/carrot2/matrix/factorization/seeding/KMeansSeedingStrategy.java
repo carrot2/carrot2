@@ -15,8 +15,7 @@ package org.carrot2.matrix.factorization.seeding;
 
 import org.carrot2.matrix.factorization.KMeansMatrixFactorization;
 
-import com.stachoodev.matrix.factorization.*;
-import cern.colt.matrix.*;
+import cern.colt.matrix.DoubleMatrix2D;
 
 /**
  * Matrix seeding based on the k-means algorithms.
@@ -50,9 +49,6 @@ public class KMeansSeedingStrategy implements SeedingStrategy
 
     /*
      * (non-Javadoc)
-     * 
-     * @see com.stachoodev.matrix.factorization.SeedingStrategy#seed(cern.colt.matrix.DoubleMatrix2D,
-     *      cern.colt.matrix.DoubleMatrix2D)
      */
     public void seed(DoubleMatrix2D A, DoubleMatrix2D U, DoubleMatrix2D V)
     {

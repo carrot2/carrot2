@@ -16,12 +16,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
+import org.carrot2.core.*;
+import org.carrot2.core.clustering.*;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
-
-import org.carrot2.core.*;
-import org.carrot2.core.clustering.*;
 
 /**
  * Passes down the processing chain query results read from an XML stream in the

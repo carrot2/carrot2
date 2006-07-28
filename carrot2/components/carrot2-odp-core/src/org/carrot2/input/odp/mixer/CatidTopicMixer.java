@@ -15,9 +15,10 @@ package org.carrot2.input.odp.mixer;
 
 import java.util.*;
 
-import com.dawidweiss.carrot.util.common.*;
-import org.carrot2.input.odp.*;
-import org.carrot2.input.odp.index.*;
+import org.carrot2.input.odp.ODPIndex;
+import org.carrot2.input.odp.Topic;
+import org.carrot2.input.odp.index.Location;
+import org.carrot2.input.odp.index.PrimaryTopicIndex;
 import org.carrot2.util.StringUtils;
 
 /**

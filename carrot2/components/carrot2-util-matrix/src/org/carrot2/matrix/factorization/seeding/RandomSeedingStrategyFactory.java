@@ -46,8 +46,6 @@ public class RandomSeedingStrategyFactory implements SeedingStrategyFactory
 
     /*
      * (non-Javadoc)
-     * 
-     * @see com.stachoodev.matrix.factorization.seeding.SeedingStrategyFactory#createSeedingStrategy()
      */
     public SeedingStrategy createSeedingStrategy()
     {

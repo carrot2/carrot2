@@ -16,8 +16,6 @@ package org.carrot2.core.linguistic.tokens;
 import org.carrot2.util.PropertyHelper;
 import org.carrot2.util.PropertyProvider;
 
-import com.stachoodev.util.common.*;
-
 /**
  * A class that wraps around any
  * {@link org.carrot2.core.linguistic.tokens.Token}and adds to

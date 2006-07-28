@@ -38,8 +38,6 @@ public class PathTopicIndexBuilder implements TopicIndexBuilder
 
     /*
      * (non-Javadoc)
-     * 
-     * @see com.stachoodev.carrot.odp.index.TopicIndexBuilder#index(com.stachoodev.carrot.odp.Topic)
      */
     public void index(Topic topic)
     {
@@ -48,8 +46,6 @@ public class PathTopicIndexBuilder implements TopicIndexBuilder
 
     /*
      * (non-Javadoc)
-     * 
-     * @see com.stachoodev.carrot.odp.index.TopicIndexBuilder#getTopicIndex()
      */
     public TopicIndex getTopicIndex()
     {
@@ -58,8 +54,6 @@ public class PathTopicIndexBuilder implements TopicIndexBuilder
 
     /*
      * (non-Javadoc)
-     * 
-     * @see com.stachoodev.carrot.odp.index.TopicIndexBuilder#initialize()
      */
     public void initialize()
     {

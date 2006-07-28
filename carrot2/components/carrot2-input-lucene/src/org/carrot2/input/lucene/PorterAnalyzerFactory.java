@@ -27,16 +27,10 @@ public class PorterAnalyzerFactory implements AnalyzerFactory
     /** Public instance */
     public final static AnalyzerFactory INSTANCE = new PorterAnalyzerFactory();
     
-    /* (non-Javadoc)
-     * @see com.carrot.input.lucene.AnalyzerFactory#getInstance()
-     */
     public Analyzer getInstance()
     {
         return new StandardAnalyzer()
         {
-            /* (non-Javadoc)
-             * @see org.apache.lucene.analysis.Analyzer#tokenStream(java.lang.String, java.io.Reader)
-             */
             public TokenStream tokenStream(String fieldName, Reader reader)
             {
                 return new PorterStemFilter(super.tokenStream(fieldName,

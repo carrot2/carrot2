@@ -13,7 +13,7 @@
 
 package org.carrot2.matrix.factorization;
 
-import cern.colt.matrix.*;
+import cern.colt.matrix.DoubleMatrix2D;
 
 /**
  * @author Stanislaw Osinski

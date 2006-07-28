@@ -13,16 +13,15 @@
 
 package org.carrot2.matrix;
 
-import java.io.*;
-import java.text.*;
-import java.util.*;
+import java.io.PrintStream;
+import java.text.NumberFormat;
+import java.util.Random;
 
 import org.carrot2.matrix.factorization.*;
 
-import cern.colt.matrix.*;
-import cern.colt.matrix.impl.*;
-
-import com.stachoodev.matrix.factorization.*;
+import cern.colt.matrix.DoubleMatrix2D;
+import cern.colt.matrix.NNIDoubleFactory2D;
+import cern.colt.matrix.impl.NNIInterface;
 
 /**
  * Quickly checks if the native BLAS libraries can be loaded and what the

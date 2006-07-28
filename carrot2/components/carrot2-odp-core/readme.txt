@@ -4,8 +4,7 @@ Carrot2 Open Directory Project Core Interface
 This package provides an interface for (limited for the time being) indexing and 
 searching of the Open Directory Project database. The ODP Carrot2 local input 
 component serves as a source of document snippets drawn from the ODP directory.
-See JavaDoc for the com.stachoodev.carrot.input.odp.local.ODPLocalInputComponent
-for more details.
+See JavaDoc for the ODPLocalInputComponent class for more details.
 
 The following ODP indices are available
 
@@ -26,8 +25,8 @@ http://ophelia.cs.put.poznan.pl/~sosinski/carrot/odp-cshpark.zip
 To use the index simply unzip the file onto a folder on local drive, and point
 the tools requiring an ODP index to that folder.
 
-If you wish to build your own index, use the run the 
-com.stachoodev.carrot.odp.tools.ODPIndexer class with two parameters:
+If you wish to build your own index, use the run script 
+(ODPIndexer class) with two parameters:
 
 ODPIndexer odp-xml-input-file index-location
 

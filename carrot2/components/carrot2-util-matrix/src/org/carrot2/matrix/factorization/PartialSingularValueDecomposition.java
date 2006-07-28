@@ -13,10 +13,11 @@
 
 package org.carrot2.matrix.factorization;
 
-import nni.*;
-import cern.colt.matrix.*;
+import nni.LAPACK;
+import cern.colt.matrix.DoubleMatrix2D;
+import cern.colt.matrix.NNIDoubleFactory2D;
 import cern.colt.matrix.impl.*;
-import cern.colt.matrix.linalg.*;
+import cern.colt.matrix.linalg.SingularValueDecomposition;
 
 /**
  * @author Stanislaw Osinski
@@ -57,8 +58,6 @@ public class PartialSingularValueDecomposition extends MatrixFactorizationBase
 
     /*
      * (non-Javadoc)
-     * 
-     * @see com.stachoodev.matrix.factorization.MatrixFactorizationBase#compute()
      */
     public void compute()
     {

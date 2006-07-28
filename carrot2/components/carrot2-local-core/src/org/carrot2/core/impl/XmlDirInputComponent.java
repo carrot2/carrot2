@@ -14,7 +14,8 @@ package org.carrot2.core.impl;
 
 import java.io.*;
 
-import org.carrot2.core.*;
+import org.carrot2.core.ProcessingException;
+import org.carrot2.core.RequestContext;
 
 /**
  * Opens XML files in a local filesystem.

@@ -18,9 +18,7 @@ import java.util.*;
 import org.carrot2.matrix.factorization.seeding.KMeansSeedingStrategyFactory;
 import org.carrot2.matrix.factorization.seeding.RandomSeedingStrategyFactory;
 
-import com.stachoodev.matrix.factorization.seeding.*;
-
-import cern.colt.matrix.*;
+import cern.colt.matrix.DoubleMatrix2D;
 
 /**
  * This class helps to guesstimate the number of iterations for iterative

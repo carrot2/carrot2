@@ -22,7 +22,7 @@ import com.jgoodies.forms.layout.FormLayout;
 
 
 /**
- * A settings panel for {@link carrot2.demo.settings.FuzzyAntsSettings}. 
+ * A settings panel for {@link org.carrot2.demo.settings.FuzzyAntsSettings}. 
  *  
  * @author Dawid Weiss
  */

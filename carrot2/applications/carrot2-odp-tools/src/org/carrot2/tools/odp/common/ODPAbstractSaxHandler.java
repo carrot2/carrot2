@@ -276,9 +276,6 @@ public abstract class ODPAbstractSaxHandler extends DefaultHandler implements
 
     /*
      * (non-Javadoc)
-     * 
-     * @see com.stachoodev.util.common.PropertyProvider#getDoubleProperty(java.lang.String,
-     *      double)
      */
     public double getDoubleProperty(String propertyName, double defaultValue)
     {
@@ -287,9 +284,6 @@ public abstract class ODPAbstractSaxHandler extends DefaultHandler implements
 
     /*
      * (non-Javadoc)
-     * 
-     * @see com.stachoodev.util.common.PropertyProvider#getIntProperty(java.lang.String,
-     *      int)
      */
     public int getIntProperty(String propertyName, int defaultValue)
     {
@@ -298,8 +292,6 @@ public abstract class ODPAbstractSaxHandler extends DefaultHandler implements
 
     /*
      * (non-Javadoc)
-     * 
-     * @see com.stachoodev.util.common.PropertyProvider#getProperty(java.lang.String)
      */
     public Object getProperty(String propertyName)
     {
@@ -308,9 +300,6 @@ public abstract class ODPAbstractSaxHandler extends DefaultHandler implements
 
     /*
      * (non-Javadoc)
-     * 
-     * @see com.stachoodev.util.common.PropertyProvider#setDoubleProperty(java.lang.String,
-     *      double)
      */
     public Object setDoubleProperty(String propertyName, double value)
     {
@@ -319,9 +308,6 @@ public abstract class ODPAbstractSaxHandler extends DefaultHandler implements
 
     /*
      * (non-Javadoc)
-     * 
-     * @see com.stachoodev.util.common.PropertyProvider#setIntProperty(java.lang.String,
-     *      int)
      */
     public Object setIntProperty(String propertyName, int value)
     {
@@ -330,9 +316,6 @@ public abstract class ODPAbstractSaxHandler extends DefaultHandler implements
 
     /*
      * (non-Javadoc)
-     * 
-     * @see com.stachoodev.util.common.PropertyProvider#setProperty(java.lang.String,
-     *      java.lang.Object)
      */
     public Object setProperty(String propertyName, Object property)
     {

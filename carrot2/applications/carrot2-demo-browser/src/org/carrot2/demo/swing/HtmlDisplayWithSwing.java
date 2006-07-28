@@ -25,7 +25,7 @@ import javax.swing.text.*;
 import org.carrot2.core.clustering.RawDocument;
 
 /**
- * An implementation of {@link carrot2.demo.swing.HtmlDisplay} using
+ * An implementation of {@link org.carrot2.demo.swing.HtmlDisplay} using
  * pure Java.
  * 
  * @author Dawid Weiss

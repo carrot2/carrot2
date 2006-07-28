@@ -13,9 +13,9 @@
 
 package org.carrot2.core.linguistic;
 
-import org.carrot2.core.linguistic.tokens.Token;
-
 import java.io.Reader;
+
+import org.carrot2.core.linguistic.tokens.Token;
 
 
 /**
