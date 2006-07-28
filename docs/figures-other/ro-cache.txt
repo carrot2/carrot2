@@ -1,7 +1,0 @@
-<container
-    implementation="com.dawidweiss.carrot.controller
-                    .carrot2.process.cache.file.ZIPCachedQueriesContainer">
-    <context-relative-dir>WEB-INF/precached-queries</context-relative-dir>
-    <read-only>true</read-only>
-</container>
-
