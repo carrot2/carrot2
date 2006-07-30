@@ -11,6 +11,10 @@
     <link rel="stylesheet" href="{$skinuri}/css/documents.css" />
   </xsl:template>
     
+  <xsl:template name="on-load">
+    <xsl:text>javascript:parent.setProgress('docs-progress', false);</xsl:text>
+  </xsl:template>
+
   <xsl:template match="searchresult[@type='documents']">
     <div id="documents">
       <xsl:apply-templates />
