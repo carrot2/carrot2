@@ -28,8 +28,6 @@ Must have:
 - Move command line applications from the commercial repository to
   the OS repository (D)
 
-- Update Firefox/Mozilla search plugin to work with the new webapp (D?)
-
 Nice to have:
 
 - Add OpenSearch Descriptor support for carrot2-input-opensearch?
