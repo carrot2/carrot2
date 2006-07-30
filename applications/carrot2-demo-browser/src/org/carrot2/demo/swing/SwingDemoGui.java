@@ -343,7 +343,8 @@ public class SwingDemoGui implements DemoGuiDelegate {
 
         final CellConstraints cc = new CellConstraints();
 
-        JLabel queryLabel = new JLabel("Query:");
+        JLabel queryLabel = new JLabel("Query:", SwingConstants.RIGHT);
+        queryLabel.setPreferredSize(new Dimension(42, queryLabel.getPreferredSize().height));
         topPanel.add(queryLabel, cc.xywh(1,1,1,1));
         
         queryField = new JTextField();
@@ -361,7 +362,7 @@ public class SwingDemoGui implements DemoGuiDelegate {
                 "pref");
         JPanel detailsPanel = new JPanel(layout2);
         detailsPanel.setOpaque(false);
-        topPanel.add(detailsPanel, cc.xywh(3,3,1,1, CellConstraints.RIGHT, CellConstraints.DEFAULT));
+        topPanel.add(detailsPanel, cc.xywh(1,3,2,1, CellConstraints.LEFT, CellConstraints.DEFAULT));
 
         this.processSettingsButton = new JButton("Settings");
         processSettingsButton.setToolTipText("Displays process settings window. Disabled if no settings.");
@@ -377,22 +378,10 @@ public class SwingDemoGui implements DemoGuiDelegate {
         });
         detailsPanel.add(processSettingsButton, cc.xy(5,1, CellConstraints.DEFAULT, CellConstraints.FILL));
 
-        detailsPanel.add(new JLabel("Process:"), cc.xy(1,1));
+        JLabel processLabel = new JLabel("Process:", SwingConstants.RIGHT);
+        processLabel.setPreferredSize(queryLabel.getPreferredSize());
+        detailsPanel.add(processLabel, cc.xy(1,1));
         this.processComboBox = new JComboBox();
-        if (HtmlDisplay.isNativeBrowserUsed()) {
-            // QUICKFIX: native JDIC browser always overlaps
-            // the dropbox, so we hide it for a moment.
-            this.processComboBox.addPopupMenuListener(new PopupMenuListener() {
-                public void popupMenuCanceled(PopupMenuEvent e) {/* nothing */}
-                public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-                    tabbedPane.setVisible(true);
-                }
-    
-                public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-                    tabbedPane.setVisible(false);
-                }
-            });
-        }
         this.processComboBox.setToolTipText("A chain of components used to process the query.");
         this.processComboBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -400,6 +389,8 @@ public class SwingDemoGui implements DemoGuiDelegate {
                 processSettingsButton.setVisible(demoContext.getSettingsObject(processId).hasSettings());
             }
         });
+        // Hack: We need to hard-code the width to avoid JDIC overlap problem...
+        processComboBox.setPreferredSize(new Dimension(250, processComboBox.getPreferredSize().height));
         detailsPanel.add(processComboBox, cc.xy(3,1, CellConstraints.DEFAULT, CellConstraints.FILL));
 
         detailsPanel.add(new JLabel("Results:"), cc.xy(7,1));
