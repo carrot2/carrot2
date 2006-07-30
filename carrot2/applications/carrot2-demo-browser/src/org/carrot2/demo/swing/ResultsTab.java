@@ -340,6 +340,8 @@ public class ResultsTab extends JPanel {
             subPanel.add(panelBuilder.getPanel(), BorderLayout.EAST);
         }
 
+        // Hack: We need to hard-code the min-width to avoid JDIC overlap problem...
+        leftPanel.setMinimumSize(new Dimension(300, leftPanel.getMinimumSize().height));
         JSplitPane splitPane = new JSplitPane(
                 JSplitPane.HORIZONTAL_SPLIT,
                 leftPanel, subPanel);
