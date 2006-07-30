@@ -370,3 +370,21 @@ td.more-icon {
   vertical-align: top;
   padding-right: 10px;
 }
+
+div#clusters-progress, div#docs-progress {
+  width: 100px; 
+  color: gray; 
+  text-align:right; 
+  font-size: 12px; 
+  font-weight: bold; 
+  position: absolute; 
+  margin-top: -3px;
+}
+
+div#clusters-progress {
+  margin-left: 158px; 
+}
+
+div#docs-progress {
+   right: 37px;
+}

@@ -99,10 +99,10 @@ function insertNewProcess(processId)
 }
 
 /* Disable/enable progress bar */
-function setProgress(enabled) {
+function setProgress(id, enabled) {
 	if (enabled) {
-		show('progress');
+		show(id);
 	} else {
-		hide('progress');
+		hide(id);
 	}
 }

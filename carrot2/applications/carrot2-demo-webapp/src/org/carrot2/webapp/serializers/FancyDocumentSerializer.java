@@ -45,7 +45,7 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer {
                 "<link href=\"" + base + "/css/common.css\" type=\"text/css\" rel=\"stylesheet\">\r\n" + 
                 "<link href=\"" + base + "/css/documents.css\" rel=\"stylesheet\">\r\n" + 
                 "</head>" +
-                "<body style=\"height: 100%;\">\r\n" + 
+                "<body style=\"height: 100%;\" onload=\"parent.setProgress('docs-progress', false);\">\r\n" + 
                 "<div id=\"documents\">");
     }
 

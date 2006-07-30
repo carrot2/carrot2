@@ -10,7 +10,7 @@
   <xsl:param name="more-increment">8</xsl:param>
 
   <xsl:template name="on-load">
-    <xsl:text>javascript:parent.setProgress(false);</xsl:text>
+    <xsl:text>javascript:parent.setProgress('clusters-progress', false);</xsl:text>
   </xsl:template>
 
   <xsl:template name="head-insert">
