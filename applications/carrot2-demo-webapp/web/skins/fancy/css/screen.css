@@ -98,6 +98,14 @@ html > body img.tab-img {
   bottom: 2px;
 }
 
+a.tab-link {
+  text-decoration: none;
+  color: #94938F;
+}
+
+a.tab-link:hover {
+  color: #404040;
+}
 
 /** Borders */
 

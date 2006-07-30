@@ -47,27 +47,8 @@
 
   <!-- Emit the main page -->
   <xsl:template match="meta" mode="no-query">
-    <script type="text/javascript" language="javascript">&lt;!--
-    var preload = new Array();
-    if (document.images)
-    {
-      var skinuri = "<xsl:value-of select='$skinuri' />";
-      var preload = ["/img/progress.gif", 
-                     "/img/tab-active-lead-in.gif", 
-                     "/img/tab-active-lead-out.gif",
-                     "/img/tab-active-passive-link.gif",
-                     "/img/tab-passive-active-link.gif",
-                     "/img/tab-passive-lead-in.gif",
-                     "/img/tab-passive-lead-out.gif",
-                     "/img/tab-passive-passive-link.gif" ];
-      for (i = 0; i &lt; preload.length; i++) {
-          var img = new Image();
-          img.src = skinuri + preload[i];
-          preload[i] = img;
-      }
-    }
-    //--> </script>
 
+    <xsl:call-template name="preload-script" />
     <xsl:call-template name="custom-results-utils" />
     <div><!-- empty --></div>
     <table id="startup-main">
@@ -98,6 +79,7 @@
   <!-- Emit the results page -->
   <xsl:template match="meta" mode="query">
       
+    <xsl:call-template name="preload-script" />
     <table style="width: 100%; height: 100%">
       <tr>
         <td style="padding-top: 17px">
@@ -255,11 +237,26 @@
                   <td class="tab-{$status}-lead-in" />
               </xsl:if>
 
-              <td class="tab-{$status}-body" onclick="javascript:switchTab('{$tabElemName}', '{@id}')">
-                  <xsl:if test="property[@key = 'tab.icon']">
-                      <img class="tab-img" src="{$skinuri}/inputs/{property[@key = 'tab.icon']/@value}" />
-                  </xsl:if>
-                  <xsl:value-of select="short" />
+              <td class="tab-{$status}-body" onclick="javascript:switchTab('{$tabElemName}', '{@id}')"
+                  title="{property[@key = 'tab.description']/@value}">
+                  
+                  <xsl:choose>
+                    <xsl:when test="$tabId = @id">
+                      <xsl:if test="property[@key = 'tab.icon']">
+                          <img class="tab-img" src="{$skinuri}/inputs/{property[@key = 'tab.icon']/@value}" />
+                      </xsl:if>
+                      <xsl:value-of select="short" />
+                    </xsl:when>
+                    
+                    <xsl:otherwise>
+                      <a href="javascript:switchTab('{$tabElemName}', '{@id}')" class="tab-link">
+                        <xsl:if test="property[@key = 'tab.icon']">
+                          <img class="tab-img" src="{$skinuri}/inputs/{property[@key = 'tab.icon']/@value}" />
+                        </xsl:if>
+                        <xsl:value-of select="short" />
+                      </a>
+                    </xsl:otherwise>
+                  </xsl:choose>
               </td>
               
               <xsl:if test="not(position() = last())">
@@ -357,6 +354,29 @@
           </table>                  
         </td>
       </tr>
+  </xsl:template>
+
+  <xsl:template name="preload-script">
+    <script type="text/javascript" language="javascript">&lt;!--
+    var preload = new Array();
+    if (document.images)
+    {
+      var skinuri = "<xsl:value-of select='$skinuri' />";
+      var preload = ["/img/progress.gif", 
+                     "/img/tab-active-lead-in.gif", 
+                     "/img/tab-active-lead-out.gif",
+                     "/img/tab-active-passive-link.gif",
+                     "/img/tab-passive-active-link.gif",
+                     "/img/tab-passive-lead-in.gif",
+                     "/img/tab-passive-lead-out.gif",
+                     "/img/tab-passive-passive-link.gif" ];
+      for (i = 0; i &lt; preload.length; i++) {
+          var img = new Image();
+          img.src = skinuri + preload[i];
+          preload[i] = img;
+      }
+    }
+    //--> </script>
   </xsl:template>
 
   <xsl:template name="footer">
