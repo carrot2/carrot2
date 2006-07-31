@@ -1,4 +1,2 @@
 
 - decrease the number of synchronizations in the broadcaster
-- stachoo: add a nice and user-friendly exception page
-- stachoo: add tab image preloading

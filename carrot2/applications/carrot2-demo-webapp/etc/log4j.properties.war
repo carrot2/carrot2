@@ -1,13 +1,15 @@
 
-### direct log messages to stdout ###
+### direct log messages to a rolling file ###
 
-log4j.appender.stdout=org.apache.log4j.ConsoleAppender
-log4j.appender.stdout.Target=System.out
+log4j.appender.stdout=org.apache.log4j.RollingFileAppender 
+log4j.appender.stdout.File=${catalina.home}/logs/carrot2-webapp.log 
+log4j.appender.stdout.MaxFileSize=10MB 
+log4j.appender.stdout.MaxBackupIndex=10 
 log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
 log4j.appender.stdout.layout.ConversionPattern=%d{ABSOLUTE} %5p %c - %m%n
 
 # Global logger configuration
-log4j.rootLogger=debug, stdout
+log4j.rootLogger=warn, stdout
 
 # Apache commons configuration.
 log4j.logger.org.apache.commons=warn
@@ -20,8 +22,10 @@ log4j.logger.org.apache.jasper=warn
 log4j.logger.httpclient=warn
 
 # Query logging
-log4j.appender.querylog=org.apache.log4j.ConsoleAppender
-log4j.appender.querylog.Target=System.out
+log4j.appender.querylog=org.apache.log4j.FileAppender
+log4j.appender.querylog.File=${catalina.home}/logs/carrot2-queries.log
+log4j.appender.querylog.Append=true
+log4j.appender.querylog.Threshold=INFO
 log4j.appender.querylog.layout=org.apache.log4j.PatternLayout
 log4j.appender.querylog.layout.ConversionPattern=%d{dd MMM yyyy HH:mm:ss},%m%n
 
