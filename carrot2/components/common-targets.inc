@@ -18,31 +18,39 @@
         <ant target="cleanall" antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" />
     </target>
     
-    <target name="tests.run" if="tests.available.true">
+    <target name="_tests.run">
     	<property name="profile" value="test" />
         <ant target="build.testtype"
              antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" inheritrefs="true">
         </ant>
     </target>
 
-	<target name="tests.info" unless="tests.available.true">
-    	<echo message="This component has no tests." />
-	</target>
-
     <target name="test">
-    	<condition property="tests.available.true" value="true">
+	    <taskdef resource="net/sf/antcontrib/antlib.xml">
+    	    <classpath location="${carrot2.cvs.dir}/lib/ant-extensions/ant-contrib.jar" />
+  	    </taskdef>
+    	
+    	<if>
     		<equals arg1="true" arg2="${tests.available}" casesensitive="false" trim="true" />
-    	</condition>
-    	<antcall target="tests.run">
-            <reference refid="dependencies" />
-            <reference refid="c2.tasks.classloader" />
-            <param name="cache:deps" value="${cache:deps}" />
-        </antcall>
-    	<antcall target="tests.info">
-            <reference refid="dependencies" />
-            <reference refid="c2.tasks.classloader" />
-            <param name="cache:deps" value="${cache:deps}" />
-        </antcall>
+    		<then>
+		    	<if>
+    				<isset property="cache:deps" />
+    				<then>
+				    	<antcall target="_tests.run">
+				            <reference refid="dependencies" />
+				            <reference refid="c2.tasks.classloader" />
+				            <param name="cache:deps" value="${cache:deps}" />
+				        </antcall>
+    				</then>
+    				<else>
+				    	<antcall target="_tests.run" />
+    				</else>
+    			</if>
+    		</then>
+    		<else>
+		    	<echo message="This component has no tests." />
+    		</else>
+    	</if>
     </target>
 
     <target name="build">
