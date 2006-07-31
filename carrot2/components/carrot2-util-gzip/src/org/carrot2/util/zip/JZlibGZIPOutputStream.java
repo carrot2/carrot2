@@ -58,7 +58,7 @@ public class JZlibGZIPOutputStream extends OutputStream {
         out.write(GZIP_HEADER);
     }
 
-    public void close() throws IOException {
+    public void softClose() throws IOException {
         if (closed) {
             throw new IOException("Stream already closed.");
         }
@@ -80,9 +80,18 @@ public class JZlibGZIPOutputStream extends OutputStream {
                 (byte) ((isize & 0xff000000) >> 24),
         };
         out.write(trailer);
-        out.close();
+        out.flush();
+        
+        this.closed = true;
+    }
 
-        closed = true;
+    public void close() throws IOException {
+        if (closed) {
+            throw new IOException("Stream already closed.");
+        }
+        softClose();
+
+        out.close();
     }
 
     public void flush() throws IOException {
