@@ -41,6 +41,7 @@ import org.carrot2.core.controller.loaders.BeanShellFactoryDescriptionLoader;
  */
 public final class QueryProcessorServlet extends HttpServlet {
     private Logger logger;
+    private Logger queryLogger = Logger.getLogger(QueryProcessorServlet.class.getName() + ".queryLog");
 
     public static final String PARAM_Q = "q";
     public static final String PARAM_INPUT = "in";
@@ -260,9 +261,11 @@ public final class QueryProcessorServlet extends HttpServlet {
                 response.setContentType(serializer.getContentType());
                 try {
                     logger.info("Clustering results using: " + algorithmTab.getShortName());
+                    long start = System.currentTimeMillis();
                     final ProcessingResult result = 
                         algorithmsController.query(algorithmTab.getShortName(), 
                                 searchRequest.query, props);
+                    long stop = System.currentTimeMillis();
                     final ArrayOutputComponent.Result collected =  
                         (ArrayOutputComponent.Result) result.getQueryResult();
                     final List clusters = collected.clusters; 
@@ -273,6 +276,8 @@ public final class QueryProcessorServlet extends HttpServlet {
                         serializer.write((RawCluster) i.next());
                     }
                     serializer.endResult();
+                    
+                    logQuery(searchRequest, stop - start);
                 } catch (BroadcasterException e) {
                     // broadcaster exceptions are shown in the documents iframe,
                     // so we simply emit no clusters.
@@ -299,6 +304,25 @@ public final class QueryProcessorServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Logs the query for further analysis
+     */
+    private void logQuery(SearchRequest searchRequest, long clusteringTime) {
+        StringBuffer message = new StringBuffer();
+        
+        message.append(searchRequest.getAlgorithm().getShortName());
+        message.append(",");
+        message.append(searchRequest.getInputTab().getShortName());
+        message.append(",");
+        message.append(searchRequest.getInputSize());
+        message.append(",");
+        message.append(clusteringTime);
+        message.append(",");
+        message.append(searchRequest.query);
+        
+        queryLogger.info(message.toString());
+    }
+    
     /**
      * Initializes results serializers.
      */
