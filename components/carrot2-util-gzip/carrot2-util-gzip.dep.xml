@@ -8,6 +8,7 @@
     <provides>
         <files build-path-exclude="true" prefix=".">
             <file location="jzlib.LICENSE" />
+            <file location="pjl.LICENSE" />
         </files>
         <files build-path-exclude="true" prefix="tmp/dist">
             <file location="carrot2-util-gzip.jar" />
