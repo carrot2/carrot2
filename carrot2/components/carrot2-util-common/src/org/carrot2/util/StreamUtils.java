@@ -72,59 +72,18 @@ public final class StreamUtils
      * @param input InputStream from which data is to be read.
      * @throws IOException propagated from the underlaying stream.
      */
-    public static byte[] readFully(InputStream input)
+    public static byte[] readFully(final InputStream input)
         throws IOException
     {
-        final int MIN_BUFFER_SIZE = 16000;    // default buffer size is approx. 16k.
-        byte[]    output          = null;
-        byte[]    buffer;
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream(8 * 1024);
+        final byte [] buffer = new byte[8 * 1024];
 
-        // start with the default size of the buffer.
-        buffer = new byte[MIN_BUFFER_SIZE];
-
-        while (true)
-        {
-            int bytesRead = input.read(buffer);
-
-            if (bytesRead == -1)
-            {
-                // eof has been reached.
-                if (output == null)
-                {
-                    output = new byte[0];
-                }
-                break;
-            }
-            else
-            {
-                if (bytesRead == 0)
-                {
-                    // an end has been reached
-                    break;
-                }
-                else
-                {
-                    // append the buffer to the output array
-                    if (output == null)
-                    {
-                        output = new byte[bytesRead];
-                        System.arraycopy(buffer, 0, output, 0, bytesRead);
-                    }
-                    else
-                    {
-                        // extend the output array with the buffer.
-                        byte[] newOutput = new byte[output.length + bytesRead];
-
-                        System.arraycopy(output, 0, newOutput, 0, output.length);
-                        System.arraycopy(buffer, 0, newOutput, output.length, bytesRead);
-
-                        output = newOutput;
-                    }
-                }
-            }
+        int z;
+        while ((z = input.read(buffer)) > 0) {
+            baos.write(buffer, 0, z);
         }
 
-        return output;
+        return baos.toByteArray();
     }
     
     
@@ -218,7 +177,19 @@ public final class StreamUtils
 
         return output;
     }
-    
 
+    /**
+     * Copies all available data from the input stream to the 
+     * output stream. Data is internally buffered.
+     */
+    public static void copy(InputStream in, OutputStream out, int bufSize) 
+        throws IOException 
+    {
+        final byte [] buffer = new byte[bufSize];
+        int tmp;
+        while ((tmp = in.read(buffer)) > 0) {
+            out.write(buffer, 0, tmp);
+        }
+    }
 }
 
