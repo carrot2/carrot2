@@ -300,6 +300,7 @@ TESTING: @{component.path}
     <component-apply component.path="components/carrot2-util-tokenizer" />
     <component-apply component.path="components/carrot2-util-matrix" />
     <component-apply component.path="components/carrot2-util-lang-guesser" />
+    <component-apply component.path="components/carrot2-util-gzip" />
 
     <component-apply component.path="components/carrot2-input-xml" />
     <component-apply component.path="components/carrot2-input-lucene" />
