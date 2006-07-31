@@ -109,7 +109,8 @@ public final class JZlibDeflaterOutputStream extends OutputStream {
         bufferFlush(JZlib.Z_FINISH);
         zstream.deflateEnd();
         zstream.free();
-        
+
+        this.out.flush();
         this.closed = true;
     }
 
