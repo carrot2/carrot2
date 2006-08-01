@@ -41,6 +41,8 @@ Must have:
 
 - Add Wikipedia demo?
 
+- Add incremental document pushing for the Luce input component (S)
+
 Nice to have:
 
 - Add OpenSearch Descriptor support for carrot2-input-opensearch?
