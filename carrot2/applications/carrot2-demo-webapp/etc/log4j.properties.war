@@ -27,9 +27,10 @@ log4j.appender.querylog.File=${catalina.home}/logs/carrot2-queries.log
 log4j.appender.querylog.Append=true
 log4j.appender.querylog.Threshold=INFO
 log4j.appender.querylog.layout=org.apache.log4j.PatternLayout
-log4j.appender.querylog.layout.ConversionPattern=%d{dd MMM yyyy HH:mm:ss},%m%n
+log4j.appender.querylog.layout.ConversionPattern=%d{dd MM yyyy HH:mm:ss},%c,%m%n
 
-log4j.logger.org.carrot2.webapp.QueryProcessorServlet.queryLog=info, querylog
-log4j.additivity.org.carrot2.webapp.QueryProcessorServlet.queryLog=false
+log4j.logger.queryLog=info, querylog
+log4j.additivity.queryLog=false
+
 
 
