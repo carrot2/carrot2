@@ -13,18 +13,17 @@
 
 package org.carrot2.input.lucene;
 
-import java.io.*;
+import java.io.IOException;
 import java.util.*;
 
-import org.apache.log4j.*;
-import org.apache.lucene.analysis.*;
-import org.apache.lucene.document.*;
-import org.apache.lucene.queryParser.*;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.*;
-
 import org.carrot2.core.*;
 import org.carrot2.core.clustering.*;
-import org.carrot2.core.profiling.*;
+import org.carrot2.core.profiling.ProfiledLocalInputComponentBase;
 
 /**
  * Implements a local input component that reads data from Lucene index. Use
@@ -37,9 +36,6 @@ import org.carrot2.core.profiling.*;
 public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
     implements RawDocumentsProducer
 {
-    /** Logger */
-    private final Logger logger = Logger.getLogger(this.getClass());
-
     /** The default number of requested results */
     public static final int DEFAULT_REQUESTED_RESULTS = 100;
 
@@ -214,9 +210,6 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
             startAt = 0;
         }
 
-        long start = System.currentTimeMillis();
-        startTimer();
-        
         // Create a boolean query that combines all fields  
         BooleanQuery booleanQuery = new BooleanQuery();
         for (int i = 0; i < searchFields.length; i++)
@@ -243,14 +236,12 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
         // This improves document fetching when document count is > 100
         // The reason for this is 'specific' implementation of Lucene's
         // Hits class. The number 100 is hardcoded in Hits.
-        int trash = 0; 
         if (endAt > 100)
         {
-            trash = hits.id(endAt-1);
+            hits.id(endAt-1);
         }
         
         // Get results from the index
-        List documents = new ArrayList(endAt - startAt);
         for (int i = startAt; i < endAt; i++)
         {
             Document doc = hits.doc(i);
@@ -258,24 +249,6 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
             RawDocumentSnippet rawDocument = new RawDocumentSnippet(
                 new Integer(hits.id(i)), doc.get(titleField), doc
                     .get(summaryField), doc.get(urlField), hits.score(i));
-            documents.add(rawDocument);
-        }
-        
-        // Must do this. Otherwise the optimizer would remove the call we want
-        // TODO: [DW] No it shouldn't. it can only do it when hits.id() assumes
-        // no side effects, but this must be told explicitly, so the optimizer
-        // should never remove that method call.
-        trash = trash + 1; 
-        
-        long stop = System.currentTimeMillis();
-        stopTimer();
-
-        logger.info("Lucene search: " + (stop - start) + " ms");
-        
-        // Push results
-        for (Iterator iter = documents.iterator(); iter.hasNext();)
-        {
-            RawDocument rawDocument = (RawDocument) iter.next();
             rawDocumentConsumer.addDocument(rawDocument);
         }
     }
