@@ -40,8 +40,11 @@ import org.carrot2.core.controller.loaders.BeanShellFactoryDescriptionLoader;
  * @author Dawid Weiss
  */
 public final class QueryProcessorServlet extends HttpServlet {
+    /** logger for activities and information */
     private Logger logger;
-    private Logger queryLogger = Logger.getLogger(QueryProcessorServlet.class.getName() + ".queryLog");
+    
+    /** logger for queries */
+    private volatile Logger queryLogger;
 
     public static final String PARAM_Q = "q";
     public static final String PARAM_INPUT = "in";
@@ -118,6 +121,22 @@ public final class QueryProcessorServlet extends HttpServlet {
         final String type = request.getParameter("type");
         final SearchRequest searchRequest = searchSettings.parseRequest(request.getParameterMap());
 
+        // Initialize loggers depending on the application context.
+        if (this.queryLogger == null) {
+            synchronized (this) {
+                // initialize query logger.
+                String contextPath = request.getContextPath();
+
+                contextPath = contextPath.replaceAll("[^a-zA-Z0-9]", "");
+                if (contextPath == null || "".equals(contextPath)) {
+                    contextPath = "ROOT";
+                }
+
+                this.queryLogger = Logger.getLogger("queryLog." + contextPath);
+            }
+        }
+
+        // Determine request type and redirect control
         final int requestType;
         if ("d".equals(type)) {
             requestType = DOCUMENT_REQUEST;
@@ -307,20 +326,17 @@ public final class QueryProcessorServlet extends HttpServlet {
     /**
      * Logs the query for further analysis
      */
-    private void logQuery(SearchRequest searchRequest, long clusteringTime) {
-        StringBuffer message = new StringBuffer();
-        
-        message.append(searchRequest.getAlgorithm().getShortName());
-        message.append(",");
-        message.append(searchRequest.getInputTab().getShortName());
-        message.append(",");
-        message.append(searchRequest.getInputSize());
-        message.append(",");
-        message.append(clusteringTime);
-        message.append(",");
-        message.append(searchRequest.query);
-        
-        queryLogger.info(message.toString());
+    private void logQuery(final SearchRequest searchRequest, long clusteringTime) {
+        queryLogger.info(
+                  searchRequest.getAlgorithm().getShortName()
+                + ","
+                + searchRequest.getInputTab().getShortName()
+                + ","
+                + searchRequest.getInputSize()
+                + ","
+                + clusteringTime
+                + ","
+                + searchRequest.query);
     }
     
     /**
