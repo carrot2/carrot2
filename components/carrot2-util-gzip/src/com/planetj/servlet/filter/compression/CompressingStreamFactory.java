@@ -362,7 +362,7 @@ abstract class CompressingStreamFactory {
                 }
 
                 public void finish() throws IOException {
-                    gzipOutputStream.softClose();
+                    gzipOutputStream.flush();
                 }
             };
         }
@@ -504,7 +504,7 @@ abstract class CompressingStreamFactory {
                 }
 
                 public void finish() throws IOException {
-                    deflaterOutputStream.softClose();
+                    deflaterOutputStream.flush();
                 }
             };
         }
