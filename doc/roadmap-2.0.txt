@@ -32,6 +32,15 @@ Must have:
   seem to be indexed right now...) (+ add nice links and keywords on the 
   start page for the SE (S))
 
+- Stability of carrot.cs.put.poznan.pl/demo-stable
+  Maybe we should keep demo-stable on a separate Tomcat to avoid service down
+  times caused by messing with the demo-head? Alternatively, we could have the
+  nightly build scripts just copy the new demo-head WAR to Tomcat's webapps
+  dir without restarting Tomcat at all. Tomcat should pick it up and redeploy
+  (tested with Tomcat 5.5 -- works smoothly).
+
+- Add Wikipedia demo?
+
 Nice to have:
 
 - Add OpenSearch Descriptor support for carrot2-input-opensearch?
