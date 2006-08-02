@@ -28,11 +28,9 @@ Must have:
 - Move command line applications from the commercial repository to
   the OS repository (D)
 
-- Allow search engines to index the start page of the demo webapp (it doesn't
-  seem to be indexed right now...) (+ add nice links and keywords on the 
-  start page for the SE (S))
+- add nice links and keywords on the start page for the SE (S)
 
-- Add Wikipedia demo?
+- Add Wikipedia demo? [would Yahoo's site-restricted query suffice? + there is very little space tab-wise now]
 
 Nice to have:
 
@@ -40,7 +38,7 @@ Nice to have:
 
 - Unify coding style (reformat existing code)
 
-- Check out Unicode segmentation spec (info from Andrzej Zydroñ):
+- Check out Unicode segmentation spec (info from Andrzej Zydro):
 http://www.unicode.org/reports/tr29/tr29-10.html
 
 - add lucene input source to the local demo application
