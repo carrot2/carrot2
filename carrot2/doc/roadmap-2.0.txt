@@ -34,6 +34,8 @@ Must have:
 
 Nice to have:
 
+- (webapp) decrease the number of synchronizations in the broadcaster.
+
 - Add OpenSearch Descriptor support for carrot2-input-opensearch?
 
 - Unify coding style (reformat existing code)

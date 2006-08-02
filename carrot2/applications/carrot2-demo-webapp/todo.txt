@@ -1,2 +1,0 @@
-
-- decrease the number of synchronizations in the broadcaster
