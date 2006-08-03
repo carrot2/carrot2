@@ -18,8 +18,7 @@ import java.net.URL;
 import java.util.*;
 
 import org.carrot2.core.*;
-import org.carrot2.core.controller.ControllerHelper;
-import org.carrot2.core.controller.LoadedProcess;
+import org.carrot2.core.controller.*;
 import org.carrot2.core.controller.loaders.ComponentInitializationException;
 
 /**
@@ -106,9 +105,8 @@ public class DemoContext {
             }
     
             try {
-                cl.addComponentFactoriesFromDirectory(controller, componentsDir);
-                this.loadedProcesses = 
-                    Arrays.asList(cl.loadProcessesFromDirectory(processesDir));
+                cl.addAll(controller, cl.loadComponentFactoriesFromDir(componentsDir));
+                this.loadedProcesses = Arrays.asList(cl.loadProcessesFromDir(processesDir));
             } catch (Exception e) {
                 throw new RuntimeException("Unhandled exception when initializing components and processes.", e);
             }
@@ -119,7 +117,8 @@ public class DemoContext {
                     final String external = componentUrls[i].toExternalForm();
                     final int lastDotIndex = external.lastIndexOf('.');
                     final String extension = external.substring(lastDotIndex+1);
-                    cl.addComponentFactory(controller, extension, componentUrls[i].openStream());
+                    LoadedComponentFactory lcf = cl.loadComponentFactory(extension, componentUrls[i].openStream());
+                    controller.addLocalComponentFactory(lcf.getId(), lcf.getFactory());
                 }
                 this.loadedProcesses = new ArrayList();
                 for (int i = 0; i < processUrls.length; i++) {
@@ -171,8 +170,6 @@ public class DemoContext {
             }
         } catch (DuplicatedKeyException e) {
             throw new RuntimeException("Identifiers of components and processes must be unique.", e);
-        } catch (ComponentInitializationException e) {
-            throw new RuntimeException("Cannot initialize component.", e);
         } catch (Exception e) {
             throw new RuntimeException("Unhandled exception when initializing components and processes.", e);
         }

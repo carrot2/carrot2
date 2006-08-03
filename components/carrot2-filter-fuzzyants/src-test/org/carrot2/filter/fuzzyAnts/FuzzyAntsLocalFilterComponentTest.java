@@ -61,7 +61,7 @@ public class FuzzyAntsLocalFilterComponentTest extends TestCase {
      * should be performed only once in the final application - the controller is 
      * thread safe and can be reused in subsequent clustering calls.
      */
-    public void setUp() {
+    public void setUp() throws DuplicatedKeyException {
         // The controller we initialize.
         final LocalController controller = new LocalControllerBase(); 
 

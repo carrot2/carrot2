@@ -46,10 +46,8 @@ public interface LocalControllerContext {
      *
      * @throws MissingComponentException Thrown if <code>key</code> is  not
      *         associated with any factory.
-     * @throws Exception If some other exception occurred.
      */
-    public Class getComponentClass(String key)
-        throws MissingComponentException, Exception;
+    public Class getComponentClass(String key) throws MissingComponentException;
 
     /**
      * Checks compatibility of two ordered components.
@@ -73,13 +71,9 @@ public interface LocalControllerContext {
      * @throws MissingComponentException Thrown if there is no factory for
      *         either <code>keyComponentFrom</code> or
      *         <code>keyComponentTo</code>.
-     * @throws Exception Thrown if any other error occurred during the
-     *         verification process. The exception <i>does not</i> indicate
-     *         incompatibility, only inability to proceed with the
-     *         verification procedure.
      */
-    public boolean isComponentSequenceCompatible(String keyComponentFrom,
-        String keyComponentTo) throws MissingComponentException, Exception;
+    public boolean isComponentSequenceCompatible(String keyComponentFrom, 
+            String keyComponentTo) throws MissingComponentException;
 
     /**
      * Returns a human-explanation of the reason of incompatibility between two
@@ -102,9 +96,7 @@ public interface LocalControllerContext {
      * @throws MissingComponentException Thrown if there is no factory for
      *         either <code>keyComponentFrom</code> or
      *         <code>keyComponentTo</code>.
-     * @throws Exception Thrown if any other error occurred during the
-     *         verification process.
      */
     public String explainIncompatibility(String from, String to)
-        throws MissingComponentException, Exception;
+        throws MissingComponentException;
 }

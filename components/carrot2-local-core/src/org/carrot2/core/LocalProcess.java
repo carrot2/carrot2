@@ -48,11 +48,13 @@ public interface LocalProcess {
      *
      * @param context An instance of a {@link LocalControllerContext}.
      *
-     * @throws Exception If for any reason the local process instance is unable
-     *         to process queries, an exception should be thrown.
+     * @throws InitializationException If for any reason the local process instance 
+     *          is unable to process queries, an exception should be thrown.
+     * @throws MissingComponentException If a component required by this process 
+     *          is missing.
      */
     public void initialize(LocalControllerContext context)
-        throws Exception;
+        throws InitializationException, MissingComponentException;
 
     /**
      * A callback method that the controller invokes to process some user
@@ -148,13 +150,13 @@ public interface LocalProcess {
      *         The application invoking the query method must know how to
      *         downcast it to a more specific type.
      *
-     * @throws Exception If any problem occurred during the processing.
+     * @throws ProcessingException If any problem occurred during the processing.
      *
      * @see LocalComponent
      * @see LocalProcessBase Local process class implementation.
      */
     public Object query(RequestContext context, String query)
-        throws Exception;
+        throws ProcessingException;
     
     /**
      * @return returns a name for this process or

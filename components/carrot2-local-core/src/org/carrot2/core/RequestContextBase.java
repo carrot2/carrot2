@@ -70,7 +70,7 @@ public class RequestContextBase implements RequestContext
      * @see org.carrot2.core.RequestContext#getComponentInstance(java.lang.String)
      */
     public LocalComponent getComponentInstance(String key)
-        throws MissingComponentException, Exception
+        throws MissingComponentException
     {
         if (disposed)
         {
@@ -93,7 +93,7 @@ public class RequestContextBase implements RequestContext
      * 
      * @see org.carrot2.core.RequestContext#dispose()
      */
-    public void dispose() throws Exception
+    public void dispose()
     {
         // Set disposed first, just in case we get errors during returning
         // components

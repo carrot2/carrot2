@@ -17,8 +17,6 @@ import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
 
 import org.carrot2.demo.*;
 import org.carrot2.demo.swing.util.*;
@@ -33,7 +31,7 @@ import com.jgoodies.looks.Options;
  * 
  * @author Dawid Weiss
  */
-public class SwingDemoGui implements DemoGuiDelegate {
+public class SwingDemoGui {
 
     /** Search banner color. */
     private static final Color BANNER_COLOR = new Color(0xe0, 0xe0, 0xe0);

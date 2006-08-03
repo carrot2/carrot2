@@ -203,10 +203,6 @@ public class LocalControllerTest extends junit.framework.TestCase {
         final boolean[] states = new boolean[2];
 
         LocalProcessBase process = new LocalProcessBase() {
-                protected void beforeProcessingStartsHook(
-                    LocalComponent[] components) {
-                }
-
                 protected void afterProcessingStartedHook(
                     LocalComponent[] components) {
                     try {

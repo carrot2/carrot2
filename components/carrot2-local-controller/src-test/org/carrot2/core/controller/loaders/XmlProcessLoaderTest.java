@@ -39,7 +39,7 @@ public class XmlProcessLoaderTest extends junit.framework.TestCase {
         final LocalController controller = new LocalControllerBase();
         final ControllerHelper cl = new ControllerHelper();
 
-        cl.addComponentFactoriesFromDirectory(controller, file);
+        cl.addAll(controller, cl.loadComponentFactoriesFromDir(file));
         final LoadedProcess process = cl.loadProcess(new File(processDir, "xml-process.xml"));
 
         assertTrue(process != null);

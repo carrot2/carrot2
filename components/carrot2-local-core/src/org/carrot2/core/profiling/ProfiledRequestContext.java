@@ -70,7 +70,7 @@ public class ProfiledRequestContext extends RequestContextBase
      * @see org.carrot2.core.RequestContext#getComponentInstance(java.lang.String)
      */
     public LocalComponent getComponentInstance(String key)
-        throws MissingComponentException, Exception
+        throws MissingComponentException
     {
         LocalComponent localComponent = super.getComponentInstance(key);
         profiles.put(localComponent, new Profile(localComponent.getName()));

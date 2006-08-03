@@ -213,8 +213,7 @@ public class SaveXmlFilterComponent
      * @param root Root element of the XML file
      * @param requestContext current request context
      */
-    protected void addAdditionalInformation(Element root,
-        RequestContext requestContext)
+    protected void addAdditionalInformation(Element root, RequestContext requestContext)
     {
     }
 
@@ -364,7 +363,7 @@ public class SaveXmlFilterComponent
     }
 
     /**
-     * @return
+     * 
      */
     private List collectRawDocuments()
     {
