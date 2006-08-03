@@ -22,22 +22,10 @@ package org.carrot2.core.controller.loaders;
  * @version $Revision$
  */
 public class ComponentInitializationException extends Exception {
-
-    /**
-     * Creates a new exception object. 
-     * 
-     * @param message The cause of the exception.
-     */
     public ComponentInitializationException(String message) {
         super(message);
     }
-    
-    /**
-     * Creates a new exception wrapper.
-     * 
-     * @param message The cause of the exception.
-     * @param cause The wrapped exception.
-     */
+
     public ComponentInitializationException(String message, Throwable cause) {
         super(message, cause);
     }

@@ -38,8 +38,6 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
 
     /**
      * Default implementation of the {@link ProcessingResult} interface.
-     * 
-     * @author stachoo
      */
     protected static class Result implements ProcessingResult
     {
@@ -81,6 +79,7 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
 
     public void addLocalComponentFactory(String componentId,
         final LocalComponentFactory factory)
+        throws DuplicatedKeyException
     {
         if (componentPools.containsKey(componentId)) {
             throw new DuplicatedKeyException("Component factory with " +
@@ -126,39 +125,41 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
      * Borrows a component with given <code>componentId</code> from the
      * internal component instance pool.
      * 
-     * @param componentId
-     * @return component instance
      * @throws MissingComponentException when no factory has been registered
      *             with given <code>componentId</code>
-     * @throws Exception when other problems occur
      */
     public LocalComponent borrowComponent(String componentId)
-        throws MissingComponentException, Exception
+        throws MissingComponentException
     {
         ObjectPool pool = (ObjectPool) componentPools.get(componentId);
         if (pool == null)
         {
-            throw new MissingComponentException("Component missing: "
-                + componentId);
+            throw new MissingComponentException(componentId);
         }
 
-        return (LocalComponent) pool.borrowObject();
+        try {
+            return (LocalComponent) pool.borrowObject();
+        } catch (Exception e) {
+            throw new RuntimeException("Could not acquire component instance from the pool.", e);
+        }
     }
 
     /**
      * Returns the <code>component</code> with given <code>componentId</code>
      * to the internal component pool.
-     * 
-     * @param componentId
-     * @param component
-     * @throws Exception when problems occur
      */
     public void returnComponent(String componentId, LocalComponent component)
-        throws Exception
     {
-        ((ObjectPool) componentPools.get(componentId)).returnObject(component);
+        try {
+            ((ObjectPool) componentPools.get(componentId)).returnObject(component);
+        } catch (Exception e) {
+            throw new RuntimeException("Could not put the component back to the pool.", e);
+        }
     }
 
+    /**
+     * Execute a given query against the process <code>processId</code>.
+     */
     public ProcessingResult query(String processId, String query,
         Map requestParameters) throws MissingProcessException, Exception
     {
@@ -185,37 +186,47 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
         return new Result(queryResult, requestContext);
     }
 
-    public void addProcess(String processId, LocalProcess localProcess)
-        throws Exception
+    /**
+     * Add a local process with the specified id to the controller.
+     */
+    public void addProcess(String processId, LocalProcess localProcess) 
+        throws InitializationException, MissingComponentException, DuplicatedKeyException
     {
+        if (processes.containsKey(processId))
+            throw new DuplicatedKeyException("Process with this identifier " +
+                    "already exists: " + processId);
         localProcess.initialize(this);
         processes.put(processId, localProcess);
     }
 
+    /**
+     * Returns <code>true</code> if a given component factory is available.
+     */
     public boolean isComponentFactoryAvailable(String key)
     {
         return componentPools.containsKey(key);
     }
 
+    /**
+     * Returns the class of a given component factory.
+     */
     public Class getComponentClass(String componentId)
-        throws MissingComponentException, Exception
+        throws MissingComponentException
     {
-        ObjectPool pool = (ObjectPool) componentPools.get(componentId);
-        if (pool == null)
-        {
-            throw new MissingComponentException("Component missing: "
-                + componentId);
+        LocalComponent component = borrowComponent(componentId);
+        try {
+            return component.getClass();
+        } finally {
+            returnComponent(componentId, component);
         }
-
-        LocalComponent component = (LocalComponent) pool.borrowObject();
-        Class componentClass = component.getClass();
-        pool.returnObject(component);
-
-        return componentClass;
     }
 
+    /**
+     * Returns <code>true</code> if a given sequence of components is available
+     * and compatible.
+     */
     public boolean isComponentSequenceCompatible(String keyComponentFrom,
-        String keyComponentTo) throws MissingComponentException, Exception
+        String keyComponentTo) throws MissingComponentException
     {
         LocalComponent from = null;
         LocalComponent to = null;
@@ -236,8 +247,11 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
         }
     }
 
+    /**
+     * Explains the reason of incompatibility between two components.
+     */
     public String explainIncompatibility(String keyComponentFrom, String keyComponentTo)
-        throws MissingComponentException, Exception
+        throws MissingComponentException
     {
         LocalComponent from = null;
         LocalComponent to = null;
@@ -258,11 +272,17 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
         }
     }
     
+    /**
+     * Returns a copy of the process identifier list.
+     */
     public List getProcessIds()
     {
         return new ArrayList(processes.keySet());
     }
 
+    /**
+     * Returns the name of a process with the given identifier.
+     */
     public String getProcessName(String processId)
         throws MissingProcessException
     {
@@ -275,35 +295,13 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
         return process.getName();
     }
 
-    public String getProcessDescription(String processId)
-        throws MissingProcessException
-    {
-        LocalProcess process = (LocalProcess) processes.get(processId);
-        if (process == null)
-        {
-            throw new MissingProcessException("No such process: " + processId);
-        }
-
-        return process.getDescription();
-    }
-
     public String getComponentName(String componentId)
-        throws MissingComponentException, Exception
+        throws MissingComponentException
     {
         LocalComponent localComponent = borrowComponent(componentId);
         String name = localComponent.getName();
         returnComponent(componentId, localComponent);
 
         return name;
-    }
-
-    public String getComponentDescription(String componentId)
-        throws MissingComponentException, Exception
-    {
-        LocalComponent localComponent = borrowComponent(componentId);
-        String description = localComponent.getDescription();
-        returnComponent(componentId, localComponent);
-
-        return description;
     }
 }

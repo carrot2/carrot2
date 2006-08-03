@@ -23,44 +23,25 @@ package org.carrot2.core;
  * @see LocalComponent
  */
 public class MissingComponentException extends Exception {
-    /**
-     * Creates a new exception object with no explanation.
-     */
-    public MissingComponentException() {
-        super();
-    }
 
+    private final String componentId;
+    
     /**
      * Creates a new exception object with  an associated message explaining
      * the cause of the error.
      *
-     * @param message A message to associate with the exception.
+     * @param componentId The identifier of a missing component.
      */
-    public MissingComponentException(String message) {
-        super(message);
+    public MissingComponentException(String componentId) {
+        super("Component with this identifier not found: " + componentId);
+        
+        this.componentId = componentId;
     }
-
+    
     /**
-     * Creates a new exception object with  an associated root cause -- a
-     * linked {@link Throwable} object.
-     *
-     * @param t A {@link Throwable} object to link as the root cause of the
-     *        exception.
+     * Returns the identifier of a missing component.
      */
-    public MissingComponentException(Throwable t) {
-        super(t);
-    }
-
-    /**
-     * Creates a new exception object with  an associated explanation message
-     * and a root cause of the exception -- a  linked {@link Throwable}
-     * object.
-     *
-     * @param message A message to associate with the exception.
-     * @param t A {@link Throwable} object to link as the root cause of the
-     *        exception.
-     */
-    public MissingComponentException(String message, Throwable t) {
-        super(message, t);
+    public String getMissingComponentId() {
+        return this.componentId;
     }
 }

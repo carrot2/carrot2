@@ -414,28 +414,33 @@ public final class QueryProcessorServlet extends HttpServlet {
             ((BeanShellFactoryDescriptionLoader) bshLoader).setGlobals(globals);
         }
 
-        // Add an output sink component now.
-        controller.addLocalComponentFactory("collector",
-                new LocalComponentFactory() {
-                    public LocalComponent getInstance() {
-                        return new BroadcasterPushOutputComponent();
+        try {
+            // Add an output sink component now.
+            controller.addLocalComponentFactory("collector",
+                    new LocalComponentFactory() {
+                        public LocalComponent getInstance() {
+                            return new BroadcasterPushOutputComponent();
+                        }
                     }
-                }
-        );
-
-        // Add document enumerator.
-        controller.addLocalComponentFactory("enumerator",
-                new LocalComponentFactory() {
-                    public LocalComponent getInstance() {
-                        return new RawDocumentEnumerator();
+            );
+    
+            // Add document enumerator.
+            controller.addLocalComponentFactory("enumerator",
+                    new LocalComponentFactory() {
+                        public LocalComponent getInstance() {
+                            return new RawDocumentEnumerator();
+                        }
                     }
-                }
-        );
+            );
+        } catch (DuplicatedKeyException e) {
+            // not-reachable
+            throw new RuntimeException(e);
+        }
 
         // And now add inputs.
         try {
             final LoadedComponentFactory [] factories = 
-                helper.loadComponentFactoriesFromDirectory(inputScripts);
+                helper.loadComponentFactoriesFromDir(inputScripts);
             for (int i = 0; i < factories.length; i++) {
                 final LoadedComponentFactory loaded = factories[i];
                 // check if the required properties are present.
@@ -500,22 +505,27 @@ public final class QueryProcessorServlet extends HttpServlet {
         final LocalControllerBase controller = new LocalControllerBase();
         final ControllerHelper helper = new ControllerHelper();
 
-        // Add an input producer component now.
-        controller.addLocalComponentFactory("input-demo-webapp",
-                new LocalComponentFactory() {
-                    public LocalComponent getInstance() {
-                        return new RawDocumentsProducerLocalInputComponent();
+        try {
+            // Add an input producer component now.
+            controller.addLocalComponentFactory("input-demo-webapp",
+                    new LocalComponentFactory() {
+                        public LocalComponent getInstance() {
+                            return new RawDocumentsProducerLocalInputComponent();
+                        }
                     }
-                }
-        );
-        // Add an output collector.
-        controller.addLocalComponentFactory("output-demo-webapp",
-                new LocalComponentFactory() {
-                    public LocalComponent getInstance() {
-                        return new ArrayOutputComponent();
+            );
+            // Add an output collector.
+            controller.addLocalComponentFactory("output-demo-webapp",
+                    new LocalComponentFactory() {
+                        public LocalComponent getInstance() {
+                            return new ArrayOutputComponent();
+                        }
                     }
-                }
-        );
+            );
+        } catch (DuplicatedKeyException e) {
+            // not-reachable
+            throw new RuntimeException(e);
+        }
         
         final FileFilter processFilter = new FileFilter() {
             public boolean accept(File file) {
@@ -532,10 +542,10 @@ public final class QueryProcessorServlet extends HttpServlet {
         };
 
         try {
-            helper.addComponentFactoriesFromDirectory(
-                    controller, algorithmScripts, componentFilter);
+            helper.addAll(controller, 
+                    helper.loadComponentFactoriesFromDir(algorithmScripts, componentFilter));
             final LoadedProcess [] processes = 
-                helper.loadProcessesFromDirectory(algorithmScripts, processFilter);
+                helper.loadProcessesFromDir(algorithmScripts, processFilter);
             for (int i = 0; i < processes.length; i++) {
                 final String shortName = processes[i].getProcess().getName();
                 final String description = processes[i].getProcess().getDescription();

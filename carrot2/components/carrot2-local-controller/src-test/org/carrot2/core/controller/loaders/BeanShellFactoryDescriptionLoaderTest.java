@@ -13,28 +13,30 @@
 
 package org.carrot2.core.controller.loaders;
 
-import java.util.Arrays;
+import java.io.IOException;
+import java.io.InputStream;
 
-import org.carrot2.core.LocalComponent;
-import org.carrot2.core.LocalControllerBase;
-import org.carrot2.core.controller.ControllerHelper;
-import org.carrot2.core.controller.StubOutputComponent;
+import junit.framework.TestCase;
+
+import org.carrot2.core.*;
+import org.carrot2.core.controller.*;
 
 
 /**
  *  Beanshell component factory loader test.
  */
 public class BeanShellFactoryDescriptionLoaderTest
-    extends junit.framework.TestCase {
+    extends TestCase {
+
+    private LocalControllerBase controller = new LocalControllerBase();
+    private ControllerHelper cl = new ControllerHelper();
 
     public BeanShellFactoryDescriptionLoaderTest(String s) {
         super(s);
     }
 
     public void testLoadingComponentFromBSHStream() throws Exception {
-        LocalControllerBase controller = new LocalControllerBase();
-        ControllerHelper cl = new ControllerHelper();
-        cl.addComponentFactory(controller, "bsh",
+        addComponentFactory(controller, "bsh",
             this.getClass().getResourceAsStream("components/StubOutputComponentDescriptor.bsh"));
 
         assertTrue(controller.isComponentFactoryAvailable("stub-output-bsh"));
@@ -42,9 +44,7 @@ public class BeanShellFactoryDescriptionLoaderTest
 
     public void testPropertiesHaveBeenSetInBeanShellLoader()
         throws Exception {
-        LocalControllerBase controller = new LocalControllerBase();
-        ControllerHelper cl = new ControllerHelper();
-        cl.addComponentFactory(controller, "bsh",
+        addComponentFactory(controller, "bsh",
             this.getClass().getResourceAsStream("components/StubOutputComponentDescriptor.bsh"));
 
         assertTrue(controller.isComponentFactoryAvailable("stub-output-bsh"));
@@ -58,10 +58,15 @@ public class BeanShellFactoryDescriptionLoaderTest
 
     public void testNameAndDescriptionHasBeenSetInBeanShellLoader()
         throws Exception {
-        LocalControllerBase controller = new LocalControllerBase();
-        ControllerHelper cl = new ControllerHelper();
-        cl.addComponentFactory(controller, "bsh",
+        addComponentFactory(controller, "bsh",
             this.getClass().getResourceAsStream("components/StubOutputComponentDescriptor.bsh"));
         assertTrue(controller.isComponentFactoryAvailable("stub-output-bsh"));
+    }
+    
+    private void addComponentFactory(LocalControllerBase controller, String loaderId, InputStream stream) 
+        throws LoaderExtensionUnknownException, IOException, ComponentInitializationException, DuplicatedKeyException
+    {
+        LoadedComponentFactory lcf = this.cl.loadComponentFactory(loaderId, stream);
+        controller.addLocalComponentFactory(lcf.getId(), lcf.getFactory());
     }
 }

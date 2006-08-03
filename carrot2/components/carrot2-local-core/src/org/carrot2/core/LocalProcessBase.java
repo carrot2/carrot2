@@ -149,49 +149,44 @@ public class LocalProcessBase implements LocalProcess {
      * queries.
      * </p>
      *
-     * @throws Exception An exception is thrown if any error occurred (a component
-     *         factory is not available for some component, components are not
-     *         compatible).
+     * @throws InitializationException An exception is thrown if any error occurred 
+     *          (a component factory is not available for some component, components 
+     *          are not compatible).
      *
      * @see LocalProcess#initialize(LocalControllerContext)
      */
     public void initialize(LocalControllerContext context)
-        throws Exception {
+        throws InitializationException, MissingComponentException 
+    {
         if (initialized) {
-            throw new RuntimeException("Object already initialized.");
+            throw new IllegalStateException("Object already initialized.");
         }
 
         if (this.input == null) {
-            throw new RuntimeException("Input is required.");
+            throw new InitializationException("Input component is required.");
         }
 
         if (this.output == null) {
-            throw new RuntimeException("Output is required.");
+            throw new InitializationException("Output component is required.");
         }
 
         // verify implemented interfaces.
         Class c;
         c = LocalInputComponent.class;
-
         if (!c.isAssignableFrom(context.getComponentClass(input))) {
-            throw new Exception("Input component must implement: " +
-                c.getName());
+            throw new InitializationException("Input component must implement: " + c.getName());
         }
 
         c = LocalOutputComponent.class;
-
         if (!c.isAssignableFrom(context.getComponentClass(output))) {
-            throw new Exception("Output component must implement: " +
-                c.getName());
+            throw new InitializationException("Output component must implement: " + c.getName());
         }
 
         c = LocalFilterComponent.class;
-
         for (int i = 0; i < filters.size(); i++) {
-            if (!c.isAssignableFrom(context.getComponentClass(
-                            (String) filters.get(i)))) {
-                throw new Exception("Filter component must implement: " +
-                    c.getName());
+            final String filterId = (String) filters.get(i);
+            if (!c.isAssignableFrom(context.getComponentClass(filterId))) {
+                throw new InitializationException("Filter component must implement: " + c.getName());
             }
         }
 
@@ -213,7 +208,7 @@ public class LocalProcessBase implements LocalProcess {
             }
 
             if (!context.isComponentSequenceCompatible(from, to)) {
-                throw new Exception("Components not pairwise compatible: " +
+                throw new InitializationException("Components not pairwise compatible: " +
                     from + ", " + to + ".\nExplanation: " +
                     context.explainIncompatibility(from, to));
             }
@@ -260,13 +255,19 @@ public class LocalProcessBase implements LocalProcess {
      * </li>
      * </ul>
      * 
-     *
      * @see LocalProcess#query(RequestContext, String)
      */
     public Object query(RequestContext context, String query)
-        throws Exception {
-        LocalComponent[] components = getComponentInstancesForRequest(context);
-        setupComponentsChain(components, query);
+        throws ProcessingException
+    {
+        final LocalComponent[] components;
+        try {
+            components = getComponentInstancesForRequest(context);
+            setupComponentsChain(components, query);
+        } catch (MissingComponentException e) {
+            // not-reachable?
+            throw new RuntimeException("Missing component?", e);
+        }
 
         beforeProcessingStartsHook(context, components);
 
@@ -276,23 +277,21 @@ public class LocalProcessBase implements LocalProcess {
             components[0].endProcessing();
             afterProcessingEndedHook(context, components);
 
-            Object result = ((LocalOutputComponent) components[components.length -
-                1]).getResult();
-
+            Object result = ((LocalOutputComponent) components[components.length - 1]).getResult();
             return result;
-        } catch (Throwable p) {
+        } catch (ProcessingException p) {
+            // Rethrow processing exceptions
+            throw p;
+        } catch (RuntimeException t) {
+            // Inform the processing chain
             components[0].processingErrorOccurred();
-
-            if (p instanceof Exception) {
-                throw (Exception) p;
-            }
-
-            if (p instanceof Error) {
-                throw (Error) p;
-            }
-
-            // This should be unreachable, but the compiler complains.
-            throw new RuntimeException(p);
+            // Rethrow runtime exceptions as processing exceptions.
+            throw new UncheckedProcessingException("Internal processing error.", t);
+        } catch (Error t) {
+            // Inform the processing chain
+            components[0].processingErrorOccurred();
+            // Rethrow errors.
+            throw t;
         } finally {
             components[0].flushResources();
         }
@@ -308,6 +307,7 @@ public class LocalProcessBase implements LocalProcess {
      */
     protected void afterProcessingEndedHook(RequestContext context,
         LocalComponent[] components) {
+        // Do nothing
     }
 
     /**
@@ -321,6 +321,7 @@ public class LocalProcessBase implements LocalProcess {
      */
     protected void afterProcessingStartedHook(RequestContext context,
         LocalComponent[] components) {
+        // Do nothing        
     }
 
     /**
@@ -333,6 +334,7 @@ public class LocalProcessBase implements LocalProcess {
      */
     protected void beforeProcessingStartsHook(RequestContext context,
         LocalComponent[] components) {
+        // Do nothing
     }
 
     /**
@@ -374,16 +376,16 @@ public class LocalProcessBase implements LocalProcess {
      *
      * @throws MissingComponentException If any of the component factory
      *         identifiers is unavailable from the request context.
-     * @throws Exception In case of any other failure.
      */
     protected LocalComponent[] getComponentInstancesForRequest(
-        RequestContext context) throws MissingComponentException, Exception {
-        LocalComponent[] components = new LocalComponent[2 + filters.size()];
+        RequestContext context) throws MissingComponentException {
+        final LocalComponent[] components = new LocalComponent[2 + filters.size()];
 
         components[0] = context.getComponentInstance(input);
 
+        // this should be verified at process-assembling phase, but just in case
         if (!(components[0] instanceof LocalInputComponent)) {
-            throw new Exception("Component: " +
+            throw new RuntimeException("Component: " +
                 components[0].getClass().getName() + " does not implement " +
                 LocalInputComponent.class.getName());
         }
@@ -391,7 +393,7 @@ public class LocalProcessBase implements LocalProcess {
         components[components.length - 1] = context.getComponentInstance(output);
 
         if (!(components[components.length - 1] instanceof LocalOutputComponent)) {
-            throw new Exception("Component: " + input + " does not implement " +
+            throw new RuntimeException("Component: " + input + " does not implement " +
                 LocalOutputComponent.class.getName());
         }
 

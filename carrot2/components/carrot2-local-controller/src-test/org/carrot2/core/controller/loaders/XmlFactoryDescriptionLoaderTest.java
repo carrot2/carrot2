@@ -13,16 +13,20 @@
 
 package org.carrot2.core.controller.loaders;
 
-import org.carrot2.core.LocalComponent;
-import org.carrot2.core.LocalControllerBase;
-import org.carrot2.core.controller.ControllerHelper;
-import org.carrot2.core.controller.StubOutputComponent;
+import java.io.IOException;
+import java.io.InputStream;
+
+import org.carrot2.core.*;
+import org.carrot2.core.controller.*;
 
 
 /**
  *  XML component factory loader test.
  */
 public class XmlFactoryDescriptionLoaderTest extends junit.framework.TestCase {
+    private LocalControllerBase controller = new LocalControllerBase();
+    private ControllerHelper cl = new ControllerHelper();
+
     /**
      * Creates a new XmlFactoryDescriptionLoaderTest object.
      */
@@ -38,9 +42,7 @@ public class XmlFactoryDescriptionLoaderTest extends junit.framework.TestCase {
     }
 
     public void testLoadingComponentFromXMLStream() throws Exception {
-        LocalControllerBase controller = new LocalControllerBase();
-        ControllerHelper cl = new ControllerHelper();
-        cl.addComponentFactory(controller, "xml",
+        addComponentFactory(controller, "xml",
             this.getClass().getResourceAsStream("components/StubOutputComponentDescriptor.xml"));
 
         assertTrue(controller.isComponentFactoryAvailable("stub-output"));
@@ -48,9 +50,7 @@ public class XmlFactoryDescriptionLoaderTest extends junit.framework.TestCase {
 
     public void testPropertiesHaveBeenSetInXmlLoader()
         throws Exception {
-        LocalControllerBase controller = new LocalControllerBase();
-        ControllerHelper cl = new ControllerHelper();
-        cl.addComponentFactory(controller, "xml",
+        addComponentFactory(controller, "xml",
             this.getClass().getResourceAsStream("components/StubOutputComponentDescriptor.xml"));
 
         assertTrue(controller.isComponentFactoryAvailable("stub-output"));
@@ -66,11 +66,16 @@ public class XmlFactoryDescriptionLoaderTest extends junit.framework.TestCase {
     
     public void testNameHasBeenSetInXmlLoader()
         throws Exception {
-        LocalControllerBase controller = new LocalControllerBase();
-        ControllerHelper cl = new ControllerHelper();
-        cl.addComponentFactory(controller, "xml",
+        addComponentFactory(controller, "xml",
             this.getClass().getResourceAsStream("components/StubOutputComponentDescriptor.xml"));
 
         assertTrue(controller.isComponentFactoryAvailable("stub-output"));
+    }
+    
+    private void addComponentFactory(LocalControllerBase controller, String loaderId, InputStream stream) 
+        throws LoaderExtensionUnknownException, IOException, ComponentInitializationException, DuplicatedKeyException
+    {
+        LoadedComponentFactory lcf = this.cl.loadComponentFactory(loaderId, stream);
+        controller.addLocalComponentFactory(lcf.getId(), lcf.getFactory());
     }
 }

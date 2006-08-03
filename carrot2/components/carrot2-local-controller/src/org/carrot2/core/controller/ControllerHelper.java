@@ -16,8 +16,7 @@ package org.carrot2.core.controller;
 import java.io.*;
 import java.util.*;
 
-import org.carrot2.core.DuplicatedKeyException;
-import org.carrot2.core.LocalController;
+import org.carrot2.core.*;
 import org.carrot2.core.controller.loaders.*;
 
 
@@ -43,9 +42,7 @@ import org.carrot2.core.controller.loaders.*;
  * 
  * <p>
  * Please note that component and process extensions may be identical. This may
- * cause conflicts when using {@link
- * #addComponentFactoriesFromDirectory(LocalController controller, File
- * directory)} method that attempts to automatically load all components based
+ * cause conflicts when automatically loading all components based
  * on file extensions. Split loader and process definitions into two
  * directories, or use a custom {@link FileFilter} to correctly choose between
  * processes and component factories.
@@ -112,34 +109,6 @@ public class ControllerHelper {
             // impossible state: we know what we're adding.
         }
     }
-
-    /**
-     * Clears any loader extension mappings. Use this method if you need to
-     * change the default loader  extensions.
-     */
-    public void clearLoaders() {
-        this.componentFactoryLoaders.clear();
-        this.processLoaders.clear();
-    }
-
-    /**
-     * Maps a {@link ComponentFactoryLoader} to the given extension.
-     *
-     * @param loaderExtension The extension to map the loader to.
-     * @param loader The loader to use.
-     *
-     * @throws DuplicatedKeyException If the extension is already mapped to a
-     *         loader, this exception is thrown.
-     */
-    public void addComponentFactoryLoader(String loaderExtension,
-        ComponentFactoryLoader loader) throws DuplicatedKeyException {
-        if (componentFactoryLoaders.containsKey(loaderExtension)) {
-            throw new DuplicatedKeyException(
-                "Loader for this extension exists: " + loaderExtension);
-        }
-
-        componentFactoryLoaders.put(loaderExtension, loader);
-    }
     
     /**
      * Returns a component factory loader with a given extension or
@@ -149,25 +118,6 @@ public class ControllerHelper {
         return (ComponentFactoryLoader) this.componentFactoryLoaders.get(loaderExtension);
     }
 
-    /**
-     * Maps a {@link ProcessLoader} to the given extension.
-     *
-     * @param loaderExtension The extension to map the loader to.
-     * @param loader The loader to use.
-     *
-     * @throws DuplicatedKeyException If the extension is already mapped to a
-     *         loader, this exception is thrown.
-     */
-    public void addProcessLoader(String loaderExtension, ProcessLoader loader)
-        throws DuplicatedKeyException {
-        if (processLoaders.containsKey(loaderExtension)) {
-            throw new DuplicatedKeyException(
-                "Loader for this extension exists: " + loaderExtension);
-        }
-
-        processLoaders.put(loaderExtension, loader);
-    }
-    
     /**
      * Returns a registered process loader or <code>null</code>
      * if no such loader exists.
@@ -248,37 +198,11 @@ public class ControllerHelper {
      * <b>Only recognized loaders</b> (file extensions) will trigger component
      * load attempt.
      */
-    public LoadedProcess [] loadProcessesFromDirectory(File directory)
+    public LoadedProcess [] loadProcessesFromDir(File directory)
         throws IOException, DuplicatedKeyException, Exception {
-        return loadProcessesFromDirectory(directory, getProcessFileFilter());
-    }
-
-    /**
-     * Returns a file filter that accepts all files with extensions matching processes.
-     */
-    public FileFilter getProcessFileFilter() {
-        final FileFilter filter = new FileFilter() {
-            public boolean accept(File pathname) {
-                return processLoaders.containsKey(getExtension(pathname));
-            }
-        };
-        return filter;
+        return loadProcessesFromDir(directory, getProcessFileFilter());
     }
     
-    /**
-     * Returns a file filter that accepts all files with extensions matching
-     * components.
-     */
-    public FileFilter getComponentFilter() {
-        final FileFilter filter = new FileFilter() {
-            public boolean accept(File pathname) {
-                return componentFactoryLoaders.containsKey(getExtension(
-                        pathname));
-            }
-        };
-        return filter;
-    }
-
     /**
      * Loads processes from a directory and returns an array of {@link LoadedProcess}.
      *
@@ -293,7 +217,7 @@ public class ControllerHelper {
      * @throws Exception Thrown if some process has been loaded and
      *         initialized, but adding it to a controller failed.
      */
-    public LoadedProcess [] loadProcessesFromDirectory(File directory, FileFilter filter)
+    public LoadedProcess [] loadProcessesFromDir(File directory, FileFilter filter)
         throws IOException, DuplicatedKeyException, Exception {
         final File[] files = directory.listFiles(filter);
         Arrays.sort(files, filenameComparator);
@@ -310,69 +234,6 @@ public class ControllerHelper {
         }
         return (LoadedProcess []) loadedProcesses.toArray(
                 new LoadedProcess [loadedProcesses.size()]);
-    }
-
-    /**
-     * Loads all processes in a directory and adds them to a given controller.
-     * <b>Only recognized loaders</b> (file extensions) will trigger component
-     * load attempt.
-     *
-     * @param controller The controller to add the process to.
-     * @param directory The directory to scan. Subdirectories are not
-     *        traversed.
-     *
-     * @throws IOException Thrown if an i/o exception occurs.
-     * @throws DuplicatedKeyException Thrown if the controller already has a
-     *         component factory mapped to the identifier of the newly loaded
-     *         factory.
-     * @throws Exception Thrown if some process has been loaded and
-     *         initialized, but adding it to a controller failed.
-     */
-    public void addProcessesFromDirectory(LocalController controller, File directory)
-        throws IOException, DuplicatedKeyException, Exception {
-        final LoadedProcess [] loadedProcesses = loadProcessesFromDirectory(directory);
-        for (int i = 0; i < loadedProcesses.length; i++) {
-            final LoadedProcess lp = loadedProcesses[i];
-            controller.addProcess(lp.getId(), lp.getProcess());
-        }
-    }
-
-    /**
-     * Applies {@link #loadProcess(File file)}
-     * method to all files in the directory that return <code>true</code> from
-     * the provided file name selector filter and adds processes to the given
-     * controller.
-     *
-     * @param controller The controller to add the process to.
-     * @param directory The directory to scan. Subdirectories are not
-     *        traversed.
-     * @param filter FileFilter object for selecting files to add to the
-     *        controller.
-     *
-     * @throws IOException Thrown if an i/o exception occurs.
-     * @throws DuplicatedKeyException Thrown if the controller already has a
-     *         component factory mapped to the identifier of the newly loaded
-     *         factory.
-     * @throws LoaderExtensionUnknownException Thrown if there is no loader
-     *         associated with the provided extension.
-     * @throws Exception Thrown if some process has been loaded and
-     *         initialized, but adding it to a controller failed.
-     */
-    public void addProcessesFromDirectory(LocalController controller,
-        File directory, FileFilter filter)
-        throws LoaderExtensionUnknownException, IOException, 
-            DuplicatedKeyException, Exception {
-        File[] files = directory.listFiles(filter);
-
-        for (int i = 0; i < files.length; i++) {
-            try {
-                final LoadedProcess loadedProcess = loadProcess(files[i]);
-                controller.addProcess(loadedProcess.getId(), loadedProcess.getProcess());
-            } catch (FileNotFoundException e) {
-                // file has been apparently deleted between list()
-                // and its access time. ok, ignore it.
-            }
-        }
     }
 
     /**
@@ -408,75 +269,24 @@ public class ControllerHelper {
             }
         }
     }
-    
-    /**
-     * Adds a component factory to the local controller, the factory is read
-     * from a data stream using a loader matching the provided extension.
-     * 
-     * <p>
-     * The stream is always closed when this method returns.
-     * </p>
-     *
-     * @param controller The controller to add the factory to.
-     * @param loaderExtension The extension of a loader to use.
-     * @param data Data stream.
-     *
-     * @throws IOException Thrown if an i/o exception occurs.
-     * @throws LoaderExtensionUnknownException Thrown if there is no loader
-     *         associated with the provided extension.
-     * @throws DuplicatedKeyException Thrown if the controller already has a
-     *         component factory mapped to the identifier of the newly loaded
-     *         factory.
-     */
-    public void addComponentFactory(LocalController controller,
-            String loaderExtension, InputStream data)
-        throws IOException, LoaderExtensionUnknownException, 
-        	ComponentInitializationException, DuplicatedKeyException {
-        try {
-            final LoadedComponentFactory loaded = loadComponentFactory(loaderExtension, data);
-            controller.addLocalComponentFactory(loaded.getId(), loaded.getFactory());
-        } finally {
-            try {
-                data.close();
-            } catch (IOException e) {
-            }
-        }
-    }
-
-    /**
-     * Adds a component factory to the local controller, the factory is read
-     * from a file. The extension of the file is used to find the appropriate
-     * loader.
-     *
-     * @param controller The controller to add the factory to.
-     * @param file The file to load the factory from.
-     *
-     * @throws FileNotFoundException Thrown if the file does not exist.
-     * @throws IOException Thrown if an i/o exception occurs.
-     * @throws LoaderExtensionUnknownException Thrown if there is no loader
-     *         associated with the provided extension.
-     * @throws ComponentInitializationException Thrown if factory has been loaded, but
-     *         components instantiation failed in the controller.
-     * @throws DuplicatedKeyException Thrown if the controller already has a
-     *         component factory mapped to the identifier of the newly loaded
-     *         factory.
-     */
-    public void addComponentFactory(LocalController controller, File file)
-        throws FileNotFoundException, IOException, 
-            LoaderExtensionUnknownException, ComponentInitializationException, 
-            DuplicatedKeyException {
-        addComponentFactory(controller, getExtension(file), new FileInputStream(file));
-    }
 
     /**
      * Loads component factories from a given directory. 
-     * @throws ComponentInitializationException 
-     * @throws IOException 
      */
-    public LoadedComponentFactory [] loadComponentFactoriesFromDirectory(File directory) 
+    public LoadedComponentFactory [] loadComponentFactoriesFromDir(File directory) 
         throws IOException, ComponentInitializationException
     {
-        final File[] files = directory.listFiles(getComponentFilter());
+        return loadComponentFactoriesFromDir(directory, getComponentFilter());
+    }
+
+    /**
+     * Loads component factories from a given directory and select files using
+     * a custom file filter. 
+     */
+    public LoadedComponentFactory [] loadComponentFactoriesFromDir(File directory, FileFilter customFilter) 
+        throws IOException, ComponentInitializationException
+    {
+        final File[] files = directory.listFiles(customFilter);
         Arrays.sort(files, filenameComparator);
 
         final ArrayList list = new ArrayList(files.length);
@@ -497,64 +307,53 @@ public class ControllerHelper {
     }
 
     /**
-     * Applies {@link #addComponentFactory(LocalController controller, File
-     * file)} method to all files in the directory. <b>Only recognized
-     * loaders</b> (file extensions) will trigger component load attempt.
-     *
-     * @param controller The controller to add the factory to.
-     * @param directory The directory to load components from. Subdirectories
-     *        are not traversed.
-     *        
-     * @throws IOException Thrown if an i/o exception occurs.
-     * @throws ComponentInitializationException Thrown if factory has been loaded, but
-     *         components instantiation failed in the controller.
-     * @throws DuplicatedKeyException Thrown if the controller already has a
-     *         component factory mapped to the identifier of the newly loaded
-     *         factory.
+     * Add all component factories to a controller.
      */
-    public void addComponentFactoriesFromDirectory(LocalController controller, File directory)
-        throws IOException, ComponentInitializationException, DuplicatedKeyException {
-        final LoadedComponentFactory [] loaded = loadComponentFactoriesFromDirectory(directory);
-        for (int i = 0; i < loaded.length; i++) {
-            controller.addLocalComponentFactory(loaded[i].getId(), loaded[i].getFactory());
+    public void addAll(LocalController controller, LoadedComponentFactory[] factories)
+        throws DuplicatedKeyException
+    {
+        for (int i = 0; i < factories.length; i++) {
+            controller.addLocalComponentFactory(factories[i].getId(), factories[i].getFactory());
         }
     }
 
     /**
-     * Applies {@link #addComponentFactory(LocalController controller, File
-     * file)} method to all files in the directory that return
-     * <code>true</code> from the provided file name selector filter.
-     *
-     * @param controller The controller to add the factory to.
-     * @param directory The directory to load components from. Subdirectories
-     *        are not traversed.
-     * @param filter Custom file name filter to use.
-     *
-     * @throws IOException Thrown if an i/o exception occurs.
-     * @throws ComponentInitializationException Thrown if factory has been loaded, but
-     *         components instantiation failed in the controller.
-     * @throws DuplicatedKeyException Thrown if the controller already has a
-     *         component factory mapped to the identifier of the newly loaded
-     *         factory.
-     * @throws LoaderExtensionUnknownException Thrown if there is no loader
-     *         associated with the provided extension.
+     * Add all processes to a controller.
      */
-    public void addComponentFactoriesFromDirectory(LocalController controller,
-        File directory, FileFilter filter)
-        throws IOException, LoaderExtensionUnknownException, 
-        	ComponentInitializationException, DuplicatedKeyException {
-        File[] files = directory.listFiles(filter);
-
-        for (int i = 0; i < files.length; i++) {
-            try {
-                addComponentFactory(controller, files[i]);
-            } catch (FileNotFoundException e) {
-                // file has been apparently deleted between list()
-                // and its access time. ok, ignore it.
-            }
+    public void addAll(LocalController controller, LoadedProcess[] loadedProcesses) 
+        throws DuplicatedKeyException, InitializationException, MissingComponentException
+    {
+        for (int i = 0; i < loadedProcesses.length; i++) {
+            controller.addProcess(loadedProcesses[i].getId(), loadedProcesses[i].getProcess());
         }
     }
-
+    
+    /**
+     * Returns a file filter that accepts all files with extensions matching processes.
+     */
+    public FileFilter getProcessFileFilter() {
+        final FileFilter filter = new FileFilter() {
+            public boolean accept(File pathname) {
+                return processLoaders.containsKey(getExtension(pathname));
+            }
+        };
+        return filter;
+    }
+    
+    /**
+     * Returns a file filter that accepts all files with extensions matching
+     * components.
+     */
+    public FileFilter getComponentFilter() {
+        final FileFilter filter = new FileFilter() {
+            public boolean accept(File pathname) {
+                return componentFactoryLoaders.containsKey(getExtension(
+                        pathname));
+            }
+        };
+        return filter;
+    }
+    
     /**
      * @param file A {@link File} object to return the file name extension
      *        from.
@@ -572,5 +371,52 @@ public class ControllerHelper {
         }
 
         return fileName.substring(lastDotIndex + 1);
+    }
+    
+    /**
+     * Clears any loader extension mappings. Use this method if you need to
+     * change the default loader  extensions.
+     */
+    private void clearLoaders() {
+        this.componentFactoryLoaders.clear();
+        this.processLoaders.clear();
+    }
+
+    /**
+     * Maps a {@link ComponentFactoryLoader} to the given extension.
+     *
+     * @param loaderExtension The extension to map the loader to.
+     * @param loader The loader to use.
+     *
+     * @throws DuplicatedKeyException If the extension is already mapped to a
+     *         loader, this exception is thrown.
+     */
+    private void addComponentFactoryLoader(String loaderExtension,
+        ComponentFactoryLoader loader) throws DuplicatedKeyException {
+        if (componentFactoryLoaders.containsKey(loaderExtension)) {
+            throw new DuplicatedKeyException(
+                "Loader for this extension exists: " + loaderExtension);
+        }
+
+        componentFactoryLoaders.put(loaderExtension, loader);
+    }
+
+    /**
+     * Maps a {@link ProcessLoader} to the given extension.
+     *
+     * @param loaderExtension The extension to map the loader to.
+     * @param loader The loader to use.
+     *
+     * @throws DuplicatedKeyException If the extension is already mapped to a
+     *         loader, this exception is thrown.
+     */
+    private void addProcessLoader(String loaderExtension, ProcessLoader loader)
+        throws DuplicatedKeyException {
+        if (processLoaders.containsKey(loaderExtension)) {
+            throw new DuplicatedKeyException(
+                "Loader for this extension exists: " + loaderExtension);
+        }
+
+        processLoaders.put(loaderExtension, loader);
     }
 }

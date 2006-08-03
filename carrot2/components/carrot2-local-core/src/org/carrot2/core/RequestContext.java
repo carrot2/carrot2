@@ -63,20 +63,15 @@ public interface RequestContext
      *             the controller.
      * @throws IllegalStateException in case of an attempt to get component
      *             instance after the this context has been disposed of
-     * @throws Exception If the controller was unable to create a new instance
-     *             of the given component, even though the factory for it
-     *             exists.
      */
     public LocalComponent getComponentInstance(String key)
-        throws MissingComponentException, IllegalStateException, Exception;
+        throws MissingComponentException, IllegalStateException;
 
     /**
      * Called by the {@link LocalController} after processing this request has
      * been completed (no matter whether successfully or not). After the dispose
      * method has been called, it is not possible to get component instances
      * using the {@link #getComponentInstance(String)} method.
-     * 
-     * @throws Exception if errors occur during disposing
      */
-    public void dispose() throws Exception;
+    public void dispose();
 }

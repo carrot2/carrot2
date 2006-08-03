@@ -20,8 +20,10 @@ import java.util.Map;
  * A container for local processes and local components. Local applications will
  * use this interface to set up all necessary processes and components as well
  * as to execute queries.
- * 
+ *
  * @author Stanislaw Osinski
+ * @author Dawid Weiss
+ * 
  * @version $Revision$
  */
 public interface LocalController
@@ -52,8 +54,6 @@ public interface LocalController
      * Adds a factory that will be used to produce components associated with
      * given <code>componentId</code>.
      * 
-     * @param componentId
-     * @param factory
      * @throws DuplicatedKeyException Thrown when <code>componentId</code> already
      *      exists in the controller.
      */
@@ -67,18 +67,14 @@ public interface LocalController
      * 
      * @param processId identifier of the new process
      * @param localProcess instance of the local process
-     * @throws Exception if an error occurrs during initialization of the
-     *             process.
      */
     public void addProcess(String processId, LocalProcess localProcess)
-        throws Exception;
+        throws InitializationException, MissingComponentException, DuplicatedKeyException;
 
     /**
      * Returns the name of the process associated with given
      * <code>processId</code>.
      * 
-     * @param processId
-     * @return process name
      * @throws MissingProcessException when there is no process associated with
      *             <code>processId</code>
      */
@@ -86,42 +82,14 @@ public interface LocalController
         throws MissingProcessException;
 
     /**
-     * Returns description of the process associated with given
-     * <code>processId</code>.
-     * 
-     * @param processId
-     * @return process description
-     * @throws MissingProcessException when there is no process associated with
-     *             given <code>processId</code>
-     */
-    public String getProcessDescription(String processId)
-        throws MissingProcessException;
-
-    /**
      * Returns the name of the component associated with given
      * <code>componentId</code>.
      * 
-     * @param componentId
-     * @return component name
-     * @throws Exception when component could not be instantiated
      * @throws MissingComponentException when there is no component associated
      *             with given <code>componentId</code>
      */
     public String getComponentName(String componentId)
-        throws MissingComponentException, Exception;
-
-    /**
-     * Returns the description of the component associated with given
-     * <code>componentId</code>.
-     * 
-     * @param componentId
-     * @return component description
-     * @throws Exception when component could not be instantiated
-     * @throws MissingComponentException when there is no component associated
-     *             with given <code>componentId</code>
-     */
-    public String getComponentDescription(String componentId)
-        throws MissingComponentException, Exception;
+        throws MissingComponentException;
 
     /**
      * Returns a {@link List}of identifiers of all processes that have been

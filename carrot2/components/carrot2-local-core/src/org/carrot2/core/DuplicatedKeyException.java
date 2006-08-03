@@ -20,14 +20,7 @@ package org.carrot2.core;
  * @author Dawid Weiss
  * @version $Revision$
  */
-public class DuplicatedKeyException extends RuntimeException {
-    /**
-     * Creates a new exception object.
-     */
-    public DuplicatedKeyException() {
-        super();
-    }
-
+public final class DuplicatedKeyException extends Exception {
     /**
      * Creates a new exception object with an additional message.
      *
