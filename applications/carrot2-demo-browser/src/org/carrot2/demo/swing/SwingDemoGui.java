@@ -18,7 +18,8 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
-import org.carrot2.demo.*;
+import org.carrot2.demo.DemoContext;
+import org.carrot2.demo.ProcessSettings;
 import org.carrot2.demo.swing.util.*;
 
 import com.jgoodies.forms.layout.CellConstraints;
@@ -131,7 +132,12 @@ public class SwingDemoGui {
         final Runnable task = new Runnable() {
             public void run() {
                 // Now initialize the application.
-                demoContext.initialize();
+                try {
+                    demoContext.initialize();
+                } catch (Exception e) {
+                    SwingUtils.showExceptionDialog(frame, 
+                            "Program startup failed.", e);
+                }
 
                 processComboModel = new MapComboModel(demoContext.getProcessIdToProcessNameMap());
                 processComboBox.setModel(processComboModel);
@@ -146,10 +152,10 @@ public class SwingDemoGui {
                 enableUI();
             }
         };
+
         try {
             SwingTask.runNow(task);
         } catch (Throwable t) {
-            SwingUtils.showExceptionDialog(frame, "Initialization exception.", t);
         }
     }
 

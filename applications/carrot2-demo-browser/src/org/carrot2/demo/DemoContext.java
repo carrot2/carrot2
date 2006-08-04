@@ -14,6 +14,7 @@
 package org.carrot2.demo;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
@@ -32,7 +33,7 @@ public class DemoContext {
     private final String PROCESS_DEFAULT = "process.default";
 
     /** Local Carrot2 controller */
-    private LocalController controller = new LocalControllerBase();
+    private final LocalControllerBase controller;
 
     /** Maps process identifiers to their user interface names. */
     private HashMap processIdToName;
@@ -73,6 +74,8 @@ public class DemoContext {
      */
     public DemoContext() {
         this.localDefinitionFolders = true;
+        this.controller = new LocalControllerBase();
+        this.controller.setComponentAutoload(true);
     }
 
     /**
@@ -83,13 +86,17 @@ public class DemoContext {
         this.localDefinitionFolders = false;
         this.componentUrls = components;
         this.processUrls = processes;
+        this.controller = new LocalControllerBase();
+        this.controller.setComponentAutoload(true);
     }
 
     /**
      * Initialize the demo context, create local controller 
      * and component factories.
      */
-    public void initialize() {
+    public void initialize() throws InitializationException, MissingComponentException, 
+        DuplicatedKeyException, IOException, ComponentInitializationException
+    {
         final ControllerHelper cl = new ControllerHelper();
 
         if (localDefinitionFolders) {
@@ -104,12 +111,8 @@ public class DemoContext {
                         + componentsDir.getAbsolutePath());
             }
     
-            try {
-                cl.addAll(controller, cl.loadComponentFactoriesFromDir(componentsDir));
-                this.loadedProcesses = Arrays.asList(cl.loadProcessesFromDir(processesDir));
-            } catch (Exception e) {
-                throw new RuntimeException("Unhandled exception when initializing components and processes.", e);
-            }
+            cl.addAll(controller, cl.loadComponentFactoriesFromDir(componentsDir));
+            this.loadedProcesses = Arrays.asList(cl.loadProcessesFromDir(processesDir));
         } else {
             try {
                 // Initialization from resource files.
@@ -135,43 +138,37 @@ public class DemoContext {
         //
         // Add scripted/ custom components and processes
         //
-        try {
-            for (Iterator i = loadedProcesses.iterator(); i.hasNext();) {
-                final LoadedProcess lp = (LoadedProcess) i.next();
-                if (lp.getAttributes().containsKey(PROCESS_SETTINGS_CLASS)) {
-                    final String processSettingsClass = (String) lp.getAttributes().get(PROCESS_SETTINGS_CLASS);
-                    try {
-                        final Class clazz = Thread.currentThread().getContextClassLoader().loadClass(processSettingsClass);
-                        final ProcessSettings st = (ProcessSettings) clazz.newInstance();
-                        this.loadedSettings.put(lp.getId(), st);
-                    } catch (Exception e) {
-                        throw new RuntimeException("Could not load process settings: "
-                                + processSettingsClass, e);
-                    }
-                    if (lp.getAttributes().containsKey(PROCESS_DEFAULT)) {
-                        this.defaultProcess = lp.getId();
-                    }
+        for (Iterator i = loadedProcesses.iterator(); i.hasNext();) {
+            final LoadedProcess lp = (LoadedProcess) i.next();
+            if (lp.getAttributes().containsKey(PROCESS_SETTINGS_CLASS)) {
+                final String processSettingsClass = (String) lp.getAttributes().get(PROCESS_SETTINGS_CLASS);
+                try {
+                    final Class clazz = Thread.currentThread().getContextClassLoader().loadClass(processSettingsClass);
+                    final ProcessSettings st = (ProcessSettings) clazz.newInstance();
+                    this.loadedSettings.put(lp.getId(), st);
+                } catch (Exception e) {
+                    throw new RuntimeException("Could not load process settings: "
+                            + processSettingsClass, e);
                 }
-                if (lp.getAttributes().containsKey(CLUSTER_INFO_RENDERER_CLASS)) {
-                    final String clusterInfoRendererClass = (String) lp.getAttributes().get(CLUSTER_INFO_RENDERER_CLASS);
-                    try {
-                        final Class clazz = Thread.currentThread().getContextClassLoader().loadClass(clusterInfoRendererClass);
-                        final ClusterInfoRenderer cir = (ClusterInfoRenderer) clazz.newInstance();
-                        this.loadedClusterInfoRenderers.put(lp.getId(), cir);
-                    } catch (Exception e) {
-                        throw new RuntimeException("Could not load process settings: "
-                            + clusterInfoRendererClass, e);
-                    }
-                    if (lp.getAttributes().containsKey(PROCESS_DEFAULT)) {
-                        this.defaultProcess = lp.getId();
-                    }
+                if (lp.getAttributes().containsKey(PROCESS_DEFAULT)) {
+                    this.defaultProcess = lp.getId();
                 }
-                controller.addProcess(lp.getId(), lp.getProcess());
             }
-        } catch (DuplicatedKeyException e) {
-            throw new RuntimeException("Identifiers of components and processes must be unique.", e);
-        } catch (Exception e) {
-            throw new RuntimeException("Unhandled exception when initializing components and processes.", e);
+            if (lp.getAttributes().containsKey(CLUSTER_INFO_RENDERER_CLASS)) {
+                final String clusterInfoRendererClass = (String) lp.getAttributes().get(CLUSTER_INFO_RENDERER_CLASS);
+                try {
+                    final Class clazz = Thread.currentThread().getContextClassLoader().loadClass(clusterInfoRendererClass);
+                    final ClusterInfoRenderer cir = (ClusterInfoRenderer) clazz.newInstance();
+                    this.loadedClusterInfoRenderers.put(lp.getId(), cir);
+                } catch (Exception e) {
+                    throw new RuntimeException("Could not load process settings: "
+                        + clusterInfoRendererClass, e);
+                }
+                if (lp.getAttributes().containsKey(PROCESS_DEFAULT)) {
+                    this.defaultProcess = lp.getId();
+                }
+            }
+            controller.addProcess(lp.getId(), lp.getProcess());
         }
 
         final HashMap processIdToName = new HashMap();
@@ -185,7 +182,7 @@ public class DemoContext {
                 }
                 processIdToName.put(processId, processName);
             } catch (MissingProcessException e) {
-                throw new Error("Process identifier not associated with any name?", e);
+                throw new RuntimeException("Process identifier not associated with any name?", e);
             }
         }
         this.processIdToName = processIdToName;

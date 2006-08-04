@@ -138,18 +138,7 @@ public class XmlFactoryDescriptionLoader implements ComponentFactoryLoader {
                 }
             }
             
-            String name = null;
-            Element nameElement = root.element("name");
-            if (nameElement != null)
-                name = nameElement.getTextTrim();
-
-            String description = null;
-            Element descriptionElement = root.element("description");
-            if (descriptionElement != null)
-                description = descriptionElement.getTextTrim();
-
             Class componentClazz;
-
             try {
                 componentClazz = Thread.currentThread().getContextClassLoader()
                                        .loadClass(componentClass);

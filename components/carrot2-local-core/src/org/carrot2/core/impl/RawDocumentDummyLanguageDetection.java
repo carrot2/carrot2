@@ -31,9 +31,9 @@ import org.carrot2.core.profiling.ProfiledLocalFilterComponentBase;
  * @author Stanislaw Osinski
  * @version $Revision$
  */
-public class RawDocumentDummyLanguageDetection extends
-    ProfiledLocalFilterComponentBase implements RawDocumentsProducer,
-    RawDocumentsConsumer
+public class RawDocumentDummyLanguageDetection 
+    extends ProfiledLocalFilterComponentBase 
+    implements RawDocumentsProducer, RawDocumentsConsumer
 {
     /**
      * Name of the context parameter which holds the default language
@@ -42,37 +42,22 @@ public class RawDocumentDummyLanguageDetection extends
     public static final String PARAM_LANGUAGE_CODE_TO_SET = "lang-code";
 
     /**
-     * Default language code to set if no {@link #PARAM_LANGUAGE_CODE_TO_SET}
-     * was provided in the context params. 
-     */
-    public static final String DEFAULT_LANGUAGE_CODE_TO_SET = "en";
-
-    /**
      * Capabilities exposed by this component.
      */
-    private static final Set CAPABILITIES_COMPONENT = new HashSet(Arrays
-        .asList(new Object []
-        {
-            RawDocumentsProducer.class, RawDocumentsConsumer.class
-        }));
+    private static final Set CAPABILITIES_COMPONENT = toSet(
+            RawDocumentsProducer.class, RawDocumentsConsumer.class);
 
     /**
      * Capabilities required of the successor of this component.
      */
-    private static final Set CAPABILITIES_SUCCESSOR = new HashSet(Arrays
-        .asList(new Object []
-        {
-            RawDocumentsConsumer.class,
-        }));
+    private static final Set CAPABILITIES_SUCCESSOR = toSet(
+            RawDocumentsConsumer.class);
 
     /**
      * Capabilities required of the predecessor of this component.
      */
-    private static final Set CAPABILITIES_PREDECESSOR = new HashSet(Arrays
-        .asList(new Object []
-        {
-            RawDocumentsProducer.class,
-        }));
+    private static final Set CAPABILITIES_PREDECESSOR = toSet(
+            RawDocumentsProducer.class);
 
     /**
      * The successor component, consumer of documents accepted by this
@@ -81,7 +66,7 @@ public class RawDocumentDummyLanguageDetection extends
     private RawDocumentsConsumer rawDocumentConsumer;
 
     /** Language code to be added to the documents */
-    private final String languageCode;
+    private String languageCode;
 
     /** 
      * Language code set for the duration of one query (either an override
@@ -89,6 +74,16 @@ public class RawDocumentDummyLanguageDetection extends
      * or the {@link #languageCode} set in the constructor). 
      */
     private String currentLanguageCode;
+
+    /**
+     * Default no-language-code constructor. Use 
+     * {@link #setProperty(String, String)} method and
+     * set the default language code appropriately.
+     */
+    public RawDocumentDummyLanguageDetection()
+    {
+        this.languageCode = null;
+    }
 
     /**
      * @param languageCode
@@ -107,7 +102,9 @@ public class RawDocumentDummyLanguageDetection extends
     public void addDocument(RawDocument doc) throws ProcessingException
     {
         startTimer();
-        doc.setProperty(RawDocument.PROPERTY_LANGUAGE, currentLanguageCode);
+        if (this.currentLanguageCode != null) {
+            doc.setProperty(RawDocument.PROPERTY_LANGUAGE, currentLanguageCode);
+        }
         stopTimer();
 
         // pass the document reference...
@@ -124,10 +121,12 @@ public class RawDocumentDummyLanguageDetection extends
     {
         // If there's an override of the default language in the context,
         // use it. Otherwise, take the default set in the constructor.
-        final String languageCodeForQuery = (String) requestContext
+        String languageCodeForQuery = (String) requestContext
             .getRequestParameters().get(PARAM_LANGUAGE_CODE_TO_SET);
         if (languageCodeForQuery != null) {
             this.currentLanguageCode = languageCodeForQuery;
+        } else if (this.getProperty(PARAM_LANGUAGE_CODE_TO_SET) != null) {
+            this.currentLanguageCode = getProperty(PARAM_LANGUAGE_CODE_TO_SET);
         } else {
             this.currentLanguageCode = this.languageCode;
         }
