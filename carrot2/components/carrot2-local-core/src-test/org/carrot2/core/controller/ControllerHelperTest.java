@@ -63,7 +63,7 @@ public class ControllerHelperTest extends junit.framework.TestCase {
         assertTrue(controller.isComponentFactoryAvailable("stub-output"));
     }
 
-    public void testLoadingComponentFromDirectory() throws Exception {
+    public void testLoadingComponentsFromDirectory() throws Exception {
         // an easy way to descent to the right package...
         File dir = new File(this.getClass().getName().replace('.', '/')).getParentFile();
         File file = new File(dir, "loaders" + File.separator + "components");
@@ -81,7 +81,7 @@ public class ControllerHelperTest extends junit.framework.TestCase {
         assertTrue(controller.isComponentFactoryAvailable("stub-output-bsh"));
     }
 
-    public void testLoadingComponentFromDirectoryWithFilter()
+    public void testLoadingComponentsFromDirectoryWithFilter()
         throws Exception {
         // an easy way to descent to the right package...
         File dir = new File(this.getClass().getName().replace('.', '/')).getParentFile();
@@ -140,6 +140,29 @@ public class ControllerHelperTest extends junit.framework.TestCase {
         ControllerHelper cl = new ControllerHelper();
 
         cl.addAll(controller, cl.loadComponentFactoriesFromDir(file));
+        final LoadedProcess loadedProcess = cl.loadProcess(processFile);
+        controller.addProcess(loadedProcess.getId(), loadedProcess.getProcess());
+
+        assertTrue(controller.getProcessIds().contains("xmlprocess"));
+    }
+    
+    public void testComponentAutoLoading() throws Exception {
+        // an easy way to descent to the right package...
+        File dir = new File(this.getClass().getName().replace('.', '/')).getParentFile();
+        File file = new File(dir, "loaders" + File.separator + "components");
+        File processFile = new File(dir,
+                "loaders" + File.separator + "autoload" + File.separator +
+                "xml-process.xml");
+
+        LocalControllerBase controller = new LocalControllerBase();
+        controller.setComponentAutoload(true);
+
+        ControllerHelper cl = new ControllerHelper();
+
+        // Load several components manually,
+        cl.addAll(controller, cl.loadComponentFactoriesFromDir(file));
+
+        // And now try to load the process.
         final LoadedProcess loadedProcess = cl.loadProcess(processFile);
         controller.addProcess(loadedProcess.getId(), loadedProcess.getProcess());
 

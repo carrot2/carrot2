@@ -29,6 +29,16 @@
 -keep class org.carrot2.core.** {
     public protected *;
 }
+
+# Keep local controller utility classes used from BeanShell.
+-keep class org.carrot2.core.controller.* {
+    public protected static <methods>;
+    public protected static <fields>;
+}
+-keep class org.carrot2.core.controller.loaders.* {
+    public protected static <methods>;
+    public protected static <fields>;
+}
         ]]></meta>
     </provides>
 
@@ -37,4 +47,7 @@
     <dependency name="commons-pool" />
     <dependency name="carrot2-license" />
     <dependency name="carrot2-util-common" />
+    <dependency name="beanshell" />
+    
+    <dependency name="junit" profile="test" />
 </component>

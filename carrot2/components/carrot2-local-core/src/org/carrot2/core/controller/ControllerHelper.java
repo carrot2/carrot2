@@ -355,15 +355,32 @@ public class ControllerHelper {
     }
     
     /**
+     * Returns a set of <code>String</code> keys -- extensions 
+     * of streams recognized as component factories. 
+     */
+    public Set getRecognizedComponentFactoryExtensions() {
+        return Collections.unmodifiableSet(
+                this.componentFactoryLoaders.keySet());
+    }
+    
+    /**
      * @param file A {@link File} object to return the file name extension
      *        from.
      *
      * @return Returns the file name extension, or an empty string if no
      *         extension is available.
      */
-    protected final String getExtension(File file) {
-        String fileName = file.getName();
-
+    public final String getExtension(File file) {
+        return getExtension(file.getName());
+    }
+    
+    /**
+     * @param fileName A resource name the extension should be extracted from.
+     *
+     * @return Returns the extension, or an empty string if no
+     *         extension is available.
+     */
+    public final String getExtension(String fileName) {
         int lastDotIndex = fileName.lastIndexOf('.');
 
         if ((lastDotIndex == -1) || ((lastDotIndex + 1) == fileName.length())) {
@@ -372,6 +389,7 @@ public class ControllerHelper {
 
         return fileName.substring(lastDotIndex + 1);
     }
+    
     
     /**
      * Clears any loader extension mappings. Use this method if you need to

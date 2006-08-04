@@ -170,7 +170,8 @@ public class LocalProcessBase implements LocalProcess {
             throw new InitializationException("Output component is required.");
         }
 
-        // verify implemented interfaces.
+        // verify implemented interfaces and availability of all components in
+        // the chain.
         Class c;
         c = LocalInputComponent.class;
         if (!c.isAssignableFrom(context.getComponentClass(input))) {
