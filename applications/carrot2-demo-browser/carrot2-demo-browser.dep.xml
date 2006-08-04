@@ -57,7 +57,6 @@
 
     <dependency name="carrot2-util-common" />
     <dependency name="carrot2-local-core" />
-    <dependency name="carrot2-local-controller" />
     
     <dependency name="proguard-base" />
 

@@ -13,10 +13,13 @@
 
 package org.carrot2.core;
 
+import java.io.*;
 import java.util.*;
 
 import org.apache.commons.pool.*;
 import org.apache.commons.pool.impl.GenericObjectPool;
+import org.carrot2.core.controller.*;
+import org.carrot2.core.controller.loaders.ComponentInitializationException;
 
 /**
  * A complete base implementation of the
@@ -35,6 +38,8 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
 
     /** Stores local processes */
     protected Map processes;
+
+    private boolean autoload;
 
     /**
      * Default implementation of the {@link ProcessingResult} interface.
@@ -195,8 +200,121 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
         if (processes.containsKey(processId))
             throw new DuplicatedKeyException("Process with this identifier " +
                     "already exists: " + processId);
-        localProcess.initialize(this);
+        if (autoload) {
+            boolean initialized = false;
+            do {
+                try {
+                    localProcess.initialize(this);
+                    initialized = true;
+                } catch (MissingComponentException e) {
+                    // At least one component is missing. Try autoloading.
+                    LoadedComponentFactory loadedComponent;
+                    try {
+                        loadedComponent = searchComponentFactory(e.getMissingComponentId());
+                        if (loadedComponent == null) {
+                            /* nothing found, rethrow missing component exception */
+                            throw e;
+                        }
+                        // Component factory found, add it and retry.
+                        this.addLocalComponentFactory(loadedComponent.getId(),
+                                loadedComponent.getFactory());
+                    } catch (IOException ioe) {
+                        throw new InitializationException("Missing component autoloading failed: "
+                                + e.getMissingComponentId(), ioe);
+                    } catch (ComponentInitializationException cie) {
+                        throw new InitializationException("Missing component autoloading failed: "
+                                + e.getMissingComponentId(), cie);
+                    }
+                }
+            } while (!initialized);
+        } else {
+            localProcess.initialize(this);
+        }
         processes.put(processId, localProcess);
+    }
+
+    /**
+     * Component factory auto-lookup. We convert the identifier
+     * of a component factory to resource name and then try to read that
+     * resource (if found). 
+     * 
+     * @throws MissingComponentException If nothing can be found, this exception is rethrown.
+     */
+    private LoadedComponentFactory searchComponentFactory(String componentId)
+        throws IOException, ComponentInitializationException
+    {
+        final ControllerHelper helper = new ControllerHelper();
+        final String [] nameCandidates = getPotentialComponentNames(componentId, helper);
+
+        InputStream stream = null;
+        for (int i = 0; i < nameCandidates.length; i++) {
+            // Construct resource name
+            final String resourceName = "" + nameCandidates[i];
+
+            // Try context class loader first.
+            final ClassLoader ctxLoader = Thread.currentThread().getContextClassLoader();
+            stream = ctxLoader.getResourceAsStream(resourceName);
+
+            if (stream == null) {
+                // Try this class's loader next.
+                final ClassLoader clsLoader = this.getClass().getClassLoader();
+                stream = clsLoader.getResourceAsStream(resourceName);
+   
+                if (stream == null) {
+                    // Try local directory
+                    final File file = new File("components" + 
+                            File.separator + nameCandidates[i]);
+                    try {
+                        if (file.exists() && file.isFile() && file.canRead()) {
+                            stream = new FileInputStream(file);
+                            
+                            // NO MORE OPTIONS
+                            if (stream == null) {
+                                continue;
+                            }
+                        }
+                    } catch (SecurityException e) {
+                        // Ignore security exceptions.
+                    } catch (IOException e) {
+                        // Ignore IO exceptions.
+                    }
+                }
+            }
+            
+            if (stream != null) {
+                // Something found. Try reading it.
+                try {
+                    return helper.loadComponentFactory(
+                            helper.getExtension(nameCandidates[i]), stream);
+                } catch (LoaderExtensionUnknownException e) {
+                    // theoretically unreachable...
+                    throw new RuntimeException("Loader unknown?");
+                }
+            }
+        }
+        
+        // Nothing found.
+        return null;
+    }
+    
+    /**
+     * Generates potential component descriptor names from its it.
+     */
+    private String [] getPotentialComponentNames(String componentId, ControllerHelper helper) {
+        final Object [] extensions = helper.getRecognizedComponentFactoryExtensions().toArray();
+        final String [] baseNames = new String [] {
+                componentId
+        };
+
+        final String [] candidates = new String [extensions.length * baseNames.length];
+        int k = 0;
+        for (int i = 0; i < baseNames.length; i++) {
+            for (int j = 0; j < extensions.length; j++) {
+                candidates[k] = baseNames[i] + "." + extensions[j];
+                k++;
+            }            
+        }
+        return candidates;
     }
 
     /**
@@ -303,5 +421,14 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
         returnComponent(componentId, localComponent);
 
         return name;
+    }
+
+    /**
+     * Enable or disable component autoloading. Missing components
+     * will be searched in classpath by converting their identifiers
+     * to a resource name.
+     */
+    public void setComponentAutoload(boolean autoloadOn) {
+        this.autoload = autoloadOn;
     }
 }

@@ -10,7 +10,6 @@
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/xercesImpl-2.7.1.jar"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/xml-apis.jar"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/servlet.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-local-controller"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/xalan-2.7.0.jar"/>
 	<classpathentry kind="lib" path="lib/ehcache-1.2.1RC.jar"/>
 	<classpathentry sourcepath="D:/repositories/prv-dweiss/projects/trunk/xslt-filter/src" kind="lib" path="lib/xslt-filter-0.93.jar"/>

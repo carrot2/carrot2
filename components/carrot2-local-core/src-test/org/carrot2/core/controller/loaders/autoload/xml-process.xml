@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<local-process id="xmlprocess">
+  <name>name</name>
+  <description>description</description>
+
+  <input component-key="stub-input" />
+  <filter component-key="stub-autoload-filter" />
+  <output component-key="stub-output-with-required-attrs" />
+</local-process>
