@@ -6,13 +6,13 @@
   <input  component-key="input-cached-yahooapi" />
 
   <filter component-key="filter-rawdocument-enumerator" />
-  <filter component-key="filter-language-detection-en" />
+  <filter component-key="filter-langset-en" />
   <filter component-key="filter-tokenizer" />
-  <filter component-key="filter-case-normalizer" />
-  <filter component-key="filter-haog-stc" />
-  <filter component-key="filter-file-save-interceptor" />
+  <filter component-key="filter-smart-case-normalizer" />
+  <filter component-key="filter-clustering-haog-stc" />
+  <filter component-key="filter-save-xml" />
 
-  <output component-key="output-clustersConsumer" />
+  <output component-key="output-array" />
 
   <attribute key="process.settings.class" 
 	         value="org.carrot2.demo.settings.HaogStcSettings" />

@@ -34,8 +34,8 @@ public interface ProcessLoader {
      *         LoadedComponentFactory} object.
      *
      * @throws IOException If an i/o error occurs.
-     * @throws InstantiationException If creating of the process failed for
-     *         some reason.
+     * @throws InstantiationException If creating of the process failed 
+     * for some reason.
      */
     public LoadedProcess load(InputStream dataStream)
         throws IOException, InstantiationException;

@@ -16,11 +16,11 @@
 			<fileset dir="src" />
 		</check-newer>
     </provides>
-	
 
 	<!-- Carrot2 components -->
     <dependency name="carrot2-license" />
 	<dependency name="carrot2-util-common" />
+	<dependency name="carrot2-util-tokenizer" noexport="true" nocopy="true" />
 	<dependency name="carrot2-local-core" />
     <dependency name="jama" />
     <dependency name="log4j" />

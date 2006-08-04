@@ -1,0 +1,4 @@
+<local-component-factory 
+	id="filter-clustering-haog-stc" 
+	component-class="org.carrot2.filter.haog.haogstc.local.HAOGSTCLocalFilterComponent">
+</local-component-factory> 

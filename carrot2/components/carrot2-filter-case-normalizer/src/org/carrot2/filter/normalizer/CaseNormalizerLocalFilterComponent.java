@@ -55,15 +55,6 @@ public class CaseNormalizerLocalFilterComponent extends
     private CaseNormalizer caseNormalizer;
 
     /**
-     * Creates the case normalizer filter with the default instance of 
-     * {@link SimpleCaseNormalizer} algorithm.
-     */
-    public CaseNormalizerLocalFilterComponent()
-    {
-        caseNormalizer = new SimpleCaseNormalizer();
-    }
-    
-    /**
      * Creates the case normalizer filter with given implementation of
      */
     public CaseNormalizerLocalFilterComponent(CaseNormalizer caseNormalizer)

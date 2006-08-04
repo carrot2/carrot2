@@ -26,7 +26,18 @@
 		<property name="keystore.password" value="carrot2" />
 		<property name="keystore" value="webstart/carrot2.org.keystore" />
 
-       	<java classname="bsh.Interpreter" dir="webstart" fork="true">
+       	<copy todir="${distribution.webstart}">
+       		<fileset dir="${distribution.dir}" />
+       	</copy>
+
+       	<copy todir="${distribution.webstart}">
+       		<fileset dir=".">
+       			<include name="processes/**" />
+       			<include name="components/**" />
+       		</fileset>
+       	</copy>
+
+       	<java classname="bsh.Interpreter" dir="${distribution.webstart}" fork="true">
        		<classpath>
        			<fileset dir="${carrot2.cvs.dir}/lib" includes="*bsh*.jar" />
        		</classpath>
@@ -35,18 +46,18 @@
 
 		<mkdir dir="${distribution.webstart}/lib" />
        	<jar jarfile="${distribution.webstart}/lib/demo-resources.jar" update="false">
-       		<fileset dir="webstart">
+       		<fileset dir="${distribution.webstart}" id="webstart.todel">
        			<include name="components/**" />
        			<include name="processes/**" />
        			<include name="demo-resources.xml" />
        		</fileset>
        	</jar>
-       	
-       	<delete file="webstart/demo-resources.xml" />
+    	
+    	<delete>
+    		<fileset refid="webstart.todel" />
+    	</delete>
 
-       	<copy todir="${distribution.webstart}">
-       		<fileset dir="${distribution.dir}" />
-       	</copy>
+       	<delete file="webstart/demo-resources.xml" />
 
        	<delete>
        		<fileset dir="${distribution.webstart}">
@@ -60,9 +71,10 @@
        			<include name="lib/**" />
        			<include name="img/**" />
        			<include name="*.php" />
+       			<include name="*.jsp" />
        		</fileset>
        	</copy>
-       	
+
        	<java classname="bsh.Interpreter" dir="${distribution.webstart}" fork="true">
        		<classpath>
        			<fileset dir="${carrot2.cvs.dir}/lib" includes="*bsh*.jar" />

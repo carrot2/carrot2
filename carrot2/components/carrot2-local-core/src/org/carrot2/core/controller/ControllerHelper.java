@@ -142,15 +142,9 @@ public class ControllerHelper {
      * @throws IOException Thrown if an i/o exception occurs.
      * @throws LoaderExtensionUnknownException Thrown if there is no loader
      *         associated with the provided extension.
-     * @throws DuplicatedKeyException Thrown if the controller already has a
-     *         component factory mapped to the identifier of the newly loaded
-     *         factory.
-     * @throws Exception Thrown if the process has been loaded and initialized,
-     *         but adding it to a controller failed.
      */
     public LoadedProcess loadProcess(final String loaderExtension, final InputStream data)
-        throws LoaderExtensionUnknownException, IOException, 
-            DuplicatedKeyException, Exception {
+        throws LoaderExtensionUnknownException, IOException, InstantiationException {
         try {
             if (!processLoaders.containsKey(loaderExtension)) {
                 throw new LoaderExtensionUnknownException(
@@ -175,20 +169,13 @@ public class ControllerHelper {
      *
      * @param file The file to load the process from.
      * @return Returns the loaded process definition.
-     *
-     * @throws IOException Thrown if an i/o exception occurs.
-     * @throws LoaderExtensionUnknownException Thrown if there is no loader
-     *         associated with the provided extension.
-     * @throws DuplicatedKeyException Thrown if the controller already has a
-     *         component factory mapped to the identifier of the newly loaded
-     *         factory.
-     * @throws FileNotFoundException Thrown if the file does not exist.
-     * @throws Exception Thrown if the process has been loaded and initialized,
-     *         but adding it to a controller failed.
+     * @throws InstantiationException 
+     * @throws IOException 
+     * @throws LoaderExtensionUnknownException 
      */
-    public LoadedProcess loadProcess(File file)
-        throws FileNotFoundException, LoaderExtensionUnknownException, 
-            IOException, DuplicatedKeyException, Exception {
+    public LoadedProcess loadProcess(File file) 
+        throws LoaderExtensionUnknownException, IOException, InstantiationException
+    {
         String extension = getExtension(file);
         return loadProcess(extension, new FileInputStream(file));
     }
@@ -199,8 +186,13 @@ public class ControllerHelper {
      * load attempt.
      */
     public LoadedProcess [] loadProcessesFromDir(File directory)
-        throws IOException, DuplicatedKeyException, Exception {
-        return loadProcessesFromDir(directory, getProcessFileFilter());
+        throws IOException {
+        try {
+            return loadProcessesFromDir(directory, getProcessFileFilter());
+        } catch (LoaderExtensionUnknownException e) {
+            // unreachable?
+            throw new RuntimeException("Loader extension unknown.", e);
+        }
     }
     
     /**
@@ -214,18 +206,21 @@ public class ControllerHelper {
      * @throws DuplicatedKeyException Thrown if the controller already has a
      *         component factory mapped to the identifier of the newly loaded
      *         factory.
-     * @throws Exception Thrown if some process has been loaded and
-     *         initialized, but adding it to a controller failed.
      */
     public LoadedProcess [] loadProcessesFromDir(File directory, FileFilter filter)
-        throws IOException, DuplicatedKeyException, Exception {
+        throws IOException, LoaderExtensionUnknownException {
         final File[] files = directory.listFiles(filter);
         Arrays.sort(files, filenameComparator);
 
         final ArrayList loadedProcesses = new ArrayList(files.length);
         for (int i = 0; i < files.length; i++) {
             try {
-                final LoadedProcess loadedProcess = loadProcess(files[i]);
+                LoadedProcess loadedProcess;
+                try {
+                    loadedProcess = loadProcess(files[i]);
+                } catch (InstantiationException e) {
+                    throw new IOException("Unhandled exception.");
+                }
                 loadedProcesses.add(loadedProcess);
             } catch (FileNotFoundException e) {
                 // file has been apparently deleted between list()
