@@ -8,7 +8,7 @@ Must have:
 
 - Add some basic information about the Carrot2 project to
   the demo webapp startup page? (S)
-  
+
 - Website update (S)
   - Make Carrot2 a Search Results Clustering Framework
   - L&F update
@@ -32,7 +32,14 @@ Must have:
 
 - Add Wikipedia demo? [would Yahoo's site-restricted query suffice? + there is very little space tab-wise now]
 
+- Make the new webapp pass the HTML 4.01 validation
+
+
 Nice to have:
+
+- Take a look at: http://www.aduna-software.com/products/professional_search/autofocus/overview.view
+  A very interesting Open Source desktop search that could benefit from clustering.
+  Also a very interesting Open Source cluster visualisation component.
 
 - (webapp) decrease the number of synchronizations in the broadcaster.
 
