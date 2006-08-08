@@ -43,6 +43,7 @@
             <exclude name="algorithms/*.xml" />
             <exclude name="inputs/*.bsh" />
             <exclude name="inputs/*.xml" />
+            <exclude name="inputs/*.cfg" />
         </patternset>
 
         <property name="profile" value="war" />
