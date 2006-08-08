@@ -300,7 +300,7 @@ public class SaveXmlFilterComponent
         {
             RawDocument rawDocument = (RawDocument) it.next();
             element.addElement("document").addAttribute("refid",
-                rawDocument.getId().toString());
+                getDocumentId(rawDocument));
         }
 
         // Add subclusters
@@ -339,9 +339,10 @@ public class SaveXmlFilterComponent
     {
         Element element = DocumentHelper.createElement("document");
 
-        if (rawDocument.getId() != null)
+        String id = getDocumentId(rawDocument);
+        if (id != null)
         {
-            element.addAttribute("id", rawDocument.getId().toString());
+            element.addAttribute("id", id);
         }
 
         if (rawDocument.getTitle() != null)
@@ -360,6 +361,20 @@ public class SaveXmlFilterComponent
         }
 
         return element;
+    }
+
+    /**
+     * @param rawDocument
+     * @return
+     */
+    private String getDocumentId(RawDocument rawDocument)
+    {
+        String id = rawDocument.getProperty(RawDocumentEnumerator.DOCUMENT_SEQ_NUMBER).toString();
+        if (id == null)
+        {
+            id = rawDocument.getId().toString();
+        }
+        return id;
     }
 
     /**
