@@ -19,6 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.carrot2.core.ProcessingException;
+import org.carrot2.core.clustering.RawDocumentBase;
+import org.carrot2.core.clustering.RawDocumentsConsumer;
+import org.carrot2.util.StringUtils;
 import org.carrot2.util.URLEncoding;
 
 import com.sun.syndication.feed.synd.SyndEntry;
@@ -58,9 +62,13 @@ public class OpenSearchService {
      * @throws FetcherException
      * @throws FeedException
      * @throws IllegalArgumentException
+     * @throws ProcessingException 
      */
-    public OpenSearchResult[] query(final String query, final int requestedResults) throws IOException,
-            IllegalArgumentException, FeedException, FetcherException {
+    public OpenSearchResult [] query(final String query,
+        final int requestedResults, RawDocumentsConsumer documentConsumer)
+        throws IOException, IllegalArgumentException, FeedException,
+        FetcherException, ProcessingException
+    {
 
         final ArrayList result = new ArrayList(requestedResults);
 
@@ -72,6 +80,9 @@ public class OpenSearchService {
         int pagenumber = 1;
 
 fetch:  while (true) {
+            // results counter
+            int resultIndex = 0;
+    
             // builds the URL by replacing the variables in the template
             String feedUrl = urlService.replaceFirst("\\{searchTerms\\}", codedQuery);
 
@@ -109,6 +120,17 @@ fetch:  while (true) {
                 final String syDESCRIPTION = sy.getDescription().getValue();
                 final OpenSearchResult current = new OpenSearchResult(syURL, syTITLE, syDESCRIPTION);
                 result.add(current);
+                final int id = resultIndex;
+                
+                if (documentConsumer != null) {
+                    documentConsumer.addDocument(new RawDocumentBase(current.url, 
+                        StringUtils.removeMarkup(current.title), 
+                        StringUtils.removeMarkup(current.summary)){
+                        public Object getId() {
+                            return Integer.toString(id);
+                        }
+                    });
+                }
             }
             if (!supportsPaging) {
                 break fetch;

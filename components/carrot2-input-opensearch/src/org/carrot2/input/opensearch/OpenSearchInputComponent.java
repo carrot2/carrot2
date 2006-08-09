@@ -99,17 +99,7 @@ public class OpenSearchInputComponent extends LocalInputComponentBase implements
                     LocalInputComponent.PARAM_REQUESTED_RESULTS, 100);
             int results = Math.min(resultsRequested, MAXIMUM_RESULTS);
             log.info("OpenSearch query (" + results + "):" + query);
-            final OpenSearchResult[] docs = service.query(query, results);
-            for (int i = 0; i < docs.length; i++) {
-                final int id = i;
-                rawDocumentConsumer.addDocument(new RawDocumentBase(docs[i].url, 
-                        StringUtils.removeMarkup(docs[i].title), 
-                        StringUtils.removeMarkup(docs[i].summary)) {
-                    public Object getId() {
-                        return Integer.toString(id);
-                    }
-                });
-            }
+            final OpenSearchResult[] docs = service.query(query, results, rawDocumentConsumer);
         } catch (Throwable e) {
             if (e instanceof ProcessingException) {
                 throw (ProcessingException) e;

@@ -48,14 +48,14 @@ public class OpenSearchInputComponentTest extends junit.framework.TestCase {
         final String query = "blog";
         final long start = System.currentTimeMillis();
         final HashMap params = new HashMap();
-        params.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, new Integer(50));
+        params.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, new Integer(105));
         final List results = ((ArrayOutputComponent.Result) controller.query(
                 "testprocess", query, params).getQueryResult()).documents;
         final long end = System.currentTimeMillis();
         log.info("Open Search query time: " + (end - start) + " ms.");
 
         // the results should contain some documents.
-        assertEquals("Results acquired > 0?: " + results.size(), 50, results.size());
+        assertEquals("Results acquired > 0?: " + results.size(), 105, results.size());
     }
 
 	private LocalControllerBase setUpController(LocalComponentFactory inputFactory) throws Exception {
