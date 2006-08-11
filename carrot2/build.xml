@@ -3,7 +3,7 @@
 <project name="Carrot2 main build file" default="help">
   <property file="${user.home}/.carrot.properties" />
   <property file="local-build.properties" />
-  <property file="${user.home}/.carrot.api-upload.properties" />
+  <property file="${user.home}/.carrot.website-upload.properties" />
 
   <property name="release.number"   value="head" />
 
