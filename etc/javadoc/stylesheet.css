@@ -28,8 +28,11 @@ div.logo {
 }
 
 table .TableHeadingColor td,
+table .TableHeadingColor th,
 table .TableSubHeadingColor td,
-table .TableRowColor td
+table .TableSubHeadingColor th,
+table .TableRowColor td,
+table .TableRowColor th
 {
   border: 1px solid #cccccc;
 }
