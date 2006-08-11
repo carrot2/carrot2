@@ -84,7 +84,7 @@
     </copy>
   </target>
 
-  <target name="javadoc.upload" depends="javadoc">
+  <target name="javadoc.upload" depends="">
     <fail unless="website.upload.host">Please define the website.upload.host variable</fail>
     <fail unless="website.upload.user">Please define the website.upload.user variable</fail>
     <fail unless="website.upload.password">Please define the website.upload.password variable</fail>
@@ -98,7 +98,9 @@ Uploading JavaDoc to: ${website.upload.host}/${website.javadoc.upload.dir}
          userid="${website.upload.user}"
          password="${website.upload.password}"
          remotedir="${website.javadoc.upload.dir}"
-         depends="yes">
+         depends="no"
+         verbose="yes"
+         passive="yes">
       <fileset dir="${javadoc.dir}"/>
     </ftp>
   </target>
