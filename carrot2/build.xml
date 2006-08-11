@@ -3,6 +3,7 @@
 <project name="Carrot2 main build file" default="help">
   <property file="${user.home}/.carrot.properties" />
   <property file="local-build.properties" />
+  <property file="${user.home}/.carrot.api-upload.properties" />
 
   <property name="release.number"   value="head" />
 
@@ -26,9 +27,9 @@
   <property name="carrot2.cvs.dir" location="${basedir}" />
   <import file="${carrot2.cvs.dir}/components/carrot2-ant-extensions/bootstrap.xml" />
 
+  <property name="javadoc.dir" location="tmp/javadoc" />
 
   <target name="javadoc">
-    <property name="javadoc.dir" location="tmp/javadoc" />
 
     <delete dir="${javadoc.dir}" />
     <delete dir="tmp/src" />
@@ -51,9 +52,9 @@
              protected        = "true"
              version          = "false"
              use              = "false"
-             doctitle         = "${ant.project.name}"
-             header           = "${ant.project.name}"
-             footer           = "Please refer to project documentation at &lt;br&gt;&lt;a href=http://www.carrot2.org&gt;http://www.carrot2.org&lt;/a&gt;"
+             doctitle         = "Carrot&lt;sup&gt;2&lt;/sup&gt; Framework API Specification"
+             header           = "&lt;div class='logo'&gt;Carrot&lt;sup&gt;2&lt;/sup&gt; Framework&lt;br&gt;API Specification&lt;/div&gt;"
+             footer           = "&lt;div class='logo'&gt;Please refer to project documentation at &lt;br&gt;&lt;a href=http://www.carrot2.org&gt;http://www.carrot2.org&lt;/a&gt;&lt;/div&gt;"
              bottom           = "&lt;center&gt;Copyright (c) Copyright (C) Dawid Weiss, Stanislaw Osinski &lt;/center&gt;"
              failonerror      = "true"
              stylesheetfile   = "${carrot2.cvs.dir}/etc/javadoc/stylesheet.css"
@@ -69,12 +70,38 @@
         <fileset dir="tmp/src">
             <include name="**/*.java" />
         </fileset>
+
+        <link href="http://java.sun.com/j2se/1.5.0/docs/api/" />
+        <link href="http://www.dom4j.org/apidocs/" />
+        <link href="http://dsd.lbl.gov/~hoschek/colt/api/" />
     </javadoc>
 
     <delete dir="tmp/src" />
+    <copy todir="${javadoc.dir}">
+      <fileset dir="${carrot2.cvs.dir}/etc/javadoc/">
+        <include name="*.gif" />
+      </fileset>
+    </copy>
   </target>
 
-
+  <target name="javadoc.upload" depends="javadoc">
+    <fail unless="website.upload.host">Please define the website.upload.host variable</fail>
+    <fail unless="website.upload.user">Please define the website.upload.user variable</fail>
+    <fail unless="website.upload.password">Please define the website.upload.password variable</fail>
+    <fail unless="website.javadoc.upload.dir">Please define the website.javadoc.upload.dir variable</fail>
+    <echo>
+####
+Uploading JavaDoc to: ${website.upload.host}/${website.javadoc.upload.dir}
+####
+    </echo> 
+    <ftp server="${website.upload.host}"
+         userid="${website.upload.user}"
+         password="${website.upload.password}"
+         remotedir="${website.javadoc.upload.dir}"
+         depends="yes">
+      <fileset dir="${javadoc.dir}"/>
+    </ftp>
+  </target>
 
   <target name="build" depends="bootstrap,bootstrap:dependencies">
   	<description>
