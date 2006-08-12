@@ -57,7 +57,7 @@
              use              = "false"
              doctitle         = "Carrot&lt;sup&gt;2&lt;/sup&gt; Framework API Specification"
              header           = "&lt;div class='logo'&gt;Carrot&lt;sup&gt;2&lt;/sup&gt; Framework&lt;br&gt;API Specification&lt;/div&gt;"
-             footer           = "&lt;div class='logo'&gt;Please refer to project documentation at &lt;br&gt;&lt;a href=http://www.carrot2.org&gt;http://www.carrot2.org&lt;/a&gt;&lt;/div&gt;"
+             footer           = "&lt;div class='logo'&gt;Please refer to project documentation at &lt;br&gt;&lt;a href=http://project.carrot2.org&gt;http://project.carrot2.org&lt;/a&gt;&lt;/div&gt;"
              bottom           = "&lt;center&gt;Copyright (c) Copyright (C) Dawid Weiss, Stanislaw Osinski &lt;/center&gt;"
              failonerror      = "true"
              stylesheetfile   = "${carrot2.cvs.dir}/etc/javadoc/stylesheet.css"
