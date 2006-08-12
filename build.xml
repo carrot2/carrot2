@@ -84,7 +84,7 @@
     </copy>
   </target>
 
-  <target name="javadoc.upload" depends="">
+  <target name="javadoc.upload" depends="javadoc">
     <fail unless="website.upload.host">Please define the website.upload.host variable</fail>
     <fail unless="website.upload.user">Please define the website.upload.user variable</fail>
     <fail unless="website.upload.password">Please define the website.upload.password variable</fail>

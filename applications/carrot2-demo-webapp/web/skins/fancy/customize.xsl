@@ -12,7 +12,9 @@
   
   <xsl:template name="custom-results-utils">
     <div id="results-utils">
-      <a href="http://www.carrot2.org">Carrot2 project homepage</a> |
+      <a href="{$carrot2.website.url}">About</a> |
+      <a href="{$carrot2.website.url}/demos.html">More demos</a> |
+      <a href="{$carrot2.website.url}/download.html">Download</a> |
       <a href="http://sf.net/projects/carrot2">Carrot2 @ sf.net</a> |
       <a href="http://www.carrot-search.com">Carrot Search</a>
     </div>
@@ -26,4 +28,17 @@
     <a href="{$contextPath}/"><img border="0" src="{$skinuri}/img/startup-logo.gif" id="startup-logo" /></a>
   </xsl:template>
   
+  <xsl:param name="carrot2.website.url">http://project.carrot2.org</xsl:param>
+  
+  <xsl:template name="startup-extra-content">
+    <div id="startup-extra-ruler" />
+
+    <div id="startup-extra">
+      <a href="{$carrot2.website.url}">About</a> | <a href="{$carrot2.website.url}/demos.html">More demos</a> | <a href="{$carrot2.website.url}/applications.html">Applications</a> | <a href="{$carrot2.website.url}/download.html">Download</a> | <a href="{$carrot2.website.url}/faq.html">FAQ</a> | <a href="{$carrot2.website.url}/support.html">Contact</a>
+    </div>
+  </xsl:template>
+  
+  <xsl:template name="copyright-holder">
+    <a href="http://www.man.poznan.pl/~stachoo/">Stanislaw Osinski</a>, <a href="http://www.cs.put.poznan.pl/dweiss/">Dawid Weiss</a>
+  </xsl:template>
 </xsl:stylesheet>
