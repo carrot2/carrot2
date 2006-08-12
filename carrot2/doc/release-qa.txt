@@ -56,12 +56,26 @@ Download them and see if they unpack successfully.
 	cd applications/carrot2-demo-browser
 	ant -q clean webstart
 
-- Place the WebStart version on www.carrot2.org. Make sure it works.
+- Place the WebStart version on project.carrot2.org. Make sure it works.
 
-- Edit the open source website (add news item), news/news.xml
+- Build and upload JavaDocs to the website:
+
+  ant javadoc.upload
+
+- Edit the open source website:
+  - add brief release notes (website/src/release-VERSION-notes.xml)
+    with a summary of the major and minor changes
+  - add a one-sentence news info on the main page (website/src/index.xml)
+    with a link to the release-VERSION-notes file
+  - update the download page (website/src/download.xml) to contain
+    a link to the newest release notes and direct links to the
+    newest binaries on sourceforge.
+  - upload the new webiste:
+
+    ant upload
 
 - Publish news to:
 
 carrot2-news@lists.sourceforge.net
 carrot2-developers@lists.sourceforge.net
-
+Lucene/Nutch lists?

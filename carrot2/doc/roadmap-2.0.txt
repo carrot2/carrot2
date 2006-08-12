@@ -6,31 +6,16 @@ Must have:
 
 - Make the demo webapp a start page for carrot2.org (S)
 
-- Add some basic information about the Carrot2 project to
-  the demo webapp startup page? (S)
-
-- Website update (S)
-  - Make Carrot2 a Search Results Clustering Framework
-  - L&F update
-  - publications
-  - describe available algorithms
-  - projects using Carrot2
-    - CALO
-    - nutch plugin
-    
 - Documentation
   - What is Carrot2
   - Getting source and building?
   - Brief overview of the (local) architecture
   - Brief example of using LocalController (+Lucene)
+  - One-sentence summary for each carrot2 subproject
   - For more information: use mailing list :)
 
 - Move command line applications from the commercial repository to
   the OS repository (D)
-
-- add nice links and keywords on the start page for the SE (S)
-
-- Add Wikipedia demo? [would Yahoo's site-restricted query suffice? + there is very little space tab-wise now]
 
 - Make the new webapp pass the HTML 4.01 validation
 
