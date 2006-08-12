@@ -64,13 +64,8 @@
         <xsl:with-param name="table-style">margin-bottom: 10px</xsl:with-param>
       </xsl:call-template>
       <xsl:call-template name="input-descriptions" />
-<!-- 
-      <div style="width: 405px; border-bottom: 1px dotted #808080; margin-top: 15px" />
-
-      <div style="margin-top: 13px; padding-bottom: 20px; width: 405px; color: #808080; font-size: 11px">
-        <a href="#">About</a> | <a href="#">Download</a> | <a href="#">Source code</a> | <a href="#">Sponsors</a> | <a href="#">Contact us</a>
-      </div>
- -->
+      
+      <xsl:call-template name="startup-extra-content" />
     </div>    
 
     <xsl:call-template name="footer" />
@@ -382,7 +377,7 @@
   <xsl:template name="footer">
     <div id="startup-main-bottom-outer" />
     <div class="copyright">
-      © 2002-2006 <a href="http://www.carrot-search.com" target="_blank">Carrot Search</a>, Stanislaw Osinski, Dawid Weiss
+      © 2002-2006 <xsl:call-template name="copyright-holder" />
     </div>
   </xsl:template>
 </xsl:stylesheet>

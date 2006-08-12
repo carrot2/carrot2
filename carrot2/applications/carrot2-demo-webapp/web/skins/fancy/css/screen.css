@@ -396,3 +396,20 @@ div#clusters-progress {
 div#docs-progress {
    right: 37px;
 }
+
+div#startup-extra-ruler {
+  width: 405px; 
+  border-bottom: 1px dotted #808080; 
+  margin-top: 15px;
+}
+    
+div#startup-extra {
+  margin-top: 13px; 
+  padding-bottom: 20px; 
+  width: 405px; 
+  color: #808080;
+  font-size: 11px;
+}
+
+div#startup-extra a {
+}
