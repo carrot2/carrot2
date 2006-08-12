@@ -19,6 +19,9 @@
   <property name="distribution.dir" value="tmp" />
   <property name="tests.report.dir" value="tmp/test-report" />
 
+  <!-- Remote directory to which JavaDocs will be uploaded -->
+  <property name="website.javadoc.upload.dir"   value="project.carrot2.org/api" />
+
   <!-- Load ant-contrib task library -->
   <taskdef resource="net/sf/antcontrib/antlib.xml">
     <classpath location="${carrot2.cvs.dir}/lib/ant-extensions/ant-contrib.jar" />
