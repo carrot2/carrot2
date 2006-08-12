@@ -21,11 +21,11 @@
   </xsl:template>
     
   <xsl:template name="custom-results-logo">
-    <a href="{$contextPath}/"><img border="0" src="{$skinuri}/img/results-logo.gif" id="results-logo" /></a>
+    <a href="{$contextPath}/"><img border="0" src="{$skinuri}/img/results-logo.gif" id="results-logo" alt="Carrot2 logo" /></a>
   </xsl:template>
     
   <xsl:template name="custom-startup-logo">
-    <a href="{$contextPath}/"><img border="0" src="{$skinuri}/img/startup-logo.gif" id="startup-logo" /></a>
+    <a href="{$contextPath}/"><img border="0" src="{$skinuri}/img/startup-logo.gif" id="startup-logo" alt="Carrot2 logo" /></a>
   </xsl:template>
   
   <xsl:param name="carrot2.website.url">http://project.carrot2.org</xsl:param>

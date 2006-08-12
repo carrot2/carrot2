@@ -13,7 +13,7 @@
   </xsl:variable>
 
   <xsl:template match="/">
-<html style="height: 100%" class="outside-back-color">
+<html>
   <head>
     <title>Carrot Clustering Engine</title>
     
