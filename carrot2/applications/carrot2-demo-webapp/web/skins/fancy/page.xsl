@@ -238,7 +238,7 @@
                   <xsl:choose>
                     <xsl:when test="$tabId = @id">
                       <xsl:if test="property[@key = 'tab.icon']">
-                          <img class="tab-img" src="{$skinuri}/inputs/{property[@key = 'tab.icon']/@value}" />
+                          <img class="tab-img" src="{$skinuri}/inputs/{property[@key = 'tab.icon']/@value}" alt="{property[@key = 'tab.name']/@value}" />
                       </xsl:if>
                       <xsl:value-of select="short" />
                     </xsl:when>
@@ -246,7 +246,7 @@
                     <xsl:otherwise>
                       <a href="javascript:switchTab('{$tabElemName}', '{@id}')" class="tab-link">
                         <xsl:if test="property[@key = 'tab.icon']">
-                          <img class="tab-img" src="{$skinuri}/inputs/{property[@key = 'tab.icon']/@value}" />
+                          <img class="tab-img" src="{$skinuri}/inputs/{property[@key = 'tab.icon']/@value}" alt="{property[@key = 'tab.name']/@value}" />
                         </xsl:if>
                         <xsl:value-of select="short" />
                       </a>
