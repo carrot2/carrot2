@@ -148,6 +148,9 @@
     </target>
 
   <target name="upload" description="Uploads the website to the server">
+    <property name="website.properties" value="${user.home}/.carrot.website-upload.properties" />
+    <property file="${website.properties}" />
+
     <fail unless="website.upload.host">Please define the website.upload.host variable</fail>
     <fail unless="website.upload.user">Please define the website.upload.user variable</fail>
     <fail unless="website.upload.password">Please define the website.upload.password variable</fail>
@@ -156,7 +159,7 @@
     <!-- htmls first (chunked, single) -->
     <antcall target="html.single" />
     <antcall target="html.chunked" />
-    <copy file="${build.dir}/index.html" tofile="${build.dir}/carrot2-documentation.html" overwrite="true" />
+    <copy file="${distribution.dir}/index.html" tofile="${distribution.dir}/carrot2-documentation.html" overwrite="true" />
 
 	<!-- and finally the pdf -->
 	<antcall target="pdf" />
