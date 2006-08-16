@@ -147,4 +147,35 @@
         </path>
     </target>
 
+  <target name="upload" description="Uploads the website to the server">
+    <fail unless="website.upload.host">Please define the website.upload.host variable</fail>
+    <fail unless="website.upload.user">Please define the website.upload.user variable</fail>
+    <fail unless="website.upload.password">Please define the website.upload.password variable</fail>
+    <fail unless="website.manual.upload.dir">Please define the website.manual.upload.dir variable</fail>
+    
+    <!-- htmls first (chunked, single) -->
+    <antcall target="html.single" />
+    <antcall target="html.chunked" />
+    <copy file="${build.dir}/index.html" tofile="${build.dir}/carrot2-documentation.html" overwrite="true" />
+
+	<!-- and finally the pdf -->
+	<antcall target="pdf" />
+
+	<!-- upload results -->
+    <echo>
+####
+Uploading manual to: ${website.upload.host}/${website.manual.upload.dir}
+####
+    </echo> 
+    <ftp server="${website.upload.host}"
+         userid="${website.upload.user}"
+         password="${website.upload.password}"
+         remotedir="${website.manual.upload.dir}"
+         depends="no"
+         verbose="yes"
+         passive="yes">
+      <fileset dir="${distribution.dir}"/>
+    </ftp>
+  </target>
+
 </project>
