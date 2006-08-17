@@ -4,8 +4,6 @@ A roadmap to release 2.0
 
 Must have:
 
-- Make the demo webapp a start page for carrot2.org (S)
-
 - Documentation
   - What is Carrot2
   - Getting source and building?
@@ -16,8 +14,6 @@ Must have:
 
 - Move command line applications from the commercial repository to
   the OS repository (D)
-
-- Make the new webapp pass the HTML 4.01 validation
 
 
 Nice to have:
