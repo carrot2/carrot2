@@ -54,6 +54,7 @@
     <dependency name="jdic" />
     <dependency name="dom4j" />
     <dependency name="lucene" />
+    <dependency name="clustermap" />
 
     <dependency name="carrot2-util-common" />
     <dependency name="carrot2-local-core" />

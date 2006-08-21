@@ -16,7 +16,6 @@ package org.carrot2.demo.swing;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
@@ -37,6 +36,7 @@ import org.carrot2.demo.cache.RawDocumentProducerCacheWrapper;
 import org.carrot2.demo.index.RawDocumentsLuceneIndexSearcher;
 import org.carrot2.demo.swing.util.SwingTask;
 import org.carrot2.demo.swing.util.ToolbarButton;
+import org.carrot2.demo.visualization.ClusterMapVisualization;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -86,7 +86,7 @@ public class ResultsTab extends JPanel {
     private int requestedResults;
     
     private JLabel matchedDocumentsLabel;
-
+    
     private class SelfRemoveAction implements ActionListener {
         public void actionPerformed(ActionEvent actionEvent) {
             cleanup();
@@ -225,6 +225,19 @@ public class ResultsTab extends JPanel {
                     querySaveDialog.show();
                 }
             });
+        ToolbarButton mapButton = new ToolbarButton(
+            new ImageIcon(this.getClass().getResource("map.gif")),
+            new ImageIcon(this.getClass().getResource("map_dis.gif")));
+        mapButton.setToolTipText("Explore cluster map");
+        mapButton.addActionListener(
+            new ActionListener() {
+                public void actionPerformed(ActionEvent arg0)
+            {
+                ClusterMapVisualization.showMapFrame(result, owner
+                    .getLocation(), owner.getWidth(), owner.getHeight());
+            }
+            });
+        toolbar.add(mapButton);
         toolbar.add(benchmarkButton);
         toolbar.add(saveButton);
         toolbar.add(homeButton);
@@ -355,10 +368,10 @@ public class ResultsTab extends JPanel {
 
         this.add(internalFrame, BorderLayout.CENTER);        
     }
-
+    
     /**
-     * Updates the HTML view component with the provided HTML.
-     * MUST BE INVOKED FROM AN AWT THREAD.
+     * Updates the HTML view component with the provided HTML. MUST BE INVOKED
+     * FROM AN AWT THREAD.
      */
     public void updateDocumentsView(String htmlContent) {
         if (!SwingUtilities.isEventDispatchThread())

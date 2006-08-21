@@ -1,26 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry exported="true" kind="src" path="/carrot2-util-common"/>
-	<classpathentry exported="true" kind="var" path="CARROT2_CHECKOUT_BASE/lib/log4j-1.2.13.jar"/>
-	<classpathentry exported="true" kind="src" path="/carrot2-local-core"/>
-	<classpathentry exported="true" kind="src" path="/carrot2-util-tokenizer"/>
-	<classpathentry exported="true" kind="src" path="/carrot2-filter-lingo"/>
-	<classpathentry exported="true" kind="src" path="/carrot2-filter-trc"/>
-	<classpathentry exported="true" kind="lib" path="lib/jdic_windows/jdic_stub.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jdic.jar"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-input-yahooapi"/>
-	<classpathentry exported="true" kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/junit-3.8.1.jar"/>
-	<classpathentry exported="true" kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/junit-addons-1.4.jar"/>
-	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/lucene-core-2.0.0.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-matrix"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-stc"/>
-	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/dom4j-1.6.1.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-case-normalizer"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-haog"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-fuzzyants"/>
-	<classpathentry kind="lib" path="lib/forms-1.0.7.jar"/>
-	<classpathentry kind="lib" path="lib/looks-2.0.4.jar"/>
-	<classpathentry kind="output" path="tmp/eclipse/classes"/>
+	<classpathentry path="src" kind="src"/>
+	<classpathentry path="org.eclipse.jdt.launching.JRE_CONTAINER" kind="con"/>
+	<classpathentry path="/carrot2-util-common" kind="src" exported="true"/>
+	<classpathentry path="CARROT2_CHECKOUT_BASE/lib/log4j-1.2.13.jar" kind="var" exported="true"/>
+	<classpathentry path="/carrot2-local-core" kind="src" exported="true"/>
+	<classpathentry path="/carrot2-util-tokenizer" kind="src" exported="true"/>
+	<classpathentry path="/carrot2-filter-lingo" kind="src" exported="true"/>
+	<classpathentry path="/carrot2-filter-trc" kind="src" exported="true"/>
+	<classpathentry path="lib/jdic_windows/jdic_stub.jar" kind="lib" exported="true"/>
+	<classpathentry path="lib/jdic.jar" kind="lib" exported="true"/>
+	<classpathentry path="/carrot2-input-yahooapi" combineaccessrules="false" kind="src" exported="true"/>
+	<classpathentry path="CARROT2_CHECKOUT_BASE/lib/compile-time/junit-3.8.1.jar" kind="var" exported="true"/>
+	<classpathentry path="CARROT2_CHECKOUT_BASE/lib/compile-time/junit-addons-1.4.jar" kind="var" exported="true"/>
+	<classpathentry path="CARROT2_CHECKOUT_BASE/lib/lucene-core-2.0.0.jar" kind="var"/>
+	<classpathentry path="/carrot2-util-matrix" combineaccessrules="false" kind="src"/>
+	<classpathentry path="/carrot2-filter-stc" combineaccessrules="false" kind="src"/>
+	<classpathentry path="CARROT2_CHECKOUT_BASE/lib/dom4j-1.6.1.jar" kind="var"/>
+	<classpathentry path="/carrot2-filter-case-normalizer" combineaccessrules="false" kind="src"/>
+	<classpathentry path="/carrot2-filter-haog" combineaccessrules="false" kind="src"/>
+	<classpathentry path="/carrot2-filter-fuzzyants" combineaccessrules="false" kind="src"/>
+	<classpathentry path="lib/forms-1.0.7.jar" kind="lib"/>
+	<classpathentry path="lib/looks-2.0.4.jar" kind="lib"/>
+	<classpathentry path="lib/aduna-clustermap-2006.1.jar" kind="lib"/>
+	<classpathentry path="lib/aduna-clustermap-2006.1-resources.jar" kind="lib"/>
+	<classpathentry path="tmp/eclipse/classes" kind="output"/>
 </classpath>
