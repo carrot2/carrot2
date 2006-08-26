@@ -52,10 +52,10 @@
 		<all-permissions/>
 	</security>
 
-	<application-desc main-class="carrot2.demo.DemoSplash">
-		<argument>/carrot2/demo/carrot2-splash.gif</argument>
+	<application-desc main-class="org.carrot2.demo.DemoSplash">
+		<argument>/org/carrot2/demo/carrot2-splash.gif</argument>
 		<argument>4</argument>
-		<argument>carrot2.demo.DemoSwing</argument>
+		<argument>org.carrot2.demo.DemoSwing</argument>
 		<argument>--resource</argument>
 	</application-desc>
 </jnlp>
