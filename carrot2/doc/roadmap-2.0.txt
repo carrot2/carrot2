@@ -43,3 +43,24 @@ Lucene's highlighter?).
 
 - Write a clustering plugin for Kneobase?
   http://www.kneobase.com/en/kneobase
+
+
+SourceForge.net Release Notes
+-----------------------------
+
+The 2.0 release brings a lot of additions and improvements to the core
+framework, components and applications.  Major improvements include brand-new
+search clustering web application and attractive cluster visualization added
+to the standalone GUI application.
+
+For more information, please see:
+
+http://project.carrot2.org/release-2.0-notes.html
+
+
+SourceForge.net Changes File
+----------------------------
+
+For a list of changes in the 2.0 release, please see:
+
+http://project.carrot2.org/release-2.0-notes.html
