@@ -6,9 +6,6 @@ import org.carrot2.input.lucene.*;
 import org.carrot2.demo.cache.*;
 
 String indexPath = System.getProperty("odp.index.location");
-if (!(new File(indexPath).exists())) {
-	return null;
-}
 
 luceneFactory = new LuceneLocalInputComponentFactory(indexPath);
 
