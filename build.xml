@@ -170,12 +170,12 @@ BUILDING: @{component.path}
     	<fileset dir="applications/carrot2-demo-webapp/tmp/dist" includes="*.war" />
     </copy>    
     <zip basedir="dist/remote" 
-        zipfile="dist/carrot2-remote-demo-${release.number}.zip" />
+        zipfile="dist/carrot2-demo-webapp-${release.number}.zip" />
 
     <ant antfile="build.xml" dir="applications/carrot2-demo-browser"
         inheritall="false" inheritrefs="false" target="dist">
         <property name="distribution.zips.dir" location="dist" />
-        <property name="distribution.zip.name" value="carrot2-local-demo-${release.number}.zip" />
+        <property name="distribution.zip.name" value="carrot2-demo-browser-${release.number}.zip" />
         <reference refid="dependencies" />
         <reference refid="c2.tasks.classloader" />
         <property name="cache:deps" value="${cache:deps}" />
