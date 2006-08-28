@@ -7,7 +7,6 @@
     <property file="${user.home}/carrot.properties" />
 
     <!-- Override these properties -->
-    <property name="carrot2.cvs.dir"         location="../carrot2" />
     <property name="docbook.styler"          value="${undefined.value}" />
 
     <!-- Override these if needed --> 
@@ -121,17 +120,6 @@
         <description>
         Checks whether all the required properties are present.
         </description>
-
-        <condition property="tmp:carrot2.cvs.ok" value="true">
-            <and>
-                <not>
-                    <equals arg1="${carrot2.cvs.dir}" arg2="undefined" />
-                </not>
-                <available file="${carrot2.cvs.dir}/carrot2.LICENSE" type="file" />
-            </and>
-        </condition>
-        <fail message="### Define 'carrot2.cvs.dir' property pointing at Carrot2 CVS checkout."
-              unless="tmp:carrot2.cvs.ok" />
 
         <condition property="tmp:styler.ok" value="true">
             <and>
