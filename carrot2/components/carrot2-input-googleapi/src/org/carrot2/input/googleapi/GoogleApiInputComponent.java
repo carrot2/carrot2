@@ -13,27 +13,14 @@
 
 package org.carrot2.input.googleapi;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import org.apache.log4j.Logger;
-
-import org.carrot2.core.LocalComponent;
-import org.carrot2.core.LocalInputComponent;
-import org.carrot2.core.LocalInputComponentBase;
-import org.carrot2.core.ProcessingException;
-import org.carrot2.core.RequestContext;
-import org.carrot2.core.clustering.RawDocument;
-import org.carrot2.core.clustering.RawDocumentBase;
-import org.carrot2.core.clustering.RawDocumentsConsumer;
-import org.carrot2.core.clustering.RawDocumentsProducer;
+import org.carrot2.core.*;
+import org.carrot2.core.clustering.*;
 import org.carrot2.util.StringUtils;
 
-import com.google.soap.search.GoogleSearch;
-import com.google.soap.search.GoogleSearchFault;
-import com.google.soap.search.GoogleSearchResult;
-import com.google.soap.search.GoogleSearchResultElement;
+import com.google.soap.search.*;
 
 public class GoogleApiInputComponent extends LocalInputComponentBase 
 	implements RawDocumentsProducer {
@@ -59,6 +46,9 @@ public class GoogleApiInputComponent extends LocalInputComponentBase
 
 	private GoogleKeysPool keyPool;
 
+    /** A map of already returned documents. */
+    private HashMap returnedIds = new HashMap();
+    
     /**
      * Creates a default {@link GoogleKeysPool}, using system
      * property {@link GoogleKeysPool#POOL_SYSPROPERTY} to locate a folder
@@ -117,7 +107,7 @@ public class GoogleApiInputComponent extends LocalInputComponentBase
 		    	// Nothing more.
 		    	return;
 		    }
-		    pushResults(at, result.results);
+		    pushResults(result);
 
 		    remaining = Math.min(result.totalEstimated, remaining);
 
@@ -166,12 +156,12 @@ public class GoogleApiInputComponent extends LocalInputComponentBase
 
         	class Loader extends Thread {
         		final int index;
-        		final int at;
+        		final int localAt;
         		final Counter counter;
 
         		public Loader(final int index, final int at, final Counter wakeup) {
         			this.index = index;
-        			this.at = at;
+        			this.localAt = at;
         			this.counter = wakeup;
         		}
 
@@ -180,21 +170,21 @@ public class GoogleApiInputComponent extends LocalInputComponentBase
         			try {
 	        			SearchResult result;
 	        			try {
-	        				log.info("Consecutive GoogleAPI query start (" + at + "):" + query);
-	        				result = doSearch(query, at);
+	        				log.info("Consecutive GoogleAPI query start (" + localAt + "):" + query);
+	        				result = doSearch(query, localAt);
 	        				acquired = result.results.length;
 	        			} catch (Throwable t) {
 	        				result = new SearchResult(t);
 	        			}
 	        			results[index] = result;
         			} finally {
-        				log.info("Consecutive GoogleAPI query finished (" + at + ":"
+        				log.info("Consecutive GoogleAPI query finished (" + localAt + ":"
         						+ acquired
         						+ "):" + query);
         				counter.done();
         			}
         		}
-        	};
+        	}
 
 		    Counter c = new Counter(buckets);
         	for (int i = 0; i < buckets; i++) {
@@ -219,7 +209,7 @@ public class GoogleApiInputComponent extends LocalInputComponentBase
         			throw sr.error;
         		}
         		// Otherwise push the result
-        		pushResults(sr.at, sr.results);
+        		pushResults(sr);
         	}
 	    } catch (Throwable e) {
 	    	if (e instanceof ProcessingException) {
@@ -248,14 +238,21 @@ public class GoogleApiInputComponent extends LocalInputComponentBase
 	
 		        GoogleSearchResult r = s.doSearch();
 
-		        if (r.getStartIndex() != at + 1) {
-		        	return null;
+                log.debug("Google returned:"
+                        + " startIndex=" + r.getStartIndex()
+                        + " endIndex=" + r.getEndIndex()
+                        + " estimated=" + r.getEstimatedTotalResultsCount()
+                        + " exact=" + r.getEstimateIsExact());
+                
+		        if (r.getStartIndex() != at + 1 && r.getEndIndex() > 0) {
+                    log.warn("Start index does not match the requested one: "
+                            + r.getStartIndex() + ", should be: " + (at + 1));
 		        }
 	
 		        final int totalEstimated = r.getEstimatedTotalResultsCount();
 		        results = r.getResultElements();
 
-		        return new SearchResult(results, at, totalEstimated);
+		        return new SearchResult(results, r.getStartIndex(), totalEstimated);
 		    } catch (Throwable t) {
 		    	if (t instanceof GoogleSearchFault) {
 		    		final String msg = ((GoogleSearchFault) t).getMessage();
@@ -284,10 +281,18 @@ public class GoogleApiInputComponent extends LocalInputComponentBase
 	    	}
     	}
 	}
-    
-	private final void pushResults(final int at, final GoogleSearchResultElement [] results) throws ProcessingException {
+
+	private final void pushResults(final SearchResult searchResult) throws ProcessingException {
+        final GoogleSearchResultElement [] results = searchResult.results;
+        final int at = searchResult.at;
+
     	for (int i = 0; i < results.length; i++) {
     		final Integer id = new Integer(at + i);
+
+            if (this.returnedIds.containsKey(id)) {
+                continue;
+            }
+
     		final GoogleSearchResultElement result = results[i];
 
             final RawDocument rdoc = new RawDocumentBase(
@@ -298,6 +303,8 @@ public class GoogleApiInputComponent extends LocalInputComponentBase
                     return id;
                 }
             };
+            returnedIds.put(id, rdoc);
+            
             rawDocumentConsumer.addDocument(rdoc);
     	}
     }
@@ -305,4 +312,11 @@ public class GoogleApiInputComponent extends LocalInputComponentBase
     public String getName() {
         return "Google API Input";
     }
+
+    public void flushResources() {
+        super.flushResources();
+
+        returnedIds.clear();        
+    }
+    
 }
