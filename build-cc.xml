@@ -33,6 +33,7 @@
         <copy file="${carrot2.cvs.dir}/applications/carrot2-demo-webapp/tmp/dist/carrot2-demo-webapp.war"
               tofile="/home/tomcat/webapps/${webapp.name}.war"
               overwrite="true" />
+        <delete dir="/home/tomcat/webapps/${webapp.name}" />
 
         <exec dir="${carrot2.cvs.dir}" executable="/etc/init.d/tomcat" vmlauncher="false" failonerror="true">
             <arg line="start" />
