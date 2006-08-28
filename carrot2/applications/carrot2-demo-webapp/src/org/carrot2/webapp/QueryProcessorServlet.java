@@ -45,6 +45,15 @@ public final class QueryProcessorServlet extends HttpServlet {
     
     /** logger for queries */
     private volatile Logger queryLogger;
+    
+    /**
+     * Define this system property to enable statistical information from
+     * the query processor. A GET request to {@link QueryProcessorServlet}
+     * with parameter <code>type=s</code> and <code>key</code> equal
+     * to the value of this property will return plain text information
+     * about the processing state.
+     */
+    private final static String STATISTICS_KEY = "stats.key";
 
     public static final String PARAM_Q = "q";
     public static final String PARAM_INPUT = "in";
@@ -54,6 +63,7 @@ public final class QueryProcessorServlet extends HttpServlet {
     private static final int DOCUMENT_REQUEST = 1;
     private static final int CLUSTERS_REQUEST = 2;
     private static final int PAGE_REQUEST = 3;
+    private static final int STATS_REQUEST = 4;
 
     /** All available search settings */
     private SearchSettings searchSettings = new SearchSettings();
@@ -76,7 +86,16 @@ public final class QueryProcessorServlet extends HttpServlet {
     private Cache ehcache;
 
     /** Serializer factory used to emit documents and clusters. */
-    private SerializersFactory serializerFactory; 
+    private SerializersFactory serializerFactory;
+
+    /** A counter for the number of executed queries. */
+    private long executedQueries;
+
+    /** Total time spent in clustering routines. */
+    private long totalTime;
+
+    /** Total number of successfully processed clustering queries. */
+    private long goodQueries;
 
     /**
      * Configure inputs. 
@@ -142,6 +161,8 @@ public final class QueryProcessorServlet extends HttpServlet {
             requestType = DOCUMENT_REQUEST;
         } else if ("c".equals(type)) {
             requestType = CLUSTERS_REQUEST;
+        } else if ("s".equals(type)) {
+            requestType = STATS_REQUEST;
         } else {
             requestType = PAGE_REQUEST;
         }
@@ -161,7 +182,39 @@ public final class QueryProcessorServlet extends HttpServlet {
                 servletError(request, response, os, "An internal error occurred." 
                         + searchRequest.getInputTab().getShortName(), e);
             }
-       } else {
+        } else if (requestType == STATS_REQUEST) {
+            // request for statistical information about the engine.
+            // we check if the request contains a special token known to the 
+            // administrator of the engine (so that statistics are available
+            // only to certain people).
+            final String statsKey = System.getProperty(STATISTICS_KEY);
+            if (statsKey != null && statsKey.equals(request.getParameter("key"))) {
+                synchronized (getServletContext()) {
+                    response.setContentType("text/plain; charset=utf-8");
+                    final Writer output = new OutputStreamWriter(os, "UTF-8");
+    
+                    output.write("total-queries: " + executedQueries + "\n");
+                    output.write("good-queries: " + goodQueries + "\n");
+                    if (goodQueries > 0) {
+                        output.write("ms-per-query: " + totalTime / goodQueries + "\n");
+                    }
+
+                    output.write("jvm.freemem: " + Runtime.getRuntime().freeMemory() + "\n");
+                    output.write("jvm.totalmem: " + Runtime.getRuntime().totalMemory() + "\n");
+    
+                    final Statistics stats = this.ehcache.getStatistics();
+                    output.write("ehcache.hits: " + stats.getCacheHits() + "\n");
+                    output.write("ehcache.misses: " + stats.getCacheMisses() + "\n");
+                    output.write("ehcache.memhits: " + stats.getInMemoryHits() + "\n");
+                    output.write("ehcache.diskhits: " + stats.getOnDiskHits() + "\n");
+
+                    output.flush();
+                }
+            } else {
+                // unauthorized stats request.
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            }
+        } else {
             final PageSerializer serializer = serializerFactory.createPageSerializer(request);
             response.setContentType(serializer.getContentType());
             serializer.writePage(os, searchSettings, searchRequest);
@@ -249,6 +302,7 @@ public final class QueryProcessorServlet extends HttpServlet {
             bcaster.attach();
         }
 
+        long processingTime = -1;
         try {
             final Iterator docIterator = bcaster.docIterator();
             if (requestType == DOCUMENT_REQUEST) {
@@ -280,11 +334,11 @@ public final class QueryProcessorServlet extends HttpServlet {
                 response.setContentType(serializer.getContentType());
                 try {
                     logger.info("Clustering results using: " + algorithmTab.getShortName());
-                    long start = System.currentTimeMillis();
+                    final long start = System.currentTimeMillis();
                     final ProcessingResult result = 
                         algorithmsController.query(algorithmTab.getShortName(), 
                                 searchRequest.query, props);
-                    long stop = System.currentTimeMillis();
+                    final long stop = System.currentTimeMillis();
                     final ArrayOutputComponent.Result collected =  
                         (ArrayOutputComponent.Result) result.getQueryResult();
                     final List clusters = collected.clusters; 
@@ -295,8 +349,9 @@ public final class QueryProcessorServlet extends HttpServlet {
                         serializer.write((RawCluster) i.next());
                     }
                     serializer.endResult();
-                    
-                    logQuery(searchRequest, stop - start);
+                 
+                    processingTime = stop - start;
+                    logQuery(searchRequest, processingTime);
                 } catch (BroadcasterException e) {
                     // broadcaster exceptions are shown in the documents iframe,
                     // so we simply emit no clusters.
@@ -312,6 +367,14 @@ public final class QueryProcessorServlet extends HttpServlet {
             }
         } finally {
             synchronized (getServletContext()) {
+                if (requestType == CLUSTERS_REQUEST) {
+                    this.executedQueries++;
+                    if (processingTime > 0) {
+                        this.goodQueries++;
+                        this.totalTime += processingTime;
+                    }
+                }
+
                 // detach current thread from the broadcaster and
                 // remove it if necessary.
                 bcaster.detach();
