@@ -26,7 +26,7 @@
           When there is a need to install a shared copy of log4j (between Web applications and
           Catalina), putting a local copy of Log4j causes severe class loading problems (multiple
           instantiations of singleton Logger classes, reconfiguration etc). Allow excluding
-          log4j from the built WAR file.
+          log4j from the built WAR file by specifying a property: webapp.log4j.exclude
           -->
         <if>
             <isset property="webapp.log4j.exclude" />
