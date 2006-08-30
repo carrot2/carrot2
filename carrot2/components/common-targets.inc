@@ -2,6 +2,10 @@
 	<patternset id="src.patternset" />
 	<patternset id="war.patternset" />
 
+    <taskdef resource="net/sf/antcontrib/antlib.xml">
+        <classpath location="${carrot2.cvs.dir}/lib/ant-extensions/ant-contrib.jar" />
+    </taskdef>
+
     <path id="classpath.local">
         <fileset dir="${project.dir}" includes="lib/*.jar" />
     </path>

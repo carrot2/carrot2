@@ -21,9 +21,26 @@
     	<property name="dist.name" value="carrot2-demo-webapp" />
         <property name="build.dir" location="${project.dir}/tmp/build.demo" />
         <property name="profile" value="demo" />
-      
-        <copy file="${project.dir}/etc/log4j.properties.war"
-              tofile="${build.dir}/type-war/WEB-INF/classes/log4j.properties" />
+
+        <!--
+          When there is a need to install a shared copy of log4j (between Web applications and
+          Catalina), putting a local copy of Log4j causes severe class loading problems (multiple
+          instantiations of singleton Logger classes, reconfiguration etc). Allow excluding
+          log4j from the built WAR file.
+          -->
+        <if>
+            <isset property="webapp.log4j.exclude" />
+            <then>
+                <patternset id="war.patternset">
+                    <exclude name="WEB-INF/lib/*log4j*" />
+                    <exclude name="WEB-INF/classes/log4j.properties" />
+                </patternset>
+            </then>
+            <else>
+                <copy file="${project.dir}/etc/log4j.properties.war"
+                      tofile="${build.dir}/type-war/WEB-INF/classes/log4j.properties" />
+            </else>
+        </if>
 
         <ant target="build.${type}"
              antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" inheritrefs="true">
