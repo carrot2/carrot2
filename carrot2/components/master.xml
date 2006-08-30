@@ -119,7 +119,6 @@
 	<if>
 		<equals arg1="${type}" arg2="wartype" casesensitive="false" />
 		<then>
-			<echo>${type}</echo>
 			<delete failonerror="true" includeemptydirs="true" quiet="true">
 			    <fileset dir="${project.dir}" defaultexcludes="false">
 			    	<include name="web/WEB-INF/classes/**" />
@@ -201,7 +200,6 @@
         <dependencies refid="dependencies" />
         <dependencies refid="dependencies.local" />
     </copyDependencies>
-    <echo message="done." />
     
     <condition property="merge.carrot2.components" value="true">
         <equals arg1="${single.jar}" arg2="true" casesensitive="false" />
