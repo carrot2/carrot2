@@ -27,8 +27,9 @@
 
         <sleep seconds="5" />
 
-        <ant dir="${carrot2.cvs.dir}/applications/carrot2-demo-webapp" antfile="build.xml"
-             target="build" inheritall="false" />
+        <ant dir="${carrot2.cvs.dir}/applications/carrot2-demo-webapp" antfile="build.xml" target="build" inheritall="false">
+            <property name="webapp.log4j.exclude" value="true" />
+        </ant>
 
         <copy file="${carrot2.cvs.dir}/applications/carrot2-demo-webapp/tmp/dist/carrot2-demo-webapp.war"
               tofile="/home/tomcat/webapps/${webapp.name}.war"
