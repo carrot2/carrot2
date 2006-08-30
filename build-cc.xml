@@ -20,23 +20,25 @@
     <target name="publish" description="Publish a demo web application internally on the demo server.">
         <fail unless="carrot2.cvs.dir">Define: carrot2.cvs.dir</fail>
         <fail unless="webapp.name">Define: webapp.name property.</fail>
+        <fail unless="webapps.dir">Define: webapps.dir property.</fail>
+        <fail unless="tomcat.init">Define: webapps.dir property.</fail>
 
-        <exec dir="${carrot2.cvs.dir}" executable="/etc/init.d/tomcat" vmlauncher="false" failonerror="true">
+        <exec dir="${carrot2.cvs.dir}" executable="${tomcat.init}" vmlauncher="false" failonerror="true">
             <arg line="stop" />
         </exec>
 
-        <sleep seconds="5" />
+        <sleep seconds="10" />
 
         <ant dir="${carrot2.cvs.dir}/applications/carrot2-demo-webapp" antfile="build.xml" target="build" inheritall="false">
             <property name="webapp.log4j.exclude" value="true" />
         </ant>
 
         <copy file="${carrot2.cvs.dir}/applications/carrot2-demo-webapp/tmp/dist/carrot2-demo-webapp.war"
-              tofile="/home/tomcat/webapps/${webapp.name}.war"
+              tofile="${webapps.dir}/${webapp.name}.war"
               overwrite="true" />
-        <delete dir="/home/tomcat/webapps/${webapp.name}" />
+        <delete dir="${webapps.dir}/${webapp.name}" />
 
-        <exec dir="${carrot2.cvs.dir}" executable="/etc/init.d/tomcat" vmlauncher="false" failonerror="true">
+        <exec dir="${carrot2.cvs.dir}" executable="${tomcat.init}" vmlauncher="false" failonerror="true">
             <arg line="start" />
         </exec>
     </target>
