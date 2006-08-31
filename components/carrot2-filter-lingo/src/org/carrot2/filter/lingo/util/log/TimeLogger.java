@@ -104,7 +104,7 @@ public class TimeLogger {
      * @param logger
      */
     public void logElapsedAndStart(Logger logger, String operation) {
-        logger.info(operation + " took: " +
+        logger.debug(operation + " took: " +
             elapsedToString(getElapsedAndStart()));
     }
 
@@ -112,6 +112,6 @@ public class TimeLogger {
      * @param logger
      */
     public void logElapsed(Logger logger, String operation) {
-        logger.info(operation + " took: " + elapsedToString(getElapsed()));
+        logger.debug(operation + " took: " + elapsedToString(getElapsed()));
     }
 }
