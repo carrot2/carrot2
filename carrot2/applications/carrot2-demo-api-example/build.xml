@@ -1,0 +1,13 @@
+<project name="Carrot2 API Example" default="build">
+    <property name="project.dir"      location="${basedir}" />
+    <property name="carrot2.cvs.dir"  location="../.." />
+
+    <property name="dist.name"        value="carrot2-demo-api-example" />
+
+    <property name="distribution.dir" location="${project.dir}/tmp/dist" />
+    <property name="type"             value="jartype" />
+
+    <property name="copy.dependencies" value="true" />
+
+    <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
+</project>
