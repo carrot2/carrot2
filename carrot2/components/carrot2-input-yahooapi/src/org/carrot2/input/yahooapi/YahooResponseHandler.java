@@ -21,6 +21,7 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
 import org.carrot2.core.ProcessingException;
+import org.carrot2.util.StringUtils;
 
 /**
  * Content handler for Yahoo search results.
@@ -110,14 +111,20 @@ public final class YahooResponseHandler implements ContentHandler {
             cleanup();
         }
         if (stack.size() == 3 && "Result".equals(stack.get(1))) {
+            String text = buffer.toString();
+            buffer.setLength(0);
+
+            // WORKAROUND: Yahoo returns double-encoded entities.
+            text = StringUtils.entitiesToCharacters(text, false);
+
             if ("Title".equals(localName)) {
-                this.title = buffer.toString();
+                this.title = text;
             } else if ("Summary".equals(localName)) {
-                this.summary = buffer.toString();
+                this.summary = text;
             } else if ("Url".equals(localName)) {
-                this.url = buffer.toString();
+                this.url = text;
             } else if ("ClickUrl".equals(localName)) {
-                this.clickurl = buffer.toString();
+                this.clickurl = text;
             }
         }
         stack.remove(stack.size()-1);

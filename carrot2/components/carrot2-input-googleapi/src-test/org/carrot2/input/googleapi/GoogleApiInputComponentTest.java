@@ -19,9 +19,6 @@ import java.net.URL;
 import java.util.*;
 
 import org.apache.log4j.Logger;
-import org.carrot2.input.googleapi.GoogleApiInputComponent;
-import org.carrot2.input.googleapi.GoogleKeysPool;
-
 import org.carrot2.core.*;
 import org.carrot2.core.clustering.RawDocument;
 import org.carrot2.core.impl.ArrayOutputComponent;
@@ -188,4 +185,36 @@ public class GoogleApiInputComponentTest extends junit.framework.TestCase {
         
         assertEquals(100, results.size());
 	}
+    
+    public void testEntities() throws Exception {
+        final GoogleKeysPool pool = new GoogleKeysPool();
+        pool.addKeys(new File("keypool"), ".key");
+
+        if (pool.getKeysTotal() == 0) {
+            log.error("No available google api keys.");
+            return;
+        }
+
+        LocalComponentFactory inputFactory = new LocalComponentFactory() {
+            public LocalComponent getInstance() {
+                return new GoogleApiInputComponent(pool);
+            }
+        };
+
+        LocalControllerBase controller = setUpController(inputFactory);
+        String query = "Ala ma kota";
+        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, new HashMap()).getQueryResult()).documents;
+
+        // the results should contain some documents.
+
+        for (Iterator i = results.iterator(); i.hasNext(); ) {
+            RawDocument rd = (RawDocument) i.next();
+
+            final String titleSummary = (rd.getTitle() + " " + rd.getSnippet());
+            Logger.getRootLogger().info(titleSummary);
+            assertTrue(titleSummary.indexOf("&gt;") < 0);
+            assertTrue(titleSummary.indexOf("&lt;") < 0);
+            assertTrue(titleSummary.indexOf("&amp;") < 0);
+        }
+    }
 }
