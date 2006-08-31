@@ -186,7 +186,7 @@ public class LsiClusteringStrategy implements ClusteringStrategy {
         timeLogger.start();
         if (!prepareData())
         {
-            logger.warn("No clusters created");
+            logger.info("No clusters created");
             return new Cluster[0];
         }
         timeLogger.logElapsedAndStart(logger, "prepareData()");

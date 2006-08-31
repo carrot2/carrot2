@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -42,12 +41,16 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
     /** Capabilities required from the next component in the chain */
     private final static Set SUCCESSOR_CAPABILITIES = new HashSet(Arrays
         .asList(new Object []
-        { RawDocumentsConsumer.class }));
+        {
+            RawDocumentsConsumer.class
+        }));
 
     /** This component's capabilities */
     private final static Set COMPONENT_CAPABILITIES = new HashSet(Arrays
         .asList(new Object []
-        { RawDocumentsProducer.class }));
+        {
+            RawDocumentsProducer.class
+        }));
 
     /** Lucene Searcher */
     private Searcher searcher;
@@ -148,7 +151,7 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
         throws ProcessingException
     {
         super.startProcessing(requestContext);
-        
+
         this.requestContext = requestContext;
 
         // See if the required attributes are present in the query
@@ -182,7 +185,7 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
      * @throws ParseException
      * @throws IOException
      * @throws ProcessingException
-     *  
+     * 
      */
     private void pushResults(Map params) throws ParseException, IOException,
         ProcessingException
@@ -191,8 +194,17 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
         int requestedDocuments;
         try
         {
-            requestedDocuments = Integer.parseInt((String) params
-                .get(LocalInputComponent.PARAM_REQUESTED_RESULTS));
+            Object param = params
+                .get(LocalInputComponent.PARAM_REQUESTED_RESULTS);
+
+            if (param instanceof Integer)
+            {
+                requestedDocuments = ((Integer) param).intValue();
+            }
+            else
+            {
+                requestedDocuments = Integer.parseInt((String) param);
+            }
         }
         catch (Exception e)
         {
@@ -210,7 +222,7 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
             startAt = 0;
         }
 
-        // Create a boolean query that combines all fields  
+        // Create a boolean query that combines all fields
         BooleanQuery booleanQuery = new BooleanQuery();
         for (int i = 0; i < searchFields.length; i++)
         {
@@ -238,9 +250,9 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
         // Hits class. The number 100 is hardcoded in Hits.
         if (endAt > 100)
         {
-            hits.id(endAt-1);
+            hits.id(endAt - 1);
         }
-        
+
         // Get results from the index
         for (int i = startAt; i < endAt; i++)
         {
