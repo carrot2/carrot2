@@ -297,8 +297,8 @@ public class GoogleApiInputComponent extends LocalInputComponentBase
 
             final RawDocument rdoc = new RawDocumentBase(
                     result.getURL(), 
-                    StringUtils.removeMarkup(result.getTitle()), 
-                    StringUtils.removeMarkup(result.getSnippet())) {
+                    StringUtils.entitiesToCharacters(StringUtils.removeMarkup(result.getTitle()), false), 
+                    StringUtils.entitiesToCharacters(StringUtils.removeMarkup(result.getSnippet()), false)) {
                 public Object getId() {
                     return id;
                 }

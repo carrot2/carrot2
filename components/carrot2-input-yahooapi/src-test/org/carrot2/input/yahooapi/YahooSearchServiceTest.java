@@ -13,9 +13,10 @@
 
 package org.carrot2.input.yahooapi;
 
-import org.carrot2.input.yahooapi.*;
+import org.apache.log4j.Logger;
 
-import junit.framework.*;
+import sun.util.logging.resources.logging;
+import junit.framework.TestCase;
 
 /**
  * Tests REST-type call to Yahoo search service.
@@ -55,7 +56,24 @@ public class YahooSearchServiceTest extends TestCase {
 	    YahooSearchResult [] result = service.query("apache", descriptor.getMaxResultsPerQuery() / 2);
 	    assertEquals(descriptor.getMaxResultsPerQuery() / 2, result.length);
 	}
-	
+
+    public void testEntities() throws Exception {
+        YahooSearchServiceDescriptor descriptor = new YahooSearchServiceDescriptor();
+        descriptor.initializeFromXML(
+                this.getClass().getClassLoader().getResourceAsStream("resource/yahoo.xml"));
+
+        YahooSearchService service = new YahooSearchService(descriptor); 
+        YahooSearchResult [] result = service.query("Ala ma kota", 100);
+
+        for (int i = 0; i < result.length; i++) {
+            final String titleSummary = (result[i].title + " " + result[i].summary);
+            Logger.getRootLogger().info(titleSummary);
+            assertTrue(titleSummary.indexOf("&gt;") < 0);
+            assertTrue(titleSummary.indexOf("&lt;") < 0);
+            assertTrue(titleSummary.indexOf("&amp;") < 0);
+        }
+    }
+    
 	public void testStartFromBug() throws Exception {
 	    YahooSearchServiceDescriptor descriptor = new YahooSearchServiceDescriptor();
 	    descriptor.initializeFromXML(this.getClass().getResourceAsStream("yahoo-site-cs.xml"));
