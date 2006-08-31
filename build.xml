@@ -316,6 +316,7 @@ TESTING: @{component.path}
     <application-apply application.path="applications/carrot2-demo-webapp" />
     <application-apply application.path="applications/carrot2-nutch-plugin" />
     <application-apply application.path="applications/carrot2-odp-tools" />
+    <application-apply application.path="applications/carrot2-demo-api-example" />
   </target>
 
 
