@@ -29,6 +29,7 @@
 
         <sleep seconds="10" />
 
+        <ant dir="${carrot2.cvs.dir}/applications/carrot2-demo-webapp" antfile="build.xml" target="clean" inheritall="false" />
         <ant dir="${carrot2.cvs.dir}/applications/carrot2-demo-webapp" antfile="build.xml" target="build" inheritall="false">
             <property name="webapp.log4j.exclude" value="true" />
         </ant>
