@@ -12,14 +12,15 @@
 
 package org.carrot2.input.lucene;
 
-import java.io.*;
+import java.io.IOException;
 
-import org.apache.lucene.analysis.*;
-import org.apache.lucene.analysis.standard.*;
-import org.apache.lucene.index.*;
-import org.apache.lucene.search.*;
-
-import org.carrot2.core.*;
+import org.apache.lucene.analysis.PorterStemFilter;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Searcher;
+import org.carrot2.core.LocalComponent;
+import org.carrot2.core.LocalComponentFactory;
 
 /**
  * @author Stanislaw Osinski
