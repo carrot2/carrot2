@@ -377,7 +377,7 @@ Tomcat:      ${tomcat.url}
   
   <target name="build.wartype">
     <property name="copy.dependencies" value="true" />
-    <property name="libs.dir" location="${build.dir}/type-war/WEB-INF/lib" />
+    <property name="libs.dir" location="${build.dir}/libs-war/WEB-INF/lib" />
     <antcall target="build.wartype.internal" inheritall="true" inheritrefs="true" />
   </target>
 
@@ -425,6 +425,12 @@ Tomcat:      ${tomcat.url}
           <exclude name="WEB-INF/lib/**" />
           <exclude name="WEB-INF/classes/**" />
           <patternset refid="war.patternset" />
+        </fileset>
+    </copy>
+    <copy toDir="${build.dir}/type-war">
+        <fileset dir="${build.dir}/libs-war">
+            <include name="WEB-INF/lib/**" />
+            <patternset refid="war.patternset" />
         </fileset>
     </copy>
 
