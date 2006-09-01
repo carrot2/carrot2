@@ -32,7 +32,7 @@
             <isset property="webapp.log4j.exclude" />
             <then>
                 <patternset id="war.patternset">
-                    <exclude name="WEB-INF/lib/*log4j*" />
+                    <exclude name="WEB-INF/lib/*log4j*.jar" />
                     <exclude name="WEB-INF/classes/log4j.properties" />
                 </patternset>
             </then>
