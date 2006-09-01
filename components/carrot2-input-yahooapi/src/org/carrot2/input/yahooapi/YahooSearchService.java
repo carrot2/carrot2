@@ -161,6 +161,7 @@ public class YahooSearchService {
                         }
                     }
 
+                    log.debug("Querying Yahoo API: " + httpMethod.getURI());
                     int statusCode = client.executeMethod(httpMethod);
                     if (statusCode == HttpStatus.SC_OK || statusCode == HttpStatus.SC_SERVICE_UNAVAILABLE) {
                         is = httpMethod.getResponseBodyAsStream();
@@ -215,7 +216,8 @@ public class YahooSearchService {
         } catch (ParserConfigurationException e) {
             throw new RuntimeException("Problems setting up XML parser: " + e.toString(), e);
         } catch (SAXException e) {
-            throw new RuntimeException("Problems parsing Yahoo output: " + e.toString(), e);
+            log.warn("Yahoo API response XML invalid.", e);
+            throw new IOException("Problems parsing Yahoo API response: " + e.getMessage());
         } finally {
             connectionManager.shutdown();
         }
