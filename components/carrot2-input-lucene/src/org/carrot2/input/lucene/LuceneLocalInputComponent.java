@@ -56,7 +56,7 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
     /**
      * All information required to perform a search in Lucene.
      */
-    private LuceneSearchConfig luceneSettings;
+    private final LuceneSearchConfig luceneSettings;
 
     /** Current query. */
     private String query;
@@ -88,6 +88,15 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
     protected LuceneLocalInputComponent(LuceneSearchConfig settings)
     {
         this.luceneSettings = settings;
+    }
+
+    /**
+     * Create an empty instance of this component. You will need to pass
+     * Lucene configuration at query time using {@link #LUCENE_CONFIG}.
+     */
+    public LuceneLocalInputComponent()
+    {
+        this.luceneSettings = null;
     }
 
     /*
@@ -195,6 +204,10 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
         // check if there is an override for lucene settings in the context.
         if (params.containsKey(LUCENE_CONFIG)) {
             luceneSettings = (LuceneSearchConfig) params.get(LUCENE_CONFIG); 
+        }
+        
+        if (luceneSettings == null) {
+            throw new ProcessingException("Lucene input component not configured. Need LuceneSettings.");
         }
         
         // Create a boolean query that combines all fields
