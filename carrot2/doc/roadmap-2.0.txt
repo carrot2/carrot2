@@ -8,7 +8,6 @@ Must have:
   - What is Carrot2
   - Getting source and building?
   - Brief overview of the (local) architecture
-  - Brief example of using LocalController (+Lucene)
   - One-sentence summary for each carrot2 subproject
   - For more information: use mailing list :)
 
@@ -30,8 +29,6 @@ Nice to have:
 
 - Check out Unicode segmentation spec (info from Andrzej Zydro):
 http://www.unicode.org/reports/tr29/tr29-10.html
-
-- add lucene input source to the local demo application
 
 - refactor Language use (tokenization, stemming) in Lingo.
 
