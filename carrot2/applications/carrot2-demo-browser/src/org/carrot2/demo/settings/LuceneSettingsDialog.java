@@ -23,7 +23,8 @@ import java.util.Collection;
 
 import javax.swing.*;
 
-import org.apache.lucene.analysis.*;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.SimpleAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexReader.FieldOption;
@@ -44,12 +45,13 @@ public class LuceneSettingsDialog extends JPanel {
     private JTextField indexLocationLabel;
     
     public LuceneSettingsDialog(LuceneSettings settings) {
-        this.setLayout(new BorderLayout());
         this.settings = settings;
         buildGui();
     }
 
     private void buildGui() {
+        this.setLayout(new BorderLayout());
+        
         final DefaultFormBuilder builder = 
             new DefaultFormBuilder(new FormLayout("fill:200px:grow, 4dlu, pref"));
 
@@ -57,9 +59,9 @@ public class LuceneSettingsDialog extends JPanel {
 
         this.indexLocationLabel = new JTextField();
         this.indexLocationLabel.setEditable(false);
-        if (settings.getIndexDir() != null) {
+        if (settings.luceneIndexDir != null) {
             this.indexLocationLabel.setText(
-                    settings.getIndexDir().getAbsolutePath());
+                    settings.luceneIndexDir.getAbsolutePath());
         }
 
         final JButton indexLocationEditButton = new JButton();
@@ -91,8 +93,19 @@ public class LuceneSettingsDialog extends JPanel {
                             new DefaultFormBuilder(new FormLayout("pref:grow"));
 
                         builder.appendSeparator("Search fields");
-                        final JList list = new JList(fields.toArray());
+                        final Object [] fieldsList = fields.toArray();
+                        final JList list = new JList(fieldsList);
                         list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+                        if (settings.searchFields != null) {
+                            for (int i = 0; i < settings.searchFields.length; i++) {
+                                final String key = settings.searchFields[i];
+                                for (int j = 0; j < fieldsList.length; j++) {
+                                    if (fieldsList[j].equals(key)) {
+                                        list.addSelectionInterval(j, j);
+                                    }
+                                }
+                            }
+                        }
                         builder.append(list);
                         builder.nextLine();
 
@@ -100,16 +113,25 @@ public class LuceneSettingsDialog extends JPanel {
 
                         builder.append(new JLabel("URL:"));
                         final JComboBox url = new JComboBox(fields.toArray());
+                        if (settings.urlField != null) {
+                            url.setSelectedItem(settings.urlField);
+                        }
                         builder.append(url);
                         builder.nextLine();
 
                         builder.append(new JLabel("Title:"));
                         final JComboBox title = new JComboBox(fields.toArray());
+                        if (settings.titleField != null) {
+                            title.setSelectedItem(settings.titleField);
+                        }
                         builder.append(title);
                         builder.nextLine();
 
                         builder.append(new JLabel("Snippet:"));
                         final JComboBox snippet = new JComboBox(fields.toArray());
+                        if (settings.summaryField != null) {
+                            snippet.setSelectedItem(settings.summaryField);
+                        }
                         builder.append(snippet);
                         builder.nextLine();
 
@@ -118,6 +140,9 @@ public class LuceneSettingsDialog extends JPanel {
                                 StandardAnalyzer.class.getName(), 
                                 SimpleAnalyzer.class.getName(),
                         });
+                        if (settings.analyzer != null) {
+                            analyzers.setSelectedItem(settings.analyzer.getClass().getName());
+                        }
                         builder.append(analyzers);
                         builder.nextLine();
 

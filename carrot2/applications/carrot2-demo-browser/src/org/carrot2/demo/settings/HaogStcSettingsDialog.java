@@ -13,6 +13,8 @@
 
 package org.carrot2.demo.settings;
 
+import java.awt.BorderLayout;
+
 import javax.swing.JPanel;
 
 import org.carrot2.filter.haog.stc.STCConstants;
@@ -34,6 +36,8 @@ class HaogStcSettingsDialog extends JPanel {
     }
 
     private void buildGui() {
+        this.setLayout(new BorderLayout());
+        
         final DefaultFormBuilder builder = 
             new DefaultFormBuilder(new FormLayout("pref", ""));
         
@@ -67,6 +71,6 @@ class HaogStcSettingsDialog extends JPanel {
         builder.append(ThresholdHelper.createIntegerThreshold(settings, STCConstants.HIERATCHY_CREATION_WAY,
                 "Simple (grandchild)/Full (kernel):", 0, 1, 1, 1));
 
-        this.add(builder.getPanel());
+        this.add(builder.getPanel(), BorderLayout.CENTER);
     }
 }
