@@ -85,7 +85,7 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
      * Create an instance of the component with a set
      * of predefined settings.
      */
-    protected LuceneLocalInputComponent(LuceneSearchConfig settings)
+    public LuceneLocalInputComponent(LuceneSearchConfig settings)
     {
         this.luceneSettings = settings;
     }
