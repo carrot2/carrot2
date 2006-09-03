@@ -9,6 +9,10 @@ Major functions and bug fixes
 Version  [C] Information
 
 HEAD
+          +  Added an Example explaining API use.
+
+          +  Added Lucene input process for local indices (demo browser)
+
           +  Added compression filter to the demo webapp
           
           +  Added correct (implementing flush()) implementation of GZIP and Deflate streams
