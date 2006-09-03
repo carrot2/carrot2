@@ -38,7 +38,6 @@ import sun.awt.ComponentFactory;
  */
 public final class Example {
 
-
     /**
      * <h1>Carrot<sup>2</sup> API example</h1>
      * 
@@ -164,7 +163,7 @@ public final class Example {
      * an output component of type {@link ArrayOutputComponent.Result}. The
      * 
      */
-    private static void displayResults(ArrayOutputComponent.Result result) {
+    static void displayResults(ArrayOutputComponent.Result result) {
         //
         // let's display a list of snippets recieved from the input
         // component first.
