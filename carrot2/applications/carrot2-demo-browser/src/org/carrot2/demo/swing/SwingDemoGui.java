@@ -192,14 +192,14 @@ public class SwingDemoGui {
      * result.  
      */
     private void performQuery(String processId, String query, int requestedResults) {
+        // ready to process the query, disable the user interface for the time it takes
+        // to spawn the query processing thread.
+        disableUI();
         try {
-            // ready to process the query, disable the user interface for the time it takes
-            // to spawn the query processing thread.
-            disableUI();
-
             final ProcessSettings settings = demoContext.getSettingsObject(processId);
             if (false == settings.isConfigured()) {
                 // Return immediately -- the process is not configured properly.
+                JOptionPane.showMessageDialog(queryField, "Process not properly configured (see settings).");
                 return;
             }
 
@@ -214,16 +214,14 @@ public class SwingDemoGui {
             tabbedPane.addTab(tabName, resultsTab);
             tabbedPane.setSelectedIndex(tabbedPane.getTabCount()-1);
             tabbedPane.setToolTipTextAt(tabbedPane.getTabCount()-1, query);
-            try {
-                resultsTab.performQuery();
-            } finally {
-                enableUI();
-                queryField.requestFocus();
-            }
+
+            resultsTab.performQuery();
         } catch (Throwable t) {
             JOptionPane.showMessageDialog(queryField, "Exception executing query: \n"
                     + t.toString());
+        } finally {
             enableUI();
+            queryField.requestFocus();
         }
     }
 
