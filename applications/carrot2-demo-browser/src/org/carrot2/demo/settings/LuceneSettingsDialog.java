@@ -1,3 +1,16 @@
+
+/*
+ * Carrot2 project.
+ *
+ * Copyright (C) 2002-2006, Dawid Weiss, Stanisław Osiński.
+ * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the repository checkout or at:
+ * http://www.carrot2.org/carrot2.LICENSE
+ */
+
 package org.carrot2.demo.settings;
 
 import java.awt.BorderLayout;
@@ -116,7 +129,12 @@ public class LuceneSettingsDialog extends JPanel {
                             final String [] searchFields = (String []) Arrays.asList(
                                     list.getSelectedValues()).toArray(
                                             new String [list.getSelectedIndices().length]);
-                            
+
+                            if (searchFields.length == 0) {
+                                JOptionPane.showMessageDialog(indexLocationEditButton, "At least one search field is required.");
+                                return;
+                            }
+
                             final Analyzer analyzer;
                             try {
                                 analyzer = (Analyzer) Thread.currentThread().getContextClassLoader().loadClass(
