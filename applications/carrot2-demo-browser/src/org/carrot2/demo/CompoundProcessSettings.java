@@ -15,6 +15,7 @@ package org.carrot2.demo;
 
 import java.awt.Frame;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JComponent;
 
@@ -27,12 +28,17 @@ import com.jgoodies.forms.layout.FormLayout;
  * 
  * @author Dawid Weiss
  */
-final class CompoundProcessSettings extends ProcessSettingsBase {
+final class CompoundProcessSettings extends ProcessSettingsBase implements ProcessSettingsListener {
 
     private ProcessSettings[] settings;
 
     public CompoundProcessSettings(ProcessSettings[] settings) {
         this.settings = settings;
+        for (int i = 0; i < settings.length; i++) {
+            if (settings[i] instanceof ProcessSettingsBase) {
+                ((ProcessSettingsBase) settings[i]).addListener(this);                
+            }
+        }
     }
 
     public final ProcessSettings createClone() {
@@ -85,5 +91,9 @@ final class CompoundProcessSettings extends ProcessSettingsBase {
             }
         }
         return true;
+    }
+
+    public void settingsChanged(ProcessSettings settings) {
+        super.fireParamsUpdated();
     }
 }

@@ -40,18 +40,18 @@ public final class LuceneSettings extends ProcessSettingsBase {
     private final static Logger logger = Logger.getLogger(LuceneSettings.class);
     
     /** Lucene index directory */
-    private File luceneIndexDir;
+    File luceneIndexDir;
     
     /** Lucene Analyzer */
-    private Analyzer analyzer;
+    Analyzer analyzer;
 
     /** Lucene fields to be searched */
-    private String [] searchFields;
+    String [] searchFields;
 
     /** Content fields */
-    private String titleField;
-    private String summaryField;
-    private String urlField;
+    String titleField;
+    String summaryField;
+    String urlField;
 
     private Searcher searcher;
 
@@ -77,9 +77,14 @@ public final class LuceneSettings extends ProcessSettingsBase {
 
     private void createSearcher() {
         try {
+            if (searcher != null) {
+                dispose();
+            }
+
             this.searcher = new IndexSearcher(
                     IndexReader.open(luceneIndexDir));
             logger.debug("Creating searcher: " + this.searcher);
+            super.fireParamsUpdated();
         } catch (IOException e) {
             throw new RuntimeException("Could not open lucene index.", e);
         }
@@ -138,10 +143,6 @@ public final class LuceneSettings extends ProcessSettingsBase {
                 logger.error("Could not close Lucene searcher.", e);
             }
         }
-    }
-
-    final File getIndexDir() {
-        return this.luceneIndexDir;
     }
 
     final void setConfig(File indexDir, String [] searchFields, String urlField, String titleField, String snippetField, Analyzer analyzer) {
