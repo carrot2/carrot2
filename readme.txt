@@ -13,7 +13,6 @@ primarily for clustering search results from search engines (but not only).
 See more at:
 
 http://www.carrot2.org
-http://carrot.cs.put.poznan.pl
 
 
 ACQUIRING A BINARY RELEASE
