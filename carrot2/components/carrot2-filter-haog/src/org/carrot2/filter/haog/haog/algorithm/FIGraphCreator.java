@@ -30,7 +30,7 @@ public class FIGraphCreator implements GraphCreator {
 	/**
 	 * This method creates graph from a list of 
 	 * {@link org.carrot2.filter.haog.fi.algorithm.Cluster}.
-	 * @param baseClusters - BaseCluster list.
+	 * @param clusters - BaseCluster list.
 	 * @return list containing list of graph's vertices
 	 */
 	public List createGraph(List clusters){
