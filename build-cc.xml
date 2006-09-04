@@ -54,6 +54,35 @@
         </exec>
     </target>
 
+    <target name="javadoc.upload" description="Compiles and uploads JavaDoc API to the server.">
+        <!-- Remote directory to which JavaDocs will be uploaded -->
+        <property name="website.javadoc.upload.dir"   value="project.carrot2.org/api" />
+        <property name="javadoc.dir" location="${carrot2.cvs.dir}/tmp/javadoc" />
+
+        <fail unless="carrot2.cvs.dir">Define: carrot2.cvs.dir</fail>
+        <fail unless="website.upload.host">Please define the website.upload.host variable</fail>
+        <fail unless="website.upload.user">Please define the website.upload.user variable</fail>
+        <fail unless="website.upload.password">Please define the website.upload.password variable</fail>
+        <fail unless="website.javadoc.upload.dir">Please define the website.javadoc.upload.dir variable</fail>
+
+        <ant dir="${carrot2.cvs.dir}" antfile="build.xml" target="javadoc" inheritall="false" />
+
+        <echo>
+        ####
+        Uploading JavaDoc to: ${website.upload.host}/${website.javadoc.upload.dir}
+        ####
+        </echo> 
+        <ftp server="${website.upload.host}"
+             userid="${website.upload.user}"
+             password="${website.upload.password}"
+             remotedir="${website.javadoc.upload.dir}"
+             depends="no"
+             verbose="yes"
+             passive="yes">
+          <fileset dir="${javadoc.dir}"/>
+        </ftp>
+    </target>
+
     <target name="help">
         <echo>This file is used to drive automated CruiseControl builds.</echo>
     </target>
