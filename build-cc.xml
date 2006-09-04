@@ -21,18 +21,20 @@
         <fail unless="carrot2.cvs.dir">Define: carrot2.cvs.dir</fail>
         <fail unless="webapp.name">Define: webapp.name property.</fail>
         <fail unless="webapps.dir">Define: webapps.dir property.</fail>
-        <fail unless="tomcat.init">Define: webapps.dir property.</fail>
+        <fail unless="tomcat.init">Define: tomcat.init property.</fail>
 
+        <!-- build the webapp -->
+        <ant dir="${carrot2.cvs.dir}/applications/carrot2-demo-webapp" antfile="build.xml" target="clean" inheritall="false" />
+        <ant dir="${carrot2.cvs.dir}/applications/carrot2-demo-webapp" antfile="build.xml" target="build" inheritall="false">
+            <property name="webapp.log4j.exclude" value="true" />
+        </ant>
+
+        <!-- stop tomcat, copy the webapp, restart tomcat -->
         <exec dir="${carrot2.cvs.dir}" executable="${tomcat.init}" vmlauncher="false" failonerror="true">
             <arg line="stop" />
         </exec>
 
         <sleep seconds="10" />
-
-        <ant dir="${carrot2.cvs.dir}/applications/carrot2-demo-webapp" antfile="build.xml" target="clean" inheritall="false" />
-        <ant dir="${carrot2.cvs.dir}/applications/carrot2-demo-webapp" antfile="build.xml" target="build" inheritall="false">
-            <property name="webapp.log4j.exclude" value="true" />
-        </ant>
 
         <copy file="${carrot2.cvs.dir}/applications/carrot2-demo-webapp/tmp/dist/carrot2-demo-webapp.war"
               tofile="${webapps.dir}/${webapp.name}.war"
@@ -42,6 +44,33 @@
         <exec dir="${carrot2.cvs.dir}" executable="${tomcat.init}" vmlauncher="false" failonerror="true">
             <arg line="start" />
         </exec>
+    </target>
+
+    <target name="publish.other" description="Publishes webstart version and API documentation internally on the server.">
+        <fail unless="carrot2.cvs.dir">Define: carrot2.cvs.dir</fail>
+        <fail unless="api.dir">Define: api.dir property.</fail>
+        <fail unless="webstart.dir">Define: webstart.dir property.</fail>
+
+        <!-- build javadoc -->
+        <ant dir="${carrot2.cvs.dir}" antfile="build.xml" target="javadoc" inheritall="false" />
+
+        <!-- build webstart demo -->
+        <ant dir="${carrot2.cvs.dir}/applications/carrot2-demo-browser" antfile="build.xml" target="webstart" inheritall="false" />
+        
+        <!-- copy the API and the webstart demo -->
+        <delete dir="${api.dir}" />
+        <mkdir dir="${api.dir}" />
+        <copy todir="${api.dir}">
+            <fileset dir="${carrot2.cvs.dir}/tmp/javadoc" />
+        </copy>
+
+        <mkdir dir="${webstart.dir}" />
+        <copy todir="${webstart.dir}">
+            <fileset dir="${carrot2.cvs.dir}/applications/carrot2-demo-browser/tmp/webstart">
+                <include name="**/*" />
+                <include name="*" />
+            </fileset>
+        </copy>
     </target>
 
     <target name="update" description="Perform SVN update to a given revision">
