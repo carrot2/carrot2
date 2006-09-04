@@ -15,23 +15,17 @@ package org.carrot2.ant.deps;
 
 import java.io.File;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.carrot2.ant.tasks.BringToDateTask;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
 
 /**
  * A container for build triggers for a component.
- * 
- * @see AntBuildElement
  * 
  * @author Dawid Weiss
  */

@@ -18,8 +18,7 @@ import java.util.List;
 /**
  * Interface containing algorithm for creation graph from list of clusters
  * created by different clusterer algorithms. Graph created by this algorithm
- * is suitable to use in {@link org.carrot2.filter.haog.haog.algorithm.
- * GraphProcessor} 
+ * is suitable to use in {@link GraphProcessor} 
  * @author Karol Gołembniak
  */
 public interface GraphCreator {

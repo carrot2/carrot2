@@ -27,7 +27,6 @@ public interface ClusterInfoRenderer
      * Returns a prefix to be rendered before the provided cluster's label.
      * 
      * @param rawCluster
-     * @return
      */
     public String getClusterLabelPrefix(RawCluster rawCluster);
 
@@ -35,7 +34,6 @@ public interface ClusterInfoRenderer
      * Returns a suffix to be rendered after the provided cluster's label.
      * 
      * @param rawCluster
-     * @return
      */
     public String getClusterLabelSuffix(RawCluster rawCluster);
 
@@ -44,7 +42,6 @@ public interface ClusterInfoRenderer
      * format.
      * 
      * @param rawCluster
-     * @return
      */
     public String getPlainClusterInfo(RawCluster rawCluster);
 
@@ -54,7 +51,6 @@ public interface ClusterInfoRenderer
      * caller).
      * 
      * @param rawCluster
-     * @return
      */
     public String getHtmlClusterInfo(RawCluster rawCluster);
 }

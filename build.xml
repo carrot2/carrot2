@@ -30,8 +30,8 @@
 
   <target name="javadoc">
 
-    <delete dir="${javadoc.dir}" />
-    <delete dir="tmp/src" />
+    <delete dir="${javadoc.dir}" failonerror="false" />
+    <delete dir="tmp/src" failonerror="false" />
 
     <mkdir dir="tmp/src" />
     <mkdir dir="${javadoc.dir}" />
@@ -39,6 +39,7 @@
     <copy failonerror="true" filtering="false" overwrite="true" todir="tmp/src">
         <fileset dir=".">
             <include name="**/src/**/*.java" />
+            <include name="**/src/**/*.html" />
         </fileset>
         <chainedmapper>
             <filtermapper><replacestring from="\" to="/"/></filtermapper>
@@ -48,8 +49,8 @@
 
     <javadoc
              destdir          = "${javadoc.dir}"
-             protected        = "true"
-             version          = "false"
+             access           = "package"
+             version          = "true"
              use              = "false"
              doctitle         = "Carrot&lt;sup&gt;2&lt;/sup&gt; Framework API Specification"
              header           = "&lt;div class='logo'&gt;Carrot&lt;sup&gt;2&lt;/sup&gt; Framework&lt;br&gt;API Specification&lt;/div&gt;"
@@ -70,9 +71,17 @@
             <include name="**/*.java" />
         </fileset>
 
-        <link href="http://java.sun.com/j2se/1.5.0/docs/api/" />
-        <link href="http://www.dom4j.org/apidocs/" />
-        <link href="http://dsd.lbl.gov/~hoschek/colt/api/" />
+        <link offline="true" href="http://java.sun.com/j2se/1.5.0/docs/api/" 
+            packagelistLoc="${carrot2.cvs.dir}/etc/javadoc/apis/jdk15" />
+        <link offline="true" href="http://demo.carrot2.org/thirdparty/ant/" 
+            packagelistLoc="${carrot2.cvs.dir}/etc/javadoc/apis/ant" />
+
+        <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Core" packages="org.carrot2.core*" />
+        <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; ANT Build System" packages="org.carrot2.ant*"/>
+        <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Demos and Examples" packages="org.carrot2.apiexample*:org.carrot2.demo*:org.carrot2.webapp*"/>
+        <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Filters" packages="org.carrot2.filter*"/>
+        <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Inputs" packages="org.carrot2.input*"/>
+        <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Utility classes" packages="org.carrot2.matrix*:org.carrot2.stemming*:org.carrot2.tools*:org.carrot2.util*"/>
     </javadoc>
 
     <delete dir="tmp/src" />

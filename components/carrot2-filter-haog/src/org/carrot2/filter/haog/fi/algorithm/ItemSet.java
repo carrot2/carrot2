@@ -42,7 +42,6 @@ public class ItemSet extends TreeSet {
 
 	/**
 	 * Getter for {@link #support} field.
-	 * @return
 	 */
 	public int getSupport() {
 		return support;

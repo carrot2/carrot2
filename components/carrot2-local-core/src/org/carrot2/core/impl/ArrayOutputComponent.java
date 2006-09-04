@@ -63,9 +63,9 @@ public class ArrayOutputComponent extends LocalOutputComponentBase
 
     /**
      * An class that stores documents and clusters collected during the
-     * processing of a query. The result returned by  {@link
-     * org.carrot2.core.LocalProcess#query(org.carrot2.core.RequestContext,String
-     * )} is of this type.
+     * processing of a query. The result returned by
+     * {@link org.carrot2.core.LocalProcess#query(org.carrot2.core.RequestContext,String)} 
+     * is of this type.
      */
     public static class Result {
         /**
