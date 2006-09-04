@@ -13,7 +13,8 @@
 
 package org.carrot2.input.yahooapi;
 
-import java.io.IOException;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 import org.apache.log4j.Logger;
 
@@ -23,32 +24,51 @@ import org.apache.log4j.Logger;
  * @author Dawid Weiss
  */
 public class InvalidXML extends junit.framework.TestCase {
-    private final static Logger logger = Logger.getLogger(InvalidXML.class); 
+    private final static Logger logger = Logger.getLogger(InvalidXML.class);
 
-    public InvalidXML(String s) {
-        super(s);
+    private final String query;
+    private final int results; 
+
+    public InvalidXML(String query, int results) {
+        this.query = query;
+        this.results = results;
+
+        setName(query);
     }
-    
-    public void testBrokenXMLResponses() throws Exception {
-        // This test shows the problems present in Yahoo API (non well-formed XML)
-        // returned from the engine.
+
+    public static Test suite() {
         final String [][] queries = new String [][] {
-                {"ArcIMS", "200"}
+                {"ArcIMS", "200"},
+                {"talabis", "100"},
+                {"Kosher or israel or torah", "100"},
+                {"ole nilsson", "100"},
+                {"chalva", "100"},
+                {"Apple Computer", "100"},
+                {"Public Transit or mass transit", "100"},
+                {"west bank", "100"},
         };
 
+        final TestSuite suite = new TestSuite();
+        for (int i = 0; i < queries.length; i++) {
+            suite.addTest(new InvalidXML(queries[i][0], 
+                    Integer.parseInt(queries[i][1])));
+        }
+
+        return suite;
+    }
+
+    /**
+     * 
+     */
+    public void testQuery() throws Exception {
         final YahooSearchServiceDescriptor descriptor = new YahooSearchServiceDescriptor();
         descriptor.initializeFromXML(
                 this.getClass().getClassLoader().getResourceAsStream("resource/yahoo.xml"));
         final YahooSearchService service = new YahooSearchService(descriptor);
+        service.query(query, results);
+    }
 
-        for (int i = 0; i < queries.length; i++) {
-            final String query = queries[i][0];
-            try {
-                service.query(queries[i][0], Integer.parseInt(queries[i][1]));
-                logger.info("This query now passes OK: " + query);
-            } catch (IOException e) {
-                logger.warn("This query does not pass XML validation: " + query, e);
-            }
-        }
+    protected void runTest() throws Throwable {
+        this.testQuery();
     }
 }
