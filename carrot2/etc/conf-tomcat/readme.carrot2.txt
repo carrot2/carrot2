@@ -1,9 +1,11 @@
+
 Carrot2 Web Search Clustering Engine
 ------------------------------------
 
 This archive contains a web-based application for clustering search results
 based on the clustering algorithms available in the Carrot2 Framework
-(http://project.carrot2.org).
+(http://www.carrot2.org).
+
 
 Requirements
 ------------
@@ -20,12 +22,13 @@ The application requires:
 Installation and running
 ------------------------
 
+read Installation nodes first.
+
 1. Copy the carrot2-demo-webapp.war file to Tomcat's webapps/ directory.
 
 2. Start Tomcat.
 
 3. Access: http://localhost:8080/carrot2-demo-webapp/
-
 
 
 Installation notes
@@ -36,7 +39,7 @@ Installation notes
 You must enforce proper decoding of URI parameters in the connector. You
 can do it by adding this attribute to the connector spec. in server.xml
 
-URIEncoding="utf-8"
+URIEncoding="UTF-8"
 
 An example connector should look similar to this one:
 
@@ -45,6 +48,8 @@ An example connector should look similar to this one:
     minProcessors="5" maxProcessors="25" enableLookups="false"
     redirectPort="8443" acceptCount="10" debug="0" connectionTimeout="20000" 
     URIEncoding="UTF-8" />
+
+If you use direct Apache connectors (AJP), a similar attribute must be added.
 
 
 2. For Google API input component, you need to define 'googleapi.keypool'
@@ -57,3 +62,9 @@ You can pass a JVM system property to Tomcat by defining CATALINA_OPTS:
 CATALINA_OPTS=-Dgoogleapi.keypool=[absolute-path]
 
 
+3. Carrot2 uses Log4j logging extensively. Log4j is by default included in the
+Web application (WEB-INF/lib folder) and defines a default logging configuration
+that places logging statements in Catalina's /log folder. If you plan to deploy
+more than one application that uses Log4j, you may encounter class loading problems.
+This is an advanced topic -- search mailing list archives for Log4j, Apache Commons Logging
+and Tomcat issues.
