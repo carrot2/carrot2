@@ -1,3 +1,16 @@
+
+/*
+ * Carrot2 project.
+ *
+ * Copyright (C) 2002-2006, Dawid Weiss, Stanisław Osiński.
+ * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the repository checkout or at:
+ * http://www.carrot2.org/carrot2.LICENSE
+ */
+
 package org.carrot2.apiexample;
 
 import java.io.IOException;
@@ -8,6 +21,7 @@ import org.carrot2.core.*;
 import org.carrot2.core.clustering.RawCluster;
 import org.carrot2.core.clustering.RawDocument;
 import org.carrot2.core.impl.ArrayOutputComponent;
+import org.carrot2.core.impl.ArrayOutputComponent.Result;
 import org.carrot2.core.linguistic.Language;
 import org.carrot2.filter.lingo.local.LingoLocalFilterComponent;
 import org.carrot2.input.yahooapi.YahooApiInputComponent;
@@ -24,7 +38,6 @@ import sun.awt.ComponentFactory;
  * @author Dawid Weiss
  */
 public final class Example {
-
 
     /**
      * <h1>Carrot<sup>2</sup> API example</h1>
@@ -95,7 +108,7 @@ public final class Example {
      * interface. The actual output depends a lot on the last (output) component
      * in the chain, so you'll need to see what is available. In our case, the
      * result is a buffered array of snippets and clusters of type
-     * {@link ArrayOutputComponent.Result}. We can display
+     * {@link Result}. We can display
      * documents (snippets) and clusters by fetching data from this
      * object. This procedure is shown in 
      * {@link #displayResults(ArrayOutputComponent.Result)} method.</p>
@@ -148,10 +161,10 @@ public final class Example {
 
     /**
      * <p>In this method we display documents and clusters received from 
-     * an output component of type {@link ArrayOutputComponent.Result}. The
+     * an output component of type {@link Result}.
      * 
      */
-    private static void displayResults(ArrayOutputComponent.Result result) {
+    static void displayResults(Result result) {
         //
         // let's display a list of snippets recieved from the input
         // component first.

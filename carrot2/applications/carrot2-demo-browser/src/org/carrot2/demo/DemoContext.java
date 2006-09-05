@@ -140,20 +140,9 @@ public class DemoContext {
         //
         for (Iterator i = loadedProcesses.iterator(); i.hasNext();) {
             final LoadedProcess lp = (LoadedProcess) i.next();
-            if (lp.getAttributes().containsKey(PROCESS_SETTINGS_CLASS)) {
-                final String processSettingsClass = (String) lp.getAttributes().get(PROCESS_SETTINGS_CLASS);
-                try {
-                    final Class clazz = Thread.currentThread().getContextClassLoader().loadClass(processSettingsClass);
-                    final ProcessSettings st = (ProcessSettings) clazz.newInstance();
-                    this.loadedSettings.put(lp.getId(), st);
-                } catch (Exception e) {
-                    throw new RuntimeException("Could not load process settings: "
-                            + processSettingsClass, e);
-                }
-                if (lp.getAttributes().containsKey(PROCESS_DEFAULT)) {
-                    this.defaultProcess = lp.getId();
-                }
-            }
+
+            this.loadedSettings.put(lp.getId(), getProcessSettings(lp.getAttributes()));
+
             if (lp.getAttributes().containsKey(CLUSTER_INFO_RENDERER_CLASS)) {
                 final String clusterInfoRendererClass = (String) lp.getAttributes().get(CLUSTER_INFO_RENDERER_CLASS);
                 try {
@@ -161,12 +150,13 @@ public class DemoContext {
                     final ClusterInfoRenderer cir = (ClusterInfoRenderer) clazz.newInstance();
                     this.loadedClusterInfoRenderers.put(lp.getId(), cir);
                 } catch (Exception e) {
-                    throw new RuntimeException("Could not load process settings: "
+                    throw new RuntimeException("Could not load info renderer: "
                         + clusterInfoRendererClass, e);
                 }
-                if (lp.getAttributes().containsKey(PROCESS_DEFAULT)) {
-                    this.defaultProcess = lp.getId();
-                }
+            }
+
+            if (lp.getAttributes().containsKey(PROCESS_DEFAULT)) {
+                this.defaultProcess = lp.getId();
             }
             controller.addProcess(lp.getId(), lp.getProcess());
         }
@@ -186,6 +176,41 @@ public class DemoContext {
             }
         }
         this.processIdToName = processIdToName;
+    }
+
+    /**
+     * Iterates through attributes, looking for these starting with
+     * {@link #PROCESS_SETTINGS_CLASS} and returns an instance of
+     * {@link ProcessSettings}.  
+     */
+    private ProcessSettings getProcessSettings(Map attributes) {
+        final ArrayList settingsClasses = new ArrayList();
+        for (Iterator i = attributes.keySet().iterator(); i.hasNext();) {
+            final String key = (String) i.next();
+            if (key.startsWith(PROCESS_SETTINGS_CLASS)) {
+                settingsClasses.add(key);
+            }
+        }
+
+        Collections.sort(settingsClasses);
+        final ProcessSettings [] settings = new ProcessSettings[settingsClasses.size()];
+        for (int i = 0; i < settings.length; i++) {
+            final String processSettingsClass = (String) attributes.get(settingsClasses.get(i));
+            try {
+                final Class clazz = Thread.currentThread().getContextClassLoader().loadClass(processSettingsClass);
+                settings[i] = (ProcessSettings) clazz.newInstance();
+            } catch (Exception e) {
+                throw new RuntimeException("Could not load process settings: " + processSettingsClass, e);
+            }
+        }
+        
+        if (settings.length == 0) {
+            return new EmptyProcessSettings();
+        } else if (settings.length == 1) {
+            return settings[0];
+        } else {
+            return new CompoundProcessSettings(settings); 
+        }
     }
 
     /**

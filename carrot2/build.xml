@@ -3,9 +3,8 @@
 <project name="Carrot2 main build file" default="help">
   <property file="${user.home}/.carrot.properties" />
   <property file="local-build.properties" />
-  <property file="${user.home}/.carrot.website-upload.properties" />
 
-  <property name="release.number"   value="head" />
+  <property name="release.number"   value="2.0-RC2" />
 
   <property name="build.compiler"   value="modern" />
   <property name="javac.optimize"   value="off" />
@@ -19,9 +18,6 @@
   <property name="distribution.dir" value="tmp" />
   <property name="tests.report.dir" value="tmp/test-report" />
 
-  <!-- Remote directory to which JavaDocs will be uploaded -->
-  <property name="website.javadoc.upload.dir"   value="project.carrot2.org/api" />
-
   <property name="carrot2.cvs.dir" location="${basedir}" />
   <import file="${carrot2.cvs.dir}/components/carrot2-ant-extensions/bootstrap.xml" />
 
@@ -34,8 +30,8 @@
 
   <target name="javadoc">
 
-    <delete dir="${javadoc.dir}" />
-    <delete dir="tmp/src" />
+    <delete dir="${javadoc.dir}" failonerror="false" />
+    <delete dir="tmp/src" failonerror="false" />
 
     <mkdir dir="tmp/src" />
     <mkdir dir="${javadoc.dir}" />
@@ -43,6 +39,8 @@
     <copy failonerror="true" filtering="false" overwrite="true" todir="tmp/src">
         <fileset dir=".">
             <include name="**/src/**/*.java" />
+            <include name="**/src/**/*.html" />
+            <exclude name="**/tmp/**/*" />
         </fileset>
         <chainedmapper>
             <filtermapper><replacestring from="\" to="/"/></filtermapper>
@@ -52,8 +50,8 @@
 
     <javadoc
              destdir          = "${javadoc.dir}"
-             protected        = "true"
-             version          = "false"
+             access           = "package"
+             version          = "true"
              use              = "false"
              doctitle         = "Carrot&lt;sup&gt;2&lt;/sup&gt; Framework API Specification"
              header           = "&lt;div class='logo'&gt;Carrot&lt;sup&gt;2&lt;/sup&gt; Framework&lt;br&gt;API Specification&lt;/div&gt;"
@@ -74,9 +72,17 @@
             <include name="**/*.java" />
         </fileset>
 
-        <link href="http://java.sun.com/j2se/1.5.0/docs/api/" />
-        <link href="http://www.dom4j.org/apidocs/" />
-        <link href="http://dsd.lbl.gov/~hoschek/colt/api/" />
+        <link offline="true" href="http://java.sun.com/j2se/1.5.0/docs/api/" 
+            packagelistLoc="${carrot2.cvs.dir}/etc/javadoc/apis/jdk15" />
+        <link offline="true" href="http://demo.carrot2.org/thirdparty/ant/" 
+            packagelistLoc="${carrot2.cvs.dir}/etc/javadoc/apis/ant" />
+
+        <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Core" packages="org.carrot2.core*" />
+        <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; ANT Build System" packages="org.carrot2.ant*"/>
+        <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Demos and Examples" packages="org.carrot2.apiexample*:org.carrot2.demo*:org.carrot2.webapp*"/>
+        <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Filters" packages="org.carrot2.filter*"/>
+        <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Inputs" packages="org.carrot2.input*"/>
+        <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Utility classes" packages="org.carrot2.matrix*:org.carrot2.stemming*:org.carrot2.tools*:org.carrot2.util*"/>
     </javadoc>
 
     <delete dir="tmp/src" />
@@ -85,27 +91,6 @@
         <include name="*.gif" />
       </fileset>
     </copy>
-  </target>
-
-  <target name="javadoc.upload" depends="javadoc">
-    <fail unless="website.upload.host">Please define the website.upload.host variable</fail>
-    <fail unless="website.upload.user">Please define the website.upload.user variable</fail>
-    <fail unless="website.upload.password">Please define the website.upload.password variable</fail>
-    <fail unless="website.javadoc.upload.dir">Please define the website.javadoc.upload.dir variable</fail>
-    <echo>
-####
-Uploading JavaDoc to: ${website.upload.host}/${website.javadoc.upload.dir}
-####
-    </echo> 
-    <ftp server="${website.upload.host}"
-         userid="${website.upload.user}"
-         password="${website.upload.password}"
-         remotedir="${website.javadoc.upload.dir}"
-         depends="no"
-         verbose="yes"
-         passive="yes">
-      <fileset dir="${javadoc.dir}"/>
-    </ftp>
   </target>
 
   <target name="build" depends="bootstrap,bootstrap:dependencies">
@@ -152,26 +137,9 @@ BUILDING: @{component.path}
 
   <target name="dist" depends="bootstrap,bootstrap:dependencies">
     <delete dir="dist" failonerror="false" />
-
     <mkdir dir="dist" />
-    <mkdir dir="dist/remote" />
-    <copy todir="dist/remote">
-        <fileset dir="etc/conf-tomcat">
-            <include name="**/*" />
-        </fileset>
-    </copy>
-    <ant antfile="build.xml" dir="applications/carrot2-demo-webapp"
-        inheritall="false" inheritrefs="false" target="build">
-        <reference refid="dependencies" />
-        <reference refid="c2.tasks.classloader" />
-        <property name="cache:deps" value="${cache:deps}" />
-    </ant>
-    <copy todir="dist/remote">
-    	<fileset dir="applications/carrot2-demo-webapp/tmp/dist" includes="*.war" />
-    </copy>    
-    <zip basedir="dist/remote" 
-        zipfile="dist/carrot2-demo-webapp-${release.number}.zip" />
 
+    <!-- compile desktop demo -->
     <ant antfile="build.xml" dir="applications/carrot2-demo-browser"
         inheritall="false" inheritrefs="false" target="dist">
         <property name="distribution.zips.dir" location="dist" />
@@ -180,6 +148,30 @@ BUILDING: @{component.path}
         <reference refid="c2.tasks.classloader" />
         <property name="cache:deps" value="${cache:deps}" />
     </ant>
+    <zip zipfile="dist/carrot2-demo-browser-${release.number}.zip" update="true">
+        <zipfileset file="doc/history.txt" fullpath="changes.txt" />
+    </zip>
+
+    <!-- compile the web application demo -->
+    <mkdir dir="dist/webapp" />
+    <copy todir="dist/webapp">
+        <fileset dir="etc/conf-tomcat">
+            <include name="**/*" />
+        </fileset>
+    </copy>
+    <copy file="doc/history.txt" tofile="dist/webapp/changes.txt" />
+    <ant antfile="build.xml" dir="applications/carrot2-demo-webapp"
+        inheritall="false" inheritrefs="false" target="build">
+        <reference refid="dependencies" />
+        <reference refid="c2.tasks.classloader" />
+        <property name="cache:deps" value="${cache:deps}" />
+    </ant>
+    <copy todir="dist/webapp">
+    	<fileset dir="applications/carrot2-demo-webapp/tmp/dist" includes="*.war" />
+    </copy>
+    <zip basedir="dist/webapp" 
+        zipfile="dist/carrot2-demo-webapp-${release.number}.zip" />
+    <delete dir="dist/webapp" />
   </target>
 
 

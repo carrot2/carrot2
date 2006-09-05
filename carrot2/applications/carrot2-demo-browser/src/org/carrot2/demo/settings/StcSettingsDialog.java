@@ -13,6 +13,7 @@
 
 package org.carrot2.demo.settings;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 
 import javax.swing.Box;
@@ -37,6 +38,8 @@ class StcSettingsDialog extends JPanel {
     }
 
     private void buildGui() {
+        this.setLayout(new BorderLayout());
+        
         final DefaultFormBuilder builder = 
             new DefaultFormBuilder(new FormLayout("pref", ""));
         
@@ -71,6 +74,6 @@ class StcSettingsDialog extends JPanel {
         builder.append(ThresholdHelper.createDoubleThreshold(settings, StcConstants.MOST_GENERAL_PHRASE_COVERAGE,
                 "Most general p. coverage:", 0, 1, 0.1, 0.25));
 
-        this.add(builder.getPanel());
+        this.add(builder.getPanel(), BorderLayout.CENTER);
     }
 }

@@ -26,45 +26,37 @@ import org.carrot2.core.profiling.ProfiledLocalInputComponentBase;
 
 /**
  * Implements a local input component that reads data from Lucene index. Use
- * {@link org.carrot2.input.lucene.LuceneLocalInputComponentFactory}to obtain
- * instances.
+ * {@link org.carrot2.input.lucene.LuceneLocalInputComponentFactory} to obtain
+ * instances of this component or provide a valid {@link LuceneSearchConfig}
+ * object.
  * 
  * @author Stanislaw Osinski
+ * @author Dawid Weiss
+ * 
  * @version $Revision$
  */
 public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
     implements RawDocumentsProducer
 {
     /** The default number of requested results */
-    public static final int DEFAULT_REQUESTED_RESULTS = 100;
+    public final static int DEFAULT_REQUESTED_RESULTS = 100;
+
+    /** 
+     * A request-context parameter overriding the default search configuration.
+     * The value of this parameter must be an instance of {@link LuceneSearchConfig}. 
+     */
+    public final static String LUCENE_CONFIG = "org.carrot2.input.lucene.config";
 
     /** Capabilities required from the next component in the chain */
-    private final static Set SUCCESSOR_CAPABILITIES = new HashSet(Arrays
-        .asList(new Object []
-        {
-            RawDocumentsConsumer.class
-        }));
+    private final static Set SUCCESSOR_CAPABILITIES = toSet(RawDocumentsConsumer.class);
 
     /** This component's capabilities */
-    private final static Set COMPONENT_CAPABILITIES = new HashSet(Arrays
-        .asList(new Object []
-        {
-            RawDocumentsProducer.class
-        }));
+    private final static Set COMPONENT_CAPABILITIES = toSet(RawDocumentsProducer.class);
 
-    /** Lucene Searcher */
-    private Searcher searcher;
-
-    /** Lucene Analyzer */
-    private Analyzer analyzer;
-
-    /** Lucene fields to be searched */
-    private String [] searchFields;
-
-    /** Contet fields */
-    private String titleField;
-    private String summaryField;
-    private String urlField;
+    /**
+     * All information required to perform a search in Lucene.
+     */
+    private final LuceneSearchConfig luceneSettings;
 
     /** Current query. */
     private String query;
@@ -76,18 +68,35 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
     private RequestContext requestContext;
 
     /**
-     * No direct instantiation
+     * No direct instantiation.
+     * 
+     * @deprecated Use {@link #LuceneLocalInputComponent(LuceneSearchConfig)}.
      */
     protected LuceneLocalInputComponent(Searcher searcher, Analyzer analyzer,
         String [] searchFields, String titleField, String summaryField,
         String urlField)
     {
-        this.searcher = searcher;
-        this.analyzer = analyzer;
-        this.searchFields = searchFields;
-        this.titleField = titleField;
-        this.summaryField = summaryField;
-        this.urlField = urlField;
+        this(new LuceneSearchConfig(
+                searcher, analyzer, searchFields, titleField,
+                summaryField, urlField));
+    }
+
+    /**
+     * Create an instance of the component with a set
+     * of predefined settings.
+     */
+    public LuceneLocalInputComponent(LuceneSearchConfig settings)
+    {
+        this.luceneSettings = settings;
+    }
+
+    /**
+     * Create an empty instance of this component. You will need to pass
+     * Lucene configuration at query time using {@link #LUCENE_CONFIG}.
+     */
+    public LuceneLocalInputComponent()
+    {
+        this.luceneSettings = null;
     }
 
     /*
@@ -157,11 +166,10 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
         // See if the required attributes are present in the query
         // context:
         Map params = requestContext.getRequestParameters();
-
         try
         {
             // Produce results.
-            pushResults(params);
+            pushResults(params, luceneSettings);
         }
         catch (ParseException e)
         {
@@ -182,59 +190,40 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
     }
 
     /**
-     * @throws ParseException
-     * @throws IOException
-     * @throws ProcessingException
      * 
      */
-    private void pushResults(Map params) throws ParseException, IOException,
+    private void pushResults(Map params, LuceneSearchConfig luceneSettings) throws ParseException, IOException,
         ProcessingException
     {
-        // Get parameters
-        int requestedDocuments;
-        try
-        {
-            Object param = params
-                .get(LocalInputComponent.PARAM_REQUESTED_RESULTS);
+        // assemble request parameters
+        final int requestedDocuments = getIntFromRequestContext(
+                requestContext, LocalInputComponent.PARAM_REQUESTED_RESULTS, DEFAULT_REQUESTED_RESULTS);
+        final int startAt = getIntFromRequestContext(
+                requestContext, LocalInputComponent.PARAM_START_AT, 0);
 
-            if (param instanceof Integer)
-            {
-                requestedDocuments = ((Integer) param).intValue();
-            }
-            else
-            {
-                requestedDocuments = Integer.parseInt((String) param);
-            }
+        // check if there is an override for lucene settings in the context.
+        if (params.containsKey(LUCENE_CONFIG)) {
+            luceneSettings = (LuceneSearchConfig) params.get(LUCENE_CONFIG); 
         }
-        catch (Exception e)
-        {
-            requestedDocuments = DEFAULT_REQUESTED_RESULTS;
+        
+        if (luceneSettings == null) {
+            throw new ProcessingException("Lucene input component not configured. Need LuceneSettings.");
         }
-
-        int startAt;
-        try
-        {
-            startAt = Integer.parseInt((String) params
-                .get(LocalInputComponent.PARAM_START_AT));
-        }
-        catch (Exception e)
-        {
-            startAt = 0;
-        }
-
+        
         // Create a boolean query that combines all fields
-        BooleanQuery booleanQuery = new BooleanQuery();
-        for (int i = 0; i < searchFields.length; i++)
+        final BooleanQuery booleanQuery = new BooleanQuery();
+        for (int i = 0; i < luceneSettings.searchFields.length; i++)
         {
-            QueryParser queryParser = new QueryParser(searchFields[i], analyzer);
+            final QueryParser queryParser = 
+                new QueryParser(luceneSettings.searchFields[i], luceneSettings.analyzer);
             queryParser.setDefaultOperator(QueryParser.AND_OPERATOR);
             Query queryComponent = queryParser.parse(query);
             booleanQuery.add(queryComponent, BooleanClause.Occur.SHOULD);
         }
 
         // Perform query
-        Hits hits = searcher.search(booleanQuery);
-        int endAt = Math.min(hits.length(), startAt + requestedDocuments);
+        final Hits hits = luceneSettings.searcher.search(booleanQuery);
+        final int endAt = Math.min(hits.length(), startAt + requestedDocuments);
 
         // Pass the actual document count
         requestContext.getRequestParameters().put(
@@ -256,11 +245,13 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
         // Get results from the index
         for (int i = startAt; i < endAt; i++)
         {
-            Document doc = hits.doc(i);
-
-            RawDocumentSnippet rawDocument = new RawDocumentSnippet(
-                new Integer(hits.id(i)), doc.get(titleField), doc
-                    .get(summaryField), doc.get(urlField), hits.score(i));
+            final Document doc = hits.doc(i);
+            final RawDocumentSnippet rawDocument = new RawDocumentSnippet(
+                new Integer(hits.id(i)), 
+                doc.get(luceneSettings.titleField), 
+                doc.get(luceneSettings.summaryField), 
+                doc.get(luceneSettings.urlField), 
+                hits.score(i));
             rawDocumentConsumer.addDocument(rawDocument);
         }
     }

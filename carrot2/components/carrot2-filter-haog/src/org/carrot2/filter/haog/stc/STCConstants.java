@@ -119,13 +119,11 @@ public class STCConstants {
 
 	/**
 	 * Cluster label length is limited to number of words given by this parameter.
-	 * @author Karol Gołembniak  
 	 */
 	public final static String MAX_PHRASE_LENGTH = "stc.maxPhraseLength";
 
 	/**
 	 * Default value for {@link #MAX_PHRASE_LENGTH} 
-	 * @author Karol Gołembniak  
 	 */
 	public final static int DEFAULT_MAX_PHRASE_LENGTH = 4;
 	

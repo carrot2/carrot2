@@ -7,16 +7,12 @@ Must have:
 - Documentation
   - What is Carrot2
   - Getting source and building?
-  - Brief overview of the (local) architecture
-  - Brief example of using LocalController (+Lucene)
-  - One-sentence summary for each carrot2 subproject
   - For more information: use mailing list :)
+
+Nice to have:
 
 - Move command line applications from the commercial repository to
   the OS repository (D)
-
-
-Nice to have:
 
 - Take a look at: http://www.aduna-software.com/products/professional_search/autofocus/overview.view
   A very interesting Open Source desktop search that could benefit from clustering.
@@ -30,8 +26,6 @@ Nice to have:
 
 - Check out Unicode segmentation spec (info from Andrzej Zydro):
 http://www.unicode.org/reports/tr29/tr29-10.html
-
-- add lucene input source to the local demo application
 
 - refactor Language use (tokenization, stemming) in Lingo.
 

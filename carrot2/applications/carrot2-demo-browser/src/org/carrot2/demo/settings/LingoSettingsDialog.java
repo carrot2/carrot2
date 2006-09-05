@@ -12,6 +12,8 @@
 
 package org.carrot2.demo.settings;
 
+import java.awt.BorderLayout;
+
 import javax.swing.JPanel;
 
 import org.carrot2.filter.lingo.lsicluster.LsiConstants;
@@ -36,6 +38,8 @@ final class LingoSettingsDialog extends JPanel
 
     private void buildGui()
     {
+        this.setLayout(new BorderLayout());
+
         final DefaultFormBuilder builder = new DefaultFormBuilder(
             new FormLayout("pref", ""));
 
@@ -51,6 +55,6 @@ final class LingoSettingsDialog extends JPanel
             LsiConstants.PREFERRED_CLUSTER_COUNT, "Preferred cluster count",
             -1, 100, 20, 10));
 
-        this.add(builder.getPanel());
+        this.add(builder.getPanel(), BorderLayout.CENTER);
     }
 }
