@@ -341,7 +341,11 @@ public class ResultsTab extends JPanel {
             final PanelBuilder panelBuilder = new PanelBuilder(settingsContainerLayout);
             panelBuilder.setBorder(BorderFactory.createEmptyBorder(2,4,2,4));
 
-            final JScrollPane scroller = new JScrollPane(settingsComponent,
+            final JPanel settingsWrapper = new JPanel(new BorderLayout());
+            settingsWrapper.add(settingsComponent, BorderLayout.CENTER);
+            settingsWrapper.setBorder(BorderFactory.createEmptyBorder(4,4,0,4));
+            
+            final JScrollPane scroller = new JScrollPane(settingsWrapper,
                     ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
                     ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
             scroller.setBorder(BorderFactory.createEmptyBorder());

@@ -13,6 +13,8 @@
 
 package org.carrot2.demo.settings;
 
+import java.awt.BorderLayout;
+
 import javax.swing.JPanel;
 
 import org.carrot2.filter.fuzzyAnts.FuzzyAntsParameters;
@@ -35,6 +37,8 @@ class FuzzyAntsSettingsDialog extends JPanel {
     }
 
     private void buildGui() {
+        this.setLayout(new BorderLayout());
+
         final DefaultFormBuilder builder = 
             new DefaultFormBuilder(new FormLayout("pref", ""));
 
@@ -56,6 +60,6 @@ class FuzzyAntsSettingsDialog extends JPanel {
         builder.append(ThresholdHelper.createIntegerThreshold(settings, FuzzyAntsParameters.NUMBER_OF_ITERATIONS,
                 "Number of terations", 100, 7000, 50, 100));
 
-        this.add(builder.getPanel());
+        this.add(builder.getPanel(), BorderLayout.CENTER);
     }
 }

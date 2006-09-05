@@ -144,14 +144,13 @@ public class StcConstants {
     public static final double DEFAULT_MOST_GENERAL_PHRASE_COVERAGE = 0.5d;
     
 	/**
-	 * Cluster label length is limited to number of words given by this parameter.
-	 * @author Karol Gołembniak  
+	 * Cluster label length is limited to number of words 
+     * given by this parameter.
 	 */
 	public final static String MAX_PHRASE_LENGTH = "stc.maxPhraseLength";
 
 	/**
-	 * Default value for {@link #MAX_PHRASE_LENGTH} 
-	 * @author Karol Gołembniak  
+	 * Default value for {@link #MAX_PHRASE_LENGTH}. 
 	 */
 	public final static int DEFAULT_MAX_PHRASE_LENGTH = 4;
     

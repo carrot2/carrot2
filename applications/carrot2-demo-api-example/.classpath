@@ -8,5 +8,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-input-yahooapi"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-stemmer-snowball"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-tokenizer"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-input-lucene"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/lucene-core-2.0.0.jar"/>
 	<classpathentry kind="output" path="tmp/eclipse/classes"/>
 </classpath>

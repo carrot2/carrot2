@@ -97,7 +97,7 @@ public class Transaction {
 	}
 	
 	/**
-	 * Getter for {@link basket} field.
+	 * Getter for {@link #basket} field.
 	 * @return basket connected with this transaction.
 	 */
 	public WordBasket getBasket() {
