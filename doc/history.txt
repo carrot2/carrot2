@@ -9,6 +9,9 @@ Major functions and bug fixes
 Version  [C] Information
 
 HEAD
+
+2.0-RC2   SVN:1435
+
           +  Added an Example explaining API use.
 
           +  Added Lucene input process for local indices (demo browser)
