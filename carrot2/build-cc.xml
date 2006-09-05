@@ -56,6 +56,7 @@
         <fail unless="api.dir">Define: api.dir property.</fail>
         <fail unless="webstart.dir">Define: webstart.dir property.</fail>
         <fail unless="webapps.dir">Define: webapps.dir property.</fail>
+        <fail unless="webapp.name">Define: webapp.name property.</fail>
 
         <!-- copy the API -->
         <delete dir="${api.dir}" />
