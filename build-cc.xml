@@ -14,6 +14,9 @@
         <!-- run tests -->
         <ant dir="${carrot2.cvs.dir}" antfile="build.xml" target="test" inheritall="false" />
 
+        <!-- build distribution ZIPs -->
+        <ant dir="${carrot2.cvs.dir}" antfile="build.xml" target="dist" inheritall="false" />
+
         <!-- build the webapp -->
         <ant dir="${carrot2.cvs.dir}/applications/carrot2-demo-webapp" antfile="build.xml" target="clean" inheritall="false" />
         <ant dir="${carrot2.cvs.dir}/applications/carrot2-demo-webapp" antfile="build.xml" target="build" inheritall="false">
@@ -55,8 +58,7 @@
 
         <fail unless="api.dir">Define: api.dir property.</fail>
         <fail unless="webstart.dir">Define: webstart.dir property.</fail>
-        <fail unless="webapps.dir">Define: webapps.dir property.</fail>
-        <fail unless="webapp.name">Define: webapp.name property.</fail>
+        <fail unless="dist.dir">Define: dist.dir property.</fail>
 
         <!-- copy the API -->
         <delete dir="${api.dir}" />
@@ -74,11 +76,13 @@
             </fileset>
         </copy>
 
-        <!-- copy the WAR demo -->
-        <mkdir dir="${webstart.dir}" />
-        <copy file="${carrot2.cvs.dir}/applications/carrot2-demo-webapp/tmp/dist/carrot2-demo-webapp.war"
-              tofile="${webapps.dir}/${webapp.name}.war"
-              overwrite="true" />
+        <!-- copy the distribution files -->
+        <mkdir dir="${dist.dir}" />
+        <copy todir="${dist.dir}">
+            <fileset dir="${carrot2.cvs.dir}/dist">
+                <include name="*.zip" />
+            </fileset>
+        </copy>
     </target>
 
     <target name="update" description="Perform SVN update to a given revision">
