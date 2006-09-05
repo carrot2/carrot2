@@ -40,6 +40,7 @@
         <fileset dir=".">
             <include name="**/src/**/*.java" />
             <include name="**/src/**/*.html" />
+            <exclude name="**/tmp/**/*" />
         </fileset>
         <chainedmapper>
             <filtermapper><replacestring from="\" to="/"/></filtermapper>
