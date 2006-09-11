@@ -16,6 +16,8 @@ package org.carrot2.webapp.serializers;
 import java.io.*;
 import java.util.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.carrot2.util.XMLSerializerHelper;
 import org.carrot2.webapp.Constants;
 import org.carrot2.webapp.RawClustersSerializer;
@@ -50,7 +52,7 @@ public final class XMLClustersSerializer implements RawClustersSerializer {
         return Constants.MIME_XML_CHARSET_UTF;
     }
 
-    public void startResult(OutputStream os, List rawDocumentsList)
+    public void startResult(OutputStream os, List rawDocumentsList, HttpServletRequest request)
 	    throws IOException
     {
     	this.writer = new OutputStreamWriter(os, Constants.ENCODING_UTF);
@@ -67,7 +69,16 @@ public final class XMLClustersSerializer implements RawClustersSerializer {
     	writer.write("<?skin-uri " + contextPath + skinBase + " ?>\n");
     
     	writer.write("<searchresult type=\"clusters\" totalResultsCount=\""
-    		+ rawDocumentsList.size() + "\">\n");
+    		+ rawDocumentsList.size() + "\"");
+        
+        // Check if referer and page URI match. We do it so that people explicitly
+        // linking to IFRAMEs with search results get a "powered by" message.
+        if (request.getHeader("Referer") == null ||
+                !request.getHeader("Referer").startsWith(request.getRequestURL().toString())) {
+            writer.write(" insertPoweredBy=\"true\"");
+        }
+
+        writer.write(">\n");
     }
 
     public void write(RawCluster cluster) throws IOException {

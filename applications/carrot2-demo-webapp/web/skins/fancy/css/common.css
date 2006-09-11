@@ -59,3 +59,24 @@ input.search-field:focus {
 select:focus {
   background-color: #ffffd8;
 }
+
+html>body sup {
+  line-height: 0%;
+  position: relative;
+  font-size: 80%;
+}
+
+* html sup {
+  line-height: 0%;
+  position: relative;
+  font-size: 80%;
+  top: -0.2ex;
+}
+
+div.pb {
+  margin-bottom: 14px;
+  background-image: url('../img/logo-small.gif');
+  background-repeat: no-repeat;
+  background-position: 2px 50%;
+  padding-left: 38px;
+}

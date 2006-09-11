@@ -4,7 +4,7 @@
   <property file="${user.home}/.carrot.properties" />
   <property file="local-build.properties" />
 
-  <property name="release.number"   value="2.0-RC2" />
+  <property name="release.number"   value="2.0-RC3" />
 
   <property name="build.compiler"   value="modern" />
   <property name="javac.optimize"   value="off" />
