@@ -74,9 +74,9 @@ html>body sup {
 }
 
 div.pb {
-  margin-bottom: 7px;
+  margin-bottom: 14px;
   background-image: url('../img/logo-small.gif');
   background-repeat: no-repeat;
   background-position: 2px 50%;
-  padding-left: 36px;
+  padding-left: 38px;
 }
