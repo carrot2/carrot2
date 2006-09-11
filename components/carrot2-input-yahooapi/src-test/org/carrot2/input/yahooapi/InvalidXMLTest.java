@@ -19,17 +19,17 @@ import junit.framework.TestSuite;
 import org.apache.log4j.Logger;
 
 /**
- * Tests of Yahoo API and results well-formedness. 
+ * Tests of Yahoo API and results well-formedness.
  * 
  * @author Dawid Weiss
  */
-public class InvalidXML extends junit.framework.TestCase {
-    private final static Logger logger = Logger.getLogger(InvalidXML.class);
+public class InvalidXMLTest extends junit.framework.TestCase {
+    private final static Logger logger = Logger.getLogger(InvalidXMLTest.class);
 
     private final String query;
     private final int results; 
 
-    public InvalidXML(String query, int results) {
+    public InvalidXMLTest(String query, int results) {
         this.query = query;
         this.results = results;
 
@@ -50,8 +50,8 @@ public class InvalidXML extends junit.framework.TestCase {
 
         final TestSuite suite = new TestSuite();
         for (int i = 0; i < queries.length; i++) {
-            suite.addTest(new InvalidXML(queries[i][0], 
-                    Integer.parseInt(queries[i][1])));
+            suite.addTest(
+                    new InvalidXMLTest(queries[i][0], Integer.parseInt(queries[i][1])));
         }
 
         return suite;
@@ -65,6 +65,8 @@ public class InvalidXML extends junit.framework.TestCase {
         descriptor.initializeFromXML(
                 this.getClass().getClassLoader().getResourceAsStream("resource/yahoo.xml"));
         final YahooSearchService service = new YahooSearchService(descriptor);
+
+        service.setUseSaxParser(true); // force valid XML
         service.query(query, results);
     }
 
