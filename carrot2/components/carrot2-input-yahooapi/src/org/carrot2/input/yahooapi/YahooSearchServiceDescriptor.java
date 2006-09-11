@@ -30,14 +30,19 @@ import org.dom4j.io.SAXReader;
  * @author Dawid Weiss
  */
 public class YahooSearchServiceDescriptor {
+    private final static int DEFAULT_MAXPERQUERY = 100;
+
     private FormActionInfo formActionInfo;
     private FormParameters formParameters;
 
+    private int maxResultsPerQuery;
+    
     /**
      * Creates an empty descriptor. Initialize it using
      * {@link #initializeFromXML(InputStream)}.
      */
     public YahooSearchServiceDescriptor() {
+        maxResultsPerQuery = DEFAULT_MAXPERQUERY;
     }
 
     /**
@@ -95,6 +100,13 @@ public class YahooSearchServiceDescriptor {
      * Returns maximum results per query. Currently hardcoded at 50.
      */
     public int getMaxResultsPerQuery() {
-        return 100;
+        return maxResultsPerQuery;
+    }
+    
+    /**
+     * For tests only.
+     */
+    final void setMaxResultsPerQuery(int value) {
+        this.maxResultsPerQuery = value;
     }
 }

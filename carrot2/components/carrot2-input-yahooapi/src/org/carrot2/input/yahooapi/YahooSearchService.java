@@ -15,31 +15,18 @@ package org.carrot2.input.yahooapi;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.*;
 import java.util.zip.GZIPInputStream;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
+import javax.xml.parsers.*;
 
-import org.apache.commons.httpclient.Header;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpMethodBase;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.HttpVersion;
-import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
-import org.apache.commons.httpclient.NameValuePair;
-import org.apache.commons.httpclient.URI;
+import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.log4j.Logger;
 import org.carrot2.util.StreamUtils;
 import org.carrot2.util.httpform.*;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
+import org.xml.sax.*;
 
 
 /**
@@ -51,6 +38,12 @@ public class YahooSearchService {
     private final static Logger log = Logger.getLogger(YahooSearchService.class);
 
     private YahooSearchServiceDescriptor descriptor;
+
+    /**
+     * XML parser used by default: if <code>true</code> a regular SAX parser is used,
+     * otherwise a regexp-parser is used.
+     */
+    private boolean useXmlParser = true;
 
     public YahooSearchService(YahooSearchServiceDescriptor descriptor) {
         this.descriptor = descriptor;
@@ -98,7 +91,14 @@ public class YahooSearchService {
 
         try {
             final YahooResponseHandler handler = new YahooResponseHandler(consumer);
-            final SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
+
+            final SAXParser parser;
+            if (useXmlParser) {
+                parser = SAXParserFactory.newInstance().newSAXParser();
+            } else {
+                parser = new RegExpYahooParser();
+            }
+
             final XMLReader reader = parser.getXMLReader();
             reader.setFeature("http://xml.org/sax/features/validation", false);
             reader.setFeature("http://xml.org/sax/features/namespaces", true);
@@ -163,7 +163,7 @@ public class YahooSearchService {
 
                     log.debug("Querying Yahoo API: " + httpMethod.getURI());
                     int statusCode = client.executeMethod(httpMethod);
-                    if (statusCode == HttpStatus.SC_OK || statusCode == HttpStatus.SC_SERVICE_UNAVAILABLE) {
+                    if (statusCode == HttpStatus.SC_OK || statusCode == HttpStatus.SC_SERVICE_UNAVAILABLE || statusCode == HttpStatus.SC_BAD_REQUEST) {
                         is = httpMethod.getResponseBodyAsStream();
                         Header encoded = httpMethod.getResponseHeader("Content-Encoding");
                         if (encoded != null && "gzip".equals(encoded.getValue())) {
@@ -221,5 +221,9 @@ public class YahooSearchService {
         } finally {
             connectionManager.shutdown();
         }
+    }
+
+    final void setUseSaxParser(boolean useSAX) {
+        this.useXmlParser = useSAX;
     }
 }
