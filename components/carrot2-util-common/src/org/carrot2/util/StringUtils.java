@@ -16,6 +16,8 @@ package org.carrot2.util;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 
 /**
  * Various utility classes.
@@ -100,57 +102,22 @@ public class StringUtils
         return result.toString();
     }
 
-    private static final String [] entities = 
-    {
-        "&nbsp;", " ", "&amp;", "&", "&quot;", "\"", "&lt;", "<", "&gt;", ">", "&bull;", " ",
-        "&#39;", "'"
-    };
-
-    /*
-     * We may want to replace this method with:
-     * http://jakarta.apache.org/commons/lang/xref/org/apache/commons/lang/Entities.html
-     * at some point.
+    /**
+     * Converts HTML and numeric entities in the text back 
+     * to characters. 
      */
-    public static String entitiesToCharacters(String str, boolean exceptionOnUnrecognized)
-    {
-        char [] converted = str.toCharArray();
-
-        int at = 0;
-        int from = 0;
-
-bigloop: 
-        while (from < converted.length)
-        {
-            if (converted[from] == '&')
-            {
-                for (int i = 0; i < entities.length; i += 2)
-                {
-                    if (entities[i].regionMatches(0, str, from, entities[i].length()))
-                    {
-                        converted[at] = entities[i + 1].charAt(0);
-                        at++;
-                        from += entities[i].length();
-
-                        continue bigloop;
-                    }
-                }
-
-                if (exceptionOnUnrecognized)
-                {
-                    throw new IllegalArgumentException(
-                        "Unrecognized entity: " + str.substring(from)
-                    );
-                }
-            }
-
-            converted[at] = converted[from];
-            at++;
-            from++;
-        }
-
-        return new String(converted, 0, at);
+    public static String unescapeHtml(String str) {
+        return StringEscapeUtils.unescapeHtml(str);
     }
-    
+
+    /**
+     * Converts XML and numeric entities in the text back 
+     * to characters. 
+     */
+    public static String unescapeXml(String str) {
+        return StringEscapeUtils.unescapeXml(str);
+    }
+
     /**
      * Removes html tags from a word. Html markup is for now defined
      * as sequences of characters between '<' and '>' characters

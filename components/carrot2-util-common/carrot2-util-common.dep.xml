@@ -19,6 +19,7 @@
 
     <dependency name="log4j" />
     <dependency name="dom4j" />
+    <dependency name="commons-lang" />
     <dependency name="commons-collections" />
 
     <dependency name="junit" noexport="true" no-copy="true" />
