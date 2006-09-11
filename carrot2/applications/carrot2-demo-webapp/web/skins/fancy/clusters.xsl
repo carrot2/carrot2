@@ -19,6 +19,13 @@
   </xsl:template>
 
   <xsl:template match="/searchresult[@type = 'clusters']">
+    <xsl:if test="@insertPoweredBy">
+      <div class="pb">
+        Clustering powered by<br/>
+        <a href="http://www.carrot2.org" target="_top">Carrot<sup>2</sup> Clustering Engine</a>
+      </div>
+    </xsl:if>
+  
     <xsl:if test="count(group) > 0">
       <table class="cluster-tree">
         <tr>

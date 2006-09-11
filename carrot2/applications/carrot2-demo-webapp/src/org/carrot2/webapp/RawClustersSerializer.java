@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.carrot2.core.clustering.RawCluster;
 
 /**
@@ -26,8 +28,13 @@ import org.carrot2.core.clustering.RawCluster;
  */
 public interface RawClustersSerializer {
     public String getContentType();
-    public void startResult(OutputStream os, List rawDocumentsList) throws IOException;
+
+    public void startResult(OutputStream os, List rawDocumentsList, HttpServletRequest request) 
+        throws IOException;
+
     public void write(RawCluster cluster) throws IOException;
+
     public void endResult() throws IOException;
+
     public void processingError(Throwable cause) throws IOException;
 }

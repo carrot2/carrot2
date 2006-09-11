@@ -115,7 +115,7 @@ public final class YahooResponseHandler implements ContentHandler {
             buffer.setLength(0);
 
             // WORKAROUND: Yahoo returns double-encoded entities.
-            text = StringUtils.entitiesToCharacters(text, false);
+            text = StringUtils.unescapeHtml(text);
 
             if ("Title".equals(localName)) {
                 this.title = text;
