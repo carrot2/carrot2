@@ -7,7 +7,7 @@ import org.carrot2.input.yahooapi.*;
 
 factory = new LocalComponentFactory() {
     public LocalComponent getInstance() {
-	    final File cfg = new File(inputsDirFile, "04-input-yahooapi-wiki.cfg");
+	    final File cfg = new File(inputsDirFile, "05-input-yahooapi-wiki.cfg");
 		return new YahooApiInputComponent(new FileInputStream(cfg));
     }
 };
