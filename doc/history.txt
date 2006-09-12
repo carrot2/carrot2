@@ -9,6 +9,8 @@ Major functions and bug fixes
 Version  [C] Information
 
 HEAD
+          +  Added an input component to MSN Search
+
 2.0-RC3
           +  Added referrer check.
 
