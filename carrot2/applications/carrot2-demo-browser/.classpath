@@ -25,5 +25,6 @@
 	<classpathentry kind="lib" path="lib/aduna-clustermap-2006.1.jar"/>
 	<classpathentry kind="lib" path="lib/aduna-clustermap-2006.1-resources.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-input-lucene"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-input-msnsearch"/>
 	<classpathentry kind="output" path="tmp/eclipse/classes"/>
 </classpath>
