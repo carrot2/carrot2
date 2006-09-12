@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<local-process id="msn-lingo">
+  <name>MSN API -- Lingo Classic Clusterer</name>
+
+  <input  component-key="input-cached-msnapi" />
+  <filter component-key="filter-rawdocument-enumerator" />
+  <filter component-key="filter-clustering-lingo-en" />
+  <filter component-key="filter-save-xml" />
+  <output component-key="output-array" />
+
+  <attribute key="process.settings.class" 
+	         value="org.carrot2.demo.settings.LingoClassicSettings" />
+</local-process>
