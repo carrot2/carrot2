@@ -9,9 +9,13 @@ Major functions and bug fixes
 Version  [C] Information
 
 HEAD
+
+2.0       SVN:1466
+
           +  Added an input component to MSN Search
 
 2.0-RC3
+
           +  Added referrer check.
 
           o  Entity decoding switched to apache-commons-lang 

@@ -2,10 +2,7 @@
 A roadmap to release 2.0
 ------------------------
 
-Must have:
-
-- Documentation
-  - Getting source and building?
+[released 18.09.2006]
 
 
 SourceForge.net Release Notes
