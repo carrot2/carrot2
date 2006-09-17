@@ -5,38 +5,7 @@ A roadmap to release 2.0
 Must have:
 
 - Documentation
-  - What is Carrot2
   - Getting source and building?
-  - For more information: use mailing list :)
-
-Nice to have:
-
-- Move command line applications from the commercial repository to
-  the OS repository (D)
-
-- Take a look at: http://www.aduna-software.com/products/professional_search/autofocus/overview.view
-  A very interesting Open Source desktop search that could benefit from clustering.
-  Also a very interesting Open Source cluster visualisation component.
-
-- (webapp) decrease the number of synchronizations in the broadcaster.
-
-- Add OpenSearch Descriptor support for carrot2-input-opensearch?
-
-- Unify coding style (reformat existing code)
-
-- Check out Unicode segmentation spec (info from Andrzej Zydro):
-http://www.unicode.org/reports/tr29/tr29-10.html
-
-- refactor Language use (tokenization, stemming) in Lingo.
-
-- Highlight user search terms in document snippets in the local demo application (reuse
-Lucene's highlighter?).
-
-- A plugin for SOLR?
-  http://incubator.apache.org/solr/
-
-- Write a clustering plugin for Kneobase?
-  http://www.kneobase.com/en/kneobase
 
 
 SourceForge.net Release Notes
