@@ -19,11 +19,17 @@ package org.carrot2.input.googleapi;
  * @author Dawid Weiss
  * @version $Revision$
  */
-class GoogleApiKey {
-	private final String key;
+final class GoogleApiKey {
+    /** 12 hours */
+	public static final int WAIT_TIME_LIMIT_EXCEEDED = 12 * 60 * 60 * 1000;
+
+    /** 15 minutes */
+    public static final int WAIT_TIME_UNKNOWN_PROBLEM = 15 * 60 * 1000;
+
+    private final String key;
 	private final String name;
 
-	private boolean invalid;
+	private int invalidatePeriod = 0;
 
 	/**
 	 * Creates a google API key and maximum results this
@@ -36,16 +42,15 @@ class GoogleApiKey {
 	public GoogleApiKey(String key, String name) {
 		this.key = key;
 		this.name = name;
-		this.invalid = false;
 	}
 
 	public final String getKey() {
-		if (invalid) {
+		if (isInvalid()) {
 			throw new IllegalStateException("This key is currently disabled.");
 		}
 		return key;
 	}
-	
+
 	/**
 	 * Returns the name of this key.
 	 */
@@ -53,11 +58,26 @@ class GoogleApiKey {
 		return name;
 	}
 
-	public void setInvalid(boolean flag) {
-		this.invalid = flag;
+	public boolean isInvalid() {
+		return invalidatePeriod > 0;
 	}
 
-	public boolean isInvalid() {
-		return invalid;
-	}
+    public void setInvalid(boolean flag, int invalidatePeriod) {
+        if (flag) {
+            this.invalidatePeriod = invalidatePeriod;
+        } else {
+            this.invalidatePeriod = 0;
+        }
+    }
+
+    int getInvalidPeriod() {
+        if (!isInvalid()) {
+            throw new RuntimeException("Key is valid.");
+        }
+        return this.invalidatePeriod;
+    }
+
+    void setValid() {
+        this.invalidatePeriod = 0;
+    }
 }

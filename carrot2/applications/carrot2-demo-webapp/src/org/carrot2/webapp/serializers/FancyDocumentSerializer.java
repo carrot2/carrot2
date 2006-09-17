@@ -69,10 +69,10 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer {
             return;
         }
 
-        final String title = doc.getTitle();
-        final String snippet = doc.getSnippet();
+        final String title = (null == doc.getTitle() ? "" : doc.getTitle());
+        final String snippet = (null == doc.getSnippet() ? "" : doc.getSnippet());
         final String hurl = xml.toValidXmlText(url, false);
-        
+
         writer.write(
                 "<table id=\"" + seqId.toString() + "\" class=\"d\">\r\n" + 
                 "<tr>\r\n" + 

@@ -86,6 +86,9 @@ public class XMLSerializerHelper
      * characters cannot be serialized into an XML text. Refer to <a
      * href="http://www.w3.org/TR/2000/REC-xml-20001006#charsets"> XML specification</a> for more
      * information.
+     * 
+     * @return This method returns the input string with XML characters escaped to entities. <code>null</code>
+     * input argument is returned as <code>null</code>.
      *
      * @param str The string to be escaped.
      * @param exceptionOnUnescapable If true, <code>IllegalArgumentException</code> is thrown when
@@ -94,6 +97,10 @@ public class XMLSerializerHelper
      */
     public String toValidXmlText(String str, boolean exceptionOnUnescapable)
     {
+        if (str == null) {
+            return "";
+        }
+
         StringBuffer buffer = null;
 
         for (int i = 0; i < str.length(); i++)

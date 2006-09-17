@@ -22,11 +22,6 @@ import java.util.*;
  * @author Dawid Weiss
  */
 public class GoogleKeysPool {
-	/**
-	 * Milliseconds per day + 5 minutes.
-	 */
-	private final static long DEAD_KEY_DELAY = (24 * 60 * 60 * 1000) + (5 * 60 * 1000);
-
 	private LinkedList availableKeys = new LinkedList();
 	private HashSet borrowedKeys = new HashSet();
 
@@ -56,10 +51,11 @@ public class GoogleKeysPool {
 	
 	public GoogleApiKey borrowKey() throws Exception {
 		synchronized (this) {
-			if (false == hasActiveKeys()) {
-				throw new Exception("No active Google API keys available.");
-			}
 			while (availableKeys.size() == 0) {
+                if (false == hasActiveKeys()) {
+                    throw new Exception("No active Google API keys available.");
+                }
+
 				try {
 					this.wait();
 				} catch (InterruptedException e) {
@@ -81,7 +77,7 @@ public class GoogleKeysPool {
 			borrowedKeys.remove(key);
 
 			if (key.isInvalid()) {
-				inactiveKeys.add(new WaitingKey(System.currentTimeMillis() + DEAD_KEY_DELAY, key));
+				inactiveKeys.add(new WaitingKey(System.currentTimeMillis() + key.getInvalidPeriod(), key));
 			} else {
 				availableKeys.add(key);
 			}
@@ -111,7 +107,7 @@ public class GoogleKeysPool {
 			if (wkey.availableAt < now) {
 				// Reclaim this key.
 				i.remove();
-				wkey.key.setInvalid(false);
+				wkey.key.setValid();
 				availableKeys.add(wkey.key);
 			} else {
 				// Keys are sorted, exit.
