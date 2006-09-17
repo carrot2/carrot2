@@ -35,11 +35,14 @@ public final class MsnApiInputComponent extends LocalInputComponentBase
     private final static String CARROTSEARCH_APPID = "DE531D8A42139F590B253CADFAD7A86172F93B96";
 
     /** Maximum number of results (starting offset + length) */
-	public final static int MAXIMUM_RESULTS = 1000;
+	public final static int MAXIMUM_RESULTS = 250;
 
-    /** Maximum allowed results per query*/
+    /** Maximum allowed results per query */
     public final static int MAXIMUM_RESULTS_PERQUERY = 50;
 
+    /** Maximum allowed number of requests to the MSN API */
+    private final static int MAX_REQUESTS = 8;
+    
 	private static Logger log = Logger.getLogger(MsnApiInputComponent.class);
 
     /** Capabilities required from the next component in the chain */
@@ -139,10 +142,12 @@ public final class MsnApiInputComponent extends LocalInputComponentBase
 
             int id = 0;
             int offset = 0;
-            while (results > 0) {
+            int requests = MAX_REQUESTS; 
+            while (requests > 0 && results > 0) {
+                final int fetchSize = Math.min(results, MAXIMUM_RESULTS_PERQUERY);
                 final SourceRequest sourceRequest = new SourceRequest(
                         SourceType.Web,
-                        offset, Math.min(results, MAXIMUM_RESULTS_PERQUERY), 
+                        offset, fetchSize, 
                         fields);
 
                 request.setRequests(new SourceRequest [] {sourceRequest});
@@ -161,8 +166,12 @@ public final class MsnApiInputComponent extends LocalInputComponentBase
                 
                 // feed documents.
                 final Result [] searchResults = response.getResults();
-                final int fetchSize = Math.min(results, MAXIMUM_RESULTS_PERQUERY);
-                if (searchResults.length != fetchSize) {
+                if (searchResults.length == 0)
+                {
+                    log.warn("No more search results, stopping search.");
+                    break;
+                }
+                if (searchResults.length / (double)fetchSize < 0.5) {
                     log.warn("Requested results: " + fetchSize
                             + ", but received: " + searchResults.length);
                 }
@@ -186,8 +195,9 @@ public final class MsnApiInputComponent extends LocalInputComponentBase
 
                     id++;
                 }
-                results -= fetchSize;
-                offset += fetchSize;
+                results -= searchResults.length;
+                offset += searchResults.length;
+                requests--;
             }
 	    } catch (Throwable e) {
 	    	if (e instanceof ProcessingException) {
