@@ -18,6 +18,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.carrot2.core.*;
+import org.carrot2.core.clustering.RawDocument;
 import org.carrot2.core.impl.ArrayOutputComponent;
 
 /**
@@ -94,6 +95,34 @@ public class MsnApiInputComponentTest extends junit.framework.TestCase {
                 + results.size(), 150, results.size());
     }
 
+    public void testStartFromBug() throws Exception {
+        final String query = "clustering";
+        final HashMap reqContext = new HashMap();
+        reqContext.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, new Integer(MsnApiInputComponent.MAXIMUM_RESULTS_PERQUERY * 2));
+
+        final long start = System.currentTimeMillis();
+        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, reqContext).getQueryResult()).documents;
+        final long end = System.currentTimeMillis();
+        log.info("MSN query time: " + (end - start) + " ms.");
+
+        // the results should contain some documents.
+        for (int i = 0; i < results.size() / 2; i++)
+        {
+            final String summary = ((RawDocument) results.get(i)).getSnippet()
+                + "";
+            final String summaryOffset = ((RawDocument) results.get(i
+                + results.size() / 2)).getSnippet()
+                + "";
+
+            if (!summary.equals(summaryOffset))
+            {
+                return;
+            }
+        }
+        
+        fail();
+    }
+    
     protected LocalControllerBase setUpController(LocalComponentFactory inputFactory) throws Exception {
         LocalControllerBase controller;
 

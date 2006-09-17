@@ -35,10 +35,10 @@ public final class MsnApiInputComponent extends LocalInputComponentBase
     private final static String CARROTSEARCH_APPID = "DE531D8A42139F590B253CADFAD7A86172F93B96";
 
     /** Maximum number of results (starting offset + length) */
-	private final static int MAXIMUM_RESULTS = 1000;
+	public final static int MAXIMUM_RESULTS = 1000;
 
     /** Maximum allowed results per query*/
-    private final static int MAXIMUM_RESULTS_PERQUERY = 50;
+    public final static int MAXIMUM_RESULTS_PERQUERY = 50;
 
 	private static Logger log = Logger.getLogger(MsnApiInputComponent.class);
 
@@ -187,6 +187,7 @@ public final class MsnApiInputComponent extends LocalInputComponentBase
                     id++;
                 }
                 results -= fetchSize;
+                offset += fetchSize;
             }
 	    } catch (Throwable e) {
 	    	if (e instanceof ProcessingException) {
