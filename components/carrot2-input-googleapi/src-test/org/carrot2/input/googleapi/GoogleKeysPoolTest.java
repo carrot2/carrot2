@@ -108,8 +108,8 @@ public class GoogleKeysPoolTest extends TestCase {
 		GoogleApiKey key2 = gkp.borrowKey();
 		assertNotNull(key2);
 		
-		key1.setInvalid(true);
-		key2.setInvalid(true);
+		key1.setInvalid(true, GoogleApiKey.WAIT_TIME_UNKNOWN_PROBLEM);
+		key2.setInvalid(true, GoogleApiKey.WAIT_TIME_UNKNOWN_PROBLEM);
 		
 		gkp.returnKey(key1);
 		gkp.returnKey(key2);

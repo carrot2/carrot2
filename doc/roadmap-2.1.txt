@@ -1,0 +1,38 @@
+
+A roadmap to release 2.1
+------------------------
+
+Nice to have:
+
+- Add a "Show in clusters" feature to the webapp, which will highlight all
+  clusters in the tree to which the selected document belongs
+
+- Implement the "more..." tab in the webapp, so that we can add much more new
+  data sources (MSN, *.gov.pl)
+
+- Extend the "Search with Carrot2" section to add options similar
+  to those on Clusty: http://clusty.com/sitesearch. Add information about
+  the possibility to link directly to the iframes with the results?
+
+- Move command line applications from the commercial repository to
+  the OS repository (D)
+
+- (webapp) decrease the number of synchronizations in the broadcaster.
+
+- Add OpenSearch Descriptor support for carrot2-input-opensearch?
+
+- Unify coding style (reformat existing code)
+
+- Check out Unicode segmentation spec (info from Andrzej Zydro):
+http://www.unicode.org/reports/tr29/tr29-10.html
+
+- refactor Language use (tokenization, stemming) in Lingo.
+
+- Highlight user search terms in document snippets in the local demo application (reuse
+Lucene's highlighter?).
+
+- A plugin for SOLR?
+  http://incubator.apache.org/solr/
+
+- Write a clustering plugin for Kneobase?
+  http://www.kneobase.com/en/kneobase

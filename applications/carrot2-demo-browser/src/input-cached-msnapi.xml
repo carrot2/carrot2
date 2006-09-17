@@ -1,0 +1,4 @@
+<local-component-factory 
+	id="input-cached-msnapi" 
+	component-class="org.carrot2.demo.components.InputCachedMsnAPI">
+</local-component-factory>

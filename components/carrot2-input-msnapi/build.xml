@@ -1,0 +1,39 @@
+
+<project name="Carrot2 input component using Microsoft Search API" default="build">
+
+    <property name="tests.available"  value="true"    />
+
+    <property name="project.dir"      location="${basedir}" />
+    <property name="carrot2.cvs.dir"  location="../.." />
+    <property name="dist.name"        value="carrot2-input-msnapi" />
+    <property name="type" value="jartype" />
+
+    <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
+    
+    <target name="generate">
+        <path id="axis.classpath">
+          <fileset dir="lib">
+            <include name="**/*.jar" />
+          </fileset>
+          <fileset dir="${carrot2.cvs.dir}">
+            <include name="lib/commons-logging*.jar" />
+          </fileset>
+        </path>
+        
+        <taskdef resource="axis-tasks.properties" classpathref="axis.classpath" />
+        
+        <delete dir="src">
+            <include name="com/microsoft/**/*.java" />
+        </delete>
+
+        <axis-wsdl2java
+          output="src"
+          testcase="false"
+          all="true"
+          url="http://soap.search.msn.com/webservices.asmx?wsdl">
+            <mapping
+              namespace="http://schemas.microsoft.com/MSNSearch/2005/09/fex"
+              package="com.microsoft.msnsearch" />
+        </axis-wsdl2java>
+    </target>
+</project>

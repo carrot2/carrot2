@@ -170,7 +170,7 @@ public class GoogleApiInputComponent extends LocalInputComponentBase
         			try {
 	        			SearchResult result;
 	        			try {
-	        				log.info("Consecutive GoogleAPI query start (" + localAt + "):" + query);
+	        				log.debug("Consecutive GoogleAPI query start (" + localAt + "):" + query);
 	        				result = doSearch(query, localAt);
 	        				acquired = result.results.length;
 	        			} catch (Throwable t) {
@@ -178,7 +178,7 @@ public class GoogleApiInputComponent extends LocalInputComponentBase
 	        			}
 	        			results[index] = result;
         			} finally {
-        				log.info("Consecutive GoogleAPI query finished (" + localAt + ":"
+        				log.debug("Consecutive GoogleAPI query finished (" + localAt + ":"
         						+ acquired
         						+ "):" + query);
         				counter.done();
@@ -258,15 +258,15 @@ public class GoogleApiInputComponent extends LocalInputComponentBase
 		    		final String msg = ((GoogleSearchFault) t).getMessage();
 		    		if (msg.indexOf("exceeded") >= 0) {
 		    			// Limit exceeded.
-		    			key.setInvalid(true);
-		    			log.info("Key limit exceeded: " + key.getName());
+		    			log.warn("Key limit exceeded: " + key.getName());
+                        key.setInvalid(true, GoogleApiKey.WAIT_TIME_LIMIT_EXCEEDED);
 		    		} else if (msg.indexOf("Unsupported response content type") >= 0) {
 		    			// This indicates temporary Google failure.
-		    			log.info("Temporary GoogleAPI failure on key: " + key.getName());
+		    			log.warn("Temporary GoogleAPI failure on key: " + key.getName());
 		    			continue;
 		    		} else {
 		    			log.warn("Unhandled GoogleAPI exception on key: " + key.getName(), t);
-		    			key.setInvalid(true);
+		    			key.setInvalid(true, GoogleApiKey.WAIT_TIME_UNKNOWN_PROBLEM);
 		    		}
 		    	} else {
 		    		log.warn("Unhandled doSearch exception on key: " + key.getName(), t);

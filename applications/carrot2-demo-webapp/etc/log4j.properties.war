@@ -38,6 +38,9 @@ log4j.logger.httpclient=WARN
 log4j.logger.JPOX=WARN
 log4j.logger.JPOX.Enhancer=FATAL
 
+# AXIS
+log4j.logger.org.apache.axis=WARN
+
 
 # -------------------------------------------------------------------
 # Appenders
