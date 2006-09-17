@@ -106,16 +106,14 @@ public class MsnApiInputComponentTest extends junit.framework.TestCase {
         log.info("MSN query time: " + (end - start) + " ms.");
 
         // the results should contain some documents.
-        for (int i = 0; i < results.size() / 2; i++)
-        {
+        for (int i = 0; i < results.size() / 2; i++) {
             final String summary = ((RawDocument) results.get(i)).getSnippet()
                 + "";
             final String summaryOffset = ((RawDocument) results.get(i
                 + results.size() / 2)).getSnippet()
                 + "";
 
-            if (!summary.equals(summaryOffset))
-            {
+            if (!summary.equals(summaryOffset)) {
                 return;
             }
         }
