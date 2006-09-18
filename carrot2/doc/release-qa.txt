@@ -65,3 +65,4 @@ Download them and see if they unpack successfully.
   carrot2-news@lists.sourceforge.net
   carrot2-developers@lists.sourceforge.net
   Lucene/Nutch lists?
+  KDNuggets
