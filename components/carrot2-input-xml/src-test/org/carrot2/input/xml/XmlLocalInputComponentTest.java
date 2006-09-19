@@ -271,7 +271,49 @@ public class XmlLocalInputComponentTest extends TestCase {
         // there should be some results
         assertTrue(results.size() > 0);
 	}
-	
+
+    public void testDefaultConstructors() throws Exception {
+        LocalControllerBase controller;
+        
+        // Some output component
+        LocalComponentFactory outputFactory = new LocalComponentFactory()
+        {
+            public LocalComponent getInstance()
+            {
+                return new ArrayOutputComponent();
+            }
+        };
+        
+        LocalComponentFactory inputFactory = new LocalComponentFactory()
+        {
+            public LocalComponent getInstance()
+            {
+                return new XmlLocalInputComponent(
+                        this.getClass().getResource("test2.xml"),
+                        this.getClass().getResource("test2.xsl"));
+            }
+        };
+
+        // Register with the controller
+        controller = new LocalControllerBase();
+        controller.addLocalComponentFactory("output", outputFactory);
+        controller.addLocalComponentFactory("input", inputFactory);
+
+        // Create and register the process
+        LocalProcessBase process = new LocalProcessBase();
+        process.setInput("input");
+        process.setOutput("output");
+        controller.addProcess("testprocess", process);
+        
+        // first check the precached result:
+        String query = "";
+        HashMap params = new HashMap();
+        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, params).getQueryResult()).documents;
+
+        // there should be some results
+        assertTrue(results.size() > 0);
+    }
+
 	public void testParameterPassingToStylesheet() throws Exception {
         LocalControllerBase controller = setUpController();
 
@@ -293,7 +335,7 @@ public class XmlLocalInputComponentTest extends TestCase {
         // no replacements.
         HashMap params = new HashMap();
         String url = "http://www.google.com/bubu?haha=abc";
-        String result = c.substituteParams(url, params);
+        String result = c.substituteParams(url, null, params, 0);
         assertEquals(url, result);
 
         // simple replacements
@@ -302,28 +344,28 @@ public class XmlLocalInputComponentTest extends TestCase {
         params.put("param2", "value2");
         url = "http://www.google.com/q=${param1}&${param2}=abc";
         String expected = "http://www.google.com/q=value&value2=abc";
-        result = c.substituteParams(url, params);
+        result = c.substituteParams(url, null, params, 0);
         assertEquals(expected, result);
         
         // no value matching replacement.
         params = new HashMap();
         url = "http://www.google.com/q=${param1}&${param2}=abc";
         expected = url;
-        result = c.substituteParams(url, params);
+        result = c.substituteParams(url, null, params, 0);
         assertEquals(expected, result);
 
         // empty brackets (no param name)
         params = new HashMap();
         url = "http://www.google.com/q=${}";
         expected = url;
-        result = c.substituteParams(url, params);
+        result = c.substituteParams(url, null, params, 0);
         assertEquals(expected, result);
 
         // no closing bracket
         params = new HashMap();
         url = "http://www.google.com/q=${param1&${param2}=abc";
         expected = url;
-        result = c.substituteParams(url, params);
+        result = c.substituteParams(url, null, params, 0);
         assertEquals(expected, result);        
 
         // mixed boundary conditions
@@ -332,7 +374,7 @@ public class XmlLocalInputComponentTest extends TestCase {
         params.put("param2", "xx");
         url = "${param1}http://www.google.com/q=${paramx&${param2}${";
         expected = "http://www.google.com/q=${paramx&xx${";
-        result = c.substituteParams(url, params);
+        result = c.substituteParams(url, null, params, 0);
         assertEquals(expected, result);        
         
         // encoding of values
@@ -340,7 +382,14 @@ public class XmlLocalInputComponentTest extends TestCase {
         params.put("param1", "x +x");
         url = "http://www.google.com/q=${param1}";
         expected = "http://www.google.com/q=x+%2Bx";
-        result = c.substituteParams(url, params);
+        result = c.substituteParams(url, null, params, 0);
+        assertEquals(expected, result);
+        
+        // encoding of values
+        params = new HashMap();
+        url = "http://www.google.com/q=${query}&num=${results}";
+        expected = "http://www.google.com/q=x+%2Bx&num=113";
+        result = c.substituteParams(url, "x +x", params, 113);
         assertEquals(expected, result);        
     }
 }
