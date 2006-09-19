@@ -41,18 +41,20 @@ import org.carrot2.core.*;
 import org.carrot2.core.clustering.*;
 
 /**
- * Implements a local input component that reads data
- * from an XML file, transforms it using XSLT, extracts
- * information from that file and pushes it to the successor
- * component.
+ * <p>Implements a local input component that reads data from an XML file, transforms it using 
+ * XSLT, extracts information from the resulting file and pushes it to the successor component.</p>
  * 
- * <p>
- * Input XML file must be specified as an URL, File or InputStream object
- * in the 'source' parameter of the request context. Alternatively, a String object
- * can be provided. It is converted to an URL after substitution of parameters of
- * the form: <code>${parameter_name}</code>. Named parameters must be present in
- * the request context. <code>query</code> is replaced with the current query.
- * </p>
+ * <p>Input XML file must be specified as an {@link URL}, {@link File} or {@link InputStream} object
+ * in the <code>source</code> parameter of the request context or in the constructor. 
+ * Alternatively, a {@link String} object can be provided - it is converted to an URL after 
+ * substitution of parameters of the form: <code>${parameter_name}</code>. Named parameters must be present in
+ * the request context.</p>
+ * 
+ * <p>Default substituted parameters are:
+ * <ul>
+ *  <li><code>query</code> is replaced with URL-escaped current query,</li>
+ *  <li><code>results</code> is replaced with the number of requested results,</li>
+ * </ul></p>
  * 
  * <p>
  * Input XSLT file must be specified as an URL, File or InputStream object
@@ -94,10 +96,23 @@ public class XmlLocalInputComponent extends
     /** Current request context */
     private RequestContext requestContext;
 
+    private final Object defaultXml;
+    private final Object defaultXslt;
+
     /**
      * Creates a new instance of the component.
      */
     public XmlLocalInputComponent() {
+        this.defaultXml = null;
+        this.defaultXslt = null;
+    }
+
+    /**
+     * Creates a new instance of the component with default XSLT and XML.
+     */
+    public XmlLocalInputComponent(Object xml, Object xslt) {
+        this.defaultXml = xml;
+        this.defaultXslt = xslt;
     }
 
     public void setQuery(String query) {
@@ -146,10 +161,19 @@ public class XmlLocalInputComponent extends
      * This is the actual workhorse. This method is also used by the remote component.
      */
     protected Document performQuery(Map params) throws ProcessingException {
+        int requestedResults = 100;
+        if (params.get(LocalInputComponent.PARAM_REQUESTED_RESULTS) != null) {
+            requestedResults = Integer.parseInt((String) params.get(LocalInputComponent.PARAM_REQUESTED_RESULTS));
+        }
+
         InputStream source = null;
         Object sourceOb = params.get("source");
         if (sourceOb == null) {
-            throw new ProcessingException("source request parameter must be given (URL, File, InputStream or a String (converted to URL)).");
+            if (defaultXml == null) {
+                throw new ProcessingException("source request parameter must be given (URL, File, InputStream or a String (converted to URL)).");
+            } else {
+                sourceOb = defaultXml;
+            }
         }
         try {
             if (sourceOb instanceof InputStream) {
@@ -162,7 +186,8 @@ public class XmlLocalInputComponent extends
 	        } else if (sourceOb instanceof String){
 	            // Try if the sourceOb converts to an URL at all,
 	            // substitute parts of the URL if needed
-	            String stringifiedUrl = substituteParams((String) sourceOb, params);
+	            String stringifiedUrl = substituteParams((String) sourceOb, query, params, requestedResults);
+                log.debug("Transformed URL: " + stringifiedUrl);
 	            try {
 	                URL url = new URL(stringifiedUrl);
 	                source = url.openStream();
@@ -180,9 +205,13 @@ public class XmlLocalInputComponent extends
         }
 
         InputStream xslt = null;
-        final Object xsltOb = params.get("xslt");
+        Object xsltOb = params.get("xslt");
         if (xsltOb == null) {
-            throw new ProcessingException("xslt request parameter must be given (URL, File, InputStream or identity).");
+            if (defaultXslt == null) {
+                throw new ProcessingException("xslt request parameter must be given (URL, File, InputStream or identity).");
+            } else {
+                xsltOb = defaultXslt;
+            }
         }
 
         if ("identity".equals(xsltOb)) {
@@ -261,7 +290,7 @@ public class XmlLocalInputComponent extends
      * @param requestParams
      * @return The url with parameters substituted with their values.
      */
-    protected String substituteParams(String url, Map requestParams) {
+    protected static String substituteParams(String url, String query, Map requestParams, int requestedResults) {
         try {
 	        int index = 0;
 	        
@@ -277,7 +306,11 @@ public class XmlLocalInputComponent extends
 	                continue;
 	            }
 	            String paramName = buf.substring(index+2, lastIndex);
-	            if ("query".equals(paramName)) {
+                if ("results".equals(paramName)) {
+                    final String res = Integer.toString(requestedResults);
+                    buf.replace(index, lastIndex+1, res);
+                    index = index + res.length();
+                } else if ("query".equals(paramName)) {
 	                String v = URLEncoder.encode(query, "UTF-8");
 	                buf.replace(index, lastIndex+1, v);
 	                index = index + v.length();
