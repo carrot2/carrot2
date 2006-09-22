@@ -214,7 +214,7 @@
   <xsl:template name="tabs">
     <xsl:for-each select="/page/meta/tabs/tab">
       <table id="{concat(@id, '-tab')}">
-        <xsl:attribute name="style">width: <xsl:value-of select="$all-tabs-width" />;<xsl:if test="not(@selected)">display: none;</xsl:if></xsl:attribute>
+        <xsl:attribute name="style"><xsl:if test="not(@selected)">display: none;</xsl:if></xsl:attribute>
         <xsl:variable name="tabId"><xsl:value-of select="@id" /></xsl:variable>
         <tr>
           <xsl:for-each select="/page/meta/tabs/tab">
@@ -229,10 +229,10 @@
               </xsl:variable>
 
               <xsl:if test="position() = 1">
-                  <td class="tab-{$status}-lead-in" />
+                  <td class="tab-{$status}-lead-in"><img alt="" width="14" height="1" /></td>
               </xsl:if>
 
-              <td class="tab-{$status}-body" onclick="javascript:switchTab('{$tabElemName}', '{@id}')"
+              <td class="tab-{$status}-body" style="white-space: nowrap;" onclick="javascript:switchTab('{$tabElemName}', '{@id}')"
                   title="{property[@key = 'tab.description']/@value}">
                   
                   <xsl:choose>
@@ -255,11 +255,11 @@
               </td>
               
               <xsl:if test="not(position() = last())">
-                  <td class="tab-{$status}-{$nextstatus}-link" />
+                  <td class="tab-{$status}-{$nextstatus}-link"><img alt="" width="13" height="1" /></td>
               </xsl:if>
 
               <xsl:if test="position() = last()">
-                  <td class="tab-{$status}-lead-out" />
+                  <td class="tab-{$status}-lead-out"><img alt="" width="17" height="1" /></td>
               </xsl:if>
           </xsl:for-each>
         </tr>
