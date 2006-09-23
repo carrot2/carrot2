@@ -77,6 +77,9 @@
         <link offline="true" href="http://demo.carrot2.org/thirdparty/ant/" 
             packagelistLoc="${carrot2.cvs.dir}/etc/javadoc/apis/ant" />
 
+        <link href="http://www.dom4j.org/apidocs/" />
+        <link href="http://dsd.lbl.gov/~hoschek/colt/api/" />
+
         <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Core" packages="org.carrot2.core*" />
         <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; ANT Build System" packages="org.carrot2.ant*"/>
         <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Demos and Examples" packages="org.carrot2.apiexample*:org.carrot2.demo*:org.carrot2.webapp*"/>
