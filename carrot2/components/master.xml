@@ -114,7 +114,9 @@
   <target name="cleanall" depends="check:properties"
     description="Removes all local temporary files.">
     <delete failonerror="true" includeemptydirs="true" quiet="true">
-        <fileset dir="${project.dir}/tmp" defaultexcludes="false" />
+        <fileset dir="${project.dir}" defaultexcludes="false">
+        	<include name="tmp/**" />
+        </fileset>
     </delete>
 	<if>
 		<equals arg1="${type}" arg2="wartype" casesensitive="false" />
