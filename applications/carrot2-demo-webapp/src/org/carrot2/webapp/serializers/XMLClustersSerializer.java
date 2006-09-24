@@ -19,8 +19,7 @@ import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 
 import org.carrot2.util.XMLSerializerHelper;
-import org.carrot2.webapp.Constants;
-import org.carrot2.webapp.RawClustersSerializer;
+import org.carrot2.webapp.*;
 
 import org.carrot2.core.clustering.RawCluster;
 import org.carrot2.core.clustering.RawDocument;
@@ -32,7 +31,7 @@ import org.carrot2.core.impl.RawDocumentEnumerator;
  * @author Dawid Weiss
  * @author Stanisław Osiński
  */
-public final class XMLClustersSerializer implements RawClustersSerializer {
+public class XMLClustersSerializer implements RawClustersSerializer {
     private final static char SEPARATOR = ',';
     private final StringBuffer buffer = new StringBuffer();
     private final XMLSerializerHelper xml = XMLSerializerHelper.getInstance();
@@ -48,11 +47,11 @@ public final class XMLClustersSerializer implements RawClustersSerializer {
         this.contextPath = contextPath;
     }
 
-    public String getContentType() {
+    public final String getContentType() {
         return Constants.MIME_XML_CHARSET_UTF;
     }
 
-    public void startResult(OutputStream os, List rawDocumentsList, HttpServletRequest request)
+    public final void startResult(OutputStream os, List rawDocumentsList, HttpServletRequest request)
 	    throws IOException
     {
     	this.writer = new OutputStreamWriter(os, Constants.ENCODING_UTF);
@@ -71,23 +70,18 @@ public final class XMLClustersSerializer implements RawClustersSerializer {
     	writer.write("<searchresult type=\"clusters\" totalResultsCount=\""
     		+ rawDocumentsList.size() + "\"");
         
-        // Check if referer and page URI match. We do it so that people explicitly
-        // linking to IFRAMEs with search results get a "powered by" message.
-        if (request.getHeader("Referer") == null ||
-                !request.getHeader("Referer").startsWith(request.getRequestURL().toString())) {
-            writer.write(" insertPoweredBy=\"true\"");
-        }
+        contributeHeadTagAttributes(writer, request);
 
         writer.write(">\n");
     }
 
-    public void write(RawCluster cluster) throws IOException {
+    public final void write(RawCluster cluster) throws IOException {
     	collect(cluster);
     	writer.write(buffer.toString());
     	buffer.setLength(0);
     }
 
-    public void endResult() throws IOException {
+    public final void endResult() throws IOException {
     	try {
     	    writer.write("</searchresult>");
     	    writer.flush();
@@ -97,7 +91,22 @@ public final class XMLClustersSerializer implements RawClustersSerializer {
     	writer = null;
     }
 
-    public void collect(RawCluster cluster) throws IOException {
+    /**
+     * Contributes attributes to the head tag of the response. At the moment
+     * referer consistency check is performed.
+     */
+    protected void contributeHeadTagAttributes(Writer writer, HttpServletRequest request)
+        throws IOException
+    {
+        // Check if referer and page URI match. We do it so that people explicitly
+        // linking to IFRAMEs with search results get a "powered by" message.
+        if (request.getHeader(RefererChecker.HTTP_HEADER_REFERER) == null ||
+                !request.getHeader(RefererChecker.HTTP_HEADER_REFERER).startsWith(request.getRequestURL().toString())) {
+            writer.write(" insertPoweredBy=\"true\"");
+        }
+    }
+    
+    private final void collect(RawCluster cluster) throws IOException {
     	buffer.append("<group");
     	if (cluster.getProperty(RawCluster.PROPERTY_JUNK_CLUSTER) != null) {
     	    buffer.append(" junk=\"true\"");
