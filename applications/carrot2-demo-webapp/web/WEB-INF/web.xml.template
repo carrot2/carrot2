@@ -66,12 +66,12 @@
 
         <init-param>
         	<param-name>results.serializerFactory</param-name>
-        	<param-value>org.carrot2.webapp.serializers.FancySerializersFactory</param-value>
+        	<param-value>@SERIALIZERS_FACTORY@</param-value>
         </init-param>
 
         <init-param>
         	<param-name>serializer.xml.stylesheets</param-name>
-        	<param-value>/skins/fancy</param-value>
+        	<param-value>@SKIN@</param-value>
         </init-param>
 
         <load-on-startup>1</load-on-startup>
