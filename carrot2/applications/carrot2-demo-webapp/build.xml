@@ -11,9 +11,7 @@
     <property name="distribution.dir" location="${project.dir}/tmp/dist" />
     <property name="component.descriptor" location="carrot2-demo-webapp.dep.xml" />
 
-    <!-- Default values for webapp parameters -->
-    <property name="xsltFilter.template.caching" value="false" />
-    <property name="webapp.inputSize.default" value="100" />
+	<property file="${project.dir}/customization.properties" />
   
     <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
 
@@ -88,12 +86,16 @@
 ####
 Setting inputSize.default to: ${webapp.inputSize.default}
 Setting template.caching to: ${xsltFilter.template.caching}
+Setting serializers factory to: ${webapp.serializersFactory}
+Setting skin to: ${webapp.skin}
 ####
         </echo>
     
         <filterset begintoken="@" endtoken="@" id="filter.webxml">
             <filter token="INPUT_SIZE_DEFAULT" value="${webapp.inputSize.default}"/>
             <filter token="XSLT_TEMPLATE_CACHING" value="${xsltFilter.template.caching}"/>
+            <filter token="SERIALIZERS_FACTORY" value="${webapp.serializersFactory}"/>
+            <filter token="SKIN" value="${webapp.skin}"/>
         </filterset>
     
         <copy overwrite="true" file="web/WEB-INF/web.xml.template" tofile="web/WEB-INF/web.xml" filtering="true">
