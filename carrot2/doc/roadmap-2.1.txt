@@ -2,6 +2,10 @@
 A roadmap to release 2.1
 ------------------------
 
+Must have:
+
+- correct query time statistics to return an average in a time window of 5 minutes.
+
 Nice to have:
 
 - Add a "Show in clusters" feature to the webapp, which will highlight all
