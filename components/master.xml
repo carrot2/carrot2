@@ -469,6 +469,7 @@ ${string:component.dependencies}
         <attribute name="Freshest-Source-File" value="${tmp:last-modified-date}" />            
     </manifest>
 
+    <delete file="${distribution.dir}/${dist.name}.war" />
     <zip compress="true" zipfile="${distribution.dir}/${dist.name}.war">
         <fileset dir="${build.dir}/type-war" />
     </zip>
