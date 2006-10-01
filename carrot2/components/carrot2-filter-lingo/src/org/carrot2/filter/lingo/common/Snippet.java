@@ -101,6 +101,10 @@ public class Snippet {
         return text;
     }
 
+    public int hashCode() {
+        return this.getSnippetId().hashCode();
+    }
+
     /**
      * @see java.lang.Object#equals(java.lang.Object)
      */

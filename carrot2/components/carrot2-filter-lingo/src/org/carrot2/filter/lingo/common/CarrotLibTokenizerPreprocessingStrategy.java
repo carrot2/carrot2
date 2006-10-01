@@ -454,6 +454,8 @@ outerLoop:
                 }
 
                 tokenImage = tokenImage.substring(i);
+                
+                break;
 
             case Tokenizer.TYPE_TERM:
 
