@@ -29,9 +29,9 @@ import org.carrot2.core.controller.loaders.ComponentInitializationException;
  * @author Dawid Weiss
  */
 public class DemoContext {
-    private final String CLUSTER_INFO_RENDERER_CLASS = "cluster.info.renderer.class";
-    private final String PROCESS_SETTINGS_CLASS = "process.settings.class";
-    private final String PROCESS_DEFAULT = "process.default";
+    private final static String CLUSTER_INFO_RENDERER_CLASS = "cluster.info.renderer.class";
+    private final static String PROCESS_SETTINGS_CLASS = "process.settings.class";
+    private final static String PROCESS_DEFAULT = "process.default";
 
     /** Local Carrot2 controller */
     private final LocalControllerBase controller;
