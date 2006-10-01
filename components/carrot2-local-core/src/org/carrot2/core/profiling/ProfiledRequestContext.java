@@ -110,8 +110,8 @@ public class ProfiledRequestContext extends RequestContextBase
                     profileList.add(profileList.remove(1));
                 }
             }
-        }
 
-        return profileList;
+            return profileList;
+        }
     }
 }
