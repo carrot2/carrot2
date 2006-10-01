@@ -32,7 +32,7 @@ import com.jgoodies.looks.Options;
  * 
  * @author Dawid Weiss
  */
-public class SwingDemoGui {
+public final class SwingDemoGui {
 
     /** Search banner color. */
     private static final Color BANNER_COLOR = new Color(0xe0, 0xe0, 0xe0);
@@ -258,7 +258,7 @@ public class SwingDemoGui {
         final JPanel mainPanel = new JPanel();
         final GridBagLayout layout = new GridBagLayout();
         mainPanel.setLayout(layout);
-        GridBagConstraints cc = new GridBagConstraints();
+        GridBagConstraints cc;
 
         final JComponent topPanel = buildTopPanel();
         cc = new GridBagConstraints(
