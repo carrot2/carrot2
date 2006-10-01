@@ -23,7 +23,7 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
  */
 public class RawDocumentsLuceneIndexBase
 {
-    protected static final String [] SEARCH_FIELDS = new String []
+    static final String [] SEARCH_FIELDS = new String []
     {
         "title", "body"
     };
