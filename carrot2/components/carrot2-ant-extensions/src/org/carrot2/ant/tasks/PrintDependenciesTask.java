@@ -27,7 +27,6 @@ import org.carrot2.ant.deps.ComponentInProfile;
  * dependencies of a given component. 
  */
 public class PrintDependenciesTask extends BaseDependencyPathTask {
-
     /**
      * A file to which the results will be saved or null.
      */
@@ -48,6 +47,70 @@ public class PrintDependenciesTask extends BaseDependencyPathTask {
     /** Profile for dependency traversal. */
     private String profile;
 
+    /**
+     * A nested class for recursive dumping of a tree
+     * of dependencies.
+     */
+    private final static class Dumper {
+        private ArrayList columns = new ArrayList();
+        private final static String LINE = "line";
+        private final static String ENDLINE = "endline";
+        private final static String NOLINE = "noline";
+        private final static String INLINE = "inline";
+
+        public void dump(StringBuffer buf, int indent, ComponentInProfile component) {
+            while (indent > columns.size()) {
+                columns.add(NOLINE);
+            }
+            dumpInternal(buf, indent, component);
+        }
+
+        private void dumpInternal(StringBuffer buf, int indent, ComponentInProfile component) {
+            String v;
+
+            for (int i=0; i<indent; i++) {
+                v = (String) columns.get(i);
+                if (v == NOLINE) {
+                    buf.append("   ");
+                } else if (v == LINE) {
+                    buf.append("|  ");
+                } else if (v == INLINE) {
+                    buf.append("|--");
+                } else if (v == ENDLINE) {
+                    buf.append("\\--");
+                }
+            }
+
+            buf.append(component.component.getName());
+            if (component.profile != null) {
+                buf.append(" [in profile: '" + component.profile + "']"); 
+            }
+            if (component.noCopy) {
+                buf.append(" [not copied, compile-time dependency]");
+                
+            }
+            buf.append("\n");
+
+            while (indent + 1 >= columns.size()) {
+                columns.add(NOLINE);
+            }
+            
+            if (indent > 0) {
+                v = (String) columns.get(indent-1);
+                if (v == INLINE) columns.set(indent-1, LINE);
+                else if (v == ENDLINE) columns.set(indent-1, NOLINE);
+            }
+
+            if (component.noCopy == false) {
+                for (Iterator i = component.getDependencies().iterator(); i.hasNext();) {
+                    ComponentInProfile cip = (ComponentInProfile) i.next();
+                    columns.set(indent, i.hasNext() ? INLINE : ENDLINE);
+                    dumpInternal(buf, indent+1, cip);
+                }
+            }
+        }
+    }
+    
     /**
      * Set the profile for dependency traversal.
      * @param profile
@@ -174,67 +237,6 @@ public class PrintDependenciesTask extends BaseDependencyPathTask {
                 indent(buf, 1);
                 buf.append("[no dependencies]\n");
             } else {
-                // Declare an inner class for recursion only.
-                final class Dumper {
-                    private ArrayList columns = new ArrayList();
-                    private final static String LINE = "line";
-                    private final static String ENDLINE = "endline";
-                    private final static String NOLINE = "noline";
-                    private final static String INLINE = "inline";
-
-                    public void dump(StringBuffer buf, int indent, ComponentInProfile component) {
-	                    while (indent > columns.size()) {
-                            columns.add(NOLINE);
-	                    }
-                        dumpInternal(buf, indent, component);
-                    }
-
-                    private void dumpInternal(StringBuffer buf, int indent, ComponentInProfile component) {
-                        String v;
-
-                        for (int i=0; i<indent; i++) {
-                            v = (String) columns.get(i);
-                            if (v == NOLINE) {
-                                buf.append("   ");
-                            } else if (v == LINE) {
-                                buf.append("|  ");
-                            } else if (v == INLINE) {
-                                buf.append("|--");
-                            } else if (v == ENDLINE) {
-                                buf.append("\\--");
-                            }
-                        }
-
-                        buf.append(component.component.getName());
-    	                if (component.profile != null) {
-    	                	buf.append(" [in profile: '" + component.profile + "']"); 
-    	                }
-                        if (component.noCopy) {
-                            buf.append(" [not copied, compile-time dependency]");
-                            
-                        }
-    	                buf.append("\n");
-
-	                    while (indent + 1 >= columns.size()) {
-                            columns.add(NOLINE);
-	                    }
-	                    
-	                    if (indent > 0) {
-		                    v = (String) columns.get(indent-1);
-		                    if (v == INLINE) columns.set(indent-1, LINE);
-		                    else if (v == ENDLINE) columns.set(indent-1, NOLINE);
-	                    }
-
-                        if (component.noCopy == false) {
-        	                for (Iterator i = component.getDependencies().iterator(); i.hasNext();) {
-        	                    ComponentInProfile cip = (ComponentInProfile) i.next();
-        	                    columns.set(indent, i.hasNext() ? INLINE : ENDLINE);
-        	                    dumpInternal(buf, indent+1, cip);
-        	                }
-                        }
-                    }
-                }
-
                 Dumper dumper = new Dumper();
                 dumper.dump(buf, 1, self);
             }
@@ -251,7 +253,7 @@ public class PrintDependenciesTask extends BaseDependencyPathTask {
             if (this.property != null) {
                 getProject().setNewProperty(property, buf.toString());
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new BuildException(e);
         }
     }
