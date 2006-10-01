@@ -312,7 +312,7 @@ public class MultilingualSnippetsIntWrapper extends AbstractSnippetsIntWrapper {
         clone.intData = ArrayUtils.clone(this.intData);
         clone.languageNames = ArrayUtils.clone(this.languageNames);
         clone.languageStartIndices = ArrayUtils.clone(this.languageStartIndices);
-        clone.documentsData = new String(this.documentsData);
+        clone.documentsData = this.documentsData;
         clone.snippetIntWrappers = new HashMap();
 
         Iterator keys = snippetIntWrappers.keySet().iterator();

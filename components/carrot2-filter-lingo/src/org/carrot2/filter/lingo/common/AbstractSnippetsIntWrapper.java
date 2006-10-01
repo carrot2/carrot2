@@ -142,7 +142,7 @@ public abstract class AbstractSnippetsIntWrapper extends AbstractIntWrapper {
         return distinctWordCount;
     }
 
-    protected class WordWrapper {
+    final static class WordWrapper {
         public int position;
         public int code;
         public int documentIndex;
