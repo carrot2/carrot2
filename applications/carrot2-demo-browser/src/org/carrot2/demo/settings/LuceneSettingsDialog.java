@@ -40,9 +40,9 @@ import com.jgoodies.forms.layout.FormLayout;
  */
 public class LuceneSettingsDialog extends JPanel {
 
-    private final LuceneSettings settings;
+    private final transient LuceneSettings settings;
 
-    private JTextField indexLocationLabel;
+    private transient JTextField indexLocationLabel;
     
     public LuceneSettingsDialog(LuceneSettings settings) {
         this.settings = settings;
