@@ -28,7 +28,7 @@ import com.jgoodies.forms.layout.FormLayout;
  * @author Karol Gołembniak
  */
 class HaogStcSettingsDialog extends JPanel {
-    private final HaogStcSettings settings;
+    private final transient HaogStcSettings settings;
 
     public HaogStcSettingsDialog(HaogStcSettings settings) {
         this.settings = settings;
