@@ -8,6 +8,12 @@
 
   <xsl:param name="ga-code">UA-317750-3</xsl:param>
   <xsl:param name="display-status-line">true</xsl:param>
+  <xsl:param name="show-input-descriptions">true</xsl:param>
+  <xsl:param name="show-example-queries">true</xsl:param>
+  <xsl:param name="show-options">true</xsl:param>
+  <xsl:param name="show-progress">true</xsl:param>
+  <xsl:param name="init-from-url">false</xsl:param> <!-- Set to 'true' only for generating static HTMLs -->
+  <xsl:param name="force-results-page">false</xsl:param> <!-- Set to 'true' only for generating static HTMLs (results page) -->
   
   <xsl:template name="custom-results-utils">
     <div id="results-utils">

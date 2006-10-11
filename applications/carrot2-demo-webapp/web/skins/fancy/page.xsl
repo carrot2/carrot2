@@ -35,7 +35,7 @@
 
   <xsl:template match="page">
     <xsl:choose>
-    <xsl:when test="string-length($query) &gt; 0">
+    <xsl:when test="string-length($query) &gt; 0 or $force-results-page = 'true'">
       <xsl:apply-templates select="meta" mode="query" />
     </xsl:when>
     <xsl:otherwise>
@@ -63,7 +63,9 @@
       <xsl:call-template name="search-area">
         <xsl:with-param name="table-style">margin-bottom: 10px</xsl:with-param>
       </xsl:call-template>
-      <xsl:call-template name="input-descriptions" />
+      <xsl:if test="$show-input-descriptions = 'true'">
+        <xsl:call-template name="input-descriptions" />
+      </xsl:if>
       
       <xsl:call-template name="startup-extra-content" />
     </div>    
@@ -83,7 +85,7 @@
 
           <table id="results-main">
             <tr>
-              <td id="startup-main-top-outer-left"><div style="width: 124px" /></td>
+              <td id="startup-main-top-outer-left"><div style="width: 124px"></div></td>
 
               <td>
                 <xsl:call-template name="tabs" />
@@ -113,6 +115,9 @@
         </td>
       </tr>
     </table>
+    <xsl:if test="$init-from-url = 'true'">
+      <xsl:call-template name="init-from-url-script" />
+    </xsl:if>
   </xsl:template>
 
   <!-- Search area -->
@@ -120,6 +125,8 @@
      <xsl:param name="table-style"></xsl:param>
 
      <form action="{$contextPath}{action-urls/new-search}" method="GET">
+     <input type="hidden" id="{$tabElemName}" name="{tabs/@form-element}" value="{tabs/tab[@selected]/@id}" />
+           
      <table style="{$table-style}" id="search-area">
        <tr>
          <td>
@@ -131,7 +138,13 @@
              </tr>
              <tr>
                <td class="vb l"></td>
-               <td class="c sf"><input class="search-field" style="width: 400px" name="q" id="search-field" value="{$query}" /></td>
+               <td class="c sf">
+                <input class="search-field" style="width: 400px" name="q" id="search-field">
+                  <xsl:if test="$init-from-url != 'true'">
+                    <xsl:attribute name="value"><xsl:value-of select="$query" /></xsl:attribute>
+                  </xsl:if>
+                </input>
+               </td>
                <td class="vb r"></td>
              </tr>
              <tr>
@@ -163,49 +176,50 @@
              </tr>
            </table>
          </td>
-         <td style="padding-left: 1px; font-size: 8pt; line-height: 115%">
-           <span id="sim-switch" style="{$optsShown}"><a href="javascript:hideAdvanced()">Hide<br/>options</a></span>
-           <span id="adv-switch" style="{$optsHidden}"><a href="javascript:showAdvanced()">Show<br/>options</a></span>
-         </td>
+         <xsl:if test="$show-options = 'true'">
+           <td style="padding-left: 1px; font-size: 8pt; line-height: 115%">
+             <span id="sim-switch" style="{$optsShown}"><a href="javascript:hideAdvanced()">Hide<br/>options</a></span>
+             <span id="adv-switch" style="{$optsHidden}"><a href="javascript:showAdvanced()">Show<br/>options</a></span>
+           </td>
+         </xsl:if>
        </tr>
 
-       <tr id="adv-opts" style="{$optsShown}">
-         <td style="text-align: right; padding-right: 1px; padding-top: 4px; padding-bottom: 4px;">
-           <!-- input -->
-           <input type="hidden" id="{$tabElemName}" name="{tabs/@form-element}" value="{tabs/tab[@selected]/@id}" />
-         
-           <!-- search results size -->
-           <label class="inline-cb-label" for="res-sel">Download</label> 
-           <select id="res-sel" name="{query-sizes/@form-element}">
-           <xsl:for-each select="query-sizes/size">
-               <option value="{@id}">
-                   <xsl:if test="@selected"><xsl:copy-of select="@selected" /></xsl:if>
-                   <xsl:value-of select="text()" /> results</option>
-           </xsl:for-each>
-           </select>
+       <xsl:if test="$show-options = 'true'">
+         <tr id="adv-opts" style="{$optsShown}">
+           <td style="text-align: right; padding-right: 1px; padding-top: 4px; padding-bottom: 4px;">
+             <!-- search results size -->
+             <label class="inline-cb-label" for="res-sel">Download</label> 
+             <select id="res-sel" name="{query-sizes/@form-element}">
+             <xsl:for-each select="query-sizes/size">
+                 <option value="{@id}">
+                     <xsl:if test="@selected"><xsl:copy-of select="@selected" /></xsl:if>
+                     <xsl:value-of select="text()" /> results</option>
+             </xsl:for-each>
+             </select>
 
-           <!-- algorithm -->
-           <xsl:choose>
-             <xsl:when test="count(algorithms/alg) > 1">
-               <label class="inline-cb-label" style="padding-left: 10px" for="alg-sel">Cluster with</label>
-               <select id="alg-sel" name="{algorithms/@form-element}">
-               <xsl:for-each select="algorithms/alg">
-                   <option value="{@id}">
-                       <xsl:if test="@selected"><xsl:copy-of select="@selected" /></xsl:if>
-                       <xsl:value-of select="short" /></option>
-               </xsl:for-each>
-               </select>
-             </xsl:when>
-             <xsl:otherwise>
-               <input type="hidden" name="{algorithms/@form-element}"
-                      value="{algorithms/alg[1]/@id}" />
-             </xsl:otherwise>
-           </xsl:choose>
-                               
-           <!-- show/hide options -->
-           <input type="hidden" id="opts" name="opts" value="{$opts}" />
-         </td>
-       </tr>
+             <!-- algorithm -->
+             <xsl:choose>
+               <xsl:when test="count(algorithms/alg) > 1">
+                 <label class="inline-cb-label" style="padding-left: 10px" for="alg-sel">Cluster with</label>
+                 <select id="alg-sel" name="{algorithms/@form-element}">
+                 <xsl:for-each select="algorithms/alg">
+                     <option value="{@id}">
+                         <xsl:if test="@selected"><xsl:copy-of select="@selected" /></xsl:if>
+                         <xsl:value-of select="short" /></option>
+                 </xsl:for-each>
+                 </select>
+               </xsl:when>
+               <xsl:otherwise>
+                 <input type="hidden" name="{algorithms/@form-element}"
+                        value="{algorithms/alg[1]/@id}" />
+               </xsl:otherwise>
+             </xsl:choose>
+                                 
+             <!-- show/hide options -->
+             <input type="hidden" id="opts" name="opts" value="{$opts}" />
+           </td>
+         </tr>
+       </xsl:if>
      </table>
      </form>
   </xsl:template>
@@ -282,7 +296,7 @@
           <xsl:value-of select="property[@key = 'tab.description.startup']/@value" />
         </div>
        
-        <xsl:if test="./example-queries">
+        <xsl:if test="./example-queries and $show-example-queries = 'true'">
         <div class="example-queries">
           Example queries: 
           <xsl:for-each select="./example-queries/example-query">
@@ -312,17 +326,29 @@
                 <table style="height: 100%; width: 100%">
                   <tr>
                     <td style="padding: 3px; width: 260px; border-right: 1px dotted #808080; height: 100%">
-                      <div id="clusters-progress">
-                        <img alt="..." src="{$skinuri}/img/progress.gif" style="position: relative; top: 0.5ex;"/> Loading...
-                      </div>
-                      <iframe name="clusters" src="{$contextPath}{/page/meta/action-urls/query-clusters}" frameborder="no" height="100%" width="100%" style="border: 0" />
+                      <xsl:if test="$show-progress = 'true'">
+                        <div id="clusters-progress">
+                          <img alt="..." src="{$skinuri}/img/progress.gif" style="position: relative; top: 0.5ex;"/> Loading...
+                        </div>
+                      </xsl:if>
+                      <iframe id="clustersif" name="clusters" frameborder="no" height="100%" width="100%" style="border: 0">
+                        <xsl:if test="$init-from-url != 'true'">
+                          <xsl:attribute name="src"><xsl:value-of select="$contextPath" /><xsl:value-of select="/page/meta/action-urls/query-clusters" /></xsl:attribute>
+                        </xsl:if>
+                      </iframe>
                     </td>
 
                     <td style="padding: 3px; height: 100%">
-                      <div id="docs-progress">
-                        <img alt="..." src="{$skinuri}/img/progress.gif" style="position: relative; top: 0.5ex;"/> Loading...
-                      </div>
-                      <iframe name="documents" src="{$contextPath}{/page/meta/action-urls/query-docs}" frameborder="no" height="100%" width="100%" style="border: 0" />
+                      <xsl:if test="$show-progress = 'true'">
+                        <div id="docs-progress">
+                          <img alt="..." src="{$skinuri}/img/progress.gif" style="position: relative; top: 0.5ex;"/> Loading...
+                        </div>
+                      </xsl:if>
+                      <iframe id="documentsif" name="documents" frameborder="no" height="100%" width="100%" style="border: 0">
+                        <xsl:if test="$init-from-url != 'true'">
+                          <xsl:attribute name="src"><xsl:value-of select="$contextPath" /><xsl:value-of select="/page/meta/action-urls/query-docs" /></xsl:attribute>
+                        </xsl:if>
+                      </iframe>
                     </td>
                   </tr>
                   <xsl:if test="$display-status-line = 'true'">
@@ -371,6 +397,21 @@
           preload[i] = img;
       }
     }
+    //--> </script>
+  </xsl:template>
+
+  <xsl:template name="init-from-url-script">
+    <script type="text/javascript" language="javascript">&lt;!--
+      var input = getParam(document.location, 'in');
+      document.getElementById('search-field').value = getParam(document.location, 'q');
+      if (input != "") {
+        switchTab('<xsl:value-of select='$tabElemName' />', input);
+        
+        var url = document.location.toString();
+        var queryString = "&amp;" + url.substring(url.indexOf('?')+1, url.length);
+        document.getElementById('clustersif').src = "<xsl:value-of select="/page/meta/action-urls/query-clusters" />" + queryString;
+        document.getElementById('documentsif').src = "<xsl:value-of select="/page/meta/action-urls/query-docs" />" + queryString;
+      }
     //--> </script>
   </xsl:template>
 
