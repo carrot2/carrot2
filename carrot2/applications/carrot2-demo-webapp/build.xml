@@ -102,4 +102,59 @@ Setting skin to: ${webapp.skin}
             <filterset refid="filter.webxml"/>
         </copy>
     </target>
+
+    <target name="static-html">
+      <description>Renders the two main application pages (startup and results) into static HTML files</description>
+
+      <property name="skin" value="fancy" />
+      
+      <xslt in="etc/static-html/meta.xml" out="tmp/static-html/startup.html" 
+            style="web/skins/${skin}/page.xsl">
+
+        <outputproperty name="method" value="html" />
+        <outputproperty name="standalone" value="yes"/>
+        <outputproperty name="encoding" value="UTF-8"/>
+        <outputproperty name="indent" value="yes" />
+
+        <param name="show-input-descriptions" expression="true" />
+        <param name="show-example-queries" expression="false" />
+        <param name="show-options" expression="false" />
+        <param name="show-progress" expression="false" />
+        <param name="init-from-url" expression="true" />
+        <param name="display-status-line" expression="false" />
+      </xslt>
+     
+      <xslt in="etc/static-html/meta.xml" out="tmp/static-html/search.html" 
+            style="web/skins/${skin}/page.xsl" force="true">
+
+        <outputproperty name="method" value="html" />
+        <outputproperty name="standalone" value="yes"/>
+        <outputproperty name="encoding" value="UTF-8"/>
+        <outputproperty name="indent" value="yes" />
+
+        <param name="show-input-descriptions" expression="true" />
+        <param name="show-example-queries" expression="false" />
+        <param name="show-options" expression="false" />
+        <param name="show-progress" expression="false" />
+        <param name="init-from-url" expression="true" />
+        <param name="display-status-line" expression="false" />
+        <param name="force-results-page" expression="true" />
+      </xslt>
+     
+      <copy todir="tmp/static-html" filtering="false">
+        <fileset dir="web/skins/${skin}">
+          <exclude name="**/*.bat" />
+          <exclude name="**/*.sh" />
+          <exclude name="**/*.swp" />
+          <exclude name="**/*.xml" />
+          <exclude name="**/*.xsl" />
+          <exclude name="**/.svn" />
+        </fileset>
+      </copy>
+     
+      <copy todir="tmp/static-html/img" filtering="false" overwrite="true">
+        <fileset dir="etc/static-html/${skin}/img">
+        </fileset>
+      </copy>
+    </target>
 </project>

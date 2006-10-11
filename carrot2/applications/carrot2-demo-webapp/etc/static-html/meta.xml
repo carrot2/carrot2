@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?skin-uri .?>
+<?context-path ./?>
+<page>
+  <meta>
+    <action-urls>
+      <new-search>search.html</new-search>
+      <query-docs>http://demo.carrot2.org/demo-stable/search?type=d</query-docs>
+      <query-clusters>http://demo.carrot2.org/demo-stable/search?type=c</query-clusters>
+    </action-urls>
+    <strings>
+      <search>Search</search>
+    </strings>
+    <tabs form-element="in">
+      <tab id="Yahoo!" selected="selected">
+        <short>Yahoo!</short>
+        <long>Search the Web with Yahoo!</long>
+        <property key="tab.description"
+          value="Search the Web with Yahoo!" />
+        <property key="tab.exampleQueries"
+          value="data mining|london|clustering" />
+        <property key="tab.name" value="Yahoo!" />
+        <property key="tab.description.startup"
+          value="Carrot Clustering Engine will send your query to Yahoo and automatically organize the results into thematic categories" />
+        <property key="tab.icon" value="yahoo.gif" />
+        <property key="tab.default" value="true" />
+        <example-queries>
+          <example-query url="/search?q=data+mining&amp;in=Yahoo%21">data mining</example-query>
+          <example-query url="/search?q=london&amp;in=Yahoo%21">london</example-query>
+          <example-query url="/search?q=clustering&amp;in=Yahoo%21">clustering</example-query>
+        </example-queries>
+      </tab>
+      <tab id="Google">
+        <short>Google</short>
+        <long>Search the Web with Google</long>
+        <property key="tab.description"
+          value="Search the Web with Google" />
+        <property key="tab.exampleQueries" value="chips|tiger|salsa" />
+        <property key="tab.name" value="Google" />
+        <property key="tab.description.startup"
+          value="Carrot Clustering Engine will send your query to Google and automatically organize the results into thematic categories" />
+        <property key="tab.ignoreOnError" value="true" />
+        <property key="tab.icon" value="google.gif" />
+        <example-queries>
+          <example-query url="/search?q=chips&amp;in=Google">chips</example-query>
+          <example-query url="/search?q=tiger&amp;in=Google">tiger</example-query>
+          <example-query url="/search?q=salsa&amp;in=Google">salsa</example-query>
+        </example-queries>
+      </tab>
+      <tab id="MSN">
+        <short>MSN</short>
+        <long>Search the Web with MSN Search!</long>
+        <property key="tab.description"
+          value="Search the Web with MSN Search!" />
+        <property key="tab.exampleQueries"
+          value="data mining|london|clustering" />
+        <property key="tab.name" value="MSN" />
+        <property key="tab.description.startup"
+          value="Carrot Clustering Engine will send your query to MSN Search and automatically organize the results into thematic categories" />
+        <property key="tab.icon" value="msn.gif" />
+        <property key="tab.default" value="false" />
+        <example-queries>
+          <example-query url="/search?q=data+mining&amp;in=MSN">data mining</example-query>
+          <example-query url="/search?q=london&amp;in=MSN">london</example-query>
+          <example-query url="/search?q=clustering&amp;in=MSN">clustering</example-query>
+        </example-queries>
+      </tab>
+      <tab id="Wikipedia">
+        <short>Wikipedia</short>
+        <long>Search Wikipedia</long>
+        <property key="tab.description" value="Search Wikipedia" />
+        <property key="tab.exampleQueries" value="poland|tiger|java" />
+        <property key="tab.name" value="Wikipedia" />
+        <property key="tab.description.startup"
+          value="Carrot Clustering Engine will search Wikipedia for your query and organize the results into categories" />
+        <property key="tab.icon" value="wiki.gif" />
+        <property key="tab.default" value="false" />
+        <example-queries>
+          <example-query url="/search?q=poland&amp;in=Wikipedia">poland</example-query>
+          <example-query url="/search?q=tiger&amp;in=Wikipedia">tiger</example-query>
+          <example-query url="/search?q=java&amp;in=Wikipedia">java</example-query>
+        </example-queries>
+      </tab>
+      <tab id="ODP">
+        <short>ODP</short>
+        <long>Search Open Directory Project data</long>
+        <property key="tab.description"
+          value="Search Open Directory Project data" />
+        <property key="tab.exampleQueries"
+          value="photography|test|chips" />
+        <property key="tab.name" value="ODP" />
+        <property key="tab.description.startup"
+          value="Carrot Clustering Engine will search the Open Directory Project data and organize the results into thematic categories" />
+        <property key="tab.ignoreOnError" value="true" />
+        <property key="tab.icon" value="odp.gif" />
+        <property key="tab.default" value="false" />
+        <example-queries>
+          <example-query url="/search?q=photography&amp;in=ODP">photography</example-query>
+          <example-query url="/search?q=test&amp;in=ODP">test</example-query>
+          <example-query url="/search?q=chips&amp;in=ODP">chips</example-query>
+        </example-queries>
+      </tab>
+      <tab id="Jobs">
+        <short>Jobs</short>
+        <long>Search jobs from indeed.com</long>
+        <property key="tab.description"
+          value="Search jobs from indeed.com" />
+        <property key="tab.exampleQueries" value="manager|java|sql" />
+        <property key="tab.name" value="Jobs" />
+        <property key="tab.description.startup"
+          value="Carrot Clustering Engine will search jobs at indeed.com and organize the results into thematic categories" />
+        <property key="tab.icon" value="jobs.gif" />
+        <property key="tab.default" value="false" />
+        <example-queries>
+          <example-query url="/search?q=manager&amp;in=Jobs">manager</example-query>
+          <example-query url="/search?q=java&amp;in=Jobs">java</example-query>
+          <example-query url="/search?q=sql&amp;in=Jobs">sql</example-query>
+        </example-queries>
+      </tab>
+    </tabs>
+    <algorithms form-element="alg">
+      <alg id="FuzzyAnts (+English)">
+        <short>FuzzyAnts (+English)</short>
+        <long>FuzzyAnts Algorithm</long>
+      </alg>
+      <alg id="HAOG-FI (+English)">
+        <short>HAOG-FI (+English)</short>
+        <long>HAOG-FI Algorithm</long>
+      </alg>
+      <alg id="HAOG-STC (+English)">
+        <short>HAOG-STC (+English)</short>
+        <long>HAOG-STC Algorithm</long>
+      </alg>
+      <alg id="Lingo (Polish)">
+        <short>Lingo (Polish)</short>
+        <long>Lingo Classic Clustering Algorithm optimized for Polish</long>
+      </alg>
+      <alg id="Lingo" selected="selected">
+        <short>Lingo</short>
+        <long>Lingo Classic Clustering Algorithm</long>
+      </alg>
+      <alg id="Rough k-Means">
+        <short>Rough k-Means</short>
+        <long>Rough k-Means Algorithm</long>
+      </alg>
+      <alg id="STC (+English)">
+        <short>STC (+English)</short>
+        <long>Suffix Tree Clustering Algorithm</long>
+      </alg>
+    </algorithms>
+    <query-sizes form-element="s">
+      <size id="50">50</size>
+      <size id="100" selected="selected">100</size>
+      <size id="200">200</size>
+      <size id="400">400</size>
+    </query-sizes>
+  </meta>
+</page>
