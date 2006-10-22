@@ -13,13 +13,11 @@
 
 package org.carrot2.input.opensearch;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import org.apache.log4j.Logger;
-import org.carrot2.input.opensearch.OpenSearchInputComponent;
-
 import org.carrot2.core.*;
+import org.carrot2.core.clustering.RawDocument;
 import org.carrot2.core.impl.ArrayOutputComponent;
 
 /**
@@ -48,14 +46,23 @@ public class OpenSearchInputComponentTest extends junit.framework.TestCase {
         final String query = "blog";
         final long start = System.currentTimeMillis();
         final HashMap params = new HashMap();
-        params.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, new Integer(105));
+        params.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, new Integer(65));
         final List results = ((ArrayOutputComponent.Result) controller.query(
                 "testprocess", query, params).getQueryResult()).documents;
         final long end = System.currentTimeMillis();
         log.info("Open Search query time: " + (end - start) + " ms.");
 
         // the results should contain some documents.
-        assertEquals("Results acquired > 0?: " + results.size(), 105, results.size());
+        assertEquals("Results acquired > 0?: " + results.size(), 65, results.size());
+        
+        // Check for uniqueness of the ids
+        Set idSet = new HashSet();
+        for (Iterator it = results.iterator(); it.hasNext();)
+        {
+            RawDocument document = (RawDocument) it.next();
+            assertFalse("Unique document id", idSet.contains(document.getId()));
+            idSet.add(document.getId());
+        }
     }
 
 	private LocalControllerBase setUpController(LocalComponentFactory inputFactory) throws Exception {
