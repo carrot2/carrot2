@@ -283,4 +283,17 @@ public class StringUtils
             new Object []
             { a });
     }
+    
+    /**
+     * Returns <code>true</code> if given String is <code>null</code> or consits
+     * of white space only. 
+     * 
+     * @param string
+     * @return <code>true</code> if given String is <code>null</code> or consits
+     * of white space only
+     */
+    public static boolean isBlank(String string)
+    {
+        return string == null || string.trim().length() == 0;
+    }
 }

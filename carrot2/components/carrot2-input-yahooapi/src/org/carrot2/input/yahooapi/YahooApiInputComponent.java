@@ -123,16 +123,15 @@ public class YahooApiInputComponent extends LocalInputComponentBase
 		    log.info("Yahoo API query (" + results + "):" + query);
             final YahooSearchResultConsumer consumer = new YahooSearchResultConsumer() {
                 int id = 0;
-                public void add(final YahooSearchResult result) throws ProcessingException {
-                    rawDocumentConsumer.addDocument(
-                        new RawDocumentBase(
-                                result.url, 
-                                StringUtils.removeMarkup(result.title), 
-                                StringUtils.removeMarkup(result.summary)) {
-                            public Object getId() {
-                                return Integer.toString(id);
-                            }
-                        });
+                public void add(final YahooSearchResult result)
+                    throws ProcessingException
+                {
+                    RawDocumentSnippet snippet = new RawDocumentSnippet(Integer
+                        .toString(id), StringUtils.removeMarkup(result.title),
+                        StringUtils.removeMarkup(result.summary), result.url,
+                        id);
+                    rawDocumentConsumer.addDocument(snippet);
+                    id++;
                 }
             };
             service.query(query, results, consumer);
