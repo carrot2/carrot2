@@ -27,6 +27,20 @@ Nice to have:
 - Move command line applications from the commercial repository to
   the OS repository (D)
 
+- Add support for snippet extraction to the LuceneInputComponent (based on
+  Lucene Highlighter)? Ideally, there would be a configuration switch that
+  would decide if the summary should be initialized from a Lucene field as 
+  it was, or the summary should be initialized with a "snippet" of the
+  specified field.
+
+- (webapp) AJAX-based tracking of the clusters the users choose to inspect
+  This could be an interesting source of statistics, potentially useful for
+  improving/ promoting certain clusters in the future. Implementation:
+  when the user clicks on a cluster label (for the first time only?), make
+  a background XmlHTTPRequest to send to the server: the query, the cluster
+  label (+ parent labels?), the rank of the cluster?, the number of documents
+  in the cluster?
+
 - (webapp) decrease the number of synchronizations in the broadcaster.
 
 - Add OpenSearch Descriptor support for carrot2-input-opensearch?
