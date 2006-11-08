@@ -39,7 +39,9 @@ Nice to have:
   when the user clicks on a cluster label (for the first time only?), make
   a background XmlHTTPRequest to send to the server: the query, the cluster
   label (+ parent labels?), the rank of the cluster?, the number of documents
-  in the cluster?
+  in the cluster? An even more interesting feature would be to track clicks on 
+  documents (a cluster whose documents have not been clicked is worse than a
+  cluster whose documents have been clicked).
 
 - (webapp) decrease the number of synchronizations in the broadcaster.
 
