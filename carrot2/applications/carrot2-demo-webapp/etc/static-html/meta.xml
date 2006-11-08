@@ -15,6 +15,7 @@
       <tab id="Yahoo!" selected="selected">
         <short>Yahoo!</short>
         <long>Search the Web with Yahoo!</long>
+        <property key="tab.accel" value="Y" />
         <property key="tab.description"
           value="Search the Web with Yahoo!" />
         <property key="tab.exampleQueries"
@@ -33,6 +34,7 @@
       <tab id="Google">
         <short>Google</short>
         <long>Search the Web with Google</long>
+        <property key="tab.accel" value="G" />
         <property key="tab.description"
           value="Search the Web with Google" />
         <property key="tab.exampleQueries" value="chips|tiger|salsa" />
@@ -50,6 +52,7 @@
       <tab id="MSN">
         <short>MSN</short>
         <long>Search the Web with MSN Search!</long>
+        <property key="tab.accel" value="M" />
         <property key="tab.description"
           value="Search the Web with MSN Search!" />
         <property key="tab.exampleQueries"
@@ -68,6 +71,7 @@
       <tab id="Wikipedia">
         <short>Wikipedia</short>
         <long>Search Wikipedia</long>
+        <property key="tab.accel" value="W" />
         <property key="tab.description" value="Search Wikipedia" />
         <property key="tab.exampleQueries" value="poland|tiger|java" />
         <property key="tab.name" value="Wikipedia" />
@@ -84,6 +88,7 @@
       <tab id="ODP">
         <short>ODP</short>
         <long>Search Open Directory Project data</long>
+        <property key="tab.accel" value="O" />
         <property key="tab.description"
           value="Search Open Directory Project data" />
         <property key="tab.exampleQueries"
@@ -103,6 +108,7 @@
       <tab id="Jobs">
         <short>Jobs</short>
         <long>Search jobs from indeed.com</long>
+        <property key="tab.accel" value="J" />
         <property key="tab.description"
           value="Search jobs from indeed.com" />
         <property key="tab.exampleQueries" value="manager|java|sql" />

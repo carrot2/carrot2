@@ -253,16 +253,19 @@
                     <xsl:when test="$tabId = @id">
                       <xsl:if test="property[@key = 'tab.icon']">
                           <img class="tab-img" src="{$skinuri}/inputs/{property[@key = 'tab.icon']/@value}" alt="{property[@key = 'tab.name']/@value}" />
+                          <xsl:apply-templates select="short" />
                       </xsl:if>
-                      <xsl:value-of select="short" />
                     </xsl:when>
                     
                     <xsl:otherwise>
                       <a href="javascript:switchTab('{$tabElemName}', '{@id}')" class="tab-link">
+                        <xsl:if test="property[@key = 'tab.accel']">
+                          <xsl:attribute name="accesskey"><xsl:value-of select="property[@key = 'tab.accel']/@value" /></xsl:attribute>
+                        </xsl:if>
                         <xsl:if test="property[@key = 'tab.icon']">
                           <img class="tab-img" src="{$skinuri}/inputs/{property[@key = 'tab.icon']/@value}" alt="{property[@key = 'tab.name']/@value}" />
                         </xsl:if>
-                        <xsl:value-of select="short" />
+                        <xsl:apply-templates select="short" />
                       </a>
                     </xsl:otherwise>
                   </xsl:choose>
@@ -279,6 +282,28 @@
         </tr>
       </table>
     </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template match="tab/short">
+    <xsl:choose>
+      <xsl:when test="../property[@key = 'tab.accel']">
+        <xsl:variable name="accel"><xsl:value-of select="../property[@key = 'tab.accel']/@value" /></xsl:variable>
+      
+        <xsl:choose>
+          <xsl:when test="contains(string(.), $accel)">
+            <xsl:value-of select="substring-before(string(short), $accel)" />
+            <u><xsl:value-of select="$accel" /></u>
+            <xsl:value-of select="substring-after(string(.), $accel)" />
+          </xsl:when>
+          <xsl:otherwise>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+
+      <xsl:otherwise>
+        <xsl:value-of select="." />
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
   
   <!-- Input descriptions -->

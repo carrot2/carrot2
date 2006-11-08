@@ -17,9 +17,6 @@ Nice to have:
 - Add metasearch input component (in this case the on-line demo could have
   tabs like "Web", "Wiki", "Jobs" etc.)
 
-- Support shortcut-based tab switching in the demo-webapp (e.g. pressing Alt+G
-  switches to the "Google" tab)
-
 - Extend the "Search with Carrot2" section to add options similar
   to those on Clusty: http://clusty.com/sitesearch. Add information about
   the possibility to link directly to the iframes with the results?

@@ -17,6 +17,7 @@ LoadedComponentFactory loaded =
 
 loaded.setProperties(new String [][] {
 	{"tab.name", "PUT"},
+	{"tab.accel", "P"},
 	{"tab.description", "Search *.put.poznan.pl (with Yahoo!)"},
 	{"tab.description.startup", "Carrot Clustering Engine will search Poznan University of Technology domains and organize the results into thematic categories"},
 	{"tab.exampleQueries", "computing science|idss|seminaria|publikacje"},
