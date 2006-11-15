@@ -13,13 +13,16 @@
 package org.carrot2.input.lucene;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.*;
+import org.apache.lucene.search.highlight.Highlighter;
+import org.apache.lucene.search.highlight.QueryScorer;
 import org.carrot2.core.*;
 import org.carrot2.core.clustering.*;
 import org.carrot2.core.profiling.ProfiledLocalInputComponentBase;
@@ -32,6 +35,7 @@ import org.carrot2.core.profiling.ProfiledLocalInputComponentBase;
  * 
  * @author Stanislaw Osinski
  * @author Dawid Weiss
+ * @author Sairaj Sunil
  * 
  * @version $Revision$
  */
@@ -212,6 +216,7 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
         
         // Create a boolean query that combines all fields
         final BooleanQuery booleanQuery = new BooleanQuery();
+        
         for (int i = 0; i < luceneSettings.searchFields.length; i++)
         {
             final QueryParser queryParser = 
@@ -220,7 +225,7 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
             Query queryComponent = queryParser.parse(query);
             booleanQuery.add(queryComponent, BooleanClause.Occur.SHOULD);
         }
-
+        
         // Perform query
         final Hits hits = luceneSettings.searcher.search(booleanQuery);
         final int endAt = Math.min(hits.length(), startAt + requestedDocuments);
@@ -241,17 +246,50 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
         {
             hits.id(endAt - 1);
         }
-
-        // Get results from the index
+        
+        // This line is added to the original for the highlighting part. The
+        // Highlighter is present in org.apache.lucene.search.highlight package
+        Highlighter highlighter = null;
+        if (luceneSettings.summarizerConfig != null
+            && luceneSettings.summarizerConfig != LuceneSearchConfig.NO_SUMMARIES)
+        {
+            highlighter = new Highlighter(luceneSettings.summarizerConfig.formatter,
+                new QueryScorer(booleanQuery));
+        }
+        
+        // This is the new for loop written by me to handle the case of
+        // highlighting, which was not present in the original version
         for (int i = startAt; i < endAt; i++)
         {
             final Document doc = hits.doc(i);
+            String summary;
+            final String summaryField = doc.get(luceneSettings.summaryField);
+            
+            if (summaryField != null && highlighter != null)
+            {
+                String [] summaries = highlighter.getBestFragments(
+                    luceneSettings.analyzer, luceneSettings.summaryField,
+                    summaryField, luceneSettings.summarizerConfig.maxFragments);
+                StringBuffer summaryBuffer = new StringBuffer();
+                if (summaries.length > 0)
+                {
+                    summaryBuffer.append(summaries[0]);
+                }
+                for (int j = 1; j < summaries.length; j++)
+                {
+                    summaryBuffer.append(" ... ");
+                    summaryBuffer.append(summaries[j]);
+                }
+                summary = summaryBuffer.toString();
+            }
+            else
+            {
+                summary = summaryField;
+            }
+
             final RawDocumentSnippet rawDocument = new RawDocumentSnippet(
-                new Integer(hits.id(i)), 
-                doc.get(luceneSettings.titleField), 
-                doc.get(luceneSettings.summaryField), 
-                doc.get(luceneSettings.urlField), 
-                hits.score(i));
+                new Integer(hits.id(i)), doc.get(luceneSettings.titleField),
+                summary, doc.get(luceneSettings.urlField), hits.score(i));
             rawDocumentConsumer.addDocument(rawDocument);
         }
     }
