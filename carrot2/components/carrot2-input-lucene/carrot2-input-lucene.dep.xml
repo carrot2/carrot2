@@ -22,4 +22,5 @@
 
     <dependency name="log4j" />
     <dependency name="lucene" />
+    <dependency name="lucene-highlighter" />
 </component>
