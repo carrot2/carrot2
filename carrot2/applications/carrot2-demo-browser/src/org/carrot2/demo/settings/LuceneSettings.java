@@ -68,7 +68,7 @@ public final class LuceneSettings extends ProcessSettingsBase {
         this.searchFields = (String []) other.searchFields.clone();
         this.titleField = other.titleField;
         this.summaryField = other.summaryField;
-        this.urlField = other.summaryField;
+        this.urlField = other.urlField;
 
         if (luceneIndexDir != null) {
             createSearcher();
