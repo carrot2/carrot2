@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE component PUBLIC "-//Carrot2//DTD Component Dependency Descriptor V1.0//EN" "http://www.carrot2.org/dtd/component-dependency.dtd" >
+
+<component
+    name="carrot2-clustering-benchmark"
+    description="Carrot2 Clustering Benchmark">
+    
+    <provides>
+        <files build-path-exclude="true" prefix="tmp/dist">
+            <file location="carrot2-clustering-benchmark.jar" />
+        </files>
+        <build>
+            <ant file="build.xml" target="build" />
+        </build>
+		<check-newer>
+            <fileset dir="src" />
+        </check-newer>
+    </provides>
+
+    <!-- Carrot2 components -->
+    <dependency name="carrot2-local-core" />
+    <dependency name="carrot2-snowball-stemmers" />
+    <dependency name="carrot2-util-tokenizer" />
+    
+    <dependency name="carrot2-filter-lingo" />
+    <dependency name="carrot2-input-yahooapi"  />
+    <dependency name="carrot2-input-lucene"  />
+</component>
