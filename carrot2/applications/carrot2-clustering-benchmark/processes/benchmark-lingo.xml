@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<local-process id="benchmark-lingo">
+  <name>Benchmark -- Lingo Classic Clusterer</name>
+
+  <input  component-key="input-array-rawdocuments" />
+  <filter component-key="filter-rawdocument-enumerator" />
+  <filter component-key="filter-clustering-lingo-en" />
+  <output component-key="output-array" />
+</local-process>

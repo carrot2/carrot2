@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="Carrot2 Clustering Benchmark" default="build">
+	
+  <property file="${user.home}/.carrot.properties" />
+	<property file="local.properties" />
+
+  <property name="project.dir"      location="${basedir}" />
+  <property name="carrot2.cvs.dir"  location="../.." />
+  <property name="dist.name"        value="carrot2-clustering-benchmark" />
+	<property name="distribution.dir" location="${project.dir}/tmp/dist" />
+
+  <property name="type"       	  value="jartype" />
+  <property name="tests.available"  value="false"    />
+
+	<property name="copy.dependencies" value="true" />
+	
+	<property name="jvm" value="java" />
+	
+  <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
+
+  <target name="check.lucene.index">
+    <fail unless="odp.lucene.index.dir">
+Please provide the path to the ODP Lucene index in the 'odp.lucene.index.dir' property.
+    </fail>
+  </target>
+  
+  <target name="benchmark" if="jvm" depends="check.lucene.index, build">
+		<echo>Sun JVM: ${jvm}</echo>
+		<java fork="true" 
+			  classname="org.carrot2.benchmark.ClusteringBenchmark"
+			  jvm="${jvm}"
+        output="${project.dir}/tmp/out.txt">
+			<jvmarg value="-server"/>
+			<jvmarg value="-Xmx128m"/>
+			<jvmarg value="-Xms128m"/>
+			<jvmarg value="-XX:NewRatio=1"/>
+			<jvmarg value="-Dlucene.index.path=${odp.lucene.index.dir}"/>
+			<classpath>
+				<fileset dir="${distribution.dir}">
+					<include name="**/*.jar"/>
+				</fileset>
+			</classpath>
+		</java>
+	</target>
+</project>
