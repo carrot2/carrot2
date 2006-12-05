@@ -1,5 +1,9 @@
-
-// Generated file. Do not edit by hand.
+/**
+ * SourceRequest.java
+ *
+ * This file was auto-generated from WSDL
+ * by the Apache Axis 1.4 Sep 12, 2006 (01:08:05 CEST) WSDL2Java emitter.
+ */
 
 package com.microsoft.msnsearch;
 
@@ -10,7 +14,13 @@ public class SourceRequest  implements java.io.Serializable {
 
     private int count;
 
+    private java.lang.String fileType;
+
+    private java.lang.String[] sortBy;
+
     private java.lang.String[] resultFields;
+
+    private java.lang.String[] searchTagFilters;
 
     public SourceRequest() {
     }
@@ -19,11 +29,17 @@ public class SourceRequest  implements java.io.Serializable {
            com.microsoft.msnsearch.SourceType source,
            int offset,
            int count,
-           java.lang.String[] resultFields) {
+           java.lang.String fileType,
+           java.lang.String[] sortBy,
+           java.lang.String[] resultFields,
+           java.lang.String[] searchTagFilters) {
            this.source = source;
            this.offset = offset;
            this.count = count;
+           this.fileType = fileType;
+           this.sortBy = sortBy;
            this.resultFields = resultFields;
+           this.searchTagFilters = searchTagFilters;
     }
 
 
@@ -88,6 +104,46 @@ public class SourceRequest  implements java.io.Serializable {
 
 
     /**
+     * Gets the fileType value for this SourceRequest.
+     * 
+     * @return fileType
+     */
+    public java.lang.String getFileType() {
+        return fileType;
+    }
+
+
+    /**
+     * Sets the fileType value for this SourceRequest.
+     * 
+     * @param fileType
+     */
+    public void setFileType(java.lang.String fileType) {
+        this.fileType = fileType;
+    }
+
+
+    /**
+     * Gets the sortBy value for this SourceRequest.
+     * 
+     * @return sortBy
+     */
+    public java.lang.String[] getSortBy() {
+        return sortBy;
+    }
+
+
+    /**
+     * Sets the sortBy value for this SourceRequest.
+     * 
+     * @param sortBy
+     */
+    public void setSortBy(java.lang.String[] sortBy) {
+        this.sortBy = sortBy;
+    }
+
+
+    /**
      * Gets the resultFields value for this SourceRequest.
      * 
      * @return resultFields
@@ -104,6 +160,26 @@ public class SourceRequest  implements java.io.Serializable {
      */
     public void setResultFields(java.lang.String[] resultFields) {
         this.resultFields = resultFields;
+    }
+
+
+    /**
+     * Gets the searchTagFilters value for this SourceRequest.
+     * 
+     * @return searchTagFilters
+     */
+    public java.lang.String[] getSearchTagFilters() {
+        return searchTagFilters;
+    }
+
+
+    /**
+     * Sets the searchTagFilters value for this SourceRequest.
+     * 
+     * @param searchTagFilters
+     */
+    public void setSearchTagFilters(java.lang.String[] searchTagFilters) {
+        this.searchTagFilters = searchTagFilters;
     }
 
     private java.lang.Object __equalsCalc = null;
@@ -123,9 +199,18 @@ public class SourceRequest  implements java.io.Serializable {
               this.source.equals(other.getSource()))) &&
             this.offset == other.getOffset() &&
             this.count == other.getCount() &&
+            ((this.fileType==null && other.getFileType()==null) || 
+             (this.fileType!=null &&
+              this.fileType.equals(other.getFileType()))) &&
+            ((this.sortBy==null && other.getSortBy()==null) || 
+             (this.sortBy!=null &&
+              java.util.Arrays.equals(this.sortBy, other.getSortBy()))) &&
             ((this.resultFields==null && other.getResultFields()==null) || 
              (this.resultFields!=null &&
-              java.util.Arrays.equals(this.resultFields, other.getResultFields())));
+              java.util.Arrays.equals(this.resultFields, other.getResultFields()))) &&
+            ((this.searchTagFilters==null && other.getSearchTagFilters()==null) || 
+             (this.searchTagFilters!=null &&
+              java.util.Arrays.equals(this.searchTagFilters, other.getSearchTagFilters())));
         __equalsCalc = null;
         return _equals;
     }
@@ -142,11 +227,36 @@ public class SourceRequest  implements java.io.Serializable {
         }
         _hashCode += getOffset();
         _hashCode += getCount();
+        if (getFileType() != null) {
+            _hashCode += getFileType().hashCode();
+        }
+        if (getSortBy() != null) {
+            for (int i=0;
+                 i<java.lang.reflect.Array.getLength(getSortBy());
+                 i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getSortBy(), i);
+                if (obj != null &&
+                    !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
+        }
         if (getResultFields() != null) {
             for (int i=0;
                  i<java.lang.reflect.Array.getLength(getResultFields());
                  i++) {
                 java.lang.Object obj = java.lang.reflect.Array.get(getResultFields(), i);
+                if (obj != null &&
+                    !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
+        }
+        if (getSearchTagFilters() != null) {
+            for (int i=0;
+                 i<java.lang.reflect.Array.getLength(getSearchTagFilters());
+                 i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getSearchTagFilters(), i);
                 if (obj != null &&
                     !obj.getClass().isArray()) {
                     _hashCode += obj.hashCode();
@@ -182,10 +292,32 @@ public class SourceRequest  implements java.io.Serializable {
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("fileType");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "FileType"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("sortBy");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "SortBy"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "SortByType"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("resultFields");
         elemField.setXmlName(new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "ResultFields"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "ResultFieldMask"));
         elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("searchTagFilters");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "SearchTagFilters"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        elemField.setItemQName(new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "string"));
         typeDesc.addFieldDesc(elemField);
     }
 
