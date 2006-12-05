@@ -1,5 +1,9 @@
-
-// Generated file. Do not edit by hand.
+/**
+ * ResultFieldMaskNull.java
+ *
+ * This file was auto-generated from WSDL
+ * by the Apache Axis 1.4 Sep 12, 2006 (01:08:05 CEST) WSDL2Java emitter.
+ */
 
 package com.microsoft.msnsearch;
 
@@ -27,6 +31,7 @@ public class ResultFieldMaskNull implements java.io.Serializable {
     public static final java.lang.String _Location = "Location";
     public static final java.lang.String _SearchTagsArray = "SearchTagsArray";
     public static final java.lang.String _Summary = "Summary";
+    public static final java.lang.String _ResultType = "ResultType";
     public static final ResultFieldMaskNull All = new ResultFieldMaskNull(_All);
     public static final ResultFieldMaskNull Title = new ResultFieldMaskNull(_Title);
     public static final ResultFieldMaskNull Description = new ResultFieldMaskNull(_Description);
@@ -41,6 +46,7 @@ public class ResultFieldMaskNull implements java.io.Serializable {
     public static final ResultFieldMaskNull Location = new ResultFieldMaskNull(_Location);
     public static final ResultFieldMaskNull SearchTagsArray = new ResultFieldMaskNull(_SearchTagsArray);
     public static final ResultFieldMaskNull Summary = new ResultFieldMaskNull(_Summary);
+    public static final ResultFieldMaskNull ResultType = new ResultFieldMaskNull(_ResultType);
     public java.lang.String getValue() { return _value_;}
     public static ResultFieldMaskNull fromValue(java.lang.String value)
           throws java.lang.IllegalArgumentException {
