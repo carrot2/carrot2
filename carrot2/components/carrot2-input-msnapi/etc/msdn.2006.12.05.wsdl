@@ -2,6 +2,9 @@
 
 <!--
     Schema downloaded on 2006/12/05.
+    
+    Fixed an error in the XML schema (reference to a non-existing XSD type... people at Microsoft
+    hand-edit their schemas?
 -->
 
 <wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:tns="http://schemas.microsoft.com/MSNSearch/2005/09/fex" targetNamespace="http://schemas.microsoft.com/MSNSearch/2005/09/fex">
@@ -125,7 +128,7 @@
             </xsd:complexType>
             <xsd:complexType name="ArrayOfstringSearchTagFilters">
                 <xsd:sequence>
-                    <xsd:element minOccurs="0" maxOccurs="unbounded" name="string" type="xsd:s" />
+                    <xsd:element minOccurs="0" maxOccurs="unbounded" name="string" type="xsd:string" />
                 </xsd:sequence>
             </xsd:complexType>
             <xsd:complexType name="Result">
