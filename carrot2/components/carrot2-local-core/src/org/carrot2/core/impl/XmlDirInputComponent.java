@@ -61,6 +61,12 @@ public class XmlDirInputComponent extends XmlStreamInputComponent
     }
 
     protected InputStream getInputXML(RequestContext requestContext) throws ProcessingException {
+        InputStream inputXML = (InputStream) requestContext.getRequestParameters().get(XML_STREAM);
+        if (inputXML != null)
+        {
+            return inputXML;
+        }
+        
         // Get source path from the request context
         inputDir = (File) requestContext.getRequestParameters().get(XML_DIR);
         if (inputDir == null)
