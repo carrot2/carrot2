@@ -161,7 +161,7 @@ public class DefaultSnippetsIntWrapper extends AbstractSnippetsIntWrapper {
         clone.documentCount = this.documentCount;
         clone.documentIndices = ArrayUtils.clone(this.documentIndices);
         clone.intData = ArrayUtils.clone(this.intData);
-        clone.documentsData = new String(this.documentsData);
+        clone.documentsData = this.documentsData;
 
         return clone;
     }

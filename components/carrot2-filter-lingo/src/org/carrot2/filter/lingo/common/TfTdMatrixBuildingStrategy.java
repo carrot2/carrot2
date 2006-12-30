@@ -65,7 +65,7 @@ public class TfTdMatrixBuildingStrategy implements TdMatrixBuildingStrategy {
         int size = 0;
 
         while (!features[rows].isStopWord() &&
-                (features[rows].getTf() >= minimumTd) &&
+                (features[rows].getTf() >= minimumTd) && (features[rows].getLength() == 1) &&
                 ((maximumSize < 1) || (size <= maximumSize))) {
             rows++;
             size += clusteringContext.getSnippets().length;

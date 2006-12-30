@@ -28,7 +28,7 @@ import com.jgoodies.forms.layout.FormLayout;
  */
 final class LingoSettingsDialog extends JPanel
 {
-    private final LingoClassicSettings settings;
+    private final transient LingoClassicSettings settings;
 
     public LingoSettingsDialog(LingoClassicSettings settings)
     {

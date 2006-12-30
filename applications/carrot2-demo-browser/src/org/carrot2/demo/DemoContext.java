@@ -20,6 +20,7 @@ import java.util.*;
 
 import org.carrot2.core.*;
 import org.carrot2.core.controller.*;
+import org.carrot2.core.controller.loaders.BeanShellFactoryDescriptionLoader;
 import org.carrot2.core.controller.loaders.ComponentInitializationException;
 
 /**
@@ -28,9 +29,9 @@ import org.carrot2.core.controller.loaders.ComponentInitializationException;
  * @author Dawid Weiss
  */
 public class DemoContext {
-    private final String CLUSTER_INFO_RENDERER_CLASS = "cluster.info.renderer.class";
-    private final String PROCESS_SETTINGS_CLASS = "process.settings.class";
-    private final String PROCESS_DEFAULT = "process.default";
+    private final static String CLUSTER_INFO_RENDERER_CLASS = "cluster.info.renderer.class";
+    private final static String PROCESS_SETTINGS_CLASS = "process.settings.class";
+    private final static String PROCESS_DEFAULT = "process.default";
 
     /** Local Carrot2 controller */
     private final LocalControllerBase controller;
@@ -110,7 +111,16 @@ public class DemoContext {
                 throw new RuntimeException("Components directory not found: "
                         + componentsDir.getAbsolutePath());
             }
-    
+
+            // Register context path for beanshell scripts.
+            final ComponentFactoryLoader bshLoader = cl.getComponentFactoryLoader(
+                    ControllerHelper.EXT_COMPONENT_FACTORY_LOADER_BEANSHELL);
+            if (bshLoader != null) {
+                final HashMap globals = new HashMap();
+                globals.put("inputsDirFile", componentsDir);
+                ((BeanShellFactoryDescriptionLoader) bshLoader).setGlobals(globals);
+            }
+            
             cl.addAll(controller, cl.loadComponentFactoriesFromDir(componentsDir));
             this.loadedProcesses = Arrays.asList(cl.loadProcessesFromDir(processesDir));
         } else {

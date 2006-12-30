@@ -10,6 +10,7 @@ body {
 /* Tabs */
 
 .tab-active-lead-in {
+  background-color: #f6f4ec;
   background-image: url('../img/tab-active-lead-in.gif');
   background-repeat: no-repeat;
   height: 36px;
@@ -17,6 +18,7 @@ body {
 }
 
 .tab-passive-lead-in {
+  background-color: #f6f4ec;
   background-image: url('../img/tab-passive-lead-in.gif');
   background-repeat: no-repeat;
   height: 36px;
@@ -24,6 +26,7 @@ body {
 }
 
 .tab-active-body {
+  background-color: #f6f4ec;
   background-image: url('../img/tab-active-body.gif');
   background-repeat: repeat-x;
   height: 36px;
@@ -41,6 +44,7 @@ body {
 
 .tab-passive-body {
   cursor: pointer;
+  background-color: #f6f4ec;
   background-image: url('../img/tab-passive-body.gif');
   background-repeat: repeat-x;
   height: 36px;
@@ -57,6 +61,7 @@ body {
 }
 
 .tab-active-passive-link {
+  background-color: #f6f4ec;
   background-image: url('../img/tab-active-passive-link.gif');
   background-repeat: no-repeat;
   height: 36px;
@@ -64,6 +69,7 @@ body {
 }
 
 .tab-passive-active-link {
+  background-color: #f6f4ec;
   background-image: url('../img/tab-passive-active-link.gif');
   background-repeat: no-repeat;
   height: 36px;
@@ -71,6 +77,7 @@ body {
 }
 
 .tab-passive-passive-link {
+  background-color: #f6f4ec;
   background-image: url('../img/tab-passive-passive-link.gif');
   background-repeat: no-repeat;
   height: 36px;
@@ -78,6 +85,7 @@ body {
 }
 
 .tab-active-lead-out {
+  background-color: #f6f4ec;
   background-image: url('../img/tab-active-lead-out.gif');
   background-repeat: no-repeat;
   height: 36px;
@@ -85,6 +93,7 @@ body {
 }
 
 .tab-passive-lead-out {
+  background-color: #f6f4ec;
   background-image: url('../img/tab-passive-lead-out.gif');
   background-repeat: no-repeat;
   height: 36px;

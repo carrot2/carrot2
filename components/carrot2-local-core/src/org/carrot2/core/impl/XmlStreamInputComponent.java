@@ -306,8 +306,17 @@ public class XmlStreamInputComponent extends LocalInputComponentBase
                 snippet = null;
             }
 
+            final String idString;
+            if (docElem.attributeValue("id") != null) {
+                idString = docElem.attributeValue("id");
+            }
+            else
+            {
+                idString = Integer.toString(id);
+            }
+            
             queryResult.rawDocuments.add(new RawDocumentSnippet(
-                new Integer(id), title, snippet, url, 0));
+                idString, title, snippet, url, 0));
         }
 
         return queryResult;

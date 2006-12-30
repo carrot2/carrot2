@@ -121,6 +121,7 @@ fetch:  while (true) {
                 final OpenSearchResult current = new OpenSearchResult(syURL, syTITLE, syDESCRIPTION);
                 result.add(current);
                 final int id = resultIndex;
+                resultIndex++;
                 
                 if (documentConsumer != null) {
                     documentConsumer.addDocument(new RawDocumentBase(current.url, 

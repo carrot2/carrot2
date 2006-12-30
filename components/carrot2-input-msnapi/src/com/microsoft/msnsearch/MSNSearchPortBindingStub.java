@@ -1,5 +1,9 @@
-
-// Generated file. Do not edit by hand.
+/**
+ * MSNSearchPortBindingStub.java
+ *
+ * This file was auto-generated from WSDL
+ * by the Apache Axis 1.4 Sep 12, 2006 (01:08:05 CEST) WSDL2Java emitter.
+ */
 
 package com.microsoft.msnsearch;
 
@@ -104,6 +108,15 @@ public class MSNSearchPortBindingStub extends org.apache.axis.client.Stub implem
             cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
             cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
 
+            qName = new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "ArrayOfstringSearchTagFilters");
+            cachedSerQNames.add(qName);
+            cls = java.lang.String[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string");
+            qName2 = new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "string");
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
             qName = new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "DateTime");
             cachedSerQNames.add(qName);
             cls = com.microsoft.msnsearch.DateTime.class;
@@ -187,6 +200,20 @@ public class MSNSearchPortBindingStub extends org.apache.axis.client.Stub implem
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
+
+            qName = new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "SortByType");
+            cachedSerQNames.add(qName);
+            cls = java.lang.String[].class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(simplelistsf);
+            cachedDeserFactories.add(simplelistdf);
+
+            qName = new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "SortByType>null");
+            cachedSerQNames.add(qName);
+            cls = com.microsoft.msnsearch.SortByTypeNull.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(enumsf);
+            cachedDeserFactories.add(enumdf);
 
             qName = new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "SourceRequest");
             cachedSerQNames.add(qName);

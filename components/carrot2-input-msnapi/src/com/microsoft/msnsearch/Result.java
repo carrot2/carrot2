@@ -1,5 +1,9 @@
-
-// Generated file. Do not edit by hand.
+/**
+ * Result.java
+ *
+ * This file was auto-generated from WSDL
+ * by the Apache Axis 1.4 Sep 12, 2006 (01:08:05 CEST) WSDL2Java emitter.
+ */
 
 package com.microsoft.msnsearch;
 
@@ -30,6 +34,8 @@ public class Result  implements java.io.Serializable {
 
     private java.lang.String summary;
 
+    private java.lang.String resultType;
+
     public Result() {
     }
 
@@ -46,7 +52,8 @@ public class Result  implements java.io.Serializable {
            com.microsoft.msnsearch.Address address,
            com.microsoft.msnsearch.Location location,
            com.microsoft.msnsearch.SearchTag[] searchTagsArray,
-           java.lang.String summary) {
+           java.lang.String summary,
+           java.lang.String resultType) {
            this.title = title;
            this.description = description;
            this.url = url;
@@ -60,6 +67,7 @@ public class Result  implements java.io.Serializable {
            this.location = location;
            this.searchTagsArray = searchTagsArray;
            this.summary = summary;
+           this.resultType = resultType;
     }
 
 
@@ -322,6 +330,26 @@ public class Result  implements java.io.Serializable {
         this.summary = summary;
     }
 
+
+    /**
+     * Gets the resultType value for this Result.
+     * 
+     * @return resultType
+     */
+    public java.lang.String getResultType() {
+        return resultType;
+    }
+
+
+    /**
+     * Sets the resultType value for this Result.
+     * 
+     * @param resultType
+     */
+    public void setResultType(java.lang.String resultType) {
+        this.resultType = resultType;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof Result)) return false;
@@ -372,7 +400,10 @@ public class Result  implements java.io.Serializable {
               java.util.Arrays.equals(this.searchTagsArray, other.getSearchTagsArray()))) &&
             ((this.summary==null && other.getSummary()==null) || 
              (this.summary!=null &&
-              this.summary.equals(other.getSummary())));
+              this.summary.equals(other.getSummary()))) &&
+            ((this.resultType==null && other.getResultType()==null) || 
+             (this.resultType!=null &&
+              this.resultType.equals(other.getResultType())));
         __equalsCalc = null;
         return _equals;
     }
@@ -430,6 +461,9 @@ public class Result  implements java.io.Serializable {
         }
         if (getSummary() != null) {
             _hashCode += getSummary().hashCode();
+        }
+        if (getResultType() != null) {
+            _hashCode += getResultType().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -529,6 +563,13 @@ public class Result  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("summary");
         elemField.setXmlName(new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "Summary"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("resultType");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "ResultType"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);

@@ -23,7 +23,7 @@ package org.carrot2.core.clustering;
  * @author Stanislaw Osinski
  * @version $Revision$
  */
-public class RawDocumentSnippet extends RawDocumentBase implements Cloneable
+public final class RawDocumentSnippet extends RawDocumentBase implements Cloneable
 {
     /** Document id */
     private Object id;

@@ -55,7 +55,7 @@ public class RawDocumentsLuceneIndexSearcher extends
             }
             catch (ParseException e)
             {
-                new RuntimeException("Lucene query parse exception", e);
+                throw new RuntimeException("Lucene query parse exception", e);
             }
             booleanQuery.add(queryComponent, BooleanClause.Occur.MUST);
         }

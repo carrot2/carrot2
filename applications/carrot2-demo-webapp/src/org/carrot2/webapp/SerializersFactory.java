@@ -15,6 +15,7 @@ package org.carrot2.webapp;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * A factory for objects serializing results.
@@ -28,4 +29,12 @@ public interface SerializersFactory {
     public PageSerializer createPageSerializer(HttpServletRequest request);
     public RawDocumentsSerializer createRawDocumentSerializer(HttpServletRequest request);
     public RawClustersSerializer createRawClustersSerializer(HttpServletRequest request);
+
+    /**
+     * This method is invoked before any clustering or document fetching
+     * takes place. If <code>true</code> is returned, processing continues,
+     * otherwise processing finishes immediately (set appropriate
+     * <code>response</code> HTTP headers if you wish).
+     */
+    public boolean acceptRequest(HttpServletRequest request, HttpServletResponse response);
 }

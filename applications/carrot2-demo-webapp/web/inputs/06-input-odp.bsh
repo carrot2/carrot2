@@ -13,6 +13,7 @@ loaded = new LoadedComponentFactory("input-odp", luceneFactory);
 
 loaded.setProperties(new String [][] {
 	{"tab.name", "ODP"},
+	{"tab.accel", "O"},
 	{"tab.description", "Search Open Directory Project data"},
 	{"tab.description.startup", "Carrot Clustering Engine will search the Open Directory Project data and organize the results into thematic categories"},
 	{"tab.exampleQueries", "photography|test|chips"},

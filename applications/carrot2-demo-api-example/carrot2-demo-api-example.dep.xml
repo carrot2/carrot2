@@ -10,8 +10,11 @@
     <dependency name="carrot2-util-common" />
     <dependency name="carrot2-local-core" />
     <dependency name="carrot2-filter-lingo" />
+    <dependency name="carrot2-filter-stc" />    
     <dependency name="carrot2-util-tokenizer" />
     <dependency name="carrot2-input-yahooapi" />
+    <dependency name="carrot2-input-msnapi" />    
     <dependency name="carrot2-input-lucene" />
+    <dependency name="carrot2-filter-case-normalizer" />
 </component>
 

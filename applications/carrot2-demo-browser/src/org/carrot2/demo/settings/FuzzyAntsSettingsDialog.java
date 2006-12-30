@@ -29,7 +29,7 @@ import com.jgoodies.forms.layout.FormLayout;
  * @author Dawid Weiss
  */
 class FuzzyAntsSettingsDialog extends JPanel {
-    private final FuzzyAntsSettings settings;
+    private final transient FuzzyAntsSettings settings;
 
     public FuzzyAntsSettingsDialog(FuzzyAntsSettings settings) {
         this.settings = settings;

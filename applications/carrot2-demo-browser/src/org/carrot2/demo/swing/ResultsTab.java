@@ -309,6 +309,7 @@ public class ResultsTab extends JPanel {
             final JComponent settingsComponent = processSettings.getSettingsComponent(owner);
 
             final JButton updateButton = new JButton("Refresh");
+            updateButton.setMnemonic('r');
             updateButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     performQuery();

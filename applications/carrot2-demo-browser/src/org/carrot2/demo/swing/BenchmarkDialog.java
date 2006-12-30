@@ -107,10 +107,9 @@ public class BenchmarkDialog
             });
             dialog.getContentPane().add(buildUI());
             dialog.pack();
-            dialog.setLocation((int) (owner.getLocation().getX() + (owner
-                .getWidth() - dialog.getWidth()) / 2),
-                (int) (owner.getLocation().getY() + (owner.getHeight() - dialog
-                    .getHeight()) / 2));
+            dialog.setLocation(
+                (owner.getLocation().x + (owner.getWidth() - dialog.getWidth()) / 2),
+                (owner.getLocation().y + (owner.getHeight() - dialog.getHeight()) / 2));
             
             SwingUtils.addEscapeKeyCloseAction(dialog);
         }

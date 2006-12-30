@@ -28,7 +28,7 @@ import com.jgoodies.forms.layout.FormLayout;
  * @author Karol Gołembniak
  */
 class HaogFiSettingsDialog extends JPanel {
-    private final HaogFiSettings settings;
+    private final transient HaogFiSettings settings;
 
     public HaogFiSettingsDialog(HaogFiSettings settings) {
         this.settings = settings;
