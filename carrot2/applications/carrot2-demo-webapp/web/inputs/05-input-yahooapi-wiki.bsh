@@ -17,6 +17,7 @@ LoadedComponentFactory loaded =
 
 loaded.setProperties(new String [][] {
 	{"tab.name", "Wikipedia"},
+	{"tab.accel", "W"},
 	{"tab.description", "Search Wikipedia"},
 	{"tab.description.startup", "Carrot Clustering Engine will search Wikipedia for your query and organize the results into categories"},
 	{"tab.exampleQueries", "poland|tiger|java"},

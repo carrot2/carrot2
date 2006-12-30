@@ -137,7 +137,7 @@ public final class MsnApiInputComponent extends LocalInputComponentBase
             final String [] fields = new String [] {
                     ResultFieldMaskNull._Url,
                     ResultFieldMaskNull._Title,
-                    ResultFieldMaskNull._Description
+                    ResultFieldMaskNull._Description,
                     };
 
             int id = 0;
@@ -145,10 +145,14 @@ public final class MsnApiInputComponent extends LocalInputComponentBase
             int requests = MAX_REQUESTS; 
             while (requests > 0 && results > 0) {
                 final int fetchSize = Math.min(results, MAXIMUM_RESULTS_PERQUERY);
+
                 final SourceRequest sourceRequest = new SourceRequest(
                         SourceType.Web,
-                        offset, fetchSize, 
-                        fields);
+                        offset, fetchSize,
+                        "", // fileType
+                        new String [] { SortByTypeNull._Default }, // sort by field?
+                        fields, // result fields
+                        new String [] { }); // search tag filters
 
                 request.setRequests(new SourceRequest [] {sourceRequest});
                 final SourceResponse [] responses = service.search(request).getResponses();
@@ -162,6 +166,8 @@ public final class MsnApiInputComponent extends LocalInputComponentBase
                 if (id == 0) {
                     // adjust total approximation.
                     results = Math.min(results, response.getTotal());
+                    
+                    log.debug("Received initial MSN response (total=" + response.getTotal() + ")");
                 }
                 
                 // feed documents.
@@ -192,7 +198,7 @@ public final class MsnApiInputComponent extends LocalInputComponentBase
                             return docId;
                         }
                     });
-
+                    
                     id++;
                 }
                 results -= searchResults.length;

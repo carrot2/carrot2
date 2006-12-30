@@ -258,17 +258,23 @@ public final class QueryProcessorServlet extends HttpServlet {
             }
         }
     }
-    
+
     /**
      * Process a document or cluster search query.
      */
     private void processSearchQuery(OutputStream os, final int requestType, 
-            SearchRequest searchRequest, HttpServletRequest request, HttpServletResponse response) throws IOException
+            SearchRequest searchRequest, HttpServletRequest request, HttpServletResponse response) 
+        throws IOException
     {
         final TabAlgorithm algorithmTab = searchRequest.getAlgorithm();
-
         final String queryHash = searchRequest.getInputAndSizeHashCode();
         final Broadcaster bcaster;
+
+        // check if we can process this request and return immediately if not.
+        if (false == serializerFactory.acceptRequest(request, response)) {
+            logger.debug("Request unacceptable (denied by factory).");
+            return;
+        }
 
         synchronized (getServletContext()) {
             final Broadcaster existingbcaster = (Broadcaster ) bcasters.get(queryHash); 

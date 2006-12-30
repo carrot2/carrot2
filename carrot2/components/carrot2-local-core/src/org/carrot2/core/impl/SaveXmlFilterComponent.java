@@ -369,12 +369,23 @@ public class SaveXmlFilterComponent
      */
     private String getDocumentId(RawDocument rawDocument)
     {
-        String id = rawDocument.getProperty(RawDocumentEnumerator.DOCUMENT_SEQ_NUMBER).toString();
-        if (id == null)
+        if (rawDocument.getId() != null)
         {
-            id = rawDocument.getId().toString();
+            return rawDocument.getId().toString();
         }
-        return id;
+        else
+        {
+            Object id = rawDocument
+                .getProperty(RawDocumentEnumerator.DOCUMENT_SEQ_NUMBER);
+            if (id != null)
+            {
+                return id.toString();
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 
     /**

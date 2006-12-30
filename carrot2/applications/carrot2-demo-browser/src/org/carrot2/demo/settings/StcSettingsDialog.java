@@ -30,7 +30,7 @@ import com.jgoodies.forms.layout.FormLayout;
  * @author Dawid Weiss
  */
 class StcSettingsDialog extends JPanel {
-    private final StcSettings settings;
+    private final transient StcSettings settings;
 
     public StcSettingsDialog(StcSettings settings) {
         this.settings = settings;

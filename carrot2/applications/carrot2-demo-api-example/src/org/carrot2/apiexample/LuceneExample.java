@@ -108,6 +108,7 @@ public final class LuceneExample {
         } catch (Exception e) {
             // There shouldn't be any, but just in case.
             System.err.println("An exception occurred: " + e.toString());
+            e.printStackTrace();
         }
     }
 
@@ -137,16 +138,19 @@ public final class LuceneExample {
         //
         
         // Place your index location in this variable.
-        final File indexLocation = null;
-        
+        File indexLocation = null;
+
         // Create a Searcher. Note that the same searcher is used
         // in case multiple queries are run through Carrot<sup>2</sup>.
         final IndexReader indexReader;
         try {
+            if (indexLocation == null) {
+                throw new IOException("Initialize indexLocation first.");
+            }
             indexReader = IndexReader.open(indexLocation);        
         } catch (IOException e) {
             throw new RuntimeException("Lucene index not present at" +
-                    " location: " + indexLocation);
+                    " location: " + indexLocation, e);
         }
         final Searcher searcher = new IndexSearcher(indexReader);
 

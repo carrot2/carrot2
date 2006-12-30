@@ -60,7 +60,7 @@ public final class DependencyPath extends Path {
 
         private void removeFile(Project project) {
             if (project == getProject()) {
-                getProject().log("Removing cache file: " + file.getAbsolutePath());
+                getProject().log("Removing cache file: " + file.getAbsolutePath(), Project.MSG_VERBOSE);
                 if (file.exists()) {
                     this.file.delete();
                 }
@@ -174,7 +174,7 @@ public final class DependencyPath extends Path {
             dos.close();
             final byte [] bytes = bos.toByteArray();
 
-            final File f = File.createTempFile(".c2", ".dep.cache", getProject().getBaseDir());
+            final File f = File.createTempFile(".c2", ".dep.cache");
             getProject().addBuildListener(new RemoveAtBuildEnd(f));
 
             final FileOutputStream fo = new FileOutputStream(f);

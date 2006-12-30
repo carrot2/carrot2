@@ -42,7 +42,7 @@ to instructions in the readme.txt file. See if it works.
 
 - Tag the repository:
 
-	svn copy . https://svn.sourceforge.net/svnroot/carrot2/tags/VERSION_xxx
+	svn copy https://svn.sourceforge.net/svnroot/carrot2/trunk/carrot2 https://svn.sourceforge.net/svnroot/carrot2/tags/VERSION_xxx
 
 - Create distributions from the tagged version of the repository.
 
@@ -50,17 +50,6 @@ to instructions in the readme.txt file. See if it works.
 
 - Publish distributions in SourceForge's file area (Admin->File Releases).
 Download them and see if they unpack successfully.
-
-- Compile the WebStart version.
-
-	cd applications/carrot2-demo-browser
-	ant -q clean webstart
-
-- Place the WebStart version on project.carrot2.org. Make sure it works.
-
-- Build and upload JavaDocs to the website:
-
-  ant javadoc.upload
 
 - Edit the open source website:
   - add brief release notes (website/src/release-VERSION-notes.xml)
@@ -70,12 +59,10 @@ Download them and see if they unpack successfully.
   - update the download page (website/src/download.xml) to contain
     a link to the newest release notes and direct links to the
     newest binaries on sourceforge.
-  - upload the new webiste:
-
-    ant upload
 
 - Publish news to:
 
-carrot2-news@lists.sourceforge.net
-carrot2-developers@lists.sourceforge.net
-Lucene/Nutch lists?
+  carrot2-news@lists.sourceforge.net
+  carrot2-developers@lists.sourceforge.net
+  Lucene/Nutch lists?
+  KDNuggets

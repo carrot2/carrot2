@@ -41,10 +41,18 @@ final class CacheEntry {
     public boolean equals(Object other) {
         if (other instanceof CacheEntry) {
             final CacheEntry otherEntry = (CacheEntry) other;
-            return ((this.query == null && otherEntry.query == null)
-                    || (query.equals(otherEntry.query) && requestedResults == otherEntry.requestedResults
-                        && equivalenceClass.equals(otherEntry.equivalenceClass))); 
-        } else return false;
+            if (this.query == null && otherEntry.query == null) {
+                return true;
+            } else {
+                if ((query != null && equivalenceClass != null)
+                        && (query.equals(otherEntry.query) && requestedResults == otherEntry.requestedResults)
+                        && equivalenceClass.equals(otherEntry.equivalenceClass)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**

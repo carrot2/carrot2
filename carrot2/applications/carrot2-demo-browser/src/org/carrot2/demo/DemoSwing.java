@@ -35,6 +35,11 @@ public class DemoSwing {
      * Demo Entry point.
      */
     public static void main(String[] args) {
+        new DemoSwing().run(args);
+    }
+
+    protected void run(String [] args)
+    {
         final DemoContext carrotDemo;
 
         if (args.length > 0) {
@@ -53,10 +58,16 @@ public class DemoSwing {
             carrotDemo = new DemoContext();
         }
 
-        final SwingDemoGui demoGui = new SwingDemoGui(carrotDemo); 
+        final SwingDemoGui demoGui = new SwingDemoGui(carrotDemo,
+            getMainFrameTitle()); 
         demoGui.display();
     }
 
+    protected String getMainFrameTitle()
+    {
+        return "Carrot2 Demo";
+    }
+    
     private static DemoContext initFromResource() throws IOException {
         final ArrayList components = new ArrayList();
         final ArrayList processes = new ArrayList();

@@ -15,6 +15,7 @@ package org.carrot2.webapp.serializers;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.carrot2.webapp.*;
 
@@ -52,5 +53,12 @@ public class XMLSerializersFactory implements SerializersFactory {
 
     protected final String getStylesheetsBase() {
         return this.stylesheetsBase;
+    }
+
+    /**
+     * Accept all requests by default.
+     */
+    public boolean acceptRequest(HttpServletRequest request, HttpServletResponse response) {
+        return true;
     }
 }

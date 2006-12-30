@@ -32,7 +32,7 @@ import com.jgoodies.looks.Options;
  * 
  * @author Dawid Weiss
  */
-public class SwingDemoGui {
+public final class SwingDemoGui {
 
     /** Search banner color. */
     private static final Color BANNER_COLOR = new Color(0xe0, 0xe0, 0xe0);
@@ -43,6 +43,9 @@ public class SwingDemoGui {
     
     /** Main demo frame */
     private final JFrame frame;
+    
+    /** Main demo frame title */
+    private final String mainFrameTitle;
 
     /** Tabbed pane with search results. */
     private JTabbedPane tabbedPane;
@@ -98,11 +101,20 @@ public class SwingDemoGui {
      * the demo frame.
      */
     public SwingDemoGui(DemoContext carrotDemo) {
+        this(carrotDemo, "Carrot2 Demo");
+    }
+
+    /**
+     * Creates a new object attached to a demo context. Call {@link #display()} to display
+     * the demo frame.
+     */
+    public SwingDemoGui(DemoContext carrotDemo, String frameTitle) {
         this.demoContext = carrotDemo;
+        this.mainFrameTitle = frameTitle;
         this.frame = new JFrame();
         this.config = new SwingDemoGuiConfig("/config/browser-config.xml");
     }
-
+    
     /**
      * Displays the demo frame.
      */
@@ -113,7 +125,7 @@ public class SwingDemoGui {
             // Likely PlasticXP is not in the class path; ignore.
         }
 
-        frame.setTitle("Carrot2 Demo");
+        frame.setTitle(mainFrameTitle);
         frame.setIconImage(new ImageIcon(this.getClass().getResource("carrot2-icon.png")).getImage());
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.getContentPane().add(buildMainPanel());
@@ -246,7 +258,7 @@ public class SwingDemoGui {
         final JPanel mainPanel = new JPanel();
         final GridBagLayout layout = new GridBagLayout();
         mainPanel.setLayout(layout);
-        GridBagConstraints cc = new GridBagConstraints();
+        GridBagConstraints cc;
 
         final JComponent topPanel = buildTopPanel();
         cc = new GridBagConstraints(

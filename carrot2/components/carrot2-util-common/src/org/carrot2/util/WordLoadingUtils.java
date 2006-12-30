@@ -27,6 +27,7 @@ public final class WordLoadingUtils
     private final static Logger logger = Logger.getLogger(WordLoadingUtils.class);
 
     private final static String RESOURCE_PREFIX = "resources/";
+    private final static String RESOURCE_ROOT = "/";
 
     /**
      * A utility method to load a language resource. The language resource
@@ -50,7 +51,17 @@ public final class WordLoadingUtils
             is = WordLoadingUtils.class
                 .getResourceAsStream(RESOURCE_PREFIX + resourceName);
         }
-        
+
+        if (is == null) {
+            is = Thread.currentThread().getContextClassLoader()
+                    .getResourceAsStream(RESOURCE_ROOT + RESOURCE_PREFIX + resourceName);
+       }
+
+        if (is == null) {
+            is = WordLoadingUtils.class
+                .getResourceAsStream(RESOURCE_ROOT + RESOURCE_PREFIX + resourceName);
+        }
+
         if (is == null) {
             throw new IOException("Resource could not be found: " + resourceName);
         }
