@@ -10,6 +10,16 @@ Version  [C] Information
 
 HEAD
 
+2.0.1     SVN:1532
+
+          #  Fixed minor browser display problems (font size).
+          
+          #  Build file fixes.
+          
+          o  Update of Microsoft WSDL file.
+          
+          o  Contractions and new words added to stopwords list.
+
 2.0       SVN:1466
 
           +  Added an input component to MSN Search
