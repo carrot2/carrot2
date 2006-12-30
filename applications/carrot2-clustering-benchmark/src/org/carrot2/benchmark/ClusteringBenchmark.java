@@ -32,10 +32,10 @@ public class ClusteringBenchmark
     private BenchmarkContext context;
 
     /** The number of clustering algorithm warm-up runs */
-    private int warmUpRuns = 20;
+    private int warmUpRuns = 40;
 
     /** Input warmup parameters */
-    private boolean inputWarmup = true;
+    private boolean inputWarmup = false;
     private String inputWarmupQuery = "amiga";
     private int inputWarmupResults = 200;
 
@@ -67,6 +67,11 @@ public class ClusteringBenchmark
         "music",
         "film",
         "arts"
+    };
+
+    private String [] inputs = new String []
+    {
+        "lucene", "yahooapi", "googleapi", "msnapi"
     };
 
     private int [] resultCounts = new int []
@@ -120,11 +125,15 @@ public class ClusteringBenchmark
     private void run()
     {
         int resultCountIndex = 0;
-        for (int i = 0; i < queries.length; i++)
+        for (int j = 0; j < inputs.length; j++)
         {
-            run("lucene", "lingo", queries[i], resultCounts[resultCountIndex]);
+            for (int i = 0; i < queries.length; i++)
+            {
+                run(inputs[j], "lingo", queries[i],
+                    resultCounts[resultCountIndex]);
 
-            resultCountIndex = (resultCountIndex + 1) % resultCounts.length;
+                resultCountIndex = (resultCountIndex + 1) % resultCounts.length;
+            }
         }
     }
 

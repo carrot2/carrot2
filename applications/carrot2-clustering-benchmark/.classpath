@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry path="src" kind="src"/>
-	<classpathentry path="org.eclipse.jdt.launching.JRE_CONTAINER" kind="con"/>
-	<classpathentry path="CARROT2_CHECKOUT_BASE/lib/log4j-1.2.13.jar" kind="var" exported="true"/>
-	<classpathentry path="CARROT2_CHECKOUT_BASE/lib/dom4j-1.6.1.jar" kind="var"/>
-	<classpathentry path="/carrot2-local-core" combineaccessrules="false" kind="src"/>
-	<classpathentry path="/carrot2-filter-lingo" combineaccessrules="false" kind="src"/>
-	<classpathentry path="/carrot2-input-yahooapi" combineaccessrules="false" kind="src"/>
-	<classpathentry path="/carrot2-input-lucene" combineaccessrules="false" kind="src"/>
-	<classpathentry path="tmp/eclipse/classes" kind="output"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="var" path="CARROT2_CHECKOUT_BASE/lib/log4j-1.2.13.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/dom4j-1.6.1.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-local-core"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-lingo"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-input-yahooapi"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-input-lucene"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-input-googleapi"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-input-msnsearch"/>
+	<classpathentry kind="output" path="tmp/eclipse/classes"/>
 </classpath>
