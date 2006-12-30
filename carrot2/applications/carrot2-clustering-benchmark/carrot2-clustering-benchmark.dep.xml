@@ -24,5 +24,7 @@
     
     <dependency name="carrot2-filter-lingo" />
     <dependency name="carrot2-input-yahooapi"  />
+    <dependency name="carrot2-input-msnapi"  />
+    <dependency name="carrot2-input-googleapi"  />
     <dependency name="carrot2-input-lucene"  />
 </component>

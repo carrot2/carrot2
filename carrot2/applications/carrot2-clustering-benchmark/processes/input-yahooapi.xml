@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<local-process id="input-yahoo">
+<local-process id="input-yahooapi">
   <name>Input -- Yahoo Search API</name>
 
   <input  component-key="input-yahooapi" />

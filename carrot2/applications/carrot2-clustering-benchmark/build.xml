@@ -24,18 +24,25 @@
 Please provide the path to the ODP Lucene index in the 'odp.lucene.index.dir' property.
     </fail>
   </target>
+
+  <target name="check.google.keys">
+    <fail unless="google.keys.dir">
+Please provide the path to Google API keys in the 'google.keys.dir' property.
+    </fail>
+  </target>
   
-  <target name="benchmark" if="jvm" depends="check.lucene.index, build">
+  <target name="benchmark" if="jvm" depends="check.lucene.index, check.google.keys, build">
 		<echo>Sun JVM: ${jvm}</echo>
 		<java fork="true" 
 			  classname="org.carrot2.benchmark.ClusteringBenchmark"
 			  jvm="${jvm}"
-        output="${project.dir}/tmp/out.txt">
+        output="${project.dir}/tmp/results.txt">
 			<jvmarg value="-server"/>
 			<jvmarg value="-Xmx128m"/>
 			<jvmarg value="-Xms128m"/>
 			<jvmarg value="-XX:NewRatio=1"/>
 			<jvmarg value="-Dlucene.index.path=${odp.lucene.index.dir}"/>
+			<jvmarg value="-Dgoogle.keys.path=${google.keys.dir}"/>
 			<classpath>
 				<fileset dir="${distribution.dir}">
 					<include name="**/*.jar"/>
