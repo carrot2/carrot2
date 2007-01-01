@@ -140,4 +140,21 @@ public class ArrayUtils
 
         return index;
     }
+    
+    public static String toString(Object [] array)
+    {
+        StringBuffer sb = new StringBuffer();
+        
+        if (array != null && array.length > 0)
+        {
+            sb.append(array[0].toString());
+            for (int i = 1; i < array.length; i++)
+            {
+                sb.append(", ");
+                sb.append(array[i]);
+            }
+        }
+        
+        return sb.toString();
+    }
 }
