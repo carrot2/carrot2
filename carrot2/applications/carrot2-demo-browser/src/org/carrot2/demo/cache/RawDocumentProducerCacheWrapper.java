@@ -112,6 +112,14 @@ public class RawDocumentProducerCacheWrapper extends LocalInputComponentBase {
         return COMPONENT_CAPABILITIES;
     }
     
+    public void init(LocalControllerContext context) throws InstantiationException
+    {
+        super.init(context);
+        
+        // Initialize the wrapped component
+        wrapped.init(context);
+    }
+
     public void startProcessing(RequestContext requestContext) throws ProcessingException {
     	super.startProcessing(requestContext);
     	this.requestContext = requestContext;
