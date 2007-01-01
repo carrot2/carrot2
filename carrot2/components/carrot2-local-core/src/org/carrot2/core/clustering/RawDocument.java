@@ -78,6 +78,12 @@ public interface RawDocument {
      * </p>
      */
     public final static String PROPERTY_LANGUAGE = "lang";
+
+    /**
+     * Returns an array of idenfitiers of all sources that returned this
+     * document.
+     */
+    public static final String PROPERTY_SOURCE = "source";
     
     /**
      * Returns a named property of the document.   Names of the available
