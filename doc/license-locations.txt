@@ -1,7 +1,10 @@
 
 When updating the license, check the following locations:
 
-- ${svn}/carrot2.LICENSE, then run 'ant license' to update the sources (review output).
+- ${svn}/carrot2.LICENSE, 
+- ${svn}/etc/codeconvention/*.txt
+
+then run 'ant license' to update the sources (review output).
 
 - http://project.carrot2.org/license.html
 - http://project.carrot2.org/carrot2.LICENSE
