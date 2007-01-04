@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2006, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2007, Dawid Weiss, Stanisław Osiński.
  * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
  * All rights reserved.
  *
