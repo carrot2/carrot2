@@ -10,6 +10,10 @@ Version  [C] Information
 
 HEAD
 
+2.0.2     SVN:1541
+
+          o  License text update (annual).
+
 2.0.1     SVN:1532
 
           #  Fixed minor browser display problems (font size).
