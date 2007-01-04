@@ -103,7 +103,7 @@ public abstract class HtmlDisplay extends JPanel {
 
         buffer.append("<font color=green>");
         buffer.append(doc.getUrl());
-        String [] sources = (String []) doc.getProperty(RawDocument.PROPERTY_SOURCE);
+        String [] sources = (String []) doc.getProperty(RawDocument.PROPERTY_SOURCES);
         if (sources != null)
         {
             buffer.append("</font> <font color=gray>");

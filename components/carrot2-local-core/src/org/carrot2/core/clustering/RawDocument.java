@@ -83,7 +83,7 @@ public interface RawDocument {
      * Returns an array of idenfitiers of all sources that returned this
      * document.
      */
-    public static final String PROPERTY_SOURCE = "source";
+    public static final String PROPERTY_SOURCES = "source";
     
     /**
      * Returns a named property of the document.   Names of the available
