@@ -4,7 +4,10 @@
   <property file="${user.home}/.carrot.properties" />
   <property file="local-build.properties" />
 
-  <property name="release.number"   value="head" />
+  <!-- Check if we have the default base and release number -->
+  <fail unless="carrot2.cvs.dir" />
+  <property file="${carrot2.cvs.dir}/carrot2.version" />
+  <fail unless="release.number" />
 
   <property name="build.compiler"   value="modern" />
   <property name="javac.optimize"   value="off" />
