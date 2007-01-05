@@ -271,12 +271,17 @@ input.hl {
   margin-top: 7px;
 }
 
-.copyright {
+.copyright, .versionInfo {
   margin-right: 10px;
   margin-bottom: 3px;
   font-size: 11px;
   color: #B0B0B0;
   text-align: right;
+}
+
+.versionInfo {
+  color: #c0c0c0;
+  font-size: 10px;
 }
 
 .copyright a {

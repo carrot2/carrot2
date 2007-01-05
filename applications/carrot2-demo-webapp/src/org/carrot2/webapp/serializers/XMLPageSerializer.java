@@ -18,25 +18,27 @@ import java.util.*;
 
 import org.carrot2.util.URLEncoding;
 import org.carrot2.webapp.*;
-import org.carrot2.webapp.SearchSettings.SearchRequest;
 import org.dom4j.*;
 import org.dom4j.io.XMLWriter;
 
 
 /**
- * A serializer for main search page.
+ * A serializer for the main search page.
  * 
  * @author Dawid Weiss
  */
 public class XMLPageSerializer implements PageSerializer {
     private static final String QUERY_SERVLET_PATH = "/search";
+
     private final DocumentFactory factory = DocumentFactory.getInstance();
     private final String skinBase;
     private final String contextPath;
+    private final String releaseInfo;
 
-    public XMLPageSerializer(String contextPath, String stylesheetsBase) {
+    public XMLPageSerializer(String contextPath, String stylesheetsBase, String releaseInfo) {
         this.contextPath = contextPath;
         this.skinBase = stylesheetsBase;
+        this.releaseInfo = releaseInfo;
     }
 
     public String getContentType() {
@@ -61,10 +63,9 @@ public class XMLPageSerializer implements PageSerializer {
                 "xml-stylesheet", "type=\"text/xsl\" href=\"@" + 
                 skinBase + "/page.xsl\""));
 
-        doc.add(factory.createProcessingInstruction("skin-uri", 
-                contextPath + skinBase));
-        doc.add(factory.createProcessingInstruction("context-path", 
-                contextPath));
+        doc.add(factory.createProcessingInstruction("skin-uri", contextPath + skinBase));
+        doc.add(factory.createProcessingInstruction("context-path", contextPath));
+        doc.add(factory.createProcessingInstruction("release-info", releaseInfo));
 
         doc.add(root);
 

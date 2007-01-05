@@ -4,6 +4,12 @@
     <display-name>carrot2-demo-webapp</display-name>
     <description>Carrot2 Demo Web Application</description>
 
+    <context-param>
+    	<param-name>release.info</param-name>
+    	<param-value>@VERSION@</param-value>
+        <description>Release version number/ timestamp.</description>
+    </context-param>
+
     <!-- XSLT filtering -->
     <filter>
         <filter-name>xslt-filter</filter-name>

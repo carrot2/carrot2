@@ -443,7 +443,10 @@
   <xsl:template name="footer">
     <div id="startup-main-bottom-outer" />
     <div class="copyright">
-      © 2002-2006 <xsl:call-template name="copyright-holder" />
+      <xsl:call-template name="copyright-holder" />
+    </div>
+    <div class="versionInfo">
+      <xsl:call-template name="version-info" />
     </div>
   </xsl:template>
 </xsl:stylesheet>

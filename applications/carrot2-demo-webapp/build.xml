@@ -82,6 +82,11 @@
     </target>
   
     <target name="preprocess">
+        <property file="${carrot2.cvs.dir}/carrot2.version" />
+        <tstamp>
+          <format property="tmp:build.tstamp" pattern="dd/MM/yyyy HH:mm" />
+        </tstamp>
+
         <echo>
 ####
 Setting inputSize.default to: ${webapp.inputSize.default}
@@ -96,8 +101,9 @@ Setting skin to: ${webapp.skin}
             <filter token="XSLT_TEMPLATE_CACHING" value="${xsltFilter.template.caching}"/>
             <filter token="SERIALIZERS_FACTORY" value="${webapp.serializersFactory}"/>
             <filter token="SKIN" value="${webapp.skin}"/>
+            <filter token="VERSION" value="${release.number} (${tmp:build.tstamp})" />
         </filterset>
-    
+
         <copy overwrite="true" file="web/WEB-INF/web.xml.template" tofile="web/WEB-INF/web.xml" filtering="true">
             <filterset refid="filter.webxml"/>
         </copy>

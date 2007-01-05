@@ -16,7 +16,6 @@ package org.carrot2.webapp;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import org.carrot2.webapp.SearchSettings.SearchRequest;
 
 /**
  * Page meta-info serializer.

@@ -27,6 +27,7 @@ import org.carrot2.webapp.*;
 public class XMLSerializersFactory implements SerializersFactory {
 
     private String stylesheetsBase;
+    private String releaseInfo;
 
     public void configure(ServletConfig config) {
         final String webappRelative = config.getInitParameter("serializer.xml.stylesheets");
@@ -37,10 +38,16 @@ public class XMLSerializersFactory implements SerializersFactory {
             throw new RuntimeException("serializer.xml.stylesheets property must be webapp-relative (start with a '/').");
         }
         this.stylesheetsBase = webappRelative;
+
+        String releaseInfo = config.getServletContext().getInitParameter("release.info");
+        if (releaseInfo == null) {
+            releaseInfo = "";
+        }
+        this.releaseInfo = releaseInfo;
     }
 
     public PageSerializer createPageSerializer(HttpServletRequest request) {
-        return new XMLPageSerializer(request.getContextPath(), stylesheetsBase);
+        return new XMLPageSerializer(request.getContextPath(), stylesheetsBase, releaseInfo);
     }
 
     public RawDocumentsSerializer createRawDocumentSerializer(HttpServletRequest request) {
