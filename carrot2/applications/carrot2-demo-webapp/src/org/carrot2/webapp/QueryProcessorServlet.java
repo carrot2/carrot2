@@ -24,7 +24,6 @@ import javax.servlet.http.*;
 import net.sf.ehcache.*;
 
 import org.apache.log4j.Logger;
-import org.carrot2.webapp.SearchSettings.SearchRequest;
 import org.carrot2.webapp.serializers.XMLSerializersFactory;
 
 import org.carrot2.core.*;
@@ -42,10 +41,10 @@ import org.carrot2.core.controller.loaders.BeanShellFactoryDescriptionLoader;
 public final class QueryProcessorServlet extends HttpServlet {
     /** logger for activities and information */
     private Logger logger;
-    
+
     /** logger for queries */
-    private volatile Logger queryLogger;
-    
+    private Logger queryLogger;
+
     /**
      * Define this system property to enable statistical information from
      * the query processor. A GET request to {@link QueryProcessorServlet}
@@ -68,6 +67,9 @@ public final class QueryProcessorServlet extends HttpServlet {
     /** All available search settings */
     private SearchSettings searchSettings = new SearchSettings();
     
+    /**
+     * A map of {@link Broadcaster}s.
+     */
     private final HashMap bcasters = new HashMap();
 
     /**
