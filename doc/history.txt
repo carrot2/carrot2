@@ -9,6 +9,9 @@ Major functions and bug fixes
 Version  [C] Information
 
 HEAD
+          o  Version and build time information in the Web application demo.
+
+          o  Changed version number location to external file (carrot2.version).
 
 2.0.2     SVN:1541
 
