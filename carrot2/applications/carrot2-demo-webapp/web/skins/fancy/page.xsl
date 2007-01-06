@@ -442,11 +442,11 @@
 
   <xsl:template name="footer">
     <div id="startup-main-bottom-outer" />
-    <div class="copyright">
-      <xsl:call-template name="copyright-holder" />
-    </div>
     <div class="versionInfo">
       <xsl:call-template name="version-info" />
+    </div>
+    <div class="copyright">
+      <xsl:call-template name="copyright-holder" />
     </div>
   </xsl:template>
 </xsl:stylesheet>
