@@ -271,8 +271,8 @@ input.hl {
   margin-top: 7px;
 }
 
-.copyright, .versionInfo {
-  margin-right: 10px;
+.copyright {
+  margin-right: 12px;
   margin-bottom: 3px;
   font-size: 11px;
   color: #B0B0B0;
@@ -280,6 +280,8 @@ input.hl {
 }
 
 .versionInfo {
+  float: left;
+  margin-left: 12px;
   color: #c0c0c0;
   font-size: 10px;
 }
