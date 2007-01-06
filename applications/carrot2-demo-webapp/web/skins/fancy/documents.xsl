@@ -58,6 +58,7 @@
 
           <div class="u">
             <xsl:value-of select="url" />
+            <div class="o">[<xsl:value-of select="sources" />]</div>
           </div>
         </td>
       </tr>

@@ -449,4 +449,9 @@
       <xsl:call-template name="copyright-holder" />
     </div>
   </xsl:template>
+  
+  <!-- Emits current year -->
+  <xsl:template name="current-year">
+    <xsl:value-of select="/page/@year" />
+  </xsl:template>
 </xsl:stylesheet>

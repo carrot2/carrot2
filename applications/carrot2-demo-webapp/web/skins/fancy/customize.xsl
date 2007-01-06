@@ -44,7 +44,7 @@
   </xsl:template>
   
   <xsl:template name="copyright-holder">
-    © 2002-2007 <a href="http://www.man.poznan.pl/~stachoo/">Stanislaw Osinski</a>, <a href="http://www.cs.put.poznan.pl/dweiss/">Dawid Weiss</a>
+    © 2002-<xsl:call-template name="current-year" />&#160;<a href="http://www.man.poznan.pl/~stachoo/">Stanislaw Osinski</a>, <a href="http://www.cs.put.poznan.pl/dweiss/">Dawid Weiss</a>
   </xsl:template>
 
   <xsl:template name="version-info">

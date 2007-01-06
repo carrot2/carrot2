@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?skin-uri .?>
 <?context-path ./?>
-<page>
+<page year="2007">
   <meta>
     <action-urls>
       <new-search>search.html</new-search>
