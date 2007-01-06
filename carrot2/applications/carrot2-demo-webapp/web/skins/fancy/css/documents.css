@@ -45,6 +45,12 @@ td.c {
   overflow: hidden;
 }
 
+.o {
+  display: inline;
+  padding-left: 1em;
+  color: #c0c0c0;
+}
+
 div#no-documents {
   text-align: center;
   padding-top: 5ex;

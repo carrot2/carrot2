@@ -55,6 +55,8 @@ public class XMLPageSerializer implements PageSerializer {
         // Assume a plain request type.
         final Document doc = factory.createDocument();
         final Element root = factory.createElement("page");
+        root.addAttribute("year", Integer.toString(Calendar.getInstance().get(
+            Calendar.YEAR)));
 
         // We add '@' to inform xslt processor that the stylesheet
         // is webapp-relative (not fs-root relative); this way we can avoid

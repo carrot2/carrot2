@@ -15,6 +15,7 @@ package org.carrot2.webapp.serializers;
 
 import java.io.*;
 
+import org.carrot2.util.ArrayUtils;
 import org.carrot2.util.XMLSerializerHelper;
 import org.carrot2.webapp.Constants;
 import org.carrot2.webapp.RawDocumentsSerializer;
@@ -72,6 +73,7 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer {
         final String title = (null == doc.getTitle() ? "" : doc.getTitle());
         final String snippet = (null == doc.getSnippet() ? "" : doc.getSnippet());
         final String hurl = xml.toValidXmlText(url, false);
+        String [] sources = (String []) doc.getProperty(RawDocument.PROPERTY_SOURCES);
 
         writer.write(
                 "<table id=\"" + seqId.toString() + "\" class=\"d\">\r\n" + 
@@ -81,7 +83,7 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer {
                 "<a target=\"_top\" href=\"" + hurl + "\">" + xml.toValidXmlText(title, false)+ "</a>" + 
                 "</div>\r\n" + 
                 "<div class=\"s\">" + xml.toValidXmlText(snippet, false) + "</div>\r\n" + 
-                "<div class=\"u\">" + hurl + "</div>\r\n" + 
+                "<div class=\"u\">" + hurl + (sources != null ? "<div class=\"o\">[" + ArrayUtils.toString(sources) + "]</div>" : "") +"</div>\r\n" +
                 "\r\n" + 
                 "</td>\r\n" + 
                 "</tr>\r\n" + 
