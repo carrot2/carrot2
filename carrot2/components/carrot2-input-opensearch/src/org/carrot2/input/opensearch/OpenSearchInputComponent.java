@@ -13,19 +13,12 @@
 
 package org.carrot2.input.opensearch;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+
 import org.apache.log4j.Logger;
-import org.carrot2.core.LocalComponent;
-import org.carrot2.core.LocalInputComponent;
-import org.carrot2.core.LocalInputComponentBase;
-import org.carrot2.core.ProcessingException;
-import org.carrot2.core.RequestContext;
-import org.carrot2.core.clustering.RawDocumentBase;
+import org.carrot2.core.*;
 import org.carrot2.core.clustering.RawDocumentsConsumer;
 import org.carrot2.core.clustering.RawDocumentsProducer;
-import org.carrot2.util.StringUtils;
 
 /**
  * Local input component using OpenSearch API.
@@ -35,9 +28,9 @@ import org.carrot2.util.StringUtils;
 public class OpenSearchInputComponent extends LocalInputComponentBase implements RawDocumentsProducer {
 
     /**
-     * Max. number of results acquired from an open search source.
+     * Default value for {@link #maxResults} field.
      */
-    private final static int MAXIMUM_RESULTS = 1000;
+    private final static int DEFAULT_MAX_RESULTS = 1000;
 
     /** Capabilities required from the next component in the chain */
     private final static Set SUCCESSOR_CAPABILITIES = new HashSet(Arrays
@@ -56,6 +49,14 @@ public class OpenSearchInputComponent extends LocalInputComponentBase implements
     private String query;
 
     private OpenSearchService service = null;
+    
+    /**
+     * Maximum number of results allowed from the open 
+     * search input component.
+     * 
+     * @see #setMaxResults(int)
+     */
+    private int maxResults = DEFAULT_MAX_RESULTS;
 
     public OpenSearchInputComponent(String URLtemplate) {
         final OpenSearchService service = new OpenSearchService(URLtemplate);
@@ -75,7 +76,6 @@ public class OpenSearchInputComponent extends LocalInputComponentBase implements
         rawDocumentConsumer = (RawDocumentsConsumer) next;
     }
 
-    // Method from LocalInputComponent
     public void setQuery(String q) {
         this.query = q;
     }
@@ -85,26 +85,46 @@ public class OpenSearchInputComponent extends LocalInputComponentBase implements
     }
 
     public void startProcessing(RequestContext requestContext) throws ProcessingException {
+        super.startProcessing(requestContext);
+
         if (service == null) {
             throw new ProcessingException("OpenSearch service not set.");
         }
+
         try {
             requestContext.getRequestParameters().put(LocalInputComponent.PARAM_QUERY, this.query);
-            super.startProcessing(requestContext);
+
             if (this.query == null || "".equals(query)) {
                 // empty query. just return.
                 return;
             }
-            final int resultsRequested = super.getIntFromRequestContext(requestContext,
-                    LocalInputComponent.PARAM_REQUESTED_RESULTS, 100);
-            int results = Math.min(resultsRequested, MAXIMUM_RESULTS);
+
+            final int results = Math.min(
+                super.getIntFromRequestContext(requestContext, 
+                    LocalInputComponent.PARAM_REQUESTED_RESULTS, 
+                    this.maxResults), 
+                this.maxResults);
+
             log.info("OpenSearch query (" + results + "):" + query);
-            final OpenSearchResult[] docs = service.query(query, results, rawDocumentConsumer);
+            service.query(query, results, rawDocumentConsumer);
         } catch (Throwable e) {
             if (e instanceof ProcessingException) {
                 throw (ProcessingException) e;
             }
             throw new ProcessingException("Could not process query.", e);
         }
+    }
+    
+    /**
+     * Sets the maximum number of results allowed for a single query. Note that
+     * each engine will have its own limits.
+     * 
+     * @param maxResults Max number of results (1...N).
+     */
+    public void setMaxResults(int maxResults) {
+        if (maxResults <= 0) {
+            throw new IllegalArgumentException("Max results must be greater than 0: " + maxResults);
+        }
+        this.maxResults = maxResults;
     }
 }
