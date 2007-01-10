@@ -31,6 +31,44 @@ public class OpenSearchInputComponentTest extends junit.framework.TestCase {
     public OpenSearchInputComponentTest(String s) {
         super(s);
     }
+    
+    /**
+     * Sends a simple query to Indeed OpenSearch feed.
+     */
+    public void testIndeed() throws Exception {
+        final LocalComponentFactory inputFactory = new LocalComponentFactory() {
+            public LocalComponent getInstance() {
+                final OpenSearchInputComponent input = new OpenSearchInputComponent(
+                    "http://www.indeed.com/opensearch?q={searchTerms}&start={startIndex}&limit={count}");
+                input.setMaxResults(50);
+                return input;
+            }
+        };
+
+        final LocalControllerBase controller = setUpController(inputFactory);
+        final String query = "programmer";
+        
+        final HashMap params = new HashMap();
+        params.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, new Integer(100));
+        final List results = ((ArrayOutputComponent.Result) controller.query(
+                "testprocess", query, params).getQueryResult()).documents;
+        final long end = System.currentTimeMillis();
+
+        // the results should contain exactly 50 documents.
+        assertEquals("Results acquired == 50?: " + results.size(), 50, results.size());
+
+        // Check for uniqueness of the ids.
+        Set idSet = new HashSet();
+        for (Iterator it = results.iterator(); it.hasNext();)
+        {
+            RawDocument document = (RawDocument) it.next();
+            assertFalse("Unique document id", idSet.contains(document.getId()));
+            idSet.add(document.getId());
+        }
+
+        // Exactly 50 unique URLs?
+        assertEquals(50, idSet.size());
+    }
 
     /**
      * Sends a sample query to icerocket's OpenSearch feed.
