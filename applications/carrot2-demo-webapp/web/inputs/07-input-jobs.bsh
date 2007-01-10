@@ -7,7 +7,10 @@ import org.carrot2.input.opensearch.*;
 
 factory = new LocalComponentFactory() {
     public LocalComponent getInstance() {
-        return new OpenSearchInputComponent("http://www.indeed.com/opensearch?q={searchTerms}&start={startPage}&limit={count}");
+	    final OpenSearchInputComponent input = new OpenSearchInputComponent(
+	    	"http://www.indeed.com/opensearch?q={searchTerms}&start={startIndex}&limit={count}");
+	    input.setMaxResults(50);
+        return input;
     }
 };
 
