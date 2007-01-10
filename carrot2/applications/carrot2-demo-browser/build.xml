@@ -20,7 +20,7 @@
 
 
 
-    <target name="webstart" depends="clean,build.full">
+    <target name="webstart" depends="clean,build.full" description="Build a WebStart version.">
     	<property name="distribution.webstart" location="${project.dir}/tmp/webstart" />
 		<property name="keystore.alias" value="carrot2.org" />
 		<property name="keystore.password" value="carrot2" />
@@ -91,7 +91,7 @@
 
 
 
-    <target name="dist" depends="clean,build.full">
+    <target name="dist" depends="clean,build.full" description="Build a distribution version.">
         <filterchain id="cutout.tmp-dist">
             <tokenfilter>
                 <replacestring from="tmp\dist\" to="" />
