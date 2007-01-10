@@ -230,7 +230,7 @@ public class LsiClusteringStrategy implements ClusteringStrategy {
                 // All terms later on are phrases.
                 break;
             } else {
-	            if (features[nonStopTermCount].isStopWord()) {
+	            if (features[i].isStopWord()) {
 	                stopTermCount++;                
 	            } else {
 	                nonStopTermCount++;
