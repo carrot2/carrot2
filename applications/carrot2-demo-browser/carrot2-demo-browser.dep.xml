@@ -28,7 +28,7 @@
             <fileset dir="src" />
         </check-newer>
 
-		<meta type="proguard"><![CDATA[
+	<meta type="proguard"><![CDATA[
 # (demo browser) 
 -keep class org.carrot2.demo.Demo* {
     public static void main(java.lang.String[]);
@@ -43,10 +43,11 @@
 }
 
 -keepnames class org.carrot2.demo.swing.*
-		]]></meta>        
+	]]></meta>        
     </provides>
 
     <!-- Required components -->
+    <dependency name="carrot2-launcher" />
 
     <dependency name="looks" />
     <dependency name="forms" />
@@ -61,7 +62,7 @@
     
     <dependency name="proguard-base" />
 
-	<!-- Stripped profile contains component references for compilation time only -->
+    <!-- Stripped profile contains component references for compilation time only -->
 
     <dependency name="carrot2-filter-lingo" profile="stripped" nocopy="true" />
     <dependency name="carrot2-filter-trc" profile="stripped" nocopy="true" />
@@ -72,9 +73,9 @@
     <dependency name="carrot2-input-msnapi"  profile="stripped" nocopy="true" />
     <dependency name="carrot2-input-lucene" profile="stripped" nocopy="true" />
     <dependency name="carrot2-util-tokenizer" profile="stripped" nocopy="true" />
-	<dependency name="carrot2-filter-case-normalizer"  profile="stripped" nocopy="true" />
+    <dependency name="carrot2-filter-case-normalizer"  profile="stripped" nocopy="true" />
 
-	<!-- Full profile contains all demo components -->
+    <!-- Full profile contains all demo components -->
 
     <dependency name="carrot2-filter-lingo" profile="full" />
     <dependency name="carrot2-filter-trc" profile="full" />
@@ -85,6 +86,6 @@
     <dependency name="carrot2-input-yahooapi"  profile="full" />
     <dependency name="carrot2-input-msnapi"  profile="full" />
     <dependency name="carrot2-util-tokenizer" profile="full" />
-	<dependency name="carrot2-filter-case-normalizer"  profile="full" />
+    <dependency name="carrot2-filter-case-normalizer"  profile="full" />
 </component>
 
