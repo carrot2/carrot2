@@ -507,16 +507,19 @@ public class LsiClusteringStrategy implements ClusteringStrategy {
                 continue;
             }
 
-            for (int c = 0; c < clusterClusterCos.getColumnDimension(); c++) {
-                if ((c != r) &&
-                        (Math.abs(clusterClusterCos.get(r, c)) > duplicateClustersThreshold) &&
-                        (candidateClusterScores[r] > candidateClusterScores[c])) {
-                    discard[c] = true;
+            for (int c = r + 1; c < clusterClusterCos.getColumnDimension(); c++) {
+                if ( (Math.abs(clusterClusterCos.get(r, c)) > duplicateClustersThreshold)) {
+                    if (candidateClusterScores[r] > candidateClusterScores[c]) {
+                        discard[c] = true;
+                    }
+                    else {
+                        discard[r] = true;
+                    }
                 }
             }
         }
 
-        // Find candidate cluster scores 
+        // Find candidate cluster scores
         clusterCount = 0;
 
         for (int cc = 0; cc < candidateClusterScores.length; cc++) {
