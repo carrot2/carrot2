@@ -389,17 +389,13 @@ public class LsiClusteringStrategy implements ClusteringStrategy {
             // For each candidate cluster choose the best phrase and
             // calculate the score of the phrase
             for (int c = 0; c < candidateClusterCount; c++) {
-                phraseScores[c] = Math.abs(cos.get(0, c));
-                phraseIndices[c] = 0 + firstPhraseIndex;
+                phraseScores[c] = Math.abs(cos.get(0, c)) * calculatePhrasePenalty(features[firstPhraseIndex].getLength());
+                phraseIndices[c] = firstPhraseIndex;
 
                 for (int p = 1; p < cos.getRowDimension(); p++) {
                     // Penalize phrases longer than 5 words
-                    double penalty = 1;
-
-                    if (features[firstPhraseIndex + p].getLength() > 5) {
-                        penalty = 1 -
-                            ((features[firstPhraseIndex + p].getLength() - 5) * 0.25);
-                    }
+                    int phraseLength = features[firstPhraseIndex + p].getLength();
+                    double penalty = calculatePhrasePenalty(phraseLength);
 
                     if ((Math.abs(cos.get(p, c)) * penalty) > phraseScores[c]) {
                         phraseScores[c] = Math.abs(cos.get(p, c)) * penalty;
@@ -452,6 +448,18 @@ public class LsiClusteringStrategy implements ClusteringStrategy {
         }
     }
 
+    private double calculatePhrasePenalty(int phraseLength)
+    {
+        if (phraseLength > 5)
+        {
+            return 1 - ( (phraseLength - 5) * 0.25);
+        }
+        else
+        {
+            return 1;
+        }
+    }
+    
     /**
      * Removes duplicated and too similar cluster label candidates.
      */
