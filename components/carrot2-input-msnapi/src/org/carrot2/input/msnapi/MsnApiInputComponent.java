@@ -34,6 +34,7 @@ import com.microsoft.msnsearch.*;
  */
 public final class MsnApiInputComponent extends LocalInputComponentBase implements RawDocumentsProducer
 {
+    /** Carrot Search application ID. */
     private final static String CARROTSEARCH_APPID = "DE531D8A42139F590B253CADFAD7A86172F93B96";
 
     /** Maximum number of results (starting offset + length) */
@@ -42,7 +43,8 @@ public final class MsnApiInputComponent extends LocalInputComponentBase implemen
     /** Maximum allowed results per query */
     public final static int MAXIMUM_RESULTS_PERQUERY = 50;
 
-    private static Logger log = Logger.getLogger(MsnApiInputComponent.class);
+    /** Private logger. */
+    private final static Logger log = Logger.getLogger(MsnApiInputComponent.class);
 
     /** Capabilities required from the next component in the chain */
     private final static Set SUCCESSOR_CAPABILITIES = toSet(RawDocumentsConsumer.class);
