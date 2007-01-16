@@ -22,11 +22,11 @@ import org.carrot2.core.clustering.RawDocument;
 public final class SearchResult
 {
     public final int at;
-    public final int totalEstimated;
+    public final long totalEstimated;
     public final Throwable error;
     public final RawDocument [] results;
 
-    public SearchResult(RawDocument [] results, int at, int totalEstimated)
+    public SearchResult(RawDocument [] results, int at, long totalEstimated)
     {
         this.results = results;
         this.totalEstimated = totalEstimated;

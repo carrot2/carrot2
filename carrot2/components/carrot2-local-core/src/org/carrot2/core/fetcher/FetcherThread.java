@@ -39,8 +39,8 @@ final class FetcherThread extends Thread
         try
         {
             final SearchResult result = this.fetcher.fetch(query, startAt);
-            collector.done(this.fetcherIndex, result);
             logger.debug("Fetcher retrieved: " + result);
+            collector.done(this.fetcherIndex, result);
         }
         catch (Throwable t)
         {

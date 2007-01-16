@@ -58,12 +58,20 @@ public abstract class ParallelFetcher
         logger.info("Initial fetch: " + query);
 
         final SingleFetcher initialFetcher = getFetcher();
-        final SearchResult initialResult = initialFetcher.fetch(query, start);
+        final SearchResult initialResult;
+        try {
+            initialResult = initialFetcher.fetch(query, start);
+            logger.debug("Fetcher retrieved: " + initialResult);
+        } catch (ProcessingException e) {
+            throw e;
+        } catch (Throwable t) {
+            throw new ProcessingException(t);
+        }
 
         // Modify count of needed results based on availability
         // and start parallel fetchers.
         logger.info("Initial result retrieved: " + initialResult);
-        count = Math.min(initialResult.totalEstimated, count);
+        count = Math.min((int) Math.min(Integer.MAX_VALUE, initialResult.totalEstimated), count);
         count = pushResults0(count, 0, initialResult);
 
         if (count <= 0)
