@@ -110,6 +110,31 @@ public class TestParallelFetcher extends TestCase
             // expected.
         }
     }
+    
+    /**
+     * Test full parallel mode.
+     */
+    public void testSimpleFetchInFullParallelMode() throws ProcessingException
+    {
+        // Prepare fetcher.
+        final int maxResults = 100;
+        final int requestedResults = 97;
+        final int startAt = 0;
+        final int perQueryResults = 10;
+        final int totalEstimated = 1000;
+
+        final ArrayList expectedResults = new ArrayList();
+        final ArrayList fetchedResults = new ArrayList();
+        final ParallelFetcher pfetcher = createParallelFetcher(expectedResults, fetchedResults, startAt,
+            requestedResults, maxResults, perQueryResults, totalEstimated);
+
+        pfetcher.setFullParallelMode(perQueryResults);
+        
+        // Run fetchers and push results.
+        pfetcher.fetch();
+
+        ArrayAssert.assertEquivalenceArrays(expectedResults.toArray(), fetchedResults.toArray());
+    }
 
     /**
      * Creates test data and fetcher.
