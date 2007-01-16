@@ -9,6 +9,8 @@ Major functions and bug fixes
 Version  [C] Information
 
 HEAD
+          o  Implemented parallel search results fetcher and added it to the core.
+
           o  Added a launcher application to avoid overriding java.ext.dirs.
           
           #  OpenSearch input component bug fixes.

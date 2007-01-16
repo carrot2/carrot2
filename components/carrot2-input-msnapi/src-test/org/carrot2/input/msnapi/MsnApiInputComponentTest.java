@@ -44,6 +44,22 @@ public class MsnApiInputComponentTest extends junit.framework.TestCase {
         this.controller = setUpController(inputFactory);
     }
 
+    public void testLargeQuery() throws Exception {
+        String query = "data mining";
+        final long start = System.currentTimeMillis();
+
+        final HashMap reqContext = new HashMap();
+        reqContext.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, new Integer(300));
+        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, reqContext).getQueryResult()).documents;
+        
+        final long end = System.currentTimeMillis();
+        log.info("MSN query time: " + (end - start) + " ms.");
+
+        // the results should contain some documents.
+        assertTrue("Results: "
+                + results.size(), results.size() == 300);
+    }
+
     public void testDawidWeissQuery() throws Exception {
         String query = "Dawid Weiss";
 

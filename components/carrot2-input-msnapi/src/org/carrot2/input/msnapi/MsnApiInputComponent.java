@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -13,6 +12,8 @@
 
 package org.carrot2.input.msnapi;
 
+import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Set;
 
 import javax.xml.rpc.ServiceException;
@@ -20,6 +21,7 @@ import javax.xml.rpc.ServiceException;
 import org.apache.log4j.Logger;
 import org.carrot2.core.*;
 import org.carrot2.core.clustering.*;
+import org.carrot2.core.fetcher.*;
 import org.carrot2.util.StringUtils;
 
 import com.microsoft.msnsearch.*;
@@ -30,20 +32,17 @@ import com.microsoft.msnsearch.*;
  * @see <a href="http://msdn.microsoft.com/live/msnsearch/default.aspx">Microsoft Developers site</a>
  * @author Dawid Weiss
  */
-public final class MsnApiInputComponent extends LocalInputComponentBase 
-	implements RawDocumentsProducer {
+public final class MsnApiInputComponent extends LocalInputComponentBase implements RawDocumentsProducer
+{
     private final static String CARROTSEARCH_APPID = "DE531D8A42139F590B253CADFAD7A86172F93B96";
 
     /** Maximum number of results (starting offset + length) */
-	public final static int MAXIMUM_RESULTS = 250;
+    public final static int MAXIMUM_RESULTS = 300;
 
     /** Maximum allowed results per query */
     public final static int MAXIMUM_RESULTS_PERQUERY = 50;
 
-    /** Maximum allowed number of requests to the MSN API */
-    private final static int MAX_REQUESTS = 8;
-    
-	private static Logger log = Logger.getLogger(MsnApiInputComponent.class);
+    private static Logger log = Logger.getLogger(MsnApiInputComponent.class);
 
     /** Capabilities required from the next component in the chain */
     private final static Set SUCCESSOR_CAPABILITIES = toSet(RawDocumentsConsumer.class);
@@ -68,152 +67,185 @@ public final class MsnApiInputComponent extends LocalInputComponentBase
     private final String appid;
 
     /**
-     * Create an input component with the default service descriptor and
-     * a custom application identifier.
+     * Create an input component with the default service descriptor and a custom application identifier.
      */
-    public MsnApiInputComponent(String appid) {
+    public MsnApiInputComponent(String appid)
+    {
         this.appid = appid;
 
-        try {
+        try
+        {
             this.service = new MSNSearchServiceLocator().getMSNSearchPort();
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e)
+        {
             throw new RuntimeException("Could not initialize MSN service.", e);
         }
     }
 
     /**
-     * Creates an input component with the default service descriptor
-     * and Carrot Search's application identifier.
+     * Creates an input component with the default service descriptor and Carrot Search's application identifier.
      */
-    public MsnApiInputComponent() {
+    public MsnApiInputComponent()
+    {
         this(CARROTSEARCH_APPID);
     }
 
-	public void setQuery(String query) {
-		this.query = query;
-	}
+    public void setQuery(String query)
+    {
+        this.query = query;
+    }
 
-    public Set getComponentCapabilities() {
+    public Set getComponentCapabilities()
+    {
         return COMPONENT_CAPABILITIES;
     }
 
-    public Set getRequiredSuccessorCapabilities() {
+    public Set getRequiredSuccessorCapabilities()
+    {
         return SUCCESSOR_CAPABILITIES;
     }
-    
-    public void setNext(LocalComponent next) {
+
+    public void setNext(LocalComponent next)
+    {
         super.setNext(next);
         rawDocumentConsumer = (RawDocumentsConsumer) next;
     }
-    
-    public void startProcessing(RequestContext requestContext) 
-    	throws ProcessingException {
 
-    	try {
-	    	requestContext.getRequestParameters().put(LocalInputComponent.PARAM_QUERY, this.query);
-	    	super.startProcessing(requestContext);
+    public void startProcessing(RequestContext requestContext) throws ProcessingException
+    {
+        requestContext.getRequestParameters().put(LocalInputComponent.PARAM_QUERY, this.query);
+        super.startProcessing(requestContext);
+        
+        if (this.query == null || "".equals(query))
+        {
+            // empty query. just return.
+            return;
+        }
 
-	    	if (this.query == null || "".equals(query)) {
-	    		// empty query. just return.
-	    		return;
-	    	}
+        // Number of requested results.
+        final int resultsRequested = super.getIntFromRequestContext(requestContext,
+            LocalInputComponent.PARAM_REQUESTED_RESULTS, 100);
 
-		    final int resultsRequested = super.getIntFromRequestContext(requestContext, LocalInputComponent.PARAM_REQUESTED_RESULTS, 100);
-		    int results = Math.min(resultsRequested, MAXIMUM_RESULTS);
+        final int startAt = super.getIntFromRequestContext(requestContext, LocalInputComponent.PARAM_START_AT, 0);
 
-		    log.info("MSN API query (" + results + "):" + query);
-            
-            // perform initial query and alter total number of result if necessary.
-            final SearchRequest request = new SearchRequest(
-                    appid,            // application id 
-                    query,            // query
-                    "en-US",          // culture info
-                    SafeSearchOptions.Off,                 // safe search options
-                    new String [] {SearchFlagsNull._None}, // search flags
-                    null,                                  // location
-                    null                                   // requests
-                    );
-
-            final String [] fields = new String [] {
-                    ResultFieldMaskNull._Url,
-                    ResultFieldMaskNull._Title,
-                    ResultFieldMaskNull._Description,
-                    };
-
-            int id = 0;
-            int offset = 0;
-            int requests = MAX_REQUESTS; 
-            while (requests > 0 && results > 0) {
-                final int fetchSize = Math.min(results, MAXIMUM_RESULTS_PERQUERY);
-
-                final SourceRequest sourceRequest = new SourceRequest(
-                        SourceType.Web,
-                        offset, fetchSize,
-                        "", // fileType
-                        new String [] { SortByTypeNull._Default }, // sort by field?
-                        fields, // result fields
-                        new String [] { }); // search tag filters
-
-                request.setRequests(new SourceRequest [] {sourceRequest});
-                final SourceResponse [] responses = service.search(request).getResponses();
-                
-                if (responses.length != 1) {
-                    log.warn("More than one response for a search: " + responses.length);
-                }
-                
-                final SourceResponse response = responses[0];
-                
-                if (id == 0) {
-                    // adjust total approximation.
-                    results = Math.min(results, response.getTotal());
-                    
-                    log.debug("Received initial MSN response (total=" + response.getTotal() + ")");
-                }
-                
-                // feed documents.
-                final Result [] searchResults = response.getResults();
-                if (searchResults.length == 0)
+        // Prepare fetchers.
+        final ParallelFetcher pfetcher = new ParallelFetcher("MSN API", query, startAt, resultsRequested,
+            MAXIMUM_RESULTS)
+        {
+            /**
+             *
+             */
+            public SingleFetcher getFetcher()
+            {
+                return new SingleFetcher()
                 {
-                    log.warn("No more search results, stopping search.");
-                    break;
-                }
-                if (searchResults.length / (double)fetchSize < 0.5) {
-                    log.warn("Requested results: " + fetchSize
-                            + ", but received: " + searchResults.length);
-                }
-
-                for (int j = 0; j < searchResults.length; j++) {
-                    if (searchResults[j].getUrl() == null) {
-                        log.warn("Empty URL in search result.");
-                        continue;
-                    }
-
-                    final String docId = Integer.toString(id);
-                    this.rawDocumentConsumer.addDocument(new RawDocumentBase(
-                            searchResults[j].getUrl(),
-                            StringUtils.removeMarkup(searchResults[j].getTitle()),
-                            StringUtils.removeMarkup(searchResults[j].getDescription()))
+                    public SearchResult fetch(String query, int startAt) throws ProcessingException
                     {
-                        public Object getId() {
-                            return docId;
-                        }
-                    });
-                    
-                    id++;
-                }
-                results -= searchResults.length;
-                offset += searchResults.length;
-                requests--;
+                        return doSearch(query, startAt);
+                    }
+                };
             }
-	    } catch (Throwable e) {
-	    	if (e instanceof ProcessingException) {
-	    		throw (ProcessingException) e;
-	    	}
-	        throw new ProcessingException("Could not process query.", e);
-	    }
+
+            /**
+             *
+             */
+            public void pushResults(int at, final RawDocument rawDocument) throws ProcessingException
+            {
+                rawDocumentConsumer.addDocument(rawDocument);
+            }
+        };
+
+        // Run fetchers and push results.
+        pfetcher.fetch();
     }
 
-    public String getName() {
+    public String getName()
+    {
         return "MSN API Input";
+    }
+
+    /**
+     * 
+     */
+    final SearchResult doSearch(String query, int startAt) throws ProcessingException
+    {
+        final SearchRequest request = new SearchRequest(appid, // application id
+            query, // query
+            "en-US", // culture info
+            SafeSearchOptions.Off, // safe search options
+            new String []
+            {
+                SearchFlagsNull._None
+            }, // search flags
+            null, // location
+            null // requests
+        );
+
+        final String [] searchFields = new String []
+        {
+            ResultFieldMaskNull._Url, ResultFieldMaskNull._Title, ResultFieldMaskNull._Description,
+        };
+
+        final int fetchSize = MAXIMUM_RESULTS_PERQUERY;
+        final SourceRequest sourceRequest = new SourceRequest(SourceType.Web, startAt, fetchSize, "",
+            new String []
+            {
+                SortByTypeNull._Default
+            }, // sort by field?
+            searchFields, // result fields
+            new String [] {}); // search tag filters
+
+        request.setRequests(new SourceRequest [] { sourceRequest });
+
+        final SourceResponse [] responses;
+        try
+        {
+            responses = service.search(request).getResponses();
+        }
+        catch (RemoteException e)
+        {
+            throw new ProcessingException("MSN API query failed.", e);
+        }
+
+        if (responses.length != 1)
+        {
+            log.warn("More than one response for a search: " + responses.length);
+        }
+
+        final SourceResponse response = responses[0];
+
+        // feed documents.
+        final Result [] searchResults = response.getResults();
+        if (searchResults.length / (double) fetchSize < 0.5)
+        {
+            log.warn("Requested results: " + fetchSize + ", but received: " + searchResults.length);
+        }
+
+        final ArrayList docs = new ArrayList();
+        int id = startAt;
+        for (int j = 0; j < searchResults.length; j++)
+        {
+            if (searchResults[j].getUrl() == null)
+            {
+                log.warn("Empty URL in a search result.");
+                continue;
+            }
+
+            final String docId = Integer.toString(id);
+            final RawDocument rd = new RawDocumentBase(searchResults[j].getUrl(), StringUtils.removeMarkup(searchResults[j].getTitle()),
+                StringUtils.removeMarkup(searchResults[j].getDescription()))
+            {
+                public Object getId()
+                {
+                    return docId;
+                }
+            };
+            docs.add(rd);
+            id++;
+        }
+
+        return new SearchResult((RawDocument []) docs.toArray(new RawDocument [docs.size()]), startAt, 
+            response.getTotal());
     }
 }
