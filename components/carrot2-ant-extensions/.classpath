@@ -1,19 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="src" path="src-test"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-apache-bsf.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-apache-resolver.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-commons-logging.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-commons-net.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-junit.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-launcher.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-nodeps.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-xalan1.jar"/>
-	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/resolver.jar"/>
-	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/junit-3.8.1.jar"/>
-	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/junit-addons-1.4.jar"/>
-	<classpathentry kind="output" path="tmp/eclipse/classes"/>
+	<classpathentry path="src" kind="src"/>
+	<classpathentry path="org.eclipse.jdt.launching.JRE_CONTAINER" kind="con"/>
+	<classpathentry path="src-test" kind="src"/>
+	<classpathentry path="ANT_HOME/lib/ant.jar" kind="var"/>
+	<classpathentry path="CARROT2_CHECKOUT_BASE/lib/compile-time/resolver.jar" kind="var"/>
+	<classpathentry path="CARROT2_CHECKOUT_BASE/lib/compile-time/junit-3.8.1.jar" kind="var"/>
+	<classpathentry path="CARROT2_CHECKOUT_BASE/lib/compile-time/junit-addons-1.4.jar" kind="var"/>
+	<classpathentry path="tmp/eclipse/classes" kind="output"/>
 </classpath>
