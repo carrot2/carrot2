@@ -93,32 +93,47 @@ public final class MsnApiInputComponent extends LocalInputComponentBase implemen
         this(CARROTSEARCH_APPID);
     }
 
+    /**
+     * 
+     */
     public void setQuery(String query)
     {
         this.query = query;
     }
 
+    /**
+     * 
+     */
     public Set getComponentCapabilities()
     {
         return COMPONENT_CAPABILITIES;
     }
 
+    /**
+     * 
+     */
     public Set getRequiredSuccessorCapabilities()
     {
         return SUCCESSOR_CAPABILITIES;
     }
 
+    /**
+     * 
+     */
     public void setNext(LocalComponent next)
     {
         super.setNext(next);
         rawDocumentConsumer = (RawDocumentsConsumer) next;
     }
 
+    /**
+     * 
+     */
     public void startProcessing(RequestContext requestContext) throws ProcessingException
     {
         requestContext.getRequestParameters().put(LocalInputComponent.PARAM_QUERY, this.query);
         super.startProcessing(requestContext);
-        
+
         if (this.query == null || "".equals(query))
         {
             // empty query. just return.
@@ -158,6 +173,9 @@ public final class MsnApiInputComponent extends LocalInputComponentBase implemen
             }
         };
 
+        // Enable full parallel mode.
+        pfetcher.setFullParallelMode(MAXIMUM_RESULTS_PERQUERY);
+
         // Run fetchers and push results.
         pfetcher.fetch();
     }
@@ -190,15 +208,17 @@ public final class MsnApiInputComponent extends LocalInputComponentBase implemen
         };
 
         final int fetchSize = MAXIMUM_RESULTS_PERQUERY;
-        final SourceRequest sourceRequest = new SourceRequest(SourceType.Web, startAt, fetchSize, "",
-            new String []
-            {
-                SortByTypeNull._Default
-            }, // sort by field?
+        final SourceRequest sourceRequest = new SourceRequest(SourceType.Web, startAt, fetchSize, "", new String []
+        {
+            SortByTypeNull._Default
+        }, // sort by field?
             searchFields, // result fields
             new String [] {}); // search tag filters
 
-        request.setRequests(new SourceRequest [] { sourceRequest });
+        request.setRequests(new SourceRequest []
+        {
+            sourceRequest
+        });
 
         final SourceResponse [] responses;
         try
@@ -235,8 +255,8 @@ public final class MsnApiInputComponent extends LocalInputComponentBase implemen
             }
 
             final String docId = Integer.toString(id);
-            final RawDocument rd = new RawDocumentBase(searchResults[j].getUrl(), StringUtils.removeMarkup(searchResults[j].getTitle()),
-                StringUtils.removeMarkup(searchResults[j].getDescription()))
+            final RawDocument rd = new RawDocumentBase(searchResults[j].getUrl(), StringUtils
+                .removeMarkup(searchResults[j].getTitle()), StringUtils.removeMarkup(searchResults[j].getDescription()))
             {
                 public Object getId()
                 {
@@ -247,7 +267,7 @@ public final class MsnApiInputComponent extends LocalInputComponentBase implemen
             id++;
         }
 
-        return new SearchResult((RawDocument []) docs.toArray(new RawDocument [docs.size()]), startAt, 
-            response.getTotal());
+        return new SearchResult((RawDocument []) docs.toArray(new RawDocument [docs.size()]), startAt, response
+            .getTotal());
     }
 }
