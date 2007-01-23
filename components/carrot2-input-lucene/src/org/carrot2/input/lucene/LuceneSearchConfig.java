@@ -23,6 +23,8 @@ import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
  * searched fields, analyzer etc.
  * 
  * @author Dawid Weiss
+ * @author Sairaj Sunil 
+ * @author Stanislaw Osinski
  */
 public final class LuceneSearchConfig
 {
