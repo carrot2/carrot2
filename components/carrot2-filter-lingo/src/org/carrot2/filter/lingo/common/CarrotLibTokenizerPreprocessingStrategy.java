@@ -121,6 +121,7 @@ public final class CarrotLibTokenizerPreprocessingStrategy
                 preprocessedSnippets[i].setLanguage(mostCommonLanguage);
             }
 
+            if ( ((MultilingualClusteringContext)clusteringContext).DISABLE_STEMMING ) continue;
             preprocessedSnippets[i] = stemming(preprocessedSnippets[i]);
         }
 

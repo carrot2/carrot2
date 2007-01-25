@@ -81,6 +81,6 @@ public class LsiConstants
     /**
      * If true, disables stemming, otherwise not
      */
-    public final boolean DEFAULT_DISABLE_STEMMING = false; 
+    public static final boolean DEFAULT_DISABLE_STEMMING = false; 
 
 }
