@@ -18,6 +18,7 @@ import org.carrot2.core.linguistic.Stemmer;
 
 import org.carrot2.filter.lingo.local.LingoLocalFilterComponent;
 import org.carrot2.filter.lingo.lsicluster.LsiClusteringStrategy;
+import org.carrot2.filter.lingo.lsicluster.LsiConstants;
 import org.carrot2.filter.lingo.util.log.TimeLogger;
 
 import org.apache.log4j.Logger;
@@ -57,6 +58,9 @@ public class MultilingualClusteringContext extends AbstractClusteringContext {
      * unidentified language
      */
     public static final String UNIDENTIFIED_LANGUAGE_NAME = "unidentified";
+
+    /** If true, disables stemming */
+    boolean DISABLE_STEMMING = LsiConstants.DEFAULT_DISABLE_STEMMING;
 
     public MultilingualClusteringContext(Map params) {
         if (params != null) {
@@ -109,7 +113,22 @@ public class MultilingualClusteringContext extends AbstractClusteringContext {
             featureExtractionStrategy = new MultilingualFeatureExtractionStrategy();
         }
 
+        if ((value = this.getParameter(LsiConstants.DISABLE_STEMMING)) != null) {
+            DISABLE_STEMMING = value.toString().equalsIgnoreCase( "true" );
+        }
+
         clusteringStrategy = new LsiClusteringStrategy();
+    }
+
+    /**
+     *  Sets parameters and checks for DISABLE_STEMMING
+     */
+    public void setParameters(Map params ) {
+        super.setParameters( params );
+        Object value = null;
+        if ((value = this.getParameter(LsiConstants.DISABLE_STEMMING)) != null) {
+            DISABLE_STEMMING = value.toString().equalsIgnoreCase( "true" );
+        }
     }
 
     /**
