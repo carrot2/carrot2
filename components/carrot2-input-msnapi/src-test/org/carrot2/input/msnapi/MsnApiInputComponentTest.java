@@ -122,7 +122,7 @@ public class MsnApiInputComponentTest extends junit.framework.TestCase
         log.info("MSN query time: " + (end - start) + " ms.");
 
         // the results should contain some documents.
-        assertEquals("Results: " + results.size(), 150, results.size());
+        assertTrue("Results: " + results.size(), results.size() > 140 && results.size() <= 150);
     }
 
     public void testStartFromBug() throws Exception
