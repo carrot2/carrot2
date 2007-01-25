@@ -73,4 +73,14 @@ public class LsiConstants
      */
     public final static int DEFAULT_PREFERRED_CLUSTER_COUNT = -1;
 
+    /**
+     *  Stemming can be disabled with this parameter.
+     */
+    public final static String DISABLE_STEMMING = "lsi.disable.stemming";
+
+    /**
+     * If true, disables stemming, otherwise not
+     */
+    public final boolean DEFAULT_DISABLE_STEMMING = false; 
+
 }
