@@ -5,12 +5,3 @@ A roadmap to release 2.1
 For the most up-to-date roadmap, please see JIRA: 
 
 http://issues.carrot2.org/browse/CARROT?report=com.atlassian.jira.plugin.system.project:roadmap-panel
-
-
-
-- Unify coding style (reformat existing code)
-
-- Check out Unicode segmentation spec (info from Andrzej Zydro):
-http://www.unicode.org/reports/tr29/tr29-10.html
-
-- refactor Language use (tokenization, stemming) in Lingo.
