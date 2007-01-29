@@ -191,7 +191,6 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
         startTimer();
 
         // Prepare data
-        final MultilingualClusteringContext clusteringContext = new MultilingualClusteringContext(new HashMap());
 
         final Language [] languages = this.languages;
         
@@ -199,9 +198,12 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
         // eh.. quick and dirty as always.
         Map current = new HashMap();
         if (this.defaults != null)
+        {
         	current.putAll(this.defaults);
+        }
+        
         current.putAll(requestParams);
-        clusteringContext.setParameters(current);
+        final MultilingualClusteringContext clusteringContext = new MultilingualClusteringContext( current );
         clusteringContext.setLanguages(languages);
 
         if (documents.size() == 0) {
