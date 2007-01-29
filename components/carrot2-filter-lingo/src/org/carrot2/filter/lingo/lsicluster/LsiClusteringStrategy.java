@@ -16,7 +16,9 @@ package org.carrot2.filter.lingo.lsicluster;
 import Jama.Matrix;
 import Jama.SingularValueDecomposition;
 
+import org.carrot2.core.clustering.RawDocument;
 import org.carrot2.filter.lingo.common.*;
+import org.carrot2.filter.lingo.local.SnippetInterfaceAdapter;
 import org.carrot2.filter.lingo.util.arrays.ArrayUtils;
 import org.carrot2.filter.lingo.util.log.TimeLogger;
 import org.carrot2.filter.lingo.util.matrix.MatrixUtils;
@@ -46,6 +48,9 @@ public class LsiClusteringStrategy implements ClusteringStrategy {
 
     /** @see LsiConstants#DEFAULT_CANDIDATE_CLUSTER_THRESHOLD */
     protected double candidateClusterThreshold = LsiConstants.DEFAULT_CANDIDATE_CLUSTER_THRESHOLD;
+
+    /** @see LsiConstants#DEFAULT_WEIGHT_DOCUMENT_SCORE */
+    protected boolean WEIGHT_DOCUMENT_SCORE = LsiConstants.DEFAULT_WEIGHT_DOCUMENT_SCORE;
 
     /**
      * Logger
@@ -181,6 +186,11 @@ public class LsiClusteringStrategy implements ClusteringStrategy {
             } catch (NumberFormatException e) {
                 // ignore
             }
+        }
+
+        if ((value = clusteringContext.getParameter(
+            LsiConstants.WEIGHT_DOCUMENT_SCORE )) != null) {
+            WEIGHT_DOCUMENT_SCORE = value.toString().equalsIgnoreCase( "true" );
         }
 
         timeLogger.start();
@@ -606,8 +616,22 @@ public class LsiClusteringStrategy implements ClusteringStrategy {
         // Calculate scores
         double maxScore = 0;
 
+        ArrayList rawSnippets = clusteringContext.getSnippetsAsArrayList();
+
         for (int c = 0; c < clusterCount; c++) {
-            candidateClusters[c].setScore(candidateClusters[c].getScore() * candidateClusters[c].getSnippets().length);
+           if ( ! WEIGHT_DOCUMENT_SCORE ) {
+                candidateClusters[c].setScore(candidateClusters[c].getScore() * candidateClusters[c].getSnippets().length);
+            } else {
+                double score = candidateClusters[c].getScore();
+                Snippet[] a = candidateClusters[c].getSnippets();
+                double dscore = 0;
+                for( int i = 0; i < a.length; i++ ) {
+                    SnippetInterfaceAdapter rawSnippet = (SnippetInterfaceAdapter)rawSnippets.get( Integer.parseInt( a[i].getSnippetId() ) );
+                    RawDocument document = rawSnippet.getDocument();
+                    dscore += document.getScore();
+                }
+                candidateClusters[c].setScore( score * dscore );// a.length );
+            }
 
             if (maxScore < candidateClusters[c].getScore()) {
                 maxScore = candidateClusters[c].getScore();

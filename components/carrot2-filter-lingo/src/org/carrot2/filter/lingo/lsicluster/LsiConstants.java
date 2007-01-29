@@ -79,8 +79,22 @@ public class LsiConstants
     public final static String DISABLE_STEMMING = "lsi.disable.stemming";
 
     /**
+     * Default value of the {@link #DISABLE_STEMMING}.
+     *
      * If true, disables stemming, otherwise not
      */
-    public static final boolean DEFAULT_DISABLE_STEMMING = false; 
+    public final static boolean DEFAULT_DISABLE_STEMMING = false; 
 
+    /**
+     * Document relevance scores can be used to modify cluster scores.
+     */
+    public final static String WEIGHT_DOCUMENT_SCORE = "lsi.weight.document.score";
+
+    /**
+     * Default value of the {@link #WEIGHT_DOCUMENT_SCORE}.
+     *
+     * If true, uses document relevance scores to calculate the cluster scores,
+     * otherwise ignores them.
+     */
+    public final static boolean DEFAULT_WEIGHT_DOCUMENT_SCORE = false;
 }
