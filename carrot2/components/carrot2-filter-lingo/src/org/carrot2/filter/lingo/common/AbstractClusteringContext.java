@@ -93,10 +93,19 @@ public abstract class AbstractClusteringContext {
     /**
      * Returns the snippets.
      *
-     * @return ArrayList
+     * @return snippets as array 
      */
     public Snippet[] getSnippets() {
         return (Snippet[]) snippets.toArray(new Snippet[snippets.size()]);
+    }
+
+    /**
+     * Returns the snippets
+     * 
+     * @return snippets as ArrayList
+     */
+    public ArrayList getSnippetsAsArrayList() {
+        return snippets;
     }
 
     /**

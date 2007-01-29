@@ -101,4 +101,11 @@ public final class SnippetInterfaceAdapter extends Snippet implements RawDocumen
 		return (float) base.getDoubleProperty(PROPERTY_CLUSTER_MEMBER_SCORE, -1);
 	}
 
+    /**
+     *  Retrieves the document description
+     */
+    public RawDocument getDocument() {
+        return document;
+    }
+
 }
