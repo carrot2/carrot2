@@ -63,9 +63,7 @@ public class MultilingualClusteringContext extends AbstractClusteringContext {
     boolean DISABLE_STEMMING = LsiConstants.DEFAULT_DISABLE_STEMMING;
 
     public MultilingualClusteringContext(Map params) {
-        if (params != null) {
-            super.setParameters(params);
-        }
+        setParameters( params );
 
         stopWordSets = new HashMap();
         nonStopWordSets = new HashMap();
@@ -75,7 +73,16 @@ public class MultilingualClusteringContext extends AbstractClusteringContext {
 
         nonStopWordSets.put(MultilingualClusteringContext.UNIDENTIFIED_LANGUAGE_NAME, new HashSet());
 
-        Object value;
+        clusteringStrategy = new LsiClusteringStrategy();
+    }
+
+    /**
+     *  Sets parameters and checks for DISABLE_STEMMING
+     */
+    public void setParameters(Map params ) {
+        if ( params == null ) return;
+        super.setParameters( params );
+        Object value = null;
 
         if ((value = this.getParameter("preprocessing.class")) != null) {
             if (value instanceof List) {
@@ -83,10 +90,7 @@ public class MultilingualClusteringContext extends AbstractClusteringContext {
             }
 
             try {
-                preprocessingStrategy = (PreprocessingStrategy) Thread.currentThread()
-                                                                      .getContextClassLoader()
-                                                                      .loadClass((String) value)
-                                                                      .newInstance();
+                preprocessingStrategy = (PreprocessingStrategy) Thread.currentThread().getContextClassLoader().loadClass((String) value).newInstance();
             } catch (Exception e) {
                 logger.warn("Preprocessing strategy instantiation error", e);
                 throw new RuntimeException(
@@ -99,10 +103,7 @@ public class MultilingualClusteringContext extends AbstractClusteringContext {
 
         if ((value = this.getParameter("feature.extraction.strategy")) != null) {
             try {
-                featureExtractionStrategy = (FeatureExtractionStrategy) Thread.currentThread()
-                                                                              .getContextClassLoader()
-                                                                              .loadClass((String) value)
-                                                                              .newInstance();
+                featureExtractionStrategy = (FeatureExtractionStrategy) Thread.currentThread().getContextClassLoader().loadClass((String) value).newInstance();
             } catch (Exception e) {
                 logger.warn("Feature extraction strategy instantiation error", e);
                 throw new RuntimeException(
@@ -117,18 +118,6 @@ public class MultilingualClusteringContext extends AbstractClusteringContext {
             DISABLE_STEMMING = value.toString().equalsIgnoreCase( "true" );
         }
 
-        clusteringStrategy = new LsiClusteringStrategy();
-    }
-
-    /**
-     *  Sets parameters and checks for DISABLE_STEMMING
-     */
-    public void setParameters(Map params ) {
-        super.setParameters( params );
-        Object value = null;
-        if ((value = this.getParameter(LsiConstants.DISABLE_STEMMING)) != null) {
-            DISABLE_STEMMING = value.toString().equalsIgnoreCase( "true" );
-        }
     }
 
     /**
