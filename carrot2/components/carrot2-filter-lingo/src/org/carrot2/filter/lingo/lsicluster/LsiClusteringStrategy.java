@@ -52,6 +52,9 @@ public class LsiClusteringStrategy implements ClusteringStrategy {
     /** @see LsiConstants#DEFAULT_WEIGHT_DOCUMENT_SCORE */
     protected boolean WEIGHT_DOCUMENT_SCORE = LsiConstants.DEFAULT_WEIGHT_DOCUMENT_SCORE;
 
+    /** @see LsiConstants#DEFAULT_MAX_SIZE_TD_MATRIX*/
+    protected int MAX_SIZE_TD_MATRIX = LsiConstants.DEFAULT_MAX_SIZE_TD_MATRIX;
+
     /**
      * Logger
      */
@@ -193,6 +196,15 @@ public class LsiClusteringStrategy implements ClusteringStrategy {
             WEIGHT_DOCUMENT_SCORE = value.toString().equalsIgnoreCase( "true" );
         }
 
+        if ((value = clusteringContext.getParameter(
+            LsiConstants.MAX_SIZE_TD_MATRIX )) != null) {
+            try {
+                MAX_SIZE_TD_MATRIX = Integer.parseInt(unwrapString( value) );
+            } catch (NumberFormatException e) {
+                // ignore
+            }
+        }
+
         timeLogger.start();
         if (!prepareData())
         {
@@ -257,8 +269,8 @@ public class LsiClusteringStrategy implements ClusteringStrategy {
         }
         
         // Create TD matrix
-        TdMatrixBuildingStrategy tdMatrixBuildingStrategy = new TfidfTdMatrixBuildingStrategy(2,
-                250 * 150);
+        TdMatrixBuildingStrategy tdMatrixBuildingStrategy = new TfidfTdMatrixBuildingStrategy(2, MAX_SIZE_TD_MATRIX );
+                // 250 * 150);
 
         double[][] matrix = tdMatrixBuildingStrategy.buildTdMatrix(clusteringContext);
         if (matrix.length == 0 || matrix[0].length == 0) {

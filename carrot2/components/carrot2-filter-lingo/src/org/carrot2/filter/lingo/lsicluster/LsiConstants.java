@@ -97,4 +97,14 @@ public class LsiConstants
      * otherwise ignores them.
      */
     public final static boolean DEFAULT_WEIGHT_DOCUMENT_SCORE = false;
+
+    /**
+     *  Limits the size of the term document matrix.
+     */
+    public final static String MAX_SIZE_TD_MATRIX = "lsi.max.size.tdmatrix";
+
+    /**
+     *  Default value of the {@link #MAX_SIZE_TD_MATRIX}.
+     */
+    public final static int DEFAULT_MAX_SIZE_TD_MATRIX = 250 * 150;
 }
