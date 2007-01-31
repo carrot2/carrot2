@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -23,11 +22,13 @@ import org.apache.lucene.search.Searcher;
 import org.carrot2.core.LocalComponent;
 import org.carrot2.core.LocalComponentFactory;
 
+
 /**
  * @author Stanislaw Osinski
  * @version $Revision$
  */
-public class LuceneLocalInputComponentFactory implements LocalComponentFactory
+public class LuceneLocalInputComponentFactory
+    implements LocalComponentFactory
 {
     /** Default title field name */
     public static final String DEFAULT_TITLE_FIELD = "title";
@@ -42,29 +43,20 @@ public class LuceneLocalInputComponentFactory implements LocalComponentFactory
      * Default search fields: {@link #DEFAULT_TITLE_FIELD},
      * {@link #DEFAULT_SUMMARY_FIELD}
      */
-    public static final String [] DEFAULT_SEARCH_FIELDS = new String []
-    {
-        DEFAULT_TITLE_FIELD, DEFAULT_SUMMARY_FIELD
-    };
+    public static final String[] DEFAULT_SEARCH_FIELDS = new String[] {
+            DEFAULT_TITLE_FIELD, DEFAULT_SUMMARY_FIELD };
 
     /**
-     * Lucene searcher. Searchers are thread-safe, so we can have a shared
-     * instance for all component that we produce
+     * All information required to perform a search in Lucene. Searchers are
+     * thread-safe, so we can have a shared instance for all component that we
+     * produce.
      */
+    private final LuceneSearchConfig luceneFactoryConfig;
     private Searcher searcher;
-    private IndexReader indexReader;
     private String indexDirectory;
 
     /** Lucene analyzer factory. */
     private AnalyzerFactory analyzerFactory;
-
-    /** Field names */
-    private String titleField;
-    private String summaryField;
-    private String urlField;
-
-    /** Search fields */
-    private String [] searchFields;
 
     /**
      * Default Analyzer Factory returns {@link StandardAnalyzer}wrapped with
@@ -72,62 +64,72 @@ public class LuceneLocalInputComponentFactory implements LocalComponentFactory
      */
     public static final AnalyzerFactory DEFAULT_ANALYZER_FACTORY = PorterAnalyzerFactory.INSTANCE;
 
+
+    /**
+     * CCreates a Lucene input component factory that produces
+     * {@link LuceneLocalInputComponent} instances that read index at the
+     * specified location with default field names and the default analyzer.
+     * 
+     * @param indexDirectory
+     * @throws IOException
+     */
     public LuceneLocalInputComponentFactory(String indexDirectory)
         throws IOException
     {
-        this((IndexReader) null);
+        this((Searcher)null);
         this.indexDirectory = indexDirectory;
     }
 
-    public LuceneLocalInputComponentFactory(IndexReader indexReader)
-        throws IOException
-    {
-        this(indexReader, DEFAULT_ANALYZER_FACTORY);
-    }
 
     /**
-     * Creates a factory that will produce components using
-     * {@link IndexSearcher}to perform searches, given analyzer and default
-     * field names.
+     * Creates a Lucene input component factory that produces
+     * {@link LuceneLocalInputComponent} instances that use the specified
+     * {@link Searcher} and default field names and the default analyzer.
+     * 
+     * @param searcher
+     */
+    public LuceneLocalInputComponentFactory(Searcher searcher)
+    {
+        this(searcher, new LuceneSearchConfig(null, null,
+                DEFAULT_SEARCH_FIELDS, DEFAULT_TITLE_FIELD,
+                DEFAULT_SUMMARY_FIELD, DEFAULT_URL_FIELD),
+                DEFAULT_ANALYZER_FACTORY);
+    }
+
+
+    /**
+     * Creates a Lucene input component factory that produces
+     * {@link LuceneLocalInputComponent} instances that read index at the
+     * specified location and uses the specified search configuration (field
+     * names) and the specified analyzer.
      * 
      * @throws IOException
      */
     public LuceneLocalInputComponentFactory(String indexDirectory,
-        AnalyzerFactory analyzerFactory) throws IOException
+            LuceneSearchConfig luceneSearchConfig,
+            AnalyzerFactory analyzerFactory)
+        throws IOException
     {
-        this((IndexReader) null, analyzerFactory);
+        this((Searcher)null, luceneSearchConfig, analyzerFactory);
         this.indexDirectory = indexDirectory;
     }
 
-    /**
-     * Creates a factory that will produce components using
-     * {@link IndexSearcher}to perform searches, given analyzer and default
-     * field names.
-     */
-    public LuceneLocalInputComponentFactory(IndexReader indexReader,
-        AnalyzerFactory analyzerFactory)
-    {
-        this(null, analyzerFactory, DEFAULT_SEARCH_FIELDS, DEFAULT_TITLE_FIELD,
-            DEFAULT_SUMMARY_FIELD, DEFAULT_URL_FIELD);
-        this.indexReader = indexReader;
-    }
 
     /**
-     * Creates a factory that will produce components using
-     * {@link IndexSearcher}to perform searches, given analyzer and default
-     * field names.
+     * Creates a Lucene input component factory that produces
+     * {@link LuceneLocalInputComponent} instances using the specified searcher,
+     * the specified search configuration (field names) and the specified
+     * analyzer.
      */
     public LuceneLocalInputComponentFactory(Searcher searcher,
-        AnalyzerFactory analyzerFactory, String [] searchFields,
-        String titleField, String summaryField, String urlField)
+            LuceneSearchConfig luceneSearchConfig,
+            AnalyzerFactory analyzerFactory)
     {
         this.searcher = searcher;
+        this.luceneFactoryConfig = luceneSearchConfig;
         this.analyzerFactory = analyzerFactory;
-        this.titleField = titleField;
-        this.summaryField = summaryField;
-        this.urlField = urlField;
-        this.searchFields = searchFields;
     }
+
 
     /*
      * (non-Javadoc)
@@ -136,30 +138,30 @@ public class LuceneLocalInputComponentFactory implements LocalComponentFactory
      */
     public LocalComponent getInstance()
     {
-        initSearcher();
-        return new LuceneLocalInputComponent(searcher, analyzerFactory
-            .getInstance(), searchFields, titleField, summaryField, urlField);
+        return new LuceneLocalInputComponent(new LuceneSearchConfig(
+                getOrCreateSearcher(), analyzerFactory.getInstance(),
+                luceneFactoryConfig.searchFields,
+                luceneFactoryConfig.titleField,
+                luceneFactoryConfig.summaryField, luceneFactoryConfig.urlField,
+                luceneFactoryConfig.summarizerConfig));
     }
+
 
     /**
      * Lazily initialize the searcher.
      */
-    private synchronized void initSearcher()
+    private synchronized Searcher getOrCreateSearcher()
     {
-        if (searcher == null)
-        {
-            if (indexReader == null)
-            {
-                try
-                {
-                    indexReader = IndexReader.open(indexDirectory);
-                }
-                catch (IOException e)
-                {
-                    throw new RuntimeException("Cannot initialize IndexReader");
-                }
+        if (searcher == null) {
+            try {
+                return new IndexSearcher(IndexReader.open(indexDirectory));
             }
-            searcher = new IndexSearcher(indexReader);
+            catch (IOException e) {
+                throw new RuntimeException("Cannot initialize IndexReader");
+            }
+        }
+        else {
+            return searcher;
         }
     }
 }
