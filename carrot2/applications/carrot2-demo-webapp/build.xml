@@ -110,11 +110,42 @@ Setting skin to: ${webapp.skin}
     </target>
 
     <target name="static-html">
-      <description>Renders the two main application pages (startup and results) into static HTML files</description>
+      <description>
+        Renders the two main application pages (startup and results) 
+        into static HTML files with URLs pointing to and clustering being
+        done on the demo deployment at demo.carrot2.org.
+      </description>
+
+      <antcall target="-static-html-internal">
+        <param name="target-dir" value="static-html"/>
+        <param name="init-from-url" value="true"/>
+        <param name="show-progress" value="false"/>
+        <param name="show-options" value="false"/>
+        <param name="show-example-queries" value="false"/>
+      </antcall>
+    </target>
+
+    <target name="prototype-html">
+      <description>
+        Renders the two main application pages (startup and results) 
+        with one predefined set of documents and clusters to enable
+        working on them in the "prototyping" mode.
+      </description>
+
+      <antcall target="-static-html-internal">
+        <param name="target-dir" value="prototype"/>
+        <param name="init-from-url" value="false"/>
+        <param name="show-progress" value="true"/>
+        <param name="show-options" value="true"/>
+        <param name="show-example-queries" value="true"/>
+      </antcall>
+    </target>
+    
+    <target name="-static-html-internal">
 
       <property name="skin" value="fancy" />
       
-      <xslt in="etc/static-html/meta.xml" out="tmp/static-html/startup.html" 
+      <xslt in="etc/static-html/meta.xml" out="tmp/${target-dir}/startup.html" 
             style="web/skins/${skin}/page.xsl">
 
         <outputproperty name="method" value="html" />
@@ -123,14 +154,14 @@ Setting skin to: ${webapp.skin}
         <outputproperty name="indent" value="yes" />
 
         <param name="show-input-descriptions" expression="true" />
-        <param name="show-example-queries" expression="false" />
-        <param name="show-options" expression="false" />
-        <param name="show-progress" expression="false" />
-        <param name="init-from-url" expression="true" />
+        <param name="show-example-queries" expression="${show-example-queries}" />
+        <param name="show-options" expression="${show-options}" />
+        <param name="show-progress" expression="${show-progress}" />
+        <param name="init-from-url" expression="${init-from-url}" />
         <param name="display-status-line" expression="false" />
       </xslt>
      
-      <xslt in="etc/static-html/meta.xml" out="tmp/static-html/search.html" 
+      <xslt in="etc/static-html/meta.xml" out="tmp/${target-dir}/search.html" 
             style="web/skins/${skin}/page.xsl" force="true">
 
         <outputproperty name="method" value="html" />
@@ -139,15 +170,15 @@ Setting skin to: ${webapp.skin}
         <outputproperty name="indent" value="yes" />
 
         <param name="show-input-descriptions" expression="true" />
-        <param name="show-example-queries" expression="false" />
-        <param name="show-options" expression="false" />
-        <param name="show-progress" expression="false" />
-        <param name="init-from-url" expression="true" />
+        <param name="show-example-queries" expression="${show-example-queries}" />
+        <param name="show-options" expression="${show-options}" />
+        <param name="show-progress" expression="${show-progress}" />
+        <param name="init-from-url" expression="${init-from-url}" />
         <param name="display-status-line" expression="false" />
         <param name="force-results-page" expression="true" />
       </xslt>
      
-      <copy todir="tmp/static-html" filtering="false">
+      <copy todir="tmp/${target-dir}" filtering="false">
         <fileset dir="web/skins/${skin}">
           <exclude name="**/*.bat" />
           <exclude name="**/*.sh" />
@@ -158,7 +189,7 @@ Setting skin to: ${webapp.skin}
         </fileset>
       </copy>
      
-      <copy todir="tmp/static-html/img" filtering="false" overwrite="true">
+      <copy todir="tmp/${target-dir}/img" filtering="false" overwrite="true">
         <fileset dir="etc/static-html/${skin}/img">
         </fileset>
       </copy>
