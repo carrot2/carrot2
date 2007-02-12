@@ -12,17 +12,15 @@
 
 package org.carrot2.input.pubmed;
 
-import org.carrot2.core.*;
+import org.carrot2.core.ProcessingException;
 import org.xml.sax.*;
-
 
 /**
  * A SAX content handler that collects the contents of PubMed abstracts.
  * 
  * @author Stanislaw Osinski
  */
-public class PubMedFetchHandler
-    implements ContentHandler
+public class PubMedFetchHandler implements ContentHandler
 {
     /** Collects PubMed results */
     private PubMedSearchResultConsumer consumer;
@@ -35,8 +33,6 @@ public class PubMedFetchHandler
     private String title;
     private String snippet;
     private String id;
-    private String url;
-
 
     public PubMedFetchHandler(PubMedSearchResultConsumer consumer)
     {
@@ -44,20 +40,17 @@ public class PubMedFetchHandler
         this.text = new StringBuffer();
     }
 
-
-    public void startDocument()
-        throws SAXException
+    public void startDocument() throws SAXException
     {
         this.text.setLength(0);
     }
 
-
     public void startElement(String namespaceURI, String localName,
-            String qName, Attributes atts)
-        throws SAXException
+        String qName, Attributes atts) throws SAXException
     {
-        if ("PubmedArticle".equals(localName)) {
-            title = snippet = id = url = null;
+        if ("PubmedArticle".equals(localName))
+        {
+            title = snippet = id = null;
         }
 
         inArticleTitle = "ArticleTitle".equals(localName);
@@ -65,76 +58,78 @@ public class PubMedFetchHandler
         inArticleId = "PMID".equals(localName);
     }
 
-
     public void endElement(String namespaceURI, String localName, String qName)
         throws SAXException
     {
-        if (inArticleTitle) {
+        if (inArticleTitle)
+        {
             title = text.toString();
             inArticleTitle = false;
         }
-        else if (inArticleAbstract) {
+        else if (inArticleAbstract)
+        {
             snippet = text.toString();
             inArticleAbstract = false;
         }
-        else if (inArticleId) {
+        else if (inArticleId)
+        {
             id = text.toString();
-            url = id;
             inArticleId = false;
         }
-        else if ("PubmedArticle".equals(localName)) {
+        else if ("PubmedArticle".equals(localName))
+        {
             // Push the result
-            try {
-                consumer.add(new PubMedSearchResult(id, title, snippet, url));
+            try
+            {
+                consumer.add(new PubMedSearchResult(id, title, snippet,
+                    PubMedSearchService.E_FETCH_URL + "?db=pubmed&id=" + id
+                        + "&retmode=html&rettype=abstract"));
             }
-            catch (ProcessingException e) {
+            catch (ProcessingException e)
+            {
                 throw new SAXException(
-                        "Problem with the serach results consumer", e);
+                    "Problem with the serach results consumer", e);
 
             }
         }
         text.setLength(0);
     }
 
-
-    public void characters(char[] ch, int start, int length)
+    public void characters(char [] ch, int start, int length)
         throws SAXException
     {
         text.append(ch, start, length);
     }
 
+    public void endDocument() throws SAXException
+    {
+    }
 
-    public void endDocument()
+    public void endPrefixMapping(String prefix) throws SAXException
+    {
+    }
+
+    public void ignorableWhitespace(char [] ch, int start, int length)
         throws SAXException
-    {}
-
-
-    public void endPrefixMapping(String prefix)
-        throws SAXException
-    {}
-
-
-    public void ignorableWhitespace(char[] ch, int start, int length)
-        throws SAXException
-    {}
-
+    {
+    }
 
     public void processingInstruction(String target, String data)
         throws SAXException
-    {}
-
+    {
+    }
 
     public void setDocumentLocator(Locator locator)
-    {}
+    {
+    }
 
-
-    public void skippedEntity(String name)
-        throws SAXException
-    {}
-
+    public void skippedEntity(String name) throws SAXException
+    {
+    }
 
     public void startPrefixMapping(String prefix, String uri)
         throws SAXException
-    {}
+    {
+    }
 
 }
