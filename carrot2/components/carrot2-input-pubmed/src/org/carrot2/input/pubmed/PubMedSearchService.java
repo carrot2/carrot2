@@ -38,8 +38,8 @@ public class PubMedSearchService
             .getLogger(PubMedSearchService.class);
 
     /** URLs for the PubMed service */
-    private static final String E_SEARCH_URL = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi";
-    private static final String E_FETCH_URL = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi";
+    public static final String E_SEARCH_URL = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi";
+    public static final String E_FETCH_URL = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi";
 
 
     /**
