@@ -291,7 +291,7 @@
       
         <xsl:choose>
           <xsl:when test="contains(string(.), $accel)">
-            <xsl:value-of select="substring-before(string(short), $accel)" />
+            <xsl:value-of select="substring-before(string(.), $accel)" />
             <u><xsl:value-of select="$accel" /></u>
             <xsl:value-of select="substring-after(string(.), $accel)" />
           </xsl:when>

@@ -46,6 +46,7 @@
     <dependency name="carrot2-input-lucene" profile="demo" />
     <dependency name="carrot2-input-opensearch" profile="demo" />
     <dependency name="carrot2-input-msnapi" profile="demo" />
+    <dependency name="carrot2-input-pubmed" profile="demo" />
 
     <dependency name="carrot2-filter-lingo" profile="demo" />
     <dependency name="carrot2-filter-stc" profile="demo" />
