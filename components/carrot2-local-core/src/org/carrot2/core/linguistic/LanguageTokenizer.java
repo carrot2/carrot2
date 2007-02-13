@@ -48,4 +48,15 @@ public interface LanguageTokenizer {
      *         tokens are available.
      */
     public int getNextTokens(Token [] array, int startAt);
+    
+    /**
+     * Fills the array with tokens (valid until the next call to
+     * <code>restartTokenizationOn()</code>. The arrays are filled from
+     * <code>startAt</code> until the end of the arrays or the end of the
+     * tokenized stream.
+     * 
+     * @return The number of parsed tokens placed in the array, or 0 if no more
+     *         tokens are available.
+     */
+    public int getNextTokens(Token [] array, int [] startPositions, int startAt);
 }
