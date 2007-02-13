@@ -17,6 +17,10 @@ table.d {
   margin-bottom: 3ex;
 }
 
+b {
+  font-weight: normal;
+}
+
 td.r {
   color: #a0a0a0;
   vertical-align:       top;
@@ -32,7 +36,6 @@ td.c {
 }
 
 .t {
-  font-weight: bold;
   margin-bottom: 0.5ex;
 }
 
