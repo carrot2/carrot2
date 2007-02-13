@@ -35,6 +35,8 @@ public class JFlexWordBasedParser extends WordBasedParserBase
      * tokenization.
      */
     private JFlexWordBasedParserImpl tokenizer;
+    
+    private int currentStartPosition;
 
     /**
      * Public constructor creates a new instance of the parser. <b>Reuse
@@ -61,14 +63,14 @@ public class JFlexWordBasedParser extends WordBasedParserBase
      * end of the input data has been reached. This method is <em>not</em>
      * synchronized.
      * 
-     * @param tokenTypeHolder A holder where the next token's type is saved (at
-     *            index 0).
+     * @param tokenDataHolder A holder where the next token's type, 
+     *          start offset and length are saved
      * @return Returns the next token's value as a String object, or
      *         <code>null</code> if end of the input data has been reached.
      * 
      * @see org.carrot2.core.linguistic.tokens.TypedToken
      */
-    protected String getNextToken(short [] tokenTypeHolder)
+    protected String getNextToken(TokenDataHolder tokenDataHolder)
     {
         try
         {
@@ -79,34 +81,36 @@ public class JFlexWordBasedParser extends WordBasedParserBase
                 return null;
             }
 
-            if (tokenTypeHolder != null)
+            if (tokenDataHolder != null)
             {
+                tokenDataHolder.startPosition = tokenizer.yychar();
+                
                 switch (t)
                 {
                     case JFlexWordBasedParserImpl.FULL_URL:
                     case JFlexWordBasedParserImpl.FILE:
                     case JFlexWordBasedParserImpl.EMAIL:
-                        tokenTypeHolder[0] = TypedToken.TOKEN_TYPE_SYMBOL;
+                        tokenDataHolder.type = TypedToken.TOKEN_TYPE_SYMBOL;
                         break;
 
                     case JFlexWordBasedParserImpl.TERM:
                     case JFlexWordBasedParserImpl.HYPHTERM:
                     case JFlexWordBasedParserImpl.ACRONYM:
                     case JFlexWordBasedParserImpl.BARE_URL:
-                        tokenTypeHolder[0] = TypedToken.TOKEN_TYPE_TERM;
+                        tokenDataHolder.type = TypedToken.TOKEN_TYPE_TERM;
                         break;
 
                     case JFlexWordBasedParserImpl.SENTENCEMARKER:
-                        tokenTypeHolder[0] = TypedToken.TOKEN_TYPE_PUNCTUATION
+                        tokenDataHolder.type = TypedToken.TOKEN_TYPE_PUNCTUATION
                             | TypedToken.TOKEN_FLAG_SENTENCE_DELIM;
                         break;
 
                     case JFlexWordBasedParserImpl.PUNCTUATION:
-                        tokenTypeHolder[0] = TypedToken.TOKEN_TYPE_PUNCTUATION;
+                        tokenDataHolder.type = TypedToken.TOKEN_TYPE_PUNCTUATION;
                         break;
 
                     case JFlexWordBasedParserImpl.NUMERIC:
-                        tokenTypeHolder[0] = TypedToken.TOKEN_TYPE_NUMERIC;
+                        tokenDataHolder.type = TypedToken.TOKEN_TYPE_NUMERIC;
                         break;
 
                     default:
@@ -151,5 +155,6 @@ public class JFlexWordBasedParser extends WordBasedParserBase
             tokenizer = new JFlexWordBasedParserImpl(stream);
             tokenizer.yyreset(stream);
         }
+        currentStartPosition = 0;
     }
 }

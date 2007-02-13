@@ -22,7 +22,8 @@
 		</taskdef>
 
 		<jflex file="src/org/carrot2/util/tokenizer/parser/jflex/JFlexWordBasedParserImpl.jflex"
-			outdir="src/org/carrot2/util/tokenizer/parser/jflex/"/>
+			outdir="src/org/carrot2/util/tokenizer/parser/jflex/"
+		  nobak="on" />
 	</target>
 	
 </project>
