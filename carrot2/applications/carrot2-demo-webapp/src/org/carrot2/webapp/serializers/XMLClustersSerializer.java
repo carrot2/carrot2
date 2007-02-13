@@ -16,6 +16,7 @@ package org.carrot2.webapp.serializers;
 import java.io.*;
 import java.util.*;
 
+import javax.naming.spi.DirStateFactory.*;
 import javax.servlet.http.HttpServletRequest;
 
 import org.carrot2.util.XMLSerializerHelper;
@@ -41,6 +42,8 @@ public class XMLClustersSerializer implements RawClustersSerializer {
 
     private Writer writer;
     private List rawDocumentsList;
+    
+    private TextMarker textMarker;
 
     public XMLClustersSerializer(String contextPath, String stylesheetsBase) {
         this.skinBase = stylesheetsBase;
@@ -57,6 +60,16 @@ public class XMLClustersSerializer implements RawClustersSerializer {
     	this.writer = new OutputStreamWriter(os, Constants.ENCODING_UTF);
     	this.rawDocumentsList = rawDocumentsList;
     
+    	this.textMarker = TextMarkerPool.INSTANCE.borrowTextMarker();
+        
+        // In order for cluster label word highlighting to work, we need to 
+        // once again tokenize the documents... This kind of sucks, but lets
+        // us retain the nice progressive document loading behaviour.
+        // TODO: could we somehow cache word ids (essentially, one HashMap),
+        // just as we cache the documents? In this case we'd not need to
+        // tokenize the documents again.
+        generateWordIds();
+        
     	writer.write("<?xml version=\"1.0\" encoding=\"" + Constants.ENCODING_UTF + "\" ?>\n");
     
     	// We add '@' to inform xslt processor that the stylesheet
@@ -75,13 +88,28 @@ public class XMLClustersSerializer implements RawClustersSerializer {
         writer.write(">\n");
     }
 
+    private void generateWordIds()
+    {
+        for (Iterator it = rawDocumentsList.iterator(); it.hasNext();) {
+            RawDocument rawDocument = (RawDocument)it.next();
+            if (rawDocument.getTitle() != null) {
+                textMarker.tokenize(rawDocument.getTitle().toCharArray());
+            }            
+            if (rawDocument.getSnippet() != null) {
+                textMarker.tokenize(rawDocument.getSnippet().toCharArray());
+            }
+        }
+    }
+
     public final void write(RawCluster cluster) throws IOException {
-    	collect(cluster);
+    	collect(cluster, null);
     	writer.write(buffer.toString());
     	buffer.setLength(0);
     }
 
     public final void endResult() throws IOException {
+        TextMarkerPool.INSTANCE.returnTextMarker(textMarker);
+        
     	try {
     	    writer.write("</searchresult>");
     	    writer.flush();
@@ -106,7 +134,7 @@ public class XMLClustersSerializer implements RawClustersSerializer {
         }
     }
     
-    private final void collect(RawCluster cluster) throws IOException {
+    private final void collect(RawCluster cluster, StringBuffer parentWordIds) throws IOException {
     	buffer.append("<group");
     	if (cluster.getProperty(RawCluster.PROPERTY_JUNK_CLUSTER) != null) {
     	    buffer.append(" junk=\"true\"");
@@ -117,6 +145,10 @@ public class XMLClustersSerializer implements RawClustersSerializer {
     	}
     	buffer.append(" docs=\"");
     	buffer.append(createRefidsString(cluster));
+    	buffer.append("\"");
+    	buffer.append(" words=\"");
+    	StringBuffer wordidsString = createWordidsString(cluster, parentWordIds);
+        buffer.append(wordidsString);
     	buffer.append("\"");
     	buffer.append(">");
     
@@ -141,10 +173,47 @@ public class XMLClustersSerializer implements RawClustersSerializer {
     	final List subgroups = cluster.getSubclusters();
     	for (Iterator i = subgroups.iterator(); i.hasNext();) {
     	    final RawCluster subgroup = (RawCluster) i.next();
-    	    collect(subgroup);
+    	    collect(subgroup, wordidsString);
     	}
     
     	buffer.append("</group>");
+    }
+
+    private StringBuffer createWordidsString(RawCluster cluster,
+            final StringBuffer parentWordIds)
+    {
+        final StringBuffer result = new StringBuffer();
+        if (parentWordIds != null)
+        {
+            result.append(parentWordIds);
+        }
+        
+        TextMarkerListener listener = new TextMarkerListener() {
+            public void markedTextIdentified(char[] text, int startPosition,
+                    int length, String id, boolean newId)
+            {
+                if (!newId)
+                {
+                    if (result.length() > 0){
+                        result.append(SEPARATOR);
+                    }
+                    result.append(id);
+                }
+            }
+
+
+            public void unmarkedTextIdentified(char[] text, int startPosition,
+                    int length)
+            {}
+        };
+        
+        List labels = cluster.getClusterDescription();
+        for (Iterator it = labels.iterator(); it.hasNext();) {
+            String label = (String)it.next();
+            textMarker.tokenize(label.toCharArray(), listener);
+        }
+        
+        return result;
     }
 
     private String createRefidsString(RawCluster cluster) {

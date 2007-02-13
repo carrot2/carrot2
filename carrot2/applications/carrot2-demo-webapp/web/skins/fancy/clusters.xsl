@@ -31,7 +31,7 @@
         <tr>
           <td><img src="{$skinuri}/img/folder.gif" class="f" alt="..." /></td>
           <td class="text hl" style="padding-top: 0" colspan="2" id="ttop">
-            <a class="group" href="javascript:hl('top'); showAll()"><span class="label"><span class="text">
+            <a class="group" href="javascript:hl('top'); hlw([]); showAll();"><span class="label"><span class="text">
             All results</span>&#160;<span class="size">(<xsl:value-of select="@totalResultsCount" />)</span></span></a>
           </td>
         </tr>
@@ -53,10 +53,10 @@
   
     <tr id="{$parent-id-value}">
       <xsl:if test="not(count(group) = 0)">
-        <xsl:attribute name="onclick">javascript:fold('<xsl:value-of select="$id" />');sel([<xsl:value-of select="@docs" />])</xsl:attribute>
+        <xsl:attribute name="onclick">javascript:fold('<xsl:value-of select="$id" />');sel([<xsl:value-of select="@docs" />]);hlw([<xsl:value-of select="@words" />])</xsl:attribute>
       </xsl:if>
       <xsl:if test="count(group) = 0">
-        <xsl:attribute name="onclick">javascript:hl('<xsl:value-of select="$id" />');sel([<xsl:value-of select="@docs" />])</xsl:attribute>
+        <xsl:attribute name="onclick">javascript:hl('<xsl:value-of select="$id" />');sel([<xsl:value-of select="@docs" />]);hlw([<xsl:value-of select="@words" />])</xsl:attribute>
       </xsl:if>
       
       <xsl:if test="position() &gt; $more-increment">

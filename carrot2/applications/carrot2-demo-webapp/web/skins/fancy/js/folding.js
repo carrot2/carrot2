@@ -80,13 +80,81 @@ function sel(refids)
       }
       else
       {
-        documentElements[i].style.display = "none";
+      	if (documentElements[i].style.display != "none") {
+        	documentElements[i].style.display = "none";
+        }
       }
     }
   }
   
   parent.documents.scrollBy(0,-10000);
 }
+
+function hlw(clusterIds)
+{
+  var docs = parent.documents.document;
+  if (!docs.styleSheets) {
+    hlwSlow(clusterIds);
+    return;
+  }
+
+  for (var s = 0; s < docs.styleSheets.length; s++)
+  {
+    var sheet = docs.styleSheets[s];
+    if (sheet.href.indexOf(".css") >= 0)
+    {
+      continue;
+    }
+
+    var rules;
+    if (sheet.cssRules) {
+      rules = sheet.cssRules;
+    }
+    else if (sheet.rules) {
+      rules = sheet.rules;
+    }
+    else { 
+      hlwSlow(clusterIds);
+      return;
+    }
+
+    for (var i = 0; i < rules.length; i++)
+    {
+      if (contains(clusterIds, rules[i].selectorText.toLowerCase().substring(2))) {
+        rules[i].style.fontWeight = 'bold';
+      }
+      else {
+        if (rules[i].style.fontWeight == 'bold') {
+        	rules[i].style.fontWeight = 'normal';
+        }
+      }
+    }
+  }
+}
+
+function hlwSlow(wordids)
+{
+  var documentElements = parent.documents.document.getElementsByTagName('b');
+ 
+  for (var i = 0; i < documentElements.length; i++)
+  {
+    if (documentElements[i].className) {
+      for (var j = 0; j < wordids.length; j++)
+      {
+        if (documentElements[i].className.indexOf('w' + wordids[j]) >= 0)
+        {
+          documentElements[i].style.fontWeight = "bold";
+        }
+        else
+        {
+	        if (rules[i].style.fontWeight == 'bold') {
+	          documentElements[i].style.fontWeight = "normal";
+	        }
+        }
+      }
+    }
+  }
+} 
 
 function showAll()
 {
@@ -95,7 +163,9 @@ function showAll()
   {
     if (documentElements[i].className == 'd')
     {
-      documentElements[i].style.display = "block";
+      if (documentElements[i].style.display != "block") {
+      	documentElements[i].style.display = "block";
+      }
     }
   }
   parent.documents.scrollBy(0,-10000);

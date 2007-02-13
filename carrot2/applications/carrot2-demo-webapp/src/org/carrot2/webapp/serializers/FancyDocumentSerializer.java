@@ -15,13 +15,10 @@ package org.carrot2.webapp.serializers;
 
 import java.io.*;
 
-import org.carrot2.util.ArrayUtils;
-import org.carrot2.util.XMLSerializerHelper;
-import org.carrot2.webapp.Constants;
-import org.carrot2.webapp.RawDocumentsSerializer;
-
-import org.carrot2.core.clustering.RawDocument;
-import org.carrot2.core.impl.RawDocumentEnumerator;
+import org.carrot2.core.clustering.*;
+import org.carrot2.core.impl.*;
+import org.carrot2.util.*;
+import org.carrot2.webapp.*;
 
 /**
  * A document serializer which produces HTML output similar
@@ -29,13 +26,16 @@ import org.carrot2.core.impl.RawDocumentEnumerator;
  * 
  * @author Dawid Weiss
  */
-final class FancyDocumentSerializer implements RawDocumentsSerializer {
+final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarkerListener {
     private final int FLUSH_LIMIT = 10;
     private final String base;
     private final XMLSerializerHelper xml = XMLSerializerHelper.getInstance();
 
     private Writer writer;
     private int sequence;
+    
+    /** For marking word occurrences */
+    private TextMarker textMarker;
 
     public FancyDocumentSerializer(String contextPath, String stylesheetsBase) {
         this.base = contextPath + stylesheetsBase;
@@ -48,6 +48,7 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer {
     public void startResult(OutputStream os) throws IOException {
         this.writer = new OutputStreamWriter(os, Constants.ENCODING_UTF);
         this.sequence = 1;
+        this.textMarker = TextMarkerPool.INSTANCE.borrowTextMarker();
 
         // Write HTML header
         writer.write(
@@ -80,9 +81,18 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer {
                 "<tr>\r\n" + 
                 "<td class=\"r\">" + sequence + "</td><td class=\"c\">\r\n" + 
                 "<div class=\"t\">" + 
-                "<a target=\"_top\" href=\"" + hurl + "\">" + xml.toValidXmlText(title, false)+ "</a>" + 
+                "<a target=\"_top\" href=\"" + hurl + "\">");
+                
+        textMarker.tokenize(title.toCharArray(), this);
+                
+        writer.write(
+                "</a>" + 
                 "</div>\r\n" + 
-                "<div class=\"s\">" + xml.toValidXmlText(snippet, false) + "</div>\r\n" + 
+                "<div class=\"s\">");
+        
+        textMarker.tokenize(snippet.toCharArray(), this);
+        
+        writer.write("</div>\r\n" + 
                 "<div class=\"u\">" + hurl + (sources != null ? "<div class=\"o\">[" + ArrayUtils.toString(sources) + "]</div>" : "") +"</div>\r\n" +
                 "\r\n" + 
                 "</td>\r\n" + 
@@ -99,17 +109,61 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer {
         }
     }
 
+    public void markedTextIdentified(char[] text, int startPosition,
+            int length, String id, boolean newId)
+    {
+        try {
+            if (id != null) {
+                writer.write("<b class=\"w" + id + "\">");
+            }
+            writer.write(text, startPosition, length);
+            if (id != null) {
+                writer.write("</b>");
+            }
+        }
+        catch (IOException e) {
+            throw new RuntimeException("Could not write text", e);
+        }        
+    }
+
+    public void unmarkedTextIdentified(char[] text, int startPosition,
+            int length)
+    {
+        try {
+            writer.write(text, startPosition, length);
+        }
+        catch (IOException e) {
+            throw new RuntimeException("Could not write text", e);
+        }
+    }
+    
     public void endResult() throws IOException {
         if (sequence == 1) {
             writer.write("<div id='no-documents'>Your query returned no documents.<br/>Please try a more general query.</div>");
         }
         
         writer.write(
-                "</div>\r\n" + 
-                "</body>\r\n" + 
+                "</div>\r\n"+
+                "<style>\r\n");
+        
+        // Write dummy CSS rules (we do need this)
+        for(int i = 0; i <= textMarker.getMaxWordId(); i++)
+        {
+            writer.write(".w");
+            writer.write(Integer.toString(i));
+            writer.write("{}");
+        }
+        
+        writer.write("\r\n" +  
+                "</style></body>\r\n" + 
                 "</html>");
         writer.flush();
         this.writer = null;
+        
+        if (textMarker != null)
+        {
+            TextMarkerPool.INSTANCE.returnTextMarker(textMarker);
+        }
     }
 
     public void processingError(Throwable cause) throws IOException {
