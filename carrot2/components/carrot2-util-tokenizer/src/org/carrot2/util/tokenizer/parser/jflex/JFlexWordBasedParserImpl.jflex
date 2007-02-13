@@ -6,6 +6,7 @@ package org.carrot2.util.tokenizer.parser.jflex;
 %integer
 %function getNextToken
 %pack
+%char
 
 %{
 public static final int TERM           = 1;
@@ -18,6 +19,11 @@ public static final int FULL_URL       = 7;
 public static final int BARE_URL       = 8;
 public static final int FILE           = 9;
 public static final int HYPHTERM       = 10;
+
+public final int yychar()
+{
+    return yychar;
+}
 %}
 
 DOMAIN     = "mil" | "info" | "gov" | "edu" | "biz" | "com" | "org" | "net" | 

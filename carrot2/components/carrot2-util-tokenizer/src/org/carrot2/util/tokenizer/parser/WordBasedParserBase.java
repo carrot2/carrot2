@@ -30,10 +30,14 @@ import org.carrot2.util.tokenizer.languages.MutableStemmedToken;
 public abstract class WordBasedParserBase implements LanguageTokenizer
 {
     /**
-     * Temporary variable for holding token type.
+     * Temporary variable for holding token data.
      */
-    protected final short [] tokenTypeHolder = new short [1];
-
+    protected static class TokenDataHolder {
+        public short type;
+        public int startPosition;
+    }
+    protected final TokenDataHolder tokenDataHolder = new TokenDataHolder();
+    
     /**
      * Public constructor creates a new instance of the parser. <b>Reuse
      * tokenizer objects </b> instead of recreating them.
@@ -67,14 +71,14 @@ public abstract class WordBasedParserBase implements LanguageTokenizer
      * end of the input data has been reached. This method is <em>not</em>
      * synchronized.
      * 
-     * @param tokenTypeHolder A holder where the next token's type is saved (at
-     *            index 0).
+     * @param tokenDataHolder A holder where the next token's type, 
+     *          start offset and length are saved
      * @return Returns the next token's value as a String object, or
      *         <code>null</code> if end of the input data has been reached.
      * 
      * @see org.carrot2.core.linguistic.tokens.TypedToken
      */
-    protected abstract String getNextToken(short [] tokenTypeHolder);
+    protected abstract String getNextToken(TokenDataHolder tokenDataHolder);
 
     /**
      * Parses the input and returns a new chunk of tokens.
@@ -86,6 +90,21 @@ public abstract class WordBasedParserBase implements LanguageTokenizer
      */
     public int getNextTokens(Token [] array, int startAt)
     {
+        return getNextTokens(array, null, startAt);
+    }
+    
+    /**
+     * Parses the input and returns a new chunk of tokens.
+     * 
+     * @param array An array where new tokens will be stored.
+     * @param startPositions An array where start positions (offsets) of the
+     * tokens will be stored.
+     * @param startAt The first index in <code>array</code> to use.
+     * @return the number of tokens placed in the array, or 0 if no more tokens
+     * are available.
+     */
+    public int getNextTokens(Token[] array, int[] startPositions, int startAt)
+    {
         try
         {
             int count = 0;
@@ -93,15 +112,19 @@ public abstract class WordBasedParserBase implements LanguageTokenizer
             StringTypedToken token;
             while (startAt < array.length)
             {
-                image = getNextToken(tokenTypeHolder);
+                image = getNextToken(tokenDataHolder);
                 if (image == null)
                 {
                     break;
                 }
 
                 token = new MutableStemmedToken();
-                token.assign(image, tokenTypeHolder[0]);
+                token.assign(image, tokenDataHolder.type);
                 array[startAt] = token;
+                if (startPositions != null)
+                {
+                    startPositions[startAt] = tokenDataHolder.startPosition;
+                }
                 count++;
                 startAt++;
             }

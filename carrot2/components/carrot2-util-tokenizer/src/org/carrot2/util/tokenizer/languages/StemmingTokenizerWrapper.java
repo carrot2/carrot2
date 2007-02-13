@@ -102,7 +102,7 @@ final class StemmingTokenizerWrapper implements LanguageTokenizer {
     public void reuse() {
         tokenizer.reuse();
     }
-
+    
     /**
      * Delegates method call to the wrapped tokenizer and
      * then performs stemming on the returned tokens.
@@ -110,7 +110,17 @@ final class StemmingTokenizerWrapper implements LanguageTokenizer {
      * @see org.carrot2.core.linguistic.LanguageTokenizer#getNextTokens(org.carrot2.core.linguistic.tokens.Token[], int)
      */
     public int getNextTokens(Token[] array, int startAt) {
-        int count = tokenizer.getNextTokens(array, startAt);
+        return getNextTokens(array, null, startAt);
+    }
+        
+    /**
+     * Delegates method call to the wrapped tokenizer and
+     * then performs stemming on the returned tokens.
+     * 
+     * @see org.carrot2.core.linguistic.LanguageTokenizer#getNextTokens(org.carrot2.core.linguistic.tokens.Token[], int)
+     */
+    public int getNextTokens(Token[] array, int [] startPositions, int startAt) {
+        int count = tokenizer.getNextTokens(array, startPositions, startAt);
         
         if (count != 0) {
             for (int i=startAt;i<startAt+count;i++) {

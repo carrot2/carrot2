@@ -35,5 +35,6 @@
 	<dependency name="commons-pool" />
 
     <!-- Test profile -->
+    <dependency name="junit-addons" profile="test" />
     <dependency name="junit" profile="test" />
 </component>
