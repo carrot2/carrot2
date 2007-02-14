@@ -25,7 +25,7 @@ import org.carrot2.core.clustering.RawDocument;
  */
 public interface RawDocumentsSerializer {
     public String getContentType();
-    public void startResult(OutputStream os) throws IOException;
+    public void startResult(OutputStream os, String query) throws IOException;
     public void write(RawDocument document) throws IOException;
     public void endResult() throws IOException;
     public void processingError(Throwable cause) throws IOException;
