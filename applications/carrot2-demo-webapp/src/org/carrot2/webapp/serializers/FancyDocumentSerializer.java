@@ -14,6 +14,7 @@
 package org.carrot2.webapp.serializers;
 
 import java.io.*;
+import java.util.*;
 
 import org.carrot2.core.clustering.*;
 import org.carrot2.core.impl.*;
@@ -36,6 +37,9 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
     
     /** For marking word occurrences */
     private TextMarker textMarker;
+    
+    /** For permanent marking of query words */
+    private Set queryWordIds;
 
     public FancyDocumentSerializer(String contextPath, String stylesheetsBase) {
         this.base = contextPath + stylesheetsBase;
@@ -45,10 +49,12 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
         return Constants.MIME_HTML_CHARSET_UTF;
     }
 
-    public void startResult(OutputStream os) throws IOException {
+    public void startResult(OutputStream os, String query) throws IOException {
         this.writer = new OutputStreamWriter(os, Constants.ENCODING_UTF);
         this.sequence = 1;
         this.textMarker = TextMarkerPool.INSTANCE.borrowTextMarker();
+        
+        prepareQueryWordIds(query);
 
         // Write HTML header
         writer.write(
@@ -62,6 +68,23 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
                 "</head>" +
                 "<body style=\"height: 100%;\" onload=\"parent.setProgress('docs-progress', false);\">\r\n" + 
                 "<div id=\"documents\">");
+    }
+
+    private void prepareQueryWordIds(String query)
+    {
+        String cleanQuery = query.replaceAll("[^a-zA-Z0-9]", "");
+        queryWordIds = new HashSet();
+        textMarker.tokenize(cleanQuery.toCharArray(), new TextMarkerListener() {
+            public void markedTextIdentified(char[] text, int startPosition,
+                    int length, String id, boolean newId)
+            {
+                queryWordIds.add(id);
+            }
+
+            public void unmarkedTextIdentified(char[] text, int startPosition,
+                    int length)
+            {}
+        });
     }
 
     public void write(RawDocument doc) throws IOException {
@@ -114,7 +137,12 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
     {
         try {
             if (id != null) {
-                writer.write("<b class=\"w" + id + "\">");
+                if (queryWordIds.contains(id)) {
+                    writer.write("<b class=\"pm\">");
+                }
+                else {
+                    writer.write("<b class=\"w" + id + "\">");
+                }
             }
             writer.write(text, startPosition, length);
             if (id != null) {

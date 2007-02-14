@@ -44,7 +44,7 @@ class XMLDocumentsSerializer implements RawDocumentsSerializer {
         return Constants.MIME_XML_CHARSET_UTF;
     }
 
-    public void startResult(OutputStream os) throws IOException {
+    public void startResult(OutputStream os, String query) throws IOException {
         this.writer = new OutputStreamWriter(os, Constants.ENCODING_UTF);
 
         writer.write("<?xml version=\"1.0\" encoding=\"" + Constants.ENCODING_UTF + "\" ?>\n");

@@ -21,6 +21,10 @@ b {
   font-weight: normal;
 }
 
+b.pm {
+	font-weight: bold;
+}
+
 td.r {
   color: #a0a0a0;
   vertical-align:       top;
