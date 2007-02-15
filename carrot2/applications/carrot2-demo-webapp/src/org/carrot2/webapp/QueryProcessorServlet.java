@@ -352,7 +352,7 @@ public final class QueryProcessorServlet extends HttpServlet {
                     final List clusters = collected.clusters; 
                     final List documents = bcaster.getDocuments();
 
-                    serializer.startResult(os, documents, request);
+                    serializer.startResult(os, documents, request, searchRequest.query);
                     for (Iterator i = clusters.iterator(); i.hasNext();) {
                         serializer.write((RawCluster) i.next());
                     }
@@ -363,12 +363,12 @@ public final class QueryProcessorServlet extends HttpServlet {
                 } catch (BroadcasterException e) {
                     // broadcaster exceptions are shown in the documents iframe,
                     // so we simply emit no clusters.
-                    serializer.startResult(os, Collections.EMPTY_LIST, request);
+                    serializer.startResult(os, Collections.EMPTY_LIST, request, searchRequest.query);
                     serializer.processingError(e);
                     serializer.endResult();
                 } catch (Exception e) {
                     logger.warn("Error running input query.", e);
-                    serializer.startResult(os, Collections.EMPTY_LIST, request);
+                    serializer.startResult(os, Collections.EMPTY_LIST, request, searchRequest.query);
                     serializer.processingError(e);
                     serializer.endResult();
                 }

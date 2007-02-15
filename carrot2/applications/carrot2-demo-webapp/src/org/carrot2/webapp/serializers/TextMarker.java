@@ -43,6 +43,18 @@ public class TextMarker
     Stemmer stemmer;
     Set stopwords;
 
+    static class StemInfo {
+        public String id;
+        public int frequency;
+        
+        public StemInfo(String id, int frequency)
+        {
+            super();
+            this.id = id;
+            this.frequency = frequency;
+        }
+    }
+    
 
     TextMarker(LanguageTokenizer tokenizer, Stemmer stemmer, Set stopwords)
     {
@@ -104,12 +116,17 @@ public class TextMarker
                     if (stem == null) {
                         stem = tokenImageLowerCase;
                     }
-                    wordId = (String)wordStems.get(stem);
-                    if (wordId == null) {
+                    StemInfo stemInfo = (StemInfo)wordStems.get(stem);
+                    if (stemInfo == null) {
                         wordId = Integer.toString(currentWordId);
                         currentWordId++;
-                        wordStems.put(stem, wordId);
+                        wordStems.put(stem, new StemInfo(wordId, 1));
                         newId = true;
+                    }
+                    else 
+                    {
+                        wordId = stemInfo.id;
+                        stemInfo.frequency++;
                     }
                 }
 
@@ -144,17 +161,11 @@ public class TextMarker
             stem = wordLowerCase;
         }
 
-        return (String)wordStems.get(stem);
+        return ((StemInfo)wordStems.get(stem)).id;
     }
 
-
-    /**
-     * Return the maximum word id.
-     * 
-     * @return
-     */
-    public int getMaxWordId()
+    public Iterator getWordInfos()
     {
-        return wordStems.size() - 1;
+        return wordStems.values().iterator();
     }
 }
