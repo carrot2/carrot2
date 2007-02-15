@@ -9,6 +9,10 @@ Major functions and bug fixes
 Version  [C] Information
 
 HEAD
+          +  Added cluster label highlighting in the web demo.
+          
+          +  Added PubMed input component.
+
           o  Implemented parallel search results fetcher and added it to the core.
 
           o  Added a launcher application to avoid overriding java.ext.dirs.
