@@ -16,7 +16,6 @@ package org.carrot2.webapp.serializers;
 import java.io.*;
 import java.util.*;
 
-import org.apache.log4j.*;
 import org.carrot2.core.clustering.*;
 import org.carrot2.core.impl.*;
 import org.carrot2.util.*;
@@ -30,8 +29,6 @@ import org.carrot2.webapp.serializers.TextMarker.*;
  * @author Dawid Weiss
  */
 final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarkerListener {
-    private final static Logger log = Logger.getLogger(FancyDocumentSerializer.class);
-
     private final int FLUSH_LIMIT = 10;
     private final String base;
     private final XMLSerializerHelper xml = XMLSerializerHelper.getInstance();
@@ -179,7 +176,6 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
                 "<style>\r\n");
         
         // Write dummy CSS rules (we do need this!)
-        int all = 0, emitted = 0;
         for (Iterator it = textMarker.getWordInfos(); it.hasNext();) {
             StemInfo stemInfo = (StemInfo)it.next();
             
@@ -188,12 +184,8 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
                 writer.write(".w");
                 writer.write(stemInfo.id);
                 writer.write("{}");
-                emitted++;
             }
-            all++;
         }
-        
-        log.info("Styles: " + emitted + "/" + all);
         
         writer.write("\r\n" +  
                 "</style></body>\r\n" + 

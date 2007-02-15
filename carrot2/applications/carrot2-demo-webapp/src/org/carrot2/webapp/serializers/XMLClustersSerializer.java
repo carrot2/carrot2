@@ -18,7 +18,6 @@ import java.util.*;
 
 import javax.servlet.http.*;
 
-import org.apache.log4j.*;
 import org.carrot2.core.clustering.*;
 import org.carrot2.core.impl.*;
 import org.carrot2.util.*;
@@ -31,8 +30,6 @@ import org.carrot2.webapp.*;
  * @author Stanisław Osiński
  */
 public class XMLClustersSerializer implements RawClustersSerializer {
-    private final static Logger log = Logger.getLogger(XMLClustersSerializer.class);
-    
     private final static char SEPARATOR = ',';
     private final StringBuffer buffer = new StringBuffer();
     private final XMLSerializerHelper xml = XMLSerializerHelper.getInstance();
@@ -100,7 +97,6 @@ public class XMLClustersSerializer implements RawClustersSerializer {
 
     private void generateWordIds()
     {
-        long start = System.currentTimeMillis();
         for (Iterator it = rawDocumentsList.iterator(); it.hasNext();) {
             RawDocument rawDocument = (RawDocument)it.next();
             if (rawDocument.getTitle() != null) {
@@ -110,8 +106,6 @@ public class XMLClustersSerializer implements RawClustersSerializer {
                 textMarker.tokenize(rawDocument.getSnippet().toCharArray());
             }
         }
-        long stop = System.currentTimeMillis();
-        log.info("Tokenization took: " + (stop - start) + " ms");
     }
 
     public final void write(RawCluster cluster) throws IOException {
