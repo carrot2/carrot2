@@ -16,15 +16,13 @@ package org.carrot2.webapp.serializers;
 import java.io.*;
 import java.util.*;
 
-import javax.naming.spi.DirStateFactory.*;
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.*;
 
-import org.carrot2.util.XMLSerializerHelper;
+import org.apache.log4j.*;
+import org.carrot2.core.clustering.*;
+import org.carrot2.core.impl.*;
+import org.carrot2.util.*;
 import org.carrot2.webapp.*;
-
-import org.carrot2.core.clustering.RawCluster;
-import org.carrot2.core.clustering.RawDocument;
-import org.carrot2.core.impl.RawDocumentEnumerator;
 
 /**
  * A consumer of {@link RawDocument}s which serializes them to XML.
@@ -33,6 +31,8 @@ import org.carrot2.core.impl.RawDocumentEnumerator;
  * @author Stanisław Osiński
  */
 public class XMLClustersSerializer implements RawClustersSerializer {
+    private final static Logger log = Logger.getLogger(XMLClustersSerializer.class);
+    
     private final static char SEPARATOR = ',';
     private final StringBuffer buffer = new StringBuffer();
     private final XMLSerializerHelper xml = XMLSerializerHelper.getInstance();
@@ -54,13 +54,16 @@ public class XMLClustersSerializer implements RawClustersSerializer {
         return Constants.MIME_XML_CHARSET_UTF;
     }
 
-    public final void startResult(OutputStream os, List rawDocumentsList, HttpServletRequest request)
+    public final void startResult(OutputStream os, List rawDocumentsList, HttpServletRequest request, String query)
 	    throws IOException
     {
     	this.writer = new OutputStreamWriter(os, Constants.ENCODING_UTF);
     	this.rawDocumentsList = rawDocumentsList;
     
     	this.textMarker = TextMarkerPool.INSTANCE.borrowTextMarker();
+
+        // We need to process query here as well to maintain id consistency
+        prepareQueryWordIds(query);
         
         // In order for cluster label word highlighting to work, we need to 
         // once again tokenize the documents... This kind of sucks, but lets
@@ -88,8 +91,16 @@ public class XMLClustersSerializer implements RawClustersSerializer {
         writer.write(">\n");
     }
 
+
+    private void prepareQueryWordIds(String query)
+    {
+        String cleanQuery = query.replaceAll("[^a-zA-Z0-9 ]", "");
+        textMarker.tokenize(cleanQuery.toCharArray());
+    }
+
     private void generateWordIds()
     {
+        long start = System.currentTimeMillis();
         for (Iterator it = rawDocumentsList.iterator(); it.hasNext();) {
             RawDocument rawDocument = (RawDocument)it.next();
             if (rawDocument.getTitle() != null) {
@@ -99,6 +110,8 @@ public class XMLClustersSerializer implements RawClustersSerializer {
                 textMarker.tokenize(rawDocument.getSnippet().toCharArray());
             }
         }
+        long stop = System.currentTimeMillis();
+        log.info("Tokenization took: " + (stop - start) + " ms");
     }
 
     public final void write(RawCluster cluster) throws IOException {

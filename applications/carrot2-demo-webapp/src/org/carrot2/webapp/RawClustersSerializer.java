@@ -29,7 +29,7 @@ import org.carrot2.core.clustering.RawCluster;
 public interface RawClustersSerializer {
     public String getContentType();
 
-    public void startResult(OutputStream os, List rawDocumentsList, HttpServletRequest request) 
+    public void startResult(OutputStream os, List rawDocumentsList, HttpServletRequest request, String query) 
         throws IOException;
 
     public void write(RawCluster cluster) throws IOException;
