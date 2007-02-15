@@ -19,7 +19,7 @@ function show(elementId)
 function fold(elementId)
 {
   show(elementId);
-  hl(elementId);
+  hl(elementId.substring(3));
 };
 
 function hl(elementId)
@@ -169,4 +169,22 @@ function showAll()
     }
   }
   parent.documents.scrollBy(0,-10000);
+}
+
+function showAllClusters()
+{
+  var trElements = document.getElementsByTagName('tr');
+  for (var i = 0; i < trElements.length; i++)
+  {
+    if (trElements[i].id && trElements[i].id.lastIndexOf('cld') != 0) {
+      if (trElements[i].id.indexOf('more') >= 0)
+      {
+        trElements[i].style.display = "none";
+      }
+      else
+      {
+        trElements[i].style.display = "";
+      }
+    }
+  }
 }

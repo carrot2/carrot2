@@ -53,7 +53,7 @@
   
     <tr id="{$parent-id-value}">
       <xsl:if test="not(count(group) = 0)">
-        <xsl:attribute name="onclick">javascript:fold('<xsl:value-of select="$id" />');sel([<xsl:value-of select="@docs" />]);hlw([<xsl:value-of select="@words" />])</xsl:attribute>
+        <xsl:attribute name="onclick">javascript:fold('cld<xsl:value-of select="$id" />');sel([<xsl:value-of select="@docs" />]);hlw([<xsl:value-of select="@words" />])</xsl:attribute>
       </xsl:if>
       <xsl:if test="count(group) = 0">
         <xsl:attribute name="onclick">javascript:hl('<xsl:value-of select="$id" />');sel([<xsl:value-of select="@docs" />]);hlw([<xsl:value-of select="@words" />])</xsl:attribute>
@@ -95,7 +95,7 @@
     </tr>
 
     <xsl:if test="not(count(group) = 0)">
-      <tr style="display: none" id="{$id}">
+      <tr style="display: none" id="cld{$id}">
         <td>
           <xsl:if test="position() != last()">
             <xsl:attribute name="class">tree</xsl:attribute>
@@ -123,7 +123,8 @@
         <td class="text">
           <a class="group" href="{$more-link}">
             <span class="text">more...</span>
-          </a>  
+          </a> |
+          <a href="javascript:showAllClusters()">all clusters</a>
         </td>
       </tr>
     </xsl:if>
