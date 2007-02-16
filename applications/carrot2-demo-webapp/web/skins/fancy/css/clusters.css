@@ -49,9 +49,15 @@ span.label {
   padding-right: 1px;
 }
 
+td.sic span.label {
+  background-color: #fff8b5;
+  text-decoration: underline;
+}
+
 td.hl span.label {
   color: white;
   background-color: #1678C4;
+  text-decoration: none;
 }
 
 * html td.tree {

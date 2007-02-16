@@ -16,6 +16,10 @@
   <xsl:template name="head-insert">
     <link rel="stylesheet" href="{$skinuri}/css/clusters.css" />
     <script src="{$skinuri}/js/folding.js" language="javascript"></script>
+    <script>
+      var clusterDocs = new Array();
+      <xsl:for-each select="//group">clusterDocs['<xsl:value-of select="generate-id(.)" />']=new Array(<xsl:value-of select="@docs" />);</xsl:for-each>
+    </script>
   </xsl:template>
 
   <xsl:template match="/searchresult[@type = 'clusters']">
@@ -53,10 +57,10 @@
   
     <tr id="{$parent-id-value}">
       <xsl:if test="not(count(group) = 0)">
-        <xsl:attribute name="onclick">javascript:fold('cld<xsl:value-of select="$id" />');sel([<xsl:value-of select="@docs" />]);hlw([<xsl:value-of select="@words" />])</xsl:attribute>
+        <xsl:attribute name="onclick">javascript:fold('cld<xsl:value-of select="$id" />');sel(clusterDocs['<xsl:value-of select="$id" />']);hlw([<xsl:value-of select="@words" />])</xsl:attribute>
       </xsl:if>
       <xsl:if test="count(group) = 0">
-        <xsl:attribute name="onclick">javascript:hl('<xsl:value-of select="$id" />');sel([<xsl:value-of select="@docs" />]);hlw([<xsl:value-of select="@words" />])</xsl:attribute>
+        <xsl:attribute name="onclick">javascript:hl('<xsl:value-of select="$id" />');sel(clusterDocs['<xsl:value-of select="$id" />']);hlw([<xsl:value-of select="@words" />])</xsl:attribute>
       </xsl:if>
       
       <xsl:if test="position() &gt; $more-increment">
@@ -123,8 +127,10 @@
         <td class="text">
           <a class="group" href="{$more-link}">
             <span class="text">more...</span>
-          </a> |
-          <a href="javascript:showAllClusters()">all clusters</a>
+          </a> 
+          <xsl:if test="not(local-name(..) = 'group')">
+            | <a href="javascript:showAllClusters()">all clusters</a>
+          </xsl:if>
         </td>
       </tr>
     </xsl:if>

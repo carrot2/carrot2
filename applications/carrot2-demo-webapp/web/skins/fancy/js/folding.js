@@ -28,7 +28,14 @@ function hl(elementId)
   var textTd = document.getElementById('t' + elementId);
   if (textTd)
   {
-    textTd.className = 'text hl';
+    if (textTd.className.indexOf("sic") >= 0)
+    {
+      textTd.className = 'text hl sic';
+    }
+    else
+    {
+      textTd.className = 'text hl';
+    }
   }
 }
 
@@ -49,7 +56,12 @@ function clearHighlights()
   {
     if (nodes[i].className && nodes[i].className.indexOf('text hl') >= 0)
     {
-      nodes[i].className = 'text';
+      if (nodes[i].className.indexOf('sic') >= 0) {
+        nodes[i].className = 'text sic';
+      }
+      else {
+        nodes[i].className = 'text';
+      }
     }
   }
 }
@@ -89,7 +101,6 @@ function sel(refids)
   
   parent.documents.scrollBy(0,-10000);
 }
-
 function hlw(clusterIds)
 {
   var docs = parent.documents.document;
@@ -163,9 +174,7 @@ function showAll()
   {
     if (documentElements[i].className == 'd')
     {
-      if (documentElements[i].style.display != "block") {
-      	documentElements[i].style.display = "block";
-      }
+      documentElements[i].style.display = "block";
     }
   }
   parent.documents.scrollBy(0,-10000);
@@ -186,5 +195,79 @@ function showAllClusters()
         trElements[i].style.display = "";
       }
     }
+  }
+}
+
+function showInClusters(id)
+{
+  for (var t in clusterDocs) {
+    if (contains(clusterDocs[t], id)) {
+      var textTd = document.getElementById('t' + t);
+      if (textTd)
+      {
+      	if (textTd.parentNode.style.display == 'none')
+      	{
+					showAllClusters();
+      	}
+      
+        if (textTd.className.indexOf("hl") >= 0)
+        {
+          textTd.className = 'text hl sic';
+        }
+        else
+        {
+          textTd.className = 'text sic';
+        }
+      }
+    }
+  }
+}
+
+function clearInClusters()
+{
+  var nodes = document.getElementsByTagName('td');
+  for (var i = 0; i < nodes.length; i++)
+  {
+    if (nodes[i].className && nodes[i].className.indexOf('sic') >= 0)
+    {
+      if (nodes[i].className.indexOf('hl') >= 0) {
+        nodes[i].className = 'text hl';
+      }
+      else {
+        nodes[i].className = 'text';
+      }
+    }
+  }
+}
+
+function hlDoc(id)
+{
+  parent.clusters.clearInClusters();
+  var docNodes = document.getElementsByTagName("table");
+  var showInClusters = true;
+  for (var i = 0; i < docNodes.length; i++) 
+  {
+    if (docNodes[i].className && docNodes[i].className == "d")
+    {
+      if (docNodes[i].id == id)
+      {
+        if (docNodes[i].rows[0].cells[0].className == "r hl")
+        {
+          docNodes[i].rows[0].cells[0].className = "r";
+          showInClusters = false;
+        }
+        else
+        {
+          docNodes[i].rows[0].cells[0].className = "r hl";
+        }
+      }
+      else
+      {
+        docNodes[i].rows[0].cells[0].className = "r";
+      }
+    }
+  }
+  if (showInClusters) {
+  	parent.clusters.showInClusters(id);
   }
 }

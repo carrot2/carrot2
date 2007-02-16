@@ -66,6 +66,7 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
                 "<title>Carrot Clustering Engine</title>\r\n" + 
                 "<link href=\"" + base + "/css/common.css\" type=\"text/css\" rel=\"stylesheet\">\r\n" + 
                 "<link href=\"" + base + "/css/documents.css\" rel=\"stylesheet\">\r\n" + 
+                "<script src=\"" + base + "/js/folding.js\" language=\"javascript\"></script>" +
                 "</head>" +
                 "<body style=\"height: 100%;\" onload=\"parent.setProgress('docs-progress', false);\">\r\n" + 
                 "<div id=\"documents\">");
@@ -103,7 +104,11 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
         writer.write(
                 "<table id=\"" + seqId.toString() + "\" class=\"d\">\r\n" + 
                 "<tr>\r\n" + 
-                "<td class=\"r\">" + sequence + "</td><td class=\"c\">\r\n" + 
+                "<td class=\"r\">" + 
+                sequence +
+                "<br /><a href=\"javascript:hlDoc('" + seqId.toString() + "')\" title=\"Show in clusters\">" +
+                "<img src=\"" + base + "/img/sic.gif\" class=\"sic\" />" +
+                "</td><td class=\"c\">\r\n" + 
                 "<div class=\"t\">" + 
                 "<a target=\"_top\" href=\"" + hurl + "\">");
                 

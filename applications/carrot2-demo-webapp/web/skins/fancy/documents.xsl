@@ -9,6 +9,7 @@
 
   <xsl:template name="head-insert">
     <link rel="stylesheet" href="{$skinuri}/css/documents.css" />
+    <script src="{$skinuri}/js/folding.js" language="javascript"></script>
   </xsl:template>
     
   <xsl:template name="on-load">
@@ -42,7 +43,8 @@
     <table class="d" id="{@id}">
       <tr>
         <td class="r">
-          <xsl:value-of select="position()" />
+          <xsl:value-of select="position()" /><br/>
+          <a href="javascript:hlDoc({@id})" title="Show in clusters"><img src="{$skinuri}/img/sic.gif" class="sic" /></a>
         </td>
         <td class="c">
           <div class="t">
