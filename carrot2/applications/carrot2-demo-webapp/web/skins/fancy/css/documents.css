@@ -35,11 +35,16 @@ td.r {
   border-right:         2px #a0a0a0 dotted;
 }
 
+td.hl {
+  background-color: #fff8b5;
+}
+
 td.c {
   padding-left: 0.5em;
 }
 
 .t {
+  font-weight: normal;
   margin-bottom: 0.5ex;
 }
 
@@ -56,6 +61,16 @@ td.c {
   display: inline;
   padding-left: 1em;
   color: #c0c0c0;
+}
+
+a.sic {
+  font-weight: normal;
+  color: #b0b0b0;
+  font-size: 11px;
+}
+
+img.sic {
+  margin-top: 3px;
 }
 
 div#no-documents {
