@@ -13,15 +13,13 @@
 
 package org.carrot2.input.yahooapi;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.*;
 
-import org.apache.log4j.Logger;
-
+import org.apache.log4j.*;
 import org.carrot2.core.*;
 import org.carrot2.core.clustering.*;
-import org.carrot2.util.StringUtils;
+import org.carrot2.core.fetcher.*;
 
 public class YahooApiInputComponent extends LocalInputComponentBase 
 	implements RawDocumentsProducer {
@@ -115,26 +113,37 @@ public class YahooApiInputComponent extends LocalInputComponentBase
 	    		return;
 	    	}
 
-		    final int resultsRequested = super.getIntFromRequestContext(requestContext,
-		            LocalInputComponent.PARAM_REQUESTED_RESULTS, 100);
+		    final int resultsRequested = Math.min(super.getIntFromRequestContext(requestContext,
+		            LocalInputComponent.PARAM_REQUESTED_RESULTS, 100), MAXIMUM_RESULTS);
 
-		    int results = Math.min(resultsRequested, MAXIMUM_RESULTS);
+            final int startAt = super.getIntFromRequestContext(requestContext, LocalInputComponent.PARAM_START_AT, 0);
 
-		    log.info("Yahoo API query (" + results + "):" + query);
-            final YahooSearchResultConsumer consumer = new YahooSearchResultConsumer() {
-                int id = 0;
-                public void add(final YahooSearchResult result)
-                    throws ProcessingException
+            // Prepare fetchers.
+            final ParallelFetcher pfetcher = new ParallelFetcher("Yahoo! API", query, startAt, resultsRequested,
+                MAXIMUM_RESULTS)
+            {
+                public SingleFetcher getFetcher()
                 {
-                    RawDocumentSnippet snippet = new RawDocumentSnippet(Integer
-                        .toString(id), StringUtils.removeMarkup(result.title),
-                        StringUtils.removeMarkup(result.summary), result.url,
-                        id);
-                    rawDocumentConsumer.addDocument(snippet);
-                    id++;
+                    return new SingleFetcher()
+                    {
+                        public SearchResult fetch(String query, int startAt) throws ProcessingException
+                        {
+                            return doSearch(query, startAt);
+                        }
+                    };
+                }
+
+                public void pushResults(int at, final RawDocument rawDocument) throws ProcessingException
+                {
+                    rawDocumentConsumer.addDocument(rawDocument);
                 }
             };
-            service.query(query, results, consumer);
+
+            // Enable full parallel mode.
+            pfetcher.setFullParallelMode(service.getMaxResultsPerQuery());
+
+            // Run fetchers and push results.
+            pfetcher.fetch();
 	    } catch (Throwable e) {
 	    	if (e instanceof ProcessingException) {
 	    		throw (ProcessingException) e;
@@ -145,5 +154,44 @@ public class YahooApiInputComponent extends LocalInputComponentBase
 
     public String getName() {
         return "Yahoo API Input";
+    }
+
+    final SearchResult doSearch(String query, int startAt) throws ProcessingException
+    {
+        log.info("Yahoo API query (" + service.getMaxResultsPerQuery() + "):" + query);
+        final long [] estimatedResultsArray = new long[1];
+        final List results = new ArrayList();
+        try {
+            service.query(query, service.getMaxResultsPerQuery(),
+                    new YahooSearchResultConsumer() {
+                        public void add(YahooSearchResult result)
+                            throws ProcessingException
+                        {
+                            results.add(result);
+                        }
+
+                        public void estimatedResultsReceived(
+                                long estimatedResults)
+                        {
+                            estimatedResultsArray[0] = estimatedResults;
+                        }
+                    }, startAt);
+
+            RawDocument [] rawDocuments = new RawDocument[results.size()];
+            for (int i = 0; i < rawDocuments.length; i++)
+            {
+                YahooSearchResult yahooSearchResult = (YahooSearchResult)results
+                        .get(i);
+                rawDocuments[i] = new RawDocumentSnippet(Integer.toString(i),
+                        yahooSearchResult.title, yahooSearchResult.summary,
+                        yahooSearchResult.url, 0.0f);
+            }
+            
+            // Convert to SearchResult
+            return new SearchResult(rawDocuments, startAt, estimatedResultsArray[0]);
+        }
+        catch (IOException e) {
+            throw new ProcessingException(e);
+        }
     }
 }

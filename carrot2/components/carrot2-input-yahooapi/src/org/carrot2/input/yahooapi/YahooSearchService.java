@@ -56,6 +56,19 @@ public class YahooSearchService {
      * @throws IOException If an I/O exception occurred.
      */ 
     public YahooSearchResult [] query(final String query, final int requestedResults)
+        throws IOException
+    {
+        return query(query, requestedResults, 0);
+    }
+
+    /**
+     * Searches Yahoo and retrieves a maximum of <code>requestedResults</code>
+     * snippets. May throw an exception if service is no longer available.
+     * 
+     * @throws IOException If an I/O exception occurred.
+     */ 
+    public YahooSearchResult [] query(final String query, final int requestedResults, 
+            int startAt)
         throws IOException 
     {
         final ArrayList result = new ArrayList();
@@ -63,7 +76,11 @@ public class YahooSearchService {
             public void add(YahooSearchResult sr) {
                 result.add(sr);
             }
-        });
+
+            public void estimatedResultsReceived(long estimatedResults)
+            {
+            }
+        }, startAt);
         return (YahooSearchResult []) result.toArray(new YahooSearchResult [result.size()]);
     }
     
@@ -71,10 +88,23 @@ public class YahooSearchService {
      * Searches Yahoo and retrieves a maximum of <code>requestedResults</code>
      * snippets. May throw an exception if service is no longer available.
      * 
-     * @throws IOException If an I/O exception occurred. 
+     * @throws IOException If an I/O exception occurred.
+     */
+    public void query(final String query, final int requestedResults,
+            YahooSearchResultConsumer consumer)
+        throws IOException
+    {
+        query(query, requestedResults, consumer, 0);
+    }
+    
+    /**
+     * Searches Yahoo and retrieves a maximum of <code>requestedResults</code>
+     * snippets. May throw an exception if service is no longer available.
+     * 
+     * @throws IOException If an I/O exception occurred.
      */
     public void query(final String query, final int requestedResults, 
-            YahooSearchResultConsumer consumer) 
+            YahooSearchResultConsumer consumer, int startAt) 
         throws IOException
     {
         final MultiThreadedHttpConnectionManager connectionManager = new MultiThreadedHttpConnectionManager();
@@ -85,7 +115,7 @@ public class YahooSearchService {
 
         InputStream is = null; 
 
-        int startFrom = 1;
+        int startFrom = startAt + 1;
         long resultsLeft = requestedResults;
         boolean firstPass = true;
 
@@ -197,6 +227,7 @@ public class YahooSearchService {
                 }
                 if (firstPass) {
                     // Correct the number of requested results to the maximum available.
+                    consumer.estimatedResultsReceived(handler.totalResults);
                     if (handler.totalResults < descriptor.getMaxResultsPerQuery()) {
                         // Avoid a bug in Yahoo Search API which returns different total
                         // number of results and the returned number of results.
@@ -225,5 +256,10 @@ public class YahooSearchService {
 
     final void setUseSaxParser(boolean useSAX) {
         this.useXmlParser = useSAX;
+    }
+    
+    public int getMaxResultsPerQuery()
+    {
+        return descriptor.getMaxResultsPerQuery();
     }
 }

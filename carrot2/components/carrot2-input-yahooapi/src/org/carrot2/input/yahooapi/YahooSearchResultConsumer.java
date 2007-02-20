@@ -24,4 +24,6 @@ import org.carrot2.core.ProcessingException;
 interface YahooSearchResultConsumer {
     public void add(final YahooSearchResult result)
         throws ProcessingException;
+    
+    public void estimatedResultsReceived(long estimatedResults);
 }
