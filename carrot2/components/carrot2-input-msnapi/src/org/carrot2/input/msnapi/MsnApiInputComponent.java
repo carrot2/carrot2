@@ -35,7 +35,7 @@ import com.microsoft.msnsearch.*;
 public final class MsnApiInputComponent extends LocalInputComponentBase implements RawDocumentsProducer
 {
     /** Carrot Search application ID. */
-    private final static String CARROTSEARCH_APPID = "DE531D8A42139F590B253CADFAD7A86172F93B96";
+    public final static String CARROTSEARCH_APPID = "DE531D8A42139F590B253CADFAD7A86172F93B96";
 
     /** Maximum number of results (starting offset + length) */
     public final static int MAXIMUM_RESULTS = 300;
@@ -67,13 +67,19 @@ public final class MsnApiInputComponent extends LocalInputComponentBase implemen
      * Application id for querying MSN Search.
      */
     private final String appid;
+    
+    /** Culture setting (language) */
+    private final String culture;
+    public static final String DEFAULT_CULTURE = "en-US";
 
     /**
-     * Create an input component with the default service descriptor and a custom application identifier.
+     * Create an input component with the default service descriptor, 
+     * a custom application identifier and culture.
      */
-    public MsnApiInputComponent(String appid)
+    public MsnApiInputComponent(String appid, String culture)
     {
         this.appid = appid;
+        this.culture = culture;
 
         try
         {
@@ -84,9 +90,19 @@ public final class MsnApiInputComponent extends LocalInputComponentBase implemen
             throw new RuntimeException("Could not initialize MSN service.", e);
         }
     }
+    
+    /**
+     * Create an input component with the default service descriptor, a 
+     * custom application identifier and default culture.
+     */
+    public MsnApiInputComponent(String appid)
+    {
+        this(appid, DEFAULT_CULTURE);
+    }
 
     /**
-     * Creates an input component with the default service descriptor and Carrot Search's application identifier.
+     * Creates an input component with the default service descriptor, Carrot 
+     * Search's application identifier and default culture.
      */
     public MsnApiInputComponent()
     {
@@ -192,7 +208,7 @@ public final class MsnApiInputComponent extends LocalInputComponentBase implemen
     {
         final SearchRequest request = new SearchRequest(appid, // application id
             query, // query
-            "en-US", // culture info
+            culture, // culture info
             SafeSearchOptions.Off, // safe search options
             new String []
             {
