@@ -56,5 +56,5 @@
 
     <dependency name="carrot2-stemmer-stempelator" profile="demo" />
     <dependency name="carrot2-filter-case-normalizer" profile="demo" />
-    <dependency name="carrot2-util-tokenizer" profile="demo" />
+    <dependency name="carrot2-util-tokenizer" />
 </component>
