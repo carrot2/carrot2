@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<local-process id="benchmark-null">
+  <name>Benchmark -- No clustering</name>
+
+  <input  component-key="input-array-rawdocuments" />
+  <output component-key="output-array" />
+</local-process>

@@ -12,14 +12,6 @@ String indexPath = System.getProperty("lucene.index.path");
 
 luceneFactory = new LuceneLocalInputComponentFactory(indexPath);
 
-factory = new LocalComponentFactory() 
-{
-    public LocalComponent getInstance() 
-    {
-			luceneFactory.getInstance();
-    }
-};
-
 return new LoadedComponentFactory(
 	/* id */ "input-lucene", 
-	factory);
+	luceneFactory);

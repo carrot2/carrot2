@@ -69,17 +69,37 @@ public class ClusteringBenchmark
         "radio",
         "music",
         "film",
-        "arts"
+        "arts",
+        "queen",
+        "bush",
+        "usa",
+        "moon",
+        "eclipse",
+        "sun",
+        
+        "linux",
+        "windows",
+        "army",
+        "lemon",
+        "police",
+        "king",
+        "handball",
+        "notebook",
+        "word",
+        "office"
     };
+
+    /** The clustering algorithm to be measured ("lingo", "null")*/
+    private static final String CLUSTERING_ALGORITHM = "lingo";
 
     private String [] inputs = new String []
     {
-        "lucene", "yahooapi", "googleapi", "msnapi"
+        "lucene-snippets", "lucene", "yahooapi", "googleapi", "msnapi"
     };
 
     private int [] resultCounts = new int []
     {
-        50, 100, 150, 200, 250, 300, 350, 400
+        50, 100, 150, 200, 250, 300, 350, 400 
     };
 
     public void init()
@@ -112,7 +132,8 @@ public class ClusteringBenchmark
         // Input warmup
         if (inputWarmup)
         {
-            run("lucene", "lingo", inputWarmupQuery, inputWarmupResults);
+            run("lucene", CLUSTERING_ALGORITHM, inputWarmupQuery, inputWarmupResults);
+            run("lucene-snippets", CLUSTERING_ALGORITHM, inputWarmupQuery, inputWarmupResults);
         }
 
         // Clustering algorithm warmup
@@ -121,21 +142,22 @@ public class ClusteringBenchmark
 
         for (int i = 0; i < warmUpRuns; i++)
         {
-            executeQuery("warmup-lingo", "data-mining.xml", parameters);
+            executeQuery("warmup-" + CLUSTERING_ALGORITHM, "data-mining.xml", parameters);
         }
     }
 
     private void run()
     {
         int resultCountIndex = 0;
-        for (int j = 0; j < inputs.length; j++)
+        int queryIndex = 0;
+        for (int i = 0; i < queries.length; i++)
         {
-            for (int i = 0; i < queries.length; i++)
+            for (int j = 0; j < inputs.length; j++)
             {
-                run(inputs[j], "lingo", queries[i],
-                    resultCounts[resultCountIndex]);
-
+                run(inputs[j], CLUSTERING_ALGORITHM, queries[i],
+                        resultCounts[resultCountIndex]);
                 resultCountIndex = (resultCountIndex + 1) % resultCounts.length;
+                queryIndex = (queryIndex + 1) % queries.length;
             }
         }
     }
@@ -172,9 +194,9 @@ public class ClusteringBenchmark
 
         // Processing times
         System.out.println(inputId + ";" + algorithmId + ";"
-            + input.documents.size() + ";input;" + inputTime);
-        System.out.println(inputId + ";" + algorithmId + ";"
-            + input.documents.size() + ";clustering;" + clusteringTime);
+            + input.documents.size() + ";input;" + inputTime + ";" + query);
+        System.out.println(inputId + ";" + algorithmId + ";" 
+            + input.documents.size() + ";clustering;" + clusteringTime + ";" + query);
     }
 
     private ProcessingResult executeQuery(String processId, String query,
