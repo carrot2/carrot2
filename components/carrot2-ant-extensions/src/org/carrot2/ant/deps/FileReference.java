@@ -31,7 +31,7 @@ public class FileReference {
 
 	public FileReference(File base, File file) 
         throws IllegalArgumentException {
-        final FileUtils futils = FileUtils.newFileUtils(); 
+        final FileUtils futils = FileUtils.getFileUtils(); 
         if (!base.isAbsolute()) {
             throw new IllegalArgumentException("Base must be an" +
                 " absolute reference: " + base.getPath());

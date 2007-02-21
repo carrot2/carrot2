@@ -36,7 +36,7 @@ class CheckNewerElement implements Serializable {
     private long lastModified;
 
 	public CheckNewerElement(Project project, File base, Element configElement) throws Exception {
-        final FileUtils futils = FileUtils.newFileUtils();
+        final FileUtils futils = FileUtils.getFileUtils();
         final NodeList nlist = configElement.getChildNodes();
         final MostRecentFileDateTask mrfd = new MostRecentFileDateTask();
         mrfd.setProject(project);

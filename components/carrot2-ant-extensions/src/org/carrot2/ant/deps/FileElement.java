@@ -28,7 +28,7 @@ class FileElement implements Serializable {
 
     public FileElement(File base, String localPrefix, Element configElement) 
      throws Exception {
-        final FileUtils futils = FileUtils.newFileUtils();
+        final FileUtils futils = FileUtils.getFileUtils();
         final String location = configElement.getAttribute( "location" );
         if (location == null)
             throw new Exception("location attribute required.");
