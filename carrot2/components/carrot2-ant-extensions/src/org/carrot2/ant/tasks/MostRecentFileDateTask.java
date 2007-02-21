@@ -154,7 +154,7 @@ public class MostRecentFileDateTask extends Task {
 
         checkParameters();
         
-        FileUtils fileUtils = FileUtils.newFileUtils();
+        FileUtils fileUtils = FileUtils.getFileUtils();
         
         int includedFiles = 0;
         long lastModifiedDate = 0;
