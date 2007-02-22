@@ -70,8 +70,6 @@ public class TextMarker
 
     /**
      * Tokenizes the input and assigns ids to words.
-     * 
-     * @param input
      */
     public void tokenize(char[] text)
     {
@@ -82,9 +80,6 @@ public class TextMarker
     /**
      * Tokenizes the input, assigns ids to words and notifies the listener of
      * the related events.
-     * 
-     * @param input
-     * @param listener
      */
     public void tokenize(char[] text, TextMarkerListener listener)
     {
@@ -150,7 +145,6 @@ public class TextMarker
      * Returns an Id for a word or null if the word has not been marked.
      * 
      * @param word
-     * @return
      */
     public String getWordId(String word)
     {

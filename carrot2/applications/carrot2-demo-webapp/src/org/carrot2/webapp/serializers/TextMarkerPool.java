@@ -42,8 +42,6 @@ public class TextMarkerPool
 
     /**
      * Borrows one instance of {@link TextMarker} from the pool.
-     * 
-     * @return
      */
     public TextMarker borrowTextMarker()
     {
