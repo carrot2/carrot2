@@ -15,5 +15,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/xslt-filter-0.93.jar" sourcepath="D:/repositories/prv-dweiss/projects/trunk/xslt-filter/src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-stemmer-snowball"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-tokenizer"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/json.jar"/>
 	<classpathentry kind="output" path="web/WEB-INF/classes"/>
 </classpath>
