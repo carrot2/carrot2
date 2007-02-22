@@ -82,6 +82,8 @@ public interface RawDocument {
     /**
      * Returns an array of idenfitiers of all sources that returned this
      * document.
+     * 
+     * <p>The value of this property is <code>String []</code>.</p>
      */
     public static final String PROPERTY_SOURCES = "source";
     
