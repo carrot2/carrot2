@@ -48,6 +48,9 @@
     <dependency name="carrot2-license" />
     <dependency name="carrot2-util-common" />
     <dependency name="beanshell" />
-    
+
     <dependency name="junit" profile="test" />
+    
+    <!-- These modules are required for compilation, but are not explicitly exported. -->
+    <dependency name="json" noexport="true" no-copy="true" />
 </component>
