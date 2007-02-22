@@ -35,6 +35,7 @@
     <dependency name="carrot2-util-common" />
     <dependency name="carrot2-util-gzip" />
 
+    <dependency name="json" />
     <dependency name="ehcache" />
     <dependency name="dom4j" />
     <dependency name="xerces" />

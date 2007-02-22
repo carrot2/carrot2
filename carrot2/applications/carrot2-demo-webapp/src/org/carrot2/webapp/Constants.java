@@ -36,7 +36,10 @@ public final class Constants {
 
     public final static String MIME_HTML_CHARSET_UTF
         = MIME_HTML + "; charset=" + ENCODING_UTF;
-    
+
+    public final static String MIME_JSON
+        = "application/json";
+
     /**
      * No instances.
      */
