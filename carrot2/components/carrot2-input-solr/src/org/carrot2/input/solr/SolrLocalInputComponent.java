@@ -34,7 +34,7 @@ public class SolrLocalInputComponent
         super(preprocessUrlBase(solrServiceUrlBase)
                         + "/?q=${query}&start=0&rows=${requested-results}&indent=off",
                SolrLocalInputComponent.class
-                        .getResourceAsStream("solr-to-c2.xsl"));
+                        .getResource("solr-to-c2.xsl"));
     }
 
 
