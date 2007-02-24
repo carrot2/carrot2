@@ -139,6 +139,9 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
         final List clusters = stcEngine.getClusters();
         int max = params.getMaxClusters();
 
+        final HashSet junkDocuments = new HashSet(documentReferences.size());
+        junkDocuments.addAll(documents);
+
         // Convert STC's clusters to the format required by local interfaces.
         final List rawClusters = new ArrayList();
         for (Iterator i = clusters.iterator(); i.hasNext() && (max > 0); max--)
@@ -160,11 +163,30 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
                 final TokenizedDocument tokenizedDoc = (TokenizedDocument) documents.get(docIndex);
                 final RawDocument rawDoc = (RawDocument) tokenizedDoc.getProperty(TokenizedDocument.PROPERTY_RAW_DOCUMENT);
                 rawCluster.addDocument(rawDoc);
+                junkDocuments.remove(tokenizedDoc);
             }
-
+            
             rawClusters.add(rawCluster);
         }
-        
+
+        // Create the 'junk' cluster.
+        if (junkDocuments.size() > 0)
+        {
+            final RawClusterBase junkCluster = new RawClusterBase();
+            junkCluster.setProperty(RawCluster.PROPERTY_JUNK_CLUSTER, Boolean.TRUE);
+            junkCluster.setScore(0.0d);
+            junkCluster.addLabel("(Other)");
+
+            for (final Iterator i = junkDocuments.iterator(); i.hasNext();)
+            {
+                final TokenizedDocument tokenizedDoc = (TokenizedDocument) i.next();
+                final RawDocument rawDoc = (RawDocument) tokenizedDoc.getProperty(TokenizedDocument.PROPERTY_RAW_DOCUMENT);
+                junkCluster.addDocument(rawDoc);
+            }
+            
+            rawClusters.add(junkCluster);
+        }
+
         // Don't want to time the following components, so stop here
         stopTimer();
 
