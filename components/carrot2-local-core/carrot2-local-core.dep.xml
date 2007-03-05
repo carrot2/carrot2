@@ -51,6 +51,9 @@
 
     <dependency name="junit" profile="test" />
     
+    <!-- For JUnit base classes included in src/ -->
+    <dependency name="junit" noexport="true" no-copy="true" />
+    
     <!-- These modules are required for compilation, but are not explicitly exported. -->
     <dependency name="json" noexport="true" no-copy="true" />
 </component>

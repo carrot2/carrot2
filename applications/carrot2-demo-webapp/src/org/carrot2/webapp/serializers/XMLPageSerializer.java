@@ -15,6 +15,7 @@ package org.carrot2.webapp.serializers;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.*;
 
 import org.carrot2.util.URLEncoding;
 import org.carrot2.webapp.*;
@@ -124,9 +125,11 @@ public class XMLPageSerializer implements PageSerializer {
             
             for (Iterator j = inputTab.getOtherProperties().entrySet().iterator(); j.hasNext();) {
                 final Map.Entry entry = (Map.Entry) j.next();
-                final Element propElem = tab.addElement("property");
-                propElem.addAttribute("key", (String) entry.getKey());
-                propElem.addAttribute("value", (String) entry.getValue());
+                if (entry.getValue() != null) {
+                    final Element propElem = tab.addElement("property");
+                    propElem.addAttribute("key", (String) entry.getKey());
+                    addTextWithLinks(propElem, entry.getValue().toString());
+                }
             }
             
             // Add example queries urls
@@ -195,5 +198,23 @@ public class XMLPageSerializer implements PageSerializer {
         meta.addElement("query").setText(searchRequest.query);
 
         return meta;
+    }
+    
+    private void addTextWithLinks(Element element, String text)
+    {
+        Matcher matcher = Pattern.compile("(<<(.*)>>)").matcher(text);
+        
+        int lastMatchedIndex = 0;
+        
+        while (matcher.find())
+        {
+            element.addText(text.substring(lastMatchedIndex, matcher.start()));
+            Element a = element.addElement("a");
+            a.setText(matcher.group(2));
+            a.addAttribute("href", "http://" + matcher.group(2));
+            lastMatchedIndex = matcher.end();
+        }
+        
+        element.addText(text.substring(lastMatchedIndex));
     }
 }

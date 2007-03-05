@@ -108,7 +108,7 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
         config.maxIdle = 5;
         config.timeBetweenEvictionRunsMillis = 1000 * 60 * 4;
         config.minEvictableIdleTimeMillis = 1000 * 60 * 5;
-        config.minIdle = 0;
+        config.minIdle = 1;
         config.numTestsPerEvictionRun = 5;
         config.testOnBorrow = false;
         config.testOnReturn = false;

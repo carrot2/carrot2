@@ -13,12 +13,7 @@
 
 package org.carrot2.input.xml;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -161,10 +156,7 @@ public class XmlLocalInputComponent extends
      * This is the actual workhorse. This method is also used by the remote component.
      */
     protected Document performQuery(Map params) throws ProcessingException {
-        int requestedResults = 100;
-        if (params.get(LocalInputComponent.PARAM_REQUESTED_RESULTS) != null) {
-            requestedResults = Integer.parseInt((String) params.get(LocalInputComponent.PARAM_REQUESTED_RESULTS));
-        }
+        int requestedResults = getRequestedResults(params);
 
         InputStream source = null;
         Object sourceOb = params.get("source");
@@ -372,9 +364,23 @@ public class XmlLocalInputComponent extends
             String url = docElem.elementText("url");
             String title = docElem.elementText("title");
             String snippet = docElem.elementText("snippet");
-
+            
             RawDocument document = new RawDocumentSnippet(new Integer(id),
-                    title, snippet, url, 0);
+                title, snippet, url, 0);
+
+            if (docElem.element("sources") != null)
+            {
+                List sources = docElem.element("sources").elements();
+                String [] sourcesArray = new String [sources.size()];
+                int j = 0;
+                for (Iterator it = sources.iterator(); it.hasNext(); j++)
+                {
+                    Element sourceElement = (Element) it.next();
+                    sourcesArray[j] = sourceElement.getText();
+                }
+                document.setProperty(RawDocument.PROPERTY_SOURCES, sourcesArray);
+            }
+
             this.rawDocumentConsumer.addDocument(document);
         }
     }
