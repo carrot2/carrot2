@@ -69,6 +69,7 @@
     <dependency name="carrot2-filter-stc" profile="stripped" nocopy="true" />
     <dependency name="carrot2-filter-haog" profile="stripped" nocopy="true" />
     <dependency name="carrot2-filter-fuzzyants" profile="stripped" nocopy="true" />
+    <dependency name="carrot2-input-etools"  profile="stripped" nocopy="true" />
     <dependency name="carrot2-input-yahooapi"  profile="stripped" nocopy="true" />
     <dependency name="carrot2-input-msnapi"  profile="stripped" nocopy="true" />
     <dependency name="carrot2-input-pubmed"  profile="stripped" nocopy="true" />
@@ -83,6 +84,7 @@
     <dependency name="carrot2-filter-stc" profile="full" />
     <dependency name="carrot2-filter-haog" profile="full" />
     <dependency name="carrot2-filter-fuzzyants" profile="full" />
+    <dependency name="carrot2-input-etools" profile="full" />
     <dependency name="carrot2-input-lucene" profile="full" />
     <dependency name="carrot2-input-yahooapi"  profile="full" />
     <dependency name="carrot2-input-msnapi"  profile="full" />

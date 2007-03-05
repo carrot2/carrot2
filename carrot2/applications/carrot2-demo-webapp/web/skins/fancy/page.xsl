@@ -247,12 +247,12 @@
               </xsl:if>
 
               <td class="tab-{$status}-body" style="white-space: nowrap;" onclick="javascript:switchTab('{$tabElemName}', '{@id}')"
-                  title="{property[@key = 'tab.description']/@value}">
+                  title="{property[@key = 'tab.description']}">
                   
                   <xsl:choose>
                     <xsl:when test="$tabId = @id">
                       <xsl:if test="property[@key = 'tab.icon']">
-                          <img class="tab-img" src="{$skinuri}/inputs/{property[@key = 'tab.icon']/@value}" alt="{property[@key = 'tab.name']/@value}" />
+                          <img class="tab-img" src="{$skinuri}/inputs/{property[@key = 'tab.icon']}" alt="{property[@key = 'tab.name']}" />
                           <xsl:apply-templates select="short" />
                       </xsl:if>
                     </xsl:when>
@@ -260,10 +260,10 @@
                     <xsl:otherwise>
                       <a href="javascript:switchTab('{$tabElemName}', '{@id}')" class="tab-link">
                         <xsl:if test="property[@key = 'tab.accel']">
-                          <xsl:attribute name="accesskey"><xsl:value-of select="property[@key = 'tab.accel']/@value" /></xsl:attribute>
+                          <xsl:attribute name="accesskey"><xsl:value-of select="property[@key = 'tab.accel']" /></xsl:attribute>
                         </xsl:if>
                         <xsl:if test="property[@key = 'tab.icon']">
-                          <img class="tab-img" src="{$skinuri}/inputs/{property[@key = 'tab.icon']/@value}" alt="{property[@key = 'tab.name']/@value}" />
+                          <img class="tab-img" src="{$skinuri}/inputs/{property[@key = 'tab.icon']}" alt="{property[@key = 'tab.name']}" />
                         </xsl:if>
                         <xsl:apply-templates select="short" />
                       </a>
@@ -287,7 +287,7 @@
   <xsl:template match="tab/short">
     <xsl:choose>
       <xsl:when test="../property[@key = 'tab.accel']">
-        <xsl:variable name="accel"><xsl:value-of select="../property[@key = 'tab.accel']/@value" /></xsl:variable>
+        <xsl:variable name="accel"><xsl:value-of select="../property[@key = 'tab.accel']" /></xsl:variable>
       
         <xsl:choose>
           <xsl:when test="contains(string(.), $accel)">
@@ -318,7 +318,7 @@
           <xsl:attribute name="style">display: none;</xsl:attribute>
         </xsl:if>
         <div class="process-desc">
-          <xsl:value-of select="property[@key = 'tab.description.startup']/@value" />
+          <xsl:apply-templates select="property[@key = 'tab.description.startup']" />
         </div>
        
         <xsl:if test="./example-queries and $show-example-queries = 'true'">

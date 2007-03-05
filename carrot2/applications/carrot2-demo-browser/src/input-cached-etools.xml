@@ -1,0 +1,4 @@
+<local-component-factory 
+	id="input-cached-etools" 
+	component-class="org.carrot2.demo.components.InputCachedETools">
+</local-component-factory>

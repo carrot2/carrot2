@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<local-process id="pubmed-lingo">
-  <name>PubMed -- Lingo Classic Clusterer</name>
+<local-process id="etools-lingo">
+  <name>eTools -- Lingo Classic Clusterer</name>
 
-  <input  component-key="input-cached-pubmed" />
+  <input  component-key="input-cached-etools" />
   <filter component-key="filter-rawdocument-enumerator" />
   <filter component-key="filter-clustering-lingo-en" />
   <filter component-key="filter-save-xml" />
@@ -11,4 +11,5 @@
 
   <attribute key="process.settings.class" 
 	         value="org.carrot2.demo.settings.LingoClassicSettings" />
+  <attribute key="process.default" value="true" />
 </local-process>

@@ -267,6 +267,10 @@ input.hl {
 .process-desc {
 }
 
+.process-desc a {
+	color: #808080;
+}
+
 .example-queries {
   margin-top: 7px;
 }
