@@ -12,6 +12,6 @@
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/junit-addons-1.4.jar"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/bsh-2.0b4.jar"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/log4j-1.2.13.jar"/>
-	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/json.jar"/>
+	<classpathentry exported="true" kind="var" path="CARROT2_CHECKOUT_BASE/lib/json.jar"/>
 	<classpathentry kind="output" path="tmp/eclipse/classes"/>
 </classpath>
