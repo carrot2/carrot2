@@ -385,8 +385,13 @@ public final class SwingDemoGui {
                 final String processId = (String) processComboModel.getSelectedKey();
                 final ProcessSettings settings = demoContext.getSettingsObject(processId);
 
-                JOptionPane.showMessageDialog(frame, 
-                        new Object[] {settings.getSettingsComponent(frame)}, "Default settings", 
+                final JScrollPane scrollPane = new JScrollPane(settings.getSettingsComponent(frame));
+                final Dimension dim = scrollPane.getPreferredSize();
+                scrollPane.setPreferredSize(new Dimension(dim.width, Math.min(640, (int) dim.getHeight())));
+                scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+                scrollPane.setBorder(BorderFactory.createEmptyBorder());
+                JOptionPane.showMessageDialog(frame,
+                        new Object[] {scrollPane}, "Default settings", 
                         JOptionPane.PLAIN_MESSAGE);
             }
         });

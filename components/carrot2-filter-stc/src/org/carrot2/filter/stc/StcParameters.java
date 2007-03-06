@@ -16,6 +16,8 @@ package org.carrot2.filter.stc;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.carrot2.filter.stc.algorithm.STCEngine;
+
 /**
  * A class for handling STC parameters and 
  * overriding them with mapped values.
@@ -74,6 +76,37 @@ public class StcParameters {
 	private int maxDescPhraseLength;
 
     /**
+     * A factor in calculation of the base cluster score. If greater then
+     * zero, single-term base clusters are assigned this value avoiding the 
+     * penalty function.
+     * 
+     * @see STCEngine#calculateModifiedBaseClusterScore(int, int, StcParameters)
+     */
+	private float singleTermBoost;
+
+    /**
+     * A factor in calculation of the base cluster score. 
+     * 
+     * @see STCEngine#calculateModifiedBaseClusterScore(int, int, StcParameters)
+     */
+	private int optimalPhraseLength;
+	
+    /**
+     * A factor in calculation of the base cluster score. 
+     * 
+     * @see STCEngine#calculateModifiedBaseClusterScore(int, int, StcParameters)
+     */
+	private double optimalPhraseLengthDev;
+    
+    /**
+     * A factor in calculation of the base cluster score, boosting the score
+     * depending on the number of documents found in the base cluster. 
+     *
+     * @see STCEngine#calculateModifiedBaseClusterScore(int, int, StcParameters)
+     */
+    private double documentCountBoost;
+
+    /**
      * Creates a new objects with default settings.
      */
     public StcParameters() {
@@ -87,6 +120,10 @@ public class StcParameters {
         this.maxPhraseOverlap = StcConstants.DEFAULT_MAX_PHRASE_OVERLAP;
         this.mostGeneralPhraseCoverage = StcConstants.DEFAULT_MOST_GENERAL_PHRASE_COVERAGE;
         this.maxDescPhraseLength = StcConstants.DEFAULT_MAX_PHRASE_LENGTH;
+        this.singleTermBoost = StcConstants.DEFAULT_SINGLE_TERM_BOOST;
+        this.optimalPhraseLength = StcConstants.DEFAULT_OPTIMAL_PHRASE_LENGTH;
+        this.optimalPhraseLengthDev = StcConstants.DEFAULT_OPTIMAL_PHRASE_LENGTH_DEV;
+        this.documentCountBoost = StcConstants.DEFAULT_DOCUMENT_COUNT_BOOST;
     }
 
     public static StcParameters fromMap(Map map) {
@@ -178,6 +215,39 @@ public class StcParameters {
             }
         }      
 
+        value = (String) map.get(StcConstants.SINGLE_TERM_BOOST);
+        if (value != null) {
+            params.singleTermBoost = Float.parseFloat(value);
+            if (params.singleTermBoost < 0.0d
+                    || params.singleTermBoost > 1.0d) {
+                throw new RuntimeException("Illegal value range.");
+            }
+        }
+
+        value = (String) map.get(StcConstants.OPTIMAL_PHRASE_LENGTH);
+        if (value != null) {
+            params.optimalPhraseLength = Integer.parseInt(value);
+            if (params.optimalPhraseLength < 0) {
+                throw new RuntimeException("Illegal value range.");
+            }
+        }
+
+        value = (String) map.get(StcConstants.OPTIMAL_PHRASE_LENGTH_DEV);
+        if (value != null) {
+            params.optimalPhraseLengthDev = Double.parseDouble(value);
+            if (params.optimalPhraseLengthDev < 0) {
+                throw new RuntimeException("Illegal value range.");
+            }
+        }
+
+        value = (String) map.get(StcConstants.DOCUMENT_COUNT_BOOST);
+        if (value != null) {
+            params.documentCountBoost = Double.parseDouble(value);
+            if (params.documentCountBoost < 0.0d) {
+                throw new RuntimeException("Illegal value range.");
+            }
+        }
+
         return params;
     }
     
@@ -193,6 +263,10 @@ public class StcParameters {
         map.put(StcConstants.MAX_PHRASE_OVERLAP, Double.toString(getMaxPhraseOverlap()));
         map.put(StcConstants.MOST_GENERAL_PHRASE_COVERAGE, Double.toString(getMostGeneralPhraseCoverage()));
         map.put(StcConstants.MAX_PHRASE_LENGTH, Integer.toString(getMaxDescPhraseLength()));
+        map.put(StcConstants.SINGLE_TERM_BOOST, Double.toString(getTermBoost()));
+        map.put(StcConstants.OPTIMAL_PHRASE_LENGTH, Integer.toString(getOptimalPhraseLength()));
+        map.put(StcConstants.OPTIMAL_PHRASE_LENGTH_DEV, Double.toString(getOptimalPhraseLengthDev()));
+        map.put(StcConstants.DOCUMENT_COUNT_BOOST, Double.toString(getDocumentCountBoost()));
         return map;
     }
 
@@ -235,4 +309,21 @@ public class StcParameters {
 	public int getMaxDescPhraseLength() {
 		return maxDescPhraseLength;
 	}
+
+    public float getTermBoost() {
+        return singleTermBoost;
+    }
+
+    public int getOptimalPhraseLength() {
+        return optimalPhraseLength;
+    }
+
+    public double getOptimalPhraseLengthDev() {
+        return optimalPhraseLengthDev;
+    }
+
+    public double getDocumentCountBoost()
+    {
+        return documentCountBoost;
+    }
 }
