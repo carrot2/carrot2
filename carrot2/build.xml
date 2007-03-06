@@ -339,6 +339,8 @@ TESTING: @{component.path}
     <component-apply component.path="components/carrot2-input-yahooapi" />
     <component-apply component.path="components/carrot2-input-opensearch" />
     <component-apply component.path="components/carrot2-input-msnapi" />
+    <component-apply component.path="components/carrot2-input-pubmed" />
+    <component-apply component.path="components/carrot2-input-solr" />
 
     <component-apply component.path="components/carrot2-odp-core" />
 
