@@ -41,6 +41,26 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
 
     private boolean autoload;
 
+    /** Default component pool configuration */
+    public static final GenericObjectPool.Config DEFAULT_COMPONENT_POOL_CONFIG;
+    static {
+        DEFAULT_COMPONENT_POOL_CONFIG = new GenericObjectPool.Config();
+        DEFAULT_COMPONENT_POOL_CONFIG.whenExhaustedAction = GenericObjectPool.WHEN_EXHAUSTED_GROW;
+        DEFAULT_COMPONENT_POOL_CONFIG.maxWait = 0; // irrelevant
+        DEFAULT_COMPONENT_POOL_CONFIG.maxActive = 0; // irrelevant
+        DEFAULT_COMPONENT_POOL_CONFIG.maxIdle = 5;
+        DEFAULT_COMPONENT_POOL_CONFIG.timeBetweenEvictionRunsMillis = 1000 * 60 * 4;
+        DEFAULT_COMPONENT_POOL_CONFIG.minEvictableIdleTimeMillis = 1000 * 60 * 5;
+        DEFAULT_COMPONENT_POOL_CONFIG.minIdle = 1;
+        DEFAULT_COMPONENT_POOL_CONFIG.numTestsPerEvictionRun = 5;
+        DEFAULT_COMPONENT_POOL_CONFIG.testOnBorrow = false;
+        DEFAULT_COMPONENT_POOL_CONFIG.testOnReturn = false;
+        DEFAULT_COMPONENT_POOL_CONFIG.testWhileIdle = false;        
+    }
+    
+    /** Component pool configuration */
+    private GenericObjectPool.Config poolConfig;
+    
     /**
      * Default implementation of the {@link ProcessingResult} interface.
      */
@@ -74,12 +94,23 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
     }    
     
     /**
-     * Creates a new instance of the controller.
+     * Creates a new instance of the controller with the default component 
+     * pool settings.
      */
     public LocalControllerBase()
     {
+        this(DEFAULT_COMPONENT_POOL_CONFIG);
+    }
+    
+    /**
+     * Creates a new instance of the controller with the specified configuration
+     * of the component pools.
+     */
+    public LocalControllerBase(GenericObjectPool.Config componentPoolConfig)
+    {
         componentPools = new HashMap();
         processes = new LinkedHashMap();
+        this.poolConfig = componentPoolConfig;
     }
 
     public void addLocalComponentFactory(String componentId,
@@ -101,21 +132,8 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
             }
         };
 
-        GenericObjectPool.Config config = new GenericObjectPool.Config();
-        config.whenExhaustedAction = GenericObjectPool.WHEN_EXHAUSTED_GROW;
-        config.maxWait = 0; // irrelevant
-        config.maxActive = 0; // irrelevant
-        config.maxIdle = 5;
-        config.timeBetweenEvictionRunsMillis = 1000 * 60 * 4;
-        config.minEvictableIdleTimeMillis = 1000 * 60 * 5;
-        config.minIdle = 1;
-        config.numTestsPerEvictionRun = 5;
-        config.testOnBorrow = false;
-        config.testOnReturn = false;
-        config.testWhileIdle = false;
-        
         componentPools.put(componentId, new GenericObjectPool(
-            poolableObjectFactory, config));
+            poolableObjectFactory, poolConfig));
     }
     
     /**

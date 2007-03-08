@@ -15,6 +15,7 @@ package org.carrot2.core.profiling;
 
 import java.util.Map;
 
+import org.apache.commons.pool.impl.GenericObjectPool.Config;
 import org.carrot2.core.*;
 
 /**
@@ -34,6 +35,17 @@ import org.carrot2.core.*;
  */
 public class ProfiledLocalController extends LocalControllerBase
 {
+    
+    public ProfiledLocalController()
+    {
+        super();
+    }
+
+    public ProfiledLocalController(Config componentPoolConfig)
+    {
+        super(componentPoolConfig);
+    }
+
     /*
      * (non-Javadoc)
      * 
