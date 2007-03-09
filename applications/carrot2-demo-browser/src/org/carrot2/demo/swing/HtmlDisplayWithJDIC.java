@@ -42,6 +42,11 @@ final class HtmlDisplayWithJDIC extends HtmlDisplay {
     private final HashMap savedFiles = new HashMap();
 
     private final class InternalWebBrowserListener implements WebBrowserListener {
+        public void initializationCompleted(WebBrowserEvent event)
+        {
+            log.info("Web Browser initialization completed.");
+        }
+
         public void downloadStarted(WebBrowserEvent event) {
         }
 
@@ -52,6 +57,7 @@ final class HtmlDisplayWithJDIC extends HtmlDisplay {
         }
 
         public void downloadError(WebBrowserEvent event) {
+            log.warn("Browser opening error: " + event);
         }
 
         public void documentCompleted(WebBrowserEvent event) {
@@ -71,9 +77,16 @@ final class HtmlDisplayWithJDIC extends HtmlDisplay {
 
         public void statusTextChange(WebBrowserEvent event) {
         }
+
+        public void windowClose(WebBrowserEvent arg0)
+        {
+        }
     }
-    
+
     public HtmlDisplayWithJDIC() {
+        final BrowserEngineManager manager = BrowserEngineManager.instance();
+        manager.setActiveEngine(BrowserEngineManager.IE);
+
         this.browser = new WebBrowser();
         this.browser.setFocusable(false);
         
