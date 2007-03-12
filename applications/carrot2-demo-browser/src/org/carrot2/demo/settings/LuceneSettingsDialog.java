@@ -29,6 +29,7 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexReader.FieldOption;
 import org.carrot2.demo.swing.SwingUtils;
+import org.carrot2.input.lucene.StandardAnalyzerWithPorterStemmer;
 
 import com.jgoodies.forms.builder.DefaultFormBuilder;
 import com.jgoodies.forms.layout.FormLayout;
@@ -137,6 +138,7 @@ public class LuceneSettingsDialog extends JPanel {
 
                         builder.appendSeparator("Analyzer");
                         final JComboBox analyzers = new JComboBox(new Object [] {
+                                StandardAnalyzerWithPorterStemmer.class.getName(),
                                 StandardAnalyzer.class.getName(), 
                                 SimpleAnalyzer.class.getName(),
                         });

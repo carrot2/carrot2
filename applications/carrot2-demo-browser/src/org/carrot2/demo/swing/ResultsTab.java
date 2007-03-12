@@ -649,7 +649,7 @@ public class ResultsTab extends JPanel {
         clusters.add(rc);
         final HashSet documents = collectDocuments(clusters);
 
-        appendHtmlForDocuments(buffer, documents, rc.getSubclusters().size() > 0);
+        appendHtmlForDocuments(buffer, documents, true);
 
         browserView.appendHtmlTrailer(buffer);
 
