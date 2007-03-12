@@ -13,10 +13,7 @@
 
 package org.carrot2.input.lucene;
 
-import java.io.*;
-
-import org.apache.lucene.analysis.*;
-import org.apache.lucene.analysis.standard.*;
+import org.apache.lucene.analysis.Analyzer;
 
 /**
  * @author Stanislaw Osinski
@@ -29,13 +26,6 @@ public class PorterAnalyzerFactory implements AnalyzerFactory
     
     public Analyzer getInstance()
     {
-        return new StandardAnalyzer()
-        {
-            public TokenStream tokenStream(String fieldName, Reader reader)
-            {
-                return new PorterStemFilter(super.tokenStream(fieldName,
-                    reader));
-            }
-        };
+        return new StandardAnalyzerWithPorterStemmer();
     }
 }

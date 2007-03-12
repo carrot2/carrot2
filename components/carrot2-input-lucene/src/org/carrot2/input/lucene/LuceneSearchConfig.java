@@ -76,7 +76,6 @@ public final class LuceneSearchConfig
         this.summarizerConfig = summarizerConfig;
     }
 
-    
     /**
      * Setting of the Lucene's snippet generator to be used on the summary
      * field. Please see the constants for example summarizer configurations.
