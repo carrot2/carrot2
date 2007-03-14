@@ -18,7 +18,7 @@
     <script src="{$skinuri}/js/folding.js" language="javascript"></script>
     <script>
       var clusterDocs = new Array();
-      <xsl:for-each select="//group">clusterDocs['<xsl:value-of select="generate-id(.)" />']=new Array(<xsl:value-of select="@docs" />);</xsl:for-each>
+      <xsl:for-each select="//group">clusterDocs['<xsl:value-of select="generate-id(.)" />']=[<xsl:value-of select="@docs" />];</xsl:for-each>
     </script>
   </xsl:template>
 
