@@ -74,7 +74,7 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
 
     private void prepareQueryWordIds(String query)
     {
-        String cleanQuery = query.replaceAll("[^a-zA-Z0-9 ]", "");
+        String cleanQuery = query.replaceAll("[^0-9\u0041-\u005a\u0061-\u007a\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u00ff\u0100-\u1fff\u3040-\u318f\u3300-\u337f\u3400-\u3d2d\u4e00-\u9fff\uf900-\ufaff ]", "");
         queryWordIds = new HashSet();
         textMarker.tokenize(cleanQuery.toCharArray(), new TextMarkerListener() {
             public void markedTextIdentified(char[] text, int startPosition,
