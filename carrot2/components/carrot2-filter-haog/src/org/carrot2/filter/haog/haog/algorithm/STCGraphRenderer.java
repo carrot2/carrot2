@@ -13,6 +13,7 @@
 
 package org.carrot2.filter.haog.haog.algorithm;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -37,7 +38,13 @@ public class STCGraphRenderer implements GraphRenderer {
 	 * Documents retrieved from user's query
 	 */
 	private List documents;
-	/**
+        
+        /**
+         * Documents not clustered.
+         */
+        private HashSet junkDocuments;
+
+        /**
 	 * Parameters for clusters creation.
 	 */
 	private STCParameters params;
@@ -58,6 +65,8 @@ public class STCGraphRenderer implements GraphRenderer {
    	RawClustersConsumer consumer) throws ProcessingException {
     	this.documents = documents;
     	this.params = (STCParameters) params;
+        junkDocuments = new HashSet(documents.size());
+    	junkDocuments.addAll(documents);
     	
     	CombinedVertex kernelVertex;
 		RawClusterBase rawCluster;
@@ -73,6 +82,18 @@ public class STCGraphRenderer implements GraphRenderer {
 		}
         Statistics.getInstance().setValue("Clusters repeated in hierarhy", 
         		new Integer(this.repeatedClusters));
+
+        if (junkDocuments.size() > 0) {
+            rawCluster = new RawClusterBase();
+            rawCluster.addLabel("(Other)");
+            for (Iterator iter = junkDocuments.iterator(); iter.hasNext();) {
+                RawDocument rawDocument = (RawDocument) ((TokenizedDocument)iter.next()).getProperty(
+                            TokenizedDocument.PROPERTY_RAW_DOCUMENT);
+                rawCluster.addDocument(rawDocument);
+                
+            }
+            consumer.addCluster(rawCluster);
+        }
 	}
 
     /**
@@ -147,6 +168,7 @@ public class STCGraphRenderer implements GraphRenderer {
 				subCluster = createRCFromCVSimple(successor);
 				rawCluster.addSubcluster(subCluster);
 			}
+
 		}
 		return rawCluster;
 	}
@@ -170,7 +192,34 @@ public class STCGraphRenderer implements GraphRenderer {
 	        rawDocument = (RawDocument) tokenizedDoc.getProperty(
 	        		TokenizedDocument.PROPERTY_RAW_DOCUMENT);
         	rawCluster.addDocument(rawDocument);
+                junkDocuments.remove(tokenizedDoc);
 		}
 	}
 
+
+
+        /**
+         * Orders the tokens in a string alphabetically.
+         * @param unorderedText text to order
+         * @param delim delimiter that separates tokens in the text
+         * @return an ordered
+         */
+        private static String orderText(final String unorderedText,
+                final String delim) {
+            String orderedClusterText = "";
+            String[] clusterTextTokens = unorderedText.split(delim);
+            for (int idxToken = 0; idxToken < clusterTextTokens.length;
+                idxToken++) {
+                clusterTextTokens[idxToken] = clusterTextTokens[idxToken].trim();
+            }
+            java.util.Arrays.sort(clusterTextTokens);
+            for (int idxToken = 0; idxToken < clusterTextTokens.length; idxToken++) {
+                String clusterTextToken = clusterTextTokens[idxToken];
+                orderedClusterText += clusterTextToken.trim();
+                if (idxToken < clusterTextTokens.length - 1) {
+                    orderedClusterText += delim + " ";
+                }
+            }
+            return orderedClusterText;
+        }
 }
