@@ -202,7 +202,8 @@ public class YahooApiInputComponentTest extends junit.framework.TestCase {
             urls.add(rd.getUrl());
         }
 
-        assertTrue(urls.contains("http://ant.apache.org/"));
+        assertTrue(urls.contains("http://ant.apache.org/")
+            || urls.contains("http://jakarta.apache.org/ant"));
 
         assertEquals(100, results.size());
 	}
