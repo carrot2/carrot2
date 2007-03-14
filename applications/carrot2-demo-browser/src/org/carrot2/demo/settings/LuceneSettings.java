@@ -14,12 +14,12 @@
 package org.carrot2.demo.settings;
 
 import java.awt.Frame;
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
+import java.io.*;
+import java.util.*;
 
 import javax.swing.JComponent;
 
+import org.apache.commons.pool.impl.GenericKeyedObjectPool.*;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.IndexReader;
@@ -29,6 +29,7 @@ import org.carrot2.demo.ProcessSettings;
 import org.carrot2.demo.ProcessSettingsBase;
 import org.carrot2.input.lucene.LuceneLocalInputComponent;
 import org.carrot2.input.lucene.LuceneSearchConfig;
+import org.carrot2.util.*;
 
 /**
  * Settings class for Lucene input component.
@@ -38,6 +39,10 @@ import org.carrot2.input.lucene.LuceneSearchConfig;
 public final class LuceneSettings extends ProcessSettingsBase {
 
     private final static Logger logger = Logger.getLogger(LuceneSettings.class);
+    private final static String CONFIG_DIR_NAME = ".carrot2";
+    private final static File CONFIG_DIR = new File(System.getProperty("user.home"), CONFIG_DIR_NAME);
+    private final static String CONFIG_FILE_NAME = "carrot2-browser.lucene-input.properties";
+    private final static File CONFIG_FILE = new File(CONFIG_DIR, CONFIG_FILE_NAME);
     
     /** Lucene index directory */
     File luceneIndexDir;
@@ -56,7 +61,8 @@ public final class LuceneSettings extends ProcessSettingsBase {
     private Searcher searcher;
 
     public LuceneSettings() {
-        // nothing. uninitialized.
+        // try to load config from file
+        loadConfigFile();
     }
 
     /** 
@@ -152,6 +158,111 @@ public final class LuceneSettings extends ProcessSettingsBase {
         this.titleField = titleField;
         this.summaryField = snippetField;
         this.analyzer = analyzer;
+        saveConfigFile();
         createSearcher();
+    }
+    
+    private void loadConfigFile()
+    {
+        if (CONFIG_FILE.exists())
+        {
+            Properties config = new Properties();
+            try
+            {
+                config.load(new FileInputStream(CONFIG_FILE));
+            }
+            catch (FileNotFoundException e)
+            {
+                // ignored
+            }
+            catch (IOException e)
+            {
+                logger.warn("Problems loading Lucene config", e);
+            }
+            
+            initFromProperties(config);
+        }
+    }
+    
+    private void saveConfigFile()
+    {
+        Properties config = asProperties();
+        CONFIG_DIR.mkdirs();
+        
+        try
+        {
+            config.store(new FileOutputStream(CONFIG_FILE), "Carrot2 Tuning Browser Lucene Input config file last saved by the application. Freel free to edit by hand.");
+        }
+        catch (FileNotFoundException e)
+        {
+            logger.warn("Problems saving Lucene config", e);
+        }
+        catch (IOException e)
+        {
+            logger.warn("Problems saving Lucene config", e);
+        }
+    }
+    
+    private void initFromProperties(Properties config)
+    {
+        if (config.containsKey("index.dir"))
+        {
+            luceneIndexDir = new File(config.getProperty("index.dir"));
+        }
+        if (config.containsKey("analyzer.class"))
+        {
+            try
+            {
+                analyzer = (Analyzer) Thread.currentThread().getContextClassLoader()
+                    .loadClass((String) config.getProperty("analyzer.class"))
+                    .newInstance();
+            }
+            catch (Exception e)
+            {
+                throw new RuntimeException(
+                    "Could not load analyzer class specified in the configuration file",
+                    e);
+            }
+        }
+        if (config.containsKey("search.fields"))
+        {
+            String fields = config.getProperty("search.fields");
+            searchFields = fields.split(",");
+        }
+        titleField = config.getProperty("title.field");
+        summaryField = config.getProperty("summary.field");
+        urlField = config.getProperty("url.field");
+    }
+    
+    private Properties asProperties()
+    {
+        Properties config = new Properties();
+
+        if (luceneIndexDir != null)
+        {
+            config.setProperty("index.dir", luceneIndexDir.getAbsolutePath());
+        }
+        if (analyzer != null)
+        {
+            config.setProperty("analyzer.class", analyzer.getClass().getName());
+        }
+        if (searchFields != null) 
+        {
+            config.setProperty("search.fields", ArrayUtils.toString(searchFields, ","));
+        }
+        if (titleField != null)
+        {
+            config.setProperty("title.field", titleField);
+        }
+        if (summaryField != null)
+        {
+            config.setProperty("summary.field", summaryField);
+        }
+        if (urlField != null)
+        {
+            config.setProperty("url.field", urlField);
+        }
+
+        return config;
     }
 }
