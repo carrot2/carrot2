@@ -141,7 +141,7 @@ public class ArrayUtils
         return index;
     }
     
-    public static String toString(Object [] array)
+    public static String toString(Object [] array, String delimiter)
     {
         StringBuffer sb = new StringBuffer();
         
@@ -150,11 +150,16 @@ public class ArrayUtils
             sb.append(array[0].toString());
             for (int i = 1; i < array.length; i++)
             {
-                sb.append(", ");
+                sb.append(delimiter);
                 sb.append(array[i]);
             }
         }
         
         return sb.toString();
+    }
+    
+    public static String toString(Object [] array)
+    {
+        return toString(array, ", ");
     }
 }
