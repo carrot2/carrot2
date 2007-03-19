@@ -556,6 +556,10 @@ ${string:component.dependencies}
         </classpath>
         
         <sysproperty key="log4j.configuration" value="file:///${tmp:loggingSettings}"/>
+        <syspropertyset id="properties-starting-with-foo">
+          <propertyref builtin="all"/>
+        </syspropertyset>
+
 
 		<batchtest todir="${build.dir}/junit-temp">
 			<fileset dir="${build.dir}/${build.type}">
