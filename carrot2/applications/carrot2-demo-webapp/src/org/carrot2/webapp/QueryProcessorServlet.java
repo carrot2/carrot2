@@ -613,6 +613,7 @@ public final class QueryProcessorServlet extends HttpServlet {
         };
 
         try {
+            controller.setComponentAutoload(true);
             helper.addAll(controller, 
                     helper.loadComponentFactoriesFromDir(algorithmScripts, componentFilter));
             final LoadedProcess [] processes = 
