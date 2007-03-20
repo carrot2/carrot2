@@ -1,0 +1,12 @@
+<project name="Carrot2 Strip HTML Filter Component" default="build">
+
+    <property name="project.dir"      location="${basedir}" />
+    <property name="carrot2.cvs.dir"  location="../.." />
+    <property name="dist.name"        value="carrot2-filter-striphtml" />
+
+    <property name="type"             value="jartype" />
+    <property name="tests.available"  value="true"    />
+
+    <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
+   
+</project>
