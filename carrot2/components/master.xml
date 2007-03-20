@@ -557,6 +557,11 @@ ${string:component.dependencies}
         
         <sysproperty key="log4j.configuration" value="file:///${tmp:loggingSettings}"/>
 
+	<!-- Pass on all properties with carrot2.* -->
+        <syspropertyset dynamic="true">
+        	<propertyref prefix="carrot2." />
+        </syspropertyset>
+
 		<batchtest todir="${build.dir}/junit-temp">
 			<fileset dir="${build.dir}/${build.type}">
 				<include name="**/*Test.class" />
