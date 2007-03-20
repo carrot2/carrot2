@@ -90,7 +90,7 @@ public class XmlFactoryDescriptionLoader implements ComponentFactoryLoader {
             Element root = builder.read(dataStream).getRootElement();
 
             if (!"local-component-factory".equals(root.getName())) {
-                throw new IOException("Malformed stream: root note should " +
+                throw new IOException("Malformed stream: root node should " +
                     "be 'local-component-factory'");
             }
 
