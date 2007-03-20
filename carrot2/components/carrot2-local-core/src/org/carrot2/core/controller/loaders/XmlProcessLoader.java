@@ -81,7 +81,7 @@ public class XmlProcessLoader implements ProcessLoader {
         try {
             final Element root = builder.read(dataStream).getRootElement();
             if (!"local-process".equals(root.getName())) {
-                throw new IOException("Malformed stream: root note should " +
+                throw new IOException("Malformed stream: root node should " +
                     "be 'local-process'");
             }
 
