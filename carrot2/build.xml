@@ -348,6 +348,7 @@ TESTING: @{component.path}
     <component-apply component.path="components/carrot2-stemmer-stempel" />
     <component-apply component.path="components/carrot2-stemmer-snowball" />
 
+    <component-apply component.path="components/carrot2-filter-striphtml" />
     <component-apply component.path="components/carrot2-filter-case-normalizer" />
     <component-apply component.path="components/carrot2-filter-lingo" />
     <component-apply component.path="components/carrot2-filter-fuzzyants" />
