@@ -60,7 +60,7 @@
 	</security>
 
 	<application-desc main-class="org.carrot2.demo.DemoSplash">
-		<argument>/org/carrot2/demo/carrot2-splash.gif</argument>
+		<argument>/org/carrot2/demo/carrot2-splash.png</argument>
 		<argument>4</argument>
 		<argument>org.carrot2.demo.DemoSwing</argument>
 		<argument>--resource</argument>
