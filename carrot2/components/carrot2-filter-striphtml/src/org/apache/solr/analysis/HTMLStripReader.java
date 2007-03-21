@@ -37,14 +37,14 @@ public final class HTMLStripReader extends Reader {
   private final int READAHEAD=4096;
 
   // pushback buffer
-  private final StringBuilder pushed = new StringBuilder();
+  private final StringBuffer pushed = new StringBuffer();
 
   private static final int EOF=-1;
   private static final int MISMATCH=-2;
   private static final int MATCH=-3;
 
   // temporary buffer
-  private final StringBuilder sb = new StringBuilder();
+  private final StringBuffer sb = new StringBuffer();
 
 
   public static void main(String[] args) throws IOException {
@@ -131,12 +131,11 @@ public final class HTMLStripReader extends Reader {
     // use it and add in '-',':',etc?
     return isAlpha(ch) || isDigit(ch) || ch=='.' ||
             ch=='-' || ch=='_' || ch==':'
-            || Character.isLetter(ch);
-
+            || Character.isLetter((char) ch);
   }
 
   private boolean isFirstIdChar(int ch) {
-    return Character.isUnicodeIdentifierStart(ch);
+    return Character.isUnicodeIdentifierStart((char) ch);
     // return isAlpha(ch) || ch=='_' || Character.isLetter(ch);
   }
 
@@ -222,7 +221,7 @@ public final class HTMLStripReader extends Reader {
 
     for (int i=0; i<READAHEAD; i++) {
       ch=next();
-      if (Character.isLetter(ch)) {
+      if (Character.isLetter((char) ch)) {
         sb.append((char)ch);
       } else {
         break;
