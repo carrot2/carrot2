@@ -28,5 +28,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-input-msnsearch"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-input-pubmed"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-input-etools"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-striphtml"/>
 	<classpathentry kind="output" path="tmp/eclipse/classes"/>
 </classpath>

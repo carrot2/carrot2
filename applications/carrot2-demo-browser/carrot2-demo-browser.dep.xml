@@ -76,6 +76,7 @@
     <dependency name="carrot2-input-lucene" profile="stripped" nocopy="true" />
     <dependency name="carrot2-util-tokenizer" profile="stripped" nocopy="true" />
     <dependency name="carrot2-filter-case-normalizer"  profile="stripped" nocopy="true" />
+    <dependency name="carrot2-filter-striphtml" profile="stripped" nocopy="true" />
 
     <!-- Full profile contains all demo components -->
 
@@ -91,5 +92,6 @@
     <dependency name="carrot2-input-pubmed"  profile="full" />
     <dependency name="carrot2-util-tokenizer" profile="full" />
     <dependency name="carrot2-filter-case-normalizer"  profile="full" />
+    <dependency name="carrot2-filter-striphtml" profile="full" />
 </component>
 
