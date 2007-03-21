@@ -9,7 +9,7 @@
 <listEntry value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#13;&#10;&lt;runtimeClasspathEntry containerPath=&quot;org.eclipse.jdt.launching.JRE_CONTAINER&quot; javaProject=&quot;carrot2-demo-browser&quot; path=&quot;1&quot; type=&quot;4&quot;/&gt;&#13;&#10;"/>
 <listEntry value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#13;&#10;&lt;runtimeClasspathEntry id=&quot;org.eclipse.jdt.launching.classpathentry.variableClasspathEntry&quot;&gt;&#13;&#10;&lt;memento variableString=&quot;${resource_loc:/carrot2-demo-browser/tmp/webstart/carrot2-demo-browser.jar}&quot;/&gt;&#13;&#10;&lt;/runtimeClasspathEntry&gt;&#13;&#10;"/>
 </listAttribute>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="/org/carrot2/demo/carrot2-splash.gif 3 org.carrot2.demo.DemoSwing --resource"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="/org/carrot2/demo/carrot2-splash.png 3 org.carrot2.demo.DemoSwing --resource"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="carrot2-demo-browser"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Djava.library.path=${resource_loc:/carrot2-demo-browser/lib/jdic_windows} -Dlog4j.configuration=file:///${resource_loc:/carrot2-demo-browser/src/res/log4j.properties}&#13;&#10;-Djava.ext.dirs=${resource_loc:/carrot2-demo-browser/tmp/webstart/deps-carrot2-demo-browser-jar};${resource_loc:/carrot2-demo-browser/tmp/webstart/lib}"/>
 <listAttribute key="org.eclipse.debug.ui.favoriteGroups">
