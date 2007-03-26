@@ -13,7 +13,7 @@
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-input-yahooapi"/>
 	<classpathentry exported="true" kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/junit-3.8.1.jar"/>
 	<classpathentry exported="true" kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/junit-addons-1.4.jar"/>
-	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/lucene-core-2.0.0.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/lucene-core-2.1.0.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-matrix"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-stc"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/dom4j-1.6.1.jar"/>
