@@ -63,6 +63,14 @@ public class EToolsLocalInputComponent
         this(partnerId, EToolsConfig.DEFAULT_ETOOLS_CONFIG);
     }
 
+    /**
+     * Creates the eTools input with a default partner id and the specified settings.
+     */
+    public EToolsLocalInputComponent(EToolsConfig config)
+    {
+        this("Carrot2", config);
+    }
+    
 
     /**
      * Creates the eTools input with the specified partner id and specified settings.

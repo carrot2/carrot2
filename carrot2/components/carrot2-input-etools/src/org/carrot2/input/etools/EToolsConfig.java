@@ -69,11 +69,10 @@ public class EToolsConfig
     }
 
 
-    public EToolsConfig(final String urlBase, final String country,
-            final String language)
+    public EToolsConfig(final String country, final String language)
     {
-        this(urlBase, country, language, DEFAULT_TIMEOUT, DEFAULT_DATA_SOURCES,
-                DEFAULT_SAFE_SEARCH);
+        this(DEFAULT_URL_BASE, country, language, DEFAULT_TIMEOUT,
+            DEFAULT_DATA_SOURCES, DEFAULT_SAFE_SEARCH);
     }
 
 
