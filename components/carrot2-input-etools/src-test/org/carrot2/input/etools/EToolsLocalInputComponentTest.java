@@ -93,12 +93,12 @@ public class EToolsLocalInputComponentTest extends LocalInputComponentTestBase
 
     public void testMediumQuery() throws Exception
     {
-        performQuery("test", 100, 100);
+        performQuery("test", 100, 75, 100);
     }
 
     public void testLargeQuery() throws Exception
     {
-        performQuery("test", 400, 200, 400);
+        performQuery("test", 400, 150, 400);
     }
 
     /**
