@@ -5,7 +5,7 @@
     <property file="local.properties" />
 
     <property name="project.dir"      location="${basedir}" />
-    <property name="carrot2.cvs.dir"  location="../.." />
+    <property name="carrot2.code.dir"  location="../.." />
     <property name="dist.name"        value="carrot2-demo-browser" />
 
     <property name="type" value="jartype" />
@@ -14,7 +14,7 @@
     <property name="distribution.zips.dir" location="${project.dir}/tmp/zips" />
     <property name="distribution.zip.name" value="carrot2-local-demo.zip" /> 
 
-    <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
+    <import file="${carrot2.code.dir}/components/common-targets.inc" />
 
 	<target name="build" depends="build.full" />
 
@@ -43,7 +43,7 @@
 
        	<java classname="bsh.Interpreter" dir="${distribution.webstart}" fork="true">
        		<classpath>
-       			<fileset dir="${carrot2.cvs.dir}/lib" includes="*bsh*.jar" />
+       			<fileset dir="${carrot2.code.dir}/lib" includes="*bsh*.jar" />
        		</classpath>
        		<arg file="webstart/create-resources.bsh" />
        	</java>
@@ -81,7 +81,7 @@
 
        	<java classname="bsh.Interpreter" dir="${distribution.webstart}" fork="true">
        		<classpath>
-       			<fileset dir="${carrot2.cvs.dir}/lib" includes="*bsh*.jar" />
+       			<fileset dir="${carrot2.code.dir}/lib" includes="*bsh*.jar" />
        		</classpath>
        		<arg file="webstart/create-files.bsh" />
        	</java>
@@ -139,7 +139,7 @@
 		<property name="profile" value="full" />
 
         <ant target="build.${type}"
-             antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" inheritrefs="true">
+             antfile="${carrot2.code.dir}/components/master.xml" inheritall="true" inheritrefs="true">
         </ant>
     </target>
 
@@ -159,7 +159,7 @@
         </fileset>
 
         <ant target="proguard.run" 
-            antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" inheritrefs="true" />
+            antfile="${carrot2.code.dir}/components/master.xml" inheritall="true" inheritrefs="true" />
     </target>
 
 
@@ -169,7 +169,7 @@
 		<property name="profile" value="stripped" />
 
         <ant target="build.${type}"
-             antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" inheritrefs="true">
+             antfile="${carrot2.code.dir}/components/master.xml" inheritall="true" inheritrefs="true">
         </ant>
     </target>
 </project>

@@ -1,18 +1,18 @@
 <project name="Carrot2 Matrix Routines" default="build">
 
     <property name="project.dir"      location="${basedir}" />
-    <property name="carrot2.cvs.dir"  location="../.." />
+    <property name="carrot2.code.dir"  location="../.." />
     <property name="dist.name"        value="carrot2-util-matrix" />
 
     <property name="type"       	  value="jartype" />
     <property name="tests.available"  value="true"    />
 
-    <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
+    <import file="${carrot2.code.dir}/components/common-targets.inc" />
     
     
     <target name="benchmark" depends="test">
         <ant target="run.class"
-             antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" inheritrefs="true">
+             antfile="${carrot2.code.dir}/components/master.xml" inheritall="true" inheritrefs="true">
              <property name="run.class.name" value="org.carrot2.matrix.factorization.MatrixFactorizationBenchmark" />
         </ant>
     </target>

@@ -5,8 +5,8 @@
   <property file="local-build.properties" />
 
   <!-- Check if we have the default base and release number -->
-  <fail unless="carrot2.cvs.dir" />
-  <property file="${carrot2.cvs.dir}/carrot2.version" />
+  <fail unless="carrot2.code.dir" />
+  <property file="${carrot2.code.dir}/carrot2.version" />
   <fail unless="release.number" />
 
   <property name="build.compiler"   value="modern" />
@@ -21,11 +21,11 @@
   <property name="distribution.dir" value="tmp" />
   <property name="tests.report.dir" value="tmp/test-report" />
 
-  <property name="carrot2.cvs.dir" location="${basedir}" />
-  <import file="${carrot2.cvs.dir}/components/carrot2-ant-extensions/bootstrap.xml" />
+  <property name="carrot2.code.dir" location="${basedir}" />
+  <import file="${carrot2.code.dir}/components/carrot2-ant-extensions/bootstrap.xml" />
 
   <!-- Load ant-contrib task library -->
-  <property name="ant.contrib.jar" location="${carrot2.cvs.dir}/lib/ant-extensions/ant-contrib.jar" />
+  <property name="ant.contrib.jar" location="${carrot2.code.dir}/lib/ant-extensions/ant-contrib.jar" />
   <taskdef resource="net/sf/antcontrib/antlib.xml">
     <classpath location="${ant.contrib.jar}" />
   </taskdef>
@@ -62,7 +62,7 @@
              footer           = "&lt;div class='logo'&gt;Please refer to project documentation at &lt;br&gt;&lt;a target='_top' href=http://project.carrot2.org&gt;http://project.carrot2.org&lt;/a&gt;&lt;/div&gt;"
              bottom           = "&lt;center&gt;Copyright (c) Dawid Weiss, Stanislaw Osinski &lt;/center&gt;"
              failonerror      = "true"
-             stylesheetfile   = "${carrot2.cvs.dir}/etc/javadoc/stylesheet.css"
+             stylesheetfile   = "${carrot2.code.dir}/etc/javadoc/stylesheet.css"
              useexternalfile  = "true"
     >
         <classpath>
@@ -77,9 +77,9 @@
         </fileset>
 
         <link offline="true" href="http://java.sun.com/j2se/1.5.0/docs/api/" 
-            packagelistLoc="${carrot2.cvs.dir}/etc/javadoc/apis/jdk15" />
+            packagelistLoc="${carrot2.code.dir}/etc/javadoc/apis/jdk15" />
         <link offline="true" href="http://demo.carrot2.org/thirdparty/ant/" 
-            packagelistLoc="${carrot2.cvs.dir}/etc/javadoc/apis/ant" />
+            packagelistLoc="${carrot2.code.dir}/etc/javadoc/apis/ant" />
 
         <link href="http://www.dom4j.org/apidocs/" />
         <link href="http://dsd.lbl.gov/~hoschek/colt/api/" />
@@ -94,7 +94,7 @@
 
     <delete dir="tmp/src" />
     <copy todir="${javadoc.dir}">
-      <fileset dir="${carrot2.cvs.dir}/etc/javadoc/">
+      <fileset dir="${carrot2.code.dir}/etc/javadoc/">
         <include name="*.gif" />
       </fileset>
     </copy>

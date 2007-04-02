@@ -2,7 +2,7 @@
 	<patternset id="src.patternset" />
 	<patternset id="war.patternset" />
 
-    <property name="ant.contrib.jar" location="${carrot2.cvs.dir}/lib/ant-extensions/ant-contrib.jar" />
+    <property name="ant.contrib.jar" location="${carrot2.code.dir}/lib/ant-extensions/ant-contrib.jar" />
     <taskdef resource="net/sf/antcontrib/antlib.xml">
         <classpath location="${ant.contrib.jar}" />
     </taskdef>
@@ -12,27 +12,27 @@
     </path>
 
     <target name="javadoc">
-        <ant target="javadoc" antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" inheritRefs="true" />
+        <ant target="javadoc" antfile="${carrot2.code.dir}/components/master.xml" inheritall="true" inheritRefs="true" />
     </target>
 
     <target name="clean">
-        <ant target="clean" antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" />
+        <ant target="clean" antfile="${carrot2.code.dir}/components/master.xml" inheritall="true" />
     </target>
 
     <target name="cleanall">
-        <ant target="cleanall" antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" />
+        <ant target="cleanall" antfile="${carrot2.code.dir}/components/master.xml" inheritall="true" />
     </target>
     
     <target name="_tests.run">
     	<property name="profile" value="test" />
         <ant target="build.testtype"
-             antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" inheritrefs="true">
+             antfile="${carrot2.code.dir}/components/master.xml" inheritall="true" inheritrefs="true">
         </ant>
     </target>
 
     <target name="test">
 	    <taskdef resource="net/sf/antcontrib/antlib.xml">
-    	    <classpath location="${carrot2.cvs.dir}/lib/ant-extensions/ant-contrib.jar" />
+    	    <classpath location="${carrot2.code.dir}/lib/ant-extensions/ant-contrib.jar" />
   	    </taskdef>
     	
     	<if>
@@ -60,19 +60,19 @@
 
     <target name="build">
         <ant target="build.${type}"
-             antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" inheritrefs="true">
+             antfile="${carrot2.code.dir}/components/master.xml" inheritall="true" inheritrefs="true">
         </ant>
     </target>
 	
 	<target name="tomcat.deploy">
 		<ant target="tomcat.deploy"
-			antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" inheritrefs="true">
+			antfile="${carrot2.code.dir}/components/master.xml" inheritall="true" inheritrefs="true">
 		</ant>
 	</target>
 
 	<target name="tomcat.undeploy">
 		<ant target="tomcat.undeploy"
-			antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" inheritrefs="true">
+			antfile="${carrot2.code.dir}/components/master.xml" inheritall="true" inheritrefs="true">
 		</ant>
 	</target>
 
@@ -80,7 +80,7 @@
     <target name="deps" depends="dependencies" />
     <target name="dependencies">
         <ant target="dependencies"
-             antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" inheritrefs="true">
+             antfile="${carrot2.code.dir}/components/master.xml" inheritall="true" inheritrefs="true">
         </ant>
     </target>
 </project>

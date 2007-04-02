@@ -8,7 +8,7 @@
 
   <!-- ## these are overriden by master build file ### -->
   <property name="project.dir"      value="${undefined.value}" />
-  <property name="carrot2.cvs.dir"  value="${undefined.value}" />
+  <property name="carrot2.code.dir"  value="${undefined.value}" />
   <property name="dist.name"        value="${undefined.value}" />
 
   <property name="build.dir"        location="${project.dir}/tmp/build" />
@@ -23,7 +23,7 @@
   <property name="profile"          value="" />
   
   <property file="${user.home}/.carrot.properties" />
-  <property file="${carrot2.cvs.dir}/local-build.properties" />
+  <property file="${carrot2.code.dir}/local-build.properties" />
 
   <property name="tomcat.url"       value="http://localhost:8080/manager" />
   <property name="tomcat.username"  value="carrot" />
@@ -49,10 +49,10 @@
 
   <property name="include.ant.runtime" value="false" />
   
-  <import file="${carrot2.cvs.dir}/components/carrot2-ant-extensions/bootstrap.xml" />
+  <import file="${carrot2.code.dir}/components/carrot2-ant-extensions/bootstrap.xml" />
 
   <!-- Load ant-contrib task library -->
-  <property name="ant.contrib.jar" location="${carrot2.cvs.dir}/lib/ant-extensions/ant-contrib.jar" />
+  <property name="ant.contrib.jar" location="${carrot2.code.dir}/lib/ant-extensions/ant-contrib.jar" />
   <taskdef resource="net/sf/antcontrib/antlib.xml">
     <classpath location="${ant.contrib.jar}" />
   </taskdef>
@@ -71,13 +71,13 @@
     </condition>
     <fail message="'project.dir' property must be initialized properly." unless="ok:project.dir" />
 
-    <condition property="ok:carrot2.cvs.dir" value="true">
+    <condition property="ok:carrot2.code.dir" value="true">
         <and>
-            <available file="${carrot2.cvs.dir}/lib" type="dir" />
-            <available file="${carrot2.cvs.dir}/carrot2.LICENSE" type="file" />
+            <available file="${carrot2.code.dir}/lib" type="dir" />
+            <available file="${carrot2.code.dir}/carrot2.LICENSE" type="file" />
         </and>
     </condition>
-    <fail message="'carrot2.cvs.dir' property must be set properly: ${carrot2.cvs.dir}" unless="ok:carrot2.cvs.dir" />
+    <fail message="'carrot2.code.dir' property must be set properly: ${carrot2.code.dir}" unless="ok:carrot2.code.dir" />
 
     <!-- Set to true if dependency file is available. -->
     <condition property="tmp:dep.file.available" value="true">
@@ -367,7 +367,7 @@ Tomcat:      ${tomcat.url}
 	</echo>
 
     <path id="tomcat.tasks">
-        <pathelement location="${carrot2.cvs.dir}/lib/ant-extensions/catalina-ant.jar" />
+        <pathelement location="${carrot2.code.dir}/lib/ant-extensions/catalina-ant.jar" />
 	</path>
 	
     <taskdef name="deploy"    classname="org.apache.catalina.ant.DeployTask">
@@ -525,7 +525,7 @@ ${string:component.dependencies}
     <pathconvert targetos="unix" property="tmp:safepath">
         <path location="${build.dir}/junit-temp/junit-log4j-log.html" />
     </pathconvert>
-    <copy file="${carrot2.cvs.dir}/etc/test-log4j.properties"
+    <copy file="${carrot2.code.dir}/etc/test-log4j.properties"
           tofile="${build.dir}/junit-temp/test-log4j.properties"
           includeemptydirs="false" filtering="true" overwrite="true">
         <filterset begintoken="@" endtoken="@" id="deployment.info">
@@ -552,7 +552,7 @@ ${string:component.dependencies}
              in an in-process mode, which skips classpath initialization. -->
         <classpath location="${env.JAVA_HOME}/lib/tools.jar" />
         <classpath>
-            <fileset dir="${carrot2.cvs.dir}/lib/compile-time" includes="resolver.jar" />
+            <fileset dir="${carrot2.code.dir}/lib/compile-time" includes="resolver.jar" />
         </classpath>
         
         <sysproperty key="log4j.configuration" value="file:///${tmp:loggingSettings}"/>
@@ -672,7 +672,7 @@ the default path: ${java.home}/lib
 
     <!-- Collect rules for obfuscating and run proguard -->
     <taskdef resource="proguard/ant/task.properties">
-        <classpath location="${carrot2.cvs.dir}/lib/proguard/proguard.jar" />
+        <classpath location="${carrot2.code.dir}/lib/proguard/proguard.jar" />
     </taskdef>
 
     <antcall inheritall="true" inheritrefs="true" target="proguard.collect" />
@@ -748,7 +748,7 @@ the default path: ${java.home}/lib
              footer           = "Please refer to project documentation at &lt;br&gt;&lt;a href=http://www.carrot2.org&gt;http://www.carrot2.org&lt;/a&gt;"
              bottom           = "&lt;center&gt;Copyright (c) Copyright (C) Dawid Weiss, Stanislaw Osinski &lt;/center&gt;"
              failonerror      = "true"
-             stylesheetfile   = "${carrot2.cvs.dir}/etc/javadoc/stylesheet.css"
+             stylesheetfile   = "${carrot2.code.dir}/etc/javadoc/stylesheet.css"
     >
         <classpath refid="classpath.dependencies" />
         <classpath refid="classpath.local" />

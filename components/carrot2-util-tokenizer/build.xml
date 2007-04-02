@@ -6,19 +6,19 @@
 	<property file="${user.home}/javacc.properties" />
 
     <property name="project.dir"      location="${basedir}" />
-    <property name="carrot2.cvs.dir"  location="../.." />
+    <property name="carrot2.code.dir"  location="../.." />
     <property name="dist.name"        value="carrot2-util-tokenizer" />
 
     <property name="type"       	  value="jartype" />
     <property name="tests.available"  value="true"    />
-    <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
+    <import file="${carrot2.code.dir}/components/common-targets.inc" />
 
 	<!-- Tasks specific to the project -->
 	
 	<target name="jflex">
 		<!-- JFlex task definition -->
 		<taskdef classname="JFlex.anttask.JFlexTask" name="jflex">
-			<classpath location="${carrot2.cvs.dir}/lib/compile-time/JFlex.jar" />
+			<classpath location="${carrot2.code.dir}/lib/compile-time/JFlex.jar" />
 		</taskdef>
 
 		<jflex file="src/org/carrot2/util/tokenizer/parser/jflex/JFlexWordBasedParserImpl.jflex"

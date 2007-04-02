@@ -1,10 +1,10 @@
 <project name="Carrot2 Open Directory Project Interface Core" default="build">
     <property name="project.dir"      location="${basedir}" />
-    <property name="carrot2.cvs.dir"  location="../.." />
+    <property name="carrot2.code.dir"  location="../.." />
     <property name="dist.name"        value="carrot2-odp-core" />
 
     <property name="type"       	  value="jartype" />
     <property name="tests.available"  value="true"    />
 
-    <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
+    <import file="${carrot2.code.dir}/components/common-targets.inc" />
 </project>
