@@ -5,7 +5,7 @@
     <property file="local.properties" />
 
     <property name="project.dir"      location="${basedir}" />
-    <property name="carrot2.cvs.dir"  location="../.." />
+    <property name="carrot2.code.dir"  location="../.." />
 
     <property name="type" value="wartype" />
     <property name="distribution.dir" location="${project.dir}/tmp/dist" />
@@ -13,7 +13,7 @@
 
 	<property file="${project.dir}/customization.properties" />
   
-    <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
+    <import file="${carrot2.code.dir}/components/common-targets.inc" />
 
     <target name="build" depends="preprocess" description="Builds a demo WAR file.">
     	<property name="dist.name" value="carrot2-demo-webapp" />
@@ -41,7 +41,7 @@
         </if>
 
         <ant target="build.${type}"
-             antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" inheritrefs="true">
+             antfile="${carrot2.code.dir}/components/master.xml" inheritall="true" inheritrefs="true">
         </ant>
     </target>
 
@@ -82,7 +82,7 @@
     </target>
   
     <target name="preprocess">
-        <property file="${carrot2.cvs.dir}/carrot2.version" />
+        <property file="${carrot2.code.dir}/carrot2.version" />
         <tstamp>
           <format property="tmp:build.tstamp" pattern="dd/MM/yyyy HH:mm" />
         </tstamp>

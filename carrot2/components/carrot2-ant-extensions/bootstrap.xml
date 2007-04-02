@@ -1,5 +1,5 @@
 <project name="bootstrap task" default="_failure">
-    <property name="bootstrap.dir" location="${carrot2.cvs.dir}/components/carrot2-ant-extensions/tmp/bootstrap" />
+    <property name="bootstrap.dir" location="${carrot2.code.dir}/components/carrot2-ant-extensions/tmp/bootstrap" />
 
     <target name="_failure">
         <fail>Bootstrap is intended for inclusion only.</fail>
@@ -16,19 +16,19 @@
 			   encoding = "UTF-8"
                source="1.2" target="1.2"
         >
-            <src path="${carrot2.cvs.dir}/components/carrot2-ant-extensions/src" />
+            <src path="${carrot2.code.dir}/components/carrot2-ant-extensions/src" />
             <classpath>
-                <fileset dir="${carrot2.cvs.dir}/lib/compile-time" includes="resolver.jar" />
+                <fileset dir="${carrot2.code.dir}/lib/compile-time" includes="resolver.jar" />
             </classpath>
         </javac>
 
         <mkdir dir="${bootstrap.dir}/res" />
         <copy todir="${bootstrap.dir}/res">
-            <fileset dir="${carrot2.cvs.dir}/etc">
+            <fileset dir="${carrot2.code.dir}/etc">
                 <include name="catalog.xml" />
                 <include name="component-dependency.dtd" />
             </fileset>
-            <fileset dir="${carrot2.cvs.dir}/components/carrot2-ant-extensions/src/res">
+            <fileset dir="${carrot2.code.dir}/components/carrot2-ant-extensions/src/res">
                 <include name="*antlib.xml" />
             </fileset>
         </copy>
@@ -37,7 +37,7 @@
     <target name="bootstrap" depends="bootstrap:compile">
         <path id="bootstrap">
             <pathelement location="${bootstrap.dir}" />
-            <fileset dir="${carrot2.cvs.dir}/lib/compile-time" includes="resolver.jar" />        
+            <fileset dir="${carrot2.code.dir}/lib/compile-time" includes="resolver.jar" />        
         </path>
 
         <taskdef resource="res/carrot2-antlib.xml" 
@@ -55,7 +55,7 @@
           and pass them as a project property.
           -->
         <dependency-path id="dependencies" cacheProperty="cache:deps">
-            <fileset dir="${carrot2.cvs.dir}">
+            <fileset dir="${carrot2.code.dir}">
                 <include name="lib/**/*.dep.xml" />
                 <include name="components/*/*.dep.xml" />
                 <include name="components/*/lib/*.dep.xml" />        

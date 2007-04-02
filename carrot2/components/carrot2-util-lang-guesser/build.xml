@@ -2,13 +2,13 @@
 <project name="Carrot2 Language Guesser" default="build">
 
     <property name="project.dir"      location="${basedir}" />
-    <property name="carrot2.cvs.dir"  location="../.." />
+    <property name="carrot2.code.dir"  location="../.." />
 
     <property name="dist.name" value="carrot2-language-guesser" />
     <property name="component.descriptor" location="carrot2-language-guesser.dep.xml" />
 
     <property name="tests.available"  value="true"    />
     <property name="type"       	  value="jartype" />
-    <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
+    <import file="${carrot2.code.dir}/components/common-targets.inc" />
 
 </project>
