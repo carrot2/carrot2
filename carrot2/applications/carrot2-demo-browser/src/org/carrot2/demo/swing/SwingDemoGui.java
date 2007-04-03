@@ -18,6 +18,7 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
+import org.apache.log4j.Logger;
 import org.carrot2.demo.DemoContext;
 import org.carrot2.demo.ProcessSettings;
 import org.carrot2.demo.swing.util.*;
@@ -100,25 +101,17 @@ public final class SwingDemoGui {
      * Creates a new object attached to a demo context. Call {@link #display()} to display
      * the demo frame.
      */
-    public SwingDemoGui(DemoContext carrotDemo) {
-        this(carrotDemo, "Carrot2 Demo");
-    }
-
-    /**
-     * Creates a new object attached to a demo context. Call {@link #display()} to display
-     * the demo frame.
-     */
     public SwingDemoGui(DemoContext carrotDemo, String frameTitle) {
         this.demoContext = carrotDemo;
         this.mainFrameTitle = frameTitle;
         this.frame = new JFrame();
         this.config = new SwingDemoGuiConfig("/config/browser-config.xml");
     }
-    
+
     /**
      * Displays the demo frame.
      */
-    public void display() {
+    public void display(final JWindow splash) {
         try {
             configureUI();
         } catch (Exception e) {
@@ -136,21 +129,22 @@ public final class SwingDemoGui {
 
         disableUI();
         queryField.setText("Please wait...");
-        
-        SwingUtils.centerFrameOnScreen(frame);
-        frame.setVisible(true);
 
-        // replace the combo box's model.
-        final Runnable task = new Runnable() {
-            public void run() {
-                // Now initialize the application.
+        SwingUtils.centerFrameOnScreen(frame);
+
+        Runnable task = new Runnable()
+        {
+            public void run()
+            {
+                // replace the combo box's model.
                 try {
                     demoContext.initialize();
                 } catch (Exception e) {
-                    SwingUtils.showExceptionDialog(frame, 
-                            "Program startup failed.", e);
+                    SwingUtils.showExceptionDialog(frame, "Program startup failed.", e);
+                    frame.dispose();
+                    return;
                 }
-
+        
                 processComboModel = new MapComboModel(demoContext.getProcessIdToProcessNameMap());
                 processComboBox.setModel(processComboModel);
                 if (demoContext.getDefaultProcessId() != null) {
@@ -161,14 +155,14 @@ public final class SwingDemoGui {
                 queryField.setText("");
                 queryField.requestFocus();
 
+                frame.setVisible(true);
+                frame.toFront();
+
                 enableUI();
+                if (splash.isVisible()) splash.dispose();
             }
         };
-
-        try {
-            SwingTask.runNow(task);
-        } catch (Throwable t) {
-        }
+        SwingUtilities.invokeLater(task);
     }
 
     /**

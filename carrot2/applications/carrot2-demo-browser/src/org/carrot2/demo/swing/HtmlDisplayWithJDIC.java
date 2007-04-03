@@ -87,8 +87,9 @@ final class HtmlDisplayWithJDIC extends HtmlDisplay {
         final BrowserEngineManager manager = BrowserEngineManager.instance();
         manager.setActiveEngine(BrowserEngineManager.IE);
 
+        WebBrowser.setDebug(false);
+
         this.browser = new WebBrowser();
-        this.browser.setDebug(false);
         this.browser.setFocusable(false);
         
         this.setLayout(new BorderLayout());
@@ -110,7 +111,7 @@ final class HtmlDisplayWithJDIC extends HtmlDisplay {
                 fos.write(htmlContent.getBytes("UTF-8"));
                 fos.close();
 
-                final URL tempFileURL = tempFile.toURL();
+                final URL tempFileURL = tempFile.toURI().toURL();
                 this.savedFiles.put(tempFileURL, tempFile);
                 this.browser.setURL(tempFileURL);
             } catch (IOException e) {

@@ -16,7 +16,6 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 
@@ -29,114 +28,129 @@ import javax.swing.*;
  */
 public final class DemoSplash
 {
-    /**
-     * Object used for synchronizations.
-     */
-    private final static Object monitor = new Object();
-    private static boolean waitCancelled = false;
+    /** Splash image (resource name). */
+    private static String splashImageResource;
 
+    /** Minimum splash display time. */
+    private static int minDisplayTimeMillis;
+
+    /** Target class to invoke. */
+    private static String targetClass;
+
+    /**
+     * Command line entry point.
+     */
     public static void main(String [] args)
     {
-        if (args.length < 3)
-        {
-            JOptionPane.showMessageDialog(null,
-                "Expect at least three arguments: iconResource minWaitSecs targetClass", "Error",
-                JOptionPane.ERROR_MESSAGE);
-        }
-
         JWindow splashWindow = null;
         try
         {
-            final String iconResource = args[0];
-            final int minWait;
-            try
-            {
-                minWait = 1000 * Integer.parseInt(args[1]);
-            }
-            catch (NumberFormatException e)
-            {
-                throw new IllegalArgumentException("Expected a number: " + args[1]);
-            }
-            final String targetClass = args[2];
+            // Parse command line arguments.
+            args = parseParameters(args);
 
-            final long startTime = System.currentTimeMillis();
-            splashWindow = displaySplash(iconResource);
+            // Display splash.
+            splashWindow = displaySplash(splashImageResource);
 
+            // Close splash after some time, if not closed before the deadline.
+            startTimeoutDispose(splashWindow);
+
+            // Attempt to load target class.
             Class delegate = loadAttempt(Thread.currentThread().getContextClassLoader(), targetClass);
             if (delegate == null)
             {
                 delegate = loadAttempt(DemoSplash.class.getClassLoader(), targetClass);
             }
-            if (delegate == null) throw new IllegalArgumentException("Target class not found: " + targetClass);
-
-            try
+            if (delegate == null)
             {
-                final Method mainMethod = delegate.getMethod("main", new Class []
-                {
-                    String [].class
-                });
-                final String [] targetArgs = new String [args.length - 3];
-                System.arraycopy(args, 3, targetArgs, 0, targetArgs.length);
-                new Thread()
-                {
-                    public void run()
-                    {
-                        try
-                        {
-                            mainMethod.invoke(null, new Object []
-                            {
-                                targetArgs
-                            });
-                        }
-                        catch (InvocationTargetException e)
-                        {
-                            JOptionPane.showMessageDialog(null, "Target class exception: " + e.getCause(), "Error",
-                                JOptionPane.ERROR_MESSAGE);
-                            return;
-                        }
-                        catch (IllegalAccessException e)
-                        {
-                            JOptionPane.showMessageDialog(null, "Illegal access when invoking the target class: "
-                                + e.getCause(), "Error", JOptionPane.ERROR_MESSAGE);
-                        }
-                    }
-                }.start();
-            }
-            catch (NoSuchMethodException e)
-            {
-                throw new IllegalArgumentException("Target class has no main method.");
+                throw new IllegalArgumentException("Target class not found: " + targetClass);
             }
 
-            final long remaining = startTime + minWait - System.currentTimeMillis();
-            if (remaining > 0)
-            {
-                synchronized (monitor)
-                {
-                    if (waitCancelled == false)
-                    {
-                        try
-                        {
-                            monitor.wait(remaining);
-                        }
-                        catch (InterruptedException e)
-                        {
-                        }
-                    }
-                }
-            }
+            final SplashDelegate instance = (SplashDelegate) delegate.newInstance();
+            instance.main(args, splashWindow);
         }
         catch (IllegalArgumentException e)
         {
-            JOptionPane.showMessageDialog(null, "Incorrect argument: " + e.getMessage(), "Error",
-                JOptionPane.ERROR_MESSAGE);
+            splashClose(splashWindow);
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Illegal arguments", JOptionPane.ERROR_MESSAGE);
         }
-        finally
+        catch (Exception e)
         {
-            if (splashWindow != null)
-            {
-                splashWindow.dispose();
-            }
+            splashClose(splashWindow);
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Program error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    private static void splashClose(final JWindow splashWindow)
+    {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                if (splashWindow != null && splashWindow.isVisible()) splashWindow.dispose();
+            }
+        });
+    }
+
+    /**
+     * Starts a background thread for disposing the thread after some time. 
+     */
+    private static void startTimeoutDispose(JWindow splashWindow)
+    {
+        final JWindow splashWnd = splashWindow;
+        final Thread t = new Thread()
+        {
+            public void run()
+            {
+                try
+                {
+                    if (SwingUtilities.isEventDispatchThread()) {
+                        // We are the AWT thread, check splash.
+                        if (splashWnd.isVisible()) {
+                            splashWnd.dispose();
+                        }
+                    } else {
+                        // Wait some time, invoke from AWT thread.
+                        Thread.sleep(minDisplayTimeMillis);
+                        SwingUtilities.invokeLater(this);
+                    }
+                }
+                catch (InterruptedException e)
+                {
+                    // ignore.
+                }
+            }
+        };
+        t.setDaemon(true);
+        t.start();
+    }
+
+    /**
+     * Parses arguments and sets fields of this class to proper values.
+     * 
+     * @param args
+     * @return Returns original array of parameters with splash-specific
+     * parameters removed.
+     */
+    private static String [] parseParameters(String [] args)
+    {
+        if (args.length < 3) {
+            throw new IllegalArgumentException("Expected three arguments: iconResource minWaitSecs targetClass");
+        }
+
+        DemoSplash.splashImageResource = args[0];
+        DemoSplash.targetClass = args[2];
+
+        try
+        {
+            DemoSplash.minDisplayTimeMillis = 1000 * Integer.parseInt(args[1]);
+        }
+        catch (NumberFormatException e)
+        {
+            throw new IllegalArgumentException("Expected a number: " + args[1]);
+        }
+
+        final String [] targetArgs = new String [args.length - 3];
+        System.arraycopy(args, 3, targetArgs, 0, targetArgs.length);
+
+        return targetArgs;
     }
 
     /**
@@ -193,16 +207,12 @@ public final class DemoSplash
         splashWindow.setLocation(splashRect.getLocation());
         splashWindow.setVisible(true);
 
-        // Add click listeners.
+        // Add click listener closing the splash.
         splashLabel.addMouseListener(new MouseAdapter()
         {
             public void mousePressed(MouseEvent e)
             {
-                synchronized (monitor)
-                {
-                    waitCancelled = true;
-                    monitor.notifyAll();
-                }
+                splashWindow.dispose();
             }
         });
 
@@ -247,5 +257,4 @@ public final class DemoSplash
             return device.getDefaultConfiguration().createCompatibleImage(clientRect.width, clientRect.height);
         }
     }
-
 }
