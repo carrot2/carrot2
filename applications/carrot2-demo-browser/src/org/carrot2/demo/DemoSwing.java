@@ -19,6 +19,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import javax.swing.JWindow;
+import javax.swing.SwingUtilities;
+
 import org.carrot2.demo.swing.SwingDemoGui;
 import org.carrot2.demo.swing.SwingUtils;
 import org.dom4j.*;
@@ -29,16 +32,19 @@ import org.dom4j.io.SAXReader;
  * 
  * @author Dawid Weiss
  */
-public class DemoSwing {
+public class DemoSwing implements SplashDelegate {
     
     /**
      * Demo Entry point.
      */
     public static void main(String[] args) {
-        new DemoSwing().run(args);
+        new DemoSwing().main(args, null);
     }
 
-    protected void run(String [] args)
+    /**
+     * 
+     */
+    public void main(String [] args, final JWindow splash)
     {
         final DemoContext carrotDemo;
 
@@ -58,16 +64,27 @@ public class DemoSwing {
             carrotDemo = new DemoContext();
         }
 
-        final SwingDemoGui demoGui = new SwingDemoGui(carrotDemo,
-            getMainFrameTitle()); 
-        demoGui.display();
+        final SwingDemoGui demoGui = new SwingDemoGui(carrotDemo, getMainFrameTitle());
+        SwingUtilities.invokeLater(
+            new Runnable() {
+                public void run()
+                {
+                    demoGui.display(splash);
+                }
+            });
     }
 
+    /**
+     * 
+     */
     protected String getMainFrameTitle()
     {
         return "Carrot2 Demo";
     }
     
+    /**
+     * 
+     */
     private static DemoContext initFromResource() throws IOException {
         final ArrayList components = new ArrayList();
         final ArrayList processes = new ArrayList();
