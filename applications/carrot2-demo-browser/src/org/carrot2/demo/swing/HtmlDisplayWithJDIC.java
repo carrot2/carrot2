@@ -88,6 +88,7 @@ final class HtmlDisplayWithJDIC extends HtmlDisplay {
         manager.setActiveEngine(BrowserEngineManager.IE);
 
         this.browser = new WebBrowser();
+        this.browser.setDebug(false);
         this.browser.setFocusable(false);
         
         this.setLayout(new BorderLayout());
