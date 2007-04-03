@@ -33,6 +33,10 @@ final class HtmlDisplayWithJDIC extends HtmlDisplay {
     private final static Logger log = Logger.getLogger(HtmlDisplayWithJDIC.class);
     private final WebBrowser browser;
 
+    static {
+        WebBrowser.setDebug(false);
+    }
+    
     /**
      * A map of {@link URL} to {@link File} objects of temporary
      * files and their URLs saved by us and opened by JDIC. We use
@@ -86,8 +90,6 @@ final class HtmlDisplayWithJDIC extends HtmlDisplay {
     public HtmlDisplayWithJDIC() {
         final BrowserEngineManager manager = BrowserEngineManager.instance();
         manager.setActiveEngine(BrowserEngineManager.IE);
-
-        WebBrowser.setDebug(false);
 
         this.browser = new WebBrowser();
         this.browser.setFocusable(false);
