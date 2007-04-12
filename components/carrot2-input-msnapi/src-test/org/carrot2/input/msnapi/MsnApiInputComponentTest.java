@@ -12,8 +12,7 @@
 
 package org.carrot2.input.msnapi;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import org.apache.log4j.Logger;
 import org.carrot2.core.*;
@@ -125,6 +124,30 @@ public class MsnApiInputComponentTest extends junit.framework.TestCase
         assertTrue("Results: " + results.size(), results.size() > 140 && results.size() <= 150);
     }
 
+    
+    public void testUniqueIds() throws Exception
+    {
+        final String query = "apache";
+        final HashMap reqContext = new HashMap();
+        reqContext.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, new Integer(150));
+        
+        final long start = System.currentTimeMillis();
+        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, reqContext)
+            .getQueryResult()).documents;
+        final long end = System.currentTimeMillis();
+        log.info("MSN query time: " + (end - start) + " ms.");
+        
+        Set ids = new HashSet();
+        for (Iterator it = results.iterator(); it.hasNext();)
+        {
+            RawDocument doc = (RawDocument) it.next();
+            ids.add(doc.getId());
+        }
+        
+        // the results should contain some documents.
+        assertEquals(ids.size(), results.size());
+    }
+    
     public void testStartFromBug() throws Exception
     {
         final String query = "clustering";

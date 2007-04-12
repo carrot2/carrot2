@@ -18,11 +18,13 @@ import junit.framework.*;
 
 import org.apache.log4j.*;
 import org.carrot2.core.*;
+import org.carrot2.core.clustering.RawDocument;
 import org.carrot2.core.impl.*;
 
 /**
- * A base class for {@link LocalInputComponent} test classes. This class provides some common infrastructure, e.g. a
- * local controller in which tests can be performed.
+ * A base class for {@link LocalInputComponent} test classes. This class
+ * provides some common infrastructure, e.g. a local controller in which tests
+ * can be performed.
  * 
  * @author Stanislaw Osinski
  */
@@ -47,7 +49,8 @@ public abstract class LocalInputComponentTestBase extends TestCase
     }
 
     /**
-     * Implement this method to return the factory of the input components under tests.
+     * Implement this method to return the factory of the input components under
+     * tests.
      * 
      * @return
      */
@@ -69,19 +72,20 @@ public abstract class LocalInputComponentTestBase extends TestCase
      */
     public List query(String query, Map params) throws Exception
     {
-        return ((ArrayOutputComponent.Result) controller.query("testprocess", query,
-            params).getQueryResult()).documents;
+        return ((ArrayOutputComponent.Result) controller.query("testprocess",
+            query, params).getQueryResult()).documents;
     }
 
     /**
-     * Sets up a simple (input-output) controller for testing the input component.
+     * Sets up a simple (input-output) controller for testing the input
+     * component.
      * 
      * @param inputFactory
      * @return
      * @throws Exception
      */
-    protected LocalControllerBase setUpController(LocalComponentFactory inputFactory)
-        throws Exception
+    protected LocalControllerBase setUpController(
+        LocalComponentFactory inputFactory) throws Exception
     {
         LocalControllerBase controller;
 
@@ -108,8 +112,8 @@ public abstract class LocalInputComponentTestBase extends TestCase
         return controller;
     }
 
-    protected void performQuery(String query, int requestedResults, int expectedResults)
-        throws Exception
+    protected void performQuery(String query, int requestedResults,
+        int expectedResults) throws Exception
     {
         performQuery(query, requestedResults, expectedResults, expectedResults);
     }
@@ -120,12 +124,28 @@ public abstract class LocalInputComponentTestBase extends TestCase
         final long start = System.currentTimeMillis();
         List results = query(query, requestedResults);
         final long end = System.currentTimeMillis();
-        log.info("PubMed query time: " + (end - start) + " ms.");
+        log.info("Query time: " + (end - start) + " ms.");
 
         // the results should contain some documents.
         assertTrue("Results acquired (" + results.size() + ") between "
             + minExpectedResults + " and " + maxExpectedResults,
             results.size() >= minExpectedResults
                 && results.size() <= maxExpectedResults);
+    }
+
+    protected void performIdUniquenessTest(String query, int requestedResults)
+        throws Exception
+    {
+        List results = query(query, requestedResults);
+
+        Set ids = new HashSet();
+        for (Iterator it = results.iterator(); it.hasNext();)
+        {
+            RawDocument doc = (RawDocument) it.next();
+            ids.add(doc.getId());
+        }
+
+        assertEquals("Number of unique ids equal to the number of results", ids
+            .size(), results.size());
     }
 }

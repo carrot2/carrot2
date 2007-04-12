@@ -182,7 +182,7 @@ public class YahooApiInputComponent extends LocalInputComponentBase
             {
                 YahooSearchResult yahooSearchResult = (YahooSearchResult)results
                         .get(i);
-                rawDocuments[i] = new RawDocumentSnippet(Integer.toString(i),
+                rawDocuments[i] = new RawDocumentSnippet(Integer.toString(i + startAt),
                         yahooSearchResult.title, yahooSearchResult.summary,
                         yahooSearchResult.url, 0.0f);
             }

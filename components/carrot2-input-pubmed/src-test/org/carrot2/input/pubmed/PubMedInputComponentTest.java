@@ -54,4 +54,9 @@ public class PubMedInputComponentTest extends LocalInputComponentTestBase
     {
         performQuery("test", 400, 400);
     }
+
+    public void testUniqueIds() throws Exception
+    {
+        performIdUniquenessTest("test", 200);
+    }
 }

@@ -45,7 +45,8 @@ public class EToolsLocalInputComponentTest extends LocalInputComponentTestBase
 
     public void testDataSourceResultsCount()
     {
-        EToolsLocalInputComponent input = new EToolsLocalInputComponent("partnerId");
+        EToolsLocalInputComponent input = new EToolsLocalInputComponent(
+            "partnerId");
         Map params = new HashMap();
 
         params.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, "0");
@@ -101,6 +102,11 @@ public class EToolsLocalInputComponentTest extends LocalInputComponentTestBase
         performQuery("test", 400, 150, 400);
     }
 
+    public void testUniqueIds() throws Exception
+    {
+        performIdUniquenessTest("test", 200);
+    }
+
     /**
      * Make sure that the results contain information about the source.
      * 
@@ -115,7 +121,7 @@ public class EToolsLocalInputComponentTest extends LocalInputComponentTestBase
             RawDocument document = (RawDocument) it.next();
             String [] sources = (String []) document
                 .getProperty(RawDocument.PROPERTY_SOURCES);
-            
+
             assertNotNull("Sources information available", sources);
             assertTrue("Non-zero number of sources", sources.length > 0);
         }
