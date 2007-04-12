@@ -169,6 +169,36 @@ public class YahooApiInputComponentTest extends junit.framework.TestCase {
         assertEquals("Results acquired from Yahoo is 50?"
                 + ":" + results.size(), 50, results.size());
     }    
+    
+    public void testUniqueIds() throws Exception {
+        final LocalComponentFactory inputFactory = new LocalComponentFactory() {
+            public LocalComponent getInstance() {
+                return new YahooApiInputComponent();
+            }
+        };
+        
+        LocalControllerBase controller = setUpController(inputFactory);
+        String query = "apache";
+        final long start = System.currentTimeMillis();
+        HashMap reqContext = new HashMap();
+        reqContext.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, new Integer(200));
+        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, reqContext).getQueryResult()).documents;
+        final long end = System.currentTimeMillis();
+        log.info("Yahoo query time: " + (end - start) + " ms.");
+        
+        // the results should contain some documents.
+        log.debug("Results acquired from Yahoo: " + results.size());
+        
+        Set ids = new HashSet();
+        for (Iterator ir = results.iterator(); ir.hasNext();)
+        {
+            RawDocument doc = (RawDocument) ir.next();
+            ids.add(doc.getId());
+        }
+        
+        assertEquals("All number of unique ids equal to the number of results",
+            ids.size(), results.size());
+    }    
 
 	public void testApacheAntQuery() throws Exception {
         final LocalComponentFactory inputFactory = new LocalComponentFactory() {
