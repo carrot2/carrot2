@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -23,17 +22,15 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 
 /**
- * This component acts as an interceptor in the processing chain and saves
- * query, documents, clusters and other information to a file specified by the
- * {@link #PARAM_OUTPUT_FILE} request parameter. If the
- * {@link #PARAM_OUTPUT_FILE} parameter has not been specified, this component
- * will simply pass the clusters to the next component down the chain.
+ * This component acts as an interceptor in the processing chain and saves query, documents, clusters and other
+ * information to a file specified by the {@link #PARAM_OUTPUT_FILE} request parameter. If the
+ * {@link #PARAM_OUTPUT_FILE} parameter has not been specified, this component will simply pass the clusters to the next
+ * component down the chain.
  * 
  * @author Stanislaw Osinski
  */
-public class SaveXmlFilterComponent 
-    extends LocalFilterComponentBase
-    implements RawClustersConsumer, RawClustersProducer, RawDocumentsConsumer
+public class SaveXmlFilterComponent extends LocalFilterComponentBase implements RawClustersConsumer,
+    RawClustersProducer, RawDocumentsConsumer
 {
     /** Specifies the file to which the data should be saved */
     public static final String PARAM_OUTPUT_FILE = "output-file";
@@ -42,18 +39,18 @@ public class SaveXmlFilterComponent
     public static final String PARAM_OUTPUT_STREAM = "output-stream";
 
     /**
-     * Specifies whether clusters should also be saved. Value of this parameter
-     * must be of type {@link Boolean}.
+     * Specifies whether clusters should also be saved. Value of this parameter must be of type {@link Boolean}.
      */
     public static final String PARAM_SAVE_CLUSTERS = "save-clusters";
 
     /** Capabilities required from the previous component in the chain */
-    private final static Set CAPABILITIES_PREDECESSOR = 
-        toSet(RawClustersProducer.class);
+    private final static Set CAPABILITIES_PREDECESSOR = toSet(RawClustersProducer.class);
 
     /** This component's capabilities */
-    private final static Set CAPABILITIES_COMPONENT = 
-        toSet(new Object [] {RawClustersConsumer.class, RawClustersProducer.class, RawDocumentsConsumer.class});
+    private final static Set CAPABILITIES_COMPONENT = toSet(new Object []
+    {
+        RawClustersConsumer.class, RawClustersProducer.class, RawDocumentsConsumer.class
+    });
 
     /** Capabilities required from the next component in the chain */
     private final static Set CAPABILITIES_SUCCESSOR = toSet(RawClustersConsumer.class);
@@ -119,8 +116,7 @@ public class SaveXmlFilterComponent
      * 
      * @see org.carrot2.core.LocalFilterComponentBase#startProcessing(org.carrot2.core.RequestContext)
      */
-    public void startProcessing(RequestContext requestContext)
-        throws ProcessingException
+    public void startProcessing(RequestContext requestContext) throws ProcessingException
     {
         super.startProcessing(requestContext);
         this.requestContext = requestContext;
@@ -128,25 +124,35 @@ public class SaveXmlFilterComponent
         // Determine output file
         final OutputStream os = (OutputStream) requestContext.getRequestParameters().get(PARAM_OUTPUT_STREAM);
         final File outputFile = (File) requestContext.getRequestParameters().get(PARAM_OUTPUT_FILE);
-        
-        if (os != null && outputFile != null) {
+
+        if (os != null && outputFile != null)
+        {
             throw new ProcessingException("Stream or file is required (mutually exclusive).");
         }
 
         rawClusters = new ArrayList();
         rawDocuments = new ArrayList();
-        if (outputFile != null) {
-            if (outputFile.isDirectory()) {
+        if (outputFile != null)
+        {
+            if (outputFile.isDirectory())
+            {
                 throw new ProcessingException("Output file must not be a directory.");
             }
-            try {
+            try
+            {
                 outputStream = new FileOutputStream(outputFile);
-            } catch (FileNotFoundException e) {
+            }
+            catch (FileNotFoundException e)
+            {
                 throw new ProcessingException(e);
             }
-        } else if (os != null) {
+        }
+        else if (os != null)
+        {
             outputStream = os;
-        } else {
+        }
+        else
+        {
             // do nothing.
         }
     }
@@ -166,8 +172,9 @@ public class SaveXmlFilterComponent
             root.add(createQueryElement(requestContext));
 
             // Add documents
-            if (this.rawDocuments.size() == 0) {
-                this.rawDocuments = collectRawDocuments();                
+            if (this.rawDocuments.size() == 0)
+            {
+                this.rawDocuments = collectRawDocuments();
             }
             addDocuments(root, this.rawDocuments);
 
@@ -188,8 +195,7 @@ public class SaveXmlFilterComponent
             }
             catch (Exception e)
             {
-                throw new ProcessingException("Cannot write results: "
-                    + e.getMessage());
+                throw new ProcessingException("Cannot write results: " + e.getMessage());
             }
             finally
             {
@@ -208,8 +214,8 @@ public class SaveXmlFilterComponent
     }
 
     /**
-     * Override this method to add some custom information to the xml file.
-     * Implementation of this method in this class is empty.
+     * Override this method to add some custom information to the xml file. Implementation of this method in this class
+     * is empty.
      * 
      * @param root Root element of the XML file
      * @param requestContext current request context
@@ -241,8 +247,7 @@ public class SaveXmlFilterComponent
             return;
         }
 
-        Object saveClusters = requestContext.getRequestParameters().get(
-            PARAM_SAVE_CLUSTERS);
+        Object saveClusters = requestContext.getRequestParameters().get(PARAM_SAVE_CLUSTERS);
         if (saveClusters == null || !((Boolean) saveClusters).booleanValue())
         {
             return;
@@ -265,9 +270,9 @@ public class SaveXmlFilterComponent
     {
         Element element = DocumentHelper.createElement("query");
 
-        String query = (String) requestContext.getRequestParameters().get(
-            LocalInputComponent.PARAM_QUERY);
-        if (query == null) {
+        String query = (String) requestContext.getRequestParameters().get(LocalInputComponent.PARAM_QUERY);
+        if (query == null)
+        {
             query = "";
         }
         element.setText(query);
@@ -288,8 +293,7 @@ public class SaveXmlFilterComponent
         // Add cluster score
         if (rawCluster.getProperty(RawCluster.PROPERTY_SCORE) != null)
         {
-            element.addAttribute("score", rawCluster.getProperty(
-                RawCluster.PROPERTY_SCORE).toString());
+            element.addAttribute("score", rawCluster.getProperty(RawCluster.PROPERTY_SCORE).toString());
         }
 
         // Add cluster label
@@ -300,8 +304,7 @@ public class SaveXmlFilterComponent
         for (Iterator it = documents.iterator(); it.hasNext();)
         {
             RawDocument rawDocument = (RawDocument) it.next();
-            element.addElement("document").addAttribute("refid",
-                getDocumentId(rawDocument));
+            element.addElement("document").addAttribute("refid", getDocumentId(rawDocument));
         }
 
         // Add subclusters
@@ -376,8 +379,7 @@ public class SaveXmlFilterComponent
         }
         else
         {
-            Object id = rawDocument
-                .getProperty(RawDocumentEnumerator.DOCUMENT_SEQ_NUMBER);
+            Object id = rawDocument.getProperty(RawDocumentEnumerator.DOCUMENT_SEQ_NUMBER);
             if (id != null)
             {
                 return id.toString();
@@ -409,10 +411,8 @@ public class SaveXmlFilterComponent
             {
                 RawDocument docA = (RawDocument) o1;
                 RawDocument docB = (RawDocument) o2;
-                Integer seqA = (Integer) docA
-                    .getProperty(RawDocumentEnumerator.DOCUMENT_SEQ_NUMBER);
-                Integer seqB = (Integer) docB
-                    .getProperty(RawDocumentEnumerator.DOCUMENT_SEQ_NUMBER);
+                Integer seqA = (Integer) docA.getProperty(RawDocumentEnumerator.DOCUMENT_SEQ_NUMBER);
+                Integer seqB = (Integer) docB.getProperty(RawDocumentEnumerator.DOCUMENT_SEQ_NUMBER);
 
                 if (seqA == null)
                 {
@@ -449,10 +449,8 @@ public class SaveXmlFilterComponent
         }
     }
 
-    /*
-     * (non-Javadoc)
+    /**
      * 
-     * @see org.carrot2.core.LocalFilterComponentBase#flushResources()
      */
     public void flushResources()
     {
@@ -461,13 +459,12 @@ public class SaveXmlFilterComponent
         requestContext = null;
         rawClustersConsumer = null;
         rawClusters = null;
+        rawDocuments = null;
         outputStream = null;
     }
 
-    /*
-     * (non-Javadoc)
+    /**
      * 
-     * @see org.carrot2.core.clustering.RawClustersConsumer#addCluster(org.carrot2.core.clustering.RawCluster)
      */
     public void addCluster(RawCluster cluster) throws ProcessingException
     {
@@ -479,8 +476,13 @@ public class SaveXmlFilterComponent
         rawClustersConsumer.addCluster(cluster);
     }
 
-    public void addDocument(RawDocument doc) throws ProcessingException {
-        if (outputStream != null) {
+    /**
+     * 
+     */
+    public void addDocument(RawDocument doc) throws ProcessingException
+    {
+        if (outputStream != null)
+        {
             rawDocuments.add(doc);
         }
     }
