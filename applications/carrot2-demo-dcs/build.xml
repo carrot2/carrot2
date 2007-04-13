@@ -1,0 +1,34 @@
+<project name="Carrot2 Document Clustering Server" default="dist">
+	<property file="${user.home}/.carrot.properties" />
+
+	<property name="project.dir" location="${basedir}" />
+
+	<property name="distribution.dir" location="${project.dir}/tmp/dist" />
+
+	<property name="type" value="jartype" />
+	<property name="dist.name" value="carrot2-demo-dcs" />
+	<property name="component.descriptor" location="carrot2-demo-dcs.dep.xml" />
+
+	<import file="${carrot2.code.dir}/components/common-targets.inc" />
+
+	<target name="dist">
+		<property name="copy.dependencies" value="true" />
+		<property name="single.jar" value="false" />
+		<property name="libs.dir" location="${distribution.dir}/lib" />
+
+		<ant target="build.${type}" antfile="${carrot2.code.dir}/components/master.xml" inheritall="true" inheritrefs="true" />
+
+		<delete>
+			<fileset dir="${distribution.dir}" includes="${dist.name}*" />
+		</delete>
+
+		<copy todir="${distribution.dir}">
+			<fileset dir="bin" includes="*.*" />
+			<fileset dir=".">
+				<include name="readme.txt" />
+				<include name="algorithms/**" />
+				<include name="example/**" />
+			</fileset>
+		</copy>
+	</target>
+</project>

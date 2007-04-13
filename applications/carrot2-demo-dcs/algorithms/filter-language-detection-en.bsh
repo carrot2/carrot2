@@ -1,0 +1,12 @@
+
+import org.carrot2.core.*;
+import org.carrot2.core.impl.*;
+import org.carrot2.core.controller.*;
+
+factory = new LocalComponentFactory() {
+    public LocalComponent getInstance() {
+        return new RawDocumentDummyLanguageDetection("en");
+    }
+};
+
+return new LoadedComponentFactory("filter-language-detection-en", factory);
