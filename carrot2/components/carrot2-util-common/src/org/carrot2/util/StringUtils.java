@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -18,12 +17,8 @@ import java.util.Locale;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
-
 /**
- * Various utility classes.
- *
- * @author stachoo
- * @author Dawid Weiss
+ * Various utility classes related to string processing.
  */
 public class StringUtils
 {
@@ -50,7 +45,6 @@ public class StringUtils
         return (double) capitalizedCount / (double) string.length();
     }
 
-
     /**
      * Capitalizes the string (first character only).
      */
@@ -74,14 +68,11 @@ public class StringUtils
             return string;
         }
 
-        return string.toUpperCase(locale).substring(0, 1)
-            + string.substring(1).toLowerCase(locale);
+        return string.toUpperCase(locale).substring(0, 1) + string.substring(1).toLowerCase(locale);
     }
 
-
     /**
-     * @param string
-     * @param width
+     * 
      */
     public static String addLeftPadding(String string, int width)
     {
@@ -103,42 +94,46 @@ public class StringUtils
     }
 
     /**
-     * Converts HTML and numeric entities in the text back 
-     * to characters. 
+     * Converts HTML and numeric entities in the text back to characters.
      */
-    public static String unescapeHtml(String str) {
+    public static String unescapeHtml(String str)
+    {
         return StringEscapeUtils.unescapeHtml(str);
     }
 
     /**
-     * Converts XML and numeric entities in the text back 
-     * to characters. 
+     * Converts XML and numeric entities in the text back to characters.
      */
-    public static String unescapeXml(String str) {
+    public static String unescapeXml(String str)
+    {
         return StringEscapeUtils.unescapeXml(str);
     }
 
     /**
-     * Removes html tags from a word. Html markup is for now defined
-     * as sequences of characters between '<' and '>' characters
-     * (even though it is an ugly heuristic).
-     *
-     * @param  word  The word to remove markup from.
+     * Removes html tags from a word. Html markup is for now defined as sequences of characters between '<' and '>'
+     * characters (even though it is an ugly heuristic).
+     * 
+     * @param word The word to remove markup from.
      * @return A word with removed html tags.
      */
-    public static String removeMarkup(String word) {
-	    if (word == null) return null;
+    public static String removeMarkup(String word)
+    {
+        if (word == null) return null;
 
-        final char[] chars = word.toCharArray();
+        final char [] chars = word.toCharArray();
         int i = 0;
         int j = 0;
-        while (i < chars.length) {
-            if (chars[i] == '<') {
+        while (i < chars.length)
+        {
+            if (chars[i] == '<')
+            {
                 // skip until '>'
-                while (i < chars.length && chars[i] != '>') {
+                while (i < chars.length && chars[i] != '>')
+                {
                     i++;
                 }
-                if (i < chars.length) {
+                if (i < chars.length)
+                {
                     i++;
                 }
                 continue;
@@ -147,24 +142,26 @@ public class StringUtils
             i++;
             j++;
         }
-        if (i == j) {
+        if (i == j)
+        {
             return word;
-        } else {
+        }
+        else
+        {
             return new String(chars, 0, j);
         }
-    }    
-    
-    /**
-     * Wraps the string at a given column. The wrapped lines can
-     * be prefixed with another string.
-     * <b>De-tabify the text first!</b>
-     */
-    public static String wrap( String text, int maxColumn, String prefix, String wrapAllowedAtChars, int maxGracefulWrapBacktrace )
-    {
-        if (prefix.length() >= maxColumn)
-            throw new IllegalArgumentException("Prefix is longer than max. column.");
+    }
 
-        StringBuffer output = new StringBuffer( text.length() );
+    /**
+     * Wraps the string at a given column. The wrapped lines can be prefixed with another string. <b>De-tabify the text
+     * first!</b>
+     */
+    public static String wrap(String text, int maxColumn, String prefix, String wrapAllowedAtChars,
+        int maxGracefulWrapBacktrace)
+    {
+        if (prefix.length() >= maxColumn) throw new IllegalArgumentException("Prefix is longer than max. column.");
+
+        StringBuffer output = new StringBuffer(text.length());
 
         int columnPos = 0;
         int inputTextPosition;
@@ -172,75 +169,81 @@ public class StringUtils
         for (inputTextPosition = 0; inputTextPosition < text.length(); inputTextPosition++)
         {
             char chr = text.charAt(inputTextPosition);
-            if (chr == '\r')
-                continue;
-            if (chr == '\n') {
+            if (chr == '\r') continue;
+            if (chr == '\n')
+            {
                 columnPos = 0;
-                output.append( line );
+                output.append(line);
                 output.append('\n');
                 line.setLength(0);
                 continue;
             }
             while (true)
             {
-                if (columnPos >= maxColumn) {
+                if (columnPos >= maxColumn)
+                {
                     // try to break the line gracefully.
-                    int i = line.length()-1;
+                    int i = line.length() - 1;
                     int j = maxGracefulWrapBacktrace;
-                    while (i>0 && j>0) {
-                        if (wrapAllowedAtChars.indexOf(line.charAt(i)) != -1) {
+                    while (i > 0 && j > 0)
+                    {
+                        if (wrapAllowedAtChars.indexOf(line.charAt(i)) != -1)
+                        {
                             // ok, break at this character.
                             break;
                         }
-                        j--; i--;
+                        j--;
+                        i--;
                     }
-                    if (j==0 || i==0) {
+                    if (j == 0 || i == 0)
+                    {
                         // force break.
                         columnPos = 0;
                         output.append(line);
                         output.append('\n');
-                        if (prefix != null) {
+                        if (prefix != null)
+                        {
                             output.append(prefix);
                             columnPos += prefix.length();
                         }
                         line.setLength(0);
                     }
-                    else {
+                    else
+                    {
                         // break at this character.
-                        output.append(line.substring(0, i+1));
+                        output.append(line.substring(0, i + 1));
                         output.append('\n');
                         columnPos = 0;
-                        if (prefix != null) {
+                        if (prefix != null)
+                        {
                             output.append(prefix);
                             columnPos += prefix.length();
                         }
-                        String tmp = line.substring(i+1);
+                        String tmp = line.substring(i + 1);
                         line.setLength(0);
                         line.append(tmp);
                         columnPos += line.length();
                     }
-                } else {
+                }
+                else
+                {
                     break;
                 }
             }
 
             line.append(chr);
-            columnPos+=1;
+            columnPos += 1;
         }
-        // whatever remained. 
+        // whatever remained.
         output.append(line);
 
         return output.toString();
     }
 
-
     /**
-     * Splits the <code>string</code> into parts delimited by
-     * <code>delimiter</code> and stores the parts as {@link String}s in the
-     * provided <code>list</code>. Note: substrings can be delimited by any
-     * number of delimiter characters.
-     * 
-     * TODO: replace calls to this method with String.split() (JDK1.4)
+     * Splits the <code>string</code> into parts delimited by <code>delimiter</code> and stores the parts as
+     * {@link String}s in the provided <code>list</code>. Note: substrings can be delimited by any number of
+     * delimiter characters. TODO: replace calls to this method with String.split() (JDK1.4)
      * 
      * @param string
      * @param delimiter
@@ -251,49 +254,70 @@ public class StringUtils
     {
         substrings.clear();
         string = string.trim();
-    
+
         int i = 0;
         int j = string.indexOf(delimiter);
-    
+
         while (j >= 0)
         {
             substrings.add(string.substring(i, j));
-            
+
             i = j + 1;
             while (string.charAt(i) == delimiter)
             {
                 i++;
             }
-            
+
             j = string.indexOf(delimiter, i);
         }
-    
+
         substrings.add(string.substring(i));
-        
+
         return substrings;
     }
- 
+
     /**
      * @param a
      * @param formatType as in the {@link java.text.MessageFormat}class
      */
     public static String toString(Double a, String formatType)
     {
-        return java.text.MessageFormat.format("{0,number," + formatType + "}",
-            new Object []
-            { a });
+        return java.text.MessageFormat.format("{0,number," + formatType + "}", new Object []
+        {
+            a
+        });
     }
-    
+
     /**
-     * Returns <code>true</code> if given String is <code>null</code> or consits
-     * of white space only. 
+     * Returns <code>true</code> if given String is <code>null</code> or consits of white space only.
      * 
      * @param string
-     * @return <code>true</code> if given String is <code>null</code> or consits
-     * of white space only
+     * @return <code>true</code> if given String is <code>null</code> or consits of white space only
      */
     public static boolean isBlank(String string)
     {
         return string == null || string.trim().length() == 0;
+    }
+
+    /**
+     * Creates a chain of messages from nested exceptions.
+     */
+    public static String chainExceptionMessages(Throwable e)
+    {
+        final StringBuffer buf = new StringBuffer();
+        while (e != null)
+        {
+            if (buf.length() > 0) buf.append(" -> ");
+            if (e.getMessage() == null)
+            {
+                buf.append(e.toString());
+            }
+            else
+            {
+                buf.append(e.getMessage());
+            }
+            e = e.getCause();
+        }
+        return buf.toString();
     }
 }

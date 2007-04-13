@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<component
+    name="commons-cli"
+    description="Jakarta Commons CLI 1.0">
+	<provides>
+		<files>
+			<file location="commons-cli.jar" />
+			<file location="commons-lang-2.1.jar" />
+			<file location="commons-cli.LICENSE" />
+		</files>
+	</provides>
+	<dependency name="commons-lang" />
+</component>
+

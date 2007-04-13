@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<component
+    name="jetty"
+    description="Jetty 5.1.11RC0">
+	<provides>
+		<files>
+			<file location="org.mortbay.jetty-jdk1.2.jar" />
+			<file location="org.mortbay.jmx-jdk1.2.jar" />
+			<file location="jetty.LICENSE" />
+		</files>
+	</provides>
+</component>
+
