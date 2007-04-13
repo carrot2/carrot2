@@ -312,6 +312,7 @@ TESTING: @{component.path}
 
   <target name="apply-to-applications">
     <application-apply application.path="applications/carrot2-demo-browser" />
+    <application-apply application.path="applications/carrot2-demo-dcs" />
     <application-apply application.path="applications/carrot2-demo-webapp" />
     <application-apply application.path="applications/carrot2-nutch-plugin" />
     <application-apply application.path="applications/carrot2-odp-tools" />

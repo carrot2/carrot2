@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<component
+    name="carrot2-demo-dcs"
+    description="Carrot2 Document Clustering Server">
+
+	<provides>
+		<files prefix="tmp/dist">
+			<file location="carrot2-demo-dcs.jar" />
+		</files>
+		<build>
+			<ant file="build.xml" target="build" />
+		</build>
+		<check-newer>
+			<fileset dir="src" />
+		</check-newer>
+	</provides>
+
+	<!-- Required dependencies -->
+	<dependency name="log4j" />
+	<dependency name="dom4j" />
+	<dependency name="carrot2-license" />
+	<dependency name="carrot2-local-core" />
+	<dependency name="carrot2-launcher" />
+
+	<dependency name="commons-cli" />
+	<dependency name="junit" profile="test" />
+
+        <dependency name="carrot2-filter-lingo" noexport="true" />
+        <dependency name="carrot2-filter-stc" noexport="true" />
+        <dependency name="carrot2-filter-fuzzyants" noexport="true" />
+        <dependency name="carrot2-filter-trc" noexport="true" />
+        <dependency name="carrot2-filter-haog" noexport="true" />
+        
+        <dependency name="carrot2-stemmer-stempelator" noexport="true" />
+        <dependency name="carrot2-filter-case-normalizer" noexport="true" />
+        
+</component>
