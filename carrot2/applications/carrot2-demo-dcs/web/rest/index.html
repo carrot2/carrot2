@@ -14,13 +14,22 @@ Carrot Search Document Clustering Server
   You can invoke clustering by sending a <span
   class="code">multipart/form-data</span> POST request to the Document
   Clustering Server, providing input data in the <span
-  class="code">c2stream</span> form parameter.
+  class="code">c2stream</span> form parameter. An optional parameter named
+  <span class="code">algorithm</span> may specify the algorithm to use
+  for clustering (note that this parameter <b>must</b> precede
+  the actual data stream). If nothing is given, the default algorithm is used.
+</p>
+
+<p>
   You can use the forms below to trigger clustering from your browser.
 </p>
 
 <form action="processor" enctype="multipart/form-data" method="POST">
 <div class="form">
 <fieldset>
+  <label for="algorithm">Algorithm</label>
+  <input id="algorithm" type="text" name="algorithm" size="40">
+
   <legend>Send a data file</legend>
   <label for="file">Input XML file</label>
   <input id="file" type="file" name="c2stream" size="40">
@@ -33,6 +42,8 @@ Carrot Search Document Clustering Server
 <div class="form">
 <fieldset>
   <legend>Paste data</legend>
+  <label for="algorithm">Algorithm</label>
+  <input id="algorithm" type="text" name="algorithm" size="40">
   <label>Input XML data</label>
 <textarea name="c2stream" style="width: 34em; height: 35ex;"></textarea>
 </fieldset>

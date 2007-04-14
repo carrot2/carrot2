@@ -32,7 +32,7 @@ public class ProcessingUtils
         ArrayOutputComponent.Result result;
         try
         {
-            plogger.start("Processing");
+            plogger.start("Processing request (algorithm: " + processName + ")");
 
             // Phase 1 -- read the XML
             plogger.start("Reading XML");

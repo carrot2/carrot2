@@ -24,5 +24,6 @@
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/jetty/org.mortbay.jmx.jar"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/jetty/jasper-compiler.jar"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/jetty/jasper-runtime.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-stc"/>
 	<classpathentry kind="output" path="tmp/eclipse/classes"/>
 </classpath>

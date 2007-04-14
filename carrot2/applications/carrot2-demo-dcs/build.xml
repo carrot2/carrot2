@@ -26,6 +26,7 @@
 			<fileset dir=".">
 				<include name="readme.txt" />
 				<include name="web/**" />
+				<exclude name="**/*.log" />
 			</fileset>
 		</copy>
 	</target>
