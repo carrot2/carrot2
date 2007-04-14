@@ -120,7 +120,8 @@ public final class XMLProcessorServlet extends HttpServlet
 
                     try
                     {
-                        ProcessingUtils.cluster(processId, context.getController(), dcsLogger, inputStream, outputStream);
+                        ProcessingUtils.cluster(processId, context.getController(), dcsLogger, inputStream,
+                            outputStream);
                     }
                     catch (Throwable e)
                     {
@@ -135,10 +136,16 @@ public final class XMLProcessorServlet extends HttpServlet
                         if (inputStream != null) inputStream.close();
                         break;
                     }
+
+                    return;
                 }
                 else if ("algorithm".equals(item.getFieldName()))
                 {
-                    processId = item.getString();
+                    final String newValue = item.getString();
+                    if (!"".equals(newValue.trim()))
+                    {
+                        processId = newValue;
+                    }
                 }
                 else
                 {
@@ -153,6 +160,12 @@ public final class XMLProcessorServlet extends HttpServlet
             logger.warn("File upload request failed: " + StringUtils.chainExceptionMessages(e));
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
+        }
+        catch (Throwable t)
+        {
+            final String message = "Internal server error: " + StringUtils.chainExceptionMessages(t);
+            logger.warn(message, t);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, message);
         }
     }
 }

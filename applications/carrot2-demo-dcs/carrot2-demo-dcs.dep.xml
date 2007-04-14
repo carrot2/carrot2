@@ -34,11 +34,13 @@
 
         <dependency name="carrot2-filter-lingo" noexport="true" />
         <dependency name="carrot2-filter-stc" noexport="true" />
-        <dependency name="carrot2-filter-fuzzyants" noexport="true" />
         <dependency name="carrot2-filter-trc" noexport="true" />
         <dependency name="carrot2-filter-haog" noexport="true" />
-        
+        <!--
+	        This one is pretty slow.
+        	<dependency name="carrot2-filter-fuzzyants" noexport="true" /> 
+        -->
+
         <dependency name="carrot2-stemmer-stempelator" noexport="true" />
         <dependency name="carrot2-filter-case-normalizer" noexport="true" />
-        
 </component>

@@ -5,15 +5,28 @@
     <description>Document Clustering Server</description>
 
     <servlet>
+        <servlet-name>InitializationServlet</servlet-name>
+        <servlet-class>org.carrot2.dcs.http.InitializationServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+
+        <!-- Uncomment to select specific default algorithm.
+        <init-param>
+        	<param-name>algorithm</param-name>
+        	<param-value>(process-id)</param-value>
+       	</init-param>
+        -->
+    </servlet>
+
+    <servlet>
         <servlet-name>RestProcessor</servlet-name>
         <servlet-class>org.carrot2.dcs.http.rest.XMLProcessorServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
+        <load-on-startup>2</load-on-startup>
     </servlet>
 
     <servlet>
         <servlet-name>DenyAccessServlet</servlet-name>
         <servlet-class>org.carrot2.dcs.http.DenyAccessServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
+        <load-on-startup>2</load-on-startup>
     </servlet>
 
     <servlet-mapping>
@@ -22,7 +35,7 @@
     </servlet-mapping>
 
 	<!-- Protect scripts -->
-    
+
     <servlet-mapping>
         <servlet-name>DenyAccessServlet</servlet-name>
         <url-pattern>*.sh</url-pattern>
