@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+   <link REL="stylesheet" TYPE="text/css" TITLE="style" MEDIA="all" href="../css/style.css" />
+</head>
+
+<body>
+<h1>
+Document Clustering Server
+</h1>
+
+<div class="content">
+<p>Document Clustering Server (DCS) provides the following services:</p>
+
+	<dl>
+		<dt>HTTP POST</dt>
+		<dd>
+			Clusters XML input data provided in a HTTP POST request. Format of the data
+			is the following:
+<pre>
+&lt;searchresult>
+  &lt;query>new york hotels&lt;/query>
+  &lt;document>
+    &lt;title>NewYork.com&lt;/title>
+    &lt;snippet>
+      guide to New York City with links to hotels, attractions, 
+      shopping, restaurants, and more. NewYork.com also features 
+      local New York news, arts, and sports.
+    &lt;/snippet>
+  &lt;/document>
+
+  &lt;document>
+      ...
+  &lt;/document>
+  
+  ...
+&lt;/searchresult>
+</pre>
+
+			Please see <a href="/rest">this page</a> for 
+      an example HTML form showing how to post queries and
+      how to select the clustering algorithm dynamically (if there
+      is more than one installed).
+    </dd>
+
+<!--
+		<dt>XML-RPC</dt>
+		<dd>
+			Provides an XML-RPC interface to the Lingo3G clustering engine.
+			The XML-RPC service can be used together with example PHP code located in
+	    the examples/php directory of the distribution archive. Before using the
+	    PHP example, please configure DCS address and port number in the
+	    carrot2-config.inc file. Please see the test.php file for an example on
+	    how to call clustering.
+		</dd>
+-->
+	</dl>
+</p>
+</div>
+</body></html>

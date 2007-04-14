@@ -1,0 +1,71 @@
+  body { background-color: #f0f0f0; }
+  
+  body, input {
+    font-family: Trebuchet MS, sans-serif;
+    font-size: 13px;
+  }
+  
+  label {
+    width: 8em;
+    float: left;
+    text-align: right;
+    margin-right: 0.5em;
+    font-weight: bold;
+  }
+
+  fieldset {
+    text-align: left;
+    margin: 6px;
+    margin-bottom: 2px;
+    border: 1px solid #a0a0a0;
+    -moz-border-radius: 6px;
+    padding: 10px;
+  }
+
+  html > body fieldset {
+    background-color: white;
+  }
+
+  div.form {
+    width: 48em;
+    text-align: right;
+    margin: 0 auto 5ex auto;
+  }
+
+  input.submit {
+    margin: 7px;
+    font-weight: bold;
+  }
+
+  h1 {
+    display: block;
+    text-align: center;
+    margin: 3ex auto 2ex auto;
+  }
+
+  .code { font-family: Courier; }
+
+	.content {
+    width: 46em;
+    margin: 0 auto 6ex auto;
+	}
+
+  p {
+    text-align: justify;
+  }
+  
+  pre {
+  	background-color: white;
+  	border: 1px solid #b0b0b0;
+  	padding: 1ex;
+  	width: 42em;
+  }
+  
+  dt {
+  	margin-top: 3ex;
+  	font-weight: bold;
+  }
+  
+  dd {
+  	text-align: justify;
+  }
