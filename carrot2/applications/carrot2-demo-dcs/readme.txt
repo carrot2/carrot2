@@ -47,14 +47,3 @@ provides the following access interfaces:
     an example HTML form showing how to post queries.
 
 
-    XML-RPC
-
-    Provides an XML-RPC interface to the Lingo3G clustering engine. Assuming
-    that the DCS is running on port 8080 at localhost, the XML-RPC service is
-    available at http://localhost:8080/xmlrpc.
-
-    The XML-RPC service can be used together with example PHP code located in
-    the examples/php directory of the distribution archive. Before using the
-    PHP example, please configure DCS address and port number in the
-    carrot2-config.inc file. Please see the test.php file for an example on
-    how to call clustering.
