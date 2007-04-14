@@ -14,20 +14,18 @@
 	<target name="dist">
 		<property name="copy.dependencies" value="true" />
 		<property name="single.jar" value="false" />
-		<property name="libs.dir" location="${distribution.dir}/lib" />
+		<property name="libs.dir" location="${distribution.dir}/web/WEB-INF/lib" />
 
+		<mkdir dir="${distribution.dir}/web/WEB-INF/lib" />
 		<ant target="build.${type}" antfile="${carrot2.code.dir}/components/master.xml" inheritall="true" inheritrefs="true" />
-
 		<delete>
 			<fileset dir="${distribution.dir}" includes="${dist.name}*" />
 		</delete>
 
 		<copy todir="${distribution.dir}">
-			<fileset dir="bin" includes="*.*" />
 			<fileset dir=".">
 				<include name="readme.txt" />
-				<include name="algorithms/**" />
-				<include name="example/**" />
+				<include name="web/**" />
 			</fileset>
 		</copy>
 	</target>

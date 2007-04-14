@@ -5,12 +5,8 @@ import java.util.*;
 
 import org.apache.commons.cli.*;
 import org.apache.log4j.Level;
-import org.carrot2.core.*;
-import org.carrot2.core.impl.*;
-import org.carrot2.dcs.AppBase;
-import org.carrot2.dcs.ControllerContext;
-import org.carrot2.util.PerformanceLogger;
-import org.carrot2.util.StringUtils;
+import org.carrot2.core.MissingProcessException;
+import org.carrot2.dcs.*;
 
 /**
  * A command-line batch utility for processing XML documents with search results.
@@ -126,96 +122,37 @@ public class BatchApp extends AppBase
             for (Iterator i = files.iterator(); i.hasNext();)
             {
                 final File f = (File) i.next();
-                cluster(processId, context.getController(), f, outputDir);
+                logger.info("Processing file: " + f.getName());
+
+                OutputStream outputStream = null;
+                InputStream inputStream = null;
+                try
+                {
+                    inputStream = new FileInputStream(f);
+                    if (outputDir != null)
+                    {
+                        outputStream = new FileOutputStream(new File(outputDir, f.getName()));
+                    }
+                    else
+                    {
+                        outputStream = new ByteArrayOutputStream();
+                    }
+
+                    ProcessingUtils.cluster(processId, context.getController(), getLogger(), inputStream, outputStream);
+                }
+                catch (IOException e)
+                {
+                    if (outputStream != null) outputStream.close();
+                    if (inputStream != null) inputStream.close();
+                }
             }
         }
         catch (Exception e)
         {
             getLogger().fatal("Unhandled program error occurred.", e);
         }
-        
+
         getLogger().info("Finished.");
-    }
-
-    /**
-     * Run clustering for input files.
-     */
-    private void cluster(String processName, LocalController controller, File inputFile, File outputDir)
-        throws Exception
-    {
-        // First collect input documents from the file.
-        InputStream input = null;
-        OutputStream output = null;
-
-        final PerformanceLogger plogger = new PerformanceLogger(Level.DEBUG, this.getLogger());
-        ArrayOutputComponent.Result result;
-        try
-        {
-            getLogger().info("Processing file: " + inputFile.getName());
-
-            plogger.start("Processing " + inputFile.getName());
-
-            input = new FileInputStream(inputFile);
-
-            // Phase 1 -- read the XML
-            plogger.start("Reading XML");
-
-            final HashMap requestProperties = new HashMap();
-            requestProperties.put(XmlStreamInputComponent.XML_STREAM, input);
-            result = (ArrayOutputComponent.Result) controller.query(ControllerContext.STREAM_TO_RAWDOCS, "n/a",
-                requestProperties).getQueryResult();
-
-            final List documents = result.documents;
-            final String query = (String) requestProperties.get(LocalInputComponent.PARAM_QUERY);
-
-            plogger.end("Documents: " + documents.size() + ", query: " + query);
-
-            // Phase 2 -- cluster documents
-            plogger.start("Clustering");
-
-            requestProperties.clear();
-            requestProperties.put(ArrayInputComponent.PARAM_SOURCE_RAW_DOCUMENTS, documents);
-            requestProperties.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, Integer.toString(documents.size()));
-
-            result = (ArrayOutputComponent.Result) controller.query(processName, query, requestProperties)
-                .getQueryResult();
-            final List clusters = result.clusters;
-
-            plogger.end();
-
-            // Phase 3 -- save the result or emit it somehow.
-            plogger.start("Saving result");
-
-            final File outputFile = new File(outputDir, inputFile.getName());
-            if (outputDir != null)
-            {
-                output = new FileOutputStream(outputFile);
-            }
-            else
-            {
-                output = new ByteArrayOutputStream();
-            }
-
-            requestProperties.clear();
-            requestProperties.put(ArrayInputComponent.PARAM_SOURCE_RAW_DOCUMENTS, documents);
-            requestProperties.put(ArrayInputComponent.PARAM_SOURCE_RAW_CLUSTERS, clusters);
-            requestProperties.put(SaveXmlFilterComponent.PARAM_OUTPUT_STREAM, output);
-            requestProperties.put(SaveXmlFilterComponent.PARAM_SAVE_CLUSTERS, Boolean.TRUE);
-            controller.query(ControllerContext.RESULTS_TO_XML, query, requestProperties);
-
-            plogger.end(outputDir != null ? outputFile.getAbsolutePath() : "serialization only (no output file)");
-        }
-        catch (IOException e)
-        {
-            logger.warn("Failed to process: " + inputFile + " " + StringUtils.chainExceptionMessages(e));
-            logger.debug("Failed to process: " + inputFile + " (full stack)", e);
-        }
-        finally
-        {
-            plogger.reset();
-            if (input != null) input.close();
-            if (output != null) output.close();
-        }
     }
 
     /**

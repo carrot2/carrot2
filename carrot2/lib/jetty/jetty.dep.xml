@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<component
+    name="jetty"
+    description="Jetty 5.1.12">
+	<provides>
+		<files>
+			<file location="org.mortbay.jetty.jar" />
+			<file location="org.mortbay.jmx.jar" />
+			<file location="jasper-compiler.jar" />
+			<file location="jasper-runtime.jar" />
+			<file location="jetty.LICENSE" />
+		</files>
+	</provides>
+</component>
+

@@ -16,10 +16,10 @@ Applications
 This package provides the following applications:
 
 
-1) l3cli
+1) batch
 
-Clusters XML files from the "queries" folder and saves the results to
-the "output" folder. Format for the input data is the following:
+Clusters XML files and saves the results to an output folder. 
+Format for the input data is the following:
 
 <searchresult>
     <query>new york hotels</query>
@@ -33,7 +33,7 @@ the "output" folder. Format for the input data is the following:
     </document>
 </searchresult>
 
-2) l3dcs
+2) dcs
 
 Starts the Document Clustering Server (DCS) on a given port. DCS
 provides the following access interfaces:

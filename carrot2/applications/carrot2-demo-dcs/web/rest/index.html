@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <link REL="stylesheet" TYPE="text/css" TITLE="style" MEDIA="all" href="../css/style.css" />
+</head>
+<body>
+
+<h1>
+Carrot Search Document Clustering Server
+</h1>
+
+<div class="content">
+<p>
+  You can invoke clustering by sending a <span
+  class="code">multipart/form-data</span> POST request to the Document
+  Clustering Server, providing input data in the <span
+  class="code">c2stream</span> form parameter.
+  You can use the forms below to trigger clustering from your browser.
+</p>
+
+<form action="processor" enctype="multipart/form-data" method="POST">
+<div class="form">
+<fieldset>
+  <legend>Send a data file</legend>
+  <label for="file">Input XML file</label>
+  <input id="file" type="file" name="c2stream" size="40">
+</fieldset>
+    <input class="submit" type="submit" name="Send" value="Cluster >>">
+</div>
+</form>
+
+<form action="processor" enctype="multipart/form-data" method="POST">
+<div class="form">
+<fieldset>
+  <legend>Paste data</legend>
+  <label>Input XML data</label>
+<textarea name="c2stream" style="width: 34em; height: 35ex;"></textarea>
+</fieldset>
+<input class="submit" type="submit" name="Send" value="Cluster >>">
+</div>
+</form>
+</body></html>

@@ -1,10 +1,10 @@
 <?xml version="1.0" ?>
 <component
     name="commons-fileupload"
-    description="Jakarta Commons FileUpload 1.1.1">
+    description="Jakarta Commons FileUpload 1.2">
 	<provides>
 		<files>
-			<file location="commons-fileupload-1.1.1.jar" />
+			<file location="commons-fileupload-1.2.jar" />
 			<file location="commons-fileupload.LICENSE" />
 		</files>
 	</provides>
