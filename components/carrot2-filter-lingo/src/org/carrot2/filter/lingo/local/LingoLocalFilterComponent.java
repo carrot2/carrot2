@@ -21,7 +21,7 @@ import org.carrot2.core.linguistic.*;
 import org.carrot2.core.profiling.*;
 import org.carrot2.filter.lingo.common.*;
 import org.carrot2.filter.lingo.common.Cluster;
-import org.carrot2.filter.lingo.common.MultilingualClusteringContext;
+import org.carrot2.util.tokenizer.languages.*;
 
 
 /**
@@ -88,6 +88,8 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
 	 */
 	private Map defaults;
 
+    private Language tokenizerLanguage;
+    
     /**
      * Creates a new Lingo filter with default parameters.
      */
@@ -96,11 +98,19 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
     	this(null, null);
     }
     
-    public LingoLocalFilterComponent(Language [] languages, Map parameters) {
-    	this.languages = languages;
-    	this.defaults = parameters;
+    public LingoLocalFilterComponent(Language [] languages, Map parameters)
+    {
+        this(languages, AllKnownLanguages.getLanguageForIsoCode("en"), parameters);
     }
 
+    public LingoLocalFilterComponent(Language [] languages, Language tokenizerLanguage,
+        Map parameters)
+    {
+        this.languages = languages;
+        this.defaults = parameters;
+        this.tokenizerLanguage = tokenizerLanguage;
+    }
+    
     /*
      * @see org.carrot2.core.LocalComponent#init(org.carrot2.core.LocalControllerContext)
      */
@@ -205,6 +215,7 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
         current.putAll(requestParams);
         final MultilingualClusteringContext clusteringContext = new MultilingualClusteringContext( current );
         clusteringContext.setLanguages(languages);
+        clusteringContext.setTokenizerLanguage(tokenizerLanguage);
 
         if (documents.size() == 0) {
         	super.endProcessing();
