@@ -24,7 +24,7 @@ import org.carrot2.util.tokenizer.parser.jflex.JFlexWordBasedParser;
 
 
 /**
- * Test JavaCC tokenizer definition and the Carrot2 wrapper.
+ * Test tokenizer definition and the Carrot2 wrapper.
  */
 public class WordBasedParserTest
     extends TestCase

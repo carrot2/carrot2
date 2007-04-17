@@ -53,6 +53,9 @@ public class MultilingualClusteringContext extends AbstractClusteringContext {
 
     /** DOCUMENT ME! */
     private HashMap languages;
+    
+    /** The language to get the tokenizer from. */
+    private Language tokenizerLanguage;
 
     /**
      * unidentified language
@@ -296,6 +299,16 @@ public class MultilingualClusteringContext extends AbstractClusteringContext {
         this.languages = map;
     }
 
+    public void setTokenizerLanguage(Language tokenizerLanguage)
+    {
+        this.tokenizerLanguage = tokenizerLanguage;
+    }
+    
+    public Language getTokenizerLanguage()
+    {
+        return tokenizerLanguage;
+    }
+    
     public Map getLanguages() {
         return this.languages;
     }
