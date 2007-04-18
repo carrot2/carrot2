@@ -16,11 +16,13 @@ package org.carrot2.webapp.serializers;
 import java.io.*;
 import java.util.*;
 
-import org.carrot2.core.clustering.*;
-import org.carrot2.core.impl.*;
-import org.carrot2.util.*;
-import org.carrot2.webapp.*;
-import org.carrot2.webapp.serializers.TextMarker.*;
+import org.carrot2.core.clustering.RawDocument;
+import org.carrot2.core.impl.RawDocumentEnumerator;
+import org.carrot2.util.ArrayUtils;
+import org.carrot2.util.XMLSerializerHelper;
+import org.carrot2.webapp.Constants;
+import org.carrot2.webapp.RawDocumentsSerializer;
+import org.carrot2.webapp.serializers.TextMarker.StemInfo;
 
 /**
  * A document serializer which produces HTML output similar

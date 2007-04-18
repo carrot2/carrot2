@@ -14,11 +14,11 @@
 		</buildCommand>
 		<buildCommand>
 			<name>org.eclipse.ui.externaltools.ExternalToolBuilder</name>
-			<triggers>full,incremental,</triggers>
+			<triggers>auto,full,incremental,</triggers>
 			<arguments>
 				<dictionary>
 					<key>LaunchConfigHandle</key>
-					<value>&lt;project&gt;/.externalToolBuilders/jars-to-WEB-INF.launch</value>
+					<value>&lt;project&gt;/.externalToolBuilders/preprocess-web.xml.launch</value>
 				</dictionary>
 			</arguments>
 		</buildCommand>
