@@ -333,8 +333,7 @@ public final class QueryProcessorServlet extends HttpServlet {
                 // clustering request.
                 //
                 final HashMap props = new HashMap();
-                props.put(RawDocumentsProducerLocalInputComponent.PARAM_SOURCE_RAW_DOCUMENTS, 
-                        docIterator);
+                props.put(ArrayInputComponent.PARAM_SOURCE_RAW_DOCUMENTS, docIterator);
                 props.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, 
                         Integer.toString(searchRequest.getInputSize()));
 
@@ -581,7 +580,7 @@ public final class QueryProcessorServlet extends HttpServlet {
             controller.addLocalComponentFactory("input-demo-webapp",
                     new LocalComponentFactory() {
                         public LocalComponent getInstance() {
-                            return new RawDocumentsProducerLocalInputComponent();
+                            return new ArrayInputComponent();
                         }
                     }
             );
