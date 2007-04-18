@@ -5,18 +5,31 @@
     name="carrot2-demo-webapp"
     description="Carrot2 Demo Web Application">
 
+    <!--
+      This profile builds the Web application with:
+        - no descriptors of processes and components,
+        - no exported relationships to demo components
+        - an additional exported JAR with Web application classes
+          (allows compilation against the Webapp classes and later merging with the WAR file).
+        - the application is always rebuilt in this profile
+          (to substitute web.xml tokens).
+      -->
     <provides profile="war">
         <files build-path-exclude="true" prefix="tmp/dist">
             <file location="carrot2-webapp.war" />
+            <file location="carrot2-webapp.jar" />
         </files>
         <build>
             <ant file="build.xml" target="build.war" />
         </build>
-        <check-newer>
-            <fileset dir="web" />
-        </check-newer>        
+        <rebuild-always />
     </provides>
 
+    <!--
+      This profile builds the Web application with:
+        - descriptors of processes of demo components,
+        - exported relationships to demo components
+      -->
     <provides profile="demo">
         <files build-path-exclude="true" prefix="tmp/dist">
             <file location="carrot2-demo-webapp.war" />

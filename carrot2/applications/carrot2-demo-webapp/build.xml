@@ -48,7 +48,7 @@
     <target name="build.demo" depends="build" description="Builds a WAR file with open source components demo.">
     </target>
 
-    <target name="build.war" description="Builds a plain WAR file (no components)"
+    <target name="build.war" description="Builds a plain WAR file (no components)."
             depends="preprocess">
         <property name="dist.name" value="carrot2-webapp" />
         <property name="build.dir" location="${project.dir}/tmp/build.war" />
@@ -65,6 +65,9 @@
         <antcall target="build" inheritall="true">
             <reference refid="war.patternset" />
         </antcall>
+        <zip zipfile="${distribution.dir}/${dist.name}.jar" update="false">
+            <fileset dir="${build.dir}/type-war/WEB-INF/classes" />
+        </zip>
     </target>
     
     <target name="jars" description="Updates JARS in WEB-INF/lib" depends="build.demo">
