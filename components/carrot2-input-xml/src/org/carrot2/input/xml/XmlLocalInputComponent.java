@@ -228,8 +228,7 @@ public class XmlLocalInputComponent extends
 	                    + xsltOb);            
 	        }
         } catch (IOException e) {
-            throw new ProcessingException("Could not open stream for URL: "
-                    + params.get("xslt"));
+            throw new ProcessingException("Could not open stream for URL: " + xsltOb);
         }
         
         // we have an input and an xslt stylesheet. Perform transformation.
