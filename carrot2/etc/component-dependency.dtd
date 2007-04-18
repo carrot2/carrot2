@@ -52,7 +52,7 @@
     indicate a rebuild is necessary.
   -->
   
-<!ELEMENT provides (files*, build*, check-newer?, meta*) >
+<!ELEMENT provides (files*, build*, check-newer?, rebuild-always?, meta*) >
 
 <!ATTLIST provides profile NMTOKEN #IMPLIED >
 
@@ -91,6 +91,13 @@
     contained in the given filesets. If so, a rebuild is invoked.
   -->
 <!ELEMENT check-newer (fileset+) >
+
+<!--
+    If present, this element will trigger a full rebuild when
+    a component is referenced as a dependency. The build elements
+    specifies what kind of build is invoked.
+  -->
+<!ELEMENT rebuild-always EMPTY >
 
 <!--
     An ANT-like fileset. Currently the fileset only supports
