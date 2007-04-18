@@ -63,7 +63,7 @@ public final class QueryProcessorServlet extends HttpServlet {
     private static final int STATS_REQUEST = 4;
 
     /** All available search settings */
-    private SearchSettings searchSettings = new SearchSettings();
+    private SearchSettings searchSettings;
     
     /**
      * A map of {@link Broadcaster}s.
@@ -105,19 +105,6 @@ public final class QueryProcessorServlet extends HttpServlet {
      */
     public void init() throws ServletException {
         this.logger = Logger.getLogger(this.getServletName());
-
-        // Initialize default input size and allowed input sizes.
-        int defaultInputSize = 100;
-        try {
-            defaultInputSize = Integer.parseInt(getServletConfig()
-                .getInitParameter("inputSize.default"));
-        }
-        catch (Exception e){
-            logger.warn("Could not parse inputSize.default: " + getServletConfig()
-                .getInitParameter("inputSize.default"));
-        }        
-        searchSettings.setAllowedInputSizes(
-                new int [] {50, 100, 200, 400}, defaultInputSize);
 
         // Run initial process and components configuration.
         try {
@@ -426,6 +413,21 @@ public final class QueryProcessorServlet extends HttpServlet {
      */
     private void initialize() throws ServletException {
         final ServletContext context = super.getServletContext();
+
+        this.searchSettings = new SearchSettings();
+
+        // Initialize default input size and allowed input sizes.
+        int defaultInputSize = 100;
+        try {
+            defaultInputSize = Integer.parseInt(getServletConfig()
+                .getInitParameter("inputSize.default"));
+        }
+        catch (Exception e){
+            logger.warn("Could not parse inputSize.default: " + getServletConfig()
+                .getInitParameter("inputSize.default"));
+        }        
+        searchSettings.setAllowedInputSizes(
+                new int [] {50, 100, 200, 400}, defaultInputSize);
 
         // Initialize serializers.
         this.serializerFactory = InitializationUtils.initializeSerializers(logger, getServletConfig());
