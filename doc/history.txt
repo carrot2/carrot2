@@ -9,21 +9,8 @@ Major functions and bug fixes
 Version  [C] Information
 
 HEAD
-          +  Added cluster label highlighting in the web demo.
-          
-          +  Added PubMed input component.
-
-          o  Implemented parallel search results fetcher and added it to the core.
-
-          o  Added a launcher application to avoid overriding java.ext.dirs.
-          
-          #  OpenSearch input component bug fixes.
-          
-          #  Indeed input returned duplicated results.
-
-          o  Version and build time information in the Web application demo.
-
-          o  Changed version number location to external file (carrot2.version).
+         See status in JIRA:
+         http://issues.carrot2.org/secure/ReleaseNote.jspa?projectId=10000&styleName=Html&version=10001
 
 2.0.2     SVN:1541
 
