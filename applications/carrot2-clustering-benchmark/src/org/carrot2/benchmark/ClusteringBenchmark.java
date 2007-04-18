@@ -183,7 +183,7 @@ public class ClusteringBenchmark
         // Run clustering
         Map benchmarkParameters = new HashMap();
         benchmarkParameters.put(
-            RawDocumentsProducerLocalInputComponent.PARAM_SOURCE_RAW_DOCUMENTS,
+            ArrayInputComponent.PARAM_SOURCE_RAW_DOCUMENTS,
             input.documents);
         benchmarkParameters.put(LocalInputComponent.PARAM_REQUESTED_RESULTS,
             new Integer(results));
