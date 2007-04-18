@@ -9,6 +9,11 @@
 			<file location="jasper-compiler.jar" />
 			<file location="jasper-runtime.jar" />
 			<file location="jetty.LICENSE" />
+			<!--
+			Not all files are required, so I decided to skip them.
+			<file location="ant.jar" />
+			<file location="commons-el.jar" />
+			-->
 		</files>
 	</provides>
 </component>

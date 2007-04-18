@@ -12,11 +12,12 @@
 
 package org.carrot2.webapp.serializers;
 
-import java.io.*;
+import java.io.CharArrayReader;
 import java.util.*;
 
-import org.carrot2.core.linguistic.*;
-import org.carrot2.core.linguistic.tokens.*;
+import org.carrot2.core.linguistic.LanguageTokenizer;
+import org.carrot2.core.linguistic.Stemmer;
+import org.carrot2.core.linguistic.tokens.Token;
 
 
 /**

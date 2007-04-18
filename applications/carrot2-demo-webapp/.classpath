@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry exported="true" kind="src" path="/carrot2-util-common"/>
 	<classpathentry exported="true" kind="src" path="/carrot2-local-core"/>
 	<classpathentry exported="true" kind="var" path="CARROT2_CHECKOUT_BASE/lib/log4j-1.2.13.jar"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/dom4j-1.6.1.jar"/>
@@ -16,5 +15,25 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-tokenizer"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-input-etools"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/xslt-filter-0.93.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/jetty/jasper-compiler.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/jetty/jasper-runtime.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/jetty/org.mortbay.jetty.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/jetty/org.mortbay.jmx.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-gzip"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-input-lucene"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-input-googleapi"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-input-msnsearch"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-input-yahooapi"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-input-opensearch"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-input-pubmed"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-case-normalizer"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-fuzzyants"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-haog"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-lingo"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-stc"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-trc"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-common"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/jetty/ant.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/jetty/commons-el.jar"/>
 	<classpathentry kind="output" path="web/WEB-INF/classes"/>
 </classpath>

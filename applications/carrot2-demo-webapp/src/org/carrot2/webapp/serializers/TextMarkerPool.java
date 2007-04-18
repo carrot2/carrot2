@@ -12,8 +12,8 @@
 
 package org.carrot2.webapp.serializers;
 
-import org.carrot2.core.linguistic.*;
-import org.carrot2.util.tokenizer.languages.english.*;
+import org.carrot2.core.linguistic.Language;
+import org.carrot2.util.tokenizer.languages.english.English;
 
 
 /**

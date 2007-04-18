@@ -16,11 +16,12 @@ package org.carrot2.webapp.serializers;
 import java.io.*;
 import java.util.*;
 
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServletRequest;
 
-import org.carrot2.core.clustering.*;
-import org.carrot2.core.impl.*;
-import org.carrot2.util.*;
+import org.carrot2.core.clustering.RawCluster;
+import org.carrot2.core.clustering.RawDocument;
+import org.carrot2.core.impl.RawDocumentEnumerator;
+import org.carrot2.util.XMLSerializerHelper;
 import org.carrot2.webapp.*;
 
 /**

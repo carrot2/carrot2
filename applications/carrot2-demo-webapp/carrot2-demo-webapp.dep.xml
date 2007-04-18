@@ -53,7 +53,6 @@
     <dependency name="dom4j" />
     <dependency name="xerces" />
     <dependency name="xslt-filter" />
-    <dependency name="servlets-api" nocopy="true" noexport="true" />
 
     <dependency name="carrot2-input-yahooapi" profile="demo" />
     <dependency name="carrot2-input-googleapi" profile="demo" />
@@ -72,4 +71,7 @@
     <dependency name="carrot2-stemmer-stempelator" profile="demo" />
     <dependency name="carrot2-filter-case-normalizer" profile="demo" />
     <dependency name="carrot2-util-tokenizer" />
+
+    <dependency name="servlets-api" nocopy="true" noexport="true" />
+    <dependency name="jetty" nocopy="true" noexport="true" />
 </component>

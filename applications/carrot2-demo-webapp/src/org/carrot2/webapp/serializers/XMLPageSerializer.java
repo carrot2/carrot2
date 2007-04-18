@@ -15,7 +15,8 @@ package org.carrot2.webapp.serializers;
 
 import java.io.*;
 import java.util.*;
-import java.util.regex.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.carrot2.util.URLEncoding;
 import org.carrot2.webapp.*;

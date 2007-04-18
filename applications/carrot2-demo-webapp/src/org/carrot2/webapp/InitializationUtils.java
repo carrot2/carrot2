@@ -18,6 +18,7 @@ import org.carrot2.core.clustering.RawDocument;
 import org.carrot2.core.controller.*;
 import org.carrot2.core.controller.loaders.BeanShellFactoryDescriptionLoader;
 import org.carrot2.core.impl.*;
+import org.carrot2.util.StringUtils;
 import org.carrot2.webapp.serializers.XMLSerializersFactory;
 
 /**
@@ -199,7 +200,8 @@ final class InitializationUtils
                     if (ignoreOnError)
                     {
                         // ignore exception.
-                        logger.warn("Skipping input tab: " + tabName + " (ignored exception: " + e.getMessage() + ")");
+                        logger.warn("Skipping input tab: " + tabName + " (ignored exception: " + 
+                            StringUtils.chainExceptionMessages(e) + ")");
                     }
                     else
                     {
