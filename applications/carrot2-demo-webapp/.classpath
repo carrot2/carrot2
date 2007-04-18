@@ -12,9 +12,9 @@
 	<classpathentry exported="true" kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/servlet.jar"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/xalan-2.7.0.jar"/>
 	<classpathentry kind="lib" path="lib/ehcache-1.2.1RC.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/xslt-filter-0.93.jar" sourcepath="D:/repositories/prv-dweiss/projects/trunk/xslt-filter/src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-stemmer-snowball"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-tokenizer"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-input-etools"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/xslt-filter-0.93.jar"/>
 	<classpathentry kind="output" path="web/WEB-INF/classes"/>
 </classpath>
