@@ -69,6 +69,8 @@ class ProvidesElement implements Serializable {
                         builds.add(new BuildElement(base, (Element) n));
                     } else if ("check-newer".equals(n.getNodeName())) {
                         conditions.add(new CheckNewerElement(project, base, (Element) n));
+                    } else if ("rebuild-always".equals(n.getNodeName())) {
+                        conditions.add(new RebuildAlways());
                     } else if ("meta".equals(n.getNodeName())) {
                         final Element e = (Element) n;
                         final String type = e.getAttribute("type");
@@ -150,6 +152,10 @@ class ProvidesElement implements Serializable {
                             rebuild = true;
                             break;
                         }
+                    } else if (o instanceof RebuildAlways) {
+                        project.log("Component [" + component.getName() + "] needs to be rebuilt (forced), rebuilding.");
+                        rebuild = true;
+                        break;
                     } else {
                         throw new BuildException("Unknown condition: " + o.getClass());
                     }

@@ -61,6 +61,7 @@
                 <include name="components/*/lib/*.dep.xml" />        
 
                 <include name="applications/carrot2-demo-browser/**/*.dep.xml" />
+                <include name="applications/carrot2-demo-webapp/**/*.dep.xml" />
             </fileset>
             <dependency-path path="${extra.dependencies.path}" />
         </dependency-path>
