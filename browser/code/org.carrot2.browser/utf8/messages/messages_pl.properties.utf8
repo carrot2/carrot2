@@ -1,2 +1,5 @@
 queryview.query=Zapytanie:
 queryview.submit=Szukaj
+queryview.source=Źródło:
+queryview.results=Wyniki:
+queryview.algorithm=Algorytm:
