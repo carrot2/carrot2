@@ -14,8 +14,7 @@ package org.carrot2.util.tokenizer.parser.jflex;
 
 import java.io.*;
 
-import org.carrot2.core.linguistic.*;
-import org.carrot2.core.linguistic.tokens.*;
+import org.carrot2.core.linguistic.tokens.Token;
 
 /**
  * A wrapper around the {@link JFlexWordBasedParser} that allows custom
@@ -25,7 +24,8 @@ import org.carrot2.core.linguistic.tokens.*;
  * @author Stanislaw Osinski
  * @version $Revision: 1595 $
  */
-public abstract class PreprocessedJFlexWordBasedParserBase implements LanguageTokenizer
+public abstract class PreprocessedJFlexWordBasedParserBase extends
+    JFlexWordBasedParser
 {
     /** The JFlex-based tokenizer to handle the complicated stuff */
     private JFlexWordBasedParser tokenizer = new JFlexWordBasedParser();
@@ -71,15 +71,15 @@ public abstract class PreprocessedJFlexWordBasedParserBase implements LanguageTo
         int len = 0;
         try
         {
-            while ((len = reader.read(buffer)) != 0)
+            while ((len = reader.read(buffer)) > 0)
             {
                 writer.write(buffer, 0, len);
             }
         }
         catch (IOException e)
         {
-            throw new RuntimeException("Parser exception: " + e.getLocalizedMessage(),
-                e);
+            throw new RuntimeException("Parser exception: "
+                + e.getLocalizedMessage(), e);
         }
 
         return writer.toString();
