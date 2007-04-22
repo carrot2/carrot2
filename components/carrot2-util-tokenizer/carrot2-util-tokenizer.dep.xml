@@ -32,7 +32,8 @@
 
     <!-- Libraries -->
     <dependency name="log4j" />
-	<dependency name="commons-pool" />
+	  <dependency name="commons-pool" />
+	  <dependency name="je-analysis" /> <!-- Chinese tokenizer -->
 
     <!-- Test profile -->
     <dependency name="junit-addons" profile="test" />

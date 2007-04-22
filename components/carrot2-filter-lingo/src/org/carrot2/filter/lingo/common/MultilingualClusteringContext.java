@@ -229,6 +229,9 @@ public class MultilingualClusteringContext extends AbstractClusteringContext {
                     Language language = (Language) languages.get(key);
 
                     Stemmer stemmer = language.borrowStemmer();
+                    if (stemmer == null) {
+                        continue;
+                    }
 
                     try {
                         String stemmed = stemmer.getStem(word.toCharArray(), 0,
