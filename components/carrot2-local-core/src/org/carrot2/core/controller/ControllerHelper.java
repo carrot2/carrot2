@@ -203,9 +203,6 @@ public class ControllerHelper {
      *
      * @return Returns a list of {@link LoadedProcess} objects.
      * @throws IOException Thrown if an i/o exception occurs.
-     * @throws DuplicatedKeyException Thrown if the controller already has a
-     *         component factory mapped to the identifier of the newly loaded
-     *         factory.
      */
     public LoadedProcess [] loadProcessesFromDir(File directory, FileFilter filter)
         throws IOException, LoaderExtensionUnknownException {
