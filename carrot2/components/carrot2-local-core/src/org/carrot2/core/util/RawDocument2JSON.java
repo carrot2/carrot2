@@ -63,7 +63,7 @@ public final class RawDocument2JSON
     /**
      * Adds a single {@link RawDocument} to a {@link JSONWriter}.
      */
-    private static void serialize(final RawDocument document, final JSONWriter jsonWriter) throws JSONException
+    public static void serialize(final RawDocument document, final JSONWriter jsonWriter) throws JSONException
     {
         jsonWriter.object().key("id").value(document.getId());
 

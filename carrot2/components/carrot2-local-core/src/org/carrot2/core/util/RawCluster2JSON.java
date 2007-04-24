@@ -49,7 +49,7 @@ public final class RawCluster2JSON
     /**
      * Adds a single {@link RawCluster} to a {@link JSONWriter}.
      */
-    private static void serialize(final RawCluster cluster, final JSONWriter jsonWriter) throws JSONException
+    public static void serialize(final RawCluster cluster, final JSONWriter jsonWriter) throws JSONException
     {
         jsonWriter.object();
 

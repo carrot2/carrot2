@@ -1,15 +1,3 @@
-/*
- * Copyright (c) 2004 Poznan Supercomputing and Networking Center
- * 10 Noskowskiego Street, Poznan, Wielkopolska 61-704, Poland
- * All rights reserved.
- *
- * This software is the confidential and proprietary information of
- * Poznan Supercomputing and Networking Center ("Confidential Information").
- * You shall not disclose such Confidential Information and shall use it only
- * in accordance with the terms of the license agreement you entered into
- * with PSNC.
- */
-
 package org.carrot2.core.test;
 
 import java.util.*;
@@ -22,16 +10,14 @@ import org.carrot2.core.clustering.RawDocument;
 import org.carrot2.core.impl.*;
 
 /**
- * A base class for {@link LocalInputComponent} test classes. This class
- * provides some common infrastructure, e.g. a local controller in which tests
- * can be performed.
+ * A base class for {@link LocalInputComponent} test classes. This class provides some common infrastructure, e.g. a
+ * local controller in which tests can be performed.
  * 
  * @author Stanislaw Osinski
  */
 public abstract class LocalInputComponentTestBase extends TestCase
 {
-    public final static Logger log = Logger
-        .getLogger(LocalInputComponentTestBase.class);
+    public final static Logger log = Logger.getLogger(LocalInputComponentTestBase.class);
 
     /** A simple local controller in which the input under tests is embedded */
     protected LocalController controller;
@@ -49,8 +35,7 @@ public abstract class LocalInputComponentTestBase extends TestCase
     }
 
     /**
-     * Implement this method to return the factory of the input components under
-     * tests.
+     * Implement this method to return the factory of the input components under tests.
      */
     protected abstract LocalComponentFactory getLocalInputFactory();
 
@@ -60,8 +45,7 @@ public abstract class LocalInputComponentTestBase extends TestCase
     public List query(String query, int requestedResults) throws Exception
     {
         Map params = new HashMap();
-        params.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, Integer
-            .toString(requestedResults));
+        params.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, Integer.toString(requestedResults));
         return query(query, params);
     }
 
@@ -70,16 +54,13 @@ public abstract class LocalInputComponentTestBase extends TestCase
      */
     public List query(String query, Map params) throws Exception
     {
-        return ((ArrayOutputComponent.Result) controller.query("testprocess",
-            query, params).getQueryResult()).documents;
+        return ((ArrayOutputComponent.Result) controller.query("testprocess", query, params).getQueryResult()).documents;
     }
 
     /**
-     * Sets up a simple (input-output) controller for testing the input
-     * component.
+     * Sets up a simple (input-output) controller for testing the input component.
      */
-    protected LocalControllerBase setUpController(
-        LocalComponentFactory inputFactory) throws Exception
+    protected LocalControllerBase setUpController(LocalComponentFactory inputFactory) throws Exception
     {
         LocalControllerBase controller;
 
@@ -109,17 +90,16 @@ public abstract class LocalInputComponentTestBase extends TestCase
     /**
      * 
      */
-    protected void performQuery(String query, int requestedResults,
-        int expectedResults) throws Exception
+    protected void performQuery(String query, int requestedResults, int expectedResults) throws Exception
     {
-        performQuery(query, requestedResults, expectedResults, expectedResults);
+        performQuery(query, requestedResults, new Range(expectedResults, expectedResults));
     }
 
     /**
      * 
      */
-    protected void performQuery(String query, int requestedResults,
-        int minExpectedResults, int maxExpectedResults) throws Exception
+    protected void performQuery(String query, int requestedResults, Range expectedResultsRange)
+        throws Exception
     {
         final long start = System.currentTimeMillis();
         List results = query(query, requestedResults);
@@ -127,17 +107,13 @@ public abstract class LocalInputComponentTestBase extends TestCase
         log.info("Query time: " + (end - start) + " ms.");
 
         // the results should contain some documents.
-        assertTrue("Results acquired (" + results.size() + ") between "
-            + minExpectedResults + " and " + maxExpectedResults,
-            results.size() >= minExpectedResults
-                && results.size() <= maxExpectedResults);
+        assertTrue("Results acquired (" + results.size() + ") not in " + expectedResultsRange, expectedResultsRange.isIn(results.size()));
     }
 
     /**
      * 
      */
-    protected void performIdUniquenessTest(String query, int requestedResults)
-        throws Exception
+    protected void performIdUniquenessTest(String query, int requestedResults) throws Exception
     {
         List results = query(query, requestedResults);
 
@@ -148,7 +124,6 @@ public abstract class LocalInputComponentTestBase extends TestCase
             ids.add(doc.getId());
         }
 
-        assertEquals("Number of unique ids equal to the number of results", ids
-            .size(), results.size());
+        assertEquals("Number of unique ids equal to the number of results", ids.size(), results.size());
     }
 }
