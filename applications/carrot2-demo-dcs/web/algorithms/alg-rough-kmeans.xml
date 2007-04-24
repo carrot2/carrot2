@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<local-process id="rough kmeans">
+<local-process id="rough-kmeans">
   <name>Rough k-Means</name>
   <description>Rough k-Means Algorithm</description>
 
