@@ -45,41 +45,32 @@ public class EToolsLocalInputComponentTest extends LocalInputComponentTestBase
 
     public void testDataSourceResultsCount()
     {
-        EToolsLocalInputComponent input = new EToolsLocalInputComponent(
-            "partnerId");
+        EToolsLocalInputComponent input = new EToolsLocalInputComponent("partnerId");
         Map params = new HashMap();
 
         params.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, "0");
-        assertEquals("Data source results count", 0, input
-            .getDataSourceResultsCount(params));
+        assertEquals("Data source results count", 0, input.getDataSourceResultsCount(params));
 
         params.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, "50");
-        assertEquals("Data source results count", 20, input
-            .getDataSourceResultsCount(params));
+        assertEquals("Data source results count", 20, input.getDataSourceResultsCount(params));
 
         params.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, "100");
-        assertEquals("Data source results count", 20, input
-            .getDataSourceResultsCount(params));
+        assertEquals("Data source results count", 20, input.getDataSourceResultsCount(params));
 
         params.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, "120");
-        assertEquals("Data source results count", 30, input
-            .getDataSourceResultsCount(params));
+        assertEquals("Data source results count", 30, input.getDataSourceResultsCount(params));
 
         params.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, "200");
-        assertEquals("Data source results count", 30, input
-            .getDataSourceResultsCount(params));
+        assertEquals("Data source results count", 30, input.getDataSourceResultsCount(params));
 
         params.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, "250");
-        assertEquals("Data source results count", 40, input
-            .getDataSourceResultsCount(params));
+        assertEquals("Data source results count", 40, input.getDataSourceResultsCount(params));
 
         params.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, "400");
-        assertEquals("Data source results count", 40, input
-            .getDataSourceResultsCount(params));
+        assertEquals("Data source results count", 40, input.getDataSourceResultsCount(params));
 
         params.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, "450");
-        assertEquals("Data source results count", 40, input
-            .getDataSourceResultsCount(params));
+        assertEquals("Data source results count", 40, input.getDataSourceResultsCount(params));
     }
 
     public void testNoHitsQuery() throws Exception
@@ -119,8 +110,7 @@ public class EToolsLocalInputComponentTest extends LocalInputComponentTestBase
         for (Iterator it = results.iterator(); it.hasNext();)
         {
             RawDocument document = (RawDocument) it.next();
-            String [] sources = (String []) document
-                .getProperty(RawDocument.PROPERTY_SOURCES);
+            String [] sources = (String []) document.getProperty(RawDocument.PROPERTY_SOURCES);
 
             assertNotNull("Sources information available", sources);
             assertTrue("Non-zero number of sources", sources.length > 0);
