@@ -51,8 +51,6 @@ public abstract class LocalInputComponentTestBase extends TestCase
     /**
      * Implement this method to return the factory of the input components under
      * tests.
-     * 
-     * @return
      */
     protected abstract LocalComponentFactory getLocalInputFactory();
 
@@ -79,10 +77,6 @@ public abstract class LocalInputComponentTestBase extends TestCase
     /**
      * Sets up a simple (input-output) controller for testing the input
      * component.
-     * 
-     * @param inputFactory
-     * @return
-     * @throws Exception
      */
     protected LocalControllerBase setUpController(
         LocalComponentFactory inputFactory) throws Exception
@@ -112,12 +106,18 @@ public abstract class LocalInputComponentTestBase extends TestCase
         return controller;
     }
 
+    /**
+     * 
+     */
     protected void performQuery(String query, int requestedResults,
         int expectedResults) throws Exception
     {
         performQuery(query, requestedResults, expectedResults, expectedResults);
     }
 
+    /**
+     * 
+     */
     protected void performQuery(String query, int requestedResults,
         int minExpectedResults, int maxExpectedResults) throws Exception
     {
@@ -133,6 +133,9 @@ public abstract class LocalInputComponentTestBase extends TestCase
                 && results.size() <= maxExpectedResults);
     }
 
+    /**
+     * 
+     */
     protected void performIdUniquenessTest(String query, int requestedResults)
         throws Exception
     {
