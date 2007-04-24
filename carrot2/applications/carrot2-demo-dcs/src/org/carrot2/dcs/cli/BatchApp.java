@@ -151,7 +151,7 @@ public class BatchApp extends AppBase
                         outputStream = new ByteArrayOutputStream();
                     }
 
-                    ProcessingUtils.cluster(processId, context.getController(), getLogger(), inputStream, outputStream);
+                    ProcessingUtils.cluster(processId, context.getController(), getLogger(), inputStream, outputStream, false);
                 }
                 catch (IOException e)
                 {

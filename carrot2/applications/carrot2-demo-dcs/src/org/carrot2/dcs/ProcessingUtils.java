@@ -39,7 +39,7 @@ public class ProcessingUtils
      * Run clustering for input files.
      */
     public static void cluster(String processName, LocalController controller, Logger logger, InputStream inputXML,
-        OutputStream outputXML) throws Exception
+        OutputStream outputXML, boolean clustersOnly) throws Exception
     {
         final PerformanceLogger plogger = new PerformanceLogger(Level.DEBUG, logger);
         ArrayOutputComponent.Result result;
@@ -79,8 +79,10 @@ public class ProcessingUtils
             requestProperties.clear();
             requestProperties.put(ArrayInputComponent.PARAM_SOURCE_RAW_DOCUMENTS, documents);
             requestProperties.put(ArrayInputComponent.PARAM_SOURCE_RAW_CLUSTERS, clusters);
-            requestProperties.put(SaveXmlFilterComponent.PARAM_OUTPUT_STREAM, outputXML);
-            requestProperties.put(SaveXmlFilterComponent.PARAM_SAVE_CLUSTERS, Boolean.TRUE);
+            requestProperties.put(SaveFilterComponentBase.PARAM_OUTPUT_STREAM, outputXML);
+            requestProperties.put(SaveFilterComponentBase.PARAM_SAVE_CLUSTERS, Boolean.TRUE);
+            requestProperties.put(SaveFilterComponentBase.PARAM_SAVE_DOCUMENTS, new Boolean(!clustersOnly));
+
             controller.query(ControllerContext.RESULTS_TO_XML, query, requestProperties);
 
             plogger.end();

@@ -63,10 +63,11 @@ public final class InitializationServlet extends HttpServlet
         if (null == servletContext.getAttribute(ServletContextConstants.ATTR_DEFAULT_PROCESSID))
         {
             // Look for init. parameter. If not found, try the first available process.
-            String processId = getInitParameter("algorithm");
+            String processId = getInitParameter(ServletContextConstants.ATTR_DEFAULT_PROCESSID);
             if (processId == null)
             {
-                dcsLogger.warn("No 'algorithm' init parameter specified. Taking the first available process.");
+                dcsLogger.warn("No " + ServletContextConstants.ATTR_DEFAULT_PROCESSID 
+                    + " init parameter specified. Taking the first available algorithm.");
 
                 final ControllerContext ctx = (ControllerContext) servletContext
                     .getAttribute(ServletContextConstants.ATTR_CONTROLLER_CONTEXT);
@@ -92,6 +93,14 @@ public final class InitializationServlet extends HttpServlet
             }
             servletContext.setAttribute(ServletContextConstants.ATTR_DEFAULT_PROCESSID, processId);
             dcsLogger.debug("Default algorithm set to: " + processId);
+        }
+
+        if (null == servletContext.getAttribute(ServletContextConstants.ATTR_CLUSTERS_ONLY))
+        {
+            final String clustersOnly = getInitParameter(ServletContextConstants.ATTR_CLUSTERS_ONLY);
+            servletContext.setAttribute(ServletContextConstants.ATTR_CLUSTERS_ONLY, 
+                Boolean.valueOf(clustersOnly));
+            dcsLogger.debug("Clusters only switch (init parameter): " + clustersOnly);
         }
     }
 }

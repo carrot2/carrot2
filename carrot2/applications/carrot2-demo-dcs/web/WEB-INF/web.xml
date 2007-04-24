@@ -11,8 +11,16 @@
 
         <!-- Uncomment to select specific default algorithm.
         <init-param>
-        	<param-name>algorithm</param-name>
+        	<param-name>dcs.default.algorithm</param-name>
         	<param-value>(process-id)</param-value>
+       	</init-param>
+        -->
+        
+        <!-- Uncomment to skip mirroring input documents in the result (result will
+			contain just the clusters).
+        <init-param>
+        	<param-name>dcs.clusters.only</param-name>
+        	<param-value>true</param-value>
        	</init-param>
         -->
     </servlet>
