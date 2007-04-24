@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<local-process id="LingoClassic">
+<local-process id="lingo-classic">
   <name>Lingo</name>
   <description>Lingo Classic Clustering Algorithm</description>
 
