@@ -29,7 +29,14 @@ public class ControllerContext
      */
     public static final String RESULTS_TO_XML = ".internal.results-to-xml";
 
-    /** Local Carrot2 controller */
+    /**
+     * Name of a synthetic process for saving the results (clusters, documents) to a JSON stream.
+     */
+    public static final String RESULTS_TO_JSON = ".internal.results-to-json";
+
+    /** 
+     * Local Carrot2 controller.
+     */
     private final LocalControllerBase controller;
 
     /**
@@ -174,6 +181,11 @@ public class ControllerContext
                     new String []
                     {
                         "filter-save-xml"
+                    }));
+                controller.addProcess(RESULTS_TO_JSON, new LocalProcessBase("input-array", "output-array",
+                    new String []
+                    {
+                        "filter-save-json"
                     }));
             }
             catch (Exception e)

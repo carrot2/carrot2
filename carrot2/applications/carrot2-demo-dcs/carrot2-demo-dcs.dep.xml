@@ -18,6 +18,7 @@
         <!-- Required dependencies -->
         <dependency name="log4j" />
         <dependency name="dom4j" />
+        <dependency name="json" />
 
         <dependency name="carrot2-license" />
         <dependency name="carrot2-local-core" />
