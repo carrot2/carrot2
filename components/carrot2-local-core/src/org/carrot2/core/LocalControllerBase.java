@@ -163,7 +163,8 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
         try {
             return (LocalComponent) pool.borrowObject();
         } catch (Exception e) {
-            throw new RuntimeException("Could not acquire component instance from the pool.", e);
+            throw new RuntimeException("Could not acquire component instance from the pool: "
+                + componentId, e);
         }
     }
 
