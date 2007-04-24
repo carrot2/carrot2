@@ -1,13 +1,14 @@
+
 /*
- * Copyright (c) 2004 Poznan Supercomputing and Networking Center
- * 10 Noskowskiego Street, Poznan, Wielkopolska 61-704, Poland
+ * Carrot2 project.
+ *
+ * Copyright (C) 2002-2007, Dawid Weiss, Stanisław Osiński.
+ * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
  * All rights reserved.
  *
- * This software is the confidential and proprietary information of
- * Poznan Supercomputing and Networking Center ("Confidential Information").
- * You shall not disclose such Confidential Information and shall use it only
- * in accordance with the terms of the license agreement you entered into
- * with PSNC.
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the repository checkout or at:
+ * http://www.carrot2.org/carrot2.LICENSE
  */
 
 package org.carrot2.webapp.serializers;

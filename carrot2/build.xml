@@ -384,6 +384,8 @@ TESTING: @{component.path}
                 replacement="${carrot2.ccg.license}" />
         <header contains="http://www.carrot2.org/carrot2.LICENSE"
                 replacement="${carrot2.license}" />
+        <header contains="Poznan Supercomputing and Networking Center" 
+                replacement="${carrot2.license}" />
 
         <!-- Replace generated headers with a simple statement -->
         <header contains="${carrot2.generated.code}"           replacement="${carrot2.generated.code}" />
