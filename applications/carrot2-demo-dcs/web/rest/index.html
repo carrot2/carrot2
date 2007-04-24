@@ -27,14 +27,19 @@ Carrot Search Document Clustering Server
 <form action="processor" enctype="multipart/form-data" method="POST">
 <div class="form">
 <fieldset>
-  <label for="algorithm">Algorithm</label>
-  <input id="algorithm" type="text" name="algorithm" size="40">
-
   <legend>Send a data file</legend>
-  <label for="file">Input XML file</label>
+
+  <label for="algorithm">Algorithm</label>
+  <input id="algorithm" type="text" name="dcs.default.algorithm" size="40">
+
+  <br/><label for="clusters">Clusters only</label>
+  <input id="clusters" type="checkbox" value="true" name="dcs.clusters.only">
+
+  <br/><br/><label for="file">Input XML file</label>
   <input id="file" type="file" name="c2stream" size="40">
 </fieldset>
-    <input class="submit" type="submit" name="Send" value="Cluster >>">
+
+<input class="submit" type="submit" name="Send" value="Cluster >>">
 </div>
 </form>
 
@@ -42,11 +47,17 @@ Carrot Search Document Clustering Server
 <div class="form">
 <fieldset>
   <legend>Paste data</legend>
+
   <label for="algorithm">Algorithm</label>
-  <input id="algorithm" type="text" name="algorithm" size="40">
-  <label>Input XML data</label>
-<textarea name="c2stream" style="width: 34em; height: 35ex;"></textarea>
+  <input id="algorithm" type="text" name="dcs.default.algorithm" size="40">
+
+  <br/><label for="clusters">Clusters only</label>
+  <input id="clusters" type="checkbox" value="true" name="dcs.clusters.only">
+
+  <br/><br/><label>Input XML data</label>
+  <textarea name="c2stream" style="width: 34em; height: 35ex;"></textarea>
 </fieldset>
+
 <input class="submit" type="submit" name="Send" value="Cluster >>">
 </div>
 </form>

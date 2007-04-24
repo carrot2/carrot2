@@ -105,7 +105,7 @@ public final class XMLProcessorServlet extends HttpServlet
 
         if (ServletFileUpload.isMultipartContent(request) == false)
         {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Only multipart requests supported.");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Only requests with type multipart/form-data are supported.");
             return;
         }
 
@@ -115,6 +115,10 @@ public final class XMLProcessorServlet extends HttpServlet
             final List items = upld.parseRequest(request);
 
             String processId = defaultProcessId;
+            Boolean clustersOnly = (Boolean) getServletContext().getAttribute(
+                ServletContextConstants.ATTR_CLUSTERS_ONLY);
+            if (clustersOnly == null) clustersOnly = Boolean.FALSE;
+
             for (Iterator i = items.iterator(); i.hasNext();)
             {
                 final FileItem item = (FileItem) i.next();
@@ -134,7 +138,7 @@ public final class XMLProcessorServlet extends HttpServlet
                     try
                     {
                         ProcessingUtils.cluster(processId, context.getController(), dcsLogger, inputStream,
-                            outputStream);
+                            outputStream, clustersOnly.booleanValue());
                     }
                     catch (Throwable e)
                     {
@@ -152,13 +156,18 @@ public final class XMLProcessorServlet extends HttpServlet
 
                     return;
                 }
-                else if ("algorithm".equals(item.getFieldName()))
+                else if (ServletContextConstants.ATTR_DEFAULT_PROCESSID.equals(item.getFieldName()))
                 {
                     final String newValue = item.getString();
                     if (!"".equals(newValue.trim()))
                     {
                         processId = newValue;
                     }
+                }
+                else if (ServletContextConstants.ATTR_CLUSTERS_ONLY.equals(item.getFieldName()))
+                {
+                    clustersOnly = Boolean.valueOf(item.getString());
+                    logger.debug("Clusters only switch (request): " + clustersOnly.booleanValue());
                 }
                 else
                 {

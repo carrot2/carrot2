@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -52,6 +51,7 @@ public final class DCSApp extends AppBase
         final int port = ((Number) options.getOptionObject("port")).intValue();
         final File descriptors = (File) getOption(options, "algorithms", new File("algorithms"));
         final String algorithm = options.getOptionValue("algorithm");
+        final boolean clustersOnly = options.hasOption("co");
 
         final boolean verbose = options.hasOption("verbose");
         if (verbose)
@@ -74,7 +74,7 @@ public final class DCSApp extends AppBase
         getLogger().info("Starting standalone DCS server.");
         try
         {
-            startJetty(port, context, algorithm);
+            startJetty(port, context, algorithm, clustersOnly);
             getLogger().info("Accepting HTTP requests on port: " + port);
         }
         catch (Exception e)
@@ -108,6 +108,11 @@ public final class DCSApp extends AppBase
         port.setType(Number.class);
         options.addOption(port);
 
+        final Option clustersOnly = new Option("co", false, "Skips input documents in the response.");
+        clustersOnly.setLongOpt("clusters-only");
+        clustersOnly.setRequired(false);
+        options.addOption(clustersOnly);
+
         final Option verbose = new Option("verbose", false, "Be more verbose.");
         options.addOption(verbose);
     }
@@ -115,8 +120,8 @@ public final class DCSApp extends AppBase
     /**
      * Starts embedded JETTY server.
      */
-    private void startJetty(final int port, final ControllerContext controllerContext, String defaultAlgorithm)
-        throws Exception
+    private void startJetty(final int port, final ControllerContext controllerContext, String defaultAlgorithm,
+        boolean clustersOnly) throws Exception
     {
         final Server server = new Server();
         server.setResolveRemoteHost(false);
@@ -134,6 +139,7 @@ public final class DCSApp extends AppBase
         server.addContext(context);
 
         // Pass controller context as a global application attribute.
+        context.setAttribute(ServletContextConstants.ATTR_CLUSTERS_ONLY, new Boolean(clustersOnly));
         context.setAttribute(ServletContextConstants.ATTR_CONTROLLER_CONTEXT, controllerContext);
         context.setAttribute(ServletContextConstants.ATTR_DEFAULT_PROCESSID, defaultAlgorithm);
         context.setAttribute(ServletContextConstants.ATTR_DCS_LOGGER, logger);
