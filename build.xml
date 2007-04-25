@@ -5,7 +5,21 @@
   <property file="local-build.properties" />
 
   <!-- Check if we have the default base and release number -->
-  <fail unless="carrot2.code.dir" />
+  <fail unless="carrot2.code.dir">
+Define a property 'carrot2.code.dir' pointing to the root of your carrot2 
+sources checkout. This can be done in two ways:
+
+1) Create a property file called in your user home folder, called 
+".carrot.properties" and place the definition there (Windows users
+replace backslashes with slashes):
+
+carrot2.code.dir=(path)
+
+2) Provide the property directly from the command line.
+
+ant -Dcarrot2.code.dir=(path) ...
+  </fail>
+
   <property file="${carrot2.code.dir}/carrot2.version" />
   <fail unless="release.number" />
 
