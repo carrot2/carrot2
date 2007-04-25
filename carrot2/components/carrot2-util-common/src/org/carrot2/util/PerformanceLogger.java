@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -23,7 +22,8 @@ import org.apache.log4j.Logger;
 /**
  * A thread-safe, nested performance logger.
  */
-public final class PerformanceLogger {
+public final class PerformanceLogger
+{
     /** The actual Log4j sink */
     private final Logger sink;
 
@@ -31,32 +31,36 @@ public final class PerformanceLogger {
     private Level level;
 
     /**
-     * A bunch of information about the most recent job, stored in the thread's local data.
+     * A bunch of information about the most recent job, stored in the thread's local
+     * data.
      */
-    private static class JobInfo {
+    private static class JobInfo
+    {
         public final long start;
         public final String jobName;
         public final String prefix;
         public final String full;
 
-        JobInfo(String jobName, String prefix, String full) {
+        JobInfo(String jobName, String prefix, String full)
+        {
             this.jobName = jobName;
             this.prefix = prefix;
             this.full = full;
             this.start = System.currentTimeMillis();
         }
 
-        public long getDuration() {
+        public long getDuration()
+        {
             return System.currentTimeMillis() - start;
         }
     }
 
     /**
      * A stack of {@link JobInfo} nested objects. The most recent job is last on the list.
-     * 
      * <code>ThreadLocal<ArrayList<JobInfo>></code>
      */
-    private final ThreadLocal jobs = new ThreadLocal() {
+    private final ThreadLocal jobs = new ThreadLocal()
+    {
         protected Object initialValue()
         {
             return new ArrayList(5);
@@ -64,11 +68,13 @@ public final class PerformanceLogger {
     };
 
     /**
-     * Precompiled {@link MessageFormat} object (message formats are not thread safe and their compilation is lengthy,
-     * so this is a tradeoff).
+     * Precompiled {@link MessageFormat} object (message formats are not thread safe and
+     * their compilation is lengthy, so this is a tradeoff).
      */
-    private final ThreadLocal mformat = new ThreadLocal() {
-        protected Object initialValue() {
+    private final ThreadLocal mformat = new ThreadLocal()
+    {
+        protected Object initialValue()
+        {
             return new MessageFormat("{0,number,0.00} sec.", Locale.ENGLISH);
         }
     };
@@ -76,17 +82,20 @@ public final class PerformanceLogger {
     /**
      * 
      */
-    public PerformanceLogger(Level level, Logger sink) {
+    public PerformanceLogger(Level level, Logger sink)
+    {
         this.sink = sink;
         this.level = level;
     }
 
     /**
-     * Logs information about the job being started. Records the current time. <b>This method must be accompanied by a
-     * call to {@link #end()}.</b>
+     * Logs information about the job being started. Records the current time. <b>This
+     * method must be accompanied by a call to {@link #end()}.</b>
      */
-    public void start(String jobName) {
-        if (!sink.isEnabledFor(level)) {
+    public void start(String jobName)
+    {
+        if (!sink.isEnabledFor(level))
+        {
             return;
         }
 
@@ -94,10 +103,13 @@ public final class PerformanceLogger {
         final String prefix;
         final String full;
 
-        if (stack.size() == 0) {
+        if (stack.size() == 0)
+        {
             prefix = "";
             full = jobName;
-        } else {
+        }
+        else
+        {
             final JobInfo prev = (JobInfo) stack.get(stack.size() - 1);
             prefix = prev.prefix + prev.jobName + " > ";
             full = prefix + jobName;
@@ -111,29 +123,43 @@ public final class PerformanceLogger {
     /**
      * Logs information about the finished job: duration, nesting and job name.
      */
-    public final void end() {
-        if (!sink.isEnabledFor(level)) {
+    public final void end()
+    {
+        if (!sink.isEnabledFor(level))
+        {
             return;
         }
 
-        end(null);
+        end(this.level, null);
     }
 
     /**
      * Reset any nesting (prevents indefinite growing of the internal stack).
      */
-    public final void reset() {
+    public final void reset()
+    {
         final ArrayList stack = (ArrayList) jobs.get();
-        while (!stack.isEmpty()) {
+        while (!stack.isEmpty())
+        {
             end();
         }
     }
 
     /**
+     * Logs information about the finished job: duration and an optional message.
+     */
+    public void end(String message)
+    {
+        end(this.level, message);
+    }
+
+    /**
      * Logs information about the finished job: duration, job name, optional message.
      */
-    public void end(String message) {
-        if (!sink.isEnabledFor(level)) {
+    public void end(Level level, String message)
+    {
+        if (!sink.isEnabledFor(level))
+        {
             return;
         }
 
@@ -141,9 +167,9 @@ public final class PerformanceLogger {
         final JobInfo job = (JobInfo) stack.remove(stack.size() - 1);
         final MessageFormat mf = (MessageFormat) mformat.get();
 
-        sink.log(level, "END: "
-                + job.full
-                + " (" + mf.format(new Object [] {new Double(job.getDuration()/1000.0)}) + ") "
-                + (message == null ? "" : (" {" + message + "}")));
+        sink.log(level, "END: " + job.full + " (" + mf.format(new Object []
+        {
+            new Double(job.getDuration() / 1000.0)
+        }) + ") " + (message == null ? "" : (" {" + message + "}")));
     }
 }
