@@ -7,7 +7,6 @@
     <servlet>
         <servlet-name>InitializationServlet</servlet-name>
         <servlet-class>org.carrot2.dcs.http.InitializationServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
 
         <!-- Uncomment to select specific default algorithm.
         <init-param>
@@ -23,6 +22,18 @@
         	<param-value>true</param-value>
        	</init-param>
         -->
+
+		<!-- This parameter controls the default output format of clustered results.
+		Choose among the following options:
+		  - json   JSON output format.
+		  - xml    XML output format.
+		-->
+        <init-param>
+        	<param-name>dcs.output</param-name>
+        	<param-value>xml</param-value>
+       	</init-param>
+       	
+        <load-on-startup>1</load-on-startup>       	
     </servlet>
 
     <servlet>

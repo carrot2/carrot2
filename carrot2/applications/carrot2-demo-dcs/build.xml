@@ -30,5 +30,10 @@
 				<exclude name="**/*.log" />
 			</fileset>
 		</copy>
+        <chmod perm="a+x">
+            <fileset dir="${distribution.dir}">
+                <include name="**/*.sh" />
+            </fileset>
+        </chmod>
 	</target>
 </project>

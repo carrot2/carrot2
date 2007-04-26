@@ -13,7 +13,9 @@
 
 package org.carrot2.dcs;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,7 +23,10 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.carrot2.core.LocalController;
 import org.carrot2.core.LocalInputComponent;
-import org.carrot2.core.impl.*;
+import org.carrot2.core.impl.ArrayInputComponent;
+import org.carrot2.core.impl.ArrayOutputComponent;
+import org.carrot2.core.impl.SaveFilterComponentBase;
+import org.carrot2.core.impl.XmlStreamInputComponent;
 import org.carrot2.util.PerformanceLogger;
 import org.carrot2.util.StringUtils;
 
@@ -38,14 +43,14 @@ public class ProcessingUtils
     /**
      * Run clustering for input files.
      */
-    public static void cluster(String processName, LocalController controller, Logger logger, InputStream inputXML,
-        OutputStream outputXML, boolean clustersOnly) throws Exception
+    public static void cluster(LocalController controller, Logger logger, InputStream inputXML, OutputStream outputXML,
+        String processName, String outputProcessName, boolean clustersOnly) throws Exception
     {
         final PerformanceLogger plogger = new PerformanceLogger(Level.DEBUG, logger);
         ArrayOutputComponent.Result result;
         try
         {
-            plogger.start("Processing request (algorithm: " + processName + ")");
+            plogger.start("Processing.");
 
             // Phase 1 -- read the XML
             plogger.start("Reading XML");
@@ -58,7 +63,7 @@ public class ProcessingUtils
             final List documents = result.documents;
             final String query = (String) requestProperties.get(LocalInputComponent.PARAM_QUERY);
 
-            plogger.end("Documents: " + documents.size() + ", query: " + query);
+            plogger.end();
 
             // Phase 2 -- cluster documents
             plogger.start("Clustering");
@@ -83,9 +88,11 @@ public class ProcessingUtils
             requestProperties.put(SaveFilterComponentBase.PARAM_SAVE_CLUSTERS, Boolean.TRUE);
             requestProperties.put(SaveFilterComponentBase.PARAM_SAVE_DOCUMENTS, new Boolean(!clustersOnly));
 
-            controller.query(ControllerContext.RESULTS_TO_XML, query, requestProperties);
-
+            controller.query(outputProcessName, query, requestProperties);
+            
             plogger.end();
+
+            plogger.end(Level.INFO, "algorithm: " + processName + ", documents: " + documents.size() + ", query: " + query);
         }
         catch (IOException e)
         {
