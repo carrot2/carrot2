@@ -13,13 +13,29 @@
 
 package org.carrot2.dcs.cli;
 
-import java.io.*;
-import java.util.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 
-import org.apache.commons.cli.*;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.OptionGroup;
+import org.apache.commons.cli.Options;
 import org.apache.log4j.Level;
 import org.carrot2.core.MissingProcessException;
-import org.carrot2.dcs.*;
+import org.carrot2.dcs.AppBase;
+import org.carrot2.dcs.ConfigConstants;
+import org.carrot2.dcs.ControllerContext;
+import org.carrot2.dcs.ProcessingUtils;
 
 /**
  * A command-line batch utility for processing XML documents with search results.
@@ -46,8 +62,14 @@ public class BatchApp extends AppBase
     {
         final File outputDir = (File) getOption(options, "output", null);
         final File descriptors = (File) getOption(options, "algorithms", new File("algorithms"));
-        final boolean verbose = options.hasOption("verbose");
 
+        super.config.setDefaultValue(ConfigConstants.ATTR_CLUSTERS_ONLY, new Boolean(options.hasOption("co")));
+        super.config.setDefaultValue(ConfigConstants.ATTR_DEFAULT_PROCESSID, options.getOptionValue("algorithm"));
+        super.config.setDefaultValue(ConfigConstants.ATTR_OUTPUT_FORMAT, 
+            options.hasOption("json") ? ControllerContext.RESULTS_TO_JSON :
+            options.hasOption("xml") ? ControllerContext.RESULTS_TO_XML : null);
+
+        final boolean verbose = options.hasOption("verbose");
         if (verbose)
         {
             logger.setLevel(Level.DEBUG);
@@ -80,7 +102,7 @@ public class BatchApp extends AppBase
             return;
         }
 
-        final String processId = options.getOptionValue("algorithm");
+        final String processId = config.getString(ConfigConstants.ATTR_DEFAULT_PROCESSID);
         if (processId == null || !context.getController().getProcessIds().contains(processId))
         {
             if (processId == null)
@@ -151,7 +173,10 @@ public class BatchApp extends AppBase
                         outputStream = new ByteArrayOutputStream();
                     }
 
-                    ProcessingUtils.cluster(processId, context.getController(), getLogger(), inputStream, outputStream, false);
+                    final String processName = config.getRequiredString(ConfigConstants.ATTR_DEFAULT_PROCESSID);
+                    final String outputProcessName = null;
+                    final boolean clustersOnly = config.getRequiredBoolean(ConfigConstants.ATTR_CLUSTERS_ONLY);
+                    ProcessingUtils.cluster(context.getController(), getLogger(), inputStream, outputStream, processName, outputProcessName, clustersOnly);
                 }
                 catch (IOException e)
                 {
@@ -202,5 +227,21 @@ public class BatchApp extends AppBase
 
         final Option verbose = new Option("verbose", false, "Be more verbose.");
         options.addOption(verbose);
+
+        final Option clustersOnly = new Option("co", false, "Skips input documents in the response.");
+        clustersOnly.setLongOpt("clusters-only");
+        clustersOnly.setRequired(false);
+        options.addOption(clustersOnly);
+
+        final OptionGroup outputFormats = new OptionGroup();
+        // Add options to the group.
+        {
+            final Option xmlOutput = new Option("xml", false, "XML output format");
+            outputFormats.addOption(xmlOutput);
+            final Option jsonOutput = new Option("json", false, "JSON output format");
+            outputFormats.addOption(jsonOutput);
+        }
+        outputFormats.setRequired(true);
+        options.addOptionGroup(outputFormats);
     }
 }

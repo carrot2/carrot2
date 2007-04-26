@@ -10,17 +10,16 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package org.carrot2.dcs.http;
+package org.carrot2.dcs;
 
 import javax.servlet.ServletContext;
 
 import org.apache.log4j.Logger;
-import org.carrot2.dcs.ControllerContext;
 
 /**
  * Named {@link ServletContext} attributes.
  */
-public class ServletContextConstants
+public class ConfigConstants
 {
     /** An instance of {@link ControllerContext}. */
     public final static String ATTR_CONTROLLER_CONTEXT = "dcs.controller.context";
@@ -37,7 +36,15 @@ public class ServletContextConstants
      */
     public final static String ATTR_CLUSTERS_ONLY = "dcs.clusters.only";
 
-    private ServletContextConstants()
+    /**
+     * Name of the process used to serialize the output.
+     * 
+     * @see ControllerContext#RESULTS_TO_JSON
+     * @see ControllerContext#RESULTS_TO_XML
+     */
+    public static final String ATTR_OUTPUT_FORMAT = "dcs.output";
+
+    private ConfigConstants()
     {
         // no instances.
     }

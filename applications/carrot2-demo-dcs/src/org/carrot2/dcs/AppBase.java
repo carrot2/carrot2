@@ -35,6 +35,9 @@ public abstract class AppBase
     /** Application name. */
     private final String appName;
 
+    /** Application configuration. */
+    protected final Config config = new Config();
+    
     /**
      * Initializing constructor.
      * 

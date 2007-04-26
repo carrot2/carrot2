@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -13,24 +12,31 @@
 
 package org.carrot2.dcs.http.rest;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
+import org.carrot2.dcs.Config;
+import org.carrot2.dcs.ConfigConstants;
 import org.carrot2.dcs.ControllerContext;
 import org.carrot2.dcs.ProcessingUtils;
-import org.carrot2.dcs.http.ServletContextConstants;
+import org.carrot2.dcs.http.InitializationServlet;
 import org.carrot2.util.StringUtils;
 
 /**
- * A servlet that parses HTTP POST input in Carrot<sup>2</sup> XML format, clusters it and returns clusters.
+ * A servlet that parses HTTP POST input in Carrot<sup>2</sup> XML format, clusters it
+ * and returns clusters.
  */
 public final class XMLProcessorServlet extends HttpServlet
 {
@@ -50,9 +56,9 @@ public final class XMLProcessorServlet extends HttpServlet
     private ControllerContext context;
 
     /**
-     * Default process identifier.
+     * Application configuration object.
      */
-    private String defaultProcessId;
+    private Config config;
 
     /**
      * Indicates if the servlet was initialized properly.
@@ -66,27 +72,19 @@ public final class XMLProcessorServlet extends HttpServlet
     {
         super.init();
 
-        this.dcsLogger = (Logger) getServletContext().getAttribute(ServletContextConstants.ATTR_DCS_LOGGER);
-
-        this.context = (ControllerContext) getServletContext().getAttribute(
-            ServletContextConstants.ATTR_CONTROLLER_CONTEXT);
-        if (context == null)
+        config = (Config) getServletContext().getAttribute(
+            InitializationServlet.ATTR_APPCONFIG);
+        if (config == null)
         {
-            final String message = "Expected an instance of a controller context in the servlet context.";
+            final String message = "Expected an configuration object in the servlet context.";
             logger.error(message);
-            dcsLogger.error(message);
             return;
         }
 
-        this.defaultProcessId = (String) getServletContext().getAttribute(
-            ServletContextConstants.ATTR_DEFAULT_PROCESSID);
-        if (this.defaultProcessId == null)
-        {
-            final String message = "Expected default algorithm name in the servlet context.";
-            logger.error(message);
-            dcsLogger.error(message);
-            return;
-        }
+        this.dcsLogger = (Logger) config
+            .getRequiredValue(ConfigConstants.ATTR_DCS_LOGGER);
+        this.context = (ControllerContext) config
+            .getRequiredValue(ConfigConstants.ATTR_CONTROLLER_CONTEXT);
 
         initialized = true;
     }
@@ -94,18 +92,20 @@ public final class XMLProcessorServlet extends HttpServlet
     /**
      * 
      */
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-        IOException
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException
     {
         if (!initialized)
         {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Initialization failed. Check the logs.");
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                "Initialization failed. Check the logs.");
             return;
         }
 
         if (ServletFileUpload.isMultipartContent(request) == false)
         {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Only requests with type multipart/form-data are supported.");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                "Only requests with type multipart/form-data are supported.");
             return;
         }
 
@@ -114,10 +114,12 @@ public final class XMLProcessorServlet extends HttpServlet
         {
             final List items = upld.parseRequest(request);
 
-            String processId = defaultProcessId;
-            Boolean clustersOnly = (Boolean) getServletContext().getAttribute(
-                ServletContextConstants.ATTR_CLUSTERS_ONLY);
-            if (clustersOnly == null) clustersOnly = Boolean.FALSE;
+            String processId = config
+                .getRequiredString(ConfigConstants.ATTR_DEFAULT_PROCESSID);
+            boolean clustersOnly = config
+                .getRequiredBoolean(ConfigConstants.ATTR_CLUSTERS_ONLY);
+            String outputProcessName = config
+                .getRequiredString(ConfigConstants.ATTR_OUTPUT_FORMAT);
 
             for (Iterator i = items.iterator(); i.hasNext();)
             {
@@ -126,27 +128,39 @@ public final class XMLProcessorServlet extends HttpServlet
                 {
                     if (!this.context.getController().getProcessIds().contains(processId))
                     {
-                        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "No such algorithm: " + processId);
+                        response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                            "No such algorithm: " + processId);
                         break;
                     }
 
                     // Run the query.
                     final InputStream inputStream = item.getInputStream();
                     final OutputStream outputStream = response.getOutputStream();
-                    response.setContentType("text/xml");
+                    
+                    if (outputProcessName.equals(ControllerContext.RESULTS_TO_JSON))
+                    {
+                        response.setContentType("text/json");
+                    } else if (outputProcessName.equals(ControllerContext.RESULTS_TO_XML))
+                    {
+                        response.setContentType("text/xml");
+                    }
 
                     try
                     {
-                        ProcessingUtils.cluster(processId, context.getController(), dcsLogger, inputStream,
-                            outputStream, clustersOnly.booleanValue());
+                        ProcessingUtils.cluster(context.getController(), dcsLogger,
+                            inputStream, outputStream, processId, outputProcessName,
+                            clustersOnly);
                     }
                     catch (Throwable e)
                     {
-                        final String message = "Clustering failed: " + StringUtils.chainExceptionMessages(e);
+                        final String message = "Clustering failed: "
+                            + StringUtils.chainExceptionMessages(e);
+                        dcsLogger.error(message);
                         logger.error(message, e);
                         if (!response.isCommitted())
                         {
-                            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, message);
+                            response.sendError(
+                                HttpServletResponse.SC_INTERNAL_SERVER_ERROR, message);
                         }
 
                         if (outputStream != null) outputStream.close();
@@ -156,7 +170,8 @@ public final class XMLProcessorServlet extends HttpServlet
 
                     return;
                 }
-                else if (ServletContextConstants.ATTR_DEFAULT_PROCESSID.equals(item.getFieldName()))
+                else if (ConfigConstants.ATTR_DEFAULT_PROCESSID.equals(item
+                    .getFieldName()))
                 {
                     final String newValue = item.getString();
                     if (!"".equals(newValue.trim()))
@@ -164,10 +179,34 @@ public final class XMLProcessorServlet extends HttpServlet
                         processId = newValue;
                     }
                 }
-                else if (ServletContextConstants.ATTR_CLUSTERS_ONLY.equals(item.getFieldName()))
+                else if (ConfigConstants.ATTR_CLUSTERS_ONLY.equals(item.getFieldName()))
                 {
-                    clustersOnly = Boolean.valueOf(item.getString());
-                    logger.debug("Clusters only switch (request): " + clustersOnly.booleanValue());
+                    clustersOnly = Boolean.valueOf(item.getString()).booleanValue();
+                    logger.debug("Clusters only switch (request): " + clustersOnly);
+                }
+                else if (ConfigConstants.ATTR_OUTPUT_FORMAT.equals(item.getFieldName()))
+                {
+                    final String outputFormatName = item.getString();
+                    if ("".equals(outputFormatName))
+                    {
+                        // Ignore.
+                    }
+                    else if ("xml".equals(outputFormatName))
+                    {
+                        outputProcessName = ControllerContext.RESULTS_TO_XML;
+                        logger.debug("Request output format set to " + outputFormatName);
+                    }
+                    else if ("json".equals(outputFormatName))
+                    {
+                        outputProcessName = ControllerContext.RESULTS_TO_JSON;
+                        logger.debug("Request output format set to " + outputFormatName);
+                    }
+                    else
+                    {
+                        response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                            "Request format invalid: " + outputFormatName);
+                        return;
+                    }
                 }
                 else
                 {
@@ -176,16 +215,19 @@ public final class XMLProcessorServlet extends HttpServlet
             }
             logger.info("Missing 'c2stream' request parameter.");
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
         }
         catch (FileUploadException e)
         {
-            logger.warn("File upload request failed: " + StringUtils.chainExceptionMessages(e));
+            logger.warn("File upload request failed: "
+                + StringUtils.chainExceptionMessages(e));
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
         catch (Throwable t)
         {
-            final String message = "Internal server error: " + StringUtils.chainExceptionMessages(t);
+            final String message = "Internal server error: "
+                + StringUtils.chainExceptionMessages(t);
             logger.warn(message, t);
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, message);
         }

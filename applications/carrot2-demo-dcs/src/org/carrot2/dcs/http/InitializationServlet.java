@@ -20,8 +20,11 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.carrot2.dcs.Config;
+import org.carrot2.dcs.ConfigConstants;
 import org.carrot2.dcs.ControllerContext;
 
 /**
@@ -31,23 +34,32 @@ import org.carrot2.dcs.ControllerContext;
 public final class InitializationServlet extends HttpServlet
 {
     /**
+     * Application configuration (instance of {@link Config}. This key is used
+     * to pass the configuration to the servlets (via servlet context).
+     */
+    public static final String ATTR_APPCONFIG = "dcs.app-config";
+
+    /**
      * Perform initialization.
      */
     public void init() throws ServletException
     {
-        final ServletContext servletContext = getServletContext();
-
-        Logger dcsLogger;
-        // Check for DCS logger. If not defined, define it.
-        if ((dcsLogger = (Logger) servletContext.getAttribute(ServletContextConstants.ATTR_DCS_LOGGER)) == null)
+        Config config = (Config) getServletContext().getAttribute(InitializationServlet.ATTR_APPCONFIG);
+        if (config == null)
         {
-            dcsLogger = Logger.getLogger("dcs-webapp");
-            servletContext.setAttribute(ServletContextConstants.ATTR_DCS_LOGGER, dcsLogger);
+            config = new Config();
         }
 
-        if (null == servletContext.getAttribute(ServletContextConstants.ATTR_CONTROLLER_CONTEXT))
+        Logger dcsLogger = (Logger) config.getValue(ConfigConstants.ATTR_DCS_LOGGER);
+        if (dcsLogger == null)
         {
-            final File descriptorsDir = new File(servletContext.getRealPath("algorithms"));
+            dcsLogger = Logger.getLogger("dcs-webapp");
+            config.setDefaultValue(ConfigConstants.ATTR_DCS_LOGGER, dcsLogger);
+        }
+
+        if (!config.hasValue(ConfigConstants.ATTR_CONTROLLER_CONTEXT))
+        {
+            final File descriptorsDir = new File(getServletContext().getRealPath("algorithms"));
             final ControllerContext context = new ControllerContext();
             if (descriptorsDir.exists() && !descriptorsDir.isDirectory())
             {
@@ -57,20 +69,20 @@ public final class InitializationServlet extends HttpServlet
             }
 
             context.initialize(descriptorsDir, dcsLogger);
-            servletContext.setAttribute(ServletContextConstants.ATTR_CONTROLLER_CONTEXT, context);
+            config.setDefaultValue(ConfigConstants.ATTR_CONTROLLER_CONTEXT, context);
         }
 
-        if (null == servletContext.getAttribute(ServletContextConstants.ATTR_DEFAULT_PROCESSID))
+        if (!config.hasValue(ConfigConstants.ATTR_DEFAULT_PROCESSID))
         {
             // Look for init. parameter. If not found, try the first available process.
-            String processId = getInitParameter(ServletContextConstants.ATTR_DEFAULT_PROCESSID);
+            String processId = getInitParameter(ConfigConstants.ATTR_DEFAULT_PROCESSID);
             if (processId == null)
             {
-                dcsLogger.warn("No " + ServletContextConstants.ATTR_DEFAULT_PROCESSID 
+                dcsLogger.warn("No " + ConfigConstants.ATTR_DEFAULT_PROCESSID 
                     + " init parameter specified. Taking the first available algorithm.");
 
-                final ControllerContext ctx = (ControllerContext) servletContext
-                    .getAttribute(ServletContextConstants.ATTR_CONTROLLER_CONTEXT);
+                final ControllerContext ctx = (ControllerContext) getServletContext()
+                    .getAttribute(ConfigConstants.ATTR_CONTROLLER_CONTEXT);
                 final List processIds = ctx.getController().getProcessIds();
                 for (Iterator i = processIds.iterator(); i.hasNext();)
                 {
@@ -91,16 +103,38 @@ public final class InitializationServlet extends HttpServlet
                     throw new ServletException(message);
                 }
             }
-            servletContext.setAttribute(ServletContextConstants.ATTR_DEFAULT_PROCESSID, processId);
+            config.setDefaultValue(ConfigConstants.ATTR_DEFAULT_PROCESSID, processId);
             dcsLogger.debug("Default algorithm set to: " + processId);
         }
 
-        if (null == servletContext.getAttribute(ServletContextConstants.ATTR_CLUSTERS_ONLY))
+        if (!config.hasValue(ConfigConstants.ATTR_CLUSTERS_ONLY))
         {
-            final String clustersOnly = getInitParameter(ServletContextConstants.ATTR_CLUSTERS_ONLY);
-            servletContext.setAttribute(ServletContextConstants.ATTR_CLUSTERS_ONLY, 
-                Boolean.valueOf(clustersOnly));
+            final String clustersOnly = getInitParameter(ConfigConstants.ATTR_CLUSTERS_ONLY);
+            config.setDefaultValue(ConfigConstants.ATTR_CLUSTERS_ONLY, Boolean.valueOf(clustersOnly));
             dcsLogger.debug("Clusters only switch (init parameter): " + clustersOnly);
         }
+
+        if (!config.hasValue(ConfigConstants.ATTR_OUTPUT_FORMAT))
+        {
+            final String outputFormatName = getInitParameter(ConfigConstants.ATTR_OUTPUT_FORMAT);
+            final String outputProcessName;
+            if ("xml".equals(outputFormatName))
+            {
+                outputProcessName = ControllerContext.RESULTS_TO_XML;
+            }
+            else if ("json".equals(outputFormatName))
+            {
+                outputProcessName = ControllerContext.RESULTS_TO_JSON;
+            }
+            else
+            {
+                dcsLogger.warn("Request format invalid: " + outputFormatName);
+                return;
+            }
+            config.setDefaultValue(ConfigConstants.ATTR_OUTPUT_FORMAT, outputProcessName);
+        }
+        
+        final ServletContext servletContext = getServletContext();
+        servletContext.setAttribute(InitializationServlet.ATTR_APPCONFIG, config);
     }
 }

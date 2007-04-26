@@ -17,6 +17,8 @@ import java.io.File;
 import org.apache.commons.cli.*;
 import org.apache.log4j.Level;
 import org.carrot2.dcs.AppBase;
+import org.carrot2.dcs.Config;
+import org.carrot2.dcs.ConfigConstants;
 import org.carrot2.dcs.ControllerContext;
 import org.carrot2.util.StringUtils;
 import org.mortbay.http.SocketListener;
@@ -48,11 +50,6 @@ public final class DCSApp extends AppBase
      */
     protected void go(CommandLine options)
     {
-        final int port = ((Number) options.getOptionObject("port")).intValue();
-        final File descriptors = (File) getOption(options, "algorithms", new File("algorithms"));
-        final String algorithm = options.getOptionValue("algorithm");
-        final boolean clustersOnly = options.hasOption("co");
-
         final boolean verbose = options.hasOption("verbose");
         if (verbose)
         {
@@ -63,6 +60,7 @@ public final class DCSApp extends AppBase
         final ControllerContext context;
         try
         {
+            final File descriptors = (File) getOption(options, "algorithms", new File("algorithms"));
             context = initializeContext(descriptors);
         }
         catch (Exception e)
@@ -71,10 +69,16 @@ public final class DCSApp extends AppBase
             return;
         }
 
+        config.setDefaultValue(ConfigConstants.ATTR_DCS_LOGGER, logger);
+        config.setDefaultValue(ConfigConstants.ATTR_CLUSTERS_ONLY, new Boolean(options.hasOption("co")));
+        config.setDefaultValue(ConfigConstants.ATTR_DEFAULT_PROCESSID, options.getOptionValue("algorithm"));
+        config.setDefaultValue(ConfigConstants.ATTR_CONTROLLER_CONTEXT, context);
+
         getLogger().info("Starting standalone DCS server.");
         try
         {
-            startJetty(port, context, algorithm, clustersOnly);
+            final int port = ((Number) options.getOptionObject("port")).intValue();
+            startJetty(port, config);
             getLogger().info("Accepting HTTP requests on port: " + port);
         }
         catch (Exception e)
@@ -120,8 +124,7 @@ public final class DCSApp extends AppBase
     /**
      * Starts embedded JETTY server.
      */
-    private void startJetty(final int port, final ControllerContext controllerContext, String defaultAlgorithm,
-        boolean clustersOnly) throws Exception
+    private void startJetty(final int port, final Config config) throws Exception
     {
         final Server server = new Server();
         server.setResolveRemoteHost(false);
@@ -139,10 +142,7 @@ public final class DCSApp extends AppBase
         server.addContext(context);
 
         // Pass controller context as a global application attribute.
-        context.setAttribute(ServletContextConstants.ATTR_CLUSTERS_ONLY, new Boolean(clustersOnly));
-        context.setAttribute(ServletContextConstants.ATTR_CONTROLLER_CONTEXT, controllerContext);
-        context.setAttribute(ServletContextConstants.ATTR_DEFAULT_PROCESSID, defaultAlgorithm);
-        context.setAttribute(ServletContextConstants.ATTR_DCS_LOGGER, logger);
+        context.setAttribute(InitializationServlet.ATTR_APPCONFIG, config);
 
         // Start the http server
         server.start();
