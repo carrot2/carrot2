@@ -1,6 +1,7 @@
 <project name="Carrot2 Document Clustering Server" default="dist">
 	<property file="${user.home}/.carrot.properties" />
 
+	<property name="carrot2.code.dir" location="../.." />
 	<property name="project.dir" location="${basedir}" />
 
 	<property name="distribution.dir" location="${project.dir}/tmp/dist" />
