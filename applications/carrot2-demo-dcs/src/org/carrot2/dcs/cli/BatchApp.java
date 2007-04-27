@@ -174,7 +174,7 @@ public class BatchApp extends AppBase
                     }
 
                     final String processName = config.getRequiredString(ConfigConstants.ATTR_DEFAULT_PROCESSID);
-                    final String outputProcessName = null;
+                    final String outputProcessName = config.getRequiredString(ConfigConstants.ATTR_OUTPUT_FORMAT);
                     final boolean clustersOnly = config.getRequiredBoolean(ConfigConstants.ATTR_CLUSTERS_ONLY);
                     ProcessingUtils.cluster(context.getController(), getLogger(), inputStream, outputStream, processName, outputProcessName, clustersOnly);
                 }
