@@ -94,11 +94,6 @@ public final class PerformanceLogger
      */
     public void start(String jobName)
     {
-        if (!sink.isEnabledFor(level))
-        {
-            return;
-        }
-
         final ArrayList stack = (ArrayList) jobs.get();
         final String prefix;
         final String full;
@@ -125,11 +120,6 @@ public final class PerformanceLogger
      */
     public final void end()
     {
-        if (!sink.isEnabledFor(level))
-        {
-            return;
-        }
-
         end(this.level, null);
     }
 
@@ -158,11 +148,6 @@ public final class PerformanceLogger
      */
     public void end(Level level, String message)
     {
-        if (!sink.isEnabledFor(level))
-        {
-            return;
-        }
-
         final ArrayList stack = (ArrayList) jobs.get();
         final JobInfo job = (JobInfo) stack.remove(stack.size() - 1);
         final MessageFormat mf = (MessageFormat) mformat.get();
