@@ -12,8 +12,7 @@
 
 package org.carrot2.util;
 
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
@@ -317,6 +316,20 @@ public class StringUtils
                 buf.append(e.getMessage());
             }
             e = e.getCause();
+        }
+        return buf.toString();
+    }
+
+    /**
+     * Converts a {@link List} to a <code>separator</code> delimited string.
+     */
+    public static String toString(List list, String separator)
+    {
+        final StringBuffer buf = new StringBuffer();
+        for (Iterator i = list.iterator(); i.hasNext();)
+        {
+            buf.append(i.next().toString());
+            if (i.hasNext()) buf.append(separator);
         }
         return buf.toString();
     }
