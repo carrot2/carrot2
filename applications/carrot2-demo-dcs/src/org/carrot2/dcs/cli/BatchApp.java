@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -13,35 +12,22 @@
 
 package org.carrot2.dcs.cli;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
+import java.io.*;
+import java.util.*;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionGroup;
-import org.apache.commons.cli.Options;
+import org.apache.commons.cli.*;
 import org.apache.log4j.Level;
 import org.carrot2.core.MissingProcessException;
-import org.carrot2.dcs.AppBase;
-import org.carrot2.dcs.ConfigConstants;
-import org.carrot2.dcs.ControllerContext;
-import org.carrot2.dcs.ProcessingUtils;
+import org.carrot2.dcs.*;
 
 /**
  * A command-line batch utility for processing XML documents with search results.
  */
 public class BatchApp extends AppBase
 {
+    /** Command-line options */
+    private CliOptions opts;
+
     public BatchApp()
     {
         super("batch");
@@ -58,74 +44,83 @@ public class BatchApp extends AppBase
     /**
      * Command line entry point (after parsing arguments).
      */
-    protected final void go(CommandLine options)
+    protected final void go(CommandLine options) throws Exception
     {
-        final File outputDir = (File) getOption(options, "output", null);
-        final File descriptors = (File) getOption(options, "algorithms", new File("algorithms"));
-
-        super.config.setDefaultValue(ConfigConstants.ATTR_CLUSTERS_ONLY, new Boolean(options.hasOption("co")));
-        super.config.setDefaultValue(ConfigConstants.ATTR_DEFAULT_PROCESSID, options.getOptionValue("algorithm"));
-        super.config.setDefaultValue(ConfigConstants.ATTR_OUTPUT_FORMAT, 
-            options.hasOption("json") ? ControllerContext.RESULTS_TO_JSON :
-            options.hasOption("xml") ? ControllerContext.RESULTS_TO_XML : null);
-
-        final boolean verbose = options.hasOption("verbose");
-        if (verbose)
-        {
-            logger.setLevel(Level.DEBUG);
-        }
-
-        if (outputDir != null && !outputDir.exists())
-        {
-            logger.info("Creating output folder: " + outputDir.getAbsolutePath());
-            if (!outputDir.mkdirs())
-            {
-                logger.error("Could not create output folder: " + outputDir.getAbsolutePath());
-                return;
-            }
-        }
-
-        if (outputDir == null)
-        {
-            logger.warn("Output directory not specified, clustering without saving the result.");
-        }
-
-        // Initialize processes.
-        final ControllerContext context;
-        try
-        {
-            context = initializeContext(descriptors);
-        }
-        catch (Exception e)
-        {
-            getLogger().fatal("Could not initialize clustering algorithms. Inspect log files.", e);
-            return;
-        }
-
-        final String processId = config.getString(ConfigConstants.ATTR_DEFAULT_PROCESSID);
-        if (processId == null || !context.getController().getProcessIds().contains(processId))
-        {
-            if (processId == null)
-            {
-                getLogger().fatal("Provide the identifier of a clustering algorithm to use.");
-            }
-            else
-            {
-                getLogger().fatal("This clustering algorithm is not available: " + processId);
-            }
-            return;
-        }
+        // Toggle verbose mode.
+        if (options.hasOption(opts.verbose.getOpt())) getLogger().setLevel(Level.DEBUG);
 
         // Collect files to process.
-        final String [] unprocessed = options.getArgs();
-        final ArrayList files = new ArrayList();
+        final ArrayList files = collectInputFiles(options.getArgs());
+        if (files.isEmpty())
+        {
+            throw new ConfigurationException(
+                "Empty list of input files. Provide files and/or directories " +
+                "as program arguments.");
+        }
 
+        // Initialize the controller context.
+        final ControllerContext context = initializeContext(
+            (File) CliOptions.getOption(options, opts.descriptorsDir, new File("descriptors")));
+
+        final HashMap processingOptions = new HashMap();
+        processingOptions.put(
+            ProcessingOptionNames.ATTR_PROCESSID, 
+            opts.parseProcessIdOption(options, context));
+        processingOptions.put(
+            ProcessingOptionNames.ATTR_OUTPUT_FORMAT, 
+            opts.parseOutputFormat(options));
+        processingOptions.put(
+            ProcessingOptionNames.ATTR_CLUSTERS_ONLY, 
+            Boolean.toString(options.hasOption(opts.clustersOnly.getOpt())));
+
+        // Initialize the output folder.
+        final File outputDir = getOutputDirectory(options);
+
+        // Run batch clustering.
+        for (Iterator i = files.iterator(); i.hasNext();)
+        {
+            final File f = (File) i.next();
+            getLogger().info("Processing file: " + f.getName());
+
+            OutputStream outputStream = null;
+            InputStream inputStream = null;
+            try
+            {
+                inputStream = new FileInputStream(f);
+                if (outputDir != null)
+                {
+                    outputStream = new FileOutputStream(new File(outputDir, f.getName()));
+                }
+                else
+                {
+                    outputStream = new ByteArrayOutputStream();
+                }
+
+                ProcessingUtils.cluster(context.getController(), getLogger(),
+                    inputStream, outputStream, processingOptions);
+            }
+            catch (IOException e)
+            {
+                if (outputStream != null) outputStream.close();
+                if (inputStream != null) inputStream.close();
+            }
+        }
+
+        getLogger().info("Finished.");
+    }
+
+    /**
+     * Collects input files to be processed.
+     */
+    private ArrayList collectInputFiles(String [] unprocessed)
+    {
+        final ArrayList files = new ArrayList(unprocessed.length);
         for (int i = 0; i < unprocessed.length; i++)
         {
             final File file = new File(unprocessed[i]);
             if (!file.exists())
             {
-                logger.warn("File does not exist, skipping: " + file);
+                getLogger().warn("File does not exist, skipping: " + file);
                 continue;
             }
 
@@ -145,52 +140,36 @@ public class BatchApp extends AppBase
                 files.add(file);
             }
         }
+        return files;
+    }
 
-        // Run batch clustering.
-        try
+    /**
+     * Creates or tests the output folder.
+     */
+    private File getOutputDirectory(CommandLine options)
+    {
+        final File outputDir = (File) CliOptions.getOption(options, opts.outputFolder,
+            null);
+        if (outputDir != null)
         {
-            if (files.isEmpty())
+            if (!outputDir.exists())
             {
-                getLogger().warn("Empty list of input files. Provide files and/or directories as program arguments.");
-            }
-
-            for (Iterator i = files.iterator(); i.hasNext();)
-            {
-                final File f = (File) i.next();
-                logger.info("Processing file: " + f.getName());
-
-                OutputStream outputStream = null;
-                InputStream inputStream = null;
-                try
+                getLogger().info("Creating output folder: " + outputDir.getAbsolutePath());
+                if (!outputDir.mkdirs())
                 {
-                    inputStream = new FileInputStream(f);
-                    if (outputDir != null)
-                    {
-                        outputStream = new FileOutputStream(new File(outputDir, f.getName()));
-                    }
-                    else
-                    {
-                        outputStream = new ByteArrayOutputStream();
-                    }
-
-                    final String processName = config.getRequiredString(ConfigConstants.ATTR_DEFAULT_PROCESSID);
-                    final String outputProcessName = config.getRequiredString(ConfigConstants.ATTR_OUTPUT_FORMAT);
-                    final boolean clustersOnly = config.getRequiredBoolean(ConfigConstants.ATTR_CLUSTERS_ONLY);
-                    ProcessingUtils.cluster(context.getController(), getLogger(), inputStream, outputStream, processName, outputProcessName, clustersOnly);
-                }
-                catch (IOException e)
-                {
-                    if (outputStream != null) outputStream.close();
-                    if (inputStream != null) inputStream.close();
+                    final String message = "Could not create output folder: "
+                        + outputDir.getAbsolutePath();
+                    getLogger().error(message);
+                    throw new RuntimeException(message);
                 }
             }
         }
-        catch (Exception e)
+        else
         {
-            getLogger().fatal("Unhandled program error occurred.", e);
+            getLogger().warn("Output directory not specified, clustering without saving the result.");
         }
 
-        getLogger().info("Finished.");
+        return outputDir;
     }
 
     /**
@@ -199,7 +178,10 @@ public class BatchApp extends AppBase
     protected void printUsage()
     {
         HelpFormatter formatter = new HelpFormatter();
-        formatter.printHelp(getCommandName() + " [options] <file|dir> <file|dir> ...", cliOptions, false);
+        formatter.printHelp(getCommandName() + " [options] <INPUT>, <INPUT>...\n\n"
+            + "INPUT can be any a file or a directory.\n"
+            + "The available options are described below.",
+            cliOptions, false);
     }
 
     /**
@@ -207,41 +189,12 @@ public class BatchApp extends AppBase
      */
     protected void initializeOptions(Options options)
     {
-        final Option processName = new Option("algorithm", true, "Identifier of the algorithm used for clustering.");
-        processName.setArgName("identifier");
-        processName.setRequired(false);
-        processName.setType(String.class);
-        options.addOption(processName);
+        opts = new CliOptions();
 
-        final Option descriptors = new Option("descriptors", true, "Descriptors folder (algorithms).");
-        descriptors.setArgName("path");
-        descriptors.setRequired(false);
-        descriptors.setType(File.class);
-        options.addOption(descriptors);
-
-        final Option output = new Option("output", true, "Directory for output files.");
-        output.setArgName("path");
-        output.setRequired(false);
-        output.setType(File.class);
-        options.addOption(output);
-
-        final Option verbose = new Option("verbose", false, "Be more verbose.");
-        options.addOption(verbose);
-
-        final Option clustersOnly = new Option("co", false, "Skips input documents in the response.");
-        clustersOnly.setLongOpt("clusters-only");
-        clustersOnly.setRequired(false);
-        options.addOption(clustersOnly);
-
-        final OptionGroup outputFormats = new OptionGroup();
-        // Add options to the group.
+        CliOptions.addAll(options, new Object []
         {
-            final Option xmlOutput = new Option("xml", false, "XML output format");
-            outputFormats.addOption(xmlOutput);
-            final Option jsonOutput = new Option("json", false, "JSON output format");
-            outputFormats.addOption(jsonOutput);
-        }
-        outputFormats.setRequired(true);
-        options.addOptionGroup(outputFormats);
+            opts.descriptorsDir, opts.processName, opts.outputFormat, opts.clustersOnly,
+            opts.verbose, opts.outputFolder
+        });
     }
 }

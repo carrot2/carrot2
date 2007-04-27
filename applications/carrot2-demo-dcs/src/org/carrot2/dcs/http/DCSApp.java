@@ -13,13 +13,12 @@
 package org.carrot2.dcs.http;
 
 import java.io.File;
+import java.util.HashMap;
 
-import org.apache.commons.cli.*;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.Options;
 import org.apache.log4j.Level;
-import org.carrot2.dcs.AppBase;
-import org.carrot2.dcs.Config;
-import org.carrot2.dcs.ConfigConstants;
-import org.carrot2.dcs.ControllerContext;
+import org.carrot2.dcs.*;
 import org.carrot2.util.StringUtils;
 import org.mortbay.http.SocketListener;
 import org.mortbay.jetty.Server;
@@ -32,6 +31,8 @@ import org.mortbay.jetty.servlet.WebApplicationContext;
  */
 public final class DCSApp extends AppBase
 {
+    private CliOptions opts;
+
     protected DCSApp()
     {
         super("dcs");
@@ -49,36 +50,33 @@ public final class DCSApp extends AppBase
      * Command line entry point (after parsing arguments).
      */
     protected void go(CommandLine options)
+        throws ConfigurationException
     {
-        final boolean verbose = options.hasOption("verbose");
-        if (verbose)
-        {
-            logger.setLevel(Level.DEBUG);
-        }
+        // Toggle verbose mode.
+        if (options.hasOption(opts.verbose.getOpt())) getLogger().setLevel(Level.DEBUG);
 
         // Initialize processes.
-        final ControllerContext context;
-        try
-        {
-            final File descriptors = (File) getOption(options, "algorithms", new File("algorithms"));
-            context = initializeContext(descriptors);
-        }
-        catch (Exception e)
-        {
-            getLogger().fatal("Could not initialize clustering algorithms. Inspect log files.", e);
-            return;
-        }
+        final ControllerContext context = initializeContext(
+            (File) CliOptions.getOption(options, opts.descriptorsDir, new File("descriptors")));
 
-        config.setDefaultValue(ConfigConstants.ATTR_DCS_LOGGER, logger);
-        config.setDefaultValue(ConfigConstants.ATTR_CLUSTERS_ONLY, new Boolean(options.hasOption("co")));
-        config.setDefaultValue(ConfigConstants.ATTR_DEFAULT_PROCESSID, options.getOptionValue("algorithm"));
-        config.setDefaultValue(ConfigConstants.ATTR_CONTROLLER_CONTEXT, context);
+        // Parse command-line options (defaults).
+        final HashMap processingOptions = new HashMap();
+        processingOptions.put(
+            ProcessingOptionNames.ATTR_PROCESSID, 
+            opts.parseProcessIdOption(options, context));
+        processingOptions.put(
+            ProcessingOptionNames.ATTR_OUTPUT_FORMAT, 
+            opts.parseOutputFormat(options));
+        processingOptions.put(
+            ProcessingOptionNames.ATTR_CLUSTERS_ONLY, 
+            Boolean.toString(options.hasOption(opts.clustersOnly.getOpt())));
 
         getLogger().info("Starting standalone DCS server.");
         try
         {
-            final int port = ((Number) options.getOptionObject("port")).intValue();
-            startJetty(port, config);
+            final int port = ((Number) options.getOptionObject(opts.port.getOpt())).intValue();
+            final AppConfig appConfig = new AppConfig(context, getLogger(), processingOptions);
+            startJetty(port, appConfig);
             getLogger().info("Accepting HTTP requests on port: " + port);
         }
         catch (Exception e)
@@ -93,38 +91,21 @@ public final class DCSApp extends AppBase
      */
     protected void initializeOptions(Options options)
     {
-        final Option processName = new Option("algorithm", true,
-            "Identifier of the default algorithm used for clustering.");
-        processName.setArgName("identifier");
-        processName.setRequired(true);
-        processName.setType(String.class);
-        options.addOption(processName);
+        opts = new CliOptions();
 
-        final Option descriptors = new Option("descriptors", true, "Descriptors folder (algorithms).");
-        descriptors.setArgName("path");
-        descriptors.setRequired(false);
-        descriptors.setType(File.class);
-        options.addOption(descriptors);
+        CliOptions.addAll(options, new Object []
+        {
+            opts.descriptorsDir, opts.processName, opts.outputFormat, opts.clustersOnly,
+            opts.verbose, 
 
-        final Option port = new Option("port", true, "Socket to bind to.");
-        port.setArgName("number");
-        port.setRequired(true);
-        port.setType(Number.class);
-        options.addOption(port);
-
-        final Option clustersOnly = new Option("co", false, "Skips input documents in the response.");
-        clustersOnly.setLongOpt("clusters-only");
-        clustersOnly.setRequired(false);
-        options.addOption(clustersOnly);
-
-        final Option verbose = new Option("verbose", false, "Be more verbose.");
-        options.addOption(verbose);
+            opts.port
+        });
     }
 
     /**
      * Starts embedded JETTY server.
      */
-    private void startJetty(final int port, final Config config) throws Exception
+    private void startJetty(final int port, final AppConfig config) throws Exception
     {
         final Server server = new Server();
         server.setResolveRemoteHost(false);

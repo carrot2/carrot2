@@ -12,25 +12,17 @@
 
 package org.carrot2.dcs.http.rest;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Iterator;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
-import org.carrot2.dcs.Config;
-import org.carrot2.dcs.ConfigConstants;
-import org.carrot2.dcs.ControllerContext;
-import org.carrot2.dcs.ProcessingUtils;
+import org.carrot2.dcs.*;
 import org.carrot2.dcs.http.InitializationServlet;
 import org.carrot2.util.StringUtils;
 
@@ -58,7 +50,7 @@ public final class XMLProcessorServlet extends HttpServlet
     /**
      * Application configuration object.
      */
-    private Config config;
+    private AppConfig config;
 
     /**
      * Indicates if the servlet was initialized properly.
@@ -72,7 +64,7 @@ public final class XMLProcessorServlet extends HttpServlet
     {
         super.init();
 
-        config = (Config) getServletContext().getAttribute(
+        config = (AppConfig) getServletContext().getAttribute(
             InitializationServlet.ATTR_APPCONFIG);
         if (config == null)
         {
@@ -81,10 +73,8 @@ public final class XMLProcessorServlet extends HttpServlet
             return;
         }
 
-        this.dcsLogger = (Logger) config
-            .getRequiredValue(ConfigConstants.ATTR_DCS_LOGGER);
-        this.context = (ControllerContext) config
-            .getRequiredValue(ConfigConstants.ATTR_CONTROLLER_CONTEXT);
+        this.dcsLogger = config.getConsoleLogger();
+        this.context = config.getControllerContext();
 
         initialized = true;
     }
@@ -114,42 +104,33 @@ public final class XMLProcessorServlet extends HttpServlet
         {
             final List items = upld.parseRequest(request);
 
-            String processId = config
-                .getRequiredString(ConfigConstants.ATTR_DEFAULT_PROCESSID);
-            boolean clustersOnly = config
-                .getRequiredBoolean(ConfigConstants.ATTR_CLUSTERS_ONLY);
-            String outputProcessName = config
-                .getRequiredString(ConfigConstants.ATTR_OUTPUT_FORMAT);
-
+            final Map processingDefaults = config.getProcessingDefaults();
+            final HashMap overrides = new HashMap(processingDefaults);
             for (Iterator i = items.iterator(); i.hasNext();)
             {
                 final FileItem item = (FileItem) i.next();
                 if ("c2stream".equals(item.getFieldName()))
                 {
+                    final String processId = (String) overrides.get(ProcessingOptionNames.ATTR_PROCESSID);
                     if (!this.context.getController().getProcessIds().contains(processId))
                     {
                         response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-                            "No such algorithm: " + processId);
+                            "No such process: " + processId + " (available processes: "
+                            + StringUtils.toString(this.context.getProcessIds(), ", "));
                         break;
                     }
 
                     // Run the query.
                     final InputStream inputStream = item.getInputStream();
                     final OutputStream outputStream = response.getOutputStream();
-                    
-                    if (outputProcessName.equals(ControllerContext.RESULTS_TO_JSON))
-                    {
-                        response.setContentType("text/json");
-                    } else if (outputProcessName.equals(ControllerContext.RESULTS_TO_XML))
-                    {
-                        response.setContentType("text/xml");
-                    }
+
+                    final String outputFormat = (String) overrides.get(ProcessingOptionNames.ATTR_OUTPUT_FORMAT);
+                    response.setContentType(ControllerContext.getContentTypeFor(outputFormat));
 
                     try
                     {
                         ProcessingUtils.cluster(context.getController(), dcsLogger,
-                            inputStream, outputStream, processId, outputProcessName,
-                            clustersOnly);
+                            inputStream, outputStream, overrides);
                     }
                     catch (Throwable e)
                     {
@@ -170,49 +151,17 @@ public final class XMLProcessorServlet extends HttpServlet
 
                     return;
                 }
-                else if (ConfigConstants.ATTR_DEFAULT_PROCESSID.equals(item
-                    .getFieldName()))
-                {
-                    final String newValue = item.getString();
-                    if (!"".equals(newValue.trim()))
-                    {
-                        processId = newValue;
-                    }
-                }
-                else if (ConfigConstants.ATTR_CLUSTERS_ONLY.equals(item.getFieldName()))
-                {
-                    clustersOnly = Boolean.valueOf(item.getString()).booleanValue();
-                    logger.debug("Clusters only switch (request): " + clustersOnly);
-                }
-                else if (ConfigConstants.ATTR_OUTPUT_FORMAT.equals(item.getFieldName()))
-                {
-                    final String outputFormatName = item.getString();
-                    if ("".equals(outputFormatName))
-                    {
-                        // Ignore.
-                    }
-                    else if ("xml".equals(outputFormatName))
-                    {
-                        outputProcessName = ControllerContext.RESULTS_TO_XML;
-                        logger.debug("Request output format set to " + outputFormatName);
-                    }
-                    else if ("json".equals(outputFormatName))
-                    {
-                        outputProcessName = ControllerContext.RESULTS_TO_JSON;
-                        logger.debug("Request output format set to " + outputFormatName);
-                    }
-                    else
-                    {
-                        response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-                            "Request format invalid: " + outputFormatName);
-                        return;
-                    }
-                }
                 else
                 {
-                    // skip this part.
+                    final String fieldName = item.getFieldName();
+                    final String fieldValue = item.getString();
+                    if (fieldValue != null && !"".equals(fieldValue)) 
+                    {
+                        overrides.put(fieldName, fieldValue);
+                    }
                 }
             }
+
             logger.info("Missing 'c2stream' request parameter.");
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;

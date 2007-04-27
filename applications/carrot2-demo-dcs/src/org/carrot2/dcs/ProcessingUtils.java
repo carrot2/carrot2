@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -13,39 +12,61 @@
 
 package org.carrot2.dcs;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.carrot2.core.LocalController;
 import org.carrot2.core.LocalInputComponent;
-import org.carrot2.core.impl.ArrayInputComponent;
-import org.carrot2.core.impl.ArrayOutputComponent;
-import org.carrot2.core.impl.SaveFilterComponentBase;
-import org.carrot2.core.impl.XmlStreamInputComponent;
+import org.carrot2.core.clustering.RawCluster;
+import org.carrot2.core.clustering.RawDocument;
+import org.carrot2.core.impl.*;
 import org.carrot2.util.PerformanceLogger;
 import org.carrot2.util.StringUtils;
 
 /**
- * Utilities for processing requests and C2 data streams.
+ * Utility method for processing Carrot2 XML through a sequence of three processes:
+ * <ul>
+ * <li>conversion of the XML to an in-memory array of {@link RawDocument}s,</li>
+ * <li>actual processing of the {@link RawDocument}s using the selected algorithm,
+ * collecting {@link RawCluster}s in the output,
+ * <li>
+ * <li>conversion of {@link RawDocument}s and {@link RawCluster}s to the output format
+ * (XML, JSON, possibly other).</li>
+ * </ul>
  */
-public class ProcessingUtils
+public final class ProcessingUtils
 {
+    /**
+     * No instances of this class.
+     */
     private ProcessingUtils()
     {
         // no instances.
     }
 
     /**
-     * Run clustering for input files.
+     * Runs clustering for the input stream, redirecting the output to the output stream.
      */
-    public static void cluster(LocalController controller, Logger logger, InputStream inputXML, OutputStream outputXML,
-        String processName, String outputProcessName, boolean clustersOnly) throws Exception
+    public static void cluster(LocalController controller, Logger logger,
+        InputStream inputXML, OutputStream outputXML, Map processingOptions) throws Exception
     {
+        final String processName = (String) processingOptions.get(
+            ProcessingOptionNames.ATTR_PROCESSID);
+
+        final String outputProcessName = ControllerContext.getOutputProcessId(
+            (String) processingOptions.get(ProcessingOptionNames.ATTR_OUTPUT_FORMAT));
+
+        boolean saveDocuments = true;
+        final String clustersOnly = (String) processingOptions.get(
+            ProcessingOptionNames.ATTR_CLUSTERS_ONLY);
+        if (clustersOnly != null && Boolean.valueOf(clustersOnly).booleanValue())
+        {
+            saveDocuments = false;
+        }
+
+        
         final PerformanceLogger plogger = new PerformanceLogger(Level.DEBUG, logger);
         ArrayOutputComponent.Result result;
         try
@@ -56,41 +77,48 @@ public class ProcessingUtils
             plogger.start("Reading XML");
             final HashMap requestProperties = new HashMap();
             requestProperties.put(XmlStreamInputComponent.XML_STREAM, inputXML);
-            result = (ArrayOutputComponent.Result) controller.query(ControllerContext.STREAM_TO_RAWDOCS, "n/a",
-                requestProperties).getQueryResult();
+            result = (ArrayOutputComponent.Result) controller.query(
+                ControllerContext.STREAM_TO_RAWDOCS, "n/a", requestProperties)
+                .getQueryResult();
 
             final List documents = result.documents;
-            final String query = (String) requestProperties.get(LocalInputComponent.PARAM_QUERY);
+            final String query = (String) requestProperties
+                .get(LocalInputComponent.PARAM_QUERY);
             plogger.end(); // Reading XML
 
             // Phase 2 -- cluster documents
             plogger.start("Clustering");
-
             requestProperties.clear();
-            requestProperties.put(ArrayInputComponent.PARAM_SOURCE_RAW_DOCUMENTS, documents);
-            requestProperties.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, Integer.toString(documents.size()));
+            requestProperties.put(ArrayInputComponent.PARAM_SOURCE_RAW_DOCUMENTS,
+                documents);
+            requestProperties.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, Integer
+                .toString(documents.size()));
 
-            result = (ArrayOutputComponent.Result) controller.query(processName, query, requestProperties)
-                .getQueryResult();
+            result = (ArrayOutputComponent.Result) controller.query(processName, query,
+                requestProperties).getQueryResult();
             final List clusters = result.clusters;
-
             plogger.end(); // Clustering
 
             // Phase 3 -- save the result or emit it somehow.
             plogger.start("Saving result");
-
             requestProperties.clear();
-            requestProperties.put(ArrayInputComponent.PARAM_SOURCE_RAW_DOCUMENTS, documents);
-            requestProperties.put(ArrayInputComponent.PARAM_SOURCE_RAW_CLUSTERS, clusters);
-            requestProperties.put(SaveFilterComponentBase.PARAM_OUTPUT_STREAM, outputXML);
-            requestProperties.put(SaveFilterComponentBase.PARAM_SAVE_CLUSTERS, Boolean.TRUE);
-            requestProperties.put(SaveFilterComponentBase.PARAM_SAVE_DOCUMENTS, new Boolean(!clustersOnly));
-
+            requestProperties.put(
+                ArrayInputComponent.PARAM_SOURCE_RAW_DOCUMENTS,
+                documents);
+            requestProperties.put(
+                ArrayInputComponent.PARAM_SOURCE_RAW_CLUSTERS, clusters);
+            requestProperties.put(SaveFilterComponentBase.PARAM_OUTPUT_STREAM, 
+                outputXML);
+            requestProperties.put(SaveFilterComponentBase.PARAM_SAVE_CLUSTERS,
+                Boolean.TRUE);
+            requestProperties.put(SaveFilterComponentBase.PARAM_SAVE_DOCUMENTS, 
+                Boolean.valueOf(saveDocuments));
             controller.query(outputProcessName, query, requestProperties);
-            
             plogger.end(); // Saving result
 
-            plogger.end(Level.INFO, "algorithm: " + processName + ", documents: " + documents.size() + ", query: " + query);
+            // Finish processing with a logging message.
+            plogger.end(Level.INFO, "algorithm: " + processName + ", documents: "
+                + documents.size() + ", query: " + query);
         }
         catch (IOException e)
         {

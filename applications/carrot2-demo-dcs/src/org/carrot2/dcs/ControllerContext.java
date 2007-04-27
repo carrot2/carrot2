@@ -14,12 +14,14 @@
 package org.carrot2.dcs;
 
 import java.io.*;
+import java.util.*;
 
 import org.apache.log4j.Logger;
 import org.carrot2.core.*;
 import org.carrot2.core.controller.*;
 import org.carrot2.core.controller.loaders.ComponentInitializationException;
-import org.carrot2.core.impl.*;
+import org.carrot2.core.impl.ArrayInputComponent;
+import org.carrot2.core.impl.ArrayOutputComponent;
 import org.carrot2.util.StringUtils;
 
 /**
@@ -46,6 +48,29 @@ public class ControllerContext
      * Name of a synthetic process for saving the results (clusters, documents) to a JSON stream.
      */
     public static final String RESULTS_TO_JSON = ".internal.results-to-json";
+
+    /**
+     * A map of short abbreviated names of output formats to output process' identifiers.
+     */
+    private static Map OUTPUT_SHORT_TO_PROCESS;
+
+    /**
+     * A map of short abbreviated names of output formats to MIME content type identifiers.
+     */
+    private static Map OUTPUT_SHORT_TO_CONTENTTYPE;
+    
+    /*
+     * Initialize static maps. 
+     */
+    static {
+        OUTPUT_SHORT_TO_PROCESS = new HashMap();
+        OUTPUT_SHORT_TO_PROCESS.put("xml", RESULTS_TO_XML);
+        OUTPUT_SHORT_TO_PROCESS.put("json", RESULTS_TO_JSON);
+        
+        OUTPUT_SHORT_TO_CONTENTTYPE = new HashMap();
+        OUTPUT_SHORT_TO_CONTENTTYPE.put("xml", "text/xml");
+        OUTPUT_SHORT_TO_CONTENTTYPE.put("json", "text/json");
+    }
 
     /** 
      * Local Carrot2 controller.
@@ -219,5 +244,50 @@ public class ControllerContext
     public LocalController getController()
     {
         return this.controller;
+    }
+
+    /**
+     * Returns the identifier of a process for its abbreviated name.
+     * 
+     * @see #OUTPUT_SHORT_TO_PROCESS
+     */
+    public static String getOutputProcessId(String abbreviated)
+    {
+        final String processId = (String) OUTPUT_SHORT_TO_PROCESS.get(abbreviated);
+        if (processId == null)
+        {
+            throw new IllegalArgumentException("An abbreviation for an unknown process: " + abbreviated);
+        }
+        return processId;
+    }
+
+    /**
+     * Returns the content type for the selected output format.
+     */
+    public static String getContentTypeFor(String abbreviated)
+    {
+        final String contentType = (String) OUTPUT_SHORT_TO_CONTENTTYPE.get(abbreviated);
+        if (contentType == null)
+        {
+            throw new IllegalArgumentException("An abbreviation for an unknown process: " + abbreviated);
+        }
+        return contentType;
+    }
+
+    /**
+     * Returns a list of process identifiers (filtered from internal processes).
+     */
+    public List getProcessIds()
+    {
+        final ArrayList list = new ArrayList(getController().getProcessIds());
+        for (Iterator i = list.iterator(); i.hasNext();)
+        {
+            final String processId = (String) i.next();
+            if (processId.startsWith("."))
+            {
+                i.remove();
+            }
+        }
+        return list;
     }
 }
