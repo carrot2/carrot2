@@ -139,12 +139,16 @@ public final class Example {
             final LocalController controller = initLocalController();
 
             /*
-             * Once we have a controller we can run queries. Let's try with
-             * "data mining" query. The result object is a generic 
-             * ProcessingResult from which we acquire the actual result stored by
-             * {@link ArrayOutputComponent}. 
+             * Once we have a controller we can run queries. Let's try with "data mining"
+             * query. The result object is a generic ProcessingResult from which we
+             * acquire the actual result stored by {@link ArrayOutputComponent}. You can
+             * provide additional parameters (e.g. the number of results to fetch from the
+             * source) through the Map below.
              */
-            final ProcessingResult pResult = controller.query("yahoo-lingo", "data mining", new HashMap());
+            final Map parameters = new HashMap();
+            parameters.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, "150");
+            
+            final ProcessingResult pResult = controller.query("yahoo-lingo", "data mining", parameters);
             final ArrayOutputComponent.Result result = (ArrayOutputComponent.Result) pResult.getQueryResult();
 
             /*
