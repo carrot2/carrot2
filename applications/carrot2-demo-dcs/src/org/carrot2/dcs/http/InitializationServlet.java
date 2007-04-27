@@ -56,16 +56,20 @@ public final class InitializationServlet extends HttpServlet
         final HashMap processingOptions = new HashMap();
 
         // Initialize console logger (hardcoded prefix).
-        final Logger dcsLogger = Logger.getLogger("dcs-webapp");
+        final Logger dcsLogger = Logger.getLogger("dcs");
 
         // Initialize controller context.
+        dcsLogger.info("Initializing context based on values from web.xml.");
         final ControllerContext context = initializeControllerContext(dcsLogger);
 
         // Initialize default process. If not found, try the first available process.
+        dcsLogger.debug("Initializing default process.");
         processingOptions.put(
             ProcessingOptionNames.ATTR_PROCESSID, 
             initializeDefaultProcess(context, dcsLogger));
 
+        // Initialize default process. If not found, try the first available process.
+        dcsLogger.debug("Initializing other processing options.");
         // Initialize other options.
         for (Enumeration e = getInitParameterNames(); e.hasMoreElements();)
         {
@@ -75,12 +79,15 @@ public final class InitializationServlet extends HttpServlet
                 continue;
             }
 
+            dcsLogger.debug("Adding processing option: " + paramName + "=" + getInitParameter(paramName));
             processingOptions.put(paramName, getInitParameter(paramName));
         }
 
         final ServletContext servletContext = getServletContext();
         servletContext.setAttribute(InitializationServlet.ATTR_APPCONFIG, 
             new AppConfig(context, dcsLogger, processingOptions));
+        
+        dcsLogger.info("Initialization complete.");
     }
 
     /**
@@ -89,8 +96,31 @@ public final class InitializationServlet extends HttpServlet
     private ControllerContext initializeControllerContext(Logger dcsLogger)
         throws ServletException
     {
+        final String PARAM_NAME = "dcs.descriptors-dir";
+        final String dPath = getInitParameter(PARAM_NAME);
+        if (dPath == null)
+        {
+            final String message = "Required attribute '" 
+                + PARAM_NAME + "' is not properly initialized.";
+            dcsLogger.fatal(message);
+            throw new ServletException(message);
+        }
+
+        File descriptorsDir = new File(getServletContext().getRealPath(dPath));
+        if (!descriptorsDir.isDirectory())
+        {
+            // Try absolute path.
+            descriptorsDir = new File(dPath);
+            if (!descriptorsDir.isAbsolute() || !descriptorsDir.isDirectory())
+            {
+                final String message = "Required attribute '" 
+                    + PARAM_NAME + "' does not point to a directory.";
+                dcsLogger.fatal(message);
+                throw new ServletException(message);
+            }
+        }
+
         final ControllerContext context = new ControllerContext();
-        final File descriptorsDir = new File(getServletContext().getRealPath("algorithms"));
         if (descriptorsDir.exists() && !descriptorsDir.isDirectory())
         {
             final String message = "Components directory not found: " + descriptorsDir.getAbsolutePath();
