@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -18,16 +17,22 @@ import java.io.File;
 import org.apache.commons.cli.*;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.carrot2.dcs.cli.BatchApp;
+import org.carrot2.dcs.http.DCSApp;
+import org.carrot2.util.StringUtils;
 
 /**
  * A base for command-line invoked applications.
+ * 
+ * @see BatchApp
+ * @see DCSApp
  */
 public abstract class AppBase
 {
     /**
      * Logger for the application.
      */
-    protected final Logger logger;
+    private final Logger logger;
 
     /** Command line options. */
     protected final Options cliOptions = new Options();
@@ -35,9 +40,6 @@ public abstract class AppBase
     /** Application name. */
     private final String appName;
 
-    /** Application configuration. */
-    protected final Config config = new Config();
-    
     /**
      * Initializing constructor.
      * 
@@ -67,11 +69,23 @@ public abstract class AppBase
         try
         {
             line = parser.parse(cliOptions, args);
-            go(line);
+            try
+            {
+                go(line);
+            }
+            catch (ConfigurationException e)
+            {
+                getLogger().fatal(StringUtils.chainExceptionMessages(e));
+            }
+            catch (Throwable e)
+            {
+                getLogger().fatal("Unhandled program error occurred.", e);
+            }
         }
         catch (MissingArgumentException e)
         {
-            logger.log(Level.FATAL, "Provide the required argument for option " + e.getMessage());
+            logger.log(Level.FATAL, "Provide the required argument for option "
+                + e.getMessage());
             printUsage();
         }
         catch (MissingOptionException e)
@@ -95,23 +109,30 @@ public abstract class AppBase
      * Initializes the processing context.
      * 
      * @param descriptorsDir A directory with definitions of processes and descriptors.
-     * @throws Exception if the configuration fails for some reason.
+     * @throws ConfigurationException if the configuration fails for some reason.
      */
-    protected ControllerContext initializeContext(File descriptorsDir) throws Exception
+    protected ControllerContext initializeContext(File descriptorsDir) throws ConfigurationException
     {
         logger.info("Initializing components.");
 
-        final ControllerContext context = new ControllerContext();
-
-        if (descriptorsDir.exists() && !descriptorsDir.isDirectory())
-        {
-            throw new Exception("Components directory not found: " + descriptorsDir.getAbsolutePath());
+        try {
+            final ControllerContext context = new ControllerContext();
+    
+            if (descriptorsDir.exists() && !descriptorsDir.isDirectory())
+            {
+                throw new Exception("Components directory not found: "
+                    + descriptorsDir.getAbsolutePath());
+            }
+    
+            context.initialize(descriptorsDir, logger);
+    
+            logger.info("Finished initializing components.");
+            return context;
         }
-
-        context.initialize(descriptorsDir, logger);
-
-        logger.info("Finished initializing components.");
-        return context;
+        catch (Exception e)
+        {
+            throw new ConfigurationException("Could not initialize clustering algorithms. Inspect log files.", e);
+        }
     }
 
     /**
@@ -119,14 +140,14 @@ public abstract class AppBase
      */
     protected void printUsage()
     {
-        HelpFormatter formatter = new HelpFormatter();
+        final HelpFormatter formatter = new HelpFormatter();
         formatter.printHelp(getCommandName(), cliOptions, true);
     }
 
     /**
      * Override and write your stuff using command line options.
      */
-    protected abstract void go(CommandLine line);
+    protected abstract void go(CommandLine line) throws Exception;
 
     /**
      * Override and initialize options.
@@ -149,20 +170,5 @@ public abstract class AppBase
     protected final Logger getLogger()
     {
         return logger;
-    }
-
-    /**
-     * Get an option, if defined, or return the default value.
-     */
-    protected final Object getOption(CommandLine options, String optionName, Object defaultValue)
-    {
-        if (options.hasOption(optionName))
-        {
-            return options.getOptionObject(optionName);
-        }
-        else
-        {
-            return defaultValue;
-        }
     }
 }
