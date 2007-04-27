@@ -13,20 +13,17 @@
 
 package org.carrot2.apiexample;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
+import java.io.*;
+import java.util.*;
 
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Searcher;
+import org.apache.lucene.analysis.*;
+import org.apache.lucene.analysis.standard.*;
+import org.apache.lucene.index.*;
+import org.apache.lucene.search.*;
 import org.carrot2.core.*;
-import org.carrot2.core.impl.ArrayOutputComponent;
-import org.carrot2.filter.lingo.local.LingoLocalFilterComponent;
-import org.carrot2.input.lucene.LuceneLocalInputComponent;
-import org.carrot2.input.lucene.LuceneSearchConfig;
+import org.carrot2.core.impl.*;
+import org.carrot2.filter.lingo.local.*;
+import org.carrot2.input.lucene.*;
 
 /**
  * <p>This is an example of using the Carrot<sup>2</sup> API to cluster
@@ -96,7 +93,15 @@ public final class LuceneExample {
              * to something that is relevant to the data in your index.
              */
             final String query = "your query";
-            final ProcessingResult pResult = controller.query("lucene-lingo", query, new HashMap());
+            
+            /*
+             * You can provide additional parameters (e.g. the number of results
+             * to fetch from the source) through the Map below.
+             */
+            final Map parameters = new HashMap();
+            parameters.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, "150");
+            
+            final ProcessingResult pResult = controller.query("lucene-lingo", query, parameters);
             final ArrayOutputComponent.Result result = (ArrayOutputComponent.Result) pResult.getQueryResult();
 
             /*
