@@ -8,20 +8,28 @@
         <servlet-name>InitializationServlet</servlet-name>
         <servlet-class>org.carrot2.dcs.http.InitializationServlet</servlet-class>
 
-        <!-- Uncomment to select specific default algorithm.
+		<!-- A web-application-relative path to the process and component descriptors
+		folder.
+		-->
+        <init-param>
+        	<param-name>dcs.descriptors-dir</param-name>
+        	<param-value>/descriptors</param-value>
+       	</init-param>
+
+        <!-- Uncomment to select specific default algorithm. By default the first
+        available algorithm is taken.
         <init-param>
         	<param-name>dcs.default.algorithm</param-name>
         	<param-value>(process-id)</param-value>
        	</init-param>
         -->
-        
-        <!-- Uncomment to skip mirroring input documents in the result (result will
-			contain just the clusters).
+
+        <!-- Enable to mirror input documents in the result (result will
+			contain just the clusters). -->
         <init-param>
         	<param-name>dcs.clusters.only</param-name>
-        	<param-value>true</param-value>
+        	<param-value>false</param-value>
        	</init-param>
-        -->
 
 		<!-- This parameter controls the default output format of clustered results.
 		Choose among the following options:
@@ -29,7 +37,7 @@
 		  - xml    XML output format.
 		-->
         <init-param>
-        	<param-name>dcs.output</param-name>
+        	<param-name>dcs.default.output</param-name>
         	<param-value>xml</param-value>
        	</init-param>
        	

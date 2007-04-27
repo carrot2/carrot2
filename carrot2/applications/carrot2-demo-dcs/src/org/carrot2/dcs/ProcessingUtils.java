@@ -55,8 +55,10 @@ public final class ProcessingUtils
         final String processName = (String) processingOptions.get(
             ProcessingOptionNames.ATTR_PROCESSID);
 
+        final String outputFormat = (String) processingOptions.get(
+            ProcessingOptionNames.ATTR_OUTPUT_FORMAT); 
         final String outputProcessName = ControllerContext.getOutputProcessId(
-            (String) processingOptions.get(ProcessingOptionNames.ATTR_OUTPUT_FORMAT));
+            outputFormat);
 
         boolean saveDocuments = true;
         final String clustersOnly = (String) processingOptions.get(
@@ -118,7 +120,7 @@ public final class ProcessingUtils
 
             // Finish processing with a logging message.
             plogger.end(Level.INFO, "algorithm: " + processName + ", documents: "
-                + documents.size() + ", query: " + query);
+                + documents.size() + ", query: " + query + ", output: " + outputFormat);
         }
         catch (IOException e)
         {
