@@ -10,6 +10,13 @@ version 1.4.2 or newer. JRE can be downloaded free of charge from:
 http://java.sun.com/javase/downloads/index.jsp
 
 
+Building
+--------
+
+To build the DCS, run: ant dist. You will find the assembled applications
+in the tmp/dist/web directory.
+
+
 Applications
 ------------
 
@@ -32,6 +39,10 @@ Format for the input data is the following:
         ...
     </document>
 </searchresult>
+
+For a description of the batch application switches, run the script
+(batch.cmd, batch.sh) without parameters.
+
 
 2) dcs
 
