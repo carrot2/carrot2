@@ -54,7 +54,6 @@ public class ProcessingUtils
 
             // Phase 1 -- read the XML
             plogger.start("Reading XML");
-
             final HashMap requestProperties = new HashMap();
             requestProperties.put(XmlStreamInputComponent.XML_STREAM, inputXML);
             result = (ArrayOutputComponent.Result) controller.query(ControllerContext.STREAM_TO_RAWDOCS, "n/a",
@@ -62,8 +61,7 @@ public class ProcessingUtils
 
             final List documents = result.documents;
             final String query = (String) requestProperties.get(LocalInputComponent.PARAM_QUERY);
-
-            plogger.end();
+            plogger.end(); // Reading XML
 
             // Phase 2 -- cluster documents
             plogger.start("Clustering");
@@ -76,7 +74,7 @@ public class ProcessingUtils
                 .getQueryResult();
             final List clusters = result.clusters;
 
-            plogger.end();
+            plogger.end(); // Clustering
 
             // Phase 3 -- save the result or emit it somehow.
             plogger.start("Saving result");
@@ -90,7 +88,7 @@ public class ProcessingUtils
 
             controller.query(outputProcessName, query, requestProperties);
             
-            plogger.end();
+            plogger.end(); // Saving result
 
             plogger.end(Level.INFO, "algorithm: " + processName + ", documents: " + documents.size() + ", query: " + query);
         }
