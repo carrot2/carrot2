@@ -30,8 +30,7 @@ import org.carrot2.util.StringUtils;
  * <ul>
  * <li>conversion of the XML to an in-memory array of {@link RawDocument}s,</li>
  * <li>actual processing of the {@link RawDocument}s using the selected algorithm,
- * collecting {@link RawCluster}s in the output,
- * <li>
+ * collecting {@link RawCluster}s in the output,<li>
  * <li>conversion of {@link RawDocument}s and {@link RawCluster}s to the output format
  * (XML, JSON, possibly other).</li>
  * </ul>
@@ -49,8 +48,8 @@ public final class ProcessingUtils
     /**
      * Runs clustering for the input stream, redirecting the output to the output stream.
      */
-    public static void cluster(LocalController controller, Logger logger,
-        InputStream inputXML, OutputStream outputXML, Map processingOptions) throws Exception
+    public static ArrayOutputComponent.Result cluster(LocalController controller, Logger logger,
+        InputStream inputXML, OutputStream outputStream, Map processingOptions) throws Exception
     {
         final String processName = (String) processingOptions.get(
             ProcessingOptionNames.ATTR_PROCESSID);
@@ -101,6 +100,12 @@ public final class ProcessingUtils
             final List clusters = result.clusters;
             plogger.end(); // Clustering
 
+            // Skip serialization if output stream is not given.
+            if (outputStream == null)
+            {
+                return result;
+            }
+
             // Phase 3 -- save the result or emit it somehow.
             plogger.start("Saving result");
             requestProperties.clear();
@@ -110,22 +115,27 @@ public final class ProcessingUtils
             requestProperties.put(
                 ArrayInputComponent.PARAM_SOURCE_RAW_CLUSTERS, clusters);
             requestProperties.put(SaveFilterComponentBase.PARAM_OUTPUT_STREAM, 
-                outputXML);
+                outputStream);
             requestProperties.put(SaveFilterComponentBase.PARAM_SAVE_CLUSTERS,
                 Boolean.TRUE);
             requestProperties.put(SaveFilterComponentBase.PARAM_SAVE_DOCUMENTS, 
                 Boolean.valueOf(saveDocuments));
-            controller.query(outputProcessName, query, requestProperties);
+            result = (ArrayOutputComponent.Result) controller.query(outputProcessName, 
+                query, requestProperties).getQueryResult();
             plogger.end(); // Saving result
 
             // Finish processing with a logging message.
             plogger.end(Level.INFO, "algorithm: " + processName + ", documents: "
                 + documents.size() + ", query: " + query + ", output: " + outputFormat);
+
+            return result;
         }
         catch (IOException e)
         {
             logger.warn("Processing failed: " + StringUtils.chainExceptionMessages(e));
             logger.debug("Processing failed (full stack): ", e);
+
+            return null;
         }
         finally
         {
