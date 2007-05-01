@@ -1,6 +1,13 @@
 Carrot2 Document Clustering Server
 ----------------------------------
 
+The Carrot2 Document Clustering Server (DCS) exposes Carrot2 clustering as an
+HTTP/REST service. Essentially, you make an HTTP/POST request with an XML
+containing the documents you want to have clustered and the DCS responds with
+an XML containing the clusters created by Carrot2. For quick integration with
+Ruby, A JSON output format is also available. Finally, for batch processing, a
+simple command-line application is provided.
+
 Requirements
 ------------
 
