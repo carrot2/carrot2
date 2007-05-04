@@ -141,6 +141,35 @@ public class ArrayUtils
         return index;
     }
     
+    /**
+     * Return index of the first maxiumum element in <code>a</code>. If
+     * <code>a</code> is null of has length 0, -1 will be returned.
+     * 
+     * @param a
+     * @return index of the first maxiumum element in <code>a</code> or -1
+     */
+    public static int max(int [] a)
+    {
+        if (a == null || a.length == 0)
+        {
+            return -1;
+        }
+        
+        double max = a[0];
+        int index = 0;
+        
+        for (int i = 1; i < a.length; i++)
+        {
+            if (max < a[i])
+            {
+                max = a[i];
+                index = i;
+            }
+        }
+        
+        return index;
+    }
+    
     public static String toString(Object [] array, String delimiter)
     {
         StringBuffer sb = new StringBuffer();
