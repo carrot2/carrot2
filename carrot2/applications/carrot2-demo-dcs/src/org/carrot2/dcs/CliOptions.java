@@ -185,7 +185,8 @@ public final class CliOptions
         final String avString = "The following " + "processes are available: "
             + StringUtils.toString(context.getProcessIds(), ", ");
 
-        final String processId = (String) CliOptions.getOption(options, processName, null);
+        final String processId = (String) CliOptions.getOption(options, processName,
+            context.getDefaultProcessId());
         
         if (processId == null)
         {

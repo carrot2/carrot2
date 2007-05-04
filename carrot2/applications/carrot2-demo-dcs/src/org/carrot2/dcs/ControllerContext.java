@@ -59,6 +59,11 @@ public class ControllerContext
      */
     private static Map OUTPUT_SHORT_TO_CONTENTTYPE;
     
+    /**
+     * Identifier of the default clustering algorithm
+     */
+    private String defaultProcessId = null;
+    
     /*
      * Initialize static maps. 
      */
@@ -145,19 +150,42 @@ public class ControllerContext
             final LoadedProcess [] loadedProcesses = cl.loadProcessesFromDir(descriptorsDir, processFilter);
             for (int i = 0; i < loadedProcesses.length; i++)
             {
-                final String processName = loadedProcesses[i].getId();
+                final String processId = loadedProcesses[i].getId();
+
+                Object processDefaultAttribute = loadedProcesses[i].getAttributes().get(
+                    LoadedProcess.ATTRIBUTE_PROCESS_DEFAULT);
+                if (defaultProcessId == null && processDefaultAttribute != null
+                    && "true".equalsIgnoreCase(processDefaultAttribute.toString()))
+                {
+                    defaultProcessId = processId;
+                    infoLogger.info("Setting the context-level default process id to: "
+                        + defaultProcessId);
+                    logger.info("Setting the context-level default process id to: "
+                        + defaultProcessId);
+                }
+
                 try
                 {
-                    controller.addProcess(loadedProcesses[i].getId(), loadedProcesses[i].getProcess());
-                    logger.debug("Loaded algorithm: " + processName);
-                    infoLogger.info("Loaded algorithm: " + processName);
+                    controller.addProcess(loadedProcesses[i].getId(), loadedProcesses[i]
+                        .getProcess());
+                    logger.debug("Loaded algorithm: " + processId);
+                    infoLogger.info("Loaded algorithm: " + processId);
                 }
                 catch (Exception e)
                 {
-                    logger.warn("Error loading algorithm: " + processName, e);
-                    infoLogger.warn("Error loading algorithm: " + processName + " ("
+                    logger.warn("Error loading algorithm: " + processId, e);
+                    infoLogger.warn("Error loading algorithm: " + processId + " ("
                         + StringUtils.chainExceptionMessages(e) + ")");
                 }
+            }
+            
+            if (defaultProcessId == null && loadedProcesses.length > 0)
+            {
+                defaultProcessId = loadedProcesses[0].getId();
+                infoLogger.info("Setting the context-level default process id "
+                    + "to the first on the list: " + defaultProcessId);
+                logger.info("Setting the context-level default process id "
+                    + "to the first on the list: " + defaultProcessId);
             }
         }
         catch (IOException e)
@@ -246,6 +274,16 @@ public class ControllerContext
         return this.controller;
     }
 
+    /**
+     * Returns the default process id or <code>null</code> if none of the processes
+     * had the <code>process.default</code> attribute set to <code>true</code>.
+     * 
+     * @return
+     */
+    public String getDefaultProcessId() {
+        return defaultProcessId;
+    }
+    
     /**
      * Returns the identifier of a process for its abbreviated name.
      * 
