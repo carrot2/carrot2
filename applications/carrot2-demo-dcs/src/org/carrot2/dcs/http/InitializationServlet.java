@@ -128,6 +128,16 @@ public final class InitializationServlet extends HttpServlet
             throw new ServletException(message);
         }
         context.initialize(descriptorsDir, dcsLogger);
+        
+        // Check if there is at least one process
+        final List processIds = context.getProcessIds();
+        if (processIds.size() == 0)
+        {
+            final String message = "No algorithms available.";
+            dcsLogger.error(message);
+            throw new ServletException(message);
+        }
+        
         return context;
     }
 
@@ -140,23 +150,13 @@ public final class InitializationServlet extends HttpServlet
         String processId = getInitParameter(ProcessingOptionNames.ATTR_PROCESSID);
         if (processId == null)
         {
-            dcsLogger.warn("No " + ProcessingOptionNames.ATTR_PROCESSID 
-                + " init parameter specified. Taking the first available algorithm.");
-
-            final List processIds = context.getProcessIds();
-            if (processIds.size() == 0)
-            {
-                final String message = "No algorithms available.";
-                dcsLogger.error(message);
-                throw new ServletException(message);
-            }
-            else
-            {
-                processId = (String) processIds.get(0);
-            }
+            processId = context.getDefaultProcessId();
+            dcsLogger.warn("No " + ProcessingOptionNames.ATTR_PROCESSID
+                + " init parameter specified. Taking the context-level default: "
+                + processId);
         }
         dcsLogger.debug("Default algorithm set to: " + processId);
-        
+
         return processId;
     }
 }

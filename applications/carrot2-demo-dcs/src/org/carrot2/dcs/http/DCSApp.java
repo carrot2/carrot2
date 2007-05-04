@@ -123,7 +123,7 @@ public final class DCSApp extends AppBase
         server.addContext(context);
 
         // Pass controller context as a global application attribute.
-        // context.setAttribute(InitializationServlet.ATTR_APPCONFIG, config);
+        context.setAttribute(InitializationServlet.ATTR_APPCONFIG, config);
 
         // Start the http server
         server.start();
