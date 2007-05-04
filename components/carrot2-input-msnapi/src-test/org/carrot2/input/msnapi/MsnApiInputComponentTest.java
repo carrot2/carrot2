@@ -63,14 +63,14 @@ public class MsnApiInputComponentTest extends junit.framework.TestCase
         // the results should contain some documents.
         assertTrue("Results: " + results.size(), 
             /* Allow certain inconsistencies -- MSN sometimes returns fewer results than requested. */
-            results.size() >= 190 && results.size() <= 200);
+            results.size() >= 170 && results.size() <= 200);
     }
 
     public void testDawidWeissQuery() throws Exception
     {
         String query = "Stanislaw Osinski";
         final HashMap reqContext = new HashMap();
-        reqContext.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, new Integer(100));
+        reqContext.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, new Integer(150));
 
         final long start = System.currentTimeMillis();
         List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, reqContext)
@@ -81,7 +81,7 @@ public class MsnApiInputComponentTest extends junit.framework.TestCase
         // the results should contain some documents.
         assertTrue("Results: " + results.size(),
             /* Allow certain inconsistencies -- MSN sometimes returns fewer results than requested. */
-            results.size() >= 90 && results.size() <= 100);
+            results.size() >= 120 && results.size() <= 150);
     }
 
     public void testMediumQuery() throws Exception
