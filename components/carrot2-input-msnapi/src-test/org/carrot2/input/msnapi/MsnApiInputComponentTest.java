@@ -45,7 +45,7 @@ public class MsnApiInputComponentTest extends junit.framework.TestCase {
     }
 
     public void testDawidWeissQuery() throws Exception {
-        String query = "Dawid Weiss";
+        String query = "Stanislaw Osinski";
 
         final long start = System.currentTimeMillis();
         List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, new HashMap()).getQueryResult()).documents;
