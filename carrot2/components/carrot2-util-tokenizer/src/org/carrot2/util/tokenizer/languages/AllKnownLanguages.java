@@ -43,6 +43,7 @@ public class AllKnownLanguages
      * them dynamically to avoid errors if some of them are not available.
      */
     final static String [] languageClasses = new String [] {
+        "org.carrot2.util.tokenizer.languages.chinese.Chinese",
         "org.carrot2.util.tokenizer.languages.dutch.Dutch",
         "org.carrot2.util.tokenizer.languages.english.English",
         "org.carrot2.util.tokenizer.languages.french.French",
