@@ -50,7 +50,7 @@ public class YahooApiInputComponentTest extends junit.framework.TestCase {
                 + ":" + results.size(), 100, results.size());
     }
 
-    public void testSiteQuery() throws Exception {
+    public void DISABLEDtestSiteQuery() throws Exception {
         final LocalComponentFactory inputFactory = new LocalComponentFactory() {
             public LocalComponent getInstance() {
                 return new YahooApiInputComponent();
@@ -58,12 +58,32 @@ public class YahooApiInputComponentTest extends junit.framework.TestCase {
         };
 
         LocalControllerBase controller = setUpController(inputFactory);
+        String query = "koelle bmw site:handelsblatt.de";
+        final long start = System.currentTimeMillis();
+        HashMap params = new HashMap();
+        params.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, "400");
+        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, params).getQueryResult()).documents;
+        final long end = System.currentTimeMillis();
+        log.info("YahooAPI query time: " + (end - start) + " ms.");
+
+        // the results should contain some documents.
+        assertTrue("Results acquired from Yahoo" + ":" + results.size(), results.size() == 1);
+    }
+    
+    public void testWeissQuery() throws Exception {
+        final LocalComponentFactory inputFactory = new LocalComponentFactory() {
+            public LocalComponent getInstance() {
+                return new YahooApiInputComponent();
+            }
+        };
+        
+        LocalControllerBase controller = setUpController(inputFactory);
         String query = "weiss";
         final long start = System.currentTimeMillis();
         List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, new HashMap()).getQueryResult()).documents;
         final long end = System.currentTimeMillis();
         log.info("YahooAPI query time: " + (end - start) + " ms.");
-
+        
         // the results should contain some documents.
         assertTrue("Results acquired from Yahoo" + ":" + results.size(), results.size() > 0);
     }
