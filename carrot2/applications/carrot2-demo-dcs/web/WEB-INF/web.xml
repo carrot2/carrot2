@@ -45,8 +45,14 @@
     </servlet>
 
     <servlet>
-        <servlet-name>RestProcessor</servlet-name>
-        <servlet-class>org.carrot2.dcs.http.rest.XMLProcessorServlet</servlet-class>
+        <servlet-name>RESTProcessor</servlet-name>
+        <servlet-class>org.carrot2.dcs.http.rest.RESTProcessorServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>XMLRPCProcessor</servlet-name>
+        <servlet-class>org.carrot2.dcs.http.xmlrpc.XMLRPCProcessorServlet</servlet-class>
         <load-on-startup>2</load-on-startup>
     </servlet>
 
@@ -56,9 +62,16 @@
         <load-on-startup>2</load-on-startup>
     </servlet>
 
+    <!-- Map services to application URIs -->
+
     <servlet-mapping>
-        <servlet-name>RestProcessor</servlet-name>
+        <servlet-name>RESTProcessor</servlet-name>
         <url-pattern>/rest/processor</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>XMLRPCProcessor</servlet-name>
+        <url-pattern>/xmlrpc/processor</url-pattern>
     </servlet-mapping>
 
 	<!-- Protect scripts -->

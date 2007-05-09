@@ -4,7 +4,7 @@
     description="Carrot2 Document Clustering Server">
 
         <provides>
-                <files prefix="tmp/dist">
+                <files build-path-exclude="true" prefix="tmp/dist">
                         <file location="carrot2-demo-dcs.jar" />
                 </files>
                 <build>
@@ -29,6 +29,7 @@
         <dependency name="commons-logging" />
         <dependency name="commons-fileupload" />
         <dependency name="commons-cli" />
+        <dependency name="xmlrpc-2.0" />
         <dependency name="servlets-api" noexport="true" />
 
         <dependency name="junit" profile="test" />

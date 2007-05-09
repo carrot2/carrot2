@@ -39,7 +39,8 @@ Format for the input data is the following:
     <query>new york hotels</query>
     <document>
     	<title>NewYork.com</title>
-        <snippet>guide to New York City with links to hotels, attractions, shopping, restaurants, and more. NewYork.com also features local New York news, arts, and sports.</snippet>
+        <snippet>guide to New York City with links to hotels, attractions, shopping, restaurants, and more. NewYork.com 
+        also features local New York news, arts, and sports.</snippet>
     </document>
 
     <document>
@@ -54,14 +55,6 @@ For a description of the batch application switches, run the script
 2) dcs
 
 Starts the Document Clustering Server (DCS) on a given port. DCS
-provides the following access interfaces:
-
-    HTTP POST 
-
-    Clusters XML input data (in the same format as for the c2cli application)
-    provided in a HTTP POST request. Assuming that the DCS is running on
-    port 8080 at localhost, the HTTP POST service is available at
-    http://localhost:8080/rest. Please access this address with a browser for
-    an example HTML form showing how to post queries.
-
-
+provides several access interfaces, REST (XML over HTTP) and XML-RPC
+among them. When you start the Web dcs version, access it using
+a Web browser for a full description of available options.
