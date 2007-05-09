@@ -275,10 +275,8 @@ public class ControllerContext
     }
 
     /**
-     * Returns the default process id or <code>null</code> if none of the processes
+     * @return Returns the default process id or <code>null</code> if none of the processes
      * had the <code>process.default</code> attribute set to <code>true</code>.
-     * 
-     * @return
      */
     public String getDefaultProcessId() {
         return defaultProcessId;
