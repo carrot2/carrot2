@@ -16,76 +16,29 @@ import java.io.*;
 import java.util.*;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.log4j.Logger;
 import org.carrot2.dcs.*;
-import org.carrot2.dcs.http.InitializationServlet;
+import org.carrot2.dcs.http.AbstractProcessorServlet;
 import org.carrot2.util.StringUtils;
 
 /**
  * A servlet that parses HTTP POST input in Carrot<sup>2</sup> XML format, clusters it
  * and returns clusters.
  */
-public final class XMLProcessorServlet extends HttpServlet
+public final class RESTProcessorServlet extends AbstractProcessorServlet
 {
     /**
-     * Local logger.
-     */
-    private Logger logger = Logger.getLogger(XMLProcessorServlet.class);
-
-    /**
-     * DCS logger.
-     */
-    private Logger dcsLogger;
-
-    /**
-     * Controller context for processing requests.
-     */
-    private ControllerContext context;
-
-    /**
-     * Application configuration object.
-     */
-    private AppConfig config;
-
-    /**
-     * Indicates if the servlet was initialized properly.
-     */
-    private boolean initialized;
-
-    /**
-     * 
-     */
-    public void init() throws ServletException
-    {
-        super.init();
-
-        config = (AppConfig) getServletContext().getAttribute(
-            InitializationServlet.ATTR_APPCONFIG);
-        if (config == null)
-        {
-            final String message = "Expected an configuration object in the servlet context.";
-            logger.error(message);
-            return;
-        }
-
-        this.dcsLogger = config.getConsoleLogger();
-        this.context = config.getControllerContext();
-
-        initialized = true;
-    }
-
-    /**
-     * 
+     * Handle REST requests (HTTP POST with multipart/form-data content).
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException
     {
-        if (!initialized)
+        if (!isInitialized())
         {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                 "Initialization failed. Check the logs.");
