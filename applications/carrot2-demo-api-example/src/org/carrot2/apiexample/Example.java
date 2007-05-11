@@ -27,8 +27,6 @@ import org.carrot2.filter.lingo.local.LingoLocalFilterComponent;
 import org.carrot2.input.yahooapi.YahooApiInputComponent;
 import org.carrot2.util.tokenizer.languages.english.English;
 
-import sun.awt.ComponentFactory;
-
 /**
  * This is an example of using the Carrot<sup>2</sup> API and components
  * directly from a Java application. The walk-through starts 
@@ -252,7 +250,7 @@ public final class Example {
 
     /**
      * <p>In this method we collect components (or rather
-     * instances of {@link ComponentFactory} interface) and put together
+     * instances of {@link LocalComponentFactory} interface) and put together
      * a {@link LocalController}. A controller assembles processing
      * chains (components) for the execution of each query, controls the process of
      * its execution and in general is the heart of Carrot<sup>2</sup>
@@ -266,7 +264,7 @@ public final class Example {
      *  component so that we can display them later.</li>
      * </ul>
      * 
-     * <p>For each component, we must create a {@link ComponentFactory} and add it
+     * <p>For each component, we must create a {@link LocalComponentFactory} and add it
      * to the controller. Each factory, on the other hand, is identifier with a
      * string identifier. This identifier is reused later when you assemble a {@link LocalProcess}.</p>
      * 
