@@ -1,10 +1,8 @@
-<project name="Carrot2 Document Clustering Server" default="dist">
+<project name="Carrot2 Document Clustering Server" default="build">
 	<property file="${user.home}/.carrot.properties" />
 
 	<property name="carrot2.code.dir" location="../.." />
 	<property name="project.dir" location="${basedir}" />
-
-	<property name="distribution.dir" location="${project.dir}/tmp/dist" />
 
 	<property name="type" value="jartype" />
 	<property name="dist.name" value="carrot2-demo-dcs" />
@@ -12,16 +10,32 @@
 
 	<import file="${carrot2.code.dir}/components/common-targets.inc" />
 
-	<target name="dist">
+        <target name="build" depends="build.demo" />
+
+	<target name="build.demo">
+                <property name="distribution.dir" location="${project.dir}/tmp/dist" />
+	        <property name="profile" value="demo" />
+
+                <antcall target="build.internal" inheritall="true" />
+        </target>
+
+	<target name="build.stripped">
+                <property name="distribution.dir" location="${project.dir}/tmp/stripped" />
+	        <property name="profile" value="stripped" />
+
+                <antcall target="build.internal" inheritall="true" />
+        </target>
+
+	<target name="build.internal">
 		<property name="copy.dependencies" value="true" />
 		<property name="single.jar" value="false" />
 		<property name="libs.dir" location="${distribution.dir}/web/WEB-INF/lib" />
 
 		<mkdir dir="${distribution.dir}/web/WEB-INF/lib" />
 		<ant target="build.${type}" antfile="${carrot2.code.dir}/components/master.xml" inheritall="true" inheritrefs="true" />
-		<delete>
-			<fileset dir="${distribution.dir}" includes="${dist.name}*" />
-		</delete>
+		<move todir="${distribution.dir}/web/WEB-INF/lib">
+                    <fileset dir="${distribution.dir}" includes="${dist.name}*" />
+		</move>
 
 		<copy todir="${distribution.dir}">
 			<fileset dir=".">
@@ -30,10 +44,10 @@
 				<exclude name="**/*.log" />
 			</fileset>
 		</copy>
-        <chmod perm="a+x">
-            <fileset dir="${distribution.dir}">
-                <include name="**/*.sh" />
-            </fileset>
-        </chmod>
+                <chmod perm="a+x">
+                    <fileset dir="${distribution.dir}">
+                        <include name="**/*.sh" />
+                    </fileset>
+                </chmod>
 	</target>
 </project>

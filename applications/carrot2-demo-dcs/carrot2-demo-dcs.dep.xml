@@ -3,7 +3,7 @@
     name="carrot2-demo-dcs"
     description="Carrot2 Document Clustering Server">
 
-        <provides>
+        <provides profile="demo">
                 <files build-path-exclude="true" prefix="tmp/dist">
                         <file location="carrot2-demo-dcs.jar" />
                 </files>
@@ -12,7 +12,15 @@
                 </build>
                 <check-newer>
                         <fileset dir="src" />
+                        <fileset dir="web" />
                 </check-newer>
+        </provides>
+
+        <provides profile="stripped">
+                <build>
+                        <ant file="build.xml" target="build.stripped" />
+                </build>
+                <rebuild-always />
         </provides>
 
         <!-- Required dependencies -->
@@ -34,15 +42,11 @@
 
         <dependency name="junit" profile="test" />
 
-        <dependency name="carrot2-filter-lingo" noexport="true" />
-        <dependency name="carrot2-filter-stc" noexport="true" />
-        <dependency name="carrot2-filter-trc" noexport="true" />
-        <dependency name="carrot2-filter-haog" noexport="true" />
-        <!--
-	        This one is pretty slow.
-        	<dependency name="carrot2-filter-fuzzyants" noexport="true" /> 
-        -->
+        <dependency name="carrot2-filter-lingo" profile="demo" noexport="true" />
+        <dependency name="carrot2-filter-stc" profile="demo" noexport="true" />
+        <dependency name="carrot2-filter-trc" profile="demo" noexport="true" />
+        <dependency name="carrot2-filter-haog" profile="demo" noexport="true" />
+        <dependency name="carrot2-stemmer-stempelator" profile="demo" noexport="true" />
+        <dependency name="carrot2-filter-case-normalizer" profile="demo" noexport="true" />
 
-        <dependency name="carrot2-stemmer-stempelator" noexport="true" />
-        <dependency name="carrot2-filter-case-normalizer" noexport="true" />
 </component>
