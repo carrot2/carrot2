@@ -80,6 +80,11 @@
         	<param-value>@SKIN@</param-value>
         </init-param>
 
+        <init-param>
+        	<param-name>localization</param-name>
+        	<param-value>@LOCALIZATION@</param-value>
+        </init-param>
+
         <load-on-startup>1</load-on-startup>
     </servlet>
 

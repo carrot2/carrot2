@@ -23,6 +23,7 @@ import org.carrot2.core.clustering.RawDocument;
 import org.carrot2.core.impl.RawDocumentEnumerator;
 import org.carrot2.util.XMLSerializerHelper;
 import org.carrot2.webapp.*;
+import org.dom4j.Element;
 
 /**
  * A consumer of {@link RawDocument}s which serializes them to XML.
@@ -34,6 +35,7 @@ public class XMLClustersSerializer implements RawClustersSerializer {
     private final static char SEPARATOR = ',';
     private final StringBuffer buffer = new StringBuffer();
     private final XMLSerializerHelper xml = XMLSerializerHelper.getInstance();
+    private final ResourceBundle messages;
 
     private final String contextPath;
     private final String skinBase;
@@ -43,9 +45,10 @@ public class XMLClustersSerializer implements RawClustersSerializer {
     
     private TextMarker textMarker;
 
-    public XMLClustersSerializer(String contextPath, String stylesheetsBase) {
+    public XMLClustersSerializer(String contextPath, String stylesheetsBase, ResourceBundle messages) {
         this.skinBase = stylesheetsBase;
         this.contextPath = contextPath;
+        this.messages = messages;
     }
 
     public final String getContentType() {
@@ -87,6 +90,8 @@ public class XMLClustersSerializer implements RawClustersSerializer {
         contributeHeadTagAttributes(writer, request);
 
         writer.write(">\n");
+        
+        emitMessageStrings(writer);
     }
 
 
@@ -260,6 +265,32 @@ public class XMLClustersSerializer implements RawClustersSerializer {
     	    final RawCluster subcluster = (RawCluster) it.next();
     	    collectRefids(subcluster, set);
     	}
+    }
+    
+    private void emitMessageStrings(Writer writer) throws IOException
+    {
+        writer.write("<strings>");
+        emitMessageString(writer, Constants.RB_OTHER_TOPICS);
+        emitMessageString(writer, Constants.RB_SHOW_ALL_CLUSTERS);
+        emitMessageString(writer, Constants.RB_MORE_CLUSTERS);
+        emitMessageString(writer, Constants.RB_NO_CLUSTERS_CREATED);
+        writer.write("</strings>");
+    }
+
+    /**
+     * @param writer
+     * @param key
+     * @throws IOException
+     */
+    private void emitMessageString(Writer writer, String key) throws IOException
+    {
+        writer.write("<");
+        writer.write(key);
+        writer.write(">");
+        writer.write(messages.getString(key));
+        writer.write("</");
+        writer.write(key);
+        writer.write(">");
     }
 
     public void processingError(Throwable cause) throws IOException {

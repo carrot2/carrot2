@@ -36,11 +36,15 @@ public class XMLPageSerializer implements PageSerializer {
     private final String skinBase;
     private final String contextPath;
     private final String releaseInfo;
+    private final ResourceBundle messages;
 
-    public XMLPageSerializer(String contextPath, String stylesheetsBase, String releaseInfo) {
+    public XMLPageSerializer(String contextPath, String stylesheetsBase,
+        String releaseInfo, ResourceBundle messages)
+    {
         this.contextPath = contextPath;
         this.skinBase = stylesheetsBase;
         this.releaseInfo = releaseInfo;
+        this.messages = messages;
     }
 
     public String getContentType() {
@@ -106,8 +110,7 @@ public class XMLPageSerializer implements PageSerializer {
         actionUrls.addElement("query-clusters").setText(uri + "&type=c");
 
         // Emit interface strings, TODO: depending on the input locale?
-        final Element strings = meta.addElement("strings");
-        strings.addElement("search").setText("Search");
+        emitMessageStrings(meta);
 
         // Emit input search tabs
         final Element tabs = meta.addElement("tabs");
@@ -199,6 +202,15 @@ public class XMLPageSerializer implements PageSerializer {
         meta.addElement("query").setText(searchRequest.query);
 
         return meta;
+    }
+
+    private void emitMessageStrings(final Element meta)
+    {
+        final Element strings = meta.addElement("strings");
+        for (Enumeration it = messages.getKeys(); it.hasMoreElements(); ) {
+            String key = (String) it.nextElement();
+            strings.addElement(key).setText(messages.getString(key));
+        }
     }
     
     private void addTextWithLinks(Element element, String text)

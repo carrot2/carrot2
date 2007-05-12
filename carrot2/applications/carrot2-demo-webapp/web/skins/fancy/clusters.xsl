@@ -45,7 +45,7 @@
     </xsl:if>
     <xsl:if test="count(group) = 0">
       <div id="no-clusters">
-        No clusters created
+        <xsl:value-of select="/searchresult/strings/no-clusters-created" />
       </div>
     </xsl:if>
   </xsl:template>
@@ -92,9 +92,9 @@
         <img src="{$skinuri}/img/folder.gif" class="f" alt="..." />
       </td>
       <td class="text" id="t{$id}">
+        <xsl:variable name="label"><xsl:choose><xsl:when test="@junk"><xsl:value-of select="/searchresult/strings/other-topics" /></xsl:when><xsl:otherwise><xsl:value-of select="title/phrase[1]" /></xsl:otherwise> </xsl:choose></xsl:variable>
         <a class="group" href="javascript:void(null)">
-          <span class="label"><span class="text"><xsl:value-of select="title/phrase[1]" /></span>&#160;<span class="size">(<xsl:value-of select="count(descendant-or-self::*/document)" />)</span></span>
-        </a>
+          <span class="label"><span class="text"><xsl:value-of select="$label" /></span>&#160;<span class="size">(<xsl:value-of select="count(descendant-or-self::*/document)" />)</span></span></a>
       </td>
     </tr>
 
@@ -126,10 +126,10 @@
         <td class="fold"><a href="{$more-link}"><img src="{$skinuri}/img/folder-more.gif" class="f" alt="..." /></a></td>
         <td class="text">
           <a class="group" href="{$more-link}">
-            <span class="text">more...</span>
+            <span class="text"><xsl:value-of select="/searchresult/strings/more-clusters" /></span>
           </a> 
           <xsl:if test="not(local-name(..) = 'group')">
-            | <a href="javascript:showAllClusters()">all clusters</a>
+            | <a href="javascript:showAllClusters()"><xsl:value-of select="/searchresult/strings/show-all-clusters" /></a>
           </xsl:if>
         </td>
       </tr>

@@ -34,6 +34,7 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
     private final int FLUSH_LIMIT = 10;
     private final String base;
     private final XMLSerializerHelper xml = XMLSerializerHelper.getInstance();
+    private final ResourceBundle messages;
 
     private Writer writer;
     private int sequence;
@@ -44,8 +45,11 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
     /** For permanent marking of query words */
     private Set queryWordIds;
 
-    public FancyDocumentSerializer(String contextPath, String stylesheetsBase) {
+    public FancyDocumentSerializer(String contextPath, String stylesheetsBase,
+        ResourceBundle messages)
+    {
         this.base = contextPath + stylesheetsBase;
+        this.messages = messages;
     }
 
     public String getContentType() {
@@ -108,7 +112,7 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
                 "<tr>\r\n" + 
                 "<td class=\"r\">" + 
                 sequence +
-                "<br /><a href=\"javascript:hlDoc('" + seqId.toString() + "')\" title=\"Show in clusters\">" +
+                "<br /><a href=\"javascript:hlDoc('" + seqId.toString() + "')\" title=\"" + messages.getString(Constants.RB_SHOW_IN_CLUSTTERS) +"\">" +
                 "<img src=\"" + base + "/img/sic.gif\" class=\"sic\" />" +
                 "</td><td class=\"c\">\r\n" + 
                 "<div class=\"t\">" + 
@@ -175,7 +179,11 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
     
     public void endResult() throws IOException {
         if (sequence == 1) {
-            writer.write("<div id='no-documents'>Your query returned no documents.<br/>Please try a more general query.</div>");
+            writer.write("<div id='no-documents'>");
+            writer.write(messages.getString(Constants.RB_QUERY_RETURNED_NO_DOCUMENTS));
+            writer.write("<br />");
+            writer.write(messages.getString(Constants.RB_TRY_MORE_GENERAL_QUERY));
+            writer.write("</div>");
         }
         
         writer.write(
