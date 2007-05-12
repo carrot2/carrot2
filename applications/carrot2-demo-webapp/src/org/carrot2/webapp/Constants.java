@@ -46,6 +46,7 @@ public final class Constants {
     
     // Resource bundle keys
     public static final String RB_SHOW_IN_CLUSTTERS = "show-in-clusters";
+    public static final String RB_OPEN_IN_NEW_WINDOW = "open-in-new-window";
     public static final String RB_QUERY_RETURNED_NO_DOCUMENTS = "query-returned-no-documents";
     public static final String RB_TRY_MORE_GENERAL_QUERY = "try-more-general-query";
     public static final String RB_NO_CLUSTERS_CREATED = "no-clusters-created";

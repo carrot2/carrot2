@@ -121,7 +121,10 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
         textMarker.tokenize(title.toCharArray(), this);
                 
         writer.write(
-                "</a>" + 
+                "</a>" +
+                "<a target=\"_blank\" href=\"" + hurl + "\" title=\"" + 
+                messages.getString(Constants.RB_OPEN_IN_NEW_WINDOW) + 
+                "\"><img class=\"onw\" src=\"" + base +  "/img/onw.gif\" /></a>" +
                 "</div>\r\n" + 
                 "<div class=\"s\">");
         
