@@ -96,6 +96,7 @@ Setting inputSize.default to: ${webapp.inputSize.default}
 Setting template.caching to: ${xsltFilter.template.caching}
 Setting serializers factory to: ${webapp.serializersFactory}
 Setting skin to: ${webapp.skin}
+Setting localization to: ${webapp.localization}
 ####
         </echo>
     
@@ -104,6 +105,7 @@ Setting skin to: ${webapp.skin}
             <filter token="XSLT_TEMPLATE_CACHING" value="${xsltFilter.template.caching}"/>
             <filter token="SERIALIZERS_FACTORY" value="${webapp.serializersFactory}"/>
             <filter token="SKIN" value="${webapp.skin}"/>
+            <filter token="LOCALIZATION" value="${webapp.localization}"/>
             <filter token="VERSION" value="${release.number} (${tmp:build.tstamp})" />
         </filterset>
 

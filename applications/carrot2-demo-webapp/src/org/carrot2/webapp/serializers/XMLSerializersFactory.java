@@ -13,6 +13,8 @@
 
 package org.carrot2.webapp.serializers;
 
+import java.util.ResourceBundle;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,7 +49,9 @@ public class XMLSerializersFactory implements SerializersFactory {
     }
 
     public PageSerializer createPageSerializer(HttpServletRequest request) {
-        return new XMLPageSerializer(request.getContextPath(), stylesheetsBase, releaseInfo);
+        return new XMLPageSerializer(request.getContextPath(), stylesheetsBase,
+            releaseInfo, (ResourceBundle) request
+                .getAttribute(Constants.RESOURCE_BUNDLE_KEY));
     }
 
     public RawDocumentsSerializer createRawDocumentSerializer(HttpServletRequest request) {
@@ -55,7 +59,8 @@ public class XMLSerializersFactory implements SerializersFactory {
     }
 
     public RawClustersSerializer createRawClustersSerializer(HttpServletRequest request) {
-        return new XMLClustersSerializer(request.getContextPath(), stylesheetsBase);
+        return new XMLClustersSerializer(request.getContextPath(), stylesheetsBase,
+            (ResourceBundle) request.getAttribute(Constants.RESOURCE_BUNDLE_KEY));
     }
 
     protected final String getStylesheetsBase() {

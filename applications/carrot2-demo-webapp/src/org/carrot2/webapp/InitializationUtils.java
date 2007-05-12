@@ -320,4 +320,20 @@ final class InitializationUtils
 
         return controller;
     }
+
+    /**
+     * Initializes the resource bundle with localized messages.
+     */
+    static ResourceBundle initializeResourceBundle(final Logger logger,
+        final ServletConfig config)
+    {
+        String locale = config.getInitParameter("localization");
+        if (locale == null)
+        {
+            locale = Constants.DEFAULT_LOCALE;
+        }
+
+        return ResourceBundle.getBundle("messages", new Locale(locale), Thread
+            .currentThread().getContextClassLoader());
+    }
 }

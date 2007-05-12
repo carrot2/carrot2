@@ -100,6 +100,9 @@ public final class QueryProcessorServlet extends HttpServlet {
     /** If <code>true</code> the processes and components have been successfully read. */
     private boolean initialized;
 
+    /** A bundle with localized messages */
+    private ResourceBundle localizedMessages;
+
     /**
      * Configure inputs. 
      */
@@ -154,6 +157,8 @@ public final class QueryProcessorServlet extends HttpServlet {
             }
         }
 
+        request.setAttribute(Constants.RESOURCE_BUNDLE_KEY, localizedMessages);
+        
         // Determine request type and redirect control
         final int requestType;
         if ("d".equals(type)) {
@@ -274,7 +279,7 @@ public final class QueryProcessorServlet extends HttpServlet {
             logger.debug("Request unacceptable (denied by factory).");
             return;
         }
-
+        
         synchronized (getServletContext()) {
             final Broadcaster existingbcaster = (Broadcaster ) bcasters.get(queryHash); 
             if (existingbcaster != null) {
@@ -443,6 +448,10 @@ public final class QueryProcessorServlet extends HttpServlet {
         final File algorithmScripts = new File(context.getRealPath("/algorithms"));
         this.algorithmsController = InitializationUtils.initializeAlgorithms(logger, algorithmScripts, searchSettings);
 
+        // Initialize the bundle for localized messages
+        this.localizedMessages = InitializationUtils.initializeResourceBundle(logger,
+            getServletConfig());
+        
         // Mark as initialized.
         this.initialized = true;
     }
