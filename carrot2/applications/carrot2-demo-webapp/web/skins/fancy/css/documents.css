@@ -73,6 +73,12 @@ img.sic {
   margin-top: 3px;
 }
 
+img.onw {
+  margin-left: 5px;
+  position: relative;
+  top: 2px;
+}
+
 div#no-documents {
   text-align: center;
   padding-top: 5ex;
