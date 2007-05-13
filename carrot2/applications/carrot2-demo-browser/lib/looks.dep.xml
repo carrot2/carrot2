@@ -6,7 +6,7 @@
     description="JGoodies Looks LookAndFeel, http://www.jgoodies.com/">
 	<provides>
 		<files>
-			<file location="looks-2.0.4.jar" />
+			<file location="looks-2.1.4.jar" />
 			<file location="looks.LICENSE" />
 		</files>
 	</provides>

@@ -21,7 +21,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-haog"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-fuzzyants"/>
 	<classpathentry kind="lib" path="lib/forms-1.0.7.jar"/>
-	<classpathentry kind="lib" path="lib/looks-2.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/looks-2.1.4.jar"/>
 	<classpathentry kind="lib" path="lib/aduna-clustermap-2006.1.jar"/>
 	<classpathentry kind="lib" path="lib/aduna-clustermap-2006.1-resources.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-input-lucene"/>
