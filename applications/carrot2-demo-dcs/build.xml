@@ -23,13 +23,15 @@
                 <property name="distribution.dir" location="${project.dir}/tmp/stripped" />
 	        <property name="profile" value="stripped" />
 
-                <antcall target="build.internal" inheritall="true" />
+                <antcall target="build.internal" inheritall="true" inheritrefs="true" />
         </target>
 
 	<target name="build.internal">
 		<property name="copy.dependencies" value="true" />
 		<property name="single.jar" value="false" />
 		<property name="libs.dir" location="${distribution.dir}/web/WEB-INF/lib" />
+
+                <echo>BASEDIR: ${basedir}</echo>
 
 		<mkdir dir="${distribution.dir}/web/WEB-INF/lib" />
 		<ant target="build.${type}" antfile="${carrot2.code.dir}/components/master.xml" inheritall="true" inheritrefs="true" />
