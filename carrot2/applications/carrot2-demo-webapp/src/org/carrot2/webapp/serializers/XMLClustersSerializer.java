@@ -23,7 +23,6 @@ import org.carrot2.core.clustering.RawDocument;
 import org.carrot2.core.impl.RawDocumentEnumerator;
 import org.carrot2.util.XMLSerializerHelper;
 import org.carrot2.webapp.*;
-import org.dom4j.Element;
 
 /**
  * A consumer of {@link RawDocument}s which serializes them to XML.
@@ -163,6 +162,9 @@ public class XMLClustersSerializer implements RawClustersSerializer {
     	StringBuffer wordidsString = createWordidsString(cluster, parentWordIds);
         buffer.append(wordidsString);
     	buffer.append("\"");
+    	buffer.append(" unique-docs=\"");
+    	buffer.append(collectDocumentIds(cluster, new HashSet()).size());
+    	buffer.append("\"");
     	buffer.append(">");
     
     	buffer.append("<title>");
@@ -190,6 +192,24 @@ public class XMLClustersSerializer implements RawClustersSerializer {
     	}
     
     	buffer.append("</group>");
+    }
+    
+    private static Set collectDocumentIds(RawCluster cluster, Set documentIds) {
+        final List docs = cluster.getDocuments();
+        for (Iterator it = docs.iterator(); it.hasNext();)
+        {
+            RawDocument doc = (RawDocument) it.next();
+            documentIds.add(doc.getId());
+        }
+        
+        final List subclusters = cluster.getSubclusters();
+        for (Iterator it = subclusters.iterator(); it.hasNext();)
+        {
+            RawCluster subcluster = (RawCluster) it.next();
+            collectDocumentIds(subcluster, documentIds);
+        }
+        
+        return documentIds;
     }
 
     private StringBuffer createWordidsString(RawCluster cluster,
