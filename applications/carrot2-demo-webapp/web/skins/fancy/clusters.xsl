@@ -94,7 +94,7 @@
       <td class="text" id="t{$id}">
         <xsl:variable name="label"><xsl:choose><xsl:when test="@junk"><xsl:value-of select="/searchresult/strings/other-topics" /></xsl:when><xsl:otherwise><xsl:value-of select="title/phrase[1]" /></xsl:otherwise> </xsl:choose></xsl:variable>
         <a class="group" href="javascript:void(null)">
-          <span class="label"><span class="text"><xsl:value-of select="$label" /></span>&#160;<span class="size">(<xsl:value-of select="count(descendant-or-self::*/document)" />)</span></span></a>
+          <span class="label"><span class="text"><xsl:value-of select="$label" /></span>&#160;<span class="size">(<xsl:value-of select="@unique-docs" />)</span></span></a>
       </td>
     </tr>
 
