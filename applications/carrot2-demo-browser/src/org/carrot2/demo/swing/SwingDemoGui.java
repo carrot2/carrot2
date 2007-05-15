@@ -119,7 +119,7 @@ public final class SwingDemoGui {
         }
 
         frame.setTitle(mainFrameTitle);
-        frame.setIconImage(new ImageIcon(this.getClass().getResource("carrot2-icon.png")).getImage());
+        frame.setIconImage(new ImageIcon(this.getClass().getResource("/res/browser-icon.png")).getImage());
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.getContentPane().add(buildMainPanel());
         frame.pack();
@@ -330,7 +330,7 @@ public final class SwingDemoGui {
         topPanel.add(queryForm, cc.xywh(2,2,1,1));
 
         final ImageIcon carrotLogo = new ImageIcon(
-                this.getClass().getClassLoader().getResource("res/Carrot2-symbol-final.png"));
+                this.getClass().getClassLoader().getResource("res/browser-logo.png"));
         final JLabel label = new JLabel(carrotLogo);
         topPanel.add(label, cc.xywh(4,2,1,1));
 
