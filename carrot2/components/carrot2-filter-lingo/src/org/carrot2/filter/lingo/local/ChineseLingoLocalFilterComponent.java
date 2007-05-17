@@ -15,7 +15,7 @@ package org.carrot2.filter.lingo.local;
 import java.util.HashMap;
 
 import org.carrot2.core.linguistic.Language;
-import org.carrot2.util.tokenizer.languages.chinese.Chinese;
+import org.carrot2.util.tokenizer.languages.chinese.ChineseSimplified;
 
 /**
  * A Lingo component fixed to the Chinese language.
@@ -28,7 +28,7 @@ public class ChineseLingoLocalFilterComponent extends LingoLocalFilterComponent
     {
         super(new Language []
         {
-            new Chinese()
-        }, new Chinese(), new HashMap());
+            new ChineseSimplified()
+        }, new ChineseSimplified(), new HashMap());
     }
 }
