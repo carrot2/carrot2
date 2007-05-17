@@ -21,12 +21,12 @@ import org.carrot2.util.tokenizer.languages.StemmedLanguageBase;
 import org.carrot2.util.tokenizer.parser.WordBasedParserFactory;
 
 /**
- * An implementation of {@link Language} interface for the Chinese language.
+ * An implementation of {@link Language} interface for the Chinese (simplified) language.
  * 
  * @author Stanislaw Osinski
  * @version $Revision: 1539 $
  */
-public class Chinese extends StemmedLanguageBase
+public class ChineseSimplified extends StemmedLanguageBase
 {
 
     /**
@@ -41,7 +41,7 @@ public class Chinese extends StemmedLanguageBase
     {
         try
         {
-            stopwords = WordLoadingUtils.loadWordSet("stopwords.zh");
+            stopwords = WordLoadingUtils.loadWordSet("stopwords.zh-cn");
         }
         catch (IOException e)
         {
@@ -52,7 +52,7 @@ public class Chinese extends StemmedLanguageBase
     /**
      * Public constructor.
      */
-    public Chinese()
+    public ChineseSimplified()
     {
         super.setStopwords(stopwords);
     }
@@ -64,7 +64,7 @@ public class Chinese extends StemmedLanguageBase
      */
     protected LanguageTokenizer createTokenizerInstanceInternal()
     {
-        return WordBasedParserFactory.Chinese.borrowParser();
+        return WordBasedParserFactory.ChineseSimplified.borrowParser();
     }
 
     /**
@@ -73,7 +73,7 @@ public class Chinese extends StemmedLanguageBase
      */
     public String getIsoCode()
     {
-        return "zh";
+        return "zh-cn";
     }
 
     protected Stemmer createStemmerInstance()
