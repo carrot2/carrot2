@@ -38,7 +38,7 @@ public class WordBasedParserFactory
     public static final WordBasedParserFactory Default = JFlex;
 
     /** Chinese tokenizer factory */
-    public static final WordBasedParserFactory Chinese = new JeZHWordBasedParserFactory();
+    public static final WordBasedParserFactory ChineseSimplified = new JeZHWordBasedParserFactory();
     
     /** Parser pool */
     protected ObjectPool parserPool;
