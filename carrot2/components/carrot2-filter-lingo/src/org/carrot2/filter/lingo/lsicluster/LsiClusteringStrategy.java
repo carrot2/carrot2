@@ -670,22 +670,21 @@ public class LsiClusteringStrategy implements ClusteringStrategy {
         }
 
         // Create "Singletons" group
-        Cluster singletons = new Cluster();
-        singletons.setOtherTopics(true);
-        singletons.addLabel("(Singletons)");
-        singletons.setScore(0.00002);
+        List singletons = new ArrayList();
 
         // Create final clusters
         for (int i = 0; i < candidateClusters.length; i++) {
             if (candidateClusters[i].getSnippets().length > 1) {
                 finalClusters.add(candidateClusters[i]);
             } else if (candidateClusters[i].getSnippets().length == 1) {
-                singletons.addCluster(candidateClusters[i]);
+                singletons.add(candidateClusters[i]);
             }
         }
 
-        if (singletons.getClusters().length > 0) {
-            other.addCluster(singletons);
+        for (Iterator it = singletons.iterator(); it.hasNext();)
+        {
+            Cluster singleton = (Cluster) it.next();
+            other.addCluster(singleton);
         }
 
         if (other.getSnippets().length > 0) {
