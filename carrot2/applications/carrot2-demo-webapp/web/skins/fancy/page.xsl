@@ -124,7 +124,7 @@
   <xsl:template name="search-area">
      <xsl:param name="table-style"></xsl:param>
 
-     <form action="{$contextPath}{action-urls/new-search}" method="GET">
+     <form action="{$contextPath}{$search-servlet}" method="GET">
      <input type="hidden" id="{$tabElemName}" name="{tabs/@form-element}" value="{tabs/tab[@selected]/@id}" />
            
      <table style="{$table-style}" id="search-area">
@@ -325,7 +325,7 @@
         <div class="example-queries">
           Example queries: 
           <xsl:for-each select="./example-queries/example-query">
-            <a href="{$contextPath}{@url}"><xsl:value-of select="." /></a>
+            <a href="{$contextPath}{$search-servlet}?{@url}"><xsl:value-of select="." /></a>
             <xsl:text> </xsl:text><xsl:if test="position() != last()">|</xsl:if><xsl:text> </xsl:text>
           </xsl:for-each>
         </div>
@@ -358,7 +358,7 @@
                       </xsl:if>
                       <iframe id="clustersif" name="clusters" frameborder="no" height="100%" width="100%" style="border: 0">
                         <xsl:if test="$init-from-url != 'true'">
-                          <xsl:attribute name="src"><xsl:value-of select="$contextPath" /><xsl:value-of select="/page/meta/action-urls/query-clusters" /></xsl:attribute>
+                          <xsl:attribute name="src"><xsl:value-of select="concat($contextPath,$search-servlet,'?',/page/meta/action-urls/query-clusters)" /></xsl:attribute>
                         </xsl:if>
                       </iframe>
                     </td>
@@ -371,7 +371,7 @@
                       </xsl:if>
                       <iframe id="documentsif" name="documents" frameborder="no" height="100%" width="100%" style="border: 0">
                         <xsl:if test="$init-from-url != 'true'">
-                          <xsl:attribute name="src"><xsl:value-of select="$contextPath" /><xsl:value-of select="/page/meta/action-urls/query-docs" /></xsl:attribute>
+                          <xsl:attribute name="src"><xsl:value-of select="concat($contextPath,$search-servlet,'?',/page/meta/action-urls/query-docs)" /></xsl:attribute>
                         </xsl:if>
                       </iframe>
                     </td>
@@ -431,11 +431,11 @@
       document.getElementById('search-field').value = getParam(document.location, 'q');
       if (input != "") {
         switchTab('<xsl:value-of select='$tabElemName' />', input);
-        
+
         var url = document.location.toString();
         var queryString = "&amp;" + url.substring(url.indexOf('?')+1, url.length);
-        document.getElementById('clustersif').src = "<xsl:value-of select="/page/meta/action-urls/query-clusters" />" + queryString;
-        document.getElementById('documentsif').src = "<xsl:value-of select="/page/meta/action-urls/query-docs" />" + queryString;
+        document.getElementById('clustersif').src = "<xsl:value-of select="concat($search-servlet,/page/meta/action-urls/query-clusters)" />" + queryString;
+        document.getElementById('documentsif').src = "<xsl:value-of select="concat($search-servlet,/page/meta/action-urls/query-docs)" />" + queryString;
       }
     //--> </script>
   </xsl:template>

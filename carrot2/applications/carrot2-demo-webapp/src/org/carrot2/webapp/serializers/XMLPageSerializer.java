@@ -30,8 +30,6 @@ import org.dom4j.io.XMLWriter;
  * @author Dawid Weiss
  */
 public class XMLPageSerializer implements PageSerializer {
-    private static final String QUERY_SERVLET_PATH = "/search";
-
     private final DocumentFactory factory = DocumentFactory.getInstance();
     private final String skinBase;
     private final String contextPath;
@@ -100,9 +98,8 @@ public class XMLPageSerializer implements PageSerializer {
 
         // Emit action URLs
         final Element actionUrls = meta.addElement("action-urls");
-        actionUrls.addElement("new-search").setText(QUERY_SERVLET_PATH);
-        final String uri = QUERY_SERVLET_PATH + "?"
-            + QueryProcessorServlet.PARAM_Q + "=" + URLEncoding.encode(searchRequest.query, "UTF-8")
+        final String uri =
+            QueryProcessorServlet.PARAM_Q + "=" + URLEncoding.encode(searchRequest.query, "UTF-8")
             + "&" + QueryProcessorServlet.PARAM_INPUT + "=" + URLEncoding.encode(searchRequest.getInputTab().getShortName(), "UTF-8")
             + "&" + QueryProcessorServlet.PARAM_ALG + "=" + URLEncoding.encode(searchRequest.getAlgorithm().getShortName(), "UTF-8")
             + "&" + QueryProcessorServlet.PARAM_SIZE + "=" + searchRequest.getInputSize();
@@ -135,7 +132,7 @@ public class XMLPageSerializer implements PageSerializer {
                     addTextWithLinks(propElem, entry.getValue().toString());
                 }
             }
-            
+
             // Add example queries urls
             final String exampleQueriesString = ((String) inputTab.getOtherProperties().get(
                 "tab.exampleQueries"));
@@ -146,8 +143,8 @@ public class XMLPageSerializer implements PageSerializer {
                 for (int j = 0; j < exampleQueries.length; j++)
                 {
                     final Element query = queriesElement.addElement("example-query");
-                    final String url = QUERY_SERVLET_PATH + "?"
-                        + QueryProcessorServlet.PARAM_Q + "="
+                    final String url =
+                        QueryProcessorServlet.PARAM_Q + "="
                         + URLEncoding.encode(exampleQueries[j], "UTF-8")
                         + "&" + QueryProcessorServlet.PARAM_INPUT + "="
                         + URLEncoding.encode(inputTab.getShortName(), "UTF-8");
