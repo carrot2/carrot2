@@ -193,7 +193,7 @@ public class XmlLocalInputComponent extends
 	        }
         } catch (IOException e) {
             throw new ProcessingException("Could not open stream for URL: "
-                    + params.get("source"));
+                    + sourceOb);
         }
 
         InputStream xslt = null;
