@@ -441,11 +441,21 @@ public final class QueryProcessorServlet extends HttpServlet {
         this.ehcache = InitializationUtils.initializeCache(getServletConfig());
 
         // Create processes for collecting documents from input tabs.
-        final File inputScripts = new File(context.getRealPath("/inputs"));
+        String inputsPath = this.getInitParameter("inputs.path");
+        if (inputsPath == null || inputsPath.trim().equals(""))
+        {
+        	inputsPath = "/inputs";
+        }
+        final File inputScripts = new File(context.getRealPath(inputsPath));
         this.tabsController = InitializationUtils.initializeInputs(logger, inputScripts, searchSettings);
 
         // Create processes for algorithms.
-        final File algorithmScripts = new File(context.getRealPath("/algorithms"));
+        String algorithmsPath = this.getInitParameter("algorithms.path");
+        if (algorithmsPath == null || algorithmsPath.trim().equals(""))
+        {
+        	algorithmsPath = "/algorithms";
+        }
+        final File algorithmScripts = new File(context.getRealPath(algorithmsPath));
         this.algorithmsController = InitializationUtils.initializeAlgorithms(logger, algorithmScripts, searchSettings);
 
         // Initialize the bundle for localized messages
