@@ -45,6 +45,10 @@ public class XMLClustersSerializer implements RawClustersSerializer {
     private TextMarker textMarker;
 
     public XMLClustersSerializer(String contextPath, String stylesheetsBase, ResourceBundle messages) {
+        if (messages == null)
+        {
+            throw new IllegalArgumentException("Resource bundle must not be null.");
+        }
         this.skinBase = stylesheetsBase;
         this.contextPath = contextPath;
         this.messages = messages;
@@ -307,7 +311,15 @@ public class XMLClustersSerializer implements RawClustersSerializer {
         writer.write("<");
         writer.write(key);
         writer.write(">");
-        writer.write(messages.getString(key));
+        if (messages.getString(key) != null)
+        {
+            writer.write(XMLSerializerHelper.getInstance().toValidXmlText(
+                messages.getString(key), false));
+        }
+        else
+        {
+            writer.write(XMLSerializerHelper.getInstance().toValidXmlText(key, false));
+        }
         writer.write("</");
         writer.write(key);
         writer.write(">");
