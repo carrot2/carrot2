@@ -65,6 +65,25 @@ public class MsnApiInputComponentTest extends junit.framework.TestCase
             /* Allow certain inconsistencies -- MSN sometimes returns fewer results than requested. */
             results.size() >= 170 && results.size() <= 200);
     }
+    
+    public void testVeryLargeQuery() throws Exception
+    {
+        String query = "clinton";
+        final long start = System.currentTimeMillis();
+        
+        final HashMap reqContext = new HashMap();
+        reqContext.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, new Integer(500));
+        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, reqContext)
+            .getQueryResult()).documents;
+        
+        final long end = System.currentTimeMillis();
+        log.info("MSN query time: " + (end - start) + " ms.");
+        
+        // the results should contain some documents.
+        assertTrue("Results: " + results.size(), 
+            /* Allow certain inconsistencies -- MSN sometimes returns fewer results than requested. */
+            results.size() >= 400 && results.size() <= 500);
+    }
 
     public void testDawidWeissQuery() throws Exception
     {

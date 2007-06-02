@@ -66,6 +66,11 @@
         </init-param>
 
         <init-param>
+        	<param-name>inputSize.choices</param-name>
+        	<param-value>@INPUT_SIZE_CHOICES@</param-value>
+        </init-param>
+
+        <init-param>
         	<param-name>inputSize.default</param-name>
         	<param-value>@INPUT_SIZE_DEFAULT@</param-value>
         </init-param>

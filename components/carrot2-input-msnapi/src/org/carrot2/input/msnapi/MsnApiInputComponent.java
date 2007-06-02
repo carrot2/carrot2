@@ -38,7 +38,7 @@ public final class MsnApiInputComponent extends LocalInputComponentBase implemen
     public final static String CARROTSEARCH_APPID = "DE531D8A42139F590B253CADFAD7A86172F93B96";
 
     /** Maximum number of results (starting offset + length) */
-    public final static int MAXIMUM_RESULTS = 300;
+    public final static int MAXIMUM_RESULTS = 1000;
 
     /** Maximum allowed results per query */
     public final static int MAXIMUM_RESULTS_PERQUERY = 50;

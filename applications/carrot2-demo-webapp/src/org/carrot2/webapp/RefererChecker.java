@@ -66,6 +66,7 @@ public final class RefererChecker {
 
         for (int i = 0; i < patterns.length; i++) {
             if (false == patterns[i].matcher(referer).matches()) {
+                logger.info("Denying referer: " + referer);
                 return false;
             }
         }

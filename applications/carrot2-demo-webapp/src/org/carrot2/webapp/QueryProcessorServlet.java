@@ -430,9 +430,30 @@ public final class QueryProcessorServlet extends HttpServlet {
         catch (Exception e){
             logger.warn("Could not parse inputSize.default: " + getServletConfig()
                 .getInitParameter("inputSize.default"));
-        }        
-        searchSettings.setAllowedInputSizes(
-                new int [] {50, 100, 200, 400}, defaultInputSize);
+        }
+        
+        // Initialize the allowed input sizes
+        int [] allowedInputSize = new int [] {50, 100, 200, 400};
+        String sizesString = getServletConfig().getInitParameter("inputSize.choices");
+        if (sizesString != null)
+        {
+            try
+            {
+                String [] split = sizesString.split(",");
+                allowedInputSize = new int [split.length];
+                for (int i = 0; i < split.length; i++)
+                {
+                    allowedInputSize[i] = Integer.parseInt(split[i]);
+                }
+            }
+            catch (NumberFormatException e)
+            {
+                logger.warn("Could not parse inputSize.choices: " + getServletConfig()
+                    .getInitParameter("inputSize.default"));
+                allowedInputSize = new int [] {50, 100, 200, 400};
+            }
+        }
+        searchSettings.setAllowedInputSizes(allowedInputSize, defaultInputSize);
 
         // Initialize serializers.
         this.serializerFactory = InitializationUtils.initializeSerializers(logger, getServletConfig());
