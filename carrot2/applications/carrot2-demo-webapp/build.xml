@@ -101,6 +101,7 @@ Setting localization to: ${webapp.localization}
         </echo>
     
         <filterset begintoken="@" endtoken="@" id="filter.webxml">
+            <filter token="INPUT_SIZE_CHOICES" value="${webapp.inputSize.choices}"/>
             <filter token="INPUT_SIZE_DEFAULT" value="${webapp.inputSize.default}"/>
             <filter token="XSLT_TEMPLATE_CACHING" value="${xsltFilter.template.caching}"/>
             <filter token="SERIALIZERS_FACTORY" value="${webapp.serializersFactory}"/>
