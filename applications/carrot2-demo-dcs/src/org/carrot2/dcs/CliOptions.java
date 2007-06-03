@@ -66,7 +66,7 @@ public final class CliOptions
             "Select default output format. Allowed values: json, xml.");
         option.setArgName("format");
         option.setLongOpt("output-format");
-        option.setRequired(true);
+        option.setRequired(false);
 
         return option;
     }
@@ -210,7 +210,11 @@ public final class CliOptions
     public String parseOutputFormat(CommandLine options) 
         throws ConfigurationException
     {
-        final String outputFormat = options.getOptionValue(this.outputFormat.getOpt());
+        String outputFormat = options.getOptionValue(this.outputFormat.getOpt());
+        if (outputFormat == null)
+        {
+            outputFormat = "xml";
+        }
         try
         {
             ControllerContext.getOutputProcessId(outputFormat);
