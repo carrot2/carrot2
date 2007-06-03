@@ -29,20 +29,28 @@ Document Clustering Server (REST interface)
 <fieldset>
   <legend>Send a data file</legend>
 
-  <label for="algorithm">Algorithm</label>
-  <input id="algorithm" type="text" name="dcs.default.algorithm" size="40">
+  <div class="row">
+    <label for="output">Output format</label>
+    <select id="output" name="dcs.default.output">
+      <option value="xml" selected="selected">XML</option>
+    <option value="json">JSON</option>
+    </select>
+  </div>
 
-  <br/><label for="output">Output format</label>
-  <select id="output" name="dcs.default.output">
-  	<option value="xml" selected="selected">XML</option>
- 	<option value="json">JSON</option>
-  </select>
+  <div class="row">
+    <label for="clusters">Clusters only</label>
+    <input id="clusters" type="checkbox" value="true" name="dcs.clusters.only">
+  </div>
 
-  <br/><label for="clusters">Clusters only</label>
-  <input id="clusters" type="checkbox" value="true" name="dcs.clusters.only">
+  <div class="row">
+    <label for="algorithm">Algorithm</label>
+    <input id="algorithm" type="text" name="dcs.default.algorithm" size="42"> (optional)
+  </div>
 
-  <br/><br/><label for="file">Input XML file</label>
-  <input id="file" type="file" name="c2stream" size="40">
+  <div class="row" style="margin-top: 4ex">
+    <label for="file">Input XML file</label>
+    <input id="file" type="file" name="c2stream" size="40">
+  </div>
 </fieldset>
 
 <input class="submit" type="submit" name="Send" value="Cluster >>">
@@ -54,20 +62,28 @@ Document Clustering Server (REST interface)
 <fieldset>
   <legend>Paste data</legend>
 
-  <label for="algorithm">Algorithm</label>
-  <input id="algorithm" type="text" name="dcs.default.algorithm" size="40">
+  <div class="row">
+    <label for="output">Output format</label>
+    <select id="output" name="dcs.default.output">
+      <option value="xml" selected="selected">XML</option>
+    <option value="json">JSON</option>
+    </select>
+  </div>
 
-  <br/><label for="output">Output format</label>
-  <select id="output" name="dcs.default.output">
-  	<option value="xml" selected="selected">XML</option>
- 	<option value="json">JSON</option>
-  </select>
+  <div class="row">
+    <label for="clusters">Clusters only</label>
+    <input id="clusters" type="checkbox" value="true" name="dcs.clusters.only">
+  </div>
 
-  <br/><label for="clusters">Clusters only</label>
-  <input id="clusters" type="checkbox" value="true" name="dcs.clusters.only">
+  <div class="row">
+    <label for="algorithm">Algorithm</label>
+    <input id="algorithm" type="text" name="dcs.default.algorithm" size="42"> (optional)
+  </div>
 
-  <br/><br/><label>Input XML data</label>
-  <textarea name="c2stream" style="width: 34em; height: 35ex;"></textarea>
+  <div class="row" style="margin-top: 4ex">
+    <label>Input XML data</label>
+    <textarea name="c2stream" style="width: 34em; height: 35ex;"></textarea>
+  </div>
 </fieldset>
 
 <input class="submit" type="submit" name="Send" value="Cluster >>">
