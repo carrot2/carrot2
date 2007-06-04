@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <project name="Carrot2 Bamboo builds" default="help">
-    <property file="bamboo-build.properties" />
+    <property file="${bamboo.build.properties}" />
 
     <target name="build" description="Perform a full build.">
         <fail unless="carrot2.code.dir">Define: carrot2.code.dir</fail>
@@ -98,5 +98,19 @@
 
     <target name="help">
         <echo>This file is used to drive automated Bamboo builds.</echo>
+    </target>
+
+    <target name="check">
+      <fail unless="carrot2.code.dir">Define: carrot2.code.dir</fail>
+
+      <fail unless="api.dir">Define: api.dir property.</fail>
+      <fail unless="webstart.dir">Define: webstart.dir property.</fail>
+      <fail unless="dist.dir">Define: dist.dir property.</fail>
+
+      <fail unless="webapp.name">Define: webapp.name property.</fail>
+      <fail unless="webapps.dir">Define: webapps.dir property.</fail>
+      <fail unless="tomcat.init">Define: tomcat.init property.</fail>
+
+      <echo>All required variables defined.</echo>
     </target>
 </project>
