@@ -100,7 +100,7 @@ public class MsnApiInputComponentTest extends junit.framework.TestCase
         // the results should contain some documents.
         assertTrue("Results: " + results.size(),
             /* Allow certain inconsistencies -- MSN sometimes returns fewer results than requested. */
-            results.size() >= 120 && results.size() <= 150);
+            results.size() >= 90 && results.size() <= 150);
     }
 
     public void testMediumQuery() throws Exception
