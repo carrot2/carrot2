@@ -12,8 +12,13 @@
 
 package org.carrot2.input.pubmed;
 
-import org.carrot2.core.*;
-import org.carrot2.core.test.*;
+import junit.framework.Test;
+import junit.framework.TestSuite;
+
+import org.carrot2.core.LocalComponent;
+import org.carrot2.core.LocalComponentFactory;
+import org.carrot2.core.test.LocalInputComponentTestBase;
+import org.carrot2.core.test.Range;
 
 public class PubMedInputComponentTest extends LocalInputComponentTestBase
 {
@@ -42,21 +47,28 @@ public class PubMedInputComponentTest extends LocalInputComponentTestBase
 
     public void testSmallQuery() throws Exception
     {
-        performQuery("test", 50, 50);
+        performQuery("test", 50, new Range(40, 50));
     }
 
     public void testMediumQuery() throws Exception
     {
-        performQuery("test", 100, 100);
+        performQuery("test", 100, new Range(80, 100));
     }
 
     public void testLargeQuery() throws Exception
     {
-        performQuery("test", 400, 400);
+        performQuery("test", 400, new Range(320, 400));
     }
 
-    public void testUniqueIds() throws Exception
+    public static Test suite()
     {
-        performIdUniquenessTest("test", 200);
+        if (isApiTestingEnabled())
+        {
+            return new TestSuite(PubMedInputComponentTest.class);
+        }
+        else
+        {
+            return new TestSuite();
+        }
     }
 }

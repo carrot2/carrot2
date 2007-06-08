@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -13,248 +12,81 @@
 
 package org.carrot2.input.yahooapi;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.*;
+import java.util.List;
 
-import org.apache.log4j.Logger;
-import org.carrot2.input.yahooapi.YahooApiInputComponent;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
-import org.carrot2.core.*;
-import org.carrot2.core.clustering.RawDocument;
-import org.carrot2.core.impl.ArrayOutputComponent;
+import org.carrot2.core.LocalComponent;
+import org.carrot2.core.LocalComponentFactory;
+import org.carrot2.core.test.LocalInputComponentTestBase;
+import org.carrot2.core.test.Range;
 
-public class YahooApiInputComponentTest extends junit.framework.TestCase {
-    private final static Logger log = Logger.getLogger(YahooApiInputComponentTest.class);
-
-    public YahooApiInputComponentTest(String s) {
+public class YahooApiInputComponentTest extends LocalInputComponentTestBase
+{
+    public YahooApiInputComponentTest(String s)
+    {
         super(s);
     }
 
-    public void testJanWeglarzQuery() throws Exception {
-        final LocalComponentFactory inputFactory = new LocalComponentFactory() {
-            public LocalComponent getInstance() {
-                return new YahooApiInputComponent();
-            }
-        };
-
-        LocalControllerBase controller = setUpController(inputFactory);
-        String query = "Jan Węglarz";
-        final long start = System.currentTimeMillis();
-        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, new HashMap()).getQueryResult()).documents;
-        final long end = System.currentTimeMillis();
-        log.info("Yahoo query time: " + (end - start) + " ms.");
-
-        // the results should contain some documents.
-        assertEquals("Results acquired from Yahoo"
-                + ":" + results.size(), 100, results.size());
-    }
-
-    public void DISABLEDtestSiteQuery() throws Exception {
-        final LocalComponentFactory inputFactory = new LocalComponentFactory() {
-            public LocalComponent getInstance() {
-                return new YahooApiInputComponent();
-            }
-        };
-
-        LocalControllerBase controller = setUpController(inputFactory);
-        String query = "koelle bmw site:handelsblatt.de";
-        final long start = System.currentTimeMillis();
-        HashMap params = new HashMap();
-        params.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, "400");
-        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, params).getQueryResult()).documents;
-        final long end = System.currentTimeMillis();
-        log.info("YahooAPI query time: " + (end - start) + " ms.");
-
-        // the results should contain some documents.
-        assertTrue("Results acquired from Yahoo" + ":" + results.size(), results.size() == 1);
-    }
-    
-    public void testWeissQuery() throws Exception {
-        final LocalComponentFactory inputFactory = new LocalComponentFactory() {
-            public LocalComponent getInstance() {
-                return new YahooApiInputComponent();
-            }
-        };
-        
-        LocalControllerBase controller = setUpController(inputFactory);
-        String query = "weiss";
-        final long start = System.currentTimeMillis();
-        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, new HashMap()).getQueryResult()).documents;
-        final long end = System.currentTimeMillis();
-        log.info("YahooAPI query time: " + (end - start) + " ms.");
-        
-        // the results should contain some documents.
-        assertTrue("Results acquired from Yahoo" + ":" + results.size(), results.size() > 0);
-    }
-
-    public void testStartPositionIncorrect() throws Exception {
-        final LocalComponentFactory inputFactory = new LocalComponentFactory() {
-            public LocalComponent getInstance() {
-                return new YahooApiInputComponent();
-            }
-        };
-
-        LocalControllerBase controller = setUpController(inputFactory);
-        String query = "webstart splash colors";
-        final long start = System.currentTimeMillis();
-        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, new HashMap()).getQueryResult()).documents;
-        final long end = System.currentTimeMillis();
-        log.info("YahooAPI query time: " + (end - start) + " ms.");
-
-        // the results should contain some documents.
-        assertTrue("Results acquired from Yahoo" + ":" + results.size(), results.size() > 0);
-    }
-    
-	protected LocalControllerBase setUpController(LocalComponentFactory inputFactory) throws Exception {
-		LocalControllerBase controller;
-		
-        // Some output component
-        LocalComponentFactory outputFactory = new LocalComponentFactory() {
-            public LocalComponent getInstance() {
-                return new ArrayOutputComponent();
-            }
-        };
-
-        // Register with the controller
-        controller = new LocalControllerBase();
-        controller.addLocalComponentFactory("output", outputFactory);
-        controller.addLocalComponentFactory("input", inputFactory);
-
-        // Create and register the process
-        LocalProcessBase process = new LocalProcessBase();
-        process.setInput("input");
-        process.setOutput("output");
-        controller.addProcess("testprocess", process);
-
-        return controller;
-	}
-
-	public void testMediumQuery() throws Exception {
-        final LocalComponentFactory inputFactory = new LocalComponentFactory() {
-            public LocalComponent getInstance() {
-                return new YahooApiInputComponent();
-            }
-        };
-
-        LocalControllerBase controller = setUpController(inputFactory);
-        String query = "dawid weiss ant styler docbook poznan";
-        final long start = System.currentTimeMillis();
-        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, new HashMap()).getQueryResult()).documents;
-        final long end = System.currentTimeMillis();
-        log.info("YahooAPI query time: " + (end - start) + " ms.");
-
-        // the results should contain some documents.
-        assertTrue("Results acquired from Yahoo"
-                + ":" + results.size(), results.size() > 0 && results.size() < 100);
-	}
-	
-	public void testEmptyQuery() throws Exception {
-        final LocalComponentFactory inputFactory = new LocalComponentFactory() {
-            public LocalComponent getInstance() {
-                return new YahooApiInputComponent();
-            }
-        };
-
-        LocalControllerBase controller = setUpController(inputFactory);
-        String query = "duiogig oiudgisugviw siug iugw iusviuwg";
-        final long start = System.currentTimeMillis();
-        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, new HashMap()).getQueryResult()).documents;
-        final long end = System.currentTimeMillis();
-        log.info("Yahoo query time: " + (end - start) + " ms.");
-
-        // the results should contain some documents.
-        assertTrue("Results acquired from Yahoo"
-                + ":" + results.size(), results.size() == 0);
-	}
-
-    public void testResultsRequested() throws Exception {
-        final LocalComponentFactory inputFactory = new LocalComponentFactory() {
-            public LocalComponent getInstance() {
-                return new YahooApiInputComponent();
-            }
-        };
-
-        LocalControllerBase controller = setUpController(inputFactory);
-        String query = "apache";
-        final long start = System.currentTimeMillis();
-        HashMap reqContext = new HashMap();
-        reqContext.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, new Integer(50));
-        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, reqContext).getQueryResult()).documents;
-        final long end = System.currentTimeMillis();
-        log.info("Yahoo query time: " + (end - start) + " ms.");
-
-        // the results should contain some documents.
-        log.debug("Results acquired from Yahoo: " + results.size());
-        assertEquals("Results acquired from Yahoo is 50?"
-                + ":" + results.size(), 50, results.size());
-    }    
-    
-    public void testUniqueIds() throws Exception {
-        final LocalComponentFactory inputFactory = new LocalComponentFactory() {
-            public LocalComponent getInstance() {
-                return new YahooApiInputComponent();
-            }
-        };
-        
-        LocalControllerBase controller = setUpController(inputFactory);
-        String query = "apache";
-        final long start = System.currentTimeMillis();
-        HashMap reqContext = new HashMap();
-        reqContext.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, new Integer(200));
-        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, reqContext).getQueryResult()).documents;
-        final long end = System.currentTimeMillis();
-        log.info("Yahoo query time: " + (end - start) + " ms.");
-        
-        // the results should contain some documents.
-        log.debug("Results acquired from Yahoo: " + results.size());
-        
-        Set ids = new HashSet();
-        for (Iterator ir = results.iterator(); ir.hasNext();)
+    protected LocalComponentFactory getLocalInputFactory()
+    {
+        return new LocalComponentFactory()
         {
-            RawDocument doc = (RawDocument) ir.next();
-            ids.add(doc.getId());
-        }
-        
-        assertEquals("All number of unique ids equal to the number of results",
-            ids.size(), results.size());
-    }    
-
-	public void testApacheAntQuery() throws Exception {
-        final LocalComponentFactory inputFactory = new LocalComponentFactory() {
-            public LocalComponent getInstance() {
+            public LocalComponent getInstance()
+            {
                 return new YahooApiInputComponent();
             }
         };
+    }
 
-        LocalControllerBase controller = setUpController(inputFactory);
-        String query = "apache ant";
-        final long start = System.currentTimeMillis();
-        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, new HashMap()).getQueryResult()).documents;
-        final long end = System.currentTimeMillis();
-        log.info("Yahoo query time: " + (end - start) + " ms.");
+    public void testJanWeglarzQuery() throws Exception
+    {
+        performQuery("Jan Węglarz", 100, new Range(90, 100));
+    }
 
-        // the results should contain some documents.
-        assertTrue("Results acquired from Yahoo"
-                + ":" + results.size(), results.size() > 0);
-        log.debug("Results acquired from Yahoo: " + results.size());
+    /**
+     * This is a test case for a situation where a large enough number of results is
+     * requested to spawn more than one fetching thread, but only very little results are
+     * available. As a result -- the returned list will contain the handful of snippets
+     * duplicated by the number of fetching threads (because each thread downloaded the
+     * same results).
+     */
+    public void DISABLEDtestSiteQuery() throws Exception
+    {
+        List results = query("koelle bmw site:handelsblatt.de", 400);
+        // TODO: make sure here that there are no duplicates
+    }
 
-        HashSet urls = new HashSet();
-        for (Iterator i = results.iterator(); i.hasNext(); ) {
-            RawDocument rd = (RawDocument) i.next();
-            // Check the URL.
-            try {
-                new URL(rd.getUrl());
-            } catch (MalformedURLException e) {
-                fail("Snippet reader failure (malformed URL): "
-                        + rd.toString());
-            }
-            urls.add(rd.getUrl());
+    public void testMediumQuery() throws Exception
+    {
+        performQuery("dawid weiss ant styler docbook poznan", 100, new Range(1, 100));
+    }
+
+    public void testStartPositionIncorrect() throws Exception
+    {
+        performQuery("webstart splash colors", 100, new Range(1, 100));
+    }
+
+    public void testNoResults() throws Exception
+    {
+        performQuery("duiogig oiudgisugviw siug iugw iusviuwg", 100, 0);
+    }
+
+    public void testResultsRequested() throws Exception
+    {
+        performQuery("apache", 50, 50);
+    }
+
+    public static Test suite()
+    {
+        if (isApiTestingEnabled())
+        {
+            return new TestSuite(YahooApiInputComponentTest.class);
         }
-
-        assertTrue(urls.contains("http://ant.apache.org/")
-            || urls.contains("http://jakarta.apache.org/ant"));
-
-        assertEquals(100, results.size());
-	}
+        else
+        {
+            return new TestSuite();
+        }
+    }
 }

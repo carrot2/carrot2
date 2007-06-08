@@ -12,181 +12,72 @@
 
 package org.carrot2.input.msnapi;
 
-import java.util.*;
+import java.util.List;
 
-import org.apache.log4j.Logger;
-import org.carrot2.core.*;
+import junit.framework.Test;
+import junit.framework.TestSuite;
+
+import org.carrot2.core.LocalComponent;
+import org.carrot2.core.LocalComponentFactory;
 import org.carrot2.core.clustering.RawDocument;
-import org.carrot2.core.impl.ArrayOutputComponent;
+import org.carrot2.core.test.LocalInputComponentTestBase;
+import org.carrot2.core.test.Range;
 
 /**
  * Test {@link MsnApiInputComponent}.
- * 
+ *
  * @author Dawid Weiss
  */
-public class MsnApiInputComponentTest extends junit.framework.TestCase
+public class MsnApiInputComponentTest extends LocalInputComponentTestBase
 {
-    private final static Logger log = Logger.getLogger(MsnApiInputComponentTest.class);
-
-    private LocalControllerBase controller;
-
     public MsnApiInputComponentTest(String s)
     {
         super(s);
     }
 
-    public void setUp() throws Exception
+    protected LocalComponentFactory getLocalInputFactory()
     {
-        final LocalComponentFactory inputFactory = new LocalComponentFactory()
+        return new LocalComponentFactory()
         {
             public LocalComponent getInstance()
             {
                 return new MsnApiInputComponent();
             }
         };
-        this.controller = setUpController(inputFactory);
     }
 
     public void testLargeQuery() throws Exception
     {
-        String query = "windows";
-        final long start = System.currentTimeMillis();
-
-        final HashMap reqContext = new HashMap();
-        reqContext.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, new Integer(200));
-        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, reqContext)
-            .getQueryResult()).documents;
-
-        final long end = System.currentTimeMillis();
-        log.info("MSN query time: " + (end - start) + " ms.");
-
-        // the results should contain some documents.
-        assertTrue("Results: " + results.size(), 
-            /* Allow certain inconsistencies -- MSN sometimes returns fewer results than requested. */
-            results.size() >= 170 && results.size() <= 200);
-    }
-    
-    public void testVeryLargeQuery() throws Exception
-    {
-        String query = "clinton";
-        final long start = System.currentTimeMillis();
-        
-        final HashMap reqContext = new HashMap();
-        reqContext.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, new Integer(500));
-        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, reqContext)
-            .getQueryResult()).documents;
-        
-        final long end = System.currentTimeMillis();
-        log.info("MSN query time: " + (end - start) + " ms.");
-        
-        // the results should contain some documents.
-        assertTrue("Results: " + results.size(), 
-            /* Allow certain inconsistencies -- MSN sometimes returns fewer results than requested. */
-            results.size() >= 400 && results.size() <= 500);
-    }
-
-    public void testDawidWeissQuery() throws Exception
-    {
-        String query = "Stanislaw Osinski";
-        final HashMap reqContext = new HashMap();
-        reqContext.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, new Integer(150));
-
-        final long start = System.currentTimeMillis();
-        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, reqContext)
-            .getQueryResult()).documents;
-        final long end = System.currentTimeMillis();
-        log.info("MSN query time: " + (end - start) + " ms.");
-
-        // the results should contain some documents.
-        assertTrue("Results: " + results.size(),
-            /* Allow certain inconsistencies -- MSN sometimes returns fewer results than requested. */
-            results.size() >= 90 && results.size() <= 150);
-    }
-
-    public void testMediumQuery() throws Exception
-    {
-        String query = "dawid weiss ant styler docbook poznan";
-        final long start = System.currentTimeMillis();
-        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, new HashMap())
-            .getQueryResult()).documents;
-        final long end = System.currentTimeMillis();
-        log.info("MSN query time: " + (end - start) + " ms.");
-
-        // the results should contain some documents.
-        assertTrue("Results: " + results.size(), results.size() > 0 && results.size() < 100);
-    }
-
-    public void testEmptyQuery() throws Exception
-    {
-        String query = "duiogig oiudgisugviw siug iugw iusviuwg";
-        final long start = System.currentTimeMillis();
-        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, new HashMap())
-            .getQueryResult()).documents;
-        final long end = System.currentTimeMillis();
-        log.info("MSN query time: " + (end - start) + " ms.");
-
-        // the results should contain some documents.
-        assertTrue("Results: " + results.size(), results.size() == 0);
+        performQuery("windows", 200, new Range(170, 200));
     }
 
     public void testResultsRequested() throws Exception
     {
-        final String query = "apache";
-        final HashMap reqContext = new HashMap();
-        reqContext.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, new Integer(150));
-
-        final long start = System.currentTimeMillis();
-        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, reqContext)
-            .getQueryResult()).documents;
-        final long end = System.currentTimeMillis();
-        log.info("MSN query time: " + (end - start) + " ms.");
-
-        // the results should contain some documents.
-        assertTrue("Results: " + results.size(), results.size() > 140 && results.size() <= 150);
+        performQuery("apache", 150, new Range(90, 150));
     }
 
-    
-    public void testUniqueIds() throws Exception
+    public void testMediumQuery() throws Exception
     {
-        final String query = "apache";
-        final HashMap reqContext = new HashMap();
-        reqContext.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, new Integer(150));
-        
-        final long start = System.currentTimeMillis();
-        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, reqContext)
-            .getQueryResult()).documents;
-        final long end = System.currentTimeMillis();
-        log.info("MSN query time: " + (end - start) + " ms.");
-        
-        Set ids = new HashSet();
-        for (Iterator it = results.iterator(); it.hasNext();)
-        {
-            RawDocument doc = (RawDocument) it.next();
-            ids.add(doc.getId());
-        }
-        
-        // the results should contain some documents.
-        assertEquals(ids.size(), results.size());
+        performQuery("dawid weiss ant styler docbook poznan", 100, new Range(1, 100));
     }
-    
+
+    public void testEmptyQuery() throws Exception
+    {
+        performQuery("duiogig oiudgisugviw siug iugw iusviuwg", 100, 0);
+    }
+
     public void testStartFromBug() throws Exception
     {
-        final String query = "clustering";
-        final HashMap reqContext = new HashMap();
-        reqContext.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, new Integer(
-            MsnApiInputComponent.MAXIMUM_RESULTS_PERQUERY * 2));
-
-        final long start = System.currentTimeMillis();
-        List results = ((ArrayOutputComponent.Result) controller.query("testprocess", query, reqContext)
-            .getQueryResult()).documents;
-        final long end = System.currentTimeMillis();
-        log.info("MSN query time: " + (end - start) + " ms.");
+        List results = query("clustering",
+            MsnApiInputComponent.MAXIMUM_RESULTS_PERQUERY * 2);
 
         // the results should contain some documents.
         for (int i = 0; i < results.size() / 2; i++)
         {
             final String summary = ((RawDocument) results.get(i)).getSnippet() + "";
-            final String summaryOffset = ((RawDocument) results.get(i + results.size() / 2)).getSnippet() + "";
+            final String summaryOffset = ((RawDocument) results.get(i + results.size()
+                / 2)).getSnippet()
+                + "";
 
             if (!summary.equals(summaryOffset))
             {
@@ -197,30 +88,15 @@ public class MsnApiInputComponentTest extends junit.framework.TestCase
         fail();
     }
 
-    protected LocalControllerBase setUpController(LocalComponentFactory inputFactory) throws Exception
+    public static Test suite()
     {
-        LocalControllerBase controller;
-
-        // Some output component
-        LocalComponentFactory outputFactory = new LocalComponentFactory()
+        if (isApiTestingEnabled())
         {
-            public LocalComponent getInstance()
-            {
-                return new ArrayOutputComponent();
-            }
-        };
-
-        // Register with the controller
-        controller = new LocalControllerBase();
-        controller.addLocalComponentFactory("output", outputFactory);
-        controller.addLocalComponentFactory("input", inputFactory);
-
-        // Create and register the process
-        LocalProcessBase process = new LocalProcessBase();
-        process.setInput("input");
-        process.setOutput("output");
-        controller.addProcess("testprocess", process);
-
-        return controller;
+            return new TestSuite(MsnApiInputComponentTest.class);
+        }
+        else
+        {
+            return new TestSuite();
+        }
     }
 }

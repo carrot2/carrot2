@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -15,64 +14,62 @@ package org.carrot2.input.pubmed;
 
 import java.io.*;
 
-import junit.framework.*;
+import org.carrot2.core.test.ExternalApiTestBase;
 
+import junit.framework.*;
 
 /**
  * @author Stanislaw Osinski
  */
-public class PubMedSearchServiceTest
-    extends TestCase
+public class PubMedSearchServiceTest extends ExternalApiTestBase
 {
-    public void testNoHitsQuery()
-        throws IOException
+    public void testNoHitsQuery() throws IOException
     {
         PubMedSearchService service = new PubMedSearchService();
-        PubMedSearchResult[] results = service.query("qwieur sldkfjy sdfb", 20);
+        PubMedSearchResult [] results = service.query("qwieur sldkfjy sdfb", 20);
         assertEquals("Returned results", results.length, 0);
     }
 
-
-    public void testNonEmptyAbstracts()
-        throws IOException
+    public void testNonEmptyAbstracts() throws IOException
     {
         PubMedSearchService service = new PubMedSearchService();
-        PubMedSearchResult[] results = service.query("test", 50);
-        assertEquals("Returned results", results.length, 50);
-        
-        for (int i = 0; i < results.length; i++) {
+        PubMedSearchResult [] results = service.query("test", 50);
+        assertTrue("Returned results", results.length >= 40 && results.length <= 50);
+
+        for (int i = 0; i < results.length; i++)
+        {
             if (results[i].summary != null && results[i].summary.length() > 0)
             {
                 return;
             }
         }
-        
+
         fail("No abstracts fetched.");
     }
-    
-    public void testSmallQuery()
-    throws IOException
+
+    public void testMediumQuery() throws IOException
     {
         PubMedSearchService service = new PubMedSearchService();
-        PubMedSearchResult[] results = service.query("test", 50);
-        assertEquals("Returned results", results.length, 50);
+        PubMedSearchResult [] results = service.query("test", 100);
+        assertTrue("Returned results", results.length >= 80 && results.length <= 100);
     }
 
-
-    public void testMediumQuery()
-        throws IOException
+    public void testLargeQuery() throws IOException
     {
         PubMedSearchService service = new PubMedSearchService();
-        PubMedSearchResult[] results = service.query("test", 100);
-        assertEquals("Returned results", results.length, 100);
+        PubMedSearchResult [] results = service.query("test", 400);
+        assertTrue("Returned results", results.length >= 320 && results.length <= 400);
     }
 
-
-    public void testLargeQuery()
-        throws IOException
+    public static Test suite()
     {
-        PubMedSearchService service = new PubMedSearchService();
-        PubMedSearchResult[] results = service.query("test", 400);
-        assertEquals("Returned results", results.length, 400);
+        if (isApiTestingEnabled())
+        {
+            return new TestSuite(PubMedInputComponentTest.class);
+        }
+        else
+        {
+            return new TestSuite();
+        }
     }
 }
