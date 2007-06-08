@@ -16,18 +16,16 @@ package org.carrot2.input.yahooapi;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.apache.log4j.Logger;
+import org.carrot2.core.test.ExternalApiTestBase;
 
 /**
  * Tests of Yahoo API and results well-formedness.
- * 
+ *
  * @author Dawid Weiss
  */
-public class InvalidXMLTest extends junit.framework.TestCase {
-    private final static Logger logger = Logger.getLogger(InvalidXMLTest.class);
-
+public class InvalidXMLTest extends ExternalApiTestBase {
     private final String query;
-    private final int results; 
+    private final int results;
 
     public InvalidXMLTest(String query, int results) {
         this.query = query;
@@ -49,16 +47,21 @@ public class InvalidXMLTest extends junit.framework.TestCase {
         };
 
         final TestSuite suite = new TestSuite();
-        for (int i = 0; i < queries.length; i++) {
-            suite.addTest(
-                    new InvalidXMLTest(queries[i][0], Integer.parseInt(queries[i][1])));
+
+        if (isApiTestingEnabled())
+        {
+            for (int i = 0; i < queries.length; i++)
+            {
+                suite.addTest(new InvalidXMLTest(queries[i][0], Integer
+                    .parseInt(queries[i][1])));
+            }
         }
 
         return suite;
     }
 
     /**
-     * 
+     *
      */
     public void testQuery() throws Exception {
         final YahooSearchServiceDescriptor descriptor = new YahooSearchServiceDescriptor();

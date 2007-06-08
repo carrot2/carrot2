@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -15,13 +14,17 @@ package org.carrot2.input.etools;
 
 import java.util.*;
 
+import junit.framework.Test;
+import junit.framework.TestSuite;
+
 import org.carrot2.core.*;
-import org.carrot2.core.clustering.*;
-import org.carrot2.core.test.*;
+import org.carrot2.core.clustering.RawDocument;
+import org.carrot2.core.test.LocalInputComponentTestBase;
+import org.carrot2.core.test.Range;
 
 /**
  * eTools input component tests.
- * 
+ *
  * @author Stanislaw Osinski
  */
 public class EToolsLocalInputComponentTest extends LocalInputComponentTestBase
@@ -44,36 +47,6 @@ public class EToolsLocalInputComponentTest extends LocalInputComponentTestBase
         return inputFactory;
     }
 
-    public void testDataSourceResultsCount()
-    {
-        EToolsLocalInputComponent input = new EToolsLocalInputComponent("partnerId");
-        Map params = new HashMap();
-
-        params.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, "0");
-        assertEquals("Data source results count", 0, input.getDataSourceResultsCount(params));
-
-        params.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, "50");
-        assertEquals("Data source results count", 20, input.getDataSourceResultsCount(params));
-
-        params.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, "100");
-        assertEquals("Data source results count", 20, input.getDataSourceResultsCount(params));
-
-        params.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, "120");
-        assertEquals("Data source results count", 30, input.getDataSourceResultsCount(params));
-
-        params.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, "200");
-        assertEquals("Data source results count", 30, input.getDataSourceResultsCount(params));
-
-        params.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, "250");
-        assertEquals("Data source results count", 40, input.getDataSourceResultsCount(params));
-
-        params.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, "400");
-        assertEquals("Data source results count", 40, input.getDataSourceResultsCount(params));
-
-        params.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, "450");
-        assertEquals("Data source results count", 40, input.getDataSourceResultsCount(params));
-    }
-
     public void testNoHitsQuery() throws Exception
     {
         performQuery("asdhasd alksjdhar swioer", 50, 0);
@@ -94,14 +67,9 @@ public class EToolsLocalInputComponentTest extends LocalInputComponentTestBase
         performQuery("test", 400, new Range(150, 400));
     }
 
-    public void testUniqueIds() throws Exception
-    {
-        performIdUniquenessTest("test", 200);
-    }
-
     /**
      * Make sure that the results contain information about the source.
-     * 
+     *
      * @throws Exception
      */
     public void testSources() throws Exception
@@ -111,10 +79,23 @@ public class EToolsLocalInputComponentTest extends LocalInputComponentTestBase
         for (Iterator it = results.iterator(); it.hasNext();)
         {
             RawDocument document = (RawDocument) it.next();
-            String [] sources = (String []) document.getProperty(RawDocument.PROPERTY_SOURCES);
+            String [] sources = (String []) document
+                .getProperty(RawDocument.PROPERTY_SOURCES);
 
             assertNotNull("Sources information available", sources);
             assertTrue("Non-zero number of sources", sources.length > 0);
+        }
+    }
+
+    public static Test suite()
+    {
+        if (isApiTestingEnabled())
+        {
+            return new TestSuite(EToolsLocalInputComponentTest.class);
+        }
+        else
+        {
+            return new TestSuite();
         }
     }
 }
