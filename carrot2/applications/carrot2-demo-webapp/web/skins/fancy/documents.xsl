@@ -13,7 +13,7 @@
   </xsl:template>
     
   <xsl:template name="on-load">
-    <xsl:text>javascript:parent.setProgress('docs-progress', false);</xsl:text>
+    <xsl:text>javascript:parent.afterDocsLoaded();</xsl:text>
   </xsl:template>
 
   <xsl:template match="searchresult[@type='documents']">

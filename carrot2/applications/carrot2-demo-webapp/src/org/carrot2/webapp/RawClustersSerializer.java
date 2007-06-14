@@ -34,7 +34,7 @@ public interface RawClustersSerializer {
 
     public void write(RawCluster cluster) throws IOException;
 
-    public void endResult() throws IOException;
+    public void endResult(long clusteringTime) throws IOException;
 
     public void processingError(Throwable cause) throws IOException;
 }

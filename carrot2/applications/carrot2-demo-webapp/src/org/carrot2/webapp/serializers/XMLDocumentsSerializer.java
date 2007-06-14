@@ -83,7 +83,7 @@ class XMLDocumentsSerializer implements RawDocumentsSerializer {
                 + "</document>\n");
     }
 
-    public void endResult() {
+    public void endResult(long fetchingTime) {
         try {
             writer.write("</searchresult>");
             writer.flush();

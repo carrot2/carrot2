@@ -27,7 +27,7 @@ import org.carrot2.webapp.serializers.TextMarker.StemInfo;
 /**
  * A document serializer which produces HTML output similar
  * to that produced by the <code>fancy</code> XSLT stylesheet.
- * 
+ *
  * @author Dawid Weiss
  */
 final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarkerListener {
@@ -38,13 +38,13 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
 
     private Writer writer;
     private int sequence;
-    
+
     /** For marking word occurrences */
     private TextMarker textMarker;
-    
+
     /** For permanent marking of query words */
     private Set queryWordIds;
-
+    
     public FancyDocumentSerializer(String contextPath, String stylesheetsBase,
         ResourceBundle messages)
     {
@@ -60,21 +60,27 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
         this.writer = new OutputStreamWriter(os, Constants.ENCODING_UTF);
         this.sequence = 1;
         this.textMarker = TextMarkerPool.INSTANCE.borrowTextMarker();
-        
+
         prepareQueryWordIds(query);
 
         // Write HTML header
         writer.write(
-                "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\r\n" + 
-                "<html class=\"outside-back-color\" style=\"height: 100%\">\r\n" + 
-                "<head>\r\n" + 
-                "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\r\n" + 
-                "<title>Carrot Clustering Engine</title>\r\n" + 
-                "<link href=\"" + base + "/css/common.css\" type=\"text/css\" rel=\"stylesheet\">\r\n" + 
-                "<link href=\"" + base + "/css/documents.css\" rel=\"stylesheet\">\r\n" + 
-                "<script src=\"" + base + "/js/folding.js\" language=\"javascript\"></script>" +
+                "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\r\n" +
+                "<html class=\"outside-back-color\" style=\"height: 100%\">\r\n" +
+                "<head>\r\n" +
+                "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\r\n" +
+                "<title>Carrot Clustering Engine</title>\r\n" +
+                "<link href=\"" + base + "/css/common.css\" type=\"text/css\" rel=\"stylesheet\">\r\n" +
+                "<link href=\"" + base + "/css/documents.css\" rel=\"stylesheet\">\r\n" +
+                "<!--[if IE]><link href=\"" +  base + "/css/documents-ie.css\" rel=\"stylesheet\"><![endif]-->" +
                 "</head>" +
-                "<body style=\"height: 100%;\" onload=\"parent.setProgress('docs-progress', false);\">\r\n" + 
+                "<body style=\"height: 100%;\">\r\n" +
+                "<script type=\"text/javascript\" src=\"http://yui.yahooapis.com/2.2.0/build/yahoo-dom-event/yahoo-dom-event.js\" ></script>" +
+                "<script type=\"text/javascript\" src=\"" + base + "/js/Documents.js\" ></script>" +
+                "<script type=\"text/javascript\" src=\"" + base + "/js/DOM.js\" ></script>" +
+                "<script type=\"text/javascript\">\n" +
+                "YAHOO.util.Event.addListener(window, \"load\", init);\n" +
+                "</script>\n" +
                 "<div id=\"documents\">");
     }
 
@@ -108,33 +114,33 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
         String [] sources = (String []) doc.getProperty(RawDocument.PROPERTY_SOURCES);
 
         writer.write(
-                "<table id=\"" + seqId.toString() + "\" class=\"d\">\r\n" + 
-                "<tr>\r\n" + 
-                "<td class=\"r\">" + 
+                "<table id=\"" + seqId.toString() + "\" class=\"d\">\r\n" +
+                "<tr>\r\n" +
+                "<td class=\"r\">" +
                 sequence +
-                "<br /><a href=\"javascript:hlDoc('" + seqId.toString() + "')\" title=\"" + messages.getString(Constants.RB_SHOW_IN_CLUSTTERS) +"\">" +
-                "<img src=\"" + base + "/img/sic.gif\" class=\"sic\" />" +
-                "</td><td class=\"c\">\r\n" + 
-                "<div class=\"t\">" + 
-                "<a target=\"_top\" href=\"" + hurl + "\">");
-                
+                "</td><td class=\"c\">\r\n" +
+                "<div class=\"t\">" +
+                "<span id=\"scs" + seqId.toString() + "\"><a target=\"_top\" href=\"" + hurl + "\">");
+
         textMarker.tokenize(title.toCharArray(), this);
-                
+
         writer.write(
                 "</a>" +
-                "<a target=\"_blank\" href=\"" + hurl + "\" title=\"" + 
-                messages.getString(Constants.RB_OPEN_IN_NEW_WINDOW) + 
-                "\"><img class=\"onw\" src=\"" + base +  "/img/onw.gif\" /></a>" +
-                "</div>\r\n" + 
+                "<img src=\"" + base + "/img/sic.gif\" class=\"onw ilink\" id=\"sic" +
+                seqId.toString() + "\" title=\"" + messages.getString(Constants.RB_SHOW_IN_CLUSTTERS) + "\" /></span>" +
+                "<a target=\"_blank\" href=\"" + hurl + "\" title=\"" +
+                messages.getString(Constants.RB_OPEN_IN_NEW_WINDOW) + "\">" +
+                "<img class=\"onw\" src=\"" + base +  "/img/onw.gif\" /></a>" +
+                "</div>\r\n" +
                 "<div class=\"s\">");
-        
+
         textMarker.tokenize(snippet.toCharArray(), this);
-        
-        writer.write("</div>\r\n" + 
+
+        writer.write("</div>\r\n" +
                 "<div class=\"u\">" + hurl + (sources != null ? "<div class=\"o\">[" + ArrayUtils.toString(sources) + "]</div>" : "") +"</div>\r\n" +
-                "\r\n" + 
-                "</td>\r\n" + 
-                "</tr>\r\n" + 
+                "\r\n" +
+                "</td>\r\n" +
+                "</tr>\r\n" +
                 "</table>"
                 );
 
@@ -166,7 +172,7 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
         }
         catch (IOException e) {
             throw new RuntimeException("Could not write text", e);
-        }        
+        }
     }
 
     public void unmarkedTextIdentified(char[] text, int startPosition,
@@ -179,8 +185,8 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
             throw new RuntimeException("Could not write text", e);
         }
     }
-    
-    public void endResult() throws IOException {
+
+    public void endResult(long fetchingTime) throws IOException {
         if (sequence == 1) {
             writer.write("<div id='no-documents'>");
             writer.write(messages.getString(Constants.RB_QUERY_RETURNED_NO_DOCUMENTS));
@@ -188,15 +194,15 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
             writer.write(messages.getString(Constants.RB_TRY_MORE_GENERAL_QUERY));
             writer.write("</div>");
         }
-        
+
         writer.write(
                 "</div>\r\n"+
                 "<style>\r\n");
-        
+
         // Write dummy CSS rules (we do need this!)
         for (Iterator it = textMarker.getWordInfos(); it.hasNext();) {
             StemInfo stemInfo = (StemInfo)it.next();
-            
+
             if (stemInfo.frequency > 1)
             {
                 writer.write(".w");
@@ -204,13 +210,14 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
                 writer.write("{}");
             }
         }
-        
-        writer.write("\r\n" +  
-                "</style></body>\r\n" + 
+
+        writer.write("\r\n" +
+                "</style></body>\r\n" +
+                "<!-- document fetch time: " + fetchingTime + " ms -->" +
                 "</html>");
         writer.flush();
         this.writer = null;
-        
+
         if (textMarker != null)
         {
             TextMarkerPool.INSTANCE.returnTextMarker(textMarker);
@@ -220,17 +227,17 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
     public void processingError(Throwable cause) throws IOException {
         // Ignore processing exceptions.
         writer.write(
-                "      <div style=\"margin-top: 5px; border: 1px dotted red; border-left: 5px solid red; padding: 4px; margin-left: 2px;\">\r\n" + 
-                "          <div style=\"font-size: 9px; color: gray; background-color: #ffe0e0;\">" + cause.getClass() + "</div>\r\n" + 
-                "          <pre style=\"font-size: 11px; color: black; font-weight: bold;\">\r\n" + 
-                "              " + cause.getMessage() + 
-                "          </pre>\r\n" + 
-                "      </div>\r\n"); 
+                "      <div style=\"margin-top: 5px; border: 1px dotted red; border-left: 5px solid red; padding: 4px; margin-left: 2px;\">\r\n" +
+                "          <div style=\"font-size: 9px; color: gray; background-color: #ffe0e0;\">" + cause.getClass() + "</div>\r\n" +
+                "          <pre style=\"font-size: 11px; color: black; font-weight: bold;\">\r\n" +
+                "              " + cause.getMessage() +
+                "          </pre>\r\n" +
+                "      </div>\r\n");
 
         if (cause.getCause() != null) {
             processingError(cause.getCause());
         }
-        
+
         this.sequence = 0;
     }
 }

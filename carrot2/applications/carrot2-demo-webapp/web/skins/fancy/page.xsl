@@ -11,7 +11,7 @@
   <!-- The query, if any -->
   <xsl:param name="query" select="/page/meta/query" />
   <xsl:variable name="tabElemName">tabElem</xsl:variable>
-    
+
   <xsl:variable name="opts">
       <xsl:choose>
         <xsl:when test="/page/meta/request-arguments/arg[@name='opts']/value = 's'">s</xsl:when>
@@ -22,13 +22,51 @@
   <xsl:variable name="optsHidden"><xsl:if test="$opts = 's'">display: none</xsl:if></xsl:variable>
   <xsl:variable name="optsShown"><xsl:if test="$opts = 'h'">display: none</xsl:if></xsl:variable>
 
+  <xsl:template name="on-load" />
+
   <xsl:template name="head-insert">
     <link rel="stylesheet" type="text/css" href="{$skinuri}/css/screen.css" />
-    <script src="{$skinuri}/js/util.js" type="text/javascript" language="javascript" />
   </xsl:template>
-  
-  <xsl:template name="on-load">
-    <xsl:text>javascript:initPage()</xsl:text>
+
+  <xsl:template name="body-insert">
+    <script type="text/javascript" src="http://yui.yahooapis.com/2.2.0/build/yahoo-dom-event/yahoo-dom-event.js" ></script>
+    <script type="text/javascript" src="http://yui.yahooapis.com/2.2.0/build/dragdrop/dragdrop-min.js" ></script>
+    <script type="text/javascript" src="{$skinuri}/js/DDTab.js" ></script>
+    <script type="text/javascript" src="{$skinuri}/js/SearchTab.js" ></script>
+    <script type="text/javascript" src="{$skinuri}/js/SearchTabModel.js" ></script>
+    <script type="text/javascript" src="{$skinuri}/js/SearchTabView.js" ></script>
+    <script type="text/javascript" src="{$skinuri}/js/SearchTabController.js" ></script>
+    <script type="text/javascript" src="{$skinuri}/js/DOM.js" ></script>
+    <script type="text/javascript" src="{$skinuri}/js/Cookies.js" ></script>
+
+    <script type="text/javascript">
+var query = "<xsl:value-of select="$query" />";
+var tabModel = new SearchTabModel();
+
+<xsl:for-each select="/page/meta/user-tabs/user-tab">
+  <xsl:choose>
+    <xsl:when test="@selected">
+tabModel.tabs[<xsl:value-of select="position()-1" />] = tabModel.activeTab = new SearchTab('<xsl:value-of select="@id" />');
+    </xsl:when>
+
+    <xsl:otherwise>
+tabModel.tabs[<xsl:value-of select="position()-1" />] = new SearchTab('<xsl:value-of select="@id" />');
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:for-each>
+
+tabModel.tabs[<xsl:value-of select="count(/page/meta/user-tabs/user-tab)" />] = new SearchTab('-more', true);
+
+<xsl:for-each select="/page/meta/tabs/tab">
+tabModel.allTabs[<xsl:value-of select="position()-1" />] = new SearchTab('<xsl:value-of select="@id" />');
+</xsl:for-each>
+    </script>
+
+    <script type="text/javascript" src="{$skinuri}/js/Carrot2App.js" ></script>
+
+    <script type="text/javascript">
+YAHOO.util.Event.addListener(window, "load", c2AppInit, stc, true);
+    </script>
   </xsl:template>
 
   <!-- end of customization block -->
@@ -42,7 +80,7 @@
       <xsl:apply-templates select="meta" mode="no-query" />
     </xsl:otherwise>
     </xsl:choose>
-    
+
   </xsl:template>
 
   <!-- Emit the main page -->
@@ -66,16 +104,18 @@
       <xsl:if test="$show-input-descriptions = 'true'">
         <xsl:call-template name="input-descriptions" />
       </xsl:if>
-      
+
+      <xsl:call-template name="hidden-tabs" />
+
       <xsl:call-template name="startup-extra-content" />
-    </div>    
+    </div>
 
     <xsl:call-template name="footer" />
   </xsl:template>
 
   <!-- Emit the results page -->
   <xsl:template match="meta" mode="query">
-      
+
     <xsl:call-template name="preload-script" />
     <table style="width: 100%; height: 100%">
       <tr>
@@ -98,16 +138,22 @@
       </tr>
 
       <tr id="inp-row">
-        <td>
-          <div id="results-main-search" class="active-area" style="padding-top: 15px">
+        <td class="active-area">
+          <div id="results-main-search" style="padding-top: 15px">
             <xsl:call-template name="search-area">
               <xsl:with-param name="table-style">margin-left: 130px</xsl:with-param>
             </xsl:call-template>
           </div>
         </td>
       </tr>
-  
+
       <xsl:call-template name="iframes" />
+
+			<tr id="more-row" style="display: none">
+        <td class="active-area" style="height: 100%; width: 100%; vertical-align: top; padding-left: 130px">
+					<xsl:call-template name="hidden-tabs" />
+				</td>
+			</tr>
 
       <tr>
         <td>
@@ -124,9 +170,9 @@
   <xsl:template name="search-area">
      <xsl:param name="table-style"></xsl:param>
 
-     <form action="{$contextPath}{$search-servlet}" method="GET">
+     <form action="{$contextPath}{action-urls/new-search}" method="GET" id="search-area">
      <input type="hidden" id="{$tabElemName}" name="{tabs/@form-element}" value="{tabs/tab[@selected]/@id}" />
-           
+
      <table style="{$table-style}" id="search-area">
        <tr>
          <td>
@@ -154,7 +200,7 @@
              </tr>
            </table>
          </td>
-     
+
          <td>
            <table class="glow glow-big">
              <tr>
@@ -165,7 +211,7 @@
              <tr>
                <td class="vb l"></td>
                <td class="c sb"><input type="submit" class="search-button" value="{strings/search}"
-                 onmouseover="this.className = 'search-button hl'" 
+                 onmouseover="this.className = 'search-button hl'"
                  onmouseout="this.className='search-button'" /></td>
                <td class="vb r"></td>
              </tr>
@@ -178,8 +224,8 @@
          </td>
          <xsl:if test="$show-options = 'true'">
            <td style="padding-left: 1px; font-size: 8pt; line-height: 115%">
-             <span id="sim-switch" style="{$optsShown}"><a href="javascript:hideAdvanced()">Hide<br/>options</a></span>
-             <span id="adv-switch" style="{$optsHidden}"><a href="javascript:showAdvanced()">Show<br/>options</a></span>
+             <span id="sim-switch" style="{$optsShown}"><span class="blue link" id="hide-advanced">Hide<br/>options</span></span>
+             <span id="adv-switch" style="{$optsHidden}"><span class="blue link" id="show-advanced">Show<br/>options</span></span>
            </td>
          </xsl:if>
        </tr>
@@ -188,7 +234,7 @@
          <tr id="adv-opts" style="{$optsShown}">
            <td style="text-align: right; padding-right: 1px; padding-top: 4px; padding-bottom: 4px;">
              <!-- search results size -->
-             <label class="inline-cb-label" for="res-sel">Download</label> 
+             <label class="inline-cb-label" for="res-sel">Download</label>
              <select id="res-sel" name="{query-sizes/@form-element}">
              <xsl:for-each select="query-sizes/size">
                  <option value="{@id}">
@@ -214,7 +260,7 @@
                         value="{algorithms/alg[1]/@id}" />
                </xsl:otherwise>
              </xsl:choose>
-                                 
+
              <!-- show/hide options -->
              <input type="hidden" id="opts" name="opts" value="{$opts}" />
            </td>
@@ -226,74 +272,71 @@
 
   <!-- Tabs -->
   <xsl:template name="tabs">
-    <xsl:for-each select="/page/meta/tabs/tab">
-      <table id="{concat(@id, '-tab')}">
-        <xsl:attribute name="style"><xsl:if test="not(@selected)">display: none;</xsl:if></xsl:attribute>
-        <xsl:variable name="tabId"><xsl:value-of select="@id" /></xsl:variable>
-        <tr>
-          <xsl:for-each select="/page/meta/tabs/tab">
-              <xsl:variable name="status">
-                  <xsl:choose><xsl:when test="$tabId = @id">active</xsl:when><xsl:otherwise>passive</xsl:otherwise></xsl:choose>
-              </xsl:variable>
-              <xsl:variable name="nextstatus">
-                  <xsl:choose>
-                      <xsl:when test="$tabId = following-sibling::tab[position() = 1]/@id">active</xsl:when>
-                      <xsl:otherwise>passive</xsl:otherwise>
-                  </xsl:choose>
-              </xsl:variable>
+    <table>
+      <tr id="main-tabs">
+        <xsl:for-each select="/page/meta/user-tabs/user-tab">
+          <xsl:variable name="id"><xsl:value-of select="@id" /></xsl:variable>
+          <xsl:variable name="status">
+            <xsl:choose><xsl:when test="@selected">active</xsl:when><xsl:otherwise>passive</xsl:otherwise></xsl:choose>
+          </xsl:variable>
+          <xsl:variable name="nextstatus">
+            <xsl:choose>
+              <xsl:when test="following-sibling::user-tab[position() = 1]/@selected">active</xsl:when>
+              <xsl:otherwise>passive</xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
 
-              <xsl:if test="position() = 1">
-                  <td class="tab-{$status}-lead-in"><img alt="" width="14" height="1" /></td>
-              </xsl:if>
+          <xsl:if test="position() = 1">
+            <td class="tab-{$status}-lead-in"><img alt="" width="14" height="1" /></td>
+          </xsl:if>
 
-              <td class="tab-{$status}-body" style="white-space: nowrap;" onclick="javascript:switchTab('{$tabElemName}', '{@id}')"
-                  title="{property[@key = 'tab.description']}">
-                  
-                  <xsl:choose>
-                    <xsl:when test="$tabId = @id">
-                      <xsl:if test="property[@key = 'tab.icon']">
-                          <img class="tab-img" src="{$skinuri}/inputs/{property[@key = 'tab.icon']}" alt="{property[@key = 'tab.name']}" />
-                          <xsl:apply-templates select="short" />
-                      </xsl:if>
-                    </xsl:when>
-                    
-                    <xsl:otherwise>
-                      <a href="javascript:switchTab('{$tabElemName}', '{@id}')" class="tab-link">
-                        <xsl:if test="property[@key = 'tab.accel']">
-                          <xsl:attribute name="accesskey"><xsl:value-of select="property[@key = 'tab.accel']" /></xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="property[@key = 'tab.icon']">
-                          <img class="tab-img" src="{$skinuri}/inputs/{property[@key = 'tab.icon']}" alt="{property[@key = 'tab.name']}" />
-                        </xsl:if>
-                        <xsl:apply-templates select="short" />
-                      </a>
-                    </xsl:otherwise>
-                  </xsl:choose>
-              </td>
-              
-              <xsl:if test="not(position() = last())">
-                  <td class="tab-{$status}-{$nextstatus}-link"><img alt="" width="13" height="1" /></td>
-              </xsl:if>
+          <td class="tab-{$status}-body" id="{@id}-td" title="{/page/meta/tabs/tab[@id = $id]/property[@key = 'tab.description']}">
+            <div id="{@id}" class="tab-content">
+              <span class="arrow">&#160;</span>
+              <span id="{@id}-link" class="tab-link active">
+                <xsl:if test="/page/meta/tabs/tab[@id = $id]/property[@key = 'tab.accel']">
+                  <xsl:attribute name="accesskey"><xsl:value-of select="/page/meta/tabs/tab[@id = $id]/property[@key = 'tab.accel']" /></xsl:attribute>
+                </xsl:if>
+                <xsl:choose>
+                  <xsl:when test="/page/meta/tabs/tab[@id = $id]/property[@key = 'tab.icon']">
+                    <img class="tab-img" src="{$skinuri}/inputs/{/page/meta/tabs/tab[@id = $id]/property[@key = 'tab.icon']}" alt="{/page/meta/tabs/tab[@id = $id]/property[@key = 'tab.name']}" />
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <img class="tab-img" src="{$skinuri}/inputs/unknown.gif" alt="{/page/meta/tabs/tab[@id = $id]/property[@key = 'tab.name']}" />
+                  </xsl:otherwise>
+                </xsl:choose><span>&#160;&#160;</span><xsl:apply-templates select="/page/meta/tabs/tab[@id = $id]/short" /></span>
+            </div>
+          </td>
 
-              <xsl:if test="position() = last()">
-                  <td class="tab-{$status}-lead-out"><img alt="" width="17" height="1" /></td>
-              </xsl:if>
-          </xsl:for-each>
-        </tr>
-      </table>
-    </xsl:for-each>
+          <td class="tab-{$status}-{$nextstatus}-link"><img alt="" width="13" height="1" /></td>
+        </xsl:for-each>
+
+        <xsl:call-template name="more-tab" />
+        <td class="tab-passive-lead-out"><img alt="" width="17" height="1" /></td>
+      </tr>
+    </table>
+  </xsl:template>
+
+  <xsl:template name="more-tab">
+    <td class="tab-passive-body" id="-more-td" title="more...">
+      <div id="-more" class="tab-content">
+        <span class="arrow">&#160;</span>
+        <span id="-more-link" class="tab-link active" accesskey=".">
+          <img class="tab-img" src="{$skinuri}/inputs/unknown.gif" alt="more search sources..." /><span>&#160;&#160;</span>more<u>.</u>..</span>
+      </div>
+    </td>
   </xsl:template>
 
   <xsl:template match="tab/short">
     <xsl:choose>
       <xsl:when test="../property[@key = 'tab.accel']">
         <xsl:variable name="accel"><xsl:value-of select="../property[@key = 'tab.accel']" /></xsl:variable>
-      
+
         <xsl:choose>
           <xsl:when test="contains(string(.), $accel)">
-            <xsl:value-of select="substring-before(string(.), $accel)" />
+            <span><xsl:value-of select="substring-before(string(.), $accel)" /></span>
             <u><xsl:value-of select="$accel" /></u>
-            <xsl:value-of select="substring-after(string(.), $accel)" />
+            <span><xsl:value-of select="substring-after(string(.), $accel)" /></span>
           </xsl:when>
           <xsl:otherwise>
           </xsl:otherwise>
@@ -305,7 +348,7 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-  
+
   <!-- Input descriptions -->
   <xsl:template name="input-descriptions">
     <div id="process-instr">
@@ -313,17 +356,18 @@
         <xsl:attribute name="style">display: none</xsl:attribute>
       </xsl:if>
     <xsl:for-each select="/page/meta/tabs/tab">
+      <xsl:variable name="id"><xsl:value-of select="@id" /></xsl:variable>
       <div id="{concat(@id, '-desc')}">
-        <xsl:if test="not(@selected)">
+        <xsl:if test="not(/page/meta/user-tabs/user-tab[@id = $id]/@selected)">
           <xsl:attribute name="style">display: none;</xsl:attribute>
         </xsl:if>
         <div class="process-desc">
           <xsl:apply-templates select="property[@key = 'tab.description.startup']" />
         </div>
-       
+
         <xsl:if test="./example-queries and $show-example-queries = 'true'">
         <div class="example-queries">
-          Example queries: 
+          Example queries:
           <xsl:for-each select="./example-queries/example-query">
             <a href="{$contextPath}{$search-servlet}?{@url}"><xsl:value-of select="." /></a>
             <xsl:text> </xsl:text><xsl:if test="position() != last()">|</xsl:if><xsl:text> </xsl:text>
@@ -334,72 +378,110 @@
     </xsl:for-each>
     </div>
   </xsl:template>
-  
+
+  <!-- Hidden tabs -->
+  <xsl:template name="hidden-tabs">
+    <div id="-more-desc" style="display: none">
+      <div id="dd-tip">
+        Tip: you can drag &amp; drop<br />the tabs to change order
+      </div>
+      <xsl:for-each select="/page/meta/tabs/tab">
+        <xsl:variable name="id"><xsl:value-of select="@id" /></xsl:variable>
+        <div class="more-entry">
+          <input id="{@id}-cb" type="checkbox">
+            <xsl:if test="/page/meta/user-tabs/user-tab[@id = $id]">
+              <xsl:attribute name="checked">true</xsl:attribute>
+            </xsl:if>
+          </input>
+          <div id="{@id}-h-link">
+	          <div id="{@id}-h" class="tab-content">
+	            <span class="arrow">&#160;</span>
+	            <span class="tab-link active">
+	              <xsl:if test="property[@key = 'tab.accel']">
+	                <xsl:attribute name="accesskey"><xsl:value-of select="property[@key = 'tab.accel']" /></xsl:attribute>
+	              </xsl:if>
+	              <xsl:choose>
+	                <xsl:when test="property[@key = 'tab.icon']">
+	                  <img class="tab-img" src="{$skinuri}/inputs/{property[@key = 'tab.icon']}" alt="{property[@key = 'tab.name']}" />
+	                </xsl:when>
+	                <xsl:otherwise>
+	                  <img class="tab-img" src="{$skinuri}/inputs/unknown.gif" alt="{property[@key = 'tab.name']}" />
+	                </xsl:otherwise>
+	              </xsl:choose>
+	              <span>&#160;&#160;</span><xsl:apply-templates select="short" /></span>
+						  <span class="hidden-long-desc"><xsl:apply-templates select="long" /></span>
+	          </div>
+	        </div>
+        </div>
+      </xsl:for-each>
+    </div>
+  </xsl:template>
+
   <!-- Emit code for iframes -->
   <xsl:template name="iframes">
-      <tr id="res-row">
-        <td class="active-area" style="padding: 10px; height: 100%; width: 100%">
-          <table class="glow glow-small" style="background-color: white; height: 100%; width: 100%">
-            <tr>
-              <td class="cs tl"></td>
-              <td class="hb t"></td>
-              <td class="cs tr"></td>
-            </tr>
-            <tr>
-              <td class="vb l"></td>
-              <td class="c" id="results-main-content" style="height: 100%">
-                <table style="height: 100%; width: 100%">
-                  <tr>
-                    <td style="padding: 3px; width: 260px; border-right: 1px dotted #808080; height: 100%">
-                      <xsl:if test="$show-progress = 'true'">
-                        <div id="clusters-progress">
-                          <img alt="..." src="{$skinuri}/img/progress.gif" style="position: relative; top: 0.5ex;"/> Loading...
-                        </div>
+    <tr id="res-row">
+      <td class="active-area" style="padding: 10px; height: 100%; width: 100%">
+        <table class="glow glow-small" style="background-color: white; height: 100%; width: 100%">
+          <tr>
+            <td class="cs tl"></td>
+            <td class="hb t"></td>
+            <td class="cs tr"></td>
+          </tr>
+          <tr>
+            <td class="vb l"></td>
+            <td class="c" id="results-main-content" style="height: 100%">
+              <table style="height: 100%; width: 100%">
+                <tr>
+                  <td style="padding: 3px; width: 260px; border-right: 1px dotted #808080; height: 100%">
+                    <xsl:if test="$show-progress = 'true'">
+                      <div id="clusters-progress">
+                        <img alt="..." src="{$skinuri}/img/progress.gif" style="position: relative; top: 0.5ex;"/> Loading...
+                      </div>
+                    </xsl:if>
+                    <iframe id="clustersif" name="clusters" frameborder="no" height="100%" width="100%" style="border: 0">
+                      <xsl:if test="$init-from-url != 'true'">
+                        <xsl:attribute name="src"><xsl:value-of select="concat($contextPath,$search-servlet,'?',/page/meta/action-urls/query-clusters)" /></xsl:attribute>
                       </xsl:if>
-                      <iframe id="clustersif" name="clusters" frameborder="no" height="100%" width="100%" style="border: 0">
-                        <xsl:if test="$init-from-url != 'true'">
-                          <xsl:attribute name="src"><xsl:value-of select="concat($contextPath,$search-servlet,'?',/page/meta/action-urls/query-clusters)" /></xsl:attribute>
-                        </xsl:if>
-                      </iframe>
-                    </td>
+                    </iframe>
+                  </td>
 
-                    <td style="padding: 3px; height: 100%">
-                      <xsl:if test="$show-progress = 'true'">
-                        <div id="docs-progress">
-                          <img alt="..." src="{$skinuri}/img/progress.gif" style="position: relative; top: 0.5ex;"/> Loading...
-                        </div>
+                  <td style="padding: 3px; height: 100%">
+                    <xsl:if test="$show-progress = 'true'">
+                      <div id="docs-progress">
+                        <img alt="..." src="{$skinuri}/img/progress.gif" style="position: relative; top: 0.5ex;"/> Loading...
+                      </div>
+                    </xsl:if>
+                    <iframe id="documentsif" name="documents" frameborder="no" height="100%" width="100%" style="border: 0">
+                      <xsl:if test="$init-from-url != 'true'">
+                        <xsl:attribute name="src"><xsl:value-of select="concat($contextPath,$search-servlet,'?',/page/meta/action-urls/query-docs)" /></xsl:attribute>
                       </xsl:if>
-                      <iframe id="documentsif" name="documents" frameborder="no" height="100%" width="100%" style="border: 0">
-                        <xsl:if test="$init-from-url != 'true'">
-                          <xsl:attribute name="src"><xsl:value-of select="concat($contextPath,$search-servlet,'?',/page/meta/action-urls/query-docs)" /></xsl:attribute>
-                        </xsl:if>
-                      </iframe>
+                    </iframe>
+                  </td>
+                </tr>
+                <xsl:if test="$display-status-line = 'true'">
+                  <tr>
+                    <td colspan="2" class="reshead">
+                        Query: <b><xsl:value-of select="$query" /></b>
+                        -- Input: <b><xsl:value-of select="/page/meta/tabs/tab[@selected = 'selected']/short" />
+                                  (<xsl:value-of select="/page/meta/query-sizes/size[@selected = 'selected']" /> results)
+                                  </b>
+                        -- Clusterer: <b><xsl:value-of select="/page/meta/algorithms/alg[@selected = 'selected']/short" /></b>
                     </td>
                   </tr>
-                  <xsl:if test="$display-status-line = 'true'">
-                    <tr>
-                      <td colspan="2" class="reshead">
-                          Query: <b><xsl:value-of select="$query" /></b>
-                          -- Input: <b><xsl:value-of select="/page/meta/tabs/tab[@selected = 'selected']/short" />
-                                    (<xsl:value-of select="/page/meta/query-sizes/size[@selected = 'selected']" /> results)
-                                    </b>
-                          -- Clusterer: <b><xsl:value-of select="/page/meta/algorithms/alg[@selected = 'selected']/short" /></b>
-                      </td>
-                    </tr>
-                  </xsl:if>
-                </table>
-              
-              </td>
-              <td class="vb r"></td>
-            </tr>
-            <tr>
-              <td class="cs bl"></td>
-              <td class="hb b"></td>
-              <td class="cs br"></td>
-            </tr>
-          </table>                  
-        </td>
-      </tr>
+                </xsl:if>
+              </table>
+
+            </td>
+            <td class="vb r"></td>
+          </tr>
+          <tr>
+            <td class="cs bl"></td>
+            <td class="hb b"></td>
+            <td class="cs br"></td>
+          </tr>
+        </table>
+      </td>
+    </tr>
   </xsl:template>
 
   <xsl:template name="preload-script">
@@ -408,8 +490,8 @@
     if (document.images)
     {
       var skinuri = "<xsl:value-of select='$skinuri' />";
-      var preload = ["/img/progress.gif", 
-                     "/img/tab-active-lead-in.gif", 
+      var preload = ["/img/progress.gif",
+                     "/img/tab-active-lead-in.gif",
                      "/img/tab-active-lead-out.gif",
                      "/img/tab-active-passive-link.gif",
                      "/img/tab-passive-active-link.gif",
@@ -434,8 +516,8 @@
 
         var url = document.location.toString();
         var queryString = "&amp;" + url.substring(url.indexOf('?')+1, url.length);
-        document.getElementById('clustersif').src = "<xsl:value-of select="concat($search-servlet,/page/meta/action-urls/query-clusters)" />" + queryString;
-        document.getElementById('documentsif').src = "<xsl:value-of select="concat($search-servlet,/page/meta/action-urls/query-docs)" />" + queryString;
+        document.getElementById('clustersif').src = "<xsl:value-of select="/page/meta/action-urls/query-clusters" />" + queryString;
+        document.getElementById('documentsif').src = "<xsl:value-of select="/page/meta/action-urls/query-docs" />" + queryString;
       }
     //--> </script>
   </xsl:template>

@@ -1,12 +1,3 @@
-* html {
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-* html #documents {
-  margin-right: 25px;
-}
-
 #documents {
   margin: 5px;
   margin-top: 0ex;
@@ -35,7 +26,7 @@ td.r {
   border-right:         2px #a0a0a0 dotted;
 }
 
-td.hl {
+.hl {
   background-color: #fff8b5;
 }
 
@@ -69,12 +60,9 @@ a.sic {
   font-size: 11px;
 }
 
-img.sic {
-  margin-top: 3px;
-}
-
 img.onw {
-  margin-left: 5px;
+  margin-right: 2px;
+  margin-left: 4px;
   position: relative;
   top: 2px;
 }

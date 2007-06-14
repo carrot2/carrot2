@@ -27,6 +27,8 @@
       <xsl:attribute name="onload"><xsl:value-of select="$onload" /></xsl:attribute>
     </xsl:if>
 
+    <xsl:call-template name="body-insert" />
+
     <xsl:apply-templates />
     
     <xsl:if test="string-length($ga-code)">
@@ -47,6 +49,12 @@ urchinTracker();
 
   <!-- Empty onload -->
   <xsl:template name="on-load" />
+
+  <!-- Empty head insert -->
+  <xsl:template name="head-insert" />
+
+  <!-- Empty body insert -->
+  <xsl:template name="body-insert" />
 
   <!-- Certain HTML elements -->
   <xsl:template match="p|table|tr|td|a|b|ul|br|img|div|select|option|span|li|form|script">
