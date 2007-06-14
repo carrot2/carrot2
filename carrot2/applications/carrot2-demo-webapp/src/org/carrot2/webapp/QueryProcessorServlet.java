@@ -29,6 +29,7 @@ import org.carrot2.core.clustering.RawCluster;
 import org.carrot2.core.clustering.RawDocument;
 import org.carrot2.core.impl.ArrayInputComponent;
 import org.carrot2.core.impl.ArrayOutputComponent;
+import org.carrot2.util.RollingWindowAverage;
 import org.carrot2.util.StringUtils;
 
 /**
@@ -96,6 +97,12 @@ public final class QueryProcessorServlet extends HttpServlet {
 
     /** Total number of successfully processed clustering queries. */
     private long goodQueries;
+
+    /** 
+     * Average processing times (5 minutes, granularity of 10 seconds).
+     */
+    private final RollingWindowAverage averageProcessingTime = new RollingWindowAverage(
+        5 * RollingWindowAverage.MINUTE, 10 * RollingWindowAverage.SECOND);
 
     /** If <code>true</code> the processes and components have been successfully read. */
     private boolean initialized;
@@ -196,11 +203,14 @@ public final class QueryProcessorServlet extends HttpServlet {
                 synchronized (getServletContext()) {
                     response.setContentType("text/plain; charset=utf-8");
                     final Writer output = new OutputStreamWriter(os, "UTF-8");
-    
+
                     output.write("total-queries: " + executedQueries + "\n");
                     output.write("good-queries: " + goodQueries + "\n");
-                    if (goodQueries > 0) {
-                        output.write("ms-per-query: " + totalTime / goodQueries + "\n");
+
+                    final long average = (long) this.averageProcessingTime.getCurrentAverage();
+                    if (average > 0)
+                    {
+                        output.write("ms-per-query: " + average + "\n");
                     }
 
                     output.write("jvm.freemem: " + Runtime.getRuntime().freeMemory() + "\n");
@@ -383,6 +393,7 @@ public final class QueryProcessorServlet extends HttpServlet {
                     if (processingTime > 0) {
                         this.goodQueries++;
                         this.totalTime += processingTime;
+                        this.averageProcessingTime.add(System.currentTimeMillis(), processingTime);
                     }
                 }
 
