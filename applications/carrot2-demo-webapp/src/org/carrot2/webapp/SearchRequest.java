@@ -16,6 +16,8 @@ package org.carrot2.webapp;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
+
 /** Settings for a single search request. */
 public final class SearchRequest {
     /** {@link SearchSettings} for which this request was made. */
@@ -38,11 +40,15 @@ public final class SearchRequest {
 
     /** All options passed in the query */
     public final Map allRequestOpts;
-
+    
+    /** All cookies that came with the request */
+    public final Map cookies;
+    
     /**
      * Parse parameters.
+     * @param cookieArray 
      */
-    public SearchRequest(SearchSettings settings, Map parameterMap) {
+    public SearchRequest(SearchSettings settings, Map parameterMap, Cookie [] cookieArray) {
         searchSettings = settings;
 
         // Parse the query
@@ -52,10 +58,26 @@ public final class SearchRequest {
         } else {
             this.query = query;
         }
-
+        
+        // copy cookies into a map
+        this.cookies = new HashMap();
+        if (cookieArray != null)
+        {
+            for (int i = 0; i < cookieArray.length; i++)
+            {
+                this.cookies.put(cookieArray[i].getName(), cookieArray[i].getValue());
+            }
+        }
+        
         // Parse input tab.
-        this.inputTabIndex = lookupIndex(searchSettings.inputTabsIndex, extract(parameterMap, QueryProcessorServlet.PARAM_INPUT),
-                searchSettings.getDefaultSearchInputTab());
+        int defaultInputIndex = searchSettings.getDefaultSearchInputTab();
+        if (cookies.containsKey(Constants.COOKIE_ACTIVE_TAB))
+        {
+            defaultInputIndex = lookupIndex(searchSettings.inputTabsIndex,
+                (String) cookies.get(Constants.COOKIE_ACTIVE_TAB), defaultInputIndex);
+        }
+        this.inputTabIndex = lookupIndex(searchSettings.inputTabsIndex, extract(
+            parameterMap, QueryProcessorServlet.PARAM_INPUT), defaultInputIndex);
 
         // Parse the algorithm
         this.algorithmIndex = lookupIndex(searchSettings.algorithmsIndex, extract(parameterMap, QueryProcessorServlet.PARAM_ALG), 
@@ -84,7 +106,7 @@ public final class SearchRequest {
         this.allRequestOpts = parameterMap;
     }
 
-    private int lookupIndex(HashMap index, String key, int defaultValue) {
+    private int lookupIndex(Map index, String key, int defaultValue) {
         final Integer value = (Integer) index.get(key);
         if (value == null) return defaultValue;
         else return value.intValue();

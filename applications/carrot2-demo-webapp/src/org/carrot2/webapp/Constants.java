@@ -53,6 +53,13 @@ public final class Constants {
     public static final String RB_OTHER_TOPICS = "other-topics";
     public static final String RB_MORE_CLUSTERS = "more-clusters";
     public static final String RB_SHOW_ALL_CLUSTERS = "show-all-clusters";
+
+    // Cookies
+    public static final String COOKIE_DD_TIP = "dd-tip";
+    public static final String COOKIE_TAB_ORDER = "tab-order";
+    public static final String COOKIE_ACTIVE_TAB = "active-tab";
+    public static final String COOKIE_SHOW_ALL_CLUSTERS = "always-all-clusters";
+
     
     /**
      * No instances.

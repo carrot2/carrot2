@@ -76,7 +76,7 @@ public class JSONClustersSerializer implements RawClustersSerializer
     /**
      * 
      */
-    public final void endResult() throws IOException
+    public final void endResult(long clusteringTime) throws IOException
     {
         final RawCluster [] docsArray = (RawCluster []) clusters.toArray(new RawCluster [clusters.size()]);
         RawCluster2JSON.serialize(docsArray, writer);

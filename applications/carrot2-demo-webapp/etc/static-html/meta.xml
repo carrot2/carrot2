@@ -85,7 +85,7 @@
           <example-query url="/search?q=java&amp;in=Wikipedia">java</example-query>
         </example-queries>
       </tab>
-      <tab id="ODP">
+      <tab id="ODP" hidden="true">
         <short>ODP</short>
         <long>Search Open Directory Project data</long>
         <property key="tab.accel" >O</property>
@@ -105,7 +105,7 @@
           <example-query url="/search?q=chips&amp;in=ODP">chips</example-query>
         </example-queries>
       </tab>
-      <tab id="Jobs">
+      <tab id="Jobs" hidden="true">
         <short>Jobs</short>
         <long>Search jobs from indeed.com</long>
         <property key="tab.accel" >J</property>

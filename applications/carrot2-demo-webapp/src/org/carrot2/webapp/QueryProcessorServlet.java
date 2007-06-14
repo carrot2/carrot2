@@ -147,7 +147,8 @@ public final class QueryProcessorServlet extends HttpServlet {
 
         // identify request type first.
         final String type = request.getParameter("type");
-        final SearchRequest searchRequest = searchSettings.parseRequest(request.getParameterMap());
+        final SearchRequest searchRequest = searchSettings.parseRequest(request
+            .getParameterMap(), request.getCookies());
 
         // Initialize loggers depending on the application context.
         if (this.queryLogger == null) {
@@ -329,6 +330,7 @@ public final class QueryProcessorServlet extends HttpServlet {
                 //
                 // document request
                 //
+                final long start = System.currentTimeMillis();
                 final RawDocumentsSerializer serializer = serializerFactory.createRawDocumentSerializer(request);
                 response.setContentType(serializer.getContentType());
                 serializer.startResult(os, searchRequest.query);
@@ -339,7 +341,11 @@ public final class QueryProcessorServlet extends HttpServlet {
                 } catch (BroadcasterException e) {
                     serializer.processingError(e.getCause());
                 }
-                serializer.endResult();
+                final long totalTime = System.currentTimeMillis() - start;
+                
+                // Technically, the total time includes also the serialization time, 
+                // but I guess this is negligible compared to fetching anyway
+                serializer.endResult(totalTime);
             } else {
                 //
                 // clustering request.
@@ -367,9 +373,9 @@ public final class QueryProcessorServlet extends HttpServlet {
                     for (Iterator i = clusters.iterator(); i.hasNext();) {
                         serializer.write((RawCluster) i.next());
                     }
-                    serializer.endResult();
-
                     processingTime = stop - start;
+                    serializer.endResult(processingTime);
+
                     if (queryLogger.isEnabledFor(Level.INFO)) {
                         logQuery(searchRequest, processingTime);
                     }
@@ -378,12 +384,12 @@ public final class QueryProcessorServlet extends HttpServlet {
                     // so we simply emit no clusters.
                     serializer.startResult(os, Collections.EMPTY_LIST, request, searchRequest.query);
                     serializer.processingError(e);
-                    serializer.endResult();
+                    serializer.endResult(processingTime);
                 } catch (Exception e) {
                     logger.warn("Error running input query.", e);
                     serializer.startResult(os, Collections.EMPTY_LIST, request, searchRequest.query);
                     serializer.processingError(e);
-                    serializer.endResult();
+                    serializer.endResult(processingTime);
                 }
             }
         } finally {

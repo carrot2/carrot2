@@ -22,7 +22,8 @@ loaded.setProperties(new String [][] {
 	{"tab.description.startup", "Carrot Clustering Engine will search Poznan University of Technology domains and organize the results into thematic categories"},
 	{"tab.exampleQueries", "computing science|idss|seminaria|publikacje"},
 	{"tab.icon", "put.gif"},
-	{"tab.default", "false"}
+	{"tab.default", "false"},
+	{"tab.hidden", "true"}
 });
 
 return loaded;

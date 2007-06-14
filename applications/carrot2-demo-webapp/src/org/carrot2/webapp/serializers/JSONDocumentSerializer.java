@@ -78,7 +78,7 @@ final class JSONDocumentSerializer implements RawDocumentsSerializer
     /**
      * 
      */
-    public void endResult() throws IOException
+    public void endResult(long fetchingTime) throws IOException
     {
         final RawDocument [] docsArray = (RawDocument []) docs.toArray(new RawDocument [docs.size()]);
         RawDocument2JSON.serialize(docsArray, writer);

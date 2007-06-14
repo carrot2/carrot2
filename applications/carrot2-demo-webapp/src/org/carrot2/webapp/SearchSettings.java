@@ -15,6 +15,8 @@ package org.carrot2.webapp;
 
 import java.util.*;
 
+import javax.servlet.http.Cookie;
+
 /**
  * All available search settings and options.
  * 
@@ -28,8 +30,8 @@ public final class SearchSettings {
     final ArrayList algorithms = new ArrayList();
 
     /** Lookup indexes for input tabs and algorithms. */
-    final HashMap inputTabsIndex = new HashMap();
-    final HashMap algorithmsIndex = new HashMap();
+    final Map inputTabsIndex = new HashMap();
+    final Map algorithmsIndex = new HashMap();
 
     /** Allowed input sizes */
     int [] allowedInputSizes;
@@ -101,8 +103,8 @@ public final class SearchSettings {
      * Parses request arguments and returns a valid
      * search request object.
      */
-    public SearchRequest parseRequest(Map parameterMap) {
-        return new SearchRequest(this, parameterMap);
+    public SearchRequest parseRequest(Map parameterMap, Cookie [] cookies) {
+        return new SearchRequest(this, parameterMap, cookies);
     }
 
     /**
