@@ -17,6 +17,8 @@
   <xsl:param name="init-from-url">false</xsl:param> <!-- Set to 'true' only for generating static HTMLs -->
   <xsl:param name="force-results-page">false</xsl:param> <!-- Set to 'true' only for generating static HTMLs (results page) -->
 
+  <xsl:param name="carrot2.website.url">http://project.carrot2.org</xsl:param>
+
   <xsl:template name="custom-results-utils">
     <div id="results-utils">
       <a href="{$carrot2.website.url}">About</a> |
@@ -26,17 +28,15 @@
       <a href="http://www.carrot-search.com">Carrot Search</a>
     </div>
   </xsl:template>
-    
+
   <xsl:template name="custom-results-logo">
     <a href="{$contextPath}/"><img border="0" src="{$skinuri}/img/results-logo.gif" id="results-logo" alt="Carrot2 logo" /></a>
   </xsl:template>
-    
+
   <xsl:template name="custom-startup-logo">
     <a href="{$contextPath}/"><img border="0" src="{$skinuri}/img/startup-logo.gif" id="startup-logo" alt="Carrot2 logo" /></a>
   </xsl:template>
-  
-  <xsl:param name="carrot2.website.url">http://project.carrot2.org</xsl:param>
-  
+
   <xsl:template name="startup-extra-content">
     <div id="startup-extra-ruler" />
 
