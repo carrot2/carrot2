@@ -29,8 +29,8 @@
   </xsl:template>
 
   <xsl:template name="body-insert">
-    <script type="text/javascript" src="http://yui.yahooapis.com/2.2.0/build/yahoo-dom-event/yahoo-dom-event.js" ></script>
-    <script type="text/javascript" src="http://yui.yahooapis.com/2.2.0/build/dragdrop/dragdrop-min.js" ></script>
+    <script type="text/javascript" src="{$skinuri}/js/yui/yahoo-dom-event.js" ></script>
+    <script type="text/javascript" src="{$skinuri}/js/yui/dragdrop-min.js" ></script>
     <script type="text/javascript" src="{$skinuri}/js/DDTab.js" ></script>
     <script type="text/javascript" src="{$skinuri}/js/SearchTab.js" ></script>
     <script type="text/javascript" src="{$skinuri}/js/SearchTabModel.js" ></script>
