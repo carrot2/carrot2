@@ -44,7 +44,7 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
 
     /** For permanent marking of query words */
     private Set queryWordIds;
-    
+
     public FancyDocumentSerializer(String contextPath, String stylesheetsBase,
         ResourceBundle messages)
     {
@@ -75,7 +75,7 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
                 "<!--[if IE]><link href=\"" +  base + "/css/documents-ie.css\" rel=\"stylesheet\"><![endif]-->" +
                 "</head>" +
                 "<body style=\"height: 100%;\">\r\n" +
-                "<script type=\"text/javascript\" src=\"http://yui.yahooapis.com/2.2.0/build/yahoo-dom-event/yahoo-dom-event.js\" ></script>" +
+                "<script type=\"text/javascript\" src=\"" + base + "/js/yui/yahoo-dom-event.js\" ></script>" +
                 "<script type=\"text/javascript\" src=\"" + base + "/js/Documents.js\" ></script>" +
                 "<script type=\"text/javascript\" src=\"" + base + "/js/DOM.js\" ></script>" +
                 "<script type=\"text/javascript\">\n" +

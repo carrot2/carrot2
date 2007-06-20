@@ -15,8 +15,8 @@
 <xsl:text disable-output-escaping="yes">&lt;!--[if IE]&gt;</xsl:text>
     <link rel="stylesheet" href="{$skinuri}/css/clusters-ie.css" />
 <xsl:text disable-output-escaping="yes">&lt;![endif]--&gt;</xsl:text>
-    <script type="text/javascript" src="http://yui.yahooapis.com/2.2.2/build/yahoo-dom-event/yahoo-dom-event.js" ></script>
-    <script type="text/javascript" src="http://yui.yahooapis.com/2.2.2/build/history/history-experimental-min.js"></script>
+    <script type="text/javascript" src="{$skinuri}/js/yui/yahoo-dom-event.js" ></script>
+    <script type="text/javascript" src="{$skinuri}/js/yui/history-experimental-min.js" ></script>
     <script type="text/javascript" src="{$skinuri}/js/DOM.js" ></script>
     <script type="text/javascript" src="{$skinuri}/js/Cookies.js" ></script>
     <script type="text/javascript" src="{$skinuri}/js/Clusters.js"></script>
@@ -71,7 +71,7 @@ YAHOO.util.Event.addListener(window, "load", init);
         <xsl:value-of select="/searchresult/strings/no-clusters-created" />
       </div>
     </xsl:if>
-    
+
     <xsl:comment> clustering time: <xsl:value-of select="time/@clustering" /> ms </xsl:comment>
   </xsl:template>
 
