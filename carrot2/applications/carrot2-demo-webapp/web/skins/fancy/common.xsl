@@ -15,7 +15,7 @@
 <html>
   <head>
     <title>Carrot Clustering Engine</title>
-    
+
     <link rel="stylesheet" type="text/css" href="{$skinuri}/css/common.css" />
     <xsl:call-template name="head-insert" />
   </head>
@@ -30,7 +30,9 @@
     <xsl:call-template name="body-insert" />
 
     <xsl:apply-templates />
-    
+
+    <xsl:call-template name="body-end-insert" />
+
     <xsl:if test="string-length($ga-code)">
 <script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
 </script>
@@ -55,6 +57,7 @@ urchinTracker();
 
   <!-- Empty body insert -->
   <xsl:template name="body-insert" />
+  <xsl:template name="body-end-insert" />
 
   <!-- Certain HTML elements -->
   <xsl:template match="p|table|tr|td|a|b|ul|br|img|div|select|option|span|li|form|script">

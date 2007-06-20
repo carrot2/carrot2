@@ -41,25 +41,9 @@
 
     <script type="text/javascript">
 var query = "<xsl:value-of select="$query" />";
-var tabModel = new SearchTabModel();
-
-<xsl:for-each select="/page/meta/user-tabs/user-tab">
-  <xsl:choose>
-    <xsl:when test="@selected">
-tabModel.tabs[<xsl:value-of select="position()-1" />] = tabModel.activeTab = new SearchTab('<xsl:value-of select="@id" />');
-    </xsl:when>
-
-    <xsl:otherwise>
-tabModel.tabs[<xsl:value-of select="position()-1" />] = new SearchTab('<xsl:value-of select="@id" />');
-    </xsl:otherwise>
-  </xsl:choose>
-</xsl:for-each>
-
-tabModel.tabs[<xsl:value-of select="count(/page/meta/user-tabs/user-tab)" />] = new SearchTab('-more', true);
-
-<xsl:for-each select="/page/meta/tabs/tab">
-tabModel.allTabs[<xsl:value-of select="position()-1" />] = new SearchTab('<xsl:value-of select="@id" />');
-</xsl:for-each>
+var userTabIds = "<xsl:apply-templates select="/page/meta/user-tabs/user-tab" mode="tab-ids" />";
+var selectedTabId = "<xsl:value-of select="/page/meta/user-tabs/user-tab[@selected]/@id" />";
+var allTabIds = "<xsl:apply-templates select="/page/meta/tabs/tab" mode="tab-ids" />";
     </script>
 
     <script type="text/javascript" src="{$skinuri}/js/Carrot2App.js" ></script>
@@ -68,6 +52,9 @@ tabModel.allTabs[<xsl:value-of select="position()-1" />] = new SearchTab('<xsl:v
 YAHOO.util.Event.addListener(window, "load", c2AppInit, stc, true);
     </script>
   </xsl:template>
+
+  <xsl:template match="user-tab" mode="tab-ids"><xsl:value-of select="@id" />:</xsl:template>
+  <xsl:template match="tab" mode="tab-ids"><xsl:value-of select="@id" />:</xsl:template>
 
   <!-- end of customization block -->
 
