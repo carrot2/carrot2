@@ -16,7 +16,7 @@ SearchTabView.prototype.applyTabInsert = function(tab) {
 
   var tabEl = document.getElementById(tab.id+"-h").cloneNode(true);
   tabEl.id = tab.id;
-  
+
   bodyEl.appendChild(tabEl);
   rowElement.insertBefore(linkEl, tds[tds.length - 2]);
   rowElement.insertBefore(bodyEl, tds[tds.length - 3]);
@@ -29,16 +29,26 @@ SearchTabView.prototype.applyModelChanges = function() {
 
   // Make sure the number of td elements is correct
   var tds = rowElement.getElementsByTagName("td");
-  var diff = (tds.length - 1) / 2 - this.tabModel.tabs.length;
-  if (diff > 0) {
-    // Remove td
-    for (var i = 0; i < (tds.length - 1) / 2; i++) {
-      var tabEl = tds[i * 2 + 1].getElementsByTagName("div")[0];
-      if (this.tabModel.getTabIndex(tabEl.id) < 0) {
-        rowElement.removeChild(tds[i * 2]);
-        rowElement.removeChild(tds[i * 2]);
-        break;
-      }
+
+  // Add missing tabs
+  for (var i = 0; i < tabModel.tabs.length; i++) {
+    if (!document.getElementById(tabModel.tabs[i].id)) {
+      var td = tabView.applyTabInsert(tabModel.tabs[i]);
+      YAHOO.util.Event.addListener(td,
+                                   "click", stc.tabClickListener,
+                                   { controller: stc },
+                                   true);
+      new DDTab(tabModel.tabs[i].id, "tabs", null, stc);
+    }
+  }
+
+  // Remove tds
+  for (var i = (tds.length - 1) / 2 - 2; i >= 0 ; i--) {
+    var tabEl = tds[i * 2 + 1].getElementsByTagName("div")[0];
+    if (this.tabModel.getTabIndex(tabEl.id) < 0) {
+      rowElement.removeChild(tds[i * 2]);
+      rowElement.removeChild(tds[i * 2]);
+      Dom.hide(tabEl.id + "-desc");
     }
   }
 
@@ -57,7 +67,7 @@ SearchTabView.prototype.applyModelChanges = function() {
     var first = this.tabModel.isTabFirst(tab.id);
     var last = this.tabModel.isTabLast(tab.id);
     var prevActive = i != 0 ? this.tabModel.tabs[i - 1] == this.tabModel.activeTab : this.tabModel.tabs[i] == this.tabModel.activeTab;
-    
+
     if (tab == this.tabModel.activeTab) {
       tabElement.parentNode.className = "tab-active-body";
       if (first) {

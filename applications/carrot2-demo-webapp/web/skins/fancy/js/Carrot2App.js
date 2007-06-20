@@ -1,3 +1,40 @@
+var COOKIE_DD_TIP = "dd-tip";
+var COOKIE_TAB_ORDER = "tab-order";
+var COOKIE_ACTIVE_TAB = "active-tab";
+
+// Initialize tab model
+var tabModel = new SearchTabModel();
+
+var cookieUserTabIds = Cookies.readCookie(COOKIE_TAB_ORDER);
+var cookieActiveTabId = Cookies.readCookie(COOKIE_ACTIVE_TAB);
+
+var actualUserTabIds = cookieUserTabIds || userTabIds;
+var actualActiveTabId = cookieActiveTabId || selectedTabId;
+
+var split = actualUserTabIds.split(":");
+var i = 0;
+for (i = 0; i < split.length; i++) {
+  if (split[i].length > 0) {
+    tabModel.tabs[i] = new SearchTab(split[i]);
+    if (split[i] == selectedTabId) {
+      tabModel.activeTab = tabModel.tabs[i];
+    }
+  }
+}
+tabModel.tabs[tabModel.tabs.length] = new SearchTab('-more', true);
+
+if (!tabModel.activeTab) {
+  tabModel.activeTab = tabModel.tabs[0];
+  Dom.hide(actualActiveTabId + "-desc");
+}
+
+split = allTabIds.split(":");
+for (i = 0; i < split.length; i++) {
+  if (split[i].length > 0) {
+    tabModel.allTabs[i] = new SearchTab(split[i]);
+  }
+}
+
 var tabView = new SearchTabView(tabModel);
 
 var stc = new SearchTabController(tabModel, tabView,
@@ -6,11 +43,6 @@ var stc = new SearchTabController(tabModel, tabView,
                                   afterSearchTabRemoveAdd,
                                   afterSearchTabRemoveAdd,
                                   afterSearchTabSwap);
-
-var COOKIE_DD_TIP = "dd-tip";
-var COOKIE_TAB_ORDER = "tab-order";
-var COOKIE_ACTIVE_TAB = "active-tab";
-
 function c2AppInit()
 {
   // Drag&drop init
@@ -31,6 +63,12 @@ function c2AppInit()
   YAHOO.util.Dom.get('search-field').value = query;
   YAHOO.util.Dom.get('search-field').focus();
   YAHOO.util.Dom.get('search-field').select();
+
+  // Update tabs based on cookies
+  if (cookieUserTabIds || cookieActiveTabId) {
+    tabView.applyModelChanges();
+    Dom.show(tabModel.activeTab.id + "-desc");
+  }
 }
 
 /** Showing/hinding advanced option */
