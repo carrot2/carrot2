@@ -107,8 +107,9 @@ Setting localization to: ${webapp.localization}
             <filter token="SERIALIZERS_FACTORY" value="${webapp.serializersFactory}"/>
             <filter token="SKIN" value="${webapp.skin}"/>
             <filter token="LOCALIZATION" value="${webapp.localization}"/>
-        	<filter token="ALGORITHMS_PATH" value="${webapp.algorithms.path}" />
-			<filter token="INPUTS_PATH" value="${webapp.inputs.path}" />	
+            <filter token="ALGORITHMS_PATH" value="${webapp.algorithms.path}" />
+            <filter token="INPUTS_PATH" value="${webapp.inputs.path}" />	
+            <filter token="XML_FEED_KEY" value="${webapp.xml.feed.key}" />	
             <filter token="VERSION" value="${release.number} (${tmp:build.tstamp})" />
         </filterset>
 

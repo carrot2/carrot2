@@ -31,6 +31,7 @@ import org.carrot2.core.impl.ArrayInputComponent;
 import org.carrot2.core.impl.ArrayOutputComponent;
 import org.carrot2.util.RollingWindowAverage;
 import org.carrot2.util.StringUtils;
+import org.carrot2.webapp.serializers.C2XMLSerializer;
 
 /**
  * Query processor servlet.
@@ -57,11 +58,13 @@ public final class QueryProcessorServlet extends HttpServlet {
     public static final String PARAM_INPUT = "in";
     public static final String PARAM_ALG = "alg";
     public static final String PARAM_SIZE = "s";
+    public static final String PARAM_XML_FEED_KEY = "xmlkey";
 
     private static final int DOCUMENT_REQUEST = 1;
     private static final int CLUSTERS_REQUEST = 2;
     private static final int PAGE_REQUEST = 3;
     private static final int STATS_REQUEST = 4;
+    private static final int DOCUMENTS_CLUSTERS_REQUEST = 5;
 
     /** All available search settings */
     private SearchSettings searchSettings;
@@ -88,6 +91,9 @@ public final class QueryProcessorServlet extends HttpServlet {
 
     /** Serializer factory used to emit documents and clusters. */
     private SerializersFactory serializerFactory;
+    
+    /** A key required to get the XML feed with clusters and documents */
+    private String xmlFeedKey;
 
     /** A counter for the number of executed queries. */
     private long executedQueries;
@@ -175,14 +181,25 @@ public final class QueryProcessorServlet extends HttpServlet {
             requestType = CLUSTERS_REQUEST;
         } else if ("s".equals(type)) {
             requestType = STATS_REQUEST;
+        } else if ("xml".equals(type)) {
+            requestType = DOCUMENTS_CLUSTERS_REQUEST;
         } else {
             requestType = PAGE_REQUEST;
         }
 
         final OutputStream os = response.getOutputStream();
-        if (requestType == DOCUMENT_REQUEST || requestType == CLUSTERS_REQUEST) {
+        if (requestType == DOCUMENT_REQUEST || requestType == CLUSTERS_REQUEST || requestType == DOCUMENTS_CLUSTERS_REQUEST) {
             // request for documents or clusters
             if (searchRequest.query.length() == 0) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                return;
+            }
+
+            // If the key is missing or wrong
+            if (requestType == DOCUMENTS_CLUSTERS_REQUEST
+                && ("disabled".equals(xmlFeedKey) || !xmlFeedKey.equals(request
+                    .getParameter(PARAM_XML_FEED_KEY))))
+            {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST);
                 return;
             }
@@ -355,7 +372,14 @@ public final class QueryProcessorServlet extends HttpServlet {
                 props.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, 
                         Integer.toString(searchRequest.getInputSize()));
 
-                final RawClustersSerializer serializer = serializerFactory.createRawClustersSerializer(request);
+                RawClustersSerializer serializer;
+                if (requestType == CLUSTERS_REQUEST) { 
+                    serializer = serializerFactory.createRawClustersSerializer(request);
+                }
+                else {
+                    // DOCUMENTS_CLUSTERS_REQUEST
+                    serializer = new C2XMLSerializer();
+                }
                 response.setContentType(serializer.getContentType());
                 try {
                     logger.info("Clustering results using: " + algorithmTab.getShortName());
@@ -472,6 +496,9 @@ public final class QueryProcessorServlet extends HttpServlet {
         }
         searchSettings.setAllowedInputSizes(allowedInputSize, defaultInputSize);
 
+        // Initialize XML feed key
+        this.xmlFeedKey = InitializationUtils.initializeXmlFeedKey(logger, getServletConfig());
+        
         // Initialize serializers.
         this.serializerFactory = InitializationUtils.initializeSerializers(logger, getServletConfig());
 
