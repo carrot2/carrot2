@@ -100,6 +100,11 @@
         	<param-value>@INPUTS_PATH@</param-value>
         </init-param>
 
+        <init-param>
+        	<param-name>xml.feed.key</param-name>
+        	<param-value>@XML_FEED_KEY@</param-value>
+        </init-param>
+
         <load-on-startup>1</load-on-startup>
     </servlet>
 
@@ -111,5 +116,10 @@
     <servlet-mapping>
         <servlet-name>QueryProcessor</servlet-name>
         <url-pattern>/main</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>QueryProcessor</servlet-name>
+        <url-pattern>/xml</url-pattern>
     </servlet-mapping>
 </web-app>

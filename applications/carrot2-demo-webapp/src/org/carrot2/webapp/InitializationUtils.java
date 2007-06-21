@@ -336,4 +336,12 @@ final class InitializationUtils
         return ResourceBundle.getBundle("messages", new Locale(locale), Thread
             .currentThread().getContextClassLoader());
     }
+    
+    /**
+     * Initializes the XML feed key.
+     */
+    static String initializeXmlFeedKey(final Logger logger, final ServletConfig config)
+    {
+        return config.getInitParameter("xml.feed.key");
+    }
 }
