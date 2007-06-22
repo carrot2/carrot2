@@ -70,3 +70,13 @@ Dom.change = function(elementId) {
     Dom.hide(elementId);
   }
 }
+
+Dom.getInnerHTML = function(elementId) {
+  var element = document.getElementById(elementId);
+  if (element) {
+    return element.innerHTML;
+  }
+  else {
+    return null;
+  }
+}

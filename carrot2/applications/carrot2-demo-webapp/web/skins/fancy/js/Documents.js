@@ -1,6 +1,6 @@
 function init()
 {
-  parent.afterDocsLoaded();
+  parent.afterDocsLoaded(Dom.getInnerHTML("itime"));
 
   YAHOO.util.Dom.batch(
     YAHOO.util.Dom.getElementsBy(

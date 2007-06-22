@@ -211,10 +211,8 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
             }
         }
 
-        writer.write("\r\n" +
-                "</style></body>\r\n" +
-                "<!-- document fetch time: " + fetchingTime + " ms -->" +
-                "</html>");
+        writer.write("</style>\r\n" + "<span id=\"itime\" style=\"display: none\">"
+            + fetchingTime + "</span>" + "</body>\r\n" + "</html>");
         writer.flush();
         this.writer = null;
 

@@ -3,7 +3,7 @@ var currentClusterId;
 
 function init()
 {
-  parent.afterClustersLoaded();
+  parent.afterClustersLoaded(Dom.getInnerHTML("ctime"));
 
   YAHOO.util.Dom.batch(
     YAHOO.util.Dom.getElementsBy(
@@ -44,15 +44,15 @@ function init()
     function(element) {
       if (element && element.id) {
         var id = element.id.substring(0, element.id.indexOf("more"));
-        
-        var td = element.getElementsByTagName("td")[1]; 
+
+        var td = element.getElementsByTagName("td")[1];
         YAHOO.util.Event.addListener(td, "click", moreClicked, {id: id, ft: element.className.substring(4)});
-        
-        var span = element.getElementsByTagName("span")[0]; 
+
+        var span = element.getElementsByTagName("span")[0];
         YAHOO.util.Event.addListener(span, "click", moreClicked, {id: id, ft: element.className.substring(4)});
       }
     });
-    
+
   YAHOO.util.Event.addListener("always-all-link", "click", alwaysShowAllClusters);
   YAHOO.util.Event.addListener("top-link", "click", topClusterClicked);
 }
@@ -102,9 +102,9 @@ function showAllClustersClicked()
 
 function topClusterClicked(event)
 {
-  highlightCluster('top'); 
-  highlightWords([]); 
-  showAll(); 
+  highlightCluster('top');
+  highlightWords([]);
+  showAll();
   updateUrl('top');
 }
 
@@ -142,7 +142,7 @@ function foldRange(prefix, morePrefix, start, end)
   {
     Dom.show(prefix + "|" + i);
   }
-  
+
   Dom.hide(prefix + morePrefix + (start-1));
   Dom.show(prefix + morePrefix + (end));
 };
@@ -369,11 +369,11 @@ function updateUrl(id)
 
 function scrollToCluster(id)
 {
-  var hashIndex = (document.location.href.indexOf("#") >= 0 ? 
-    document.location.href.indexOf("#") : document.location.href.length); 
+  var hashIndex = (document.location.href.indexOf("#") >= 0 ?
+    document.location.href.indexOf("#") : document.location.href.length);
   var newURL = document.location.href.substring(0, hashIndex) + "#" + id;
   document.location.replace(newURL);
-  
+
   window.scrollBy(0, -25);
 }
 

@@ -168,12 +168,20 @@ function storeTabOrder()
   Cookies.createCookieForever(COOKIE_TAB_ORDER, selectedTabs);
 }
 
-function afterClustersLoaded()
+function afterClustersLoaded(clusteringTime)
 {
   Dom.hide("clusters-progress");
+  if (clusteringTime) {
+    document.getElementById("ctimec").innerHTML = clusteringTime;
+    Dom.show("ctime");
+  }
 }
 
-function afterDocsLoaded()
+function afterDocsLoaded(inputTime)
 {
   Dom.hide("docs-progress");
+  if (inputTime) {
+    document.getElementById("itimec").innerHTML = inputTime;
+    Dom.show("itime");
+  }
 }

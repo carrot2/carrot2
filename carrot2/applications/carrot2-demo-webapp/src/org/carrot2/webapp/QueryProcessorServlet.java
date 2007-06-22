@@ -29,13 +29,15 @@ import org.carrot2.core.clustering.RawCluster;
 import org.carrot2.core.clustering.RawDocument;
 import org.carrot2.core.impl.ArrayInputComponent;
 import org.carrot2.core.impl.ArrayOutputComponent;
+import org.carrot2.core.profiling.Profile;
+import org.carrot2.core.profiling.ProfiledRequestContext;
 import org.carrot2.util.RollingWindowAverage;
 import org.carrot2.util.StringUtils;
 import org.carrot2.webapp.serializers.C2XMLSerializer;
 
 /**
  * Query processor servlet.
- * 
+ *
  * @author Dawid Weiss
  */
 public final class QueryProcessorServlet extends HttpServlet {
@@ -68,7 +70,7 @@ public final class QueryProcessorServlet extends HttpServlet {
 
     /** All available search settings */
     private SearchSettings searchSettings;
-    
+
     /**
      * A map of {@link Broadcaster}s.
      */
@@ -78,7 +80,7 @@ public final class QueryProcessorServlet extends HttpServlet {
      * A process controller for input tabs. Each tab's name ({@link TabSearchInput#getShortName()})
      * corresponds to an identifier of a process defined in this controller.
      */
-    private LocalControllerBase tabsController; 
+    private LocalControllerBase tabsController;
 
     /**
      * A process controller for algorithms. Each algorithm's name ({@link TabAlgorithm#getShortName()})
@@ -91,7 +93,7 @@ public final class QueryProcessorServlet extends HttpServlet {
 
     /** Serializer factory used to emit documents and clusters. */
     private SerializersFactory serializerFactory;
-    
+
     /** A key required to get the XML feed with clusters and documents */
     private String xmlFeedKey;
 
@@ -104,7 +106,7 @@ public final class QueryProcessorServlet extends HttpServlet {
     /** Total number of successfully processed clustering queries. */
     private long goodQueries;
 
-    /** 
+    /**
      * Average processing times (5 minutes, granularity of 10 seconds).
      */
     private final RollingWindowAverage averageProcessingTime = new RollingWindowAverage(
@@ -117,7 +119,7 @@ public final class QueryProcessorServlet extends HttpServlet {
     private ResourceBundle localizedMessages;
 
     /**
-     * Configure inputs. 
+     * Configure inputs.
      */
     public void init() throws ServletException {
         this.logger = Logger.getLogger(this.getServletName());
@@ -133,7 +135,7 @@ public final class QueryProcessorServlet extends HttpServlet {
     /**
      * Process a HTTP GET request.
      */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException
     {
         // check if initialized.
@@ -172,7 +174,7 @@ public final class QueryProcessorServlet extends HttpServlet {
         }
 
         request.setAttribute(Constants.RESOURCE_BUNDLE_KEY, localizedMessages);
-        
+
         // Determine request type and redirect control
         final int requestType;
         if ("d".equals(type)) {
@@ -208,12 +210,12 @@ public final class QueryProcessorServlet extends HttpServlet {
                 processSearchQuery(os, requestType, searchRequest, request, response);
             } catch (IOException e) {
                 // Handle process exception gracefully?
-                servletError(request, response, os, "An internal error occurred." 
+                servletError(request, response, os, "An internal error occurred."
                         + searchRequest.getInputTab().getShortName(), e);
             }
         } else if (requestType == STATS_REQUEST) {
             // request for statistical information about the engine.
-            // we check if the request contains a special token known to the 
+            // we check if the request contains a special token known to the
             // administrator of the engine (so that statistics are available
             // only to certain people).
             final String statsKey = System.getProperty(STATISTICS_KEY);
@@ -233,7 +235,7 @@ public final class QueryProcessorServlet extends HttpServlet {
 
                     output.write("jvm.freemem: " + Runtime.getRuntime().freeMemory() + "\n");
                     output.write("jvm.totalmem: " + Runtime.getRuntime().totalMemory() + "\n");
-    
+
                     final Statistics stats = this.ehcache.getStatistics();
                     output.write("ehcache.hits: " + stats.getCacheHits() + "\n");
                     output.write("ehcache.misses: " + stats.getCacheMisses() + "\n");
@@ -254,7 +256,7 @@ public final class QueryProcessorServlet extends HttpServlet {
     }
 
     /**
-     * A thread that fetches search results and caches them. 
+     * A thread that fetches search results and caches them.
      */
     private class SearchResultsDownloaderThread extends Thread {
         private final SearchRequest searchRequest;
@@ -269,7 +271,7 @@ public final class QueryProcessorServlet extends HttpServlet {
 
         public void run() {
             final HashMap props = new HashMap();
-            props.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, 
+            props.put(LocalInputComponent.PARAM_REQUESTED_RESULTS,
                     Integer.toString(searchRequest.getInputSize()));
             props.put(BroadcasterPushOutputComponent.BROADCASTER, bcaster);
             try {
@@ -283,7 +285,7 @@ public final class QueryProcessorServlet extends HttpServlet {
             try {
                 // add documents to the cache
                 ehcache.put(
-                        new net.sf.ehcache.Element(queryHash, 
+                        new net.sf.ehcache.Element(queryHash,
                                 new SearchResults(bcaster.getDocuments())));
             } catch (CacheException e) {
                 logger.error("Could not save results to cache.", e);
@@ -294,8 +296,8 @@ public final class QueryProcessorServlet extends HttpServlet {
     /**
      * Process a document or cluster search query.
      */
-    private void processSearchQuery(OutputStream os, final int requestType, 
-            SearchRequest searchRequest, HttpServletRequest request, HttpServletResponse response) 
+    private void processSearchQuery(OutputStream os, final int requestType,
+            SearchRequest searchRequest, HttpServletRequest request, HttpServletResponse response)
         throws IOException
     {
         final TabAlgorithm algorithmTab = searchRequest.getAlgorithm();
@@ -307,9 +309,9 @@ public final class QueryProcessorServlet extends HttpServlet {
             logger.debug("Request unacceptable (denied by factory).");
             return;
         }
-        
+
         synchronized (getServletContext()) {
-            final Broadcaster existingbcaster = (Broadcaster ) bcasters.get(queryHash); 
+            final Broadcaster existingbcaster = (Broadcaster ) bcasters.get(queryHash);
             if (existingbcaster != null) {
                 //
                 // Existing broadcaster is reused.
@@ -319,7 +321,7 @@ public final class QueryProcessorServlet extends HttpServlet {
             } else {
                 final net.sf.ehcache.Element value = ehcache.get(queryHash);
                 if (value != null) {
-                    // 
+                    //
                     // Recreate a broadcaster from the cache.
                     //
                     logger.debug("Broadcaster recovered from cache: " + searchRequest.query);
@@ -328,7 +330,7 @@ public final class QueryProcessorServlet extends HttpServlet {
                 } else {
                     //
                     // A new broadcaster is needed.
-                    // 
+                    //
                     logger.debug("Broadcaster created: " + searchRequest.query);
                     bcaster = new Broadcaster();
                     bcasters.put(queryHash, bcaster);
@@ -359,8 +361,8 @@ public final class QueryProcessorServlet extends HttpServlet {
                     serializer.processingError(e.getCause());
                 }
                 final long totalTime = System.currentTimeMillis() - start;
-                
-                // Technically, the total time includes also the serialization time, 
+
+                // Technically, the total time includes also the serialization time,
                 // but I guess this is negligible compared to fetching anyway
                 serializer.endResult(totalTime);
             } else {
@@ -369,11 +371,11 @@ public final class QueryProcessorServlet extends HttpServlet {
                 //
                 final HashMap props = new HashMap();
                 props.put(ArrayInputComponent.PARAM_SOURCE_RAW_DOCUMENTS, docIterator);
-                props.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, 
+                props.put(LocalInputComponent.PARAM_REQUESTED_RESULTS,
                         Integer.toString(searchRequest.getInputSize()));
 
                 RawClustersSerializer serializer;
-                if (requestType == CLUSTERS_REQUEST) { 
+                if (requestType == CLUSTERS_REQUEST) {
                     serializer = serializerFactory.createRawClustersSerializer(request);
                 }
                 else {
@@ -383,21 +385,29 @@ public final class QueryProcessorServlet extends HttpServlet {
                 response.setContentType(serializer.getContentType());
                 try {
                     logger.info("Clustering results using: " + algorithmTab.getShortName());
-                    final long start = System.currentTimeMillis();
-                    final ProcessingResult result = 
-                        algorithmsController.query(algorithmTab.getShortName(), 
+                    final ProcessingResult result =
+                        algorithmsController.query(algorithmTab.getShortName(),
                                 searchRequest.query, props);
-                    final long stop = System.currentTimeMillis();
-                    final ArrayOutputComponent.Result collected =  
+                    final ArrayOutputComponent.Result collected =
                         (ArrayOutputComponent.Result) result.getQueryResult();
-                    final List clusters = collected.clusters; 
+                    final List clusters = collected.clusters;
                     final List documents = bcaster.getDocuments();
 
                     serializer.startResult(os, documents, request, searchRequest.query);
                     for (Iterator i = clusters.iterator(); i.hasNext();) {
                         serializer.write((RawCluster) i.next());
                     }
-                    processingTime = stop - start;
+
+                    List profiles = ((ProfiledRequestContext) result
+                        .getRequestContext()).getProfiles();
+                    Profile [] array = (Profile []) profiles
+                        .toArray(new Profile [profiles.size()]);
+                    // count only filters
+                    for (int i = 1; i < array.length - 1; i++)
+                    {
+                        processingTime += array[i].getTotalTimeElapsed();
+                    }
+
                     serializer.endResult(processingTime);
 
                     if (queryLogger.isEnabledFor(Level.INFO)) {
@@ -472,7 +482,7 @@ public final class QueryProcessorServlet extends HttpServlet {
             logger.warn("Could not parse inputSize.default: " + getServletConfig()
                 .getInitParameter("inputSize.default"));
         }
-        
+
         // Initialize the allowed input sizes
         int [] allowedInputSize = new int [] {50, 100, 200, 400};
         String sizesString = getServletConfig().getInitParameter("inputSize.choices");
@@ -498,7 +508,7 @@ public final class QueryProcessorServlet extends HttpServlet {
 
         // Initialize XML feed key
         this.xmlFeedKey = InitializationUtils.initializeXmlFeedKey(logger, getServletConfig());
-        
+
         // Initialize serializers.
         this.serializerFactory = InitializationUtils.initializeSerializers(logger, getServletConfig());
 
@@ -526,14 +536,14 @@ public final class QueryProcessorServlet extends HttpServlet {
         // Initialize the bundle for localized messages
         this.localizedMessages = InitializationUtils.initializeResourceBundle(logger,
             getServletConfig());
-        
+
         // Mark as initialized.
         this.initialized = true;
     }
 
     /**
      * Attempts to send an internal server error HTTP error, if possible.
-     * Otherwise simply pushes the exception message to the output stream. 
+     * Otherwise simply pushes the exception message to the output stream.
 
      * @param message Message to be printed to the logger and to the output stream.
      * @param t Exception that caused the error.
