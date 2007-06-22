@@ -31,6 +31,7 @@ import org.carrot2.core.clustering.RawDocument;
 import org.carrot2.core.controller.*;
 import org.carrot2.core.controller.loaders.BeanShellFactoryDescriptionLoader;
 import org.carrot2.core.impl.*;
+import org.carrot2.core.profiling.ProfiledLocalController;
 import org.carrot2.util.StringUtils;
 import org.carrot2.webapp.serializers.XMLSerializersFactory;
 
@@ -213,7 +214,7 @@ final class InitializationUtils
                     if (ignoreOnError)
                     {
                         // ignore exception.
-                        logger.warn("Skipping input tab: " + tabName + " (ignored exception: " + 
+                        logger.warn("Skipping input tab: " + tabName + " (ignored exception: " +
                             StringUtils.chainExceptionMessages(e) + ")");
                     }
                     else
@@ -249,7 +250,7 @@ final class InitializationUtils
             throw new RuntimeException("Scripts for algorithm tabs not initialized.");
         }
 
-        final LocalControllerBase controller = new LocalControllerBase();
+        final LocalControllerBase controller = new ProfiledLocalController();
         final ControllerHelper helper = new ControllerHelper();
 
         try
@@ -336,7 +337,7 @@ final class InitializationUtils
         return ResourceBundle.getBundle("messages", new Locale(locale), Thread
             .currentThread().getContextClassLoader());
     }
-    
+
     /**
      * Initializes the XML feed key.
      */

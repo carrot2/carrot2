@@ -449,10 +449,10 @@ YAHOO.util.Event.addListener(window, "load", c2AppInit, stc, true);
                   <tr>
                     <td colspan="2" class="reshead">
                         Query: <b><xsl:value-of select="$query" /></b>
-                        -- Input: <b><xsl:value-of select="/page/meta/tabs/tab[@selected = 'selected']/short" />
-                                  (<xsl:value-of select="/page/meta/query-sizes/size[@selected = 'selected']" /> results)
-                                  </b>
-                        -- Clusterer: <b><xsl:value-of select="/page/meta/algorithms/alg[@selected = 'selected']/short" /></b>
+                        -- Source: <b><xsl:value-of select="/page/meta/tabs/tab[@id = /page/meta/user-tabs/user-tab[@selected]/@id]/short" /></b>
+                                  (<xsl:value-of select="/page/meta/query-sizes/size[@selected]" /> results<span style="display: none" id="itime">, <span id="itimec"></span> ms</span>)
+                        -- Clusterer: <b><xsl:value-of select="/page/meta/algorithms/alg[@selected]/short" /></b>
+                                  &#160;<span style="display: none" id="ctime">(<span id="ctimec"></span> ms)</span>
                     </td>
                   </tr>
                 </xsl:if>

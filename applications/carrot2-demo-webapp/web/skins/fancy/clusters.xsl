@@ -72,7 +72,7 @@ YAHOO.util.Event.addListener(window, "load", init);
       </div>
     </xsl:if>
 
-    <xsl:comment> clustering time: <xsl:value-of select="time/@clustering" /> ms </xsl:comment>
+    <span id="ctime" style="display: none"><xsl:value-of select="time/@clustering" /></span>
   </xsl:template>
 
   <xsl:template match="group">
