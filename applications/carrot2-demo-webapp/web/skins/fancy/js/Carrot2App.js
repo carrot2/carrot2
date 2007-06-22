@@ -172,8 +172,11 @@ function afterClustersLoaded(clusteringTime)
 {
   Dom.hide("clusters-progress");
   if (clusteringTime) {
-    document.getElementById("ctimec").innerHTML = clusteringTime;
-    Dom.show("ctime");
+    var holder = document.getElementById("ctimec");
+    if (holder) {
+      holder.innerHTML = clusteringTime;
+      Dom.show("ctime");
+    }
   }
 }
 
@@ -181,7 +184,10 @@ function afterDocsLoaded(inputTime)
 {
   Dom.hide("docs-progress");
   if (inputTime) {
-    document.getElementById("itimec").innerHTML = inputTime;
-    Dom.show("itime");
+    var holder = document.getElementById("itimec");
+    if (holder) {
+      holder.innerHTML = inputTime;
+      Dom.show("itime");
+    }
   }
 }
