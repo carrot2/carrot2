@@ -18,7 +18,8 @@ import org.carrot2.core.ProcessingException;
 import org.carrot2.core.clustering.RawDocument;
 
 /**
- * A parallel fetcher can spawn multiple threads to download search results.
+ * A parallel fetcher executes multiple parallel threads to 
+ * download search results concurrently.
  * 
  * @author Dawid Weiss
  */
@@ -42,7 +43,8 @@ public abstract class ParallelFetcher
     /**
      * 
      */
-    public ParallelFetcher(String fetcherName, String query, int startAt, int resultsRequested, int maximumResults)
+    public ParallelFetcher(String fetcherName, String query, int startAt, 
+        int resultsRequested, int maximumResults)
     {
         this.logger = Logger.getLogger(ParallelFetcher.class + "." + fetcherName);
         this.startAt = startAt;
