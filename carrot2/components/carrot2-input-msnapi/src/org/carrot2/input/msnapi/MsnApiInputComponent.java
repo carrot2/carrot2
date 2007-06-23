@@ -59,11 +59,6 @@ public final class MsnApiInputComponent extends LocalInputComponentBase implemen
     private RawDocumentsConsumer rawDocumentConsumer;
 
     /**
-     * MSN search service wrapper.
-     */
-    private final MSNSearchPortType service;
-
-    /**
      * Application id for querying MSN Search.
      */
     private final String appid;
@@ -80,15 +75,6 @@ public final class MsnApiInputComponent extends LocalInputComponentBase implemen
     {
         this.appid = appid;
         this.culture = culture;
-
-        try
-        {
-            this.service = new MSNSearchServiceLocator().getMSNSearchPort();
-        }
-        catch (ServiceException e)
-        {
-            throw new RuntimeException("Could not initialize MSN service.", e);
-        }
     }
     
     /**
@@ -235,6 +221,16 @@ public final class MsnApiInputComponent extends LocalInputComponentBase implemen
         {
             sourceRequest
         });
+
+        MSNSearchPortType service;
+        try
+        {
+            service = new MSNSearchServiceLocator().getMSNSearchPort();
+        }
+        catch (ServiceException e)
+        {
+            throw new ProcessingException("Could not initialize MSN service.", e);
+        }
 
         final SourceResponse [] responses;
         try
