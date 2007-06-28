@@ -21,19 +21,13 @@ import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 /**
  * All settings required to perform a search in Lucene: location of the index,
  * searched fields, analyzer etc.
- * 
+ *
  * @author Dawid Weiss
- * @author Sairaj Sunil 
+ * @author Sairaj Sunil
  * @author Stanislaw Osinski
  */
-public final class LuceneSearchConfig
+public final class LuceneLocalInputComponentFactoryConfig
 {
-    /** Lucene Searcher */
-    final Searcher searcher;
-
-    /** Lucene Analyzer */
-    final Analyzer analyzer;
-
     /** Lucene fields to be searched */
     final String [] searchFields;
 
@@ -47,7 +41,7 @@ public final class LuceneSearchConfig
 
     /**
      * Creates a default Lucene search config with summarization switched off.
-     * 
+     *
      * @param searcher
      * @param analyzer
      * @param searchFields
@@ -55,20 +49,18 @@ public final class LuceneSearchConfig
      * @param summaryField
      * @param urlField
      */
-    public LuceneSearchConfig(Searcher searcher, Analyzer analyzer,
+    public LuceneLocalInputComponentFactoryConfig(
         String [] searchFields, String titleField, String summaryField,
         String urlField)
     {
-        this(searcher, analyzer, searchFields, titleField, summaryField,
+        this(searchFields, titleField, summaryField,
             urlField, NO_SUMMARIES);
     }
 
-    public LuceneSearchConfig(Searcher searcher, Analyzer analyzer,
+    public LuceneLocalInputComponentFactoryConfig(
         String [] searchFields, String titleField, String summaryField,
         String urlField, LuceneSummarizerConfig summarizerConfig)
     {
-        this.searcher = searcher;
-        this.analyzer = analyzer;
         this.searchFields = searchFields;
         this.titleField = titleField;
         this.summaryField = summaryField;
@@ -79,7 +71,7 @@ public final class LuceneSearchConfig
     /**
      * Setting of the Lucene's snippet generator to be used on the summary
      * field. Please see the constants for example summarizer configurations.
-     * 
+     *
      * @author Stanislaw Osinski
      */
     public static class LuceneSummarizerConfig
