@@ -1,0 +1,42 @@
+
+<project name="Carrot2 input component using Alexa Web Search API" default="build">
+    <property file="${user.home}/.carrot.properties" />
+    <fail unless="carrot2.code.dir" />
+
+    <property name="tests.available"  value="true"    />
+
+    <property name="project.dir" location="${basedir}" />
+    <property name="dist.name" value="carrot2-input-alexa" />
+    <property name="type" value="jartype" />
+
+    <import file="${carrot2.code.dir}/components/common-targets.inc" />
+
+    <target name="generate">
+        <path id="axis.classpath">
+          <fileset dir="${carrot2.code.dir}">
+            <include name="lib/commons-logging*.jar" />
+            <include name="lib/axis/*.jar" />
+          </fileset>
+        </path>
+
+        <taskdef resource="axis-tasks.properties" classpathref="axis.classpath" />
+
+        <delete>
+        	<fileset dir="src">
+            		<include name="com/alexasearch/**/*.java" />
+            	</fileset>
+        </delete>
+
+        <axis-wsdl2java
+          output="src"
+          testcase="false"
+          verbose="true"
+          nowrapped="true"
+          all="true"
+          url="wsdl/AlexaWebSearch-2007-03-15.wsdl">
+            <mapping
+              namespace="http://wsearch.amazonaws.com/doc/2007-03-15/"
+              package="com.alexasearch" />
+        </axis-wsdl2java>
+    </target>
+</project>

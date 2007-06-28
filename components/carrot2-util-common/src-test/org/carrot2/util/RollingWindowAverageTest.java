@@ -16,7 +16,7 @@ import junit.framework.TestCase;
 
 /**
  * Tests {@link RollingWindowAverage}.
- * 
+ *
  * @author Dawid Weiss
  */
 public class RollingWindowAverageTest extends TestCase
@@ -58,7 +58,7 @@ public class RollingWindowAverageTest extends TestCase
         assertEquals("Average incorrect.", (2.0 + 3 + 5 + 7 + 9) / 5, rwa
             .getCurrentAverage(), 0.01d);
 
-        Thread.sleep(1100 * RollingWindowAverage.MILLIS);
+        Thread.sleep(1200 * RollingWindowAverage.MILLIS);
 
         assertEquals("Average incorrect.", 0, rwa.getCurrentAverage(), 0.01d);
     }
