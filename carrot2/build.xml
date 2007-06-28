@@ -348,6 +348,8 @@ TESTING: @{component.path}
     <component-apply component.path="components/carrot2-util-lang-guesser" />
     <component-apply component.path="components/carrot2-util-gzip" />
 
+    <component-apply component.path="components/carrot2-input-aggregator" />
+    <component-apply component.path="components/carrot2-input-alexa" />
     <component-apply component.path="components/carrot2-input-xml" />
     <component-apply component.path="components/carrot2-input-lucene" />
     <component-apply component.path="components/carrot2-input-googleapi" />
