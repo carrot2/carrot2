@@ -23,6 +23,7 @@
     <div id="results-utils">
       <a href="{$carrot2.website.url}">About</a> |
       <a href="{$carrot2.website.url}/demos.html">More demos</a> |
+      <a href="{$carrot2.website.url}/browser-plugins.html">Plugins</a> |
       <a href="{$carrot2.website.url}/download.html">Download</a> |
       <a href="http://sf.net/projects/carrot2">Carrot2 @ sf.net</a> |
       <a href="http://www.carrot-search.com">Carrot Search</a>
@@ -41,10 +42,16 @@
     <div id="startup-extra-ruler" />
 
     <div id="startup-extra">
-      <a href="{$carrot2.website.url}">About</a> | <a href="{$carrot2.website.url}/demos.html">More demos</a> | <a href="{$carrot2.website.url}/applications.html">Applications</a> | <a href="{$carrot2.website.url}/download.html">Download</a> | <a href="{$carrot2.website.url}/faq.html">FAQ</a> | <a href="{$carrot2.website.url}/support.html">Contact</a>
+      <a href="{$carrot2.website.url}">About</a> |
+      <a href="{$carrot2.website.url}/demos.html">More demos</a> |
+      <a href="{$carrot2.website.url}/applications.html">Applications</a> |
+      <a href="{$carrot2.website.url}/browser-plugins.html">Plugins</a> |
+      <a href="{$carrot2.website.url}/download.html">Download</a> |
+      <a href="{$carrot2.website.url}/faq.html">FAQ</a> |
+      <a href="{$carrot2.website.url}/support.html">Contact</a>
     </div>
   </xsl:template>
-  
+
   <xsl:template name="copyright-holder">
     © 2002-<xsl:value-of select="/page/@year" />&#160;<a href="http://www.man.poznan.pl/~stachoo/">Stanislaw Osinski</a>, <a href="http://www.cs.put.poznan.pl/dweiss/">Dawid Weiss</a>
   </xsl:template>
