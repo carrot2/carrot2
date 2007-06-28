@@ -33,7 +33,7 @@ import org.carrot2.util.*;
 
 /**
  * Settings class for Lucene input component.
- * 
+ *
  * @author Dawid Weiss
  */
 public final class LuceneSettings extends ProcessSettingsBase {
@@ -43,10 +43,10 @@ public final class LuceneSettings extends ProcessSettingsBase {
     private final static File CONFIG_DIR = new File(System.getProperty("user.home"), CONFIG_DIR_NAME);
     private final static String CONFIG_FILE_NAME = "carrot2-browser.lucene-input.properties";
     private final static File CONFIG_FILE = new File(CONFIG_DIR, CONFIG_FILE_NAME);
-    
+
     /** Lucene index directory */
     File luceneIndexDir;
-    
+
     /** Lucene Analyzer */
     Analyzer analyzer;
 
@@ -57,6 +57,7 @@ public final class LuceneSettings extends ProcessSettingsBase {
     String titleField;
     String summaryField;
     String urlField;
+    boolean createSnippets;
 
     private Searcher searcher;
 
@@ -65,7 +66,7 @@ public final class LuceneSettings extends ProcessSettingsBase {
         loadConfigFile();
     }
 
-    /** 
+    /**
      * Cloning constructor.
      */
     public LuceneSettings(LuceneSettings other) {
@@ -75,6 +76,7 @@ public final class LuceneSettings extends ProcessSettingsBase {
         this.titleField = other.titleField;
         this.summaryField = other.summaryField;
         this.urlField = other.urlField;
+        this.createSnippets = other.createSnippets;
 
         if (luceneIndexDir != null) {
             createSearcher();
@@ -105,10 +107,13 @@ public final class LuceneSettings extends ProcessSettingsBase {
             throw new RuntimeException("Not configured yet.");
         }
         final HashMap map = new HashMap();
-        map.put(LuceneLocalInputComponent.LUCENE_CONFIG, 
+        map.put(LuceneLocalInputComponent.LUCENE_CONFIG,
                 new LuceneSearchConfig(searcher,
                         analyzer, searchFields, titleField,
-                        summaryField, urlField));
+                        summaryField, urlField,
+                        (createSnippets ?
+                            LuceneSearchConfig.LONG_PLAIN_TEXT_SUMMARY :
+                            LuceneSearchConfig.NO_SUMMARIES)));
         return map;
     }
 
@@ -128,11 +133,11 @@ public final class LuceneSettings extends ProcessSettingsBase {
         if (this.analyzer == null) {
             return false;
         }
-        
+
         if (this.searchFields == null || this.searchFields.length == 0) {
             return false;
         }
-        
+
         if (this.titleField == null || this.summaryField == null || this.urlField == null) {
             return false;
         }
@@ -151,17 +156,20 @@ public final class LuceneSettings extends ProcessSettingsBase {
         }
     }
 
-    final void setConfig(File indexDir, String [] searchFields, String urlField, String titleField, String snippetField, Analyzer analyzer) {
+    final void setConfig(File indexDir, String [] searchFields, String urlField,
+        String titleField, String snippetField, Analyzer analyzer, boolean createSnippets)
+    {
         this.luceneIndexDir = indexDir;
         this.searchFields = searchFields;
         this.urlField = urlField;
         this.titleField = titleField;
         this.summaryField = snippetField;
         this.analyzer = analyzer;
+        this.createSnippets = createSnippets;
         saveConfigFile();
         createSearcher();
     }
-    
+
     private void loadConfigFile()
     {
         if (CONFIG_FILE.exists())
@@ -179,16 +187,16 @@ public final class LuceneSettings extends ProcessSettingsBase {
             {
                 logger.warn("Problems loading Lucene config", e);
             }
-            
+
             initFromProperties(config);
         }
     }
-    
+
     private void saveConfigFile()
     {
         Properties config = asProperties();
         CONFIG_DIR.mkdirs();
-        
+
         try
         {
             config.store(new FileOutputStream(CONFIG_FILE), "Carrot2 Tuning Browser Lucene Input config file last saved by the application. Freel free to edit by hand.");
@@ -202,7 +210,7 @@ public final class LuceneSettings extends ProcessSettingsBase {
             logger.warn("Problems saving Lucene config", e);
         }
     }
-    
+
     private void initFromProperties(Properties config)
     {
         if (config.containsKey("index.dir"))
@@ -232,8 +240,9 @@ public final class LuceneSettings extends ProcessSettingsBase {
         titleField = config.getProperty("title.field");
         summaryField = config.getProperty("summary.field");
         urlField = config.getProperty("url.field");
+        createSnippets = Boolean.valueOf(config.getProperty("snippets")).booleanValue();
     }
-    
+
     private Properties asProperties()
     {
         Properties config = new Properties();
@@ -246,7 +255,7 @@ public final class LuceneSettings extends ProcessSettingsBase {
         {
             config.setProperty("analyzer.class", analyzer.getClass().getName());
         }
-        if (searchFields != null) 
+        if (searchFields != null)
         {
             config.setProperty("search.fields", ArrayUtils.toString(searchFields, ","));
         }
@@ -262,6 +271,7 @@ public final class LuceneSettings extends ProcessSettingsBase {
         {
             config.setProperty("url.field", urlField);
         }
+        config.setProperty("snippets", Boolean.toString(createSnippets));
 
         return config;
     }
