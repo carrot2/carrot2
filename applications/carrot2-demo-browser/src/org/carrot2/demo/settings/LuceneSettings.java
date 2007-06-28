@@ -15,11 +15,11 @@ package org.carrot2.demo.settings;
 
 import java.awt.Frame;
 import java.io.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Properties;
 
 import javax.swing.JComponent;
 
-import org.apache.commons.pool.impl.GenericKeyedObjectPool.*;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.IndexReader;
@@ -27,9 +27,8 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Searcher;
 import org.carrot2.demo.ProcessSettings;
 import org.carrot2.demo.ProcessSettingsBase;
-import org.carrot2.input.lucene.LuceneLocalInputComponent;
-import org.carrot2.input.lucene.LuceneSearchConfig;
-import org.carrot2.util.*;
+import org.carrot2.input.lucene.*;
+import org.carrot2.util.ArrayUtils;
 
 /**
  * Settings class for Lucene input component.
@@ -108,12 +107,15 @@ public final class LuceneSettings extends ProcessSettingsBase {
         }
         final HashMap map = new HashMap();
         map.put(LuceneLocalInputComponent.LUCENE_CONFIG,
-                new LuceneSearchConfig(searcher,
-                        analyzer, searchFields, titleField,
-                        summaryField, urlField,
-                        (createSnippets ?
-                            LuceneSearchConfig.LONG_PLAIN_TEXT_SUMMARY :
-                            LuceneSearchConfig.NO_SUMMARIES)));
+                new LuceneLocalInputComponentConfig(
+                    new LuceneLocalInputComponentFactoryConfig(
+                        searchFields,
+                        titleField,
+                        summaryField,
+                        urlField,
+                        (createSnippets ? LuceneLocalInputComponentFactoryConfig.LONG_PLAIN_TEXT_SUMMARY
+                            : LuceneLocalInputComponentFactoryConfig.NO_SUMMARIES)),
+                    searcher, analyzer));
         return map;
     }
 
