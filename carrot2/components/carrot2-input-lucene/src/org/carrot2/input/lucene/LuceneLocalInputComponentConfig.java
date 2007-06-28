@@ -17,9 +17,13 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.search.Searcher;
 
 /**
+ * Configuration for the Lucene input component. Contains everything that
+ * the {@lin LuceneLocalInputComponentFactoryConfig} has, plus the {@link Searcher}
+ * and the {@link Analyzer} the input component is to use.
+ *
  * @author Stanislaw Osinski
  */
-public class LuceneLocalInputComponentConfig
+public final class LuceneLocalInputComponentConfig
 {
     /** Factory config */
     final LuceneLocalInputComponentFactoryConfig factoryConfig;
@@ -30,11 +34,6 @@ public class LuceneLocalInputComponentConfig
     /** Lucene Analyzer */
     final Analyzer analyzer;
 
-    /**
-     * @param factoryConfig
-     * @param searcher
-     * @param analyzer
-     */
     public LuceneLocalInputComponentConfig(
         LuceneLocalInputComponentFactoryConfig factoryConfig, Searcher searcher,
         Analyzer analyzer)

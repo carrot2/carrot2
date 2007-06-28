@@ -13,14 +13,12 @@
 
 package org.carrot2.input.lucene;
 
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.search.Searcher;
 import org.apache.lucene.search.highlight.Formatter;
 import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 
 /**
- * All settings required to perform a search in Lucene: location of the index,
- * searched fields, analyzer etc.
+ * All settings required for the lucene input component factory:
+ * searched fields, analyzer, summarizer config etc.
  *
  * @author Dawid Weiss
  * @author Sairaj Sunil
@@ -41,13 +39,6 @@ public final class LuceneLocalInputComponentFactoryConfig
 
     /**
      * Creates a default Lucene search config with summarization switched off.
-     *
-     * @param searcher
-     * @param analyzer
-     * @param searchFields
-     * @param titleField
-     * @param summaryField
-     * @param urlField
      */
     public LuceneLocalInputComponentFactoryConfig(
         String [] searchFields, String titleField, String summaryField,
