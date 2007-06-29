@@ -140,7 +140,7 @@ function foldRange(prefix, morePrefix, start, end)
 {
   for(var i = start; i <= end; i++)
   {
-    Dom.show(prefix + "|" + i);
+    Dom.show(prefix + ":" + i);
   }
 
   Dom.hide(prefix + morePrefix + (start-1));
@@ -184,7 +184,7 @@ function selectDocuments(refids)
   {
     if (documentElements[i].className == 'd')
     {
-      if (contains(refids, documentElements[i].id))
+      if (contains(refids, documentElements[i].id.substring(1)))
       {
         documentElements[i].style.display = "block";
       }
@@ -408,7 +408,7 @@ function selectCluster(id, showAll)
 
 function unfoldToTop(id)
 {
-  id = id.substring(0, id.indexOf("|"));
+  id = id.substring(1, id.indexOf(":"));
   var cldTr = document.getElementById("cld" + id);
   if (!cldTr)
   {

@@ -78,7 +78,7 @@ YAHOO.util.Event.addListener(window, "load", init);
   <xsl:template match="group">
     <xsl:param name="id"><xsl:value-of select="@hash" /></xsl:param>
     <xsl:param name="parent-id"><xsl:value-of select="../@hash" /></xsl:param>
-    <xsl:param name="parent-id-position"><xsl:value-of select="concat($parent-id, '|', position())" /></xsl:param>
+    <xsl:param name="parent-id-position"><xsl:value-of select="concat('p', $parent-id, ':', position())" /></xsl:param>
 
     <tr id="{$parent-id-position}">
       <xsl:if test="not(count(group) = 0)">
