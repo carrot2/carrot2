@@ -66,7 +66,7 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
         // Write HTML header
         writer.write(
                 "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\r\n" +
-                "<html class=\"outside-back-color\" style=\"height: 100%\">\r\n" +
+                "<html>\r\n" +
                 "<head>\r\n" +
                 "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\r\n" +
                 "<title>Carrot Clustering Engine</title>\r\n" +
@@ -114,7 +114,7 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
         String [] sources = (String []) doc.getProperty(RawDocument.PROPERTY_SOURCES);
 
         writer.write(
-                "<table id=\"" + seqId.toString() + "\" class=\"d\">\r\n" +
+                "<table id=\"d" + seqId.toString() + "\" class=\"d\">\r\n" +
                 "<tr>\r\n" +
                 "<td class=\"r\">" +
                 sequence +
@@ -127,10 +127,12 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
         writer.write(
                 "</a>" +
                 "<img src=\"" + base + "/img/sic.gif\" class=\"onw ilink\" id=\"sic" +
-                seqId.toString() + "\" title=\"" + messages.getString(Constants.RB_SHOW_IN_CLUSTTERS) + "\" /></span>" +
+                seqId.toString() + "\" title=\"" + messages.getString(Constants.RB_SHOW_IN_CLUSTTERS) +
+                "\" alt=\"" + messages.getString(Constants.RB_SHOW_IN_CLUSTTERS) + "\" /></span>" +
                 "<a target=\"_blank\" href=\"" + hurl + "\" title=\"" +
                 messages.getString(Constants.RB_OPEN_IN_NEW_WINDOW) + "\">" +
-                "<img class=\"onw\" src=\"" + base +  "/img/onw.gif\" /></a>" +
+                "<img class=\"onw\" src=\"" + base +  "/img/onw.gif\" alt=\"" +
+                messages.getString(Constants.RB_OPEN_IN_NEW_WINDOW) + "\"/></a>" +
                 "</div>\r\n" +
                 "<div class=\"s\">");
 
@@ -197,7 +199,7 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
 
         writer.write(
                 "</div>\r\n"+
-                "<style>\r\n");
+                "<style type=\"text/css\">\r\n");
 
         // Write dummy CSS rules (we do need this!)
         for (Iterator it = textMarker.getWordInfos(); it.hasNext();) {

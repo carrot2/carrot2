@@ -44,7 +44,7 @@ public class XMLClustersSerializer implements RawClustersSerializer {
     private List rawDocumentsList;
 
     private TextMarker textMarker;
-    
+
     public XMLClustersSerializer(String contextPath, String stylesheetsBase, ResourceBundle messages) {
         if (messages == null)
         {
@@ -174,10 +174,12 @@ public class XMLClustersSerializer implements RawClustersSerializer {
         String parentLabel) throws IOException
     {
         final String baseLabel = (String)cluster.getClusterDescription().get(0);
-        final String newParentLabel = parentLabel + baseLabel;
+        final String newParentLabel = parentLabel + baseLabel
+            + (baseLabel.length() == 0 ? "junk" : "");
 
         buffer.append("<group");
-        if (cluster.getProperty(RawCluster.PROPERTY_JUNK_CLUSTER) != null) {
+        if (cluster.getProperty(RawCluster.PROPERTY_JUNK_CLUSTER) != null
+            || baseLabel.length() == 0) {
             buffer.append(" junk=\"true\"");
         }
         if (cluster.getProperty(RawCluster.PROPERTY_SCORE) != null) {
@@ -195,7 +197,12 @@ public class XMLClustersSerializer implements RawClustersSerializer {
         buffer.append(collectDocumentIds(cluster, new HashSet()).size());
         buffer.append("\"");
         buffer.append(" hash=\"");
-        buffer.append(Long.toString(newParentLabel.hashCode(), 36));
+        String hash = Long.toString(newParentLabel.hashCode(), 36);
+        if (hash.length() > 0 && !Character.isLetter(hash.charAt(0)))
+        {
+            hash = "x" + hash;
+        }
+        buffer.append(hash);
         buffer.append("\"");
         buffer.append(">");
 
