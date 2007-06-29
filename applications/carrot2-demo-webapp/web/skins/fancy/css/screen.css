@@ -230,7 +230,7 @@ table.glow-big-sub .vb {
 }
 
 table.glow .tl {
-  
+
 }
 
 table.glow .tr {
@@ -246,7 +246,7 @@ table.glow .br {
 }
 
 table.glow .t {
-  
+
 }
 
 table.glow .b {
@@ -254,7 +254,7 @@ table.glow .b {
 }
 
 table.glow .l {
-  
+
 }
 
 table.glow .r {
@@ -347,6 +347,15 @@ input.hl {
   color: #B0B0B0;
 }
 
+.small-copy a {
+  color: #808080;
+}
+
+span.small-copy {
+  float: right;
+  padding-right: 4px;
+}
+
 /** Startup page */
 #startup-main {
   width: 100%;
@@ -428,7 +437,7 @@ input.hl {
 }
 
 #results-main-search {
-  
+
 }
 
 .main-adv-opts {
@@ -507,5 +516,5 @@ div#startup-extra {
 }
 
 div#startup-extra a {
-  
+
 }

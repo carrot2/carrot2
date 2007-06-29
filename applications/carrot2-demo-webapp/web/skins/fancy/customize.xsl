@@ -14,6 +14,7 @@
   <xsl:param name="show-example-queries">true</xsl:param>
   <xsl:param name="show-options">true</xsl:param>
   <xsl:param name="show-progress">true</xsl:param>
+  <xsl:param name="show-results-page-footer">false</xsl:param>
   <xsl:param name="init-from-url">false</xsl:param> <!-- Set to 'true' only for generating static HTMLs -->
   <xsl:param name="force-results-page">false</xsl:param> <!-- Set to 'true' only for generating static HTMLs (results page) -->
 
@@ -53,7 +54,7 @@
   </xsl:template>
 
   <xsl:template name="copyright-holder">
-    © 2002-<xsl:value-of select="/page/@year" />&#160;<a href="http://www.man.poznan.pl/~stachoo/">Stanislaw Osinski</a>, <a href="http://www.cs.put.poznan.pl/dweiss/">Dawid Weiss</a>
+    © 2002-<xsl:value-of select="/page/@year" />&#160;<a href="http://stanislaw.osinski.name/">Stanislaw Osinski</a>, <a href="http://www.cs.put.poznan.pl/dweiss/">Dawid Weiss</a>
   </xsl:template>
 
   <xsl:template name="version-info">
