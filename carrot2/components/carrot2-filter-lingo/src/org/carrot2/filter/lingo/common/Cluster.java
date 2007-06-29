@@ -142,7 +142,7 @@ public class Cluster implements Comparable {
      *
      * @return Snippet [] the snippets belonging to this cluster
      */
-    public ArrayList getSnippetsAsArray() {
+    public ArrayList getSnippetsAsArrayList() {
         return snippets;
     }
 

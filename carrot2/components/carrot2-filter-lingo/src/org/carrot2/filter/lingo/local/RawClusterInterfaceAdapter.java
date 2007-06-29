@@ -23,7 +23,7 @@ import org.carrot2.filter.lingo.common.Cluster;
 import org.carrot2.filter.lingo.common.Snippet;
 
 /**
- * 
+ *
  * @author Dawid Weiss
  * @version $Revision$
  */
@@ -31,7 +31,7 @@ public final class RawClusterInterfaceAdapter extends RawClusterBase {
 
 	private List originalDocuments;
 	private Cluster cluster;
-	
+
 	RawClusterInterfaceAdapter(Cluster cluster, List originalDocuments) {
 		this.originalDocuments = originalDocuments;
 		this.cluster = cluster;
@@ -47,11 +47,10 @@ public final class RawClusterInterfaceAdapter extends RawClusterBase {
 	public List getSubclusters() {
         ArrayList subclusters = (ArrayList) cluster.getClustersAsList().clone();
 
-        int max = subclusters.size();
         for (int i = subclusters.size()-1; i >= 0; i--) {
         	Cluster subcluster = (Cluster) subclusters.get(i);
-        	RawClusterInterfaceAdapter adapter = 
-        		new RawClusterInterfaceAdapter( subcluster, 
+        	RawClusterInterfaceAdapter adapter =
+        		new RawClusterInterfaceAdapter( subcluster,
         				this.originalDocuments);
         	// replace with an adapter.
         	subclusters.set(i, adapter);
@@ -60,7 +59,7 @@ public final class RawClusterInterfaceAdapter extends RawClusterBase {
 	}
 
 	public List getDocuments() {
-        ArrayList documents = (ArrayList) cluster.getSnippetsAsArray().clone();
+        ArrayList documents = (ArrayList) cluster.getSnippetsAsArrayList().clone();
 
         for (int i = documents.size()-1; i >= 0 ; i--) {
             Object id = ((Snippet) documents.get(i)).getSnippetId();
