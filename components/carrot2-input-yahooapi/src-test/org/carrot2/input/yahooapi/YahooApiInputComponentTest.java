@@ -12,13 +12,14 @@
 
 package org.carrot2.input.yahooapi;
 
-import java.util.List;
+import java.util.*;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.carrot2.core.LocalComponent;
 import org.carrot2.core.LocalComponentFactory;
+import org.carrot2.core.clustering.RawDocument;
 import org.carrot2.core.test.LocalInputComponentTestBase;
 import org.carrot2.core.test.Range;
 
@@ -52,10 +53,19 @@ public class YahooApiInputComponentTest extends LocalInputComponentTestBase
      * duplicated by the number of fetching threads (because each thread downloaded the
      * same results).
      */
-    public void DISABLEDtestSiteQuery() throws Exception
+    public void testSiteQuery() throws Exception
     {
         List results = query("koelle bmw site:handelsblatt.de", 400);
-        // TODO: make sure here that there are no duplicates
+
+        Set set = new HashSet();
+        for (Iterator it = results.iterator(); it.hasNext();)
+        {
+            RawDocument rawDocument = (RawDocument) it.next();
+            set.add(rawDocument.getUrl());
+        }
+
+        assertEquals("Number of unique URLs not equal to number of results", set.size(),
+            results.size());
     }
 
     public void testMediumQuery() throws Exception

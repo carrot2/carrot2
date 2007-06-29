@@ -13,14 +13,16 @@
 
 package org.carrot2.core.fetcher;
 
+import java.util.*;
+
 import org.apache.log4j.Logger;
 import org.carrot2.core.ProcessingException;
 import org.carrot2.core.clustering.RawDocument;
 
 /**
- * A parallel fetcher executes multiple parallel threads to 
+ * A parallel fetcher executes multiple parallel threads to
  * download search results concurrently.
- * 
+ *
  * @author Dawid Weiss
  */
 public abstract class ParallelFetcher
@@ -41,9 +43,9 @@ public abstract class ParallelFetcher
     private int fetchSize;
 
     /**
-     * 
+     *
      */
-    public ParallelFetcher(String fetcherName, String query, int startAt, 
+    public ParallelFetcher(String fetcherName, String query, int startAt,
         int resultsRequested, int maximumResults)
     {
         this.logger = Logger.getLogger(ParallelFetcher.class + "." + fetcherName);
@@ -54,10 +56,10 @@ public abstract class ParallelFetcher
     }
 
     /**
-     * <p>Enables full parallelism in fetching. Upon a call to {@link #fetch()}, all 
+     * <p>Enables full parallelism in fetching. Upon a call to {@link #fetch()}, all
      * fetch chunks will be started immediately, without the initial check of how
      * many results are actually available.
-     * 
+     *
      * <p>Note that this mode of execution always starts multiple queries to the
      * search engine, so in case of pay-per-query engines, it is not advisable.
      */
@@ -69,10 +71,10 @@ public abstract class ParallelFetcher
 
         this.fetchSize = singleFetchSize;
     }
-    
+
     /**
      * Starts fetching search results.
-     * 
+     *
      * @throws ProcessingException
      */
     public final void fetch() throws ProcessingException
@@ -112,8 +114,8 @@ public abstract class ParallelFetcher
             // and start parallel fetchers.
             logger.info("Initial result retrieved: " + initialResult);
             count = Math.min((int) Math.min(Integer.MAX_VALUE, initialResult.totalEstimated), count);
-            count = pushResults0(count, 0, initialResult);
-            
+            count = pushResults0(count, 0, initialResult, new HashSet());
+
             // Estimate fetch size and advance start point.
             currentFetchSize = initialResult.results.length;
             start += currentFetchSize;
@@ -145,10 +147,17 @@ public abstract class ParallelFetcher
         {
             collector.blockUntilZero();
 
+            /**
+             * Use a set to detect which URLs have been pushed already. Note
+             * that we don't need any synchronization here, as we've already
+             * collected output from all threads.
+             */
+            Set urlsPushed = new HashSet();
+
             final SearchResult [] results = collector.getSearchResults();
             for (int i = 0; i < results.length; i++)
             {
-                count = pushResults0(count, results[i].at, results[i]);
+                count = pushResults0(count, results[i].at, results[i], urlsPushed);
             }
         }
         catch (InterruptedException e)
@@ -161,19 +170,19 @@ public abstract class ParallelFetcher
     }
 
     /**
-     * 
+     *
      */
     public abstract SingleFetcher getFetcher();
 
     /**
-     * 
+     *
      */
     public abstract void pushResults(int at, final RawDocument rawDocument) throws ProcessingException;
 
     /**
-     * 
+     *
      */
-    private int pushResults0(int count, int at, SearchResult result) throws ProcessingException
+    private int pushResults0(int count, int at, SearchResult result, Set urlsPushed) throws ProcessingException
     {
         if (result.error != null)
         {
@@ -183,7 +192,12 @@ public abstract class ParallelFetcher
         final RawDocument [] rdocs = result.results;
         for (int i = 0; count > 0 && i < rdocs.length; i++, count--)
         {
-            pushResults(at + i, rdocs[i]);
+            final RawDocument rawDocument = rdocs[i];
+            if (!urlsPushed.contains(rawDocument.getUrl()))
+            {
+                urlsPushed.add(rawDocument.getUrl());
+                pushResults(at + i, rawDocument);
+            }
         }
 
         return count;
