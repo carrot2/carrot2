@@ -142,11 +142,13 @@ YAHOO.util.Event.addListener(window, "load", c2AppInit, stc, true);
 				</td>
 			</tr>
 
-      <tr>
-        <td>
-          <xsl:call-template name="footer" />
-        </td>
-      </tr>
+      <xsl:if test="$show-results-page-footer = 'true'">
+        <tr>
+          <td>
+            <xsl:call-template name="footer" />
+          </td>
+        </tr>
+      </xsl:if>
     </table>
     <xsl:if test="$init-from-url = 'true'">
       <xsl:call-template name="init-from-url-script" />
@@ -448,11 +450,17 @@ YAHOO.util.Event.addListener(window, "load", c2AppInit, stc, true);
                 <xsl:if test="$display-status-line = 'true'">
                   <tr>
                     <td colspan="2" class="reshead">
-                        Query: <b><xsl:value-of select="$query" /></b>
-                        -- Source: <b><xsl:value-of select="/page/meta/tabs/tab[@id = /page/meta/user-tabs/user-tab[@selected]/@id]/short" /></b>
-                                  (<xsl:value-of select="/page/meta/query-sizes/size[@selected]" /> results<span style="display: none" id="itime">, <span id="itimec"></span> ms</span>)
-                        -- Clusterer: <b><xsl:value-of select="/page/meta/algorithms/alg[@selected]/short" /></b>
-                                  &#160;<span style="display: none" id="ctime">(<span id="ctimec"></span> ms)</span>
+                      <xsl:if test="not($show-results-page-footer = 'true')">
+                        <span class="small-copy">
+                          <xsl:call-template name="copyright-holder" />
+                        </span>
+                      </xsl:if>
+
+                      Query: <b><xsl:value-of select="$query" /></b>
+                      -- Source: <b><xsl:value-of select="/page/meta/tabs/tab[@id = /page/meta/user-tabs/user-tab[@selected]/@id]/short" /></b>
+                                (<xsl:value-of select="/page/meta/query-sizes/size[@selected]" /> results<span style="display: none" id="itime">, <span id="itimec"></span> ms</span>)
+                      -- Clusterer: <b><xsl:value-of select="/page/meta/algorithms/alg[@selected]/short" /></b>
+                                &#160;<span style="display: none" id="ctime">(<span id="ctimec"></span> ms)</span>
                     </td>
                   </tr>
                 </xsl:if>
