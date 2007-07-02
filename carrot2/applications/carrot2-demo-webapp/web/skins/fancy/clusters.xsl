@@ -62,8 +62,8 @@ YAHOO.util.Event.addListener(window, "load", init);
     </xsl:if>
 
     <div id="always-all">
-      <span class="link" id="always-all-link">Always show all clusters</span>
-      <span id="always-all-done"> (saved)</span>
+      <span class="link" id="always-all-link"><xsl:value-of select="/searchresult/strings/always-show-all-clusters" /></span>
+      <span id="always-all-done"> (<xsl:value-of select="/searchresult/strings/saved" />)</span>
     </div>
 
     <xsl:if test="count(group) = 0">

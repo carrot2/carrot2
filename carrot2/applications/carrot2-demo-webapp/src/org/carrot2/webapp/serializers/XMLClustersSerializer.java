@@ -337,6 +337,8 @@ public class XMLClustersSerializer implements RawClustersSerializer {
         emitMessageString(writer, Constants.RB_SHOW_ALL_CLUSTERS);
         emitMessageString(writer, Constants.RB_MORE_CLUSTERS);
         emitMessageString(writer, Constants.RB_NO_CLUSTERS_CREATED);
+        emitMessageString(writer, Constants.RB_ALWAYS_SHOW_ALL_CLUSTERS);
+        emitMessageString(writer, Constants.RB_SAVED);
         writer.write("</strings>");
     }
 
