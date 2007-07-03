@@ -193,6 +193,16 @@ BUILDING: @{component.path}
     <zip basedir="dist/webapp" 
         zipfile="dist/carrot2-demo-webapp-${release.number}.zip" />
     <delete dir="dist/webapp" />
+    
+    <!-- compile and zip the DCS -->
+    <ant antfile="build.xml" dir="applications/carrot2-demo-dcs"
+        inheritall="false" inheritrefs="false" target="dist">
+        <reference refid="dependencies" />
+        <reference refid="c2.tasks.classloader" />
+        <property name="cache:deps" value="${cache:deps}" />
+    </ant>
+    <zip basedir="applications/carrot2-demo-dcs/tmp/dist"
+        zipfile="dist/carrot2-demo-dcs-${release.number}.zip" update="false" />
   </target>
 
 
