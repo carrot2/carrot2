@@ -126,9 +126,9 @@ public class YahooApiInputComponent extends LocalInputComponentBase
                 {
                     return new SingleFetcher()
                     {
-                        public SearchResult fetch(String query, int startAt) throws ProcessingException
+                        public SearchResult fetch(String query, int startAt, int totalResultsRequested) throws ProcessingException
                         {
-                            return doSearch(query, startAt);
+                            return doSearch(query, startAt, totalResultsRequested);
                         }
                     };
                 }
@@ -156,13 +156,16 @@ public class YahooApiInputComponent extends LocalInputComponentBase
         return "Yahoo API Input";
     }
 
-    final SearchResult doSearch(String query, int startAt) throws ProcessingException
+    final SearchResult doSearch(String query, int startAt, int totalResultsRequested) throws ProcessingException
     {
-        log.info("Yahoo API query (" + service.getMaxResultsPerQuery() + "):" + query);
+        final int maxResultsPerQuery = Math.min(totalResultsRequested, service
+            .getMaxResultsPerQuery());
+        
+        log.info("Yahoo API query (" + maxResultsPerQuery + "):" + query);
         final long [] estimatedResultsArray = new long[1];
         final List results = new ArrayList();
         try {
-            service.query(query, service.getMaxResultsPerQuery(),
+            service.query(query, maxResultsPerQuery,
                     new YahooSearchResultConsumer() {
                         public void add(YahooSearchResult result)
                             throws ProcessingException
