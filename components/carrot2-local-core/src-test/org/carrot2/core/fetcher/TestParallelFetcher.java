@@ -97,6 +97,29 @@ public class TestParallelFetcher extends TestCase
 
         ArrayAssert.assertEquivalenceArrays(expectedResults.toArray(), fetchedResults.toArray());
     }
+    
+    /**
+     * Requested less results than the maximum per query for the input component.
+     */
+    public void testRequestedLessThanMaxPerQuery() throws ProcessingException
+    {
+        // Prepare fetcher.
+        final int maxResults = 200;
+        final int requestedResults = 100;
+        final int startAt = 0;
+        final int perQueryResults = 150;
+        final int totalEstimated = 150;
+        
+        final ArrayList expectedResults = new ArrayList();
+        final ArrayList fetchedResults = new ArrayList();
+        final ParallelFetcher pfetcher = createParallelFetcher(expectedResults, fetchedResults, startAt,
+            requestedResults, maxResults, perQueryResults, totalEstimated);
+        
+        // Run fetchers and push results.
+        pfetcher.fetch();
+        
+        ArrayAssert.assertEquivalenceArrays(expectedResults.toArray(), fetchedResults.toArray());
+    }
 
     /**
      * Start is negative.
@@ -170,7 +193,7 @@ public class TestParallelFetcher extends TestCase
             {
                 return new SingleFetcher()
                 {
-                    public SearchResult fetch(String query, int startAt) throws ProcessingException
+                    public SearchResult fetch(String query, int startAt, int totalResultsRequested) throws ProcessingException
                     {
                         final RawDocument [] rawDocs = new RawDocument [perQueryResults];
                         int j = 0;

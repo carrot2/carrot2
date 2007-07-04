@@ -18,10 +18,9 @@ http://www.carrot2.org
 ACQUIRING A BINARY RELEASE
 ========================
 
-Prebuilt demo applications are also available on SourceForge's file
-download area:
+Prebuilt demo applications are available from our build server:
 
-http://sourceforge.net/projects/carrot2/
+http://project.carrot2.org/download.html
 
 
 BUILDING FROM SOURCES

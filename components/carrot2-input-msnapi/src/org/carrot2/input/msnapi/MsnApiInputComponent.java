@@ -159,9 +159,9 @@ public final class MsnApiInputComponent extends LocalInputComponentBase implemen
             {
                 return new SingleFetcher()
                 {
-                    public SearchResult fetch(String query, int startAt) throws ProcessingException
+                    public SearchResult fetch(String query, int startAt, int totalResultsRequested) throws ProcessingException
                     {
-                        return doSearch(query, startAt);
+                        return doSearch(query, startAt, totalResultsRequested);
                     }
                 };
             }
@@ -190,7 +190,7 @@ public final class MsnApiInputComponent extends LocalInputComponentBase implemen
     /**
      * 
      */
-    final SearchResult doSearch(String query, int startAt) throws ProcessingException
+    final SearchResult doSearch(String query, int startAt, int totalResultsRequested) throws ProcessingException
     {
         final SearchRequest request = new SearchRequest(appid, // application id
             query, // query
@@ -209,7 +209,7 @@ public final class MsnApiInputComponent extends LocalInputComponentBase implemen
             ResultFieldMaskNull._Url, ResultFieldMaskNull._Title, ResultFieldMaskNull._Description,
         };
 
-        final int fetchSize = MAXIMUM_RESULTS_PERQUERY;
+        final int fetchSize = Math.min(totalResultsRequested, MAXIMUM_RESULTS_PERQUERY);
         final SourceRequest sourceRequest = new SourceRequest(SourceType.Web, startAt, fetchSize, "", new String []
         {
             SortByTypeNull._Default
