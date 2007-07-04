@@ -140,7 +140,7 @@ function foldRange(prefix, morePrefix, start, end)
 {
   for(var i = start; i <= end; i++)
   {
-    Dom.show(prefix + ":" + i);
+    Dom.show("p" + prefix + ":" + i);
   }
 
   Dom.hide(prefix + morePrefix + (start-1));
