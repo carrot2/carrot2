@@ -28,18 +28,12 @@ final class FetcherThread extends Thread
     private final SearchResultCollector collector;
     private final int startAt;
     private final String query;
-    
-    /** 
-     * Total number of results requested. We need this value to not to cause
-     * fetcher threads to always download maximum supported number of results
-     */
-    private final int totalResultsRequested;
 
     /**
      * 
      */
     public FetcherThread(Logger logger, SearchResultCollector collector, int fetcherIndex, 
-        SingleFetcher fetcher, String query, int startAt, int totalResultsRequested)
+        SingleFetcher fetcher, String query, int startAt)
     {
         this.logger = logger;
         this.fetcher = fetcher;
@@ -47,7 +41,6 @@ final class FetcherThread extends Thread
         this.startAt = startAt;
         this.collector = collector;
         this.query = query;
-        this.totalResultsRequested = totalResultsRequested;
     }
 
     /**
@@ -58,7 +51,7 @@ final class FetcherThread extends Thread
         logger.debug("Fetcher [" + fetcherIndex + "] started.");
         try
         {
-            final SearchResult result = this.fetcher.fetch(query, startAt, totalResultsRequested);
+            final SearchResult result = this.fetcher.fetch(query, startAt);
             logger.debug("Fetcher retrieved: " + result);
             collector.done(this.fetcherIndex, result);
         }
