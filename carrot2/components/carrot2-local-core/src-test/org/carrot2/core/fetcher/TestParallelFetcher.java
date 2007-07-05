@@ -19,8 +19,7 @@ import junit.framework.TestCase;
 import junitx.framework.ArrayAssert;
 
 import org.carrot2.core.ProcessingException;
-import org.carrot2.core.clustering.RawDocument;
-import org.carrot2.core.clustering.RawDocumentBase;
+import org.carrot2.core.fetcher.DebugParallelFetcher.FetchInfo;
 
 /**
  * Tests {@link ParallelFetcher} class.
@@ -30,26 +29,31 @@ import org.carrot2.core.clustering.RawDocumentBase;
 public class TestParallelFetcher extends TestCase
 {
     /**
-     * Simple scenario: just fetch using multiple threads.
+     * 
      */
-    public void testSimpleFetch() throws ProcessingException
+    public void testTypicalSituation() throws ProcessingException
     {
-        // Prepare fetcher.
-        final int maxResults = 100;
-        final int requestedResults = 97;
-        final int startAt = 0;
-        final int perQueryResults = 10;
-        final int totalEstimated = 1000;
+        DebugParallelFetcher[] fetchers = runBoth(
+            0, 97,            // start index, requested results
+            200, 50,          // max result index, single fetch size,
+            1000              // total number of results available
+        );
 
-        final ArrayList expectedResults = new ArrayList();
-        final ArrayList fetchedResults = new ArrayList();
-        final ParallelFetcher pfetcher = createParallelFetcher(expectedResults, fetchedResults, startAt,
-            requestedResults, maxResults, perQueryResults, totalEstimated);
+        // Check fetch infos for prefetch version.
+        FetchInfo [] fetchInfos = fetchers[0].getFetchInfos();
+        assertEquals(2, fetchInfos.length);
+        assertEquals(0, fetchInfos[0].startAt);
+        assertEquals(50, fetchInfos[0].fetchSize);
+        assertEquals(50, fetchInfos[1].startAt);
+        assertEquals(47, fetchInfos[1].fetchSize);
 
-        // Run fetchers and push results.
-        pfetcher.fetch();
-
-        ArrayAssert.assertEquivalenceArrays(expectedResults.toArray(), fetchedResults.toArray());
+        // Check fetch infos for parallel version.
+        fetchInfos = fetchers[1].getFetchInfos();
+        assertEquals(2, fetchInfos.length);
+        assertEquals(0, fetchInfos[0].startAt);
+        assertEquals(50, fetchInfos[0].fetchSize);
+        assertEquals(50, fetchInfos[1].startAt);
+        assertEquals(47, fetchInfos[1].fetchSize);
     }
 
     /**
@@ -57,22 +61,11 @@ public class TestParallelFetcher extends TestCase
      */
     public void testLimitedResults() throws ProcessingException
     {
-        // Prepare fetcher.
-        final int maxResults = 50;
-        final int requestedResults = 100;
-        final int startAt = 0;
-        final int perQueryResults = 40;
-        final int totalEstimated = 1000;
-
-        final ArrayList expectedResults = new ArrayList();
-        final ArrayList fetchedResults = new ArrayList();
-        final ParallelFetcher pfetcher = createParallelFetcher(expectedResults, fetchedResults, startAt,
-            requestedResults, maxResults, perQueryResults, totalEstimated);
-
-        // Run fetchers and push results.
-        pfetcher.fetch();
-
-        ArrayAssert.assertEquivalenceArrays(expectedResults.toArray(), fetchedResults.toArray());
+        runBoth(
+            0, 100,           // start index, requested results
+            50, 10,           // max result index, single fetch size,
+            1000              // total number of results available
+        );
     }
 
     /**
@@ -80,22 +73,50 @@ public class TestParallelFetcher extends TestCase
      */
     public void testSmallResultSet() throws ProcessingException
     {
-        // Prepare fetcher.
-        final int maxResults = 400;
-        final int requestedResults = 200;
-        final int startAt = 0;
-        final int perQueryResults = 20;
-        final int totalEstimated = 16;
+        DebugParallelFetcher[] fetchers = runBoth(
+            0, 175,           // start index, requested results
+            400, 50,          // max result index, single fetch size,
+            16                // total number of results available
+        );
 
-        final ArrayList expectedResults = new ArrayList();
-        final ArrayList fetchedResults = new ArrayList();
-        final ParallelFetcher pfetcher = createParallelFetcher(expectedResults, fetchedResults, startAt,
-            requestedResults, maxResults, perQueryResults, totalEstimated);
+        // This is not a mistake -- the first request
+        // is always for the full page in the prefetch version.
+        FetchInfo [] fetchInfos = fetchers[0].getFetchInfos();
+        assertEquals(1, fetchInfos.length);
+        assertEquals(50, fetchInfos[0].fetchSize);
 
-        // Run fetchers and push results.
-        pfetcher.fetch();
+        // In parallel mode the total is not visible, so multiple
+        // requests are made.
+        fetchInfos = fetchers[1].getFetchInfos();
+        assertEquals(4, fetchInfos.length);
+        assertEquals(0, fetchInfos[0].startAt);
+        assertEquals(50, fetchInfos[0].fetchSize);
 
-        ArrayAssert.assertEquivalenceArrays(expectedResults.toArray(), fetchedResults.toArray());
+        assertEquals(50, fetchInfos[1].startAt);
+        assertEquals(50, fetchInfos[1].fetchSize);
+
+        assertEquals(100, fetchInfos[2].startAt);
+        assertEquals(50, fetchInfos[2].fetchSize);
+        
+        assertEquals(150, fetchInfos[3].startAt);
+        assertEquals(25, fetchInfos[3].fetchSize);
+    }
+
+    /**
+     * 
+     */
+    public void testSmallRequestBigFetchSize() throws ProcessingException
+    {
+        FetchInfo [] fetchInfos = runWithPrefetch(
+            0, 50,            // start index, requested results
+            400, 200,         // max result index, single fetch size,
+            1000              // total number of results available
+        ).getFetchInfos();
+
+        // We should assert here that only one 50-result request was made.
+        assertEquals(1, fetchInfos.length);
+        assertEquals(0, fetchInfos[0].startAt);
+        assertEquals(50, fetchInfos[0].fetchSize);
     }
 
     /**
@@ -103,124 +124,91 @@ public class TestParallelFetcher extends TestCase
      */
     public void testNegativeStart() throws ProcessingException
     {
-        // Prepare fetcher.
-        final int maxResults = 400;
-        final int requestedResults = 100;
-        final int startAt = -10;
-        final int perQueryResults = 20;
-        final int totalEstimated = 1000;
-
-        final ArrayList expectedResults = new ArrayList();
-        final ArrayList fetchedResults = new ArrayList();
-        final ParallelFetcher pfetcher = createParallelFetcher(expectedResults, fetchedResults, startAt,
-            requestedResults, maxResults, perQueryResults, totalEstimated);
-
-        // Run fetchers and push results.
         try {
-            pfetcher.fetch();
+            runBoth(
+                -10, 100,         // start index, requested results
+                400, 50,          // max result index, single fetch size,
+                1000              // total number of results available
+            );
             fail();
         } catch (ProcessingException e) {
             // expected.
         }
     }
-    
+
     /**
-     * Test full parallel mode.
+     * 
      */
-    public void testSimpleFetchInFullParallelMode() throws ProcessingException
+    private DebugParallelFetcher runWithPrefetch(int startAtIndex, int requestedResults,
+        int maxResultIndex, int singleFetchSize, int totalEstimated) 
+        throws ProcessingException
     {
-        // Prepare fetcher.
-        final int maxResults = 100;
-        final int requestedResults = 97;
-        final int startAt = 0;
-        final int perQueryResults = 10;
-        final int totalEstimated = 1000;
+        return run(startAtIndex, requestedResults, maxResultIndex, singleFetchSize, 
+            totalEstimated, false);
+    }
 
+    /**
+     * @return Returns two {@link DebugParallelFetcher}s: (prefetch, parallel).
+     */
+    private DebugParallelFetcher [] runBoth(int startAtIndex, int requestedResults,
+        int maxResultIndex, int singleFetchSize, int totalEstimated) 
+        throws ProcessingException
+    {
+        return new DebugParallelFetcher [] {
+            run(startAtIndex, requestedResults, maxResultIndex, singleFetchSize, 
+                totalEstimated, false),
+            run(startAtIndex, requestedResults, maxResultIndex, singleFetchSize, 
+                totalEstimated, true)
+        };
+    }
+
+    /**
+     * 
+     */
+    private DebugParallelFetcher run(int startAtIndex, int requestedResults,
+        int maxResultIndex, int singleFetchSize, int totalEstimated,
+        boolean prefetch) 
+        throws ProcessingException
+    {
         final ArrayList expectedResults = new ArrayList();
-        final ArrayList fetchedResults = new ArrayList();
-        final ParallelFetcher pfetcher = createParallelFetcher(expectedResults, fetchedResults, startAt,
-            requestedResults, maxResults, perQueryResults, totalEstimated);
 
-        pfetcher.setFullParallelMode(perQueryResults);
-        
+        final DebugParallelFetcher pfetcher = createParallelFetcher(
+            expectedResults,
+            startAtIndex, requestedResults, 
+            maxResultIndex, singleFetchSize, totalEstimated);
+
+        // Perform initial check for totalEstimated.
+        pfetcher.setParallelMode(prefetch);
+
         // Run fetchers and push results.
         pfetcher.fetch();
 
-        ArrayAssert.assertEquivalenceArrays(expectedResults.toArray(), fetchedResults.toArray());
+        // Verify the output.
+        ArrayAssert.assertEquivalenceArrays(expectedResults.toArray(), 
+            pfetcher.getResults().toArray());
+        
+        return pfetcher;
     }
 
     /**
      * Creates test data and fetcher.
      */
-    private ParallelFetcher createParallelFetcher(ArrayList expectedResults, final ArrayList fetchedResults,
-        int startAt, int requestedResults, int maxResults, final int perQueryResults, final int totalEstimated)
+    private DebugParallelFetcher createParallelFetcher(ArrayList expectedResults,
+        int startAt, int requestedResults, int maxResults, int perQueryResults, long totalEstimated)
     {
-        // create 'expected' results.
-        final int maxId = Math.min(Math.min(maxResults, totalEstimated), startAt + requestedResults);
-        final int minId = Math.min(Math.min(maxResults, totalEstimated), Math.max(0, startAt));
+        // Create 'expected' results.
+        final int maxId = Math.min((int) Math.min(maxResults, totalEstimated), startAt + requestedResults);
+        final int minId = Math.min((int) Math.min(maxResults, totalEstimated), Math.max(0, startAt));
         for (int i = minId; i < maxId; i++)
         {
-            expectedResults.add(createRD(i));
+            expectedResults.add(DebugParallelFetcher.createRawDocument(i));
         }
 
-        // create parallel fetcher.
-        final ParallelFetcher pfetcher = new ParallelFetcher("Test", "query", startAt, requestedResults, maxResults)
-        {
-            public SingleFetcher getFetcher()
-            {
-                return new SingleFetcher()
-                {
-                    public SearchResult fetch(String query, int startAt) throws ProcessingException
-                    {
-                        final RawDocument [] rawDocs = new RawDocument [perQueryResults];
-                        int j = 0;
-                        for (int i = startAt; i < startAt + perQueryResults; i++, j++)
-                        {
-                            rawDocs[j] = createRD(i);
-                        }
-
-                        return new SearchResult(rawDocs, startAt, totalEstimated);
-                    }
-                };
-            }
-
-            /**
-             *
-             */
-            public void pushResults(int at, final RawDocument rawDocument) throws ProcessingException
-            {
-                fetchedResults.add(rawDocument);
-            }
-        };
+        // Create parallel fetcher.
+        final DebugParallelFetcher pfetcher = new DebugParallelFetcher(
+            "Test", "query", startAt, requestedResults, maxResults, perQueryResults,
+            totalEstimated);
 
         return pfetcher;
-    }
-
-    /**
-     */
-    private RawDocument createRD(int i)
-    {
-        final Integer id = new Integer(i);
-
-        return new RawDocumentBase("nourl://" + i, "title", "snippet")
-        {
-            public Object getId()
-            {
-                return id;
-            }
-            
-            public boolean equals(Object obj)
-            {
-                if (obj instanceof RawDocumentBase) {
-                    
-                }
-                return this.getId().equals(((RawDocumentBase) obj).getId());
-            }
-            
-            public int hashCode()
-            {
-                return this.getId().hashCode();
-            }
-        };
     }
 }

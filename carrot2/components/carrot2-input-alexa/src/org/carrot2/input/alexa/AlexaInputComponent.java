@@ -177,8 +177,8 @@ public final class AlexaInputComponent extends LocalInputComponentBase implement
         final int startAt = super.getIntFromRequestContext(requestContext, LocalInputComponent.PARAM_START_AT, 0);
 
         // Prepare fetchers.
-        final ParallelFetcher pfetcher = new ParallelFetcher("Alexa API", query, startAt, resultsRequested,
-            MAXIMUM_RESULTS)
+        final ParallelFetcher pfetcher = new ParallelFetcher("alexa", query, startAt, 
+            resultsRequested, MAXIMUM_RESULTS, MAXIMUM_RESULTS_PERQUERY)
         {
             /**
              *
@@ -187,9 +187,9 @@ public final class AlexaInputComponent extends LocalInputComponentBase implement
             {
                 return new SingleFetcher()
                 {
-                    public org.carrot2.core.fetcher.SearchResult fetch(String query, int startAt) throws ProcessingException
+                    public org.carrot2.core.fetcher.SearchResult fetch(String query, int startAt, int totalResultsRequested) throws ProcessingException
                     {
-                        return doSearch(query, startAt);
+                        return doSearch(query, startAt, totalResultsRequested);
                     }
                 };
             }
@@ -205,8 +205,7 @@ public final class AlexaInputComponent extends LocalInputComponentBase implement
 
         final Map requestContextParams = requestContext.getRequestParameters();
         if (fullParallelMode && !requestContextParams.containsKey(PROPERTY_DISABLE_PARALLEL_MODE)) {
-            // Set full parallel mode.
-            pfetcher.setFullParallelMode(MAXIMUM_RESULTS_PERQUERY);
+            pfetcher.setParallelMode(true);
         }
 
         // Run fetchers and push results.
@@ -254,7 +253,7 @@ public final class AlexaInputComponent extends LocalInputComponentBase implement
     /**
      * Performs a single search in the Alexa Search API.
      */
-    private org.carrot2.core.fetcher.SearchResult doSearch(String query, int startAt) throws ProcessingException
+    private org.carrot2.core.fetcher.SearchResult doSearch(String query, int startAt, int totalResultsRequested) throws ProcessingException
     {
         // Modify the query to include only sensible page types and English language results.
         // This is supposedly what they use at Alexa's web site, but the counts don't match --
@@ -262,7 +261,7 @@ public final class AlexaInputComponent extends LocalInputComponentBase implement
         final String modifiedQuery = query + " lang:(en|unknown) -pagetype:irrelevant";
 
         // Perform the query.
-        final int fetchSize = MAXIMUM_RESULTS_PERQUERY;
+        final int fetchSize = Math.min(totalResultsRequested, MAXIMUM_RESULTS_PERQUERY);
         final String ACTION_NAME = "Search";
         final String timestamp = getTimestamp();
 
@@ -315,7 +314,11 @@ public final class AlexaInputComponent extends LocalInputComponentBase implement
         final long total = Long.parseLong(webResults.getEstimatedNumberOfDocuments());
 
         // Fetch remaining documents.
-        final Document [] documents = webResults.getDocument();
+        Document [] documents = webResults.getDocument();
+        if (documents == null)
+        {
+            documents = new Document [0];
+        }
         if (documents.length / (double) fetchSize < 0.5)
         {
             log.warn("Requested results: " + fetchSize + ", but received: " + documents.length);

@@ -29,13 +29,11 @@ import org.carrot2.core.test.Range;
 
 public class GoogleApiInputComponentTest extends LocalInputComponentTestBase
 {
-    private final static Logger log = Logger.getLogger(GoogleApiInputComponentTest.class);
+    private final GoogleKeysPool keysPool;
 
-    final GoogleKeysPool keysPool;
-
-    public GoogleApiInputComponentTest(GoogleKeysPool pool) throws IOException
+    public GoogleApiInputComponentTest(String testName, GoogleKeysPool pool) throws IOException
     {
-        super("");
+        super(testName);
         keysPool = pool;
     }
 
@@ -83,16 +81,10 @@ public class GoogleApiInputComponentTest extends LocalInputComponentTestBase
         }
     }
 
-    protected void runTest() throws Throwable {
-        testMediumQuery();
-        testEmptyResults();
-        testResultsRequested();
-        testEntities();
-    }
-
     public static Test suite() throws IOException
     {
         TestSuite testSuite = new TestSuite();
+        testSuite.setName(GoogleApiInputComponentTest.class.toString());
 
         if (isApiTestingEnabled())
         {
@@ -105,7 +97,17 @@ public class GoogleApiInputComponentTest extends LocalInputComponentTestBase
             }
             else
             {
-                testSuite.addTest(new GoogleApiInputComponentTest(pool));
+                final String [] testNames = new String [] {
+                    "testMediumQuery",
+                    "testEmptyResults",
+                    "testResultsRequested",
+                    "testEntities"
+                };
+
+                for (int i = 0; i < testNames.length; i++)
+                {
+                    testSuite.addTest(new GoogleApiInputComponentTest(testNames[i], pool));
+                }
             }
         }
 

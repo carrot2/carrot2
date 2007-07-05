@@ -46,7 +46,7 @@ public final class AlexaInputComponentTest extends LocalInputComponentTestBase
 
     public void testNoHitsQuery() throws Exception
     {
-        performQuery("asdhasd alksjdhar swioer", 50, 0);
+        performQuery("asdhasd alksjdhar swioer doihdefoihewf", 50, 0);
     }
 
     public void testDataMiningQuery() throws Exception
@@ -70,6 +70,9 @@ public final class AlexaInputComponentTest extends LocalInputComponentTestBase
         return (accessKey != null && secretKey != null);
     }
 
+    /**
+     * 
+     */
     public static Test suite()
     {
         if (isApiTestingEnabled() && keysAvailable())

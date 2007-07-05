@@ -149,8 +149,8 @@ public final class MsnApiInputComponent extends LocalInputComponentBase implemen
         final int startAt = super.getIntFromRequestContext(requestContext, LocalInputComponent.PARAM_START_AT, 0);
 
         // Prepare fetchers.
-        final ParallelFetcher pfetcher = new ParallelFetcher("MSN API", query, startAt, resultsRequested,
-            MAXIMUM_RESULTS)
+        final ParallelFetcher pfetcher = new ParallelFetcher("msn", query, startAt, 
+            resultsRequested, MAXIMUM_RESULTS, MAXIMUM_RESULTS_PERQUERY)
         {
             /**
              *
@@ -159,9 +159,9 @@ public final class MsnApiInputComponent extends LocalInputComponentBase implemen
             {
                 return new SingleFetcher()
                 {
-                    public SearchResult fetch(String query, int startAt) throws ProcessingException
+                    public SearchResult fetch(String query, int startAt, int totalResultsRequested) throws ProcessingException
                     {
-                        return doSearch(query, startAt);
+                        return doSearch(query, startAt, totalResultsRequested);
                     }
                 };
             }
@@ -176,7 +176,7 @@ public final class MsnApiInputComponent extends LocalInputComponentBase implemen
         };
 
         // Enable full parallel mode.
-        pfetcher.setFullParallelMode(MAXIMUM_RESULTS_PERQUERY);
+        pfetcher.setParallelMode(true);
 
         // Run fetchers and push results.
         pfetcher.fetch();
@@ -190,7 +190,7 @@ public final class MsnApiInputComponent extends LocalInputComponentBase implemen
     /**
      * 
      */
-    final SearchResult doSearch(String query, int startAt) throws ProcessingException
+    final SearchResult doSearch(String query, int startAt, int totalResultsRequested) throws ProcessingException
     {
         final SearchRequest request = new SearchRequest(appid, // application id
             query, // query
@@ -209,7 +209,7 @@ public final class MsnApiInputComponent extends LocalInputComponentBase implemen
             ResultFieldMaskNull._Url, ResultFieldMaskNull._Title, ResultFieldMaskNull._Description,
         };
 
-        final int fetchSize = MAXIMUM_RESULTS_PERQUERY;
+        final int fetchSize = Math.min(totalResultsRequested, MAXIMUM_RESULTS_PERQUERY);
         final SourceRequest sourceRequest = new SourceRequest(SourceType.Web, startAt, fetchSize, "", new String []
         {
             SortByTypeNull._Default

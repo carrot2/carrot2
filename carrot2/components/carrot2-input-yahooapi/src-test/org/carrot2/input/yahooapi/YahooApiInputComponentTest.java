@@ -96,7 +96,9 @@ public class YahooApiInputComponentTest extends LocalInputComponentTestBase
         }
         else
         {
-            return new TestSuite();
+            final TestSuite suite = new TestSuite();
+            suite.setName(YahooApiInputComponentTest.class.toString());
+            return suite;
         }
     }
 }
