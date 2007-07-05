@@ -37,8 +37,6 @@ public class ExternalApiTestBase extends TestCase
      * testing (tests requiring e.g. a connection to Yahoo or MSN API). If this methods
      * returns <code>true</code>, external API tests should proceed. Otherwise, no
      * tests relying on external resources should be performed.
-     *
-     * @return
      */
     public static boolean isApiTestingEnabled()
     {
