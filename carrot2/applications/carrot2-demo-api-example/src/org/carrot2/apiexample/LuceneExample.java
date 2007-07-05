@@ -176,7 +176,7 @@ public final class LuceneExample {
         final LuceneLocalInputComponentConfig luceneConfig =
             new LuceneLocalInputComponentConfig(
                 new LuceneLocalInputComponentFactoryConfig(searchFields, titleField,
-                summaryField, urlField), searcher, analyzer);
+                summaryField, urlField), indexReader, searcher, analyzer);
 
         //
         // Create Lucene input component factory.

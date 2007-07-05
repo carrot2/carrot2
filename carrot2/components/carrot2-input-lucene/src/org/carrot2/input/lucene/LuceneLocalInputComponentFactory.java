@@ -51,6 +51,7 @@ public class LuceneLocalInputComponentFactory implements LocalComponentFactory
      */
     private final LuceneLocalInputComponentFactoryConfig luceneFactoryConfig;
     private Searcher searcher;
+    private IndexReader indexReader;
     private String indexDirectory;
 
     /** Lucene analyzer factory. */
@@ -119,14 +120,15 @@ public class LuceneLocalInputComponentFactory implements LocalComponentFactory
      */
     public LocalComponent getInstance()
     {
+        getCreateIndexReaderAndSearcher();
         return new LuceneLocalInputComponent(new LuceneLocalInputComponentConfig(
-            luceneFactoryConfig, getOrCreateSearcher(), analyzerFactory.getInstance()));
+            luceneFactoryConfig, indexReader, searcher, analyzerFactory.getInstance()));
     }
 
     /**
      * Lazily initialize the searcher.
      */
-    private synchronized Searcher getOrCreateSearcher()
+    private synchronized void getCreateIndexReaderAndSearcher()
     {
         if (searcher == null)
         {
@@ -136,16 +138,13 @@ public class LuceneLocalInputComponentFactory implements LocalComponentFactory
             }
             try
             {
-                return new IndexSearcher(IndexReader.open(indexDirectory));
+                indexReader = IndexReader.open(indexDirectory);
+                searcher = new IndexSearcher(indexReader);
             }
             catch (IOException e)
             {
                 throw new RuntimeException("Cannot initialize IndexReader");
             }
-        }
-        else
-        {
-            return searcher;
         }
     }
 }
