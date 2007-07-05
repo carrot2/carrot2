@@ -320,6 +320,42 @@ public class StringUtils
         return buf.toString();
     }
 
+    /** A second is 1000 millis. */
+    public final static long SECOND = 1000;
+
+    /** A minute is 60 seconds. */
+    public final static long MINUTE = 60 * SECOND;
+
+    /** An hour is 60 minutes. */
+    public final static long HOUR = 60 * MINUTE;
+
+    /**
+     * Converts the given number of milliseconds to a string containing
+     * a given number of days, hours and minutes.
+     */
+    public final static String getDurationAsString(long durationMillis) {
+        final long days = durationMillis /  (24 * HOUR);
+        durationMillis -= days * (24 * HOUR);
+
+        final long hours = durationMillis / HOUR;
+        durationMillis -= hours * HOUR;
+
+        final long minutes = durationMillis / MINUTE;
+        durationMillis -= minutes * MINUTE;
+
+        final long seconds = durationMillis / SECOND;
+        durationMillis -= seconds * SECOND;
+
+        final StringBuffer builder = new StringBuffer();
+        
+        if (days > 0) builder.append(days).append(days == 1 ? " day " : " days "); 
+        if (hours > 0) builder.append(hours).append(hours == 1 ? " hour " : " hours "); 
+        if (minutes > 0) builder.append(minutes).append(minutes == 1 ? " minute " : " minutes "); 
+        builder.append(seconds).append(seconds == 1 ? " second" : " seconds"); 
+
+        return builder.toString();
+    }
+    
     /**
      * Converts a {@link List} to a <code>separator</code> delimited string.
      */
