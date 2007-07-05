@@ -1,3 +1,4 @@
+
 /*
  * Carrot2 project.
  *
@@ -22,8 +23,7 @@ import org.carrot2.core.ProcessingException;
 public abstract class SingleFetcher
 {
     /**
-     * @param totalResultsRequested the total number of results requested for the query
+     * 
      */
-    public abstract SearchResult fetch(String query, int startAt,
-        int totalResultsRequested) throws ProcessingException;
+    public abstract SearchResult fetch(String query, int startAt) throws ProcessingException;
 }

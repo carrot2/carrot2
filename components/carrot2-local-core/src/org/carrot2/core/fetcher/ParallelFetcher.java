@@ -102,7 +102,7 @@ public abstract class ParallelFetcher
             final SingleFetcher initialFetcher = getFetcher();
             final SearchResult initialResult;
             try {
-                initialResult = initialFetcher.fetch(query, start, count);
+                initialResult = initialFetcher.fetch(query, start);
                 logger.debug("Fetcher retrieved: " + initialResult);
             } catch (ProcessingException e) {
                 throw e;
@@ -137,7 +137,7 @@ public abstract class ParallelFetcher
         for (int i = 0; i < buckets; i++)
         {
             final SingleFetcher fetcher = getFetcher();
-            fetcherThreads[i] = new FetcherThread(logger, collector, i, fetcher, query, start, count);
+            fetcherThreads[i] = new FetcherThread(logger, collector, i, fetcher, query, start);
             fetcherThreads[i].start();
 
             start += currentFetchSize;

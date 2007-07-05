@@ -146,9 +146,9 @@ public final class GoogleApiInputComponent extends LocalInputComponentBase imple
             {
                 return new SingleFetcher()
                 {
-                    public SearchResult fetch(String query, int startAt, int totalResultsRequested) throws ProcessingException
+                    public SearchResult fetch(String query, int startAt) throws ProcessingException
                     {
-                        return doSearch(query, startAt, totalResultsRequested);
+                        return doSearch(query, startAt);
                     }
                 };
             }
@@ -188,7 +188,7 @@ public final class GoogleApiInputComponent extends LocalInputComponentBase imple
      * Performs a single search to Google. This method is used
      * from {@link SingleFetcher#fetch(String, int)}.
      */
-    final SearchResult doSearch(final String query, final int at, int totalResultsRequested) throws ProcessingException
+    final SearchResult doSearch(final String query, final int at) throws ProcessingException
     {
         while (true)
         {

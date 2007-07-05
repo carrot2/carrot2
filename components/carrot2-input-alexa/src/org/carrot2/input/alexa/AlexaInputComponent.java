@@ -187,9 +187,9 @@ public final class AlexaInputComponent extends LocalInputComponentBase implement
             {
                 return new SingleFetcher()
                 {
-                    public org.carrot2.core.fetcher.SearchResult fetch(String query, int startAt, int totalResultsRequested) throws ProcessingException
+                    public org.carrot2.core.fetcher.SearchResult fetch(String query, int startAt) throws ProcessingException
                     {
-                        return doSearch(query, startAt, totalResultsRequested);
+                        return doSearch(query, startAt);
                     }
                 };
             }
@@ -254,7 +254,7 @@ public final class AlexaInputComponent extends LocalInputComponentBase implement
     /**
      * Performs a single search in the Alexa Search API.
      */
-    private org.carrot2.core.fetcher.SearchResult doSearch(String query, int startAt, int totalResultsRequested) throws ProcessingException
+    private org.carrot2.core.fetcher.SearchResult doSearch(String query, int startAt) throws ProcessingException
     {
         // Modify the query to include only sensible page types and English language results.
         // This is supposedly what they use at Alexa's web site, but the counts don't match --
@@ -262,7 +262,7 @@ public final class AlexaInputComponent extends LocalInputComponentBase implement
         final String modifiedQuery = query + " lang:(en|unknown) -pagetype:irrelevant";
 
         // Perform the query.
-        final int fetchSize = Math.min(totalResultsRequested, MAXIMUM_RESULTS_PERQUERY);
+        final int fetchSize = MAXIMUM_RESULTS_PERQUERY;
         final String ACTION_NAME = "Search";
         final String timestamp = getTimestamp();
 
