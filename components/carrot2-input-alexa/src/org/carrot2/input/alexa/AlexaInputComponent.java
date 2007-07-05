@@ -35,7 +35,7 @@ public final class AlexaInputComponent extends LocalInputComponentBase implement
      * If any value is set in the request context under this key,
      * full parallel mode is disabled.
      *
-     * @see ParallelFetcher#setFullParallelMode(int)
+     * @see ParallelFetcher#setParallelMode(boolean)
      */
     public final static String PROPERTY_DISABLE_PARALLEL_MODE = "input.alexa.disableParallelMode";
 
@@ -107,7 +107,7 @@ public final class AlexaInputComponent extends LocalInputComponentBase implement
      * @see ParallelFetcher#setFullParallelMode(int)
      * @see #setFullParallelMode(boolean)
      */
-    private boolean fullParallelMode = true;
+    private boolean parallelMode = true;
 
     /**
      * Create an input component with the default service descriptor and a custom application identifier.
@@ -204,7 +204,7 @@ public final class AlexaInputComponent extends LocalInputComponentBase implement
         };
 
         final Map requestContextParams = requestContext.getRequestParameters();
-        if (fullParallelMode && !requestContextParams.containsKey(PROPERTY_DISABLE_PARALLEL_MODE)) {
+        if (parallelMode && !requestContextParams.containsKey(PROPERTY_DISABLE_PARALLEL_MODE)) {
             pfetcher.setParallelMode(true);
         }
 
@@ -223,8 +223,8 @@ public final class AlexaInputComponent extends LocalInputComponentBase implement
     /**
      * Enables or disables full parallel mode of search results fetching.
      */
-    public void setFullParallelMode(boolean value) {
-        this.fullParallelMode = value;
+    public void setParallelMode(boolean value) {
+        this.parallelMode = value;
     }
 
     /**

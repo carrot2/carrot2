@@ -15,7 +15,7 @@ factory = new LocalComponentFactory() {
 	// up common queries with many results, but induce additional costs
 	// for queries with a small number of results.
 
-	// aic.setFullParallelMode(false);
+	// aic.setParallelMode(false);
 
 	return aic;
     }
