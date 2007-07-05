@@ -59,6 +59,7 @@ public final class LuceneSettings extends ProcessSettingsBase {
     boolean createSnippets;
 
     private Searcher searcher;
+    private IndexReader indexReader;
 
     public LuceneSettings() {
         // try to load config from file
@@ -78,18 +79,18 @@ public final class LuceneSettings extends ProcessSettingsBase {
         this.createSnippets = other.createSnippets;
 
         if (luceneIndexDir != null) {
-            createSearcher();
+            createIndexReaderAndSearcher();
         }
     }
 
-    private void createSearcher() {
+    private void createIndexReaderAndSearcher() {
         try {
             if (searcher != null) {
                 dispose();
             }
 
-            this.searcher = new IndexSearcher(
-                    IndexReader.open(luceneIndexDir));
+            indexReader = IndexReader.open(luceneIndexDir);
+            this.searcher = new IndexSearcher(indexReader);
             logger.debug("Creating searcher: " + this.searcher);
             super.fireParamsUpdated();
         } catch (IOException e) {
@@ -115,7 +116,7 @@ public final class LuceneSettings extends ProcessSettingsBase {
                         urlField,
                         (createSnippets ? LuceneLocalInputComponentFactoryConfig.LONG_PLAIN_TEXT_SUMMARY
                             : LuceneLocalInputComponentFactoryConfig.NO_SUMMARIES)),
-                    searcher, analyzer));
+                    indexReader, searcher, analyzer));
         return map;
     }
 
@@ -169,7 +170,7 @@ public final class LuceneSettings extends ProcessSettingsBase {
         this.analyzer = analyzer;
         this.createSnippets = createSnippets;
         saveConfigFile();
-        createSearcher();
+        createIndexReaderAndSearcher();
     }
 
     private void loadConfigFile()
