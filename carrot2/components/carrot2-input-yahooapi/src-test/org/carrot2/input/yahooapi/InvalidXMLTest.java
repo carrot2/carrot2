@@ -56,6 +56,8 @@ public class InvalidXMLTest extends ExternalApiTestBase {
                     .parseInt(queries[i][1])));
             }
         }
+        
+        suite.setName(InvalidXMLTest.class.getName());
 
         return suite;
     }
