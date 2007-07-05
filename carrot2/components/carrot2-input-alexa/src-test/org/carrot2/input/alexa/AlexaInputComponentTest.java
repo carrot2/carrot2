@@ -32,7 +32,7 @@ public final class AlexaInputComponentTest extends LocalInputComponentTestBase
                 public LocalComponent getInstance()
                 {
                     final AlexaInputComponent aic = new AlexaInputComponent(accessKey, secretKey);
-                    aic.setFullParallelMode(true);
+                    aic.setParallelMode(true);
                     return aic;
                 }
             };
