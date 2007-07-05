@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -13,17 +12,18 @@
 
 package org.carrot2.core.fetcher;
 
-import java.util.ArrayList;
 
 /**
- * A counter of remaining {@link Fetcher}s.
+ * A collector and counter of remaining running {@link Fetcher}s.
  * 
  * @author Dawid Weiss
  */
 final class SearchResultCollector
 {
     private int fetchersCount;
-    private final SearchResult [] results;
+
+    private SearchResult [] results;
+    private SearchResult [] bad;
 
     /**
      * 
@@ -50,6 +50,7 @@ final class SearchResultCollector
             if (fetchersCount == 0)
             {
                 this.notifyAll();
+                splitErrorAndGood();
             }
         }
     }
@@ -69,20 +70,55 @@ final class SearchResultCollector
     }
 
     /**
-     * 
+     *
      */
-    public SearchResult [] getSearchResults()
+    private void splitErrorAndGood()
     {
-        // filter out only these results that contained some documents.
-        final ArrayList realResults = new ArrayList(this.results.length);
+        int errorCount = 0;
         for (int i = 0; i < results.length; i++)
         {
-            if (results[i].results != null)
+            if (results[i].error != null)
             {
-                realResults.add(results[i]);
+                errorCount++;
             }
         }
 
-        return (SearchResult []) realResults.toArray(new SearchResult [realResults.size()]);
+        if (errorCount > 0)
+        {
+            final SearchResult [] good = new SearchResult [results.length - errorCount];
+            bad = new SearchResult [errorCount];
+            int ig = 0;
+            int ib = 0;
+            for (int i = 0; i < results.length; i++)
+            {
+                if (results[i].error != null)
+                {
+                    bad[ib] = results[i];
+                    ib++;
+                }
+                else
+                {
+                    good[ig] = results[i];
+                    ig++;
+                }
+            }
+            results = good;
+        }
+    }
+
+    /**
+     * 
+     */
+    public SearchResult [] getNonErrorSearchResults()
+    {
+        return results;
+    }
+
+    /**
+     * @return Returns <code>null</code> if there were no errors.
+     */
+    public SearchResult [] getErrorSearchResults()
+    {
+        return bad;
     }
 }

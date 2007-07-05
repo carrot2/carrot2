@@ -24,19 +24,20 @@ import org.carrot2.util.StringUtils;
 import com.google.soap.search.*;
 
 /**
- * <p>
- * GoogleAPI input component.
- * <p>
- * Note that GoogleAPI is officially deprecated as of December 2006.
+ * <p>GoogleAPI input component.
+ * 
+ * <p>Note that GoogleAPI is officially deprecated as of December 2006. and
+ * <b>will be removed from future versions of Carrot2</b>.
  * 
  * @author Dawid Weiss
  */
-public final class GoogleApiInputComponent extends LocalInputComponentBase implements RawDocumentsProducer
+public final class GoogleApiInputComponent 
+    extends LocalInputComponentBase implements RawDocumentsProducer
 {
     /**
      * Private logger.
      */
-    static Logger log = Logger.getLogger(GoogleApiInputComponent.class);
+    private static Logger log = Logger.getLogger(GoogleApiInputComponent.class);
 
     /**
      * Maximum results this component can fetch.
@@ -136,8 +137,8 @@ public final class GoogleApiInputComponent extends LocalInputComponentBase imple
         final int startAt = super.getIntFromRequestContext(requestContext, LocalInputComponent.PARAM_START_AT, 0);
 
         // Prepare fetchers.
-        final ParallelFetcher pfetcher = new ParallelFetcher("GoogleAPI", query, startAt, resultsRequested,
-            MAXIMUM_RESULTS)
+        final ParallelFetcher pfetcher = new ParallelFetcher("google", query, startAt, resultsRequested,
+            MAXIMUM_RESULTS, EXPECTED_RESULTS_PER_KEY)
         {
             /**
              *
@@ -146,9 +147,9 @@ public final class GoogleApiInputComponent extends LocalInputComponentBase imple
             {
                 return new SingleFetcher()
                 {
-                    public SearchResult fetch(String query, int startAt) throws ProcessingException
+                    public SearchResult fetch(String query, int startAt, int totalResultsRequested) throws ProcessingException
                     {
-                        return doSearch(query, startAt);
+                        return doSearch(query, startAt, totalResultsRequested);
                     }
                 };
             }
@@ -161,6 +162,9 @@ public final class GoogleApiInputComponent extends LocalInputComponentBase imple
                 rawDocumentConsumer.addDocument(rawDocument);
             }
         };
+
+        // Disable parallel mode (save keys).
+        pfetcher.setParallelMode(false);
 
         // Run fetchers and push results.
         pfetcher.fetch();
@@ -188,7 +192,7 @@ public final class GoogleApiInputComponent extends LocalInputComponentBase imple
      * Performs a single search to Google. This method is used
      * from {@link SingleFetcher#fetch(String, int)}.
      */
-    final SearchResult doSearch(final String query, final int at) throws ProcessingException
+    final SearchResult doSearch(final String query, final int at, int totalResultsRequested) throws ProcessingException
     {
         while (true)
         {

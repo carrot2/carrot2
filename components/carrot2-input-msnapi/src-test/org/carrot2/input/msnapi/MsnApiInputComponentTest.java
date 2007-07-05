@@ -96,7 +96,9 @@ public class MsnApiInputComponentTest extends LocalInputComponentTestBase
         }
         else
         {
-            return new TestSuite();
+            final TestSuite suite = new TestSuite();
+            suite.setName(MsnApiInputComponentTest.class.toString());
+            return suite;
         }
     }
 }

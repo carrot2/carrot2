@@ -119,16 +119,16 @@ public class YahooApiInputComponent extends LocalInputComponentBase
             final int startAt = super.getIntFromRequestContext(requestContext, LocalInputComponent.PARAM_START_AT, 0);
 
             // Prepare fetchers.
-            final ParallelFetcher pfetcher = new ParallelFetcher("Yahoo! API", query, startAt, resultsRequested,
-                MAXIMUM_RESULTS)
+            final ParallelFetcher pfetcher = new ParallelFetcher("yahoo", query, startAt, 
+                resultsRequested, MAXIMUM_RESULTS, this.service.getMaxResultsPerQuery())
             {
                 public SingleFetcher getFetcher()
                 {
                     return new SingleFetcher()
                     {
-                        public SearchResult fetch(String query, int startAt) throws ProcessingException
+                        public SearchResult fetch(String query, int startAt, int totalResultsRequested) throws ProcessingException
                         {
-                            return doSearch(query, startAt);
+                            return doSearch(query, startAt, totalResultsRequested);
                         }
                     };
                 }
@@ -140,7 +140,7 @@ public class YahooApiInputComponent extends LocalInputComponentBase
             };
 
             // Enable full parallel mode.
-            pfetcher.setFullParallelMode(service.getMaxResultsPerQuery());
+            pfetcher.setParallelMode(true);
 
             // Run fetchers and push results.
             pfetcher.fetch();
@@ -156,13 +156,16 @@ public class YahooApiInputComponent extends LocalInputComponentBase
         return "Yahoo API Input";
     }
 
-    final SearchResult doSearch(String query, int startAt) throws ProcessingException
+    final SearchResult doSearch(String query, int startAt, int totalResultsRequested) throws ProcessingException
     {
-        log.info("Yahoo API query (" + service.getMaxResultsPerQuery() + "):" + query);
+        final int maxResultsPerQuery = Math.min(totalResultsRequested, service
+            .getMaxResultsPerQuery());
+        
+        log.info("Yahoo API query (" + maxResultsPerQuery + "):" + query);
         final long [] estimatedResultsArray = new long[1];
         final List results = new ArrayList();
         try {
-            service.query(query, service.getMaxResultsPerQuery(),
+            service.query(query, maxResultsPerQuery,
                     new YahooSearchResultConsumer() {
                         public void add(YahooSearchResult result)
                             throws ProcessingException
