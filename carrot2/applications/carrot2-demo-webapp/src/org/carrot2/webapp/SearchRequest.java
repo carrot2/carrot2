@@ -23,9 +23,15 @@ public final class SearchRequest {
     /** {@link SearchSettings} for which this request was made. */
     private final SearchSettings searchSettings;
 
-    /** The query for this request. Never null, but may be empty. */
+    /** The query in the form user entered it. Never null, but may be empty. */
     public final String query;
 
+    /**
+     * Expanded query. Can be <code>null</code> if there is no query expansion done, or
+     * if after expansion the query has not changed.
+     */
+    public final String expandedQuery;
+    
     /** Input tab index. */
     public final int inputTabIndex;
 
@@ -47,8 +53,10 @@ public final class SearchRequest {
     /**
      * Parse parameters.
      * @param cookieArray 
+     * @param queryExpander 
      */
-    public SearchRequest(SearchSettings settings, Map parameterMap, Cookie [] cookieArray) {
+    public SearchRequest(SearchSettings settings, Map parameterMap, Cookie [] cookieArray, 
+        QueryExpander queryExpander) {
         searchSettings = settings;
 
         // Parse the query
@@ -58,6 +66,17 @@ public final class SearchRequest {
         } else {
             this.query = query;
         }
+        
+        // Perform query expansion
+        if (queryExpander != null)
+        {
+            this.expandedQuery = queryExpander.expandQuery(query);
+        }
+        else
+        {
+            this.expandedQuery = null;
+        }
+        
         
         // copy cookies into a map
         this.cookies = new HashMap();
@@ -136,5 +155,21 @@ public final class SearchRequest {
 
     public Map getRequestArguments() {
         return this.allRequestOpts;
+    }
+    
+    /**
+     * Returns the actual query to be performed.on the search engine. 
+     * 
+     * @return
+     */
+    public String getActualQuery() {
+        if (expandedQuery != null)
+        {
+            return expandedQuery;
+        }
+        else
+        {
+            return query;
+        }
     }
 }

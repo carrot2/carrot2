@@ -232,6 +232,10 @@ public class XMLPageSerializer implements PageSerializer
 
         // And finally, emit the query
         meta.addElement("query").setText(searchRequest.query);
+        if (searchRequest.expandedQuery != null)
+        {
+            meta.addElement("expanded-query").setText(searchRequest.expandedQuery);
+        }
 
         return meta;
     }

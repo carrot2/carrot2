@@ -110,6 +110,7 @@ Setting localization to: ${webapp.localization}
             <filter token="ALGORITHMS_PATH" value="${webapp.algorithms.path}" />
             <filter token="INPUTS_PATH" value="${webapp.inputs.path}" />	
             <filter token="XML_FEED_KEY" value="${webapp.xml.feed.key}" />	
+            <filter token="QUERY_EXPANDER" value="${webapp.query.expander}" />	
             <filter token="VERSION" value="${release.number} (${tmp:build.tstamp})" />
         </filterset>
 

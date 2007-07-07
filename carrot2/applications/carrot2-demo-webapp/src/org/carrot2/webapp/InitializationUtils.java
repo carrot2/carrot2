@@ -345,4 +345,44 @@ final class InitializationUtils
     {
         return config.getInitParameter("xml.feed.key");
     }
+
+    /**
+     * @param servletConfig
+     * @return
+     */
+    public static QueryExpander initializeQueryExpander(final Logger logger, ServletConfig config)
+    {
+        String expanderClassName = config.getInitParameter("query.expander");
+        if (expanderClassName == null || expanderClassName.length() == 0)
+        {
+            return null;
+        }
+
+        try
+        {
+            Class expanderClass = Class.forName(expanderClassName);
+            Object instance = expanderClass.newInstance();
+            return (QueryExpander) instance;
+        }
+        catch (ClassNotFoundException e)
+        {
+            logger.warn("Query expander class not found: " + expanderClassName);
+            return null;
+        }
+        catch (InstantiationException e)
+        {
+            logger.warn("Could not instantiate Query expander class", e);
+            return null;
+        }
+        catch (IllegalAccessException e)
+        {
+            logger.warn("Could not instantiate Query expander class", e);
+            return null;
+        }
+        catch (ClassCastException e)
+        {
+            logger.warn("Query expander class does not implement the org.carrot2.webapp.QueryExpander interface");
+            return null;
+        }
+    }
 }
