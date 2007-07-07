@@ -103,8 +103,8 @@ public final class SearchSettings {
      * Parses request arguments and returns a valid
      * search request object.
      */
-    public SearchRequest parseRequest(Map parameterMap, Cookie [] cookies) {
-        return new SearchRequest(this, parameterMap, cookies);
+    public SearchRequest parseRequest(Map parameterMap, Cookie [] cookies, QueryExpander queryExpander) {
+        return new SearchRequest(this, parameterMap, cookies, queryExpander);
     }
 
     /**

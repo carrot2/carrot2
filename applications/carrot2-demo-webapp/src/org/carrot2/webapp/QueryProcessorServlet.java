@@ -117,6 +117,9 @@ public final class QueryProcessorServlet extends HttpServlet {
 
     /** A bundle with localized messages */
     private ResourceBundle localizedMessages;
+    
+    /** Query expander (may be null) */
+    private QueryExpander queryExpander;
 
     /**
      * Configure inputs.
@@ -156,7 +159,7 @@ public final class QueryProcessorServlet extends HttpServlet {
         // identify request type first.
         final String type = request.getParameter("type");
         final SearchRequest searchRequest = searchSettings.parseRequest(request
-            .getParameterMap(), request.getCookies());
+            .getParameterMap(), request.getCookies(), queryExpander);
 
         // Initialize loggers depending on the application context.
         if (this.queryLogger == null) {
@@ -275,7 +278,7 @@ public final class QueryProcessorServlet extends HttpServlet {
                     Integer.toString(searchRequest.getInputSize()));
             props.put(BroadcasterPushOutputComponent.BROADCASTER, bcaster);
             try {
-                tabsController.query(searchRequest.getInputTab().getShortName(), searchRequest.query, props);
+                tabsController.query(searchRequest.getInputTab().getShortName(), searchRequest.getActualQuery(), props);
             } catch (Exception e) {
                 logger.warn("Error running input query.", e);
                 this.bcaster.endProcessingWithError(e);
@@ -537,6 +540,9 @@ public final class QueryProcessorServlet extends HttpServlet {
         this.localizedMessages = InitializationUtils.initializeResourceBundle(logger,
             getServletConfig());
 
+        // Initialize query expander
+        this.queryExpander = InitializationUtils.initializeQueryExpander(logger, getServletConfig());
+        
         // Mark as initialized.
         this.initialized = true;
     }

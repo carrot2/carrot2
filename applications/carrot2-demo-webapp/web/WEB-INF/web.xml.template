@@ -105,6 +105,11 @@
         	<param-value>@XML_FEED_KEY@</param-value>
         </init-param>
 
+        <init-param>
+        	<param-name>query.expander</param-name>
+        	<param-value>@QUERY_EXPANDER@</param-value>
+        </init-param>
+
         <load-on-startup>1</load-on-startup>
     </servlet>
 
