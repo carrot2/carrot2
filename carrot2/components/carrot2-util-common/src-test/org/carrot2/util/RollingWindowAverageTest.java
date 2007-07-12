@@ -79,30 +79,34 @@ public class RollingWindowAverageTest extends TestCase
      */
     public void testBucketsNumber() throws InterruptedException
     {
-        final RollingWindowAverage rwa = new RollingWindowAverage(
-            1 * RollingWindowAverage.SECOND, 100 * RollingWindowAverage.MILLIS);
+        final int previousPriority = Thread.currentThread().getPriority();
+        try
+        {
+            Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 
-        rwa.add(System.currentTimeMillis(), 2);
-        rwa.add(System.currentTimeMillis(), 3);
-        rwa.add(System.currentTimeMillis(), 5);
-
-        assertEquals(1, rwa.buckets.size());
-
-        Thread.sleep(120 * RollingWindowAverage.MILLIS);
-
-        rwa.add(System.currentTimeMillis(), 7);
-
-        assertEquals(2, rwa.buckets.size());
-
-        Thread.sleep(500 * RollingWindowAverage.MILLIS);
-
-        rwa.add(System.currentTimeMillis(), 9);
-
-        assertEquals(3, rwa.buckets.size());
-
-        Thread.sleep(1100 * RollingWindowAverage.MILLIS);
-
-        rwa.getCurrentAverage();
-        assertEquals(0, rwa.buckets.size());
+            final RollingWindowAverage rwa = new RollingWindowAverage(
+                1 * RollingWindowAverage.SECOND, 100 * RollingWindowAverage.MILLIS);
+    
+            rwa.add(System.currentTimeMillis(), 2);
+            rwa.add(System.currentTimeMillis(), 3);
+            rwa.add(System.currentTimeMillis(), 5);
+    
+            assertEquals(1, rwa.buckets.size());
+    
+            Thread.sleep(120 * RollingWindowAverage.MILLIS);
+    
+            rwa.add(System.currentTimeMillis(), 7);
+    
+            assertEquals(2, rwa.buckets.size());
+    
+            Thread.sleep(3000 * RollingWindowAverage.MILLIS);
+    
+            rwa.getCurrentAverage();
+            assertEquals(0, rwa.buckets.size());
+        }
+        finally
+        {
+            Thread.currentThread().setPriority(previousPriority);
+        }
     }
 }
