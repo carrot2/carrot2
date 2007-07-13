@@ -276,7 +276,14 @@ public class LocalProcessBase implements LocalProcess {
         // startProcessing(context) method which set this parameter in most cases.
         if (!context.getRequestParameters().containsKey(LocalInputComponent.PARAM_QUERY))
         {
-            context.getRequestParameters().put(LocalInputComponent.PARAM_QUERY, query);
+            try
+            {
+                context.getRequestParameters().put(LocalInputComponent.PARAM_QUERY, query);
+            }
+            catch (UnsupportedOperationException e)
+            {
+                // Ignore if request context's parameters are read-only.
+            }
         }
         
         beforeProcessingStartsHook(context, components);
