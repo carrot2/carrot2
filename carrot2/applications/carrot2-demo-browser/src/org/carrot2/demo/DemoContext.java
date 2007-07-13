@@ -13,8 +13,7 @@
 
 package org.carrot2.demo;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.util.*;
 
@@ -22,6 +21,8 @@ import org.carrot2.core.*;
 import org.carrot2.core.controller.*;
 import org.carrot2.core.controller.loaders.BeanShellFactoryDescriptionLoader;
 import org.carrot2.core.controller.loaders.ComponentInitializationException;
+import org.carrot2.util.CompoundFileFilter;
+import org.carrot2.util.SkipFileFilter;
 
 /**
  * A Carrot2 clustering demo context.
@@ -66,7 +67,7 @@ public class DemoContext {
      * <code>processes</code> (these folders must exist).
      */
     private boolean localDefinitionFolders;
-    
+
     private URL [] processUrls;
     private URL [] componentUrls;
     
@@ -120,9 +121,29 @@ public class DemoContext {
                 globals.put("inputsDirFile", componentsDir);
                 ((BeanShellFactoryDescriptionLoader) bshLoader).setGlobals(globals);
             }
-            
-            cl.addAll(controller, cl.loadComponentFactoriesFromDir(componentsDir));
-            this.loadedProcesses = Arrays.asList(cl.loadProcessesFromDir(processesDir));
+
+            final FileFilter skipDisabledComponents = new CompoundFileFilter(
+                new FileFilter[] {
+                    cl.getComponentFilter(),
+                    new SkipFileFilter("-disabled")
+                });
+            cl.addAll(controller, 
+                cl.loadComponentFactoriesFromDir(componentsDir, skipDisabledComponents));
+
+            final FileFilter skipDisabledProcesses = new CompoundFileFilter(
+                new FileFilter[] {
+                    cl.getProcessFileFilter(),
+                    new SkipFileFilter("-disabled")
+                });
+            try
+            {
+                this.loadedProcesses = Arrays.asList(
+                    cl.loadProcessesFromDir(processesDir, skipDisabledProcesses));
+            }
+            catch (LoaderExtensionUnknownException e)
+            {
+                throw new RuntimeException("Unexpected code block reached.", e);
+            }
         } else {
             try {
                 // Initialization from resource files.
@@ -133,6 +154,7 @@ public class DemoContext {
                     LoadedComponentFactory lcf = cl.loadComponentFactory(extension, componentUrls[i].openStream());
                     controller.addLocalComponentFactory(lcf.getId(), lcf.getFactory());
                 }
+
                 this.loadedProcesses = new ArrayList();
                 for (int i = 0; i < processUrls.length; i++) {
                     final String external = processUrls[i].toExternalForm();
