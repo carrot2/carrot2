@@ -23,6 +23,7 @@
   <xsl:template name="custom-results-utils">
     <div id="results-utils">
       <a href="{$carrot2.website.url}">About</a> |
+      <a href="{$carrot2.website.url}/release-2.1-notes.html" class="new">New features!</a> |
       <a href="{$carrot2.website.url}/demos.html">More demos</a> |
       <a href="{$carrot2.website.url}/browser-plugins.html">Plugins</a> |
       <a href="{$carrot2.website.url}/download.html">Download</a> |
@@ -44,8 +45,8 @@
 
     <div id="startup-extra">
       <a href="{$carrot2.website.url}">About</a> |
+      <a href="{$carrot2.website.url}/release-2.1-notes.html" class="new">New features!</a> |
       <a href="{$carrot2.website.url}/demos.html">More demos</a> |
-      <a href="{$carrot2.website.url}/applications.html">Applications</a> |
       <a href="{$carrot2.website.url}/browser-plugins.html">Plugins</a> |
       <a href="{$carrot2.website.url}/download.html">Download</a> |
       <a href="{$carrot2.website.url}/faq.html">FAQ</a> |

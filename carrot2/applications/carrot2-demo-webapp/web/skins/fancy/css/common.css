@@ -33,6 +33,14 @@ a:hover {
   color: #005393;
 }
 
+a.new {
+  color: #e00000;
+}
+
+a.new:hover {
+  color: #b00000;
+}
+
 form {
   margin: 0;
 }
