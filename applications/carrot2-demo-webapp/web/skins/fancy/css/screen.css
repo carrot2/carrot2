@@ -404,6 +404,9 @@ span.small-copy {
 #results-utils a {
   color: #909090;
 }
+#results-utils a.new {
+  color: #e00000;
+}
 
 #results-utils {
   position: absolute;
