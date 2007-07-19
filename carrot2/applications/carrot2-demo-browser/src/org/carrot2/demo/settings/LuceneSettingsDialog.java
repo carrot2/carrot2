@@ -141,6 +141,7 @@ public class LuceneSettingsDialog extends JPanel {
                                 StandardAnalyzerWithPorterStemmer.class.getName(),
                                 StandardAnalyzer.class.getName(),
                                 SimpleAnalyzer.class.getName(),
+                                jeasy.analysis.MMAnalyzer.class.getName()
                         });
                         if (settings.analyzer != null) {
                             analyzers.setSelectedItem(settings.analyzer.getClass().getName());
