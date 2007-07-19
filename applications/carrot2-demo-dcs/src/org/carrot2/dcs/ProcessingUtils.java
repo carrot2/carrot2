@@ -86,6 +86,7 @@ public final class ProcessingUtils
 
             // Phase 2 -- cluster documents
             requestProperties.clear();
+            requestProperties.putAll(processingOptions);
             final List clusters = clusterRawDocuments(plogger, controller,
                 processingOptions, query, documents, requestProperties).clusters;
 
