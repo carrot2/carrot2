@@ -107,7 +107,7 @@ public class LuceneSettingsDialog extends JPanel {
                                 }
                             }
                         }
-                        builder.append(list);
+                        builder.append(new JScrollPane(list));
                         builder.nextLine();
 
                         builder.appendSeparator("Results fields");
