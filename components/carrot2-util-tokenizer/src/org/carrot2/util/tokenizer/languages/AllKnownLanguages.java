@@ -56,7 +56,10 @@ public class AllKnownLanguages
         "org.carrot2.util.tokenizer.languages.norwegian.Norwegian",
         "org.carrot2.util.tokenizer.languages.portuguese.Portuguese",
         "org.carrot2.util.tokenizer.languages.russian.Russian",
-        "org.carrot2.util.tokenizer.languages.swedish.Swedish"
+        "org.carrot2.util.tokenizer.languages.swedish.Swedish",
+        "org.carrot2.util.tokenizer.languages.turkish.Turkish",
+        "org.carrot2.util.tokenizer.languages.romanian.Romanian",
+        "org.carrot2.util.tokenizer.languages.hungarian.Hungarian",
     };
     
     /** Initialize the data */
