@@ -1,9 +1,5 @@
-/**
- * AlexaWebSearchBindingStub.java
- *
- * This file was auto-generated from WSDL
- * by the Apache Axis 1.4 Sep 12, 2006 (01:08:05 CEST) WSDL2Java emitter.
- */
+
+// Generated file. Do not edit by hand.
 
 package com.alexasearch;
 
