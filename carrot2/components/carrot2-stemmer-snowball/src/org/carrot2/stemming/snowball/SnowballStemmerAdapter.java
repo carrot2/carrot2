@@ -53,10 +53,10 @@ public class SnowballStemmerAdapter implements Stemmer {
     public String getStem(char[] charArray, int startCharacter, int length) {
         snowballStemmer.setCurrent(charArray, startCharacter, length);
 
-        if (snowballStemmer.stem() == false) {
+        final boolean result = snowballStemmer.stem();
+        if (!result) {
             return null;
         }
-
         return snowballStemmer.getCurrent();
     }
 }

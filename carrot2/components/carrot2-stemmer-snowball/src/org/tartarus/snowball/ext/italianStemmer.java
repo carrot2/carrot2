@@ -1,5 +1,4 @@
-
-// Generated file. Do not edit by hand.
+// This file was generated automatically by the Snowball to Java compiler
 
 package org.tartarus.snowball.ext;
 import org.tartarus.snowball.SnowballProgram;
