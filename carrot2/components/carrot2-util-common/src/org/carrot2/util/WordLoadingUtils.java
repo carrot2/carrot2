@@ -99,9 +99,9 @@ public final class WordLoadingUtils
                 + "(resource '" + resourceName + "' does not exist?)");
         }
 
-        Set set = new HashSet();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(
-            stream, "UTF-8"));
+        final Set set = new HashSet();
+        final BufferedReader reader = new BufferedReader(
+            new InputStreamReader(stream, "UTF-8"));
         try
         {
             String line;
