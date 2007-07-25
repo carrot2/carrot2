@@ -3,7 +3,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="src" path="/carrot2-util-common"/>
-	<classpathentry exported="true" kind="var" path="CARROT2_CHECKOUT_BASE/lib/log4j-1.2.13.jar"/>
+	<classpathentry exported="true" kind="var" path="CARROT2_CHECKOUT_BASE/lib/log4j-1.2.14.jar"/>
 	<classpathentry exported="true" kind="src" path="/carrot2-local-core"/>
 	<classpathentry exported="true" kind="src" path="/carrot2-util-tokenizer"/>
 	<classpathentry exported="true" kind="src" path="/carrot2-filter-lingo"/>
@@ -20,7 +20,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-case-normalizer"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-haog"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-fuzzyants"/>
-	<classpathentry kind="lib" path="lib/forms-1.0.7.jar"/>
+	<classpathentry kind="lib" path="lib/forms-1.1.0.jar"/>
 	<classpathentry kind="lib" path="lib/looks-2.1.4.jar"/>
 	<classpathentry kind="lib" path="lib/aduna-clustermap-2006.1.jar"/>
 	<classpathentry kind="lib" path="lib/aduna-clustermap-2006.1-resources.jar"/>

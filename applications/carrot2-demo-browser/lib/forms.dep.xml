@@ -6,7 +6,7 @@
     description="JGoodies Forms Layout, http://www.jgoodies.com/">
 	<provides>
 		<files>
-			<file location="forms-1.0.7.jar" />
+			<file location="forms-1.1.0.jar" />
 			<file location="forms.LICENSE" />
 		</files>
 	</provides>
