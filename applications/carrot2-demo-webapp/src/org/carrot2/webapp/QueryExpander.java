@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -13,18 +12,22 @@
 
 package org.carrot2.webapp;
 
+import java.util.Map;
+
 /**
  * A facility for performing query expansion.
- * 
+ *
  * @author Stanislaw Osinski
  */
 public interface QueryExpander
 {
     /**
-     * Returns query after expansion. If the the query expansion mechanism is unable
-     * to add anything to the original query, <code>null</code> should be returned.
-     * 
+     * Returns query after expansion. If the the query expansion mechanism is unable to
+     * add anything to the original query, <code>null</code> should be returned.
+     *
      * @param query original query to be expanded
+     * @param requestParameters request parameters that may contain parameters relevant
+     *            for the query expander
      */
-    public String expandQuery(String query);
+    public String expandQuery(String query, Map requestParameters);
 }

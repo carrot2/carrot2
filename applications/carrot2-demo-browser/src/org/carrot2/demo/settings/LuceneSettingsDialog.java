@@ -23,12 +23,12 @@ import java.util.Collection;
 
 import javax.swing.*;
 
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.SimpleAnalyzer;
+import org.apache.lucene.analysis.*;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexReader.FieldOption;
 import org.carrot2.demo.swing.SwingUtils;
+import org.carrot2.input.lucene.Carrot2Analyzer;
 import org.carrot2.input.lucene.StandardAnalyzerWithPorterStemmer;
 
 import com.jgoodies.forms.builder.DefaultFormBuilder;
@@ -141,7 +141,8 @@ public class LuceneSettingsDialog extends JPanel {
                                 StandardAnalyzerWithPorterStemmer.class.getName(),
                                 StandardAnalyzer.class.getName(),
                                 SimpleAnalyzer.class.getName(),
-                                jeasy.analysis.MMAnalyzer.class.getName()
+                                jeasy.analysis.MMAnalyzer.class.getName(),
+                                WhitespaceAnalyzer.class.getName()
                         });
                         if (settings.analyzer != null) {
                             analyzers.setSelectedItem(settings.analyzer.getClass().getName());
