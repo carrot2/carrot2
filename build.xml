@@ -362,6 +362,7 @@ TESTING: @{component.path}
     <component-apply component.path="components/carrot2-input-alexa" />
     <component-apply component.path="components/carrot2-input-xml" />
     <component-apply component.path="components/carrot2-input-lucene" />
+    <component-apply component.path="components/carrot2-input-etools" />
     <component-apply component.path="components/carrot2-input-googleapi" />
     <component-apply component.path="components/carrot2-input-yahooapi" />
     <component-apply component.path="components/carrot2-input-opensearch" />
@@ -370,6 +371,7 @@ TESTING: @{component.path}
     <component-apply component.path="components/carrot2-input-solr" />
 
     <component-apply component.path="components/carrot2-odp-core" />
+    <component-apply component.path="components/carrot2-launcher" />
 
     <component-apply component.path="components/carrot2-stemmer-stempelator" />
     <component-apply component.path="components/carrot2-stemmer-stempel" />
