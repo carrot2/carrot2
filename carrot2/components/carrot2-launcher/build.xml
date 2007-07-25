@@ -23,4 +23,7 @@
     <target name="clean">
         <delete dir="${build.dir}" />
     </target>
+    
+    <target name="cleanall" depends="clean" />
+    <target name="test" />
 </project>
