@@ -2,6 +2,8 @@
 [FROM CARROT PROJECT] note that even though JFlex is GNU-licensed, code
 it generates is under Carrot2 license, so it is commerce-friendly.
 
+JFlex 1.4.1
+
 --
 
 JFlex - Copying, Warranty & License

@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry exported="true" kind="var" path="CARROT2_CHECKOUT_BASE/lib/log4j-1.2.13.jar"/>
+	<classpathentry exported="true" kind="var" path="CARROT2_CHECKOUT_BASE/lib/log4j-1.2.14.jar"/>
 	<classpathentry exported="true" kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/servlet.jar"/>
 	<classpathentry exported="true" kind="var" path="CARROT2_CHECKOUT_BASE/lib/dom4j-1.6.1.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-common"/>
