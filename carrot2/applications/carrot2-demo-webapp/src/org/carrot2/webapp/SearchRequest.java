@@ -31,7 +31,7 @@ public final class SearchRequest {
      * if after expansion the query has not changed.
      */
     public final String expandedQuery;
-    
+
     /** Input tab index. */
     public final int inputTabIndex;
 
@@ -40,22 +40,22 @@ public final class SearchRequest {
 
     /** Requested input size index. */
     public final int inputSizeIndex;
-    
+
     /** hashcode of the combination of inputTab and size */
     public final String inputAndSizeHashCode;
 
     /** All options passed in the query */
     public final Map allRequestOpts;
-    
+
     /** All cookies that came with the request */
     public final Map cookies;
-    
+
     /**
      * Parse parameters.
-     * @param cookieArray 
-     * @param queryExpander 
+     * @param cookieArray
+     * @param queryExpander
      */
-    public SearchRequest(SearchSettings settings, Map parameterMap, Cookie [] cookieArray, 
+    public SearchRequest(SearchSettings settings, Map parameterMap, Cookie [] cookieArray,
         QueryExpander queryExpander) {
         searchSettings = settings;
 
@@ -66,18 +66,18 @@ public final class SearchRequest {
         } else {
             this.query = query;
         }
-        
+
         // Perform query expansion
         if (queryExpander != null)
         {
-            this.expandedQuery = queryExpander.expandQuery(query);
+            this.expandedQuery = queryExpander.expandQuery(query, parameterMap);
         }
         else
         {
             this.expandedQuery = null;
         }
-        
-        
+
+
         // copy cookies into a map
         this.cookies = new HashMap();
         if (cookieArray != null)
@@ -87,7 +87,7 @@ public final class SearchRequest {
                 this.cookies.put(cookieArray[i].getName(), cookieArray[i].getValue());
             }
         }
-        
+
         // Parse input tab.
         int defaultInputIndex = searchSettings.getDefaultSearchInputTab();
         if (cookies.containsKey(Constants.COOKIE_ACTIVE_TAB))
@@ -99,7 +99,7 @@ public final class SearchRequest {
             parameterMap, QueryProcessorServlet.PARAM_INPUT), defaultInputIndex);
 
         // Parse the algorithm
-        this.algorithmIndex = lookupIndex(searchSettings.algorithmsIndex, extract(parameterMap, QueryProcessorServlet.PARAM_ALG), 
+        this.algorithmIndex = lookupIndex(searchSettings.algorithmsIndex, extract(parameterMap, QueryProcessorServlet.PARAM_ALG),
                 searchSettings.getDefaultAlgorithm());
 
         // Parse the input size
@@ -117,8 +117,8 @@ public final class SearchRequest {
         this.inputSizeIndex = tmp;
 
         // calculate hash code.
-        this.inputAndSizeHashCode = query + "//" 
-            + getInputTab().getShortName() 
+        this.inputAndSizeHashCode = query + "//"
+            + getInputTab().getShortName()
             + "//" + getInputSize();
 
         // save remaining options.
@@ -156,10 +156,10 @@ public final class SearchRequest {
     public Map getRequestArguments() {
         return this.allRequestOpts;
     }
-    
+
     /**
-     * Returns the actual query to be performed.on the search engine. 
-     * 
+     * Returns the actual query to be performed.on the search engine.
+     *
      * @return
      */
     public String getActualQuery() {

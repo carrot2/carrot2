@@ -160,7 +160,8 @@ YAHOO.util.Event.addListener(window, "load", c2AppInit, stc, true);
      <xsl:param name="table-style"></xsl:param>
 
      <form action="{$contextPath}{$search-servlet}" method="GET" id="search-area">
-     <input type="hidden" id="{$tabElemName}" name="{tabs/@form-element}" value="{tabs/tab[@selected]/@id}" />
+     <input type="hidden" id="{$tabElemName}" name="{tabs/@form-element}"
+            value="{/page/meta/user-tabs/user-tab[@selected]/@id}" />
 
      <table style="{$table-style}" id="search-area">
        <tr>
