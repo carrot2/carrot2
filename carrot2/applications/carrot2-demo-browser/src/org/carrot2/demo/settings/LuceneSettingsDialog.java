@@ -28,7 +28,6 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexReader.FieldOption;
 import org.carrot2.demo.swing.SwingUtils;
-import org.carrot2.input.lucene.Carrot2Analyzer;
 import org.carrot2.input.lucene.StandardAnalyzerWithPorterStemmer;
 
 import com.jgoodies.forms.builder.DefaultFormBuilder;
