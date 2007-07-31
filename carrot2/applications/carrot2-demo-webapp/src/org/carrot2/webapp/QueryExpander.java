@@ -30,4 +30,9 @@ public interface QueryExpander
      *            for the query expander
      */
     public String expandQuery(String query, Map requestParameters);
+
+    /**
+     * Returns names of parameters the query expander is expecting to get.
+     */
+    public String [] getParameterNames();
 }

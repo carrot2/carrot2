@@ -24,7 +24,7 @@ import org.dom4j.io.XMLWriter;
 
 /**
  * A serializer for the main search page.
- * 
+ *
  * @author Dawid Weiss
  */
 public class XMLPageSerializer implements PageSerializer
@@ -99,13 +99,18 @@ public class XMLPageSerializer implements PageSerializer
 
         // Emit action URLs
         final Element actionUrls = meta.addElement("action-urls");
-        final String uri =
-            QueryProcessorServlet.PARAM_Q + "=" + URLEncoding.encode(searchRequest.query, "UTF-8")
-            + "&" + QueryProcessorServlet.PARAM_INPUT + "=" + URLEncoding.encode(searchRequest.getInputTab().getShortName(), "UTF-8")
-            + "&" + QueryProcessorServlet.PARAM_ALG + "=" + URLEncoding.encode(searchRequest.getAlgorithm().getShortName(), "UTF-8")
+        final String uri = QueryProcessorServlet.PARAM_Q + "="
+            + URLEncoding.encode(searchRequest.query, "UTF-8") + "&"
+            + QueryProcessorServlet.PARAM_INPUT + "="
+            + URLEncoding.encode(searchRequest.getInputTab().getShortName(), "UTF-8")
+            + "&" + QueryProcessorServlet.PARAM_ALG + "="
+            + URLEncoding.encode(searchRequest.getAlgorithm().getShortName(), "UTF-8")
             + "&" + QueryProcessorServlet.PARAM_SIZE + "=" + searchRequest.getInputSize();
-        actionUrls.addElement("query-docs").setText(uri + "&type=d");
-        actionUrls.addElement("query-clusters").setText(uri + "&type=c");
+        String queryStringExtension = getQueryStringExtension(searchRequest);
+        actionUrls.addElement("query-docs").setText(
+            uri + queryStringExtension + "&type=d");
+        actionUrls.addElement("query-clusters").setText(
+            uri + queryStringExtension + "&type=c");
 
         // Emit interface strings, TODO: depending on the input locale?
         emitMessageStrings(meta);
@@ -120,7 +125,7 @@ public class XMLPageSerializer implements PageSerializer
         {
             final TabSearchInput inputTab = (TabSearchInput) inputTabs.get(i);
             final Element tab = tabs.addElement("tab");
-            
+
             tab.addAttribute("id", inputTab.getShortName());
             tab.addElement("short").setText(inputTab.getShortName());
             tab.addElement("long").setText(inputTab.getLongDescription());
@@ -147,8 +152,7 @@ public class XMLPageSerializer implements PageSerializer
                 for (int j = 0; j < exampleQueries.length; j++)
                 {
                     final Element query = queriesElement.addElement("example-query");
-                    final String url =
-                        QueryProcessorServlet.PARAM_Q + "="
+                    final String url = QueryProcessorServlet.PARAM_Q + "="
                         + URLEncoding.encode(exampleQueries[j], "UTF-8") + "&"
                         + QueryProcessorServlet.PARAM_INPUT + "="
                         + URLEncoding.encode(inputTab.getShortName(), "UTF-8");
@@ -166,7 +170,7 @@ public class XMLPageSerializer implements PageSerializer
             String tabId = (String) it.next();
             Element userTabElement = userTabsElement.addElement("user-tab");
             userTabElement.addAttribute("id", tabId);
-            if (searchRequest.getInputTab().getShortName().equals(tabId)) 
+            if (searchRequest.getInputTab().getShortName().equals(tabId))
             {
                 userTabElement.addAttribute("selected", "true");
                 selectedTabAdded = true;
@@ -194,7 +198,7 @@ public class XMLPageSerializer implements PageSerializer
                 algoElem.addAttribute("selected", "selected");
             }
             algoElem.addElement("short").setText(algo.getShortName());
-            if (algo.getLongDescription() != null) 
+            if (algo.getLongDescription() != null)
             {
                 algoElem.addElement("long").setText(algo.getLongDescription());
             }
@@ -238,6 +242,23 @@ public class XMLPageSerializer implements PageSerializer
         }
 
         return meta;
+    }
+
+    private String getQueryStringExtension(SearchRequest searchRequest)
+        throws UnsupportedEncodingException
+    {
+        Map extraRequestOpts = searchRequest.extraRequestOpts;
+        StringBuffer result = new StringBuffer();
+
+        for (Iterator it = extraRequestOpts.entrySet().iterator(); it.hasNext();)
+        {
+            Map.Entry entry = (Map.Entry) it.next();
+            result.append("&");
+            result.append(entry.getKey());
+            result.append("=");
+            result.append(URLEncoding.encode((String) entry.getValue(), "UTF-8"));
+        }
+        return result.toString();
     }
 
     private Set extractUserTabs(Map cookies, List inputs)

@@ -51,6 +51,12 @@ public final class SearchRequest {
     public final Map cookies;
 
     /**
+     * Extra request options that may need to be appended to the URLs for
+     * IFRAMES, so that these parameters are available e.g. while fetching documents.
+     */
+    public Map extraRequestOpts;
+
+    /**
      * Parse parameters.
      * @param cookieArray
      * @param queryExpander
@@ -117,12 +123,28 @@ public final class SearchRequest {
         this.inputSizeIndex = tmp;
 
         // calculate hash code.
-        this.inputAndSizeHashCode = query + "//"
+        this.inputAndSizeHashCode = getActualQuery() + "//"
             + getInputTab().getShortName()
             + "//" + getInputSize();
 
         // save remaining options.
         this.allRequestOpts = parameterMap;
+
+        // compute query string extension
+        extraRequestOpts = new HashMap();
+        final String[] parameterNames = queryExpander.getParameterNames();
+        if (parameterNames != null)
+        {
+            for (int i = 0; i < parameterNames.length; i++)
+            {
+                final String val = extract(parameterMap, parameterNames[i]);
+                if (val != null)
+                {
+                    extraRequestOpts.put(parameterNames[i], val);
+                }
+            }
+        }
+
     }
 
     private int lookupIndex(Map index, String key, int defaultValue) {
