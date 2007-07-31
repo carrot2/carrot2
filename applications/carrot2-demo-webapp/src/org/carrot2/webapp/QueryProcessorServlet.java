@@ -117,7 +117,7 @@ public final class QueryProcessorServlet extends HttpServlet {
 
     /** A bundle with localized messages */
     private ResourceBundle localizedMessages;
-    
+
     /** Query expander (may be null) */
     private QueryExpander queryExpander;
 
@@ -355,7 +355,7 @@ public final class QueryProcessorServlet extends HttpServlet {
                 final long start = System.currentTimeMillis();
                 final RawDocumentsSerializer serializer = serializerFactory.createRawDocumentSerializer(request);
                 response.setContentType(serializer.getContentType());
-                serializer.startResult(os, searchRequest.query);
+                serializer.startResult(os, searchRequest.getActualQuery());
                 try {
                     while (docIterator.hasNext()) {
                         serializer.write((RawDocument) docIterator.next());
@@ -390,13 +390,13 @@ public final class QueryProcessorServlet extends HttpServlet {
                     logger.info("Clustering results using: " + algorithmTab.getShortName());
                     final ProcessingResult result =
                         algorithmsController.query(algorithmTab.getShortName(),
-                                searchRequest.query, props);
+                                searchRequest.getActualQuery(), props);
                     final ArrayOutputComponent.Result collected =
                         (ArrayOutputComponent.Result) result.getQueryResult();
                     final List clusters = collected.clusters;
                     final List documents = bcaster.getDocuments();
 
-                    serializer.startResult(os, documents, request, searchRequest.query);
+                    serializer.startResult(os, documents, request, searchRequest.getActualQuery());
                     for (Iterator i = clusters.iterator(); i.hasNext();) {
                         serializer.write((RawCluster) i.next());
                     }
@@ -542,7 +542,7 @@ public final class QueryProcessorServlet extends HttpServlet {
 
         // Initialize query expander
         this.queryExpander = InitializationUtils.initializeQueryExpander(logger, getServletConfig());
-        
+
         // Mark as initialized.
         this.initialized = true;
     }
