@@ -132,15 +132,18 @@ public final class SearchRequest {
 
         // compute query string extension
         extraRequestOpts = new HashMap();
-        final String[] parameterNames = queryExpander.getParameterNames();
-        if (parameterNames != null)
+        if (queryExpander != null)
         {
-            for (int i = 0; i < parameterNames.length; i++)
+            final String [] parameterNames = queryExpander.getParameterNames();
+            if (parameterNames != null)
             {
-                final String val = extract(parameterMap, parameterNames[i]);
-                if (val != null)
+                for (int i = 0; i < parameterNames.length; i++)
                 {
-                    extraRequestOpts.put(parameterNames[i], val);
+                    final String val = extract(parameterMap, parameterNames[i]);
+                    if (val != null)
+                    {
+                        extraRequestOpts.put(parameterNames[i], val);
+                    }
                 }
             }
         }
