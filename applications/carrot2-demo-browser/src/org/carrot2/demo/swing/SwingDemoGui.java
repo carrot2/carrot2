@@ -98,7 +98,7 @@ public final class SwingDemoGui {
     }
 
     /**
-     * Creates a new object attached to a demo context. Call {@link #display()} to display
+     * Creates a new object attached to a demo context. Call {@link #display(JWindow)} to display
      * the demo frame.
      */
     public SwingDemoGui(DemoContext carrotDemo, String frameTitle) {

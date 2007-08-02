@@ -14,7 +14,7 @@ package org.carrot2.core.fetcher;
 
 
 /**
- * A collector and counter of remaining running {@link Fetcher}s.
+ * A collector and counter of remaining running {@link ParallelFetcher}s.
  * 
  * @author Dawid Weiss
  */

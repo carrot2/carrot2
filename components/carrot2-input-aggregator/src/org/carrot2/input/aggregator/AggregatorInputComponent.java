@@ -87,7 +87,7 @@ public class AggregatorInputComponent extends LocalInputComponentBase implements
     /**
      * Creates the aggregator input component.
      *
-     * @param inputComponentFactories an array of {@link AggregatorInput}s
+     * @param inputs an array of {@link AggregatorInput}s
      *            describing the document sources to be aggregated
      */
     public AggregatorInputComponent(AggregatorInput [] inputs)
@@ -98,7 +98,7 @@ public class AggregatorInputComponent extends LocalInputComponentBase implements
     /**
      * Creates the aggregator input component.
      *
-     * @param inputComponentFactories an array of {@link AggregatorInput}s
+     * @param inputs an array of {@link AggregatorInput}s
      *            describing the document sources to be aggregated
      * @param timeout the maximum amount of time the aggregator component will
      *            wait for all the individual inputs to deliver the results

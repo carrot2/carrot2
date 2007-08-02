@@ -183,9 +183,7 @@ public final class SearchRequest {
     }
 
     /**
-     * Returns the actual query to be performed.on the search engine.
-     *
-     * @return
+     * Returns the actual query to be performed on the search engine.
      */
     public String getActualQuery() {
         if (expandedQuery != null)
