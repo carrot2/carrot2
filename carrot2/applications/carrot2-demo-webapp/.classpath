@@ -14,7 +14,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-stemmer-snowball"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-tokenizer"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-input-etools"/>
-	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/xslt-filter-0.93.jar"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/jetty/jasper-compiler.jar"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/jetty/jasper-runtime.jar"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/jetty/org.mortbay.jetty.jar"/>
@@ -35,5 +34,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-common"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/jetty/ant.jar"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/jetty/commons-el.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-xsltfilter"/>
 	<classpathentry kind="output" path="web/WEB-INF/classes"/>
 </classpath>
