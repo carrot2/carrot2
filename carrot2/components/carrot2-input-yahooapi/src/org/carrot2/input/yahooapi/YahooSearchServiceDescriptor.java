@@ -36,7 +36,7 @@ public class YahooSearchServiceDescriptor {
     private FormParameters formParameters;
 
     private int maxResultsPerQuery;
-    
+
     /**
      * Creates an empty descriptor. Initialize it using
      * {@link #initializeFromXML(InputStream)}.
@@ -72,6 +72,13 @@ public class YahooSearchServiceDescriptor {
         }
 
         final Element configuration = doc.getRootElement();
+        
+        final Element service = configuration.element("service");
+        final String SERVICE_ATTR = "max-results-per-query";
+        if (service.attribute(SERVICE_ATTR) != null) {
+            this.maxResultsPerQuery = Integer.parseInt(
+                service.attributeValue(SERVICE_ATTR));
+        }
 
         FormActionInfo formActionInfo = new FormActionInfo(configuration);
         FormParameters formParameters = new FormParameters(configuration.element("parameters"));

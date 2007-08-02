@@ -45,20 +45,28 @@ public class YahooApiInputComponent extends LocalInputComponentBase
     /**
      * Yahoo search service wrapper.
      */
-    private YahooSearchService service;
+    protected final YahooSearchService service;
 
     /**
-     * Create an input component with the default service descriptor.
+     * Create an input component reading service descriptor from the specified resource. 
      */
-    public YahooApiInputComponent() {
+    protected YahooApiInputComponent(String descriptorResource) {
         final YahooSearchServiceDescriptor descriptor = new YahooSearchServiceDescriptor();
         try {
-            descriptor.initializeFromXML(this.getClass().getClassLoader().getResourceAsStream("resource/yahoo.xml"));
+            descriptor.initializeFromXML(
+                this.getClass().getClassLoader().getResourceAsStream(descriptorResource));
         } catch (IOException e) {
             throw new RuntimeException("Could not find default Yahoo service descriptor.");
         }
         final YahooSearchService service = new YahooSearchService(descriptor);
         this.service = service;
+    }
+
+    /**
+     * Create an input component with the default service descriptor.
+     */
+    public YahooApiInputComponent() {
+        this("resource/yahoo.xml");
     }
 
     /**
@@ -188,6 +196,10 @@ public class YahooApiInputComponent extends LocalInputComponentBase
                 rawDocuments[i] = new RawDocumentSnippet(Integer.toString(i + startAt),
                         yahooSearchResult.title, yahooSearchResult.summary,
                         yahooSearchResult.url, 0.0f);
+
+                if (yahooSearchResult.newsSource != null) {
+                    rawDocuments[i].setProperty(RawDocument.PROPERTY_SOURCES, new String [] {yahooSearchResult.newsSource});
+                }
             }
             
             // Convert to SearchResult

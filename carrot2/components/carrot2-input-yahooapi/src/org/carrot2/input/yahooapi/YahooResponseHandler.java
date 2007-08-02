@@ -39,6 +39,9 @@ public final class YahooResponseHandler implements ContentHandler {
     private String summary;
     private String url;
     private String clickurl;
+    private String newsSource;
+    private String newsSourceUrl;
+    
     private StringBuffer buffer = new StringBuffer();
 
     /** An error occurred. */
@@ -67,6 +70,8 @@ public final class YahooResponseHandler implements ContentHandler {
         this.summary = null;
         this.clickurl = null;
         this.url = null;
+        this.newsSource = null;
+        this.newsSourceUrl = null;
     }
 
     public void endDocument() throws SAXException {
@@ -104,7 +109,11 @@ public final class YahooResponseHandler implements ContentHandler {
         if (stack.size() == 2 && "Result".equals(localName)) {
             // New result parsed. Push it.
             try {
-                consumer.add(new YahooSearchResult(url, title, summary, clickurl));
+                if (newsSource == null) {
+                    consumer.add(new YahooSearchResult(url, title, summary, clickurl));
+                } else {
+                    consumer.add(new YahooSearchResult(url, title, summary, clickurl, newsSource, newsSourceUrl));
+                }
             } catch (ProcessingException e) {
                 throw new SAXException("Could not add result to consumer.", e);
             }
@@ -125,6 +134,10 @@ public final class YahooResponseHandler implements ContentHandler {
                 this.url = text;
             } else if ("ClickUrl".equals(localName)) {
                 this.clickurl = text;
+            } else if ("NewsSource".equals(localName)) {
+                this.newsSource = text;
+            } else if ("NewsSourceUrl".equals(localName)) {
+                this.newsSourceUrl = text;
             }
         }
         stack.remove(stack.size()-1);
