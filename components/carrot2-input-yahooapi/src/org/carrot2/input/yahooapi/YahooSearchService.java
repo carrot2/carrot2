@@ -38,12 +38,19 @@ public class YahooSearchService {
     private final static Logger log = Logger.getLogger(YahooSearchService.class);
 
     private YahooSearchServiceDescriptor descriptor;
-
+    
     /**
-     * XML parser used by default: if <code>true</code> a regular SAX parser is used,
-     * otherwise a regexp-parser is used.
+     * Determines the results parser used by default. 
+     * @see #PARSER_SAX
+     * @see #PARSER_REGEXP
      */
-    private boolean useXmlParser = true;
+    private int parserType = PARSER_SAX;
+    
+    /** @see #RESULT_PARSER_TYPE */
+    private final static int PARSER_SAX = 1;
+
+    /** @see #RESULT_PARSER_TYPE */
+    private final static int PARSER_REGEXP = 2;
 
     public YahooSearchService(YahooSearchServiceDescriptor descriptor) {
         this.descriptor = descriptor;
@@ -122,14 +129,18 @@ public class YahooSearchService {
         try {
             final YahooResponseHandler handler = new YahooResponseHandler(consumer);
 
-            final SAXParser parser;
-            if (useXmlParser) {
-                parser = SAXParserFactory.newInstance().newSAXParser();
-            } else {
-                parser = new RegExpYahooParser();
+            final XMLReader reader;
+            switch (parserType) {
+                case PARSER_REGEXP:
+                    reader = new RegExpYahooXMLReader();
+                    break;
+                case PARSER_SAX:
+                    reader = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
+                    break;
+                default:
+                    throw new RuntimeException("Unknown parser type: " + parserType);
             }
 
-            final XMLReader reader = parser.getXMLReader();
             reader.setFeature("http://xml.org/sax/features/validation", false);
             reader.setFeature("http://xml.org/sax/features/namespaces", true);
             reader.setContentHandler(handler);
@@ -254,10 +265,20 @@ public class YahooSearchService {
         }
     }
 
+    /**
+     * 
+     */
     final void setUseSaxParser(boolean useSAX) {
-        this.useXmlParser = useSAX;
+        if (useSAX) { 
+            this.parserType = PARSER_SAX;
+        } else {
+            this.parserType = PARSER_REGEXP;
+        }
     }
     
+    /**
+     * 
+     */
     public int getMaxResultsPerQuery()
     {
         return descriptor.getMaxResultsPerQuery();
