@@ -25,6 +25,8 @@
         <parameter name="results" mapto="query.results" />
 
         <parameter name="appid"   value="carrotsearch" />
+        
+        <parameter name="language"   value="en" />
     </parameters>
 
     <!-- override the http-headers you need here -->
