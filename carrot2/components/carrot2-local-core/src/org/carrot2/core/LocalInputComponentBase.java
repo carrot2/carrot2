@@ -159,9 +159,6 @@ public abstract class LocalInputComponentBase extends LocalComponentBase
      * Extracts the number of requested results ({@link LocalInputComponent#PARAM_REQUESTED_RESULTS})from
      * request parameters. If the {@link LocalInputComponent#PARAM_REQUESTED_RESULTS}
      * parameter is not present in the parameters map, 100 will be returned.
-     * 
-     * @param params
-     * @return
      */
     protected int getRequestedResults(Map params)
     {

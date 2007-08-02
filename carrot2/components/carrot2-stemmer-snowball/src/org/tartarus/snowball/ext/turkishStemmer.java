@@ -3084,7 +3084,7 @@ public class turkishStemmer extends SnowballProgram {
          * Something is wrong with the Turkish stemmer -- it returns
          * <code>false</code> for stems that have been found. This is a fix.
          *  
-         * @author Carrot2
+         * [author Carrot2]
          */
         public boolean stem() {
             stem0();

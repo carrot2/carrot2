@@ -18,10 +18,7 @@ Quality Assurance [before a release]
 
 	svn stat -u                 (nothing should be printed)
 
-
 - Go to carrot root checkout and issue the following:
-
-	ant license                 (commit and repeat if license files have been saved)
 
 	ant -q cleanall clean
 

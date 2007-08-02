@@ -15,7 +15,7 @@ public class SnowballProgram {
      * calls to all stemmer types without using Java
      * Reflection, which is slowing things down.
      * 
-     * @author Carrot2
+     * [author Carrot2]
      */
     public boolean stem() {
         return false;
@@ -24,7 +24,7 @@ public class SnowballProgram {
     /**
      * Initialize the current string from a character array.
      * 
-     * @author Carrot2
+     * [author Carrot2]
      */
     public void setCurrent(char [] value, int start, int length)
     {

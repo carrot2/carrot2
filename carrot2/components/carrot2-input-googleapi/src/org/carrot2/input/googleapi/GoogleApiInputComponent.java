@@ -190,7 +190,7 @@ public final class GoogleApiInputComponent
     
     /**
      * Performs a single search to Google. This method is used
-     * from {@link SingleFetcher#fetch(String, int)}.
+     * from {@link SingleFetcher#fetch(String, int, int)}.
      */
     final SearchResult doSearch(final String query, final int at, int totalResultsRequested) throws ProcessingException
     {

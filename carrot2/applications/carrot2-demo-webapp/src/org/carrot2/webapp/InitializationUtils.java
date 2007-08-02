@@ -347,8 +347,7 @@ final class InitializationUtils
     }
 
     /**
-     * @param servletConfig
-     * @return
+     * 
      */
     public static QueryExpander initializeQueryExpander(final Logger logger, ServletConfig config)
     {

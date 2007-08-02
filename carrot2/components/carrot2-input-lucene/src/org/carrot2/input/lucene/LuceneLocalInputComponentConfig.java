@@ -18,7 +18,7 @@ import org.apache.lucene.search.Searcher;
 
 /**
  * Configuration for the Lucene input component. Contains everything that the
- * {@lin LuceneLocalInputComponentFactoryConfig} has, plus the {@link Searcher} and the
+ * {@link LuceneLocalInputComponentFactoryConfig} has, plus the {@link Searcher} and the
  * {@link Analyzer} the input component is to use.
  * 
  * @author Stanislaw Osinski

@@ -273,7 +273,7 @@ public abstract class ParallelFetcher
     protected abstract SingleFetcher getFetcher();
 
     /**
-     * This method is called from {@link #pushResults0(int, int, SearchResult, Set)}
+     * This method is called from {@link #pushResults0(int, int, SearchResult, HashSet)}
      * and passes all search results fetched in increasing order of their index.
      * 
      * @param at Index of the search result.
