@@ -47,12 +47,12 @@
     <dependency name="carrot2-local-core" />
     <dependency name="carrot2-util-common" />
     <dependency name="carrot2-util-gzip" />
+    <dependency name="carrot2-util-xsltfilter" />
 
     <dependency name="json" />
     <dependency name="ehcache" />
     <dependency name="dom4j" />
     <dependency name="xerces" />
-    <dependency name="xslt-filter" />
 
     <dependency name="carrot2-input-yahooapi" profile="demo" />
     <dependency name="carrot2-input-googleapi" profile="demo" />
