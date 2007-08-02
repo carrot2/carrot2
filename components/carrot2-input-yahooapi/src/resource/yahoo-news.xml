@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <request encoding="UTF-8">
-    <service url="http://api.search.yahoo.com/WebSearchService/V1/webSearch" 
+    <service url="http://search.yahooapis.com/NewsSearchService/V1/newsSearch" 
              method="get" 
-             max-results-per-query="100" />
+             max-results-per-query="50"
+             />
 
     <!-- 
       Specify any other parameters which will be sent to the service
@@ -22,19 +23,8 @@
         <parameter name="query"   mapto="query.string" />
         <parameter name="start"   mapto="query.startFrom" />
         <parameter name="results" mapto="query.results" />
-        <parameter name="ei"      value="UTF-8" />
 
         <parameter name="appid"   value="carrotsearch" />
-
-        <parameter name="similar_ok" value="0" />
-
-        <!--
-        <parameter name="adult_ok" value="" />
-
-        <parameter name="language" value="en" />
-        <parameter name="country"  value="en" />
-        <parameter name="site"     value="www.cs.put.poznan.pl" />
-        -->
     </parameters>
 
     <!-- override the http-headers you need here -->

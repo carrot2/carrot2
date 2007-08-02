@@ -37,6 +37,9 @@ import org.xml.sax.*;
 public class YahooSearchService {
     private final static Logger log = Logger.getLogger(YahooSearchService.class);
 
+    /**
+     * 
+     */
     private YahooSearchServiceDescriptor descriptor;
     
     /**
@@ -275,7 +278,7 @@ public class YahooSearchService {
             this.parserType = PARSER_REGEXP;
         }
     }
-    
+
     /**
      * 
      */

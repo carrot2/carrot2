@@ -25,10 +25,22 @@ final class YahooSearchResult {
     final String summary;
     final String clickurl;
 
-    public YahooSearchResult(String url, String title, String summary, String clickurl) {
+    final String newsSource;
+    final String newsSourceUrl;
+
+    public YahooSearchResult(String url, String title, String summary, String clickurl, 
+        String newsSource, String newsSourceUrl)
+    {
         this.url = url;
         this.title = title;
         this.summary = summary;
         this.clickurl = clickurl;
+        this.newsSource = newsSource;
+        this.newsSourceUrl = newsSourceUrl;
+    }
+
+    public YahooSearchResult(String url, String title, String summary, String clickurl)
+    {
+        this(url, title, summary, clickurl, null, null);
     }
 }
