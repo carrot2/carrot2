@@ -2,6 +2,18 @@
 Quality Assurance [before a release]
 -----------------
 
+- Update license files (update the year too, if needed).
+
+    When updating the license, check the following locations:
+    
+    - ${svn}/carrot2.LICENSE, 
+    - ${svn}/etc/codeconvention/*.txt
+    
+    then run 'ant license' to update the sources (review output).
+    
+    - http://project.carrot2.org/license.html
+    - http://project.carrot2.org/carrot2.LICENSE
+
 - Make sure the local checkout is in sync with the server:
 
 	svn stat -u                 (nothing should be printed)
