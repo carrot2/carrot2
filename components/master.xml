@@ -754,6 +754,7 @@ the default path: ${java.home}/lib
              protected        = "true"
              version          = "false"
              use              = "true"
+             encoding         = "UTF-8"
              doctitle         = "${ant.project.name}"
              header           = "${ant.project.name}"
              footer           = "Please refer to project documentation at &lt;br&gt;&lt;a href=http://www.carrot2.org&gt;http://www.carrot2.org&lt;/a&gt;"

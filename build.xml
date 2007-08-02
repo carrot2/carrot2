@@ -71,6 +71,7 @@ ant -Dcarrot2.code.dir=(path) ...
              access           = "package"
              version          = "true"
              use              = "false"
+             encoding         = "UTF-8"
              doctitle         = "Carrot&lt;sup&gt;2&lt;/sup&gt; Framework API Specification"
              header           = "&lt;div class='logo'&gt;Carrot&lt;sup&gt;2&lt;/sup&gt; Framework&lt;br&gt;API Specification&lt;/div&gt;"
              footer           = "&lt;div class='logo'&gt;Please refer to project documentation at &lt;br&gt;&lt;a target='_top' href=http://project.carrot2.org&gt;http://project.carrot2.org&lt;/a&gt;&lt;/div&gt;"
