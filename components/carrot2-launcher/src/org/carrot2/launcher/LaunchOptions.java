@@ -94,7 +94,7 @@ final class LaunchOptions
     {
         try
         {
-            final URL url = dirLocation.toURL();
+            final URL url = dirLocation.toURI().toURL();
             final String external = url.toExternalForm();
             if (!external.endsWith("/")) {
                 throw new LaunchException("A folder URL should end with a '/'.");
