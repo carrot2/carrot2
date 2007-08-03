@@ -58,3 +58,8 @@ Starts the Document Clustering Server (DCS) on a given port. DCS
 provides several access interfaces, REST (XML over HTTP) and XML-RPC
 among them. When you start the Web dcs version, access it using
 a Web browser for a full description of available options.
+
+3) benchmark
+
+A benchmarking application for input components and clustering
+algorithms, mostly for internal use in the project.
