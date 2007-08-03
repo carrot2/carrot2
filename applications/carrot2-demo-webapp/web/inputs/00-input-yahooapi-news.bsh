@@ -7,16 +7,16 @@ factory = new LocalComponentFactory() {
     }
 };
 
-LoadedComponentFactory loaded = 
+LoadedComponentFactory loaded =
 	new LoadedComponentFactory("input-yahooapi-news", factory);
 
 loaded.setProperties(new String [][] {
-	{"tab.name", "Yahoo! News"},
-	{"tab.accel", "Y"},
+	{"tab.name", "News"},
+	{"tab.accel", "N"},
 	{"tab.description", "Search the News with Yahoo!"},
 	{"tab.description.startup", "Carrot Clustering Engine will send your query to Yahoo! News and automatically organize the results into thematic categories"},
-	{"tab.exampleQueries", "madonna|iraq|apple"},
-	{"tab.icon", "yahoo.png"},
+	{"tab.exampleQueries", "madonna|stocks|apple"},
+	{"tab.icon", "yahoo.gif"},
 	{"tab.default", "false"}
 });
 

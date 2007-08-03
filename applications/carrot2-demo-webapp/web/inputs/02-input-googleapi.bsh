@@ -7,7 +7,7 @@ factory = new LocalComponentFactory() {
     }
 };
 
-LoadedComponentFactory loaded = 
+LoadedComponentFactory loaded =
 	new LoadedComponentFactory("input-googleapi", factory);
 
 loaded.setProperties(new String [][] {
@@ -17,7 +17,8 @@ loaded.setProperties(new String [][] {
 	{"tab.description.startup", "Carrot Clustering Engine will send your query to Google and automatically organize the results into thematic categories"},
 	{"tab.exampleQueries", "chips|tiger|salsa"},
 	{"tab.icon", "google.gif"},
-	{"tab.ignoreOnError", "true" }
+	{"tab.ignoreOnError", "true" },
+	{"tab.hidden", "true"}
 });
 
 return loaded;
