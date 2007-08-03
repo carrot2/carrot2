@@ -137,24 +137,31 @@ public final class PerformanceLogger
 
     /**
      * Logs information about the finished job: duration and an optional message.
+     * 
+     * @return Returns the logged duration as a number of milliseconds.
      */
-    public void end(String message)
+    public long end(String message)
     {
-        end(this.level, message);
+        return end(this.level, message);
     }
 
     /**
      * Logs information about the finished job: duration, job name, optional message.
+     * 
+     * @return Returns the logged duration as a number of milliseconds.
      */
-    public void end(Level level, String message)
+    public long end(Level level, String message)
     {
         final ArrayList stack = (ArrayList) jobs.get();
         final JobInfo job = (JobInfo) stack.remove(stack.size() - 1);
         final MessageFormat mf = (MessageFormat) mformat.get();
+        final long duration = job.getDuration();
 
         sink.log(level, "END: " + job.full + " (" + mf.format(new Object []
         {
-            new Double(job.getDuration() / 1000.0)
+            new Double(duration / 1000.0)
         }) + ") " + (message == null ? "" : (" {" + message + "}")));
+        
+        return duration;
     }
 }
