@@ -28,6 +28,16 @@
 	    </layout>
 	</appender>
 
+	<appender  name="appender-benchmark" class="org.apache.log4j.FileAppender">
+		<param name="File" value=".dcs.benchmark" />
+		<param name="Encoding" value="UTF-8" />
+		<param name="Append" value="false" />
+
+	    <layout class="org.apache.log4j.PatternLayout">
+	        <param name="ConversionPattern" value="%m%n"/>
+	    </layout>
+	</appender>
+
     <!-- Add logger filters here. -->
     &filters-common;
     &filters-silent;
@@ -40,6 +50,14 @@
     <logger name="batch" additivity="false">
     	<level value="info" />
         <appender-ref ref="appender-console" />
+    </logger>
+    <logger name="benchmark" additivity="false">
+    	<level value="info" />
+        <appender-ref ref="appender-console" />
+    </logger>
+    <logger name="benchmark-results" additivity="false">
+    	<level value="info" />
+        <appender-ref ref="appender-benchmark" />
     </logger>
 
     <!-- Root logger config. -->
