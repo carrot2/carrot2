@@ -169,7 +169,7 @@ public class YahooApiInputComponent extends LocalInputComponentBase
         final int maxResultsPerQuery = Math.min(totalResultsRequested, service
             .getMaxResultsPerQuery());
         
-        log.info("Yahoo API query (" + maxResultsPerQuery + "):" + query);
+        log.info("Yahoo API query (" + maxResultsPerQuery + "): " + query);
         final long [] estimatedResultsArray = new long[1];
         final List results = new ArrayList();
         try {

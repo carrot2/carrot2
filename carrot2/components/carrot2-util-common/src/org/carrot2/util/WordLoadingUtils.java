@@ -91,7 +91,7 @@ public final class WordLoadingUtils
             InputStream stream, boolean convertToLowerCase) 
         throws IOException
     {
-        logger.debug("Loading word list for: " + resourceName);
+        logger.debug("Loading word list: " + resourceName);
 
         if (stream == null)
         {
@@ -133,7 +133,7 @@ public final class WordLoadingUtils
             reader.close();
         }
 
-        logger.debug("Finished loading: " + resourceName);
+        logger.info("Loaded: " + resourceName + " (" + set.size() + " entries)");
         return set;
     }
 
@@ -146,7 +146,7 @@ public final class WordLoadingUtils
     private static Set loadPhraseSet(String resourceName, InputStream stream,
         boolean convertToLowerCase) throws IOException
     {
-        logger.debug("Loading word list for: " + resourceName);
+        logger.debug("Loading phrase list: " + resourceName);
 
         if (stream == null)
         {
@@ -201,8 +201,7 @@ public final class WordLoadingUtils
             reader.close();
         }
 
-        logger.debug("Finished loading: " + resourceName);
-
+        logger.info("Loaded: " + resourceName + " (" + set.size() + " entries)");
         return set;
     }
 
@@ -216,7 +215,7 @@ public final class WordLoadingUtils
         InputStream stream, boolean convertToLowerCase, int parameterCount)
         throws IOException
     {
-        logger.debug("Loading word list for: " + resourceName);
+        logger.debug("Loading phrase set: " + resourceName);
 
         if (stream == null)
         {
@@ -282,7 +281,7 @@ public final class WordLoadingUtils
             reader.close();
         }
 
-        logger.debug("Finished loading: " + resourceName);
+        logger.info("Loaded: " + resourceName + " (" + set.size() + " entries)");
 
         return set;
     }
@@ -298,7 +297,7 @@ public final class WordLoadingUtils
         InputStream stream, boolean convertToLowerCase)
         throws IOException
     {
-        logger.debug("Loading word list for: " + resourceName);
+        logger.debug("Loading phrase set list: " + resourceName);
 
         if (stream == null)
         {
@@ -364,8 +363,7 @@ public final class WordLoadingUtils
             reader.close();
         }
 
-        logger.debug("Finished loading: " + resourceName);
-
+        logger.info("Loaded: " + resourceName + " (" + phraseSetsList.size() + " entries)");
         return phraseSetsList;
     }
 }

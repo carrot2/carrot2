@@ -536,22 +536,24 @@ ${string:component.dependencies}
     <pathconvert targetos="unix" property="tmp:safepath">
         <path location="${build.dir}/junit-temp/junit-log4j-log.html" />
     </pathconvert>
-    <copy file="${carrot2.code.dir}/etc/test-log4j.properties"
-          tofile="${build.dir}/junit-temp/test-log4j.properties"
+
+    <copy toDir="${build.dir}/junit-temp/log4j"
           includeemptydirs="false" filtering="true" overwrite="true">
+        <fileset dir="${carrot2.code.dir}/components/carrot2-util-log4j/src" />
         <filterset begintoken="@" endtoken="@" id="deployment.info">
             <filter token="LOGPATH"       value="${tmp:safepath}" />
         </filterset>
     </copy>
+
     <pathconvert property="tmp:loggingSettings" pathSep=",">
-        <path><pathelement location="${build.dir}/junit-temp/test-log4j.properties" /></path>
+        <path><pathelement location="${build.dir}/junit-temp/log4j/log4j-junit-tests.xml" /></path>
     </pathconvert>
     <touch file="${build.dir}/junit-temp/junit-log4j-log.html" />
 
     <property environment="env"/>
 
     <junit dir="${build.dir}/${build.type}" forkmode="perBatch" fork="true" printsummary="true"
-        errorproperty="junit.error" failureproperty="junit.failure">
+        showoutput="true" errorproperty="junit.error" failureproperty="junit.failure">
 
         <formatter type="xml"/>
 
@@ -567,8 +569,9 @@ ${string:component.dependencies}
         </classpath>
         
         <sysproperty key="log4j.configuration" value="file:///${tmp:loggingSettings}"/>
+        <sysproperty key="log4j.debug" value="true"/>
 
-	<!-- Pass on all properties with carrot2.* -->
+        <!-- Pass on all properties with carrot2.* -->
         <syspropertyset dynamic="true">
         	<propertyref prefix="carrot2." />
         </syspropertyset>

@@ -114,7 +114,7 @@ public final class ProcessingUtils
             plogger.end("Output: " + outputFormat); // Saving result
 
             // Finish processing with a logging message.
-            plogger.end();
+            plogger.end(Level.INFO, "total");
 
             return result;
         }

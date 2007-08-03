@@ -57,9 +57,11 @@
     <dependency name="lucene" />
     <dependency name="clustermap" />
 
-    <dependency name="carrot2-util-common" />
     <dependency name="carrot2-local-core" />
-    
+    <dependency name="carrot2-util-common" />
+
+    <dependency name="carrot2-util-log4j" in-profile="console" noexport="true" />
+
     <dependency name="proguard-base" />
 
     <!-- Stripped profile contains component references for compilation time only -->

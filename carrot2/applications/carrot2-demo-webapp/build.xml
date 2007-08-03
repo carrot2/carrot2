@@ -31,12 +31,10 @@
             <then>
                 <patternset id="war.patternset">
                     <exclude name="WEB-INF/lib/*log4j*.jar" />
-                    <exclude name="WEB-INF/classes/log4j.properties" />
+                    <exclude name="WEB-INF/lib/carrot2-util-log4j*.jar" />
                 </patternset>
             </then>
             <else>
-                <copy file="${project.dir}/etc/log4j.properties.war"
-                      tofile="${build.dir}/type-war/WEB-INF/classes/log4j.properties" />
             </else>
         </if>
 
