@@ -7,7 +7,7 @@ factory = new LocalComponentFactory() {
     }
 };
 
-LoadedComponentFactory loaded = 
+LoadedComponentFactory loaded =
 	new LoadedComponentFactory("input-msnapi", factory);
 
 loaded.setProperties(new String [][] {
@@ -17,7 +17,8 @@ loaded.setProperties(new String [][] {
 	{"tab.description.startup", "Carrot Clustering Engine will send your query to MSN Search and automatically organize the results into thematic categories"},
 	{"tab.exampleQueries", "data mining|london|clustering"},
 	{"tab.icon", "msn.gif"},
-	{"tab.default", "false"}
+	{"tab.default", "false"},
+	{"tab.hidden", "true"}
 });
 
 return loaded;
