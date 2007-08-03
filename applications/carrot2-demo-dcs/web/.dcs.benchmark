@@ -1,518 +1,766 @@
-fetching;results=;50;input=;input-yahooapi;query=;data mining;duration=;1484
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;true;duration=;891
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;true;duration=;281
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;true;duration=;453
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;true;duration=;187
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;true;duration=;203
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;203
+fetching;results=;50;input=;input-yahooapi;query=;data mining;duration=;1735
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;true;duration=;703
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;true;duration=;204
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;true;duration=;234
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;true;duration=;125
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;true;duration=;125
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;94
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;109
 clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;172
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;266
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;172
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;156
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;140
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;172
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;219
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;219
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;172
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;156
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;187
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;313
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;203
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;172
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;140
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;125
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;125
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;94
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;93
 clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;141
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;219
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;172
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;141
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;125
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;93
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;125
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;157
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;93
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;94
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;110
 clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;156
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;true;duration=;437
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;true;duration=;157
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;109
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;true;duration=;282
 clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;true;duration=;93
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;true;duration=;157
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;true;duration=;93
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;63
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;78
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;63
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;62
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;94
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;62
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;172
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;78
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;63
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;63
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;78
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;true;duration=;47
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;true;duration=;110
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;true;duration=;47
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;46
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;32
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;47
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;32
 clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;109
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;63
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;78
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;156
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;78
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;63
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;true;duration=;1359
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;true;duration=;344
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;true;duration=;312
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;true;duration=;344
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;true;duration=;281
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;266
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;281
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;281
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;266
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;328
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;32
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;62
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;32
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;16
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;94
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;true;duration=;1016
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;true;duration=;234
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;true;duration=;203
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;true;duration=;235
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;true;duration=;187
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;172
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;171
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;188
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;156
 clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;250
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;156
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;172
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;172
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;172
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;188
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;218
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;188
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;156
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;172
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;172
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;172
 clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;250
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;281
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;250
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;266
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;312
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;250
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;266
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;250
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;250
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;250
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;344
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;265
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;250
-clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;250
-fetching;results=;50;input=;input-yahooapi;query=;dawid weiss;duration=;985
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;true;duration=;156
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;true;duration=;328
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;true;duration=;140
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;true;duration=;157
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;true;duration=;156
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;156
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;250
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;125
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;141
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;140
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;172
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;235
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;156
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;141
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;140
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;125
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;250
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;187
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;172
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;141
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;156
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;172
+clustering;results=;50;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;219
+fetching;results=;50;input=;input-yahooapi;query=;dawid weiss;duration=;796
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;true;duration=;110
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;true;duration=;203
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;true;duration=;141
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;true;duration=;93
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;true;duration=;110
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;203
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;94
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;94
 clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;140
 clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;219
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;203
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;141
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;172
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;true;duration=;94
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;true;duration=;62
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;true;duration=;141
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;true;duration=;78
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;true;duration=;78
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;109
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;78
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;79
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;78
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;78
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;94
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;93
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;79
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;93
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;157
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;93
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;94
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;94
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;94
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;187
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;109
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;94
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;94
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;true;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;true;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;true;duration=;110
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;true;duration=;15
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;true;duration=;47
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;32
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;15
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;32
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;31
 clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;94
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;156
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;78
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;93
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;63
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;94
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;78
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;93
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;79
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;62
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;78
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;156
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;63
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;true;duration=;437
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;true;duration=;391
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;true;duration=;359
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;true;duration=;516
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;true;duration=;390
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;344
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;438
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;500
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;578
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;516
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;516
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;437
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;422
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;453
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;360
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;421
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;391
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;16
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;32
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;16
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;141
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;true;duration=;282
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;true;duration=;281
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;true;duration=;281
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;true;duration=;281
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;true;duration=;328
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;297
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;266
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;266
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;281
 clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;375
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;469
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;390
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;360
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;422
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;422
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;422
-clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;468
-fetching;results=;50;input=;input-yahooapi;query=;madonna;duration=;1000
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;true;duration=;125
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;true;duration=;110
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;true;duration=;140
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;true;duration=;204
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;true;duration=;140
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;156
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;188
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;172
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;328
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;281
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;266
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;281
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;266
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;343
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;297
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;266
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;281
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;313
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;343
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;282
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;265
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;281
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;266
+clustering;results=;50;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;375
+fetching;results=;50;input=;input-yahooapi;query=;madonna;duration=;766
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;true;duration=;93
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;true;duration=;79
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;true;duration=;62
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;true;duration=;78
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;true;duration=;141
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;63
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;140
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;79
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;62
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;78
 clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;141
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;171
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;219
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;188
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;140
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;219
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;140
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;172
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;172
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;203
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;266
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;156
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;188
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;140
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;63
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;78
 clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;141
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;234
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;62
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;true;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;true;duration=;16
 clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;true;duration=;47
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;true;duration=;47
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;true;duration=;47
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;true;duration=;62
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;true;duration=;47
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;46
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;141
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;62
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;63
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;62
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;63
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;46
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;203
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;63
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;46
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;true;duration=;15
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;true;duration=;94
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;16
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;16
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;32
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;15
 clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;94
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;78
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;true;duration=;531
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;true;duration=;422
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;true;duration=;500
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;true;duration=;407
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;true;duration=;390
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;485
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;453
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;468
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;532
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;406
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;469
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;515
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;469
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;453
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;578
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;391
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;406
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;16
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;15
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;32
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;15
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;16
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;15
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;94
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;16
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;16
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;true;duration=;344
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;true;duration=;312
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;true;duration=;344
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;true;duration=;313
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;true;duration=;328
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;422
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;328
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;312
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;328
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;328
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;313
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;422
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;312
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;328
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;313
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;328
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;344
 clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;390
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;407
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;406
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;484
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;407
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;421
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;391
-clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;406
-fetching;results=;50;input=;input-yahooapi;query=;amiga;duration=;1219
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;true;duration=;125
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;true;duration=;234
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;true;duration=;125
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;true;duration=;140
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;313
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;328
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;344
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;312
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;328
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;375
+clustering;results=;50;input=;input-yahooapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;329
+fetching;results=;50;input=;input-yahooapi;query=;amiga;duration=;734
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;true;duration=;94
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;true;duration=;78
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;true;duration=;62
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;true;duration=;78
 clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;true;duration=;141
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;172
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;203
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;125
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;187
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;94
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;62
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;94
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;141
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;63
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;140
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;63
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;78
 clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;157
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;125
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;218
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;141
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;125
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;125
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;375
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;203
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;140
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;188
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;125
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;125
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;203
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;141
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;125
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;140
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;true;duration=;63
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;true;duration=;47
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;true;duration=;62
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;true;duration=;47
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;true;duration=;141
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;46
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;62
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;156
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;62
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;63
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;62
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;true;duration=;32
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;true;duration=;15
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;true;duration=;110
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;true;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;true;duration=;16
 clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;31
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;63
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;46
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;63
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;140
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;true;duration=;219
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;true;duration=;219
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;true;duration=;234
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;true;duration=;235
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;true;duration=;234
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;219
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;297
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;219
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;219
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;16
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;16
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;15
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;94
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;16
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;32
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;15
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;16
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;32
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;15
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;94
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;16
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;true;duration=;187
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;true;duration=;156
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;true;duration=;157
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;true;duration=;156
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;true;duration=;172
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;218
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;172
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;172
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;156
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;157
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;172
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;156
 clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;234
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;235
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;234
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;219
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;312
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;219
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;281
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;219
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;250
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;219
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;234
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;297
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;219
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;234
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;234
-clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;219
-fetching;results=;50;input=;input-msnapi;query=;data mining;duration=;3422
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;true;duration=;234
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;true;duration=;157
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;true;duration=;140
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;true;duration=;172
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;true;duration=;250
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;125
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;141
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;156
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;141
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;250
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;140
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;203
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;156
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;172
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;172
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;156
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;157
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;172
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;218
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;157
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;156
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;531
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;172
+clustering;results=;50;input=;input-yahooapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;156
+fetching;results=;50;input=;input-msnapi;query=;data mining;duration=;2844
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;true;duration=;187
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;true;duration=;110
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;true;duration=;78
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;true;duration=;187
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;true;duration=;94
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;110
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;94
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;171
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;79
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;93
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;94
 clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;172
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;141
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;250
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;141
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;203
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;156
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;141
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;250
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;140
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;141
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;140
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;141
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;156
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;true;duration=;172
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;true;duration=;47
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;true;duration=;63
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;true;duration=;46
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;true;duration=;63
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;62
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;63
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;62
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;63
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;156
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;62
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;63
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;78
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;62
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;63
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;78
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;62
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;63
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;62
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;true;duration=;360
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;true;duration=;234
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;true;duration=;266
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;true;duration=;234
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;true;duration=;250
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;250
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;250
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;344
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;265
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;235
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;250
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;235
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;265
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;94
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;94
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;93
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;79
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;187
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;94
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;94
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;true;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;true;duration=;16
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;true;duration=;140
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;true;duration=;32
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;true;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;16
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;32
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;16
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;125
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;15
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;16
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;16
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;32
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;109
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;true;duration=;188
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;true;duration=;156
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;true;duration=;187
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;true;duration=;172
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;true;duration=;172
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;172
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;172
 clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;266
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;234
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;344
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;281
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;235
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;421
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;172
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;172
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;156
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;188
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;172
 clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;250
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;234
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;281
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;187
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;188
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;187
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;172
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;156
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;172
 clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;266
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;234
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;344
-clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;281
-fetching;results=;50;input=;input-msnapi;query=;dawid weiss;duration=;1032
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;true;duration=;171
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;true;duration=;141
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;true;duration=;141
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;true;duration=;140
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;true;duration=;235
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;156
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;125
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;172
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;172
+clustering;results=;50;input=;input-msnapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;172
+fetching;results=;50;input=;input-msnapi;query=;dawid weiss;duration=;406
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;true;duration=;94
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;true;duration=;93
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;true;duration=;172
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;true;duration=;94
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;true;duration=;94
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;94
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;78
 clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;172
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;140
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;157
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;250
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;125
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;140
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;141
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;141
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;171
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;188
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;266
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;156
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;125
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;93
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;94
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;94
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;78
 clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;172
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;140
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;141
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;297
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;94
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;94
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;93
 clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;172
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;true;duration=;47
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;true;duration=;62
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;true;duration=;47
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;true;duration=;62
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;true;duration=;63
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;62
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;63
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;62
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;157
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;46
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;63
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;62
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;110
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;62
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;63
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;46
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;62
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;63
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;172
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;true;duration=;421
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;true;duration=;391
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;true;duration=;359
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;true;duration=;360
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;true;duration=;437
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;469
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;938
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;390
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;360
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;94
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;94
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;true;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;true;duration=;32
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;true;duration=;125
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;true;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;true;duration=;15
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;32
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;16
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;16
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;16
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;125
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;16
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;32
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;16
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;true;duration=;297
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;true;duration=;375
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;true;duration=;281
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;true;duration=;281
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;true;duration=;282
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;281
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;281
 clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;375
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;375
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;453
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;375
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;437
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;375
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;360
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;375
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;468
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;391
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;375
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;375
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;281
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;282
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;281
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;297
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;281
 clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;359
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;391
-clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;453
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;282
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;281
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;281
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;281
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;282
 clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;375
-fetching;results=;50;input=;input-msnapi;query=;madonna;duration=;484
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;true;duration=;157
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;true;duration=;140
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;true;duration=;141
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;265
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;297
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;281
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;282
+clustering;results=;50;input=;input-msnapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;562
+fetching;results=;50;input=;input-msnapi;query=;madonna;duration=;469
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;true;duration=;94
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;true;duration=;93
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;true;duration=;94
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;true;duration=;94
 clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;true;duration=;125
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;true;duration=;234
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;141
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;141
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;140
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;125
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;156
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;235
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;156
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;94
 clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;172
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;93
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;94
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;219
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;94
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;94
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;172
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;94
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;94
 clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;171
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;125
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;141
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;234
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;125
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;141
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;141
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;140
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;141
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;234
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;157
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;140
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;true;duration=;63
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;true;duration=;62
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;true;duration=;63
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;true;duration=;62
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;79
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;true;duration=;31
 clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;true;duration=;47
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;62
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;78
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;141
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;62
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;63
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;78
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;62
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;62
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;63
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;172
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;47
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;46
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;63
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;47
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;true;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;true;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;true;duration=;32
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;109
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;32
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;15
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;32
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;15
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;32
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;16
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;125
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;15
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;32
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;16
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;stc-en;warmup=;false;duration=;16
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;rough-kmeans;warmup=;true;duration=;422
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;rough-kmeans;warmup=;true;duration=;421
 clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;rough-kmeans;warmup=;true;duration=;500
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;rough-kmeans;warmup=;true;duration=;515
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;rough-kmeans;warmup=;true;duration=;469
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;rough-kmeans;warmup=;true;duration=;500
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;rough-kmeans;warmup=;true;duration=;610
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;rough-kmeans;warmup=;true;duration=;407
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;rough-kmeans;warmup=;true;duration=;422
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;406
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;406
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;422
 clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;484
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;422
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;406
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;407
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;406
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;422
 clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;500
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;500
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;516
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;500
-clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;1172
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;453
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;422
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;406
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;438
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;406
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;422
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;547
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;406
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;453
+clustering;results=;50;input=;input-msnapi;query=;madonna;algorithm=;rough-kmeans;warmup=;false;duration=;406
+fetching;results=;50;input=;input-msnapi;query=;amiga;duration=;360
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;lingo-classic;warmup=;true;duration=;109
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;lingo-classic;warmup=;true;duration=;78
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;lingo-classic;warmup=;true;duration=;219
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;lingo-classic;warmup=;true;duration=;78
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;lingo-classic;warmup=;true;duration=;94
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;94
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;172
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;93
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;79
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;172
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;94
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;172
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;94
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;78
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;lingo-classic;warmup=;false;duration=;94
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;stc-en;warmup=;true;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;stc-en;warmup=;true;duration=;15
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;stc-en;warmup=;true;duration=;47
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;stc-en;warmup=;true;duration=;110
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;stc-en;warmup=;true;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;16
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;16
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;16
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;16
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;125
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;16
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;16
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;16
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;stc-en;warmup=;false;duration=;31
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;rough-kmeans;warmup=;true;duration=;203
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;rough-kmeans;warmup=;true;duration=;282
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;rough-kmeans;warmup=;true;duration=;203
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;rough-kmeans;warmup=;true;duration=;203
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;rough-kmeans;warmup=;true;duration=;187
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;188
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;203
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;188
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;296
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;204
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;187
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;188
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;187
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;187
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;188
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;281
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;203
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;234
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;188
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;203
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;188
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;187
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;281
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;188
+clustering;results=;50;input=;input-msnapi;query=;amiga;algorithm=;rough-kmeans;warmup=;false;duration=;219
+fetching;results=;100;input=;input-yahooapi;query=;data mining;duration=;1250
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;true;duration=;375
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;true;duration=;453
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;true;duration=;343
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;true;duration=;422
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;true;duration=;344
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;344
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;422
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;343
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;438
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;344
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;343
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;438
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;359
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;360
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;406
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;328
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;406
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;422
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;344
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;344
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;453
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;359
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;344
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;406
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;lingo-classic;warmup=;false;duration=;344
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;true;duration=;47
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;true;duration=;94
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;true;duration=;140
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;true;duration=;63
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;true;duration=;47
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;62
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;63
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;156
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;47
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;62
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;63
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;47
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;46
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;141
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;63
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;46
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;63
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;62
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;157
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;47
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;62
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;63
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;62
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;141
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;stc-en;warmup=;false;duration=;47
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;true;duration=;671
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;true;duration=;672
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;true;duration=;766
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;true;duration=;766
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;true;duration=;656
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;734
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;656
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;938
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;828
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;640
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;657
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;812
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;656
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;657
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;750
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;625
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;1671
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;829
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;656
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;640
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;782
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;703
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;734
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;735
+clustering;results=;100;input=;input-yahooapi;query=;data mining;algorithm=;rough-kmeans;warmup=;false;duration=;640
+fetching;results=;100;input=;input-yahooapi;query=;dawid weiss;duration=;1469
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;true;duration=;516
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;true;duration=;609
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;true;duration=;437
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;true;duration=;516
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;true;duration=;469
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;531
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;453
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;594
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;437
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;532
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;484
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;531
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;422
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;547
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;438
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;453
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;515
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;438
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;531
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;422
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;531
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;485
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;515
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;422
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;lingo-classic;warmup=;false;duration=;625
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;true;duration=;94
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;true;duration=;94
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;true;duration=;93
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;true;duration=;78
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;true;duration=;235
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;47
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;62
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;63
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;62
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;156
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;63
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;62
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;63
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;47
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;172
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;62
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;63
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;78
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;62
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;63
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;47
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;172
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;46
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;63
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;stc-en;warmup=;false;duration=;62
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;true;duration=;891
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;true;duration=;969
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;true;duration=;1094
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;true;duration=;1156
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;true;duration=;1109
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;1156
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;1266
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;1219
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;859
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;906
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;922
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;828
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;829
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;921
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;829
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;843
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;907
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;812
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;813
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;906
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;812
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;813
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;906
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;813
+clustering;results=;100;input=;input-yahooapi;query=;dawid weiss;algorithm=;rough-kmeans;warmup=;false;duration=;859
+fetching;results=;100;input=;input-yahooapi;query=;madonna;duration=;1734
+clustering;results=;100;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;true;duration=;719
+clustering;results=;100;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;true;duration=;656
+clustering;results=;100;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;true;duration=;547
+clustering;results=;100;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;true;duration=;453
+clustering;results=;100;input=;input-yahooapi;query=;madonna;algorithm=;lingo-classic;warmup=;true;duration=;500
