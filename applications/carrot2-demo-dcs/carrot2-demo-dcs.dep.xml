@@ -31,6 +31,8 @@
         <dependency name="carrot2-license" />
         <dependency name="carrot2-local-core" />
         <dependency name="carrot2-launcher" />
+        
+        <dependency name="carrot2-util-log4j" in-profile="dcs" noexport="true" />
 
         <dependency name="jetty" />
 

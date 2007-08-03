@@ -12,7 +12,7 @@
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/commons-primitives-1.0.jar"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/dom4j-1.6.1.jar"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/servlet.jar"/>
-	<classpathentry exported="true" kind="var" path="CARROT2_CHECKOUT_BASE/etc/eclipse/log4j-eclipse.jar"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/commons-lang-2.1.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-log4j"/>
 	<classpathentry kind="output" path="tmp/eclipse/classes"/>
 </classpath>

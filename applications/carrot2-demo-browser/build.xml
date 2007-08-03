@@ -26,10 +26,6 @@
 		<property name="keystore.password" value="carrot2" />
 		<property name="keystore" value="webstart/carrot2.org.keystore" />
 
-        <zip update="true" zipfile="${distribution.dir}/${dist.name}.jar">
-            <zipfileset dir="src/res" includes="log4j-deploy.properties" fullpath="log4j.properties" />
-        </zip>
-        
        	<copy todir="${distribution.webstart}">
        		<fileset dir="${distribution.dir}" />
        	</copy>
