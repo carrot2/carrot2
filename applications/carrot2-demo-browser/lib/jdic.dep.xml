@@ -4,21 +4,17 @@
 <component
     name="jdic"
     description="Java Desktop Integration Components (JDIC), Version 20061102 (with patches), https://jdic.dev.java.net/">
-    <!--
-Minor patch added to avoid spamming System.out.
 
---- JdicManager.java_orig	2006-10-19 15:40:50.000000000 +0200
-+++ JdicManager.java	2007-08-03 15:38:41.250000000 +0200
-@@ -262,7 +262,7 @@
- 	}
+    <!--
+    Minor patch added to avoid spamming System.out (JdicManager.java)
  
  	public String getBinaryPath() {
 -		System.out.print("native lib path "+nativeLibPath);
 +		org.apache.log4j.Logger.getLogger(JdicManager.class).debug("Native libraries path " + nativeLibPath);
  		return nativeLibPath;
  	}
- 
     -->
+
 	<provides>
 		<files>
 			<file location="jdic.jar" />
