@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-
-<local-process id="input-lucene">
-  <name>Input -- Lucene index</name>
-
-  <input  component-key="input-lucene" />
-  <output component-key="output-array" />
-</local-process>
