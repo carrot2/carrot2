@@ -13,6 +13,7 @@
 package org.carrot2.dcs.cli;
 
 import java.io.File;
+import java.text.MessageFormat;
 import java.util.*;
 
 import org.apache.commons.cli.*;
@@ -87,6 +88,7 @@ public class BenchmarkApp extends AppBase
             options, opts.benchmarkWarmupRounds, Integer.valueOf("5"))).intValue();
         final boolean cacheInput = !options.hasOption(opts.benchmarkCacheInput.getOpt());
 
+        final MessageFormat mformat = new MessageFormat("{0,number,#.##}", Locale.ENGLISH);
         final HashMap requestProperties = new HashMap();
         final PerformanceLogger plogger = new PerformanceLogger(Level.DEBUG, getLogger());
 
@@ -110,6 +112,7 @@ public class BenchmarkApp extends AppBase
                     {
                         final String algorithm = algorithms[algoIndex];
 
+                        long [] durations = new long [rounds];
                         for (int round = 0; round < rounds + warmup; round++)
                         {
                             if (inputData == null || !cacheInput)
@@ -140,9 +143,30 @@ public class BenchmarkApp extends AppBase
                             final String logMsg = "results=;" + requestSize 
                                 + ";input=;" + input + ";query=;" + query + ";algorithm=;" 
                                 + algorithm + ";warmup=;" + (round < warmup);
-                            final long duration = plogger.end(Level.INFO, logMsg);
+                            final long duration = plogger.end(Level.DEBUG, logMsg);
                             statsLogger.info("clustering;" + logMsg + ";duration=;" + duration);
+
+                            if (round > warmup)
+                            {
+                                durations[round - warmup] = duration;
+                            }
                         }
+
+                        final String logMsg = "results=;" + requestSize 
+                            + ";input=;" + input + ";query=;" + query + ";algorithm=;" 
+                            + algorithm;
+                        
+                        long total = 0;
+                        for (int i = 0; i < durations.length; i++)
+                        {
+                            total += durations[i];
+                        }
+                        final double average = (double) total / durations.length;
+
+                        getLogger().info(logMsg 
+                            + ";average duration (ms.)=;" + Math.round(average)
+                            + ";queries/sec.=;"
+                            + mformat.format(new Object [] {new Double(1000.0 / average)}));
                     }
                 }
             }
