@@ -25,5 +25,8 @@
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/jetty/jasper-compiler.jar"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/jetty/jasper-runtime.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-stc"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-input-msnsearch"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-input-yahooapi"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-trc"/>
 	<classpathentry kind="output" path="tmp/eclipse/classes"/>
 </classpath>

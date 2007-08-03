@@ -11,7 +11,7 @@ goto setupArgs
 :doneStart
 
 SET OPTS=-Xms128m -Xmx384m -XX:NewRatio=1
-SET MAIN_CLASS=org.carrot2.dcs.cli.BatchApp
+SET MAIN_CLASS=org.carrot2.dcs.cli.BenchmarkApp
 SET DEPLIB=WEB-INF/lib
 SET LAUNCHER=-jar %DEPLIB%\carrot2-launcher.jar -cp WEB-INF/classes -cpdir %DEPLIB%
 

@@ -150,8 +150,8 @@ public final class ProcessingUtils
         plogger.start("Clustering");
 
         requestProperties.put(ArrayInputComponent.PARAM_SOURCE_RAW_DOCUMENTS, documents);
-        requestProperties.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, Integer
-            .toString(documents.size()));
+        requestProperties.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, 
+            Integer.toString(documents.size()));
 
         final ArrayOutputComponent.Result result = (ArrayOutputComponent.Result) controller
             .query(processName, query, requestProperties).getQueryResult();
