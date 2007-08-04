@@ -42,6 +42,7 @@ public final class CliOptions
     public final Option benchmarkRounds;
     public final Option benchmarkWarmupRounds;
     public final Option benchmarkCacheInput;
+    public final Option benchmarkXMLFolder;
 
     /**
      *
@@ -62,8 +63,12 @@ public final class CliOptions
         benchmarkRounds = createBenchmarkRounds();
         benchmarkWarmupRounds = createBenchmarkWarmupRounds();
         benchmarkCacheInput = createCacheInput();
+        benchmarkXMLFolder = createBenchmarkXMLFolder();
     }
 
+    /**
+     * 
+     */
     private Option createPortOption()
     {
         final Option option = new Option("port", true, "Socket number to bind to.");
@@ -137,6 +142,20 @@ public final class CliOptions
     }
 
     /**
+     * 
+     */
+    private Option createBenchmarkXMLFolder()
+    {
+        final Option option = new Option("f", true,
+            "Folder with input XMLs.");
+        option.setLongOpt("inputs-dir");
+        option.setArgName("path");
+        option.setRequired(false);
+        option.setType(File.class);
+        return option;
+    }
+    
+    /**
      * Selection of the default algorithm.
      */
     private Option createProcessName()
@@ -158,7 +177,7 @@ public final class CliOptions
         final Option option = new Option("i", true, "List of IDs of input components.");
         option.setLongOpt("inputs");
         option.setArgName("id1 id2...");
-        option.setRequired(true);
+        option.setRequired(false);
         option.setArgs(Option.UNLIMITED_VALUES);
         option.setType(String[].class);
         return option;
@@ -225,7 +244,7 @@ public final class CliOptions
         final Option option = new Option("q", true, "List of queries.");
         option.setLongOpt("queries");
         option.setArgName("query1 qiery2...");
-        option.setRequired(true);
+        option.setRequired(false);
         option.setArgs(Option.UNLIMITED_VALUES);
         option.setType(String[].class);
         return option;
