@@ -13,6 +13,7 @@
 package org.carrot2.dcs.cli;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.text.MessageFormat;
 import java.util.*;
 
@@ -20,8 +21,7 @@ import org.apache.commons.cli.*;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.carrot2.core.*;
-import org.carrot2.core.impl.ArrayInputComponent;
-import org.carrot2.core.impl.ArrayOutputComponent;
+import org.carrot2.core.impl.*;
 import org.carrot2.dcs.*;
 import org.carrot2.util.PerformanceLogger;
 import org.carrot2.util.StringUtils;
@@ -67,19 +67,66 @@ public class BenchmarkApp extends AppBase
         // Initialize the controller context.
         final ControllerContext context = initializeContext(
             (File) CliOptions.getOption(options, opts.descriptorsDir, new File("descriptors")));
+        final HashMap requestProperties = new HashMap();
 
-        // Determine input component IDs and build fake processes for these inputs.
-        final String [] inputIds = options.getOptionValues(opts.benchmarkInputs.getOpt());
-        final String [] inputs = createInputProcesses(inputIds, context.getController());
+        if (options.hasOption(opts.benchmarkInputs.getOpt()) 
+            && options.hasOption(opts.benchmarkXMLFolder.getOpt()))
+        {
+            throw new ConfigurationException("Input XMLs folder and input components list are" +
+                    " mutually exclusive.");
+        }
+        
+        if (options.hasOption(opts.benchmarkXMLFolder.getOpt())
+            && options.hasOption(opts.benchmarkQueries.getOpt()))
+        {
+            throw new ConfigurationException("A list of queries and the input XMLs folder are" +
+                    " mutually exclusive.");
+        }
+        
+        if (options.hasOption(opts.benchmarkInputs.getOpt())
+            && !options.hasOption(opts.benchmarkQueries.getOpt()))
+        {
+            throw new ConfigurationException("A list of queries is required in " +
+                    "combination with input component IDs.");
+        }        
+
+        final String [] inputs;
+        final String [] queries;
+        if (options.hasOption(opts.benchmarkInputs.getOpt()))
+        {
+            // Determine input component IDs and build fake processes for these inputs.
+            final String [] inputIds = options.getOptionValues(opts.benchmarkInputs.getOpt());
+            inputs = createInputProcesses(inputIds, context.getController());
+            queries = options.getOptionValues(opts.benchmarkQueries.getOpt());
+        }
+        else
+        {
+            // Build a list of queries dynamically from files inside the
+            // specified folder.
+            final File inputXMLDir = (File) options.getOptionObject(opts.benchmarkXMLFolder.getOpt());
+            if (!inputXMLDir.isDirectory())
+            {
+                throw new ConfigurationException("Folder does not exist: " +
+                        inputXMLDir.getAbsolutePath());
+            }
+
+            final String [] inputIds = new String [] { "input-xml-dir" };
+            inputs = createInputProcesses(inputIds, context.getController());
+            requestProperties.put(XmlDirInputComponent.XML_DIR, inputXMLDir);
+
+            queries = inputXMLDir.list(new FilenameFilter() {
+                public boolean accept(File dir, String name)
+                {
+                    return name.toLowerCase().endsWith(".xml");
+                }
+            });
+        }
 
         // Determine algorithm IDs
         final String [] algorithms = opts.parseBenchmarkAlgorithmsOption(options, context);
 
         // Input sizes
         final int [] requestSizes = opts.parseBenchmarkResultsOption(options);
-
-        // Queries
-        final String [] queries = options.getOptionValues(opts.benchmarkQueries.getOpt());
 
         // Other options
         final int rounds = ((Integer) CliOptions.getOption(
@@ -89,7 +136,6 @@ public class BenchmarkApp extends AppBase
         final boolean cacheInput = !options.hasOption(opts.benchmarkCacheInput.getOpt());
 
         final MessageFormat mformat = new MessageFormat("{0,number,#.##}", Locale.ENGLISH);
-        final HashMap requestProperties = new HashMap();
         final PerformanceLogger plogger = new PerformanceLogger(Level.DEBUG, getLogger());
 
         // Loop over all possibilities.
@@ -263,6 +309,7 @@ public class BenchmarkApp extends AppBase
             opts.benchmarkResults,
             opts.benchmarkRounds,
             opts.benchmarkWarmupRounds,
+            opts.benchmarkXMLFolder,
         });
     }
 }

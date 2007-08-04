@@ -179,7 +179,7 @@ public class BatchApp extends AppBase
     {
         HelpFormatter formatter = new HelpFormatter();
         formatter.printHelp(getCommandName() + " [options] <INPUT>, <INPUT>...\n\n"
-            + "INPUT can be any a file or a directory.\n"
+            + "INPUT can be a file or a directory.\n"
             + "The available options are described below.",
             cliOptions, false);
     }
