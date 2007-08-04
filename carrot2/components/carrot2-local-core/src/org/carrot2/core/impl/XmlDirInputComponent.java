@@ -21,9 +21,10 @@ import org.carrot2.core.RequestContext;
 /**
  * Opens XML files in a local filesystem.
  * 
- * This component expects that the {@link #XML_DIR} parameter contains 
- * the name of the data file to be loaded. Tha name must be relative to the local filesystem
- * directory path provided in the constructor or in the {@link #XML_DIR} parameter.
+ * This component expects that the {@link #XML_DIR} parameter is 
+ * a {@link File} object pointing to a local directory. The query is then appended
+ * to the directory's path and should point to an XML file with
+ * input documents data.
  * 
  * @author Stanislaw Osinski
  */
