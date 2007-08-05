@@ -30,15 +30,24 @@ public class StressApp
     private String [] inputs;
     private String [] queries;
 
+    private long initialPeriod;
+    private long minimalPeriod;
+    private long saturationTime;
+
     public StressApp(String serviceURI, 
         String [] algorithms,
         String [] inputs,
-        String [] queries)
+        String [] queries,
+        long initialPeriod, long minimalPeriod, long saturationTime)
     {
         this.serviceURI = serviceURI;
         this.algorithms = algorithms;
         this.inputs = inputs;
         this.queries = queries;
+        
+        this.initialPeriod = initialPeriod;
+        this.minimalPeriod = minimalPeriod;
+        this.saturationTime = saturationTime;
     }
 
     public void start()
@@ -87,18 +96,12 @@ public class StressApp
 
         try
         {
-            long initialPeriod = 2000;
-            long minimalPeriod = 100;
-            long saturationTime = 30 * 1000;
-
             final long start = System.currentTimeMillis();
             while (true)
             {
                 final long now = System.currentTimeMillis();
-                
-                long sleepTime = (long) (initialPeriod - 
+                final long sleepTime = (long) (initialPeriod - 
                     (initialPeriod - minimalPeriod) * (Math.min(1.0d, (now - start) / (double) saturationTime)));
-                logger.warn("Sleep time: " + sleepTime);
                 Thread.sleep(sleepTime);
 
                 final String algorithm = random(algorithms);
@@ -189,7 +192,8 @@ public class StressApp
             "http://localhost:8080/search",
             new String [] {"Lingo", "STC (+English)"},
             new String [] {"Web", "Yahoo!", "MSN"},
-            new String [] {"data mining", "Dawid Weiss", "apple", "computer"}
+            new String [] {"data mining", "Dawid Weiss", "apple", "computer"},
+            2000, 100, 60 * 1000
         ).start();
     }
 }
