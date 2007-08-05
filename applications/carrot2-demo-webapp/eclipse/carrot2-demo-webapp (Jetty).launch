@@ -5,7 +5,7 @@
 <listEntry value="/carrot2-demo-webapp"/>
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="carrot2-demo-webapp"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dgoogleapi.keypool=/keypool&#13;&#10;-Dstats.key=&#13;&#10;-Dlog4j.configuration=log4j.xml"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dgoogleapi.keypool=/keypool&#13;&#10;-Dstats.key=stats&#13;&#10;-Dlog4j.configuration=log4j.xml"/>
 <listAttribute key="org.eclipse.debug.ui.favoriteGroups">
 <listEntry value="org.eclipse.debug.ui.launchGroup.debug"/>
 <listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
