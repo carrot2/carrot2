@@ -15,6 +15,7 @@ package org.carrot2.core.controller;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
 import org.carrot2.core.*;
 
 
@@ -116,7 +117,7 @@ public class LocalControllerTest extends junit.framework.TestCase {
 
         // check the expected output: every component
         // simply adds a single letter and a comma.
-        System.out.println(result.toString());
+        Logger.getLogger(LocalControllerTest.class).info(result.toString());
 
         assertEquals("i:begin,f1:begin,f2:begin,o:begin,i:end,f1:end,f2:end,o:end,",
             result.getQueryResult().toString());
