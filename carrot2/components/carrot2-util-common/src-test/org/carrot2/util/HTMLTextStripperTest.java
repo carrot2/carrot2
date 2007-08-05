@@ -147,10 +147,7 @@ public class HTMLTextStripperTest
         {
             String shouldBe = normalize(pairs[i][1]); 
             String is = normalize(HTMLTextStripper.getInstance().htmlToText(pairs[i][0])); 
-            if (!shouldBe.equals(is)) {
-                System.out.println(shouldBe + "\n" + is + "\n\n");
-            }
-            assertEquals(shouldBe, is);
+            assertEquals(shouldBe + "\n" + is + "\n\n", shouldBe, is);
         }
     }
 
