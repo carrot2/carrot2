@@ -86,9 +86,6 @@ public abstract class LanguageImplTestBase extends TestCase {
             for (int i=0;i<forms.length;i++) {
                 String word = forms[i][0];
                 String base = stemmer.getStem(word.toCharArray(),0, word.length());
-                if (!forms[i][1].equals(base)) {
-                    System.out.println(base + ", should be: " + forms[i][1]);
-                }
                 assertEquals("Pair (expected, stemmed): " + forms[i][1] + ", " + base, forms[i][1], base);
             }
         } finally {
