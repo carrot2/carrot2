@@ -15,6 +15,7 @@ package org.carrot2.filter.lingo.lsicluster;
 
 import Jama.Matrix;
 
+import org.apache.log4j.Logger;
 import org.carrot2.filter.lingo.common.*;
 import org.carrot2.filter.lingo.util.matrix.MatrixUtils;
 
@@ -22,6 +23,7 @@ import java.util.Arrays;
 
 
 public class DummyClusteringStrategy implements ClusteringStrategy {
+    private final static Logger logger = Logger.getLogger(DummyClusteringStrategy.class);
 
     public Cluster[] cluster(AbstractClusteringContext clusteringContext) {
         Snippet[] snippets = clusteringContext.getSnippets();
@@ -285,8 +287,7 @@ public class DummyClusteringStrategy implements ClusteringStrategy {
             double currentMdl = (m * (n - i) * (Math.log(numerator / denominator))) +
                 ((i * ((2 * n) - i + 1) * Math.log(m)) / 2);
 
-            System.out.println(i + " " + currentMdl + " " + denominator + " " +
-                numerator);
+            logger.debug(i + " " + currentMdl + " " + denominator + " " + numerator);
 
             if (i == 0) {
                 mdl = currentMdl;
@@ -298,7 +299,7 @@ public class DummyClusteringStrategy implements ClusteringStrategy {
             }
         }
 
-        System.out.println("k = " + k);
+        logger.debug("k = " + k);
 
         return 10;
     }
