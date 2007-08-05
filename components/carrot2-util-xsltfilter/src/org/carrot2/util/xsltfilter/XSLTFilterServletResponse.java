@@ -343,4 +343,52 @@ final class XSLTFilterServletResponse extends HttpServletResponseWrapper {
         t.printStackTrace(osw);
         osw.write("</pre>");
     }
+
+    /**
+     * 
+     */
+    private void detectErrorResponse(int errorCode)
+    {
+        if (errorCode != HttpServletResponse.SC_ACCEPTED)
+        {
+            origRequest.setAttribute(XSLTFilterConstants.NO_XSLT_PROCESSING, Boolean.TRUE);
+        }
+    }
+
+    /**
+     * 
+     */
+    public void sendError(int errorCode) throws IOException
+    {
+        detectErrorResponse(errorCode);
+        super.sendError(errorCode);
+    }
+
+    /**
+     * 
+     */
+    public void sendError(int errorCode, String message) throws IOException
+    {
+        detectErrorResponse(errorCode);
+        super.sendError(errorCode, message);
+    }
+    
+    /**
+     * 
+     */
+    public void setStatus(int statusCode)
+    {
+        detectErrorResponse(statusCode);
+        super.setStatus(statusCode);
+    }
+    
+    /**
+     * 
+     */
+    public void setStatus(int statusCode, String message)
+    {
+        detectErrorResponse(statusCode);
+        super.setStatus(statusCode, message);
+    }
+    
 }
