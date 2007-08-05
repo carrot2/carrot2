@@ -98,6 +98,7 @@ public class ReusableObjectsPoolTest extends TestCase {
             "Dummy", "Soft ", "Hard "
         };
 
+        final Logger logger = Logger.getLogger(ReusableObjectsPoolTest.class);
         for (int i = 0; i<hlinksizes.length;i++) {
             for (int j=0; j<softlinksizes.length;j++) {
                 for (int cl = 0; cl<=classes; cl++) {
@@ -166,13 +167,9 @@ public class ReusableObjectsPoolTest extends TestCase {
                         avg += iters[h];
                     avg = avg / iters.length;
 
-                    System.out.print(clname[cl] + ": hard=" + hlinksizes[i] + ", increase=" + softlinksizes[j]
+                    logger.info(clname[cl] + ": hard=" + hlinksizes[i] + ", increase=" + softlinksizes[j]
                         + ", allocations-made=" + counter[0] + ", avg.-iterations-per-thread: "
                             + avg);
-
-                    //for (int h=0;h<threads;h++)  
-                    //    System.out.print(iters[h] + ", ");
-                    System.out.println();
                 }
             }
         }
