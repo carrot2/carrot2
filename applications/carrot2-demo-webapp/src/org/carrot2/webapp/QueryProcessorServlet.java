@@ -510,7 +510,7 @@ public final class QueryProcessorServlet extends HttpServlet {
         searchSettings.setAllowedInputSizes(allowedInputSize, defaultInputSize);
 
         // Initialize XML feed key
-        this.xmlFeedKey = InitializationUtils.initializeXmlFeedKey(logger, getServletConfig());
+        this.xmlFeedKey = InitializationUtils.initializeXmlFeedKey(getServletConfig());
 
         // Initialize serializers.
         this.serializerFactory = InitializationUtils.initializeSerializers(logger, getServletConfig());
@@ -537,7 +537,7 @@ public final class QueryProcessorServlet extends HttpServlet {
         this.algorithmsController = InitializationUtils.initializeAlgorithms(logger, algorithmScripts, searchSettings);
 
         // Initialize the bundle for localized messages
-        this.localizedMessages = InitializationUtils.initializeResourceBundle(logger,
+        this.localizedMessages = InitializationUtils.initializeResourceBundle(
             getServletConfig());
 
         // Initialize query expander

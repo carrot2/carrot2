@@ -325,8 +325,7 @@ final class InitializationUtils
     /**
      * Initializes the resource bundle with localized messages.
      */
-    static ResourceBundle initializeResourceBundle(final Logger logger,
-        final ServletConfig config)
+    static ResourceBundle initializeResourceBundle(final ServletConfig config)
     {
         String locale = config.getInitParameter("localization");
         if (locale == null)
@@ -341,7 +340,7 @@ final class InitializationUtils
     /**
      * Initializes the XML feed key.
      */
-    static String initializeXmlFeedKey(final Logger logger, final ServletConfig config)
+    static String initializeXmlFeedKey(final ServletConfig config)
     {
         return config.getInitParameter("xml.feed.key");
     }
