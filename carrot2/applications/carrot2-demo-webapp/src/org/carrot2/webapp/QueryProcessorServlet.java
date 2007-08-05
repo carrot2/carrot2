@@ -130,6 +130,7 @@ public final class QueryProcessorServlet extends HttpServlet {
         // Run initial process and components configuration.
         try {
             initialize();
+            logger.info("Initialized and accepting requests.");
         } catch (Throwable t) {
             logger.error("Could not initialize query processor servlet: " + StringUtils.chainExceptionMessages(t), t);
         }
@@ -244,6 +245,10 @@ public final class QueryProcessorServlet extends HttpServlet {
                     output.write("ehcache.misses: " + stats.getCacheMisses() + "\n");
                     output.write("ehcache.memhits: " + stats.getInMemoryHits() + "\n");
                     output.write("ehcache.diskhits: " + stats.getOnDiskHits() + "\n");
+
+                    // Return server configuration for remote testing.
+                    output.write("algorithms: " + StringUtils.toString(algorithmsController.getProcessIds(), ",") + "\n");
+                    output.write("inputs: " + StringUtils.toString(this.tabsController.getProcessIds(), ",") + "\n");
 
                     output.flush();
                 }
