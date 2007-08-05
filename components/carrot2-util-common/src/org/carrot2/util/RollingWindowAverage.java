@@ -126,6 +126,15 @@ public final class RollingWindowAverage
     }
 
     /**
+     * 
+     */
+    public long getUpdatesInWindow()
+    {
+        removeOldBuckets(System.currentTimeMillis());
+        return this.currentCount;
+    }
+
+    /**
      *
      */
     private void removeOldBuckets(long now)
