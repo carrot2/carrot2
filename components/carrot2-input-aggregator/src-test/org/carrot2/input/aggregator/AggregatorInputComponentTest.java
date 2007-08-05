@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -86,20 +85,19 @@ public class AggregatorInputComponentTest extends TestCase
                 }
             });
 
-        controller.addLocalComponentFactory("output-array",
-            new LocalComponentFactory()
+        controller.addLocalComponentFactory("output-array", new LocalComponentFactory()
+        {
+            public LocalComponent getInstance()
             {
-                public LocalComponent getInstance()
-                {
-                    return new ArrayOutputComponent();
-                }
-            });
+                return new ArrayOutputComponent();
+            }
+        });
 
-        controller.addProcess("aggregator-1", new LocalProcessBase(
-            "input-aggregator-1", "output-array", new String [0]));
+        controller.addProcess("aggregator-1", new LocalProcessBase("input-aggregator-1",
+            "output-array", new String [0]));
 
-        controller.addProcess("aggregator-2", new LocalProcessBase(
-            "input-aggregator-2", "output-array", new String [0]));
+        controller.addProcess("aggregator-2", new LocalProcessBase("input-aggregator-2",
+            "output-array", new String [0]));
     }
 
     /**
@@ -107,9 +105,12 @@ public class AggregatorInputComponentTest extends TestCase
      */
     public void testNoTimeout() throws Exception
     {
+        // "Warm up", load classes etc.
+        controller.query("aggregator-1", "does not matter", createRequestParameters());
+
         long start = System.currentTimeMillis();
-        ProcessingResult result = controller.query("aggregator-1",
-            "does not matter", createRequestParameters());
+        ProcessingResult result = controller.query("aggregator-1", "does not matter",
+            createRequestParameters());
         long stop = System.currentTimeMillis();
 
         List docs = ((ArrayOutputComponent.Result) result.getQueryResult()).documents;
@@ -126,9 +127,12 @@ public class AggregatorInputComponentTest extends TestCase
      */
     public void testTimeout() throws Exception
     {
+        // "Warm up", load classes etc.
+        controller.query("aggregator-2", "does not matter", createRequestParameters());
+
         long start = System.currentTimeMillis();
-        ProcessingResult result = controller.query("aggregator-2",
-            "does not matter", createRequestParameters());
+        ProcessingResult result = controller.query("aggregator-2", "does not matter",
+            createRequestParameters());
         long stop = System.currentTimeMillis();
 
         List docs = ((ArrayOutputComponent.Result) result.getQueryResult()).documents;
@@ -146,12 +150,9 @@ public class AggregatorInputComponentTest extends TestCase
         Map params = new HashMap();
         List docs = new ArrayList();
 
-        docs.add(new RawDocumentSnippet(new Integer(1), "Test", "Test", "test",
-            1.0f));
+        docs.add(new RawDocumentSnippet(new Integer(1), "Test", "Test", "test", 1.0f));
 
-        params.put(
-            ArrayInputComponent.PARAM_SOURCE_RAW_DOCUMENTS,
-            docs);
+        params.put(ArrayInputComponent.PARAM_SOURCE_RAW_DOCUMENTS, docs);
         return params;
     }
 
