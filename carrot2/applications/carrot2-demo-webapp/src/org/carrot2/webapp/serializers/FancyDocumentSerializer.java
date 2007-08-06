@@ -111,32 +111,32 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
         final String title = (null == doc.getTitle() ? "" : doc.getTitle());
         final String snippet = (null == doc.getSnippet() ? "" : doc.getSnippet());
         final String hurl = xml.toValidXmlText(url, false);
-        String [] sources = (String []) doc.getProperty(RawDocument.PROPERTY_SOURCES);
-
-        writer.write(
-                "<table id=\"d" + seqId.toString() + "\" class=\"d\">\r\n" +
-                "<tr>\r\n" +
-                "<td class=\"r\">" +
-                sequence +
-                "</td><td class=\"c\">\r\n" +
-                "<div class=\"t\">" +
-                "<span id=\"scs" + seqId.toString() + "\"><a target=\"_top\" href=\"" + hurl + "\">");
-
-        textMarker.tokenize(title.toCharArray(), this);
-
-        writer.write(
-                "</a>" +
-                "<img src=\"" + base + "/img/sic.gif\" class=\"onw ilink\" id=\"sic" +
-                seqId.toString() + "\" title=\"" + messages.getString(Constants.RB_SHOW_IN_CLUSTTERS) +
-                "\" alt=\"" + messages.getString(Constants.RB_SHOW_IN_CLUSTTERS) + "\" /></span>" +
-                "<a target=\"_blank\" href=\"" + hurl + "\" title=\"" +
-                messages.getString(Constants.RB_OPEN_IN_NEW_WINDOW) + "\">" +
-                "<img class=\"onw\" src=\"" + base +  "/img/onw.gif\" alt=\"" +
-                messages.getString(Constants.RB_OPEN_IN_NEW_WINDOW) + "\"/></a>" +
-                "</div>\r\n" +
-                "<div class=\"s\">");
+        final String [] sources = (String []) doc.getProperty(RawDocument.PROPERTY_SOURCES);
 
         try {
+            writer.write(
+                    "<table id=\"d" + seqId.toString() + "\" class=\"d\">\r\n" +
+                    "<tr>\r\n" +
+                    "<td class=\"r\">" +
+                    sequence +
+                    "</td><td class=\"c\">\r\n" +
+                    "<div class=\"t\">" +
+                    "<span id=\"scs" + seqId.toString() + "\"><a target=\"_top\" href=\"" + hurl + "\">");
+    
+            textMarker.tokenize(title.toCharArray(), this);
+    
+            writer.write(
+                    "</a>" +
+                    "<img src=\"" + base + "/img/sic.gif\" class=\"onw ilink\" id=\"sic" +
+                    seqId.toString() + "\" title=\"" + messages.getString(Constants.RB_SHOW_IN_CLUSTTERS) +
+                    "\" alt=\"" + messages.getString(Constants.RB_SHOW_IN_CLUSTTERS) + "\" /></span>" +
+                    "<a target=\"_blank\" href=\"" + hurl + "\" title=\"" +
+                    messages.getString(Constants.RB_OPEN_IN_NEW_WINDOW) + "\">" +
+                    "<img class=\"onw\" src=\"" + base +  "/img/onw.gif\" alt=\"" +
+                    messages.getString(Constants.RB_OPEN_IN_NEW_WINDOW) + "\"/></a>" +
+                    "</div>\r\n" +
+                    "<div class=\"s\">");
+
             textMarker.tokenize(snippet.toCharArray(), this);
         } catch (RuntimeException e) {
             if (e.getCause() != null && e.getCause() instanceof IOException) {
