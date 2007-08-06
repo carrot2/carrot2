@@ -136,7 +136,13 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
                 "</div>\r\n" +
                 "<div class=\"s\">");
 
-        textMarker.tokenize(snippet.toCharArray(), this);
+        try {
+            textMarker.tokenize(snippet.toCharArray(), this);
+        } catch (RuntimeException e) {
+            if (e.getCause() != null && e.getCause() instanceof IOException) {
+                throw (IOException) e.getCause();
+            } else throw e;
+        }
 
         writer.write("</div>\r\n" +
                 "<div class=\"u\">" + hurl + (sources != null ? "<div class=\"o\">[" + ArrayUtils.toString(sources) + "]</div>" : "") +"</div>\r\n" +
