@@ -166,9 +166,9 @@ public class YahooApiInputComponent extends LocalInputComponentBase
 
     final SearchResult doSearch(String query, int startAt, int totalResultsRequested) throws ProcessingException
     {
-        final int maxResultsPerQuery = Math.min(totalResultsRequested, service
-            .getMaxResultsPerQuery());
-        
+        final int maxResultsPerQuery = Math.min(totalResultsRequested, 
+            service.getMaxResultsPerQuery());
+
         log.info("Yahoo API query (" + maxResultsPerQuery + "): " + query);
         final long [] estimatedResultsArray = new long[1];
         final List results = new ArrayList();
@@ -188,11 +188,10 @@ public class YahooApiInputComponent extends LocalInputComponentBase
                         }
                     }, startAt);
 
-            RawDocument [] rawDocuments = new RawDocument[results.size()];
+            final RawDocument [] rawDocuments = new RawDocument[results.size()];
             for (int i = 0; i < rawDocuments.length; i++)
             {
-                YahooSearchResult yahooSearchResult = (YahooSearchResult)results
-                        .get(i);
+                final YahooSearchResult yahooSearchResult = (YahooSearchResult) results.get(i);
                 rawDocuments[i] = new RawDocumentSnippet(Integer.toString(i + startAt),
                         yahooSearchResult.title, yahooSearchResult.summary,
                         yahooSearchResult.url, 0.0f);
