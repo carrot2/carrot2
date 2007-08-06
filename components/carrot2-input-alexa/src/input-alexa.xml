@@ -1,4 +1,0 @@
-<local-component-factory 
-	id="input-alexa" 
-	component-class="org.carrot2.input.alexa.AlexaApiInputComponent">
-</local-component-factory> 

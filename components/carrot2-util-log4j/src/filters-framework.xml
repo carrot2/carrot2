@@ -1,8 +1,0 @@
-
-<!--
-    Filtering of logs from various framework's utility methods.
--->
-
-<logger name="org.carrot2.util.WordLoadingUtils"><level value="info"/></logger>
-<logger name="org.carrot2.util.xsltfilter"><level value="warn"/></logger>
-<logger name="org.carrot2.webapp.stress"><level value="info"/></logger>
