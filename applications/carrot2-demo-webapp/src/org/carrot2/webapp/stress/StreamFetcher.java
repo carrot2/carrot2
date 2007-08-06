@@ -1,4 +1,4 @@
-package org.carrot2.webapp;
+package org.carrot2.webapp.stress;
 
 import java.io.IOException;
 

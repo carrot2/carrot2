@@ -1,4 +1,4 @@
-package org.carrot2.webapp;
+package org.carrot2.webapp.stress;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -8,6 +8,7 @@ import java.util.Random;
 
 import org.apache.log4j.Logger;
 import org.carrot2.util.RollingWindowAverage;
+import org.carrot2.webapp.QueryProcessorServlet;
 
 /**
  * A simple stress utility to put some load on the webapp.
@@ -34,19 +35,22 @@ public class StressApp
     private long minimalPeriod;
     private long saturationTime;
 
-    public StressApp(String serviceURI, 
+    volatile long sleepTime; 
+
+    public StressApp(
+        String serviceURI, 
         String [] algorithms,
         String [] inputs,
         String [] queries,
-        long initialPeriod, long minimalPeriod, long saturationTime)
+        long maxPeriod, long minPeriod, long saturationTime)
     {
         this.serviceURI = serviceURI;
         this.algorithms = algorithms;
         this.inputs = inputs;
         this.queries = queries;
         
-        this.initialPeriod = initialPeriod;
-        this.minimalPeriod = minimalPeriod;
+        this.initialPeriod = maxPeriod;
+        this.minimalPeriod = minPeriod;
         this.saturationTime = saturationTime;
     }
 
@@ -73,15 +77,18 @@ public class StressApp
                                 failureHits = failures.getUpdatesInWindow();
                             }
                         }
+
                         statsLogger.info(
-                            "successes;" 
+                              "request-period;"
+                            + mf.format(new Object [] { new Double(sleepTime / 1000.0d) })
+                            + ";successes-in-window;" 
                             + successHits
                             + ";successes-per-sec;" 
-                            + ";" + mf.format(new Object [] { new Double(((double) successHits / (AVG_INTERVAL / 1000))) })
-                            + ";failures;"
+                            + mf.format(new Object [] { new Double(((double) successHits / (AVG_INTERVAL / 1000))) })
+                            + ";failures-in-window;"
                             + failureHits
                             + ";failures-per-sec;"
-                            + ";" + mf.format(new Object [] { new Double(((double) failureHits / (AVG_INTERVAL / 1000))) })
+                            + mf.format(new Object [] { new Double(((double) failureHits / (AVG_INTERVAL / 1000))) })
                             );
                     }
                     catch (InterruptedException e)
@@ -100,7 +107,7 @@ public class StressApp
             while (true)
             {
                 final long now = System.currentTimeMillis();
-                final long sleepTime = (long) (initialPeriod - 
+                sleepTime = (long) (initialPeriod - 
                     (initialPeriod - minimalPeriod) * (Math.min(1.0d, (now - start) / (double) saturationTime)));
                 Thread.sleep(sleepTime);
 
@@ -117,6 +124,9 @@ public class StressApp
         reporter.interrupt();
     }
 
+    /**
+     * Emulates a single "query" (page, document and clusters fetch). 
+     */
     private void doQuery(String input, String algorithm, String query)
     {
         try
@@ -128,9 +138,11 @@ public class StressApp
 
             // Construct the page, clusters and document URLs.
             final String pageURI = serviceURI + "?" + requestDetails;
-            final String clustersURI = serviceURI + "?type=c&" + requestDetails;
-            final String documentURI = serviceURI + "?type=d&" + requestDetails;
-            
+            final String clustersURI = serviceURI + "?" + QueryProcessorServlet.PARAM_TYPE 
+                + "=" + QueryProcessorServlet.TYPE_DOCUMENTS + "&" + requestDetails;
+            final String documentURI = serviceURI + "?" + QueryProcessorServlet.PARAM_TYPE 
+                + "=" + QueryProcessorServlet.TYPE_CLUSTERS  + "&" + requestDetails;
+
             // Randomize the order of document/clusters requests.
             final boolean clustersFirst;
             synchronized (rnd)
@@ -189,7 +201,8 @@ public class StressApp
     public static void main(String [] args)
     {
         new StressApp(
-            "http://localhost:8080/search",
+            "http://localhost:8080/carrot2-demo-webapp/search",
+            // "http://localhost:8080/search",
             new String [] {"Lingo", "STC (+English)"},
             new String [] {"Web", "Yahoo!", "MSN"},
             new String [] {"data mining", "Dawid Weiss", "apple", "computer"},
