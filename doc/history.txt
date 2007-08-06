@@ -9,8 +9,13 @@ Major functions and bug fixes
 Version  [C] Information
 
 HEAD
-         See status in JIRA:
-         http://issues.carrot2.org/secure/ReleaseNote.jspa?projectId=10000&styleName=Html&version=10001
+          See status in JIRA:
+          http://issues.carrot2.org/secure/ReleaseNote.jspa?version=10010&styleName=Html&projectId=10000
+
+2.1-RC1   SVN:1928
+
+          See JIRA:
+          http://issues.carrot2.org/secure/ReleaseNote.jspa?projectId=10000&styleName=Html&version=10001
 
 2.0.2     SVN:1541
 
