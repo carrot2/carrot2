@@ -1,4 +1,4 @@
-package org.carrot2.webapp;
+package org.carrot2.webapp.stress;
 
 import org.apache.commons.httpclient.*;
 
@@ -12,8 +12,11 @@ public class OnetimeConnectionManager extends SimpleHttpConnectionManager
 {
     public void releaseConnection(HttpConnection conn)
     {
-        super.releaseConnection(conn);
-        this.httpConnection.close();
-        this.httpConnection = null;
+        if (this.httpConnection != null)
+        {
+            super.releaseConnection(conn);
+            this.httpConnection.close();
+            this.httpConnection = null;
+        }
     }
 }
