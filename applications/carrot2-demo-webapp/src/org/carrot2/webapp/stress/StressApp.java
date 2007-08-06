@@ -22,6 +22,8 @@ public class StressApp
 
     private final Random rnd = new Random();
 
+    private final static int MAX_RUNNING_FETCHERS = 200;
+
     private final int AVG_INTERVAL = 1000 * 10;
     private final RollingWindowAverage successes = new RollingWindowAverage(AVG_INTERVAL, 100);
     private final RollingWindowAverage failures = new RollingWindowAverage(AVG_INTERVAL, 100);
@@ -30,25 +32,30 @@ public class StressApp
     private String [] algorithms;
     private String [] inputs;
     private String [] queries;
+    private int [] requestSizes; 
 
     private long initialPeriod;
     private long minimalPeriod;
     private long saturationTime;
 
-    volatile long sleepTime; 
+    volatile long sleepTime;
+    
+    private long fetchers;
 
     public StressApp(
         String serviceURI, 
         String [] algorithms,
         String [] inputs,
         String [] queries,
+        int [] requestSizes,
         long maxPeriod, long minPeriod, long saturationTime)
     {
         this.serviceURI = serviceURI;
         this.algorithms = algorithms;
         this.inputs = inputs;
         this.queries = queries;
-        
+        this.requestSizes = requestSizes;
+
         this.initialPeriod = maxPeriod;
         this.minimalPeriod = minPeriod;
         this.saturationTime = saturationTime;
@@ -66,20 +73,21 @@ public class StressApp
                     try
                     {
                         Thread.sleep(1000);
-                        
+
                         final long successHits;
                         final long failureHits;
-                        synchronized (successes)
+                        final long fetchers;
+                        synchronized (this)
                         {
-                            synchronized (failures)
-                            {
-                                successHits = successes.getUpdatesInWindow();
-                                failureHits = failures.getUpdatesInWindow();
-                            }
+                            successHits = successes.getUpdatesInWindow();
+                            failureHits = failures.getUpdatesInWindow();
+                            fetchers = StressApp.this.fetchers;
                         }
 
                         statsLogger.info(
-                              "request-period;"
+                              "running-fetchers;"
+                            + fetchers
+                            + ";request-period;"
                             + mf.format(new Object [] { new Double(sleepTime / 1000.0d) })
                             + ";successes-in-window;" 
                             + successHits
@@ -110,11 +118,18 @@ public class StressApp
                 sleepTime = (long) (initialPeriod - 
                     (initialPeriod - minimalPeriod) * (Math.min(1.0d, (now - start) / (double) saturationTime)));
                 Thread.sleep(sleepTime);
+                
+                synchronized (this) {
+                    if (fetchers > MAX_RUNNING_FETCHERS) {
+                        continue;
+                    }
+                }
 
                 final String algorithm = random(algorithms);
                 final String input = random(inputs);
                 final String query = random(queries);
-                doQuery(input, algorithm, query);
+                final int size = random(requestSizes);
+                doQuery(input, algorithm, size, query);
             }
         } 
         catch (InterruptedException e)
@@ -127,14 +142,15 @@ public class StressApp
     /**
      * Emulates a single "query" (page, document and clusters fetch). 
      */
-    private void doQuery(String input, String algorithm, String query)
+    private void doQuery(String input, String algorithm, int requestSize, String query)
     {
         try
         {
             final String requestDetails = 
                     QueryProcessorServlet.PARAM_Q + "=" + URLEncoder.encode(query, "UTF-8")
             + "&" + QueryProcessorServlet.PARAM_INPUT + "=" + URLEncoder.encode(input, "UTF-8")
-            + "&" + QueryProcessorServlet.PARAM_ALG + "=" + URLEncoder.encode(algorithm, "UTF-8");
+            + "&" + QueryProcessorServlet.PARAM_ALG + "=" + URLEncoder.encode(algorithm, "UTF-8")
+            + "&" + QueryProcessorServlet.PARAM_SIZE + "=" + requestSize;
 
             // Construct the page, clusters and document URLs.
             final String pageURI = serviceURI + "?" + requestDetails;
@@ -145,7 +161,7 @@ public class StressApp
 
             // Randomize the order of document/clusters requests.
             final boolean clustersFirst;
-            synchronized (rnd)
+            synchronized (this)
             {
                 clustersFirst = rnd.nextBoolean();
             }
@@ -173,9 +189,20 @@ public class StressApp
     private void fetch(final String uri)
     {
         final Runnable task = new StreamFetcher(uri) {
+            public void run()
+            {
+                try {
+                    super.run();
+                } finally {
+                    synchronized (StressApp.this) {
+                        StressApp.this.fetchers--;
+                    }
+                }
+            }
+
             public void failure(String reason)
             {
-                synchronized (failures)
+                synchronized (this)
                 {
                     failures.add(System.currentTimeMillis(), 1);
                 }
@@ -183,14 +210,18 @@ public class StressApp
 
             public void success(byte [] content)
             {
-                synchronized (successes)
+                synchronized (this)
                 {
                     successes.add(System.currentTimeMillis(), 1);
                 }
             }
         };
+
         logger.debug("Fetching: " + uri);
-        new Thread(task).start();
+        synchronized (StressApp.this) {
+            StressApp.this.fetchers++;
+            new Thread(task).start();
+        }
     }
 
     private synchronized String random(String [] array)
@@ -198,15 +229,25 @@ public class StressApp
         return array[rnd.nextInt(array.length)];
     }
 
+    private synchronized int random(int [] array)
+    {
+        return array[rnd.nextInt(array.length)];
+    }
+
     public static void main(String [] args)
     {
         new StressApp(
-            "http://localhost:8080/carrot2-demo-webapp/search",
+            // "http://localhost:8080/carrot2-demo-webapp/search",
             // "http://localhost:8080/search",
-            new String [] {"Lingo", "STC (+English)"},
-            new String [] {"Web", "Yahoo!", "MSN"},
-            new String [] {"data mining", "Dawid Weiss", "apple", "computer"},
-            2000, 100, 60 * 1000
+            "http://ophelia.cs.put.poznan.pl:8081/carrot2-demo-webapp/search",
+            new String [] {"Lingo", /* "STC (+English)" */},
+            new String [] {"Web", "Yahoo!", "MSN", "News"},
+            new String [] {
+                "data mining", "Dawid Weiss", "apple", "computer",
+                "amiga", "iraq", "war", "guacamole", "global warming",
+                "the times", "al arabia", "star wars" },
+            new int [] { 100 /* 50, 75, 100, 150, 200*/ },
+            2000, 0, 120 * 1000
         ).start();
     }
 }
