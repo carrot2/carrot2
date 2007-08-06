@@ -14,6 +14,7 @@
 package org.carrot2.webapp;
 
 import java.io.*;
+import java.net.SocketException;
 import java.util.*;
 
 import javax.servlet.ServletContext;
@@ -194,73 +195,88 @@ public final class QueryProcessorServlet extends HttpServlet {
         }
 
         final OutputStream os = response.getOutputStream();
-        if (requestType == DOCUMENT_REQUEST || requestType == CLUSTERS_REQUEST || requestType == DOCUMENTS_CLUSTERS_REQUEST) {
-            // request for documents or clusters
-            if (searchRequest.query.length() == 0) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-                return;
-            }
-
-            // If the key is missing or wrong
-            if (requestType == DOCUMENTS_CLUSTERS_REQUEST
-                && ("disabled".equals(xmlFeedKey) || !xmlFeedKey.equals(request
-                    .getParameter(PARAM_XML_FEED_KEY))))
-            {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-                return;
-            }
-
-            try {
+        try {
+            if (requestType == DOCUMENT_REQUEST || requestType == CLUSTERS_REQUEST || requestType == DOCUMENTS_CLUSTERS_REQUEST) {
+                // request for documents or clusters
+                if (searchRequest.query.length() == 0) {
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                    return;
+                }
+    
+                // If the key is missing or wrong
+                if (requestType == DOCUMENTS_CLUSTERS_REQUEST
+                    && ("disabled".equals(xmlFeedKey) || !xmlFeedKey.equals(request
+                        .getParameter(PARAM_XML_FEED_KEY))))
+                {
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                    return;
+                }
+    
                 processSearchQuery(os, requestType, searchRequest, request, response);
-            } catch (IOException e) {
-                // Handle process exception gracefully?
-                servletError(request, response, os, "An internal error occurred."
-                        + searchRequest.getInputTab().getShortName(), e);
-            }
-        } else if (requestType == STATS_REQUEST) {
-            // request for statistical information about the engine.
-            // we check if the request contains a special token known to the
-            // administrator of the engine (so that statistics are available
-            // only to certain people).
-            final String statsKey = System.getProperty(STATISTICS_KEY);
-            if (statsKey != null && statsKey.equals(request.getParameter("key"))) {
-                synchronized (getServletContext()) {
-                    response.setContentType("text/plain; charset=utf-8");
-                    final Writer output = new OutputStreamWriter(os, "UTF-8");
-
-                    output.write("total-queries: " + executedQueries + "\n");
-                    output.write("good-queries: " + goodQueries + "\n");
-
-                    final long average = (long) this.averageProcessingTime.getCurrentAverage();
-                    if (average > 0)
-                    {
-                        output.write("ms-per-query: " + average + "\n");
+            } else if (requestType == STATS_REQUEST) {
+                // request for statistical information about the engine.
+                // we check if the request contains a special token known to the
+                // administrator of the engine (so that statistics are available
+                // only to certain people).
+                final String statsKey = System.getProperty(STATISTICS_KEY);
+                if (statsKey != null && statsKey.equals(request.getParameter("key"))) {
+                    synchronized (getServletContext()) {
+                        processStatsQuery(os, response);
                     }
-
-                    output.write("jvm.freemem: " + Runtime.getRuntime().freeMemory() + "\n");
-                    output.write("jvm.totalmem: " + Runtime.getRuntime().totalMemory() + "\n");
-
-                    final Statistics stats = this.ehcache.getStatistics();
-                    output.write("ehcache.hits: " + stats.getCacheHits() + "\n");
-                    output.write("ehcache.misses: " + stats.getCacheMisses() + "\n");
-                    output.write("ehcache.memhits: " + stats.getInMemoryHits() + "\n");
-                    output.write("ehcache.diskhits: " + stats.getOnDiskHits() + "\n");
-
-                    // Return server configuration for remote testing.
-                    output.write("algorithms: " + StringUtils.toString(algorithmsController.getProcessIds(), ",") + "\n");
-                    output.write("inputs: " + StringUtils.toString(this.tabsController.getProcessIds(), ",") + "\n");
-
-                    output.flush();
+                } else {
+                    // unauthorized stats request.
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST);
                 }
             } else {
-                // unauthorized stats request.
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                final PageSerializer serializer = serializerFactory.createPageSerializer(request);
+                response.setContentType(serializer.getContentType());
+                serializer.writePage(os, searchSettings, searchRequest);
             }
-        } else {
-            final PageSerializer serializer = serializerFactory.createPageSerializer(request);
-            response.setContentType(serializer.getContentType());
-            serializer.writePage(os, searchSettings, searchRequest);
+        } catch (IOException e) {
+            if (e instanceof SocketException
+                || e.getClass().getName().equals("org.apache.catalina.connector.ClientAbortException")) {
+                logger.debug("Client abort when writing response: "
+                    + StringUtils.chainExceptionMessages(e));
+            } else {
+                logger.warn("Unrecognized I/O exception when writing response: " 
+                    + StringUtils.chainExceptionMessages(e), e);
+            }
         }
+    }
+
+    /**
+     * 
+     */
+    private void processStatsQuery(OutputStream os, HttpServletResponse response)
+        throws IOException
+    {
+        response.setContentType("text/plain; charset=utf-8");
+        final Writer output = new OutputStreamWriter(os, "UTF-8");
+
+        output.write("total-queries: " + executedQueries + "\n");
+        output.write("good-queries: " + goodQueries + "\n");
+
+        final long average = (long) this.averageProcessingTime.getCurrentAverage();
+        if (average > 0)
+        {
+            output.write("ms-per-query: " + average + "\n");
+            output.write("updates-in-window: " + this.averageProcessingTime.getUpdatesInWindow() + "\n");
+        }
+
+        output.write("jvm.freemem: " + Runtime.getRuntime().freeMemory() + "\n");
+        output.write("jvm.totalmem: " + Runtime.getRuntime().totalMemory() + "\n");
+
+        final Statistics stats = this.ehcache.getStatistics();
+        output.write("ehcache.hits: " + stats.getCacheHits() + "\n");
+        output.write("ehcache.misses: " + stats.getCacheMisses() + "\n");
+        output.write("ehcache.memhits: " + stats.getInMemoryHits() + "\n");
+        output.write("ehcache.diskhits: " + stats.getOnDiskHits() + "\n");
+
+        // Return server configuration for remote testing.
+        output.write("algorithms: " + StringUtils.toString(algorithmsController.getProcessIds(), ",") + "\n");
+        output.write("inputs: " + StringUtils.toString(this.tabsController.getProcessIds(), ",") + "\n");
+
+        output.flush();
     }
 
     /**
