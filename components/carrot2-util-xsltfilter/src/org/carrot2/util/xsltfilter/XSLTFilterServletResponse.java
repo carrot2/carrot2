@@ -244,6 +244,12 @@ final class XSLTFilterServletResponse extends HttpServletResponseWrapper {
                         processWithXslt(bytes, (Map) origRequest.getAttribute(
                             XSLTFilterConstants.XSLT_PARAMS_MAP), origResponse);
                     } catch (TransformerException e) {
+                        final Throwable t = unwrapCause(e);
+                        if (t instanceof IOException)
+                        {
+                            throw (IOException) t;
+                        }
+
                         filterError("Error applying stylesheet.", e);
                     }
                 }
@@ -252,11 +258,56 @@ final class XSLTFilterServletResponse extends HttpServletResponseWrapper {
     }
 
     /**
+     * Unwraps original throwable from the transformer/ SAX stack.
+     */
+    private Throwable unwrapCause(TransformerException e)
+    { 
+        Throwable t;
+
+        if (e.getException() != null)
+        {
+            t = e.getException();
+        }
+        else
+        if (e.getCause() != null)
+        {
+            t = e.getCause();
+        }
+        else
+        {
+            return e;
+        }
+
+        do
+        {
+            if (t instanceof IOException)
+            {
+                // break early on IOException
+                return t;
+            }
+            else
+            if (t.getCause() != null)
+            {
+                t = t.getCause();
+            }
+            else
+            if (t instanceof SAXException && ((SAXException) t).getException() != null)
+            {
+                t = ((SAXException) t).getException();
+            }
+            else
+            {
+                return t;
+            }
+        } while (true);
+    }
+
+    /**
      * Process the byte array (input XML) with the XSLT stylesheet and push the 
      * result to the output stream.
      */
     private void processWithXslt(byte[] bytes, final Map stylesheetParams, final HttpServletResponse response)
-            throws TransformerConfigurationException, TransformerException
+            throws TransformerConfigurationException, TransformerException, IOException
     {
         final TransformingDocumentHandler docHandler;
         try {
@@ -288,12 +339,18 @@ final class XSLTFilterServletResponse extends HttpServletResponseWrapper {
                 docHandler.cleanup();
             }
         } catch (SAXException e) {
+            final Exception nested = e.getException();
+            if (nested != null) {
+                if (nested instanceof IOException) {
+                    throw (IOException) nested;
+                } else if (nested instanceof TransformerException) {
+                    throw (TransformerException) nested;
+                }
+            }
             throw new TransformerException("Input parsing exception.", e);
-        } catch (IOException e) {
-            throw new TransformerException("IO Exception when reading input.", e);
         }
     }
-    
+
     /**
      * Attempts to send an internal server error HTTP error, if possible.
      * Otherwise simply pushes the exception message to the output stream. 
