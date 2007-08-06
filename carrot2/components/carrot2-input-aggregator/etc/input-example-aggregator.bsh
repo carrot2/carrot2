@@ -1,0 +1,46 @@
+import org.carrot2.core.*;
+import org.carrot2.core.controller.*;
+import org.carrot2.demo.cache.*;
+import org.carrot2.input.aggregator.*;
+
+/*
+ * An example of aggregating two other input components
+ * (here MSN and Yahoo!)
+ */
+
+factory = new LocalComponentFactory() {
+   public LocalComponent getInstance() {
+     msnFactory = new LocalComponentFactory() {
+       public LocalComponent getInstance() {
+         return new org.carrot2.input.msnapi.MsnApiInputComponent();
+       }       
+     };
+
+     yahooFactory = new LocalComponentFactory() {
+        public LocalComponent getInstance() {
+          return new org.carrot2.input.yahooapi.YahooApiInputComponent();
+        }
+     };
+
+     return new AggregatorInputComponent(
+        new AggregatorInput [] {
+            new AggregatorInput("MSN", msnFactory, 1.0),
+            new AggregatorInput("Yahoo!", yahooFactory, 1.0)
+        });
+    }
+};
+
+loaded = new LoadedComponentFactory("input-meta", factory);
+
+loaded.setProperties(new String [][] {
+        {"tab.name", "Meta"},
+        {"tab.accel", "M"},
+        {"tab.description", "Meta search"},
+        {"tab.description.startup", "Carrot Clustering Engine will send your query to MSN and Yahoo! and organize the results into clusters"},
+        {"tab.exampleQueries", "chips|tiger|salsa"},
+        {"tab.icon", "bulb.gif"},
+        {"tab.ignoreOnError", "true" },
+        {"tab.default", "false" }
+});
+
+return loaded;

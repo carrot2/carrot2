@@ -1,0 +1,10 @@
+
+Old API:
+
+http://websearch.amazonaws.com/doc/2006-02-15/AlexaWebSearch.wsdl
+http://websearch.amazonaws.com/doc/2006-02-15/AlexaWebSearch.xsd
+
+Newer API:
+
+http://wsearch.amazonaws.com/doc/2007-03-15/AlexaWebSearch.wsdl
+http://wsearch.amazonaws.com/doc/2007-03-15/AlexaWebSearch.xsd

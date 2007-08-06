@@ -1,0 +1,4 @@
+<local-component-factory 
+	id="stub-autoload-filter"
+	component-class="org.carrot2.core.controller.StubFilterComponent">
+</local-component-factory> 

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="src-test"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/log4j-1.2.14.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/junit-3.8.1.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-local-core"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-common"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/commons-logging-1.1.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/xercesImpl-2.7.1.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/xml-apis.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/axis/axis.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/axis/axis-ant.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/axis/commons-discovery-0.2.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/axis/jaxrpc.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/axis/saaj.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/axis/wsdl4j-1.5.1.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/commons-codec-1.3.jar"/>
+	<classpathentry kind="output" path="tmp/eclipse/classes"/>
+</classpath>

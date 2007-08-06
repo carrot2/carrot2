@@ -1,0 +1,13 @@
+
+<component name="b">
+	<provides>
+		<files prefix="tmp">
+			<file location="b.jar" />
+		</files>
+		<build>
+			<ant file="build.xml" target="build" />
+		</build>
+	</provides>
+
+    <dependency name="c" />
+</component>

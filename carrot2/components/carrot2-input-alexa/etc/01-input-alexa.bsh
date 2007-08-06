@@ -1,0 +1,37 @@
+
+import org.carrot2.core.*;
+import org.carrot2.core.controller.*;
+import org.carrot2.input.alexa.*;
+
+factory = new LocalComponentFactory() {
+    public LocalComponent getInstance() {
+        final String accessKey = ""; // Your access key here
+        final String secretKey = ""; // Your secret key here.
+
+	final AlexaInputComponent aic = new AlexaInputComponent(accessKey, secretKey);
+
+	// In full parallel mode, several queries are sent to Alexa,
+	// even if there are fewer results in the output. This will speed
+	// up common queries with many results, but induce additional costs
+	// for queries with a small number of results.
+
+	// aic.setParallelMode(false);
+
+	return aic;
+    }
+};
+
+LoadedComponentFactory loaded = 
+	new LoadedComponentFactory("input-cached-alexa", factory);
+
+loaded.setProperties(new String [][] {
+	{"tab.name", "Alexa"},
+	{"tab.accel", "A"},
+	{"tab.description", "Search the Web with Alexa Search"},
+	{"tab.description.startup", "Carrot Search Clustering Engine will send your query to Alexa Search and automatically organize the results into thematic categories"},
+	{"tab.exampleQueries", "data mining|london|clustering"},
+	{"tab.icon", "alexa.gif"},
+	{"tab.default", "true"}
+});
+
+return loaded;

@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<!DOCTYPE component PUBLIC "-//Carrot2//DTD Component Dependency Descriptor V1.0//EN" "http://www.carrot2.org/dtd/component-dependency.dtd" >
+<component
+    name="xalan"
+    description="Xalan-J, http://xml.apache.org/xalan-j/index.html">
+
+	<provides>
+		<files>
+			<file location="xalan-2.7.0.jar" />
+			<file location="serializer.jar" />
+			<file location="xalan.LICENSE" />
+		</files>
+	</provides>
+
+    <dependency name="xml-apis" />
+    <dependency name="xerces" />
+
+</component>

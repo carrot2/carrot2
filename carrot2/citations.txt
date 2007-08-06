@@ -1,0 +1,14 @@
+If you cite Carrot2 framework or its components in a research
+publication, we would be glad if you could acknowledge it by
+the following citation:
+
+Carrot2 Search Results Clustering Framework. 
+Available on-line: http://www.carrot2.org
+
+BibTeX version is given below:
+
+@misc{ carrot2,
+	key = "carrot2",
+	title = "{Carrot$^2$ Search Results Clustering Framework}",
+	howpublished = "Available on-line: \textsf{http://www.carrot2.org}.",
+}
