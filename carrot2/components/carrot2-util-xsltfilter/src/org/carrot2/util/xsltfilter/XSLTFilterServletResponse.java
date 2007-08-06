@@ -116,7 +116,7 @@ final class XSLTFilterServletResponse extends HttpServletResponseWrapper {
             // The input is something we won't process anyway, so simply passthrough
             // all data directly to the output stream.
             if (!processingSuppressed) {
-                log.warn("Content type is not text/xml or application/xml (" + contentType + "), passthrough.");
+                log.info("Content type is not text/xml or application/xml (" + contentType + "), passthrough.");
             }
 
             origResponse.setContentType(contentType);
