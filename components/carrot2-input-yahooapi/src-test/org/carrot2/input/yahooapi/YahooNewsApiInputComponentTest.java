@@ -61,7 +61,13 @@ public class YahooNewsApiInputComponentTest extends LocalInputComponentTestBase
 
         assertTrue("At least one source expected.", set.size() >= 1);
     }
-    
+
+    public void testGuacamole() throws Exception
+    {
+        List results = query("guacamole", 100);
+        assertTrue("At least one result expected.", results.size() >= 1);
+    }
+
     public static Test suite()
     {
         if (isApiTestingEnabled())

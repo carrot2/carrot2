@@ -48,7 +48,7 @@ public class YahooSearchServiceTest extends ExternalApiTestBase {
 
         YahooSearchService service = new YahooSearchService(descriptor);
         YahooSearchResult [] result = service.query("apache", 255);
-        assertEquals(255, result.length);
+        assertEquals(descriptor.getMaxResultsPerQuery(), result.length);
 	}
 
 	public void testFewerThanMaxPerQuery() throws Exception {
@@ -68,37 +68,15 @@ public class YahooSearchServiceTest extends ExternalApiTestBase {
         YahooSearchService service = new YahooSearchService(descriptor);
         YahooSearchResult [] result = service.query("Ala ma kota", 100);
 
+        final Logger logger = Logger.getLogger(YahooSearchServiceTest.class);
         for (int i = 0; i < result.length; i++) {
             final String titleSummary = (result[i].title + " " + result[i].summary);
-            Logger.getRootLogger().info(titleSummary);
+            logger.debug(titleSummary);
             assertTrue(titleSummary.indexOf("&gt;") < 0);
             assertTrue(titleSummary.indexOf("&lt;") < 0);
             assertTrue(titleSummary.indexOf("&amp;") < 0);
         }
     }
-
-	public void testStartFromBug() throws Exception {
-	    YahooSearchServiceDescriptor descriptor = new YahooSearchServiceDescriptor();
-	    descriptor.initializeFromXML(this.getClass().getResourceAsStream("yahoo-site-cs.xml"));
-
-	    YahooSearchService service = new YahooSearchService(descriptor);
-	    YahooSearchResult [] result = service.query("apache", descriptor.getMaxResultsPerQuery() * 2);
-
-        for (int i = 0; i < descriptor.getMaxResultsPerQuery(); i++)
-        {
-            final String summary = result[i].summary + "";
-            final String summaryOffset = result[i
-                + descriptor.getMaxResultsPerQuery()].summary
-                + "";
-
-            if (!summary.equals(summaryOffset))
-            {
-                return;
-            }
-        }
-
-        fail();
-	}
 
     public void testErrorResult() throws Exception {
         YahooSearchServiceDescriptor descriptor = new YahooSearchServiceDescriptor();
