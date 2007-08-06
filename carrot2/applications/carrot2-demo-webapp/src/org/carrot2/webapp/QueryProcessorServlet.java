@@ -62,6 +62,12 @@ public final class QueryProcessorServlet extends HttpServlet {
     public static final String PARAM_ALG = "alg";
     public static final String PARAM_SIZE = "s";
     public static final String PARAM_XML_FEED_KEY = "xmlkey";
+    public static final String PARAM_TYPE = "type";
+    
+    public static final String TYPE_CLUSTERS = "c";
+    public static final String TYPE_DOCUMENTS = "d";
+    public static final String TYPE_STATS = "s";
+    public static final String TYPE_XML = "xml";
 
     private static final int DOCUMENT_REQUEST = 1;
     private static final int CLUSTERS_REQUEST = 2;
@@ -159,7 +165,7 @@ public final class QueryProcessorServlet extends HttpServlet {
         }
 
         // identify request type first.
-        final String type = request.getParameter("type");
+        final String type = request.getParameter(PARAM_TYPE);
         final SearchRequest searchRequest = searchSettings.parseRequest(request
             .getParameterMap(), request.getCookies(), queryExpander);
 
@@ -182,13 +188,13 @@ public final class QueryProcessorServlet extends HttpServlet {
 
         // Determine request type and redirect control
         final int requestType;
-        if ("d".equals(type)) {
+        if (TYPE_DOCUMENTS.equals(type)) {
             requestType = DOCUMENT_REQUEST;
-        } else if ("c".equals(type)) {
+        } else if (TYPE_CLUSTERS.equals(type)) {
             requestType = CLUSTERS_REQUEST;
-        } else if ("s".equals(type)) {
+        } else if (TYPE_STATS.equals(type)) {
             requestType = STATS_REQUEST;
-        } else if ("xml".equals(type)) {
+        } else if (TYPE_XML.equals(type)) {
             requestType = DOCUMENTS_CLUSTERS_REQUEST;
         } else {
             requestType = PAGE_REQUEST;
