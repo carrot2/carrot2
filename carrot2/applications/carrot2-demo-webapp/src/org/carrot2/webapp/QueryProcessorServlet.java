@@ -240,7 +240,8 @@ public final class QueryProcessorServlet extends HttpServlet {
             }
         } catch (IOException e) {
             if (e instanceof SocketException
-                || e.getClass().getName().equals("org.apache.catalina.connector.ClientAbortException")) {
+                || e.getClass().getName().equals("org.apache.catalina.connector.ClientAbortException")
+                || e.getClass().getName().equals("org.mortbay.jetty.EofException")) {
                 logger.debug("Client abort when writing response: "
                     + StringUtils.chainExceptionMessages(e));
             } else {
