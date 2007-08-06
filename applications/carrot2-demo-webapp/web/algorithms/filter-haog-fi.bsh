@@ -1,0 +1,23 @@
+
+import org.carrot2.core.*;
+import org.carrot2.core.linguistic.*;
+import org.carrot2.core.controller.*;
+import org.carrot2.util.tokenizer.languages.english.*;
+
+//
+// Component factory is a dynamic Beanshell class
+//
+factory = new LocalComponentFactory() {
+    public LocalComponent getInstance() {
+    	return new org.carrot2.filter.haog.haogfi.local.HAOGFILocalFilterComponent();
+    }
+
+    public String getName() {
+        return "Hierarchical Arrangement of Overlapping Groups based on Frequent Itemsets";
+    }
+};
+
+//
+// Return the ID of the component and its factory.
+//
+return new LoadedComponentFactory("filter-haog-fi", factory);

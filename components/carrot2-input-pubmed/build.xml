@@ -1,0 +1,12 @@
+
+<project name="Carrot2 input component for PubMed database" default="build">
+
+    <property name="tests.available"  value="true"    />
+
+    <property name="project.dir"      location="${basedir}" />
+    <property name="carrot2.code.dir"  location="../.." />
+    <property name="dist.name"        value="carrot2-input-pubmed" />
+    <property name="type" value="jartype" />
+
+    <import file="${carrot2.code.dir}/components/common-targets.inc" />
+</project>

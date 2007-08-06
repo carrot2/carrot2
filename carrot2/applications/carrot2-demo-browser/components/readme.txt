@@ -1,1 +1,0 @@
-You can place your custom component descriptors here.
