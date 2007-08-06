@@ -111,10 +111,16 @@ public class XSLTFilter implements Filter {
             new XSLTFilterServletResponse(httpResponse, httpRequest, context, pool);
         try {
             chain.doFilter(httpRequest, wrappedResponse);
+        } catch (IOException t) {
+            logger.info("I/O exception (doFilter): " + t.toString());
         } catch (Throwable t) {
-            wrappedResponse.filterError("An exception occurred.", t);
+            wrappedResponse.filterError("An unhandled exception occurred.", t);
         } finally {
-            wrappedResponse.finishResponse();
+            try {
+                wrappedResponse.finishResponse();
+            } catch (IOException e) {
+                logger.info("I/O exception (finishResponse): " + e.toString());
+            }
         }
     }
 }
