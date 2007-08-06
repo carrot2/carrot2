@@ -5,5 +5,4 @@
 
 <logger name="org.carrot2.util.WordLoadingUtils"><level value="info"/></logger>
 <logger name="org.carrot2.util.xsltfilter"><level value="warn"/></logger>
-<logger name="org.carrot2.webapp.StressApp"><level value="info"/></logger>
-<logger name="org.carrot2.webapp.StreamFetcher"><level value="info"/></logger>
+<logger name="org.carrot2.webapp.stress"><level value="info"/></logger>
