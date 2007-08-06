@@ -35,9 +35,13 @@ public final class Main
         server.setResolveRemoteHost(false);
         server.setStopGracefully(true);
 
-        // Socket listener.
+        // Configure socket listener. Note the default on accept queue size
+        // etc. -- larger values really don't make sense and bog down the 
+        // entire server.
         final SocketListener listener = new SocketListener();
         listener.setPort(port);
+        listener.setAcceptQueueSize(20);
+        listener.setMaxThreads(10);
         server.addListener(listener);
 
         final WebApplicationContext context = new WebApplicationContext(new File("web").getAbsolutePath());
