@@ -114,9 +114,15 @@ public final class QueryProcessorServlet extends HttpServlet {
     private long goodQueries;
 
     /**
-     * Average processing times (5 minutes, granularity of 10 seconds).
+     * Average processing time for clustering requests (5 minutes, granularity of 10 seconds).
      */
     private final RollingWindowAverage averageProcessingTime = new RollingWindowAverage(
+        5 * RollingWindowAverage.MINUTE, 10 * RollingWindowAverage.SECOND);
+
+    /**
+     * Average processing time for any request (5 minutes, granularity of 10 seconds).
+     */
+    private final RollingWindowAverage averageRequestTime = new RollingWindowAverage(
         5 * RollingWindowAverage.MINUTE, 10 * RollingWindowAverage.SECOND);
 
     /** If <code>true</code> the processes and components have been successfully read. */
@@ -144,9 +150,29 @@ public final class QueryProcessorServlet extends HttpServlet {
     }
 
     /**
-     * Process a HTTP GET request.
+     * Wrap entire request processing in time counter.
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException
+    {
+        final long requestStart = System.currentTimeMillis();
+        try
+        {
+            doGet0(request, response);
+        }
+        finally
+        {
+            synchronized (getServletContext())
+            {
+                this.averageRequestTime.add(System.currentTimeMillis(), System.currentTimeMillis() - requestStart);
+            }
+        }
+    }
+
+    /**
+     * Process a HTTP GET request.
+     */
+    private void doGet0(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException
     {
         // check if initialized.
@@ -260,14 +286,23 @@ public final class QueryProcessorServlet extends HttpServlet {
         response.setContentType("text/plain; charset=utf-8");
         final Writer output = new OutputStreamWriter(os, "UTF-8");
 
-        output.write("total-queries: " + executedQueries + "\n");
-        output.write("good-queries: " + goodQueries + "\n");
+        output.write("clustering-total-queries: " + executedQueries + "\n");
+        output.write("clustering-good-queries: " + goodQueries + "\n");
 
         final long average = (long) this.averageProcessingTime.getCurrentAverage();
         if (average > 0)
         {
-            output.write("ms-per-query: " + average + "\n");
-            output.write("updates-in-window: " + this.averageProcessingTime.getUpdatesInWindow() + "\n");
+            output.write("clustering-ms-per-query: " + average + "\n");
+            output.write("clustering-updates-in-window: " 
+                + this.averageProcessingTime.getUpdatesInWindow() + "\n");
+        }
+
+        final long requestAverage = (long) averageRequestTime.getCurrentAverage();
+        if (requestAverage > 0)
+        {
+            output.write("all-ms-per-request: " + requestAverage + "\n");
+            output.write("all-updates-in-window: " 
+                + this.averageRequestTime.getUpdatesInWindow() + "\n");
         }
 
         output.write("jvm.freemem: " + Runtime.getRuntime().freeMemory() + "\n");
@@ -373,7 +408,8 @@ public final class QueryProcessorServlet extends HttpServlet {
             bcaster.attach();
         }
 
-        long processingTime = -1;
+        long filtersProcessingTime = 0;
+        boolean requestGood = false;  // Set to true after a successful clustering request. 
         try {
             final Iterator docIterator = bcaster.docIterator();
             if (requestType == DOCUMENT_REQUEST) {
@@ -433,38 +469,41 @@ public final class QueryProcessorServlet extends HttpServlet {
                         .getRequestContext()).getProfiles();
                     Profile [] array = (Profile []) profiles
                         .toArray(new Profile [profiles.size()]);
-                    // count only filters
+
+                    // Count only filters.
                     for (int i = 1; i < array.length - 1; i++)
                     {
-                        processingTime += array[i].getTotalTimeElapsed();
+                        filtersProcessingTime += array[i].getTotalTimeElapsed();
                     }
 
-                    serializer.endResult(processingTime);
+                    serializer.endResult(filtersProcessingTime);
+
+                    requestGood = true; // Mark good request here.
 
                     if (queryLogger.isEnabledFor(Level.INFO)) {
-                        logQuery(searchRequest, processingTime);
+                        logQuery(searchRequest, filtersProcessingTime);
                     }
                 } catch (BroadcasterException e) {
                     // broadcaster exceptions are shown in the documents iframe,
                     // so we simply emit no clusters.
                     serializer.startResult(os, Collections.EMPTY_LIST, request, searchRequest.query);
                     serializer.processingError(e);
-                    serializer.endResult(processingTime);
+                    serializer.endResult(filtersProcessingTime);
                 } catch (Exception e) {
                     logger.warn("Error running input query.", e);
                     serializer.startResult(os, Collections.EMPTY_LIST, request, searchRequest.query);
                     serializer.processingError(e);
-                    serializer.endResult(processingTime);
+                    serializer.endResult(filtersProcessingTime);
                 }
             }
         } finally {
             synchronized (getServletContext()) {
                 if (requestType == CLUSTERS_REQUEST) {
                     this.executedQueries++;
-                    if (processingTime > 0) {
+                    if (requestGood) {
                         this.goodQueries++;
-                        this.totalTime += processingTime;
-                        this.averageProcessingTime.add(System.currentTimeMillis(), processingTime);
+                        this.totalTime += filtersProcessingTime;
+                        this.averageProcessingTime.add(System.currentTimeMillis(), filtersProcessingTime);
                     }
                 }
 
