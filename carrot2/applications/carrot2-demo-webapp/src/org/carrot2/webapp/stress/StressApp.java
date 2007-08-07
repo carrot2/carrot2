@@ -79,7 +79,7 @@ public class StressApp
                         final long successHits;
                         final long failureHits;
                         final long fetchers;
-                        synchronized (this)
+                        synchronized (StressApp.class)
                         {
                             successHits = successes.getUpdatesInWindow();
                             failureHits = failures.getUpdatesInWindow();
@@ -121,7 +121,7 @@ public class StressApp
                     (initialPeriod - minimalPeriod) * (Math.min(1.0d, (now - start) / (double) saturationTime)));
                 Thread.sleep(sleepTime);
                 
-                synchronized (this) {
+                synchronized (StressApp.class) {
                     if (fetchers > MAX_RUNNING_FETCHERS) {
                         continue;
                     }
@@ -163,7 +163,7 @@ public class StressApp
 
             // Randomize the order of document/clusters requests.
             final boolean clustersFirst;
-            synchronized (this)
+            synchronized (StressApp.class)
             {
                 clustersFirst = rnd.nextBoolean();
             }
@@ -196,7 +196,7 @@ public class StressApp
                 try {
                     super.run();
                 } finally {
-                    synchronized (StressApp.this) {
+                    synchronized (StressApp.class) {
                         StressApp.this.fetchers--;
                     }
                 }
@@ -204,7 +204,7 @@ public class StressApp
 
             public void failure(String reason)
             {
-                synchronized (this)
+                synchronized (StressApp.class)
                 {
                     failures.add(System.currentTimeMillis(), 1);
                 }
@@ -212,7 +212,7 @@ public class StressApp
 
             public void success(byte [] content)
             {
-                synchronized (this)
+                synchronized (StressApp.class)
                 {
                     successes.add(System.currentTimeMillis(), 1);
                 }
@@ -220,20 +220,24 @@ public class StressApp
         };
 
         logger.debug("Fetching: " + uri);
-        synchronized (StressApp.this) {
+        synchronized (StressApp.class) {
             StressApp.this.fetchers++;
             new Thread(task).start();
         }
     }
 
-    private synchronized String random(String [] array)
+    private String random(String [] array)
     {
-        return array[rnd.nextInt(array.length)];
+        synchronized (StressApp.class) {
+            return array[rnd.nextInt(array.length)];
+        }
     }
 
-    private synchronized int random(int [] array)
+    private int random(int [] array)
     {
-        return array[rnd.nextInt(array.length)];
+        synchronized (StressApp.class) {
+            return array[rnd.nextInt(array.length)];
+        }
     }
 
     public static void main(String [] args)
@@ -251,22 +255,6 @@ public class StressApp
         {
             app.start();
         }
-        
-        /*
-        new StressApp(
-            // "http://localhost:8080/carrot2-demo-webapp/search",
-            // "http://localhost:8080/search",
-            "http://ophelia.cs.put.poznan.pl:8081/carrot2-demo-webapp/search",
-            new String [] {"Lingo" },
-            new String [] {"Web", "Yahoo!", "MSN", "News"},
-            new String [] {
-                "data mining", "Dawid Weiss", "apple", "computer",
-                "amiga", "iraq", "war", "guacamole", "global warming",
-                "the times", "al arabia", "star wars" },
-            new int [] { 100 },
-            2000, 0, 120 * 1000
-        ).start();
-        */
     }
 
     /**
