@@ -56,6 +56,7 @@
     <dependency name="dom4j" />
     <dependency name="xerces" />
     <dependency name="commons-httpclient" />
+    <dependency name="commons-cli" nocopy="true" noexport="true" />
 
     <dependency name="carrot2-input-yahooapi" profile="demo" />
     <dependency name="carrot2-input-googleapi" profile="demo" />
