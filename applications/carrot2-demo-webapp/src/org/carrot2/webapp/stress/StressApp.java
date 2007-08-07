@@ -6,6 +6,8 @@ import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.Random;
 
+import org.apache.commons.cli.*;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.carrot2.util.RollingWindowAverage;
 import org.carrot2.webapp.QueryProcessorServlet;
@@ -236,18 +238,192 @@ public class StressApp
 
     public static void main(String [] args)
     {
+        /** Command line options. */
+        final Options options = createOptions();
+        if (args.length == 0)
+        {
+            printUsage(options);
+            return;
+        }
+        
+        final StressApp app = parseOptions(options, args);
+        if (app != null)
+        {
+            app.start();
+        }
+        
+        /*
         new StressApp(
             // "http://localhost:8080/carrot2-demo-webapp/search",
             // "http://localhost:8080/search",
             "http://ophelia.cs.put.poznan.pl:8081/carrot2-demo-webapp/search",
-            new String [] {"Lingo", /* "STC (+English)" */},
+            new String [] {"Lingo" },
             new String [] {"Web", "Yahoo!", "MSN", "News"},
             new String [] {
                 "data mining", "Dawid Weiss", "apple", "computer",
                 "amiga", "iraq", "war", "guacamole", "global warming",
                 "the times", "al arabia", "star wars" },
-            new int [] { 100 /* 50, 75, 100, 150, 200*/ },
+            new int [] { 100 },
             2000, 0, 120 * 1000
         ).start();
+        */
     }
+
+    /**
+     * 
+     */
+    private static StressApp parseOptions(Options options, String [] args)
+    {
+        final Parser parser = new GnuParser();
+        final CommandLine line;
+        try
+        {
+            line = parser.parse(options, args);
+            try
+            {
+                return validateOptions(line);
+            }
+            catch (Throwable e)
+            {
+                logger.fatal("Unhandled program error occurred.", e);
+            }
+        }
+        catch (MissingArgumentException e)
+        {
+            logger.log(Level.FATAL, "Provide the required argument for option "
+                + e.getMessage());
+            printUsage(options);
+        }
+        catch (MissingOptionException e)
+        {
+            logger.log(Level.FATAL, "Provide the required option " + e.getMessage());
+            printUsage(options);
+        }
+        catch (UnrecognizedOptionException e)
+        {
+            logger.log(Level.FATAL, e.getMessage() + "\n");
+            printUsage(options);
+        }
+        catch (ParseException exp)
+        {
+            logger.log(Level.FATAL, "Could not parse command line: " + exp.getMessage());
+            printUsage(options);
+        }
+
+        return null;
+    }
+
+    private final static String SERVICE_OPTION = "u";
+    private final static String ALGORITHMS_OPTION = "a";
+    private final static String INPUTS_OPTION = "i";
+    private final static String QUERIES_OPTION = "q";
+    private final static String REQUEST_SIZE_OPTION = "s";
+    private final static String TIMES_OPTION = "t";
+
+    /**
+     * 
+     */
+    private static StressApp validateOptions(CommandLine line)
+    {
+        final String serviceURL = line.getOptionValue(SERVICE_OPTION);
+        final String [] algorithms = line.getOptionValues(ALGORITHMS_OPTION);
+        final String [] inputs = line.getOptionValues(INPUTS_OPTION);
+        final String [] queries = line.getOptionValues(QUERIES_OPTION);
+        final int [] requestSizes = toIntArray(
+            line.hasOption(REQUEST_SIZE_OPTION) 
+                ? line.getOptionValues(REQUEST_SIZE_OPTION)
+                : new String [] {"100"});
+        
+        final String [] times = line.getOptionValues(TIMES_OPTION);
+        final int startPeriod = Integer.parseInt(times[0]);
+        final int endPeriod = Integer.parseInt(times[1]);
+        final int saturation = Integer.parseInt(times[2]);
+        
+        if (startPeriod < endPeriod) {
+            logger.error("Start period must be >= than the end period.");
+            return null;
+        }
+
+        return new StressApp(serviceURL, algorithms, inputs, queries,
+            requestSizes, startPeriod, endPeriod, saturation);
+    }
+
+    /**
+     * 
+     */
+    private static int [] toIntArray(String [] array)
+    {
+        final int [] requestSizes = new int [ array.length ];
+        for (int i = 0; i < array.length; i++)
+        {
+            requestSizes[i] = Integer.parseInt(array[i]);
+        }
+        return requestSizes;
+    }
+
+    /**
+     * 
+     */
+    private static Options createOptions()
+    {
+        final Options options = new Options();
+
+        options.addOption(OptionBuilder
+            .isRequired()
+            .hasArg()
+            .withDescription("Webapp query service URL (~/search)")
+            .withArgName("URL")
+            .create(SERVICE_OPTION));
+        
+        options.addOption(OptionBuilder
+            .isRequired()
+            .withDescription("Space separated list of algorithm names.")
+            .withArgName("ID1 ID2...")
+            .withLongOpt("algorithms")
+            .hasArgs()
+            .create(ALGORITHMS_OPTION));
+
+        options.addOption(OptionBuilder
+            .isRequired()
+            .withDescription("Space separated list of input names.")
+            .withArgName("ID1 ID2...")
+            .withLongOpt("inputs")
+            .hasArgs()
+            .create(INPUTS_OPTION));
+
+        options.addOption(OptionBuilder
+            .isRequired()
+            .withDescription("Space separated list of queries.")
+            .withArgName("Q1 Q2 Q3...")
+            .withLongOpt("queries")
+            .hasArgs()
+            .create(QUERIES_OPTION));
+
+        options.addOption(OptionBuilder
+            .withDescription("Space separated list of request sizes (default: 100).")
+            .withArgName("SIZE1 SIZE2...")
+            .withLongOpt("request-sizes")
+            .hasArgs()
+            .create(REQUEST_SIZE_OPTION));
+
+        options.addOption(OptionBuilder
+            .isRequired()
+            .withDescription("Initial and final period between spawning new request " +
+                    "threads and saturation time between the two (in milliseconds).")
+            .withArgName("START END SATURATION")
+            .withLongOpt("times")
+            .hasArgs(3)
+            .create(TIMES_OPTION));
+
+        return options;
+    }
+
+    /**
+     * 
+     */
+    private static void printUsage(Options options)
+    {
+        final HelpFormatter formatter = new HelpFormatter();
+        formatter.printHelp(StressApp.class.getName(), options, true);
+    }    
 }
