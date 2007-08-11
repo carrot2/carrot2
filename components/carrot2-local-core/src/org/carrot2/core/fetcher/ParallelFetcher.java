@@ -18,6 +18,7 @@ import java.util.*;
 import org.apache.log4j.Logger;
 import org.carrot2.core.ProcessingException;
 import org.carrot2.core.clustering.RawDocument;
+import org.carrot2.util.StringUtils;
 
 /**
  * A parallel fetcher executes multiple threads to download search 
@@ -241,7 +242,8 @@ public abstract class ParallelFetcher
             if (!ignoreFetcherErrors && bad != null && bad.length > 0)
             {
                 throw new ProcessingException("Search results fetching failed in "
-                    + bad.length + " fetchers: " + bad[0].error);
+                    + bad.length + " fetchers: " 
+                    + StringUtils.chainExceptionMessages(bad[0].error), bad[0].error);
             }
 
             /**
