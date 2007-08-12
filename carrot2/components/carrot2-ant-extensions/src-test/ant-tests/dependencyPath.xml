@@ -1,0 +1,45 @@
+
+<project name="bring-to-date" default="test">
+
+    <target name="prepare">
+        <taskdef resource="res/carrot2-antlib.xml">
+            <classpath location="../../tmp/build/bootstrap" />
+        </taskdef>
+
+		<subant target="prepare">
+			<fileset dir="deps" includes="**/build.xml"/>
+        </subant>
+    </target>
+
+	<target name="test" depends="prepare">
+		<description>
+			Dynamic classpath resolver test.
+		</description>
+
+		<ant antfile="deps/proj_f/build.xml" inheritall="false">
+		</ant>
+	</target>
+
+	<target name="test2" depends="prepare">
+		<description>
+			Dynamic classpath resolver test (with
+			profiles).
+		</description>
+
+		<ant antfile="deps/proj_f/build.xml" inheritall="false"
+			target="profiled">
+			<property name="profile" value="profiled" />
+		</ant>
+	</target>
+	
+	<target name="test3" depends="prepare">
+		<description>
+			Tests the ability to provide non-existing paths
+			and paths out of project scope for *.dep.xml files.
+		</description>
+
+		<ant antfile="deps/proj_i/build.xml" inheritall="false"
+				target="test" />
+	</target>	
+	
+</project>

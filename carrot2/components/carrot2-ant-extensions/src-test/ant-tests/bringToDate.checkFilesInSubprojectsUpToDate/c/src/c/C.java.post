@@ -1,0 +1,8 @@
+
+package c;
+
+public class C {
+    public String getText() {
+        return "Post-change";
+    }
+}

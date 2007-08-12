@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE component PUBLIC "-//Carrot2//DTD Component Dependency Descriptor V1.0//EN" "http://www.carrot2.org/dtd/component-dependency.dtd" >
+
+<component
+    name="carrot2-language-guesser"
+    description="Carrot2 Language Guesser (borrowed from Lucene, Jean-Francois Halleux code)">
+
+    <provides>
+        <files build-path-exclude="true" prefix="tmp/dist">
+            <file location="carrot2-language-guesser.jar" />
+        </files>
+        <build>
+            <ant file="build.xml" target="build" />
+        </build>
+		<check-newer>
+			<fileset dir="src" />
+		</check-newer>
+    </provides>
+
+    <provides>
+        <files>
+            <file location="trigrams.LICENSE" />
+        </files>
+    </provides>
+
+	<!-- Carrot2 components -->
+	<dependency name="carrot2-local-core" />
+    <dependency name="carrot2-license" />
+
+    <dependency name="junit" profile="test" />
+
+</component>

@@ -1,0 +1,4 @@
+<local-component-factory 
+	id="input-cached-pubmed" 
+	component-class="org.carrot2.demo.components.InputCachedPubMedAPI">
+</local-component-factory>

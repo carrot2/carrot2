@@ -1,0 +1,8 @@
+
+<component name="b" description="projb">
+	<provides>
+		<meta type="proguard">b_meta/</meta>
+		<meta type="other">other</meta>
+	</provides>
+	<dependency name="c" />
+</component>

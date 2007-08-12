@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<local-process id="lucene-lingo">
+  <name>Lucene Index -- Lingo Classic Clusterer</name>
+
+  <input  component-key="input-lucene" />
+  <filter component-key="filter-rawdocument-enumerator" />
+  <filter component-key="filter-clustering-lingo-multi" />
+  <output component-key="output-array" />
+
+  <attribute key="process.settings.class.1" 
+	         value="org.carrot2.demo.settings.LuceneSettings" />
+  <attribute key="process.settings.class.2" 
+	         value="org.carrot2.demo.settings.LingoClassicSettings" />
+</local-process>

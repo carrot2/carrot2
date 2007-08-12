@@ -1,0 +1,82 @@
+body {
+  font-family:          Trebuchet MS, Tahoma, sans-serif;
+  font-size:            13px;
+  margin:               0px;
+  padding:              0px;
+}
+
+table {
+  border-collapse:      collapse;
+  font-family:          Trebuchet MS, Tahoma, sans-serif;
+  font-size:            13px;
+  margin:               0px;
+}
+
+input {
+  font-family:          Trebuchet MS, Tahoma, sans-serif;
+  font-size:            13px;
+}
+
+td {
+  padding: 0;
+}
+
+img {
+  border: 0;
+}
+
+a {
+  color: #1678C4;
+}
+
+a:hover {
+  color: #005393;
+}
+
+form {
+  margin: 0;
+}
+
+select {
+  font-family:          Trebuchet MS, Tahoma, sans-serif;
+  font-size:            13px;
+  margin-left:          5px;
+}
+
+label {
+  color: #808080;
+}
+
+* html label.inline-cb-label {
+  position: relative;
+  bottom: 3px;
+}
+
+input.search-field:focus {
+  background-color: #ffffd8;
+}
+
+select:focus {
+  background-color: #ffffd8;
+}
+
+html>body sup {
+  line-height: 0%;
+  position: relative;
+  font-size: 80%;
+}
+
+* html sup {
+  line-height: 0%;
+  position: relative;
+  font-size: 80%;
+  top: -0.2ex;
+}
+
+div.pb {
+  margin-bottom: 14px;
+  background-image: url('../img/logo-small.gif');
+  background-repeat: no-repeat;
+  background-position: 2px 50%;
+  padding-left: 38px;
+}

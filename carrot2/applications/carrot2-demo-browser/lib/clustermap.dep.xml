@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<!DOCTYPE component PUBLIC "-//Carrot2//DTD Component Dependency Descriptor V1.0//EN" "http://www.carrot2.org/dtd/component-dependency.dtd" >
+
+<component
+    name="clustermap"
+    description="ClusterMap visualisation library, http://www.aduna-software.com/products/developer_products/clustermap">
+	<provides>
+		<files>
+			<file location="aduna-clustermap-2006.1.jar" />
+			<file location="aduna-clustermap-2006.1-resources.jar" />
+			<file location="aduna-clustermap.LICENSE" />
+		</files>
+	</provides>
+</component>

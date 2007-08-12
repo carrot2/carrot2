@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="src" path="/carrot2-util-common"/>
+	<classpathentry exported="true" kind="var" path="CARROT2_CHECKOUT_BASE/lib/log4j-1.2.14.jar"/>
+	<classpathentry exported="true" kind="src" path="/carrot2-local-core"/>
+	<classpathentry exported="true" kind="src" path="/carrot2-util-tokenizer"/>
+	<classpathentry exported="true" kind="src" path="/carrot2-filter-lingo"/>
+	<classpathentry exported="true" kind="src" path="/carrot2-filter-trc"/>
+	<classpathentry exported="true" kind="lib" path="lib/jdic_windows/jdic_stub.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jdic.jar"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-input-yahooapi"/>
+	<classpathentry exported="true" kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/junit-3.8.1.jar"/>
+	<classpathentry exported="true" kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/junit-addons-1.4.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/lucene-core-2.2.0.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-matrix"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-stc"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/dom4j-1.6.1.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-case-normalizer"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-haog"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-fuzzyants"/>
+	<classpathentry kind="lib" path="lib/forms-1.1.0.jar"/>
+	<classpathentry kind="lib" path="lib/looks-2.1.4.jar"/>
+	<classpathentry kind="lib" path="lib/aduna-clustermap-2006.1.jar"/>
+	<classpathentry kind="lib" path="lib/aduna-clustermap-2006.1-resources.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-input-lucene"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-input-msnsearch"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-input-pubmed"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-input-etools"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-striphtml"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/je-analysis-1.5.1.jar"/>
+	<classpathentry kind="output" path="tmp/eclipse/classes"/>
+</classpath>

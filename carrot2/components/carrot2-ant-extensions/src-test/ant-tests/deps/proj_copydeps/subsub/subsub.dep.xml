@@ -1,0 +1,10 @@
+
+<component name="subsub">
+
+	<provides>
+		<files>
+			<file location="test.txt" />
+		</files>
+	</provides>
+
+</component>

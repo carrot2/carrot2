@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<local-process id="LingoClassic">
+  <name>Lingo</name>
+  <description>Lingo Classic Clustering Algorithm</description>
+
+  <input  component-key="input-demo-webapp" />
+  <filter component-key="filter-lingo" />
+  <output component-key="output-demo-webapp" />
+
+  <attribute key="process.default" value="true" />
+
+</local-process>

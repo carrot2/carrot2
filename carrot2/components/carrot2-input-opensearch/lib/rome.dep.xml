@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<!DOCTYPE component PUBLIC "-//Carrot2//DTD Component Dependency Descriptor V1.0//EN" "http://www.carrot2.org/dtd/component-dependency.dtd" >
+<component name="rome" description="ROME API, http://rome.dev.java.net/">
+	<provides>
+		<files>
+            <file location="rome-0.8.jar" />
+            <!-- http://wiki.java.net/bin/view/Javawsxml/RomeFetcher -->
+            <file location="rome-fetcher-0.7.jar" />
+		</files>
+	</provides>
+
+    <dependency name="jdom" />
+</component>

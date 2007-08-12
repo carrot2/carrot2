@@ -1,0 +1,10 @@
+
+package b;
+
+import c.*;
+
+public class B {
+    public String getText() {
+        return new C().getText();
+    }
+}

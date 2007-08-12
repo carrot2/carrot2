@@ -1,0 +1,23 @@
+import org.carrot2.core.*;
+import org.carrot2.core.controller.*;
+
+factory = new LocalComponentFactory() {
+    public LocalComponent getInstance() {
+		return new org.carrot2.input.yahooapi.YahooNewsApiInputComponent();
+    }
+};
+
+LoadedComponentFactory loaded =
+	new LoadedComponentFactory("input-yahooapi-news", factory);
+
+loaded.setProperties(new String [][] {
+	{"tab.name", "News"},
+	{"tab.accel", "N"},
+	{"tab.description", "Search the News with Yahoo!"},
+	{"tab.description.startup", "Carrot Clustering Engine will send your query to Yahoo! News and automatically organize the results into thematic categories"},
+	{"tab.exampleQueries", "madonna|stocks|apple"},
+	{"tab.icon", "yahoo.gif"},
+	{"tab.default", "false"}
+});
+
+return loaded;

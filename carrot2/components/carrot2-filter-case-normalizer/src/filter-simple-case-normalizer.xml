@@ -1,0 +1,4 @@
+<local-component-factory 
+	id="filter-simple-case-normalizer" 
+	component-class="org.carrot2.filter.normalizer.SimpleCaseNormalizerLocalFilterComponent">
+</local-component-factory> 

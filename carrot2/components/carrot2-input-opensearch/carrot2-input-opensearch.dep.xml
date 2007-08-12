@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE component PUBLIC "-//Carrot2//DTD Component Dependency Descriptor V1.0//EN" "http://www.carrot2.org/dtd/component-dependency.dtd" >
+
+<component
+    name="carrot2-input-opensearch"
+    description="Carrot2 Input Component using OpenSearch">
+
+    <provides>
+        <files build-path-exclude="true" prefix="tmp/dist">
+            <file location="carrot2-input-opensearch.jar" />
+        </files>
+        <build>
+            <ant file="build.xml" target="build"/>
+        </build>
+		<check-newer>
+			<fileset dir="src" />
+            <fileset dir="lib" />
+		</check-newer>
+    </provides>
+
+    <dependency name="rome" />
+    <dependency name="log4j" />
+
+    <dependency name="carrot2-util-common" />
+    <dependency name="carrot2-local-core" />
+    <dependency name="carrot2-license" />
+
+    <dependency name="junit" profile="test" />
+</component>

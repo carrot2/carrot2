@@ -1,0 +1,15 @@
+<local-component-factory 
+	id="stub-output"
+	component-class="org.carrot2.core.controller.StubOutputComponent">
+
+     <name>name</name>
+     <description>description</description>
+ 
+     <init-beanshell>
+		component.setProperty("bshproperty", "value");
+     </init-beanshell>
+
+     <init-properties>
+     	<property name="xmlproperty">value</property>
+     </init-properties>
+</local-component-factory> 

@@ -1,0 +1,6 @@
+
+<component name="e">
+
+    <dependency name="d" in-profile="test" />
+
+</component>
