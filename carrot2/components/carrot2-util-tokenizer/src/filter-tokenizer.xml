@@ -1,4 +1,0 @@
-<local-component-factory 
-	id="filter-tokenizer" 
-	component-class="org.carrot2.util.tokenizer.SnippetTokenizerLocalFilterComponent">
-</local-component-factory> 

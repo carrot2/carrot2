@@ -1,6 +1,0 @@
-
-<component name="d" description="projd">
-	<provides>
-		<meta type="proguard">d_meta/</meta>
-	</provides>
-</component>

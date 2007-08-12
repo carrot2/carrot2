@@ -1,4 +1,0 @@
-<local-component-factory 
-	id="filter-save-json" 
-	component-class="org.carrot2.core.impl.SaveJsonFilterComponent">
-</local-component-factory> 
