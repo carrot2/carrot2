@@ -53,6 +53,11 @@
 	<resources os="Windows">
 		<jar href="lib/windows/jdic.jar"/>
 		<nativelib href="lib/windows/jdic-native.jar"/>
+		<?php
+		if (isset($_REQUEST['purejava'])) {
+		    echo '<property name="use.java.browser" value="true" />';
+		}
+		?>
 	</resources>
 
 	<security>
