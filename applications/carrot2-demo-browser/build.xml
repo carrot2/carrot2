@@ -13,19 +13,17 @@
 
     <property name="distribution.zips.dir" location="${project.dir}/tmp/zips" />
     <property name="distribution.zip.name" value="carrot2-local-demo.zip" /> 
+	<property name="distribution.webstart" location="${project.dir}/tmp/webstart" />
 
     <import file="${carrot2.code.dir}/components/common-targets.inc" />
 
 	<target name="build" depends="build.full" />
 
 
+    <target name="webstart" depends="clean,webstart.prepare,webstart.sign" description="Build a WebStart version.">
+	</target>
 
-    <target name="webstart" depends="clean,build.full" description="Build a WebStart version.">
-    	<property name="distribution.webstart" location="${project.dir}/tmp/webstart" />
-		<property name="keystore.alias" value="carrot2.org" />
-		<property name="keystore.password" value="carrot2" />
-		<property name="keystore" value="webstart/carrot2.org.keystore" />
-
+    <target name="webstart.prepare" depends="build.full">
        	<copy todir="${distribution.webstart}">
        		<fileset dir="${distribution.dir}" />
        	</copy>
@@ -59,21 +57,15 @@
 
        	<delete file="webstart/demo-resources.xml" />
 
-       	<delete>
-       		<fileset dir="${distribution.webstart}">
-       			<include name="**/*jdic*" />
-       			<include name="**/*jdic*/**" />
-       		</fileset>
-       	</delete>
-
        	<copy todir="${distribution.webstart}">
        		<fileset dir="webstart">
-       			<include name="lib/**" />
        			<include name="img/**" />
        			<include name="*.php" />
        			<include name="*.jsp" />
        		</fileset>
        	</copy>
+
+        <move file="${distribution.webstart}/deps-carrot2-demo-browser-jar" tofile="${distribution.webstart}/lib" />
 
        	<java classname="bsh.Interpreter" dir="${distribution.webstart}" fork="true">
        		<classpath>
@@ -82,12 +74,28 @@
        		<arg file="webstart/create-files.bsh" />
        	</java>
 
-        <signjar alias="${keystore.alias}" storepass="${keystore.password}" keystore="${keystore}">
-    		<fileset dir="${distribution.webstart}">
-    			<include name="**/*.jar" />
-    		</fileset>
-       	</signjar>
+	<!-- Assemble binary JDIC JARs -->
+        <jar jarfile="${distribution.webstart}/lib/windows/x86/jdic_native.jar">
+            <fileset id="jdic.todel" dir="${distribution.webstart}/lib/windows/x86">
+                <exclude name="jdic_native.jar" />
+            </fileset>
+	</jar>
+	<delete>
+	    <fileset refid="jdic.todel" />
+	</delete>
     </target>
+
+	<target name="webstart.sign">
+		<property name="keystore.alias" value="carrot2.org" />
+		<property name="keystore.password" value="carrot2" />
+		<property name="keystore" value="webstart/carrot2.org.keystore" />
+
+	    <signjar alias="${keystore.alias}" storepass="${keystore.password}" keystore="${keystore}">
+			<fileset dir="${distribution.webstart}">
+				<include name="**/*.jar" />
+			</fileset>
+	   	</signjar>	
+	</target>
 
 
 

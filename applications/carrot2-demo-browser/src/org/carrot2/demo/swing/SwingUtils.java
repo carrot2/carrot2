@@ -15,10 +15,10 @@ package org.carrot2.demo.swing;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 
 import javax.swing.*;
+
+import org.carrot2.util.StringUtils;
 
 /**
  * Various Swing utilities.
@@ -51,7 +51,7 @@ public final class SwingUtils
         stacktraceArea.setLineWrap(false);
         stacktraceArea.setText("Exception: " + t.getClass().getName() + "\n\n"
             + "Exception message: " + t.getMessage() + "\n\n"
-            + "Stack trace:\n" + getStackTrace(t));
+            + "Stack trace:\n" + StringUtils.getStackTrace(t));
         stacktraceArea.setEditable(false);
         final JScrollPane stacktraceAreaScroller = new JScrollPane(
             stacktraceArea);
@@ -77,18 +77,6 @@ public final class SwingUtils
 
         JOptionPane.showMessageDialog(component, panel, "Exception occurred.",
             JOptionPane.ERROR_MESSAGE);
-    }
-
-    /**
-     * Dumps a {@link Throwable}'s stack trace to a string.
-     */
-    private static String getStackTrace(Throwable e)
-    {
-        final StringWriter sw = new StringWriter();
-        final PrintWriter pw = new PrintWriter(sw);
-        e.printStackTrace(pw);
-        pw.close();
-        return sw.toString();
     }
 
     /**
