@@ -8,7 +8,6 @@
 	<classpathentry exported="true" kind="src" path="/carrot2-util-tokenizer"/>
 	<classpathentry exported="true" kind="src" path="/carrot2-filter-lingo"/>
 	<classpathentry exported="true" kind="src" path="/carrot2-filter-trc"/>
-	<classpathentry exported="true" kind="lib" path="lib/jdic_windows/jdic_stub.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jdic.jar"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-input-yahooapi"/>
 	<classpathentry exported="true" kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/junit-3.8.1.jar"/>

@@ -37,6 +37,8 @@ import org.carrot2.demo.index.RawDocumentsLuceneIndexSearcher;
 import org.carrot2.demo.swing.util.SwingTask;
 import org.carrot2.demo.swing.util.ToolbarButton;
 import org.carrot2.demo.visualization.ClusterMapVisualization;
+import org.carrot2.util.StringUtils;
+import org.carrot2.util.XMLSerializerHelper;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -123,7 +125,7 @@ public class ResultsTab extends JPanel {
                             showInfo("<html><body><h1>Query processed</h1><p>The result object is not interpretable, however.</p></body></html>");
                         }
                     } catch (Throwable e) {
-                        showInfo("<html><body><h1>Exception executing query.</h1></body></html>");
+                        showInfo(buildExceptionHTML(e));
                         SwingUtils.showExceptionDialog(ResultsTab.this, "Exception executing query.", e);
                     } finally {
                         changeTitle(defaultTitle, false);                        
@@ -143,6 +145,19 @@ public class ResultsTab extends JPanel {
                 }
             }
             Logger.getLogger(ResultsTab.class).debug("Tab thread ended.");
+        }
+
+        private String buildExceptionHTML(Throwable e)
+        {
+            final StringBuffer b = new StringBuffer("<html><body><h1>Exception executing query.</h1>");
+            b.append("<h2>Exception class: <tt>" + e.getClass() + "</tt></h2>");
+            b.append("<h2>Exception message: <tt>" + e.getMessage() + "</tt></h2>");
+            b.append("<h2>Stack trace:</h2><pre>");
+            b.append(XMLSerializerHelper.getInstance().toValidXmlText(
+                StringUtils.getStackTrace(e), false));
+            b.append("</pre>");
+            b.append("</body></html>");
+            return b.toString();
         }
 
         public void dispose() {

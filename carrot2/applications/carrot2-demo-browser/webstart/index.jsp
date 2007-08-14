@@ -1,7 +1,6 @@
 <%@page pageEncoding="UTF-8" %><%
 
-	// response.setHeader("Content-Type", "application/x-java-jnlp-file");
-	response.setHeader("Content-Type", "text/plain");
+	response.setHeader("Content-Type", "application/x-java-jnlp-file");
 	response.setHeader("Cache-Control", "public, max-age=0");
 	response.setHeader("Pragma", "x-no-cache");
 
@@ -38,14 +37,12 @@
 		<j2se version="1.4+" />
 
 		<jar href="carrot2-demo-browser.jar" />
-		<jar href="lib/demo-resources.jar" />
-
 		<%@include file="demo.inc" %>
 	</resources>
 
 	<resources os="Windows">
-		<jar href="lib/windows/jdic.jar"/>
-		<nativelib href="lib/windows/jdic-native.jar"/>
+		<jar href="lib/windows/jdic_stub.jar"/>
+		<nativelib href="lib/windows/x86/jdic_native.jar"/>
 	</resources>
 
 	<security>

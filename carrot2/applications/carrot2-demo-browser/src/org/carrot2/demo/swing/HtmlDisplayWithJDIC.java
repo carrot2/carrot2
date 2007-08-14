@@ -88,9 +88,6 @@ final class HtmlDisplayWithJDIC extends HtmlDisplay {
     }
 
     public HtmlDisplayWithJDIC() {
-        final BrowserEngineManager manager = BrowserEngineManager.instance();
-        manager.setActiveEngine(BrowserEngineManager.IE);
-
         this.browser = new WebBrowser();
         this.browser.setFocusable(false);
         
