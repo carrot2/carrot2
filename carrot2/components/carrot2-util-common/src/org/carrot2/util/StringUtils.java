@@ -12,6 +12,8 @@
 
 package org.carrot2.util;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.*;
 
 import org.apache.commons.lang.StringEscapeUtils;
@@ -369,4 +371,16 @@ public class StringUtils
         }
         return buf.toString();
     }
+
+    /**
+     * @return Return the stack trace of a {@link Throwable}.
+     */
+    public static String getStackTrace(Throwable t) {
+        final StringWriter sw = new StringWriter();
+        final PrintWriter pw = new PrintWriter(sw);
+        t.printStackTrace(pw);
+        pw.close();
+        return sw.toString();
+    }
+    
 }
