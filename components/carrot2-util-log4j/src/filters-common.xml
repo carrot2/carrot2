@@ -25,3 +25,5 @@
 <!-- EHCache -->
 <logger name="net.sf.ehcache"><level value="info"/></logger>
 
+<!-- JDIC -->
+<logger name="jdic"><level value="info"/></logger>
