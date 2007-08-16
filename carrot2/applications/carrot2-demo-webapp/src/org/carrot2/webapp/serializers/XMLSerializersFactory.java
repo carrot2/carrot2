@@ -30,6 +30,7 @@ public class XMLSerializersFactory implements SerializersFactory {
 
     private String stylesheetsBase;
     private String releaseInfo;
+    private String localization;
 
     public void configure(ServletConfig config) {
         final String webappRelative = config.getInitParameter("serializer.xml.stylesheets");
@@ -46,12 +47,14 @@ public class XMLSerializersFactory implements SerializersFactory {
             releaseInfo = "";
         }
         this.releaseInfo = releaseInfo;
+        
+        this.localization = InitializationUtils.getLocalizationString(config); 
     }
 
     public PageSerializer createPageSerializer(HttpServletRequest request) {
         return new XMLPageSerializer(request.getContextPath(), stylesheetsBase,
             releaseInfo, (ResourceBundle) request
-                .getAttribute(Constants.RESOURCE_BUNDLE_KEY));
+                .getAttribute(Constants.RESOURCE_BUNDLE_KEY), localization);
     }
 
     public RawDocumentsSerializer createRawDocumentSerializer(HttpServletRequest request) {

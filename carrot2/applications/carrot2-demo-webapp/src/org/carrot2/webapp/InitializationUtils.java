@@ -38,7 +38,7 @@ import org.carrot2.webapp.serializers.XMLSerializersFactory;
 /**
  * Some static initialization utilities refactored from {@link QueryProcessorServlet}.
  */
-final class InitializationUtils
+final public class InitializationUtils
 {
     /**
      * No instances.
@@ -327,14 +327,20 @@ final class InitializationUtils
      */
     static ResourceBundle initializeResourceBundle(final ServletConfig config)
     {
+        String locale = getLocalizationString(config);
+
+        return ResourceBundle.getBundle("messages", new Locale(locale, "DE", "WMC"), Thread
+            .currentThread().getContextClassLoader());
+    }
+
+    public static String getLocalizationString(final ServletConfig config)
+    {
         String locale = config.getInitParameter("localization");
         if (locale == null)
         {
             locale = Constants.DEFAULT_LOCALE;
         }
-
-        return ResourceBundle.getBundle("messages", new Locale(locale), Thread
-            .currentThread().getContextClassLoader());
+        return locale;
     }
 
     /**
@@ -359,8 +365,9 @@ final class InitializationUtils
         try
         {
             Class expanderClass = Class.forName(expanderClassName);
-            Object instance = expanderClass.newInstance();
-            return (QueryExpander) instance;
+            QueryExpander instance = (QueryExpander)expanderClass.newInstance();
+            instance.configure(config);
+            return instance;
         }
         catch (ClassNotFoundException e)
         {

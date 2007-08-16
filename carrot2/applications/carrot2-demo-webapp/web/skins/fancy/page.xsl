@@ -31,19 +31,17 @@
   <xsl:template name="body-insert">
     <script type="text/javascript" src="{$skinuri}/js/yui/yahoo-dom-event.js" ></script>
     <script type="text/javascript" src="{$skinuri}/js/yui/dragdrop-min.js" ></script>
-    <script type="text/javascript" src="{$skinuri}/js/DDTab.js" ></script>
-    <script type="text/javascript" src="{$skinuri}/js/SearchTab.js" ></script>
-    <script type="text/javascript" src="{$skinuri}/js/SearchTabModel.js" ></script>
-    <script type="text/javascript" src="{$skinuri}/js/SearchTabView.js" ></script>
     <script type="text/javascript" src="{$skinuri}/js/SearchTabController.js" ></script>
-    <script type="text/javascript" src="{$skinuri}/js/DOM.js" ></script>
-    <script type="text/javascript" src="{$skinuri}/js/Cookies.js" ></script>
+    <script type="text/javascript" src="{$skinuri}/js/Utils.js" ></script>
 
     <script type="text/javascript">
 var query = "<xsl:value-of select="$query" />";
 var userTabIds = "<xsl:apply-templates select="/page/meta/user-tabs/user-tab" mode="tab-ids" />";
 var selectedTabId = "<xsl:value-of select="/page/meta/user-tabs/user-tab[@selected]/@id" />";
 var allTabIds = "<xsl:apply-templates select="/page/meta/tabs/tab" mode="tab-ids" />";
+
+var facetTabIds = "<xsl:apply-templates select="/page/meta/facet-tabs/facet-tab" mode="tab-ids" />";
+var selectedFacetTabId = "<xsl:value-of select="/page/meta/facet-tabs/facet-tab[@selected]/@id" />";
     </script>
 
     <script type="text/javascript" src="{$skinuri}/js/Carrot2App.js" ></script>
@@ -55,6 +53,7 @@ YAHOO.util.Event.addListener(window, "load", c2AppInit, stc, true);
 
   <xsl:template match="user-tab" mode="tab-ids"><xsl:value-of select="@id" />:</xsl:template>
   <xsl:template match="tab" mode="tab-ids"><xsl:value-of select="@id" />:</xsl:template>
+  <xsl:template match="facet-tab" mode="tab-ids"><xsl:value-of select="@id" />:</xsl:template>
 
   <!-- end of customization block -->
 
@@ -136,11 +135,11 @@ YAHOO.util.Event.addListener(window, "load", c2AppInit, stc, true);
 
       <xsl:call-template name="iframes" />
 
-			<tr id="more-row" style="display: none">
+      <tr id="more-row" style="display: none">
         <td class="active-area" style="height: 100%; width: 100%; vertical-align: top; padding-left: 130px">
-					<xsl:call-template name="hidden-tabs" />
-				</td>
-			</tr>
+          <xsl:call-template name="hidden-tabs" />
+        </td>
+      </tr>
 
       <xsl:if test="$show-results-page-footer = 'true'">
         <tr>
@@ -200,7 +199,7 @@ YAHOO.util.Event.addListener(window, "load", c2AppInit, stc, true);
              </tr>
              <tr>
                <td class="vb l"></td>
-               <td class="c sb"><input type="submit" class="search-button" value="{strings/search}"
+               <td class="c sb"><input type="submit" class="search-button" value="{/page/meta/strings/search}"
                  onmouseover="this.className = 'search-button hl'"
                  onmouseout="this.className='search-button'" /></td>
                <td class="vb r"></td>
@@ -214,8 +213,8 @@ YAHOO.util.Event.addListener(window, "load", c2AppInit, stc, true);
          </td>
          <xsl:if test="$show-options = 'true'">
            <td style="padding-left: 1px; font-size: 8pt; line-height: 115%">
-             <span id="sim-switch" style="{$optsShown}"><span class="blue link" id="hide-advanced">Hide<br/>options</span></span>
-             <span id="adv-switch" style="{$optsHidden}"><span class="blue link" id="show-advanced">Show<br/>options</span></span>
+             <span id="sim-switch" style="{$optsShown}"><span class="blue link" id="hide-advanced"><xsl:value-of select="/page/meta/strings/hide-options.line-1" /><br/><xsl:value-of select="/page/meta/strings/hide-options.line-2" /></span></span>
+             <span id="adv-switch" style="{$optsHidden}"><span class="blue link" id="show-advanced"><xsl:value-of select="/page/meta/strings/show-options.line-1" /><br/><xsl:value-of select="/page/meta/strings/show-options.line-2" /></span></span>
            </td>
          </xsl:if>
        </tr>
@@ -224,12 +223,12 @@ YAHOO.util.Event.addListener(window, "load", c2AppInit, stc, true);
          <tr id="adv-opts" style="{$optsShown}">
            <td style="text-align: right; padding-right: 1px; padding-top: 4px; padding-bottom: 4px;">
              <!-- search results size -->
-             <label class="inline-cb-label" for="res-sel">Download</label>
+             <label class="inline-cb-label" for="res-sel"><xsl:value-of select="/page/meta/strings/download-results.prefix" /></label>
              <select id="res-sel" name="{query-sizes/@form-element}">
              <xsl:for-each select="query-sizes/size">
                  <option value="{@id}">
                      <xsl:if test="@selected"><xsl:copy-of select="@selected" /></xsl:if>
-                     <xsl:value-of select="text()" /> results</option>
+                     <xsl:value-of select="text()" /> <xsl:value-of select="/page/meta/strings/download-results.suffix" /></option>
              </xsl:for-each>
              </select>
 
@@ -303,6 +302,44 @@ YAHOO.util.Event.addListener(window, "load", c2AppInit, stc, true);
 
         <xsl:call-template name="more-tab" />
         <td class="tab-passive-lead-out"><img alt="" width="17" height="1" /></td>
+      </tr>
+    </table>
+  </xsl:template>
+
+  <xsl:template name="facet-tabs">
+    <table style="position: absolute; margin-top: -0px; margin-left: -0px">
+      <tr id="facet-tabs">
+        <xsl:for-each select="/page/meta/facet-tabs/facet-tab">
+          <xsl:variable name="id"><xsl:value-of select="@id" /></xsl:variable>
+          <xsl:variable name="status">
+            <xsl:choose><xsl:when test="@selected">active</xsl:when><xsl:otherwise>passive</xsl:otherwise></xsl:choose>
+          </xsl:variable>
+          
+          <xsl:variable name="nextstatus">
+            <xsl:choose>
+              <xsl:when test="following-sibling::facet-tab[position() = 1]/@selected">active</xsl:when>
+              <xsl:otherwise>passive</xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
+
+          <xsl:if test="position() = 1">
+            <td class="ftab-{$status}-lead-in"><img alt="" width="6" height="1" /></td>
+          </xsl:if>
+
+          <td class="ftab-{$status}-body" title="{title}" id="{@id}-td">
+            <div id="{@id}"><xsl:apply-templates select="short" /></div>
+          </td>
+
+          <xsl:choose>
+            <xsl:when test="position() = last()">
+              <td class="ftab-{$status}-lead-out"><img alt="" width="10" height="1" /></td>
+            </xsl:when>
+
+            <xsl:otherwise>
+              <td class="ftab-{$status}-{$nextstatus}-link"><img alt="" width="10" height="1" /></td>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:for-each>
       </tr>
     </table>
   </xsl:template>
@@ -384,24 +421,24 @@ YAHOO.util.Event.addListener(window, "load", c2AppInit, stc, true);
             </xsl:if>
           </input>
           <div id="{@id}-h-link">
-	          <div id="{@id}-h" class="tab-content">
-	            <span class="arrow">&#160;</span>
-	            <span class="tab-link active">
-	              <xsl:if test="property[@key = 'tab.accel']">
-	                <xsl:attribute name="accesskey"><xsl:value-of select="property[@key = 'tab.accel']" /></xsl:attribute>
-	              </xsl:if>
-	              <xsl:choose>
-	                <xsl:when test="property[@key = 'tab.icon']">
-	                  <img class="tab-img" src="{$skinuri}/inputs/{property[@key = 'tab.icon']}" alt="{property[@key = 'tab.name']}" />
-	                </xsl:when>
-	                <xsl:otherwise>
-	                  <img class="tab-img" src="{$skinuri}/inputs/unknown.gif" alt="{property[@key = 'tab.name']}" />
-	                </xsl:otherwise>
-	              </xsl:choose>
-	              <span>&#160;&#160;</span><xsl:apply-templates select="short" /></span>
-						  <span class="hidden-long-desc"><xsl:apply-templates select="long" /></span>
-	          </div>
-	        </div>
+            <div id="{@id}-h" class="tab-content">
+              <span class="arrow">&#160;</span>
+              <span class="tab-link active">
+                <xsl:if test="property[@key = 'tab.accel']">
+                  <xsl:attribute name="accesskey"><xsl:value-of select="property[@key = 'tab.accel']" /></xsl:attribute>
+                </xsl:if>
+                <xsl:choose>
+                  <xsl:when test="property[@key = 'tab.icon']">
+                    <img class="tab-img" src="{$skinuri}/inputs/{property[@key = 'tab.icon']}" alt="{property[@key = 'tab.name']}" />
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <img class="tab-img" src="{$skinuri}/inputs/unknown.gif" alt="{property[@key = 'tab.name']}" />
+                  </xsl:otherwise>
+                </xsl:choose>
+                <span>&#160;&#160;</span><xsl:apply-templates select="short" /></span>
+              <span class="hidden-long-desc"><xsl:apply-templates select="long" /></span>
+            </div>
+          </div>
         </div>
       </xsl:for-each>
     </div>
@@ -411,6 +448,7 @@ YAHOO.util.Event.addListener(window, "load", c2AppInit, stc, true);
   <xsl:template name="iframes">
     <tr id="res-row">
       <td class="active-area" style="padding: 10px; height: 100%; width: 100%">
+<!--        <xsl:call-template name="facet-tabs" /> -->
         <table class="glow glow-small" style="background-color: white; height: 100%; width: 100%">
           <tr>
             <td class="cs tl"></td>
@@ -425,10 +463,11 @@ YAHOO.util.Event.addListener(window, "load", c2AppInit, stc, true);
                   <td style="padding: 3px; width: 260px; border-right: 1px dotted #808080; height: 100%">
                     <xsl:if test="$show-progress = 'true'">
                       <div id="clusters-progress">
-                        <img alt="..." src="{$skinuri}/img/progress.gif" style="position: relative; top: 0.5ex;"/> Loading...
+                        <img alt="..." src="{$skinuri}/img/progress.gif" style="position: relative; top: 0.5ex;"/>&#160;<xsl:value-of select="/page/meta/strings/loading" />
                       </div>
                     </xsl:if>
-                    <iframe id="clustersif" name="clusters" frameborder="no" height="100%" width="100%" style="border: 0">
+
+                    <iframe id="clustersif" name="clusters" frameborder="no" height="100%" width="100%" style="border: 0;">
                       <xsl:if test="$init-from-url != 'true'">
                         <xsl:attribute name="src"><xsl:value-of select="concat($contextPath,$search-servlet,'?',/page/meta/action-urls/query-clusters)" /></xsl:attribute>
                       </xsl:if>
@@ -438,7 +477,7 @@ YAHOO.util.Event.addListener(window, "load", c2AppInit, stc, true);
                   <td style="padding: 3px; height: 100%">
                     <xsl:if test="$show-progress = 'true'">
                       <div id="docs-progress">
-                        <img alt="..." src="{$skinuri}/img/progress.gif" style="position: relative; top: 0.5ex;"/> Loading...
+                        <img alt="..." src="{$skinuri}/img/progress.gif" style="position: relative; top: 0.5ex;"/>&#160;<xsl:value-of select="/page/meta/strings/loading" />
                       </div>
                     </xsl:if>
                     <iframe id="documentsif" name="documents" frameborder="no" height="100%" width="100%" style="border: 0">
@@ -493,7 +532,15 @@ YAHOO.util.Event.addListener(window, "load", c2AppInit, stc, true);
                      "/img/tab-passive-active-link.gif",
                      "/img/tab-passive-lead-in.gif",
                      "/img/tab-passive-lead-out.gif",
-                     "/img/tab-passive-passive-link.gif" ];
+                     "/img/tab-passive-passive-link.gif", 
+                     "/img/ftab-active-lead-in.gif",
+                     "/img/ftab-active-lead-out.gif",
+                     "/img/ftab-active-passive-link.gif",
+                     "/img/ftab-passive-active-link.gif",
+                     "/img/ftab-passive-lead-in.gif",
+                     "/img/ftab-passive-lead-out.gif",
+                     "/img/ftab-passive-passive-link.gif" 
+                     ];
       for (i = 0; i &lt; preload.length; i++) {
           var img = new Image();
           img.src = skinuri + preload[i];

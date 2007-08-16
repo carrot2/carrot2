@@ -77,7 +77,7 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
                 "<body style=\"height: 100%;\">\r\n" +
                 "<script type=\"text/javascript\" src=\"" + base + "/js/yui/yahoo-dom-event.js\" ></script>" +
                 "<script type=\"text/javascript\" src=\"" + base + "/js/Documents.js\" ></script>" +
-                "<script type=\"text/javascript\" src=\"" + base + "/js/DOM.js\" ></script>" +
+                "<script type=\"text/javascript\" src=\"" + base + "/js/Utils.js\" ></script>" +
                 "<script type=\"text/javascript\">\n" +
                 "YAHOO.util.Event.addListener(window, \"load\", init);\n" +
                 "</script>\n" +
