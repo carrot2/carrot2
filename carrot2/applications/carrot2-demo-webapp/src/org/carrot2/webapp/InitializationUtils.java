@@ -329,7 +329,7 @@ final public class InitializationUtils
     {
         String locale = getLocalizationString(config);
 
-        return ResourceBundle.getBundle("messages", new Locale(locale, "DE", "WMC"), Thread
+        return ResourceBundle.getBundle("messages", new Locale(locale), Thread
             .currentThread().getContextClassLoader());
     }
 
