@@ -55,6 +55,7 @@ public final class Constants {
     public static final String RB_SHOW_ALL_CLUSTERS = "show-all-clusters";
     public static final String RB_ALWAYS_SHOW_ALL_CLUSTERS = "always-show-all-clusters";
     public static final String RB_SAVED = "saved";
+    public static final String RB_ALL_RESULTS = "all-results";
 
     // Cookies
     public static final String COOKIE_DD_TIP = "dd-tip";

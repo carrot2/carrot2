@@ -34,14 +34,16 @@ public class XMLPageSerializer implements PageSerializer
     private final String contextPath;
     private final String releaseInfo;
     private final ResourceBundle messages;
+    private final String localization;
 
     public XMLPageSerializer(String contextPath, String stylesheetsBase,
-        String releaseInfo, ResourceBundle messages)
+        String releaseInfo, ResourceBundle messages, String localization)
     {
         this.contextPath = contextPath;
         this.skinBase = stylesheetsBase;
         this.releaseInfo = releaseInfo;
         this.messages = messages;
+        this.localization = localization;
     }
 
     public String getContentType()
@@ -204,6 +206,19 @@ public class XMLPageSerializer implements PageSerializer
             }
         }
 
+        // Emit facet options
+        final Element facets = meta.addElement("facet-tabs");
+        Element facetTab1 = facets.addElement("facet-tab");
+        facetTab1.addAttribute("id", "topics");
+        facetTab1.addAttribute("selected", "true");
+        facetTab1.addElement("short").setText("Topics");
+        Element facetTab2 = facets.addElement("facet-tab");
+        facetTab2.addAttribute("id", "domains");
+        facetTab2.addElement("short").setText("Domains");
+        Element facetTab3 = facets.addElement("facet-tab");
+        facetTab3.addAttribute("id", "urls");
+        facetTab3.addElement("short").setText("URLs");
+        
         // Emit allowed search sizes.
         final Element qsizes = meta.addElement("query-sizes");
         final int [] allowedInputSizes = searchSettings.getAllowedInputSizes();
@@ -290,6 +305,7 @@ public class XMLPageSerializer implements PageSerializer
     private void emitMessageStrings(final Element meta)
     {
         final Element strings = meta.addElement("strings");
+        strings.addAttribute("lang", localization);
         for (Enumeration it = messages.getKeys(); it.hasMoreElements();)
         {
             String key = (String) it.nextElement();

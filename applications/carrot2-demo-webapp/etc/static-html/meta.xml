@@ -124,6 +124,11 @@
         </example-queries>
       </tab>
     </tabs>
+    <user-tabs>
+      <user-tab id="Yahoo!" selected="true" />
+      <user-tab id="Google" />
+      <user-tab id="MSN" />
+    </user-tabs>
     <algorithms form-element="alg">
       <alg id="FuzzyAnts (+English)">
         <short>FuzzyAnts (+English)</short>
@@ -154,6 +159,17 @@
         <long>Suffix Tree Clustering Algorithm</long>
       </alg>
     </algorithms>
+    <facet-tabs>
+      <facet-tab id="topics">
+        <short>Topics</short>
+      </facet-tab>
+      <facet-tab id="domains">
+        <short>Domains</short>
+      </facet-tab>
+      <facet-tab id="sources" selected="true">
+        <short>Sources</short>
+      </facet-tab>
+    </facet-tabs>
     <query-sizes form-element="s">
       <size id="50">50</size>
       <size id="100" selected="selected">100</size>

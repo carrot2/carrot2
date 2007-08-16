@@ -2,8 +2,7 @@ var COOKIE_DD_TIP = "dd-tip";
 var COOKIE_TAB_ORDER = "tab-order";
 var COOKIE_ACTIVE_TAB = "active-tab";
 
-// Initialize tab model
-var tabModel = new SearchTabModel();
+// Initialize search tab model
 
 var cookieUserTabIds = Cookies.readCookie(COOKIE_TAB_ORDER);
 var cookieActiveTabId = Cookies.readCookie(COOKIE_ACTIVE_TAB);
@@ -11,17 +10,8 @@ var cookieActiveTabId = Cookies.readCookie(COOKIE_ACTIVE_TAB);
 var actualUserTabIds = cookieUserTabIds || userTabIds;
 var actualActiveTabId = cookieActiveTabId || selectedTabId;
 
-var split = actualUserTabIds.split(":");
-var i = 0;
-for (i = 0; i < split.length; i++) {
-  if (split[i].length > 0) {
-    tabModel.tabs[i] = new SearchTab(split[i]);
-    if (split[i] == selectedTabId) {
-      tabModel.activeTab = tabModel.tabs[i];
-    }
-  }
-}
-tabModel.tabs[tabModel.tabs.length] = new SearchTab('-more', true);
+var tabModel = new TabModel(actualUserTabIds, actualActiveTabId);
+tabModel.tabs[tabModel.tabs.length] = new Tab('-more', true);
 
 if (!tabModel.activeTab) {
   tabModel.activeTab = tabModel.tabs[0];
@@ -31,22 +21,30 @@ if (!tabModel.activeTab) {
 split = allTabIds.split(":");
 for (i = 0; i < split.length; i++) {
   if (split[i].length > 0) {
-    tabModel.allTabs[i] = new SearchTab(split[i]);
+    tabModel.allTabs[i] = new Tab(split[i]);
   }
 }
 
 var tabView = new SearchTabView(tabModel);
-
 var stc = new SearchTabController(tabModel, tabView,
                                   beforeSearchTabDeactivate,
                                   afterSearchTabActivate,
                                   afterSearchTabRemoveAdd,
                                   afterSearchTabRemoveAdd,
                                   afterSearchTabSwap);
+
+// Initialize facet tab model
+var facetTabModel = new TabModel(facetTabIds, selectedFacetTabId);
+var facetTabView = new SimpleTabView("facet-tabs", "f", facetTabModel);
+
+var ftc = new SimpleTabController("facet-tabs", 
+                                  facetTabModel, facetTabView);
+
 function c2AppInit()
 {
   // Drag&drop init
   stc.init();
+  ftc.init();
 
   // Various links
   YAHOO.util.Event.addListener("hide-advanced", "click", hideAdvancedClickListener);
@@ -191,3 +189,4 @@ function afterDocsLoaded(inputTime)
     }
   }
 }
+

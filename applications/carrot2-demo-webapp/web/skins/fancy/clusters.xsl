@@ -17,8 +17,7 @@
 <xsl:text disable-output-escaping="yes">&lt;![endif]--&gt;</xsl:text>
     <script type="text/javascript" src="{$skinuri}/js/yui/yahoo-dom-event.js" ></script>
     <script type="text/javascript" src="{$skinuri}/js/yui/history-experimental-min.js" ></script>
-    <script type="text/javascript" src="{$skinuri}/js/DOM.js" ></script>
-    <script type="text/javascript" src="{$skinuri}/js/Cookies.js" ></script>
+    <script type="text/javascript" src="{$skinuri}/js/Utils.js" ></script>
     <script type="text/javascript" src="{$skinuri}/js/Clusters.js"></script>
     <script type="text/javascript">
 initHistory();
@@ -53,7 +52,7 @@ YAHOO.util.Event.addListener(window, "load", init);
           <td><img src="{$skinuri}/img/folder.gif" class="f" alt="..." /></td>
           <td class="text hl" style="padding-top: 0" colspan="2" id="ttop">
             <span class="group" id="top-link"><span class="label"><span class="text">
-            All results</span>&#160;<span class="size">(<xsl:value-of select="@totalResultsCount" />)</span></span></span>
+            <xsl:value-of select="/searchresult/strings/all-results" /></span>&#160;<span class="size">(<xsl:value-of select="@totalResultsCount" />)</span></span></span>
           </td>
         </tr>
 

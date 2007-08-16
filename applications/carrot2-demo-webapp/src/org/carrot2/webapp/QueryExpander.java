@@ -14,6 +14,8 @@ package org.carrot2.webapp;
 
 import java.util.Map;
 
+import javax.servlet.ServletConfig;
+
 /**
  * A facility for performing query expansion.
  *
@@ -21,6 +23,11 @@ import java.util.Map;
  */
 public interface QueryExpander
 {
+    /**
+     * Configures this query expander.
+     */
+    public void configure(ServletConfig config);
+    
     /**
      * Returns query after expansion. If the the query expansion mechanism is unable to
      * add anything to the original query, <code>null</code> should be returned.

@@ -333,12 +333,11 @@ public class XMLClustersSerializer implements RawClustersSerializer {
     private void emitMessageStrings(Writer writer) throws IOException
     {
         writer.write("<strings>");
-        emitMessageString(writer, Constants.RB_OTHER_TOPICS);
-        emitMessageString(writer, Constants.RB_SHOW_ALL_CLUSTERS);
-        emitMessageString(writer, Constants.RB_MORE_CLUSTERS);
-        emitMessageString(writer, Constants.RB_NO_CLUSTERS_CREATED);
-        emitMessageString(writer, Constants.RB_ALWAYS_SHOW_ALL_CLUSTERS);
-        emitMessageString(writer, Constants.RB_SAVED);
+        for (Enumeration it = messages.getKeys(); it.hasMoreElements();)
+        {
+            String key = (String) it.nextElement();
+            emitMessageString(writer, key);
+        }
         writer.write("</strings>");
     }
 

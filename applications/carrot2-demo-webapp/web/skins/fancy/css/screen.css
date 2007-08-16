@@ -99,6 +99,101 @@ body {
   width: 17px;
 }
 
+/* Facet Tabs */
+
+.ftab-active-lead-in {
+  background-color: #f6f4ec;
+  background-image: url('../img/ftab-active-lead-in.gif');
+  background-repeat: no-repeat;
+  height: 23px;
+  width: 6px;
+}
+
+.ftab-passive-lead-in {
+  background-color: #f6f4ec;
+  background-image: url('../img/ftab-passive-lead-in.gif');
+  background-repeat: no-repeat;
+  height: 23px;
+  width: 6px;
+}
+
+.ftab-active-body {
+  background-color: #f6f4ec;
+  background-image: url('../img/ftab-active-body.gif');
+  background-repeat: repeat-x;
+  height: 23px;
+  font-size: 11px;
+  font-weight: bold;
+  color: #404040;
+  vertical-align: middle;
+  padding-top: 3px;
+  padding-right: 1px;
+  padding-left: 1px;
+}
+
+* html .ftab-active-body {
+  height: 20px;
+}
+
+.ftab-passive-body {
+  cursor: pointer;
+  background-color: #f6f4ec;
+  background-image: url('../img/ftab-passive-body.gif');
+  background-repeat: repeat-x;
+  height: 23px;
+  font-size: 11px;
+  font-weight: bold;
+  color: #94938F;
+  vertical-align: middle;
+  padding-top: 3px;
+  padding-right: 1px;
+  padding-left: 1px;
+}
+
+* html .ftab-passive-body {
+  height: 20px;
+}
+
+.ftab-active-passive-link {
+  background-color: #f6f4ec;
+  background-image: url('../img/ftab-active-passive-link.gif');
+  background-repeat: no-repeat;
+  height: 23px;
+  width: 11px;
+}
+
+.ftab-passive-active-link {
+  background-color: #f6f4ec;
+  background-image: url('../img/ftab-passive-active-link.gif');
+  background-repeat: no-repeat;
+  height: 23px;
+  width: 11px;
+}
+
+.ftab-passive-passive-link {
+  background-color: #f6f4ec;
+  background-image: url('../img/ftab-passive-passive-link.gif');
+  background-repeat: no-repeat;
+  height: 23px;
+  width: 11px;
+}
+
+.ftab-active-lead-out {
+  background-color: #f6f4ec;
+  background-image: url('../img/ftab-active-lead-out.gif');
+  background-repeat: no-repeat;
+  height: 23px;
+  width: 10px;
+}
+
+.ftab-passive-lead-out {
+  background-color: #f6f4ec;
+  background-image: url('../img/ftab-passive-lead-out.gif');
+  background-repeat: no-repeat;
+  height: 23px;
+  width: 10px;
+}
+
 img.tab-img {
   vertical-align: middle;
   padding-right: 2px;
@@ -282,6 +377,11 @@ input.search-field {
   width: 300px;
   border: 0;
   background: white;
+}
+
+input.checkbox {
+  position: relative;
+  top: 0.25ex;
 }
 
 td.sb {
