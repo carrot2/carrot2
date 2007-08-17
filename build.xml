@@ -386,6 +386,7 @@ TESTING: @{component.path}
     <component-apply component.path="components/carrot2-filter-haog" />
     <component-apply component.path="components/carrot2-filter-stc" />
     <component-apply component.path="components/carrot2-filter-trc" />
+    <component-apply component.path="components/carrot2-filter-facets" />
   </target>
 
 
