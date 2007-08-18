@@ -4,7 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-ant-extensions"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-clustering-benchmark"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-demo-api-example"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-demo-browser"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-demo-dcs"/>
