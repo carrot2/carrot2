@@ -38,7 +38,8 @@ var facetTabModel = new TabModel(facetTabIds, selectedFacetTabId);
 var facetTabView = new SimpleTabView("facet-tabs", "f", facetTabModel);
 
 var ftc = new SimpleTabController("facet-tabs", 
-                                  facetTabModel, facetTabView);
+                                  facetTabModel, facetTabView,
+                                  null, afterFacetTabActivate);
 
 function c2AppInit()
 {
@@ -166,6 +167,8 @@ function storeTabOrder()
   Cookies.createCookieForever(COOKIE_TAB_ORDER, selectedTabs);
 }
 
+var selectTopCluster = false;
+
 function afterClustersLoaded(clusteringTime)
 {
   Dom.hide("clusters-progress");
@@ -175,6 +178,10 @@ function afterClustersLoaded(clusteringTime)
       holder.innerHTML = clusteringTime;
       Dom.show("ctime");
     }
+  }
+  if (selectTopCluster) {
+    window.clusters.topClusterClicked();
+    selectTopCluster = false;
   }
 }
 
@@ -190,3 +197,10 @@ function afterDocsLoaded(inputTime)
   }
 }
 
+function afterFacetTabActivate(tab)
+{
+  var newUri = facetTabUris[tab.id];
+  Dom.show("clusters-progress");
+  document.getElementById("clustersif").src = newUri;
+  selectTopCluster = true;
+}

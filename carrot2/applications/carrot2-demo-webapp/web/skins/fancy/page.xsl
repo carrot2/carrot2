@@ -42,6 +42,10 @@ var allTabIds = "<xsl:apply-templates select="/page/meta/tabs/tab" mode="tab-ids
 
 var facetTabIds = "<xsl:apply-templates select="/page/meta/facet-tabs/facet-tab" mode="tab-ids" />";
 var selectedFacetTabId = "<xsl:value-of select="/page/meta/facet-tabs/facet-tab[@selected]/@id" />";
+var facetTabUris = new Array();
+    <xsl:for-each select="/page/meta/facet-tabs/facet-tab">
+facetTabUris["<xsl:value-of select="short" />"] = "<xsl:value-of select="concat($contextPath, $search-servlet, '?', @uri)" />"; 
+    </xsl:for-each>
     </script>
 
     <script type="text/javascript" src="{$skinuri}/js/Carrot2App.js" ></script>
@@ -448,7 +452,12 @@ YAHOO.util.Event.addListener(window, "load", c2AppInit, stc, true);
   <xsl:template name="iframes">
     <tr id="res-row">
       <td class="active-area" style="padding: 10px; height: 100%; width: 100%">
-<!--        <xsl:call-template name="facet-tabs" /> -->
+        <xsl:call-template name="facet-tabs" />
+        <xsl:if test="$show-progress = 'true'">
+          <div id="clusters-progress">
+            <img alt="..." src="{$skinuri}/img/progress.gif" style="position: relative; top: 0.5ex;"/>&#160;<xsl:value-of select="/page/meta/strings/loading" />
+          </div>
+        </xsl:if>
         <table class="glow glow-small" style="background-color: white; height: 100%; width: 100%">
           <tr>
             <td class="cs tl"></td>
@@ -460,13 +469,10 @@ YAHOO.util.Event.addListener(window, "load", c2AppInit, stc, true);
             <td class="c" id="results-main-content" style="height: 100%">
               <table style="height: 100%; width: 100%">
                 <tr>
-                  <td style="padding: 3px; width: 260px; border-right: 1px dotted #808080; height: 100%">
-                    <xsl:if test="$show-progress = 'true'">
-                      <div id="clusters-progress">
-                        <img alt="..." src="{$skinuri}/img/progress.gif" style="position: relative; top: 0.5ex;"/>&#160;<xsl:value-of select="/page/meta/strings/loading" />
-                      </div>
+                  <td id="clusterstd">
+                    <xsl:if test="count(/page/meta/facet-tabs/facet-tab) &gt; 1">
+                      <xsl:attribute name="style">padding-top: 25px</xsl:attribute>
                     </xsl:if>
-
                     <iframe id="clustersif" name="clusters" frameborder="no" height="100%" width="100%" style="border: 0;">
                       <xsl:if test="$init-from-url != 'true'">
                         <xsl:attribute name="src"><xsl:value-of select="concat($contextPath,$search-servlet,'?',/page/meta/action-urls/query-clusters)" /></xsl:attribute>

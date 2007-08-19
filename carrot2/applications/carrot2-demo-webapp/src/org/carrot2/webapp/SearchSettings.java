@@ -28,10 +28,12 @@ public final class SearchSettings {
 
     /** An array of {@link TabAlgorithm}s */
     final ArrayList algorithms = new ArrayList();
+    final ArrayList facets = new ArrayList();
 
     /** Lookup indexes for input tabs and algorithms. */
     final Map inputTabsIndex = new HashMap();
     final Map algorithmsIndex = new HashMap();
+    final Map facetsIndex = new HashMap();
 
     /** Allowed input sizes */
     int [] allowedInputSizes;
@@ -44,6 +46,9 @@ public final class SearchSettings {
 
     /** Default algorithm index. */
     private int defaultAlgorithmIndex;
+    
+    /** Facet index corresponding to "by Topics" */
+    private int topicsFacetIndex;
 
     /**
      * Adds a search tab to the list of available tabs.
@@ -56,9 +61,17 @@ public final class SearchSettings {
     /**
      * Adds an algorithm to the settings.
      */
-    public void add(TabAlgorithm algorithm) {
+    public void addAlgorithm(TabAlgorithm algorithm) {
         this.algorithmsIndex.put(algorithm.getShortName(), new Integer(algorithms.size()));
         this.algorithms.add(algorithm);
+    } 
+    
+    /**
+     * Adds a facet generation algorithm to the settings.
+     */
+    public void addFacet(TabAlgorithm facet) {
+        this.facetsIndex.put(facet.getShortName(), new Integer(facets.size()));
+        this.facets.add(facet);
     } 
     
     /**
@@ -92,6 +105,10 @@ public final class SearchSettings {
         return defaultAlgorithmIndex;
     }
 
+    protected int getTopicsFacetIndex() {
+        return topicsFacetIndex;
+    }
+    
     /**
      * Default input size index.
      */
@@ -135,6 +152,10 @@ public final class SearchSettings {
         return this.algorithms;
     }
 
+    public List getFacets() {
+        return this.facets;
+    }
+    
     public int[] getAllowedInputSizes() {
         return this.allowedInputSizes;
     }
@@ -151,5 +172,13 @@ public final class SearchSettings {
             throw new IllegalArgumentException();
         }
         this.defaultAlgorithmIndex = defaultAlgorithmIndex;
+    }
+    
+    public void setTopicsFacetIndex(int topicsFacetIndex)
+    {
+        if (topicsFacetIndex < 0 || topicsFacetIndex > this.facets.size()) {
+            throw new IllegalArgumentException();
+        }
+        this.topicsFacetIndex = topicsFacetIndex;
     }
 }
