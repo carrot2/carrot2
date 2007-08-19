@@ -38,6 +38,9 @@ public final class SearchRequest {
     /** Algorithm index */
     public final int algorithmIndex;
 
+    /** Facet generator index */
+    public final int facetIndex;
+    
     /** Requested input size index. */
     public final int inputSizeIndex;
 
@@ -107,7 +110,10 @@ public final class SearchRequest {
         // Parse the algorithm
         this.algorithmIndex = lookupIndex(searchSettings.algorithmsIndex, extract(parameterMap, QueryProcessorServlet.PARAM_ALG),
                 searchSettings.getDefaultAlgorithm());
-
+        
+        this.facetIndex = lookupIndex(searchSettings.facetsIndex, extract(parameterMap,
+            QueryProcessorServlet.PARAM_FACET), searchSettings.getTopicsFacetIndex());
+        
         // Parse the input size
         final String value = extract(parameterMap, QueryProcessorServlet.PARAM_SIZE);
         int tmp = searchSettings.getDefaultInputSizeIndex();
@@ -170,6 +176,21 @@ public final class SearchRequest {
         return (TabAlgorithm) searchSettings.algorithms.get(algorithmIndex);
     }
 
+    public TabAlgorithm getFacet() {
+        return (TabAlgorithm) searchSettings.facets.get(facetIndex);
+    }
+    
+    public TabAlgorithm getAlgorithmOrFacet() {
+        if (facetIndex == searchSettings.getTopicsFacetIndex())
+        {
+            return getAlgorithm();
+        }
+        else
+        {
+            return getFacet();
+        }
+    }
+    
     public int getInputSize() {
         return searchSettings.allowedInputSizes[inputSizeIndex];
     }

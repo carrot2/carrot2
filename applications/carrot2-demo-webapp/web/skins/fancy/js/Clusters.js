@@ -377,7 +377,7 @@ function scrollToCluster(id)
   window.scrollBy(0, -25);
 }
 
-function selectCluster(id, showAll)
+function selectCluster(id, showAllParam)
 {
   if (id == "" || currentClusterId == id) {
     return;
@@ -393,7 +393,7 @@ function selectCluster(id, showAll)
   {
     if (highlightCluster(id))
     {
-      if (showAll)
+      if (showAllParam)
       {
         showAllClusters(true);
       }

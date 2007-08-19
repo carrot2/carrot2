@@ -101,18 +101,22 @@ public class XMLPageSerializer implements PageSerializer
 
         // Emit action URLs
         final Element actionUrls = meta.addElement("action-urls");
-        final String uri = QueryProcessorServlet.PARAM_Q + "="
+        final String baseUri = QueryProcessorServlet.PARAM_Q + "="
             + URLEncoding.encode(searchRequest.query, "UTF-8") + "&"
             + QueryProcessorServlet.PARAM_INPUT + "="
             + URLEncoding.encode(searchRequest.getInputTab().getShortName(), "UTF-8")
             + "&" + QueryProcessorServlet.PARAM_ALG + "="
             + URLEncoding.encode(searchRequest.getAlgorithm().getShortName(), "UTF-8")
             + "&" + QueryProcessorServlet.PARAM_SIZE + "=" + searchRequest.getInputSize();
-        String queryStringExtension = getQueryStringExtension(searchRequest);
+        final String queryStringExtension = getQueryStringExtension(searchRequest);
+        final String facetUriPart = createFacetUriPart(searchRequest.getFacet()
+            .getShortName());
+        final String clustersUriBase = baseUri + queryStringExtension + "&type=c";
+        
         actionUrls.addElement("query-docs").setText(
-            uri + queryStringExtension + "&type=d");
+            baseUri + queryStringExtension + "&type=d");
         actionUrls.addElement("query-clusters").setText(
-            uri + queryStringExtension + "&type=c");
+            clustersUriBase + facetUriPart);
 
         // Emit interface strings, TODO: depending on the input locale?
         emitMessageStrings(meta);
@@ -207,17 +211,22 @@ public class XMLPageSerializer implements PageSerializer
         }
 
         // Emit facet options
-        final Element facets = meta.addElement("facet-tabs");
-        Element facetTab1 = facets.addElement("facet-tab");
-        facetTab1.addAttribute("id", "topics");
-        facetTab1.addAttribute("selected", "true");
-        facetTab1.addElement("short").setText("Topics");
-        Element facetTab2 = facets.addElement("facet-tab");
-        facetTab2.addAttribute("id", "domains");
-        facetTab2.addElement("short").setText("Domains");
-        Element facetTab3 = facets.addElement("facet-tab");
-        facetTab3.addAttribute("id", "urls");
-        facetTab3.addElement("short").setText("URLs");
+        final Element facetsElement = meta.addElement("facet-tabs");
+        final List facetsList = searchSettings.getFacets();
+        final int maxFacet = facetsList.size();
+        for (int i = 0; i < maxFacet; i++)
+        {
+            final TabAlgorithm facet = (TabAlgorithm) facetsList.get(i);
+            final Element facetElement = facetsElement.addElement("facet-tab");
+            facetElement.addAttribute("id", facet.getShortName());
+            facetElement.addAttribute("uri", clustersUriBase
+                + createFacetUriPart(facet.getShortName()));
+            if (searchRequest.facetIndex == i)
+            {
+                facetElement.addAttribute("selected", "selected");
+            }
+            facetElement.addElement("short").setText(facet.getShortName());
+        }
         
         // Emit allowed search sizes.
         final Element qsizes = meta.addElement("query-sizes");
@@ -257,6 +266,13 @@ public class XMLPageSerializer implements PageSerializer
         }
 
         return meta;
+    }
+
+    private String createFacetUriPart(final String facetName)
+        throws UnsupportedEncodingException
+    {
+        return "&" + QueryProcessorServlet.PARAM_FACET + "="
+            + URLEncoding.encode(facetName, "UTF-8");
     }
 
     private String getQueryStringExtension(SearchRequest searchRequest)

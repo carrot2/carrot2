@@ -32,6 +32,11 @@ SimpleTabController.prototype.tabClickListener = function (e, tab) {
   });
   var tabId = Dom.elementAt(td, 0).id;
   
+  if (tabId == this.controller.tabModel.activeTab.id)
+  {
+    return;
+  }
+  
   if (this.controller.beforeTabDeactivate) {
     this.controller.beforeTabDeactivate(this.controller.tabModel.activeTab);
   }

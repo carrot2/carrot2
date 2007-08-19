@@ -285,13 +285,21 @@ final public class InitializationUtils
                 return file.getName().startsWith("alg-");
             }
         };
+        final FileFilter facetFilter = new FileFilter()
+        {
+            public boolean accept(File file)
+            {
+                return file.getName().startsWith("facet-");
+            }
+        };
         final FileFilter componentFilter = new FileFilter()
         {
             private final FileFilter subFilter = helper.getComponentFilter();
 
             public boolean accept(File file)
             {
-                return this.subFilter.accept(file) && !file.getName().startsWith("alg-");
+                return this.subFilter.accept(file) && !file.getName().startsWith("alg-")
+                    && !file.getName().startsWith("facet-");
             }
         };
 
@@ -305,13 +313,27 @@ final public class InitializationUtils
                 final String shortName = processes[i].getProcess().getName();
                 final String description = processes[i].getProcess().getDescription();
                 final boolean defaultAlgorithm = "true".equals(processes[i].getAttributes().get("process.default"));
-                searchSettings.add(new TabAlgorithm(shortName, description));
+                searchSettings.addAlgorithm(new TabAlgorithm(shortName, description));
                 if (defaultAlgorithm)
                 {
                     searchSettings.setDefaultAlgorithmIndex(searchSettings.getAlgorithms().size() - 1);
                 }
                 controller.addProcess(shortName, processes[i].getProcess());
                 logger.info("Added algorithm: " + shortName);
+            }
+            
+            final LoadedProcess [] facets = helper.loadProcessesFromDir(algorithmScripts, facetFilter);
+            if (facets.length > 0) 
+            {
+                searchSettings.addFacet(new TabAlgorithm("Topics", ""));
+                searchSettings.setTopicsFacetIndex(0);
+                for (int i = 0; i < facets.length; i++)
+                {
+                    final String shortName = facets[i].getProcess().getName();
+                    searchSettings.addFacet(new TabAlgorithm(shortName, ""));
+                    controller.addProcess(shortName, facets[i].getProcess());
+                    logger.info("Added facet: " + shortName);
+                }
             }
         }
         catch (Exception e)

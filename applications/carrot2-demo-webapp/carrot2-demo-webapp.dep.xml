@@ -71,6 +71,7 @@
     <dependency name="carrot2-filter-fuzzyants" profile="demo" />
     <dependency name="carrot2-filter-trc" profile="demo" />
     <dependency name="carrot2-filter-haog" profile="demo" />
+    <dependency name="carrot2-filter-facets" profile="demo" />
 
     <dependency name="carrot2-stemmer-stempelator" profile="demo" />
     <dependency name="carrot2-filter-case-normalizer" profile="demo" />

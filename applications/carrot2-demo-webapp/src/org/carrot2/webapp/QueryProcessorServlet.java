@@ -60,6 +60,7 @@ public final class QueryProcessorServlet extends HttpServlet {
     public static final String PARAM_Q = "q";
     public static final String PARAM_INPUT = "in";
     public static final String PARAM_ALG = "alg";
+    public static final String PARAM_FACET = "f";
     public static final String PARAM_SIZE = "s";
     public static final String PARAM_XML_FEED_KEY = "xmlkey";
     public static final String PARAM_TYPE = "type";
@@ -366,7 +367,7 @@ public final class QueryProcessorServlet extends HttpServlet {
             SearchRequest searchRequest, HttpServletRequest request, HttpServletResponse response)
         throws IOException
     {
-        final TabAlgorithm algorithmTab = searchRequest.getAlgorithm();
+        final TabAlgorithm algorithmTab = searchRequest.getAlgorithmOrFacet();
         final String queryHash = searchRequest.getInputAndSizeHashCode();
         final Broadcaster bcaster;
 

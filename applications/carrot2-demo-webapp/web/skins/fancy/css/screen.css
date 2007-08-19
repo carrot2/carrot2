@@ -194,6 +194,13 @@ body {
   width: 10px;
 }
 
+#clusterstd {
+  padding: 3px; 
+  width: 260px; 
+  border-right: 1px dotted #808080; 
+  height: 100%;
+}
+
 img.tab-img {
   vertical-align: middle;
   padding-right: 2px;
@@ -597,6 +604,7 @@ div#clusters-progress,div#docs-progress {
 /** Progress */
 div#clusters-progress {
   margin-left: 158px;
+  margin-top: 4px;
 }
 
 div#docs-progress {
