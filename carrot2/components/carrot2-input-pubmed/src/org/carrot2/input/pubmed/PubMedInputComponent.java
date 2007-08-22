@@ -30,6 +30,7 @@ public class PubMedInputComponent
 {
 
     private final static int MAXIMUM_RESULTS = 1000;
+    private final static String [] SOURCES = new String [] { "PubMed" };
 
     private static Logger log = Logger.getLogger(PubMedInputComponent.class);
 
@@ -117,6 +118,7 @@ public class PubMedInputComponent
                     RawDocumentSnippet snippet = new RawDocumentSnippet(Integer
                             .toString(id), result.title, result.summary,
                             result.url, id);
+                    snippet.setProperty(RawDocument.PROPERTY_SOURCES, SOURCES);
                     rawDocumentConsumer.addDocument(snippet);
                     id++;
                 }

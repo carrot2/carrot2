@@ -20,8 +20,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.carrot2.core.ProcessingException;
-import org.carrot2.core.clustering.RawDocumentBase;
-import org.carrot2.core.clustering.RawDocumentsConsumer;
+import org.carrot2.core.clustering.*;
 import org.carrot2.util.StringUtils;
 import org.carrot2.util.URLEncoding;
 
@@ -128,13 +127,16 @@ fetch:  while (true) {
                 resultIndex++;
                 
                 if (documentConsumer != null) {
-                    documentConsumer.addDocument(new RawDocumentBase(current.url, 
+                    final RawDocumentBase rawDocument = new RawDocumentBase(current.url, 
                         StringUtils.removeMarkup(current.title), 
                         StringUtils.removeMarkup(current.summary)){
                         public Object getId() {
                             return Integer.toString(id);
                         }
-                    });
+                    };
+                    rawDocument.setProperty(RawDocument.PROPERTY_SOURCES,
+                        OpenSearchInputComponent.SOURCES);
+                    documentConsumer.addDocument(rawDocument);
                 }
                 
                 // Check that we did not exceed the number of results.

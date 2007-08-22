@@ -539,10 +539,12 @@ YAHOO.util.Event.addListener(window, "load", c2AppInit, stc, true);
                      "/img/tab-passive-lead-in.gif",
                      "/img/tab-passive-lead-out.gif",
                      "/img/tab-passive-passive-link.gif", 
+                     "/img/ftab-active-body.gif",
                      "/img/ftab-active-lead-in.gif",
                      "/img/ftab-active-lead-out.gif",
                      "/img/ftab-active-passive-link.gif",
                      "/img/ftab-passive-active-link.gif",
+                     "/img/ftab-passive-body.gif",
                      "/img/ftab-passive-lead-in.gif",
                      "/img/ftab-passive-lead-out.gif",
                      "/img/ftab-passive-passive-link.gif" 

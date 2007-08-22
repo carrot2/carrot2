@@ -25,6 +25,7 @@ public class YahooApiInputComponent extends LocalInputComponentBase
 	implements RawDocumentsProducer {
 
 	private final static int MAXIMUM_RESULTS = 1000;
+	private final static String [] SOURCES = new String [] { "Yahoo!" };
 
 	private static Logger log = Logger.getLogger(YahooApiInputComponent.class);
 
@@ -195,6 +196,7 @@ public class YahooApiInputComponent extends LocalInputComponentBase
                 rawDocuments[i] = new RawDocumentSnippet(Integer.toString(i + startAt),
                         yahooSearchResult.title, yahooSearchResult.summary,
                         yahooSearchResult.url, 0.0f);
+                rawDocuments[i].setProperty(RawDocument.PROPERTY_SOURCES, SOURCES);
 
                 if (yahooSearchResult.newsSource != null) {
                     rawDocuments[i].setProperty(RawDocument.PROPERTY_SOURCES, new String [] {yahooSearchResult.newsSource});

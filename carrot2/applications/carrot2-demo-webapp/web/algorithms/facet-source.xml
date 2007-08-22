@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <local-process id="SourceFacet">
-  <name>Source</name>
+  <name>Sources</name>
 
   <input  component-key="input-demo-webapp" />
   <filter component-key="filter-source-facet" />
