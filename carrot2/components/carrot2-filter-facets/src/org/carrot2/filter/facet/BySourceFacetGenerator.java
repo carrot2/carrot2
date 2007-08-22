@@ -30,7 +30,7 @@ public class BySourceFacetGenerator implements FacetGenerator
 
     public List generateFacets(List rawDocuments)
     {
-        Map sourcesToDocumentId = MapUtils.multiValueMap(new HashMap());
+        Map sourcesToDocument = MapUtils.multiValueMap(new HashMap());
         List unknownSource = new ArrayList();
 
         // Group by source
@@ -47,7 +47,7 @@ public class BySourceFacetGenerator implements FacetGenerator
                 {
                     if (sources[i] != null && sources[i].length() > 0)
                     {
-                        sourcesToDocumentId.put(sources[i], rawDocument);
+                        sourcesToDocument.put(sources[i], rawDocument);
                         sourceFound = true;
                     }
                 }
@@ -60,8 +60,8 @@ public class BySourceFacetGenerator implements FacetGenerator
         }
 
         // Convert to RawClusters
-        List rawClusters = new ArrayList(sourcesToDocumentId.size() + 1);
-        for (Iterator it = sourcesToDocumentId.entrySet().iterator(); it.hasNext();)
+        List rawClusters = new ArrayList(sourcesToDocument.size() + 1);
+        for (Iterator it = sourcesToDocument.entrySet().iterator(); it.hasNext();)
         {
             Map.Entry entry = (Map.Entry) it.next();
             final String label = (String) entry.getKey();

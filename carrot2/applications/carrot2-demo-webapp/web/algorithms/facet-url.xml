@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<local-process id="SitesFacet">
+  <name>Sites</name>
+
+  <input  component-key="input-demo-webapp" />
+  <filter component-key="filter-url-facet" />
+  <output component-key="output-demo-webapp" />
+
+</local-process>

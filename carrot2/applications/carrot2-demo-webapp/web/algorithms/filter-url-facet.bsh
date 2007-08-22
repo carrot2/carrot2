@@ -8,15 +8,15 @@ import org.carrot2.core.controller.*;
 //
 factory = new LocalComponentFactory() {
     public LocalComponent getInstance() {
-    	return new FacetGeneratorLocalFilterComponent(BySourceFacetGenerator.INSTANCE);
+    	return new FacetGeneratorLocalFilterComponent(ByUrlFacetGenerator.INSTANCE);
     }
 
     public String getName() {
-        return "Sources";
+        return "Sites";
     }
 };
 
 //
 // Return the ID of the component and its factory.
 //
-return new LoadedComponentFactory("filter-source-facet", factory);
+return new LoadedComponentFactory("filter-url-facet", factory);
