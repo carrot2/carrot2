@@ -52,6 +52,9 @@ public final class MsnApiInputComponent extends LocalInputComponentBase implemen
     /** This component's capabilities */
     private final static Set COMPONENT_CAPABILITIES = toSet(RawDocumentsProducer.class);
 
+    /** Sources array */
+    private final static String [] SOURCES = new String [] { "MSN" };
+    
     /** Current "query". See the docs for query formats. */
     private String query;
 
@@ -275,6 +278,7 @@ public final class MsnApiInputComponent extends LocalInputComponentBase implemen
                     return docId;
                 }
             };
+            rd.setProperty(RawDocument.PROPERTY_SOURCES, SOURCES);
             docs.add(rd);
             id++;
         }

@@ -31,6 +31,7 @@ public class OpenSearchInputComponent extends LocalInputComponentBase implements
      * Default value for {@link #maxResults} field.
      */
     private final static int DEFAULT_MAX_RESULTS = 1000;
+    final static String [] SOURCES = new String [] { "OpenSearch" };
 
     /** Capabilities required from the next component in the chain */
     private final static Set SUCCESSOR_CAPABILITIES = new HashSet(Arrays

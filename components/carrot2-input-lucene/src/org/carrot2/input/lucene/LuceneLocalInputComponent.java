@@ -44,6 +44,7 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
 {
     /** The default number of requested results */
     public final static int DEFAULT_REQUESTED_RESULTS = 100;
+    private final static String [] SOURCES = new String [] { "Lucene" };
 
     /**
      * A request-context parameter overriding the default search configuration.
@@ -277,6 +278,7 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
             final RawDocumentSnippet rawDocument = new RawDocumentSnippet(
                 new Integer(hits.id(i)), doc.get(luceneSettings.factoryConfig.titleField),
                 summary, doc.get(luceneSettings.factoryConfig.urlField), hits.score(i));
+            rawDocument.setProperty(RawDocument.PROPERTY_SOURCES, SOURCES);
             rawDocumentConsumer.addDocument(rawDocument);
         }
     }

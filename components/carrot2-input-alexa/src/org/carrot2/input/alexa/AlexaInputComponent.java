@@ -43,6 +43,7 @@ public final class AlexaInputComponent extends LocalInputComponentBase implement
 {
     /** An algorithm used for signing Alexa requests. */
     private final static String HMAC_SHA1_ALGORITHM = "HmacSHA1";
+    private final static String [] SOURCES = new String [] { "Alexa" };
 
     /**
      * If any value is set in the request context under this key,
@@ -352,14 +353,16 @@ public final class AlexaInputComponent extends LocalInputComponentBase implement
             }
 
             final String docId = Integer.toString(id);
-            docs.add(new RawDocumentBase(url, StringUtils.removeMarkup(title),
+            final RawDocumentBase rawDocument = new RawDocumentBase(url, StringUtils.removeMarkup(title),
                 StringUtils.removeMarkup(snippet))
             {
                 public Object getId()
                 {
                     return docId;
                 }
-            });
+            };
+            rawDocument.setProperty(RawDocument.PROPERTY_SOURCES, SOURCES);
+            docs.add(rawDocument);
 
             id++;
         }

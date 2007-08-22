@@ -106,7 +106,7 @@ SearchTabController.prototype.tabChangeListener = function(e, tab) {
       this.controller.tabView.applyModelChanges();
       YAHOO.util.Event.addListener(td, 
                                    "click", this.controller.simpleController.tabClickListener, 
-                                   { controller: this.controller },
+                                   { controller: this.controller.simpleController },
                                    true);
       new DDTab(this.tab.id, "tabs", null, this.controller);
       if (this.controller.afterTabAdd) {

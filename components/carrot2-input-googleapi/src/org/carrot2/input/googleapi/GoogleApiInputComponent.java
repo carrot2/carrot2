@@ -55,6 +55,9 @@ public final class GoogleApiInputComponent
     /** This component's capabilities */
     private final static Set COMPONENT_CAPABILITIES = toSet(RawDocumentsProducer.class);
 
+    /** Sources array */
+    private final static String [] SOURCES = new String [] { "Google" };
+    
     /** Current "query". See the docs for query formats. */
     private String query;
 
@@ -251,6 +254,7 @@ public final class GoogleApiInputComponent
                             return id;
                         }
                     };
+                    rdoc.setProperty(RawDocument.PROPERTY_SOURCES, SOURCES);
                     rawDocuments[i] = rdoc;
                 }
 
