@@ -116,6 +116,15 @@ public class RawClusterBase extends PropertyProviderBase implements RawCluster
     {
         subclusters.add(rawCluster);
     }
+    /**
+     * Adds a collection of subclusters to this cluster.
+     *
+     * @param subclusters to be added
+     */
+    public void addSubclusters(Collection subclusters)
+    {
+        this.subclusters.addAll(subclusters);
+    }
 
     /**
      * Returns a multiline String representing this cluster's content, including

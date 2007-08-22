@@ -232,7 +232,7 @@ YAHOO.util.Event.addListener(window, "load", c2AppInit, stc, true);
              <xsl:for-each select="query-sizes/size">
                  <option value="{@id}">
                      <xsl:if test="@selected"><xsl:copy-of select="@selected" /></xsl:if>
-                     <xsl:value-of select="text()" /> <xsl:value-of select="/page/meta/strings/download-results.suffix" /></option>
+                     <xsl:value-of select="text()" />&#160;<xsl:value-of select="/page/meta/strings/download-results.suffix" /></option>
              </xsl:for-each>
              </select>
 

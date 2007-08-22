@@ -60,6 +60,26 @@ public class ArrayUtils
 
         return array;
     }
+    
+    /**
+     * Reverses a <code>String</code> array in place. A reference to the input
+     * array is returned for convenience.
+     * 
+     * @param array
+     */
+    public static String [] reverse(String [] array)
+    {
+        String temp;
+        
+        for (int i = 0; i < (array.length / 2); i++)
+        {
+            temp = array[i];
+            array[i] = array[array.length - i - 1];
+            array[array.length - i - 1] = temp;
+        }
+        
+        return array;
+    }
 
     /**
      * Calculates the mean value of the <b>non-zero </b> elements of
