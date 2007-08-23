@@ -1,6 +1,7 @@
 var COOKIE_DD_TIP = "dd-tip";
 var COOKIE_TAB_ORDER = "tab-order";
 var COOKIE_ACTIVE_TAB = "active-tab";
+var COOKIE_ACTIVE_FACET = "active-facet";
 
 // Initialize search tab model
 
@@ -203,4 +204,5 @@ function afterFacetTabActivate(tab)
   Dom.show("clusters-progress");
   document.getElementById("clustersif").src = newUri;
   selectTopCluster = true;
+  Cookies.createCookieForever(COOKIE_ACTIVE_FACET, tab.id);
 }
