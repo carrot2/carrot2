@@ -111,8 +111,14 @@ public final class SearchRequest {
         this.algorithmIndex = lookupIndex(searchSettings.algorithmsIndex, extract(parameterMap, QueryProcessorServlet.PARAM_ALG),
                 searchSettings.getDefaultAlgorithm());
         
+        int defaultFacetIndex = searchSettings.getTopicsFacetIndex();
+        if (cookies.containsKey(Constants.COOKIE_ACTIVE_FACET))
+        {
+            defaultFacetIndex = lookupIndex(searchSettings.facetsIndex, (String) cookies
+                .get(Constants.COOKIE_ACTIVE_FACET), defaultFacetIndex);
+        }
         this.facetIndex = lookupIndex(searchSettings.facetsIndex, extract(parameterMap,
-            QueryProcessorServlet.PARAM_FACET), searchSettings.getTopicsFacetIndex());
+            QueryProcessorServlet.PARAM_FACET), defaultFacetIndex);
         
         // Parse the input size
         final String value = extract(parameterMap, QueryProcessorServlet.PARAM_SIZE);

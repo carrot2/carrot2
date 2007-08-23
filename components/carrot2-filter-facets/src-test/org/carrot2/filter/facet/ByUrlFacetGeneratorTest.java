@@ -159,6 +159,29 @@ public class ByUrlFacetGeneratorTest extends TestCase
         checkAsserts(Arrays.asList(docs), expectedFacets);
     }
 
+    public void testSorting()
+    {
+        RawDocument [] docs = createRawDocumentsWithUrls(new String []
+        {
+            "cos.pl", "http://cos.pl/cos", "cos.com/cos", "cos.com", "cos.pl"
+        });
+
+        List expectedFacets = new ArrayList();
+        RawClusterBase facet1 = new RawClusterBase();
+        facet1.addLabel("cos.pl");
+        facet1.addDocument(docs[0]);
+        facet1.addDocument(docs[1]);
+        facet1.addDocument(docs[4]);
+        RawClusterBase facet2 = new RawClusterBase();
+        facet2.addLabel("cos.com");
+        facet2.addDocument(docs[2]);
+        facet2.addDocument(docs[3]);
+        expectedFacets.add(facet1);
+        expectedFacets.add(facet2);
+
+        checkAsserts(Arrays.asList(docs), expectedFacets);
+    }
+
     private void checkAsserts(List rawDocuments, List expectedFacets)
     {
         final List actualFacets = ByUrlFacetGenerator.INSTANCE

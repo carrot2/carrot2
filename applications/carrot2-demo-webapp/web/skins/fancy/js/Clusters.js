@@ -69,7 +69,10 @@ function initHistory()
 
   YAHOO.util.History.onLoadEvent.subscribe(function() {
     var state = YAHOO.util.History.getCurrentState("c");
-    selectCluster(state, true);
+    if (!selectCluster(state, true))
+    {
+      selectCluster("top", true);
+    }
   });
 }
 
@@ -380,7 +383,7 @@ function scrollToCluster(id)
 function selectCluster(id, showAllParam)
 {
   if (id == "" || currentClusterId == id) {
-    return;
+    return true;
   }
 
   if (id == "top")
@@ -402,8 +405,13 @@ function selectCluster(id, showAllParam)
       highlightWords(clusterWords[id]);
       scrollToCluster(id);
     }
+    else
+    {
+      return false;
+    }
   }
   currentClusterId = id;
+  return true;
 }
 
 function unfoldToTop(id)
