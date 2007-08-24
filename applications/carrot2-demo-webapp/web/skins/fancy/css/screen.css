@@ -225,6 +225,11 @@ div.tab-content {
   white-space: nowrap;
 }
 
+.tab-active-body div.tab-content, 
+.ftab-active-body div.tab-content {
+  cursor: default;
+}
+
 a.tab-link {
   white-space: nowrap;
 }
