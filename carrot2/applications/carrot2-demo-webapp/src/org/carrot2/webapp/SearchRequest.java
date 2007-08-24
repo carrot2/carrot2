@@ -183,7 +183,14 @@ public final class SearchRequest {
     }
 
     public TabAlgorithm getFacet() {
-        return (TabAlgorithm) searchSettings.facets.get(facetIndex);
+        if (facetIndex >= 0 && facetIndex < searchSettings.facets.size())
+        {
+            return (TabAlgorithm) searchSettings.facets.get(facetIndex);
+        }
+        else
+        {
+            return null;
+        }
     }
     
     public TabAlgorithm getAlgorithmOrFacet() {

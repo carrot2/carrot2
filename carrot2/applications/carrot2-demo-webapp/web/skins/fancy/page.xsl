@@ -331,7 +331,7 @@ YAHOO.util.Event.addListener(window, "load", c2AppInit, stc, true);
           </xsl:if>
 
           <td class="ftab-{$status}-body" title="{title}" id="{@id}-td">
-            <div id="{@id}"><xsl:apply-templates select="short" /></div>
+            <div id="{@id}" class="tab-content"><xsl:apply-templates select="short" /></div>
           </td>
 
           <xsl:choose>

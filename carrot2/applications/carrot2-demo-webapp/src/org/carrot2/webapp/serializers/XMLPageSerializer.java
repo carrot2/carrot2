@@ -109,8 +109,7 @@ public class XMLPageSerializer implements PageSerializer
             + URLEncoding.encode(searchRequest.getAlgorithm().getShortName(), "UTF-8")
             + "&" + QueryProcessorServlet.PARAM_SIZE + "=" + searchRequest.getInputSize();
         final String queryStringExtension = getQueryStringExtension(searchRequest);
-        final String facetUriPart = createFacetUriPart(searchRequest.getFacet()
-            .getShortName());
+        final String facetUriPart = createFacetUriPart(searchRequest.getFacet());
         final String clustersUriBase = baseUri + queryStringExtension + "&type=c";
         
         actionUrls.addElement("query-docs").setText(
@@ -220,7 +219,7 @@ public class XMLPageSerializer implements PageSerializer
             final Element facetElement = facetsElement.addElement("facet-tab");
             facetElement.addAttribute("id", facet.getShortName());
             facetElement.addAttribute("uri", clustersUriBase
-                + createFacetUriPart(facet.getShortName()));
+                + createFacetUriPart(facet));
             if (searchRequest.facetIndex == i)
             {
                 facetElement.addAttribute("selected", "selected");
@@ -268,11 +267,18 @@ public class XMLPageSerializer implements PageSerializer
         return meta;
     }
 
-    private String createFacetUriPart(final String facetName)
+    private String createFacetUriPart(final TabAlgorithm facet)
         throws UnsupportedEncodingException
     {
-        return "&" + QueryProcessorServlet.PARAM_FACET + "="
-            + URLEncoding.encode(facetName, "UTF-8");
+        if (facet != null)
+        {
+            return "&" + QueryProcessorServlet.PARAM_FACET + "="
+                + URLEncoding.encode(facet.getShortName(), "UTF-8");
+        }
+        else
+        {
+            return "";
+        }
     }
 
     private String getQueryStringExtension(SearchRequest searchRequest)
