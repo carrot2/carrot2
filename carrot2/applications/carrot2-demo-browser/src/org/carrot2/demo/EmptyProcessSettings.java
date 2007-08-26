@@ -15,6 +15,7 @@ package org.carrot2.demo;
 
 import java.awt.Frame;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JComponent;
 
@@ -29,7 +30,7 @@ public final class EmptyProcessSettings implements ProcessSettings {
         return true;
     }
 
-    public HashMap getRequestParams() {
+    public Map getRequestParams() {
         return new HashMap();
     }
 

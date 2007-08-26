@@ -14,7 +14,7 @@
 package org.carrot2.demo;
 
 import java.awt.Frame;
-import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JComponent;
 
@@ -49,7 +49,7 @@ public interface ProcessSettings {
     public boolean isConfigured();
 
     /** Returns current request parameters. */
-    public HashMap getRequestParams();
+    public Map getRequestParams();
 
     /** 
      * Create a clone of yourself (and default settings) for use in a query 

@@ -91,8 +91,11 @@ public class XmlLocalInputComponent extends
     /** Current request context */
     private RequestContext requestContext;
 
-    private final Object defaultXml;
-    private final Object defaultXslt;
+    protected final Object defaultXml;
+    protected final Object defaultXslt;
+
+    public static final String PARAM_SOURCE_XML = "source";
+    public static final String PARAM_XSLT = "xslt";
 
     /**
      * Creates a new instance of the component.
@@ -159,7 +162,7 @@ public class XmlLocalInputComponent extends
         int requestedResults = getRequestedResults(params);
 
         InputStream source = null;
-        Object sourceOb = params.get("source");
+        Object sourceOb = params.get(PARAM_SOURCE_XML);
         if (sourceOb == null) {
             if (defaultXml == null) {
                 throw new ProcessingException("source request parameter must be given (URL, File, InputStream or a String (converted to URL)).");
@@ -197,7 +200,7 @@ public class XmlLocalInputComponent extends
         }
 
         InputStream xslt = null;
-        Object xsltOb = params.get("xslt");
+        Object xsltOb = params.get(PARAM_XSLT);
         if (xsltOb == null) {
             if (defaultXslt == null) {
                 throw new ProcessingException("xslt request parameter must be given (URL, File, InputStream or identity).");
@@ -223,7 +226,17 @@ public class XmlLocalInputComponent extends
 	        } else if (xsltOb instanceof File) {
                 xslt = new BufferedInputStream(
                         new FileInputStream((File) xsltOb));
-	        } else {
+	        } else if (xsltOb instanceof String)
+	        {
+	            // Try to parse string as url
+                try {
+                    URL url = new URL((String)xsltOb);
+                    xslt = url.openStream();
+                } catch (MalformedURLException e) {
+                    throw new ProcessingException("Malformed source URL: " + xsltOb);
+                }
+	        }
+	        else {
 	            throw new ProcessingException("xslt must be an URL or a File: "
 	                    + xsltOb);            
 	        }

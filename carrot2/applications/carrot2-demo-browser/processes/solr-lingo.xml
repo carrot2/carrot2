@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<local-process id="lucene-lingo">
-  <name>Lucene Index -- Lingo Classic Clusterer</name>
+<local-process id="solr-lingo">
+  <name>Solr -- Lingo Classic Clusterer</name>
 
-  <input  component-key="input-lucene" />
+  <input  component-key="input-cached-solr" />
   <filter component-key="filter-rawdocument-enumerator" />
   <filter component-key="filter-clustering-lingo-multi" />
   <filter component-key="filter-save-xml" />
   <output component-key="output-array" />
 
   <attribute key="process.settings.class.1" 
-	         value="org.carrot2.demo.settings.LuceneSettings" />
+           value="org.carrot2.demo.settings.SolrSettings" />
   <attribute key="process.settings.class.2" 
-	         value="org.carrot2.demo.settings.LingoClassicSettings" />
+           value="org.carrot2.demo.settings.LingoClassicSettings" />
 </local-process>

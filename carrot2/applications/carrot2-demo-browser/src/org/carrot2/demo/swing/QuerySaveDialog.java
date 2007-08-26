@@ -17,7 +17,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.*;
 
@@ -209,7 +209,7 @@ public class QuerySaveDialog
     private void save()
     {
         // Initialize request parameters with current values
-        final HashMap requestParams = processSettings.getRequestParams();
+        final Map requestParams = processSettings.getRequestParams();
         requestParams.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, Integer
             .toString(requestedResults));
 
