@@ -753,7 +753,7 @@ public class ResultsTab extends JPanel {
     }
 
     public void performQuery() {
-        HashMap requestParams = processSettings.getRequestParams();
+        Map requestParams = processSettings.getRequestParams();
         workerThread.runQuery(requestParams);
     }
 }

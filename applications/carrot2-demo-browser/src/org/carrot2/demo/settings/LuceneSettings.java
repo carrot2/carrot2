@@ -15,8 +15,7 @@ package org.carrot2.demo.settings;
 
 import java.awt.Frame;
 import java.io.*;
-import java.util.HashMap;
-import java.util.Properties;
+import java.util.*;
 
 import javax.swing.JComponent;
 
@@ -25,8 +24,8 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Searcher;
+import org.carrot2.demo.PersistentProcessSettingsBase;
 import org.carrot2.demo.ProcessSettings;
-import org.carrot2.demo.ProcessSettingsBase;
 import org.carrot2.input.lucene.*;
 import org.carrot2.util.ArrayUtils;
 
@@ -35,13 +34,9 @@ import org.carrot2.util.ArrayUtils;
  *
  * @author Dawid Weiss
  */
-public final class LuceneSettings extends ProcessSettingsBase {
+public final class LuceneSettings extends PersistentProcessSettingsBase {
 
     private final static Logger logger = Logger.getLogger(LuceneSettings.class);
-    private final static String CONFIG_DIR_NAME = ".carrot2";
-    private final static File CONFIG_DIR = new File(System.getProperty("user.home"), CONFIG_DIR_NAME);
-    private final static String CONFIG_FILE_NAME = "carrot2-browser.lucene-input.properties";
-    private final static File CONFIG_FILE = new File(CONFIG_DIR, CONFIG_FILE_NAME);
 
     /** Lucene index directory */
     File luceneIndexDir;
@@ -102,7 +97,7 @@ public final class LuceneSettings extends ProcessSettingsBase {
         return new LuceneSettings(this);
     }
 
-    public HashMap getRequestParams() {
+    public Map getRequestParams() {
         if (!isConfigured()) {
             throw new RuntimeException("Not configured yet.");
         }
@@ -173,48 +168,7 @@ public final class LuceneSettings extends ProcessSettingsBase {
         createIndexReaderAndSearcher();
     }
 
-    private void loadConfigFile()
-    {
-        if (CONFIG_FILE.exists())
-        {
-            Properties config = new Properties();
-            try
-            {
-                config.load(new FileInputStream(CONFIG_FILE));
-            }
-            catch (FileNotFoundException e)
-            {
-                // ignored
-            }
-            catch (IOException e)
-            {
-                logger.warn("Problems loading Lucene config", e);
-            }
-
-            initFromProperties(config);
-        }
-    }
-
-    private void saveConfigFile()
-    {
-        Properties config = asProperties();
-        CONFIG_DIR.mkdirs();
-
-        try
-        {
-            config.store(new FileOutputStream(CONFIG_FILE), "Carrot2 Tuning Browser Lucene Input config file last saved by the application. Freel free to edit by hand.");
-        }
-        catch (FileNotFoundException e)
-        {
-            logger.warn("Problems saving Lucene config", e);
-        }
-        catch (IOException e)
-        {
-            logger.warn("Problems saving Lucene config", e);
-        }
-    }
-
-    private void initFromProperties(Properties config)
+    protected void initFromProperties(Properties config)
     {
         if (config.containsKey("index.dir"))
         {
@@ -246,7 +200,7 @@ public final class LuceneSettings extends ProcessSettingsBase {
         createSnippets = Boolean.valueOf(config.getProperty("snippets")).booleanValue();
     }
 
-    private Properties asProperties()
+    protected Properties asProperties()
     {
         Properties config = new Properties();
 
@@ -277,5 +231,10 @@ public final class LuceneSettings extends ProcessSettingsBase {
         config.setProperty("snippets", Boolean.toString(createSnippets));
 
         return config;
+    }
+
+    public String getPropertiesFileNamePart()
+    {
+        return "lucene-input";
     }
 }

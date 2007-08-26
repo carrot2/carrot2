@@ -15,6 +15,7 @@ package org.carrot2.demo.settings;
 
 import java.awt.Component;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JComponent;
 import javax.swing.event.ChangeEvent;
@@ -35,7 +36,7 @@ public class ThresholdHelper {
             final ProcessSettingsBase settings, final String key, 
             String label, int min, int max, int minorTick, int majorTick)
     {
-        final HashMap params = settings.getRequestParams();
+        final Map params = settings.getRequestParams();
         final JIntThreshold comp = new JIntThreshold(label, min, max, minorTick, majorTick);
     
         final String paramValue = (String) params.get(key);
@@ -51,7 +52,7 @@ public class ThresholdHelper {
             {
                 public void stateChanged(ChangeEvent e)
                 {
-                    final HashMap params = settings.getRequestParams();
+                    final Map params = settings.getRequestParams();
                     params.put(key, Integer.toString(comp.getValue()));
                     settings.setRequestParams(params);
                 }
@@ -63,7 +64,7 @@ public class ThresholdHelper {
     public static JComponent createDoubleThreshold(final ProcessSettingsBase settings, final String key, 
             String label, double min, double max, double minorTick, double majorTick)
     {
-        final HashMap params = settings.getRequestParams();
+        final Map params = settings.getRequestParams();
         final double value = Double.parseDouble((String) params.get(key));
         final JThreshold comp = new JThreshold(label, min, max, minorTick, majorTick);
         comp.setValue(value);
@@ -71,7 +72,7 @@ public class ThresholdHelper {
             {
                 public void stateChanged(ChangeEvent e)
                 {
-                    final HashMap params = settings.getRequestParams();
+                    final Map params = settings.getRequestParams();
                     params.put(key, Double.toString(comp.getValue()));
                     settings.setRequestParams(params);
                 }

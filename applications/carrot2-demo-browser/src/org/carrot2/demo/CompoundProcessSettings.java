@@ -55,7 +55,7 @@ final class CompoundProcessSettings extends ProcessSettingsBase implements Proce
         }
     }
 
-    public HashMap getRequestParams() {
+    public Map getRequestParams() {
         HashMap all = new HashMap();
         for (int i = 0; i < settings.length; i++) {
             all.putAll(settings[i].getRequestParams());

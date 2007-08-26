@@ -16,7 +16,7 @@ package org.carrot2.demo.swing;
 import java.awt.*;
 import java.awt.event.*;
 import java.text.NumberFormat;
-import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -335,7 +335,7 @@ public class BenchmarkDialog
             try
             {
                 // Warmup
-                final HashMap requestParams = processSettings
+                final Map requestParams = processSettings
                     .getRequestParams();
                 requestParams.put(LocalInputComponent.PARAM_REQUESTED_RESULTS,
                     Integer.toString(requestedResults));

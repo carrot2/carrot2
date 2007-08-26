@@ -76,6 +76,7 @@
     <dependency name="carrot2-input-msnapi"  profile="stripped" nocopy="true" />
     <dependency name="carrot2-input-pubmed"  profile="stripped" nocopy="true" />
     <dependency name="carrot2-input-lucene" profile="stripped" nocopy="true" />
+    <dependency name="carrot2-input-solr" profile="stripped" nocopy="true" />
     <dependency name="carrot2-util-tokenizer" profile="stripped" nocopy="true" />
     <dependency name="carrot2-filter-case-normalizer"  profile="stripped" nocopy="true" />
     <dependency name="carrot2-filter-striphtml" profile="stripped" nocopy="true" />
@@ -92,6 +93,7 @@
     <dependency name="carrot2-input-yahooapi"  profile="full" />
     <dependency name="carrot2-input-msnapi"  profile="full" />
     <dependency name="carrot2-input-pubmed"  profile="full" />
+    <dependency name="carrot2-input-solr"  profile="full" />
     <dependency name="carrot2-util-tokenizer" profile="full" />
     <dependency name="carrot2-filter-case-normalizer"  profile="full" />
     <dependency name="carrot2-filter-striphtml" profile="full" />
