@@ -28,7 +28,7 @@
         function jarLinks($path, $prefix) {
         	$dir_handle = @opendir($path . '/' . $prefix) or die('Unable do open dir: ' . $path . '/' . $prefix);
         	while ($file = readdir($dir_handle)) {
-        		if (substr($file, -3) == "jar" ){
+        		if (substr($file, -4) == ".jar" ){
         		    echo "\t<jar href=\"$prefix$file\" /> \n";
         		}
         	}
