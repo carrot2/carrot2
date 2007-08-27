@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -60,9 +59,21 @@ public class BenchmarkDialog
     private JLabel maxLabel;
     private JSpinner warmupSpinner;
     private JSpinner benchmarkSpinner;
+    private JSpinner threadsSpinner;
 
     /** */
-    private BenchmarkThread benchmarkThread;
+    private BenchmarkThread [] benchmarkThreads;
+    private int benchmarkThreadsRunning;
+
+    private SpinnerNumberModel threadsSpinnerModel;
+
+    private SpinnerNumberModel benchmarkSpinnerModel;
+
+    private SpinnerNumberModel warmupSpinnerModel;
+
+    private BenchmarkStats benchmarkStats;
+
+    private WarmupThread warmupThread;
 
     /**
      * 
@@ -85,8 +96,8 @@ public class BenchmarkDialog
     {
         if (dialog == null)
         {
-            dialog = new JDialog(owner, demoContext
-                .getProcessIdToProcessNameMap().get(processId)
+            dialog = new JDialog(owner, demoContext.getProcessIdToProcessNameMap().get(
+                processId)
                 + " benchmark", true);
             dialog.setModal(true);
             dialog.addWindowListener(new WindowAdapter()
@@ -97,57 +108,129 @@ public class BenchmarkDialog
 
                 public void windowClosing(WindowEvent e)
                 {
-                    if (benchmarkThread != null && benchmarkThread.isRunning())
+                    if (areBenchmarksRunning())
                     {
-                        benchmarkThread.cancel();
-                        benchmarkFinished();
+                        cancelBenchmarks();
+                        benchmarkCancelled();
                     }
                     dialog.setVisible(false);
                 }
             });
             dialog.getContentPane().add(buildUI());
             dialog.pack();
-            dialog.setLocation(
-                (owner.getLocation().x + (owner.getWidth() - dialog.getWidth()) / 2),
-                (owner.getLocation().y + (owner.getHeight() - dialog.getHeight()) / 2));
-            
+            dialog.setLocation((owner.getLocation().x + (owner.getWidth() - dialog
+                .getWidth()) / 2), (owner.getLocation().y + (owner.getHeight() - dialog
+                .getHeight()) / 2));
+
             SwingUtils.addEscapeKeyCloseAction(dialog);
         }
 
         dialog.setVisible(true);
     }
 
-    /**
-     * 
-     */
-    private void runBenchmark(int warmup, int benchmark)
+    private void runBenchmark()
     {
-        progressBar.setValue(0);
-        progressBar.setMaximum(warmup + benchmark);
         warmupSpinner.setEnabled(false);
         benchmarkSpinner.setEnabled(false);
+        threadsSpinner.setEnabled(false);
 
-        benchmarkThread = new BenchmarkThread(warmup, benchmark);
-        benchmarkThread.start();
+        progressBar.setValue(0);
+        progressBar.setMaximum(warmupSpinnerModel.getNumber().intValue()
+            + benchmarkSpinnerModel.getNumber().intValue());
+        progressBar.setString("Warming up...");
 
+        benchmarkStats = new BenchmarkStats();
+
+        warmupThread = new WarmupThread(warmupSpinnerModel.getNumber().intValue(),
+            benchmarkStats);
+        warmupThread.start();
     }
 
-    private void updateResults(final int value, final String message,
-        final String avg, final String stdDev, final String min,
-        final String max)
+    private void warmupThreadFinished()
     {
+        // Run benchmark threads
+        benchmarkThreads = new BenchmarkThread [threadsSpinnerModel.getNumber()
+            .intValue()];
+        final int benchmarkRounds = benchmarkSpinnerModel.getNumber().intValue();
+        for (int i = 0; i < benchmarkThreads.length; i++)
+        {
+            benchmarkThreads[i] = new BenchmarkThread(benchmarkRounds
+                / benchmarkThreads.length
+                + (i < (benchmarkRounds % benchmarkThreads.length) ? 1 : 0), benchmarkStats);
+        }
+        for (int i = 0; i < benchmarkThreads.length; i++)
+        {
+            benchmarkThreads[i].start();
+            benchmarkThreadsRunning++;
+        }
         SwingTask.runNow(new Runnable()
         {
             public void run()
             {
-                progressBar.setValue(value);
-                progressBar.setString(message);
-                avgLabel.setText(avg);
-                stdDevLabel.setText(stdDev);
-                minLabel.setText(min);
-                maxLabel.setText(max);
+                progressBar.setString("Benchmarking...");
             }
         });
+    }
+
+    private boolean areBenchmarksRunning()
+    {
+        return (warmupThread != null && warmupThread.isRunning())
+            || benchmarkThreadsRunning != 0;
+    }
+
+    private void cancelBenchmarks()
+    {
+        warmupThread.cancel();
+        if (benchmarkThreads != null)
+        {
+            for (int i = 0; i < benchmarkThreads.length; i++)
+            {
+                benchmarkThreads[i].cancel();
+            }
+        }
+    }
+
+    private void updateBenchmarkResults(BenchmarkStats stats)
+    {
+        final BenchmarkStats statsClone = (stats != null ? stats.getClone() : null);
+
+        SwingTask.runNow(new Runnable()
+        {
+            public void run()
+            {
+                NumberFormat format = NumberFormat.getNumberInstance();
+                format.setMinimumFractionDigits(2);
+                format.setMaximumFractionDigits(2);
+
+                progressBar.setValue(statsClone.warmup + statsClone.count);
+                avgLabel.setText(format.format(statsClone.avg) + " ms");
+                stdDevLabel.setText(format.format(statsClone.stdDev) + " ms");
+                minLabel.setText(format.format(statsClone.min) + " ms");
+                maxLabel.setText(format.format(statsClone.max) + " ms");
+            }
+        });
+    }
+
+    private void updateWarmupResults(BenchmarkStats stats)
+    {
+        final BenchmarkStats statsClone = (stats != null ? stats.getClone() : null);
+
+        SwingTask.runNow(new Runnable()
+        {
+            public void run()
+            {
+                progressBar.setValue(statsClone.warmup + statsClone.count);
+            }
+        });
+    }
+
+    private synchronized void benchmarkThreadFinished()
+    {
+        benchmarkThreadsRunning--;
+        if (benchmarkThreadsRunning == 0)
+        {
+            benchmarkFinished();
+        }
     }
 
     private void benchmarkFinished()
@@ -158,7 +241,30 @@ public class BenchmarkDialog
             {
                 warmupSpinner.setEnabled(true);
                 benchmarkSpinner.setEnabled(true);
+                threadsSpinner.setEnabled(true);
                 stopButton.setText("Start");
+                progressBar.setString("Finished");
+            }
+        });
+    }
+
+    private void benchmarkCancelled()
+    {
+        SwingTask.runNow(new Runnable()
+        {
+            public void run()
+            {
+                warmupSpinner.setEnabled(true);
+                benchmarkSpinner.setEnabled(true);
+                threadsSpinner.setEnabled(true);
+                stopButton.setText("Start");
+                SwingTask.runNow(new Runnable()
+                {
+                    public void run()
+                    {
+                        progressBar.setString("Cancelled");
+                    }
+                });
             }
         });
     }
@@ -184,31 +290,36 @@ public class BenchmarkDialog
         contentPanel.setLayout(new BorderLayout(0, 3));
 
         JPanel settingsPanel = new JPanel();
-        settingsPanel.setLayout(new GridLayout(2, 2, 0, 3));
+        settingsPanel.setLayout(new GridLayout(3, 2, 0, 3));
+
         settingsPanel.add(new JLabel("JVM warm-up cycles"));
-        final SpinnerNumberModel warmupSpinnerModel = new SpinnerNumberModel(
-            25, 0, 1000000, 1);
+        warmupSpinnerModel = new SpinnerNumberModel(25, 0, 1000000, 1);
         warmupSpinner = new JSpinner(warmupSpinnerModel);
         settingsPanel.add(warmupSpinner);
+
         settingsPanel.add(new JLabel("Benchmark cycles"));
-        final SpinnerNumberModel benchmarkSpinnerModel = new SpinnerNumberModel(
-            75, 1, 1000000, 1);
+        benchmarkSpinnerModel = new SpinnerNumberModel(75, 1, 1000000, 1);
         benchmarkSpinner = new JSpinner(benchmarkSpinnerModel);
         settingsPanel.add(benchmarkSpinner);
+
+        settingsPanel.add(new JLabel("Benchmark threads"));
+        threadsSpinnerModel = new SpinnerNumberModel(1, 1, 32, 1);
+        threadsSpinner = new JSpinner(threadsSpinnerModel);
+        settingsPanel.add(threadsSpinner);
 
         final TitledBorder titledBorder = BorderFactory
             .createTitledBorder("Benchmark settings");
         titledBorder.setTitleFont(warmupSpinner.getFont());
-        settingsPanel.setBorder(BorderFactory.createCompoundBorder(
-            titledBorder, BorderFactory.createEmptyBorder(0, 5, 5, 5)));
+        settingsPanel.setBorder(BorderFactory.createCompoundBorder(titledBorder,
+            BorderFactory.createEmptyBorder(0, 5, 5, 5)));
 
         JPanel resultsPanel = new JPanel();
         resultsPanel.setLayout(new BorderLayout());
         final TitledBorder titledBorder2 = BorderFactory
             .createTitledBorder("Benchmark progress & results");
         titledBorder2.setTitleFont(warmupSpinner.getFont());
-        resultsPanel.setBorder(BorderFactory.createCompoundBorder(
-            titledBorder2, BorderFactory.createEmptyBorder(0, 5, 5, 5)));
+        resultsPanel.setBorder(BorderFactory.createCompoundBorder(titledBorder2,
+            BorderFactory.createEmptyBorder(0, 5, 5, 5)));
 
         JPanel progressPanel = new JPanel();
         progressPanel.setLayout(new BorderLayout(5, 0));
@@ -218,16 +329,19 @@ public class BenchmarkDialog
         {
             public void actionPerformed(ActionEvent e)
             {
-                if (benchmarkThread != null && benchmarkThread.isRunning())
+                if (areBenchmarksRunning())
                 {
-                    benchmarkThread.cancel();
-                    benchmarkFinished();
+                    cancelBenchmarks();
+                    benchmarkCancelled();
                 }
                 else
                 {
                     stopButton.setText("Stop");
-                    runBenchmark(warmupSpinnerModel.getNumber().intValue(),
-                        benchmarkSpinnerModel.getNumber().intValue());
+                    avgLabel.setText("n/a");
+                    stdDevLabel.setText("n/a");
+                    minLabel.setText("n/a");
+                    maxLabel.setText("n/a");
+                    runBenchmark();
                 }
             }
         });
@@ -237,8 +351,7 @@ public class BenchmarkDialog
         progressBar.setMaximum(100);
         progressBar.setValue(0);
         progressBar.setStringPainted(true);
-        progressBar
-            .setPreferredSize(new Dimension(280, stopButton.getHeight()));
+        progressBar.setPreferredSize(new Dimension(280, stopButton.getHeight()));
         progressPanel.add(progressBar, BorderLayout.CENTER);
         progressPanel.add(stopButton, BorderLayout.AFTER_LINE_ENDS);
 
@@ -269,8 +382,8 @@ public class BenchmarkDialog
     private JLabel makeBoldLabel(String text)
     {
         JLabel label = new JLabel(text);
-        label.setFont(new Font(label.getFont().getName(), Font.BOLD, label
-            .getFont().getSize()));
+        label.setFont(new Font(label.getFont().getName(), Font.BOLD, label.getFont()
+            .getSize()));
 
         return label;
     }
@@ -284,10 +397,10 @@ public class BenchmarkDialog
         {
             public void actionPerformed(ActionEvent e)
             {
-                if (benchmarkThread != null && benchmarkThread.isRunning())
+                if (areBenchmarksRunning())
                 {
-                    benchmarkThread.cancel();
-                    benchmarkFinished();
+                    cancelBenchmarks();
+                    benchmarkThreadFinished();
                 }
                 dialog.setVisible(false);
             }
@@ -298,84 +411,47 @@ public class BenchmarkDialog
         return buttonPanel;
     }
 
-    /**
-     * @author Stanislaw Osinski
-     */
     private class BenchmarkThread extends Thread
     {
-        /** */
-        private int warmupCycles;
-
         private int benchmarkCycles;
 
         private boolean running = false;
 
-        double avg = 0;
-        double stdDev = 0;
-        double min = 10e9;
-        double max = 0;
-        double sum = 0;
-        double sumSquares = 0;
-        int count = 0;
+        private BenchmarkStats stats;
 
-        public BenchmarkThread(int warmupCycles, int benchmarkCycles)
+        public BenchmarkThread(int benchmarkCycles, BenchmarkStats stats)
         {
-            this.warmupCycles = warmupCycles;
             this.benchmarkCycles = benchmarkCycles;
+            this.stats = stats;
             this.running = false;
         }
 
         public void run()
         {
-            NumberFormat format = NumberFormat.getNumberInstance();
-            format.setMinimumFractionDigits(2);
-            format.setMaximumFractionDigits(2);
-
             running = true;
             try
             {
                 // Warmup
-                final Map requestParams = processSettings
-                    .getRequestParams();
-                requestParams.put(LocalInputComponent.PARAM_REQUESTED_RESULTS,
-                    Integer.toString(requestedResults));
-                for (int i = 0; i < warmupCycles && running; i++)
-                {
-                    demoContext.getController().query(processId, query,
-                        requestParams);
-                    updateResults(i, "Warming up...", "n/a", "n/a", "n/a",
-                        "n/a");
-                }
-
-                if (!running)
-                {
-                    benchmarkFinished();
-                    running = false;
-                    return;
-                }
-
+                final Map requestParams = processSettings.getRequestParams();
+                requestParams.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, Integer
+                    .toString(requestedResults));
                 long start;
                 long stop;
 
                 for (int i = 0; i < benchmarkCycles && running; i++)
                 {
                     start = System.currentTimeMillis();
-                    demoContext.getController().query(processId, query,
-                        requestParams);
+                    demoContext.getController().query(processId, query, requestParams);
                     stop = System.currentTimeMillis();
 
-                    updateStats(stop - start);
-                    updateResults(warmupCycles + i, "Benchmarking...", format
-                        .format(avg)
-                        + " ms", format.format(stdDev) + " ms", format
-                        .format(min)
-                        + " ms", format.format(max) + " ms");
+                    stats.updateStats(stop - start);
+                    updateBenchmarkResults(stats);
                 }
 
-                updateResults(warmupCycles + benchmarkCycles, "Finished",
-                    format.format(avg) + " ms", format.format(stdDev) + " ms",
-                    format.format(min) + " ms", format.format(max) + " ms");
-                benchmarkFinished();
+                if (running)
+                {
+                    benchmarkThreadFinished();
+                }
                 running = false;
             }
             catch (MissingProcessException e)
@@ -388,7 +464,95 @@ public class BenchmarkDialog
             }
         }
 
-        private void updateStats(long time)
+        public void cancel()
+        {
+            running = false;
+        }
+
+        public boolean isRunning()
+        {
+            return running;
+        }
+    }
+
+    private class WarmupThread extends Thread
+    {
+        private int warmupCycles;
+        private boolean running = false;
+        private BenchmarkStats stats;
+
+        public WarmupThread(int warmupCycles, BenchmarkStats stats)
+        {
+            this.warmupCycles = warmupCycles;
+            this.stats = stats;
+            this.running = false;
+        }
+
+        public void run()
+        {
+            running = true;
+            try
+            {
+                // Warmup
+                final Map requestParams = processSettings.getRequestParams();
+                requestParams.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, Integer
+                    .toString(requestedResults));
+                for (int i = 0; i < warmupCycles && running; i++)
+                {
+                    demoContext.getController().query(processId, query, requestParams);
+                    stats.updateWarmupCount();
+                    updateWarmupResults(stats);
+                }
+
+                if (running)
+                {
+                    warmupThreadFinished();
+                }
+                running = false;
+            }
+            catch (MissingProcessException e)
+            {
+                e.printStackTrace();
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        public void cancel()
+        {
+            running = false;
+        }
+
+        public boolean isRunning()
+        {
+            return running;
+        }
+    }
+
+    /**
+     * A thread-safe container for benchmark stats.
+     * 
+     * @author Stanislaw Osinski
+     */
+    private class BenchmarkStats
+    {
+        double avg = 0;
+        double stdDev = 0;
+        double min = 10e9;
+        double max = 0;
+        double sum = 0;
+        double sumSquares = 0;
+        int count = 0;
+        int warmup = 0;
+
+        public synchronized void updateWarmupCount()
+        {
+            warmup++;
+        }
+
+        public synchronized void updateStats(long time)
         {
             count++;
             sum += time;
@@ -401,14 +565,20 @@ public class BenchmarkDialog
             stdDev = Math.sqrt(sumSquares / count - avg * avg);
         }
 
-        public void cancel()
+        public synchronized BenchmarkStats getClone()
         {
-            running = false;
-        }
+            BenchmarkStats clone = new BenchmarkStats();
 
-        public boolean isRunning()
-        {
-            return running;
+            clone.avg = this.avg;
+            clone.stdDev = this.stdDev;
+            clone.min = this.min;
+            clone.max = this.max;
+            clone.sum = this.sum;
+            clone.sumSquares = this.sumSquares;
+            clone.count = this.count;
+            clone.warmup = this.warmup;
+
+            return clone;
         }
     }
 }
