@@ -48,7 +48,7 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
         DEFAULT_COMPONENT_POOL_CONFIG.whenExhaustedAction = GenericObjectPool.WHEN_EXHAUSTED_GROW;
         DEFAULT_COMPONENT_POOL_CONFIG.maxWait = 0; // irrelevant
         DEFAULT_COMPONENT_POOL_CONFIG.maxActive = 0; // irrelevant
-        DEFAULT_COMPONENT_POOL_CONFIG.maxIdle = 5;
+        DEFAULT_COMPONENT_POOL_CONFIG.maxIdle = 10;
         DEFAULT_COMPONENT_POOL_CONFIG.timeBetweenEvictionRunsMillis = 1000 * 60 * 4;
         DEFAULT_COMPONENT_POOL_CONFIG.minEvictableIdleTimeMillis = 1000 * 60 * 5;
         DEFAULT_COMPONENT_POOL_CONFIG.minIdle = 1;

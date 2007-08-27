@@ -41,16 +41,22 @@ final class WeakRawDocumentsCache implements RawDocumentsCache {
     public synchronized Result get(CacheEntry entry) {
         final Result result = (Result) cache.get(entry); 
         if (result != null) {
-            logger.info("Returning cached data for: " + entry);
+            if (logger.isDebugEnabled()) {
+                logger.debug("Returning cached data for: " + entry);
+            }
             updateRecent(entry);
         } else {
-            logger.info("Not in cache: " + entry);
+            if (logger.isDebugEnabled()) {
+                logger.debug("Not in cache: " + entry);
+            }
         }
         return result;
     }
 
     public synchronized void put(CacheEntry entry, Result result) {
-        logger.info("Saving cached data for: " + entry);
+        if (logger.isDebugEnabled()) {
+            logger.debug("Saving cached data for: " + entry);
+        }
         cache.put(entry, result);
         updateRecent(entry);
     }
