@@ -20,6 +20,7 @@ import org.apache.commons.pool.*;
 import org.apache.commons.pool.impl.GenericObjectPool;
 import org.carrot2.core.controller.*;
 import org.carrot2.core.controller.loaders.ComponentInitializationException;
+import org.carrot2.util.ResourceUtils;
 
 /**
  * A complete base implementation of the
@@ -268,38 +269,11 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
         InputStream stream = null;
         for (int i = 0; i < nameCandidates.length; i++) {
             // Construct resource name
-            final String resourceName = "" + nameCandidates[i];
+            final String resourceName = nameCandidates[i];
 
-            // Try context class loader first.
-            final ClassLoader ctxLoader = Thread.currentThread().getContextClassLoader();
-            stream = ctxLoader.getResourceAsStream(resourceName);
+            // Look for the descriptor.
+            stream = ResourceUtils.getFirst(resourceName, LocalControllerBase.class);
 
-            if (stream == null) {
-                // Try this class's loader next.
-                final ClassLoader clsLoader = this.getClass().getClassLoader();
-                stream = clsLoader.getResourceAsStream(resourceName);
-   
-                if (stream == null) {
-                    // Try local directory
-                    final File file = new File("components" + 
-                            File.separator + nameCandidates[i]);
-                    try {
-                        if (file.exists() && file.isFile() && file.canRead()) {
-                            stream = new FileInputStream(file);
-                            
-                            // NO MORE OPTIONS
-                            if (stream == null) {
-                                continue;
-                            }
-                        }
-                    } catch (SecurityException e) {
-                        // Ignore security exceptions.
-                    } catch (IOException e) {
-                        // Ignore IO exceptions.
-                    }
-                }
-            }
-            
             if (stream != null) {
                 // Something found. Try reading it.
                 try {
