@@ -46,7 +46,7 @@ public class English extends StemmedLanguageBase {
         try {
             stopwords = WordLoadingUtils.loadWordSet("stopwords.en");
         } catch (IOException e) {
-            throw new RuntimeException("Could not initialize class.");
+            throw new RuntimeException("Could not initialize class: " + e.getMessage());
         }
     }
 

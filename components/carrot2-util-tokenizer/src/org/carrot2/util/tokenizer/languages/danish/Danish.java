@@ -40,7 +40,7 @@ public class Danish extends StemmedLanguageBase {
         try {
 			stopwords = WordLoadingUtils.loadWordSet("stopwords.da");
 		} catch (IOException e) {
-            throw new RuntimeException("Could not initialize class.");
+            throw new RuntimeException("Could not initialize class: " + e.getMessage());
 		}
     }
 

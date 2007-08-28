@@ -45,7 +45,7 @@ public class Turkish extends StemmedLanguageBase {
         try {
             stopwords = WordLoadingUtils.loadWordSet("stopwords.tr");
         } catch (IOException e) {
-            throw new RuntimeException("Could not initialize class.");
+            throw new RuntimeException("Could not initialize class: " + e.getMessage());
         }
     }
 
