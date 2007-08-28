@@ -25,20 +25,8 @@ import org.carrot2.core.linguistic.*;
  * {@link #createTokenizerInstanceInternal()} method. Subclasses
  * must override {@link LanguageBase#createStemmerInstance()} method
  * and return a reference to a {@link Stemmer} object when requested.
- * 
- * @author Dawid Weiss
- * @version $Revision$ 
  */
 public abstract class StemmedLanguageBase extends LanguageBase {
-    
-    /**
-     * An empty constructor, no stopword-marking in performed
-     * for TypedTokens.
-     */
-    public StemmedLanguageBase() {
-        super();
-    }
-
     /**
      * Creates a new tokenizer using the internal
      * {@link #createTokenizerInstanceInternal()} method and

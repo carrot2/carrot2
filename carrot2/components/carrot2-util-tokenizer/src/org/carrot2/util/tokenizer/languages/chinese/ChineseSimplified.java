@@ -28,7 +28,6 @@ import org.carrot2.util.tokenizer.parser.WordBasedParserFactory;
  */
 public class ChineseSimplified extends StemmedLanguageBase
 {
-
     /**
      * A set of stopwords for this language.
      */
@@ -45,7 +44,7 @@ public class ChineseSimplified extends StemmedLanguageBase
         }
         catch (IOException e)
         {
-            throw new RuntimeException("Could not initialize class.");
+            throw new RuntimeException("Could not initialize class: " + e.getMessage());
         }
     }
 
