@@ -55,8 +55,11 @@ public final class ResourceUtils
             scanLocations(urls, resourcePath, clazz);
 
             // For relative resources, re-try with resources/ prefix.
-            if (!resourcePath.startsWith("/") && !resourcePath.startsWith("resources/"))
+            if (!resourcePath.startsWith("resources/"))
             {
+                while (resourcePath.startsWith("/")) {
+                    resourcePath = resourcePath.substring(1);
+                }
                 scanLocations(urls, "resources/" + resourcePath, clazz);
             }
 
