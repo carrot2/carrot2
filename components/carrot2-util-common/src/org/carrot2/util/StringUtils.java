@@ -73,6 +73,24 @@ public class StringUtils
     }
 
     /**
+     * Capitalizes a string only when its {@link #capitalizedRatio(String)} is less
+     * or equal to 0.5. Otherwise, returns the original string.
+     * 
+     * @return
+     */
+    public static String smartCapitalize(String string)
+    {
+        if (capitalizedRatio(string) > 0.5)
+        {
+            return string;
+        }
+        else
+        {
+            return capitalize(string);
+        }
+    }
+    
+    /**
      * 
      */
     public static String addLeftPadding(String string, int width)
