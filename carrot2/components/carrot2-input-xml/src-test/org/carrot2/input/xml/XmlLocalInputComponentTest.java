@@ -330,12 +330,11 @@ public class XmlLocalInputComponentTest extends TestCase {
 	}	
 	
     public void testSubstitute() {
-        XmlLocalInputComponent c = new XmlLocalInputComponent();
-
         // no replacements.
         HashMap params = new HashMap();
         String url = "http://www.google.com/bubu?haha=abc";
-        String result = c.substituteParams(url, null, params, 0);
+        String result = XmlLocalInputComponent.substituteParams(url, null, params, 0,
+            XmlLocalInputComponent.DEFAULT_QUERY_ENCODING);
         assertEquals(url, result);
 
         // simple replacements
@@ -344,28 +343,32 @@ public class XmlLocalInputComponentTest extends TestCase {
         params.put("param2", "value2");
         url = "http://www.google.com/q=${param1}&${param2}=abc";
         String expected = "http://www.google.com/q=value&value2=abc";
-        result = c.substituteParams(url, null, params, 0);
+        result = XmlLocalInputComponent.substituteParams(url, null, params, 0,
+            XmlLocalInputComponent.DEFAULT_QUERY_ENCODING);
         assertEquals(expected, result);
         
         // no value matching replacement.
         params = new HashMap();
         url = "http://www.google.com/q=${param1}&${param2}=abc";
         expected = url;
-        result = c.substituteParams(url, null, params, 0);
+        result = XmlLocalInputComponent.substituteParams(url, null, params, 0,
+            XmlLocalInputComponent.DEFAULT_QUERY_ENCODING);
         assertEquals(expected, result);
 
         // empty brackets (no param name)
         params = new HashMap();
         url = "http://www.google.com/q=${}";
         expected = url;
-        result = c.substituteParams(url, null, params, 0);
+        result = XmlLocalInputComponent.substituteParams(url, null, params, 0,
+            XmlLocalInputComponent.DEFAULT_QUERY_ENCODING);
         assertEquals(expected, result);
 
         // no closing bracket
         params = new HashMap();
         url = "http://www.google.com/q=${param1&${param2}=abc";
         expected = url;
-        result = c.substituteParams(url, null, params, 0);
+        result = XmlLocalInputComponent.substituteParams(url, null, params, 0,
+            XmlLocalInputComponent.DEFAULT_QUERY_ENCODING);
         assertEquals(expected, result);        
 
         // mixed boundary conditions
@@ -374,7 +377,8 @@ public class XmlLocalInputComponentTest extends TestCase {
         params.put("param2", "xx");
         url = "${param1}http://www.google.com/q=${paramx&${param2}${";
         expected = "http://www.google.com/q=${paramx&xx${";
-        result = c.substituteParams(url, null, params, 0);
+        result = XmlLocalInputComponent.substituteParams(url, null, params, 0,
+            XmlLocalInputComponent.DEFAULT_QUERY_ENCODING);
         assertEquals(expected, result);        
         
         // encoding of values
@@ -382,14 +386,16 @@ public class XmlLocalInputComponentTest extends TestCase {
         params.put("param1", "x +x");
         url = "http://www.google.com/q=${param1}";
         expected = "http://www.google.com/q=x+%2Bx";
-        result = c.substituteParams(url, null, params, 0);
+        result = XmlLocalInputComponent.substituteParams(url, null, params, 0,
+            XmlLocalInputComponent.DEFAULT_QUERY_ENCODING);
         assertEquals(expected, result);
         
         // encoding of values
         params = new HashMap();
         url = "http://www.google.com/q=${query}&num=${results}";
         expected = "http://www.google.com/q=x+%2Bx&num=113";
-        result = c.substituteParams(url, "x +x", params, 113);
+        result = XmlLocalInputComponent.substituteParams(url, "x +x", params, 113,
+            XmlLocalInputComponent.DEFAULT_QUERY_ENCODING);
         assertEquals(expected, result);        
     }
 }

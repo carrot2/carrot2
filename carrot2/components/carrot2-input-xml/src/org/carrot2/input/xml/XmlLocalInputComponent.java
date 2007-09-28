@@ -19,10 +19,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.*;
 
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.*;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Logger;
@@ -70,7 +67,8 @@ import org.carrot2.core.clustering.*;
  * @version $Revision$
  */
 public class XmlLocalInputComponent extends
-        LocalInputComponentBase implements RawDocumentsProducer {
+        LocalInputComponentBase implements RawDocumentsProducer, URIResolver {
+
     private static Logger log = Logger
             .getLogger(XmlLocalInputComponent.class);
 
@@ -91,8 +89,14 @@ public class XmlLocalInputComponent extends
     /** Current request context */
     private RequestContext requestContext;
 
+    /**
+     * Default query encoding: {@value} 
+     */
+    protected static final String DEFAULT_QUERY_ENCODING = "UTF-8";
+    
     protected final Object defaultXml;
     protected final Object defaultXslt;
+    protected final String queryEncoding;
 
     public static final String PARAM_SOURCE_XML = "source";
     public static final String PARAM_XSLT = "xslt";
@@ -101,16 +105,24 @@ public class XmlLocalInputComponent extends
      * Creates a new instance of the component.
      */
     public XmlLocalInputComponent() {
-        this.defaultXml = null;
-        this.defaultXslt = null;
+        this(null, null);
     }
 
     /**
-     * Creates a new instance of the component with default XSLT and XML.
+     * Creates a new instance of the component with provided XSLT and XML and
+     * UTF-8 query encoding.
      */
     public XmlLocalInputComponent(Object xml, Object xslt) {
+        this(xml, xslt, DEFAULT_QUERY_ENCODING);
+    }
+    
+    /**
+     * Creates a new instance of the component with default XSLT and XML.
+     */
+    public XmlLocalInputComponent(Object xml, Object xslt, String queryEncoding) {
         this.defaultXml = xml;
         this.defaultXslt = xslt;
+        this.queryEncoding = queryEncoding;
     }
 
     public void setQuery(String query) {
@@ -181,7 +193,8 @@ public class XmlLocalInputComponent extends
 	        } else if (sourceOb instanceof String){
 	            // Try if the sourceOb converts to an URL at all,
 	            // substitute parts of the URL if needed
-	            String stringifiedUrl = substituteParams((String) sourceOb, query, params, requestedResults);
+	            String stringifiedUrl = substituteParams((String) sourceOb, query,
+                    params, requestedResults, queryEncoding);
                 log.debug("Transformed URL: " + stringifiedUrl);
 	            try {
 	                URL url = new URL(stringifiedUrl);
@@ -212,7 +225,8 @@ public class XmlLocalInputComponent extends
         if ("identity".equals(xsltOb)) {
             try {
                 SAXReader xmlReader = new SAXReader();
-                return xmlReader.read(source);
+                final Document doc = xmlReader.read(source);
+                return doc;
             } catch (DocumentException e) {
                 throw new ProcessingException("SAXReader parsing exception: " + e.toString());
             }
@@ -246,8 +260,10 @@ public class XmlLocalInputComponent extends
         
         // we have an input and an xslt stylesheet. Perform transformation.
         TransformerFactory tf = TransformerFactory.newInstance(); 
+        tf.setURIResolver(this);
         try {
             Transformer transformer = tf.newTransformer(new StreamSource(xslt));
+            transformer.setURIResolver(this);
             
             // Register request attributes as parameters for the transformer.
             for (Iterator i = params.keySet().iterator(); i.hasNext(); ) {
@@ -294,7 +310,9 @@ public class XmlLocalInputComponent extends
      * @param requestParams
      * @return The url with parameters substituted with their values.
      */
-    protected static String substituteParams(String url, String query, Map requestParams, int requestedResults) {
+    protected static String substituteParams(String url, String query, Map requestParams,
+        int requestedResults, String queryEncoding)
+    {
         try {
 	        int index = 0;
 	        
@@ -315,12 +333,12 @@ public class XmlLocalInputComponent extends
                     buf.replace(index, lastIndex+1, res);
                     index = index + res.length();
                 } else if ("query".equals(paramName)) {
-	                String v = URLEncoder.encode(query, "UTF-8");
+	                String v = URLEncoder.encode(query, queryEncoding);
 	                buf.replace(index, lastIndex+1, v);
 	                index = index + v.length();
 	            } else if (requestParams.containsKey(paramName)) {
 	                try {
-		                String value = URLEncoder.encode((String) requestParams.get(paramName), "UTF-8"); 
+		                String value = URLEncoder.encode((String) requestParams.get(paramName), DEFAULT_QUERY_ENCODING); 
 		                buf.replace(index, lastIndex+1, value);
 		                index = index + value.length();
 	                } catch (ClassCastException e) {
@@ -395,5 +413,13 @@ public class XmlLocalInputComponent extends
 
             this.rawDocumentConsumer.addDocument(document);
         }
+    }
+
+    /* (non-Javadoc)
+     * @see javax.xml.transform.URIResolver#resolve(java.lang.String, java.lang.String)
+     */
+    public Source resolve(String href, String base) throws TransformerException
+    {
+        return null;
     }
 }
