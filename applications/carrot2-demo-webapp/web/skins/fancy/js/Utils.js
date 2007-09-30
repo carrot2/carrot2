@@ -46,6 +46,10 @@ Dom.findParentElement = function(element, predicate)
 }
 
 Dom.applyToElements = function(parent, predicate, closure, closureData) {
+  if (parent == null)
+  {
+    return;
+  }
   for (var i = 0; i < parent.childNodes.length; i++) {
     if (parent.childNodes[i].nodeType == 1 && predicate(parent.childNodes[i])) {
       closure(parent.childNodes[i], closureData);
