@@ -236,12 +236,18 @@ public class XMLPageSerializer implements PageSerializer
 
         // And finally, emit the query
         meta.addElement("query").setText(searchRequest.query);
+        meta.addElement("query-escaped").setText(escapeForJavascriptString(searchRequest.query));
         if (searchRequest.expandedQuery != null)
         {
             meta.addElement("expanded-query").setText(searchRequest.expandedQuery);
         }
 
         return meta;
+    }
+    
+    private String escapeForJavascriptString(String text)
+    {
+        return text.replaceAll("\\\\", "\\\\\\\\").replaceAll("\"", "\\\\\"");
     }
 
     private String getQueryStringExtension(SearchRequest searchRequest)

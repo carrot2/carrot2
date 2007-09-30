@@ -4,7 +4,7 @@
   <xsl:import href="common.xsl" />
   <xsl:strip-space elements="*"/>
 
-  <xsl:output indent="yes" omit-xml-declaration="yes" media-type="text/html" encoding="utf-8"
+  <xsl:output indent="no" omit-xml-declaration="yes" media-type="text/html" encoding="utf-8"
        doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" doctype-system="http://www.w3.org/TR/html4/loose.dtd"/>
 
   <xsl:template name="head-insert">

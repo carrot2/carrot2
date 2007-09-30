@@ -6,10 +6,11 @@
 
   <xsl:strip-space elements="*"/>
 
-  <xsl:output indent="yes" omit-xml-declaration="yes" media-type="text/html" encoding="utf-8" />
+  <xsl:output indent="no" omit-xml-declaration="yes" media-type="text/html" encoding="utf-8" />
 
   <!-- The query, if any -->
   <xsl:param name="query" select="/page/meta/query" />
+  <xsl:param name="query-escaped" select="/page/meta/query-escaped" />
   <xsl:variable name="tabElemName">tabElem</xsl:variable>
 
   <xsl:variable name="opts">
@@ -40,7 +41,7 @@
     <script type="text/javascript" src="{$skinuri}/js/Cookies.js" ></script>
 
     <script type="text/javascript">
-var query = "<xsl:value-of select="$query" />";
+var query = "<xsl:value-of select="$query-escaped" />";
 var userTabIds = "<xsl:apply-templates select="/page/meta/user-tabs/user-tab" mode="tab-ids" />";
 var selectedTabId = "<xsl:value-of select="/page/meta/user-tabs/user-tab[@selected]/@id" />";
 var allTabIds = "<xsl:apply-templates select="/page/meta/tabs/tab" mode="tab-ids" />";
