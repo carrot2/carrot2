@@ -19,11 +19,24 @@
   <xsl:param name="force-results-page">false</xsl:param> <!-- Set to 'true' only for generating static HTMLs (results page) -->
 
   <xsl:param name="carrot2.website.url">http://project.carrot2.org</xsl:param>
+  <xsl:param name="carrot2.stable.url">http://demo.carrot2.org</xsl:param>
+  <xsl:param name="carrot2.head.url">http://demo.carrot2.org/demo-head/</xsl:param>
+
+  <xsl:variable name="beta"><xsl:if test="contains(/processing-instruction('release-info'), 'head')">true</xsl:if></xsl:variable>
+  <xsl:variable name="logo-suffix"><xsl:if test="$beta">-beta</xsl:if></xsl:variable>
 
   <xsl:template name="custom-results-utils">
     <div id="results-utils">
       <a href="{$carrot2.website.url}">About</a> |
-      <a href="{$carrot2.website.url}/release-2.1-notes.html" class="new">New features!</a> |
+      <xsl:choose>
+        <xsl:when test="$beta">
+          <a href="{$carrot2.stable.url}">Stable</a> |
+        </xsl:when>
+        <xsl:otherwise>
+          <a href="{$carrot2.website.url}/release-2.1-notes.html" class="new">New features!</a> |
+          <a href="{$carrot2.head.url}">Beta</a> |
+        </xsl:otherwise>
+      </xsl:choose>
       <a href="{$carrot2.website.url}/demos.html">More demos</a> |
       <a href="{$carrot2.website.url}/browser-plugins.html">Plugins</a> |
       <a href="{$carrot2.website.url}/download.html">Download</a> |
@@ -33,11 +46,11 @@
   </xsl:template>
 
   <xsl:template name="custom-results-logo">
-    <a href="{$contextPath}/"><img border="0" src="{$skinuri}/img/results-logo.gif" id="results-logo" alt="Carrot2 logo" /></a>
+    <a href="{$contextPath}/"><img border="0" src="{$skinuri}/img/results-logo{$logo-suffix}.gif" id="results-logo" alt="Carrot2 logo" /></a>
   </xsl:template>
 
   <xsl:template name="custom-startup-logo">
-    <a href="{$contextPath}/"><img border="0" src="{$skinuri}/img/startup-logo.gif" id="startup-logo" alt="Carrot2 logo" /></a>
+    <a href="{$contextPath}/"><img border="0" src="{$skinuri}/img/startup-logo{$logo-suffix}.gif" id="startup-logo" alt="Carrot2 logo" /></a>
   </xsl:template>
 
   <xsl:template name="startup-extra-content">
@@ -45,7 +58,14 @@
 
     <div id="startup-extra">
       <a href="{$carrot2.website.url}">About</a> |
-      <a href="{$carrot2.website.url}/release-2.1-notes.html" class="new">New features!</a> |
+      <xsl:choose>
+        <xsl:when test="$beta">
+          <a href="{$carrot2.stable.url}">Stable</a> |
+        </xsl:when>
+        <xsl:otherwise>
+          <a href="{$carrot2.website.url}/release-2.1-notes.html" class="new">New features!</a> |
+        </xsl:otherwise>
+      </xsl:choose>
       <a href="{$carrot2.website.url}/demos.html">More demos</a> |
       <a href="{$carrot2.website.url}/browser-plugins.html">Plugins</a> |
       <a href="{$carrot2.website.url}/download.html">Download</a> |
