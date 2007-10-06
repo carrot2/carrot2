@@ -1,8 +1,0 @@
-<local-component-factory 
-	id="filter-langset-zh" 
-	component-class="org.carrot2.core.impl.RawDocumentDummyLanguageDetection">
-
-	<init-properties>
-		<property name="lang-code">zh</property>
-	</init-properties>
-</local-component-factory> 
