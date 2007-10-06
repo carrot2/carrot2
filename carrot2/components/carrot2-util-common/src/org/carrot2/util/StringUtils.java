@@ -76,7 +76,7 @@ public class StringUtils
      * Capitalizes a string only when its {@link #capitalizedRatio(String)} is less
      * or equal to 0.5. Otherwise, returns the original string.
      * 
-     * @return
+     * @return capitalized string
      */
     public static String smartCapitalize(String string)
     {

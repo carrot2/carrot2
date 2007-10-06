@@ -21,8 +21,7 @@ import org.carrot2.core.clustering.RawCluster;
  * of the documents, e.g. the search source they come from or their domain names.
  *
  * TODO: This interface is pretty much generic, so for the 3.0 release
- * it could be refactored/replaced by a general "cluster generator" interface
- * so that there is one
+ * it could be refactored/replaced by a general "cluster generator" interface.
  *
  * @author Stanislaw Osinski
  */
@@ -33,7 +32,7 @@ public interface FacetGenerator
      * discovered in input documents.
      *
      * @param rawDocuments
-     * @return
+     * @return the list of facets discovered in the input documents 
      */
     public List generateFacets(List rawDocuments);
 }

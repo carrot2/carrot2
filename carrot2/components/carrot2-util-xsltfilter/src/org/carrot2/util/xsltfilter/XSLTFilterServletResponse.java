@@ -29,8 +29,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 /**
  * A wrapper around a {@link HttpServletResponse} which attempts to detect
  * the type of output acquired from the servlet chain and apply a stylesheet to it
- * if all conditions mentioned in {@link com.dawidweiss.xsltfilter.XsltFilter} are
- * met.
+ * if all conditions mentioned in {@link XSLTFilter} are met.
  * 
  * @author Dawid Weiss.
  */
