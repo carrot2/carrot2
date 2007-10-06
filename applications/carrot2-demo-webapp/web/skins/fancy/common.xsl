@@ -15,7 +15,7 @@
 <html>
   <head>
     <title>Carrot Clustering Engine</title>
-    
+
     <link rel="stylesheet" type="text/css" href="{$skinuri}/css/common.css" />
     <xsl:call-template name="head-insert" />
   </head>
@@ -27,8 +27,12 @@
       <xsl:attribute name="onload"><xsl:value-of select="$onload" /></xsl:attribute>
     </xsl:if>
 
+    <xsl:call-template name="body-insert" />
+
     <xsl:apply-templates />
-    
+
+    <xsl:call-template name="body-end-insert" />
+
     <xsl:if test="string-length($ga-code)">
 <script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
 </script>
@@ -47,6 +51,13 @@ urchinTracker();
 
   <!-- Empty onload -->
   <xsl:template name="on-load" />
+
+  <!-- Empty head insert -->
+  <xsl:template name="head-insert" />
+
+  <!-- Empty body insert -->
+  <xsl:template name="body-insert" />
+  <xsl:template name="body-end-insert" />
 
   <!-- Certain HTML elements -->
   <xsl:template match="p|table|tr|td|a|b|ul|br|img|div|select|option|span|li|form|script">

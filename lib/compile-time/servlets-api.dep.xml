@@ -1,5 +1,5 @@
 
-<component name="servlets-api" description="Java Servlet API, http://www.java.sun.com/products/servlet/">
+<component name="servlets-api" description="Java Servlet API (2.4), http://www.java.sun.com/products/servlet/">
 	<provides>
 		<files>
 			<file location="servlet.jar" />

@@ -19,7 +19,7 @@ import org.carrot2.util.PropertyProviderBase;
 
 /**
  * A complete base implementation of the {@link RawCluster}interface.
- * 
+ *
  * @author Stanislaw Osinski
  * @version $Revision$
  */
@@ -47,7 +47,7 @@ public class RawClusterBase extends PropertyProviderBase implements RawCluster
 
     /**
      * Returns all properties of this cluster.
-     * 
+     *
      * @return all properties of this cluster.
      */
     public Map getProperties()
@@ -58,7 +58,7 @@ public class RawClusterBase extends PropertyProviderBase implements RawCluster
     /**
      * A convenience method returning this cluster's score or -1 if the score
      * has not been set.
-     * 
+     *
      * @return this cluster's score or -1 if the score has not been set.
      */
     public double getScore()
@@ -68,7 +68,7 @@ public class RawClusterBase extends PropertyProviderBase implements RawCluster
 
     /**
      * A convenience method setting score for this cluster.
-     * 
+     *
      * @param score score to be set
      */
     public void setScore(double score)
@@ -78,7 +78,7 @@ public class RawClusterBase extends PropertyProviderBase implements RawCluster
 
     /**
      * Adds a document to this cluster.
-     * 
+     *
      * @param rawDocument the document to be added.
      */
     public void addDocument(RawDocument rawDocument)
@@ -87,8 +87,19 @@ public class RawClusterBase extends PropertyProviderBase implements RawCluster
     }
 
     /**
+     * Adds a collection of documents to this cluster in the order returned
+     * by the collection's iterator.
+     *
+     * @param documents
+     */
+    public void addDocuments(Collection documents)
+    {
+        this.documents.addAll(documents);
+    }
+
+    /**
      * Adds a label to this cluster.
-     * 
+     *
      * @param label the label to be added.
      */
     public void addLabel(String label)
@@ -98,18 +109,27 @@ public class RawClusterBase extends PropertyProviderBase implements RawCluster
 
     /**
      * Adds a subcluster to this cluster.
-     * 
+     *
      * @param rawCluster the subcluster to be added.
      */
     public void addSubcluster(RawCluster rawCluster)
     {
         subclusters.add(rawCluster);
     }
+    /**
+     * Adds a collection of subclusters to this cluster.
+     *
+     * @param subclusters to be added
+     */
+    public void addSubclusters(Collection subclusters)
+    {
+        this.subclusters.addAll(subclusters);
+    }
 
     /**
      * Returns a multiline String representing this cluster's content, including
      * the contents of this cluster's documents.
-     * 
+     *
      * @return this cluster's content
      */
     public String getFullInfo()
@@ -131,7 +151,7 @@ public class RawClusterBase extends PropertyProviderBase implements RawCluster
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.carrot2.core.clustering.RawCluster#getClusterDescription()
      */
     public List getClusterDescription()
@@ -141,7 +161,7 @@ public class RawClusterBase extends PropertyProviderBase implements RawCluster
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.carrot2.core.clustering.RawCluster#getSubclusters()
      */
     public List getSubclusters()
@@ -151,7 +171,7 @@ public class RawClusterBase extends PropertyProviderBase implements RawCluster
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.carrot2.core.clustering.RawCluster#getDocuments()
      */
     public List getDocuments()

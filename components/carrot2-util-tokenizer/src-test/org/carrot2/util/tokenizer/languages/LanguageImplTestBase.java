@@ -86,10 +86,7 @@ public abstract class LanguageImplTestBase extends TestCase {
             for (int i=0;i<forms.length;i++) {
                 String word = forms[i][0];
                 String base = stemmer.getStem(word.toCharArray(),0, word.length());
-                if (!forms[i][1].equals(base)) {
-                    System.out.println(base + ", should be: " + forms[i][1]);
-                }
-                assertEquals(forms[i][1], base);
+                assertEquals("Pair (expected, stemmed): " + forms[i][1] + ", " + base, forms[i][1], base);
             }
         } finally {
             if (stemmer != null)
@@ -143,7 +140,6 @@ public abstract class LanguageImplTestBase extends TestCase {
                 String word = (String) i.next();
                 tokenizer.restartTokenizationOn(new StringReader(word));
                 
-                Token [] tokensd = new Token[ 2 ];
                 int recognized = tokenizer.getNextTokens(tokens, 0);
                 assertEquals( 1, recognized );
                 

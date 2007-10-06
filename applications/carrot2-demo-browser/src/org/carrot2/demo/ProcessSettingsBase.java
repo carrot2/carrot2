@@ -39,7 +39,7 @@ public abstract class ProcessSettingsBase implements ProcessSettings
 
     public abstract boolean isConfigured();
 
-    public HashMap getRequestParams() {
+    public Map getRequestParams() {
         synchronized (this) {
             return new HashMap(params);
         }

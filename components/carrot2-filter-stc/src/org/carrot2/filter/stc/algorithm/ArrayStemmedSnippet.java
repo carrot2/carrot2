@@ -14,6 +14,7 @@
 package org.carrot2.filter.stc.algorithm;
 
 
+import org.apache.log4j.Logger;
 import org.carrot2.filter.stc.suffixtree.SuffixableElement;
 
 
@@ -26,7 +27,7 @@ public class ArrayStemmedSnippet
     private final StemmedTerm [] snippet;
 
     /** Precalculated sentence boundaries */
-    private final StemmedSentence [] sentences;
+    private StemmedSentence [] sentences;
 
     /**
      * Nested class representing a sentence in this snippet.
@@ -199,8 +200,8 @@ public class ArrayStemmedSnippet
         {
             // resize array
             StemmedSentence [] newSentences = new StemmedSentence[j];
-
             System.arraycopy(sentences, 0, newSentences, 0, j);
+            sentences = newSentences;
         }
     }
 

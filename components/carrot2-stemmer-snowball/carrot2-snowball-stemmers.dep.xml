@@ -3,7 +3,7 @@
 
 <component
     name="carrot2-snowball-stemmers"
-    description="Carrot2 Snowball Stemmers (Danish, Dutch, English, Finnish, French, German, Italian, Norwegian, English-Porter, Portuguese, Russian, Spanish, Swedish)">
+    description="Carrot2 Snowball Stemmers, Snowball Java lib. downloaded at July 24, 2007">
 
     <provides>
         <files build-path-exclude="true" prefix="tmp/dist">

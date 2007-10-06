@@ -1,0 +1,4 @@
+<local-component-factory 
+	id="filter-clustering-lingo-multi" 
+	component-class="org.carrot2.filter.lingo.local.MultilingualLingoLocalFilterComponent">
+</local-component-factory> 

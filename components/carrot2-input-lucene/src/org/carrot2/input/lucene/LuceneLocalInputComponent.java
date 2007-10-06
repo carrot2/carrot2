@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
@@ -31,13 +30,13 @@ import org.carrot2.core.profiling.ProfiledLocalInputComponentBase;
 /**
  * Implements a local input component that reads data from Lucene index. Use
  * {@link org.carrot2.input.lucene.LuceneLocalInputComponentFactory} to obtain
- * instances of this component or provide a valid {@link LuceneSearchConfig}
+ * instances of this component or provide a valid {@link LuceneLocalInputComponentFactoryConfig}
  * object.
- * 
+ *
  * @author Stanislaw Osinski
  * @author Dawid Weiss
  * @author Sairaj Sunil
- * 
+ *
  * @version $Revision$
  */
 public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
@@ -45,10 +44,11 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
 {
     /** The default number of requested results */
     public final static int DEFAULT_REQUESTED_RESULTS = 100;
+    private final static String [] SOURCES = new String [] { "Lucene" };
 
-    /** 
+    /**
      * A request-context parameter overriding the default search configuration.
-     * The value of this parameter must be an instance of {@link LuceneSearchConfig}. 
+     * The value of this parameter must be an instance of {@link LuceneLocalInputComponentFactoryConfig}.
      */
     public final static String LUCENE_CONFIG = "org.carrot2.input.lucene.config";
 
@@ -61,7 +61,7 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
     /**
      * All information required to perform a search in Lucene.
      */
-    private final LuceneSearchConfig luceneSettings;
+    private final LuceneLocalInputComponentConfig luceneSettings;
 
     /** Current query. */
     private String query;
@@ -73,24 +73,10 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
     private RequestContext requestContext;
 
     /**
-     * No direct instantiation.
-     * 
-     * @deprecated Use {@link #LuceneLocalInputComponent(LuceneSearchConfig)}.
-     */
-    protected LuceneLocalInputComponent(Searcher searcher, Analyzer analyzer,
-        String [] searchFields, String titleField, String summaryField,
-        String urlField)
-    {
-        this(new LuceneSearchConfig(
-                searcher, analyzer, searchFields, titleField,
-                summaryField, urlField));
-    }
-
-    /**
      * Create an instance of the component with a set
      * of predefined settings.
      */
-    public LuceneLocalInputComponent(LuceneSearchConfig settings)
+    public LuceneLocalInputComponent(LuceneLocalInputComponentConfig settings)
     {
         this.luceneSettings = settings;
     }
@@ -122,7 +108,7 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.carrot2.core.LocalComponent#getRequiredSuccessorCapabilities()
      */
     public Set getRequiredSuccessorCapabilities()
@@ -158,7 +144,7 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.carrot2.core.LocalComponent#startProcessing(org.carrot2.core.RequestContext)
      */
     public void startProcessing(RequestContext requestContext)
@@ -195,9 +181,9 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
     }
 
     /**
-     * 
+     *
      */
-    private void pushResults(Map params, LuceneSearchConfig luceneSettings) throws ParseException, IOException,
+    private void pushResults(Map params, LuceneLocalInputComponentConfig luceneSettings) throws ParseException, IOException,
         ProcessingException
     {
         // assemble request parameters
@@ -208,25 +194,26 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
 
         // check if there is an override for lucene settings in the context.
         if (params.containsKey(LUCENE_CONFIG)) {
-            luceneSettings = (LuceneSearchConfig) params.get(LUCENE_CONFIG); 
+            luceneSettings = (LuceneLocalInputComponentConfig) params.get(LUCENE_CONFIG);
         }
-        
+
         if (luceneSettings == null) {
             throw new ProcessingException("Lucene input component not configured. Need LuceneSettings.");
         }
-        
+
         // Create a boolean query that combines all fields
         final BooleanQuery booleanQuery = new BooleanQuery();
-        
-        for (int i = 0; i < luceneSettings.searchFields.length; i++)
+
+        for (int i = 0; i < luceneSettings.factoryConfig.searchFields.length; i++)
         {
-            final QueryParser queryParser = 
-                new QueryParser(luceneSettings.searchFields[i], luceneSettings.analyzer);
+            final QueryParser queryParser =
+                new QueryParser(luceneSettings.factoryConfig.searchFields[i],
+                    luceneSettings.analyzer);
             queryParser.setDefaultOperator(QueryParser.AND_OPERATOR);
             Query queryComponent = queryParser.parse(query);
             booleanQuery.add(queryComponent, BooleanClause.Occur.SHOULD);
         }
-        
+
         // Perform query
         final Hits hits = luceneSettings.searcher.search(booleanQuery);
         final int endAt = Math.min(hits.length(), startAt + requestedDocuments);
@@ -247,30 +234,30 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
         {
             hits.id(endAt - 1);
         }
-        
+
         // This line is added to the original for the highlighting part. The
         // Highlighter is present in org.apache.lucene.search.highlight package
         Highlighter highlighter = null;
-        if (luceneSettings.summarizerConfig != null
-            && luceneSettings.summarizerConfig != LuceneSearchConfig.NO_SUMMARIES)
+        if (luceneSettings.factoryConfig.summarizerConfig != null
+            && luceneSettings.factoryConfig.summarizerConfig != LuceneLocalInputComponentFactoryConfig.NO_SUMMARIES)
         {
-            highlighter = new Highlighter(luceneSettings.summarizerConfig.formatter,
+            highlighter = new Highlighter(luceneSettings.factoryConfig.summarizerConfig.formatter,
                 new QueryScorer(booleanQuery));
         }
-        
+
         // This is the new for loop written by me to handle the case of
         // highlighting, which was not present in the original version
         for (int i = startAt; i < endAt; i++)
         {
             final Document doc = hits.doc(i);
             String summary;
-            final String summaryField = doc.get(luceneSettings.summaryField);
-            
+            final String summaryField = doc.get(luceneSettings.factoryConfig.summaryField);
+
             if (summaryField != null && highlighter != null)
             {
                 String [] summaries = highlighter.getBestFragments(
-                    luceneSettings.analyzer, luceneSettings.summaryField,
-                    summaryField, luceneSettings.summarizerConfig.maxFragments);
+                    luceneSettings.analyzer, luceneSettings.factoryConfig.summaryField,
+                    summaryField, luceneSettings.factoryConfig.summarizerConfig.maxFragments);
                 StringBuffer summaryBuffer = new StringBuffer();
                 if (summaries.length > 0)
                 {
@@ -289,8 +276,9 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
             }
 
             final RawDocumentSnippet rawDocument = new RawDocumentSnippet(
-                new Integer(hits.id(i)), doc.get(luceneSettings.titleField),
-                summary, doc.get(luceneSettings.urlField), hits.score(i));
+                new Integer(hits.id(i)), doc.get(luceneSettings.factoryConfig.titleField),
+                summary, doc.get(luceneSettings.factoryConfig.urlField), hits.score(i));
+            rawDocument.setProperty(RawDocument.PROPERTY_SOURCES, SOURCES);
             rawDocumentConsumer.addDocument(rawDocument);
         }
     }

@@ -60,6 +60,26 @@ public class ArrayUtils
 
         return array;
     }
+    
+    /**
+     * Reverses a <code>String</code> array in place. A reference to the input
+     * array is returned for convenience.
+     * 
+     * @param array
+     */
+    public static String [] reverse(String [] array)
+    {
+        String temp;
+        
+        for (int i = 0; i < (array.length / 2); i++)
+        {
+            temp = array[i];
+            array[i] = array[array.length - i - 1];
+            array[array.length - i - 1] = temp;
+        }
+        
+        return array;
+    }
 
     /**
      * Calculates the mean value of the <b>non-zero </b> elements of
@@ -139,5 +159,56 @@ public class ArrayUtils
         }
 
         return index;
+    }
+    
+    /**
+     * Return index of the first maxiumum element in <code>a</code>. If
+     * <code>a</code> is null of has length 0, -1 will be returned.
+     * 
+     * @param a
+     * @return index of the first maxiumum element in <code>a</code> or -1
+     */
+    public static int max(int [] a)
+    {
+        if (a == null || a.length == 0)
+        {
+            return -1;
+        }
+        
+        double max = a[0];
+        int index = 0;
+        
+        for (int i = 1; i < a.length; i++)
+        {
+            if (max < a[i])
+            {
+                max = a[i];
+                index = i;
+            }
+        }
+        
+        return index;
+    }
+    
+    public static String toString(Object [] array, String delimiter)
+    {
+        StringBuffer sb = new StringBuffer();
+        
+        if (array != null && array.length > 0)
+        {
+            sb.append(array[0].toString());
+            for (int i = 1; i < array.length; i++)
+            {
+                sb.append(delimiter);
+                sb.append(array[i]);
+            }
+        }
+        
+        return sb.toString();
+    }
+    
+    public static String toString(Object [] array)
+    {
+        return toString(array, ", ");
     }
 }

@@ -3,24 +3,29 @@
 
 <component
     name="jdic"
-    description="Java Desktop Integration Components (JDIC), Version 20061102, https://jdic.dev.java.net/">
+    description="Java Desktop Integration Components (JDIC), Version 0.9.3 (with custom patches), https://jdic.dev.java.net/">
+
 	<provides>
 		<files>
 			<file location="jdic.jar" />
 
-			<file location="jdic_windows/IeEmbed.exe" />
-			<file location="jdic_windows/jdic.dll" />
-			<file location="jdic_windows/jdic_stub.jar" />
-			<file location="jdic_windows/MozEmbed.exe" />
-			<file location="jdic_windows/tray.dll" />
+			<file location="windows/jdic_stub.jar" />
+			<file location="windows/x86/IeEmbed.exe" />
+			<file location="windows/x86/jdic.dll" />
+			<file location="windows/x86/MozEmbed.exe" />
+			<file location="windows/x86/tray.dll" />
 
-			<file location="jdic_linux/libjdic.so" />
-			<file location="jdic_linux/libmozembed-linux-gtk1.2.so" />
-			<file location="jdic_linux/libmozembed-linux-gtk2.so" />
-			<file location="jdic_linux/libtray.so" />
-			<file location="jdic_linux/mozembed-linux-gtk1.2" />
-			<file location="jdic_linux/mozembed-linux-gtk2" />
+                        <!--
+			<file location="linux/jdic_stub.jar" />
+			<file location="linux/x86/libjdic.so" />
+			<file location="linux/x86/libmozembed-linux-gtk1.2.so" />
+			<file location="linux/x86/libmozembed-linux-gtk2.so" />
+			<file location="linux/x86/libtray.so" />
+			<file location="linux/x86/mozembed-linux-gtk2" />
+			<file location="linux/x86/mozembed-linux-gtk1.2" />
+			-->
 		</files>
 	</provides>
+
 </component>
 

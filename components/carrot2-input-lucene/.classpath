@@ -2,10 +2,11 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/log4j-1.2.13.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/log4j-1.2.14.jar"/>
 	<classpathentry kind="src" path="/carrot2-local-core"/>
-	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/lucene-core-2.0.0.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/lucene-core-2.2.0.jar"/>
 	<classpathentry kind="src" path="/carrot2-util-common"/>
 	<classpathentry kind="lib" path="lib/lucene-highlighter-2.0.0.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-tokenizer"/>
 	<classpathentry kind="output" path="tmp/eclipse/classes"/>
 </classpath>

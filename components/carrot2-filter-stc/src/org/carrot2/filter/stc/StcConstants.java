@@ -13,6 +13,8 @@
 
 package org.carrot2.filter.stc;
 
+import org.carrot2.filter.stc.algorithm.STCEngine;
+
 
 /**
  * Names of properties used to drive the algorithm and
@@ -153,5 +155,57 @@ public class StcConstants {
 	 * Default value for {@link #MAX_PHRASE_LENGTH}. 
 	 */
 	public final static int DEFAULT_MAX_PHRASE_LENGTH = 4;
-    
+
+    /**
+     * A factor in calculation of the base cluster score. If greater then
+     * zero, single-term base clusters are assigned this value avoiding the 
+     * penalty function.
+     */
+	public final static String SINGLE_TERM_BOOST = "stc.singleTermBoost";
+
+	/**
+	 * Default value for {@link #SINGLE_TERM_BOOST}. 
+	 */
+	public final static float DEFAULT_SINGLE_TERM_BOOST = .5f;
+
+    /**
+     * A factor in calculation of the base cluster score.
+     * 
+     * <p>Allowed range: 1 -- inf., property type <code>String</code> (a numeric value).</p>
+     * 
+     * @see STCEngine#calculateModifiedBaseClusterScore(int, int, StcParameters)
+     */
+	public final static String OPTIMAL_PHRASE_LENGTH = "stc.optimalPhraseLength";
+
+	/**
+	 * Default value for {@link #OPTIMAL_PHRASE_LENGTH}. 
+	 */
+	public final static int DEFAULT_OPTIMAL_PHRASE_LENGTH = 3;
+
+    /**
+     * A factor in calculation of the base cluster score.
+     * 
+     * <p>Allowed range: positive real number -- inf., property type <code>String</code> (a numeric value).</p>
+     * 
+     * @see STCEngine#calculateModifiedBaseClusterScore(int, int, StcParameters)
+     */
+	public final static String OPTIMAL_PHRASE_LENGTH_DEV = "stc.optimalPhraseLengthDev";
+
+	/**
+	 * Default value for {@link #OPTIMAL_PHRASE_LENGTH_DEV}. 
+	 */
+	public final static double DEFAULT_OPTIMAL_PHRASE_LENGTH_DEV = 2;
+
+    /**
+     * Default value for {@link #DOCUMENT_COUNT_BOOST}.
+     */
+    public final static double DEFAULT_DOCUMENT_COUNT_BOOST = 1;
+
+    /**
+     * A factor in calculation of the base cluster score, boosting the score
+     * depending on the number of documents found in the base cluster. 
+     * 
+     * <p>Allowed range: 0 -- inf., property type <code>String</code> (a numeric value).</p>
+     */
+    public final static String DOCUMENT_COUNT_BOOST = "stc.documentCountBoost";
 }

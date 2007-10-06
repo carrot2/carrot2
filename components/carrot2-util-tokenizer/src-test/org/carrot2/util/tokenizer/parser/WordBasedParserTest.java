@@ -17,13 +17,14 @@ package org.carrot2.util.tokenizer.parser;
 import java.io.StringReader;
 
 import junit.framework.TestCase;
+import junitx.framework.*;
 
 import org.carrot2.core.linguistic.tokens.TypedToken;
 import org.carrot2.util.tokenizer.parser.jflex.JFlexWordBasedParser;
 
 
 /**
- * Test JavaCC tokenizer definition and the Carrot2 wrapper.
+ * Test tokenizer definition and the Carrot2 wrapper.
  */
 public class WordBasedParserTest
     extends TestCase
@@ -51,9 +52,10 @@ public class WordBasedParserTest
         parser.restartTokenizationOn(new StringReader(TEST));
         
         org.carrot2.core.linguistic.tokens.Token [] tokens 
-            = new org.carrot2.core.linguistic.tokens.Token[20];
+            = new org.carrot2.core.linguistic.tokens.Token[6];
+        int [] startPositions = new int[tokens.length];
         
-        int howmany = parser.getNextTokens(tokens, 0);
+        int howmany = parser.getNextTokens(tokens, startPositions, 0);
 
         assertTokensEqual( tokens, new TokenImage [] {
             new TokenImage("Abecadło", TypedToken.TOKEN_TYPE_TERM),
@@ -64,6 +66,9 @@ public class WordBasedParserTest
             new TokenImage(".", TypedToken.TOKEN_TYPE_PUNCTUATION | TypedToken.TOKEN_FLAG_SENTENCE_DELIM)
         });
         
+        ArrayAssert.assertEquals(new int[] { 0, 9, 12, 32, 34, 39 },
+                startPositions);
+        
         assertEquals( 6, howmany);
         
         parser.reuse();
@@ -71,13 +76,14 @@ public class WordBasedParserTest
 
     public void testAdvancedTokenization() {
         WordBasedParserBase parser = new JFlexWordBasedParser();
-        String TEST = "hyphen-term hyphen- term";
+        String TEST = "hyphen-term hyphen-     term";
         parser.restartTokenizationOn(new StringReader(TEST));
         
         org.carrot2.core.linguistic.tokens.Token [] tokens 
-            = new org.carrot2.core.linguistic.tokens.Token[20];
+            = new org.carrot2.core.linguistic.tokens.Token[3];
+        int [] startPositions = new int[tokens.length];
         
-        int howmany = parser.getNextTokens(tokens, 0);
+        int howmany = parser.getNextTokens(tokens, startPositions, 0);
 
         assertTokensEqual(tokens, new TokenImage []
         { 
@@ -86,6 +92,8 @@ public class WordBasedParserTest
               new TokenImage("hyphen-", TypedToken.TOKEN_TYPE_SYMBOL),
               new TokenImage("term", TypedToken.TOKEN_TYPE_TERM) 
         });
+        ArrayAssert.assertEquals(new int[] { 0, 12, 24 },
+                startPositions);
         
         assertEquals(3, howmany);
         

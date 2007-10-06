@@ -18,6 +18,7 @@ import org.carrot2.core.linguistic.Stemmer;
 
 import org.carrot2.filter.lingo.local.LingoLocalFilterComponent;
 import org.carrot2.filter.lingo.lsicluster.LsiClusteringStrategy;
+import org.carrot2.filter.lingo.lsicluster.LsiConstants;
 import org.carrot2.filter.lingo.util.log.TimeLogger;
 
 import org.apache.log4j.Logger;
@@ -52,16 +53,20 @@ public class MultilingualClusteringContext extends AbstractClusteringContext {
 
     /** DOCUMENT ME! */
     private HashMap languages;
+    
+    /** The language to get the tokenizer from. */
+    private Language tokenizerLanguage;
 
     /**
      * unidentified language
      */
     public static final String UNIDENTIFIED_LANGUAGE_NAME = "unidentified";
 
+    /** If true, disables stemming */
+    boolean DISABLE_STEMMING = LsiConstants.DEFAULT_DISABLE_STEMMING;
+
     public MultilingualClusteringContext(Map params) {
-        if (params != null) {
-            super.setParameters(params);
-        }
+        setParameters( params );
 
         stopWordSets = new HashMap();
         nonStopWordSets = new HashMap();
@@ -71,7 +76,16 @@ public class MultilingualClusteringContext extends AbstractClusteringContext {
 
         nonStopWordSets.put(MultilingualClusteringContext.UNIDENTIFIED_LANGUAGE_NAME, new HashSet());
 
-        Object value;
+        clusteringStrategy = new LsiClusteringStrategy();
+    }
+
+    /**
+     *  Sets parameters and checks for DISABLE_STEMMING
+     */
+    public void setParameters(Map params ) {
+        if ( params == null ) return;
+        super.setParameters( params );
+        Object value = null;
 
         if ((value = this.getParameter("preprocessing.class")) != null) {
             if (value instanceof List) {
@@ -79,10 +93,7 @@ public class MultilingualClusteringContext extends AbstractClusteringContext {
             }
 
             try {
-                preprocessingStrategy = (PreprocessingStrategy) Thread.currentThread()
-                                                                      .getContextClassLoader()
-                                                                      .loadClass((String) value)
-                                                                      .newInstance();
+                preprocessingStrategy = (PreprocessingStrategy) Thread.currentThread().getContextClassLoader().loadClass((String) value).newInstance();
             } catch (Exception e) {
                 logger.warn("Preprocessing strategy instantiation error", e);
                 throw new RuntimeException(
@@ -95,10 +106,7 @@ public class MultilingualClusteringContext extends AbstractClusteringContext {
 
         if ((value = this.getParameter("feature.extraction.strategy")) != null) {
             try {
-                featureExtractionStrategy = (FeatureExtractionStrategy) Thread.currentThread()
-                                                                              .getContextClassLoader()
-                                                                              .loadClass((String) value)
-                                                                              .newInstance();
+                featureExtractionStrategy = (FeatureExtractionStrategy) Thread.currentThread().getContextClassLoader().loadClass((String) value).newInstance();
             } catch (Exception e) {
                 logger.warn("Feature extraction strategy instantiation error", e);
                 throw new RuntimeException(
@@ -109,7 +117,10 @@ public class MultilingualClusteringContext extends AbstractClusteringContext {
             featureExtractionStrategy = new MultilingualFeatureExtractionStrategy();
         }
 
-        clusteringStrategy = new LsiClusteringStrategy();
+        if ((value = this.getParameter(LsiConstants.DISABLE_STEMMING)) != null) {
+            DISABLE_STEMMING = value.toString().equalsIgnoreCase( "true" );
+        }
+
     }
 
     /**
@@ -218,6 +229,9 @@ public class MultilingualClusteringContext extends AbstractClusteringContext {
                     Language language = (Language) languages.get(key);
 
                     Stemmer stemmer = language.borrowStemmer();
+                    if (stemmer == null) {
+                        continue;
+                    }
 
                     try {
                         String stemmed = stemmer.getStem(word.toCharArray(), 0,
@@ -288,6 +302,16 @@ public class MultilingualClusteringContext extends AbstractClusteringContext {
         this.languages = map;
     }
 
+    public void setTokenizerLanguage(Language tokenizerLanguage)
+    {
+        this.tokenizerLanguage = tokenizerLanguage;
+    }
+    
+    public Language getTokenizerLanguage()
+    {
+        return tokenizerLanguage;
+    }
+    
     public Map getLanguages() {
         return this.languages;
     }

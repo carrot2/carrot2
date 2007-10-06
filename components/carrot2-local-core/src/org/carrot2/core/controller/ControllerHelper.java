@@ -203,9 +203,6 @@ public class ControllerHelper {
      *
      * @return Returns a list of {@link LoadedProcess} objects.
      * @throws IOException Thrown if an i/o exception occurs.
-     * @throws DuplicatedKeyException Thrown if the controller already has a
-     *         component factory mapped to the identifier of the newly loaded
-     *         factory.
      */
     public LoadedProcess [] loadProcessesFromDir(File directory, FileFilter filter)
         throws IOException, LoaderExtensionUnknownException {
@@ -275,8 +272,11 @@ public class ControllerHelper {
     }
 
     /**
-     * Loads component factories from a given directory and select files using
-     * a custom file filter. 
+     * Loads component factories from a given directory and selects files 
+     * using a custom file filter.
+     * 
+     * Remember that the custom file filter should pass only those files
+     * recognized by the loaders (use {@link #getComponentFilter()} for this).
      */
     public LoadedComponentFactory [] loadComponentFactoriesFromDir(File directory, FileFilter customFilter) 
         throws IOException, ComponentInitializationException
@@ -294,7 +294,7 @@ public class ControllerHelper {
             } catch (LoaderExtensionUnknownException e) {
                 // This is impossible, because we checked
                 // that the loader knows the extension of this file.
-                throw new RuntimeException("Impossible state reached.");
+                throw new RuntimeException("Impossible state reached.", e);
             }
         }
         return (LoadedComponentFactory[]) list.toArray(

@@ -4,19 +4,17 @@
     <property name="tests.available"  value="true"    />
 
     <property name="project.dir"      location="${basedir}" />
-    <property name="carrot2.cvs.dir"  location="../.." />
+    <property name="carrot2.code.dir"  location="../.." />
     <property name="dist.name"        value="carrot2-input-msnapi" />
     <property name="type" value="jartype" />
 
-    <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
+    <import file="${carrot2.code.dir}/components/common-targets.inc" />
     
     <target name="generate">
         <path id="axis.classpath">
-          <fileset dir="lib">
-            <include name="**/*.jar" />
-          </fileset>
-          <fileset dir="${carrot2.cvs.dir}">
+          <fileset dir="${carrot2.code.dir}">
             <include name="lib/commons-logging*.jar" />
+            <include name="lib/axis/*.jar" />
           </fileset>
         </path>
         
@@ -30,7 +28,8 @@
           output="src"
           testcase="false"
           all="true"
-          url="http://soap.search.msn.com/webservices.asmx?wsdl">
+          nowrapped="true"
+          url="wsdl/msdn.2006.12.05.wsdl">
             <mapping
               namespace="http://schemas.microsoft.com/MSNSearch/2005/09/fex"
               package="com.microsoft.msnsearch" />

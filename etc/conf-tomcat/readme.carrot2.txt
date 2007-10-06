@@ -34,23 +34,9 @@ read Installation nodes first.
 Installation notes
 ------------------
 
-1. If you are using Tomcat 5.x, you will encounter query encoding issues.
+1. Be aware of query encoding issues. See the FAQ at:
 
-You must enforce proper decoding of URI parameters in the connector. You
-can do it by adding this attribute to the connector spec. in server.xml
-
-URIEncoding="UTF-8"
-
-An example connector should look similar to this one:
-
-<Connector port="8080"
-    maxThreads="25" minSpareThreads="5" maxSpareThreads="10"
-    minProcessors="5" maxProcessors="25" enableLookups="false"
-    redirectPort="8443" acceptCount="10" debug="0" connectionTimeout="20000" 
-    URIEncoding="UTF-8" />
-
-If you use direct Apache connectors (AJP), a similar attribute must be added.
-
+http://project.carrot2.org/faq.html#corrupted-characters
 
 2. For Google API input component, you need to define 'googleapi.keypool'
 system property pointing at a folder where GoogleAPI keys can be found. Each

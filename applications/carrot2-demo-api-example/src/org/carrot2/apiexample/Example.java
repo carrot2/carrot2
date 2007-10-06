@@ -27,8 +27,6 @@ import org.carrot2.filter.lingo.local.LingoLocalFilterComponent;
 import org.carrot2.input.yahooapi.YahooApiInputComponent;
 import org.carrot2.util.tokenizer.languages.english.English;
 
-import sun.awt.ComponentFactory;
-
 /**
  * This is an example of using the Carrot<sup>2</sup> API and components
  * directly from a Java application. The walk-through starts 
@@ -139,12 +137,16 @@ public final class Example {
             final LocalController controller = initLocalController();
 
             /*
-             * Once we have a controller we can run queries. Let's try with
-             * "data mining" query. The result object is a generic 
-             * ProcessingResult from which we acquire the actual result stored by
-             * {@link ArrayOutputComponent}. 
+             * Once we have a controller we can run queries. Let's try with "data mining"
+             * query. The result object is a generic ProcessingResult from which we
+             * acquire the actual result stored by {@link ArrayOutputComponent}. You can
+             * provide additional parameters (e.g. the number of results to fetch from the
+             * source) through the Map below.
              */
-            final ProcessingResult pResult = controller.query("yahoo-lingo", "data mining", new HashMap());
+            final Map parameters = new HashMap();
+            parameters.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, "150");
+            
+            final ProcessingResult pResult = controller.query("yahoo-lingo", "data mining", parameters);
             final ArrayOutputComponent.Result result = (ArrayOutputComponent.Result) pResult.getQueryResult();
 
             /*
@@ -248,7 +250,7 @@ public final class Example {
 
     /**
      * <p>In this method we collect components (or rather
-     * instances of {@link ComponentFactory} interface) and put together
+     * instances of {@link LocalComponentFactory} interface) and put together
      * a {@link LocalController}. A controller assembles processing
      * chains (components) for the execution of each query, controls the process of
      * its execution and in general is the heart of Carrot<sup>2</sup>
@@ -262,7 +264,7 @@ public final class Example {
      *  component so that we can display them later.</li>
      * </ul>
      * 
-     * <p>For each component, we must create a {@link ComponentFactory} and add it
+     * <p>For each component, we must create a {@link LocalComponentFactory} and add it
      * to the controller. Each factory, on the other hand, is identifier with a
      * string identifier. This identifier is reused later when you assemble a {@link LocalProcess}.</p>
      * 

@@ -13,6 +13,8 @@
 
 package org.carrot2.core;
 
+import java.util.*;
+
 /**
  * A baseline implementation of a {@link LocalInputComponent}.  It mainly
  * contains correct implementations of passing the required method calls to a
@@ -151,5 +153,20 @@ public abstract class LocalInputComponentBase extends LocalComponentBase
             this.next = null;
             this.processingStarted = false;
         }
+    }
+
+    /**
+     * Extracts the number of requested results ({@link LocalInputComponent#PARAM_REQUESTED_RESULTS})from
+     * request parameters. If the {@link LocalInputComponent#PARAM_REQUESTED_RESULTS}
+     * parameter is not present in the parameters map, 100 will be returned.
+     */
+    protected int getRequestedResults(Map params)
+    {
+        int requestedResults = 100;
+        if (params.get(LocalInputComponent.PARAM_REQUESTED_RESULTS) != null) {
+            requestedResults = Integer.parseInt((String)params
+                    .get(LocalInputComponent.PARAM_REQUESTED_RESULTS));
+        }
+        return requestedResults;
     }
 }

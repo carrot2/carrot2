@@ -13,11 +13,13 @@
 
 package org.carrot2.webapp.serializers;
 
+import java.util.ResourceBundle;
+
 import javax.servlet.http.HttpServletRequest;
 
+import org.carrot2.util.xsltfilter.XSLTFilterConstants;
+import org.carrot2.webapp.Constants;
 import org.carrot2.webapp.RawDocumentsSerializer;
-
-import com.dawidweiss.xsltfilter.XsltFilterConstants;
 
 /**
  * A subclass of {@link XMLSerializersFactory} which serializes clusters
@@ -29,8 +31,9 @@ import com.dawidweiss.xsltfilter.XsltFilterConstants;
 public class FancySerializersFactory extends XMLSerializersFactory {
     public RawDocumentsSerializer createRawDocumentSerializer(HttpServletRequest request) {
         // Disable XSLT processor (if it is enabled).
-        request.setAttribute(XsltFilterConstants.NO_XSLT_PROCESSING, Boolean.TRUE);
-        return new FancyDocumentSerializer(request.getContextPath(), 
-                super.getStylesheetsBase());
+        request.setAttribute(XSLTFilterConstants.NO_XSLT_PROCESSING, Boolean.TRUE);
+        return new FancyDocumentSerializer(request.getContextPath(), super
+            .getStylesheetsBase(), (ResourceBundle) request
+            .getAttribute(Constants.RESOURCE_BUNDLE_KEY));
     }
 }

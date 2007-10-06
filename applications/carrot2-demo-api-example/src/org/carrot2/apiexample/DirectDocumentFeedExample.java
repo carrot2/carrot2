@@ -17,8 +17,7 @@ import java.util.*;
 
 import org.carrot2.core.*;
 import org.carrot2.core.clustering.RawDocumentSnippet;
-import org.carrot2.core.impl.ArrayOutputComponent;
-import org.carrot2.core.impl.RawDocumentsProducerLocalInputComponent;
+import org.carrot2.core.impl.*;
 import org.carrot2.filter.lingo.local.EnglishLingoLocalFilterComponent;
 
 /**
@@ -142,7 +141,7 @@ public final class DirectDocumentFeedExample {
             
             final HashMap params = new HashMap();
             params.put(
-                    RawDocumentsProducerLocalInputComponent.PARAM_SOURCE_RAW_DOCUMENTS,
+                ArrayInputComponent.PARAM_SOURCE_RAW_DOCUMENTS,
                     documentList);
             final ProcessingResult pResult = controller.query("direct-feed-lingo", query, params);
             final ArrayOutputComponent.Result result = (ArrayOutputComponent.Result) pResult.getQueryResult();
@@ -176,7 +175,7 @@ public final class DirectDocumentFeedExample {
         //
         final LocalComponentFactory input = new LocalComponentFactory() {
             public LocalComponent getInstance() {
-                return new RawDocumentsProducerLocalInputComponent();
+                return new ArrayInputComponent();
             }
         };
         

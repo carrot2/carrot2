@@ -4,15 +4,16 @@
   <xsl:import href="common.xsl" />
   <xsl:strip-space elements="*"/>
 
-  <xsl:output indent="yes" omit-xml-declaration="yes" media-type="text/html" encoding="utf-8"
+  <xsl:output indent="no" omit-xml-declaration="yes" media-type="text/html" encoding="utf-8"
        doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" doctype-system="http://www.w3.org/TR/html4/loose.dtd"/>
 
   <xsl:template name="head-insert">
     <link rel="stylesheet" href="{$skinuri}/css/documents.css" />
+    <script src="{$skinuri}/js/folding.js" language="javascript"></script>
   </xsl:template>
     
   <xsl:template name="on-load">
-    <xsl:text>javascript:parent.setProgress('docs-progress', false);</xsl:text>
+    <xsl:text>javascript:parent.afterDocsLoaded();</xsl:text>
   </xsl:template>
 
   <xsl:template match="searchresult[@type='documents']">
@@ -42,7 +43,8 @@
     <table class="d" id="{@id}">
       <tr>
         <td class="r">
-          <xsl:value-of select="position()" />
+          <xsl:value-of select="position()" /><br/>
+          <a href="javascript:hlDoc({@id})" title="Show in clusters"><img src="{$skinuri}/img/sic.gif" class="sic" /></a>
         </td>
         <td class="c">
           <div class="t">
@@ -58,6 +60,7 @@
 
           <div class="u">
             <xsl:value-of select="url" />
+            <div class="o">[<xsl:value-of select="sources" />]</div>
           </div>
         </td>
       </tr>

@@ -1,0 +1,13 @@
+
+import org.carrot2.core.*;
+import org.carrot2.core.controller.*;
+import org.carrot2.util.tokenizer.*;
+
+factory = new LocalComponentFactory() {
+    public LocalComponent getInstance() {
+        return new SnippetTokenizerLocalFilterComponent();
+    }
+};
+
+return new LoadedComponentFactory("filter-tokenizer", factory);
+

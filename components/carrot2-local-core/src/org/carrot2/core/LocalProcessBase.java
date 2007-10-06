@@ -270,6 +270,22 @@ public class LocalProcessBase implements LocalProcess {
             throw new RuntimeException("Missing component?", e);
         }
 
+        // [DW] I add this to ensure the query is always available in the request
+        // context, which was not always the case. Example: the browser application --
+        // whenever the cached result was returned, it bypassed the call to input component's
+        // startProcessing(context) method which set this parameter in most cases.
+        if (!context.getRequestParameters().containsKey(LocalInputComponent.PARAM_QUERY))
+        {
+            try
+            {
+                context.getRequestParameters().put(LocalInputComponent.PARAM_QUERY, query);
+            }
+            catch (UnsupportedOperationException e)
+            {
+                // Ignore if request context's parameters are read-only.
+            }
+        }
+        
         beforeProcessingStartsHook(context, components);
 
         try {

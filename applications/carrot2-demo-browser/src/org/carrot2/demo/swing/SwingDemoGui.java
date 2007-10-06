@@ -18,6 +18,7 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
+import org.apache.log4j.Logger;
 import org.carrot2.demo.DemoContext;
 import org.carrot2.demo.ProcessSettings;
 import org.carrot2.demo.swing.util.*;
@@ -97,15 +98,7 @@ public final class SwingDemoGui {
     }
 
     /**
-     * Creates a new object attached to a demo context. Call {@link #display()} to display
-     * the demo frame.
-     */
-    public SwingDemoGui(DemoContext carrotDemo) {
-        this(carrotDemo, "Carrot2 Demo");
-    }
-
-    /**
-     * Creates a new object attached to a demo context. Call {@link #display()} to display
+     * Creates a new object attached to a demo context. Call {@link #display(JWindow)} to display
      * the demo frame.
      */
     public SwingDemoGui(DemoContext carrotDemo, String frameTitle) {
@@ -114,11 +107,11 @@ public final class SwingDemoGui {
         this.frame = new JFrame();
         this.config = new SwingDemoGuiConfig("/config/browser-config.xml");
     }
-    
+
     /**
      * Displays the demo frame.
      */
-    public void display() {
+    public void display(final JWindow splash) {
         try {
             configureUI();
         } catch (Exception e) {
@@ -126,7 +119,7 @@ public final class SwingDemoGui {
         }
 
         frame.setTitle(mainFrameTitle);
-        frame.setIconImage(new ImageIcon(this.getClass().getResource("carrot2-icon.png")).getImage());
+        frame.setIconImage(new ImageIcon(this.getClass().getResource("/res/browser-icon.png")).getImage());
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.getContentPane().add(buildMainPanel());
         frame.pack();
@@ -136,21 +129,22 @@ public final class SwingDemoGui {
 
         disableUI();
         queryField.setText("Please wait...");
-        
-        SwingUtils.centerFrameOnScreen(frame);
-        frame.setVisible(true);
 
-        // replace the combo box's model.
-        final Runnable task = new Runnable() {
-            public void run() {
-                // Now initialize the application.
+        SwingUtils.centerFrameOnScreen(frame);
+
+        Runnable task = new Runnable()
+        {
+            public void run()
+            {
+                // replace the combo box's model.
                 try {
                     demoContext.initialize();
                 } catch (Exception e) {
-                    SwingUtils.showExceptionDialog(frame, 
-                            "Program startup failed.", e);
+                    SwingUtils.showExceptionDialog(frame, "Program startup failed.", e);
+                    frame.dispose();
+                    return;
                 }
-
+        
                 processComboModel = new MapComboModel(demoContext.getProcessIdToProcessNameMap());
                 processComboBox.setModel(processComboModel);
                 if (demoContext.getDefaultProcessId() != null) {
@@ -161,14 +155,14 @@ public final class SwingDemoGui {
                 queryField.setText("");
                 queryField.requestFocus();
 
+                frame.setVisible(true);
+                frame.toFront();
+
                 enableUI();
+                if (splash.isVisible()) splash.dispose();
             }
         };
-
-        try {
-            SwingTask.runNow(task);
-        } catch (Throwable t) {
-        }
+        SwingUtilities.invokeLater(task);
     }
 
     /**
@@ -336,7 +330,7 @@ public final class SwingDemoGui {
         topPanel.add(queryForm, cc.xywh(2,2,1,1));
 
         final ImageIcon carrotLogo = new ImageIcon(
-                this.getClass().getClassLoader().getResource("res/Carrot2-symbol-final.png"));
+                this.getClass().getClassLoader().getResource("res/browser-logo.png"));
         final JLabel label = new JLabel(carrotLogo);
         topPanel.add(label, cc.xywh(4,2,1,1));
 
@@ -385,8 +379,13 @@ public final class SwingDemoGui {
                 final String processId = (String) processComboModel.getSelectedKey();
                 final ProcessSettings settings = demoContext.getSettingsObject(processId);
 
-                JOptionPane.showMessageDialog(frame, 
-                        new Object[] {settings.getSettingsComponent(frame)}, "Default settings", 
+                final JScrollPane scrollPane = new JScrollPane(settings.getSettingsComponent(frame));
+                final Dimension dim = scrollPane.getPreferredSize();
+                scrollPane.setPreferredSize(new Dimension(dim.width, Math.min(640, (int) dim.getHeight())));
+                scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+                scrollPane.setBorder(BorderFactory.createEmptyBorder());
+                JOptionPane.showMessageDialog(frame,
+                        new Object[] {scrollPane}, "Default settings", 
                         JOptionPane.PLAIN_MESSAGE);
             }
         });

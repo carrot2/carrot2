@@ -5,7 +5,8 @@
 
   <input  component-key="input-lucene" />
   <filter component-key="filter-rawdocument-enumerator" />
-  <filter component-key="filter-clustering-lingo-en" />
+  <filter component-key="filter-clustering-lingo-multi" />
+  <filter component-key="filter-save-xml" />
   <output component-key="output-array" />
 
   <attribute key="process.settings.class.1" 

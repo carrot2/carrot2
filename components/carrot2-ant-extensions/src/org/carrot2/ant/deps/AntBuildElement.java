@@ -56,7 +56,7 @@ class AntBuildElement implements BuildTask, Serializable {
             throw new BuildException("'ant' task must be available.");
         }
         
-        final FileUtils futils = FileUtils.newFileUtils();
+        final FileUtils futils = FileUtils.getFileUtils();
         final File buildFile = futils.resolveFile(base, file);
         task.setAntfile(buildFile.getAbsolutePath());
         task.setDir(buildFile.getParentFile());

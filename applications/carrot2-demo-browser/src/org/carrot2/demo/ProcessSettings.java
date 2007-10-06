@@ -14,7 +14,7 @@
 package org.carrot2.demo;
 
 import java.awt.Frame;
-import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JComponent;
 
@@ -36,7 +36,6 @@ public interface ProcessSettings {
     /**
      * Returns a GUI component which displays process settings
      * and lets the user play with them interactively.
-     * @param owner TODO
      */
     public JComponent getSettingsComponent(Frame owner);
 
@@ -49,7 +48,7 @@ public interface ProcessSettings {
     public boolean isConfigured();
 
     /** Returns current request parameters. */
-    public HashMap getRequestParams();
+    public Map getRequestParams();
 
     /** 
      * Create a clone of yourself (and default settings) for use in a query 

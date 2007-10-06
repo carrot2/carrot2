@@ -195,7 +195,7 @@ public final class DependencyPath extends Path {
     {
         final Timer timer = new Timer();
 
-        final FileUtils futils = FileUtils.newFileUtils();
+        final FileUtils futils = FileUtils.getFileUtils();
         final HashMap components = new HashMap();
 
         // Scan all locations pointed to by the path.

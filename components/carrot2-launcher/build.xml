@@ -1,0 +1,29 @@
+
+<project name="Carrot2 Launcher utility" default="build">
+    <property name="build.dir" location="tmp/classes" />
+    <property name="dist.dir" location="tmp/dist" />
+
+    <target name="build">
+        <mkdir dir="${build.dir}" />
+        <mkdir dir="${dist.dir}" />
+
+        <javac destdir = "${build.dir}" debug="true"
+               includeantruntime="false" includejavaruntime="false"
+               encoding = "UTF-8" source="1.2" target="1.2">
+            <src path="src" />
+        </javac>
+        
+        <jar destfile="${dist.dir}/carrot2-launcher.jar" basedir="${build.dir}" update="false">
+            <manifest>
+                <attribute name="Main-Class" value="org.carrot2.launcher.Launcher"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="clean">
+        <delete dir="${build.dir}" />
+    </target>
+    
+    <target name="cleanall" depends="clean" />
+    <target name="test" />
+</project>

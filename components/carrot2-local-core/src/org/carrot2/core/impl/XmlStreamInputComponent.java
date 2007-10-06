@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -24,13 +23,10 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 /**
- * Passes down the processing chain query results read from an XML stream in the
- * Carrot<sup>2</sup> format. 
- * 
- * This component expects any of the following request parameters:
+ * Passes down the processing chain query results read from an XML stream in the Carrot<sup>2</sup> format. This
+ * component expects any of the following request parameters:
  * <ul>
- *   <li>{@link #XML_STREAM} initialized to an {@link java.io.InputStream} 
- *    with XML data.</li>
+ * <li>{@link #XML_STREAM} initialized to an {@link java.io.InputStream} with XML data.</li>
  * </ul>
  * 
  * @author Dawid Weiss
@@ -42,29 +38,33 @@ public class XmlStreamInputComponent extends LocalInputComponentBase
      */
     public static final String XML_STREAM = "input:xml-stream";
 
-    /** Capabilities required from the next component in the chain */
-    private final static Set SUCCESSOR_CAPABILITIES = 
-        toSet(RawDocumentsConsumer.class);
+    /** Capabilities required from the next component in the chain. */
+    private final static Set SUCCESSOR_CAPABILITIES = toSet(RawDocumentsConsumer.class);
 
-    /** This component's capabilities */
-    private final static Set COMPONENT_CAPABILITIES = 
-        toSet(RawDocumentsProducer.class);
+    /** This component's capabilities. */
+    private final static Set COMPONENT_CAPABILITIES = toSet(RawDocumentsProducer.class, RawClustersProducer.class);
 
     /**
-     * Represents a query result containing a list of {@link RawDocument}s and
-     * the query that returned these documents.
+     * Represents a query result containing a list of {@link RawDocument}s, {@link RawCluster}s and the query that
+     * returned these documents.
      */
     public final static class QueryResult
     {
         /** The query */
         public String query;
 
-        /** A list of {@link RawDocument}s returned for the query */
+        /** A list of {@link RawDocument}s parsed from the stream. */
         public List rawDocuments;
+
+        /** A list of {@link RawCluster}s parsed from the stream. */
+        public List rawClusters;
     }
-    
-    /** Current RawDocumentsConsumer to feed */
+
+    /** The {@link RawDocumentsConsumer} to feed. */
     private RawDocumentsConsumer rawDocumentConsumer;
+
+    /** The {@link RawClustersConsumer} to feed. */
+    private RawClustersConsumer rawClustersConsumer;
 
     /**
      * Query issued to this component.
@@ -90,30 +90,40 @@ public class XmlStreamInputComponent extends LocalInputComponentBase
     public void setNext(LocalComponent next)
     {
         super.setNext(next);
+
+        rawDocumentConsumer = null;
         if (next instanceof RawDocumentsConsumer)
         {
             rawDocumentConsumer = (RawDocumentsConsumer) next;
         }
-        else
+
+        rawClustersConsumer = null;
+        if (next instanceof RawClustersConsumer)
         {
-            rawDocumentConsumer = null;
+            rawClustersConsumer = (RawClustersConsumer) next;
         }
     }
 
     /*
+     * 
      */
-    public void setQuery(String query) {
+    public void setQuery(String query)
+    {
         this.originalQuery = query;
     }
-    
-    public String getQuery() {
+
+    /**
+     * Return the current query for subclasses.
+     */
+    protected String getQuery()
+    {
         return this.originalQuery;
     }
 
     /*
+     * 
      */
-    public final void startProcessing(RequestContext requestContext)
-        throws ProcessingException
+    public final void startProcessing(RequestContext requestContext) throws ProcessingException
     {
         super.startProcessing(requestContext);
 
@@ -135,12 +145,15 @@ public class XmlStreamInputComponent extends LocalInputComponentBase
         catch (Exception e)
         {
             throw new ProcessingException("Problems parsing XML stream.", e);
-        } 
+        }
         finally
         {
-            try {
+            try
+            {
                 is.close();
-            } catch (IOException e) {
+            }
+            catch (IOException e)
+            {
                 // ignore
             }
         }
@@ -155,12 +168,10 @@ public class XmlStreamInputComponent extends LocalInputComponentBase
     private int getRequestedResultsCount(RequestContext requestContext)
     {
         int requestedResults;
-        if (requestContext.getRequestParameters().containsKey(
-            LocalInputComponent.PARAM_REQUESTED_RESULTS))
+        if (requestContext.getRequestParameters().containsKey(LocalInputComponent.PARAM_REQUESTED_RESULTS))
         {
-            requestedResults = Integer.parseInt(requestContext
-                .getRequestParameters().get(
-                    LocalInputComponent.PARAM_REQUESTED_RESULTS).toString());
+            requestedResults = Integer.parseInt(requestContext.getRequestParameters().get(
+                LocalInputComponent.PARAM_REQUESTED_RESULTS).toString());
         }
         else
         {
@@ -170,10 +181,8 @@ public class XmlStreamInputComponent extends LocalInputComponentBase
     }
 
     /**
-     * Invoked at the end of the {@link #startProcessing(RequestContext)} method
-     * to allow subclasses to pass some additional information to the next
-     * component in the chain. Implementation of this method in this class is
-     * empty.
+     * Invoked at the end of the {@link #startProcessing(RequestContext)} method to allow subclasses to pass some
+     * additional information to the next component in the chain. Implementation of this method in this class is empty.
      * 
      * @param root
      * @param requestContext
@@ -183,20 +192,21 @@ public class XmlStreamInputComponent extends LocalInputComponentBase
     }
 
     /**
-     * Callback method invoked from {@link #startProcessing(RequestContext)} and responsible
-     * for locating the input XML stream.
+     * Callback method invoked from {@link #startProcessing(RequestContext)} and responsible for locating the input XML
+     * stream.
      */
-    protected InputStream getInputXML(RequestContext requestContext) throws ProcessingException {
+    protected InputStream getInputXML(RequestContext requestContext) throws ProcessingException
+    {
         final InputStream is = (InputStream) requestContext.getRequestParameters().get(XML_STREAM);
 
-        if (is == null) {
-            throw new ProcessingException("This component expects parameters in the" +
-                    " request context. See JavaDoc.");
+        if (is == null)
+        {
+            throw new ProcessingException("This component expects " + XML_STREAM + " parameter in the request context.");
         }
-        
+
         return is;
     }
-    
+
     /**
      * Passes the query result to the next component in the chain.
      * 
@@ -205,37 +215,42 @@ public class XmlStreamInputComponent extends LocalInputComponentBase
      * @param requestedResults the number of requested results
      * @throws ProcessingException if an error occurs
      */
-    protected void passQueryResult(Element root, RequestContext requestContext,
-        int requestedResults) throws ProcessingException
+    protected void passQueryResult(Element root, RequestContext requestContext, int requestedResults)
+        throws ProcessingException
     {
         // Extract documents
-        QueryResult queryResult = extractQueryResult(root, requestedResults);
+        final QueryResult queryResult = extractQueryResult(root, requestedResults);
 
-        requestContext.getRequestParameters().put(
-            LocalInputComponent.PARAM_TOTAL_MATCHING_DOCUMENTS,
+        requestContext.getRequestParameters().put(LocalInputComponent.PARAM_TOTAL_MATCHING_DOCUMENTS,
             new Integer(queryResult.rawDocuments.size()));
 
-        requestContext.getRequestParameters().put(
-                LocalInputComponent.PARAM_QUERY, queryResult.query);
+        requestContext.getRequestParameters().put(LocalInputComponent.PARAM_QUERY, queryResult.query);
 
         for (Iterator iter = queryResult.rawDocuments.iterator(); iter.hasNext();)
         {
             final RawDocument rawDocument = (RawDocument) iter.next();
             rawDocumentConsumer.addDocument(rawDocument);
         }
+
+        if (rawClustersConsumer != null)
+        {
+            for (Iterator iter = queryResult.rawClusters.iterator(); iter.hasNext();)
+            {
+                final RawCluster rawCluster = (RawCluster) iter.next();
+                rawClustersConsumer.addCluster(rawCluster);
+            }
+        }
     }
 
     /**
-     * Loads {@link QueryResult} from a stream in the Carrot<sup>2</sup>
-     * XML format.
+     * Loads {@link QueryResult} from a stream in the Carrot<sup>2</sup> XML format.
      * 
      * @param inputStream stream to read from
      * @param requestedResults the number of results to load
      * @return loaded query result
      * @throws DocumentException if a parsing problem occurs
      */
-    public static QueryResult loadQueryResult(InputStream inputStream,
-        int requestedResults) throws DocumentException
+    public static QueryResult loadQueryResult(InputStream inputStream, int requestedResults) throws DocumentException
     {
         final SAXReader reader = new SAXReader();
         final Element root = reader.read(inputStream).getRootElement();
@@ -243,37 +258,35 @@ public class XmlStreamInputComponent extends LocalInputComponentBase
     }
 
     /**
-     * Parses an XML element in the Carrot<sup>2</sup> format into a
-     * {@link QueryResult}.
+     * Parses an XML element in the Carrot<sup>2</sup> format into a {@link QueryResult}.
      * 
      * @param root XML element in the Carrot<sup>2</sup> format
      * @param requestedResults the number of results to parse
      * @return parsed query result
      */
-    public static QueryResult extractQueryResult(Element root,
-        int requestedResults)
+    private static QueryResult extractQueryResult(Element root, int requestedResults)
     {
-        List documents = root.elements("document");
+        final QueryResult queryResult = new QueryResult();
 
+        final List documents = root.elements("document");
         int matchingDocuments = documents.size();
         if (requestedResults > 0 && requestedResults < matchingDocuments)
         {
             matchingDocuments = requestedResults;
         }
 
-        QueryResult queryResult = new QueryResult();
-        queryResult.rawDocuments = new ArrayList(matchingDocuments);
-
-        // Pass the query
+        // Save the query
         final Element queryElement = root.element("query");
         if (queryElement != null)
         {
             queryResult.query = queryElement.getText();
         }
 
+        // Save documents
+        final HashMap docsById = new HashMap();
+        queryResult.rawDocuments = new ArrayList(matchingDocuments);
         int id = 0;
-        for (Iterator i = documents.iterator(); i.hasNext()
-            && id < matchingDocuments; id++)
+        for (Iterator i = documents.iterator(); i.hasNext() && id < matchingDocuments; id++)
         {
             final Element docElem = (Element) i.next();
 
@@ -308,19 +321,80 @@ public class XmlStreamInputComponent extends LocalInputComponentBase
             }
 
             final String idString;
-            if (docElem.attributeValue("id") != null) {
+            if (docElem.attributeValue("id") != null)
+            {
                 idString = docElem.attributeValue("id");
             }
             else
             {
                 idString = Integer.toString(id);
             }
-            
-            queryResult.rawDocuments.add(new RawDocumentSnippet(
-                idString, title, snippet, url, 0));
+
+            final RawDocument rawDoc = new RawDocumentSnippet(idString, title, snippet, url, 0);
+            if (null != docsById.put(idString, rawDoc)) {
+                throw new RuntimeException("Error in the input XML, duplicated document identifier: " + idString);
+            }
+            queryResult.rawDocuments.add(rawDoc);
+        }
+
+        // Save clusters
+        queryResult.rawClusters = new ArrayList();
+        final List clusters = root.elements("group");
+        for (Iterator i = clusters.iterator(); i.hasNext();)
+        {
+            final Element clusterElem = (Element) i.next();
+            final RawCluster cluster = parseSubcluster(docsById, clusterElem);
+            queryResult.rawClusters.add(cluster);
         }
 
         return queryResult;
+    }
+
+    /*
+     * 
+     */
+    private static RawCluster parseSubcluster(HashMap docsById, Element clusterElem)
+    {
+        final RawClusterBase cluster = new RawClusterBase();
+
+        final String scoreAttr = clusterElem.attributeValue("score");
+        if (scoreAttr != null)
+        {
+            cluster.setScore(Double.parseDouble(scoreAttr));
+        }
+
+        final Element titleElem = clusterElem.element("title");
+        if (titleElem != null)
+        {
+            for (Iterator iterator = titleElem.elements("phrase").iterator(); iterator.hasNext();)
+            {
+                final Element phraseElem = (Element) iterator.next();
+                cluster.addLabel(phraseElem.getText());
+            }
+        }
+
+        for (Iterator iterator = clusterElem.elements("document").iterator(); iterator.hasNext();)
+        {
+            final Element documentElem = (Element) iterator.next();
+            final String refid = documentElem.attributeValue("refid");
+            final RawDocument rawDoc = (RawDocument) docsById.get(refid);
+            if (rawDoc == null)
+            {
+                // This means that either the input is malformed (cluster references non-existent document)
+                // or the number of requested documents was lower than the one from which clusters were
+                // originally generated. 
+                continue;
+            }
+            cluster.addDocument(rawDoc);
+        }
+
+        for (Iterator iterator = clusterElem.elements("group").iterator(); iterator.hasNext();)
+        {
+            final Element subclusterElem = (Element) iterator.next();
+            cluster.addSubcluster(parseSubcluster(docsById, subclusterElem));
+        }
+
+        return cluster;
     }
 
     /*

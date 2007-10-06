@@ -1,0 +1,8 @@
+html {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+html #documents {
+  margin-right: 25px;
+}

@@ -16,7 +16,9 @@ package org.carrot2.filter.lingo.lsicluster;
 import Jama.Matrix;
 import Jama.SingularValueDecomposition;
 
+import org.carrot2.core.clustering.RawDocument;
 import org.carrot2.filter.lingo.common.*;
+import org.carrot2.filter.lingo.local.SnippetInterfaceAdapter;
 import org.carrot2.filter.lingo.util.arrays.ArrayUtils;
 import org.carrot2.filter.lingo.util.log.TimeLogger;
 import org.carrot2.filter.lingo.util.matrix.MatrixUtils;
@@ -46,6 +48,12 @@ public class LsiClusteringStrategy implements ClusteringStrategy {
 
     /** @see LsiConstants#DEFAULT_CANDIDATE_CLUSTER_THRESHOLD */
     protected double candidateClusterThreshold = LsiConstants.DEFAULT_CANDIDATE_CLUSTER_THRESHOLD;
+
+    /** @see LsiConstants#DEFAULT_WEIGHT_DOCUMENT_SCORE */
+    protected boolean WEIGHT_DOCUMENT_SCORE = LsiConstants.DEFAULT_WEIGHT_DOCUMENT_SCORE;
+
+    /** @see LsiConstants#DEFAULT_MAX_SIZE_TD_MATRIX*/
+    protected int MAX_SIZE_TD_MATRIX = LsiConstants.DEFAULT_MAX_SIZE_TD_MATRIX;
 
     /**
      * Logger
@@ -183,6 +191,20 @@ public class LsiClusteringStrategy implements ClusteringStrategy {
             }
         }
 
+        if ((value = clusteringContext.getParameter(
+            LsiConstants.WEIGHT_DOCUMENT_SCORE )) != null) {
+            WEIGHT_DOCUMENT_SCORE = value.toString().equalsIgnoreCase( "true" );
+        }
+
+        if ((value = clusteringContext.getParameter(
+            LsiConstants.MAX_SIZE_TD_MATRIX )) != null) {
+            try {
+                MAX_SIZE_TD_MATRIX = Integer.parseInt(unwrapString( value) );
+            } catch (NumberFormatException e) {
+                // ignore
+            }
+        }
+
         timeLogger.start();
         if (!prepareData())
         {
@@ -230,7 +252,7 @@ public class LsiClusteringStrategy implements ClusteringStrategy {
                 // All terms later on are phrases.
                 break;
             } else {
-	            if (features[nonStopTermCount].isStopWord()) {
+	            if (features[i].isStopWord()) {
 	                stopTermCount++;                
 	            } else {
 	                nonStopTermCount++;
@@ -247,8 +269,8 @@ public class LsiClusteringStrategy implements ClusteringStrategy {
         }
         
         // Create TD matrix
-        TdMatrixBuildingStrategy tdMatrixBuildingStrategy = new TfidfTdMatrixBuildingStrategy(2,
-                250 * 150);
+        TdMatrixBuildingStrategy tdMatrixBuildingStrategy = new TfidfTdMatrixBuildingStrategy(2, MAX_SIZE_TD_MATRIX );
+                // 250 * 150);
 
         double[][] matrix = tdMatrixBuildingStrategy.buildTdMatrix(clusteringContext);
         if (matrix.length == 0 || matrix[0].length == 0) {
@@ -389,17 +411,13 @@ public class LsiClusteringStrategy implements ClusteringStrategy {
             // For each candidate cluster choose the best phrase and
             // calculate the score of the phrase
             for (int c = 0; c < candidateClusterCount; c++) {
-                phraseScores[c] = Math.abs(cos.get(0, c));
-                phraseIndices[c] = 0 + firstPhraseIndex;
+                phraseScores[c] = Math.abs(cos.get(0, c)) * calculatePhrasePenalty(features[firstPhraseIndex].getLength());
+                phraseIndices[c] = firstPhraseIndex;
 
                 for (int p = 1; p < cos.getRowDimension(); p++) {
                     // Penalize phrases longer than 5 words
-                    double penalty = 1;
-
-                    if (features[firstPhraseIndex + p].getLength() > 5) {
-                        penalty = 1 -
-                            ((features[firstPhraseIndex + p].getLength() - 5) * 0.25);
-                    }
+                    int phraseLength = features[firstPhraseIndex + p].getLength();
+                    double penalty = calculatePhrasePenalty(phraseLength);
 
                     if ((Math.abs(cos.get(p, c)) * penalty) > phraseScores[c]) {
                         phraseScores[c] = Math.abs(cos.get(p, c)) * penalty;
@@ -452,6 +470,18 @@ public class LsiClusteringStrategy implements ClusteringStrategy {
         }
     }
 
+    private double calculatePhrasePenalty(int phraseLength)
+    {
+        if (phraseLength > 5)
+        {
+            return 1 - ( (phraseLength - 5) * 0.25);
+        }
+        else
+        {
+            return 1;
+        }
+    }
+    
     /**
      * Removes duplicated and too similar cluster label candidates.
      */
@@ -499,16 +529,19 @@ public class LsiClusteringStrategy implements ClusteringStrategy {
                 continue;
             }
 
-            for (int c = 0; c < clusterClusterCos.getColumnDimension(); c++) {
-                if ((c != r) &&
-                        (Math.abs(clusterClusterCos.get(r, c)) > duplicateClustersThreshold) &&
-                        (candidateClusterScores[r] > candidateClusterScores[c])) {
-                    discard[c] = true;
+            for (int c = r + 1; c < clusterClusterCos.getColumnDimension(); c++) {
+                if ( (Math.abs(clusterClusterCos.get(r, c)) > duplicateClustersThreshold)) {
+                    if (candidateClusterScores[r] > candidateClusterScores[c]) {
+                        discard[c] = true;
+                    }
+                    else {
+                        discard[r] = true;
+                    }
                 }
             }
         }
 
-        // Find candidate cluster scores 
+        // Find candidate cluster scores
         clusterCount = 0;
 
         for (int cc = 0; cc < candidateClusterScores.length; cc++) {
@@ -595,8 +628,22 @@ public class LsiClusteringStrategy implements ClusteringStrategy {
         // Calculate scores
         double maxScore = 0;
 
+        ArrayList rawSnippets = clusteringContext.getSnippetsAsArrayList();
+
         for (int c = 0; c < clusterCount; c++) {
-            candidateClusters[c].setScore(candidateClusters[c].getScore() * candidateClusters[c].getSnippets().length);
+           if ( ! WEIGHT_DOCUMENT_SCORE ) {
+                candidateClusters[c].setScore(candidateClusters[c].getScore() * candidateClusters[c].getSnippets().length);
+            } else {
+                double score = candidateClusters[c].getScore();
+                Snippet[] a = candidateClusters[c].getSnippets();
+                double dscore = 0;
+                for( int i = 0; i < a.length; i++ ) {
+                    SnippetInterfaceAdapter rawSnippet = (SnippetInterfaceAdapter)rawSnippets.get( Integer.parseInt( a[i].getSnippetId() ) );
+                    RawDocument document = rawSnippet.getDocument();
+                    dscore += document.getScore();
+                }
+                candidateClusters[c].setScore( score * dscore );// a.length );
+            }
 
             if (maxScore < candidateClusters[c].getScore()) {
                 maxScore = candidateClusters[c].getScore();
@@ -623,22 +670,21 @@ public class LsiClusteringStrategy implements ClusteringStrategy {
         }
 
         // Create "Singletons" group
-        Cluster singletons = new Cluster();
-        singletons.setOtherTopics(true);
-        singletons.addLabel("(Singletons)");
-        singletons.setScore(0.00002);
+        List singletons = new ArrayList();
 
         // Create final clusters
         for (int i = 0; i < candidateClusters.length; i++) {
             if (candidateClusters[i].getSnippets().length > 1) {
                 finalClusters.add(candidateClusters[i]);
             } else if (candidateClusters[i].getSnippets().length == 1) {
-                singletons.addCluster(candidateClusters[i]);
+                singletons.add(candidateClusters[i]);
             }
         }
 
-        if (singletons.getClusters().length > 0) {
-            other.addCluster(singletons);
+        for (Iterator it = singletons.iterator(); it.hasNext();)
+        {
+            Cluster singleton = (Cluster) it.next();
+            other.addCluster(singleton);
         }
 
         if (other.getSnippets().length > 0) {

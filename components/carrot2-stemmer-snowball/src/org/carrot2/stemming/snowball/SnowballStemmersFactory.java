@@ -50,6 +50,9 @@ public class SnowballStemmersFactory {
         snowballLanguages.put("ru", russianStemmer.class);
         snowballLanguages.put("es", spanishStemmer.class);
         snowballLanguages.put("sv", swedishStemmer.class);
+        snowballLanguages.put("hu", hungarianStemmer.class);
+        snowballLanguages.put("tr", turkishStemmer.class);
+        snowballLanguages.put("ro", romanianStemmer.class);
 
         // attempt to instantiate all the stemmers.
         // if a stemmer could not be instantiated, a runtime exception

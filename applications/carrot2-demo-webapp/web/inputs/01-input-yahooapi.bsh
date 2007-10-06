@@ -7,7 +7,7 @@ factory = new LocalComponentFactory() {
     }
 };
 
-LoadedComponentFactory loaded = 
+LoadedComponentFactory loaded =
 	new LoadedComponentFactory("input-yahooapi", factory);
 
 loaded.setProperties(new String [][] {
@@ -17,7 +17,8 @@ loaded.setProperties(new String [][] {
 	{"tab.description.startup", "Carrot Clustering Engine will send your query to Yahoo and automatically organize the results into thematic categories"},
 	{"tab.exampleQueries", "data mining|london|clustering"},
 	{"tab.icon", "yahoo.gif"},
-	{"tab.default", "true"}
+	{"tab.default", "false"},
+	{"tab.hidden", "true"}
 });
 
 return loaded;

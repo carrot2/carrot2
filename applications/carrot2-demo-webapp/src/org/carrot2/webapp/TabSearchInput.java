@@ -49,4 +49,10 @@ public final class TabSearchInput {
     public Map getOtherProperties() {
         return otherProperties;
     }
+    
+    public boolean isHidden()
+    {
+        return otherProperties.containsKey("tab.hidden")
+            && Boolean.valueOf((String) otherProperties.get("tab.hidden")).booleanValue();
+    }
 }

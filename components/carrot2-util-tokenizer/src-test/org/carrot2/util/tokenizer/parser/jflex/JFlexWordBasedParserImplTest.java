@@ -235,6 +235,19 @@ public class JFlexWordBasedParserImplTest
         compareTokenArrays(test, tokens);
     }
     
+    public void testKorean()
+    {
+        
+        String test = "안녕하세요 한글입니다";
+        TokenImage [] tokens = 
+        {
+            new TokenImage("안녕하세요", JFlexWordBasedParserImpl.TERM),
+            new TokenImage("한글입니다", JFlexWordBasedParserImpl.TERM),
+        };
+        
+        compareTokenArrays(test, tokens);
+    }
+    
     /*
      * Convert token types to generic TypedToken values and recompare.
      */

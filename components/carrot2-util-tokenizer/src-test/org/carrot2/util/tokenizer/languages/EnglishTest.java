@@ -32,9 +32,6 @@ public class EnglishTest extends LanguageImplTestBase {
 		super(arg0);
 	}
 
-    public void testNotAStopWord() {
-    }
-    
 	/*
 	 * @see org.carrot2.util.tokenizer.languages.LanguageImplTestBase#getLanguageInstance()
 	 */

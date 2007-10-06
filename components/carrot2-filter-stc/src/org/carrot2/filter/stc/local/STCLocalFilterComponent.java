@@ -13,14 +13,19 @@
 
 package org.carrot2.filter.stc.local;
 
+import java.io.StringReader;
 import java.util.*;
 
+import org.apache.log4j.Logger;
 import org.carrot2.core.*;
 import org.carrot2.core.clustering.*;
+import org.carrot2.core.linguistic.tokens.*;
 import org.carrot2.core.profiling.ProfiledLocalFilterComponentBase;
 import org.carrot2.filter.stc.StcParameters;
 import org.carrot2.filter.stc.algorithm.*;
-import org.carrot2.filter.stc.algorithm.MergedCluster;
+import org.carrot2.util.tokenizer.languages.MutableStemmedToken;
+import org.carrot2.util.tokenizer.parser.WordBasedParserBase;
+import org.carrot2.util.tokenizer.parser.jflex.JFlexWordBasedParser;
 
 /**
  * A local interface to the STC clustering algorithms. Parts copied & pasted
@@ -63,6 +68,11 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
     private RequestContext requestContext;
 
     /**
+     * Query words for the current query.
+     */
+    final HashSet queryWords = new HashSet();
+
+    /**
      * Implements {@link TokenizedDocumentsConsumer#addDocument(TokenizedDocument)}.
      */
     public void addDocument(TokenizedDocument doc) throws ProcessingException
@@ -70,7 +80,13 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
         startTimer();
 
         documents.add(doc);
-
+        
+        // TODO: This is a hack, we rewrite MutableTokenSequence inside the parsed 
+        // TokenizedDocument to mark stopwords. This should be done perhaps at the tokenizer
+        // level (marking query words inside the content stream with a separate token flag?).
+        markQueryWords(doc.getTitle());
+        markQueryWords(doc.getSnippet());
+        
         final DocReference documentReference = new DocReference(doc);
         documentReferences.add(documentReference);
 
@@ -121,6 +137,56 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
     {
         super.startProcessing(requestContext);
         this.requestContext = requestContext;
+
+        queryWords.clear();
+        final String query = 
+            (String) requestContext.getRequestParameters().get(LocalInputComponent.PARAM_QUERY);
+        if (query != null)
+        {
+            splitQueryWords(query);
+        }
+    }
+
+    /**
+     * Re-mark query words as stopwords inside the token sequence. 
+     */
+    private void markQueryWords(TokenSequence seq)
+    {
+        try
+        {
+            for (int i = seq.getLength() - 1; i >= 0; i--)
+            {
+                final MutableStemmedToken t = (MutableStemmedToken) seq.getTokenAt(i);
+                if (this.queryWords.contains(t.getImage().toLowerCase()))
+                {
+                    t.setType((short) (t.getType() | TypedToken.TOKEN_FLAG_STOPWORD));
+                }
+            }
+        } 
+        catch (ClassCastException e)
+        {
+            Logger.getLogger(this.getClass().getName()).warn("MutableStemmedTokens expected.", e);
+        }
+    }
+    
+    /**
+     * Splits <code>query</code> into words and places them into {@link #queryWords}.
+     */
+    private void splitQueryWords(String query)
+    {
+        final WordBasedParserBase parser = new JFlexWordBasedParser();
+        parser.restartTokenizationOn(new StringReader(query));
+
+        org.carrot2.core.linguistic.tokens.Token [] queryTokens 
+            = new org.carrot2.core.linguistic.tokens.Token[5];
+        int howMany;
+        while ((howMany = parser.getNextTokens(queryTokens, 0)) > 0)
+        {
+            for (int i = 0; i < howMany; i++)
+            {
+                queryWords.add(queryTokens[i].getImage().toLowerCase());
+            }
+        }
     }
 
     public void endProcessing() throws ProcessingException
@@ -139,6 +205,9 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
         final List clusters = stcEngine.getClusters();
         int max = params.getMaxClusters();
 
+        final HashSet junkDocuments = new HashSet(documentReferences.size());
+        junkDocuments.addAll(documents);
+
         // Convert STC's clusters to the format required by local interfaces.
         final List rawClusters = new ArrayList();
         for (Iterator i = clusters.iterator(); i.hasNext() && (max > 0); max--)
@@ -146,7 +215,8 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
             final MergedCluster b = (MergedCluster) i.next();
             final RawClusterBase rawCluster = new RawClusterBase();
 
-            int maxPhr = 3; // TODO: This should be a configuration parameter moved to STCEngine perhaps.
+            // TODO: This should be a configuration parameter moved to STCEngine perhaps.
+            int maxPhr = 3;
             final List phrases = b.getDescriptionPhrases();
             for (Iterator j = phrases.iterator(); j.hasNext() && (maxPhr > 0); maxPhr--)
             {
@@ -160,11 +230,30 @@ public class STCLocalFilterComponent extends ProfiledLocalFilterComponentBase
                 final TokenizedDocument tokenizedDoc = (TokenizedDocument) documents.get(docIndex);
                 final RawDocument rawDoc = (RawDocument) tokenizedDoc.getProperty(TokenizedDocument.PROPERTY_RAW_DOCUMENT);
                 rawCluster.addDocument(rawDoc);
+                junkDocuments.remove(tokenizedDoc);
             }
-
+            
             rawClusters.add(rawCluster);
         }
-        
+
+        // Create the 'junk' cluster.
+        if (junkDocuments.size() > 0)
+        {
+            final RawClusterBase junkCluster = new RawClusterBase();
+            junkCluster.setProperty(RawCluster.PROPERTY_JUNK_CLUSTER, Boolean.TRUE);
+            junkCluster.setScore(0.0d);
+            junkCluster.addLabel("(Other)");
+
+            for (final Iterator i = junkDocuments.iterator(); i.hasNext();)
+            {
+                final TokenizedDocument tokenizedDoc = (TokenizedDocument) i.next();
+                final RawDocument rawDoc = (RawDocument) tokenizedDoc.getProperty(TokenizedDocument.PROPERTY_RAW_DOCUMENT);
+                junkCluster.addDocument(rawDoc);
+            }
+            
+            rawClusters.add(junkCluster);
+        }
+
         // Don't want to time the following components, so stop here
         stopTimer();
 

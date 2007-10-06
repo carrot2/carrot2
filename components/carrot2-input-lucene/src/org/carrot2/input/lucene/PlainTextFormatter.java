@@ -21,6 +21,7 @@ import org.apache.lucene.search.highlight.TokenGroup;
  * that doesn't do any highlighting and just returns the original text.
  * 
  * @author Stanislaw Osinski
+ * @author Sairaj Sunil 
  */
 public class PlainTextFormatter implements Formatter
 {

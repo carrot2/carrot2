@@ -1,4 +1,4 @@
 <local-component-factory 
 	id="input-array-rawdocuments" 
-	component-class="org.carrot2.core.impl.RawDocumentsProducerLocalInputComponent">
+	component-class="org.carrot2.core.impl.ArrayInputComponent">
 </local-component-factory> 

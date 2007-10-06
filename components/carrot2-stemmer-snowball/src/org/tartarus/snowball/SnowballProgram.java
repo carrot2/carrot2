@@ -14,13 +14,17 @@ public class SnowballProgram {
      * Introduced this method to allow direct method
      * calls to all stemmer types without using Java
      * Reflection, which is slowing things down.
+     * 
+     * [author Carrot2]
      */
     public boolean stem() {
         return false;
     }
-
+    
     /**
      * Initialize the current string from a character array.
+     * 
+     * [author Carrot2]
      */
     public void setCurrent(char [] value, int start, int length)
     {
@@ -405,7 +409,7 @@ public class SnowballProgram {
     protected StringBuffer slice_to(StringBuffer s)
     {
 	slice_check();
-	int len = ket - bra;
+	// UNUSED int len = ket - bra;
 	s.replace(0, s.length(), current.substring(bra, ket));
 	return s;
     }
@@ -439,3 +443,4 @@ extern void debug(struct SN_env * z, int number, int line_count)
 */
 
 }
+

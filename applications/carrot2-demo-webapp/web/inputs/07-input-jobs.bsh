@@ -7,7 +7,10 @@ import org.carrot2.input.opensearch.*;
 
 factory = new LocalComponentFactory() {
     public LocalComponent getInstance() {
-        return new OpenSearchInputComponent("http://www.indeed.com/opensearch?q={searchTerms}&start={startPage}&limit={count}");
+	    final OpenSearchInputComponent input = new OpenSearchInputComponent(
+	    	"http://www.indeed.com/opensearch?q={searchTerms}&start={startIndex}&limit={count}");
+	    input.setMaxResults(50);
+        return input;
     }
 };
 
@@ -18,7 +21,7 @@ loaded.setProperties(new String [][] {
 	{"tab.name", "Jobs"},
 	{"tab.accel", "J"},
 	{"tab.description", "Search jobs from indeed.com"},
-	{"tab.description.startup", "Carrot Clustering Engine will search jobs at indeed.com and organize the results into thematic categories"},
+	{"tab.description.startup", "Carrot Clustering Engine will search jobs at <<indeed.com>> and organize the results into thematic categories"},
 	{"tab.exampleQueries", "manager|java|sql"},
 	{"tab.icon", "jobs.gif"},
 	{"tab.default", "false"}

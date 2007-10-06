@@ -21,14 +21,14 @@ import org.carrot2.core.linguistic.*;
 import org.carrot2.core.profiling.*;
 import org.carrot2.filter.lingo.common.*;
 import org.carrot2.filter.lingo.common.Cluster;
-import org.carrot2.filter.lingo.common.MultilingualClusteringContext;
+import org.carrot2.util.tokenizer.languages.*;
 
 
 /**
  * An adapter for the 'old' Lingo to the new local interfaces
- * architecture. The old lingo is still in use, so it makes sense to 
+ * architecture. The old lingo is still in use, so it makes sense to
  * add this support.
- * 
+ *
  * @author Dawid Weiss
  * @author Stanislaw Osinski
  * @version $Revision$
@@ -47,11 +47,11 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
     /**
      * When the {@link #PARAMETER_LEAVE_FEATURES_IN_CONTEXT} request parameter
      * is not-null, Lingo will leave under this key in the
-     * {@link RequestContext} an array of {@link Feature}s extracted while 
+     * {@link RequestContext} an array of {@link Feature}s extracted while
      * clustering.
      */
     public static final String LINGO_EXTRACTED_FEATURES = "lingo-extracted-features";
-    
+
     /** Documents to be clustered */
     private ArrayList documents;
 
@@ -69,10 +69,10 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
 
     /** Raw clusters consumer */
     private RawClustersConsumer rawClustersConsumer;
-    
+
     /** Raw documents consumer */
     private RawDocumentsConsumer rawDocumentsConsumer;
-    
+
     /**
      *  Request params.
      */
@@ -88,6 +88,8 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
 	 */
 	private Map defaults;
 
+    private Language tokenizerLanguage;
+
     /**
      * Creates a new Lingo filter with default parameters.
      */
@@ -95,10 +97,18 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
     {
     	this(null, null);
     }
-    
-    public LingoLocalFilterComponent(Language [] languages, Map parameters) {
-    	this.languages = languages;
-    	this.defaults = parameters;
+
+    public LingoLocalFilterComponent(Language [] languages, Map parameters)
+    {
+        this(languages, AllKnownLanguages.getLanguageForIsoCode("en"), parameters);
+    }
+
+    public LingoLocalFilterComponent(Language [] languages, Language tokenizerLanguage,
+        Map parameters)
+    {
+        this.languages = languages;
+        this.defaults = parameters;
+        this.tokenizerLanguage = tokenizerLanguage;
     }
 
     /*
@@ -167,7 +177,7 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
     {
         super.startProcessing(requestContext);
         this.requestParams = requestContext.getRequestParameters();
-        documents = new ArrayList();        
+        documents = new ArrayList();
     }
 
     /*
@@ -191,18 +201,21 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
         startTimer();
 
         // Prepare data
-        final MultilingualClusteringContext clusteringContext = new MultilingualClusteringContext(new HashMap());
 
         final Language [] languages = this.languages;
-        
+
         // set the default parameters of the algorithm.
         // eh.. quick and dirty as always.
         Map current = new HashMap();
         if (this.defaults != null)
+        {
         	current.putAll(this.defaults);
+        }
+
         current.putAll(requestParams);
-        clusteringContext.setParameters(current);
+        final MultilingualClusteringContext clusteringContext = new MultilingualClusteringContext( current );
         clusteringContext.setLanguages(languages);
+        clusteringContext.setTokenizerLanguage(tokenizerLanguage);
 
         if (documents.size() == 0) {
         	super.endProcessing();
@@ -220,25 +233,67 @@ public class LingoLocalFilterComponent extends ProfiledLocalFilterComponentBase
 
         // Cluster them now.
         Cluster[] clusters = clusteringContext.cluster();
-        
+        mergeClusters(clusters);
+
         // convert (lazily) back to the interfaces required by local architecture.
         for (int i = 0; i < clusters.length; i++) {
-            this.rawClustersConsumer.addCluster(
-            		new RawClusterInterfaceAdapter( clusters[i], documents ));
+            // because of mering nulls can happen here, so check first
+            if (clusters[i] != null) {
+                this.rawClustersConsumer.addCluster(
+                		new RawClusterInterfaceAdapter( clusters[i], documents ));
+            }
         }
 
         // Copy features to the context parameters
         requestParams.put(LINGO_EXTRACTED_FEATURES, current
             .get(LINGO_EXTRACTED_FEATURES));
-        
+
         stopTimer();
 
         super.endProcessing();
     }
 
+    private void mergeClusters(Cluster [] clusters)
+    {
+        for (int i = 0; i < clusters.length; i++)
+        {
+            final Cluster clusterA = clusters[i];
+            if (clusterA == null || clusterA.isJunk() || clusterA.isOtherTopics())
+            {
+                continue;
+            }
+
+            for (int j = i + 1; j < clusters.length; j++)
+            {
+                final Cluster clusterB = clusters[j];
+                if (clusterB == null|| clusterB.isJunk() || clusterB.isOtherTopics())
+                {
+                    continue;
+                }
+
+                List labelA = clusterA.getLabelsAsList();
+                List labelB = clusterB.getLabelsAsList();
+
+                if (labelA != null && labelA.equals(labelB))
+                {
+                    // Merge
+                    ArrayList snipetsB = clusterB.getSnippetsAsArrayList();
+                    for (Iterator it = snipetsB.iterator(); it.hasNext();)
+                    {
+                        Snippet snippet = (Snippet) it.next();
+                        clusterA.addSnippet(snippet);
+                    }
+
+                    clusters[j] = null;
+                }
+
+            }
+        }
+    }
+
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.carrot2.core.LocalComponent#getName()
      */
     public String getName()

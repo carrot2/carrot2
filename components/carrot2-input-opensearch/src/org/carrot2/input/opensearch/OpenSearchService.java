@@ -20,8 +20,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.carrot2.core.ProcessingException;
-import org.carrot2.core.clustering.RawDocumentBase;
-import org.carrot2.core.clustering.RawDocumentsConsumer;
+import org.carrot2.core.clustering.*;
 import org.carrot2.util.StringUtils;
 import org.carrot2.util.URLEncoding;
 
@@ -79,21 +78,29 @@ public class OpenSearchService {
         // or there are no more results available
         int pagenumber = 1;
 
+        // results counter
+        int resultIndex = 1;
+
 fetch:  while (true) {
-            // results counter
-            int resultIndex = 0;
-    
             // builds the URL by replacing the variables in the template
             String feedUrl = urlService.replaceFirst("\\{searchTerms\\}", codedQuery);
 
             // check whether the site supports startPage
             // otherwise we'll rely on count to get the results
             final boolean supportsPaging = (urlService.indexOf("startPage") != -1);
-
             if (supportsPaging) {
                 // specify the page number in the query
-                final String pageNumber = "" + pagenumber;
-                feedUrl = feedUrl.replaceFirst("\\{startPage.?\\}", pageNumber);
+                feedUrl = feedUrl.replaceFirst("\\{startPage.?\\}", 
+                    Integer.toString(pagenumber));
+            }
+
+            // check whether the site supports startIndex
+            // otherwise we'll rely on count to get the results
+            final boolean supportsIndex = (urlService.indexOf("startIndex") != -1);
+            if (supportsIndex) {
+                // specify the index number in the query
+                feedUrl = feedUrl.replaceFirst("\\{startIndex.?\\}", 
+                    Integer.toString(resultIndex));
             }
 
             // specify the number of results in the page
@@ -110,10 +117,6 @@ fetch:  while (true) {
 
             // Convert the entries into OpenSearchResults
             for (int entry = 0; entry < entries.size(); entry++) {
-                // check that we did not exceed the number of results
-                if (result.size() >= requestedResults) {
-                    break fetch;
-                }
                 final SyndEntry sy = (SyndEntry) entries.get(entry);
                 final String syURL = sy.getLink();
                 final String syTITLE = sy.getTitle();
@@ -124,18 +127,28 @@ fetch:  while (true) {
                 resultIndex++;
                 
                 if (documentConsumer != null) {
-                    documentConsumer.addDocument(new RawDocumentBase(current.url, 
+                    final RawDocumentBase rawDocument = new RawDocumentBase(current.url, 
                         StringUtils.removeMarkup(current.title), 
                         StringUtils.removeMarkup(current.summary)){
                         public Object getId() {
                             return Integer.toString(id);
                         }
-                    });
+                    };
+                    rawDocument.setProperty(RawDocument.PROPERTY_SOURCES,
+                        OpenSearchInputComponent.SOURCES);
+                    documentConsumer.addDocument(rawDocument);
+                }
+                
+                // Check that we did not exceed the number of results.
+                if (result.size() >= requestedResults) {
+                    break fetch;
                 }
             }
-            if (!supportsPaging) {
+
+            if (!supportsPaging && !supportsIndex) {
                 break fetch;
             }
+
             pagenumber++;
         }
 

@@ -112,6 +112,14 @@ public class RawDocumentProducerCacheWrapper extends LocalInputComponentBase {
         return COMPONENT_CAPABILITIES;
     }
     
+    public void init(LocalControllerContext context) throws InstantiationException
+    {
+        super.init(context);
+        
+        // Initialize the wrapped component
+        wrapped.init(context);
+    }
+
     public void startProcessing(RequestContext requestContext) throws ProcessingException {
     	super.startProcessing(requestContext);
     	this.requestContext = requestContext;
@@ -176,6 +184,11 @@ public class RawDocumentProducerCacheWrapper extends LocalInputComponentBase {
         final HashMap cachedKeys = new HashMap(cachedParams);
         cachedKeys.keySet().removeAll(contextParams.keySet());
         contextParams.putAll(cachedKeys);
+        if (cachedParams.containsKey(LocalInputComponent.PARAM_QUERY))
+        {
+            contextParams.put(LocalInputComponent.PARAM_QUERY, cachedParams
+                .get(LocalInputComponent.PARAM_QUERY));
+        }
 
         // Playback RawDocuments from cache.
         final RawDocumentsConsumer nextComponent = (RawDocumentsConsumer) super.next; 

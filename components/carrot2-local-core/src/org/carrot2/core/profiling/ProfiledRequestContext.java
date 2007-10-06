@@ -18,11 +18,11 @@ import java.util.*;
 import org.carrot2.core.*;
 
 /**
- * An implmementaion of the
- * {@link org.carrot2.core.RequestContext}interface that
+ * An implementation of the
+ * {@link org.carrot2.core.RequestContext} interface that
  * enables components to gather and store profiling and debugging information.
  * Each component in the processing chain will have a separate instance of
- * {@link Profile}obtainable by a call to {@link #getProfile(LocalComponent)}.
+ * {@link Profile} obtainable by a call to {@link #getProfile(LocalComponent)}.
  * 
  * @author Stanislaw Osinski
  * @version $Revision$

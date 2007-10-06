@@ -1,10 +1,9 @@
 <%@page pageEncoding="UTF-8" %><%
 
-	// response.setHeader("Content-Type", "application/x-java-jnlp-file");
-	response.setHeader("Content-Type", "text/plain");
+	response.setHeader("Content-Type", "application/x-java-jnlp-file");
 	response.setHeader("Cache-Control", "public, max-age=0");
 	response.setHeader("Pragma", "x-no-cache");
-	
+
 	final String codebase;
 
 	if (request.getParameter("codebase") == null) {
@@ -33,19 +32,17 @@
 
 		<offline-allowed />
 	</information>
-	
+
 	<resources>
 		<j2se version="1.4+" />
-		
-		<jar href="carrot2-demo-browser.jar" />
-		<jar href="lib/demo-resources.jar" />
 
+		<jar href="carrot2-demo-browser.jar" />
 		<%@include file="demo.inc" %>
 	</resources>
 
 	<resources os="Windows">
-		<jar href="lib/windows/jdic.jar"/> 
-		<nativelib href="lib/windows/jdic-native.jar"/>
+		<jar href="lib/windows/jdic_stub.jar"/>
+		<nativelib href="lib/windows/x86/jdic_native.jar"/>
 	</resources>
 
 	<security>
@@ -53,7 +50,7 @@
 	</security>
 
 	<application-desc main-class="org.carrot2.demo.DemoSplash">
-		<argument>/org/carrot2/demo/carrot2-splash.gif</argument>
+		<argument>/res/browser-splash.png</argument>
 		<argument>4</argument>
 		<argument>org.carrot2.demo.DemoSwing</argument>
 		<argument>--resource</argument>

@@ -1,4 +1,4 @@
 
-Up-to-date project documentation can be found at:
+Up-to-date project documentation (well, to the extent possible) can be found at:
 
-http://www.carrot2.org/
+http://project.carrot2.org/

@@ -13,29 +13,26 @@
 
 package org.carrot2.apiexample;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
+import java.io.*;
+import java.util.*;
 
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Searcher;
+import org.apache.lucene.analysis.*;
+import org.apache.lucene.analysis.standard.*;
+import org.apache.lucene.index.*;
+import org.apache.lucene.search.*;
 import org.carrot2.core.*;
-import org.carrot2.core.impl.ArrayOutputComponent;
-import org.carrot2.filter.lingo.local.LingoLocalFilterComponent;
-import org.carrot2.input.lucene.LuceneLocalInputComponent;
-import org.carrot2.input.lucene.LuceneSearchConfig;
+import org.carrot2.core.impl.*;
+import org.carrot2.filter.lingo.local.*;
+import org.carrot2.input.lucene.*;
 
 /**
  * <p>This is an example of using the Carrot<sup>2</sup> API to cluster
- * search results aquired from a local 
- * <a href="http://lucene.apache.org/">Lucene</a> index.</p> 
- * 
+ * search results aquired from a local
+ * <a href="http://lucene.apache.org/">Lucene</a> index.</p>
+ *
  * <p>This example is a continuation of the API introduction available
  * in the {@link Example} class, present in this project.</p>
- * 
+ *
  * <p>This tutorial starts in the {@link #main(String[])} method.</p>
  *
  * @see Example
@@ -47,34 +44,34 @@ public final class LuceneExample {
 
     /**
      * <h1>Using Carrot<sup>2</sup> and Lucene</h1>
-     * 
+     *
      * <h2>Introduction</h2>
-     * 
+     *
      * <p>In this example we will configure and run a few queries against
      * an index created and searched with Java Information Retrieval
      * library <a href="http://lucene.apache.org/">Lucene</a>. You should
      * be familiar with how Lucene creates indexes and how it works. Corresponding
      * documentation is available in that project.</p>
-     * 
+     *
      * <h2>Preparation</h2>
-     * 
+     *
      * <p>Further on we assume that a Lucene index is compiled and available for
      * searches. Carrot<sup>2</sup> uses Lucene 2.x JAR internally, so the index
-     * should be compatible. In addition to that, we will need <b>three fields</b>, 
+     * should be compatible. In addition to that, we will need <b>three fields</b>,
      * corresponding to the information Carrot<sup>2</sup> utilizes:</p>
      * <ul>
      *  <li>a field for <b>url</b> of a document,<li>
      *  <li>a field for the <b>title</b> of a document,</li>
      *  <li>a field for the <b>snippet</b> of a document, or in other words, a textual summary of document's contents.</li>
      * <ul>
-     * 
+     *
      * <p>If any of the above fields are not present in your index, you can simulate
      * them programmatically (only the <code>url</code> field is obligatory, but it also
      * can be simulated). This is a somewhat advanced technique and we will further assume
      * that each of the above fields is available in your index.</p>
-     * 
+     *
      * <h2>Assembling a controller and putting it to work</h2>
-     * 
+     *
      * <p>Practically the only difference between the example shown in {@link Example} class
      * and now is how we initialize the {@link LocalController} component. We will create
      * an input component searching for documents in our index ({@link LuceneLocalInputComponent})
@@ -96,7 +93,15 @@ public final class LuceneExample {
              * to something that is relevant to the data in your index.
              */
             final String query = "your query";
-            final ProcessingResult pResult = controller.query("lucene-lingo", query, new HashMap());
+
+            /*
+             * You can provide additional parameters (e.g. the number of results
+             * to fetch from the source) through the Map below.
+             */
+            final Map parameters = new HashMap();
+            parameters.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, "150");
+
+            final ProcessingResult pResult = controller.query("lucene-lingo", query, parameters);
             final ArrayOutputComponent.Result result = (ArrayOutputComponent.Result) pResult.getQueryResult();
 
             /*
@@ -118,7 +123,7 @@ public final class LuceneExample {
      * provides this object, so the configuration is permanent for the entire
      * lifecycle of a component. Alternatively, you could provide a different
      * Lucene configuration at query-time, setting a {@link RequestContext}
-     * parameter of value {@link LuceneSearchConfig} under a key 
+     * parameter of value {@link LuceneLocalInputComponentFactoryConfig} under a key
      * {@link LuceneLocalInputComponent#LUCENE_CONFIG}.</p>
      *
      * @param indexLocation A folder where your index is present. Note that
@@ -131,12 +136,12 @@ public final class LuceneExample {
     private static LocalController initLocalController() throws DuplicatedKeyException {
         final LocalController controller = new LocalControllerBase();
 
-        // 
+        //
         // Collect the information required for Lucene input component - location of
         // the index, searched fields and fields that map to URL, title and snippet
         // of {@link RawDocument}s to be clustered.
         //
-        
+
         // Place your index location in this variable.
         File indexLocation = null;
 
@@ -147,7 +152,7 @@ public final class LuceneExample {
             if (indexLocation == null) {
                 throw new IOException("Initialize indexLocation first.");
             }
-            indexReader = IndexReader.open(indexLocation);        
+            indexReader = IndexReader.open(indexLocation);
         } catch (IOException e) {
             throw new RuntimeException("Lucene index not present at" +
                     " location: " + indexLocation, e);
@@ -168,9 +173,10 @@ public final class LuceneExample {
         final String titleField = "title";
         final String summaryField = "summary";
 
-        final LuceneSearchConfig luceneConfig = new LuceneSearchConfig(
-                searcher, analyzer, searchFields,
-                titleField, summaryField, urlField); 
+        final LuceneLocalInputComponentConfig luceneConfig =
+            new LuceneLocalInputComponentConfig(
+                new LuceneLocalInputComponentFactoryConfig(searchFields, titleField,
+                summaryField, urlField), indexReader, searcher, analyzer);
 
         //
         // Create Lucene input component factory.
@@ -180,14 +186,14 @@ public final class LuceneExample {
                 return new LuceneLocalInputComponent(luceneConfig);
             }
         };
-        
+
         // add lucene input as 'lucene-myindex'
         controller.addLocalComponentFactory("lucene-myindex", input);
 
 
         //
         // Now it's time to create filters. We will use Lingo clustering
-        // component. 
+        // component.
         //
         final LocalComponentFactory lingo = new LocalComponentFactory() {
             public LocalComponent getInstance() {
@@ -200,7 +206,7 @@ public final class LuceneExample {
         // add the clustering component as "lingo-classic"
         controller.addLocalComponentFactory("lingo-classic", lingo);
 
-        
+
         //
         // Finally, create a result-catcher component
         //
@@ -213,16 +219,16 @@ public final class LuceneExample {
         // add the output component as "buffer"
         controller.addLocalComponentFactory("buffer", output);
 
-        
+
         //
         // In the final step, assemble a process from the above.
         //
         try {
-            controller.addProcess("lucene-lingo", 
+            controller.addProcess("lucene-lingo",
                     new LocalProcessBase("lucene-myindex", "buffer", new String [] {"lingo-classic"}));
         } catch (InitializationException e) {
             // This exception is thrown during verification of the added component chain,
-            // when a component cannot properly initialize for some reason. We don't 
+            // when a component cannot properly initialize for some reason. We don't
             // expect it here, so rethrow it as runtime exception.
             throw new RuntimeException(e);
         } catch (MissingComponentException e) {

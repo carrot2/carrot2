@@ -23,19 +23,19 @@ import java.util.Collection;
 
 import javax.swing.*;
 
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.SimpleAnalyzer;
+import org.apache.lucene.analysis.*;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexReader.FieldOption;
 import org.carrot2.demo.swing.SwingUtils;
+import org.carrot2.input.lucene.StandardAnalyzerWithPorterStemmer;
 
 import com.jgoodies.forms.builder.DefaultFormBuilder;
 import com.jgoodies.forms.layout.FormLayout;
 
 /**
  * Visual component for {@link LuceneSettings}.
- * 
+ *
  * @author Dawid Weiss
  */
 public class LuceneSettingsDialog extends JPanel {
@@ -43,7 +43,7 @@ public class LuceneSettingsDialog extends JPanel {
     private final transient LuceneSettings settings;
 
     private transient JTextField indexLocationLabel;
-    
+
     public LuceneSettingsDialog(LuceneSettings settings) {
         this.settings = settings;
         buildGui();
@@ -51,8 +51,8 @@ public class LuceneSettingsDialog extends JPanel {
 
     private void buildGui() {
         this.setLayout(new BorderLayout());
-        
-        final DefaultFormBuilder builder = 
+
+        final DefaultFormBuilder builder =
             new DefaultFormBuilder(new FormLayout("fill:200px:grow, 4dlu, pref"));
 
         builder.appendSeparator("Lucene index location");
@@ -83,13 +83,13 @@ public class LuceneSettingsDialog extends JPanel {
                             fields = reader.getFieldNames(FieldOption.ALL);
                             reader.close();
                         } catch (IOException e) {
-                            SwingUtils.showExceptionDialog(indexLocationEditButton, 
+                            SwingUtils.showExceptionDialog(indexLocationEditButton,
                                     "Could not open Lucene index.", e);
                             return;
                         }
 
                         // show details dialog.
-                        final DefaultFormBuilder builder = 
+                        final DefaultFormBuilder builder =
                             new DefaultFormBuilder(new FormLayout("pref:grow"));
 
                         builder.appendSeparator("Search fields");
@@ -106,7 +106,7 @@ public class LuceneSettingsDialog extends JPanel {
                                 }
                             }
                         }
-                        builder.append(list);
+                        builder.append(new JScrollPane(list));
                         builder.nextLine();
 
                         builder.appendSeparator("Results fields");
@@ -137,14 +137,24 @@ public class LuceneSettingsDialog extends JPanel {
 
                         builder.appendSeparator("Analyzer");
                         final JComboBox analyzers = new JComboBox(new Object [] {
-                                StandardAnalyzer.class.getName(), 
+                                StandardAnalyzerWithPorterStemmer.class.getName(),
+                                StandardAnalyzer.class.getName(),
                                 SimpleAnalyzer.class.getName(),
+                                jeasy.analysis.MMAnalyzer.class.getName(),
+                                WhitespaceAnalyzer.class.getName()
                         });
                         if (settings.analyzer != null) {
                             analyzers.setSelectedItem(settings.analyzer.getClass().getName());
                         }
                         builder.append(analyzers);
                         builder.nextLine();
+
+                        builder.appendSeparator("Results postprocessing");
+                        final JCheckBox createSnippets = new JCheckBox("Create snippets");
+                        createSnippets.setSelected(settings.createSnippets);
+                        builder.append(createSnippets);
+                        builder.nextLine();
+
 
                         final int result = JOptionPane.showConfirmDialog(indexLocationEditButton, builder.getPanel(), "Select fields",
                                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
@@ -174,7 +184,7 @@ public class LuceneSettingsDialog extends JPanel {
                                     (String) url.getSelectedItem(),
                                     (String) title.getSelectedItem(),
                                     (String) snippet.getSelectedItem(),
-                                    analyzer);
+                                    analyzer, createSnippets.isSelected());
                         }
                     }
                 }

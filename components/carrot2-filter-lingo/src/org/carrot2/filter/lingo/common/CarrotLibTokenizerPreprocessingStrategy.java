@@ -13,15 +13,13 @@
 
 package org.carrot2.filter.lingo.common;
 
-import org.carrot2.core.linguistic.Language;
-import org.carrot2.core.linguistic.Stemmer;
-
-import org.carrot2.filter.lingo.tokenizer.*;
-import org.carrot2.util.StringUtils;
-
-import org.apache.log4j.Logger;
-
+import java.io.*;
 import java.util.*;
+
+import org.apache.log4j.*;
+import org.carrot2.core.linguistic.*;
+import org.carrot2.core.linguistic.tokens.*;
+import org.carrot2.util.*;
 
 
 /**
@@ -65,8 +63,7 @@ public final class CarrotLibTokenizerPreprocessingStrategy
     }
 
     public Snippet[] preprocess(AbstractClusteringContext clusteringContext) {
-        Tokenizer tokenizer = JFlexTokenizer.getTokenizer();
-
+        
         Snippet[] snippets = clusteringContext.getSnippets();
         Snippet[] preprocessedSnippets = new Snippet[snippets.length];
 
@@ -83,6 +80,10 @@ public final class CarrotLibTokenizerPreprocessingStrategy
         lowCaseWords = new HashSet();
         caseCheck = new HashMap();
 
+        Language tokenizerLanguage = ((MultilingualClusteringContext) clusteringContext)
+            .getTokenizerLanguage();
+        LanguageTokenizer tokenizer = tokenizerLanguage.borrowTokenizer();
+        
         // Clean and guess language
         for (int i = 0; i < snippets.length; i++) {
             preprocessedSnippets[i] = preprocess(snippets[i], tokenizer);
@@ -121,6 +122,7 @@ public final class CarrotLibTokenizerPreprocessingStrategy
                 preprocessedSnippets[i].setLanguage(mostCommonLanguage);
             }
 
+            if ( ((MultilingualClusteringContext)clusteringContext).DISABLE_STEMMING ) continue;
             preprocessedSnippets[i] = stemming(preprocessedSnippets[i]);
         }
 
@@ -167,7 +169,7 @@ public final class CarrotLibTokenizerPreprocessingStrategy
     /**
      * Method clean.
      */
-    protected Snippet preprocess(Snippet snippet, Tokenizer tokenizer) {
+    protected Snippet preprocess(Snippet snippet, LanguageTokenizer tokenizer) {
         String title = tokenizeAndClean(snippet.getTitle(), tokenizer);
         String body = tokenizeAndClean(snippet.getBody(), tokenizer);
 
@@ -420,44 +422,19 @@ public final class CarrotLibTokenizerPreprocessingStrategy
      * Tokenizes the input text and returns a "cleaned" version containing only
      * recognizable tokens  and sequence markers.
      */
-    private String tokenizeAndClean(String text, Tokenizer tokenizer) {
-        StringBuffer stringBuffer = new StringBuffer(text.length());
+    private String tokenizeAndClean(String text, LanguageTokenizer tokenizer) {
+        tokenizer.restartTokenizationOn(new StringReader(text));
+        
+        StringBuffer stringBuffer = new StringBuffer();
+        TypedToken [] tokens = new TypedToken[1];
+        int lastAddedType = TypedToken.TOKEN_FLAG_SENTENCE_DELIM;
 
-        tokenizer.restartTokenizerOn(text);
+        while (tokenizer.getNextTokens(tokens, 0) > 0) {
+            String tokenImage = tokens[0].getImage();
+            String tokenImageLowerCase = tokenImage.toLowerCase();
 
-        int[] tokenType = { 0 };
-        String tokenImage;
-        String tokenImageLowerCase;
-        int lastAddedType = Tokenizer.TYPE_SENTENCEMARKER;
-
-        while ((tokenImage = tokenizer.getNextToken(tokenType)) != null) {
-            tokenImageLowerCase = tokenImage.toLowerCase();
-
-            switch (tokenType[0]) {
-            case Tokenizer.TYPE_PERSON:
-
-                // Pick the last contiguous component of a person's name.
-                int i = tokenImage.length() - 1;
-outerLoop: 
-                while (i >= 0) {
-                    switch (tokenImage.charAt(i)) {
-                    case ' ':
-                    case '.':
-                    case '\'': // O'Brian -- maybe we should skip this?
-                        i++;
-
-                        break outerLoop;
-
-                    default:}
-
-                    i--;
-                }
-
-                tokenImage = tokenImage.substring(i);
-                
-                break;
-
-            case Tokenizer.TYPE_TERM:
+            switch (tokens[0].getType() & TypedToken.MASK_TOKEN_TYPE) {
+            case TypedToken.TOKEN_TYPE_TERM:
 
                 Object previousTokenImage = caseCheck.get(tokenImageLowerCase);
 
@@ -469,26 +446,20 @@ outerLoop:
                     }
                 }
 
-                if (lastAddedType == Tokenizer.TYPE_TERM) {
+                if (lastAddedType == TypedToken.TOKEN_TYPE_TERM) {
                     stringBuffer.append(' ');
                 }
 
                 stringBuffer.append(tokenImage);
-                lastAddedType = Tokenizer.TYPE_TERM;
+                lastAddedType = TypedToken.TOKEN_TYPE_TERM;
 
                 break;
 
-            case Tokenizer.TYPE_EMAIL:
-            case Tokenizer.TYPE_URL:
+            case TypedToken.TOKEN_TYPE_PUNCTUATION:
 
-                // ignore these.
-                break;
-
-            case Tokenizer.TYPE_SENTENCEMARKER:
-
-                if (lastAddedType != Tokenizer.TYPE_SENTENCEMARKER) {
+                if ((tokens[0].getType() & TypedToken.TOKEN_FLAG_SENTENCE_DELIM) != 0 && lastAddedType != TypedToken.TOKEN_FLAG_SENTENCE_DELIM) {
                     stringBuffer.append(" . ");
-                    lastAddedType = Tokenizer.TYPE_SENTENCEMARKER;
+                    lastAddedType = TypedToken.TOKEN_FLAG_SENTENCE_DELIM;
                 }
 
             default:

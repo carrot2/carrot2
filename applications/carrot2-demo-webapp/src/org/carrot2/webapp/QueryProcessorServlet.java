@@ -14,38 +14,40 @@
 package org.carrot2.webapp;
 
 import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.SocketException;
 import java.util.*;
 
-import javax.servlet.*;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.http.*;
 
 import net.sf.ehcache.*;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.carrot2.webapp.SearchSettings.SearchRequest;
-import org.carrot2.webapp.serializers.XMLSerializersFactory;
-
 import org.carrot2.core.*;
 import org.carrot2.core.clustering.RawCluster;
 import org.carrot2.core.clustering.RawDocument;
-import org.carrot2.core.impl.*;
-import org.carrot2.core.controller.*;
-import org.carrot2.core.controller.loaders.BeanShellFactoryDescriptionLoader;
+import org.carrot2.core.impl.ArrayInputComponent;
+import org.carrot2.core.impl.ArrayOutputComponent;
+import org.carrot2.core.profiling.Profile;
+import org.carrot2.core.profiling.ProfiledRequestContext;
+import org.carrot2.util.RollingWindowAverage;
+import org.carrot2.util.StringUtils;
+import org.carrot2.webapp.serializers.C2XMLSerializer;
 
 /**
  * Query processor servlet.
- * 
+ *
  * @author Dawid Weiss
  */
 public final class QueryProcessorServlet extends HttpServlet {
-    /** logger for activities and information */
+    /** Logger for activities and information */
     private Logger logger;
-    
-    /** logger for queries */
+
+    /** Logger for queries */
     private volatile Logger queryLogger;
-    
+
     /**
      * Define this system property to enable statistical information from
      * the query processor. A GET request to {@link QueryProcessorServlet}
@@ -58,23 +60,35 @@ public final class QueryProcessorServlet extends HttpServlet {
     public static final String PARAM_Q = "q";
     public static final String PARAM_INPUT = "in";
     public static final String PARAM_ALG = "alg";
+    public static final String PARAM_FACET = "f";
     public static final String PARAM_SIZE = "s";
+    public static final String PARAM_XML_FEED_KEY = "xmlkey";
+    public static final String PARAM_TYPE = "type";
+    
+    public static final String TYPE_CLUSTERS = "c";
+    public static final String TYPE_DOCUMENTS = "d";
+    public static final String TYPE_STATS = "s";
+    public static final String TYPE_XML = "xml";
 
     private static final int DOCUMENT_REQUEST = 1;
     private static final int CLUSTERS_REQUEST = 2;
     private static final int PAGE_REQUEST = 3;
     private static final int STATS_REQUEST = 4;
+    private static final int DOCUMENTS_CLUSTERS_REQUEST = 5;
 
     /** All available search settings */
-    private SearchSettings searchSettings = new SearchSettings();
-    
+    private SearchSettings searchSettings;
+
+    /**
+     * A map of {@link Broadcaster}s.
+     */
     private final HashMap bcasters = new HashMap();
 
     /**
      * A process controller for input tabs. Each tab's name ({@link TabSearchInput#getShortName()})
      * corresponds to an identifier of a process defined in this controller.
      */
-    private LocalControllerBase tabsController; 
+    private LocalControllerBase tabsController;
 
     /**
      * A process controller for algorithms. Each algorithm's name ({@link TabAlgorithm#getShortName()})
@@ -88,6 +102,9 @@ public final class QueryProcessorServlet extends HttpServlet {
     /** Serializer factory used to emit documents and clusters. */
     private SerializersFactory serializerFactory;
 
+    /** A key required to get the XML feed with clusters and documents */
+    private String xmlFeedKey;
+
     /** A counter for the number of executed queries. */
     private long executedQueries;
 
@@ -98,47 +115,86 @@ public final class QueryProcessorServlet extends HttpServlet {
     private long goodQueries;
 
     /**
-     * Configure inputs. 
+     * Average processing time for clustering requests (5 minutes, granularity of 10 seconds).
+     */
+    private final RollingWindowAverage averageProcessingTime = new RollingWindowAverage(
+        5 * RollingWindowAverage.MINUTE, 10 * RollingWindowAverage.SECOND);
+
+    /**
+     * Average processing time for any request (5 minutes, granularity of 10 seconds).
+     */
+    private final RollingWindowAverage averageRequestTime = new RollingWindowAverage(
+        5 * RollingWindowAverage.MINUTE, 10 * RollingWindowAverage.SECOND);
+
+    /** If <code>true</code> the processes and components have been successfully read. */
+    private boolean initialized;
+
+    /** A bundle with localized messages */
+    private ResourceBundle localizedMessages;
+
+    /** Query expander (may be null) */
+    private QueryExpander queryExpander;
+
+    /**
+     * Configure inputs.
      */
     public void init() throws ServletException {
         this.logger = Logger.getLogger(this.getServletName());
-        final ServletContext context = super.getServletContext();
 
-        // Initialize serializers.
-        initializeSerializers(getServletConfig());
-        
-        // Initialize cache.
-        initializeCache(getServletConfig());
-
-        // Create processes for collecting documents from input tabs.
-        final File inputScripts = new File(context.getRealPath("/inputs"));
-        this.tabsController = initializeInputs(inputScripts, searchSettings);
-
-        // Create processes for algorithms.
-        final File algorithmScripts = new File(context.getRealPath("/algorithms"));
-        this.algorithmsController = initializeAlgorithms(algorithmScripts, searchSettings);
-
-        int defaultInputSize = 100;
+        // Run initial process and components configuration.
         try {
-            defaultInputSize = Integer.parseInt(getServletConfig()
-                .getInitParameter("inputSize.default"));
+            initialize();
+            logger.info("Initialized and accepting requests.");
+        } catch (Throwable t) {
+            logger.error("Could not initialize query processor servlet: " + StringUtils.chainExceptionMessages(t), t);
         }
-        catch (Exception e){
-            logger.warn("Could not parse inputSize.default: " + getServletConfig()
-                .getInitParameter("inputSize.default"));
-        }        
-        searchSettings.setAllowedInputSizes(
-                new int [] {50, 100, 200, 400}, defaultInputSize);
+    }
+
+    /**
+     * Wrap entire request processing in time counter.
+     */
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException
+    {
+        final long requestStart = System.currentTimeMillis();
+        try
+        {
+            doGet0(request, response);
+        }
+        finally
+        {
+            synchronized (getServletContext())
+            {
+                this.averageRequestTime.add(System.currentTimeMillis(), System.currentTimeMillis() - requestStart);
+            }
+        }
     }
 
     /**
      * Process a HTTP GET request.
      */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
-        throws ServletException, IOException {
+    private void doGet0(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException
+    {
+        // check if initialized.
+        synchronized (this) {
+            if (!initialized) {
+                // Attempt to repeat initialization procedure.
+                logger.info("Repeating initialization.");
+                try {
+                    initialize();
+                } catch (Throwable t) {
+                    servletError(request, response, response.getOutputStream(), "Initialization error occurred." , t);
+                    return;
+                }
+                logger.info("Initialization successful.");
+            }
+        }
+
         // identify request type first.
-        final String type = request.getParameter("type");
-        final SearchRequest searchRequest = searchSettings.parseRequest(request.getParameterMap());
+        final String type = request.getParameter(PARAM_TYPE);
+        final SearchRequest searchRequest = searchSettings.parseRequest(request
+            .getParameterMap(), request.getCookies(), queryExpander);
 
         // Initialize loggers depending on the application context.
         if (this.queryLogger == null) {
@@ -155,74 +211,119 @@ public final class QueryProcessorServlet extends HttpServlet {
             }
         }
 
+        request.setAttribute(Constants.RESOURCE_BUNDLE_KEY, localizedMessages);
+
         // Determine request type and redirect control
         final int requestType;
-        if ("d".equals(type)) {
+        if (TYPE_DOCUMENTS.equals(type)) {
             requestType = DOCUMENT_REQUEST;
-        } else if ("c".equals(type)) {
+        } else if (TYPE_CLUSTERS.equals(type)) {
             requestType = CLUSTERS_REQUEST;
-        } else if ("s".equals(type)) {
+        } else if (TYPE_STATS.equals(type)) {
             requestType = STATS_REQUEST;
+        } else if (TYPE_XML.equals(type)) {
+            requestType = DOCUMENTS_CLUSTERS_REQUEST;
         } else {
             requestType = PAGE_REQUEST;
         }
 
         final OutputStream os = response.getOutputStream();
-        if (requestType == DOCUMENT_REQUEST || requestType == CLUSTERS_REQUEST) {
-            // request for documents or clusters
-            if (searchRequest.query.length() == 0) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-                return;
-            }
-
-            try {
+        try {
+            if (requestType == DOCUMENT_REQUEST || requestType == CLUSTERS_REQUEST || requestType == DOCUMENTS_CLUSTERS_REQUEST) {
+                // request for documents or clusters
+                if (searchRequest.query.length() == 0) {
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                    return;
+                }
+    
+                // If the key is missing or wrong
+                if (requestType == DOCUMENTS_CLUSTERS_REQUEST
+                    && ("disabled".equals(xmlFeedKey) || !xmlFeedKey.equals(request
+                        .getParameter(PARAM_XML_FEED_KEY))))
+                {
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                    return;
+                }
+    
                 processSearchQuery(os, requestType, searchRequest, request, response);
-            } catch (IOException e) {
-                // Handle process exception gracefully?
-                servletError(request, response, os, "An internal error occurred." 
-                        + searchRequest.getInputTab().getShortName(), e);
-            }
-        } else if (requestType == STATS_REQUEST) {
-            // request for statistical information about the engine.
-            // we check if the request contains a special token known to the 
-            // administrator of the engine (so that statistics are available
-            // only to certain people).
-            final String statsKey = System.getProperty(STATISTICS_KEY);
-            if (statsKey != null && statsKey.equals(request.getParameter("key"))) {
-                synchronized (getServletContext()) {
-                    response.setContentType("text/plain; charset=utf-8");
-                    final Writer output = new OutputStreamWriter(os, "UTF-8");
-    
-                    output.write("total-queries: " + executedQueries + "\n");
-                    output.write("good-queries: " + goodQueries + "\n");
-                    if (goodQueries > 0) {
-                        output.write("ms-per-query: " + totalTime / goodQueries + "\n");
+            } else if (requestType == STATS_REQUEST) {
+                // request for statistical information about the engine.
+                // we check if the request contains a special token known to the
+                // administrator of the engine (so that statistics are available
+                // only to certain people).
+                final String statsKey = System.getProperty(STATISTICS_KEY);
+                if (statsKey != null && statsKey.equals(request.getParameter("key"))) {
+                    synchronized (getServletContext()) {
+                        processStatsQuery(os, response);
                     }
-
-                    output.write("jvm.freemem: " + Runtime.getRuntime().freeMemory() + "\n");
-                    output.write("jvm.totalmem: " + Runtime.getRuntime().totalMemory() + "\n");
-    
-                    final Statistics stats = this.ehcache.getStatistics();
-                    output.write("ehcache.hits: " + stats.getCacheHits() + "\n");
-                    output.write("ehcache.misses: " + stats.getCacheMisses() + "\n");
-                    output.write("ehcache.memhits: " + stats.getInMemoryHits() + "\n");
-                    output.write("ehcache.diskhits: " + stats.getOnDiskHits() + "\n");
-
-                    output.flush();
+                } else {
+                    // unauthorized stats request.
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST);
                 }
             } else {
-                // unauthorized stats request.
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                final PageSerializer serializer = serializerFactory.createPageSerializer(request);
+                response.setContentType(serializer.getContentType());
+                serializer.writePage(os, searchSettings, searchRequest);
             }
-        } else {
-            final PageSerializer serializer = serializerFactory.createPageSerializer(request);
-            response.setContentType(serializer.getContentType());
-            serializer.writePage(os, searchSettings, searchRequest);
+        } catch (IOException e) {
+            if (e instanceof SocketException
+                || e.getClass().getName().equals("org.apache.catalina.connector.ClientAbortException")
+                || e.getClass().getName().equals("org.mortbay.jetty.EofException")) {
+                logger.debug("Client abort when writing response: "
+                    + StringUtils.chainExceptionMessages(e));
+            } else {
+                logger.warn("Unrecognized I/O exception when writing response: " 
+                    + StringUtils.chainExceptionMessages(e), e);
+            }
         }
     }
 
     /**
-     * A thread that fetches search results and caches them. 
+     * 
+     */
+    private void processStatsQuery(OutputStream os, HttpServletResponse response)
+        throws IOException
+    {
+        response.setContentType("text/plain; charset=utf-8");
+        final Writer output = new OutputStreamWriter(os, "UTF-8");
+
+        output.write("clustering-total-queries: " + executedQueries + "\n");
+        output.write("clustering-good-queries: " + goodQueries + "\n");
+
+        final long average = (long) this.averageProcessingTime.getCurrentAverage();
+        if (average > 0)
+        {
+            output.write("clustering-ms-per-query: " + average + "\n");
+            output.write("clustering-updates-in-window: " 
+                + this.averageProcessingTime.getUpdatesInWindow() + "\n");
+        }
+
+        final long requestAverage = (long) averageRequestTime.getCurrentAverage();
+        if (requestAverage > 0)
+        {
+            output.write("all-ms-per-request: " + requestAverage + "\n");
+            output.write("all-updates-in-window: " 
+                + this.averageRequestTime.getUpdatesInWindow() + "\n");
+        }
+
+        output.write("jvm.freemem: " + Runtime.getRuntime().freeMemory() + "\n");
+        output.write("jvm.totalmem: " + Runtime.getRuntime().totalMemory() + "\n");
+
+        final Statistics stats = this.ehcache.getStatistics();
+        output.write("ehcache.hits: " + stats.getCacheHits() + "\n");
+        output.write("ehcache.misses: " + stats.getCacheMisses() + "\n");
+        output.write("ehcache.memhits: " + stats.getInMemoryHits() + "\n");
+        output.write("ehcache.diskhits: " + stats.getOnDiskHits() + "\n");
+
+        // Return server configuration for remote testing.
+        output.write("algorithms: " + StringUtils.toString(algorithmsController.getProcessIds(), ",") + "\n");
+        output.write("inputs: " + StringUtils.toString(this.tabsController.getProcessIds(), ",") + "\n");
+
+        output.flush();
+    }
+
+    /**
+     * A thread that fetches search results and caches them.
      */
     private class SearchResultsDownloaderThread extends Thread {
         private final SearchRequest searchRequest;
@@ -237,11 +338,11 @@ public final class QueryProcessorServlet extends HttpServlet {
 
         public void run() {
             final HashMap props = new HashMap();
-            props.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, 
+            props.put(LocalInputComponent.PARAM_REQUESTED_RESULTS,
                     Integer.toString(searchRequest.getInputSize()));
             props.put(BroadcasterPushOutputComponent.BROADCASTER, bcaster);
             try {
-                tabsController.query(searchRequest.getInputTab().getShortName(), searchRequest.query, props);
+                tabsController.query(searchRequest.getInputTab().getShortName(), searchRequest.getActualQuery(), props);
             } catch (Exception e) {
                 logger.warn("Error running input query.", e);
                 this.bcaster.endProcessingWithError(e);
@@ -251,7 +352,7 @@ public final class QueryProcessorServlet extends HttpServlet {
             try {
                 // add documents to the cache
                 ehcache.put(
-                        new net.sf.ehcache.Element(queryHash, 
+                        new net.sf.ehcache.Element(queryHash,
                                 new SearchResults(bcaster.getDocuments())));
             } catch (CacheException e) {
                 logger.error("Could not save results to cache.", e);
@@ -262,11 +363,11 @@ public final class QueryProcessorServlet extends HttpServlet {
     /**
      * Process a document or cluster search query.
      */
-    private void processSearchQuery(OutputStream os, final int requestType, 
-            SearchRequest searchRequest, HttpServletRequest request, HttpServletResponse response) 
+    private void processSearchQuery(OutputStream os, final int requestType,
+            SearchRequest searchRequest, HttpServletRequest request, HttpServletResponse response)
         throws IOException
     {
-        final TabAlgorithm algorithmTab = searchRequest.getAlgorithm();
+        final TabAlgorithm algorithmTab = searchRequest.getAlgorithmOrFacet();
         final String queryHash = searchRequest.getInputAndSizeHashCode();
         final Broadcaster bcaster;
 
@@ -277,7 +378,7 @@ public final class QueryProcessorServlet extends HttpServlet {
         }
 
         synchronized (getServletContext()) {
-            final Broadcaster existingbcaster = (Broadcaster ) bcasters.get(queryHash); 
+            final Broadcaster existingbcaster = (Broadcaster ) bcasters.get(queryHash);
             if (existingbcaster != null) {
                 //
                 // Existing broadcaster is reused.
@@ -287,7 +388,7 @@ public final class QueryProcessorServlet extends HttpServlet {
             } else {
                 final net.sf.ehcache.Element value = ehcache.get(queryHash);
                 if (value != null) {
-                    // 
+                    //
                     // Recreate a broadcaster from the cache.
                     //
                     logger.debug("Broadcaster recovered from cache: " + searchRequest.query);
@@ -296,7 +397,7 @@ public final class QueryProcessorServlet extends HttpServlet {
                 } else {
                     //
                     // A new broadcaster is needed.
-                    // 
+                    //
                     logger.debug("Broadcaster created: " + searchRequest.query);
                     bcaster = new Broadcaster();
                     bcasters.put(queryHash, bcaster);
@@ -308,16 +409,18 @@ public final class QueryProcessorServlet extends HttpServlet {
             bcaster.attach();
         }
 
-        long processingTime = -1;
+        long filtersProcessingTime = 0;
+        boolean requestGood = false;  // Set to true after a successful clustering request. 
         try {
             final Iterator docIterator = bcaster.docIterator();
             if (requestType == DOCUMENT_REQUEST) {
                 //
                 // document request
                 //
+                final long start = System.currentTimeMillis();
                 final RawDocumentsSerializer serializer = serializerFactory.createRawDocumentSerializer(request);
                 response.setContentType(serializer.getContentType());
-                serializer.startResult(os);
+                serializer.startResult(os, searchRequest.getActualQuery());
                 try {
                     while (docIterator.hasNext()) {
                         serializer.write((RawDocument) docIterator.next());
@@ -325,59 +428,83 @@ public final class QueryProcessorServlet extends HttpServlet {
                 } catch (BroadcasterException e) {
                     serializer.processingError(e.getCause());
                 }
-                serializer.endResult();
+                final long totalTime = System.currentTimeMillis() - start;
+
+                // Technically, the total time includes also the serialization time,
+                // but I guess this is negligible compared to fetching anyway
+                serializer.endResult(totalTime);
             } else {
                 //
                 // clustering request.
                 //
                 final HashMap props = new HashMap();
-                props.put(RawDocumentsProducerLocalInputComponent.PARAM_SOURCE_RAW_DOCUMENTS, 
-                        docIterator);
-                props.put(LocalInputComponent.PARAM_REQUESTED_RESULTS, 
+                props.put(ArrayInputComponent.PARAM_SOURCE_RAW_DOCUMENTS, docIterator);
+                props.put(LocalInputComponent.PARAM_REQUESTED_RESULTS,
                         Integer.toString(searchRequest.getInputSize()));
 
-                final RawClustersSerializer serializer = serializerFactory.createRawClustersSerializer(request);
+                RawClustersSerializer serializer;
+                if (requestType == CLUSTERS_REQUEST) {
+                    serializer = serializerFactory.createRawClustersSerializer(request);
+                }
+                else {
+                    // DOCUMENTS_CLUSTERS_REQUEST
+                    serializer = new C2XMLSerializer();
+                }
                 response.setContentType(serializer.getContentType());
                 try {
                     logger.info("Clustering results using: " + algorithmTab.getShortName());
-                    final long start = System.currentTimeMillis();
-                    final ProcessingResult result = 
-                        algorithmsController.query(algorithmTab.getShortName(), 
-                                searchRequest.query, props);
-                    final long stop = System.currentTimeMillis();
-                    final ArrayOutputComponent.Result collected =  
+                    final ProcessingResult result =
+                        algorithmsController.query(algorithmTab.getShortName(),
+                                searchRequest.getActualQuery(), props);
+                    final ArrayOutputComponent.Result collected =
                         (ArrayOutputComponent.Result) result.getQueryResult();
-                    final List clusters = collected.clusters; 
+                    final List clusters = collected.clusters;
                     final List documents = bcaster.getDocuments();
 
-                    serializer.startResult(os, documents, request);
+                    serializer.startResult(os, documents, request, searchRequest.getActualQuery());
                     for (Iterator i = clusters.iterator(); i.hasNext();) {
                         serializer.write((RawCluster) i.next());
                     }
-                    serializer.endResult();
-                 
-                    processingTime = stop - start;
-                    logQuery(searchRequest, processingTime);
+
+                    List profiles = ((ProfiledRequestContext) result
+                        .getRequestContext()).getProfiles();
+                    Profile [] array = (Profile []) profiles
+                        .toArray(new Profile [profiles.size()]);
+
+                    // Count only filters.
+                    for (int i = 1; i < array.length - 1; i++)
+                    {
+                        filtersProcessingTime += array[i].getTotalTimeElapsed();
+                    }
+
+                    serializer.endResult(filtersProcessingTime);
+
+                    requestGood = true; // Mark good request here.
+
+                    if (queryLogger.isEnabledFor(Level.INFO)) {
+                        logQuery(searchRequest, filtersProcessingTime);
+                    }
                 } catch (BroadcasterException e) {
                     // broadcaster exceptions are shown in the documents iframe,
                     // so we simply emit no clusters.
-                    serializer.startResult(os, Collections.EMPTY_LIST, request);
+                    serializer.startResult(os, Collections.EMPTY_LIST, request, searchRequest.query);
                     serializer.processingError(e);
-                    serializer.endResult();
+                    serializer.endResult(filtersProcessingTime);
                 } catch (Exception e) {
                     logger.warn("Error running input query.", e);
-                    serializer.startResult(os, Collections.EMPTY_LIST, request);
+                    serializer.startResult(os, Collections.EMPTY_LIST, request, searchRequest.query);
                     serializer.processingError(e);
-                    serializer.endResult();
+                    serializer.endResult(filtersProcessingTime);
                 }
             }
         } finally {
             synchronized (getServletContext()) {
                 if (requestType == CLUSTERS_REQUEST) {
                     this.executedQueries++;
-                    if (processingTime > 0) {
+                    if (requestGood) {
                         this.goodQueries++;
-                        this.totalTime += processingTime;
+                        this.totalTime += filtersProcessingTime;
+                        this.averageProcessingTime.add(System.currentTimeMillis(), filtersProcessingTime);
                     }
                 }
 
@@ -407,247 +534,106 @@ public final class QueryProcessorServlet extends HttpServlet {
                 + ","
                 + searchRequest.query);
     }
-    
-    /**
-     * Initializes results serializers.
-     */
-    private void initializeSerializers(ServletConfig conf) throws ServletException {
-        String serializerFactoryClass = conf.getInitParameter("results.serializerFactory");
-        if (serializerFactoryClass == null) {
-            serializerFactoryClass = XMLSerializersFactory.class.getName();
-            logger.warn("serializerFactory undefined, using the default: "
-                    + serializerFactoryClass);
-        }
-
-        final SerializersFactory factory;
-        try {
-            factory = (SerializersFactory)
-                Thread.currentThread().getContextClassLoader().loadClass(serializerFactoryClass).newInstance();
-            factory.configure(conf);
-        } catch (Exception e) {
-            throw new ServletException("Could not create results serializer: "
-                    + serializerFactoryClass, e);
-        }
-        logger.info("Using serializer factory: " + factory.getClass().getName());
-        this.serializerFactory = factory;
-    }
 
     /**
-     * Initializes caches.
+     * Initializes components and processes. Sets a flag if successful.
      */
-    private void initializeCache(ServletConfig config) throws ServletException {
-        final String EHCACHE_NAME = "carrot2";
+    private void initialize() throws ServletException {
+        final ServletContext context = super.getServletContext();
 
-        // Initialize EHCache
-        final String cacheConfigResource = config.getInitParameter("ehcache.config.resource");
-        if (cacheConfigResource == null) {
-            throw new ServletException("EHCache configuration location (ehcache.config.resource) is missing.");
-        }
+        this.searchSettings = new SearchSettings();
 
-        final URL configStream;
+        // Initialize default input size and allowed input sizes.
+        int defaultInputSize = 100;
         try {
-            configStream = super.getServletContext().getResource(cacheConfigResource);
-        } catch (MalformedURLException e) {
-            throw new ServletException("Resource URL malformed.", e);
+            defaultInputSize = Integer.parseInt(getServletConfig()
+                .getInitParameter("inputSize.default"));
         }
-        if (configStream == null) {
-            throw new ServletException("EHCache configuration is missing: " + cacheConfigResource);
-        }
-        
-        final CacheManager cm = CacheManager.create(configStream);
-        if (!cm.cacheExists(EHCACHE_NAME)) {
-            throw new ServletException("EHCache for Carrot2 not defined ("
-                    + EHCACHE_NAME + ")");
-        }
-        this.ehcache = cm.getCache(EHCACHE_NAME);
-    }
-
-    /**
-     * Initializes and returns {@link LocalController} which will contain processes 
-     * for collecting {@link RawDocument}s. This method also initializes {@link TabSearchInput}
-     * instances corresponding to processes defined in the returned controller.
-     */
-    private LocalControllerBase initializeInputs(final File inputScripts, final SearchSettings settings) {
-        if (!inputScripts.isDirectory()) {
-            throw new RuntimeException("Scripts for input tabs not initialized.");
+        catch (Exception e){
+            logger.warn("Could not parse inputSize.default: " + getServletConfig()
+                .getInitParameter("inputSize.default"));
         }
 
-        final LocalControllerBase controller = new LocalControllerBase();
-        final ControllerHelper helper = new ControllerHelper();
-        
-        // Register context path for beanshell scripts.
-        final ComponentFactoryLoader bshLoader = helper.getComponentFactoryLoader(ControllerHelper.EXT_COMPONENT_FACTORY_LOADER_BEANSHELL);
-        if (bshLoader != null) {
-            final HashMap globals = new HashMap();
-            globals.put("inputsDirFile", inputScripts);
-            ((BeanShellFactoryDescriptionLoader) bshLoader).setGlobals(globals);
-        }
-
-        try {
-            // Add an output sink component now.
-            controller.addLocalComponentFactory("collector",
-                    new LocalComponentFactory() {
-                        public LocalComponent getInstance() {
-                            return new BroadcasterPushOutputComponent();
-                        }
-                    }
-            );
-    
-            // Add document enumerator.
-            controller.addLocalComponentFactory("enumerator",
-                    new LocalComponentFactory() {
-                        public LocalComponent getInstance() {
-                            return new RawDocumentEnumerator();
-                        }
-                    }
-            );
-        } catch (DuplicatedKeyException e) {
-            // not-reachable
-            throw new RuntimeException(e);
-        }
-
-        // And now add inputs.
-        try {
-            final LoadedComponentFactory [] factories = 
-                helper.loadComponentFactoriesFromDir(inputScripts);
-            for (int i = 0; i < factories.length; i++) {
-                final LoadedComponentFactory loaded = factories[i];
-                // check if the required properties are present.
-                final String tabName = (String) loaded.getProperty("tab.name");
-                final String tabDesc = (String) loaded.getProperty("tab.description");
-                if (tabName == null || tabDesc == null) {
-                    logger.warn("The input factory: " + loaded.getId()
-                            + " must specify 'tab.name' and 'tab.description' properties.");
-                    continue;
-                }
-                controller.addLocalComponentFactory(loaded.getId(), loaded.getFactory());
-
-                final Map otherProps = new HashMap();
-                for (Iterator j = loaded.getProperties().entrySet().iterator(); j.hasNext();) {
-                    final Map.Entry entry = (Map.Entry) j.next();
-                    final String key = (String) entry.getKey();
-                    if (key.startsWith("tab.")) {
-                        otherProps.put(key, entry.getValue());
-                    }
-                }   
-
-                final boolean ignoreOnError = "true".equals(loaded.getProperty("tab.ignoreOnError"));
-                try {
-                    final boolean defaultTab = "true".equals(loaded.getProperty("tab.default"));
-                    controller.addProcess(tabName, new LocalProcessBase(loaded.getId(), "collector", 
-                            /* filters */ new String[] { "enumerator" } ));
-                    settings.add(new TabSearchInput(tabName, tabDesc, otherProps));
-                    if (defaultTab) {
-                        settings.setDefaultTabIndex(settings.getInputTabs().size() - 1);
-                    }
-                    logger.info("Added input tab: " + tabName + " (component: " + loaded.getId() + ")");
-                } catch (Exception e) {
-                    if (ignoreOnError) {
-                        // ignore exception.
-                        logger.warn("Skipping input tab: " + tabName + " (ignored exception: " + e.getMessage() + ")");
-                    } else {
-                        // rethrow.
-                        throw e;
-                    }
+        // Initialize the allowed input sizes
+        int [] allowedInputSize = new int [] {50, 100, 200, 400};
+        String sizesString = getServletConfig().getInitParameter("inputSize.choices");
+        if (sizesString != null)
+        {
+            try
+            {
+                String [] split = sizesString.split(",");
+                allowedInputSize = new int [split.length];
+                for (int i = 0; i < split.length; i++)
+                {
+                    allowedInputSize[i] = Integer.parseInt(split[i]);
                 }
             }
-        } catch (Exception e) {
-            throw new RuntimeException("Problems initializing input components.", e);
+            catch (NumberFormatException e)
+            {
+                logger.warn("Could not parse inputSize.choices: " + getServletConfig()
+                    .getInitParameter("inputSize.default"));
+                allowedInputSize = new int [] {50, 100, 200, 400};
+            }
         }
+        searchSettings.setAllowedInputSizes(allowedInputSize, defaultInputSize);
 
-        // Check if there are any inputs at all.
-        if (settings.inputTabs.size() == 0) {
-            throw new RuntimeException("At least one input tab must be defined.");
+        // Initialize XML feed key
+        this.xmlFeedKey = InitializationUtils.initializeXmlFeedKey(getServletConfig());
+
+        // Initialize serializers.
+        this.serializerFactory = InitializationUtils.initializeSerializers(logger, getServletConfig());
+
+        // Initialize cache.
+        this.ehcache = InitializationUtils.initializeCache(getServletConfig());
+
+        // Create processes for collecting documents from input tabs.
+        String inputsPath = this.getInitParameter("inputs.path");
+        if (inputsPath == null || inputsPath.trim().equals(""))
+        {
+        	inputsPath = "/inputs";
         }
-        
-        return controller;
+        final File inputScripts = new File(context.getRealPath(inputsPath));
+        this.tabsController = InitializationUtils.initializeInputs(logger, inputScripts, searchSettings);
+
+        // Create processes for algorithms.
+        String algorithmsPath = this.getInitParameter("algorithms.path");
+        if (algorithmsPath == null || algorithmsPath.trim().equals(""))
+        {
+        	algorithmsPath = "/algorithms";
+        }
+        final File algorithmScripts = new File(context.getRealPath(algorithmsPath));
+        this.algorithmsController = InitializationUtils.initializeAlgorithms(logger, algorithmScripts, searchSettings);
+
+        // Initialize the bundle for localized messages
+        this.localizedMessages = InitializationUtils.initializeResourceBundle(
+            getServletConfig());
+
+        // Initialize query expander
+        this.queryExpander = InitializationUtils.initializeQueryExpander(logger, getServletConfig());
+
+        // Mark as initialized.
+        this.initialized = true;
     }
 
-    /**
-     * Initializes and returns a {@link LocalController} containing clustering algorithms.
-     */
-    private LocalControllerBase initializeAlgorithms(File algorithmScripts, SearchSettings searchSettings) {
-        if (!algorithmScripts.isDirectory()) {
-            throw new RuntimeException("Scripts for algorithm tabs not initialized.");
-        }
-
-        final LocalControllerBase controller = new LocalControllerBase();
-        final ControllerHelper helper = new ControllerHelper();
-
-        try {
-            // Add an input producer component now.
-            controller.addLocalComponentFactory("input-demo-webapp",
-                    new LocalComponentFactory() {
-                        public LocalComponent getInstance() {
-                            return new RawDocumentsProducerLocalInputComponent();
-                        }
-                    }
-            );
-            // Add an output collector.
-            controller.addLocalComponentFactory("output-demo-webapp",
-                    new LocalComponentFactory() {
-                        public LocalComponent getInstance() {
-                            return new ArrayOutputComponent();
-                        }
-                    }
-            );
-        } catch (DuplicatedKeyException e) {
-            // not-reachable
-            throw new RuntimeException(e);
-        }
-        
-        final FileFilter processFilter = new FileFilter() {
-            public boolean accept(File file) {
-                return file.getName().startsWith("alg-");
-            }
-        };
-        final FileFilter componentFilter = new FileFilter() {
-            private final FileFilter subFilter = 
-                helper.getComponentFilter();
-            public boolean accept(File file) {
-                return this.subFilter.accept(file) &&
-                    !file.getName().startsWith("alg-");
-            }
-        };
-
-        try {
-            helper.addAll(controller, 
-                    helper.loadComponentFactoriesFromDir(algorithmScripts, componentFilter));
-            final LoadedProcess [] processes = 
-                helper.loadProcessesFromDir(algorithmScripts, processFilter);
-            for (int i = 0; i < processes.length; i++) {
-                final String shortName = processes[i].getProcess().getName();
-                final String description = processes[i].getProcess().getDescription();
-                final boolean defaultAlgorithm = "true".equals(processes[i].getAttributes().get("process.default"));
-                searchSettings.add(new TabAlgorithm(shortName, description));
-                if (defaultAlgorithm) {
-                    searchSettings.setDefaultAlgorithmIndex(searchSettings.getAlgorithms().size() - 1);
-                }
-                controller.addProcess(shortName, processes[i].getProcess());
-                logger.info("Added algorithm: " + shortName);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("Problems initializing algorithms.", e);
-        }
-        
-        return controller;
-    }
-    
     /**
      * Attempts to send an internal server error HTTP error, if possible.
-     * Otherwise simply pushes the exception message to the output stream. 
+     * Otherwise simply pushes the exception message to the output stream.
 
      * @param message Message to be printed to the logger and to the output stream.
      * @param t Exception that caused the error.
      */
     protected void servletError(HttpServletRequest origRequest, HttpServletResponse origResponse, OutputStream os, String message, Throwable t) {
+        logger.error(message, t);
+
         final Writer writer;
         try {
             writer = new OutputStreamWriter(os, Constants.ENCODING_UTF);
-        } catch (UnsupportedEncodingException e1) {
-            throw new RuntimeException(Constants.ENCODING_UTF + " must be supported.");
+        } catch (UnsupportedEncodingException e) {
+            final String msg = Constants.ENCODING_UTF + " must be supported.";
+            logger.fatal(msg);
+            throw new RuntimeException(msg);
         }
-        logger.warn(message, t);
+
         if (false == origResponse.isCommitted()) {
             // Reset the buffer and previous status code.
             origResponse.reset();
@@ -658,14 +644,10 @@ public final class QueryProcessorServlet extends HttpServlet {
         // Response committed. Just push the error to the output stream.
         try {
             writer.write("<h1 style=\"color: red; margin-top: 1em;\">");
-            writer.write("Internal server exception");
+            writer.write("Internal server error");
             writer.write("</h1>");
             writer.write("<b>URI</b>: " + origRequest.getRequestURI() + "\n<br/><br/>");
             serializeException(writer, t);
-            if (t instanceof ServletException && ((ServletException) t).getRootCause() != null) {
-                writer.write("<br/><br/><h2>ServletException root cause:</h2>");
-                serializeException(writer, ((ServletException) t).getRootCause());
-            }
             writer.flush();
         } catch (IOException e) {
             // not much to do in such case (connection broken most likely).
@@ -676,11 +658,27 @@ public final class QueryProcessorServlet extends HttpServlet {
     /**
      * Utility method to serialize an exception and its stack trace to simple HTML.
      */
-    private final void serializeException(Writer osw, Throwable t) throws IOException {
-        osw.write("<b>Exception</b>: " + t.toString() + "\n<br/><br/>");
-        osw.write("<b>Stack trace:</b>");
-        osw.write("<pre style=\"margin: 1px solid red; padding: 3px; font-family: sans-serif; font-size: small;\">");
-        PrintWriter pw = new PrintWriter(osw);
+    private final static void serializeException(Writer osw, Throwable t) throws IOException {
+        Throwable temp = t;
+        osw.write("<table border=\"0\" cellspacing=\"4\">");
+        while (temp != null) {
+            osw.write("<tr>");
+            osw.write("<td style=\"text-align: right\">" + (temp != t ? "caused by &rarr;" : "Exception:") + "</td>");
+            osw.write("<td style=\"color: gray; font-weight: bold;\">" + temp.getClass().getName() + "</td>");
+            osw.write("<td style=\"color: red; font-weight: bold;\">" + (temp.getMessage() != null ? temp.getMessage() : "(no message)") + "</td>");
+            osw.write("</tr>");
+
+            if (temp instanceof ServletException) {
+                temp = ((ServletException) temp).getRootCause();
+            } else {
+                temp = temp.getCause();
+            }
+        }
+        osw.write("</table>");
+
+        osw.write("<br/><br/><b>Stack trace:</b>");
+        osw.write("<pre style=\"border-left: 1px solid red; padding: 3px; font-family: monospace;\">");
+        final PrintWriter pw = new PrintWriter(osw);
         t.printStackTrace(pw);
         pw.flush();
         osw.write("</pre>");

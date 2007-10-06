@@ -56,7 +56,6 @@ public class EscapeStringTest extends TestCase {
     }
     
     public void testBugzillaBug1179124() {
-        System.out.println(EscapeString.escapeString("nt can be found <A HREF=\\\"%s\\\">here</A>.<P>"));
         assertEquals("nt can be found <A HREF=\\\\\\\"%s\\\\\\\">here</A>.<P>", EscapeString.escapeString("nt can be found <A HREF=\\\"%s\\\">here</A>.<P>"));
     }    
     

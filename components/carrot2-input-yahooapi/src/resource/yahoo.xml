@@ -2,7 +2,8 @@
 
 <request encoding="UTF-8">
     <service url="http://api.search.yahoo.com/WebSearchService/V1/webSearch" 
-             method="get" />
+             method="get" 
+             max-results-per-query="100" />
 
     <!-- 
       Specify any other parameters which will be sent to the service

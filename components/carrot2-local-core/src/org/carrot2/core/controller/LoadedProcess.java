@@ -27,15 +27,21 @@ import org.carrot2.core.LocalProcess;
  * @version $Revision$
  */
 public class LoadedProcess {
+    
+    /**
+     * An attribute that indicates whether this process is the default.
+     */
+    public final static String ATTRIBUTE_PROCESS_DEFAULT = "process.default";
+    
     /**
      * The identifier string of this process.
      */
-    private String id;
+    private final String id;
 
     /**
      * The process instance.
      */
-    private LocalProcess process;
+    private final LocalProcess process;
 
     /**
      * Any extra process attributes.

@@ -1,4 +1,5 @@
 /** Covered by Snowball license. */
+
 package org.tartarus.snowball;
 
 import java.lang.reflect.Method;

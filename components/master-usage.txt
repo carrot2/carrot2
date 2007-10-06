@@ -12,10 +12,10 @@ HOW TO USE THE MASTER BUILD FILE
 	This is where your project directory really is. Usually just
 	the same as ${basedir}.
 
-    <property name="carrot2.cvs.dir"  location="../.." />
+    <property name="carrot2.code.dir"  location="../.." />
     
     This is where the head of Carrot2 CVS checkout lives. Files
-    are referenced from ${carrot2.cvs.dir}/etc and possibly
+    are referenced from ${carrot2.code.dir}/etc and possibly
     from other directories.
 
     <property name="dist.name"        value="carrot2-common-utils" />
@@ -84,7 +84,7 @@ usually you would not want to:
 
 Import the default set of targets using:
 
-    <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
+    <import file="${carrot2.code.dir}/components/common-targets.inc" />
 
 Set the build type property:
 
@@ -102,7 +102,7 @@ set this:
 You can also override default targets of course. Usually modifying paths 
 is enough. For example:
 
-    <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
+    <import file="${carrot2.code.dir}/components/common-targets.inc" />
 
     <patternset id="src.patternset">
         <include name="**/local/**" />

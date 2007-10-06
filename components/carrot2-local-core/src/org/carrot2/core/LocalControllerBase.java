@@ -20,6 +20,7 @@ import org.apache.commons.pool.*;
 import org.apache.commons.pool.impl.GenericObjectPool;
 import org.carrot2.core.controller.*;
 import org.carrot2.core.controller.loaders.ComponentInitializationException;
+import org.carrot2.util.ResourceUtils;
 
 /**
  * A complete base implementation of the
@@ -41,6 +42,26 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
 
     private boolean autoload;
 
+    /** Default component pool configuration */
+    public static final GenericObjectPool.Config DEFAULT_COMPONENT_POOL_CONFIG;
+    static {
+        DEFAULT_COMPONENT_POOL_CONFIG = new GenericObjectPool.Config();
+        DEFAULT_COMPONENT_POOL_CONFIG.whenExhaustedAction = GenericObjectPool.WHEN_EXHAUSTED_GROW;
+        DEFAULT_COMPONENT_POOL_CONFIG.maxWait = 0; // irrelevant
+        DEFAULT_COMPONENT_POOL_CONFIG.maxActive = 0; // irrelevant
+        DEFAULT_COMPONENT_POOL_CONFIG.maxIdle = 10;
+        DEFAULT_COMPONENT_POOL_CONFIG.timeBetweenEvictionRunsMillis = 1000 * 60 * 4;
+        DEFAULT_COMPONENT_POOL_CONFIG.minEvictableIdleTimeMillis = 1000 * 60 * 5;
+        DEFAULT_COMPONENT_POOL_CONFIG.minIdle = 1;
+        DEFAULT_COMPONENT_POOL_CONFIG.numTestsPerEvictionRun = 5;
+        DEFAULT_COMPONENT_POOL_CONFIG.testOnBorrow = false;
+        DEFAULT_COMPONENT_POOL_CONFIG.testOnReturn = false;
+        DEFAULT_COMPONENT_POOL_CONFIG.testWhileIdle = false;        
+    }
+    
+    /** Component pool configuration */
+    private GenericObjectPool.Config poolConfig;
+    
     /**
      * Default implementation of the {@link ProcessingResult} interface.
      */
@@ -74,12 +95,23 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
     }    
     
     /**
-     * Creates a new instance of the controller.
+     * Creates a new instance of the controller with the default component 
+     * pool settings.
      */
     public LocalControllerBase()
     {
+        this(DEFAULT_COMPONENT_POOL_CONFIG);
+    }
+    
+    /**
+     * Creates a new instance of the controller with the specified configuration
+     * of the component pools.
+     */
+    public LocalControllerBase(GenericObjectPool.Config componentPoolConfig)
+    {
         componentPools = new HashMap();
         processes = new LinkedHashMap();
+        this.poolConfig = componentPoolConfig;
     }
 
     public void addLocalComponentFactory(String componentId,
@@ -101,21 +133,8 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
             }
         };
 
-        GenericObjectPool.Config config = new GenericObjectPool.Config();
-        config.whenExhaustedAction = GenericObjectPool.WHEN_EXHAUSTED_GROW;
-        config.maxWait = 0; // irrelevant
-        config.maxActive = 0; // irrelevant
-        config.maxIdle = 5;
-        config.timeBetweenEvictionRunsMillis = 1000 * 60 * 4;
-        config.minEvictableIdleTimeMillis = 1000 * 60 * 5;
-        config.minIdle = 0;
-        config.numTestsPerEvictionRun = 5;
-        config.testOnBorrow = false;
-        config.testOnReturn = false;
-        config.testWhileIdle = false;
-        
         componentPools.put(componentId, new GenericObjectPool(
-            poolableObjectFactory, config));
+            poolableObjectFactory, poolConfig));
     }
     
     /**
@@ -145,7 +164,8 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
         try {
             return (LocalComponent) pool.borrowObject();
         } catch (Exception e) {
-            throw new RuntimeException("Could not acquire component instance from the pool.", e);
+            throw new RuntimeException("Could not acquire component instance from the pool: "
+                + componentId, e);
         }
     }
 
@@ -249,38 +269,11 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
         InputStream stream = null;
         for (int i = 0; i < nameCandidates.length; i++) {
             // Construct resource name
-            final String resourceName = "" + nameCandidates[i];
+            final String resourceName = nameCandidates[i];
 
-            // Try context class loader first.
-            final ClassLoader ctxLoader = Thread.currentThread().getContextClassLoader();
-            stream = ctxLoader.getResourceAsStream(resourceName);
+            // Look for the descriptor.
+            stream = ResourceUtils.getFirst(resourceName, LocalControllerBase.class);
 
-            if (stream == null) {
-                // Try this class's loader next.
-                final ClassLoader clsLoader = this.getClass().getClassLoader();
-                stream = clsLoader.getResourceAsStream(resourceName);
-   
-                if (stream == null) {
-                    // Try local directory
-                    final File file = new File("components" + 
-                            File.separator + nameCandidates[i]);
-                    try {
-                        if (file.exists() && file.isFile() && file.canRead()) {
-                            stream = new FileInputStream(file);
-                            
-                            // NO MORE OPTIONS
-                            if (stream == null) {
-                                continue;
-                            }
-                        }
-                    } catch (SecurityException e) {
-                        // Ignore security exceptions.
-                    } catch (IOException e) {
-                        // Ignore IO exceptions.
-                    }
-                }
-            }
-            
             if (stream != null) {
                 // Something found. Try reading it.
                 try {

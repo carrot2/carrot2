@@ -5,7 +5,7 @@
     <property file="local.properties" />
 
     <property name="project.dir"      location="${basedir}" />
-    <property name="carrot2.cvs.dir"  location="../.." />
+    <property name="carrot2.code.dir"  location="../.." />
     <property name="dist.name"        value="carrot2-demo-browser" />
 
     <property name="type" value="jartype" />
@@ -13,23 +13,17 @@
 
     <property name="distribution.zips.dir" location="${project.dir}/tmp/zips" />
     <property name="distribution.zip.name" value="carrot2-local-demo.zip" /> 
+	<property name="distribution.webstart" location="${project.dir}/tmp/webstart" />
 
-    <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
+    <import file="${carrot2.code.dir}/components/common-targets.inc" />
 
 	<target name="build" depends="build.full" />
 
 
+    <target name="webstart" depends="clean,webstart.prepare,webstart.sign" description="Build a WebStart version.">
+	</target>
 
-    <target name="webstart" depends="clean,build.full">
-    	<property name="distribution.webstart" location="${project.dir}/tmp/webstart" />
-		<property name="keystore.alias" value="carrot2.org" />
-		<property name="keystore.password" value="carrot2" />
-		<property name="keystore" value="webstart/carrot2.org.keystore" />
-
-        <zip update="true" zipfile="${distribution.dir}/${dist.name}.jar">
-            <zipfileset dir="src/res" includes="log4j-deploy.properties" fullpath="log4j.properties" />
-        </zip>
-        
+    <target name="webstart.prepare" depends="build.full">
        	<copy todir="${distribution.webstart}">
        		<fileset dir="${distribution.dir}" />
        	</copy>
@@ -43,7 +37,7 @@
 
        	<java classname="bsh.Interpreter" dir="${distribution.webstart}" fork="true">
        		<classpath>
-       			<fileset dir="${carrot2.cvs.dir}/lib" includes="*bsh*.jar" />
+       			<fileset dir="${carrot2.code.dir}/lib" includes="*bsh*.jar" />
        		</classpath>
        		<arg file="webstart/create-resources.bsh" />
        	</java>
@@ -63,39 +57,49 @@
 
        	<delete file="webstart/demo-resources.xml" />
 
-       	<delete>
-       		<fileset dir="${distribution.webstart}">
-       			<include name="**/*jdic*" />
-       			<include name="**/*jdic*/**" />
-       		</fileset>
-       	</delete>
-
        	<copy todir="${distribution.webstart}">
        		<fileset dir="webstart">
-       			<include name="lib/**" />
        			<include name="img/**" />
        			<include name="*.php" />
        			<include name="*.jsp" />
        		</fileset>
        	</copy>
 
+        <move file="${distribution.webstart}/deps-carrot2-demo-browser-jar" tofile="${distribution.webstart}/lib" />
+
        	<java classname="bsh.Interpreter" dir="${distribution.webstart}" fork="true">
        		<classpath>
-       			<fileset dir="${carrot2.cvs.dir}/lib" includes="*bsh*.jar" />
+       			<fileset dir="${carrot2.code.dir}/lib" includes="*bsh*.jar" />
        		</classpath>
        		<arg file="webstart/create-files.bsh" />
        	</java>
 
-        <signjar alias="${keystore.alias}" storepass="${keystore.password}" keystore="${keystore}">
-    		<fileset dir="${distribution.webstart}">
-    			<include name="**/*.jar" />
-    		</fileset>
-       	</signjar>
+	<!-- Assemble binary JDIC JARs -->
+        <jar jarfile="${distribution.webstart}/lib/windows/x86/jdic_native.jar">
+            <fileset id="jdic.todel" dir="${distribution.webstart}/lib/windows/x86">
+                <exclude name="jdic_native.jar" />
+            </fileset>
+	</jar>
+	<delete>
+	    <fileset refid="jdic.todel" />
+	</delete>
     </target>
 
+	<target name="webstart.sign">
+		<property name="keystore.alias" value="carrot2.org" />
+		<property name="keystore.password" value="carrot2" />
+		<property name="keystore" value="webstart/carrot2.org.keystore" />
+
+	    <signjar alias="${keystore.alias}" storepass="${keystore.password}" keystore="${keystore}">
+			<fileset dir="${distribution.webstart}">
+				<include name="**/*.jar" />
+			</fileset>
+	   	</signjar>	
+	</target>
 
 
-    <target name="dist" depends="clean,build.full">
+
+    <target name="dist" depends="clean,build.full" description="Build a distribution version.">
         <filterchain id="cutout.tmp-dist">
             <tokenfilter>
                 <replacestring from="tmp\dist\" to="" />
@@ -139,7 +143,7 @@
 		<property name="profile" value="full" />
 
         <ant target="build.${type}"
-             antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" inheritrefs="true">
+             antfile="${carrot2.code.dir}/components/master.xml" inheritall="true" inheritrefs="true">
         </ant>
     </target>
 
@@ -159,7 +163,7 @@
         </fileset>
 
         <ant target="proguard.run" 
-            antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" inheritrefs="true" />
+            antfile="${carrot2.code.dir}/components/master.xml" inheritall="true" inheritrefs="true" />
     </target>
 
 
@@ -169,7 +173,7 @@
 		<property name="profile" value="stripped" />
 
         <ant target="build.${type}"
-             antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" inheritrefs="true">
+             antfile="${carrot2.code.dir}/components/master.xml" inheritall="true" inheritrefs="true">
         </ant>
     </target>
 </project>

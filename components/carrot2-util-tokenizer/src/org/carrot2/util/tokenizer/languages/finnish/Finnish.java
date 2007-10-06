@@ -40,7 +40,7 @@ public class Finnish extends StemmedLanguageBase {
         try {
             stopwords = WordLoadingUtils.loadWordSet("stopwords.fi");
         } catch (IOException e) {
-            throw new RuntimeException("Could not initialize class.");
+            throw new RuntimeException("Could not initialize class: " + e.getMessage());
         }
     }
 

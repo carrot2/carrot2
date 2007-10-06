@@ -3,17 +3,8 @@
 <project name="Carrot2 Bamboo builds" default="help">
     <property file="${bamboo.build.properties}" />
 
-    <target name="build" description="Perform a full build.">
+    <target name="dist" depends="build" description="Perform a full build with distribution building.">
         <fail unless="carrot2.code.dir">Define: carrot2.code.dir</fail>
-
-        <!-- clean everything -->
-        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="cleanall" inheritall="true" />
-
-        <!-- full build of all components -->
-        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="build" inheritall="true" />
-
-        <!-- run tests -->
-        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="test" inheritall="true" />
 
         <!-- build distribution ZIPs -->
         <ant dir="${carrot2.code.dir}" antfile="build.xml" target="dist" inheritall="true" />
@@ -29,6 +20,19 @@
 
         <!-- build webstart demo -->
         <ant dir="${carrot2.code.dir}/applications/carrot2-demo-browser" antfile="build.xml" target="webstart" inheritall="true" />
+    </target>
+
+    <target name="build" description="Perform a full build.">
+        <fail unless="carrot2.code.dir">Define: carrot2.code.dir</fail>
+
+        <!-- clean everything -->
+        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="cleanall" inheritall="true" />
+
+        <!-- full build of all components -->
+        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="build" inheritall="true" />
+
+        <!-- run tests -->
+        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="test" inheritall="true" />
     </target>
 
     <target name="publish.demo" description="Publish a demo web application internally on the demo server.">

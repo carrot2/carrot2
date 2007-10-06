@@ -15,6 +15,8 @@ package org.carrot2.webapp;
 
 import java.util.*;
 
+import javax.servlet.http.Cookie;
+
 /**
  * All available search settings and options.
  * 
@@ -26,10 +28,12 @@ public final class SearchSettings {
 
     /** An array of {@link TabAlgorithm}s */
     final ArrayList algorithms = new ArrayList();
+    final ArrayList facets = new ArrayList();
 
     /** Lookup indexes for input tabs and algorithms. */
-    private final HashMap inputTabsIndex = new HashMap();
-    private final HashMap algorithmsIndex = new HashMap();
+    final Map inputTabsIndex = new HashMap();
+    final Map algorithmsIndex = new HashMap();
+    final Map facetsIndex = new HashMap();
 
     /** Allowed input sizes */
     int [] allowedInputSizes;
@@ -42,103 +46,10 @@ public final class SearchSettings {
 
     /** Default algorithm index. */
     private int defaultAlgorithmIndex;
-
-    /** Settings for a single search request. */
-    public final class SearchRequest {
-        /** The query for this request. Never null, but may be empty. */
-        public final String query;
-
-        /** Input tab index. */
-        public final int inputTabIndex;
-
-        /** Algorithm index */
-        public final int algorithmIndex;
-
-        /** Requested input size index. */
-        public final int inputSizeIndex;
-        
-        /** hashcode of the combination of inputTab and size */
-        public final String inputAndSizeHashCode;
-
-        /** All options passed in the query */
-        public final Map allRequestOpts;
-
-        /**
-         * Parse parameters.
-         */
-        public SearchRequest(Map parameterMap) {
-            // Parse the query
-            final String query = extract(parameterMap, QueryProcessorServlet.PARAM_Q);
-            if (query == null || query.trim().length() == 0) {
-                this.query = "";
-            } else {
-                this.query = query;
-            }
-
-            // Parse input tab.
-            this.inputTabIndex = lookupIndex(inputTabsIndex, extract(parameterMap, QueryProcessorServlet.PARAM_INPUT),
-                    getDefaultSearchInputTab());
-
-            // Parse the algorithm
-            this.algorithmIndex = lookupIndex(algorithmsIndex, extract(parameterMap, QueryProcessorServlet.PARAM_ALG), 
-                    getDefaultAlgorithm());
-
-            // Parse the input size
-            final String value = extract(parameterMap, QueryProcessorServlet.PARAM_SIZE);
-            int tmp = getDefaultInputSizeIndex();
-            if (value != null) {
-                final int resNum = parseInt(value, 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
-                for (int i = allowedInputSizes.length - 1; i >= 0; i--) {
-                    if (allowedInputSizes[i] == resNum) {
-                        tmp = i;
-                        break;
-                    }
-                }
-            }
-            this.inputSizeIndex = tmp;
-
-            // calculate hash code.
-            this.inputAndSizeHashCode = query + "//" 
-                + getInputTab().getShortName() 
-                + "//" + getInputSize();
-
-            // save remaining options.
-            this.allRequestOpts = parameterMap;
-        }
-
-        private int lookupIndex(HashMap index, String key, int defaultValue) {
-            final Integer value = (Integer) index.get(key);
-            if (value == null) return defaultValue;
-            else return value.intValue();
-        }
-
-        private String extract(Map parameterMap, String key) {
-            final String [] values = (String []) parameterMap.get(key);
-            if (values == null) return null;
-            else return values[0];
-        }
-
-        public TabSearchInput getInputTab() {
-            return (TabSearchInput) inputTabs.get(inputTabIndex);
-        }
-
-        public TabAlgorithm getAlgorithm() {
-            return (TabAlgorithm) algorithms.get(algorithmIndex);
-        }
-
-        public int getInputSize() {
-            return allowedInputSizes[inputSizeIndex];
-        }
-
-        public String getInputAndSizeHashCode() {
-            return inputAndSizeHashCode;
-        }
-
-        public Map getRequestArguments() {
-            return this.allRequestOpts;
-        }
-    }    
     
+    /** Facet index corresponding to "by Topics" */
+    private int topicsFacetIndex;
+
     /**
      * Adds a search tab to the list of available tabs.
      */
@@ -150,9 +61,17 @@ public final class SearchSettings {
     /**
      * Adds an algorithm to the settings.
      */
-    public void add(TabAlgorithm algorithm) {
+    public void addAlgorithm(TabAlgorithm algorithm) {
         this.algorithmsIndex.put(algorithm.getShortName(), new Integer(algorithms.size()));
         this.algorithms.add(algorithm);
+    } 
+    
+    /**
+     * Adds a facet generation algorithm to the settings.
+     */
+    public void addFacet(TabAlgorithm facet) {
+        this.facetsIndex.put(facet.getShortName(), new Integer(facets.size()));
+        this.facets.add(facet);
     } 
     
     /**
@@ -186,6 +105,10 @@ public final class SearchSettings {
         return defaultAlgorithmIndex;
     }
 
+    protected int getTopicsFacetIndex() {
+        return topicsFacetIndex;
+    }
+    
     /**
      * Default input size index.
      */
@@ -197,8 +120,8 @@ public final class SearchSettings {
      * Parses request arguments and returns a valid
      * search request object.
      */
-    public SearchRequest parseRequest(Map parameterMap) {
-        return new SearchRequest(parameterMap);
+    public SearchRequest parseRequest(Map parameterMap, Cookie [] cookies, QueryExpander queryExpander) {
+        return new SearchRequest(this, parameterMap, cookies, queryExpander);
     }
 
     /**
@@ -229,6 +152,10 @@ public final class SearchSettings {
         return this.algorithms;
     }
 
+    public List getFacets() {
+        return this.facets;
+    }
+    
     public int[] getAllowedInputSizes() {
         return this.allowedInputSizes;
     }
@@ -245,5 +172,13 @@ public final class SearchSettings {
             throw new IllegalArgumentException();
         }
         this.defaultAlgorithmIndex = defaultAlgorithmIndex;
+    }
+    
+    public void setTopicsFacetIndex(int topicsFacetIndex)
+    {
+        if (topicsFacetIndex < 0 || topicsFacetIndex > this.facets.size()) {
+            throw new IllegalArgumentException();
+        }
+        this.topicsFacetIndex = topicsFacetIndex;
     }
 }

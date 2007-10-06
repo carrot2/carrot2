@@ -37,7 +37,7 @@ public class Utils {
      */
     public static LinkedList convertPathDependencies(Project prj, LinkedList deps) {
         LinkedList output = new LinkedList();
-        FileUtils futils = FileUtils.newFileUtils();
+        FileUtils futils = FileUtils.getFileUtils();
         for (Iterator i = deps.iterator(); i.hasNext(); ) {
             Object x = i.next();
             if (x instanceof FileSet) {

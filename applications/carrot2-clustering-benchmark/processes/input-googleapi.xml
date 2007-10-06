@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-
-<local-process id="input-googleapi">
-  <name>Input -- Google Search API</name>
-
-  <input  component-key="input-googleapi" />
-  <output component-key="output-array" />
-</local-process>

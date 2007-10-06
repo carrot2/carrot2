@@ -13,6 +13,8 @@
 
 package org.carrot2.webapp.serializers;
 
+import java.util.ResourceBundle;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,6 +29,8 @@ import org.carrot2.webapp.*;
 public class XMLSerializersFactory implements SerializersFactory {
 
     private String stylesheetsBase;
+    private String releaseInfo;
+    private String localization;
 
     public void configure(ServletConfig config) {
         final String webappRelative = config.getInitParameter("serializer.xml.stylesheets");
@@ -37,10 +41,20 @@ public class XMLSerializersFactory implements SerializersFactory {
             throw new RuntimeException("serializer.xml.stylesheets property must be webapp-relative (start with a '/').");
         }
         this.stylesheetsBase = webappRelative;
+
+        String releaseInfo = config.getServletContext().getInitParameter("release.info");
+        if (releaseInfo == null) {
+            releaseInfo = "";
+        }
+        this.releaseInfo = releaseInfo;
+        
+        this.localization = InitializationUtils.getLocalizationString(config); 
     }
 
     public PageSerializer createPageSerializer(HttpServletRequest request) {
-        return new XMLPageSerializer(request.getContextPath(), stylesheetsBase);
+        return new XMLPageSerializer(request.getContextPath(), stylesheetsBase,
+            releaseInfo, (ResourceBundle) request
+                .getAttribute(Constants.RESOURCE_BUNDLE_KEY), localization);
     }
 
     public RawDocumentsSerializer createRawDocumentSerializer(HttpServletRequest request) {
@@ -48,7 +62,8 @@ public class XMLSerializersFactory implements SerializersFactory {
     }
 
     public RawClustersSerializer createRawClustersSerializer(HttpServletRequest request) {
-        return new XMLClustersSerializer(request.getContextPath(), stylesheetsBase);
+        return new XMLClustersSerializer(request.getContextPath(), stylesheetsBase,
+            (ResourceBundle) request.getAttribute(Constants.RESOURCE_BUNDLE_KEY));
     }
 
     protected final String getStylesheetsBase() {

@@ -5,7 +5,7 @@
     <property file="local.properties" />
 
     <property name="project.dir"      location="${basedir}" />
-    <property name="carrot2.cvs.dir"  location="../.." />
+    <property name="carrot2.code.dir"  location="../.." />
 
     <property name="type" value="wartype" />
     <property name="distribution.dir" location="${project.dir}/tmp/dist" />
@@ -13,7 +13,7 @@
 
 	<property file="${project.dir}/customization.properties" />
   
-    <import file="${carrot2.cvs.dir}/components/common-targets.inc" />
+    <import file="${carrot2.code.dir}/components/common-targets.inc" />
 
     <target name="build" depends="preprocess" description="Builds a demo WAR file.">
     	<property name="dist.name" value="carrot2-demo-webapp" />
@@ -31,24 +31,22 @@
             <then>
                 <patternset id="war.patternset">
                     <exclude name="WEB-INF/lib/*log4j*.jar" />
-                    <exclude name="WEB-INF/classes/log4j.properties" />
+                    <exclude name="WEB-INF/lib/carrot2-util-log4j*.jar" />
                 </patternset>
             </then>
             <else>
-                <copy file="${project.dir}/etc/log4j.properties.war"
-                      tofile="${build.dir}/type-war/WEB-INF/classes/log4j.properties" />
             </else>
         </if>
 
         <ant target="build.${type}"
-             antfile="${carrot2.cvs.dir}/components/master.xml" inheritall="true" inheritrefs="true">
+             antfile="${carrot2.code.dir}/components/master.xml" inheritall="true" inheritrefs="true">
         </ant>
     </target>
 
     <target name="build.demo" depends="build" description="Builds a WAR file with open source components demo.">
     </target>
 
-    <target name="build.war" description="Builds a plain WAR file (no components)"
+    <target name="build.war" description="Builds a plain WAR file (no components)."
             depends="preprocess">
         <property name="dist.name" value="carrot2-webapp" />
         <property name="build.dir" location="${project.dir}/tmp/build.war" />
@@ -65,6 +63,9 @@
         <antcall target="build" inheritall="true">
             <reference refid="war.patternset" />
         </antcall>
+        <zip zipfile="${distribution.dir}/${dist.name}.jar" update="false">
+            <fileset dir="${build.dir}/type-war/WEB-INF/classes" />
+        </zip>
     </target>
     
     <target name="jars" description="Updates JARS in WEB-INF/lib" depends="build.demo">
@@ -82,33 +83,77 @@
     </target>
   
     <target name="preprocess">
+        <property file="${carrot2.code.dir}/carrot2.version" />
+        <tstamp>
+          <format property="tmp:build.tstamp" pattern="dd/MM/yyyy HH:mm" />
+        </tstamp>
+
         <echo>
 ####
 Setting inputSize.default to: ${webapp.inputSize.default}
 Setting template.caching to: ${xsltFilter.template.caching}
 Setting serializers factory to: ${webapp.serializersFactory}
 Setting skin to: ${webapp.skin}
+Setting localization to: ${webapp.localization}
 ####
         </echo>
     
         <filterset begintoken="@" endtoken="@" id="filter.webxml">
+            <filter token="INPUT_SIZE_CHOICES" value="${webapp.inputSize.choices}"/>
             <filter token="INPUT_SIZE_DEFAULT" value="${webapp.inputSize.default}"/>
             <filter token="XSLT_TEMPLATE_CACHING" value="${xsltFilter.template.caching}"/>
             <filter token="SERIALIZERS_FACTORY" value="${webapp.serializersFactory}"/>
             <filter token="SKIN" value="${webapp.skin}"/>
+            <filter token="LOCALIZATION" value="${webapp.localization}"/>
+            <filter token="ALGORITHMS_PATH" value="${webapp.algorithms.path}" />
+            <filter token="INPUTS_PATH" value="${webapp.inputs.path}" />	
+            <filter token="XML_FEED_KEY" value="${webapp.xml.feed.key}" />	
+            <filter token="QUERY_EXPANDER" value="${webapp.query.expander}" />	
+            <filter token="VERSION" value="${release.number} (${tmp:build.tstamp})" />
         </filterset>
-    
+
         <copy overwrite="true" file="web/WEB-INF/web.xml.template" tofile="web/WEB-INF/web.xml" filtering="true">
             <filterset refid="filter.webxml"/>
         </copy>
     </target>
 
     <target name="static-html">
-      <description>Renders the two main application pages (startup and results) into static HTML files</description>
+      <description>
+        Renders the two main application pages (startup and results) 
+        into static HTML files with URLs pointing to and clustering being
+        done on the demo deployment at demo.carrot2.org.
+      </description>
+
+      <antcall target="-static-html-internal">
+        <param name="target-dir" value="static-html"/>
+        <param name="init-from-url" value="true"/>
+        <param name="show-progress" value="false"/>
+        <param name="show-options" value="false"/>
+        <param name="show-example-queries" value="false"/>
+      </antcall>
+    </target>
+
+    <target name="prototype-html">
+      <description>
+        Renders the two main application pages (startup and results) 
+        with one predefined set of documents and clusters to enable
+        working on them in the "prototyping" mode.
+      </description>
+
+      <antcall target="-static-html-internal">
+        <param name="target-dir" value="prototype"/>
+        <param name="init-from-url" value="false"/>
+        <param name="show-progress" value="true"/>
+        <param name="show-options" value="true"/>
+        <param name="show-example-queries" value="true"/>
+      </antcall>
+    </target>
+    
+    <target name="-static-html-internal">
 
       <property name="skin" value="fancy" />
       
-      <xslt in="etc/static-html/meta.xml" out="tmp/static-html/startup.html" 
+      <xslt in="etc/static-html/meta.xml" out="tmp/${target-dir}/startup.html" 
             style="web/skins/${skin}/page.xsl">
 
         <outputproperty name="method" value="html" />
@@ -117,14 +162,14 @@ Setting skin to: ${webapp.skin}
         <outputproperty name="indent" value="yes" />
 
         <param name="show-input-descriptions" expression="true" />
-        <param name="show-example-queries" expression="false" />
-        <param name="show-options" expression="false" />
-        <param name="show-progress" expression="false" />
-        <param name="init-from-url" expression="true" />
+        <param name="show-example-queries" expression="${show-example-queries}" />
+        <param name="show-options" expression="${show-options}" />
+        <param name="show-progress" expression="${show-progress}" />
+        <param name="init-from-url" expression="${init-from-url}" />
         <param name="display-status-line" expression="false" />
       </xslt>
      
-      <xslt in="etc/static-html/meta.xml" out="tmp/static-html/search.html" 
+      <xslt in="etc/static-html/meta.xml" out="tmp/${target-dir}/search.html" 
             style="web/skins/${skin}/page.xsl" force="true">
 
         <outputproperty name="method" value="html" />
@@ -133,15 +178,15 @@ Setting skin to: ${webapp.skin}
         <outputproperty name="indent" value="yes" />
 
         <param name="show-input-descriptions" expression="true" />
-        <param name="show-example-queries" expression="false" />
-        <param name="show-options" expression="false" />
-        <param name="show-progress" expression="false" />
-        <param name="init-from-url" expression="true" />
+        <param name="show-example-queries" expression="${show-example-queries}" />
+        <param name="show-options" expression="${show-options}" />
+        <param name="show-progress" expression="${show-progress}" />
+        <param name="init-from-url" expression="${init-from-url}" />
         <param name="display-status-line" expression="false" />
         <param name="force-results-page" expression="true" />
       </xslt>
      
-      <copy todir="tmp/static-html" filtering="false">
+      <copy todir="tmp/${target-dir}" filtering="false">
         <fileset dir="web/skins/${skin}">
           <exclude name="**/*.bat" />
           <exclude name="**/*.sh" />
@@ -152,7 +197,7 @@ Setting skin to: ${webapp.skin}
         </fileset>
       </copy>
      
-      <copy todir="tmp/static-html/img" filtering="false" overwrite="true">
+      <copy todir="tmp/${target-dir}/img" filtering="false" overwrite="true">
         <fileset dir="etc/static-html/${skin}/img">
         </fileset>
       </copy>

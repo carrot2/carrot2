@@ -17,6 +17,7 @@ import org.apache.commons.pool.BasePoolableObjectFactory;
 import org.apache.commons.pool.ObjectPool;
 import org.apache.commons.pool.impl.SoftReferenceObjectPool;
 import org.carrot2.util.tokenizer.parser.jflex.JFlexWordBasedParser;
+import org.carrot2.util.tokenizer.parser.jflex.JeZHWordSplit;
 
 /**
  * Returns instances of word based parsers. Use concrete factory
@@ -31,11 +32,14 @@ import org.carrot2.util.tokenizer.parser.jflex.JFlexWordBasedParser;
 public class WordBasedParserFactory
 {
     /** JFlex-generated parser. Fast and recommended */
-    public static final WordBasedParserFactory JFlex = new WordBasedParserFactory().new JFlexWordBasedParserFactory();
+    public static final WordBasedParserFactory JFlex = new JFlexWordBasedParserFactory();
 
     /** Default factory: JFlex */
     public static final WordBasedParserFactory Default = JFlex;
 
+    /** Chinese tokenizer factory */
+    public static final WordBasedParserFactory ChineseSimplified = new JeZHWordBasedParserFactory();
+    
     /** Parser pool */
     protected ObjectPool parserPool;
 
@@ -76,7 +80,7 @@ public class WordBasedParserFactory
      * @author Stanislaw Osinski
      * @version $Revision$
      */
-    private class JFlexWordBasedParserFactory extends WordBasedParserFactory
+    private static class JFlexWordBasedParserFactory extends WordBasedParserFactory
     {
         public JFlexWordBasedParserFactory()
         {
@@ -86,6 +90,25 @@ public class WordBasedParserFactory
                     public Object makeObject() throws Exception
                     {
                         return new JFlexWordBasedParser();
+                    }
+                });
+        }
+    }
+
+    /**
+     * @author Stanislaw Osinski
+     * @version $Revision$
+     */
+    private static class JeZHWordBasedParserFactory extends WordBasedParserFactory
+    {
+        public JeZHWordBasedParserFactory()
+        {
+            parserPool = new SoftReferenceObjectPool(
+                new BasePoolableObjectFactory()
+                {
+                    public Object makeObject() throws Exception
+                    {
+                        return new JeZHWordSplit();
                     }
                 });
         }

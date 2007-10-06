@@ -4,11 +4,17 @@
     <display-name>carrot2-demo-webapp</display-name>
     <description>Carrot2 Demo Web Application</description>
 
+    <context-param>
+    	<param-name>release.info</param-name>
+    	<param-value>@VERSION@</param-value>
+        <description>Release version number/ timestamp.</description>
+    </context-param>
+
     <!-- XSLT filtering -->
     <filter>
         <filter-name>xslt-filter</filter-name>
-        <display-name>XSLT Filter, (c) Dawid Weiss (www.dawidweiss.com)</display-name>
-        <filter-class>com.dawidweiss.xsltfilter.XsltFilter</filter-class>
+        <display-name>XSLT Filter</display-name>
+        <filter-class>org.carrot2.util.xsltfilter.XSLTFilter</filter-class>
         
         <init-param>
         	<param-name>template.caching</param-name>
@@ -60,6 +66,11 @@
         </init-param>
 
         <init-param>
+        	<param-name>inputSize.choices</param-name>
+        	<param-value>@INPUT_SIZE_CHOICES@</param-value>
+        </init-param>
+
+        <init-param>
         	<param-name>inputSize.default</param-name>
         	<param-value>@INPUT_SIZE_DEFAULT@</param-value>
         </init-param>
@@ -74,6 +85,31 @@
         	<param-value>@SKIN@</param-value>
         </init-param>
 
+        <init-param>
+        	<param-name>localization</param-name>
+        	<param-value>@LOCALIZATION@</param-value>
+        </init-param>
+
+        <init-param>
+        	<param-name>algorithms.path</param-name>
+        	<param-value>@ALGORITHMS_PATH@</param-value>
+        </init-param>
+
+        <init-param>
+        	<param-name>inputs.path</param-name>
+        	<param-value>@INPUTS_PATH@</param-value>
+        </init-param>
+
+        <init-param>
+        	<param-name>xml.feed.key</param-name>
+        	<param-value>@XML_FEED_KEY@</param-value>
+        </init-param>
+
+        <init-param>
+        	<param-name>query.expander</param-name>
+        	<param-value>@QUERY_EXPANDER@</param-value>
+        </init-param>
+
         <load-on-startup>1</load-on-startup>
     </servlet>
 
@@ -85,5 +121,10 @@
     <servlet-mapping>
         <servlet-name>QueryProcessor</servlet-name>
         <url-pattern>/main</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>QueryProcessor</servlet-name>
+        <url-pattern>/xml</url-pattern>
     </servlet-mapping>
 </web-app>

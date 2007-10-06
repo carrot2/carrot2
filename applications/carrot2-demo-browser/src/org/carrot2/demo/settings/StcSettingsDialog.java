@@ -74,6 +74,17 @@ class StcSettingsDialog extends JPanel {
         builder.append(ThresholdHelper.createDoubleThreshold(settings, StcConstants.MOST_GENERAL_PHRASE_COVERAGE,
                 "Most general p. coverage:", 0, 1, 0.1, 0.25));
 
+        builder.appendSeparator("Base Cluster Boosts");
+
+        builder.append(ThresholdHelper.createDoubleThreshold(settings, StcConstants.SINGLE_TERM_BOOST,
+                "Single Term Boost:", 0, 3, 0.1, 0.5));
+        builder.append(ThresholdHelper.createIntegerThreshold(settings, StcConstants.OPTIMAL_PHRASE_LENGTH,
+                "Optimal Phrase Length:", 1, 10, 1, 2));
+        builder.append(ThresholdHelper.createDoubleThreshold(settings, StcConstants.OPTIMAL_PHRASE_LENGTH_DEV,
+                "Phrase Length Tolerance:", 0.5, 5.5, 0.25, 1));
+        builder.append(ThresholdHelper.createDoubleThreshold(settings, StcConstants.DOCUMENT_COUNT_BOOST,
+                "Document Count Boost:", 0, 5, 0.25, 1));
+
         this.add(builder.getPanel(), BorderLayout.CENTER);
     }
 }

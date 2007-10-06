@@ -4,7 +4,24 @@
   <property file="${user.home}/.carrot.properties" />
   <property file="local-build.properties" />
 
-  <property name="release.number"   value="2.0.2" />
+  <!-- Check if we have the default base and release number -->
+  <fail unless="carrot2.code.dir">
+Define a property 'carrot2.code.dir' pointing to the root of your carrot2 
+sources checkout. This can be done in two ways:
+
+1) Create a property file called in your user home folder, called 
+".carrot.properties" and place the definition there (Windows users
+replace backslashes with slashes):
+
+carrot2.code.dir=(path)
+
+2) Provide the property directly from the command line.
+
+ant -Dcarrot2.code.dir=(path) ...
+  </fail>
+
+  <property file="${carrot2.code.dir}/carrot2.version" />
+  <fail unless="release.number" />
 
   <property name="build.compiler"   value="modern" />
   <property name="javac.optimize"   value="off" />
@@ -18,12 +35,13 @@
   <property name="distribution.dir" value="tmp" />
   <property name="tests.report.dir" value="tmp/test-report" />
 
-  <property name="carrot2.cvs.dir" location="${basedir}" />
-  <import file="${carrot2.cvs.dir}/components/carrot2-ant-extensions/bootstrap.xml" />
+  <property name="carrot2.code.dir" location="${basedir}" />
+  <import file="${carrot2.code.dir}/components/carrot2-ant-extensions/bootstrap.xml" />
 
   <!-- Load ant-contrib task library -->
+  <property name="ant.contrib.jar" location="${carrot2.code.dir}/lib/ant-extensions/ant-contrib.jar" />
   <taskdef resource="net/sf/antcontrib/antlib.xml">
-    <classpath location="${carrot2.cvs.dir}/lib/ant-extensions/ant-contrib.jar" />
+    <classpath location="${ant.contrib.jar}" />
   </taskdef>
 
   <property name="javadoc.dir" location="tmp/javadoc" />
@@ -53,12 +71,13 @@
              access           = "package"
              version          = "true"
              use              = "false"
+             encoding         = "UTF-8"
              doctitle         = "Carrot&lt;sup&gt;2&lt;/sup&gt; Framework API Specification"
              header           = "&lt;div class='logo'&gt;Carrot&lt;sup&gt;2&lt;/sup&gt; Framework&lt;br&gt;API Specification&lt;/div&gt;"
              footer           = "&lt;div class='logo'&gt;Please refer to project documentation at &lt;br&gt;&lt;a target='_top' href=http://project.carrot2.org&gt;http://project.carrot2.org&lt;/a&gt;&lt;/div&gt;"
              bottom           = "&lt;center&gt;Copyright (c) Dawid Weiss, Stanislaw Osinski &lt;/center&gt;"
              failonerror      = "true"
-             stylesheetfile   = "${carrot2.cvs.dir}/etc/javadoc/stylesheet.css"
+             stylesheetfile   = "${carrot2.code.dir}/etc/javadoc/stylesheet.css"
              useexternalfile  = "true"
     >
         <classpath>
@@ -73,9 +92,9 @@
         </fileset>
 
         <link offline="true" href="http://java.sun.com/j2se/1.5.0/docs/api/" 
-            packagelistLoc="${carrot2.cvs.dir}/etc/javadoc/apis/jdk15" />
+            packagelistLoc="${carrot2.code.dir}/etc/javadoc/apis/jdk15" />
         <link offline="true" href="http://demo.carrot2.org/thirdparty/ant/" 
-            packagelistLoc="${carrot2.cvs.dir}/etc/javadoc/apis/ant" />
+            packagelistLoc="${carrot2.code.dir}/etc/javadoc/apis/ant" />
 
         <link href="http://www.dom4j.org/apidocs/" />
         <link href="http://dsd.lbl.gov/~hoschek/colt/api/" />
@@ -90,7 +109,7 @@
 
     <delete dir="tmp/src" />
     <copy todir="${javadoc.dir}">
-      <fileset dir="${carrot2.cvs.dir}/etc/javadoc/">
+      <fileset dir="${carrot2.code.dir}/etc/javadoc/">
         <include name="*.gif" />
       </fileset>
     </copy>
@@ -175,6 +194,16 @@ BUILDING: @{component.path}
     <zip basedir="dist/webapp" 
         zipfile="dist/carrot2-demo-webapp-${release.number}.zip" />
     <delete dir="dist/webapp" />
+    
+    <!-- compile and zip the DCS -->
+    <ant antfile="build.xml" dir="applications/carrot2-demo-dcs"
+        inheritall="false" inheritrefs="false" target="dist">
+        <reference refid="dependencies" />
+        <reference refid="c2.tasks.classloader" />
+        <property name="cache:deps" value="${cache:deps}" />
+    </ant>
+    <zip basedir="applications/carrot2-demo-dcs/tmp/dist"
+        zipfile="dist/carrot2-demo-dcs-${release.number}.zip" update="false" />
   </target>
 
 
@@ -308,6 +337,7 @@ TESTING: @{component.path}
 
   <target name="apply-to-applications">
     <application-apply application.path="applications/carrot2-demo-browser" />
+    <application-apply application.path="applications/carrot2-demo-dcs" />
     <application-apply application.path="applications/carrot2-demo-webapp" />
     <application-apply application.path="applications/carrot2-nutch-plugin" />
     <application-apply application.path="applications/carrot2-odp-tools" />
@@ -328,26 +358,35 @@ TESTING: @{component.path}
     <component-apply component.path="components/carrot2-util-matrix" />
     <component-apply component.path="components/carrot2-util-lang-guesser" />
     <component-apply component.path="components/carrot2-util-gzip" />
+    <component-apply component.path="components/carrot2-util-xsltfilter" />
 
+    <component-apply component.path="components/carrot2-input-aggregator" />
+    <component-apply component.path="components/carrot2-input-alexa" />
     <component-apply component.path="components/carrot2-input-xml" />
     <component-apply component.path="components/carrot2-input-lucene" />
+    <component-apply component.path="components/carrot2-input-etools" />
     <component-apply component.path="components/carrot2-input-googleapi" />
     <component-apply component.path="components/carrot2-input-yahooapi" />
     <component-apply component.path="components/carrot2-input-opensearch" />
     <component-apply component.path="components/carrot2-input-msnapi" />
+    <component-apply component.path="components/carrot2-input-pubmed" />
+    <component-apply component.path="components/carrot2-input-solr" />
 
     <component-apply component.path="components/carrot2-odp-core" />
+    <component-apply component.path="components/carrot2-launcher" />
 
     <component-apply component.path="components/carrot2-stemmer-stempelator" />
     <component-apply component.path="components/carrot2-stemmer-stempel" />
     <component-apply component.path="components/carrot2-stemmer-snowball" />
 
+    <component-apply component.path="components/carrot2-filter-striphtml" />
     <component-apply component.path="components/carrot2-filter-case-normalizer" />
     <component-apply component.path="components/carrot2-filter-lingo" />
     <component-apply component.path="components/carrot2-filter-fuzzyants" />
     <component-apply component.path="components/carrot2-filter-haog" />
     <component-apply component.path="components/carrot2-filter-stc" />
     <component-apply component.path="components/carrot2-filter-trc" />
+    <component-apply component.path="components/carrot2-filter-facets" />
   </target>
 
 
@@ -375,6 +414,8 @@ TESTING: @{component.path}
         <header contains="Sponsored by: CCG, Inc." 
                 replacement="${carrot2.ccg.license}" />
         <header contains="http://www.carrot2.org/carrot2.LICENSE"
+                replacement="${carrot2.license}" />
+        <header contains="Poznan Supercomputing and Networking Center" 
                 replacement="${carrot2.license}" />
 
         <!-- Replace generated headers with a simple statement -->

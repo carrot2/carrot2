@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
 import org.carrot2.core.clustering.RawDocument;
+import org.carrot2.util.ArrayUtils;
 
 /**
  * All the functionality we need for the demo browser is in this interface. We may then use either Swing's
@@ -107,6 +108,14 @@ public abstract class HtmlDisplay extends JPanel
 
         buffer.append("<font color=green>");
         buffer.append(doc.getUrl());
+        String [] sources = (String []) doc.getProperty(RawDocument.PROPERTY_SOURCES);
+        if (sources != null)
+        {
+            buffer.append("</font> <font color=gray>");
+            buffer.append("[");
+            buffer.append(ArrayUtils.toString(sources));
+            buffer.append("]");
+        }
         buffer.append("</font><br><br>");
     }
 

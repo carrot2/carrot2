@@ -103,7 +103,7 @@ public class CopyDependenciesTask extends BaseDependencyPathTask {
     public void execute() throws BuildException {
         checkParameters();
         
-        FileUtils futils = FileUtils.newFileUtils();
+        FileUtils futils = FileUtils.getFileUtils();
         try {
             ComponentDependency component = 
                 new ComponentDependency(getProject(), this.componentDescriptor);

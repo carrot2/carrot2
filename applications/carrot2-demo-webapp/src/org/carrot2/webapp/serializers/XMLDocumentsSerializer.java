@@ -15,12 +15,12 @@ package org.carrot2.webapp.serializers;
 
 import java.io.*;
 
+import org.carrot2.core.clustering.RawDocument;
+import org.carrot2.core.impl.RawDocumentEnumerator;
+import org.carrot2.util.ArrayUtils;
 import org.carrot2.util.XMLSerializerHelper;
 import org.carrot2.webapp.Constants;
 import org.carrot2.webapp.RawDocumentsSerializer;
-
-import org.carrot2.core.clustering.RawDocument;
-import org.carrot2.core.impl.RawDocumentEnumerator;
 
 /**
  * A consumer of {@link RawDocument}s which serializes them to XML.
@@ -43,7 +43,7 @@ class XMLDocumentsSerializer implements RawDocumentsSerializer {
         return Constants.MIME_XML_CHARSET_UTF;
     }
 
-    public void startResult(OutputStream os) throws IOException {
+    public void startResult(OutputStream os, String query) throws IOException {
         this.writer = new OutputStreamWriter(os, Constants.ENCODING_UTF);
 
         writer.write("<?xml version=\"1.0\" encoding=\"" + Constants.ENCODING_UTF + "\" ?>\n");
@@ -68,10 +68,12 @@ class XMLDocumentsSerializer implements RawDocumentsSerializer {
 
         final String title = doc.getTitle();
         final String snippet = doc.getSnippet();
+        String [] sources = (String []) doc.getProperty(RawDocument.PROPERTY_SOURCES);
 
         writer.write(
                 "<document id=\"" + seqId.toString() + "\">"
                 + "<url>" + xml.toValidXmlText(url, false) + "</url>"
+                + (sources != null ? "<sources>" + ArrayUtils.toString(sources) + "</sources>" : "")
                 + (title == null 
                         ? ""
                         : "<title>" + xml.toValidXmlText(title, false) + "</title>")
@@ -81,7 +83,7 @@ class XMLDocumentsSerializer implements RawDocumentsSerializer {
                 + "</document>\n");
     }
 
-    public void endResult() {
+    public void endResult(long fetchingTime) {
         try {
             writer.write("</searchresult>");
             writer.flush();

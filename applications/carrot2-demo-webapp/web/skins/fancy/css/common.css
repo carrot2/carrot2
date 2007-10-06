@@ -33,6 +33,14 @@ a:hover {
   color: #005393;
 }
 
+a.new {
+  color: #e00000;
+}
+
+a.new:hover {
+  color: #b00000;
+}
+
 form {
   margin: 0;
 }
@@ -79,4 +87,17 @@ div.pb {
   background-repeat: no-repeat;
   background-position: 2px 50%;
   padding-left: 38px;
+}
+
+img.ilink {
+  cursor: pointer;
+}
+
+span.link {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+span.blue {
+  color: #1678C4;
 }

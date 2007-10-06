@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<!DOCTYPE component PUBLIC "-//Carrot2//DTD Component Dependency Descriptor V1.0//EN" "http://www.carrot2.org/dtd/component-dependency.dtd" >
+<component
+    name="json"
+    description="JSON Java, [compiled 22/02/2007] http://www.json.org/java/index.html">
+	<provides>
+		<files>
+			<file location="json.jar" />
+			<file location="json.LICENSE" />
+		</files>
+	        <meta type="proguard"><![CDATA[
+	        ]]></meta>
+	</provides>
+</component>
+

@@ -71,13 +71,21 @@ public interface RawDocument {
     public final static String PROPERTY_URL = "url";
 
     /**
-     * Property that holds an ISO-639 code of the language of this document.
+     * Property that holds a two-letter ISO-639 code of the language of this document.
      * 
      * <p>
      * The value returned for this property is of type {@link java.lang.String}
      * </p>
      */
     public final static String PROPERTY_LANGUAGE = "lang";
+
+    /**
+     * Returns an array of idenfitiers of all sources that returned this
+     * document.
+     * 
+     * <p>The value of this property is <code>String []</code>.</p>
+     */
+    public static final String PROPERTY_SOURCES = "source";
     
     /**
      * Returns a named property of the document.   Names of the available

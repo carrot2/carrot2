@@ -91,7 +91,7 @@ public abstract class AbstractLicenseTask extends MatchingTask {
         checkParameters();
 
         // Traverse filesets and modify files if needed.
-        final FileUtils fUtils = FileUtils.newFileUtils();
+        final FileUtils fUtils = FileUtils.getFileUtils();
         final Project project = getProject();
         for (Iterator i = filesets.iterator(); i.hasNext();) {
             final FileSet fileset = (FileSet) i.next();
