@@ -1,0 +1,9 @@
+
+import profiled.*;
+
+public class Profiled {
+	public static void main(String [] arg) {
+		ProfiledImported i = new ProfiledImported();
+	}
+
+}

@@ -1,0 +1,13 @@
+
+<component name="g">
+
+	<provides>
+		<files prefix="tmp/dist">
+			<file location="G.jar" />
+		</files>
+		<build>
+			<ant file="build.xml" target="build" />
+		</build>
+	</provides>
+
+</component>

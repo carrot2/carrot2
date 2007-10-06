@@ -1,0 +1,4 @@
+<local-component-factory
+	id="input-cached-yahoonews"
+	component-class="org.carrot2.demo.components.InputCachedYahooAPI">
+</local-component-factory>

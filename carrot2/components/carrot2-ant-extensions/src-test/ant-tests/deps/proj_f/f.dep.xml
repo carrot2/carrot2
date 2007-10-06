@@ -1,0 +1,16 @@
+
+<component name="f">
+
+	<provides>
+		<files prefix="tmp/dist">
+			<file location="F.jar" />
+		</files>
+		<build>
+			<ant file="build.xml" target="build" />
+		</build>
+	</provides>
+
+    <dependency name="g" />
+    <dependency name="h" profile="profiled" />
+
+</component>

@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<!DOCTYPE component PUBLIC "-//Carrot2//DTD Component Dependency Descriptor V1.0//EN" "http://www.carrot2.org/dtd/component-dependency.dtd" >
+<component
+    name="nni"
+    description="Native Numerical Interface http://www.math.uib.no/~bjornoh/mtj/nni/">
+	<provides>
+		<files>
+			<file location="nni.jar" />
+			<file location="nni.LICENSE" />
+		</files>
+        <meta type="proguard"><![CDATA[
+# No obfuscation of Native Numerical Interfaces
+-keep class nni.* {
+    public protected *;
+}
+        ]]></meta>
+	</provides>
+</component>
+

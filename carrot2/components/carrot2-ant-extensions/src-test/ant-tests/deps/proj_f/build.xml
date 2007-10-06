@@ -1,0 +1,87 @@
+
+<project name="f" default="build">
+	<property name="profile" value="" />
+
+	<target name="prepare">
+		<delete dir="tmp" />
+	</target>
+
+	<target name="deps">
+        <taskdef resource="res/carrot2-antlib.xml" />
+		
+		<dependency-path id="dependencies">
+            <fileset dir="..">
+                <include name="**/*.dep.xml" />
+            </fileset>
+		</dependency-path>
+		
+		<bringToDate componentDescriptor="f.dep.xml" dependenciesOnly="true"
+			profile="${profile}">
+			<dependencies refid="dependencies" />
+		</bringToDate>
+
+		<component-path id="path.dependencies"
+			componentDescriptor="f.dep.xml" profile="${profile}">
+			<dependencies refid="dependencies" />
+		</component-path>
+	</target>
+
+	<target name="build" depends="deps">
+		<mkdir dir="tmp/classes" />
+		<mkdir dir="tmp/dist" />
+
+		<delete>
+			<fileset dir="src" includes="*.java" />
+		</delete>
+		<copy todir="src" includeemptydirs="false">
+			<fileset dir="src">
+			  <exclude name="**/*.java"/>
+			  <exclude name="**/Profiled*" />
+			</fileset>
+			<mapper type="glob" from="*.java.ext" to="*.java"/>
+		</copy>
+
+		<javac srcdir="src"
+         destdir="tmp/classes"
+         debug="on"
+  		>
+  			<classpath refid="path.dependencies" />
+  		</javac>
+
+  		<jar destfile="tmp/dist/F.jar" basedir="tmp/classes"/>
+
+		<delete>
+			<fileset dir="src" includes="*.java" />
+		</delete>
+	</target>
+
+	<target name="profiled" depends="deps">
+		<mkdir dir="tmp/classes" />
+		<mkdir dir="tmp/dist" />
+
+		<delete>
+			<fileset dir="src" includes="*.java" />
+		</delete>
+		<copy todir="src" includeemptydirs="false">
+			<fileset dir="src">
+			  <exclude name="**/*.java"/>
+			</fileset>
+			<mapper type="glob" from="*.java.ext" to="*.java"/>
+		</copy>
+
+		<javac
+         destdir="tmp/classes"
+         debug="on"
+  		>
+  			<src path="src" />
+  			<classpath refid="path.dependencies" />
+  		</javac>
+
+  		<jar destfile="tmp/dist/F.jar" basedir="tmp/classes"/>
+
+		<delete>
+			<fileset dir="src" includes="*.java" />
+		</delete>
+	</target>
+
+</project>

@@ -1,0 +1,150 @@
+
+<project name="bring-to-date" default="test">
+
+    <target name="prepare">
+        <taskdef resource="res/carrot2-antlib.xml">
+            <classpath location="../../tmp/build/bootstrap" />
+        </taskdef>
+
+		<subant target="prepare">
+			<fileset dir="deps" includes="**/build.xml"/>
+        </subant>
+    </target>
+	
+	<target name="checkFilesInSubprojectsUpToDate" depends="prepare">
+		<description>
+			This test attempts to verify that component dependencies
+			are properly recompiled if target files are older then
+			their sources.
+		</description>
+
+		<subant target="clean">
+			<fileset dir="bringToDate.checkFilesInSubprojectsUpToDate" includes="**/build.xml" />
+		</subant>
+
+		<!-- Copy the first file in project C -->
+		<copy overwrite="true" todir="bringToDate.checkFilesInSubprojectsUpToDate/c/src" includeemptydirs="false">
+			<fileset dir="bringToDate.checkFilesInSubprojectsUpToDate/c/src" />
+			<mapper type="glob" from="*.java.pre" to="*.java"/>
+		</copy>
+
+		<bringToDate componentDescriptor="bringToDate.checkFilesInSubprojectsUpToDate/a/a.dep.xml">
+			<dependencies id="dep.pre">
+				<fileset dir="bringToDate.checkFilesInSubprojectsUpToDate">
+					<include name="**/*.dep.xml" />
+				</fileset>
+			</dependencies>
+		</bringToDate>
+
+		<component-path id="a.dependency"
+			componentDescriptor="bringToDate.checkFilesInSubprojectsUpToDate/a/a.dep.xml" profile="">
+			<dependencies refid="dep.pre" />
+		</component-path>
+
+		<java classname="A" failonerror="true">
+			<classpath refid="a.dependency" />
+			<classpath location="bringToDate.checkFilesInSubprojectsUpToDate/a/tmp/a.jar" />
+			
+			<arg file="bringToDate.checkFilesInSubprojectsUpToDate" />
+		</java>
+		<loadfile srcfile="bringToDate.checkFilesInSubprojectsUpToDate/output"
+			property="a.pre" failonerror="true" />
+		<fail message="Pre-condition failed.">
+			<condition>
+				<not><equals arg1="Pre-change" arg2="${a.pre}" trim="true" /></not>
+			</condition>
+		</fail>
+
+		<!-- Now copy the second file. -->
+		<copy overwrite="true" todir="bringToDate.checkFilesInSubprojectsUpToDate/c/src" includeemptydirs="false">
+			<fileset dir="bringToDate.checkFilesInSubprojectsUpToDate/c/src" />
+			<mapper type="glob" from="*.java.post" to="*.java"/>
+		</copy>
+		<sleep seconds="4" />
+		<touch>
+			<fileset dir="bringToDate.checkFilesInSubprojectsUpToDate/c/src" />
+		</touch>
+
+		<bringToDate componentDescriptor="bringToDate.checkFilesInSubprojectsUpToDate/a/a.dep.xml">
+			<dependencies id="dep.post">
+				<fileset dir="bringToDate.checkFilesInSubprojectsUpToDate">
+					<include name="**/*.dep.xml" />
+				</fileset>
+			</dependencies>
+		</bringToDate>
+
+		<java classname="A" failonerror="true">
+			<classpath refid="a.dependency" />
+			<classpath location="bringToDate.checkFilesInSubprojectsUpToDate/a/tmp/a.jar" />
+
+			<arg file="bringToDate.checkFilesInSubprojectsUpToDate" />
+		</java>
+		<loadfile srcfile="bringToDate.checkFilesInSubprojectsUpToDate/output"
+			property="a.post" failonerror="true" />
+		<fail message="Post-condition failed.">
+			<condition>
+				<not><equals arg1="Post-change" arg2="${a.post}" trim="true" /></not>
+			</condition>
+		</fail>		
+	</target>
+
+	<target name="x">
+		<java classname="A" outputproperty="a.output" failonerror="true">
+			<classpath>
+				<fileset dir="bringToDate.checkFilesInSubprojectsUpToDate" includes="**/*.jar" />
+			</classpath>
+		</java>
+
+		<echo file="out">Output: ${a.output}</echo>
+	</target>
+
+	<target name="test" depends="prepare">
+		<description>
+			Simple dependency check.
+		</description>
+		<bringToDate componentDescriptor="deps/proj_a/a.dep.xml">
+			<dependencies>
+				<fileset dir="deps">
+					<include name="**/*.dep.xml" />
+				</fileset>
+			</dependencies>
+		</bringToDate>
+		<!-- Output of project b should be present. -->
+		<condition property="tmp:cond:test:1" value="true">
+			<available file="deps/proj_b/tmp/b-out.txt" type="file" />
+		</condition>
+		<fail unless="tmp:cond:test:1">
+			Error. File not created.
+		</fail>
+	</target>
+
+	<target name="test2" depends="prepare">
+		<description>
+			Profile dependency check.
+		</description>
+		<!-- This is no circular dependency, since d depends
+			on e only in profile 'test' -->
+		<bringToDate componentDescriptor="deps/proj_d_dep_on_e/d.dep.xml">
+			<dependencies>
+				<fileset dir="deps">
+					<include name="**/*.dep.xml" />
+				</fileset>
+			</dependencies>
+		</bringToDate>
+	</target>
+
+	<target name="test3" depends="prepare">
+		<description>
+			This should end in a circular dependency exception.
+		</description>
+		<bringToDate componentDescriptor="deps/proj_d_dep_on_e/d.dep.xml"
+			profile="test">
+			<dependencies>
+				<fileset dir="deps">
+					<include name="**/*.dep.xml" />
+				</fileset>
+			</dependencies>
+		</bringToDate>
+	</target>
+    
+</project>

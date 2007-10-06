@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<local-process id="haog-stc-en">
+  <name>HAOG-STC (+English)</name>
+  <description>HAOG-STC Algorithm</description>
+
+  <input  component-key="input-demo-webapp" />
+
+  <filter component-key="filter-language-detection-en" />
+  <filter component-key="filter-tokenizer" />
+  <filter component-key="filter-case-normalizer" />
+  <filter component-key="filter-haog-stc" />
+
+  <output component-key="output-demo-webapp" />
+
+</local-process>
+

@@ -1,0 +1,4 @@
+<local-component-factory
+	id="input-cached-solr"
+	component-class="org.carrot2.demo.components.InputCachedSolr">
+</local-component-factory>

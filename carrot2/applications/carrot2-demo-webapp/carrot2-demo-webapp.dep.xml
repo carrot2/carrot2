@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE component PUBLIC "-//Carrot2//DTD Component Dependency Descriptor V1.0//EN" "http://www.carrot2.org/dtd/component-dependency.dtd" >
+
+<component
+    name="carrot2-demo-webapp"
+    description="Carrot2 Demo Web Application">
+
+    <!--
+      This profile builds the Web application with:
+        - no descriptors of processes and components,
+        - no exported relationships to demo components
+        - an additional exported JAR with Web application classes
+          (allows compilation against the Webapp classes and later merging with the WAR file).
+        - the application is always rebuilt in this profile
+          (to substitute web.xml tokens).
+      -->
+    <provides profile="war">
+        <files build-path-exclude="true" prefix="tmp/dist">
+            <file location="carrot2-webapp.war" />
+            <file location="carrot2-webapp.jar" />
+        </files>
+        <build>
+            <ant file="build.xml" target="build.war" />
+        </build>
+        <rebuild-always />
+    </provides>
+
+    <!--
+      This profile builds the Web application with:
+        - descriptors of processes of demo components,
+        - exported relationships to demo components
+      -->
+    <provides profile="demo">
+        <files build-path-exclude="true" prefix="tmp/dist">
+            <file location="carrot2-demo-webapp.war" />
+        </files>
+        <build>
+            <ant file="build.xml" target="build.demo" />
+        </build>
+        <check-newer>
+            <fileset dir="src" />
+            <fileset dir="web" />
+        </check-newer>        
+    </provides>
+
+
+    <dependency name="carrot2-local-core" />
+    <dependency name="carrot2-util-common" />
+    <dependency name="carrot2-util-gzip" />
+    <dependency name="carrot2-util-xsltfilter" />
+
+    <dependency name="carrot2-util-log4j" in-profile="webapp" noexport="true" />
+
+    <dependency name="json" />
+    <dependency name="ehcache" />
+    <dependency name="dom4j" />
+    <dependency name="xerces" />
+    <dependency name="commons-httpclient" />
+    <dependency name="commons-cli" nocopy="true" noexport="true" />
+
+    <dependency name="carrot2-input-yahooapi" profile="demo" />
+    <dependency name="carrot2-input-googleapi" profile="demo" />
+    <dependency name="carrot2-input-lucene" profile="demo" />
+    <dependency name="carrot2-input-opensearch" profile="demo" />
+    <dependency name="carrot2-input-msnapi" profile="demo" />
+    <dependency name="carrot2-input-pubmed" profile="demo" />
+    <dependency name="carrot2-input-etools" profile="demo" />
+
+    <dependency name="carrot2-filter-lingo" profile="demo" />
+    <dependency name="carrot2-filter-stc" profile="demo" />
+    <dependency name="carrot2-filter-fuzzyants" profile="demo" />
+    <dependency name="carrot2-filter-trc" profile="demo" />
+    <dependency name="carrot2-filter-haog" profile="demo" />
+    <dependency name="carrot2-filter-facets" profile="demo" />
+
+    <dependency name="carrot2-stemmer-stempelator" profile="demo" />
+    <dependency name="carrot2-filter-case-normalizer" profile="demo" />
+    <dependency name="carrot2-util-tokenizer" />
+
+    <dependency name="servlets-api" nocopy="true" noexport="true" />
+    <dependency name="jetty" nocopy="true" noexport="true" />
+</component>

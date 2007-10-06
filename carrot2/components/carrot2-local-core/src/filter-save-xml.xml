@@ -1,0 +1,4 @@
+<local-component-factory 
+	id="filter-save-xml" 
+	component-class="org.carrot2.core.impl.SaveXmlFilterComponent">
+</local-component-factory> 

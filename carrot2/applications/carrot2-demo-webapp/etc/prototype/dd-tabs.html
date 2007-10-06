@@ -1,0 +1,132 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Carrot Clustering Engine</title>
+<link href="css/common.css" type="text/css" rel="stylesheet">
+<link href="css/screen.css" type="text/css" rel="stylesheet">
+</head>
+
+<body>
+  <script type="text/javascript" src="http://yui.yahooapis.com/2.2.0/build/yahoo-dom-event/yahoo-dom-event.js" ></script>
+  <script type="text/javascript" src="http://yui.yahooapis.com/2.2.0/build/dragdrop/dragdrop-min.js" ></script>
+  <script type="text/javascript" src="js/DDTab.js" ></script>
+  <script type="text/javascript" src="js/SearchTab.js" ></script>
+  <script type="text/javascript" src="js/SearchTabModel.js" ></script>
+  <script type="text/javascript" src="js/SearchTabView.js" ></script>
+  <script type="text/javascript" src="js/SearchTabController.js" ></script>
+  <script type="text/javascript" src="js/Dom.js" ></script>
+
+  <script type="text/javascript">
+
+var tabModel = new SearchTabModel();
+
+tabModel.tabs[0] = tabModel.activeTab = new SearchTab('yahoo');
+tabModel.tabs[1] = new SearchTab('google');
+tabModel.tabs[2] = new SearchTab('msn');
+tabModel.tabs[3] = new SearchTab('jobs');
+
+tabModel.allTabs[0] = new SearchTab('yahoo');
+tabModel.allTabs[1] = new SearchTab('google');
+tabModel.allTabs[2] = new SearchTab('msn');
+tabModel.allTabs[3] = new SearchTab('jobs');
+tabModel.allTabs[4] = new SearchTab('alexa');
+tabModel.allTabs[5] = new SearchTab('pubmed');
+
+var tabView = new SearchTabView(tabModel);
+
+var stc = new SearchTabController(tabModel, tabView);
+
+YAHOO.util.Event.addListener(window, "load", stc.init, stc, true);
+
+  </script>
+
+<table style="margin-top: 60px; margin-left: 60px">
+<tr id="main-tabs">
+<td class="tab-active-lead-in"><img height="1" width="14" alt=""></td>
+
+<td title="Search the Web with Yahoo!" class="tab-active-body">
+  <div id="yahoo" class="tab-content">
+    <span class="arrow">&nbsp;</span>
+    <a id="yahoo-link" class="tab-link active" href="#" accesskey="Y"><img alt="Yahoo!" src="./inputs/yahoo.gif" class="tab-img"><u>Y</u><span>ahoo!</span></a></div>
+ </td>
+
+<td class="tab-active-passive-link"><img height="1" width="13" alt=""></td>
+
+<td title="Search the Web with Google" class="tab-passive-body">
+  <div id="google" class="tab-content">
+    <span class="arrow">&nbsp;</span>
+    <a id="google-link" class="tab-link" href="#" accesskey="G"><img alt="Google" src="./inputs/google.gif" class="tab-img"><u>G</u><span>oogle</span></a></div>
+</td>
+
+<td class="tab-passive-passive-link"><img height="1" width="13" alt=""></td>
+
+<td title="Search the Web with MSN Search!" class="tab-passive-body">
+  <div id="msn" class="tab-content">
+    <span class="arrow">&nbsp;</span>
+    <a id="msn-link" class="tab-link" href="#" accesskey="M"><img alt="MSN" src="./inputs/msn.gif" class="tab-img"><u>M</u><span>SN</span></a></div>
+</td>
+
+<td class="tab-passive-passive-link"><img height="1" width="13" alt=""></td>
+
+<td title="Search jobs from indeed.com" class="tab-passive-body">
+  <div id="jobs" class="tab-content">
+    <span class="arrow">&nbsp;</span>
+    <a id="jobs-link" class="tab-link" href="#" accesskey="J"><img alt="Jobs" src="./inputs/jobs.gif" class="tab-img"><u>J</u><span>obs</span></a></div>
+</td>
+
+<td class="tab-passive-lead-out"><img height="1" width="17" alt=""></td>
+</tr>
+</table>
+
+<div id="more-tabs" style="margin: 30px">
+  <div class="more-entry">
+    <input id="yahoo-cb" type="checkbox" checked="true" />
+    <div id="yahoo" class="tab-content">
+      <span class="arrow">&nbsp;</span>
+      <a id="yahoo-link" class="tab-link active" href="#" accesskey="Y"><img alt="Yahoo!" src="./inputs/yahoo.gif" class="tab-img"><u>Y</u><span>ahoo!</span></a></div>
+  </div>
+  
+  <div class="more-entry">
+    <input id="google-cb" type="checkbox" checked="true" />
+    <div id="google" class="tab-content">
+      <span class="arrow">&nbsp;</span>
+      <a id="google-link" class="tab-link" href="#" accesskey="G"><img alt="Google" src="./inputs/google.gif" class="tab-img"><u>G</u><span>oogle</span></a></div>
+  </div>
+  
+  <div class="more-entry">
+    <input id="msn-cb" type="checkbox" checked="true" />
+    <div id="msn" class="tab-content">
+      <span class="arrow">&nbsp;</span>
+      <a id="msn-link" class="tab-link" href="#" accesskey="M"><img alt="MSN" src="./inputs/msn.gif" class="tab-img"><u>M</u><span>SN</span></a>
+    </div>
+  </div>
+  
+  <div class="more-entry">
+    <input id="jobs-cb" type="checkbox" checked="true" />
+    <div id="jobs" class="tab-content">
+      <span class="arrow">&nbsp;</span>
+      <a id="jobs-link" class="tab-link" href="#" accesskey="J"><img alt="Jobs" src="./inputs/jobs.gif" class="tab-img"><u>J</u><span>obs</span></a>
+    </div>
+  </div>
+  
+  <div class="more-entry">
+    <input id="alexa-cb" type="checkbox" />
+    <div id="alexa" class="tab-content">
+      <span class="arrow">&nbsp;</span>
+      <a id="alexa-link" class="tab-link" href="#" accesskey="A"><img alt="Alexa" src="./inputs/alexa.gif" class="tab-img"><u>A</u><span>lexa</span></a>
+    </div>
+  </div> 
+
+  <div class="more-entry">
+    <input id="pubmed-cb" type="checkbox" />
+    <div id="pubmed" class="tab-content">
+      <span class="arrow">&nbsp;</span>
+      <a id="pubmed-link" class="tab-link" href="#" accesskey="J"><img alt="Pubmed" src="./inputs/pubmed.gif" class="tab-img"><u>P</u><span>ubmed</span></a>
+    </div>
+  </div>
+</div>
+
+  
+</body>
+
+</html>

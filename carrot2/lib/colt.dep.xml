@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<!DOCTYPE component PUBLIC "-//Carrot2//DTD Component Dependency Descriptor V1.0//EN" "http://www.carrot2.org/dtd/component-dependency.dtd" >
+<component
+    name="colt"
+    description="Colt 1.0.3, trimmed version, http://hoschek.home.cern.ch/hoschek/colt/">
+	<provides>
+		<files>
+			<file location="colt-1.0.3-trimmed.jar" />
+			<file location="colt.LICENSE" />
+		</files>
+	</provides>
+
+    <dependency name="jal" />
+    <dependency name="format" />
+    <dependency name="violinstrings" />
+</component>
