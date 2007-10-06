@@ -23,13 +23,13 @@
   <xsl:param name="carrot2.head.url">http://demo.carrot2.org/demo-head/</xsl:param>
 
   <xsl:variable name="beta"><xsl:if test="contains(/processing-instruction('release-info'), 'head')">true</xsl:if></xsl:variable>
-  <xsl:variable name="logo-suffix"><xsl:if test="$beta">-beta</xsl:if></xsl:variable>
+  <xsl:variable name="logo-suffix"><xsl:if test="$beta = 'true'">-beta</xsl:if></xsl:variable>
 
   <xsl:template name="custom-results-utils">
     <div id="results-utils">
       <a href="{$carrot2.website.url}">About</a> |
       <xsl:choose>
-        <xsl:when test="$beta">
+        <xsl:when test="$beta = 'true'">
           <a href="{$carrot2.stable.url}">Stable</a> |
         </xsl:when>
         <xsl:otherwise>
@@ -59,7 +59,7 @@
     <div id="startup-extra">
       <a href="{$carrot2.website.url}">About</a> |
       <xsl:choose>
-        <xsl:when test="$beta">
+        <xsl:when test="$beta = 'true'">
           <a href="{$carrot2.stable.url}">Stable</a> |
         </xsl:when>
         <xsl:otherwise>
