@@ -49,7 +49,7 @@ public class EToolsLocalInputComponentTest extends LocalInputComponentTestBase
 
     public void testNoHitsQuery() throws Exception
     {
-        performQuery("asdhasd alksjdhar swioer", 50, 0);
+        performQuery("asdhfasd aleksjdhar swigoer", 50, 0);
     }
 
     public void testSmallQuery() throws Exception
