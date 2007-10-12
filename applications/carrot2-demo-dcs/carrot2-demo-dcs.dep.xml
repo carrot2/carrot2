@@ -17,6 +17,9 @@
         </provides>
 
         <provides profile="stripped">
+                <files build-path-exclude="true" prefix="tmp/stripped/WEB-INF/lib">
+                        <file location="carrot2-demo-dcs.jar" />
+                </files>
                 <build>
                         <ant file="build.xml" target="build.stripped" />
                 </build>

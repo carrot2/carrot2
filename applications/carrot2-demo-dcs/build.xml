@@ -44,6 +44,7 @@
       <fileset dir="web">
         <include name="**" />
         <exclude name="**/*.log" />
+        <exclude name=".dcs.benchmark" />
       </fileset>
     </copy>
 
