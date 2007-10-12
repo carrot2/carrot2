@@ -243,7 +243,7 @@ public final class CliOptions
     {
         final Option option = new Option("q", true, "List of queries.");
         option.setLongOpt("queries");
-        option.setArgName("query1 qiery2...");
+        option.setArgName("query1 query2...");
         option.setRequired(false);
         option.setArgs(Option.UNLIMITED_VALUES);
         option.setType(String[].class);

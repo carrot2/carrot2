@@ -41,6 +41,11 @@ public class BenchmarkApp extends AppBase
     {
         super("benchmark");
     }
+    
+    public BenchmarkApp(String header)
+    {
+        super("benchmark", header);
+    }
 
     /**
      * Command line entry point (main).

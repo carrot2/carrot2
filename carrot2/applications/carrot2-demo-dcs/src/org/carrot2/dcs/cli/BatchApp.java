@@ -32,6 +32,11 @@ public class BatchApp extends AppBase
     {
         super("batch");
     }
+    
+    public BatchApp(String header)
+    {
+        super("batch", header);
+    }
 
     /**
      * Command line entry point (main).
