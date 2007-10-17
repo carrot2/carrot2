@@ -1,0 +1,18 @@
+
+EXPECTED PROJECT MILESTONES
+
+7.11.2007.  
+    get to know: plugin system/ bundle/ updates/ OSGI Equinox/ 
+    assume the baseline Eclipse version: 3.3+
+    read release plan for Carrot2 version 3.0/ think of improvements/ alternative solutions
+    try to write an offline clustering example (Yahoo! -> STC -> console)
+
+21.11.2007.
+    initial vision of extension points/ architecture of the browser RCP application
+
+05.12.2007.
+    -
+    
+19.12.2007.
+    -
+
