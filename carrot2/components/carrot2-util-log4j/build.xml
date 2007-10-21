@@ -13,6 +13,16 @@
             <zipfileset dir="src" 
                 includes="log4j-silent.xml" fullpath="log4j.xml" />
         </jar>
+
+        <jar jarfile="${dist.dir}/carrot2-util-log4j-warn.jar">
+            <fileset dir="src">
+                <exclude name="log4j*.xml" />
+                <exclude name="appender-file-html.xml" />
+            </fileset>
+
+            <zipfileset dir="src" 
+                includes="log4j-warn.xml" fullpath="log4j.xml" />
+        </jar>
         
         <jar jarfile="${dist.dir}/carrot2-util-log4j-dcs.jar">
             <fileset dir="src">
