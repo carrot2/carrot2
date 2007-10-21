@@ -19,7 +19,7 @@ loaded.setProperties(new String [][] {
 	{"tab.name", "Wiki"},
 	{"tab.accel", "i"},
 	{"tab.description", "Search Wikipedia"},
-	{"tab.description.startup", "Carrot Clustering Engine will search Wikipedia for your query and organize the results into categories"},
+	{"tab.description.startup", "The clustering engine will search Wikipedia for your query and organize the results into categories"},
 	{"tab.exampleQueries", "poland|tiger|java"},
 	{"tab.icon", "wiki.gif"},
 	{"tab.default", "false"}

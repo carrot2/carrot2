@@ -15,7 +15,7 @@ loaded.setProperties(new String [][] {
 	{"tab.name", "ODP"},
 	{"tab.accel", "O"},
 	{"tab.description", "Search Open Directory Project data"},
-	{"tab.description.startup", "Carrot Clustering Engine will search the Open Directory Project data and organize the results into thematic categories"},
+	{"tab.description.startup", "The clustering engine will search the Open Directory Project data and organize the results into thematic categories"},
 	{"tab.exampleQueries", "photography|test|chips"},
 	{"tab.icon", "odp.gif"},
 	{"tab.default", "false"},
