@@ -19,7 +19,7 @@ loaded.setProperties(new String [][] {
 	{"tab.name", "PUT"},
 	{"tab.accel", "P"},
 	{"tab.description", "Search *.put.poznan.pl (with Yahoo!)"},
-	{"tab.description.startup", "Carrot Clustering Engine will search Poznan University of Technology domains and organize the results into thematic categories"},
+	{"tab.description.startup", "The clustering engine will search Poznan University of Technology domains and organize the results into thematic categories"},
 	{"tab.exampleQueries", "computing science|idss|seminaria|publikacje"},
 	{"tab.icon", "put.gif"},
 	{"tab.default", "false"},

@@ -21,7 +21,7 @@ loaded.setProperties(new String [][] {
 	{"tab.name", "Jobs"},
 	{"tab.accel", "J"},
 	{"tab.description", "Search jobs from indeed.com"},
-	{"tab.description.startup", "Carrot Clustering Engine will search jobs at <<indeed.com>> and organize the results into thematic categories"},
+	{"tab.description.startup", "The clustering engine will search jobs at <<indeed.com>> and organize the results into thematic categories"},
 	{"tab.exampleQueries", "manager|java|sql"},
 	{"tab.icon", "jobs.gif"},
 	{"tab.default", "false"}
