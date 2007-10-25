@@ -2,6 +2,9 @@ package org.ukrukar.converter.core.editors;
 
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.ukrukar.converter.core.views.DefaultViewerFactory;
 import org.ukrukar.converter.core.views.ITextViewer;
@@ -21,6 +24,13 @@ public class MultiTextViewerEditor extends MultiPageEditorPart {
 		viewer.refreshText(this.getEditorInput().getName());
 	}
 
+	@Override
+	public void init(IEditorSite site, IEditorInput input)
+			throws PartInitException {
+		super.init(site, input);
+		this.setPartName(input.getName());
+	}
+	
 	@Override
 	public void doSave(IProgressMonitor arg0) {
 	}

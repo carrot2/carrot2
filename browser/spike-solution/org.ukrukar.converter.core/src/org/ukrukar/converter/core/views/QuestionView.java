@@ -14,6 +14,8 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
+import org.krukar.converter.core.logic.ITextConverter;
+import org.krukar.converter.core.logic.loader.ConverterLoader;
 import org.ukrukar.converter.core.editors.MultiTextViewerEditor;
 import org.ukrukar.converter.core.editors.TextInput;
 
@@ -59,6 +61,7 @@ public class QuestionView extends ViewPart {
 		algorithmCombo.setFont(font);
 		algorithmCombo.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, true,
 				false));
+		loadAlgorithmChoices();
 
 		Button submitButton = new Button(parent, SWT.PUSH | SWT.CENTER);
 		submitButton.setText("GO!"); //$NON-NLS-1$
@@ -71,11 +74,14 @@ public class QuestionView extends ViewPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				String text = queryText.getText();
+				String converterCaption = algorithmCombo.getText();
+				ITextConverter convertion = ConverterLoader
+						.getConverter(converterCaption);
 				QuestionView.this.getViewSite().getWorkbenchWindow()
 						.getActivePage();
 				IWorkbenchPage page = QuestionView.this.getViewSite()
 						.getWorkbenchWindow().getActivePage();
-				TextInput input = new TextInput(text);
+				TextInput input = new TextInput(convertion.convert(text));
 				try {
 					page.openEditor(input, MultiTextViewerEditor.ID);
 				} catch (PartInitException ex) {
@@ -86,6 +92,12 @@ public class QuestionView extends ViewPart {
 
 		});
 
+	}
+
+	private void loadAlgorithmChoices() {
+		for (String caption : ConverterLoader.getCaptions()) {
+			algorithmCombo.add(caption);
+		}
 	}
 
 	@Override
