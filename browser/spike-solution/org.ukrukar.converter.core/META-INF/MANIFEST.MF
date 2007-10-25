@@ -12,3 +12,4 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.ide
 Eclipse-LazyStart: true
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Export-Package: org.krukar.converter.core.logic
