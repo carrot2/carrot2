@@ -1,5 +1,7 @@
 package org.ukrukar.converter.core.views;
 
+import org.eclipse.core.commands.operations.OperationStatus;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -12,10 +14,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 import org.krukar.converter.core.logic.ITextConverter;
 import org.krukar.converter.core.logic.loader.ConverterLoader;
+import org.ukrukar.converter.core.Activator;
 import org.ukrukar.converter.core.editors.MultiTextViewerEditor;
 import org.ukrukar.converter.core.editors.TextInput;
 
@@ -73,19 +75,23 @@ public class QuestionView extends ViewPart {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				String text = queryText.getText();
-				String converterCaption = algorithmCombo.getText();
-				ITextConverter convertion = ConverterLoader
-						.getConverter(converterCaption);
-				QuestionView.this.getViewSite().getWorkbenchWindow()
-						.getActivePage();
-				IWorkbenchPage page = QuestionView.this.getViewSite()
-						.getWorkbenchWindow().getActivePage();
-				TextInput input = new TextInput(convertion.convert(text));
 				try {
+					String text = queryText.getText();
+					String converterCaption = algorithmCombo.getText();
+					ITextConverter convertion = ConverterLoader
+							.getConverter(converterCaption);
+					QuestionView.this.getViewSite().getWorkbenchWindow()
+							.getActivePage();
+					IWorkbenchPage page = QuestionView.this.getViewSite()
+							.getWorkbenchWindow().getActivePage();
+					TextInput input = new TextInput(convertion.convert(text));
 					page.openEditor(input, MultiTextViewerEditor.ID);
-				} catch (PartInitException ex) {
-					// handle error
+				} catch (Throwable ex) {
+					Activator.getDefault().getLog().log(
+							new OperationStatus(IStatus.ERROR,
+									Activator.PLUGIN_ID, -1,
+									"Error while showing query result editor",
+									ex));
 				}
 
 			}

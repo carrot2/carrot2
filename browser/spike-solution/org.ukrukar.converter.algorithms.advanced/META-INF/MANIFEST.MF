@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Advanced Plug-in
+Bundle-SymbolicName: org.ukrukar.converter.algorithms.advanced;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: org.ukrukar.converter.algorithms.advanced.AdvancedActivator
+Require-Bundle: org.eclipse.core.runtime,
+ org.ukrukar.converter.core,
+ org.converter.utils
+Eclipse-LazyStart: true

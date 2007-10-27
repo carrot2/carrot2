@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Utils Plug-in
+Bundle-SymbolicName: org.converter.utils
+Bundle-Version: 1.0.0
+Export-Package: org.converter.utils
