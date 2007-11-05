@@ -4,12 +4,12 @@ Bundle-Name: Core Plug-in
 Bundle-SymbolicName: org.ukrukar.converter.core; singleton:=true
 Bundle-Version: 1.0.0
 Bundle-Activator: org.ukrukar.converter.core.Activator
-Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime,
- org.eclipse.jface.text;bundle-version="3.1.0",
- org.eclipse.core.resources,
- org.eclipse.ui.editors,
- org.eclipse.ui.ide
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.ui,
+ org.eclipse.ui.ide,
+ org.eclipse.update.ui,
+ org.eclipse.update.core,
+ org.eclipse.ui.workbench.texteditor,
+ org.eclipse.equinox.launcher
 Eclipse-LazyStart: true
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Export-Package: org.krukar.converter.core.logic

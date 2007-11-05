@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.ukrukar.converter.algorithm_1.0.0.jar" id="org.ukrukar.converter.algorithm" version="1.0.0" os="win32" ws="win32">
+      <category name="Algorithms"/>
+   </feature>
+   <category-def name="Algorithms" label="Algorithms"/>
+</site>

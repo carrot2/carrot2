@@ -45,5 +45,17 @@
             name="Sample Multi-page Editor">
       </editor>
    </extension>
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="org.ukrukar.converter.core.application"
+            name="Converter">
+         <property
+               name="appName"
+               value="Converter">
+         </property>
+      </product>
+   </extension>
 
 </plugin>

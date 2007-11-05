@@ -1,5 +1,6 @@
 package org.ukrukar.converter.core;
 
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.ui.IWorkbenchActionConstants;
@@ -8,6 +9,7 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
+import org.ukrukar.converter.core.update.AddExtensionsAction;
 
 /**
  * An action bar advisor is responsible for creating, adding, and disposing of
@@ -21,6 +23,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	// in the fill methods. This ensures that the actions aren't recreated
 	// when fillActionBars is called with FILL_PROXY.
 	private IWorkbenchAction exitAction;
+	private Action updateAction;
 
 	public ApplicationActionBarAdvisor(IActionBarConfigurer configurer) {
 		super(configurer);
@@ -36,6 +39,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
 		exitAction = ActionFactory.QUIT.create(window);
 		register(exitAction);
+		updateAction = new AddExtensionsAction(window);
+		register(updateAction);
 	}
 
 	protected void fillMenuBar(IMenuManager menuBar) {
@@ -43,6 +48,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 				IWorkbenchActionConstants.M_FILE);
 		menuBar.add(fileMenu);
 		fileMenu.add(exitAction);
+		fileMenu.add(updateAction);
 	}
 
 }
