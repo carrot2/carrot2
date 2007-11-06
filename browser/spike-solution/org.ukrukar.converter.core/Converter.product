@@ -3,7 +3,7 @@
 
 <product name="Converter" id="org.ukrukar.converter.core.product" application="org.ukrukar.converter.core.application" useFeatures="true">
 
-   <configIni use="default"/>
+   <configIni use="custom" path="/org.ukrukar.converter.core/config.ini"/>
 
    <launcherArgs>
    </launcherArgs>

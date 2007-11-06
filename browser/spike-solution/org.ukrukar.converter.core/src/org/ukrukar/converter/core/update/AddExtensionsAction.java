@@ -42,7 +42,7 @@ public class AddExtensionsAction extends Action {
 		//result.addFilter(new EnvironmentFilter());
 		UpdateSearchScope scope = new UpdateSearchScope();
 		try {
-			String homeBase = "http://localhost:8000/Algorithms-site/";
+			String homeBase = System.getProperty("converter.update.site", "http://locadsdgdflhost:8000/Algorithms-site/");
 			URL url = new URL(homeBase);
 			scope.addSearchSite("Converter site", url, null);
 		} catch (MalformedURLException e) {
