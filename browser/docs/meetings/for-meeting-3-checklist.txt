@@ -12,4 +12,14 @@ notes:
 - adds META-INF/MANIFEST.MF and build.properties (I don't know if thats a problem or no)
 
 4) update mechanism
+- simple
+
 5) ANT compilation
+- difficult
+- requires eclipse
+- example: http://www.qualityeclipse.com/projects/
+
+Sources:
+Eclipse - Building Commercial Quality Plugins (2nd Edition) - Eric Clayberg, Dan Rubel - Addisson-Wesley
+
+Eclipse - Rich Client Platform: Designing, Coding, and Packaging Java™ Applications - Jeff McAffer, Jean-Michel Lemieux -Addison-Wesley
