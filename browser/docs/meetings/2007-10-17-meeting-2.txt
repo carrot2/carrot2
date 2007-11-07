@@ -5,15 +5,17 @@ EXPECTED PROJECT MILESTONES
     get to know: plugin system/ bundle/ updates/ OSGI Equinox/ 
     assume the baseline Eclipse version: 3.3+
     read release plan for Carrot2 version 3.0/ think of improvements/ alternative solutions
-    try to write an offline clustering example (Yahoo! -> STC -> console)
     - check offline (batch) plugin compilation possibilities from ANT. This is supposedly HARD. Just find out how hard it is,
     if it's indeed next to impossible, we'll try to figure out something else.
 
 21.11.2007.
-    initial vision of extension points/ architecture of the browser RCP application
+    - [dw] SVN for the thesis. Thesis template. Book purchase.
+    - [dw] 3.0 design outline, merge with Eclipse architecture.
+    - embed web browser w/flash (multiplatform)
+    - try to write an offline clustering example (Yahoo! -> STC -> console)
 
 05.12.2007.
-    -
+    initial vision of extension points/ architecture of the browser RCP application
     
 19.12.2007.
     -
