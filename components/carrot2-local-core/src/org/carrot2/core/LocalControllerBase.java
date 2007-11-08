@@ -13,14 +13,15 @@
 
 package org.carrot2.core;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 import org.apache.commons.pool.*;
 import org.apache.commons.pool.impl.GenericObjectPool;
 import org.carrot2.core.controller.*;
 import org.carrot2.core.controller.loaders.ComponentInitializationException;
-import org.carrot2.util.ResourceUtils;
+import org.carrot2.util.resources.*;
 
 /**
  * A complete base implementation of the
@@ -266,16 +267,18 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
         final ControllerHelper helper = new ControllerHelper();
         final String [] nameCandidates = getPotentialComponentNames(componentId, helper);
 
+        final ResourceUtils resUtils = ResourceUtilsFactory.getDefaultResourceUtils();
         InputStream stream = null;
         for (int i = 0; i < nameCandidates.length; i++) {
             // Construct resource name
             final String resourceName = nameCandidates[i];
 
             // Look for the descriptor.
-            stream = ResourceUtils.getFirst(resourceName, LocalControllerBase.class);
+            final Resource res = resUtils.getFirst(resourceName, LocalControllerBase.class);
 
-            if (stream != null) {
+            if (res != null) {
                 // Something found. Try reading it.
+                stream = res.open();
                 try {
                     return helper.loadComponentFactory(
                             helper.getExtension(nameCandidates[i]), stream);

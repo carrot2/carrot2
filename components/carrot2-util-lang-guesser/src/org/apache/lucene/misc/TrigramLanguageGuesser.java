@@ -455,7 +455,9 @@ class LanguageRanker implements TrigramListener {
 		int j = right;
 
 		while (true) {
-			while (less(a[++i], a[right]));
+			while (less(a[++i], a[right])) {
+                // empty.
+            }
 			while (less(a[right], a[--j]))
 				if (j == left) break;
 			if (i >= j)	break;

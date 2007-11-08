@@ -86,7 +86,7 @@ public class QuerySaveDialog
     }
 
     /**
-     * @return
+     * 
      */
     private JPanel buildUI()
     {
@@ -104,7 +104,7 @@ public class QuerySaveDialog
     }
 
     /**
-     * @return
+     * 
      */
     private JPanel buildContentPanel()
     {
@@ -172,7 +172,7 @@ public class QuerySaveDialog
     }
 
     /**
-     * @return
+     * 
      */
     private JPanel buildButtonPanel()
     {
