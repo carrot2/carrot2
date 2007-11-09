@@ -2,6 +2,9 @@ package org.carrot2.core;
 
 import java.util.Map;
 
+/**
+ * 
+ */
 public class ThreadSafeController
 {
     void addClusteringAlgorithm(String id, Class clazz,

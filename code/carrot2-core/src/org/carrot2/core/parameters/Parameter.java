@@ -1,4 +1,4 @@
-package org.carrot2.core;
+package org.carrot2.core.parameters;
 
 public class Parameter
 {

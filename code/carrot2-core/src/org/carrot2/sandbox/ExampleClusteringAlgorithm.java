@@ -1,4 +1,9 @@
-package org.carrot2.core;
+package org.carrot2.sandbox;
+
+import org.carrot2.core.ClusteringAlgorithm;
+import org.carrot2.core.parameters.IntegerTypeMetadata;
+import org.carrot2.core.parameters.Parameter;
+import org.carrot2.core.parameters.ParameterGroup;
 
 public class ExampleClusteringAlgorithm implements ClusteringAlgorithm
 {

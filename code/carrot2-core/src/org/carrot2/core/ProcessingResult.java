@@ -5,10 +5,6 @@ import java.util.Map;
 
 /**
  * Provides results of query processing.
- * 
- * @see org.carrot2.core.LocalController
- * @author Stanislaw Osinski
- * @version $Revision: 1539 $
  */
 public interface ProcessingResult
 {
@@ -16,7 +12,14 @@ public interface ProcessingResult
 
     public Collection<Document> getDocuments();
 
+    /**
+     * Mirrors the output of {@link DocumentSource#getFields()} used
+     * during processing.
+     */
     public Collection<Field> getFields();
 
-    public Map<String, Object> getMetadata();
+    /**
+     * Follow the Web context pattern naming -- "attribute" as in request, session etc.? 
+     */
+    public Map<String, Object> getAttributes();
 }

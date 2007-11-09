@@ -1,8 +1,13 @@
-package org.carrot2.core;
+package org.carrot2.sandbox;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import org.carrot2.core.DocumentSource;
+import org.carrot2.core.Field;
+import org.carrot2.core.parameters.IntegerTypeMetadata;
+import org.carrot2.core.parameters.ParameterGroup;
 
 public class ExampleDocumentSource implements DocumentSource
 {
