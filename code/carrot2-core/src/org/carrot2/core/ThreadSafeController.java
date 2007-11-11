@@ -14,7 +14,8 @@ public class ThreadSafeController
     {
     }
 
-    void addDataSource(String id, Class<? extends DataSource> clazz, Map<String, Object> instanceParameters)
+    void addDataSource(String id, Class<? extends DataSource> clazz,
+        Map<String, Object> instanceParameters)
     {
     }
 

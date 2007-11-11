@@ -1,12 +1,10 @@
 package org.carrot2.sandbox;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import org.carrot2.core.parameters.ComponentTypeMetadata;
+import org.carrot2.core.Configurable;
 import org.carrot2.core.parameters.Parameter;
 import org.carrot2.core.parameters.ParameterGroup;
 import org.picocontainer.DefaultPicoContainer;
@@ -51,9 +49,9 @@ public class MetadataCollectorContainer extends DefaultPicoContainer
                 // Descend recursively into unresolved types.
                 for (Parameter p : result.getParameters())
                 {
-                    if (p.descriptor instanceof ComponentTypeMetadata)
+                    if (Configurable.class.isAssignableFrom(p.type.getType()))
                     {
-                        final Class<?> sub = ((ComponentTypeMetadata) p.descriptor).clazz;
+                        final Class<?> sub = p.type.getType();
                         if (!visited.contains(sub)) {
                             resolveInstantiationParameters(sub, pg, visited);
                         }

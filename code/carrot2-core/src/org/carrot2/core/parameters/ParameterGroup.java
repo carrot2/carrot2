@@ -1,43 +1,61 @@
 package org.carrot2.core.parameters;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
-
+/**
+ * A group of configuration parameters and parameter groups. Note that both parameters and
+ * sets are kept in {@link Collection}s, hence no order is imposed at this level. Order
+ * starts to matter at the level of displaying the corresponding controls or
+ * documentation, so the order will be defined by the XML file.
+ */
 public class ParameterGroup
 {
+    /** Name of this parameter group */
     private final String name;
-    private ArrayList<ParameterGroup> subgroups = new ArrayList<ParameterGroup>();
-    private ArrayList<Parameter> parameters = new ArrayList<Parameter>();
-    
+
+    /** A set of parameter subgroups */
+    private Collection<ParameterGroup> parameterGroups;
+
+    /** A set of parameters */
+    private Collection<Parameter> parameters;
+
     public ParameterGroup(String name)
     {
         this.name = name;
+        this.parameters = new HashSet<Parameter>();
+        this.parameterGroups = new HashSet<ParameterGroup>();
     }
 
-    public void addAll(Parameter... parameters)
+    public void add(Parameter... parametersToAdd)
     {
-        Collections.addAll(this.parameters, parameters);
+        parameters.addAll(Arrays.asList(parametersToAdd));
     }
 
-    public void add(ParameterGroup parameters)
+    public void add(ParameterGroup... parameterGroupsToAdd)
     {
-        subgroups.add(parameters);
+        parameterGroups.addAll(Arrays.asList(parameterGroupsToAdd));
     }
 
-    public List<Parameter> getParameters()
+    public String getName()
     {
-        return parameters;
+        return name;
     }
-    
+
+    public Collection<Parameter> getParameters()
+    {
+        return Collections.unmodifiableCollection(parameters);
+    }
+
+    public Collection<ParameterGroup> getParameterGroups()
+    {
+        return Collections.unmodifiableCollection(parameterGroups);
+    }
+
     @Override
     public String toString()
     {
-        return "[ParamGroup name=" + name 
-        + ", params: " + Arrays.toString(parameters.toArray())
-        + ", subgroups: " + Arrays.toString(subgroups.toArray())
-        + "]";
+        return "[ParamGroup name=" + name + ", params: "
+            + Arrays.toString(parameters.toArray()) + ", subgroups: "
+            + Arrays.toString(parameterGroups.toArray()) + "]";
     }
 }

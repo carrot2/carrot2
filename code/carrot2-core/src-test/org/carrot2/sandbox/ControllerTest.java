@@ -35,8 +35,7 @@ public class ControllerTest
         // could be serialized to an XML file. For the sake of this example,
         // let's assume this was read-in from somewhere
 
-        final ClusteringAlgorithm algorithm = (ClusteringAlgorithm) 
-            container.getComponent(algorithmClass);
+        final ClusteringAlgorithm algorithm = container.getComponent(algorithmClass);
 
         System.out.println(algorithm);
     }
