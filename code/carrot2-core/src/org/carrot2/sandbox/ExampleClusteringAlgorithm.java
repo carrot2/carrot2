@@ -3,7 +3,9 @@ package org.carrot2.sandbox;
 import org.carrot2.core.ClusteringAlgorithm;
 import org.carrot2.core.parameters.Parameter;
 import org.carrot2.core.parameters.ParameterGroup;
-import org.carrot2.core.type.*;
+import org.carrot2.core.type.ConfigurableType;
+import org.carrot2.core.type.EnumType;
+import org.carrot2.core.type.TypeBuilder;
 
 public class ExampleClusteringAlgorithm implements ClusteringAlgorithm
 {

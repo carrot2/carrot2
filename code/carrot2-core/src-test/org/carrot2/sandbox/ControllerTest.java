@@ -15,8 +15,9 @@ public class ControllerTest
 
     @Test
     public void testLifecycleWithParameters() {
-        final MetadataCollectorContainer container = new MetadataCollectorContainer();
-        container.changeMonitor(new MyComponentMonitor());
+        final RequestLifecycleStrategy s = new RequestLifecycleStrategy();
+        final MetadataCollectorContainer container = 
+            new MetadataCollectorContainer(s);
 
         // We want to get a concrete instance of this class.
         final Class<ExampleClusteringAlgorithm> algorithmClass = 
@@ -33,10 +34,28 @@ public class ControllerTest
         // and instantiate proper classes, populating the container
         // with their implementations. I guess the parameters
         // could be serialized to an XML file. For the sake of this example,
-        // let's assume this was read-in from somewhere
+        // let's assume this was read-in from somewhere and added
+        // proper implementations.
+        container.addComponent(algorithmClass);
+        container.addComponent(ExampleTokenizer.class);
 
-        final ClusteringAlgorithm algorithm = container.getComponent(algorithmClass);
+        final ClusteringAlgorithm algorithm =
+            (ClusteringAlgorithm) container.getComponent(algorithmClass);
 
-        System.out.println(algorithm);
+        //
+        // Request-time injection of parameters.
+        //
+        
+        // For some reason this doesn't seem to work -- these calls
+        // are not propagated properly to the lifecycle object. A look
+        // at the implementation reveals some scary gorey details and I'm
+        // too tired to investigate now.
+
+        container.start();
+        container.stop();
+        
+        // and again (another request).
+        container.start();
+        container.stop();
     }
 }

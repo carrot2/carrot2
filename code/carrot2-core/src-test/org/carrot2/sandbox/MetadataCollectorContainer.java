@@ -3,6 +3,7 @@ package org.carrot2.sandbox;
 import java.lang.reflect.*;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.logging.Logger;
 
 import org.carrot2.core.Configurable;
 import org.carrot2.core.parameters.Parameter;
@@ -13,8 +14,18 @@ import org.picocontainer.DefaultPicoContainer;
  * 
  */
 @SuppressWarnings("serial")
-public class MetadataCollectorContainer extends DefaultPicoContainer
+public class MetadataCollectorContainer 
+    extends DefaultPicoContainer
 {
+    private RequestLifecycleStrategy lifecycleStrategy;
+    private final static Logger logger = Logger.getLogger(MetadataCollectorContainer.class.getName());
+
+    public MetadataCollectorContainer(RequestLifecycleStrategy s)
+    {
+        super(s, null);
+        this.lifecycleStrategy = s;
+    }
+    
     /**
      * 
      */
