@@ -3,9 +3,7 @@ package org.carrot2.sandbox;
 import org.carrot2.core.ClusteringAlgorithm;
 import org.carrot2.core.parameters.Parameter;
 import org.carrot2.core.parameters.ParameterGroup;
-import org.carrot2.core.type.ConfigurableType;
-import org.carrot2.core.type.EnumType;
-import org.carrot2.core.type.TypeBuilder;
+import org.carrot2.core.type.*;
 
 public class ExampleClusteringAlgorithm implements ClusteringAlgorithm
 {
@@ -26,7 +24,8 @@ public class ExampleClusteringAlgorithm implements ClusteringAlgorithm
         ParameterGroup pg = new ParameterGroup("Example");
 
         Parameter p1 = new Parameter("a", TypeBuilder.build(20, 10, 50));
-        Parameter p2 = new Parameter("b", new EnumType<Test>(Test.class));
+        Parameter p2 = new Parameter("b", new EnumTypeWithDefaultValue<Test>(Test.class,
+            Test.VAL1));
 
         pg.add(p1, p2);
         pg.add(tokenizer.getParameters());

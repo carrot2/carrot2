@@ -8,6 +8,8 @@ import java.util.logging.Logger;
 import org.carrot2.core.Configurable;
 import org.carrot2.core.parameters.Parameter;
 import org.carrot2.core.parameters.ParameterGroup;
+import org.carrot2.core.type.ClassType;
+import org.carrot2.core.type.ConfigurableType;
 import org.picocontainer.DefaultPicoContainer;
 
 /**
@@ -38,7 +40,10 @@ public class MetadataCollectorContainer
     }
 
     /**
-     * 
+     * TODO: Question: how can we resolve the instantiation parameters without the
+     * actual values? :-) Should we rely on default values only? Once this problem is solved
+     * we need to replace the parameter of {@link ConfigurableType} with a parameter
+     * of {@link ClassType} here.
      */
     private <T> void resolveInstantiationParameters(
         Class<T> algorithmClass, 
