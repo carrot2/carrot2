@@ -16,4 +16,17 @@ public class BoundedIntegerTypeWithDefaultValue extends BoundedIntegerType imple
     {
         return defaultValue;
     }
+    
+    @Override
+    public boolean equals(Object obj)
+    {
+    	if (this == obj) 
+    		return true;
+    	
+    	if (this == null || !(obj instanceof BoundedIntegerTypeWithDefaultValue)) 
+    		return false;
+
+    	return super.equals(obj) && 
+    		((BoundedIntegerTypeWithDefaultValue) obj).defaultValue.equals(defaultValue);
+    }
 }

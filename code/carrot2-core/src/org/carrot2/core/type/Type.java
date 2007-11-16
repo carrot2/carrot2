@@ -5,6 +5,7 @@ package org.carrot2.core.type;
 
 /**
  *
+ * IMPLEMENT HASHCODE AND EQUALS, STUPID!
  */
 public interface Type<T>
 {

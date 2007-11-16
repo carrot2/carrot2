@@ -15,4 +15,21 @@ public abstract class AbstractType<T> implements Type<T>
     }
     
     public abstract T valueOf(String s);
+
+    @Override
+    public int hashCode() 
+    {
+    	return type.hashCode();
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+    	if (this == obj) 
+    		return true;
+
+    	if (this == null || !(obj instanceof AbstractType<?>)) 
+    		return false;
+
+    	return ((AbstractType<?>) obj).type.equals(type);    	
+    }
 }

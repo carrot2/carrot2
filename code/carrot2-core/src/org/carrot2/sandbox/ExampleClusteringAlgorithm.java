@@ -1,50 +1,41 @@
 package org.carrot2.sandbox;
 
 import org.carrot2.core.ClusteringAlgorithm;
-import org.carrot2.core.parameters.Parameter;
+import org.carrot2.core.parameters.AnyClassTypeWithDefaultValue;
+import org.carrot2.core.parameters.Binding;
+import org.carrot2.core.parameters.BindingPolicy;
+import org.carrot2.core.parameters.ParameterBuilder;
 import org.carrot2.core.parameters.ParameterGroup;
-import org.carrot2.core.type.*;
+import org.carrot2.core.type.BoundedIntegerTypeWithDefaultValue;
+import org.carrot2.core.type.Type;
 
 public class ExampleClusteringAlgorithm implements ClusteringAlgorithm
 {
+    @Binding(BindingPolicy.INSTANTIATION)
     private Tokenizer tokenizer;
+    private static Type<?> TOKENIZER = new AnyClassTypeWithDefaultValue(
+        Tokenizer.class, ExampleTokenizer.class);
 
-    private enum Test
-    {
-        VAL1, VAL2;
-    }
+    @Binding(BindingPolicy.RUNTIME)
+    private int threshold;
+    private static Type<?> THRESHOLD = new BoundedIntegerTypeWithDefaultValue(5, 0, 10);
 
-    public ExampleClusteringAlgorithm(Tokenizer tokenizer)
-    {
-        this.tokenizer = tokenizer;
-    }
-
+    /*
+     * 
+     */
     public ParameterGroup getParameters()
     {
-        ParameterGroup pg = new ParameterGroup("Example");
+        ParameterGroup pg = new ParameterGroup("ExampleAlgorithm");
 
-        Parameter p1 = new Parameter("a", TypeBuilder.build(20, 10, 50));
-        Parameter p2 = new Parameter("b", new EnumTypeWithDefaultValue<Test>(Test.class,
-            Test.VAL1));
-
-        pg.add(p1, p2);
+        pg.add(ParameterBuilder.getParameters(this.getClass(), BindingPolicy.RUNTIME));
         pg.add(tokenizer.getParameters());
 
-        return null;
-    }
-
-    /**
-     * STATIC (instance-creation time) parameters.
-     */
-    public static ParameterGroup getInstantiationParameters()
-    {
-        ParameterGroup pg = new ParameterGroup("Example");
-        Parameter p1 = new Parameter("tokenizer", new ConfigurableType<Tokenizer>(
-            Tokenizer.class));
-        pg.add(p1);
         return pg;
     }
 
+    /*
+     * 
+     */
     @Override
     public String toString()
     {

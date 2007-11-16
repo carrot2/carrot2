@@ -8,8 +8,6 @@ import java.util.logging.Logger;
 import org.carrot2.core.Configurable;
 import org.carrot2.core.parameters.Parameter;
 import org.carrot2.core.parameters.ParameterGroup;
-import org.carrot2.core.type.ClassType;
-import org.carrot2.core.type.ConfigurableType;
 import org.picocontainer.DefaultPicoContainer;
 
 /**

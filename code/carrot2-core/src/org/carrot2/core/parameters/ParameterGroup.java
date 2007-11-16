@@ -7,6 +7,10 @@ import java.util.*;
  * sets are kept in {@link Collection}s, hence no order is imposed at this level. Order
  * starts to matter at the level of displaying the corresponding controls or
  * documentation, so the order will be defined by the XML file.
+ * 
+ * T0DO: It would be sensible to preserve the order of parameters though. If this information is important
+ * at runtime (and it is), then we should use a generic List interface instead of Collection. It doesn't
+ * change much, really -- the methods are nearly all the same -- and List implies an ordering of elements.  
  */
 public class ParameterGroup
 {
@@ -31,6 +35,11 @@ public class ParameterGroup
         parameters.addAll(Arrays.asList(parametersToAdd));
     }
 
+    public void add(Collection<Parameter> parametersToAdd)
+    {
+        parameters.addAll(parametersToAdd);
+    }
+    
     public void add(ParameterGroup... parameterGroupsToAdd)
     {
         parameterGroups.addAll(Arrays.asList(parameterGroupsToAdd));
