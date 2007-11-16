@@ -40,6 +40,12 @@ public class Binder
 
             if (p.type instanceof AnyClassTypeWithDefaultValue)
             {
+                // TODO: Right.. we didn't run these test after we meddled
+                // with AnyClassType... Anyway, if AnyClassType returns an
+                // instance (as it is now), then we can't cast it to a class
+                // again and recursively descend here. We need to either
+                // extract a method that would inject params into an
+                // object instance or revert to something else with AnyClassType.
                 value = createInstance((Class) value, values);
             }
 
