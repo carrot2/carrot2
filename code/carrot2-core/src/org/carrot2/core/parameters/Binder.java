@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.carrot2.core.Configurable;
+import org.carrot2.core.type.AnyClassTypeWithDefaultValue;
 import org.carrot2.core.type.TypeWithDefaultValue;
 
 public class Binder

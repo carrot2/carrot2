@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import org.carrot2.core.Configurable;
+import org.carrot2.core.type.AnyClassTypeWithDefaultValue;
 import org.carrot2.core.type.BoundedIntegerTypeWithDefaultValue;
 import org.carrot2.core.type.Type;
 import org.junit.Test;
@@ -20,11 +21,14 @@ public class BinderTest
     private final static Logger logger = Logger.getAnonymousLogger();
 
     public static interface ITest
-    {        
+    {     
     }
 
     public static class TestImpl implements ITest
     {
+        @Binding(BindingPolicy.INSTANTIATION)
+        private int testIntField;
+        public static Type<?> TESTINTFIELD = new BoundedIntegerTypeWithDefaultValue(5, 0, 10);        
     }
     
     public static class TestClass implements Configurable
@@ -52,10 +56,12 @@ public class BinderTest
     {
         final Map<String, Object> params = new HashMap<String, Object>();
         params.put("instanceIntField", 6);
-        
+
         TestClass instance = Binder.createInstance(TestClass.class, params);
         assertEquals(6, instance.instanceIntField);
         assertTrue(instance.instanceRefField != null 
             && instance.instanceRefField instanceof TestImpl);
+        
+        assertEquals(5, ((TestImpl) instance.instanceRefField).testIntField);
     }
 }

@@ -1,11 +1,11 @@
 package org.carrot2.sandbox;
 
 import org.carrot2.core.ClusteringAlgorithm;
-import org.carrot2.core.parameters.AnyClassTypeWithDefaultValue;
 import org.carrot2.core.parameters.Binding;
 import org.carrot2.core.parameters.BindingPolicy;
 import org.carrot2.core.parameters.ParameterBuilder;
 import org.carrot2.core.parameters.ParameterGroup;
+import org.carrot2.core.type.AnyClassTypeWithDefaultValue;
 import org.carrot2.core.type.BoundedIntegerTypeWithDefaultValue;
 import org.carrot2.core.type.Type;
 

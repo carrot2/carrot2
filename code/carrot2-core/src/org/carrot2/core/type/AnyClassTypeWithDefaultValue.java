@@ -1,35 +1,25 @@
-package org.carrot2.core.parameters;
+package org.carrot2.core.type;
 
-import org.carrot2.core.type.AbstractType;
-import org.carrot2.core.type.TypeWithDefaultValue;
 
-public class AnyClassTypeWithDefaultValue extends AbstractType<Object> implements TypeWithDefaultValue<Object>
+public class AnyClassTypeWithDefaultValue<T> extends AbstractType<T> implements TypeWithDefaultValue<T>
 {
-    private Class implType;
-    private Class type;
+    private Class<? extends T> implType;
 
-    public <T> AnyClassTypeWithDefaultValue(Class<T> type, Class<? extends T> implType)
+    public AnyClassTypeWithDefaultValue(Class<T> type, Class<? extends T> implType)
     {
-        super(Object.class);
+        super(type);
         this.implType = implType;
-        this.type = type;
-    }
-    
-    @Override
-    public Class<Object> getType()
-    {
-        return type;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public Object valueOf(String s)
+    public T valueOf(String s)
     {
         try
         {
             final ClassLoader classLoader = Thread.currentThread()
                 .getContextClassLoader();
-            return classLoader.loadClass(s).newInstance();
+            return (T) classLoader.loadClass(s).newInstance();
         }
         catch (Exception e)
         {
@@ -38,7 +28,7 @@ public class AnyClassTypeWithDefaultValue extends AbstractType<Object> implement
     }
 
     @Override
-    public Object getDefaultValue()
+    public T getDefaultValue()
     {
         try
         {
