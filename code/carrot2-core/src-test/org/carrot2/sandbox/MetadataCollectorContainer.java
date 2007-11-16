@@ -44,6 +44,13 @@ public class MetadataCollectorContainer
      * actual values? :-) Should we rely on default values only? Once this problem is solved
      * we need to replace the parameter of {@link ConfigurableType} with a parameter
      * of {@link ClassType} here.
+     * 
+     * ANSWER: We resolve only the declarations of instantiation parameters so that we know
+     * what to put in the dependency-injection container... If, for example, you'd like to declare
+     * a required interface parameter (used in the constructor, so it has to be injected), then
+     * you could at the same time provide some default value (implementation class) for it. This class
+     * would be instantiated and added to the container in case no overriden value were provided. 
+     * I was just playing around though... it's still quite vague to me how it could actually work.
      */
     private <T> void resolveInstantiationParameters(
         Class<T> algorithmClass, 
