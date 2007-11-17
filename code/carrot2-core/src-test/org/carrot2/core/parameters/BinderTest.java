@@ -28,19 +28,19 @@ public class BinderTest
     {
         @Binding(BindingPolicy.INSTANTIATION)
         private int testIntField;
-        public static Type<?> TESTINTFIELD = new BoundedIntegerTypeWithDefaultValue(5, 0, 10);        
+        public static Type<?> TEST_INT_FIELD = new BoundedIntegerTypeWithDefaultValue(5, 0, 10);        
     }
     
     public static class TestClass implements Configurable
     {
         @Binding(BindingPolicy.INSTANTIATION)
         private int instanceIntField;
-        public static Type<?> INSTANCEINTFIELD = new BoundedIntegerTypeWithDefaultValue(5,
+        public static Type<?> INSTANCE_INT_FIELD = new BoundedIntegerTypeWithDefaultValue(5,
             0, 10);
 
         @Binding(BindingPolicy.INSTANTIATION)
         private ITest instanceRefField;
-        public static Type<?> INSTANCEREFFIELD = new AnyClassTypeWithDefaultValue(
+        public static Type<?> INSTANCE_REF_FIELD = new AnyClassTypeWithDefaultValue<ITest>(
             ITest.class, TestImpl.class);
 
         @Override
