@@ -287,7 +287,7 @@ YAHOO.util.Event.addListener(window, "load", c2AppInit, stc, true);
           <td class="tab-{$status}-body" id="{@id}-td" title="{/page/meta/tabs/tab[@id = $id]/property[@key = 'tab.description']}">
             <div id="{@id}" class="tab-content">
               <span class="arrow">&#160;</span>
-              <span id="{@id}-link" class="tab-link active">
+              <a id="{@id}-link" class="tab-link active" href="#">
                 <xsl:if test="/page/meta/tabs/tab[@id = $id]/property[@key = 'tab.accel']">
                   <xsl:attribute name="accesskey"><xsl:value-of select="/page/meta/tabs/tab[@id = $id]/property[@key = 'tab.accel']" /></xsl:attribute>
                 </xsl:if>
@@ -298,7 +298,7 @@ YAHOO.util.Event.addListener(window, "load", c2AppInit, stc, true);
                   <xsl:otherwise>
                     <img class="tab-img" src="{$skinuri}/inputs/unknown.gif" alt="{/page/meta/tabs/tab[@id = $id]/property[@key = 'tab.name']}" />
                   </xsl:otherwise>
-                </xsl:choose><span>&#160;&#160;</span><xsl:apply-templates select="/page/meta/tabs/tab[@id = $id]/short" /></span>
+                </xsl:choose><span>&#160;&#160;</span><xsl:apply-templates select="/page/meta/tabs/tab[@id = $id]/short" /></a>
             </div>
           </td>
 
@@ -353,8 +353,8 @@ YAHOO.util.Event.addListener(window, "load", c2AppInit, stc, true);
     <td class="tab-passive-body" id="-more-td" title="more...">
       <div id="-more" class="tab-content">
         <span class="arrow">&#160;</span>
-        <span id="-more-link" class="tab-link active" accesskey=".">
-          <img class="tab-img" src="{$skinuri}/inputs/unknown.gif" alt="more search sources..." /><span>&#160;&#160;</span>more<u>.</u>..</span>
+        <a id="-more-link" class="tab-link active" accesskey="." href="#">
+          <img class="tab-img" src="{$skinuri}/inputs/unknown.gif" alt="more search sources..." /><span>&#160;&#160;</span>more<u>.</u>..</a>
       </div>
     </td>
   </xsl:template>
@@ -428,7 +428,7 @@ YAHOO.util.Event.addListener(window, "load", c2AppInit, stc, true);
           <div id="{@id}-h-link">
             <div id="{@id}-h" class="tab-content">
               <span class="arrow">&#160;</span>
-              <span class="tab-link active">
+              <a class="tab-link active" href="#">
                 <xsl:if test="property[@key = 'tab.accel']">
                   <xsl:attribute name="accesskey"><xsl:value-of select="property[@key = 'tab.accel']" /></xsl:attribute>
                 </xsl:if>
@@ -440,7 +440,7 @@ YAHOO.util.Event.addListener(window, "load", c2AppInit, stc, true);
                     <img class="tab-img" src="{$skinuri}/inputs/unknown.gif" alt="{property[@key = 'tab.name']}" />
                   </xsl:otherwise>
                 </xsl:choose>
-                <span>&#160;&#160;</span><xsl:apply-templates select="short" /></span>
+                <span>&#160;&#160;</span><xsl:apply-templates select="short" /></a>
               <span class="hidden-long-desc"><xsl:apply-templates select="long" /></span>
             </div>
           </div>

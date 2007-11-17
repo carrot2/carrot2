@@ -15,6 +15,16 @@ function init()
   YAHOO.util.Dom.batch(
     YAHOO.util.Dom.getElementsBy(
     function (element) {
+      return element.className == "prev";
+    }, "span"),
+
+    function(element) {
+      YAHOO.util.Event.addListener(element, "click", togglePreview, element.id.substring(3));
+    });
+
+  YAHOO.util.Dom.batch(
+    YAHOO.util.Dom.getElementsBy(
+    function (element) {
       return element.id && element.id.indexOf("scs") == 0;
     }, "span"),
 
@@ -22,6 +32,16 @@ function init()
       YAHOO.util.Event.addListener(element, "mouseover", highlightClusterForDocument, element.id.substring(3));
       YAHOO.util.Event.addListener(element, "mouseout", clearHighlightedClusters, element.id.substring(3));
     });
+}
+
+function togglePreview(event, id)
+{
+  var iframe = document.getElementById("pr" + id);
+  if (!(iframe.src && iframe.src.length > 0)) {
+    iframe.src = iframe.getAttribute("url");
+  }
+  Dom.change(iframe);
+  
 }
 
 /**
