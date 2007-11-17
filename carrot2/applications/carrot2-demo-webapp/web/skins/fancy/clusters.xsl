@@ -8,7 +8,7 @@
        doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" doctype-system="http://www.w3.org/TR/html4/loose.dtd"/>
 
   <xsl:variable name="more-increment-internal"><xsl:value-of select="normalize-space(processing-instruction('more-increment'))" /></xsl:variable>
-  <xsl:param name="more-increment"><xsl:choose><xsl:when test="$more-increment-internal"><xsl:value-of select="$more-increment-internal" /></xsl:when><xsl:otherwise>10</xsl:otherwise></xsl:choose></xsl:param>
+  <xsl:param name="more-increment"><xsl:choose><xsl:when test="not(string-length($more-increment-internal) = 0)"><xsl:value-of select="$more-increment-internal" /></xsl:when><xsl:otherwise>10</xsl:otherwise></xsl:choose></xsl:param>
 
   <xsl:template name="head-insert">
     <link rel="stylesheet" href="{$skinuri}/css/clusters.css" />
