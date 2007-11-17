@@ -67,6 +67,6 @@ function keepClusterHighlight(event, id)
     highlightedDocumentId = id;
   }
 
-  parent.clusters.showAllClusters();
+  parent.clusters.showAllClusters(true);
   clearHighlightedClusters(null, prev);
 }

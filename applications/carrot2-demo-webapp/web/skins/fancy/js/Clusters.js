@@ -327,7 +327,7 @@ function showInClusters(id)
         needToShowAllClusters = true;
         setTimeout(function () {
           if (needToShowAllClusters) {
-            showAllClusters();
+            showAllClusters(true);
           }
         }, 500);
     	}
