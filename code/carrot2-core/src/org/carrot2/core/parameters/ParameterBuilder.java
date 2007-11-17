@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import org.carrot2.core.Configurable;
 import org.carrot2.core.type.Type;
 
 /**
@@ -20,7 +19,7 @@ public class ParameterBuilder {
 	/**
 	 * 
 	 */
-	public static Collection<Parameter> getParameters(Class<? extends Configurable> clazz, BindingPolicy policy)
+	public static Collection<Parameter> getParameters(Class<?> clazz, BindingPolicy policy)
 	{
 	    // Output array of parameters.
 		final ArrayList<Parameter> params = new ArrayList<Parameter>();
@@ -99,7 +98,7 @@ public class ParameterBuilder {
     /*
 	 * 
 	 */
-    public static Map<String, Field> getFieldMap(Class<? extends Configurable> clazz, BindingPolicy policy)
+    public static Map<String, Field> getFieldMap(Class<?> clazz, BindingPolicy policy)
     {
         final Field [] declaredFields = clazz.getDeclaredFields();
         final Map<String, Field> result = new HashMap<String, Field>(declaredFields.length);

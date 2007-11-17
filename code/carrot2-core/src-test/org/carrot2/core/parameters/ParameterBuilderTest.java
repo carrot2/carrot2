@@ -19,11 +19,11 @@ public class ParameterBuilderTest
 	{
 	    @Binding(BindingPolicy.INSTANTIATION)
 	    private int instanceField;
-	    private static Type<?> INSTANCEFIELD = new BoundedIntegerTypeWithDefaultValue(5, 0, 10);
+	    private static Type<?> INSTANCE_FIELD = new BoundedIntegerTypeWithDefaultValue(5, 0, 10);
 
 	    @Binding(BindingPolicy.RUNTIME)
 	    private int runtimeField;
-	    private static Type<?> RUNTIMEFIELD = new BoundedIntegerTypeWithDefaultValue(5, 0, 10);		
+	    private static Type<?> RUNTIME_FIELD = new BoundedIntegerTypeWithDefaultValue(5, 0, 10);		
 
 		@Override
 		public ParameterGroup getParameters()
@@ -37,7 +37,7 @@ public class ParameterBuilderTest
 	{
 	    @Binding(BindingPolicy.RUNTIME)
 	    private float runtimeField;
-	    private static Type<?> RUNTIMEFIELD = new BoundedIntegerTypeWithDefaultValue(5, 0, 10);		
+	    private static Type<?> RUNTIME_FIELD = new BoundedIntegerTypeWithDefaultValue(5, 0, 10);		
 
 		@Override
 		public ParameterGroup getParameters()

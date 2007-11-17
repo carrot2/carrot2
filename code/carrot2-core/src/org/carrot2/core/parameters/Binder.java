@@ -10,23 +10,17 @@ import org.carrot2.core.type.TypeWithDefaultValue;
 
 public class Binder
 {
-    public static <T extends Configurable> T createInstance(Class<T> clazz, Map<String, Object> values)
+    /**
+     * Initialize a given object with default values of instance-time binding parameters ({@link BindingPolicy#INSTANTIATION}).
+     */
+    public static <T> T initializeInstance(T instance, Map<String, Object> values)
         throws InstantiationException
     {
-        final Collection<Parameter> instanceParameters = 
-            ParameterBuilder.getParameters(clazz, BindingPolicy.INSTANTIATION);
+        final Collection<Parameter> instanceParameters = ParameterBuilder.getParameters(
+            instance.getClass(), BindingPolicy.INSTANTIATION);
 
-        final T instance;
-        try
-        {
-            instance = clazz.newInstance();
-        }
-        catch (IllegalAccessException e)
-        {
-            throw new InstantiationException("Could not create instance (illegal access): " + e);
-        }
-
-        final Map<String, Field> fields = ParameterBuilder.getFieldMap(clazz, BindingPolicy.INSTANTIATION);
+        final Map<String, Field> fields = ParameterBuilder.getFieldMap(instance
+            .getClass(), BindingPolicy.INSTANTIATION);
 
         for (Parameter p : instanceParameters)
         {
@@ -40,13 +34,8 @@ public class Binder
 
             if (p.type instanceof AnyClassTypeWithDefaultValue)
             {
-                // TODO: Right.. we didn't run these test after we meddled
-                // with AnyClassType... Anyway, if AnyClassType returns an
-                // instance (as it is now), then we can't cast it to a class
-                // again and recursively descend here. We need to either
-                // extract a method that would inject params into an
-                // object instance or revert to something else with AnyClassType.
-                value = createInstance((Class) value, values);
+                // Recursively descend into other types.
+                value = initializeInstance(value, values);
             }
 
             try
@@ -60,7 +49,28 @@ public class Binder
                     + value);
             }
         }
-        
+
         return instance;
+    }
+
+    /**
+     * Create an instance of a given class and initialize it with default values of
+     * instance-time binding parameters ({@link BindingPolicy#INSTANTIATION}).
+     */
+    public static <T extends Configurable> T createInstance(Class<T> clazz,
+        Map<String, Object> values) throws InstantiationException
+    {
+        final T instance;
+        try
+        {
+            instance = clazz.newInstance();
+        }
+        catch (IllegalAccessException e)
+        {
+            throw new InstantiationException(
+                "Could not create instance (illegal access): " + e);
+        }
+
+        return initializeInstance(instance, values);
     }
 }
