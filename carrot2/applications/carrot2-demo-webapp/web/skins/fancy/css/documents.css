@@ -5,6 +5,7 @@
 }
 
 table.d {
+  width: 100%;
   margin-bottom: 3ex;
 }
 
@@ -70,4 +71,10 @@ img.onw {
 div#no-documents {
   text-align: center;
   padding-top: 5ex;
+}
+
+iframe.preview {
+  width: 98%; 
+  height: 300px; 
+  border: 1px dotted #c0c0c0; 
 }

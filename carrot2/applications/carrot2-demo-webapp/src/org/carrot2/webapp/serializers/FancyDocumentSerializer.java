@@ -130,10 +130,17 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
                     "<img src=\"" + base + "/img/sic.gif\" class=\"onw ilink\" id=\"sic" +
                     seqId.toString() + "\" title=\"" + messages.getString(Constants.RB_SHOW_IN_CLUSTTERS) +
                     "\" alt=\"" + messages.getString(Constants.RB_SHOW_IN_CLUSTTERS) + "\" /></span>" +
+                    
                     "<a target=\"_blank\" href=\"" + hurl + "\" title=\"" +
                     messages.getString(Constants.RB_OPEN_IN_NEW_WINDOW) + "\">" +
                     "<img class=\"onw\" src=\"" + base +  "/img/onw.gif\" alt=\"" +
                     messages.getString(Constants.RB_OPEN_IN_NEW_WINDOW) + "\"/></a>" +
+                    
+                    "<span class=\"prev\" id=\"pre" + seqId.toString() + "\" title=\"" +
+                    messages.getString(Constants.RB_DOCUMENT_PREVIEW) + "\">" +
+                    "<img class=\"onw\" src=\"" + base +  "/img/preview.gif\" alt=\"" +
+                    messages.getString(Constants.RB_DOCUMENT_PREVIEW) + "\"/></span>" +
+                    
                     "</div>\r\n" +
                     "<div class=\"s\">");
 
@@ -145,6 +152,9 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
         }
 
         writer.write("</div>\r\n" +
+                "<div class=\"p\">" +
+                "<iframe class=\"preview\" id=\"pr" + seqId.toString() + "\" style=\"display: none\" frameborder=\"no\" url=\"" + hurl + "\"></iframe>" +
+                "</div>" +
                 "<div class=\"u\">" + hurl + (sources != null ? "<div class=\"o\">[" + ArrayUtils.toString(sources) + "]</div>" : "") +"</div>\r\n" +
                 "\r\n" +
                 "</td>\r\n" +
