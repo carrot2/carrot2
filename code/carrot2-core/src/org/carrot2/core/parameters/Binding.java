@@ -11,6 +11,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface Binding {
-	BindingPolicy value();
+	BindingPolicy policy();
+	boolean recursive() default false;
 }
 

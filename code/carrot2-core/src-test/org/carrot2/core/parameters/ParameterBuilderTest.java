@@ -1,103 +1,76 @@
 package org.carrot2.core.parameters;
 
-import static org.junit.Assert.fail;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.*;
 
 import org.carrot2.core.Configurable;
-import org.carrot2.core.type.BoundedIntegerTypeWithDefaultValue;
-import org.carrot2.core.type.Type;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class ParameterBuilderTest
 {
-	private static class TestClass
-		implements Configurable
-	{
-	    @Binding(BindingPolicy.INSTANTIATION)
-	    private int instanceField;
-	    private static Type<?> INSTANCE_FIELD = new BoundedIntegerTypeWithDefaultValue(5, 0, 10);
+    public static class TestClass implements Configurable
+    {
+        @SuppressWarnings("unused")
+        @Binding(policy = BindingPolicy.INSTANTIATION)
+        private int instanceField = 5;
 
-	    @Binding(BindingPolicy.RUNTIME)
-	    private int runtimeField;
-	    private static Type<?> RUNTIME_FIELD = new BoundedIntegerTypeWithDefaultValue(5, 0, 10);		
+        @SuppressWarnings("unused")
+        @Binding(policy = BindingPolicy.RUNTIME)
+        private int runtimeField = 5;
 
-		@Override
-		public ParameterGroup getParameters()
-		{
-			throw new UnsupportedOperationException();
-		}
-	}
+        @SuppressWarnings("unused")
+        @Binding(policy = BindingPolicy.RUNTIME)
+        private int runtimeField2 = 5;
+        private static Constraint<Integer> RUNTIME_FIELD2_CONSTRAINT = new RangeConstraint<Integer>(
+            0, 10);
 
-	private static class BadClass
-		implements Configurable
-	{
-	    @Binding(BindingPolicy.RUNTIME)
-	    private float runtimeField;
-	    private static Type<?> RUNTIME_FIELD = new BoundedIntegerTypeWithDefaultValue(5, 0, 10);		
-
-		@Override
-		public ParameterGroup getParameters()
-		{
-			throw new UnsupportedOperationException();
-		}
-	}
+        @Override
+        public ParameterGroup getParameters()
+        {
+            throw new UnsupportedOperationException();
+        }
+    }
 
     @Test
     public void testGetParametersMap()
     {
-        Collection<String> expected = Arrays.asList(
-                new String [] {
-                        "runtimeField"
-                });
-    
-        Collection<String> actual = ParameterBuilder.getFieldMap(
-                TestClass.class, BindingPolicy.RUNTIME).keySet();
-    
+        Collection<String> expected = Arrays.asList(new String []
+        {
+            "runtimeField2", "runtimeField"
+        });
+
+        Collection<String> actual = ParameterBuilder.getFieldMap(TestClass.class,
+            BindingPolicy.RUNTIME).keySet();
+
         Assert.assertEquals(expected, new ArrayList<String>(actual));
     }
-	
-	@Test
-	public void testGetParametersRuntime()
-	{
-		Collection<Parameter> expected = Arrays.asList(
-				new Parameter [] {
-						new Parameter("runtimeField", new BoundedIntegerTypeWithDefaultValue(5, 0, 10))
-				});
-	
-		Collection<Parameter> actual = ParameterBuilder.getParameters(
-				TestClass.class, BindingPolicy.RUNTIME);
-	
-		Assert.assertEquals(expected, actual);
-	}
 
-	@Test
-	public void testGetParametersInstance()
-	{
-		Collection<Parameter> expected = Arrays.asList(
-				new Parameter [] {
-						new Parameter("instanceField", new BoundedIntegerTypeWithDefaultValue(5, 0, 10))
-				});
+    @Test
+    public void testGetParametersRuntime()
+    {
+        Collection<Parameter> expected = Arrays.asList(new Parameter []
+        {
+            new Parameter("runtimeField2", Integer.class, 5, new RangeConstraint<Integer>(0, 10)),
+            new Parameter("runtimeField", Integer.class, 5, null)
+        });
 
-		Collection<Parameter> actual = ParameterBuilder.getParameters(
-				TestClass.class, BindingPolicy.INSTANTIATION);
+        Collection<Parameter> actual = ParameterBuilder.getParameters(TestClass.class,
+            BindingPolicy.RUNTIME);
 
-		Assert.assertEquals(expected, actual);
-	}
-	
-	@Test
-	public void testTypeEquality()
-	{
-		try {
-			ParameterBuilder.getParameters(
-				BadClass.class, BindingPolicy.RUNTIME);
+        Assert.assertEquals(expected, actual);
+    }
 
-			fail();
-		} catch (RuntimeException e) {
-			// ok, expected.
-		}
-	}	
+    @Test
+    public void testGetParametersInstance()
+    {
+        Collection<Parameter> expected = Arrays.asList(new Parameter []
+        {
+            new Parameter("instanceField", Integer.class, 5, null),
+        });
+
+        Collection<Parameter> actual = ParameterBuilder.getParameters(TestClass.class,
+            BindingPolicy.INSTANTIATION);
+
+        Assert.assertEquals(expected, actual);
+    }
 }

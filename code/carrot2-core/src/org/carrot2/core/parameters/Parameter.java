@@ -1,26 +1,25 @@
 package org.carrot2.core.parameters;
 
-import org.carrot2.core.type.Type;
-import org.carrot2.core.type.TypeWithDefaultValue;
+import org.carrot2.util.ObjectUtils;
 
 public class Parameter
 {
     public final String name;
+    public final Class<?> type;
+    public final Object defaultValue;
+    public final Constraint<?> constraint;
 
-    /**
-     * TODO: assuming all parameters are optional, we should use
-     * {@link TypeWithDefaultValue} here instead of the unrestricted {@link Type}.
-     */
-    public final Type<?> type;
-
-    public Parameter(String name, Type<?> type)
+    public Parameter(String name, Class<?> type, Object defaultValue, Constraint<?> constraint)
     {
-    	if (name == null || type == null) {
-    		throw new IllegalArgumentException();
-    	}
+        if (name == null || type == null)
+        {
+            throw new IllegalArgumentException();
+        }
 
         this.name = name;
         this.type = type;
+        this.defaultValue = defaultValue;
+        this.constraint = constraint;
     }
 
     public String getName()
@@ -28,31 +27,50 @@ public class Parameter
         return name;
     }
 
-    public Type<?> getType()
+    public Class<?> getType()
     {
         return type;
     }
-    
-    @Override
-    public boolean equals(Object obj) {
-    	if (obj == this) 
-    		return true;
 
-    	if (obj == null || !(obj instanceof Parameter)) 
-    		return false;
-
-    	return ((Parameter) obj).name.equals(this.name)
-    		&& ((Parameter) obj).type.equals(this.type);
+    public Object getDefaultValue()
+    {
+        return defaultValue;
     }
     
+    public Constraint<?> getConstraint()
+    {
+        return constraint;
+    }
+
     @Override
-    public int hashCode() {
-    	return name.hashCode();
+    public boolean equals(Object obj)
+    {
+        if (obj == this)
+        {
+            return true;
+        }
+
+        if (obj == null || !(obj instanceof Parameter))
+        {
+            return false;
+        }
+
+        Parameter other = ((Parameter) obj);
+        return other.name.equals(this.name)
+            && other.type.equals(this.type)
+            && ObjectUtils.equals(defaultValue, defaultValue)
+            && ObjectUtils.equals(other.constraint, this.constraint);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return name.hashCode();
     }
 
     @Override
     public String toString()
     {
-        return name + "=" + type.getType();
+        return name + "=" + type;
     }
 }
