@@ -1,7 +1,16 @@
 package org.carrot2.core.parameters;
 
-import java.lang.reflect.*;
-import java.util.*;
+import java.lang.reflect.AccessibleObject;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+
+import org.carrot2.util.ClassUtils;
 
 /**
  * 
@@ -22,7 +31,9 @@ public class ParameterBuilder {
         final HashSet<Field> remainingFields = new HashSet<Field>(
             Arrays.asList(clazz.getDeclaredFields()));
         remainingFields.removeAll(bindableFields);
-        setAccessible(remainingFields.toArray(new Field[remainingFields.size()]));
+
+        AccessibleObject.setAccessible(
+            remainingFields.toArray(new Field[remainingFields.size()]), true);
 
         final HashMap<String,Field> remainingFieldsByName = new HashMap<String,Field>();
         for (Field f : remainingFields)
@@ -76,7 +87,6 @@ public class ParameterBuilder {
 			}
 
 			// TODO: check what's wrong with isAssignableFrom and primitive types.
-			final Class<?> fieldClass = wrapPrimitive(field.getType());
 			Object fieldValue;
             try
             {
@@ -88,7 +98,9 @@ public class ParameterBuilder {
                     + fieldName);
             }
 
-			params.add(new Parameter(fieldName, fieldClass, fieldValue, constraint));
+			params.add(
+			    new Parameter(
+			        fieldName, ClassUtils.boxPrimitive(field.getType()), fieldValue, constraint));
 		}
 
 		return params;
@@ -111,8 +123,9 @@ public class ParameterBuilder {
         final Field [] declaredFields = clazz.getDeclaredFields();
         final Map<String, Field> result = new HashMap<String, Field>(declaredFields.length);
         
-        setAccessible(declaredFields);
-        
+        // TODO: Should we remember or somehow reset the accessibility for non-descriptor fields
+        // upon returning from this method?
+        AccessibleObject.setAccessible(declaredFields, true);
         for (final Field field : declaredFields)
         {
             final Binding binding = field.getAnnotation(Binding.class);
@@ -129,41 +142,6 @@ public class ParameterBuilder {
 
         return result;
     }
-	
-    /*
-     * 
-     */
-	private static void setAccessible(AccessibleObject... accessible)
-    {
-        // TODO: check accessibility jumpout -- howto and why.
-        for (final AccessibleObject field : accessible)
-        {
-            field.setAccessible(true);
-        }
-    }
-
-    private final static HashMap<Class<?>,Class<?>> types = 
-		new HashMap<Class<?>,Class<?>>();
-
-	static {
-		types.put(byte.class, Byte.class);
-		types.put(short.class, Short.class);
-		types.put(int.class, Integer.class);
-		types.put(long.class, Long.class);
-		types.put(float.class, Float.class);
-		types.put(double.class, Double.class);
-		types.put(char.class, Character.class);
-	}
-
-	/*
-	 * 
-	 */
-	private static Class<?> wrapPrimitive(Class<?> type) {
-		if (type.isPrimitive()) {
-			return types.get(type);
-		}
-		return type;
-	}
 }
 
 
