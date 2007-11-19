@@ -15,6 +15,10 @@ public class Binder
     public static <T> T initializeInstance(T instance, Map<String, Object> values)
         throws InstantiationException
     {
+        if (instance.getClass().getAnnotation(Bindable.class) == null) {
+            throw new IllegalArgumentException("Class is not bindable: " + instance.getClass().getName());
+        }
+
         final Collection<Parameter> instanceParameters = ParameterBuilder.getParameters(
             instance.getClass(), BindingPolicy.INSTANTIATION);
 
@@ -50,7 +54,7 @@ public class Binder
             final Field field = fields.get(p.name);
             final Binding binding = field.getAnnotation(Binding.class);
 
-            if (binding != null && binding.recursive())
+            if (binding != null && value.getClass().getAnnotation(Bindable.class) != null)
             {
                 // Recursively descend into other types.
                 value = initializeInstance(value, values);

@@ -21,18 +21,21 @@ public class BinderTest
     {
     }
 
+    @Bindable
     public static class TestImpl implements ITest
     {
         @Binding(policy = BindingPolicy.INSTANTIATION)
         private int testIntField = 5;
     }
 
+    @Bindable
     public static class TestBetterImpl implements ITest
     {
         @Binding(policy = BindingPolicy.INSTANTIATION)
         private int testIntField = 10;
     }
 
+    @Bindable
     public static class TestClass implements Configurable
     {
         @Binding(policy = BindingPolicy.INSTANTIATION)
@@ -40,7 +43,7 @@ public class BinderTest
         private static Constraint<Integer> INSTANCE_INT_FIELD_CONSTRAINT = new RangeConstraint<Integer>(
             0, 10);
 
-        @Binding(policy = BindingPolicy.INSTANTIATION, recursive = true)
+        @Binding(policy = BindingPolicy.INSTANTIATION)
         private ITest instanceRefField = new TestImpl();
 
         @Override

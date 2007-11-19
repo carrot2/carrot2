@@ -8,6 +8,7 @@ import org.junit.Test;
 
 public class ParameterBuilderTest
 {
+    @Bindable
     public static class TestClass implements Configurable
     {
         @SuppressWarnings("unused")
