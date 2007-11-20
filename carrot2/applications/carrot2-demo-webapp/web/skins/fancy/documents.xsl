@@ -65,10 +65,8 @@
             <xsl:apply-templates select="snippet" />
           </div>
           
-          <div class="p">
-            <iframe class="preview" id="pr{@id}" style="display: none" frameborder="no" 
-                    url="{url}" />
-          </div>
+          <iframe class="preview" id="pr{@id}" style="display: none" frameborder="no" 
+                  url="{url}" />
 
           <div class="u">
             <xsl:value-of select="url" />

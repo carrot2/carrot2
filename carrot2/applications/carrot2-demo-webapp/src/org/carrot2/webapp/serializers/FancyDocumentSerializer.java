@@ -78,6 +78,7 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
                 "<script type=\"text/javascript\" src=\"" + base + "/js/yui/yahoo-dom-event.js\" ></script>" +
                 "<script type=\"text/javascript\" src=\"" + base + "/js/Documents.js\" ></script>" +
                 "<script type=\"text/javascript\" src=\"" + base + "/js/Utils.js\" ></script>" +
+                "<script type=\"text/javascript\" src=\"" + base + "/js/jquery/jquery-1.2.1.pack.js\" ></script>" +
                 "<script type=\"text/javascript\">\n" +
                 "YAHOO.util.Event.addListener(window, \"load\", init);\n" +
                 "</script>\n" +
@@ -142,7 +143,7 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
                     messages.getString(Constants.RB_DOCUMENT_PREVIEW) + "\"/></span>" +
                     
                     "</div>\r\n" +
-                    "<div class=\"s\">");
+                    "<div id=\"sn" + seqId.toString() + "\" class=\"s\" url=\"" + hurl + "\">");
 
             textMarker.tokenize(snippet.toCharArray(), this);
         } catch (RuntimeException e) {
@@ -152,9 +153,6 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
         }
 
         writer.write("</div>\r\n" +
-                "<div class=\"p\">" +
-                "<iframe class=\"preview\" id=\"pr" + seqId.toString() + "\" style=\"display: none\" frameborder=\"no\" url=\"" + hurl + "\"></iframe>" +
-                "</div>" +
                 "<div class=\"u\">" + hurl + (sources != null ? "<div class=\"o\">[" + ArrayUtils.toString(sources) + "]</div>" : "") +"</div>\r\n" +
                 "\r\n" +
                 "</td>\r\n" +
