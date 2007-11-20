@@ -37,11 +37,15 @@ function init()
 function togglePreview(event, id)
 {
   var iframe = document.getElementById("pr" + id);
-  if (!(iframe.src && iframe.src.length > 0)) {
-    iframe.src = iframe.getAttribute("url");
+  if (!iframe) {
+    var snippet = $("#sn" + id);
+    var iframeHtml = "<iframe class='preview' id='pr" + id + "' " +
+                     "style='display: none' frameborder='no' " +
+                     "src='" + snippet.attr("url") + "'></iframe>";
+    iframe = $(iframeHtml).insertAfter(snippet);
   }
-  Dom.change(iframe);
   
+  Dom.change(iframe);
 }
 
 /**
