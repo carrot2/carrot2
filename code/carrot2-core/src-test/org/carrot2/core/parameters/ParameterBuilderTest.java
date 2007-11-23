@@ -9,7 +9,7 @@ import org.junit.Test;
 public class ParameterBuilderTest
 {
     @Bindable
-    public static class TestClass implements Configurable
+    public static class TestClass
     {
         @SuppressWarnings("unused")
         @Binding(policy = BindingPolicy.INSTANTIATION)
@@ -24,12 +24,6 @@ public class ParameterBuilderTest
         private int runtimeField2 = 5;
         private static Constraint<Integer> RUNTIME_FIELD2_CONSTRAINT = new RangeConstraint<Integer>(
             0, 10);
-
-        @Override
-        public ParameterGroup getParameters()
-        {
-            throw new UnsupportedOperationException();
-        }
     }
 
     @Test

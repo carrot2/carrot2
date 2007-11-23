@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import org.carrot2.core.Configurable;
 import org.junit.Test;
 
 /**
@@ -36,7 +35,7 @@ public class BinderTest
     }
 
     @Bindable
-    public static class TestClass implements Configurable
+    public static class TestClass
     {
         @Binding(policy = BindingPolicy.INSTANTIATION)
         private int instanceIntField = 5;
@@ -45,12 +44,6 @@ public class BinderTest
 
         @Binding(policy = BindingPolicy.INSTANTIATION)
         private ITest instanceRefField = new TestImpl();
-
-        @Override
-        public ParameterGroup getParameters()
-        {
-            throw new UnsupportedOperationException();
-        }
     }
 
     @Test

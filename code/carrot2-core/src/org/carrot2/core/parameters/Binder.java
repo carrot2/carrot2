@@ -4,34 +4,38 @@ import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.Map;
 
-import org.carrot2.core.Configurable;
-
 public class Binder
 {
     /**
      * Initialize a given object with default values of instance-time binding parameters ({@link BindingPolicy#INSTANTIATION}).
      * TODO: if parameters contain constraints, check them here
      */
-    public static <T> T initializeInstance(T instance, Map<String, Object> values)
+    public static <T> void bind(T instance, Map<String, Object> values, BindingPolicy policy)
         throws InstantiationException
     {
         if (instance.getClass().getAnnotation(Bindable.class) == null) {
             throw new IllegalArgumentException("Class is not bindable: " + instance.getClass().getName());
         }
 
-        final Collection<Parameter> instanceParameters = ParameterBuilder.getParameters(
-            instance.getClass(), BindingPolicy.INSTANTIATION);
+        final Collection<Parameter> parameters = ParameterBuilder.getParameters(
+            instance.getClass(), policy);
 
-        final Map<String, Field> fields = ParameterBuilder.getFieldMap(instance
-            .getClass(), BindingPolicy.INSTANTIATION);
+        final Map<String, Field> fields = ParameterBuilder.getFieldMap(
+            instance.getClass(), policy);
 
-        for (Parameter p : instanceParameters)
+        for (Parameter p : parameters)
         {
             Object value = values.get(p.getName());
             
             // Try to coerce from class to its instance first
             if (value instanceof Class)
             {
+                if (policy == BindingPolicy.RUNTIME)
+                {
+                    throw new InstantiationException("Only instantiation-time parameters can "
+                        + " be bound to class values, offending field: " + p.getName());
+                }
+
                 Class<?> clazz = ((Class<?>)value);
                 try
                 {
@@ -57,7 +61,7 @@ public class Binder
             if (binding != null && value.getClass().getAnnotation(Bindable.class) != null)
             {
                 // Recursively descend into other types.
-                value = initializeInstance(value, values);
+                bind(value, values, policy);
             }
 
             try
@@ -71,15 +75,13 @@ public class Binder
                     + value);
             }
         }
-
-        return instance;
     }
 
     /**
      * Create an instance of a given class and initialize it with default values of
      * instance-time binding parameters ({@link BindingPolicy#INSTANTIATION}).
      */
-    public static <T extends Configurable> T createInstance(Class<T> clazz,
+    public static <T> T createInstance(Class<T> clazz,
         Map<String, Object> values) throws InstantiationException
     {
         final T instance;
@@ -93,6 +95,8 @@ public class Binder
                 "Could not create instance (illegal access): " + e);
         }
 
-        return initializeInstance(instance, values);
+        bind(instance, values, BindingPolicy.INSTANTIATION);
+
+        return instance;
     }
 }

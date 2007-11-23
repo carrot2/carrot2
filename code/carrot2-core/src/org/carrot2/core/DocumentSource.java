@@ -1,8 +1,8 @@
 package org.carrot2.core;
 
-import java.util.Collection;
+import java.util.Iterator;
 
-public interface DocumentSource extends Configurable
+public interface DocumentSource
 {
-    Collection<Field> getFields();
+    public Iterator<Document> getDocuments();
 }

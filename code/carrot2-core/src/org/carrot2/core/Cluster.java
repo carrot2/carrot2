@@ -9,6 +9,4 @@ public interface Cluster
     Collection<Document> getDocuments();
 
     Collection<Cluster> getSubclusters();
-
-    // metadata
 }

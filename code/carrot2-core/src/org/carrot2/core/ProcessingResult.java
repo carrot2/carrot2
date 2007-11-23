@@ -6,20 +6,27 @@ import java.util.Map;
 /**
  * Provides results of query processing.
  */
-public interface ProcessingResult
+public class ProcessingResult
 {
-    public Collection<Cluster> getClusters();
+    public Collection<Cluster> clusters;
+    public Collection<Document> documents;
+    public Map<String,Object> attributes;
 
-    public Collection<Document> getDocuments();
+    public Collection<Cluster> getClusters()
+    {
+        return clusters;
+    }
+
+    public Collection<Document> getDocuments()
+    {
+        return documents;
+    }
 
     /**
-     * Mirrors the output of {@link DocumentSource#getFields()} used
-     * during processing.
+     * Follow the Web context pattern naming -- "attribute" as in request, session etc.?
      */
-    public Collection<Field> getFields();
-
-    /**
-     * Follow the Web context pattern naming -- "attribute" as in request, session etc.? 
-     */
-    public Map<String, Object> getAttributes();
+    public Map<String, Object> getAttributes()
+    {
+        return attributes;
+    }
 }

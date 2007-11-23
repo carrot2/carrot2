@@ -10,5 +10,6 @@ public interface Controller
     // listener for documents
     ProcessingResult process(
         Map<String, Object> requestParameters,
-        DocumentSource documentSource, ClusteringAlgorithm clusteringAlgorithm);
+        DocumentSource documentSource, ClusteringAlgorithm clusteringAlgorithm)
+        throws ProcessingException;
 }
