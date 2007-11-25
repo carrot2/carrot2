@@ -1,7 +1,5 @@
-/**
- * 
- */
 package org.carrot2.util;
+
 
 import static org.junit.Assert.*;
 

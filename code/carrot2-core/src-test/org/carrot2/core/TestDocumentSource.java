@@ -22,7 +22,7 @@ public class TestDocumentSource implements DocumentSource
         final Document [] result = new Document [numDocs];
         for (int i = 0; i < numDocs; i++)
         {
-            result[i] = new TestDocument();
+            result[i] = new Document();
         }
         return Arrays.asList(result).iterator();
     }
