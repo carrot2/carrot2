@@ -58,6 +58,8 @@ public class ParameterBuilder {
         
         for (final Field field : bindableFields)
 		{
+        	//here: instead of looking for a static field with appropriate name
+        	//annotation HasConstraint can be checked
 			final String fieldName = field.getName();
 			final String normalizedFieldName = normalize(fieldName + "constraint");
 

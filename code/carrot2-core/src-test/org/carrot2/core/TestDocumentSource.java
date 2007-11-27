@@ -6,6 +6,8 @@ import java.util.Iterator;
 import org.carrot2.core.parameters.Bindable;
 import org.carrot2.core.parameters.Binding;
 import org.carrot2.core.parameters.BindingPolicy;
+import org.carrot2.core.parameters.Constraint;
+import org.carrot2.core.parameters.HasConstraint;
 
 @Bindable
 public class TestDocumentSource implements DocumentSource
@@ -14,6 +16,7 @@ public class TestDocumentSource implements DocumentSource
     int numDocs;
 
     @Binding(policy = BindingPolicy.RUNTIME)
+    @HasConstraint(TestConstraint.class)
     String query;
     
 
