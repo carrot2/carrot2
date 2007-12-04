@@ -7,8 +7,8 @@
 
     <provides>
         <files>
-            <file location="stempel-1.0-dw.jar" />
-            <file location="stempel-1.0-dw.LICENSE" />
+            <file location="stempel-1.0.jar" />
+            <file location="stempel-1.0.LICENSE" />
             <file location="morfologik-stemming-1.1.1.jar" />
             <file location="morfologik-stemming.LICENSE" />
         </files>
