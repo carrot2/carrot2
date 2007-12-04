@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>carrot2-stemmer-stempelator</name>
-	<comment>carrot2-stemmer-stempelator</comment>
+	<name>carrot2-stemmer-morfologik</name>
+	<comment>carrot2-stemmer-morfologik</comment>
 	<projects>
 		<project>carrot2-local-core</project>
 	</projects>

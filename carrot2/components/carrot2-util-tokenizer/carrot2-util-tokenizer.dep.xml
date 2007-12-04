@@ -28,7 +28,7 @@
     <dependency name="carrot2-util-common" />
     <dependency name="carrot2-license" />
     <dependency name="carrot2-snowball-stemmers" />
-    <dependency name="carrot2-stemmer-stempelator" />
+    <dependency name="carrot2-stemmer-morfologik" />
 
     <!-- Libraries -->
     <dependency name="log4j" />

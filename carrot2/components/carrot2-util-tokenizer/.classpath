@@ -10,9 +10,8 @@
 	<classpathentry kind="src" path="/carrot2-local-core"/>
 	<classpathentry kind="src" path="/carrot2-util-common"/>
 	<classpathentry kind="src" path="/carrot2-stemmer-snowball"/>
-	<classpathentry kind="src" path="/carrot2-stemmer-stempel"/>
-	<classpathentry kind="src" path="/carrot2-stemmer-stempelator"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/junit-addons-1.4.jar"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/je-analysis-1.5.1.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-stemmer-morfologik"/>
 	<classpathentry kind="output" path="tmp/eclipse/classes"/>
 </classpath>

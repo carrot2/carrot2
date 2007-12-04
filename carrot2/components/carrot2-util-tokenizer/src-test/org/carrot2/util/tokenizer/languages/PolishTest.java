@@ -28,8 +28,8 @@ public class PolishTest extends LanguageImplTestBase {
 		super();
 	}
 
-	public PolishTest(String arg0) {
-		super(arg0);
+	public PolishTest(String testName) {
+		super(testName);
 	}
 
 	/*
@@ -42,7 +42,7 @@ public class PolishTest extends LanguageImplTestBase {
     protected String [][] getWordsToCompare() {
         return new String [][] {
                 {"okropnymi", "okropny"},
-                {"mrocznie", "mroczny"}
+                {"owocami", "owoc"}
         };
     }
 }

@@ -83,6 +83,6 @@ public class Polish extends StemmedLanguageBase {
      * @see org.carrot2.util.tokenizer.languages.LanguageBase#createStemmerInstance()
      */
     protected Stemmer createStemmerInstance() {
-		return new org.carrot2.stemming.stempelator.Stempelator();
+		return new org.carrot2.stemming.morfologik.Stempelator();
     }
 }

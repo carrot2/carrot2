@@ -51,7 +51,7 @@
         <dependency name="carrot2-filter-stc" profile="demo" noexport="true" />
         <dependency name="carrot2-filter-trc" profile="demo" noexport="true" />
         <dependency name="carrot2-filter-haog" profile="demo" noexport="true" />
-        <dependency name="carrot2-stemmer-stempelator" profile="demo" noexport="true" />
+        <dependency name="carrot2-stemmer-morfologik" profile="demo" noexport="true" />
         <dependency name="carrot2-filter-case-normalizer" profile="demo" noexport="true" />
 
 </component>
