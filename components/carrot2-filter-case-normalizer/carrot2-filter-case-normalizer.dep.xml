@@ -27,9 +27,8 @@
     <dependency name="carrot2-util-common" />
     <dependency name="carrot2-util-tokenizer" />
     <dependency name="carrot2-license" />
-    
+
     <dependency name="junit" profile="test" />
-    <dependency name="carrot2-stemmer-stempelator" profile="test" />
     <dependency name="carrot2-language-guesser" profile="test" />
     <dependency name="carrot2-util-tokenizer" profile="test" />
 </component>
