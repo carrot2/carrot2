@@ -1,0 +1,6 @@
+
+- Ula: check the possibility of fixing a view's position and blocking drag-and-drop
+
+- Dawid: consult the U/I proposal with Staszek.
+
+- Dawid: prepare a functional version of the b3.0 architecture.
