@@ -35,7 +35,7 @@ public class ParameterBuilderTest
             "runtimeField2", "runtimeField"
         });
 
-        Collection<String> actual = ParameterDescriptionBuilder.getFieldMap(TestClass.class,
+        Collection<String> actual = ParameterDescriptorBuilder.getFieldMap(TestClass.class,
             BindingPolicy.RUNTIME).keySet();
 
         Assert.assertEquals(expected, new ArrayList<String>(actual));
@@ -50,7 +50,7 @@ public class ParameterBuilderTest
             new ParameterDescriptor("runtimeField", Integer.class, 5, null)
         });
 
-        Collection<ParameterDescriptor> actual = ParameterDescriptionBuilder.getParameters(TestClass.class,
+        Collection<ParameterDescriptor> actual = ParameterDescriptorBuilder.getParameters(TestClass.class,
             BindingPolicy.RUNTIME);
 
         Assert.assertEquals(expected, actual);
@@ -64,7 +64,7 @@ public class ParameterBuilderTest
             new ParameterDescriptor("instanceField", Integer.class, 5, null),
         });
 
-        Collection<ParameterDescriptor> actual = ParameterDescriptionBuilder.getParameters(TestClass.class,
+        Collection<ParameterDescriptor> actual = ParameterDescriptorBuilder.getParameters(TestClass.class,
             BindingPolicy.INSTANTIATION);
 
         Assert.assertEquals(expected, actual);

@@ -20,7 +20,7 @@ import org.carrot2.util.ClassUtils;
 /**
  * 
  */
-public class ParameterDescriptionBuilder
+public class ParameterDescriptorBuilder
 {
     /**
      * 
