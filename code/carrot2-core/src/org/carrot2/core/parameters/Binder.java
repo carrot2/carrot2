@@ -17,10 +17,10 @@ public class Binder
             throw new IllegalArgumentException("Class is not bindable: " + instance.getClass().getName());
         }
 
-        final Collection<ParameterDescriptor> parameters = ParameterBuilder.getParameters(
+        final Collection<ParameterDescriptor> parameters = ParameterDescriptionBuilder.getParameters(
             instance.getClass(), policy);
 
-        final Map<String, Field> fields = ParameterBuilder.getFieldMap(
+        final Map<String, Field> fields = ParameterDescriptionBuilder.getFieldMap(
             instance.getClass(), policy);
 
         for (ParameterDescriptor p : parameters)
@@ -56,7 +56,7 @@ public class Binder
             }
 
             final Field field = fields.get(p.name);
-            final Binding binding = field.getAnnotation(Binding.class);
+            final Parameter binding = field.getAnnotation(Parameter.class);
 
             if (binding != null && value.getClass().getAnnotation(Bindable.class) != null)
             {

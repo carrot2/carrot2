@@ -24,25 +24,25 @@ public class BinderTest
     @Bindable
     public static class TestImpl implements ITest
     {
-        @Binding(policy = BindingPolicy.INSTANTIATION)
+        @Parameter(policy = BindingPolicy.INSTANTIATION)
         private int testIntField = 5;
     }
 
     @Bindable
     public static class TestBetterImpl implements ITest
     {
-        @Binding(policy = BindingPolicy.INSTANTIATION)
+        @Parameter(policy = BindingPolicy.INSTANTIATION)
         private int testIntField = 10;
     }
 
     @Bindable
     public static class TestClass
     {
-        @Binding(policy = BindingPolicy.INSTANTIATION)
+        @Parameter(policy = BindingPolicy.INSTANTIATION)
         @IntRange(min = 0, max = 10)
         private int instanceIntField = 5;
 
-        @Binding(policy = BindingPolicy.INSTANTIATION)
+        @Parameter(policy = BindingPolicy.INSTANTIATION)
         private ITest instanceRefField = new TestImpl();
     }
 

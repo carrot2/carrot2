@@ -14,15 +14,15 @@ public class ParameterBuilderTest
     public static class TestClass
     {
         @SuppressWarnings("unused")
-        @Binding(policy = BindingPolicy.INSTANTIATION)
+        @Parameter(policy = BindingPolicy.INSTANTIATION)
         private int instanceField = 5;
 
         @SuppressWarnings("unused")
-        @Binding(policy = BindingPolicy.RUNTIME)
+        @Parameter(policy = BindingPolicy.RUNTIME)
         private int runtimeField = 5;
 
         @SuppressWarnings("unused")
-        @Binding(policy = BindingPolicy.RUNTIME)
+        @Parameter(policy = BindingPolicy.RUNTIME)
         @IntRange(min=0, max=10)
         private int runtimeField2 = 5;
     }
@@ -35,7 +35,7 @@ public class ParameterBuilderTest
             "runtimeField2", "runtimeField"
         });
 
-        Collection<String> actual = ParameterBuilder.getFieldMap(TestClass.class,
+        Collection<String> actual = ParameterDescriptionBuilder.getFieldMap(TestClass.class,
             BindingPolicy.RUNTIME).keySet();
 
         Assert.assertEquals(expected, new ArrayList<String>(actual));
@@ -50,7 +50,7 @@ public class ParameterBuilderTest
             new ParameterDescriptor("runtimeField", Integer.class, 5, null)
         });
 
-        Collection<ParameterDescriptor> actual = ParameterBuilder.getParameters(TestClass.class,
+        Collection<ParameterDescriptor> actual = ParameterDescriptionBuilder.getParameters(TestClass.class,
             BindingPolicy.RUNTIME);
 
         Assert.assertEquals(expected, actual);
@@ -64,7 +64,7 @@ public class ParameterBuilderTest
             new ParameterDescriptor("instanceField", Integer.class, 5, null),
         });
 
-        Collection<ParameterDescriptor> actual = ParameterBuilder.getParameters(TestClass.class,
+        Collection<ParameterDescriptor> actual = ParameterDescriptionBuilder.getParameters(TestClass.class,
             BindingPolicy.INSTANTIATION);
 
         Assert.assertEquals(expected, actual);

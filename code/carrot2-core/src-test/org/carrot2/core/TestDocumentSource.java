@@ -4,16 +4,16 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 import org.carrot2.core.parameters.Bindable;
-import org.carrot2.core.parameters.Binding;
+import org.carrot2.core.parameters.Parameter;
 import org.carrot2.core.parameters.BindingPolicy;
 
 @Bindable
 public class TestDocumentSource implements DocumentSource
 {
-    @Binding(policy = BindingPolicy.RUNTIME)
+    @Parameter(policy = BindingPolicy.RUNTIME)
     int numDocs;
 
-    @Binding(policy = BindingPolicy.RUNTIME)
+    @Parameter(policy = BindingPolicy.RUNTIME)
     String query;
     
 

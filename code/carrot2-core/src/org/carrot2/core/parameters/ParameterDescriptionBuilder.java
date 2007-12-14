@@ -20,7 +20,7 @@ import org.carrot2.util.ClassUtils;
 /**
  * 
  */
-public class ParameterBuilder
+public class ParameterDescriptionBuilder
 {
     /**
      * 
@@ -106,7 +106,7 @@ public class ParameterBuilder
         AccessibleObject.setAccessible(declaredFields, true);
         for (final Field field : declaredFields)
         {
-            final Binding binding = field.getAnnotation(Binding.class);
+            final Parameter binding = field.getAnnotation(Parameter.class);
             if (binding == null)
             {
                 continue;
