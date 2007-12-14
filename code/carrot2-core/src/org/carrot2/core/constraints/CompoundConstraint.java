@@ -5,25 +5,24 @@ package org.carrot2.core.constraints;
 
 import java.util.*;
 
-import org.carrot2.core.parameters.Constraint;
 import org.carrot2.util.ObjectUtils;
 
 /**
  *
  */
-public class MultipleConstraint<T> implements Constraint<T>
+public class CompoundConstraint<T> implements Constraint<T>
 {
     private final Set<Constraint<T>> constraints;
 
     /**
      * 
      */
-    public MultipleConstraint(Constraint<T>... constraints)
+    public CompoundConstraint(Constraint<T>... constraints)
     {
         this.constraints = new HashSet<Constraint<T>>(Arrays.asList(constraints));
     }
 
-    public MultipleConstraint(Collection<? extends Constraint<T>> constraints)
+    public CompoundConstraint(Collection<? extends Constraint<T>> constraints)
     {
         this.constraints = new HashSet<Constraint<T>>(constraints);
     }
@@ -42,7 +41,7 @@ public class MultipleConstraint<T> implements Constraint<T>
         return true;
     }
 
-    public MultipleConstraint<T> add(Constraint<T>... constraints)
+    public CompoundConstraint<T> add(Constraint<T>... constraints)
     {
         for (int i = 0; i < constraints.length; i++)
         {
@@ -65,12 +64,12 @@ public class MultipleConstraint<T> implements Constraint<T>
             return false;
         }
         
-        if (!(obj instanceof MultipleConstraint))
+        if (!(obj instanceof CompoundConstraint))
         {
             return false;
         }
         
-        MultipleConstraint<T> other = (MultipleConstraint<T>) obj;
+        CompoundConstraint<T> other = (CompoundConstraint<T>) obj;
         
         return ObjectUtils.equals(this.constraints, other.constraints);
     }

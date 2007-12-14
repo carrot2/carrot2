@@ -44,13 +44,13 @@ public class ParameterBuilderTest
     @Test
     public void testGetParametersRuntime()
     {
-        Collection<Parameter> expected = Arrays.asList(new Parameter []
+        Collection<ParameterDescriptor> expected = Arrays.asList(new ParameterDescriptor []
         {
-            new Parameter("runtimeField2", Integer.class, 5, new RangeImplementator<Integer>(0, 10)),
-            new Parameter("runtimeField", Integer.class, 5, null)
+            new ParameterDescriptor("runtimeField2", Integer.class, 5, new RangeImplementator<Integer>(0, 10)),
+            new ParameterDescriptor("runtimeField", Integer.class, 5, null)
         });
 
-        Collection<Parameter> actual = ParameterBuilder.getParameters(TestClass.class,
+        Collection<ParameterDescriptor> actual = ParameterBuilder.getParameters(TestClass.class,
             BindingPolicy.RUNTIME);
 
         Assert.assertEquals(expected, actual);
@@ -59,12 +59,12 @@ public class ParameterBuilderTest
     @Test
     public void testGetParametersInstance()
     {
-        Collection<Parameter> expected = Arrays.asList(new Parameter []
+        Collection<ParameterDescriptor> expected = Arrays.asList(new ParameterDescriptor []
         {
-            new Parameter("instanceField", Integer.class, 5, null),
+            new ParameterDescriptor("instanceField", Integer.class, 5, null),
         });
 
-        Collection<Parameter> actual = ParameterBuilder.getParameters(TestClass.class,
+        Collection<ParameterDescriptor> actual = ParameterBuilder.getParameters(TestClass.class,
             BindingPolicy.INSTANTIATION);
 
         Assert.assertEquals(expected, actual);

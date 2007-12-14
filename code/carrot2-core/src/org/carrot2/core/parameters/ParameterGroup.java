@@ -21,21 +21,21 @@ public class ParameterGroup
     private Collection<ParameterGroup> parameterGroups;
 
     /** A set of parameters */
-    private Collection<Parameter> parameters;
+    private Collection<ParameterDescriptor> parameters;
 
     public ParameterGroup(String name)
     {
         this.name = name;
-        this.parameters = new HashSet<Parameter>();
+        this.parameters = new HashSet<ParameterDescriptor>();
         this.parameterGroups = new HashSet<ParameterGroup>();
     }
 
-    public void add(Parameter... parametersToAdd)
+    public void add(ParameterDescriptor... parametersToAdd)
     {
         parameters.addAll(Arrays.asList(parametersToAdd));
     }
 
-    public void add(Collection<Parameter> parametersToAdd)
+    public void add(Collection<ParameterDescriptor> parametersToAdd)
     {
         parameters.addAll(parametersToAdd);
     }
@@ -50,7 +50,7 @@ public class ParameterGroup
         return name;
     }
 
-    public Collection<Parameter> getParameters()
+    public Collection<ParameterDescriptor> getParameters()
     {
         return Collections.unmodifiableCollection(parameters);
     }

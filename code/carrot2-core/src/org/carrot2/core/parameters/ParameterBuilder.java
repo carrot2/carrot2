@@ -12,8 +12,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import org.carrot2.core.constraints.Constraint;
 import org.carrot2.core.constraints.ConstraintFactory;
-import org.carrot2.core.constraints.MultipleConstraint;
+import org.carrot2.core.constraints.CompoundConstraint;
 import org.carrot2.util.ClassUtils;
 
 /**
@@ -24,10 +25,10 @@ public class ParameterBuilder
     /**
      * 
      */
-    public static Collection<Parameter> getParameters(Class<?> clazz, BindingPolicy policy)
+    public static Collection<ParameterDescriptor> getParameters(Class<?> clazz, BindingPolicy policy)
     {
         // Output array of parameters.
-        final ArrayList<Parameter> params = new ArrayList<Parameter>();
+        final ArrayList<ParameterDescriptor> params = new ArrayList<ParameterDescriptor>();
 
         // Get the field names that correspond to the requested policy.
         final Collection<Field> bindableFields = getFieldMap(clazz, policy).values();
@@ -69,7 +70,7 @@ public class ParameterBuilder
             }
             else if (constraints.size() > 1)
             {
-                constraint = new MultipleConstraint(constraints);
+                constraint = new CompoundConstraint(constraints);
             }
 
             Object fieldValue;
@@ -83,7 +84,7 @@ public class ParameterBuilder
                     + fieldName);
             }
 
-            params.add(new Parameter(fieldName, ClassUtils.boxPrimitive(field.getType()),
+            params.add(new ParameterDescriptor(fieldName, ClassUtils.boxPrimitive(field.getType()),
                 fieldValue, constraint));
         }
 

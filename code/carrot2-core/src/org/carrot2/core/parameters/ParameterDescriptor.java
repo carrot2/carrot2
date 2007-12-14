@@ -1,15 +1,16 @@
 package org.carrot2.core.parameters;
 
+import org.carrot2.core.constraints.Constraint;
 import org.carrot2.util.ObjectUtils;
 
-public class Parameter
+public class ParameterDescriptor
 {
     public final String name;
     public final Class<?> type;
     public final Object defaultValue;
     public final Constraint<?> constraint;
 
-    public Parameter(String name, Class<?> type, Object defaultValue, Constraint<?> constraint)
+    public ParameterDescriptor(String name, Class<?> type, Object defaultValue, Constraint<?> constraint)
     {
         if (name == null || type == null)
         {
@@ -50,12 +51,12 @@ public class Parameter
             return true;
         }
 
-        if (obj == null || !(obj instanceof Parameter))
+        if (obj == null || !(obj instanceof ParameterDescriptor))
         {
             return false;
         }
 
-        Parameter other = ((Parameter) obj);
+        ParameterDescriptor other = ((ParameterDescriptor) obj);
         return other.name.equals(this.name)
             && other.type.equals(this.type)
             && ObjectUtils.equals(defaultValue, defaultValue)

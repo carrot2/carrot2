@@ -4,7 +4,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.carrot2.core.parameters.Constraint;
 
 public class ConstraintFactory
 {

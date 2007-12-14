@@ -17,13 +17,13 @@ public class Binder
             throw new IllegalArgumentException("Class is not bindable: " + instance.getClass().getName());
         }
 
-        final Collection<Parameter> parameters = ParameterBuilder.getParameters(
+        final Collection<ParameterDescriptor> parameters = ParameterBuilder.getParameters(
             instance.getClass(), policy);
 
         final Map<String, Field> fields = ParameterBuilder.getFieldMap(
             instance.getClass(), policy);
 
-        for (Parameter p : parameters)
+        for (ParameterDescriptor p : parameters)
         {
             Object value = values.get(p.getName());
             

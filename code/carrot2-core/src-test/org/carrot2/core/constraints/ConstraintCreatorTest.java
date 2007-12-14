@@ -8,7 +8,6 @@ import static org.junit.Assert.fail;
 
 import java.lang.annotation.Target;
 
-import org.carrot2.core.parameters.Constraint;
 import org.junit.Test;
 
 public class ConstraintCreatorTest
