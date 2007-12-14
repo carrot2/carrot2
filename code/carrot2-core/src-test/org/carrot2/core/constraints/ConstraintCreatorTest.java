@@ -1,15 +1,14 @@
 package org.carrot2.core.constraints;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.lang.annotation.Target;
 
 import org.carrot2.core.parameters.Constraint;
-import org.carrot2.core.parameters.RangeConstraint;
 import org.junit.Test;
 
 public class ConstraintCreatorTest

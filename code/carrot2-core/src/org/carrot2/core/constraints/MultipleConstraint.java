@@ -1,10 +1,11 @@
 /**
  * 
  */
-package org.carrot2.core.parameters;
+package org.carrot2.core.constraints;
 
 import java.util.*;
 
+import org.carrot2.core.parameters.Constraint;
 import org.carrot2.util.ObjectUtils;
 
 /**
@@ -22,6 +23,11 @@ public class MultipleConstraint<T> implements Constraint<T>
         this.constraints = new HashSet<Constraint<T>>(Arrays.asList(constraints));
     }
 
+    public MultipleConstraint(Collection<? extends Constraint<T>> constraints)
+    {
+        this.constraints = new HashSet<Constraint<T>>(constraints);
+    }
+    
     @Override
     public <V extends T> boolean isMet(V value)
     {

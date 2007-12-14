@@ -1,7 +1,6 @@
 package org.carrot2.core.constraints;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -54,7 +53,7 @@ public class ConstraintFactory
         // return RangeImplementator.createForClass(Integer.class);
     }
 
-    static boolean isConstraintAnnotation(Class<? extends Annotation> ann)
+    public static boolean isConstraintAnnotation(Class<? extends Annotation> ann)
     {
         return ann.isAnnotationPresent(IsConstraint.class);
     }

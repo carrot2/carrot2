@@ -3,6 +3,8 @@ package org.carrot2.core.parameters;
 import java.util.*;
 
 import org.carrot2.core.Configurable;
+import org.carrot2.core.constraints.IntRange;
+import org.carrot2.core.constraints.RangeImplementator;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -21,9 +23,8 @@ public class ParameterBuilderTest
 
         @SuppressWarnings("unused")
         @Binding(policy = BindingPolicy.RUNTIME)
+        @IntRange(min=0, max=10)
         private int runtimeField2 = 5;
-        private static Constraint<Integer> RUNTIME_FIELD2_CONSTRAINT = new RangeConstraint<Integer>(
-            0, 10);
     }
 
     @Test
@@ -45,7 +46,7 @@ public class ParameterBuilderTest
     {
         Collection<Parameter> expected = Arrays.asList(new Parameter []
         {
-            new Parameter("runtimeField2", Integer.class, 5, new RangeConstraint<Integer>(0, 10)),
+            new Parameter("runtimeField2", Integer.class, 5, new RangeImplementator<Integer>(0, 10)),
             new Parameter("runtimeField", Integer.class, 5, null)
         });
 

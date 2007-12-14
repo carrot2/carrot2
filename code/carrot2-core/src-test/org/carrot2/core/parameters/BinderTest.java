@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import org.carrot2.core.constraints.IntRange;
 import org.junit.Test;
 
 /**
@@ -38,9 +39,8 @@ public class BinderTest
     public static class TestClass
     {
         @Binding(policy = BindingPolicy.INSTANTIATION)
+        @IntRange(min = 0, max = 10)
         private int instanceIntField = 5;
-        private static Constraint<Integer> INSTANCE_INT_FIELD_CONSTRAINT = new RangeConstraint<Integer>(
-            0, 10);
 
         @Binding(policy = BindingPolicy.INSTANTIATION)
         private ITest instanceRefField = new TestImpl();
