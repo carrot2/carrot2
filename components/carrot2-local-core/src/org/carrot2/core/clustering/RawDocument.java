@@ -88,6 +88,13 @@ public interface RawDocument {
     public static final String PROPERTY_SOURCES = "source";
     
     /**
+     * Returns an array of keywords the search engine attached to the document, if any.
+     * 
+     * <p>The value of this property is <code>String []</code>.</p>
+     */
+    public static final String PROPERTY_KEYWORDS = "keywords";
+    
+    /**
      * Returns a named property of the document.   Names of the available
      * properties depend on the component that produces
      * <code>RawDocument</code> objects. Some constants should also be

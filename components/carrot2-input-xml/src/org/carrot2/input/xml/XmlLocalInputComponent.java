@@ -31,6 +31,9 @@ import org.dom4j.io.SAXReader;
 
 import org.carrot2.core.*;
 import org.carrot2.core.clustering.*;
+import org.carrot2.core.impl.XmlStreamInputComponent;
+import org.carrot2.core.impl.XmlStreamInputComponent.QueryResult;
+import org.carrot2.util.StringUtils;
 
 /**
  * <p>Implements a local input component that reads data from an XML file, transforms it using 
@@ -374,43 +377,22 @@ public class XmlLocalInputComponent extends
     }
 
     private void pushAsLocalData(Element root) throws ProcessingException {
-        List documents = root.elements("document");
-
+        QueryResult queryResult = XmlStreamInputComponent.extractQueryResult(root, -1);
+        
         // Pass the actual document count
         requestContext.getRequestParameters().put(
                 LocalInputComponent.PARAM_TOTAL_MATCHING_DOCUMENTS,
-                new Integer(documents.size()));
+                new Integer(queryResult.rawDocuments.size()));
 
         // Pass the query (if there was any)
-        if (!query.equals("")) {
+        if (!StringUtils.isBlank(queryResult.query)) {
 		    requestContext.getRequestParameters().put(
-		            LocalInputComponent.PARAM_QUERY, query);
+		            LocalInputComponent.PARAM_QUERY, queryResult.query);
         }
 
-        int id = 0;
-        for (Iterator i = documents.iterator(); i.hasNext(); id++) {
-            Element docElem = (Element) i.next();
-
-            String url = docElem.elementText("url");
-            String title = docElem.elementText("title");
-            String snippet = docElem.elementText("snippet");
-            
-            RawDocument document = new RawDocumentSnippet(new Integer(id),
-                title, snippet, url, 0);
-
-            if (docElem.element("sources") != null)
-            {
-                List sources = docElem.element("sources").elements();
-                String [] sourcesArray = new String [sources.size()];
-                int j = 0;
-                for (Iterator it = sources.iterator(); it.hasNext(); j++)
-                {
-                    Element sourceElement = (Element) it.next();
-                    sourcesArray[j] = sourceElement.getText();
-                }
-                document.setProperty(RawDocument.PROPERTY_SOURCES, sourcesArray);
-            }
-
+        for (Iterator i = queryResult.rawDocuments.iterator(); i.hasNext();)
+        {
+            RawDocument document = (RawDocument) i.next();
             this.rawDocumentConsumer.addDocument(document);
         }
     }

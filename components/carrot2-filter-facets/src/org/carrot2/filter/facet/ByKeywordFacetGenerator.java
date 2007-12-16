@@ -15,18 +15,18 @@ package org.carrot2.filter.facet;
 import org.carrot2.core.clustering.RawDocument;
 
 /**
- * Divides the input documents according to the search source they came from. The search
- * source is determined based on the {@link RawDocument#PROPERTY_SOURCES} property. This
- * class is thread-safe.
- *
+ * Divides the input documents according to the keywords the search engine attached to
+ * them. The keywords are determined based on the {@link RawDocument#PROPERTY_KEYWORDS}
+ * property. This class is thread-safe.
+ * 
  * @author Stanislaw Osinski
  */
-public class BySourceFacetGenerator extends ByArrayPropertyFacetGenerator
+public class ByKeywordFacetGenerator extends ByArrayPropertyFacetGenerator
 {
-    public static BySourceFacetGenerator INSTANCE = new BySourceFacetGenerator();
+    public static ByKeywordFacetGenerator INSTANCE = new ByKeywordFacetGenerator();
 
-    public BySourceFacetGenerator()
+    public ByKeywordFacetGenerator()
     {
-        super(RawDocument.PROPERTY_SOURCES);
+        super(RawDocument.PROPERTY_KEYWORDS);
     }
 }

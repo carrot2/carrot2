@@ -264,7 +264,7 @@ public class XmlStreamInputComponent extends LocalInputComponentBase
      * @param requestedResults the number of results to parse
      * @return parsed query result
      */
-    private static QueryResult extractQueryResult(Element root, int requestedResults)
+    public static QueryResult extractQueryResult(Element root, int requestedResults)
     {
         final QueryResult queryResult = new QueryResult();
 
@@ -334,6 +334,10 @@ public class XmlStreamInputComponent extends LocalInputComponentBase
             if (null != docsById.put(idString, rawDoc)) {
                 throw new RuntimeException("Error in the input XML, duplicated document identifier: " + idString);
             }
+            
+            addArrayProperties(docElem, rawDoc, "sources", RawDocument.PROPERTY_SOURCES);
+            addArrayProperties(docElem, rawDoc, "keywords", RawDocument.PROPERTY_KEYWORDS);
+            
             queryResult.rawDocuments.add(rawDoc);
         }
 
@@ -348,6 +352,24 @@ public class XmlStreamInputComponent extends LocalInputComponentBase
         }
 
         return queryResult;
+    }
+
+    private static void addArrayProperties(final Element docElem,
+        final RawDocument rawDoc, final String parentElementName,
+        final String propertyName)
+    {
+        if (docElem.element(parentElementName) != null)
+        {
+            List sources = docElem.element(parentElementName).elements();
+            String [] sourcesArray = new String [sources.size()];
+            int j = 0;
+            for (Iterator it = sources.iterator(); it.hasNext(); j++)
+            {
+                Element sourceElement = (Element) it.next();
+                sourcesArray[j] = sourceElement.getText();
+            }
+            rawDoc.setProperty(propertyName, sourcesArray);
+        }
     }
 
     /*
