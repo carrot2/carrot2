@@ -17,6 +17,16 @@ Consulted. Staszek pointed out the following things (please add them to the requ
     Ula: Would something like splitting the editor area be enought for that 
     (if I understand correctly, what yu want)? See editor-split.tif in concepts.
 
+	Staszek: not quite -- imagine a scenario where you are trying to compare
+	clusters generated for the same data but different parameter settings. You
+	could put editors showing clusters side by side, but if parameters are
+	only available as a view, you wouldn't be able to see the params for both
+	clusterings. Hence, apart from the usual splitting of editor area (used to
+	put two editors side by side), we'd need a composite view inside each 
+	of the editors showing, e.g. clusters + document or clusters + params
+	(these are the two most useful combinations. See editors-split-side-by-side.png
+	for an example.
+
     b) The fixed query input dialog ('fixed view' above) doesn't have to be fixed after all. If you look at slide 4 from:
     2007-04-16-meeting-1.pdf, the ``input'' view is vertically laid out and placed in the left-upper corner. This does make sense as it
     allows us to extend the input view with more switches, should they be needed. Makes sense.
