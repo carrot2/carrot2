@@ -18,7 +18,7 @@ import com.google.common.collect.Multimap;
 @Bindable
 public class ByUrlClusteringAlgorithm implements ClusteringAlgorithm
 {
-    @Parameter(policy = BindingPolicy.RUNTIME)
+    @Attribute(key="documents", bindingDirection = BindingDirection.IN)
     private Collection<Document> documents = Collections.<Document> emptyList();
 
     private static final Set<String> STOP_URL_PARTS;

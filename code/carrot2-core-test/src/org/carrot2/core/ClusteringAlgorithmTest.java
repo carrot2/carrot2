@@ -7,8 +7,7 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 
-import org.carrot2.core.parameters.Binder;
-import org.carrot2.core.parameters.BindingPolicy;
+import org.carrot2.core.parameters.*;
 import org.junit.Test;
 
 import com.google.common.collect.Iterators;
@@ -28,10 +27,7 @@ public abstract class ClusteringAlgorithmTest
     @Test
     public void testNoDocuments()
     {
-        // Do we test for situations where the "documents" runtime parameter is
-        // not bound? This is essentially about checking whether the "documents"
-        // field has a default value (e.g. empty collection).
-        ClusteringAlgorithm instance = createInstance();
+        ClusteringAlgorithm instance = prepareInstance(Collections.<Document>emptyList());
         Collection<Cluster> clusters = collectClusters(instance.getClusters());
 
         assertNotNull(clusters);
@@ -83,7 +79,7 @@ public abstract class ClusteringAlgorithmTest
     {
         try
         {
-            return Binder.createInstance(getClusteringAlgorithmClass(),
+            return ParameterBinder.createInstance(getClusteringAlgorithmClass(),
                 getInstanceParameters());
         }
         catch (InstantiationException e)
@@ -108,10 +104,11 @@ public abstract class ClusteringAlgorithmTest
     {
         try
         {
-            Map<String, Object> parametersWithDocuments = new HashMap<String, Object>(
-                runtimeParameters);
-            parametersWithDocuments.put("documents", documents);
-            Binder.bind(instance, parametersWithDocuments, BindingPolicy.RUNTIME);
+            ParameterBinder.bind(instance, runtimeParameters, BindingPolicy.RUNTIME);
+            
+            Map<String, Object> attributes = new HashMap<String, Object>();
+            attributes.put("documents", documents);
+            AttributeBinder.bind(instance, attributes, BindingDirection.IN);
         }
         catch (InstantiationException e)
         {
