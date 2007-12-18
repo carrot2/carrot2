@@ -6,7 +6,7 @@ package org.carrot2.core.constraints;
 /**
  *
  */
-public interface Constraint<T>
+public interface Constraint
 {
-    public <V extends T> boolean isMet(V value);
+    public boolean isMet(Object value);
 }

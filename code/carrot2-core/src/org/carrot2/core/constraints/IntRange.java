@@ -5,9 +5,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@IsConstraint(implementator=RangeImplementator.class)
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
+@IsConstraint(implementation=NumberRangeConstraint.class)
 public @interface IntRange {
 	int min();
 	int max();

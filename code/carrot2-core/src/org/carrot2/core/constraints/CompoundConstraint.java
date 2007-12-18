@@ -10,27 +10,27 @@ import org.carrot2.util.ObjectUtils;
 /**
  *
  */
-public class CompoundConstraint<T> implements Constraint<T>
+public class CompoundConstraint implements Constraint
 {
-    private final Set<Constraint<T>> constraints;
+    private final Set<Constraint> constraints;
 
     /**
      * 
      */
-    public CompoundConstraint(Constraint<T>... constraints)
+    public CompoundConstraint(Constraint... constraints)
     {
-        this.constraints = new HashSet<Constraint<T>>(Arrays.asList(constraints));
+        this.constraints = new HashSet<Constraint>(Arrays.asList(constraints));
     }
 
-    public CompoundConstraint(Collection<? extends Constraint<T>> constraints)
+    public CompoundConstraint(Collection<? extends Constraint> constraints)
     {
-        this.constraints = new HashSet<Constraint<T>>(constraints);
+        this.constraints = new HashSet<Constraint>(constraints);
     }
     
     @Override
-    public <V extends T> boolean isMet(V value)
+    public boolean isMet(Object value)
     {
-        for (Constraint<T> constraint : constraints)
+        for (Constraint constraint : constraints)
         {
             if (!constraint.isMet(value))
             {
@@ -41,7 +41,7 @@ public class CompoundConstraint<T> implements Constraint<T>
         return true;
     }
 
-    public CompoundConstraint<T> add(Constraint<T>... constraints)
+    public CompoundConstraint add(Constraint... constraints)
     {
         for (int i = 0; i < constraints.length; i++)
         {
@@ -69,7 +69,7 @@ public class CompoundConstraint<T> implements Constraint<T>
             return false;
         }
         
-        CompoundConstraint<T> other = (CompoundConstraint<T>) obj;
+        CompoundConstraint other = (CompoundConstraint) obj;
         
         return ObjectUtils.equals(this.constraints, other.constraints);
     }

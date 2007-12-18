@@ -1,59 +1,58 @@
 package org.carrot2.core.constraints;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
+import java.lang.reflect.*;
 
 public class ConstraintFactory
 {
+    public static boolean isConstraintAnnotation(Class<? extends Annotation> ann)
+    {
+        return ann.isAnnotationPresent(IsConstraint.class);
+    }
 
-    public static Constraint<?> createConstraint(Annotation ann)
+    public static Constraint createConstraint(Annotation ann)
     {
         if (!isConstraintAnnotation(ann.annotationType()))
         {
-            throw new ConstraintCreationException();
+            throw new IllegalArgumentException("Provided annotation is not a constraint");
         }
 
         try
         {
-            Constraint<?> implementator = createImplementatorInstance(ann
-                .annotationType().getAnnotation(IsConstraint.class));
+            Constraint implementator = createImplementation(ann.annotationType()
+                .getAnnotation(IsConstraint.class));
             assignFieldValues(implementator, ann);
             return implementator;
         }
         catch (Exception e)
         {
-            throw new ConstraintCreationException(e);
+            throw new RuntimeException("Could not create constraint instance", e);
         }
     }
 
-    static void assignFieldValues(Constraint<?> implementator, Annotation ann)
+    private static void assignFieldValues(Constraint implementator, Annotation ann)
         throws IllegalAccessException, NoSuchFieldException, InvocationTargetException
     {
-        // Field [] fields = ann.annotationType().getFields();
         Method [] methods = ann.annotationType().getDeclaredMethods();
         for (Method method : methods)
         {
-            implementator.getClass().getDeclaredField(method.getName()).set(
-                implementator, method.invoke(ann));
+            final Field field = implementator.getClass().getDeclaredField(
+                method.getName());
+            field.setAccessible(true);
+            field.set(implementator, method.invoke(ann));
         }
     }
 
-    static Constraint<?> createImplementatorInstance(IsConstraint ann)
+    static Constraint createImplementation(IsConstraint ann)
         throws InstantiationException, IllegalAccessException
     {
-        Class<?> implClass = ann.implementator();
+        Class<?> implClass = ann.implementation();
         if (!Constraint.class.isAssignableFrom(implClass))
         {
-            throw new ConstraintCreationException();
+            throw new RuntimeException("Implementation class "
+                + implClass.getClass().getName() + " must implement "
+                + Constraint.class.getName());
         }
-        return (Constraint<?>) implClass.newInstance();
-        // return RangeImplementator.createForClass(Integer.class);
-    }
-
-    public static boolean isConstraintAnnotation(Class<? extends Annotation> ann)
-    {
-        return ann.isAnnotationPresent(IsConstraint.class);
+        return (Constraint) implClass.newInstance();
     }
 }

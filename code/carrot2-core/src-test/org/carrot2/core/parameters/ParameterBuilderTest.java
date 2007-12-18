@@ -2,9 +2,8 @@ package org.carrot2.core.parameters;
 
 import java.util.*;
 
-import org.carrot2.core.Configurable;
 import org.carrot2.core.constraints.IntRange;
-import org.carrot2.core.constraints.RangeImplementator;
+import org.carrot2.core.constraints.NumberRangeConstraint;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -46,7 +45,7 @@ public class ParameterBuilderTest
     {
         Collection<ParameterDescriptor> expected = Arrays.asList(new ParameterDescriptor []
         {
-            new ParameterDescriptor("runtimeField2", Integer.class, 5, new RangeImplementator<Integer>(0, 10)),
+            new ParameterDescriptor("runtimeField2", Integer.class, 5, new NumberRangeConstraint(0, 10)),
             new ParameterDescriptor("runtimeField", Integer.class, 5, null)
         });
 

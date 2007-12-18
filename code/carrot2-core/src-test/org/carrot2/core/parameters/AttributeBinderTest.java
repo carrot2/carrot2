@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import org.junit.Test;
 
@@ -13,8 +12,6 @@ import org.junit.Test;
  */
 public class AttributeBinderTest
 {
-    private final static Logger logger = Logger.getAnonymousLogger();
-
     @Bindable
     public static class TestImpl
     {

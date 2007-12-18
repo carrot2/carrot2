@@ -4,39 +4,45 @@ import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.Map;
 
+import org.carrot2.core.constraints.Constraint;
+import org.carrot2.core.constraints.ConstraintViolationException;
+
 public class Binder
 {
     /**
      * Initialize a given object with default values of instance-time binding parameters ({@link BindingPolicy#INSTANTIATION}).
-     * TODO: if parameters contain constraints, check them here
      */
-    public static <T> void bind(T instance, Map<String, Object> values, BindingPolicy policy)
-        throws InstantiationException
+    public static <T> void bind(T instance, Map<String, Object> values,
+        BindingPolicy policy) throws InstantiationException
     {
-        if (instance.getClass().getAnnotation(Bindable.class) == null) {
-            throw new IllegalArgumentException("Class is not bindable: " + instance.getClass().getName());
+        if (instance.getClass().getAnnotation(Bindable.class) == null)
+        {
+            throw new IllegalArgumentException("Class is not bindable: "
+                + instance.getClass().getName());
         }
 
-        final Collection<ParameterDescriptor> parameters = ParameterDescriptorBuilder.getParameters(
-            instance.getClass(), policy);
+        final Collection<ParameterDescriptor> parameterDescriptors = ParameterDescriptorBuilder
+            .getParameters(instance.getClass(), policy);
 
-        final Map<String, Field> fields = ParameterDescriptorBuilder.getFieldMap(
-            instance.getClass(), policy);
+        final Map<String, Field> fields = ParameterDescriptorBuilder.getFieldMap(instance
+            .getClass(), policy);
 
-        for (ParameterDescriptor p : parameters)
+        for (ParameterDescriptor parameterDescriptor : parameterDescriptors)
         {
-            Object value = values.get(p.getName());
-            
+            Object value = values.get(parameterDescriptor.getName());
+
             // Try to coerce from class to its instance first
             if (value instanceof Class)
             {
                 if (policy == BindingPolicy.RUNTIME)
                 {
-                    throw new InstantiationException("Only instantiation-time parameters can "
-                        + " be bound to class values, offending field: " + p.getName());
+                    throw new InstantiationException(
+                        "Only instantiation-time parameters can "
+                            + " be bound to class values, offending field: "
+                            + parameterDescriptor.getName());
                 }
 
-                Class<?> clazz = ((Class<?>)value);
+                Class<?> clazz = ((Class<?>) value);
                 try
                 {
                     value = clazz.newInstance();
@@ -45,17 +51,32 @@ public class Binder
                 {
                     throw new InstantiationException(
                         "Could not create instance of class:" + clazz.getName()
-                            + " for parameter " + p.getName());
+                            + " for parameter " + parameterDescriptor.getName());
                 }
             }
-            
+
+            if (value != null)
+            {
+                // Check constraints
+                Constraint constraint = parameterDescriptor.getConstraint();
+                if (constraint != null)
+                {
+                    if (!constraint.isMet(value))
+                    {
+                        // TODO: should we really throw an exception here?
+                        throw new ConstraintViolationException(parameterDescriptor,
+                            constraint, value);
+                    }
+                }
+            }
+
             if (value == null)
             {
                 // check the default value of parameter.
-                value = p.getDefaultValue();
+                value = parameterDescriptor.getDefaultValue();
             }
 
-            final Field field = fields.get(p.name);
+            final Field field = fields.get(parameterDescriptor.name);
             final Parameter binding = field.getAnnotation(Parameter.class);
 
             if (binding != null && value.getClass().getAnnotation(Bindable.class) != null)
@@ -71,8 +92,8 @@ public class Binder
             catch (Exception e)
             {
                 throw new InstantiationException("Could not assign field "
-                    + instance.getClass().getName() + "#" + p.name + " with value "
-                    + value);
+                    + instance.getClass().getName() + "#" + parameterDescriptor.name
+                    + " with value " + value);
             }
         }
     }
@@ -81,8 +102,8 @@ public class Binder
      * Create an instance of a given class and initialize it with default values of
      * instance-time binding parameters ({@link BindingPolicy#INSTANTIATION}).
      */
-    public static <T> T createInstance(Class<T> clazz,
-        Map<String, Object> values) throws InstantiationException
+    public static <T> T createInstance(Class<T> clazz, Map<String, Object> values)
+        throws InstantiationException
     {
         final T instance;
         try

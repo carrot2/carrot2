@@ -3,18 +3,9 @@ package org.carrot2.core.parameters;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import org.carrot2.core.constraints.Constraint;
-import org.carrot2.core.constraints.ConstraintFactory;
-import org.carrot2.core.constraints.CompoundConstraint;
+import org.carrot2.core.constraints.*;
 import org.carrot2.util.ClassUtils;
 
 /**
@@ -25,6 +16,7 @@ public class ParameterDescriptorBuilder
     /**
      * 
      */
+    @SuppressWarnings("unchecked")
     public static Collection<ParameterDescriptor> getParameters(Class<?> clazz, BindingPolicy policy)
     {
         // Output array of parameters.
@@ -52,9 +44,7 @@ public class ParameterDescriptorBuilder
         {
             final String fieldName = field.getName();
 
-            List<Constraint<?>> constraints = new ArrayList<Constraint<?>>();
-            final Annotation [] a1 = field.getAnnotations();
-            final Annotation [] a2 = field.getDeclaredAnnotations();
+            List<Constraint> constraints = new ArrayList<Constraint>();
             
             for (Annotation annotation : field.getAnnotations())
             {
@@ -63,7 +53,7 @@ public class ParameterDescriptorBuilder
                     constraints.add(ConstraintFactory.createConstraint(annotation));
                 }
             }
-            Constraint<?> constraint = null;
+            Constraint constraint = null;
             if (constraints.size() == 1)
             {
                 constraint = constraints.get(0);
@@ -101,8 +91,7 @@ public class ParameterDescriptorBuilder
             declaredFields.length);
 
         // TODO: Should we remember or somehow reset the accessibility for non-descriptor
-        // fields
-        // upon returning from this method?
+        // fields upon returning from this method?
         AccessibleObject.setAccessible(declaredFields, true);
         for (final Field field : declaredFields)
         {

@@ -3,10 +3,9 @@ package org.carrot2.core.parameters;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Logger;
+import java.util.*;
 
+import org.carrot2.core.constraints.ConstraintViolationException;
 import org.carrot2.core.constraints.IntRange;
 import org.junit.Test;
 
@@ -15,8 +14,6 @@ import org.junit.Test;
  */
 public class BinderTest
 {
-    private final static Logger logger = Logger.getAnonymousLogger();
-
     public static interface ITest
     {
     }
@@ -44,6 +41,10 @@ public class BinderTest
 
         @Parameter(policy = BindingPolicy.INSTANTIATION)
         private ITest instanceRefField = new TestImpl();
+
+        @Parameter(policy = BindingPolicy.RUNTIME)
+        @IntRange(min = 0, max = 10)
+        private int runtimeIntField = 5;
     }
 
     @Test
@@ -72,5 +73,48 @@ public class BinderTest
             && instance.instanceRefField instanceof TestBetterImpl);
 
         assertEquals(10, ((TestBetterImpl) instance.instanceRefField).testIntField);
+    }
+
+    @Test
+    public void testRuntimeBinding() throws InstantiationException
+    {
+        final Map<String, Object> params = new HashMap<String, Object>();
+        params.put("runtimeIntField", 6);
+
+        TestClass instance = Binder.createInstance(TestClass.class, params);
+        assertEquals(5, instance.runtimeIntField);
+
+        Binder.bind(instance, params, BindingPolicy.RUNTIME);
+        assertEquals(6, instance.runtimeIntField);
+    }
+
+    @Test
+    public void testConstraintEnforcement() throws InstantiationException
+    {
+        final Map<String, Object> violatingParams = new HashMap<String, Object>();
+        violatingParams.put("instanceIntField", 16);
+        violatingParams.put("runtimeIntField", 16);
+
+        TestClass instance;
+        try
+        {
+            instance = Binder.createInstance(TestClass.class, violatingParams);
+        }
+        catch (ConstraintViolationException e)
+        {
+            assertEquals(16, e.getOffendingValue());
+        }
+
+        instance = Binder.createInstance(TestClass.class, Collections
+            .<String, Object> emptyMap());
+
+        try
+        {
+            Binder.bind(instance, violatingParams, BindingPolicy.RUNTIME);
+        }
+        catch (ConstraintViolationException e)
+        {
+            assertEquals(16, e.getOffendingValue());
+        }
     }
 }

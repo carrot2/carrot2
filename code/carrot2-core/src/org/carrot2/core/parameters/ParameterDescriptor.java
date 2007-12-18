@@ -8,9 +8,9 @@ public class ParameterDescriptor
     public final String name;
     public final Class<?> type;
     public final Object defaultValue;
-    public final Constraint<?> constraint;
+    public final Constraint constraint;
 
-    public ParameterDescriptor(String name, Class<?> type, Object defaultValue, Constraint<?> constraint)
+    public ParameterDescriptor(String name, Class<?> type, Object defaultValue, Constraint constraint)
     {
         if (name == null || type == null)
         {
@@ -38,7 +38,7 @@ public class ParameterDescriptor
         return defaultValue;
     }
     
-    public Constraint<?> getConstraint()
+    public Constraint getConstraint()
     {
         return constraint;
     }

@@ -30,23 +30,23 @@ public class ConstraintCreatorTest
     }
 
     @Test
-    public void testCreateImplementatorInstance()
+    public void testCreateImplementation()
     {
         try
         {
-            Constraint<?> impl = ConstraintFactory
-                .createImplementatorInstance(IntRange.class
-                    .getAnnotation(IsConstraint.class));
+            Constraint impl = ConstraintFactory.createImplementation(IntRange.class
+                .getAnnotation(IsConstraint.class));
             assertNotNull(impl);
-            assertEquals(RangeImplementator.class, impl.getClass());
+            assertEquals(NumberRangeConstraint.class, impl.getClass());
         }
         catch (Exception e)
         {
             fail(e.getMessage());
         }
+        
         try
         {
-            ConstraintFactory.createImplementatorInstance(TestConstraintAnnotation.class
+            ConstraintFactory.createImplementation(TestConstraintAnnotation.class
                 .getAnnotation(IsConstraint.class));
             fail();
         }
@@ -56,34 +56,37 @@ public class ConstraintCreatorTest
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testCreateConstraint() throws NoSuchFieldException
     {
         TestSample sample = new TestSample();
+        
         {
             IntRange range = TestSample.class.getField("somethingAmount").getAnnotation(
                 IntRange.class);
-            Constraint<?> impl = ConstraintFactory.createConstraint(range);
-            assertEquals(RangeImplementator.class, impl.getClass());
-            RangeImplementator rangeImpl = (RangeImplementator) impl;
+            Constraint impl = ConstraintFactory.createConstraint(range);
+            assertEquals(NumberRangeConstraint.class, impl.getClass());
+            NumberRangeConstraint rangeImpl = (NumberRangeConstraint) impl;
             assertEquals(0, range.min());
             assertEquals(8, range.max());
-            assertEquals(0, rangeImpl.min);
-            assertEquals(8, rangeImpl.max);
+            assertEquals(0, rangeImpl.getMin());
+            assertEquals(8, rangeImpl.getMax());
             assertTrue(rangeImpl.isMet(sample.somethingAmount));
             sample.somethingAmount = 9;
             assertFalse(rangeImpl.isMet(sample.somethingAmount));
         }
+        
         {
             DoubleRange range = TestSample.class.getField("somethingPercent")
                 .getAnnotation(DoubleRange.class);
-            Constraint<?> impl = ConstraintFactory.createConstraint(range);
-            assertEquals(RangeImplementator.class, impl.getClass());
-            RangeImplementator rangeImpl = (RangeImplementator) impl;
+            Constraint impl = ConstraintFactory.createConstraint(range);
+            assertEquals(NumberRangeConstraint.class, impl.getClass());
+            NumberRangeConstraint rangeImpl = (NumberRangeConstraint) impl;
             assertEquals(0.2, range.min(), 0.000001);
             assertEquals(0.5, range.max(), 0.000001);
-            assertEquals(0.2, Double.class.cast(rangeImpl.min), 0.000001);
-            assertEquals(0.5, Double.class.cast(rangeImpl.max), 0.000001);
+            assertEquals(0.2, Double.class.cast(rangeImpl.getMin()), 0.000001);
+            assertEquals(0.5, Double.class.cast(rangeImpl.getMax()), 0.000001);
             assertFalse(rangeImpl.isMet(sample.somethingPercent));
             sample.somethingPercent = 0.2;
             assertTrue(rangeImpl.isMet(sample.somethingPercent));

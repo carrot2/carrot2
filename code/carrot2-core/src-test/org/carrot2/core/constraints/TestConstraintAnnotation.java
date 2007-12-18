@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@IsConstraint(implementator = String.class)
+@IsConstraint(implementation = String.class)
 public @interface TestConstraintAnnotation {
 
 }
