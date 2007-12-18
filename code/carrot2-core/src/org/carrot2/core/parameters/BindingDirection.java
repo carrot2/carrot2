@@ -1,6 +1,6 @@
 package org.carrot2.core.parameters;
 
-public enum Direction
+public enum BindingDirection
 {
     IN,
     OUT,

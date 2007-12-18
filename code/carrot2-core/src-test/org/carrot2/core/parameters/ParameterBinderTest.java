@@ -1,7 +1,6 @@
 package org.carrot2.core.parameters;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.*;
 
@@ -12,7 +11,7 @@ import org.junit.Test;
 /**
  * 
  */
-public class BinderTest
+public class ParameterBinderTest
 {
     public static interface ITest
     {
@@ -53,7 +52,7 @@ public class BinderTest
         final Map<String, Object> params = new HashMap<String, Object>();
         params.put("instanceIntField", 6);
 
-        TestClass instance = Binder.createInstance(TestClass.class, params);
+        TestClass instance = ParameterBinder.createInstance(TestClass.class, params);
         assertEquals(6, instance.instanceIntField);
         assertTrue(instance.instanceRefField != null
             && instance.instanceRefField instanceof TestImpl);
@@ -67,7 +66,7 @@ public class BinderTest
         final Map<String, Object> params = new HashMap<String, Object>();
         params.put("instanceRefField", TestBetterImpl.class);
 
-        TestClass instance = Binder.createInstance(TestClass.class, params);
+        TestClass instance = ParameterBinder.createInstance(TestClass.class, params);
         assertEquals(5, instance.instanceIntField);
         assertTrue(instance.instanceRefField != null
             && instance.instanceRefField instanceof TestBetterImpl);
@@ -81,10 +80,10 @@ public class BinderTest
         final Map<String, Object> params = new HashMap<String, Object>();
         params.put("runtimeIntField", 6);
 
-        TestClass instance = Binder.createInstance(TestClass.class, params);
+        TestClass instance = ParameterBinder.createInstance(TestClass.class, params);
         assertEquals(5, instance.runtimeIntField);
 
-        Binder.bind(instance, params, BindingPolicy.RUNTIME);
+        ParameterBinder.bind(instance, params, BindingPolicy.RUNTIME);
         assertEquals(6, instance.runtimeIntField);
     }
 
@@ -98,19 +97,21 @@ public class BinderTest
         TestClass instance;
         try
         {
-            instance = Binder.createInstance(TestClass.class, violatingParams);
+            instance = ParameterBinder.createInstance(TestClass.class, violatingParams);
+            fail();
         }
         catch (ConstraintViolationException e)
         {
             assertEquals(16, e.getOffendingValue());
         }
 
-        instance = Binder.createInstance(TestClass.class, Collections
+        instance = ParameterBinder.createInstance(TestClass.class, Collections
             .<String, Object> emptyMap());
 
         try
         {
-            Binder.bind(instance, violatingParams, BindingPolicy.RUNTIME);
+            ParameterBinder.bind(instance, violatingParams, BindingPolicy.RUNTIME);
+            fail();
         }
         catch (ConstraintViolationException e)
         {

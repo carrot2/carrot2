@@ -15,23 +15,23 @@ public class AttributeBinderTest
     @Bindable
     public static class TestImpl
     {
-        @Attribute(key="inField", direction = Direction.IN)
+        @Attribute(key="inField", bindingDirection = BindingDirection.IN)
         private int inField = 5;
 
-        @Attribute(key="inoutField", direction = Direction.INOUT)
+        @Attribute(key="inoutField", bindingDirection = BindingDirection.INOUT)
         private int inoutField = 5;
 
-        @Attribute(key="outField", direction = Direction.OUT)
+        @Attribute(key="outField", bindingDirection = BindingDirection.OUT)
         private int outField = 5;
         
-        @Attribute(direction = Direction.INOUT)
+        @Attribute(bindingDirection = BindingDirection.INOUT)
         private int defaultKeyField = 5;
     }
 
     @Bindable(prefix = "prefix")
     public static class TestImpl2
     {
-        @Attribute(direction = Direction.IN)
+        @Attribute(bindingDirection = BindingDirection.IN)
         private int inField = 5;
 
         private TestImpl referenced = new TestImpl();
@@ -45,7 +45,7 @@ public class AttributeBinderTest
         params.put("outField", 10);
 
         TestImpl instance = new TestImpl();
-        AttributeBinder.bind(instance, params, Direction.IN);
+        AttributeBinder.bind(instance, params, BindingDirection.IN);
         assertEquals(10, instance.inField);
         assertEquals(5, instance.outField);
         assertEquals(5, instance.inoutField);
@@ -59,7 +59,7 @@ public class AttributeBinderTest
         params.put("outField", 10);
 
         TestImpl instance = new TestImpl();
-        AttributeBinder.bind(instance, params, Direction.OUT);
+        AttributeBinder.bind(instance, params, BindingDirection.OUT);
         assertEquals(new Integer(5), params.get("outField"));
         assertEquals(new Integer(10), params.get("inField"));
         assertEquals(new Integer(5), params.get("inoutField"));
@@ -72,11 +72,11 @@ public class AttributeBinderTest
         final String fieldName = TestImpl.class.getName() + ".defaultKeyField";
         final TestImpl instance = new TestImpl();
 
-        AttributeBinder.bind(instance, params, Direction.INOUT);
+        AttributeBinder.bind(instance, params, BindingDirection.INOUT);
         assertEquals(new Integer(5), params.get(fieldName));
 
         params.put(fieldName, 10);
-        AttributeBinder.bind(instance, params, Direction.INOUT);
+        AttributeBinder.bind(instance, params, BindingDirection.INOUT);
         assertEquals(new Integer(10), params.get(fieldName));
     }
     
@@ -87,7 +87,7 @@ public class AttributeBinderTest
         params.put("prefix.inField", 10);
 
         TestImpl2 instance = new TestImpl2();
-        AttributeBinder.bind(instance, params, Direction.IN);
+        AttributeBinder.bind(instance, params, BindingDirection.IN);
         assertEquals(10, instance.inField);
     }
     
@@ -97,14 +97,14 @@ public class AttributeBinderTest
         final Map<String, Object> params = new HashMap<String, Object>();
 
         TestImpl2 instance = new TestImpl2();
-        AttributeBinder.bind(instance, params, Direction.INOUT);
+        AttributeBinder.bind(instance, params, BindingDirection.INOUT);
 
         assertEquals(new Integer(5), params.get("prefix.inField"));
         assertEquals(new Integer(5), params.get("inField"));
 
         params.put("prefix.inField", 10);
         params.put("inField", 10);        
-        AttributeBinder.bind(instance, params, Direction.INOUT);
+        AttributeBinder.bind(instance, params, BindingDirection.INOUT);
         assertEquals(10, instance.inField);
         assertEquals(10, instance.referenced.inField);
     }        

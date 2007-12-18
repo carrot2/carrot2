@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.carrot2.core.parameters.Binder;
+import org.carrot2.core.parameters.ParameterBinder;
 import org.carrot2.core.parameters.BindingPolicy;
 
 public class ControllerImpl implements Controller
@@ -17,7 +17,7 @@ public class ControllerImpl implements Controller
         {
             final ProcessingResult result = new ProcessingResult();
             
-            Binder.bind(documentSource, requestParameters, BindingPolicy.RUNTIME);
+            ParameterBinder.bind(documentSource, requestParameters, BindingPolicy.RUNTIME);
 
             result.documents = new ArrayList<Document>();
             for (Iterator<Document> i = documentSource.getDocuments(); i.hasNext();)
@@ -26,7 +26,7 @@ public class ControllerImpl implements Controller
             }
 
             requestParameters.put("documents", result.documents);
-            Binder.bind(clusteringAlgorithm, requestParameters, BindingPolicy.RUNTIME);
+            ParameterBinder.bind(clusteringAlgorithm, requestParameters, BindingPolicy.RUNTIME);
 
             result.clusters = new ArrayList<Cluster>();
             for (Iterator<Cluster> i = clusteringAlgorithm.getClusters(); i.hasNext();)

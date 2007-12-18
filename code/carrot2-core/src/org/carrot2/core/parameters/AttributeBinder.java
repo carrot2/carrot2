@@ -28,7 +28,7 @@ public final class AttributeBinder
      * 
      */
     public static void bind(Object instance, Map<String, Object> values,
-        Direction direction) throws IllegalArgumentException
+        BindingDirection bindingDirection) throws IllegalArgumentException
     {
         if (instance.getClass().getAnnotation(Bindable.class) == null)
         {
@@ -36,9 +36,9 @@ public final class AttributeBinder
                 + instance.getClass().getName());
         }
 
-        final Map<String, FieldInstance> fields = getFields(instance, direction);
+        final Map<String, FieldInstance> fields = getFields(instance, bindingDirection);
 
-        if (direction == Direction.IN || direction == Direction.INOUT)
+        if (bindingDirection == BindingDirection.IN || bindingDirection == BindingDirection.INOUT)
         {
             final Set<String> keySet = (values.size() > fields.size() ? fields.keySet()
                 : values.keySet());
@@ -64,7 +64,7 @@ public final class AttributeBinder
             }
         }
 
-        if (direction == Direction.OUT || direction == Direction.INOUT)
+        if (bindingDirection == BindingDirection.OUT || bindingDirection == BindingDirection.INOUT)
         {
             for (Map.Entry<String, FieldInstance> kv : fields.entrySet())
             {
@@ -87,11 +87,11 @@ public final class AttributeBinder
      * 
      */
     private static Map<String, FieldInstance> getFields(Object instance,
-        Direction direction)
+        BindingDirection bindingDirection)
     {
         final HashSet<Object> instances = new HashSet<Object>();
         final HashMap<String, FieldInstance> fields = new HashMap<String, FieldInstance>();
-        getFields0(instances, fields, instance, direction);
+        getFields0(instances, fields, instance, bindingDirection);
         return fields;
     }
 
@@ -99,7 +99,7 @@ public final class AttributeBinder
      * 
      */
     private static void getFields0(HashSet<Object> instances,
-        HashMap<String, FieldInstance> fields, Object instance, Direction direction)
+        HashMap<String, FieldInstance> fields, Object instance, BindingDirection bindingDirection)
     {
         instances.add(instance);
 
@@ -111,13 +111,13 @@ public final class AttributeBinder
             final Attribute ann = f.getAnnotation(Attribute.class);
             if (ann != null)
             {
-                if (direction == Direction.INOUT || ann.direction() == Direction.INOUT
-                    || ann.direction() == direction)
+                if (bindingDirection == BindingDirection.INOUT || ann.bindingDirection() == BindingDirection.INOUT
+                    || ann.bindingDirection() == bindingDirection)
                 {
                     final String key;
                     if (ann.key().equals(""))
                     {
-                        key = BindableUtil.getPrefix(instance) + "." + f.getName();
+                        key = BindableUtils.getPrefix(instance) + "." + f.getName();
                     }
                     else
                     {
@@ -146,7 +146,7 @@ public final class AttributeBinder
                     {
                         if (!instances.contains(fieldValue))
                         {
-                            getFields0(instances, fields, fieldValue, direction);
+                            getFields0(instances, fields, fieldValue, bindingDirection);
                         }
                     }
                 }

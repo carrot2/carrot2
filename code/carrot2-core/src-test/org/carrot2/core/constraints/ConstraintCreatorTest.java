@@ -37,7 +37,7 @@ public class ConstraintCreatorTest
             Constraint impl = ConstraintFactory.createImplementation(IntRange.class
                 .getAnnotation(IsConstraint.class));
             assertNotNull(impl);
-            assertEquals(NumberRangeConstraint.class, impl.getClass());
+            assertEquals(RangeConstraint.class, impl.getClass());
         }
         catch (Exception e)
         {
@@ -66,8 +66,8 @@ public class ConstraintCreatorTest
             IntRange range = TestSample.class.getField("somethingAmount").getAnnotation(
                 IntRange.class);
             Constraint impl = ConstraintFactory.createConstraint(range);
-            assertEquals(NumberRangeConstraint.class, impl.getClass());
-            NumberRangeConstraint rangeImpl = (NumberRangeConstraint) impl;
+            assertEquals(RangeConstraint.class, impl.getClass());
+            RangeConstraint rangeImpl = (RangeConstraint) impl;
             assertEquals(0, range.min());
             assertEquals(8, range.max());
             assertEquals(0, rangeImpl.getMin());
@@ -81,8 +81,8 @@ public class ConstraintCreatorTest
             DoubleRange range = TestSample.class.getField("somethingPercent")
                 .getAnnotation(DoubleRange.class);
             Constraint impl = ConstraintFactory.createConstraint(range);
-            assertEquals(NumberRangeConstraint.class, impl.getClass());
-            NumberRangeConstraint rangeImpl = (NumberRangeConstraint) impl;
+            assertEquals(RangeConstraint.class, impl.getClass());
+            RangeConstraint rangeImpl = (RangeConstraint) impl;
             assertEquals(0.2, range.min(), 0.000001);
             assertEquals(0.5, range.max(), 0.000001);
             assertEquals(0.2, Double.class.cast(rangeImpl.getMin()), 0.000001);

@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@IsConstraint(implementation=NumberRangeConstraint.class)
+@IsConstraint(implementation=RangeConstraint.class)
 public @interface IntRange {
 	int min();
 	int max();

@@ -1,6 +1,6 @@
 package org.carrot2.core.parameters;
 
-final class BindableUtil
+final class BindableUtils
 {
     public static String getPrefix(Object instance)
     {

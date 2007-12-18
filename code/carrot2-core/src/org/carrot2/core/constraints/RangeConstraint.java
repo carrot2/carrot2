@@ -1,6 +1,6 @@
 package org.carrot2.core.constraints;
 
-public class NumberRangeConstraint implements Constraint
+public class RangeConstraint implements Constraint
 {
     @SuppressWarnings("unchecked")
     private Comparable min;
@@ -8,11 +8,11 @@ public class NumberRangeConstraint implements Constraint
     @SuppressWarnings("unchecked")
     private Comparable max;
 
-    public NumberRangeConstraint()
+    public RangeConstraint()
     {
     }
     
-    public NumberRangeConstraint(Comparable<?> min, Comparable<?> max)
+    public RangeConstraint(Comparable<?> min, Comparable<?> max)
     {
         this.min = min;
         this.max = max;
@@ -33,12 +33,12 @@ public class NumberRangeConstraint implements Constraint
             return true;
         }
 
-        if (obj == null || !(obj instanceof NumberRangeConstraint))
+        if (obj == null || !(obj instanceof RangeConstraint))
         {
             return false;
         }
 
-        NumberRangeConstraint other = (NumberRangeConstraint) obj;
+        RangeConstraint other = (RangeConstraint) obj;
 
         return other.min.equals(this.min) && other.max.equals(this.max);
     }

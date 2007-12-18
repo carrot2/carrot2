@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface Attribute
 {
-    Direction direction();
+    BindingDirection bindingDirection();
     
     String key() default "";
 }

@@ -7,7 +7,7 @@ import java.util.Map;
 import org.carrot2.core.constraints.Constraint;
 import org.carrot2.core.constraints.ConstraintViolationException;
 
-public class Binder
+public class ParameterBinder
 {
     /**
      * Initialize a given object with default values of instance-time binding parameters ({@link BindingPolicy#INSTANTIATION}).
