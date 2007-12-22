@@ -12,6 +12,7 @@
     <dependency name="carrot2-filter-lingo" />
     <dependency name="carrot2-filter-stc" />    
     <dependency name="carrot2-util-tokenizer" />
+    <dependency name="carrot2-input-aggregator" />
     <dependency name="carrot2-input-yahooapi" />
     <dependency name="carrot2-input-msnapi" />    
     <dependency name="carrot2-input-lucene" />
