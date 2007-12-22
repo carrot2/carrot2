@@ -25,6 +25,7 @@ import org.carrot2.core.impl.ArrayOutputComponent.Result;
 import org.carrot2.core.linguistic.Language;
 import org.carrot2.filter.lingo.local.LingoLocalFilterComponent;
 import org.carrot2.input.yahooapi.YahooApiInputComponent;
+import org.carrot2.util.ArrayUtils;
 import org.carrot2.util.tokenizer.languages.english.English;
 
 /**
@@ -185,7 +186,11 @@ public final class Example {
             // we don't display this here
             // final String snippet = document.getSnippet();
 
-            System.out.print(num + ": " + url
+            // Get the list of sources
+            final String sources = "[" + ArrayUtils.toString((String []) document
+                .getProperty(RawDocument.PROPERTY_SOURCES)) + "]";
+            
+            System.out.print(num + ": " + url + " " + sources
                 + "\n\t-> " + (title.length() > 70 ? title.substring(0, 70) : title) + "\n\n");
         }
         
