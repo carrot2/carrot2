@@ -23,7 +23,7 @@ public class ControllerTest
         final TestClusteringAlgorithm algorithm = new TestClusteringAlgorithm();
 
         final Controller controller = new ControllerImpl();
-        final ProcessingResult result = controller.process(params, source, algorithm);
+        final ProcessingResult result = controller.process(params, null, source, algorithm);
 
         assertEquals("query", source.query);        
         assertEquals(5, source.numDocs);

@@ -18,8 +18,12 @@ import com.google.common.collect.Multimap;
 @Bindable
 public class ByUrlClusteringAlgorithm implements ClusteringAlgorithm
 {
-    @Attribute(key="documents", bindingDirection = BindingDirection.IN)
+    @Attribute(key = "documents", bindingDirection = BindingDirection.IN)
     private Collection<Document> documents = Collections.<Document> emptyList();
+
+    @SuppressWarnings("unused")
+    @Attribute(key = "clusters", bindingDirection = BindingDirection.OUT)
+    private Collection<Cluster> clusters = null;
 
     private static final Set<String> STOP_URL_PARTS;
     static
@@ -29,7 +33,7 @@ public class ByUrlClusteringAlgorithm implements ClusteringAlgorithm
     }
 
     @Override
-    public Iterator<Cluster> getClusters()
+    public void performProcessing() throws ProcessingException
     {
         // Just in case we get a linked list, create an array of documents
         final Document [] documentArray = this.documents
@@ -44,10 +48,27 @@ public class ByUrlClusteringAlgorithm implements ClusteringAlgorithm
         {
             documentIndexes.add(new Integer(i));
         }
-        List<Cluster> clusters = createClusters(documentArray, documentIndexes, urlParts,
-            0, "");
+        this.clusters = createClusters(documentArray, documentIndexes, urlParts, 0, "");
+    }
 
-        return clusters.iterator();
+    @Override
+    public void beforeProcessing() throws ProcessingException
+    {
+    }
+
+    @Override
+    public void afterProcessing()
+    {
+    }
+
+    @Override
+    public void init() throws InitializationException
+    {
+    }
+
+    @Override
+    public void destroy()
+    {
     }
 
     private List<Cluster> createClusters(Document [] documents,
@@ -176,5 +197,4 @@ public class ByUrlClusteringAlgorithm implements ClusteringAlgorithm
 
         return urlParts;
     }
-
 }

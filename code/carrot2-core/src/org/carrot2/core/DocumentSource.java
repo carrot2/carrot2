@@ -1,8 +1,5 @@
 package org.carrot2.core;
 
-import java.util.Iterator;
-
-public interface DocumentSource
+public interface DocumentSource extends ProcessingComponent
 {
-    public Iterator<Document> getDocuments();
 }

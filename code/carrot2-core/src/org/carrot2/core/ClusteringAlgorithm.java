@@ -1,8 +1,6 @@
 package org.carrot2.core;
 
-import java.util.Iterator;
 
-public interface ClusteringAlgorithm
+public interface ClusteringAlgorithm extends ProcessingComponent
 {
-    public Iterator<Cluster> getClusters();
 }

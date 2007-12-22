@@ -1,11 +1,6 @@
 package org.carrot2.core;
 
-import java.util.Arrays;
-import java.util.Iterator;
-
-import org.carrot2.core.parameters.Bindable;
-import org.carrot2.core.parameters.Parameter;
-import org.carrot2.core.parameters.BindingPolicy;
+import org.carrot2.core.parameters.*;
 
 @Bindable
 public class TestDocumentSource implements DocumentSource
@@ -15,15 +10,29 @@ public class TestDocumentSource implements DocumentSource
 
     @Parameter(policy = BindingPolicy.RUNTIME)
     String query;
-    
 
-    public Iterator<Document> getDocuments()
+    @Override
+    public void afterProcessing()
     {
-        final Document [] result = new Document [numDocs];
-        for (int i = 0; i < numDocs; i++)
-        {
-            result[i] = new Document();
-        }
-        return Arrays.asList(result).iterator();
+    }
+
+    @Override
+    public void beforeProcessing() throws ProcessingException
+    {
+    }
+
+    @Override
+    public void destroy()
+    {
+    }
+
+    @Override
+    public void init() throws InitializationException
+    {
+    }
+
+    @Override
+    public void performProcessing() throws ProcessingException
+    {
     }
 }

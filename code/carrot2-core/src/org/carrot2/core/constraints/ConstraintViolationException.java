@@ -5,13 +5,9 @@ package org.carrot2.core.constraints;
 
 import org.carrot2.core.parameters.ParameterDescriptor;
 
-/**
- *
- */
+@SuppressWarnings("serial")
 public class ConstraintViolationException extends RuntimeException
 {
-    private static final long serialVersionUID = 1L;
-
     private final Object offendingValue;
     private final Constraint constraint;
     private final ParameterDescriptor parameterDescriptor;

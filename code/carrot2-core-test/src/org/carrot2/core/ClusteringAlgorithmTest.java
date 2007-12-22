@@ -3,17 +3,25 @@
  */
 package org.carrot2.core;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.*;
 
-import org.carrot2.core.parameters.*;
+import org.carrot2.core.parameters.BindingPolicy;
+import org.carrot2.core.parameters.ParameterBinder;
 import org.junit.Test;
-
-import com.google.common.collect.Iterators;
 
 /**
  * Simple baseline tests that apply to all clustering algorithms.
+ * <p>
+ * TODO: it might be interesting (not sure if possible) to have a base class for testing
+ * algorithms that would automatically run the tests in two modes: 1) creating a new
+ * instance for each test, 2) run all tests on one instance to make sure the algorithm
+ * will not fail in production.
+ * <p>
+ * Some methods of this class can probably be refactored to a more general
+ * {@link ProcessingComponent} testing base class.
  */
 public abstract class ClusteringAlgorithmTest
 {
@@ -27,37 +35,97 @@ public abstract class ClusteringAlgorithmTest
     @Test
     public void testNoDocuments()
     {
-        ClusteringAlgorithm instance = prepareInstance(Collections.<Document>emptyList());
-        Collection<Cluster> clusters = collectClusters(instance.getClusters());
+        Collection<Cluster> clusters = cluster(Collections.<Document> emptyList());
 
         assertNotNull(clusters);
         assertEquals(0, clusters.size());
     }
 
     /**
-     * Checks whether all input documents are placed in some cluster. TODO: Not sure if
-     * this should hold for all algorithms though.
+     * Checks whether all input documents are placed in some cluster.
+     * <p>
+     * TODO: Not sure if this should hold for all algorithms though.
      */
     @Test
     public void testNoDocumentLoss()
     {
         final int documentCount = 10;
 
-        ClusteringAlgorithm instance = prepareInstance(DocumentFactory
-            .generate(documentCount));
-        Collection<Cluster> clusters = collectClusters(instance.getClusters());
+        Collection<Cluster> clusters = cluster(DocumentFactory.generate(documentCount));
         Collection<Document> documentsFromClusters = collectDocuments(clusters);
 
         assertEquals(documentCount, documentsFromClusters.size());
     }
 
-    public Collection<Cluster> collectClusters(Iterator<Cluster> clusters)
+    /**
+     * Performs clustering.
+     * 
+     * @param documents
+     * @return
+     */
+    public Collection<Cluster> cluster(Collection<Document> documents)
     {
-        final ArrayList<Cluster> collected = new ArrayList<Cluster>();
-        Iterators.addAll(collected, clusters);
-        return collected;
+        return cluster(documents, Collections.<String, Object> emptyMap());
     }
 
+    /**
+     * Performs clustering.
+     * 
+     * @param documents
+     * @param parameters
+     * @return
+     */
+    public Collection<Cluster> cluster(Collection<Document> documents,
+        Map<String, Object> parameters)
+    {
+        return cluster(documents, parameters, new HashMap<String, Object>());
+    }
+
+    /**
+     * Performs clustering.
+     * 
+     * @param documents
+     * @param parameters
+     * @return
+     */
+    public Collection<Cluster> cluster(Collection<Document> documents,
+        Map<String, Object> parameters, Map<String, Object> attributes)
+    {
+        return cluster(createInstance(), documents, parameters, attributes);
+    }
+
+    /**
+     * Performs clustering.
+     * 
+     * @param documents
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public Collection<Cluster> cluster(ClusteringAlgorithm instance,
+        Collection<Document> documents, Map<String, Object> parameters,
+        Map<String, Object> attributes)
+    {
+        try
+        {
+            attributes.put("documents", documents);
+            ControllerImpl.beforeProcessing(instance, parameters, attributes);
+            instance.performProcessing();
+            ControllerImpl.afterProcessing(instance, parameters, attributes);
+
+            return (Collection<Cluster>) attributes.get("clusters");
+        }
+        catch (InstantiationException e)
+        {
+            throw new RuntimeException();
+        }
+    }
+
+    /**
+     * Recursively collects documents from clusters.
+     * 
+     * @param clusters
+     * @return
+     */
     public Collection<Document> collectDocuments(Collection<Cluster> clusters)
     {
         return collectDocuments(clusters, new HashSet<Document>());
@@ -75,12 +143,21 @@ public abstract class ClusteringAlgorithmTest
         return documents;
     }
 
+    /**
+     * Creates and initializes an instance of the clustering algorighm.
+     * 
+     * @return
+     */
     public ClusteringAlgorithm createInstance()
     {
         try
         {
-            return ParameterBinder.createInstance(getClusteringAlgorithmClass(),
-                getInstanceParameters());
+            final ClusteringAlgorithm instance = ParameterBinder.createInstance(
+                getClusteringAlgorithmClass(), getInstanceParameters());
+
+            instance.init();
+
+            return instance;
         }
         catch (InstantiationException e)
         {
@@ -88,27 +165,19 @@ public abstract class ClusteringAlgorithmTest
         }
     }
 
-    public ClusteringAlgorithm prepareInstance(Collection<Document> documents)
-    {
-        return prepareInstance(documents, Collections.<String, Object> emptyMap());
-    }
-
-    public ClusteringAlgorithm prepareInstance(Collection<Document> documents,
-        Map<String, Object> runtimeParameters)
-    {
-        return prepareInstance(documents, runtimeParameters, createInstance());
-    }
-
-    public ClusteringAlgorithm prepareInstance(Collection<Document> documents,
-        Map<String, Object> runtimeParameters, ClusteringAlgorithm instance)
+    /**
+     * Initializes an instance of a clustering algorithm.
+     * 
+     * @param instance
+     * @return
+     */
+    public ClusteringAlgorithm initInstance(ClusteringAlgorithm instance)
     {
         try
         {
-            ParameterBinder.bind(instance, runtimeParameters, BindingPolicy.RUNTIME);
-            
-            Map<String, Object> attributes = new HashMap<String, Object>();
-            attributes.put("documents", documents);
-            AttributeBinder.bind(instance, attributes, BindingDirection.IN);
+            ParameterBinder.bind(instance, getInstanceParameters(),
+                BindingPolicy.INSTANTIATION);
+            instance.init();
         }
         catch (InstantiationException e)
         {

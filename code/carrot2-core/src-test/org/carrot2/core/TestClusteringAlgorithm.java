@@ -1,12 +1,8 @@
 package org.carrot2.core;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
 
-import org.carrot2.core.parameters.Bindable;
-import org.carrot2.core.parameters.Parameter;
-import org.carrot2.core.parameters.BindingPolicy;
+import org.carrot2.core.parameters.*;
 
 
 @Bindable
@@ -16,8 +12,27 @@ public class TestClusteringAlgorithm implements ClusteringAlgorithm
     Collection<Document> documents;
 
     @Override
-    public Iterator<Cluster> getClusters()
+    public void afterProcessing()
     {
-        return Collections.<Cluster>emptyList().iterator();
+    }
+
+    @Override
+    public void beforeProcessing() throws ProcessingException
+    {
+    }
+
+    @Override
+    public void destroy()
+    {
+    }
+
+    @Override
+    public void init() throws InitializationException
+    {
+    }
+
+    @Override
+    public void performProcessing() throws ProcessingException
+    {
     }
 }
