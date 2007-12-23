@@ -10,7 +10,7 @@ import java.util.*;
 public class Document
 {
     public static final String TITLE = "title";
-    public static final String SUMMARY = "summery";
+    public static final String SUMMARY = "summary";
     public static final String CONTENT_URL = "url";
     
     private Map<String, Object> fields = new HashMap<String, Object>();

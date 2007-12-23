@@ -32,6 +32,12 @@ public class Cluster
     {
     }
 
+    public Cluster(String label, Document... documents)
+    {
+        addPhrases(label);
+        addDocuments(documents);
+    }
+    
     public String getLabel()
     {
         if (labelCache == null)
@@ -56,58 +62,70 @@ public class Cluster
         return documentsView;
     }
 
-    public void addPhrases(String... phrases)
+    public Cluster addPhrases(String... phrases)
     {
         labelCache = null;
         for (String phrase : phrases)
         {
             this.phrases.add(phrase);
         }
+        
+        return this;
     }
 
-    public void addPhrases(Iterable<String> phrases)
+    public Cluster addPhrases(Iterable<String> phrases)
     {
         labelCache = null;
         for (String phrase : phrases)
         {
             this.phrases.add(phrase);
         }
+        
+        return this;
     }
 
-    public void addDocuments(Document... documents)
+    public Cluster addDocuments(Document... documents)
     {
         for (Document document : documents)
         {
             this.documents.add(document);
         }
         actualSizeCache = -1;
+        
+        return this;
     }
 
-    public void addDocuments(Iterable<Document> documents)
+    public Cluster addDocuments(Iterable<Document> documents)
     {
         for (Document document : documents)
         {
             this.documents.add(document);
         }
         actualSizeCache = -1;
+        
+        return this;
     }
 
-    public void addSubclusters(Cluster... clusters)
+    public Cluster addSubclusters(Cluster... clusters)
     {
         for (Cluster cluster : clusters)
         {
             this.subclusters.add(cluster);
         }
         actualSizeCache = -1;
+        
+        return this;
     }
 
-    public void addSubclusters(Iterable<Cluster> clusters)
+    public Cluster addSubclusters(Iterable<Cluster> clusters)
     {
         for (Cluster cluster : clusters)
         {
             this.subclusters.add(cluster);
         }
         actualSizeCache = -1;
+        
+        return this;
     }
 
     @SuppressWarnings("unchecked")
@@ -116,9 +134,11 @@ public class Cluster
         return (T) attributes.get(key);
     }
 
-    public <T> void setAttribute(String key, T value)
+    public <T> Cluster setAttribute(String key, T value)
     {
         attributes.put(key, value);
+        
+        return this;
     }
 
     /**
@@ -150,8 +170,10 @@ public class Cluster
 
         Cluster other = (Cluster) obj;
 
+        final boolean subclustersEqual = subclusters.equals(other.subclusters);
+        
         return phrases.equals(other.phrases) && documents.equals(other.documents)
-            && subclusters.equals(other.subclusters)
+            && subclustersEqual
             && attributes.equals(other.attributes);
     }
 

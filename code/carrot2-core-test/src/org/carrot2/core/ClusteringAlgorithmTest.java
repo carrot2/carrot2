@@ -8,8 +8,6 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.*;
 
-import org.carrot2.core.parameters.BindingPolicy;
-import org.carrot2.core.parameters.ParameterBinder;
 import org.junit.Test;
 
 /**
@@ -23,15 +21,9 @@ import org.junit.Test;
  * Some methods of this class can probably be refactored to a more general
  * {@link ProcessingComponent} testing base class.
  */
-public abstract class ClusteringAlgorithmTest
+public abstract class ClusteringAlgorithmTest<T extends ClusteringAlgorithm> extends
+    ProcessingComponentTest<T>
 {
-    public abstract Class<? extends ClusteringAlgorithm> getClusteringAlgorithmClass();
-
-    public Map<String, Object> getInstanceParameters()
-    {
-        return Collections.<String, Object> emptyMap();
-    }
-
     @Test
     public void testNoDocuments()
     {
@@ -51,7 +43,8 @@ public abstract class ClusteringAlgorithmTest
     {
         final int documentCount = 10;
 
-        Collection<Cluster> clusters = cluster(DocumentFactory.generate(documentCount));
+        Collection<Cluster> clusters = cluster(DocumentFactory.DEFAULT
+            .generate(documentCount));
         Collection<Document> documentsFromClusters = collectDocuments(clusters);
 
         assertEquals(documentCount, documentsFromClusters.size());
@@ -108,9 +101,9 @@ public abstract class ClusteringAlgorithmTest
         try
         {
             attributes.put("documents", documents);
-            ControllerImpl.beforeProcessing(instance, parameters, attributes);
+            ControllerUtils.beforeProcessing(instance, parameters, attributes);
             instance.performProcessing();
-            ControllerImpl.afterProcessing(instance, parameters, attributes);
+            ControllerUtils.afterProcessing(instance, parameters, attributes);
 
             return (Collection<Cluster>) attributes.get("clusters");
         }
@@ -141,48 +134,5 @@ public abstract class ClusteringAlgorithmTest
         }
 
         return documents;
-    }
-
-    /**
-     * Creates and initializes an instance of the clustering algorighm.
-     * 
-     * @return
-     */
-    public ClusteringAlgorithm createInstance()
-    {
-        try
-        {
-            final ClusteringAlgorithm instance = ParameterBinder.createInstance(
-                getClusteringAlgorithmClass(), getInstanceParameters());
-
-            instance.init();
-
-            return instance;
-        }
-        catch (InstantiationException e)
-        {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * Initializes an instance of a clustering algorithm.
-     * 
-     * @param instance
-     * @return
-     */
-    public ClusteringAlgorithm initInstance(ClusteringAlgorithm instance)
-    {
-        try
-        {
-            ParameterBinder.bind(instance, getInstanceParameters(),
-                BindingPolicy.INSTANTIATION);
-            instance.init();
-        }
-        catch (InstantiationException e)
-        {
-            throw new RuntimeException(e);
-        }
-        return instance;
     }
 }

@@ -132,13 +132,18 @@ public class ByUrlClusteringAlgorithm implements ClusteringAlgorithm
             }
         }
 
+        if (documentsInClusters.isEmpty())
+        {
+            return Collections.<Cluster>emptyList();
+        }
+        
         // Sort clusters
         Collections.sort(clusters, Cluster.BY_REVERSED_SIZE_AND_LABEL_COMPARATOR);
 
         // Add junk clusters
         Cluster otherUrls = new Cluster();
         otherUrls.addPhrases("Other Sites");
-        otherUrls.setAttribute(Cluster.OTHER_TOPICS, false);
+        otherUrls.setAttribute(Cluster.OTHER_TOPICS, true);
 
         for (Integer documentIndex : documentIndexes)
         {

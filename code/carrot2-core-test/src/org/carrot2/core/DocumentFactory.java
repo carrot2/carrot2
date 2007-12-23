@@ -8,18 +8,18 @@ import java.util.*;
 /**
  *
  */
-public final class DocumentFactory
+public class DocumentFactory
 {
-    private static final Map<String, DataGenerator<?>> GENERATORS;
+    protected static final Map<String, DataGenerator<?>> DEFAULT_GENERATORS;
     static
     {
-        GENERATORS = new HashMap<String, DataGenerator<?>>();
-        GENERATORS.put(Document.TITLE, new SentenceGenerator(5));
-        GENERATORS.put(Document.SUMMARY, new SentenceGenerator(20));
-        GENERATORS.put(Document.CONTENT_URL, new UrlGenerator(3));
+        DEFAULT_GENERATORS = new HashMap<String, DataGenerator<?>>();
+        DEFAULT_GENERATORS.put(Document.TITLE, new SentenceGenerator(3, true));
+        DEFAULT_GENERATORS.put(Document.SUMMARY, new SentenceGenerator(10));
+        DEFAULT_GENERATORS.put(Document.CONTENT_URL, new UrlGenerator(3));
     }
 
-    private static final Set<String> DEFAULT_FIELDS;
+    protected static final Set<String> DEFAULT_FIELDS;
     static
     {
         DEFAULT_FIELDS = new HashSet<String>();
@@ -27,21 +27,33 @@ public final class DocumentFactory
             Document.CONTENT_URL));
     }
 
-    public static Collection<Document> generate(int number)
+    public static final DocumentFactory DEFAULT = new DocumentFactory(DEFAULT_GENERATORS,
+        DEFAULT_FIELDS);
+
+    private Map<String, DataGenerator<?>> generators;
+    private Set<String> fields;
+
+    public DocumentFactory(Map<String, DataGenerator<?>> generators, Set<String> fields)
     {
-        return generate(number, DEFAULT_FIELDS);
+        this.generators = generators;
+        this.fields = fields;
     }
 
-    public static Collection<Document> generate(int number, Set<String> fieldsToGenerate)
+    public List<Document> generate(int number)
+    {
+        return generate(number, fields);
+    }
+
+    public List<Document> generate(int number, Set<String> fieldsToGenerate)
     {
         return generate(number, fieldsToGenerate, Collections
             .<String, DataGenerator<?>> emptyMap());
     }
 
-    public static Collection<Document> generate(int number, Set<String> fieldsToGenerate,
+    public List<Document> generate(int number, Set<String> fieldsToGenerate,
         Map<String, DataGenerator<?>> customGenerators)
     {
-        Collection<Document> result = new ArrayList<Document>(number);
+        List<Document> result = new ArrayList<Document>(number);
 
         for (int i = 0; i < number; i++)
         {
@@ -49,7 +61,7 @@ public final class DocumentFactory
             for (String field : fieldsToGenerate)
             {
                 DataGenerator<?> generator = resolveGenerator(customGenerators, field);
-                document.addField(field, generator.generate());
+                document.addField(field, generator.generate(i));
             }
 
             result.add(document);
@@ -58,14 +70,14 @@ public final class DocumentFactory
         return result;
     }
 
-    private static DataGenerator<?> resolveGenerator(
+    private DataGenerator<?> resolveGenerator(
         Map<String, DataGenerator<?>> customGenerators, String field)
     {
         DataGenerator<?> generator = customGenerators.get(field);
 
         if (generator == null)
         {
-            generator = GENERATORS.get(field);
+            generator = generators.get(field);
         }
 
         if (generator == null)
@@ -77,10 +89,10 @@ public final class DocumentFactory
 
     public static interface DataGenerator<T>
     {
-        public T generate();
+        public T generate(int sequentialNumber);
     }
 
-    public static class SentenceGenerator implements DataGenerator<String>
+    private static class SentenceGenerator implements DataGenerator<String>
     {
         private static final String [] WORDS = new String []
         {
@@ -89,17 +101,30 @@ public final class DocumentFactory
         };
 
         private int words;
+        private boolean prependSequentialNumber;
+
         private final Random random = new Random(0);
 
         public SentenceGenerator(int words)
         {
+            this(words, false);
+        }
+
+        public SentenceGenerator(int words, boolean prependSequentialNumber)
+        {
             this.words = words;
+            this.prependSequentialNumber = prependSequentialNumber;
         }
 
         @Override
-        public String generate()
+        public String generate(int sequentialNumber)
         {
             StringBuilder builder = new StringBuilder();
+
+            if (prependSequentialNumber)
+            {
+                builder.append("[" + sequentialNumber + "] ");
+            }
 
             for (int i = 0; i < words - 1; i++)
             {
@@ -133,7 +158,7 @@ public final class DocumentFactory
         }
 
         @Override
-        public String generate()
+        public String generate(int sequentialNumber)
         {
             StringBuilder builder = new StringBuilder();
 
