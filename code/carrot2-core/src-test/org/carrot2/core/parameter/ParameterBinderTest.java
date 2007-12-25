@@ -1,11 +1,13 @@
-package org.carrot2.core.parameters;
+package org.carrot2.core.parameter;
 
 import static org.junit.Assert.*;
 
 import java.util.*;
 
-import org.carrot2.core.constraints.ConstraintViolationException;
-import org.carrot2.core.constraints.IntRange;
+import org.carrot2.core.constraint.ConstraintViolationException;
+import org.carrot2.core.constraint.IntRange;
+import org.carrot2.core.parameter.BindingPolicy;
+import org.carrot2.core.parameter.ParameterBinder;
 import org.junit.Test;
 
 /**

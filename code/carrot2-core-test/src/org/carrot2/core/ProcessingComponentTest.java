@@ -6,8 +6,8 @@ package org.carrot2.core;
 import java.util.Collections;
 import java.util.Map;
 
-import org.carrot2.core.parameters.BindingPolicy;
-import org.carrot2.core.parameters.ParameterBinder;
+import org.carrot2.core.parameter.BindingPolicy;
+import org.carrot2.core.parameter.ParameterBinder;
 
 /**
  *

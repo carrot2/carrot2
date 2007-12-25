@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.carrot2.core.constraints;
+package org.carrot2.core.constraint;
 
 import java.util.*;
 

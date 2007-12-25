@@ -6,5 +6,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-util-common"/>
 	<classpathentry kind="var" path="CARROT2_30_CHECKOUT_BASE/lib/google-collections.jar"/>
+	<classpathentry kind="var" path="CARROT2_30_CHECKOUT_BASE/lib/compile-time/easymock.jar"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>

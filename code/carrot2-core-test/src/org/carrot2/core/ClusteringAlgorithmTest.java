@@ -103,7 +103,7 @@ public abstract class ClusteringAlgorithmTest<T extends ClusteringAlgorithm> ext
             attributes.put("documents", documents);
             ControllerUtils.beforeProcessing(instance, parameters, attributes);
             instance.performProcessing();
-            ControllerUtils.afterProcessing(instance, parameters, attributes);
+            ControllerUtils.afterProcessing(instance, attributes);
 
             return (Collection<Cluster>) attributes.get("clusters");
         }

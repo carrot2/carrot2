@@ -1,6 +1,6 @@
-package org.carrot2.core.parameters;
+package org.carrot2.core.parameter;
 
-import org.carrot2.core.constraints.Constraint;
+import org.carrot2.core.constraint.Constraint;
 import org.carrot2.util.ObjectUtils;
 
 public class ParameterDescriptor

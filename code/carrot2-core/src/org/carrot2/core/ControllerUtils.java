@@ -5,14 +5,13 @@ package org.carrot2.core;
 
 import java.util.Map;
 
-import org.carrot2.core.parameters.*;
+import org.carrot2.core.parameter.*;
 
 /**
  *
  */
 public class ControllerUtils
 {
-
     /**
      * Performs all life cycle actions required before processing starts. This code is
      * refactored to make sure the tests can perform exactly the same sequence of actions
@@ -37,15 +36,13 @@ public class ControllerUtils
      * Perform all life cycle actions after processing is complete.
      * 
      * @param processingComponent
-     * @param parameters
      * @param attributes
      * @throws InstantiationException
      */
     public static void afterProcessing(ProcessingComponent processingComponent,
-        Map<String, Object> parameters, Map<String, Object> attributes)
+        Map<String, Object> attributes)
         throws InstantiationException
     {
         AttributeBinder.bind(processingComponent, attributes, BindingDirection.OUT);
     }
-
 }

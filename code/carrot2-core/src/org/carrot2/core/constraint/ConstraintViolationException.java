@@ -1,9 +1,9 @@
 /**
  * 
  */
-package org.carrot2.core.constraints;
+package org.carrot2.core.constraint;
 
-import org.carrot2.core.parameters.ParameterDescriptor;
+import org.carrot2.core.parameter.ParameterDescriptor;
 
 @SuppressWarnings("serial")
 public class ConstraintViolationException extends RuntimeException

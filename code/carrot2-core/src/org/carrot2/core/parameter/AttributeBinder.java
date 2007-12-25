@@ -1,4 +1,4 @@
-package org.carrot2.core.parameters;
+package org.carrot2.core.parameter;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;

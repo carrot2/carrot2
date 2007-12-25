@@ -1,15 +1,13 @@
-package org.carrot2.core.parameters;
+package org.carrot2.core.constraint;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
-public @interface Attribute
-{
-    BindingDirection bindingDirection();
-    
-    String key() default "";
+@Target(ElementType.ANNOTATION_TYPE)
+public @interface IsConstraint {
+	Class<?> implementation();
 }

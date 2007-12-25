@@ -1,4 +1,4 @@
-package org.carrot2.core.constraints;
+package org.carrot2.core.constraint;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;

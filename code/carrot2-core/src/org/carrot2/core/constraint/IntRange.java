@@ -1,4 +1,4 @@
-package org.carrot2.core.constraints;
+package org.carrot2.core.constraint;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,8 +7,8 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@IsConstraint(implementation = RangeConstraint.class)
-public @interface DoubleRange {
-    double min();
-    double max();
+@IsConstraint(implementation=RangeConstraint.class)
+public @interface IntRange {
+	int min();
+	int max();
 }

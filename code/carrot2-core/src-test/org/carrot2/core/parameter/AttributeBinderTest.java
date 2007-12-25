@@ -1,10 +1,12 @@
-package org.carrot2.core.parameters;
+package org.carrot2.core.parameter;
 
 import static org.junit.Assert.assertEquals;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import org.carrot2.core.parameter.AttributeBinder;
+import org.carrot2.core.parameter.BindingDirection;
 import org.junit.Test;
 
 /**

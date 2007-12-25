@@ -3,8 +3,7 @@
  */
 package org.carrot2.core;
 
-import org.carrot2.core.parameters.BindingDirection;
-import org.carrot2.core.parameters.BindingPolicy;
+import org.carrot2.core.parameter.*;
 
 /**
  * Defines the life cycle of a Carrot2 processing component.
@@ -60,5 +59,5 @@ public interface ProcessingComponent
      * Invoked before this processing component is about to be destroyed. After the call
      * to this method, no other method of this processing component will be called.
      */
-    public void destroy();
+    public void dispose();
 }

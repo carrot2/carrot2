@@ -1,6 +1,6 @@
 package org.carrot2.core;
 
-import org.carrot2.core.parameters.*;
+import org.carrot2.core.parameter.*;
 
 @Bindable
 public class TestDocumentSource implements DocumentSource
@@ -22,7 +22,7 @@ public class TestDocumentSource implements DocumentSource
     }
 
     @Override
-    public void destroy()
+    public void dispose()
     {
     }
 

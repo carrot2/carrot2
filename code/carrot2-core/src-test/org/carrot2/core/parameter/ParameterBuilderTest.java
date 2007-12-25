@@ -1,9 +1,10 @@
-package org.carrot2.core.parameters;
+package org.carrot2.core.parameter;
 
 import java.util.*;
 
-import org.carrot2.core.constraints.IntRange;
-import org.carrot2.core.constraints.RangeConstraint;
+import org.carrot2.core.constraint.IntRange;
+import org.carrot2.core.constraint.RangeConstraint;
+import org.carrot2.core.parameter.*;
 import org.junit.Assert;
 import org.junit.Test;
 

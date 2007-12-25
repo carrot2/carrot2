@@ -2,7 +2,7 @@ package org.carrot2.core;
 
 import java.util.Collection;
 
-import org.carrot2.core.parameters.*;
+import org.carrot2.core.parameter.*;
 
 
 @Bindable
@@ -22,7 +22,7 @@ public class TestClusteringAlgorithm implements ClusteringAlgorithm
     }
 
     @Override
-    public void destroy()
+    public void dispose()
     {
     }
 

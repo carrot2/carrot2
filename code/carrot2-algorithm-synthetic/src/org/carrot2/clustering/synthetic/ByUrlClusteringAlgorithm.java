@@ -6,7 +6,7 @@ package org.carrot2.clustering.synthetic;
 import java.util.*;
 
 import org.carrot2.core.*;
-import org.carrot2.core.parameters.*;
+import org.carrot2.core.parameter.*;
 import org.carrot2.util.ArrayUtils;
 
 import com.google.common.collect.HashMultimap;
@@ -67,7 +67,7 @@ public class ByUrlClusteringAlgorithm implements ClusteringAlgorithm
     }
 
     @Override
-    public void destroy()
+    public void dispose()
     {
     }
 

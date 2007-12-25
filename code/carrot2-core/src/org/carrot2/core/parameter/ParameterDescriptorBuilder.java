@@ -1,11 +1,11 @@
-package org.carrot2.core.parameters;
+package org.carrot2.core.parameter;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.util.*;
 
-import org.carrot2.core.constraints.*;
+import org.carrot2.core.constraint.*;
 import org.carrot2.util.ClassUtils;
 
 /**
