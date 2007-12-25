@@ -17,7 +17,8 @@ public class ParameterDescriptorBuilder
      * 
      */
     @SuppressWarnings("unchecked")
-    public static Collection<ParameterDescriptor> getParameters(Class<?> clazz, BindingPolicy policy)
+    public static Collection<ParameterDescriptor> getParameters(Class<?> clazz,
+        BindingPolicy policy)
     {
         // Output array of parameters.
         final ArrayList<ParameterDescriptor> params = new ArrayList<ParameterDescriptor>();
@@ -45,7 +46,7 @@ public class ParameterDescriptorBuilder
             final String fieldName = field.getName();
 
             List<Constraint> constraints = new ArrayList<Constraint>();
-            
+
             for (Annotation annotation : field.getAnnotations())
             {
                 if (ConstraintFactory.isConstraintAnnotation(annotation.annotationType()))
@@ -74,8 +75,8 @@ public class ParameterDescriptorBuilder
                     + fieldName);
             }
 
-            params.add(new ParameterDescriptor(fieldName, ClassUtils.boxPrimitive(field.getType()),
-                fieldValue, constraint));
+            params.add(new ParameterDescriptor(fieldName, ClassUtils.boxPrimitive(field
+                .getType()), fieldValue, constraint));
         }
 
         return params;
@@ -86,14 +87,14 @@ public class ParameterDescriptorBuilder
      */
     public static Map<String, Field> getFieldMap(Class<?> clazz, BindingPolicy policy)
     {
-        final Field [] declaredFields = clazz.getDeclaredFields();
-        final Map<String, Field> result = new HashMap<String, Field>(
-            declaredFields.length);
+        final Collection<Field> fieldSet = getFieldsFromBindableHierarchy(clazz);
+        final Field [] fields = fieldSet.toArray(new Field [fieldSet.size()]);
+        final Map<String, Field> result = new HashMap<String, Field>(fields.length);
 
         // TODO: Should we remember or somehow reset the accessibility for non-descriptor
         // fields upon returning from this method?
-        AccessibleObject.setAccessible(declaredFields, true);
-        for (final Field field : declaredFields)
+        AccessibleObject.setAccessible(fields, true);
+        for (final Field field : fields)
         {
             final Parameter binding = field.getAnnotation(Parameter.class);
             if (binding == null)
@@ -108,5 +109,23 @@ public class ParameterDescriptorBuilder
         }
 
         return result;
+    }
+
+    public static Collection<Field> getFieldsFromBindableHierarchy(Class<?> clazz)
+    {
+        Set<Field> fields = new HashSet<Field>();
+
+        if (clazz.getAnnotation(Bindable.class) != null)
+        {
+            fields.addAll(Arrays.asList(clazz.getDeclaredFields()));
+        }
+
+        Class<?> superClass = clazz.getSuperclass();
+        if (superClass != null)
+        {
+            fields.addAll(getFieldsFromBindableHierarchy(superClass));
+        }
+
+        return fields;
     }
 }

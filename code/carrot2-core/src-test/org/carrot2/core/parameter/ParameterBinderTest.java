@@ -6,8 +6,6 @@ import java.util.*;
 
 import org.carrot2.core.constraint.ConstraintViolationException;
 import org.carrot2.core.constraint.IntRange;
-import org.carrot2.core.parameter.BindingPolicy;
-import org.carrot2.core.parameter.ParameterBinder;
 import org.junit.Test;
 
 /**
@@ -38,14 +36,29 @@ public class ParameterBinderTest
     {
         @Parameter(policy = BindingPolicy.INSTANTIATION)
         @IntRange(min = 0, max = 10)
-        private int instanceIntField = 5;
+        protected int instanceIntField = 5;
 
         @Parameter(policy = BindingPolicy.INSTANTIATION)
-        private ITest instanceRefField = new TestImpl();
+        protected ITest instanceRefField = new TestImpl();
 
         @Parameter(policy = BindingPolicy.RUNTIME)
         @IntRange(min = 0, max = 10)
-        private int runtimeIntField = 5;
+        protected int runtimeIntField = 5;
+    }
+
+    @Bindable
+    public static class TestSubclass extends TestClass
+    {
+        @Parameter(policy = BindingPolicy.INSTANTIATION)
+        @IntRange(min = 0, max = 10)
+        private int subclassInstanceIntField = 5;
+
+        @Parameter(policy = BindingPolicy.INSTANTIATION)
+        private ITest subclassInstanceRefField = new TestImpl();
+
+        @Parameter(policy = BindingPolicy.RUNTIME)
+        @IntRange(min = 0, max = 10)
+        private int subclassRuntimeIntField = 5;
     }
 
     @Test
@@ -60,6 +73,25 @@ public class ParameterBinderTest
             && instance.instanceRefField instanceof TestImpl);
 
         assertEquals(5, ((TestImpl) instance.instanceRefField).testIntField);
+    }
+
+    @Test
+    public void testInstanceBindingForSubclass() throws InstantiationException
+    {
+        final Map<String, Object> params = new HashMap<String, Object>();
+        params.put("subclassInstanceIntField", 6);
+        params.put("instanceIntField", 7);
+
+        TestSubclass instance = ParameterBinder
+            .createInstance(TestSubclass.class, params);
+        assertEquals(6, instance.subclassInstanceIntField);
+        assertEquals(7, instance.instanceIntField);
+        assertTrue(instance.subclassInstanceRefField != null
+            && instance.subclassInstanceRefField instanceof TestImpl);
+        assertTrue(instance.instanceRefField != null
+            && instance.instanceRefField instanceof TestImpl);
+
+        assertEquals(5, ((TestImpl) instance.subclassInstanceRefField).testIntField);
     }
 
     @Test
@@ -87,6 +119,22 @@ public class ParameterBinderTest
 
         ParameterBinder.bind(instance, params, BindingPolicy.RUNTIME);
         assertEquals(6, instance.runtimeIntField);
+    }
+    
+    @Test
+    public void testRuntimeBindingForSubclass() throws InstantiationException
+    {
+        final Map<String, Object> params = new HashMap<String, Object>();
+        params.put("runtimeIntField", 6);
+        params.put("subclassRuntimeIntField", 8);
+        
+        TestSubclass instance = ParameterBinder.createInstance(TestSubclass.class, params);
+        assertEquals(5, instance.runtimeIntField);
+        assertEquals(5, instance.subclassRuntimeIntField);
+        
+        ParameterBinder.bind(instance, params, BindingPolicy.RUNTIME);
+        assertEquals(6, instance.runtimeIntField);
+        assertEquals(8, instance.subclassRuntimeIntField);
     }
 
     @Test
