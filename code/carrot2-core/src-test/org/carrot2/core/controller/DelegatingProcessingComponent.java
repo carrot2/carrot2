@@ -7,11 +7,8 @@ import org.carrot2.core.*;
 import org.carrot2.core.parameter.*;
 
 @Bindable
-public class DelegatingProcessingComponent implements ProcessingComponent
+public abstract class DelegatingProcessingComponent implements ProcessingComponent
 {
-    @Parameter(policy = BindingPolicy.INSTANTIATION)
-    private ProcessingComponent delegate;
-
     @Parameter(policy = BindingPolicy.INSTANTIATION)
     private String instanceParameter;
 
@@ -25,19 +22,19 @@ public class DelegatingProcessingComponent implements ProcessingComponent
     @Override
     public void init() throws InitializationException
     {
-        delegate.init();
+        getDelegate().init();
     }
 
     @Override
     public void beforeProcessing() throws ProcessingException
     {
-        delegate.beforeProcessing();
+        getDelegate().beforeProcessing();
     }
 
     @Override
     public void performProcessing() throws ProcessingException
     {
-        delegate.performProcessing();
+        getDelegate().performProcessing();
 
         // Do some simple processing
         data += instanceParameter + runtimeParameter;
@@ -46,12 +43,14 @@ public class DelegatingProcessingComponent implements ProcessingComponent
     @Override
     public void afterProcessing()
     {
-        delegate.afterProcessing();
+        getDelegate().afterProcessing();
     }
 
     @Override
     public void dispose()
     {
-        delegate.dispose();
+        getDelegate().dispose();
     }
+
+    abstract ProcessingComponent getDelegate();
 }

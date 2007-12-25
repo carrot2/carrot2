@@ -103,6 +103,7 @@ public final class AttributeBinder
     {
         instances.add(instance);
 
+        // TODO: get fields for classes up the hierarchy
         final Field [] classFields = instance.getClass().getDeclaredFields();
         AccessibleObject.setAccessible(classFields, true);
 

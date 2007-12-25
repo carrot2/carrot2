@@ -23,7 +23,14 @@ public class SimpleController
      * 
      * @param parameters both instatiation and runtime parameters
      * @param attributes
-     * @param processingComponents
+     * @param processingComponents TODO: This is one of the places where generics suck:
+     *            it's nice to have a varargs of class with an upper bound here, but the
+     *            caller's code will get warnings (implicint construction of an array of
+     *            parametrized type, which is not allowed). An alternative is to have
+     *            Class<?> here, but then, class types won't be checked during
+     *            compilation. Finally, a collection would solve all the problems, but
+     *            this is so much hassle on the calling code's side. For now I guess I'd
+     *            go with the second option.
      * @return
      * @throws InstantiationException
      * @throws InitializationException
@@ -31,16 +38,15 @@ public class SimpleController
      */
     @SuppressWarnings("unchecked")
     public ProcessingResult process(Map<String, Object> parameters,
-        Map<String, Object> attributes,
-        Class<? extends ProcessingComponent>... processingComponentClasses)
+        Map<String, Object> attributes, Class<?>... processingComponentClasses)
         throws InstantiationException
     {
         // First, create and initialize instances
         ProcessingComponent [] processingComponents = new ProcessingComponent [processingComponentClasses.length];
         for (int i = 0; i < processingComponents.length; i++)
         {
-            processingComponents[i] = ParameterBinder.createInstance(
-                processingComponentClasses[i], parameters);
+            processingComponents[i] = (ProcessingComponent) ParameterBinder
+                .createInstance(processingComponentClasses[i], parameters);
             processingComponents[i].init();
         }
 
@@ -69,7 +75,7 @@ public class SimpleController
         {
             processingComponents[i].dispose();
         }
-        
+
         // Form the results object
         result.clusters = (Collection<Cluster>) attributes.get("clusters");
         result.documents = (Collection<Document>) attributes.get("documents");
