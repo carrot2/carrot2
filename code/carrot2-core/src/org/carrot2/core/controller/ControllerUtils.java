@@ -1,10 +1,11 @@
 /**
  * 
  */
-package org.carrot2.core;
+package org.carrot2.core.controller;
 
 import java.util.Map;
 
+import org.carrot2.core.ProcessingComponent;
 import org.carrot2.core.parameter.*;
 
 /**

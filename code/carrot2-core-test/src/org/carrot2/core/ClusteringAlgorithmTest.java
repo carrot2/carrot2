@@ -8,6 +8,7 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.*;
 
+import org.carrot2.core.controller.ControllerUtils;
 import org.junit.Test;
 
 /**

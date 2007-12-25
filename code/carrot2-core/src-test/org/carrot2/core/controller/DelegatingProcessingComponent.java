@@ -1,8 +1,9 @@
 /**
  * 
  */
-package org.carrot2.core;
+package org.carrot2.core.controller;
 
+import org.carrot2.core.*;
 import org.carrot2.core.parameter.*;
 
 @Bindable

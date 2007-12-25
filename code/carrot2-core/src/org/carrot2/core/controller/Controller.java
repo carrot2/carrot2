@@ -1,6 +1,8 @@
-package org.carrot2.core;
+package org.carrot2.core.controller;
 
 import java.util.Map;
+
+import org.carrot2.core.*;
 
 /**
  * TODO: I'm not sure if it make sense to define an interface for controllers, because
