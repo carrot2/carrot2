@@ -25,6 +25,7 @@ public final class ClassUtils
             if (Float.TYPE == type) return Float.class;
             if (Double.TYPE == type) return Double.class;
             if (Character.TYPE == type) return Character.class;
+            if (Boolean.TYPE == type) return Boolean.class;
             throw new RuntimeException("Unknown primitive type: " + type);
         }
 

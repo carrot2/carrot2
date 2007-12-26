@@ -8,6 +8,11 @@ import org.carrot2.core.parameter.*;
 /**
  * Defines the life cycle of a Carrot2 processing component.
  * <p>
+ * TODO: should we have a method called in case of processing errors? I've just checked
+ * LocalComponent -- the processingErrorOcurred() method is never overriden to do
+ * something more than the base component is doing (i.e. propagating the call down the
+ * chain).
+ * <p>
  * TODO: method names?
  * <p>
  * TODO: write proper lifecycle docs

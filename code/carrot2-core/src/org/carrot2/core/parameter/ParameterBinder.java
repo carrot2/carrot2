@@ -81,8 +81,10 @@ public class ParameterBinder
 
             // TODO: if there is no default value provided for a parameter and
             // no value for the parameter in the map, we'll get a NPE here.
-            // Should we do something about it?
-            if (binding != null && value.getClass().getAnnotation(Bindable.class) != null)
+            // Should we do something about it? For the time being, don't descend if there
+            // is no value.
+            if (binding != null && value != null
+                && value.getClass().getAnnotation(Bindable.class) != null)
             {
                 // Recursively descend into other types.
                 bind(value, values, policy);

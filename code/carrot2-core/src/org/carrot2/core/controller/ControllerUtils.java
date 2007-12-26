@@ -6,6 +6,7 @@ package org.carrot2.core.controller;
 import java.util.Map;
 
 import org.carrot2.core.ProcessingComponent;
+import org.carrot2.core.ProcessingException;
 import org.carrot2.core.parameter.*;
 
 /**
@@ -24,13 +25,36 @@ public class ControllerUtils
      * @param parameters
      * @param attributes
      * @throws InstantiationException
+     * @throws ProcessingException
      */
     public static void beforeProcessing(ProcessingComponent processingComponent,
         Map<String, Object> parameters, Map<String, Object> attributes)
-        throws InstantiationException
+        throws InstantiationException, ProcessingException
     {
         ParameterBinder.bind(processingComponent, parameters, BindingPolicy.RUNTIME);
         AttributeBinder.bind(processingComponent, attributes, BindingDirection.IN);
+        processingComponent.beforeProcessing();
+
+        // It might be useful to bind outgoing attributes -- some components
+        // down the chain may need to use the data bound here
+        AttributeBinder.bind(processingComponent, attributes, BindingDirection.OUT);
+    }
+
+    /**
+     * Perform all life cycle required to do processing.
+     * 
+     * @param processingComponent
+     * @param attributes
+     * @throws InstantiationException
+     * @throws ProcessingException
+     */
+    public static void performProcessing(ProcessingComponent processingComponent,
+        Map<String, Object> attributes) throws InstantiationException,
+        ProcessingException
+    {
+        AttributeBinder.bind(processingComponent, attributes, BindingDirection.IN);
+        processingComponent.performProcessing();
+        AttributeBinder.bind(processingComponent, attributes, BindingDirection.OUT);
     }
 
     /**
@@ -42,8 +66,7 @@ public class ControllerUtils
      */
     public static void afterProcessing(ProcessingComponent processingComponent,
         Map<String, Object> attributes)
-        throws InstantiationException
     {
-        AttributeBinder.bind(processingComponent, attributes, BindingDirection.OUT);
+        processingComponent.afterProcessing();
     }
 }

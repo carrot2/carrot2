@@ -39,47 +39,64 @@ public class SimpleController
     @SuppressWarnings("unchecked")
     public ProcessingResult process(Map<String, Object> parameters,
         Map<String, Object> attributes, Class<?>... processingComponentClasses)
-        throws InstantiationException
+        throws InstantiationException, InitializationException, ProcessingException
     {
-        // First, create and initialize instances
+        // First, create instances
         ProcessingComponent [] processingComponents = new ProcessingComponent [processingComponentClasses.length];
         for (int i = 0; i < processingComponents.length; i++)
         {
             processingComponents[i] = (ProcessingComponent) ParameterBinder
                 .createInstance(processingComponentClasses[i], parameters);
-            processingComponents[i].init();
         }
 
-        // Now let each component in the chain do the processing
-        final ProcessingResult result = new ProcessingResult();
-
-        for (int i = 0; i < processingComponents.length; i++)
+        // Now initialize
+        try
         {
+            for (int i = 0; i < processingComponents.length; i++)
+            {
+                processingComponents[i].init();
+            }
+
             try
             {
-                ControllerUtils.beforeProcessing(processingComponents[i], parameters,
-                    attributes);
-                processingComponents[i].beforeProcessing();
-                processingComponents[i].performProcessing();
+                // Perform runtime life cycle
+                // Call before processing hooks
+                for (int i = 0; i < processingComponents.length; i++)
+                {
+                    ControllerUtils.beforeProcessing(processingComponents[i], parameters,
+                        attributes);
+                }
 
-                ControllerUtils.afterProcessing(processingComponents[i], attributes);
+                // Perform processing
+                for (int i = 0; i < processingComponents.length; i++)
+                {
+                    ControllerUtils
+                        .performProcessing(processingComponents[i], attributes);
+                }
+
+                // Form the results object
+                final ProcessingResult result = new ProcessingResult();
+                result.clusters = (Collection<Cluster>) attributes.get("clusters");
+                result.documents = (Collection<Document>) attributes.get("documents");
+
+                return result;
             }
             finally
             {
-                processingComponents[i].afterProcessing();
+                // Call after processing hooks
+                for (int i = 0; i < processingComponents.length; i++)
+                {
+                    ControllerUtils.afterProcessing(processingComponents[i], attributes);
+                }
             }
         }
-
-        // Finally, dispose of all components
-        for (int i = 0; i < processingComponents.length; i++)
+        finally
         {
-            processingComponents[i].dispose();
+            // Finally, dispose of all components
+            for (int i = 0; i < processingComponents.length; i++)
+            {
+                processingComponents[i].dispose();
+            }
         }
-
-        // Form the results object
-        result.clusters = (Collection<Cluster>) attributes.get("clusters");
-        result.documents = (Collection<Document>) attributes.get("documents");
-
-        return result;
     }
 }

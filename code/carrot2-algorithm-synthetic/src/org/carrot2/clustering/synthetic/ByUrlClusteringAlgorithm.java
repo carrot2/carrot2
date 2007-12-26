@@ -16,7 +16,8 @@ import com.google.common.collect.Multimap;
  *
  */
 @Bindable
-public class ByUrlClusteringAlgorithm implements ClusteringAlgorithm
+public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
+    ClusteringAlgorithm
 {
     @Attribute(key = "documents", bindingDirection = BindingDirection.IN)
     private Collection<Document> documents = Collections.<Document> emptyList();
@@ -49,26 +50,6 @@ public class ByUrlClusteringAlgorithm implements ClusteringAlgorithm
             documentIndexes.add(new Integer(i));
         }
         this.clusters = createClusters(documentArray, documentIndexes, urlParts, 0, "");
-    }
-
-    @Override
-    public void beforeProcessing() throws ProcessingException
-    {
-    }
-
-    @Override
-    public void afterProcessing()
-    {
-    }
-
-    @Override
-    public void init() throws InitializationException
-    {
-    }
-
-    @Override
-    public void dispose()
-    {
     }
 
     private List<Cluster> createClusters(Document [] documents,
@@ -134,9 +115,9 @@ public class ByUrlClusteringAlgorithm implements ClusteringAlgorithm
 
         if (documentsInClusters.isEmpty())
         {
-            return Collections.<Cluster>emptyList();
+            return Collections.<Cluster> emptyList();
         }
-        
+
         // Sort clusters
         Collections.sort(clusters, Cluster.BY_REVERSED_SIZE_AND_LABEL_COMPARATOR);
 
