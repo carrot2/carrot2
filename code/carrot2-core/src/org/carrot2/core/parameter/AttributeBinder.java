@@ -2,10 +2,7 @@ package org.carrot2.core.parameter;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public final class AttributeBinder
 {
@@ -38,7 +35,8 @@ public final class AttributeBinder
 
         final Map<String, FieldInstance> fields = getFields(instance, bindingDirection);
 
-        if (bindingDirection == BindingDirection.IN || bindingDirection == BindingDirection.INOUT)
+        if (bindingDirection == BindingDirection.IN
+            || bindingDirection == BindingDirection.INOUT)
         {
             final Set<String> keySet = (values.size() > fields.size() ? fields.keySet()
                 : values.keySet());
@@ -64,7 +62,8 @@ public final class AttributeBinder
             }
         }
 
-        if (bindingDirection == BindingDirection.OUT || bindingDirection == BindingDirection.INOUT)
+        if (bindingDirection == BindingDirection.OUT
+            || bindingDirection == BindingDirection.INOUT)
         {
             for (Map.Entry<String, FieldInstance> kv : fields.entrySet())
             {
@@ -99,12 +98,14 @@ public final class AttributeBinder
      * 
      */
     private static void getFields0(HashSet<Object> instances,
-        HashMap<String, FieldInstance> fields, Object instance, BindingDirection bindingDirection)
+        HashMap<String, FieldInstance> fields, Object instance,
+        BindingDirection bindingDirection)
     {
         instances.add(instance);
 
-        // TODO: get fields for classes up the hierarchy
-        final Field [] classFields = instance.getClass().getDeclaredFields();
+        final Collection<Field> fieldSet = BindableUtils
+            .getFieldsFromBindableHierarchy(instance.getClass());
+        final Field [] classFields = fieldSet.toArray(new Field [fieldSet.size()]);
         AccessibleObject.setAccessible(classFields, true);
 
         for (Field f : classFields)
@@ -112,7 +113,8 @@ public final class AttributeBinder
             final Attribute ann = f.getAnnotation(Attribute.class);
             if (ann != null)
             {
-                if (bindingDirection == BindingDirection.INOUT || ann.bindingDirection() == BindingDirection.INOUT
+                if (bindingDirection == BindingDirection.INOUT
+                    || ann.bindingDirection() == BindingDirection.INOUT
                     || ann.bindingDirection() == bindingDirection)
                 {
                     final String key;

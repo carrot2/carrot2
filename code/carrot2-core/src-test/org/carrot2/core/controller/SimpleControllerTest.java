@@ -102,9 +102,7 @@ public class SimpleControllerTest
 
         mocksControl.verify();
 
-        // TODO: this will be failing until we do walking up class hierarchy for attribute
-        // setting/ collection
-        // assertEquals("dir", attributes.get("data"));
+        assertEquals("dir", attributes.get("data"));
     }
 
     @Test
@@ -146,9 +144,7 @@ public class SimpleControllerTest
             ProcessingComponent2.class, ProcessingComponent3.class);
 
         mocksControl.verify();
-        
-        // TODO: this will be failing until we do walking up class hierarchy for attribute
-        // setting/ collection
-        // assertEquals("diririr", attributes.get("data"));
+
+        assertEquals("diririr", attributes.get("data"));
     }
 }

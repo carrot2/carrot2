@@ -87,7 +87,7 @@ public class ParameterDescriptorBuilder
      */
     public static Map<String, Field> getFieldMap(Class<?> clazz, BindingPolicy policy)
     {
-        final Collection<Field> fieldSet = getFieldsFromBindableHierarchy(clazz);
+        final Collection<Field> fieldSet = BindableUtils.getFieldsFromBindableHierarchy(clazz);
         final Field [] fields = fieldSet.toArray(new Field [fieldSet.size()]);
         final Map<String, Field> result = new HashMap<String, Field>(fields.length);
 
@@ -109,23 +109,5 @@ public class ParameterDescriptorBuilder
         }
 
         return result;
-    }
-
-    public static Collection<Field> getFieldsFromBindableHierarchy(Class<?> clazz)
-    {
-        Set<Field> fields = new HashSet<Field>();
-
-        if (clazz.getAnnotation(Bindable.class) != null)
-        {
-            fields.addAll(Arrays.asList(clazz.getDeclaredFields()));
-        }
-
-        Class<?> superClass = clazz.getSuperclass();
-        if (superClass != null)
-        {
-            fields.addAll(getFieldsFromBindableHierarchy(superClass));
-        }
-
-        return fields;
     }
 }
