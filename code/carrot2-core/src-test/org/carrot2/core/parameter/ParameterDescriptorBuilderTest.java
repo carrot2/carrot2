@@ -2,14 +2,13 @@ package org.carrot2.core.parameter;
 
 import java.util.*;
 
-import org.carrot2.core.constraint.IntRange;
-import org.carrot2.core.constraint.RangeConstraint;
+import org.carrot2.core.constraint.*;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class ParameterDescriptorBuilderTest
 {
-    @Bindable(prefix="Test")
+    @Bindable(prefix = "Test")
     public static class TestClass
     {
         @SuppressWarnings("unused")
@@ -18,6 +17,8 @@ public class ParameterDescriptorBuilderTest
 
         @SuppressWarnings("unused")
         @Parameter(policy = BindingPolicy.RUNTIME)
+        @IntRange(min = 0, max = 10)
+        @IntModulo(modulo = 2)
         private int runtimeField = 5;
 
         @SuppressWarnings("unused")
@@ -26,7 +27,7 @@ public class ParameterDescriptorBuilderTest
         private int runtimeField2 = 5;
     }
 
-    @Bindable(prefix="Test")
+    @Bindable(prefix = "Test")
     public static class TestSubclass extends TestClass
     {
         @SuppressWarnings("unused")
@@ -74,7 +75,9 @@ public class ParameterDescriptorBuilderTest
             {
                 new ParameterDescriptor("Test.runtimeField2", Integer.class, 5,
                     new RangeConstraint(0, 10)),
-                new ParameterDescriptor("Test.runtimeField", Integer.class, 5, null)
+                new ParameterDescriptor("Test.runtimeField", Integer.class, 5,
+                    new CompoundConstraint(new RangeConstraint(0, 10),
+                        new IntModuloConstraint(2, 0)))
             });
 
         Collection<ParameterDescriptor> actual = ParameterDescriptorBuilder
@@ -89,10 +92,13 @@ public class ParameterDescriptorBuilderTest
         Collection<ParameterDescriptor> expected = Arrays
             .asList(new ParameterDescriptor []
             {
-                new ParameterDescriptor("Test.subclassRuntimeField", Integer.class, 5, null),
+                new ParameterDescriptor("Test.subclassRuntimeField", Integer.class, 5,
+                    null),
                 new ParameterDescriptor("Test.runtimeField2", Integer.class, 5,
                     new RangeConstraint(0, 10)),
-                new ParameterDescriptor("Test.runtimeField", Integer.class, 5, null),
+                new ParameterDescriptor("Test.runtimeField", Integer.class, 5,
+                    new CompoundConstraint(new RangeConstraint(0, 10),
+                        new IntModuloConstraint(2, 0))),
             });
 
         Collection<ParameterDescriptor> actual = ParameterDescriptorBuilder
@@ -122,7 +128,8 @@ public class ParameterDescriptorBuilderTest
         Collection<ParameterDescriptor> expected = Arrays
             .asList(new ParameterDescriptor []
             {
-                new ParameterDescriptor("Test.subclassInstanceField", Integer.class, 5, null),
+                new ParameterDescriptor("Test.subclassInstanceField", Integer.class, 5,
+                    null),
                 new ParameterDescriptor("Test.instanceField", Integer.class, 5, null),
             });
 

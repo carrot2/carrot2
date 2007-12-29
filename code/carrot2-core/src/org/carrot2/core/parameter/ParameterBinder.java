@@ -36,9 +36,9 @@ public class ParameterBinder
             {
                 if (policy == BindingPolicy.RUNTIME)
                 {
-                    throw new InstantiationException(
+                    throw new RuntimeException(
                         "Only instantiation-time parameters can "
-                            + " be bound to class values, offending field: "
+                            + "be bound to class values, offending field: "
                             + parameterDescriptor.getKey());
                 }
 
@@ -96,8 +96,8 @@ public class ParameterBinder
             }
             catch (Exception e)
             {
-                throw new InstantiationException("Could not assign field "
-                    + instance.getClass().getName() + "#" + parameterDescriptor.key
+                throw new RuntimeException("Could not assign field "
+                    + instance.getClass().getName() + "#" + field.getName()
                     + " with value " + value);
             }
         }

@@ -4,8 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 
-import org.carrot2.core.constraint.ConstraintViolationException;
-import org.carrot2.core.constraint.IntRange;
+import org.carrot2.core.constraint.*;
 import org.junit.Test;
 
 /**
@@ -31,7 +30,7 @@ public class ParameterBinderTest
         private int testIntField = 10;
     }
 
-    @Bindable(prefix="Test")
+    @Bindable(prefix = "Test")
     public static class TestClass
     {
         @Parameter(policy = BindingPolicy.INSTANTIATION)
@@ -46,7 +45,7 @@ public class ParameterBinderTest
         protected int runtimeIntField = 5;
     }
 
-    @Bindable(prefix="Test")
+    @Bindable(prefix = "Test")
     public static class TestSubclass extends TestClass
     {
         @Parameter(policy = BindingPolicy.INSTANTIATION)
@@ -58,7 +57,14 @@ public class ParameterBinderTest
 
         @Parameter(policy = BindingPolicy.RUNTIME)
         @IntRange(min = 0, max = 10)
+        @IntModulo(modulo = 2, offset = 1)
         private int subclassRuntimeIntField = 5;
+    }
+
+    public static class NotBindable
+    {
+        @Parameter(policy = BindingPolicy.RUNTIME)
+        private int test = 20;
     }
 
     @Test
@@ -109,6 +115,49 @@ public class ParameterBinderTest
     }
 
     @Test
+    public void testRuntimeClassCoercionAttempt() throws InstantiationException
+    {
+        TestClass instance = ParameterBinder.createInstance(TestClass.class, Collections
+            .<String, Object> emptyMap());
+
+        final Map<String, Object> params = new HashMap<String, Object>();
+        params.put("Test.runtimeIntField", TestBetterImpl.class);
+
+        try
+        {
+            ParameterBinder.bind(instance, params, BindingPolicy.RUNTIME);
+            fail();
+        }
+        catch (RuntimeException e)
+        {
+            // expected
+        }
+
+        assertEquals("Field value not changed", 5, instance.runtimeIntField);
+    }
+
+    @Test
+    public void testNotBindableBindingAttempt() throws InstantiationException
+    {
+        NotBindable instance = new NotBindable();
+
+        final Map<String, Object> params = new HashMap<String, Object>();
+        params.put("test", 20);
+
+        try
+        {
+            ParameterBinder.bind(instance, params, BindingPolicy.RUNTIME);
+            fail();
+        }
+        catch (RuntimeException e)
+        {
+            // expected
+        }
+
+        assertEquals("Field value not changed", 20, instance.test);
+    }
+
+    @Test
     public void testRuntimeBinding() throws InstantiationException
     {
         final Map<String, Object> params = new HashMap<String, Object>();
@@ -120,25 +169,26 @@ public class ParameterBinderTest
         ParameterBinder.bind(instance, params, BindingPolicy.RUNTIME);
         assertEquals(6, instance.runtimeIntField);
     }
-    
+
     @Test
     public void testRuntimeBindingForSubclass() throws InstantiationException
     {
         final Map<String, Object> params = new HashMap<String, Object>();
         params.put("Test.runtimeIntField", 6);
-        params.put("Test.subclassRuntimeIntField", 8);
-        
-        TestSubclass instance = ParameterBinder.createInstance(TestSubclass.class, params);
+        params.put("Test.subclassRuntimeIntField", 9);
+
+        TestSubclass instance = ParameterBinder
+            .createInstance(TestSubclass.class, params);
         assertEquals(5, instance.runtimeIntField);
         assertEquals(5, instance.subclassRuntimeIntField);
-        
+
         ParameterBinder.bind(instance, params, BindingPolicy.RUNTIME);
         assertEquals(6, instance.runtimeIntField);
-        assertEquals(8, instance.subclassRuntimeIntField);
+        assertEquals(9, instance.subclassRuntimeIntField);
     }
 
     @Test
-    public void testConstraintEnforcement() throws InstantiationException
+    public void testSimpleConstraintEnforcement() throws InstantiationException
     {
         final Map<String, Object> violatingParams = new HashMap<String, Object>();
         violatingParams.put("Test.instanceIntField", 16);
@@ -167,5 +217,39 @@ public class ParameterBinderTest
         {
             assertEquals(16, e.getOffendingValue());
         }
+    }
+
+    @Test
+    public void testCompoundConstraintEnforcement() throws InstantiationException
+    {
+        TestSubclass instance = new TestSubclass();
+        final Map<String, Object> violatingParams = new HashMap<String, Object>();
+        
+        violatingParams.put("Test.subclassRuntimeIntField", 16);
+        try
+        {
+            // First constraint violated
+            ParameterBinder.bind(instance, violatingParams, BindingPolicy.RUNTIME);
+            fail();
+        }
+        catch (ConstraintViolationException e)
+        {
+            assertEquals(16, e.getOffendingValue());
+        }
+        assertEquals("Field value not changed", 5, instance.subclassRuntimeIntField);
+        
+        violatingParams.put("Test.subclassRuntimeIntField", 6);
+        try
+        {
+            // Second constraint violated
+            ParameterBinder.bind(instance, violatingParams, BindingPolicy.RUNTIME);
+            fail();
+        }
+        catch (ConstraintViolationException e)
+        {
+            assertEquals(6, e.getOffendingValue());
+        }
+        assertEquals("Field value not changed", 5, instance.subclassRuntimeIntField);
+        
     }
 }

@@ -1,9 +1,9 @@
-package org.carrot2.core;
+package org.carrot2.core.controller;
 
 import java.util.Collection;
 import java.util.Map;
 
-import org.carrot2.core.controller.ControllerUtils;
+import org.carrot2.core.*;
 import org.carrot2.core.parameter.ParameterBinder;
 
 /**
