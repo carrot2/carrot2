@@ -43,7 +43,7 @@ public class ParameterDescriptorBuilder
 
         for (final Field field : bindableFields)
         {
-            final String fieldName = field.getName();
+            final String fieldName = BindableUtils.getFieldName(field);
 
             List<Constraint> constraints = new ArrayList<Constraint>();
 
@@ -87,7 +87,8 @@ public class ParameterDescriptorBuilder
      */
     public static Map<String, Field> getFieldMap(Class<?> clazz, BindingPolicy policy)
     {
-        final Collection<Field> fieldSet = BindableUtils.getFieldsFromBindableHierarchy(clazz);
+        final Collection<Field> fieldSet = BindableUtils
+            .getFieldsFromBindableHierarchy(clazz);
         final Field [] fields = fieldSet.toArray(new Field [fieldSet.size()]);
         final Map<String, Field> result = new HashMap<String, Field>(fields.length);
 
@@ -104,7 +105,7 @@ public class ParameterDescriptorBuilder
 
             if (binding.policy() == policy)
             {
-                result.put(field.getName(), field);
+                result.put(BindableUtils.getFieldName(field), field);
             }
         }
 

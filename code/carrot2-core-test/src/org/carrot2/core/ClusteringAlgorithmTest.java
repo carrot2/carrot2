@@ -8,6 +8,8 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.*;
 
+import javax.swing.text.DefaultEditorKit.CutAction;
+
 import org.carrot2.core.controller.ControllerUtils;
 import org.junit.Test;
 
@@ -103,7 +105,7 @@ public abstract class ClusteringAlgorithmTest<T extends ClusteringAlgorithm> ext
         {
             attributes.put("documents", documents);
             ControllerUtils.beforeProcessing(instance, parameters, attributes);
-            instance.performProcessing();
+            ControllerUtils.performProcessing(instance, attributes);
             ControllerUtils.afterProcessing(instance, attributes);
 
             return (Collection<Cluster>) attributes.get("clusters");

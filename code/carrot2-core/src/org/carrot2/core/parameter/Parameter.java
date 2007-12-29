@@ -12,5 +12,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface Parameter {
 	BindingPolicy policy();
+	
+    String key() default "";
 }
 

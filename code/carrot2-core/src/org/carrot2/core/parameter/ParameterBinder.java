@@ -29,7 +29,7 @@ public class ParameterBinder
 
         for (ParameterDescriptor parameterDescriptor : parameterDescriptors)
         {
-            Object value = values.get(parameterDescriptor.getName());
+            Object value = values.get(parameterDescriptor.getKey());
 
             // Try to coerce from class to its instance first
             if (value instanceof Class)
@@ -39,7 +39,7 @@ public class ParameterBinder
                     throw new InstantiationException(
                         "Only instantiation-time parameters can "
                             + " be bound to class values, offending field: "
-                            + parameterDescriptor.getName());
+                            + parameterDescriptor.getKey());
                 }
 
                 Class<?> clazz = ((Class<?>) value);
@@ -51,7 +51,7 @@ public class ParameterBinder
                 {
                     throw new InstantiationException(
                         "Could not create instance of class:" + clazz.getName()
-                            + " for parameter " + parameterDescriptor.getName());
+                            + " for parameter " + parameterDescriptor.getKey());
                 }
             }
 
@@ -76,7 +76,7 @@ public class ParameterBinder
                 value = parameterDescriptor.getDefaultValue();
             }
 
-            final Field field = fields.get(parameterDescriptor.name);
+            final Field field = fields.get(parameterDescriptor.key);
             final Parameter binding = field.getAnnotation(Parameter.class);
 
             // TODO: if there is no default value provided for a parameter and
@@ -97,7 +97,7 @@ public class ParameterBinder
             catch (Exception e)
             {
                 throw new InstantiationException("Could not assign field "
-                    + instance.getClass().getName() + "#" + parameterDescriptor.name
+                    + instance.getClass().getName() + "#" + parameterDescriptor.key
                     + " with value " + value);
             }
         }

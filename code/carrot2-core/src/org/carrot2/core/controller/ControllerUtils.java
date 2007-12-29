@@ -36,7 +36,8 @@ public class ControllerUtils
         processingComponent.beforeProcessing();
 
         // It might be useful to bind outgoing attributes -- some components
-        // down the chain may need to use the data bound here
+        // down the chain may need to use the data bound here.
+        // On the second thought...
         AttributeBinder.bind(processingComponent, attributes, BindingDirection.OUT);
     }
 

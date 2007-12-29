@@ -5,7 +5,7 @@ import org.carrot2.util.ObjectUtils;
 
 public class ParameterDescriptor
 {
-    public final String name;
+    public final String key;
     public final Class<?> type;
     public final Object defaultValue;
     public final Constraint constraint;
@@ -17,15 +17,15 @@ public class ParameterDescriptor
             throw new IllegalArgumentException();
         }
 
-        this.name = name;
+        this.key = name;
         this.type = type;
         this.defaultValue = defaultValue;
         this.constraint = constraint;
     }
 
-    public String getName()
+    public String getKey()
     {
-        return name;
+        return key;
     }
 
     public Class<?> getType()
@@ -57,7 +57,7 @@ public class ParameterDescriptor
         }
 
         ParameterDescriptor other = ((ParameterDescriptor) obj);
-        return other.name.equals(this.name)
+        return other.key.equals(this.key)
             && other.type.equals(this.type)
             && ObjectUtils.equals(defaultValue, defaultValue)
             && ObjectUtils.equals(other.constraint, this.constraint);
@@ -66,12 +66,12 @@ public class ParameterDescriptor
     @Override
     public int hashCode()
     {
-        return name.hashCode();
+        return key.hashCode();
     }
 
     @Override
     public String toString()
     {
-        return name + "=" + type;
+        return key + "=" + type;
     }
 }

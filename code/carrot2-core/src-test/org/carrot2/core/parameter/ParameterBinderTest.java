@@ -31,7 +31,7 @@ public class ParameterBinderTest
         private int testIntField = 10;
     }
 
-    @Bindable
+    @Bindable(prefix="Test")
     public static class TestClass
     {
         @Parameter(policy = BindingPolicy.INSTANTIATION)
@@ -46,7 +46,7 @@ public class ParameterBinderTest
         protected int runtimeIntField = 5;
     }
 
-    @Bindable
+    @Bindable(prefix="Test")
     public static class TestSubclass extends TestClass
     {
         @Parameter(policy = BindingPolicy.INSTANTIATION)
@@ -65,7 +65,7 @@ public class ParameterBinderTest
     public void testInstanceBinding() throws InstantiationException
     {
         final Map<String, Object> params = new HashMap<String, Object>();
-        params.put("instanceIntField", 6);
+        params.put("Test.instanceIntField", 6);
 
         TestClass instance = ParameterBinder.createInstance(TestClass.class, params);
         assertEquals(6, instance.instanceIntField);
@@ -79,8 +79,8 @@ public class ParameterBinderTest
     public void testInstanceBindingForSubclass() throws InstantiationException
     {
         final Map<String, Object> params = new HashMap<String, Object>();
-        params.put("subclassInstanceIntField", 6);
-        params.put("instanceIntField", 7);
+        params.put("Test.subclassInstanceIntField", 6);
+        params.put("Test.instanceIntField", 7);
 
         TestSubclass instance = ParameterBinder
             .createInstance(TestSubclass.class, params);
@@ -98,7 +98,7 @@ public class ParameterBinderTest
     public void testClassCoercion() throws InstantiationException
     {
         final Map<String, Object> params = new HashMap<String, Object>();
-        params.put("instanceRefField", TestBetterImpl.class);
+        params.put("Test.instanceRefField", TestBetterImpl.class);
 
         TestClass instance = ParameterBinder.createInstance(TestClass.class, params);
         assertEquals(5, instance.instanceIntField);
@@ -112,7 +112,7 @@ public class ParameterBinderTest
     public void testRuntimeBinding() throws InstantiationException
     {
         final Map<String, Object> params = new HashMap<String, Object>();
-        params.put("runtimeIntField", 6);
+        params.put("Test.runtimeIntField", 6);
 
         TestClass instance = ParameterBinder.createInstance(TestClass.class, params);
         assertEquals(5, instance.runtimeIntField);
@@ -125,8 +125,8 @@ public class ParameterBinderTest
     public void testRuntimeBindingForSubclass() throws InstantiationException
     {
         final Map<String, Object> params = new HashMap<String, Object>();
-        params.put("runtimeIntField", 6);
-        params.put("subclassRuntimeIntField", 8);
+        params.put("Test.runtimeIntField", 6);
+        params.put("Test.subclassRuntimeIntField", 8);
         
         TestSubclass instance = ParameterBinder.createInstance(TestSubclass.class, params);
         assertEquals(5, instance.runtimeIntField);
@@ -141,8 +141,8 @@ public class ParameterBinderTest
     public void testConstraintEnforcement() throws InstantiationException
     {
         final Map<String, Object> violatingParams = new HashMap<String, Object>();
-        violatingParams.put("instanceIntField", 16);
-        violatingParams.put("runtimeIntField", 16);
+        violatingParams.put("Test.instanceIntField", 16);
+        violatingParams.put("Test.runtimeIntField", 16);
 
         TestClass instance;
         try

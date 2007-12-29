@@ -9,7 +9,7 @@ import org.junit.Test;
 
 public class ParameterDescriptorBuilderTest
 {
-    @Bindable
+    @Bindable(prefix="Test")
     public static class TestClass
     {
         @SuppressWarnings("unused")
@@ -26,7 +26,7 @@ public class ParameterDescriptorBuilderTest
         private int runtimeField2 = 5;
     }
 
-    @Bindable
+    @Bindable(prefix="Test")
     public static class TestSubclass extends TestClass
     {
         @SuppressWarnings("unused")
@@ -43,7 +43,7 @@ public class ParameterDescriptorBuilderTest
     {
         Collection<String> expected = Arrays.asList(new String []
         {
-            "runtimeField2", "runtimeField"
+            "Test.runtimeField2", "Test.runtimeField"
         });
 
         Collection<String> actual = ParameterDescriptorBuilder.getFieldMap(
@@ -57,7 +57,7 @@ public class ParameterDescriptorBuilderTest
     {
         Collection<String> expected = Arrays.asList(new String []
         {
-            "subclassRuntimeField", "runtimeField2", "runtimeField"
+            "Test.subclassRuntimeField", "Test.runtimeField2", "Test.runtimeField"
         });
 
         Collection<String> actual = ParameterDescriptorBuilder.getFieldMap(
@@ -72,9 +72,9 @@ public class ParameterDescriptorBuilderTest
         Collection<ParameterDescriptor> expected = Arrays
             .asList(new ParameterDescriptor []
             {
-                new ParameterDescriptor("runtimeField2", Integer.class, 5,
+                new ParameterDescriptor("Test.runtimeField2", Integer.class, 5,
                     new RangeConstraint(0, 10)),
-                new ParameterDescriptor("runtimeField", Integer.class, 5, null)
+                new ParameterDescriptor("Test.runtimeField", Integer.class, 5, null)
             });
 
         Collection<ParameterDescriptor> actual = ParameterDescriptorBuilder
@@ -89,10 +89,10 @@ public class ParameterDescriptorBuilderTest
         Collection<ParameterDescriptor> expected = Arrays
             .asList(new ParameterDescriptor []
             {
-                new ParameterDescriptor("subclassRuntimeField", Integer.class, 5, null),
-                new ParameterDescriptor("runtimeField2", Integer.class, 5,
+                new ParameterDescriptor("Test.subclassRuntimeField", Integer.class, 5, null),
+                new ParameterDescriptor("Test.runtimeField2", Integer.class, 5,
                     new RangeConstraint(0, 10)),
-                new ParameterDescriptor("runtimeField", Integer.class, 5, null),
+                new ParameterDescriptor("Test.runtimeField", Integer.class, 5, null),
             });
 
         Collection<ParameterDescriptor> actual = ParameterDescriptorBuilder
@@ -107,7 +107,7 @@ public class ParameterDescriptorBuilderTest
         Collection<ParameterDescriptor> expected = Arrays
             .asList(new ParameterDescriptor []
             {
-                new ParameterDescriptor("instanceField", Integer.class, 5, null),
+                new ParameterDescriptor("Test.instanceField", Integer.class, 5, null),
             });
 
         Collection<ParameterDescriptor> actual = ParameterDescriptorBuilder
@@ -122,8 +122,8 @@ public class ParameterDescriptorBuilderTest
         Collection<ParameterDescriptor> expected = Arrays
             .asList(new ParameterDescriptor []
             {
-                new ParameterDescriptor("instanceField", Integer.class, 5, null),
-                new ParameterDescriptor("subclassInstanceField", Integer.class, 5, null),
+                new ParameterDescriptor("Test.subclassInstanceField", Integer.class, 5, null),
+                new ParameterDescriptor("Test.instanceField", Integer.class, 5, null),
             });
 
         Collection<ParameterDescriptor> actual = ParameterDescriptorBuilder

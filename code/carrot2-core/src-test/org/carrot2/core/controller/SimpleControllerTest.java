@@ -35,7 +35,7 @@ public class SimpleControllerTest
     @Bindable
     public static class ProcessingComponent1 extends DelegatingProcessingComponent
     {
-        @Parameter(policy = BindingPolicy.INSTANTIATION)
+        @Parameter(policy = BindingPolicy.INSTANTIATION, key="delegate1")
         private ProcessingComponent delegate1;
 
         @Override
@@ -48,7 +48,7 @@ public class SimpleControllerTest
     @Bindable
     public static class ProcessingComponent2 extends DelegatingProcessingComponent
     {
-        @Parameter(policy = BindingPolicy.INSTANTIATION)
+        @Parameter(policy = BindingPolicy.INSTANTIATION, key="delegate2")
         private ProcessingComponent delegate2;
 
         @Override
@@ -61,7 +61,7 @@ public class SimpleControllerTest
     @Bindable
     public static class ProcessingComponent3 extends DelegatingProcessingComponent
     {
-        @Parameter(policy = BindingPolicy.INSTANTIATION)
+        @Parameter(policy = BindingPolicy.INSTANTIATION, key="delegate3")
         private ProcessingComponent delegate3;
 
         @Override

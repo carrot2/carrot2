@@ -24,7 +24,7 @@ public class ConstraintViolationException extends RuntimeException
     public String getMessage()
     {
         return "Value: " + offendingValue + " of parameter: "
-            + parameterDescriptor.getName() + " violates constraint: " + constraint;
+            + parameterDescriptor.getKey() + " violates constraint: " + constraint;
     }
 
     public Object getOffendingValue()

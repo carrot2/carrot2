@@ -5,24 +5,52 @@ import java.util.*;
 
 final class BindableUtils
 {
-    public static String getPrefix(Object instance)
+    public static String getFieldName(Field field)
     {
-        final Bindable bindable = instance.getClass().getAnnotation(Bindable.class);
-        if (bindable == null)
+        final String key = getKey(field);
+        if ("".equals(key))
         {
-            throw new IllegalArgumentException();
-        }
-
-        if (bindable.prefix().equals(""))
-        {
-            return instance.getClass().getName();
+            final Class<?> declaringClass = field.getDeclaringClass();
+            Bindable classAnnotation = declaringClass.getAnnotation(Bindable.class);
+            if (classAnnotation == null)
+            {
+                throw new IllegalArgumentException();
+            }
+            
+            final String classPrefix = classAnnotation.prefix();
+            if ("".equals(classPrefix))
+            {
+                return declaringClass.getName() + "." + field.getName();
+            }
+            else
+            {
+                return classPrefix + "." + field.getName();
+            }
+            
         }
         else
         {
-            return bindable.prefix();
+            return key;
         }
     }
 
+    public static String getKey(Field field)
+    {
+        Attribute attributeAnnotation = field.getAnnotation(Attribute.class);
+        if (attributeAnnotation != null)
+        {
+            return attributeAnnotation.key();
+        }
+        
+        Parameter parameterAnnotation = field.getAnnotation(Parameter.class);
+        if (parameterAnnotation != null)
+        {
+            return parameterAnnotation.key();
+        }
+        
+        throw new IllegalArgumentException();
+    }
+    
     public static Collection<Field> getFieldsFromBindableHierarchy(Class<?> clazz)
     {
         Set<Field> fields = new HashSet<Field>();
