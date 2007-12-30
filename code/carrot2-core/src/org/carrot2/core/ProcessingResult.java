@@ -8,18 +8,11 @@ import java.util.Map;
  */
 public class ProcessingResult
 {
-    public Collection<Cluster> clusters;
-    public Collection<Document> documents;
-    public Map<String,Object> attributes;
+    private final Map<String, Object> attributes;
 
-    public Collection<Cluster> getClusters()
+    public ProcessingResult(Map<String, Object> attributes)
     {
-        return clusters;
-    }
-
-    public Collection<Document> getDocuments()
-    {
-        return documents;
+        this.attributes = attributes;
     }
 
     /**
@@ -28,5 +21,19 @@ public class ProcessingResult
     public Map<String, Object> getAttributes()
     {
         return attributes;
+    }
+
+    @SuppressWarnings("unchecked")
+    public Collection<Document> getDocuments()
+    {
+        // TODO: we need to have one place where the key "documents" is defined
+        return (Collection<Document>) attributes.get("documents");
+    }
+
+    @SuppressWarnings("unchecked")
+    public Collection<Cluster> getClusters()
+    {
+        // TODO: we need to have one place where the key "clusters" is defined
+        return (Collection<Cluster>) attributes.get("clusters");
     }
 }

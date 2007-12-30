@@ -8,7 +8,7 @@ import java.util.*;
 /**
  *
  */
-public class DocumentFactory
+public class TestDocumentFactory
 {
     protected static final Map<String, DataGenerator<?>> DEFAULT_GENERATORS;
     static
@@ -27,13 +27,13 @@ public class DocumentFactory
             Document.CONTENT_URL));
     }
 
-    public static final DocumentFactory DEFAULT = new DocumentFactory(DEFAULT_GENERATORS,
+    public static final TestDocumentFactory DEFAULT = new TestDocumentFactory(DEFAULT_GENERATORS,
         DEFAULT_FIELDS);
 
     private Map<String, DataGenerator<?>> generators;
     private Set<String> fields;
 
-    public DocumentFactory(Map<String, DataGenerator<?>> generators, Set<String> fields)
+    public TestDocumentFactory(Map<String, DataGenerator<?>> generators, Set<String> fields)
     {
         this.generators = generators;
         this.fields = fields;

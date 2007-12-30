@@ -8,8 +8,6 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.*;
 
-import javax.swing.text.DefaultEditorKit.CutAction;
-
 import org.carrot2.core.controller.ControllerUtils;
 import org.junit.Test;
 
@@ -46,7 +44,7 @@ public abstract class ClusteringAlgorithmTest<T extends ClusteringAlgorithm> ext
     {
         final int documentCount = 10;
 
-        Collection<Cluster> clusters = cluster(DocumentFactory.DEFAULT
+        Collection<Cluster> clusters = cluster(TestDocumentFactory.DEFAULT
             .generate(documentCount));
         Collection<Document> documentsFromClusters = collectDocuments(clusters);
 

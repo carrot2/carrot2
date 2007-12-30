@@ -1,6 +1,5 @@
 package org.carrot2.core.controller;
 
-import java.util.Collection;
 import java.util.Map;
 
 import org.carrot2.core.*;
@@ -74,12 +73,7 @@ public class SimpleController
                         .performProcessing(processingComponents[i], attributes);
                 }
 
-                // Form the results object
-                final ProcessingResult result = new ProcessingResult();
-                result.clusters = (Collection<Cluster>) attributes.get("clusters");
-                result.documents = (Collection<Document>) attributes.get("documents");
-
-                return result;
+                return new ProcessingResult(attributes);
             }
             finally
             {

@@ -6,9 +6,6 @@ import static org.junit.Assert.fail;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.carrot2.core.parameter.AttributeBinder;
-import org.carrot2.core.parameter.BindingDirection;
-import org.carrot2.core.parameter.ParameterBinderTest.NotBindable;
 import org.junit.Test;
 
 /**

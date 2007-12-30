@@ -6,12 +6,12 @@ package org.carrot2.clustering.synthetic;
 import java.util.*;
 
 import org.carrot2.core.Document;
-import org.carrot2.core.DocumentFactory;
+import org.carrot2.core.TestDocumentFactory;
 
 /**
  *
  */
-public class DocumentWithUrlsFactory extends DocumentFactory
+public class DocumentWithUrlsFactory extends TestDocumentFactory
 {
     public final static DocumentWithUrlsFactory INSTANCE = new DocumentWithUrlsFactory();
 
