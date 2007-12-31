@@ -5,6 +5,12 @@ import java.util.*;
 
 final class BindableUtils
 {
+    /**
+     * Caches the sets of declared fields determined for class hierarchies by the
+     * {@link #getFieldsFromBindableHierarchy(Class)} method.
+     */
+    private static final Map<Class<?>, Collection<Field>> FIELD_CACHE = new WeakHashMap<Class<?>, Collection<Field>>();
+
     public static String getFieldName(Field field)
     {
         final String key = getKey(field);
@@ -16,7 +22,7 @@ final class BindableUtils
             {
                 throw new IllegalArgumentException();
             }
-            
+
             final String classPrefix = classAnnotation.prefix();
             if ("".equals(classPrefix))
             {
@@ -26,7 +32,7 @@ final class BindableUtils
             {
                 return classPrefix + "." + field.getName();
             }
-            
+
         }
         else
         {
@@ -41,31 +47,39 @@ final class BindableUtils
         {
             return attributeAnnotation.key();
         }
-        
+
         Parameter parameterAnnotation = field.getAnnotation(Parameter.class);
         if (parameterAnnotation != null)
         {
             return parameterAnnotation.key();
         }
-        
+
         throw new IllegalArgumentException();
     }
-    
+
     public static Collection<Field> getFieldsFromBindableHierarchy(Class<?> clazz)
     {
-        Set<Field> fields = new HashSet<Field>();
-
-        if (clazz.getAnnotation(Bindable.class) != null)
+        synchronized (FIELD_CACHE)
         {
-            fields.addAll(Arrays.asList(clazz.getDeclaredFields()));
-        }
+            Collection<Field> fields = FIELD_CACHE.get(clazz);
+            if (fields == null)
+            {
+                fields = new HashSet<Field>();
 
-        Class<?> superClass = clazz.getSuperclass();
-        if (superClass != null)
-        {
-            fields.addAll(getFieldsFromBindableHierarchy(superClass));
-        }
+                if (clazz.getAnnotation(Bindable.class) != null)
+                {
+                    fields.addAll(Arrays.asList(clazz.getDeclaredFields()));
+                }
 
-        return fields;
+                Class<?> superClass = clazz.getSuperclass();
+                if (superClass != null)
+                {
+                    fields.addAll(getFieldsFromBindableHierarchy(superClass));
+                }
+
+                FIELD_CACHE.put(clazz, fields);
+            }
+            return fields;
+        }
     }
 }
