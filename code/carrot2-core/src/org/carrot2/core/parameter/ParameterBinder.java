@@ -22,7 +22,7 @@ public class ParameterBinder
         }
 
         final Collection<ParameterDescriptor> parameterDescriptors = ParameterDescriptorBuilder
-            .getParameters(instance.getClass(), policy);
+            .getParameterDescriptors(instance.getClass(), policy);
 
         final Map<String, Field> fields = ParameterDescriptorBuilder.getFieldMap(instance
             .getClass(), policy);

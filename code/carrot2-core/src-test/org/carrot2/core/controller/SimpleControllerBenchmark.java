@@ -69,7 +69,7 @@ public class SimpleControllerBenchmark
     {
         SimpleController controller = new SimpleController();
 
-        final int requests = 100000;
+        final int requests = 10000;
 
         long start = System.currentTimeMillis();
 

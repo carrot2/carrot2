@@ -11,7 +11,7 @@ final class BindableUtils
      */
     private static final Map<Class<?>, Collection<Field>> FIELD_CACHE = new WeakHashMap<Class<?>, Collection<Field>>();
 
-    public static String getFieldName(Field field)
+    public static String getFieldKey(Field field)
     {
         final String key = getKey(field);
         if ("".equals(key))
@@ -76,7 +76,7 @@ final class BindableUtils
                 {
                     fields.addAll(getFieldsFromBindableHierarchy(superClass));
                 }
-
+                
                 FIELD_CACHE.put(clazz, fields);
             }
             return fields;

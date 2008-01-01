@@ -61,6 +61,13 @@ public class ParameterBinderTest
         private int subclassRuntimeIntField = 5;
     }
 
+    @Bindable(prefix = "Test")
+    public static class TestSubclass2 extends TestClass
+    {
+        @Parameter(policy = BindingPolicy.RUNTIME, key = "clone")
+        protected int runtimeIntField = 7;
+    }
+
     public static class NotBindable
     {
         @Parameter(policy = BindingPolicy.RUNTIME)
@@ -188,6 +195,23 @@ public class ParameterBinderTest
     }
 
     @Test
+    public void testFieldNamingConflict() throws InstantiationException
+    {
+        final Map<String, Object> params = new HashMap<String, Object>();
+        params.put("Test.runtimeIntField", 6);
+        params.put("clone", 9);
+
+        TestSubclass2 instance = ParameterBinder.createInstance(TestSubclass2.class,
+            params);
+        assertEquals(7, instance.runtimeIntField);
+        assertEquals(5, ((TestClass) instance).runtimeIntField);
+
+        ParameterBinder.bind(instance, params, BindingPolicy.RUNTIME);
+        assertEquals(6, ((TestClass) instance).runtimeIntField);
+        assertEquals(9, instance.runtimeIntField);
+    }
+
+    @Test
     public void testSimpleConstraintEnforcement() throws InstantiationException
     {
         final Map<String, Object> violatingParams = new HashMap<String, Object>();
@@ -224,7 +248,7 @@ public class ParameterBinderTest
     {
         TestSubclass instance = new TestSubclass();
         final Map<String, Object> violatingParams = new HashMap<String, Object>();
-        
+
         violatingParams.put("Test.subclassRuntimeIntField", 16);
         try
         {
@@ -237,7 +261,7 @@ public class ParameterBinderTest
             assertEquals(16, e.getOffendingValue());
         }
         assertEquals("Field value not changed", 5, instance.subclassRuntimeIntField);
-        
+
         violatingParams.put("Test.subclassRuntimeIntField", 6);
         try
         {
@@ -250,6 +274,6 @@ public class ParameterBinderTest
             assertEquals(6, e.getOffendingValue());
         }
         assertEquals("Field value not changed", 5, instance.subclassRuntimeIntField);
-        
+
     }
 }

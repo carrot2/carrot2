@@ -17,7 +17,7 @@ public class ParameterDescriptorBuilder
      * 
      */
     @SuppressWarnings("unchecked")
-    public static Collection<ParameterDescriptor> getParameters(Class<?> clazz,
+    public static Collection<ParameterDescriptor> getParameterDescriptors(Class<?> clazz,
         BindingPolicy policy)
     {
         // Output array of parameters.
@@ -43,7 +43,7 @@ public class ParameterDescriptorBuilder
 
         for (final Field field : bindableFields)
         {
-            final String fieldName = BindableUtils.getFieldName(field);
+            final String fieldName = BindableUtils.getFieldKey(field);
 
             List<Constraint> constraints = new ArrayList<Constraint>();
 
@@ -105,7 +105,11 @@ public class ParameterDescriptorBuilder
 
             if (binding.policy() == policy)
             {
-                result.put(BindableUtils.getFieldName(field), field);
+                if (result.put(BindableUtils.getFieldKey(field), field) != null)
+                {
+                    throw new RuntimeException("A field with duplicated key exist: "
+                        + BindableUtils.getFieldKey(field));
+                }
             }
         }
 

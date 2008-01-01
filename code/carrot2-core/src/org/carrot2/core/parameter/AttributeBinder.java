@@ -117,7 +117,7 @@ public final class AttributeBinder
                     || ann.bindingDirection() == BindingDirection.INOUT
                     || ann.bindingDirection() == bindingDirection)
                 {
-                    final String key = BindableUtils.getFieldName(f);
+                    final String key = BindableUtils.getFieldKey(f);
 
                     if (fields.put(key, new FieldInstance(f, instance)) != null)
                     {
