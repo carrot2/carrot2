@@ -12,12 +12,9 @@ Document Clustering Server (REST interface)
 <div class="content">
 <p>
   You can invoke clustering by sending a <span
-  class="code">multipart/form-data</span> POST request to the Document
-  Clustering Server, providing input data in the <span
-  class="code">c2stream</span> form parameter. An optional parameter named
-  <span class="code">algorithm</span> may specify the algorithm to use
-  for clustering (note that this parameter <b>must</b> precede
-  the actual data stream). If nothing is given, the default algorithm is used.
+  class="code">multipart/form-data</span> HTTP POST request to the Document
+  Clustering Server (<span class="code">x-www-form-urlencoded</span> encoding will
+  not work). The format of this request is <a href="parameters.html">explained here</a>.
 </p>
 
 <p>
