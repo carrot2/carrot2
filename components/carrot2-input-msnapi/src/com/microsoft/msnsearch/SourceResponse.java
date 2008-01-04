@@ -1,5 +1,9 @@
-
-// Generated file. Do not edit by hand.
+/**
+ * SourceResponse.java
+ *
+ * This file was auto-generated from WSDL
+ * by the Apache Axis 1.4 Sep 12, 2006 (01:08:05 CEST) WSDL2Java emitter.
+ */
 
 package com.microsoft.msnsearch;
 
@@ -10,6 +14,8 @@ public class SourceResponse  implements java.io.Serializable {
 
     private int total;
 
+    private java.lang.String recourseQuery;
+
     private com.microsoft.msnsearch.Result[] results;
 
     public SourceResponse() {
@@ -19,10 +25,12 @@ public class SourceResponse  implements java.io.Serializable {
            com.microsoft.msnsearch.SourceType source,
            int offset,
            int total,
+           java.lang.String recourseQuery,
            com.microsoft.msnsearch.Result[] results) {
            this.source = source;
            this.offset = offset;
            this.total = total;
+           this.recourseQuery = recourseQuery;
            this.results = results;
     }
 
@@ -88,6 +96,26 @@ public class SourceResponse  implements java.io.Serializable {
 
 
     /**
+     * Gets the recourseQuery value for this SourceResponse.
+     * 
+     * @return recourseQuery
+     */
+    public java.lang.String getRecourseQuery() {
+        return recourseQuery;
+    }
+
+
+    /**
+     * Sets the recourseQuery value for this SourceResponse.
+     * 
+     * @param recourseQuery
+     */
+    public void setRecourseQuery(java.lang.String recourseQuery) {
+        this.recourseQuery = recourseQuery;
+    }
+
+
+    /**
      * Gets the results value for this SourceResponse.
      * 
      * @return results
@@ -123,6 +151,9 @@ public class SourceResponse  implements java.io.Serializable {
               this.source.equals(other.getSource()))) &&
             this.offset == other.getOffset() &&
             this.total == other.getTotal() &&
+            ((this.recourseQuery==null && other.getRecourseQuery()==null) || 
+             (this.recourseQuery!=null &&
+              this.recourseQuery.equals(other.getRecourseQuery()))) &&
             ((this.results==null && other.getResults()==null) || 
              (this.results!=null &&
               java.util.Arrays.equals(this.results, other.getResults())));
@@ -142,6 +173,9 @@ public class SourceResponse  implements java.io.Serializable {
         }
         _hashCode += getOffset();
         _hashCode += getTotal();
+        if (getRecourseQuery() != null) {
+            _hashCode += getRecourseQuery().hashCode();
+        }
         if (getResults() != null) {
             for (int i=0;
                  i<java.lang.reflect.Array.getLength(getResults());
@@ -179,6 +213,13 @@ public class SourceResponse  implements java.io.Serializable {
         elemField.setFieldName("total");
         elemField.setXmlName(new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "Total"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("recourseQuery");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "RecourseQuery"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();

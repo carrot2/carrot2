@@ -1,5 +1,9 @@
-
-// Generated file. Do not edit by hand.
+/**
+ * Result.java
+ *
+ * This file was auto-generated from WSDL
+ * by the Apache Axis 1.4 Sep 12, 2006 (01:08:05 CEST) WSDL2Java emitter.
+ */
 
 package com.microsoft.msnsearch;
 
@@ -32,6 +36,10 @@ public class Result  implements java.io.Serializable {
 
     private java.lang.String resultType;
 
+    private com.microsoft.msnsearch.Image image;
+
+    private com.microsoft.msnsearch.Video video;
+
     public Result() {
     }
 
@@ -49,7 +57,9 @@ public class Result  implements java.io.Serializable {
            com.microsoft.msnsearch.Location location,
            com.microsoft.msnsearch.SearchTag[] searchTagsArray,
            java.lang.String summary,
-           java.lang.String resultType) {
+           java.lang.String resultType,
+           com.microsoft.msnsearch.Image image,
+           com.microsoft.msnsearch.Video video) {
            this.title = title;
            this.description = description;
            this.url = url;
@@ -64,6 +74,8 @@ public class Result  implements java.io.Serializable {
            this.searchTagsArray = searchTagsArray;
            this.summary = summary;
            this.resultType = resultType;
+           this.image = image;
+           this.video = video;
     }
 
 
@@ -346,6 +358,46 @@ public class Result  implements java.io.Serializable {
         this.resultType = resultType;
     }
 
+
+    /**
+     * Gets the image value for this Result.
+     * 
+     * @return image
+     */
+    public com.microsoft.msnsearch.Image getImage() {
+        return image;
+    }
+
+
+    /**
+     * Sets the image value for this Result.
+     * 
+     * @param image
+     */
+    public void setImage(com.microsoft.msnsearch.Image image) {
+        this.image = image;
+    }
+
+
+    /**
+     * Gets the video value for this Result.
+     * 
+     * @return video
+     */
+    public com.microsoft.msnsearch.Video getVideo() {
+        return video;
+    }
+
+
+    /**
+     * Sets the video value for this Result.
+     * 
+     * @param video
+     */
+    public void setVideo(com.microsoft.msnsearch.Video video) {
+        this.video = video;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof Result)) return false;
@@ -399,7 +451,13 @@ public class Result  implements java.io.Serializable {
               this.summary.equals(other.getSummary()))) &&
             ((this.resultType==null && other.getResultType()==null) || 
              (this.resultType!=null &&
-              this.resultType.equals(other.getResultType())));
+              this.resultType.equals(other.getResultType()))) &&
+            ((this.image==null && other.getImage()==null) || 
+             (this.image!=null &&
+              this.image.equals(other.getImage()))) &&
+            ((this.video==null && other.getVideo()==null) || 
+             (this.video!=null &&
+              this.video.equals(other.getVideo())));
         __equalsCalc = null;
         return _equals;
     }
@@ -460,6 +518,12 @@ public class Result  implements java.io.Serializable {
         }
         if (getResultType() != null) {
             _hashCode += getResultType().hashCode();
+        }
+        if (getImage() != null) {
+            _hashCode += getImage().hashCode();
+        }
+        if (getVideo() != null) {
+            _hashCode += getVideo().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -567,6 +631,20 @@ public class Result  implements java.io.Serializable {
         elemField.setFieldName("resultType");
         elemField.setXmlName(new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "ResultType"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("image");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "Image"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "Image"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("video");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "Video"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "Video"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);

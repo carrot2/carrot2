@@ -1,5 +1,9 @@
-
-// Generated file. Do not edit by hand.
+/**
+ * SourceType.java
+ *
+ * This file was auto-generated from WSDL
+ * by the Apache Axis 1.4 Sep 12, 2006 (01:08:05 CEST) WSDL2Java emitter.
+ */
 
 package com.microsoft.msnsearch;
 
@@ -21,6 +25,8 @@ public class SourceType implements java.io.Serializable {
     public static final java.lang.String _WordBreaker = "WordBreaker";
     public static final java.lang.String _Spelling = "Spelling";
     public static final java.lang.String _QueryLocation = "QueryLocation";
+    public static final java.lang.String _Image = "Image";
+    public static final java.lang.String _Video = "Video";
     public static final SourceType Web = new SourceType(_Web);
     public static final SourceType News = new SourceType(_News);
     public static final SourceType Ads = new SourceType(_Ads);
@@ -29,6 +35,8 @@ public class SourceType implements java.io.Serializable {
     public static final SourceType WordBreaker = new SourceType(_WordBreaker);
     public static final SourceType Spelling = new SourceType(_Spelling);
     public static final SourceType QueryLocation = new SourceType(_QueryLocation);
+    public static final SourceType Image = new SourceType(_Image);
+    public static final SourceType Video = new SourceType(_Video);
     public java.lang.String getValue() { return _value_;}
     public static SourceType fromValue(java.lang.String value)
           throws java.lang.IllegalArgumentException {

@@ -1,5 +1,9 @@
-
-// Generated file. Do not edit by hand.
+/**
+ * MSNSearchServiceLocator.java
+ *
+ * This file was auto-generated from WSDL
+ * by the Apache Axis 1.4 Sep 12, 2006 (01:08:05 CEST) WSDL2Java emitter.
+ */
 
 package com.microsoft.msnsearch;
 
@@ -18,7 +22,7 @@ public class MSNSearchServiceLocator extends org.apache.axis.client.Service impl
     }
 
     // Use to get a proxy class for MSNSearchPort
-    private java.lang.String MSNSearchPort_address = "http://soap.search.msn.com:80/webservices.asmx";
+    private java.lang.String MSNSearchPort_address = "http://soap.search.live.com:80/webservices.asmx";
 
     public java.lang.String getMSNSearchPortAddress() {
         return MSNSearchPort_address;
