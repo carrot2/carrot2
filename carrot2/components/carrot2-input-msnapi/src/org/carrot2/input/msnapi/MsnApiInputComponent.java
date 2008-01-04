@@ -34,7 +34,12 @@ import com.microsoft.msnsearch.*;
  */
 public final class MsnApiInputComponent extends LocalInputComponentBase implements RawDocumentsProducer
 {
-    /** Carrot Search application ID. */
+    /**
+     * Carrot Search application ID.
+     * <p>
+     * If you're deploying your own instance of Carrot2 with MSN API input, please get
+     * your own AppID at: http://search.msn.com/developer?mkt=en-us
+     */
     public final static String CARROTSEARCH_APPID = "DE531D8A42139F590B253CADFAD7A86172F93B96";
 
     /** Maximum number of results (starting offset + length) */

@@ -34,11 +34,14 @@
     <xsl:call-template name="body-end-insert" />
 
     <xsl:if test="string-length($ga-code)">
-<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
 </script>
 <script type="text/javascript">
-_uacct = "<xsl:value-of select="$ga-code" />";
-urchinTracker();
+var pageTracker = _gat._getTracker("<xsl:value-of select="$ga-code" />");
+pageTracker._initData();
+pageTracker._trackPageview();
 </script>
     </xsl:if>
   </body>

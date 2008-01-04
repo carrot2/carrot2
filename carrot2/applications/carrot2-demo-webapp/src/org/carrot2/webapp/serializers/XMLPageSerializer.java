@@ -327,6 +327,16 @@ public class XMLPageSerializer implements PageSerializer
                 }
             }
         }
+        
+        Set existingInputs = new HashSet();
+        for (Iterator it = inputs.iterator(); it.hasNext();)
+        {
+            TabSearchInput input = (TabSearchInput) it.next();
+            existingInputs.add(input.getShortName());
+        }
+
+        result.retainAll(existingInputs);
+        
         return result;
     }
 
