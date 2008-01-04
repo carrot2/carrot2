@@ -201,7 +201,8 @@ public final class MsnApiInputComponent extends LocalInputComponentBase implemen
             SafeSearchOptions.Off, // safe search options
             new String []
             {
-                SearchFlagsNull._None
+                SearchFlagsNull._None,
+                SearchFlagsNull._DisableLocationDetection, 
             }, // search flags
             null, // location
             null // requests
@@ -238,7 +239,7 @@ public final class MsnApiInputComponent extends LocalInputComponentBase implemen
         final SourceResponse [] responses;
         try
         {
-            responses = service.search(request).getResponses();
+            responses = service.search(new Search(request)).getResponse().getResponses();
         }
         catch (RemoteException e)
         {
@@ -251,7 +252,7 @@ public final class MsnApiInputComponent extends LocalInputComponentBase implemen
         }
 
         final SourceResponse response = responses[0];
-
+    
         // feed documents.
         final Result [] searchResults = response.getResults();
         if (searchResults.length / (double) fetchSize < 0.5)
