@@ -1,5 +1,9 @@
-
-// Generated file. Do not edit by hand.
+/**
+ * SearchFlagsNull.java
+ *
+ * This file was auto-generated from WSDL
+ * by the Apache Axis 1.4 Sep 12, 2006 (01:08:05 CEST) WSDL2Java emitter.
+ */
 
 package com.microsoft.msnsearch;
 
@@ -17,10 +21,14 @@ public class SearchFlagsNull implements java.io.Serializable {
     public static final java.lang.String _MarkQueryWords = "MarkQueryWords";
     public static final java.lang.String _DisableSpellCorrectForSpecialWords = "DisableSpellCorrectForSpecialWords";
     public static final java.lang.String _DisableHostCollapsing = "DisableHostCollapsing";
+    public static final java.lang.String _DisableLocationDetection = "DisableLocationDetection";
+    public static final java.lang.String _DisableWebQueryAlteration = "DisableWebQueryAlteration";
     public static final SearchFlagsNull None = new SearchFlagsNull(_None);
     public static final SearchFlagsNull MarkQueryWords = new SearchFlagsNull(_MarkQueryWords);
     public static final SearchFlagsNull DisableSpellCorrectForSpecialWords = new SearchFlagsNull(_DisableSpellCorrectForSpecialWords);
     public static final SearchFlagsNull DisableHostCollapsing = new SearchFlagsNull(_DisableHostCollapsing);
+    public static final SearchFlagsNull DisableLocationDetection = new SearchFlagsNull(_DisableLocationDetection);
+    public static final SearchFlagsNull DisableWebQueryAlteration = new SearchFlagsNull(_DisableWebQueryAlteration);
     public java.lang.String getValue() { return _value_;}
     public static SearchFlagsNull fromValue(java.lang.String value)
           throws java.lang.IllegalArgumentException {

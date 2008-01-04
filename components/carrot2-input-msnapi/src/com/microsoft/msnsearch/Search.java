@@ -1,5 +1,5 @@
 /**
- * SearchResponse.java
+ * Search.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis 1.4 Sep 12, 2006 (01:08:05 CEST) WSDL2Java emitter.
@@ -7,41 +7,41 @@
 
 package com.microsoft.msnsearch;
 
-public class SearchResponse  implements java.io.Serializable {
-    private com.microsoft.msnsearch.SourceResponse[] responses;
+public class Search  implements java.io.Serializable {
+    private com.microsoft.msnsearch.SearchRequest request;
 
-    public SearchResponse() {
+    public Search() {
     }
 
-    public SearchResponse(
-           com.microsoft.msnsearch.SourceResponse[] responses) {
-           this.responses = responses;
-    }
-
-
-    /**
-     * Gets the responses value for this SearchResponse.
-     * 
-     * @return responses
-     */
-    public com.microsoft.msnsearch.SourceResponse[] getResponses() {
-        return responses;
+    public Search(
+           com.microsoft.msnsearch.SearchRequest request) {
+           this.request = request;
     }
 
 
     /**
-     * Sets the responses value for this SearchResponse.
+     * Gets the request value for this Search.
      * 
-     * @param responses
+     * @return request
      */
-    public void setResponses(com.microsoft.msnsearch.SourceResponse[] responses) {
-        this.responses = responses;
+    public com.microsoft.msnsearch.SearchRequest getRequest() {
+        return request;
+    }
+
+
+    /**
+     * Sets the request value for this Search.
+     * 
+     * @param request
+     */
+    public void setRequest(com.microsoft.msnsearch.SearchRequest request) {
+        this.request = request;
     }
 
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
-        if (!(obj instanceof SearchResponse)) return false;
-        SearchResponse other = (SearchResponse) obj;
+        if (!(obj instanceof Search)) return false;
+        Search other = (Search) obj;
         if (obj == null) return false;
         if (this == obj) return true;
         if (__equalsCalc != null) {
@@ -50,9 +50,9 @@ public class SearchResponse  implements java.io.Serializable {
         __equalsCalc = obj;
         boolean _equals;
         _equals = true && 
-            ((this.responses==null && other.getResponses()==null) || 
-             (this.responses!=null &&
-              java.util.Arrays.equals(this.responses, other.getResponses())));
+            ((this.request==null && other.getRequest()==null) || 
+             (this.request!=null &&
+              this.request.equals(other.getRequest())));
         __equalsCalc = null;
         return _equals;
     }
@@ -64,16 +64,8 @@ public class SearchResponse  implements java.io.Serializable {
         }
         __hashCodeCalc = true;
         int _hashCode = 1;
-        if (getResponses() != null) {
-            for (int i=0;
-                 i<java.lang.reflect.Array.getLength(getResponses());
-                 i++) {
-                java.lang.Object obj = java.lang.reflect.Array.get(getResponses(), i);
-                if (obj != null &&
-                    !obj.getClass().isArray()) {
-                    _hashCode += obj.hashCode();
-                }
-            }
+        if (getRequest() != null) {
+            _hashCode += getRequest().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -81,16 +73,15 @@ public class SearchResponse  implements java.io.Serializable {
 
     // Type metadata
     private static org.apache.axis.description.TypeDesc typeDesc =
-        new org.apache.axis.description.TypeDesc(SearchResponse.class, true);
+        new org.apache.axis.description.TypeDesc(Search.class, true);
 
     static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "SearchResponse"));
+        typeDesc.setXmlType(new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", ">Search"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("responses");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "Responses"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "SourceResponse"));
+        elemField.setFieldName("request");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "Request"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "SearchRequest"));
         elemField.setNillable(false);
-        elemField.setItemQName(new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "SourceResponse"));
         typeDesc.addFieldDesc(elemField);
     }
 
