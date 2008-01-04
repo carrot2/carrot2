@@ -1,5 +1,9 @@
-
-// Generated file. Do not edit by hand.
+/**
+ * MSNSearchPortBindingStub.java
+ *
+ * This file was auto-generated from WSDL
+ * by the Apache Axis 1.4 Sep 12, 2006 (01:08:05 CEST) WSDL2Java emitter.
+ */
 
 package com.microsoft.msnsearch;
 
@@ -21,12 +25,12 @@ public class MSNSearchPortBindingStub extends org.apache.axis.client.Stub implem
         org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("Search");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "Request"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "SearchRequest"), com.microsoft.msnsearch.SearchRequest.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "Search"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", ">Search"), com.microsoft.msnsearch.Search.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "SearchResponse"));
-        oper.setReturnClass(com.microsoft.msnsearch.SearchResponse.class);
-        oper.setReturnQName(new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "Response"));
-        oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
+        oper.setReturnType(new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", ">SearchResponse"));
+        oper.setReturnClass(com.microsoft.msnsearch.SearchResponseType0.class);
+        oper.setReturnQName(new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "SearchResponse"));
+        oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
         _operations[0] = oper;
 
@@ -61,6 +65,20 @@ public class MSNSearchPortBindingStub extends org.apache.axis.client.Stub implem
             java.lang.Class simpledf = org.apache.axis.encoding.ser.SimpleDeserializerFactory.class;
             java.lang.Class simplelistsf = org.apache.axis.encoding.ser.SimpleListSerializerFactory.class;
             java.lang.Class simplelistdf = org.apache.axis.encoding.ser.SimpleListDeserializerFactory.class;
+            qName = new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", ">Search");
+            cachedSerQNames.add(qName);
+            cls = com.microsoft.msnsearch.Search.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
+            qName = new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", ">SearchResponse");
+            cachedSerQNames.add(qName);
+            cls = com.microsoft.msnsearch.SearchResponseType0.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
             qName = new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "Address");
             cachedSerQNames.add(qName);
             cls = com.microsoft.msnsearch.Address.class;
@@ -120,9 +138,23 @@ public class MSNSearchPortBindingStub extends org.apache.axis.client.Stub implem
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
+            qName = new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "Image");
+            cachedSerQNames.add(qName);
+            cls = com.microsoft.msnsearch.Image.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
             qName = new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "Location");
             cachedSerQNames.add(qName);
             cls = com.microsoft.msnsearch.Location.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
+            qName = new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "MotionThumbnail");
+            cachedSerQNames.add(qName);
+            cls = com.microsoft.msnsearch.MotionThumbnail.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
@@ -232,6 +264,20 @@ public class MSNSearchPortBindingStub extends org.apache.axis.client.Stub implem
             cachedSerFactories.add(enumsf);
             cachedDeserFactories.add(enumdf);
 
+            qName = new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "StaticThumbnail");
+            cachedSerQNames.add(qName);
+            cls = com.microsoft.msnsearch.StaticThumbnail.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
+            qName = new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "Video");
+            cachedSerQNames.add(qName);
+            cls = com.microsoft.msnsearch.Video.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
     }
 
     protected org.apache.axis.client.Call createCall() throws java.rmi.RemoteException {
@@ -298,7 +344,7 @@ public class MSNSearchPortBindingStub extends org.apache.axis.client.Stub implem
         }
     }
 
-    public com.microsoft.msnsearch.SearchResponse search(com.microsoft.msnsearch.SearchRequest request) throws java.rmi.RemoteException {
+    public com.microsoft.msnsearch.SearchResponseType0 search(com.microsoft.msnsearch.Search parameters) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -310,11 +356,11 @@ public class MSNSearchPortBindingStub extends org.apache.axis.client.Stub implem
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
         _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("http://schemas.microsoft.com/MSNSearch/2005/09/fex", "Search"));
+        _call.setOperationName(new javax.xml.namespace.QName("", "Search"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
- try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {request});
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {parameters});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;
@@ -322,9 +368,9 @@ public class MSNSearchPortBindingStub extends org.apache.axis.client.Stub implem
         else {
             extractAttachments(_call);
             try {
-                return (com.microsoft.msnsearch.SearchResponse) _resp;
+                return (com.microsoft.msnsearch.SearchResponseType0) _resp;
             } catch (java.lang.Exception _exception) {
-                return (com.microsoft.msnsearch.SearchResponse) org.apache.axis.utils.JavaUtils.convert(_resp, com.microsoft.msnsearch.SearchResponse.class);
+                return (com.microsoft.msnsearch.SearchResponseType0) org.apache.axis.utils.JavaUtils.convert(_resp, com.microsoft.msnsearch.SearchResponseType0.class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {

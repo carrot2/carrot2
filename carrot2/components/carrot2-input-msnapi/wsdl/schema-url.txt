@@ -1,1 +1,1 @@
-http://soap.search.msn.com/webservices.asmx?wsdl
+http://soap.search.live.com/webservices.asmx?wsdl
