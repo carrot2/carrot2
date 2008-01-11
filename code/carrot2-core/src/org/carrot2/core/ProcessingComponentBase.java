@@ -4,7 +4,7 @@ package org.carrot2.core;
  * A base class for implementation of the {@link ProcessingComponent} interface that
  * provides empty implementations of all life cycle methods.
  */
-public class ProcessingComponentBase implements ProcessingComponent
+public abstract class ProcessingComponentBase implements ProcessingComponent
 {
     @Override
     public void init() throws InitializationException
