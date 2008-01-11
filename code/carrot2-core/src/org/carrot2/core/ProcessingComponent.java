@@ -15,7 +15,7 @@ import org.carrot2.core.parameter.*;
  * <p>
  * TODO: method names?
  * <p>
- * TODO: write proper lifecycle docs
+ * TODO: write proper life cycle docs
  */
 public interface ProcessingComponent
 {
