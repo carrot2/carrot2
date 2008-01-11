@@ -171,7 +171,7 @@ public class SimpleControllerTest
                 ProcessingComponentWithoutDefaultConstructor.class);
             fail();
         }
-        catch (InstantiationException e)
+        catch (ProcessingException e)
         {
             // expected
         }
@@ -212,7 +212,7 @@ public class SimpleControllerTest
         processingComponent3Mock.init();
         processingComponent1Mock.beforeProcessing();
         processingComponent2Mock.beforeProcessing();
-        mocksControl.andThrow(new ProcessingException(null));
+        mocksControl.andThrow(new ProcessingException("no message"));
         processingComponent1Mock.afterProcessing();
         processingComponent2Mock.afterProcessing();
         processingComponent3Mock.afterProcessing();
@@ -246,7 +246,7 @@ public class SimpleControllerTest
         processingComponent3Mock.beforeProcessing();
         processingComponent1Mock.performProcessing();
         processingComponent2Mock.performProcessing();
-        mocksControl.andThrow(new ProcessingException(null));
+        mocksControl.andThrow(new ProcessingException("no message"));
         processingComponent1Mock.afterProcessing();
         processingComponent2Mock.afterProcessing();
         processingComponent3Mock.afterProcessing();

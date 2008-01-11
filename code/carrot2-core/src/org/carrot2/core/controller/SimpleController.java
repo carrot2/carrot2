@@ -41,15 +41,23 @@ public final class SimpleController
     @SuppressWarnings("unchecked")
     public ProcessingResult process(Map<String, Object> parameters,
         Map<String, Object> attributes, Class<?>... processingComponentClasses)
-        throws InstantiationException, InitializationException, ProcessingException
+        throws ProcessingException
     {
         // Create instances of processing components.
         final ProcessingComponent [] processingComponents = 
             new ProcessingComponent [processingComponentClasses.length];
         for (int i = 0; i < processingComponents.length; i++)
         {
-            processingComponents[i] = (ProcessingComponent) ParameterBinder
-                .createInstance(processingComponentClasses[i], parameters);
+            try
+            {
+                processingComponents[i] = (ProcessingComponent) ParameterBinder
+                    .createInstance(processingComponentClasses[i], parameters);
+            }
+            catch (InstantiationException e)
+            {
+                throw new ComponentInitializationException("Could not instantiate component class: " 
+                    + processingComponentClasses[i].getName(), e);
+            }
         }
 
         return process(parameters, attributes, processingComponents);
@@ -60,7 +68,7 @@ public final class SimpleController
      */
     public ProcessingResult process(Map<String, Object> parameters,
         Map<String, Object> attributes, ProcessingComponent... processingComponents)
-        throws InstantiationException, InitializationException, ProcessingException
+        throws ProcessingException
     {
         try
         {

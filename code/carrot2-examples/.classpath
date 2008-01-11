@@ -5,5 +5,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-algorithm-synthetic"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-core"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-source-yahoo"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>

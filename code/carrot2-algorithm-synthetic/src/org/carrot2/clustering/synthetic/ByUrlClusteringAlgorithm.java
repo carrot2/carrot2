@@ -19,13 +19,6 @@ import com.google.common.collect.Multimap;
 public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
     ClusteringAlgorithm
 {
-    @Attribute(key = "documents", bindingDirection = BindingDirection.IN)
-    private Collection<Document> documents = Collections.<Document> emptyList();
-
-    @SuppressWarnings("unused")
-    @Attribute(key = "clusters", bindingDirection = BindingDirection.OUT)
-    private Collection<Cluster> clusters = null;
-
     private static final Set<String> STOP_URL_PARTS;
     static
     {
@@ -33,6 +26,16 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
         STOP_URL_PARTS.add("www");
     }
 
+    @Attribute(key = "documents", bindingDirection = BindingDirection.IN)
+    private Collection<Document> documents = Collections.<Document> emptyList();
+
+    @SuppressWarnings("unused")
+    @Attribute(key = "clusters", bindingDirection = BindingDirection.OUT)
+    private Collection<Cluster> clusters = null;
+
+    /*
+     * 
+     */
     @Override
     public void performProcessing() throws ProcessingException
     {
@@ -41,10 +44,10 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
             .toArray(new Document [this.documents.size()]);
 
         // Prepare an array of url parts
-        String [][] urlParts = buildUrlParts(documentArray);
+        final String [][] urlParts = buildUrlParts(documentArray);
 
         // Recursively build the cluster structure
-        List<Integer> documentIndexes = new ArrayList<Integer>(documentArray.length);
+        final List<Integer> documentIndexes = new ArrayList<Integer>(documentArray.length);
         for (int i = 0; i < documentArray.length; i++)
         {
             documentIndexes.add(new Integer(i));
@@ -52,6 +55,9 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
         this.clusters = createClusters(documentArray, documentIndexes, urlParts, 0, "");
     }
 
+    /*
+     * 
+     */
     private List<Cluster> createClusters(Document [] documents,
         Collection<Integer> documentIndexes, String [][] urlParts, int level,
         String labelSuffix)
@@ -142,7 +148,10 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
         return clusters;
     }
 
-    String [][] buildUrlParts(final Document [] documents)
+    /*
+     * 
+     */
+    final String [][] buildUrlParts(final Document [] documents)
     {
         final String [][] urlParts = new String [documents.length] [];
         for (int i = 0; i < documents.length; i++)
@@ -173,8 +182,8 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
                 slashIndex = url.length();
             }
 
-            final String urlMainPart = url.substring(colonSlashSlashIndex, slashIndex)
-                .toLowerCase();
+            final String urlMainPart = 
+                url.substring(colonSlashSlashIndex, slashIndex).toLowerCase();
 
             final String [] splitUrl = urlMainPart.split("\\.");
             ArrayUtils.reverse(splitUrl);

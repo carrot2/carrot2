@@ -100,17 +100,10 @@ public abstract class ClusteringAlgorithmTest<T extends ClusteringAlgorithm> ext
         Collection<Document> documents, Map<String, Object> parameters,
         Map<String, Object> attributes)
     {
-        try
-        {
-            attributes.put("documents", documents);
-            SimpleController controller = new SimpleController();
-            controller.process(parameters, attributes, instance);
-            return (Collection<Cluster>) attributes.get("clusters");
-        }
-        catch (InstantiationException e)
-        {
-            throw new RuntimeException();
-        }
+        attributes.put("documents", documents);
+        SimpleController controller = new SimpleController();
+        controller.process(parameters, attributes, instance);
+        return (Collection<Cluster>) attributes.get("clusters");
     }
 
     /**

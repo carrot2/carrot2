@@ -75,19 +75,9 @@ public class ClusteringWithDirectDocumentFeed
         
         attributes.put("documents", documents);
         
-        ProcessingResult result;
-        try
-        {
-            result = controller.process(parameters, attributes,
-                ByUrlClusteringAlgorithm.class);
-        }
-        catch (InstantiationException e)
-        {
-            // TODO: InstantiationException can be thrown in parameter/ attribute binding
-            // code, but maybe we could wrap it in some runtime exception? 
-            throw new RuntimeException();
-        }
-        
+        final ProcessingResult result = 
+            controller.process(parameters, attributes, ByUrlClusteringAlgorithm.class);
+
         ExampleUtils.displayResults(result);
     }
 }

@@ -24,9 +24,9 @@ public interface ProcessingComponent
      * bound. This method is called once in the life time of a processing component
      * object.
      * 
-     * @throws InitializationException when initialization failed
+     * @throws ComponentInitializationException when initialization failed
      */
-    public void init() throws InitializationException;
+    public void init() throws ComponentInitializationException;
 
     /**
      * Invoked after the {@link BindingPolicy#RUNTIME} parameters and

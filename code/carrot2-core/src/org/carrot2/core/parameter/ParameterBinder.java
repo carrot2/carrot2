@@ -50,7 +50,7 @@ public class ParameterBinder
                 catch (IllegalAccessException e)
                 {
                     throw new InstantiationException(
-                        "Could not create instance of class:" + clazz.getName()
+                        "Could not create instance of class: " + clazz.getName()
                             + " for parameter " + parameterDescriptor.getKey());
                 }
             }
