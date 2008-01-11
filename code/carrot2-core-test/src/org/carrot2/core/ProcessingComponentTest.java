@@ -22,7 +22,7 @@ public abstract class ProcessingComponentTest<T extends ProcessingComponent>
     }
 
     /**
-     * Creates and initializes an instance of the clustering algorighm.
+     * Creates and initializes an instance of the clustering algorithm.
      * 
      * @return
      */

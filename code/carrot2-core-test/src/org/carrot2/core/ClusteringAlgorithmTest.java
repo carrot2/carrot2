@@ -6,9 +6,13 @@ package org.carrot2.core;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 
-import org.carrot2.core.controller.ControllerUtils;
+import org.carrot2.core.controller.SimpleController;
 import org.junit.Test;
 
 /**
@@ -90,9 +94,6 @@ public abstract class ClusteringAlgorithmTest<T extends ClusteringAlgorithm> ext
 
     /**
      * Performs clustering.
-     * 
-     * @param documents
-     * @return
      */
     @SuppressWarnings("unchecked")
     public Collection<Cluster> cluster(ClusteringAlgorithm instance,
@@ -102,10 +103,8 @@ public abstract class ClusteringAlgorithmTest<T extends ClusteringAlgorithm> ext
         try
         {
             attributes.put("documents", documents);
-            ControllerUtils.beforeProcessing(instance, parameters, attributes);
-            ControllerUtils.performProcessing(instance, attributes);
-            ControllerUtils.afterProcessing(instance, attributes);
-
+            SimpleController controller = new SimpleController();
+            controller.process(parameters, attributes, instance);
             return (Collection<Cluster>) attributes.get("clusters");
         }
         catch (InstantiationException e)
