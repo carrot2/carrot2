@@ -14,14 +14,6 @@ public final class StreamUtils
     }
 
     /**
-     * Reads an entire file into a byte array.
-     */
-    public static byte [] read(String fileName) throws IOException
-    {
-        return readClose(new FileInputStream(fileName));
-    }
-
-    /**
      * Read the contents of an opened stream until EOF (or an exception is thrown). Note
      * that this method does close the input stream, regardless whether exception has been
      * thrown or not.
@@ -29,15 +21,15 @@ public final class StreamUtils
      * @param input Input stream to be read.
      * @throws IOException propagated from the underlying stream.
      */
-    public static byte [] readClose(InputStream input) throws IOException
+    public static byte [] readFullyAndClose(InputStream input) throws IOException
     {
         try
         {
-            return read(input);
+            return readFully(input);
         }
         finally
         {
-            CloseableUtils.close(input);
+            CloseableUtils.closeIgnoringException(input);
         }
     }
 
@@ -48,7 +40,7 @@ public final class StreamUtils
      * @param input InputStream from which data is to be read.
      * @throws IOException propagated from the underlying stream.
      */
-    public static byte [] read(final InputStream input) throws IOException
+    public static byte [] readFully(final InputStream input) throws IOException
     {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream(8 * 1024);
         final byte [] buffer = new byte [8 * 1024];
@@ -70,15 +62,15 @@ public final class StreamUtils
      * @param input Reader to be read.
      * @throws IOException propagated from the underlying stream.
      */
-    public static char [] readClose(Reader input) throws IOException
+    public static char [] readFullyAndClose(Reader input) throws IOException
     {
         try
         {
-            return readClose(input);
+            return readFullyAndClose(input);
         }
         finally
         {
-            CloseableUtils.close(input);
+            CloseableUtils.closeIgnoringException(input);
         }
     }
 
@@ -89,7 +81,7 @@ public final class StreamUtils
      * @param input Reader from which data will be read.
      * @throws IOException propagated from the underlying stream.
      */
-    public static char [] read(Reader input) throws IOException
+    public static char [] readFully(Reader input) throws IOException
     {
         final CharArrayWriter baos = new CharArrayWriter(8 * 1024);
         final char [] buffer = new char [8 * 1024];

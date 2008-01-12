@@ -26,30 +26,21 @@ public class ConstraintCreatorTest
     }
 
     @Test
-    public void testCreateImplementation()
+    public void testCreateImplementationSuccess() throws InstantiationException,
+        IllegalAccessException
     {
-        try
-        {
-            Constraint impl = ConstraintFactory.createImplementation(IntRange.class
-                .getAnnotation(IsConstraint.class));
-            assertNotNull(impl);
-            assertEquals(RangeConstraint.class, impl.getClass());
-        }
-        catch (Exception e)
-        {
-            fail(e.getMessage());
-        }
-        
-        try
-        {
-            ConstraintFactory.createImplementation(TestConstraintAnnotation.class
-                .getAnnotation(IsConstraint.class));
-            fail();
-        }
-        catch (Exception e)
-        {
-            // supposed to happen
-        }
+        Constraint impl = ConstraintFactory.createImplementation(IntRange.class
+            .getAnnotation(IsConstraint.class));
+        assertNotNull(impl);
+        assertEquals(RangeConstraint.class, impl.getClass());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testCreateImplementationException() throws InstantiationException,
+        IllegalAccessException
+    {
+        ConstraintFactory.createImplementation(TestConstraintAnnotation.class
+            .getAnnotation(IsConstraint.class));
     }
 
     @SuppressWarnings("unchecked")
@@ -57,7 +48,7 @@ public class ConstraintCreatorTest
     public void testCreateConstraint() throws NoSuchFieldException
     {
         TestSample sample = new TestSample();
-        
+
         {
             IntRange range = TestSample.class.getField("somethingAmount").getAnnotation(
                 IntRange.class);
@@ -72,7 +63,7 @@ public class ConstraintCreatorTest
             sample.somethingAmount = 9;
             assertFalse(rangeImpl.isMet(sample.somethingAmount));
         }
-        
+
         {
             DoubleRange range = TestSample.class.getField("somethingPercent")
                 .getAnnotation(DoubleRange.class);

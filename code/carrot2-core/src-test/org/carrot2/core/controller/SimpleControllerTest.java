@@ -5,7 +5,6 @@ package org.carrot2.core.controller;
 
 import static org.easymock.EasyMock.createStrictControl;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,8 +12,7 @@ import java.util.Map;
 import org.carrot2.core.*;
 import org.carrot2.core.parameter.*;
 import org.easymock.IMocksControl;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 /**
  *
@@ -35,7 +33,7 @@ public class SimpleControllerTest
     @Bindable
     public static class ProcessingComponent1 extends DelegatingProcessingComponent
     {
-        @Parameter(policy = BindingPolicy.INSTANTIATION, key="delegate1")
+        @Parameter(policy = BindingPolicy.INSTANTIATION, key = "delegate1")
         private ProcessingComponent delegate1;
 
         @Override
@@ -48,7 +46,7 @@ public class SimpleControllerTest
     @Bindable
     public static class ProcessingComponent2 extends DelegatingProcessingComponent
     {
-        @Parameter(policy = BindingPolicy.INSTANTIATION, key="delegate2")
+        @Parameter(policy = BindingPolicy.INSTANTIATION, key = "delegate2")
         private ProcessingComponent delegate2;
 
         @Override
@@ -61,7 +59,7 @@ public class SimpleControllerTest
     @Bindable
     public static class ProcessingComponent3 extends DelegatingProcessingComponent
     {
-        @Parameter(policy = BindingPolicy.INSTANTIATION, key="delegate3")
+        @Parameter(policy = BindingPolicy.INSTANTIATION, key = "delegate3")
         private ProcessingComponent delegate3;
 
         @Override
@@ -93,14 +91,20 @@ public class SimpleControllerTest
         parameters.put("delegate1", processingComponent1Mock);
         parameters.put("delegate2", processingComponent2Mock);
         parameters.put("delegate3", processingComponent3Mock);
-        
+
         attributes = new HashMap<String, Object>();
 
         controller = new SimpleController();
     }
 
+    @After
+    public void verifyMocks()
+    {
+        mocksControl.verify();
+    }
+
     @Test
-    public void testNormalExecution1Component() throws InstantiationException
+    public void testNormalExecution1Component()
     {
         processingComponent1Mock.init();
         processingComponent1Mock.beforeProcessing();
@@ -123,7 +127,7 @@ public class SimpleControllerTest
     }
 
     @Test
-    public void testNormalExecution3Components() throws InstantiationException
+    public void testNormalExecution3Components()
     {
         processingComponent1Mock.init();
         processingComponent2Mock.init();
@@ -155,32 +159,20 @@ public class SimpleControllerTest
         controller.process(parameters, attributes, ProcessingComponent1.class,
             ProcessingComponent2.class, ProcessingComponent3.class);
 
-        mocksControl.verify();
-
         assertEquals("diririr", attributes.get("data"));
     }
 
-    @Test
-    public void testExceptionWhileCreatingInstances() throws InstantiationException
+    @Test(expected = ProcessingException.class)
+    public void testExceptionWhileCreatingInstances()
     {
         mocksControl.replay();
 
-        try
-        {
-            controller.process(parameters, attributes, ProcessingComponent1.class,
-                ProcessingComponentWithoutDefaultConstructor.class);
-            fail();
-        }
-        catch (ProcessingException e)
-        {
-            // expected
-        }
-
-        mocksControl.verify();
+        controller.process(parameters, attributes, ProcessingComponent1.class,
+            ProcessingComponentWithoutDefaultConstructor.class);
     }
-    
-    @Test
-    public void testExceptionWhileInit() throws InstantiationException
+
+    @Test(expected = InitializationException.class)
+    public void testExceptionWhileInit()
     {
         processingComponent1Mock.init();
         processingComponent2Mock.init();
@@ -189,23 +181,13 @@ public class SimpleControllerTest
         processingComponent2Mock.dispose();
         processingComponent3Mock.dispose();
         mocksControl.replay();
-        
-        try
-        {
-            controller.process(parameters, attributes, ProcessingComponent1.class,
-                ProcessingComponent2.class, ProcessingComponent3.class);
-            fail();
-        }
-        catch (InitializationException e)
-        {
-            // expected
-        }
-        
-        mocksControl.verify();
+
+        controller.process(parameters, attributes, ProcessingComponent1.class,
+            ProcessingComponent2.class, ProcessingComponent3.class);
     }
-    
-    @Test
-    public void testExceptionBeforeProcessing() throws InstantiationException
+
+    @Test(expected = ProcessingException.class)
+    public void testExceptionBeforeProcessing()
     {
         processingComponent1Mock.init();
         processingComponent2Mock.init();
@@ -220,23 +202,13 @@ public class SimpleControllerTest
         processingComponent2Mock.dispose();
         processingComponent3Mock.dispose();
         mocksControl.replay();
-        
-        try
-        {
-            controller.process(parameters, attributes, ProcessingComponent1.class,
-                ProcessingComponent2.class, ProcessingComponent3.class);
-            fail();
-        }
-        catch (ProcessingException e)
-        {
-            // expected
-        }
-        
-        mocksControl.verify();
+
+        controller.process(parameters, attributes, ProcessingComponent1.class,
+            ProcessingComponent2.class, ProcessingComponent3.class);
     }
-    
-    @Test
-    public void testExceptionDuringProcessing() throws InstantiationException
+
+    @Test(expected = ProcessingException.class)
+    public void testExceptionDuringProcessing()
     {
         processingComponent1Mock.init();
         processingComponent2Mock.init();
@@ -254,18 +226,8 @@ public class SimpleControllerTest
         processingComponent2Mock.dispose();
         processingComponent3Mock.dispose();
         mocksControl.replay();
-        
-        try
-        {
-            controller.process(parameters, attributes, ProcessingComponent1.class,
-                ProcessingComponent2.class, ProcessingComponent3.class);
-            fail();
-        }
-        catch (ProcessingException e)
-        {
-            // expected
-        }
-        
-        mocksControl.verify();
+
+        controller.process(parameters, attributes, ProcessingComponent1.class,
+            ProcessingComponent2.class, ProcessingComponent3.class);
     }
 }

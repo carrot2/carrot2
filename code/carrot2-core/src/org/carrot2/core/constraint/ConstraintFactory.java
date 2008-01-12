@@ -49,7 +49,7 @@ public class ConstraintFactory
         Class<?> implClass = ann.implementation();
         if (!Constraint.class.isAssignableFrom(implClass))
         {
-            throw new RuntimeException("Implementation class "
+            throw new IllegalArgumentException("Implementation class "
                 + implClass.getClass().getName() + " must implement "
                 + Constraint.class.getName());
         }

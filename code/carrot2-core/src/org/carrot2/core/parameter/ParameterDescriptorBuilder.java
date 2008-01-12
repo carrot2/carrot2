@@ -5,8 +5,8 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.util.*;
 
+import org.apache.commons.lang.ClassUtils;
 import org.carrot2.core.constraint.*;
-import org.carrot2.util.ClassUtils;
 
 /**
  * 
@@ -75,7 +75,7 @@ public class ParameterDescriptorBuilder
                     + fieldName);
             }
 
-            params.add(new ParameterDescriptor(fieldName, ClassUtils.boxPrimitive(field
+            params.add(new ParameterDescriptor(fieldName, ClassUtils.primitiveToWrapper(field
                 .getType()), fieldValue, constraint));
         }
 

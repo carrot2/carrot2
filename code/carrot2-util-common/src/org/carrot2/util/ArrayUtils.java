@@ -4,31 +4,14 @@
 package org.carrot2.util;
 
 /**
- *
+ * Provides a number of useful method operating on {@link Array}s.
+ * <p>
+ * Although we inherit from {@link org.apache.commons.lang.ArrayUtils} to explicitly show
+ * the relation to it, please reference the static methods from their original class.
  */
-public final class ArrayUtils
+public final class ArrayUtils extends org.apache.commons.lang.ArrayUtils
 {
     private ArrayUtils()
     {
-    }
-    
-    /**
-     * Reverses an array in place. The reference to the input array is returned for 
-     * convenience.
-     */
-    public static <T> T [] reverse(T [] array)
-    {
-        if (array != null) {
-            T temp;
-            
-            for (int i = 0; i < (array.length / 2); i++)
-            {
-                temp = array[i];
-                array[i] = array[array.length - i - 1];
-                array[array.length - i - 1] = temp;
-            }
-        }
-        
-        return array;
     }
 }

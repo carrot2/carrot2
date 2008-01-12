@@ -1,7 +1,7 @@
 package org.carrot2.core.parameter;
 
 import org.carrot2.core.constraint.Constraint;
-import org.carrot2.util.ObjectUtils;
+import org.apache.commons.lang.ObjectUtils;
 
 public class ParameterDescriptor
 {

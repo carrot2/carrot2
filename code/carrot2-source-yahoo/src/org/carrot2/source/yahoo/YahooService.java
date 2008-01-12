@@ -99,14 +99,14 @@ public final class YahooService
             {
                 // Read the output and throw an exception.
                 final String m = "Yahoo returned HTTP Error: " + statusCode
-                    + ", HTTP payload: " + new String(StreamUtils.read(is), "iso8859-1");
+                    + ", HTTP payload: " + new String(StreamUtils.readFully(is), "iso8859-1");
                 logger.warn(m);
                 throw new IOException(m);
             }
         }
         finally
         {
-            if (is != null) CloseableUtils.close(is);
+            if (is != null) CloseableUtils.closeIgnoringException(is);
             request.releaseConnection();
         }
     }

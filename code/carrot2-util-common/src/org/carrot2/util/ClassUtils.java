@@ -1,34 +1,15 @@
 package org.carrot2.util;
 
-
 /**
- * Class related utilities.
+ * Provides a number of useful method operating on {@link Class}es.
+ * <p>
+ * Although we inherit from {@link org.apache.commons.lang.ClassUtils} to explicitly show
+ * the relation to it, please reference the static methods from their original class.
  */
-public final class ClassUtils
+public final class ClassUtils extends org.apache.commons.lang.ClassUtils
 {
     private ClassUtils()
     {
         // no instances.
-    }
-
-    /**
-     * Convert primitive types to their boxed counterparts. 
-     */
-    public static Class<?> boxPrimitive(Class<?> type)
-    {
-        if (type.isPrimitive())
-        {
-            if (Byte.TYPE == type) return Byte.class;
-            if (Short.TYPE == type) return Short.class;
-            if (Integer.TYPE == type) return Integer.class;
-            if (Long.TYPE == type) return Long.class;
-            if (Float.TYPE == type) return Float.class;
-            if (Double.TYPE == type) return Double.class;
-            if (Character.TYPE == type) return Character.class;
-            if (Boolean.TYPE == type) return Boolean.class;
-            throw new RuntimeException("Unknown primitive type: " + type);
-        }
-
-        return type;
     }
 }

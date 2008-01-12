@@ -5,7 +5,7 @@ package org.carrot2.core.constraint;
 
 import java.util.*;
 
-import org.carrot2.util.ObjectUtils;
+import org.apache.commons.lang.ObjectUtils;
 
 /**
  *

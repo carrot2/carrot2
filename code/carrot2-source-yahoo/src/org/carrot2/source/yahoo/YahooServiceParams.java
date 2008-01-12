@@ -7,6 +7,9 @@ import org.carrot2.core.parameter.Parameter;
 /**
  * Yahoo! search service parameters. Several of these parameters (if set) correspond to
  * the service documentation (links below).
+ * <p>
+ * TODO: As we briefly discussed, for now I'd flatten this data object to the class it
+ * belongs {@link YahooService}, just as we did for {@link YahooDocumentSource}.
  * 
  * @see http://com3.devnet.re3.yahoo.com/search/
  * @see http://com3.devnet.re3.yahoo.com/search/web/V1/webSearch.html

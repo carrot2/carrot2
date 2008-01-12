@@ -2,11 +2,9 @@ package org.carrot2.source.yahoo;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
 import org.carrot2.core.Document;
 import org.junit.Before;
 import org.junit.Test;
@@ -64,18 +62,10 @@ public class YahooServiceTest
         }
     }
 
-    @Test
+    @Test(expected=IOException.class)
     public void testErrorResult() throws Exception
     {
         service.serviceParams.maxResultsPerPage = 400;
-        try
-        {
-            service.query("apache", 0, 400);
-            fail();
-        }
-        catch (IOException e)
-        {
-            // This is expected, good.
-        }
+        service.query("apache", 0, 400);
     }
 }
