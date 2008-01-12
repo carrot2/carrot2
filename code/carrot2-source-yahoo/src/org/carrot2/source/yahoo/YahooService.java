@@ -132,7 +132,7 @@ public final class YahooService
         }
         catch (SAXException e)
         {
-            final Throwable cause = e.getCause();
+            final Throwable cause = e.getException();
             if (cause != null && cause instanceof IOException)
             {
                 throw (IOException) cause;

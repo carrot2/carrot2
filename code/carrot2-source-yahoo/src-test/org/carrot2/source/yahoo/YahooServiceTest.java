@@ -1,105 +1,81 @@
 package org.carrot2.source.yahoo;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.io.IOException;
+
+import org.apache.log4j.Logger;
+import org.carrot2.core.Document;
+import org.junit.Before;
 import org.junit.Test;
 
-/*
- * 
+/**
+ * Tests plain service accessor (no queries longer than a single page etc.).
  */
 public class YahooServiceTest
 {
+    private YahooService service;
+
+    @Before
+    public void init()
+    {
+        service = new YahooService();
+    }
+    
     @Test
     public void testNoResultsQuery() throws Exception
     {
-        final YahooService service = new YahooService();
         final SearchResponse response = service.query("duiogig oiudgisugviw siug iugw iusviuwg", 0, 100);
-
         assertEquals(0, response.results.size());
     }
 
     @Test
     public void testPolishDiacritics() throws Exception
     {
-        final YahooService service = new YahooService();
         final SearchResponse response = service.query("Łódź", 0, 100);
         assertEquals(service.serviceParams.maxResultsPerPage, response.results.size());
     }
 
-/*
+    @Test
     public void testLargerQuery() throws Exception
     {
-        YahooSearchServiceDescriptor descriptor = new YahooSearchServiceDescriptor();
-        descriptor.initializeFromXML(this.getClass().getResourceAsStream(
-            "yahoo-site-cs.xml"));
-
-        YahooSearchService service = new YahooSearchService(descriptor);
-        YahooSearchResult [] result = service.query("apache", 255);
-        assertEquals(descriptor.getMaxResultsPerQuery(), result.length);
+        final int needed = service.serviceParams.maxResultsPerPage / 2;
+        final SearchResponse response = service.query("apache", 0, needed);
+        assertEquals(needed, response.results.size());
     }
 
-    public void testFewerThanMaxPerQuery() throws Exception
-    {
-        YahooSearchServiceDescriptor descriptor = new YahooSearchServiceDescriptor();
-        descriptor.initializeFromXML(this.getClass().getResourceAsStream(
-            "yahoo-site-cs.xml"));
-
-        YahooSearchService service = new YahooSearchService(descriptor);
-        YahooSearchResult [] result = service.query("apache", descriptor
-            .getMaxResultsPerQuery() / 2);
-        assertEquals(descriptor.getMaxResultsPerQuery() / 2, result.length);
-    }
-
+    @Test
     public void testEntities() throws Exception
     {
-        YahooSearchServiceDescriptor descriptor = new YahooSearchServiceDescriptor();
-        descriptor.initializeFromXML(this.getClass().getClassLoader()
-            .getResourceAsStream("resource/yahoo.xml"));
+        final SearchResponse response = service.query("Ala ma kota", 0, 100);
 
-        YahooSearchService service = new YahooSearchService(descriptor);
-        YahooSearchResult [] result = service.query("Ala ma kota", 100);
-
-        final Logger logger = Logger.getLogger(YahooSearchServiceTest.class);
-        for (int i = 0; i < result.length; i++)
+        for (Document d : response.results)
         {
-            final String titleSummary = (result[i].title + " " + result[i].summary);
-            logger.debug(titleSummary);
-            assertTrue(titleSummary.indexOf("&gt;") < 0);
-            assertTrue(titleSummary.indexOf("&lt;") < 0);
-            assertTrue(titleSummary.indexOf("&amp;") < 0);
+            final String title = d.getField(Document.TITLE);
+            final String summary = d.getField(Document.SUMMARY);
+
+            final String merged = (title + " " + summary);
+
+            assertTrue(merged.indexOf("&gt;") < 0);
+            assertTrue(merged.indexOf("&lt;") < 0);
+            assertTrue(merged.indexOf("&amp;") < 0);
         }
     }
 
+    @Test
     public void testErrorResult() throws Exception
     {
-        YahooSearchServiceDescriptor descriptor = new YahooSearchServiceDescriptor();
-        descriptor.initializeFromXML(this.getClass().getResourceAsStream(
-            "yahoo-site-cs.xml"));
-
-        descriptor.setMaxResultsPerQuery(400);
-
-        YahooSearchService service = new YahooSearchService(descriptor);
+        service.serviceParams.maxResultsPerPage = 400;
         try
         {
-            service.query("apache", descriptor.getMaxResultsPerQuery() * 2);
+            service.query("apache", 0, 400);
             fail();
         }
         catch (IOException e)
         {
-            // expected, good.
+            // This is expected, good.
         }
     }
-
-    public static Test suite()
-    {
-        if (isApiTestingEnabled())
-        {
-            return new TestSuite(YahooSearchServiceTest.class);
-        }
-        else
-        {
-            return new TestSuite();
-        }
-    }
-*/
-
 }

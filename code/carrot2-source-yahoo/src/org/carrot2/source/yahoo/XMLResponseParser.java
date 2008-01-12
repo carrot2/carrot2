@@ -60,7 +60,7 @@ final class XMLResponseParser implements ContentHandler
     public void endDocument() throws SAXException
     {
         if (error) {
-            throw new SAXException(new IOException(errorText.toString()));
+            throw new SAXException(new IOException("Yahoo! service error: " + errorText.toString()));
         }
     }
 
