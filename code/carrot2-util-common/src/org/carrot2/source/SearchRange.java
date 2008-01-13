@@ -6,6 +6,10 @@ package org.carrot2.source;
  * TODO: Assuming that the carrot2-util-common project should contain only general code,
  * which could be reusable pretty much everywhere (should it?), this class should probably
  * be not in this project, maybe the core project is better for it?
+ * 
+ * REPLY: I don't know if the core project is the right place to store such a class. This is
+ * not really the API, it just happens to be useful in a number of places. That's what util 
+ * projects are for, right?
  */
 public final class SearchRange
 {
@@ -18,8 +22,12 @@ public final class SearchRange
     /** How many results to fetch. */
     public final int results;
 
-    /*
+    /**
+     * Create a new search range.
      * 
+     * @param start Start index of the first result to return (0-based).
+     * @param results The number of results to return. The actual number of results
+     * returned by a search service may be lower than this number.
      */
     public SearchRange(int start, int results)
     {
