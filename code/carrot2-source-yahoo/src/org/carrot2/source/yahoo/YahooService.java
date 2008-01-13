@@ -16,7 +16,9 @@ import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.log4j.Logger;
+import org.carrot2.core.parameter.Attribute;
 import org.carrot2.core.parameter.Bindable;
+import org.carrot2.core.parameter.BindingDirection;
 import org.carrot2.core.parameter.BindingPolicy;
 import org.carrot2.core.parameter.Parameter;
 import org.carrot2.util.CloseableUtils;
@@ -43,6 +45,12 @@ public final class YahooService
     public YahooServiceParams serviceParams = new YahooServiceParams();
 
     /**
+     * Number of requests made to the search service (total).
+     */
+    @Attribute(bindingDirection = BindingDirection.OUT)
+    private volatile int requestCount;
+    
+    /**
      * Sends a Web search query to Yahoo!.
      */
     public SearchResponse query(String query, int start, int results) throws IOException
@@ -68,6 +76,7 @@ public final class YahooService
             request.setQueryString(params.toArray(new NameValuePair [params.size()]));
 
             logger.info("Request params: " + request.getQueryString());
+            requestCount++;
             final int statusCode = client.executeMethod(request);
 
             // Unwrap compressed streams.

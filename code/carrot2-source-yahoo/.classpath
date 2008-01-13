@@ -11,5 +11,6 @@
 	<classpathentry kind="var" path="CARROT2_30_CHECKOUT_BASE/lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="var" path="CARROT2_30_CHECKOUT_BASE/lib/log4j-1.2.14.jar"/>
 	<classpathentry kind="var" path="CARROT2_30_CHECKOUT_BASE/lib/commons-lang-2.3.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-core-test"/>
 	<classpathentry kind="output" path="tmp/eclipse/classes"/>
 </classpath>

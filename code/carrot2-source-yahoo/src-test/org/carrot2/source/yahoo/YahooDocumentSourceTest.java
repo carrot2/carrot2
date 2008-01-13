@@ -3,72 +3,77 @@
  */
 package org.carrot2.source.yahoo;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.carrot2.core.Document;
-import org.carrot2.core.ProcessingResult;
-import org.carrot2.core.controller.SimpleController;
-import org.junit.Before;
+import org.carrot2.core.DocumentSource;
+import org.carrot2.core.DocumentSourceTest;
+import org.carrot2.source.SearchMode;
 import org.junit.Test;
 
 
 /**
- *
+ * Tests Yahoo! input component.
  */
-public class YahooDocumentSourceTest
+public class YahooDocumentSourceTest extends DocumentSourceTest<YahooDocumentSource>
 {
-    protected SimpleController controller;
-    protected Map<String, Object> parameters;
-    protected Map<String, Object> attributes;
-
-    @Before
-    public void prepareComponent()
-    {
-        this.controller = new SimpleController();
-        this.parameters = new HashMap<String, Object>();
-        this.attributes = new HashMap<String, Object>();
-    }
-
-    @SuppressWarnings("unchecked")
     @Test
     public void testNoResultsQuery() throws Exception
     {
-        parameters.put("query", "duiogig oiudgisugviw siug iugw iusviuwg");
-        parameters.put("results", 100);
-        final ProcessingResult result = controller.process(parameters, attributes, YahooDocumentSource.class);
-
-        final Collection<Document> documents = (Collection<Document>) attributes.get("documents");
-        assertSame(result.getDocuments(), documents);
-        assertEquals(0, documents.size());
+        assertEquals(0, runQuery("duiogig oiudgisugviw siug iugw iusviuwg", 100));
     }
 
     @Test
     public void testQueryLargerThanPage() throws Exception
     {
         final int needed = new YahooServiceParams().resultsPerPage * 2 + 10;
-
-        parameters.put("query", "apache");
-        parameters.put("results", needed);
-        final ProcessingResult result = controller.process(parameters, attributes, YahooDocumentSource.class);
-
-        final Collection<Document> documents = (Collection<Document>) attributes.get("documents");
-        assertSame(result.getDocuments(), documents);
-        assertEquals(needed, documents.size());
+        assertEquals(needed, runQuery("apache", needed));
     }
 
     @Test
     public void testResultsTotal() throws Exception
     {
-        parameters.put("query", "apache");
-        final ProcessingResult result = controller.process(parameters, attributes, YahooDocumentSource.class);
+        runQuery("apache", 50);
 
-        final String attributeName = YahooDocumentSource.class.getName() + ".resultsTotal";
+        final String attributeName = "results-total";
         assertNotNull(attributes.get(attributeName));
         assertNotNull((Long) attributes.get(attributeName) > 0);
     }
 
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testURLsUnique() throws Exception 
+    {
+        runQuery("apache", 200);
+
+        assertFieldUnique((Collection<Document>) attributes.get("documents"),
+            Document.CONTENT_URL);
+    }
+
+    @Test
+    public void testConservativeMode() throws Exception
+    {
+        parameters.put("search-mode", SearchMode.CONSERVATIVE);
+
+        assertEquals(0, runQuery("duiogig oiudgisugviw siug iugw iusviuwg", 100));
+        assertEquals(1, (Integer) attributes.get(YahooService.class.getName() + ".requestCount"));
+    }
+
+    @Test
+    public void testSpeculativeMode() throws Exception
+    {
+        parameters.put("search-mode", SearchMode.SPECULATIVE);
+
+        assertEquals(0, runQuery("duiogig oiudgisugviw siug iugw iusviuwg", 100));
+        assertEquals(2, (Integer) attributes.get(YahooService.class.getName() + ".requestCount"));
+    }
+
+    @Override
+    public Class<? extends DocumentSource> getComponentClass()
+    {
+        return YahooDocumentSource.class;
+    }
 }
