@@ -10,7 +10,9 @@ import org.carrot2.core.parameter.BindingPolicy;
 import org.carrot2.core.parameter.ParameterBinder;
 
 /**
- *
+ * TODO: This class seems to be specific to clustering algorithms rather than any
+ * processing component. Also, I would vote strongly for using full component life cycle
+ * rather than calling life cycle methods directly. 
  */
 public abstract class ProcessingComponentTest<T extends ProcessingComponent>
 {
@@ -22,9 +24,7 @@ public abstract class ProcessingComponentTest<T extends ProcessingComponent>
     }
 
     /**
-     * Creates and initializes an instance of the clustering algorithm.
-     * 
-     * @return
+     * Creates and initializes an instance of the processing component.
      */
     @SuppressWarnings("unchecked")
     public T createInstance()
@@ -46,9 +46,6 @@ public abstract class ProcessingComponentTest<T extends ProcessingComponent>
 
     /**
      * Initializes an instance of a clustering algorithm.
-     * 
-     * @param instance
-     * @return
      */
     @SuppressWarnings("unchecked")
     public T initInstance(ClusteringAlgorithm instance)
