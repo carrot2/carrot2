@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import org.apache.log4j.Logger;
 import org.carrot2.core.Document;
 import org.carrot2.core.DocumentSource;
 import org.carrot2.core.ProcessingComponentBase;
@@ -20,34 +23,35 @@ import org.carrot2.core.parameter.Parameter;
 import org.carrot2.source.SearchRange;
 
 @Bindable
-public class YahooDocumentSource 
-    extends ProcessingComponentBase 
-    implements DocumentSource
+public final class YahooDocumentSource 
+    extends ProcessingComponentBase implements DocumentSource
 {
+    /** Logger for this class. */
+    private final static Logger logger = Logger.getLogger(YahooDocumentSource.class);
+
     /**
      * Static executor for threads running Yahoo! API queries.
      */
-    private static final ExecutorService executor = Executors.newFixedThreadPool(/* max threads */ 10);
+    private final static ExecutorService executor = Executors.newFixedThreadPool(/* max threads */ 10);
 
     @Parameter(policy = BindingPolicy.INSTANTIATION)
-    private int maxResultIndex = 1000;
+    private YahooService searchService = new YahooService();  
 
-    @Parameter(policy = BindingPolicy.INSTANTIATION)
-    private int resultsPerPage = 50;
-
-    @Attribute(bindingDirection = BindingDirection.IN)
+    @Parameter(key="start", policy=BindingPolicy.RUNTIME)
     private int start = 0;
 
-    @Attribute(bindingDirection = BindingDirection.IN)
+    @Parameter(key="results", policy=BindingPolicy.RUNTIME)
     private int results = 100;
 
-    @Attribute(bindingDirection = BindingDirection.IN)
+    @Parameter(key="query", policy=BindingPolicy.RUNTIME)
     private String query;
 
+    @SuppressWarnings("unused")
     @Attribute(bindingDirection = BindingDirection.OUT)
     private long resultsTotal;
 
-    @Attribute(bindingDirection = BindingDirection.OUT)
+    @SuppressWarnings("unused")
+    @Attribute(key="documents", bindingDirection = BindingDirection.OUT)
     private Collection<Document> documents = Collections.<Document> emptyList();
 
     /**
@@ -57,9 +61,11 @@ public class YahooDocumentSource
     @Override
     public void performProcessing() throws ProcessingException
     {
+        final YahooServiceParams params = searchService.serviceParams;
+        
         // Split the requested range into pages.
         final SearchRange [] buckets = 
-            SearchRange.getSearchRanges(start, results, maxResultIndex, resultsPerPage);
+            SearchRange.getSearchRanges(start, results, params.maxResultIndex, params.resultsPerPage);
 
         // Check preconditions.
         if (query == null || query.trim().equals("") || buckets.length == 0)
@@ -69,16 +75,44 @@ public class YahooDocumentSource
         }
 
         // Run concurrent requests using the executor. 
-        final ArrayList<PageFetcher> bucketFetchers = new ArrayList<PageFetcher>();
-        for (SearchRange r : buckets) {
-            bucketFetchers.add(new PageFetcher(r));
+        final ArrayList<Callable<SearchResponse>> fetchers = 
+            new ArrayList<Callable<SearchResponse>>();
+
+        for (final SearchRange r : buckets) {
+            fetchers.add(new Callable<SearchResponse>()
+            {
+                @Override
+                public SearchResponse call() throws Exception
+                {
+                    return searchService.query(query, r.start, r.results);
+                }
+            });
         }
 
         try
         {
-            // Run the first request to estimate the result set size.
-            final Future<SearchResults> firstResult = executor.submit(bucketFetchers.remove(0));
-            final List<Future<SearchResults>> results = executor.invokeAll(bucketFetchers);
+            // Run requests in parallel.
+            final List<Future<SearchResponse>> responses = executor.invokeAll(fetchers);
+
+            // Collect results.
+            this.documents = new ArrayList<Document>(Math.min(results, params.maxResultIndex));
+            for (Future<SearchResponse> response : responses)
+            {
+                if (!response.isCancelled())
+                {
+                    this.documents.addAll(response.get().results);
+                }
+            }
+
+            // Fill in informational attributes
+            if (responses.size() > 0) {
+                final SearchResponse response = responses.get(0).get();
+                this.resultsTotal = response.resultsTotal;
+            }
+        }
+        catch (ExecutionException e)
+        {
+            logger.error(e.getMessage(), e);
         }
         catch (InterruptedException e)
         {

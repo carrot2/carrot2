@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import org.carrot2.core.Document;
 
 /**
- * 
+ * Parsed search response from Yahoo!
  */
 final class SearchResponse
 {
-    public final long totalResults;
+    public final long resultsTotal;
     public final int firstResultIndex;
     public final int resultsReturned;
 
@@ -21,7 +21,7 @@ final class SearchResponse
      */
     public SearchResponse(long totalResults, int firstResultPosition, int resultsReturned)
     {
-        this.totalResults = totalResults;
+        this.resultsTotal = totalResults;
         this.firstResultIndex = firstResultPosition;
         this.resultsReturned = resultsReturned;
     }

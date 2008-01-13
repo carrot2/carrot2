@@ -27,7 +27,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
 /**
- * Sends queries to Yahoo! search service. This class is not multithreaded.
+ * Sends queries to Yahoo! search service. Instances of this class are thread-safe.
  */
 @Bindable
 public final class YahooService
@@ -49,7 +49,7 @@ public final class YahooService
     {
         // Yahoo's results start from 1.
         start++;
-        results = Math.min(results, serviceParams.maxResultsPerPage);
+        results = Math.min(results, serviceParams.resultsPerPage);
 
         final HttpClient client = HttpClientFactory.getTimeoutingClient();
         client.getParams().setVersion(HttpVersion.HTTP_1_1);
@@ -89,7 +89,7 @@ public final class YahooService
                 if (logger.isDebugEnabled()) {
                     logger.debug("Received, results: " 
                         + response.results.size()
-                        + ", total: " + response.totalResults
+                        + ", total: " + response.resultsTotal
                         + ", first: " + response.firstResultIndex);
                 }
 

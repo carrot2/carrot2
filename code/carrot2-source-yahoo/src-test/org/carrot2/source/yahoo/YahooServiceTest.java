@@ -33,13 +33,13 @@ public class YahooServiceTest
     public void testPolishDiacritics() throws Exception
     {
         final SearchResponse response = service.query("Łódź", 0, 100);
-        assertEquals(service.serviceParams.maxResultsPerPage, response.results.size());
+        assertEquals(service.serviceParams.resultsPerPage, response.results.size());
     }
 
     @Test
     public void testLargerQuery() throws Exception
     {
-        final int needed = service.serviceParams.maxResultsPerPage / 2;
+        final int needed = service.serviceParams.resultsPerPage / 2;
         final SearchResponse response = service.query("apache", 0, needed);
         assertEquals(needed, response.results.size());
     }
@@ -65,7 +65,7 @@ public class YahooServiceTest
     @Test(expected=IOException.class)
     public void testErrorResult() throws Exception
     {
-        service.serviceParams.maxResultsPerPage = 400;
+        service.serviceParams.resultsPerPage = 400;
         service.query("apache", 0, 400);
     }
 }

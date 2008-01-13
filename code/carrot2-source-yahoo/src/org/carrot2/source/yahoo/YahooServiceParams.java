@@ -25,7 +25,10 @@ public final class YahooServiceParams
     public String appid = "carrotsearch";
 
     @Parameter(policy = BindingPolicy.INSTANTIATION)
-    public int maxResultsPerPage = 50;
+    public int resultsPerPage = 50;
+
+    @Parameter(policy = BindingPolicy.INSTANTIATION)
+    public int maxResultIndex = 1000;
 
     @Parameter(policy = BindingPolicy.INSTANTIATION)
     public String language;
