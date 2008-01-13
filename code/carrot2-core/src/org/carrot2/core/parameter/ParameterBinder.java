@@ -98,7 +98,7 @@ public class ParameterBinder
             {
                 throw new RuntimeException("Could not assign field "
                     + instance.getClass().getName() + "#" + field.getName()
-                    + " with value " + value);
+                    + " with value " + value, e);
             }
         }
     }
