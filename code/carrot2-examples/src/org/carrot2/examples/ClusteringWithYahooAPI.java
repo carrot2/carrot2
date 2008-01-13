@@ -23,7 +23,10 @@ public class ClusteringWithYahooAPI
 
         // Initialization parameters for components.
         final Map<String, Object> parameters = new HashMap<String, Object>();
-        
+
+        parameters.put("query", "data mining");
+        parameters.put("results", 200);
+
         // Runtime attributes passed between components.
         final Map<String, Object> attributes = new HashMap<String, Object>();
 
