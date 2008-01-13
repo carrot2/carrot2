@@ -40,14 +40,14 @@ public final class SearchRange
      * split into page buckets if necessary.
      */
     public static SearchRange [] getSearchRanges(int start, int results,
-        int maxStartIndex, int resultsPerPage)
+        int maxIndex, int resultsPerPage)
     {
         // Sanity check.
         results = Math.max(results, 0);
         start = Math.max(start, 0);
 
-        int startIndex = Math.min(start, maxStartIndex);
-        final int endIndex = Math.min(start + results, maxStartIndex);
+        int startIndex = Math.min(start, maxIndex);
+        final int endIndex = Math.min(start + results, maxIndex);
 
         final int resultsNeeded = endIndex - startIndex;
         if (resultsNeeded == 0)
