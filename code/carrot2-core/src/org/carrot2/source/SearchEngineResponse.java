@@ -1,4 +1,4 @@
-package org.carrot2.source.yahoo;
+package org.carrot2.source;
 
 import java.util.ArrayList;
 import java.util.HashMap;

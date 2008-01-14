@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 
 import org.carrot2.core.Document;
+import org.carrot2.source.SearchEngineResponse;
 import org.junit.Before;
 import org.junit.Test;
 

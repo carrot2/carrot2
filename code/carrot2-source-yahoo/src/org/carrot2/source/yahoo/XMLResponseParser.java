@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.carrot2.core.Document;
+import org.carrot2.source.SearchEngineResponse;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
@@ -76,13 +77,13 @@ final class XMLResponseParser implements ContentHandler
         {
             response = new SearchEngineResponse();
 
-            addResponseMetadata(attributes, "firstResultPosition",
+            addResponseMetadataLong(attributes, "firstResultPosition",
                 response, YahooService.FIRST_INDEX_KEY);
 
-            addResponseMetadata(attributes, "totalResultsAvailable",
+            addResponseMetadataLong(attributes, "totalResultsAvailable",
                 response, SearchEngineResponse.RESULTS_TOTAL_KEY);
 
-            addResponseMetadata(attributes, "totalResultsReturned",
+            addResponseMetadataLong(attributes, "totalResultsReturned",
                 response, YahooService.RESULTS_RETURNED_KEY);
         }
         else if (stack.size() == 0 && "Error".equals(localName))
@@ -106,14 +107,14 @@ final class XMLResponseParser implements ContentHandler
      * Adds a meta data entry to the response if it exists in the set of 
      * attributes.
      */
-    private static void addResponseMetadata(
+    private static void addResponseMetadataLong(
         Attributes attributes, String attributeName, 
         SearchEngineResponse response, String metadataKey)
     {
         final String value = attributes.getValue(attributeName);
         if (value != null)
         {
-            response.metadata.put(metadataKey, value);
+            response.metadata.put(metadataKey, Long.parseLong(value));
         }
     }
 

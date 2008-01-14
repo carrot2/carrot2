@@ -8,7 +8,6 @@ import static org.junit.Assert.assertSame;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 import org.carrot2.core.controller.SimpleController;
@@ -73,15 +72,26 @@ public abstract class DocumentSourceTest<T extends DocumentSource>
     @SuppressWarnings("unchecked")
     protected final void assertFieldUnique(Collection<Document> result, String fieldName)
     {
-        final HashSet values = new HashSet();
+        final HashMap<Object,Integer> values = new HashMap<Object,Integer>();
+
+        final StringBuilder builder = new StringBuilder();
+        int i = 0;
         for (Document d : result)
         {
-            final Object value = d.getField(fieldName); 
-            if (values.contains(value)) {
-                Assert.fail("Field values are not unique, offending field value: " 
-                    + d.getField(fieldName));
+            final Object key = d.getField(fieldName); 
+            if (values.containsKey(key)) {
+                builder.append("Key: " + key + ", in docs: " + values.get(key) + ", " + i + "\n");
+            } else {
+                values.put(key, i);
             }
-            values.add(value);
+
+            i++;
+        }
+
+        if (builder.length() > 0) 
+        {
+            Assert.fail("Field values are not unique, offending fields: \n" 
+                + builder.toString());
         }
     }
 }

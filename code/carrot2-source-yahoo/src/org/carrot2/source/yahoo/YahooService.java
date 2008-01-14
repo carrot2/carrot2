@@ -21,6 +21,7 @@ import org.carrot2.core.parameter.Bindable;
 import org.carrot2.core.parameter.BindingDirection;
 import org.carrot2.core.parameter.BindingPolicy;
 import org.carrot2.core.parameter.Parameter;
+import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.StreamUtils;
 import org.carrot2.util.httpclient.HttpClientFactory;
