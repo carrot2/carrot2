@@ -25,14 +25,14 @@ public class YahooServiceTest
     @Test
     public void testNoResultsQuery() throws Exception
     {
-        final SearchResponse response = service.query("duiogig oiudgisugviw siug iugw iusviuwg", 0, 100);
+        final SearchEngineResponse response = service.query("duiogig oiudgisugviw siug iugw iusviuwg", 0, 100);
         assertEquals(0, response.results.size());
     }
 
     @Test
     public void testPolishDiacritics() throws Exception
     {
-        final SearchResponse response = service.query("Łódź", 0, 100);
+        final SearchEngineResponse response = service.query("Łódź", 0, 100);
         assertEquals(service.serviceParams.resultsPerPage, response.results.size());
     }
 
@@ -40,14 +40,14 @@ public class YahooServiceTest
     public void testLargerQuery() throws Exception
     {
         final int needed = service.serviceParams.resultsPerPage / 2;
-        final SearchResponse response = service.query("apache", 0, needed);
+        final SearchEngineResponse response = service.query("apache", 0, needed);
         assertEquals(needed, response.results.size());
     }
 
     @Test
     public void testEntities() throws Exception
     {
-        final SearchResponse response = service.query("Ala ma kota", 0, 100);
+        final SearchEngineResponse response = service.query("Ala ma kota", 0, 100);
 
         for (Document d : response.results)
         {
