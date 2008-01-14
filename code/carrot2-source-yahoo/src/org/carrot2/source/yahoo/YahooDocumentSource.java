@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -69,97 +68,150 @@ public final class YahooDocumentSource
     public void performProcessing() throws ProcessingException
     {
         final YahooServiceParams params = searchService.serviceParams;
+        
+        final SearchEngineResponse [] responses = runQuery(
+            query, start, results, params.maxResultIndex, params.resultsPerPage,
+            searchMode, executor);
 
+        if (responses.length > 0)
+        {
+            // Collect documents from the responses.
+            documents.clear();
+            collectDocuments(documents, responses);
+
+            resultsTotal = responses[0].getResultsTotal();
+        }
+        else
+        {
+            documents = Collections.<Document> emptyList();
+            resultsTotal = 0;
+        }
+    }
+
+    /** 
+     * Collects documents from an array of search engine's responses.
+     */
+    protected final void collectDocuments(
+        Collection<Document> collector, SearchEngineResponse [] responses)
+    {
+        for (SearchEngineResponse response : responses)
+        {
+            collector.addAll(response.results);
+        }
+    }
+
+    /**
+     * This method implements the logic of querying a typical search engine. If the
+     * number of requested results is higher than the number of results on one response
+     * page, then concurrent requests are issued.
+     */
+    protected final SearchEngineResponse [] runQuery(
+        final String query,
+        final int start, final int results,
+        final int maxResultIndex, final int resultsPerPage,
+        final SearchMode searchMode,
+        final ExecutorService executor)
+        throws ProcessingException
+    {
         // Split the requested range into pages.
         SearchRange [] buckets = 
-            SearchRange.getSearchRanges(start, results, params.maxResultIndex, params.resultsPerPage);
+            SearchRange.getSearchRanges(start, results, maxResultIndex, resultsPerPage);
 
         // Check preconditions.
         if (query == null || query.trim().equals("") || buckets.length == 0)
         {
-            documents = Collections.<Document> emptyList();
-            return;
+            return new SearchEngineResponse [0];
         }
 
         try {
+            if (logger.isDebugEnabled())
+            {
+                logger.info("Results: " + results + ", query: " + query);
+            }
+
             // Initialize output documents array.
-            documents = new ArrayList<Document>(Math.min(results, params.maxResultIndex));
+            final ArrayList<SearchEngineResponse> responses = 
+                new ArrayList<SearchEngineResponse>(buckets.length);
 
             // If in conservative mode, run the first request to estimate the
             // number of needed results.
             if (buckets.length == 1 || searchMode == SearchMode.CONSERVATIVE)
             {
-                final SearchResponse response = searchService.query(
-                    query, buckets[0].start, buckets[0].results);
-                
-                documents.addAll(response.results);
-                resultsTotal = response.resultsTotal;
+                final SearchEngineResponse response = createFetcher(buckets[0]).call();
+
+                final long resultsTotal = response.getResultsTotal();
+                responses.add(response);
 
                 if (buckets.length == 1)
                 {
-                    // If there was just one bucket, there is no need
-                    // to go further on.
-                    return;
+                    // If there was just one bucket, there is no need to go further on.
+                    return responses.toArray(new SearchEngineResponse [responses.size()]);
                 }
                 else
                 {
                     // We do have an estimate of results now, modify it
                     // and recalculate the buckets.
-                    if (resultsTotal < results)
+                    if (resultsTotal != -1 && resultsTotal < results)
                     {
                         buckets = SearchRange.getSearchRanges(
-                            buckets[0].results, (int) resultsTotal, params.maxResultIndex, params.resultsPerPage);
+                            buckets[0].results, (int) resultsTotal, maxResultIndex, resultsPerPage);
                     }
                 }
             }
 
             // Run concurrent requests using the executor. 
-            final ArrayList<Callable<SearchResponse>> fetchers = 
-                new ArrayList<Callable<SearchResponse>>();
-    
-            for (final SearchRange r : buckets) {
-                fetchers.add(new Callable<SearchResponse>()
-                {
-                    @Override
-                    public SearchResponse call() throws Exception
-                    {
-                        return searchService.query(query, r.start, r.results);
-                    }
-                });
+            final ArrayList<Callable<SearchEngineResponse>> fetchers = 
+                new ArrayList<Callable<SearchEngineResponse>>(buckets.length);
+
+            for (final SearchRange r : buckets)
+            {
+                fetchers.add(createFetcher(r));
             }
 
             // Run requests in parallel.
-            final List<Future<SearchResponse>> responses = executor.invokeAll(fetchers);
+            final List<Future<SearchEngineResponse>> futures = executor.invokeAll(fetchers);
 
             // Collect results.
-            for (Future<SearchResponse> response : responses)
+            for (Future<SearchEngineResponse> future : futures)
             {
-                if (!response.isCancelled())
+                if (!future.isCancelled())
                 {
-                    this.documents.addAll(response.get().results);
+                    responses.add(future.get());
                 }
             }
 
-            // Fill in informational attributes, if not done previously. 
-            if (responses.size() > 0 && searchMode != SearchMode.CONSERVATIVE) {
-                final SearchResponse response = responses.get(0).get();
-                this.resultsTotal = response.resultsTotal;
-            }
+            return responses.toArray(new SearchEngineResponse [responses.size()]);
         }
         catch (IOException e)
         {
             throw new ProcessingException(e.getMessage(), e);
         }
-        catch (ExecutionException e)
+        catch (InterruptedException e)
+        {
+            // If interrupted, return with no error.
+            return new SearchEngineResponse [0];
+        }
+        catch (Exception e)
         {
             Throwable cause = e.getCause();
             if (cause == null) cause = e;
 
             throw new ProcessingException(cause.getMessage(), e);
         }
-        catch (InterruptedException e)
+    }
+
+    /**
+     * Create a single page fetcher for the search range.
+     */
+    protected final Callable<SearchEngineResponse> createFetcher(final SearchRange bucket)
+    {
+        return new Callable<SearchEngineResponse>()
         {
-            // If interrupted, just fall through.
-        }
+            @Override
+            public SearchEngineResponse call() throws Exception
+            {
+                return searchService.query(query, bucket.start, bucket.results);
+            }
+        };
     }
 }

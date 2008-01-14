@@ -41,6 +41,23 @@ public final class YahooService
 
     private static final Header ENCODING_HEADER = new Header("Accept-Encoding", "gzip");
 
+    /**
+     * A key for the first result's index.
+     * 
+     * @see SearchEngineResponse#metadata 
+     */
+    public static final String FIRST_INDEX_KEY = "firstIndex";
+
+    /**
+     * A key for the number of results actually returned.
+     * 
+     * @see SearchEngineResponse#metadata 
+     */
+    public static final String RESULTS_RETURNED_KEY = "resultsReturned";
+
+    /**
+     * Service location and parameters.
+     */
     @Parameter(policy = BindingPolicy.INSTANTIATION)
     public YahooServiceParams serviceParams = new YahooServiceParams();
 
@@ -53,7 +70,7 @@ public final class YahooService
     /**
      * Sends a Web search query to Yahoo!.
      */
-    public SearchResponse query(String query, int start, int results) throws IOException
+    public SearchEngineResponse query(String query, int start, int results) throws IOException
     {
         // Yahoo's results start from 1.
         start++;
@@ -93,13 +110,13 @@ public final class YahooService
                 || statusCode == HttpStatus.SC_BAD_REQUEST)
             {
                 // Parse the data stream.
-                final SearchResponse response = parseResponseXML(is);
+                final SearchEngineResponse response = parseResponseXML(is);
 
                 if (logger.isDebugEnabled()) {
                     logger.debug("Received, results: " 
                         + response.results.size()
-                        + ", total: " + response.resultsTotal
-                        + ", first: " + response.firstResultIndex);
+                        + ", total: " + response.getResultsTotal()
+                        + ", first: " + response.metadata.get(FIRST_INDEX_KEY));
                 }
 
                 return response;
@@ -123,7 +140,7 @@ public final class YahooService
     /**
      * Parse the response stream.
      */
-    private SearchResponse parseResponseXML(final InputStream is)
+    private SearchEngineResponse parseResponseXML(final InputStream is)
         throws IOException
     {
         try

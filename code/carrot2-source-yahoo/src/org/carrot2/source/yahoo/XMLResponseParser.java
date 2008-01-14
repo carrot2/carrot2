@@ -16,7 +16,7 @@ import org.xml.sax.SAXException;
 final class XMLResponseParser implements ContentHandler
 {
     /** Search response object. */
-    public SearchResponse response;
+    public SearchEngineResponse response;
 
     /** Currently parsed document. */
     private Document document;
@@ -74,31 +74,16 @@ final class XMLResponseParser implements ContentHandler
         buffer.setLength(0);
         if (stack.size() == 0 && "ResultSet".equals(localName))
         {
-            String tmp;
+            response = new SearchEngineResponse();
 
-            long totalResults = 0;
-            int resultsReturned = 0;
-            int firstResultPosition = 0;
+            addResponseMetadata(attributes, "firstResultPosition",
+                response, YahooService.FIRST_INDEX_KEY);
 
-            tmp = attributes.getValue("totalResultsAvailable");
-            if (tmp != null)
-            {
-                totalResults = Long.parseLong(tmp);
-            }
+            addResponseMetadata(attributes, "totalResultsAvailable",
+                response, SearchEngineResponse.RESULTS_TOTAL_KEY);
 
-            tmp = attributes.getValue("totalResultsReturned");
-            if (tmp != null)
-            {
-                resultsReturned = Integer.parseInt(tmp);
-            }
-
-            tmp = attributes.getValue("firstResultPosition");
-            if (tmp != null)
-            {
-                firstResultPosition = Integer.parseInt(tmp);
-            }
-
-            this.response = new SearchResponse(totalResults, firstResultPosition, resultsReturned);
+            addResponseMetadata(attributes, "totalResultsReturned",
+                response, YahooService.RESULTS_RETURNED_KEY);
         }
         else if (stack.size() == 0 && "Error".equals(localName))
         {
@@ -115,6 +100,21 @@ final class XMLResponseParser implements ContentHandler
         }
 
         stack.add(localName);
+    }
+
+    /**
+     * Adds a meta data entry to the response if it exists in the set of 
+     * attributes.
+     */
+    private static void addResponseMetadata(
+        Attributes attributes, String attributeName, 
+        SearchEngineResponse response, String metadataKey)
+    {
+        final String value = attributes.getValue(attributeName);
+        if (value != null)
+        {
+            response.metadata.put(metadataKey, value);
+        }
     }
 
     /*

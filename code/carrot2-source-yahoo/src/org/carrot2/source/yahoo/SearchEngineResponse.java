@@ -1,0 +1,43 @@
+package org.carrot2.source.yahoo;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import org.carrot2.core.Document;
+
+/**
+ * A single search engine response. This includes typical information
+ * returned by a search engine: documents, total number of results, time
+ * of processing the query, etc.
+ */
+public final class SearchEngineResponse
+{
+    /** */
+    public static final String RESULTS_TOTAL_KEY = "resultsTotal";
+
+    /**
+     * All meta data returned in the response.
+     */
+    public final HashMap<String, Object> metadata = new HashMap<String, Object>(10); 
+
+    /** 
+     * All documents returned in the response.
+     */
+    public final ArrayList<Document> results = new ArrayList<Document>(100);
+
+    /**
+     * @return Returns an estimate of the total number of results or
+     * <b>-1</b> if not available.
+     */
+    public long getResultsTotal()
+    {
+        if (metadata.containsKey(RESULTS_TOTAL_KEY))
+        {
+            return (Long) metadata.get(RESULTS_TOTAL_KEY);
+        }
+        else
+        {
+            return -1;
+        }
+    }
+}
