@@ -105,6 +105,9 @@ public class AttributeBinderTest
         assertEquals(5, instance.outField);
         assertEquals(10, instance.subclassInField);
         assertEquals(5, instance.subclassOutField);
+        
+        AttributeBinder.bind(instance, params, BindingDirection.OUT);
+        assertEquals(5, params.get("outField"));
     }
 
     @Test
