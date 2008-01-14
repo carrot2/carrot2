@@ -13,14 +13,14 @@ import org.junit.Test;
 /**
  * Tests plain service accessor (no queries longer than a single page etc.).
  */
-public class YahooServiceTest
+public class YahooWebSearchServiceTest
 {
-    private YahooService service;
+    private YahooSearchService service;
 
     @Before
     public void init()
     {
-        service = new YahooService();
+        service = new YahooWebSearchService();
     }
     
     @Test
@@ -34,13 +34,13 @@ public class YahooServiceTest
     public void testPolishDiacritics() throws Exception
     {
         final SearchEngineResponse response = service.query("Łódź", 0, 100);
-        assertEquals(service.serviceParams.resultsPerPage, response.results.size());
+        assertEquals(service.resultsPerPage, response.results.size());
     }
 
     @Test
     public void testLargerQuery() throws Exception
     {
-        final int needed = service.serviceParams.resultsPerPage / 2;
+        final int needed = service.resultsPerPage / 2;
         final SearchEngineResponse response = service.query("apache", 0, needed);
         assertEquals(needed, response.results.size());
     }
@@ -66,7 +66,7 @@ public class YahooServiceTest
     @Test(expected=IOException.class)
     public void testErrorResult() throws Exception
     {
-        service.serviceParams.resultsPerPage = 400;
+        service.resultsPerPage = 400;
         service.query("apache", 0, 400);
     }
 }

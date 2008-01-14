@@ -30,73 +30,116 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
 /**
- * Sends queries to Yahoo! search service. Instances of this class are thread-safe.
+ * A superclass shared between Web and News searching services.
  */
 @Bindable
-public final class YahooService
+public abstract class YahooSearchService
 {
-    private final static Logger logger = Logger.getLogger(YahooService.class);
+    /** Logger for this object. */
+    protected final Logger logger = Logger.getLogger(this.getClass().getName());
 
-    private static final Header CONTENT_HEADER = new Header("Content-type",
-        "application/x-www-form-urlencoded; charset=UTF-8");
+    /** HTTP header for requests. */
+    protected static final Header CONTENT_HEADER = new Header("Content-type",
+            "application/x-www-form-urlencoded; charset=UTF-8");
 
-    private static final Header ENCODING_HEADER = new Header("Accept-Encoding", "gzip");
+    /** HTTP header for declaring allowed GZIP encoding. */
+    protected static final Header ENCODING_HEADER = new Header("Accept-Encoding", "gzip");
+
+    /** */
+    public enum QueryType {
+        ALL    { public String toString() { return "all"; } },
+        ANY    { public String toString() { return "any"; } },
+        PHRASE { public String toString() { return "phrase"; } },
+    }
 
     /**
-     * A key for the first result's index.
+     * Metadata key for the first result's index.
      * 
      * @see SearchEngineResponse#metadata 
      */
     public static final String FIRST_INDEX_KEY = "firstIndex";
 
     /**
-     * A key for the number of results actually returned.
+     * Metadata key for the number of results actually returned.
      * 
      * @see SearchEngineResponse#metadata 
      */
     public static final String RESULTS_RETURNED_KEY = "resultsReturned";
 
     /**
-     * Service location and parameters.
+     * Application ID required for Yahoo! services. 
      */
     @Parameter(policy = BindingPolicy.INSTANTIATION)
-    public YahooServiceParams serviceParams = new YahooServiceParams();
+    protected String appid = "carrotsearch";
 
     /**
-     * Number of requests made to the search service (total).
+     * Maximum number of results returned per page.
+     */
+    @Parameter(policy = BindingPolicy.INSTANTIATION)
+    public int resultsPerPage = 50;
+
+    /**
+     * Maximum index of reachable result.
+     */
+    @Parameter(policy = BindingPolicy.INSTANTIATION)
+    public int maxResultIndex = 1000;
+
+    /**
+     * Number of requests made to this service (total).
      */
     @Attribute(bindingDirection = BindingDirection.OUT)
     private volatile int requestCount;
-    
+
     /**
-     * Sends a Web search query to Yahoo!.
+     * Keeps subclasses to this package.
      */
-    public SearchEngineResponse query(String query, int start, int results) throws IOException
+    YahooSearchService()
+    {
+    }
+
+    /**
+     * Prepare an array of {@link NameValuePair} (parameters for
+     * the request).
+     */
+    protected abstract ArrayList<NameValuePair> createRequestParams(
+        String query, int start, int results);
+
+    /**
+     * @return Return service URI for this service.
+     */
+    protected abstract String getServiceURI();
+
+    /**
+     * Sends a search query to Yahoo! and parses the result.
+     */
+    protected final SearchEngineResponse query(
+        String query, int start, int results)
+        throws IOException
     {
         // Yahoo's results start from 1.
         start++;
-        results = Math.min(results, serviceParams.resultsPerPage);
-
+        results = Math.min(results, resultsPerPage);
+    
         final HttpClient client = HttpClientFactory.getTimeoutingClient();
         client.getParams().setVersion(HttpVersion.HTTP_1_1);
-
+    
         InputStream is = null;
         final GetMethod request = new GetMethod();
         try
         {
-            request.setURI(new URI(serviceParams.serviceURI, false));
+            request.setURI(new URI(getServiceURI(), false));
             request.setRequestHeader(CONTENT_HEADER);
             request.addRequestHeader(ENCODING_HEADER);
-
+    
             final ArrayList<NameValuePair> params = createRequestParams(query, start,
                 results);
             params.add(new NameValuePair("output", "xml"));
             request.setQueryString(params.toArray(new NameValuePair [params.size()]));
-
+    
             logger.info("Request params: " + request.getQueryString());
             requestCount++;
             final int statusCode = client.executeMethod(request);
-
+    
             // Unwrap compressed streams.
             is = request.getResponseBodyAsStream();
             final Header encoded = request.getResponseHeader("Content-Encoding");
@@ -105,21 +148,21 @@ public final class YahooService
                 logger.debug("Unwrapping GZIP compressed stream.");
                 is = new GZIPInputStream(is);
             }
-
+    
             if (statusCode == HttpStatus.SC_OK
                 || statusCode == HttpStatus.SC_SERVICE_UNAVAILABLE
                 || statusCode == HttpStatus.SC_BAD_REQUEST)
             {
                 // Parse the data stream.
                 final SearchEngineResponse response = parseResponseXML(is);
-
+    
                 if (logger.isDebugEnabled()) {
                     logger.debug("Received, results: " 
                         + response.results.size()
                         + ", total: " + response.getResultsTotal()
                         + ", first: " + response.metadata.get(FIRST_INDEX_KEY));
                 }
-
+    
                 return response;
             }
             else
@@ -139,22 +182,21 @@ public final class YahooService
     }
 
     /**
-     * Parse the response stream.
+     * Parse the response stream, assuming it is XML.
      */
-    private SearchEngineResponse parseResponseXML(final InputStream is)
-        throws IOException
+    private SearchEngineResponse parseResponseXML(final InputStream is) throws IOException
     {
         try
         {
             final XMLResponseParser parser = new XMLResponseParser();
             final XMLReader reader = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
-
+    
             reader.setFeature("http://xml.org/sax/features/validation", false);
             reader.setFeature("http://xml.org/sax/features/namespaces", true);
             reader.setContentHandler(parser);
-
+    
             reader.parse(new InputSource(is));
-
+    
             return parser.response;
         }
         catch (SAXException e)
@@ -172,26 +214,4 @@ public final class YahooService
         }
     }
 
-    /**
-     * Assembles an array of {@link NameValuePair} with request parameters.
-     */
-    private ArrayList<NameValuePair> createRequestParams(String query, int start,
-        int results)
-    {
-        final ArrayList<NameValuePair> params = new ArrayList<NameValuePair>(10);
-
-        params.add(new NameValuePair("query", query));
-        params.add(new NameValuePair("start", Integer.toString(start)));
-        params.add(new NameValuePair("results", Integer.toString(results)));
-
-        params.add(new NameValuePair("appid", serviceParams.appid));
-
-        if (serviceParams.country != null) params.add(new NameValuePair("country",
-            serviceParams.country));
-
-        if (serviceParams.site != null) params.add(new NameValuePair("site",
-            serviceParams.site));
-
-        return params;
-    }
 }

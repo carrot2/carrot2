@@ -1,10 +1,6 @@
-/**
- * 
- */
 package org.carrot2.source.yahoo;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 import java.util.Collection;
 
@@ -29,7 +25,7 @@ public class YahooDocumentSourceTest extends DocumentSourceTest<YahooDocumentSou
     @Test
     public void testQueryLargerThanPage() throws Exception
     {
-        final int needed = new YahooServiceParams().resultsPerPage * 2 + 10;
+        final int needed = new YahooWebSearchService().resultsPerPage * 2 + 10;
         assertEquals(needed, runQuery("apache", needed));
     }
 
@@ -59,7 +55,7 @@ public class YahooDocumentSourceTest extends DocumentSourceTest<YahooDocumentSou
         parameters.put("search-mode", SearchMode.CONSERVATIVE);
 
         assertEquals(0, runQuery("duiogig oiudgisugviw siug iugw iusviuwg", 100));
-        assertEquals(1, (Integer) attributes.get(YahooService.class.getName() + ".requestCount"));
+        assertEquals(1, (Integer) attributes.get(YahooSearchService.class.getName() + ".requestCount"));
     }
 
     @Test
@@ -68,7 +64,16 @@ public class YahooDocumentSourceTest extends DocumentSourceTest<YahooDocumentSou
         parameters.put("search-mode", SearchMode.SPECULATIVE);
 
         assertEquals(0, runQuery("duiogig oiudgisugviw siug iugw iusviuwg", 100));
-        assertEquals(2, (Integer) attributes.get(YahooService.class.getName() + ".requestCount"));
+        assertEquals(2, (Integer) attributes.get(YahooSearchService.class.getName() + ".requestCount"));
+    }
+    
+    @Test
+    public void testNewsServiceSearch() throws Exception
+    {
+        parameters.put(YahooDocumentSource.class.getName() 
+            + ".service", YahooNewsSearchService.class);
+
+        assertTrue(runQuery("iraq", 50) > 0);
     }
 
     @Override

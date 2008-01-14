@@ -78,13 +78,13 @@ final class XMLResponseParser implements ContentHandler
             response = new SearchEngineResponse();
 
             addResponseMetadataLong(attributes, "firstResultPosition",
-                response, YahooService.FIRST_INDEX_KEY);
+                response, YahooSearchService.FIRST_INDEX_KEY);
 
             addResponseMetadataLong(attributes, "totalResultsAvailable",
                 response, SearchEngineResponse.RESULTS_TOTAL_KEY);
 
             addResponseMetadataLong(attributes, "totalResultsReturned",
-                response, YahooService.RESULTS_RETURNED_KEY);
+                response, YahooSearchService.RESULTS_RETURNED_KEY);
         }
         else if (stack.size() == 0 && "Error".equals(localName))
         {

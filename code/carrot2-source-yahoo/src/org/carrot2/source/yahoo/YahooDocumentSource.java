@@ -10,6 +10,7 @@ import java.util.concurrent.Executors;
 
 import org.apache.log4j.Logger;
 import org.carrot2.core.Document;
+import org.carrot2.core.DocumentSource;
 import org.carrot2.core.ProcessingException;
 import org.carrot2.core.parameter.Attribute;
 import org.carrot2.core.parameter.Bindable;
@@ -20,8 +21,11 @@ import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.source.SearchRange;
 
 import com.google.common.base.Predicate;
-import com.google.common.collect.Iterators;
 
+/**
+ * A {@link DocumentSource} fetching {@link Document}s (search results)
+ * from Yahoo!.
+ */
 @Bindable
 public final class YahooDocumentSource extends SearchEngine
 {
@@ -36,7 +40,7 @@ public final class YahooDocumentSource extends SearchEngine
     private final static ExecutorService executor = Executors.newFixedThreadPool(/* max threads */ 10);
 
     @Parameter(policy = BindingPolicy.INSTANTIATION)
-    private YahooService searchService = new YahooService();  
+    private YahooSearchService service = new YahooWebSearchService();  
 
     @Parameter(key="start", policy=BindingPolicy.RUNTIME)
     private int start = 0;
@@ -62,15 +66,13 @@ public final class YahooDocumentSource extends SearchEngine
     @Override
     public void performProcessing() throws ProcessingException
     {
-        final YahooServiceParams params = searchService.serviceParams;
-        
         final SearchEngineResponse [] responses = runQuery(
-            query, start, results, params.maxResultIndex, params.resultsPerPage, executor);
+            query, start, results, service.maxResultIndex, service.resultsPerPage, executor);
 
         if (responses.length > 0)
         {
             // Collect documents from the responses.
-            documents = new ArrayList<Document>(Math.min(results, params.maxResultIndex));
+            documents = new ArrayList<Document>(Math.min(results, service.maxResultIndex));
             collectDocuments(documents, responses);
 
             // Filter out duplicated URLs (may happen, the results are paged based
@@ -102,7 +104,7 @@ public final class YahooDocumentSource extends SearchEngine
             @Override
             public SearchEngineResponse call() throws Exception
             {
-                return searchService.query(query, bucket.start, bucket.results);
+                return service.query(query, bucket.start, bucket.results);
             }
         };
     }
