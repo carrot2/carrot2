@@ -33,7 +33,7 @@ import org.xml.sax.XMLReader;
  * A superclass shared between Web and News searching services.
  */
 @Bindable
-public abstract class YahooSearchService
+abstract class YahooSearchService
 {
     /** Logger for this object. */
     protected final Logger logger = Logger.getLogger(this.getClass().getName());
@@ -45,6 +45,13 @@ public abstract class YahooSearchService
     /** HTTP header for declaring allowed GZIP encoding. */
     protected static final Header ENCODING_HEADER = new Header("Accept-Encoding", "gzip");
 
+    /**
+     * HTTP header faking Mozilla as the user agent (otherwise compression
+     * doesn't work). 
+     */
+    protected static final Header USER_AGENT_HEADER_MOZILLA = 
+        new Header("User-Agent", "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:0.9.7) Gecko/20011221");
+    
     /** */
     public enum QueryType {
         ALL    { public String toString() { return "all"; } },
@@ -67,6 +74,14 @@ public abstract class YahooSearchService
     public static final String RESULTS_RETURNED_KEY = "resultsReturned";
 
     /**
+     * Metadata key for the compression algorithm used to decompress
+     * the returned stream.
+     * 
+     * @see SearchEngineResponse#metadata
+     */
+    public static final String COMPRESSION_USED_KEY = "compressionUsed";
+    
+    /**
      * Application ID required for Yahoo! services. 
      */
     @Parameter(policy = BindingPolicy.INSTANTIATION)
@@ -88,8 +103,27 @@ public abstract class YahooSearchService
      * Number of requests made to this service (total).
      */
     @Attribute(bindingDirection = BindingDirection.OUT)
-    private volatile int requestCount;
+    private int requestCountTotal;
 
+    /**
+     * Number of requests made to this service (successful).
+     */
+    @Attribute(bindingDirection = BindingDirection.OUT)
+    private int requestCount;
+
+    /**
+     * A sum of all times spent on waiting for response from the
+     * service (in milliseconds).
+     */
+    @Attribute(bindingDirection = BindingDirection.OUT)
+    private long requestTimeSum;
+
+    /**
+     * Maximum request time.
+     */
+    @Attribute(bindingDirection = BindingDirection.OUT)
+    private long requestTimeMax;
+    
     /**
      * Keeps subclasses to this package.
      */
@@ -116,6 +150,8 @@ public abstract class YahooSearchService
         String query, int start, int results)
         throws IOException
     {
+        requestCountTotal++;
+
         // Yahoo's results start from 1.
         start++;
         results = Math.min(results, resultsPerPage);
@@ -125,11 +161,13 @@ public abstract class YahooSearchService
     
         InputStream is = null;
         final GetMethod request = new GetMethod();
+        final long startTime = System.currentTimeMillis();
         try
         {
             request.setURI(new URI(getServiceURI(), false));
             request.setRequestHeader(CONTENT_HEADER);
-            request.addRequestHeader(ENCODING_HEADER);
+            request.setRequestHeader(ENCODING_HEADER);
+            request.setRequestHeader(USER_AGENT_HEADER_MOZILLA);
     
             final ArrayList<NameValuePair> params = createRequestParams(query, start,
                 results);
@@ -137,24 +175,30 @@ public abstract class YahooSearchService
             request.setQueryString(params.toArray(new NameValuePair [params.size()]));
     
             logger.info("Request params: " + request.getQueryString());
-            requestCount++;
             final int statusCode = client.executeMethod(request);
     
             // Unwrap compressed streams.
             is = request.getResponseBodyAsStream();
             final Header encoded = request.getResponseHeader("Content-Encoding");
-            if (encoded != null && "gzip".equals(encoded.getValue()))
+            final String compressionUsed;
+            if (encoded != null && "gzip".equalsIgnoreCase(encoded.getValue()))
             {
                 logger.debug("Unwrapping GZIP compressed stream.");
+                compressionUsed = "gzip";
                 is = new GZIPInputStream(is);
             }
-    
+            else
+            {
+                compressionUsed = "(uncompressed)";
+            }
+
             if (statusCode == HttpStatus.SC_OK
                 || statusCode == HttpStatus.SC_SERVICE_UNAVAILABLE
                 || statusCode == HttpStatus.SC_BAD_REQUEST)
             {
                 // Parse the data stream.
                 final SearchEngineResponse response = parseResponseXML(is);
+                response.metadata.put(COMPRESSION_USED_KEY, compressionUsed);
     
                 if (logger.isDebugEnabled()) {
                     logger.debug("Received, results: " 
@@ -162,6 +206,12 @@ public abstract class YahooSearchService
                         + ", total: " + response.getResultsTotal()
                         + ", first: " + response.metadata.get(FIRST_INDEX_KEY));
                 }
+
+                // Update statistics.
+                final long duration = System.currentTimeMillis() - startTime;
+                requestCount++;
+                requestTimeMax = Math.max(requestTimeMax, duration);
+                requestTimeSum += duration;                
     
                 return response;
             }

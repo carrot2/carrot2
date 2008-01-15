@@ -69,4 +69,12 @@ public class YahooWebSearchServiceTest
         service.resultsPerPage = 400;
         service.query("apache", 0, 400);
     }
+
+    @Test
+    public void testCompressedStreamsUsed() throws Exception
+    {
+        final SearchEngineResponse response = service.query("apache", 0, 50);
+        assertEquals("gzip", 
+            response.metadata.get(YahooSearchService.COMPRESSION_USED_KEY));
+    }
 }
