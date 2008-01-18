@@ -43,7 +43,16 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
 
     private boolean autoload;
 
-    /** Default component pool configuration */
+    /**
+     * Default component pool configuration. With this configuration the behaviour of the
+     * pool should be like this:
+     * <ul>
+     * <li>when pool is exhausted, it will grow infinitely
+     * <li>every 5 minutes, 3 oldest idle component instances will be evicted, but only
+     * if they are older than 5 minutes
+     * <li>one idle instance will always be available
+     * </ul>
+     */
     public static final GenericObjectPool.Config DEFAULT_COMPONENT_POOL_CONFIG;
     static {
         DEFAULT_COMPONENT_POOL_CONFIG = new GenericObjectPool.Config();
@@ -51,10 +60,11 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
         DEFAULT_COMPONENT_POOL_CONFIG.maxWait = 0; // irrelevant
         DEFAULT_COMPONENT_POOL_CONFIG.maxActive = 0; // irrelevant
         DEFAULT_COMPONENT_POOL_CONFIG.maxIdle = 10;
-        DEFAULT_COMPONENT_POOL_CONFIG.timeBetweenEvictionRunsMillis = 1000 * 60 * 4;
-        DEFAULT_COMPONENT_POOL_CONFIG.minEvictableIdleTimeMillis = 1000 * 60 * 5;
+        DEFAULT_COMPONENT_POOL_CONFIG.timeBetweenEvictionRunsMillis = 1000 * 60 * 5;
+        DEFAULT_COMPONENT_POOL_CONFIG.softMinEvictableIdleTimeMillis = 1000 * 60 * 5;
+        DEFAULT_COMPONENT_POOL_CONFIG.minEvictableIdleTimeMillis = -1; // no hard eviction
         DEFAULT_COMPONENT_POOL_CONFIG.minIdle = 1;
-        DEFAULT_COMPONENT_POOL_CONFIG.numTestsPerEvictionRun = 5;
+        DEFAULT_COMPONENT_POOL_CONFIG.numTestsPerEvictionRun = 3;
         DEFAULT_COMPONENT_POOL_CONFIG.testOnBorrow = false;
         DEFAULT_COMPONENT_POOL_CONFIG.testOnReturn = false;
         DEFAULT_COMPONENT_POOL_CONFIG.testWhileIdle = false;        

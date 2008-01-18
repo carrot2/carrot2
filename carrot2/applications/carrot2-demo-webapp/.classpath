@@ -11,6 +11,8 @@
 	<classpathentry exported="true" kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/servlet.jar"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/xalan-2.7.0.jar"/>
 	<classpathentry kind="lib" path="lib/ehcache-1.2.1RC.jar"/>
+	<classpathentry kind="lib" path="lib/commons-el.jar"/>
+	<classpathentry kind="lib" path="lib/httpheaders-0.0.0.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-stemmer-snowball"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-tokenizer"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-input-etools"/>
@@ -37,7 +39,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-xsltfilter"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/commons-httpclient-3.0.1.jar"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/commons-logging-1.1.jar"/>
-	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/commons-pool-1.3.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/commons-pool-1.4.jar"/>
 	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/commons-cli.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-filter-facets"/>
 	<classpathentry kind="output" path="web/WEB-INF/classes"/>
