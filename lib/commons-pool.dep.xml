@@ -2,10 +2,10 @@
 <!DOCTYPE component PUBLIC "-//Carrot2//DTD Component Dependency Descriptor V1.0//EN" "http://www.carrot2.org/dtd/component-dependency.dtd" >
 <component
     name="commons-pool"
-    description="Jakarta Commons Pool 1.3, http://jakarta.apache.org/commons/pool">
+    description="Jakarta Commons Pool 1.4, http://jakarta.apache.org/commons/pool">
 	<provides>
 		<files>
-			<file location="commons-pool-1.3.jar" />
+			<file location="commons-pool-1.4.jar" />
 			<file location="commons-pool.LICENSE" />
 		</files>
 	</provides>
