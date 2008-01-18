@@ -202,17 +202,7 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
         }
 
         // Create a boolean query that combines all fields
-        final BooleanQuery booleanQuery = new BooleanQuery();
-
-        for (int i = 0; i < luceneSettings.factoryConfig.searchFields.length; i++)
-        {
-            final QueryParser queryParser =
-                new QueryParser(luceneSettings.factoryConfig.searchFields[i],
-                    luceneSettings.analyzer);
-            queryParser.setDefaultOperator(QueryParser.AND_OPERATOR);
-            Query queryComponent = queryParser.parse(query);
-            booleanQuery.add(queryComponent, BooleanClause.Occur.SHOULD);
-        }
+        final Query booleanQuery = createQuery(luceneSettings);
 
         // Perform query
         final Hits hits = luceneSettings.searcher.search(booleanQuery);
@@ -281,5 +271,22 @@ public class LuceneLocalInputComponent extends ProfiledLocalInputComponentBase
             rawDocument.setProperty(RawDocument.PROPERTY_SOURCES, SOURCES);
             rawDocumentConsumer.addDocument(rawDocument);
         }
+    }
+
+    protected Query createQuery(LuceneLocalInputComponentConfig luceneSettings)
+        throws ParseException
+    {
+        final BooleanQuery booleanQuery = new BooleanQuery();
+
+        for (int i = 0; i < luceneSettings.factoryConfig.searchFields.length; i++)
+        {
+            final QueryParser queryParser =
+                new QueryParser(luceneSettings.factoryConfig.searchFields[i],
+                    luceneSettings.analyzer);
+            queryParser.setDefaultOperator(QueryParser.AND_OPERATOR);
+            Query queryComponent = queryParser.parse(query);
+            booleanQuery.add(queryComponent, BooleanClause.Occur.SHOULD);
+        }
+        return booleanQuery;
     }
 }
