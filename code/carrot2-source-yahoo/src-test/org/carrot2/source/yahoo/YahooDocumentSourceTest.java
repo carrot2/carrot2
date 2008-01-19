@@ -7,6 +7,7 @@ import java.util.Collection;
 import org.carrot2.core.Document;
 import org.carrot2.core.DocumentSource;
 import org.carrot2.core.DocumentSourceTest;
+import org.carrot2.core.parameter.AttributeNames;
 import org.carrot2.source.SearchMode;
 import org.junit.Test;
 
@@ -26,7 +27,8 @@ public class YahooDocumentSourceTest extends DocumentSourceTest<YahooDocumentSou
     public void testQueryLargerThanPage() throws Exception
     {
         final int needed = new YahooWebSearchService().resultsPerPage * 2 + 10;
-        assertEquals(needed, runQuery("apache", needed));
+        // Allow some slack (duplicated URLs).
+        assertTrue(runQuery("apache", needed) > needed - 5);
     }
 
     @Test
@@ -34,9 +36,8 @@ public class YahooDocumentSourceTest extends DocumentSourceTest<YahooDocumentSou
     {
         runQuery("apache", 50);
 
-        final String attributeName = "results-total";
-        assertNotNull(attributes.get(attributeName));
-        assertNotNull((Long) attributes.get(attributeName) > 0);
+        assertNotNull(attributes.get(AttributeNames.RESULTS_TOTAL));
+        assertNotNull((Long) attributes.get(AttributeNames.RESULTS_TOTAL) > 0);
     }
 
     @SuppressWarnings("unchecked")
@@ -45,7 +46,7 @@ public class YahooDocumentSourceTest extends DocumentSourceTest<YahooDocumentSou
     {
         runQuery("apache", 200);
 
-        assertFieldUnique((Collection<Document>) attributes.get("documents"),
+        assertFieldUnique((Collection<Document>) attributes.get(AttributeNames.DOCUMENTS),
             Document.CONTENT_URL);
     }
 

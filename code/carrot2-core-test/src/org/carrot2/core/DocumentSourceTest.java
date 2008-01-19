@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.carrot2.core.controller.SimpleController;
+import org.carrot2.core.parameter.AttributeNames;
 import org.junit.Assert;
 import org.junit.Before;
 
@@ -54,12 +55,13 @@ public abstract class DocumentSourceTest<T extends DocumentSource>
     @SuppressWarnings("unchecked")
     protected final int runQuery(String query, int results)
     {
-        parameters.put("query", query);
-        parameters.put("results", results);
+        attributes.put(AttributeNames.QUERY, query);
+        attributes.put(AttributeNames.RESULTS, results);
 
         final ProcessingResult result = controller.process(parameters, attributes, getComponentClass());
 
-        final Collection<Document> documents = (Collection<Document>) attributes.get("documents");
+        final Collection<Document> documents = (Collection<Document>) attributes.get(
+            AttributeNames.DOCUMENTS);
         assertNotNull(result.getDocuments());
         assertSame(result.getDocuments(), documents);
 

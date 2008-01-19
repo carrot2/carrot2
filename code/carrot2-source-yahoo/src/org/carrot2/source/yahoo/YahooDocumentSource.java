@@ -13,6 +13,7 @@ import org.carrot2.core.Document;
 import org.carrot2.core.DocumentSource;
 import org.carrot2.core.ProcessingException;
 import org.carrot2.core.parameter.Attribute;
+import org.carrot2.core.parameter.AttributeNames;
 import org.carrot2.core.parameter.Bindable;
 import org.carrot2.core.parameter.BindingDirection;
 import org.carrot2.core.parameter.BindingPolicy;
@@ -46,21 +47,21 @@ public final class YahooDocumentSource extends SearchEngine
     @Parameter(policy = BindingPolicy.INSTANTIATION)
     private YahooSearchService service = new YahooWebSearchService();  
 
-    @Parameter(key="start", policy=BindingPolicy.RUNTIME)
+    @Attribute(key=AttributeNames.START, bindingDirection = BindingDirection.IN)
     private int start = 0;
 
-    @Parameter(key="results", policy=BindingPolicy.RUNTIME)
+    @Attribute(key=AttributeNames.RESULTS, bindingDirection = BindingDirection.IN)
     private int results = 100;
 
-    @Parameter(key="query", policy=BindingPolicy.RUNTIME)
+    @Attribute(key=AttributeNames.QUERY, bindingDirection = BindingDirection.IN)
     private String query;
 
     @SuppressWarnings("unused")
-    @Attribute(key="results-total", bindingDirection = BindingDirection.OUT)
+    @Attribute(key=AttributeNames.RESULTS_TOTAL, bindingDirection = BindingDirection.OUT)
     private long resultsTotal;
 
     @SuppressWarnings("unused")
-    @Attribute(key="documents", bindingDirection = BindingDirection.OUT)
+    @Attribute(key=AttributeNames.DOCUMENTS, bindingDirection = BindingDirection.OUT)
     private Collection<Document> documents;
 
     /**

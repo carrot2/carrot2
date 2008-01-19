@@ -8,6 +8,7 @@ import java.util.*;
 import org.carrot2.clustering.synthetic.ByUrlClusteringAlgorithm;
 import org.carrot2.core.*;
 import org.carrot2.core.controller.SimpleController;
+import org.carrot2.core.parameter.AttributeNames;
 
 /**
  *
@@ -73,7 +74,7 @@ public class ClusteringWithDirectDocumentFeed
         Map<String, Object> parameters = new HashMap<String, Object>();
         Map<String, Object> attributes = new HashMap<String, Object>();
         
-        attributes.put("documents", documents);
+        attributes.put(AttributeNames.DOCUMENTS, documents);
         
         final ProcessingResult result = 
             controller.process(parameters, attributes, ByUrlClusteringAlgorithm.class);

@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.Map;
 
 import org.carrot2.core.controller.SimpleController;
+import org.carrot2.core.parameter.AttributeNames;
 import org.junit.Test;
 
 /**
@@ -98,10 +99,10 @@ public abstract class ClusteringAlgorithmTest<T extends ClusteringAlgorithm> ext
         Collection<Document> documents, Map<String, Object> parameters,
         Map<String, Object> attributes)
     {
-        attributes.put("documents", documents);
+        attributes.put(AttributeNames.DOCUMENTS, documents);
         SimpleController controller = new SimpleController();
         controller.process(parameters, attributes, instance);
-        return (Collection<Cluster>) attributes.get("clusters");
+        return (Collection<Cluster>) attributes.get(AttributeNames.CLUSTERS);
     }
 
     /**

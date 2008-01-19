@@ -3,6 +3,8 @@ package org.carrot2.core;
 import java.util.Collection;
 import java.util.Map;
 
+import org.carrot2.core.parameter.AttributeNames;
+
 /**
  * Provides results of query processing.
  */
@@ -26,14 +28,14 @@ public class ProcessingResult
     @SuppressWarnings("unchecked")
     public Collection<Document> getDocuments()
     {
-        // TODO: we need to have one place where the key "documents" is defined
-        return (Collection<Document>) attributes.get("documents");
+        return (Collection<Document>) attributes.get(
+            AttributeNames.DOCUMENTS);
     }
 
     @SuppressWarnings("unchecked")
     public Collection<Cluster> getClusters()
     {
-        // TODO: we need to have one place where the key "clusters" is defined
-        return (Collection<Cluster>) attributes.get("clusters");
+        return (Collection<Cluster>) attributes.get(
+            AttributeNames.CLUSTERS);
     }
 }

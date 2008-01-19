@@ -9,6 +9,7 @@ import java.util.Map;
 import org.carrot2.clustering.synthetic.ByUrlClusteringAlgorithm;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.controller.SimpleController;
+import org.carrot2.core.parameter.AttributeNames;
 import org.carrot2.source.yahoo.YahooDocumentSource;
 import org.carrot2.source.yahoo.YahooNewsSearchService;
 
@@ -26,11 +27,11 @@ public class ClusteringWithYahooAPI
         // Initialization parameters for components.
         final Map<String, Object> parameters = new HashMap<String, Object>();
 
-        parameters.put("query", "data mining");
-        parameters.put("results", 200);
-
         // Runtime attributes passed between components.
         final Map<String, Object> attributes = new HashMap<String, Object>();
+
+        attributes.put(AttributeNames.QUERY, "data mining");
+        attributes.put(AttributeNames.RESULTS, 200);
 
         ProcessingResult result = controller.process(parameters, attributes, 
                 YahooDocumentSource.class, ByUrlClusteringAlgorithm.class);
@@ -42,9 +43,10 @@ public class ClusteringWithYahooAPI
         //
         parameters.put(YahooDocumentSource.class.getName() + ".service", 
             YahooNewsSearchService.class);
-        parameters.put("query", "iraq");
-        parameters.put("results", 50);
 
+        attributes.put(AttributeNames.QUERY, "iraq");
+        attributes.put(AttributeNames.RESULTS, 50);
+        
         result = controller.process(parameters, attributes, 
             YahooDocumentSource.class, ByUrlClusteringAlgorithm.class);
         ExampleUtils.displayResults(result);

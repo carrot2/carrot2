@@ -26,11 +26,11 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
         STOP_URL_PARTS.add("www");
     }
 
-    @Attribute(key = "documents", bindingDirection = BindingDirection.IN)
+    @Attribute(key = AttributeNames.DOCUMENTS, bindingDirection = BindingDirection.IN)
     private Collection<Document> documents = Collections.<Document> emptyList();
 
     @SuppressWarnings("unused")
-    @Attribute(key = "clusters", bindingDirection = BindingDirection.OUT)
+    @Attribute(key = AttributeNames.CLUSTERS, bindingDirection = BindingDirection.OUT)
     private Collection<Cluster> clusters = null;
 
     /*
