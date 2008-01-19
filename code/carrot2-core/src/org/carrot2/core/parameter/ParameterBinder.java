@@ -78,12 +78,20 @@ public class ParameterBinder
             final Field field = fields.get(parameterDescriptor.key);
             final Parameter binding = field.getAnnotation(Parameter.class);
 
-            // TODO: if there is no default value, throw an exception.
-            if (binding != null && value != null
-                && value.getClass().getAnnotation(Bindable.class) != null)
+            if (binding != null)
             {
-                // Recursively descend into other types.
-                bind(value, values, policy);
+                if (value == null)
+                {
+                    // If there is no default value, throw an exception.
+                    throw new InstantiationException("Parameter field must have a" +
+                    		" non-null default value: " + field.getName());
+                }
+
+                if (value.getClass().getAnnotation(Bindable.class) != null)
+                {
+                    // Recursively descend into other types.
+                    bind(value, values, policy);
+                }
             }
 
             try
