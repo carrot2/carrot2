@@ -63,7 +63,6 @@ public class ParameterBinder
                 {
                     if (!constraint.isMet(value))
                     {
-                        // TODO: should we really throw an exception here?
                         throw new ConstraintViolationException(parameterDescriptor,
                             constraint, value);
                     }
@@ -79,10 +78,7 @@ public class ParameterBinder
             final Field field = fields.get(parameterDescriptor.key);
             final Parameter binding = field.getAnnotation(Parameter.class);
 
-            // TODO: if there is no default value provided for a parameter and
-            // no value for the parameter in the map, we'll get a NPE here.
-            // Should we do something about it? For the time being, don't descend if there
-            // is no value.
+            // TODO: if there is no default value, throw an exception.
             if (binding != null && value != null
                 && value.getClass().getAnnotation(Bindable.class) != null)
             {

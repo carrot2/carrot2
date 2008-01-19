@@ -8,14 +8,7 @@ import org.carrot2.core.parameter.*;
 /**
  * Defines the life cycle of a Carrot2 processing component.
  * <p>
- * TODO: should we have a method called in case of processing errors? I've just checked
- * LocalComponent -- the processingErrorOcurred() method is never overriden to do
- * something more than the base component is doing (i.e. propagating the call down the
- * chain).
- * <p>
- * TODO: method names?
- * <p>
- * TODO: write proper life cycle docs
+ * TODO: write proper life cycle documentation.
  */
 public interface ProcessingComponent
 {
@@ -33,9 +26,7 @@ public interface ProcessingComponent
      * {@link BindingDirection#IN} and {@link BindingDirection#INOUT} attributes have been
      * bound, but before a call to {@link #performProcessing()}. In this method, the
      * processing component should perform any initializations based on the runtime
-     * parameters. This method is called once per "request cycle".
-     * <p>
-     * (TODO: need to come up with a good name for "request cycle": "query", "request"?).
+     * parameters. This method is called once per request cycle described in the class header.
      * 
      * @throws ProcessingException when processing cannot be performed (e.g. some
      *             parameters are not bound)
@@ -46,7 +37,9 @@ public interface ProcessingComponent
      * Performs the processing required to fulfill the request. After the call to this
      * method completes without an exception, {@link BindingDirection#OUT} and
      * {@link BindingDirection#INOUT} attributes will be collected. This method is called
-     * once per "request cycle".
+     * once per request cycle.
+     * 
+     * TODO: rename to "process".
      * 
      * @throws ProcessingException when processing failed
      */
@@ -56,7 +49,7 @@ public interface ProcessingComponent
      * Invoked after the processing has finished, no matter whether an exception has been
      * thrown or not. In this method, the processing component should dispose of any
      * resources it has allocated to fulfill the request. This method is called once per
-     * "request cycle".
+     * request cycle.
      */
     public void afterProcessing();
 

@@ -3,8 +3,7 @@ package org.carrot2.core;
 import java.util.*;
 
 /**
- * TODO: how do we handle document ids? Expose a public method for setting/getting id?
- * This is very much internal, so ideally setting ids would not be available for everyone.
+ * TODO: handle document ids internally in the controller (after processing is finished). Do not expose them.
  */
 public class Document
 {
@@ -65,7 +64,6 @@ public class Document
             return false;
         }
 
-        // TODO: shall we just compare ids (fast!) or all fields
         return this.id == ((Document) obj).id;
     }
 

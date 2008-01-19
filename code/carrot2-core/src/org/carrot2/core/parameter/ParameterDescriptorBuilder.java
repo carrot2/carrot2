@@ -92,8 +92,6 @@ public class ParameterDescriptorBuilder
         final Field [] fields = fieldSet.toArray(new Field [fieldSet.size()]);
         final Map<String, Field> result = new HashMap<String, Field>(fields.length);
 
-        // TODO: Should we remember or somehow reset the accessibility for non-descriptor
-        // fields upon returning from this method?
         AccessibleObject.setAccessible(fields, true);
         for (final Field field : fields)
         {

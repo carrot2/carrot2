@@ -2,14 +2,6 @@ package org.carrot2.source;
 
 /**
  * A single result window to fetch.
- * <p>
- * TODO: Assuming that the carrot2-util-common project should contain only general code,
- * which could be reusable pretty much everywhere (should it?), this class should probably
- * be not in this project, maybe the core project is better for it?
- * 
- * REPLY: I don't know if the core project is the right place to store such a class. This is
- * not really the API, it just happens to be useful in a number of places. That's what util 
- * projects are for, right?
  */
 public final class SearchRange
 {
