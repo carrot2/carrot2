@@ -27,6 +27,8 @@ import com.google.common.base.Predicate;
 /**
  * A {@link DocumentSource} fetching {@link Document}s (search results)
  * from Yahoo!.
+ * 
+ * TODO: change start, results and query to be attributes.
  */
 @Bindable
 public final class YahooDocumentSource extends SearchEngine
