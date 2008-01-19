@@ -18,10 +18,7 @@ import org.junit.Test;
 /**
  * Simple baseline tests that apply to all clustering algorithms.
  * <p>
- * TODO: it might be interesting (not sure if possible) to have a base class for testing
- * algorithms that would automatically run the tests in two modes: 1) creating a new
- * instance for each test, 2) run all tests on one instance to make sure the algorithm
- * will not fail in production.
+ * TODO: Replace custom lifecycle in this class to utilizing a controller.
  * <p>
  * Some methods of this class can probably be refactored to a more general
  * {@link ProcessingComponent} testing base class.
@@ -41,7 +38,8 @@ public abstract class ClusteringAlgorithmTest<T extends ClusteringAlgorithm> ext
     /**
      * Checks whether all input documents are placed in some cluster.
      * <p>
-     * TODO: Not sure if this should hold for all algorithms though.
+     * TODO: Not sure if this should hold for all algorithms though. [DW] No, I guess it
+     * doesn't make sense to forge the junk cluster (and therefore this test).
      */
     @Test
     public void testNoDocumentLoss()
