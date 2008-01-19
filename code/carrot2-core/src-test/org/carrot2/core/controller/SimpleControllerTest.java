@@ -171,6 +171,9 @@ public class SimpleControllerTest
             ProcessingComponentWithoutDefaultConstructor.class);
     }
 
+    // TODO: The tests below fail for me. Is there anything special
+    // about them?
+    
     @Test(expected = InitializationException.class)
     public void testExceptionWhileInit()
     {
