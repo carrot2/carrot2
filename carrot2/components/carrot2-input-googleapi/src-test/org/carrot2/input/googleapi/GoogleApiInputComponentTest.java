@@ -78,7 +78,6 @@ public class GoogleApiInputComponentTest extends LocalInputComponentTestBase
             Logger.getRootLogger().info(titleSummary);
             assertTrue(titleSummary.indexOf("&gt;") < 0);
             assertTrue(titleSummary.indexOf("&lt;") < 0);
-            assertTrue(titleSummary.indexOf("&amp;") < 0);
         }
     }
 

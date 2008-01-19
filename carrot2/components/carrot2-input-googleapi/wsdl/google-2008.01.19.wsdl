@@ -5,7 +5,7 @@
      change as we refine and extend our APIs. Please see the terms of use
      for more information. -->
 
-<!-- Revision 2002-08-16 -->
+<!--  Revision 2002-08-16  -->
 
 <definitions name="GoogleSearch"
              targetNamespace="urn:GoogleSearch"

@@ -60,7 +60,7 @@ public class GoogleStress extends TestCase {
     public void testMediumQuery() throws Exception {
         final GoogleKeysPool pool = new GoogleKeysPool();
 
-        // pool.addKey("", "key1");
+        pool.addKey("dl1IciJQFHK96hkIvnbTuDthIQd4Sm41", "key1");
 
         LocalComponentFactory inputFactory = new LocalComponentFactory() {
             public LocalComponent getInstance() {

@@ -14,17 +14,15 @@
         </build>
 		<check-newer>
 			<fileset dir="src" />
-            <fileset dir="lib" />
 		</check-newer>
     </provides>
 
 
-    <dependency name="googleapi" />
     <dependency name="log4j" />
-
     <dependency name="carrot2-util-common" />
     <dependency name="carrot2-local-core" />
     <dependency name="carrot2-license" />
+    <dependency name="axis" />
     
     <dependency name="junit" profile="test" />
 </component>
