@@ -13,8 +13,11 @@
 
 package org.carrot2.input.googleapi;
 
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Set;
+
+import javax.xml.rpc.ServiceException;
 
 import org.apache.log4j.Logger;
 import org.carrot2.core.*;
@@ -22,7 +25,7 @@ import org.carrot2.core.clustering.*;
 import org.carrot2.core.fetcher.*;
 import org.carrot2.util.StringUtils;
 
-import com.google.soap.search.*;
+import com.google.soapapi.*;
 
 /**
  * <p>GoogleAPI input component.
@@ -211,23 +214,25 @@ public final class GoogleApiInputComponent
             }
 
             try
-            {
-                final GoogleSearch s = new GoogleSearch();
-                s.setKey(key.getKey());
+            {                
+                final GoogleSearchService service = new GoogleSearchServiceLocator();
+                final GoogleSearchPort s = service.getGoogleSearchPort();
 
-                s.setQueryString(query);
-                s.setStartResult(at);
-                s.setMaxResults(EXPECTED_RESULTS_PER_KEY);
-                s.setFilter(false); /* Similar results filtering */
-                s.setSafeSearch(false);
+                final String keyValue = key.getKey();
+                final boolean filter = false; /* Similar results filtering */
+                
+                final String restrict = null; /* Country and Topic Restricts */
+                final boolean safeSearch = false; /* adult filtering */
+                final String languageRestrict = null; /* Language restricts */
+                
+                final String UTF8 = "UTF-8";
 
-                // s.setLanguageRestricts(); /* Language restricts -- lang_pl */
-                // s.setRestrict(); /* Location restricts -- countryPL */
-
-                final GoogleSearchResult r = s.doSearch();
+                final GoogleSearchResult r = 
+                    s.doGoogleSearch(keyValue, query, at, EXPECTED_RESULTS_PER_KEY, 
+                        filter, restrict, safeSearch, languageRestrict, UTF8, UTF8);
 
                 log.debug("Google returned:" + " startIndex=" + r.getStartIndex() + " endIndex=" + r.getEndIndex()
-                    + " estimated=" + r.getEstimatedTotalResultsCount() + " exact=" + r.getEstimateIsExact());
+                    + " estimated=" + r.getEstimatedTotalResultsCount() + " exact=" + r.isEstimateIsExact());
 
                 if (r.getStartIndex() != at + 1 && r.getEndIndex() > 0)
                 {
@@ -238,12 +243,12 @@ public final class GoogleApiInputComponent
                 final int totalEstimated = r.getEstimatedTotalResultsCount();
 
                 // Convert to raw documents.
-                final GoogleSearchResultElement [] results = r.getResultElements();
+                final ResultElement [] results = r.getResultElements();
                 final RawDocument [] rawDocuments = new RawDocument [results.length];
 
                 for (int i = 0; i < results.length; i++)
                 {
-                    final GoogleSearchResultElement gsr = results[i];
+                    final ResultElement gsr = results[i];
                     final Integer id = new Integer(at + i);
 
                     final RawDocument rdoc = new RawDocumentBase(gsr.getURL(), StringUtils.unescapeHtml(StringUtils
@@ -261,11 +266,15 @@ public final class GoogleApiInputComponent
 
                 return new SearchResult(rawDocuments, r.getStartIndex(), totalEstimated);
             }
+            catch (ServiceException e)
+            {
+                throw new ProcessingException("Could not initialize Google service.", e);
+            }
             catch (Throwable t)
             {
-                if (t instanceof GoogleSearchFault)
+                if (t instanceof RemoteException)
                 {
-                    final String msg = ((GoogleSearchFault) t).getMessage();
+                    final String msg = ((RemoteException) t).getMessage();
                     if (msg.indexOf("exceeded") >= 0)
                     {
                         // Limit exceeded.
