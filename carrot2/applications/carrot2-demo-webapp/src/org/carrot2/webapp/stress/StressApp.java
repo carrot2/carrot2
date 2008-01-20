@@ -217,6 +217,7 @@ public class StressApp
 
             public void failure(String reason)
             {
+                logger.warn(reason);
                 synchronized (StressApp.class)
                 {
                     failures.add(System.currentTimeMillis(), 1);
