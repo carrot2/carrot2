@@ -21,19 +21,21 @@ Edit https://carrot2.svn.sourceforge.net/svnroot/carrot2/branches/stable/carrot2
 svn commit https://carrot2.svn.sourceforge.net/svnroot/carrot2/branches/stable/carrot2/carrot2.version -m "Version number updated"
 
 
-4. Create a tag
-
-svn copy https://carrot2.svn.sourceforge.net/svnroot/carrot2/branches/stable/carrot2 https://carrot2.svn.sourceforge.net/svnroot/carrot2/tags/VERSION_2_1_3 -m "Tag created"
-
-
-5. Trigger the stable build on the build server:
+4. Trigger the stable build on the build server:
 
 http://builds.carrot2.org/browse/C2STABLE-COMMIT
 
+The build must pass without errors.
 
-6. Verify if the automatically deployed demo webapp works:
+
+5. Verify if the automatically deployed demo webapp works:
 
 http://demo.carrot2.org/
+
+
+6. Create a tag
+
+svn copy https://carrot2.svn.sourceforge.net/svnroot/carrot2/branches/stable/carrot2 https://carrot2.svn.sourceforge.net/svnroot/carrot2/tags/VERSION_2_1_3 -m "Tag created"
 
 
 7. Build the website
