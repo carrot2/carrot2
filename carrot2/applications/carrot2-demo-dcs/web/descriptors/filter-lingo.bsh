@@ -1,0 +1,22 @@
+
+import org.carrot2.filter.lingo.local.*;
+import org.carrot2.core.*;
+import org.carrot2.core.controller.*;
+
+//
+// Component factory is a dynamic Beanshell class
+//
+factory = new LocalComponentFactory() {
+    public LocalComponent getInstance() {
+    	return new MultilingualLingoLocalFilterComponent();
+    }
+
+    public String getName() {
+        return "Lingo Classic (Open Source)";
+    }
+};
+
+//
+// Return the ID of the component and its factory.
+//
+return new LoadedComponentFactory("filter-lingo", factory);

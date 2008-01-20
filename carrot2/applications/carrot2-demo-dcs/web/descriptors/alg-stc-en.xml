@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<local-process id="stc-en">
+  <name>STC (+English)</name>
+  <description>Suffix Tree Clustering Algorithm</description>
+
+  <input  component-key="input-demo-webapp" />
+
+  <filter component-key="filter-language-detection-en" />
+  <filter component-key="filter-tokenizer" />
+  <filter component-key="filter-case-normalizer" />
+  <filter component-key="filter-stc" />
+  
+  <output component-key="output-demo-webapp" />
+</local-process>

@@ -1,0 +1,10 @@
+
+<component name="xx">
+
+	<provides>
+		<files>
+			<file location="xx.dep.xml" />
+		</files>
+	</provides>
+
+</component>

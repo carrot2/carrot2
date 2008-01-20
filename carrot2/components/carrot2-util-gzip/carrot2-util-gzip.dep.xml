@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE component PUBLIC "-//Carrot2//DTD Component Dependency Descriptor V1.0//EN" "http://www.carrot2.org/dtd/component-dependency.dtd" >
+
+<component
+    name="carrot2-util-gzip"
+    description="Carrot2 GZIP Utilities">
+    
+    <provides>
+        <files build-path-exclude="true" prefix=".">
+            <file location="jzlib.LICENSE" />
+            <file location="pjl.LICENSE" />
+        </files>
+        <files build-path-exclude="true" prefix="tmp/dist">
+            <file location="carrot2-util-gzip.jar" />
+        </files>
+        <build>
+            <ant file="build.xml" target="build" />
+        </build>
+		<check-newer>
+			<fileset dir="src" />
+		</check-newer>
+    </provides>
+
+    <dependency name="carrot2-license" />
+
+    <dependency name="junit" noexport="true" no-copy="true" />
+    <dependency name="junit-addons" noexport="true" no-copy="true" />
+    <dependency name="servlets-api" noexport="true" no-copy="true" />    
+    
+    <dependency name="carrot2-util-common" profile="test" />
+</component>

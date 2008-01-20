@@ -1,0 +1,33 @@
+
+<project name="bring-to-date" default="test">
+
+    <target name="prepare">
+        <taskdef resource="res/carrot2-antlib.xml">
+            <classpath location="../../tmp/build/bootstrap" />
+        </taskdef>
+        <delete dir="tmp" />
+		<mkdir dir="tmp"/>
+    </target>
+
+	<target name="test" depends="prepare">
+		<printDependencies componentDescriptor="deps/proj_a/a.dep.xml"
+			file="tmp/dependencies.txt" property="tmp:dependencies:string">
+			<dependencies>
+				<fileset dir="deps">
+				<include name="**/*.dep.xml" />
+				</fileset>
+			</dependencies>
+		</printDependencies>
+		<available property="tmp:dep:ok" value="ok" file="tmp/dependencies.txt" type="file" />
+		<fail unless="tmp:dep:ok">
+			Printing dependencies failed.
+		</fail>
+		
+		<echo>${tmp:dependencies:string}</echo>
+
+		<fail unless="tmp:dependencies:string">
+			Property not set.
+		</fail>
+	</target>
+    
+</project>

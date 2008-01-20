@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE component PUBLIC "-//Carrot2//DTD Component Dependency Descriptor V1.0//EN" "http://www.carrot2.org/dtd/component-dependency.dtd" >
+
+<component
+    name="carrot2-filter-lingo"
+    description="Carrot2 Lingo Clustering filter">
+
+    <provides>
+        <files build-path-exclude="true" prefix="tmp/dist">
+            <file location="carrot2-filter-lingo.jar" />
+        </files>
+        <build>
+            <ant file="build.xml" target="build" />
+        </build>
+		<check-newer>
+			<fileset dir="src" />
+		</check-newer>
+    </provides>
+
+	<!-- Carrot2 components -->
+    <dependency name="carrot2-license" />
+	<dependency name="carrot2-util-common" />
+	<dependency name="carrot2-util-tokenizer" noexport="true" nocopy="true" />
+	<dependency name="carrot2-local-core" />
+    <dependency name="jama" />
+    <dependency name="log4j" />
+    <dependency name="violinstrings" />
+
+	<dependency name="junit" profile="test" />
+    <dependency name="dom4j" profile="test" />
+</component>

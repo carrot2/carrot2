@@ -1,0 +1,114 @@
+
+Major functions and bug fixes
+-----------------------------
+
+[C]:      #  Bugfix
+          +  new feature
+          o  minor feature, update or fix.
+
+Version  [C] Information
+
+HEAD
+          See status in JIRA:
+          http://issues.carrot2.org/secure/ReleaseNote.jspa?version=10010&styleName=Html&projectId=10000
+
+2.1-RC1   SVN:1928
+
+          See JIRA:
+          http://issues.carrot2.org/secure/ReleaseNote.jspa?projectId=10000&styleName=Html&version=10001
+
+2.0.2     SVN:1541
+
+          o  License text update (annual).
+
+2.0.1     SVN:1532
+
+          #  Fixed minor browser display problems (font size).
+          
+          #  Build file fixes.
+          
+          o  Update of Microsoft WSDL file.
+          
+          o  Contractions and new words added to stopwords list.
+
+2.0       SVN:1466
+
+          +  Added an input component to MSN Search
+
+2.0-RC3
+
+          +  Added referrer check.
+
+          o  Entity decoding switched to apache-commons-lang 
+          
+          o  Implemented regexp-based Yahoo API XML parser
+
+2.0-RC2   SVN:1435
+
+          +  Added an Example explaining API use.
+
+          +  Added Lucene input process for local indices (demo browser)
+
+          +  Added compression filter to the demo webapp
+          
+          +  Added correct (implementing flush()) implementation of GZIP and Deflate streams
+             based on jzlib
+
+          o  Refactoring of package names. Carrot2 now uses org.carrot2.* packages.
+             THIS REFACTORING INCLUDES CORE CLASSES, so any code using C2 must be recompiled.
+
+          o  Progress page for the webapp demo (D).
+
+          o  Updated JARs of projects used in Carrot2.
+
+          #  Snowball stemmers were quite old. King's was stemmed into King' for example. 
+             Upgrade fixes that problem.
+          
+          o  Build system improvements (speed).
+
+          +  Demo web application using local interfaces. Initial version.
+          
+          o  Core classes refactoring. Several classes removed or slightly redesigned to simplify 
+             code.
+
+          #  Snowball stemmers were quite old. King's was stemmed into King' for example. 
+             Upgrade fixes that problem.
+          
+          +  Local interface to FuzzyAnts added.
+
+          +  Added proguard obfuscation infrastructure.
+
+          #  The cache in demo application did not work properly for input components
+             with the same input component class customizable by parameters set in the constructor
+             (such as the opensearch). An explicit equivalence class object 
+             is now required in the RawDocumentProducerCacheWrapper.
+
+          +  Added carrot2-input-opensearch input component, contributed by Julien Nioche.
+
+1.0.2     (svn version: 1000) I thought it's a good Subversion number to release
+             a minor update. The update includes a few fixes to the demo application
+             and will not be officially released on SourceForge (with this we will
+             wait until some functionality is added).
+
+          +  Added initial version of HAOG clustering algorithm.
+
+1.0.1
+
+          +  Added speed/ performance button to the demo application.
+
+          #  Implemented a workaround for issues with long text sequences in cluster label
+             display.
+
+          +  STC clustering component refactored. Adopted for the local pipeline 
+             (tokenizer, case normalization). Remote version uses embedded local
+             controller.
+
+          o  Added 'identity' XSLT argument to carrot2-input-xml.
+
+          #  YahooAPI input occasionally threw an exception due to incorrect result from Yahoo.
+             A workaround is not to throw an exception at all -- YahooAPI isn't stable enough to
+             rely on it. 
+
+1.0          We're putting a label on the, otherwise stable for a long time, code. Release 1.0
+             also brings a refactored local demo/tuning application and several minor technical
+             enhancements.

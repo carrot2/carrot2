@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<!DOCTYPE component PUBLIC "-//Carrot2//DTD Component Dependency Descriptor V1.0//EN" "http://www.carrot2.org/dtd/component-dependency.dtd" >
+<component
+    name="axis"
+    description="Axis 1.4 with applied patch for XML deserialization, http://ws.apache.org/axis/">
+	<provides>
+		<files>
+			<file location="axis.jar" />
+			<file location="axis.LICENSE" />
+            <file location="commons-discovery-0.2.jar" />
+            <file location="commons-discovery-0.2.LICENSE" />
+            <file location="jaxrpc.jar" />
+            <file location="saaj.jar" />
+            <file location="wsdl4j-1.5.1.jar" />
+            <file location="wsdl4j-1.5.1.LICENSE" />            
+		</files>
+	</provides>
+    
+    <dependency name="commons-logging" />
+</component>

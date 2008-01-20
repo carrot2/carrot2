@@ -1,0 +1,4 @@
+<local-component-factory 
+	id="filter-clustering-rough-kmeans" 
+	component-class="org.carrot2.filter.trc.carrot.filter.cluster.local.RoughKMeansLocalFilterComponent">
+</local-component-factory> 

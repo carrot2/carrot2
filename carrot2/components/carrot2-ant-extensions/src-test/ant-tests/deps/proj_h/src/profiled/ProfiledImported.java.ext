@@ -1,0 +1,6 @@
+package profiled;
+
+public class ProfiledImported {
+	public ProfiledImported() {
+	}
+}

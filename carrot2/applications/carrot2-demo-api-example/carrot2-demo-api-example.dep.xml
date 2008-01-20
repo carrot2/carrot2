@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE component PUBLIC "-//Carrot2//DTD Component Dependency Descriptor V1.0//EN" "http://www.carrot2.org/dtd/component-dependency.dtd" >
+
+<component
+    name="carrot2-demo-api-example"
+    description="Carrot2 Demo API Example">
+
+    <!-- Required components -->
+
+    <dependency name="carrot2-util-common" />
+    <dependency name="carrot2-local-core" />
+    <dependency name="carrot2-filter-lingo" />
+    <dependency name="carrot2-filter-stc" />    
+    <dependency name="carrot2-util-tokenizer" />
+    <dependency name="carrot2-input-aggregator" />
+    <dependency name="carrot2-input-yahooapi" />
+    <dependency name="carrot2-input-msnapi" />    
+    <dependency name="carrot2-input-lucene" />
+    <dependency name="carrot2-filter-case-normalizer" />
+</component>
+

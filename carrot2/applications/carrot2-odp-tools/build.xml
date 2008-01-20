@@ -1,0 +1,39 @@
+<project name="Carrot2 Open Directory Project Interface Core" default="build">
+    <property file="local.properties" />
+
+    <property name="project.dir"      location="${basedir}" />
+    <property name="carrot2.code.dir"  location="../.." />
+    <property name="dist.name"        value="carrot2-odp-tools" />
+
+    <property name="type"       	  value="jartype" />
+    <property name="tests.available"  value="true"    />
+
+	<property name="distribution.dir" location="${project.dir}/tmp/dist" />
+
+	<import file="${carrot2.code.dir}/components/common-targets.inc" />
+
+	<target name="build">
+		<property name="copy.dependencies" value="true" />
+
+		<ant target="build.${type}"
+             antfile="${carrot2.code.dir}/components/master.xml" inheritall="true" inheritrefs="true">
+		</ant>
+	</target>
+
+	<target name="create-index-lucene" depends="build">
+		<description>Creates a lucene index from given ODD RDF file</description>
+
+		<fail message="Please provide a path to an ODP RDF file in the 'odp.src.file' property" unless="odp.src.file"/>
+		<fail message="Please provide a path for the Lucene index in the 'odp.lucene.index.dir' property" unless="odp.lucene.index.dir"/>
+		<mkdir dir="${odp.lucene.index.dir}"/>
+		<java fork="true" classname="org.carrot2.tools.odp.tools.ODPLuceneIndexer">
+			<sysproperty key="odp.src.file" value="${odp.src.file}"/>
+			<sysproperty key="odp.lucene.index.dir" value="${odp.lucene.index.dir}"/>
+			<classpath>
+				<fileset dir="${distribution.dir}">
+					<include name="**/*.jar"/>
+				</fileset>
+			</classpath>
+		</java>
+	</target>
+</project>
