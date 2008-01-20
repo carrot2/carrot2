@@ -1,5 +1,0 @@
-<!-- This is an alternative definition of a component (using XML) -->
-<local-component-factory 
-	id="input-array" 
-	component-class="org.carrot2.core.impl.ArrayInputComponent">
-</local-component-factory> 

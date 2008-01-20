@@ -1,6 +1,0 @@
-package imported;
-
-public class ImportedClass {
-	public ImportedClass() {
-	}
-}

@@ -1,4 +1,0 @@
-<local-component-factory 
-	id="input-lucene" 
-	component-class="org.carrot2.input.lucene.LuceneLocalInputComponent">
-</local-component-factory>
