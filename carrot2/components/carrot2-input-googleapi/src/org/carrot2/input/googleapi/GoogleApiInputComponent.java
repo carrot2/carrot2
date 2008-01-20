@@ -19,6 +19,7 @@ import java.util.Set;
 
 import javax.xml.rpc.ServiceException;
 
+import org.apache.axis.AxisFault;
 import org.apache.log4j.Logger;
 import org.carrot2.core.*;
 import org.carrot2.core.clustering.*;
@@ -272,9 +273,9 @@ public final class GoogleApiInputComponent
             }
             catch (Throwable t)
             {
-                if (t instanceof RemoteException)
+                if (t instanceof AxisFault)
                 {
-                    final String msg = ((RemoteException) t).getMessage();
+                    final String msg = ((AxisFault) t).getMessage();
                     if (msg.indexOf("exceeded") >= 0)
                     {
                         // Limit exceeded.
