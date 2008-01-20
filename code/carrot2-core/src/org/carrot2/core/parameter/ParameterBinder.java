@@ -24,9 +24,6 @@ public class ParameterBinder
         final Collection<ParameterDescriptor> parameterDescriptors = ParameterDescriptorBuilder
             .getParameterDescriptors(instance.getClass(), policy);
 
-        final Map<String, Field> fields = ParameterDescriptorBuilder.getFieldMap(instance
-            .getClass(), policy);
-
         for (ParameterDescriptor parameterDescriptor : parameterDescriptors)
         {
             Object value = values.get(parameterDescriptor.getKey());
@@ -75,7 +72,7 @@ public class ParameterBinder
                 value = parameterDescriptor.getDefaultValue();
             }
 
-            final Field field = fields.get(parameterDescriptor.key);
+            final Field field = parameterDescriptor.field;
             final Parameter binding = field.getAnnotation(Parameter.class);
 
             if (binding != null)

@@ -5,7 +5,6 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.util.*;
 
-import org.apache.commons.lang.ClassUtils;
 import org.carrot2.core.constraint.*;
 
 /**
@@ -24,7 +23,8 @@ public class ParameterDescriptorBuilder
         final ArrayList<ParameterDescriptor> params = new ArrayList<ParameterDescriptor>();
 
         // Get the field names that correspond to the requested policy.
-        final Collection<Field> bindableFields = getFieldMap(clazz, policy).values();
+        final Collection<Field> bindableFields = getParameterFieldMap(clazz, policy)
+            .values();
 
         // This is a little hacky -- to get the default values we must create an instance
         // of the class. Assuming that we have no-parameter constructors
@@ -38,7 +38,7 @@ public class ParameterDescriptorBuilder
         catch (Exception e)
         {
             throw new RuntimeException("Could not create instance of class: "
-                + clazz.getName());
+                + clazz.getName(), e);
         }
 
         for (final Field field : bindableFields)
@@ -75,8 +75,7 @@ public class ParameterDescriptorBuilder
                     + fieldName);
             }
 
-            params.add(new ParameterDescriptor(fieldName, ClassUtils.primitiveToWrapper(field
-                .getType()), fieldValue, constraint));
+            params.add(new ParameterDescriptor(fieldName, fieldValue, constraint, field));
         }
 
         return params;
@@ -85,7 +84,8 @@ public class ParameterDescriptorBuilder
     /*
      * 
      */
-    public static Map<String, Field> getFieldMap(Class<?> clazz, BindingPolicy policy)
+    static Map<String, Field> getParameterFieldMap(Class<?> clazz,
+        BindingPolicy policy)
     {
         final Collection<Field> fieldSet = BindableUtils
             .getFieldsFromBindableHierarchy(clazz);

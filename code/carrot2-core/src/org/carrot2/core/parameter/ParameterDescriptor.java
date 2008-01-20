@@ -1,7 +1,10 @@
 package org.carrot2.core.parameter;
 
-import org.carrot2.core.constraint.Constraint;
+import java.lang.reflect.Field;
+
+import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.ObjectUtils;
+import org.carrot2.core.constraint.Constraint;
 
 public class ParameterDescriptor
 {
@@ -9,16 +12,19 @@ public class ParameterDescriptor
     public final Class<?> type;
     public final Object defaultValue;
     public final Constraint constraint;
+    final Field field;
 
-    public ParameterDescriptor(String name, Class<?> type, Object defaultValue, Constraint constraint)
+    ParameterDescriptor(String name, Object defaultValue, Constraint constraint,
+        Field field)
     {
-        if (name == null || type == null)
+        if (name == null || field == null)
         {
             throw new IllegalArgumentException();
         }
 
         this.key = name;
-        this.type = type;
+        this.field = field;
+        this.type = ClassUtils.primitiveToWrapper(field.getType());
         this.defaultValue = defaultValue;
         this.constraint = constraint;
     }
@@ -37,7 +43,7 @@ public class ParameterDescriptor
     {
         return defaultValue;
     }
-    
+
     public Constraint getConstraint()
     {
         return constraint;
@@ -57,8 +63,7 @@ public class ParameterDescriptor
         }
 
         ParameterDescriptor other = ((ParameterDescriptor) obj);
-        return other.key.equals(this.key)
-            && other.type.equals(this.type)
+        return other.key.equals(this.key) && other.type.equals(this.type)
             && ObjectUtils.equals(defaultValue, defaultValue)
             && ObjectUtils.equals(other.constraint, this.constraint);
     }
