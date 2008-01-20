@@ -16,30 +16,15 @@ public class ParameterDescriptorBuilder
      * 
      */
     @SuppressWarnings("unchecked")
-    public static Collection<ParameterDescriptor> getParameterDescriptors(Class<?> clazz,
-        BindingPolicy policy)
+    public static Collection<ParameterDescriptor> getParameterDescriptors(
+        Object instance, BindingPolicy policy)
     {
         // Output array of parameters.
         final ArrayList<ParameterDescriptor> params = new ArrayList<ParameterDescriptor>();
 
         // Get the field names that correspond to the requested policy.
-        final Collection<Field> bindableFields = getParameterFieldMap(clazz, policy)
-            .values();
-
-        // This is a little hacky -- to get the default values we must create an instance
-        // of the class. Assuming that we have no-parameter constructors
-        // and an explicit lifecycle method doing the (usually costly) initialization,
-        // we can safely create this instance here.
-        Object instance;
-        try
-        {
-            instance = clazz.newInstance();
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException("Could not create instance of class: "
-                + clazz.getName(), e);
-        }
+        final Collection<Field> bindableFields = getParameterFieldMap(
+            instance.getClass(), policy).values();
 
         for (final Field field : bindableFields)
         {
@@ -84,8 +69,7 @@ public class ParameterDescriptorBuilder
     /*
      * 
      */
-    static Map<String, Field> getParameterFieldMap(Class<?> clazz,
-        BindingPolicy policy)
+    static Map<String, Field> getParameterFieldMap(Class<?> clazz, BindingPolicy policy)
     {
         final Collection<Field> fieldSet = BindableUtils
             .getFieldsFromBindableHierarchy(clazz);

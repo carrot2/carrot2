@@ -81,7 +81,7 @@ public class ParameterDescriptorBuilderTest
             });
 
         Collection<ParameterDescriptor> actual = ParameterDescriptorBuilder
-            .getParameterDescriptors(TestClass.class, BindingPolicy.RUNTIME);
+            .getParameterDescriptors(new TestClass(), BindingPolicy.RUNTIME);
 
         Assert.assertEquals(expected, actual);
     }
@@ -105,7 +105,7 @@ public class ParameterDescriptorBuilderTest
             });
 
         Collection<ParameterDescriptor> actual = ParameterDescriptorBuilder
-            .getParameterDescriptors(TestSubclass.class, BindingPolicy.RUNTIME);
+            .getParameterDescriptors(new TestSubclass(), BindingPolicy.RUNTIME);
 
         Assert.assertEquals(expected, actual);
     }
@@ -122,7 +122,7 @@ public class ParameterDescriptorBuilderTest
             });
 
         Collection<ParameterDescriptor> actual = ParameterDescriptorBuilder
-            .getParameterDescriptors(TestClass.class, BindingPolicy.INSTANTIATION);
+            .getParameterDescriptors(new TestClass(), BindingPolicy.INSTANTIATION);
 
         Assert.assertEquals(expected, actual);
     }
@@ -141,7 +141,7 @@ public class ParameterDescriptorBuilderTest
             });
 
         Collection<ParameterDescriptor> actual = ParameterDescriptorBuilder
-            .getParameterDescriptors(TestSubclass.class, BindingPolicy.INSTANTIATION);
+            .getParameterDescriptors(new TestSubclass(), BindingPolicy.INSTANTIATION);
 
         Assert.assertEquals(expected, actual);
     }

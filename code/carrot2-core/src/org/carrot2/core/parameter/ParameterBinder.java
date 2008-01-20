@@ -22,7 +22,7 @@ public class ParameterBinder
         }
 
         final Collection<ParameterDescriptor> parameterDescriptors = ParameterDescriptorBuilder
-            .getParameterDescriptors(instance.getClass(), policy);
+            .getParameterDescriptors(instance, policy);
 
         for (ParameterDescriptor parameterDescriptor : parameterDescriptors)
         {
