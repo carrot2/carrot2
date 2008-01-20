@@ -5,6 +5,7 @@
 }
 
 table.d {
+  width: 100%;
   margin-bottom: 3ex;
 }
 
@@ -65,9 +66,16 @@ img.onw {
   margin-left: 4px;
   position: relative;
   top: 2px;
+  cursor: pointer;
 }
 
 div#no-documents {
   text-align: center;
   padding-top: 5ex;
+}
+
+iframe.preview {
+  width: 98%; 
+  height: 300px; 
+  border: 1px dotted #c0c0c0; 
 }

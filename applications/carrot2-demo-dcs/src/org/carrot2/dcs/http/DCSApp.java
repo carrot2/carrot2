@@ -1,7 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2007, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
  * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
  * All rights reserved.
  *
@@ -29,7 +30,7 @@ import org.mortbay.jetty.servlet.WebApplicationContext;
  * 
  * @author Dawid Weiss
  */
-public final class DCSApp extends AppBase
+public class DCSApp extends AppBase
 {
     private CliOptions opts;
 
@@ -38,6 +39,11 @@ public final class DCSApp extends AppBase
         super("dcs");
     }
 
+    protected DCSApp(String heading)
+    {
+        super("dcs", heading);
+    }
+    
     /**
      * Command line entry point (main).
      */

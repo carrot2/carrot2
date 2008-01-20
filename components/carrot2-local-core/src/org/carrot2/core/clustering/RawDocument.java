@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2007, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
  * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
  * All rights reserved.
  *
@@ -86,6 +86,13 @@ public interface RawDocument {
      * <p>The value of this property is <code>String []</code>.</p>
      */
     public static final String PROPERTY_SOURCES = "source";
+    
+    /**
+     * Returns an array of keywords the search engine attached to the document, if any.
+     * 
+     * <p>The value of this property is <code>String []</code>.</p>
+     */
+    public static final String PROPERTY_KEYWORDS = "keywords";
     
     /**
      * Returns a named property of the document.   Names of the available

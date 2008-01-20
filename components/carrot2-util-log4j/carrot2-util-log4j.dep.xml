@@ -12,6 +12,14 @@
         <check-newer><fileset dir="src" /></check-newer>
     </provides>
 
+    <provides profile="console-warn">
+        <files build-path-exclude="true" prefix="tmp/dist">
+            <file location="carrot2-util-log4j-warn.jar" />
+        </files>
+        <build><ant file="build.xml" target="build" /></build>
+        <check-newer><fileset dir="src" /></check-newer>
+    </provides>
+
     <provides profile="dcs">
         <files build-path-exclude="true" prefix="tmp/dist">
             <file location="carrot2-util-log4j-dcs.jar" />

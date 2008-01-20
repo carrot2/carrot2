@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2007, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
  * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
  * All rights reserved.
  *
@@ -455,7 +455,9 @@ class LanguageRanker implements TrigramListener {
 		int j = right;
 
 		while (true) {
-			while (less(a[++i], a[right]));
+			while (less(a[++i], a[right])) {
+                // empty.
+            }
 			while (less(a[right], a[--j]))
 				if (j == left) break;
 			if (i >= j)	break;

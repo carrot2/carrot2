@@ -15,7 +15,7 @@ loaded.setProperties(new String [][] {
 	{"tab.name", "PubMed"},
 	{"tab.accel", "b"},
 	{"tab.description", "Search PubMed medical database"},
-	{"tab.description.startup", "Carrot Clustering Engine will search the PubMed medical abstracts database and cluster the results"},
+	{"tab.description.startup", "The clustering engine will search the PubMed medical abstracts database and cluster the results"},
 	{"tab.exampleQueries", "cancer|heart|lung"},
 	{"tab.icon", "pubmed.gif"},
 	{"tab.default", "false"}

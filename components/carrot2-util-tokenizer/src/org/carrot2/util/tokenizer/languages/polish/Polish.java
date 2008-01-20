@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2007, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
  * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
  * All rights reserved.
  *
@@ -83,6 +83,6 @@ public class Polish extends StemmedLanguageBase {
      * @see org.carrot2.util.tokenizer.languages.LanguageBase#createStemmerInstance()
      */
     protected Stemmer createStemmerInstance() {
-		return new org.carrot2.stemming.stempelator.Stempelator();
+		return new org.carrot2.stemming.morfologik.Stempelator();
     }
 }

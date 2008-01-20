@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2007, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
  * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
  * All rights reserved.
  *
@@ -56,6 +56,7 @@ public final class Constants {
     public static final String RB_ALWAYS_SHOW_ALL_CLUSTERS = "always-show-all-clusters";
     public static final String RB_SAVED = "saved";
     public static final String RB_ALL_RESULTS = "all-results";
+    public static final String RB_DOCUMENT_PREVIEW = "document-preview";
 
     // Cookies
     public static final String COOKIE_DD_TIP = "dd-tip";

@@ -1,7 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2007, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
  * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
  * All rights reserved.
  *
@@ -49,7 +50,7 @@ public class EToolsLocalInputComponentTest extends LocalInputComponentTestBase
 
     public void testNoHitsQuery() throws Exception
     {
-        performQuery("asdhasd alksjdhar swioer", 50, 0);
+        performQuery("asdhfasd aleksjdhar swigoer", 50, 0);
     }
 
     public void testSmallQuery() throws Exception

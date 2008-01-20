@@ -375,8 +375,7 @@ TESTING: @{component.path}
     <component-apply component.path="components/carrot2-odp-core" />
     <component-apply component.path="components/carrot2-launcher" />
 
-    <component-apply component.path="components/carrot2-stemmer-stempelator" />
-    <component-apply component.path="components/carrot2-stemmer-stempel" />
+    <component-apply component.path="components/carrot2-stemmer-morfologik" />
     <component-apply component.path="components/carrot2-stemmer-snowball" />
 
     <component-apply component.path="components/carrot2-filter-striphtml" />

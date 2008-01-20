@@ -1,3 +1,16 @@
+
+/*
+ * Carrot2 project.
+ *
+ * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
+ * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the repository checkout or at:
+ * http://www.carrot2.org/carrot2.LICENSE
+ */
+
 package org.carrot2.webapp.stress;
 
 import java.io.UnsupportedEncodingException;
@@ -204,6 +217,7 @@ public class StressApp
 
             public void failure(String reason)
             {
+                logger.warn(reason);
                 synchronized (StressApp.class)
                 {
                     failures.add(System.currentTimeMillis(), 1);

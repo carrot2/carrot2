@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2007, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
  * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
  * All rights reserved.
  *
@@ -78,6 +78,7 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
                 "<script type=\"text/javascript\" src=\"" + base + "/js/yui/yahoo-dom-event.js\" ></script>" +
                 "<script type=\"text/javascript\" src=\"" + base + "/js/Documents.js\" ></script>" +
                 "<script type=\"text/javascript\" src=\"" + base + "/js/Utils.js\" ></script>" +
+                "<script type=\"text/javascript\" src=\"" + base + "/js/jquery/jquery-1.2.1.pack.js\" ></script>" +
                 "<script type=\"text/javascript\">\n" +
                 "YAHOO.util.Event.addListener(window, \"load\", init);\n" +
                 "</script>\n" +
@@ -130,12 +131,19 @@ final class FancyDocumentSerializer implements RawDocumentsSerializer, TextMarke
                     "<img src=\"" + base + "/img/sic.gif\" class=\"onw ilink\" id=\"sic" +
                     seqId.toString() + "\" title=\"" + messages.getString(Constants.RB_SHOW_IN_CLUSTTERS) +
                     "\" alt=\"" + messages.getString(Constants.RB_SHOW_IN_CLUSTTERS) + "\" /></span>" +
+                    
                     "<a target=\"_blank\" href=\"" + hurl + "\" title=\"" +
                     messages.getString(Constants.RB_OPEN_IN_NEW_WINDOW) + "\">" +
                     "<img class=\"onw\" src=\"" + base +  "/img/onw.gif\" alt=\"" +
                     messages.getString(Constants.RB_OPEN_IN_NEW_WINDOW) + "\"/></a>" +
+                    
+                    "<span class=\"prev\" id=\"pre" + seqId.toString() + "\" title=\"" +
+                    messages.getString(Constants.RB_DOCUMENT_PREVIEW) + "\">" +
+                    "<img class=\"onw\" src=\"" + base +  "/img/preview.gif\" alt=\"" +
+                    messages.getString(Constants.RB_DOCUMENT_PREVIEW) + "\"/></span>" +
+                    
                     "</div>\r\n" +
-                    "<div class=\"s\">");
+                    "<div id=\"sn" + seqId.toString() + "\" class=\"s\" url=\"" + hurl + "\">");
 
             textMarker.tokenize(snippet.toCharArray(), this);
         } catch (RuntimeException e) {

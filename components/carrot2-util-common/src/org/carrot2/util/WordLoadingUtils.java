@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2007, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
  * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
  * All rights reserved.
  *
@@ -14,9 +14,11 @@
 package org.carrot2.util;
 
 import java.io.*;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.carrot2.util.resources.*;
 
 /**
  * 
@@ -26,17 +28,22 @@ public final class WordLoadingUtils
     private final static Logger logger = Logger.getLogger(WordLoadingUtils.class);
 
     /**
+     * Resource utilities. 
+     */
+    private final static ResourceUtils resUtils = ResourceUtilsFactory.getDefaultResourceUtils();
+    
+    /**
      * A utility method to load a language resource. This method
      * uses locations scanned by {@link ResourceUtils}.
      */
     public static Set loadWordSet(String resourceName)
         throws IOException
     {
-        final InputStream is = ResourceUtils.getFirst(resourceName, WordLoadingUtils.class);
-        if (is == null) {
+        final Resource res = resUtils.getFirst(resourceName, WordLoadingUtils.class);
+        if (res == null) {
             throw new IOException("Resource could not be found: " + resourceName);
         }
-        return loadWordSet(resourceName, is);
+        return loadWordSet(resourceName, res.open());
     }
 
     /**

@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2007, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
  * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
  * All rights reserved.
  *
@@ -28,8 +28,8 @@ public class PolishTest extends LanguageImplTestBase {
 		super();
 	}
 
-	public PolishTest(String arg0) {
-		super(arg0);
+	public PolishTest(String testName) {
+		super(testName);
 	}
 
 	/*
@@ -42,7 +42,7 @@ public class PolishTest extends LanguageImplTestBase {
     protected String [][] getWordsToCompare() {
         return new String [][] {
                 {"okropnymi", "okropny"},
-                {"mrocznie", "mroczny"}
+                {"owocami", "owoc"}
         };
     }
 }

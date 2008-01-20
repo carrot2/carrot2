@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2007, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
  * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
  * All rights reserved.
  *
@@ -243,7 +243,7 @@ public final class CliOptions
     {
         final Option option = new Option("q", true, "List of queries.");
         option.setLongOpt("queries");
-        option.setArgName("query1 qiery2...");
+        option.setArgName("query1 query2...");
         option.setRequired(false);
         option.setArgs(Option.UNLIMITED_VALUES);
         option.setType(String[].class);

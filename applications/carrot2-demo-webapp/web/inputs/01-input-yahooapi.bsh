@@ -14,7 +14,7 @@ loaded.setProperties(new String [][] {
 	{"tab.name", "Yahoo!"},
 	{"tab.accel", "Y"},
 	{"tab.description", "Search the Web with Yahoo!"},
-	{"tab.description.startup", "Carrot Clustering Engine will send your query to Yahoo and automatically organize the results into thematic categories"},
+	{"tab.description.startup", "The clustering engine will send your query to Yahoo and automatically organize the results into thematic categories"},
 	{"tab.exampleQueries", "data mining|london|clustering"},
 	{"tab.icon", "yahoo.gif"},
 	{"tab.default", "false"},

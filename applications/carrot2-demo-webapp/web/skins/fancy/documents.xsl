@@ -8,8 +8,14 @@
        doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" doctype-system="http://www.w3.org/TR/html4/loose.dtd"/>
 
   <xsl:template name="head-insert">
+    <link rel="stylesheet" href="{$skinuri}/css/common.css" />
     <link rel="stylesheet" href="{$skinuri}/css/documents.css" />
-    <script src="{$skinuri}/js/folding.js" language="javascript"></script>
+    <script type="text/javascript" src="{$skinuri}/js/yui/yahoo-dom-event.js" ><xsl:comment>x</xsl:comment></script>
+    <script type="text/javascript" src="{$skinuri}/js/Documents.js" ><xsl:comment>x</xsl:comment></script>
+    <script type="text/javascript" src="{$skinuri}/js/Utils.js"><xsl:comment>x</xsl:comment></script>
+<script type="text/javascript">
+  YAHOO.util.Event.addListener(window, "load", init);
+</script>    
   </xsl:template>
     
   <xsl:template name="on-load">
@@ -44,7 +50,7 @@
       <tr>
         <td class="r">
           <xsl:value-of select="position()" /><br/>
-          <a href="javascript:hlDoc({@id})" title="Show in clusters"><img src="{$skinuri}/img/sic.gif" class="sic" /></a>
+          <img id="sic{@id}" src="{$skinuri}/img/sic.gif" class="sic" />
         </td>
         <td class="c">
           <div class="t">
@@ -52,11 +58,15 @@
               <xsl:attribute name="href"><xsl:value-of select="url" /></xsl:attribute>
               <xsl:apply-templates select="title" />
             </a>
+            <span id="pre{@id}" class="prev" title="Show preview"><img alt="Preview" src="{$skinuri}/img/preview.gif" class="onw"/></span>              
           </div>
 
           <div class="s">
             <xsl:apply-templates select="snippet" />
           </div>
+          
+          <iframe class="preview" id="pr{@id}" style="display: none" frameborder="no" 
+                  url="{url}" />
 
           <div class="u">
             <xsl:value-of select="url" />

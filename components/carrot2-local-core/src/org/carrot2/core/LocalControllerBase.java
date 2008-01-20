@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2007, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
  * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
  * All rights reserved.
  *
@@ -13,14 +13,15 @@
 
 package org.carrot2.core;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 import org.apache.commons.pool.*;
 import org.apache.commons.pool.impl.GenericObjectPool;
 import org.carrot2.core.controller.*;
 import org.carrot2.core.controller.loaders.ComponentInitializationException;
-import org.carrot2.util.ResourceUtils;
+import org.carrot2.util.resources.*;
 
 /**
  * A complete base implementation of the
@@ -42,7 +43,16 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
 
     private boolean autoload;
 
-    /** Default component pool configuration */
+    /**
+     * Default component pool configuration. With this configuration the behaviour of the
+     * pool should be like this:
+     * <ul>
+     * <li>when pool is exhausted, it will grow infinitely
+     * <li>every 5 minutes, 3 oldest idle component instances will be evicted, but only
+     * if they are older than 5 minutes
+     * <li>one idle instance will always be available
+     * </ul>
+     */
     public static final GenericObjectPool.Config DEFAULT_COMPONENT_POOL_CONFIG;
     static {
         DEFAULT_COMPONENT_POOL_CONFIG = new GenericObjectPool.Config();
@@ -50,10 +60,11 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
         DEFAULT_COMPONENT_POOL_CONFIG.maxWait = 0; // irrelevant
         DEFAULT_COMPONENT_POOL_CONFIG.maxActive = 0; // irrelevant
         DEFAULT_COMPONENT_POOL_CONFIG.maxIdle = 10;
-        DEFAULT_COMPONENT_POOL_CONFIG.timeBetweenEvictionRunsMillis = 1000 * 60 * 4;
-        DEFAULT_COMPONENT_POOL_CONFIG.minEvictableIdleTimeMillis = 1000 * 60 * 5;
+        DEFAULT_COMPONENT_POOL_CONFIG.timeBetweenEvictionRunsMillis = 1000 * 60 * 5;
+        DEFAULT_COMPONENT_POOL_CONFIG.softMinEvictableIdleTimeMillis = 1000 * 60 * 5;
+        DEFAULT_COMPONENT_POOL_CONFIG.minEvictableIdleTimeMillis = -1; // no hard eviction
         DEFAULT_COMPONENT_POOL_CONFIG.minIdle = 1;
-        DEFAULT_COMPONENT_POOL_CONFIG.numTestsPerEvictionRun = 5;
+        DEFAULT_COMPONENT_POOL_CONFIG.numTestsPerEvictionRun = 3;
         DEFAULT_COMPONENT_POOL_CONFIG.testOnBorrow = false;
         DEFAULT_COMPONENT_POOL_CONFIG.testOnReturn = false;
         DEFAULT_COMPONENT_POOL_CONFIG.testWhileIdle = false;        
@@ -266,16 +277,18 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
         final ControllerHelper helper = new ControllerHelper();
         final String [] nameCandidates = getPotentialComponentNames(componentId, helper);
 
+        final ResourceUtils resUtils = ResourceUtilsFactory.getDefaultResourceUtils();
         InputStream stream = null;
         for (int i = 0; i < nameCandidates.length; i++) {
             // Construct resource name
             final String resourceName = nameCandidates[i];
 
             // Look for the descriptor.
-            stream = ResourceUtils.getFirst(resourceName, LocalControllerBase.class);
+            final Resource res = resUtils.getFirst(resourceName, LocalControllerBase.class);
 
-            if (stream != null) {
+            if (res != null) {
                 // Something found. Try reading it.
+                stream = res.open();
                 try {
                     return helper.loadComponentFactory(
                             helper.getExtension(nameCandidates[i]), stream);

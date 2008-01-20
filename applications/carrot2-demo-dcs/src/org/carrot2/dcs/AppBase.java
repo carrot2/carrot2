@@ -1,7 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2007, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
  * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
  * All rights reserved.
  *
@@ -39,6 +40,9 @@ public abstract class AppBase
 
     /** Application name. */
     private final String appName;
+    
+    /** Header text */
+    protected final String header;
 
     /**
      * Initializing constructor.
@@ -47,10 +51,22 @@ public abstract class AppBase
      */
     protected AppBase(String appName)
     {
-        this.appName = appName;
-        this.logger = Logger.getLogger(appName);
+        this(appName, "");
     }
 
+    /**
+     * Initializing constructor.
+     * 
+     * @param appName Application name (used in help and logger naming).
+     * @param header Header text to be appended before options help
+     */
+    protected AppBase(String appName, String header)
+    {
+        this.appName = appName;
+        this.logger = Logger.getLogger(appName);
+        this.header = header;
+    }
+    
     /**
      * Initializes application context.
      */
@@ -60,6 +76,7 @@ public abstract class AppBase
 
         if (args.length == 0)
         {
+            printHeader();
             printUsage();
             return;
         }
@@ -135,6 +152,17 @@ public abstract class AppBase
         }
     }
 
+    /**
+     * Prints header text (if not blank).
+     */
+    protected void printHeader()
+    {
+        if (!StringUtils.isBlank(header))
+        {
+            System.out.println(header);
+        }
+    }
+    
     /**
      * Prints usage (options).
      */

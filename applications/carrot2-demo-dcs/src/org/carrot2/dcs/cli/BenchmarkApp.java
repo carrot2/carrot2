@@ -1,7 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2007, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
  * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
  * All rights reserved.
  *
@@ -40,6 +41,11 @@ public class BenchmarkApp extends AppBase
     public BenchmarkApp()
     {
         super("benchmark");
+    }
+    
+    public BenchmarkApp(String header)
+    {
+        super("benchmark", header);
     }
 
     /**

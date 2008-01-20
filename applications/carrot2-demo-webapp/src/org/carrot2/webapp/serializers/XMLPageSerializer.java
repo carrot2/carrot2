@@ -1,7 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2007, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
  * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
  * All rights reserved.
  *
@@ -327,6 +328,16 @@ public class XMLPageSerializer implements PageSerializer
                 }
             }
         }
+        
+        Set existingInputs = new HashSet();
+        for (Iterator it = inputs.iterator(); it.hasNext();)
+        {
+            TabSearchInput input = (TabSearchInput) it.next();
+            existingInputs.add(input.getShortName());
+        }
+
+        result.retainAll(existingInputs);
+        
         return result;
     }
 

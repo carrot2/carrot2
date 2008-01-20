@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2007, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
  * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
  * All rights reserved.
  *
@@ -25,7 +25,7 @@ import org.carrot2.core.impl.ArrayOutputComponent;
  * input components. In the constructor you can specify an array of factories of
  * input components to be aggregated. Optionally, you can set the maximum amount
  * of time the aggregator component will wait for all the individual inputs to
- * deliver the results.
+ * deliver the results. For a usage example, see {@link org.carrot2.apiexample.AggregatorInputExample}.
  *
  * <p>
  * Limitations:
@@ -39,6 +39,8 @@ import org.carrot2.core.impl.ArrayOutputComponent;
  * This component was donated to the Carrot2 project by deepVertical.
  *
  * @author Stanislaw Osinski
+ * 
+ * @see org.carrot2.apiexample.AggregatorInputExample
  */
 public class AggregatorInputComponent extends LocalInputComponentBase implements
     ResultsCollector, RawDocumentsProducer
