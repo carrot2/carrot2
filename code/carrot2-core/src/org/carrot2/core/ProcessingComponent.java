@@ -8,9 +8,9 @@ import org.carrot2.core.parameter.*;
 /**
  * Defines the life cycle of a Carrot<sup>2</sup> processing component.
  * <p>
- * Any controller should invoke methods of a {@link ProcessingComponent}
- * according to the following pseudo-code (see methods for detailed description
- * of each step):
+ * Any controller should invoke methods of a {@link ProcessingComponent} according to the
+ * following pseudo-code (see methods for detailed description of each step):
+ * 
  * <pre>
  * Map parameters = ...;
  * 
@@ -26,7 +26,7 @@ import org.carrot2.core.parameter.*;
  *     bindAttributes(component, attributes, 
  *         {@link BindingDirection#IN}, {@link BindingDirection#INOUT});
  *     component.{@link #beforeProcessing()};
- *
+ * 
  *     try {
  *         component.{@link #process()};
  *         bindAttributes(component, attributes, 
@@ -38,6 +38,14 @@ import org.carrot2.core.parameter.*;
  * 
  * component.{@link #dispose()};
  * </pre>
+ * 
+ * TODO: Would it be beneficial to have the controller 'clean up' attribute values to
+ * their defaults? Currently the values in component fields remain there after processing
+ * is finished and {@link #afterProcessing()} method should do the cleanup. There are pros
+ * and cons. It isn't hard to imagine a public parameterless constructor simply calling
+ * some private <code>reset()</code> method to reset field values to defaults. The
+ * controller could reset field values to their original values, although there will be
+ * problems with object references (which cannot be easily recreated).
  */
 public interface ProcessingComponent
 {
