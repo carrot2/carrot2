@@ -67,7 +67,7 @@ public final class YahooDocumentSource extends SearchEngine
      * the set of returned documents.
      */
     @Override
-    public void performProcessing() throws ProcessingException
+    public void process() throws ProcessingException
     {
         final SearchEngineResponse [] responses = runQuery(
             query, start, results, service.maxResultIndex, service.resultsPerPage, executor);

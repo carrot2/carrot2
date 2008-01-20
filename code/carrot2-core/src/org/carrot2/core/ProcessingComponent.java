@@ -6,9 +6,38 @@ package org.carrot2.core;
 import org.carrot2.core.parameter.*;
 
 /**
- * Defines the life cycle of a Carrot2 processing component.
+ * Defines the life cycle of a Carrot<sup>2</sup> processing component.
  * <p>
- * TODO: write proper life cycle documentation.
+ * Any controller should invoke methods of a {@link ProcessingComponent}
+ * according to the following pseudo-code (see methods for detailed description
+ * of each step):
+ * <pre>
+ * Map parameters = ...;
+ * 
+ * ProcessingComponent component = newInstance();
+ * bindParameters(component, parameters, {@link BindingPolicy#INSTANTIATION});
+ * component.{@link #init()};
+ * 
+ * while (pendingRequests())
+ * {
+ *     Map attributes = ...;
+ *     
+ *     bindParameters(component, parameters, {@link BindingPolicy#RUNTIME});
+ *     bindAttributes(component, attributes, 
+ *         {@link BindingDirection#IN}, {@link BindingDirection#INOUT});
+ *     component.{@link #beforeProcessing()};
+ *
+ *     try {
+ *         component.{@link #process()};
+ *         bindAttributes(component, attributes, 
+ *             {@link BindingDirection#INOUT}, {@link BindingDirection#OUT});
+ *     } finally {
+ *         component.afterProcessing();
+ *     }
+ * }
+ * 
+ * component.{@link #dispose()};
+ * </pre>
  */
 public interface ProcessingComponent
 {
@@ -22,11 +51,11 @@ public interface ProcessingComponent
     public void init() throws ComponentInitializationException;
 
     /**
-     * Invoked after the {@link BindingPolicy#RUNTIME} parameters and
+     * AOP-style hook invoked after the {@link BindingPolicy#RUNTIME} parameters and
      * {@link BindingDirection#IN} and {@link BindingDirection#INOUT} attributes have been
-     * bound, but before a call to {@link #performProcessing()}. In this method, the
-     * processing component should perform any initializations based on the runtime
-     * parameters. This method is called once per request cycle described in the class header.
+     * bound, but before a call to {@link #process()}. In this method, the processing
+     * component should perform any initializations based on the runtime parameters. This
+     * method is called once per request cycle described in the class header.
      * 
      * @throws ProcessingException when processing cannot be performed (e.g. some
      *             parameters are not bound)
@@ -39,17 +68,15 @@ public interface ProcessingComponent
      * {@link BindingDirection#INOUT} attributes will be collected. This method is called
      * once per request cycle.
      * 
-     * TODO: rename to "process".
-     * 
      * @throws ProcessingException when processing failed
      */
-    public void performProcessing() throws ProcessingException;
+    public void process() throws ProcessingException;
 
     /**
-     * Invoked after the processing has finished, no matter whether an exception has been
-     * thrown or not. In this method, the processing component should dispose of any
-     * resources it has allocated to fulfill the request. This method is called once per
-     * request cycle.
+     * AOP-style hook invoked after the processing has finished, no matter whether an
+     * exception has been thrown or not. In this method, the processing component should
+     * dispose of any resources it has allocated to fulfill the request. This method is
+     * called once per request cycle.
      */
     public void afterProcessing();
 

@@ -56,7 +56,7 @@ final class ControllerUtils
         throws ProcessingException
     {
         AttributeBinder.bind(processingComponent, attributes, BindingDirection.IN);
-        processingComponent.performProcessing();
+        processingComponent.process();
         AttributeBinder.bind(processingComponent, attributes, BindingDirection.OUT);
     }
 

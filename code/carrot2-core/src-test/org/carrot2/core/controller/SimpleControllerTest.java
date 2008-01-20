@@ -108,7 +108,7 @@ public class SimpleControllerTest
     {
         processingComponent1Mock.init();
         processingComponent1Mock.beforeProcessing();
-        processingComponent1Mock.performProcessing();
+        processingComponent1Mock.process();
         processingComponent1Mock.afterProcessing();
         processingComponent1Mock.dispose();
 
@@ -137,9 +137,9 @@ public class SimpleControllerTest
         processingComponent2Mock.beforeProcessing();
         processingComponent3Mock.beforeProcessing();
 
-        processingComponent1Mock.performProcessing();
-        processingComponent2Mock.performProcessing();
-        processingComponent3Mock.performProcessing();
+        processingComponent1Mock.process();
+        processingComponent2Mock.process();
+        processingComponent3Mock.process();
 
         processingComponent1Mock.afterProcessing();
         processingComponent2Mock.afterProcessing();
@@ -219,8 +219,8 @@ public class SimpleControllerTest
         processingComponent1Mock.beforeProcessing();
         processingComponent2Mock.beforeProcessing();
         processingComponent3Mock.beforeProcessing();
-        processingComponent1Mock.performProcessing();
-        processingComponent2Mock.performProcessing();
+        processingComponent1Mock.process();
+        processingComponent2Mock.process();
         mocksControl.andThrow(new ProcessingException("no message"));
         processingComponent1Mock.afterProcessing();
         processingComponent2Mock.afterProcessing();

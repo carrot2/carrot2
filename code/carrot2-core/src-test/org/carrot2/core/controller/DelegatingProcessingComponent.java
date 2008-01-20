@@ -32,9 +32,9 @@ public abstract class DelegatingProcessingComponent implements ProcessingCompone
     }
 
     @Override
-    public void performProcessing() throws ProcessingException
+    public void process() throws ProcessingException
     {
-        getDelegate().performProcessing();
+        getDelegate().process();
 
         // Do some simple processing
         data += instanceParameter + runtimeParameter;

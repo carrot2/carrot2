@@ -17,7 +17,7 @@ public abstract class ProcessingComponentBase implements ProcessingComponent
     }
 
     @Override
-    public void performProcessing() throws ProcessingException
+    public void process() throws ProcessingException
     {
     }
 

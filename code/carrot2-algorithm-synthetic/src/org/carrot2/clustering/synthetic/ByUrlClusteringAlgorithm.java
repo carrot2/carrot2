@@ -37,7 +37,7 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
      * 
      */
     @Override
-    public void performProcessing() throws ProcessingException
+    public void process() throws ProcessingException
     {
         // Just in case we get a linked list, create an array of documents
         final Document [] documentArray = this.documents

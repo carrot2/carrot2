@@ -29,7 +29,7 @@ public final class SimpleController
      * 
      * @param parameters Both instantiation and runtime parameters.
      * @param attributes A map of attributes passed between components during processing.
-     * @param processingComponents This is one of the places where generics suck:
+     * @param processingComponentClasses This is one of the places where generics suck:
      *            it's nice to have a varargs of class with an upper bound here, but the
      *            caller's code will get warnings (implicit construction of an array of
      *            parameterized type, which is not allowed). An alternative is to have
