@@ -10,10 +10,10 @@ import org.carrot2.core.parameter.*;
 public abstract class DelegatingProcessingComponent implements ProcessingComponent
 {
     @Parameter(policy = BindingPolicy.INSTANTIATION, key="instanceParameter")
-    private String instanceParameter;
+    private String instanceParameter = "";
 
     @Parameter(policy = BindingPolicy.RUNTIME, key="runtimeParameter")
-    private String runtimeParameter;
+    private String runtimeParameter = "";
     
     @SuppressWarnings("unused")
     @Attribute(key = "data", bindingDirection = BindingDirection.INOUT)
