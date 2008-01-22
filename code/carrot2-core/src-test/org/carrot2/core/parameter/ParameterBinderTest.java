@@ -19,28 +19,38 @@ public class ParameterBinderTest
     @Bindable
     public static class TestImpl implements ITest
     {
-        @Parameter(policy = BindingPolicy.INSTANTIATION)
+        @Init
+        @Input
+        @Parameter
         private int testIntField = 5;
     }
 
     @Bindable
     public static class TestBetterImpl implements ITest
     {
-        @Parameter(policy = BindingPolicy.INSTANTIATION)
+        @Init
+        @Input
+        @Parameter
         private int testIntField = 10;
     }
 
     @Bindable(prefix = "Test")
     public static class TestClass
     {
-        @Parameter(policy = BindingPolicy.INSTANTIATION)
+        @Init
+        @Input
+        @Parameter
         @IntRange(min = 0, max = 10)
         protected int instanceIntField = 5;
 
-        @Parameter(policy = BindingPolicy.INSTANTIATION)
+        @Init
+        @Input
+        @Parameter
         protected ITest instanceRefField = new TestImpl();
 
-        @Parameter(policy = BindingPolicy.RUNTIME)
+        @BeforeProcessing
+        @Input
+        @Parameter
         @IntRange(min = 0, max = 10)
         protected int runtimeIntField = 5;
     }
@@ -48,14 +58,20 @@ public class ParameterBinderTest
     @Bindable(prefix = "Test")
     public static class TestSubclass extends TestClass
     {
-        @Parameter(policy = BindingPolicy.INSTANTIATION)
+        @Init
+        @Input
+        @Parameter
         @IntRange(min = 0, max = 10)
         private int subclassInstanceIntField = 5;
 
-        @Parameter(policy = BindingPolicy.INSTANTIATION)
+        @Init
+        @Input
+        @Parameter
         private ITest subclassInstanceRefField = new TestImpl();
 
-        @Parameter(policy = BindingPolicy.RUNTIME)
+        @BeforeProcessing
+        @Input
+        @Parameter
         @IntRange(min = 0, max = 10)
         @IntModulo(modulo = 2, offset = 1)
         private int subclassRuntimeIntField = 5;
@@ -64,13 +80,17 @@ public class ParameterBinderTest
     @Bindable(prefix = "Test")
     public static class TestSubclass2 extends TestClass
     {
-        @Parameter(policy = BindingPolicy.RUNTIME, key = "clone")
+        @BeforeProcessing
+        @Input
+        @Parameter(key = "clone")
         protected int runtimeIntField = 7;
     }
 
     public static class NotBindable
     {
-        @Parameter(policy = BindingPolicy.RUNTIME)
+        @BeforeProcessing
+        @Input
+        @Parameter
         private int test = 20;
     }
 
@@ -81,6 +101,7 @@ public class ParameterBinderTest
         params.put("Test.instanceIntField", 6);
 
         TestClass instance = ParameterBinder.createInstance(TestClass.class, params);
+
         assertEquals(6, instance.instanceIntField);
         assertTrue(instance.instanceRefField != null
             && instance.instanceRefField instanceof TestImpl);
@@ -97,6 +118,7 @@ public class ParameterBinderTest
 
         TestSubclass instance = ParameterBinder
             .createInstance(TestSubclass.class, params);
+
         assertEquals(6, instance.subclassInstanceIntField);
         assertEquals(7, instance.instanceIntField);
         assertTrue(instance.subclassInstanceRefField != null
@@ -132,7 +154,7 @@ public class ParameterBinderTest
 
         try
         {
-            ParameterBinder.bind(instance, params, BindingPolicy.RUNTIME);
+            ParameterBinder.bind(instance, params, BeforeProcessing.class, Input.class);
             fail();
         }
         catch (RuntimeException e)
@@ -153,7 +175,7 @@ public class ParameterBinderTest
 
         try
         {
-            ParameterBinder.bind(instance, params, BindingPolicy.RUNTIME);
+            ParameterBinder.bind(instance, params, BeforeProcessing.class, Input.class);
             fail();
         }
         catch (RuntimeException e)
@@ -173,7 +195,7 @@ public class ParameterBinderTest
         TestClass instance = ParameterBinder.createInstance(TestClass.class, params);
         assertEquals(5, instance.runtimeIntField);
 
-        ParameterBinder.bind(instance, params, BindingPolicy.RUNTIME);
+        ParameterBinder.bind(instance, params, BeforeProcessing.class, Input.class);
         assertEquals(6, instance.runtimeIntField);
     }
 
@@ -189,7 +211,7 @@ public class ParameterBinderTest
         assertEquals(5, instance.runtimeIntField);
         assertEquals(5, instance.subclassRuntimeIntField);
 
-        ParameterBinder.bind(instance, params, BindingPolicy.RUNTIME);
+        ParameterBinder.bind(instance, params, BeforeProcessing.class, Input.class);
         assertEquals(6, instance.runtimeIntField);
         assertEquals(9, instance.subclassRuntimeIntField);
     }
@@ -206,7 +228,7 @@ public class ParameterBinderTest
         assertEquals(7, instance.runtimeIntField);
         assertEquals(5, ((TestClass) instance).runtimeIntField);
 
-        ParameterBinder.bind(instance, params, BindingPolicy.RUNTIME);
+        ParameterBinder.bind(instance, params, BeforeProcessing.class, Input.class);
         assertEquals(6, ((TestClass) instance).runtimeIntField);
         assertEquals(9, instance.runtimeIntField);
     }
@@ -234,7 +256,8 @@ public class ParameterBinderTest
 
         try
         {
-            ParameterBinder.bind(instance, violatingParams, BindingPolicy.RUNTIME);
+            ParameterBinder.bind(instance, violatingParams, BeforeProcessing.class,
+                Input.class);
             fail();
         }
         catch (ConstraintViolationException e)
@@ -253,7 +276,8 @@ public class ParameterBinderTest
         try
         {
             // First constraint violated
-            ParameterBinder.bind(instance, violatingParams, BindingPolicy.RUNTIME);
+            ParameterBinder.bind(instance, violatingParams, BeforeProcessing.class,
+                Input.class);
             fail();
         }
         catch (ConstraintViolationException e)
@@ -266,7 +290,8 @@ public class ParameterBinderTest
         try
         {
             // Second constraint violated
-            ParameterBinder.bind(instance, violatingParams, BindingPolicy.RUNTIME);
+            ParameterBinder.bind(instance, violatingParams, BeforeProcessing.class,
+                Input.class);
             fail();
         }
         catch (ConstraintViolationException e)

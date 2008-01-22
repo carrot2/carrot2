@@ -6,13 +6,12 @@ package org.carrot2.core;
 import java.util.Collections;
 import java.util.Map;
 
-import org.carrot2.core.parameter.BindingPolicy;
-import org.carrot2.core.parameter.ParameterBinder;
+import org.carrot2.core.parameter.*;
 
 /**
  * TODO: This class seems to be specific to clustering algorithms rather than any
  * processing component. Also, I would vote strongly for using full component life cycle
- * rather than calling life cycle methods directly. 
+ * rather than calling life cycle methods directly.
  */
 public abstract class ProcessingComponentTest<T extends ProcessingComponent>
 {
@@ -52,8 +51,8 @@ public abstract class ProcessingComponentTest<T extends ProcessingComponent>
     {
         try
         {
-            ParameterBinder.bind(instance, getInstanceParameters(),
-                BindingPolicy.INSTANTIATION);
+            ParameterBinder.bind(instance, getInstanceParameters(), Init.class,
+                Input.class);
             instance.init();
         }
         catch (InstantiationException e)

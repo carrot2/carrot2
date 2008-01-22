@@ -8,26 +8,15 @@ import java.util.zip.GZIPInputStream;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.apache.commons.httpclient.Header;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.HttpVersion;
-import org.apache.commons.httpclient.NameValuePair;
-import org.apache.commons.httpclient.URI;
+import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.log4j.Logger;
-import org.carrot2.core.parameter.Attribute;
-import org.carrot2.core.parameter.Bindable;
-import org.carrot2.core.parameter.BindingDirection;
-import org.carrot2.core.parameter.BindingPolicy;
-import org.carrot2.core.parameter.Parameter;
+import org.carrot2.core.parameter.*;
 import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.StreamUtils;
 import org.carrot2.util.httpclient.HttpClientFactory;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
+import org.xml.sax.*;
 
 /**
  * A superclass shared between Web and News searching services.
@@ -84,19 +73,25 @@ abstract class YahooSearchService
     /**
      * Application ID required for Yahoo! services. 
      */
-    @Parameter(policy = BindingPolicy.INSTANTIATION)
+    @Init
+    @Input
+    @Parameter
     protected String appid = "carrotsearch";
 
     /**
      * Maximum number of results returned per page.
      */
-    @Parameter(policy = BindingPolicy.INSTANTIATION)
+    @Init
+    @Input
+    @Parameter
     public int resultsPerPage = 50;
 
     /**
      * Maximum index of reachable result.
      */
-    @Parameter(policy = BindingPolicy.INSTANTIATION)
+    @Init
+    @Input
+    @Parameter
     public int maxResultIndex = 1000;
 
     /**

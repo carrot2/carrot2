@@ -4,10 +4,7 @@ import java.util.Map;
 
 import org.carrot2.core.ProcessingComponent;
 import org.carrot2.core.ProcessingException;
-import org.carrot2.core.parameter.AttributeBinder;
-import org.carrot2.core.parameter.BindingDirection;
-import org.carrot2.core.parameter.BindingPolicy;
-import org.carrot2.core.parameter.ParameterBinder;
+import org.carrot2.core.parameter.*;
 
 /**
  * Static life cycle and controller utilities.
@@ -35,14 +32,16 @@ final class ControllerUtils
         // Bind runtime parameters to the component.
         try
         {
-            ParameterBinder.bind(processingComponent, parameters, BindingPolicy.RUNTIME);
+            ParameterBinder.bind(processingComponent, parameters, BeforeProcessing.class,
+                Input.class);
         }
         catch (InstantiationException e)
         {
-            throw new ProcessingException("Binding parameters failed with instantiation exception.", e);
+            throw new ProcessingException(
+                "Binding parameters failed with instantiation exception.", e);
         }
 
-        // Inject attributes in, run the hook, and extract attributes out. 
+        // Inject attributes in, run the hook, and extract attributes out.
         AttributeBinder.bind(processingComponent, attributes, BindingDirection.IN);
         processingComponent.beforeProcessing();
         AttributeBinder.bind(processingComponent, attributes, BindingDirection.OUT);
@@ -52,8 +51,7 @@ final class ControllerUtils
      * Perform all life cycle required to do processing.
      */
     public static void performProcessing(ProcessingComponent processingComponent,
-        Map<String, Object> attributes) 
-        throws ProcessingException
+        Map<String, Object> attributes) throws ProcessingException
     {
         AttributeBinder.bind(processingComponent, attributes, BindingDirection.IN);
         processingComponent.process();

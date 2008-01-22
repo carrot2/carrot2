@@ -1,20 +1,11 @@
 package org.carrot2.source;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
+import java.util.*;
+import java.util.concurrent.*;
 
-import org.carrot2.core.Document;
-import org.carrot2.core.DocumentSource;
-import org.carrot2.core.ProcessingComponentBase;
-import org.carrot2.core.ProcessingException;
-import org.carrot2.core.parameter.Bindable;
-import org.carrot2.core.parameter.BindingPolicy;
-import org.carrot2.core.parameter.Parameter;
+import org.carrot2.core.*;
+import org.carrot2.core.parameter.*;
 
 /**
  * A superclass facilitating implementation of {@link DocumentSource}s wrapping
@@ -32,7 +23,9 @@ public abstract class SearchEngine
      * 
      * @see SearchMode
      */
-    @Parameter(key="search-mode", policy=BindingPolicy.INSTANTIATION)
+    @Init
+    @Input
+    @Parameter(key="search-mode")
     private SearchMode searchMode = SearchMode.SPECULATIVE;
     
     /**

@@ -1,5 +1,6 @@
 package org.carrot2.core.parameter;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.Map;
@@ -13,7 +14,9 @@ public class ParameterBinder
      * Initialize a given object with default values of instance-time binding parameters ({@link BindingPolicy#INSTANTIATION}).
      */
     public static <T> void bind(T instance, Map<String, Object> values,
-        BindingPolicy policy) throws InstantiationException
+        Class<? extends Annotation> bindingTimeAnnotation,
+        Class<? extends Annotation> bindingDirectionAnnotation)
+        throws InstantiationException
     {
         if (instance.getClass().getAnnotation(Bindable.class) == null)
         {
@@ -22,7 +25,8 @@ public class ParameterBinder
         }
 
         final Collection<ParameterDescriptor> parameterDescriptors = ParameterDescriptorBuilder
-            .getParameterDescriptors(instance, policy);
+            .getParameterDescriptors(instance, bindingTimeAnnotation,
+                bindingDirectionAnnotation);
 
         for (ParameterDescriptor parameterDescriptor : parameterDescriptors)
         {
@@ -31,12 +35,12 @@ public class ParameterBinder
             // Try to coerce from class to its instance first
             if (value instanceof Class)
             {
-                if (policy == BindingPolicy.RUNTIME)
+                if (!Init.class.equals(bindingTimeAnnotation))
                 {
-                    throw new RuntimeException(
-                        "Only instantiation-time parameters can "
-                            + "be bound to class values, offending field: "
-                            + parameterDescriptor.getKey());
+                    // TODO: move this check to ParameterDescriptorBuilder
+                    throw new RuntimeException("Only instantiation-time parameters can "
+                        + "be bound to class values, offending field: "
+                        + parameterDescriptor.getKey());
                 }
 
                 Class<?> clazz = ((Class<?>) value);
@@ -80,14 +84,14 @@ public class ParameterBinder
                 if (value == null)
                 {
                     // If there is no default value, throw an exception.
-                    throw new InstantiationException("Parameter field must have a" +
-                    		" non-null default value: " + field.getName());
+                    throw new InstantiationException("Parameter field must have a"
+                        + " non-null default value: " + field.getName());
                 }
 
                 if (value.getClass().getAnnotation(Bindable.class) != null)
                 {
                     // Recursively descend into other types.
-                    bind(value, values, policy);
+                    bind(value, values, bindingTimeAnnotation, bindingDirectionAnnotation);
                 }
             }
 
@@ -122,7 +126,7 @@ public class ParameterBinder
                 "Could not create instance (illegal access): " + e);
         }
 
-        bind(instance, values, BindingPolicy.INSTANTIATION);
+        bind(instance, values, Init.class, Input.class);
 
         return instance;
     }

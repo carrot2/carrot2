@@ -1,27 +1,12 @@
 package org.carrot2.source.yahoo;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.*;
+import java.util.concurrent.*;
 
 import org.apache.log4j.Logger;
-import org.carrot2.core.Document;
-import org.carrot2.core.DocumentSource;
-import org.carrot2.core.ProcessingException;
-import org.carrot2.core.parameter.Attribute;
-import org.carrot2.core.parameter.AttributeNames;
-import org.carrot2.core.parameter.Bindable;
-import org.carrot2.core.parameter.BindingDirection;
-import org.carrot2.core.parameter.BindingPolicy;
-import org.carrot2.core.parameter.Parameter;
-import org.carrot2.source.SearchEngine;
-import org.carrot2.source.SearchEngineResponse;
-import org.carrot2.source.SearchRange;
-import org.carrot2.source.UniqueFieldPredicate;
+import org.carrot2.core.*;
+import org.carrot2.core.parameter.*;
+import org.carrot2.source.*;
 
 import com.google.common.base.Predicate;
 
@@ -42,7 +27,9 @@ public final class YahooDocumentSource extends SearchEngine
      */
     private final static ExecutorService executor = Executors.newFixedThreadPool(/* max threads */ 10);
 
-    @Parameter(policy = BindingPolicy.INSTANTIATION)
+    @Init
+    @Input
+    @Parameter
     private YahooSearchService service = new YahooWebSearchService();  
 
     @Attribute(key=AttributeNames.START, bindingDirection = BindingDirection.IN)

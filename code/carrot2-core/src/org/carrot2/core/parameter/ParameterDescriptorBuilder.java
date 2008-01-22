@@ -13,18 +13,19 @@ import org.carrot2.core.constraint.*;
 public class ParameterDescriptorBuilder
 {
     /**
-     * 
+     *
      */
-    @SuppressWarnings("unchecked")
     public static Collection<ParameterDescriptor> getParameterDescriptors(
-        Object instance, BindingPolicy policy)
+        Object instance, Class<? extends Annotation> bindingTimeAnnotation,
+        Class<? extends Annotation> bindingDirectionAnnotation)
     {
         // Output array of parameters.
         final ArrayList<ParameterDescriptor> params = new ArrayList<ParameterDescriptor>();
 
         // Get the field names that correspond to the requested policy.
         final Collection<Field> bindableFields = getParameterFieldMap(
-            instance.getClass(), policy).values();
+            instance.getClass(), bindingTimeAnnotation, bindingDirectionAnnotation)
+            .values();
 
         for (final Field field : bindableFields)
         {
@@ -66,10 +67,12 @@ public class ParameterDescriptorBuilder
         return params;
     }
 
-    /*
-     * 
+    /**
+     *
      */
-    static Map<String, Field> getParameterFieldMap(Class<?> clazz, BindingPolicy policy)
+    static Map<String, Field> getParameterFieldMap(Class<?> clazz,
+        Class<? extends Annotation> bindingTimeAnnotation,
+        Class<? extends Annotation> bindingDirectionAnnotation)
     {
         final Collection<Field> fieldSet = BindableUtils
             .getFieldsFromBindableHierarchy(clazz);
@@ -79,19 +82,19 @@ public class ParameterDescriptorBuilder
         AccessibleObject.setAccessible(fields, true);
         for (final Field field : fields)
         {
-            final Parameter binding = field.getAnnotation(Parameter.class);
-            if (binding == null)
+            // For binding time and direction we only need to check if we receive
+            // a non-value -- this means the field has the annotation we want
+            if (field.getAnnotation(Parameter.class) == null
+                || field.getAnnotation(bindingDirectionAnnotation) == null
+                || field.getAnnotation(bindingTimeAnnotation) == null)
             {
                 continue;
             }
 
-            if (binding.policy() == policy)
+            if (result.put(BindableUtils.getFieldKey(field), field) != null)
             {
-                if (result.put(BindableUtils.getFieldKey(field), field) != null)
-                {
-                    throw new RuntimeException("A field with duplicated key exist: "
-                        + BindableUtils.getFieldKey(field));
-                }
+                throw new RuntimeException("A field with duplicated key exist: "
+                    + BindableUtils.getFieldKey(field));
             }
         }
 

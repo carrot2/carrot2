@@ -2,12 +2,9 @@ package org.carrot2.source.yahoo;
 
 import java.util.ArrayList;
 
-
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.log4j.Logger;
-import org.carrot2.core.parameter.Bindable;
-import org.carrot2.core.parameter.BindingPolicy;
-import org.carrot2.core.parameter.Parameter;
+import org.carrot2.core.parameter.*;
 
 /**
  * Sends queries to Yahoo! News search service. Instances of this class are
@@ -30,19 +27,27 @@ public final class YahooNewsSearchService extends YahooSearchService
     }
 
     /** */
-    @Parameter(policy = BindingPolicy.INSTANTIATION) 
+    @Init
+    @Input
+    @Parameter 
     private String serviceURI = "http://search.yahooapis.com/NewsSearchService/V1/newsSearch";
 
     /** */
-    @Parameter(policy = BindingPolicy.RUNTIME)
+    @BeforeProcessing
+    @Input
+    @Parameter
     public String language;
 
     /** */
-    @Parameter(policy = BindingPolicy.RUNTIME)
+    @BeforeProcessing
+    @Input
+    @Parameter
     public String country;
 
     /** */
-    @Parameter(policy = BindingPolicy.RUNTIME)
+    @BeforeProcessing
+    @Input
+    @Parameter
     public String site;
 
     /** */

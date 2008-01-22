@@ -12,17 +12,23 @@ public class ParameterDescriptorBuilderTest
     public static class TestClass
     {
         @SuppressWarnings("unused")
-        @Parameter(policy = BindingPolicy.INSTANTIATION)
+        @Init
+        @Input
+        @Parameter
         private int instanceField = 5;
 
         @SuppressWarnings("unused")
-        @Parameter(policy = BindingPolicy.RUNTIME)
+        @BeforeProcessing
+        @Input
+        @Parameter
         @IntRange(min = 0, max = 10)
         @IntModulo(modulo = 2)
         private int runtimeField = 5;
 
         @SuppressWarnings("unused")
-        @Parameter(policy = BindingPolicy.RUNTIME)
+        @BeforeProcessing
+        @Input
+        @Parameter
         @IntRange(min = 0, max = 10)
         private int runtimeField2 = 5;
     }
@@ -31,11 +37,15 @@ public class ParameterDescriptorBuilderTest
     public static class TestSubclass extends TestClass
     {
         @SuppressWarnings("unused")
-        @Parameter(policy = BindingPolicy.INSTANTIATION)
+        @Init
+        @Input
+        @Parameter
         private int subclassInstanceField = 5;
 
         @SuppressWarnings("unused")
-        @Parameter(policy = BindingPolicy.RUNTIME)
+        @BeforeProcessing
+        @Input
+        @Parameter
         private int subclassRuntimeField = 5;
     }
 
@@ -48,7 +58,7 @@ public class ParameterDescriptorBuilderTest
         });
 
         Collection<String> actual = ParameterDescriptorBuilder.getParameterFieldMap(
-            TestClass.class, BindingPolicy.RUNTIME).keySet();
+            TestClass.class, BeforeProcessing.class, Input.class).keySet();
 
         Assert.assertEquals(expected, new ArrayList<String>(actual));
     }
@@ -62,7 +72,7 @@ public class ParameterDescriptorBuilderTest
         });
 
         Collection<String> actual = ParameterDescriptorBuilder.getParameterFieldMap(
-            TestSubclass.class, BindingPolicy.RUNTIME).keySet();
+            TestSubclass.class, BeforeProcessing.class, Input.class).keySet();
 
         Assert.assertEquals(expected, new ArrayList<String>(actual));
     }
@@ -81,7 +91,7 @@ public class ParameterDescriptorBuilderTest
             });
 
         Collection<ParameterDescriptor> actual = ParameterDescriptorBuilder
-            .getParameterDescriptors(new TestClass(), BindingPolicy.RUNTIME);
+            .getParameterDescriptors(new TestClass(), BeforeProcessing.class, Input.class);
 
         Assert.assertEquals(expected, actual);
     }
@@ -105,7 +115,8 @@ public class ParameterDescriptorBuilderTest
             });
 
         Collection<ParameterDescriptor> actual = ParameterDescriptorBuilder
-            .getParameterDescriptors(new TestSubclass(), BindingPolicy.RUNTIME);
+            .getParameterDescriptors(new TestSubclass(), BeforeProcessing.class,
+                Input.class);
 
         Assert.assertEquals(expected, actual);
     }
@@ -122,7 +133,7 @@ public class ParameterDescriptorBuilderTest
             });
 
         Collection<ParameterDescriptor> actual = ParameterDescriptorBuilder
-            .getParameterDescriptors(new TestClass(), BindingPolicy.INSTANTIATION);
+            .getParameterDescriptors(new TestClass(), Init.class, Input.class);
 
         Assert.assertEquals(expected, actual);
     }
@@ -141,7 +152,7 @@ public class ParameterDescriptorBuilderTest
             });
 
         Collection<ParameterDescriptor> actual = ParameterDescriptorBuilder
-            .getParameterDescriptors(new TestSubclass(), BindingPolicy.INSTANTIATION);
+            .getParameterDescriptors(new TestSubclass(), Init.class, Input.class);
 
         Assert.assertEquals(expected, actual);
     }

@@ -18,16 +18,24 @@ public class SimpleControllerBenchmark
     @Bindable
     public static class ProcessingComponent1 extends ProcessingComponentBase
     {
-        @Parameter(policy = BindingPolicy.RUNTIME)
+        @BeforeProcessing
+        @Input
+        @Parameter
         private int intParameter1 = 0;
 
-        @Parameter(policy = BindingPolicy.RUNTIME)
+        @BeforeProcessing
+        @Input
+        @Parameter
         private double doubleParameter1 = 1.0;
 
-        @Parameter(policy = BindingPolicy.RUNTIME)
+        @BeforeProcessing
+        @Input
+        @Parameter
         private String stringParameter1 = "test";
 
-        @Parameter(policy = BindingPolicy.RUNTIME)
+        @BeforeProcessing
+        @Input
+        @Parameter
         private boolean booleanParameter1 = false;
 
         @Attribute(key = "in1", bindingDirection = BindingDirection.IN)
@@ -43,16 +51,24 @@ public class SimpleControllerBenchmark
     @Bindable
     public static class ProcessingComponent2 extends ProcessingComponentBase
     {
-        @Parameter(policy = BindingPolicy.RUNTIME)
+        @BeforeProcessing
+        @Input
+        @Parameter
         private int intParameter2 = 0;
 
-        @Parameter(policy = BindingPolicy.RUNTIME)
+        @BeforeProcessing
+        @Input
+        @Parameter
         private double doubleParameter2 = 1.0;
 
-        @Parameter(policy = BindingPolicy.RUNTIME)
+        @BeforeProcessing
+        @Input
+        @Parameter
         private String stringParameter2 = "test";
 
-        @Parameter(policy = BindingPolicy.RUNTIME)
+        @BeforeProcessing
+        @Input
+        @Parameter
         private boolean booleanParameter2 = false;
 
         @Attribute(key = "in2", bindingDirection = BindingDirection.IN)
