@@ -24,9 +24,6 @@ public abstract class DocumentSourceTest<T extends DocumentSource>
     /** Controller used for tests. */
     protected SimpleController controller;
     
-    /** A map of parameters used for tests. */
-    protected Map<String, Object> parameters;
-    
     /** A map of attributes used for tests. */
     protected Map<String, Object> attributes;
 
@@ -42,7 +39,6 @@ public abstract class DocumentSourceTest<T extends DocumentSource>
     public void prepareComponent()
     {
         this.controller = new SimpleController();
-        this.parameters = new HashMap<String, Object>();
         this.attributes = new HashMap<String, Object>();
     }
     
@@ -58,7 +54,7 @@ public abstract class DocumentSourceTest<T extends DocumentSource>
         attributes.put(AttributeNames.QUERY, query);
         attributes.put(AttributeNames.RESULTS, results);
 
-        final ProcessingResult result = controller.process(parameters, attributes, getComponentClass());
+        final ProcessingResult result = controller.process(attributes, getComponentClass());
 
         final Collection<Document> documents = (Collection<Document>) attributes.get(
             AttributeNames.DOCUMENTS);

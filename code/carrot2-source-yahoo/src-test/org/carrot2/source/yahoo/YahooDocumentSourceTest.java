@@ -53,7 +53,7 @@ public class YahooDocumentSourceTest extends DocumentSourceTest<YahooDocumentSou
     @Test
     public void testConservativeMode() throws Exception
     {
-        parameters.put("search-mode", SearchMode.CONSERVATIVE);
+        attributes.put("search-mode", SearchMode.CONSERVATIVE);
 
         assertEquals(0, runQuery("duiogig oiudgisugviw siug iugw iusviuwg", 100));
         assertEquals(1, (Integer) attributes.get(YahooSearchService.class.getName() + ".requestCount"));
@@ -62,7 +62,7 @@ public class YahooDocumentSourceTest extends DocumentSourceTest<YahooDocumentSou
     @Test
     public void testSpeculativeMode() throws Exception
     {
-        parameters.put("search-mode", SearchMode.SPECULATIVE);
+        attributes.put("search-mode", SearchMode.SPECULATIVE);
 
         assertEquals(0, runQuery("duiogig oiudgisugviw siug iugw iusviuwg", 100));
         assertEquals(2, (Integer) attributes.get(YahooSearchService.class.getName() + ".requestCount"));
@@ -71,7 +71,7 @@ public class YahooDocumentSourceTest extends DocumentSourceTest<YahooDocumentSou
     @Test
     public void testNewsServiceSearch() throws Exception
     {
-        parameters.put(YahooDocumentSource.class.getName() 
+        attributes.put(YahooDocumentSource.class.getName() 
             + ".service", YahooNewsSearchService.class);
 
         assertTrue(runQuery("iraq", 50) > 0);

@@ -24,16 +24,13 @@ public class ClusteringWithYahooAPI
     {
         final SimpleController controller = new SimpleController();
 
-        // Initialization parameters for components.
-        final Map<String, Object> parameters = new HashMap<String, Object>();
-
         // Runtime attributes passed between components.
         final Map<String, Object> attributes = new HashMap<String, Object>();
 
         attributes.put(AttributeNames.QUERY, "data mining");
         attributes.put(AttributeNames.RESULTS, 200);
 
-        ProcessingResult result = controller.process(parameters, attributes, 
+        ProcessingResult result = controller.process(attributes, 
                 YahooDocumentSource.class, ByUrlClusteringAlgorithm.class);
 
         ExampleUtils.displayResults(result);
@@ -41,13 +38,13 @@ public class ClusteringWithYahooAPI
         //
         // Fetching from Yahoo! News.
         //
-        parameters.put(YahooDocumentSource.class.getName() + ".service", 
+        attributes.put(YahooDocumentSource.class.getName() + ".service", 
             YahooNewsSearchService.class);
 
         attributes.put(AttributeNames.QUERY, "iraq");
         attributes.put(AttributeNames.RESULTS, 50);
         
-        result = controller.process(parameters, attributes, 
+        result = controller.process(attributes, 
             YahooDocumentSource.class, ByUrlClusteringAlgorithm.class);
         ExampleUtils.displayResults(result);
     }

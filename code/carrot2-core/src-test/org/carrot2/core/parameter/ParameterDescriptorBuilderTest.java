@@ -18,7 +18,7 @@ public class ParameterDescriptorBuilderTest
         private int instanceField = 5;
 
         @SuppressWarnings("unused")
-        @BeforeProcessing
+        @Processing
         @Input
         @Parameter
         @IntRange(min = 0, max = 10)
@@ -26,7 +26,7 @@ public class ParameterDescriptorBuilderTest
         private int runtimeField = 5;
 
         @SuppressWarnings("unused")
-        @BeforeProcessing
+        @Processing
         @Input
         @Parameter
         @IntRange(min = 0, max = 10)
@@ -43,7 +43,7 @@ public class ParameterDescriptorBuilderTest
         private int subclassInstanceField = 5;
 
         @SuppressWarnings("unused")
-        @BeforeProcessing
+        @Processing
         @Input
         @Parameter
         private int subclassRuntimeField = 5;
@@ -58,7 +58,7 @@ public class ParameterDescriptorBuilderTest
         });
 
         Collection<String> actual = ParameterDescriptorBuilder.getParameterFieldMap(
-            TestClass.class, BeforeProcessing.class, Input.class).keySet();
+            TestClass.class, Processing.class, Input.class).keySet();
 
         Assert.assertEquals(expected, new ArrayList<String>(actual));
     }
@@ -72,7 +72,7 @@ public class ParameterDescriptorBuilderTest
         });
 
         Collection<String> actual = ParameterDescriptorBuilder.getParameterFieldMap(
-            TestSubclass.class, BeforeProcessing.class, Input.class).keySet();
+            TestSubclass.class, Processing.class, Input.class).keySet();
 
         Assert.assertEquals(expected, new ArrayList<String>(actual));
     }
@@ -91,7 +91,7 @@ public class ParameterDescriptorBuilderTest
             });
 
         Collection<ParameterDescriptor> actual = ParameterDescriptorBuilder
-            .getParameterDescriptors(new TestClass(), BeforeProcessing.class, Input.class);
+            .getParameterDescriptors(new TestClass(), Processing.class, Input.class);
 
         Assert.assertEquals(expected, actual);
     }
@@ -115,7 +115,7 @@ public class ParameterDescriptorBuilderTest
             });
 
         Collection<ParameterDescriptor> actual = ParameterDescriptorBuilder
-            .getParameterDescriptors(new TestSubclass(), BeforeProcessing.class,
+            .getParameterDescriptors(new TestSubclass(), Processing.class,
                 Input.class);
 
         Assert.assertEquals(expected, actual);

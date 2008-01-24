@@ -18,66 +18,78 @@ public class SimpleControllerBenchmark
     @Bindable
     public static class ProcessingComponent1 extends ProcessingComponentBase
     {
-        @BeforeProcessing
+        @Processing
         @Input
         @Parameter
         private int intParameter1 = 0;
 
-        @BeforeProcessing
+        @Processing
         @Input
         @Parameter
         private double doubleParameter1 = 1.0;
 
-        @BeforeProcessing
+        @Processing
         @Input
         @Parameter
         private String stringParameter1 = "test";
 
-        @BeforeProcessing
+        @Processing
         @Input
         @Parameter
         private boolean booleanParameter1 = false;
 
-        @Attribute(key = "in1", bindingDirection = BindingDirection.IN)
-        private String inAttribute;
+        @Processing
+        @Input
+        @Parameter(key = "in1")
+        private List<String> inAttribute = new ArrayList<String>();
 
-        @Attribute(key = "out1", bindingDirection = BindingDirection.OUT)
+        @Processing
+        @Output
+        @Parameter(key = "out2")
         private List<String> outAttribute = new ArrayList<String>();
 
-        @Attribute(key = "debug1", bindingDirection = BindingDirection.OUT)
+        @Processing
+        @Output
+        @Parameter(key = "debug2")
         private List<String> debugAttribute = new ArrayList<String>();
     }
 
     @Bindable
     public static class ProcessingComponent2 extends ProcessingComponentBase
     {
-        @BeforeProcessing
+        @Processing
         @Input
         @Parameter
         private int intParameter2 = 0;
 
-        @BeforeProcessing
+        @Processing
         @Input
         @Parameter
         private double doubleParameter2 = 1.0;
 
-        @BeforeProcessing
+        @Processing
         @Input
         @Parameter
         private String stringParameter2 = "test";
 
-        @BeforeProcessing
+        @Processing
         @Input
         @Parameter
         private boolean booleanParameter2 = false;
 
-        @Attribute(key = "in2", bindingDirection = BindingDirection.IN)
+        @Processing
+        @Input
+        @Parameter(key = "in2")
         private List<String> inAttribute = new ArrayList<String>();
 
-        @Attribute(key = "out2", bindingDirection = BindingDirection.OUT)
+        @Processing
+        @Output
+        @Parameter(key = "out2")
         private List<String> outAttribute = new ArrayList<String>();
 
-        @Attribute(key = "debug2", bindingDirection = BindingDirection.OUT)
+        @Processing
+        @Output
+        @Parameter(key = "debug2")
         private List<String> debugAttribute = new ArrayList<String>();
     }
 
@@ -91,26 +103,25 @@ public class SimpleControllerBenchmark
 
         for (int i = 0; i < requests; i++)
         {
-            Map<String, Object> parameters = new HashMap<String, Object>();
-            parameters.put("intParameter1", 1);
-            parameters.put("intParameter2", 1);
-            parameters.put("doubleParameter1", 1.0);
-            parameters.put("doubleParameter2", 2.0);
-            parameters.put("stringParameter1", "t");
-            parameters.put("stringParameter2", "z");
-            parameters.put("booleanParameter1", false);
-            parameters.put("booleanParameter2", true);
-
             Map<String, Object> attributes = new HashMap<String, Object>();
+            attributes.put("intParameter1", 1);
+            attributes.put("intParameter2", 1);
+            attributes.put("doubleParameter1", 1.0);
+            attributes.put("doubleParameter2", 2.0);
+            attributes.put("stringParameter1", "t");
+            attributes.put("stringParameter2", "z");
+            attributes.put("booleanParameter1", false);
+            attributes.put("booleanParameter2", true);
             attributes.put("in1", "t");
 
-            controller.process(parameters, attributes, ProcessingComponent1.class,
+            controller.process(attributes, ProcessingComponent1.class,
                 ProcessingComponent2.class);
         }
 
         long stop = System.currentTimeMillis();
 
-        System.out.printf("Request time    : %.2f ms\n", (stop - start) / (double) requests);
+        System.out.printf("Request time    : %.2f ms\n", (stop - start)
+            / (double) requests);
         System.out.printf("Requests per sec: %.2f", requests / ((stop - start) / 1000.0));
     }
 }

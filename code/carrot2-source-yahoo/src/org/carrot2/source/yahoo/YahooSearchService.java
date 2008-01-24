@@ -97,26 +97,34 @@ abstract class YahooSearchService
     /**
      * Number of requests made to this service (total).
      */
-    @Attribute(bindingDirection = BindingDirection.OUT)
+    @Processing
+    @Output
+    @Parameter
     private int requestCountTotal;
 
     /**
      * Number of requests made to this service (successful).
      */
-    @Attribute(bindingDirection = BindingDirection.OUT)
+    @Processing
+    @Output
+    @Parameter
     private int requestCount;
 
     /**
      * A sum of all times spent on waiting for response from the
      * service (in milliseconds).
      */
-    @Attribute(bindingDirection = BindingDirection.OUT)
+    @Processing
+    @Output
+    @Parameter
     private long requestTimeSum;
 
     /**
      * Maximum request time.
      */
-    @Attribute(bindingDirection = BindingDirection.OUT)
+    @Processing
+    @Output
+    @Parameter
     private long requestTimeMax;
     
     /**

@@ -6,11 +6,7 @@ package org.carrot2.core;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 import org.carrot2.core.controller.SimpleController;
 import org.carrot2.core.parameter.AttributeNames;
@@ -62,7 +58,7 @@ public abstract class ClusteringAlgorithmTest<T extends ClusteringAlgorithm> ext
      */
     public Collection<Cluster> cluster(Collection<Document> documents)
     {
-        return cluster(documents, Collections.<String, Object> emptyMap());
+        return cluster(documents, new HashMap<String, Object>());
     }
 
     /**
@@ -73,22 +69,9 @@ public abstract class ClusteringAlgorithmTest<T extends ClusteringAlgorithm> ext
      * @return
      */
     public Collection<Cluster> cluster(Collection<Document> documents,
-        Map<String, Object> parameters)
+        Map<String, Object> attributes)
     {
-        return cluster(documents, parameters, new HashMap<String, Object>());
-    }
-
-    /**
-     * Performs clustering.
-     * 
-     * @param documents
-     * @param parameters
-     * @return
-     */
-    public Collection<Cluster> cluster(Collection<Document> documents,
-        Map<String, Object> parameters, Map<String, Object> attributes)
-    {
-        return cluster(createInstance(), documents, parameters, attributes);
+        return cluster(createInstance(), documents, attributes);
     }
 
     /**
@@ -96,12 +79,11 @@ public abstract class ClusteringAlgorithmTest<T extends ClusteringAlgorithm> ext
      */
     @SuppressWarnings("unchecked")
     public Collection<Cluster> cluster(ClusteringAlgorithm instance,
-        Collection<Document> documents, Map<String, Object> parameters,
-        Map<String, Object> attributes)
+        Collection<Document> documents, Map<String, Object> attributes)
     {
         attributes.put(AttributeNames.DOCUMENTS, documents);
         SimpleController controller = new SimpleController();
-        controller.process(parameters, attributes, instance);
+        controller.process(attributes, instance);
         return (Collection<Cluster>) attributes.get(AttributeNames.CLUSTERS);
     }
 

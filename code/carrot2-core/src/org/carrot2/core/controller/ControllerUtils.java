@@ -23,28 +23,50 @@ final class ControllerUtils
     }
 
     /**
-     * Performs all life cycle actions required before processing starts.
+     * Performs all life cycle actions required upon initialization.
      */
-    public static void beforeProcessing(ProcessingComponent processingComponent,
-        Map<String, Object> parameters, Map<String, Object> attributes)
-        throws ProcessingException
+    public static void init(ProcessingComponent processingComponent,
+        Map<String, Object> attributes) throws ProcessingException
     {
         // Bind runtime parameters to the component.
         try
         {
-            ParameterBinder.bind(processingComponent, parameters, BeforeProcessing.class,
-                Input.class);
+            // TODO: this is currently done in ParameterBinder, but I'm not sure if
+            // it should be there...
+//            ParameterBinder
+//                .bind(processingComponent, attributes, Init.class, Input.class);
+
+            processingComponent.init();
+
+            ParameterBinder.bind(processingComponent, attributes, Init.class,
+                Output.class);
         }
         catch (InstantiationException e)
         {
-            throw new ProcessingException(
-                "Binding parameters failed with instantiation exception.", e);
+            throw new ProcessingException("Attribute binding failed", e);
         }
 
-        // Inject attributes in, run the hook, and extract attributes out.
-        AttributeBinder.bind(processingComponent, attributes, BindingDirection.IN);
-        processingComponent.beforeProcessing();
-        AttributeBinder.bind(processingComponent, attributes, BindingDirection.OUT);
+    }
+
+    /**
+     * Performs all life cycle actions required before processing starts.
+     */
+    public static void beforeProcessing(ProcessingComponent processingComponent,
+        Map<String, Object> attributes) throws ProcessingException
+    {
+        // Bind runtime parameters to the component.
+        try
+        {
+            ParameterBinder.bind(processingComponent, attributes, Processing.class,
+                Input.class);
+
+            processingComponent.beforeProcessing();
+        }
+        catch (InstantiationException e)
+        {
+            throw new ProcessingException("Attribute binding failed", e);
+        }
+
     }
 
     /**
@@ -53,9 +75,7 @@ final class ControllerUtils
     public static void performProcessing(ProcessingComponent processingComponent,
         Map<String, Object> attributes) throws ProcessingException
     {
-        AttributeBinder.bind(processingComponent, attributes, BindingDirection.IN);
         processingComponent.process();
-        AttributeBinder.bind(processingComponent, attributes, BindingDirection.OUT);
     }
 
     /**
@@ -64,6 +84,16 @@ final class ControllerUtils
     public static void afterProcessing(ProcessingComponent processingComponent,
         Map<String, Object> attributes)
     {
-        processingComponent.afterProcessing();
+        try
+        {
+            processingComponent.afterProcessing();
+
+            ParameterBinder.bind(processingComponent, attributes, Processing.class,
+                Output.class);
+        }
+        catch (InstantiationException e)
+        {
+            throw new ProcessingException("Attribute binding failed", e);
+        }
     }
 }

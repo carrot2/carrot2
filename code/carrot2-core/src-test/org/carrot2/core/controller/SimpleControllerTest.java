@@ -27,7 +27,6 @@ public class SimpleControllerTest
 
     private SimpleController controller;
 
-    private Map<String, Object> parameters;
     private Map<String, Object> attributes;
 
     @Bindable
@@ -93,12 +92,10 @@ public class SimpleControllerTest
         processingComponent2Mock = mocksControl.createMock(DocumentSource.class);
         processingComponent3Mock = mocksControl.createMock(DocumentSource.class);
 
-        parameters = new HashMap<String, Object>();
-        parameters.put("delegate1", processingComponent1Mock);
-        parameters.put("delegate2", processingComponent2Mock);
-        parameters.put("delegate3", processingComponent3Mock);
-
         attributes = new HashMap<String, Object>();
+        attributes.put("delegate1", processingComponent1Mock);
+        attributes.put("delegate2", processingComponent2Mock);
+        attributes.put("delegate3", processingComponent3Mock);
 
         controller = new SimpleController();
     }
@@ -120,12 +117,11 @@ public class SimpleControllerTest
 
         mocksControl.replay();
 
-        parameters.put("instanceParameter", "i");
-        parameters.put("runtimeParameter", "r");
-
+        attributes.put("instanceParameter", "i");
+        attributes.put("runtimeParameter", "r");
         attributes.put("data", "d");
 
-        controller.process(parameters, attributes, ProcessingComponent1.class);
+        controller.process(attributes, ProcessingComponent1.class);
 
         mocksControl.verify();
 
@@ -157,15 +153,15 @@ public class SimpleControllerTest
 
         mocksControl.replay();
 
-        parameters.put("instanceParameter", "i");
-        parameters.put("runtimeParameter", "r");
+        attributes.put("instanceParameter", "i");
+        attributes.put("runtimeParameter", "r");
 
         attributes.put("data", "d");
 
-        controller.process(parameters, attributes, ProcessingComponent1.class,
+        controller.process(attributes, ProcessingComponent1.class,
             ProcessingComponent2.class, ProcessingComponent3.class);
 
-        assertEquals("diririr", attributes.get("data"));
+        assertEquals("dir", attributes.get("data"));
     }
 
     @Test(expected = ProcessingException.class)
@@ -173,13 +169,13 @@ public class SimpleControllerTest
     {
         mocksControl.replay();
 
-        controller.process(parameters, attributes, ProcessingComponent1.class,
+        controller.process(attributes, ProcessingComponent1.class,
             ProcessingComponentWithoutDefaultConstructor.class);
     }
 
     // TODO: The tests below fail for me. Is there anything special
     // about them?
-    
+
     @Test(expected = InitializationException.class)
     public void testExceptionWhileInit()
     {
@@ -191,7 +187,7 @@ public class SimpleControllerTest
         processingComponent3Mock.dispose();
         mocksControl.replay();
 
-        controller.process(parameters, attributes, ProcessingComponent1.class,
+        controller.process(attributes, ProcessingComponent1.class,
             ProcessingComponent2.class, ProcessingComponent3.class);
     }
 
@@ -212,7 +208,7 @@ public class SimpleControllerTest
         processingComponent3Mock.dispose();
         mocksControl.replay();
 
-        controller.process(parameters, attributes, ProcessingComponent1.class,
+        controller.process(attributes, ProcessingComponent1.class,
             ProcessingComponent2.class, ProcessingComponent3.class);
     }
 
@@ -236,7 +232,7 @@ public class SimpleControllerTest
         processingComponent3Mock.dispose();
         mocksControl.replay();
 
-        controller.process(parameters, attributes, ProcessingComponent1.class,
+        controller.process(attributes, ProcessingComponent1.class,
             ProcessingComponent2.class, ProcessingComponent3.class);
     }
 }

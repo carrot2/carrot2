@@ -32,21 +32,31 @@ public final class YahooDocumentSource extends SearchEngine
     @Parameter
     private YahooSearchService service = new YahooWebSearchService();  
 
-    @Attribute(key=AttributeNames.START, bindingDirection = BindingDirection.IN)
+    @Processing
+    @Input
+    @Parameter(key=AttributeNames.START)
     private int start = 0;
 
-    @Attribute(key=AttributeNames.RESULTS, bindingDirection = BindingDirection.IN)
+    @Processing
+    @Input
+    @Parameter(key=AttributeNames.RESULTS)
     private int results = 100;
 
-    @Attribute(key=AttributeNames.QUERY, bindingDirection = BindingDirection.IN)
+    @Processing
+    @Input
+    @Parameter(key=AttributeNames.QUERY)
     private String query;
 
     @SuppressWarnings("unused")
-    @Attribute(key=AttributeNames.RESULTS_TOTAL, bindingDirection = BindingDirection.OUT)
+    @Processing
+    @Output
+    @Parameter(key=AttributeNames.RESULTS_TOTAL)
     private long resultsTotal;
 
     @SuppressWarnings("unused")
-    @Attribute(key=AttributeNames.DOCUMENTS, bindingDirection = BindingDirection.OUT)
+    @Processing
+    @Output
+    @Parameter(key=AttributeNames.DOCUMENTS)
     private Collection<Document> documents;
 
     /**

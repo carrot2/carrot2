@@ -33,19 +33,19 @@ public final class YahooNewsSearchService extends YahooSearchService
     private String serviceURI = "http://search.yahooapis.com/NewsSearchService/V1/newsSearch";
 
     /** */
-    @BeforeProcessing
+    @Processing
     @Input
     @Parameter
     public String language;
 
     /** */
-    @BeforeProcessing
+    @Processing
     @Input
     @Parameter
     public String country;
 
     /** */
-    @BeforeProcessing
+    @Processing
     @Input
     @Parameter
     public String site;

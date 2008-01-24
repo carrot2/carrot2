@@ -7,11 +7,11 @@ import org.carrot2.core.parameter.ParameterBinder;
 
 /**
  * <p>
- * This is the simplest possible controller. It is useful for one-off processing
- * either with existing component instances or just classes of components to be 
- * involved in processing. 
+ * This is the simplest possible controller. It is useful for one-off processing either
+ * with existing component instances or just classes of components to be involved in
+ * processing.
  * <p>
- * The processing cycle 
+ * The processing cycle
  */
 public final class SimpleController
 {
@@ -39,43 +39,41 @@ public final class SimpleController
      *            go with the second option.
      */
     @SuppressWarnings("unchecked")
-    public ProcessingResult process(Map<String, Object> parameters,
-        Map<String, Object> attributes, Class<?>... processingComponentClasses)
-        throws ProcessingException
+    public ProcessingResult process(Map<String, Object> attributes,
+        Class<?>... processingComponentClasses) throws ProcessingException
     {
         // Create instances of processing components.
-        final ProcessingComponent [] processingComponents = 
-            new ProcessingComponent [processingComponentClasses.length];
+        final ProcessingComponent [] processingComponents = new ProcessingComponent [processingComponentClasses.length];
         for (int i = 0; i < processingComponents.length; i++)
         {
             try
             {
                 processingComponents[i] = (ProcessingComponent) ParameterBinder
-                    .createInstance(processingComponentClasses[i], parameters);
+                    .createInstance(processingComponentClasses[i], attributes);
             }
             catch (InstantiationException e)
             {
-                throw new ComponentInitializationException("Could not instantiate component class: " 
-                    + processingComponentClasses[i].getName(), e);
+                throw new ComponentInitializationException(
+                    "Could not instantiate component class: "
+                        + processingComponentClasses[i].getName(), e);
             }
         }
 
-        return process(parameters, attributes, processingComponents);
+        return process(attributes, processingComponents);
     }
 
     /**
      * Run full processing cycle on already instantiated components.
      */
-    public ProcessingResult process(Map<String, Object> parameters,
-        Map<String, Object> attributes, ProcessingComponent... processingComponents)
-        throws ProcessingException
+    public ProcessingResult process(Map<String, Object> attributes,
+        ProcessingComponent... processingComponents) throws ProcessingException
     {
         try
         {
-            // Initialize all components. 
+            // Initialize all components.
             for (int i = 0; i < processingComponents.length; i++)
             {
-                processingComponents[i].init();
+                ControllerUtils.init(processingComponents[i], attributes);
             }
 
             try
@@ -83,15 +81,14 @@ public final class SimpleController
                 // Call before processing hook.
                 for (int i = 0; i < processingComponents.length; i++)
                 {
-                    ControllerUtils.beforeProcessing(
-                        processingComponents[i], parameters, attributes);
+                    ControllerUtils.beforeProcessing(processingComponents[i], attributes);
                 }
 
                 // Perform processing
                 for (int i = 0; i < processingComponents.length; i++)
                 {
-                    ControllerUtils.performProcessing(
-                        processingComponents[i], attributes);
+                    ControllerUtils
+                        .performProcessing(processingComponents[i], attributes);
                 }
 
                 return new ProcessingResult(attributes);

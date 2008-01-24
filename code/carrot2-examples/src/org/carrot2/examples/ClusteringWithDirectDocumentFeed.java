@@ -70,14 +70,13 @@ public class ClusteringWithDirectDocumentFeed
         }
 
         SimpleController controller = new SimpleController();
-        
-        Map<String, Object> parameters = new HashMap<String, Object>();
+
         Map<String, Object> attributes = new HashMap<String, Object>();
-        
+
         attributes.put(AttributeNames.DOCUMENTS, documents);
-        
-        final ProcessingResult result = 
-            controller.process(parameters, attributes, ByUrlClusteringAlgorithm.class);
+
+        final ProcessingResult result = controller.process(attributes,
+            ByUrlClusteringAlgorithm.class);
 
         ExampleUtils.displayResults(result);
     }

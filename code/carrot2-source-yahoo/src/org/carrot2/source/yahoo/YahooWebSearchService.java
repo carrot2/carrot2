@@ -30,25 +30,25 @@ public final class YahooWebSearchService extends YahooSearchService
     private String serviceURI = "http://api.search.yahoo.com/WebSearchService/V1/webSearch";
 
     /** */
-    @BeforeProcessing
+    @Processing
     @Input
     @Parameter
     public String language;
 
     /** */
-    @BeforeProcessing
+    @Processing
     @Input
     @Parameter
     public String country;
 
     /** */
-    @BeforeProcessing
+    @Processing
     @Input
     @Parameter
     public String site;
 
     /** */
-    @BeforeProcessing
+    @Processing
     @Input
     @Parameter
     public String region;

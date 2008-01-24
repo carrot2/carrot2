@@ -26,11 +26,15 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
         STOP_URL_PARTS.add("www");
     }
 
-    @Attribute(key = AttributeNames.DOCUMENTS, bindingDirection = BindingDirection.IN)
+    @Processing
+    @Input
+    @Parameter(key = AttributeNames.DOCUMENTS)
     private Collection<Document> documents = Collections.<Document> emptyList();
 
     @SuppressWarnings("unused")
-    @Attribute(key = AttributeNames.CLUSTERS, bindingDirection = BindingDirection.OUT)
+    @Processing
+    @Output
+    @Parameter(key = AttributeNames.CLUSTERS)
     private Collection<Cluster> clusters = null;
 
     /*
@@ -182,8 +186,8 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
                 slashIndex = url.length();
             }
 
-            final String urlMainPart = 
-                url.substring(colonSlashSlashIndex, slashIndex).toLowerCase();
+            final String urlMainPart = url.substring(colonSlashSlashIndex, slashIndex)
+                .toLowerCase();
 
             final String [] splitUrl = urlMainPart.split("\\.");
             ArrayUtils.reverse(splitUrl);

@@ -29,26 +29,9 @@ public class ParameterDescriptorBuilder
 
         for (final Field field : bindableFields)
         {
-            final String fieldName = BindableUtils.getFieldKey(field);
+            final String fieldName = BindableUtils.getKey(field);
 
-            List<Constraint> constraints = new ArrayList<Constraint>();
-
-            for (Annotation annotation : field.getAnnotations())
-            {
-                if (ConstraintFactory.isConstraintAnnotation(annotation.annotationType()))
-                {
-                    constraints.add(ConstraintFactory.createConstraint(annotation));
-                }
-            }
-            Constraint constraint = null;
-            if (constraints.size() == 1)
-            {
-                constraint = constraints.get(0);
-            }
-            else if (constraints.size() > 1)
-            {
-                constraint = new CompoundConstraint(constraints);
-            }
+            Constraint constraint = BindableUtils.getConstraint(field);
 
             Object fieldValue;
             try
@@ -91,10 +74,10 @@ public class ParameterDescriptorBuilder
                 continue;
             }
 
-            if (result.put(BindableUtils.getFieldKey(field), field) != null)
+            if (result.put(BindableUtils.getKey(field), field) != null)
             {
                 throw new RuntimeException("A field with duplicated key exist: "
-                    + BindableUtils.getFieldKey(field));
+                    + BindableUtils.getKey(field));
             }
         }
 

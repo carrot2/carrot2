@@ -11,99 +11,135 @@ import org.carrot2.core.constraint.ConstraintViolationException;
 public class ParameterBinder
 {
     /**
-     * Initialize a given object with default values of instance-time binding parameters ({@link BindingPolicy#INSTANTIATION}).
+     * Contract:
+     * <ul>
+     * <li>Attributes are optional</li>
+     * <li>Attributes don't have to have default values</li>
+     * <li>Map can contain null values, these will be transferred to the fields</li>
+     * <li>If the map doesn't have a mapping for some key, the corresponding field will
+     * not be changed</li>
+     * <li>Class coercion is also performed for all binding times</li>
+     * </ul>
      */
     public static <T> void bind(T instance, Map<String, Object> values,
         Class<? extends Annotation> bindingTimeAnnotation,
         Class<? extends Annotation> bindingDirectionAnnotation)
         throws InstantiationException
     {
+        // We can only bind values on classes that are @Bindable
         if (instance.getClass().getAnnotation(Bindable.class) == null)
         {
             throw new IllegalArgumentException("Class is not bindable: "
                 + instance.getClass().getName());
         }
 
-        final Collection<ParameterDescriptor> parameterDescriptors = ParameterDescriptorBuilder
-            .getParameterDescriptors(instance, bindingTimeAnnotation,
-                bindingDirectionAnnotation);
+        // Get all fields (including those from bindable super classes)
+        final Collection<Field> fieldSet = BindableUtils
+            .getFieldsFromBindableHierarchy(instance.getClass());
 
-        for (ParameterDescriptor parameterDescriptor : parameterDescriptors)
+        for (Field field : fieldSet)
         {
-            Object value = values.get(parameterDescriptor.getKey());
+            final String key = BindableUtils.getKey(field);
+            Object value = null;
 
-            // Try to coerce from class to its instance first
-            if (value instanceof Class)
+            // We skip fields that do not have the required binding time
+            if (!(field.getAnnotation(bindingTimeAnnotation) == null))
             {
-                if (!Init.class.equals(bindingTimeAnnotation))
+                // Choose the right direction
+                if (Input.class.equals(bindingDirectionAnnotation)
+                    && field.getAnnotation(Input.class) != null)
                 {
-                    // TODO: move this check to ParameterDescriptorBuilder
-                    throw new RuntimeException("Only instantiation-time parameters can "
-                        + "be bound to class values, offending field: "
-                        + parameterDescriptor.getKey());
-                }
-
-                Class<?> clazz = ((Class<?>) value);
-                try
-                {
-                    value = clazz.newInstance();
-                }
-                catch (IllegalAccessException e)
-                {
-                    throw new InstantiationException(
-                        "Could not create instance of class: " + clazz.getName()
-                            + " for parameter " + parameterDescriptor.getKey());
-                }
-            }
-
-            if (value != null)
-            {
-                // Check constraints
-                Constraint constraint = parameterDescriptor.getConstraint();
-                if (constraint != null)
-                {
-                    if (!constraint.isMet(value))
+                    // Transfer values from the map to the fields.
+                    // If the input map doesn't contain an entry for this key, do nothing
+                    // Otherwise, perform binding as usual. This will allow to set null
+                    // values
+                    if (!values.containsKey(key))
                     {
-                        throw new ConstraintViolationException(parameterDescriptor,
-                            constraint, value);
+                        continue;
+                    }
+
+                    // Note that the value can still be null here
+                    value = values.get(key);
+
+                    // Try to coerce from class to its instance first
+                    if (value instanceof Class)
+                    {
+                        Class<?> clazz = ((Class<?>) value);
+                        try
+                        {
+                            value = createInstance(clazz, values);
+                        }
+                        catch (InstantiationException e)
+                        {
+                            throw new InstantiationException(
+                                "Could not create instance of class: " + clazz.getName()
+                                    + " for parameter " + key);
+                        }
+                    }
+
+                    if (value != null)
+                    {
+                        // Check constraints
+                        Constraint constraint = BindableUtils.getConstraint(field);
+                        if (constraint != null)
+                        {
+                            if (!constraint.isMet(value))
+                            {
+                                throw new ConstraintViolationException(key, constraint,
+                                    value);
+                            }
+                        }
+                    }
+
+                    // Finally, set the field value
+                    try
+                    {
+                        field.setAccessible(true);
+                        field.set(instance, value);
+                    }
+                    catch (Exception e)
+                    {
+                        throw new RuntimeException("Could not assign field "
+                            + instance.getClass().getName() + "#" + field.getName()
+                            + " with value " + value, e);
+                    }
+                }
+                else if (Output.class.equals(bindingDirectionAnnotation)
+                    && field.getAnnotation(Output.class) != null)
+                {
+                    // Transfer values from fields to the map here
+                    try
+                    {
+                        field.setAccessible(true);
+                        value = field.get(instance);
+                        values.put(key, value);
+                    }
+                    catch (Exception e)
+                    {
+                        throw new RuntimeException("Could not get field value "
+                            + instance.getClass().getName() + "#" + field.getName());
                     }
                 }
             }
-
-            if (value == null)
+            else
             {
-                // check the default value of parameter.
-                value = parameterDescriptor.getDefaultValue();
-            }
-
-            final Field field = parameterDescriptor.field;
-            final Parameter binding = field.getAnnotation(Parameter.class);
-
-            if (binding != null)
-            {
-                if (value == null)
+                try
                 {
-                    // If there is no default value, throw an exception.
-                    throw new InstantiationException("Parameter field must have a"
-                        + " non-null default value: " + field.getName());
+                    field.setAccessible(true);
+                    value = field.get(instance);
                 }
-
-                if (value.getClass().getAnnotation(Bindable.class) != null)
+                catch (Exception e)
                 {
-                    // Recursively descend into other types.
-                    bind(value, values, bindingTimeAnnotation, bindingDirectionAnnotation);
+                    throw new RuntimeException("Could not get field value "
+                        + instance.getClass().getName() + "#" + field.getName());
                 }
             }
 
-            try
+            // If value is not null and its class is @Bindable, we must descend into it
+            if (value != null && value.getClass().getAnnotation(Bindable.class) != null)
             {
-                field.set(instance, value);
-            }
-            catch (Exception e)
-            {
-                throw new RuntimeException("Could not assign field "
-                    + instance.getClass().getName() + "#" + field.getName()
-                    + " with value " + value, e);
+                // Recursively descend into other types.
+                bind(value, values, bindingTimeAnnotation, bindingDirectionAnnotation);
             }
         }
     }
@@ -122,8 +158,7 @@ public class ParameterBinder
         }
         catch (IllegalAccessException e)
         {
-            throw new InstantiationException(
-                "Could not create instance (illegal access): " + e);
+            throw new InstantiationException("Could not create instance: " + e);
         }
 
         bind(instance, values, Init.class, Input.class);

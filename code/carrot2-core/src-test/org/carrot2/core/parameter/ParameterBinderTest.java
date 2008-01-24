@@ -48,7 +48,7 @@ public class ParameterBinderTest
         @Parameter
         protected ITest instanceRefField = new TestImpl();
 
-        @BeforeProcessing
+        @Processing
         @Input
         @Parameter
         @IntRange(min = 0, max = 10)
@@ -69,7 +69,7 @@ public class ParameterBinderTest
         @Parameter
         private ITest subclassInstanceRefField = new TestImpl();
 
-        @BeforeProcessing
+        @Processing
         @Input
         @Parameter
         @IntRange(min = 0, max = 10)
@@ -80,7 +80,7 @@ public class ParameterBinderTest
     @Bindable(prefix = "Test")
     public static class TestSubclass2 extends TestClass
     {
-        @BeforeProcessing
+        @Processing
         @Input
         @Parameter(key = "clone")
         protected int runtimeIntField = 7;
@@ -88,14 +88,14 @@ public class ParameterBinderTest
 
     public static class NotBindable
     {
-        @BeforeProcessing
+        @Processing
         @Input
         @Parameter
         private int test = 20;
     }
 
     @Test
-    public void testInstanceBinding() throws InstantiationException
+    public void testInitInputBinding() throws InstantiationException
     {
         final Map<String, Object> params = new HashMap<String, Object>();
         params.put("Test.instanceIntField", 6);
@@ -110,7 +110,7 @@ public class ParameterBinderTest
     }
 
     @Test
-    public void testInstanceBindingForSubclass() throws InstantiationException
+    public void testInitInputBindingForSubclass() throws InstantiationException
     {
         final Map<String, Object> params = new HashMap<String, Object>();
         params.put("Test.subclassInstanceIntField", 6);
@@ -130,7 +130,7 @@ public class ParameterBinderTest
     }
 
     @Test
-    public void testClassCoercion() throws InstantiationException
+    public void testInitInputClassCoercion() throws InstantiationException
     {
         final Map<String, Object> params = new HashMap<String, Object>();
         params.put("Test.instanceRefField", TestBetterImpl.class);
@@ -154,7 +154,7 @@ public class ParameterBinderTest
 
         try
         {
-            ParameterBinder.bind(instance, params, BeforeProcessing.class, Input.class);
+            ParameterBinder.bind(instance, params, Processing.class, Input.class);
             fail();
         }
         catch (RuntimeException e)
@@ -175,7 +175,7 @@ public class ParameterBinderTest
 
         try
         {
-            ParameterBinder.bind(instance, params, BeforeProcessing.class, Input.class);
+            ParameterBinder.bind(instance, params, Processing.class, Input.class);
             fail();
         }
         catch (RuntimeException e)
@@ -195,7 +195,7 @@ public class ParameterBinderTest
         TestClass instance = ParameterBinder.createInstance(TestClass.class, params);
         assertEquals(5, instance.runtimeIntField);
 
-        ParameterBinder.bind(instance, params, BeforeProcessing.class, Input.class);
+        ParameterBinder.bind(instance, params, Processing.class, Input.class);
         assertEquals(6, instance.runtimeIntField);
     }
 
@@ -211,7 +211,7 @@ public class ParameterBinderTest
         assertEquals(5, instance.runtimeIntField);
         assertEquals(5, instance.subclassRuntimeIntField);
 
-        ParameterBinder.bind(instance, params, BeforeProcessing.class, Input.class);
+        ParameterBinder.bind(instance, params, Processing.class, Input.class);
         assertEquals(6, instance.runtimeIntField);
         assertEquals(9, instance.subclassRuntimeIntField);
     }
@@ -228,7 +228,7 @@ public class ParameterBinderTest
         assertEquals(7, instance.runtimeIntField);
         assertEquals(5, ((TestClass) instance).runtimeIntField);
 
-        ParameterBinder.bind(instance, params, BeforeProcessing.class, Input.class);
+        ParameterBinder.bind(instance, params, Processing.class, Input.class);
         assertEquals(6, ((TestClass) instance).runtimeIntField);
         assertEquals(9, instance.runtimeIntField);
     }
@@ -256,7 +256,7 @@ public class ParameterBinderTest
 
         try
         {
-            ParameterBinder.bind(instance, violatingParams, BeforeProcessing.class,
+            ParameterBinder.bind(instance, violatingParams, Processing.class,
                 Input.class);
             fail();
         }
@@ -276,7 +276,7 @@ public class ParameterBinderTest
         try
         {
             // First constraint violated
-            ParameterBinder.bind(instance, violatingParams, BeforeProcessing.class,
+            ParameterBinder.bind(instance, violatingParams, Processing.class,
                 Input.class);
             fail();
         }
@@ -290,7 +290,7 @@ public class ParameterBinderTest
         try
         {
             // Second constraint violated
-            ParameterBinder.bind(instance, violatingParams, BeforeProcessing.class,
+            ParameterBinder.bind(instance, violatingParams, Processing.class,
                 Input.class);
             fail();
         }
