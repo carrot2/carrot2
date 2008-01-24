@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.carrot2.core.*;
-import org.carrot2.core.parameter.*;
+import org.carrot2.core.attribute.*;
 import org.easymock.IMocksControl;
 import org.junit.*;
 

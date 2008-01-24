@@ -4,10 +4,8 @@ import static org.junit.Assert.*;
 
 import java.util.Collection;
 
-import org.carrot2.core.Document;
-import org.carrot2.core.DocumentSource;
-import org.carrot2.core.DocumentSourceTest;
-import org.carrot2.core.parameter.AttributeNames;
+import org.carrot2.core.*;
+import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.source.SearchMode;
 import org.junit.Test;
 

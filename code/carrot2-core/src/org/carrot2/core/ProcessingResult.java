@@ -3,7 +3,7 @@ package org.carrot2.core;
 import java.util.Collection;
 import java.util.Map;
 
-import org.carrot2.core.parameter.AttributeNames;
+import org.carrot2.core.attribute.AttributeNames;
 
 /**
  * Provides results of query processing.

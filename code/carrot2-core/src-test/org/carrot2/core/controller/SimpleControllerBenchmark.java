@@ -6,7 +6,7 @@ package org.carrot2.core.controller;
 import java.util.*;
 
 import org.carrot2.core.*;
-import org.carrot2.core.parameter.*;
+import org.carrot2.core.attribute.*;
 
 /**
  * This class measures the overhead resulting from reflection stuff performed by the

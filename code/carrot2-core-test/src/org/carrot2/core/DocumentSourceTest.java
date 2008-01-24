@@ -6,12 +6,10 @@ package org.carrot2.core;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
+import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.controller.SimpleController;
-import org.carrot2.core.parameter.AttributeNames;
 import org.junit.Assert;
 import org.junit.Before;
 

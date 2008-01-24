@@ -6,7 +6,7 @@ package org.carrot2.core;
 import java.util.Collections;
 import java.util.Map;
 
-import org.carrot2.core.parameter.*;
+import org.carrot2.core.attribute.*;
 
 /**
  * TODO: This class seems to be specific to clustering algorithms rather than any

@@ -6,10 +6,7 @@ import java.util.ArrayList;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.carrot2.core.Document;
 import org.carrot2.source.SearchEngineResponse;
-import org.xml.sax.Attributes;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.Locator;
-import org.xml.sax.SAXException;
+import org.xml.sax.*;
 
 /**
  * XML content handler for parsing Yahoo! search response.

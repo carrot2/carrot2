@@ -3,7 +3,7 @@ package org.carrot2.core.controller;
 import java.util.Map;
 
 import org.carrot2.core.*;
-import org.carrot2.core.parameter.AttributeBinder;
+import org.carrot2.core.attribute.AttributeBinder;
 
 /**
  * <p>

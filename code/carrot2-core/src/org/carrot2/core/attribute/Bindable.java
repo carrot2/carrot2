@@ -1,4 +1,4 @@
-package org.carrot2.core.parameter;
+package org.carrot2.core.attribute;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

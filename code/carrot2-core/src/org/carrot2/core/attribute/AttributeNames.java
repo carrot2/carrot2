@@ -1,4 +1,4 @@
-package org.carrot2.core.parameter;
+package org.carrot2.core.attribute;
 
 /**
  * Certain constant attribute names. Note that not all attributes need to be specified

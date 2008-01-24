@@ -6,9 +6,10 @@ package org.carrot2.examples;
 import java.util.*;
 
 import org.carrot2.clustering.synthetic.ByUrlClusteringAlgorithm;
-import org.carrot2.core.*;
+import org.carrot2.core.Document;
+import org.carrot2.core.ProcessingResult;
+import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.controller.SimpleController;
-import org.carrot2.core.parameter.AttributeNames;
 
 /**
  *

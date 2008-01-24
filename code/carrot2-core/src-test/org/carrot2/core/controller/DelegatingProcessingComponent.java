@@ -4,7 +4,7 @@
 package org.carrot2.core.controller;
 
 import org.carrot2.core.*;
-import org.carrot2.core.parameter.*;
+import org.carrot2.core.attribute.*;
 
 @Bindable
 public abstract class DelegatingProcessingComponent implements ProcessingComponent

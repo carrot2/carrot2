@@ -7,7 +7,7 @@ import java.util.*;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.carrot2.core.*;
-import org.carrot2.core.parameter.*;
+import org.carrot2.core.attribute.*;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;

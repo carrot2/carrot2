@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.log4j.Logger;
-import org.carrot2.core.parameter.*;
+import org.carrot2.core.attribute.*;
 
 /**
  * Sends queries to Yahoo! Web search service. Instances of this class are

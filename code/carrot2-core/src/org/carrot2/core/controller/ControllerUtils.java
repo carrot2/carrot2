@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.carrot2.core.ProcessingComponent;
 import org.carrot2.core.ProcessingException;
-import org.carrot2.core.parameter.*;
+import org.carrot2.core.attribute.*;
 
 /**
  * Static life cycle and controller utilities.

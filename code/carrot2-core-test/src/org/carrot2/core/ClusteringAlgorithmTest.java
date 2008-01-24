@@ -8,8 +8,8 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.*;
 
+import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.controller.SimpleController;
-import org.carrot2.core.parameter.AttributeNames;
 import org.junit.Test;
 
 /**

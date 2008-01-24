@@ -3,7 +3,6 @@
  */
 package org.carrot2.core;
 
-import org.carrot2.core.parameter.*;
 
 /**
  * Defines the life cycle of a Carrot<sup>2</sup> processing component.
