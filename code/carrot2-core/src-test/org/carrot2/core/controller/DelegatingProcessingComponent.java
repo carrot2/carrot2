@@ -11,19 +11,19 @@ public abstract class DelegatingProcessingComponent implements ProcessingCompone
 {
     @Init
     @Input
-    @Parameter(key = "instanceParameter")
+    @Attribute(key = "instanceParameter")
     private String instanceParameter = "";
 
     @Processing
     @Input
-    @Parameter(key = "runtimeParameter")
+    @Attribute(key = "runtimeParameter")
     private String runtimeParameter = "";
 
     @SuppressWarnings("unused")
     @Processing
     @Input
     @Output
-    @Parameter(key = "data")
+    @Attribute(key = "data")
     private String data;
 
     @Override

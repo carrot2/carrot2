@@ -30,7 +30,7 @@ public abstract class ProcessingComponentTest<T extends ProcessingComponent>
     {
         try
         {
-            final ClusteringAlgorithm instance = ParameterBinder.createInstance(
+            final ClusteringAlgorithm instance = AttributeBinder.createInstance(
                 getProcessingComponentClass(), getInstanceParameters());
 
             instance.init();
@@ -51,7 +51,7 @@ public abstract class ProcessingComponentTest<T extends ProcessingComponent>
     {
         try
         {
-            ParameterBinder.bind(instance, getInstanceParameters(), Init.class,
+            AttributeBinder.bind(instance, getInstanceParameters(), Init.class,
                 Input.class);
             instance.init();
         }

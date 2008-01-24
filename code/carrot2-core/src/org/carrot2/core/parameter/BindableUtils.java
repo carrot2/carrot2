@@ -42,7 +42,7 @@ final class BindableUtils
 
     public static String getKey(Field field)
     {
-        Parameter attributeAnnotation = field.getAnnotation(Parameter.class);
+        Attribute attributeAnnotation = field.getAnnotation(Attribute.class);
 
         if (attributeAnnotation == null || "".equals(attributeAnnotation.key()))
         {

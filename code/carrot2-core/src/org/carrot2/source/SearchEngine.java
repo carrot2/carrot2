@@ -25,7 +25,7 @@ public abstract class SearchEngine
      */
     @Init
     @Input
-    @Parameter(key="search-mode")
+    @Attribute(key="search-mode")
     private SearchMode searchMode = SearchMode.SPECULATIVE;
     
     /**

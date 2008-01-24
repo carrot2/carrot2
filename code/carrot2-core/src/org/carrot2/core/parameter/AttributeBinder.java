@@ -8,7 +8,7 @@ import java.util.Map;
 import org.carrot2.core.constraint.Constraint;
 import org.carrot2.core.constraint.ConstraintViolationException;
 
-public class ParameterBinder
+public class AttributeBinder
 {
     /**
      * Contract:

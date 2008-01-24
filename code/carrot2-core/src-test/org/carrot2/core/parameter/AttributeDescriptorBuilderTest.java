@@ -6,7 +6,7 @@ import org.carrot2.core.constraint.*;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class ParameterDescriptorBuilderTest
+public class AttributeDescriptorBuilderTest
 {
     @Bindable(prefix = "Test")
     public static class TestClass
@@ -14,13 +14,13 @@ public class ParameterDescriptorBuilderTest
         @SuppressWarnings("unused")
         @Init
         @Input
-        @Parameter
+        @Attribute
         private int instanceField = 5;
 
         @SuppressWarnings("unused")
         @Processing
         @Input
-        @Parameter
+        @Attribute
         @IntRange(min = 0, max = 10)
         @IntModulo(modulo = 2)
         private int runtimeField = 5;
@@ -28,7 +28,7 @@ public class ParameterDescriptorBuilderTest
         @SuppressWarnings("unused")
         @Processing
         @Input
-        @Parameter
+        @Attribute
         @IntRange(min = 0, max = 10)
         private int runtimeField2 = 5;
     }
@@ -39,13 +39,13 @@ public class ParameterDescriptorBuilderTest
         @SuppressWarnings("unused")
         @Init
         @Input
-        @Parameter
+        @Attribute
         private int subclassInstanceField = 5;
 
         @SuppressWarnings("unused")
         @Processing
         @Input
-        @Parameter
+        @Attribute
         private int subclassRuntimeField = 5;
     }
 
@@ -57,7 +57,7 @@ public class ParameterDescriptorBuilderTest
             "Test.runtimeField2", "Test.runtimeField"
         });
 
-        Collection<String> actual = ParameterDescriptorBuilder.getParameterFieldMap(
+        Collection<String> actual = AttributeDescriptorBuilder.getParameterFieldMap(
             TestClass.class, Processing.class, Input.class).keySet();
 
         Assert.assertEquals(expected, new ArrayList<String>(actual));
@@ -71,7 +71,7 @@ public class ParameterDescriptorBuilderTest
             "Test.subclassRuntimeField", "Test.runtimeField2", "Test.runtimeField"
         });
 
-        Collection<String> actual = ParameterDescriptorBuilder.getParameterFieldMap(
+        Collection<String> actual = AttributeDescriptorBuilder.getParameterFieldMap(
             TestSubclass.class, Processing.class, Input.class).keySet();
 
         Assert.assertEquals(expected, new ArrayList<String>(actual));
@@ -80,17 +80,17 @@ public class ParameterDescriptorBuilderTest
     @Test
     public void testGetParametersRuntime() throws SecurityException, NoSuchFieldException
     {
-        Collection<ParameterDescriptor> expected = Arrays
-            .asList(new ParameterDescriptor []
+        Collection<AttributeDescriptor> expected = Arrays
+            .asList(new AttributeDescriptor []
             {
-                new ParameterDescriptor("Test.runtimeField2", 5, new RangeConstraint(0,
+                new AttributeDescriptor("Test.runtimeField2", 5, new RangeConstraint(0,
                     10), TestClass.class.getDeclaredField("runtimeField2")),
-                new ParameterDescriptor("Test.runtimeField", 5, new CompoundConstraint(
+                new AttributeDescriptor("Test.runtimeField", 5, new CompoundConstraint(
                     new RangeConstraint(0, 10), new IntModuloConstraint(2, 0)),
                     TestClass.class.getDeclaredField("runtimeField"))
             });
 
-        Collection<ParameterDescriptor> actual = ParameterDescriptorBuilder
+        Collection<AttributeDescriptor> actual = AttributeDescriptorBuilder
             .getParameterDescriptors(new TestClass(), Processing.class, Input.class);
 
         Assert.assertEquals(expected, actual);
@@ -100,21 +100,21 @@ public class ParameterDescriptorBuilderTest
     public void testGetParametersRuntimeForSubclass() throws SecurityException,
         NoSuchFieldException
     {
-        Collection<ParameterDescriptor> expected = Arrays
-            .asList(new ParameterDescriptor []
+        Collection<AttributeDescriptor> expected = Arrays
+            .asList(new AttributeDescriptor []
             {
-                new ParameterDescriptor("Test.subclassRuntimeField", 5, null,
+                new AttributeDescriptor("Test.subclassRuntimeField", 5, null,
                     TestSubclass.class.getDeclaredField("subclassRuntimeField")),
-                new ParameterDescriptor("Test.runtimeField2", Integer.class,
+                new AttributeDescriptor("Test.runtimeField2", Integer.class,
                     new RangeConstraint(0, 10), TestClass.class
                         .getDeclaredField("runtimeField2")),
-                new ParameterDescriptor("Test.runtimeField", Integer.class,
+                new AttributeDescriptor("Test.runtimeField", Integer.class,
                     new CompoundConstraint(new RangeConstraint(0, 10),
                         new IntModuloConstraint(2, 0)), TestClass.class
                         .getDeclaredField("runtimeField")),
             });
 
-        Collection<ParameterDescriptor> actual = ParameterDescriptorBuilder
+        Collection<AttributeDescriptor> actual = AttributeDescriptorBuilder
             .getParameterDescriptors(new TestSubclass(), Processing.class,
                 Input.class);
 
@@ -125,14 +125,14 @@ public class ParameterDescriptorBuilderTest
     public void testGetParametersInstance() throws SecurityException,
         NoSuchFieldException
     {
-        Collection<ParameterDescriptor> expected = Arrays
-            .asList(new ParameterDescriptor []
+        Collection<AttributeDescriptor> expected = Arrays
+            .asList(new AttributeDescriptor []
             {
-                new ParameterDescriptor("Test.instanceField", 5, null, TestClass.class
+                new AttributeDescriptor("Test.instanceField", 5, null, TestClass.class
                     .getDeclaredField("instanceField")),
             });
 
-        Collection<ParameterDescriptor> actual = ParameterDescriptorBuilder
+        Collection<AttributeDescriptor> actual = AttributeDescriptorBuilder
             .getParameterDescriptors(new TestClass(), Init.class, Input.class);
 
         Assert.assertEquals(expected, actual);
@@ -142,16 +142,16 @@ public class ParameterDescriptorBuilderTest
     public void testGetParametersInstanceForSubclass() throws SecurityException,
         NoSuchFieldException
     {
-        Collection<ParameterDescriptor> expected = Arrays
-            .asList(new ParameterDescriptor []
+        Collection<AttributeDescriptor> expected = Arrays
+            .asList(new AttributeDescriptor []
             {
-                new ParameterDescriptor("Test.subclassInstanceField", 5, null,
+                new AttributeDescriptor("Test.subclassInstanceField", 5, null,
                     TestSubclass.class.getDeclaredField("subclassInstanceField")),
-                new ParameterDescriptor("Test.instanceField", 5, null, TestClass.class
+                new AttributeDescriptor("Test.instanceField", 5, null, TestClass.class
                     .getDeclaredField("instanceField")),
             });
 
-        Collection<ParameterDescriptor> actual = ParameterDescriptorBuilder
+        Collection<AttributeDescriptor> actual = AttributeDescriptorBuilder
             .getParameterDescriptors(new TestSubclass(), Init.class, Input.class);
 
         Assert.assertEquals(expected, actual);

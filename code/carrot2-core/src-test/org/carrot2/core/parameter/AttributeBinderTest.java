@@ -10,7 +10,7 @@ import org.junit.Test;
 /**
  * 
  */
-public class ParameterBinderTest
+public class AttributeBinderTest
 {
     public static interface ITest
     {
@@ -21,7 +21,7 @@ public class ParameterBinderTest
     {
         @Init
         @Input
-        @Parameter
+        @Attribute
         private int testIntField = 5;
     }
 
@@ -30,7 +30,7 @@ public class ParameterBinderTest
     {
         @Init
         @Input
-        @Parameter
+        @Attribute
         private int testIntField = 10;
     }
 
@@ -39,18 +39,18 @@ public class ParameterBinderTest
     {
         @Init
         @Input
-        @Parameter
+        @Attribute
         @IntRange(min = 0, max = 10)
         protected int instanceIntField = 5;
 
         @Init
         @Input
-        @Parameter
+        @Attribute
         protected ITest instanceRefField = new TestImpl();
 
         @Processing
         @Input
-        @Parameter
+        @Attribute
         @IntRange(min = 0, max = 10)
         protected int runtimeIntField = 5;
     }
@@ -60,18 +60,18 @@ public class ParameterBinderTest
     {
         @Init
         @Input
-        @Parameter
+        @Attribute
         @IntRange(min = 0, max = 10)
         private int subclassInstanceIntField = 5;
 
         @Init
         @Input
-        @Parameter
+        @Attribute
         private ITest subclassInstanceRefField = new TestImpl();
 
         @Processing
         @Input
-        @Parameter
+        @Attribute
         @IntRange(min = 0, max = 10)
         @IntModulo(modulo = 2, offset = 1)
         private int subclassRuntimeIntField = 5;
@@ -82,7 +82,7 @@ public class ParameterBinderTest
     {
         @Processing
         @Input
-        @Parameter(key = "clone")
+        @Attribute(key = "clone")
         protected int runtimeIntField = 7;
     }
 
@@ -90,7 +90,7 @@ public class ParameterBinderTest
     {
         @Processing
         @Input
-        @Parameter
+        @Attribute
         private int test = 20;
     }
 
@@ -100,7 +100,7 @@ public class ParameterBinderTest
         final Map<String, Object> params = new HashMap<String, Object>();
         params.put("Test.instanceIntField", 6);
 
-        TestClass instance = ParameterBinder.createInstance(TestClass.class, params);
+        TestClass instance = AttributeBinder.createInstance(TestClass.class, params);
 
         assertEquals(6, instance.instanceIntField);
         assertTrue(instance.instanceRefField != null
@@ -116,7 +116,7 @@ public class ParameterBinderTest
         params.put("Test.subclassInstanceIntField", 6);
         params.put("Test.instanceIntField", 7);
 
-        TestSubclass instance = ParameterBinder
+        TestSubclass instance = AttributeBinder
             .createInstance(TestSubclass.class, params);
 
         assertEquals(6, instance.subclassInstanceIntField);
@@ -135,7 +135,7 @@ public class ParameterBinderTest
         final Map<String, Object> params = new HashMap<String, Object>();
         params.put("Test.instanceRefField", TestBetterImpl.class);
 
-        TestClass instance = ParameterBinder.createInstance(TestClass.class, params);
+        TestClass instance = AttributeBinder.createInstance(TestClass.class, params);
         assertEquals(5, instance.instanceIntField);
         assertTrue(instance.instanceRefField != null
             && instance.instanceRefField instanceof TestBetterImpl);
@@ -146,7 +146,7 @@ public class ParameterBinderTest
     @Test
     public void testRuntimeClassCoercionAttempt() throws InstantiationException
     {
-        TestClass instance = ParameterBinder.createInstance(TestClass.class, Collections
+        TestClass instance = AttributeBinder.createInstance(TestClass.class, Collections
             .<String, Object> emptyMap());
 
         final Map<String, Object> params = new HashMap<String, Object>();
@@ -154,7 +154,7 @@ public class ParameterBinderTest
 
         try
         {
-            ParameterBinder.bind(instance, params, Processing.class, Input.class);
+            AttributeBinder.bind(instance, params, Processing.class, Input.class);
             fail();
         }
         catch (RuntimeException e)
@@ -175,7 +175,7 @@ public class ParameterBinderTest
 
         try
         {
-            ParameterBinder.bind(instance, params, Processing.class, Input.class);
+            AttributeBinder.bind(instance, params, Processing.class, Input.class);
             fail();
         }
         catch (RuntimeException e)
@@ -192,10 +192,10 @@ public class ParameterBinderTest
         final Map<String, Object> params = new HashMap<String, Object>();
         params.put("Test.runtimeIntField", 6);
 
-        TestClass instance = ParameterBinder.createInstance(TestClass.class, params);
+        TestClass instance = AttributeBinder.createInstance(TestClass.class, params);
         assertEquals(5, instance.runtimeIntField);
 
-        ParameterBinder.bind(instance, params, Processing.class, Input.class);
+        AttributeBinder.bind(instance, params, Processing.class, Input.class);
         assertEquals(6, instance.runtimeIntField);
     }
 
@@ -206,12 +206,12 @@ public class ParameterBinderTest
         params.put("Test.runtimeIntField", 6);
         params.put("Test.subclassRuntimeIntField", 9);
 
-        TestSubclass instance = ParameterBinder
+        TestSubclass instance = AttributeBinder
             .createInstance(TestSubclass.class, params);
         assertEquals(5, instance.runtimeIntField);
         assertEquals(5, instance.subclassRuntimeIntField);
 
-        ParameterBinder.bind(instance, params, Processing.class, Input.class);
+        AttributeBinder.bind(instance, params, Processing.class, Input.class);
         assertEquals(6, instance.runtimeIntField);
         assertEquals(9, instance.subclassRuntimeIntField);
     }
@@ -223,12 +223,12 @@ public class ParameterBinderTest
         params.put("Test.runtimeIntField", 6);
         params.put("clone", 9);
 
-        TestSubclass2 instance = ParameterBinder.createInstance(TestSubclass2.class,
+        TestSubclass2 instance = AttributeBinder.createInstance(TestSubclass2.class,
             params);
         assertEquals(7, instance.runtimeIntField);
         assertEquals(5, ((TestClass) instance).runtimeIntField);
 
-        ParameterBinder.bind(instance, params, Processing.class, Input.class);
+        AttributeBinder.bind(instance, params, Processing.class, Input.class);
         assertEquals(6, ((TestClass) instance).runtimeIntField);
         assertEquals(9, instance.runtimeIntField);
     }
@@ -243,7 +243,7 @@ public class ParameterBinderTest
         TestClass instance;
         try
         {
-            instance = ParameterBinder.createInstance(TestClass.class, violatingParams);
+            instance = AttributeBinder.createInstance(TestClass.class, violatingParams);
             fail();
         }
         catch (ConstraintViolationException e)
@@ -251,12 +251,12 @@ public class ParameterBinderTest
             assertEquals(16, e.getOffendingValue());
         }
 
-        instance = ParameterBinder.createInstance(TestClass.class, Collections
+        instance = AttributeBinder.createInstance(TestClass.class, Collections
             .<String, Object> emptyMap());
 
         try
         {
-            ParameterBinder.bind(instance, violatingParams, Processing.class,
+            AttributeBinder.bind(instance, violatingParams, Processing.class,
                 Input.class);
             fail();
         }
@@ -276,7 +276,7 @@ public class ParameterBinderTest
         try
         {
             // First constraint violated
-            ParameterBinder.bind(instance, violatingParams, Processing.class,
+            AttributeBinder.bind(instance, violatingParams, Processing.class,
                 Input.class);
             fail();
         }
@@ -290,7 +290,7 @@ public class ParameterBinderTest
         try
         {
             // Second constraint violated
-            ParameterBinder.bind(instance, violatingParams, Processing.class,
+            AttributeBinder.bind(instance, violatingParams, Processing.class,
                 Input.class);
             fail();
         }

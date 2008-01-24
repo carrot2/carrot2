@@ -6,7 +6,7 @@ import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.ObjectUtils;
 import org.carrot2.core.constraint.Constraint;
 
-public class ParameterDescriptor
+public class AttributeDescriptor
 {
     public final String key;
     public final Class<?> type;
@@ -14,7 +14,7 @@ public class ParameterDescriptor
     public final Constraint constraint;
     final Field field;
 
-    ParameterDescriptor(String name, Object defaultValue, Constraint constraint,
+    AttributeDescriptor(String name, Object defaultValue, Constraint constraint,
         Field field)
     {
         if (name == null || field == null)
@@ -57,12 +57,12 @@ public class ParameterDescriptor
             return true;
         }
 
-        if (obj == null || !(obj instanceof ParameterDescriptor))
+        if (obj == null || !(obj instanceof AttributeDescriptor))
         {
             return false;
         }
 
-        ParameterDescriptor other = ((ParameterDescriptor) obj);
+        AttributeDescriptor other = ((AttributeDescriptor) obj);
         return other.key.equals(this.key) && other.type.equals(this.type)
             && ObjectUtils.equals(defaultValue, defaultValue)
             && ObjectUtils.equals(other.constraint, this.constraint);

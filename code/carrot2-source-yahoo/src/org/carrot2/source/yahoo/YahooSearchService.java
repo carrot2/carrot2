@@ -75,7 +75,7 @@ abstract class YahooSearchService
      */
     @Init
     @Input
-    @Parameter
+    @Attribute
     protected String appid = "carrotsearch";
 
     /**
@@ -83,7 +83,7 @@ abstract class YahooSearchService
      */
     @Init
     @Input
-    @Parameter
+    @Attribute
     public int resultsPerPage = 50;
 
     /**
@@ -91,7 +91,7 @@ abstract class YahooSearchService
      */
     @Init
     @Input
-    @Parameter
+    @Attribute
     public int maxResultIndex = 1000;
 
     /**
@@ -99,7 +99,7 @@ abstract class YahooSearchService
      */
     @Processing
     @Output
-    @Parameter
+    @Attribute
     private int requestCountTotal;
 
     /**
@@ -107,7 +107,7 @@ abstract class YahooSearchService
      */
     @Processing
     @Output
-    @Parameter
+    @Attribute
     private int requestCount;
 
     /**
@@ -116,7 +116,7 @@ abstract class YahooSearchService
      */
     @Processing
     @Output
-    @Parameter
+    @Attribute
     private long requestTimeSum;
 
     /**
@@ -124,7 +124,7 @@ abstract class YahooSearchService
      */
     @Processing
     @Output
-    @Parameter
+    @Attribute
     private long requestTimeMax;
     
     /**

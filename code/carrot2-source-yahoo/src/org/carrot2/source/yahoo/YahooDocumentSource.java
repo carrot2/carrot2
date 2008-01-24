@@ -29,34 +29,34 @@ public final class YahooDocumentSource extends SearchEngine
 
     @Init
     @Input
-    @Parameter
+    @Attribute
     private YahooSearchService service = new YahooWebSearchService();  
 
     @Processing
     @Input
-    @Parameter(key=AttributeNames.START)
+    @Attribute(key=AttributeNames.START)
     private int start = 0;
 
     @Processing
     @Input
-    @Parameter(key=AttributeNames.RESULTS)
+    @Attribute(key=AttributeNames.RESULTS)
     private int results = 100;
 
     @Processing
     @Input
-    @Parameter(key=AttributeNames.QUERY)
+    @Attribute(key=AttributeNames.QUERY)
     private String query;
 
     @SuppressWarnings("unused")
     @Processing
     @Output
-    @Parameter(key=AttributeNames.RESULTS_TOTAL)
+    @Attribute(key=AttributeNames.RESULTS_TOTAL)
     private long resultsTotal;
 
     @SuppressWarnings("unused")
     @Processing
     @Output
-    @Parameter(key=AttributeNames.DOCUMENTS)
+    @Attribute(key=AttributeNames.DOCUMENTS)
     private Collection<Document> documents;
 
     /**

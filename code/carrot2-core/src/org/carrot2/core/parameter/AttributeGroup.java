@@ -12,37 +12,37 @@ import java.util.*;
  * at runtime (and it is), then we should use a generic List interface instead of Collection. It doesn't
  * change much, really -- the methods are nearly all the same -- and List implies an ordering of elements.  
  */
-public class ParameterGroup
+public class AttributeGroup
 {
     /** Name of this parameter group */
     private final String name;
 
     /** A set of parameter subgroups */
-    private Collection<ParameterGroup> parameterGroups;
+    private Collection<AttributeGroup> attributeGroups;
 
     /** A set of parameters */
-    private Collection<ParameterDescriptor> parameters;
+    private Collection<AttributeDescriptor> parameters;
 
-    public ParameterGroup(String name)
+    public AttributeGroup(String name)
     {
         this.name = name;
-        this.parameters = new HashSet<ParameterDescriptor>();
-        this.parameterGroups = new HashSet<ParameterGroup>();
+        this.parameters = new HashSet<AttributeDescriptor>();
+        this.attributeGroups = new HashSet<AttributeGroup>();
     }
 
-    public void add(ParameterDescriptor... parametersToAdd)
+    public void add(AttributeDescriptor... parametersToAdd)
     {
         parameters.addAll(Arrays.asList(parametersToAdd));
     }
 
-    public void add(Collection<ParameterDescriptor> parametersToAdd)
+    public void add(Collection<AttributeDescriptor> parametersToAdd)
     {
         parameters.addAll(parametersToAdd);
     }
     
-    public void add(ParameterGroup... parameterGroupsToAdd)
+    public void add(AttributeGroup... parameterGroupsToAdd)
     {
-        parameterGroups.addAll(Arrays.asList(parameterGroupsToAdd));
+        attributeGroups.addAll(Arrays.asList(parameterGroupsToAdd));
     }
 
     public String getName()
@@ -50,14 +50,14 @@ public class ParameterGroup
         return name;
     }
 
-    public Collection<ParameterDescriptor> getParameters()
+    public Collection<AttributeDescriptor> getParameters()
     {
         return Collections.unmodifiableCollection(parameters);
     }
 
-    public Collection<ParameterGroup> getParameterGroups()
+    public Collection<AttributeGroup> getParameterGroups()
     {
-        return Collections.unmodifiableCollection(parameterGroups);
+        return Collections.unmodifiableCollection(attributeGroups);
     }
 
     @Override
@@ -65,6 +65,6 @@ public class ParameterGroup
     {
         return "[ParamGroup name=" + name + ", params: "
             + Arrays.toString(parameters.toArray()) + ", subgroups: "
-            + Arrays.toString(parameterGroups.toArray()) + "]";
+            + Arrays.toString(attributeGroups.toArray()) + "]";
     }
 }

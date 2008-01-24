@@ -3,7 +3,7 @@ package org.carrot2.core.controller;
 import java.util.Map;
 
 import org.carrot2.core.*;
-import org.carrot2.core.parameter.ParameterBinder;
+import org.carrot2.core.parameter.AttributeBinder;
 
 /**
  * <p>
@@ -48,7 +48,7 @@ public final class SimpleController
         {
             try
             {
-                processingComponents[i] = (ProcessingComponent) ParameterBinder
+                processingComponents[i] = (ProcessingComponent) AttributeBinder
                     .createInstance(processingComponentClasses[i], attributes);
             }
             catch (InstantiationException e)

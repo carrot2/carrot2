@@ -20,37 +20,37 @@ public class SimpleControllerBenchmark
     {
         @Processing
         @Input
-        @Parameter
+        @Attribute
         private int intParameter1 = 0;
 
         @Processing
         @Input
-        @Parameter
+        @Attribute
         private double doubleParameter1 = 1.0;
 
         @Processing
         @Input
-        @Parameter
+        @Attribute
         private String stringParameter1 = "test";
 
         @Processing
         @Input
-        @Parameter
+        @Attribute
         private boolean booleanParameter1 = false;
 
         @Processing
         @Input
-        @Parameter(key = "in1")
+        @Attribute(key = "in1")
         private List<String> inAttribute = new ArrayList<String>();
 
         @Processing
         @Output
-        @Parameter(key = "out2")
+        @Attribute(key = "out2")
         private List<String> outAttribute = new ArrayList<String>();
 
         @Processing
         @Output
-        @Parameter(key = "debug2")
+        @Attribute(key = "debug2")
         private List<String> debugAttribute = new ArrayList<String>();
     }
 
@@ -59,37 +59,37 @@ public class SimpleControllerBenchmark
     {
         @Processing
         @Input
-        @Parameter
+        @Attribute
         private int intParameter2 = 0;
 
         @Processing
         @Input
-        @Parameter
+        @Attribute
         private double doubleParameter2 = 1.0;
 
         @Processing
         @Input
-        @Parameter
+        @Attribute
         private String stringParameter2 = "test";
 
         @Processing
         @Input
-        @Parameter
+        @Attribute
         private boolean booleanParameter2 = false;
 
         @Processing
         @Input
-        @Parameter(key = "in2")
+        @Attribute(key = "in2")
         private List<String> inAttribute = new ArrayList<String>();
 
         @Processing
         @Output
-        @Parameter(key = "out2")
+        @Attribute(key = "out2")
         private List<String> outAttribute = new ArrayList<String>();
 
         @Processing
         @Output
-        @Parameter(key = "debug2")
+        @Attribute(key = "debug2")
         private List<String> debugAttribute = new ArrayList<String>();
     }
 

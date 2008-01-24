@@ -38,7 +38,7 @@ final class ControllerUtils
 
             processingComponent.init();
 
-            ParameterBinder.bind(processingComponent, attributes, Init.class,
+            AttributeBinder.bind(processingComponent, attributes, Init.class,
                 Output.class);
         }
         catch (InstantiationException e)
@@ -57,7 +57,7 @@ final class ControllerUtils
         // Bind runtime parameters to the component.
         try
         {
-            ParameterBinder.bind(processingComponent, attributes, Processing.class,
+            AttributeBinder.bind(processingComponent, attributes, Processing.class,
                 Input.class);
 
             processingComponent.beforeProcessing();
@@ -88,7 +88,7 @@ final class ControllerUtils
         {
             processingComponent.afterProcessing();
 
-            ParameterBinder.bind(processingComponent, attributes, Processing.class,
+            AttributeBinder.bind(processingComponent, attributes, Processing.class,
                 Output.class);
         }
         catch (InstantiationException e)

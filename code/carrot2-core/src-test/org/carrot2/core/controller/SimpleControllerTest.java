@@ -34,7 +34,7 @@ public class SimpleControllerTest
     {
         @Init
         @Input
-        @Parameter(key = "delegate1")
+        @Attribute(key = "delegate1")
         private ProcessingComponent delegate1;
 
         @Override
@@ -49,7 +49,7 @@ public class SimpleControllerTest
     {
         @Init
         @Input
-        @Parameter(key = "delegate2")
+        @Attribute(key = "delegate2")
         private ProcessingComponent delegate2;
 
         @Override
@@ -64,7 +64,7 @@ public class SimpleControllerTest
     {
         @Init
         @Input
-        @Parameter(key = "delegate3")
+        @Attribute(key = "delegate3")
         private ProcessingComponent delegate3;
 
         @Override

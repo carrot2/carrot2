@@ -10,17 +10,17 @@ import org.carrot2.core.constraint.*;
 /**
  * 
  */
-public class ParameterDescriptorBuilder
+public class AttributeDescriptorBuilder
 {
     /**
      *
      */
-    public static Collection<ParameterDescriptor> getParameterDescriptors(
+    public static Collection<AttributeDescriptor> getParameterDescriptors(
         Object instance, Class<? extends Annotation> bindingTimeAnnotation,
         Class<? extends Annotation> bindingDirectionAnnotation)
     {
         // Output array of parameters.
-        final ArrayList<ParameterDescriptor> params = new ArrayList<ParameterDescriptor>();
+        final ArrayList<AttributeDescriptor> params = new ArrayList<AttributeDescriptor>();
 
         // Get the field names that correspond to the requested policy.
         final Collection<Field> bindableFields = getParameterFieldMap(
@@ -44,7 +44,7 @@ public class ParameterDescriptorBuilder
                     + fieldName);
             }
 
-            params.add(new ParameterDescriptor(fieldName, fieldValue, constraint, field));
+            params.add(new AttributeDescriptor(fieldName, fieldValue, constraint, field));
         }
 
         return params;
@@ -67,7 +67,7 @@ public class ParameterDescriptorBuilder
         {
             // For binding time and direction we only need to check if we receive
             // a non-value -- this means the field has the annotation we want
-            if (field.getAnnotation(Parameter.class) == null
+            if (field.getAnnotation(Attribute.class) == null
                 || field.getAnnotation(bindingDirectionAnnotation) == null
                 || field.getAnnotation(bindingTimeAnnotation) == null)
             {

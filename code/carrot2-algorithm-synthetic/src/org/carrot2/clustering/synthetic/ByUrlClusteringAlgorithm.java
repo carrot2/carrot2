@@ -28,13 +28,13 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
 
     @Processing
     @Input
-    @Parameter(key = AttributeNames.DOCUMENTS)
+    @Attribute(key = AttributeNames.DOCUMENTS)
     private Collection<Document> documents = Collections.<Document> emptyList();
 
     @SuppressWarnings("unused")
     @Processing
     @Output
-    @Parameter(key = AttributeNames.CLUSTERS)
+    @Attribute(key = AttributeNames.CLUSTERS)
     private Collection<Cluster> clusters = null;
 
     /*
