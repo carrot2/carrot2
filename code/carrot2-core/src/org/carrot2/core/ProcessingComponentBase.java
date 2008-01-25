@@ -7,7 +7,7 @@ package org.carrot2.core;
 public abstract class ProcessingComponentBase implements ProcessingComponent
 {
     @Override
-    public void init() throws InitializationException
+    public void init()
     {
     }
 

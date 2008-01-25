@@ -1,7 +1,3 @@
-/**
- * TODO: This may sound a little fetishistic, but this package should probably be called
- * something like "bindables" or "bindable".
- */
 package org.carrot2.core.attribute;
 
 import java.lang.annotation.ElementType;

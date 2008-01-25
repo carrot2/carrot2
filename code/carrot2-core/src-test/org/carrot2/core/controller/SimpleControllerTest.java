@@ -173,7 +173,7 @@ public class SimpleControllerTest
             ProcessingComponentWithoutDefaultConstructor.class);
     }
 
-    @Test(expected = InitializationException.class)
+    @Test(expected = ComponentInitializationException.class)
     public void testExceptionWhileInit()
     {
         // We need to initialize classes and delegates manually here
@@ -186,7 +186,7 @@ public class SimpleControllerTest
 
         processingComponent1Mock.init();
         processingComponent2Mock.init();
-        mocksControl.andThrow(new InitializationException(null));
+        mocksControl.andThrow(new ComponentInitializationException((String)null));
         processingComponent1Mock.dispose();
         processingComponent2Mock.dispose();
         processingComponent3Mock.dispose();

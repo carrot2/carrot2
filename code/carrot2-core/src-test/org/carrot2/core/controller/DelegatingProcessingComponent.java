@@ -27,7 +27,7 @@ public abstract class DelegatingProcessingComponent implements ProcessingCompone
     private String data;
 
     @Override
-    public void init() throws InitializationException
+    public void init()
     {
         getDelegate().init();
     }

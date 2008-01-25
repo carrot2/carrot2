@@ -3,6 +3,8 @@
  */
 package org.carrot2.core;
 
+import org.carrot2.core.attribute.Input;
+import org.carrot2.core.attribute.Processing;
 import org.carrot2.core.controller.SimpleController;
 
 /**
@@ -15,7 +17,11 @@ import org.carrot2.core.controller.SimpleController;
  * and cons. It isn't hard to imagine a public parameterless constructor simply calling
  * some private <code>reset()</code> method to reset field values to defaults. The
  * controller could reset field values to their original values, although there will be
- * problems with object references (which cannot be easily recreated).
+ * problems with object references (which cannot be easily recreated). [SO] Absolutely, we
+ * must have this if we want to have a controller that pools component instances. In this
+ * case we could read values of {@link Processing} {@link Input} attributes after
+ * component is initialized (but before it serves any request) and then restore these
+ * values after the request is handled.
  */
 public interface ProcessingComponent
 {
