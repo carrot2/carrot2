@@ -3,8 +3,11 @@ package org.carrot2.source.yahoo;
 import java.util.ArrayList;
 
 import org.apache.commons.httpclient.NameValuePair;
-import org.apache.log4j.Logger;
-import org.carrot2.core.attribute.*;
+import org.carrot2.core.attribute.Attribute;
+import org.carrot2.core.attribute.Bindable;
+import org.carrot2.core.attribute.Init;
+import org.carrot2.core.attribute.Input;
+import org.carrot2.core.attribute.Processing;
 
 /**
  * Sends queries to Yahoo! News search service. Instances of this class are
@@ -17,9 +20,6 @@ import org.carrot2.core.attribute.*;
 @Bindable
 public final class YahooNewsSearchService extends YahooSearchService
 {
-    /** Logger for this class. */
-    static final Logger logger = Logger.getLogger(YahooNewsSearchService.class);
-
     /** */
     public enum SortType {
         RANK { public String toString() { return "rank"; } },

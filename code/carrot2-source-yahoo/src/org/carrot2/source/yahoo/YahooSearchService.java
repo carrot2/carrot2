@@ -177,7 +177,10 @@ abstract class YahooSearchService
             params.add(new NameValuePair("output", "xml"));
             request.setQueryString(params.toArray(new NameValuePair [params.size()]));
     
-            logger.info("Request params: " + request.getQueryString());
+            if (logger.isInfoEnabled())
+            {
+                logger.info("Request params: " + request.getQueryString());
+            }
             final int statusCode = client.executeMethod(request);
     
             // Unwrap compressed streams.
