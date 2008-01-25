@@ -28,14 +28,11 @@ final class ControllerUtils
     public static void init(ProcessingComponent processingComponent,
         Map<String, Object> attributes) throws ProcessingException
     {
-        // Bind runtime parameters to the component.
         try
         {
-            // TODO: this is currently done in ParameterBinder, but I'm not sure if
-            // it should be there...
-//            ParameterBinder
-//                .bind(processingComponent, attributes, Init.class, Input.class);
-
+            AttributeBinder
+                .bind(processingComponent, attributes, Init.class, Input.class);
+            
             processingComponent.init();
 
             AttributeBinder.bind(processingComponent, attributes, Init.class,
@@ -54,7 +51,6 @@ final class ControllerUtils
     public static void beforeProcessing(ProcessingComponent processingComponent,
         Map<String, Object> attributes) throws ProcessingException
     {
-        // Bind runtime parameters to the component.
         try
         {
             AttributeBinder.bind(processingComponent, attributes, Processing.class,

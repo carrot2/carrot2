@@ -22,7 +22,7 @@ public class ConstraintViolationException extends RuntimeException
     @Override
     public String getMessage()
     {
-        return "Value: " + offendingValue + " of parameter: " + key
+        return "Value: " + offendingValue + " of attribute: " + key
             + " violates constraint: " + constraint;
     }
 

@@ -3,63 +3,37 @@
  */
 package org.carrot2.core;
 
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
-import org.carrot2.core.attribute.*;
+import org.carrot2.core.controller.SimpleController;
+import org.junit.Before;
 
 /**
- * TODO: This class seems to be specific to clustering algorithms rather than any
- * processing component. Also, I would vote strongly for using full component life cycle
- * rather than calling life cycle methods directly.
+ * A very basic base class for testing {@link ProcessingComponent}s. This class provides
+ * an instance of {@link SimpleController}, a map for attributes and a method that
+ * initializes them.
  */
 public abstract class ProcessingComponentTest<T extends ProcessingComponent>
 {
-    public abstract Class<? extends ClusteringAlgorithm> getProcessingComponentClass();
+    /** Controller used for tests. */
+    protected SimpleController controller;
 
-    public Map<String, Object> getInstanceParameters()
-    {
-        return Collections.<String, Object> emptyMap();
-    }
-
-    /**
-     * Creates and initializes an instance of the processing component.
-     */
-    @SuppressWarnings("unchecked")
-    public T createInstance()
-    {
-        try
-        {
-            final ClusteringAlgorithm instance = AttributeBinder.createInstance(
-                getProcessingComponentClass(), getInstanceParameters());
-
-            instance.init();
-
-            return (T) instance;
-        }
-        catch (InstantiationException e)
-        {
-            throw new RuntimeException(e);
-        }
-    }
+    /** A map of attributes used for tests. */
+    protected Map<String, Object> attributes;
 
     /**
-     * Initializes an instance of a clustering algorithm.
+     * @return Return the class of the component being tested.
      */
-    @SuppressWarnings("unchecked")
-    public T initInstance(ClusteringAlgorithm instance)
-    {
-        try
-        {
-            AttributeBinder.bind(instance, getInstanceParameters(), Init.class,
-                Input.class);
-            instance.init();
-        }
-        catch (InstantiationException e)
-        {
-            throw new RuntimeException(e);
-        }
-        return (T) instance;
-    }
+    public abstract Class<T> getComponentClass();
 
+    /**
+     * Controller and attributes are cleared before every test.
+     */
+    @Before
+    public void prepareComponent()
+    {
+        this.controller = new SimpleController();
+        this.attributes = new HashMap<String, Object>();
+    }
 }

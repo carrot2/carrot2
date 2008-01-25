@@ -13,7 +13,7 @@ import org.carrot2.core.attribute.Processing;
  * Sends queries to Yahoo! News search service. Instances of this class are
  * thread-safe.
  * <p>
- * Parameters of this class correspond to Yahoo's documentation (see links below).
+ * Attributes of this class correspond to Yahoo's documentation (see links below).
  * 
  * @see http://com3.devnet.re3.yahoo.com/search/news/V1/newsSearch.html 
  */

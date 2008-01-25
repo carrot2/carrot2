@@ -16,27 +16,28 @@ import org.carrot2.core.attribute.*;
 public class SimpleControllerBenchmark
 {
     @Bindable
+    @SuppressWarnings("unused")
     public static class ProcessingComponent1 extends ProcessingComponentBase
     {
         @Processing
         @Input
         @Attribute
-        private int intParameter1 = 0;
+        private int int1 = 0;
 
         @Processing
         @Input
         @Attribute
-        private double doubleParameter1 = 1.0;
+        private double double1 = 1.0;
 
         @Processing
         @Input
         @Attribute
-        private String stringParameter1 = "test";
+        private String string1 = "test";
 
         @Processing
         @Input
         @Attribute
-        private boolean booleanParameter1 = false;
+        private boolean boolean1 = false;
 
         @Processing
         @Input
@@ -55,27 +56,28 @@ public class SimpleControllerBenchmark
     }
 
     @Bindable
+    @SuppressWarnings("unused")
     public static class ProcessingComponent2 extends ProcessingComponentBase
     {
         @Processing
         @Input
         @Attribute
-        private int intParameter2 = 0;
+        private int int2 = 0;
 
         @Processing
         @Input
         @Attribute
-        private double doubleParameter2 = 1.0;
+        private double double2 = 1.0;
 
         @Processing
         @Input
         @Attribute
-        private String stringParameter2 = "test";
+        private String string2 = "test";
 
         @Processing
         @Input
         @Attribute
-        private boolean booleanParameter2 = false;
+        private boolean boolean2 = false;
 
         @Processing
         @Input
@@ -97,22 +99,22 @@ public class SimpleControllerBenchmark
     {
         SimpleController controller = new SimpleController();
 
-        final int requests = 10000;
+        final int requests = 100000;
 
         long start = System.currentTimeMillis();
 
         for (int i = 0; i < requests; i++)
         {
             Map<String, Object> attributes = new HashMap<String, Object>();
-            attributes.put("intParameter1", 1);
-            attributes.put("intParameter2", 1);
-            attributes.put("doubleParameter1", 1.0);
-            attributes.put("doubleParameter2", 2.0);
-            attributes.put("stringParameter1", "t");
-            attributes.put("stringParameter2", "z");
-            attributes.put("booleanParameter1", false);
-            attributes.put("booleanParameter2", true);
-            attributes.put("in1", "t");
+            attributes.put("int1", 1);
+            attributes.put("int2", 1);
+            attributes.put("double1", 1.0);
+            attributes.put("double2", 2.0);
+            attributes.put("string1", "t");
+            attributes.put("string2", "z");
+            attributes.put("boolean1", false);
+            attributes.put("boolean2", true);
+            attributes.put("in1", null);
 
             controller.process(attributes, ProcessingComponent1.class,
                 ProcessingComponent2.class);

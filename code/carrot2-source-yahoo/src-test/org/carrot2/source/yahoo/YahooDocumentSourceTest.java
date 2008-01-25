@@ -54,7 +54,7 @@ public class YahooDocumentSourceTest extends DocumentSourceTest<YahooDocumentSou
         attributes.put("search-mode", SearchMode.CONSERVATIVE);
 
         assertEquals(0, runQuery("duiogig oiudgisugviw siug iugw iusviuwg", 100));
-        assertEquals(1, (Integer) attributes.get(YahooSearchService.class.getName() + ".requestCount"));
+        assertEquals(1, attributes.get(YahooSearchService.class.getName() + ".requestCount"));
     }
 
     @Test
@@ -63,7 +63,7 @@ public class YahooDocumentSourceTest extends DocumentSourceTest<YahooDocumentSou
         attributes.put("search-mode", SearchMode.SPECULATIVE);
 
         assertEquals(0, runQuery("duiogig oiudgisugviw siug iugw iusviuwg", 100));
-        assertEquals(2, (Integer) attributes.get(YahooSearchService.class.getName() + ".requestCount"));
+        assertEquals(2, attributes.get(YahooSearchService.class.getName() + ".requestCount"));
     }
     
     @Test
@@ -76,7 +76,7 @@ public class YahooDocumentSourceTest extends DocumentSourceTest<YahooDocumentSou
     }
 
     @Override
-    public Class<? extends DocumentSource> getComponentClass()
+    public Class<YahooDocumentSource> getComponentClass()
     {
         return YahooDocumentSource.class;
     }

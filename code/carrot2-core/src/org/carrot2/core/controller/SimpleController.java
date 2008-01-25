@@ -3,7 +3,6 @@ package org.carrot2.core.controller;
 import java.util.Map;
 
 import org.carrot2.core.*;
-import org.carrot2.core.attribute.AttributeBinder;
 
 /**
  * <p>
@@ -48,10 +47,16 @@ public final class SimpleController
         {
             try
             {
-                processingComponents[i] = (ProcessingComponent) AttributeBinder
-                    .createInstance(processingComponentClasses[i], attributes);
+                processingComponents[i] = (ProcessingComponent) processingComponentClasses[i]
+                    .newInstance();
             }
             catch (InstantiationException e)
+            {
+                throw new ComponentInitializationException(
+                    "Could not instantiate component class: "
+                        + processingComponentClasses[i].getName(), e);
+            }
+            catch (IllegalAccessException e)
             {
                 throw new ComponentInitializationException(
                     "Could not instantiate component class: "

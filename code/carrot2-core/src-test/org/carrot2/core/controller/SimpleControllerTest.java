@@ -117,8 +117,8 @@ public class SimpleControllerTest
 
         mocksControl.replay();
 
-        attributes.put("instanceParameter", "i");
-        attributes.put("runtimeParameter", "r");
+        attributes.put("instanceAttribute", "i");
+        attributes.put("runtimeAttribute", "r");
         attributes.put("data", "d");
 
         controller.process(attributes, ProcessingComponent1.class);
@@ -153,8 +153,8 @@ public class SimpleControllerTest
 
         mocksControl.replay();
 
-        attributes.put("instanceParameter", "i");
-        attributes.put("runtimeParameter", "r");
+        attributes.put("instanceAttribute", "i");
+        attributes.put("runtimeAttribute", "r");
 
         attributes.put("data", "d");
 

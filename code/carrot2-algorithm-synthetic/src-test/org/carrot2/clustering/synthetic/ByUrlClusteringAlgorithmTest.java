@@ -3,7 +3,8 @@
  */
 package org.carrot2.clustering.synthetic;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 import java.util.*;
 
@@ -17,7 +18,7 @@ public class ByUrlClusteringAlgorithmTest extends
     ClusteringAlgorithmTest<ByUrlClusteringAlgorithm>
 {
     @Override
-    public Class<? extends ClusteringAlgorithm> getProcessingComponentClass()
+    public Class<ByUrlClusteringAlgorithm> getComponentClass()
     {
         return ByUrlClusteringAlgorithm.class;
     }
@@ -31,7 +32,7 @@ public class ByUrlClusteringAlgorithmTest extends
                 "cos.pl", "http://cos.pl/cos", "cos.pl/cos", "http://", null
             });
 
-        ByUrlClusteringAlgorithm instance = createInstance();
+        ByUrlClusteringAlgorithm instance = new ByUrlClusteringAlgorithm();
 
         String [][] actualUrlParts = instance.buildUrlParts(docs
             .toArray(new Document [docs.size()]));

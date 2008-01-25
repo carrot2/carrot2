@@ -3,41 +3,12 @@
  */
 package org.carrot2.core;
 
+import org.carrot2.core.controller.SimpleController;
 
 /**
- * Defines the life cycle of a Carrot<sup>2</sup> processing component.
+ * Defines the life cycle of a Carrot<sup>2</sup> processing component. See
+ * {@link SimpleController} for a reference impelementation of componenty life cycle.
  * <p>
- * Any controller should invoke methods of a {@link ProcessingComponent} according to the
- * following pseudo-code (see methods for detailed description of each step):
- * 
- * <pre>
- * Map parameters = ...;
- * 
- * ProcessingComponent component = newInstance();
- * bindParameters(component, parameters, {@link BindingPolicy#INSTANTIATION});
- * component.{@link #init()};
- * 
- * while (pendingRequests())
- * {
- *     Map attributes = ...;
- *     
- *     bindParameters(component, parameters, {@link BindingPolicy#RUNTIME});
- *     bindAttributes(component, attributes, 
- *         {@link BindingDirection#IN}, {@link BindingDirection#INOUT});
- *     component.{@link #beforeProcessing()};
- * 
- *     try {
- *         component.{@link #process()};
- *         bindAttributes(component, attributes, 
- *             {@link BindingDirection#INOUT}, {@link BindingDirection#OUT});
- *     } finally {
- *         component.afterProcessing();
- *     }
- * }
- * 
- * component.{@link #dispose()};
- * </pre>
- * 
  * TODO: Would it be beneficial to have the controller 'clean up' attribute values to
  * their defaults? Currently the values in component fields remain there after processing
  * is finished and {@link #afterProcessing()} method should do the cleanup. There are pros
@@ -49,7 +20,7 @@ package org.carrot2.core;
 public interface ProcessingComponent
 {
     /**
-     * Invoked after the {@link BindingPolicy#INSTANTIATION} time parameters have been
+     * Invoked after the {@link BindingPolicy#INSTANTIATION} time attributes have been
      * bound. This method is called once in the life time of a processing component
      * object.
      * 
@@ -58,14 +29,14 @@ public interface ProcessingComponent
     public void init() throws ComponentInitializationException;
 
     /**
-     * AOP-style hook invoked after the {@link BindingPolicy#RUNTIME} parameters and
+     * AOP-style hook invoked after the {@link BindingPolicy#RUNTIME} attributes and
      * {@link BindingDirection#IN} and {@link BindingDirection#INOUT} attributes have been
      * bound, but before a call to {@link #process()}. In this method, the processing
-     * component should perform any initializations based on the runtime parameters. This
+     * component should perform any initializations based on the runtime attributes. This
      * method is called once per request cycle described in the class header.
      * 
      * @throws ProcessingException when processing cannot be performed (e.g. some
-     *             parameters are not bound)
+     *             attributess cannot be bound)
      */
     public void beforeProcessing() throws ProcessingException;
 

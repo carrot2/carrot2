@@ -40,7 +40,7 @@ public class AttributeBinder
             throw new IllegalArgumentException("Class is not bindable: "
                 + instance.getClass().getName());
         }
-        
+
         // To detect circulare references
         boundInstances.add(instance);
 
@@ -78,13 +78,20 @@ public class AttributeBinder
                         Class<?> clazz = ((Class<?>) value);
                         try
                         {
-                            value = createInstance(clazz, values);
+                            value = clazz.newInstance();
+                            bind(value, values, Init.class, Input.class);
                         }
                         catch (InstantiationException e)
                         {
                             throw new InstantiationException(
                                 "Could not create instance of class: " + clazz.getName()
-                                    + " for parameter " + key);
+                                    + " for attribute " + key);
+                        }
+                        catch (IllegalAccessException e)
+                        {
+                            throw new InstantiationException(
+                                "Could not create instance of class: " + clazz.getName()
+                                    + " for attribute " + key);
                         }
                     }
 
@@ -155,32 +162,10 @@ public class AttributeBinder
                     throw new UnsupportedOperationException(
                         "Binding circular references not is supported");
                 }
-                
+
                 // Recursively descend into other types.
                 bind(value, values, bindingTimeAnnotation, bindingDirectionAnnotation);
             }
         }
-    }
-
-    /**
-     * Create an instance of a given class and initialize it with default values of
-     * instance-time binding parameters ({@link BindingPolicy#INSTANTIATION}).
-     */
-    public static <T> T createInstance(Class<T> clazz, Map<String, Object> values)
-        throws InstantiationException
-    {
-        final T instance;
-        try
-        {
-            instance = clazz.newInstance();
-        }
-        catch (IllegalAccessException e)
-        {
-            throw new InstantiationException("Could not create instance: " + e);
-        }
-
-        bind(instance, values, Init.class, Input.class);
-
-        return instance;
     }
 }
