@@ -70,6 +70,22 @@ final class BindableUtils
         }
     }
 
+    public static String getKey(Class<?> clazz, String fieldName)
+    {
+        try
+        {
+            return getKey(clazz.getDeclaredField(fieldName));
+        }
+        catch (SecurityException e)
+        {
+            throw new RuntimeException(e);
+        }
+        catch (NoSuchFieldException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
     /**
      *
      */

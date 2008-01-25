@@ -2,8 +2,7 @@ package org.carrot2.core.attribute;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 
 import org.carrot2.core.constraint.Constraint;
 import org.carrot2.core.constraint.ConstraintViolationException;
@@ -26,12 +25,24 @@ public class AttributeBinder
         Class<? extends Annotation> bindingDirectionAnnotation)
         throws InstantiationException
     {
+        bind(instance, values, bindingTimeAnnotation, bindingDirectionAnnotation,
+            new HashSet<Object>());
+    }
+
+    static <T> void bind(T instance, Map<String, Object> values,
+        Class<? extends Annotation> bindingTimeAnnotation,
+        Class<? extends Annotation> bindingDirectionAnnotation, Set<Object> boundInstances)
+        throws InstantiationException
+    {
         // We can only bind values on classes that are @Bindable
         if (instance.getClass().getAnnotation(Bindable.class) == null)
         {
             throw new IllegalArgumentException("Class is not bindable: "
                 + instance.getClass().getName());
         }
+        
+        // To detect circulare references
+        boundInstances.add(instance);
 
         // Get all fields (including those from bindable super classes)
         final Collection<Field> fieldSet = BindableUtils
@@ -138,6 +149,13 @@ public class AttributeBinder
             // If value is not null and its class is @Bindable, we must descend into it
             if (value != null && value.getClass().getAnnotation(Bindable.class) != null)
             {
+                // Check for circular references
+                if (boundInstances.contains(value))
+                {
+                    throw new UnsupportedOperationException(
+                        "Binding circular references not is supported");
+                }
+                
                 // Recursively descend into other types.
                 bind(value, values, bindingTimeAnnotation, bindingDirectionAnnotation);
             }
