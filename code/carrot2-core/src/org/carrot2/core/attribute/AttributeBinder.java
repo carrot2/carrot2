@@ -12,13 +12,16 @@ public class AttributeBinder
     /**
      * Contract:
      * <ul>
-     * <li>Attributes are optional</li>
+     * <li>Attributes annotations are required</li>
+     * <li>Either Input or Output annotation is required</li>
+     * <li>Either Init or Processing annotation is required</li>
      * <li>Attributes don't have to have default values</li>
      * <li>Map can contain null values, these will be transferred to the fields</li>
      * <li>If the map doesn't have a mapping for some key, the corresponding field will
      * not be changed</li>
      * <li>Class coercion is also performed for all binding times</li>
      * </ul>
+     * TODO: provide proper docs for AttributeBinder
      */
     public static <T> void bind(T instance, Map<String, Object> values,
         Class<? extends Annotation> bindingTimeAnnotation,
@@ -41,7 +44,7 @@ public class AttributeBinder
                 + instance.getClass().getName());
         }
 
-        // To detect circulare references
+        // For keeping track of circular references
         boundInstances.add(instance);
 
         // Get all fields (including those from bindable super classes)
@@ -54,7 +57,8 @@ public class AttributeBinder
             Object value = null;
 
             // We skip fields that do not have the required binding time
-            if (!(field.getAnnotation(bindingTimeAnnotation) == null))
+            if (hasAllRequiredAnnotations(field)
+                && (!(field.getAnnotation(bindingTimeAnnotation) == null)))
             {
                 // Choose the right direction
                 if (Input.class.equals(bindingDirectionAnnotation)
@@ -141,6 +145,7 @@ public class AttributeBinder
             }
             else
             {
+                // Just get the @Bindable value to perform a recursive call on it below
                 try
                 {
                     field.setAccessible(true);
@@ -167,5 +172,53 @@ public class AttributeBinder
                 bind(value, values, bindingTimeAnnotation, bindingDirectionAnnotation);
             }
         }
+    }
+
+    /**
+     * Checks if all required annotations are provided.
+     * 
+     * @return <code>true</code> if the field has all required annotations
+     * @throws IllegalArgumentException in case of any missing annotations to ease
+     *             debugging
+     */
+    private static boolean hasAllRequiredAnnotations(Field field)
+    {
+        boolean hasAttribute = field.getAnnotation(Attribute.class) != null;
+        boolean hasBindingDirection = field.getAnnotation(Input.class) != null
+            || field.getAnnotation(Output.class) != null;
+        boolean hasBindingTime = field.getAnnotation(Init.class) != null
+            || field.getAnnotation(Processing.class) != null;
+
+        if (hasAttribute)
+        {
+            if (!hasBindingDirection)
+            {
+                throw new IllegalArgumentException(
+                    "Define binding direction annotation (@"
+                        + Input.class.getSimpleName() + " or @"
+                        + Output.class.getSimpleName() + ") for field "
+                        + field.getClass().getName() + "#" + field.getName());
+            }
+
+            if (!hasBindingTime)
+            {
+                throw new IllegalArgumentException("Define binding time annotation (@"
+                    + Init.class.getSimpleName() + " or @"
+                    + Processing.class.getSimpleName() + ") for field "
+                    + field.getClass().getName() + "#" + field.getName());
+            }
+        }
+        else
+        {
+            if (hasBindingDirection || hasBindingTime)
+            {
+                throw new IllegalArgumentException(
+                    "Binding time or direction defined for a field (" + field.getClass()
+                        + "#" + field.getName() + ") that does not have an @"
+                        + Attribute.class.getSimpleName() + " annotation");
+            }
+        }
+
+        return hasAttribute;
     }
 }

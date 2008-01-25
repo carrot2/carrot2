@@ -88,9 +88,9 @@ public class SimpleControllerTest
     {
         mocksControl = createStrictControl();
 
-        processingComponent1Mock = mocksControl.createMock(DocumentSource.class);
-        processingComponent2Mock = mocksControl.createMock(DocumentSource.class);
-        processingComponent3Mock = mocksControl.createMock(DocumentSource.class);
+        processingComponent1Mock = mocksControl.createMock(ProcessingComponent.class);
+        processingComponent2Mock = mocksControl.createMock(ProcessingComponent.class);
+        processingComponent3Mock = mocksControl.createMock(ProcessingComponent.class);
 
         attributes = new HashMap<String, Object>();
         attributes.put("delegate1", processingComponent1Mock);
@@ -173,12 +173,17 @@ public class SimpleControllerTest
             ProcessingComponentWithoutDefaultConstructor.class);
     }
 
-    // TODO: The tests below fail for me. Is there anything special
-    // about them?
-
     @Test(expected = InitializationException.class)
     public void testExceptionWhileInit()
     {
+        // We need to initialize classes and delegates manually here
+        ProcessingComponent1 processingComponent1 = new ProcessingComponent1();
+        ProcessingComponent2 processingComponent2 = new ProcessingComponent2();
+        ProcessingComponent3 processingComponent3 = new ProcessingComponent3();
+        processingComponent1.delegate1 = processingComponent1Mock;
+        processingComponent2.delegate2 = processingComponent2Mock;
+        processingComponent3.delegate3 = processingComponent3Mock;
+
         processingComponent1Mock.init();
         processingComponent2Mock.init();
         mocksControl.andThrow(new InitializationException(null));
@@ -187,8 +192,8 @@ public class SimpleControllerTest
         processingComponent3Mock.dispose();
         mocksControl.replay();
 
-        controller.process(attributes, ProcessingComponent1.class,
-            ProcessingComponent2.class, ProcessingComponent3.class);
+        controller.process(attributes, processingComponent1, processingComponent2,
+            processingComponent3);
     }
 
     @Test(expected = ProcessingException.class)

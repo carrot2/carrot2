@@ -178,7 +178,7 @@ public class AttributeBinderTest
         @Attribute
         private BindableReference processingInput = null;
     }
-    
+
     @SuppressWarnings("unused")
     public static class NotBindable
     {
@@ -186,6 +186,40 @@ public class AttributeBinderTest
         @Input
         @Attribute
         private int processingInput = 5;
+    }
+
+    @Bindable
+    @SuppressWarnings("unused")
+    public static class OnlyBindingDirectionAnnotationProvided
+    {
+        @Input
+        private int initInput;
+    }
+
+    @Bindable
+    @SuppressWarnings("unused")
+    public static class OnlyBindingTimeAnnotationProvided
+    {
+        @Init
+        private int initInput;
+    }
+
+    @Bindable
+    @SuppressWarnings("unused")
+    public static class AttributeAnnotationWithoutBindingTime
+    {
+        @Input
+        @Attribute
+        private int initInput;
+    }
+
+    @Bindable
+    @SuppressWarnings("unused")
+    public static class AttributeAnnotationWithoutBindingDirection
+    {
+        @Init
+        @Attribute
+        private int initInput;
     }
 
     @Before
@@ -431,31 +465,60 @@ public class AttributeBinderTest
     public void testNullReference() throws InstantiationException
     {
         NullReferenceContainer instance = new NullReferenceContainer();
-        
+
         addAttribute(BindableReference.class, "processingInput", 10);
-        
+
         // Neither @Input nor @Output binding can fail
         AttributeBinder.bind(instance, attributes, Processing.class, Input.class);
         AttributeBinder.bind(instance, attributes, Processing.class, Output.class);
     }
-    
+
     @Test
     public void testNullInputAttributes() throws InstantiationException
     {
         NullReferenceContainer instance = new NullReferenceContainer();
         instance.processingInput = new BindableReference();
-        
+
         addAttribute(NullReferenceContainer.class, "processingInput", null);
-        
+
         AttributeBinder.bind(instance, attributes, Processing.class, Input.class);
-        
+
         assertNull(instance.processingInput);
     }
-    
+
     @Test(expected = IllegalArgumentException.class)
     public void testNotBindable() throws InstantiationException
     {
         NotBindable instance = new NotBindable();
+        AttributeBinder.bind(instance, attributes, Init.class, Input.class);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testOnlyBindingDirectionAnnotationProvided()
+        throws InstantiationException
+    {
+        OnlyBindingDirectionAnnotationProvided instance = new OnlyBindingDirectionAnnotationProvided();
+        AttributeBinder.bind(instance, attributes, Init.class, Input.class);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testOnlyBindingTimeAnnotationProvided() throws InstantiationException
+    {
+        OnlyBindingTimeAnnotationProvided instance = new OnlyBindingTimeAnnotationProvided();
+        AttributeBinder.bind(instance, attributes, Init.class, Input.class);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testAttributeAnnotationWithoutBindingTime() throws InstantiationException
+    {
+        AttributeAnnotationWithoutBindingTime instance = new AttributeAnnotationWithoutBindingTime();
+        AttributeBinder.bind(instance, attributes, Init.class, Input.class);
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testAttributeAnnotationWithoutBindingDirection() throws InstantiationException
+    {
+        AttributeAnnotationWithoutBindingDirection instance = new AttributeAnnotationWithoutBindingDirection();
         AttributeBinder.bind(instance, attributes, Init.class, Input.class);
     }
 
