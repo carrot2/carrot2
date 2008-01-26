@@ -10,8 +10,7 @@ import org.carrot2.core.attribute.Input;
 import org.carrot2.core.attribute.Processing;
 
 /**
- * Sends queries to Yahoo! Web search service. Instances of this class are
- * thread-safe.
+ * Sends queries to Yahoo! Web search service. Instances of this class are thread-safe.
  * <p>
  * Attributes of this class correspond to Yahoo's documentation (see links below).
  * 
@@ -21,12 +20,14 @@ import org.carrot2.core.attribute.Processing;
 public final class YahooWebSearchService extends YahooSearchService
 {
     /**
-     * @see http://api.search.yahoo.com/WebSearchService/V1/webSearch
-     * @see http://search.yahooapis.com/NewsSearchService/V1/newsSearch
+     * @see <a href="http://api.search.yahoo.com/WebSearchService/V1/webSearch">Yahoo Web
+     *      Search API</a>
+     * @see <a href="http://search.yahooapis.com/NewsSearchService/V1/newsSearch">Yahoo
+     *      News Search API</a>
      */
     @Init
     @Input
-    @Attribute 
+    @Attribute
     private String serviceURI = "http://api.search.yahoo.com/WebSearchService/V1/webSearch";
 
     /** */
@@ -52,7 +53,7 @@ public final class YahooWebSearchService extends YahooSearchService
     @Input
     @Attribute
     public String region;
-    
+
     /** */
     public QueryType type = QueryType.ALL;
 

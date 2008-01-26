@@ -11,8 +11,7 @@ import org.carrot2.source.*;
 import com.google.common.base.Predicate;
 
 /**
- * A {@link DocumentSource} fetching {@link Document}s (search results)
- * from Yahoo!.
+ * A {@link DocumentSource} fetching {@link Document}s (search results) from Yahoo!.
  */
 @Bindable
 public final class YahooDocumentSource extends SearchEngine
@@ -21,53 +20,60 @@ public final class YahooDocumentSource extends SearchEngine
     final static Logger logger = Logger.getLogger(YahooDocumentSource.class);
 
     /**
-     * Static executor for running search threads to Yahoo!. You can set the
-     * number of concurrent requests from <b>all</b> instances of this component
-     * here.
+     * Static executor for running search threads to Yahoo!. You can set the number of
+     * concurrent requests from <b>all</b> instances of this component here.
      */
-    private final static ExecutorService executor = Executors.newFixedThreadPool(/* max threads */ 10);
+    private final static ExecutorService executor = Executors
+        .newFixedThreadPool(/* max threads */10);
 
+    /**
+     * The specific search service to be used by this document source. You can use this
+     * attribute to choose which Yahoo! service to query, e.g. Yahoo Web Search or Yahoo
+     * News.
+     * 
+     * @label Yahoo Search Service
+     */
     @Init
     @Input
     @Attribute
-    private YahooSearchService service = new YahooWebSearchService();  
+    private YahooSearchService service = new YahooWebSearchService();
 
     @Processing
     @Input
-    @Attribute(key=AttributeNames.START)
+    @Attribute(key = AttributeNames.START)
     private int start = 0;
 
     @Processing
     @Input
-    @Attribute(key=AttributeNames.RESULTS)
+    @Attribute(key = AttributeNames.RESULTS)
     private int results = 100;
 
     @Processing
     @Input
-    @Attribute(key=AttributeNames.QUERY)
+    @Attribute(key = AttributeNames.QUERY)
     private String query;
 
     @SuppressWarnings("unused")
     @Processing
     @Output
-    @Attribute(key=AttributeNames.RESULTS_TOTAL)
+    @Attribute(key = AttributeNames.RESULTS_TOTAL)
     private long resultsTotal;
 
     @SuppressWarnings("unused")
     @Processing
     @Output
-    @Attribute(key=AttributeNames.DOCUMENTS)
+    @Attribute(key = AttributeNames.DOCUMENTS)
     private Collection<Document> documents;
 
     /**
-     * Run a request against Yahoo API and set {@link #documents} to 
-     * the set of returned documents.
+     * Run a request against Yahoo API and set {@link #documents} to the set of returned
+     * documents.
      */
     @Override
     public void process() throws ProcessingException
     {
-        final SearchEngineResponse [] responses = runQuery(
-            query, start, results, service.maxResultIndex, service.resultsPerPage, executor);
+        final SearchEngineResponse [] responses = runQuery(query, start, results,
+            service.maxResultIndex, service.resultsPerPage, executor);
 
         if (responses.length > 0)
         {

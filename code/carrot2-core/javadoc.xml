@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project default="javadoc">
-    <target name="javadoc">
-        <javadoc access="public"
-        	
-        	packagenames="org.carrot2.source.yahoo" 
-        	extdirs="E:\repositories\carrot\sourceforge.net\3.0-proto\code\carrot2-core\tmp\eclipse;E:\repositories\carrot\sourceforge.net\3.0-proto\code\carrot2-source-yahoo\tmp\eclipse;E:\repositories\carrot\sourceforge.net\3.0-proto\code\carrot2-util-common\tmp\eclipse"
-        	sourcepath="E:\repositories\carrot\sourceforge.net\3.0-proto\code\carrot2-source-yahoo\src">
-        	<classpath>
-        	  <fileset dir="E:\repositories\carrot\sourceforge.net\3.0-proto\lib">
-        	  	<include name="**/*.jar" />
-        		</fileset>
-        	  <pathelement location="E:\repositories\carrot\sourceforge.net\3.0-proto\code\carrot2-core\tmp\eclipse"/>
-        	  <pathelement location="E:\repositories\carrot\sourceforge.net\3.0-proto\code\carrot2-source-yahoo\tmp\eclipse"/>
-        	  <pathelement location="E:\repositories\carrot\sourceforge.net\3.0-proto\code\carrot2-util-common\tmp\eclipse"/>
-        	</classpath>
-          <doclet 
-          	name="org.carrot2.core.bindable.javadoc.BindableJavadocToXmlDoclet" 
-          	path="E:\repositories\carrot\sourceforge.net\3.0-proto\lib\commons-httpclient-3.1.jar;E:\repositories\carrot\sourceforge.net\3.0-proto\lib\google-collections.jar;E:\repositories\carrot\sourceforge.net\3.0-proto\lib\commons-lang-2.3.jar;E:\repositories\carrot\sourceforge.net\3.0-proto\lib\commons-codec-1.3.jar;E:\repositories\carrot\sourceforge.net\3.0-proto\lib\log4j-1.2.14.jar;E:\repositories\carrot\sourceforge.net\3.0-proto\code\carrot2-core-tools\tmp\eclipse;E:\repositories\carrot\sourceforge.net\3.0-proto\code\carrot2-core\tmp\eclipse;E:\repositories\carrot\sourceforge.net\3.0-proto\code\carrot2-source-yahoo\tmp\eclipse;E:\repositories\carrot\sourceforge.net\3.0-proto\code\carrot2-util-common\tmp\eclipse"/>
-        </javadoc>
-    </target>
+  <target name="javadoc">
+    <property name="checkout.dir"
+              location="E:\repositories\carrot\sourceforge.net\3.0-proto" />
+
+    <javadoc access="public"
+             packagenames="org.carrot2.*"
+             sourcepath="${checkout.dir}\code\carrot2-algorithm-synthetic\src;${checkout.dir}\code\carrot2-source-yahoo\src;${checkout.dir}\code\carrot2-core\src">
+
+      <classpath>
+        <fileset dir="${checkout.dir}\lib">
+          <include name="**/*.jar" />
+        </fileset>
+        <pathelement location="${checkout.dir}\code\carrot2-core\tmp\eclipse" />
+        <pathelement location="${checkout.dir}\code\carrot2-source-yahoo\tmp\eclipse" />
+        <pathelement location="${checkout.dir}\code\carrot2-algorithm-synthetic\tmp\eclipse" />
+        <pathelement location="${checkout.dir}\code\carrot2-util-common\tmp\eclipse" />
+      </classpath>
+      
+      <doclet name="org.carrot2.core.attribute.javadoc.AttributeJavadocToXmlDoclet"
+              path="${checkout.dir}\lib\google-collections.jar;${checkout.dir}\lib\dom4j-1.6.1.jar;${checkout.dir}\lib\log4j-1.2.14.jar;${checkout.dir}\code\carrot2-core-tools\tmp\eclipse;${checkout.dir}\code\carrot2-core\tmp\eclipse" />
+    </javadoc>
+  </target>
 </project>

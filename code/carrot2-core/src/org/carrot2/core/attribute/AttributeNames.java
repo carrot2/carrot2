@@ -7,38 +7,47 @@ package org.carrot2.core.attribute;
 public final class AttributeNames
 {
     /**
-     * Start fetching documents (search results) from this value (zero-based).
+     * Index (zero-based) of the first document/ search result to fetch.
+     * 
+     * @label Start Index
      */
     public static final String START = "start";
-    
+
     /**
-     * Fetch this number of documents (search results) from
-     * the source.
+     * Number of documents/ search results to fetch.
+     * 
+     * @label Results
      */
     public static final String RESULTS = "results";
-    
+
     /**
-     * Pass this query to the search engine/ document retrieval
-     * system.
+     * Query to be executed by the search engine/ document retrieval system.
+     * 
+     * @label Query
      */
     public static final String QUERY = "query";
 
     /**
-     * The number of matching documents (estimated total).
+     * Estimated total number of matching documents.
+     * 
+     * @label Total Results
      */
     public static final String RESULTS_TOTAL = "results-total";
 
     /**
-     * A collection of returned documents.
+     * Documents returned by the search engine/ document retrieval system.
+     * 
+     * @label Documents
      */
     public static final String DOCUMENTS = "documents";
 
     /**
-     * A collection of created clusters.
+     * Clusters created by the clustering algorithm.
+     * 
+     * @label Clusters
      */
     public static final String CLUSTERS = "clusters";
 
-    
     /*
      * 
      */
