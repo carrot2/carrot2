@@ -33,4 +33,19 @@ public final class StringUtils extends org.apache.commons.lang.StringUtils
 
         return stringBuilder.toString();
     }
+    
+    public static int multiStringHashCode(String... strings)
+    {
+        int result = 0;
+        
+        for (String string : strings)
+        {
+            if (string != null)
+            {
+                result ^= string.hashCode();
+            }
+        }
+        
+        return result;
+    }
 }

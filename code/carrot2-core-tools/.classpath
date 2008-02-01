@@ -5,10 +5,15 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5">
 		<accessrules>
 			<accessrule kind="accessible" pattern="com/sun/javadoc/**"/>
+			<accessrule kind="accessible" pattern="com/sun/tools/javadoc/**"/>
 		</accessrules>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-core"/>
 	<classpathentry kind="var" path="CARROT2_30_CHECKOUT_BASE/lib/dom4j-1.6.1.jar"/>
+	<classpathentry kind="var" path="CARROT2_30_CHECKOUT_BASE/lib/compile-time/qdox-1.6.3.jar"/>
+	<classpathentry kind="var" path="CARROT2_30_CHECKOUT_BASE/lib/google-collections.jar"/>
+	<classpathentry kind="var" path="CARROT2_30_CHECKOUT_BASE/lib/compile-time/fest-assert-0.9.jar"/>
+	<classpathentry kind="var" path="CARROT2_30_CHECKOUT_BASE/lib/compile-time/fest-util-0.3.jar"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>
