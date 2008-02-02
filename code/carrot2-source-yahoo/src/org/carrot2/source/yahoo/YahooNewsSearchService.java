@@ -10,41 +10,64 @@ import org.carrot2.core.attribute.Input;
 import org.carrot2.core.attribute.Processing;
 
 /**
- * Sends queries to Yahoo! News search service. Instances of this class are
- * thread-safe.
+ * Sends queries to Yahoo! News search service. Instances of this class are thread-safe.
  * <p>
  * Attributes of this class correspond to Yahoo's documentation (see links below).
  * 
- * @see http://com3.devnet.re3.yahoo.com/search/news/V1/newsSearch.html 
+ * @see <a href="http://com3.devnet.re3.yahoo.com/search/news/V1/newsSearch.html">Yahoo
+ *      News Search Documentation</a>
  */
 @Bindable
 public final class YahooNewsSearchService extends YahooSearchService
 {
     /** */
-    public enum SortType {
-        RANK { public String toString() { return "rank"; } },
-        DATE { public String toString() { return "date"; } },
+    public enum SortType
+    {
+        RANK
+        {
+            public String toString()
+            {
+                return "rank";
+            }
+        },
+        DATE
+        {
+            public String toString()
+            {
+                return "date";
+            }
+        },
     }
 
-    /** */
+    /**
+     * Yahoo service URI to be queried.
+     */
     @Init
     @Input
-    @Attribute 
+    @Attribute
     private String serviceURI = "http://search.yahooapis.com/NewsSearchService/V1/newsSearch";
 
-    /** */
+    /**
+     * The language the results are written in. Value must be one of the <a
+     * href="http://developer.yahoo.com/search/languages.html">supported language</a>
+     * codes. Omitting language returns results in any language.
+     */
     @Processing
     @Input
     @Attribute
     public String language;
 
-    /** */
+    /** 
+     * TODO: It doesn't look like the news service has the 'country' parameter. 
+     */
     @Processing
     @Input
     @Attribute
     public String country;
 
-    /** */
+    /** 
+     * A domain to restrict your searches to (e.g. www.yahoo.com). 
+     */
     @Processing
     @Input
     @Attribute

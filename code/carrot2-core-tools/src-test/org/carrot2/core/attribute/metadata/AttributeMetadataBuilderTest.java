@@ -39,7 +39,12 @@ public class AttributeMetadataBuilderTest
             builder.addSourceTree(new File(path));
         }
 
-        attributeMetadata = builder.buildAttributeMetadata();
+        MapStorageAttributeMetadataBuilderListener mapListener = new MapStorageAttributeMetadataBuilderListener();
+        builder.addListener(mapListener);
+
+        builder.buildAttributeMetadata();
+
+        attributeMetadata = mapListener.getAttributeMetadata();
     }
 
     @Test
@@ -121,6 +126,16 @@ public class AttributeMetadataBuilderTest
     {
         // Note that this scenario is not supported
         checkTitle(AttributeTitles.class, "titleWithExtraSpace", "Title with extra space");
+    }
+
+    @Test
+    public void testTitleWithExclamationMarkNotSupported()
+    {
+        // Note that this scenario is not supported
+        checkTitle(AttributeTitles.class, "titleWithExclamationMark",
+            "Title with exclamation mark!");
+        checkDescription(AttributeTitles.class, "titleWithExclamationMark",
+            "and something more. Description.");
     }
 
     @Test
@@ -206,24 +221,24 @@ public class AttributeMetadataBuilderTest
         checkTitle(clazz, fieldName, "Title overriden");
         checkDescription(clazz, fieldName, "Description overriden.");
     }
-    
+
     @Test
     public void testNamedAttributeNoDotInKey()
     {
         final Class<NamedAttributes> clazz = NamedAttributes.class;
         final String fieldName = "noDotInKey";
-        
+
         checkLabel(clazz, fieldName, null);
         checkTitle(clazz, fieldName, null);
         checkDescription(clazz, fieldName, null);
     }
-    
+
     @Test
     public void testClassNotInSourcePath()
     {
         final Class<NamedAttributes> clazz = NamedAttributes.class;
         final String fieldName = "classNotInSourcePath";
-        
+
         checkLabel(clazz, fieldName, null);
         checkTitle(clazz, fieldName, null);
         checkDescription(clazz, fieldName, null);

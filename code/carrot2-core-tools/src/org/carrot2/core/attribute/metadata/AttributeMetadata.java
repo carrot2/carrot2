@@ -3,14 +3,22 @@
  */
 package org.carrot2.core.attribute.metadata;
 
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 
 /**
  *
  */
+@Root(name = "attribute-metadata")
 public class AttributeMetadata
 {
+    @Element(required = false)
     private String title;
+    
+    @Element(required = false)
     private String label;
+    
+    @Element(required = false)
     private String description;
 
     AttributeMetadata()

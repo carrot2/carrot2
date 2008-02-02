@@ -34,6 +34,11 @@ public class AttributeMetadataBuilder
     private JavaDocBuilder javaDocBuilder = new JavaDocBuilder();
     private List<Class<?>> commonMetadataSources;
 
+    private List<AttributeMetadataBuilderListener> listeners = Lists.newArrayList();
+
+    /**
+     *
+     */
     public AttributeMetadataBuilder()
     {
         commonMetadataSources = Lists.newArrayList();
@@ -50,10 +55,13 @@ public class AttributeMetadataBuilder
         commonMetadataSources.add(clazz);
     }
 
-    public Map<String, Map<String, AttributeMetadata>> buildAttributeMetadata()
+    public void addListener(AttributeMetadataBuilderListener listener)
     {
-        final Map<String, Map<String, AttributeMetadata>> result = Maps.newHashMap();
+        listeners.add(listener);
+    }
 
+    public void buildAttributeMetadata()
+    {
         final JavaSource [] javaSources = javaDocBuilder.getSources();
         for (JavaSource javaSource : javaSources)
         {
@@ -61,12 +69,14 @@ public class AttributeMetadataBuilder
             final JavaClass javaClass = javaSource.getClasses()[0];
             if (JavaDocBuilderUtils.hasAnnotation(javaClass, Bindable.class))
             {
-                result.put(javaClass.getFullyQualifiedName(),
-                    buildAttributeMetadata(javaClass));
+                final Map<String, AttributeMetadata> attributeMetadata = buildAttributeMetadata(javaClass);
+                for (AttributeMetadataBuilderListener listener : listeners)
+                {
+                    listener.attributeMetadataForBindableBuilt(javaClass,
+                        attributeMetadata);
+                }
             }
         }
-
-        return result;
     }
 
     private Map<String, AttributeMetadata> buildAttributeMetadata(JavaClass bindable)
@@ -107,7 +117,8 @@ public class AttributeMetadataBuilder
 
         // This bit is not really well documented in QDocs (well, nothing is really...),
         // so let's convert the value to a string and proceed
-        final Object namedParameter = annotation.getNamedParameter(ATTRIBUTE_KEY_PARAMETER);
+        final Object namedParameter = annotation
+            .getNamedParameter(ATTRIBUTE_KEY_PARAMETER);
         if (namedParameter == null)
         {
             return null;

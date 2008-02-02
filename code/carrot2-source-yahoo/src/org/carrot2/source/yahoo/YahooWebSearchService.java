@@ -14,7 +14,8 @@ import org.carrot2.core.attribute.Processing;
  * <p>
  * Attributes of this class correspond to Yahoo's documentation (see links below).
  * 
- * @see http://com3.devnet.re3.yahoo.com/search/web/V1/webSearch.html
+ * @see <a href="http://developer.yahoo.com/search/web/V1/webSearch.html">Yahoo Web Search
+ *      Documentation</a>
  */
 @Bindable
 public final class YahooWebSearchService extends YahooSearchService
@@ -42,7 +43,9 @@ public final class YahooWebSearchService extends YahooSearchService
     @Attribute
     public String country;
 
-    /** */
+    /**
+     * A domain to restrict your searches to (e.g. www.yahoo.com).
+     */
     @Processing
     @Input
     @Attribute

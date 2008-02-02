@@ -56,6 +56,14 @@ public class AttributeTitles
     @Input
     @Attribute
     private int titleWithoutPeriod;
+    
+    /**
+     * Title with exclamation mark! and something more. Description.
+     */
+    @Init
+    @Input
+    @Attribute
+    private int titleWithExclamationMark;
 
     /**
      * Title with description. Description follows.

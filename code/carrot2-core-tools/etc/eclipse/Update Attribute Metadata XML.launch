@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
+<stringAttribute key="bad_container_name" value="\carrot2-core-tools\etc\eclipse"/>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/carrot2-core-tools/src/org/carrot2/core/attribute/metadata/AttributeMetadataXmlSerializer.java"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="1"/>
+</listAttribute>
+<booleanAttribute key="org.eclipse.debug.core.appendEnvironmentVariables" value="true"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.carrot2.core.attribute.metadata.AttributeMetadataXmlSerializer"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="${resource_loc:carrot2-core/src} ${resource_loc:carrot2-source-yahoo/src} ${resource_loc:carrot2-algorithm-synthetic/src}"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="carrot2-core-tools"/>
+</launchConfiguration>

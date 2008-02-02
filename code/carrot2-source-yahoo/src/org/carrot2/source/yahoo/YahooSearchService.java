@@ -71,7 +71,7 @@ abstract class YahooSearchService
     public static final String COMPRESSION_USED_KEY = "compressionUsed";
     
     /**
-     * Application ID required for Yahoo! services. 
+     * Application ID required for Yahoo services. 
      */
     @Init
     @Input
