@@ -10,7 +10,7 @@ import org.carrot2.core.attribute.*;
  */
 @Bindable
 @SuppressWarnings("unused")
-public class SimpleComponent
+public class AttributeLabels
 {
     /**
      * @label word
@@ -21,27 +21,28 @@ public class SimpleComponent
     private int singleWordLabel;
 
     /**
-     * Only title
-     * 
      * @label multi word label
      */
     @Init
     @Input
     @Attribute
-    private int multipleWordLabel;
+    private int multiWordLabel;
+    
+    /**
+     * @label First label sentence. Second label sentence.
+     */
+    @Init
+    @Input
+    @Attribute
+    private int multiSentenceLabel;
 
     /**
      * Attribute comment. Second sentence of attribute comment.
      * 
-     * @label word2
+     * @label word
      */
     @Init
     @Input
     @Attribute
     private int labelWithComment;
-    
-    @Init
-    @Input
-    @Attribute
-    private int noJavadoc;
 }

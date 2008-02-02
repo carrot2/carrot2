@@ -3,8 +3,6 @@
  */
 package org.carrot2.core.attribute.metadata;
 
-import org.apache.commons.lang.ObjectUtils;
-import org.carrot2.util.StringUtils;
 
 /**
  *
@@ -13,17 +11,10 @@ public class AttributeMetadata
 {
     private String title;
     private String label;
-    private String plainTextDescription;
+    private String description;
 
-    public AttributeMetadata()
+    AttributeMetadata()
     {
-    }
-
-    public AttributeMetadata(String title, String label, String plainTextDescription)
-    {
-        this.title = title;
-        this.label = label;
-        this.plainTextDescription = plainTextDescription;
     }
 
     public String getTitle()
@@ -31,7 +22,7 @@ public class AttributeMetadata
         return title;
     }
 
-    public void setTitle(String title)
+    void setTitle(String title)
     {
         this.title = title;
     }
@@ -41,50 +32,24 @@ public class AttributeMetadata
         return label;
     }
 
-    public void setLabel(String label)
+    void setLabel(String label)
     {
         this.label = label;
     }
 
-    public String getPlainTextDescription()
+    public String getDescription()
     {
-        return plainTextDescription;
+        return description;
     }
 
-    public void setPlainTextDescription(String plainTextDescription)
+    void setDescription(String plainTextDescription)
     {
-        this.plainTextDescription = plainTextDescription;
-    }
-
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (obj == this)
-        {
-            return true;
-        }
-
-        if (obj == null || !(obj instanceof AttributeMetadata))
-        {
-            return false;
-        }
-
-        AttributeMetadata other = (AttributeMetadata) obj;
-
-        return ObjectUtils.equals(title, other.title)
-            && ObjectUtils.equals(label, other.label)
-            && ObjectUtils.equals(plainTextDescription, other.plainTextDescription);
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return StringUtils.multiStringHashCode(title, label, plainTextDescription);
+        this.description = plainTextDescription;
     }
 
     @Override
     public String toString()
     {
-        return "[" + title + ", " + label + ", " + plainTextDescription + "]";
+        return "[" + title + ", " + label + ", " + description + "]";
     }
 }

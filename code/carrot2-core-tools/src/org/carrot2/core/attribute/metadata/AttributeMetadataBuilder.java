@@ -4,11 +4,9 @@
 package org.carrot2.core.attribute.metadata;
 
 import java.io.File;
-import java.io.Reader;
 import java.util.*;
 
-import org.carrot2.core.attribute.Attribute;
-import org.carrot2.core.attribute.Bindable;
+import org.carrot2.core.attribute.*;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -20,16 +18,26 @@ import com.thoughtworks.qdox.model.*;
  */
 public class AttributeMetadataBuilder
 {
+    public static final String ATTRIBUTE_KEY_PARAMETER = "key";
+
     private static final AttributeMetadataExtractor [] EXTRACTORS = new AttributeMetadataExtractor []
     {
-        new AttributeLabelExtractor(), new AttributeTitleExtractor()
+        new AttributeLabelExtractor(), new AttributeTitleExtractor(),
+        new AttributeDescriptionExtractor()
+    };
+
+    private static final Class<?> [] COMMON_METADATA_SOURCES = new Class<?> []
+    {
+        AttributeNames.class
     };
 
     private JavaDocBuilder javaDocBuilder = new JavaDocBuilder();
+    private List<Class<?>> commonMetadataSources;
 
-    public void addSource(Reader reader)
+    public AttributeMetadataBuilder()
     {
-        javaDocBuilder.addSource(reader);
+        commonMetadataSources = Lists.newArrayList();
+        commonMetadataSources.addAll(Arrays.asList(COMMON_METADATA_SOURCES));
     }
 
     public void addSourceTree(File directory)
@@ -37,9 +45,14 @@ public class AttributeMetadataBuilder
         javaDocBuilder.addSourceTree(directory);
     }
 
-    public Map<String, Collection<AttributeMetadata>> buildAttributeMetadata()
+    public void addCommonMetadataSource(Class<?> clazz)
     {
-        final Map<String, Collection<AttributeMetadata>> result = Maps.newHashMap();
+        commonMetadataSources.add(clazz);
+    }
+
+    public Map<String, Map<String, AttributeMetadata>> buildAttributeMetadata()
+    {
+        final Map<String, Map<String, AttributeMetadata>> result = Maps.newHashMap();
 
         final JavaSource [] javaSources = javaDocBuilder.getSources();
         for (JavaSource javaSource : javaSources)
@@ -56,10 +69,10 @@ public class AttributeMetadataBuilder
         return result;
     }
 
-    private Collection<AttributeMetadata> buildAttributeMetadata(JavaClass bindable)
+    private Map<String, AttributeMetadata> buildAttributeMetadata(JavaClass bindable)
     {
-        final List<AttributeMetadata> result = Lists.newArrayList();
-        
+        final Map<String, AttributeMetadata> result = Maps.newHashMap();
+
         final JavaField [] fields = bindable.getFields();
         for (JavaField javaField : fields)
         {
@@ -68,13 +81,65 @@ public class AttributeMetadataBuilder
                 AttributeMetadata metadata = new AttributeMetadata();
                 for (AttributeMetadataExtractor extractor : EXTRACTORS)
                 {
+                    // First extract with the common metadata source
+                    JavaField commonMetadataSource = resolveCommonMetadataSource(javaField);
+                    if (commonMetadataSource != null)
+                    {
+                        extractor.extractMetadataItem(commonMetadataSource,
+                            javaDocBuilder, metadata);
+                    }
+
+                    // Then override with the actual metadata source
                     extractor.extractMetadataItem(javaField, javaDocBuilder, metadata);
                 }
-                
-                result.add(metadata);
+
+                result.put(javaField.getName(), metadata);
             }
         }
 
         return result;
+    }
+
+    private JavaField resolveCommonMetadataSource(JavaField originalField)
+    {
+        final Annotation annotation = JavaDocBuilderUtils.getAnnotation(originalField,
+            Attribute.class);
+
+        // This bit is not really well documented in QDocs (well, nothing is really...),
+        // so let's convert the value to a string and proceed
+        final Object namedParameter = annotation.getNamedParameter(ATTRIBUTE_KEY_PARAMETER);
+        if (namedParameter == null)
+        {
+            return null;
+        }
+
+        final String keyExpression = namedParameter.toString();
+        int dotIndex = keyExpression.indexOf('.');
+        if (dotIndex <= 0)
+        {
+            return null;
+        }
+
+        final String [] split = keyExpression.split("\\.");
+        final String className = split[0];
+        final String fieldName = split[1];
+
+        for (Class<?> clazz : commonMetadataSources)
+        {
+            if (clazz.getName().indexOf(className) >= 0)
+            {
+                JavaClass commonClass = javaDocBuilder.getClassByName(clazz.getName());
+                if (commonClass != null)
+                {
+                    JavaField commonField = commonClass.getFieldByName(fieldName);
+                    if (commonField != null)
+                    {
+                        return commonField;
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 }
