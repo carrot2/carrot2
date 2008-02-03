@@ -6,6 +6,8 @@ import java.util.*;
 
 import org.carrot2.core.constraint.*;
 
+import com.google.common.collect.Lists;
+
 final class BindableUtils
 {
     /**
@@ -38,6 +40,23 @@ final class BindableUtils
             }
             return fields;
         }
+    }
+
+    public static Collection<Class<?>> getClassesFromBindableHerarchy(Class<?> clazz)
+    {
+        Collection<Class<?>> classes = Lists.newArrayList();
+
+        while (clazz != null)
+        {
+            if (clazz.getAnnotation(Bindable.class) != null)
+            {
+                classes.add(clazz);
+            }
+            
+            clazz = clazz.getSuperclass();
+        }
+
+        return classes;
     }
 
     public static String getKey(Field field)

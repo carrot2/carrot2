@@ -8,45 +8,33 @@ import org.carrot2.core.constraint.Constraint;
 
 public class AttributeDescriptor
 {
+    public final AttributeMetadata metadata;
+
     public final String key;
     public final Class<?> type;
     public final Object defaultValue;
     public final Constraint constraint;
-    final Field field;
 
-    AttributeDescriptor(String name, Object defaultValue, Constraint constraint,
-        Field field)
+    AttributeDescriptor(Field field, Object defaultValue, Constraint constraint,
+        AttributeMetadata metadata)
     {
-        if (name == null || field == null)
+        this(BindableUtils.getKey(field), ClassUtils.primitiveToWrapper(field.getType()),
+            defaultValue, constraint, metadata);
+    }
+
+    AttributeDescriptor(String key, Class<?> type, Object defaultValue,
+        Constraint constraint, AttributeMetadata metadata)
+    {
+        if (key == null || type == null)
         {
             throw new IllegalArgumentException();
         }
 
-        this.key = name;
-        this.field = field;
-        this.type = ClassUtils.primitiveToWrapper(field.getType());
+        this.key = key;
+        this.type = type;
         this.defaultValue = defaultValue;
         this.constraint = constraint;
-    }
-
-    public String getKey()
-    {
-        return key;
-    }
-
-    public Class<?> getType()
-    {
-        return type;
-    }
-
-    public Object getDefaultValue()
-    {
-        return defaultValue;
-    }
-
-    public Constraint getConstraint()
-    {
-        return constraint;
+        this.metadata = metadata;
     }
 
     @Override
@@ -65,7 +53,8 @@ public class AttributeDescriptor
         AttributeDescriptor other = ((AttributeDescriptor) obj);
         return other.key.equals(this.key) && other.type.equals(this.type)
             && ObjectUtils.equals(defaultValue, defaultValue)
-            && ObjectUtils.equals(other.constraint, this.constraint);
+            && ObjectUtils.equals(other.constraint, this.constraint)
+            && ObjectUtils.equals(metadata, other.metadata);
     }
 
     @Override

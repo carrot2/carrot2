@@ -19,9 +19,13 @@ public class BindableMetadata
 
     BindableMetadata()
     {
-
     }
 
+    public BindableMetadata(Map<String, AttributeMetadata> attributeMetadata)
+    {
+        this.attributeMetadata = attributeMetadata;
+    }
+    
     public Map<String, AttributeMetadata> getAttributeMetadata()
     {
         return attributeMetadata;

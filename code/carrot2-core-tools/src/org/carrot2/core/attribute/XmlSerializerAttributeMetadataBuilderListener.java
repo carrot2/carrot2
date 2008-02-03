@@ -27,8 +27,7 @@ public class XmlSerializerAttributeMetadataBuilderListener implements
             final File xmlFile = new File(new File(bindable.getSource().getURL().toURI())
                 .getParentFile(), bindable.getName() + ".xml");
 
-            BindableMetadata bindableMetadata = new BindableMetadata();
-            bindableMetadata.setAttributeMetadata(metadata);
+            BindableMetadata bindableMetadata = new BindableMetadata(metadata);
 
             Persister persister = new Persister(new Format(2,
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"));

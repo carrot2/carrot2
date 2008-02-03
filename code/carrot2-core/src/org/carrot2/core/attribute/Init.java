@@ -6,7 +6,7 @@ package org.carrot2.core.attribute;
 import java.lang.annotation.*;
 
 /**
- * TODO: document binding annotations
+ * TODO: write documentation for binding annotations
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
