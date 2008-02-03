@@ -3,7 +3,8 @@ package org.carrot2.core;
 import java.util.*;
 
 /**
- * TODO: handle document ids internally in the controller (after processing is finished). Do not expose them.
+ * TODO: handle document ids internally in the controller (after processing is finished).
+ * Do not expose them.
  */
 public class Document
 {
@@ -20,7 +21,11 @@ public class Document
     {
     }
 
-    Document(int id)
+    /**
+     * TODO: Once we implement document id handling properly, make this constructor
+     * package-private
+     */
+    public Document(int id)
     {
         this.id = id;
     }

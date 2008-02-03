@@ -7,5 +7,6 @@
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-util-common"/>
 	<classpathentry kind="var" path="CARROT2_30_CHECKOUT_BASE/lib/google-collections.jar"/>
 	<classpathentry kind="var" path="CARROT2_30_CHECKOUT_BASE/lib/compile-time/easymock.jar"/>
+	<classpathentry kind="var" path="CARROT2_30_CHECKOUT_BASE/lib/simple-xml-1.7.1.jar"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>

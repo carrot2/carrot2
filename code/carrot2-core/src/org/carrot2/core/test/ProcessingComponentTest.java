@@ -6,6 +6,7 @@ package org.carrot2.core.test;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.carrot2.core.ProcessingComponent;
 import org.carrot2.core.controller.SimpleController;
 import org.junit.Before;
 

@@ -9,6 +9,7 @@ import static org.junit.Assert.assertSame;
 import java.util.Collection;
 import java.util.HashMap;
 
+import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.junit.Assert;
 

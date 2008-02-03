@@ -8,6 +8,7 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.*;
 
+import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.junit.Test;
 
@@ -40,9 +41,6 @@ public abstract class ClusteringAlgorithmTest<T extends ClusteringAlgorithm> ext
 
     /**
      * Recursively collects documents from clusters.
-     * 
-     * @param clusters
-     * @return
      */
     public Collection<Document> collectDocuments(Collection<Cluster> clusters)
     {

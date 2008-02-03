@@ -5,6 +5,8 @@ package org.carrot2.core.test;
 
 import java.util.*;
 
+import org.carrot2.core.Document;
+
 /**
  *
  */
