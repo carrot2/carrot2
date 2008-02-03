@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.carrot2.core.attribute.metadata;
+package org.carrot2.core.attribute;
 
 import java.text.BreakIterator;
 import java.util.Locale;
@@ -12,7 +12,7 @@ import com.thoughtworks.qdox.model.JavaField;
 /**
  *
  */
-public class AttributeTitleExtractor implements AttributeMetadataExtractor
+public class AttributeDescriptionExtractor implements AttributeMetadataExtractor
 {
     @Override
     public boolean extractMetadataItem(JavaField attributeField,
@@ -29,21 +29,10 @@ public class AttributeTitleExtractor implements AttributeMetadataExtractor
             .getSentenceInstance(Locale.ENGLISH);
         sentenceIterator.setText(comment);
 
-        final int first = sentenceIterator.first();
         final int next = sentenceIterator.next();
-        if (first >= 0 && next > first)
+        if (next > 0 && next < comment.length())
         {
-            // Strip off the last "."
-            final String firstSentence = comment.substring(first, next).trim();
-            if (firstSentence.endsWith("."))
-            {
-                attributeMetadata.setTitle(firstSentence.substring(0, firstSentence
-                    .length() - 1));
-            }
-            else
-            {
-                attributeMetadata.setTitle(firstSentence);
-            }
+            attributeMetadata.setDescription(comment.substring(next).trim());
             return true;
         }
         else

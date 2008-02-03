@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.carrot2.core.attribute.metadata;
+package org.carrot2.core.attribute;
 
 import static org.junit.Assert.*;
 

@@ -1,12 +1,10 @@
 /**
  * 
  */
-package org.carrot2.core.attribute.metadata;
+package org.carrot2.core.attribute;
 
 import java.io.File;
 import java.util.*;
-
-import org.carrot2.core.attribute.*;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;

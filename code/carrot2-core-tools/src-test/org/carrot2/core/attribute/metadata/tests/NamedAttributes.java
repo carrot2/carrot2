@@ -4,7 +4,6 @@
 package org.carrot2.core.attribute.metadata.tests;
 
 import org.carrot2.core.attribute.*;
-import org.carrot2.core.attribute.metadata.AttributeMetadataBuilder;
 
 /**
  *

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.carrot2.core.attribute.metadata;
+package org.carrot2.core.attribute;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
