@@ -7,6 +7,5 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-core"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-common"/>
 	<classpathentry kind="var" path="CARROT2_30_CHECKOUT_BASE/lib/google-collections.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-core-test"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>
