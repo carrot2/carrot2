@@ -50,6 +50,6 @@ public class NamedAttributes
     
     @Init
     @Input
-    @Attribute(key = AttributeMetadataBuilder.ATTRIBUTE_KEY_PARAMETER)
+    @Attribute(key = BindableMetadataBuilder.ATTRIBUTE_KEY_PARAMETER)
     private int classNotInSourcePath;
 }

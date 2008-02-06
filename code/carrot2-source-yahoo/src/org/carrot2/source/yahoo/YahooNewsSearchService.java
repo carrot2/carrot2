@@ -14,6 +14,7 @@ import org.carrot2.core.attribute.Processing;
  * <p>
  * Attributes of this class correspond to Yahoo's documentation (see links below).
  * 
+ * @label Yahoo News Search Service
  * @see <a href="http://com3.devnet.re3.yahoo.com/search/news/V1/newsSearch.html">Yahoo
  *      News Search Documentation</a>
  */
@@ -40,7 +41,10 @@ public final class YahooNewsSearchService extends YahooSearchService
     }
 
     /**
-     * Yahoo service URI to be queried.
+     * Yahoo! service URI to be queried.
+     * 
+     * @label Service URI
+     * 
      */
     @Init
     @Input
@@ -51,22 +55,19 @@ public final class YahooNewsSearchService extends YahooSearchService
      * The language the results are written in. Value must be one of the <a
      * href="http://developer.yahoo.com/search/languages.html">supported language</a>
      * codes. Omitting language returns results in any language.
+     * 
+     * @label Results Language
      */
     @Processing
     @Input
     @Attribute
-    public String language;
+    private String language;
 
-    /** 
-     * TODO: It doesn't look like the news service has the 'country' parameter. 
-     */
-    @Processing
-    @Input
-    @Attribute
-    public String country;
-
-    /** 
-     * A domain to restrict your searches to (e.g. www.yahoo.com). 
+    /**
+     * A domain to restrict your searches to (e.g. www.yahoo.com). TODO: maybe it would
+     * make sense to implement multiple values here (allowed by Yahoo)?
+     * 
+     * @label Site
      */
     @Processing
     @Input
@@ -94,7 +95,7 @@ public final class YahooNewsSearchService extends YahooSearchService
 
         params.add(new NameValuePair("appid", appid));
 
-        if (country != null) params.add(new NameValuePair("country", country));
+        if (language != null) params.add(new NameValuePair("languae", language));
         if (site != null) params.add(new NameValuePair("site", site));
         if (sort != null) params.add(new NameValuePair("sort", sort.toString()));
         if (type != null) params.add(new NameValuePair("type", type.toString()));

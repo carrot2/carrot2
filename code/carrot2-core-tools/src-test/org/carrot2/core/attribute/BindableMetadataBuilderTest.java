@@ -14,13 +14,13 @@ import org.junit.Test;
 /**
  *
  */
-public class AttributeMetadataBuilderTest
+public class BindableMetadataBuilderTest
 {
     private static final String SOURCE_PATH_PROPERTY = "source.paths";
-    protected AttributeMetadataBuilder builder;
-    protected Map<String, Map<String, AttributeMetadata>> attributeMetadata;
+    protected BindableMetadataBuilder builder;
+    protected Map<String, BindableMetadata> bindableMetadata;
 
-    public AttributeMetadataBuilderTest()
+    public BindableMetadataBuilderTest()
     {
         final String sourcePaths = System.getProperty(SOURCE_PATH_PROPERTY);
         if (sourcePaths == null)
@@ -30,7 +30,7 @@ public class AttributeMetadataBuilderTest
 
         }
 
-        builder = new AttributeMetadataBuilder();
+        builder = new BindableMetadataBuilder();
         builder.addCommonMetadataSource(TestAttributeNames.class);
 
         String [] paths = sourcePaths.split(File.pathSeparator);
@@ -39,12 +39,12 @@ public class AttributeMetadataBuilderTest
             builder.addSourceTree(new File(path));
         }
 
-        MapStorageAttributeMetadataBuilderListener mapListener = new MapStorageAttributeMetadataBuilderListener();
+        MemoryStorageBindableMetadataBuilderListener mapListener = new MemoryStorageBindableMetadataBuilderListener();
         builder.addListener(mapListener);
 
         builder.buildAttributeMetadata();
 
-        attributeMetadata = mapListener.getAttributeMetadata();
+        bindableMetadata = mapListener.getBindableMetadata();
     }
 
     @Test
@@ -129,13 +129,13 @@ public class AttributeMetadataBuilderTest
     }
 
     @Test
-    public void testTitleWithExclamationMarkNotSupported()
+    public void testTitleWithExclamationMark()
     {
         // Note that this scenario is not supported
         checkTitle(AttributeTitles.class, "titleWithExclamationMark",
-            "Title with exclamation mark!");
+            "Title with exclamation mark! and something more");
         checkDescription(AttributeTitles.class, "titleWithExclamationMark",
-            "and something more. Description.");
+            "Description.");
     }
 
     @Test
@@ -244,6 +244,16 @@ public class AttributeMetadataBuilderTest
         checkDescription(clazz, fieldName, null);
     }
 
+    @Test
+    public void testBindableMetadata()
+    {
+        BindableMetadata metadata = bindableMetadata.get(TestBindable.class.getName());
+        assertNotNull(metadata);
+        assertEquals("Some test bindable", metadata.title);
+        assertEquals("Description.", metadata.description);
+        assertEquals("Test Bindable", metadata.label);
+    }
+
     /**
      *
      */
@@ -279,7 +289,7 @@ public class AttributeMetadataBuilderTest
      */
     protected String getLabel(Class<?> componentClass, String fieldName)
     {
-        final AttributeMetadata fieldAttributeMetadata = getAttributeMetadata(
+        final CommonMetadata fieldAttributeMetadata = getAttributeMetadata(
             componentClass, fieldName);
 
         return fieldAttributeMetadata.getLabel();
@@ -290,7 +300,7 @@ public class AttributeMetadataBuilderTest
      */
     protected String getTitle(Class<?> componentClass, String fieldName)
     {
-        final AttributeMetadata fieldAttributeMetadata = getAttributeMetadata(
+        final CommonMetadata fieldAttributeMetadata = getAttributeMetadata(
             componentClass, fieldName);
 
         return fieldAttributeMetadata.getTitle();
@@ -301,7 +311,7 @@ public class AttributeMetadataBuilderTest
      */
     protected String getDescription(Class<?> componentClass, String fieldName)
     {
-        final AttributeMetadata fieldAttributeMetadata = getAttributeMetadata(
+        final CommonMetadata fieldAttributeMetadata = getAttributeMetadata(
             componentClass, fieldName);
 
         return fieldAttributeMetadata.getDescription();
@@ -310,17 +320,16 @@ public class AttributeMetadataBuilderTest
     /**
      *
      */
-    private AttributeMetadata getAttributeMetadata(Class<?> componentClass,
-        String fieldName)
+    private CommonMetadata getAttributeMetadata(Class<?> componentClass, String fieldName)
     {
-        final Map<String, AttributeMetadata> componentAttributeMetadata = attributeMetadata
-            .get(componentClass.getName());
+        final Map<String, AttributeMetadata> componentAttributeMetadata = bindableMetadata
+            .get(componentClass.getName()).getAttributeMetadata();
         if (componentAttributeMetadata == null)
         {
             return null;
         }
 
-        final AttributeMetadata fieldAttributeMetadata = componentAttributeMetadata
+        final CommonMetadata fieldAttributeMetadata = componentAttributeMetadata
             .get(fieldName);
         if (fieldAttributeMetadata == null)
         {

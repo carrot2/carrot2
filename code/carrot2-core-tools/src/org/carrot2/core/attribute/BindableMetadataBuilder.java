@@ -14,14 +14,18 @@ import com.thoughtworks.qdox.model.*;
 /**
  *
  */
-public class AttributeMetadataBuilder
+public class BindableMetadataBuilder
 {
     public static final String ATTRIBUTE_KEY_PARAMETER = "key";
 
-    private static final AttributeMetadataExtractor [] EXTRACTORS = new AttributeMetadataExtractor []
+    private static final MetadataExtractor [] ATTRIBUTE_METADATA_EXTRACTORS = new MetadataExtractor []
     {
-        new AttributeLabelExtractor(), new AttributeTitleExtractor(),
-        new AttributeDescriptionExtractor()
+        new LabelExtractor(), new TitleExtractor(), new DescriptionExtractor()
+    };
+
+    private static final MetadataExtractor [] BINDABLE_METADATA_EXTRACTORS = new MetadataExtractor []
+    {
+        new LabelExtractor(), new TitleExtractor(), new DescriptionExtractor()
     };
 
     private static final Class<?> [] COMMON_METADATA_SOURCES = new Class<?> []
@@ -32,12 +36,12 @@ public class AttributeMetadataBuilder
     private JavaDocBuilder javaDocBuilder = new JavaDocBuilder();
     private List<Class<?>> commonMetadataSources;
 
-    private List<AttributeMetadataBuilderListener> listeners = Lists.newArrayList();
+    private List<BindableMetadataBuilderListener> listeners = Lists.newArrayList();
 
     /**
      *
      */
-    public AttributeMetadataBuilder()
+    public BindableMetadataBuilder()
     {
         commonMetadataSources = Lists.newArrayList();
         commonMetadataSources.addAll(Arrays.asList(COMMON_METADATA_SOURCES));
@@ -53,7 +57,7 @@ public class AttributeMetadataBuilder
         commonMetadataSources.add(clazz);
     }
 
-    public void addListener(AttributeMetadataBuilderListener listener)
+    public void addListener(BindableMetadataBuilderListener listener)
     {
         listeners.add(listener);
     }
@@ -67,17 +71,29 @@ public class AttributeMetadataBuilder
             final JavaClass javaClass = javaSource.getClasses()[0];
             if (JavaDocBuilderUtils.hasAnnotation(javaClass, Bindable.class))
             {
-                final Map<String, AttributeMetadata> attributeMetadata = buildAttributeMetadata(javaClass);
-                for (AttributeMetadataBuilderListener listener : listeners)
+                final BindableMetadata bindableMetadata = new BindableMetadata();
+                buildBindableMetadata(javaClass, bindableMetadata);
+                buildAttributeMetadata(javaClass, bindableMetadata);
+
+                for (BindableMetadataBuilderListener listener : listeners)
                 {
-                    listener.attributeMetadataForBindableBuilt(javaClass,
-                        attributeMetadata);
+                    listener.bindableMetadataBuilt(javaClass, bindableMetadata);
                 }
             }
         }
     }
 
-    private Map<String, AttributeMetadata> buildAttributeMetadata(JavaClass bindable)
+    private void buildBindableMetadata(JavaClass javaClass,
+        BindableMetadata bindableMetadata)
+    {
+        for (MetadataExtractor extractor : BINDABLE_METADATA_EXTRACTORS)
+        {
+            extractor.extractMetadataItem(javaClass, javaDocBuilder, bindableMetadata);
+        }
+    }
+
+    private void buildAttributeMetadata(JavaClass bindable,
+        BindableMetadata bindableMetadata)
     {
         final Map<String, AttributeMetadata> result = Maps.newHashMap();
 
@@ -87,7 +103,7 @@ public class AttributeMetadataBuilder
             if (JavaDocBuilderUtils.hasAnnotation(javaField, Attribute.class))
             {
                 AttributeMetadata metadata = new AttributeMetadata();
-                for (AttributeMetadataExtractor extractor : EXTRACTORS)
+                for (MetadataExtractor extractor : ATTRIBUTE_METADATA_EXTRACTORS)
                 {
                     // First extract with the common metadata source
                     JavaField commonMetadataSource = resolveCommonMetadataSource(javaField);
@@ -105,7 +121,7 @@ public class AttributeMetadataBuilder
             }
         }
 
-        return result;
+        bindableMetadata.setAttributeMetadata(result);
     }
 
     private JavaField resolveCommonMetadataSource(JavaField originalField)

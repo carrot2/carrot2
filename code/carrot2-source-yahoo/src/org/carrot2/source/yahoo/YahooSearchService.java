@@ -71,7 +71,9 @@ abstract class YahooSearchService
     public static final String COMPRESSION_USED_KEY = "compressionUsed";
     
     /**
-     * Application ID required for Yahoo services. 
+     * Application ID required for Yahoo! services. 
+     * 
+     * @label Application ID
      */
     @Init
     @Input
@@ -80,6 +82,8 @@ abstract class YahooSearchService
 
     /**
      * Maximum number of results returned per page.
+     * 
+     * @label Results Per Page
      */
     @Init
     @Input
@@ -88,6 +92,8 @@ abstract class YahooSearchService
 
     /**
      * Maximum index of reachable result.
+     * 
+     * @label Maximum Result Index
      */
     @Init
     @Input
@@ -96,6 +102,8 @@ abstract class YahooSearchService
 
     /**
      * Number of requests made to this service (total).
+     * 
+     * @label Total Requests
      */
     @Processing
     @Output
@@ -104,6 +112,8 @@ abstract class YahooSearchService
 
     /**
      * Number of requests made to this service (successful).
+     * 
+     * @label Successful Requests
      */
     @Processing
     @Output
@@ -113,6 +123,8 @@ abstract class YahooSearchService
     /**
      * A sum of all times spent on waiting for response from the
      * service (in milliseconds).
+     * 
+     * @label Total Request Time
      */
     @Processing
     @Output
@@ -121,6 +133,8 @@ abstract class YahooSearchService
 
     /**
      * Maximum request time.
+     * 
+     * @label Maximum Request Time
      */
     @Processing
     @Output

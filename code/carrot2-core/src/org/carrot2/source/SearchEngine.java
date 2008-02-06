@@ -21,6 +21,7 @@ public abstract class SearchEngine
      * Search mode defines how fetchers returned from {@link #createFetcher(SearchRange)}
      * are called.
      * 
+     * @label Search Mode 
      * @see SearchMode
      */
     @Init

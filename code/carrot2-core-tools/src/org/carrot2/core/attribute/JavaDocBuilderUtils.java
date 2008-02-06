@@ -3,6 +3,9 @@
  */
 package org.carrot2.core.attribute;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.thoughtworks.qdox.model.AbstractJavaEntity;
 import com.thoughtworks.qdox.model.Annotation;
 
@@ -11,6 +14,8 @@ import com.thoughtworks.qdox.model.Annotation;
  */
 public final class JavaDocBuilderUtils
 {
+    private static final Pattern FIRST_SENTENCE_PATTERN = Pattern.compile("\\.\\s?");
+
     private JavaDocBuilderUtils()
     {
         // No instantiation
@@ -34,6 +39,19 @@ public final class JavaDocBuilderUtils
             }
         }
         return null;
+    }
+
+    public static int getEndOfFirstSenteceCharIndex(String text)
+    {
+        Matcher matcher = FIRST_SENTENCE_PATTERN.matcher(text);
+        if (matcher.find())
+        {
+            return matcher.start();
+        }
+        else
+        {
+            return -1;
+        }
     }
 
     public static String normalizeSpaces(String string)

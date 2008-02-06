@@ -8,18 +8,18 @@ import java.io.File;
 /**
  *
  */
-public class AttributeMetadataXmlSerializer
+public class BindableMetadataXmlSerializer
 {
     public static void main(String [] args)
     {
-        AttributeMetadataBuilder builder = new AttributeMetadataBuilder();
+        BindableMetadataBuilder builder = new BindableMetadataBuilder();
 
         for (String path : args)
         {
             builder.addSourceTree(new File(path));
         }
 
-        builder.addListener(new XmlSerializerAttributeMetadataBuilderListener());
+        builder.addListener(new XmlSerializerBindableMetadataBuilderListener());
         builder.buildAttributeMetadata();
     }
 }

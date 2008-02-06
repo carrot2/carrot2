@@ -69,7 +69,7 @@ public class ExampleUtils
         }
     }
 
-    private static String getIndent(final int level)
+    public static String getIndent(final int level)
     {
         final StringBuilder indent = new StringBuilder();
         for (int i = 0; i < level; i++)

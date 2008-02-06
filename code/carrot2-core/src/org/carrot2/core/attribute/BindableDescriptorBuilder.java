@@ -3,11 +3,12 @@
  */
 package org.carrot2.core.attribute;
 
+import java.io.InputStream;
 import java.lang.reflect.Field;
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 
 import org.carrot2.core.constraint.Constraint;
+import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.resource.Resource;
 import org.carrot2.util.resource.ResourceUtilsFactory;
 import org.simpleframework.xml.load.Persister;
@@ -37,14 +38,33 @@ public class BindableDescriptorBuilder
      */
     public static BindableDescriptor buildDescriptor(Object initializedInstance)
     {
+        return buildDescriptor(initializedInstance, new HashSet<Object>());
+    }
+
+    /**
+     *
+     */
+    private static BindableDescriptor buildDescriptor(Object initializedInstance,
+        Set<Object> processedInstances)
+    {
         final Class<?> clazz = initializedInstance.getClass();
         if (clazz.getAnnotation(Bindable.class) == null)
         {
             throw new IllegalArgumentException("Provided instance must be @Bindable");
         }
 
+        if (!processedInstances.add(initializedInstance))
+        {
+            throw new UnsupportedOperationException(
+                "Circular references are not supported");
+        }
+
+        // Load metadata
+        BindableMetadata bindableMetadata = buildMetadataForBindableHierarchy(clazz);
+
         // Build descriptors for direct attributes
-        Map<String, AttributeDescriptor> attributeDescriptors = buildAttributeDescriptors(initializedInstance);
+        Map<String, AttributeDescriptor> attributeDescriptors = buildAttributeDescriptors(
+            initializedInstance, bindableMetadata);
 
         // Build descriptors for nested bindables
         Map<String, BindableDescriptor> bindableDescriptors = Maps.newHashBiMap();
@@ -68,29 +88,24 @@ public class BindableDescriptorBuilder
 
             // Descend only for non-null values
             if (fieldValue != null
-                && field.getClass().getAnnotation(Bindable.class) != null)
+                && fieldValue.getClass().getAnnotation(Bindable.class) != null)
             {
-                bindableDescriptors.put(field.getName(), buildDescriptor(fieldValue));
+                bindableDescriptors.put(field.getName(), buildDescriptor(fieldValue,
+                    processedInstances));
             }
         }
 
-        return new BindableDescriptor(bindableDescriptors, attributeDescriptors);
+        return new BindableDescriptor(bindableMetadata, bindableDescriptors,
+            attributeDescriptors);
     }
 
     /**
      *
      */
     private static Map<String, AttributeDescriptor> buildAttributeDescriptors(
-        Object initializedInstance)
+        Object initializedInstance, BindableMetadata bindableMetadata)
     {
         final Class<?> clazz = initializedInstance.getClass();
-        if (clazz.getAnnotation(Bindable.class) == null)
-        {
-            throw new IllegalArgumentException("Provided instance must be @Bindable");
-        }
-
-        // Load metadata
-        BindableMetadata bindableMetadata = buildMetadataForBindableHierarchy(clazz);
 
         Map<String, AttributeDescriptor> result = Maps.newHashMap();
         Collection<Field> fieldsFromBindableHierarchy = BindableUtils
@@ -141,18 +156,30 @@ public class BindableDescriptorBuilder
         BindableMetadata bindableMetadata = null;
         if (metadataXml != null)
         {
+            InputStream inputStream = null;
             try
             {
+                inputStream = metadataXml.open();
                 bindableMetadata = new Persister().read(BindableMetadata.class,
-                    metadataXml.open());
+                    inputStream);
             }
             catch (Exception e)
             {
                 throw new RuntimeException("Could not load attribute metadata from: "
                     + metadataXml, e);
             }
+            finally
+            {
+                CloseableUtils.closeIgnoringException(inputStream);
+            }
+
+            return bindableMetadata;
         }
-        return bindableMetadata;
+        else
+        {
+            throw new RuntimeException("Could not load attribute metadata from: "
+                + clazz.getSimpleName() + ".xml");
+        }
     }
 
     /**

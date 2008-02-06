@@ -165,7 +165,7 @@ public class AttributeBinder
                 if (boundInstances.contains(value))
                 {
                     throw new UnsupportedOperationException(
-                        "Binding circular references not is supported");
+                        "Circular references are not supported");
                 }
 
                 // Recursively descend into other types.
