@@ -19,9 +19,6 @@ import com.google.common.collect.Maps;
  * TODO: implement a simple API for querying/ filtering the descriptor tree:
  * 
  * <pre>
- *  Querying the descriptors:
- *  - filter: Input, Output, both (priority: high)
- *  - filter: Init, Processing (priority: high)
  *  - filter: level (priority: medium)
  *  - filter: group
  *  - filter: text search in title/label/description (for filtering like in Eclipse)
@@ -29,6 +26,10 @@ import com.google.common.collect.Maps;
  *  - organization: tree according to components (priority: high)
  *  - organization: flat list (priority: high)
  *  - organization: tree according to group
+ *  
+ *  - sorting: by declaration order (default)
+ *  - sorting: by label
+ *  - sorting: by level
  * </pre>
  */
 public class BindableDescriptorBuilder
@@ -67,7 +68,7 @@ public class BindableDescriptorBuilder
             initializedInstance, bindableMetadata);
 
         // Build descriptors for nested bindables
-        Map<String, BindableDescriptor> bindableDescriptors = Maps.newHashBiMap();
+        Map<String, BindableDescriptor> bindableDescriptors = Maps.newLinkedHashMap();
 
         Collection<Field> fieldsFromBindableHierarchy = BindableUtils
             .getFieldsFromBindableHierarchy(clazz);
@@ -107,7 +108,7 @@ public class BindableDescriptorBuilder
     {
         final Class<?> clazz = initializedInstance.getClass();
 
-        Map<String, AttributeDescriptor> result = Maps.newHashMap();
+        Map<String, AttributeDescriptor> result = Maps.newLinkedHashMap();
         Collection<Field> fieldsFromBindableHierarchy = BindableUtils
             .getFieldsFromBindableHierarchy(clazz);
 
@@ -138,7 +139,7 @@ public class BindableDescriptorBuilder
             if (bindableClass != clazz)
             {
                 final BindableMetadata moreMetadata = getBindableMetadata(bindableClass);
-                bindableMetadata.getAttributeMetadata().putAll(
+                bindableMetadata.getInternalAttributeMetadata().putAll(
                     moreMetadata.getAttributeMetadata());
             }
         }

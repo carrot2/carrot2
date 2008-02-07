@@ -3,9 +3,14 @@
  */
 package org.carrot2.core.attribute;
 
-import java.util.Map;
+import java.lang.annotation.Annotation;
+import java.util.*;
 
 import org.apache.commons.lang.ObjectUtils;
+
+import com.google.common.base.Predicate;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 /**
  *
@@ -24,13 +29,102 @@ public class BindableDescriptor
     public final Map<String, AttributeDescriptor> attributeDescriptors;
 
     public final BindableMetadata metadata;
-    
-    BindableDescriptor(BindableMetadata metadata, Map<String, BindableDescriptor> bindableDescriptors,
+
+    BindableDescriptor(BindableMetadata metadata,
+        Map<String, BindableDescriptor> bindableDescriptors,
         Map<String, AttributeDescriptor> attributeDescriptors)
     {
         this.metadata = metadata;
-        this.bindableDescriptors = bindableDescriptors;
-        this.attributeDescriptors = attributeDescriptors;
+        this.bindableDescriptors = Collections.unmodifiableMap(bindableDescriptors);
+        this.attributeDescriptors = Collections.unmodifiableMap(attributeDescriptors);
+    }
+
+    /**
+     * Filters out descriptors for which the provided <code>predicate</code> returns
+     * <code>false</code>.
+     * 
+     * @param predicate predicate to the applied
+     */
+    public BindableDescriptor only(Predicate<AttributeDescriptor> predicate)
+    {
+        final Map<String, AttributeDescriptor> filteredAttributeDescriptors = Maps
+            .newLinkedHashMap();
+        outer: for (Map.Entry<String, AttributeDescriptor> entry : attributeDescriptors
+            .entrySet())
+        {
+            final AttributeDescriptor descriptor = entry.getValue();
+            if (!predicate.apply(descriptor))
+            {
+                continue outer;
+            }
+            filteredAttributeDescriptors.put(entry.getKey(), descriptor);
+        }
+
+        // Now recursively filter bindable descriptors
+        final Map<String, BindableDescriptor> filteredBindableDescriptors = Maps
+            .newLinkedHashMap();
+        for (Map.Entry<String, BindableDescriptor> entry : bindableDescriptors.entrySet())
+        {
+            filteredBindableDescriptors.put(entry.getKey(), entry.getValue().only(
+                predicate));
+        }
+
+        return new BindableDescriptor(this.metadata, filteredBindableDescriptors,
+            filteredAttributeDescriptors);
+    }
+
+    /**
+     * Filters out descriptors that do not match at least one of the provided binding time
+     * and binding direction restrictions.
+     * 
+     * @param bindingAnnotationClasses binding time and direction annotation classes to be
+     *            matched. Classes other than {@link Input}, {@link Output},
+     *            {@link Init} and {@link Processing} will be ignored.
+     */
+    @SuppressWarnings("unchecked")
+    public BindableDescriptor only(final Class<?>... bindingAnnotationClasses)
+    {
+        return only(new Predicate<AttributeDescriptor>()
+        {
+            @Override
+            public boolean apply(AttributeDescriptor descriptor)
+            {
+                final Set<Class<? extends Annotation>> annotationClasses = Sets
+                    .newHashSet(Input.class, Output.class, Init.class, Processing.class);
+                annotationClasses.retainAll(Arrays.asList(bindingAnnotationClasses));
+
+                for (Class<? extends Annotation> annotationClass : annotationClasses)
+                {
+                    if (!descriptor.hasBindingAnnotation(annotationClass))
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+        });
+    }
+
+    /**
+     * Returns a flattened structure of attribute descriptors. After flattening
+     * {@link #attributeDescriptors} contains descriptors of direct and referenced
+     * attributes and {@link #bindableDescriptors} is empty.
+     */
+    public BindableDescriptor flatten()
+    {
+        // Copy attributes to a new map
+        Map<String, AttributeDescriptor> flatDescriptors = Maps.newLinkedHashMap();
+        flatDescriptors.putAll(attributeDescriptors);
+
+        // Recursively flatten the references
+        for (BindableDescriptor descriptor : bindableDescriptors.values())
+        {
+            flatDescriptors.putAll(descriptor.flatten().attributeDescriptors);
+        }
+
+        return new BindableDescriptor(metadata,
+            new HashMap<String, BindableDescriptor>(), flatDescriptors);
     }
 
     @Override

@@ -19,10 +19,10 @@ import com.google.common.collect.Maps;
 public class BindableDescriptorBuilderTest
 {
     @Test
-    public void testSimpleComponent()
+    public void testSimpleComponent() throws Exception
     {
         final Object instance = new SingleClass();
-        final String className = SingleClass.class.getName();
+        final Class<?> clazz = SingleClass.class;
 
         BindableDescriptor bindableDescriptor = BindableDescriptorBuilder
             .buildDescriptor(instance);
@@ -30,60 +30,59 @@ public class BindableDescriptorBuilderTest
         assertThat(bindableDescriptor.bindableDescriptors).isEmpty();
         assertThat(bindableDescriptor.attributeDescriptors.values())
             .contains(
-                new AttributeDescriptor(className + ".initInputInt", Integer.class, 10,
-                    null, new AttributeMetadata("Init input int attribute",
-                        "Init Input Int", null)),
-                new AttributeDescriptor(className + ".processingInputString",
-                    String.class, "test", null, new AttributeMetadata(
+                new AttributeDescriptor(clazz.getDeclaredField("initInputInt"), 10, null,
+                    new AttributeMetadata("Init input int attribute", "Init Input Int",
+                        null)),
+                new AttributeDescriptor(clazz.getDeclaredField("processingInputString"),
+                    "test", null, new AttributeMetadata(
                         "Processing input string attribute", "Processing Input String",
                         "Some description.")));
         assertThat(bindableDescriptor.attributeDescriptors.keySet()).excludes(
-            className + ".notAnAttribute");
+            clazz.getName() + ".notAnAttribute");
     }
 
     @Test
-    public void testSubClass()
+    public void testSubClass() throws Exception
     {
         final Object instance = new SubClass();
-        final String subClassName = SubClass.class.getName();
-        final String superClassName = SuperClass.class.getName();
+        final Class<?> subClass = SubClass.class;
+        final Class<?> superClass = SuperClass.class;
 
         BindableDescriptor bindableDescriptor = BindableDescriptorBuilder
             .buildDescriptor(instance);
 
         assertThat(bindableDescriptor.bindableDescriptors).isEmpty();
         assertThat(bindableDescriptor.attributeDescriptors.values()).contains(
-            new AttributeDescriptor(superClassName + ".initInputInt", Integer.class, 5,
-                null, new AttributeMetadata("Super class init input int", null, null)),
-            new AttributeDescriptor(subClassName + ".processingInputString",
-                String.class, "input", null, new AttributeMetadata(
-                    "Subclass processing input", null, null)));
+            new AttributeDescriptor(superClass.getDeclaredField("initInputInt"), 5, null,
+                new AttributeMetadata("Super class init input int", null, null)),
+            new AttributeDescriptor(subClass.getDeclaredField("processingInputString"),
+                "input", null, new AttributeMetadata("Subclass processing input", null,
+                    null)));
     }
 
     @Test
-    public void testBindableReferenceWithDefaultValue()
+    public void testBindableReferenceWithDefaultValue() throws Exception
     {
         final Object instance = new BindableReferenceContainer();
-        final String bindableReferenceClassName = BindableReferenceContainer.class
-            .getName();
-        final String referenceClassName = TestBindableImpl1.class.getName();
+        final Class<?> bindableReferenceClass = BindableReferenceContainer.class;
+        final Class<?> referenceClass = TestBindableImpl1.class;
 
         BindableDescriptor bindableDescriptor = BindableDescriptorBuilder
             .buildDescriptor(instance);
 
         // Direct attributes
         assertThat(bindableDescriptor.attributeDescriptors.values()).contains(
-            new AttributeDescriptor(bindableReferenceClassName + ".bindableAttribute",
-                TestBindable.class, null, null, new AttributeMetadata("Test Bindable",
-                    null, null)));
+            new AttributeDescriptor(bindableReferenceClass
+                .getDeclaredField("bindableAttribute"), null, null,
+                new AttributeMetadata("Test Bindable", null, null)));
 
         // Referenced attributes
         Map<String, AttributeDescriptor> referenceAttributeDescriptors = Maps
             .newHashMap();
-        referenceAttributeDescriptors.put(referenceClassName + ".processingInputInt",
-            new AttributeDescriptor(referenceClassName + ".processingInputInt",
-                Integer.class, 10, null, new AttributeMetadata("Processing input int",
-                    null, null)));
+        referenceAttributeDescriptors.put(referenceClass.getName()
+            + ".processingInputInt", new AttributeDescriptor(referenceClass
+            .getDeclaredField("processingInputInt"), 10, null, new AttributeMetadata(
+            "Processing input int", null, null)));
 
         assertThat(bindableDescriptor.bindableDescriptors.values())
             .contains(
@@ -93,13 +92,12 @@ public class BindableDescriptorBuilderTest
     }
 
     @Test
-    public void testBindableReferenceWithBoundValue() throws InstantiationException
+    public void testBindableReferenceWithBoundValue() throws Exception
     {
         final Object instance = new BindableReferenceContainer();
-        final String bindableReferenceClassName = BindableReferenceContainer.class
-            .getName();
-        final String referenceClassName1 = TestBindableImpl1.class.getName();
-        final String referenceClassName2 = TestBindableImpl2.class.getName();
+        final Class<?> bindableReferenceClass = BindableReferenceContainer.class;
+        final Class<?> referenceClass1 = TestBindableImpl1.class;
+        final Class<?> referenceClass2 = TestBindableImpl2.class;
 
         // Bind init input attributes
         final Map<String, Object> attributes = Maps.newHashMap();
@@ -112,16 +110,16 @@ public class BindableDescriptorBuilderTest
 
         // Direct attributes
         assertThat(bindableDescriptor.attributeDescriptors.values()).contains(
-            new AttributeDescriptor(bindableReferenceClassName + ".bindableAttribute",
-                TestBindable.class, null, null, new AttributeMetadata("Test Bindable",
-                    null, null)));
+            new AttributeDescriptor(bindableReferenceClass
+                .getDeclaredField("bindableAttribute"), null, null,
+                new AttributeMetadata("Test Bindable", null, null)));
 
         // Referenced attributes -- regular field
         Map<String, AttributeDescriptor> fieldReferenceAttributeDescriptors = Maps
             .newHashMap();
-        fieldReferenceAttributeDescriptors.put(referenceClassName1
-            + ".processingInputInt", new AttributeDescriptor(referenceClassName1
-            + ".processingInputInt", Integer.class, 10, null, new AttributeMetadata(
+        fieldReferenceAttributeDescriptors.put(referenceClass1.getName()
+            + ".processingInputInt", new AttributeDescriptor(referenceClass1
+            .getDeclaredField("processingInputInt"), 10, null, new AttributeMetadata(
             "Processing input int", null, null)));
 
         assertThat(bindableDescriptor.bindableDescriptors.values()).contains(
@@ -132,9 +130,10 @@ public class BindableDescriptorBuilderTest
         // Referenced attributes -- attribute field
         Map<String, AttributeDescriptor> attributeReferenceAttributeDescriptors = Maps
             .newHashMap();
-        attributeReferenceAttributeDescriptors.put(referenceClassName2 + ".initInputInt",
-            new AttributeDescriptor(referenceClassName2 + ".initInputInt", Integer.class,
-                12, null, new AttributeMetadata("Init input int", null, null)));
+        attributeReferenceAttributeDescriptors.put(referenceClass2.getName()
+            + ".initInputInt", new AttributeDescriptor(referenceClass2
+            .getDeclaredField("initInputInt"), 12, null, new AttributeMetadata(
+            "Init input int", null, null)));
 
         assertThat(bindableDescriptor.bindableDescriptors.values()).contains(
             new BindableDescriptor(new BindableMetadata(),

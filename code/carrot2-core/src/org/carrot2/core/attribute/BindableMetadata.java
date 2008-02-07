@@ -3,6 +3,7 @@
  */
 package org.carrot2.core.attribute;
 
+import java.util.Collections;
 import java.util.Map;
 
 import org.apache.commons.lang.ObjectUtils;
@@ -16,32 +17,25 @@ import org.simpleframework.xml.Root;
 public class BindableMetadata extends CommonMetadata
 {
     @ElementMap(name = "attributes", entry = "attribute", key = "field-name", inline = false, attribute = true)
-    private Map<String, AttributeMetadata> attributeMetadata;
+    private Map<String, AttributeMetadata> attributeMetadataInternal;
 
     BindableMetadata()
     {
     }
 
-    BindableMetadata(String title, String label, String description)
-    {
-        this.title = title;
-        this.label = label;
-        this.description = description;
-    }
-
-    public BindableMetadata(Map<String, AttributeMetadata> attributeMetadata)
-    {
-        this.attributeMetadata = attributeMetadata;
-    }
-
     public Map<String, AttributeMetadata> getAttributeMetadata()
     {
-        return attributeMetadata;
+        return Collections.unmodifiableMap(attributeMetadataInternal);
+    }
+    
+    Map<String, AttributeMetadata> getInternalAttributeMetadata()
+    {
+        return attributeMetadataInternal;
     }
 
     void setAttributeMetadata(Map<String, AttributeMetadata> attributeMetadata)
     {
-        this.attributeMetadata = attributeMetadata;
+        this.attributeMetadataInternal = attributeMetadata;
     }
 
     @Override

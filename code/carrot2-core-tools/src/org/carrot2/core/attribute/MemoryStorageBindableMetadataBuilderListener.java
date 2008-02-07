@@ -14,7 +14,7 @@ import com.thoughtworks.qdox.model.JavaClass;
 public class MemoryStorageBindableMetadataBuilderListener implements
     BindableMetadataBuilderListener
 {
-    private Map<String, BindableMetadata> bindableMetadata = Maps.newHashMap();
+    private Map<String, BindableMetadata> bindableMetadata = Maps.newLinkedHashMap();
 
     @Override
     public void bindableMetadataBuilt(JavaClass bindable,

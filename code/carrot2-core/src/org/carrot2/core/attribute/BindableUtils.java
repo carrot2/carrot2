@@ -23,7 +23,7 @@ final class BindableUtils
             Collection<Field> fields = FIELD_CACHE.get(clazz);
             if (fields == null)
             {
-                fields = new HashSet<Field>();
+                fields = new LinkedHashSet<Field>();
 
                 if (clazz.getAnnotation(Bindable.class) != null)
                 {

@@ -26,7 +26,6 @@ public final class SimpleController
      * cluster collector components). The latter case is useful when some filters are
      * required in between the source and clustering components (e.g. HTML stripping).
      * 
-     * @param parameters Both instantiation and runtime parameters.
      * @param attributes A map of attributes passed between components during processing.
      * @param processingComponentClasses This is one of the places where generics suck:
      *            it's nice to have a varargs of class with an upper bound here, but the

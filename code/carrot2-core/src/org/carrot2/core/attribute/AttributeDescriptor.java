@@ -1,5 +1,6 @@
 package org.carrot2.core.attribute;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 import org.apache.commons.lang.ClassUtils;
@@ -15,26 +16,46 @@ public class AttributeDescriptor
     public final Object defaultValue;
     public final Constraint constraint;
 
+    public final boolean initAttribute;
+    public final boolean processingAttribute;
+    public final boolean inputAttribute;
+    public final boolean outputAttribute;
+
     AttributeDescriptor(Field field, Object defaultValue, Constraint constraint,
         AttributeMetadata metadata)
     {
-        this(BindableUtils.getKey(field), ClassUtils.primitiveToWrapper(field.getType()),
-            defaultValue, constraint, metadata);
-    }
-
-    AttributeDescriptor(String key, Class<?> type, Object defaultValue,
-        Constraint constraint, AttributeMetadata metadata)
-    {
-        if (key == null || type == null)
-        {
-            throw new IllegalArgumentException();
-        }
-
-        this.key = key;
-        this.type = type;
+        this.key = BindableUtils.getKey(field);
+        this.type = ClassUtils.primitiveToWrapper(field.getType());
         this.defaultValue = defaultValue;
         this.constraint = constraint;
         this.metadata = metadata;
+
+        this.initAttribute = field.getAnnotation(Init.class) != null;
+        this.processingAttribute = field.getAnnotation(Processing.class) != null;
+        this.inputAttribute = field.getAnnotation(Input.class) != null;
+        this.outputAttribute = field.getAnnotation(Output.class) != null;
+    }
+
+    boolean hasBindingAnnotation(Class<? extends Annotation> annotationClass)
+    {
+        if (Init.class.equals(annotationClass) && initAttribute)
+        {
+            return true;
+        }
+        else if (Processing.class.equals(annotationClass) && processingAttribute)
+        {
+            return true;
+        }
+        else if (Input.class.equals(annotationClass) && inputAttribute)
+        {
+            return true;
+        }
+        else if (Output.class.equals(annotationClass) && outputAttribute)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     @Override

@@ -25,6 +25,7 @@ public class WorkingWithAttributeDescriptors
         BindableDescriptor descriptor = BindableDescriptorBuilder
             .buildDescriptor(yahooDocumentSource);
         displayDescriptor(descriptor, 0);
+        System.out.println("\n");
 
         // Notice that for some values of initialization attribute values,
         // you may get different attribute descriptors
@@ -34,8 +35,20 @@ public class WorkingWithAttributeDescriptors
         AttributeBinder
             .bind(yahooDocumentSource, initAttributes, Init.class, Input.class);
 
-        System.out.println("\n");
         descriptor = BindableDescriptorBuilder.buildDescriptor(yahooDocumentSource);
+        displayDescriptor(descriptor, 0);
+        System.out.println("\n");
+
+        // You can also get descriptors for a subset of component's attributes
+        // (in the case below, only input attributes bound at processing time)
+        descriptor = BindableDescriptorBuilder.buildDescriptor(yahooDocumentSource).only(
+            Input.class, Processing.class);
+        displayDescriptor(descriptor, 0);
+        System.out.println("\n");
+
+        // You can also flatten the descriptor tree to a linear list
+        descriptor = BindableDescriptorBuilder.buildDescriptor(yahooDocumentSource).only(
+            Input.class, Processing.class).flatten();
         displayDescriptor(descriptor, 0);
     }
 

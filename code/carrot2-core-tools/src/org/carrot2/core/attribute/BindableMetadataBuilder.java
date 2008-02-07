@@ -95,7 +95,7 @@ public class BindableMetadataBuilder
     private void buildAttributeMetadata(JavaClass bindable,
         BindableMetadata bindableMetadata)
     {
-        final Map<String, AttributeMetadata> result = Maps.newHashMap();
+        final Map<String, AttributeMetadata> result = Maps.newLinkedHashMap();
 
         final JavaField [] fields = bindable.getFields();
         for (JavaField javaField : fields)
