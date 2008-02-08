@@ -64,6 +64,14 @@ public class AttributeTitles
     @Input
     @Attribute
     private int titleWithExclamationMark;
+    
+    /**
+     * Title with extra periods (e.g. www.carrot2.org). Description.
+     */
+    @Init
+    @Input
+    @Attribute
+    private int titleWithExtraPeriods;
 
     /**
      * Title with description. Description follows.
@@ -84,7 +92,9 @@ public class AttributeTitles
     private int titleWithLabel;
 
     /**
-     * @label label Title at the bottom. This arrangement is not supported.
+     * @label label 
+     * 
+     * Title at the bottom. This arrangement is not supported.
      */
     @Init
     @Input

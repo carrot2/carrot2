@@ -14,7 +14,8 @@ import com.thoughtworks.qdox.model.Annotation;
  */
 public final class JavaDocBuilderUtils
 {
-    private static final Pattern FIRST_SENTENCE_PATTERN = Pattern.compile("\\.\\s?");
+    private static final Pattern FIRST_SENTENCE_PATTERN = Pattern
+        .compile("\\.(?<!((\\w\\.){2,5}+))(\\s|\\z)");
 
     private JavaDocBuilderUtils()
     {
