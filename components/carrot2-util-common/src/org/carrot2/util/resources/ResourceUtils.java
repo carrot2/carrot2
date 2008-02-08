@@ -13,9 +13,11 @@
 
 package org.carrot2.util.resources;
 
+import java.io.*;
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
+import org.carrot2.util.StreamUtils;
 
 /**
  * Resource loading abstraction layer.
@@ -101,5 +103,21 @@ public final class ResourceUtils
     public Resource getFirst(String resource)
     {
         return getFirst(resource, null);
+    }
+
+    /**
+     * Prefetches the entire content of <code>stream</code>, closing it at the
+     * end. Returns an input stream to in-memory buffer.
+     */
+    public static InputStream prefetch(InputStream stream)
+        throws IOException
+    {
+        if (stream instanceof ByteArrayInputStream)
+        {
+            return stream;
+        }
+
+        final byte [] content = StreamUtils.readFullyAndCloseInput(stream);
+        return new ByteArrayInputStream(content);
     }
 }

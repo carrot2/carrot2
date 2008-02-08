@@ -17,9 +17,9 @@ import java.io.*;
 
 
 /**
- * 
+ * A local filesystem resource.
  */
-public class FileResource implements Resource
+public final class FileResource implements Resource
 {
     private final File file;
     private final String info;
@@ -32,7 +32,7 @@ public class FileResource implements Resource
 
     public InputStream open() throws IOException
     {
-        return new FileInputStream(file);
+        return ResourceUtils.prefetch(new FileInputStream(file));
     }
 
     public String toString() {
