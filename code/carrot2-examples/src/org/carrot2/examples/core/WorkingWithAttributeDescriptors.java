@@ -3,10 +3,10 @@
  */
 package org.carrot2.examples.core;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import org.carrot2.core.attribute.*;
+import org.carrot2.core.constraint.ConstraintUtils;
 import org.carrot2.examples.ExampleUtils;
 import org.carrot2.source.yahoo.YahooDocumentSource;
 import org.carrot2.source.yahoo.YahooNewsSearchService;
@@ -19,6 +19,8 @@ public class WorkingWithAttributeDescriptors
 {
     public static void main(String [] args) throws InstantiationException
     {
+        // Here is the component instance that we will be working with. Notice
+        // that the BindableDescriptorBuilder requires an initialized instance on input.
         YahooDocumentSource yahooDocumentSource = new YahooDocumentSource();
 
         // Descriptors for a component with default initialization attribute values
@@ -50,6 +52,18 @@ public class WorkingWithAttributeDescriptors
         descriptor = BindableDescriptorBuilder.buildDescriptor(yahooDocumentSource).only(
             Input.class, Processing.class).flatten();
         displayDescriptor(descriptor, 0);
+        System.out.println("\n");
+
+        // For attributes whose value is not a primitive type (e.g. see
+        // YahooDocumentSource.service), you may want to get a list of all allowed
+        // implementing classes to be shown e.g. in a combo box.
+        descriptor = BindableDescriptorBuilder.buildDescriptor(yahooDocumentSource);
+        final AttributeDescriptor yahooServiceDescriptor = descriptor.attributeDescriptors
+            .get(YahooDocumentSource.class.getName() + ".service");
+        final Class<?> [] implementingClasses = ConstraintUtils
+            .getImplementingClasses(yahooServiceDescriptor.constraint);
+        System.out.println(yahooServiceDescriptor.metadata.getLabel()
+            + ": allowed implementations: " + Arrays.toString(implementingClasses));
     }
 
     private static void displayDescriptor(BindableDescriptor descriptor, int indent)

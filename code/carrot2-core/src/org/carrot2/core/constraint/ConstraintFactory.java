@@ -19,10 +19,10 @@ public class ConstraintFactory
 
         try
         {
-            Constraint implementator = createImplementation(ann.annotationType()
+            Constraint implementation = createImplementation(ann.annotationType()
                 .getAnnotation(IsConstraint.class));
-            assignFieldValues(implementator, ann);
-            return implementator;
+            assignFieldValues(implementation, ann);
+            return implementation;
         }
         catch (Exception e)
         {

@@ -6,6 +6,7 @@ import java.util.concurrent.*;
 import org.apache.log4j.Logger;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
+import org.carrot2.core.constraint.ImplementingClasses;
 import org.carrot2.source.*;
 
 import com.google.common.base.Predicate;
@@ -36,6 +37,10 @@ public final class YahooDocumentSource extends SearchEngine
     @Init
     @Input
     @Attribute
+    @ImplementingClasses(classes =
+    {
+        YahooWebSearchService.class, YahooNewsSearchService.class
+    })
     private YahooSearchService service = new YahooWebSearchService();
 
     @Processing

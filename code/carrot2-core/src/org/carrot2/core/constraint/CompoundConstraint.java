@@ -14,17 +14,14 @@ public class CompoundConstraint implements Constraint
 {
     private final Set<Constraint> constraints;
 
-    /**
-     * 
-     */
-    public CompoundConstraint(Constraint... constraints)
-    {
-        this.constraints = new HashSet<Constraint>(Arrays.asList(constraints));
-    }
-
     public CompoundConstraint(Collection<? extends Constraint> constraints)
     {
         this.constraints = new HashSet<Constraint>(constraints);
+    }
+    
+    public CompoundConstraint(Constraint... constraints)
+    {
+        this.constraints = new HashSet<Constraint>(Arrays.asList(constraints));
     }
     
     @Override
@@ -41,13 +38,9 @@ public class CompoundConstraint implements Constraint
         return true;
     }
 
-    public CompoundConstraint add(Constraint... constraints)
+    Set<Constraint> getConstraints()
     {
-        for (int i = 0; i < constraints.length; i++)
-        {
-            this.constraints.add(constraints[i]);
-        }
-        return this;
+        return constraints;
     }
     
     @SuppressWarnings("unchecked")
