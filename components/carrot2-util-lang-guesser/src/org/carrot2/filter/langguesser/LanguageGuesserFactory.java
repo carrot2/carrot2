@@ -13,21 +13,13 @@
 
 package org.carrot2.filter.langguesser;
 
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
-import org.carrot2.core.linguistic.LanguageGuesser;
 import org.apache.lucene.misc.TrigramLanguageGuesser;
 import org.apache.lucene.misc.Trigrams;
+import org.carrot2.core.linguistic.LanguageGuesser;
+import org.carrot2.util.resources.*;
 
 /**
  * Language guesser factory for the Carrot2 framework.
@@ -66,11 +58,17 @@ public class LanguageGuesserFactory {
     static {
         languages = new HashSet();
 
+        final ResourceUtils resourceUtils = ResourceUtilsFactory.getDefaultResourceUtils();
         // read properties file specifying available languages.
         Properties props = new Properties();
         try {
-			props.load(
-                LanguageGuesserFactory.class.getResourceAsStream("/trigrams/languages.properties"));
+            final Resource res = resourceUtils.getFirst("/trigrams/languages.properties", LanguageGuesserFactory.class);
+            if (res == null) {
+                throw new RuntimeException("Language resources not found.");
+            }
+
+            // Prefetch so that we don't have to worry about closing the stream.
+			props.load(ResourceUtils.prefetch(res.open()));
 		} catch (IOException e) {
             throw new RuntimeException("Could not load the required language.properties resource.");
 		}
@@ -82,20 +80,24 @@ public class LanguageGuesserFactory {
         StringTokenizer tokenizer = new StringTokenizer( languagesList, ",;");
         while (tokenizer.hasMoreTokens()) {
         	String langCode = tokenizer.nextToken().trim();
+
             // check that the resource indeed exists.
-            InputStream is = LanguageGuesserFactory.class.getResourceAsStream("/trigrams/" + langCode + ".tri");
-            if (is == null)
-                throw new RuntimeException("Trigrams resource does not exist for language: "
-                        + langCode);
+            final Resource res = resourceUtils.getFirst("/trigrams/" + langCode + ".tri", LanguageGuesserFactory.class);
+            if (res == null)
+            {
+                throw new RuntimeException("Trigrams resource does not exist for language: " + langCode);
+            }
+
+            InputStream is = null;
             try {
+                is = res.open();
                 is = new DataInputStream(new BufferedInputStream(is));
             	Trigrams t = Trigrams.loadFromInputStream(
                         (DataInputStream) is);
             	languages.add(langCode);
                 langMap.put(langCode, t);
             } catch (IOException e) {
-                throw new RuntimeException("Could not read language trigram file: "
-                        + langCode);
+                throw new RuntimeException("Could not read language trigram file: " + langCode);
 			} finally {
                 try {
 					is.close();

@@ -20,6 +20,7 @@ import org.apache.log4j.*;
 import org.carrot2.core.*;
 import org.carrot2.core.clustering.*;
 import org.carrot2.core.fetcher.*;
+import org.carrot2.util.resources.*;
 
 public class YahooApiInputComponent extends LocalInputComponentBase 
 	implements RawDocumentsProducer {
@@ -54,10 +55,17 @@ public class YahooApiInputComponent extends LocalInputComponentBase
     protected YahooApiInputComponent(String descriptorResource) {
         final YahooSearchServiceDescriptor descriptor = new YahooSearchServiceDescriptor();
         try {
-            descriptor.initializeFromXML(
-                this.getClass().getClassLoader().getResourceAsStream(descriptorResource));
+            final Resource resource = ResourceUtilsFactory.getDefaultResourceUtils().getFirst(
+                descriptorResource);
+            if (resource == null) {
+                throw new RuntimeException("Could not find default Yahoo service descriptor: "
+                    + descriptorResource);
+            }
+            // Prefetch so that we don't have to worry about closing the stream.
+            descriptor.initializeFromXML(ResourceUtils.prefetch(resource.open()));
         } catch (IOException e) {
-            throw new RuntimeException("Could not find default Yahoo service descriptor.");
+            throw new RuntimeException("Could not load service descriptor: "
+                + descriptorResource, e);
         }
         final YahooSearchService service = new YahooSearchService(descriptor);
         this.service = service;
