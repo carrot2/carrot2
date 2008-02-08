@@ -18,7 +18,7 @@ package org.carrot2.util.resources;
  * Prefixes all resource names with a given prefix at lookup time and
  * delegates to another resource locator. 
  */
-public class PrefixDecoratorLocator implements ResourceLocator
+public final class PrefixDecoratorLocator implements ResourceLocator
 {
     private final ResourceLocator delegate;
     private final String prefix;

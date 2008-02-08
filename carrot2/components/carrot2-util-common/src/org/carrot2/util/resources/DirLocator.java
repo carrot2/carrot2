@@ -19,7 +19,7 @@ import java.io.File;
 /**
  * Looks up resources in a filesystem folder. 
  */
-public class DirLocator implements ResourceLocator
+public final class DirLocator implements ResourceLocator
 {
     /** The folder relative to which resources are resolved. */
     private File dir;
