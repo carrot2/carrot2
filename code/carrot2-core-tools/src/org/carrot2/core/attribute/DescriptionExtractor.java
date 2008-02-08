@@ -15,21 +15,13 @@ public class DescriptionExtractor implements MetadataExtractor
     public boolean extractMetadataItem(AbstractJavaEntity javaEntity,
         JavaDocBuilder javaDocBuilder, CommonMetadata attributeMetadata)
     {
-        final String comment = JavaDocBuilderUtils.normalizeSpaces(javaEntity
-            .getComment());
+        final String comment = JavaDocBuilderUtils.toPlainText(javaEntity.getComment());
         if (comment == null)
         {
             return false;
         }
 
-        final String commentTrimmed = comment.trim();
-        if (commentTrimmed.length() == 0)
-        {
-            return false;
-        }
-
-        final int next = JavaDocBuilderUtils
-            .getEndOfFirstSenteceCharIndex(commentTrimmed);
+        final int next = JavaDocBuilderUtils.getEndOfFirstSenteceCharIndex(comment);
         if (next > 0 && next < comment.length())
         {
             final String description = comment.substring(next + 1).trim();

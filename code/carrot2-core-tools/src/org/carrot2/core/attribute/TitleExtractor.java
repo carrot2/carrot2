@@ -15,31 +15,24 @@ public class TitleExtractor implements MetadataExtractor
     public boolean extractMetadataItem(AbstractJavaEntity javaEntity,
         JavaDocBuilder javaDocBuilder, CommonMetadata attributeMetadata)
     {
-        final String comment = JavaDocBuilderUtils.normalizeSpaces(javaEntity
-            .getComment());
+        final String comment = JavaDocBuilderUtils.toPlainText(javaEntity.getComment());
         if (comment == null)
         {
             return false;
         }
 
-        final String commentTrimmed = comment.trim();
-        if (commentTrimmed.length() == 0)
-        {
-            return false;
-        }
-
         final int next = JavaDocBuilderUtils
-            .getEndOfFirstSenteceCharIndex(commentTrimmed);
+            .getEndOfFirstSenteceCharIndex(comment);
         if (next >= 0)
         {
             // Strip off the last "."
-            final String firstSentence = commentTrimmed.substring(0, next).trim();
+            final String firstSentence = comment.substring(0, next).trim();
             attributeMetadata.setTitle(firstSentence);
             return true;
         }
         else
         {
-            attributeMetadata.setTitle(commentTrimmed);
+            attributeMetadata.setTitle(comment);
             return true;
         }
     }

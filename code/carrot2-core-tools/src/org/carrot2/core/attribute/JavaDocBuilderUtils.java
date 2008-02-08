@@ -17,6 +17,9 @@ public final class JavaDocBuilderUtils
     private static final Pattern FIRST_SENTENCE_PATTERN = Pattern
         .compile("\\.(?<!((\\w\\.){2,5}+))(\\s|\\z)");
 
+    private static final Pattern LINK_TO_TEXT_PATTERN = Pattern
+        .compile("\\{@link\\s(.+)\\}");
+
     private JavaDocBuilderUtils()
     {
         // No instantiation
@@ -62,5 +65,27 @@ public final class JavaDocBuilderUtils
             return null;
         }
         return string.replaceAll("[\\t\\r\\n]+", " ");
+    }
+
+    public static String renderInlineTags(String comment)
+    {
+        return LINK_TO_TEXT_PATTERN.matcher(comment).replaceAll("$1");
+    }
+
+    public static String toPlainText(String comment)
+    {
+        if (comment == null)
+        {
+            return null;
+        }
+        final String normalizedSpace = normalizeSpaces(comment);
+        final String linksRendered = renderInlineTags(normalizedSpace);
+        final String trimmed = linksRendered.trim();
+        if (trimmed.length() == 0)
+        {
+            return null;
+        }
+
+        return trimmed;
     }
 }

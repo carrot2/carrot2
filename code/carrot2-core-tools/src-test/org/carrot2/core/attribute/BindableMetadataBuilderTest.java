@@ -144,8 +144,16 @@ public class BindableMetadataBuilderTest
         // Note that this scenario is not supported
         checkTitle(AttributeTitles.class, "titleWithExtraPeriods",
             "Title with extra periods (e.g. www.carrot2.org)");
-        checkDescription(AttributeTitles.class, "titleWithExtraPeriods",
-            "Description.");
+        checkDescription(AttributeTitles.class, "titleWithExtraPeriods", "Description.");
+    }
+
+    @Test
+    public void testTitleWithLink()
+    {
+        // Note that this scenario is not supported
+        checkTitle(AttributeTitles.class, "titleWithLink",
+            "Title with link to ProcessingComponent#init()");
+        checkDescription(AttributeTitles.class, "titleWithLink", "Description.");
     }
 
     @Test
