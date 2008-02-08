@@ -1,25 +1,12 @@
-
-/*
- * Carrot2 project.
- *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
- * All rights reserved.
- *
- * Refer to the full license file "carrot2.LICENSE"
- * in the root folder of the repository checkout or at:
- * http://www.carrot2.org/carrot2.LICENSE
- */
-
 package org.carrot2.util.resource;
 
 import java.io.*;
 
 
 /**
- * 
+ * A local filesystem resource.
  */
-public class FileResource implements Resource
+public final class FileResource implements Resource
 {
     private final File file;
     private final String info;
@@ -32,7 +19,7 @@ public class FileResource implements Resource
 
     public InputStream open() throws IOException
     {
-        return new FileInputStream(file);
+        return ResourceUtils.prefetch(new FileInputStream(file));
     }
 
     public String toString() {

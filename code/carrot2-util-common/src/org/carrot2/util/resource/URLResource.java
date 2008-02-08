@@ -16,10 +16,15 @@ package org.carrot2.util.resource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.jar.JarFile;
 
 
 /**
+ * This class opens a connection to a resource pointed to by an URI. Note
+ * that JAR resources <b>should not</b> be accessed this way because the default
+ * handler caches {@link JarFile} instances and thus locks the file.
  * 
+ * @see <a href="http://issues.carrot2.org/browse/CARROT-143">Issue CARROT-143</a>
  */
 public class URLResource implements Resource
 {
@@ -34,14 +39,14 @@ public class URLResource implements Resource
 
     public InputStream open() throws IOException
     {
-        return url.openStream();
+        return ResourceUtils.prefetch(url.openStream());
     }
 
     public String toString() {
         return info;
     }
 
-    public boolean equals(Object obj)
+    public final boolean equals(Object obj)
     {
         if (this == obj) return true;
         if (obj instanceof URLResource) {
@@ -50,7 +55,7 @@ public class URLResource implements Resource
         return false;
     }
 
-    public int hashCode()
+    public final int hashCode()
     {
         return this.info.hashCode();
     }

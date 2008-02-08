@@ -10,5 +10,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-log4j"/>
 	<classpathentry exported="true" kind="var" path="CARROT2_30_CHECKOUT_BASE/lib/commons-lang-2.3.jar"/>
 	<classpathentry kind="var" path="CARROT2_30_CHECKOUT_BASE/lib/google-collections.jar"/>
+	<classpathentry kind="var" path="CARROT2_30_CHECKOUT_BASE/lib/log4j-1.2.14.jar"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>

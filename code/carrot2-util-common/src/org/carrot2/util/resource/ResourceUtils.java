@@ -13,10 +13,11 @@
 
 package org.carrot2.util.resource;
 
+import java.io.*;
 import java.util.ArrayList;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
+import org.carrot2.util.StreamUtils;
 
 import com.google.common.collect.Lists;
 
@@ -28,7 +29,7 @@ public final class ResourceUtils
     /**
      * Logger instance. 
      */
-    private final static Log logger = LogFactory.getLog(ResourceUtils.class);
+    private final static Logger logger = Logger.getLogger(ResourceUtils.class);
 
     /**
      * An array of resource locators (used first to last).
@@ -104,5 +105,21 @@ public final class ResourceUtils
     public Resource getFirst(String resource)
     {
         return getFirst(resource, null);
+    }
+
+    /**
+     * Prefetches the entire content of <code>stream</code>, closing it at the
+     * end. Returns an input stream to in-memory buffer.
+     */
+    public static InputStream prefetch(InputStream stream)
+        throws IOException
+    {
+        if (stream instanceof ByteArrayInputStream)
+        {
+            return stream;
+        }
+
+        final byte [] content = StreamUtils.readFullyAndClose(stream);
+        return new ByteArrayInputStream(content);
     }
 }
