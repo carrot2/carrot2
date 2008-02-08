@@ -53,7 +53,7 @@ public class ProfiledLocalController extends LocalControllerBase
      *      java.lang.String, java.util.Map)
      */
     public ProcessingResult query(String processId, String query,
-        Map requestParameters) throws MissingProcessException, Exception
+        Map requestParameters) throws MissingProcessException, ProcessingException
     {
         // Get the process
         LocalProcess process = (LocalProcess) processes.get(processId);
