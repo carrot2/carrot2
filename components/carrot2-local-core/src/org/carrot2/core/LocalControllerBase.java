@@ -18,22 +18,15 @@ import java.io.InputStream;
 import java.util.*;
 
 import org.apache.commons.pool.*;
-import org.apache.commons.pool.impl.GenericObjectPool;
+import org.apache.commons.pool.impl.StackKeyedObjectPool;
 import org.carrot2.core.controller.*;
 import org.carrot2.core.controller.loaders.ComponentInitializationException;
 import org.carrot2.util.resources.*;
 
 /**
- * <p>A complete base implementation of the
+ * A complete base implementation of the
  * {@link org.carrot2.core.LocalController} interface. Also
  * implements the {@link LocalControllerContext} interface.
- * 
- * <p>This class is in general not thread-safe at initialization time. It is safe to invoke
- * {@link #query(String, String, Map)} method from multiple threads after an instance has been
- * initialized. 
- *
- * <p>The {@link #cleanup()} method must be called to remove internal object pools 
- * properly.   
  *
  * @author Stanislaw Osinski
  * @author Dawid Weiss
@@ -42,54 +35,49 @@ import org.carrot2.util.resources.*;
  */
 public class LocalControllerBase implements LocalController, LocalControllerContext
 {
-    /**
-     * Stores local component pools.
-     * Map<String, GenericObjectPool>
+    /** 
+     * Default number of idle instances in the pool.
      */
-    protected final Map componentPools;
+    public final static int DEFAULT_MAX_SLEEPING_INSTANCES = 3;
 
-    /** Stores local processes */
+    /**
+     * Stores component factories (<String,LocalComponentFactory>). 
+     */
+    protected final Map componentFactories;
+
+    /**
+     * Stores initialized component pools (<String,KeyedObjectPool>). 
+     */
+    protected final KeyedObjectPool componentPools;
+
+    /** 
+     * Stores local processes.
+     */
     protected final Map processes;
 
     /**
-     * Search and autoload component descriptors if they are missing. 
+     * If <code>true</code>, component descriptors should be automatically
+     * discovered and loaded if not available.
      */
     private boolean autoload;
-
-    /**
-     * A flag marking destroyed controller.
-     */
-    private volatile boolean destroyed;
-
-    /**
-     * Default component pool configuration. With this configuration the behaviour of the
-     * pool should be like this:
-     * <ul>
-     * <li>when pool is exhausted, it will grow infinitely
-     * <li>every 5 minutes, 3 oldest idle component instances will be evicted, but only
-     * if they are older than 15 minutes
-     * <li>one idle instance will always be available
-     * </ul>
-     */
-    public static final GenericObjectPool.Config DEFAULT_COMPONENT_POOL_CONFIG;
-    static {
-        DEFAULT_COMPONENT_POOL_CONFIG = new GenericObjectPool.Config();
-        DEFAULT_COMPONENT_POOL_CONFIG.whenExhaustedAction = GenericObjectPool.WHEN_EXHAUSTED_GROW;
-        DEFAULT_COMPONENT_POOL_CONFIG.maxWait = 0; // irrelevant
-        DEFAULT_COMPONENT_POOL_CONFIG.maxActive = 0; // irrelevant
-        DEFAULT_COMPONENT_POOL_CONFIG.maxIdle = 10;
-        DEFAULT_COMPONENT_POOL_CONFIG.timeBetweenEvictionRunsMillis = 1000 * 60 * 5;
-        DEFAULT_COMPONENT_POOL_CONFIG.softMinEvictableIdleTimeMillis = 1000 * 60 * 15;
-        DEFAULT_COMPONENT_POOL_CONFIG.minEvictableIdleTimeMillis = -1; // no hard eviction
-        DEFAULT_COMPONENT_POOL_CONFIG.minIdle = 1;
-        DEFAULT_COMPONENT_POOL_CONFIG.numTestsPerEvictionRun = 3;
-        DEFAULT_COMPONENT_POOL_CONFIG.testOnBorrow = false;
-        DEFAULT_COMPONENT_POOL_CONFIG.testOnReturn = false;
-        DEFAULT_COMPONENT_POOL_CONFIG.testWhileIdle = false;        
-    }
     
-    /** Component pool configuration */
-    private GenericObjectPool.Config poolConfig;
+    /**
+     * An adapter between {@link KeyedObjectPoolFactory} and components' 
+     * {@link LocalComponentFactory} instances.
+     */
+    private KeyedPoolableObjectFactory componentFactoryAdapter = 
+        new BaseKeyedPoolableObjectFactory()
+    {
+        public Object makeObject(Object id) 
+            throws Exception
+        {
+            final LocalComponent component = 
+                ((LocalComponentFactory) componentFactories.get(id)).getInstance();
+            component.init(LocalControllerBase.this);
+
+            return component;
+        }
+    };
     
     /**
      * Default implementation of the {@link ProcessingResult} interface.
@@ -122,54 +110,52 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
             return requestContext;
         }
     }    
-    
+
     /**
      * Creates a new instance of the controller with the default component 
      * pool settings.
      */
     public LocalControllerBase()
     {
-        this(DEFAULT_COMPONENT_POOL_CONFIG);
+        this(DEFAULT_MAX_SLEEPING_INSTANCES);
     }
     
     /**
      * Creates a new instance of the controller with the specified configuration
      * of the component pools.
+     * 
+     * @param maxSleepingInstances Number of idle component instances in the pool.
      */
-    public LocalControllerBase(GenericObjectPool.Config componentPoolConfig)
+    public LocalControllerBase(int maxSleepingInstances)
     {
-        componentPools = new HashMap();
+        this.componentFactories = new HashMap();
+
+        this.componentPools = new StackKeyedObjectPool(
+            componentFactoryAdapter, maxSleepingInstances);
+
         processes = new LinkedHashMap();
-        this.poolConfig = componentPoolConfig;
     }
 
-    /*
+    /**
      * 
      */
-    public void addLocalComponentFactory(String componentId, LocalComponentFactory factory)
+    public void addLocalComponentFactory(String componentId,
+        final LocalComponentFactory factory)
         throws DuplicatedKeyException
     {
-        if (componentPools.containsKey(componentId)) {
+        if (componentFactories.containsKey(componentId)) {
             throw new DuplicatedKeyException("Component factory with " +
                     "this id already exists: " + componentId);
         }
-        
-        // http://issues.carrot2.org/browse/CARROT-145
-        // An anonymous class here would hold synthetic backreference to outer
-        // LocalControllerBase.this instance. This in turn would never let 
-        // the LocalControllerBase be finalized and garbage collected.
-        final PoolableObjectFactory poolableObjectFactory = 
-            new PoolableComponentFactory(factory, this);
 
-        componentPools.put(componentId, 
-            new GenericObjectPool(poolableObjectFactory, poolConfig));
+        componentFactories.put(componentId, factory);
     }
-
+    
     /**
      * @return Returns an array of names of component factories.
      */
     public final String[] getComponentFactoryNames() {
-        final Set keys = this.componentPools.keySet();
+        final Set keys = this.componentFactories.keySet();
         return (String[]) keys.toArray(new String[keys.size()]);
     }
 
@@ -183,14 +169,13 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
     public LocalComponent borrowComponent(String componentId)
         throws MissingComponentException
     {
-        ObjectPool pool = (ObjectPool) componentPools.get(componentId);
-        if (pool == null)
+        if (!componentFactories.containsKey(componentId))
         {
             throw new MissingComponentException(componentId);
         }
 
         try {
-            return (LocalComponent) pool.borrowObject();
+            return (LocalComponent) componentPools.borrowObject(componentId);
         } catch (Exception e) {
             throw new RuntimeException("Could not acquire component instance from the pool: "
                 + componentId, e);
@@ -204,7 +189,7 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
     public void returnComponent(String componentId, LocalComponent component)
     {
         try {
-            ((ObjectPool) componentPools.get(componentId)).returnObject(component);
+            componentPools.returnObject(componentId, component);
         } catch (Exception e) {
             throw new RuntimeException("Could not put the component back to the pool.", e);
         }
@@ -214,23 +199,19 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
      * Execute a given query against the process <code>processId</code>.
      */
     public ProcessingResult query(String processId, String query,
-        Map requestParameters) throws MissingProcessException, ProcessingException
+        Map requestParameters) throws MissingProcessException, Exception
     {
-        if (destroyed) {
-            throw new ProcessingException("Controller destroyed.");
-        }
-        
         // Get the process
-        LocalProcess process = (LocalProcess) processes.get(processId);
+        final LocalProcess process = (LocalProcess) processes.get(processId);
         if (process == null)
         {
             throw new MissingProcessException("Process missing: " + processId);
         }
 
-        RequestContext requestContext = new RequestContextBase(this,
+        final RequestContext requestContext = new RequestContextBase(this,
             requestParameters);
 
-        Object queryResult;
+        final Object queryResult;
         try
         {
             queryResult = process.query(requestContext, query);
@@ -325,7 +306,7 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
     }
     
     /**
-     * Generates potential component descriptor names from its it.
+     * Generates potential component descriptor names from the identifier of the component.
      */
     private String [] getPotentialComponentNames(String componentId, ControllerHelper helper) {
         final Object [] extensions = helper.getRecognizedComponentFactoryExtensions().toArray();
@@ -349,7 +330,7 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
      */
     public boolean isComponentFactoryAvailable(String key)
     {
-        return componentPools.containsKey(key);
+        return componentFactories.containsKey(key);
     }
 
     /**
@@ -358,7 +339,7 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
     public Class getComponentClass(String componentId)
         throws MissingComponentException
     {
-        LocalComponent component = borrowComponent(componentId);
+        final LocalComponent component = borrowComponent(componentId);
         try {
             return component.getClass();
         } finally {
@@ -416,7 +397,7 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
             }
         }
     }
-    
+
     /**
      * Returns a copy of the process identifier list.
      */
@@ -440,14 +421,18 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
         return process.getName();
     }
 
+    /**
+     * Returns the name of a component with the given identifier.
+     */
     public String getComponentName(String componentId)
         throws MissingComponentException
     {
-        LocalComponent localComponent = borrowComponent(componentId);
-        String name = localComponent.getName();
-        returnComponent(componentId, localComponent);
-
-        return name;
+        final LocalComponent localComponent = borrowComponent(componentId);
+        try {
+            return localComponent.getName();
+        } finally {
+            returnComponent(componentId, localComponent);
+        }
     }
 
     /**
@@ -457,45 +442,5 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
      */
     public void setComponentAutoload(boolean autoloadOn) {
         this.autoload = autoloadOn;
-    }
-
-    /**
-     * Cleanup the controller, clear all pools etc. There is no synchronization between
-     * this method and {@link #query(String, String, Map)}, so assure synchronization 
-     * externally.
-     */
-    public void cleanup() {
-        this.destroyed = true;
-
-        // Destroy existing pools.
-        for (Iterator i = this.componentPools.values().iterator(); i.hasNext();)
-        {
-            final GenericObjectPool pool = (GenericObjectPool) i.next();
-            try
-            {
-                pool.close();
-            }
-            catch (Exception e)
-            {
-                // We can't do much more.
-            }
-        }
-
-        // Clear internal maps.
-        this.componentPools.clear();
-        this.processes.clear();
-    }
-
-    /**
-     * Cleanup on finalize, if not done manually.
-     */
-    protected final void finalize() throws Throwable
-    {
-        super.finalize();
-
-        if (!this.destroyed)
-        {
-            this.cleanup();
-        }
     }
 }
