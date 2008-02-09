@@ -15,7 +15,6 @@ package org.carrot2.core.profiling;
 
 import java.util.Map;
 
-import org.apache.commons.pool.impl.GenericObjectPool.Config;
 import org.carrot2.core.*;
 
 /**
@@ -35,17 +34,6 @@ import org.carrot2.core.*;
  */
 public class ProfiledLocalController extends LocalControllerBase
 {
-    
-    public ProfiledLocalController()
-    {
-        super();
-    }
-
-    public ProfiledLocalController(Config componentPoolConfig)
-    {
-        super(componentPoolConfig);
-    }
-
     /*
      * (non-Javadoc)
      * 
@@ -53,7 +41,7 @@ public class ProfiledLocalController extends LocalControllerBase
      *      java.lang.String, java.util.Map)
      */
     public ProcessingResult query(String processId, String query,
-        Map requestParameters) throws MissingProcessException, ProcessingException
+        Map requestParameters) throws MissingProcessException, Exception
     {
         // Get the process
         LocalProcess process = (LocalProcess) processes.get(processId);
