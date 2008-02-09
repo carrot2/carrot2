@@ -157,16 +157,9 @@ public final class QueryProcessorServlet extends HttpServlet {
     {
         super.destroy();
         
-        if (algorithmsController != null) {
-            this.algorithmsController.cleanup();
-            this.algorithmsController = null;
-        }
-        
-        if (tabsController != null) {
-            this.tabsController.cleanup();
-            this.tabsController = null;
-        }
-        
+        this.algorithmsController = null;
+        this.tabsController = null;
+
         if (ehcache != null) {
             this.ehcache.getCacheManager().shutdown();
             this.ehcache = null;
