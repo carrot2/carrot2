@@ -15,7 +15,13 @@ package org.carrot2.core.profiling;
 
 import java.util.Map;
 
-import org.carrot2.core.*;
+import org.apache.commons.pool.impl.GenericKeyedObjectPool;
+import org.carrot2.core.LocalControllerBase;
+import org.carrot2.core.LocalProcess;
+import org.carrot2.core.MissingProcessException;
+import org.carrot2.core.ProcessingException;
+import org.carrot2.core.ProcessingResult;
+import org.carrot2.core.RequestContext;
 
 /**
  * An implementation of the
@@ -34,6 +40,17 @@ import org.carrot2.core.*;
  */
 public class ProfiledLocalController extends LocalControllerBase
 {
+    
+    public ProfiledLocalController()
+    {
+        super();
+    }
+
+    public ProfiledLocalController(GenericKeyedObjectPool.Config componentPoolConfig)
+    {
+        super(componentPoolConfig);
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -41,7 +58,7 @@ public class ProfiledLocalController extends LocalControllerBase
      *      java.lang.String, java.util.Map)
      */
     public ProcessingResult query(String processId, String query,
-        Map requestParameters) throws MissingProcessException, Exception
+        Map requestParameters) throws MissingProcessException, ProcessingException
     {
         // Get the process
         LocalProcess process = (LocalProcess) processes.get(processId);
