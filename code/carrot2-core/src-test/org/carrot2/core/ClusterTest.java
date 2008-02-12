@@ -3,7 +3,8 @@
  */
 package org.carrot2.core;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -35,7 +36,7 @@ public class ClusterTest
     public void testSizeNonEmptyFlat()
     {
         Cluster flatCluster = new Cluster();
-        flatCluster.addDocuments(new Document(1), new Document(2));
+        flatCluster.addDocuments(new Document(), new Document());
         assertEquals(2, flatCluster.size());
     }
 
@@ -47,8 +48,8 @@ public class ClusterTest
 
         hierarchicalCluster.addSubclusters(subcluster);
 
-        hierarchicalCluster.addDocuments(new Document(1));
-        subcluster.addDocuments(new Document(2));
+        hierarchicalCluster.addDocuments(new Document());
+        subcluster.addDocuments(new Document());
 
         assertEquals(2, hierarchicalCluster.size());
     }
@@ -60,12 +61,12 @@ public class ClusterTest
         final Cluster subcluster = new Cluster();
         hierarchicalCluster.addSubclusters(subcluster);
 
-        final Document document1 = new Document(1);
+        final Document document1 = new Document();
 
         hierarchicalCluster.addDocuments(document1);
-        hierarchicalCluster.addDocuments(new Document(2));
+        hierarchicalCluster.addDocuments(new Document());
         subcluster.addDocuments(document1);
-        subcluster.addDocuments(new Document(3));
+        subcluster.addDocuments(new Document());
 
         assertEquals(3, hierarchicalCluster.size());
     }
@@ -90,7 +91,7 @@ public class ClusterTest
     public void testBySizeComparator()
     {
         Cluster clusterA = new Cluster();
-        clusterA.addDocuments(new Document(1), new Document(2));
+        clusterA.addDocuments(new Document(), new Document());
 
         Cluster clusterB = new Cluster();
 
@@ -103,15 +104,15 @@ public class ClusterTest
     {
         Cluster clusterA = new Cluster();
         clusterA.addPhrases("A");
-        clusterA.addDocuments(new Document(1), new Document(2));
+        clusterA.addDocuments(new Document(), new Document());
 
         Cluster clusterB = new Cluster();
         clusterB.addPhrases("B");
-        clusterB.addDocuments(new Document(1), new Document(2));
+        clusterB.addDocuments(new Document(), new Document());
 
         Cluster clusterC = new Cluster();
         clusterC.addPhrases("C");
-        clusterC.addDocuments(new Document(1), new Document(2), new Document(3));
+        clusterC.addDocuments(new Document(), new Document(), new Document());
 
         assertEquals(0, Cluster.BY_REVERSED_SIZE_AND_LABEL_COMPARATOR.compare(clusterA,
             clusterA));

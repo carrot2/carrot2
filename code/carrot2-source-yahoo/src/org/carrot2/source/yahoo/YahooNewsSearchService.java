@@ -3,11 +3,7 @@ package org.carrot2.source.yahoo;
 import java.util.ArrayList;
 
 import org.apache.commons.httpclient.NameValuePair;
-import org.carrot2.core.attribute.Attribute;
-import org.carrot2.core.attribute.Bindable;
-import org.carrot2.core.attribute.Init;
-import org.carrot2.core.attribute.Input;
-import org.carrot2.core.attribute.Processing;
+import org.carrot2.core.attribute.*;
 
 /**
  * Sends queries to Yahoo! News search service. Instances of this class are thread-safe.

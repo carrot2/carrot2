@@ -1,11 +1,10 @@
 /**
  * 
  */
-package org.carrot2.core.controller;
+package org.carrot2.core;
 
 import java.util.*;
 
-import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
 
 /**

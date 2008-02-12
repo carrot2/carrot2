@@ -3,9 +3,7 @@ package org.carrot2.util.httpclient;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.commons.httpclient.HostConfiguration;
-import org.apache.commons.httpclient.HttpConnection;
-import org.apache.commons.httpclient.SimpleHttpConnectionManager;
+import org.apache.commons.httpclient.*;
 
 /**
  * A simple connection manager serving a new connection every time it is asked to do so.

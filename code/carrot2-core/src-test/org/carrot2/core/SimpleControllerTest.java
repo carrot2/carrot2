@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.carrot2.core.controller;
+package org.carrot2.core;
 
 import static org.easymock.EasyMock.createStrictControl;
 import static org.junit.Assert.assertEquals;
@@ -9,7 +9,6 @@ import static org.junit.Assert.assertEquals;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
 import org.easymock.IMocksControl;
 import org.junit.*;

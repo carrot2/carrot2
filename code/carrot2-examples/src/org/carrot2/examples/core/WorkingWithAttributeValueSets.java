@@ -1,6 +1,6 @@
 package org.carrot2.examples.core;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.*;
 import java.util.Map;

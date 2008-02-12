@@ -1,9 +1,7 @@
-package org.carrot2.core.controller;
+package org.carrot2.core;
 
 import java.util.Map;
 
-import org.carrot2.core.ProcessingComponent;
-import org.carrot2.core.ProcessingException;
 import org.carrot2.core.attribute.*;
 
 /**
@@ -14,7 +12,7 @@ import org.carrot2.core.attribute.*;
  */
 final class ControllerUtils
 {
-    /*
+    /**
      * 
      */
     private ControllerUtils()

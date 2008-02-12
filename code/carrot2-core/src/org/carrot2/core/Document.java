@@ -3,84 +3,97 @@ package org.carrot2.core;
 import java.util.*;
 
 /**
- * TODO: handle document ids internally in the controller (after processing is finished).
- * Do not expose them.
+ * A document that to be processed by the framework. Each document is a collection of
+ * fields carrying different bits of information, e.g. {@link #TITLE} or
+ * {@link #CONTENT_URL}.
  */
 public class Document
 {
+    /** Title of the document. */
     public static final String TITLE = "title";
+
+    /** A short summary of the document, e.g. the snippet returned by the search engine. */
     public static final String SUMMARY = "summary";
+
+    /** URL pointing to the full version of the document. */
     public static final String CONTENT_URL = "url";
 
+    /** Fields of this document */
     private Map<String, Object> fields = new HashMap<String, Object>();
+
+    /** Read-only collection of fields exposed in {@link #getField(String)}. */
     private Map<String, Object> fieldsView = Collections.unmodifiableMap(fields);
 
-    private int id;
+    /** Internal identifier of the document */
+    int id;
 
+    /**
+     * Creates an empty document with no fields.
+     */
     public Document()
     {
     }
 
     /**
-     * TODO: Once we implement document id handling properly, make this constructor
-     * package-private
+     * A unique identifier of this document. The identifiers are assigned to documents
+     * before processing finishes. Note that two documents with equal contents will be
+     * assigned different identifiers.
+     * 
+     * @return unique identifier of this document
      */
-    public Document(int id)
-    {
-        this.id = id;
-    }
-
     public int getId()
     {
         return id;
     }
 
-    void setId(int id)
-    {
-        this.id = id;
-    }
-
+    /**
+     * Returns all fields of this document. The returned map is unmodifiable.
+     * 
+     * @return all fields of this document
+     */
     public Map<String, Object> getFields()
     {
         return fieldsView;
     }
 
+    /**
+     * Returns value of the specified field of this document. If no field corresponds to
+     * the provided <code>name</code>, <code>null</code> will be returned.
+     * 
+     * @param name of the field to be returned
+     * @return value of the field or <code>null</code>
+     */
     @SuppressWarnings("unchecked")
     public <T> T getField(String name)
     {
         return (T) fields.get(name);
     }
 
-    public void addField(String name, Object value)
+    /**
+     * Adds a field to this document.
+     * 
+     * @param name of the field to be added
+     * @param value value of the field
+     * @return this document for convenience
+     */
+    public Document addField(String name, Object value)
     {
         fields.put(name, value);
+        return this;
     }
 
-    @Override
-    public boolean equals(Object obj)
+    /**
+     * A utility method for creating a document with provided <code>title</code>,
+     * <code>summary</code> and <code>contentUrl</code>.
+     * 
+     * @param title for the document
+     * @param summary for the document
+     * @param contentUrl for the document
+     * @return the created document
+     */
+    public static Document create(String title, String summary, String contentUrl)
     {
-        if (obj == this)
-        {
-            return true;
-        }
-
-        if (obj == null || !(obj instanceof Document))
-        {
-            return false;
-        }
-
-        return this.id == ((Document) obj).id;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return id;
-    }
-
-    public static Document create(int id, String title, String summary, String contentUrl)
-    {
-        Document document = new Document(id);
+        Document document = new Document();
 
         document.addField(TITLE, title);
         document.addField(SUMMARY, summary);

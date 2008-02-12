@@ -1,6 +1,7 @@
 package org.carrot2.util.resource;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * A resource loaded using a class loader. This resource provider caches the content of

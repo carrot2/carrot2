@@ -1,9 +1,8 @@
 package org.carrot2.core;
 
-
 /**
- * Generic processing exception thrown if something went wrong. See specific
- * subclasses for different reasons this exception may be thrown.
+ * An exception thrown if processing failed. For certain specific failure reasons,
+ * subclasses of this exception have been defined.
  */
 @SuppressWarnings("serial")
 public class ProcessingException extends RuntimeException

@@ -1,9 +1,6 @@
 package org.carrot2.core.attribute;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * When a given type is bindable, its fields can be bound to attribute values by the

@@ -59,7 +59,7 @@ public class TestDocumentFactory
 
         for (int i = 0; i < number; i++)
         {
-            Document document = new Document(i);
+            Document document = new Document();
             for (String field : fieldsToGenerate)
             {
                 DataGenerator<?> generator = resolveGenerator(customGenerators, field);

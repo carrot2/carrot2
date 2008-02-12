@@ -13,12 +13,25 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
 /**
- *
+ * Hierarchically clusters documents according to their content URLs.
+ * {@link Document#CONTENT_URL} property will be used to obtain a document's URL.
+ * <p>
+ * Groups at the top level of the hierarchy will correspond to the last segments of the
+ * URLs, usually domain suffixes, such as ".com" or ".co.uk". Subgroups will be created
+ * based on further segments of the URLs, very often domains subdomains, e.g. "yahoo.com",
+ * "bbc.co.uk" and then e.g. "mail.yahoo.com", "news.yahoo.com". The "www" segment of the
+ * URLs will be ignored.
+ * <p>
+ * Clusters will be ordered by size (number of documents) descendingly; in case of equal
+ * sizes, alphabetically by URL, see {@link Cluster#BY_REVERSED_SIZE_AND_LABEL_COMPARATOR}.
+ * 
+ * @label By URL Clustering
  */
 @Bindable
 public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
     ClusteringAlgorithm
 {
+    /** A set of URL segments to be ignored. */
     private static final Set<String> STOP_URL_PARTS;
     static
     {
@@ -37,8 +50,8 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
     @Attribute(key = AttributeNames.CLUSTERS)
     private Collection<Cluster> clusters = null;
 
-    /*
-     * 
+    /**
+     * Performs by URL clustering.
      */
     @Override
     public void process() throws ProcessingException
@@ -59,8 +72,8 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
         this.clusters = createClusters(documentArray, documentIndexes, urlParts, 0, "");
     }
 
-    /*
-     * 
+    /**
+     * The actual, recursive, clustering routine.
      */
     private List<Cluster> createClusters(Document [] documents,
         Collection<Integer> documentIndexes, String [][] urlParts, int level,
@@ -152,8 +165,8 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
         return clusters;
     }
 
-    /*
-     * 
+    /**
+     * For each documents builds an array of parts of their corresponding URLs.
      */
     final String [][] buildUrlParts(final Document [] documents)
     {

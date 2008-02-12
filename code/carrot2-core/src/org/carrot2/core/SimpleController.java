@@ -1,40 +1,26 @@
-package org.carrot2.core.controller;
+package org.carrot2.core;
 
 import java.util.Map;
 
-import org.carrot2.core.*;
+import org.carrot2.core.attribute.Output;
 
 /**
- * <p>
- * This is the simplest possible controller. It is useful for one-off processing either
- * with existing component instances or just classes of components to be involved in
- * processing.
- * <p>
- * The processing cycle
+ * The simplest possible controller, which for each processing request initializes the
+ * involved components and disposes of them after processing completes. This controller is
+ * useful for one-off processing either with existing component instances or classes of
+ * components to be created for processing.
  */
 public final class SimpleController
 {
     /**
-     * <p>
-     * Every time processing is requested, new instances of the components get created,
-     * initialized, called and disposed of.
-     * <p>
-     * This method may seem too general, but actually it might be useful to be able to
-     * call processing with only one or more than two components. The former case is handy
-     * when one wants to fetch documents from some source without processing or perform
-     * clustering on already available documents (this just saves dummy document producer/
-     * cluster collector components). The latter case is useful when some filters are
-     * required in between the source and clustering components (e.g. HTML stripping).
+     * Creates instances of processing components, initializes them, performs processing
+     * and disposes of the component instances after processing is complete
      * 
-     * @param attributes A map of attributes passed between components during processing.
-     * @param processingComponentClasses This is one of the places where generics suck:
-     *            it's nice to have a varargs of class with an upper bound here, but the
-     *            caller's code will get warnings (implicit construction of an array of
-     *            parameterized type, which is not allowed). An alternative is to have
-     *            Class<?> here, but then, class types won't be checked during
-     *            compilation. Finally, a collection would solve all the problems, but
-     *            this is so much hassle on the calling code's side. For now I guess I'd
-     *            go with the second option.
+     * @param attributes attributes to be used during processing. {@link Output}
+     *            attributes will be collected and stored in this map, so the map must be
+     *            modifiable.
+     * @param processingComponentClasses classes of components to be involved in
+     *            processing in the order they should be arranged in the pipeline.
      */
     @SuppressWarnings("unchecked")
     public ProcessingResult process(Map<String, Object> attributes,
@@ -67,7 +53,14 @@ public final class SimpleController
     }
 
     /**
-     * Run full processing cycle on already instantiated components.
+     * Initializes the provided component instances, performs processing and disposes of
+     * the instances after processing is complete.
+     * 
+     * @param attributes attributes to be used during processing. {@link Output}
+     *            attributes will be collected and stored in this map, so the map must be
+     *            modifiable.
+     * @param processingComponents instances of processing component to be used for
+     *            processing.
      */
     public ProcessingResult process(Map<String, Object> attributes,
         ProcessingComponent... processingComponents) throws ProcessingException

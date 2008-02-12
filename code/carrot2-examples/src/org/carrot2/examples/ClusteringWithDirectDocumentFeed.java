@@ -6,10 +6,8 @@ package org.carrot2.examples;
 import java.util.*;
 
 import org.carrot2.clustering.synthetic.ByUrlClusteringAlgorithm;
-import org.carrot2.core.Document;
-import org.carrot2.core.ProcessingResult;
+import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.core.controller.SimpleController;
 
 /**
  *
@@ -66,7 +64,7 @@ public class ClusteringWithDirectDocumentFeed
         List<Document> documents = new ArrayList<Document>();
         for (int i = 0; i < documentContent.length; i++)
         {
-            documents.add(Document.create(i, documentContent[i][0], "",
+            documents.add(Document.create(documentContent[i][0], "",
                 documentContent[i][1]));
         }
 

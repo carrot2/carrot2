@@ -17,7 +17,7 @@ public class ComponentInitializationException extends ProcessingException
     {
         super(t);
     }
-    
+
     public ComponentInitializationException(String message, Throwable t)
     {
         super(message, t);

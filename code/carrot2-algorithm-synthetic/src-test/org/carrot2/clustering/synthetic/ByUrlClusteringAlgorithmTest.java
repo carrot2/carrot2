@@ -8,12 +8,13 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.*;
 
-import org.carrot2.core.*;
+import org.carrot2.core.Cluster;
+import org.carrot2.core.Document;
 import org.carrot2.core.test.ClusteringAlgorithmTest;
 import org.junit.Test;
 
 /**
- *
+ * Test cases for the {@link ByUrlClusteringAlgorithm}.
  */
 public class ByUrlClusteringAlgorithmTest extends
     ClusteringAlgorithmTest<ByUrlClusteringAlgorithm>

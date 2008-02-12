@@ -1,6 +1,7 @@
 package org.carrot2.source;
 
 import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
 public class SearchRangeTest
