@@ -59,8 +59,16 @@ public class ProcessingResult
     @SuppressWarnings("unchecked")
     public Collection<Document> getDocuments()
     {
-        return Collections.unmodifiableCollection((Collection<Document>) attributes
-            .get(AttributeNames.DOCUMENTS));
+        final Collection<Document> documents = (Collection<Document>) attributes
+            .get(AttributeNames.DOCUMENTS);
+        if (documents != null)
+        {
+            return Collections.unmodifiableCollection(documents);
+        }
+        else
+        {
+            return null;
+        }
     }
 
     /**
@@ -72,7 +80,15 @@ public class ProcessingResult
     @SuppressWarnings("unchecked")
     public Collection<Cluster> getClusters()
     {
-        return Collections.unmodifiableCollection((Collection<Cluster>) attributes
-            .get(AttributeNames.CLUSTERS));
+        final Collection<Cluster> clusters = (Collection<Cluster>) attributes
+            .get(AttributeNames.DOCUMENTS);
+        if (clusters != null)
+        {
+            return Collections.unmodifiableCollection(clusters);
+        }
+        else
+        {
+            return null;
+        }
     }
 }
