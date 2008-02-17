@@ -8,9 +8,9 @@ import com.google.common.base.Function;
 import com.google.common.collect.Comparators;
 
 /**
- * A cluster (group) of documents. Each cluster has a human-readable label consisting of
- * one or more phrases, a list of documents it contains and a list of its subclusters.
- * Optionally, additional attributes can be associated with a cluster, e.g.
+ * A cluster (group) of {@link Document}s. Each cluster has a human-readable label
+ * consisting of one or more phrases, a list of documents it contains and a list of its
+ * subclusters. Optionally, additional attributes can be associated with a cluster, e.g.
  * {@link #OTHER_TOPICS}.
  */
 public class Cluster
@@ -22,25 +22,25 @@ public class Cluster
     public static final String OTHER_TOPICS = "other-topics";
 
     /** Phrases describing this cluster. */
-    private List<String> phrases = new ArrayList<String>();
+    private final ArrayList<String> phrases = new ArrayList<String>();
 
     /** A read-only list of phrases exposed in {@link #getPhrases()}. */
     private List<String> phrasesView = Collections.unmodifiableList(phrases);
 
     /** Subclusters of this cluster. */
-    private List<Cluster> subclusters = new ArrayList<Cluster>();
+    private final ArrayList<Cluster> subclusters = new ArrayList<Cluster>();
 
     /** A read-only list of subclusters exposed in {@link #getSubclusters()}. */
-    private List<Cluster> subclustersView = Collections.unmodifiableList(subclusters);
+    private final List<Cluster> subclustersView = Collections.unmodifiableList(subclusters);
 
     /** Documents contained in this cluster. */
-    private List<Document> documents = new ArrayList<Document>();
+    private final ArrayList<Document> documents = new ArrayList<Document>();
 
     /** A read-only list of this cluster's document exposed in {@link #getDocuments()}. */
-    private List<Document> documentsView = Collections.unmodifiableList(documents);
+    private final List<Document> documentsView = Collections.unmodifiableList(documents);
 
     /** Attributes of this cluster. */
-    private Map<String, Object> attributes = new HashMap<String, Object>();
+    private final HashMap<String, Object> attributes = new HashMap<String, Object>();
 
     /** Cached concatenated label */
     private String labelCache = null;
