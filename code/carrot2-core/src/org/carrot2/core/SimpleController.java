@@ -5,16 +5,25 @@ import java.util.Map;
 import org.carrot2.core.attribute.Output;
 
 /**
- * The simplest possible controller, which for each processing request initializes the
- * involved components and disposes of them after processing completes. This controller is
- * useful for one-off processing either with existing component instances or classes of
- * components to be created for processing.
+ * A simple controller implementing the life cycle described in <{@link ProcessingComponent}.
+ * <p>
+ * This controller is useful for one-time processing either with existing component
+ * instances or classes of components to be created for processing. In case component
+ * classes are used, for <b>each query</b> the controller creates, initializes and
+ * destroys instances of all components involved in the processing.
+ * <p>
+ * Thread-safety of processing on instantiated component instances is not enforced in any
+ * way and must be assured externally. Processing on component classes is thread safe, but
+ * there is an additional overhead of creating new component instances for each query
+ * (which may or may not be a performance issue, this depends on a given component).
  */
 public final class SimpleController
 {
     /**
      * Creates instances of processing components, initializes them, performs processing
-     * and disposes of the component instances after processing is complete
+     * and disposes of the component instances after processing is complete.
+     * <p>
+     * See class description for potential performance aspects of using this method.
      * 
      * @param attributes attributes to be used during processing. {@link Output}
      *            attributes will be collected and stored in this map, so the map must be
@@ -55,6 +64,9 @@ public final class SimpleController
     /**
      * Initializes the provided component instances, performs processing and disposes of
      * the instances after processing is complete.
+     * <p>
+     * See class description for potential performance and threading aspects of using this
+     * method.
      * 
      * @param attributes attributes to be used during processing. {@link Output}
      *            attributes will be collected and stored in this map, so the map must be

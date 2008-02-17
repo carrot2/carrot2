@@ -5,7 +5,7 @@ import java.util.Map;
 import org.carrot2.core.attribute.*;
 
 /**
- * Static life cycle and controller utilities.
+ * Static life cycle and controller utilities (for use within the core package).
  * <p>
  * This code is refactored to make sure the tests can perform exactly the same sequence of
  * actions without using the controller as a whole.

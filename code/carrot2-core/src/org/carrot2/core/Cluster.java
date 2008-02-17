@@ -273,12 +273,15 @@ public class Cluster
             return false;
         }
 
-        Cluster other = (Cluster) obj;
+        final Cluster other = (Cluster) obj;
 
-        final boolean subclustersEqual = subclusters.equals(other.subclusters);
-
-        return phrases.equals(other.phrases) && documents.equals(other.documents)
-            && subclustersEqual && attributes.equals(other.attributes);
+        // TODO: List comparisons work on SUN's JRE, but they are often not implemented
+        // properly on other JVMs (i.e. they are buggy in Microsoft's JVM for example).
+        // It is simply and safe to have our own array-comparison utility here.
+        return subclusters.equals(other.subclusters) 
+            && phrases.equals(other.phrases)
+            && documents.equals(other.documents)
+            && attributes.equals(other.attributes);
     }
 
     /**
@@ -292,8 +295,8 @@ public class Cluster
         }
 
         docs.addAll(cluster.getDocuments());
-        List<Cluster> subclusters = cluster.getSubclusters();
 
+        final List<Cluster> subclusters = cluster.getSubclusters();
         for (Cluster subcluster : subclusters)
         {
             calculateSize(subcluster, docs);
@@ -337,6 +340,7 @@ public class Cluster
      * towards the beginning of the list being sorted. In case of equal sizes, natural
      * order of the labels decides.
      */
-    public static final Comparator<Cluster> BY_REVERSED_SIZE_AND_LABEL_COMPARATOR = Comparators
-        .compound(Collections.reverseOrder(BY_SIZE_COMPARATOR), BY_LABEL_COMPARATOR);
+    public static final Comparator<Cluster> BY_REVERSED_SIZE_AND_LABEL_COMPARATOR = 
+        Comparators.compound(
+            Collections.reverseOrder(BY_SIZE_COMPARATOR), BY_LABEL_COMPARATOR);
 }

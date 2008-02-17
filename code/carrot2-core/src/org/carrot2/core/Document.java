@@ -9,22 +9,35 @@ import java.util.*;
  */
 public class Document
 {
-    /** Title of the document. */
+    /* 
+     * TODO: finalize Document and Cluster? Does it make sense to 
+     * allow subclasses of these?
+     */
+
+    /** Field name for the title of the document. */
     public static final String TITLE = "title";
 
-    /** A short summary of the document, e.g. the snippet returned by the search engine. */
+    /**
+     * Field name for a short summary of the document, e.g. the snippet returned by 
+     * the search engine.
+     */
     public static final String SUMMARY = "summary";
 
-    /** URL pointing to the full version of the document. */
+    /** Field name for an URL pointing to the full version of the document. */
     public static final String CONTENT_URL = "url";
 
     /** Fields of this document */
-    private Map<String, Object> fields = new HashMap<String, Object>();
+    private final HashMap<String, Object> fields = new HashMap<String, Object>();
 
     /** Read-only collection of fields exposed in {@link #getField(String)}. */
-    private Map<String, Object> fieldsView = Collections.unmodifiableMap(fields);
+    private final Map<String, Object> fieldsView = Collections.unmodifiableMap(fields);
 
-    /** Internal identifier of the document */
+    /** 
+     * Internal identifier of the document. This identifier is assigned dynamically
+     * after documents are returned from {@link DocumentSource}.
+     * 
+     * @see ProcessingResult
+     */
     int id;
 
     /**

@@ -33,7 +33,7 @@ public abstract class SearchEngine
      * Subclasses should override this method and return a {@link Callable}
      * instance that fetches search results in the given range.
      * <p>
-     * Note the query (if any is required) should be passed at the conrete
+     * Note the query (if any is required) should be passed at the concrete
      * class level. We are not concerned with it here. 
      * 
      * @param bucket The search range to fetch.
@@ -43,7 +43,8 @@ public abstract class SearchEngine
     /** 
      * Collects documents from an array of search engine's responses.
      */
-    protected final void collectDocuments(Collection<Document> collector, SearchEngineResponse [] responses)
+    protected final void collectDocuments(Collection<Document> collector, 
+        SearchEngineResponse [] responses)
     {
         for (SearchEngineResponse response : responses)
         {
@@ -54,10 +55,13 @@ public abstract class SearchEngine
     /**
      * This method implements the logic of querying a typical search engine. If the
      * number of requested results is higher than the number of results on one response
-     * page, then concurrent requests are issued.
+     * page, then multiple (possibly concurrent) requests are issued via the provided 
+     * {@link ExecutorService}.
      */
-    protected final SearchEngineResponse [] runQuery(final String query, final int start, final int results, final int maxResultIndex,
-        final int resultsPerPage, final ExecutorService executor) throws ProcessingException
+    protected final SearchEngineResponse [] runQuery(final String query, 
+        final int start, final int results, final int maxResultIndex,
+        final int resultsPerPage, final ExecutorService executor) 
+        throws ProcessingException
     {
         // Split the requested range into pages.
         SearchRange [] buckets = 

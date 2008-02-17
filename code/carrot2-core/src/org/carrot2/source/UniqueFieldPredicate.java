@@ -10,10 +10,9 @@ import com.google.common.base.Predicate;
  * This predicate allows one to filter out documents with non-unique 
  * field values.
  */
-@SuppressWarnings("unchecked")
 public final class UniqueFieldPredicate implements Predicate<Document>
 {
-    private final HashSet unique = new HashSet();
+    private final HashSet<Object> unique = new HashSet<Object>();
 
     private final String fieldName;
     
