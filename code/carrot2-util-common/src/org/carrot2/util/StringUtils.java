@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.carrot2.util;
 
 import java.util.Iterator;
