@@ -13,7 +13,7 @@ import com.google.common.collect.Comparators;
  * subclusters. Optionally, additional attributes can be associated with a cluster, e.g.
  * {@link #OTHER_TOPICS}.
  */
-public class Cluster
+public final class Cluster
 {
     /**
      * Indicates that the cluster is an "(Other Topics)" cluster. Such a cluster contains

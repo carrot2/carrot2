@@ -7,13 +7,8 @@ import java.util.*;
  * fields carrying different bits of information, e.g. {@link #TITLE} or
  * {@link #CONTENT_URL}.
  */
-public class Document
+public final class Document
 {
-    /* 
-     * TODO: finalize Document and Cluster? Does it make sense to 
-     * allow subclasses of these?
-     */
-
     /** Field name for the title of the document. */
     public static final String TITLE = "title";
 
