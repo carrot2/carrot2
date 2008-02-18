@@ -66,7 +66,7 @@ public final class StreamUtils
     {
         try
         {
-            return readFullyAndClose(input);
+            return readFully(input);
         }
         finally
         {
