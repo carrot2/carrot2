@@ -53,7 +53,7 @@ public class SaveXmlFilterComponent extends SaveFilterComponentBase
         if (saveClusters)
         {
             // Add clusters to the output XML
-            addClusters(root, rawClusters);
+            addClusters(root, rawClusters, 0);
         }
 
         // Add any additional information.
@@ -100,18 +100,20 @@ public class SaveXmlFilterComponent extends SaveFilterComponentBase
     /**
      * 
      */
-    private void addClusters(Element root, List rawClusters)
+    private int addClusters(Element root, List rawClusters, int id)
     {
         if (rawClusters == null)
         {
-            return;
+            return id;
         }
 
         for (Iterator it = rawClusters.iterator(); it.hasNext();)
         {
             final RawCluster rawCluster = (RawCluster) it.next();
-            root.add(createClusterElement(rawCluster));
+            id = addClusterElement(root, rawCluster, id);
         }
+        
+        return id;
     }
 
     /**
@@ -134,15 +136,11 @@ public class SaveXmlFilterComponent extends SaveFilterComponentBase
         return element;
     }
 
-    /**
-     * Creates an element representing a {@link RawCluster}.
-     * 
-     * @param rawCluster
-     * @return an element representing the {@link RawCluster}.
-     */
-    protected Element createClusterElement(RawCluster rawCluster)
+    protected int addClusterElement(Element root, RawCluster rawCluster, int id)
     {
         final Element element = DocumentHelper.createElement("group");
+        element.addAttribute("id", Integer.toString(id));
+        id++;
 
         // Add cluster score
         if (rawCluster.getProperty(RawCluster.PROPERTY_SCORE) != null)
@@ -161,10 +159,13 @@ public class SaveXmlFilterComponent extends SaveFilterComponentBase
             element.addElement("document").addAttribute("refid", getDocumentId(rawDocument));
         }
 
+        // Add to root
+        root.add(element);
+        
         // Add subclusters
-        addClusters(element, rawCluster.getSubclusters());
+        id = addClusters(element, rawCluster.getSubclusters(), id);
 
-        return element;
+        return id;
     }
 
     /**
