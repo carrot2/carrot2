@@ -488,11 +488,13 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
      */
     protected final void finalize() throws Throwable
     {
-        super.finalize();
-
-        if (!this.destroyed)
-        {
-            this.destroy();
+        try {
+            if (!this.destroyed)
+            {
+                this.destroy();
+            }
+        } finally {
+            super.finalize();
         }
     }
 }
