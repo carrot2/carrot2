@@ -2,7 +2,9 @@ package org.carrot2.core;
 
 import java.util.Map;
 
+import org.carrot2.core.attribute.Input;
 import org.carrot2.core.attribute.Output;
+import org.simpleframework.xml.Attribute;
 
 /**
  * A simple controller implementing the life cycle described in <{@link ProcessingComponent}.
@@ -25,9 +27,11 @@ public final class SimpleController
      * <p>
      * See class description for potential performance aspects of using this method.
      * 
-     * @param attributes attributes to be used during processing. {@link Output}
-     *            attributes will be collected and stored in this map, so the map must be
-     *            modifiable.
+     * @param attributes attributes to be used during processing. {@link Input} attributes
+     *            will be transferred from this map to the corresponding fields.
+     *            {@link Output} attributes will be collected and stored in this map, so
+     *            the map must be modifiable. Keys of the map are computed based on the
+     *            <code>key</code> parameter of the {@link Attribute} annotation.
      * @param processingComponentClasses classes of components to be involved in
      *            processing in the order they should be arranged in the pipeline.
      */
@@ -68,9 +72,11 @@ public final class SimpleController
      * See class description for potential performance and threading aspects of using this
      * method.
      * 
-     * @param attributes attributes to be used during processing. {@link Output}
-     *            attributes will be collected and stored in this map, so the map must be
-     *            modifiable.
+     * @param attributes attributes to be used during processing. {@link Input} attributes
+     *            will be transferred from this map to the corresponding fields.
+     *            {@link Output} attributes will be collected and stored in this map, so
+     *            the map must be modifiable. Keys of the map are computed based on the
+     *            <code>key</code> parameter of the {@link Attribute} annotation.
      * @param processingComponents instances of processing component to be used for
      *            processing.
      */

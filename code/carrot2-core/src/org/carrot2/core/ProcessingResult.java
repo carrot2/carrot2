@@ -9,10 +9,8 @@ import org.carrot2.core.attribute.AttributeNames;
  * collected after processing and utility methods for obtaining processed documents ({@link #getDocuments()}))
  * and the created clusters ({@link #getClusters()}).
  */
-public class ProcessingResult
+public final class ProcessingResult
 {
-    /* TODO: Finalize this class? */
-
     /** Attributes collected after processing */
     private final Map<String, Object> attributes;
 
@@ -59,7 +57,7 @@ public class ProcessingResult
      * unmodifiable.
      * 
      * @return documents that have been processed or <code>null</code> if no documents
-     * are present in the result.
+     *         are present in the result.
      */
     @SuppressWarnings("unchecked")
     public Collection<Document> getDocuments()
@@ -76,18 +74,26 @@ public class ProcessingResult
         }
     }
 
+    /*
+     * TODO: Returning a list of clusters instead of a (possibly atrificial) cluster with
+     * subclusters adds a little complexity to recursive methods operating on clusters (a
+     * natural entry point is a method taking one cluster and acting on subclusters
+     * recursively). If we have to start with a list of clusters, we have to handle this
+     * special case separately...
+     */
+
     /**
      * Returns the clusters that have been created during processing. The returned
      * collection is unmodifiable.
      * 
      * @return clusters created during processing or <code>null</code> if no clusters
-     * were present in the result.
+     *         were present in the result.
      */
     @SuppressWarnings("unchecked")
     public Collection<Cluster> getClusters()
     {
         final Collection<Cluster> clusters = (Collection<Cluster>) attributes
-            .get(AttributeNames.DOCUMENTS);
+            .get(AttributeNames.CLUSTERS);
         if (clusters != null)
         {
             return Collections.unmodifiableCollection(clusters);
