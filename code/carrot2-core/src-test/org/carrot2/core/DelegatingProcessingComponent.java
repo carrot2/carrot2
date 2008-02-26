@@ -1,9 +1,9 @@
 /**
- * 
+ *
  */
 package org.carrot2.core;
 
-import org.carrot2.core.attribute.*;
+import carrot2.util.attribute.*;
 
 @Bindable
 public abstract class DelegatingProcessingComponent implements ProcessingComponent
@@ -11,12 +11,12 @@ public abstract class DelegatingProcessingComponent implements ProcessingCompone
     @Init
     @Input
     @Attribute(key = "instanceAttribute")
-    private String instanceAttribute = "";
+    private final String instanceAttribute = "";
 
     @Processing
     @Input
     @Attribute(key = "runtimeAttribute")
-    private String runtimeAttribute = "";
+    private final String runtimeAttribute = "";
 
     @SuppressWarnings("unused")
     @Processing

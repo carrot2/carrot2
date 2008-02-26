@@ -22,7 +22,7 @@ public class YahooWebSearchServiceTest
     {
         service = new YahooWebSearchService();
     }
-    
+
     @Test
     public void testNoResultsQuery() throws Exception
     {
@@ -50,7 +50,7 @@ public class YahooWebSearchServiceTest
     {
         final SearchEngineResponse response = service.query("Ala ma kota", 0, 100);
 
-        for (Document d : response.results)
+        for (final Document d : response.results)
         {
             final String title = d.getField(Document.TITLE);
             final String summary = d.getField(Document.SUMMARY);
@@ -74,7 +74,7 @@ public class YahooWebSearchServiceTest
     public void testCompressedStreamsUsed() throws Exception
     {
         final SearchEngineResponse response = service.query("apache", 0, 50);
-        assertEquals("gzip", 
+        assertEquals("gzip",
             response.metadata.get(YahooSearchService.COMPRESSION_USED_KEY));
     }
 }

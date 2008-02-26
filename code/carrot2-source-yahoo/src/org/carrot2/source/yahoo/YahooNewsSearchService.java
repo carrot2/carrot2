@@ -3,13 +3,13 @@ package org.carrot2.source.yahoo;
 import java.util.ArrayList;
 
 import org.apache.commons.httpclient.NameValuePair;
-import org.carrot2.core.attribute.*;
+import carrot2.util.attribute.*;
 
 /**
  * Sends queries to Yahoo! News search service. Instances of this class are thread-safe.
  * <p>
  * Attributes of this class correspond to Yahoo's documentation (see links below).
- * 
+ *
  * @label Yahoo News Search Service
  * @see <a href="http://com3.devnet.re3.yahoo.com/search/news/V1/newsSearch.html">Yahoo
  *      News Search Documentation</a>
@@ -22,6 +22,7 @@ public final class YahooNewsSearchService extends YahooSearchService
     {
         RANK
         {
+            @Override
             public String toString()
             {
                 return "rank";
@@ -29,6 +30,7 @@ public final class YahooNewsSearchService extends YahooSearchService
         },
         DATE
         {
+            @Override
             public String toString()
             {
                 return "date";
@@ -38,20 +40,20 @@ public final class YahooNewsSearchService extends YahooSearchService
 
     /**
      * Yahoo! service URI to be queried.
-     * 
+     *
      * @label Service URI
-     * 
+     *
      */
     @Init
     @Input
     @Attribute
-    private String serviceURI = "http://search.yahooapis.com/NewsSearchService/V1/newsSearch";
+    private final String serviceURI = "http://search.yahooapis.com/NewsSearchService/V1/newsSearch";
 
     /**
      * The language the results are written in. Value must be one of the <a
      * href="http://developer.yahoo.com/search/languages.html">supported language</a>
      * codes. Omitting language returns results in any language.
-     * 
+     *
      * @label Results Language
      */
     @Processing
@@ -62,7 +64,7 @@ public final class YahooNewsSearchService extends YahooSearchService
     /**
      * A domain to restrict your searches to (e.g. www.yahoo.com). TODO: maybe it would
      * make sense to implement multiple values here (allowed by Yahoo)?
-     * 
+     *
      * @label Site
      */
     @Processing
@@ -91,10 +93,22 @@ public final class YahooNewsSearchService extends YahooSearchService
 
         params.add(new NameValuePair("appid", appid));
 
-        if (language != null) params.add(new NameValuePair("languae", language));
-        if (site != null) params.add(new NameValuePair("site", site));
-        if (sort != null) params.add(new NameValuePair("sort", sort.toString()));
-        if (type != null) params.add(new NameValuePair("type", type.toString()));
+        if (language != null)
+        {
+            params.add(new NameValuePair("languae", language));
+        }
+        if (site != null)
+        {
+            params.add(new NameValuePair("site", site));
+        }
+        if (sort != null)
+        {
+            params.add(new NameValuePair("sort", sort.toString()));
+        }
+        if (type != null)
+        {
+            params.add(new NameValuePair("type", type.toString()));
+        }
 
         return params;
     }

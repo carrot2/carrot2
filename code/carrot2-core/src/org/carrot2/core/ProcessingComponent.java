@@ -1,6 +1,6 @@
 package org.carrot2.core;
 
-import org.carrot2.core.attribute.*;
+import carrot2.util.attribute.*;
 
 /**
  * Defines the life cycle of a Carrot<sup>2</sup> processing component. The life cycle
@@ -33,7 +33,7 @@ public interface ProcessingComponent
      * components should perform initializations based on the initialization-time
      * attributes. This method is called <b>once</b> in the life time of a processing
      * component instance.
-     * 
+     *
      * @throws ComponentInitializationException when initialization failed. If thrown, the
      *             {@link #dispose()} method will be called on this component instance to
      *             allow clean-up actions. The instance will not be used for any further
@@ -48,7 +48,7 @@ public interface ProcessingComponent
      * annotations have been bound, but before a call to {@link #process()}. In this
      * method, the processing component should perform any initializations based on the
      * runtime attributes. This method is called once per request.
-     * 
+     *
      * @throws ProcessingException when processing cannot start, e.g. because some
      *             attributes were not bound. If thrown, the {@link #process()} method
      *             will not be called. Instead, {@link #afterProcessing()} will be called
@@ -62,7 +62,7 @@ public interface ProcessingComponent
     /**
      * Performs the processing required to fulfill the request. This method is called once
      * per request.
-     * 
+     *
      * @throws ProcessingException when processing failed. If thrown, the
      *             {@link #afterProcessing()} method will be called and the component will
      *             be ready to accept further requests or to be disposed of. Finally, the

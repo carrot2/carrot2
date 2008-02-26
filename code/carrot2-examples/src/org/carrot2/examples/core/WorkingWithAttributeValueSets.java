@@ -6,10 +6,11 @@ import java.io.*;
 import java.util.Map;
 import java.util.Set;
 
-import org.carrot2.core.attribute.AttributeValueSet;
-import org.carrot2.core.attribute.AttributeValueSets;
 import org.carrot2.util.CloseableUtils;
 import org.junit.Test;
+
+import carrot2.util.attribute.AttributeValueSet;
+import carrot2.util.attribute.AttributeValueSets;
 
 /**
  * An example showing how developers can use the low-level core utilities for working with
@@ -27,8 +28,8 @@ public class WorkingWithAttributeValueSets
          * (optionally) description and (optionally) a base attribute set from which it
          * can "inherit" attribute values.
          */
-        AttributeValueSet set1 = new AttributeValueSet("Set 1", "Description 1", null);
-        AttributeValueSet set2 = new AttributeValueSet("Set 2", "Description 2", set1);
+        final AttributeValueSet set1 = new AttributeValueSet("Set 1", "Description 1", null);
+        final AttributeValueSet set2 = new AttributeValueSet("Set 2", "Description 2", set1);
 
         /**
          * You can easily set and retrieve attribute values.
@@ -53,7 +54,7 @@ public class WorkingWithAttributeValueSets
         /**
          * We can group attribute value sets.
          */
-        AttributeValueSets sets = new AttributeValueSets();
+        final AttributeValueSets sets = new AttributeValueSets();
         sets.addAttributeValueSet("set1", set1);
         sets.addAttributeValueSet("set2", set2);
 
@@ -67,7 +68,7 @@ public class WorkingWithAttributeValueSets
 
         final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(
             byteArrayOutputStream.toByteArray());
-        AttributeValueSets deserialized = AttributeValueSets
+        final AttributeValueSets deserialized = AttributeValueSets
             .deserialize(byteArrayInputStream);
         CloseableUtils.closeIgnoringException(byteArrayInputStream); // need to close!
 
@@ -98,7 +99,7 @@ public class WorkingWithAttributeValueSets
          * To build the model for e.g. a combo box used to select the attribute value set,
          * you'll need to get list of setIds and then iterate to get e.g. labels.
          */
-        Set<String> attributeValueSetIds = sets.getAttributeValueSetIds();
+        final Set<String> attributeValueSetIds = sets.getAttributeValueSetIds();
 
         /**
          * When a user selects some set, you'll probably need to get a map of all values
@@ -106,7 +107,7 @@ public class WorkingWithAttributeValueSets
          */
         final AttributeValueSet selectedAttributeValueSet = sets
             .getAttributeValueSet("set1");
-        Map<String, Object> attributeValues = selectedAttributeValueSet
+        final Map<String, Object> attributeValues = selectedAttributeValueSet
             .getAttributeValues();
 
         /**
@@ -115,7 +116,7 @@ public class WorkingWithAttributeValueSets
          * value set and set the value in there. The combo box could get an entry along
          * the lines of "Custom" and make it selected.
          */
-        AttributeValueSet customAttributeValueSet = new AttributeValueSet("Custom", null,
+        final AttributeValueSet customAttributeValueSet = new AttributeValueSet("Custom", null,
             selectedAttributeValueSet);
         customAttributeValueSet.setAttributeValue("modified.attribute.key", "value");
 
@@ -137,14 +138,14 @@ public class WorkingWithAttributeValueSets
 
     private InputStream getAttributeValueSetsStream() throws Exception
     {
-        AttributeValueSet set1 = new AttributeValueSet("Set 1", "Description 1", null);
-        AttributeValueSet set2 = new AttributeValueSet("Set 2", "Description 2", set1);
+        final AttributeValueSet set1 = new AttributeValueSet("Set 1", "Description 1", null);
+        final AttributeValueSet set2 = new AttributeValueSet("Set 2", "Description 2", set1);
 
         set1.setAttributeValue("string.attribute", "value");
         set1.setAttributeValue("integer.attribute", 10);
         set2.setAttributeValue("string.attribute", "overriden");
 
-        AttributeValueSets sets = new AttributeValueSets();
+        final AttributeValueSets sets = new AttributeValueSets();
         sets.addAttributeValueSet("set1", set1);
         sets.addAttributeValueSet("set2", set2);
 

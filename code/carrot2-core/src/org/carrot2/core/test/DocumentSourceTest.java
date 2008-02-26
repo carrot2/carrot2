@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.carrot2.core.test;
 
@@ -10,8 +10,8 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import org.carrot2.core.*;
-import org.carrot2.core.attribute.AttributeNames;
 import org.junit.Assert;
+
 
 /**
  * Simple baseline tests that apply to most (?) data sources.
@@ -21,7 +21,7 @@ public abstract class DocumentSourceTest<T extends DocumentSource> extends
 {
     /**
      * Runs a <code>query</code> and asks for <code>results</code> results.
-     * 
+     *
      * @return Returns the number of fetched documents. Access {@link #attributes} map to
      *         get hold of the actual documents.
      */
@@ -52,7 +52,7 @@ public abstract class DocumentSourceTest<T extends DocumentSource> extends
 
         final StringBuilder builder = new StringBuilder();
         int i = 0;
-        for (Document d : result)
+        for (final Document d : result)
         {
             final Object key = d.getField(fieldName);
             if (values.containsKey(key))

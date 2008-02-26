@@ -2,9 +2,10 @@ package org.carrot2.core;
 
 import java.util.Map;
 
-import org.carrot2.core.attribute.Input;
-import org.carrot2.core.attribute.Output;
 import org.simpleframework.xml.Attribute;
+
+import carrot2.util.attribute.Input;
+import carrot2.util.attribute.Output;
 
 /**
  * A simple controller implementing the life cycle described in <{@link ProcessingComponent}.
@@ -26,7 +27,7 @@ public final class SimpleController
      * and disposes of the component instances after processing is complete.
      * <p>
      * See class description for potential performance aspects of using this method.
-     * 
+     *
      * @param attributes attributes to be used during processing. {@link Input} attributes
      *            will be transferred from this map to the corresponding fields.
      *            {@link Output} attributes will be collected and stored in this map, so
@@ -48,13 +49,13 @@ public final class SimpleController
                 processingComponents[i] = (ProcessingComponent) processingComponentClasses[i]
                     .newInstance();
             }
-            catch (InstantiationException e)
+            catch (final InstantiationException e)
             {
                 throw new ComponentInitializationException(
                     "Could not instantiate component class: "
                         + processingComponentClasses[i].getName(), e);
             }
-            catch (IllegalAccessException e)
+            catch (final IllegalAccessException e)
             {
                 throw new ComponentInitializationException(
                     "Could not instantiate component class: "
@@ -71,7 +72,7 @@ public final class SimpleController
      * <p>
      * See class description for potential performance and threading aspects of using this
      * method.
-     * 
+     *
      * @param attributes attributes to be used during processing. {@link Input} attributes
      *            will be transferred from this map to the corresponding fields.
      *            {@link Output} attributes will be collected and stored in this map, so
@@ -86,24 +87,24 @@ public final class SimpleController
         try
         {
             // Initialize all components.
-            for (int i = 0; i < processingComponents.length; i++)
+            for (final ProcessingComponent element : processingComponents)
             {
-                ControllerUtils.init(processingComponents[i], attributes);
+                ControllerUtils.init(element, attributes);
             }
 
             try
             {
                 // Call before processing hook.
-                for (int i = 0; i < processingComponents.length; i++)
+                for (final ProcessingComponent element : processingComponents)
                 {
-                    ControllerUtils.beforeProcessing(processingComponents[i], attributes);
+                    ControllerUtils.beforeProcessing(element, attributes);
                 }
 
                 // Perform processing
-                for (int i = 0; i < processingComponents.length; i++)
+                for (final ProcessingComponent element : processingComponents)
                 {
                     ControllerUtils
-                        .performProcessing(processingComponents[i], attributes);
+                        .performProcessing(element, attributes);
                 }
 
                 return new ProcessingResult(attributes);
@@ -111,18 +112,18 @@ public final class SimpleController
             finally
             {
                 // Call after processing hooks
-                for (int i = 0; i < processingComponents.length; i++)
+                for (final ProcessingComponent element : processingComponents)
                 {
-                    ControllerUtils.afterProcessing(processingComponents[i], attributes);
+                    ControllerUtils.afterProcessing(element, attributes);
                 }
             }
         }
         finally
         {
             // Finally, dispose of all components
-            for (int i = 0; i < processingComponents.length; i++)
+            for (final ProcessingComponent element : processingComponents)
             {
-                processingComponents[i].dispose();
+                element.dispose();
             }
         }
     }

@@ -2,7 +2,7 @@ package org.carrot2.core;
 
 import java.util.Map;
 
-import org.carrot2.core.attribute.*;
+import carrot2.util.attribute.*;
 
 /**
  * Static life cycle and controller utilities (for use within the core package).
@@ -13,7 +13,7 @@ import org.carrot2.core.attribute.*;
 final class ControllerUtils
 {
     /**
-     * 
+     *
      */
     private ControllerUtils()
     {
@@ -30,13 +30,13 @@ final class ControllerUtils
         {
             AttributeBinder
                 .bind(processingComponent, attributes, Init.class, Input.class);
-            
+
             processingComponent.init();
 
             AttributeBinder.bind(processingComponent, attributes, Init.class,
                 Output.class);
         }
-        catch (InstantiationException e)
+        catch (final InstantiationException e)
         {
             throw new ProcessingException("Attribute binding failed", e);
         }
@@ -56,7 +56,7 @@ final class ControllerUtils
 
             processingComponent.beforeProcessing();
         }
-        catch (InstantiationException e)
+        catch (final InstantiationException e)
         {
             throw new ProcessingException("Attribute binding failed", e);
         }
@@ -85,7 +85,7 @@ final class ControllerUtils
             AttributeBinder.bind(processingComponent, attributes, Processing.class,
                 Output.class);
         }
-        catch (InstantiationException e)
+        catch (final InstantiationException e)
         {
             throw new ProcessingException("Attribute binding failed", e);
         }

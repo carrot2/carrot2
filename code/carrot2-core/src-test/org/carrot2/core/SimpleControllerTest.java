@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.carrot2.core;
 
@@ -9,9 +9,10 @@ import static org.junit.Assert.assertEquals;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.carrot2.core.attribute.*;
 import org.easymock.IMocksControl;
 import org.junit.*;
+
+import carrot2.util.attribute.*;
 
 /**
  *
@@ -176,9 +177,9 @@ public class SimpleControllerTest
     public void testExceptionWhileInit()
     {
         // We need to initialize classes and delegates manually here
-        ProcessingComponent1 processingComponent1 = new ProcessingComponent1();
-        ProcessingComponent2 processingComponent2 = new ProcessingComponent2();
-        ProcessingComponent3 processingComponent3 = new ProcessingComponent3();
+        final ProcessingComponent1 processingComponent1 = new ProcessingComponent1();
+        final ProcessingComponent2 processingComponent2 = new ProcessingComponent2();
+        final ProcessingComponent3 processingComponent3 = new ProcessingComponent3();
         processingComponent1.delegate1 = processingComponent1Mock;
         processingComponent2.delegate2 = processingComponent2Mock;
         processingComponent3.delegate3 = processingComponent3Mock;

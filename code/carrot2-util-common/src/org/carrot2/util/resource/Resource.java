@@ -6,7 +6,7 @@ import java.io.InputStream;
 /**
  * Resource abstraction. Override {@link Object#toString()} to have meaningful logging
  * information at runtime.
- * 
+ *
  * @author Dawid Weiss
  */
 public interface Resource

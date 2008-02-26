@@ -20,17 +20,17 @@ final class XMLResponseParser implements ContentHandler
     private Document document;
 
     /** Parsed element stack. */
-    private ArrayList<String> stack = new ArrayList<String>();
+    private final ArrayList<String> stack = new ArrayList<String>();
 
     /** String builder for assembling content. */
-    private StringBuilder buffer = new StringBuilder();
+    private final StringBuilder buffer = new StringBuilder();
 
     /** An error occurred. */
     private boolean error;
     private StringBuilder errorText;
 
     /*
-     * 
+     *
      */
     @Override
     public void startDocument() throws SAXException
@@ -43,7 +43,7 @@ final class XMLResponseParser implements ContentHandler
     }
 
     /*
-     * 
+     *
      */
     private void cleanup()
     {
@@ -52,7 +52,7 @@ final class XMLResponseParser implements ContentHandler
     }
 
     /*
-     * 
+     *
      */
     @Override
     public void endDocument() throws SAXException
@@ -63,7 +63,7 @@ final class XMLResponseParser implements ContentHandler
     }
 
     /*
-     * 
+     *
      */
     @Override
     public void startElement(String uri, String localName, String qname,
@@ -101,11 +101,11 @@ final class XMLResponseParser implements ContentHandler
     }
 
     /**
-     * Adds a meta data entry to the response if it exists in the set of 
+     * Adds a meta data entry to the response if it exists in the set of
      * attributes.
      */
     private static void addResponseMetadataLong(
-        Attributes attributes, String attributeName, 
+        Attributes attributes, String attributeName,
         SearchEngineResponse response, String metadataKey)
     {
         final String value = attributes.getValue(attributeName);
@@ -116,7 +116,7 @@ final class XMLResponseParser implements ContentHandler
     }
 
     /*
-     * 
+     *
      */
     @Override
     public void endElement(String uri, String localName, String qname)
@@ -155,7 +155,7 @@ final class XMLResponseParser implements ContentHandler
             {
                 document.addField(Document.CONTENT_URL, text);
             }
-            else 
+            else
             {
                 // All other fields go directly in the document.
                 document.addField(localName, text);
@@ -166,7 +166,7 @@ final class XMLResponseParser implements ContentHandler
     }
 
     /*
-     * 
+     *
      */
     @Override
     public void characters(char [] chars, int start, int length) throws SAXException
@@ -175,7 +175,7 @@ final class XMLResponseParser implements ContentHandler
     }
 
     /*
-     * 
+     *
      */
     @Override
     public void setDocumentLocator(Locator locator)
@@ -184,7 +184,7 @@ final class XMLResponseParser implements ContentHandler
     }
 
     /*
-     * 
+     *
      */
     @Override
     public void startPrefixMapping(String arg0, String arg1) throws SAXException
@@ -193,7 +193,7 @@ final class XMLResponseParser implements ContentHandler
     }
 
     /*
-     * 
+     *
      */
     @Override
     public void endPrefixMapping(String arg0) throws SAXException
@@ -202,7 +202,7 @@ final class XMLResponseParser implements ContentHandler
     }
 
     /*
-     * 
+     *
      */
     @Override
     public void ignorableWhitespace(char [] whsp, int start, int length)
@@ -211,7 +211,7 @@ final class XMLResponseParser implements ContentHandler
     }
 
     /*
-     * 
+     *
      */
     @Override
     public void processingInstruction(String name, String value) throws SAXException
@@ -219,7 +219,7 @@ final class XMLResponseParser implements ContentHandler
     }
 
     /*
-     * 
+     *
      */
     @Override
     public void skippedEntity(String entity) throws SAXException

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.carrot2.core.test;
 
@@ -32,8 +32,8 @@ public class TestDocumentFactory
     public static final TestDocumentFactory DEFAULT = new TestDocumentFactory(DEFAULT_GENERATORS,
         DEFAULT_FIELDS);
 
-    private Map<String, DataGenerator<?>> generators;
-    private Set<String> fields;
+    private final Map<String, DataGenerator<?>> generators;
+    private final Set<String> fields;
 
     public TestDocumentFactory(Map<String, DataGenerator<?>> generators, Set<String> fields)
     {
@@ -55,14 +55,14 @@ public class TestDocumentFactory
     public List<Document> generate(int number, Set<String> fieldsToGenerate,
         Map<String, DataGenerator<?>> customGenerators)
     {
-        List<Document> result = new ArrayList<Document>(number);
+        final List<Document> result = new ArrayList<Document>(number);
 
         for (int i = 0; i < number; i++)
         {
-            Document document = new Document();
-            for (String field : fieldsToGenerate)
+            final Document document = new Document();
+            for (final String field : fieldsToGenerate)
             {
-                DataGenerator<?> generator = resolveGenerator(customGenerators, field);
+                final DataGenerator<?> generator = resolveGenerator(customGenerators, field);
                 document.addField(field, generator.generate(i));
             }
 
@@ -102,8 +102,8 @@ public class TestDocumentFactory
             "CD"
         };
 
-        private int words;
-        private boolean prependSequentialNumber;
+        private final int words;
+        private final boolean prependSequentialNumber;
 
         private final Random random = new Random(0);
 
@@ -121,7 +121,7 @@ public class TestDocumentFactory
         @Override
         public String generate(int sequentialNumber)
         {
-            StringBuilder builder = new StringBuilder();
+            final StringBuilder builder = new StringBuilder();
 
             if (prependSequentialNumber)
             {
@@ -151,7 +151,7 @@ public class TestDocumentFactory
             "pl", "co.uk", "com", "org", "net"
         };
 
-        private int length;
+        private final int length;
         private final Random random = new Random(0);
 
         public UrlGenerator(int length)
@@ -162,7 +162,7 @@ public class TestDocumentFactory
         @Override
         public String generate(int sequentialNumber)
         {
-            StringBuilder builder = new StringBuilder();
+            final StringBuilder builder = new StringBuilder();
 
             for (int i = 0; i < length - 1; i++)
             {

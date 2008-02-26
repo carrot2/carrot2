@@ -16,7 +16,7 @@ public final class CloseableUtils
     }
 
     /*
-     * 
+     *
      */
     public static void closeIgnoringException(Closeable closeable)
     {
@@ -26,7 +26,7 @@ public final class CloseableUtils
             {
                 closeable.close();
             }
-            catch (IOException e)
+            catch (final IOException e)
             {
                 // Ignore.
             }

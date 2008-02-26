@@ -1,14 +1,14 @@
 package org.carrot2.util.resource;
 
 /**
- * An abstraction layer for resource lookup. 
- * 
+ * An abstraction layer for resource lookup.
+ *
  * @see ResourceUtils
  */
 public interface ResourceLocator
 {
     /**
-     * Locate All matching resources and return their abstraction. 
+     * Locate All matching resources and return their abstraction.
      */
     public Resource [] getAll(String resource, Class<?> clazz);
 }

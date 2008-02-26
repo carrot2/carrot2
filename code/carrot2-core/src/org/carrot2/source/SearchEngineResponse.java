@@ -18,9 +18,9 @@ public final class SearchEngineResponse
     /**
      * All meta data returned in the response.
      */
-    public final HashMap<String, Object> metadata = new HashMap<String, Object>(10); 
+    public final HashMap<String, Object> metadata = new HashMap<String, Object>(10);
 
-    /** 
+    /**
      * All documents returned in the response.
      */
     public final ArrayList<Document> results = new ArrayList<Document>(100);

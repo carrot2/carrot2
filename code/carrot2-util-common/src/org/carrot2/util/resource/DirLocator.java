@@ -4,7 +4,7 @@ import java.io.File;
 
 
 /**
- * Looks up resources in a filesystem folder. 
+ * Looks up resources in a filesystem folder.
  */
 public final class DirLocator implements ResourceLocator
 {
@@ -14,7 +14,7 @@ public final class DirLocator implements ResourceLocator
     /**
      * Initializes the locator using the given path. If the
      * argument is null or a non-existent folder, the locator
-     * will return an empty set of resources. 
+     * will return an empty set of resources.
      */
     public DirLocator(String dirPath)
     {
@@ -27,7 +27,7 @@ public final class DirLocator implements ResourceLocator
     }
 
     /**
-     * 
+     *
      */
     public Resource [] getAll(String resource, Class<?> clazz)
     {
@@ -44,7 +44,7 @@ public final class DirLocator implements ResourceLocator
                 return new Resource [] {
                     new FileResource(resourceFile)
                 };
-            }            
+            }
         }
         return new Resource [0];
     }

@@ -4,11 +4,12 @@ import static org.junit.Assert.*;
 
 import java.util.Collection;
 
+import org.carrot2.core.AttributeNames;
 import org.carrot2.core.Document;
-import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.test.DocumentSourceTest;
 import org.carrot2.source.SearchMode;
 import org.junit.Test;
+
 
 
 /**
@@ -26,8 +27,11 @@ public class YahooDocumentSourceTest extends DocumentSourceTest<YahooDocumentSou
     public void testQueryLargerThanPage() throws Exception
     {
         final int needed = new YahooWebSearchService().resultsPerPage * 2 + 10;
+        
         // Allow some slack (duplicated URLs).
-        assertTrue(runQuery("apache", needed) > needed - 5);
+        final int documentsReturned = runQuery("apache", needed);
+        
+        assertTrue(documentsReturned > needed - 20);
     }
 
     @Test
@@ -41,7 +45,7 @@ public class YahooDocumentSourceTest extends DocumentSourceTest<YahooDocumentSou
 
     @SuppressWarnings("unchecked")
     @Test
-    public void testURLsUnique() throws Exception 
+    public void testURLsUnique() throws Exception
     {
         runQuery("apache", 200);
 
@@ -66,11 +70,11 @@ public class YahooDocumentSourceTest extends DocumentSourceTest<YahooDocumentSou
         assertEquals(0, runQuery("duiogig oiudgisugviw siug iugw iusviuwg", 100));
         assertEquals(2, attributes.get(YahooSearchService.class.getName() + ".requestCount"));
     }
-    
+
     @Test
     public void testNewsServiceSearch() throws Exception
     {
-        attributes.put(YahooDocumentSource.class.getName() 
+        attributes.put(YahooDocumentSource.class.getName()
             + ".service", YahooNewsSearchService.class);
 
         assertTrue(runQuery("iraq", 50) > 0);

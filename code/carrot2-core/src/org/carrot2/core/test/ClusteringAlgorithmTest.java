@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.carrot2.core.test;
 
@@ -9,8 +9,8 @@ import static org.junit.Assert.assertNotNull;
 import java.util.*;
 
 import org.carrot2.core.*;
-import org.carrot2.core.attribute.AttributeNames;
 import org.junit.Test;
+
 
 /**
  * Simple baseline tests that apply to all clustering algorithms.
@@ -21,7 +21,7 @@ public abstract class ClusteringAlgorithmTest<T extends ClusteringAlgorithm> ext
     @Test
     public void testNoDocuments()
     {
-        Collection<Cluster> clusters = cluster(Collections.<Document> emptyList());
+        final Collection<Cluster> clusters = cluster(Collections.<Document> emptyList());
 
         assertNotNull(clusters);
         assertEquals(0, clusters.size());
@@ -29,7 +29,7 @@ public abstract class ClusteringAlgorithmTest<T extends ClusteringAlgorithm> ext
 
     /**
      * Performs clustering.
-     * 
+     *
      * @param documents documents to be clustered
      * @return clustering results
      */
@@ -50,7 +50,7 @@ public abstract class ClusteringAlgorithmTest<T extends ClusteringAlgorithm> ext
     private Collection<Document> collectDocuments(Collection<Cluster> clusters,
         Collection<Document> documents)
     {
-        for (Cluster cluster : clusters)
+        for (final Cluster cluster : clusters)
         {
             documents.addAll(cluster.getDocuments());
             collectDocuments(cluster.getSubclusters());

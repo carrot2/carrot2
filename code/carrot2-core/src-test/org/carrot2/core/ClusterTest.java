@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.carrot2.core;
 
@@ -16,7 +16,7 @@ public class ClusterTest
     @Test
     public void testSizeEmptyFlat()
     {
-        Cluster flatCluster = new Cluster();
+        final Cluster flatCluster = new Cluster();
         assertEquals(0, flatCluster.size());
     }
 
@@ -35,7 +35,7 @@ public class ClusterTest
     @Test
     public void testSizeNonEmptyFlat()
     {
-        Cluster flatCluster = new Cluster();
+        final Cluster flatCluster = new Cluster();
         flatCluster.addDocuments(new Document(), new Document());
         assertEquals(2, flatCluster.size());
     }
@@ -74,13 +74,13 @@ public class ClusterTest
     @Test
     public void testByLabelComparator()
     {
-        Cluster clusterA = new Cluster();
+        final Cluster clusterA = new Cluster();
         clusterA.addPhrases("A");
 
-        Cluster clusterB = new Cluster();
+        final Cluster clusterB = new Cluster();
         clusterB.addPhrases("b");
 
-        Cluster clusterNull = new Cluster();
+        final Cluster clusterNull = new Cluster();
 
         assertEquals(0, Cluster.BY_LABEL_COMPARATOR.compare(clusterA, clusterA));
         assertTrue(Cluster.BY_LABEL_COMPARATOR.compare(clusterA, clusterB) < 0);
@@ -90,10 +90,10 @@ public class ClusterTest
     @Test
     public void testBySizeComparator()
     {
-        Cluster clusterA = new Cluster();
+        final Cluster clusterA = new Cluster();
         clusterA.addDocuments(new Document(), new Document());
 
-        Cluster clusterB = new Cluster();
+        final Cluster clusterB = new Cluster();
 
         assertEquals(0, Cluster.BY_SIZE_COMPARATOR.compare(clusterA, clusterA));
         assertTrue(Cluster.BY_SIZE_COMPARATOR.compare(clusterA, clusterB) > 0);
@@ -102,15 +102,15 @@ public class ClusterTest
     @Test
     public void testByReversedSizeAndLabelComparator()
     {
-        Cluster clusterA = new Cluster();
+        final Cluster clusterA = new Cluster();
         clusterA.addPhrases("A");
         clusterA.addDocuments(new Document(), new Document());
 
-        Cluster clusterB = new Cluster();
+        final Cluster clusterB = new Cluster();
         clusterB.addPhrases("B");
         clusterB.addDocuments(new Document(), new Document());
 
-        Cluster clusterC = new Cluster();
+        final Cluster clusterC = new Cluster();
         clusterC.addPhrases("C");
         clusterC.addDocuments(new Document(), new Document(), new Document());
 

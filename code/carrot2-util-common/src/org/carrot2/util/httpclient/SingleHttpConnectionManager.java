@@ -34,7 +34,7 @@ public final class SingleHttpConnectionManager extends SimpleHttpConnectionManag
             {
                 lastResponse.close();
             }
-            catch (IOException ioe)
+            catch (final IOException ioe)
             {
                 // ignore.
             }

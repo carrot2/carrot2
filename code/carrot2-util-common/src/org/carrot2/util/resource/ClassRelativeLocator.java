@@ -17,7 +17,7 @@ public class ClassRelativeLocator implements ResourceLocator
     private final static Logger logger = Logger.getLogger(ClassRelativeLocator.class);
 
     /**
-     * 
+     *
      */
     public Resource [] getAll(String resource, Class<?> clazz)
     {
@@ -42,7 +42,7 @@ public class ClassRelativeLocator implements ResourceLocator
             }
             return result.toArray(new Resource [result.size()]);
         }
-        catch (IOException e)
+        catch (final IOException e)
         {
             logger.warn("Locator failed to find resources.", e);
             return new Resource [0];

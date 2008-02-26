@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.carrot2.clustering.synthetic;
 
@@ -29,13 +29,13 @@ public class DocumentWithUrlsFactory extends TestDocumentFactory
     /**
      * Generates documents with the provided URLs. The number of generated documents is
      * equal to the number of the <code>urls</code> provided.
-     * 
+     *
      * @param urls URLs for the documents
      * @return documents with provided URLs
      */
     public List<Document> generate(final String [] urls)
     {
-        Map<String, DataGenerator<?>> customGenerators = new HashMap<String, DataGenerator<?>>();
+        final Map<String, DataGenerator<?>> customGenerators = new HashMap<String, DataGenerator<?>>();
         customGenerators.put(Document.CONTENT_URL, new DataGenerator<String>()
         {
             @Override

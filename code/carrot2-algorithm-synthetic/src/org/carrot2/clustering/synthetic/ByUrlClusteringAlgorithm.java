@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.carrot2.clustering.synthetic;
 
@@ -7,7 +7,7 @@ import java.util.*;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.carrot2.core.*;
-import org.carrot2.core.attribute.*;
+import carrot2.util.attribute.*;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -24,7 +24,7 @@ import com.google.common.collect.Multimap;
  * <p>
  * Clusters will be ordered by size (number of documents) descendingly; in case of equal
  * sizes, alphabetically by URL, see {@link Cluster#BY_REVERSED_SIZE_AND_LABEL_COMPARATOR}.
- * 
+ *
  * @label By URL Clustering
  */
 @Bindable
@@ -42,7 +42,7 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
     @Processing
     @Input
     @Attribute(key = AttributeNames.DOCUMENTS)
-    private Collection<Document> documents = Collections.<Document> emptyList();
+    private final Collection<Document> documents = Collections.<Document> emptyList();
 
     @SuppressWarnings("unused")
     @Processing
@@ -79,10 +79,10 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
         Collection<Integer> documentIndexes, String [][] urlParts, int level,
         String labelSuffix)
     {
-        Multimap<String, Integer> urlPartToDocumentIndex = new HashMultimap<String, Integer>();
-        for (Integer documentIndex : documentIndexes)
+        final Multimap<String, Integer> urlPartToDocumentIndex = new HashMultimap<String, Integer>();
+        for (final Integer documentIndex : documentIndexes)
         {
-            String [] urlPartsForDocument = urlParts[documentIndex.intValue()];
+            final String [] urlPartsForDocument = urlParts[documentIndex.intValue()];
             if (urlPartsForDocument != null && urlPartsForDocument.length > level
                 && !STOP_URL_PARTS.contains(urlPartsForDocument[level]))
             {
@@ -90,21 +90,19 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
             }
         }
 
-        Set<Integer> documentsInClusters = new HashSet<Integer>();
-        List<Cluster> clusters = new ArrayList<Cluster>();
-        for (Iterator<String> it = urlPartToDocumentIndex.keySet().iterator(); it
-            .hasNext();)
+        final Set<Integer> documentsInClusters = new HashSet<Integer>();
+        final List<Cluster> clusters = new ArrayList<Cluster>();
+        for (final String urlPart : urlPartToDocumentIndex.keySet())
         {
-            String urlPart = it.next();
-            Collection<Integer> indexes = urlPartToDocumentIndex.get(urlPart);
+            final Collection<Integer> indexes = urlPartToDocumentIndex.get(urlPart);
 
             if (indexes.size() > 1)
             {
-                Cluster cluster = new Cluster();
+                final Cluster cluster = new Cluster();
                 String clusterLabel = urlPart
                     + (labelSuffix.length() > 0 ? "." + labelSuffix : "");
 
-                List<Cluster> subclusters = createClusters(documents, indexes, urlParts,
+                final List<Cluster> subclusters = createClusters(documents, indexes, urlParts,
                     level + 1, clusterLabel);
                 if (subclusters.size() > 1)
                 {
@@ -122,9 +120,8 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
                     }
                     else
                     {
-                        for (Iterator<Integer> it2 = indexes.iterator(); it2.hasNext();)
+                        for (final Integer documentIndex : indexes)
                         {
-                            Integer documentIndex = it2.next();
                             cluster.addDocuments(documents[documentIndex.intValue()]);
                         }
                     }
@@ -145,11 +142,11 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
         Collections.sort(clusters, Cluster.BY_REVERSED_SIZE_AND_LABEL_COMPARATOR);
 
         // Add junk clusters
-        Cluster otherUrls = new Cluster();
+        final Cluster otherUrls = new Cluster();
         otherUrls.addPhrases("Other Sites");
         otherUrls.setAttribute(Cluster.OTHER_TOPICS, true);
 
-        for (Integer documentIndex : documentIndexes)
+        for (final Integer documentIndex : documentIndexes)
         {
             if (!documentsInClusters.contains(documentIndex))
             {

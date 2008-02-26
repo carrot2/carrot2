@@ -1,8 +1,8 @@
 package org.carrot2.source;
 
 /**
- * Search mode for data source components that implement 
- * parallel request to some search service.  
+ * Search mode for data source components that implement
+ * parallel request to some search service.
  */
 public enum SearchMode
 {
@@ -21,7 +21,7 @@ public enum SearchMode
      * launched to the search service.
      * <p>
      * Note that speculative threads cause larger load on the search service
-     * and will exhaust your request pool quicker (if it is limited).   
+     * and will exhaust your request pool quicker (if it is limited).
      */
     SPECULATIVE,
 }

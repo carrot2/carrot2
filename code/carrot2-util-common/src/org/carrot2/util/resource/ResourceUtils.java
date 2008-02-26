@@ -27,7 +27,7 @@ import com.google.common.collect.Lists;
 public final class ResourceUtils
 {
     /**
-     * Logger instance. 
+     * Logger instance.
      */
     private final static Logger logger = Logger.getLogger(ResourceUtils.class);
 
@@ -47,16 +47,17 @@ public final class ResourceUtils
 
     /**
      * Scans all resource locators and returns matching resources.
-     * 
+     *
      * @param resource Resource name.
      * @param clazz Optional class for class-relative resources.
      * @return Returns an empty array if no resource matched the given name.
      */
     public Resource [] getAll(String resource, Class<?> clazz) {
         final ArrayList<Resource> result = Lists.newArrayList();
-        for (int i = 0; i < locators.length; i++) {
-            final Resource [] current = locators[i].getAll(resource, clazz);
-            // There shouldn't be too many matching resources, 
+        for (final ResourceLocator element : locators)
+        {
+            final Resource [] current = element.getAll(resource, clazz);
+            // There shouldn't be too many matching resources,
             // so linear search is ok.
             for (int j = 0; j < current.length; j++) {
                 if (!result.contains(current[j])) {
@@ -68,35 +69,39 @@ public final class ResourceUtils
         if (logger.isDebugEnabled()) {
             final StringBuffer buf = new StringBuffer("All matching: " + resource + ", ");
             for (int i = 0; i < result.size(); i++) {
-                if (i > 0) buf.append(", ");
+                if (i > 0)
+                {
+                    buf.append(", ");
+                }
                 buf.append(result.get(i).toString());
             }
             if (result.size() == 0) {
                 buf.append("(none found)");
             }
-            logger.debug(buf.toString());            
+            logger.debug(buf.toString());
         }
 
-        return result.toArray(new Resource[result.size()]); 
+        return result.toArray(new Resource[result.size()]);
     }
 
     /**
      * Scans through resource locators and returns the first matching resource.
-     * 
+     *
      * @param resource Resource name.
      * @param clazz Optional class for class-relative resources.
      * @return Returns null if no resource was found for the given name.
      */
     public Resource getFirst(String resource, Class<?> clazz) {
-        for (int i = 0; i < locators.length; i++) {
-            final Resource [] result = locators[i].getAll(resource, clazz);
+        for (final ResourceLocator element : locators)
+        {
+            final Resource [] result = element.getAll(resource, clazz);
             if (result != null && result.length > 0) {
                 logger.debug("First matching " + resource + ", " + result[0].toString());
                 return result[0];
             }
         }
         logger.debug("First matching " + resource + ", (none found)");
-        return null; 
+        return null;
     }
 
     /**

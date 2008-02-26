@@ -8,7 +8,7 @@ import java.net.URL;
 public final class ContextClassLoaderLocator implements ResourceLocator
 {
     /**
-     * 
+     *
      */
     public Resource [] getAll(String resource, Class<?> clazz)
     {

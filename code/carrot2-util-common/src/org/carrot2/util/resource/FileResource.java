@@ -22,21 +22,27 @@ public final class FileResource implements Resource
         return ResourceUtils.prefetch(new FileInputStream(file));
     }
 
+    @Override
     public String toString() {
         return info;
     }
-    
+
+    @Override
     public boolean equals(Object obj)
     {
-        if (this == obj) return true;
+        if (this == obj)
+        {
+            return true;
+        }
         if (obj instanceof FileResource) {
             return ((FileResource) obj).file.equals(this.file);
         }
         return false;
     }
 
+    @Override
     public int hashCode()
     {
         return this.file.hashCode();
-    }    
+    }
 }

@@ -16,11 +16,11 @@ public final class StringUtils extends org.apache.commons.lang.StringUtils
 
     public static <T> String toString(Iterable<T> iterable, String separator)
     {
-        StringBuilder stringBuilder = new StringBuilder();
+        final StringBuilder stringBuilder = new StringBuilder();
 
-        for (Iterator<T> iterator = iterable.iterator(); iterator.hasNext();)
+        for (final Iterator<T> iterator = iterable.iterator(); iterator.hasNext();)
         {
-            T object = iterator.next();
+            final T object = iterator.next();
             stringBuilder.append(object);
             if (iterator.hasNext())
             {
@@ -30,19 +30,19 @@ public final class StringUtils extends org.apache.commons.lang.StringUtils
 
         return stringBuilder.toString();
     }
-    
+
     public static int multiStringHashCode(String... strings)
     {
         int result = 0;
-        
-        for (String string : strings)
+
+        for (final String string : strings)
         {
             if (string != null)
             {
                 result ^= string.hashCode();
             }
         }
-        
+
         return result;
     }
 }

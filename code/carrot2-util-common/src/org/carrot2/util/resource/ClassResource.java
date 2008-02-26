@@ -9,8 +9,8 @@ import java.io.InputStream;
  */
 public final class ClassResource extends URLResource
 {
-    private Class<?> clazz;
-    private String resource;
+    private final Class<?> clazz;
+    private final String resource;
 
     public ClassResource(Class<?> clazz, String resource)
     {
@@ -20,6 +20,7 @@ public final class ClassResource extends URLResource
         this.resource = resource;
     }
 
+    @Override
     public InputStream open() throws IOException
     {
         return ResourceUtils.prefetch(clazz.getResourceAsStream(resource));

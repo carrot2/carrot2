@@ -1,11 +1,11 @@
 /**
- * 
+ *
  */
 package org.carrot2.core;
 
 import java.util.*;
 
-import org.carrot2.core.attribute.*;
+import carrot2.util.attribute.*;
 
 /**
  * This class measures the overhead resulting from reflection stuff performed by the
@@ -21,37 +21,37 @@ public class SimpleControllerBenchmark
         @Processing
         @Input
         @Attribute
-        private int int1 = 0;
+        private final int int1 = 0;
 
         @Processing
         @Input
         @Attribute
-        private double double1 = 1.0;
+        private final double double1 = 1.0;
 
         @Processing
         @Input
         @Attribute
-        private String string1 = "test";
+        private final String string1 = "test";
 
         @Processing
         @Input
         @Attribute
-        private boolean boolean1 = false;
+        private final boolean boolean1 = false;
 
         @Processing
         @Input
         @Attribute(key = "in1")
-        private List<String> inAttribute = new ArrayList<String>();
+        private final List<String> inAttribute = new ArrayList<String>();
 
         @Processing
         @Output
         @Attribute(key = "out2")
-        private List<String> outAttribute = new ArrayList<String>();
+        private final List<String> outAttribute = new ArrayList<String>();
 
         @Processing
         @Output
         @Attribute(key = "debug2")
-        private List<String> debugAttribute = new ArrayList<String>();
+        private final List<String> debugAttribute = new ArrayList<String>();
     }
 
     @Bindable
@@ -61,50 +61,50 @@ public class SimpleControllerBenchmark
         @Processing
         @Input
         @Attribute
-        private int int2 = 0;
+        private final int int2 = 0;
 
         @Processing
         @Input
         @Attribute
-        private double double2 = 1.0;
+        private final double double2 = 1.0;
 
         @Processing
         @Input
         @Attribute
-        private String string2 = "test";
+        private final String string2 = "test";
 
         @Processing
         @Input
         @Attribute
-        private boolean boolean2 = false;
+        private final boolean boolean2 = false;
 
         @Processing
         @Input
         @Attribute(key = "in2")
-        private List<String> inAttribute = new ArrayList<String>();
+        private final List<String> inAttribute = new ArrayList<String>();
 
         @Processing
         @Output
         @Attribute(key = "out2")
-        private List<String> outAttribute = new ArrayList<String>();
+        private final List<String> outAttribute = new ArrayList<String>();
 
         @Processing
         @Output
         @Attribute(key = "debug2")
-        private List<String> debugAttribute = new ArrayList<String>();
+        private final List<String> debugAttribute = new ArrayList<String>();
     }
 
     public static void main(String [] args) throws InstantiationException
     {
-        SimpleController controller = new SimpleController();
+        final SimpleController controller = new SimpleController();
 
         final int requests = 100000;
 
-        long start = System.currentTimeMillis();
+        final long start = System.currentTimeMillis();
 
         for (int i = 0; i < requests; i++)
         {
-            Map<String, Object> attributes = new HashMap<String, Object>();
+            final Map<String, Object> attributes = new HashMap<String, Object>();
             attributes.put("int1", 1);
             attributes.put("int2", 1);
             attributes.put("double1", 1.0);
@@ -119,7 +119,7 @@ public class SimpleControllerBenchmark
                 ProcessingComponent2.class);
         }
 
-        long stop = System.currentTimeMillis();
+        final long stop = System.currentTimeMillis();
 
         System.out.printf("Request time    : %.2f ms\n", (stop - start)
             / (double) requests);

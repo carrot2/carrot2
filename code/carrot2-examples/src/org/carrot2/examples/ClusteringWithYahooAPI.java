@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.carrot2.examples;
 
@@ -7,11 +7,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.carrot2.clustering.synthetic.ByUrlClusteringAlgorithm;
-import org.carrot2.core.ProcessingResult;
-import org.carrot2.core.SimpleController;
-import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.core.*;
 import org.carrot2.source.yahoo.YahooDocumentSource;
 import org.carrot2.source.yahoo.YahooNewsSearchService;
+
 
 /**
  * An example showing how to query Yahoo! for search results
@@ -30,21 +29,21 @@ public class ClusteringWithYahooAPI
         attributes.put(AttributeNames.QUERY, "data mining");
         attributes.put(AttributeNames.RESULTS, 200);
 
-        ProcessingResult result = controller.process(attributes, 
+        ProcessingResult result = controller.process(attributes,
                 YahooDocumentSource.class, ByUrlClusteringAlgorithm.class);
 
         ExampleUtils.displayResults(result);
-        
+
         //
         // Fetching from Yahoo! News.
         //
-        attributes.put(YahooDocumentSource.class.getName() + ".service", 
+        attributes.put(YahooDocumentSource.class.getName() + ".service",
             YahooNewsSearchService.class);
 
         attributes.put(AttributeNames.QUERY, "iraq");
         attributes.put(AttributeNames.RESULTS, 50);
-        
-        result = controller.process(attributes, 
+
+        result = controller.process(attributes,
             YahooDocumentSource.class, ByUrlClusteringAlgorithm.class);
         ExampleUtils.displayResults(result);
     }

@@ -2,8 +2,6 @@ package org.carrot2.core;
 
 import java.util.*;
 
-import org.carrot2.core.attribute.AttributeNames;
-
 /**
  * Encapsulates the results of processing. Provides access to the values of attributes
  * collected after processing and utility methods for obtaining processed documents ({@link #getDocuments()}))
@@ -19,9 +17,30 @@ public final class ProcessingResult
      * Assigns unique document identifiers if documents are present in the
      * <code>attributes</code> map (under the key {@link AttributeNames#DOCUMENTS}).
      */
+    @SuppressWarnings("unchecked")
     ProcessingResult(Map<String, Object> attributes)
     {
+        // Replace a modifiable collection of documents with an unmodifiable one
+        final Collection<Document> documents = (Collection<Document>) attributes
+            .get(AttributeNames.DOCUMENTS);
+        if (documents != null)
+        {
+            attributes.put(AttributeNames.DOCUMENTS, Collections
+                .unmodifiableCollection(documents));
+        }
+
+        // Replace a modifiable collection of clusters with an unmodifiable one
+        final Collection<Cluster> clusters = (Collection<Cluster>) attributes
+            .get(AttributeNames.CLUSTERS);
+        if (clusters != null)
+        {
+            attributes.put(AttributeNames.CLUSTERS, Collections
+                .unmodifiableCollection(clusters));
+        }
+
+        // Store a reference to attributes as an unmodifiable map
         this.attributes = Collections.unmodifiableMap(attributes);
+
         assignDocumentIds();
     }
 
@@ -34,7 +53,7 @@ public final class ProcessingResult
         if (documents != null)
         {
             int id = 0;
-            for (Document document : documents)
+            for (final Document document : documents)
             {
                 document.id = id++;
             }
@@ -62,16 +81,7 @@ public final class ProcessingResult
     @SuppressWarnings("unchecked")
     public Collection<Document> getDocuments()
     {
-        final Collection<Document> documents = (Collection<Document>) attributes
-            .get(AttributeNames.DOCUMENTS);
-        if (documents != null)
-        {
-            return Collections.unmodifiableCollection(documents);
-        }
-        else
-        {
-            return null;
-        }
+        return (Collection<Document>) attributes.get(AttributeNames.DOCUMENTS);
     }
 
     /*
@@ -92,15 +102,6 @@ public final class ProcessingResult
     @SuppressWarnings("unchecked")
     public Collection<Cluster> getClusters()
     {
-        final Collection<Cluster> clusters = (Collection<Cluster>) attributes
-            .get(AttributeNames.CLUSTERS);
-        if (clusters != null)
-        {
-            return Collections.unmodifiableCollection(clusters);
-        }
-        else
-        {
-            return null;
-        }
+        return (Collection<Cluster>) attributes.get(AttributeNames.CLUSTERS);
     }
 }

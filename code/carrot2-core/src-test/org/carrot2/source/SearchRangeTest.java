@@ -16,7 +16,7 @@ public class SearchRangeTest
         assertEquals(50, range[1].start);
         assertEquals(50, range[1].results);
 
-        
+
         range = SearchRange.getSearchRanges(0, 60, 1000, 50);
         assertEquals(2, range.length);
         assertEquals(0, range[0].start);
@@ -28,7 +28,7 @@ public class SearchRangeTest
         assertEquals(1, range.length);
         assertEquals(10, range[0].start);
         assertEquals(20, range[0].results);
-        
+
         range = SearchRange.getSearchRanges(10, 60, 1000, 50);
         assertEquals(2, range.length);
         assertEquals(10, range[0].start);

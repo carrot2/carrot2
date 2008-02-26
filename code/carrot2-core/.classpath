@@ -11,5 +11,6 @@
 	<classpathentry kind="var" path="CARROT2_30_CHECKOUT_BASE/lib/compile-time/fest-assert-1.0a1.jar"/>
 	<classpathentry kind="var" path="CARROT2_30_CHECKOUT_BASE/lib/compile-time/fest-mocks-0.1.jar"/>
 	<classpathentry kind="var" path="CARROT2_30_CHECKOUT_BASE/lib/compile-time/fest-util-0.4.jar"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-util-attribute"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>

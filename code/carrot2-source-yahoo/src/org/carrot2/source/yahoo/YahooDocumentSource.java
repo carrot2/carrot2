@@ -5,9 +5,10 @@ import java.util.concurrent.*;
 
 import org.apache.log4j.Logger;
 import org.carrot2.core.*;
-import org.carrot2.core.attribute.*;
-import org.carrot2.core.constraint.ImplementingClasses;
 import org.carrot2.source.*;
+
+import carrot2.util.attribute.*;
+import carrot2.util.attribute.constraint.ImplementingClasses;
 
 import com.google.common.base.Predicate;
 
@@ -31,7 +32,7 @@ public final class YahooDocumentSource extends SearchEngine
      * The specific search service to be used by this document source. You can use this
      * attribute to choose which Yahoo! service to query, e.g. Yahoo Web Search or Yahoo
      * News.
-     * 
+     *
      * @label Yahoo Search Service
      */
     @Init
@@ -41,17 +42,17 @@ public final class YahooDocumentSource extends SearchEngine
     {
         YahooWebSearchService.class, YahooNewsSearchService.class
     })
-    private YahooSearchService service = new YahooWebSearchService();
+    private final YahooSearchService service = new YahooWebSearchService();
 
     @Processing
     @Input
     @Attribute(key = AttributeNames.START)
-    private int start = 0;
+    private final int start = 0;
 
     @Processing
     @Input
     @Attribute(key = AttributeNames.RESULTS)
-    private int results = 100;
+    private final int results = 100;
 
     @Processing
     @Input
@@ -92,7 +93,10 @@ public final class YahooDocumentSource extends SearchEngine
             final Predicate<Document> p = new UniqueFieldPredicate(Document.CONTENT_URL);
             while (i.hasNext())
             {
-                if (!p.apply(i.next())) i.remove();
+                if (!p.apply(i.next()))
+                {
+                    i.remove();
+                }
             }
 
             resultsTotal = responses[0].getResultsTotal();

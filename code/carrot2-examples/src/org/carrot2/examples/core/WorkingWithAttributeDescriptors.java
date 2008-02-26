@@ -1,15 +1,17 @@
 /**
- * 
+ *
  */
 package org.carrot2.examples.core;
 
 import java.util.*;
 
-import org.carrot2.core.attribute.*;
-import org.carrot2.core.constraint.ConstraintUtils;
 import org.carrot2.examples.ExampleUtils;
 import org.carrot2.source.yahoo.YahooDocumentSource;
 import org.carrot2.source.yahoo.YahooNewsSearchService;
+
+import carrot2.util.attribute.*;
+import carrot2.util.attribute.constraint.ConstraintUtils;
+import carrot2.util.attribute.metadata.*;
 
 /**
  * An example showing how developers can use the low-level core utilities for processing
@@ -21,7 +23,7 @@ public class WorkingWithAttributeDescriptors
     {
         // Here is the component instance that we will be working with. Notice
         // that the BindableDescriptorBuilder requires an initialized instance on input.
-        YahooDocumentSource yahooDocumentSource = new YahooDocumentSource();
+        final YahooDocumentSource yahooDocumentSource = new YahooDocumentSource();
 
         // Descriptors for a component with default initialization attribute values
         BindableDescriptor descriptor = BindableDescriptorBuilder
@@ -31,7 +33,7 @@ public class WorkingWithAttributeDescriptors
 
         // Notice that for some values of initialization attribute values,
         // you may get different attribute descriptors
-        Map<String, Object> initAttributes = new HashMap<String, Object>();
+        final Map<String, Object> initAttributes = new HashMap<String, Object>();
         initAttributes.put(YahooDocumentSource.class.getName() + ".service",
             YahooNewsSearchService.class);
         AttributeBinder
@@ -68,7 +70,7 @@ public class WorkingWithAttributeDescriptors
 
     private static void displayDescriptor(BindableDescriptor descriptor, int indent)
     {
-        for (AttributeDescriptor attributeDescriptor : descriptor.attributeDescriptors
+        for (final AttributeDescriptor attributeDescriptor : descriptor.attributeDescriptors
             .values())
         {
             System.out.print(ExampleUtils.getIndent(indent));
@@ -76,7 +78,7 @@ public class WorkingWithAttributeDescriptors
                 + attributeDescriptor.metadata.getTitle());
         }
 
-        for (Map.Entry<String, BindableDescriptor> entry : descriptor.bindableDescriptors
+        for (final Map.Entry<String, BindableDescriptor> entry : descriptor.bindableDescriptors
             .entrySet())
         {
             final BindableDescriptor subdescriptor = entry.getValue();

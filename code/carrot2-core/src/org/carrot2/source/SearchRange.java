@@ -16,7 +16,7 @@ public final class SearchRange
 
     /**
      * Create a new search range.
-     * 
+     *
      * @param start Start index of the first result to return (0-based).
      * @param results The number of results to return. The actual number of results
      * returned by a search service may be lower than this number.
