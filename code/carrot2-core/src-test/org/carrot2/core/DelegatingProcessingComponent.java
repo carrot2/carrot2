@@ -11,12 +11,12 @@ public abstract class DelegatingProcessingComponent implements ProcessingCompone
     @Init
     @Input
     @Attribute(key = "instanceAttribute")
-    private final String instanceAttribute = "";
+    private String instanceAttribute = "";
 
     @Processing
     @Input
     @Attribute(key = "runtimeAttribute")
-    private final String runtimeAttribute = "";
+    private String runtimeAttribute = "";
 
     @SuppressWarnings("unused")
     @Processing
@@ -43,7 +43,8 @@ public abstract class DelegatingProcessingComponent implements ProcessingCompone
         getDelegate().process();
 
         // Do some simple processing
-        data += instanceAttribute + runtimeAttribute;
+        data = data + instanceAttribute;
+        data = data + runtimeAttribute;
     }
 
     @Override

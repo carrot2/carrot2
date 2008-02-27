@@ -136,15 +136,15 @@ public class SimpleControllerTest
         processingComponent3Mock.init();
 
         processingComponent1Mock.beforeProcessing();
-        processingComponent2Mock.beforeProcessing();
-        processingComponent3Mock.beforeProcessing();
-
         processingComponent1Mock.process();
-        processingComponent2Mock.process();
-        processingComponent3Mock.process();
-
         processingComponent1Mock.afterProcessing();
+        
+        processingComponent2Mock.beforeProcessing();
+        processingComponent2Mock.process();
         processingComponent2Mock.afterProcessing();
+        
+        processingComponent3Mock.beforeProcessing();
+        processingComponent3Mock.process();
         processingComponent3Mock.afterProcessing();
 
         processingComponent1Mock.dispose();
@@ -161,7 +161,7 @@ public class SimpleControllerTest
         controller.process(attributes, ProcessingComponent1.class,
             ProcessingComponent2.class, ProcessingComponent3.class);
 
-        assertEquals("dir", attributes.get("data"));
+        assertEquals("diririr", attributes.get("data"));
     }
 
     @Test(expected = ProcessingException.class)
@@ -203,11 +203,11 @@ public class SimpleControllerTest
         processingComponent2Mock.init();
         processingComponent3Mock.init();
         processingComponent1Mock.beforeProcessing();
+        processingComponent1Mock.process();
+        processingComponent1Mock.afterProcessing();
         processingComponent2Mock.beforeProcessing();
         mocksControl.andThrow(new ProcessingException("no message"));
-        processingComponent1Mock.afterProcessing();
         processingComponent2Mock.afterProcessing();
-        processingComponent3Mock.afterProcessing();
         processingComponent1Mock.dispose();
         processingComponent2Mock.dispose();
         processingComponent3Mock.dispose();
@@ -224,14 +224,12 @@ public class SimpleControllerTest
         processingComponent2Mock.init();
         processingComponent3Mock.init();
         processingComponent1Mock.beforeProcessing();
-        processingComponent2Mock.beforeProcessing();
-        processingComponent3Mock.beforeProcessing();
         processingComponent1Mock.process();
+        processingComponent1Mock.afterProcessing();
+        processingComponent2Mock.beforeProcessing();
         processingComponent2Mock.process();
         mocksControl.andThrow(new ProcessingException("no message"));
-        processingComponent1Mock.afterProcessing();
         processingComponent2Mock.afterProcessing();
-        processingComponent3Mock.afterProcessing();
         processingComponent1Mock.dispose();
         processingComponent2Mock.dispose();
         processingComponent3Mock.dispose();

@@ -18,5 +18,5 @@ public class SubClass extends SuperClass
     @Processing
     @Input
     @Attribute
-    private final String processingInputString = "input";
+    private String processingInputString = "input";
 }

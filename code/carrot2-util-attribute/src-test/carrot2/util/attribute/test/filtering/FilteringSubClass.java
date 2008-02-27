@@ -16,18 +16,18 @@ public class FilteringSubClass extends FilteringSuperClass
     @Processing
     @Input
     @Attribute
-    private final int initProcessingInput = 10;
+    private int initProcessingInput = 10;
 
     @Init
     @Processing
     @Output
     @Attribute
-    private final int initProcessingOutput = 10;
+    private int initProcessingOutput = 10;
 
     @Init
     @Processing
     @Input
     @Output
     @Attribute
-    private final int initProcessingInputOutput = 10;
+    private int initProcessingInputOutput = 10;
 }

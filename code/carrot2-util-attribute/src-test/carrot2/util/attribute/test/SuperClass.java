@@ -18,5 +18,5 @@ public class SuperClass
     @Init
     @Input
     @Attribute
-    private final int initInputInt = 5;
+    private int initInputInt = 5;
 }

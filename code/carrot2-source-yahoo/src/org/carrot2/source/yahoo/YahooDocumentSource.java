@@ -42,17 +42,17 @@ public final class YahooDocumentSource extends SearchEngine
     {
         YahooWebSearchService.class, YahooNewsSearchService.class
     })
-    private final YahooSearchService service = new YahooWebSearchService();
+    private YahooSearchService service = new YahooWebSearchService();
 
     @Processing
     @Input
     @Attribute(key = AttributeNames.START)
-    private final int start = 0;
+    private int start = 0;
 
     @Processing
     @Input
     @Attribute(key = AttributeNames.RESULTS)
-    private final int results = 100;
+    private int results = 100;
 
     @Processing
     @Input

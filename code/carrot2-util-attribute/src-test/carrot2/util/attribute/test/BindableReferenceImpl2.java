@@ -18,5 +18,5 @@ public class BindableReferenceImpl2 implements BindableReference
     @Init
     @Input
     @Attribute
-    private final int initInputInt = 12;
+    private int initInputInt = 12;
 }

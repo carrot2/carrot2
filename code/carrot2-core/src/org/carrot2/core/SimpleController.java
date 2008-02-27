@@ -99,10 +99,6 @@ public final class SimpleController
                     ControllerUtils.beforeProcessing(element, attributes);
                     ControllerUtils.performProcessing(element, attributes);
                 }
-                catch (Exception e)
-                {
-                    break;
-                }
                 finally
                 {
                     ControllerUtils.afterProcessing(element, attributes);

@@ -31,16 +31,16 @@ public class YahooDocumentSourceTest extends DocumentSourceTest<YahooDocumentSou
         // Allow some slack (duplicated URLs).
         final int documentsReturned = runQuery("apache", needed);
         
-        assertTrue(documentsReturned > needed - 20);
+        assertTrue(documentsReturned > needed - 5);
     }
 
     @Test
     public void testResultsTotal() throws Exception
     {
         runQuery("apache", 50);
-
+        
         assertNotNull(attributes.get(AttributeNames.RESULTS_TOTAL));
-        assertNotNull((Long) attributes.get(AttributeNames.RESULTS_TOTAL) > 0);
+        assertTrue((Long) attributes.get(AttributeNames.RESULTS_TOTAL) > 0);
     }
 
     @SuppressWarnings("unchecked")

@@ -27,7 +27,7 @@ public abstract class SearchEngine
     @Init
     @Input
     @Attribute(key="search-mode")
-    private final SearchMode searchMode = SearchMode.SPECULATIVE;
+    private SearchMode searchMode = SearchMode.SPECULATIVE;
 
     /**
      * Subclasses should override this method and return a {@link Callable}

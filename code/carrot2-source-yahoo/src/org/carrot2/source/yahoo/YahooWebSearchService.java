@@ -29,7 +29,7 @@ public final class YahooWebSearchService extends YahooSearchService
     @Init
     @Input
     @Attribute
-    private final String serviceURI = "http://api.search.yahoo.com/WebSearchService/V1/webSearch";
+    private String serviceURI = "http://api.search.yahoo.com/WebSearchService/V1/webSearch";
 
     /**
      * The language the results are written in. Value must be one of the <a

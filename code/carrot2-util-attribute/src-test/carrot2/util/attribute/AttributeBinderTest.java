@@ -222,6 +222,21 @@ public class AttributeBinderTest
         @Attribute
         private int initInput;
     }
+    
+    @Bindable
+    @SuppressWarnings("unused")
+    public static class RequiredInputAttributes
+    {
+        @Init
+        @Input(required = true)
+        @Attribute
+        private int initInputInt;
+        
+        @Init
+        @Input(required = true)
+        @Attribute
+        private String initInputString;
+    }
 
     @Before
     public void initAttributes()
@@ -520,6 +535,31 @@ public class AttributeBinderTest
     public void testAttributeAnnotationWithoutBindingDirection() throws InstantiationException
     {
         final AttributeAnnotationWithoutBindingDirection instance = new AttributeAnnotationWithoutBindingDirection();
+        AttributeBinder.bind(instance, attributes, Init.class, Input.class);
+    }
+    
+    @Test(expected=AttributeBindingException.class)
+    public void testRequiredInputAttributeNotProvided() throws InstantiationException
+    {
+        RequiredInputAttributes instance;
+        instance = new RequiredInputAttributes();
+
+        // Attribute value missing
+        addAttribute(RequiredInputAttributes.class, "initInputInt", 6);
+        
+        AttributeBinder.bind(instance, attributes, Init.class, Input.class);
+    }
+    
+    @Test(expected=AttributeBindingException.class)
+    public void testRequiredInputAttributeIsNull() throws InstantiationException
+    {
+        RequiredInputAttributes instance;
+        instance = new RequiredInputAttributes();
+        
+        // Attribute value missing
+        addAttribute(RequiredInputAttributes.class, "initInputInt", 6);
+        addAttribute(RequiredInputAttributes.class, "initInputString", null);
+        
         AttributeBinder.bind(instance, attributes, Init.class, Input.class);
     }
 

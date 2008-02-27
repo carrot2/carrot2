@@ -47,7 +47,7 @@ public final class YahooNewsSearchService extends YahooSearchService
     @Init
     @Input
     @Attribute
-    private final String serviceURI = "http://search.yahooapis.com/NewsSearchService/V1/newsSearch";
+    private String serviceURI = "http://search.yahooapis.com/NewsSearchService/V1/newsSearch";
 
     /**
      * The language the results are written in. Value must be one of the <a

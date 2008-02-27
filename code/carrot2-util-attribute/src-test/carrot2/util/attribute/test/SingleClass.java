@@ -20,7 +20,7 @@ public class SingleClass
     @Init
     @Input
     @Attribute
-    private final int initInputInt = 10;
+    private int initInputInt = 10;
 
     /**
      * Processing input string attribute. Some description.
@@ -30,7 +30,7 @@ public class SingleClass
     @Processing
     @Input
     @Attribute
-    private final String processingInputString = "test";
+    private String processingInputString = "test";
 
     /**
      * This is not an attribute.

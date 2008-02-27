@@ -15,20 +15,20 @@ public class FilteringReferenceClass
     @Init
     @Input
     @Attribute
-    private final int initInput = 10;
+    private int initInput = 10;
 
     @Init
     @Output
     @Attribute
-    private final int initOutput = 10;
+    private int initOutput = 10;
 
     @Processing
     @Input
     @Attribute
-    private final int processingInput = 10;
+    private int processingInput = 10;
 
     @Processing
     @Output
     @Attribute
-    private final int processingOutput = 10;
+    private int processingOutput = 10;
 }

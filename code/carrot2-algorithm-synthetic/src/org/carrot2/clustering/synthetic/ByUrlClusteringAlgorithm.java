@@ -42,7 +42,7 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
     @Processing
     @Input
     @Attribute(key = AttributeNames.DOCUMENTS)
-    private final Collection<Document> documents = Collections.<Document> emptyList();
+    private Collection<Document> documents = Collections.<Document> emptyList();
 
     @SuppressWarnings("unused")
     @Processing

@@ -64,17 +64,32 @@ public class AttributeBinder
                 if (Input.class.equals(bindingDirectionAnnotation)
                     && field.getAnnotation(Input.class) != null)
                 {
+                    final Input inputAnnotation = field.getAnnotation(Input.class);
+
                     // Transfer values from the map to the fields.
                     // If the input map doesn't contain an entry for this key, do nothing
                     // Otherwise, perform binding as usual. This will allow to set null
                     // values
                     if (!values.containsKey(key))
                     {
+                        if (inputAnnotation.required())
+                        {
+                            throw new AttributeBindingException(
+                                "No value for required attribute: " + key);
+                        }
                         continue;
                     }
 
                     // Note that the value can still be null here
                     value = values.get(key);
+
+                    // TODO: Should required mean also not null? I'm only 99% convinced...
+                    if (value == null && inputAnnotation.required())
+                    {
+                        // TODO: maybe we should have some dedicated exception here?
+                        throw new AttributeBindingException(
+                            "No value for required attribute: " + key);
+                    }
 
                     // Try to coerce from class to its instance first
                     if (value instanceof Class)
@@ -121,7 +136,7 @@ public class AttributeBinder
                     }
                     catch (final Exception e)
                     {
-                        throw new RuntimeException("Could not assign field "
+                        throw new AttributeBindingException("Could not assign field "
                             + instance.getClass().getName() + "#" + field.getName()
                             + " with value " + value, e);
                     }
@@ -138,7 +153,7 @@ public class AttributeBinder
                     }
                     catch (final Exception e)
                     {
-                        throw new RuntimeException("Could not get field value "
+                        throw new AttributeBindingException("Could not get field value "
                             + instance.getClass().getName() + "#" + field.getName());
                     }
                 }
@@ -153,7 +168,7 @@ public class AttributeBinder
                 }
                 catch (final Exception e)
                 {
-                    throw new RuntimeException("Could not get field value "
+                    throw new AttributeBindingException("Could not get field value "
                         + instance.getClass().getName() + "#" + field.getName());
                 }
             }
@@ -176,7 +191,7 @@ public class AttributeBinder
 
     /**
      * Checks if all required annotations are provided.
-     *
+     * 
      * @return <code>true</code> if the field has all required annotations
      * @throws IllegalArgumentException in case of any missing annotations to ease
      *             debugging
