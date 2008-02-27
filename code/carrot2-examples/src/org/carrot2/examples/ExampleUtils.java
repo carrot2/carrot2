@@ -4,6 +4,7 @@
 package org.carrot2.examples;
 
 import java.util.Collection;
+import java.util.Map;
 
 import org.carrot2.core.*;
 
@@ -17,6 +18,14 @@ public class ExampleUtils
     {
         final Collection<Document> documents = processingResult.getDocuments();
         final Collection<Cluster> clusters = processingResult.getClusters();
+        final Map<String, Object> attributes = processingResult.getAttributes();
+
+        // Show attributes
+        System.out.println("Attributes:");
+        for (final Map.Entry<String, Object> attribute : attributes.entrySet())
+        {
+            System.out.println(attribute.getKey() + ":   " + attribute.getValue());
+        }
 
         // Show documents
         System.out.println("Collected " + documents.size() + " documents\n");

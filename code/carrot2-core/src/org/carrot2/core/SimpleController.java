@@ -27,7 +27,7 @@ public final class SimpleController
      * and disposes of the component instances after processing is complete.
      * <p>
      * See class description for potential performance aspects of using this method.
-     *
+     * 
      * @param attributes attributes to be used during processing. {@link Input} attributes
      *            will be transferred from this map to the corresponding fields.
      *            {@link Output} attributes will be collected and stored in this map, so
@@ -72,7 +72,7 @@ public final class SimpleController
      * <p>
      * See class description for potential performance and threading aspects of using this
      * method.
-     *
+     * 
      * @param attributes attributes to be used during processing. {@link Input} attributes
      *            will be transferred from this map to the corresponding fields.
      *            {@link Output} attributes will be collected and stored in this map, so
@@ -92,31 +92,25 @@ public final class SimpleController
                 ControllerUtils.init(element, attributes);
             }
 
-            try
+            for (final ProcessingComponent element : processingComponents)
             {
-                // Call before processing hook.
-                for (final ProcessingComponent element : processingComponents)
+                try
                 {
                     ControllerUtils.beforeProcessing(element, attributes);
+                    ControllerUtils.performProcessing(element, attributes);
                 }
-
-                // Perform processing
-                for (final ProcessingComponent element : processingComponents)
+                catch (Exception e)
                 {
-                    ControllerUtils
-                        .performProcessing(element, attributes);
+                    break;
                 }
-
-                return new ProcessingResult(attributes);
-            }
-            finally
-            {
-                // Call after processing hooks
-                for (final ProcessingComponent element : processingComponents)
+                finally
                 {
                     ControllerUtils.afterProcessing(element, attributes);
                 }
             }
+
+            return new ProcessingResult(attributes);
+
         }
         finally
         {
