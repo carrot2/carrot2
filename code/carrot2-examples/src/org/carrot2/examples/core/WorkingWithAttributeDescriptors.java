@@ -16,6 +16,12 @@ import carrot2.util.attribute.metadata.*;
 /**
  * An example showing how developers can use the low-level core utilities for processing
  * Carrot2 component attribute descriptors.
+ * <p>
+ * For the time being, before you run this example, you need to run
+ * {@link BindableMetadataXmlSerializer} giving source code locations of at least
+ * <code>carrot2-core</code> and <code>carrot2-souce-yahoo</code> as parameters. There
+ * is an Eclipse launch configuration that does just that in carrot2-util-attributes/ etc/
+ * eclipse.
  */
 public class WorkingWithAttributeDescriptors
 {
