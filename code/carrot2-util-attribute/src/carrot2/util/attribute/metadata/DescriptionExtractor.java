@@ -22,7 +22,7 @@ public class DescriptionExtractor implements MetadataExtractor
             return false;
         }
 
-        final int next = JavaDocBuilderUtils.getEndOfFirstSenteceCharIndex(comment);
+        final int next = JavaDocBuilderUtils.getEndOfFirstSentenceCharIndex(comment);
         if (next > 0 && next < comment.length())
         {
             final String description = comment.substring(next + 1).trim();

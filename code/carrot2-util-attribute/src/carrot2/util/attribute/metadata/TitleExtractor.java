@@ -23,7 +23,7 @@ public class TitleExtractor implements MetadataExtractor
         }
 
         final int next = JavaDocBuilderUtils
-            .getEndOfFirstSenteceCharIndex(comment);
+            .getEndOfFirstSentenceCharIndex(comment);
         if (next >= 0)
         {
             // Strip off the last "."

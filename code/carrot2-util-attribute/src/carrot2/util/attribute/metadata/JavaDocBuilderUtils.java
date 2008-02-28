@@ -45,7 +45,7 @@ public final class JavaDocBuilderUtils
         return null;
     }
 
-    public static int getEndOfFirstSenteceCharIndex(String text)
+    public static int getEndOfFirstSentenceCharIndex(String text)
     {
         final Matcher matcher = FIRST_SENTENCE_PATTERN.matcher(text);
         if (matcher.find())
