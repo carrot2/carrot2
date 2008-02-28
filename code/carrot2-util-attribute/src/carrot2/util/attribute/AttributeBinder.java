@@ -64,7 +64,7 @@ public class AttributeBinder
                 if (Input.class.equals(bindingDirectionAnnotation)
                     && field.getAnnotation(Input.class) != null)
                 {
-                    final Input inputAnnotation = field.getAnnotation(Input.class);
+                    final boolean required = field.getAnnotation(Required.class) != null;
 
                     // Transfer values from the map to the fields.
                     // If the input map doesn't contain an entry for this key, do nothing
@@ -72,7 +72,7 @@ public class AttributeBinder
                     // values
                     if (!values.containsKey(key))
                     {
-                        if (inputAnnotation.required())
+                        if (required)
                         {
                             throw new AttributeBindingException(
                                 "No value for required attribute: " + key);
@@ -84,7 +84,7 @@ public class AttributeBinder
                     value = values.get(key);
 
                     // TODO: Should required mean also not null? I'm only 99% convinced...
-                    if (value == null && inputAnnotation.required())
+                    if (value == null && required)
                     {
                         // TODO: maybe we should have some dedicated exception here?
                         throw new AttributeBindingException(

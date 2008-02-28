@@ -228,12 +228,14 @@ public class AttributeBinderTest
     public static class RequiredInputAttributes
     {
         @Init
-        @Input(required = true)
+        @Input
+        @Required
         @Attribute
         private int initInputInt;
         
         @Init
-        @Input(required = true)
+        @Input
+        @Required
         @Attribute
         private String initInputString;
     }

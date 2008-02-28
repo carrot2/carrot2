@@ -22,6 +22,8 @@ public class AttributeDescriptor
     public final boolean processingAttribute;
     public final boolean inputAttribute;
     public final boolean outputAttribute;
+    
+    public final boolean requiredAttribute;
 
     AttributeDescriptor(Field field, Object defaultValue, Constraint constraint,
         AttributeMetadata metadata)
@@ -36,6 +38,8 @@ public class AttributeDescriptor
         this.processingAttribute = field.getAnnotation(Processing.class) != null;
         this.inputAttribute = field.getAnnotation(Input.class) != null;
         this.outputAttribute = field.getAnnotation(Output.class) != null;
+        
+        this.requiredAttribute = field.getAnnotation(Required.class) != null;
     }
 
     boolean hasBindingAnnotation(Class<? extends Annotation> annotationClass)
