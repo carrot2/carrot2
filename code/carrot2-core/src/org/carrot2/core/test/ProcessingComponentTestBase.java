@@ -15,7 +15,7 @@ import org.junit.Before;
  * an instance of {@link SimpleController}, a map for attributes and a method that
  * initializes them.
  */
-public abstract class ProcessingComponentTest<T extends ProcessingComponent>
+public abstract class ProcessingComponentTestBase<T extends ProcessingComponent>
 {
     /** Controller used for tests. */
     protected SimpleController controller;

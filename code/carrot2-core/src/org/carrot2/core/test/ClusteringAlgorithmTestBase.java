@@ -15,8 +15,8 @@ import org.junit.Test;
 /**
  * Simple baseline tests that apply to all clustering algorithms.
  */
-public abstract class ClusteringAlgorithmTest<T extends ClusteringAlgorithm> extends
-    ProcessingComponentTest<T>
+public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm> extends
+    ProcessingComponentTestBase<T>
 {
     @Test
     public void testNoDocuments()

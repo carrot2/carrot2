@@ -16,8 +16,8 @@ import org.junit.Assert;
 /**
  * Simple baseline tests that apply to most (?) data sources.
  */
-public abstract class DocumentSourceTest<T extends DocumentSource> extends
-    ProcessingComponentTest<T>
+public abstract class DocumentSourceTestBase<T extends DocumentSource> extends
+    ProcessingComponentTestBase<T>
 {
     /**
      * Runs a <code>query</code> and asks for <code>results</code> results.

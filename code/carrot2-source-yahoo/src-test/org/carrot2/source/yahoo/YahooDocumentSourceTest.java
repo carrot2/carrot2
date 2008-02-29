@@ -6,7 +6,7 @@ import java.util.Collection;
 
 import org.carrot2.core.AttributeNames;
 import org.carrot2.core.Document;
-import org.carrot2.core.test.DocumentSourceTest;
+import org.carrot2.core.test.DocumentSourceTestBase;
 import org.carrot2.source.SearchMode;
 import org.junit.Test;
 
@@ -15,7 +15,7 @@ import org.junit.Test;
 /**
  * Tests Yahoo! input component.
  */
-public class YahooDocumentSourceTest extends DocumentSourceTest<YahooDocumentSource>
+public class YahooDocumentSourceTest extends DocumentSourceTestBase<YahooDocumentSource>
 {
     @Test
     public void testNoResultsQuery() throws Exception
