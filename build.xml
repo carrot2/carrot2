@@ -1,0 +1,95 @@
+
+
+<project name="proto-3.0" default="test">
+
+    <property name="build.dir" location="tmp/classes" />
+    <property name="tests.report.dir" location="tmp/test-report" />
+
+    <path id="src.folders">
+        <dirset dir="code" includes="**/src" />
+        <dirset dir="code" includes="**/src-test" />
+    </path>
+    
+    <path id="lib.classpath">
+        <fileset dir="lib" includes="**/*.jar" />    
+    </path>
+
+    <path id="test.classpath">
+        <path refid="lib.classpath" />
+        <path location="${build.dir}" />
+    </path>
+
+
+    <target name="clean">
+        <delete dir="tmp" failonerror="false" />
+    </target>
+
+    
+    <target name="compile">
+        <mkdir dir="${build.dir}" />
+
+        <javac destdir="${build.dir}" source="1.5" target="1.5">
+            <src refid="src.folders" />
+
+            <classpath refid="lib.classpath" />
+        </javac>
+    </target>
+
+
+    <target name="resources" depends="attributes">
+        <mkdir dir="${build.dir}" />
+        
+        <copy todir="${build.dir}">
+            <fileset dir="code">
+                <include name="**/src/**" />
+                <include name="**/src-test/**" />
+                <exclude name="**/*.java" />
+            </fileset>
+            <regexpmapper from="^(.*/src(-test)?/)(.+)$" to="\3"/>
+        </copy>
+    </target>
+    
+
+	<target name="test" depends="compile,attributes,resources">
+        <mkdir dir="${tests.report.dir}" />
+
+	    <junit fork="false" printsummary="on" errorproperty="junit.error" failureproperty="junit.failure">
+	        <formatter type="xml"/>
+
+	        <classpath refid="test.classpath" />
+
+			<batchtest todir="${tests.report.dir}">
+				<fileset dir="${build.dir}">
+					<include name="**/*Test.class" />
+				</fileset>
+			</batchtest>
+	    </junit>
+
+	    <junitreport todir="${tests.report.dir}">
+	        <fileset dir="${tests.report.dir}">
+	            <include name="TEST-*.xml"/>
+	        </fileset>
+	        <report format="frames" todir="${tests.report.dir}"/>
+	    </junitreport>
+
+        <condition property="tests.failed" value="true">
+            <or>
+                <isset property="junit.error" />
+                <isset property="junit.failure" />
+            </or>
+        </condition>
+	    <fail message="Tests failed. See ${tests.report.dir} for report." if="tests.failed" />
+    </target>
+    
+    
+    <target name="attributes" depends="compile">
+        <java classname="carrot2.util.attribute.metadata.BindableMetadataXmlSerializer" classpathref="test.classpath">
+            <arg value="org.carrot2.core.AttributeNames" />
+
+            <arg file="code/carrot2-core" />
+            <arg file="code/carrot2-util-attribute" />
+            <arg file="code/carrot2-source-yahoo/src" />
+            <arg file="code/carrot2-algorithm-synthetic/src" />
+        </java>
+    </target>
+</project>
