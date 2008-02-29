@@ -67,7 +67,7 @@ public class ByUrlClusteringAlgorithmTest extends
             new Cluster("cos.pl", docs.get(0), docs.get(1), docs.get(2))
         });
 
-        assertEquals(expectedFacets, cluster(docs));
+        assertEquals(expectedFacets, new ArrayList<Cluster>(cluster(docs)));
     }
 
     @Test
@@ -83,7 +83,7 @@ public class ByUrlClusteringAlgorithmTest extends
             new Cluster("cos.pl", docs.get(0), docs.get(1), docs.get(2))
         });
 
-        assertEquals(expectedFacets, cluster(docs));
+        assertEquals(expectedFacets, new ArrayList<Cluster>(cluster(docs)));
     }
 
     @Test
@@ -101,7 +101,7 @@ public class ByUrlClusteringAlgorithmTest extends
         final Cluster facet1 = new Cluster("cos.pl").addSubclusters(facet11, facet12);
         expectedFacets.add(facet1);
 
-        assertEquals(expectedFacets, cluster(docs));
+        assertEquals(expectedFacets, new ArrayList<Cluster>(cluster(docs)));
     }
 
     @Test
@@ -118,6 +118,6 @@ public class ByUrlClusteringAlgorithmTest extends
             new Cluster("cos.com", docs.get(2), docs.get(3))
         });
 
-        assertEquals(expectedFacets, cluster(docs));
+        assertEquals(expectedFacets, new ArrayList<Cluster>(cluster(docs)));
     }
 }
