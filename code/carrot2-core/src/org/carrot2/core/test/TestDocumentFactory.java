@@ -118,7 +118,6 @@ public class TestDocumentFactory
             this.prependSequentialNumber = prependSequentialNumber;
         }
 
-        @Override
         public String generate(int sequentialNumber)
         {
             final StringBuilder builder = new StringBuilder();
@@ -159,7 +158,6 @@ public class TestDocumentFactory
             this.length = length;
         }
 
-        @Override
         public String generate(int sequentialNumber)
         {
             final StringBuilder builder = new StringBuilder();

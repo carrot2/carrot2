@@ -24,7 +24,6 @@ public class CompoundConstraint implements Constraint
         this.constraints = new HashSet<Constraint>(Arrays.asList(constraints));
     }
 
-    @Override
     public boolean isMet(Object value)
     {
         for (final Constraint constraint : constraints)

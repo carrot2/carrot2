@@ -38,7 +38,6 @@ public class DocumentWithUrlsFactory extends TestDocumentFactory
         final Map<String, DataGenerator<?>> customGenerators = new HashMap<String, DataGenerator<?>>();
         customGenerators.put(Document.CONTENT_URL, new DataGenerator<String>()
         {
-            @Override
             public String generate(int sequentialNumber)
             {
                 return urls[sequentialNumber % urls.length];

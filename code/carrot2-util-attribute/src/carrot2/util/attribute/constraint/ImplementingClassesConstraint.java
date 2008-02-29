@@ -19,7 +19,6 @@ public class ImplementingClassesConstraint implements Constraint
         this.classes = classes;
     }
 
-    @Override
     public boolean isMet(Object value)
     {
         for (final Class<?> clazz : classes)

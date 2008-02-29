@@ -15,7 +15,6 @@ import com.thoughtworks.qdox.model.DocletTag;
  */
 public class LabelExtractor implements MetadataExtractor
 {
-    @Override
     public boolean extractMetadataItem(AbstractJavaEntity javaEntity,
         JavaDocBuilder javaDocBuilder, CommonMetadata attributeMetadata)
     {

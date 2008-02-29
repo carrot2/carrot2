@@ -27,12 +27,13 @@ final class XMLResponseParser implements ContentHandler
 
     /** An error occurred. */
     private boolean error;
+    
+    /** */
     private StringBuilder errorText;
 
     /*
      *
      */
-    @Override
     public void startDocument() throws SAXException
     {
         this.error = false;
@@ -54,7 +55,6 @@ final class XMLResponseParser implements ContentHandler
     /*
      *
      */
-    @Override
     public void endDocument() throws SAXException
     {
         if (error) {
@@ -65,7 +65,6 @@ final class XMLResponseParser implements ContentHandler
     /*
      *
      */
-    @Override
     public void startElement(String uri, String localName, String qname,
         Attributes attributes) throws SAXException
     {
@@ -118,7 +117,6 @@ final class XMLResponseParser implements ContentHandler
     /*
      *
      */
-    @Override
     public void endElement(String uri, String localName, String qname)
         throws SAXException
     {
@@ -168,7 +166,6 @@ final class XMLResponseParser implements ContentHandler
     /*
      *
      */
-    @Override
     public void characters(char [] chars, int start, int length) throws SAXException
     {
         buffer.append(chars, start, length);
@@ -177,7 +174,6 @@ final class XMLResponseParser implements ContentHandler
     /*
      *
      */
-    @Override
     public void setDocumentLocator(Locator locator)
     {
         // Empty.
@@ -186,7 +182,6 @@ final class XMLResponseParser implements ContentHandler
     /*
      *
      */
-    @Override
     public void startPrefixMapping(String arg0, String arg1) throws SAXException
     {
         // Empty.
@@ -195,7 +190,6 @@ final class XMLResponseParser implements ContentHandler
     /*
      *
      */
-    @Override
     public void endPrefixMapping(String arg0) throws SAXException
     {
         // Empty.
@@ -204,7 +198,6 @@ final class XMLResponseParser implements ContentHandler
     /*
      *
      */
-    @Override
     public void ignorableWhitespace(char [] whsp, int start, int length)
         throws SAXException
     {
@@ -213,7 +206,6 @@ final class XMLResponseParser implements ContentHandler
     /*
      *
      */
-    @Override
     public void processingInstruction(String name, String value) throws SAXException
     {
     }
@@ -221,7 +213,6 @@ final class XMLResponseParser implements ContentHandler
     /*
      *
      */
-    @Override
     public void skippedEntity(String entity) throws SAXException
     {
     }

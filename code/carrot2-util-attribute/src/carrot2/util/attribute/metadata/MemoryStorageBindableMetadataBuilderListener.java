@@ -17,7 +17,6 @@ public class MemoryStorageBindableMetadataBuilderListener implements
 {
     private final Map<String, BindableMetadata> bindableMetadata = Maps.newLinkedHashMap();
 
-    @Override
     public void bindableMetadataBuilt(JavaClass bindable,
         BindableMetadata metadata)
     {

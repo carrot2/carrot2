@@ -21,7 +21,6 @@ public final class UniqueFieldPredicate implements Predicate<Document>
         this.fieldName = fieldName;
     }
 
-    @Override
     public boolean apply(Document document)
     {
         final Object fieldValue = document.getField(fieldName);

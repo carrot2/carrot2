@@ -319,7 +319,6 @@ public final class Cluster
     public static final Comparator<Cluster> BY_SIZE_COMPARATOR = Comparators
         .nullLeastOrder(Comparators.fromFunction(new Function<Cluster, Integer>()
         {
-            @Override
             public Integer apply(Cluster cluster)
             {
                 return cluster.size();
@@ -333,7 +332,6 @@ public final class Cluster
     public static final Comparator<Cluster> BY_LABEL_COMPARATOR = Comparators
         .nullLeastOrder(Comparators.fromFunction(new Function<Cluster, String>()
         {
-            @Override
             public String apply(Cluster cluster)
             {
                 return cluster.getLabel();

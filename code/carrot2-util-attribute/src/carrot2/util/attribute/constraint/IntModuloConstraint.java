@@ -21,7 +21,6 @@ public class IntModuloConstraint implements Constraint
         this.offset = offset;
     }
 
-    @Override
     public boolean isMet(Object value)
     {
         final Integer v = (Integer) value;

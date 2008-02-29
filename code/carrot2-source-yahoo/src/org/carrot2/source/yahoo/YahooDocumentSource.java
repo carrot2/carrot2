@@ -116,7 +116,6 @@ public final class YahooDocumentSource extends SearchEngine
     {
         return new Callable<SearchEngineResponse>()
         {
-            @Override
             public SearchEngineResponse call() throws Exception
             {
                 return service.query(query, bucket.start, bucket.results);

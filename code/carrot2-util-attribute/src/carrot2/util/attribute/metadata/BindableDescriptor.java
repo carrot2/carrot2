@@ -88,7 +88,6 @@ public class BindableDescriptor
     {
         return only(new Predicate<AttributeDescriptor>()
         {
-            @Override
             public boolean apply(AttributeDescriptor descriptor)
             {
                 final Set<Class<? extends Annotation>> annotationClasses = Sets

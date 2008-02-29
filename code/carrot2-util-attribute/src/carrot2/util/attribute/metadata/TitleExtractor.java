@@ -12,7 +12,6 @@ import com.thoughtworks.qdox.model.AbstractJavaEntity;
  */
 public class TitleExtractor implements MetadataExtractor
 {
-    @Override
     public boolean extractMetadataItem(AbstractJavaEntity javaEntity,
         JavaDocBuilder javaDocBuilder, CommonMetadata attributeMetadata)
     {

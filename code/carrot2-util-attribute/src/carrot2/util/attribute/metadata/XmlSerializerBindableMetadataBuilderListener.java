@@ -18,7 +18,6 @@ import com.thoughtworks.qdox.model.JavaClass;
 public class XmlSerializerBindableMetadataBuilderListener implements
     BindableMetadataBuilderListener
 {
-    @Override
     public void bindableMetadataBuilt(JavaClass bindable,
         BindableMetadata bindableMetadata)
     {

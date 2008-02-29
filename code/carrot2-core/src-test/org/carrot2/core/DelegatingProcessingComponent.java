@@ -25,19 +25,16 @@ public abstract class DelegatingProcessingComponent implements ProcessingCompone
     @Attribute(key = "data")
     private String data;
 
-    @Override
     public void init()
     {
         getDelegate().init();
     }
 
-    @Override
     public void beforeProcessing() throws ProcessingException
     {
         getDelegate().beforeProcessing();
     }
 
-    @Override
     public void process() throws ProcessingException
     {
         getDelegate().process();
@@ -47,13 +44,11 @@ public abstract class DelegatingProcessingComponent implements ProcessingCompone
         data = data + runtimeAttribute;
     }
 
-    @Override
     public void afterProcessing()
     {
         getDelegate().afterProcessing();
     }
 
-    @Override
     public void dispose()
     {
         getDelegate().dispose();
