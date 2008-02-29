@@ -53,10 +53,13 @@
 	<target name="test" depends="compile,attributes,resources">
         <mkdir dir="${tests.report.dir}" />
 
+        <property name="source.paths" location="code/carrot2-util-attribute/src-test" />
 	    <junit fork="false" printsummary="on" errorproperty="junit.error" failureproperty="junit.failure">
 	        <formatter type="xml"/>
 
 	        <classpath refid="test.classpath" />
+
+            <sysproperty key="source.paths" value="${source.paths}" />
 
 			<batchtest todir="${tests.report.dir}">
 				<fileset dir="${build.dir}">
