@@ -12,22 +12,22 @@ import org.carrot2.util.attribute.*;
 @SuppressWarnings("unused")
 public class FilteringReferenceClass
 {
-    @Init
+    @TestInit
     @Input
     @Attribute
     private int initInput = 10;
 
-    @Init
+    @TestInit
     @Output
     @Attribute
     private int initOutput = 10;
 
-    @Processing
+    @TestProcessing
     @Input
     @Attribute
     private int processingInput = 10;
 
-    @Processing
+    @TestProcessing
     @Output
     @Attribute
     private int processingOutput = 10;

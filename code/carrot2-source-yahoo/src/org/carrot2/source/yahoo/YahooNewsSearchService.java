@@ -3,6 +3,8 @@ package org.carrot2.source.yahoo;
 import java.util.ArrayList;
 
 import org.apache.commons.httpclient.NameValuePair;
+import org.carrot2.core.attribute.Init;
+import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
 
 /**

@@ -12,7 +12,7 @@ import org.carrot2.util.attribute.*;
 @SuppressWarnings("unused")
 public class NoJavadoc
 {
-    @Init
+    @TestInit
     @Input
     @Attribute
     private int noJavadoc;

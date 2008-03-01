@@ -15,7 +15,7 @@ public class BindableReferenceContainer
     /**
      * Test Bindable.
      */
-    @Init
+    @TestInit
     @Input
     @Attribute
     private BindableReference bindableAttribute;

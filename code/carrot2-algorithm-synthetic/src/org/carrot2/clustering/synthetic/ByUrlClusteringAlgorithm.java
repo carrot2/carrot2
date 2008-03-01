@@ -7,6 +7,8 @@ import java.util.*;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.carrot2.core.*;
+import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
 
 

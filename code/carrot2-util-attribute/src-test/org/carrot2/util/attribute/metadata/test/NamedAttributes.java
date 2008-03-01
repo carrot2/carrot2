@@ -15,7 +15,7 @@ public class NamedAttributes
 {
     private static final String TEST = "test";
 
-    @Init
+    @TestInit
     @Input
     @Attribute(key = TestAttributeNames.TITLE_DESCRIPTION_LABEL)
     private int noJavadoc;
@@ -23,7 +23,7 @@ public class NamedAttributes
     /**
      * @label overriden
      */
-    @Init
+    @TestInit
     @Input
     @Attribute(key = TestAttributeNames.TITLE_DESCRIPTION_LABEL)
     private int labelOverride;
@@ -31,7 +31,7 @@ public class NamedAttributes
     /**
      * Title overriden.
      */
-    @Init
+    @TestInit
     @Input
     @Attribute(key = TestAttributeNames.TITLE_DESCRIPTION_LABEL)
     private int titleOverride;
@@ -39,17 +39,17 @@ public class NamedAttributes
     /**
      * Title overriden. Description overriden.
      */
-    @Init
+    @TestInit
     @Input
     @Attribute(key = TestAttributeNames.TITLE_DESCRIPTION_LABEL)
     private int titleDescriptionOverride;
 
-    @Init
+    @TestInit
     @Input
     @Attribute(key = TEST)
     private int noDotInKey;
 
-    @Init
+    @TestInit
     @Input
     @Attribute(key = BindableMetadataBuilder.ATTRIBUTE_KEY_PARAMETER)
     private int classNotInSourcePath;

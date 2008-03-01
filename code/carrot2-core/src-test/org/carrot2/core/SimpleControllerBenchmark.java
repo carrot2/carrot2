@@ -5,6 +5,7 @@ package org.carrot2.core;
 
 import java.util.*;
 
+import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
 
 

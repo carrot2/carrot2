@@ -31,8 +31,8 @@ public class BindableDescriptorTest
     @Test
     public void testOnlyInitProcessing()
     {
-        final BindableDescriptor filteredDescriptor = descriptor.only(Init.class,
-            Processing.class);
+        final BindableDescriptor filteredDescriptor = descriptor.only(TestInit.class,
+            TestProcessing.class);
         assertThat(filteredDescriptor.attributeDescriptors.keySet()).containsOnly(
             keyFromSubClass("initProcessingInput"),
             keyFromSubClass("initProcessingOutput"),
@@ -55,8 +55,8 @@ public class BindableDescriptorTest
     @Test
     public void testOnlyInputOutputInitProcessing()
     {
-        final BindableDescriptor filteredDescriptor = descriptor.only(Init.class,
-            Processing.class, Input.class, Output.class);
+        final BindableDescriptor filteredDescriptor = descriptor.only(TestInit.class,
+            TestProcessing.class, Input.class, Output.class);
         assertThat(filteredDescriptor.attributeDescriptors.keySet()).containsOnly(
             keyFromSubClass("initProcessingInputOutput"));
         assertThat(getReferenceDescriptors(filteredDescriptor)).isEmpty();
@@ -82,7 +82,7 @@ public class BindableDescriptorTest
     public void testOnlyInputProcessing()
     {
         final BindableDescriptor filteredDescriptor = descriptor.only(Input.class,
-            Processing.class);
+            TestProcessing.class);
 
         assertThat(filteredDescriptor.attributeDescriptors.keySet()).containsOnly(
             keyFromSuperClass("processingInput"),
@@ -98,7 +98,7 @@ public class BindableDescriptorTest
     public void testFlatten()
     {
         final BindableDescriptor filteredDescriptor = descriptor.only(Input.class,
-            Processing.class).flatten();
+            TestProcessing.class).flatten();
 
         assertThat(filteredDescriptor.attributeDescriptors.keySet()).containsOnly(
             keyFromSuperClass("processingInput"),

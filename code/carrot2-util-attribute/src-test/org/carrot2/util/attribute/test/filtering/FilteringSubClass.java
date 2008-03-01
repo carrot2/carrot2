@@ -12,20 +12,20 @@ import org.carrot2.util.attribute.*;
 @SuppressWarnings("unused")
 public class FilteringSubClass extends FilteringSuperClass
 {
-    @Init
-    @Processing
+    @TestInit
+    @TestProcessing
     @Input
     @Attribute
     private int initProcessingInput = 10;
 
-    @Init
-    @Processing
+    @TestInit
+    @TestProcessing
     @Output
     @Attribute
     private int initProcessingOutput = 10;
 
-    @Init
-    @Processing
+    @TestInit
+    @TestProcessing
     @Input
     @Output
     @Attribute

@@ -11,6 +11,8 @@ import javax.xml.parsers.SAXParserFactory;
 import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.log4j.Logger;
+import org.carrot2.core.attribute.Init;
+import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.StreamUtils;

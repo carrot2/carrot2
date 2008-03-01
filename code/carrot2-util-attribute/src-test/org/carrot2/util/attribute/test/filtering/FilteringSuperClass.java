@@ -14,33 +14,33 @@ public class FilteringSuperClass
 {
     private FilteringReferenceClass reference = new FilteringReferenceClass();
 
-    @Init
+    @TestInit
     @Input
     @Attribute
     private int initInput = 10;
 
-    @Init
+    @TestInit
     @Output
     @Attribute
     private int initOutput = 10;
 
-    @Init
+    @TestInit
     @Input
     @Output
     @Attribute
     private int initInputOutput = 10;
 
-    @Processing
+    @TestProcessing
     @Input
     @Attribute
     private int processingInput = 10;
 
-    @Processing
+    @TestProcessing
     @Output
     @Attribute
     private int processingOutput = 10;
 
-    @Processing
+    @TestProcessing
     @Input
     @Output
     @Attribute

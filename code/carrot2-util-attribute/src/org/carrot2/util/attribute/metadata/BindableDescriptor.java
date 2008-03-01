@@ -7,12 +7,10 @@ import java.lang.annotation.Annotation;
 import java.util.*;
 
 import org.apache.commons.lang.ObjectUtils;
-import org.carrot2.util.attribute.*;
-
+import org.carrot2.util.attribute.BindableUtils;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 /**
  *
@@ -44,7 +42,7 @@ public class BindableDescriptor
     /**
      * Filters out descriptors for which the provided <code>predicate</code> returns
      * <code>false</code>.
-     *
+     * 
      * @param predicate predicate to the applied
      */
     public BindableDescriptor only(Predicate<AttributeDescriptor> predicate)
@@ -65,7 +63,8 @@ public class BindableDescriptor
         // Now recursively filter bindable descriptors
         final Map<String, BindableDescriptor> filteredBindableDescriptors = Maps
             .newLinkedHashMap();
-        for (final Map.Entry<String, BindableDescriptor> entry : bindableDescriptors.entrySet())
+        for (final Map.Entry<String, BindableDescriptor> entry : bindableDescriptors
+            .entrySet())
         {
             filteredBindableDescriptors.put(entry.getKey(), entry.getValue().only(
                 predicate));
@@ -77,26 +76,26 @@ public class BindableDescriptor
 
     /**
      * Filters out descriptors that do not match at least one of the provided binding time
-     * and binding direction restrictions.
-     *
-     * @param bindingAnnotationClasses binding time and direction annotation classes to be
-     *            matched. Classes other than {@link Input}, {@link Output},
-     *            {@link Init} and {@link Processing} will be ignored.
+     * and filtering annotation restrictions.
+     * 
+     * @param annotationClasses binding time and direction annotation classes to be
+     *            matched.
      */
     @SuppressWarnings("unchecked")
-    public BindableDescriptor only(final Class<?>... bindingAnnotationClasses)
+    public BindableDescriptor only(final Class<? extends Annotation>... annotationClasses)
     {
+        if (annotationClasses.length == 0)
+        {
+            return this;
+        }
+
         return only(new Predicate<AttributeDescriptor>()
         {
             public boolean apply(AttributeDescriptor descriptor)
             {
-                final Set<Class<? extends Annotation>> annotationClasses = Sets
-                    .newHashSet(Input.class, Output.class, Init.class, Processing.class);
-                annotationClasses.retainAll(Arrays.asList(bindingAnnotationClasses));
-
                 for (final Class<? extends Annotation> annotationClass : annotationClasses)
                 {
-                    if (!descriptor.hasBindingAnnotation(annotationClass))
+                    if (descriptor.getAnnotation(annotationClass) == null)
                     {
                         return false;
                     }

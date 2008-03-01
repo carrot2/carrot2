@@ -5,6 +5,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.carrot2.core.*;
+import org.carrot2.core.attribute.Init;
 import org.carrot2.util.attribute.*;
 
 /**

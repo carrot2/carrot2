@@ -15,7 +15,7 @@ public class AttributeTitles
     /**
      * @label label
      */
-    @Init
+    @TestInit
     @Input
     @Attribute
     private int noTitle;
@@ -25,7 +25,7 @@ public class AttributeTitles
      *
      * @label label
      */
-    @Init
+    @TestInit
     @Input
     @Attribute
     private int emptyTitle;
@@ -33,7 +33,7 @@ public class AttributeTitles
     /**
      * Title with period.
      */
-    @Init
+    @TestInit
     @Input
     @Attribute
     private int titleWithPeriod;
@@ -44,7 +44,7 @@ public class AttributeTitles
      *
      * extra    space.
      */
-    @Init
+    @TestInit
     @Input
     @Attribute
     private int titleWithExtraSpace;
@@ -52,7 +52,7 @@ public class AttributeTitles
     /**
      * Title without period
      */
-    @Init
+    @TestInit
     @Input
     @Attribute
     private int titleWithoutPeriod;
@@ -60,7 +60,7 @@ public class AttributeTitles
     /**
      * Title with exclamation mark! and something more. Description.
      */
-    @Init
+    @TestInit
     @Input
     @Attribute
     private int titleWithExclamationMark;
@@ -68,7 +68,7 @@ public class AttributeTitles
     /**
      * Title with extra periods (e.g. www.carrot2.org). Description.
      */
-    @Init
+    @TestInit
     @Input
     @Attribute
     private int titleWithExtraPeriods;
@@ -76,7 +76,7 @@ public class AttributeTitles
     /**
      * Title with link to {@link ProcessingComponent#init()}. Description.
      */
-    @Init
+    @TestInit
     @Input
     @Attribute
     private int titleWithLink;
@@ -84,7 +84,7 @@ public class AttributeTitles
     /**
      * Title with description. Description follows.
      */
-    @Init
+    @TestInit
     @Input
     @Attribute
     private int titleWithDescription;
@@ -94,7 +94,7 @@ public class AttributeTitles
      *
      * @label label
      */
-    @Init
+    @TestInit
     @Input
     @Attribute
     private int titleWithLabel;
@@ -104,7 +104,7 @@ public class AttributeTitles
      *
      * Title at the bottom. This arrangement is not supported.
      */
-    @Init
+    @TestInit
     @Input
     @Attribute
     private int titleAtTheBottom;

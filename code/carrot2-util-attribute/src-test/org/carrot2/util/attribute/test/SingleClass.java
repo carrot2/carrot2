@@ -17,7 +17,7 @@ public class SingleClass
      *
      * @label Init Input Int
      */
-    @Init
+    @TestInit
     @Input
     @Attribute
     private int initInputInt = 10;
@@ -27,7 +27,7 @@ public class SingleClass
      *
      * @label Processing Input String
      */
-    @Processing
+    @TestProcessing
     @Input
     @Attribute
     private String processingInputString = "test";

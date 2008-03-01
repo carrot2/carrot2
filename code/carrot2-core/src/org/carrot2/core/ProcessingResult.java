@@ -2,6 +2,8 @@ package org.carrot2.core;
 
 import java.util.*;
 
+import org.carrot2.core.attribute.AttributeNames;
+
 /**
  * Encapsulates the results of processing. Provides access to the values of attributes
  * collected after processing and utility methods for obtaining processed documents ({@link #getDocuments()}))

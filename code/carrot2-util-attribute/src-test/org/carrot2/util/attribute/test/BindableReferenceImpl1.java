@@ -15,7 +15,7 @@ public class BindableReferenceImpl1 implements BindableReference
     /**
      * Processing input int.
      */
-    @Processing
+    @TestProcessing
     @Input
     @Attribute
     private int processingInputInt = 10;

@@ -5,6 +5,7 @@ import java.util.concurrent.*;
 
 import org.apache.log4j.Logger;
 import org.carrot2.core.*;
+import org.carrot2.core.attribute.*;
 import org.carrot2.source.*;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;

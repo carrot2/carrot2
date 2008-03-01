@@ -15,7 +15,7 @@ public class SuperClass
     /**
      * Super class init input int.
      */
-    @Init
+    @TestInit
     @Input
     @Attribute
     private int initInputInt = 5;

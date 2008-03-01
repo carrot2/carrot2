@@ -9,6 +9,7 @@ import static org.junit.Assert.assertNotNull;
 import java.util.*;
 
 import org.carrot2.core.*;
+import org.carrot2.core.attribute.AttributeNames;
 import org.junit.Test;
 
 

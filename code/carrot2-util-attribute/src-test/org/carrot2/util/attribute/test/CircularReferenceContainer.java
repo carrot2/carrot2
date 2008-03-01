@@ -15,7 +15,7 @@ public class CircularReferenceContainer
     /**
      * Circular reference.
      */
-    @Processing
+    @TestProcessing
     @Input
     @Attribute
     public CircularReferenceContainer circular;

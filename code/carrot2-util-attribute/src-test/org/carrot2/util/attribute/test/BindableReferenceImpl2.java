@@ -15,7 +15,7 @@ public class BindableReferenceImpl2 implements BindableReference
     /**
      * Init input int.
      */
-    @Init
+    @TestInit
     @Input
     @Attribute
     private int initInputInt = 12;

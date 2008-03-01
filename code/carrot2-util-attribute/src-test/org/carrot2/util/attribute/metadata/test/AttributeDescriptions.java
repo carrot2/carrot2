@@ -15,7 +15,7 @@ public class AttributeDescriptions
     /**
      * @label label
      */
-    @Init
+    @TestInit
     @Input
     @Attribute
     private int noDescriptionNoTitle;
@@ -25,7 +25,7 @@ public class AttributeDescriptions
      *
      * @label label
      */
-    @Init
+    @TestInit
     @Input
     @Attribute
     private int noDescription;
@@ -33,7 +33,7 @@ public class AttributeDescriptions
     /**
      * Title. Single sentence description.
      */
-    @Init
+    @TestInit
     @Input
     @Attribute
     private int singleSentenceDescription;
@@ -41,7 +41,7 @@ public class AttributeDescriptions
     /**
      * Title. Description sentence 1. Description sentence 2.
      */
-    @Init
+    @TestInit
     @Input
     @Attribute
     private int twoSentenceDescription;
@@ -52,7 +52,7 @@ public class AttributeDescriptions
      * with     extra
      * space.
      */
-    @Init
+    @TestInit
     @Input
     @Attribute
     private int descriptionWithExtraSpace;

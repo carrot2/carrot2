@@ -5,6 +5,8 @@ package org.carrot2.examples.core;
 
 import java.util.*;
 
+import org.carrot2.core.attribute.Init;
+import org.carrot2.core.attribute.Processing;
 import org.carrot2.examples.ExampleUtils;
 import org.carrot2.source.yahoo.YahooDocumentSource;
 import org.carrot2.source.yahoo.YahooNewsSearchService;

@@ -9,6 +9,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.carrot2.core.attribute.Init;
 import org.carrot2.util.attribute.*;
 import org.easymock.IMocksControl;
 import org.junit.*;

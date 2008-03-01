@@ -1,7 +1,7 @@
 /**
  *
  */
-package org.carrot2.util.attribute;
+package org.carrot2.core.attribute;
 
 import java.lang.annotation.*;
 

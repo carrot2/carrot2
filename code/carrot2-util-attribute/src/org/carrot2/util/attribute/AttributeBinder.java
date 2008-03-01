@@ -26,14 +26,6 @@ public class AttributeBinder
      * <li>Class coercion is also performed for all binding times</li>
      * </ul>
      * TODO: provide proper docs for AttributeBinder
-     * <p>
-     * TODO: After refactoring this classes out of carrot2-core, the binding time
-     * annotations ({@link Processing} and {@link Init}) are out of place here. The
-     * problem is that they are specific to the application domain, so they should not be
-     * defined here, but in carrot2-core. Then, this method should have a vararg for
-     * specifying binding time annotations. If none is provided, no problem with that, all
-     * attributes will be bound. Otherwise, only those attributes will be bound that have
-     * either of the specified binding time annotations.
      */
     public static <T> void bind(T instance, Map<String, Object> values,
         Class<? extends Annotation> bindingDirectionAnnotation,

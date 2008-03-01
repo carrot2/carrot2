@@ -7,6 +7,7 @@ import java.util.*;
 
 import org.carrot2.clustering.synthetic.ByUrlClusteringAlgorithm;
 import org.carrot2.core.*;
+import org.carrot2.core.attribute.AttributeNames;
 
 
 /**

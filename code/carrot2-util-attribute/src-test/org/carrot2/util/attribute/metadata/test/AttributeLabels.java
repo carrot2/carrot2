@@ -15,7 +15,7 @@ public class AttributeLabels
     /**
      * @label word
      */
-    @Init
+    @TestInit
     @Input
     @Attribute
     private int singleWordLabel;
@@ -23,7 +23,7 @@ public class AttributeLabels
     /**
      * @label multi word label
      */
-    @Init
+    @TestInit
     @Input
     @Attribute
     private int multiWordLabel;
@@ -31,7 +31,7 @@ public class AttributeLabels
     /**
      * @label First label sentence. Second label sentence.
      */
-    @Init
+    @TestInit
     @Input
     @Attribute
     private int multiSentenceLabel;
@@ -41,7 +41,7 @@ public class AttributeLabels
      *
      * @label word
      */
-    @Init
+    @TestInit
     @Input
     @Attribute
     private int labelWithComment;

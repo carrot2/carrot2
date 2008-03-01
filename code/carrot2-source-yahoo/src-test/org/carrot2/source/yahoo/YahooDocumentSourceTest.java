@@ -4,8 +4,8 @@ import static org.junit.Assert.*;
 
 import java.util.Collection;
 
-import org.carrot2.core.AttributeNames;
 import org.carrot2.core.Document;
+import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.test.DocumentSourceTestBase;
 import org.carrot2.source.SearchMode;
 import org.junit.Test;

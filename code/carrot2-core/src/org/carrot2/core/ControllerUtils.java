@@ -2,6 +2,8 @@ package org.carrot2.core;
 
 import java.util.Map;
 
+import org.carrot2.core.attribute.Init;
+import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
 
 
