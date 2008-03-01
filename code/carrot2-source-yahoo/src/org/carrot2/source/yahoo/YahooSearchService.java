@@ -283,11 +283,11 @@ abstract class YahooSearchService
             {
                 throw (IOException) cause;
             }
-            throw new IOException("XML parsing exception: " + e.getMessage(), e);
+            throw new IOException("XML parsing exception: " + e.getMessage());
         }
         catch (final ParserConfigurationException e)
         {
-            throw new IOException("Could not acquire XML parser.", e);
+            throw new IOException("Could not acquire XML parser.");
         }
     }
 
