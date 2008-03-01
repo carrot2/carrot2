@@ -1,6 +1,6 @@
 package org.carrot2.core;
 
-import carrot2.util.attribute.*;
+import org.carrot2.util.attribute.*;
 
 /**
  * Defines the life cycle of a Carrot<sup>2</sup> processing component. The life cycle

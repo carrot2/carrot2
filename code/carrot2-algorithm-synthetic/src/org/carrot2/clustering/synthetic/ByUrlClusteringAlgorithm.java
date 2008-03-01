@@ -7,8 +7,8 @@ import java.util.*;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.carrot2.core.*;
+import org.carrot2.util.attribute.*;
 
-import carrot2.util.attribute.*;
 
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;

@@ -7,10 +7,10 @@ import java.util.Map;
 import java.util.Set;
 
 import org.carrot2.util.CloseableUtils;
+import org.carrot2.util.attribute.AttributeValueSet;
+import org.carrot2.util.attribute.AttributeValueSets;
 import org.junit.Test;
 
-import carrot2.util.attribute.AttributeValueSet;
-import carrot2.util.attribute.AttributeValueSets;
 
 /**
  * An example showing how developers can use the low-level core utilities for working with

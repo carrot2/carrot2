@@ -5,7 +5,8 @@ package org.carrot2.core;
 
 import java.util.*;
 
-import carrot2.util.attribute.*;
+import org.carrot2.util.attribute.*;
+
 
 /**
  * This class measures the overhead resulting from reflection stuff performed by the

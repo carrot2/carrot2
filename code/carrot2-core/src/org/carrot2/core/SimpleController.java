@@ -2,10 +2,10 @@ package org.carrot2.core;
 
 import java.util.Map;
 
+import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Output;
 import org.simpleframework.xml.Attribute;
 
-import carrot2.util.attribute.Input;
-import carrot2.util.attribute.Output;
 
 /**
  * A simple controller implementing the life cycle described in <{@link ProcessingComponent}.

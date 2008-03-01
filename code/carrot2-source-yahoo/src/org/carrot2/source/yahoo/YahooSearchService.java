@@ -14,10 +14,10 @@ import org.apache.log4j.Logger;
 import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.StreamUtils;
+import org.carrot2.util.attribute.*;
 import org.carrot2.util.httpclient.HttpClientFactory;
 import org.xml.sax.*;
 
-import carrot2.util.attribute.*;
 
 /**
  * A superclass shared between Web and News searching services.

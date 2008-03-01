@@ -3,7 +3,7 @@ package org.carrot2.source.yahoo;
 import java.util.ArrayList;
 
 import org.apache.commons.httpclient.NameValuePair;
-import carrot2.util.attribute.*;
+import org.carrot2.util.attribute.*;
 
 /**
  * Sends queries to Yahoo! Web search service. Instances of this class are thread-safe.

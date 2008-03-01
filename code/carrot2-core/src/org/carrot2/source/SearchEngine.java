@@ -5,7 +5,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.carrot2.core.*;
-import carrot2.util.attribute.*;
+import org.carrot2.util.attribute.*;
 
 /**
  * A superclass facilitating implementation of {@link DocumentSource}s wrapping

@@ -8,10 +8,10 @@ import java.util.*;
 import org.carrot2.examples.ExampleUtils;
 import org.carrot2.source.yahoo.YahooDocumentSource;
 import org.carrot2.source.yahoo.YahooNewsSearchService;
+import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.constraint.ConstraintUtils;
+import org.carrot2.util.attribute.metadata.*;
 
-import carrot2.util.attribute.*;
-import carrot2.util.attribute.constraint.ConstraintUtils;
-import carrot2.util.attribute.metadata.*;
 
 /**
  * An example showing how developers can use the low-level core utilities for processing

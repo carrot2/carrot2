@@ -2,7 +2,8 @@ package org.carrot2.core;
 
 import java.util.Map;
 
-import carrot2.util.attribute.*;
+import org.carrot2.util.attribute.*;
+
 
 /**
  * Static life cycle and controller utilities (for use within the core package).

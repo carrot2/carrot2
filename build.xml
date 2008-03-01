@@ -101,7 +101,7 @@
     
     
     <target name="attributes" depends="compile">
-        <java classname="carrot2.util.attribute.metadata.BindableMetadataXmlSerializer" classpathref="test.classpath">
+        <java classname="org.carrot2.util.attribute.metadata.BindableMetadataXmlSerializer" classpathref="test.classpath">
             <arg value="org.carrot2.core.AttributeNames" />
 
             <arg file="code/carrot2-core/src" />

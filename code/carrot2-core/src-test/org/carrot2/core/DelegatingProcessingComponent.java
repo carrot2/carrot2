@@ -3,7 +3,7 @@
  */
 package org.carrot2.core;
 
-import carrot2.util.attribute.*;
+import org.carrot2.util.attribute.*;
 
 @Bindable
 public abstract class DelegatingProcessingComponent implements ProcessingComponent
