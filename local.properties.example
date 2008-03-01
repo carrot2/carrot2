@@ -5,3 +5,7 @@
 
 # Path to Clover for Ant binaries, required to generate coverage reports
 #clover.home=D:/dev/java/clover/ant
+
+# Set this property to true to disable tests depending on the correct
+# functioning of external APIs, e.g. search engine APIs.
+#external.api.tests.disabled=true

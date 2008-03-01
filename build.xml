@@ -17,6 +17,12 @@
         <dirset dir="code" includes="**/src-test" />
     </path>
     
+    <fileset id="src.coverage" dir="code">
+        <include name="**/*.java" />
+        <exclude name="**/carrot2-examples/**/*.java" if="external.api.tests.disabled" />
+        <exclude name="**/carrot2-source-yahoo/**/*.java" if="external.api.tests.disabled" />
+    </fileset>
+    
     <path id="lib.classpath">
         <fileset dir="lib" includes="**/*.jar" />    
     </path>
@@ -69,6 +75,7 @@
             <classpath refid="test.classpath" />
 
             <sysproperty key="source.paths" value="${source.paths}" />
+            <sysproperty key="external.api.tests.disabled" value="${external.api.tests.disabled}" />
 
             <batchtest todir="${tests.report.dir}">
                 <fileset dir="${build.dir}">
@@ -98,25 +105,31 @@
         <java classname="carrot2.util.attribute.metadata.BindableMetadataXmlSerializer" classpathref="test.classpath">
             <arg value="org.carrot2.core.AttributeNames" />
 
-            <arg file="code/carrot2-core" />
-            <arg file="code/carrot2-util-attribute" />
-            <arg file="code/carrot2-source-yahoo" />
-            <arg file="code/carrot2-algorithm-synthetic" />
+            <arg file="code/carrot2-core/src" />
+            <arg file="code/carrot2-util-attribute/src-test" />
+            <arg file="code/carrot2-source-yahoo/src" />
+            <arg file="code/carrot2-algorithm-synthetic/src" />
         </java>
     </target>
 
     <target name="with.clover" if="clover.home">
-        <clover-setup/>
+        <clover-setup>
+          <fileset refid="src.coverage" />
+        </clover-setup>
     </target>
    
     <target name="clover.html" if="clover.home">
-        <clover-html-report outdir="${coverage.report.dir}" title="Carrot2 3.0"/>
+        <clover-report>
+            <current outfile="${coverage.report.dir}" title="Carrot2 3.0">
+                <format type="html" />
+            </current>
+        </clover-report>
     </target>
    
     <target name="clover.xml" if="clover.home">
         <clover-report>
-           <current outfile="${coverage.report.dir}">
-              <format type="xml"/>
+           <current outfile="${coverage.report.dir}" title="Carrot2 3.0">
+              <format type="xml" />
            </current>
         </clover-report>
     </target>

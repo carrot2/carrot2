@@ -12,7 +12,6 @@ import java.util.HashMap;
 import org.carrot2.core.*;
 import org.junit.Assert;
 
-
 /**
  * Simple baseline tests that apply to most (?) data sources.
  */
@@ -21,7 +20,7 @@ public abstract class DocumentSourceTestBase<T extends DocumentSource> extends
 {
     /**
      * Runs a <code>query</code> and asks for <code>results</code> results.
-     *
+     * 
      * @return Returns the number of fetched documents. Access {@link #attributes} map to
      *         get hold of the actual documents.
      */

@@ -8,6 +8,7 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.util.Map;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import carrot2.util.attribute.metadata.test.*;
@@ -18,11 +19,17 @@ import carrot2.util.attribute.metadata.test.*;
 public class BindableMetadataBuilderTest
 {
     private static final String SOURCE_PATH_PROPERTY = "source.paths";
-    protected BindableMetadataBuilder builder;
-    protected Map<String, BindableMetadata> bindableMetadata;
+    protected static Map<String, BindableMetadata> bindableMetadata;
 
-    public BindableMetadataBuilderTest()
+    /**
+     * Generates metadata once for all the tests, which will significantly speed up
+     * processing. The metadata is stored in a static field though, which might be an
+     * issue if the test cases are executed in some parallel way.
+     */
+    @BeforeClass
+    public static void generateMetadata()
     {
+        BindableMetadataBuilder builder;
         final String sourcePaths = System.getProperty(SOURCE_PATH_PROPERTY);
         if (sourcePaths == null)
         {
@@ -266,7 +273,8 @@ public class BindableMetadataBuilderTest
     @Test
     public void testBindableMetadata()
     {
-        final BindableMetadata metadata = bindableMetadata.get(TestBindable.class.getName());
+        final BindableMetadata metadata = bindableMetadata.get(TestBindable.class
+            .getName());
         assertNotNull(metadata);
         assertEquals("Some test bindable", metadata.title);
         assertEquals("Description.", metadata.description);

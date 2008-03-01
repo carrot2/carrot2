@@ -6,14 +6,16 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 
 import org.carrot2.core.Document;
+import org.carrot2.core.test.ExternalApiTestBase;
 import org.carrot2.source.SearchEngineResponse;
 import org.junit.Before;
 import org.junit.Test;
+import org.junitext.Prerequisite;
 
 /**
  * Tests plain service accessor (no queries longer than a single page etc.).
  */
-public class YahooWebSearchServiceTest
+public class YahooWebSearchServiceTest extends ExternalApiTestBase
 {
     private YahooSearchService service;
 
@@ -24,6 +26,7 @@ public class YahooWebSearchServiceTest
     }
 
     @Test
+    @Prerequisite(requires = "externalApiTestsEnabled")
     public void testNoResultsQuery() throws Exception
     {
         final SearchEngineResponse response = service.query("duiogig oiudgisugviw siug iugw iusviuwg", 0, 100);
@@ -31,6 +34,7 @@ public class YahooWebSearchServiceTest
     }
 
     @Test
+    @Prerequisite(requires = "externalApiTestsEnabled")
     public void testPolishDiacritics() throws Exception
     {
         final SearchEngineResponse response = service.query("Łódź", 0, 100);
@@ -38,6 +42,7 @@ public class YahooWebSearchServiceTest
     }
 
     @Test
+    @Prerequisite(requires = "externalApiTestsEnabled")
     public void testLargerQuery() throws Exception
     {
         final int needed = service.resultsPerPage / 2;
@@ -46,6 +51,7 @@ public class YahooWebSearchServiceTest
     }
 
     @Test
+    @Prerequisite(requires = "externalApiTestsEnabled")
     public void testEntities() throws Exception
     {
         final SearchEngineResponse response = service.query("Ala ma kota", 0, 100);
@@ -64,6 +70,7 @@ public class YahooWebSearchServiceTest
     }
 
     @Test(expected=IOException.class)
+    @Prerequisite(requires = "externalApiTestsEnabled")
     public void testErrorResult() throws Exception
     {
         service.resultsPerPage = 400;
@@ -71,6 +78,7 @@ public class YahooWebSearchServiceTest
     }
 
     @Test
+    @Prerequisite(requires = "externalApiTestsEnabled")
     public void testCompressedStreamsUsed() throws Exception
     {
         final SearchEngineResponse response = service.query("apache", 0, 50);

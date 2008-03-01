@@ -9,8 +9,9 @@ import org.carrot2.core.Document;
 import org.carrot2.core.test.DocumentSourceTestBase;
 import org.carrot2.source.SearchMode;
 import org.junit.Test;
-
-
+import org.junit.runner.RunWith;
+import org.junitext.Prerequisite;
+import org.junitext.runners.AnnotationRunner;
 
 /**
  * Tests Yahoo! input component.
@@ -18,12 +19,14 @@ import org.junit.Test;
 public class YahooDocumentSourceTest extends DocumentSourceTestBase<YahooDocumentSource>
 {
     @Test
+    @Prerequisite(requires = "externalApiTestsEnabled")
     public void testNoResultsQuery() throws Exception
     {
         assertEquals(0, runQuery("duiogig oiudgisugviw siug iugw iusviuwg", 100));
     }
 
     @Test
+    @Prerequisite(requires = "externalApiTestsEnabled")
     public void testQueryLargerThanPage() throws Exception
     {
         final int needed = new YahooWebSearchService().resultsPerPage * 2 + 10;
@@ -35,6 +38,7 @@ public class YahooDocumentSourceTest extends DocumentSourceTestBase<YahooDocumen
     }
 
     @Test
+    @Prerequisite(requires = "externalApiTestsEnabled")
     public void testResultsTotal() throws Exception
     {
         runQuery("apache", 50);
@@ -43,8 +47,9 @@ public class YahooDocumentSourceTest extends DocumentSourceTestBase<YahooDocumen
         assertTrue((Long) attributes.get(AttributeNames.RESULTS_TOTAL) > 0);
     }
 
-    @SuppressWarnings("unchecked")
     @Test
+    @Prerequisite(requires = "externalApiTestsEnabled")
+    @SuppressWarnings("unchecked")
     public void testURLsUnique() throws Exception
     {
         runQuery("apache", 200);
@@ -54,6 +59,7 @@ public class YahooDocumentSourceTest extends DocumentSourceTestBase<YahooDocumen
     }
 
     @Test
+    @Prerequisite(requires = "externalApiTestsEnabled")
     public void testConservativeMode() throws Exception
     {
         attributes.put("search-mode", SearchMode.CONSERVATIVE);
@@ -63,6 +69,7 @@ public class YahooDocumentSourceTest extends DocumentSourceTestBase<YahooDocumen
     }
 
     @Test
+    @Prerequisite(requires = "externalApiTestsEnabled")
     public void testSpeculativeMode() throws Exception
     {
         attributes.put("search-mode", SearchMode.SPECULATIVE);
@@ -72,6 +79,7 @@ public class YahooDocumentSourceTest extends DocumentSourceTestBase<YahooDocumen
     }
 
     @Test
+    @Prerequisite(requires = "externalApiTestsEnabled")
     public void testNewsServiceSearch() throws Exception
     {
         attributes.put(YahooDocumentSource.class.getName()
