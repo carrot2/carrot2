@@ -30,7 +30,6 @@
     <path id="test.classpath">
         <path refid="lib.classpath" />
         <path location="${build.dir}" />
-        <path refid="src.folders" />
         <path location="${clover.jar}" />
     </path>
 
@@ -51,16 +50,16 @@
     </target>
 
 
-    <target name="resources" depends="attributes">
+    <target name="resources" depends="">
         <mkdir dir="${build.dir}" />
         
         <copy todir="${build.dir}">
             <fileset dir="code">
-                <include name="**/src/**" />
-                <include name="**/src-test/**" />
-                <exclude name="**/*.java" />
+                <include name="**/src/**/*.xml" />
+                <include name="**/src-test/**/*.xml" />
+                <exclude name="**/carrot2-util-log4j/**" />
             </fileset>
-            <regexpmapper from="^(.*/src(-test)?/)(.+)$" to="\3"/>
+            <regexpmapper from="^.*src(-test)?(.*)$$" to="\2"/>
         </copy>
     </target>
     
