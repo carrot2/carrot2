@@ -1,7 +1,7 @@
 /**
  *
  */
-package org.carrot2.util.attribute.metadata.test;
+package org.carrot2.util.attribute.test.metadata;
 
 /**
  *

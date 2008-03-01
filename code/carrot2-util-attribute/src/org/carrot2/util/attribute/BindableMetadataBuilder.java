@@ -21,12 +21,14 @@ class BindableMetadataBuilder
 
     private static final MetadataExtractor [] ATTRIBUTE_METADATA_EXTRACTORS = new MetadataExtractor []
     {
-        new LabelExtractor(), new TitleExtractor(), new DescriptionExtractor()
+        new MetadataExtractor.LabelExtractor(), new MetadataExtractor.TitleExtractor(),
+        new MetadataExtractor.DescriptionExtractor()
     };
 
     private static final MetadataExtractor [] BINDABLE_METADATA_EXTRACTORS = new MetadataExtractor []
     {
-        new LabelExtractor(), new TitleExtractor(), new DescriptionExtractor()
+        new MetadataExtractor.LabelExtractor(), new MetadataExtractor.TitleExtractor(),
+        new MetadataExtractor.DescriptionExtractor()
     };
 
     private final JavaDocBuilder javaDocBuilder = new JavaDocBuilder();
@@ -69,7 +71,7 @@ class BindableMetadataBuilder
         {
             // Take first class in a file
             final JavaClass javaClass = javaSource.getClasses()[0];
-            if (JavaDocBuilderUtils.hasAnnotation(javaClass, Bindable.class))
+            if (MetadataExtractorUtils.hasAnnotation(javaClass, Bindable.class))
             {
                 final BindableMetadata bindableMetadata = new BindableMetadata();
                 buildBindableMetadata(javaClass, bindableMetadata);
@@ -100,7 +102,7 @@ class BindableMetadataBuilder
         final JavaField [] fields = bindable.getFields();
         for (final JavaField javaField : fields)
         {
-            if (JavaDocBuilderUtils.hasAnnotation(javaField, Attribute.class))
+            if (MetadataExtractorUtils.hasAnnotation(javaField, Attribute.class))
             {
                 final AttributeMetadata metadata = new AttributeMetadata();
                 for (final MetadataExtractor extractor : ATTRIBUTE_METADATA_EXTRACTORS)
@@ -126,7 +128,7 @@ class BindableMetadataBuilder
 
     private JavaField resolveCommonMetadataSource(JavaField originalField)
     {
-        final Annotation annotation = JavaDocBuilderUtils.getAnnotation(originalField,
+        final Annotation annotation = MetadataExtractorUtils.getAnnotation(originalField,
             Attribute.class);
 
         // This bit is not really well documented in QDocs (well, nothing is, really...),

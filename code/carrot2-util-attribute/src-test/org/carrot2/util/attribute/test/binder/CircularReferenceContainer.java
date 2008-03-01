@@ -1,7 +1,7 @@
 /**
  *
  */
-package org.carrot2.util.attribute.test;
+package org.carrot2.util.attribute.test.binder;
 
 import org.carrot2.util.attribute.*;
 
@@ -10,13 +10,13 @@ import org.carrot2.util.attribute.*;
  */
 @Bindable
 @SuppressWarnings("unused")
-public class BindableReferenceImpl1 implements BindableReference
+public class CircularReferenceContainer
 {
     /**
-     * Processing input int.
+     * Circular reference.
      */
     @TestProcessing
     @Input
     @Attribute
-    private int processingInputInt = 10;
+    public CircularReferenceContainer circular;
 }

@@ -1,28 +1,33 @@
 package org.carrot2.util.attribute;
 
 /**
- * TODO: add fields specifying e.g. the key of the attribute in question?
+ * 
  */
 @SuppressWarnings("serial")
 public class AttributeBindingException extends RuntimeException
 {
-    public AttributeBindingException()
+    public final String attributeKey;
+
+    public AttributeBindingException(String attributeKey)
     {
+        this.attributeKey = attributeKey;
     }
 
-    public AttributeBindingException(String message, Throwable cause)
+    public AttributeBindingException(String attributeKey, String message, Throwable cause)
     {
         super(message, cause);
+        this.attributeKey = attributeKey;
     }
 
-    public AttributeBindingException(String message)
+    public AttributeBindingException(String attributeKey, String message)
     {
         super(message);
+        this.attributeKey = attributeKey;
     }
 
-    public AttributeBindingException(Throwable cause)
+    public AttributeBindingException(String attributeKey, Throwable cause)
     {
         super(cause);
+        this.attributeKey = attributeKey;
     }
-    
 }

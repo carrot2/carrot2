@@ -5,7 +5,7 @@ import java.util.*;
 
 import com.google.common.collect.Lists;
 
-public final class BindableUtils
+final class BindableUtils
 {
     /**
      * Caches the sets of declared fields determined for class hierarchies by the

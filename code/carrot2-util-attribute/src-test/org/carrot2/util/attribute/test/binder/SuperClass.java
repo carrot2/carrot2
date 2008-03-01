@@ -1,7 +1,7 @@
 /**
  *
  */
-package org.carrot2.util.attribute.test;
+package org.carrot2.util.attribute.test.binder;
 
 import org.carrot2.util.attribute.*;
 
@@ -10,13 +10,13 @@ import org.carrot2.util.attribute.*;
  */
 @Bindable
 @SuppressWarnings("unused")
-public class BindableReferenceImpl2 implements BindableReference
+public class SuperClass
 {
     /**
-     * Init input int.
+     * Super class init input int.
      */
     @TestInit
     @Input
     @Attribute
-    private int initInputInt = 12;
+    private int initInputInt = 5;
 }

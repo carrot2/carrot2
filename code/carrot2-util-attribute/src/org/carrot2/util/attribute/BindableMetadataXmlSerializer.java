@@ -5,7 +5,6 @@ package org.carrot2.util.attribute;
 
 import java.io.File;
 
-
 /**
  *
  */
@@ -28,7 +27,8 @@ public class BindableMetadataXmlSerializer
             }
         }
 
-        builder.addListener(new XmlSerializerBindableMetadataBuilderListener());
+        builder
+            .addListener(new BindableMetadataBuilderListener.XmlSerializerListener());
         builder.buildAttributeMetadata();
     }
 

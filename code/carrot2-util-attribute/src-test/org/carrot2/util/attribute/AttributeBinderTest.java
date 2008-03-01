@@ -13,7 +13,6 @@ import org.carrot2.util.attribute.constraint.*;
 import org.junit.Before;
 import org.junit.Test;
 
-
 /**
  *
  */
@@ -232,10 +231,40 @@ public class AttributeBinderTest
         private String initInputString;
     }
 
+    @Bindable
+    @SuppressWarnings("unused")
+    public static class ClassValuedAttribute
+    {
+        @TestInit
+        @Input
+        @Output
+        @Required
+        @Attribute
+        private Class initInputOutputClass;
+    }
+
+    @Bindable
+    @SuppressWarnings("unused")
+    public static class NotBindableCoercedAttribute
+    {
+        @TestInit
+        @Input
+        @Required
+        @Attribute
+        private NotBindable initInputReference;
+    }
+
     @Before
     public void initAttributes()
     {
         attributes = new HashMap<String, Object>();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testIllegalBindingDirection() throws InstantiationException
+    {
+        SingleClass instance = new SingleClass();
+        AttributeBinder.bind(instance, attributes, Attribute.class, TestInit.class);
     }
 
     @Test
@@ -549,6 +578,42 @@ public class AttributeBinderTest
         addAttribute(RequiredInputAttributes.class, "initInputString", null);
 
         AttributeBinder.bind(instance, attributes, Input.class, TestInit.class);
+    }
+
+    @Test
+    public void testClassValuedAttribute() throws InstantiationException
+    {
+        ClassValuedAttribute instance;
+
+        addAttribute(ClassValuedAttribute.class, "initInputOutputClass",
+            CoercedInterfaceImpl.class);
+
+        instance = new ClassValuedAttribute();
+        AttributeBinder.bind(instance, attributes, Input.class, TestInit.class);
+        checkFieldValues(instance, new Object []
+        {
+            "initInputOutputClass", CoercedInterfaceImpl.class
+        });
+
+        instance.initInputOutputClass = String.class;
+        AttributeBinder.bind(instance, attributes, Output.class, TestInit.class);
+        checkAttributeValues(ClassValuedAttribute.class, new Object []
+        {
+            "initInputOutputClass", String.class
+        });
+    }
+
+    @Test
+    public void testNotBindableCoercedAttribute() throws InstantiationException
+    {
+        NotBindableCoercedAttribute instance;
+
+        addAttribute(NotBindableCoercedAttribute.class, "initInputReference",
+            NotBindable.class);
+
+        instance = new NotBindableCoercedAttribute();
+        AttributeBinder.bind(instance, attributes, Input.class, TestInit.class);
+        assertNotNull(instance.initInputReference);
     }
 
     private void addAttribute(Class<?> clazz, String field, Object value)

@@ -12,7 +12,7 @@ import com.thoughtworks.qdox.model.Annotation;
 /**
  *
  */
-final class JavaDocBuilderUtils
+final class MetadataExtractorUtils
 {
     private static final Pattern FIRST_SENTENCE_PATTERN = Pattern
         .compile("\\.(?<!((\\w\\.){2,5}+))(\\s|\\z)");
@@ -20,7 +20,7 @@ final class JavaDocBuilderUtils
     private static final Pattern LINK_TO_TEXT_PATTERN = Pattern
         .compile("\\{@link\\s(.+)\\}");
 
-    private JavaDocBuilderUtils()
+    private MetadataExtractorUtils()
     {
         // No instantiation
     }

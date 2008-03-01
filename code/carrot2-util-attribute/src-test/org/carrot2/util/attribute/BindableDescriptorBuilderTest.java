@@ -8,7 +8,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.carrot2.util.attribute.test.*;
+import org.carrot2.util.attribute.test.binder.*;
 import org.junit.Test;
 
 import com.google.common.collect.Maps;

@@ -8,10 +8,9 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.util.Map;
 
-import org.carrot2.util.attribute.metadata.test.*;
+import org.carrot2.util.attribute.test.metadata.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
 
 /**
  *
@@ -47,7 +46,7 @@ public class BindableMetadataBuilderTest
             builder.addSourceTree(new File(path));
         }
 
-        final MemoryStorageBindableMetadataBuilderListener mapListener = new MemoryStorageBindableMetadataBuilderListener();
+        final BindableMetadataBuilderListener.MapStorageListener mapListener = new BindableMetadataBuilderListener.MapStorageListener();
         builder.addListener(mapListener);
 
         builder.buildAttributeMetadata();
