@@ -1,13 +1,12 @@
 /**
  *
  */
-package org.carrot2.util.attribute.metadata;
+package org.carrot2.util.attribute;
 
 import java.io.File;
 
 import org.simpleframework.xml.load.Persister;
 import org.simpleframework.xml.stream.Format;
-
 
 import com.thoughtworks.qdox.model.JavaClass;
 
@@ -15,7 +14,7 @@ import com.thoughtworks.qdox.model.JavaClass;
  * Saves the attribute metadata information next to the Java source file defining the
  * component.
  */
-public class XmlSerializerBindableMetadataBuilderListener implements
+class XmlSerializerBindableMetadataBuilderListener implements
     BindableMetadataBuilderListener
 {
     public void bindableMetadataBuilt(JavaClass bindable,

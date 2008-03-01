@@ -1,15 +1,11 @@
 /**
  *
  */
-package org.carrot2.util.attribute.metadata;
+package org.carrot2.util.attribute;
 
 import java.io.File;
 import java.util.List;
 import java.util.Map;
-
-import org.carrot2.util.attribute.Attribute;
-import org.carrot2.util.attribute.Bindable;
-
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -19,7 +15,7 @@ import com.thoughtworks.qdox.model.*;
 /**
  *
  */
-public class BindableMetadataBuilder
+class BindableMetadataBuilder
 {
     public static final String ATTRIBUTE_KEY_PARAMETER = "key";
 

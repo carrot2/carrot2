@@ -4,9 +4,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.*;
 
-import org.carrot2.util.attribute.constraint.Constraint;
+import org.carrot2.util.attribute.constraint.ConstraintValidator;
 import org.carrot2.util.attribute.constraint.ConstraintViolationException;
-
 
 /**
  * Provides methods for binding (setting or reading) values of attributes defined by the
@@ -123,14 +122,12 @@ public class AttributeBinder
                     if (value != null)
                     {
                         // Check constraints
-                        final Constraint constraint = BindableUtils.getConstraint(field);
-                        if (constraint != null)
+                        final Annotation [] unmetConstraints = ConstraintValidator.isMet(
+                            value, field.getAnnotations());
+                        if (unmetConstraints.length > 0)
                         {
-                            if (!constraint.isMet(value))
-                            {
-                                throw new ConstraintViolationException(key, constraint,
-                                    value);
-                            }
+                            throw new ConstraintViolationException(key, value,
+                                unmetConstraints);
                         }
                     }
 

@@ -1,11 +1,7 @@
 package org.carrot2.util.attribute;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.*;
-
-import org.carrot2.util.attribute.constraint.*;
-
 
 import com.google.common.collect.Lists;
 
@@ -104,30 +100,5 @@ public final class BindableUtils
         {
             throw new RuntimeException(e);
         }
-    }
-
-    /**
-     *
-     */
-    public static Constraint getConstraint(final Field field)
-    {
-        final List<Constraint> constraints = new ArrayList<Constraint>();
-        for (final Annotation annotation : field.getAnnotations())
-        {
-            if (ConstraintFactory.isConstraintAnnotation(annotation.annotationType()))
-            {
-                constraints.add(ConstraintFactory.createConstraint(annotation));
-            }
-        }
-        Constraint constraint = null;
-        if (constraints.size() == 1)
-        {
-            constraint = constraints.get(0);
-        }
-        else if (constraints.size() > 1)
-        {
-            constraint = new CompoundConstraint(constraints);
-        }
-        return constraint;
     }
 }

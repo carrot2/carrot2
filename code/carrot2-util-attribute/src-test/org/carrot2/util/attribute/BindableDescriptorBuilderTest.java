@@ -1,14 +1,13 @@
 /**
  *
  */
-package org.carrot2.util.attribute.metadata;
+package org.carrot2.util.attribute;
 
 import static org.fest.assertions.Assertions.assertThat;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.test.*;
 import org.junit.Test;
 

@@ -385,7 +385,7 @@ public class AttributeBinderTest
         }
         catch (final ConstraintViolationException e)
         {
-            assertEquals(12, e.getOffendingValue());
+            assertEquals(12, e.offendingValue);
         }
         checkFieldValues(instance, new Object []
         {
@@ -413,7 +413,7 @@ public class AttributeBinderTest
         }
         catch (final ConstraintViolationException e)
         {
-            assertEquals(8, e.getOffendingValue());
+            assertEquals(8, e.offendingValue);
         }
         checkFieldValues(instance, new Object []
         {
@@ -428,7 +428,7 @@ public class AttributeBinderTest
         }
         catch (final ConstraintViolationException e)
         {
-            assertEquals(12, e.getOffendingValue());
+            assertEquals(12, e.offendingValue);
         }
         checkFieldValues(instance, new Object []
         {

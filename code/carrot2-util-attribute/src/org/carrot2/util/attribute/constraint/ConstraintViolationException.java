@@ -3,19 +3,20 @@
  */
 package org.carrot2.util.attribute.constraint;
 
+import java.lang.annotation.Annotation;
 
 @SuppressWarnings("serial")
 public class ConstraintViolationException extends RuntimeException
 {
-    private final Object offendingValue;
-    private final Constraint constraint;
-    private final String key;
+    public final Object offendingValue;
+    public final Annotation [] annotations;
+    public final String key;
 
-    public ConstraintViolationException(String key, Constraint constraint,
-        Object offendngValue)
+    public ConstraintViolationException(String key, Object offendngValue,
+        Annotation... annotations)
     {
         this.offendingValue = offendngValue;
-        this.constraint = constraint;
+        this.annotations = annotations;
         this.key = key;
     }
 
@@ -23,21 +24,6 @@ public class ConstraintViolationException extends RuntimeException
     public String getMessage()
     {
         return "Value: " + offendingValue + " of attribute: " + key
-            + " violates constraint: " + constraint;
-    }
-
-    public Object getOffendingValue()
-    {
-        return offendingValue;
-    }
-
-    public Constraint getConstraint()
-    {
-        return constraint;
-    }
-
-    public String getKey()
-    {
-        return key;
+            + " violates constraints: " + annotations;
     }
 }

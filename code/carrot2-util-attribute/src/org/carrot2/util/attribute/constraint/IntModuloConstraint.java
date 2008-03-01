@@ -6,7 +6,7 @@ package org.carrot2.util.attribute.constraint;
 /**
  *
  */
-public class IntModuloConstraint implements Constraint
+class IntModuloConstraint extends Constraint
 {
     private int modulo;
     private int offset;

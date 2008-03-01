@@ -1,7 +1,7 @@
 /**
  *
  */
-package org.carrot2.util.attribute.metadata;
+package org.carrot2.util.attribute;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,7 +12,7 @@ import com.thoughtworks.qdox.model.Annotation;
 /**
  *
  */
-public final class JavaDocBuilderUtils
+final class JavaDocBuilderUtils
 {
     private static final Pattern FIRST_SENTENCE_PATTERN = Pattern
         .compile("\\.(?<!((\\w\\.){2,5}+))(\\s|\\z)");

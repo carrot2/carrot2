@@ -1,11 +1,10 @@
-package org.carrot2.util.attribute.metadata;
+package org.carrot2.util.attribute;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.List;
 
 import org.apache.commons.lang.ClassUtils;
-import org.carrot2.util.attribute.*;
-import org.carrot2.util.attribute.constraint.Constraint;
 
 public class AttributeDescriptor
 {
@@ -14,7 +13,7 @@ public class AttributeDescriptor
     public final String key;
     public final Class<?> type;
     public final Object defaultValue;
-    public final Constraint constraint;
+    public final List<Annotation> constraints;
 
     public final boolean inputAttribute;
     public final boolean outputAttribute;
@@ -22,7 +21,7 @@ public class AttributeDescriptor
 
     final Field attributeField;
 
-    AttributeDescriptor(Field field, Object defaultValue, Constraint constraint,
+    AttributeDescriptor(Field field, Object defaultValue, List<Annotation> constraints,
         AttributeMetadata metadata)
     {
         this.attributeField = field;
@@ -30,7 +29,7 @@ public class AttributeDescriptor
         this.key = BindableUtils.getKey(field);
         this.type = ClassUtils.primitiveToWrapper(field.getType());
         this.defaultValue = defaultValue;
-        this.constraint = constraint;
+        this.constraints = constraints;
         this.metadata = metadata;
 
         this.inputAttribute = field.getAnnotation(Input.class) != null;

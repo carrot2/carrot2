@@ -1,13 +1,12 @@
 /**
  *
  */
-package org.carrot2.util.attribute.metadata;
+package org.carrot2.util.attribute;
 
 import java.lang.annotation.Annotation;
 import java.util.*;
 
 import org.apache.commons.lang.ObjectUtils;
-import org.carrot2.util.attribute.BindableUtils;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Maps;

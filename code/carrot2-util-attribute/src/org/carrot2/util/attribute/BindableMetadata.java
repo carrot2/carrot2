@@ -1,26 +1,41 @@
 /**
  *
  */
-package org.carrot2.util.attribute.metadata;
+package org.carrot2.util.attribute;
+
+import java.util.Collections;
+import java.util.Map;
 
 import org.apache.commons.lang.ObjectUtils;
+import org.simpleframework.xml.ElementMap;
 import org.simpleframework.xml.Root;
 
 /**
  *
  */
-@Root(name = "attribute-metadata")
-public class AttributeMetadata extends CommonMetadata
+@Root(name = "component-metadata")
+public class BindableMetadata extends CommonMetadata
 {
-    AttributeMetadata()
+    @ElementMap(name = "attributes", entry = "attribute", key = "field-name", inline = false, attribute = true)
+    private Map<String, AttributeMetadata> attributeMetadataInternal;
+
+    BindableMetadata()
     {
     }
 
-    AttributeMetadata(String title, String label, String description)
+    public Map<String, AttributeMetadata> getAttributeMetadata()
     {
-        this.title = title;
-        this.label = label;
-        this.description = description;
+        return Collections.unmodifiableMap(attributeMetadataInternal);
+    }
+
+    Map<String, AttributeMetadata> getInternalAttributeMetadata()
+    {
+        return attributeMetadataInternal;
+    }
+
+    void setAttributeMetadata(Map<String, AttributeMetadata> attributeMetadata)
+    {
+        this.attributeMetadataInternal = attributeMetadata;
     }
 
     @Override

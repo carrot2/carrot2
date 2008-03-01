@@ -3,10 +3,23 @@
  */
 package org.carrot2.util.attribute.constraint;
 
+import java.lang.annotation.Annotation;
+
 /**
  *
  */
-public interface Constraint
+abstract class Constraint
 {
-    public boolean isMet(Object value);
+    Annotation annotation;
+    
+    Constraint()
+    {
+    }
+    
+    Constraint(Annotation constraintAnnotation)
+    {
+        this.annotation = constraintAnnotation;
+    }
+
+    abstract boolean isMet(Object value);
 }

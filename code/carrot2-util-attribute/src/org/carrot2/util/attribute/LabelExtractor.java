@@ -1,10 +1,9 @@
 /**
  *
  */
-package org.carrot2.util.attribute.metadata;
+package org.carrot2.util.attribute;
 
 import org.apache.commons.lang.StringUtils;
-
 
 import com.thoughtworks.qdox.JavaDocBuilder;
 import com.thoughtworks.qdox.model.AbstractJavaEntity;
@@ -13,7 +12,7 @@ import com.thoughtworks.qdox.model.DocletTag;
 /**
  *
  */
-public class LabelExtractor implements MetadataExtractor
+class LabelExtractor implements MetadataExtractor
 {
     public boolean extractMetadataItem(AbstractJavaEntity javaEntity,
         JavaDocBuilder javaDocBuilder, CommonMetadata attributeMetadata)

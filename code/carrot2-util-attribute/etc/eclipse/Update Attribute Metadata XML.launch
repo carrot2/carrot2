@@ -22,7 +22,7 @@
 <listEntry value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#13;&#10;&lt;runtimeClasspathEntry path=&quot;3&quot; projectName=&quot;carrot2-util-log4j&quot; type=&quot;1&quot;/&gt;&#13;&#10;"/>
 </listAttribute>
 <booleanAttribute key="org.eclipse.jdt.launching.DEFAULT_CLASSPATH" value="false"/>
-<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.carrot2.util.attribute.metadata.BindableMetadataXmlSerializer"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.carrot2.util.attribute.BindableMetadataXmlSerializer"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="org.carrot2.core.AttributeNames ${resource_loc:carrot2-core} ${resource_loc:carrot2-util-attribute} ${resource_loc:carrot2-source-yahoo/src} ${resource_loc:carrot2-algorithm-synthetic/src}"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="carrot2-util-attribute"/>
 </launchConfiguration>

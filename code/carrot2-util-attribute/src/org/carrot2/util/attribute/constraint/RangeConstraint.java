@@ -1,6 +1,6 @@
 package org.carrot2.util.attribute.constraint;
 
-public class RangeConstraint implements Constraint
+class RangeConstraint extends Constraint
 {
     @SuppressWarnings("unchecked")
     private Comparable min;

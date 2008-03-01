@@ -11,9 +11,7 @@ import org.carrot2.examples.ExampleUtils;
 import org.carrot2.source.yahoo.YahooDocumentSource;
 import org.carrot2.source.yahoo.YahooNewsSearchService;
 import org.carrot2.util.attribute.*;
-import org.carrot2.util.attribute.constraint.ConstraintUtils;
-import org.carrot2.util.attribute.metadata.*;
-
+import org.carrot2.util.attribute.constraint.ImplementingClasses;
 
 /**
  * An example showing how developers can use the low-level core utilities for processing
@@ -71,10 +69,10 @@ public class WorkingWithAttributeDescriptors
         descriptor = BindableDescriptorBuilder.buildDescriptor(yahooDocumentSource);
         final AttributeDescriptor yahooServiceDescriptor = descriptor.attributeDescriptors
             .get(YahooDocumentSource.class.getName() + ".service");
-        final Class<?> [] implementingClasses = ConstraintUtils
-            .getImplementingClasses(yahooServiceDescriptor.constraint);
         System.out.println(yahooServiceDescriptor.metadata.getLabel()
-            + ": allowed implementations: " + Arrays.toString(implementingClasses));
+            + ": allowed implementations: "
+            + Arrays.toString(((ImplementingClasses) yahooServiceDescriptor.constraints
+                .get(0)).classes()));
     }
 
     private static void displayDescriptor(BindableDescriptor descriptor, int indent)

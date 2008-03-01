@@ -1,7 +1,8 @@
 /**
  *
  */
-package org.carrot2.util.attribute.metadata;
+package org.carrot2.util.attribute;
+
 
 
 import com.thoughtworks.qdox.model.JavaClass;
@@ -9,7 +10,7 @@ import com.thoughtworks.qdox.model.JavaClass;
 /**
  *
  */
-public interface BindableMetadataBuilderListener
+interface BindableMetadataBuilderListener
 {
     public void bindableMetadataBuilt(JavaClass bindable,
         BindableMetadata bindableMetadata);

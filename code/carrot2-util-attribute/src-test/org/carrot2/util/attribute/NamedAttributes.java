@@ -1,10 +1,9 @@
 /**
  *
  */
-package org.carrot2.util.attribute.metadata.test;
+package org.carrot2.util.attribute;
 
-import org.carrot2.util.attribute.*;
-import org.carrot2.util.attribute.metadata.BindableMetadataBuilder;
+import org.carrot2.util.attribute.metadata.test.TestAttributeNames;
 
 /**
  *

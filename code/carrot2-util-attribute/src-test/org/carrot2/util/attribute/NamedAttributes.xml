@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component-metadata>
+  <attributes class="java.util.LinkedHashMap">
+    <attribute field-name="noJavadoc">
+      <attribute-metadata/>
+    </attribute>
+    <attribute field-name="labelOverride">
+      <attribute-metadata>
+        <label>overriden</label>
+      </attribute-metadata>
+    </attribute>
+    <attribute field-name="titleOverride">
+      <attribute-metadata>
+        <title>Title overriden</title>
+      </attribute-metadata>
+    </attribute>
+    <attribute field-name="titleDescriptionOverride">
+      <attribute-metadata>
+        <title>Title overriden</title>
+        <description>Description overriden.</description>
+      </attribute-metadata>
+    </attribute>
+    <attribute field-name="noDotInKey">
+      <attribute-metadata/>
+    </attribute>
+    <attribute field-name="classNotInSourcePath">
+      <attribute-metadata/>
+    </attribute>
+  </attributes>
+</component-metadata>

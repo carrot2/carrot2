@@ -1,6 +1,3 @@
-/**
- *
- */
 package org.carrot2.util.attribute;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -8,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Map;
 
-import org.carrot2.util.attribute.metadata.*;
 import org.carrot2.util.attribute.test.filtering.*;
 import org.junit.Test;
 
@@ -16,6 +12,7 @@ import org.junit.Test;
 /**
  *
  */
+@SuppressWarnings("unchecked")
 public class BindableDescriptorTest
 {
     private final BindableDescriptor descriptor = BindableDescriptorBuilder

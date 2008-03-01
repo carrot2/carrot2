@@ -1,34 +1,34 @@
 /**
  *
  */
-package org.carrot2.util.attribute.metadata;
+package org.carrot2.util.attribute;
 
 import java.io.InputStream;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.*;
 
 import org.carrot2.util.CloseableUtils;
-import org.carrot2.util.attribute.*;
-import org.carrot2.util.attribute.constraint.Constraint;
+import org.carrot2.util.attribute.constraint.IsConstraint;
 import org.carrot2.util.resource.Resource;
 import org.carrot2.util.resource.ResourceUtilsFactory;
 import org.simpleframework.xml.load.Persister;
 
-
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
  * TODO: implement a simple API for querying/ filtering the descriptor tree:
- *
+ * 
  * <pre>
  *  - filter: level (priority: medium)
  *  - filter: group
  *  - filter: text search in title/label/description (for filtering like in Eclipse)
- *
+ * 
  *  - organization: tree according to components (priority: high)
  *  - organization: flat list (priority: high)
  *  - organization: tree according to group
- *
+ * 
  *  - sorting: by declaration order (default)
  *  - sorting: by label
  *  - sorting: by level
@@ -70,7 +70,8 @@ public class BindableDescriptorBuilder
             initializedInstance, bindableMetadata);
 
         // Build descriptors for nested bindables
-        final Map<String, BindableDescriptor> bindableDescriptors = Maps.newLinkedHashMap();
+        final Map<String, BindableDescriptor> bindableDescriptors = Maps
+            .newLinkedHashMap();
 
         final Collection<Field> fieldsFromBindableHierarchy = BindableUtils
             .getFieldsFromBindableHierarchy(clazz);
@@ -154,8 +155,8 @@ public class BindableDescriptorBuilder
      */
     private static BindableMetadata getBindableMetadata(final Class<?> clazz)
     {
-        final Resource metadataXml = ResourceUtilsFactory.getDefaultResourceUtils().getFirst(
-            clazz.getSimpleName() + ".xml", clazz);
+        final Resource metadataXml = ResourceUtilsFactory.getDefaultResourceUtils()
+            .getFirst(clazz.getSimpleName() + ".xml", clazz);
         BindableMetadata bindableMetadata = null;
         if (metadataXml != null)
         {
@@ -191,7 +192,6 @@ public class BindableDescriptorBuilder
     private static AttributeDescriptor buildAttributeDescriptor(
         Object initializedInstance, Field field, BindableMetadata bindableMetadata)
     {
-        final Constraint constraint = BindableUtils.getConstraint(field);
         Object defaultValue = null;
 
         try
@@ -205,7 +205,23 @@ public class BindableDescriptorBuilder
                 + BindableUtils.getKey(field));
         }
 
-        return new AttributeDescriptor(field, defaultValue, constraint, bindableMetadata
-            .getAttributeMetadata().get(field.getName()));
+        return new AttributeDescriptor(field, defaultValue,
+            getConstraintAnnotations(field), bindableMetadata.getAttributeMetadata().get(
+                field.getName()));
+    }
+
+    private static List<Annotation> getConstraintAnnotations(Field field)
+    {
+        final Annotation [] annotations = field.getAnnotations();
+        final ArrayList<Annotation> constraintAnnotations = Lists.newArrayList();
+        for (Annotation annotation : annotations)
+        {
+            if (annotation.annotationType().isAnnotationPresent(IsConstraint.class))
+            {
+                constraintAnnotations.add(annotation);
+            }
+        }
+
+        return constraintAnnotations;
     }
 }

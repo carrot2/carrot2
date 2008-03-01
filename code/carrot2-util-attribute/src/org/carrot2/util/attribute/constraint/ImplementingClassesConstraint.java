@@ -1,12 +1,9 @@
-/**
- *
- */
 package org.carrot2.util.attribute.constraint;
 
 /**
  *
  */
-public class ImplementingClassesConstraint implements Constraint
+class ImplementingClassesConstraint extends Constraint
 {
     private Class<?> [] classes;
 
