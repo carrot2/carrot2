@@ -2,7 +2,7 @@
 <launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
 <stringAttribute key="bad_container_name" value="\carrot2-core-tools\etc\eclipse"/>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-<listEntry value="/carrot2-util-attribute/src/carrot2/util/attribute/metadata/BindableMetadataXmlSerializer.java"/>
+<listEntry value="/carrot2-util-attribute/src/org/carrot2/util/attribute/BindableMetadataXmlSerializer.java"/>
 </listAttribute>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="1"/>

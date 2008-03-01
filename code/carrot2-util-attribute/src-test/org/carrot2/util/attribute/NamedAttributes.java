@@ -8,6 +8,7 @@ import org.carrot2.util.attribute.test.metadata.TestAttributeNames;
 /**
  *
  */
+@Bindable
 @SuppressWarnings("unused")
 public class NamedAttributes
 {
