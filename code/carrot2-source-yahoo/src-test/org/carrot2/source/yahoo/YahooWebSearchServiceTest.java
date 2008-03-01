@@ -10,11 +10,14 @@ import org.carrot2.core.test.ExternalApiTestBase;
 import org.carrot2.source.SearchEngineResponse;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.junitext.Prerequisite;
+import org.junitext.runners.AnnotationRunner;
 
 /**
  * Tests plain service accessor (no queries longer than a single page etc.).
  */
+@RunWith(AnnotationRunner.class)
 public class YahooWebSearchServiceTest extends ExternalApiTestBase
 {
     private YahooSearchService service;

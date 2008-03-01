@@ -16,6 +16,7 @@ import org.junitext.runners.AnnotationRunner;
 /**
  * Tests Yahoo! input component.
  */
+@RunWith(AnnotationRunner.class)
 public class YahooDocumentSourceTest extends DocumentSourceTestBase<YahooDocumentSource>
 {
     @Test

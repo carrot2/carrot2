@@ -1,14 +1,11 @@
 package org.carrot2.core.test;
 
-import org.junit.runner.RunWith;
-import org.junitext.runners.AnnotationRunner;
 
 /**
  * A base class for tests whose results depend on the correct functioning of some external
  * APIs. Such tests may be ignored e.g. during post-commit builds and executed only during
  * daily builds.
  */
-@RunWith(AnnotationRunner.class)
 public class ExternalApiTestBase
 {
     /**

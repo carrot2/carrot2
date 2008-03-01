@@ -288,7 +288,7 @@ public final class Cluster
     @Override
     public int hashCode()
     {
-        return 0;
+        return phrases.hashCode() ^ documents.hashCode();
     }
 
     /**

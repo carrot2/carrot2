@@ -7,9 +7,10 @@ import java.util.*;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.carrot2.core.*;
+
 import carrot2.util.attribute.*;
 
-import com.google.common.collect.HashMultimap;
+import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 
 /**
@@ -24,7 +25,7 @@ import com.google.common.collect.Multimap;
  * <p>
  * Clusters will be ordered by size (number of documents) descendingly; in case of equal
  * sizes, alphabetically by URL, see {@link Cluster#BY_REVERSED_SIZE_AND_LABEL_COMPARATOR}.
- *
+ * 
  * @label By URL Clustering
  */
 @Bindable
@@ -79,7 +80,7 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
         Collection<Integer> documentIndexes, String [][] urlParts, int level,
         String labelSuffix)
     {
-        final Multimap<String, Integer> urlPartToDocumentIndex = new HashMultimap<String, Integer>();
+        final Multimap<String, Integer> urlPartToDocumentIndex = new LinkedHashMultimap<String, Integer>();
         for (final Integer documentIndex : documentIndexes)
         {
             final String [] urlPartsForDocument = urlParts[documentIndex.intValue()];
@@ -90,7 +91,7 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
             }
         }
 
-        final Set<Integer> documentsInClusters = new HashSet<Integer>();
+        final Set<Integer> documentsInClusters = new LinkedHashSet<Integer>();
         final List<Cluster> clusters = new ArrayList<Cluster>();
         for (final String urlPart : urlPartToDocumentIndex.keySet())
         {
@@ -102,8 +103,8 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
                 String clusterLabel = urlPart
                     + (labelSuffix.length() > 0 ? "." + labelSuffix : "");
 
-                final List<Cluster> subclusters = createClusters(documents, indexes, urlParts,
-                    level + 1, clusterLabel);
+                final List<Cluster> subclusters = createClusters(documents, indexes,
+                    urlParts, level + 1, clusterLabel);
                 if (subclusters.size() > 1)
                 {
                     cluster.addSubclusters(subclusters);

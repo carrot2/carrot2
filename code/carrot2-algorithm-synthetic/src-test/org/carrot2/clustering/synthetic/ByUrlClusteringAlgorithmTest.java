@@ -65,12 +65,11 @@ public class ByUrlClusteringAlgorithmTest extends
                 "cos.pl", "http://cos.pl/cos", "cos.pl/cos"
             });
 
-        final List<Cluster> expectedFacets = Arrays.asList(new Cluster []
-        {
-            new Cluster("cos.pl", docs.get(0), docs.get(1), docs.get(2))
-        });
+        final List<Cluster> expectedFacets = Lists.newArrayList(new Cluster("cos.pl",
+            docs.get(0), docs.get(1), docs.get(2)));
 
-        assertEquals(expectedFacets, Lists.newArrayList(cluster(docs)));
+        final ArrayList<Cluster> actual = Lists.newArrayList(cluster(docs));
+        assertEquals(expectedFacets, actual);
     }
 
     @Test
@@ -82,10 +81,8 @@ public class ByUrlClusteringAlgorithmTest extends
                 "www.cos.pl", "http://cos.pl/cos", "cos.pl/cos"
             });
 
-        final List<Cluster> expectedFacets = Arrays.asList(new Cluster []
-        {
-            new Cluster("cos.pl", docs.get(0), docs.get(1), docs.get(2))
-        });
+        final List<Cluster> expectedFacets = Lists.newArrayList(new Cluster("cos.pl",
+            docs.get(0), docs.get(1), docs.get(2)));
 
         assertEquals(expectedFacets, Lists.newArrayList(cluster(docs)));
     }
@@ -99,7 +96,7 @@ public class ByUrlClusteringAlgorithmTest extends
                 "mail.cos.pl", "http://cos.pl/cos", "cos.pl/cos", "mail.cos.pl"
             });
 
-        final List<Cluster> expectedFacets = new ArrayList<Cluster>();
+        final List<Cluster> expectedFacets = Lists.newArrayList();
         final Cluster facet11 = new Cluster("mail.cos.pl", docs.get(0), docs.get(3));
         final Cluster facet12 = new Cluster("Other Sites", docs.get(1), docs.get(2))
             .setAttribute(Cluster.OTHER_TOPICS, Boolean.TRUE);
@@ -118,11 +115,9 @@ public class ByUrlClusteringAlgorithmTest extends
                 "cos.pl", "http://cos.pl/cos", "cos.com/cos", "cos.com", "cos.pl"
             });
 
-        final List<Cluster> expectedFacets = Arrays.asList(new Cluster []
-        {
-            new Cluster("cos.pl", docs.get(0), docs.get(1), docs.get(4)),
-            new Cluster("cos.com", docs.get(2), docs.get(3))
-        });
+        final List<Cluster> expectedFacets = Lists.newArrayList(new Cluster("cos.pl",
+            docs.get(0), docs.get(1), docs.get(4)), new Cluster("cos.com", docs.get(2),
+            docs.get(3)));
 
         assertEquals(expectedFacets, Lists.newArrayList(cluster(docs)));
     }
