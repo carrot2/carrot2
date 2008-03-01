@@ -25,6 +25,7 @@ import carrot2.util.attribute.metadata.*;
  */
 public class WorkingWithAttributeDescriptors
 {
+    @SuppressWarnings("unchecked")
     public static void main(String [] args) throws InstantiationException
     {
         // Here is the component instance that we will be working with. Notice
@@ -43,7 +44,7 @@ public class WorkingWithAttributeDescriptors
         initAttributes.put(YahooDocumentSource.class.getName() + ".service",
             YahooNewsSearchService.class);
         AttributeBinder
-            .bind(yahooDocumentSource, initAttributes, Init.class, Input.class);
+            .bind(yahooDocumentSource, initAttributes, Input.class, Init.class);
 
         descriptor = BindableDescriptorBuilder.buildDescriptor(yahooDocumentSource);
         displayDescriptor(descriptor, 0);

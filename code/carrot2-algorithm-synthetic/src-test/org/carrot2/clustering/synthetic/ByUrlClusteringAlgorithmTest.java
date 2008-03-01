@@ -13,6 +13,8 @@ import org.carrot2.core.Document;
 import org.carrot2.core.test.ClusteringAlgorithmTestBase;
 import org.junit.Test;
 
+import com.google.common.collect.Lists;
+
 /**
  * Test cases for the {@link ByUrlClusteringAlgorithm}.
  */
@@ -57,42 +59,45 @@ public class ByUrlClusteringAlgorithmTest extends
     @Test
     public void testOneUrl()
     {
-        final List<Document> docs = DocumentWithUrlsFactory.INSTANCE.generate(new String []
-        {
-            "cos.pl", "http://cos.pl/cos", "cos.pl/cos"
-        });
+        final List<Document> docs = DocumentWithUrlsFactory.INSTANCE
+            .generate(new String []
+            {
+                "cos.pl", "http://cos.pl/cos", "cos.pl/cos"
+            });
 
         final List<Cluster> expectedFacets = Arrays.asList(new Cluster []
         {
             new Cluster("cos.pl", docs.get(0), docs.get(1), docs.get(2))
         });
 
-        assertEquals(expectedFacets, new ArrayList<Cluster>(cluster(docs)));
+        assertEquals(expectedFacets, Lists.newArrayList(cluster(docs)));
     }
 
     @Test
     public void testStopPartsStripping()
     {
-        final List<Document> docs = DocumentWithUrlsFactory.INSTANCE.generate(new String []
-        {
-            "www.cos.pl", "http://cos.pl/cos", "cos.pl/cos"
-        });
+        final List<Document> docs = DocumentWithUrlsFactory.INSTANCE
+            .generate(new String []
+            {
+                "www.cos.pl", "http://cos.pl/cos", "cos.pl/cos"
+            });
 
         final List<Cluster> expectedFacets = Arrays.asList(new Cluster []
         {
             new Cluster("cos.pl", docs.get(0), docs.get(1), docs.get(2))
         });
 
-        assertEquals(expectedFacets, new ArrayList<Cluster>(cluster(docs)));
+        assertEquals(expectedFacets, Lists.newArrayList(cluster(docs)));
     }
 
     @Test
     public void testOneUrlWithTwoSuburls()
     {
-        final List<Document> docs = DocumentWithUrlsFactory.INSTANCE.generate(new String []
-        {
-            "mail.cos.pl", "http://cos.pl/cos", "cos.pl/cos", "mail.cos.pl"
-        });
+        final List<Document> docs = DocumentWithUrlsFactory.INSTANCE
+            .generate(new String []
+            {
+                "mail.cos.pl", "http://cos.pl/cos", "cos.pl/cos", "mail.cos.pl"
+            });
 
         final List<Cluster> expectedFacets = new ArrayList<Cluster>();
         final Cluster facet11 = new Cluster("mail.cos.pl", docs.get(0), docs.get(3));
@@ -101,16 +106,17 @@ public class ByUrlClusteringAlgorithmTest extends
         final Cluster facet1 = new Cluster("cos.pl").addSubclusters(facet11, facet12);
         expectedFacets.add(facet1);
 
-        assertEquals(expectedFacets, new ArrayList<Cluster>(cluster(docs)));
+        assertEquals(expectedFacets, Lists.newArrayList(cluster(docs)));
     }
 
     @Test
     public void testSorting()
     {
-        final List<Document> docs = DocumentWithUrlsFactory.INSTANCE.generate(new String []
-        {
-            "cos.pl", "http://cos.pl/cos", "cos.com/cos", "cos.com", "cos.pl"
-        });
+        final List<Document> docs = DocumentWithUrlsFactory.INSTANCE
+            .generate(new String []
+            {
+                "cos.pl", "http://cos.pl/cos", "cos.com/cos", "cos.com", "cos.pl"
+            });
 
         final List<Cluster> expectedFacets = Arrays.asList(new Cluster []
         {
@@ -118,6 +124,6 @@ public class ByUrlClusteringAlgorithmTest extends
             new Cluster("cos.com", docs.get(2), docs.get(3))
         });
 
-        assertEquals(expectedFacets, new ArrayList<Cluster>(cluster(docs)));
+        assertEquals(expectedFacets, Lists.newArrayList(cluster(docs)));
     }
 }

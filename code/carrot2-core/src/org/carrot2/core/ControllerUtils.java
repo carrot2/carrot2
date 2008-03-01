@@ -23,18 +23,19 @@ final class ControllerUtils
     /**
      * Performs all life cycle actions required upon initialization.
      */
+    @SuppressWarnings("unchecked")
     public static void init(ProcessingComponent processingComponent,
         Map<String, Object> attributes) throws ProcessingException
     {
         try
         {
             AttributeBinder
-                .bind(processingComponent, attributes, Init.class, Input.class);
+                .bind(processingComponent, attributes, Input.class, Init.class);
 
             processingComponent.init();
 
-            AttributeBinder.bind(processingComponent, attributes, Init.class,
-                Output.class);
+            AttributeBinder.bind(processingComponent, attributes, Output.class,
+                Init.class);
         }
         catch (final InstantiationException e)
         {
@@ -46,13 +47,14 @@ final class ControllerUtils
     /**
      * Performs all life cycle actions required before processing starts.
      */
+    @SuppressWarnings("unchecked")
     public static void beforeProcessing(ProcessingComponent processingComponent,
         Map<String, Object> attributes) throws ProcessingException
     {
         try
         {
-            AttributeBinder.bind(processingComponent, attributes, Processing.class,
-                Input.class);
+            AttributeBinder.bind(processingComponent, attributes, Input.class,
+                Processing.class);
 
             processingComponent.beforeProcessing();
         }
@@ -75,6 +77,7 @@ final class ControllerUtils
     /**
      * Perform all life cycle actions after processing is completed.
      */
+    @SuppressWarnings("unchecked")
     public static void afterProcessing(ProcessingComponent processingComponent,
         Map<String, Object> attributes)
     {
@@ -82,8 +85,8 @@ final class ControllerUtils
         {
             processingComponent.afterProcessing();
 
-            AttributeBinder.bind(processingComponent, attributes, Processing.class,
-                Output.class);
+            AttributeBinder.bind(processingComponent, attributes, Output.class,
+                Processing.class);
         }
         catch (final InstantiationException e)
         {

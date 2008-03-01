@@ -17,6 +17,7 @@ import carrot2.util.attribute.constraint.*;
 /**
  *
  */
+@SuppressWarnings("unchecked")
 public class AttributeBinderTest
 {
     private Map<String, Object> attributes;
@@ -137,7 +138,7 @@ public class AttributeBinderTest
     public static class CoercedReferenceContainer
     {
         @Input
-        @Processing
+        @Init
         @Attribute
         private final CoercedInterface coerced = null;
     }
@@ -207,22 +208,13 @@ public class AttributeBinderTest
 
     @Bindable
     @SuppressWarnings("unused")
-    public static class AttributeAnnotationWithoutBindingTime
-    {
-        @Input
-        @Attribute
-        private int initInput;
-    }
-
-    @Bindable
-    @SuppressWarnings("unused")
     public static class AttributeAnnotationWithoutBindingDirection
     {
         @Init
         @Attribute
         private int initInput;
     }
-    
+
     @Bindable
     @SuppressWarnings("unused")
     public static class RequiredInputAttributes
@@ -232,7 +224,7 @@ public class AttributeBinderTest
         @Required
         @Attribute
         private int initInputInt;
-        
+
         @Init
         @Input
         @Required
@@ -255,7 +247,7 @@ public class AttributeBinderTest
         addAttribute(SingleClass.class, "processingInput", 6);
 
         instance = new SingleClass();
-        AttributeBinder.bind(instance, attributes, Init.class, Input.class);
+        AttributeBinder.bind(instance, attributes, Input.class, Init.class);
         checkFieldValues(instance, new Object []
         {
             "initInput", 6, "processingInput", 5, "initOutput", 10, "processingOutput",
@@ -263,7 +255,7 @@ public class AttributeBinderTest
         });
 
         instance = new SingleClass();
-        AttributeBinder.bind(instance, attributes, Processing.class, Input.class);
+        AttributeBinder.bind(instance, attributes, Input.class, Processing.class);
         checkFieldValues(instance, new Object []
         {
             "initInput", 5, "processingInput", 6, "initOutput", 10, "processingOutput",
@@ -276,14 +268,14 @@ public class AttributeBinderTest
     {
         final SingleClass instance = new SingleClass();
 
-        AttributeBinder.bind(instance, attributes, Init.class, Output.class);
+        AttributeBinder.bind(instance, attributes, Output.class, Init.class);
         checkAttributeValues(instance.getClass(), new Object []
         {
             "initOutput", 10
         });
 
         attributes.clear();
-        AttributeBinder.bind(instance, attributes, Processing.class, Output.class);
+        AttributeBinder.bind(instance, attributes, Output.class, Processing.class);
         checkFieldValues(instance, new Object []
         {
             "processingOutput", 10
@@ -298,7 +290,7 @@ public class AttributeBinderTest
         addAttribute(SubClass.class, "processingInput", 6);
         addAttribute(SuperClass.class, "processingInput", 7);
 
-        AttributeBinder.bind(instance, attributes, Processing.class, Input.class);
+        AttributeBinder.bind(instance, attributes, Input.class, Processing.class);
         checkFieldValues(instance, new Object []
         {
             "processingInput", 6
@@ -314,7 +306,7 @@ public class AttributeBinderTest
     {
         final SubClass instance = new SubClass();
 
-        AttributeBinder.bind(instance, attributes, Processing.class, Output.class);
+        AttributeBinder.bind(instance, attributes, Output.class, Processing.class);
         checkAttributeValues(SubClass.class, new Object []
         {
             "processingOutput", 5
@@ -332,7 +324,7 @@ public class AttributeBinderTest
         addAttribute(BindableReference.class, "processingInput", 6);
         addAttribute(NotBindable.class, "processingInput", 7);
 
-        AttributeBinder.bind(instance, attributes, Processing.class, Input.class);
+        AttributeBinder.bind(instance, attributes, Input.class, Processing.class);
 
         checkFieldValues(instance.bindableReference, new Object []
         {
@@ -351,7 +343,7 @@ public class AttributeBinderTest
     {
         final BindableReferenceContainer instance = new BindableReferenceContainer();
 
-        AttributeBinder.bind(instance, attributes, Processing.class, Output.class);
+        AttributeBinder.bind(instance, attributes, Output.class, Processing.class);
         checkAttributeValues(BindableReference.class, new Object []
         {
             "processingOutput", 5
@@ -370,7 +362,7 @@ public class AttributeBinderTest
 
         addAttribute(CircularReferenceContainer.class, "circular", instance);
 
-        AttributeBinder.bind(instance, attributes, Processing.class, Input.class);
+        AttributeBinder.bind(instance, attributes, Input.class, Processing.class);
     }
 
     @Test
@@ -379,7 +371,7 @@ public class AttributeBinderTest
         final SimpleConstraint instance = new SimpleConstraint();
 
         addAttribute(SimpleConstraint.class, "processingInput", 2);
-        AttributeBinder.bind(instance, attributes, Processing.class, Input.class);
+        AttributeBinder.bind(instance, attributes, Input.class, Processing.class);
         checkFieldValues(instance, new Object []
         {
             "processingInput", 2
@@ -388,7 +380,7 @@ public class AttributeBinderTest
         addAttribute(SimpleConstraint.class, "processingInput", 12);
         try
         {
-            AttributeBinder.bind(instance, attributes, Processing.class, Input.class);
+            AttributeBinder.bind(instance, attributes, Input.class, Processing.class);
             fail();
         }
         catch (final ConstraintViolationException e)
@@ -407,7 +399,7 @@ public class AttributeBinderTest
         final CompoundConstraint instance = new CompoundConstraint();
 
         addAttribute(CompoundConstraint.class, "processingInput", 9);
-        AttributeBinder.bind(instance, attributes, Processing.class, Input.class);
+        AttributeBinder.bind(instance, attributes, Input.class, Processing.class);
         checkFieldValues(instance, new Object []
         {
             "processingInput", 9
@@ -416,7 +408,7 @@ public class AttributeBinderTest
         addAttribute(CompoundConstraint.class, "processingInput", 8);
         try
         {
-            AttributeBinder.bind(instance, attributes, Processing.class, Input.class);
+            AttributeBinder.bind(instance, attributes, Input.class, Processing.class);
             fail();
         }
         catch (final ConstraintViolationException e)
@@ -431,7 +423,7 @@ public class AttributeBinderTest
         addAttribute(CompoundConstraint.class, "processingInput", 12);
         try
         {
-            AttributeBinder.bind(instance, attributes, Processing.class, Input.class);
+            AttributeBinder.bind(instance, attributes, Input.class, Processing.class);
             fail();
         }
         catch (final ConstraintViolationException e)
@@ -453,7 +445,7 @@ public class AttributeBinderTest
             CoercedInterfaceImpl.class);
         addAttribute(CoercedInterfaceImpl.class, "initInput", 7);
 
-        AttributeBinder.bind(instance, attributes, Processing.class, Input.class);
+        AttributeBinder.bind(instance, attributes, Input.class, Init.class);
         assertNotNull(instance.coerced);
         assertEquals(instance.coerced.getClass(), CoercedInterfaceImpl.class);
         checkFieldValues(instance.coerced, new Object []
@@ -470,8 +462,8 @@ public class AttributeBinderTest
         attributes.put("init", 7);
         attributes.put("Prefix.procesingField", 6);
 
-        AttributeBinder.bind(instance, attributes, Init.class, Input.class);
-        AttributeBinder.bind(instance, attributes, Processing.class, Input.class);
+        AttributeBinder.bind(instance, attributes, Input.class, Init.class);
+        AttributeBinder.bind(instance, attributes, Input.class, Processing.class);
 
         checkFieldValues(instance, new Object []
         {
@@ -487,8 +479,8 @@ public class AttributeBinderTest
         addAttribute(BindableReference.class, "processingInput", 10);
 
         // Neither @Input nor @Output binding can fail
-        AttributeBinder.bind(instance, attributes, Processing.class, Input.class);
-        AttributeBinder.bind(instance, attributes, Processing.class, Output.class);
+        AttributeBinder.bind(instance, attributes, Input.class, Processing.class);
+        AttributeBinder.bind(instance, attributes, Output.class, Processing.class);
     }
 
     @Test
@@ -499,7 +491,7 @@ public class AttributeBinderTest
 
         addAttribute(NullReferenceContainer.class, "processingInput", null);
 
-        AttributeBinder.bind(instance, attributes, Processing.class, Input.class);
+        AttributeBinder.bind(instance, attributes, Input.class, Processing.class);
 
         assertNull(instance.processingInput);
     }
@@ -508,7 +500,7 @@ public class AttributeBinderTest
     public void testNotBindable() throws InstantiationException
     {
         final NotBindable instance = new NotBindable();
-        AttributeBinder.bind(instance, attributes, Init.class, Input.class);
+        AttributeBinder.bind(instance, attributes, Input.class, Init.class);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -516,31 +508,25 @@ public class AttributeBinderTest
         throws InstantiationException
     {
         final OnlyBindingDirectionAnnotationProvided instance = new OnlyBindingDirectionAnnotationProvided();
-        AttributeBinder.bind(instance, attributes, Init.class, Input.class);
+        AttributeBinder.bind(instance, attributes, Input.class, Init.class);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testOnlyBindingTimeAnnotationProvided() throws InstantiationException
     {
         final OnlyBindingTimeAnnotationProvided instance = new OnlyBindingTimeAnnotationProvided();
-        AttributeBinder.bind(instance, attributes, Init.class, Input.class);
+        AttributeBinder.bind(instance, attributes, Input.class, Init.class);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testAttributeAnnotationWithoutBindingTime() throws InstantiationException
-    {
-        final AttributeAnnotationWithoutBindingTime instance = new AttributeAnnotationWithoutBindingTime();
-        AttributeBinder.bind(instance, attributes, Init.class, Input.class);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testAttributeAnnotationWithoutBindingDirection() throws InstantiationException
+    public void testAttributeAnnotationWithoutBindingDirection()
+        throws InstantiationException
     {
         final AttributeAnnotationWithoutBindingDirection instance = new AttributeAnnotationWithoutBindingDirection();
-        AttributeBinder.bind(instance, attributes, Init.class, Input.class);
+        AttributeBinder.bind(instance, attributes, Input.class, Init.class);
     }
-    
-    @Test(expected=AttributeBindingException.class)
+
+    @Test(expected = AttributeBindingException.class)
     public void testRequiredInputAttributeNotProvided() throws InstantiationException
     {
         RequiredInputAttributes instance;
@@ -548,21 +534,21 @@ public class AttributeBinderTest
 
         // Attribute value missing
         addAttribute(RequiredInputAttributes.class, "initInputInt", 6);
-        
-        AttributeBinder.bind(instance, attributes, Init.class, Input.class);
+
+        AttributeBinder.bind(instance, attributes, Input.class, Init.class);
     }
-    
-    @Test(expected=AttributeBindingException.class)
+
+    @Test(expected = AttributeBindingException.class)
     public void testRequiredInputAttributeIsNull() throws InstantiationException
     {
         RequiredInputAttributes instance;
         instance = new RequiredInputAttributes();
-        
+
         // Attribute value missing
         addAttribute(RequiredInputAttributes.class, "initInputInt", 6);
         addAttribute(RequiredInputAttributes.class, "initInputString", null);
-        
-        AttributeBinder.bind(instance, attributes, Init.class, Input.class);
+
+        AttributeBinder.bind(instance, attributes, Input.class, Init.class);
     }
 
     private void addAttribute(Class<?> clazz, String field, Object value)

@@ -72,7 +72,7 @@ public final class YahooDocumentSource extends SearchEngine
     private Collection<Document> documents;
 
     /**
-     * Run a request against Yahoo! API and set {@link #documents} to the set of returned
+     * Run a request against Yahoo! API and set <code>documents</code> to the set of returned
      * documents.
      */
     @Override

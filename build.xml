@@ -2,8 +2,15 @@
 
 <project name="proto-3.0" default="test">
 
+    <property file="local.properties" />
+
     <property name="build.dir" location="tmp/classes" />
     <property name="tests.report.dir" location="tmp/test-report" />
+    <property name="coverage.report.dir" location="tmp/coverage-report" />
+
+    <!-- Clover -->
+    <property name="clover.jar" location="${clover.home}/lib/clover.jar"/>
+    <taskdef resource="cloverlib.xml" classpath="${clover.jar}"/>
 
     <path id="src.folders">
         <dirset dir="code" includes="**/src" />
@@ -17,15 +24,17 @@
     <path id="test.classpath">
         <path refid="lib.classpath" />
         <path location="${build.dir}" />
+        <path refid="src.folders" />
+        <path location="${clover.jar}" />
     </path>
-
 
     <target name="clean">
         <delete dir="tmp" failonerror="false" />
+        <clover-clean />
     </target>
 
     
-    <target name="compile">
+    <target name="compile" depends="with.clover">
         <mkdir dir="${build.dir}" />
 
         <javac destdir="${build.dir}" source="1.5" target="1.5">
@@ -50,30 +59,30 @@
     </target>
     
 
-	<target name="test" depends="compile,attributes,resources">
+    <target name="test" depends="compile,attributes,resources">
         <mkdir dir="${tests.report.dir}" />
 
         <property name="source.paths" location="code/carrot2-util-attribute/src-test" />
-	    <junit fork="false" printsummary="on" errorproperty="junit.error" failureproperty="junit.failure">
-	        <formatter type="xml"/>
+        <junit fork="true" forkmode="once" printsummary="on" errorproperty="junit.error" failureproperty="junit.failure">
+            <formatter type="xml"/>
 
-	        <classpath refid="test.classpath" />
+            <classpath refid="test.classpath" />
 
             <sysproperty key="source.paths" value="${source.paths}" />
 
-			<batchtest todir="${tests.report.dir}">
-				<fileset dir="${build.dir}">
-					<include name="**/*Test.class" />
-				</fileset>
-			</batchtest>
-	    </junit>
+            <batchtest todir="${tests.report.dir}">
+                <fileset dir="${build.dir}">
+                    <include name="**/*Test.class" />
+                </fileset>
+            </batchtest>
+        </junit>
 
-	    <junitreport todir="${tests.report.dir}">
-	        <fileset dir="${tests.report.dir}">
-	            <include name="TEST-*.xml"/>
-	        </fileset>
-	        <report format="frames" todir="${tests.report.dir}"/>
-	    </junitreport>
+        <junitreport todir="${tests.report.dir}">
+            <fileset dir="${tests.report.dir}">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${tests.report.dir}"/>
+        </junitreport>
 
         <condition property="tests.failed" value="true">
             <or>
@@ -81,7 +90,7 @@
                 <isset property="junit.failure" />
             </or>
         </condition>
-	    <fail message="Tests failed. See ${tests.report.dir} for report." if="tests.failed" />
+        <fail message="Tests failed. See ${tests.report.dir} for report." if="tests.failed" />
     </target>
     
     
@@ -91,8 +100,25 @@
 
             <arg file="code/carrot2-core" />
             <arg file="code/carrot2-util-attribute" />
-            <arg file="code/carrot2-source-yahoo/src" />
-            <arg file="code/carrot2-algorithm-synthetic/src" />
+            <arg file="code/carrot2-source-yahoo" />
+            <arg file="code/carrot2-algorithm-synthetic" />
         </java>
     </target>
+
+    <target name="with.clover" if="clover.home">
+        <clover-setup/>
+    </target>
+   
+    <target name="clover.html" if="clover.home">
+        <clover-html-report outdir="${coverage.report.dir}" title="Carrot2 3.0"/>
+    </target>
+   
+    <target name="clover.xml" if="clover.home">
+        <clover-report>
+           <current outfile="${coverage.report.dir}">
+              <format type="xml"/>
+           </current>
+        </clover-report>
+    </target>
+
 </project>

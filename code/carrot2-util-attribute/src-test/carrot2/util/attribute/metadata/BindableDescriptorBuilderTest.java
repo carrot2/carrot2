@@ -94,6 +94,7 @@ public class BindableDescriptorBuilderTest
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testBindableReferenceWithBoundValue() throws Exception
     {
         final Object instance = new BindableReferenceContainer();
@@ -105,7 +106,7 @@ public class BindableDescriptorBuilderTest
         final Map<String, Object> attributes = Maps.newHashMap();
         attributes.put(BindableReferenceContainer.class.getName() + ".bindableAttribute",
             BindableReferenceImpl2.class);
-        AttributeBinder.bind(instance, attributes, Init.class, Input.class);
+        AttributeBinder.bind(instance, attributes, Input.class, Init.class);
 
         final BindableDescriptor bindableDescriptor = BindableDescriptorBuilder
             .buildDescriptor(instance);

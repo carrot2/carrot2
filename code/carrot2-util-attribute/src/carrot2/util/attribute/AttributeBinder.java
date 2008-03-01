@@ -7,6 +7,10 @@ import java.util.*;
 import carrot2.util.attribute.constraint.Constraint;
 import carrot2.util.attribute.constraint.ConstraintViolationException;
 
+/**
+ * Provides methods for binding (setting or reading) values of attributes defined by the
+ * {@link Attribute} annotation.
+ */
 public class AttributeBinder
 {
     /**
@@ -14,7 +18,6 @@ public class AttributeBinder
      * <ul>
      * <li>Attributes annotations are required</li>
      * <li>Either Input or Output annotation is required</li>
-     * <li>Either Init or Processing annotation is required</li>
      * <li>Attributes don't have to have default values</li>
      * <li>Map can contain null values, these will be transferred to the fields</li>
      * <li>If the map doesn't have a mapping for some key, the corresponding field will
@@ -22,19 +25,28 @@ public class AttributeBinder
      * <li>Class coercion is also performed for all binding times</li>
      * </ul>
      * TODO: provide proper docs for AttributeBinder
+     * <p>
+     * TODO: After refactoring this classes out of carrot2-core, the binding time
+     * annotations ({@link Processing} and {@link Init}) are out of place here. The
+     * problem is that they are specific to the application domain, so they should not be
+     * defined here, but in carrot2-core. Then, this method should have a vararg for
+     * specifying binding time annotations. If none is provided, no problem with that, all
+     * attributes will be bound. Otherwise, only those attributes will be bound that have
+     * either of the specified binding time annotations.
      */
     public static <T> void bind(T instance, Map<String, Object> values,
-        Class<? extends Annotation> bindingTimeAnnotation,
-        Class<? extends Annotation> bindingDirectionAnnotation)
+        Class<? extends Annotation> bindingDirectionAnnotation,
+        Class<? extends Annotation>... filteringAnnotations)
         throws InstantiationException
     {
-        bind(instance, values, bindingTimeAnnotation, bindingDirectionAnnotation,
-            new HashSet<Object>());
+        bind(new HashSet<Object>(), instance, values, bindingDirectionAnnotation,
+            filteringAnnotations);
     }
 
-    static <T> void bind(T instance, Map<String, Object> values,
-        Class<? extends Annotation> bindingTimeAnnotation,
-        Class<? extends Annotation> bindingDirectionAnnotation, Set<Object> boundInstances)
+    static <T> void bind(Set<Object> boundInstances, T instance,
+        Map<String, Object> values,
+        Class<? extends Annotation> bindingDirectionAnnotation,
+        Class<? extends Annotation>... filteringAnnotations)
         throws InstantiationException
     {
         // We can only bind values on classes that are @Bindable
@@ -56,9 +68,8 @@ public class AttributeBinder
             final String key = BindableUtils.getKey(field);
             Object value = null;
 
-            // We skip fields that do not have the required binding time
-            if (hasAllRequiredAnnotations(field)
-                && (!(field.getAnnotation(bindingTimeAnnotation) == null)))
+            // We skip fields that do not have all the required annotations
+            if (hasAllRequiredAnnotations(field, filteringAnnotations))
             {
                 // Choose the right direction
                 if (Input.class.equals(bindingDirectionAnnotation)
@@ -66,10 +77,9 @@ public class AttributeBinder
                 {
                     final boolean required = field.getAnnotation(Required.class) != null;
 
-                    // Transfer values from the map to the fields.
-                    // If the input map doesn't contain an entry for this key, do nothing
-                    // Otherwise, perform binding as usual. This will allow to set null
-                    // values
+                    // Transfer values from the map to the fields. If the input map
+                    // doesn't contain an entry for this key, do nothing. Otherwise,
+                    // perform binding as usual. This will allow to set null values
                     if (!values.containsKey(key))
                     {
                         if (required)
@@ -92,13 +102,16 @@ public class AttributeBinder
                     }
 
                     // Try to coerce from class to its instance first
+                    // Notice that if some extra annotations are provided, the newly
+                    // created instance will get only those attributes bound that
+                    // match any of the extra annotations.
                     if (value instanceof Class)
                     {
                         final Class<?> clazz = ((Class<?>) value);
                         try
                         {
                             value = clazz.newInstance();
-                            bind(value, values, Init.class, Input.class);
+                            bind(value, values, Input.class, filteringAnnotations);
                         }
                         catch (final InstantiationException e)
                         {
@@ -184,7 +197,7 @@ public class AttributeBinder
                 }
 
                 // Recursively descend into other types.
-                bind(value, values, bindingTimeAnnotation, bindingDirectionAnnotation);
+                bind(value, values, bindingDirectionAnnotation, filteringAnnotations);
             }
         }
     }
@@ -196,13 +209,18 @@ public class AttributeBinder
      * @throws IllegalArgumentException in case of any missing annotations to ease
      *             debugging
      */
-    private static boolean hasAllRequiredAnnotations(Field field)
+    private static boolean hasAllRequiredAnnotations(Field field,
+        Class<? extends Annotation>... filteringAnnotations)
     {
         final boolean hasAttribute = field.getAnnotation(Attribute.class) != null;
         boolean hasBindingDirection = field.getAnnotation(Input.class) != null
             || field.getAnnotation(Output.class) != null;
-        boolean hasBindingTime = field.getAnnotation(Init.class) != null
-            || field.getAnnotation(Processing.class) != null;
+
+        boolean hasExtraAnnotations = filteringAnnotations.length == 0;
+        for (Class<? extends Annotation> filteringAnnotation : filteringAnnotations)
+        {
+            hasExtraAnnotations |= field.getAnnotation(filteringAnnotation) != null;
+        }
 
         if (hasAttribute)
         {
@@ -214,18 +232,10 @@ public class AttributeBinder
                         + Output.class.getSimpleName() + ") for field "
                         + field.getClass().getName() + "#" + field.getName());
             }
-
-            if (!hasBindingTime)
-            {
-                throw new IllegalArgumentException("Define binding time annotation (@"
-                    + Init.class.getSimpleName() + " or @"
-                    + Processing.class.getSimpleName() + ") for field "
-                    + field.getClass().getName() + "#" + field.getName());
-            }
         }
         else
         {
-            if (hasBindingDirection || hasBindingTime)
+            if (hasBindingDirection || hasExtraAnnotations)
             {
                 throw new IllegalArgumentException(
                     "Binding time or direction defined for a field (" + field.getClass()
@@ -234,6 +244,6 @@ public class AttributeBinder
             }
         }
 
-        return hasAttribute;
+        return hasAttribute && hasExtraAnnotations;
     }
 }
