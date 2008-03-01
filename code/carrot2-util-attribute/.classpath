@@ -12,5 +12,7 @@
 	<classpathentry kind="var" path="CARROT2_30_CHECKOUT_BASE/lib/compile-time/fest-util-0.4.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-common"/>
 	<classpathentry kind="var" path="CARROT2_30_CHECKOUT_BASE/lib/compile-time/qdox-1.6.3.jar"/>
+	<classpathentry kind="var" path="CARROT2_30_CHECKOUT_BASE/lib/stax-1.2.0.jar"/>
+	<classpathentry kind="var" path="CARROT2_30_CHECKOUT_BASE/lib/stax-api-1.0.1.jar"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>
