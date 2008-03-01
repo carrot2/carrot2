@@ -118,7 +118,9 @@
         </clover-setup>
     </target>
    
-    <target name="clover.html" if="clover.home">
+    <target name="coverage" depends="coverage.html, coverage.xml" />
+
+    <target name="coverage.html" if="clover.home">
         <clover-report>
             <current outfile="${coverage.report.dir}" title="Carrot2 3.0">
                 <format type="html" />
@@ -126,9 +128,9 @@
         </clover-report>
     </target>
    
-    <target name="clover.xml" if="clover.home">
+    <target name="coverage.xml" if="clover.home">
         <clover-report>
-           <current outfile="${coverage.report.dir}" title="Carrot2 3.0">
+           <current outfile="${coverage.report.dir}/coverage.xml" title="Carrot2 3.0">
               <format type="xml" />
            </current>
         </clover-report>
