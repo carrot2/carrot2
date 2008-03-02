@@ -1,22 +1,22 @@
 package org.carrot2.util.attribute.constraint;
 
 /**
- *
+ * Implementation of the {@link ImplementingClasses} constraint.
  */
 class ImplementingClassesConstraint extends Constraint
 {
     private Class<?> [] classes;
 
-    public ImplementingClassesConstraint()
+    ImplementingClassesConstraint()
     {
     }
 
-    public ImplementingClassesConstraint(Class<?> [] classes)
+    ImplementingClassesConstraint(Class<?> [] classes)
     {
         this.classes = classes;
     }
 
-    public boolean isMet(Object value)
+    boolean isMet(Object value)
     {
         for (final Class<?> clazz : classes)
         {
@@ -27,10 +27,5 @@ class ImplementingClassesConstraint extends Constraint
         }
 
         return false;
-    }
-
-    public Class<?> [] getClasses()
-    {
-        return classes;
     }
 }

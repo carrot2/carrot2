@@ -1,6 +1,3 @@
-/**
- *
- */
 package org.carrot2.util.attribute;
 
 import java.util.regex.Matcher;
@@ -10,13 +7,19 @@ import com.thoughtworks.qdox.model.AbstractJavaEntity;
 import com.thoughtworks.qdox.model.Annotation;
 
 /**
- *
+ * A number of utility methods for working with JavaDoc comments.
  */
 final class MetadataExtractorUtils
 {
+    /**
+     * Extracts the first sentence of a JavaDoc comment.
+     */
     private static final Pattern FIRST_SENTENCE_PATTERN = Pattern
         .compile("\\.(?<!((\\w\\.){2,5}+))(\\s|\\z)");
 
+    /**
+     * Converts a JavaDoc link to text.
+     */
     private static final Pattern LINK_TO_TEXT_PATTERN = Pattern
         .compile("\\{@link\\s(.+)\\}");
 
@@ -25,13 +28,19 @@ final class MetadataExtractorUtils
         // No instantiation
     }
 
-    public static boolean hasAnnotation(AbstractJavaEntity javaEntity,
+    /**
+     * Checks if the Java source element has the required annotation.
+     */
+    static boolean hasAnnotation(AbstractJavaEntity javaEntity,
         Class<?> requestedAnnotationClass)
     {
         return getAnnotation(javaEntity, requestedAnnotationClass) != null;
     }
 
-    public static Annotation getAnnotation(AbstractJavaEntity javaEntity,
+    /**
+     * Returns a required annotation for the provided Java source element.
+     */
+    static Annotation getAnnotation(AbstractJavaEntity javaEntity,
         Class<?> requestedAnnotationClass)
     {
         for (final Annotation annotation : javaEntity.getAnnotations())
@@ -45,7 +54,10 @@ final class MetadataExtractorUtils
         return null;
     }
 
-    public static int getEndOfFirstSentenceCharIndex(String text)
+    /**
+     * Returns the index of the last character of the first JavaDoc sentence.
+     */
+    static int getEndOfFirstSentenceCharIndex(String text)
     {
         final Matcher matcher = FIRST_SENTENCE_PATTERN.matcher(text);
         if (matcher.find())
@@ -58,7 +70,10 @@ final class MetadataExtractorUtils
         }
     }
 
-    public static String normalizeSpaces(String string)
+    /**
+     * Converts multiple space, tab, return characters into one space.
+     */
+    static String normalizeSpaces(String string)
     {
         if (string == null)
         {
@@ -67,12 +82,19 @@ final class MetadataExtractorUtils
         return string.replaceAll("[\\t\\r\\n]+", " ");
     }
 
-    public static String renderInlineTags(String comment)
+    /**
+     * Converts in-line link tag to text.
+     */
+    static String renderInlineTags(String comment)
     {
         return LINK_TO_TEXT_PATTERN.matcher(comment).replaceAll("$1");
     }
 
-    public static String toPlainText(String comment)
+    /**
+     * Converts JavaDoc comment body to plain text. Currently only normalizes space and
+     * renders links. In the future, we might think of dealing with HTML properly.
+     */
+    static String toPlainText(String comment)
     {
         if (comment == null)
         {

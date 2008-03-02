@@ -1,6 +1,3 @@
-/**
- *
- */
 package org.carrot2.util.attribute;
 
 import java.io.File;
@@ -13,58 +10,93 @@ import com.thoughtworks.qdox.JavaDocBuilder;
 import com.thoughtworks.qdox.model.*;
 
 /**
- *
+ * Builds metadata for {@link Bindable} types.
  */
 class BindableMetadataBuilder
 {
-    public static final String ATTRIBUTE_KEY_PARAMETER = "key";
+    /** A field used in tests */
+    static final String ATTRIBUTE_KEY_PARAMETER = "key";
 
+    /**
+     * Metadata extractors for attributes.
+     */
     private static final MetadataExtractor [] ATTRIBUTE_METADATA_EXTRACTORS = new MetadataExtractor []
     {
         new MetadataExtractor.LabelExtractor(), new MetadataExtractor.TitleExtractor(),
         new MetadataExtractor.DescriptionExtractor()
     };
 
+    /**
+     * Metadata extractors for bindable types.
+     */
     private static final MetadataExtractor [] BINDABLE_METADATA_EXTRACTORS = new MetadataExtractor []
     {
         new MetadataExtractor.LabelExtractor(), new MetadataExtractor.TitleExtractor(),
         new MetadataExtractor.DescriptionExtractor()
     };
 
+    /** JavaDoc parser */
     private final JavaDocBuilder javaDocBuilder = new JavaDocBuilder();
+
+    /**
+     * List of fully qualified names of classes containing common attribute keys. An
+     * example of such a class can be org.carrot2.core.attribute.AttributeNames. If the
+     * key of an attribute is taken from any class on this list, the metadata from the
+     * actual field will be complemented by the metadata provided for the constant
+     * defining the key.
+     */
     private final List<String> commonMetadataSources;
 
+    /**
+     * Metadata listeners, useful for tests and serialization application.
+     */
     private final List<BindableMetadataBuilderListener> listeners = Lists.newArrayList();
 
     /**
-     *
+     * Creates a {@link BindableMetadataBuilder} with empty commonMetadataSources.
      */
-    public BindableMetadataBuilder()
+    BindableMetadataBuilder()
     {
         commonMetadataSources = Lists.newArrayList();
     }
 
-    public void addSourceTree(File directory)
+    /**
+     * Adds Java sources to be parsed.
+     */
+    void addSourceTree(File directory)
     {
         javaDocBuilder.addSourceTree(directory);
     }
 
-    public void addCommonMetadataSource(String className)
+    /**
+     * Adds a class to commonMetadataSources.
+     */
+    void addCommonMetadataSource(String className)
     {
         commonMetadataSources.add(className);
     }
 
-    public void addCommonMetadataSource(Class<?> clazz)
+    /**
+     * Adds a class to commonMetadataSources.
+     */
+    void addCommonMetadataSource(Class<?> clazz)
     {
         commonMetadataSources.add(clazz.getName());
     }
 
-    public void addListener(BindableMetadataBuilderListener listener)
+    /**
+     * Adds a metadata listener.
+     */
+    void addListener(BindableMetadataBuilderListener listener)
     {
         listeners.add(listener);
     }
 
-    public void buildAttributeMetadata()
+    /**
+     * Builds attribute metadata, notifying all the listeners when
+     * {@link BindableMetadata} gets built.
+     */
+    void buildAttributeMetadata()
     {
         final JavaSource [] javaSources = javaDocBuilder.getSources();
         for (final JavaSource javaSource : javaSources)
@@ -85,6 +117,9 @@ class BindableMetadataBuilder
         }
     }
 
+    /**
+     * Fills {@link BindableMetadata} with data collected from the Java class.
+     */
     private void buildBindableMetadata(JavaClass javaClass,
         BindableMetadata bindableMetadata)
     {
@@ -94,6 +129,10 @@ class BindableMetadataBuilder
         }
     }
 
+    /**
+     * Fills {@link BindableMetadata} with {@link AttributeMetadata} data collected from
+     * the Java class.
+     */
     private void buildAttributeMetadata(JavaClass bindable,
         BindableMetadata bindableMetadata)
     {
@@ -126,6 +165,9 @@ class BindableMetadataBuilder
         bindableMetadata.setAttributeMetadata(result);
     }
 
+    /**
+     * Resolves additional metadata from commonMetadataSources.
+     */
     private JavaField resolveCommonMetadataSource(JavaField originalField)
     {
         final Annotation annotation = MetadataExtractorUtils.getAnnotation(originalField,

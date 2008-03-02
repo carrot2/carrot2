@@ -12,8 +12,8 @@ import org.apache.commons.lang.ClassUtils;
  * human-readable {@link #metadata} about the attribute such as title, label or
  * description.
  * <p>
- * Attribute descriptors can be obtained from
- * {@link BindableDescriptorBuilder#buildDescriptor(Object)};
+ * {@link AttributeDescriptor}s can be obtained from {@link BindableDescriptor}s, which
+ * in turn are built by {@link BindableDescriptorBuilder#buildDescriptor(Object)};
  */
 public class AttributeDescriptor
 {

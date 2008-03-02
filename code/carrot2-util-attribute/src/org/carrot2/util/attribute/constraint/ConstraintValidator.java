@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.carrot2.util.attribute.constraint;
 
 import java.lang.annotation.Annotation;
@@ -9,10 +6,20 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 /**
- *
+ * Checks whether values meet the provided constraints.
  */
 public class ConstraintValidator
 {
+    /**
+     * Checks whether the <code>value</code> meets the constraints defined by the
+     * provided <code>constraintAnnotations</code>.
+     * 
+     * @param value the value to be checked
+     * @param constraintAnnotations constraint annotations defining the constraints to be
+     *            checked.
+     * @return an array of constraint annotations which the value does not meet. If all
+     *         constraints are met, the returned array is empty.
+     */
     public static Annotation [] isMet(Object value, Annotation... constraintAnnotations)
     {
         final List<Constraint> constraints = ConstraintFactory

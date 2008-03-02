@@ -13,6 +13,9 @@ import com.google.common.collect.Maps;
  * {@link AttributeDescriptor}s for all attributes defined by the type. Also provides
  * some human-readable metadata for the {@link Bindable} type itself.
  * {@link BindableDescriptor}s are immutable.
+ * <p>
+ * {@link BindableDescriptor}s can be obtained from
+ * {@link BindableDescriptorBuilder#buildDescriptor(Object)}.
  */
 public class BindableDescriptor
 {

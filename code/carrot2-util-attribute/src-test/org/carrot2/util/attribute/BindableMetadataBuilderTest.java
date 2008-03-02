@@ -1,6 +1,3 @@
-/**
- *
- */
 package org.carrot2.util.attribute;
 
 import static org.junit.Assert.*;
@@ -12,9 +9,6 @@ import org.carrot2.util.attribute.test.metadata.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-/**
- *
- */
 public class BindableMetadataBuilderTest
 {
     private static final String SOURCE_PATH_PROPERTY = "source.paths";
@@ -220,7 +214,7 @@ public class BindableMetadataBuilderTest
         final Class<NamedAttributes> clazz = NamedAttributes.class;
         final String fieldName = "labelOverride";
 
-        checkLabel(clazz, fieldName, "overriden");
+        checkLabel(clazz, fieldName, "overridden");
         checkTitle(clazz, fieldName, "Title");
         checkDescription(clazz, fieldName, "Description.");
     }
@@ -232,7 +226,7 @@ public class BindableMetadataBuilderTest
         final String fieldName = "titleOverride";
 
         checkLabel(clazz, fieldName, "label");
-        checkTitle(clazz, fieldName, "Title overriden");
+        checkTitle(clazz, fieldName, "Title overridden");
         checkDescription(clazz, fieldName, "Description.");
     }
 
@@ -243,8 +237,8 @@ public class BindableMetadataBuilderTest
         final String fieldName = "titleDescriptionOverride";
 
         checkLabel(clazz, fieldName, "label");
-        checkTitle(clazz, fieldName, "Title overriden");
-        checkDescription(clazz, fieldName, "Description overriden.");
+        checkTitle(clazz, fieldName, "Title overridden");
+        checkDescription(clazz, fieldName, "Description overridden.");
     }
 
     @Test

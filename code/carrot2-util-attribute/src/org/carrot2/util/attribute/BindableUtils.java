@@ -5,6 +5,9 @@ import java.util.*;
 
 import com.google.common.collect.Lists;
 
+/**
+ * A set of utility methods for working with {@link Bindable} types.
+ */
 final class BindableUtils
 {
     /**
@@ -13,7 +16,11 @@ final class BindableUtils
      */
     private static final Map<Class<?>, Collection<Field>> FIELD_CACHE = new WeakHashMap<Class<?>, Collection<Field>>();
 
-    public static Collection<Field> getFieldsFromBindableHierarchy(Class<?> clazz)
+    /**
+     * Returns all fields from all {@link Bindable} types in the hierarchy of the provided
+     * <code>clazz</code>. The collected fields gets cached.
+     */
+    static Collection<Field> getFieldsFromBindableHierarchy(Class<?> clazz)
     {
         synchronized (FIELD_CACHE)
         {
@@ -39,7 +46,10 @@ final class BindableUtils
         }
     }
 
-    public static Collection<Class<?>> getClassesFromBindableHerarchy(Class<?> clazz)
+    /**
+     * Returns all {@link Bindable} from the hierarchy of the provided <code>clazz</code>.
+     */
+    static Collection<Class<?>> getClassesFromBindableHerarchy(Class<?> clazz)
     {
         final Collection<Class<?>> classes = Lists.newArrayList();
 
@@ -56,7 +66,10 @@ final class BindableUtils
         return classes;
     }
 
-    public static String getKey(Field field)
+    /**
+     * Computes the attribute key according to the definition in {@link Attribute#key()}.
+     */
+    static String getKey(Field field)
     {
         final Attribute attributeAnnotation = field.getAnnotation(Attribute.class);
 
@@ -86,7 +99,10 @@ final class BindableUtils
         }
     }
 
-    public static String getKey(Class<?> clazz, String fieldName)
+    /**
+     * Computes the attribute key according to the definition in {@link Attribute#key()}.
+     */
+    static String getKey(Class<?> clazz, String fieldName)
     {
         try
         {

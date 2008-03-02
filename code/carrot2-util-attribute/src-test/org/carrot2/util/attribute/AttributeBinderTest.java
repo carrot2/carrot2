@@ -1,6 +1,3 @@
-/**
- *
- */
 package org.carrot2.util.attribute;
 
 import static org.junit.Assert.*;
@@ -13,9 +10,6 @@ import org.carrot2.util.attribute.constraint.*;
 import org.junit.Before;
 import org.junit.Test;
 
-/**
- *
- */
 @SuppressWarnings("unchecked")
 public class AttributeBinderTest
 {

@@ -1,41 +1,29 @@
-/**
- *
- */
 package org.carrot2.util.attribute.constraint;
 
 /**
- *
+ * Implementation of the {@link IntModuloConstraint}.
  */
 class IntModuloConstraint extends Constraint
 {
-    private int modulo;
-    private int offset;
+    int modulo;
+    int offset;
 
-    public IntModuloConstraint()
+    IntModuloConstraint()
     {
     }
 
-    public IntModuloConstraint(int modulo, int offset)
+    IntModuloConstraint(int modulo, int offset)
     {
         this.modulo = modulo;
         this.offset = offset;
     }
 
-    public boolean isMet(Object value)
+    boolean isMet(Object value)
     {
         final Integer v = (Integer) value;
         return (v % modulo) == offset;
     }
 
-    public int getModulo()
-    {
-        return modulo;
-    }
-
-    public int getOffset()
-    {
-        return offset;
-    }
 
     @Override
     public boolean equals(Object obj)
@@ -54,7 +42,6 @@ class IntModuloConstraint extends Constraint
 
         return other.modulo == this.modulo && other.offset == this.offset;
     }
-
 
     @Override
     public int hashCode()

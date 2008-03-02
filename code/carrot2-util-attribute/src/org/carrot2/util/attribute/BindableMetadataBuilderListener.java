@@ -9,13 +9,24 @@ import org.simpleframework.xml.stream.Format;
 import com.google.common.collect.Maps;
 import com.thoughtworks.qdox.model.JavaClass;
 
+/**
+ * Allows to get notifications about {@link BindableMetadata} being built by
+ * {@link BindableMetadataBuilder}.
+ */
 abstract class BindableMetadataBuilderListener
 {
+    /**
+     * Invoked after {@link BindableMetadata} has been built.
+     * 
+     * @param bindable the Java class for which the metadata has been built.
+     * @param bindableMetadata metadata that has been built.
+     */
     abstract void bindableMetadataBuilt(JavaClass bindable,
         BindableMetadata bindableMetadata);
 
     /**
      * Stores attribute metadata in a map using fully qualified class names as keys.
+     * Useful for unit testing.
      */
     static class MapStorageListener extends BindableMetadataBuilderListener
     {

@@ -1,6 +1,3 @@
-/**
- *
- */
 package org.carrot2.util.attribute;
 
 import java.io.InputStream;
@@ -18,26 +15,19 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
- * TODO: implement a simple API for querying/ filtering the descriptor tree:
- * 
- * <pre>
- *  - filter: level (priority: medium)
- *  - filter: group
- *  - filter: text search in title/label/description (for filtering like in Eclipse)
- * 
- *  - organization: tree according to components (priority: high)
- *  - organization: flat list (priority: high)
- *  - organization: tree according to group
- * 
- *  - sorting: by declaration order (default)
- *  - sorting: by label
- *  - sorting: by level
- * </pre>
+ * Builds {@link BindableDescriptor}s based on the provided bindable type instances.
  */
 public class BindableDescriptorBuilder
 {
     /**
-     *
+     * Builds a {@link BindableDescriptor} for an initialized instance of a
+     * {@link Bindable} type. Notice that the set of {@link AttributeDescriptor} found in
+     * the returned {@link BindableDescriptor} may vary depending on how the provided
+     * instance is initialized.
+     * 
+     * @param initializedInstance initialized instance of a {@link Bindable} type for
+     *            which to build the descriptor
+     * @return the descriptor built
      */
     public static BindableDescriptor buildDescriptor(Object initializedInstance)
     {
@@ -45,7 +35,7 @@ public class BindableDescriptorBuilder
     }
 
     /**
-     *
+     * Internal implementation of descriptor building.
      */
     private static BindableDescriptor buildDescriptor(Object initializedInstance,
         Set<Object> processedInstances)
@@ -104,7 +94,7 @@ public class BindableDescriptorBuilder
     }
 
     /**
-     *
+     * Builds descriptors for direct attributes.
      */
     private static Map<String, AttributeDescriptor> buildAttributeDescriptors(
         Object initializedInstance, BindableMetadata bindableMetadata)
@@ -128,7 +118,7 @@ public class BindableDescriptorBuilder
     }
 
     /**
-     *
+     * Builds bindable metadata for a {@link Bindable} class.
      */
     private static BindableMetadata buildMetadataForBindableHierarchy(final Class<?> clazz)
     {
@@ -151,7 +141,7 @@ public class BindableDescriptorBuilder
     }
 
     /**
-     *
+     * Deserializes metadata for a {@link Bindable} class.
      */
     private static BindableMetadata getBindableMetadata(final Class<?> clazz)
     {
@@ -187,7 +177,7 @@ public class BindableDescriptorBuilder
     }
 
     /**
-     *
+     * Builds {@link AttributeDescriptor} for a field from a {@link Bindable} type.
      */
     private static AttributeDescriptor buildAttributeDescriptor(
         Object initializedInstance, Field field, BindableMetadata bindableMetadata)
@@ -210,6 +200,9 @@ public class BindableDescriptorBuilder
                 field.getName()));
     }
 
+    /**
+     * Gets constraint annotations for a field, ignoring any other annotations.
+     */
     private static List<Annotation> getConstraintAnnotations(Field field)
     {
         final Annotation [] annotations = field.getAnnotations();

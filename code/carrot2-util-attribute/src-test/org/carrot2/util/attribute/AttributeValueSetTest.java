@@ -1,6 +1,3 @@
-/**
- *
- */
 package org.carrot2.util.attribute;
 
 import static junit.framework.Assert.assertEquals;
@@ -13,9 +10,6 @@ import org.junit.Test;
 
 import com.google.common.collect.Maps;
 
-/**
- *
- */
 public class AttributeValueSetTest
 {
     @Test

@@ -1,6 +1,3 @@
-/**
- *
- */
 package org.carrot2.util.attribute;
 
 import org.apache.commons.lang.StringUtils;
@@ -10,13 +7,21 @@ import com.thoughtworks.qdox.model.AbstractJavaEntity;
 import com.thoughtworks.qdox.model.DocletTag;
 
 /**
- *
+ * Extracts certain items of metadata from Java source.
  */
 abstract class MetadataExtractor
 {
+    /**
+     * Extracts some metadata from the provided Java source element and sets it on the
+     * provided <code>attributeMetadata</code>.
+     */
     abstract boolean extractMetadataItem(AbstractJavaEntity javaEntity,
         JavaDocBuilder javaDocBuilder, CommonMetadata attributeMetadata);
 
+    /**
+     * Extracts attribute/ bindable descriptions. Anything in the JavaDoc comment that
+     * follows after its first sentence becomes a description.
+     */
     static class DescriptionExtractor extends MetadataExtractor
     {
         public boolean extractMetadataItem(AbstractJavaEntity javaEntity,
@@ -29,7 +34,8 @@ abstract class MetadataExtractor
                 return false;
             }
 
-            final int next = MetadataExtractorUtils.getEndOfFirstSentenceCharIndex(comment);
+            final int next = MetadataExtractorUtils
+                .getEndOfFirstSentenceCharIndex(comment);
             if (next > 0 && next < comment.length())
             {
                 final String description = comment.substring(next + 1).trim();
@@ -43,6 +49,10 @@ abstract class MetadataExtractor
         }
     }
 
+    /**
+     * Extracts attribute/ bindable labels. Labels are extracted from the dedicated
+     * (label) JavaDoc tag.
+     */
     static class LabelExtractor extends MetadataExtractor
     {
         public boolean extractMetadataItem(AbstractJavaEntity javaEntity,
@@ -61,6 +71,10 @@ abstract class MetadataExtractor
         }
     }
 
+    /**
+     * Extracts attribute/ bindable titles. The first sentence of the JavaDoc comment
+     * becomes the title.
+     */
     static class TitleExtractor extends MetadataExtractor
     {
         public boolean extractMetadataItem(AbstractJavaEntity javaEntity,
@@ -73,7 +87,8 @@ abstract class MetadataExtractor
                 return false;
             }
 
-            final int next = MetadataExtractorUtils.getEndOfFirstSentenceCharIndex(comment);
+            final int next = MetadataExtractorUtils
+                .getEndOfFirstSentenceCharIndex(comment);
             if (next >= 0)
             {
                 // Strip off the last "."

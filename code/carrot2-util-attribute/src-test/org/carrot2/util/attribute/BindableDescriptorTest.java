@@ -8,10 +8,6 @@ import java.util.Map;
 import org.carrot2.util.attribute.test.filtering.*;
 import org.junit.Test;
 
-
-/**
- *
- */
 @SuppressWarnings("unchecked")
 public class BindableDescriptorTest
 {
@@ -40,8 +36,8 @@ public class BindableDescriptorTest
     @Test
     public void testOnlyInputOutput()
     {
-        final BindableDescriptor filteredDescriptor = descriptor
-            .only(Input.class, Output.class);
+        final BindableDescriptor filteredDescriptor = descriptor.only(Input.class,
+            Output.class);
         assertThat(filteredDescriptor.attributeDescriptors.keySet()).containsOnly(
             keyFromSuperClass("initInputOutput"),
             keyFromSuperClass("processingInputOutput"),

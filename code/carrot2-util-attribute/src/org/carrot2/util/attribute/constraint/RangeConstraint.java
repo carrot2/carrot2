@@ -1,25 +1,25 @@
 package org.carrot2.util.attribute.constraint;
 
+/**
+ * A common implementation of all range constraints involving {@link Comparable}s.
+ */
 class RangeConstraint extends Constraint
 {
-    @SuppressWarnings("unchecked")
-    private Comparable min;
+    Comparable<Object> min;
+    Comparable<Object> max;
 
-    @SuppressWarnings("unchecked")
-    private Comparable max;
-
-    public RangeConstraint()
+    RangeConstraint()
     {
     }
 
-    public RangeConstraint(Comparable<?> min, Comparable<?> max)
+    RangeConstraint(Comparable<Object> min, Comparable<Object> max)
     {
         this.min = min;
         this.max = max;
     }
 
     @SuppressWarnings("unchecked")
-    public boolean isMet(Object value)
+    boolean isMet(Object value)
     {
         return (value instanceof Comparable<?>)
             && (min.compareTo(value) <= 0 && max.compareTo(value) >= 0);
@@ -50,16 +50,6 @@ class RangeConstraint extends Constraint
         final int maxHash = (max != null ? max.hashCode() : 0);
 
         return minHash ^ maxHash;
-    }
-
-    public Comparable<?> getMin()
-    {
-        return min;
-    }
-
-    public Comparable<?> getMax()
-    {
-        return max;
     }
 
     @Override

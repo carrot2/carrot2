@@ -59,8 +59,8 @@ public class ConstraintCreatorTest
         final RangeConstraint rangeImpl = (RangeConstraint) constraints.get(0);
         assertEquals(0.2, range.min(), 0.000001);
         assertEquals(0.5, range.max(), 0.000001);
-        assertEquals(0.2, Double.class.cast(rangeImpl.getMin()), 0.000001);
-        assertEquals(0.5, Double.class.cast(rangeImpl.getMax()), 0.000001);
+        assertEquals(0.2, Double.class.cast(rangeImpl.min), 0.000001);
+        assertEquals(0.5, Double.class.cast(rangeImpl.max), 0.000001);
         assertFalse(rangeImpl.isMet(sample.somethingPercent));
         sample.somethingPercent = 0.2;
         assertTrue(rangeImpl.isMet(sample.somethingPercent));
@@ -82,15 +82,15 @@ public class ConstraintCreatorTest
         assertEquals(2, constraints.size());
 
         final RangeConstraint rangeImpl = (RangeConstraint) constraints.get(0);
-        assertEquals(range.min(), rangeImpl.getMin());
-        assertEquals(range.max(), rangeImpl.getMax());
+        assertEquals(range.min(), rangeImpl.min);
+        assertEquals(range.max(), rangeImpl.max);
         assertTrue(rangeImpl.isMet(sample.somethingAmount));
         sample.somethingAmount = 9;
         assertFalse(rangeImpl.isMet(sample.somethingAmount));
 
         final IntModuloConstraint moduloImpl = (IntModuloConstraint) constraints.get(1);
-        assertEquals(modulo.modulo(), moduloImpl.getModulo());
-        assertEquals(modulo.offset(), moduloImpl.getOffset());
+        assertEquals(modulo.modulo(), moduloImpl.modulo);
+        assertEquals(modulo.offset(), moduloImpl.offset);
         assertFalse(rangeImpl.isMet(sample.somethingAmount));
         sample.somethingAmount = 4;
         assertTrue(rangeImpl.isMet(sample.somethingAmount));

@@ -1,17 +1,13 @@
-/**
- *
- */
 package org.carrot2.util.attribute;
 
 import java.util.Collections;
 import java.util.Map;
 
-import org.apache.commons.lang.ObjectUtils;
 import org.simpleframework.xml.ElementMap;
 import org.simpleframework.xml.Root;
 
 /**
- *
+ * Human-readable metadata for a {@link Bindable} type.
  */
 @Root(name = "component-metadata")
 public class BindableMetadata extends CommonMetadata
@@ -23,46 +19,32 @@ public class BindableMetadata extends CommonMetadata
     {
     }
 
+    /**
+     * Returns metadata for all attributes in the bindable type.
+     * 
+     * @return metadata for all attributes in the bindable type. Key in the map represents
+     *         the attribute key as defined by {@link Attribute#key()}. The returned map
+     *         is unmodifiable.
+     */
     public Map<String, AttributeMetadata> getAttributeMetadata()
     {
         return Collections.unmodifiableMap(attributeMetadataInternal);
     }
 
+    /**
+     * Returns the internal (modifiable) map of attribute metadata.
+     */
     Map<String, AttributeMetadata> getInternalAttributeMetadata()
     {
         return attributeMetadataInternal;
     }
 
+    /**
+     * Sets internal (modifiable) map of attribute metadata.
+     */
     void setAttributeMetadata(Map<String, AttributeMetadata> attributeMetadata)
     {
         this.attributeMetadataInternal = attributeMetadata;
-    }
-
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (obj == this)
-        {
-            return true;
-        }
-
-        if (obj == null || !(obj instanceof AttributeMetadata))
-        {
-            return false;
-        }
-
-        final CommonMetadata other = (CommonMetadata) obj;
-
-        return ObjectUtils.equals(title, other.title)
-            && ObjectUtils.equals(label, other.label)
-            && ObjectUtils.equals(description, other.description);
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return ObjectUtils.hashCode(title) ^ ObjectUtils.hashCode(label)
-            ^ ObjectUtils.hashCode(description);
     }
 
     @Override

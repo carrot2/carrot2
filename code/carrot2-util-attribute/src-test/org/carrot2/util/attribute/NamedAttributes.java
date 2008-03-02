@@ -1,12 +1,9 @@
-/**
- *
- */
 package org.carrot2.util.attribute;
 
 import org.carrot2.util.attribute.test.metadata.TestAttributeNames;
 
 /**
- *
+ * Test named attribute container.
  */
 @Bindable
 @SuppressWarnings("unused")
@@ -20,7 +17,7 @@ public class NamedAttributes
     private int noJavadoc;
 
     /**
-     * @label overriden
+     * @label overridden
      */
     @TestInit
     @Input
@@ -28,7 +25,7 @@ public class NamedAttributes
     private int labelOverride;
 
     /**
-     * Title overriden.
+     * Title overridden.
      */
     @TestInit
     @Input
@@ -36,7 +33,7 @@ public class NamedAttributes
     private int titleOverride;
 
     /**
-     * Title overriden. Description overriden.
+     * Title overridden. Description overridden.
      */
     @TestInit
     @Input

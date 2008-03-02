@@ -2,7 +2,8 @@ package org.carrot2.core;
 
 import org.carrot2.core.attribute.Init;
 import org.carrot2.core.attribute.Processing;
-import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Output;
 
 /**
  * Defines the life cycle of a Carrot<sup>2</sup> processing component. The life cycle

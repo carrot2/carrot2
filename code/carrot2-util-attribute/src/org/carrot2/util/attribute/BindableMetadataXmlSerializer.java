@@ -1,12 +1,9 @@
-/**
- *
- */
 package org.carrot2.util.attribute;
 
 import java.io.File;
 
 /**
- *
+ * Builds metadata XML files for the requested Java source directories.
  */
 public class BindableMetadataXmlSerializer
 {

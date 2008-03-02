@@ -1,6 +1,3 @@
-/**
- *
- */
 package org.carrot2.util.attribute;
 
 import static junit.framework.Assert.assertEquals;
@@ -14,9 +11,6 @@ import java.util.Map;
 import org.apache.commons.lang.ObjectUtils;
 import org.junit.Test;
 
-/**
- *
- */
 public class AttributeValueSetsTest
 {
     @Test(expected = IllegalArgumentException.class)

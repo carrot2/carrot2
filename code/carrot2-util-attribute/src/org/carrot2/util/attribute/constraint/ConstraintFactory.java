@@ -7,8 +7,14 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+/**
+ * Builds constraint implementation from constraint annotations.
+ */
 class ConstraintFactory
 {
+    /**
+     * Create a list of constraints based on the provided <code>annotations</code>.
+     */
     static List<Constraint> createConstraints(Annotation... annotations)
     {
         final ArrayList<Constraint> constraints = Lists.newArrayList();
@@ -23,11 +29,17 @@ class ConstraintFactory
         return constraints;
     }
 
+    /**
+     * Returns <code>true</code> if the provided annotation is a constraint annotation.
+     */
     static boolean isConstraintAnnotation(Class<? extends Annotation> ann)
     {
         return ann.isAnnotationPresent(IsConstraint.class);
     }
 
+    /**
+     * Creates a class implementing the provided constraint annotation.
+     */
     static Constraint createImplementation(IsConstraint ann)
         throws InstantiationException, IllegalAccessException
     {
@@ -41,6 +53,9 @@ class ConstraintFactory
         return (Constraint) implClass.newInstance();
     }
 
+    /**
+     * Creates a class implementing the provided constraint annotation.
+     */
     private static Constraint createConstraint(Annotation annotation)
     {
         try
@@ -57,6 +72,9 @@ class ConstraintFactory
         }
     }
 
+    /**
+     * Sets fields of the constraint implementation based on the annotation parameters.
+     */
     private static void assignFieldValues(Constraint implementator, Annotation ann)
         throws IllegalAccessException, NoSuchFieldException, InvocationTargetException
     {
