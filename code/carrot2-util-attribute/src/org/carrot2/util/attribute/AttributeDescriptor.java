@@ -6,21 +6,67 @@ import java.util.List;
 
 import org.apache.commons.lang.ClassUtils;
 
+/**
+ * Provides a full description of an individual attribute, including its {@link #key},
+ * {@link #type}, {@link #defaultValue} and {@link #constraints}. Also contains
+ * human-readable {@link #metadata} about the attribute such as title, label or
+ * description.
+ * <p>
+ * Attribute descriptors can be obtained from
+ * {@link BindableDescriptorBuilder#buildDescriptor(Object)};
+ */
 public class AttributeDescriptor
 {
+    /**
+     * Human-readable metadata describing the attribute.
+     */
     public final AttributeMetadata metadata;
 
+    /**
+     * Type of the attribute as defined by {@link Attribute#key()}.
+     */
     public final String key;
+
+    /**
+     * Type of the attribute. Primitive types are represented by their corresponding
+     * wrapper/ box types.
+     */
     public final Class<?> type;
+
+    /**
+     * Default value of the attribute.
+     */
     public final Object defaultValue;
+
+    /**
+     * Constraints defined for the attribute. If the attribute has no constraints, this
+     * list is empty.
+     */
     public final List<Annotation> constraints;
 
+    /**
+     * <code>True</code> if the attribute is an {@link Input} attribute.
+     */
     public final boolean inputAttribute;
+
+    /**
+     * <code>True</code> if the attribute is an {@link Output} attribute.
+     */
     public final boolean outputAttribute;
+
+    /**
+     * <code>True</code> if the attribute is a {@link Required} attribute.
+     */
     public final boolean requiredAttribute;
 
+    /**
+     * Field representing the attribute.
+     */
     final Field attributeField;
 
+    /**
+     *
+     */
     AttributeDescriptor(Field field, Object defaultValue, List<Annotation> constraints,
         AttributeMetadata metadata)
     {
@@ -37,6 +83,13 @@ public class AttributeDescriptor
         this.requiredAttribute = field.getAnnotation(Required.class) != null;
     }
 
+    /**
+     * Returns an annotation specified for the attribute.
+     * 
+     * @param annotationClass type of annotation to be returned
+     * @return annotation of the attribute or <code>null</code> is annotation of the
+     *         provided type is not defined for the attribute
+     */
     public Annotation getAnnotation(Class<? extends Annotation> annotationClass)
     {
         return attributeField.getAnnotation(annotationClass);

@@ -1,6 +1,3 @@
-/**
- *
- */
 package org.carrot2.util.attribute;
 
 import java.lang.annotation.Annotation;
@@ -12,23 +9,33 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Maps;
 
 /**
- *
+ * Provides a full description of a {@link Bindable} type, including
+ * {@link AttributeDescriptor}s for all attributes defined by the type. Also provides
+ * some human-readable metadata for the {@link Bindable} type itself.
+ * {@link BindableDescriptor}s are immutable.
  */
 public class BindableDescriptor
 {
     /**
-     * Key: field <b>name</b>. TODO: this kind of sucks because its inconsistent with
-     * attributes below, but I can't see any better way to do this right now.
+     * Descriptors for attributes defined in the {@link Bindable}. Keys in the map
+     * correspond to attribute keys as defined in {@link Attribute#key()}.
+     */
+    public final Map<String, AttributeDescriptor> attributeDescriptors;
+
+    /**
+     * Descriptors for other {@link Bindable} types referenced by this descriptor. Keys in
+     * this map correspond to <b>names of fields</b> that hold the references.
      */
     public final Map<String, BindableDescriptor> bindableDescriptors;
 
     /**
-     * Key: attribute key as returned by {@link BindableUtils#getKey(Class, String)}
+     * Human-readable metadata about this {@link Bindable} type.
      */
-    public final Map<String, AttributeDescriptor> attributeDescriptors;
-
     public final BindableMetadata metadata;
 
+    /**
+     * An internal constructor.
+     */
     BindableDescriptor(BindableMetadata metadata,
         Map<String, BindableDescriptor> bindableDescriptors,
         Map<String, AttributeDescriptor> attributeDescriptors)
@@ -39,10 +46,13 @@ public class BindableDescriptor
     }
 
     /**
-     * Filters out descriptors for which the provided <code>predicate</code> returns
-     * <code>false</code>.
+     * Preserves descriptors for which the provided <code>predicate</code> returns
+     * <code>true</code>. Notice that {@link BindableDescriptor}s are immutable, so
+     * the filtered descriptor set is returned rather than filtering being applied to the
+     * receiver.
      * 
      * @param predicate predicate to the applied
+     * @return a new {@link BindableDescriptor} with the descriptors filtered.
      */
     public BindableDescriptor only(Predicate<AttributeDescriptor> predicate)
     {
@@ -74,11 +84,14 @@ public class BindableDescriptor
     }
 
     /**
-     * Filters out descriptors that do not match at least one of the provided binding time
-     * and filtering annotation restrictions.
+     * Preserves descriptors that match all of the provided binding time and filtering
+     * annotation restrictions. Notice that {@link BindableDescriptor}s are immutable, so
+     * the filtered descriptor set is returned rather than filtering being applied to the
+     * receiver.
      * 
      * @param annotationClasses binding time and direction annotation classes to be
      *            matched.
+     * @return a new {@link BindableDescriptor} with the descriptors filtered.
      */
     @SuppressWarnings("unchecked")
     public BindableDescriptor only(final Class<? extends Annotation>... annotationClasses)
@@ -106,9 +119,11 @@ public class BindableDescriptor
     }
 
     /**
-     * Returns a flattened structure of attribute descriptors. After flattening
+     * Returns a flattened structure of attribute descriptors. After flattening,
      * {@link #attributeDescriptors} contains descriptors of direct and referenced
      * attributes and {@link #bindableDescriptors} is empty.
+     * 
+     * @return flattened descriptor
      */
     public BindableDescriptor flatten()
     {

@@ -7,7 +7,8 @@ import org.apache.commons.lang.ObjectUtils;
 import org.simpleframework.xml.Root;
 
 /**
- *
+ * Human-readable metadata about an attribute. Metadata contains such elements as title,
+ * label and description.
  */
 @Root(name = "attribute-metadata")
 public class AttributeMetadata extends CommonMetadata

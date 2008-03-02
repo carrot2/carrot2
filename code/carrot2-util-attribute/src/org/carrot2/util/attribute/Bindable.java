@@ -3,7 +3,7 @@ package org.carrot2.util.attribute;
 import java.lang.annotation.*;
 
 /**
- * Denotes types that will have some of their fields bound (set or read) by the
+ * Denotes types that will have some of their fields bound (set or collected) by the
  * {@link AttributeBinder}. Fields to be bound are denoted by the {@link Attribute}
  * annotation. If a type has some its fields annotated by {@link Attribute}, but the type
  * itself is not marked with {@link Bindable}, the {@link Attribute} annotations will be

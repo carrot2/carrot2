@@ -5,6 +5,7 @@
     <property file="local.properties" />
 
     <property name="build.dir" location="tmp/classes" />
+    <property name="javadoc.dir" location="tmp/javadoc" />
     <property name="tests.report.dir" location="tmp/test-report" />
     <property name="coverage.report.dir" location="tmp/coverage-report" />
 
@@ -133,6 +134,66 @@
               <format type="xml" />
            </current>
         </clover-report>
+    </target>
+
+    <target name="javadoc">
+        <delete dir="${javadoc.dir}" failonerror="false" />
+
+        <mkdir dir="tmp/src" />
+        <mkdir dir="${javadoc.dir}" />
+
+        <copy failonerror="true" filtering="false" overwrite="true" todir="tmp/src">
+            <fileset dir=".">
+                <include name="**/src/**/*.java" />
+                <include name="**/src/**/*.html" />
+                <exclude name="**/tmp/**/*" />
+            </fileset>
+            <chainedmapper>
+                <filtermapper><replacestring from="\" to="/"/></filtermapper>
+                <mapper type="regexp" from="^(.+)/src/(.+)" to="\2"/>
+            </chainedmapper>
+        </copy>
+
+        <javadoc
+                 destdir          = "${javadoc.dir}"
+                 access           = "public"
+                 version          = "true"
+                 use              = "false"
+                 encoding         = "UTF-8"
+                 doctitle         = "Carrot&lt;sup&gt;2&lt;/sup&gt; Framework API Specification"
+                 header           = "&lt;div class='logo'&gt;Carrot&lt;sup&gt;2&lt;/sup&gt; Framework&lt;br&gt;API Specification&lt;/div&gt;"
+                 footer           = "&lt;div class='logo'&gt;Please refer to project documentation at &lt;br&gt;&lt;a target='_top' href=http://project.carrot2.org&gt;http://project.carrot2.org&lt;/a&gt;&lt;/div&gt;"
+                 bottom           = "&lt;center&gt;Copyright (c) Dawid Weiss, Stanislaw Osinski &lt;/center&gt;"
+                 failonerror      = "true"
+                 stylesheetfile   = "etc/javadoc/stylesheet.css"
+                 useexternalfile  = "true"
+        >
+            <classpath>
+                <fileset dir=".">
+                    <include name="lib/**/*.jar" />
+                </fileset>
+            </classpath>
+
+            <fileset dir="tmp/src">
+                <include name="**/*.java" />
+            </fileset>
+
+            <link href="http://java.sun.com/j2se/1.5.0/docs/api/" />
+
+            <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Core" packages="org.carrot2.core*" />
+            <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Demos and Examples" packages="org.carrot2.examples*"/>
+            <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Data Sources" packages="org.carrot2.source*"/>
+            <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Clustering Algorithms" packages="org.carrot2.clustering*"/>
+            <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Attribute Binding" packages="org.carrot2.util.attribute*"/>
+            <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Utility classes" packages="org.carrot2.util*"/>
+        </javadoc>
+
+        <delete dir="tmp/src" />
+        <copy todir="${javadoc.dir}">
+            <fileset dir="etc/javadoc/">
+                <include name="*.gif" />
+            </fileset>
+        </copy>
     </target>
 
 </project>

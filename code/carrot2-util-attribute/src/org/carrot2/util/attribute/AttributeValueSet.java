@@ -13,27 +13,38 @@ import com.google.common.collect.Maps;
  * Maintains a named set of attribute values. Allows one {@link AttributeValueSet} (A) to
  * be "based" on another {@link AttributeValueSet} (B), whereby the main
  * {@link AttributeValueSet} (A) inherits all values from the base
- * {@link AttributeValueSet} (B) and can override some of them.
+ * {@link AttributeValueSet} (B) and can override some of them. Any depth of the base
+ * attribute sets hierarchy is possible.
  */
 @Root(name = "value-set")
 public class AttributeValueSet
 {
+    /**
+     * Human-readable value of this attribute value set.
+     */
     @Element
     public final String label;
 
+    /**
+     * Human-readable description of this attribute value set.
+     */
     @Element(required = false)
     public final String description;
 
     /**
-     * Holds values of attributes overriden by this attribute set.
+     * Holds values of attributes overridden by this attribute set.
      */
     Map<String, Object> overridenAttributeValues;
 
     /**
-     * The base attribute values set, source of all not overriden values.
+     * The base attribute values set, source of all not overridden values.
      */
     AttributeValueSet baseAttributeValueSet;
 
+    /**
+     * Identifier of the attribute value set this set is based on. Used only for
+     * serialization/ deserialization purposes.
+     */
     @org.simpleframework.xml.Attribute(name = "based-on", required = false)
     String baseAttributeValueSetId;
 
@@ -53,7 +64,7 @@ public class AttributeValueSet
      */
     @SuppressWarnings("unused")
     @Root(name = "value")
-    public static class TypeStringValuePair
+    static class TypeStringValuePair
     {
         @org.simpleframework.xml.Attribute
         private Class<?> type;
@@ -78,6 +89,38 @@ public class AttributeValueSet
         description = null;
     }
 
+    /**
+     * Creates a new empty {@link AttributeValueSet} with a <code>null</code>
+     * description and a <code>null</code> base attribute value set.
+     * 
+     * @param label human-readable label for this attribute value set
+     */
+    public AttributeValueSet(String label)
+    {
+        this(label, null);
+    }
+
+    /**
+     * Creates a new empty {@link AttributeValueSet} with a <code>null</code>
+     * description.
+     * 
+     * @param label human-readable label for this attribute value set
+     * @param base the attribute value set this set should be based on.
+     */
+    public AttributeValueSet(String label, AttributeValueSet base)
+    {
+        this(label, null, base);
+    }
+
+    /**
+     * Creates a new empty {@link AttributeValueSet}.
+     * 
+     * @param label human-readable label for this attribute value set
+     * @param description human-readable description for this attribute value set, can be
+     *            <code>null</code>
+     * @param base the attribute value set this set should be based on, can be
+     *            <code>null</code>.
+     */
     public AttributeValueSet(String label, String description, AttributeValueSet base)
     {
         this.label = label;
@@ -87,6 +130,23 @@ public class AttributeValueSet
         this.overridenAttributeValues = Maps.newHashMap();
     }
 
+    /**
+     * Returns value of the attribute with the provided <code>key</code>. Attribute
+     * values are resolved in the following order:
+     * <ul>
+     * <li>If this set contains a value for the attribute with given <code>key</code>
+     * set by {{@link #setAttributeValue(String, Object)} or
+     * {@link #setAttributeValues(Map)}, the value is returned.</li>
+     * <li>Otherwise, if the base attribute value set is not <code>null</code>,
+     * attribute value is retrieved from the base set by calling the same method on it. If
+     * any of the base attribute sets in the hierarchy contains a value for the provided
+     * key, that value is returned.</li>
+     * <li>Otherwise, <code>null</code> is returned.</li>
+     * </ul>
+     * 
+     * @param key key of the attribute for which value is to be returned
+     * @return value of the attribute or <code>null</code>.
+     */
     public Object getAttributeValue(String key)
     {
         if (overridenAttributeValues.containsKey(key))
@@ -106,7 +166,7 @@ public class AttributeValueSet
     /**
      * Returns attribute values defined by this {@link AttributeValueSet} and all other
      * {@link AttributeValueSet}s that this set is based on. The returned map is
-     * independent of this {@link AttributeValueSet}, so any modifications to the map
+     * independent of this {@link AttributeValueSet}, so any modifications to that map
      * will not be reflected in this {@link AttributeValueSet}.
      */
     public Map<String, Object> getAttributeValues()
@@ -120,11 +180,29 @@ public class AttributeValueSet
         return result;
     }
 
+    /**
+     * Sets a <code>value</code> corresponding to the provided <code>key</code> in
+     * this attribute value set. If the set previously contained some value under the
+     * provided <code>key</code>, that value is returned. Values set using this method
+     * override values found in the base attribute sets of this set.
+     * 
+     * @param key attribute key
+     * @param value attribute value
+     * @return previous value of the attribute or <code>null</code>
+     */
     public Object setAttributeValue(String key, Object value)
     {
         return overridenAttributeValues.put(key, value);
     }
 
+    /**
+     * Copies all <code>values</code> to this attribute value set. If this attribute
+     * value set already contains mappings for some of the provided key, the mappings will
+     * be overwritten. Values set using this method override values found in the base
+     * attribute sets of this set.
+     * 
+     * @param values values to be set on this attribute value set.
+     */
     public void setAttributeValues(Map<String, Object> values)
     {
         overridenAttributeValues.putAll(values);
