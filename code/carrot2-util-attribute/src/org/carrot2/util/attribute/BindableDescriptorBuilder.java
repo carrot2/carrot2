@@ -164,7 +164,7 @@ public class BindableDescriptorBuilder
             }
             finally
             {
-                CloseableUtils.closeIgnoringException(inputStream);
+                CloseableUtils.close(inputStream);
             }
 
             return bindableMetadata;

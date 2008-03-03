@@ -29,7 +29,7 @@ public final class StreamUtils
         }
         finally
         {
-            CloseableUtils.closeIgnoringException(input);
+            CloseableUtils.close(input);
         }
     }
 
@@ -70,7 +70,7 @@ public final class StreamUtils
         }
         finally
         {
-            CloseableUtils.closeIgnoringException(input);
+            CloseableUtils.close(input);
         }
     }
 

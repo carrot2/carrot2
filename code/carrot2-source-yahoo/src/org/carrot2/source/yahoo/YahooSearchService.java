@@ -254,7 +254,7 @@ abstract class YahooSearchService
         {
             if (is != null)
             {
-                CloseableUtils.closeIgnoringException(is);
+                CloseableUtils.close(is);
             }
             request.releaseConnection();
         }
