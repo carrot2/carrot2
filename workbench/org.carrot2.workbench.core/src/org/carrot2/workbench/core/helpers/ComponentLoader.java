@@ -18,7 +18,8 @@ public class ComponentLoader
     public static final ComponentLoader SOURCE_LOADER = new ComponentLoader("source",
         "source", "label", "class");
 
-    private ComponentLoader(String extensionName, String elementName, String captionName, String className)
+    private ComponentLoader(String extensionName, String elementName, String captionName,
+        String className)
     {
         this.extensionName = extensionName;
         this.elementName = elementName;
@@ -61,7 +62,8 @@ public class ComponentLoader
             {
                 return;
             }
-            ComponentWrapper wrapper = new ComponentWrapper(configurationElement, captionName, className);
+            ComponentWrapper wrapper = new ComponentWrapper(configurationElement,
+                captionName, className);
             converterCache.put(wrapper.getCaption(), wrapper);
         }
 
