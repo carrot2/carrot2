@@ -9,9 +9,6 @@
     <property name="tests.report.dir" location="tmp/test-report" />
     <property name="coverage.report.dir" location="tmp/coverage-report" />
 
-    <!-- Clover -->
-    <property name="clover.jar" location="${clover.home}/lib/clover.jar"/>
-    <taskdef resource="cloverlib.xml" classpath="${clover.jar}"/>
 
     <path id="src.folders">
         <dirset dir="code" includes="**/src" />
@@ -34,9 +31,8 @@
         <path location="${clover.jar}" />
     </path>
 
-    <target name="clean">
+    <target name="clean" depends="coverage.clean">
         <delete dir="tmp" failonerror="false" />
-        <clover-clean />
     </target>
 
     
@@ -113,6 +109,10 @@
     </target>
 
     <target name="with.clover" if="clover.home">
+    	<!-- Clover -->
+        <property name="clover.jar" location="${clover.home}/lib/clover.jar"/>
+        <taskdef resource="cloverlib.xml" classpath="${clover.jar}"/>
+
         <clover-setup>
           <fileset refid="src.coverage" />
         </clover-setup>
@@ -127,13 +127,17 @@
             </current>
         </clover-report>
     </target>
-   
+
     <target name="coverage.xml" if="clover.home">
         <clover-report>
            <current outfile="${coverage.report.dir}/coverage.xml" title="Carrot2 3.0">
               <format type="xml" />
            </current>
         </clover-report>
+    </target>
+
+    <target name="coverage.clean" depends="with.clover" if="clover.home">
+        <clover-clean />
     </target>
 
     <target name="javadoc">
