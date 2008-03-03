@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Carrot2 Core
-Bundle-SymbolicName: org.carrot2.core
+Bundle-SymbolicName: org.carrot2.core;singleton:=true
 Bundle-Version: 1.0.0
 Export-Package: org.carrot2.core,
  org.carrot2.core.attribute,
