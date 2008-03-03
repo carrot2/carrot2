@@ -8,22 +8,19 @@
     <property name="javadoc.dir" location="tmp/javadoc" />
     <property name="tests.report.dir" location="tmp/test-report" />
     <property name="coverage.report.dir" location="tmp/coverage-report" />
-
-    <!-- Clover -->
     <property name="clover.jar" location="${clover.home}/lib/clover.jar"/>
-    <taskdef resource="cloverlib.xml" classpath="${clover.jar}"/>
 
     <path id="src.folders">
         <dirset dir="code" includes="**/src" />
         <dirset dir="code" includes="**/src-test" />
     </path>
-    
+
     <fileset id="src.coverage" dir="code">
         <include name="**/*.java" />
         <exclude name="**/carrot2-examples/**/*.java" if="external.api.tests.disabled" />
         <exclude name="**/carrot2-source-yahoo/**/*.java" if="external.api.tests.disabled" />
     </fileset>
-    
+
     <path id="lib.classpath">
         <fileset dir="lib" includes="**/*.jar" />    
     </path>
@@ -34,9 +31,9 @@
         <path location="${clover.jar}" />
     </path>
 
-    <target name="clean">
+    
+    <target name="clean" depends="coverage.clean">
         <delete dir="tmp" failonerror="false" />
-        <clover-clean />
     </target>
 
     
@@ -112,15 +109,23 @@
         </java>
     </target>
 
-    <target name="with.clover" if="clover.home">
+
+    <target name="clover.tasks" if="clover.home">
+        <taskdef resource="cloverlib.xml" classpath="${clover.jar}"/>
+    </target>
+
+
+    <target name="with.clover" depends="clover.tasks" if="clover.home">
         <clover-setup>
           <fileset refid="src.coverage" />
         </clover-setup>
     </target>
-   
+    
+
     <target name="coverage" depends="coverage.html, coverage.xml" />
 
-    <target name="coverage.html" if="clover.home">
+    
+    <target name="coverage.html" depends="clover.tasks" if="clover.home">
         <clover-report>
             <current outfile="${coverage.report.dir}" title="Carrot2 3.0">
                 <format type="html" />
@@ -128,13 +133,20 @@
         </clover-report>
     </target>
    
-    <target name="coverage.xml" if="clover.home">
+    
+    <target name="coverage.xml" depends="clover.tasks" if="clover.home">
         <clover-report>
            <current outfile="${coverage.report.dir}/coverage.xml" title="Carrot2 3.0">
               <format type="xml" />
            </current>
         </clover-report>
     </target>
+
+
+    <target name="coverage.clean" depends="clover.tasks" if="clover.home">
+        <clover-clean />
+    </target>
+
 
     <target name="javadoc">
         <delete dir="${javadoc.dir}" failonerror="false" />
