@@ -31,5 +31,13 @@
          </property>
       </product>
    </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="org.carrot2.workbench.core.search.SearchView"
+            id="org.carrot2.workbench.core.search"
+            name="Search">
+      </view>
+   </extension>
 
 </plugin>

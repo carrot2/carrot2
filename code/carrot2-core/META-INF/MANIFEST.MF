@@ -10,4 +10,6 @@ Export-Package: org.carrot2.core,
 Require-Bundle: org.carrot2.util.attribute,
  org.carrot2.util.common,
  com.google.collections,
- org.simpleframework.xml
+ org.simpleframework.xml,
+ com.bea.xml,
+ org.junit4

@@ -14,5 +14,4 @@ Export-Package: com.thoughtworks.qdox,
  com.thoughtworks.qdox.parser.impl,
  com.thoughtworks.qdox.parser.structs,
  com.thoughtworks.qdox.tools
-Require-Bundle: org.junit4,
- org.apache.ant
+Require-Bundle: org.apache.ant
