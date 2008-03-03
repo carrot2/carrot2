@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Core Plug-in
+Bundle-SymbolicName: org.carrot2.workbench.core; singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: org.carrot2.workbench.core.CorePlugin
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.carrot2.algorithm.synthetic,
+ org.carrot2.core,
+ org.carrot2.source.yahoo,
+ org.carrot2.util.attribute,
+ org.carrot2.util.common,
+ org.carrot2.util.log4j,
+ com.google.collections,
+ com.bea.xml,
+ org.apache.commons,
+ org.simpleframework.xml
+Eclipse-LazyStart: true

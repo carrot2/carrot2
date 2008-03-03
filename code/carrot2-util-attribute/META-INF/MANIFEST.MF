@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Carrot2 Attribute Utils
+Bundle-SymbolicName: org.carrot2.util.attribute
+Bundle-Version: 1.0.0
+Export-Package: org.carrot2.util.attribute,
+ org.carrot2.util.attribute.constraint
+Require-Bundle: org.carrot2.util.common,
+ com.bea.xml,
+ com.google.collections,
+ org.simpleframework.xml,
+ com.thoughtworks.qdox

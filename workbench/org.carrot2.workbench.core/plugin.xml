@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+
+   <extension
+         id="application"
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run
+               class="org.carrot2.workbench.core.Application">
+         </run>
+      </application>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            name="RCP Perspective"
+            class="org.carrot2.workbench.core.Perspective"
+            id="org.carrot2.workbench.core.perspective">
+      </perspective>
+   </extension>
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="org.carrot2.workbench.core.application"
+            name="Carrot2 Workbench">
+         <property
+               name="appName"
+               value="Carrot2 Workbench">
+         </property>
+      </product>
+   </extension>
+
+</plugin>

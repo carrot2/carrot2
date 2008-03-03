@@ -1,0 +1,35 @@
+<project name="c2-workbench" default="build">
+    
+    <target name="copy.libs">
+        <copy todir="workbench/com.thoughtworks.qdox/">
+            <fileset dir="lib/compile-time">
+                <include name="qdox*" />
+            </fileset>
+        </copy>
+        <copy todir="workbench/com.bea.xml/">
+            <fileset dir="lib">
+                <include name="stax*" />
+            </fileset>
+        </copy>
+        <copy todir="workbench/com.google.collections/">
+            <fileset dir="lib">
+                <include name="google*" />
+            </fileset>
+        </copy>
+        <copy todir="workbench/org.apache.commons/">
+            <fileset dir="lib">
+                <include name="commons*" />
+            </fileset>
+        </copy>
+        <copy todir="workbench/org.apache.log4j/">
+            <fileset dir="lib">
+                <include name="log4j*" />
+            </fileset>
+        </copy>
+        <copy todir="workbench/org.simpleframework.xml/">
+            <fileset dir="lib">
+                <include name="simple-xml*" />
+            </fileset>
+        </copy>
+    </target>
+</project>

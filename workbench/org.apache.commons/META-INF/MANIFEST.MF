@@ -1,0 +1,35 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Apache Commons Codec
+Bundle-SymbolicName: org.apache.commons
+Bundle-Version: 1.0.0
+Bundle-ClassPath: commons-codec-1.3.jar,
+ commons-logging-1.1.1.jar,
+ commons-httpclient-3.1.jar,
+ commons-lang-2.3.jar
+Bundle-Vendor: Apache Foundation
+Export-Package: org.apache.commons.codec,
+ org.apache.commons.codec.binary,
+ org.apache.commons.codec.digest,
+ org.apache.commons.codec.language,
+ org.apache.commons.codec.net,
+ org.apache.commons.httpclient,
+ org.apache.commons.httpclient.auth,
+ org.apache.commons.httpclient.cookie,
+ org.apache.commons.httpclient.methods,
+ org.apache.commons.httpclient.methods.multipart,
+ org.apache.commons.httpclient.params,
+ org.apache.commons.httpclient.protocol,
+ org.apache.commons.httpclient.util,
+ org.apache.commons.lang,
+ org.apache.commons.lang.builder,
+ org.apache.commons.lang.enums,
+ org.apache.commons.lang.exception,
+ org.apache.commons.lang.math,
+ org.apache.commons.lang.mutable,
+ org.apache.commons.lang.text,
+ org.apache.commons.lang.time,
+ org.apache.commons.logging,
+ org.apache.commons.logging.impl
+Require-Bundle: javax.servlet,
+ org.eclipse.core.runtime

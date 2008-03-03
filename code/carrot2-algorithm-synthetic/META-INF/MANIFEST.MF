@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Carrot2 - Synthetic Algorithm
+Bundle-SymbolicName: org.carrot2.algorithm.synthetic
+Bundle-Version: 1.0.0
+Export-Package: org.carrot2.clustering.synthetic
+Require-Bundle: com.google.collections,
+ org.carrot2.core,
+ org.carrot2.util.common
