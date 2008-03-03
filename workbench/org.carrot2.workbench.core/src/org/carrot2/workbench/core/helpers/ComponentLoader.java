@@ -3,7 +3,6 @@ package org.carrot2.workbench.core.helpers;
 import java.util.*;
 
 import org.carrot2.core.ProcessingComponent;
-import org.carrot2.workbench.core.CorePlugin;
 import org.eclipse.core.runtime.*;
 
 public class ComponentLoader
@@ -17,6 +16,9 @@ public class ComponentLoader
 
     public static final ComponentLoader SOURCE_LOADER = new ComponentLoader("source",
         "source", "label", "class");
+
+    public static final ComponentLoader ALGORITHM_LOADER = new ComponentLoader(
+        "algorithm", "algorithm", "label", "class");
 
     private ComponentLoader(String extensionName, String elementName, String captionName,
         String className)

@@ -28,6 +28,13 @@ public class SearchView extends ViewPart
         {
             text += caption + System.getProperty("line.separator");
         }
+        captions = ComponentLoader.ALGORITHM_LOADER.getCaptions();
+        text += "Available algorithms:";
+        text += System.getProperty("line.separator");
+        for (String caption : captions)
+        {
+            text += caption + System.getProperty("line.separator");
+        }
         l.setText(text);
     }
 
