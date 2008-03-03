@@ -1,8 +1,6 @@
 package org.carrot2.workbench.core;
 
-import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
-import org.eclipse.ui.application.WorkbenchAdvisor;
-import org.eclipse.ui.application.WorkbenchWindowAdvisor;
+import org.eclipse.ui.application.*;
 
 public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor
 {

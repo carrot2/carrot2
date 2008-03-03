@@ -13,10 +13,6 @@ public class SearchView extends ViewPart
 
     public static final String ID = "org.carrot2.workbench.core.search";
 
-    public SearchView()
-    {
-    }
-
     @Override
     public void createPartControl(Composite parent)
     {

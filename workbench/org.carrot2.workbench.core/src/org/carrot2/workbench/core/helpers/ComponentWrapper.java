@@ -5,7 +5,7 @@ import org.carrot2.workbench.core.CorePlugin;
 import org.eclipse.core.commands.operations.OperationStatus;
 import org.eclipse.core.runtime.*;
 
-public class ComponentWrapper
+class ComponentWrapper
 {
     private IConfigurationElement element;
     private String caption;

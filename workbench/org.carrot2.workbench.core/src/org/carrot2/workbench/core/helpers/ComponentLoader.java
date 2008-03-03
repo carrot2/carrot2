@@ -10,8 +10,8 @@ public class ComponentLoader
 
     private String extensionName;
     private String elementName;
-    private String captionName;
-    private String className;
+    private String captionAttName;
+    private String classAttName;
     private Map<String, ComponentWrapper> converterCache;
 
     public static final ComponentLoader SOURCE_LOADER = new ComponentLoader("source",
@@ -20,21 +20,48 @@ public class ComponentLoader
     public static final ComponentLoader ALGORITHM_LOADER = new ComponentLoader(
         "algorithm", "algorithm", "label", "class");
 
+    /**
+     * All of parameters should be taken from schema files (*.exsd). Plugin name is
+     * assumed to be <code>"org.carrot2.core"</code>, since this class is dedicated to
+     * loading document sources and clustering algorithms, and those both extensions are
+     * defined in org.carrot2.core plugin.
+     * 
+     * @param extensionName extension point ID (without plugin ID as a prefix)
+     * @param elementName name of element, that stores info about component
+     * @param captionName name of a attribute, that stores label/caption/etc. of a
+     *            component
+     * @param className name of a attribute, that stores name of a class of a component
+     */
     private ComponentLoader(String extensionName, String elementName, String captionName,
         String className)
     {
         this.extensionName = extensionName;
         this.elementName = elementName;
-        this.captionName = captionName;
-        this.className = className;
+        this.captionAttName = captionName;
+        this.classAttName = className;
     }
 
+    /**
+     * Analyzes extension registry to find all extensions for point defined in
+     * constructor. Plugins are not loaded inside this method! List of all components is
+     * cached, so only first invocation actually reads the registry.
+     * 
+     * @return captions for all components of a given type
+     * @see ComponentLoader#ComponentLoader(String, String, String, String)
+     */
     public List<String> getCaptions()
     {
         loadExtensions();
         return new ArrayList<String>(converterCache.keySet());
     }
 
+    /**
+     * Creates instance of a given component. Plugin, in which component is defined, is
+     * loaded while invoking this method! Use when necessary!
+     * 
+     * @param caption
+     * @return instance of a component with the given caption.
+     */
     public ProcessingComponent getConverter(String caption)
     {
         return converterCache.get(caption).getExecutableConverter();
@@ -65,7 +92,7 @@ public class ComponentLoader
                 return;
             }
             ComponentWrapper wrapper = new ComponentWrapper(configurationElement,
-                captionName, className);
+                captionAttName, classAttName);
             converterCache.put(wrapper.getCaption(), wrapper);
         }
 
