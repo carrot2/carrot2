@@ -64,13 +64,13 @@ public class WorkingWithAttributeValueSets
          */
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         sets.serialize(byteArrayOutputStream);
-        CloseableUtils.closeIgnoringException(byteArrayOutputStream); // need to close!
+        CloseableUtils.close(byteArrayOutputStream); // need to close!
 
         final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(
             byteArrayOutputStream.toByteArray());
         final AttributeValueSets deserialized = AttributeValueSets
             .deserialize(byteArrayInputStream);
-        CloseableUtils.closeIgnoringException(byteArrayInputStream); // need to close!
+        CloseableUtils.close(byteArrayInputStream); // need to close!
 
         assertEquals("value", deserialized.getAttributeValueSet("set1")
             .getAttributeValue("string.attribute"));
@@ -133,7 +133,7 @@ public class WorkingWithAttributeValueSets
             "Description if any");
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         sets.serialize(byteArrayOutputStream);
-        CloseableUtils.closeIgnoringException(byteArrayOutputStream); // need to close!
+        CloseableUtils.close(byteArrayOutputStream); // need to close!
     }
 
     private InputStream getAttributeValueSetsStream() throws Exception
@@ -151,7 +151,7 @@ public class WorkingWithAttributeValueSets
 
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         sets.serialize(byteArrayOutputStream);
-        CloseableUtils.closeIgnoringException(byteArrayOutputStream); // need to close!
+        CloseableUtils.close(byteArrayOutputStream); // need to close!
 
         return new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
     }
