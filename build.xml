@@ -43,7 +43,7 @@
     <target name="compile" depends="with.clover">
         <mkdir dir="${build.dir}" />
 
-        <javac destdir="${build.dir}" source="1.5" target="1.5">
+        <javac destdir="${build.dir}" source="1.5" target="1.5" encoding="UTF-8">
             <src refid="src.folders" />
 
             <classpath refid="lib.classpath" />
