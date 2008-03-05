@@ -33,7 +33,7 @@ class ComponentWrapper
         return caption;
     }
 
-    public ProcessingComponent getExecutableConverter()
+    public ProcessingComponent getExecutableComponent()
     {
         try
         {

@@ -62,9 +62,9 @@ public class ComponentLoader
      * @param caption
      * @return instance of a component with the given caption.
      */
-    public ProcessingComponent getConverter(String caption)
+    public ProcessingComponent getComponent(String caption)
     {
-        return converterCache.get(caption).getExecutableConverter();
+        return converterCache.get(caption).getExecutableComponent();
     }
 
     private void loadExtensions()

@@ -87,7 +87,7 @@
          <meta.section type="apiInfo"/>
       </appInfo>
       <documentation>
-         
+         In order to provide new document source, you need to implement &lt;samp&gt;org.carrot2.core.ClusteringAlgorithm&lt;/samp&gt;. Implementing class should be annotated with &lt;samp&gt;@Bindable&lt;/samp&gt;.
       </documentation>
    </annotation>
 

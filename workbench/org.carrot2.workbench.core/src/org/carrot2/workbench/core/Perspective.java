@@ -9,7 +9,8 @@ public class Perspective implements IPerspectiveFactory
 
     public void createInitialLayout(IPageLayout layout)
     {
-        layout.addView(SearchView.ID, IPageLayout.LEFT, 0.5f, layout.getEditorArea());
+        layout.addStandaloneView(SearchView.ID, false, IPageLayout.TOP, 0.5f, layout
+            .getEditorArea());
         layout.setEditorAreaVisible(true);
     }
 }
