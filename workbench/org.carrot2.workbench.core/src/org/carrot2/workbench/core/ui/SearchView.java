@@ -1,9 +1,15 @@
-package org.carrot2.workbench.core.search;
+package org.carrot2.workbench.core.ui;
 
+import org.carrot2.workbench.core.CorePlugin;
 import org.carrot2.workbench.core.helpers.ComponentLoader;
+import org.eclipse.core.commands.operations.OperationStatus;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.part.ViewPart;
 
 public class SearchView extends ViewPart
@@ -23,7 +29,38 @@ public class SearchView extends ViewPart
 
         createItems(sourceCombo, ComponentLoader.SOURCE_LOADER);
         createItems(algorithmCombo, ComponentLoader.ALGORITHM_LOADER);
+        processButton.addSelectionListener(new SelectionAdapter()
+        {
+            @Override
+            public void widgetSelected(SelectionEvent e)
+            {
+                try
+                {
+                    IWorkbenchPage page = SearchView.this.getViewSite()
+                        .getWorkbenchWindow().getActivePage();
+                    SearchParameters input = new SearchParameters(getSourceCaption(),
+                        getAlgorithmCaption(), null);
+                    page.openEditor(input, ResultsEditor.ID);
+                }
+                catch (Throwable ex)
+                {
+                    CorePlugin.getDefault().getLog().log(
+                        new OperationStatus(IStatus.ERROR, CorePlugin.PLUGIN_ID, -1,
+                            "Error while showing query result editor", ex));
+                }
+            }
+        });
 
+    }
+
+    private String getSourceCaption()
+    {
+        return sourceCombo.getItem(sourceCombo.getSelectionIndex());
+    }
+
+    private String getAlgorithmCaption()
+    {
+        return algorithmCombo.getItem(algorithmCombo.getSelectionIndex());
     }
 
     private void createItems(Combo combo, ComponentLoader loader)

@@ -1,6 +1,6 @@
 package org.carrot2.workbench.core;
 
-import org.carrot2.workbench.core.search.SearchView;
+import org.carrot2.workbench.core.ui.SearchView;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 

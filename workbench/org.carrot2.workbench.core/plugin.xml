@@ -34,10 +34,19 @@
    <extension
          point="org.eclipse.ui.views">
       <view
-            class="org.carrot2.workbench.core.search.SearchView"
+            class="org.carrot2.workbench.core.ui.SearchView"
             id="org.carrot2.workbench.core.search"
             name="Search">
       </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.carrot2.workbench.core.ui.ResultsEditor"
+            icon="icons/sample.gif"
+            id="org.carrot2.workbench.core.editors.results"
+            name="Results Editor">
+      </editor>
    </extension>
 
 </plugin>
