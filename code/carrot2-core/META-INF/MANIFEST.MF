@@ -7,7 +7,7 @@ Export-Package: org.carrot2.core,
  org.carrot2.core.attribute,
  org.carrot2.core.test,
  org.carrot2.source
-Require-Bundle: org.carrot2.util.attribute,
+Require-Bundle: org.carrot2.util.attribute;visibility:=reexport,
  org.carrot2.util.common,
  com.google.collections,
  org.simpleframework.xml,

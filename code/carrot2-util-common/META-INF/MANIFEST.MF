@@ -6,7 +6,7 @@ Bundle-Version: 1.0.0
 Export-Package: org.carrot2.util,
  org.carrot2.util.httpclient,
  org.carrot2.util.resource
-Require-Bundle: org.carrot2.util.log4j,
+Require-Bundle: org.carrot2.util.log4j;visibility:=reexport,
  com.google.collections,
- org.apache.commons,
+ org.apache.commons;visibility:=reexport,
  org.apache.log4j

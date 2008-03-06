@@ -1,5 +1,6 @@
 package org.carrot2.workbench.core.ui;
 
+import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.workbench.core.CorePlugin;
 import org.carrot2.workbench.core.helpers.ComponentLoader;
 import org.eclipse.core.commands.operations.OperationStatus;
@@ -21,6 +22,7 @@ public class SearchView extends ViewPart
     private Combo sourceCombo;
     private Combo algorithmCombo;
     private Button processButton;
+    private Text queryText;
 
     @Override
     public void createPartControl(Composite parent)
@@ -40,6 +42,7 @@ public class SearchView extends ViewPart
                         .getWorkbenchWindow().getActivePage();
                     SearchParameters input = new SearchParameters(getSourceCaption(),
                         getAlgorithmCaption(), null);
+                    input.putAttribute(AttributeNames.QUERY, queryText.getText());
                     page.openEditor(input, ResultsEditor.ID);
                 }
                 catch (Throwable ex)
@@ -83,11 +86,14 @@ public class SearchView extends ViewPart
         sourceCombo = new Combo(innerComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
         Label algorithmLabel = new Label(innerComposite, SWT.CENTER);
         algorithmCombo = new Combo(innerComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
+        Label queryLabel = new Label(innerComposite, SWT.CENTER);
+        queryText = new Text(innerComposite, SWT.SINGLE | SWT.SEARCH);
         processButton = new Button(parent, SWT.PUSH);
 
         // init nonviusuals
         GridData GridData_3 = new GridData();
         GridData GridData_4 = new GridData();
+        GridData GridData_5 = new GridData();
         FormData FormData_1 = new FormData();
         FormData FormData_2 = new FormData();
 
@@ -96,6 +102,8 @@ public class SearchView extends ViewPart
         GridData_3.grabExcessHorizontalSpace = true;
         GridData_4.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
         GridData_4.grabExcessHorizontalSpace = true;
+        GridData_5.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
+        GridData_5.grabExcessHorizontalSpace = true;
         FormData_1.right = new FormAttachment(100, 0);
         FormData_1.top = new FormAttachment(0, 0);
         FormData_1.left = new FormAttachment(0, 0);
@@ -110,16 +118,20 @@ public class SearchView extends ViewPart
         algorithmLabel.setLayoutData(new GridData());
         algorithmLabel.setText("Algorithm:");
 
+        queryLabel.setLayoutData(new GridData());
+        queryLabel.setText("Query:");
+
         sourceCombo.setLayoutData(GridData_3);
         sourceCombo.setText("Combo_1");
 
         algorithmCombo.setLayoutData(GridData_4);
         algorithmCombo.setText("Combo_2");
 
+        queryText.setLayoutData(GridData_5);
+
         processButton.setLayoutData(FormData_2);
         processButton.setText("Process");
 
         innerComposite.setLayout(new GridLayout(4, false));
     }
-
 }

@@ -1,6 +1,7 @@
 package org.carrot2.workbench.core.ui;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.lang.NullArgumentException;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -59,7 +60,7 @@ public class SearchParameters implements IEditorInput
 
     public Map<String, Object> getAttributes()
     {
-        return Collections.unmodifiableMap(attributes);
+        return attributes;
     }
 
     public boolean exists()

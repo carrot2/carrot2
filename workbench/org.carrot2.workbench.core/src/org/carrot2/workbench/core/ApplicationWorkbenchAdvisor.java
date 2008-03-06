@@ -17,4 +17,11 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor
     {
         return PERSPECTIVE_ID;
     }
+
+    @Override
+    public void initialize(IWorkbenchConfigurer configurer)
+    {
+        super.initialize(configurer);
+        configurer.setSaveAndRestore(true);
+    }
 }
