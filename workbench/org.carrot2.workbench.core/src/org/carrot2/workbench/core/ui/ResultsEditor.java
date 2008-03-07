@@ -16,12 +16,18 @@ public class ResultsEditor extends MultiPageEditorPart
 {
     public static final String ID = "org.carrot2.workbench.core.editors.results";
 
+    /*
+     * 
+     */
     private void createClustersPage(Collection<Cluster> clusters)
     {
         ClusterTreeComponent tree = new ClusterTreeComponent();
         setControl(0, tree.createControls(getContainer(), clusters).getTree());
     }
 
+    /*
+     * 
+     */
     private void createDocumentsPage(Collection<Document> documents)
     {
         Text l = new Text(getContainer(), SWT.MULTI | SWT.WRAP | SWT.READ_ONLY
@@ -40,11 +46,14 @@ public class ResultsEditor extends MultiPageEditorPart
         setControl(1, l);
     }
 
+    /*
+     * 
+     */
     private void performClustering()
     {
+        // TODO: Use JDK's Executor framework here (reuse threads). 
         new Thread(new Runnable()
         {
-
             public void run()
             {
                 SearchParameters search = (SearchParameters) getEditorInput();
@@ -57,25 +66,27 @@ public class ResultsEditor extends MultiPageEditorPart
                         .getAlgorithmCaption()));
                 buildPages(result);
             }
-
         }).start();
-
     }
 
+    /*
+     * 
+     */
     private void buildPages(final ProcessingResult result)
     {
         Display.getDefault().asyncExec(new Runnable()
         {
-
             public void run()
             {
                 createClustersPage(result.getClusters());
                 createDocumentsPage(result.getDocuments());
             }
-
         });
     }
 
+    /*
+     * 
+     */
     protected void createPages()
     {
         performClustering();
@@ -85,6 +96,9 @@ public class ResultsEditor extends MultiPageEditorPart
         setPageText(0, "Clusters");
     }
 
+    /*
+     * 
+     */
     @Override
     public void init(IEditorSite site, IEditorInput input) throws PartInitException
     {
@@ -94,19 +108,31 @@ public class ResultsEditor extends MultiPageEditorPart
         super.init(site, input);
     }
 
+    /*
+     * 
+     */
     public void doSave(IProgressMonitor monitor)
     {
     }
 
+    /*
+     * 
+     */
     public void doSaveAs()
     {
     }
 
+    /*
+     * 
+     */
     public boolean isSaveAsAllowed()
     {
         return false;
     }
 
+    /*
+     * 
+     */
     @Override
     public String getPartName()
     {
@@ -114,6 +140,9 @@ public class ResultsEditor extends MultiPageEditorPart
             AttributeNames.QUERY).toString();
     }
 
+    /*
+     * 
+     */
     @Override
     public String getTitleToolTip()
     {

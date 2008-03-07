@@ -5,23 +5,15 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 /**
- * The activator class controls the plug-in life cycle
+ * The activator class controls the plug-in life cycle.
  */
 public class CorePlugin extends AbstractUIPlugin
 {
-
     // The plug-in ID
     public static final String PLUGIN_ID = "org.carrot2.workbench.core";
 
     // The shared instance
     private static CorePlugin plugin;
-
-    /**
-     * The constructor
-     */
-    public CorePlugin()
-    {
-    }
 
     /*
      * (non-Javadoc)

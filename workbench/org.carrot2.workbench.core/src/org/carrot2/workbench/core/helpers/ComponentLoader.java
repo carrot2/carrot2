@@ -7,7 +7,6 @@ import org.eclipse.core.runtime.*;
 
 public class ComponentLoader
 {
-
     private String extensionName;
     private String elementName;
     private String captionAttName;
@@ -22,14 +21,13 @@ public class ComponentLoader
 
     /**
      * All of parameters should be taken from schema files (*.exsd). Plugin name is
-     * assumed to be <code>"org.carrot2.core"</code>, since this class is dedicated to
+     * assumed to be <code>org.carrot2.core</code>, since this class is dedicated to
      * loading document sources and clustering algorithms, and those both extensions are
-     * defined in org.carrot2.core plugin.
+     * defined in <code>org.carrot2.core</code> plugin.
      * 
      * @param extensionName extension point ID (without plugin ID as a prefix)
      * @param elementName name of element, that stores info about component
-     * @param captionName name of a attribute, that stores label/caption/etc. of a
-     *            component
+     * @param captionName name of a attribute, that stores label/caption/etc. of a component
      * @param className name of a attribute, that stores name of a class of a component
      */
     private ComponentLoader(String extensionName, String elementName, String captionName,
@@ -67,6 +65,9 @@ public class ComponentLoader
         return converterCache.get(caption).getExecutableComponent();
     }
 
+    /*
+     * 
+     */
     private void loadExtensions()
     {
         if (converterCache == null)
@@ -82,6 +83,9 @@ public class ComponentLoader
         }
     }
 
+    /*
+     * 
+     */
     private void parseExtension(IConfigurationElement [] configurationElements)
     {
         for (int i = 0; i < configurationElements.length; i++)

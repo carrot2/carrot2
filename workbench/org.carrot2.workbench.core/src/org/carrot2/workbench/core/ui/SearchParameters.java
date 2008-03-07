@@ -93,5 +93,4 @@ public class SearchParameters implements IEditorInput
     {
         return null;
     }
-
 }
