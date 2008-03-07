@@ -2,7 +2,6 @@ package org.carrot2.core;
 
 import java.util.*;
 
-import org.carrot2.util.attribute.Attribute;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.load.Commit;
 import org.simpleframework.xml.load.Persist;
@@ -39,28 +38,28 @@ public final class Document
      * Field used during serialization/ deserialization to preserve Carrot2 2.x format.
      * See {@link #beforeSerialization()} and {@link #afterDeserialization()}.
      */
-    @Element
+    @Element(required = false)
     private String title;
 
     /**
      * Field used during serialization/ deserialization to preserve Carrot2 2.x format.
      * See {@link #beforeSerialization()} and {@link #afterDeserialization()}.
      */
-    @Element
+    @Element(required = false)
     private String url;
 
     /**
      * Field used during serialization/ deserialization to preserve Carrot2 2.x format.
      * See {@link #beforeSerialization()} and {@link #afterDeserialization()}.
      */
-    @Element
+    @Element(required = false)
     private String snippet;
 
     /**
      * Field used during serialization/ deserialization to preserve Carrot2 2.x format.
      * See {@link #beforeSerialization()} and {@link #afterDeserialization()}.
      */
-    @ElementMap
+    @ElementMap(required = false)
     private HashMap<String, Object> otherFields;
 
     /**
@@ -169,7 +168,10 @@ public final class Document
     @Commit
     private void afterDeserialization()
     {
-        fields.putAll(otherFields);
+        if (otherFields != null)
+        {
+            fields.putAll(otherFields);
+        }
         fields.put(TITLE, title);
         fields.put(SUMMARY, snippet);
         fields.put(CONTENT_URL, url);

@@ -98,23 +98,4 @@ final class BindableUtils
             return attributeAnnotation.key();
         }
     }
-
-    /**
-     * Computes the attribute key according to the definition in {@link Attribute#key()}.
-     */
-    static String getKey(Class<?> clazz, String fieldName)
-    {
-        try
-        {
-            return getKey(clazz.getDeclaredField(fieldName));
-        }
-        catch (final SecurityException e)
-        {
-            throw new RuntimeException(e);
-        }
-        catch (final NoSuchFieldException e)
-        {
-            throw new RuntimeException(e);
-        }
-    }
 }

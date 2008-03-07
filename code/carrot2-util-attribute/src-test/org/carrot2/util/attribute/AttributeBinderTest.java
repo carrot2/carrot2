@@ -619,7 +619,7 @@ public class AttributeBinderTest
     {
         if (clazz.getAnnotation(Bindable.class) != null)
         {
-            return BindableUtils.getKey(clazz, fieldName);
+            return AttributeUtils.getKey(clazz, fieldName);
         }
         else
         {

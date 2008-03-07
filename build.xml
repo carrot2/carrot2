@@ -73,6 +73,7 @@
 
             <sysproperty key="source.paths" value="${source.paths}" />
             <sysproperty key="external.api.tests.disabled" value="${external.api.tests.disabled}" />
+            <sysproperty key="org.carrot2.source.xml.test.file-path-prefix" value="code/carrot2-source-xml/src-test" />
 
             <batchtest todir="${tests.report.dir}">
                 <fileset dir="${build.dir}">

@@ -20,6 +20,25 @@ public abstract class DocumentSourceTestBase<T extends DocumentSource> extends
     ProcessingComponentTestBase<T>
 {
     /**
+     * Runs a query without specifying any additional attributes.
+     * 
+     * @return Returns the number of fetched documents. Access {@link #attributes} map to
+     *         get hold of the actual documents.
+     */
+    @SuppressWarnings("unchecked")
+    protected int runQuery()
+    {
+        final ProcessingResult result = controller.process(attributes,
+            getComponentClass());
+
+        final Collection<Document> documents = (Collection<Document>) attributes
+            .get(AttributeNames.DOCUMENTS);
+        assertNotNull(result.getDocuments());
+        assertSame(result.getDocuments(), documents);
+        return documents.size();
+    }
+
+    /**
      * Runs a <code>query</code> and asks for <code>results</code> results.
      * 
      * @return Returns the number of fetched documents. Access {@link #attributes} map to
@@ -30,16 +49,7 @@ public abstract class DocumentSourceTestBase<T extends DocumentSource> extends
     {
         attributes.put(AttributeNames.QUERY, query);
         attributes.put(AttributeNames.RESULTS, results);
-
-        final ProcessingResult result = controller.process(attributes,
-            getComponentClass());
-
-        final Collection<Document> documents = (Collection<Document>) attributes
-            .get(AttributeNames.DOCUMENTS);
-        assertNotNull(result.getDocuments());
-        assertSame(result.getDocuments(), documents);
-
-        return documents.size();
+        return runQuery();
     }
 
     /**

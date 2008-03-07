@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Simpleframework XML
 Bundle-SymbolicName: org.simpleframework.xml
 Bundle-Version: 1.0.0
-Bundle-ClassPath: simple-xml-1.7.1.jar
+Bundle-ClassPath: simple-xml-1.7.2.jar
 Bundle-Vendor: SimpleFramework
 Export-Package: org.simpleframework.xml,
  org.simpleframework.xml.filter,

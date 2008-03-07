@@ -1,12 +1,10 @@
 package org.carrot2.core;
 
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.*;
 
 import org.carrot2.core.attribute.AttributeNames;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Root;
+import org.simpleframework.xml.*;
 import org.simpleframework.xml.load.*;
 
 import com.google.common.collect.Lists;
@@ -26,7 +24,14 @@ public final class ProcessingResult
     private final Map<String, Object> attributesView;
 
     /**
-     * Fields used during serialization/ deserialization, see
+     * Query field used during serialization/ deserialization, see
+     * {@link #afterDeserialization()} and {@link #beforeSerialization()}
+     */
+    @Element(required = false)
+    private String query;
+
+    /**
+     * Documents field used during serialization/ deserialization, see
      * {@link #afterDeserialization()} and {@link #beforeSerialization()}
      */
     @ElementList(inline = true)
@@ -141,6 +146,7 @@ public final class ProcessingResult
     @Persist
     private void beforeSerialization()
     {
+        query = (String) attributes.get(AttributeNames.QUERY);
         documents = Lists.newArrayList(getDocuments());
     }
 
@@ -150,6 +156,7 @@ public final class ProcessingResult
     @Commit
     private void afterDeserialization()
     {
+        attributes.put(AttributeNames.QUERY, query);
         attributes.put(AttributeNames.DOCUMENTS, documents);
     }
 
@@ -166,6 +173,18 @@ public final class ProcessingResult
     }
 
     /**
+     * Serializes this {@link ProcessingResult} to an XML writer.
+     * 
+     * @param writer the writer to serialize this {@link ProcessingResult} to. The writer
+     *            will <strong>not</strong> be closed.
+     * @throws Exception in case of any problems with serialization
+     */
+    public void serialize(Writer writer) throws Exception
+    {
+        new Persister().write(this, writer);
+    }
+
+    /**
      * Deserializes a {@link ProcessingResult} from an XML stream.
      * 
      * @param inputStream the stream to deserialize a {@link ProcessingResult} from. The
@@ -176,5 +195,18 @@ public final class ProcessingResult
     public static ProcessingResult deserialize(InputStream inputStream) throws Exception
     {
         return new Persister().read(ProcessingResult.class, inputStream);
+    }
+
+    /**
+     * Deserializes a {@link ProcessingResult} from an XML reader.
+     * 
+     * @param reader the reader to deserialize a {@link ProcessingResult} from. The reader
+     *            will <strong>not</strong> be closed.
+     * @return deserialized {@link ProcessingResult}
+     * @throws Exception is case of any problems with deserialization
+     */
+    public static ProcessingResult deserialize(Reader reader) throws Exception
+    {
+        return new Persister().read(ProcessingResult.class, reader);
     }
 }

@@ -7,7 +7,7 @@
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-util-common"/>
 	<classpathentry exported="true" kind="var" path="CARROT2_30_CHECKOUT_BASE/lib/google-collections.jar"/>
 	<classpathentry kind="var" path="CARROT2_30_CHECKOUT_BASE/lib/compile-time/easymock.jar"/>
-	<classpathentry kind="var" path="CARROT2_30_CHECKOUT_BASE/lib/simple-xml-1.7.1.jar" sourcepath="/SRC_JARS/simpleframework"/>
+	<classpathentry kind="var" path="CARROT2_30_CHECKOUT_BASE/lib/simple-xml-1.7.2.jar" sourcepath="/SRC_JARS/simpleframework"/>
 	<classpathentry kind="var" path="CARROT2_30_CHECKOUT_BASE/lib/compile-time/fest-assert-1.0a1.jar"/>
 	<classpathentry kind="var" path="CARROT2_30_CHECKOUT_BASE/lib/compile-time/fest-mocks-0.1.jar"/>
 	<classpathentry kind="var" path="CARROT2_30_CHECKOUT_BASE/lib/compile-time/fest-util-0.4.jar"/>

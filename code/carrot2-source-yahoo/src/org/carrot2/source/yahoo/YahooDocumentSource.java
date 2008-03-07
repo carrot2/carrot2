@@ -58,6 +58,7 @@ public final class YahooDocumentSource extends SearchEngine
     @Processing
     @Input
     @Attribute(key = AttributeNames.QUERY)
+    @Required
     private String query;
 
     @SuppressWarnings("unused")
