@@ -1,0 +1,34 @@
+REQUIREMENTS:
+
+1. You need to download set of plugins, which will become your target platform (it is a good practice to have separate development platform and target platform). What you will download depends on your needs:
+- RCP/Platform Runtime Binary: enough to launch the workbench
+- RCP/Platform SDK: enough to launch the workbench, SRC added, necessary for context assist to work
+- RCP/Platform SDK for All Platforms (aka delta pack): all the above, necessary for building products for several platforms)
+
+Platform package has more plugins that RCP, workbench might be needing some of them in the future.
+Download page:
+http://download.eclipse.org/eclipse/downloads/drops/R-3.3.1.1-200710231652/index.php 
+(v. 3.3.1.1 is used by developer as a target platform, any version 3.3+ can also be used)
+
+2. Unpack downloaded package somewhere on disk (we will call this directory TARGET_ROOT).
+
+3. Copy org.junit4 plugin from your development platform (needed because of *TestBase in org.carrot2.org) to plugins directory in target platform. 
+
+4. Run build-workbench.build script.
+
+5. In your development Eclipse go to Plugin Development -> Target Platform preference page, point location to $TARGET_ROOT$\eclipse directory and click Reload. All plugins should be selected.
+
+6. Go to org.carrot2.workbench.core project, open Workbench.product file, on Overview page, in Testing section, choose 'Launch an Eclipse application'. Workbench should open :)
+
+=======================================================================================
+TROUBLESHOOTING (aka it won't build or launch although Ula says it should):
+
+1. Clean all projects.
+
+2. In Workbench.product file, Overview page choose 'Synchronize' before launching.
+
+3. In Target Platform preference page, choose 'Add Required Plugins' or 'Select all'.
+
+4. Still doesn't work? Open 'Error Log' view. Go to Workbench.product run configuration, in Main tab find out where Workspace Data Location is set. Import .log file from there in 'Error Log' view, maybe it will help to diagnose whats wrong.
+
+5. ??
