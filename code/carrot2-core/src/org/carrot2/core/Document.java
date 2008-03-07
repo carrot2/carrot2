@@ -2,19 +2,27 @@ package org.carrot2.core;
 
 import java.util.*;
 
+import org.carrot2.util.attribute.Attribute;
+import org.simpleframework.xml.*;
+import org.simpleframework.xml.load.Commit;
+import org.simpleframework.xml.load.Persist;
+
+import com.google.common.collect.Maps;
+
 /**
  * A document that to be processed by the framework. Each document is a collection of
  * fields carrying different bits of information, e.g. {@link #TITLE} or
  * {@link #CONTENT_URL}.
  */
+@Root(name = "document")
 public final class Document
 {
     /** Field name for the title of the document. */
     public static final String TITLE = "title";
 
     /**
-     * Field name for a short summary of the document, e.g. the snippet returned by
-     * the search engine.
+     * Field name for a short summary of the document, e.g. the snippet returned by the
+     * search engine.
      */
     public static final String SUMMARY = "summary";
 
@@ -28,11 +36,40 @@ public final class Document
     private final Map<String, Object> fieldsView = Collections.unmodifiableMap(fields);
 
     /**
-     * Internal identifier of the document. This identifier is assigned dynamically
-     * after documents are returned from {@link DocumentSource}.
-     *
+     * Field used during serialization/ deserialization to preserve Carrot2 2.x format.
+     * See {@link #beforeSerialization()} and {@link #afterDeserialization()}.
+     */
+    @Element
+    private String title;
+
+    /**
+     * Field used during serialization/ deserialization to preserve Carrot2 2.x format.
+     * See {@link #beforeSerialization()} and {@link #afterDeserialization()}.
+     */
+    @Element
+    private String url;
+
+    /**
+     * Field used during serialization/ deserialization to preserve Carrot2 2.x format.
+     * See {@link #beforeSerialization()} and {@link #afterDeserialization()}.
+     */
+    @Element
+    private String snippet;
+
+    /**
+     * Field used during serialization/ deserialization to preserve Carrot2 2.x format.
+     * See {@link #beforeSerialization()} and {@link #afterDeserialization()}.
+     */
+    @ElementMap
+    private HashMap<String, Object> otherFields;
+
+    /**
+     * Internal identifier of the document. This identifier is assigned dynamically after
+     * documents are returned from {@link DocumentSource}.
+     * 
      * @see ProcessingResult
      */
+    @Attribute
     int id;
 
     /**
@@ -46,7 +83,7 @@ public final class Document
      * A unique identifier of this document. The identifiers are assigned to documents
      * before processing finishes. Note that two documents with equal contents will be
      * assigned different identifiers.
-     *
+     * 
      * @return unique identifier of this document
      */
     public int getId()
@@ -56,7 +93,7 @@ public final class Document
 
     /**
      * Returns all fields of this document. The returned map is unmodifiable.
-     *
+     * 
      * @return all fields of this document
      */
     public Map<String, Object> getFields()
@@ -67,7 +104,7 @@ public final class Document
     /**
      * Returns value of the specified field of this document. If no field corresponds to
      * the provided <code>name</code>, <code>null</code> will be returned.
-     *
+     * 
      * @param name of the field to be returned
      * @return value of the field or <code>null</code>
      */
@@ -79,7 +116,7 @@ public final class Document
 
     /**
      * Adds a field to this document.
-     *
+     * 
      * @param name of the field to be added
      * @param value value of the field
      * @return this document for convenience
@@ -93,7 +130,7 @@ public final class Document
     /**
      * A utility method for creating a document with provided <code>title</code>,
      * <code>summary</code> and <code>contentUrl</code>.
-     *
+     * 
      * @param title for the document
      * @param summary for the document
      * @param contentUrl for the document
@@ -108,5 +145,33 @@ public final class Document
         document.addField(CONTENT_URL, contentUrl);
 
         return document;
+    }
+
+    /**
+     * Transfers some fields from the map to individual class fields.
+     */
+    @Persist
+    private void beforeSerialization()
+    {
+        title = (String) fields.get(TITLE);
+        snippet = (String) fields.get(SUMMARY);
+        url = (String) fields.get(CONTENT_URL);
+
+        otherFields = Maps.newHashMap(fields);
+        otherFields.remove(TITLE);
+        otherFields.remove(SUMMARY);
+        otherFields.remove(CONTENT_URL);
+    }
+
+    /**
+     * Transfers values of class field to the field map.
+     */
+    @Commit
+    private void afterDeserialization()
+    {
+        fields.putAll(otherFields);
+        fields.put(TITLE, title);
+        fields.put(SUMMARY, snippet);
+        fields.put(CONTENT_URL, url);
     }
 }

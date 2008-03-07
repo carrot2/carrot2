@@ -1,4 +1,4 @@
-<project name="c2-workbench" default="build">
+<project name="c2-workbench" default="copy.libs">
     
     <target name="copy.libs">
         <copy todir="workbench/com.thoughtworks.qdox/">
