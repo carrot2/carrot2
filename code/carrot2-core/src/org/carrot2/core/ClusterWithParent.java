@@ -39,7 +39,8 @@ public class ClusterWithParent
     }
 
     /**
-     * Wraps a single <code>cluster</code> together with its parent cluster.
+     * Wraps a single <code>cluster</code> together with its parent cluster. Note that
+     * for efficiency reasons, reference cycles are <strong>not</strong> detected.
      * 
      * @param cluster the cluster to be wrapped
      * @param parent the parent cluster of <code>cluster</code>, can be
@@ -63,7 +64,8 @@ public class ClusterWithParent
 
     /**
      * Wraps a list of top level clusters. Each cluster in the list will be assumed to
-     * have a <code>null</code> parent cluster.
+     * have a <code>null</code> parent cluster. Note that for efficiency reasons,
+     * reference cycles are <strong>not</strong> detected.
      * 
      * @param clusters the list of top-level clusters to be wrapped
      * @return the wrapped clusters with parents

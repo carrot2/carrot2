@@ -74,15 +74,24 @@ public class ClusterWithParentTest
                     }
                 })).containsOnly(clusterA, clusterB);
 
-        assertThat(
-            Lists.transform(clustersWithParents,
-                new Function<ClusterWithParent, Cluster>()
-                {
-                    public Cluster apply(ClusterWithParent clusterWithParent)
-                    {
-                        return clusterWithParent.subclusters.get(0).cluster;
-                    }
-                })).containsOnly(subcluster, subcluster);
+        assertThat(subcluster).isSameAs(
+            clustersWithParents.get(0).subclusters.get(0).cluster);
+        assertThat(subcluster).isSameAs(
+            clustersWithParents.get(1).subclusters.get(0).cluster);
+    }
+
+    /**
+     * Currently, cycle detection is not supported.
+     */
+    @Test(expected = StackOverflowError.class)
+    public void testCyclicReferences()
+    {
+        final Cluster cluster = new Cluster();
+        final Cluster subcluster = new Cluster();
+        cluster.addSubclusters(subcluster);
+        subcluster.addSubclusters(cluster); // Cyclic reference here
+
+        ClusterWithParent.wrap(null, cluster);
     }
 
     @Test
