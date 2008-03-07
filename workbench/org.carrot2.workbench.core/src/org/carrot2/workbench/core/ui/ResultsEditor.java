@@ -41,6 +41,7 @@ public class ResultsEditor extends MultiPageEditorPart
 
     protected void createPages()
     {
+        // TODO: this should be done outside of gui thread
         SearchParameters search = (SearchParameters) getEditorInput();
 
         final SimpleController controller = new SimpleController();
