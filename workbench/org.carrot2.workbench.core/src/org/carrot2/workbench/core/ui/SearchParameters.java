@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang.NullArgumentException;
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
@@ -18,11 +19,11 @@ public class SearchParameters implements IEditorInput
     public SearchParameters(String sourceCaption, String algorithmCaption,
         Map<String, Object> attributes)
     {
-        if (sourceCaption == null || sourceCaption.length() == 0)
+        if (StringUtils.isBlank(sourceCaption))
         {
             throw new NullArgumentException("sourceCaption");
         }
-        if (algorithmCaption == null || sourceCaption.length() == 0)
+        if (StringUtils.isBlank(algorithmCaption))
         {
             throw new NullArgumentException("algorithmCaption");
         }

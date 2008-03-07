@@ -1,5 +1,7 @@
 package org.carrot2.workbench.core.ui;
 
+import java.util.Collection;
+
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.workbench.core.helpers.ComponentLoader;
@@ -13,24 +15,20 @@ public class ResultsEditor extends MultiPageEditorPart
 {
     public static final String ID = "org.carrot2.workbench.core.editors.results";
 
-    /**
-     * Creates page 0 of the multi-page editor, which contains a text editor.
-     */
-    void createPage0()
+    private void createClustersPage(Collection<Cluster> clusters)
     {
-        SearchParameters search = (SearchParameters) getEditorInput();
+        ClusterTreeComponent tree = new ClusterTreeComponent();
+        addPage(tree.createControls(getContainer(), clusters).getTree());
+    }
 
-        final SimpleController controller = new SimpleController();
-        ProcessingResult result = controller.process(search.getAttributes(),
-            ComponentLoader.SOURCE_LOADER.getComponent(search.getSourceCaption()),
-            ComponentLoader.ALGORITHM_LOADER.getComponent(search.getAlgorithmCaption()));
-
+    private void createDocumentsPage(Collection<Document> documents)
+    {
         Text l = new Text(getContainer(), SWT.MULTI | SWT.WRAP | SWT.READ_ONLY
             | SWT.V_SCROLL);
 
         StringBuilder builder = new StringBuilder();
         String newLine = System.getProperty("line.separator");
-        for (Document doc : result.getDocuments())
+        for (Document doc : documents)
         {
             builder.append(doc.getField(Document.TITLE));
             builder.append(" - ");
@@ -39,12 +37,20 @@ public class ResultsEditor extends MultiPageEditorPart
         }
         l.setText(builder.toString());
         addPage(l);
-        setPageText(0, "Documents");
     }
 
     protected void createPages()
     {
-        createPage0();
+        SearchParameters search = (SearchParameters) getEditorInput();
+
+        final SimpleController controller = new SimpleController();
+        ProcessingResult result = controller.process(search.getAttributes(),
+            ComponentLoader.SOURCE_LOADER.getComponent(search.getSourceCaption()),
+            ComponentLoader.ALGORITHM_LOADER.getComponent(search.getAlgorithmCaption()));
+        createClustersPage(result.getClusters());
+        createDocumentsPage(result.getDocuments());
+        setPageText(1, "Documents");
+        setPageText(0, "Clusters");
     }
 
     @Override
