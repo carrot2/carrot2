@@ -8,14 +8,24 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.*;
-import org.eclipse.swt.widgets.*;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.part.ViewPart;
 
 public class SearchView extends ViewPart
 {
-
     public static final String ID = "org.carrot2.workbench.core.search";
 
     private Composite innerComposite;
@@ -31,11 +41,9 @@ public class SearchView extends ViewPart
 
         createItems(sourceCombo, ComponentLoader.SOURCE_LOADER);
         createItems(algorithmCombo, ComponentLoader.ALGORITHM_LOADER);
-        processButton.addSelectionListener(new SelectionAdapter()
-        {
-            @Override
-            public void widgetSelected(SelectionEvent e)
-            {
+
+        final Runnable execQuery = new Runnable() {
+            public void run() {
                 try
                 {
                     IWorkbenchPage page = SearchView.this.getViewSite()
@@ -52,12 +60,29 @@ public class SearchView extends ViewPart
                             "Error while showing query result editor", ex));
                 }
             }
+        };
+
+        processButton.addSelectionListener(new SelectionAdapter()
+        {
+            public void widgetSelected(SelectionEvent e)
+            {
+                execQuery.run();
+
+                // Set the focus back to the query box (?).
+                queryText.setFocus();
+            }
         });
 
+        queryText.addListener(SWT.DefaultSelection, new Listener () {
+            public void handleEvent (Event e) {
+                execQuery.run();
+            }
+        });
     }
 
     private String getSourceCaption()
     {
+        // TODO: There should be some corner-case checks here (no algorithms, no sources?). 
         return sourceCombo.getItem(sourceCombo.getSelectionIndex());
     }
 
@@ -75,6 +100,7 @@ public class SearchView extends ViewPart
     @Override
     public void setFocus()
     {
+        queryText.setFocus();
     }
 
     private void createPermanentLayout(Composite parent)
@@ -90,7 +116,7 @@ public class SearchView extends ViewPart
         queryText = new Text(innerComposite, SWT.SINGLE | SWT.SEARCH);
         processButton = new Button(parent, SWT.PUSH);
 
-        // init nonviusuals
+        // init nonvisuals
         GridData GridData_3 = new GridData();
         GridData GridData_4 = new GridData();
         GridData GridData_5 = new GridData();
@@ -111,6 +137,8 @@ public class SearchView extends ViewPart
         FormData_2.top = new FormAttachment(innerComposite, 0, 0);
 
         innerComposite.setLayoutData(FormData_1);
+
+        // TODO: We'll need to think about i18n at some point (externalize strings).
 
         sourceLabel.setLayoutData(new GridData());
         sourceLabel.setText("Source:");
