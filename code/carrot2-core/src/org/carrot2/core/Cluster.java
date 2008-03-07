@@ -260,37 +260,6 @@ public final class Cluster
         return actualSizeCache;
     }
 
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (this == obj)
-        {
-            return true;
-        }
-
-        if (obj == null || !(obj instanceof Cluster))
-        {
-            return false;
-        }
-
-        final Cluster other = (Cluster) obj;
-
-        // TODO: List comparisons work on SUN's JRE, but they are often not implemented
-        // properly on other JVMs (i.e. they are buggy in Microsoft's JVM for example).
-        // It is simply and safe to have our own array-comparison utility here.
-        return subclusters.equals(other.subclusters)
-            && phrases.equals(other.phrases)
-            && documents.equals(other.documents)
-            && attributes.equals(other.attributes);
-    }
-    
-
-    @Override
-    public int hashCode()
-    {
-        return phrases.hashCode() ^ documents.hashCode();
-    }
-
     /**
      * A recursive routine for calculating the size of the cluster.
      */

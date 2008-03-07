@@ -5,6 +5,7 @@ package org.carrot2.clustering.synthetic;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.carrot2.util.reflect.ObjectEquivalenceHelper.wrap;
 
 import java.util.*;
 
@@ -69,7 +70,7 @@ public class ByUrlClusteringAlgorithmTest extends
             docs.get(0), docs.get(1), docs.get(2)));
 
         final ArrayList<Cluster> actual = Lists.newArrayList(cluster(docs));
-        assertEquals(expectedFacets, actual);
+        assertEquals(wrap(expectedFacets), wrap(actual));
     }
 
     @Test
@@ -84,7 +85,7 @@ public class ByUrlClusteringAlgorithmTest extends
         final List<Cluster> expectedFacets = Lists.newArrayList(new Cluster("cos.pl",
             docs.get(0), docs.get(1), docs.get(2)));
 
-        assertEquals(expectedFacets, Lists.newArrayList(cluster(docs)));
+        assertEquals(wrap(expectedFacets), wrap(Lists.newArrayList(cluster(docs))));
     }
 
     @Test
@@ -103,7 +104,7 @@ public class ByUrlClusteringAlgorithmTest extends
         final Cluster facet1 = new Cluster("cos.pl").addSubclusters(facet11, facet12);
         expectedFacets.add(facet1);
 
-        assertEquals(expectedFacets, Lists.newArrayList(cluster(docs)));
+        assertEquals(wrap(expectedFacets), wrap(Lists.newArrayList(cluster(docs))));
     }
 
     @Test
@@ -119,6 +120,6 @@ public class ByUrlClusteringAlgorithmTest extends
             docs.get(0), docs.get(1), docs.get(4)), new Cluster("cos.com", docs.get(2),
             docs.get(3)));
 
-        assertEquals(expectedFacets, Lists.newArrayList(cluster(docs)));
+        assertEquals(wrap(expectedFacets), wrap(Lists.newArrayList(cluster(docs))));
     }
 }
