@@ -18,11 +18,11 @@ public class SearchParameters implements IEditorInput
     public SearchParameters(String sourceCaption, String algorithmCaption,
         Map<String, Object> attributes)
     {
-        if (sourceCaption == null || sourceCaption.isEmpty())
+        if (sourceCaption == null || sourceCaption.length() == 0)
         {
             throw new NullArgumentException("sourceCaption");
         }
-        if (algorithmCaption == null || algorithmCaption.isEmpty())
+        if (algorithmCaption == null || sourceCaption.length() == 0)
         {
             throw new NullArgumentException("algorithmCaption");
         }
