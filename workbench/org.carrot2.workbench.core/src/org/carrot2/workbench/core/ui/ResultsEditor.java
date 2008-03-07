@@ -7,6 +7,7 @@ import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.workbench.core.helpers.ComponentLoader;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.*;
 import org.eclipse.ui.part.MultiPageEditorPart;
@@ -18,7 +19,7 @@ public class ResultsEditor extends MultiPageEditorPart
     private void createClustersPage(Collection<Cluster> clusters)
     {
         ClusterTreeComponent tree = new ClusterTreeComponent();
-        addPage(tree.createControls(getContainer(), clusters).getTree());
+        setControl(0, tree.createControls(getContainer(), clusters).getTree());
     }
 
     private void createDocumentsPage(Collection<Document> documents)
@@ -36,20 +37,50 @@ public class ResultsEditor extends MultiPageEditorPart
             builder.append(newLine);
         }
         l.setText(builder.toString());
-        addPage(l);
+        setControl(1, l);
+    }
+
+    private void performClustering()
+    {
+        new Thread(new Runnable()
+        {
+
+            public void run()
+            {
+                SearchParameters search = (SearchParameters) getEditorInput();
+
+                final SimpleController controller = new SimpleController();
+                final ProcessingResult result = controller.process(
+                    search.getAttributes(), ComponentLoader.SOURCE_LOADER
+                        .getComponent(search.getSourceCaption()),
+                    ComponentLoader.ALGORITHM_LOADER.getComponent(search
+                        .getAlgorithmCaption()));
+                buildPages(result);
+            }
+
+        }).start();
+
+    }
+
+    private void buildPages(final ProcessingResult result)
+    {
+        Display.getDefault().asyncExec(new Runnable()
+        {
+
+            public void run()
+            {
+                createClustersPage(result.getClusters());
+                createDocumentsPage(result.getDocuments());
+            }
+
+        });
     }
 
     protected void createPages()
     {
-        // TODO: this should be done outside of gui thread
-        SearchParameters search = (SearchParameters) getEditorInput();
-
-        final SimpleController controller = new SimpleController();
-        ProcessingResult result = controller.process(search.getAttributes(),
-            ComponentLoader.SOURCE_LOADER.getComponent(search.getSourceCaption()),
-            ComponentLoader.ALGORITHM_LOADER.getComponent(search.getAlgorithmCaption()));
-        createClustersPage(result.getClusters());
-        createDocumentsPage(result.getDocuments());
+        performClustering();
+        addPage(null);
+        addPage(null);
         setPageText(1, "Documents");
         setPageText(0, "Clusters");
     }
