@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.workbench.core.CorePlugin;
 import org.carrot2.workbench.core.helpers.ComponentLoader;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.SWT;
@@ -51,8 +52,7 @@ public class ResultsEditor extends MultiPageEditorPart
      */
     private void performClustering()
     {
-        // TODO: Use JDK's Executor framework here (reuse threads). 
-        new Thread(new Runnable()
+        CorePlugin.getExecutorService().execute(new Runnable()
         {
             public void run()
             {
@@ -66,7 +66,7 @@ public class ResultsEditor extends MultiPageEditorPart
                         .getAlgorithmCaption()));
                 buildPages(result);
             }
-        }).start();
+        });
     }
 
     /*

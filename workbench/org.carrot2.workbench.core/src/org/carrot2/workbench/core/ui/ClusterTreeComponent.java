@@ -16,8 +16,8 @@ public class ClusterTreeComponent
         TreeViewer tree = new TreeViewer(parent);
         tree.setLabelProvider(new LabelProvider()
         {
-            Image folderImage = CorePlugin.imageDescriptorFromPlugin(
-                CorePlugin.PLUGIN_ID, "icons/folder.gif").createImage();
+            Image folderImage = CorePlugin.getImageDescriptor("icons/folder.gif")
+                .createImage();
 
             @Override
             public String getText(Object element)
@@ -58,6 +58,7 @@ public class ClusterTreeComponent
                 return (children != null && !children.isEmpty());
             }
 
+            @SuppressWarnings("unchecked")
             public Object [] getElements(Object inputElement)
             {
                 return ((List<ClusterWithParent>) inputElement).toArray();

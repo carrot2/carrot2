@@ -1,5 +1,8 @@
 package org.carrot2.workbench.core;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -15,10 +18,13 @@ public class CorePlugin extends AbstractUIPlugin
     // The shared instance
     private static CorePlugin plugin;
 
+    private static ExecutorService executorService;
+
     public void start(BundleContext context) throws Exception
     {
         super.start(context);
         plugin = this;
+        executorService = Executors.newCachedThreadPool();
     }
 
     public void stop(BundleContext context) throws Exception
@@ -46,5 +52,15 @@ public class CorePlugin extends AbstractUIPlugin
     public static ImageDescriptor getImageDescriptor(String path)
     {
         return imageDescriptorFromPlugin(PLUGIN_ID, path);
+    }
+
+    /**
+     * @return shared instance of ThreadPoolExecutor
+     * @see java.util.concurrent.ThreadPoolExecutor
+     * @see java.util.concurrent.Executors#newCachedThreadPool()
+     */
+    public static ExecutorService getExecutorService()
+    {
+        return executorService;
     }
 }
