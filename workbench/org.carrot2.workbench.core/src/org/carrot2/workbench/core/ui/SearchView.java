@@ -8,19 +8,8 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.FormAttachment;
-import org.eclipse.swt.layout.FormData;
-import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.layout.*;
+import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.part.ViewPart;
 
@@ -42,8 +31,10 @@ public class SearchView extends ViewPart
         createItems(sourceCombo, ComponentLoader.SOURCE_LOADER);
         createItems(algorithmCombo, ComponentLoader.ALGORITHM_LOADER);
 
-        final Runnable execQuery = new Runnable() {
-            public void run() {
+        final Runnable execQuery = new Runnable()
+        {
+            public void run()
+            {
                 try
                 {
                     IWorkbenchPage page = SearchView.this.getViewSite()
@@ -73,8 +64,10 @@ public class SearchView extends ViewPart
             }
         });
 
-        queryText.addListener(SWT.DefaultSelection, new Listener () {
-            public void handleEvent (Event e) {
+        queryText.addListener(SWT.DefaultSelection, new Listener()
+        {
+            public void handleEvent(Event e)
+            {
                 execQuery.run();
             }
         });
@@ -82,7 +75,8 @@ public class SearchView extends ViewPart
 
     private String getSourceCaption()
     {
-        // TODO: There should be some corner-case checks here (no algorithms, no sources?). 
+        // TODO: There should be some corner-case checks here (no algorithms, no
+        // sources?).
         return sourceCombo.getItem(sourceCombo.getSelectionIndex());
     }
 
