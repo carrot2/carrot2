@@ -11,6 +11,7 @@ public class Perspective implements IPerspectiveFactory
     {
         layout.addStandaloneView(SearchView.ID, false, IPageLayout.TOP, 0.2f, layout
             .getEditorArea());
+        layout.getViewLayout(SearchView.ID).setCloseable(false);
         layout.setEditorAreaVisible(true);
     }
 }

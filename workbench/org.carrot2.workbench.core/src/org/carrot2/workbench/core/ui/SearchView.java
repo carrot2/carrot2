@@ -1,5 +1,7 @@
 package org.carrot2.workbench.core.ui;
 
+import java.util.ArrayList;
+
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.workbench.core.CorePlugin;
 import org.carrot2.workbench.core.helpers.ComponentLoader;
@@ -8,6 +10,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Resource;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.IWorkbenchPage;
@@ -22,6 +25,7 @@ public class SearchView extends ViewPart
     private Combo algorithmCombo;
     private Button processButton;
     private Text queryText;
+    private java.util.List<Resource> toDispose = new ArrayList<Resource>();
 
     @Override
     public void createPartControl(Composite parent)
@@ -30,6 +34,8 @@ public class SearchView extends ViewPart
 
         createItems(sourceCombo, ComponentLoader.SOURCE_LOADER);
         createItems(algorithmCombo, ComponentLoader.ALGORITHM_LOADER);
+
+        checkProcessingConditions(parent);
 
         final Runnable execQuery = new Runnable()
         {
@@ -73,15 +79,55 @@ public class SearchView extends ViewPart
         });
     }
 
+    /**
+     * Disables query textbox and process button if there is no document source or
+     * clustering algorithm.
+     * 
+     * @param parent
+     */
+    private void checkProcessingConditions(Composite parent)
+    {
+        if (sourceCombo.getItemCount() == 0 || algorithmCombo.getItemCount() == 0)
+        {
+            processButton.setEnabled(false);
+            queryText.setEnabled(false);
+        }
+        if (sourceCombo.getItemCount() == 0)
+        {
+            disableComboWithMessage(sourceCombo, "No Document Source found!");
+        }
+        if (algorithmCombo.getItemCount() == 0)
+        {
+            disableComboWithMessage(algorithmCombo, "No Clustering Algorithm found!");
+        }
+    }
+
+    private void disableComboWithMessage(Combo toDisable, String message)
+    {
+        toDisable.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
+        toDisable.setItems(new String []
+        {
+            message
+        });
+        toDisable.select(0);
+        toDisable.setEnabled(false);
+    }
+
     private String getSourceCaption()
     {
-        // TODO: There should be some corner-case checks here (no algorithms, no
-        // sources?).
+        if (sourceCombo.getSelectionIndex() == -1)
+        {
+            return null;
+        }
         return sourceCombo.getItem(sourceCombo.getSelectionIndex());
     }
 
     private String getAlgorithmCaption()
     {
+        if (algorithmCombo.getSelectionIndex() == -1)
+        {
+            return null;
+        }
         return algorithmCombo.getItem(algorithmCombo.getSelectionIndex());
     }
 
@@ -95,6 +141,16 @@ public class SearchView extends ViewPart
     public void setFocus()
     {
         queryText.setFocus();
+    }
+
+    @Override
+    public void dispose()
+    {
+        for (Resource resource : toDispose)
+        {
+            resource.dispose();
+        }
+        super.dispose();
     }
 
     private void createPermanentLayout(Composite parent)
@@ -127,7 +183,7 @@ public class SearchView extends ViewPart
         FormData_1.right = new FormAttachment(100, 0);
         FormData_1.top = new FormAttachment(0, 0);
         FormData_1.left = new FormAttachment(0, 0);
-        FormData_2.right = new FormAttachment(100, 0);
+        FormData_2.right = new FormAttachment(100, -5);
         FormData_2.top = new FormAttachment(innerComposite, 0, 0);
 
         innerComposite.setLayoutData(FormData_1);
