@@ -4,12 +4,10 @@ import java.io.InputStream;
 import java.util.*;
 
 import org.carrot2.core.*;
-import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.core.attribute.Processing;
+import org.carrot2.core.attribute.*;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.resource.Resource;
-import org.carrot2.util.resource.ResourceUtils;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -41,6 +39,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
      * @label XML Resource
      */
     @Input
+    @Init
     @Processing
     @Attribute
     @Required
