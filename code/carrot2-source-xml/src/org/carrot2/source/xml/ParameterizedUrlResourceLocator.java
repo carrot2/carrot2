@@ -7,11 +7,14 @@ import org.apache.log4j.Logger;
 import org.carrot2.util.resource.*;
 
 /**
- * Looks up resources as, possibly remote, URLs.
+ * Looks up resources as, possibly remote, URLs and returns
+ * {@link ParameterizedUrlResource}s, so that parameterization of the actual URL is
+ * possible at runtime.
  */
-public class ParametrizedUrlResourceLocator implements ResourceLocator
+public class ParameterizedUrlResourceLocator implements ResourceLocator
 {
-    private final static Logger logger = Logger.getLogger(ParametrizedUrlResourceLocator.class);
+    private final static Logger logger = Logger
+        .getLogger(ParameterizedUrlResourceLocator.class);
 
     /**
      * If the provided <code>resource</code> is a valid URL, returns an array containing
@@ -24,7 +27,7 @@ public class ParametrizedUrlResourceLocator implements ResourceLocator
             URL url = new URL(resource);
             return new Resource []
             {
-                new ParametrizedUrlResource(url)
+                new ParameterizedUrlResource(url)
             };
         }
         catch (MalformedURLException e)

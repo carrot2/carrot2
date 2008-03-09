@@ -59,7 +59,7 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
     @Prerequisite(requires = "carrot2XmlFeedTestsEnabled")
     public void testRemoteUrl() throws MalformedURLException
     {
-        Resource resource = new ParametrizedUrlResource(new URL(
+        Resource resource = new ParameterizedUrlResource(new URL(
             getCarrot2XmlFeedUrlBase() + "&q=${query}&results=${results}"));
         final String query = "apple computer";
 

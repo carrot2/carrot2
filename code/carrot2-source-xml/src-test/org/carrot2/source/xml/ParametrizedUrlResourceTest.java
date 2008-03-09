@@ -9,7 +9,7 @@ import org.junit.Test;
 import com.google.common.collect.Maps;
 
 /**
- * Test cases for {@link ParametrizedUrlResource}.
+ * Test cases for {@link ParameterizedUrlResource}.
  */
 public class ParametrizedUrlResourceTest
 {
@@ -18,7 +18,7 @@ public class ParametrizedUrlResourceTest
     {
         final String url = "http://test.com/main?query=${query}&results=${results}";
         final Map<String, Object> attributes = Maps.newHashMap();
-        final String processedUrl = ParametrizedUrlResource.substituteAttributes(
+        final String processedUrl = ParameterizedUrlResource.substituteAttributes(
             attributes, url);
 
         assertEquals(url, processedUrl);
@@ -32,7 +32,7 @@ public class ParametrizedUrlResourceTest
         attributes.put("query", "test");
         attributes.put("results", "");
 
-        final String processedUrl = ParametrizedUrlResource.substituteAttributes(
+        final String processedUrl = ParameterizedUrlResource.substituteAttributes(
             attributes, url);
         final String expectedProcessedUrl = "http://test.com/main?query=test&results=";
 

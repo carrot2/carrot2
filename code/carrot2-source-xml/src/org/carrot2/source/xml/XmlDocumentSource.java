@@ -26,7 +26,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
      * {@link Resource} instances from a variety of locations.
      * <p>
      * One special {@link Resource} implementation you can use is
-     * {@link ParametrizedUrlResource}. It allows you to specify attribute place holders
+     * {@link ParameterizedUrlResource}. It allows you to specify attribute place holders
      * in the URL that will be replaced during runtime. The place holder format is
      * <code>${attribute}</code>. The following attributes will be resolved:
      * <ul>
@@ -69,7 +69,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
         InputStream inputStream = null;
         try
         {
-            if (resource instanceof ParametrizedUrlResource)
+            if (resource instanceof ParameterizedUrlResource)
             {
                 // If we got a specialized implementation of the Resource interface,
                 // perform substitution of known attributes
@@ -78,7 +78,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
                 attributes.put("query", (query != null ? query : ""));
                 attributes.put("results", (results != -1 ? results : ""));
 
-                inputStream = ((ParametrizedUrlResource) resource).open(attributes);
+                inputStream = ((ParameterizedUrlResource) resource).open(attributes);
             }
             else
             {
