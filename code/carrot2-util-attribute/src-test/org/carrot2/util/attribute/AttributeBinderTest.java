@@ -248,6 +248,18 @@ public class AttributeBinderTest
         private NotBindable initInputReference;
     }
 
+    @Bindable
+    @SuppressWarnings("unused")
+    public static class RequiredInitProcessingAttributes
+    {
+        @TestInit
+        @TestProcessing
+        @Input
+        @Required
+        @Attribute
+        private String initProcessingInputString;
+    }
+
     @Before
     public void initAttributes()
     {
@@ -608,6 +620,31 @@ public class AttributeBinderTest
         instance = new NotBindableCoercedAttribute();
         AttributeBinder.bind(instance, attributes, Input.class, TestInit.class);
         assertNotNull(instance.initInputReference);
+    }
+
+    @Test
+    public void testRequiredAttributeAlreadyBound() throws InstantiationException
+    {
+        RequiredInitProcessingAttributes instance;
+        instance = new RequiredInitProcessingAttributes();
+        instance.initProcessingInputString = "test";
+
+        // Attribute value missing, but should not cause exception
+        AttributeBinder.bind(instance, attributes, Input.class, TestProcessing.class);
+    }
+
+    @Test(expected = AttributeBindingException.class)
+    public void testRequiredAttributeNullAttempt() throws InstantiationException
+    {
+        RequiredInitProcessingAttributes instance;
+        instance = new RequiredInitProcessingAttributes();
+        instance.initProcessingInputString = "test";
+
+        // An attempt to set the required attribute to null
+        addAttribute(RequiredInitProcessingAttributes.class, "initProcessingInputString",
+            null);
+
+        AttributeBinder.bind(instance, attributes, Input.class, TestProcessing.class);
     }
 
     private void addAttribute(Class<?> clazz, String field, Object value)

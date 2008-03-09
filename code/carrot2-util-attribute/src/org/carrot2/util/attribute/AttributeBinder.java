@@ -29,11 +29,13 @@ public class AttributeBinder
      * <p>
      * Keys of the <code>values</code> map are interpreted as attribute keys as defined
      * by {@link Attribute#key()}. When setting attribute values, the map must contain
-     * non-<code>null</code> mappings for all {@link Required} attributes, otherwise an
-     * {@link AttributeBindingException} will be thrown. If the map has no mapping for
-     * some non-{@link Required} attribute, the value of that attribute will not be
-     * changed. However, if the map contains a <code>null</code> mapping for some non-{@link Required}
-     * attribute, the value that attribute will be set to <code>null</code>.
+     * non-<code>null</code> mappings for all {@link Required} attributes that have not
+     * yet been set on the <code>object</code> to a non-<code>null</code> value.
+     * Otherwise an {@link AttributeBindingException} will be thrown. If the map has no
+     * mapping for some non-{@link Required} attribute, the value of that attribute will
+     * not be changed. However, if the map contains a <code>null</code> mapping for some
+     * non-{@link Required} attribute, the value that attribute will be set to
+     * <code>null</code>.
      * <p>
      * When setting attributes, values will be transferred from the map without any
      * conversion with one exception. If the type of the attribute field is not
@@ -124,6 +126,18 @@ public class AttributeBinder
             final String key = BindableUtils.getKey(field);
             Object value = null;
 
+            // Get the @Bindable value to perform a recursive call on it later on
+            try
+            {
+                field.setAccessible(true);
+                value = field.get(object);
+            }
+            catch (final Exception e)
+            {
+                throw new AttributeBindingException(key, "Could not get field value "
+                    + object.getClass().getName() + "#" + field.getName());
+            }
+
             // We skip fields that do not have all the required annotations
             if (hasAllRequiredAnnotations(field, filteringAnnotations))
             {
@@ -132,14 +146,16 @@ public class AttributeBinder
                     && field.getAnnotation(Input.class) != null)
                 {
                     final boolean required = field.getAnnotation(Required.class) != null;
+                    final Object currentValue = value;
 
                     // Transfer values from the map to the fields. If the input map
                     // doesn't contain an entry for this key, do nothing. Otherwise,
                     // perform binding as usual. This will allow to set null values
                     if (!values.containsKey(key))
                     {
-                        if (required)
+                        if (currentValue == null && required)
                         {
+                            // Throw exception only if the current value is null
                             throw new AttributeBindingException(key,
                                 "No value for required attribute: " + key);
                         }
@@ -150,11 +166,14 @@ public class AttributeBinder
                     value = values.get(key);
 
                     // TODO: Should required mean also not null? I'm only 99% convinced...
-                    if (value == null && required)
+                    if (required)
                     {
-                        // TODO: maybe we should have some dedicated exception here?
-                        throw new AttributeBindingException(key,
-                            "No value for required attribute: " + key);
+                        if (value == null)
+                        {
+                            // TODO: maybe we should have some dedicated exception here?
+                            throw new AttributeBindingException(key,
+                                "Not allowed to set required attribute to null: " + key);
+                        }
                     }
 
                     // Try to coerce from class to its instance first
@@ -227,20 +246,6 @@ public class AttributeBinder
                             "Could not get field value " + object.getClass().getName()
                                 + "#" + field.getName());
                     }
-                }
-            }
-            else
-            {
-                // Just get the @Bindable value to perform a recursive call on it below
-                try
-                {
-                    field.setAccessible(true);
-                    value = field.get(object);
-                }
-                catch (final Exception e)
-                {
-                    throw new AttributeBindingException(key, "Could not get field value "
-                        + object.getClass().getName() + "#" + field.getName());
                 }
             }
 
