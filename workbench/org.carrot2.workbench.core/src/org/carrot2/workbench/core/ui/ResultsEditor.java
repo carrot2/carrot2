@@ -89,6 +89,17 @@ public class ResultsEditor extends MultiPageEditorPart
      */
     protected void createPages()
     {
+        /*
+         * [dw] I don't want to get in the way here, but wouldn't a classic MVC pattern be better for
+         * the design of this class/ functionality? What I specifically mean is to have a model object
+         * wrapping the clustering to be executed and implementing a listener/ event producer pattern.
+         * 
+         * Then you can create composites that are attached to the above model and listen for events
+         * about the clustering being in progress, updated or finished in which case they re-render
+         * their content (if they are visible).
+         * 
+         * Just a thought, but certainly something to think of.
+         */
         performClustering();
         addPage(null);
         addPage(null);
