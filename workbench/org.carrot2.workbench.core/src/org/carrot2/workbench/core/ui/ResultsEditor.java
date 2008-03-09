@@ -7,9 +7,7 @@ import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.workbench.core.CorePlugin;
 import org.carrot2.workbench.core.helpers.ComponentLoader;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.*;
 import org.eclipse.ui.part.MultiPageEditorPart;
 
@@ -31,20 +29,8 @@ public class ResultsEditor extends MultiPageEditorPart
      */
     private void createDocumentsPage(Collection<Document> documents)
     {
-        Text l = new Text(getContainer(), SWT.MULTI | SWT.WRAP | SWT.READ_ONLY
-            | SWT.V_SCROLL);
-
-        StringBuilder builder = new StringBuilder();
-        String newLine = System.getProperty("line.separator");
-        for (Document doc : documents)
-        {
-            builder.append(doc.getField(Document.TITLE));
-            builder.append(" - ");
-            builder.append(doc.getField(Document.CONTENT_URL));
-            builder.append(newLine);
-        }
-        l.setText(builder.toString());
-        setControl(1, l);
+        DocumentListComponent list = new DocumentListComponent();
+        setControl(1, list.createControls(getContainer(), documents));
     }
 
     /*
