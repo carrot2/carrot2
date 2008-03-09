@@ -14,7 +14,7 @@ import com.google.common.collect.Lists;
  * collected after processing and utility methods for obtaining processed documents ({@link #getDocuments()}))
  * and the created clusters ({@link #getClusters()}).
  */
-@Root(name = "searchresult")
+@Root(name = "searchresult", strict = false)
 public final class ProcessingResult
 {
     /** Attributes collected after processing */

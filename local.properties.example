@@ -9,3 +9,6 @@
 # Set this property to true to disable tests depending on the correct
 # functioning of external APIs, e.g. search engine APIs.
 #external.api.tests.disabled=true
+
+# To run tests requiring Carrot2 XML feed URLs, set the base URL here
+#carrot2.xml.feed.url.base=
