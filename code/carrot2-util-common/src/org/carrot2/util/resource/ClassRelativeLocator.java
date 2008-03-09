@@ -21,6 +21,12 @@ public class ClassRelativeLocator implements ResourceLocator
      */
     public Resource [] getAll(String resource, Class<?> clazz)
     {
+        if (clazz == null)
+        {
+            logger.warn("The class was null.");
+            return new Resource [0];
+        }
+        
         try
         {
             final ArrayList<Resource> result = Lists.newArrayList();

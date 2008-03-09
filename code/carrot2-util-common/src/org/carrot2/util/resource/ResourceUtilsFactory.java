@@ -13,6 +13,9 @@
 package org.carrot2.util.resource;
 
 import java.io.File;
+import java.util.ArrayList;
+
+import com.google.common.collect.Lists;
 
 /**
  * A factory of {@link ResourceUtils}.
@@ -26,6 +29,8 @@ public final class ResourceUtilsFactory
     {
         final ResourceLocator [] base = new ResourceLocator []
         {
+            // Absolute resource files
+            new AbsoluteFilePathLocator(),
             // Current working directory
             new DirLocator(new File(".").getAbsolutePath()),
             // Context class loader-relative
@@ -38,10 +43,34 @@ public final class ResourceUtilsFactory
     }
 
     /**
+     * Return the default resource-lookup locators and the locators loading resources from
+     * remote URLs.
+     */
+    public static ResourceLocator [] getDefaultAndRemoteResourceLocators()
+    {
+        ArrayList<ResourceLocator> list = Lists
+            .newArrayList(getDefaultResourceLocators());
+
+        // Add a locator resolving remote URLs
+        list.add(new URLResourceLocator());
+
+        return list.toArray(new ResourceLocator [list.size()]);
+    }
+
+    /**
      * Return the default resource lookup proxy.
      */
     public static ResourceUtils getDefaultResourceUtils()
     {
         return new ResourceUtils(getDefaultResourceLocators());
+    }
+
+    /**
+     * Return the resource lookup proxy locating resources at default and remote URL
+     * locations.
+     */
+    public static ResourceUtils getDefaultAndRemoteResourceUtils()
+    {
+        return new ResourceUtils(getDefaultAndRemoteResourceLocators());
     }
 }

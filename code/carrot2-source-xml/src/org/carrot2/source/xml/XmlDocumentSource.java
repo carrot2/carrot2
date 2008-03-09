@@ -8,6 +8,8 @@ import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.attribute.*;
+import org.carrot2.util.resource.Resource;
+import org.carrot2.util.resource.ResourceUtils;
 
 /**
  * Fetches documents from XML files and stream.
@@ -16,16 +18,16 @@ import org.carrot2.util.attribute.*;
 public class XmlDocumentSource extends ProcessingComponentBase implements DocumentSource
 {
     /**
-     * Path to load the XML data from. The path can be either absolute or relative to
-     * the current working directory.
+     * The resource to load XML data from. Use {@link ResourceUtils} to easily obtain
+     * {@link Resource} instances for many different types of resources.
      * 
-     * @label Path
+     * @label XML Resource
      */
     @Input
     @Processing
     @Attribute
     @Required
-    private String path;
+    private Resource resource;
 
     @SuppressWarnings("unused")
     @Processing
@@ -36,18 +38,11 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
     @Override
     public void process() throws ProcessingException
     {
-        final File xmlFile = new File(path);
-
-        FileInputStream fileInputStream = null;
+        InputStream fileInputStream = null;
         try
         {
-            fileInputStream = new FileInputStream(xmlFile);
+            fileInputStream = resource.open();
             documents = ProcessingResult.deserialize(fileInputStream).getDocuments();
-        }
-        catch (FileNotFoundException e)
-        {
-            throw new ProcessingException("File does not exist: "
-                + xmlFile.getAbsolutePath());
         }
         catch (Exception e)
         {

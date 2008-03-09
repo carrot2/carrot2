@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -22,7 +21,8 @@ import org.carrot2.util.StreamUtils;
 import com.google.common.collect.Lists;
 
 /**
- * Resource loading abstraction layer.
+ * Resource loading abstraction layer. Use {@link ResourceUtilsFactory} to get the default
+ * {@link ResourceUtils} instance.
  */
 public final class ResourceUtils
 {
@@ -47,55 +47,63 @@ public final class ResourceUtils
 
     /**
      * Scans all resource locators and returns matching resources.
-     *
+     * 
      * @param resource Resource name.
      * @param clazz Optional class for class-relative resources.
      * @return Returns an empty array if no resource matched the given name.
      */
-    public Resource [] getAll(String resource, Class<?> clazz) {
+    public Resource [] getAll(String resource, Class<?> clazz)
+    {
         final ArrayList<Resource> result = Lists.newArrayList();
         for (final ResourceLocator element : locators)
         {
             final Resource [] current = element.getAll(resource, clazz);
             // There shouldn't be too many matching resources,
             // so linear search is ok.
-            for (int j = 0; j < current.length; j++) {
-                if (!result.contains(current[j])) {
+            for (int j = 0; j < current.length; j++)
+            {
+                if (!result.contains(current[j]))
+                {
                     result.add(current[j]);
                 }
             }
         }
 
-        if (logger.isDebugEnabled()) {
+        if (logger.isDebugEnabled())
+        {
             final StringBuffer buf = new StringBuffer("All matching: " + resource + ", ");
-            for (int i = 0; i < result.size(); i++) {
+            for (int i = 0; i < result.size(); i++)
+            {
                 if (i > 0)
                 {
                     buf.append(", ");
                 }
                 buf.append(result.get(i).toString());
             }
-            if (result.size() == 0) {
+            if (result.size() == 0)
+            {
                 buf.append("(none found)");
             }
             logger.debug(buf.toString());
         }
 
-        return result.toArray(new Resource[result.size()]);
+        return result.toArray(new Resource [result.size()]);
     }
 
     /**
      * Scans through resource locators and returns the first matching resource.
-     *
+     * 
      * @param resource Resource name.
      * @param clazz Optional class for class-relative resources.
      * @return Returns null if no resource was found for the given name.
      */
-    public Resource getFirst(String resource, Class<?> clazz) {
+    public Resource getFirst(String resource, Class<?> clazz)
+    {
         for (final ResourceLocator element : locators)
         {
             final Resource [] result = element.getAll(resource, clazz);
-            if (result != null && result.length > 0) {
+            if (result != null && result.length > 0)
+            {
                 logger.debug("First matching " + resource + ", " + result[0].toString());
                 return result[0];
             }
@@ -113,11 +121,10 @@ public final class ResourceUtils
     }
 
     /**
-     * Prefetches the entire content of <code>stream</code>, closing it at the
-     * end. Returns an input stream to in-memory buffer.
+     * Prefetches the entire content of <code>stream</code>, closing it at the end.
+     * Returns an input stream to in-memory buffer.
      */
-    public static InputStream prefetch(InputStream stream)
-        throws IOException
+    public static InputStream prefetch(InputStream stream) throws IOException
     {
         if (stream instanceof ByteArrayInputStream)
         {
