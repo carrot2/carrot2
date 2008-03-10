@@ -13,6 +13,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.browser.IWebBrowser;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 
 public class DocumentWidget extends Composite
@@ -44,17 +45,12 @@ public class DocumentWidget extends Composite
                     try
                     {
                         // TODO: check user preference here
-                        IWorkbenchBrowserSupport support = PlatformUI.getWorkbench()
-                            .getBrowserSupport();
-                        if (support.isInternalWebBrowserAvailable())
-                        {
-                            support.createBrowser(IWorkbenchBrowserSupport.AS_EDITOR,
-                                null, null, null).openURL(new URL(e.text));
-                        }
-                        else
-                        {
-                            support.getExternalBrowser().openURL(new URL(e.text));
-                        }
+                        IWebBrowser browser = PlatformUI.getWorkbench()
+                            .getBrowserSupport().createBrowser(
+                                IWorkbenchBrowserSupport.STATUS
+                                    | IWorkbenchBrowserSupport.AS_EDITOR, null, null,
+                                null);
+                        browser.openURL(new URL(e.text));
                     }
                     catch (Exception ex)
                     {
