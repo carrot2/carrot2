@@ -1,6 +1,7 @@
 package org.carrot2.source.xml;
 
 import java.io.InputStream;
+import java.net.ConnectException;
 import java.util.*;
 
 import org.carrot2.core.*;
@@ -62,6 +63,9 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
     @Attribute(key = AttributeNames.DOCUMENTS)
     private Collection<Document> documents;
 
+    /*
+     * 
+     */
     @Override
     public void process() throws ProcessingException
     {
@@ -108,12 +112,10 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
                 }
                 documents = truncatedDocuments;
             }
-
-            // Copy query
         }
         catch (Exception e)
         {
-            throw new ProcessingException("Could not deserialize XML data", e);
+            throw new ProcessingException("Could not process query: " + e.getMessage(), e);
         }
         finally
         {
