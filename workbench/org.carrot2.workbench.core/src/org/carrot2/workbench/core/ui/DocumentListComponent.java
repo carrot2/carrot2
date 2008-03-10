@@ -17,8 +17,8 @@ public class DocumentListComponent
 
     public Composite createControls(final Composite parent, Collection<Document> documents)
     {
-        // TODO: enable mouse wheel scrolling
         final ScrolledComposite scroll = new ScrolledComposite(parent, SWT.V_SCROLL);
+        scroll.getVerticalBar().setIncrement(5);
         scroll.setLayout(new FillLayout());
         final Composite list = new Composite(scroll, SWT.NONE);
         list.setLayout(new GridLayout());
@@ -29,6 +29,7 @@ public class DocumentListComponent
             gd.grabExcessHorizontalSpace = true;
             gd.horizontalAlignment = SWT.FILL;
             dw.setLayoutData(gd);
+            // TODO: think of creating this fontBold differently, I don't like it this way
             if (boldFont == null)
             {
                 FontData fd = dw.getTitleText().getFont().getFontData()[0];
