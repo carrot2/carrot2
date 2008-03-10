@@ -44,7 +44,9 @@ public class DocumentWidget extends Composite
                 {
                     try
                     {
-                        // TODO: check user preference here
+                        // TODO: check user preference here, 
+                        // TODO: in case of an error embedding the browser, try opening it in
+                        // an external application (like before).
                         IWebBrowser browser = PlatformUI.getWorkbench()
                             .getBrowserSupport().createBrowser(
                                 IWorkbenchBrowserSupport.STATUS
