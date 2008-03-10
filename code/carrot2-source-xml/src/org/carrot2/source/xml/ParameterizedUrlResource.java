@@ -43,7 +43,7 @@ public class ParameterizedUrlResource implements Resource
      *            will be replaced by the value found (if any) in the attributes map under
      *            the <code>attributeX</code> key.
      */
-    public InputStream open(Map<String, Object> attributes) throws IOException
+    InputStream open(Map<String, Object> attributes) throws IOException
     {
         String urlString = url.toExternalForm();
         urlString = substituteAttributes(attributes, urlString);
