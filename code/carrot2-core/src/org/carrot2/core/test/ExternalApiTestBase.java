@@ -1,5 +1,7 @@
 package org.carrot2.core.test;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * A base class for tests whose results depend on the correct functioning of some external
  * APIs. Such tests may be ignored e.g. during post-commit builds and executed only during
@@ -23,7 +25,7 @@ public class ExternalApiTestBase
      */
     public boolean carrot2XmlFeedTestsEnabled()
     {
-        return externalApiTestsEnabled() && getCarrot2XmlFeedUrlBase() != null;
+        return externalApiTestsEnabled() && StringUtils.isNotBlank(getCarrot2XmlFeedUrlBase());
     }
 
     /**

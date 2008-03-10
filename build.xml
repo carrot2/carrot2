@@ -66,6 +66,10 @@
         <mkdir dir="${tests.report.dir}" />
 
         <property name="source.paths" location="code/carrot2-util-attribute/src-test" />
+        <condition property="carrot2.xml.feed.url.base.internal" value="${carrot2.xml.feed.url.base}" else="">
+          <isset property="carrot2.xml.feed.url.base"/>
+        </condition>
+
         <junit fork="true" forkmode="once" printsummary="on" errorproperty="junit.error" failureproperty="junit.failure">
             <formatter type="xml"/>
 
@@ -73,7 +77,7 @@
 
             <sysproperty key="source.paths" value="${source.paths}" />
             <sysproperty key="external.api.tests.disabled" value="${external.api.tests.disabled}" />
-            <sysproperty key="carrot2.xml.feed.url.base" value="${carrot2.xml.feed.url.base}" />
+            <sysproperty key="carrot2.xml.feed.url.base" value="${carrot2.xml.feed.url.base.internal}" />
 
             <batchtest todir="${tests.report.dir}">
                 <fileset dir="${build.dir}">
