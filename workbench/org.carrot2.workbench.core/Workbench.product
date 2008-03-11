@@ -3,6 +3,7 @@
 
 <product name="Carrot2 Workbench" id="org.carrot2.workbench.core.product" application="org.carrot2.workbench.core.application" useFeatures="false">
 
+
    <configIni use="default"/>
 
    <launcherArgs>
@@ -11,6 +12,7 @@
 
    <windowImages/>
 
+
    <launcher>
       <solaris/>
       <win useIco="false">
@@ -18,20 +20,17 @@
       </win>
    </launcher>
 
+
    <vm>
    </vm>
 
    <plugins>
-      <plugin id="com.bea.xml"/>
-      <plugin id="com.google.collections"/>
       <plugin id="com.ibm.icu"/>
-      <plugin id="com.thoughtworks.qdox"/>
       <plugin id="javax.servlet"/>
       <plugin id="org.apache.ant"/>
-      <plugin id="org.apache.commons"/>
-      <plugin id="org.apache.log4j"/>
       <plugin id="org.carrot2.algorithm.synthetic"/>
       <plugin id="org.carrot2.core"/>
+      <plugin id="org.carrot2.libs"/>
       <plugin id="org.carrot2.source.yahoo"/>
       <plugin id="org.carrot2.util.attribute"/>
       <plugin id="org.carrot2.util.common"/>
@@ -95,7 +94,6 @@
       <plugin id="org.eclipse.update.core.win32" fragment="true"/>
       <plugin id="org.eclipse.update.ui"/>
       <plugin id="org.junit4"/>
-      <plugin id="org.simpleframework.xml"/>
    </plugins>
 
 </product>

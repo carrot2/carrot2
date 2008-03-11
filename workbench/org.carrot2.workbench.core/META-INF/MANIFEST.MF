@@ -7,5 +7,6 @@ Bundle-Activator: org.carrot2.workbench.core.CorePlugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.carrot2.core,
- org.carrot2.util.common
+ org.carrot2.util.common,
+ org.carrot2.libs
 Eclipse-LazyStart: true
