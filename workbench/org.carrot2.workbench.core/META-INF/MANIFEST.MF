@@ -7,5 +7,6 @@ Bundle-Activator: org.carrot2.workbench.core.CorePlugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.carrot2.core;visibility:=reexport,
- org.carrot2.util.common;visibility:=reexport
+ org.carrot2.util.common;visibility:=reexport,
+ org.eclipse.pde.runtime
 Eclipse-LazyStart: true
