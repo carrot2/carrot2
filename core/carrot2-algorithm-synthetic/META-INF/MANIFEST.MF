@@ -5,5 +5,4 @@ Bundle-SymbolicName: org.carrot2.algorithm.synthetic;singleton:=true
 Bundle-Version: 1.0.0
 Export-Package: org.carrot2.clustering.synthetic
 Require-Bundle: org.carrot2.core,
- org.carrot2.util.common,
- org.carrot2.libs
+ org.carrot2.util.common

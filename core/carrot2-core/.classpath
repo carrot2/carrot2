@@ -6,19 +6,8 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-util-common"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-util-attribute"/>
-	<classpathentry kind="lib" path="/lib/commons-codec-1.3.jar"/>
-	<classpathentry kind="lib" path="/lib/commons-httpclient-3.1.jar"/>
-	<classpathentry kind="lib" path="/lib/commons-lang-2.3.jar"/>
-	<classpathentry kind="lib" path="/lib/commons-logging-1.1.1.jar"/>
-	<classpathentry kind="lib" path="/lib/dom4j-1.6.1.jar"/>
-	<classpathentry kind="lib" path="/lib/google-collections.jar"/>
-	<classpathentry kind="lib" path="/lib/log4j-1.2.14.jar"/>
-	<classpathentry kind="lib" path="/lib/simple-xml-1.7.2.jar"/>
-	<classpathentry kind="lib" path="/lib/stax-1.2.0.jar"/>
-	<classpathentry kind="lib" path="/lib/stax-api-1.0.1.jar"/>
-	<classpathentry kind="lib" path="/lib/compile-time/easymock.jar"/>
-	<classpathentry kind="lib" path="/lib/compile-time/fest-assert-1.0a1.jar"/>
-	<classpathentry kind="lib" path="/lib/compile-time/fest-mocks-0.1.jar"/>
-	<classpathentry kind="lib" path="/lib/compile-time/fest-util-0.4.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.simpleframework.xml"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.easymock"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.fest"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>

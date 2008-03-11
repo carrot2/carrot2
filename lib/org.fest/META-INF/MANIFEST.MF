@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: FEST libraries
+Bundle-SymbolicName: org.fest
+Bundle-Version: 1.0.0
+Require-Bundle: org.eclipse.core.runtime
+Bundle-ClassPath: fest-assert-1.0a1.jar,
+ fest-mocks-0.1.jar,
+ fest-util-0.4.jar
+Export-Package: org.fest.assertions,
+ org.fest.mocks,
+ org.fest.util

@@ -5,14 +5,13 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-common"/>
-	<classpathentry kind="lib" path="/lib/compile-time/easymock.jar"/>
-	<classpathentry kind="lib" path="/lib/compile-time/fest-assert-1.0a1.jar"/>
-	<classpathentry kind="lib" path="/lib/compile-time/fest-mocks-0.1.jar"/>
-	<classpathentry kind="lib" path="/lib/compile-time/fest-util-0.4.jar"/>
-	<classpathentry kind="lib" path="/lib/compile-time/qdox-1.6.3.jar"/>
-	<classpathentry kind="lib" path="/lib/google-collections.jar"/>
-	<classpathentry kind="lib" path="/lib/simple-xml-1.7.2.jar"/>
-	<classpathentry kind="lib" path="/lib/stax-1.2.0.jar"/>
-	<classpathentry kind="lib" path="/lib/stax-api-1.0.1.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.bea.xml"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.google.collections"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.thoughtworks.qdox"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.easymock"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.fest"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.simpleframework.xml"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.junit4-ext"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.apache.log4j"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>

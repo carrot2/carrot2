@@ -22,7 +22,7 @@
     </fileset>
 
     <path id="lib.classpath">
-        <fileset dir="core/lib" includes="**/*.jar" />    
+        <fileset dir="lib" includes="*/*.jar" />    
     </path>
 
     <path id="test.classpath">
@@ -187,7 +187,7 @@
         >
             <classpath>
                 <fileset dir=".">
-                    <include name="core/lib/**/*.jar" />
+                    <include name="lib/*/*.jar" />
                 </fileset>
             </classpath>
 

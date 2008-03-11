@@ -4,15 +4,31 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.util.Map;
+import java.util.logging.Logger;
 
+import org.apache.commons.lang.StringUtils;
 import org.carrot2.util.attribute.test.metadata.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junitext.Prerequisite;
+import org.junitext.runners.AnnotationRunner;
 
+@RunWith(AnnotationRunner.class)
 public class BindableMetadataBuilderTest
 {
     private static final String SOURCE_PATH_PROPERTY = "source.paths";
     protected static Map<String, BindableMetadata> bindableMetadata;
+
+    /**
+     * @return Return <code>true</code> if source path property is available and tests
+     *         can proceed.
+     */
+    public static boolean isSourcePathAvailable()
+    {
+        final String sourcePaths = System.getProperty(SOURCE_PATH_PROPERTY);
+        return !StringUtils.isEmpty(sourcePaths);
+    }
 
     /**
      * Generates metadata once for all the tests, which will significantly speed up
@@ -22,14 +38,18 @@ public class BindableMetadataBuilderTest
     @BeforeClass
     public static void generateMetadata()
     {
-        BindableMetadataBuilder builder;
-        final String sourcePaths = System.getProperty(SOURCE_PATH_PROPERTY);
-        if (sourcePaths == null)
+        if (!isSourcePathAvailable())
         {
-            fail("Please provide path to sources of test classes in the '"
-                + SOURCE_PATH_PROPERTY + "' JVM property");
+            org.apache.log4j.Logger.getLogger(BindableMetadataBuilderTest.class)
+                .warn("Some tests skipped: provide path to sources of test classes in the '" 
+                    + SOURCE_PATH_PROPERTY + "' JVM property");
 
+            // Return, the tests that require this property will be ignored. 
+            return;
         }
+        
+        final BindableMetadataBuilder builder;
+        final String sourcePaths = System.getProperty(SOURCE_PATH_PROPERTY);
 
         builder = new BindableMetadataBuilder();
         builder.addCommonMetadataSource(TestAttributeNames.class);
@@ -48,6 +68,7 @@ public class BindableMetadataBuilderTest
         bindableMetadata = mapListener.getBindableMetadata();
     }
 
+    @Prerequisite(requires = "isSourcePathAvailable")
     @Test
     public void testEmptyJavadoc()
     {
@@ -60,18 +81,21 @@ public class BindableMetadataBuilderTest
         assertNull(getDescription(clazz, fieldName));
     }
 
+    @Prerequisite(requires = "isSourcePathAvailable")
     @Test
     public void testSingleWordLabel()
     {
         checkLabel(AttributeLabels.class, "singleWordLabel", "word");
     }
-
+    
+    @Prerequisite(requires = "isSourcePathAvailable")
     @Test
     public void testMultiWordLabel()
     {
         checkLabel(AttributeLabels.class, "multiWordLabel", "multi word label");
     }
 
+    @Prerequisite(requires = "isSourcePathAvailable")
     @Test
     public void testMultiSentenceLabel()
     {
@@ -79,36 +103,42 @@ public class BindableMetadataBuilderTest
             "First label sentence. Second label sentence.");
     }
 
+    @Prerequisite(requires = "isSourcePathAvailable")
     @Test
     public void testLabelWithComment()
     {
         checkLabel(AttributeLabels.class, "labelWithComment", "word");
     }
 
+    @Prerequisite(requires = "isSourcePathAvailable")
     @Test
     public void testNoTitle()
     {
         checkTitle(AttributeTitles.class, "noTitle", null);
     }
 
+    @Prerequisite(requires = "isSourcePathAvailable")
     @Test
     public void testEmptyTitle()
     {
         checkTitle(AttributeTitles.class, "emptyTitle", "");
     }
 
+    @Prerequisite(requires = "isSourcePathAvailable")
     @Test
     public void testTitleWithPeriod()
     {
         checkTitle(AttributeTitles.class, "titleWithPeriod", "Title with period");
     }
 
+    @Prerequisite(requires = "isSourcePathAvailable")
     @Test
     public void testTitleWithoutPeriod()
     {
         checkTitle(AttributeTitles.class, "titleWithoutPeriod", "Title without period");
     }
-
+    
+    @Prerequisite(requires = "isSourcePathAvailable")
     @Test
     public void testTitleWithDescription()
     {
@@ -116,12 +146,14 @@ public class BindableMetadataBuilderTest
             "Title with description");
     }
 
+    @Prerequisite(requires = "isSourcePathAvailable")
     @Test
     public void testTitleWithLabel()
     {
         checkTitle(AttributeTitles.class, "titleWithLabel", "Title with label");
     }
 
+    @Prerequisite(requires = "isSourcePathAvailable")
     @Test
     public void testTitleWithExtraSpace()
     {
@@ -129,6 +161,7 @@ public class BindableMetadataBuilderTest
         checkTitle(AttributeTitles.class, "titleWithExtraSpace", "Title with extra space");
     }
 
+    @Prerequisite(requires = "isSourcePathAvailable")
     @Test
     public void testTitleWithExclamationMark()
     {
@@ -139,6 +172,7 @@ public class BindableMetadataBuilderTest
             "Description.");
     }
 
+    @Prerequisite(requires = "isSourcePathAvailable")
     @Test
     public void testTitleWithExtraPeriods()
     {
@@ -148,6 +182,7 @@ public class BindableMetadataBuilderTest
         checkDescription(AttributeTitles.class, "titleWithExtraPeriods", "Description.");
     }
 
+    @Prerequisite(requires = "isSourcePathAvailable")
     @Test
     public void testTitleWithLink()
     {
@@ -157,6 +192,7 @@ public class BindableMetadataBuilderTest
         checkDescription(AttributeTitles.class, "titleWithLink", "Description.");
     }
 
+    @Prerequisite(requires = "isSourcePathAvailable")
     @Test
     public void testTitleAtTheBottomNotSupported()
     {
@@ -164,18 +200,21 @@ public class BindableMetadataBuilderTest
         checkTitle(AttributeTitles.class, "titleAtTheBottom", null);
     }
 
+    @Prerequisite(requires = "isSourcePathAvailable")
     @Test
     public void testNoDescriptionNoTitle()
     {
         checkDescription(AttributeDescriptions.class, "noDescriptionNoTitle", null);
     }
 
+    @Prerequisite(requires = "isSourcePathAvailable")
     @Test
     public void testNoDescription()
     {
         checkDescription(AttributeDescriptions.class, "noDescription", null);
     }
 
+    @Prerequisite(requires = "isSourcePathAvailable")
     @Test
     public void testSingleSentenceDescription()
     {
@@ -183,6 +222,7 @@ public class BindableMetadataBuilderTest
             "Single sentence description.");
     }
 
+    @Prerequisite(requires = "isSourcePathAvailable")
     @Test
     public void testTwoSentenceDescription()
     {
@@ -190,6 +230,7 @@ public class BindableMetadataBuilderTest
             "Description sentence 1. Description sentence 2.");
     }
 
+    @Prerequisite(requires = "isSourcePathAvailable")
     @Test
     public void testDescriptionWithExtraSpace()
     {
@@ -197,6 +238,7 @@ public class BindableMetadataBuilderTest
             "Description with extra space.");
     }
 
+    @Prerequisite(requires = "isSourcePathAvailable")
     @Test
     public void testNamedAttributeNoJavadoc()
     {
@@ -208,6 +250,7 @@ public class BindableMetadataBuilderTest
         checkDescription(clazz, fieldName, "Description.");
     }
 
+    @Prerequisite(requires = "isSourcePathAvailable")
     @Test
     public void testNamedAttributeLabelOverride()
     {
@@ -219,6 +262,7 @@ public class BindableMetadataBuilderTest
         checkDescription(clazz, fieldName, "Description.");
     }
 
+    @Prerequisite(requires = "isSourcePathAvailable")
     @Test
     public void testNamedAttributeTitleOverride()
     {
@@ -230,6 +274,7 @@ public class BindableMetadataBuilderTest
         checkDescription(clazz, fieldName, "Description.");
     }
 
+    @Prerequisite(requires = "isSourcePathAvailable")
     @Test
     public void testNamedAttributeTitleDescriptionOverride()
     {
@@ -241,6 +286,7 @@ public class BindableMetadataBuilderTest
         checkDescription(clazz, fieldName, "Description overridden.");
     }
 
+    @Prerequisite(requires = "isSourcePathAvailable")
     @Test
     public void testNamedAttributeNoDotInKey()
     {
@@ -252,6 +298,7 @@ public class BindableMetadataBuilderTest
         checkDescription(clazz, fieldName, null);
     }
 
+    @Prerequisite(requires = "isSourcePathAvailable")
     @Test
     public void testClassNotInSourcePath()
     {
@@ -263,6 +310,7 @@ public class BindableMetadataBuilderTest
         checkDescription(clazz, fieldName, null);
     }
 
+    @Prerequisite(requires = "isSourcePathAvailable")
     @Test
     public void testBindableMetadata()
     {

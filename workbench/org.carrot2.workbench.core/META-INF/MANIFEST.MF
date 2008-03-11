@@ -6,7 +6,6 @@ Bundle-Version: 1.0.0
 Bundle-Activator: org.carrot2.workbench.core.CorePlugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.carrot2.core,
- org.carrot2.util.common,
- org.carrot2.libs
+ org.carrot2.core;visibility:=reexport,
+ org.carrot2.util.common;visibility:=reexport
 Eclipse-LazyStart: true
