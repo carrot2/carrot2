@@ -3,7 +3,6 @@
 
 <product name="Carrot2 Workbench" id="org.carrot2.workbench.core.product" application="org.carrot2.workbench.core.application" useFeatures="false">
 
-
    <configIni use="default"/>
 
    <launcherArgs>
@@ -18,7 +17,6 @@
          <bmp/>
       </win>
    </launcher>
-
 
    <vm>
    </vm>
@@ -69,6 +67,7 @@
       <plugin id="org.eclipse.jface.text"/>
       <plugin id="org.eclipse.osgi"/>
       <plugin id="org.eclipse.osgi.services"/>
+      <plugin id="org.eclipse.pde.runtime"/>
       <plugin id="org.eclipse.swt"/>
       <plugin id="org.eclipse.swt.carbon.macosx"/>
       <plugin id="org.eclipse.swt.gtk.linux.ppc"/>
