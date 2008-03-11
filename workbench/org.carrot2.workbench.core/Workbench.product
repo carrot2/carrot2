@@ -28,6 +28,7 @@
       <plugin id="javax.servlet"/>
       <plugin id="org.apache.ant"/>
       <plugin id="org.apache.commons"/>
+      <plugin id="org.apache.log4j"/>
       <plugin id="org.carrot2.algorithm.synthetic"/>
       <plugin id="org.carrot2.core"/>
       <plugin id="org.carrot2.source.yahoo"/>

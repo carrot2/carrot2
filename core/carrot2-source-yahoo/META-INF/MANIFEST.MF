@@ -5,4 +5,5 @@ Bundle-SymbolicName: org.carrot2.source.yahoo;singleton:=true
 Bundle-Version: 1.0.0
 Export-Package: org.carrot2.source.yahoo
 Require-Bundle: org.carrot2.core,
- org.carrot2.util.common
+ org.carrot2.util.common,
+ org.apache.log4j
