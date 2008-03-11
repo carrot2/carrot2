@@ -5,13 +5,16 @@ import java.util.*;
 import org.carrot2.core.ProcessingComponent;
 import org.eclipse.core.runtime.*;
 
+import com.google.common.collect.Maps;
+
 public class ComponentLoader
 {
-    private String extensionName;
-    private String elementName;
-    private String captionAttName;
-    private String classAttName;
-    private Map<String, ComponentWrapper> converterCache;
+    private final String extensionName;
+    private final String elementName;
+    private final String captionAttName;
+    private final String classAttName;
+
+    private final Map<String, ComponentWrapper> converterCache = Maps.newHashMap();
 
     public static final ComponentLoader SOURCE_LOADER = new ComponentLoader("source",
         "source", "label", "class");
@@ -27,7 +30,8 @@ public class ComponentLoader
      * 
      * @param extensionName extension point ID (without plugin ID as a prefix)
      * @param elementName name of element, that stores info about component
-     * @param captionName name of a attribute, that stores label/caption/etc. of a component
+     * @param captionName name of a attribute, that stores label/caption/etc. of a
+     *            component
      * @param className name of a attribute, that stores name of a class of a component
      */
     private ComponentLoader(String extensionName, String elementName, String captionName,
@@ -62,6 +66,11 @@ public class ComponentLoader
      */
     public ProcessingComponent getComponent(String caption)
     {
+        if (!converterCache.containsKey(caption))
+        {
+            throw new RuntimeException("No such component: " + caption);
+        }
+
         return converterCache.get(caption).getExecutableComponent();
     }
 
@@ -70,16 +79,11 @@ public class ComponentLoader
      */
     private void loadExtensions()
     {
-        if (converterCache == null)
+        final IExtension [] extensions = Platform.getExtensionRegistry()
+            .getExtensionPoint("org.carrot2.core", extensionName).getExtensions();
+        for (IExtension extension : extensions)
         {
-            converterCache = new HashMap<String, ComponentWrapper>();
-            IExtension [] extensions = Platform.getExtensionRegistry().getExtensionPoint(
-                "org.carrot2.core", extensionName).getExtensions();
-            for (int i = 0; i < extensions.length; i++)
-            {
-                IExtension extension = extensions[i];
-                parseExtension(extension.getConfigurationElements());
-            }
+            parseExtension(extension.getConfigurationElements());
         }
     }
 
