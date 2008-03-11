@@ -22,7 +22,7 @@ http://download.eclipse.org/eclipse/downloads/drops/R-3.3.1.1-200710231652/index
 3. Copy org.junit4 plugin from your development platform (needed because of *TestBase in
 org.carrot2.org) to plugins directory in target platform.
 
-4. Run build-workbench.build script.
+4. (* DELETED *)
 
 5. In your development Eclipse go to Plugin Development -> Target Platform preference page, point
 location to $TARGET_ROOT$\eclipse directory and click Reload. All plugins should be selected.
