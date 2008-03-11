@@ -8,7 +8,6 @@ public class Perspective implements IPerspectiveFactory
 {
     public void createInitialLayout(IPageLayout layout)
     {
-        // TODO: This code does not seem to be invoked (ever). What gives?!
         layout.addStandaloneView(SearchView.ID, false, IPageLayout.TOP, 0.2f, layout
             .getEditorArea());
         layout.getViewLayout(SearchView.ID).setCloseable(false);
@@ -16,6 +15,6 @@ public class Perspective implements IPerspectiveFactory
 
         // Display LogView for debugging.
         layout.addStandaloneView("org.eclipse.pde.runtime.LogView", true,
-            IPageLayout.BOTTOM, .2f, layout.getEditorArea());
+            IPageLayout.BOTTOM, .8f, layout.getEditorArea());
     }
 }

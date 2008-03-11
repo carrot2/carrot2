@@ -6,6 +6,7 @@ import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.workbench.core.CorePlugin;
 import org.carrot2.workbench.core.helpers.ComponentLoader;
+import org.carrot2.workbench.core.helpers.RunnableWithErrorDialog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.*;
@@ -38,9 +39,9 @@ public class ResultsEditor extends MultiPageEditorPart
      */
     private void performClustering()
     {
-        CorePlugin.getExecutorService().execute(new Runnable()
+        CorePlugin.getExecutorService().execute(new RunnableWithErrorDialog()
         {
-            public void run()
+            public void runCore()
             {
                 SearchParameters search = (SearchParameters) getEditorInput();
 
@@ -51,22 +52,37 @@ public class ResultsEditor extends MultiPageEditorPart
                     ComponentLoader.ALGORITHM_LOADER.getComponent(search
                         .getAlgorithmCaption()));
                 buildPages(result);
+
+            }
+
+            @Override
+            protected String getErrorTitle()
+            {
+                return "Error while processing query";
             }
         });
     }
 
     /*
+     * } } }); } /*
      * 
      */
     private void buildPages(final ProcessingResult result)
     {
-        Display.getDefault().asyncExec(new Runnable()
+        Display.getDefault().asyncExec(new RunnableWithErrorDialog()
         {
-            public void run()
+            public void runCore()
             {
                 createClustersPage(result.getClusters());
                 createDocumentsPage(result.getDocuments());
             }
+
+            @Override
+            protected String getErrorTitle()
+            {
+                return "Error while creating results editor";
+            }
+
         });
     }
 

@@ -3,10 +3,8 @@ package org.carrot2.workbench.core.ui;
 import java.util.ArrayList;
 
 import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.workbench.core.CorePlugin;
 import org.carrot2.workbench.core.helpers.ComponentLoader;
-import org.eclipse.core.commands.operations.OperationStatus;
-import org.eclipse.core.runtime.IStatus;
+import org.carrot2.workbench.core.helpers.RunnableWithErrorDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -37,25 +35,22 @@ public class SearchView extends ViewPart
 
         checkProcessingConditions(parent);
 
-        final Runnable execQuery = new Runnable()
+        final Runnable execQuery = new RunnableWithErrorDialog()
         {
-            public void run()
+            public void runCore() throws Exception
             {
-                try
-                {
-                    IWorkbenchPage page = SearchView.this.getViewSite()
-                        .getWorkbenchWindow().getActivePage();
-                    SearchParameters input = new SearchParameters(getSourceCaption(),
-                        getAlgorithmCaption(), null);
-                    input.putAttribute(AttributeNames.QUERY, queryText.getText());
-                    page.openEditor(input, ResultsEditor.ID);
-                }
-                catch (Throwable ex)
-                {
-                    CorePlugin.getDefault().getLog().log(
-                        new OperationStatus(IStatus.ERROR, CorePlugin.PLUGIN_ID, -1,
-                            "Error while showing query result editor", ex));
-                }
+                IWorkbenchPage page = SearchView.this.getViewSite().getWorkbenchWindow()
+                    .getActivePage();
+                SearchParameters input = new SearchParameters(getSourceCaption(),
+                    getAlgorithmCaption(), null);
+                input.putAttribute(AttributeNames.QUERY, queryText.getText());
+                page.openEditor(input, ResultsEditor.ID);
+            }
+
+            @Override
+            protected String getErrorTitle()
+            {
+                return "Error while opening query result editor";
             }
         };
 
