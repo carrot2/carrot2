@@ -11,18 +11,18 @@
     <property name="clover.jar" location="${clover.home}/lib/clover.jar"/>
 
     <path id="src.folders">
-        <dirset dir="code" includes="**/src" />
-        <dirset dir="code" includes="**/src-test" />
+        <dirset dir="core" includes="**/src" />
+        <dirset dir="core" includes="**/src-test" />
     </path>
 
-    <fileset id="src.coverage" dir="code">
+    <fileset id="src.coverage" dir="core">
         <include name="**/*.java" />
         <exclude name="**/carrot2-examples/**/*.java" if="external.api.tests.disabled" />
         <exclude name="**/carrot2-source-yahoo/**/*.java" if="external.api.tests.disabled" />
     </fileset>
 
     <path id="lib.classpath">
-        <fileset dir="code/lib" includes="**/*.jar" />    
+        <fileset dir="core/lib" includes="**/*.jar" />    
     </path>
 
     <path id="test.classpath">
@@ -52,7 +52,7 @@
         <mkdir dir="${build.dir}" />
         
         <copy todir="${build.dir}">
-            <fileset dir="code">
+            <fileset dir="core">
                 <include name="**/src/**/*.xml" />
                 <include name="**/src-test/**/*.xml" />
                 <exclude name="**/carrot2-util-log4j/**" />
@@ -65,7 +65,7 @@
     <target name="test" depends="compile,attributes,resources">
         <mkdir dir="${tests.report.dir}" />
 
-        <property name="source.paths" location="code/carrot2-util-attribute/src-test" />
+        <property name="source.paths" location="core/carrot2-util-attribute/src-test" />
         <condition property="carrot2.xml.feed.url.base.internal" value="${carrot2.xml.feed.url.base}" else="">
           <isset property="carrot2.xml.feed.url.base"/>
         </condition>
@@ -107,10 +107,10 @@
         <java classname="org.carrot2.util.attribute.BindableMetadataXmlSerializer" classpathref="test.classpath">
             <arg value="org.carrot2.core.attribute.AttributeNames" />
 
-            <arg file="code/carrot2-core/src" />
-            <arg file="code/carrot2-util-attribute/src-test" />
-            <arg file="code/carrot2-source-yahoo/src" />
-            <arg file="code/carrot2-algorithm-synthetic/src" />
+            <arg file="core/carrot2-core/src" />
+            <arg file="core/carrot2-util-attribute/src-test" />
+            <arg file="core/carrot2-source-yahoo/src" />
+            <arg file="core/carrot2-algorithm-synthetic/src" />
         </java>
     </target>
 
@@ -187,7 +187,7 @@
         >
             <classpath>
                 <fileset dir=".">
-                    <include name="code/lib/**/*.jar" />
+                    <include name="core/lib/**/*.jar" />
                 </fileset>
             </classpath>
 
