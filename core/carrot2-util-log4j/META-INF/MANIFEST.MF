@@ -3,3 +3,4 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Carrot2 log4j Utils
 Bundle-SymbolicName: org.carrot2.util.log4j
 Bundle-Version: 1.0.0
+Fragment-Host: org.apache.log4j
