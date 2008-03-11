@@ -34,6 +34,13 @@ public class ResultsEditor extends MultiPageEditorPart
         setControl(1, list.createControls(getContainer(), documents));
     }
 
+    private void createBrowserPage(Collection<Document> documents)
+        throws PartInitException
+    {
+        DocumentListBrowser list = new DocumentListBrowser();
+        setControl(2, list.createControls(getContainer(), documents));
+    }
+
     /*
      * 
      */
@@ -71,10 +78,11 @@ public class ResultsEditor extends MultiPageEditorPart
     {
         Display.getDefault().asyncExec(new RunnableWithErrorDialog()
         {
-            public void runCore()
+            public void runCore() throws Exception
             {
                 createClustersPage(result.getClusters());
                 createDocumentsPage(result.getDocuments());
+                createBrowserPage(result.getDocuments());
             }
 
             @Override
@@ -106,8 +114,10 @@ public class ResultsEditor extends MultiPageEditorPart
         performClustering();
         addPage(null);
         addPage(null);
+        addPage(null);
         setPageText(1, "Documents");
         setPageText(0, "Clusters");
+        setPageText(2, "Browser");
     }
 
     /*
