@@ -14,30 +14,16 @@ import org.eclipse.swt.widgets.Composite;
 public class DocumentListComponent
 {
     private Font boldFont;
+    private Composite list;
 
     public Composite createControls(final Composite parent, Collection<Document> documents)
     {
         final ScrolledComposite scroll = new ScrolledComposite(parent, SWT.V_SCROLL);
         scroll.getVerticalBar().setIncrement(5);
         scroll.setLayout(new FillLayout());
-        final Composite list = new Composite(scroll, SWT.NONE);
+        list = new Composite(scroll, SWT.NONE);
         list.setLayout(new GridLayout());
-        for (Document document : documents)
-        {
-            DocumentWidget dw = new DocumentWidget(list, SWT.DOUBLE_BUFFERED, document);
-            GridData gd = new GridData();
-            gd.grabExcessHorizontalSpace = true;
-            gd.horizontalAlignment = SWT.FILL;
-            dw.setLayoutData(gd);
-            // TODO: think of creating this fontBold differently, I don't like it this way
-            if (boldFont == null)
-            {
-                FontData fd = dw.getTitleText().getFont().getFontData()[0];
-                fd.setStyle(SWT.BOLD);
-                boldFont = new Font(null, fd);
-            }
-            dw.getTitleText().setFont(boldFont);
-        }
+        createRows(documents);
         scroll.setContent(list);
         // TODO: it has the right size after first resize, have to change it somehow
         list.setSize(list.computeSize(scroll.getClientArea().width, SWT.DEFAULT));
@@ -57,11 +43,34 @@ public class DocumentListComponent
 
             public void widgetDisposed(DisposeEvent e)
             {
-                boldFont.dispose();
+                if (boldFont != null)
+                {
+                    boldFont.dispose();
+                }
             }
 
         });
         return scroll;
         // return list;
+    }
+
+    private void createRows(Collection<Document> documents)
+    {
+        for (Document document : documents)
+        {
+            DocumentWidget dw = new DocumentWidget(list, SWT.DOUBLE_BUFFERED, document);
+            GridData gd = new GridData();
+            gd.grabExcessHorizontalSpace = true;
+            gd.horizontalAlignment = SWT.FILL;
+            dw.setLayoutData(gd);
+            // TODO: think of creating this fontBold differently, I don't like it this way
+            if (boldFont == null)
+            {
+                FontData fd = dw.getTitleText().getFont().getFontData()[0];
+                fd.setStyle(SWT.BOLD);
+                boldFont = new Font(null, fd);
+            }
+            dw.getTitleText().setFont(boldFont);
+        }
     }
 }

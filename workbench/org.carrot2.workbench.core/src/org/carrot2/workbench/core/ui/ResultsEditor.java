@@ -1,5 +1,6 @@
 package org.carrot2.workbench.core.ui;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.carrot2.core.*;
@@ -8,6 +9,7 @@ import org.carrot2.workbench.core.CorePlugin;
 import org.carrot2.workbench.core.helpers.ComponentLoader;
 import org.carrot2.workbench.core.helpers.RunnableWithErrorDialog;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.*;
 import org.eclipse.ui.part.MultiPageEditorPart;
@@ -16,13 +18,48 @@ public class ResultsEditor extends MultiPageEditorPart
 {
     public static final String ID = "org.carrot2.workbench.core.editors.results";
 
+    private ISelectionChangedListener clusterSelectionListener;
+    private Collection<Document> allDocuments;
+
     /*
      * 
      */
     private void createClustersPage(Collection<Cluster> clusters)
     {
         ClusterTreeComponent tree = new ClusterTreeComponent();
-        setControl(0, tree.createControls(getContainer(), clusters).getTree());
+        TreeViewer viewer = tree.createControls(getContainer(), clusters);
+        this.getSite().setSelectionProvider(viewer);
+        hookClusterListener(viewer);
+        setControl(0, viewer.getTree());
+    }
+
+    private void hookClusterListener(ISelectionProvider provider)
+    {
+        clusterSelectionListener = new ISelectionChangedListener()
+        {
+
+            public void selectionChanged(SelectionChangedEvent event)
+            {
+                IStructuredSelection selection = (IStructuredSelection) event
+                    .getSelection();
+                if (selection.isEmpty())
+                {
+                    createDocumentsPage(allDocuments);
+                }
+                if (selection.size() > 1)
+                {
+                    createDocumentsPage(new ArrayList<Document>());
+                }
+                else
+                {
+                    Cluster selectedCluster = ((ClusterWithParent) selection
+                        .getFirstElement()).cluster;
+                    createDocumentsPage(selectedCluster.getDocuments());
+                }
+            }
+
+        };
+        provider.addSelectionChangedListener(clusterSelectionListener);
     }
 
     /*
@@ -80,6 +117,7 @@ public class ResultsEditor extends MultiPageEditorPart
         {
             public void runCore() throws Exception
             {
+                allDocuments = result.getDocuments();
                 createClustersPage(result.getClusters());
                 createDocumentsPage(result.getDocuments());
                 createBrowserPage(result.getDocuments());

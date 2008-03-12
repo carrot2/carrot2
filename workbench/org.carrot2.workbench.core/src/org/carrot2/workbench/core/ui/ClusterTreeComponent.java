@@ -6,6 +6,7 @@ import org.carrot2.core.Cluster;
 import org.carrot2.core.ClusterWithParent;
 import org.carrot2.workbench.core.CorePlugin;
 import org.eclipse.jface.viewers.*;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 
@@ -74,7 +75,7 @@ public class ClusterTreeComponent
 
     public TreeViewer createControls(Composite parent, Collection<Cluster> clusters)
     {
-        TreeViewer tree = new TreeViewer(parent);
+        TreeViewer tree = new TreeViewer(parent, SWT.MULTI);
         tree.setLabelProvider(new ClusterLabelProvider());
         tree.setContentProvider(new ClusterTreeContentProvider());
         List<ClusterWithParent> nodes = ClusterWithParent.wrap(new ArrayList<Cluster>(
