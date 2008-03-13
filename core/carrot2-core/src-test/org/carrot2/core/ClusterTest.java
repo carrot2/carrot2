@@ -1,27 +1,30 @@
-/**
- *
- */
 package org.carrot2.core;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.List;
+
 import org.junit.Test;
 
+import com.google.common.collect.Lists;
+
 /**
- *
+ * Test cases for {@link Cluster}.
  */
 public class ClusterTest
 {
     @Test
-    public void testSizeEmptyFlat()
+    public void testAllDocumentsEmptyFlat()
     {
         final Cluster flatCluster = new Cluster();
         assertEquals(0, flatCluster.size());
+        assertThat(flatCluster.getAllDocuments()).isEmpty();
     }
 
     @Test
-    public void testSizeEmptyHierarchical()
+    public void testAllDocumentsEmptyHierarchical()
     {
         final Cluster hierarchicalCluster = new Cluster();
         final Cluster subcluster = new Cluster();
@@ -30,14 +33,19 @@ public class ClusterTest
         subcluster.addSubclusters(new Cluster());
 
         assertEquals(0, hierarchicalCluster.size());
+        assertThat(hierarchicalCluster.getAllDocuments()).isEmpty();
     }
 
     @Test
     public void testSizeNonEmptyFlat()
     {
         final Cluster flatCluster = new Cluster();
-        flatCluster.addDocuments(new Document(), new Document());
+        final List<Document> documents = Lists.newArrayList(new Document(),
+            new Document());
+
+        flatCluster.addDocuments(documents);
         assertEquals(2, flatCluster.size());
+        assertEquals(documents, flatCluster.getAllDocuments());
     }
 
     @Test
@@ -48,10 +56,16 @@ public class ClusterTest
 
         hierarchicalCluster.addSubclusters(subcluster);
 
-        hierarchicalCluster.addDocuments(new Document());
-        subcluster.addDocuments(new Document());
+        final Document documentA = new Document();
+        hierarchicalCluster.addDocuments(documentA);
+        final Document documentB = new Document();
+        subcluster.addDocuments(documentB);
+
+        final List<Document> expectedAllDocuments = Lists.newArrayList(documentA,
+            documentB);
 
         assertEquals(2, hierarchicalCluster.size());
+        assertEquals(expectedAllDocuments, hierarchicalCluster.getAllDocuments());
     }
 
     @Test
@@ -64,11 +78,17 @@ public class ClusterTest
         final Document document1 = new Document();
 
         hierarchicalCluster.addDocuments(document1);
-        hierarchicalCluster.addDocuments(new Document());
+        final Document documentB = new Document();
+        hierarchicalCluster.addDocuments(documentB);
         subcluster.addDocuments(document1);
-        subcluster.addDocuments(new Document());
+        final Document documentC = new Document();
+        subcluster.addDocuments(documentC);
+
+        final List<Document> expectedAllDocuments = Lists.newArrayList(document1,
+            documentB, documentC);
 
         assertEquals(3, hierarchicalCluster.size());
+        assertEquals(expectedAllDocuments, hierarchicalCluster.getAllDocuments());
     }
 
     @Test

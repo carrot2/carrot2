@@ -11,7 +11,7 @@ import com.google.common.collect.Comparators;
  * A cluster (group) of {@link Document}s. Each cluster has a human-readable label
  * consisting of one or more phrases, a list of documents it contains and a list of its
  * subclusters. Optionally, additional attributes can be associated with a cluster, e.g.
- * {@link #OTHER_TOPICS}.
+ * {@link #OTHER_TOPICS}. This class is <strong>not</strong> thread-safe.
  */
 public final class Cluster
 {
@@ -31,7 +31,8 @@ public final class Cluster
     private final ArrayList<Cluster> subclusters = new ArrayList<Cluster>();
 
     /** A read-only list of subclusters exposed in {@link #getSubclusters()}. */
-    private final List<Cluster> subclustersView = Collections.unmodifiableList(subclusters);
+    private final List<Cluster> subclustersView = Collections
+        .unmodifiableList(subclusters);
 
     /** Documents contained in this cluster. */
     private final ArrayList<Document> documents = new ArrayList<Document>();
@@ -45,8 +46,8 @@ public final class Cluster
     /** Cached concatenated label */
     private String labelCache = null;
 
-    /** Cached actual cluster size */
-    private int actualSizeCache = -1;
+    /** Cached list of documents from this cluster and subclusters */
+    private List<Document> allDocuments;
 
     /**
      * Creates a {@link Cluster} with an empty label, no documents and no subclusters.
@@ -58,7 +59,7 @@ public final class Cluster
     /**
      * Creates a {@link Cluster} with the provided <code>phrase</code> to be used as the
      * cluster's label and <code>documents</code> contained in the cluster.
-     *
+     * 
      * @param phrase the phrase to form the cluster's label
      * @param documents documents contained in the cluster
      */
@@ -73,7 +74,7 @@ public final class Cluster
      * cluster, phrases will be separated by a comma followed by a space, e.g. "Phrase
      * one, Phrase two". To format multi-phrase label in a different way, use
      * {@link #getPhrases()}.
-     *
+     * 
      * @return formatted label of this cluster
      */
     public String getLabel()
@@ -87,7 +88,7 @@ public final class Cluster
 
     /**
      * Returns all phrases describing this cluster. The returned list is unmodifiable.
-     *
+     * 
      * @return phrases describing this cluster
      */
     public List<String> getPhrases()
@@ -97,7 +98,7 @@ public final class Cluster
 
     /**
      * Returns all subclusters of this cluster. The returned list is unmodifiable.
-     *
+     * 
      * @return subclusters of this cluster
      */
     public List<Cluster> getSubclusters()
@@ -107,7 +108,7 @@ public final class Cluster
 
     /**
      * Returns all documents contained in this cluster. The returned list is unmodifiable.
-     *
+     * 
      * @return documents contained in this cluster
      */
     public List<Document> getDocuments()
@@ -116,8 +117,51 @@ public final class Cluster
     }
 
     /**
+     * Returns all documents contained in this cluster and (recursively) all documents
+     * from this cluster's subclusters. The returned list contains unique documents, i.e.
+     * if a document is attached to multiple subclusters if this cluster, the document
+     * will appear only once on the list. The documents are enumerated in breadth first
+     * order, i.e. first come documents returned by {@link #getDocuments()} and then
+     * documents from subclusters.
+     * 
+     * @return all documents from this cluster and its subclusters
+     */
+    public List<Document> getAllDocuments()
+    {
+        if (allDocuments == null)
+        {
+            allDocuments = new ArrayList<Document>(collectAllDocuments(this,
+                new LinkedHashSet<Document>()));
+        }
+
+        return allDocuments;
+    }
+
+    /**
+     * A recursive routine for collecting unique documents from this cluster and
+     * subclusters.
+     */
+    private Set<Document> collectAllDocuments(Cluster cluster, Set<Document> docs)
+    {
+        if (cluster == null)
+        {
+            return docs;
+        }
+
+        docs.addAll(cluster.getDocuments());
+
+        final List<Cluster> subclusters = cluster.getSubclusters();
+        for (final Cluster subcluster : subclusters)
+        {
+            collectAllDocuments(subcluster, docs);
+        }
+
+        return docs;
+    }
+
+    /**
      * Adds phrases to the description of this cluster.
-     *
+     * 
      * @param phrases to be added to the description of this cluster
      * @return this cluster for convenience
      */
@@ -134,7 +178,7 @@ public final class Cluster
 
     /**
      * Adds phrases to the description of this cluster.
-     *
+     * 
      * @param phrases to be added to the description of this cluster
      * @return this cluster for convenience
      */
@@ -151,7 +195,7 @@ public final class Cluster
 
     /**
      * Adds document to this cluster.
-     *
+     * 
      * @param documents to be added to this cluster
      * @return this cluster for convenience
      */
@@ -161,14 +205,14 @@ public final class Cluster
         {
             this.documents.add(document);
         }
-        actualSizeCache = -1;
+        allDocuments = null;
 
         return this;
     }
 
     /**
      * Adds document to this cluster.
-     *
+     * 
      * @param documents to be added to this cluster
      * @return this cluster for convenience
      */
@@ -178,14 +222,14 @@ public final class Cluster
         {
             this.documents.add(document);
         }
-        actualSizeCache = -1;
+        allDocuments = null;
 
         return this;
     }
 
     /**
      * Adds subclusters to this cluster
-     *
+     * 
      * @param subclusters to be added to this cluster
      * @return this cluster for convenience
      */
@@ -195,14 +239,14 @@ public final class Cluster
         {
             this.subclusters.add(cluster);
         }
-        actualSizeCache = -1;
+        allDocuments = null;
 
         return this;
     }
 
     /**
      * Adds subclusters to this cluster
-     *
+     * 
      * @param clusters to be added to this cluster
      * @return this cluster for convenience
      */
@@ -212,7 +256,7 @@ public final class Cluster
         {
             this.subclusters.add(cluster);
         }
-        actualSizeCache = -1;
+        allDocuments = null;
 
         return this;
     }
@@ -221,7 +265,7 @@ public final class Cluster
      * Returns the attribute associated with this cluster under the provided
      * <code>key</code>. If there is no attribute under the provided <code>key</code>,
      * <code>null</code> will be returned.
-     *
+     * 
      * @param key of the attribute
      * @return attribute value of <code>null</code>
      */
@@ -233,7 +277,7 @@ public final class Cluster
 
     /**
      * Associates an attribute with this cluster.
-     *
+     * 
      * @param key for the attribute
      * @param value for the attribute
      * @return this cluster for convenience
@@ -247,38 +291,12 @@ public final class Cluster
     /**
      * Returns the size of the cluster calculated as the number of unique documents it
      * contains, including its subclusters.
-     *
+     * 
      * @return size of the cluster
      */
     public int size()
     {
-        if (actualSizeCache == -1)
-        {
-            actualSizeCache = calculateSize(this, new HashSet<Document>());
-        }
-
-        return actualSizeCache;
-    }
-
-    /**
-     * A recursive routine for calculating the size of the cluster.
-     */
-    private int calculateSize(Cluster cluster, Set<Document> docs)
-    {
-        if (cluster == null)
-        {
-            return docs.size();
-        }
-
-        docs.addAll(cluster.getDocuments());
-
-        final List<Cluster> subclusters = cluster.getSubclusters();
-        for (final Cluster subcluster : subclusters)
-        {
-            calculateSize(subcluster, docs);
-        }
-
-        return docs.size();
+        return getAllDocuments().size();
     }
 
     /**
@@ -314,7 +332,6 @@ public final class Cluster
      * towards the beginning of the list being sorted. In case of equal sizes, natural
      * order of the labels decides.
      */
-    public static final Comparator<Cluster> BY_REVERSED_SIZE_AND_LABEL_COMPARATOR =
-        Comparators.compound(
-            Collections.reverseOrder(BY_SIZE_COMPARATOR), BY_LABEL_COMPARATOR);
+    public static final Comparator<Cluster> BY_REVERSED_SIZE_AND_LABEL_COMPARATOR = Comparators
+        .compound(Collections.reverseOrder(BY_SIZE_COMPARATOR), BY_LABEL_COMPARATOR);
 }

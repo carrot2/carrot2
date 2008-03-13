@@ -55,8 +55,7 @@ public class ClusterTreeComponent
         public String getText(Object element)
         {
             Cluster cluster = ((ClusterWithParent) element).cluster;
-            return String.format("%s (%d)", cluster.getLabel(), cluster.getDocuments()
-                .size());
+            return String.format("%s (%d)", cluster.getLabel(), cluster.size());
         }
 
         @Override

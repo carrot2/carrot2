@@ -54,7 +54,7 @@ public class ResultsEditor extends MultiPageEditorPart
                 {
                     Cluster selectedCluster = ((ClusterWithParent) selection
                         .getFirstElement()).cluster;
-                    createDocumentsPage(selectedCluster.getDocuments());
+                    createDocumentsPage(selectedCluster.getAllDocuments());
                 }
             }
 

@@ -43,7 +43,7 @@
          point="org.eclipse.ui.editors">
       <editor
             class="org.carrot2.workbench.core.ui.ResultsEditor"
-            icon="icons/results.gif"
+            icon="icons/results.png"
             id="org.carrot2.workbench.core.editors.results"
             name="Results Editor">
       </editor>
