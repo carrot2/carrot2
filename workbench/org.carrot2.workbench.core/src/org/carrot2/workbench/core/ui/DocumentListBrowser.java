@@ -12,8 +12,8 @@ import org.carrot2.workbench.core.CorePlugin;
 import org.eclipse.core.commands.operations.OperationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.browser.Browser;
-import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.browser.*;
+import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.PartInitException;
 
 public class DocumentListBrowser
@@ -48,6 +48,21 @@ public class DocumentListBrowser
 
         Browser browser = new Browser(parent, SWT.NONE);
         browser.setText(sw.toString());
+        browser.addLocationListener(new LocationAdapter()
+        {
+
+            public void changing(LocationEvent event)
+            {
+                if (event.location.startsWith("msg:"))
+                {
+                    MessageBox box = new MessageBox(Display.getDefault().getActiveShell());
+                    box.setMessage(event.location.substring("msg:".length()));
+                    box.open();
+                    event.doit = false;
+                }
+            }
+
+        });
         return browser;
         // return list;
     }
