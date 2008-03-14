@@ -1,6 +1,5 @@
 package org.carrot2.workbench.core.ui;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import org.carrot2.core.*;
@@ -35,47 +34,14 @@ public class ResultsEditor extends MultiPageEditorPart
 
     private void hookClusterListener(ISelectionProvider provider)
     {
-        clusterSelectionListener = new ISelectionChangedListener()
-        {
-
-            public void selectionChanged(SelectionChangedEvent event)
-            {
-                IStructuredSelection selection = (IStructuredSelection) event
-                    .getSelection();
-                if (selection.isEmpty())
-                {
-                    createDocumentsPage(allDocuments);
-                }
-                if (selection.size() > 1)
-                {
-                    createDocumentsPage(new ArrayList<Document>());
-                }
-                else
-                {
-                    Cluster selectedCluster = ((ClusterWithParent) selection
-                        .getFirstElement()).cluster;
-                    createDocumentsPage(selectedCluster.getAllDocuments());
-                }
-            }
-
-        };
-        provider.addSelectionChangedListener(clusterSelectionListener);
-    }
-
-    /*
-     * 
-     */
-    private void createDocumentsPage(Collection<Document> documents)
-    {
-        DocumentListComponent list = new DocumentListComponent();
-        setControl(1, list.createControls(getContainer(), documents));
+        // provider.addSelectionChangedListener(clusterSelectionListener);
     }
 
     private void createBrowserPage(Collection<Document> documents)
         throws PartInitException
     {
         DocumentListBrowser list = new DocumentListBrowser();
-        setControl(2, list.createControls(getContainer(), documents));
+        setControl(1, list.createControls(getContainer(), documents));
     }
 
     /*
@@ -119,7 +85,6 @@ public class ResultsEditor extends MultiPageEditorPart
             {
                 allDocuments = result.getDocuments();
                 createClustersPage(result.getClusters());
-                createDocumentsPage(result.getDocuments());
                 createBrowserPage(result.getDocuments());
             }
 
@@ -152,10 +117,8 @@ public class ResultsEditor extends MultiPageEditorPart
         performClustering();
         addPage(null);
         addPage(null);
-        addPage(null);
         setPageText(1, "Documents");
         setPageText(0, "Clusters");
-        setPageText(2, "Browser");
     }
 
     /*
