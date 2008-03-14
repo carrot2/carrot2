@@ -15,13 +15,8 @@ package org.carrot2.core.profiling;
 
 import java.util.Map;
 
-import org.apache.commons.pool.impl.GenericKeyedObjectPool;
-import org.carrot2.core.LocalControllerBase;
-import org.carrot2.core.LocalProcess;
-import org.carrot2.core.MissingProcessException;
-import org.carrot2.core.ProcessingException;
-import org.carrot2.core.ProcessingResult;
-import org.carrot2.core.RequestContext;
+import org.apache.commons.pool.impl.GenericObjectPool.Config;
+import org.carrot2.core.*;
 
 /**
  * An implementation of the
@@ -46,7 +41,7 @@ public class ProfiledLocalController extends LocalControllerBase
         super();
     }
 
-    public ProfiledLocalController(GenericKeyedObjectPool.Config componentPoolConfig)
+    public ProfiledLocalController(Config componentPoolConfig)
     {
         super(componentPoolConfig);
     }
