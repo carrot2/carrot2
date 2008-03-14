@@ -5,9 +5,13 @@ import java.util.Collection;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.workbench.core.CorePlugin;
-import org.carrot2.workbench.core.helpers.ComponentLoader;
 import org.carrot2.workbench.core.helpers.RunnableWithErrorDialog;
+import org.carrot2.workbench.core.jobs.ProcessingJob;
+import org.carrot2.workbench.core.jobs.ProcessingStatus;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.*;
@@ -49,28 +53,23 @@ public class ResultsEditor extends MultiPageEditorPart
      */
     private void performClustering()
     {
-        CorePlugin.getExecutorService().execute(new RunnableWithErrorDialog()
+        ProcessingJob job =
+            new ProcessingJob("Processing of a query",
+                (SearchParameters) getEditorInput());
+        job.addJobChangeListener(new JobChangeAdapter()
         {
-            public void runCore()
-            {
-                SearchParameters search = (SearchParameters) getEditorInput();
-
-                final SimpleController controller = new SimpleController();
-                final ProcessingResult result = controller.process(
-                    search.getAttributes(), ComponentLoader.SOURCE_LOADER
-                        .getComponent(search.getSourceCaption()),
-                    ComponentLoader.ALGORITHM_LOADER.getComponent(search
-                        .getAlgorithmCaption()));
-                buildPages(result);
-
-            }
-
             @Override
-            protected String getErrorTitle()
+            public void done(IJobChangeEvent event)
             {
-                return "Error while processing query";
+                if (event.getResult().getSeverity() == IStatus.OK)
+                {
+                    buildPages(((ProcessingStatus) event.getResult()).result);
+                }
             }
         });
+        CorePlugin.getDefault().getWorkbench().getProgressService().showInDialog(
+            Display.getDefault().getActiveShell(), job);
+        job.schedule();
     }
 
     /*

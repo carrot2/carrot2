@@ -48,8 +48,8 @@ public class ClusterTreeComponent
 
     private final class ClusterLabelProvider extends LabelProvider
     {
-        Image folderImage = CorePlugin.getImageDescriptor("icons/folder.gif")
-            .createImage();
+        Image folderImage =
+            CorePlugin.getImageDescriptor("icons/folder.gif").createImage();
 
         @Override
         public String getText(Object element)
@@ -77,8 +77,8 @@ public class ClusterTreeComponent
         TreeViewer tree = new TreeViewer(parent, SWT.MULTI);
         tree.setLabelProvider(new ClusterLabelProvider());
         tree.setContentProvider(new ClusterTreeContentProvider());
-        List<ClusterWithParent> nodes = ClusterWithParent.wrap(new ArrayList<Cluster>(
-            clusters));
+        List<ClusterWithParent> nodes =
+            ClusterWithParent.wrap(new ArrayList<Cluster>(clusters));
         tree.setInput(nodes);
         return tree;
     }
