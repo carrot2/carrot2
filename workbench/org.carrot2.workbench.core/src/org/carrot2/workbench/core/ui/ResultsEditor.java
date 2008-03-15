@@ -21,7 +21,8 @@ public class ResultsEditor extends SashFormEditorPart
         ClusterTreeComponent tree =
             new ClusterTreeComponent(getSite(), getContainer(), job);
         addControl(tree.getControl(), 1);
-        DocumentListBrowser browser = new DocumentListBrowser(getSite(), getContainer());
+        DocumentListBrowser browser =
+            new DocumentListBrowser(getSite(), getContainer(), job);
         addControl(browser.getControl(), 2);
         CorePlugin.getDefault().getWorkbench().getProgressService().showInDialog(
             Display.getDefault().getActiveShell(), job);

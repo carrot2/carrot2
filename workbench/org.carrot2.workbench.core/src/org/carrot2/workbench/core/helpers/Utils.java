@@ -1,5 +1,7 @@
 package org.carrot2.workbench.core.helpers;
 
+import org.carrot2.workbench.core.CorePlugin;
+import org.eclipse.core.commands.operations.OperationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.widgets.Display;
@@ -40,6 +42,30 @@ public class Utils
                         message, status);
                 }
             });
+        }
+    }
+
+    public static void logError(String message, Throwable exception, boolean showError)
+    {
+        IStatus status =
+            new OperationStatus(IStatus.ERROR, CorePlugin.PLUGIN_ID, -1, message,
+                exception);
+        CorePlugin.getDefault().getLog().log(status);
+        if (showError)
+        {
+            showError(status);
+        }
+    }
+
+    public static void logError(Throwable exception, boolean showError)
+    {
+        IStatus status =
+            new OperationStatus(IStatus.ERROR, CorePlugin.PLUGIN_ID, -1, exception
+                .getMessage(), exception);
+        CorePlugin.getDefault().getLog().log(status);
+        if (showError)
+        {
+            showError(status);
         }
     }
 

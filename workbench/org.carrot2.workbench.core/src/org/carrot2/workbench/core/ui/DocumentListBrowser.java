@@ -2,29 +2,51 @@ package org.carrot2.workbench.core.ui;
 
 import java.io.StringWriter;
 import java.util.Collection;
-import java.util.Properties;
 
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
-import org.carrot2.core.Cluster;
-import org.carrot2.core.Document;
-import org.carrot2.workbench.core.CorePlugin;
-import org.eclipse.core.commands.operations.OperationStatus;
+import org.carrot2.core.*;
+import org.carrot2.workbench.core.helpers.Utils;
+import org.carrot2.workbench.core.jobs.ProcessingJob;
+import org.carrot2.workbench.core.jobs.ProcessingStatus;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.browser.*;
-import org.eclipse.swt.widgets.*;
+import org.eclipse.swt.browser.Browser;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbenchSite;
 
 public class DocumentListBrowser
 {
     private Browser browser;
 
-    public DocumentListBrowser(IWorkbenchSite site, Composite parent)
+    public DocumentListBrowser(IWorkbenchSite site, Composite parent, ProcessingJob job)
     {
         browser = new Browser(parent, SWT.NONE);
+        job.addJobChangeListener(new JobChangeAdapter()
+        {
+            @Override
+            public void done(IJobChangeEvent event)
+            {
+                if (event.getResult().getSeverity() == IStatus.OK)
+                {
+                    final ProcessingResult result =
+                        ((ProcessingStatus) event.getResult()).result;
+                    Utils.asyncExec(new Runnable()
+                    {
+                        public void run()
+                        {
+                            updateBrowserText(result.getDocuments());
+                        }
+                    });
+                }
+            }
+        });
+
         site.getSelectionProvider().addSelectionChangedListener(
             new ISelectionChangedListener()
             {
@@ -44,55 +66,42 @@ public class DocumentListBrowser
                     }
                     else
                     {
-                        updateBrowserText(((Cluster) selection.getFirstElement())
-                            .getAllDocuments());
+                        updateBrowserText((Cluster) selection.getFirstElement());
                     }
                 }
 
             });
-        browser.addLocationListener(new LocationAdapter()
-        {
-
-            public void changing(LocationEvent event)
-            {
-                if (event.location.startsWith("msg:"))
-                {
-                    MessageBox box =
-                        new MessageBox(Display.getDefault().getActiveShell());
-                    box.setMessage(event.location.substring("msg:".length()));
-                    box.open();
-                    event.doit = false;
-                }
-            }
-
-        });
     }
 
     public void updateBrowserText(Collection<Document> documents)
     {
-        // TODO: some management of velocity should be made
         VelocityContext context = new VelocityContext();
         context.put("documents", documents);
 
+        merge(context);
+    }
+
+    public void updateBrowserText(Cluster cluster)
+    {
+        VelocityContext context = new VelocityContext();
+        context.put("documents", cluster.getAllDocuments());
+        context.put("cluster", cluster);
+
+        merge(context);
+    }
+
+    private void merge(VelocityContext context)
+    {
         Template template = null;
         StringWriter sw = new StringWriter();
         try
         {
-            Properties p = new Properties();
-            p.setProperty("resource.loader", "class");
-            p.setProperty("class.resource.loader.class",
-                "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
-
-            Velocity.init(p);
             template = Velocity.getTemplate("documents-list.vm");
             template.merge(context, sw);
         }
         catch (Exception e)
         {
-            CorePlugin.getDefault().getLog().log(
-                new OperationStatus(IStatus.ERROR, CorePlugin.PLUGIN_ID, -1,
-                    "Error while loading template", e));
-            // throw new PartInitException("Error while loading template", e);
+            Utils.logError("Error while loading template", e, true);
             return;
         }
 

@@ -3,6 +3,7 @@ package org.carrot2.workbench.core;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.carrot2.workbench.core.helpers.VelocityHelper;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -25,6 +26,7 @@ public class CorePlugin extends AbstractUIPlugin
         super.start(context);
         plugin = this;
         executorService = Executors.newCachedThreadPool();
+        VelocityHelper.init();
     }
 
     public void stop(BundleContext context) throws Exception
