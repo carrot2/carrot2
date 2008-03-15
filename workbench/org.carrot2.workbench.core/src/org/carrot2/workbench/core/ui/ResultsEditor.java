@@ -3,6 +3,7 @@ package org.carrot2.workbench.core.ui;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.workbench.core.CorePlugin;
 import org.carrot2.workbench.core.jobs.ProcessingJob;
+import org.carrot2.workbench.core.ui.clusters.ClusterTreeComponent;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.*;
