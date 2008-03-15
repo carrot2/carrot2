@@ -6,7 +6,7 @@
          <meta.schema plugin="org.carrot2.core" id="source" name="Document Source"/>
       </appInfo>
       <documentation>
-         
+         Document Source is specialised component, which can provide collection of documents (&lt;samp&gt;org.carrot2.core.Document&lt;/samp&gt;). Usually these documents are extracted from external search engine or read from file (e.g. XML file).
       </documentation>
    </annotation>
 
@@ -43,11 +43,16 @@
    </element>
 
    <element name="source">
+      <annotation>
+         <appInfo>
+            <meta.element labelAttribute="label" icon="new_attribute2"/>
+         </appInfo>
+      </annotation>
       <complexType>
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  Must implement &lt;samp&gt;org.carrot2.core.DocumentSource&lt;/samp&gt;.
                </documentation>
                <appInfo>
                   <meta.attribute kind="java" basedOn=":org.carrot2.core.DocumentSource"/>
@@ -57,8 +62,11 @@
          <attribute name="label" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  Localizable.
                </documentation>
+               <appInfo>
+                  <meta.attribute translatable="true"/>
+               </appInfo>
             </annotation>
          </attribute>
       </complexType>
@@ -87,7 +95,9 @@
          <meta.section type="apiInfo"/>
       </appInfo>
       <documentation>
-         In order to provide new document source, you need to implement &lt;samp&gt;org.carrot2.core.DocumentSource&lt;/samp&gt;. Implementing class should be annotated with &lt;samp&gt;@Bindable&lt;/samp&gt;.
+         In order to provide new document source, you need to implement &lt;samp&gt;org.carrot2.core.DocumentSource&lt;/samp&gt;. Implementing class should be annotated with &lt;samp&gt;@Bindable&lt;/samp&gt;.&lt;br&gt;
+Usually it is best to extend abstract &lt;samp&gt;org.carrot2.core.ProcessingComponentBase&lt;/samp&gt; class.&lt;br&gt;
+Sources based on external search engine should extend &lt;samp&gt;org.carrot2.source.SearchEngine&lt;/samp&gt;.
       </documentation>
    </annotation>
 
