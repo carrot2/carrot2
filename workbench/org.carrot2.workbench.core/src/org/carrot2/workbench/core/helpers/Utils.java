@@ -59,14 +59,7 @@ public class Utils
 
     public static void logError(Throwable exception, boolean showError)
     {
-        IStatus status =
-            new OperationStatus(IStatus.ERROR, CorePlugin.PLUGIN_ID, -1, exception
-                .getMessage(), exception);
-        CorePlugin.getDefault().getLog().log(status);
-        if (showError)
-        {
-            showError(status);
-        }
+        logError(exception.getMessage(), exception, showError);
     }
 
     /**

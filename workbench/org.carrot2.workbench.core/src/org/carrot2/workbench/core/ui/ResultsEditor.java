@@ -23,7 +23,7 @@ public class ResultsEditor extends SashFormEditorPart
         addControl(tree.getControl(), 1);
         DocumentListBrowser browser =
             new DocumentListBrowser(getSite(), getContainer(), job);
-        addControl(browser.getControl(), 2);
+        addControl(browser.getControl(), 3);
         CorePlugin.getDefault().getWorkbench().getProgressService().showInDialog(
             Display.getDefault().getActiveShell(), job);
         job.schedule();
