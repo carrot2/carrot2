@@ -8,6 +8,7 @@ import org.simpleframework.xml.*;
 import org.simpleframework.xml.load.*;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 /**
  * Encapsulates the results of processing. Provides access to the values of attributes
@@ -56,21 +57,21 @@ public final class ProcessingResult
         this.attributes = attributes;
 
         // Replace a modifiable collection of documents with an unmodifiable one
-        final Collection<Document> documents = (Collection<Document>) attributes
+        final List<Document> documents = (List<Document>) attributes
             .get(AttributeNames.DOCUMENTS);
         if (documents != null)
         {
             attributes.put(AttributeNames.DOCUMENTS, Collections
-                .unmodifiableCollection(documents));
+                .unmodifiableList(documents));
         }
 
         // Replace a modifiable collection of clusters with an unmodifiable one
-        final Collection<Cluster> clusters = (Collection<Cluster>) attributes
+        final List<Cluster> clusters = (List<Cluster>) attributes
             .get(AttributeNames.CLUSTERS);
         if (clusters != null)
         {
             attributes.put(AttributeNames.CLUSTERS, Collections
-                .unmodifiableCollection(clusters));
+                .unmodifiableList(clusters));
         }
 
         // Store a reference to attributes as an unmodifiable map
@@ -87,10 +88,34 @@ public final class ProcessingResult
         final Collection<Document> documents = getDocuments();
         if (documents != null)
         {
-            int id = 0;
+            final HashSet<Integer> ids = Sets.newHashSet();
+
+            // First, find the start value for the id and check uniqueness of the ids
+            // already provided.
+            int maxId = Integer.MIN_VALUE;
             for (final Document document : documents)
             {
-                document.id = id++;
+                if (document.id != null)
+                {
+                    if (!ids.add(document.id))
+                    {
+                        throw new RuntimeException("Non-unique document id found: "
+                            + document.id);
+                    }
+                    maxId = Math.max(maxId, document.id);
+                }
+            }
+
+            // We'd rather start with 0
+            maxId = Math.max(maxId, -1);
+
+            // Assign missing ids
+            for (final Document document : documents)
+            {
+                if (document.id == null)
+                {
+                    document.id = ++maxId;
+                }
             }
         }
     }
@@ -114,13 +139,13 @@ public final class ProcessingResult
      *         are present in the result.
      */
     @SuppressWarnings("unchecked")
-    public Collection<Document> getDocuments()
+    public List<Document> getDocuments()
     {
-        return (Collection<Document>) attributes.get(AttributeNames.DOCUMENTS);
+        return (List<Document>) attributes.get(AttributeNames.DOCUMENTS);
     }
 
     /*
-     * TODO: Returning a list of clusters instead of a (possibly atrificial) cluster with
+     * TODO: Returning a list of clusters instead of a (possibly artificial) cluster with
      * subclusters adds a little complexity to recursive methods operating on clusters (a
      * natural entry point is a method taking one cluster and acting on subclusters
      * recursively). If we have to start with a list of clusters, we have to handle this
@@ -128,16 +153,16 @@ public final class ProcessingResult
      */
 
     /**
-     * Returns the clusters that have been created during processing. The returned
-     * collection is unmodifiable.
+     * Returns the clusters that have been created during processing. The returned list is
+     * unmodifiable.
      * 
      * @return clusters created during processing or <code>null</code> if no clusters
      *         were present in the result.
      */
     @SuppressWarnings("unchecked")
-    public Collection<Cluster> getClusters()
+    public List<Cluster> getClusters()
     {
-        return (Collection<Cluster>) attributes.get(AttributeNames.CLUSTERS);
+        return (List<Cluster>) attributes.get(AttributeNames.CLUSTERS);
     }
 
     /**

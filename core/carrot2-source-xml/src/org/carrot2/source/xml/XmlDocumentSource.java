@@ -1,14 +1,20 @@
 package org.carrot2.source.xml;
 
-import java.io.InputStream;
-import java.net.ConnectException;
+import java.io.*;
 import java.util.*;
 
+import javax.xml.transform.*;
+import javax.xml.transform.sax.*;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+
+import org.apache.commons.lang.ObjectUtils;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.resource.Resource;
+import org.carrot2.util.resource.ResourceUtils;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -40,11 +46,43 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
      * @label XML Resource
      */
     @Input
-    @Init
     @Processing
     @Attribute
     @Required
-    private Resource resource;
+    private Resource xml;
+
+    /**
+     * The resource to load XSLT stylesheet from. The XSLT stylesheet is optional and is
+     * useful when the source XML stream does not follow the Carrot2 format. The XSLT
+     * transformation will be applied to the source XML stream, the transformed XML stream
+     * will be deserialized into {@link Document}s.
+     * <p>
+     * The XSLT {@link Resource} can be provided both on initialization and processing
+     * time. The stylesheet provided on initialization will be cached for the life time of
+     * the component, while processing-time style sheets will be compiled every time
+     * processing is requested and will override the initialization-time stylesheet.
+     * <p>
+     * To pass additional parameters to the XSLT transformer, use the
+     * {@link #xsltParameters} attribute.
+     * 
+     * @label XSLT stylesheet
+     */
+    @Input
+    @Init
+    @Processing
+    @Attribute
+    private Resource xslt;
+
+    /**
+     * Parameters to be passed to the XSLT transformer.
+     * 
+     * @label XSLT parameters
+     */
+    @Input
+    @Init
+    @Processing
+    @Attribute
+    private Map<String, String> xsltParameters = Collections.<String, String> emptyMap();
 
     @Input
     @Output
@@ -63,35 +101,64 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
     @Attribute(key = AttributeNames.DOCUMENTS)
     private Collection<Document> documents;
 
-    /*
-     * 
+    /**
+     * The XSLT resource provided at init. If we want to allow specifying the XSLT both on
+     * init and processing, and want to cache the XSLT template provided on init, we must
+     * store this reference.
      */
+    private Resource initXslt;
+
+    /** A template defined at initialization time, can be null */
+    private Templates instanceLevelXslt;
+
+    /** XSLT transformer factory. */
+    private final TransformerFactory transformerFactory;
+
+    /**
+     * URI resolver. Does nothing.
+     */
+    private final static URIResolver uriResolver = new URIResolver()
+    {
+        public Source resolve(String href, String base) throws TransformerException
+        {
+            return null;
+        }
+    };
+
+    /**
+     * Creates a new {@link XmlDocumentSource}.
+     */
+    public XmlDocumentSource()
+    {
+        this.transformerFactory = TransformerFactory.newInstance();
+        this.transformerFactory.setURIResolver(uriResolver);
+    }
+
+    @Override
+    public void init()
+    {
+        super.init();
+
+        // Try to initialize the XSLT template, if provided in init attributes
+        if (xslt != null)
+        {
+            initXslt = xslt;
+            instanceLevelXslt = loadXslt(xslt);
+        }
+    }
+
     @Override
     public void process() throws ProcessingException
     {
-        InputStream inputStream = null;
+        InputStream carrot2XmlInputStream = null;
         try
         {
-            if (resource instanceof ParameterizedUrlResource)
-            {
-                // If we got a specialized implementation of the Resource interface,
-                // perform substitution of known attributes
-                Map<String, Object> attributes = Maps.newHashMap();
-
-                attributes.put("query", (query != null ? query : ""));
-                attributes.put("results", (results != -1 ? results : ""));
-
-                inputStream = ((ParameterizedUrlResource) resource).open(attributes);
-            }
-            else
-            {
-                // Open the generic Resource instance
-                inputStream = resource.open();
-            }
+            // Perform the transformation if stylesheet available
+            carrot2XmlInputStream = getCarrot2XmlStream();
 
             // Deserialize the XML stream
             final ProcessingResult processingResult = ProcessingResult
-                .deserialize(inputStream);
+                .deserialize(carrot2XmlInputStream);
 
             query = (String) processingResult.getAttributes().get(AttributeNames.QUERY);
             documents = processingResult.getDocuments();
@@ -119,7 +186,162 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
         }
         finally
         {
-            CloseableUtils.close(inputStream);
+            CloseableUtils.close(carrot2XmlInputStream);
         }
+    }
+
+    /**
+     * Returns a Carrot2 XML stream, applying an XSLT transformation if the stylesheet is
+     * provided.
+     */
+    private InputStream getCarrot2XmlStream() throws TransformerConfigurationException,
+        IOException, TransformerException
+    {
+        // Resolve the stylesheet to use
+        Templates stylesheet = instanceLevelXslt;
+        if (xslt != null)
+        {
+            if (!ObjectUtils.equals(xslt, initXslt))
+            {
+                stylesheet = loadXslt(xslt);
+            }
+        }
+        else
+        {
+            stylesheet = null;
+        }
+
+        // Perform transformation if stylesheet found
+        InputStream carrot2XmlInputStream;
+        if (stylesheet != null)
+        {
+            InputStream xmlInputStream = null;
+            try
+            {
+                // Initialize transformer
+                final Transformer transformer = stylesheet.newTransformer();
+                final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+                // Set XSLT parameters, if any
+                for (Map.Entry<String, String> entry : xsltParameters.entrySet())
+                {
+                    transformer.setParameter(entry.getKey(), entry.getValue());
+                }
+
+                // Perform transformation
+                xmlInputStream = openResource(xml);
+                transformer.transform(new StreamSource(xmlInputStream), new StreamResult(
+                    outputStream));
+                carrot2XmlInputStream = new ByteArrayInputStream(outputStream
+                    .toByteArray());
+            }
+            finally
+            {
+                CloseableUtils.close(xmlInputStream);
+            }
+        }
+        else
+        {
+            carrot2XmlInputStream = openResource(xml);
+        }
+
+        return carrot2XmlInputStream;
+    }
+
+    /**
+     * Loads the XSLT stylesheet from the provided {@link Resource}.
+     */
+    private Templates loadXslt(Resource xslt)
+    {
+        InputStream templateInputStream = null;
+        try
+        {
+            templateInputStream = xslt.open();
+
+            if (!transformerFactory.getFeature(SAXSource.FEATURE)
+                || !transformerFactory.getFeature(SAXResult.FEATURE))
+            {
+                throw new RuntimeException(
+                    "Required source types not supported by the Transformer Factory.");
+            }
+
+            if (!transformerFactory.getFeature(SAXResult.FEATURE)
+                || !transformerFactory.getFeature(StreamResult.FEATURE))
+            {
+                throw new RuntimeException(
+                    "Required result types not supported by the Transformer Factory.");
+            }
+
+            if (!(transformerFactory instanceof SAXTransformerFactory))
+            {
+                throw new RuntimeException(
+                    "TransformerFactory not an instance of SAXTransformerFactory");
+            }
+
+            transformerFactory.setErrorListener(new ErrorListener()
+            {
+                public void warning(TransformerException exception)
+                    throws TransformerException
+                {
+                    throw exception;
+                }
+
+                public void error(TransformerException exception)
+                    throws TransformerException
+                {
+                    throw exception;
+                }
+
+                public void fatalError(TransformerException exception)
+                    throws TransformerException
+                {
+                    throw exception;
+                }
+            });
+
+            try
+            {
+                final Templates newTemplates = transformerFactory
+                    .newTemplates(new StreamSource(templateInputStream));
+                return newTemplates;
+            }
+            catch (TransformerConfigurationException e)
+            {
+                throw new RuntimeException("Could not compile stylesheet.", e);
+            }
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException("Could not load stylesheet", e);
+        }
+        finally
+        {
+            CloseableUtils.close(templateInputStream);
+        }
+    }
+
+    /**
+     * Opens a {@link Resource}, also handles {@link ParameterizedUrlResource}s.
+     */
+    private InputStream openResource(Resource resource) throws IOException
+    {
+        InputStream inputStream;
+        if (resource instanceof ParameterizedUrlResource)
+        {
+            // If we got a specialized implementation of the Resource interface,
+            // perform substitution of known attributes
+            Map<String, Object> attributes = Maps.newHashMap();
+
+            attributes.put("query", (query != null ? query : ""));
+            attributes.put("results", (results != -1 ? results : ""));
+
+            inputStream = ((ParameterizedUrlResource) resource).open(attributes);
+        }
+        else
+        {
+            // Open the generic Resource instance
+            inputStream = resource.open();
+        }
+        return inputStream;
     }
 }

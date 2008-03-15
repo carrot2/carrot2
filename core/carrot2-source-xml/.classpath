@@ -8,5 +8,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.apache.log4j"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.junit4-ext"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.fest"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>

@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
 import org.carrot2.util.attribute.test.metadata.*;

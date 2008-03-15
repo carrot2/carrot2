@@ -3,11 +3,10 @@
  */
 package org.carrot2.core.test;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-import org.carrot2.core.ProcessingComponent;
-import org.carrot2.core.SimpleController;
+import org.carrot2.core.*;
+import org.carrot2.core.attribute.AttributeNames;
 import org.junit.Before;
 
 /**
@@ -37,5 +36,14 @@ public abstract class ProcessingComponentTestBase<T extends ProcessingComponent>
     {
         this.controller = new SimpleController();
         this.attributes = new HashMap<String, Object>();
+    }
+
+    /**
+     * Returns the documents stored in {@link #attributes}.
+     */
+    @SuppressWarnings("unchecked")
+    protected List<Document> getDocuments()
+    {
+        return (List<Document>) attributes.get(AttributeNames.DOCUMENTS);
     }
 }

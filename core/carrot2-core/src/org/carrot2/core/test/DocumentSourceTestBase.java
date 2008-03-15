@@ -13,6 +13,8 @@ import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.junit.Assert;
 
+import com.google.common.base.Function;
+
 /**
  * Simple baseline tests that apply to most (?) data sources.
  */
@@ -84,4 +86,55 @@ public abstract class DocumentSourceTestBase<T extends DocumentSource> extends
                 + builder.toString());
         }
     }
+
+    /**
+     * Transforms {@link Document}s to their individual fields.
+     */
+    protected static class DocumentToFieldTransformer implements Function<Document, Object>
+    {
+        /** Field name */
+        private final String fieldName;
+
+        /**
+         * Builds a transformer with the provided field name.
+         */
+        public DocumentToFieldTransformer(String fieldName)
+        {
+            this.fieldName = fieldName;
+        }
+
+        public Object apply(Document document)
+        {
+            return document.getField(fieldName);
+        }
+    }
+
+    /**
+     * Transforms {@link Document}s to their ids.
+     */
+    protected static Function<Document, Integer> DOCUMENT_TO_ID = new Function<Document, Integer>()
+    {
+        public Integer apply(Document document)
+        {
+            return document.getId();
+        }
+    };
+
+    /**
+     * Transforms {@link Document}s to their titles.
+     */
+    protected static DocumentToFieldTransformer DOCUMENT_TO_TITLE = new DocumentToFieldTransformer(
+        Document.TITLE);
+
+    /**
+     * Transforms {@link Document}s to their summaries.
+     */
+    protected static DocumentToFieldTransformer DOCUMENT_TO_SUMMARY = new DocumentToFieldTransformer(
+        Document.SUMMARY);
+
+    /**
+     * Transforms {@link Document}s to their content URLs.
+     */
+    protected static DocumentToFieldTransformer DOCUMENT_TO_CONTENT_URL = new DocumentToFieldTransformer(
+        Document.CONTENT_URL);
 }

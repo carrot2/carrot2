@@ -55,6 +55,7 @@
             <fileset dir="core">
                 <include name="**/src/**/*.xml" />
                 <include name="**/src-test/**/*.xml" />
+                <include name="**/src-test/**/*.xsl" />
                 <exclude name="**/carrot2-util-log4j/**" />
             </fileset>
             <regexpmapper from="^.*src(-test)?(.*)$$" to="\2"/>

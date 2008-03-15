@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<searchresult>
+  <query>test</query>
+  <document id="1">
+    <title>Title 0</title>
+    <snippet>Snippet 0</snippet>
+    <url>Url 0</url>
+  </document>
+  <document id="1">
+    <title>Title 1</title>
+    <snippet>Snippet 1</snippet>
+    <url>Url 1</url>
+  </document>
+</searchresult>

@@ -68,8 +68,8 @@ public final class Document
      * 
      * @see ProcessingResult
      */
-    @Attribute
-    int id;
+    @Attribute(required = false)
+    Integer id;
 
     /**
      * Creates an empty document with no fields.
@@ -85,7 +85,7 @@ public final class Document
      * 
      * @return unique identifier of this document
      */
-    public int getId()
+    public Integer getId()
     {
         return id;
     }
