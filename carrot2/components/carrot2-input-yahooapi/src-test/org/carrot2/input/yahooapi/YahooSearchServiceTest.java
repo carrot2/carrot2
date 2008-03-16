@@ -74,7 +74,6 @@ public class YahooSearchServiceTest extends ExternalApiTestBase {
             logger.debug(titleSummary);
             assertTrue(titleSummary.indexOf("&gt;") < 0);
             assertTrue(titleSummary.indexOf("&lt;") < 0);
-            assertTrue(titleSummary.indexOf("&amp;") < 0);
         }
     }
 
