@@ -17,12 +17,18 @@ import org.junit.Before;
 public abstract class ProcessingComponentTestBase<T extends ProcessingComponent> extends
     ExternalApiTestBase
 {
-    /** Controller used for tests. */
-    protected SimpleController controller;
+    /** Simple controller used for tests. */
+    protected SimpleController simpleController;
 
-    /** A map of attributes used for tests. */
-    protected Map<String, Object> attributes;
+    /** Simple controller used for tests. */
+    protected CachingController cachingController;
+    
+    /** A map of initialization attributes used for tests. */
+    protected Map<String, Object> initAttributes;
 
+    /** A map of processing attributes used for tests. */
+    protected Map<String, Object> processingAttributes;
+    
     /**
      * @return Return the class of the component being tested.
      */
@@ -34,16 +40,18 @@ public abstract class ProcessingComponentTestBase<T extends ProcessingComponent>
     @Before
     public void prepareComponent()
     {
-        this.controller = new SimpleController();
-        this.attributes = new HashMap<String, Object>();
+        this.simpleController = new SimpleController();
+        this.cachingController = new CachingController();
+        this.initAttributes = new HashMap<String, Object>();
+        this.processingAttributes = new HashMap<String, Object>();
     }
 
     /**
-     * Returns the documents stored in {@link #attributes}.
+     * Returns the documents stored in {@link #processingAttributes}.
      */
     @SuppressWarnings("unchecked")
     protected List<Document> getDocuments()
     {
-        return (List<Document>) attributes.get(AttributeNames.DOCUMENTS);
+        return (List<Document>) processingAttributes.get(AttributeNames.DOCUMENTS);
     }
 }

@@ -5,7 +5,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.carrot2.core.*;
-import org.carrot2.core.attribute.Init;
+import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
 
 /**
@@ -25,7 +25,7 @@ public abstract class SearchEngine
      * @label Search Mode
      * @see SearchMode
      */
-    @Init
+    @Processing
     @Input
     @Attribute(key="search-mode")
     private SearchMode searchMode = SearchMode.SPECULATIVE;

@@ -1,6 +1,3 @@
-/**
- *
- */
 package org.carrot2.core.test;
 
 import static org.junit.Assert.assertNotNull;
@@ -22,18 +19,52 @@ public abstract class DocumentSourceTestBase<T extends DocumentSource> extends
     ProcessingComponentTestBase<T>
 {
     /**
-     * Runs a query without specifying any additional attributes.
+     * Runs a query without specifying any additional attributes. The query is run using
+     * the {@link #simpleController}.
      * 
-     * @return Returns the number of fetched documents. Access {@link #attributes} map to
-     *         get hold of the actual documents.
+     * @return Returns the number of fetched documents. Access
+     *         {@link #processingAttributes} map to get hold of the actual documents.
      */
     @SuppressWarnings("unchecked")
     protected int runQuery()
     {
-        final ProcessingResult result = controller.process(attributes,
-            getComponentClass());
+        return runQuery(simpleController);
+    }
 
-        final Collection<Document> documents = (Collection<Document>) attributes
+    /**
+     * Runs a query without specifying any additional attributes. The query is run using
+     * the {@link #cachingController}.
+     * 
+     * @return Returns the number of fetched documents. Access
+     *         {@link #processingAttributes} map to get hold of the actual documents.
+     */
+    @SuppressWarnings("unchecked")
+    protected int runQueryInCachingController()
+    {
+        return runQuery(cachingController);
+    }
+
+    /**
+     * Runs a query without specifying any additional attributes.
+     * 
+     * @param controller the {@link Controller} to perform the query
+     * @return Returns the number of fetched documents. Access
+     *         {@link #processingAttributes} map to get hold of the actual documents.
+     */
+    @SuppressWarnings("unchecked")
+    protected int runQuery(Controller controller)
+    {
+        // A little hacky, but looks like the simplest way to ensure a single
+        // initialization per one test case
+        if (!initAttributes.isEmpty())
+        {
+            controller.init(initAttributes);
+        }
+        final ProcessingResult result = controller.process(processingAttributes,
+            getComponentClass());
+        initAttributes.clear();
+
+        final Collection<Document> documents = (Collection<Document>) processingAttributes
             .get(AttributeNames.DOCUMENTS);
         assertNotNull(result.getDocuments());
         assertSame(result.getDocuments(), documents);
@@ -41,16 +72,17 @@ public abstract class DocumentSourceTestBase<T extends DocumentSource> extends
     }
 
     /**
-     * Runs a <code>query</code> and asks for <code>results</code> results.
+     * Runs a <code>query</code> and asks for <code>results</code> results. The query
+     * is run using the {@link #simpleController}.
      * 
-     * @return Returns the number of fetched documents. Access {@link #attributes} map to
-     *         get hold of the actual documents.
+     * @return Returns the number of fetched documents. Access
+     *         {@link #processingAttributes} map to get hold of the actual documents.
      */
     @SuppressWarnings("unchecked")
     protected final int runQuery(String query, int results)
     {
-        attributes.put(AttributeNames.QUERY, query);
-        attributes.put(AttributeNames.RESULTS, results);
+        processingAttributes.put(AttributeNames.QUERY, query);
+        processingAttributes.put(AttributeNames.RESULTS, results);
         return runQuery();
     }
 
@@ -90,7 +122,8 @@ public abstract class DocumentSourceTestBase<T extends DocumentSource> extends
     /**
      * Transforms {@link Document}s to their individual fields.
      */
-    protected static class DocumentToFieldTransformer implements Function<Document, Object>
+    protected static class DocumentToFieldTransformer implements
+        Function<Document, Object>
     {
         /** Field name */
         private final String fieldName;

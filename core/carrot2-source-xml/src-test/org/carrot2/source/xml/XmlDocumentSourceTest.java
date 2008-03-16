@@ -38,10 +38,11 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
         Resource xml = resourceUtils.getFirst("/xml/carrot2-apple-computer.xml",
             XmlDocumentSourceTest.class);
 
-        attributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"), xml);
+        processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"),
+            xml);
         final int documentCount = runQuery();
         assertEquals(200, documentCount);
-        assertEquals("apple computer", attributes.get(AttributeNames.QUERY));
+        assertEquals("apple computer", processingAttributes.get(AttributeNames.QUERY));
     }
 
     @Test
@@ -50,11 +51,12 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
         Resource xml = resourceUtils.getFirst("/xml/carrot2-apple-computer.xml",
             XmlDocumentSourceTest.class);
 
-        attributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"), xml);
-        attributes.put(AttributeNames.RESULTS, 50);
+        processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"),
+            xml);
+        processingAttributes.put(AttributeNames.RESULTS, 50);
         final int documentCount = runQuery();
         assertEquals(50, documentCount);
-        assertEquals("apple computer", attributes.get(AttributeNames.QUERY));
+        assertEquals("apple computer", processingAttributes.get(AttributeNames.QUERY));
     }
 
     @Test
@@ -65,8 +67,10 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
         Resource xslt = resourceUtils.getFirst("/xsl/custom-xslt.xsl",
             XmlDocumentSourceTest.class);
 
-        attributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"), xml);
-        attributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xslt"), xslt);
+        processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"),
+            xml);
+        processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xslt"),
+            xslt);
         final int documentCount = runQuery();
         assertTransformedDocumentsEqual(documentCount);
     }
@@ -85,10 +89,12 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
         xsltParameters.put("snippet-field", "snippet");
         xsltParameters.put("url-field", "url");
 
-        attributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"), xml);
-        attributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xslt"), xslt);
-        attributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xsltParameters"),
-            xsltParameters);
+        processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"),
+            xml);
+        processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xslt"),
+            xslt);
+        processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class,
+            "xsltParameters"), xsltParameters);
         final int documentCount = runQuery();
         assertTransformedDocumentsEqual(documentCount);
     }
@@ -99,7 +105,8 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
         Resource xml = resourceUtils.getFirst("/xml/carrot2-no-ids.xml",
             XmlDocumentSourceTest.class);
 
-        attributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"), xml);
+        processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"),
+            xml);
         final int documentCount = runQuery();
         assertEquals(2, documentCount);
         assertEquals(Lists.newArrayList(0, 1), Lists.transform(getDocuments(),
@@ -112,7 +119,8 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
         Resource xml = resourceUtils.getFirst("/xml/carrot2-gapped-ids.xml",
             XmlDocumentSourceTest.class);
 
-        attributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"), xml);
+        processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"),
+            xml);
         final int documentCount = runQuery();
         assertEquals(4, documentCount);
         assertEquals(Lists.newArrayList(6, 2, 5, 7), Lists.transform(getDocuments(),
@@ -125,28 +133,109 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
         Resource xml = resourceUtils.getFirst("/xml/carrot2-duplicated-ids.xml",
             XmlDocumentSourceTest.class);
 
-        attributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"), xml);
+        processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"),
+            xml);
         runQuery();
     }
 
+    @Test
     public void testInitializationTimeXslt()
     {
-        // TODO: implement this test
+        Resource xslt = resourceUtils.getFirst("/xsl/custom-xslt.xsl",
+            XmlDocumentSourceTest.class);
+        initAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xslt"), xslt);
+
+        Resource xml = resourceUtils.getFirst("/xml/custom-parameters-not-required.xml",
+            XmlDocumentSourceTest.class);
+        processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"),
+            xml);
+
+        final int documentCount = runQueryInCachingController();
+        assertTransformedDocumentsEqual(documentCount);
     }
 
-    public void testProcessingTimeXslt()
-    {
-        // TODO: implement this test
-    }
-
+    @Test
     public void testOverridingInitializationTimeXslt()
     {
-        // TODO: implement this test
+        Resource initXslt = resourceUtils.getFirst("/xsl/carrot2-identity.xsl",
+            XmlDocumentSourceTest.class);
+        initAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xslt"),
+            initXslt);
+
+        // Run with identity XSLT
+        {
+            Resource xml = resourceUtils.getFirst("/xml/carrot2-test.xml",
+                XmlDocumentSourceTest.class);
+            processingAttributes.put(AttributeUtils
+                .getKey(XmlDocumentSource.class, "xml"), xml);
+
+            final int documentCount = runQueryInCachingController();
+            assertEquals(2, documentCount);
+            assertEquals(Lists.newArrayList("Title 0", "Title 1"), Lists.transform(
+                getDocuments(), DOCUMENT_TO_TITLE));
+            assertEquals(Lists.newArrayList("Snippet 0", "Snippet 1"), Lists.transform(
+                getDocuments(), DOCUMENT_TO_SUMMARY));
+        }
+
+        // Run with swapping XSLT
+        {
+            Resource xml = resourceUtils.getFirst("/xml/carrot2-test.xml",
+                XmlDocumentSourceTest.class);
+            Resource xslt = resourceUtils.getFirst(
+                "/xsl/carrot2-title-snippet-switch.xsl", XmlDocumentSourceTest.class);
+            processingAttributes.put(AttributeUtils
+                .getKey(XmlDocumentSource.class, "xml"), xml);
+            processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class,
+                "xslt"), xslt);
+
+            final int documentCount = runQueryInCachingController();
+            assertEquals(2, documentCount);
+            assertEquals(Lists.newArrayList("Snippet 0", "Snippet 1"), Lists.transform(
+                getDocuments(), DOCUMENT_TO_TITLE));
+            assertEquals(Lists.newArrayList("Title 0", "Title 1"), Lists.transform(
+                getDocuments(), DOCUMENT_TO_SUMMARY));
+        }
     }
 
+    @Test
     public void testDisablingInitializationTimeXslt()
     {
-        // TODO: implement this test
+        Resource initXslt = resourceUtils.getFirst(
+            "/xsl/carrot2-title-snippet-switch.xsl", XmlDocumentSourceTest.class);
+        initAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xslt"),
+            initXslt);
+
+        // Run with swapping XSLT
+        {
+            Resource xml = resourceUtils.getFirst("/xml/carrot2-test.xml",
+                XmlDocumentSourceTest.class);
+            processingAttributes.put(AttributeUtils
+                .getKey(XmlDocumentSource.class, "xml"), xml);
+
+            final int documentCount = runQueryInCachingController();
+            assertEquals(2, documentCount);
+            assertEquals(Lists.newArrayList("Snippet 0", "Snippet 1"), Lists.transform(
+                getDocuments(), DOCUMENT_TO_TITLE));
+            assertEquals(Lists.newArrayList("Title 0", "Title 1"), Lists.transform(
+                getDocuments(), DOCUMENT_TO_SUMMARY));
+        }
+
+        // Run without XSLT
+        {
+            Resource xml = resourceUtils.getFirst("/xml/carrot2-test.xml",
+                XmlDocumentSourceTest.class);
+            processingAttributes.put(AttributeUtils
+                .getKey(XmlDocumentSource.class, "xml"), xml);
+            processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class,
+                "xslt"), null);
+
+            final int documentCount = runQueryInCachingController();
+            assertEquals(2, documentCount);
+            assertEquals(Lists.newArrayList("Title 0", "Title 1"), Lists.transform(
+                getDocuments(), DOCUMENT_TO_TITLE));
+            assertEquals(Lists.newArrayList("Snippet 0", "Snippet 1"), Lists.transform(
+                getDocuments(), DOCUMENT_TO_SUMMARY));
+        }
     }
 
     @Test
@@ -157,18 +246,19 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
             + "&q=${query}&results=${results}"));
         final String query = "apple computer";
 
-        attributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"), xml);
-        attributes.put(AttributeNames.QUERY, query);
-        attributes.put(AttributeNames.RESULTS, 50);
+        processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"),
+            xml);
+        processingAttributes.put(AttributeNames.QUERY, query);
+        processingAttributes.put(AttributeNames.RESULTS, 50);
         final int documentCount = runQuery();
         assertEquals(50, documentCount);
-        assertEquals(query, attributes.get(AttributeNames.QUERY));
+        assertEquals(query, processingAttributes.get(AttributeNames.QUERY));
     }
 
     private void assertTransformedDocumentsEqual(final int documentCount)
     {
         assertEquals(2, documentCount);
-        assertEquals("xslt test", attributes.get(AttributeNames.QUERY));
+        assertEquals("xslt test", processingAttributes.get(AttributeNames.QUERY));
         assertEquals(Lists.newArrayList(498967, 831478), Lists.transform(getDocuments(),
             DOCUMENT_TO_ID));
         assertEquals(Lists.newArrayList("IBM's MARS Block Cipher.",

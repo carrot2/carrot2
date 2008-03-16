@@ -44,8 +44,8 @@ public class YahooDocumentSourceTest extends DocumentSourceTestBase<YahooDocumen
     {
         runQuery("apache", 50);
         
-        assertNotNull(attributes.get(AttributeNames.RESULTS_TOTAL));
-        assertTrue((Long) attributes.get(AttributeNames.RESULTS_TOTAL) > 0);
+        assertNotNull(processingAttributes.get(AttributeNames.RESULTS_TOTAL));
+        assertTrue((Long) processingAttributes.get(AttributeNames.RESULTS_TOTAL) > 0);
     }
 
     @Test
@@ -55,7 +55,7 @@ public class YahooDocumentSourceTest extends DocumentSourceTestBase<YahooDocumen
     {
         runQuery("apache", 200);
 
-        assertFieldUnique((Collection<Document>) attributes.get(AttributeNames.DOCUMENTS),
+        assertFieldUnique((Collection<Document>) processingAttributes.get(AttributeNames.DOCUMENTS),
             Document.CONTENT_URL);
     }
 
@@ -63,27 +63,27 @@ public class YahooDocumentSourceTest extends DocumentSourceTestBase<YahooDocumen
     @Prerequisite(requires = "externalApiTestsEnabled")
     public void testConservativeMode() throws Exception
     {
-        attributes.put("search-mode", SearchMode.CONSERVATIVE);
+        processingAttributes.put("search-mode", SearchMode.CONSERVATIVE);
 
         assertEquals(0, runQuery("duiogig oiudgisugviw siug iugw iusviuwg", 100));
-        assertEquals(1, attributes.get(YahooSearchService.class.getName() + ".requestCount"));
+        assertEquals(1, processingAttributes.get(YahooSearchService.class.getName() + ".requestCount"));
     }
 
     @Test
     @Prerequisite(requires = "externalApiTestsEnabled")
     public void testSpeculativeMode() throws Exception
     {
-        attributes.put("search-mode", SearchMode.SPECULATIVE);
+        processingAttributes.put("search-mode", SearchMode.SPECULATIVE);
 
         assertEquals(0, runQuery("duiogig oiudgisugviw siug iugw iusviuwg", 100));
-        assertEquals(2, attributes.get(YahooSearchService.class.getName() + ".requestCount"));
+        assertEquals(2, processingAttributes.get(YahooSearchService.class.getName() + ".requestCount"));
     }
 
     @Test
     @Prerequisite(requires = "externalApiTestsEnabled")
     public void testNewsServiceSearch() throws Exception
     {
-        attributes.put(YahooDocumentSource.class.getName()
+        processingAttributes.put(YahooDocumentSource.class.getName()
             + ".service", YahooNewsSearchService.class);
 
         assertTrue(runQuery("iraq", 50) > 0);

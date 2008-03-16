@@ -10,14 +10,13 @@
 
   <xsl:template match="document">
     <document id="{@id}">
-      <title><xsl:apply-templates select="snippet" /></title>
-      <snippet><xsl:apply-templates select="title" /></snippet>
-      <url><xsl:apply-templates select="url" /></url>
+      <title><xsl:value-of select="snippet" /></title>
+      <snippet><xsl:value-of select="title" /></snippet>
     </document>
   </xsl:template>
 
   <!-- Certain elements -->
-  <xsl:template match="searchresult|document|title|snippet|url|query">
+  <xsl:template match="searchresult|title|snippet|url|query">
     <xsl:copy>
       <xsl:copy-of select="@*" />
       <xsl:apply-templates />

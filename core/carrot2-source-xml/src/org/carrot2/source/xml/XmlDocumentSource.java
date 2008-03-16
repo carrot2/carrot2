@@ -20,7 +20,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
- * Fetches documents from XML files and stream.
+ * Fetches documents from XML files and streams. For additional flexibility, an XSLT
+ * stylesheet can be applied to the XML stream before it is deserialized into Carrot2
+ * data.
  */
 @Bindable
 public class XmlDocumentSource extends ProcessingComponentBase implements DocumentSource

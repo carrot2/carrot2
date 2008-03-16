@@ -1,12 +1,8 @@
-/**
- *
- */
 package org.carrot2.core;
 
 import static org.easymock.EasyMock.createStrictControl;
 import static org.junit.Assert.assertEquals;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.carrot2.core.attribute.Init;
@@ -14,21 +10,24 @@ import org.carrot2.util.attribute.*;
 import org.easymock.IMocksControl;
 import org.junit.*;
 
+import com.google.common.collect.Maps;
 
 /**
- *
+ * Base test cases that each implementation of {@link Controller} must pass.
  */
-public class SimpleControllerTest
+public abstract class ControllerTestBase
 {
-    private IMocksControl mocksControl;
+    protected IMocksControl mocksControl;
 
-    private ProcessingComponent processingComponent1Mock;
-    private ProcessingComponent processingComponent2Mock;
-    private ProcessingComponent processingComponent3Mock;
+    protected ProcessingComponent processingComponent1Mock;
+    protected ProcessingComponent processingComponent2Mock;
+    protected ProcessingComponent processingComponent3Mock;
 
-    private SimpleController controller;
+    protected Controller controller;
 
-    private Map<String, Object> attributes;
+    protected Map<String, Object> attributes;
+
+    protected abstract Controller createController();
 
     @Bindable
     public static class ProcessingComponent1 extends DelegatingProcessingComponent
@@ -36,7 +35,7 @@ public class SimpleControllerTest
         @Init
         @Input
         @Attribute(key = "delegate1")
-        private ProcessingComponent delegate1;
+        protected ProcessingComponent delegate1;
 
         @Override
         ProcessingComponent getDelegate()
@@ -51,7 +50,7 @@ public class SimpleControllerTest
         @Init
         @Input
         @Attribute(key = "delegate2")
-        private ProcessingComponent delegate2;
+        protected ProcessingComponent delegate2;
 
         @Override
         ProcessingComponent getDelegate()
@@ -66,7 +65,7 @@ public class SimpleControllerTest
         @Init
         @Input
         @Attribute(key = "delegate3")
-        private ProcessingComponent delegate3;
+        protected ProcessingComponent delegate3;
 
         @Override
         ProcessingComponent getDelegate()
@@ -93,12 +92,16 @@ public class SimpleControllerTest
         processingComponent2Mock = mocksControl.createMock(ProcessingComponent.class);
         processingComponent3Mock = mocksControl.createMock(ProcessingComponent.class);
 
-        attributes = new HashMap<String, Object>();
-        attributes.put("delegate1", processingComponent1Mock);
-        attributes.put("delegate2", processingComponent2Mock);
-        attributes.put("delegate3", processingComponent3Mock);
+        Map<String, Object> initAttributes = Maps.newHashMap();
+        initAttributes.put("delegate1", processingComponent1Mock);
+        initAttributes.put("delegate2", processingComponent2Mock);
+        initAttributes.put("delegate3", processingComponent3Mock);
+        initAttributes.put("instanceAttribute", "i");
 
-        controller = new SimpleController();
+        controller = createController();
+        controller.init(initAttributes);
+
+        attributes = Maps.newHashMap();
     }
 
     @After
@@ -118,13 +121,10 @@ public class SimpleControllerTest
 
         mocksControl.replay();
 
-        attributes.put("instanceAttribute", "i");
         attributes.put("runtimeAttribute", "r");
         attributes.put("data", "d");
 
-        controller.process(attributes, ProcessingComponent1.class);
-
-        mocksControl.verify();
+        performProcessingAndDispose(ProcessingComponent1.class);
 
         assertEquals("dir", attributes.get("data"));
     }
@@ -132,25 +132,29 @@ public class SimpleControllerTest
     @Test
     public void testNormalExecution3Components()
     {
+        mocksControl.checkOrder(false); // we don't care about the order of initialization
         processingComponent1Mock.init();
         processingComponent2Mock.init();
         processingComponent3Mock.init();
+        mocksControl.checkOrder(true);
 
         processingComponent1Mock.beforeProcessing();
         processingComponent1Mock.process();
         processingComponent1Mock.afterProcessing();
-        
+
         processingComponent2Mock.beforeProcessing();
         processingComponent2Mock.process();
         processingComponent2Mock.afterProcessing();
-        
+
         processingComponent3Mock.beforeProcessing();
         processingComponent3Mock.process();
         processingComponent3Mock.afterProcessing();
 
+        mocksControl.checkOrder(false); // we don't care about the order of disposal
         processingComponent1Mock.dispose();
         processingComponent2Mock.dispose();
         processingComponent3Mock.dispose();
+        mocksControl.checkOrder(true);
 
         mocksControl.replay();
 
@@ -159,7 +163,7 @@ public class SimpleControllerTest
 
         attributes.put("data", "d");
 
-        controller.process(attributes, ProcessingComponent1.class,
+        performProcessingAndDispose(ProcessingComponent1.class,
             ProcessingComponent2.class, ProcessingComponent3.class);
 
         assertEquals("diririr", attributes.get("data"));
@@ -168,62 +172,55 @@ public class SimpleControllerTest
     @Test(expected = ProcessingException.class)
     public void testExceptionWhileCreatingInstances()
     {
-        mocksControl.replay();
-
-        controller.process(attributes, ProcessingComponent1.class,
-            ProcessingComponentWithoutDefaultConstructor.class);
-    }
-
-    @Test(expected = ComponentInitializationException.class)
-    public void testExceptionWhileInit()
-    {
-        // We need to initialize classes and delegates manually here
-        final ProcessingComponent1 processingComponent1 = new ProcessingComponent1();
-        final ProcessingComponent2 processingComponent2 = new ProcessingComponent2();
-        final ProcessingComponent3 processingComponent3 = new ProcessingComponent3();
-        processingComponent1.delegate1 = processingComponent1Mock;
-        processingComponent2.delegate2 = processingComponent2Mock;
-        processingComponent3.delegate3 = processingComponent3Mock;
-
+        // Depending on implementation, the controller may or may not create/ initialize
+        // the instance of the first component. That doesn't make a big difference.
         processingComponent1Mock.init();
-        processingComponent2Mock.init();
-        mocksControl.andThrow(new ComponentInitializationException((String)null));
+        mocksControl.times(0, 1);
         processingComponent1Mock.dispose();
-        processingComponent2Mock.dispose();
-        processingComponent3Mock.dispose();
+        mocksControl.times(0, 1);
         mocksControl.replay();
 
-        controller.process(attributes, processingComponent1, processingComponent2,
-            processingComponent3);
+        performProcessingAndDispose(ProcessingComponent1.class,
+            ProcessingComponentWithoutDefaultConstructor.class);
     }
 
     @Test(expected = ProcessingException.class)
     public void testExceptionBeforeProcessing()
     {
+        mocksControl.checkOrder(false); // we don't care about the order of initialization
         processingComponent1Mock.init();
         processingComponent2Mock.init();
         processingComponent3Mock.init();
+        mocksControl.checkOrder(true);
+
         processingComponent1Mock.beforeProcessing();
         processingComponent1Mock.process();
         processingComponent1Mock.afterProcessing();
         processingComponent2Mock.beforeProcessing();
         mocksControl.andThrow(new ProcessingException("no message"));
         processingComponent2Mock.afterProcessing();
+
+        mocksControl.checkOrder(false); // we don't care about the order of disposal
         processingComponent1Mock.dispose();
         processingComponent2Mock.dispose();
         processingComponent3Mock.dispose();
+        mocksControl.checkOrder(true);
+
         mocksControl.replay();
 
-        controller.process(attributes, ProcessingComponent1.class,
+        performProcessingAndDispose(ProcessingComponent1.class,
             ProcessingComponent2.class, ProcessingComponent3.class);
     }
 
     @Test(expected = ProcessingException.class)
     public void testExceptionDuringProcessing()
     {
+        mocksControl.checkOrder(false); // we don't care about the order of initialization
         processingComponent1Mock.init();
         processingComponent2Mock.init();
         processingComponent3Mock.init();
+        mocksControl.checkOrder(true);
+
         processingComponent1Mock.beforeProcessing();
         processingComponent1Mock.process();
         processingComponent1Mock.afterProcessing();
@@ -231,12 +228,50 @@ public class SimpleControllerTest
         processingComponent2Mock.process();
         mocksControl.andThrow(new ProcessingException("no message"));
         processingComponent2Mock.afterProcessing();
+
+        mocksControl.checkOrder(false); // we don't care about the order of disposal
         processingComponent1Mock.dispose();
         processingComponent2Mock.dispose();
         processingComponent3Mock.dispose();
+        mocksControl.checkOrder(true);
+
         mocksControl.replay();
 
-        controller.process(attributes, ProcessingComponent1.class,
+        performProcessingAndDispose(ProcessingComponent1.class,
             ProcessingComponent2.class, ProcessingComponent3.class);
+    }
+
+    @Test(expected = ComponentInitializationException.class)
+    public void testExceptionWhileInit()
+    {
+        mocksControl.checkOrder(false); // we don't care about the order of initialization
+        processingComponent1Mock.init();
+        processingComponent2Mock.init();
+        mocksControl.andThrow(new ComponentInitializationException((String) null));
+        mocksControl.checkOrder(false); // we don't care about the order of disposal
+        processingComponent1Mock.dispose();
+        processingComponent2Mock.dispose();
+        mocksControl.checkOrder(true);
+        mocksControl.replay();
+
+        performProcessingAndDispose(ProcessingComponent1.class,
+            ProcessingComponent2.class, ProcessingComponent3.class);
+    }
+
+    protected void performProcessing(Class<?>... classes)
+    {
+        controller.process(attributes, classes);
+    }
+
+    protected void performProcessingAndDispose(Class<?>... classes)
+    {
+        try
+        {
+            performProcessing(classes);
+        }
+        finally
+        {
+            controller.dispose();
+        }
     }
 }

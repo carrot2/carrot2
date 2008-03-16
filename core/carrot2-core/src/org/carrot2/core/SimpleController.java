@@ -1,14 +1,18 @@
 package org.carrot2.core;
 
 import java.util.Map;
+import java.util.Set;
 
 import org.carrot2.util.attribute.Input;
 import org.carrot2.util.attribute.Output;
 import org.simpleframework.xml.Attribute;
 
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+
 
 /**
- * A simple controller implementing the life cycle described in <{@link ProcessingComponent}.
+ * A simple controller implementing the life cycle described in {@link ProcessingComponent}.
  * <p>
  * This controller is useful for one-time processing either with existing component
  * instances or classes of components to be created for processing. In case component
@@ -20,8 +24,11 @@ import org.simpleframework.xml.Attribute;
  * there is an additional overhead of creating new component instances for each query
  * (which may or may not be a performance issue, this depends on a given component).
  */
-public final class SimpleController
+public final class SimpleController implements Controller
 {
+    /** Attributes provided upon {@link #init(Map)} */
+    private Map<String, Object> initAttributes = Maps.newHashMap();
+    
     /**
      * Creates instances of processing components, initializes them, performs processing
      * and disposes of the component instances after processing is complete.
@@ -36,7 +43,6 @@ public final class SimpleController
      * @param processingComponentClasses classes of components to be involved in
      *            processing in the order they should be arranged in the pipeline.
      */
-    @SuppressWarnings("unchecked")
     public ProcessingResult process(Map<String, Object> attributes,
         Class<?>... processingComponentClasses) throws ProcessingException
     {
@@ -84,12 +90,14 @@ public final class SimpleController
     public ProcessingResult process(Map<String, Object> attributes,
         ProcessingComponent... processingComponents) throws ProcessingException
     {
+        final Set<ProcessingComponent> initializedComponents = Sets.newHashSet();
         try
         {
             // Initialize all components.
             for (final ProcessingComponent element : processingComponents)
             {
-                ControllerUtils.init(element, attributes);
+                initializedComponents.add(element);
+                ControllerUtils.init(element, initAttributes);
             }
 
             for (final ProcessingComponent element : processingComponents)
@@ -111,10 +119,20 @@ public final class SimpleController
         finally
         {
             // Finally, dispose of all components
-            for (final ProcessingComponent element : processingComponents)
+            for (final ProcessingComponent element : initializedComponents)
             {
                 element.dispose();
             }
         }
+    }
+
+    public void dispose()
+    {
+        // Nothing to do
+    }
+
+    public void init(Map<String, Object> attributes) throws ComponentInitializationException
+    {
+        this.initAttributes = attributes;
     }
 }

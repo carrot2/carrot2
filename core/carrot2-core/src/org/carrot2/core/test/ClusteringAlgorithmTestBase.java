@@ -12,7 +12,6 @@ import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.junit.Test;
 
-
 /**
  * Simple baseline tests that apply to all clustering algorithms.
  */
@@ -29,15 +28,24 @@ public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm>
     }
 
     /**
-     * Performs clustering.
-     *
+     * Performs clustering using {@link #simpleController}.
+     * 
      * @param documents documents to be clustered
      * @return clustering results
      */
     public Collection<Cluster> cluster(Collection<Document> documents)
     {
-        attributes.put(AttributeNames.DOCUMENTS, documents);
-        return controller.process(attributes, getComponentClass()).getClusters();
+        // A little hacky, but looks like the simplest way to ensure a single
+        // initialization per one test case
+        if (!initAttributes.isEmpty())
+        {
+            simpleController.init(initAttributes);
+            initAttributes.clear();
+        }
+
+        processingAttributes.put(AttributeNames.DOCUMENTS, documents);
+        return simpleController.process(processingAttributes, getComponentClass())
+            .getClusters();
     }
 
     /**
