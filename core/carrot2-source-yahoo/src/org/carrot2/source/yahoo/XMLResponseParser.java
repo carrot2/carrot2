@@ -27,7 +27,7 @@ final class XMLResponseParser implements ContentHandler
 
     /** An error occurred. */
     private boolean error;
-    
+
     /** */
     private StringBuilder errorText;
 
@@ -57,8 +57,10 @@ final class XMLResponseParser implements ContentHandler
      */
     public void endDocument() throws SAXException
     {
-        if (error) {
-            throw new SAXException(new IOException("Yahoo! service error: " + errorText.toString()));
+        if (error)
+        {
+            throw new SAXException(new IOException("Yahoo! service error: "
+                + errorText.toString()));
         }
     }
 
@@ -73,14 +75,14 @@ final class XMLResponseParser implements ContentHandler
         {
             response = new SearchEngineResponse();
 
-            addResponseMetadataLong(attributes, "firstResultPosition",
-                response, YahooSearchService.FIRST_INDEX_KEY);
+            addResponseMetadataLong(attributes, "firstResultPosition", response,
+                YahooSearchService.FIRST_INDEX_KEY);
 
-            addResponseMetadataLong(attributes, "totalResultsAvailable",
-                response, SearchEngineResponse.RESULTS_TOTAL_KEY);
+            addResponseMetadataLong(attributes, "totalResultsAvailable", response,
+                SearchEngineResponse.RESULTS_TOTAL_KEY);
 
-            addResponseMetadataLong(attributes, "totalResultsReturned",
-                response, YahooSearchService.RESULTS_RETURNED_KEY);
+            addResponseMetadataLong(attributes, "totalResultsReturned", response,
+                YahooSearchService.RESULTS_RETURNED_KEY);
         }
         else if (stack.size() == 0 && "Error".equals(localName))
         {
@@ -100,12 +102,10 @@ final class XMLResponseParser implements ContentHandler
     }
 
     /**
-     * Adds a meta data entry to the response if it exists in the set of
-     * attributes.
+     * Adds a meta data entry to the response if it exists in the set of attributes.
      */
-    private static void addResponseMetadataLong(
-        Attributes attributes, String attributeName,
-        SearchEngineResponse response, String metadataKey)
+    private static void addResponseMetadataLong(Attributes attributes,
+        String attributeName, SearchEngineResponse response, String metadataKey)
     {
         final String value = attributes.getValue(attributeName);
         if (value != null)
@@ -137,26 +137,35 @@ final class XMLResponseParser implements ContentHandler
         {
             // Yahoo! returns double-encoded entities in its response (it
             // return escaped HTML), so reparse it.
-            final String text = StringEscapeUtils.unescapeHtml(buffer.toString());
+            final String htmlToUnescape = buffer.toString();
+            String unescaped = StringEscapeUtils.unescapeHtml(htmlToUnescape);
+
+            // Unescaping "&amp;"s is actually more tricky, because one pass may not be
+            // enough (e.g. "&amp;amp;"). Commons-lang doesn't seem to deal with that.
+            while (unescaped.indexOf("&amp;") >= 0)
+            {
+                unescaped = unescaped.replaceAll("&amp;", "&");
+            }
+
             buffer.setLength(0);
 
             // Recognize special fields and translate them.
             if ("Title".equals(localName))
             {
-                document.addField(Document.TITLE, text);
+                document.addField(Document.TITLE, unescaped);
             }
             else if ("Summary".equals(localName))
             {
-                document.addField(Document.SUMMARY, text);
+                document.addField(Document.SUMMARY, unescaped);
             }
             else if ("Url".equals(localName))
             {
-                document.addField(Document.CONTENT_URL, text);
+                document.addField(Document.CONTENT_URL, unescaped);
             }
             else
             {
                 // All other fields go directly in the document.
-                document.addField(localName, text);
+                document.addField(localName, unescaped);
             }
         }
 
