@@ -68,7 +68,6 @@ public class YahooWebSearchServiceTest extends ExternalApiTestBase
 
             assertTrue(merged.indexOf("&gt;") < 0);
             assertTrue(merged.indexOf("&lt;") < 0);
-            assertTrue(merged.indexOf("&amp;") < 0);
         }
     }
 
