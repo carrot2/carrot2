@@ -2,12 +2,12 @@ package org.carrot2.workbench.core.ui;
 
 import java.io.StringWriter;
 import java.net.URL;
-import java.util.Collection;
 
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
-import org.carrot2.core.*;
+import org.carrot2.core.Cluster;
+import org.carrot2.core.ProcessingResult;
 import org.carrot2.workbench.core.CorePlugin;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.core.jobs.ProcessingJob;
@@ -108,7 +108,7 @@ public class DocumentListBrowser
                     {
                         public void run()
                         {
-                            updateBrowserText(result.getDocuments());
+                            updateBrowserText(result);
                         }
                     });
                 }
@@ -116,10 +116,11 @@ public class DocumentListBrowser
         });
     }
 
-    public void updateBrowserText(Collection<Document> documents)
+    public void updateBrowserText(ProcessingResult result)
     {
         VelocityContext context = new VelocityContext();
-        context.put("documents", documents);
+        context.put("documents", result.getDocuments());
+        context.put("query", result.getAttributes().get("query"));
 
         merge(context);
     }
