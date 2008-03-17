@@ -2,12 +2,14 @@ package org.carrot2.workbench.core.ui;
 
 import java.util.ArrayList;
 
+import org.aspencloud.widgets.ImageCombo;
 import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.workbench.core.helpers.ComponentLoader;
-import org.carrot2.workbench.core.helpers.RunnableWithErrorDialog;
+import org.carrot2.workbench.core.helpers.*;
+import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Resource;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
@@ -19,11 +21,29 @@ public class SearchView extends ViewPart
     public static final String ID = "org.carrot2.workbench.core.search";
 
     private Composite innerComposite;
-    private Combo sourceCombo;
-    private Combo algorithmCombo;
+    private ImageCombo sourceCombo;
+    private ImageCombo algorithmCombo;
     private Button processButton;
     private Text queryText;
     private java.util.List<Resource> toDispose = new ArrayList<Resource>();
+
+    private class ComponentLabelProvider extends LabelProvider implements
+        ITableLabelProvider
+    {
+
+        public Image getColumnImage(Object element, int columnIndex)
+        {
+            Image icon = ((ComponentWrapper) element).getIcon().createImage();
+            toDispose.add(icon);
+            return icon;
+        }
+
+        public String getColumnText(Object element, int columnIndex)
+        {
+            return ((ComponentWrapper) element).getCaption();
+        }
+
+    }
 
     @Override
     public void createPartControl(Composite parent)
@@ -39,10 +59,10 @@ public class SearchView extends ViewPart
         {
             public void runCore() throws Exception
             {
-                IWorkbenchPage page = SearchView.this.getViewSite().getWorkbenchWindow()
-                    .getActivePage();
-                SearchParameters input = new SearchParameters(getSourceCaption(),
-                    getAlgorithmCaption(), null);
+                IWorkbenchPage page =
+                    SearchView.this.getViewSite().getWorkbenchWindow().getActivePage();
+                SearchParameters input =
+                    new SearchParameters(getSourceCaption(), getAlgorithmCaption(), null);
                 input.putAttribute(AttributeNames.QUERY, queryText.getText());
                 page.openEditor(input, ResultsEditor.ID);
             }
@@ -82,22 +102,23 @@ public class SearchView extends ViewPart
      */
     private void checkProcessingConditions(Composite parent)
     {
-        if (sourceCombo.getItemCount() == 0 || algorithmCombo.getItemCount() == 0)
+        if (ComponentLoader.SOURCE_LOADER.getComponents().isEmpty()
+            || ComponentLoader.ALGORITHM_LOADER.getComponents().isEmpty())
         {
             processButton.setEnabled(false);
             queryText.setEnabled(false);
         }
-        if (sourceCombo.getItemCount() == 0)
+        if (ComponentLoader.SOURCE_LOADER.getComponents().isEmpty())
         {
             disableComboWithMessage(sourceCombo, "No Document Source found!");
         }
-        if (algorithmCombo.getItemCount() == 0)
+        if (ComponentLoader.ALGORITHM_LOADER.getComponents().isEmpty())
         {
             disableComboWithMessage(algorithmCombo, "No Clustering Algorithm found!");
         }
     }
 
-    private void disableComboWithMessage(Combo toDisable, String message)
+    private void disableComboWithMessage(ImageCombo toDisable, String message)
     {
         toDisable.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
         toDisable.setItems(new String []
@@ -114,7 +135,7 @@ public class SearchView extends ViewPart
         {
             return null;
         }
-        return sourceCombo.getItem(sourceCombo.getSelectionIndex());
+        return sourceCombo.getItem(sourceCombo.getSelectionIndex()).getText();
     }
 
     private String getAlgorithmCaption()
@@ -123,12 +144,16 @@ public class SearchView extends ViewPart
         {
             return null;
         }
-        return algorithmCombo.getItem(algorithmCombo.getSelectionIndex());
+        return algorithmCombo.getItem(algorithmCombo.getSelectionIndex()).getText();
     }
 
-    private void createItems(Combo combo, ComponentLoader loader)
+    private void createItems(ImageCombo combo, ComponentLoader loader)
     {
-        combo.setItems(loader.getCaptions().toArray(new String [0]));
+        combo.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+        TableViewer viewer = new TableViewer(combo.getTable());
+        viewer.setLabelProvider(new ComponentLabelProvider());
+        viewer.setContentProvider(new ArrayContentProvider());
+        viewer.setInput(loader.getComponents());
         combo.select(0);
     }
 
@@ -154,9 +179,11 @@ public class SearchView extends ViewPart
 
         innerComposite = new Composite(parent, SWT.NULL);
         Label sourceLabel = new Label(innerComposite, SWT.CENTER);
-        sourceCombo = new Combo(innerComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
+        sourceCombo =
+            new ImageCombo(innerComposite, SWT.DROP_DOWN | SWT.READ_ONLY | SWT.BORDER);
         Label algorithmLabel = new Label(innerComposite, SWT.CENTER);
-        algorithmCombo = new Combo(innerComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
+        algorithmCombo =
+            new ImageCombo(innerComposite, SWT.DROP_DOWN | SWT.READ_ONLY | SWT.BORDER);
         Label queryLabel = new Label(innerComposite, SWT.CENTER);
         queryText = new Text(innerComposite, SWT.SINGLE | SWT.SEARCH);
         processButton = new Button(parent, SWT.PUSH);

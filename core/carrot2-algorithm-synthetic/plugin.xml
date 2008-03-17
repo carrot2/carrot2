@@ -6,6 +6,7 @@
          point="org.carrot2.core.algorithm">
       <algorithm
             class="org.carrot2.clustering.synthetic.ByUrlClusteringAlgorithm"
+            icon="icons/web.gif"
             label="By Url Clustering">
       </algorithm>
    </extension>

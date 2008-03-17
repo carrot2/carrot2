@@ -5,6 +5,7 @@ import java.util.*;
 import org.carrot2.core.ProcessingComponent;
 import org.eclipse.core.runtime.*;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 public class ComponentLoader
@@ -13,14 +14,15 @@ public class ComponentLoader
     private final String elementName;
     private final String captionAttName;
     private final String classAttName;
+    private final String iconAttName;
 
     private final Map<String, ComponentWrapper> converterCache = Maps.newHashMap();
 
-    public static final ComponentLoader SOURCE_LOADER = new ComponentLoader("source",
-        "source", "label", "class");
+    public static final ComponentLoader SOURCE_LOADER =
+        new ComponentLoader("source", "source", "label", "class", "icon");
 
-    public static final ComponentLoader ALGORITHM_LOADER = new ComponentLoader(
-        "algorithm", "algorithm", "label", "class");
+    public static final ComponentLoader ALGORITHM_LOADER =
+        new ComponentLoader("algorithm", "algorithm", "label", "class", "icon");
 
     /**
      * All of parameters should be taken from schema files (*.exsd). Plugin name is
@@ -35,12 +37,14 @@ public class ComponentLoader
      * @param className name of a attribute, that stores name of a class of a component
      */
     private ComponentLoader(String extensionName, String elementName, String captionName,
-        String className)
+        String className, String iconAttName)
     {
         this.extensionName = extensionName;
         this.elementName = elementName;
         this.captionAttName = captionName;
         this.classAttName = className;
+        this.iconAttName = iconAttName;
+        loadExtensions();
     }
 
     /**
@@ -53,8 +57,14 @@ public class ComponentLoader
      */
     public List<String> getCaptions()
     {
-        loadExtensions();
+        // loadExtensions();
         return new ArrayList<String>(converterCache.keySet());
+    }
+
+    public List<ComponentWrapper> getComponents()
+    {
+        // loadExtensions();
+        return Lists.immutableList(converterCache.values());
     }
 
     /**
@@ -79,8 +89,9 @@ public class ComponentLoader
      */
     private void loadExtensions()
     {
-        final IExtension [] extensions = Platform.getExtensionRegistry()
-            .getExtensionPoint("org.carrot2.core", extensionName).getExtensions();
+        final IExtension [] extensions =
+            Platform.getExtensionRegistry().getExtensionPoint("org.carrot2.core",
+                extensionName).getExtensions();
         for (IExtension extension : extensions)
         {
             parseExtension(extension.getConfigurationElements());
@@ -99,8 +110,9 @@ public class ComponentLoader
             {
                 return;
             }
-            ComponentWrapper wrapper = new ComponentWrapper(configurationElement,
-                captionAttName, classAttName);
+            ComponentWrapper wrapper =
+                new ComponentWrapper(configurationElement, captionAttName, classAttName,
+                    iconAttName);
             converterCache.put(wrapper.getCaption(), wrapper);
         }
 

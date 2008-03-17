@@ -45,7 +45,7 @@
    <element name="algorithm">
       <annotation>
          <appInfo>
-            <meta.element labelAttribute="label"/>
+            <meta.element labelAttribute="label" icon="icon"/>
          </appInfo>
       </annotation>
       <complexType>
@@ -66,6 +66,16 @@
                </documentation>
                <appInfo>
                   <meta.attribute kind="java" basedOn=":org.carrot2.core.ClusteringAlgorithm"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="icon" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="resource"/>
                </appInfo>
             </annotation>
          </attribute>

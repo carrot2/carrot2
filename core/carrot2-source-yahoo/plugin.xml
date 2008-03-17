@@ -6,6 +6,7 @@
          point="org.carrot2.core.source">
       <source
             class="org.carrot2.source.yahoo.YahooDocumentSource"
+            icon="icons/yahoo.gif"
             label="Yahoo! Search Engine">
       </source>
    </extension>
