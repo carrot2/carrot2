@@ -7,4 +7,5 @@ Export-Package: org.carrot2.util,
  org.carrot2.util.httpclient,
  org.carrot2.util.resource
 Require-Bundle: com.google.collections;visibility:=reexport,
- org.apache.commons;visibility:=reexport
+ org.apache.commons;visibility:=reexport,
+ org.apache.log4j

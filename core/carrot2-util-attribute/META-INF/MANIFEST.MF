@@ -9,4 +9,5 @@ Require-Bundle: org.carrot2.util.common,
  com.bea.xml,
  com.google.collections,
  org.apache.commons,
- org.simpleframework.xml
+ org.simpleframework.xml,
+ com.thoughtworks.qdox

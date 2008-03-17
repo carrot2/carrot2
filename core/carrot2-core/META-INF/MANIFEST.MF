@@ -9,4 +9,4 @@ Export-Package: org.carrot2.core,
  org.carrot2.source
 Require-Bundle: org.carrot2.util.attribute;visibility:=reexport,
  org.carrot2.util.common,
- org.junit4;resolution:=optional
+ org.junit4
