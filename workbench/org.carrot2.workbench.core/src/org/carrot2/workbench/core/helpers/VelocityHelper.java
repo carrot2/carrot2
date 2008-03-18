@@ -10,6 +10,7 @@ import org.eclipse.core.runtime.IStatus;
 
 public class VelocityHelper
 {
+    // TODO: unused?
     private static Map<String, Template> templateCache = new HashMap<String, Template>();
 
     public static void init()
