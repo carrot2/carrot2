@@ -16,14 +16,9 @@ import org.carrot2.workbench.core.jobs.ProcessingStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.ISelectionProvider;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.browser.Browser;
-import org.eclipse.swt.browser.LocationAdapter;
-import org.eclipse.swt.browser.LocationEvent;
+import org.eclipse.swt.browser.*;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbenchSite;
@@ -125,10 +120,9 @@ public class DocumentListBrowser
     public void updateBrowserText(ProcessingResult result)
     {
         VelocityContext context = new VelocityContext();
-        context.put("documents", result.getDocuments());
+        context.put("result", result);
 
         final String query = (String) result.getAttributes().get("query");
-        context.put("query", query);
         context.put("queryEscaped", StringEscapeUtils.escapeHtml(query));
 
         merge(context);
@@ -137,7 +131,6 @@ public class DocumentListBrowser
     public void updateBrowserText(Cluster cluster)
     {
         VelocityContext context = new VelocityContext();
-        context.put("documents", cluster.getAllDocuments());
         context.put("cluster", cluster);
 
         merge(context);

@@ -7,7 +7,7 @@
 			font-family: Arial, Helvetica, sans-serif;
 		}
 		
-		div.cl {
+		div.cl, div.status {
 			color: white;
 			font-weight: bold;
 			background-color: #5588BE;
@@ -17,12 +17,30 @@
 			margin-bottom: 6pt;
 		}
 		
+		div.status {
+			text-align: right;
+		}
+		
 		span.du {
 			color: green;
 		}
 		</style>
 	</head>
 	<body>
+
+#if ($result)
+	#set ( $totalProcessingSec = ${result.Attributes.processing-time-total} / 1000.0 )
+	<div class="status">
+ 		${result.Documents.size()} documents and ${result.Clusters.size()} clusters 
+ 		fetched in ${totalProcessingSec} sec.
+	</div>
+	#set( $documents = $result.Documents )
+#end
+
+#if ($cluster)
+	<div class="cl">$cluster.Label</div>
+	#set( $documents = $cluster.AllDocuments )
+#end
 
 #if ($documents.isEmpty())
 	Your query - <b>&quot;${queryEscaped}&quot;</b> - did not return any documents.<br><br> 
@@ -32,10 +50,6 @@
 	<li>Try different keywords.
 	<li>Try more general keywords.
 	</ul>
-#end
-
-#if ($cluster)
-	<div class="cl">$cluster.Label</div>
 #end
 
 #foreach ($document in $documents)
