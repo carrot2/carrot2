@@ -1,24 +1,49 @@
 <html>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
-<body style="font-size: 10pt; font-family: Arial, Helvetica, sans-serif;">
-#if ($documents.isEmpty())
-Your query - <b>&quot;$query&quot;</b> - did not return any documents.<br><br> 
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
+		<style type="text/css">
+		body, table {
+			font-size: 10pt;
+			font-family: Arial, Helvetica, sans-serif;
+		}
+		
+		div.cl {
+			color: white;
+			font-weight: bold;
+			background-color: #5588BE;
+			border-bottom: 1px solid #303030;
+			padding-bottom: 4px;
+			padding-top: 4px;
+			margin-bottom: 6pt;
+		}
+		
+		span.du {
+			color: green;
+		}
+		</style>
+	</head>
+	<body>
 
-Suggestions:<ul>
-<li>Make sure all words are spelled correctly.
-<li>Try different keywords.
-<li>Try more general keywords.
-</ul>
+#if ($documents.isEmpty())
+	Your query - <b>&quot;${queryEscaped}&quot;</b> - did not return any documents.<br><br> 
+	
+	Suggestions:<ul>
+	<li>Make sure all words are spelled correctly.
+	<li>Try different keywords.
+	<li>Try more general keywords.
+	</ul>
 #end
+
 #if ($cluster)
-<div style="color: white; font-weight: bold; background-color: #5588BE; border-bottom: 1px solid #303030; padding-bottom: 4px; padding-top: 4px;">
-$cluster.Label
-</div><br/>
+	<div class="cl">$cluster.Label</div>
 #end
+
 #foreach ($document in $documents)
-<a href="$document.getField("url")"><b>$document.getField("title")</b></a>
-<span style="color: gray;"> [$document.Id]</span><br>
-$document.getField("summary")<br>
-<font color=green>$document.getField("url")</font><br><br>
+	<a href="${document.getField("url")}"><b>$document.getField("title")</b></a>
+		<span style="color: gray;"> [$document.Id]</span><br>
+    #if($document.getField("summary") != "")
+	$document.getField("summary")<br>
+	#end
+	<span class="du">${document.getField("url")}</span><br><br>
 #end
 </body></html>

@@ -3,6 +3,7 @@ package org.carrot2.workbench.core.ui;
 import java.io.StringWriter;
 import java.net.URL;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -15,9 +16,14 @@ import org.carrot2.workbench.core.jobs.ProcessingStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
-import org.eclipse.jface.viewers.*;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.browser.*;
+import org.eclipse.swt.browser.Browser;
+import org.eclipse.swt.browser.LocationAdapter;
+import org.eclipse.swt.browser.LocationEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbenchSite;
@@ -120,7 +126,10 @@ public class DocumentListBrowser
     {
         VelocityContext context = new VelocityContext();
         context.put("documents", result.getDocuments());
-        context.put("query", result.getAttributes().get("query"));
+
+        final String query = (String) result.getAttributes().get("query");
+        context.put("query", query);
+        context.put("queryEscaped", StringEscapeUtils.escapeHtml(query));
 
         merge(context);
     }
