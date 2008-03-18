@@ -89,6 +89,7 @@ public class SearchParameters implements IEditorInput
         return "SearchParameters ToolTip";
     }
 
+    @SuppressWarnings("unchecked")
     public Object getAdapter(Class adapter)
     {
         return null;

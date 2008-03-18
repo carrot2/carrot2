@@ -40,6 +40,7 @@ class ClusterSelectionProvider implements ISelectionProvider
         listeners.add(listener);
     }
 
+    @SuppressWarnings("unchecked")
     public ISelection getSelection()
     {
         IStructuredSelection selectionWithParent =
