@@ -10,9 +10,9 @@ import org.simpleframework.xml.Attribute;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
-
 /**
- * A simple controller implementing the life cycle described in {@link ProcessingComponent}.
+ * A simple controller implementing the life cycle described in
+ * {@link ProcessingComponent}.
  * <p>
  * This controller is useful for one-time processing either with existing component
  * instances or classes of components to be created for processing. In case component
@@ -28,7 +28,7 @@ public final class SimpleController implements Controller
 {
     /** Attributes provided upon {@link #init(Map)} */
     private Map<String, Object> initAttributes = Maps.newHashMap();
-    
+
     /**
      * Creates instances of processing components, initializes them, performs processing
      * and disposes of the component instances after processing is complete.
@@ -100,18 +100,8 @@ public final class SimpleController implements Controller
                 ControllerUtils.init(element, initAttributes);
             }
 
-            for (final ProcessingComponent element : processingComponents)
-            {
-                try
-                {
-                    ControllerUtils.beforeProcessing(element, attributes);
-                    ControllerUtils.performProcessing(element, attributes);
-                }
-                finally
-                {
-                    ControllerUtils.afterProcessing(element, attributes);
-                }
-            }
+            ControllerUtils.performProcessingWithTimeMeasurement(attributes,
+                processingComponents);
 
             return new ProcessingResult(attributes);
 
@@ -131,7 +121,8 @@ public final class SimpleController implements Controller
         // Nothing to do
     }
 
-    public void init(Map<String, Object> attributes) throws ComponentInitializationException
+    public void init(Map<String, Object> attributes)
+        throws ComponentInitializationException
     {
         this.initAttributes = attributes;
     }

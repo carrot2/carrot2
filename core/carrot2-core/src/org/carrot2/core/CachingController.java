@@ -53,19 +53,8 @@ public class CachingController implements Controller
                 }
             }
 
-            // Perform processing
-            for (final ProcessingComponent element : processingComponents)
-            {
-                try
-                {
-                    ControllerUtils.beforeProcessing(element, attributes);
-                    ControllerUtils.performProcessing(element, attributes);
-                }
-                finally
-                {
-                    ControllerUtils.afterProcessing(element, attributes);
-                }
-            }
+            ControllerUtils.performProcessingWithTimeMeasurement(attributes,
+                processingComponents);
 
             return new ProcessingResult(attributes);
         }

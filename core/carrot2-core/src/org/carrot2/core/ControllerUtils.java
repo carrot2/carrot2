@@ -2,10 +2,8 @@ package org.carrot2.core;
 
 import java.util.Map;
 
-import org.carrot2.core.attribute.Init;
-import org.carrot2.core.attribute.Processing;
+import org.carrot2.core.attribute.*;
 import org.carrot2.util.attribute.*;
-
 
 /**
  * Static life cycle and controller utilities (for use within the core package).
@@ -75,6 +73,56 @@ final class ControllerUtils
         Map<String, Object> attributes) throws ProcessingException
     {
         processingComponent.process();
+    }
+
+    /**
+     * Perform processing on the provided {@link ProcessingComponent}s, including
+     * {@link ProcessingComponent#beforeProcessing()} and
+     * {@link ProcessingComponent#afterProcessing()} hooks. Stores processing times in the
+     * attributes map on return.
+     */
+    public static void performProcessingWithTimeMeasurement(
+        Map<String, Object> attributes, ProcessingComponent... processingComponents)
+    {
+        long totalStart = System.currentTimeMillis();
+        long sourceTime = 0;
+        long algorithmTime = 0;
+
+        try
+        {
+            for (final ProcessingComponent element : processingComponents)
+            {
+                long componentStart = System.currentTimeMillis();
+                try
+                {
+                    beforeProcessing(element, attributes);
+                    performProcessing(element, attributes);
+                }
+                finally
+                {
+                    afterProcessing(element, attributes);
+                    long componentStop = System.currentTimeMillis();
+
+                    if (element instanceof DocumentSource)
+                    {
+                        sourceTime += (componentStop - componentStart);
+                    }
+                    else if (element instanceof ClusteringAlgorithm)
+                    {
+                        algorithmTime += (componentStop - componentStart);
+                    }
+                }
+            }
+        }
+        finally
+        {
+            long totalStop = System.currentTimeMillis();
+
+            attributes
+                .put(AttributeNames.PROCESSING_TIME_TOTAL, (totalStop - totalStart));
+            attributes.put(AttributeNames.PROCESSING_TIME_SOURCE, sourceTime);
+            attributes.put(AttributeNames.PROCESSING_TIME_ALGORITHM, algorithmTime);
+        }
     }
 
     /**

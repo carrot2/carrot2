@@ -1,12 +1,15 @@
 package org.carrot2.core;
 
 import static org.easymock.EasyMock.createStrictControl;
+import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Map;
 
+import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.util.attribute.*;
+import org.easymock.IAnswer;
 import org.easymock.IMocksControl;
 import org.junit.*;
 
@@ -31,6 +34,7 @@ public abstract class ControllerTestBase
 
     @Bindable
     public static class ProcessingComponent1 extends DelegatingProcessingComponent
+        implements DocumentSource
     {
         @Init
         @Input
@@ -46,6 +50,7 @@ public abstract class ControllerTestBase
 
     @Bindable
     public static class ProcessingComponent2 extends DelegatingProcessingComponent
+        implements ClusteringAlgorithm
     {
         @Init
         @Input
@@ -258,6 +263,125 @@ public abstract class ControllerTestBase
             ProcessingComponent2.class, ProcessingComponent3.class);
     }
 
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testNormalExecutionTimeMeasurement()
+    {
+        final long c1Time = 50;
+        final long c2Time = 100;
+        final long c3Time = 150;
+        final long totalTime = c1Time + c2Time + c3Time;
+        final double tolerance = 0.3;
+
+        mocksControl.checkOrder(false); // we don't care about the order of initialization
+        processingComponent1Mock.init();
+        processingComponent2Mock.init();
+        processingComponent3Mock.init();
+        mocksControl.checkOrder(true);
+
+        processingComponent1Mock.beforeProcessing();
+        processingComponent1Mock.process();
+        mocksControl.andAnswer(new DelayedAnswer<Object>(c1Time));
+        processingComponent1Mock.afterProcessing();
+
+        processingComponent2Mock.beforeProcessing();
+        mocksControl.andAnswer(new DelayedAnswer<Object>(c2Time));
+        processingComponent2Mock.process();
+        processingComponent2Mock.afterProcessing();
+
+        processingComponent3Mock.beforeProcessing();
+        processingComponent3Mock.process();
+        processingComponent3Mock.afterProcessing();
+        mocksControl.andAnswer(new DelayedAnswer<Object>(c3Time));
+
+        mocksControl.checkOrder(false); // we don't care about the order of disposal
+        processingComponent1Mock.dispose();
+        processingComponent2Mock.dispose();
+        processingComponent3Mock.dispose();
+        mocksControl.checkOrder(true);
+
+        mocksControl.replay();
+
+        performProcessingAndDispose(ProcessingComponent1.class,
+            ProcessingComponent2.class, ProcessingComponent3.class);
+
+        assertThat(
+            ((Long) (attributes.get(AttributeNames.PROCESSING_TIME_TOTAL))).longValue())
+            .isLessThan((long) (totalTime * (1 + tolerance))).isGreaterThan(
+                (long) (totalTime * (1 - tolerance)));
+
+        assertThat(
+            ((Long) (attributes.get(AttributeNames.PROCESSING_TIME_SOURCE))).longValue())
+            .isLessThan((long) (c1Time * (1 + tolerance))).isGreaterThan(
+                (long) (c1Time * (1 - tolerance)));
+
+        assertThat(
+            ((Long) (attributes.get(AttributeNames.PROCESSING_TIME_ALGORITHM)))
+                .longValue()).isLessThan((long) (c2Time * (1 + tolerance)))
+            .isGreaterThan((long) (c2Time * (1 - tolerance)));
+    }
+
+    @Test(expected = ProcessingException.class)
+    @SuppressWarnings("unchecked")
+    public void testTimeMeasurementWithException()
+    {
+        final long c1Time = 50;
+        final long c2Time = 100;
+        final long totalTime = c1Time + c2Time;
+        final double tolerance = 0.3;
+
+        mocksControl.checkOrder(false); // we don't care about the order of initialization
+        processingComponent1Mock.init();
+        processingComponent2Mock.init();
+        processingComponent3Mock.init();
+        mocksControl.checkOrder(true);
+
+        processingComponent1Mock.beforeProcessing();
+        processingComponent1Mock.process();
+        mocksControl.andAnswer(new DelayedAnswer<Object>(c1Time));
+        processingComponent1Mock.afterProcessing();
+
+        processingComponent2Mock.beforeProcessing();
+        mocksControl.andAnswer(new DelayedAnswer<Object>(c2Time));
+        processingComponent2Mock.process();
+        processingComponent2Mock.afterProcessing();
+
+        processingComponent3Mock.beforeProcessing();
+        mocksControl.andThrow(new ProcessingException("no message"));
+        processingComponent3Mock.afterProcessing();
+
+        mocksControl.checkOrder(false); // we don't care about the order of disposal
+        processingComponent1Mock.dispose();
+        processingComponent2Mock.dispose();
+        processingComponent3Mock.dispose();
+        mocksControl.checkOrder(true);
+
+        mocksControl.replay();
+
+        try
+        {
+            performProcessingAndDispose(ProcessingComponent1.class,
+                ProcessingComponent2.class, ProcessingComponent3.class);
+        }
+        finally
+        {
+            assertThat(
+                ((Long) (attributes.get(AttributeNames.PROCESSING_TIME_TOTAL)))
+                    .longValue()).isLessThan((long) (totalTime * (1 + tolerance)))
+                .isGreaterThan((long) (totalTime * (1 - tolerance)));
+
+            assertThat(
+                ((Long) (attributes.get(AttributeNames.PROCESSING_TIME_SOURCE)))
+                    .longValue()).isLessThan((long) (c1Time * (1 + tolerance)))
+                .isGreaterThan((long) (c1Time * (1 - tolerance)));
+
+            assertThat(
+                ((Long) (attributes.get(AttributeNames.PROCESSING_TIME_ALGORITHM)))
+                    .longValue()).isLessThan((long) (c2Time * (1 + tolerance)))
+                .isGreaterThan((long) (c2Time * (1 - tolerance)));
+        }
+    }
+
     protected void performProcessing(Class<?>... classes)
     {
         controller.process(attributes, classes);
@@ -272,6 +396,22 @@ public abstract class ControllerTestBase
         finally
         {
             controller.dispose();
+        }
+    }
+
+    protected static class DelayedAnswer<T> implements IAnswer<T>
+    {
+        private long delayMilis;
+
+        public DelayedAnswer(long delayMilis)
+        {
+            this.delayMilis = delayMilis;
+        }
+
+        public T answer() throws Throwable
+        {
+            Thread.sleep(delayMilis);
+            return null;
         }
     }
 }
