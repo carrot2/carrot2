@@ -5,16 +5,19 @@ import org.carrot2.workbench.core.CorePlugin;
 import org.carrot2.workbench.core.jobs.ProcessingJob;
 import org.carrot2.workbench.core.ui.clusters.ClusterTreeComponent;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.*;
 
 public class ResultsEditor extends SashFormEditorPart
 {
     public static final String ID = "org.carrot2.workbench.core.editors.results";
+    private Image sourceImage;
 
     @Override
     protected void createControls()
     {
+        sourceImage = getEditorInput().getImageDescriptor().createImage();
         ProcessingJob job =
             new ProcessingJob("Processing of a query",
                 (SearchParameters) getEditorInput());
@@ -69,6 +72,12 @@ public class ResultsEditor extends SashFormEditorPart
             AttributeNames.QUERY).toString();
     }
 
+    @Override
+    public Image getTitleImage()
+    {
+        return sourceImage;
+    }
+
     /*
      * 
      */
@@ -87,5 +96,12 @@ public class ResultsEditor extends SashFormEditorPart
     public boolean isDirty()
     {
         return false;
+    }
+
+    @Override
+    public void dispose()
+    {
+        sourceImage.dispose();
+        super.dispose();
     }
 }

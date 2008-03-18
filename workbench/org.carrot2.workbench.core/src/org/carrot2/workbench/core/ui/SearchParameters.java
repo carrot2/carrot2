@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.lang.StringUtils;
+import org.carrot2.workbench.core.helpers.ComponentLoader;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
@@ -71,7 +72,7 @@ public class SearchParameters implements IEditorInput
 
     public ImageDescriptor getImageDescriptor()
     {
-        return null;
+        return ComponentLoader.SOURCE_LOADER.getComponent(this.sourceCaption).getIcon();
     }
 
     public String getName()

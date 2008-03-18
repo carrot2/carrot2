@@ -18,9 +18,9 @@ public class ProcessingJob extends Job
     public ProcessingJob(String name, SearchParameters search)
     {
         super(name);
-        source = ComponentLoader.SOURCE_LOADER.getComponent(search.getSourceCaption());
+        source = ComponentLoader.SOURCE_LOADER.getExecutableComponent(search.getSourceCaption());
         algorithm =
-            ComponentLoader.ALGORITHM_LOADER.getComponent(search.getAlgorithmCaption());
+            ComponentLoader.ALGORITHM_LOADER.getExecutableComponent(search.getAlgorithmCaption());
         attributes = search.getAttributes();
     }
 

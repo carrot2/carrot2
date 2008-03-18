@@ -16,7 +16,7 @@ public class ComponentLoader
     private final String classAttName;
     private final String iconAttName;
 
-    private final Map<String, ComponentWrapper> converterCache = Maps.newHashMap();
+    private final Map<String, ComponentWrapper> componentrCache = Maps.newHashMap();
 
     public static final ComponentLoader SOURCE_LOADER =
         new ComponentLoader("source", "source", "label", "class", "icon");
@@ -58,13 +58,22 @@ public class ComponentLoader
     public List<String> getCaptions()
     {
         // loadExtensions();
-        return new ArrayList<String>(converterCache.keySet());
+        return new ArrayList<String>(componentrCache.keySet());
     }
 
     public List<ComponentWrapper> getComponents()
     {
         // loadExtensions();
-        return Lists.immutableList(converterCache.values());
+        return Lists.immutableList(componentrCache.values());
+    }
+
+    public ComponentWrapper getComponent(String caption)
+    {
+        if (!componentrCache.containsKey(caption))
+        {
+            throw new RuntimeException("No such component: " + caption);
+        }
+        return componentrCache.get(caption);
     }
 
     /**
@@ -74,14 +83,14 @@ public class ComponentLoader
      * @param caption
      * @return instance of a component with the given caption.
      */
-    public ProcessingComponent getComponent(String caption)
+    public ProcessingComponent getExecutableComponent(String caption)
     {
-        if (!converterCache.containsKey(caption))
+        if (!componentrCache.containsKey(caption))
         {
             throw new RuntimeException("No such component: " + caption);
         }
 
-        return converterCache.get(caption).getExecutableComponent();
+        return componentrCache.get(caption).getExecutableComponent();
     }
 
     /*
@@ -113,7 +122,7 @@ public class ComponentLoader
             ComponentWrapper wrapper =
                 new ComponentWrapper(configurationElement, captionAttName, classAttName,
                     iconAttName);
-            converterCache.put(wrapper.getCaption(), wrapper);
+            componentrCache.put(wrapper.getCaption(), wrapper);
         }
 
     }
