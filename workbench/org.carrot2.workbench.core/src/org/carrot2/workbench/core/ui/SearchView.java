@@ -2,14 +2,12 @@ package org.carrot2.workbench.core.ui;
 
 import java.util.ArrayList;
 
-import org.aspencloud.widgets.ImageCombo;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.workbench.core.helpers.*;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Resource;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
@@ -21,24 +19,16 @@ public class SearchView extends ViewPart
     public static final String ID = "org.carrot2.workbench.core.search";
 
     private Composite innerComposite;
-    private ImageCombo sourceCombo;
-    private ImageCombo algorithmCombo;
+    private Combo sourceCombo;
+    private Combo algorithmCombo;
     private Button processButton;
     private Text queryText;
     private java.util.List<Resource> toDispose = new ArrayList<Resource>();
 
-    private class ComponentLabelProvider extends LabelProvider implements
-        ITableLabelProvider
+    private class ComponentLabelProvider extends LabelProvider
     {
-
-        public Image getColumnImage(Object element, int columnIndex)
-        {
-            Image icon = ((ComponentWrapper) element).getIcon().createImage();
-            toDispose.add(icon);
-            return icon;
-        }
-
-        public String getColumnText(Object element, int columnIndex)
+        @Override
+        public String getText(Object element)
         {
             return ((ComponentWrapper) element).getCaption();
         }
@@ -118,7 +108,7 @@ public class SearchView extends ViewPart
         }
     }
 
-    private void disableComboWithMessage(ImageCombo toDisable, String message)
+    private void disableComboWithMessage(Combo toDisable, String message)
     {
         toDisable.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
         toDisable.setItems(new String []
@@ -135,7 +125,7 @@ public class SearchView extends ViewPart
         {
             return null;
         }
-        return sourceCombo.getItem(sourceCombo.getSelectionIndex()).getText();
+        return sourceCombo.getItem(sourceCombo.getSelectionIndex());
     }
 
     private String getAlgorithmCaption()
@@ -144,13 +134,13 @@ public class SearchView extends ViewPart
         {
             return null;
         }
-        return algorithmCombo.getItem(algorithmCombo.getSelectionIndex()).getText();
+        return algorithmCombo.getItem(algorithmCombo.getSelectionIndex());
     }
 
-    private void createItems(ImageCombo combo, ComponentLoader loader)
+    private void createItems(Combo combo, ComponentLoader loader)
     {
         combo.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-        TableViewer viewer = new TableViewer(combo.getTable());
+        ComboViewer viewer = new ComboViewer(combo);
         viewer.setLabelProvider(new ComponentLabelProvider());
         viewer.setContentProvider(new ArrayContentProvider());
         viewer.setInput(loader.getComponents());
@@ -180,10 +170,10 @@ public class SearchView extends ViewPart
         innerComposite = new Composite(parent, SWT.NULL);
         Label sourceLabel = new Label(innerComposite, SWT.CENTER);
         sourceCombo =
-            new ImageCombo(innerComposite, SWT.DROP_DOWN | SWT.READ_ONLY | SWT.BORDER);
+            new Combo(innerComposite, SWT.DROP_DOWN | SWT.READ_ONLY | SWT.BORDER);
         Label algorithmLabel = new Label(innerComposite, SWT.CENTER);
         algorithmCombo =
-            new ImageCombo(innerComposite, SWT.DROP_DOWN | SWT.READ_ONLY | SWT.BORDER);
+            new Combo(innerComposite, SWT.DROP_DOWN | SWT.READ_ONLY | SWT.BORDER);
         Label queryLabel = new Label(innerComposite, SWT.CENTER);
         queryText = new Text(innerComposite, SWT.SINGLE | SWT.SEARCH);
         processButton = new Button(parent, SWT.PUSH);
