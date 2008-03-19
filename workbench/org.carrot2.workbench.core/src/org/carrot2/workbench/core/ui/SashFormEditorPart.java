@@ -10,10 +10,11 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.*;
 import org.eclipse.ui.part.EditorPart;
 
-public abstract class SashFormEditorPart extends EditorPart
+public abstract class SashFormEditorPart extends EditorPart implements IPersistableEditor
 {
     private SashForm form;
     private List<Integer> weights;
+    private IMemento state;
 
     /**
      * Should not be called by subclasses. Call createControls().
@@ -24,12 +25,30 @@ public abstract class SashFormEditorPart extends EditorPart
         form = new SashForm(parent, getSashFormOrientation());
         weights = new ArrayList<Integer>();
         createControls();
+        if (state != null)
+        {
+            restoreWeightsFromState();
+        }
         int [] intWeights = new int [weights.size()];
         for (int i = 0; i < intWeights.length; i++)
         {
             intWeights[i] = weights.get(i);
         }
         form.setWeights(intWeights);
+    }
+
+    private void restoreWeightsFromState()
+    {
+        int weightsAmount = state.getInteger("weights-amount");
+        if (weightsAmount != weights.size())
+        {
+            return;
+        }
+        weights.clear();
+        for (int i = 0; i < weightsAmount; i++)
+        {
+            weights.add(state.getInteger("w" + i));
+        }
     }
 
     /**
@@ -78,5 +97,20 @@ public abstract class SashFormEditorPart extends EditorPart
     {
         setSite(site);
         setInput(input);
+    }
+
+    public void saveState(IMemento memento)
+    {
+        memento.putInteger("weights-amount", this.form.getWeights().length);
+        for (int i = 0; i < this.form.getWeights().length; i++)
+        {
+            int weight = this.form.getWeights()[i];
+            memento.putInteger("w" + i, weight);
+        }
+    }
+
+    public void restoreState(IMemento memento)
+    {
+        state = memento;
     }
 }

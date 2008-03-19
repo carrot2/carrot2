@@ -48,5 +48,12 @@
             name="Results Editor">
       </editor>
    </extension>
+   <extension
+         point="org.eclipse.ui.elementFactories">
+      <factory
+            class="org.carrot2.workbench.core.ui.SearchParametersFactory"
+            id="org.carrot2.workbench.core.searchParametersFactory">
+      </factory>
+   </extension>
 
 </plugin>

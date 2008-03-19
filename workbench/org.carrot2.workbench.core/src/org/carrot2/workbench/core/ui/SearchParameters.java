@@ -7,10 +7,9 @@ import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.lang.StringUtils;
 import org.carrot2.workbench.core.helpers.ComponentLoader;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IPersistableElement;
+import org.eclipse.ui.*;
 
-public class SearchParameters implements IEditorInput
+public class SearchParameters implements IEditorInput, IPersistableElement
 {
 
     private String sourceCaption;
@@ -82,7 +81,7 @@ public class SearchParameters implements IEditorInput
 
     public IPersistableElement getPersistable()
     {
-        return null;
+        return this;
     }
 
     public String getToolTipText()
@@ -93,6 +92,23 @@ public class SearchParameters implements IEditorInput
     @SuppressWarnings("unchecked")
     public Object getAdapter(Class adapter)
     {
+        if (adapter.isInstance(this))
+        {
+            return this;
+        }
         return null;
+    }
+
+    public String getFactoryId()
+    {
+        return SearchParametersFactory.ID;
+    }
+
+    public void saveState(IMemento memento)
+    {
+        memento.createChild("source").putString("caption", sourceCaption);
+        memento.createChild("algorithm").putString("caption", algorithmCaption);
+        memento.createChild("query")
+            .putString("text", attributes.get("query").toString());
     }
 }
