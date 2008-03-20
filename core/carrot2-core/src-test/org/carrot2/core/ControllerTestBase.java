@@ -267,9 +267,9 @@ public abstract class ControllerTestBase
     @SuppressWarnings("unchecked")
     public void testNormalExecutionTimeMeasurement()
     {
-        final long c1Time = 50;
-        final long c2Time = 100;
-        final long c3Time = 150;
+        final long c1Time = 500;
+        final long c2Time = 1000;
+        final long c3Time = 1500;
         final long totalTime = c1Time + c2Time + c3Time;
         final double tolerance = 0.3;
 
@@ -325,8 +325,8 @@ public abstract class ControllerTestBase
     @SuppressWarnings("unchecked")
     public void testTimeMeasurementWithException()
     {
-        final long c1Time = 50;
-        final long c2Time = 100;
+        final long c1Time = 500;
+        final long c2Time = 1000;
         final long totalTime = c1Time + c2Time;
         final double tolerance = 0.3;
 
