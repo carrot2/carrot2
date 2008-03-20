@@ -85,15 +85,55 @@ public class AttributeBinder
         Class<? extends Annotation>... filteringAnnotations)
         throws InstantiationException, AttributeBindingException
     {
-        bind(new HashSet<Object>(), object, values, bindingDirectionAnnotation,
+        AttributeBinderAction [] actions = new AttributeBinderAction []
+        {
+            new AttributeBinderActionBind(Input.class, values, true),
+            new AttributeBinderActionCollect(Output.class, values),
+        };
+
+        bind(new HashSet<Object>(), object, actions, bindingDirectionAnnotation,
             filteringAnnotations);
     }
 
     /**
-     * Internal implementation with an additional parameter for tracking the already bound
-     * instances.
+     * A complementary version of the {@link #bind(Object, Map, Class, Class...)} method.
+     * This method <strong>collects</strong> values of {@link Input} attributes and
+     * <strong>sets</strong> values of {@link Output} attributes.
      */
-    static <T> void bind(Set<Object> boundObjects, T object, Map<String, Object> values,
+    public static <T> void unbind(T object, Map<String, Object> values,
+        Class<? extends Annotation> bindingDirectionAnnotation,
+        Class<? extends Annotation>... filteringAnnotations)
+        throws InstantiationException, AttributeBindingException
+    {
+        AttributeBinderAction [] actions = new AttributeBinderAction []
+        {
+            new AttributeBinderActionCollect(Input.class, values),
+            new AttributeBinderActionBind(Output.class, values, true),
+        };
+
+        bind(new HashSet<Object>(), object, actions, bindingDirectionAnnotation,
+            filteringAnnotations);
+    }
+
+    /**
+     * A more flexible version of {@link #bind(Object, Map, Class, Class...)} that accepts
+     * custom {@link AttributeBinderAction}s. For experts only.
+     */
+    public static <T> void bind(T object,
+        AttributeBinderAction [] attributeBinderActions,
+        Class<? extends Annotation> bindingDirectionAnnotation,
+        Class<? extends Annotation>... filteringAnnotations)
+        throws InstantiationException, AttributeBindingException
+    {
+        bind(new HashSet<Object>(), object, attributeBinderActions,
+            bindingDirectionAnnotation, filteringAnnotations);
+    }
+
+    /**
+     * Internal implementation that tracks object that have already been bound.
+     */
+    static <T> void bind(Set<Object> boundObjects, T object,
+        AttributeBinderAction [] attributeBinderActions,
         Class<? extends Annotation> bindingDirectionAnnotation,
         Class<? extends Annotation>... filteringAnnotations)
         throws InstantiationException, AttributeBindingException
@@ -141,111 +181,11 @@ public class AttributeBinder
             // We skip fields that do not have all the required annotations
             if (hasAllRequiredAnnotations(field, filteringAnnotations))
             {
-                // Choose the right direction
-                if (Input.class.equals(bindingDirectionAnnotation)
-                    && field.getAnnotation(Input.class) != null)
+                // Apply binding actions provided
+                for (int i = 0; i < attributeBinderActions.length; i++)
                 {
-                    final boolean required = field.getAnnotation(Required.class) != null;
-                    final Object currentValue = value;
-
-                    // Transfer values from the map to the fields. If the input map
-                    // doesn't contain an entry for this key, do nothing. Otherwise,
-                    // perform binding as usual. This will allow to set null values
-                    if (!values.containsKey(key))
-                    {
-                        if (currentValue == null && required)
-                        {
-                            // Throw exception only if the current value is null
-                            throw new AttributeBindingException(key,
-                                "No value for required attribute: " + key);
-                        }
-                        continue;
-                    }
-
-                    // Note that the value can still be null here
-                    value = values.get(key);
-
-                    // TODO: Should required mean also not null? I'm only 99% convinced...
-                    if (required)
-                    {
-                        if (value == null)
-                        {
-                            // TODO: maybe we should have some dedicated exception here?
-                            throw new AttributeBindingException(key,
-                                "Not allowed to set required attribute to null: " + key);
-                        }
-                    }
-
-                    // Try to coerce from class to its instance first
-                    // Notice that if some extra annotations are provided, the newly
-                    // created instance will get only those attributes bound that
-                    // match any of the extra annotations.
-                    if (value instanceof Class && !field.getType().equals(Class.class))
-                    {
-                        final Class<?> clazz = ((Class<?>) value);
-                        try
-                        {
-                            value = clazz.newInstance();
-                            if (clazz.isAnnotationPresent(Bindable.class))
-                            {
-                                bind(value, values, Input.class, filteringAnnotations);
-                            }
-                        }
-                        catch (final InstantiationException e)
-                        {
-                            throw new InstantiationException(
-                                "Could not create instance of class: " + clazz.getName()
-                                    + " for attribute " + key);
-                        }
-                        catch (final IllegalAccessException e)
-                        {
-                            throw new InstantiationException(
-                                "Could not create instance of class: " + clazz.getName()
-                                    + " for attribute " + key);
-                        }
-                    }
-
-                    if (value != null)
-                    {
-                        // Check constraints
-                        final Annotation [] unmetConstraints = ConstraintValidator.isMet(
-                            value, field.getAnnotations());
-                        if (unmetConstraints.length > 0)
-                        {
-                            throw new ConstraintViolationException(key, value,
-                                unmetConstraints);
-                        }
-                    }
-
-                    // Finally, set the field value
-                    try
-                    {
-                        field.setAccessible(true);
-                        field.set(object, value);
-                    }
-                    catch (final Exception e)
-                    {
-                        throw new AttributeBindingException(key,
-                            "Could not assign field " + object.getClass().getName() + "#"
-                                + field.getName() + " with value " + value, e);
-                    }
-                }
-                else if (Output.class.equals(bindingDirectionAnnotation)
-                    && field.getAnnotation(Output.class) != null)
-                {
-                    // Transfer values from fields to the map here
-                    try
-                    {
-                        field.setAccessible(true);
-                        value = field.get(object);
-                        values.put(key, value);
-                    }
-                    catch (final Exception e)
-                    {
-                        throw new AttributeBindingException(key,
-                            "Could not get field value " + object.getClass().getName()
-                                + "#" + field.getName());
-                    }
+                    attributeBinderActions[i].performAction(object, key, field, value,
+                        bindingDirectionAnnotation, filteringAnnotations);
                 }
             }
 
@@ -260,7 +200,173 @@ public class AttributeBinder
                 }
 
                 // Recursively descend into other types.
-                bind(value, values, bindingDirectionAnnotation, filteringAnnotations);
+                bind(boundObjects, value, attributeBinderActions,
+                    bindingDirectionAnnotation, filteringAnnotations);
+            }
+        }
+    }
+
+    /**
+     * An action to be applied during attribute binding.
+     */
+    public static abstract class AttributeBinderAction
+    {
+        abstract <T> void performAction(T object, String key, Field field, Object value,
+            Class<? extends Annotation> bindingDirectionAnnotation,
+            Class<? extends Annotation>... filteringAnnotations)
+            throws InstantiationException;
+    }
+
+    /**
+     * An action that binds all {@link Input} attributes.
+     */
+    public static class AttributeBinderActionBind extends AttributeBinderAction
+    {
+        final private Map<String, Object> values;
+        final private Class<?> bindingDirectionAnnotation;
+        final boolean checkRequired;
+
+        public AttributeBinderActionBind(Class<?> bindingDirectionAnnotation,
+            Map<String, Object> values, boolean checkRequired)
+        {
+            this.values = values;
+            this.bindingDirectionAnnotation = bindingDirectionAnnotation;
+            this.checkRequired = checkRequired;
+        }
+
+        @Override
+        <T> void performAction(T object, String key, Field field, Object value,
+            Class<? extends Annotation> bindingDirectionAnnotation,
+            Class<? extends Annotation>... filteringAnnotations)
+            throws InstantiationException
+        {
+            if (this.bindingDirectionAnnotation.equals(bindingDirectionAnnotation)
+                && field.getAnnotation(bindingDirectionAnnotation) != null)
+            {
+                final boolean required = field.getAnnotation(Required.class) != null
+                    && checkRequired;
+                final Object currentValue = value;
+
+                // Transfer values from the map to the fields. If the input map
+                // doesn't contain an entry for this key, do nothing. Otherwise,
+                // perform binding as usual. This will allow to set null values
+                if (!values.containsKey(key))
+                {
+                    if (currentValue == null && required)
+                    {
+                        // Throw exception only if the current value is null
+                        throw new AttributeBindingException(key,
+                            "No value for required attribute: " + key);
+                    }
+                    return;
+                }
+
+                // Note that the value can still be null here
+                value = values.get(key);
+
+                // TODO: Should required mean also not null? I'm only 99% convinced...
+                if (required)
+                {
+                    if (value == null)
+                    {
+                        // TODO: maybe we should have some dedicated exception here?
+                        throw new AttributeBindingException(key,
+                            "Not allowed to set required attribute to null: " + key);
+                    }
+                }
+
+                // Try to coerce from class to its instance first
+                // Notice that if some extra annotations are provided, the newly
+                // created instance will get only those attributes bound that
+                // match any of the extra annotations.
+                if (value instanceof Class && !field.getType().equals(Class.class))
+                {
+                    final Class<?> clazz = ((Class<?>) value);
+                    try
+                    {
+                        value = clazz.newInstance();
+                        if (clazz.isAnnotationPresent(Bindable.class))
+                        {
+                            bind(value, values, Input.class, filteringAnnotations);
+                        }
+                    }
+                    catch (final InstantiationException e)
+                    {
+                        throw new InstantiationException(
+                            "Could not create instance of class: " + clazz.getName()
+                                + " for attribute " + key);
+                    }
+                    catch (final IllegalAccessException e)
+                    {
+                        throw new InstantiationException(
+                            "Could not create instance of class: " + clazz.getName()
+                                + " for attribute " + key);
+                    }
+                }
+
+                if (value != null)
+                {
+                    // Check constraints
+                    final Annotation [] unmetConstraints = ConstraintValidator.isMet(
+                        value, field.getAnnotations());
+                    if (unmetConstraints.length > 0)
+                    {
+                        throw new ConstraintViolationException(key, value,
+                            unmetConstraints);
+                    }
+                }
+
+                // Finally, set the field value
+                try
+                {
+                    field.setAccessible(true);
+                    field.set(object, value);
+                }
+                catch (final Exception e)
+                {
+                    throw new AttributeBindingException(key, "Could not assign field "
+                        + object.getClass().getName() + "#" + field.getName()
+                        + " with value " + value, e);
+                }
+            }
+        }
+    }
+
+    /**
+     * An action that binds all {@link Output} attributes.
+     */
+    public static class AttributeBinderActionCollect extends AttributeBinderAction
+    {
+        final private Map<String, Object> values;
+        final private Class<?> bindingDirectionAnnotation;
+
+        public AttributeBinderActionCollect(Class<?> bindingDirectionAnnotation,
+            Map<String, Object> values)
+        {
+            this.values = values;
+            this.bindingDirectionAnnotation = bindingDirectionAnnotation;
+        }
+
+        @Override
+        <T> void performAction(T object, String key, Field field, Object value,
+            Class<? extends Annotation> bindingDirectionAnnotation,
+            Class<? extends Annotation>... filteringAnnotations)
+            throws InstantiationException
+        {
+            if (this.bindingDirectionAnnotation.equals(bindingDirectionAnnotation)
+                && field.getAnnotation(bindingDirectionAnnotation) != null)
+            {
+                try
+                {
+                    field.setAccessible(true);
+                    value = field.get(object);
+                    values.put(key, value);
+                }
+                catch (final Exception e)
+                {
+                    throw new AttributeBindingException(key, "Could not get field value "
+                        + object.getClass().getName() + "#" + field.getName());
+                }
             }
         }
     }

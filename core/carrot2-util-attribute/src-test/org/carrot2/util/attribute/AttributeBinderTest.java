@@ -22,22 +22,22 @@ public class AttributeBinderTest
         @TestInit
         @Input
         @Attribute
-        private final int initInput = 5;
+        private int initInput = 5;
 
         @TestInit
         @Output
         @Attribute
-        private final int initOutput = 10;
+        private int initOutput = 10;
 
         @TestProcessing
         @Input
         @Attribute
-        private final int processingInput = 5;
+        private int processingInput = 5;
 
         @TestProcessing
         @Output
         @Attribute
-        private final int processingOutput = 10;
+        private int processingOutput = 10;
     }
 
     @Bindable
@@ -47,12 +47,12 @@ public class AttributeBinderTest
         @TestProcessing
         @Input
         @Attribute
-        private final int processingInput = 5;
+        private int processingInput = 5;
 
         @TestProcessing
         @Output
         @Attribute
-        private final int processingOutput = 9;
+        private int processingOutput = 9;
     }
 
     @Bindable
@@ -62,20 +62,20 @@ public class AttributeBinderTest
         @TestProcessing
         @Input
         @Attribute
-        private final int processingInput = 5;
+        private int processingInput = 5;
 
         @TestProcessing
         @Output
         @Attribute
-        private final int processingOutput = 5;
+        private int processingOutput = 5;
     }
 
     @Bindable
     public static class BindableReferenceContainer
     {
-        private final BindableReference bindableReference = new BindableReference();
+        private BindableReference bindableReference = new BindableReference();
 
-        private final NotBindable notBindableReference = new NotBindable();
+        private NotBindable notBindableReference = new NotBindable();
     }
 
     @Bindable
@@ -85,12 +85,12 @@ public class AttributeBinderTest
         @TestProcessing
         @Input
         @Attribute
-        private final int processingInput = 5;
+        private int processingInput = 5;
 
         @TestProcessing
         @Output
         @Attribute
-        private final int processingOutput = 5;
+        private int processingOutput = 5;
     }
 
     @Bindable
@@ -112,7 +112,7 @@ public class AttributeBinderTest
         @Input
         @Attribute
         @IntRange(min = 0, max = 10)
-        private final int processingInput = 5;
+        private int processingInput = 5;
     }
 
     @Bindable
@@ -124,7 +124,7 @@ public class AttributeBinderTest
         @Attribute
         @IntRange(min = 0, max = 10)
         @IntModulo(modulo = 3)
-        private final int processingInput = 3;
+        private int processingInput = 3;
     }
 
     @Bindable
@@ -133,7 +133,7 @@ public class AttributeBinderTest
         @Input
         @TestInit
         @Attribute
-        private final CoercedInterface coerced = null;
+        private CoercedInterface coerced = null;
     }
 
     public static interface CoercedInterface
@@ -147,7 +147,7 @@ public class AttributeBinderTest
         @TestInit
         @Input
         @Attribute
-        private final int initInput = 5;
+        private int initInput = 5;
     }
 
     @Bindable(prefix = "Prefix")
@@ -157,12 +157,12 @@ public class AttributeBinderTest
         @TestInit
         @Input
         @Attribute(key = "init")
-        private final int initInput = 5;
+        private int initInput = 5;
 
         @TestProcessing
         @Input
         @Attribute
-        private final int processingInput = 10;
+        private int processingInput = 10;
     }
 
     @Bindable
@@ -180,7 +180,7 @@ public class AttributeBinderTest
         @TestProcessing
         @Input
         @Attribute
-        private final int processingInput = 5;
+        private int processingInput = 5;
     }
 
     @Bindable
@@ -645,6 +645,37 @@ public class AttributeBinderTest
             null);
 
         AttributeBinder.bind(instance, attributes, Input.class, TestProcessing.class);
+    }
+
+    @Test
+    public void testRequiredAttributeNullAttemptWithRequiredCheckingDisabled()
+        throws InstantiationException
+    {
+        RequiredInitProcessingAttributes instance;
+        instance = new RequiredInitProcessingAttributes();
+        instance.initProcessingInputString = "test";
+
+        // An attempt to set the required attribute to null
+        addAttribute(RequiredInitProcessingAttributes.class, "initProcessingInputString",
+            null);
+
+        AttributeBinder.bind(instance, new AttributeBinder.AttributeBinderAction []
+        {
+            new AttributeBinder.AttributeBinderActionBind(Input.class, attributes, false)
+        }, Input.class, TestProcessing.class);
+    }
+
+    @Test
+    public void testSingleClassUnbind() throws InstantiationException
+    {
+        final SingleClass instance = new SingleClass();
+        instance.processingInput = 6;
+
+        AttributeBinder.unbind(instance, attributes, Input.class);
+        checkAttributeValues(instance.getClass(), new Object []
+        {
+            "initInput", 5, "processingInput", 6
+        });
     }
 
     private void addAttribute(Class<?> clazz, String field, Object value)

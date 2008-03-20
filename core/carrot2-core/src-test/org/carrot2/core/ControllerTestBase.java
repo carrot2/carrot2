@@ -213,6 +213,7 @@ public abstract class ControllerTestBase
 
         mocksControl.replay();
 
+        attributes.put("data", "d");
         performProcessingAndDispose(ProcessingComponent1.class,
             ProcessingComponent2.class, ProcessingComponent3.class);
     }
@@ -242,6 +243,7 @@ public abstract class ControllerTestBase
 
         mocksControl.replay();
 
+        attributes.put("data", "d");
         performProcessingAndDispose(ProcessingComponent1.class,
             ProcessingComponent2.class, ProcessingComponent3.class);
     }
@@ -302,6 +304,7 @@ public abstract class ControllerTestBase
 
         mocksControl.replay();
 
+        attributes.put("data", "d");
         performProcessingAndDispose(ProcessingComponent1.class,
             ProcessingComponent2.class, ProcessingComponent3.class);
 
@@ -360,6 +363,7 @@ public abstract class ControllerTestBase
 
         try
         {
+            attributes.put("data", "d");
             performProcessingAndDispose(ProcessingComponent1.class,
                 ProcessingComponent2.class, ProcessingComponent3.class);
         }

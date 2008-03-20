@@ -1,6 +1,6 @@
 package org.carrot2.util.pool;
 
-import java.lang.ref.WeakReference;
+import java.lang.ref.SoftReference;
 import java.util.*;
 
 import com.google.common.collect.Maps;
@@ -8,11 +8,11 @@ import com.google.common.collect.Maps;
 /**
  * An extremely simple, unbounded object pool. The pool can provide objects of may types,
  * objects get created using parameterless constructors. The pool holds objects using
- * {@link WeakReference}s, so they can be garbage collected when inactive.
+ * {@link SoftReference}s, so they can be garbage collected when memory is needed.
  */
 public class ObjectPool<T>
 {
-    Map<Class<? extends T>, List<WeakReference<? extends T>>> instances = Maps
+    Map<Class<? extends T>, List<SoftReference<? extends T>>> instances = Maps
         .newHashMap();
 
     /**
@@ -37,10 +37,10 @@ public class ObjectPool<T>
                 throw new IllegalStateException("The pool has already been disposed of");
             }
 
-            List<WeakReference<? extends T>> list = instances.get(clazz);
+            List<SoftReference<? extends T>> list = instances.get(clazz);
             if (list == null)
             {
-                list = new ArrayList<WeakReference<? extends T>>();
+                list = new ArrayList<SoftReference<? extends T>>();
                 instances.put(clazz, list);
             }
 
@@ -88,14 +88,14 @@ public class ObjectPool<T>
 
         synchronized (this)
         {
-            List<WeakReference<? extends T>> list = instances.get(object.getClass());
+            List<SoftReference<? extends T>> list = instances.get(object.getClass());
             if (list == null)
             {
                 throw new IllegalStateException(
                     "Returning an object that was never borrowed.");
             }
 
-            list.add(new WeakReference<T>(object));
+            list.add(new SoftReference<T>(object));
         }
     }
 
@@ -106,12 +106,12 @@ public class ObjectPool<T>
     {
         synchronized (this)
         {
-            Map<Class<? extends T>, List<WeakReference<? extends T>>> instancesRef = this.instances;
+            Map<Class<? extends T>, List<SoftReference<? extends T>>> instancesRef = this.instances;
             this.instances = null;
 
-            for (List<WeakReference<? extends T>> list : instancesRef.values())
+            for (List<SoftReference<? extends T>> list : instancesRef.values())
             {
-                for (WeakReference<? extends T> reference : list)
+                for (SoftReference<? extends T> reference : list)
                 {
                     T instance = reference.get();
                     if (instance != null && disposalListener != null)

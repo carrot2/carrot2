@@ -24,8 +24,9 @@ public abstract class DelegatingProcessingComponent implements ProcessingCompone
     @Processing
     @Input
     @Output
+    @Required
     @Attribute(key = "data")
-    private String data;
+    private String data = null;
 
     public void init()
     {
