@@ -12,22 +12,39 @@ import com.google.common.collect.Maps;
  */
 public class ObjectPool<T>
 {
-    Map<Class<? extends T>, List<SoftReference<? extends T>>> instances = Maps
+    private Map<Class<? extends T>, List<SoftReference<? extends T>>> instances = Maps
         .newHashMap();
+
+    private final ObjectInstantiationListener<T> objectInstantiationListener;
+    private final ObjectActivationListener<T> objectActivationListener;
+    private final ObjectPassivationListener<T> objectPassivationListener;
+    private final ObjectDisposalListener<T> objectDisposalListener;
+
+    public ObjectPool()
+    {
+        this(null, null, null, null);
+    }
+
+    public ObjectPool(ObjectInstantiationListener<T> objectInstantiationListener,
+        ObjectActivationListener<T> objectActivationListener,
+        ObjectPassivationListener<T> objectPassivationListener,
+        ObjectDisposalListener<T> objectDisposalListener)
+    {
+        this.objectInstantiationListener = objectInstantiationListener;
+        this.objectActivationListener = objectActivationListener;
+        this.objectPassivationListener = objectPassivationListener;
+        this.objectDisposalListener = objectDisposalListener;
+    }
 
     /**
      * Borrows an object from the pool. If no instance is available, a parameterless
      * constructor will be used to create a new one.
      * 
      * @param clazz class of object to be borrowed
-     * @param instantiationListener if not-<code>null</code>, the listener will be
-     *            notified if a new instance is created (but not if borrowed from the
-     *            pool).
      */
     @SuppressWarnings("unchecked")
-    public <I extends T> I borrowObject(Class<I> clazz,
-        ObjectInstantiationListener<T> instantiationListener)
-        throws InstantiationException, IllegalAccessException
+    public <I extends T> I borrowObject(Class<I> clazz) throws InstantiationException,
+        IllegalAccessException
     {
         I instance = null;
         synchronized (this)
@@ -54,25 +71,20 @@ public class ObjectPool<T>
         if (instance == null)
         {
             instance = clazz.newInstance();
-            if (instantiationListener != null)
+            if (objectInstantiationListener != null)
             {
-                instantiationListener.objectInstantiated(instance);
+                // TODO: should we assume listeners are thread-safe, or synchronize here?
+                objectInstantiationListener.objectInstantiated(instance);
             }
         }
 
-        return instance;
-    }
+        if (objectActivationListener != null)
+        {
+            // TODO: should we assume listeners are thread-safe, or synchronize here?
+            objectActivationListener.activate(instance);
+        }
 
-    /**
-     * Borrows an object from the pool. If no instance is available, a parameterless
-     * constructor will be used to create a new one.
-     * 
-     * @param clazz class of object to be borrowed
-     */
-    public <I extends T> I borrowObject(Class<I> clazz) throws InstantiationException,
-        IllegalAccessException
-    {
-        return borrowObject(clazz, null);
+        return instance;
     }
 
     /**
@@ -84,6 +96,13 @@ public class ObjectPool<T>
         if (object == null || instances == null)
         {
             return;
+        }
+
+        if (objectPassivationListener != null)
+        {
+            // TODO: should we assume listeners are thread-safe, or synchronize here?
+            // If the listener throws an exception, we don't return the object
+            objectPassivationListener.passivate(object);
         }
 
         synchronized (this)
@@ -102,7 +121,7 @@ public class ObjectPool<T>
     /**
      * Disposes of the pool. No objects can be borrowed from the pool after disposed.
      */
-    public void dispose(ObjectDisposalListener<T> disposalListener)
+    public void dispose()
     {
         synchronized (this)
         {
@@ -114,9 +133,11 @@ public class ObjectPool<T>
                 for (SoftReference<? extends T> reference : list)
                 {
                     T instance = reference.get();
-                    if (instance != null && disposalListener != null)
+                    if (instance != null && objectDisposalListener != null)
                     {
-                        disposalListener.objectDisposed(instance);
+                        // TODO: should we assume listeners are thread-safe, or
+                        // synchronize here?
+                        objectDisposalListener.dispose(instance);
                     }
                 }
             }

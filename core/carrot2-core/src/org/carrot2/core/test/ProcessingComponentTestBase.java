@@ -20,15 +20,15 @@ public abstract class ProcessingComponentTestBase<T extends ProcessingComponent>
     /** Simple controller used for tests. */
     protected SimpleController simpleController;
 
-    /** Simple controller used for tests. */
+    /** Caching controller used for tests. */
     protected CachingController cachingController;
-    
+
     /** A map of initialization attributes used for tests. */
     protected Map<String, Object> initAttributes;
 
     /** A map of processing attributes used for tests. */
     protected Map<String, Object> processingAttributes;
-    
+
     /**
      * @return Return the class of the component being tested.
      */
@@ -38,6 +38,7 @@ public abstract class ProcessingComponentTestBase<T extends ProcessingComponent>
      * Controller and attributes are cleared before every test.
      */
     @Before
+    @SuppressWarnings("unchecked")
     public void prepareComponent()
     {
         this.simpleController = new SimpleController();

@@ -42,6 +42,26 @@ public abstract class SearchEngine
     protected abstract Callable<SearchEngineResponse> createFetcher(final SearchRange bucket);
 
     /**
+     * Number queries to this search engine.
+     *
+     * @label Total Queries
+     */
+    @Processing
+    @Output
+    @Attribute
+    private int queriesCountTotal;
+
+    /**
+     * Number queries handled successfully by this search engine.
+     *
+     * @label Successful Queries
+     */
+    @Processing
+    @Output
+    @Attribute
+    private int queriesCount;
+    
+    /**
      * Collects documents from an array of search engine's responses.
      */
     protected final void collectDocuments(Collection<Document> collector,
@@ -64,6 +84,8 @@ public abstract class SearchEngine
         final int resultsPerPage, final ExecutorService executor)
         throws ProcessingException
     {
+        queriesCountTotal++;
+        
         // Split the requested range into pages.
         SearchRange [] buckets =
             SearchRange.getSearchRanges(start, results, maxResultIndex, resultsPerPage);
@@ -126,6 +148,8 @@ public abstract class SearchEngine
                 }
             }
 
+            queriesCount++;
+            
             return responses.toArray(new SearchEngineResponse [responses.size()]);
         }
         catch (final IOException e)

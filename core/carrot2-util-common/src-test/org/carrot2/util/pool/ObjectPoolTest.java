@@ -53,7 +53,7 @@ public class ObjectPoolTest
         final String recycledString = pool.borrowObject(String.class);
         assertSame(newString, recycledString);
         
-        pool.dispose(null);
+        pool.dispose();
         pool.returnObject(recycledString); // still can return, nothing is done anyway
         pool.borrowObject(String.class);
     }

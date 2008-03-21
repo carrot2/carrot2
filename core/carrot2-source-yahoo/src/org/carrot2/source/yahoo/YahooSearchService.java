@@ -107,7 +107,7 @@ abstract class YahooSearchService
     public int maxResultIndex = 1000;
 
     /**
-     * Number of requests made to this service (total).
+     * Number of individual HTTP requests made by this service (total).
      *
      * @label Total Requests
      */
@@ -117,7 +117,7 @@ abstract class YahooSearchService
     private int requestCountTotal;
 
     /**
-     * Number of requests made to this service (successful).
+     * Number of individual HTTP requests made by this service (successful).
      *
      * @label Successful Requests
      */

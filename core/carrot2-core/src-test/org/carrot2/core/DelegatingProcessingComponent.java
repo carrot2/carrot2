@@ -28,6 +28,11 @@ public abstract class DelegatingProcessingComponent implements ProcessingCompone
     @Attribute(key = "data")
     private String data = null;
 
+    @Processing
+    @Input
+    @Attribute(key = "delay")
+    private int delay = 0;
+    
     public void init()
     {
         getDelegate().init();
@@ -45,6 +50,18 @@ public abstract class DelegatingProcessingComponent implements ProcessingCompone
         // Do some simple processing
         data = data + instanceAttribute;
         data = data + runtimeAttribute;
+        
+        if (delay != 0)
+        {
+            try
+            {
+                Thread.sleep(delay);
+            }
+            catch (InterruptedException e)
+            {
+                // nothing to do
+            }
+        }
     }
 
     public void afterProcessing()

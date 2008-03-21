@@ -9,5 +9,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/org.simpleframework.xml"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.easymock"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.fest"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/net.sf.ehcache"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>

@@ -31,14 +31,24 @@ public class BindableDescriptorBuilder
      */
     public static BindableDescriptor buildDescriptor(Object initializedInstance)
     {
-        return buildDescriptor(initializedInstance, new HashSet<Object>());
+        return buildDescriptor(initializedInstance, new HashSet<Object>(), true);
+    }
+
+    /**
+     * A variant of {@link #buildDescriptor(Object)} that allows to skip loading metadata
+     * for the descriptors.
+     */
+    public static BindableDescriptor buildDescriptor(Object initializedInstance,
+        boolean loadMetadata)
+    {
+        return buildDescriptor(initializedInstance, new HashSet<Object>(), loadMetadata);
     }
 
     /**
      * Internal implementation of descriptor building.
      */
     private static BindableDescriptor buildDescriptor(Object initializedInstance,
-        Set<Object> processedInstances)
+        Set<Object> processedInstances, boolean loadMetadata)
     {
         final Class<?> clazz = initializedInstance.getClass();
         if (clazz.getAnnotation(Bindable.class) == null)
@@ -53,7 +63,8 @@ public class BindableDescriptorBuilder
         }
 
         // Load metadata
-        final BindableMetadata bindableMetadata = buildMetadataForBindableHierarchy(clazz);
+        final BindableMetadata bindableMetadata = buildMetadataForBindableHierarchy(
+            clazz, loadMetadata);
 
         // Build descriptors for direct attributes
         final Map<String, AttributeDescriptor> attributeDescriptors = buildAttributeDescriptors(
@@ -85,7 +96,7 @@ public class BindableDescriptorBuilder
                 && fieldValue.getClass().getAnnotation(Bindable.class) != null)
             {
                 bindableDescriptors.put(field.getName(), buildDescriptor(fieldValue,
-                    processedInstances));
+                    processedInstances, loadMetadata));
             }
         }
 
@@ -120,8 +131,14 @@ public class BindableDescriptorBuilder
     /**
      * Builds bindable metadata for a {@link Bindable} class.
      */
-    private static BindableMetadata buildMetadataForBindableHierarchy(final Class<?> clazz)
+    private static BindableMetadata buildMetadataForBindableHierarchy(
+        final Class<?> clazz, boolean loadMetadata)
     {
+        if (!loadMetadata)
+        {
+            return null;
+        }
+
         final Collection<Class<?>> classesFromBindableHerarchy = BindableUtils
             .getClassesFromBindableHerarchy(clazz);
 
@@ -195,9 +212,13 @@ public class BindableDescriptorBuilder
                 + BindableUtils.getKey(field));
         }
 
+        AttributeMetadata attributeMetadata = null;
+        if (bindableMetadata != null)
+        {
+            bindableMetadata.getAttributeMetadata().get(field.getName());
+        }
         return new AttributeDescriptor(field, defaultValue,
-            getConstraintAnnotations(field), bindableMetadata.getAttributeMetadata().get(
-                field.getName()));
+            getConstraintAnnotations(field), attributeMetadata);
     }
 
     /**

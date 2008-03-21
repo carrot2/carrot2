@@ -102,19 +102,18 @@ public abstract class ControllerTestBase
         initAttributes.put("delegate2", processingComponent2Mock);
         initAttributes.put("delegate3", processingComponent3Mock);
         initAttributes.put("instanceAttribute", "i");
-
+        beforeControllerInit(initAttributes);
+        
         controller = createController();
         controller.init(initAttributes);
 
         attributes = Maps.newHashMap();
     }
 
-    @After
-    public void verifyMocks()
+    protected void beforeControllerInit(Map<String, Object> initAttributes)
     {
-        mocksControl.verify();
     }
-
+    
     @Test
     public void testNormalExecution1Component()
     {
@@ -132,6 +131,7 @@ public abstract class ControllerTestBase
         performProcessingAndDispose(ProcessingComponent1.class);
 
         assertEquals("dir", attributes.get("data"));
+        mocksControl.verify();
     }
 
     @Test
@@ -172,6 +172,7 @@ public abstract class ControllerTestBase
             ProcessingComponent2.class, ProcessingComponent3.class);
 
         assertEquals("diririr", attributes.get("data"));
+        mocksControl.verify();
     }
 
     @Test(expected = ProcessingException.class)
@@ -187,6 +188,7 @@ public abstract class ControllerTestBase
 
         performProcessingAndDispose(ProcessingComponent1.class,
             ProcessingComponentWithoutDefaultConstructor.class);
+        mocksControl.verify();
     }
 
     @Test(expected = ProcessingException.class)
@@ -216,6 +218,7 @@ public abstract class ControllerTestBase
         attributes.put("data", "d");
         performProcessingAndDispose(ProcessingComponent1.class,
             ProcessingComponent2.class, ProcessingComponent3.class);
+        mocksControl.verify();
     }
 
     @Test(expected = ProcessingException.class)
@@ -246,6 +249,7 @@ public abstract class ControllerTestBase
         attributes.put("data", "d");
         performProcessingAndDispose(ProcessingComponent1.class,
             ProcessingComponent2.class, ProcessingComponent3.class);
+        mocksControl.verify();
     }
 
     @Test(expected = ComponentInitializationException.class)
@@ -263,6 +267,7 @@ public abstract class ControllerTestBase
 
         performProcessingAndDispose(ProcessingComponent1.class,
             ProcessingComponent2.class, ProcessingComponent3.class);
+        mocksControl.verify();
     }
 
     @Test
@@ -322,6 +327,7 @@ public abstract class ControllerTestBase
             ((Long) (attributes.get(AttributeNames.PROCESSING_TIME_ALGORITHM)))
                 .longValue()).isLessThan((long) (c2Time * (1 + tolerance)))
             .isGreaterThan((long) (c2Time * (1 - tolerance)));
+        mocksControl.verify();
     }
 
     @Test(expected = ProcessingException.class)
@@ -383,6 +389,7 @@ public abstract class ControllerTestBase
                 ((Long) (attributes.get(AttributeNames.PROCESSING_TIME_ALGORITHM)))
                     .longValue()).isLessThan((long) (c2Time * (1 + tolerance)))
                 .isGreaterThan((long) (c2Time * (1 - tolerance)));
+            mocksControl.verify();
         }
     }
 
