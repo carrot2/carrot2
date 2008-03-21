@@ -113,6 +113,7 @@ public abstract class SearchEngine
                 if (buckets.length == 1)
                 {
                     // If there was just one bucket, there is no need to go further on.
+                    queriesCount++;
                     return responses.toArray(new SearchEngineResponse [responses.size()]);
                 }
                 else

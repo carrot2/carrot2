@@ -8,9 +8,7 @@ import java.util.concurrent.*;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.test.DocumentSourceTestBase;
-import org.carrot2.source.SearchEngine;
 import org.carrot2.source.SearchMode;
-import org.carrot2.util.attribute.AttributeUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junitext.Prerequisite;
@@ -104,11 +102,11 @@ public class YahooDocumentSourceTest extends DocumentSourceTestBase<YahooDocumen
     {
         final Map<String, Object> attributes = Maps.newHashMap();
         attributes.put(AttributeNames.QUERY, "test");
-        attributes.put(AttributeNames.RESULTS, 100);
+        attributes.put(AttributeNames.RESULTS, 50);
 
         // Cache results from all DataSources
         final CachingController cachingController = new CachingController(
-            YahooDocumentSource.class);
+            DocumentSource.class);
         cachingController.init(new HashMap<String, Object>());
 
         int count = 3;
@@ -129,15 +127,24 @@ public class YahooDocumentSourceTest extends DocumentSourceTestBase<YahooDocumen
 
         List<Future<ProcessingResult>> results = executorService.invokeAll(callables);
 
+        List<Document> documents = null;
         for (Future<ProcessingResult> future : results)
         {
             ProcessingResult processingResult = future.get();
-            assertEquals(1, processingResult.getAttributes().get(
-                AttributeUtils.getKey(SearchEngine.class, "queriesCount")));
-            final List<Document> documents = (List<Document>) processingResult
+            final List<Document> documentsLocal = (List<Document>) processingResult
                 .getAttributes().get(AttributeNames.DOCUMENTS);
-            assertNotNull(documents);
-            assertTrue(documents.size() <= 100 && documents.size() >= 85);
+            assertNotNull(documentsLocal);
+            assertTrue(documentsLocal.size() <= 50 && documentsLocal.size() >= 35);
+
+            // Should have same documents (from the cache)
+            if (documents != null)
+            {
+                for (int i = 0; i < documents.size(); i++)
+                {
+                    assertSame(documents.get(i), documentsLocal.get(i));
+                }
+            }
+            documents = documentsLocal;
         }
     }
 

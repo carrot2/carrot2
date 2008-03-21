@@ -144,14 +144,15 @@ public class CachingController implements Controller
         Class<? extends ProcessingComponent> componentClass,
         Map<String, Object> attributes)
     {
-        if (cachedComponentClasses.contains(componentClass))
+        for (Class<?> clazz : cachedComponentClasses)
         {
-            return new CachedProcessingComponent(componentClass, attributes);
+            if (clazz.isAssignableFrom(componentClass))
+            {
+                return new CachedProcessingComponent(componentClass, attributes);
+            }
         }
-        else
-        {
-            return borrowProcessingComponent(componentClass);
-        }
+
+        return borrowProcessingComponent(componentClass);
     }
 
     /**

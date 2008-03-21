@@ -61,6 +61,7 @@ public final class ProcessingResult
             .get(AttributeNames.DOCUMENTS);
         if (documents != null)
         {
+            assignDocumentIds(documents);
             attributes.put(AttributeNames.DOCUMENTS, Collections
                 .unmodifiableList(documents));
         }
@@ -77,16 +78,16 @@ public final class ProcessingResult
         // Store a reference to attributes as an unmodifiable map
         this.attributesView = Collections.unmodifiableMap(attributes);
 
-        assignDocumentIds();
     }
 
     /**
      * Assigns sequential identifiers to documents.
      */
-    private void assignDocumentIds()
+    private void assignDocumentIds(Collection<Document> documents)
     {
-        final Collection<Document> documents = getDocuments();
-        if (documents != null)
+        // We may get concurrent calls referring to the same documents
+        // in the same list, so we need to synchronize here.
+        synchronized (documents)
         {
             final HashSet<Integer> ids = Sets.newHashSet();
 
