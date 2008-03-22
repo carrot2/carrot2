@@ -3,6 +3,8 @@ package org.carrot2.core;
 import java.io.IOException;
 import java.util.*;
 
+import javax.sql.DataSource;
+
 import net.sf.ehcache.*;
 import net.sf.ehcache.constructs.blocking.CacheEntryFactory;
 import net.sf.ehcache.constructs.blocking.SelfPopulatingCache;
@@ -16,9 +18,10 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 /**
- * A controller implementing the life cycle described in <{@link ProcessingComponent}
- * which pools processing component instances. Processing performed using this controller
- * is thread-safe.
+ * A controller implementing the life cycle described in {@link ProcessingComponent} with
+ * support for component pooling and, optionally, data caching.
+ * <p>
+ * Processing performed using this controller is thread-safe.
  */
 public class CachingController implements Controller
 {
@@ -59,7 +62,10 @@ public class CachingController implements Controller
      * Creates a new caching controller.
      * 
      * @param cachedComponentClasses classes of components whose output should be cached
-     *            by the controller
+     *            by the controller. If a superclass is provided here, e.g.
+     *            {@link DataSource}, all its subclasses will be subject to caching. If
+     *            {@link ProcessingComponent} is provided here, output of all components
+     *            will be cached.
      */
     public CachingController(
         Class<? extends ProcessingComponent>... cachedComponentClasses)
@@ -77,22 +83,25 @@ public class CachingController implements Controller
             new ComponentInstantiationListener(initAttributes), null,
             new ComponentPassivationListener(), ComponentDisposalListener.INSTANCE);
 
-        try
+        if (!cachedComponentClasses.isEmpty())
         {
-            cacheManager = CacheManager.create(new ClassResource(CachingController.class,
-                "/controller-ehcache.xml").open());
-        }
-        catch (IOException e)
-        {
-            throw new ComponentInitializationException("Could not initalize cache", e);
-        }
+            try
+            {
+                cacheManager = CacheManager.create(new ClassResource(
+                    CachingController.class, "/controller-ehcache.xml").open());
+            }
+            catch (IOException e)
+            {
+                throw new ComponentInitializationException("Could not initalize cache", e);
+            }
 
-        if (!cacheManager.cacheExists("data"))
-        {
-            cacheManager.addCache("data");
+            if (!cacheManager.cacheExists("data"))
+            {
+                cacheManager.addCache("data");
+            }
+            dataCache = new SelfPopulatingCache(cacheManager.getCache("data"),
+                new CachedDataFactory());
         }
-        dataCache = new SelfPopulatingCache(cacheManager.getCache("data"),
-            new CachedDataFactory());
     }
 
     /*
