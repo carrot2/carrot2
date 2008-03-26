@@ -1,17 +1,27 @@
 package org.carrot2.core;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Map;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
-import net.sf.ehcache.*;
+import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.constructs.blocking.CacheEntryFactory;
 import net.sf.ehcache.constructs.blocking.SelfPopulatingCache;
 
 import org.carrot2.core.attribute.Processing;
-import org.carrot2.util.attribute.*;
-import org.carrot2.util.pool.*;
+import org.carrot2.util.ExceptionUtils;
+import org.carrot2.util.attribute.AttributeBinder;
+import org.carrot2.util.attribute.AttributeDescriptor;
+import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.BindableDescriptorBuilder;
+import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Output;
+import org.carrot2.util.pool.ObjectDisposalListener;
+import org.carrot2.util.pool.ObjectInstantiationListener;
+import org.carrot2.util.pool.ObjectPassivationListener;
+import org.carrot2.util.pool.ObjectPool;
 import org.carrot2.util.resource.ClassResource;
 
 import com.google.common.collect.Maps;
@@ -261,14 +271,8 @@ public final class CachingController implements Controller
                 // If init() throws any exception, this exception will
                 // be propagated to the borrowObject() call.
                 component.dispose();
-                if (e instanceof ComponentInitializationException)
-                {
-                    throw (ComponentInitializationException) e;
-                }
-                else
-                {
-                    throw new ComponentInitializationException(e);
-                }
+                
+                throw ExceptionUtils.wrapAs(ComponentInitializationException.class, e);
             }
         }
     }
