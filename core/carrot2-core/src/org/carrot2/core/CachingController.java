@@ -21,16 +21,24 @@ import com.google.common.collect.Sets;
  * A controller implementing the life cycle described in {@link ProcessingComponent} with
  * support for component pooling and, optionally, data caching.
  * <p>
- * Processing performed using this controller is thread-safe.
+ * Calls to {@link #process(Map, Class...)} are thread-safe, although some care should be
+ * given to initialization: {@link #init(Map)} should be called before other threads are allowed
+ * to see this object and {@link #dispose()} should be called after all threads leave 
+ * {@link #process(Map, Class...)}.
  */
-public class CachingController implements Controller
+public final class CachingController implements Controller
 {
-    /** Pool for component instances */
-    private ObjectPool<ProcessingComponent> componentPool;
+    /** Private monitor for multi-threaded critical sections. */
+    final Object reentrantLock = new Object();
+
+    /** Pool for component instances. */
+    private volatile ObjectPool<ProcessingComponent> componentPool;
 
     /**
      * Original values of {@link Processing} attributes that will be restored in the
      * component after processing finishes.
+     * <p>
+     * Access monitor: {#link #reentrantLock}.
      */
     private final Map<Class<?>, Map<String, Object>> resetAttributes = Maps.newHashMap();
 
@@ -47,11 +55,14 @@ public class CachingController implements Controller
     private final Set<Class<? extends ProcessingComponent>> cachedComponentClasses;
 
     /**
-     * Caches the data from components of classes provided in
+     * Populates on-demand and caches the data from components of classes provided in
      * {@link #cachedComponentClasses}. The key of the cache is a map of all
      * {@link Input} {@link Processing} attributes of the component for which caching is
      * performed. The value of the cache is a map of all {@link Output} {@link Processing}
      * attributes produced by the component.
+     * 
+     * TODO: [dw] Isn't using a Collection instance for a Map key going to cause long-lasting 
+     *            lookups? Most collections don't run deep-comparisons anyway, as far as I recall.
      */
     private SelfPopulatingCache dataCache;
 
@@ -74,7 +85,7 @@ public class CachingController implements Controller
     }
 
     /*
-     *
+     * 
      */
     public void init(Map<String, Object> initAttributes)
         throws ComponentInitializationException
@@ -92,7 +103,7 @@ public class CachingController implements Controller
             }
             catch (IOException e)
             {
-                throw new ComponentInitializationException("Could not initalize cache", e);
+                throw new ComponentInitializationException("Could not initalize cache.", e);
             }
 
             if (!cacheManager.cacheExists("data"))
@@ -111,6 +122,7 @@ public class CachingController implements Controller
     public ProcessingResult process(Map<String, Object> attributes,
         Class<?>... processingComponentClasses) throws ProcessingException
     {
+        final ObjectPool<ProcessingComponent> componentPool = this.componentPool;
         if (componentPool == null)
         {
             throw new IllegalStateException("Initialize the controller first.");
@@ -188,7 +200,11 @@ public class CachingController implements Controller
     }
 
     /*
-     *
+     * TODO: [dw] You are making an implicit assumption that init(), process() and dispose()
+     * will be called sequentially. This may or may not be true, especially with regard to data
+     * visibility between threads in process() and dispose(). If a number of threads is inside
+     * process(), calling dispose() may cause unpredictable side-effects (exceptions from internal 
+     * pools?). I added a JavaDoc comment about this.
      */
     public void dispose()
     {
@@ -220,7 +236,7 @@ public class CachingController implements Controller
 
                 // If this is the first component we initialize, remember attribute
                 // values so that they can be reset on returning to the pool.
-                synchronized (CachingController.this)
+                synchronized (reentrantLock)
                 {
                     // Attribute values for resetting
                     final Class<? extends ProcessingComponent> componentClass = component
@@ -287,6 +303,8 @@ public class CachingController implements Controller
                 // Here's a little hack: we need to disable checking
                 // for required attributes, otherwise, we won't be able
                 // to reset @Required input attributes to null
+                //
+                // TODO: [dw] resetAttributes map is used outside its monitor scope -> a problem in case of concurrent updates here.
                 AttributeBinder.bind(processingComponent,
                     new AttributeBinder.AttributeBinderAction []
                     {
@@ -346,7 +364,11 @@ public class CachingController implements Controller
         {
             InputOutputAttributeDescriptors descriptors = null;
 
-            synchronized (CachingController.this)
+            // TODO: [dw] This method is invoked on every cached component's process() call, which 
+            // may lead to increasing the monitor's congestion ratio. Would it make sense to move
+            // this call to this class's constructor and cache a reference to descriptors in a 
+            // field? As far as I understand, they are immutable and don't change over time. 
+            synchronized (reentrantLock)
             {
                 descriptors = cachedComponentAttributeDescriptors.get(componentClass);
                 if (descriptors == null)
@@ -408,8 +430,8 @@ public class CachingController implements Controller
         {
             final Map<String, Object> inputAttributes = (Map<String, Object>) key;
 
-            Class<? extends ProcessingComponent> componentClass = (Class<? extends ProcessingComponent>) inputAttributes
-                .get(COMPONENT_CLASS_KEY);
+            Class<? extends ProcessingComponent> componentClass = 
+                (Class<? extends ProcessingComponent>) inputAttributes.get(COMPONENT_CLASS_KEY);
 
             ProcessingComponent component = null;
             try
