@@ -9,11 +9,16 @@ import com.google.common.collect.Maps;
  * An extremely simple, unbounded object pool. The pool can provide objects of may types,
  * objects get created using parameterless constructors. The pool holds objects using
  * {@link SoftReference}s, so they can be garbage collected when memory is needed.
+ * 
+ * TODO: [dw] Suggestion: rename classes in this package, drop Object* prefix.
+ * TODO: [dw] Suggestion: rename this class to SoftUnboundedPool.
+ * TODO: [dw] Performance impact of storing soft references may not be worth it. If you need a pool,
+ *            you tune it to your memory capacity. A pre-warmed pool with a fixed-size would be
+ *            more practical to my intuition.
  */
-public class ObjectPool<T>
+public final class ObjectPool<T>
 {
-    private Map<Class<? extends T>, List<SoftReference<? extends T>>> instances = Maps
-        .newHashMap();
+    private Map<Class<? extends T>, List<SoftReference<? extends T>>> instances = Maps.newHashMap();
 
     private final ObjectInstantiationListener<T> objectInstantiationListener;
     private final ObjectActivationListener<T> objectActivationListener;
@@ -67,7 +72,7 @@ public class ObjectPool<T>
             }
         }
 
-        // Not a problem that many threads create new objects for now
+        // Not a problem that many threads create new objects for now.
         if (instance == null)
         {
             instance = clazz.newInstance();
@@ -93,7 +98,7 @@ public class ObjectPool<T>
     @SuppressWarnings("unchecked")
     public void returnObject(T object)
     {
-        if (object == null || instances == null)
+        if (object == null)
         {
             return;
         }
@@ -107,11 +112,15 @@ public class ObjectPool<T>
 
         synchronized (this)
         {
-            List<SoftReference<? extends T>> list = instances.get(object.getClass());
+            if (instances == null) {
+                return;
+            }
+
+            final List<SoftReference<? extends T>> list = instances.get(object.getClass());
             if (list == null)
             {
                 throw new IllegalStateException(
-                    "Returning an object that was never borrowed.");
+                    "Returning an object that was never borrowed: " + object);
             }
 
             list.add(new SoftReference<T>(object));
