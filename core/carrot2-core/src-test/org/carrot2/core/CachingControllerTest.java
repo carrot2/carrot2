@@ -7,7 +7,6 @@ import java.util.concurrent.*;
 
 import org.carrot2.core.attribute.Init;
 import org.carrot2.util.attribute.*;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.common.collect.*;
@@ -193,15 +192,7 @@ public class CachingControllerTest extends ControllerTestBase
         mocksControl.verify();
     }
 
-    /**
-     * TODO: This test is ignored for now. When the number of threads is > 1, it sometimes
-     * reports that the number of calls to afterProcessing() is smaller than required by
-     * 1. Simple debugging with System.outs shows that the number is correct, so it might
-     * be EasyMock's proxy that is not thread-safe and doesn't record invocations
-     * accurately. Definitely worth checking at some point.
-     */
     @Test
-    @Ignore
     @SuppressWarnings("unchecked")
     public void testConcurrency() throws InterruptedException
     {
@@ -373,26 +364,18 @@ public class CachingControllerTest extends ControllerTestBase
         mocksControl.verify();
     }
 
-    /**
-     * TODO: This test is ignored for now. When the number of threads is > 1, it sometimes
-     * reports that the number of calls to afterProcessing() is smaller than required by
-     * 1. Simple debugging with System.outs shows that the number is correct, so it might
-     * be EasyMock's proxy that is not thread-safe and doesn't record invocations
-     * accurately. Definitely worth checking at some point.
-     */
     @Test
-    @Ignore
     @SuppressWarnings("unchecked")
     public void testStress() throws InterruptedException, ExecutionException
     {
         final Random random = new Random();
-        final int numberOfThreads = 5 + random.nextInt(5);
-        final int numberOfQueries = 100 + random.nextInt(100);
+        final int numberOfThreads = 25 + random.nextInt(10);
+        final int numberOfQueries = 1000 + random.nextInt(1000);
         final String [] data = new String [numberOfQueries];
         final Set<String> uniqueQueries = Sets.newHashSet();
         for (int i = 0; i < data.length; i++)
         {
-            data[i] = Integer.toString(random.nextInt(5));
+            data[i] = Integer.toString(random.nextInt(20 + random.nextInt(10)));
             uniqueQueries.add(data[i]);
         }
 
@@ -404,6 +387,7 @@ public class CachingControllerTest extends ControllerTestBase
         {
             cachedProcessingComponent1Mock.beforeProcessing();
             cachedProcessingComponent1Mock.process();
+            mocksControl.andAnswer(new DelayedAnswer<Object>(random.nextInt(100)));
             cachedProcessingComponent1Mock.afterProcessing();
         }
         cachedProcessingComponent1Mock.dispose();
@@ -421,7 +405,6 @@ public class CachingControllerTest extends ControllerTestBase
                     Map<String, Object> localAttributes = Maps.newHashMap(attributes);
                     localAttributes.put("runtimeAttribute", string);
                     localAttributes.put("data", "d");
-                    localAttributes.put("delay", 100);
                     controller.process(localAttributes, CachedProcessingComponent1.class);
                     return (String) localAttributes.get("data");
                 }
@@ -436,7 +419,6 @@ public class CachingControllerTest extends ControllerTestBase
         }
 
         executorService.shutdown();
-        executorService.awaitTermination(100, TimeUnit.SECONDS);
 
         controller.dispose();
         mocksControl.verify();

@@ -3,7 +3,7 @@ package org.carrot2.util.pool;
 /**
  *
  */
-public interface ObjectInstantiationListener<T>
+public interface InstantiationListener<T>
 {
     /**
      * Called after the object gets instantiated.

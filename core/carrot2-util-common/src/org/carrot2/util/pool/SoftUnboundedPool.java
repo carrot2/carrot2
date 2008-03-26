@@ -10,35 +10,33 @@ import com.google.common.collect.Maps;
  * objects get created using parameterless constructors. The pool holds objects using
  * {@link SoftReference}s, so they can be garbage collected when memory is needed.
  * 
- * TODO: [dw] Suggestion: rename classes in this package, drop Object* prefix.
- * TODO: [dw] Suggestion: rename this class to SoftUnboundedPool.
  * TODO: [dw] Performance impact of storing soft references may not be worth it. If you need a pool,
  *            you tune it to your memory capacity. A pre-warmed pool with a fixed-size would be
- *            more practical to my intuition.
+ *            more practical to my intuition. [so] True -- there is an issue for it: CARROT-192
  */
-public final class ObjectPool<T>
+public final class SoftUnboundedPool<T>
 {
     private Map<Class<? extends T>, List<SoftReference<? extends T>>> instances = Maps.newHashMap();
 
-    private final ObjectInstantiationListener<T> objectInstantiationListener;
-    private final ObjectActivationListener<T> objectActivationListener;
-    private final ObjectPassivationListener<T> objectPassivationListener;
-    private final ObjectDisposalListener<T> objectDisposalListener;
+    private final InstantiationListener<T> instantiationListener;
+    private final ActivationListener<T> activationListener;
+    private final PassivationListener<T> passivationListener;
+    private final DisposalListener<T> disposalListener;
 
-    public ObjectPool()
+    public SoftUnboundedPool()
     {
         this(null, null, null, null);
     }
 
-    public ObjectPool(ObjectInstantiationListener<T> objectInstantiationListener,
-        ObjectActivationListener<T> objectActivationListener,
-        ObjectPassivationListener<T> objectPassivationListener,
-        ObjectDisposalListener<T> objectDisposalListener)
+    public SoftUnboundedPool(InstantiationListener<T> objectInstantiationListener,
+        ActivationListener<T> objectActivationListener,
+        PassivationListener<T> objectPassivationListener,
+        DisposalListener<T> objectDisposalListener)
     {
-        this.objectInstantiationListener = objectInstantiationListener;
-        this.objectActivationListener = objectActivationListener;
-        this.objectPassivationListener = objectPassivationListener;
-        this.objectDisposalListener = objectDisposalListener;
+        this.instantiationListener = objectInstantiationListener;
+        this.activationListener = objectActivationListener;
+        this.passivationListener = objectPassivationListener;
+        this.disposalListener = objectDisposalListener;
     }
 
     /**
@@ -76,17 +74,17 @@ public final class ObjectPool<T>
         if (instance == null)
         {
             instance = clazz.newInstance();
-            if (objectInstantiationListener != null)
+            if (instantiationListener != null)
             {
                 // TODO: should we assume listeners are thread-safe, or synchronize here?
-                objectInstantiationListener.objectInstantiated(instance);
+                instantiationListener.objectInstantiated(instance);
             }
         }
 
-        if (objectActivationListener != null)
+        if (activationListener != null)
         {
             // TODO: should we assume listeners are thread-safe, or synchronize here?
-            objectActivationListener.activate(instance);
+            activationListener.activate(instance);
         }
 
         return instance;
@@ -103,11 +101,11 @@ public final class ObjectPool<T>
             return;
         }
 
-        if (objectPassivationListener != null)
+        if (passivationListener != null)
         {
             // TODO: should we assume listeners are thread-safe, or synchronize here?
             // If the listener throws an exception, we don't return the object
-            objectPassivationListener.passivate(object);
+            passivationListener.passivate(object);
         }
 
         synchronized (this)
@@ -142,11 +140,11 @@ public final class ObjectPool<T>
                 for (SoftReference<? extends T> reference : list)
                 {
                     T instance = reference.get();
-                    if (instance != null && objectDisposalListener != null)
+                    if (instance != null && disposalListener != null)
                     {
                         // TODO: should we assume listeners are thread-safe, or
                         // synchronize here?
-                        objectDisposalListener.dispose(instance);
+                        disposalListener.dispose(instance);
                     }
                 }
             }

@@ -3,7 +3,7 @@ package org.carrot2.util.pool;
 /**
  *
  */
-public interface ObjectPassivationListener<T>
+public interface PassivationListener<T>
 {
     /**
      * Called after the object is returned to the pool.

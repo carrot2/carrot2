@@ -7,16 +7,16 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Test cases for {@link ObjectPool}.
+ * Test cases for {@link SoftUnboundedPool}.
  */
-public class ObjectPoolTest
+public class SoftUnboundedPoolTest
 {
-    private ObjectPool<Object> pool;
+    private SoftUnboundedPool<Object> pool;
 
     @Before
     public void initializePool()
     {
-        pool = new ObjectPool<Object>();
+        pool = new SoftUnboundedPool<Object>();
     }
 
     @Test

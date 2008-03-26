@@ -28,50 +28,58 @@ public abstract class DelegatingProcessingComponent implements ProcessingCompone
     @Attribute(key = "data")
     private String data = null;
 
-    @Processing
-    @Input
-    @Attribute(key = "delay")
-    private int delay = 0;
-    
     public void init()
     {
-        getDelegate().init();
+        // We perform synchronization here because the mock object passed as the delegate
+        // is not thread-safe and may fail to record some invocations if not synchronized
+        synchronized (getDelegate())
+        {
+            getDelegate().init();
+        }
     }
 
     public void beforeProcessing() throws ProcessingException
     {
-        getDelegate().beforeProcessing();
+        // We perform synchronization here because the mock object passed as the delegate
+        // is not thread-safe and may fail to record some invocations if not synchronized
+        synchronized (getDelegate())
+        {
+            getDelegate().beforeProcessing();
+        }
     }
 
     public void process() throws ProcessingException
     {
-        getDelegate().process();
+        // We perform synchronization here because the mock object passed as the delegate
+        // is not thread-safe and may fail to record some invocations if not synchronized
+        synchronized (getDelegate())
+        {
+            getDelegate().process();
+        }
 
         // Do some simple processing
         data = data + instanceAttribute;
         data = data + runtimeAttribute;
-        
-        if (delay != 0)
-        {
-            try
-            {
-                Thread.sleep(delay);
-            }
-            catch (InterruptedException e)
-            {
-                // nothing to do
-            }
-        }
     }
 
     public void afterProcessing()
     {
-        getDelegate().afterProcessing();
+        // We perform synchronization here because the mock object passed as the delegate
+        // is not thread-safe and may fail to record some invocations if not synchronized
+        synchronized (getDelegate())
+        {
+            getDelegate().afterProcessing();
+        }
     }
 
     public void dispose()
     {
-        getDelegate().dispose();
+        // We perform synchronization here because the mock object passed as the delegate
+        // is not thread-safe and may fail to record some invocations if not synchronized
+        synchronized (getDelegate())
+        {
+            getDelegate().dispose();
+        }
     }
 
     abstract ProcessingComponent getDelegate();

@@ -3,7 +3,7 @@ package org.carrot2.util.pool;
 /**
  *
  */
-public interface ObjectDisposalListener<T>
+public interface DisposalListener<T>
 {
     /**
      * Called before the object is disposed of.

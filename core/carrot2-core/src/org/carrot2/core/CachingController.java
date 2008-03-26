@@ -18,10 +18,10 @@ import org.carrot2.util.attribute.Bindable;
 import org.carrot2.util.attribute.BindableDescriptorBuilder;
 import org.carrot2.util.attribute.Input;
 import org.carrot2.util.attribute.Output;
-import org.carrot2.util.pool.ObjectDisposalListener;
-import org.carrot2.util.pool.ObjectInstantiationListener;
-import org.carrot2.util.pool.ObjectPassivationListener;
-import org.carrot2.util.pool.ObjectPool;
+import org.carrot2.util.pool.DisposalListener;
+import org.carrot2.util.pool.InstantiationListener;
+import org.carrot2.util.pool.PassivationListener;
+import org.carrot2.util.pool.SoftUnboundedPool;
 import org.carrot2.util.resource.ClassResource;
 
 import com.google.common.collect.Maps;
@@ -42,7 +42,7 @@ public final class CachingController implements Controller
     final Object reentrantLock = new Object();
 
     /** Pool for component instances. */
-    private volatile ObjectPool<ProcessingComponent> componentPool;
+    private volatile SoftUnboundedPool<ProcessingComponent> componentPool;
 
     /**
      * Original values of {@link Processing} attributes that will be restored in the
@@ -100,7 +100,7 @@ public final class CachingController implements Controller
     public void init(Map<String, Object> initAttributes)
         throws ComponentInitializationException
     {
-        componentPool = new ObjectPool<ProcessingComponent>(
+        componentPool = new SoftUnboundedPool<ProcessingComponent>(
             new ComponentInstantiationListener(initAttributes), null,
             new ComponentPassivationListener(), ComponentDisposalListener.INSTANCE);
 
@@ -132,7 +132,7 @@ public final class CachingController implements Controller
     public ProcessingResult process(Map<String, Object> attributes,
         Class<?>... processingComponentClasses) throws ProcessingException
     {
-        final ObjectPool<ProcessingComponent> componentPool = this.componentPool;
+        final SoftUnboundedPool<ProcessingComponent> componentPool = this.componentPool;
         if (componentPool == null)
         {
             throw new IllegalStateException("Initialize the controller first.");
@@ -227,7 +227,7 @@ public final class CachingController implements Controller
      * they can be reset after the component gets returned to the pool.
      */
     private final class ComponentInstantiationListener implements
-        ObjectInstantiationListener<ProcessingComponent>
+        InstantiationListener<ProcessingComponent>
     {
         private final Map<String, Object> initAttributes;
 
@@ -281,7 +281,7 @@ public final class CachingController implements Controller
      * Disposes of components on shut down.
      */
     private final static class ComponentDisposalListener implements
-        ObjectDisposalListener<ProcessingComponent>
+        DisposalListener<ProcessingComponent>
     {
         final static ComponentDisposalListener INSTANCE = new ComponentDisposalListener();
 
@@ -296,7 +296,7 @@ public final class CachingController implements Controller
      * pool.
      */
     private final class ComponentPassivationListener implements
-        ObjectPassivationListener<ProcessingComponent>
+        PassivationListener<ProcessingComponent>
     {
         @SuppressWarnings("unchecked")
         public void passivate(ProcessingComponent processingComponent)
