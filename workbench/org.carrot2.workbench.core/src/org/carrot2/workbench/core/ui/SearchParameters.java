@@ -106,9 +106,6 @@ public class SearchParameters implements IEditorInput, IPersistableElement
 
     public void saveState(IMemento memento)
     {
-        memento.createChild("source").putString("caption", sourceCaption);
-        memento.createChild("algorithm").putString("caption", algorithmCaption);
-        memento.createChild("query")
-            .putString("text", attributes.get("query").toString());
+        SearchParametersFactory.saveState(this, memento);
     }
 }
