@@ -18,9 +18,12 @@ public class ProcessingJob extends Job
     public ProcessingJob(String name, SearchParameters search)
     {
         super(name);
-        source = ComponentLoader.SOURCE_LOADER.getExecutableComponent(search.getSourceCaption());
+        source =
+            ComponentLoader.SOURCE_LOADER.getExecutableComponent(search
+                .getSourceCaption());
         algorithm =
-            ComponentLoader.ALGORITHM_LOADER.getExecutableComponent(search.getAlgorithmCaption());
+            ComponentLoader.ALGORITHM_LOADER.getExecutableComponent(search
+                .getAlgorithmCaption());
         attributes = search.getAttributes();
     }
 
@@ -28,7 +31,7 @@ public class ProcessingJob extends Job
     protected IStatus run(IProgressMonitor monitor)
     {
         IStatus status;
-        monitor.beginTask("Processing of a query", 1);
+        monitor.beginTask("Processing of a query", IProgressMonitor.UNKNOWN);
         try
         {
             final SimpleController controller = new SimpleController();
@@ -40,7 +43,6 @@ public class ProcessingJob extends Job
         {
             status = new ProcessingStatus(ex);
         }
-        monitor.worked(1);
         monitor.done();
         return status;
     }
