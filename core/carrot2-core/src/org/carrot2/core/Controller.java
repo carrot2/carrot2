@@ -17,13 +17,14 @@ public interface Controller
      * Initializes this controller. This method must complete successfully before any
      * calls are made to the {@link #process(Map, Class...)} method.
      * 
-     * @param attributes {@link Init}-time attributes for the component
+     * @param attributes {@link Init}-time attributes for components instantiated in
+     *  {@link #process(Map, Class...)}. 
      */
     public void init(Map<String, Object> attributes)
         throws ComponentInitializationException;
 
     /**
-     * s Disposed of this controller. No calls to {@link #process(Map, Class...)} must be
+     * Shuts down this controller. No calls to {@link #process(Map, Class...)} must be
      * made after invoking this method.
      */
     public void dispose();
