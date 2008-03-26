@@ -11,7 +11,7 @@ import org.junit.Before;
 
 /**
  * A very basic base class for testing {@link ProcessingComponent}s. This class provides
- * an instance of {@link SimpleController}, a map for attributes and a method that
+ * an instance of a {@link Controller}, a map for attributes and a method that
  * initializes them.
  */
 public abstract class ProcessingComponentTestBase<T extends ProcessingComponent> extends
