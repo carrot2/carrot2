@@ -12,23 +12,23 @@ import org.eclipse.ui.*;
 public class SearchParameters implements IEditorInput, IPersistableElement
 {
 
-    private String sourceCaption;
-    private String algorithmCaption;
+    private String sourceId;
+    private String algorithmId;
     private Map<String, Object> attributes;
 
-    public SearchParameters(String sourceCaption, String algorithmCaption,
+    public SearchParameters(String sourceId, String algorithmId,
         Map<String, Object> attributes)
     {
-        if (StringUtils.isBlank(sourceCaption))
+        if (StringUtils.isBlank(sourceId))
         {
-            throw new NullArgumentException("sourceCaption");
+            throw new NullArgumentException("sourceId");
         }
-        if (StringUtils.isBlank(algorithmCaption))
+        if (StringUtils.isBlank(algorithmId))
         {
-            throw new NullArgumentException("algorithmCaption");
+            throw new NullArgumentException("algorithmId");
         }
-        this.sourceCaption = sourceCaption;
-        this.algorithmCaption = algorithmCaption;
+        this.sourceId = sourceId;
+        this.algorithmId = algorithmId;
         if (attributes == null)
         {
             this.attributes = new HashMap<String, Object>();
@@ -49,14 +49,14 @@ public class SearchParameters implements IEditorInput, IPersistableElement
         return this.attributes.remove(key);
     }
 
-    public String getSourceCaption()
+    public String getSourceId()
     {
-        return sourceCaption;
+        return sourceId;
     }
 
-    public String getAlgorithmCaption()
+    public String getAlgorithmId()
     {
-        return algorithmCaption;
+        return algorithmId;
     }
 
     public Map<String, Object> getAttributes()
@@ -71,7 +71,7 @@ public class SearchParameters implements IEditorInput, IPersistableElement
 
     public ImageDescriptor getImageDescriptor()
     {
-        return ComponentLoader.SOURCE_LOADER.getComponent(this.sourceCaption).getIcon();
+        return ComponentLoader.SOURCE_LOADER.getComponent(this.sourceId).getIcon();
     }
 
     public String getName()

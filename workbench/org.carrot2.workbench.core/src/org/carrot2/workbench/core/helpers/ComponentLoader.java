@@ -16,7 +16,7 @@ public class ComponentLoader
     private final String classAttName;
     private final String iconAttName;
 
-    private final Map<String, ComponentWrapper> componentrCache = Maps.newHashMap();
+    private final Map<String, ComponentWrapper> componentCache = Maps.newHashMap();
 
     public static final ComponentLoader SOURCE_LOADER =
         new ComponentLoader("source", "source", "label", "class", "icon");
@@ -58,39 +58,39 @@ public class ComponentLoader
     public List<String> getCaptions()
     {
         // loadExtensions();
-        return new ArrayList<String>(componentrCache.keySet());
+        return new ArrayList<String>(componentCache.keySet());
     }
 
     public List<ComponentWrapper> getComponents()
     {
         // loadExtensions();
-        return Lists.immutableList(componentrCache.values());
+        return Lists.immutableList(componentCache.values());
     }
 
-    public ComponentWrapper getComponent(String caption)
+    public ComponentWrapper getComponent(String id)
     {
-        if (!componentrCache.containsKey(caption))
+        if (!componentCache.containsKey(id))
         {
-            throw new RuntimeException("No such component: " + caption);
+            throw new RuntimeException("No such component: " + id);
         }
-        return componentrCache.get(caption);
+        return componentCache.get(id);
     }
 
     /**
      * Creates instance of a given component. Plugin, in which component is defined, is
      * loaded while invoking this method! Use when necessary!
      * 
-     * @param caption
+     * @param id
      * @return instance of a component with the given caption.
      */
-    public ProcessingComponent getExecutableComponent(String caption)
+    public ProcessingComponent getExecutableComponent(String id)
     {
-        if (!componentrCache.containsKey(caption))
+        if (!componentCache.containsKey(id))
         {
-            throw new RuntimeException("No such component: " + caption);
+            throw new RuntimeException("No such component: " + id);
         }
 
-        return componentrCache.get(caption).getExecutableComponent();
+        return componentCache.get(id).getExecutableComponent();
     }
 
     /*
@@ -122,7 +122,8 @@ public class ComponentLoader
             ComponentWrapper wrapper =
                 new ComponentWrapper(configurationElement, captionAttName, classAttName,
                     iconAttName);
-            componentrCache.put(wrapper.getCaption(), wrapper);
+            componentCache.put(configurationElement.getDeclaringExtension()
+                .getUniqueIdentifier(), wrapper);
         }
 
     }

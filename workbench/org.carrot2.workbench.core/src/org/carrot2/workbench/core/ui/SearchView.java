@@ -19,8 +19,8 @@ public class SearchView extends ViewPart
     public static final String ID = "org.carrot2.workbench.core.search";
 
     private Composite innerComposite;
-    private Combo sourceCombo;
-    private Combo algorithmCombo;
+    private ComboViewer sourceViewer;
+    private ComboViewer algorithmViewer;
     private Button processButton;
     private Text queryText;
     private java.util.List<Resource> toDispose = new ArrayList<Resource>();
@@ -40,9 +40,6 @@ public class SearchView extends ViewPart
     {
         createPermanentLayout(parent);
 
-        createItems(sourceCombo, ComponentLoader.SOURCE_LOADER);
-        createItems(algorithmCombo, ComponentLoader.ALGORITHM_LOADER);
-
         checkProcessingConditions(parent);
 
         final Runnable execQuery = new RunnableWithErrorDialog()
@@ -52,7 +49,7 @@ public class SearchView extends ViewPart
                 IWorkbenchPage page =
                     SearchView.this.getViewSite().getWorkbenchWindow().getActivePage();
                 SearchParameters input =
-                    new SearchParameters(getSourceCaption(), getAlgorithmCaption(), null);
+                    new SearchParameters(getSourceId(), getAlgorithmId(), null);
                 input.putAttribute(AttributeNames.QUERY, queryText.getText());
                 page.openEditor(input, ResultsEditor.ID);
             }
@@ -100,11 +97,12 @@ public class SearchView extends ViewPart
         }
         if (ComponentLoader.SOURCE_LOADER.getComponents().isEmpty())
         {
-            disableComboWithMessage(sourceCombo, "No Document Source found!");
+            disableComboWithMessage(sourceViewer.getCombo(), "No Document Source found!");
         }
         if (ComponentLoader.ALGORITHM_LOADER.getComponents().isEmpty())
         {
-            disableComboWithMessage(algorithmCombo, "No Clustering Algorithm found!");
+            disableComboWithMessage(algorithmViewer.getCombo(),
+                "No Clustering Algorithm found!");
         }
     }
 
@@ -119,25 +117,27 @@ public class SearchView extends ViewPart
         toDisable.setEnabled(false);
     }
 
-    private String getSourceCaption()
+    private String getSourceId()
     {
-        if (sourceCombo.getSelectionIndex() == -1)
+        if (sourceViewer.getSelection().isEmpty())
         {
             return null;
         }
-        return sourceCombo.getItem(sourceCombo.getSelectionIndex());
+        return ((ComponentWrapper) ((IStructuredSelection) sourceViewer.getSelection())
+            .getFirstElement()).getId();
     }
 
-    private String getAlgorithmCaption()
+    private String getAlgorithmId()
     {
-        if (algorithmCombo.getSelectionIndex() == -1)
+        if (algorithmViewer.getSelection().isEmpty())
         {
             return null;
         }
-        return algorithmCombo.getItem(algorithmCombo.getSelectionIndex());
+        return ((ComponentWrapper) ((IStructuredSelection) algorithmViewer.getSelection())
+            .getFirstElement()).getId();
     }
 
-    private void createItems(Combo combo, ComponentLoader loader)
+    private ComboViewer createViewer(Combo combo, ComponentLoader loader)
     {
         combo.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
         ComboViewer viewer = new ComboViewer(combo);
@@ -145,6 +145,7 @@ public class SearchView extends ViewPart
         viewer.setContentProvider(new ArrayContentProvider());
         viewer.setInput(loader.getComponents());
         combo.select(0);
+        return viewer;
     }
 
     @Override
@@ -169,10 +170,10 @@ public class SearchView extends ViewPart
 
         innerComposite = new Composite(parent, SWT.NULL);
         Label sourceLabel = new Label(innerComposite, SWT.CENTER);
-        sourceCombo =
+        Combo sourceCombo =
             new Combo(innerComposite, SWT.DROP_DOWN | SWT.READ_ONLY | SWT.BORDER);
         Label algorithmLabel = new Label(innerComposite, SWT.CENTER);
-        algorithmCombo =
+        Combo algorithmCombo =
             new Combo(innerComposite, SWT.DROP_DOWN | SWT.READ_ONLY | SWT.BORDER);
         Label queryLabel = new Label(innerComposite, SWT.CENTER);
         queryText = new Text(innerComposite, SWT.SINGLE | SWT.SEARCH);
@@ -223,5 +224,8 @@ public class SearchView extends ViewPart
         processButton.setText("Process");
 
         innerComposite.setLayout(new GridLayout(4, false));
+
+        sourceViewer = createViewer(sourceCombo, ComponentLoader.SOURCE_LOADER);
+        algorithmViewer = createViewer(algorithmCombo, ComponentLoader.ALGORITHM_LOADER);
     }
 }

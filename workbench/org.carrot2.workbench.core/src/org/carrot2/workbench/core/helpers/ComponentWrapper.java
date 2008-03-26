@@ -76,4 +76,9 @@ public class ComponentWrapper
         }
         return null;
     }
+
+    public String getId()
+    {
+        return element.getDeclaringExtension().getUniqueIdentifier();
+    }
 }

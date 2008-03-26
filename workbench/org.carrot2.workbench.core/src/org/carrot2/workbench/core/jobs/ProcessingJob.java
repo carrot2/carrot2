@@ -20,10 +20,10 @@ public class ProcessingJob extends Job
         super(name);
         source =
             ComponentLoader.SOURCE_LOADER.getExecutableComponent(search
-                .getSourceCaption());
+                .getSourceId());
         algorithm =
             ComponentLoader.ALGORITHM_LOADER.getExecutableComponent(search
-                .getAlgorithmCaption());
+                .getAlgorithmId());
         attributes = search.getAttributes();
     }
 

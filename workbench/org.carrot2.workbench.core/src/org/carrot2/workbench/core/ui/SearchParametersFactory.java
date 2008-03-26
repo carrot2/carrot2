@@ -8,16 +8,15 @@ import org.eclipse.ui.IMemento;
 public class SearchParametersFactory implements IElementFactory
 {
 
-    private static final String CAPTION_ATTRIBUTE = "caption";
+    private static final String ID_ATTRIBUTE = "id";
     private static final String ALGORITHM_ELEMENT = "algorithm";
     private static final String SOURCE_ELEMENT = "source";
     public static final String ID = "org.carrot2.workbench.core.searchParametersFactory";
 
     public IAdaptable createElement(IMemento memento)
     {
-        String source = tryGetStringFrom(memento, SOURCE_ELEMENT, CAPTION_ATTRIBUTE);
-        String algorithm =
-            tryGetStringFrom(memento, ALGORITHM_ELEMENT, CAPTION_ATTRIBUTE);
+        String source = tryGetStringFrom(memento, SOURCE_ELEMENT, ID_ATTRIBUTE);
+        String algorithm = tryGetStringFrom(memento, ALGORITHM_ELEMENT, ID_ATTRIBUTE);
         if (StringUtils.isBlank(source) || StringUtils.isBlank(algorithm))
         {
             return null;
@@ -46,10 +45,9 @@ public class SearchParametersFactory implements IElementFactory
 
     static void saveState(SearchParameters search, IMemento memento)
     {
-        memento.createChild(SOURCE_ELEMENT).putString(CAPTION_ATTRIBUTE,
-            search.getSourceCaption());
-        memento.createChild(ALGORITHM_ELEMENT).putString(CAPTION_ATTRIBUTE,
-            search.getAlgorithmCaption());
+        memento.createChild(SOURCE_ELEMENT).putString(ID_ATTRIBUTE, search.getSourceId());
+        memento.createChild(ALGORITHM_ELEMENT).putString(ID_ATTRIBUTE,
+            search.getAlgorithmId());
         memento.createChild("query").putString("text",
             search.getAttributes().get("query").toString());
     }
