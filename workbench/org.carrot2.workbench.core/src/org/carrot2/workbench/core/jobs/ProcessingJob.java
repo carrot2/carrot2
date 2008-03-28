@@ -3,7 +3,7 @@ package org.carrot2.workbench.core.jobs;
 import java.util.Map;
 
 import org.carrot2.core.*;
-import org.carrot2.workbench.core.helpers.CachingHelper;
+import org.carrot2.workbench.core.CorePlugin;
 import org.carrot2.workbench.core.helpers.ComponentLoader;
 import org.carrot2.workbench.core.ui.SearchParameters;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -35,7 +35,7 @@ public class ProcessingJob extends Job
         monitor.beginTask("Processing of a query", IProgressMonitor.UNKNOWN);
         try
         {
-            final Controller controller = CachingHelper.getController(source);
+            final Controller controller = CorePlugin.getController();
             final ProcessingResult result =
                 controller.process(attributes, source.getClass(), algorithm.getClass());
             status = new ProcessingStatus(result);

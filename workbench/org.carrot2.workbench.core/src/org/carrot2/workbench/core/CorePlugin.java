@@ -1,6 +1,9 @@
 package org.carrot2.workbench.core;
 
-import org.carrot2.workbench.core.helpers.CachingHelper;
+import java.util.HashMap;
+
+import org.carrot2.core.CachingController;
+import org.carrot2.core.DocumentSource;
 import org.carrot2.workbench.core.helpers.VelocityHelper;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -17,17 +20,22 @@ public class CorePlugin extends AbstractUIPlugin
     // The shared instance
     private static CorePlugin plugin;
 
+    private static CachingController controller;
+
+    @SuppressWarnings("unchecked")
     public void start(BundleContext context) throws Exception
     {
         super.start(context);
         plugin = this;
+        controller = new CachingController(DocumentSource.class);
+        controller.init(new HashMap<String, Object>());
         VelocityHelper.init();
     }
 
     public void stop(BundleContext context) throws Exception
     {
         plugin = null;
-        CachingHelper.disposeAllControllers();
+        controller.dispose();
         super.stop(context);
     }
 
@@ -39,6 +47,11 @@ public class CorePlugin extends AbstractUIPlugin
     public static CorePlugin getDefault()
     {
         return plugin;
+    }
+
+    public static CachingController getController()
+    {
+        return controller;
     }
 
     /**
