@@ -1,5 +1,6 @@
 package org.carrot2.workbench.core;
 
+import org.carrot2.workbench.core.helpers.CachingHelper;
 import org.carrot2.workbench.core.helpers.VelocityHelper;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -26,6 +27,7 @@ public class CorePlugin extends AbstractUIPlugin
     public void stop(BundleContext context) throws Exception
     {
         plugin = null;
+        CachingHelper.disposeAllControllers();
         super.stop(context);
     }
 
