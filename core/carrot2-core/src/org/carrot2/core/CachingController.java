@@ -70,9 +70,6 @@ public final class CachingController implements Controller
      * {@link Input} {@link Processing} attributes of the component for which caching is
      * performed. The value of the cache is a map of all {@link Output} {@link Processing}
      * attributes produced by the component.
-     * 
-     * TODO: [dw] Isn't using a Collection instance for a Map key going to cause long-lasting 
-     *            lookups? Most collections don't run deep-comparisons anyway, as far as I recall.
      */
     private SelfPopulatingCache dataCache;
 
@@ -210,7 +207,7 @@ public final class CachingController implements Controller
     }
 
     /*
-     * TODO: [dw] You are making an implicit assumption that init(), process() and dispose()
+     * We are making an implicit assumption that init(), process() and dispose()
      * will be called sequentially. This may or may not be true, especially with regard to data
      * visibility between threads in process() and dispose(). If a number of threads is inside
      * process(), calling dispose() may cause unpredictable side-effects (exceptions from internal 
@@ -307,13 +304,17 @@ public final class CachingController implements Controller
                 // Here's a little hack: we need to disable checking
                 // for required attributes, otherwise, we won't be able
                 // to reset @Required input attributes to null
-                //
-                // TODO: [dw] resetAttributes map is used outside its monitor scope -> a problem in case of concurrent updates here.
+                final Map<String, Object> map;
+                synchronized (reentrantLock) 
+                {
+                     map = resetAttributes.get(processingComponent.getClass());
+                }
+
                 AttributeBinder.bind(processingComponent,
                     new AttributeBinder.AttributeBinderAction []
                     {
                         new AttributeBinder.AttributeBinderActionBind(Input.class,
-                            resetAttributes.get(processingComponent.getClass()), false)
+                            map, false)
                     }, Input.class, Processing.class);
             }
             catch (Exception e)
@@ -368,10 +369,6 @@ public final class CachingController implements Controller
         {
             InputOutputAttributeDescriptors descriptors = null;
 
-            // TODO: [dw] This method is invoked on every cached component's process() call, which 
-            // may lead to increasing the monitor's congestion ratio. Would it make sense to move
-            // this call to this class's constructor and cache a reference to descriptors in a 
-            // field? As far as I understand, they are immutable and don't change over time. 
             synchronized (reentrantLock)
             {
                 descriptors = cachedComponentAttributeDescriptors.get(componentClass);
