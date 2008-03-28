@@ -7,6 +7,10 @@ import org.carrot2.core.*;
 
 import com.google.common.collect.Maps;
 
+/**
+ * TODO: Use one {@link CachingController} per Workbench instance, use {@link DocumentSource} as
+ * the class to be cached.
+ */
 public class CachingHelper
 {
     private static Map<Class<? extends ProcessingComponent>, CachingController> controllers =

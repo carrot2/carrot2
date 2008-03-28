@@ -26,7 +26,7 @@ public @interface Attribute
      * {@link AttributeBinder#bind(Object, java.util.Map, Class, Class...)} method. If the
      * key is not provided, the attribute will have its key composed of the prefix defined
      * by the {@link Bindable} annotation on the enclosing class (see
-     * {@link Bindable#prefix()}) followed by a dot (<code>.</code>) and the name of
+     * {@link Bindable#prefix()})  followed by a dot (<code>.</code>) and the name of
      * the attribute field as returned by {@link Field#getName()}.
      */
     String key() default "";
