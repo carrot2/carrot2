@@ -3,6 +3,7 @@ package org.carrot2.workbench.core.jobs;
 import java.util.Map;
 
 import org.carrot2.core.*;
+import org.carrot2.workbench.core.helpers.CachingHelper;
 import org.carrot2.workbench.core.helpers.ComponentLoader;
 import org.carrot2.workbench.core.ui.SearchParameters;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -18,9 +19,9 @@ public class ProcessingJob extends Job
     public ProcessingJob(String name, SearchParameters search)
     {
         super(name);
+        // TODO: I only need classes, not instances, figure out how to do this
         source =
-            ComponentLoader.SOURCE_LOADER.getExecutableComponent(search
-                .getSourceId());
+            ComponentLoader.SOURCE_LOADER.getExecutableComponent(search.getSourceId());
         algorithm =
             ComponentLoader.ALGORITHM_LOADER.getExecutableComponent(search
                 .getAlgorithmId());
@@ -34,9 +35,9 @@ public class ProcessingJob extends Job
         monitor.beginTask("Processing of a query", IProgressMonitor.UNKNOWN);
         try
         {
-            final SimpleController controller = new SimpleController();
+            final Controller controller = CachingHelper.getController(source);
             final ProcessingResult result =
-                controller.process(attributes, source, algorithm);
+                controller.process(attributes, source.getClass(), algorithm.getClass());
             status = new ProcessingStatus(result);
         }
         catch (ProcessingException ex)

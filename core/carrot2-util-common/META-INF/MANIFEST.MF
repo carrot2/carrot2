@@ -5,7 +5,10 @@ Bundle-SymbolicName: org.carrot2.util.common
 Bundle-Version: 1.0.0
 Export-Package: org.carrot2.util,
  org.carrot2.util.httpclient,
+ org.carrot2.util.pool,
+ org.carrot2.util.reflect,
  org.carrot2.util.resource
 Require-Bundle: com.google.collections;visibility:=reexport,
  org.apache.commons;visibility:=reexport,
- org.apache.log4j
+ org.apache.log4j,
+ net.sf.ehcache;visibility:=reexport

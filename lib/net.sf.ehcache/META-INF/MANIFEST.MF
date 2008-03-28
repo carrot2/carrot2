@@ -29,3 +29,4 @@ Export-Package: edu.emory.mathcs.backport.java.util,
  net.sf.ehcache.management,
  net.sf.ehcache.store,
  net.sf.ehcache.util
+Require-Bundle: org.apache.commons
