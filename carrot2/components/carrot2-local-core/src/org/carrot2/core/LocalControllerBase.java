@@ -87,6 +87,31 @@ public class LocalControllerBase implements LocalController, LocalControllerCont
         DEFAULT_COMPONENT_POOL_CONFIG.testOnReturn = false;
         DEFAULT_COMPONENT_POOL_CONFIG.testWhileIdle = false;        
     }
+
+    /**
+     * Component pool configuration with no background eviction. The behaviour of the
+     * pool should be like this:
+     * <ul>
+     * <li>when pool is exhausted, it will grow infinitely
+     * <li>one idle instance will always be available
+     * </ul>
+     */
+    public static final GenericObjectPool.Config NO_TIMED_EVICTION_COMPONENT_POOL_CONFIG;
+    static {
+        NO_TIMED_EVICTION_COMPONENT_POOL_CONFIG = new GenericObjectPool.Config();
+        NO_TIMED_EVICTION_COMPONENT_POOL_CONFIG.whenExhaustedAction = GenericObjectPool.WHEN_EXHAUSTED_GROW;
+        NO_TIMED_EVICTION_COMPONENT_POOL_CONFIG.maxWait = 0; // irrelevant
+        NO_TIMED_EVICTION_COMPONENT_POOL_CONFIG.maxActive = 0; // irrelevant
+        NO_TIMED_EVICTION_COMPONENT_POOL_CONFIG.maxIdle = 5;
+        // no background evictor.
+        NO_TIMED_EVICTION_COMPONENT_POOL_CONFIG.timeBetweenEvictionRunsMillis = -1;
+        NO_TIMED_EVICTION_COMPONENT_POOL_CONFIG.softMinEvictableIdleTimeMillis = -1;
+        NO_TIMED_EVICTION_COMPONENT_POOL_CONFIG.minEvictableIdleTimeMillis = -1;
+        NO_TIMED_EVICTION_COMPONENT_POOL_CONFIG.minIdle = 1;
+        NO_TIMED_EVICTION_COMPONENT_POOL_CONFIG.testOnBorrow = false;
+        NO_TIMED_EVICTION_COMPONENT_POOL_CONFIG.testOnReturn = false;
+        NO_TIMED_EVICTION_COMPONENT_POOL_CONFIG.testWhileIdle = false;        
+    }
     
     /** Component pool configuration */
     private GenericObjectPool.Config poolConfig;
