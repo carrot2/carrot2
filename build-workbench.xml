@@ -1,0 +1,21 @@
+
+
+<project name="proto-3.0" default="build">
+
+    <property file="workbench.properties" />
+
+    <target name="build">
+            <java
+                  jar="${eclipse.home}/plugins/${equinox.launcher.plugin.jar}"
+                  fork="true"
+                  failonerror="true">
+                  <arg line="-application org.eclipse.ant.core.antRunner" />
+                  <arg line="-buildfile ${eclipse.home}/plugins/${pde.build.plugin}/scripts/productBuild/productBuild.xml" />
+                  <arg line="-Dbuilder=${basedir}/workbench/build-conf/" />
+                  <arg line="-DbuildDirectory=${basedir}/build-dir" />
+                  <arg line="-Dcarrot2.dir=${basedir}"/>
+                  <arg line="-Dtarget.platform=${target.platform}" />
+                  <arg line="-propertyfile ${basedir}/workbench.properties" />
+            </java>
+    </target>
+</project>

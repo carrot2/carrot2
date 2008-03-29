@@ -1,0 +1,47 @@
+# Eclipse installation with PDE (propably this installation youre normally working on while developing the workbench/carrot2 3.0
+eclipse.home                        =   D:/eclipse-3.3-PDE
+
+# Name of a directory that stores org.eclipse.pde.build plugin, it should be in ${eclipse.home}/plugins directory
+# probably only version number will differ
+pde.build.plugin                    =   org.eclipse.pde.build_3.3.1.v20070828
+
+# Name of a org.eclipse.equinox.launcher plugin jar, it should be in ${eclipse.home}/plugins directory
+# probably only version number will differ
+equinox.launcher.plugin.jar         =   org.eclipse.equinox.launcher_1.0.1.R33x_v20070828.jar
+
+#Target platform, to build Workbench against, should be the same one as is set in your eclipse.home installation
+target.platform                     =   D:/magisterka/target3.3.1-Platform/eclipse_no_source
+
+# The list of {os, ws, arch} configurations to build.  This
+# value is a '&' separated list of ',' separate triples.  For example,
+#     configs=win32,win32,x86 & linux,motif,x86
+# By default the value is *,*,*
+#configs = *, *, *
+#configs=win32, win32, x86
+#configs=win32, win32, x86 & \
+#	linux, gtk, ppc &\
+# linux, gtk, x86 & \
+#	linux, gtk, x86_64 & \
+#	linux, motif, x86 & \
+#	solaris, motif, sparc & \
+#	solaris, gtk, sparc & \
+#	aix, motif, ppc & \
+#	hpux, motif, PA_RISC & \
+#	macosx, carbon, ppc
+configs                             =   win32, win32, x86
+
+#The format of the archive. By default a zip is created using antZip.
+#The list can only contain the configuration for which the desired format is different than zip.
+#Possible formats are: zip (requires zip executable in path), antZip, rar, folder
+#archivesFormat=win32, win32, x86 - folder
+# win32, win32, x86 - antZip& \
+#	linux, gtk, ppc - antZip &\
+#    linux, gtk, x86 - antZip& \
+#	linux, gtk, x86_64 - antZip& \
+# linux, motif, x86 - antZip& \
+#	solaris, motif, sparc - antZip& \
+#	solaris, gtk, sparc - antZip& \
+#	aix, motif, ppc - antZip& \
+#	hpux, motif, PA_RISC - antZip& \
+#	macosx, carbon, ppc - antZip
+archivesFormat                      =   win32, win32, x86 - folder

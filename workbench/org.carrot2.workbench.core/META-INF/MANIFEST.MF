@@ -8,10 +8,12 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.carrot2.core;visibility:=reexport,
  org.carrot2.util.common;visibility:=reexport,
- org.eclipse.pde.runtime
+ org.eclipse.pde.runtime,
+ org.junit4.ext
 Eclipse-LazyStart: true
 Bundle-ClassPath: lib/commons-collections-3.1.jar,
  lib/oro-2.0.8.jar,
  lib/velocity-1.5.jar,
  .,
  templates/
+Export-Package: org.carrot2.workbench.core

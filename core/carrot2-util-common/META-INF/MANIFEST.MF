@@ -8,7 +8,7 @@ Export-Package: org.carrot2.util,
  org.carrot2.util.pool,
  org.carrot2.util.reflect,
  org.carrot2.util.resource
-Require-Bundle: com.google.collections;visibility:=reexport,
- org.apache.commons;visibility:=reexport,
+Require-Bundle: org.apache.commons;visibility:=reexport,
  org.apache.log4j,
- net.sf.ehcache;visibility:=reexport
+ net.sf.ehcache;visibility:=reexport,
+ com.google.collections;visibility:=reexport
