@@ -81,8 +81,6 @@ public class HAOGFILocalFilterComponent extends ProfiledLocalFilterComponentBase
         throws InstantiationException
     {
         super.init(context);
-        documents = new ArrayList();
-        aprioriEngine = new AprioriEngine();
     }
 
     public Set getComponentCapabilities()
@@ -117,11 +115,11 @@ public class HAOGFILocalFilterComponent extends ProfiledLocalFilterComponentBase
     {
         super.flushResources();
 
-        documents.clear();
-        aprioriEngine.flushResources();
+        documents = null;
+        aprioriEngine = null;
         
         rawClustersConsumer = null;
-        this.requestContext = null;
+        requestContext = null;
     }
 
     public void startProcessing(RequestContext requestContext)
@@ -129,6 +127,8 @@ public class HAOGFILocalFilterComponent extends ProfiledLocalFilterComponentBase
     {
         super.startProcessing(requestContext);
         this.requestContext = requestContext;
+        aprioriEngine = new AprioriEngine();
+        documents = new ArrayList();        
     }
 
     public void endProcessing() throws ProcessingException
