@@ -11,7 +11,7 @@ import org.carrot2.util.attribute.*;
  * Sends queries to Yahoo! News search service. Instances of this class are thread-safe.
  * <p>
  * Attributes of this class correspond to Yahoo's documentation (see links below).
- *
+ * 
  * @label Yahoo News Search Service
  * @see <a href="http://com3.devnet.re3.yahoo.com/search/news/V1/newsSearch.html">Yahoo
  *      News Search Documentation</a>
@@ -42,22 +42,24 @@ public final class YahooNewsSearchService extends YahooSearchService
 
     /**
      * Yahoo! service URI to be queried.
-     *
+     * 
      * @label Service URI
-     *
+     * 
      */
     @Init
     @Input
     @Attribute
-    private String serviceURI = "http://search.yahooapis.com/NewsSearchService/V1/newsSearch";
+    private String serviceURI =
+        "http://search.yahooapis.com/NewsSearchService/V1/newsSearch";
 
     /**
      * The language the results are written in. Value must be one of the <a
      * href="http://developer.yahoo.com/search/languages.html">supported language</a>
      * codes. Omitting language returns results in any language.
-     *
+     * 
      * @label Results Language
      */
+    // TODO: maybe this should be enum?
     @Processing
     @Input
     @Attribute
@@ -66,7 +68,7 @@ public final class YahooNewsSearchService extends YahooSearchService
     /**
      * A domain to restrict your searches to (e.g. www.yahoo.com). TODO: maybe it would
      * make sense to implement multiple values here (allowed by Yahoo)?
-     *
+     * 
      * @label Site
      */
     @Processing

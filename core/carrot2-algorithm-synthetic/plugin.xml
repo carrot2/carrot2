@@ -2,7 +2,7 @@
 <?eclipse version="3.2"?>
 <plugin>
    <extension
-         id="id1"
+         id="byUrl"
          point="org.carrot2.core.algorithm">
       <algorithm
             class="org.carrot2.clustering.synthetic.ByUrlClusteringAlgorithm"

@@ -1,34 +1,60 @@
-REQUIREMENTS (workbench):
+SETTING UP THE ENVIRONMENT (workbench):
 
 1. You need to download set of plugins, which will become your target platform (it is a good
 practice to have separate development platform and target platform). What you will download depends
 on your needs:
 
-- RCP/Platform Runtime Binary: enough to launch the workbench,
 
-- RCP/Platform SDK: enough to launch the workbench, SRC added, necessary for context assist to work,
+*  Platform Runtime Binary: enough to build and launch the workbench,
+or
+   Platform SDK: enough to buld and launch the workbench, SRC added, necessary for context assist to work,
 
-- RCP/Platform SDK for All Platforms (aka delta pack): all the above, necessary for building 
-products for several platforms).
+* RCP for All Platforms (aka delta pack): necessary for building
+products for several platforms.
 
-Platform package has more plugins than RCP, workbench might be needing some of them in the future.
+* Eclipse Test Framework: necessary for headless tests
+
 Download page:
 
-http://download.eclipse.org/eclipse/downloads/drops/R-3.3.1.1-200710231652/index.php 
+http://download.eclipse.org/eclipse/downloads/drops/R-3.3.1.1-200710231652/index.php
 (v. 3.3.1.1 is used by developer as a target platform, any version 3.3+ can also be used)
 
-2. Unpack downloaded package somewhere on disk (we will call this directory TARGET_ROOT).
+2. Unpack all downloaded packages to the same directory somewhere on disk,
+in such a way, that plugins/ and features/ directories from every package end up in the same directory respecively
+(we will call this directory TARGET_ROOT).
 
-3. Copy org.junit4 plugin from your development platform (needed because of *TestBase in
-org.carrot2.org) to plugins directory in target platform.
+3. Copy org.eclipse.pde.runtime_<version>.jar to $TARGET_ROOT$/plugins (needed for Error Log view).
 
 4. (* DELETED *)
 
 5. In your development Eclipse go to Plugin Development -> Target Platform preference page, point
 location to $TARGET_ROOT$\eclipse directory and click Reload. All plugins should be selected.
 
-6. Go to org.carrot2.workbench.core project, open Workbench.product file, on Overview page, in
+6. Go to org.carrot2.workbench project, open Workbench.product file, on Overview page, in
 Testing section, choose 'Launch an Eclipse application'. Workbench should open :)
+
+7. Go to org.carrot2.workbench.test project, open WorkbenchTest.product file, do the same as in point 6. Workbench should open :)
+(Additional menu items might appear, it's ok. Testing feature has more dependencies, some of them not required when not testing. They add these menus).
+
+========================================================================================
+HEADLESS BUILD AND TESTING:
+
+1. Set up the environment (see above). When this does not work, headless build most probably also won't.
+
+2. CD $3.0-PROTO$, create workbench.properties file (I suggest to copy workbench.properties.example file and rename it).
+
+3. Edit workbench.properties as described inside the sample file.
+
+4. CD $3.0-PROTO$/workbench/org.carrot2.workbench.core.test and create test.properties 
+(I suggest to copy test.properties.example file and rename it).
+
+5. >> ant -f build-workbench.xml build
+
+6. Directory build-dir should be created, inside in tmp/workbench/ is build application
+
+7. >> ant -f build-workbench.xml test
+
+8. Directory test-dir should be created, inside in tmp/workbench/ is test application and XML files with test results.
 
 =======================================================================================
 TROUBLESHOOTING (aka it won't build or launch although Ula says it should):

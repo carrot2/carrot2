@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="testsuite" default="run" basedir=".">
+	<!-- The property ${eclipse-home} should be passed into this script -->
+	<!-- Set a meaningful default value for when it is not. -->
+	<property file="test.properties" />
+	
+	<property name="eclipse-home" value="${basedir}\..\.."/>
+
+	<!-- sets the properties eclipse-home, and library-file -->
+	<property name="plugin-name" value="org.carrot2.workbench.core.test"/>
+	<property name="library-file"
+            value="${eclipse-home}/plugins/${eclipse.test.plugin}/library.xml"/>
+
+	<!-- This target holds all initialization code that needs to be done for -->
+	<!-- all tests that are to be run. Initialization for individual tests -->
+	<!-- should be done within the body of the suite target. -->
+	<target name="init">
+		<tstamp/>
+		<delete>
+			<fileset dir="${eclipse-home}" includes="org*.xml"/>
+		</delete>
+	</target>
+
+	<!-- This target defines the tests that need to be run. -->
+	<target name="suite">
+		<ant target="core-test" antfile="${library-file}" dir="${eclipse-home}">
+			<property name="plugin-name" value="${plugin-name}"/>
+			<property name="classname" 
+                value="org.carrot2.workbench.core.ProcessingJobTest"/>
+			<property name="data-dir" value="${eclipse.home}/data" />
+		</ant>
+	</target>
+	
+	<!-- This target holds code to cleanup the testing environment after -->
+	<!-- after all of the tests have been run. You can use this target to -->
+	<!-- delete temporary files that have been created. -->
+	<target name="cleanup">
+	</target>
+
+	<!-- This target runs the test suite. Any actions that need to happen -->
+	<!-- after all the tests have been run should go here. -->
+	<target name="run" depends="init,suite,cleanup">
+		<ant target="collect" antfile="${library-file}" dir="${eclipse-home}">
+			<property name="includes" value="org*.xml"/>
+			<property name="output-file" value="${plugin-name}.xml"/>
+		</ant>
+	</target>
+	</project>

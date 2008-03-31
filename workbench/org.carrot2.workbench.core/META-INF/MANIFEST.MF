@@ -16,4 +16,8 @@ Bundle-ClassPath: lib/commons-collections-3.1.jar,
  lib/velocity-1.5.jar,
  .,
  templates/
-Export-Package: org.carrot2.workbench.core
+Export-Package: org.carrot2.workbench.core,
+ org.carrot2.workbench.core.helpers,
+ org.carrot2.workbench.core.jobs,
+ org.carrot2.workbench.core.ui,
+ org.carrot2.workbench.core.ui.clusters

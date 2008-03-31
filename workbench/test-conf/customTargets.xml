@@ -84,9 +84,10 @@
                   <patternset refid="to.exclude"/>
                </fileset>
         </copy>
-               <copy todir="${buildDirectory}/plugins/org.carrot2.workbench.core">
-              <fileset dir="${carrot2.dir}/workbench/org.carrot2.workbench.core">
+               <copy todir="${buildDirectory}/plugins">
+              <fileset dir="${carrot2.dir}/workbench">
                   <patternset refid="to.exclude"/>
+                  <include name="*core*/**"/>
                </fileset>
         </copy>
         <!--exec dir="${buildDirectory}/plugins" executable="svn" vmlauncher="false" failonerror="true">
@@ -98,9 +99,10 @@
         <exec dir="${buildDirectory}/plugins" executable="svn" vmlauncher="false" failonerror="true">
             <arg line="export -r HEAD ../../workbench/org.carrot2.workbench.core/ ./org.carrot2.workbench.core -force" />
         </exec-->
-                       <copy todir="${buildDirectory}/features/org.carrot2.workbench">
-              <fileset dir="${carrot2.dir}/workbench/org.carrot2.workbench">
+                       <copy todir="${buildDirectory}/features">
+              <fileset dir="${carrot2.dir}/workbench">
                   <patternset refid="to.exclude"/>
+                  <exclude name="*core*/**"/>
                </fileset>
         </copy>
 

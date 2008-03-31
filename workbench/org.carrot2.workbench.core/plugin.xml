@@ -24,10 +24,10 @@
          point="org.eclipse.core.runtime.products">
       <product
             application="org.carrot2.workbench.core.application"
-            name="Carrot2 Workbench">
+            name="Workbench Test Application">
          <property
                name="appName"
-               value="Carrot2 Workbench">
+               value="Workbench Test Application">
          </property>
       </product>
    </extension>

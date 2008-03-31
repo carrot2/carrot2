@@ -11,7 +11,7 @@ import org.carrot2.util.attribute.*;
  * Sends queries to Yahoo! Web search service. Instances of this class are thread-safe.
  * <p>
  * Attributes of this class correspond to Yahoo's documentation (see links below).
- *
+ * 
  * @label Yahoo Web Search Service
  * @see <a href="http://developer.yahoo.com/search/web/V1/webSearch.html">Yahoo Web Search
  *      Documentation</a>
@@ -21,7 +21,7 @@ public final class YahooWebSearchService extends YahooSearchService
 {
     /**
      * Yahoo! service URI to be queried.
-     *
+     * 
      * @label Service URI
      * @see <a href="http://api.search.yahoo.com/WebSearchService/V1/webSearch">Yahoo Web
      *      Search API</a>
@@ -31,13 +31,14 @@ public final class YahooWebSearchService extends YahooSearchService
     @Init
     @Input
     @Attribute
-    private String serviceURI = "http://api.search.yahoo.com/WebSearchService/V1/webSearch";
+    private String serviceURI =
+        "http://api.search.yahoo.com/WebSearchService/V1/webSearch";
 
     /**
      * The language the results are written in. Value must be one of the <a
      * href="http://developer.yahoo.com/search/languages.html">supported language codes</a>.
      * Omitting language returns results in any language.
-     *
+     * 
      * @label Language
      */
     @Processing
@@ -49,9 +50,10 @@ public final class YahooWebSearchService extends YahooSearchService
      * The country in which to restrict your search results. Only results on web sites
      * within this country are returned. Value must be one of the <a
      * href="http://developer.yahoo.com/search/countries.html">supported country codes</a>.
-     *
+     * 
      * @label Country
      */
+    // TODO: maybe this should be enum?
     @Processing
     @Input
     @Attribute
@@ -60,7 +62,7 @@ public final class YahooWebSearchService extends YahooSearchService
     /**
      * A domain to restrict your searches to (e.g. www.yahoo.com). TODO: maybe it would
      * make sense to implement multiple values here (allowed by Yahoo)?
-     *
+     * 
      * @label Site
      */
     @Processing
@@ -73,9 +75,10 @@ public final class YahooWebSearchService extends YahooSearchService
      * region=uk will give you the search engine at uk.search.yahoo.com. Value must be one
      * of the <a href="http://developer.yahoo.com/search/regions.html">supported region
      * codes</a>.
-     *
+     * 
      * @label Region
      */
+    // TODO: maybe this should be enum?
     @Processing
     @Input
     @Attribute
