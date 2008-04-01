@@ -10,5 +10,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/org.easymock"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.fest"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/net.sf.ehcache"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.bea.xml"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>
