@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Carrot2 XML Source
+Bundle-SymbolicName: org.carrot2.source.xml;singleton:=true
+Bundle-Version: 1.0.0
+Export-Package: org.carrot2.source.xml
+Require-Bundle: org.carrot2.core,
+ org.carrot2.util.common,
+ javax.servlet

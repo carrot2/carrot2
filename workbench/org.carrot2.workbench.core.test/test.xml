@@ -6,7 +6,7 @@
 	<property file="test.properties" />
 	
 	<property name="eclipse-home" value="${basedir}\..\.."/>
-
+	
 	<!-- sets the properties eclipse-home, and library-file -->
 	<property name="plugin-name" value="org.carrot2.workbench.core.test"/>
 	<property name="library-file"
@@ -21,7 +21,7 @@
 			<fileset dir="${eclipse-home}" includes="org*.xml"/>
 		</delete>
 	</target>
-
+	
 	<!-- This target defines the tests that need to be run. -->
 	<target name="suite">
 		<ant target="core-test" antfile="${library-file}" dir="${eclipse-home}">

@@ -6,5 +6,8 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-algorithm-synthetic"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-core"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-source-yahoo"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-attribute"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.google.collections"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-common"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>

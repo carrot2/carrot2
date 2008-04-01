@@ -33,6 +33,7 @@
                   jar="${eclipse.home}/plugins/${equinox.launcher.plugin.jar}"
                   fork="true"
                   failonerror="true">
+                  <arg line="-version:1.5" />
                   <arg line="-application org.eclipse.ant.core.antRunner" />
                   <arg line="-buildfile ${eclipse.home}/plugins/${pde.build.plugin}/scripts/productBuild/productBuild.xml" />
                   <arg line="-Dbuilder=${basedir}/workbench/test-conf/" />

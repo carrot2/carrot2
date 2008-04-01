@@ -1,12 +1,18 @@
 package org.carrot2.workbench.core;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import junit.framework.TestCase;
 
+import org.carrot2.source.xml.XmlDocumentSource;
+import org.carrot2.util.attribute.AttributeUtils;
+import org.carrot2.util.resource.Resource;
+import org.carrot2.util.resource.URLResource;
 import org.carrot2.workbench.core.jobs.ProcessingJob;
 import org.carrot2.workbench.core.ui.SearchParameters;
+import org.eclipse.core.runtime.*;
 
 public class ProcessingJobTest extends TestCase
 {
@@ -24,6 +30,16 @@ public class ProcessingJobTest extends TestCase
     {
         runSearch("org.carrot2.algorithm.synthetic.byUrl",
             "org.carrot2.source.yahoo.yahoo");
+    }
+
+    public void testXmlAndByUrl() throws InterruptedException, IOException
+    {
+        Resource xmlInput =
+            new URLResource(FileLocator.toFileURL(FileLocator.find(Platform
+                .getBundle("org.carrot2.workbench.core.test"), new Path(
+                "input/data_mining.xml"), null)));
+        attributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"), xmlInput);
+        runSearch("org.carrot2.algorithm.synthetic.byUrl", "org.carrot2.source.xml.xml");
     }
 
     private void runSearch(String algorithmId, String sourceId)

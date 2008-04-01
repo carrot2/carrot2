@@ -3,6 +3,5 @@
 	<classpathentry exported="true" kind="lib" path="stax-1.2.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="stax-api-1.0.1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

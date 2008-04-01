@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         id="xml"
+         point="org.carrot2.core.source">
+      <source
+            class="org.carrot2.source.xml.XmlDocumentSource"
+            icon="icons/xml.gif"
+            label="From XML">
+      </source>
+   </extension>
+
+</plugin>
