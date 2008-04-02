@@ -4,7 +4,7 @@
     <property name="workbench.build.dir" value="tmp/workbench" />
     <property name="workbench.tests.report.dir" value="tmp/workbench/test-report" />
 
-    <target name="build">
+    <target name="build" description="Builds workbench without test plugins">
         <java jar="${eclipse.home}/plugins/${equinox.launcher.plugin.jar}"
             fork="true"
             failonerror="true">
@@ -29,7 +29,7 @@
         </fail>
     </target>
 
-    <target name="test">
+    <target name="test" description="Builds workbench with test plugins and runs tests">
         <java jar="${eclipse.home}/plugins/${equinox.launcher.plugin.jar}"
               fork="true"
               failonerror="true">
