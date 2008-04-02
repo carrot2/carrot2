@@ -1,6 +1,3 @@
-/**
- *
- */
 package org.carrot2.clustering.synthetic;
 
 import java.util.*;
