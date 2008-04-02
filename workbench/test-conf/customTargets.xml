@@ -87,29 +87,17 @@
                <copy todir="${buildDirectory}/plugins">
               <fileset dir="${carrot2.dir}/workbench">
                   <patternset refid="to.exclude"/>
-                  <include name="*core*/**"/>
+                  <include name="org.carrot2.workbench?*/**" />
+                  <exclude name="org.carrot2.workbench.test/**" />
                </fileset>
         </copy>
-        <!--exec dir="${buildDirectory}/plugins" executable="svn" vmlauncher="false" failonerror="true">
-            <arg line="export -r HEAD ../../core/ . -force" />
-        </exec>
-        <exec dir="${buildDirectory}/plugins" executable="svn" vmlauncher="false" failonerror="true">
-            <arg line="export -r HEAD ../../lib/ . -force" />
-        </exec>
-        <exec dir="${buildDirectory}/plugins" executable="svn" vmlauncher="false" failonerror="true">
-            <arg line="export -r HEAD ../../workbench/org.carrot2.workbench.core/ ./org.carrot2.workbench.core -force" />
-        </exec-->
                        <copy todir="${buildDirectory}/features">
               <fileset dir="${carrot2.dir}/workbench">
-                  <patternset refid="to.exclude"/>
-                  <exclude name="*core*/**"/>
+                  <include name="org.carrot2.workbench/**" />
+                  <include name="org.carrot2.workbench.test/**" />
                </fileset>
         </copy>
-
-        <!--exec dir="${buildDirectory}/features" executable="svn" vmlauncher="false" failonerror="true">
-              <arg line="export -r HEAD ../../workbench/org.carrot2.workbench/ ./org.carrot2.workbench -force" />
-        </exec-->
-		<antcall target="getBaseComponents" />
+        <antcall target="getBaseComponents" />
 	</target>
 
 	<!-- ===================================================================== -->

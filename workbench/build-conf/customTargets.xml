@@ -78,36 +78,25 @@
                        <exclude name="**/.svn/**"/>
                        <exclude name="**/tmp/**"/>
                        <exclude name="**/.clover/**" />
+                       <exclude name="**/*test*/**" />
                    </patternset>
                </fileset>
                              <fileset dir="${carrot2.dir}/lib">
                   <patternset refid="to.exclude"/>
                </fileset>
         </copy>
-               <copy todir="${buildDirectory}/plugins/org.carrot2.workbench.core">
-              <fileset dir="${carrot2.dir}/workbench/org.carrot2.workbench.core">
+               <copy todir="${buildDirectory}/plugins">
+              <fileset dir="${carrot2.dir}/workbench">
                   <patternset refid="to.exclude"/>
+                  <include name="org.carrot2.workbench?*/**" />
                </fileset>
         </copy>
-        <!--exec dir="${buildDirectory}/plugins" executable="svn" vmlauncher="false" failonerror="true">
-            <arg line="export -r HEAD ../../core/ . -force" />
-        </exec>
-        <exec dir="${buildDirectory}/plugins" executable="svn" vmlauncher="false" failonerror="true">
-            <arg line="export -r HEAD ../../lib/ . -force" />
-        </exec>
-        <exec dir="${buildDirectory}/plugins" executable="svn" vmlauncher="false" failonerror="true">
-            <arg line="export -r HEAD ../../workbench/org.carrot2.workbench.core/ ./org.carrot2.workbench.core -force" />
-        </exec-->
                        <copy todir="${buildDirectory}/features/org.carrot2.workbench">
               <fileset dir="${carrot2.dir}/workbench/org.carrot2.workbench">
                   <patternset refid="to.exclude"/>
                </fileset>
         </copy>
-
-        <!--exec dir="${buildDirectory}/features" executable="svn" vmlauncher="false" failonerror="true">
-              <arg line="export -r HEAD ../../workbench/org.carrot2.workbench/ ./org.carrot2.workbench -force" />
-        </exec-->
-		<antcall target="getBaseComponents" />
+        <antcall target="getBaseComponents" />
 	</target>
 
 	<!-- ===================================================================== -->
