@@ -1,65 +1,86 @@
-
-
 <project name="proto-3.0" default="build">
-
     <property file="workbench.properties" />
 
+    <property name="workbench.build.dir" value="tmp/workbench" />
+    <property name="workbench.tests.report.dir" value="tmp/workbench/test-report" />
+
     <target name="build">
-            <java
-                  jar="${eclipse.home}/plugins/${equinox.launcher.plugin.jar}"
-                  fork="true"
-                  failonerror="true">
-                  <arg line="-application org.eclipse.ant.core.antRunner" />
-                  <arg line="-buildfile ${eclipse.home}/plugins/${pde.build.plugin}/scripts/productBuild/productBuild.xml" />
-                  <arg line="-Dbuilder=${basedir}/workbench/build-conf/" />
-                  <arg line="-DbuildDirectory=${basedir}/build-dir" />
-                  <arg line="-Dcarrot2.dir=${basedir}"/>
-                  <arg line="-Dtarget.platform=${target.platform}" />
-                  <arg line="-propertyfile ${basedir}/workbench.properties" />
-            </java>
-            <fail message="Access Restriction errors during build! Are you sure all packages from carrot2 are made visible at runtime?">
-                  <condition>
-                      <resourcecount when="greater" count="0" >
-                          <fileset dir="${basedir}/build-dir">
-           <include name="**/compilelogs/**" />
-           <contains text="Access restriction" />
-    </fileset>
-                      </resourcecount>
-                  </condition>
-            </fail>
+        <java jar="${eclipse.home}/plugins/${equinox.launcher.plugin.jar}"
+            fork="true"
+            failonerror="true">
+            <arg line="-application org.eclipse.ant.core.antRunner" />
+            <arg line="-buildfile ${eclipse.home}/plugins/${pde.build.plugin}/scripts/productBuild/productBuild.xml" />
+            <arg line="-Dbuilder=${basedir}/workbench/build-conf/" />
+            <arg line="-DbuildDirectory=${basedir}/${workbench.build.dir}/build-dir" />
+            <arg line="-Dcarrot2.dir=${basedir}"/>
+            <arg line="-Dtarget.platform=${target.platform}" />
+            <arg line="-propertyfile ${basedir}/workbench.properties" />
+        </java>
+
+        <fail message="Access Restriction errors during build! Are you sure all packages from carrot2 are made visible at runtime?">
+            <condition>
+                <resourcecount when="greater" count="0" >
+                    <fileset dir="${basedir}/${workbench.build.dir}/build-dir">
+                        <include name="**/compilelogs/**" />
+                        <contains text="Access restriction" />
+                    </fileset>
+                </resourcecount>
+            </condition>
+        </fail>
     </target>
+
     <target name="test">
-            <java
-                  jar="${eclipse.home}/plugins/${equinox.launcher.plugin.jar}"
-                  fork="true"
-                  failonerror="true">
-                  <arg line="-version:1.5" />
-                  <arg line="-application org.eclipse.ant.core.antRunner" />
-                  <arg line="-buildfile ${eclipse.home}/plugins/${pde.build.plugin}/scripts/productBuild/productBuild.xml" />
-                  <arg line="-Dbuilder=${basedir}/workbench/test-conf/" />
-                  <arg line="-DbuildDirectory=${basedir}/test-dir" />
-                  <arg line="-Dcarrot2.dir=${basedir}"/>
-                  <arg line="-Dtarget.platform=${target.platform}" />
-                  <arg line="-propertyfile ${basedir}/workbench.properties" />
-            </java>
-            <fail message="Access Restriction errors during build! Are you sure all packages from carrot2 are made visible at runtime?">
-                  <condition>
-                      <resourcecount when="greater" count="0" >
-                          <fileset dir="${basedir}/test-dir">
-           <include name="**/compilelogs/**" />
-           <contains text="Access restriction" />
-    </fileset>
-                      </resourcecount>
-                  </condition>
-            </fail>
-            <java
-                  jar="${eclipse.home}/plugins/${equinox.launcher.plugin.jar}"
-                  fork="true"
-                  failonerror="true">
-                  <arg line="-application org.eclipse.ant.core.antRunner" />
-                  <arg line="-buildfile ${basedir}/test-dir/tmp/workbench/plugins/org.carrot2.workbench.core.test_1.0.0/test.xml" />
-                  <arg line="-Declipse-home=${basedir}/test-dir/tmp/workbench" />
-                  <arg line="-Dos=win32 -Dws=win32 -Darch=x86" />
-            </java>
+        <java jar="${eclipse.home}/plugins/${equinox.launcher.plugin.jar}"
+              fork="true"
+              failonerror="true">
+            <arg line="-version:1.5" />
+            <arg line="-application org.eclipse.ant.core.antRunner" />
+            <arg line="-buildfile ${eclipse.home}/plugins/${pde.build.plugin}/scripts/productBuild/productBuild.xml" />
+            <arg line="-Dbuilder=${basedir}/workbench/test-conf/" />
+            <arg line="-DbuildDirectory=${basedir}/${workbench.build.dir}/test-dir" />
+            <arg line="-Dcarrot2.dir=${basedir}"/>
+            <arg line="-Dtarget.platform=${target.platform}" />
+            <arg line="-propertyfile ${basedir}/workbench.properties" />
+        </java>
+
+        <fail message="Access Restriction errors during build! Are you sure all packages from carrot2 are made visible at runtime?">
+            <condition>
+                <resourcecount when="greater" count="0" >
+                    <fileset dir="${basedir}/${workbench.build.dir}/test-dir">
+                        <include name="**/compilelogs/**" />
+                        <contains text="Access restriction" />
+                    </fileset>
+                </resourcecount>
+            </condition>
+        </fail>
+
+        <java jar="${eclipse.home}/plugins/${equinox.launcher.plugin.jar}"
+              fork="true"
+              failonerror="true">
+            <arg line="-application org.eclipse.ant.core.antRunner" />
+            <arg line="-buildfile ${basedir}/${workbench.build.dir}/test-dir/${workbench.build.dir}/plugins/org.carrot2.workbench.core.test_1.0.0/test.xml" />
+            <arg line="-Declipse-home=${basedir}/${workbench.build.dir}/test-dir/tmp/workbench" />
+            <arg line="-Dos=win32 -Dws=win32 -Darch=x86" />
+        </java>
+
+        <!-- JUnit report -->
+        <mkdir dir="${workbench.tests.report.dir}" />
+        <junitreport todir="${workbench.tests.report.dir}">
+            <fileset dir="${basedir}/${workbench.build.dir}/test-dir/tmp/workbench">
+                <include name="*.xml"/>
+            </fileset>
+            <report format="frames" todir="${workbench.tests.report.dir}"/>
+        </junitreport>
+
+        <copy todir="${workbench.tests.report.dir}">
+          <fileset dir="${basedir}/${workbench.build.dir}/test-dir/tmp/workbench">
+            <include name="*.xml" />
+          </fileset>
+          <mapper type="glob" from="*.xml" to="TEST-*.xml"/>
+        </copy>
+    </target>
+
+    <target name="clean">
+      <delete dir="tmp/workbench" />
     </target>
 </project>
