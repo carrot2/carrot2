@@ -18,7 +18,7 @@ First one found is used.
       </documentation>
    </annotation>
 
-   <element name="extension">
+   <element name="extension"> 
       <complexType>
          <sequence>
             <element ref="typeEditor" minOccurs="0" maxOccurs="unbounded"/>
@@ -53,13 +53,16 @@ First one found is used.
 
    <element name="typeEditor">
       <annotation>
+         <appInfo>
+            <meta.element labelAttribute="attributeClass"/>
+         </appInfo>
          <documentation>
             Used to add editor, that can be used for all attributes of a given type having given constraints.
          </documentation>
       </annotation>
       <complexType>
          <sequence>
-            <element ref="constraints"/>
+            <element ref="constraints" minOccurs="0" maxOccurs="1"/>
          </sequence>
          <attribute name="attributeClass" type="string" use="required">
             <annotation>
@@ -123,6 +126,9 @@ When looking for an editor for an attribute that has constraints, editor with ma
 
    <element name="dedicatedEditor">
       <annotation>
+         <appInfo>
+            <meta.element labelAttribute="attributeId"/>
+         </appInfo>
          <documentation>
             Used to add editor that is dedicated for specific attribute in specific component (source or algorithm).
          </documentation>
@@ -150,6 +156,16 @@ When looking for an editor for an attribute that has constraints, editor with ma
                   Identifier of attribute.
 Value from the editor will be stored with the key &lt;code&gt;AttributeUtils.getKey(ComponentSample.class, attributeId)&lt;/code&gt;
                </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn=":org.carrot2.workbench.editors.IAttributeEditor"/>
+               </appInfo>
             </annotation>
          </attribute>
       </complexType>

@@ -8,3 +8,4 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.carrot2.util.attribute
 Eclipse-LazyStart: true
+Export-Package: org.carrot2.workbench.editors

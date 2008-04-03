@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Workbench Core Test Plug-in
-Bundle-SymbolicName: org.carrot2.workbench.core.test
+Bundle-SymbolicName: org.carrot2.workbench.core.test;singleton:=true
 Bundle-Version: 1.0.0
 Export-Package: org.carrot2.workbench.core
 Bundle-ClassPath: .
@@ -10,4 +10,6 @@ Require-Bundle: org.junit,
  org.eclipse.core.runtime,
  org.carrot2.util.common,
  org.carrot2.source.xml,
- org.carrot2.workbench.core
+ org.carrot2.workbench.core,
+ org.carrot2.workbench.editors,
+ org.eclipse.ui

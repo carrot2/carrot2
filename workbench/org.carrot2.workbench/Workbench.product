@@ -3,7 +3,6 @@
 
 <product name="Carrot2 Workbench" id="org.carrot2.workbench.core.product" application="org.carrot2.workbench.core.application" useFeatures="true">
 
-
    <configIni use="default"/>
 
    <launcherArgs>
@@ -12,14 +11,12 @@
 
    <windowImages/>
 
-
    <launcher name="carrot2-workbench">
       <solaris/>
       <win useIco="false">
          <bmp/>
       </win>
    </launcher>
-
 
    <vm>
    </vm>
