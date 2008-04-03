@@ -20,8 +20,8 @@
         <fail unless="carrot2.code.dir">Define: carrot2.code.dir</fail>
         <fail unless="dist.dir">Define: dist.dir property.</fail>
 
-        <copy file="${workbench.properties}" todir="${carrot2.code.dir}" />
-        <copy file="${workbench.test.properties}" todir="${carrot2.code.dir}" />
+        <copy file="${workbench.properties}" todir="${carrot2.code.dir}" overwrite="true" />
+        <copy file="${workbench.test.properties}" todir="${carrot2.code.dir}" overwrite="true" />
 
         <!-- clean everything -->
         <ant dir="${carrot2.code.dir}" antfile="build-workbench.xml" target="clean" inheritall="true" />
