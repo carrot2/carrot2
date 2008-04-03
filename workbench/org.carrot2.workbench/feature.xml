@@ -31,7 +31,7 @@
          id="com.bea.xml"
          download-size="0"
          install-size="0"
-         version="1.0.0"/>
+         version="1.2.0"/>
 
    <plugin
          id="com.google.collections"
@@ -43,13 +43,13 @@
          id="com.thoughtworks.qdox"
          download-size="0"
          install-size="0"
-         version="1.0.0"/>
+         version="1.6.3"/>
 
    <plugin
          id="net.sf.ehcache"
          download-size="0"
          install-size="0"
-         version="1.0.0"/>
+         version="1.4.1"/>
 
    <plugin
          id="org.apache.commons"
@@ -61,7 +61,7 @@
          id="org.apache.log4j"
          download-size="0"
          install-size="0"
-         version="1.0.0"/>
+         version="1.2.14"/>
 
    <plugin
          id="org.carrot2.algorithm.synthetic"
@@ -110,13 +110,13 @@
          id="org.easymock"
          download-size="0"
          install-size="0"
-         version="1.0.0"/>
+         version="2.3.0"/>
 
    <plugin
          id="org.simpleframework.xml"
          download-size="0"
          install-size="0"
-         version="1.0.0"/>
+         version="1.7.2"/>
 
    <plugin
          id="org.eclipse.pde.runtime"
@@ -129,7 +129,7 @@
          id="org.junit4.ext"
          download-size="0"
          install-size="0"
-         version="1.0.0"/>
+         version="4.3.1"/>
 
    <plugin
          id="javax.servlet"

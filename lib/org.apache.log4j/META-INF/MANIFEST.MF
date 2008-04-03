@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Apache Log4j
 Bundle-SymbolicName: org.apache.log4j
-Bundle-Version: 1.0.0
+Bundle-Version: 1.2.14
 Bundle-ClassPath: log4j-1.2.14.jar
 Bundle-Vendor: Apache Foundation
 Export-Package: org.apache.log4j,

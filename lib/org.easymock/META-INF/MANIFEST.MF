@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: EasyMock
 Bundle-SymbolicName: org.easymock
-Bundle-Version: 1.0.0
+Bundle-Version: 2.3.0
 Bundle-ClassPath: easymock.jar
 Bundle-Vendor: EasyMock
 Require-Bundle: org.eclipse.core.runtime
