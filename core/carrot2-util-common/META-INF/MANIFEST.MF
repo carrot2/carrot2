@@ -3,7 +3,8 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Carrot2 Common Utils
 Bundle-SymbolicName: org.carrot2.util.common
 Bundle-Version: 1.0.0
-Export-Package: org.carrot2.util,
+Export-Package: org.carrot2.text.analysis,
+ org.carrot2.util,
  org.carrot2.util.httpclient,
  org.carrot2.util.pool,
  org.carrot2.util.reflect,
@@ -12,4 +13,5 @@ Require-Bundle: org.apache.commons;visibility:=reexport,
  org.apache.log4j;visibility:=reexport,
  net.sf.ehcache;visibility:=reexport,
  com.google.collections;visibility:=reexport,
- org.apache.lucene;visibility:=reexport
+ org.apache.lucene;bundle-version="2.3.1";visibility:=reexport
+Bundle-ClassPath: .
