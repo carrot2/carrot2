@@ -70,8 +70,6 @@
 	<!-- Steps to do after setup but before starting the build proper -->
 	<!-- ===================================================================== -->
 	<target name="postSetup">
-   <echo>Updating local checkout to revision: HEAD</echo>
-   <property name="svn.repo.url" value="https://carrot2.svn.sourceforge.net/svnroot/carrot2/branches/3.0-proto" />
         <copy todir="${buildDirectory}/plugins">
               <fileset dir="${carrot2.dir}/core">
                   <patternset id="to.exclude">

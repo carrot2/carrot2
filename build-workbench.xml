@@ -30,6 +30,12 @@
     </target>
 
     <target name="test" description="Builds workbench with test plugins and runs tests">
+        <condition property="workbench.test.properties" 
+                   value="${basedir}/workbench.test.properties"
+                   else="${basedir}/workbench.properties">
+          <available file="${basedir}/workbench.test.properties" />             
+        </condition>
+
         <java jar="${eclipse.home}/plugins/${equinox.launcher.plugin.jar}"
               fork="true"
               failonerror="true">
@@ -40,7 +46,7 @@
             <arg line="-DbuildDirectory=${basedir}/${workbench.build.dir}/test-dir" />
             <arg line="-Dcarrot2.dir=${basedir}"/>
             <arg line="-Dtarget.platform=${target.platform}" />
-            <arg line="-propertyfile ${basedir}/workbench.properties" />
+            <arg line="-propertyfile ${workbench.test.properties}" />
         </java>
 
         <fail message="Access Restriction errors during build! Are you sure all packages from carrot2 are made visible at runtime?">

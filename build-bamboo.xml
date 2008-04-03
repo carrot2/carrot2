@@ -3,7 +3,7 @@
 <project name="Carrot2 3.0 Bamboo builds" default="help">
     <property file="${bamboo.build.properties}" />
 
-    <target name="build" description="Perform a full build.">
+    <target name="build" description="Perform a full build of the core">
         <fail unless="carrot2.code.dir">Define: carrot2.code.dir</fail>
 
         <!-- clean everything -->
@@ -14,6 +14,32 @@
 
         <!-- build coverage report -->
         <ant dir="${carrot2.code.dir}" antfile="build.xml" target="coverage" inheritall="true" />
+    </target>
+
+    <target name="workbench" description="Perform a full build of the workbench">
+        <fail unless="carrot2.code.dir">Define: carrot2.code.dir</fail>
+        <fail unless="dist.dir">Define: dist.dir property.</fail>
+
+        <copy file="${workbench.properties}" todir="${carrot2.code.dir}" />
+        <copy file="${workbench.test.properties}" todir="${carrot2.code.dir}" />
+
+        <!-- clean everything -->
+        <ant dir="${carrot2.code.dir}" antfile="build-workbench.xml" target="clean" inheritall="true" />
+
+        <!-- test the workbench -->
+        <ant dir="${carrot2.code.dir}" antfile="build-workbench.xml" target="test" inheritall="true" />
+
+        <!-- build the workbench -->
+        <ant dir="${carrot2.code.dir}" antfile="build-workbench.xml" target="build" inheritall="true" />
+
+        <!-- copy to the distribution dir -->
+        <mkdir dir="${dist.dir}" />
+        <copy todir="${dist.dir}">
+            <fileset dir="${carrot2.code.dir}/tmp/workbench/build-dir">
+                <include name="*carrot2-workbench/*.zip" />
+            </fileset>
+            <mapper type="flatten" />
+        </copy>
     </target>
 
     <target name="help">
