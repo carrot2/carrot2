@@ -2,7 +2,8 @@
     <property file="workbench.properties" />
 
     <property name="workbench.build.dir" value="tmp/workbench" />
-    <property name="workbench.tests.report.dir" value="tmp/workbench/test-report" />
+    <property name="workbench.tests.html.report.dir" value="tmp/workbench/test-report" />
+    <property name="workbench.tests.txt.report.dir" value="tmp/workbench/test-report-txt" />
 
     <target name="build" description="Builds workbench without test plugins">
         <java jar="${eclipse.home}/plugins/${equinox.launcher.plugin.jar}"
@@ -70,27 +71,36 @@
         </java>
 
         <!-- JUnit report -->
-        <mkdir dir="${workbench.tests.report.dir}" />
-        <junitreport todir="${workbench.tests.report.dir}">
+        <mkdir dir="${workbench.tests.html.report.dir}" />
+        <junitreport todir="${workbench.tests.html.report.dir}">
             <fileset dir="${basedir}/${workbench.build.dir}/test-dir/tmp/workbench">
                 <include name="*.xml"/>
             </fileset>
-            <report format="frames" todir="${workbench.tests.report.dir}"/>
+            <report format="frames" todir="${workbench.tests.html.report.dir}"/>
         </junitreport>
 
-        <copy todir="${workbench.tests.report.dir}">
+        <!-- Copy XML reports -->
+        <copy todir="${workbench.tests.html.report.dir}">
           <fileset dir="${basedir}/${workbench.build.dir}/test-dir/tmp/workbench">
             <include name="*.xml" />
           </fileset>
           <mapper type="glob" from="*.xml" to="TEST-*.xml"/>
         </copy>
 
+        <!-- Copy text reports -->
+        <mkdir dir="${workbench.tests.txt.report.dir}" />
+        <copy todir="${workbench.tests.txt.report.dir}">
+          <fileset dir="${basedir}/${workbench.build.dir}/test-dir/tmp/workbench/raw-output">
+            <include name="*.txt" />
+          </fileset>
+        </copy>
+
         <!-- 
              A hacky way of finding out whether tests passed. The Eclipse runner doesn't
              seem to expose this information directly.
         -->
-        <loadfile property="testxml" srcFile="${workbench.tests.report.dir}/TESTS-TestSuites.xml" />
-        <fail message="Tests failed, see ${workbench.tests.report.dir} for report.">
+        <loadfile property="testxml" srcFile="${workbench.tests.html.report.dir}/TESTS-TestSuites.xml" />
+        <fail message="Tests failed, see ${workbench.tests.html.report.dir} for report.">
           <condition>
             <or>
               <matches string="${testxml}" pattern='errors="[1-9][0-9]*"' />
