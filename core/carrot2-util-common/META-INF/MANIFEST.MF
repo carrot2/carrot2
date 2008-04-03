@@ -11,4 +11,5 @@ Export-Package: org.carrot2.util,
 Require-Bundle: org.apache.commons;visibility:=reexport,
  org.apache.log4j;visibility:=reexport,
  net.sf.ehcache;visibility:=reexport,
- com.google.collections;visibility:=reexport
+ com.google.collections;visibility:=reexport,
+ org.apache.lucene;visibility:=reexport

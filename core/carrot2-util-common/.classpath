@@ -8,5 +8,6 @@
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.apache.commons"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.apache.log4j"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/net.sf.ehcache"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.apache.lucene"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>
