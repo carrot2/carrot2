@@ -1,0 +1,100 @@
+<project name="allElements Delegator">
+
+	<!-- ===================================================================== -->
+	<!-- Run a given ${target} on all elements being built                     -->
+	<!-- Replace element.id with the id of the top level element being built.    -->
+	<!-- If element.id does not exist in ${buildDirectory}/features/element.id   -->
+	<!-- or ${baseLocation}/features/element.id, then you must provide the       -->
+	<!-- location by setting the property "pluginPath"                           -->
+	<!-- Add on <ant> task for each top level element being built.             -->
+	<!-- ===================================================================== -->
+	<target name="allElementsDelegator">
+		<ant antfile="${genericTargets}" target="${target}">
+			<property name="type" value="feature" />
+			<property name="id" value="org.carrot2.workbench" />
+		</ant>
+		<ant antfile="${genericTargets}" target="${target}">
+			<property name="type" value="feature" />
+			<property name="id" value="org.carrot2.workbench.test" />
+		</ant>
+	</target>
+
+	<!-- ===================================================================== -->
+	<!-- Targets to assemble the built elements for particular configurations  -->
+	<!-- These generally call the generated assemble scripts (named in         -->
+	<!-- ${assembleScriptName}) but may also add pre and post processing       -->
+	<!-- Add one target for each root element and each configuration           -->
+	<!-- Replace element.id with the id of the top level element being built   -->
+	<!-- ===================================================================== -->
+	<target name="assemble.org.carrot2.workbench.win32.win32.x86">
+		<ant antfile="${assembleScriptName}" dir="${buildDirectory}" />
+	</target>
+
+	<target name="assemble.org.carrot2.workbench.test.win32.win32.x86">
+		<ant antfile="${assembleScriptName}" dir="${buildDirectory}" />
+	</target>
+
+	<target name="assemble.org.carrot2.workbench.linux.gtk.ppc">
+		<ant antfile="${assembleScriptName}" dir="${buildDirectory}" />
+	</target>
+
+	<target name="assemble.org.carrot2.workbench.test.linux.gtk.ppc">
+		<ant antfile="${assembleScriptName}" dir="${buildDirectory}" />
+	</target>
+
+	<target name="assemble.org.carrot2.workbench.linux.gtk.x86">
+		<ant antfile="${assembleScriptName}" dir="${buildDirectory}" />
+	</target>
+
+	<target name="assemble.org.carrot2.workbench.test.linux.gtk.x86">
+		<ant antfile="${assembleScriptName}" dir="${buildDirectory}" />
+	</target>
+
+	<target name="assemble.org.carrot2.workbench.linux.gtk.x86_64">
+		<ant antfile="${assembleScriptName}" dir="${buildDirectory}" />
+	</target>
+
+	<target name="assemble.org.carrot2.workbench.test.linux.gtk.x86_64">
+		<ant antfile="${assembleScriptName}" dir="${buildDirectory}" />
+	</target>
+
+	<target name="assemble.org.carrot2.workbench.linux.motif.x86">
+		<ant antfile="${assembleScriptName}" dir="${buildDirectory}" />
+	</target>
+
+	<target name="assemble.org.carrot2.workbench.test.linux.motif.x86">
+		<ant antfile="${assembleScriptName}" dir="${buildDirectory}" />
+	</target>
+
+	<target name="assemble.org.carrot2.workbench.solaris.motif.sparc">
+		<ant antfile="${assembleScriptName}" dir="${buildDirectory}" />
+	</target>
+
+	<target name="assemble.org.carrot2.workbench.test.solaris.motif.sparc">
+		<ant antfile="${assembleScriptName}" dir="${buildDirectory}" />
+	</target>
+
+	<target name="assemble.org.carrot2.workbench.solaris.gtk.sparc">
+		<ant antfile="${assembleScriptName}" dir="${buildDirectory}" />
+	</target>
+
+	<target name="assemble.org.carrot2.workbench.test.solaris.gtk.sparc">
+		<ant antfile="${assembleScriptName}" dir="${buildDirectory}" />
+	</target>
+
+	<target name="assemble.org.carrot2.workbench.aix.motif.ppc">
+		<ant antfile="${assembleScriptName}" dir="${buildDirectory}" />
+	</target>
+
+	<target name="assemble.org.carrot2.workbench.test.aix.motif.ppc">
+		<ant antfile="${assembleScriptName}" dir="${buildDirectory}" />
+	</target>
+
+	<target name="assemble.org.carrot2.workbench.macosx.carbon.ppc">
+		<ant antfile="${assembleScriptName}" dir="${buildDirectory}" />
+	</target>
+
+	<target name="assemble.org.carrot2.workbench.test.macosx.carbon.ppc">
+		<ant antfile="${assembleScriptName}" dir="${buildDirectory}" />
+	</target>
+</project>

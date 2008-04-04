@@ -4,8 +4,13 @@
 	<!-- Run a given ${target} on all elements being built -->
 	<!-- Add on <ant> task for each top level element being built. -->
 	<!-- ===================================================================== -->
-	<property name="allElementsFile"  value="${builder}/allElements.xml"/>
-	<import file="${allElementsFile}" />
+
+	<condition property="allElementsTestFile" 
+		value="${builder}/allElements.xml"
+		else="${allElementsFile}" >
+		<equals arg1="${build.type}" arg2="test" />
+	</condition>
+	<import file="${allElementsTestFile}" />
 	<target name="allElements">
 		<antcall target="allElementsDelegator" />
 	</target>
@@ -62,39 +67,73 @@
 	<!-- Steps to do before setup -->
 	<!-- ===================================================================== -->
 	<target name="preSetup">
-	        <delete dir="${buildDirectory}"/>
-	        <mkdir dir="${buildDirectory}"/>
+		<echoproperties/>
+		<delete dir="${buildDirectory}" />
+		<mkdir dir="${buildDirectory}" />
 	</target>
+
+	<!-- ================================= 
+          target: fetchBuildFiles              
+         ================================= -->
+	<target name="fetchBuildFiles">
+		<copy todir="${buildDirectory}/plugins">
+			<fileset dir="${carrot2.dir}/core">
+				<patternset id="to.exclude">
+					<exclude name="**/.svn/**" />
+					<exclude name="**/tmp/**" />
+					<exclude name="**/.clover/**" />
+					<exclude name="**/*test*/**" />
+				</patternset>
+			</fileset>
+			<fileset dir="${carrot2.dir}/lib">
+				<patternset refid="to.exclude" />
+			</fileset>
+		</copy>
+		<copy todir="${buildDirectory}/plugins">
+			<fileset dir="${carrot2.dir}/workbench">
+				<patternset refid="to.exclude" />
+				<include name="org.carrot2.workbench?*/**" />
+			</fileset>
+		</copy>
+		<copy todir="${buildDirectory}/features/org.carrot2.workbench">
+			<fileset dir="${carrot2.dir}/workbench/org.carrot2.workbench">
+				<patternset refid="to.exclude" />
+			</fileset>
+		</copy>
+	</target>
+
+	<!-- ================================= 
+          target: fetchTestFiles              
+         ================================= -->
+	<target name="fetchTestFiles" depends="fetchBuildFiles">
+		<patternset id="to.exclude">
+			<exclude name="**/.svn/**" />
+			<exclude name="**/tmp/**" />
+			<exclude name="**/.clover/**" />
+		</patternset>
+		<copy todir="${buildDirectory}/plugins">
+			<fileset dir="${carrot2.dir}/workbench">
+				<patternset refid="to.exclude" />
+			</fileset>
+		</copy>
+		<copy todir="${buildDirectory}/features">
+			<fileset dir="${carrot2.dir}/workbench">
+				<include name="org.carrot2.workbench.test/**" />
+				<patternset refid="to.exclude" />
+			</fileset>
+		</copy>
+	</target>
+
 
 	<!-- ===================================================================== -->
 	<!-- Steps to do after setup but before starting the build proper -->
 	<!-- ===================================================================== -->
 	<target name="postSetup">
-        <copy todir="${buildDirectory}/plugins">
-              <fileset dir="${carrot2.dir}/core">
-                  <patternset id="to.exclude">
-                       <exclude name="**/.svn/**"/>
-                       <exclude name="**/tmp/**"/>
-                       <exclude name="**/.clover/**" />
-                       <exclude name="**/*test*/**" />
-                   </patternset>
-               </fileset>
-                             <fileset dir="${carrot2.dir}/lib">
-                  <patternset refid="to.exclude"/>
-               </fileset>
-        </copy>
-               <copy todir="${buildDirectory}/plugins">
-              <fileset dir="${carrot2.dir}/workbench">
-                  <patternset refid="to.exclude"/>
-                  <include name="org.carrot2.workbench?*/**" />
-               </fileset>
-        </copy>
-                       <copy todir="${buildDirectory}/features/org.carrot2.workbench">
-              <fileset dir="${carrot2.dir}/workbench/org.carrot2.workbench">
-                  <patternset refid="to.exclude"/>
-               </fileset>
-        </copy>
-        <antcall target="getBaseComponents" />
+		<condition property="fetchTarget" value="fetchTestFiles" else="fetchBuildFiles">
+			<equals arg1="${build.type}" arg2="test" />
+		</condition>
+		<antcall target="${fetchTarget}" />
+		<antcall target="getBaseComponents" />
 	</target>
 
 	<!-- ===================================================================== -->
