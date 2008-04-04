@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Apache Lucene
-Bundle-SymbolicName: org.apache.lucene
+Bundle-SymbolicName: org.apache.lucene.v2
 Bundle-Version: 2.3.1
 Bundle-ClassPath: lucene-core-2.3.1.jar
 Bundle-Vendor: Apache Foundation

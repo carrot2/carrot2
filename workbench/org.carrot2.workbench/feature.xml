@@ -17,7 +17,7 @@
    </license>
 
    <requires>
-      <import feature="org.eclipse.rcp" version="3.3.1.R33x_r20070802-8y8eE8sEV3Fz0z0GlHJrXvTAUS"/>
+      <import feature="org.eclipse.rcp" version="3.3.1.R33x_r20070802-8y8eE8sEV3Fz0z0GlHJrXvTAUS" match="compatible"/>
    </requires>
 
    <plugin
@@ -159,9 +159,9 @@
          unpack="false"/>
 
    <plugin
-         id="org.apache.lucene"
+         id="org.apache.lucene.v2"
          download-size="0"
          install-size="0"
-         version="2.3.1"/>
+         version="0.0.0"/>
 
 </feature>

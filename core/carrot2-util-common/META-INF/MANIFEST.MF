@@ -13,5 +13,5 @@ Require-Bundle: org.apache.commons;visibility:=reexport,
  org.apache.log4j;visibility:=reexport,
  net.sf.ehcache;visibility:=reexport,
  com.google.collections;visibility:=reexport,
- org.apache.lucene;bundle-version="2.3.1";visibility:=reexport
+ org.apache.lucene.v2;visibility:=reexport
 Bundle-ClassPath: .

@@ -24,9 +24,9 @@
          id="org.eclipse.platform"
          version="0.0.0"/>
 
-   <includes
-         id="org.carrot2.workbench"
-         version="0.0.0"/>
+   <requires>
+      <import feature="org.carrot2.workbench" version="1.0.0"/>
+   </requires>
 
    <plugin
          id="org.carrot2.workbench.core.test"
