@@ -112,9 +112,9 @@
 		</copy>
 
 		<!-- 
-             A hacky way of finding out whether tests passed. The Eclipse runner doesn't
-             seem to expose this information directly.
-        -->
+       A hacky way of finding out whether tests passed. The Eclipse runner doesn't
+       seem to expose this information directly.
+    -->
 		<loadfile property="testxml" srcFile="${workbench.tests.html.report.dir}/TESTS-TestSuites.xml" />
 		<fail message="Tests failed, see ${workbench.tests.html.report.dir} for report.">
 			<condition>
@@ -123,6 +123,13 @@
 					<matches string="${testxml}" pattern='failures="[1-9][0-9]*"' />
 					<matches string="${testxml}" pattern="errors='[1-9][0-9]*'" />
 					<matches string="${testxml}" pattern="failures='[1-9][0-9]*'" />
+				</or>
+			</condition>
+		</fail>
+		<fail message="Tests did not run, see ${workbench.tests.txt.report.dir} for logs.">
+			<condition>
+				<or>
+					<matches string="${testxml}" pattern="testsuites />" />
 				</or>
 			</condition>
 		</fail>
