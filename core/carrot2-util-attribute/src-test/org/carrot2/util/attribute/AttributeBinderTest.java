@@ -10,13 +10,15 @@ import org.carrot2.util.attribute.constraint.*;
 import org.junit.Before;
 import org.junit.Test;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings(value =
+{
+    "unchecked", "unused"
+})
 public class AttributeBinderTest
 {
     private Map<String, Object> attributes;
 
     @Bindable
-    @SuppressWarnings("unused")
     public static class SingleClass
     {
         @TestInit
@@ -41,7 +43,6 @@ public class AttributeBinderTest
     }
 
     @Bindable
-    @SuppressWarnings("unused")
     public static class SuperClass
     {
         @TestProcessing
@@ -56,7 +57,6 @@ public class AttributeBinderTest
     }
 
     @Bindable
-    @SuppressWarnings("unused")
     public static class SubClass extends SuperClass
     {
         @TestProcessing
@@ -71,7 +71,6 @@ public class AttributeBinderTest
     }
 
     @Bindable
-    @SuppressWarnings("unused")
     public static class InputReferenceContainerWithNoImplementingClass
     {
         @TestProcessing
@@ -81,7 +80,6 @@ public class AttributeBinderTest
     }
 
     @Bindable
-    @SuppressWarnings("unused")
     public static class OutputReferenceContainerWithNoImplementingClass
     {
         @TestProcessing
@@ -91,17 +89,11 @@ public class AttributeBinderTest
     }
 
     @Bindable
-    @SuppressWarnings("unused")
     public static class EnumAttributeContainer
     {
         @Input
         @Attribute
         private TestEnum enumInput;
-    }
-
-    public static enum TestEnum
-    {
-        VALUE1, VALUE2
     }
 
     @Bindable
@@ -113,7 +105,6 @@ public class AttributeBinderTest
     }
 
     @Bindable
-    @SuppressWarnings("unused")
     public static class BindableReference
     {
         @TestProcessing
@@ -128,22 +119,6 @@ public class AttributeBinderTest
     }
 
     @Bindable
-    @SuppressWarnings("unused")
-    public static class CircularReferenceContainer
-    {
-        @TestProcessing
-        @Input
-        @Output
-        @Attribute
-        @ImplementingClasses(classes =
-        {
-            CircularReferenceContainer.class
-        })
-        private CircularReferenceContainer circular;
-    }
-
-    @Bindable
-    @SuppressWarnings("unused")
     public static class SimpleConstraint
     {
         @TestProcessing
@@ -154,7 +129,6 @@ public class AttributeBinderTest
     }
 
     @Bindable
-    @SuppressWarnings("unused")
     public static class CompoundConstraint
     {
         @TestProcessing
@@ -178,12 +152,25 @@ public class AttributeBinderTest
         private CoercedInterface coerced = null;
     }
 
+    @Bindable
+    public static class CircularReferenceContainer
+    {
+        @TestProcessing
+        @Input
+        @Output
+        @Attribute
+        @ImplementingClasses(classes =
+        {
+            CircularReferenceContainer.class
+        })
+        private CircularReferenceContainer circular;
+    }
+
     public static interface CoercedInterface
     {
     }
 
     @Bindable
-    @SuppressWarnings("unused")
     public static class CoercedInterfaceImpl implements CoercedInterface
     {
         @TestInit
@@ -193,7 +180,6 @@ public class AttributeBinderTest
     }
 
     @Bindable(prefix = "Prefix")
-    @SuppressWarnings("unused")
     public static class ClassWithPrefix
     {
         @TestInit
@@ -220,7 +206,6 @@ public class AttributeBinderTest
         private BindableReference processingInput = null;
     }
 
-    @SuppressWarnings("unused")
     public static class NotBindable
     {
         @TestProcessing
@@ -230,7 +215,6 @@ public class AttributeBinderTest
     }
 
     @Bindable
-    @SuppressWarnings("unused")
     public static class OnlyBindingDirectionAnnotationProvided
     {
         @Input
@@ -238,7 +222,6 @@ public class AttributeBinderTest
     }
 
     @Bindable
-    @SuppressWarnings("unused")
     public static class OnlyBindingTimeAnnotationProvided
     {
         @TestInit
@@ -246,7 +229,6 @@ public class AttributeBinderTest
     }
 
     @Bindable
-    @SuppressWarnings("unused")
     public static class AttributeAnnotationWithoutBindingDirection
     {
         @TestInit
@@ -255,7 +237,6 @@ public class AttributeBinderTest
     }
 
     @Bindable
-    @SuppressWarnings("unused")
     public static class RequiredInputAttributes
     {
         @TestInit
@@ -272,7 +253,6 @@ public class AttributeBinderTest
     }
 
     @Bindable
-    @SuppressWarnings("unused")
     public static class ClassValuedAttribute
     {
         @TestInit
@@ -284,7 +264,6 @@ public class AttributeBinderTest
     }
 
     @Bindable
-    @SuppressWarnings("unused")
     public static class NotBindableCoercedAttribute
     {
         @TestInit
@@ -299,7 +278,6 @@ public class AttributeBinderTest
     }
 
     @Bindable
-    @SuppressWarnings("unused")
     public static class RequiredInitProcessingAttributes
     {
         @TestInit
@@ -821,5 +799,10 @@ public class AttributeBinderTest
             assertEquals("Value of " + clazz.getName() + "#" + keysValues[i],
                 expectedValue, actualValue);
         }
+    }
+    
+    public static enum TestEnum
+    {
+        VALUE1, VALUE2
     }
 }

@@ -40,7 +40,7 @@ public abstract class ControllerTestBase
         @Init
         @Input
         @Attribute(key = "delegate1")
-        @ImplementingClasses(classes = {}, strict = false)
+        @ImplementingClasses(classes = {ProcessingComponent.class}, strict = false)
         protected ProcessingComponent delegate1;
 
         @Override
@@ -57,7 +57,7 @@ public abstract class ControllerTestBase
         @Init
         @Input
         @Attribute(key = "delegate2")
-        @ImplementingClasses(classes = {}, strict = false)
+        @ImplementingClasses(classes = {ProcessingComponent.class}, strict = false)
         protected ProcessingComponent delegate2;
 
         @Override
@@ -73,7 +73,7 @@ public abstract class ControllerTestBase
         @Init
         @Input
         @Attribute(key = "delegate3")
-        @ImplementingClasses(classes = {}, strict = false)
+        @ImplementingClasses(classes = {ProcessingComponent.class}, strict = false)
         protected ProcessingComponent delegate3;
 
         @Override

@@ -25,7 +25,7 @@ public class CachingControllerTest extends ControllerTestBase
         @Init
         @Input
         @Attribute(key = "cachedDelegate1")
-        @ImplementingClasses(classes = {}, strict = false)
+        @ImplementingClasses(classes = {ProcessingComponent.class}, strict = false)
         protected ProcessingComponent cachedDelegate1;
 
         @Override
