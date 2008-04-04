@@ -4,8 +4,11 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.*;
 
-import org.carrot2.util.attribute.constraint.ConstraintValidator;
-import org.carrot2.util.attribute.constraint.ConstraintViolationException;
+import org.apache.commons.lang.ClassUtils;
+import org.carrot2.util.attribute.constraint.*;
+import org.carrot2.util.resource.Resource;
+
+import com.google.common.collect.Sets;
 
 /**
  * Provides methods for binding (setting and collecting) values of attributes defined by
@@ -13,6 +16,13 @@ import org.carrot2.util.attribute.constraint.ConstraintViolationException;
  */
 public class AttributeBinder
 {
+    /** Consistency checks to be applied before binding */
+    private final static ConsistencyCheck [] CONSISTENCY_CHECKS = new ConsistencyCheck []
+    {
+        new ConsistencyCheckRequiredAnnotations(),
+        new ConsistencyCheckImplementingClasses()
+    };
+
     /**
      * Performs binding (setting or collecting) of {@link Attribute} values on the
      * provided <code>instance</code>. The direction of binding, i.e. whether
@@ -178,8 +188,16 @@ public class AttributeBinder
                     + object.getClass().getName() + "#" + field.getName());
             }
 
+            // Apply consistency checks
+            boolean consistent = true;
+            for (int i = 0; consistent && i < CONSISTENCY_CHECKS.length; i++)
+            {
+                consistent &= CONSISTENCY_CHECKS[i].check(field,
+                    bindingDirectionAnnotation, filteringAnnotations);
+            }
+
             // We skip fields that do not have all the required annotations
-            if (hasAllRequiredAnnotations(field, filteringAnnotations))
+            if (consistent)
             {
                 // Apply binding actions provided
                 for (int i = 0; i < attributeBinderActions.length; i++)
@@ -372,47 +390,103 @@ public class AttributeBinder
     }
 
     /**
-     * Checks if all required annotations are provided.
-     * 
-     * @return <code>true</code> if the field has all required annotations
-     * @throws IllegalArgumentException in case of any missing annotations to ease
-     *             debugging
+     * Checks individual attribute definitions for consistency, e.g. whether they have all
+     * required annotations.
      */
-    private static boolean hasAllRequiredAnnotations(Field field,
-        Class<? extends Annotation>... filteringAnnotations)
+    static abstract class ConsistencyCheck
     {
-        final boolean hasAttribute = field.getAnnotation(Attribute.class) != null;
-        boolean hasBindingDirection = field.getAnnotation(Input.class) != null
-            || field.getAnnotation(Output.class) != null;
+        /**
+         * Checks an attribute's annotations.
+         * 
+         * @param bindingDirection TODO
+         * @return <code>true</code> if the attribute passed the check and can be bound,
+         *         <code>false</code> if the attribute did not pass the check and cannot
+         *         be bound.
+         * @throws IllegalArgumentException when attribute's annotations are inconsistent
+         */
+        abstract boolean check(Field field, Class<? extends Annotation> bindingDirection,
+            Class<? extends Annotation>... filteringAnnotations);
+    }
 
-        boolean hasExtraAnnotations = filteringAnnotations.length == 0;
-        for (Class<? extends Annotation> filteringAnnotation : filteringAnnotations)
+    /**
+     * Checks if all required attribute annotations are provided.
+     */
+    static class ConsistencyCheckRequiredAnnotations extends ConsistencyCheck
+    {
+        @Override
+        boolean check(Field field, Class<? extends Annotation> bindingDirection,
+            Class<? extends Annotation>... filteringAnnotations)
         {
-            hasExtraAnnotations |= field.getAnnotation(filteringAnnotation) != null;
-        }
+            final boolean hasAttribute = field.getAnnotation(Attribute.class) != null;
+            boolean hasBindingDirection = field.getAnnotation(Input.class) != null
+                || field.getAnnotation(Output.class) != null;
 
-        if (hasAttribute)
-        {
-            if (!hasBindingDirection)
+            boolean hasExtraAnnotations = filteringAnnotations.length == 0;
+            for (Class<? extends Annotation> filteringAnnotation : filteringAnnotations)
             {
-                throw new IllegalArgumentException(
-                    "Define binding direction annotation (@"
-                        + Input.class.getSimpleName() + " or @"
-                        + Output.class.getSimpleName() + ") for field "
-                        + field.getClass().getName() + "#" + field.getName());
+                hasExtraAnnotations |= field.getAnnotation(filteringAnnotation) != null;
             }
-        }
-        else
-        {
-            if (hasBindingDirection || hasExtraAnnotations)
-            {
-                throw new IllegalArgumentException(
-                    "Binding time or direction defined for a field (" + field.getClass()
-                        + "#" + field.getName() + ") that does not have an @"
-                        + Attribute.class.getSimpleName() + " annotation");
-            }
-        }
 
-        return hasAttribute && hasExtraAnnotations;
+            if (hasAttribute)
+            {
+                if (!hasBindingDirection)
+                {
+                    throw new IllegalArgumentException(
+                        "Define binding direction annotation (@"
+                            + Input.class.getSimpleName() + " or @"
+                            + Output.class.getSimpleName() + ") for field "
+                            + field.getClass().getName() + "#" + field.getName());
+                }
+            }
+            else
+            {
+                if (hasBindingDirection || hasExtraAnnotations)
+                {
+                    throw new IllegalArgumentException(
+                        "Binding time or direction defined for a field ("
+                            + field.getClass() + "#" + field.getName()
+                            + ") that does not have an @"
+                            + Attribute.class.getSimpleName() + " annotation");
+                }
+            }
+
+            return hasAttribute && hasExtraAnnotations;
+        }
+    }
+
+    /**
+     * Checks whether attributes of non-primitive types have the
+     * {@link ImplementingClasses} constraint.
+     */
+    static class ConsistencyCheckImplementingClasses extends ConsistencyCheck
+    {
+        static Set<Class<?>> ALLOWED_TYPES = Sets.<Class<?>> immutableSet(Byte.class,
+            Short.class, Integer.class, Long.class, Float.class, Double.class,
+            Boolean.class, String.class, Class.class, Resource.class, Collection.class,
+            Map.class);
+
+        @Override
+        boolean check(Field field, Class<? extends Annotation> bindingDirection,
+            Class<? extends Annotation>... filteringAnnotations)
+        {
+            if (!Input.class.equals(bindingDirection))
+            {
+                return true;
+            }
+
+            final Class<?> attributeType = ClassUtils.primitiveToWrapper(field.getType());
+
+            if (!ALLOWED_TYPES.contains(attributeType)
+                && !Enum.class.isAssignableFrom(attributeType)
+                && field.getAnnotation(ImplementingClasses.class) == null)
+            {
+                throw new IllegalArgumentException("Non-primitive typed attribute "
+                    + field.getDeclaringClass().getName() + "#" + field.getName()
+                    + " must have the @" + ImplementingClasses.class.getSimpleName()
+                    + " constraint.");
+            }
+
+            return true;
+        }
     }
 }

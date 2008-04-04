@@ -40,7 +40,18 @@ public class ConstraintViolationException extends RuntimeException
     @Override
     public String getMessage()
     {
+        final StringBuilder constraintsString = new StringBuilder();
+        for (int i = 0; i < annotations.length; i++)
+        {
+            constraintsString.append("@");
+            constraintsString.append(annotations[i].annotationType().getSimpleName());
+            if (i != annotations.length - 1)
+            {
+                constraintsString.append(", ");
+            }
+        }
+
         return "Value: " + offendingValue + " of attribute: " + key
-            + " violates constraints: " + annotations;
+            + " violates constraints: " + constraintsString;
     }
 }

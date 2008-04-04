@@ -13,6 +13,7 @@ import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.constraint.ImplementingClasses;
 import org.carrot2.util.resource.Resource;
 import org.carrot2.util.resource.ResourceUtils;
 
@@ -51,6 +52,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
     @Processing
     @Attribute
     @Required
+    @ImplementingClasses(classes = {}, strict = false)
     private Resource xml;
 
     /**

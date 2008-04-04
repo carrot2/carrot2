@@ -6,6 +6,8 @@ package org.carrot2.util.attribute.constraint;
 class ImplementingClassesConstraint extends Constraint
 {
     private Class<?> [] classes;
+    
+    private boolean strict;
 
     ImplementingClassesConstraint()
     {
@@ -26,6 +28,6 @@ class ImplementingClassesConstraint extends Constraint
             }
         }
 
-        return false;
+        return !strict;
     }
 }

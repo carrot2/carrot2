@@ -15,4 +15,10 @@ public @interface ImplementingClasses
      * The allowed classes for the attribute value.
      */
     Class<?> [] classes();
+
+    /**
+     * If <code>true</code>, only instance of the listed {@link #classes()} will be
+     * allowed. Otherwise, any instance assignable to the attribute type will be allowed.
+     */
+    boolean strict() default true;
 }

@@ -71,6 +71,40 @@ public class AttributeBinderTest
     }
 
     @Bindable
+    @SuppressWarnings("unused")
+    public static class InputReferenceContainerWithNoImplementingClass
+    {
+        @TestProcessing
+        @Input
+        @Attribute
+        private BindableReference bindableReference;
+    }
+
+    @Bindable
+    @SuppressWarnings("unused")
+    public static class OutputReferenceContainerWithNoImplementingClass
+    {
+        @TestProcessing
+        @Output
+        @Attribute
+        private BindableReference bindableReference;
+    }
+
+    @Bindable
+    @SuppressWarnings("unused")
+    public static class EnumAttributeContainer
+    {
+        @Input
+        @Attribute
+        private TestEnum enumInput;
+    }
+
+    public static enum TestEnum
+    {
+        VALUE1, VALUE2
+    }
+
+    @Bindable
     public static class BindableReferenceContainer
     {
         private BindableReference bindableReference = new BindableReference();
@@ -101,6 +135,10 @@ public class AttributeBinderTest
         @Input
         @Output
         @Attribute
+        @ImplementingClasses(classes =
+        {
+            CircularReferenceContainer.class
+        })
         private CircularReferenceContainer circular;
     }
 
@@ -133,6 +171,10 @@ public class AttributeBinderTest
         @Input
         @TestInit
         @Attribute
+        @ImplementingClasses(classes =
+        {
+            CoercedInterfaceImpl.class
+        })
         private CoercedInterface coerced = null;
     }
 
@@ -171,6 +213,10 @@ public class AttributeBinderTest
         @TestProcessing
         @Input
         @Attribute
+        @ImplementingClasses(classes =
+        {
+            BindableReference.class
+        })
         private BindableReference processingInput = null;
     }
 
@@ -245,6 +291,10 @@ public class AttributeBinderTest
         @Input
         @Required
         @Attribute
+        @ImplementingClasses(classes =
+        {
+            NotBindable.class
+        })
         private NotBindable initInputReference;
     }
 
@@ -675,6 +725,37 @@ public class AttributeBinderTest
         checkAttributeValues(instance.getClass(), new Object []
         {
             "initInput", 5, "processingInput", 6
+        });
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testInputReferenceAttributeWithoutImplementingClass()
+        throws AttributeBindingException, InstantiationException
+    {
+        final InputReferenceContainerWithNoImplementingClass instance = new InputReferenceContainerWithNoImplementingClass();
+
+        AttributeBinder.bind(instance, attributes, Input.class);
+    }
+
+    @Test
+    public void testOutputReferenceAttributeWithoutImplementingClass()
+        throws AttributeBindingException, InstantiationException
+    {
+        final OutputReferenceContainerWithNoImplementingClass instance = new OutputReferenceContainerWithNoImplementingClass();
+
+        AttributeBinder.bind(instance, attributes, Output.class);
+    }
+
+    @Test
+    public void testEnumInput() throws InstantiationException
+    {
+        EnumAttributeContainer instance = new EnumAttributeContainer();
+
+        addAttribute(EnumAttributeContainer.class, "enumInput", TestEnum.VALUE1);
+        AttributeBinder.bind(instance, attributes, Input.class);
+        checkFieldValues(instance, new Object []
+        {
+            "enumInput", TestEnum.VALUE1
         });
     }
 

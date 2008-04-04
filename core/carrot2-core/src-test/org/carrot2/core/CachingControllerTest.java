@@ -7,6 +7,7 @@ import java.util.concurrent.*;
 
 import org.carrot2.core.attribute.Init;
 import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.constraint.ImplementingClasses;
 import org.junit.Test;
 
 import com.google.common.collect.*;
@@ -24,6 +25,7 @@ public class CachingControllerTest extends ControllerTestBase
         @Init
         @Input
         @Attribute(key = "cachedDelegate1")
+        @ImplementingClasses(classes = {}, strict = false)
         protected ProcessingComponent cachedDelegate1;
 
         @Override

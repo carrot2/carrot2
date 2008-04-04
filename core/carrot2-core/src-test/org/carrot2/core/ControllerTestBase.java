@@ -9,6 +9,7 @@ import java.util.Map;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.constraint.ImplementingClasses;
 import org.easymock.IAnswer;
 import org.easymock.IMocksControl;
 import org.junit.*;
@@ -39,6 +40,7 @@ public abstract class ControllerTestBase
         @Init
         @Input
         @Attribute(key = "delegate1")
+        @ImplementingClasses(classes = {}, strict = false)
         protected ProcessingComponent delegate1;
 
         @Override
@@ -55,6 +57,7 @@ public abstract class ControllerTestBase
         @Init
         @Input
         @Attribute(key = "delegate2")
+        @ImplementingClasses(classes = {}, strict = false)
         protected ProcessingComponent delegate2;
 
         @Override
@@ -70,6 +73,7 @@ public abstract class ControllerTestBase
         @Init
         @Input
         @Attribute(key = "delegate3")
+        @ImplementingClasses(classes = {}, strict = false)
         protected ProcessingComponent delegate3;
 
         @Override
@@ -103,7 +107,7 @@ public abstract class ControllerTestBase
         initAttributes.put("delegate3", processingComponent3Mock);
         initAttributes.put("instanceAttribute", "i");
         beforeControllerInit(initAttributes);
-        
+
         controller = createController();
         controller.init(initAttributes);
 
@@ -113,7 +117,7 @@ public abstract class ControllerTestBase
     protected void beforeControllerInit(Map<String, Object> initAttributes)
     {
     }
-    
+
     @Test
     public void testNormalExecution1Component()
     {
