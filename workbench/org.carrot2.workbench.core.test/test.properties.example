@@ -1,5 +1,0 @@
-# Name of a directory that stores eclipse.test plugin, it should be in 
-#${target.home}/eclipse/plugins directory
-# probably only version number will differ
-# This directory should contain file library.xml
-eclipse.test.plugin			= 	org.eclipse.test_3.2.0

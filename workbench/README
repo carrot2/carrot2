@@ -33,8 +33,7 @@ location to $TARGET_ROOT$\eclipse directory and click Reload. All plugins should
 6. Go to org.carrot2.workbench project, open Workbench.product file, on Overview page, in
 Testing section, choose 'Launch an Eclipse application'. Workbench should open :)
 
-7. Go to org.carrot2.workbench.test project, open WorkbenchTest.product file, do the same as in point 6. Workbench should open :)
-(Additional menu items might appear, it's ok. Testing feature has more dependencies, some of them not required when not testing. They add these menus).
+7. (* DELETED *)
 
 ========================================================================================
 HEADLESS BUILD AND TESTING:
@@ -45,16 +44,15 @@ HEADLESS BUILD AND TESTING:
 
 3. Edit workbench.properties as described inside the sample file.
 
-4. CD $3.0-PROTO$/workbench/org.carrot2.workbench.core.test and create test.properties 
-(I suggest to copy test.properties.example file and rename it).
+4. (* DELETED *)
 
 5. >> ant -f build-workbench.xml build
 
-6. Directory build-dir should be created, inside in tmp/workbench/ is build application
+6. Directory tmp/workbench/build-dir should be created, inside in tmp/workbench/ is build application
 
 7. >> ant -f build-workbench.xml test
 
-8. Directory test-dir should be created, inside in tmp/workbench/ is test application and XML files with test results.
+8. Directory tmp/workbench/test-dir should be created, inside in tmp/workbench/ is test application.
 
 =======================================================================================
 TROUBLESHOOTING (aka it won't build or launch although Ula says it should):

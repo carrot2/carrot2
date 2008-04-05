@@ -1,10 +1,13 @@
 <project name="proto-3.0" default="build">
 	<property file="workbench.properties" />
-	
-	<property name="custom.tasks.dir" location="${basedir}/workbench/custom.ant.tasks"/>
+
+	<property name="custom.tasks.dir"
+	          location="${basedir}/workbench/custom.ant.tasks" />
 	<property name="workbench.build.dir" value="tmp/workbench" />
-	<property name="workbench.tests.html.report.dir" value="tmp/workbench/test-report" />
-	<property name="workbench.tests.txt.report.dir" value="tmp/workbench/test-report-txt" />
+	<property name="workbench.tests.html.report.dir"
+	          value="tmp/workbench/test-report" />
+	<property name="workbench.tests.txt.report.dir"
+	          value="tmp/workbench/test-report-txt" />
 
 	<!-- = = = = = = = = = = = = = = = = =
           macrodef: launchAntRunner          
@@ -14,9 +17,11 @@
 		<attribute name="build.dir" />
 		<attribute name="build.type" />
 		<attribute name="props.file" default="workbench.properties" />
-		<attribute name="extra.args" default=""/>
+		<attribute name="extra.args" default="" />
 		<sequential>
-			<java jar="${eclipse.home}/plugins/${equinox.launcher.plugin.jar}" fork="true" failonerror="true">
+			<java jar="${eclipse.home}/plugins/${equinox.launcher.plugin.jar}"
+			      fork="true"
+			      failonerror="true">
 				<arg line="-application org.eclipse.ant.core.antRunner" />
 				<arg line="-buildfile @{buildfile}" />
 				<arg line="-Dbuilder=${basedir}/workbench/build-conf/" />
@@ -52,64 +57,70 @@
 	<!-- - - - - - - - - - - - - - - - - - 
           target: init                      
          - - - - - - - - - - - - - - - - - -->
-    <target name="init">
-    	<ant antfile="${custom.tasks.dir}/build.xml" target="build" /> 
-    	<taskdef name="findVersion" classname="org.carrot2.custom.tasks.FindVersionTask">
-    		<classpath>
-    			<pathelement location="${custom.tasks.dir}/tmp/eclipse"/>
-    		</classpath>
-    	</taskdef>
-    	<findVersion 
-    				property="equinox.launcher.plugin.jar" 
-    				eclipsehome="${eclipse.home}"
-    				pluginid="org.eclipse.equinox.launcher"
-    				pluginform="jar"
-    			/>
-    	<findVersion
-    		property="pde.build.plugin"
-    		eclipsehome="${eclipse.home}"
-    		pluginid="org.eclipse.pde.build"
-    		pluginform="dir"/>
-    	
-    </target>
+	<target name="init">
+		<ant antfile="${custom.tasks.dir}/build.xml" target="build" />
+		<taskdef name="findVersion"
+		         classname="org.carrot2.custom.tasks.FindVersionTask">
+			<classpath>
+				<pathelement location="${custom.tasks.dir}/tmp/eclipse" />
+			</classpath>
+		</taskdef>
+		<findVersion property="equinox.launcher.plugin.jar"
+		             eclipsehome="${eclipse.home}"
+		             pluginid="org.eclipse.equinox.launcher"
+		             pluginform="jar" />
+		<findVersion property="pde.build.plugin"
+		             eclipsehome="${eclipse.home}"
+		             pluginid="org.eclipse.pde.build"
+		             pluginform="dir" />
 
-	<target name="build" description="Builds workbench without test plugins" depends="init">
-		
-		<property name="build.props" value="workbench.properties" />
-		<property name="build.dir" value="build-dir" />
-		<launchAntRunner 
-			buildfile="${eclipse.home}/plugins/${pde.build.plugin}/scripts/productBuild/productBuild.xml" 
-			build.dir="${basedir}/${workbench.build.dir}/${build.dir}" 
-			build.type="build"
-			props.file="${build.props}"
-			extra.args="-Dproduct=/org.carrot2.workbench/Workbench.product" />
-		<checkAccessRestriction 
-			logsbasedir="${basedir}/${workbench.build.dir}/${build.dir}"/>
 	</target>
 
-	<target name="test" description="Builds workbench with test plugins and runs tests" depends="init">
-		<condition property="test.props" 
-			value="workbench.test.properties" 
-			else="workbench.properties">
+	<target name="build"
+	        description="Builds workbench without test plugins"
+	        depends="init">
+
+		<property name="build.props" value="workbench.properties" />
+		<property name="build.dir" value="build-dir" />
+		<launchAntRunner buildfile="${eclipse.home}/plugins/${pde.build.plugin}/scripts/productBuild/productBuild.xml"
+		                 build.dir="${basedir}/${workbench.build.dir}/${build.dir}"
+		                 build.type="build"
+		                 props.file="${build.props}"
+		                 extra.args="-Dproduct=/org.carrot2.workbench/Workbench.product" />
+		<checkAccessRestriction logsbasedir="${basedir}/${workbench.build.dir}/${build.dir}" />
+	</target>
+
+	<target name="test"
+	        description="Builds workbench with test plugins and runs tests"
+	        depends="init">
+		<condition property="test.props"
+		           value="workbench.test.properties"
+		           else="workbench.properties">
 			<available file="${basedir}/workbench.test.properties" />
 		</condition>
 		<antcall target="build">
-			<param name="build.props" value="${test.props}"/>
-			<param name="build.dir" value="test-dir"/>
+			<param name="build.props" value="${test.props}" />
+			<param name="build.dir" value="test-dir" />
 		</antcall>
-		<launchAntRunner
-			buildfile="${eclipse.home}/plugins/${pde.build.plugin}/scripts/productBuild/productBuild.xml"
-			build.dir="${basedir}/${workbench.build.dir}/test-dir"
-			build.type="test"
-			props.file="${test.props}"
-		/>
-		<checkAccessRestriction
-			logsbasedir="${basedir}/${workbench.build.dir}/test-dir"/>
+		<launchAntRunner buildfile="${eclipse.home}/plugins/${pde.build.plugin}/scripts/productBuild/productBuild.xml"
+		                 build.dir="${basedir}/${workbench.build.dir}/test-dir"
+		                 build.type="test"
+		                 props.file="${test.props}" />
+		<checkAccessRestriction logsbasedir="${basedir}/${workbench.build.dir}/test-dir" />
 
-		<java jar="${eclipse.home}/plugins/${equinox.launcher.plugin.jar}" fork="true" failonerror="true">
+		<property name="test.eclipse.home"
+		          location="${basedir}/${workbench.build.dir}/test-dir/tmp/workbench" />
+		<findVersion property="workbench.core.test.dir"
+		             pluginid="org.carrot2.workbench.core.test"
+		             pluginform="dir"
+		             eclipsehome="${test.eclipse.home}" />
+
+		<java jar="${eclipse.home}/plugins/${equinox.launcher.plugin.jar}"
+		      fork="true"
+		      failonerror="true">
 			<arg line="-application org.eclipse.ant.core.antRunner" />
-			<arg line="-buildfile ${basedir}/${workbench.build.dir}/test-dir/${workbench.build.dir}/plugins/org.carrot2.workbench.core.test_1.0.0/test.xml" />
-			<arg line="-Declipse-home=${basedir}/${workbench.build.dir}/test-dir/tmp/workbench" />
+			<arg line="-buildfile ${test.eclipse.home}/plugins/${workbench.core.test.dir}/test.xml" />
+			<arg line="-Declipse-home=${test.eclipse.home}" />
 			<arg line="-Dos=${test.os} -Dws=${test.ws} -Darch=${test.arch}" />
 		</java>
 		<!-- JUnit report -->
@@ -118,7 +129,8 @@
 			<fileset dir="${basedir}/${workbench.build.dir}/test-dir/tmp/workbench">
 				<include name="*.xml" />
 			</fileset>
-			<report format="frames" todir="${workbench.tests.html.report.dir}" />
+			<report format="frames"
+			        todir="${workbench.tests.html.report.dir}" />
 		</junitreport>
 		<!-- Copy XML reports -->
 		<copy todir="${workbench.tests.html.report.dir}">
@@ -138,25 +150,30 @@
              A hacky way of finding out whether tests passed. The Eclipse runner doesn't
              seem to expose this information directly.
         -->
-		<loadfile property="testxml" srcFile="${workbench.tests.html.report.dir}/TESTS-TestSuites.xml" />
+		<loadfile property="testxml"
+		          srcFile="${workbench.tests.html.report.dir}/TESTS-TestSuites.xml" />
 		<fail message="Tests failed, see ${workbench.tests.html.report.dir} for report.">
 			<condition>
 				<or>
-					<matches string="${testxml}" pattern='errors="[1-9][0-9]*"' />
-					<matches string="${testxml}" pattern='failures="[1-9][0-9]*"' />
-					<matches string="${testxml}" pattern="errors='[1-9][0-9]*'" />
-					<matches string="${testxml}" pattern="failures='[1-9][0-9]*'" />
+					<matches string="${testxml}"
+					         pattern='errors="[1-9][0-9]*"' />
+					<matches string="${testxml}"
+					         pattern='failures="[1-9][0-9]*"' />
+					<matches string="${testxml}"
+					         pattern="errors='[1-9][0-9]*'" />
+					<matches string="${testxml}"
+					         pattern="failures='[1-9][0-9]*'" />
 				</or>
 			</condition>
 		</fail>
-	<fail message="Tests did not run, see ${workbench.tests.txt.report.dir} for logs.">
-				<condition>
-					<or>
-						<matches string="${testxml}" pattern="testsuites />" />
-					</or>
-				</condition>
-			</fail>
-		
+		<fail message="Tests did not run, see ${workbench.tests.txt.report.dir} for logs.">
+			<condition>
+				<or>
+					<matches string="${testxml}" pattern="testsuites />" />
+				</or>
+			</condition>
+		</fail>
+
 	</target>
 
 	<target name="clean">

@@ -106,18 +106,18 @@ public class FindVersionTask
             baseDir = new File(eclipseDir, "plugins");
             if ("jar".equals(pluginForm))
             {
-                includes = pluginId + "*.jar";
+                includes = pluginId + "_*.jar";
                 dirExpected = false;
             }
             else
             {
-                includes = pluginId + "*";
+                includes = pluginId + "_*";
             }
         }
         else
         {
             baseDir = new File(eclipseDir, "features");
-            includes = featureId + "*";
+            includes = featureId + "_*";
         }
         DirectoryScanner scanner = new DirectoryScanner();
         scanner.setBasedir(baseDir);

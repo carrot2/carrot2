@@ -3,38 +3,49 @@
 <project name="testsuite" default="run" basedir=".">
 	<!-- The property ${eclipse-home} should be passed into this script -->
 	<!-- Set a meaningful default value for when it is not. -->
-	<property file="test.properties" />
-	
-	<property name="eclipse-home" location="${basedir}\..\.."/>
+
+	<property name="eclipse-home" location="${basedir}\..\.." />
 	<property name="test-output-dir" location="${eclipse-home}\test-output" />
 	<property name="raw-output-dir" location="${eclipse-home}\raw-output" />
-	
+
 	<!-- sets the properties eclipse-home, and library-file -->
-	<property name="plugin-name" value="org.carrot2.workbench.core.test"/>
-	<property name="library-file"
-            location="${eclipse-home}/plugins/${eclipse.test.plugin}/library.xml"/>
+	<property name="plugin-name" value="org.carrot2.workbench.core.test" />
 
 	<!-- This target holds all initialization code that needs to be done for -->
 	<!-- all tests that are to be run. Initialization for individual tests -->
 	<!-- should be done within the body of the suite target. -->
 	<target name="init">
-		<tstamp/>
+		<tstamp />
 		<delete>
-			<fileset dir="${eclipse-home}" includes="org*.xml"/>
+			<fileset dir="${eclipse-home}" includes="org*.xml" />
 		</delete>
 	</target>
-	
+
 	<!-- This target defines the tests that need to be run. -->
 	<target name="suite">
+		<property name="custom.tasks.path"
+		          location="${eclipse-home}/../../../../../workbench/custom.ant.tasks/tmp/eclipse" />
+		<taskdef name="findVersion"
+		         classname="org.carrot2.custom.tasks.FindVersionTask">
+			<classpath>
+				<pathelement location="${custom.tasks.path}" />
+			</classpath>
+		</taskdef>
+		<findVersion property="eclipse.test.plugin"
+		             eclipsehome="${eclipse-home}"
+		             pluginid="org.eclipse.test"
+		             pluginform="dir" />
+		<property name="library-file"
+		          location="${eclipse-home}/plugins/${eclipse.test.plugin}/library.xml" />
 		<ant target="core-test" antfile="${library-file}" dir="${eclipse-home}">
-			<property name="plugin-name" value="${plugin-name}"/>
-			<property name="classname" 
-                value="org.carrot2.workbench.core.ProcessingJobTest"/>
+			<property name="plugin-name" value="${plugin-name}" />
+			<property name="classname"
+			          value="org.carrot2.workbench.core.ProcessingJobTest" />
 			<property name="data-dir" value="${eclipse-home}/data" />
 			<property name="junit-report-output" value="${raw-output-dir}" />
 		</ant>
 	</target>
-	
+
 	<!-- This target holds code to cleanup the testing environment after -->
 	<!-- after all of the tests have been run. You can use this target to -->
 	<!-- delete temporary files that have been created. -->
@@ -44,10 +55,12 @@
 	<!-- This target runs the test suite. Any actions that need to happen -->
 	<!-- after all the tests have been run should go here. -->
 	<target name="run" depends="init,suite,cleanup">
-		<mkdir dir="${test-output-dir}"/>
-		<ant target="collect" antfile="${library-file}" dir="${test-output-dir}">
-			<property name="includes" value="org*.xml"/>
-			<property name="output-file" value="${plugin-name}.xml"/>
+		<mkdir dir="${test-output-dir}" />
+		<ant target="collect"
+		     antfile="${library-file}"
+		     dir="${test-output-dir}">
+			<property name="includes" value="org*.xml" />
+			<property name="output-file" value="${plugin-name}.xml" />
 		</ant>
 	</target>
-	</project>
+</project>

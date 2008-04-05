@@ -22,8 +22,7 @@
 
         <copy file="${workbench.properties}" todir="${carrot2.code.dir}" overwrite="true" />
         <copy file="${workbench.test.properties}" todir="${carrot2.code.dir}" overwrite="true" />
-        <copy file="${test.properties}" todir="${carrot2.code.dir}/workbench/org.carrot2.workbench.core.test" overwrite="true" />
-
+        
         <!-- clean everything -->
         <ant dir="${carrot2.code.dir}" antfile="build-workbench.xml" target="clean" inheritall="true" />
 
