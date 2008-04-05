@@ -1,14 +1,6 @@
 # Eclipse installation with PDE (propably this installation youre normally working on while developing the workbench/carrot2 3.0
 eclipse.home                        =   D:/eclipse-3.3-PDE
 
-# Name of a directory that stores org.eclipse.pde.build plugin, it should be in ${eclipse.home}/plugins directory
-# probably only version number will differ
-pde.build.plugin                    =   org.eclipse.pde.build_3.3.1.v20070828
-
-# Name of a org.eclipse.equinox.launcher plugin jar, it should be in ${eclipse.home}/plugins directory
-# probably only version number will differ
-equinox.launcher.plugin.jar         =   org.eclipse.equinox.launcher_1.0.1.R33x_v20070828.jar
-
 # Target platform, to build Workbench against, should be the same one as is set in your eclipse.home installation
 # This directory should have eclipse/ directory inside it! Not plugins/ and features/!
 target.platform                     =   D:/magisterka/target3.3.1-Platform/eclipse_no_source

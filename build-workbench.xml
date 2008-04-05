@@ -1,6 +1,7 @@
 <project name="proto-3.0" default="build">
 	<property file="workbench.properties" />
-
+	
+	<property name="custom.tasks.dir" location="${basedir}/workbench/custom.ant.tasks"/>
 	<property name="workbench.build.dir" value="tmp/workbench" />
 	<property name="workbench.tests.html.report.dir" value="tmp/workbench/test-report" />
 	<property name="workbench.tests.txt.report.dir" value="tmp/workbench/test-report-txt" />
@@ -48,7 +49,32 @@
 		</sequential>
 	</macrodef>
 
-	<target name="build" description="Builds workbench without test plugins">
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: init                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="init">
+    	<ant antfile="${custom.tasks.dir}/build.xml" target="build" /> 
+    	<taskdef name="findVersion" classname="org.carrot2.custom.tasks.FindVersionTask">
+    		<classpath>
+    			<pathelement location="${custom.tasks.dir}/tmp/eclipse"/>
+    		</classpath>
+    	</taskdef>
+    	<findVersion 
+    				property="equinox.launcher.plugin.jar" 
+    				eclipsehome="${eclipse.home}"
+    				pluginid="org.eclipse.equinox.launcher"
+    				pluginform="jar"
+    			/>
+    	<findVersion
+    		property="pde.build.plugin"
+    		eclipsehome="${eclipse.home}"
+    		pluginid="org.eclipse.pde.build"
+    		pluginform="dir"/>
+    	
+    </target>
+
+	<target name="build" description="Builds workbench without test plugins" depends="init">
+		
 		<property name="build.props" value="workbench.properties" />
 		<property name="build.dir" value="build-dir" />
 		<launchAntRunner 
@@ -61,7 +87,7 @@
 			logsbasedir="${basedir}/${workbench.build.dir}/${build.dir}"/>
 	</target>
 
-	<target name="test" description="Builds workbench with test plugins and runs tests">
+	<target name="test" description="Builds workbench with test plugins and runs tests" depends="init">
 		<condition property="test.props" 
 			value="workbench.test.properties" 
 			else="workbench.properties">
