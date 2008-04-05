@@ -67,7 +67,6 @@
 	<!-- Steps to do before setup -->
 	<!-- ===================================================================== -->
 	<target name="preSetup">
-		<delete dir="${buildDirectory}" />
 		<mkdir dir="${buildDirectory}" />
 	</target>
 

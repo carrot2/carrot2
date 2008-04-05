@@ -48,17 +48,17 @@
 		</sequential>
 	</macrodef>
 
-
-
 	<target name="build" description="Builds workbench without test plugins">
-		
+		<property name="build.props" value="workbench.properties" />
+		<property name="build.dir" value="build-dir" />
 		<launchAntRunner 
 			buildfile="${eclipse.home}/plugins/${pde.build.plugin}/scripts/productBuild/productBuild.xml" 
-			build.dir="${basedir}/${workbench.build.dir}/build-dir" 
+			build.dir="${basedir}/${workbench.build.dir}/${build.dir}" 
 			build.type="build"
+			props.file="${build.props}"
 			extra.args="-Dproduct=/org.carrot2.workbench/Workbench.product" />
 		<checkAccessRestriction 
-			logsbasedir="${basedir}/${workbench.build.dir}/build-dir"/>
+			logsbasedir="${basedir}/${workbench.build.dir}/${build.dir}"/>
 	</target>
 
 	<target name="test" description="Builds workbench with test plugins and runs tests">
@@ -67,9 +67,10 @@
 			else="workbench.properties">
 			<available file="${basedir}/workbench.test.properties" />
 		</condition>
-<echo>
-	++++++++++++++++ ${test.props} ++++++++++++++++++++++
-</echo>
+		<antcall target="build">
+			<param name="build.props" value="${test.props}"/>
+			<param name="build.dir" value="test-dir"/>
+		</antcall>
 		<launchAntRunner
 			buildfile="${eclipse.home}/plugins/${pde.build.plugin}/scripts/productBuild/productBuild.xml"
 			build.dir="${basedir}/${workbench.build.dir}/test-dir"
@@ -85,7 +86,6 @@
 			<arg line="-Declipse-home=${basedir}/${workbench.build.dir}/test-dir/tmp/workbench" />
 			<arg line="-Dos=${test.os} -Dws=${test.ws} -Darch=${test.arch}" />
 		</java>
-
 		<!-- JUnit report -->
 		<mkdir dir="${workbench.tests.html.report.dir}" />
 		<junitreport todir="${workbench.tests.html.report.dir}">
@@ -94,7 +94,6 @@
 			</fileset>
 			<report format="frames" todir="${workbench.tests.html.report.dir}" />
 		</junitreport>
-
 		<!-- Copy XML reports -->
 		<copy todir="${workbench.tests.html.report.dir}">
 			<fileset dir="${basedir}/${workbench.build.dir}/test-dir/tmp/workbench">
@@ -102,7 +101,6 @@
 			</fileset>
 			<mapper type="glob" from="*.xml" to="TEST-*.xml" />
 		</copy>
-
 		<!-- Copy text reports -->
 		<mkdir dir="${workbench.tests.txt.report.dir}" />
 		<copy todir="${workbench.tests.txt.report.dir}">
@@ -110,11 +108,10 @@
 				<include name="*.txt" />
 			</fileset>
 		</copy>
-
 		<!-- 
-       A hacky way of finding out whether tests passed. The Eclipse runner doesn't
-       seem to expose this information directly.
-    -->
+             A hacky way of finding out whether tests passed. The Eclipse runner doesn't
+             seem to expose this information directly.
+        -->
 		<loadfile property="testxml" srcFile="${workbench.tests.html.report.dir}/TESTS-TestSuites.xml" />
 		<fail message="Tests failed, see ${workbench.tests.html.report.dir} for report.">
 			<condition>
@@ -126,13 +123,14 @@
 				</or>
 			</condition>
 		</fail>
-		<fail message="Tests did not run, see ${workbench.tests.txt.report.dir} for logs.">
-			<condition>
-				<or>
-					<matches string="${testxml}" pattern="testsuites />" />
-				</or>
-			</condition>
-		</fail>
+	<fail message="Tests did not run, see ${workbench.tests.txt.report.dir} for logs.">
+				<condition>
+					<or>
+						<matches string="${testxml}" pattern="testsuites />" />
+					</or>
+				</condition>
+			</fail>
+		
 	</target>
 
 	<target name="clean">

@@ -11,10 +11,6 @@
 	<target name="allElementsDelegator">
 		<ant antfile="${genericTargets}" target="${target}">
 			<property name="type" value="feature" />
-			<property name="id" value="org.carrot2.workbench" />
-		</ant>
-		<ant antfile="${genericTargets}" target="${target}">
-			<property name="type" value="feature" />
 			<property name="id" value="org.carrot2.workbench.test" />
 		</ant>
 	</target>
@@ -97,4 +93,83 @@
 	<target name="assemble.org.carrot2.workbench.test.macosx.carbon.ppc">
 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}" />
 	</target>
+	
+	<target name="assemble.org.eclipse.pde.build.container.feature">
+ 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">
+			<property name="archiveName" value="${archiveNamePrefix}.zip"/>
+		</ant>
+ 	</target>
+	
+ 	<target name="assemble.org.eclipse.pde.build.container.feature.win32.win32.x86">
+ 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
+ 			<property name="archiveName" value="${archiveNamePrefix}-win32.win32.x86.zip"/>
+		</ant>
+
+ 	</target>
+	
+ 	<target name="assemble.org.eclipse.pde.build.container.feature.linux.gtk.ppc">
+ 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
+ 			<property name="archiveName" value="${archiveNamePrefix}-linux.gtk.ppc.zip"/>
+		</ant>
+ 	</target>
+	
+ 	<target name="assemble.org.eclipse.pde.build.container.feature.linux.gtk.x86">
+ 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
+ 			<property name="archiveName" value="${archiveNamePrefix}-linux.gtk.x86.zip"/>
+		</ant>
+ 	</target>
+	
+ 	<target name="assemble.org.eclipse.pde.build.container.feature.linux.gtk.x86_64">
+ 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
+ 			<property name="archiveName" value="${archiveNamePrefix}-linux.gtk.x86_64.zip"/>
+		</ant>
+ 	</target>
+	
+ 	<target name="assemble.org.eclipse.pde.build.container.feature.linux.motif.x86">
+ 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
+ 			<property name="archiveName" value="${archiveNamePrefix}-linux.motif.x86.zip"/>
+		</ant>
+ 	</target>
+	
+ 	<target name="assemble.org.eclipse.pde.build.container.feature.solaris.motif.sparc">
+ 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
+ 			<property name="archiveName" value="${archiveNamePrefix}-solaris.motif.sparc.zip"/>
+		</ant>
+ 	</target>
+ 		
+ 	<target name="assemble.org.eclipse.pde.build.container.feature.solaris.gtk.sparc">
+ 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
+ 			<property name="archiveName" value="${archiveNamePrefix}-solaris.gtk.sparc.zip"/>
+		</ant>
+ 	</target>
+	
+ 	<target name="assemble.org.eclipse.pde.build.container.feature.aix.motif.ppc">
+ 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
+ 			<property name="archiveName" value="${archiveNamePrefix}-aix.motif.ppc.zip"/>
+		</ant>
+ 	</target>
+	
+ 	<target name="assemble.org.eclipse.pde.build.container.feature.hpux.motif.PA_RISC">
+ 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
+ 			<property name="archiveName" value="${archiveNamePrefix}-hpux.motif.PA_RISC.zip"/>
+		</ant>
+ 	</target>
+	
+ 	<target name="assemble.org.eclipse.pde.build.container.feature.macosx.carbon.ppc">
+ 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
+ 			<property name="archiveName" value="${archiveNamePrefix}-macosx.carbon.ppc.tar.gz"/>
+		</ant>
+ 	</target>
+	
+ 	<target name="assemble.org.eclipse.pde.build.container.feature.macosx.carbon.x86">
+ 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
+ 			<property name="archiveName" value="${archiveNamePrefix}-macosx.carbon.x86.tar.gz"/>
+		</ant>
+ 	</target>
+	
+ 	<target name="assemble.org.eclipse.pde.build.container.feature.group.group.group">
+ 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
+ 			<property name="archiveName" value="${archiveNamePrefix}-group.zip"/>
+		</ant>
+ 	</target>
 </project>
