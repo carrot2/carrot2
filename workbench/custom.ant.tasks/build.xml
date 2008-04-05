@@ -4,15 +4,15 @@
               To include a user specific buildfile here, simply create one in the same
               directory with the processing instruction <?eclipse.ant.import?>
               as the first entry and export the buildfile again. -->
-<project basedir="." default="build" name="custom.ant.tasks">
+<project basedir="" default="build" name="custom.ant.tasks">
 	<property name="debuglevel" value="source,lines,vars" />
 	<property name="target" value="1.5" />
 	<property name="source" value="1.5" />
 	<target name="init">
-		<mkdir dir="tmp/eclipse" />
+		<mkdir dir="${custom.tasks.dir}/tmp/eclipse" />
 	</target>
 	<target name="clean">
-		<delete dir="tmp/eclipse" />
+		<delete dir="${custom.tasks.dir}/tmp/eclipse" />
 	</target>
 	<target depends="init" name="build">
 		<echo message="${ant.project.name}: ${ant.file}" />
