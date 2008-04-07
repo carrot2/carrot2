@@ -53,6 +53,21 @@ public class EditorsTest extends TestCase
 
     }
 
+    public class DedicatedEditor2 extends AttributeEditorAdapter
+    {
+
+    }
+
+    public class DedicatedEditor3 extends AttributeEditorAdapter
+    {
+
+    }
+
+    public class DedicatedEditor4 extends AttributeEditorAdapter
+    {
+
+    }
+
     public class RangeEditor extends AttributeEditorAdapter
     {
 
