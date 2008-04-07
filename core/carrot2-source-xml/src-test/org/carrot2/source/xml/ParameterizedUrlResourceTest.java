@@ -11,7 +11,7 @@ import com.google.common.collect.Maps;
 /**
  * Test cases for {@link ParameterizedUrlResource}.
  */
-public class ParametrizedUrlResourceTest
+public class ParameterizedUrlResourceTest
 {
     @Test
     public void testNoAttributesToSubstitute()
