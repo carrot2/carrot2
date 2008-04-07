@@ -1,5 +1,7 @@
 package org.carrot2.workbench.core.helpers;
 
+import static org.apache.commons.lang.StringUtils.isBlank;
+
 import org.eclipse.core.runtime.IConfigurationElement;
 
 public abstract class ExtensionWrapperBase
@@ -37,7 +39,7 @@ public abstract class ExtensionWrapperBase
         boolean throwOnError)
     {
         String classAtt = element.getAttribute(attName);
-        if (throwOnError && (classAtt == null || classAtt.length() == 0))
+        if (throwOnError && isBlank(classAtt))
         {
             throw new IllegalArgumentException("Missing " + attName + " attribute");
         }
