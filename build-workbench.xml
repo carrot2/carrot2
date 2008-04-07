@@ -117,14 +117,14 @@
 
 <!--
 	Workaround: testing framework expects that executable will be called eclipse :/
--->
+
 		 <move todir="${test.eclipse.home}">
 		 	<fileset dir="${test.eclipse.home}">
 		 		<include name="carrot2-workbench*"/>
 		 	</fileset>
 		 	<mapper type="glob" from="carrot2-workbench*" to="eclipse*"></mapper>
 		  </move>
-		
+-->		
 		<java jar="${eclipse.home}/plugins/${equinox.launcher.plugin.jar}"
 		      fork="true"
 		      failonerror="true">

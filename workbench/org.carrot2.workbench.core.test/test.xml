@@ -43,7 +43,6 @@
 			          value="org.carrot2.workbench.core.AllTests" />
 			<property name="data-dir" value="${eclipse-home}/data" />
 			<property name="junit-report-output" value="${raw-output-dir}" />
-			<property name="useEclipseExe" value="true" />
 		</ant>
 	</target>
 
