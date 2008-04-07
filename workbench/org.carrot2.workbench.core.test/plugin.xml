@@ -18,7 +18,7 @@
             class="org.carrot2.workbench.editors.EditorsTest.DedicatedEditor">
       </dedicatedEditor>
       <typeEditor
-            attributeClass="java.lang.Integer"
+            attributeClass="org.carrot2.workbench.editors.EditorsTest.TestType"
             class="org.carrot2.workbench.editors.EditorsTest.RangeEditor">
          <constraints
                allAtOnce="false">
@@ -28,7 +28,7 @@
          </constraints>
       </typeEditor>
       <typeEditor
-            attributeClass="java.lang.Integer"
+            attributeClass="org.carrot2.workbench.editors.EditorsTest.TestType"
             class="org.carrot2.workbench.editors.EditorsTest.IntEditor">
       </typeEditor>
    </extension>

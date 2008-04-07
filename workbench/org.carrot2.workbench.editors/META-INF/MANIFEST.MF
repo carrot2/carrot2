@@ -6,6 +6,6 @@ Bundle-Version: 1.0.0
 Bundle-Activator: org.carrot2.workbench.editors.EditorsPlugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.carrot2.util.attribute
+ org.carrot2.util.attribute,
+ org.apache.commons
 Eclipse-LazyStart: true
-Export-Package: org.carrot2.workbench.editors

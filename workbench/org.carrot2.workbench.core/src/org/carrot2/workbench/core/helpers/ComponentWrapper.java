@@ -1,13 +1,12 @@
 package org.carrot2.workbench.core.helpers;
 
-import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.ProcessingComponent;
 import org.carrot2.workbench.core.CorePlugin;
 import org.eclipse.core.commands.operations.OperationStatus;
 import org.eclipse.core.runtime.*;
 import org.eclipse.jface.resource.ImageDescriptor;
 
-public class ComponentWrapper
+public class ComponentWrapper extends ExtensionWrapperBase
 {
     private IConfigurationElement element;
     private String caption;
@@ -18,22 +17,10 @@ public class ComponentWrapper
         String className, String iconAttName)
     {
         this.element = element;
-        this.caption = element.getAttribute(captionName);
+        this.caption = getAttribute(element, captionName);
         this.className = className;
-        if (StringUtils.isBlank(caption))
-        {
-            throw new IllegalArgumentException("Missing " + captionName + " attribute");
-        }
-        String classAtt = element.getAttribute(className);
-        if (classAtt == null || classAtt.length() == 0)
-        {
-            throw new IllegalArgumentException("Missing " + className + " attribute");
-        }
-        String iconPath = element.getAttribute(iconAttName);
-        if (StringUtils.isBlank(iconPath))
-        {
-            throw new IllegalArgumentException("Missing " + iconAttName + " attribute");
-        }
+        getAttribute(element, className);
+        String iconPath = getAttribute(element, iconAttName);
         iconDescriptor =
             CorePlugin.imageDescriptorFromPlugin(element.getContributor().getName(),
                 iconPath);

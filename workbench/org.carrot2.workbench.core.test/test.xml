@@ -40,7 +40,7 @@
 		<ant target="core-test" antfile="${library-file}" dir="${eclipse-home}">
 			<property name="plugin-name" value="${plugin-name}" />
 			<property name="classname"
-			          value="org.carrot2.workbench.core.ProcessingJobTest" />
+			          value="org.carrot2.workbench.core.AllTests" />
 			<property name="data-dir" value="${eclipse-home}/data" />
 			<property name="junit-report-output" value="${raw-output-dir}" />
 		</ant>

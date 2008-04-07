@@ -12,4 +12,5 @@ Require-Bundle: org.junit,
  org.carrot2.source.xml,
  org.carrot2.workbench.core,
  org.carrot2.workbench.editors,
- org.eclipse.ui
+ org.eclipse.ui,
+ org.carrot2.core
