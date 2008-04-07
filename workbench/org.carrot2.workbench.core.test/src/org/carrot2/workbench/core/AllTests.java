@@ -2,6 +2,8 @@ package org.carrot2.workbench.core;
 
 import junit.framework.TestSuite;
 
+import org.carrot2.workbench.editors.factory.TypeEditorWrapperTest;
+
 public class AllTests extends TestSuite
 {
     public static TestSuite suite()
@@ -12,7 +14,7 @@ public class AllTests extends TestSuite
     public AllTests()
     {
         this.addTestSuite(ProcessingJobTest.class);
-        // this.addTestSuite(EditorsTest.class);
+        this.addTestSuite(TypeEditorWrapperTest.class);
     }
 
 }

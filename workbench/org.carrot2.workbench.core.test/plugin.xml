@@ -11,15 +11,16 @@
       </algorithm>
    </extension>
    <extension
-         point="org.carrot2.workbench.editors.attributeEditor">
+         id="testEditors"
+         point="org.carrot2.workbench.core.attributeEditor">
       <dedicatedEditor
             algorithmId="org.carrot2.workbench.core.test.algorithm1"
             attributeId="specificAttribute"
             class="org.carrot2.workbench.editors.EditorsTest.DedicatedEditor">
       </dedicatedEditor>
       <typeEditor
-            attributeClass="org.carrot2.workbench.editors.EditorsTest.TestType"
-            class="org.carrot2.workbench.editors.EditorsTest.RangeEditor">
+            attributeClass="org.carrot2.workbench.editors.EditorsTest$TestType"
+            class="org.carrot2.workbench.editors.EditorsTest$RangeEditor">
          <constraints
                allAtOnce="false">
             <constraint
@@ -28,8 +29,21 @@
          </constraints>
       </typeEditor>
       <typeEditor
-            attributeClass="org.carrot2.workbench.editors.EditorsTest.TestType"
-            class="org.carrot2.workbench.editors.EditorsTest.IntEditor">
+            attributeClass="org.carrot2.workbench.editors.EditorsTest$TestType"
+            class="org.carrot2.workbench.editors.EditorsTest$IntEditor">
+      </typeEditor>
+      <typeEditor
+            attributeClass="org.carrot2.workbench.editors.EditorsTest$TestType"
+            class="org.carrot2.workbench.editors.EditorsTest$RangeEditor2">
+         <constraints
+               allAtOnce="true">
+            <constraint
+                  constraintClass="org.carrot2.util.attribute.constraint.DoubleRange">
+            </constraint>
+            <constraint
+                  constraintClass="org.carrot2.util.attribute.constraint.ImplementingClasses">
+            </constraint>
+         </constraints>
       </typeEditor>
    </extension>
 

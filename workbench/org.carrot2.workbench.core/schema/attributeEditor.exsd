@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.carrot2.workbench.editors">
+<schema targetNamespace="org.carrot2.workbench.core">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.carrot2.workbench.editors" id="attributeEditor" name="Attribute Editor"/>
+         <meta.schema plugin="org.carrot2.workbench.core" id="attributeEditor" name="Attribute Editor"/>
       </appInfo>
       <documentation>
          Extention for defining attribute editors. Those editors will be used to create Attributes view.&lt;br&gt;&lt;br&gt;
@@ -18,7 +18,7 @@ First one found is used.
       </documentation>
    </annotation>
 
-   <element name="extension"> 
+   <element name="extension">
       <complexType>
          <sequence>
             <element ref="typeEditor" minOccurs="0" maxOccurs="unbounded"/>

@@ -63,6 +63,11 @@ public class EditorsTest extends TestCase
 
     }
 
+    public class RangeEditor2 extends AttributeEditorAdapter
+    {
+
+    }
+
     protected void setUp() throws Exception
     {
         super.setUp();
