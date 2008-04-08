@@ -18,10 +18,19 @@ import org.junit.Test;
 public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm> extends
     ProcessingComponentTestBase<T>
 {
+    /**
+     * A set of sample documents returned for the query <i>data mining</i>.
+     */
+    protected final static Collection<Document> DOCUMENTS_DATA_MINING = SampleDocumentData.DOCUMENTS_DATA_MINING;
+
+    /*
+     * 
+     */
     @Test
     public void testNoDocuments()
     {
-        final Collection<Cluster> clusters = cluster(Collections.<Document> emptyList());
+        final Collection<Cluster> clusters = cluster(Collections.<Document> emptyList())
+            .getClusters();
 
         assertNotNull(clusters);
         assertEquals(0, clusters.size());
@@ -30,10 +39,10 @@ public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm>
     /**
      * Performs clustering using {@link #simpleController}.
      * 
-     * @param documents documents to be clustered
-     * @return clustering results
+     * @param documents Documents to be clustered.
+     * @return {@link ProcessingResult} returned from the controller.
      */
-    public Collection<Cluster> cluster(Collection<Document> documents)
+    public ProcessingResult cluster(Collection<Document> documents)
     {
         // A little hacky, but looks like the simplest way to ensure a single
         // initialization per one test case
@@ -44,8 +53,7 @@ public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm>
         }
 
         processingAttributes.put(AttributeNames.DOCUMENTS, documents);
-        return simpleController.process(processingAttributes, getComponentClass())
-            .getClusters();
+        return simpleController.process(processingAttributes, getComponentClass());
     }
 
     /**
@@ -56,6 +64,9 @@ public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm>
         return collectDocuments(clusters, new HashSet<Document>());
     }
 
+    /*
+     * 
+     */
     private Collection<Document> collectDocuments(Collection<Cluster> clusters,
         Collection<Document> documents)
     {

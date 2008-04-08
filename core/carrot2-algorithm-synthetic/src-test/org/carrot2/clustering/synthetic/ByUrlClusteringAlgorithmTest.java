@@ -69,7 +69,7 @@ public class ByUrlClusteringAlgorithmTest extends
         final List<Cluster> expectedFacets = Lists.newArrayList(new Cluster("cos.pl",
             docs.get(0), docs.get(1), docs.get(2)));
 
-        final ArrayList<Cluster> actual = Lists.newArrayList(cluster(docs));
+        final ArrayList<Cluster> actual = Lists.newArrayList(cluster(docs).getClusters());
         assertEquals(wrap(expectedFacets), wrap(actual));
     }
 
