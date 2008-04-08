@@ -34,24 +34,8 @@ public class DedicatedEditorWrapperTest extends TestCase
             findEditor("org.carrot2.workbench.editors.EditorsTest$DedicatedEditor");
         DedicatedEditorWrapper wrapper = new DedicatedEditorWrapper(element);
         assertEquals("specificAttribute", wrapper.getAttributeId());
-        assertEquals("org.carrot2.workbench.core.test.algorithm1", wrapper
-            .getAlgorithmId());
-        assertNull(wrapper.getSourceId());
-    }
-
-    public void testBothIds()
-    {
-        IConfigurationElement element =
-            findEditor("org.carrot2.workbench.editors.EditorsTest$DedicatedEditor2");
-        try
-        {
-            new DedicatedEditorWrapper(element);
-            fail("Dedicated editor with both sourceId and algorithmId was created!");
-        }
-        catch (IllegalArgumentException ex)
-        {
-            // should happen
-        }
+        assertEquals("org.carrot2.workbench.editors.EditorsTest$TestComponent", wrapper
+            .getComponentClass());
     }
 
     public void testNoId()
@@ -61,7 +45,7 @@ public class DedicatedEditorWrapperTest extends TestCase
         try
         {
             new DedicatedEditorWrapper(element);
-            fail("Dedicated editor with neither of sourceId and algorithmId was created!");
+            fail("Dedicated editor without componentClass attribute was created!");
         }
         catch (IllegalArgumentException ex)
         {

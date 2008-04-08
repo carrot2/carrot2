@@ -134,22 +134,6 @@ When looking for an editor for an attribute that has constraints, editor with ma
          </documentation>
       </annotation>
       <complexType>
-         <attribute name="sourceId" type="string">
-            <annotation>
-               <documentation>
-                  Full Id of extension for &lt;code&gt;org.carrot2.core.algorithm&lt;/code&gt; extension point.&lt;br&gt;
-&lt;u&gt;Cannot be used together with algorithmId!&lt;/u&gt;
-               </documentation>
-            </annotation>
-         </attribute>
-         <attribute name="algorithmId" type="string">
-            <annotation>
-               <documentation>
-                  Full Id of extension for &lt;code&gt;org.carrot2.core.source&lt;/code&gt; extension point.&lt;br&gt;
-&lt;u&gt;Cannot be used together with sourceId!&lt;/u&gt;
-               </documentation>
-            </annotation>
-         </attribute>
          <attribute name="attributeId" type="string" use="required">
             <annotation>
                <documentation>
@@ -165,6 +149,16 @@ Value from the editor will be stored with the key &lt;code&gt;AttributeUtils.get
                </documentation>
                <appInfo>
                   <meta.attribute kind="java" basedOn=":org.carrot2.workbench.editors.IAttributeEditor"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="componentClass" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn=":org.carrot2.core.ProcessingComponent"/>
                </appInfo>
             </annotation>
          </attribute>

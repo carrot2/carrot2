@@ -14,4 +14,5 @@ Require-Bundle: org.junit,
  org.carrot2.source.xml,
  org.carrot2.workbench.core,
  org.eclipse.ui,
- org.carrot2.core
+ org.carrot2.core,
+ org.carrot2.source.yahoo

@@ -5,6 +5,9 @@ import java.util.*;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.eclipse.core.runtime.*;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Lists;
+
 public class AttributeEditorLoader
 {
     public static final String EXTENSION_NAME = "attributeEditor";
@@ -34,6 +37,20 @@ public class AttributeEditorLoader
     private AttributeEditorLoader()
     {
         loadExtensions();
+    }
+
+    List<DedicatedEditorWrapper> filterDedicatedEditors(
+        Predicate<DedicatedEditorWrapper> predicate)
+    {
+        List<DedicatedEditorWrapper> result = Lists.newArrayList();
+        for (DedicatedEditorWrapper dedicatedEditor : dedicatedEditors)
+        {
+            if (predicate.apply(dedicatedEditor))
+            {
+                result.add(dedicatedEditor);
+            }
+        }
+        return Lists.immutableList(result);
     }
 
     /*

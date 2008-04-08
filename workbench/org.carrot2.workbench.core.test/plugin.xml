@@ -14,9 +14,9 @@
          id="testEditors"
          point="org.carrot2.workbench.core.attributeEditor">
       <dedicatedEditor
-            algorithmId="org.carrot2.workbench.core.test.algorithm1"
             attributeId="specificAttribute"
-            class="org.carrot2.workbench.editors.EditorsTest$DedicatedEditor">
+            class="org.carrot2.workbench.editors.EditorsTest$DedicatedEditor"
+            componentClass="org.carrot2.workbench.editors.EditorsTest$TestComponent">
       </dedicatedEditor>
       <typeEditor
             attributeClass="org.carrot2.workbench.editors.EditorsTest$TestType"
@@ -46,18 +46,12 @@
          </constraints>
       </typeEditor>
       <dedicatedEditor
-            algorithmId="org.carrot2.workbench.core.test.algorithm1"
-            attributeId="attId"
-            class="org.carrot2.workbench.editors.EditorsTest$DedicatedEditor2"
-            sourceId="org.carrot2.source.yahoo.yahoo">
-      </dedicatedEditor>
-      <dedicatedEditor
             attributeId="attId2"
             class="org.carrot2.workbench.editors.EditorsTest$DedicatedEditor3">
       </dedicatedEditor>
       <dedicatedEditor
             class="org.carrot2.workbench.editors.EditorsTest$DedicatedEditor4"
-            sourceId="org.carrot2.source.yahoo.yahoo">
+            componentClass="org.carrot2.source.yahoo.YahooDocumentSource">
       </dedicatedEditor>
    </extension>
 
