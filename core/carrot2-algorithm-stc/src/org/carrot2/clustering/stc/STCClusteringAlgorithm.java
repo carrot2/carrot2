@@ -163,22 +163,21 @@ public class STCClusteringAlgorithm extends ProcessingComponentBase implements
         final ArrayList<StemmedTerm> currentDocument = new ArrayList<StemmedTerm>();
         try
         {
-            ArrayDeque<String> fieldValues = new ArrayDeque<String>();
+            ArrayList<String> fieldValues = new ArrayList<String>();
             for (final Document doc : documentArray)
             {
                 final String title = doc.getField(Document.TITLE);
-                if (!StringUtils.isEmpty(title)) fieldValues.addLast(title);
+                if (!StringUtils.isEmpty(title)) fieldValues.add(title);
 
                 final String snippet = doc.getField(Document.SUMMARY);
-                if (!StringUtils.isEmpty(snippet)) fieldValues.addLast(snippet);
+                if (!StringUtils.isEmpty(snippet)) fieldValues.add(snippet);
 
                 Token t = null;
                 StemmedTerm lastValue = null;
                 while (!fieldValues.isEmpty())
                 {
                     final ExtendedWhitespaceTokenizer ts = (ExtendedWhitespaceTokenizer) analyzer
-                        .reusableTokenStream(null, new StringReader(fieldValues
-                            .removeFirst()));
+                        .reusableTokenStream(null, new StringReader(fieldValues.remove(0)));
 
                     while ((t = ts.next(t)) != null)
                     {

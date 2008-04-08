@@ -1,9 +1,9 @@
 package org.carrot2.text.suffixtrees;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Stack;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -27,7 +27,7 @@ public class SuffixTreeTest
         t.add(sequence);
 
         final List<String> actual = new ArrayList<String>();
-        final ArrayDeque<Node> nodes = new ArrayDeque<Node>();
+        final Stack<Node> nodes = new Stack<Node>();
         nodes.push(t.getRootNode());
         while (!nodes.isEmpty())
         {
