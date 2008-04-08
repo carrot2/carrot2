@@ -42,6 +42,16 @@ public class ProcessingJobTest extends TestCase
         runSearch("org.carrot2.algorithm.synthetic.byUrl", "org.carrot2.source.xml.xml");
     }
 
+    public void testXmlAndSTC() throws InterruptedException, IOException
+    {
+        Resource xmlInput =
+            new URLResource(FileLocator.toFileURL(FileLocator.find(Platform
+                .getBundle("org.carrot2.workbench.core.test"), new Path(
+                "input/data_mining.xml"), null)));
+        attributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"), xmlInput);
+        runSearch("org.carrot2.algorithm.stc.stc", "org.carrot2.source.xml.xml");
+    }
+
     private void runSearch(String algorithmId, String sourceId)
         throws InterruptedException
     {
