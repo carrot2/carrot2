@@ -2,31 +2,16 @@ package org.carrot2.clustering.stc;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.analysis.Token;
-import org.carrot2.core.Cluster;
-import org.carrot2.core.ClusteringAlgorithm;
-import org.carrot2.core.Document;
-import org.carrot2.core.ProcessingComponentBase;
-import org.carrot2.core.ProcessingException;
-import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.core.attribute.Init;
-import org.carrot2.core.attribute.Processing;
+import org.carrot2.core.*;
+import org.carrot2.core.attribute.*;
 import org.carrot2.text.analysis.ExtendedWhitespaceAnalyzer;
 import org.carrot2.text.analysis.ExtendedWhitespaceTokenizer;
 import org.carrot2.util.ExceptionUtils;
-import org.carrot2.util.attribute.Attribute;
-import org.carrot2.util.attribute.Bindable;
-import org.carrot2.util.attribute.Input;
-import org.carrot2.util.attribute.Output;
+import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
 
 /**
