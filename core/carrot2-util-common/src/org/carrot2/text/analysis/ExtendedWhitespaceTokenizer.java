@@ -4,14 +4,14 @@ import java.io.IOException;
 import java.io.Reader;
 
 import org.apache.lucene.analysis.Token;
-import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.Tokenizer;
 import org.carrot2.util.CloseableUtils;
 
 /**
- * Tokenizer separating input characters on whitespace, but capable of extracting more
+ * A tokenizer separating input characters on whitespace, but capable of extracting more
  * complex tokens, such as URLs, e-mail addresses and sentence delimiters.
  */
-public final class ExtendedWhitespaceTokenizer extends TokenStream
+public final class ExtendedWhitespaceTokenizer extends Tokenizer
 {
     /**
      * Character stream source.
@@ -26,12 +26,13 @@ public final class ExtendedWhitespaceTokenizer extends TokenStream
     /**
      * Reusable object for returning token type.
      */
-    private final TokenInfo tokenInfo = new TokenInfo(ExtendedWhitespaceTokenizerImpl.YYEOF);
+    private final TokenInfo tokenInfo = new TokenInfo(
+        ExtendedWhitespaceTokenizerImpl.YYEOF);
 
     /**
      * 
      */
-    public ExtendedWhitespaceTokenizer(Reader input) throws IOException
+    public ExtendedWhitespaceTokenizer(Reader input)
     {
         reset(input);
     }
@@ -57,7 +58,8 @@ public final class ExtendedWhitespaceTokenizer extends TokenStream
         }
 
         // TODO: Add intern() on certain token type values (proliferation
-        // of common symbols).
+        // of common symbols)? Lucene's Tokens convert it back to char buffers anyway,
+        // so maybe there is little point...
         final String tokenText = parser.yytext();
         result.setTermText(tokenText);
 
@@ -84,11 +86,18 @@ public final class ExtendedWhitespaceTokenizer extends TokenStream
     /**
      * Reset this tokenizer to start parsing another stream.
      */
-    public void reset(Reader input) throws IOException
+    public void reset(Reader input)
     {
         if (this.reader != null)
         {
-            close();
+            try
+            {
+                close();
+            }
+            catch (IOException e)
+            {
+                // Fall through, nothing to be done here.
+            }
         }
 
         this.reader = input;
