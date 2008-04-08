@@ -18,6 +18,9 @@ public final class Cluster
     /**
      * Indicates that the cluster is an "(Other Topics)" cluster. Such a cluster contains
      * documents that remain unclustered at given level of cluster hierarchy.
+     * 
+     * @see #setAttribute(String, Object)
+     * @see #getAttribute(String)
      */
     public static final String OTHER_TOPICS = "other-topics";
 
