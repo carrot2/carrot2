@@ -5,17 +5,17 @@ import static org.junit.Assert.*;
 import java.util.*;
 import java.util.concurrent.*;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.test.DocumentSourceTestBase;
 import org.carrot2.source.SearchMode;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junitext.Prerequisite;
 import org.junitext.runners.AnnotationRunner;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import com.google.common.collect.*;
 
 /**
  * Tests Yahoo! input component.
@@ -93,6 +93,28 @@ public class YahooDocumentSourceTest extends DocumentSourceTestBase<YahooDocumen
             YahooNewsSearchService.class);
 
         assertTrue(runQuery("iraq", 50) > 0);
+    }
+
+    @Ignore
+    @Test
+    @Prerequisite(requires = "externalApiTestsEnabled")
+    @SuppressWarnings("unchecked")
+    public void dumpResultAsJavaSource() throws Exception
+    {
+        runQuery("data mining", 100);
+
+        Collection<Document> docs = (Collection<Document>) processingAttributes
+            .get(AttributeNames.DOCUMENTS);
+        for (Document d : docs)
+        {
+            System.out.println("{ \""
+                + StringEscapeUtils.escapeJava((String) d.getField(Document.CONTENT_URL))
+                + "\",\n\t"
+                + "\"" + StringEscapeUtils.escapeJava((String) d.getField(Document.TITLE)) 
+                + "\",\n\t"
+                + "\"" + StringEscapeUtils.escapeJava((String) d.getField(Document.SUMMARY))
+                + "\" },\n\n");
+        }
     }
 
     @Test
