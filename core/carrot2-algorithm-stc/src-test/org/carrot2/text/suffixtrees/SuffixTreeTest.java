@@ -1,12 +1,8 @@
 package org.carrot2.text.suffixtrees;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.*;
 
 import com.google.common.collect.Iterators;
 
@@ -47,7 +43,7 @@ public class SuffixTreeTest
             }
         }
 
-        final List<String> expected = Arrays.asList(
+        final List<String> expected = new ArrayList<String>(Arrays.asList(
             new String [] {
                 "mississippi",
                 "ippi",
@@ -59,7 +55,10 @@ public class SuffixTreeTest
                 "sippi",
                 "ssissippi",
                 "ssippi",
-            });
+            }));
+
+        Collections.sort(expected);
+        Collections.sort(actual);
 
         Assert.assertEquals(expected, actual);
     }
