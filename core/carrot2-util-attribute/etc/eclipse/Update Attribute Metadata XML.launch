@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
 <stringAttribute key="bad_container_name" value="\carrot2-core-tools\etc\eclipse"/>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
@@ -28,6 +28,6 @@
 </listAttribute>
 <booleanAttribute key="org.eclipse.jdt.launching.DEFAULT_CLASSPATH" value="false"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.carrot2.util.attribute.BindableMetadataXmlSerializer"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="org.carrot2.core.AttributeNames ${resource_loc:carrot2-core} ${resource_loc:carrot2-util-attribute} ${resource_loc:carrot2-source-yahoo/src} ${resource_loc:carrot2-algorithm-synthetic/src}"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="org.carrot2.core.AttributeNames ${resource_loc:carrot2-core} ${resource_loc:carrot2-util-attribute} ${resource_loc:carrot2-source-yahoo/src} ${resource_loc:carrot2-algorithm-synthetic/src} ${resource_loc:carrot2-algorithm-stc/src}"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="carrot2-util-attribute"/>
 </launchConfiguration>

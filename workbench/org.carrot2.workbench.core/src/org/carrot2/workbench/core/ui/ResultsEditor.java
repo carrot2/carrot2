@@ -3,6 +3,7 @@ package org.carrot2.workbench.core.ui;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.workbench.core.CorePlugin;
 import org.carrot2.workbench.core.jobs.ProcessingJob;
+import org.carrot2.workbench.core.ui.attributes.AttributeListComponent;
 import org.carrot2.workbench.core.ui.clusters.ClusterTreeComponent;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.graphics.Image;
@@ -27,6 +28,9 @@ public class ResultsEditor extends SashFormEditorPart
         DocumentListBrowser browser =
             new DocumentListBrowser(getSite(), getContainer(), job);
         addControl(browser.getControl(), 3);
+        AttributeListComponent attributeList =
+            new AttributeListComponent(getSite(), getContainer(), job);
+        addControl(attributeList.getControl(), 3);
         CorePlugin.getDefault().getWorkbench().getProgressService().showInDialog(
             Display.getDefault().getActiveShell(), job);
         job.schedule();

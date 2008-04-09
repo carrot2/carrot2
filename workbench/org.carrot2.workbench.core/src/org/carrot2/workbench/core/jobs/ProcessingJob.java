@@ -12,9 +12,9 @@ import org.eclipse.core.runtime.jobs.Job;
 
 public class ProcessingJob extends Job
 {
-    private ProcessingComponent source;
-    private ProcessingComponent algorithm;
-    private Map<String, Object> attributes;
+    public final ProcessingComponent source;
+    public final ProcessingComponent algorithm;
+    public final Map<String, Object> attributes;
 
     public ProcessingJob(String name, SearchParameters search)
     {
