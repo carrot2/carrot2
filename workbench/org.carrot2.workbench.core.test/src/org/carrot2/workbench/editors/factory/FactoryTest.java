@@ -26,7 +26,7 @@ public class FactoryTest extends TestCase
 
     public void testEditorFactory()
     {
-        checkEditor(RangeEditor.class, "ranheEditor");
+        checkEditor(RangeEditor.class, "rangeAttribute");
         checkEditor(IntEditor.class, "simpleAttribute");
         try
         {

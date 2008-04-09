@@ -42,12 +42,25 @@ public class AttributeEditorLoader
     List<DedicatedEditorWrapper> filterDedicatedEditors(
         Predicate<DedicatedEditorWrapper> predicate)
     {
-        List<DedicatedEditorWrapper> result = Lists.newArrayList();
-        for (DedicatedEditorWrapper dedicatedEditor : dedicatedEditors)
+        List<DedicatedEditorWrapper> result = apply(predicate, dedicatedEditors);
+        return Lists.immutableList(result);
+    }
+
+    List<TypeEditorWrapper> filterTypeEditors(Predicate<TypeEditorWrapper> predicate)
+    {
+        List<TypeEditorWrapper> result = apply(predicate, typeEditors);
+        return Lists.immutableList(result);
+    }
+
+    private <T extends AttributeEditorWrapper> List<T> apply(Predicate<T> predicate,
+        List<T> list)
+    {
+        List<T> result = Lists.newArrayList();
+        for (T element : list)
         {
-            if (predicate.apply(dedicatedEditor))
+            if (predicate.apply(element))
             {
-                result.add(dedicatedEditor);
+                result.add(element);
             }
         }
         return Lists.immutableList(result);
