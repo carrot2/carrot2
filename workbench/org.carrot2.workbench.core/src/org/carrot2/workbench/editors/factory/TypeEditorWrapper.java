@@ -1,8 +1,11 @@
 package org.carrot2.workbench.editors.factory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.runtime.IConfigurationElement;
+
+import com.google.common.collect.Lists;
 
 public class TypeEditorWrapper extends AttributeEditorWrapper
 {
@@ -12,9 +15,9 @@ public class TypeEditorWrapper extends AttributeEditorWrapper
     public static final String EL_CONSTRAINT = "constraint";
     public static final String ATT_CONSTRAINT_CLASS = "constraintClass";
 
-    private boolean allAtOnce;
-    private String attributeClass;
-    private List<String> constraints;
+    public final boolean allAtOnce;
+    public final String attributeClass;
+    public final List<String> constraints;
 
     @SuppressWarnings("unchecked")
     public TypeEditorWrapper(IConfigurationElement element)
@@ -23,7 +26,7 @@ public class TypeEditorWrapper extends AttributeEditorWrapper
         attributeClass = getAttribute(element, ATT_ATTRIBUTE_CLASS);
         IConfigurationElement constraintsElement =
             getElement(element, EL_CONSTRAINTS, false);
-        constraints = new ArrayList<String>();
+        List<String> tempConstraints = new ArrayList<String>();
         if (constraintsElement != null)
         {
             allAtOnce =
@@ -35,30 +38,14 @@ public class TypeEditorWrapper extends AttributeEditorWrapper
                 IConfigurationElement constraintElement = constraintElements[i];
                 String constraintClassName =
                     getAttribute(constraintElement, ATT_CONSTRAINT_CLASS);
-                constraints.add(constraintClassName);
+                tempConstraints.add(constraintClassName);
             }
-        }
-    }
-
-    public boolean isAllAtOnce()
-    {
-        return allAtOnce;
-    }
-
-    public String getAttributeClass()
-    {
-        return attributeClass;
-    }
-
-    public List<String> getConstraints()
-    {
-        if (constraints == null)
-        {
-            return null;
+            constraints = Lists.immutableList(tempConstraints);
         }
         else
         {
-            return Collections.unmodifiableList(constraints);
+            allAtOnce = false;
+            constraints = Lists.immutableList();
         }
     }
 

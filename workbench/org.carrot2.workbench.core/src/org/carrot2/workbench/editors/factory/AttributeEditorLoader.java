@@ -1,6 +1,7 @@
 package org.carrot2.workbench.editors.factory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.carrot2.workbench.core.helpers.Utils;
 import org.eclipse.core.runtime.*;
@@ -14,41 +15,36 @@ public class AttributeEditorLoader
     public static final String EL_TYPE_EDITOR = "typeEditor";
     public static final String EL_DEDICATED_EDITOR = "dedicatedEditor";
 
-    private List<DedicatedEditorWrapper> dedicatedEditors =
-        new ArrayList<DedicatedEditorWrapper>();
-    private List<TypeEditorWrapper> typeEditors = new ArrayList<TypeEditorWrapper>();
     public static final AttributeEditorLoader INSTANCE;
+
+    private List<DedicatedEditorWrapper> dedicatedEditorsList =
+        new ArrayList<DedicatedEditorWrapper>();
+    private List<TypeEditorWrapper> typeEditorsList = new ArrayList<TypeEditorWrapper>();
+    public final List<DedicatedEditorWrapper> dedicatedEditors;
+    public final List<TypeEditorWrapper> typeEditors;
 
     static
     {
         INSTANCE = new AttributeEditorLoader();
     }
 
-    public List<DedicatedEditorWrapper> getDedicatedEditors()
-    {
-        return Collections.unmodifiableList(dedicatedEditors);
-    }
-
-    public List<TypeEditorWrapper> getTypeEditors()
-    {
-        return Collections.unmodifiableList(typeEditors);
-    }
-
     private AttributeEditorLoader()
     {
         loadExtensions();
+        dedicatedEditors = Lists.immutableList(dedicatedEditorsList);
+        typeEditors = Lists.immutableList(typeEditorsList);
     }
 
     List<DedicatedEditorWrapper> filterDedicatedEditors(
         Predicate<DedicatedEditorWrapper> predicate)
     {
-        List<DedicatedEditorWrapper> result = apply(predicate, dedicatedEditors);
+        List<DedicatedEditorWrapper> result = apply(predicate, dedicatedEditorsList);
         return Lists.immutableList(result);
     }
 
     List<TypeEditorWrapper> filterTypeEditors(Predicate<TypeEditorWrapper> predicate)
     {
-        List<TypeEditorWrapper> result = apply(predicate, typeEditors);
+        List<TypeEditorWrapper> result = apply(predicate, typeEditorsList);
         return Lists.immutableList(result);
     }
 
@@ -95,13 +91,13 @@ public class AttributeEditorLoader
 
                     DedicatedEditorWrapper wrapper =
                         new DedicatedEditorWrapper(configurationElement);
-                    dedicatedEditors.add(wrapper);
+                    dedicatedEditorsList.add(wrapper);
                 }
                 else if (configurationElement.getName().equals(EL_TYPE_EDITOR))
                 {
                     TypeEditorWrapper wrapper =
                         new TypeEditorWrapper(configurationElement);
-                    typeEditors.add(wrapper);
+                    typeEditorsList.add(wrapper);
                 }
             }
             catch (IllegalArgumentException ex)

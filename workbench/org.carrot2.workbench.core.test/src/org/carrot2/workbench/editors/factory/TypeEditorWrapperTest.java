@@ -35,8 +35,8 @@ public class TypeEditorWrapperTest extends TestCase
         IConfigurationElement element =
             findEditor("org.carrot2.workbench.editors.EditorsTest$IntEditor");
         TypeEditorWrapper wrapper = new TypeEditorWrapper(element);
-        assertEquals(EditorsTest.TestType.class.getName(), wrapper.getAttributeClass());
-        assertTrue(wrapper.getConstraints().isEmpty());
+        assertEquals(EditorsTest.TestType.class.getName(), wrapper.attributeClass);
+        assertTrue(wrapper.constraints.isEmpty());
     }
 
     public void testWithConstraint()
@@ -44,11 +44,11 @@ public class TypeEditorWrapperTest extends TestCase
         IConfigurationElement element =
             findEditor("org.carrot2.workbench.editors.EditorsTest$RangeEditor");
         TypeEditorWrapper wrapper = new TypeEditorWrapper(element);
-        assertEquals(EditorsTest.TestType.class.getName(), wrapper.getAttributeClass());
-        assertFalse(wrapper.getConstraints().isEmpty());
-        assertEquals(1, wrapper.getConstraints().size());
-        assertEquals(IntRange.class.getName(), wrapper.getConstraints().get(0));
-        assertFalse(wrapper.isAllAtOnce());
+        assertEquals(EditorsTest.TestType.class.getName(), wrapper.attributeClass);
+        assertFalse(wrapper.constraints.isEmpty());
+        assertEquals(1, wrapper.constraints.size());
+        assertEquals(IntRange.class.getName(), wrapper.constraints.get(0));
+        assertFalse(wrapper.allAtOnce);
     }
 
     public void testWithConstraints()
@@ -56,12 +56,12 @@ public class TypeEditorWrapperTest extends TestCase
         IConfigurationElement element =
             findEditor("org.carrot2.workbench.editors.EditorsTest$RangeEditor2");
         TypeEditorWrapper wrapper = new TypeEditorWrapper(element);
-        assertEquals(EditorsTest.TestType.class.getName(), wrapper.getAttributeClass());
-        assertFalse(wrapper.getConstraints().isEmpty());
-        assertEquals(2, wrapper.getConstraints().size());
-        assertTrue(wrapper.getConstraints().contains(DoubleRange.class.getName()));
-        assertTrue(wrapper.getConstraints().contains(ImplementingClasses.class.getName()));
-        assertTrue(wrapper.isAllAtOnce());
+        assertEquals(EditorsTest.TestType.class.getName(), wrapper.attributeClass);
+        assertFalse(wrapper.constraints.isEmpty());
+        assertEquals(2, wrapper.constraints.size());
+        assertTrue(wrapper.constraints.contains(DoubleRange.class.getName()));
+        assertTrue(wrapper.constraints.contains(ImplementingClasses.class.getName()));
+        assertTrue(wrapper.allAtOnce);
     }
 
     private IConfigurationElement findEditor(String editorClassname)

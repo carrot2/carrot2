@@ -65,15 +65,15 @@ public class EditorFactory
 
             public int compare(TypeEditorWrapper o1, TypeEditorWrapper o2)
             {
-                if (o1.getConstraints().isEmpty() && o2.getConstraints().isEmpty())
+                if (o1.constraints.isEmpty() && o2.constraints.isEmpty())
                 {
                     return 0;
                 }
-                if (!o2.getConstraints().isEmpty() && !o2.getConstraints().isEmpty())
+                if (!o2.constraints.isEmpty() && !o2.constraints.isEmpty())
                 {
                     return 0;
                 }
-                if (o1.getConstraints().isEmpty() ^ constraintsPreffered)
+                if (o1.constraints.isEmpty() ^ constraintsPreffered)
                 {
                     return -1;
                 }
@@ -93,7 +93,7 @@ public class EditorFactory
                 public boolean apply(TypeEditorWrapper editor)
                 {
                     boolean result =
-                        isCompatible(attribute.type, editor.getAttributeClass());
+                        isCompatible(attribute.type, editor.attributeClass);
                     if (!attribute.constraints.isEmpty())
                     {
                         boolean all = false;
@@ -101,12 +101,12 @@ public class EditorFactory
                         for (Annotation constraintAnn : attribute.constraints)
                         {
                             boolean contains =
-                                (editor.getConstraints().contains(constraintAnn
+                                (editor.constraints.contains(constraintAnn
                                     .annotationType().getName()));
                             one |= contains;
                             all &= contains;
                         }
-                        if (editor.isAllAtOnce())
+                        if (editor.allAtOnce)
                         {
                             result &= all;
                         }
@@ -130,9 +130,9 @@ public class EditorFactory
 
                 public boolean apply(DedicatedEditorWrapper editor)
                 {
-                    return isCompatible(owner.getClass(), editor.getComponentClass())
+                    return isCompatible(owner.getClass(), editor.componentClass)
                         && AttributeUtils.getKey(owner.getClass(),
-                            editor.getAttributeId()).equals(attribute.key);
+                            editor.attributeId).equals(attribute.key);
                 }
 
             });
