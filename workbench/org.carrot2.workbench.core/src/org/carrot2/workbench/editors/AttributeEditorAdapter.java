@@ -5,6 +5,8 @@ import org.eclipse.swt.widgets.Composite;
 
 public abstract class AttributeEditorAdapter implements IAttributeEditor
 {
+    protected AttributeDescriptor descriptor;
+
     public void createEditor(Composite parent)
     {
     }
@@ -16,6 +18,7 @@ public abstract class AttributeEditorAdapter implements IAttributeEditor
 
     public void init(AttributeDescriptor descriptor)
     {
+        this.descriptor = descriptor;
     }
 
     public void dispose()

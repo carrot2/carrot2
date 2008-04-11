@@ -2,6 +2,7 @@ package org.carrot2.workbench.core.ui.attributes;
 
 import java.util.Map;
 
+import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
 import org.carrot2.workbench.core.jobs.ProcessingJob;
@@ -26,23 +27,26 @@ public class AttributeListComponent
         layout.numColumns = 1;
         root.setLayout(layout);
         BindableDescriptor desc =
-            BindableDescriptorBuilder.buildDescriptor(job.algorithm);
-        desc = desc.only(Input.class, Processing.class);
+            BindableDescriptorBuilder.buildDescriptor(job.algorithm, true);
+        desc = desc.only(Input.class, Processing.class).flatten();
         for (Map.Entry<String, AttributeDescriptor> descriptor : desc.attributeDescriptors
             .entrySet())
         {
-            try
+            if (!descriptor.getValue().key.equals(AttributeNames.DOCUMENTS))
             {
-                IAttributeEditor editor =
-                    EditorFactory.getEditorFor(job.algorithm, descriptor.getValue());
-                editor.init(descriptor.getValue());
-                editor.createEditor(root);
-            }
-            catch (EditorNotFoundException ex)
-            {
-                Label l = new Label(root, SWT.NONE);
-                l.setText(descriptor.getKey());
-                l.setLayoutData(new GridData());
+                try
+                {
+                    IAttributeEditor editor =
+                        EditorFactory.getEditorFor(job.algorithm, descriptor.getValue());
+                    editor.init(descriptor.getValue());
+                    editor.createEditor(root);
+                }
+                catch (EditorNotFoundException ex)
+                {
+                    Label l = new Label(root, SWT.NONE);
+                    l.setText(descriptor.getKey());
+                    l.setLayoutData(new GridData());
+                }
             }
         }
     }

@@ -7,5 +7,10 @@ Bundle-Activator: org.carrot2.workbench.editors.EditorsPlugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.carrot2.util.attribute,
- org.apache.commons
+ org.apache.commons,
+ org.carrot2.core,
+ org.carrot2.workbench.core
 Eclipse-LazyStart: true
+Bundle-ClassPath: .
+Export-Package: org.carrot2.workbench.editors,
+ org.carrot2.workbench.editors.tmp

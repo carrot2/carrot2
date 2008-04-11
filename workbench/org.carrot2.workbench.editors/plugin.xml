@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
+   <extension
+         id="id1"
+         point="org.carrot2.core.algorithm">
+      <algorithm
+            class="org.carrot2.workbench.editors.tmp.TempClusteringAlgorithm"
+            icon="build.properties"
+            label="Temp ">
+      </algorithm>
+   </extension>
+   <extension
+         id="basic"
+         name="Basic Editors"
+         point="org.carrot2.workbench.core.attributeEditor">
+      <typeEditor
+            attributeClass="java.lang.Boolean"
+            class="org.carrot2.workbench.editors.BooleanEditor">
+      </typeEditor>
+   </extension>
 
 </plugin>
