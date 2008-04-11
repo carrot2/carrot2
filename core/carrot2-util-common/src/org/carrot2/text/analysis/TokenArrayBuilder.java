@@ -103,7 +103,8 @@ public final class TokenArrayBuilder
             final int oldData[] = tokens;
             final int newCapacity = Math.max(minCapacity, (oldCapacity * 3) / 2 + 1);
 
-            tokens = Arrays.copyOf(oldData, newCapacity);
+            tokens = new int [newCapacity];
+            System.arraycopy(oldData, 0, tokens, 0, Math.min(oldData.length, tokens.length));
         }
     }
 }
