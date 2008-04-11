@@ -6,21 +6,21 @@ import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.analysis.Token;
+import org.apache.lucene.analysis.Tokenizer;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
-import org.carrot2.text.analysis.ExtendedWhitespaceAnalyzer;
-import org.carrot2.text.analysis.ExtendedWhitespaceTokenizer;
+import org.carrot2.text.analysis.*;
 import org.carrot2.util.ExceptionUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
 
 /**
- * Suffix Tree Clustering algorithm.
+ * Suffix Tree Clustering (STC) algorithm.
  * 
  * @label STC Clustering
  */
 @Bindable
-public class STCClusteringAlgorithm extends ProcessingComponentBase implements
+public final class STCClusteringAlgorithm extends ProcessingComponentBase implements
     ClusteringAlgorithm
 {
     @Processing
@@ -157,17 +157,19 @@ public class STCClusteringAlgorithm extends ProcessingComponentBase implements
                 final String snippet = doc.getField(Document.SUMMARY);
                 if (!StringUtils.isEmpty(snippet)) fieldValues.add(snippet);
 
+                TokenType type = null;
                 Token t = null;
                 StemmedTerm lastValue = null;
                 while (!fieldValues.isEmpty())
                 {
-                    final ExtendedWhitespaceTokenizer ts = (ExtendedWhitespaceTokenizer) analyzer
+                    final Tokenizer ts = (ExtendedWhitespaceTokenizer) analyzer
                         .reusableTokenStream(null, new StringReader(fieldValues.remove(0)));
 
                     while ((t = ts.next(t)) != null)
                     {
                         // Add artificial marker separating sentences.
-                        if (ts.getLastTokenInfo().isSentenceMarker())
+                        type = (TokenType) t.getPayload();
+                        if (TokenTypeUtils.isSentenceDelimiter(type))
                         {
                             if (lastValue != null)
                             {
