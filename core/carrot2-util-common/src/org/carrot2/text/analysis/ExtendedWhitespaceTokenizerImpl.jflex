@@ -16,6 +16,19 @@ package org.carrot2.text.analysis;
 	}
 %}
 
+%{
+    /**
+     * Return the internal token's character buffer.
+     */
+	final char [] yybuffer() {
+		return zzBuffer;
+	}
+
+	final int yystart() {
+		return zzStartRead;
+	}
+%}
+
 DOMAIN     = "mil" | "info" | "gov" | "edu" | "biz" | "com" | "org" | "net" | 
              "arpa" | {LETTER}{2}
              
@@ -30,31 +43,31 @@ URL_PATH   = (";" | ":" | "@" | "&" | "=" | "?" | "/" | "_" | "%" | "." | {LETTE
 
 %%
 
-{DIGIT}+  ((":" | "-" | "/" | "," | ".") {DIGIT}+)*          { return TokenInfo.NUMERIC; }
+{DIGIT}+  ((":" | "-" | "/" | "," | ".") {DIGIT}+)*          { return TokenType.TT_NUMERIC; }
 
-({LETTER} "." ({LETTER} ".")+) | ({TERM} ("&" {TERM})+)      { return TokenInfo.ACRONYM; }
+({LETTER} "." ({LETTER} ".")+) | ({TERM} ("&" {TERM})+)      { return TokenType.TT_ACRONYM; }
 
-{LETTER} "." 												 { return TokenInfo.TERM; }
+{LETTER} "." 												 { return TokenType.TT_TERM; }
 
-{TERM} ( "-" {TERM})+                                        { return TokenInfo.HYPHTERM; }
+{TERM} ( "-" {TERM})+                                        { return TokenType.TT_HYPHTERM; }
 
-{TERM} "'" {LETTER}{1,2}                                     { return TokenInfo.TERM; }
+{TERM} "'" {LETTER}{1,2}                                     { return TokenType.TT_TERM; }
 
-{TERM} "s'"                                                  { return TokenInfo.TERM; }
+{TERM} "s'"                                                  { return TokenType.TT_TERM; }
 
-{TERM}                                                       { return TokenInfo.TERM; }
+{TERM}                                                       { return TokenType.TT_TERM; }
 
-("mailto:")?{SYMBOL}("."{SYMBOL})*"@"{SYMBOL}("."{SYMBOL})*  { return TokenInfo.EMAIL; }
+("mailto:")?{SYMBOL}("."{SYMBOL})*"@"{SYMBOL}("."{SYMBOL})*  { return TokenType.TT_EMAIL; }
 
-{BARE_URL}                                                   { return TokenInfo.BARE_URL;}
+{BARE_URL}                                                   { return TokenType.TT_BARE_URL;}
 	
-{SYMBOL}("."{SYMBOL})*                                       { return TokenInfo.FILE;}
+{SYMBOL}("."{SYMBOL})*                                       { return TokenType.TT_FILE;}
 	
-(("http" | "https" | "ftp") "://")? {BARE_URL} {URL_PATH}?   { return TokenInfo.FULL_URL; }
+(("http" | "https" | "ftp") "://")? {BARE_URL} {URL_PATH}?   { return TokenType.TT_FULL_URL; }
 	
-("." | "?" | "!" | ";" )+	                                 { return TokenInfo.PUNCTUATION | TokenInfo.SENTENCEMARKER; }
+("." | "?" | "!" | ";" )+	                                 { return TokenType.TT_PUNCTUATION | TokenType.TF_SENTENCEMARKER; }
 
-"," | "'" | ":" | "-"                                        { return TokenInfo.PUNCTUATION; }
+"," | "'" | ":" | "-"                                        { return TokenType.TT_PUNCTUATION; }
 
 /** Ignore HTML entities */
 "&" [a-zA-Z0-9#]+ ";"                                         { ; }

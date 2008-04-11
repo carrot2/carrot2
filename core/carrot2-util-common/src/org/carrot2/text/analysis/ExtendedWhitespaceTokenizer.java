@@ -9,7 +9,8 @@ import org.carrot2.util.CloseableUtils;
 
 /**
  * A tokenizer separating input characters on whitespace, but capable of extracting more
- * complex tokens, such as URLs, e-mail addresses and sentence delimiters.
+ * complex tokens, such as URLs, e-mail addresses and sentence delimiters. For each
+ * returned {@link Token}, a payload implementing {@link TokenType} is returned.
  */
 public final class ExtendedWhitespaceTokenizer extends Tokenizer
 {
@@ -21,19 +22,19 @@ public final class ExtendedWhitespaceTokenizer extends Tokenizer
     /**
      * JFlex parser used to split the input into tokens.
      */
-    private ExtendedWhitespaceTokenizerImpl parser;
+    private final ExtendedWhitespaceTokenizerImpl parser;
 
     /**
      * Reusable object for returning token type.
      */
-    private final TokenInfo tokenInfo = new TokenInfo(
-        ExtendedWhitespaceTokenizerImpl.YYEOF);
+    private final TokenTypePayload tokenPayload = new TokenTypePayload();
 
     /**
      * 
      */
     public ExtendedWhitespaceTokenizer(Reader input)
     {
+        this.parser = new ExtendedWhitespaceTokenizerImpl(input);
         reset(input);
     }
 
@@ -44,7 +45,6 @@ public final class ExtendedWhitespaceTokenizer extends Tokenizer
     public final Token next(Token result) throws IOException
     {
         final int tokenType = parser.getNextToken();
-        tokenInfo.setValue(tokenType);
 
         // EOF?
         if (tokenType == ExtendedWhitespaceTokenizerImpl.YYEOF)
@@ -52,27 +52,25 @@ public final class ExtendedWhitespaceTokenizer extends Tokenizer
             return null;
         }
 
+        tokenPayload.setRawFlags(tokenType);
         if (result == null)
         {
             result = new Token();
+            result.setPayload(tokenPayload);
         }
 
-        // TODO: Add intern() on certain token type values (proliferation
-        // of common symbols)? Lucene's Tokens convert it back to char buffers anyway,
-        // so maybe there is little point...
-        final String tokenText = parser.yytext();
-        result.setTermText(tokenText);
+        result.setTermBuffer(parser.yybuffer(), parser.yystart(), parser.yylength());
 
         return result;
     }
-
+    
     /**
-     * @return Returns the {@link TokenInfo} of the token last returned from
-     *         {@link #next(Token)}.
+     * Calls {@link #next()} with an empty token, effectively creating a new one.
      */
-    public final TokenInfo getLastTokenInfo()
+    @Override
+    public Token next() throws IOException
     {
-        return this.tokenInfo;
+        return next(null);
     }
 
     /**
@@ -101,7 +99,7 @@ public final class ExtendedWhitespaceTokenizer extends Tokenizer
         }
 
         this.reader = input;
-        this.parser = new ExtendedWhitespaceTokenizerImpl(input);
+        this.parser.yyreset(input);
     }
 
     /**
@@ -113,7 +111,6 @@ public final class ExtendedWhitespaceTokenizer extends Tokenizer
         {
             CloseableUtils.close(reader);
             this.reader = null;
-            this.parser = null;
         }
     }
 }
