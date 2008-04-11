@@ -1,16 +1,43 @@
 <project name="Build specific targets and properties" default="noDefault">
 
+	<condition property="allElementsTestFile"
+	           value="${builder}/allElements.xml"
+	           else="${allElementsFile}">
+		<equals arg1="${build.type}" arg2="test" />
+	</condition>
+	<import file="${allElementsTestFile}" />
+
+	<property name="java.source.common.attributes"
+	          location="${buildDirectory}/plugins/carrot2-core/src/org/carrot2/core/attribute/AttributeNames.java" />
+	<path id="attribute.classpath">
+		<pathelement path="${buildDirectory}/plugins/carrot2-core/@dot" />
+		<pathelement path="${buildDirectory}/plugins/carrot2-util-attribute/@dot" />
+		<pathelement path="${buildDirectory}/plugins/carrot2-util-common/@dot" />
+		<pathelement path="${buildDirectory}/plugins/carrot2-util-log4j/@dot" />
+		<fileset dir="${buildDirectory}/plugins" includes="**/*.jar" />
+	</path>
+
+	<!-- = = = = = = = = = = = = = = = = =
+		          macrodef: buildMetadata          
+		         = = = = = = = = = = = = = = = = = -->
+	<macrodef name="buildMetadata">
+		<attribute name="project.loc" />
+		<sequential>
+			<java classname="org.carrot2.util.attribute.BindableMetadataXmlSerializer"
+			      failonerror="true">
+				<classpath refid="attribute.classpath"/>
+				<arg file="@{project.loc}/src" />
+				<arg file="@{project.loc}/META-INF" />
+				<arg value="${java.source.common.attributes}" />
+			</java>
+		</sequential>
+	</macrodef>
+
 	<!-- ===================================================================== -->
 	<!-- Run a given ${target} on all elements being built -->
 	<!-- Add on <ant> task for each top level element being built. -->
 	<!-- ===================================================================== -->
 
-	<condition property="allElementsTestFile" 
-		value="${builder}/allElements.xml"
-		else="${allElementsFile}" >
-		<equals arg1="${build.type}" arg2="test" />
-	</condition>
-	<import file="${allElementsTestFile}" />
 	<target name="allElements">
 		<antcall target="allElementsDelegator" />
 	</target>
@@ -18,8 +45,11 @@
 	<!-- ===================================================================== -->
 	<!-- ===================================================================== -->
 	<target name="getBaseComponents" depends="checkLocalBase" unless="skipBase">
-		<get src="${eclipseBaseURL}" dest="${buildDirectory}/../temp-base.zip" />
-		<unzip dest="${base}" overwrite="true" src="${buildDirectory}/../temp-base.zip" />
+		<get src="${eclipseBaseURL}"
+		     dest="${buildDirectory}/../temp-base.zip" />
+		<unzip dest="${base}"
+		       overwrite="true"
+		       src="${buildDirectory}/../temp-base.zip" />
 	</target>
 
 	<target name="checkLocalBase">
@@ -32,7 +62,10 @@
 	<!-- ===================================================================== -->
 	<target name="getMapFiles" depends="checkLocalMaps" unless="skipMaps">
 		<property name="mapsCheckoutTag" value="HEAD" />
-		<cvs cvsRoot="${mapsRepo}" package="${mapsRoot}" dest="${buildDirectory}/maps" tag="${mapsCheckoutTag}" />
+		<cvs cvsRoot="${mapsRepo}"
+		     package="${mapsRoot}"
+		     dest="${buildDirectory}/maps"
+		     tag="${mapsCheckoutTag}" />
 	</target>
 
 	<target name="checkLocalMaps">
@@ -40,7 +73,8 @@
 	</target>
 
 	<target name="tagMapFiles" if="tagMaps">
-		<cvs dest="${buildDirectory}/maps/${mapsRoot}" command="tag ${mapsTagTag}" />
+		<cvs dest="${buildDirectory}/maps/${mapsRoot}"
+		     command="tag ${mapsTagTag}" />
 	</target>
 
 	<!-- ===================================================================== -->
@@ -56,7 +90,8 @@
 		<antcall target="allElements">
 			<param name="target" value="gatherLogs" />
 		</antcall>
-		<unzip dest="${buildDirectory}/${buildLabel}/compilelogs" overwrite="true">
+		<unzip dest="${buildDirectory}/${buildLabel}/compilelogs"
+		       overwrite="true">
 			<fileset dir="${buildDirectory}/features">
 				<include name="**/*.log.zip" />
 			</fileset>
@@ -127,7 +162,9 @@
 	<!-- Steps to do after setup but before starting the build proper -->
 	<!-- ===================================================================== -->
 	<target name="postSetup">
-		<condition property="fetchTarget" value="fetchTestFiles" else="fetchBuildFiles">
+		<condition property="fetchTarget"
+		           value="fetchTestFiles"
+		           else="fetchBuildFiles">
 			<equals arg1="${build.type}" arg2="test" />
 		</condition>
 		<antcall target="${fetchTarget}" />
@@ -175,6 +212,12 @@
 	<!-- Steps to do before running assemble. -->
 	<!-- ===================================================================== -->
 	<target name="preAssemble">
+		<buildMetadata project.loc="${buildDirectory}/plugins/carrot2-algorithm-stc" />
+		<buildMetadata project.loc="${buildDirectory}/plugins/org.carrot2.workbench.editors" />
+		<buildMetadata project.loc="${buildDirectory}/plugins/carrot2-algorithm-synthetic" />
+		<buildMetadata project.loc="${buildDirectory}/plugins/carrot2-source-yahoo" />
+		<buildMetadata project.loc="${buildDirectory}/plugins/carrot2-source-xml" />
+		<buildMetadata project.loc="${buildDirectory}/plugins/carrot2-core" />
 	</target>
 
 	<!-- ===================================================================== -->
@@ -195,10 +238,12 @@
 	<target name="postPackage">
 	</target>
 
+
 	<!-- ===================================================================== -->
 	<!-- Steps to do after the build is done. -->
 	<!-- ===================================================================== -->
 	<target name="postBuild">
+		<buildMetadata project.loc="${buildDirectory}/plugins/carrot2-algorithm-stc" />
 		<antcall target="gatherLogs" />
 	</target>
 

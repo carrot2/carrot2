@@ -11,3 +11,5 @@ Require-Bundle: org.carrot2.util.attribute;visibility:=reexport,
  org.carrot2.util.common,
  org.junit4.ext,
  org.simpleframework.xml
+Bundle-ClassPath: META-INF/,
+ .

@@ -7,3 +7,5 @@ Export-Package: org.carrot2.source.yahoo
 Require-Bundle: org.carrot2.core,
  org.carrot2.util.common,
  org.apache.log4j
+Bundle-ClassPath: META-INF/,
+ .
