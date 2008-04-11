@@ -1,4 +1,4 @@
-package org.carrot2.workbench.editors.tmp;
+package org.carrot2.workbench.editors.temp;
 
 import java.util.*;
 

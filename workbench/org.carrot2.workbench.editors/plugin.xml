@@ -5,8 +5,8 @@
          id="id1"
          point="org.carrot2.core.algorithm">
       <algorithm
-            class="org.carrot2.workbench.editors.tmp.TempClusteringAlgorithm"
-            icon="build.properties"
+            class="org.carrot2.workbench.editors.temp.TempClusteringAlgorithm"
+            icon="icons/web.gif"
             label="Temp ">
       </algorithm>
    </extension>

@@ -12,9 +12,9 @@ public class BooleanEditor extends AttributeEditorAdapter implements IAttributeE
     public void createEditor(Composite parent)
     {
         button = new Button(parent, SWT.CHECK);
-        // assert (descriptor != null);
-        // assert (descriptor.metadata != null);
-        // button.setText(descriptor.metadata.getLabel());
+        assert (descriptor != null);
+        assert (descriptor.metadata != null);
+        button.setText(descriptor.metadata.getLabel());
     }
 
     @Override
