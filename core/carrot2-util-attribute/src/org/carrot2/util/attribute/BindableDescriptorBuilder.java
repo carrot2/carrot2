@@ -215,7 +215,8 @@ public class BindableDescriptorBuilder
         AttributeMetadata attributeMetadata = null;
         if (bindableMetadata != null)
         {
-            bindableMetadata.getAttributeMetadata().get(field.getName());
+            attributeMetadata = bindableMetadata.getAttributeMetadata().get(
+                field.getName());
         }
         return new AttributeDescriptor(field, defaultValue,
             getConstraintAnnotations(field), attributeMetadata);

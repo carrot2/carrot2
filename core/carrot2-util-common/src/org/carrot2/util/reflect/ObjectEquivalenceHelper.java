@@ -17,7 +17,6 @@ import org.apache.commons.lang.builder.*;
 public class ObjectEquivalenceHelper
 {
     /** The original object */
-    @SuppressWarnings("unused")
     private final Object delegate;
 
     /**

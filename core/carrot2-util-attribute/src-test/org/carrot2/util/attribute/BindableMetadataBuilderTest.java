@@ -17,6 +17,7 @@ import org.junitext.runners.AnnotationRunner;
 public class BindableMetadataBuilderTest
 {
     private static final String SOURCE_PATH_PROPERTY = "source.paths";
+    private static final String COMMON_ATTRIBUTE_NAMES_SOURCE_PATH_PROPERTY = "common.attribte.names.source.path";
     protected static Map<String, BindableMetadata> bindableMetadata;
 
     /**
@@ -25,8 +26,8 @@ public class BindableMetadataBuilderTest
      */
     public static boolean isSourcePathAvailable()
     {
-        final String sourcePaths = System.getProperty(SOURCE_PATH_PROPERTY);
-        return !StringUtils.isEmpty(sourcePaths);
+        return !StringUtils.isBlank(System.getProperty(SOURCE_PATH_PROPERTY))
+            && !StringUtils.isBlank(COMMON_ATTRIBUTE_NAMES_SOURCE_PATH_PROPERTY);
     }
 
     /**
@@ -39,9 +40,13 @@ public class BindableMetadataBuilderTest
     {
         if (!isSourcePathAvailable())
         {
-            org.apache.log4j.Logger.getLogger(BindableMetadataBuilderTest.class).warn(
-                "Some tests skipped: provide path to sources of test classes in the '"
-                    + SOURCE_PATH_PROPERTY + "' JVM property");
+            org.apache.log4j.Logger
+                .getLogger(BindableMetadataBuilderTest.class)
+                .warn(
+                    "Some tests skipped: provide path to sources of test classes in the '"
+                        + SOURCE_PATH_PROPERTY
+                        + "' JVM property and a path to the common attribute names class source in the "
+                        + COMMON_ATTRIBUTE_NAMES_SOURCE_PATH_PROPERTY + " property");
 
             // Return, the tests that require this property will be ignored.
             return;
@@ -51,7 +56,8 @@ public class BindableMetadataBuilderTest
         final String sourcePaths = System.getProperty(SOURCE_PATH_PROPERTY);
 
         builder = new BindableMetadataBuilder();
-        builder.addCommonMetadataSource(TestAttributeNames.class);
+        builder.addCommonMetadataSource(new File(System
+            .getProperty(COMMON_ATTRIBUTE_NAMES_SOURCE_PATH_PROPERTY)));
 
         final String [] paths = sourcePaths.split(File.pathSeparator);
         for (final String path : paths)

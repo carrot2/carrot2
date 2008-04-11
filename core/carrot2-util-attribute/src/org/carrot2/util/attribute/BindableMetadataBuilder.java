@@ -78,17 +78,10 @@ class BindableMetadataBuilder
     /**
      * Adds a class to commonMetadataSources.
      */
-    void addCommonMetadataSource(String className)
+    void addCommonMetadataSource(File file) throws FileNotFoundException, IOException
     {
-        commonMetadataSources.add(className);
-    }
-
-    /**
-     * Adds a class to commonMetadataSources.
-     */
-    void addCommonMetadataSource(Class<?> clazz)
-    {
-        commonMetadataSources.add(clazz.getName());
+        JavaSource addSource = javaDocBuilder.addSource(file);
+        commonMetadataSources.add(addSource.getClasses()[0].getFullyQualifiedName());
     }
 
     /**

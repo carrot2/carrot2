@@ -3,7 +3,8 @@
     <java classname="org.carrot2.util.attribute.BindableMetadataXmlSerializer">
       <arg file="${java.source}" />
       <arg file="${output.dir}" />
-      <arg value="org.carrot2.core.attribute.AttributeNames" />
+      <arg file="${java.source.common.attributes}" />
+<!--      <arg value="org.carrot2.core.attribute.AttributeNames" />-->
     </java>
   </target>
 </project>

@@ -23,7 +23,7 @@ public class BindableMetadataXmlSerializer
 
         for (int i = 2; i < args.length; i++)
         {
-            builder.addCommonMetadataSource(args[i]);
+            builder.addCommonMetadataSource(new File(args[i]));
         }
 
         builder.addListener(new BindableMetadataBuilderListener.XmlSerializerListener(

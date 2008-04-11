@@ -32,11 +32,12 @@
 <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.ant.ui.AntClasspathProvider"/>
 <mapAttribute key="org.eclipse.ui.externaltools.ATTR_ANT_PROPERTIES">
 <mapEntry key="java.source" value="${build_project}"/>
-<mapEntry key="eclipse.pdebuild.scripts" value="/D:/dev/eclipse-3.4/plugins/org.eclipse.pde.build_3.4.0.v20080323/scripts/"/>
 <mapEntry key="eclipse.pdebuild.home" value="/D:/dev/eclipse-3.4/plugins/org.eclipse.pde.build_3.4.0.v20080323/./"/>
-<mapEntry key="eclipse.pdebuild.templates" value="/D:/dev/eclipse-3.4/plugins/org.eclipse.pde.build_3.4.0.v20080323/templates/"/>
 <mapEntry key="output.dir" value="${build_project}/tmp/eclipse"/>
 <mapEntry key="clover.license.path" value="D:\dev\eclipse-3.4\plugins\com.cenqua.clover.ant_2.0.3.v20071203123733\clover.license"/>
+<mapEntry key="eclipse.pdebuild.scripts" value="/D:/dev/eclipse-3.4/plugins/org.eclipse.pde.build_3.4.0.v20080323/scripts/"/>
+<mapEntry key="eclipse.pdebuild.templates" value="/D:/dev/eclipse-3.4/plugins/org.eclipse.pde.build_3.4.0.v20080323/templates/"/>
+<mapEntry key="java.source.common.attributes" value="${resource_loc:/carrot2-core/src/org/carrot2/core/attribute/AttributeNames.java}"/>
 </mapAttribute>
 <stringAttribute key="org.eclipse.ui.externaltools.ATTR_LAUNCH_CONFIGURATION_BUILD_SCOPE" value="${projects:carrot2-algorithm-stc,carrot2-algorithm-synthetic,carrot2-core,carrot2-source-xml,carrot2-source-yahoo,carrot2-util-attribute}"/>
 <stringAttribute key="org.eclipse.ui.externaltools.ATTR_LOCATION" value="${workspace_loc:/carrot2-util-attribute/etc/eclipse/build-attributes.xml}"/>
@@ -44,3 +45,4 @@
 <booleanAttribute key="org.eclipse.ui.externaltools.ATTR_TRIGGERS_CONFIGURED" value="true"/>
 <stringAttribute key="process_factory_id" value="org.eclipse.ant.ui.remoteAntProcessFactory"/>
 </launchConfiguration>
+

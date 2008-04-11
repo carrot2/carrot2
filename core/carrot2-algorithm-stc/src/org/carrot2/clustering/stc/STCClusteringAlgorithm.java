@@ -34,7 +34,9 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     @Attribute(key = AttributeNames.CLUSTERS)
     Collection<Cluster> clusters = null;
 
-    /*
+    /**
+     * Temporary tokenizer.
+     * 
      * TODO: This should really be replaced with a strategy that splits document(s) into
      * sentences.
      */
