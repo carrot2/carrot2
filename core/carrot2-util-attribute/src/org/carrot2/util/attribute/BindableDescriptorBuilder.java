@@ -163,7 +163,7 @@ public class BindableDescriptorBuilder
     private static BindableMetadata getBindableMetadata(final Class<?> clazz)
     {
         final Resource metadataXml = ResourceUtilsFactory.getDefaultResourceUtils()
-            .getFirst(clazz.getSimpleName() + ".xml", clazz);
+            .getFirst(clazz.getName() + ".xml", clazz);
         BindableMetadata bindableMetadata = null;
         if (metadataXml != null)
         {

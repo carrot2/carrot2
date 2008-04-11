@@ -62,7 +62,6 @@ public class AttributeValueSet
      * the attribute, but this tight coupling between attribute values sets and
      * descriptors would probably be too cumbersome in most situations.
      */
-    @SuppressWarnings("unused")
     @Root(name = "value")
     static class TypeStringValuePair
     {
@@ -212,6 +211,7 @@ public class AttributeValueSet
      * Converts attribute values to {@link TypeStringValuePair}s for serialization.
      */
     @Persist
+    @SuppressWarnings("unused")
     private void convertAttributeValuesToStrings()
     {
         overridenAttributeValuesAsStrings = Maps.newHashMap();
@@ -237,6 +237,7 @@ public class AttributeValueSet
      * Converts attribute values to {@link TypeStringValuePair}s after deserialization.
      */
     @Commit
+    @SuppressWarnings("unused")
     private void convertAttributeValuesFromStrings() throws Exception
     {
         overridenAttributeValues = Maps.newHashMap();

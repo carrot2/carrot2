@@ -1,6 +1,6 @@
 package org.carrot2.util.attribute;
 
-import java.io.File;
+import java.io.*;
 import java.util.List;
 import java.util.Map;
 
@@ -63,9 +63,16 @@ class BindableMetadataBuilder
     /**
      * Adds Java sources to be parsed.
      */
-    void addSourceTree(File directory)
+    void addSource(File file) throws FileNotFoundException, IOException
     {
-        javaDocBuilder.addSourceTree(directory);
+        if (file.isDirectory())
+        {
+            javaDocBuilder.addSourceTree(file);
+        }
+        else
+        {
+            javaDocBuilder.addSource(file);
+        }
     }
 
     /**

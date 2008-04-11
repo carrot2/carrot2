@@ -102,19 +102,27 @@
         </condition>
         <fail message="Tests failed. See ${tests.report.dir} for report." if="tests.failed" />
     </target>
-    
-    
+   
+    <macrodef name="attributes-xml">
+      <attribute name="java.source" />
+      <attribute name="output.dir" />
+      <sequential>
+          <java classname="org.carrot2.util.attribute.BindableMetadataXmlSerializer" classpathref="test.classpath">
+              <arg file="@{java.source}" />
+              <arg file="@{output.dir}" />
+              <arg value="org.carrot2.core.attribute.AttributeNames" />
+          </java>
+      </sequential>
+    </macrodef>
+
     <target name="attributes" depends="compile">
-        <java classname="org.carrot2.util.attribute.BindableMetadataXmlSerializer" classpathref="test.classpath">
-            <arg value="org.carrot2.core.attribute.AttributeNames" />
-
-            <arg file="core/carrot2-core/src" />
-            <arg file="core/carrot2-util-attribute/src-test" />
-            <arg file="core/carrot2-source-yahoo/src" />
-            <arg file="core/carrot2-algorithm-synthetic/src" />
-        </java>
+        <attributes-xml java.source="core/carrot2-algorithm-stc/src" output.dir="${build.dir}" />
+        <attributes-xml java.source="core/carrot2-algorithm-synthetic/src" output.dir="${build.dir}" />
+        <attributes-xml java.source="core/carrot2-core/src" output.dir="${build.dir}" />
+        <attributes-xml java.source="core/carrot2-source-yahoo/src" output.dir="${build.dir}" />
+        <attributes-xml java.source="core/carrot2-source-xml/src" output.dir="${build.dir}" />
+        <attributes-xml java.source="core/carrot2-util-attribute/src-test" output.dir="${build.dir}" />
     </target>
-
 
     <target name="clover.tasks" if="clover.home">
         <taskdef resource="cloverlib.xml" classpath="${clover.jar}"/>

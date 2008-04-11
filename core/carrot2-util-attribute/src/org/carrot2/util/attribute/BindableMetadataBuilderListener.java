@@ -50,13 +50,20 @@ abstract class BindableMetadataBuilderListener
      */
     static class XmlSerializerListener extends BindableMetadataBuilderListener
     {
+        private final File outputDir;
+
+        public XmlSerializerListener(File outputDir)
+        {
+            this.outputDir = outputDir;
+        }
+
         public void bindableMetadataBuilt(JavaClass bindable,
             BindableMetadata bindableMetadata)
         {
             try
             {
-                final File xmlFile = new File(new File(bindable.getSource().getURL()
-                    .toURI()).getParentFile(), bindable.getName() + ".xml");
+                final File xmlFile = new File(outputDir, bindable.getFullyQualifiedName()
+                    + ".xml");
 
                 final Persister persister = new Persister(new Format(2,
                     "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"));

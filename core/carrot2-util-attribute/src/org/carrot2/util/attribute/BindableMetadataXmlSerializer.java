@@ -1,45 +1,39 @@
 package org.carrot2.util.attribute;
 
-import java.io.File;
+import java.io.*;
 
 /**
  * Builds metadata XML files for the requested Java source directories.
  */
 public class BindableMetadataXmlSerializer
 {
-    public static void main(String [] args)
+    public static void main(String [] args) throws FileNotFoundException, IOException
     {
-        final BindableMetadataBuilder builder = new BindableMetadataBuilder();
-
-        for (final String path : args)
+        if (args.length < 2)
         {
-            // TODO: remove this nasty hack at some point
-            if (isClassName(path))
-            {
-                builder.addCommonMetadataSource(path);
-            }
-            else
-            {
-                builder.addSourceTree(new File(path));
-            }
+            printUsage();
+            return;
         }
 
-        builder
-            .addListener(new BindableMetadataBuilderListener.XmlSerializerListener());
+        final String javaSource = args[0];
+        final String outputDir = args[1];
+
+        final BindableMetadataBuilder builder = new BindableMetadataBuilder();
+        builder.addSource(new File(javaSource));
+
+        for (int i = 2; i < args.length; i++)
+        {
+            builder.addCommonMetadataSource(args[i]);
+        }
+
+        builder.addListener(new BindableMetadataBuilderListener.XmlSerializerListener(
+            new File(outputDir)));
         builder.buildAttributeMetadata();
     }
 
-    private static boolean isClassName(String string)
+    private static void printUsage()
     {
-        try
-        {
-            Class.forName(string);
-        }
-        catch (ClassNotFoundException e)
-        {
-            return false;
-        }
-
-        return true;
+        System.out.println("Usage: BindableMetadataXmlSerializer "
+            + "java-source-dir-or-file output-dir [common-metadata-class-name...]");
     }
 }

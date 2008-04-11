@@ -14,8 +14,7 @@ import org.carrot2.core.attribute.*;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
-import org.carrot2.util.resource.Resource;
-import org.carrot2.util.resource.ResourceUtils;
+import org.carrot2.util.resource.*;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -52,7 +51,10 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
     @Processing
     @Attribute
     @Required
-    @ImplementingClasses(classes = {}, strict = false)
+    @ImplementingClasses(classes =
+    {
+        FileResource.class, ParameterizedUrlResource.class, URLResource.class
+    }, strict = false)
     private Resource xml;
 
     /**
@@ -75,6 +77,10 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
     @Init
     @Processing
     @Attribute
+    @ImplementingClasses(classes =
+    {
+        FileResource.class, ParameterizedUrlResource.class, URLResource.class
+    }, strict = false)
     private Resource xslt;
 
     /**
@@ -86,7 +92,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
     @Init
     @Processing
     @Attribute
-    private Map<String, String> xsltParameters = Collections.<String, String> emptyMap();
+    private Map<String, String> xsltParameters = Maps.immutableMap();
 
     @Input
     @Output
@@ -99,7 +105,6 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
     @Attribute(key = AttributeNames.RESULTS)
     private int results = -1;
 
-    @SuppressWarnings("unused")
     @Processing
     @Output
     @Attribute(key = AttributeNames.DOCUMENTS)

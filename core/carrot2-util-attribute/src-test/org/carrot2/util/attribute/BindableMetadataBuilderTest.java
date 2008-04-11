@@ -2,7 +2,7 @@ package org.carrot2.util.attribute;
 
 import static org.junit.Assert.*;
 
-import java.io.File;
+import java.io.*;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -35,18 +35,18 @@ public class BindableMetadataBuilderTest
      * issue if the test cases are executed in some parallel way.
      */
     @BeforeClass
-    public static void generateMetadata()
+    public static void generateMetadata() throws FileNotFoundException, IOException
     {
         if (!isSourcePathAvailable())
         {
-            org.apache.log4j.Logger.getLogger(BindableMetadataBuilderTest.class)
-                .warn("Some tests skipped: provide path to sources of test classes in the '" 
+            org.apache.log4j.Logger.getLogger(BindableMetadataBuilderTest.class).warn(
+                "Some tests skipped: provide path to sources of test classes in the '"
                     + SOURCE_PATH_PROPERTY + "' JVM property");
 
-            // Return, the tests that require this property will be ignored. 
+            // Return, the tests that require this property will be ignored.
             return;
         }
-        
+
         final BindableMetadataBuilder builder;
         final String sourcePaths = System.getProperty(SOURCE_PATH_PROPERTY);
 
@@ -56,7 +56,7 @@ public class BindableMetadataBuilderTest
         final String [] paths = sourcePaths.split(File.pathSeparator);
         for (final String path : paths)
         {
-            builder.addSourceTree(new File(path));
+            builder.addSource(new File(path));
         }
 
         final BindableMetadataBuilderListener.MapStorageListener mapListener = new BindableMetadataBuilderListener.MapStorageListener();
@@ -86,7 +86,7 @@ public class BindableMetadataBuilderTest
     {
         checkLabel(AttributeLabels.class, "singleWordLabel", "word");
     }
-    
+
     @Prerequisite(requires = "isSourcePathAvailable")
     @Test
     public void testMultiWordLabel()
@@ -136,7 +136,7 @@ public class BindableMetadataBuilderTest
     {
         checkTitle(AttributeTitles.class, "titleWithoutPeriod", "Title without period");
     }
-    
+
     @Prerequisite(requires = "isSourcePathAvailable")
     @Test
     public void testTitleWithDescription()
