@@ -398,7 +398,7 @@ public class AttributeBinder
         /**
          * Checks an attribute's annotations.
          * 
-         * @param bindingDirection TODO
+         * @param bindingDirection
          * @return <code>true</code> if the attribute passed the check and can be bound,
          *         <code>false</code> if the attribute did not pass the check and cannot
          *         be bound.
@@ -460,10 +460,13 @@ public class AttributeBinder
      */
     static class ConsistencyCheckImplementingClasses extends ConsistencyCheck
     {
-        static Set<Class<?>> ALLOWED_TYPES = Sets.<Class<?>> immutableSet(Byte.class,
-            Short.class, Integer.class, Long.class, Float.class, Double.class,
-            Boolean.class, String.class, Class.class, Resource.class, Collection.class,
-            Map.class);
+        static Set<Class<?>> ALLOWED_PLAIN_TYPES = Sets.<Class<?>> immutableSet(
+            Byte.class, Short.class, Integer.class, Long.class, Float.class,
+            Double.class, Boolean.class, String.class, Class.class, Resource.class,
+            Collection.class, Map.class);
+
+        static Set<Class<?>> ALLOWED_ASSIGNABLE_TYPES = Sets.<Class<?>> immutableSet(
+            Enum.class, Resource.class, Collection.class, Map.class);
 
         @Override
         boolean check(Field field, Class<? extends Annotation> bindingDirection,
@@ -476,8 +479,8 @@ public class AttributeBinder
 
             final Class<?> attributeType = ClassUtils.primitiveToWrapper(field.getType());
 
-            if (!ALLOWED_TYPES.contains(attributeType)
-                && !Enum.class.isAssignableFrom(attributeType)
+            if (!ALLOWED_PLAIN_TYPES.contains(attributeType)
+                && !isAllowedAssignableType(attributeType)
                 && field.getAnnotation(ImplementingClasses.class) == null)
             {
                 throw new IllegalArgumentException("Non-primitive typed attribute "
@@ -487,6 +490,19 @@ public class AttributeBinder
             }
 
             return true;
+        }
+
+        private static boolean isAllowedAssignableType(Class<?> attributeType)
+        {
+            for (Class<?> clazz : ALLOWED_ASSIGNABLE_TYPES)
+            {
+                if (clazz.isAssignableFrom(attributeType))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

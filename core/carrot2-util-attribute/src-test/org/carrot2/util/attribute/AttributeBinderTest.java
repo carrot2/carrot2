@@ -3,8 +3,8 @@ package org.carrot2.util.attribute;
 import static org.junit.Assert.*;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.carrot2.util.attribute.constraint.*;
 import org.junit.Before;
@@ -286,6 +286,40 @@ public class AttributeBinderTest
         @Required
         @Attribute
         private String initProcessingInputString;
+    }
+
+    @Bindable
+    public static class CollectionInputAttributes
+    {
+        @TestProcessing
+        @Input
+        @Attribute
+        private List<String> list;
+
+        @TestProcessing
+        @Input
+        @Attribute
+        private LinkedList<String> linkedList;
+
+        @TestProcessing
+        @Input
+        @Attribute
+        private Set<String> set;
+
+        @TestProcessing
+        @Input
+        @Attribute
+        private LinkedHashSet<String> linkedHashSet;
+
+        @TestProcessing
+        @Input
+        @Attribute
+        private Map<String, String> map;
+
+        @TestProcessing
+        @Input
+        @Attribute
+        private ConcurrentHashMap<String, String> concurrentHashMap;
     }
 
     @Before
@@ -737,6 +771,30 @@ public class AttributeBinderTest
         });
     }
 
+    @Test
+    public void testCollectionInput() throws InstantiationException
+    {
+        CollectionInputAttributes instance = new CollectionInputAttributes();
+
+        addAttribute(CollectionInputAttributes.class, "list", Collections.emptyList());
+        final LinkedList<String> linkedList = new LinkedList<String>();
+        addAttribute(CollectionInputAttributes.class, "linkedList", linkedList);
+        addAttribute(CollectionInputAttributes.class, "set", Collections.emptySet());
+        final LinkedHashSet<String> linkedHashSet = new LinkedHashSet<String>();
+        addAttribute(CollectionInputAttributes.class, "linkedHashSet", linkedHashSet);
+        addAttribute(CollectionInputAttributes.class, "map", Collections.emptyMap());
+        final ConcurrentHashMap<String, String> concurrentHashMap = new ConcurrentHashMap<String, String>();
+        addAttribute(CollectionInputAttributes.class, "concurrentHashMap",
+            concurrentHashMap);
+        AttributeBinder.bind(instance, attributes, Input.class);
+        checkFieldValues(instance, new Object []
+        {
+            "list", Collections.emptyList(), "linkedList", linkedList, "set",
+            Collections.emptySet(), "linkedHashSet", linkedHashSet, "map",
+            Collections.emptyMap(), "concurrentHashMap", concurrentHashMap
+        });
+    }
+
     private void addAttribute(Class<?> clazz, String field, Object value)
     {
         attributes.put(getKey(clazz, field), value);
@@ -800,7 +858,7 @@ public class AttributeBinderTest
                 expectedValue, actualValue);
         }
     }
-    
+
     public static enum TestEnum
     {
         VALUE1, VALUE2
