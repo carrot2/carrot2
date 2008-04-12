@@ -4,7 +4,6 @@
       <arg file="${java.source}" />
       <arg file="${output.dir}" />
       <arg file="${java.source.common.attributes}" />
-<!--      <arg value="org.carrot2.core.attribute.AttributeNames" />-->
     </java>
   	<antcall target="copy.metadata"/>
   </target>
