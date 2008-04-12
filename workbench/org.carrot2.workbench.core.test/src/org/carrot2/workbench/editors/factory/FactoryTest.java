@@ -42,6 +42,7 @@ public class FactoryTest extends TestCase
     public void testInheritance() throws Exception
     {
         checkEditor(ComboEditor.class, "comboAttribute");
+        checkEditor(ComboEditor.class, "editor");
     }
 
     private void checkEditor(Class<?> expectedEditor, String attId)

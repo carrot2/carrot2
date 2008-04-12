@@ -140,13 +140,30 @@ public class EditorFactory
     private static boolean isCompatible(Class<?> clazz, String className)
     {
         // TODO: should interfaces of component also taken into account?
-        boolean result = clazz.getName().equals(className);
+        boolean compatible = clazz.getName().equals(className);
         Class<?> c = clazz;
-        while (!result && !c.getName().equals("java.lang.Object"))
+        while (!compatible && c.getSuperclass() != null)
         {
             c = c.getSuperclass();
-            result = c.getName().equals(className);
+            compatible = c.getName().equals(className);
         }
-        return result;
+        if (!compatible && clazz.isInterface())
+        {
+            compatible = "java.lang.Object".equals(className);
+        }
+        if (!compatible)
+        {
+            boolean innerCompatible = false;
+            for (int i = 0; i < clazz.getInterfaces().length; i++)
+            {
+                if (!innerCompatible)
+                {
+                    Class<?> c2 = clazz.getInterfaces()[i];
+                    innerCompatible = isCompatible(c2, className);
+                }
+            }
+            compatible = innerCompatible;
+        }
+        return compatible;
     }
 }

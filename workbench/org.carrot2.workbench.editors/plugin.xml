@@ -18,6 +18,16 @@
             attributeClass="java.lang.Boolean"
             class="org.carrot2.workbench.editors.BooleanEditor">
       </typeEditor>
+      <typeEditor
+            attributeClass="java.lang.Object"
+            class="org.carrot2.workbench.editors.ImplementingClassesEditor">
+         <constraints
+               allAtOnce="true">
+            <constraint
+                  constraintClass="org.carrot2.util.attribute.constraint.ImplementingClasses">
+            </constraint>
+         </constraints>
+      </typeEditor>
    </extension>
 
 </plugin>

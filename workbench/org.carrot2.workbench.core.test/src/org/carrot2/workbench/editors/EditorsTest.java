@@ -52,6 +52,15 @@ public class EditorsTest
         })
         TestType2 comboAttribute;
 
+        @Attribute
+        @Input
+        @Processing
+        @ImplementingClasses(classes =
+        {
+            DedicatedEditor.class, DedicatedEditor3.class
+        })
+        IAttributeEditor editor = new DedicatedEditor();
+
     }
 
     public static class DedicatedEditor extends AttributeEditorAdapter
