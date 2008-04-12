@@ -1,6 +1,8 @@
 package org.carrot2.workbench.editors;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
@@ -15,6 +17,20 @@ public class BooleanEditor extends AttributeEditorAdapter implements IAttributeE
         assert (descriptor != null);
         assert (descriptor.metadata != null);
         button.setText(descriptor.metadata.getLabel());
+        button.addSelectionListener(new SelectionAdapter()
+        {
+            @Override
+            public void widgetSelected(SelectionEvent e)
+            {
+                doEvent();
+            }
+        });
+    }
+
+    private void doEvent()
+    {
+        AttributeChangeEvent event = new AttributeChangeEvent(this);
+        fireAttributeChange(event);
     }
 
     @Override

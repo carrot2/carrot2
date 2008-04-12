@@ -21,6 +21,8 @@ public interface IAttributeEditor
 
     void init(AttributeDescriptor descriptor);
 
+    String getAttributeKey();
+
     void createEditor(Composite parent);
 
     void setValue(Object currentValue);
@@ -28,5 +30,9 @@ public interface IAttributeEditor
     Object getValue();
 
     void dispose();
+
+    public void addAttributeChangeListener(AttributeChangeListener listener);
+
+    public void removeAttributeChangeListener(AttributeChangeListener listener);
 
 }

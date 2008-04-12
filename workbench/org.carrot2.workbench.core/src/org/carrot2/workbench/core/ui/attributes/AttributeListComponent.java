@@ -6,8 +6,7 @@ import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
 import org.carrot2.workbench.core.jobs.ProcessingJob;
-import org.carrot2.workbench.editors.EditorNotFoundException;
-import org.carrot2.workbench.editors.IAttributeEditor;
+import org.carrot2.workbench.editors.*;
 import org.carrot2.workbench.editors.factory.EditorFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -18,10 +17,21 @@ import org.eclipse.ui.IWorkbenchSite;
 public class AttributeListComponent
 {
     private Composite root;
+    private ProcessingJob processingJob;
 
     @SuppressWarnings("unchecked")
     public AttributeListComponent(IWorkbenchSite site, Composite parent, ProcessingJob job)
     {
+        this.processingJob = job;
+        AttributeChangeListener listener = new AttributeChangeListener()
+        {
+            public void attributeChange(AttributeChangeEvent event)
+            {
+                processingJob.attributes.put(event.key, event.value);
+                processingJob.schedule();
+            }
+        };
+
         root = new Composite(parent, SWT.EMBEDDED | SWT.DOUBLE_BUFFERED);
         GridLayout layout = new GridLayout();
         layout.numColumns = 1;
@@ -40,6 +50,8 @@ public class AttributeListComponent
                         EditorFactory.getEditorFor(job.algorithm, descriptor.getValue());
                     editor.init(descriptor.getValue());
                     editor.createEditor(root);
+                    editor.setValue(descriptor.getValue().defaultValue);
+                    editor.addAttributeChangeListener(listener);
                 }
                 catch (EditorNotFoundException ex)
                 {
