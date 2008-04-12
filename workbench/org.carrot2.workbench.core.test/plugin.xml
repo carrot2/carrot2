@@ -53,6 +53,15 @@
             class="org.carrot2.workbench.editors.EditorsTest$DedicatedEditor4"
             componentClass="org.carrot2.source.yahoo.YahooDocumentSource">
       </dedicatedEditor>
+      <typeEditor
+            attributeClass="java.lang.Object"
+            class="org.carrot2.workbench.editors.EditorsTest$ComboEditor">
+         <constraints>
+            <constraint
+                  constraintClass="org.carrot2.util.attribute.constraint.ImplementingClasses">
+            </constraint>
+         </constraints>
+      </typeEditor>
    </extension>
 
 </plugin>

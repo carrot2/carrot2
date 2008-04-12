@@ -4,8 +4,7 @@ import org.carrot2.core.ClusteringAlgorithm;
 import org.carrot2.core.ProcessingComponentBase;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
-import org.carrot2.util.attribute.constraint.DoubleRange;
-import org.carrot2.util.attribute.constraint.IntRange;
+import org.carrot2.util.attribute.constraint.*;
 
 public class EditorsTest
 {
@@ -43,6 +42,16 @@ public class EditorsTest
         @Processing
         @DoubleRange(min = 0, max = 10)
         TestType2 rangeDoubleAttribute;
+
+        @Attribute
+        @Input
+        @Processing
+        @ImplementingClasses(classes =
+        {
+            TestType.class, TestType2.class
+        })
+        TestType2 comboAttribute;
+
     }
 
     public static class DedicatedEditor extends AttributeEditorAdapter
@@ -76,6 +85,11 @@ public class EditorsTest
     }
 
     public static class RangeEditor2 extends AttributeEditorAdapter
+    {
+
+    }
+
+    public static class ComboEditor extends AttributeEditorAdapter
     {
 
     }

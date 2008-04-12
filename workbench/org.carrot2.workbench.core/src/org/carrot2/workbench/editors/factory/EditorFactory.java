@@ -92,8 +92,7 @@ public class EditorFactory
 
                 public boolean apply(TypeEditorWrapper editor)
                 {
-                    boolean result =
-                        isCompatible(attribute.type, editor.attributeClass);
+                    boolean result = isCompatible(attribute.type, editor.attributeClass);
                     if (!attribute.constraints.isEmpty())
                     {
                         boolean all = false;
@@ -131,8 +130,8 @@ public class EditorFactory
                 public boolean apply(DedicatedEditorWrapper editor)
                 {
                     return isCompatible(owner.getClass(), editor.componentClass)
-                        && AttributeUtils.getKey(owner.getClass(),
-                            editor.attributeId).equals(attribute.key);
+                        && AttributeUtils.getKey(owner.getClass(), editor.attributeId)
+                            .equals(attribute.key);
                 }
 
             });
@@ -140,7 +139,14 @@ public class EditorFactory
 
     private static boolean isCompatible(Class<?> clazz, String className)
     {
-        // TODO: should subclasses of component also taken into account?
-        return clazz.getName().equals(className);
+        // TODO: should interfaces of component also taken into account?
+        boolean result = clazz.getName().equals(className);
+        Class<?> c = clazz;
+        while (!result && !c.getName().equals("java.lang.Object"))
+        {
+            c = c.getSuperclass();
+            result = c.getName().equals(className);
+        }
+        return result;
     }
 }
