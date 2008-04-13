@@ -23,6 +23,11 @@ public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm>
      */
     protected final static Collection<Document> DOCUMENTS_DATA_MINING = SampleDocumentData.DOCUMENTS_DATA_MINING;
 
+    /**
+     * A set of sample documents returned for the query <i>dawid</i>.
+     */
+    protected final static Collection<Document> DOCUMENTS_DAWID = SampleDocumentData.DOCUMENTS_DAWID;
+
     /*
      * 
      */
