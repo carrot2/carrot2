@@ -65,8 +65,11 @@ public class ImplementingClassesEditor extends AttributeEditorAdapter
     @Override
     public void setValue(Object currentValue)
     {
-        int current = classes.indexOf(currentValue.getClass());
-        combo.getCombo().select(current);
+        if (currentValue != null)
+        {
+            int current = classes.indexOf(currentValue.getClass());
+            combo.getCombo().select(current);
+        }
     }
 
     @Override
