@@ -70,7 +70,7 @@ public class ExtendedWhitespaceTokenizerTest
         String test = " ...  S_NI_P token";
         TokenImage [] tokens =
         {
-            new TokenImage("...", TokenType.TT_PUNCTUATION | TokenType.TF_SENTENCEMARKER),
+            new TokenImage("...", TokenType.TT_PUNCTUATION | TokenType.TF_SEPARATOR_SENTENCE),
             new TokenImage("S_NI_P", TokenType.TT_FILE),
             new TokenImage("token", TokenType.TT_TERM)
         };
@@ -203,7 +203,7 @@ public class ExtendedWhitespaceTokenizerTest
             new TokenImage(",", TokenType.TT_PUNCTUATION),
             new TokenImage("Data", TokenType.TT_TERM),
             new TokenImage("Mining", TokenType.TT_TERM),
-            new TokenImage("!", TokenType.TT_PUNCTUATION | TokenType.TF_SENTENCEMARKER)
+            new TokenImage("!", TokenType.TT_PUNCTUATION | TokenType.TF_SEPARATOR_SENTENCE)
         };
 
         assertEqualTokens(test, tokens);

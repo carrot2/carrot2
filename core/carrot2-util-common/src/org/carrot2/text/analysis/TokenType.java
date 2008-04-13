@@ -9,7 +9,7 @@ package org.carrot2.text.analysis;
  * constants in this class declared with <code>TT_</code> prefix.</dd>
  * <dt>token flags</dt>
  * <dd>Additional token flags such as an indication whether a punctuation token is a
- * sentence delimiter ({@link #TF_SENTENCEMARKER}).</dd>
+ * sentence delimiter ({@link #TF_SEPARATOR_SENTENCE}).</dd>
  * </dl>
  * 
  * @see TokenTypeUtils
@@ -19,6 +19,8 @@ public interface TokenType
     /*
      * Token type mask: 0x00ff
      */
+    public static final int TYPE_MASK = 0x00ff;
+
     public static final int TT_TERM = 0x0001;
     public static final int TT_NUMERIC = 0x0002;
     public static final int TT_PUNCTUATION = 0x0003;
@@ -32,7 +34,12 @@ public interface TokenType
     /*
      * Additional token flags, mask: 0x0f00
      */
-    public static final int TF_SENTENCEMARKER = 0x0100;
+    /** Current token is a sentence separator. */
+    public static final int TF_SEPARATOR_SENTENCE = 0x0100;
+    /** Current token is a document separator (never returned from parsing). */
+    public static final int TF_SEPARATOR_DOCUMENT = 0x0200;
+    /** Current token separates document's logical fields. */
+    public static final int TF_SEPARATOR_FIELD = 0x0800;
 
     /**
      * @return Returns raw bitmask associated with the token.

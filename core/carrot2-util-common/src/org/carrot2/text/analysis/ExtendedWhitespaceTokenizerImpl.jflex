@@ -65,7 +65,7 @@ URL_PATH   = (";" | ":" | "@" | "&" | "=" | "?" | "/" | "_" | "%" | "." | {LETTE
 	
 (("http" | "https" | "ftp") "://")? {BARE_URL} {URL_PATH}?   { return TokenType.TT_FULL_URL; }
 	
-("." | "?" | "!" | ";" )+	                                 { return TokenType.TT_PUNCTUATION | TokenType.TF_SENTENCEMARKER; }
+("." | "?" | "!" | ";" )+	                                 { return TokenType.TT_PUNCTUATION | TokenType.TF_SEPARATOR_SENTENCE; }
 
 "," | "'" | ":" | "-"                                        { return TokenType.TT_PUNCTUATION; }
 
