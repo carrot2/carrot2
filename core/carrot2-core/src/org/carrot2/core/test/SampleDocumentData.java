@@ -1,8 +1,6 @@
 package org.carrot2.core.test;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
 
 import org.carrot2.core.Document;
 
@@ -622,5 +620,611 @@ final class SampleDocumentData
         }
 
         DOCUMENTS_DATA_MINING = Collections.unmodifiableList(documents);
+    }
+
+    final static Collection<Document> DOCUMENTS_DAWID;
+    static
+    {
+        final String [][] data = new String [] []
+        {
+            {
+                "http://www.dawid.tv/",
+                "dawid.tv",
+                "Watch free videos on dawid.tv. Now Playing: DAWID DRIF ... About. Dawid. Bielawa - Poland. Friends: 1. Last Login: ... View All Members of dawid.tv. Tag Cloud ..."
+            },
+
+            {
+                "http://www.dawid.co.za/", "DAWID",
+                "Welkom by: Dawid Bredenkamp se webtuiste. Foto's. Skakels. Kontak ..."
+            },
+
+            {
+                "http://www.dawid-nowak.org/",
+                "Dawid Nowak",
+                "Dawid Nowak Home Page ... Resume. Gallery. Thailand. Still in Thailand. Into Laos. Through Laos To Cambodia. RSS feeds for lazy technically oriented people ..."
+            },
+
+            {
+                "http://dawid.digitalart.org/",
+                "dawid.digitalart.org - Profile of Dawid Michalczyk",
+                "A gallery of masterfully created works of digital art. ... Dawid Michalczyk \" Send Private Message \" Send an E-mail. Art Gallery (13) Guestbook ..."
+            },
+
+            {
+                "http://www.dawid.nu/index.php?ID=4",
+                "dawid :: images / commercial work :: advertising & illustrations",
+                "The official site of photographer Dawid, Bj\u00F6rn Dawidsson. Fotograf Dawid - Bj\u00F6rn Dawidsson ... references: AB Vin & Sprit, Apple, Berliner, Bond, Ericsson, ..."
+            },
+
+            {
+                "http://www.dawidphotography.com/",
+                "Photographer London UK, Dawid de Greeff \u00A9 2007 , Digital photographer - Portfolio",
+                "South African born Dawid & Annemarie de Greeff are International digital ... NAME. EMAIL. MESSAGE ..."
+            },
+
+            {
+                "http://www.anniedawid.com/",
+                ": : Annie Dawid : : Author and Photographer",
+                "Annie Dawid is the author of Resurrection City: A Novel of Jonestown (to be ... Annie Dawid lives and writes in the Sangre de Cristo range of South-Central Colorado. ..."
+            },
+
+            {
+                "http://en.wikipedia.org/wiki/Dawid_Janowski",
+                "Dawid Janowski - Wikipedia, the free encyclopedia",
+                "Dawid Markelowicz Janowski (in English usually called David Janowski) (born 25 ... Dawid Janowski died on January 15, 1927 of tuberculosis. ..."
+            },
+
+            {
+                "http://www.dawid.nu/index.php?ID=2",
+                "dawid :: images / art :: COMP",
+                "The official site of photographer Dawid, Bj\u00F6rn Dawidsson. Fotograf Dawid - Bj\u00F6rn Dawidsson ... dawid : images / art : COMP: Series photographed during the mid 80's. ..."
+            },
+
+            {
+                "http://en.wikipedia.org/wiki/Dawid",
+                "Dawid - Wikipedia, the free encyclopedia",
+                "Dawid. From Wikipedia, the free encyclopedia. Jump to: navigation, search. Dawid may refer to the following people: David, the biblical King David ..."
+            },
+
+            {
+                "http://www.myspace.com/dawidszczesny",
+                "MySpace.com - dawid szczesny - Wroclaw - www.myspace.com/dawidszczesny",
+                "MySpace music profile for dawid szczesny with tour dates, songs, videos, pictures, blogs, band information, downloads and more"
+            },
+
+            {
+                "http://www.art.eonworks.com/",
+                "Computer wallpaper, stock illustration, Sci-Fi art, Fantasy art, Surreal art, Space art, Abstract art - posters, ...",
+                "Digital Art of Dawid Michalczyk. Unique posters, prints, wallpapers and wall calendars. ... the official website of Dawid Michalczyk - a freelance illustrator ..."
+            },
+
+            {
+                "http://www.surfski.info/content/view/384/147/",
+                "Surf Ski . Info - Dawid Mocke King of the Harbour 2007",
+                "Surf Ski information and news. Training tips from the experts, equipment, getting started guides, surfski reviews, photos ...links and stories."
+            },
+
+            {
+                "http://www.agentsbase.com/",
+                "Agent's Base",
+                "Dawid Kasperowicz. Get Firefox. Get Google Ads. Affiliates ... By Dawid | February 28, 2008 - 12:05 pm - Posted in Technology ..."
+            },
+
+            {
+                "http://www.target.com/Dawid-Dawidsson-Bjorn/dp/3882437243",
+                "Dawid [Hardcover] | Target Official Site",
+                "Shop for Dawid at Target. Choose from a wide range of Books. Expect More, Pay Less at Target.com"
+            },
+
+            {
+                "http://www.dawid.tobiasz.org/",
+                "Dawid",
+                "Dawid. Fotografia stanowi w\u0142asno\u015B\u0107 autora. Kopiowanie i rozpowszechnianie ... Copyright by Dawid Tobiasz [Fotografia stanowi w\u0142asno\u015B\u0107 autora. ..."
+            },
+
+            {
+                "http://juliedawid.co.uk/",
+                "Julie Dawid :",
+                "birthing support scotland. Poetical Fusion Folk. Words. Band. Listen. Contact. Copyright \u00A9 2004 Julie Dawid. All Rights reserved. Powered by Accidental Media ..."
+            },
+
+            {
+                "http://conference.dawid.uni.wroc.pl/index.php?lang=iso-8859-2",
+                "konferencja - Welcome",
+                "Joomla - the dynamic portal engine and content management system ... The 1st Symposium of Pedagogy and Psychology PhD Students. Monday, 13 February 2006 ..."
+            },
+
+            {
+                "http://www.ibe.unesco.org/publications/ThinkersPdf/dawide.pdf",
+                "Jan Wladyslaw Dawid",
+                "All his life, Jan Wladyslaw Dawid was closely associated with the teaching ... Dawid who believed that these experiments were fundamental to the blossoming and ..."
+            },
+
+            {
+                "http://www.dawid-posciel.pl/", "www.<b>dawid-posciel.pl</b>", ""
+            },
+
+            {
+                "http://www.dawidrurkowski.com/",
+                "Dawid Rurkowski - portfolio",
+                "Dawid Rurkowski online webdesign portfolio ... My name is Dawid, I am a web designer with a real passion to my work. ... \u00A9 Copyright 2007 Dawid Rurkowski All ..."
+            },
+
+            {
+                "http://conference.dawid.uni.wroc.pl/index.php?option=com_content&task=blogsection&id=20&Itemid=49%E2%8C%A9=iso-8859-2",
+                "konferencja - Warsztaty",
+                "Joomla - the dynamic portal engine and content management system ... Karolina Pietras is a psychologist, business trainer and PhD student at Faculty ..."
+            },
+
+            {
+                "http://chess.about.com/library/persons/blp-jano.htm",
+                "Famous Chess Players - Dawid Janowsky",
+                "Beginners Improve Your Game Play Chess Online Chess Downloads Computers and ... Dawid Janowsky. Unsuccessful challenger for World Championship ..."
+            },
+
+            {
+                "http://www.pbase.com/dawidwnuk",
+                "Dawid Wnuk's Photo Galleries at pbase.com",
+                "All images on this site copyrighted by DAWID WNUK. Please contact me if you would like to purchase or licence a photograph. Portraiture ..."
+            },
+
+            {
+                "http://dawid-witos.nazwa.pl/chylu/en/index.php?link=news",
+                "...Official Website of Michael Chylinski...",
+                "Welcome to chylinski.info- the official web site of Polish National Team and ... We invite you to visite our service and write your opinions on forum. A few ..."
+            },
+
+            {
+                "http://photoexposed.com/", "photoeXposed.com",
+                "Dawid Slaski-Sawicki Photography"
+            },
+
+            {
+                "http://vids.myspace.com/index.cfm?fuseaction=vids.individual&VideoID=7370487",
+                "MySpaceTV Videos: Edyp trailer by dawid",
+                "Edyp trailer by dawid Watch it on MySpace Videos. ... Posted by: dawid. Runtime: 0:52. Plays: 43. Comments: 0. Reinkarnacje - \"Czy to mi..."
+            },
+
+            {
+                "http://www.linkedin.com/in/dawidmadon",
+                "LinkedIn: Dawid Mado\u0144",
+                "Dawid Mado\u0144's professional profile on LinkedIn. ... Dawid Mado\u0144. ORACLE DBA at Apriso and Information Technology and Services Consultant ..."
+            },
+
+            {
+                "http://www.linkedin.com/pub/1/878/410",
+                "LinkedIn: Dawid Tracz",
+                "Dawid Tracz's professional profile on LinkedIn. ... Dawid Tracz's Experience. Graphician, WebDesigner, InterfaceDesigner. DreamLab Onet.pl Sp. ..."
+            },
+
+            {
+                "http://profiles.friendster.com/13547484",
+                "Friendster - Dawid Martin",
+                "Friendster: ; location: Poland, PL; Kiedrowice, Warsaw (Poland),Jogja (Indonesia); Warsaw Gamelan Group, Bosso, Tepellere, Mandala, Suita Etnik, Konco-Konco Blues ..."
+            },
+
+            {
+                "http://www.genevievedawid.com/",
+                "Genevieve Dawid mentor, lecturer and author",
+                "Author of the Achiever's Journey a real self help book for dyslexics, Genevieve Dawid offers a unique approach to mentoring and personal development."
+            },
+
+            {
+                "http://www.last.fm/music/dawid+szczesny",
+                "dawid szczesny \u2013 Music at Last.fm",
+                "People who like dawid szczesny also like Masayasu Tzboguchi Trio, Ametsub, ... Dawid Szcz\u0119sny performed in Poland, Germany (in 2005 invited by Kata Adamek and ..."
+            },
+
+            {
+                "http://vids.myspace.com/index.cfm?fuseaction=vids.individual&videoid=2028359840",
+                "MySpaceTV Videos: paka 2007-1 by dawid",
+                "paka 2007-1 by dawid Watch it on MySpace Videos. ... Posted by: dawid. Runtime: 0:52. Plays: 43. Comments: 0. Reinkarnacje - \"Czy to mi..."
+            },
+
+            {
+                "http://dawid.secondbrain.com/",
+                "Dawid's profile page - Second Brain_ - All Your Content",
+                "Dawid. People first, strategy second ... Dawid's recent updates. February 07 2008. Wimbledon ... Posted by Dawid on Second Brain February 05 2008. Post comment ..."
+            },
+
+            {
+                "http://www.ushmm.org/wlc/article.php?lang=en&ModuleId=10007294",
+                "Dawid Sierakowiak",
+                "Dawid was an avid reader and an excellent observer. Throughout Dawid's imprisonment in the Lodz ghetto he made sure to write about ..."
+            },
+
+            {
+                "http://www.ctbodyartist.com/",
+                "CT Body Artist | Chrys Dawid (203) 255-1875",
+                "CT Body Artist, Chrys Dawid (203) 255-1875 Professional Body painting service. From Advertising Champaigns to Private parties, make your statement & Marketing goals ..."
+            },
+
+            {
+                "http://www.amazon.com/phrase/Dawid-Sierakowiak",
+                "Amazon.com: \"Dawid Sierakowiak\": Key Phrase page",
+                "Key Phrase page for Dawid Sierakowiak: Books containing the phrase Dawid Sierakowiak ... Key Phrases: Dawid Sierakowiak, United States, New York, Niutek ..."
+            },
+
+            {
+                "http://www.planetizen.com/user/403/track",
+                "Irvin Dawid | Planetizen",
+                "Irvin Dawid. 0. 2 weeks 20 hours ago. news ... Irvin Dawid. 1. 3 weeks 5 days ago. news. Traffic Crashes Cost Twice as Much as Congestion ..."
+            },
+
+            {
+                "http://www.ushmm.org/wlc/idcard.php?lang=en&ModuleId=10006389",
+                "Dawid Szpiro",
+                "Dawid was the older of two sons born to Jewish parents in Warsaw. ... of Warsaw's Jewish district, where Dawid and his brother, Shlomo, attended Jewish schools. ..."
+            },
+
+            {
+                "http://groups.yahoo.com/group/dawid",
+                "dawid : Katechetyczne Forum Dyskusyjne",
+                "dawid \u00B7 Katechetyczne Forum Dyskusyjne. Home. Messages ... Lista dyskusyjna strony internetowej DAWID. Most Recent Messages (View All) (Group by Topic) ..."
+            },
+
+            {
+                "http://www.blogger.com/profile/01359115939699161533",
+                "Blogger: User Profile: Dawid",
+                "Push-Button Publishing. Dawid. Blogs. Blog Name. Team Members. Midwest Petanque Alliance BLOG ... MGal hdarpini chilipepper diveborabora DanDan Mike A testerin ..."
+            },
+
+            {
+                "http://www.blogger.com/profile/15768169977536938605",
+                "Blogger: User Profile: David",
+                "kilconriola Credo Perp\u00E9tua Amanda Liturgeist Chris + AMDG + +Miguel Vinuesa+ Royal Girl ... roydosan chrysogonus Brownthing Aristotle Boeciana Amanda Lactantius Juan ..."
+            },
+
+            {
+                "http://www.babynamer.com/Dawid",
+                "Dawid on BabyNamer",
+                "For parents-to-be who want to confidently choose potential names for their baby, ... Dawid. Meaning: Its source is a ... baby name page for boy name Dawid. ..."
+            },
+
+            {
+                "http://profile.myspace.com/index.cfm?fuseaction=user.viewprofile&friendid=38408574",
+                "MySpace.com - Dawid - 26 - Male - FR - www.myspace.com/trastaroots",
+                "MySpace profile for Dawid with pictures, videos, personal blog, interests, information about me and more ... yo dawid, ya un gars de ta r\u00E9gion (koubiak) qui ..."
+            },
+
+            {
+                "http://www.imdb.com/name/nm1058743/",
+                "Dawid Kruiper",
+                "Actor: Liebe. Macht. Blind.. Visit IMDb for Photos, Filmography, Discussions, Bio, News, Awards, Agent, Fan Sites. ... on IMDb message board for Dawid Kruiper ..."
+            },
+
+            {
+                "http://citeseer.ist.psu.edu/context/55656/0",
+                "Citations: Conditional independence in statistical theory - Dawid (ResearchIndex)",
+                "A. P. Dawid. Conditional independence in statistical theory (with discussion). J. Roy. ... To capture Dawid s property for overlapping sets, Pearl introduces ..."
+            },
+
+            {
+                "http://www.dawid.pl/gb/main.php",
+                "Systemy ogrodzeniowe, ta\u015Bmy, sita, siatki - DAWID Cz\u0119stochowa",
+                "Firma DAWID - Producent siatki ogrodzeniowej, bram, furtek, paneli D-1, D-2 itp. Cz\u0119stochowa. ... DAWID Company has a long-standing tradition which has been ..."
+            },
+
+            {
+                "http://www.imdb.com/name/nm2014139/",
+                "Dawid Jakubowski",
+                "Miscellaneous Crew: Once Upon a Knight. Visit IMDb for Photos, Filmography, Discussions, Bio, News, Awards, Agent, Fan Sites."
+            },
+
+            {
+                "http://www.lclark.edu/cgi-bin/shownews.cgi?1011726000.1",
+                "Dawid publishes Lily in the Desert",
+                "Lewis & Clark College: Dawid publishes <i>Lily in the Desert</i> ... Annie Dawid is one of those all-too-rare writers who fully inhabits each ..."
+            },
+
+            {
+                "http://dir.nichd.nih.gov/lmg/lmgdevb.htm",
+                "Igor Dawid Lab Home Page",
+                "Dawid Lab. Welcome to Igor Dawid's lab in the Laboratory of Molecular Genetics, ... National Institute of Child Health and Human Development, National ..."
+            },
+
+            {
+                "http://www.ucl.ac.uk/~ucak06d/",
+                "Philip Dawid",
+                "DEPARTMENT OF STATISTICAL SCIENCE. UNIVERSITY COLLEGE LONDON. A. Philip Dawid ... Professor A. P. Dawid, Department of Statistical Science, University College London, ..."
+            },
+
+            {
+                "http://www.pbase.com/dawidwnuk/profile",
+                "pbase Artist Dawid Wnuk",
+                "View Galleries : Dawid Wnuk has 5 galleries and 487 images online. ... My name is Dawid and I'm a photographer from Warsaw, Poland. ..."
+            },
+
+            {
+                "http://dawidfrederik.deviantart.com/",
+                "DawidFrederik on deviantART",
+                "Art - community of artists and those devoted to art. ... Dawid Frederik Strauss. Profile Gallery Faves Journal. Status: deviantART Subscriber ..."
+            },
+
+            {
+                "http://citeseer.ist.psu.edu/context/332153/0",
+                "Citations: Statistical theory - Dawid (ResearchIndex)",
+                "Dawid, P. (1984). Statistical theory. The prequential approach (with discussion) . Journal of the Royal Statistical Society A, 147:178--292."
+            },
+
+            {
+                "http://www.infinitee-designs.com/Dawid-Michalczyk.htm",
+                "Dawid Michalczyk Artist of the Month Space Art",
+                "Artist of the Month, Dawid Michalczyk Abstract 3D Space Art, Visions, computer graphics, 2D illustration, sci-fi, fantasy, digital art"
+            },
+
+            {
+                "http://www.myspace.com/dawidgatti",
+                "MySpace.com - dawid - 26 - Male - www.myspace.com/dawidgatti",
+                "MySpace profile for dawid with pictures, videos, personal blog, interests, information about me and more ... to meet: dawid's Friend Space (Top 1) dawid has 1 ..."
+            },
+
+            {
+                "http://ezinearticles.com/?expert=Genevieve_Dawid",
+                "Genevieve Dawid - EzineArticles.com Expert Author",
+                "Genevieve Dawid is a published author and highly successful ... Genevieve Dawid's Extended ... [Business:Management] Genevieve Dawid explores the history of ..."
+            },
+
+            {
+                "http://www.artnet.com/artist/698445/dawid-bjorn-dawidsson.html",
+                "Dawid (Bjorn Dawidsson) on artnet",
+                "Dawid (Bjorn Dawidsson) (Swedish, 1949) - Find works of art, auction results & sale prices of artist Dawid (Bjorn Dawidsson) at galleries and auctions worldwide."
+            },
+
+            {
+                "http://www.glennshafer.com/assets/downloads/other12.pdf",
+                "Comments on \"Causal Inference without Counterfactuals\" by A.P. Dawid",
+                "Phil Dawid's elegant ... ted from discussions of causality with Phil Dawid over many years. ... ground with those who tout counterfactual variables, Dawid ..."
+            },
+
+            {
+                "http://www.primerica.com/dawidkmiotek",
+                "Primerica Financial Services : Dawid Ireneusz Kmiotek",
+                "Primerica is in the business of ... Buy Term & Invest the Difference. The Theory of Decreasing ... About Dawid Ireneusz Kmiotek. Office Directions ..."
+            },
+
+            {
+                "http://www.youtube.com/watch?v=tEKmrUhCMFo",
+                "YouTube - Dawid Janczyk POLAND u-19 - BELGIUM u-19 (4-1)",
+                "Dawid Janczyk (Legia Warsaw) ... Dawid Janczy gral w sandecji nowy sacz i raz gralem z nim(ja gralem w sokol ... Dawid Janczyk (Legia Warsaw) (less) Added: ..."
+            },
+
+            {
+                "http://www.miniclip.com/games/david/en/",
+                "David - Miniclip Games - Play Free Games",
+                "Help David find the Lost Sheep and avoid the rampaging wild animals ... Hotmail, AOL, Yahoo Mail & other online email services. ..."
+            },
+
+            {
+                "http://product.half.ebay.com/_W0QQprZ62221",
+                "The Diary of Dawid Sierakowiak | Books at Half.com",
+                "Buy The Diary of Dawid Sierakowiak by Dawid Sierakowiak, Kamil Turowski (1998) at Half.com. Find new and used books and save more than half off at Half.com."
+            },
+
+            {
+                "http://www.primerica.com/PrimericaRep?rep=dawidkmiotek&pageName=about",
+                "About Dawid Ireneusz Kmiotek",
+                "Primerica is in the business of ... About Dawid Ireneusz Kmiotek. Office Directions ... Dawid Ireneusz Kmiotek. DISTRICT LEADER. Mutual Funds ..."
+            },
+
+            {
+                "http://www.dawid.tobiasz.org/Monachium%20-%20Dachau/index.html",
+                "Dawid/Monachium - Dachau",
+                "Dawid \" Monachium - Dachau. Fotografia stanowi w\u0142asno\u015B\u0107 autora. Kopiowanie i ... Copyright by Dawid Tobiasz [Fotografia stanowi w\u0142asno\u015B\u0107 autora. ..."
+            },
+
+            {
+                "http://www.davidwilkerson.org/", "David Wilkerson | World Challenge", ""
+            },
+
+            {
+                "http://www.statslab.cam.ac.uk/~apd/index.html",
+                "Philip Dawid",
+                "PHILIP DAWID. Professor of Statistics. Contact Details. Professor A. P. Dawid, ... Valencia International Meetings on Bayesian Statistics. Bayesians Worldwide ..."
+            },
+
+            {
+                "http://ideas.repec.org/e/poc8.html",
+                "Dawid Zochowski at IDEAS",
+                "Dawid Zochowski: current contact information and listing of economic research of this author provided by RePEc/IDEAS ... Pruski, Jerzy & \u017Bochowski, Dawid, 2005. ..."
+            },
+
+            {
+                "http://www.scrumalliance.org/profiles/15472-dawid-mielnik",
+                "Scrum Alliance - Profile: Dawid Mielnik",
+                "Dawid has five years of professional experience in telecommunications business. ... Dawid is a Warsaw University of Technology graduate with a BSc in ..."
+            },
+
+            {
+                "http://www.flickr.com/photos/dawidwalega/",
+                "Flickr: Photos from 11September",
+                "Flickr is almost certainly the best online photo management and sharing ... Explore Page Last 7 Days Interesting Calendar A Year Ago Today World Map Places ..."
+            },
+
+            {
+                "http://www.youtube.com/watch?v=UOMk0M0hBNQ",
+                "YouTube - Grembach Vigo Zgierz - Dawid Korona Rzesz\u00F3w 8-1",
+                "Grembach Vigo Zgierz - Dawid Korona Rzesz\u00F3w 8-1 w Pucharze Polski ... Grembach Vigo Zgierz Dawid Korona Rzesz\u00F3w futsal \u0142\u00F3d\u017A kolejarz clearex hurtap puchar polski ..."
+            },
+
+            {
+                "http://www.amazon.com/Diary-Dawid-Sierakowiak-Notebooks-Ghetto/dp/0195122852",
+                "Amazon.com: The Diary of Dawid Sierakowiak: Five Notebooks from the Lodz Ghetto: Dawid Sierakowiak,Lawrence L. ...",
+                "Amazon.com: The Diary of Dawid Sierakowiak: Five Notebooks from the Lodz Ghetto: Dawid Sierakowiak,Lawrence L. Langer,Alan Adelson,Kamil Turowski: Books"
+            },
+
+            {
+                "http://shopping.yahoo.com/p:Kimberley%20Jim:1808599509",
+                "Kimberley Jim - DVD at Yahoo! Shopping",
+                "Yahoo! Shopping is the best place to comparison shop for Kimberley Jim - DVD. Compare products, compare prices, read reviews and merchant ratings."
+            },
+
+            {
+                "http://www.ctfaceart.com/",
+                "CT Face Art (203) 255-1875 - Chrys Dawid CTFaceArt@aol.com",
+                "Award winning Face Painting for children through adults. ... CT FACE ART is owned and operated by Chrys Dawid. CT FACE ART is CT's finest face painting service. ..."
+            },
+
+            {
+                "http://www.discogs.com/artist/Dawid+Szczesny",
+                "Dawid Szczesny",
+                "Submissions Drafts Collection Wantlist Favorites Watchlist Friends ... Dawid Szczesny / artists (D) Real Name: Dawid Szcz\u0119sny. URLs: ..."
+            },
+
+            {
+                "http://www.shop.com/+-p94105045-st.shtml",
+                "York Ferry Annie Dawid - SHOP.COM",
+                "Shop for York Ferry Annie Dawid at Shop.com. $1.99 - york ferry annie dawid language:english, format:paperback, fiction/non-fiction:fiction, publisher:cane hill pr,"
+            },
+
+            {
+                "http://www.the-artists.org/artistsblog/posts/st_content_001.cfm?id=2600",
+                "Dawid Michalczyk ...the-artists.org",
+                "Dawid Michalczyk; portfolio & art news...the-artists.org, modern and contemporary art ... Dawid Michalczyk. Conflicting emotions. Suburbs 2100. After the ..."
+            },
+
+            {
+                "http://www.dcorfield.pwp.blueyonder.co.uk/2006/06/dawid-on-probabilities.html",
+                "Philosophy of Real Mathematics: Dawid on probabilities",
+                "... reading group ran through Phil Dawid's Probability, Causality and the Empirical ... Dawid (pronounced 'David') holds a Bayesian position, made evident in his ..."
+            },
+
+            {
+                "http://www.cs.put.poznan.pl/dweiss/xml/index.xml?lang=en",
+                "Dawid Weiss - Main page",
+                "Dawid Weiss, PhD. Institute of Computing Science. Poznan University of Technology. ul. ... (Available as RSS) (c) Dawid Weiss. All rights reserved unless stated ..."
+            },
+
+            {
+                "http://www.dawid.eu/",
+                "dawid.eu",
+                "Hier entsteht dawid.eu ... dawid.eu. Hier entsteht in K\u00FCrze das Projekt. dawid.eu. info@dawid.eu ..."
+            },
+
+            {
+                "http://www.local.com/results.aspx?keyword=Dawid+Frank+B+Inc&location=06890",
+                "Dawid Frank B Inc in Southport, CT (Connecticut) @ Local.com",
+                "Dawid Frank B Inc located in Southport, CT (Connecticut). Find contact info, maps and directions for local contractors and home improvement services at Local.com."
+            },
+
+            {
+                "http://www.anniedawid.com/shortfiction.htm",
+                ": : Annie Dawid : : Short Fiction",
+                "Annie Dawid is the author of Resurrection City: A Novel of Jonestown (to be ... Copyright \u00A9 2007 Annie Dawid. Web Site Design by Chameleon Web Design ..."
+            },
+
+            {
+                "http://dawid.ca/",
+                "www.dawid.ca",
+                "I was in such a huge mistake. (Dawid Bober) ... 2006-02-26 Skating - Agnieszka, Joanna, Michal, Dawid (Nathan Phillips Square \u2013 Toronto) ..."
+            },
+
+            {
+                "http://www.planetizen.com/?q=about/correspondent/dawid",
+                "Irvin Dawid | Planetizen",
+                "Irvin Dawid is a long-time Sierra Club activist, having worked in transportation, ... Irvin Dawid. Leo Vazquez. Mary Reynolds. Michael Dudley. Mike Lydon ..."
+            },
+
+            {
+                "http://www.sourcekibitzer.org/Bio.ext?sp=l6",
+                "SourceKibitzer - Bio - Dawid Weiss",
+                "Dawid Weiss - Bio. Dawid Weiss. The founder of the Carrot2 project. Adjunct professor at the Laboratory of Intelligent Decision Support Systems ..."
+            },
+
+            {
+                "http://www.lulu.com/content/815029",
+                "MD by Marcin and Dawid Witukiewicz (Music & Audio) in Electronic & Dance",
+                "MD by Marcin and Dawid Witukiewicz (Music & Audio) in Electronic & Dance : Music ... Music inspierd by the photography of Marcin and Dawid. ..."
+            },
+
+            {
+                "http://www.juliedawid.co.uk/index.php?page=Band",
+                "Julie Dawid : Halfwise",
+                "the songs of prize winning folk singer and poet Julie Dawid. ... Also a lover and keeper of fish, professional storyteller Julie Dawid ..."
+            },
+
+            {
+                "http://www.jewishencyclopedia.com/view.jsp?artid=38&letter=M",
+                "JewishEncyclopedia.com - MAGEN DAWID",
+                "The hexagram formed by the combination of two equilateral triangles; used as the ... The \"Magen Dawid,\" therefore, probably did not originate withinRabbinism, the ..."
+            },
+
+            {
+                "http://www.lulu.com/content/815298",
+                "MD Photography by Marcin and Dawid Witukiewicz (Book) in Arts & Photography",
+                "... This is a book feturing some of Marcin and Dawid Witukiewicz photographic work. ... by Marcin and Dawid Witukiewicz. Share This. Report this item. Preview ..."
+            },
+
+            {
+                "http://finance.yahoo.com/q?s=dawid.x",
+                "DAWID.X: Summary for DIA Sep 2008 134.0000 call - Yahoo! Finance",
+                "Get detailed information on DIA Sep 2008 134.0000 call (DAWID.X) including quote performance, Real-Time ECN, technical chart analysis, key stats, insider ..."
+            },
+
+            {
+                "http://www.bikepics.com/members/dawid/",
+                "BikePics - Dawid's Member Page on BikePics.Com",
+                "Dawid's Member Page. Member: dawid. Name: Dawid. From: ... You must be a BikePics Member and be logged in to message members. Current: 1998 Suzuki GS 500 ..."
+            },
+
+            {
+                "http://www.david-banner.com/main.html", "David Banner",
+                "Universal Records \\ SRC \\ Artists \\ David Banner ..."
+            },
+
+            {
+                "http://www.dawid.com.pl/",
+                "Kinga Dawid",
+                "PORTRAITS by Kinga Dawid. Copying, dissemination, forwarding, printing and/or ... All rights reserved. Copyright C 2006 Kinga Dawid ..."
+            },
+
+            {
+                "http://www.bikepics.com/members/devdawid/",
+                "BikePics - dawid's Member Page on BikePics.Com",
+                "dawid's Member Page. Member: devdawid. Name: dawid. From: Poland. Message: You must be a BikePics Member and be logged in to message members. Current: 2002 ..."
+            },
+
+            {
+                "http://dawid.bracka.pl/", "Portfolio",
+                "google | portfolio | klan mortal. google | portfolio | klan mortal ..."
+            },
+
+            {
+                "http://amiestreet.com/dawid",
+                "Amie Street - DaWid's Music Store",
+                "Amie Street empowers musicians to release, and music fans to discover, new and ... music from DaWid. recommendations (3) more info. SELECT: All, None, Free ..."
+            },
+
+            {
+                "http://markoff.pl/", "Dawid Markoff Photography",
+                "Nude, Fashion and Portrait photography"
+            },
+
+            {
+                "http://www.archinect.com/schoolblog/blog.php?id=C0_372_39",
+                "Archinect : Schoolblog : UC DAAP (Dawid)",
+                "UC DAAP (Dawid) (002) a couple of quotes and a mini thesis rant. Oct 02 2006, 6 comments ... UC DAAP (Dawid) (001) it's the year of the thesis. Sep 06 2006, 4 ..."
+            },
+
+            {
+                "http://groups.yahoo.com/group/dawid/rss",
+                "dawid : RSS / XML",
+                "dawid: Katechetyczne Forum Dyskusyjne ... Sign In. dawid \u00B7 Katechetyczne Forum Dyskusyjne. Home. Messages. Members Only. Post. Files ..."
+            },
+
+            {
+                "http://cssoff.com/2007/06/14/and-the-winner-is-dawid-lizak/",
+                "CSS OFF",
+                "And the Winner is Dawid Lizak. View the winning entry. Dawid Lizak is from \u0141\u0119czna \u2013 a ... Dawid is currently expanding his knowledge of JavaScript, usability, ..."
+            },
+        };
+
+        final ArrayList<Document> documents = new ArrayList<Document>();
+        for (String [] row : data)
+        {
+            documents.add(Document.create(row[1], row[2], row[0]));
+        }
+
+        DOCUMENTS_DAWID = Collections.unmodifiableList(documents);
     }
 }
