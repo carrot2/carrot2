@@ -28,6 +28,10 @@
             </constraint>
          </constraints>
       </typeEditor>
+      <typeEditor
+            attributeClass="java.lang.Enum"
+            class="org.carrot2.workbench.editors.EnumEditor">
+      </typeEditor>
    </extension>
 
 </plugin>

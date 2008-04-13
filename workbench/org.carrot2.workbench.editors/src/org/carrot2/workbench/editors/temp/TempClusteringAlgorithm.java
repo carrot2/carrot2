@@ -55,6 +55,8 @@ public class TempClusteringAlgorithm extends ProcessingComponentBase implements
     /**
      * Some description.
      * 
+     * dfgshdhfsjhdsgsr
+     * 
      * @label Amount
      */
     @SuppressWarnings("unused")
