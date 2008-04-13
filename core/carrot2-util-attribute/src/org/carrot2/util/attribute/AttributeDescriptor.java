@@ -94,7 +94,7 @@ public class AttributeDescriptor
     {
         return attributeField.getAnnotation(annotationClass);
     }
-
+/**
     @Override
     public boolean equals(Object obj)
     {
@@ -123,4 +123,5 @@ public class AttributeDescriptor
     {
         return key + "=" + type;
     }
+    */
 }

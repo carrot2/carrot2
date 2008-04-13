@@ -46,6 +46,10 @@ public final class Cluster
     /** Attributes of this cluster. */
     private final HashMap<String, Object> attributes = new HashMap<String, Object>();
 
+    /** A Read-only view of the attributes of this cluster. */
+    private final Map<String, Object> attributesView = Collections
+        .unmodifiableMap(attributes);
+
     /** Cached concatenated label */
     private String labelCache = null;
 
@@ -289,6 +293,16 @@ public final class Cluster
     {
         attributes.put(key, value);
         return this;
+    }
+
+    /**
+     * Returns all attributes of this cluster. The returned map is unmodifiable.
+     * 
+     * @return all attributes of this cluster
+     */
+    public Map<String, Object> getAttributes()
+    {
+        return attributesView;
     }
 
     /**

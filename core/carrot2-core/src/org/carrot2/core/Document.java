@@ -150,6 +150,7 @@ public final class Document
      * Transfers some fields from the map to individual class fields.
      */
     @Persist
+    @SuppressWarnings("unused")
     private void beforeSerialization()
     {
         title = (String) fields.get(TITLE);
@@ -166,6 +167,7 @@ public final class Document
      * Transfers values of class field to the field map.
      */
     @Commit
+    @SuppressWarnings("unused")
     private void afterDeserialization()
     {
         if (otherFields != null)

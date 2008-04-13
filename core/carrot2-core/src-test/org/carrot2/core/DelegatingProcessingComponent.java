@@ -20,7 +20,6 @@ public abstract class DelegatingProcessingComponent implements ProcessingCompone
     @Attribute(key = "runtimeAttribute")
     private String runtimeAttribute = "";
 
-    @SuppressWarnings("unused")
     @Processing
     @Input
     @Output

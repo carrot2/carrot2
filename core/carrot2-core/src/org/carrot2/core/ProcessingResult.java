@@ -170,6 +170,7 @@ public final class ProcessingResult
      * Extracts document and cluster lists before serialization.
      */
     @Persist
+    @SuppressWarnings("unused")
     private void beforeSerialization()
     {
         query = (String) attributes.get(AttributeNames.QUERY);
@@ -180,6 +181,7 @@ public final class ProcessingResult
      * Transfers document and cluster lists to the attributes map after deserialization.
      */
     @Commit
+    @SuppressWarnings("unused")
     private void afterDeserialization()
     {
         attributes.put(AttributeNames.QUERY, query);

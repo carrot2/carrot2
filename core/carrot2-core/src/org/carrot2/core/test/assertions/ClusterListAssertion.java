@@ -1,0 +1,55 @@
+package org.carrot2.core.test.assertions;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThat;
+
+import java.util.List;
+
+import org.carrot2.core.Cluster;
+import org.fest.assertions.Assertions;
+
+/**
+ * Assertions on lists of {@link Cluster}s.
+ */
+public class ClusterListAssertion
+{
+    /** The actual list of clusters */
+    private final List<Cluster> actualClusterList;
+
+    ClusterListAssertion(List<Cluster> actualClusterList)
+    {
+        this.actualClusterList = actualClusterList;
+    }
+
+    /**
+     * Asserts that the cluster list is equivalent to the provided cluster list. Two lists
+     * of clusters are equivalent if they have the same size, and the clusters on the
+     * corresponding positions on the lists are equivalent (see
+     * {@link ClusterAssertion#isEquivalentTo(Cluster)}.
+     * 
+     * @param expectedClusterList the expected cluster list
+     * @return this assertion for convenience
+     */
+    public ClusterListAssertion isEquivalentTo(List<Cluster> expectedClusterList)
+    {
+        assertThat(actualClusterList).hasSize(expectedClusterList.size());
+        for (int i = 0; i < actualClusterList.size(); i++)
+        {
+            assertThat(actualClusterList.get(i)).isEquivalentTo(
+                expectedClusterList.get(i));
+        }
+        return this;
+    }
+
+    /**
+     * Asserts that the cluster list has the provided size.
+     * 
+     * @param expectedSize the expected list size
+     * @return this assertion for convenience
+     */
+    public ClusterListAssertion hasSize(int expectedSize)
+    {
+        Assertions.assertThat(actualClusterList).hasSize(expectedSize);
+        return this;
+    }
+}

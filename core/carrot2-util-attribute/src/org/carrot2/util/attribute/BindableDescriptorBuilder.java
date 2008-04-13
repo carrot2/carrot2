@@ -189,7 +189,7 @@ public class BindableDescriptorBuilder
         else
         {
             throw new RuntimeException("Could not load attribute metadata from: "
-                + clazz.getSimpleName() + ".xml");
+                + clazz.getName() + ".xml");
         }
     }
 

@@ -67,7 +67,6 @@ public final class YahooDocumentSource extends SearchEngine
     @Attribute(key = AttributeNames.RESULTS_TOTAL)
     private long resultsTotal;
 
-    @SuppressWarnings("unused")
     @Processing
     @Output
     @Attribute(key = AttributeNames.DOCUMENTS)

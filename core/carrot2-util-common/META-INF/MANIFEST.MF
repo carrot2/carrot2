@@ -8,7 +8,6 @@ Export-Package: org.carrot2.text,
  org.carrot2.util,
  org.carrot2.util.httpclient,
  org.carrot2.util.pool,
- org.carrot2.util.reflect,
  org.carrot2.util.resource
 Require-Bundle: org.apache.commons;visibility:=reexport,
  org.apache.log4j;visibility:=reexport,

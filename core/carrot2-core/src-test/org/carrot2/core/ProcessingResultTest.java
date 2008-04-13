@@ -2,7 +2,7 @@ package org.carrot2.core;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
-import static org.carrot2.util.reflect.ObjectEquivalenceHelper.wrap;
+import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThat;
 
 import java.io.*;
 import java.util.List;
@@ -38,7 +38,7 @@ public class ProcessingResultTest
 
         assertNotNull(deserialized);
         assertNotNull(deserialized.getAttributes());
-        assertEquals(wrap(documents), wrap(deserialized.getDocuments()));
+        assertThat(deserialized.getDocuments()).isEquivalentTo(documents);
     }
 
     @Test
