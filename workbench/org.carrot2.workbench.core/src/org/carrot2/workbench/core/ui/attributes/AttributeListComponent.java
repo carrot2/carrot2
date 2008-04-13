@@ -34,7 +34,7 @@ public class AttributeListComponent
 
         root = new Composite(parent, SWT.EMBEDDED | SWT.DOUBLE_BUFFERED);
         GridLayout layout = new GridLayout();
-        layout.numColumns = 1;
+        layout.numColumns = 2;
         root.setLayout(layout);
         BindableDescriptor desc =
             BindableDescriptorBuilder.buildDescriptor(job.algorithm, true);
@@ -48,8 +48,20 @@ public class AttributeListComponent
                 {
                     IAttributeEditor editor =
                         EditorFactory.getEditorFor(job.algorithm, descriptor.getValue());
+                    GridData data = new GridData();
+                    data.grabExcessHorizontalSpace = true;
                     editor.init(descriptor.getValue());
-                    editor.createEditor(root);
+                    if (editor.containsLabel())
+                    {
+                        data.horizontalSpan = 2;
+                    }
+                    else
+                    {
+                        Label l = new Label(root, SWT.NONE);
+                        l.setText(descriptor.getValue().metadata.getLabel());
+                        l.setLayoutData(new GridData());
+                    }
+                    editor.createEditor(root, data);
                     editor.setValue(descriptor.getValue().defaultValue);
                     editor.addAttributeChangeListener(listener);
                 }

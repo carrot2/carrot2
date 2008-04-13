@@ -11,12 +11,13 @@ public class BooleanEditor extends AttributeEditorAdapter implements IAttributeE
     private Button button;
 
     @Override
-    public void createEditor(Composite parent)
+    public void createEditor(Composite parent, Object layoutData)
     {
         button = new Button(parent, SWT.CHECK);
         assert (descriptor != null);
         assert (descriptor.metadata != null);
         button.setText(descriptor.metadata.getLabel());
+        button.setLayoutData(layoutData);
         button.addSelectionListener(new SelectionAdapter()
         {
             @Override
@@ -44,5 +45,11 @@ public class BooleanEditor extends AttributeEditorAdapter implements IAttributeE
     public Object getValue()
     {
         return button.getSelection();
+    }
+
+    @Override
+    public boolean containsLabel()
+    {
+        return true;
     }
 }

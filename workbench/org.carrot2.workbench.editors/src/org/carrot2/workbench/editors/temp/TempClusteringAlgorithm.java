@@ -52,6 +52,11 @@ public class TempClusteringAlgorithm extends ProcessingComponentBase implements
     @Processing
     private boolean oneCluster;
 
+    /**
+     * Some description.
+     * 
+     * @label Amount
+     */
     @SuppressWarnings("unused")
     @Attribute(key = "someObject")
     @Input

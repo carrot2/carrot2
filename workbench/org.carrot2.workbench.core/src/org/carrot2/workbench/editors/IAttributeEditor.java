@@ -23,7 +23,7 @@ public interface IAttributeEditor
 
     String getAttributeKey();
 
-    void createEditor(Composite parent);
+    void createEditor(Composite parent, Object layoutData);
 
     void setValue(Object currentValue);
 
@@ -34,5 +34,13 @@ public interface IAttributeEditor
     public void addAttributeChangeListener(AttributeChangeListener listener);
 
     public void removeAttributeChangeListener(AttributeChangeListener listener);
+
+    /**
+     * If false, than surrounding view must display label for given attribute on it's own.
+     * If true, that label is a part of editor's control.
+     * 
+     * @return
+     */
+    public boolean containsLabel();
 
 }

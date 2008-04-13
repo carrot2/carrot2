@@ -6,8 +6,6 @@ import java.util.List;
 
 import org.carrot2.util.attribute.AttributeDescriptor;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
-import org.carrot2.workbench.editors.AttributeChangeEvent;
-import org.carrot2.workbench.editors.AttributeEditorAdapter;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -33,7 +31,7 @@ public class ImplementingClassesEditor extends AttributeEditorAdapter
     }
 
     @Override
-    public void createEditor(Composite parent)
+    public void createEditor(Composite parent, Object layoutData)
     {
         combo = new ComboViewer(parent, SWT.READ_ONLY | SWT.DROP_DOWN | SWT.SINGLE);
         combo.setContentProvider(new ArrayContentProvider());
@@ -55,6 +53,7 @@ public class ImplementingClassesEditor extends AttributeEditorAdapter
             }
 
         });
+        combo.getCombo().setLayoutData(layoutData);
     }
 
     private void doEvent()

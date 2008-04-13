@@ -12,7 +12,7 @@ public abstract class AttributeEditorAdapter implements IAttributeEditor
     private List<AttributeChangeListener> listeners =
         new ArrayList<AttributeChangeListener>();
 
-    public void createEditor(Composite parent)
+    public void createEditor(Composite parent, Object layoutData)
     {
     }
 
@@ -55,5 +55,13 @@ public abstract class AttributeEditorAdapter implements IAttributeEditor
         {
             listener.attributeChange(event);
         }
+    }
+
+    /**
+     * Default implementation returns false;
+     */
+    public boolean containsLabel()
+    {
+        return false;
     }
 }
