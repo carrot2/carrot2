@@ -57,4 +57,12 @@ public final class CharSequenceIntMap
 
         return result;
     }
+
+    /**
+     * @return Returns the current size of the unique images set.
+     */
+    public int getSize()
+    {
+        return tokenImages.size();
+    }
 }
