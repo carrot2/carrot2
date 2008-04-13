@@ -37,7 +37,7 @@ public class PreprocessorTest
 
         testDocuments3 = Arrays.asList(new Document []
         {
-            new Document().addField("title", "Data And Mining and or abc"),
+            new Document().addField("title", "Data And Mining and or abc By"),
         });
 
         testFields = Arrays.asList(new String []
@@ -165,6 +165,7 @@ public class PreprocessorTest
         assertEquals("and", images[tokens[i++]].toString());
         assertEquals("or", images[tokens[i++]].toString());
         assertEquals("abc", images[tokens[i++]].toString());
+        assertEquals("by", images[tokens[i++]].toString());
         
         i = 0;
         assertEquals(false, common[tokens[i++]]);
@@ -173,5 +174,6 @@ public class PreprocessorTest
         assertEquals(true, common[tokens[i++]]);
         assertEquals(true, common[tokens[i++]]);
         assertEquals(false, common[tokens[i++]]);
+        assertEquals(true, common[tokens[i++]]);
     }
 }

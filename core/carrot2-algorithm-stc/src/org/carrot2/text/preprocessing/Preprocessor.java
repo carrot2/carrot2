@@ -52,40 +52,40 @@ public final class Preprocessor
     });
 
     /**
-     * Performs {@link PreprocessingTasks#TOKENIZE} task.
+     * Text tokenizer. Performs {@link PreprocessingTasks#TOKENIZE} task.
      */
-    @Init
+    @Processing
     @Input
     @Attribute
     @ImplementingClasses(classes =
     {
         TokenizerTaskImpl.class
     })
-    public TokenizerTask tokenizer = new TokenizerTaskImpl();
+    public TokenizerTask tokenizer;
 
     /**
-     * Performs {@link PreprocessingTasks#CASE_NORMALIZE} task.
+     * Case normalizer. Performs {@link PreprocessingTasks#CASE_NORMALIZE} task.
      */
-    @Init
+    @Processing
     @Input
     @Attribute
     @ImplementingClasses(classes =
     {
         LocaleCaseNormalizer.class
     })
-    public CaseNormalizerTask caseNormalizer = new LocaleCaseNormalizer();
+    public CaseNormalizerTask caseNormalizer;
 
     /**
-     * Performs {@link PreprocessingTasks#STEMMING} task.
+     * Stemmer. Performs {@link PreprocessingTasks#STEMMING} task.
      */
-    @Init
+    @Processing
     @Input
     @Attribute
     @ImplementingClasses(classes =
     {
         LanguageModelStemmingTask.class
     })
-    public StemmingTask stemmer = new LanguageModelStemmingTask();
+    public StemmingTask stemmer;
 
     /**
      * Linguistic resources. Exposes current processing language internally.
@@ -99,6 +99,16 @@ public final class Preprocessor
     {
         final LanguageModel language = languageFactory.getCurrentLanguage();
 
+        /*
+         * TODO: If we assign default values to these fields, they are being
+         * reused on subsequent requests and are not cleared properly. Is there
+         * any way to define a default value for an attribute so that it is
+         * recreated properly on each request in the caching controller?
+         */
+        if (this.tokenizer == null) tokenizer = new TokenizerTaskImpl();
+        if (this.caseNormalizer == null) caseNormalizer = new LocaleCaseNormalizer();
+        if (this.stemmer == null) stemmer = new LanguageModelStemmingTask();
+        
         /*
          * Assert the correct order of preprocessing tasks by throwing them all in a set
          * and checking for all possibilities.

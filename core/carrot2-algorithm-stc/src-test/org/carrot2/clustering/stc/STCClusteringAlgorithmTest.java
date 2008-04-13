@@ -2,12 +2,14 @@ package org.carrot2.clustering.stc;
 
 import static org.junit.Assert.assertTrue;
 
-import java.util.Collection;
+import java.util.*;
 
-import org.carrot2.core.Cluster;
-import org.carrot2.core.ProcessingResult;
+import org.carrot2.core.*;
+import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.test.ClusteringAlgorithmTestBase;
 import org.junit.Test;
+
+import com.google.common.collect.Maps;
 
 /**
  * Test cases for the {@link STCClusteringAlgorithm}.
@@ -28,13 +30,19 @@ public class STCClusteringAlgorithmTest extends
         final Collection<Cluster> clusters = processingResult.getClusters();
 
         assertTrue(clusters.size() > 0);
-        
-        /*
-        for (final Cluster cluster : clusters)
-        {
-            System.out.println(cluster.getLabel() + " (" + cluster.getDocuments().size()
-                + " documents)");
-        }
-        */
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testRepeatedClusteringWithCache()
+    {
+        final Controller controller = new CachingController(DocumentSource.class);
+        controller.init(new HashMap());
+
+        final HashMap processingAttributes = Maps.newHashMap();
+        processingAttributes.put(AttributeNames.DOCUMENTS, DOCUMENTS_DATA_MINING);
+
+        controller.process(processingAttributes, STCClusteringAlgorithm.class);
+        controller.process(processingAttributes, STCClusteringAlgorithm.class);
     }
 }
