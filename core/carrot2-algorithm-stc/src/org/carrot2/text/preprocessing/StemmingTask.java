@@ -1,59 +1,27 @@
 package org.carrot2.text.preprocessing;
 
-import org.carrot2.text.*;
-import org.carrot2.text.linguistic.*;
+import org.carrot2.text.CharSequenceIntMap;
+import org.carrot2.text.linguistic.LanguageModel;
 
 /**
+ * Stemming contract for {@link Preprocessor}. 
  * 
+ * @see PreprocessingTasks#STEMMING
  */
-public final class StemmingTask
+public interface StemmingTask
 {
     /**
-     * Token sequence pointing to stemmed images.
+     * Creates stems of inflected word forms and remaps token sequence from the given
+     * context to stemmed token indices.
+     * <p>
+     * If case normalization is applied, then stemming operates on case-normalized tokens.
+     * Otherwise raw tokens are used.
      */
-    private int [] tokensStemmed;
+    public abstract void stem(CharSequenceIntMap tokenCoder,
+        PreprocessingContext context, LanguageModel language);
 
-    public void stem(CharSequenceIntMap tokenCoder, PreprocessingContext context,
-        LanguageModel language)
-    {
-        final MutableCharArray current = new MutableCharArray("");
-        final Stemmer stemmer = language.getStemmer();
-
-        final CharSequence [] allTokenImages = context.allTokenImages;
-        final int [] allTokens = (context.allTokensNormalized != null ? context.allTokensNormalized
-            : context.allTokens);
-
-        final int [] remapping = new int [allTokenImages.length];
-        for (int i = 0; i < allTokenImages.length; i++)
-        {
-            current.reset(allTokenImages[i]);
-            final CharSequence stemmed = stemmer.stem(current);
-            current.reset(stemmed);
-
-            if (stemmed != null)
-            {
-                final int stemmedTokenCode = tokenCoder.getIndex(current);
-                remapping[i] = stemmedTokenCode;
-            }
-            else
-            {
-                remapping[i] = i;
-            }
-        }
-
-        this.tokensStemmed = new int [allTokens.length];
-        for (int i = 0; i < tokensStemmed.length; i++)
-        {
-            final int tokenCode = allTokens[i];
-            tokensStemmed[i] = (tokenCode >= 0 ? remapping[allTokens[i]] : tokenCode);
-        }
-    }
-
-    /*
-     * 
+    /**
+     * @return Returns remapped sequence of tokens.
      */
-    public int [] getTokensStemmed()
-    {
-        return tokensStemmed;
-    }
+    public abstract int [] getTokensStemmed();
 }

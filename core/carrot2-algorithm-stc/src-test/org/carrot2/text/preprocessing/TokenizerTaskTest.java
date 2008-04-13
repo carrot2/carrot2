@@ -32,8 +32,7 @@ public class TokenizerTaskTest
      */
     private TokenizerTask build(String text) throws IOException
     {
-        final CharSequenceIntMap tokenMap = new CharSequenceIntMap();
-        final TokenizerTask builder = new TokenizerTask(tokenMap);
+        final TokenizerTaskImpl builder = new TokenizerTaskImpl();
         final Tokenizer tokenizer = new ExtendedWhitespaceTokenizer(
             new StringReader(text));
 

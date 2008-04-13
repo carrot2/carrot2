@@ -6,7 +6,6 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.Payload;
 import org.carrot2.core.Document;
 import org.carrot2.core.attribute.*;
-import org.carrot2.text.CharSequenceIntMap;
 import org.carrot2.text.analysis.*;
 import org.carrot2.text.linguistic.*;
 import org.carrot2.util.attribute.*;
@@ -53,6 +52,42 @@ public final class Preprocessor
     });
 
     /**
+     * Performs {@link PreprocessingTasks#TOKENIZE} task.
+     */
+    @Init
+    @Input
+    @Attribute
+    @ImplementingClasses(classes =
+    {
+        TokenizerTaskImpl.class
+    })
+    public TokenizerTask tokenizer = new TokenizerTaskImpl();
+
+    /**
+     * Performs {@link PreprocessingTasks#CASE_NORMALIZE} task.
+     */
+    @Init
+    @Input
+    @Attribute
+    @ImplementingClasses(classes =
+    {
+        LocaleCaseNormalizer.class
+    })
+    public CaseNormalizerTask caseNormalizer = new LocaleCaseNormalizer();
+
+    /**
+     * Performs {@link PreprocessingTasks#STEMMING} task.
+     */
+    @Init
+    @Input
+    @Attribute
+    @ImplementingClasses(classes =
+    {
+        LanguageModelStemmingTask.class
+    })
+    public StemmingTask stemmer = new LanguageModelStemmingTask();
+
+    /**
      * Linguistic resources. Exposes current processing language internally.
      */
     public LanguageModelFactory languageFactory = new LanguageModelFactory();
@@ -81,13 +116,12 @@ public final class Preprocessor
             assertParameterGiven(PreprocessingTasks.TOKENIZE, "documentFields",
                 documentFields);
 
-            final TokenizerTask task = new TokenizerTask(context.tokenCoder);
-            task.add(documents, documentFields, analyzer);
+            tokenizer.add(documents, documentFields, analyzer);
 
-            context.allTokens = task.getTokens();
-            context.allTypes = task.getTokenTypes();
-
-            context.allTokenImages = task.getTokenImages();
+            context.tokenMap = tokenizer.getTokenMap();
+            context.allTokens = tokenizer.getTokens();
+            context.allTypes = tokenizer.getTokenTypes();
+            context.allTokenImages = tokenizer.getTokenImages();
         }
 
         /*
@@ -97,45 +131,32 @@ public final class Preprocessor
         {
             assertContextParameterGiven(PreprocessingTasks.CASE_NORMALIZE,
                 PreprocessingTasks.TOKENIZE, context.allTokenImages);
+            assertContextParameterGiven(PreprocessingTasks.CASE_NORMALIZE,
+                PreprocessingTasks.TOKENIZE, context.allTokens);
 
-            /*
-             * We use the same token coder for case-normalized images, this should save
-             * some memory (reuse existing token images) and allow for unique token image
-             * indices. One could also create a new token coder here.
-             */
-            final CharSequenceIntMap coder = context.tokenCoder;
-            final CaseNormalizerTask task = new CaseNormalizerTask();
-            task.normalize(coder, context.allTokenImages, context.allTokens, language);
+            caseNormalizer.normalize(context.tokenMap, context.allTokenImages,
+                context.allTokens, languageFactory);
 
-            context.allTokenImages = coder.getTokenImages();
-            context.allTokensNormalized = task.getTokensNormalized();
+            context.allTokensNormalized = caseNormalizer.getTokensNormalized();
+            context.allTokenImages = context.tokenMap.getTokenImages();
         }
 
         /*
-         * Stemming. If case normalization is applied, then stemming operates on
-         * case-normalized tokens. Otherwise raw tokens are used.
+         * Stemming.
          */
         if (taskSet.remove(PreprocessingTasks.STEMMING))
         {
             assertContextParameterGiven(PreprocessingTasks.STEMMING,
                 PreprocessingTasks.TOKENIZE, context.allTokenImages);
 
-            /*
-             * We use the same token coder for stemmed images, this should save some
-             * memory (reuse existing token images) and allow for unique token image
-             * indices. One could also create a new token coder here.
-             */
-            final CharSequenceIntMap coder = context.tokenCoder;
-            final StemmingTask task = new StemmingTask();
-            task.stem(coder, context, language);
+            stemmer.stem(context.tokenMap, context, language);
 
-            context.allTokenImages = coder.getTokenImages();
-            context.allTokensStemmed = task.getTokensStemmed();
+            context.allTokenImages = context.tokenMap.getTokenImages();
+            context.allTokensStemmed = stemmer.getTokensStemmed();
         }
 
         /*
-         * Common word marking based on stop word lists associated with the given
-         * language.
+         * Common word marking.
          */
         if (taskSet.remove(PreprocessingTasks.MARK_TOKENS_STOPLIST))
         {
@@ -172,7 +193,7 @@ public final class Preprocessor
     }
 
     /**
-     * 
+     * Asserts that the given parameter is not null.
      */
     private void assertContextParameterGiven(PreprocessingTasks task,
         PreprocessingTasks requiredTask, Object parameterValue)

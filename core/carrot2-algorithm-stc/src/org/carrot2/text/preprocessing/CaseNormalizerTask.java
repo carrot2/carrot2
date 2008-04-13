@@ -1,64 +1,26 @@
 package org.carrot2.text.preprocessing;
 
-import java.util.Locale;
-
-import org.carrot2.text.*;
-import org.carrot2.text.linguistic.LanguageModel;
+import org.carrot2.text.CharSequenceIntMap;
+import org.carrot2.text.linguistic.LanguageModelFactory;
 
 /**
- * Simple case normalization.
+ * Case normalization contract for {@link Preprocessor}.
+ * 
+ * @see PreprocessingTasks#CASE_NORMALIZE
  */
-public class CaseNormalizerTask
+public interface CaseNormalizerTask
 {
     /**
-     * Token sequence pointing to normalized images.
+     * Normalize token images in <code>allTokenImages</code> and remap token indices in
+     * <code>allTokens</code> using new token codes.
      */
-    private int [] tokensNormalized;
+    public abstract void normalize(CharSequenceIntMap tokenCoder,
+        CharSequence [] allTokenImages, int [] allTokens,
+        LanguageModelFactory languageFactory);
 
-    /*
-     * 
+    /**
+     * Returns remapped token sequence.
      */
-    public void normalize(CharSequenceIntMap tokenCoder, CharSequence [] allTokenImages,
-        int [] allTokens, LanguageModel language)
-    {
-        final MutableCharArray current = new MutableCharArray("");
+    public abstract int [] getTokensNormalized();
 
-        Locale locale = language.getLanguageCode().getLocale();
-        if (locale == null)
-        {
-            locale = Locale.ENGLISH;
-        }
-
-        final int [] remapping = new int [allTokenImages.length];
-        for (int i = 0; i < allTokenImages.length; i++)
-        {
-            final String normalized = allTokenImages[i].toString().toLowerCase(locale);
-            current.reset(normalized);
-
-            final int normalizedTokenCode = tokenCoder.getIndex(current);
-            remapping[i] = normalizedTokenCode;
-        }
-
-        this.tokensNormalized = new int [allTokens.length];
-        for (int i = 0; i < tokensNormalized.length; i++)
-        {
-            final int tokenCode = allTokens[i];
-            if (tokenCode >= 0)
-            {
-                tokensNormalized[i] = remapping[allTokens[i]];
-            }
-            else
-            {
-                tokensNormalized[i] = tokenCode;
-            }
-        }
-    }
-
-    /*
-     * 
-     */
-    public int [] getTokensNormalized()
-    {
-        return tokensNormalized;
-    }
 }

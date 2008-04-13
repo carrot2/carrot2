@@ -36,8 +36,10 @@ public final class PreprocessingContext
     /**
      * Engine used to convert arbitrary character sequences into non-negative integer
      * codes so that each unique character sequence is assigned a unique code.
+     * 
+     * @see PreprocessingTasks#TOKENIZE
      */
-    public final CharSequenceIntMap tokenCoder = new CharSequenceIntMap();
+    public CharSequenceIntMap tokenMap;
 
     /**
      * Unique set of token images after running a {@link PreprocessingTasks#TOKENIZE} on a
