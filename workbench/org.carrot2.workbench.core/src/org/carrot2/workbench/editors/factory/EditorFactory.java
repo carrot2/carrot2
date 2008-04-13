@@ -93,15 +93,15 @@ public class EditorFactory
                 public boolean apply(TypeEditorWrapper editor)
                 {
                     boolean result = isCompatible(attribute.type, editor.attributeClass);
-                    if (!attribute.constraints.isEmpty())
+                    if (!editor.constraints.isEmpty())
                     {
-                        boolean all = false;
+                        boolean all = true;
                         boolean one = false;
-                        for (Annotation constraintAnn : attribute.constraints)
+                        for (String constraintName : editor.constraints)
                         {
+
                             boolean contains =
-                                (editor.constraints.contains(constraintAnn
-                                    .annotationType().getName()));
+                                containsAnnotation(attribute.constraints, constraintName);
                             one |= contains;
                             all &= contains;
                         }
@@ -118,6 +118,18 @@ public class EditorFactory
                 }
 
             });
+    }
+
+    private static boolean containsAnnotation(List<Annotation> list, String annotationName)
+    {
+        for (Annotation annotation : list)
+        {
+            if (annotation.annotationType().getName().equals(annotationName))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static List<DedicatedEditorWrapper> filterDedicatedEditors(

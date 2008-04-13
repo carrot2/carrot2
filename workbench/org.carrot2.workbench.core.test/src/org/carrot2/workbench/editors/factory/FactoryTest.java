@@ -43,6 +43,15 @@ public class FactoryTest extends TestCase
     {
         checkEditor(ComboEditor.class, "comboAttribute");
         checkEditor(ComboEditor.class, "editor");
+        try
+        {
+            checkEditor(null, "editor2");
+            fail("No editor for field 'editor2' should be found");
+        }
+        catch (EditorNotFoundException e)
+        {
+            // TODO: handle exception
+        }
     }
 
     private void checkEditor(Class<?> expectedEditor, String attId)

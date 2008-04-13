@@ -46,20 +46,19 @@ public class EditorsTest
         @Attribute
         @Input
         @Processing
-        @ImplementingClasses(classes =
-        {
-            TestType.class, TestType2.class
-        })
+        @IntModulo(modulo = 2, offset = 3)
         TestType2 comboAttribute;
 
         @Attribute
         @Input
         @Processing
-        @ImplementingClasses(classes =
-        {
-            DedicatedEditor.class, DedicatedEditor3.class
-        })
+        @IntModulo(modulo = 2, offset = 1)
         IAttributeEditor editor = new DedicatedEditor();
+
+        @Attribute
+        @Input
+        @Processing
+        IAttributeEditor editor2 = new DedicatedEditor();
 
     }
 

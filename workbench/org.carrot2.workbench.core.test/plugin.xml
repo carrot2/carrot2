@@ -56,9 +56,10 @@
       <typeEditor
             attributeClass="java.lang.Object"
             class="org.carrot2.workbench.editors.EditorsTest$ComboEditor">
-         <constraints>
+         <constraints
+               allAtOnce="true">
             <constraint
-                  constraintClass="org.carrot2.util.attribute.constraint.ImplementingClasses">
+                  constraintClass="org.carrot2.util.attribute.constraint.IntModulo">
             </constraint>
          </constraints>
       </typeEditor>
