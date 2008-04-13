@@ -53,12 +53,13 @@
         
         <copy todir="${build.dir}">
             <fileset dir="core">
-                <include name="**/src/**/*.xml" />
-                <include name="**/src-test/**/*.xml" />
-                <include name="**/src-test/**/*.xsl" />
+                <include name="**/src/**" />
+                <include name="**/src-test/**" />
+                <include name="**/src-resources/**" />
+                <exclude name="**/*.java" />
                 <exclude name="**/carrot2-util-log4j/**" />
             </fileset>
-            <regexpmapper from="^.*src(-test)?(.*)$$" to="\2"/>
+            <regexpmapper from="^.*src((-resources)|(-test))?(.*)$$" to="\4"/>
         </copy>
     </target>
     
