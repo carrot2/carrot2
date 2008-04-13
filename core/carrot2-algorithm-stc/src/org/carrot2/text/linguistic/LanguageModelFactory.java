@@ -21,7 +21,7 @@ public final class LanguageModelFactory
     @Processing
     @Input
     @Attribute
-    private LanguageCode current = LanguageCode.ENGLISH;
+    public LanguageCode current = LanguageCode.ENGLISH;
 
     /**
      * @return Returns {@link LanguageModel} for the {@link #current} language or

@@ -2,15 +2,11 @@ package org.carrot2.clustering.stc;
 
 import java.util.*;
 
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.index.Payload;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
 import org.carrot2.text.analysis.*;
-import org.carrot2.text.linguistic.LanguageModelFactory;
 import org.carrot2.text.preprocessing.*;
 import org.carrot2.util.attribute.*;
-import org.carrot2.util.attribute.constraint.ImplementingClasses;
 
 import com.google.common.collect.Lists;
 
@@ -29,7 +25,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     @Processing
     @Input
     @Attribute(key = AttributeNames.DOCUMENTS)
-    Collection<Document> documents = Collections.<Document> emptyList();
+    public Collection<Document> documents = Collections.<Document> emptyList();
 
     /**
      * Output clusters.
@@ -38,37 +34,13 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     @Processing
     @Output
     @Attribute(key = AttributeNames.CLUSTERS)
-    Collection<Cluster> clusters = null;
+    public Collection<Cluster> clusters = null;
 
     /**
-     * Analyzer used to split {@link #documents} into individual tokens (terms). This
-     * analyzer must provide token {@link Payload} implementing {@link TokenType}.
+     * Preprocessing pipeline. Not an attribute, but contains bindable
+     * attributes inside.
      */
-    @Init
-    @Input
-    @Attribute
-    @ImplementingClasses(classes =
-    {
-        ExtendedWhitespaceAnalyzer.class
-    })
-    Analyzer analyzer = new ExtendedWhitespaceAnalyzer();
-
-    /**
-     * Textual fields of a {@link Document} that should be tokenized and parsed for
-     * clustering.
-     */
-    @Init
-    @Input
-    @Attribute
-    List<String> clusteredFields = Arrays.asList(new String []
-    {
-        Document.TITLE, Document.SUMMARY
-    });
-
-    /**
-     * Linguistic resources.
-     */
-    private LanguageModelFactory languages = new LanguageModelFactory();
+    public Preprocessor preprocessor = new Preprocessor();
 
     /**
      * Performs STC clustering of {@link #documents}.
@@ -80,12 +52,6 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
         final STCEngine engine = new STCEngine();
 
         final PreprocessingContext context = new PreprocessingContext();
-        final Preprocessor preprocessor = new Preprocessor();
-
-        preprocessor.setDocuments(documents);
-        preprocessor.setAnalyzer(analyzer);
-        preprocessor.setDocumentFields(clusteredFields);
-        preprocessor.setLanguageModel(languages.getCurrentLanguage());
 
         preprocessor.preprocess(context, PreprocessingTasks.TOKENIZE,
             PreprocessingTasks.CASE_NORMALIZE, PreprocessingTasks.STEMMING,

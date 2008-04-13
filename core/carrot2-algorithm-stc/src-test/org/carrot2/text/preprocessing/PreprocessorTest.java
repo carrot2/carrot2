@@ -51,9 +51,9 @@ public class PreprocessorTest
     {
         final Preprocessor preprocessor = new Preprocessor();
 
-        preprocessor.setAnalyzer(new ExtendedWhitespaceAnalyzer());
-        preprocessor.setDocuments(testDocuments1);
-        preprocessor.setDocumentFields(testFields);
+        preprocessor.analyzer = new ExtendedWhitespaceAnalyzer();
+        preprocessor.documents = testDocuments1;
+        preprocessor.documentFields = testFields;
 
         final PreprocessingContext context = new PreprocessingContext();
         preprocessor.preprocess(context, PreprocessingTasks.TOKENIZE);
@@ -80,11 +80,10 @@ public class PreprocessorTest
     {
         final Preprocessor preprocessor = new Preprocessor();
 
-        preprocessor.setAnalyzer(new ExtendedWhitespaceAnalyzer());
-        preprocessor.setDocuments(testDocuments2);
-        preprocessor.setDocumentFields(testFields);
-        preprocessor.setLanguageModel(new LanguageModelFactory()
-            .getLanguage(LanguageCode.ENGLISH));
+        preprocessor.analyzer = new ExtendedWhitespaceAnalyzer();
+        preprocessor.documents = testDocuments2;
+        preprocessor.documentFields = testFields;
+        preprocessor.languageFactory.current = LanguageCode.ENGLISH;
 
         final PreprocessingContext context = new PreprocessingContext();
         preprocessor.preprocess(context, PreprocessingTasks.TOKENIZE,
@@ -113,11 +112,9 @@ public class PreprocessorTest
     {
         final Preprocessor preprocessor = new Preprocessor();
 
-        preprocessor.setAnalyzer(new ExtendedWhitespaceAnalyzer());
-        preprocessor.setDocuments(testDocuments2);
-        preprocessor.setDocumentFields(testFields);
-        preprocessor.setLanguageModel(new LanguageModelFactory()
-            .getLanguage(LanguageCode.ENGLISH));
+        preprocessor.analyzer = new ExtendedWhitespaceAnalyzer();
+        preprocessor.documents = testDocuments2;
+        preprocessor.documentFields = testFields;
 
         final PreprocessingContext context = new PreprocessingContext();
         preprocessor.preprocess(context, PreprocessingTasks.TOKENIZE,
@@ -146,11 +143,9 @@ public class PreprocessorTest
     {
         final Preprocessor preprocessor = new Preprocessor();
 
-        preprocessor.setAnalyzer(new ExtendedWhitespaceAnalyzer());
-        preprocessor.setDocuments(testDocuments3);
-        preprocessor.setDocumentFields(testFields);
-        preprocessor.setLanguageModel(new LanguageModelFactory()
-            .getLanguage(LanguageCode.ENGLISH));
+        preprocessor.analyzer = new ExtendedWhitespaceAnalyzer();
+        preprocessor.documents = testDocuments3;
+        preprocessor.documentFields = testFields;
 
         final PreprocessingContext context = new PreprocessingContext();
         preprocessor.preprocess(context, PreprocessingTasks.TOKENIZE,

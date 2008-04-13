@@ -3,9 +3,14 @@ package org.carrot2.text.preprocessing;
 import java.util.*;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.index.Payload;
 import org.carrot2.core.Document;
+import org.carrot2.core.attribute.*;
 import org.carrot2.text.CharSequenceIntMap;
-import org.carrot2.text.linguistic.LanguageModel;
+import org.carrot2.text.analysis.*;
+import org.carrot2.text.linguistic.*;
+import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.constraint.ImplementingClasses;
 
 import com.google.common.collect.Sets;
 
@@ -13,25 +18,52 @@ import com.google.common.collect.Sets;
  * Utilities for transforming {@link Document}s into low-level data structures in
  * {@link PreprocessingContext}.
  */
+@Bindable
 public final class Preprocessor
 {
-    /** */
-    private Analyzer analyzer;
+    /**
+     * Analyzer used to split {@link #documents} into individual tokens (terms). This
+     * analyzer must provide token {@link Payload} implementing {@link TokenType}.
+     */
+    @Init
+    @Input
+    @Attribute
+    @ImplementingClasses(classes =
+    {
+        ExtendedWhitespaceAnalyzer.class
+    })
+    public Analyzer analyzer = new ExtendedWhitespaceAnalyzer();
 
     /** */
-    private Collection<Document> documents;
+    @Processing
+    @Input
+    @Attribute(key = AttributeNames.DOCUMENTS)
+    public Collection<Document> documents;
 
-    /** */
-    private Collection<String> documentFields;
+    /**
+     * Textual fields of a {@link Document} that should be tokenized and parsed for
+     * clustering.
+     */
+    @Init
+    @Input
+    @Attribute
+    public Collection<String> documentFields = Arrays.asList(new String []
+    {
+        Document.TITLE, Document.SUMMARY
+    });
 
-    /** */
-    private LanguageModel language;
+    /**
+     * Linguistic resources. Exposes current processing language internally.
+     */
+    public LanguageModelFactory languageFactory = new LanguageModelFactory();
 
     /**
      * Run the selected preprocessing tasks.
      */
     public void preprocess(PreprocessingContext context, PreprocessingTasks... tasks)
     {
+        final LanguageModel language = languageFactory.getCurrentLanguage();
+
         /*
          * Assert the correct order of preprocessing tasks by throwing them all in a set
          * and checking for all possibilities.
@@ -124,39 +156,6 @@ public final class Preprocessor
             throw new RuntimeException("Unimplemented preprocessing tasks remained: "
                 + taskSet);
         }
-    }
-
-    /**
-     * Sets the {@link Document}s required for {@link PreprocessingTasks#TOKENIZE}.
-     */
-    public void setDocuments(Collection<Document> documents)
-    {
-        this.documents = documents;
-    }
-
-    /**
-     * Sets the {@link Analyzer} required for {@link PreprocessingTasks#TOKENIZE}.
-     */
-    public void setAnalyzer(Analyzer analyzer)
-    {
-        this.analyzer = analyzer;
-    }
-
-    /**
-     * Sets the document fields required for {@link PreprocessingTasks#TOKENIZE}.
-     */
-    public void setDocumentFields(Collection<String> fields)
-    {
-        this.documentFields = fields;
-    }
-
-    /**
-     * Set language model required for {@link PreprocessingTasks#CASE_NORMALIZE},
-     * {@link PreprocessingTasks#STEMMING}.
-     */
-    public void setLanguageModel(LanguageModel model)
-    {
-        this.language = model;
     }
 
     /**
