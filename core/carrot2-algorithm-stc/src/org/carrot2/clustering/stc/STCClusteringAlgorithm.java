@@ -1,18 +1,18 @@
 package org.carrot2.clustering.stc;
 
-import java.io.IOException;
-import java.io.StringReader;
 import java.util.*;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.lucene.analysis.Token;
-import org.apache.lucene.analysis.Tokenizer;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.index.Payload;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
 import org.carrot2.text.analysis.*;
-import org.carrot2.util.ExceptionUtils;
+import org.carrot2.text.linguistic.LanguageModelFactory;
+import org.carrot2.text.preprocessing.*;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
+
+import com.google.common.collect.Lists;
 
 /**
  * Suffix Tree Clustering (STC) algorithm.
@@ -23,11 +23,17 @@ import org.carrot2.util.attribute.constraint.ImplementingClasses;
 public final class STCClusteringAlgorithm extends ProcessingComponentBase implements
     ClusteringAlgorithm
 {
+    /**
+     * Input documents.
+     */
     @Processing
     @Input
     @Attribute(key = AttributeNames.DOCUMENTS)
     Collection<Document> documents = Collections.<Document> emptyList();
 
+    /**
+     * Output clusters.
+     */
     @SuppressWarnings("unused")
     @Processing
     @Output
@@ -35,10 +41,8 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     Collection<Cluster> clusters = null;
 
     /**
-     * Temporary tokenizer.
-     * 
-     * TODO: This should really be replaced with a strategy that splits document(s) into
-     * sentences.
+     * Analyzer used to split {@link #documents} into individual tokens (terms). This
+     * analyzer must provide token {@link Payload} implementing {@link TokenType}.
      */
     @Init
     @Input
@@ -47,12 +51,24 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     {
         ExtendedWhitespaceAnalyzer.class
     })
-    private ExtendedWhitespaceAnalyzer analyzer = new ExtendedWhitespaceAnalyzer();
+    Analyzer analyzer = new ExtendedWhitespaceAnalyzer();
 
     /**
-     * {@link #documents} converted to an array.
+     * Textual fields of a {@link Document} that should be tokenized and parsed for
+     * clustering.
      */
-    private Document [] documentArray;
+    @Init
+    @Input
+    @Attribute
+    List<String> clusteredFields = Arrays.asList(new String []
+    {
+        Document.TITLE, Document.SUMMARY
+    });
+
+    /**
+     * Linguistic resources.
+     */
+    private LanguageModelFactory languages = new LanguageModelFactory();
 
     /**
      * Performs STC clustering of {@link #documents}.
@@ -60,16 +76,28 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     @Override
     public void process() throws ProcessingException
     {
-        documentArray = this.documents.toArray(new Document [this.documents.size()]);
-
         final STCParameters params = new STCParameters();
         final STCEngine engine = new STCEngine();
 
+        final PreprocessingContext context = new PreprocessingContext();
+        final Preprocessor preprocessor = new Preprocessor();
+
+        preprocessor.setDocuments(documents);
+        preprocessor.setAnalyzer(analyzer);
+        preprocessor.setDocumentFields(clusteredFields);
+        preprocessor.setLanguageModel(languages.getCurrentLanguage());
+
+        preprocessor.preprocess(context, PreprocessingTasks.TOKENIZE,
+            PreprocessingTasks.CASE_NORMALIZE, PreprocessingTasks.STEMMING,
+            PreprocessingTasks.MARK_TOKENS_STOPLIST);
+
+        final Document [] documentArray = this.documents
+            .toArray(new Document [this.documents.size()]);
+
         /*
-         * Step 1: Tokenize input documents and perform shallow linguistic preprocessing
-         * if needed (stemming, character case normalization).
+         * Step 1: Convert documents to legacy STC input.
          */
-        final List<StemmedTerm []> documentData = prepareInputData();
+        final List<StemmedTerm []> documentData = convertToLegacyFormat(context);
 
         /*
          * Step 2: Create a generalized suffix tree from phrases in the input.
@@ -141,70 +169,48 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     }
 
     /**
-     * 
+     * Convert preprocessed data to legacy data structures required by the STC.
      */
-    private List<StemmedTerm []> prepareInputData()
+    private List<StemmedTerm []> convertToLegacyFormat(PreprocessingContext context)
     {
-        final ArrayList<StemmedTerm []> documentData = new ArrayList<StemmedTerm []>(
-            documentArray.length);
-        final ArrayList<StemmedTerm> currentDocument = new ArrayList<StemmedTerm>();
-        try
+        final ArrayList<StemmedTerm []> documentData = Lists
+            .newArrayListWithCapacity(documents.size());
+        final ArrayList<StemmedTerm> currentDocument = Lists.newArrayList();
+
+        final PreprocessedDocumentScanner scanner = new PreprocessedDocumentScanner()
         {
-            ArrayList<String> fieldValues = new ArrayList<String>();
-            for (final Document doc : documentArray)
+            protected void document(PreprocessingContext context, int start, int length)
             {
-                final String title = doc.getField(Document.TITLE);
-                if (!StringUtils.isEmpty(title)) fieldValues.add(title);
-
-                final String snippet = doc.getField(Document.SUMMARY);
-                if (!StringUtils.isEmpty(snippet)) fieldValues.add(snippet);
-
-                TokenType type = null;
-                Token t = null;
-                StemmedTerm lastValue = null;
-                while (!fieldValues.isEmpty())
-                {
-                    final Tokenizer ts = (ExtendedWhitespaceTokenizer) analyzer
-                        .reusableTokenStream(null, new StringReader(fieldValues.remove(0)));
-
-                    while ((t = ts.next(t)) != null)
-                    {
-                        // Add artificial marker separating sentences.
-                        type = (TokenType) t.getPayload();
-                        if (TokenTypeUtils.isSentenceDelimiter(type))
-                        {
-                            if (lastValue != null)
-                            {
-                                currentDocument.add(null);
-                                lastValue = null;
-                            }
-                            continue;
-                        }
-
-                        final String termText = new String(t.termBuffer(), 0, t
-                            .termLength());
-                        final String stemmed = null;
-                        final boolean stopword = false;
-                        lastValue = new StemmedTerm(termText, stemmed, stopword);
-                        currentDocument.add(lastValue);
-                    }
-
-                    // Split fields with a sentence break.
-                    if (!fieldValues.isEmpty() && lastValue != null)
-                    {
-                        currentDocument.add(null);
-                    }
-                }
+                super.document(context, start, length);
 
                 documentData.add(currentDocument.toArray(new StemmedTerm [currentDocument
                     .size()]));
                 currentDocument.clear();
             }
-        }
-        catch (IOException e)
-        {
-            throw ExceptionUtils.wrapAs(ProcessingException.class, e);
-        }
+
+            protected void sentence(PreprocessingContext context, int start, int length)
+            {
+                final int [] tokens = context.allTokens;
+                final CharSequence [] images = context.allTokenImages;
+                final int [] stemsMap = context.allTokensStemmed;
+                final boolean [] commonWords = context.commonTermFlag;
+
+                for (int i = start; i < start + length; i++)
+                {
+                    final int tokenCode = tokens[i];
+                    final String term = images[tokenCode].toString();
+                    final String stem = images[stemsMap[i]].toString();
+
+                    boolean stop = commonWords[tokenCode]
+                        || TokenTypeUtils.maskType(context.allTypes[i]) == TokenType.TT_PUNCTUATION;
+
+                    currentDocument.add(new StemmedTerm(term, stem, stop));
+                }
+                currentDocument.add(null);
+            }
+        };
+
+        scanner.iterate(context);
 
         return documentData;
     }

@@ -22,12 +22,19 @@ public class STCClusteringAlgorithmTest extends
     }
 
     @Test
-    public void testClusteringDataMining() 
+    public void testClusteringDataMining()
     {
-        final ProcessingResult processingResult = cluster(DOCUMENTS_DATA_MINING); 
+        final ProcessingResult processingResult = cluster(DOCUMENTS_DATA_MINING);
         final Collection<Cluster> clusters = processingResult.getClusters();
-        
+
         assertTrue(clusters.size() > 0);
-        ExampleUtils.displayResults(processingResult);
+        
+        /*
+        for (final Cluster cluster : clusters)
+        {
+            System.out.println(cluster.getLabel() + " (" + cluster.getDocuments().size()
+                + " documents)");
+        }
+        */
     }
 }
