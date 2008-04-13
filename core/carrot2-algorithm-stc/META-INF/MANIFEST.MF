@@ -12,4 +12,5 @@ Export-Package: org.carrot2.clustering.stc,
 Require-Bundle: org.carrot2.core,
  org.carrot2.util.common
 Bundle-ClassPath: META-INF/,
- .
+ .,
+ src-resources/
