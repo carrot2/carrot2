@@ -167,7 +167,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
                     final String term = images[tokenCode].toString();
                     final String stem = images[stemsMap[i]].toString();
 
-                    boolean stop = commonWords[tokenCode]
+                    boolean stop = commonWords[stemsMap[i]]
                         || TokenTypeUtils.maskType(context.allTypes[i]) == TokenType.TT_PUNCTUATION;
 
                     currentDocument.add(new StemmedTerm(term, stem, stop));
