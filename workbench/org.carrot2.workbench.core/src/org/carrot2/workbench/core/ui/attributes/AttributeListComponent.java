@@ -50,7 +50,7 @@ public class AttributeListComponent
                     IAttributeEditor editor =
                         EditorFactory.getEditorFor(job.algorithm, descriptor.getValue());
                     GridData data = new GridData();
-                    data.grabExcessHorizontalSpace = true;
+                    // data.grabExcessHorizontalSpace = true;
                     editor.init(descriptor.getValue());
                     if (editor.containsLabel())
                     {
@@ -61,25 +61,26 @@ public class AttributeListComponent
                         Label l = new Label(root, SWT.NONE);
                         String text = getLabelForAttribute(descriptor.getValue());
                         l.setText(text);
-                        GridData g = new GridData();
-                        g.horizontalSpan = 2;
                         l.setLayoutData(new GridData());
+                        data.horizontalAlignment = SWT.FILL;
                     }
                     editor.createEditor(root, data);
                     editor.setValue(descriptor.getValue().defaultValue);
                     editor.addAttributeChangeListener(listener);
-                    if (descriptor.getValue().metadata.getDescription() != null)
-                    {
-                        descriptionText.setText(descriptor.getValue().metadata
-                            .getDescription());
-                    }
+                    // if (descriptor.getValue().metadata.getDescription() != null)
+                    // {
+                    // descriptionText.setText(descriptor.getValue().metadata
+                    // .getDescription());
+                    // }
                 }
                 catch (EditorNotFoundException ex)
                 {
                     Utils.logError(ex, false);
                     Label l = new Label(root, SWT.NONE);
                     l.setText(getLabelForAttribute(descriptor.getValue()));
-                    l.setLayoutData(new GridData());
+                    GridData gd = new GridData();
+                    gd.horizontalSpan = 2;
+                    l.setLayoutData(gd);
                 }
             }
         }
@@ -87,10 +88,14 @@ public class AttributeListComponent
 
     private String getLabelForAttribute(AttributeDescriptor descriptor)
     {
-        String text =
-            descriptor.metadata.getLabel() != null ? descriptor.metadata.getLabel()
-                : null;
-        text = text != null ? text : descriptor.metadata.getTitle();
+        String text = null;
+        if (descriptor.metadata != null)
+        {
+            text =
+                descriptor.metadata.getLabel() != null ? descriptor.metadata.getLabel()
+                    : null;
+            text = text != null ? text : descriptor.metadata.getTitle();
+        }
         text = text != null ? text : "Attribute without label nor title :/";
         return text;
     }
