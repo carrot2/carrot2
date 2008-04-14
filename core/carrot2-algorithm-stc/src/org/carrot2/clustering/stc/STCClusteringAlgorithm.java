@@ -43,12 +43,16 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     public Preprocessor preprocessor = new Preprocessor();
 
     /**
+     * Parameters and thresholds of the algorithm.
+     */
+    public STCClusteringParameters params = new STCClusteringParameters();
+
+    /**
      * Performs STC clustering of {@link #documents}.
      */
     @Override
     public void process() throws ProcessingException
     {
-        final STCParameters params = new STCParameters();
         final STCEngine engine = new STCEngine();
 
         final PreprocessingContext context = new PreprocessingContext();
@@ -88,7 +92,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
         clusters = new ArrayList<Cluster>();
 
         final List mergedClusters = engine.getClusters();
-        int max = params.getMaxClusters();
+        int max = params.maxClusters;
 
         final HashSet<Document> junkDocuments = new HashSet<Document>(mergedClusters
             .size());

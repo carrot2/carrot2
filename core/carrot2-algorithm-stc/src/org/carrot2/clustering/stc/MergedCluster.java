@@ -57,10 +57,10 @@ public class MergedCluster implements Comparable
         documents.or(b.getNode().getInternalDocumentsRepresentation());
     }
 
-    public void createDescription(final STCParameters parameters)
+    public void createDescription(final STCClusteringParameters parameters)
     {
-        this.allPhrases = this.createDescriptionPhrases(parameters.getMaxPhraseOverlap(),
-            parameters.getMostGeneralPhraseCoverage());
+        this.allPhrases = this.createDescriptionPhrases(parameters.maxPhraseOverlap,
+            parameters.mostGeneralPhraseCoverage);
     }
 
     /**

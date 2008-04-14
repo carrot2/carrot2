@@ -1,10 +1,6 @@
 package org.carrot2.clustering.stc;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 import org.carrot2.text.suffixtrees.Edge;
 
@@ -85,12 +81,11 @@ public class STCEngine
     /**
      * Phase 3. Create base clusters from the suffix tree.
      */
-    public long createBaseClusters(final STCParameters params)
+    public long createBaseClusters(final STCClusteringParameters params)
     {
-        final float minBaseClusterScore = params.getMinBaseClusterScore();
-        final int ignoreIfInFewerDocs = params.getIgnoreWordIfInFewerDocs();
-        final float ignoreIfInHigherDocsPercent = params
-            .getIgnoreWordIfInHigherDocsPercent();
+        final float minBaseClusterScore = (float) params.minBaseClusterScore;
+        final int ignoreIfInFewerDocs = params.ignoreWordIfInFewerDocs;
+        final float ignoreIfInHigherDocsPercent = (float) params.ignoreWordIfInHigherDocsPercent;
 
         final long time = System.currentTimeMillis();
         final Stack nodes = new Stack();
@@ -222,8 +217,8 @@ public class STCEngine
 
         // take only N first base clusters and only those existing in more than
         // X documents
-        final int noMoreBaseClustersThan = params.getMaxBaseClusters();
-        final int minimalGroupSize = params.getMinBaseClusterSize();
+        final int noMoreBaseClustersThan = params.maxBaseClusters;
+        final int minimalGroupSize = params.minBaseClusterSize;
         for (int i = 0; i < baseClusters.lastIndex(); i++)
         {
             if (((BaseCluster) baseClusters.elementAt(i)).getNode()
@@ -299,12 +294,12 @@ public class STCEngine
      *         the phrase.
      */
     private float calculateModifiedBaseClusterScore(final int phraseLength,
-        final int documentCount, final STCParameters params)
+        final int documentCount, final STCClusteringParameters params)
     {
-        final double singleTermBoost = params.getTermBoost();
-        final int phraseLengthOptimum = params.getOptimalPhraseLength();
-        final double phraseLengthTolerance = params.getOptimalPhraseLengthDev();
-        final double documentCountBoost = params.getDocumentCountBoost();
+        final double singleTermBoost = params.singleTermBoost;
+        final int phraseLengthOptimum = params.optimalPhraseLength;
+        final double phraseLengthTolerance = params.optimalPhraseLengthDev;
+        final double documentCountBoost = params.documentCountBoost;
 
         final double boost;
         if (phraseLength == 1 && singleTermBoost > 0)
@@ -324,9 +319,9 @@ public class STCEngine
     /**
      * Phase 4. Create merged clusters
      */
-    public long createMergedClusters(final STCParameters parameters)
+    public long createMergedClusters(final STCClusteringParameters parameters)
     {
-        final float MERGE_THRESHOLD = parameters.getMergeThreshold();
+        final float MERGE_THRESHOLD = (float) parameters.mergeThreshold;
         final long time = System.currentTimeMillis();
 
         // Create links in base clusters graph
