@@ -32,6 +32,15 @@
             attributeClass="java.lang.Enum"
             class="org.carrot2.workbench.editors.EnumEditor">
       </typeEditor>
+      <typeEditor
+            attributeClass="java.lang.Integer"
+            class="org.carrot2.workbench.editors.IntegerRangeEditor">
+         <constraints>
+            <constraint
+                  constraintClass="org.carrot2.util.attribute.constraint.IntRange">
+            </constraint>
+         </constraints>
+      </typeEditor>
    </extension>
 
 </plugin>

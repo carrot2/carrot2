@@ -7,6 +7,7 @@ import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
+import org.carrot2.util.attribute.constraint.IntRange;
 
 @Bindable
 public class TempClusteringAlgorithm extends ProcessingComponentBase implements
@@ -80,6 +81,17 @@ public class TempClusteringAlgorithm extends ProcessingComponentBase implements
     @Attribute(key = AttributeNames.CLUSTERS)
     Collection<Cluster> clusters = null;
 
+    /**
+     * Number of docs in the cluster.
+     * 
+     * @label Number of docs
+     */
+    @Attribute
+    @Processing
+    @Input
+    @IntRange(min = 1, max = 20)
+    int rangeAttribute = 3;
+
     @Override
     public void process() throws ProcessingException
     {
@@ -95,16 +107,16 @@ public class TempClusteringAlgorithm extends ProcessingComponentBase implements
                 tempClusters.add(c);
             }
             int i = 0;
-            while (i + someObject.getAmount() < tempClusters.size())
+            while (i + rangeAttribute < tempClusters.size())
             {
                 Cluster c = new Cluster();
                 c.addPhrases("Cluster " + i);
-                for (int j = 0; j < someObject.getAmount(); j++)
+                for (int j = 0; j < rangeAttribute; j++)
                 {
                     c.addSubclusters(tempClusters.get(i + j));
                 }
                 clusters.add(c);
-                i += someObject.getAmount();
+                i += rangeAttribute;
             }
             {
                 Cluster c = new Cluster();
