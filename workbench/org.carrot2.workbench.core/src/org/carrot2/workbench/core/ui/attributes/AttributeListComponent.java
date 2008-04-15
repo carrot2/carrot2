@@ -10,6 +10,7 @@ import org.carrot2.workbench.core.jobs.ProcessingJob;
 import org.carrot2.workbench.editors.*;
 import org.carrot2.workbench.editors.factory.EditorFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.IWorkbenchSite;
@@ -84,6 +85,7 @@ public class AttributeListComponent
                 }
             }
         }
+        root.getParent().setSize(root.getParent().computeSize(SWT.DEFAULT, SWT.DEFAULT));
     }
 
     private String getLabelForAttribute(AttributeDescriptor descriptor)
@@ -102,12 +104,14 @@ public class AttributeListComponent
 
     public Control getControl()
     {
-        return root.getParent();
+        return root.getParent().getParent();
     }
 
     public void initLayout(Composite parent)
     {
-        Composite holder = new Composite(parent, SWT.NULL);
+        final ScrolledComposite scroll =
+            new ScrolledComposite(parent, SWT.V_SCROLL | SWT.H_SCROLL);
+        final Composite holder = new Composite(scroll, SWT.NULL);
         descriptionText = new Label(holder, SWT.WRAP);
         Label Label_1 = new Label(holder, SWT.HORIZONTAL | SWT.SEPARATOR);
         root = new Composite(holder, SWT.NULL);
@@ -134,6 +138,10 @@ public class AttributeListComponent
         root.setLayoutData(FormData_1);
         Label_1.setVisible(true);
         holder.setLayout(new FormLayout());
+
+        scroll.setLayout(new FillLayout());
+
+        scroll.setContent(holder);
     }
 
 }

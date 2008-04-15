@@ -65,7 +65,7 @@ public class AttributeDescriptor
     final Field attributeField;
 
     /**
-     *
+     * 
      */
     AttributeDescriptor(Field field, Object defaultValue, List<Annotation> constraints,
         AttributeMetadata metadata)
@@ -94,34 +94,36 @@ public class AttributeDescriptor
     {
         return attributeField.getAnnotation(annotationClass);
     }
-/**
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (obj == this)
+
+    /*
+        @Override
+        public boolean equals(Object obj) 
         {
-            return true;
+            if (obj == this)
+            {
+                return true;
+            }
+
+            if (obj == null || !(obj instanceof AttributeDescriptor))
+            {
+                return false;
+            }
+
+            final AttributeDescriptor other = ((AttributeDescriptor) obj);
+            return other.attributeField.equals(this.attributeField);
         }
 
-        if (obj == null || !(obj instanceof AttributeDescriptor))
+        @Override
+        public int hashCode()
         {
-            return false;
+            return key.hashCode();
         }
 
-        final AttributeDescriptor other = ((AttributeDescriptor) obj);
-        return other.attributeField.equals(this.attributeField);
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return key.hashCode();
-    }
-
+         */
     @Override
     public String toString()
     {
         return key + "=" + type;
     }
-    */
+
 }
