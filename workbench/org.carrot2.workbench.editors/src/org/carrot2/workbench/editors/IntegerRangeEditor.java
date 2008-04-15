@@ -37,21 +37,29 @@ public class IntegerRangeEditor extends AttributeEditorAdapter implements
     {
         Composite holder = new Composite(parent, SWT.NULL);
         holder.setLayoutData(layoutData);
-        GridLayout gl = new GridLayout(2, false);
+        GridLayout gl = new GridLayout();
         gl.marginWidth = 0;
         gl.marginHeight = 0;
-        holder.setLayout(gl);
 
-        createScale(holder);
-        GridData gd1 = new GridData();
-        gd1.horizontalAlignment = SWT.FILL;
-        gd1.grabExcessHorizontalSpace = true;
-        scale.setLayoutData(gd1);
+        if (constraint.max() < Integer.MAX_VALUE)
+        {
+            createScale(holder);
+            GridData gd1 = new GridData();
+            gd1.horizontalAlignment = SWT.FILL;
+            gd1.grabExcessHorizontalSpace = true;
+            scale.setLayoutData(gd1);
+
+            gl.numColumns = 2;
+        }
 
         createSpinner(holder);
         GridData gd2 = new GridData();
         gd2.minimumWidth = 30;
+        gd2.horizontalAlignment = SWT.FILL;
+        gd2.grabExcessHorizontalSpace = true;
         spinner.setLayoutData(gd2);
+
+        holder.setLayout(gl);
     }
 
     private void createSpinner(Composite holder)
@@ -59,14 +67,19 @@ public class IntegerRangeEditor extends AttributeEditorAdapter implements
         spinner = new Spinner(holder, SWT.BORDER);
         spinner.setMinimum(constraint.min());
         spinner.setMaximum(constraint.max());
-        spinner.setIncrement(scale.getIncrement());
-        spinner.setPageIncrement(scale.getPageIncrement());
+        spinner.setIncrement(RangeUtils.getIntMinorTicks(constraint.min(), constraint
+            .max()));
+        spinner.setPageIncrement(RangeUtils.getIntMajorTicks(constraint.min(), constraint
+            .max()));
         spinner.addSelectionListener(new SelectionAdapter()
         {
             @Override
             public void widgetSelected(SelectionEvent e)
             {
-                scale.setSelection(spinner.getSelection());
+                if (scale != null)
+                {
+                    scale.setSelection(spinner.getSelection());
+                }
                 doEvent();
             }
         });
@@ -101,13 +114,17 @@ public class IntegerRangeEditor extends AttributeEditorAdapter implements
     @Override
     public void setValue(Object currentValue)
     {
-        scale.setSelection((Integer) currentValue);
+        spinner.setSelection((Integer) currentValue);
+        if (scale != null)
+        {
+            scale.setSelection((Integer) currentValue);
+        }
     }
 
     @Override
     public Object getValue()
     {
-        return scale.getSelection();
+        return spinner.getSelection();
     }
 
 }
