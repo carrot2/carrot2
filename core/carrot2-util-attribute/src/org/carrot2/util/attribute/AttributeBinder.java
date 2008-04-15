@@ -101,8 +101,7 @@ public class AttributeBinder
             new AttributeBinderActionCollect(Output.class, values),
         };
 
-        bind(new HashSet<Object>(), object, actions, bindingDirectionAnnotation,
-            filteringAnnotations);
+        bind(object, actions, bindingDirectionAnnotation, filteringAnnotations);
     }
 
     /**
@@ -121,8 +120,7 @@ public class AttributeBinder
             new AttributeBinderActionBind(Output.class, values, true),
         };
 
-        bind(new HashSet<Object>(), object, actions, bindingDirectionAnnotation,
-            filteringAnnotations);
+        bind(object, actions, bindingDirectionAnnotation, filteringAnnotations);
     }
 
     /**
@@ -227,18 +225,28 @@ public class AttributeBinder
     /**
      * An action to be applied during attribute binding.
      */
-    public static abstract class AttributeBinderAction
+    public static interface AttributeBinderAction
     {
-        abstract <T> void performAction(T object, String key, Field field, Object value,
+        public <T> void performAction(T object, String key, Field field, Object value,
             Class<? extends Annotation> bindingDirectionAnnotation,
             Class<? extends Annotation>... filteringAnnotations)
             throws InstantiationException;
     }
 
     /**
+     * Transforms attribute values.
+     */
+    public static interface AttributeTransformer
+    {
+        public Object transform(Object value, String key, Field field,
+            Class<? extends Annotation> bindingDirectionAnnotation,
+            Class<? extends Annotation>... filteringAnnotations);
+    }
+
+    /**
      * An action that binds all {@link Input} attributes.
      */
-    public static class AttributeBinderActionBind extends AttributeBinderAction
+    public static class AttributeBinderActionBind implements AttributeBinderAction
     {
         final private Map<String, Object> values;
         final private Class<?> bindingDirectionAnnotation;
@@ -252,8 +260,7 @@ public class AttributeBinder
             this.checkRequired = checkRequired;
         }
 
-        @Override
-        <T> void performAction(T object, String key, Field field, Object value,
+        public <T> void performAction(T object, String key, Field field, Object value,
             Class<? extends Annotation> bindingDirectionAnnotation,
             Class<? extends Annotation>... filteringAnnotations)
             throws InstantiationException
@@ -282,12 +289,10 @@ public class AttributeBinder
                 // Note that the value can still be null here
                 value = values.get(key);
 
-                // TODO: Should required mean also not null? I'm only 99% convinced...
                 if (required)
                 {
                     if (value == null)
                     {
-                        // TODO: maybe we should have some dedicated exception here?
                         throw new AttributeBindingException(key,
                             "Not allowed to set required attribute to null: " + key);
                     }
@@ -353,20 +358,21 @@ public class AttributeBinder
     /**
      * An action that binds all {@link Output} attributes.
      */
-    public static class AttributeBinderActionCollect extends AttributeBinderAction
+    public static class AttributeBinderActionCollect implements AttributeBinderAction
     {
         final private Map<String, Object> values;
         final private Class<?> bindingDirectionAnnotation;
+        final AttributeTransformer [] transformers;
 
         public AttributeBinderActionCollect(Class<?> bindingDirectionAnnotation,
-            Map<String, Object> values)
+            Map<String, Object> values, AttributeTransformer... transformers)
         {
             this.values = values;
             this.bindingDirectionAnnotation = bindingDirectionAnnotation;
+            this.transformers = transformers;
         }
 
-        @Override
-        <T> void performAction(T object, String key, Field field, Object value,
+        public <T> void performAction(T object, String key, Field field, Object value,
             Class<? extends Annotation> bindingDirectionAnnotation,
             Class<? extends Annotation>... filteringAnnotations)
             throws InstantiationException
@@ -377,7 +383,14 @@ public class AttributeBinder
                 try
                 {
                     field.setAccessible(true);
-                    value = field.get(object);
+
+                    // Apply transforms
+                    for (AttributeTransformer transformer : transformers)
+                    {
+                        value = transformer.transform(value, key, field,
+                            bindingDirectionAnnotation, filteringAnnotations);
+                    }
+
                     values.put(key, value);
                 }
                 catch (final Exception e)

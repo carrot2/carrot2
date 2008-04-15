@@ -61,7 +61,7 @@ public final class Preprocessor
     {
         TokenizerTaskImpl.class
     })
-    public TokenizerTask tokenizer;
+    public TokenizerTask tokenizer = new TokenizerTaskImpl();
 
     /**
      * Case normalizer. Performs {@link PreprocessingTasks#CASE_NORMALIZE} task.
@@ -73,7 +73,7 @@ public final class Preprocessor
     {
         LocaleCaseNormalizer.class
     })
-    public CaseNormalizerTask caseNormalizer;
+    public CaseNormalizerTask caseNormalizer = new LocaleCaseNormalizer();
 
     /**
      * Stemmer. Performs {@link PreprocessingTasks#STEMMING} task.
@@ -85,7 +85,7 @@ public final class Preprocessor
     {
         LanguageModelStemmingTask.class
     })
-    public StemmingTask stemmer;
+    public StemmingTask stemmer = new LanguageModelStemmingTask();
 
     /**
      * Linguistic resources. Exposes current processing language internally.
@@ -99,16 +99,6 @@ public final class Preprocessor
     {
         final LanguageModel language = languageFactory.getCurrentLanguage();
 
-        /*
-         * TODO: If we assign default values to these fields, they are being
-         * reused on subsequent requests and are not cleared properly. Is there
-         * any way to define a default value for an attribute so that it is
-         * recreated properly on each request in the caching controller?
-         */
-        if (this.tokenizer == null) tokenizer = new TokenizerTaskImpl();
-        if (this.caseNormalizer == null) caseNormalizer = new LocaleCaseNormalizer();
-        if (this.stemmer == null) stemmer = new LanguageModelStemmingTask();
-        
         /*
          * Assert the correct order of preprocessing tasks by throwing them all in a set
          * and checking for all possibilities.

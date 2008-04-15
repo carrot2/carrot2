@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.carrot2.core.attribute.Init;
+import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
 import org.junit.Test;
@@ -25,13 +26,44 @@ public class CachingControllerTest extends ControllerTestBase
         @Init
         @Input
         @Attribute(key = "cachedDelegate1")
-        @ImplementingClasses(classes = {ProcessingComponent.class}, strict = false)
+        @ImplementingClasses(classes =
+        {
+            ProcessingComponent.class
+        }, strict = false)
         protected ProcessingComponent cachedDelegate1;
 
         @Override
         ProcessingComponent getDelegate()
         {
             return cachedDelegate1;
+        }
+    }
+
+    @Bindable
+    @SuppressWarnings("unused")
+    public static class ComponentWithBindableReference extends ProcessingComponentBase
+    {
+        @Processing
+        @Input
+        @Attribute
+        @ImplementingClasses(classes = BindableClass.class)
+        private BindableClass inputProcessingBindableWithDefault = new BindableClass();
+
+        @Processing
+        @Input
+        @Attribute
+        @ImplementingClasses(classes = BindableClass.class)
+        private BindableClass inputProcessingBindableWithoutDefault;
+    }
+
+    @Bindable
+    public static class BindableClass
+    {
+        static int createdInstances = 0;
+
+        public BindableClass()
+        {
+            createdInstances++;
         }
     }
 
@@ -156,6 +188,18 @@ public class CachingControllerTest extends ControllerTestBase
 
         controller.dispose();
         mocksControl.verify();
+    }
+    
+    @Test
+    public void testReferenceAttributeRestoring()
+    {
+        assertEquals(0, BindableClass.createdInstances);
+        performProcessing(ComponentWithBindableReference.class);
+        assertEquals(2, BindableClass.createdInstances);
+        performProcessing(ComponentWithBindableReference.class);
+        assertEquals(3, BindableClass.createdInstances);
+        performProcessing(ComponentWithBindableReference.class);
+        assertEquals(4, BindableClass.createdInstances);
     }
 
     @Test(expected = AttributeBindingException.class)

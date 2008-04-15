@@ -1,6 +1,8 @@
 package org.carrot2.core;
 
 import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.Set;
 
@@ -10,18 +12,14 @@ import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.constructs.blocking.CacheEntryFactory;
 import net.sf.ehcache.constructs.blocking.SelfPopulatingCache;
 
+import org.carrot2.core.attribute.Init;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.ExceptionUtils;
-import org.carrot2.util.attribute.AttributeBinder;
-import org.carrot2.util.attribute.AttributeDescriptor;
-import org.carrot2.util.attribute.Bindable;
-import org.carrot2.util.attribute.BindableDescriptorBuilder;
-import org.carrot2.util.attribute.Input;
-import org.carrot2.util.attribute.Output;
-import org.carrot2.util.pool.DisposalListener;
-import org.carrot2.util.pool.InstantiationListener;
-import org.carrot2.util.pool.PassivationListener;
-import org.carrot2.util.pool.SoftUnboundedPool;
+import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.AttributeBinder.AttributeBinderAction;
+import org.carrot2.util.attribute.AttributeBinder.AttributeBinderActionCollect;
+import org.carrot2.util.attribute.constraint.ImplementingClasses;
+import org.carrot2.util.pool.*;
 import org.carrot2.util.resource.ClassResource;
 
 import com.google.common.collect.Maps;
@@ -32,9 +30,9 @@ import com.google.common.collect.Sets;
  * support for component pooling and, optionally, data caching.
  * <p>
  * Calls to {@link #process(Map, Class...)} are thread-safe, although some care should be
- * given to initialization: {@link #init(Map)} should be called before other threads are allowed
- * to see this object and {@link #dispose()} should be called after all threads leave 
- * {@link #process(Map, Class...)}.
+ * given to initialization: {@link #init(Map)} should be called before other threads are
+ * allowed to see this object and {@link #dispose()} should be called after all threads
+ * leave {@link #process(Map, Class...)}.
  */
 public final class CachingController implements Controller
 {
@@ -110,7 +108,8 @@ public final class CachingController implements Controller
             }
             catch (IOException e)
             {
-                throw new ComponentInitializationException("Could not initalize cache.", e);
+                throw new ComponentInitializationException("Could not initalize cache.",
+                    e);
             }
 
             if (!cacheManager.cacheExists("data"))
@@ -207,16 +206,38 @@ public final class CachingController implements Controller
     }
 
     /*
-     * We are making an implicit assumption that init(), process() and dispose()
-     * will be called sequentially. This may or may not be true, especially with regard to data
-     * visibility between threads in process() and dispose(). If a number of threads is inside
-     * process(), calling dispose() may cause unpredictable side-effects (exceptions from internal 
-     * pools?). I added a JavaDoc comment about this.
+     * We are making an implicit assumption that init(), process() and dispose() will be
+     * called sequentially. This may or may not be true, especially with regard to data
+     * visibility between threads in process() and dispose(). If a number of threads is
+     * inside process(), calling dispose() may cause unpredictable side-effects
+     * (exceptions from internal pools?).
      */
     public void dispose()
     {
         componentPool.dispose();
         cacheManager.shutdown();
+    }
+
+    /**
+     * Transforms values of attributes that are bound only at {@link Processing} time and
+     * have {@link ImplementingClasses} constraints into the classes of the values.
+     */
+    private final static class ToClassAttributeTransformer implements
+        AttributeBinder.AttributeTransformer
+    {
+        static ToClassAttributeTransformer INSTANCE = new ToClassAttributeTransformer();
+
+        public Object transform(Object value, String key, Field field,
+            Class<? extends Annotation> bindingDirectionAnnotation,
+            Class<? extends Annotation>... filteringAnnotations)
+        {
+            if (value != null && field.getAnnotation(ImplementingClasses.class) != null
+                && field.getAnnotation(Init.class) == null)
+            {
+                return value.getClass();
+            }
+            return value;
+        }
     }
 
     /**
@@ -257,8 +278,12 @@ public final class CachingController implements Controller
                         // must not change @Init attributes during processing.
                         // We could unbind @Init attributes also, but this may be
                         // costly when Class -> Object coercion happens.
-                        AttributeBinder.unbind(component, attributes, Input.class,
-                            Processing.class);
+                        AttributeBinder.bind(component, new AttributeBinderAction []
+                        {
+                            new AttributeBinderActionCollect(Input.class, attributes,
+                                ToClassAttributeTransformer.INSTANCE),
+                        }, Input.class, Processing.class);
+
                         resetAttributes.put(componentClass, attributes);
                     }
                 }
@@ -268,7 +293,7 @@ public final class CachingController implements Controller
                 // If init() throws any exception, this exception will
                 // be propagated to the borrowObject() call.
                 component.dispose();
-                
+
                 throw ExceptionUtils.wrapAs(ComponentInitializationException.class, e);
             }
         }
@@ -305,16 +330,16 @@ public final class CachingController implements Controller
                 // for required attributes, otherwise, we won't be able
                 // to reset @Required input attributes to null
                 final Map<String, Object> map;
-                synchronized (reentrantLock) 
+                synchronized (reentrantLock)
                 {
-                     map = resetAttributes.get(processingComponent.getClass());
+                    map = resetAttributes.get(processingComponent.getClass());
                 }
 
                 AttributeBinder.bind(processingComponent,
                     new AttributeBinder.AttributeBinderAction []
                     {
-                        new AttributeBinder.AttributeBinderActionBind(Input.class,
-                            map, false)
+                        new AttributeBinder.AttributeBinderActionBind(Input.class, map,
+                            false)
                     }, Input.class, Processing.class);
             }
             catch (Exception e)
@@ -431,8 +456,8 @@ public final class CachingController implements Controller
         {
             final Map<String, Object> inputAttributes = (Map<String, Object>) key;
 
-            Class<? extends ProcessingComponent> componentClass = 
-                (Class<? extends ProcessingComponent>) inputAttributes.get(COMPONENT_CLASS_KEY);
+            Class<? extends ProcessingComponent> componentClass = (Class<? extends ProcessingComponent>) inputAttributes
+                .get(COMPONENT_CLASS_KEY);
 
             ProcessingComponent component = null;
             try

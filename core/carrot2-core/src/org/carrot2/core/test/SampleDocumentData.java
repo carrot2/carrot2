@@ -4,6 +4,8 @@ import java.util.*;
 
 import org.carrot2.core.Document;
 
+import com.google.common.collect.Lists;
+
 /**
  * A set of sample documents returned for the query <i>data mining</i>. This set is
  * hard-coded so that no other external components are needed to run tests (i.e., circular
@@ -1227,4 +1229,8 @@ final class SampleDocumentData
 
         DOCUMENTS_DAWID = Collections.unmodifiableList(documents);
     }
+    
+    @SuppressWarnings("unchecked")
+    final static List<Collection<Document>> ALL = Lists.immutableList(
+        DOCUMENTS_DATA_MINING, DOCUMENTS_DAWID);
 }

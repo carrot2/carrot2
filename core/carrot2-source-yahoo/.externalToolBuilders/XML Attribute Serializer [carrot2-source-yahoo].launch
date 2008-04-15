@@ -2,7 +2,7 @@
 <launchConfiguration type="org.eclipse.ant.AntBuilderLaunchConfigurationType">
 <stringAttribute key="org.eclipse.ant.ui.ATTR_ANT_CLEAN_TARGETS" value="clean,"/>
 <booleanAttribute key="org.eclipse.ant.ui.ATTR_TARGETS_UPDATED" value="true"/>
-<booleanAttribute key="org.eclipse.ant.ui.DEFAULT_VM_INSTALL" value="true"/>
+<booleanAttribute key="org.eclipse.ant.ui.DEFAULT_VM_INSTALL" value="false"/>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
 <listEntry value="/carrot2-util-attribute/etc/eclipse/build-attributes.xml"/>
 </listAttribute>
@@ -28,7 +28,7 @@
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.eclipse.ant.ui.AntClasspathProvider"/>
 <booleanAttribute key="org.eclipse.jdt.launching.DEFAULT_CLASSPATH" value="false"/>
-<stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/sun-j2sdk1.5.0"/>
+<stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/ibm-j2sdk1.5.0"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.eclipse.ant.internal.ui.antsupport.InternalAntRunner"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="carrot2-util-attribute"/>
 <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.ant.ui.AntClasspathProvider"/>
@@ -42,7 +42,7 @@
 <mapEntry key="output.plugin.dir" value="${build_project}/META-INF"/>
 <mapEntry key="java.source.common.attributes" value="${resource_loc:/carrot2-core/src/org/carrot2/core/attribute/AttributeNames.java}"/>
 </mapAttribute>
-<stringAttribute key="org.eclipse.ui.externaltools.ATTR_BUILD_SCOPE" value="${working_set:&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#13;&#10;&lt;launchConfigurationWorkingSet editPageId=&quot;org.eclipse.ui.resourceWorkingSetPage&quot; factoryID=&quot;org.eclipse.ui.internal.WorkingSetFactory&quot; label=&quot;workingSet&quot; name=&quot;workingSet&quot;&gt;&#13;&#10;&lt;item factoryID=&quot;org.eclipse.ui.internal.model.ResourceFactory&quot; path=&quot;/carrot2-source-yahoo/src/org/carrot2/source/yahoo/YahooDocumentSource.java&quot; type=&quot;1&quot;/&gt;&#13;&#10;&lt;item factoryID=&quot;org.eclipse.ui.internal.model.ResourceFactory&quot; path=&quot;/carrot2-source-yahoo/src/org/carrot2/source/yahoo/YahooNewsSearchService.java&quot; type=&quot;1&quot;/&gt;&#13;&#10;&lt;item factoryID=&quot;org.eclipse.ui.internal.model.ResourceFactory&quot; path=&quot;/carrot2-source-yahoo/src/org/carrot2/source/yahoo/YahooSearchService.java&quot; type=&quot;1&quot;/&gt;&#13;&#10;&lt;item factoryID=&quot;org.eclipse.ui.internal.model.ResourceFactory&quot; path=&quot;/carrot2-source-yahoo/src/org/carrot2/source/yahoo/YahooWebSearchService.java&quot; type=&quot;1&quot;/&gt;&#13;&#10;&lt;/launchConfigurationWorkingSet&gt;}"/>
+<stringAttribute key="org.eclipse.ui.externaltools.ATTR_BUILD_SCOPE" value="${working_set:&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#13;&#10;&lt;launchConfigurationWorkingSet editPageId=&quot;org.eclipse.ui.resourceWorkingSetPage&quot; factoryID=&quot;org.eclipse.ui.internal.WorkingSetFactory&quot; label=&quot;workingSet&quot; name=&quot;workingSet&quot;&gt;&#13;&#10;&lt;item factoryID=&quot;org.eclipse.ui.internal.model.ResourceFactory&quot; path=&quot;/carrot2-source-yahoo/src/org/carrot2/source/yahoo/YahooNewsSearchService.java&quot; type=&quot;1&quot;/&gt;&#13;&#10;&lt;item factoryID=&quot;org.eclipse.ui.internal.model.ResourceFactory&quot; path=&quot;/carrot2-source-yahoo/src/org/carrot2/source/yahoo/YahooDocumentSource.java&quot; type=&quot;1&quot;/&gt;&#13;&#10;&lt;item factoryID=&quot;org.eclipse.ui.internal.model.ResourceFactory&quot; path=&quot;/carrot2-source-yahoo/src/org/carrot2/source/yahoo/YahooSearchService.java&quot; type=&quot;1&quot;/&gt;&#13;&#10;&lt;item factoryID=&quot;org.eclipse.ui.internal.model.ResourceFactory&quot; path=&quot;/carrot2-source-yahoo/src/org/carrot2/source/yahoo/YahooWebSearchService.java&quot; type=&quot;1&quot;/&gt;&#13;&#10;&lt;/launchConfigurationWorkingSet&gt;}"/>
 <stringAttribute key="org.eclipse.ui.externaltools.ATTR_LAUNCH_CONFIGURATION_BUILD_SCOPE" value="${projects:carrot2-algorithm-stc,carrot2-algorithm-synthetic,carrot2-core,carrot2-source-xml,carrot2-source-yahoo,carrot2-util-attribute}"/>
 <stringAttribute key="org.eclipse.ui.externaltools.ATTR_LOCATION" value="${workspace_loc:/carrot2-util-attribute/etc/eclipse/build-attributes.xml}"/>
 <stringAttribute key="org.eclipse.ui.externaltools.ATTR_RUN_BUILD_KINDS" value="full,incremental,clean"/>
