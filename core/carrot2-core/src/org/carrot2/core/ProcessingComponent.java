@@ -14,21 +14,6 @@ import org.carrot2.util.attribute.Output;
  */
 public interface ProcessingComponent
 {
-    /*
-     * TODO: Would it be beneficial to have the controller 'clean up' attribute values to
-     * their defaults? Currently the values in component fields remain there after
-     * processing is finished and {@link #afterProcessing()} method should do the cleanup.
-     * There are pros and cons. It isn't hard to imagine a public parameterless
-     * constructor simply calling some private <code>reset()</code> method to reset
-     * field values to defaults. The controller could reset field values to their original
-     * values, although there will be problems with object references (which cannot be
-     * easily recreated). [SO] Absolutely, we must have this if we want to have a
-     * controller that pools component instances. In this case we could read values of
-     * {@link Processing} {@link Input} attributes after component is initialized (but
-     * before it serves any request) and then restore these values after the request is
-     * handled.
-     */
-
     /**
      * Invoked after component's attributes marked with {@link Init} and {@link Input}
      * annotations have been bound, but before calls to any other methods of this
