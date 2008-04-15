@@ -14,20 +14,13 @@ import org.carrot2.util.attribute.constraint.*;
 public final class STCClusteringParameters
 {
     /**
-     * Minimum base cluster score.
-     */
-    @Processing
-    @Input
-    @Attribute
-    public double minBaseClusterScore = 2.0d;
-
-    /**
      * Minimum word-document recurrences.
      */
     @Processing
     @Input
     @Attribute
     @IntRange(min = 2, max = Integer.MAX_VALUE)
+    // @AttributeGroup(label="Word filtering")
     public int ignoreWordIfInFewerDocs = 2;
 
     /**
@@ -38,7 +31,18 @@ public final class STCClusteringParameters
     @Input
     @Attribute
     @DoubleRange(min = 0, max = 1)
+    // @AttributeGroup(label="Word filtering")
     public double ignoreWordIfInHigherDocsPercent = 0.9d;
+
+    /**
+     * Minimum base cluster score.
+     */
+    @Processing
+    @Input
+    @Attribute
+    @DoubleRange(min = 0, max = 10)
+    // @AttributeGroup(label="Base clusters")
+    public double minBaseClusterScore = 2.0d;
 
     /**
      * Maximum base clusters count. Trims the base cluster array after N-th position for
@@ -48,6 +52,7 @@ public final class STCClusteringParameters
     @Input
     @Attribute
     @IntRange(min = 2, max = Integer.MAX_VALUE)
+    // @AttributeGroup(label="Base clusters")
     public int maxBaseClusters = 300;
 
     /**
@@ -56,7 +61,8 @@ public final class STCClusteringParameters
     @Processing
     @Input
     @Attribute
-    @IntRange(min = 2, max = Integer.MAX_VALUE)
+    @IntRange(min = 2, max = 20)
+    // @AttributeGroup(label="Base clusters")    
     public int minBaseClusterSize = 2;
 
     /**
@@ -66,6 +72,7 @@ public final class STCClusteringParameters
     @Input
     @Attribute
     @IntRange(min = 1, max = Integer.MAX_VALUE)
+    // @AttributeGroup(label="Merging and output")    
     public int maxClusters = 15;
 
     /**
@@ -75,6 +82,7 @@ public final class STCClusteringParameters
     @Input
     @Attribute
     @DoubleRange(min = 0, max = 1)
+    // @AttributeGroup(label="Merging and output")    
     public double mergeThreshold = 0.6d;
 
     /**
@@ -84,6 +92,7 @@ public final class STCClusteringParameters
     @Input
     @Attribute
     @DoubleRange(min = 0, max = 1)
+    // @AttributeGroup(label="Label creation")    
     public double maxPhraseOverlap = 0.3d;
 
     /**
@@ -94,6 +103,7 @@ public final class STCClusteringParameters
     @Input
     @Attribute
     @DoubleRange(min = 0, max = 1)
+    // @AttributeGroup(label="Label creation")    
     public double mostGeneralPhraseCoverage = 0.5d;
 
     /**
@@ -103,6 +113,7 @@ public final class STCClusteringParameters
     @Input
     @Attribute
     @IntRange(min = 1, max = Integer.MAX_VALUE)
+    // @AttributeGroup(label="Label creation")    
     public int maxDescPhraseLength = 4;
 
     /**
@@ -115,7 +126,8 @@ public final class STCClusteringParameters
     @Processing
     @Input
     @Attribute
-    @DoubleRange(min = 0, max = 1)
+    @DoubleRange(min = 0, max = Double.MAX_VALUE)
+    // @AttributeGroup(label="Base cluster boosts")    
     public double singleTermBoost = 0.5d;
 
     /**
@@ -127,17 +139,19 @@ public final class STCClusteringParameters
     @Input
     @Attribute
     @IntRange(min = 1, max = Integer.MAX_VALUE)
+    // @AttributeGroup(label="Base cluster boosts")    
     public int optimalPhraseLength = 3;
 
     /**
-     * Optimal label length deviation. A factor in calculation of the base cluster score.
+     * Phrase length tolerance. A factor in calculation of the base cluster score.
      * 
      * @see STCEngine#calculateModifiedBaseClusterScore(int, int, STCParameters)
      */
     @Processing
     @Input
     @Attribute
-    @DoubleRange(min = 1, max = Integer.MAX_VALUE)
+    @DoubleRange(min = 0.5, max = Integer.MAX_VALUE)
+    // @AttributeGroup(label="Base cluster boosts")    
     public double optimalPhraseLengthDev = 2.0d;
 
     /**
@@ -150,5 +164,6 @@ public final class STCClusteringParameters
     @Input
     @Attribute
     @DoubleRange(min = 0, max = Integer.MAX_VALUE)
+    // @AttributeGroup(label="Base cluster boosts")    
     public double documentCountBoost = 1.0d;
 }
