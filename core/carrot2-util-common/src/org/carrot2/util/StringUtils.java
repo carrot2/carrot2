@@ -1,6 +1,8 @@
 package org.carrot2.util;
 
-import java.util.Iterator;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Provides a number of useful method operating on {@link String}s.
@@ -10,6 +12,8 @@ import java.util.Iterator;
  */
 public final class StringUtils extends org.apache.commons.lang.StringUtils
 {
+    private static Pattern camelCasePart;
+
     private StringUtils()
     {
     }
@@ -44,5 +48,20 @@ public final class StringUtils extends org.apache.commons.lang.StringUtils
         }
 
         return result;
+    }
+
+    public static String splitCamelCase(String camelCaseString)
+    {
+        if (camelCasePart == null)
+        {
+            camelCasePart = Pattern.compile("[A-Z][a-z0-9]*");
+        }
+        Matcher matcher = camelCasePart.matcher(camelCaseString);
+        List<String> parts = new ArrayList<String>();
+        while (matcher.find())
+        {
+            parts.add(matcher.group());
+        }
+        return join(parts, ' ');
     }
 }
