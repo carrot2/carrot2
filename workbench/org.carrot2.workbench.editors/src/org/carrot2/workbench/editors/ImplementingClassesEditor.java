@@ -4,6 +4,8 @@ import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang.ClassUtils;
+import org.carrot2.util.StringUtils;
 import org.carrot2.util.attribute.AttributeDescriptor;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
 import org.eclipse.jface.viewers.*;
@@ -40,7 +42,8 @@ public class ImplementingClassesEditor extends AttributeEditorAdapter
 
             public String getText(Object element)
             {
-                return ((Class<?>) element).getName();
+                return StringUtils.splitCamelCase(ClassUtils
+                    .getShortClassName((Class<?>) element));
             }
         });
         combo.setInput(constraint.classes());
