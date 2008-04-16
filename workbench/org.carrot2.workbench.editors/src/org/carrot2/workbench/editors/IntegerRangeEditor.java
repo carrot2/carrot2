@@ -5,20 +5,16 @@ import java.lang.annotation.Annotation;
 import org.carrot2.util.RangeUtils;
 import org.carrot2.util.attribute.AttributeDescriptor;
 import org.carrot2.util.attribute.constraint.IntRange;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.*;
 
-public class IntegerRangeEditor extends AttributeEditorAdapter implements
-    IAttributeEditor
+public class IntegerRangeEditor extends RangeEditorBase
 {
     private IntRange constraint;
-    private Scale scale;
-    private Spinner spinner;
-    private boolean duringSelection;
+
+    @Override
+    public Object getValue()
+    {
+        return getIntValue();
+    }
 
     @Override
     public void init(AttributeDescriptor descriptor)
@@ -34,124 +30,59 @@ public class IntegerRangeEditor extends AttributeEditorAdapter implements
     }
 
     @Override
-    public void createEditor(Composite parent, Object layoutData)
+    public void setValue(Object currentValue)
     {
-        Composite holder = new Composite(parent, SWT.NULL);
-        holder.setLayoutData(layoutData);
-        GridLayout gl = new GridLayout();
-        gl.marginWidth = 0;
-        gl.marginHeight = 0;
-
-        if (constraint.max() < Integer.MAX_VALUE)
-        {
-            createScale(holder);
-            GridData gd1 = new GridData();
-            gd1.horizontalAlignment = SWT.FILL;
-            gd1.grabExcessHorizontalSpace = true;
-            scale.setLayoutData(gd1);
-
-            gl.numColumns = 2;
-        }
-
-        createSpinner(holder);
-        GridData gd2 = new GridData();
-        gd2.minimumWidth = 30;
-        gd2.horizontalAlignment = SWT.FILL;
-        gd2.grabExcessHorizontalSpace = true;
-        spinner.setLayoutData(gd2);
-
-        holder.setLayout(gl);
+        setIntValue((Integer) currentValue);
     }
 
-    private void createSpinner(Composite holder)
+    @Override
+    protected int getDigits()
     {
-        spinner = new Spinner(holder, SWT.BORDER);
-        spinner.setMinimum(constraint.min());
-        spinner.setMaximum(constraint.max());
-        if (constraint.max() < Integer.MAX_VALUE)
+        return 0;
+    }
+
+    @Override
+    protected int getIncrement()
+    {
+        if (isBounded())
         {
-            spinner.setIncrement(RangeUtils.getIntMinorTicks(constraint.min(), constraint
-                .max()));
-            spinner.setPageIncrement(RangeUtils.getIntMajorTicks(constraint.min(),
-                constraint.max()));
+            return RangeUtils.getIntMinorTicks(constraint.min(), constraint.max());
         }
         else
         {
-            spinner.setIncrement(1);
-            spinner.setPageIncrement(10);
-        }
-        spinner.addSelectionListener(new SelectionAdapter()
-        {
-            @Override
-            public void widgetSelected(SelectionEvent e)
-            {
-                duringSelection = true;
-                if (scale != null)
-                {
-                    scale.setSelection(spinner.getSelection());
-                }
-            }
-        });
-        attachEvents(spinner);
-    }
-
-    private void createScale(Composite holder)
-    {
-        scale = new Scale(holder, SWT.HORIZONTAL);
-        scale.setMinimum(constraint.min());
-        scale.setMaximum(constraint.max());
-        scale.setIncrement(RangeUtils
-            .getIntMinorTicks(constraint.min(), constraint.max()));
-        scale.setPageIncrement(RangeUtils.getIntMajorTicks(constraint.min(), constraint
-            .max()));
-        scale.addListener(SWT.Selection, new Listener()
-        {
-            public void handleEvent(Event event)
-            {
-                duringSelection = true;
-                spinner.setSelection(scale.getSelection());
-            }
-        });
-        attachEvents(scale);
-    }
-
-    private void attachEvents(final Control control)
-    {
-        Listener eventDoer = new Listener()
-        {
-            public void handleEvent(Event event)
-            {
-                doEvent();
-            }
-        };
-        control.addListener(SWT.KeyUp, eventDoer);
-        control.addListener(SWT.MouseUp, eventDoer);
-    }
-
-    private void doEvent()
-    {
-        if (duringSelection)
-        {
-            duringSelection = false;
-            AttributeChangeEvent event = new AttributeChangeEvent(this);
-            fireAttributeChange(event);
+            return 1;
         }
     }
 
     @Override
-    public void setValue(Object currentValue)
+    protected int getMaximum()
     {
-        spinner.setSelection((Integer) currentValue);
-        if (scale != null)
+        return constraint.max();
+    }
+
+    @Override
+    protected int getMinimum()
+    {
+        return constraint.min();
+    }
+
+    @Override
+    protected int getPageIncrement()
+    {
+        if (isBounded())
         {
-            scale.setSelection((Integer) currentValue);
+            return RangeUtils.getIntMajorTicks(constraint.min(), constraint.max());
+        }
+        else
+        {
+            return 10;
         }
     }
 
     @Override
-    public Object getValue()
+    protected boolean isBounded()
     {
-        return spinner.getSelection();
+        return (constraint.max() < Integer.MAX_VALUE);
     }
 
 }

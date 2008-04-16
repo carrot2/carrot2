@@ -41,6 +41,15 @@
             </constraint>
          </constraints>
       </typeEditor>
+      <typeEditor
+            attributeClass="java.lang.Double"
+            class="org.carrot2.workbench.editors.DoubleRangeEditor">
+         <constraints>
+            <constraint
+                  constraintClass="org.carrot2.util.attribute.constraint.DoubleRange">
+            </constraint>
+         </constraints>
+      </typeEditor>
    </extension>
 
 </plugin>
