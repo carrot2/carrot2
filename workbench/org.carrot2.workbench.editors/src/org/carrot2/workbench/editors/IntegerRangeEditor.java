@@ -18,6 +18,7 @@ public class IntegerRangeEditor extends AttributeEditorAdapter implements
     private IntRange constraint;
     private Scale scale;
     private Spinner spinner;
+    private boolean duringSelection;
 
     @Override
     public void init(AttributeDescriptor descriptor)
@@ -67,22 +68,31 @@ public class IntegerRangeEditor extends AttributeEditorAdapter implements
         spinner = new Spinner(holder, SWT.BORDER);
         spinner.setMinimum(constraint.min());
         spinner.setMaximum(constraint.max());
-        spinner.setIncrement(RangeUtils.getIntMinorTicks(constraint.min(), constraint
-            .max()));
-        spinner.setPageIncrement(RangeUtils.getIntMajorTicks(constraint.min(), constraint
-            .max()));
+        if (constraint.max() < Integer.MAX_VALUE)
+        {
+            spinner.setIncrement(RangeUtils.getIntMinorTicks(constraint.min(), constraint
+                .max()));
+            spinner.setPageIncrement(RangeUtils.getIntMajorTicks(constraint.min(),
+                constraint.max()));
+        }
+        else
+        {
+            spinner.setIncrement(1);
+            spinner.setPageIncrement(10);
+        }
         spinner.addSelectionListener(new SelectionAdapter()
         {
             @Override
             public void widgetSelected(SelectionEvent e)
             {
+                duringSelection = true;
                 if (scale != null)
                 {
                     scale.setSelection(spinner.getSelection());
                 }
-                doEvent();
             }
         });
+        attachEvents(spinner);
     }
 
     private void createScale(Composite holder)
@@ -94,21 +104,38 @@ public class IntegerRangeEditor extends AttributeEditorAdapter implements
             .getIntMinorTicks(constraint.min(), constraint.max()));
         scale.setPageIncrement(RangeUtils.getIntMajorTicks(constraint.min(), constraint
             .max()));
-        scale.addSelectionListener(new SelectionAdapter()
+        scale.addListener(SWT.Selection, new Listener()
         {
-            @Override
-            public void widgetSelected(SelectionEvent e)
+            public void handleEvent(Event event)
             {
+                duringSelection = true;
                 spinner.setSelection(scale.getSelection());
-                doEvent();
             }
         });
+        attachEvents(scale);
+    }
+
+    private void attachEvents(final Control control)
+    {
+        Listener eventDoer = new Listener()
+        {
+            public void handleEvent(Event event)
+            {
+                doEvent();
+            }
+        };
+        control.addListener(SWT.KeyUp, eventDoer);
+        control.addListener(SWT.MouseUp, eventDoer);
     }
 
     private void doEvent()
     {
-        AttributeChangeEvent event = new AttributeChangeEvent(this);
-        fireAttributeChange(event);
+        if (duringSelection)
+        {
+            duringSelection = false;
+            AttributeChangeEvent event = new AttributeChangeEvent(this);
+            fireAttributeChange(event);
+        }
     }
 
     @Override
