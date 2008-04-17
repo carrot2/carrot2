@@ -1,13 +1,13 @@
 package org.carrot2.workbench.editors.temp;
 
+import java.io.File;
 import java.util.*;
 
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
-import org.carrot2.util.attribute.constraint.ImplementingClasses;
-import org.carrot2.util.attribute.constraint.IntRange;
+import org.carrot2.util.attribute.constraint.*;
 
 @Bindable
 public class TempClusteringAlgorithm extends ProcessingComponentBase implements
@@ -69,6 +69,26 @@ public class TempClusteringAlgorithm extends ProcessingComponentBase implements
         Amount2.class, Amount3.class
     })
     private AmountInterface someObject = new Amount2();
+
+    /**
+     * @label normal file
+     */
+    @SuppressWarnings("unused")
+    @Attribute(key = "fileAttribute")
+    @Input
+    @Processing
+    @IsFile
+    private File fileAttribute;
+
+    /**
+     * @label directory
+     */
+    @SuppressWarnings("unused")
+    @Attribute(key = "dirAttribute")
+    @Input
+    @Processing
+    @IsDirectory
+    private File dirAttribute;
 
     @Processing
     @Input

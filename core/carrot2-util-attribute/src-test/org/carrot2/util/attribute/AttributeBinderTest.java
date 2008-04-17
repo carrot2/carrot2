@@ -71,7 +71,7 @@ public class AttributeBinderTest
     }
 
     @Bindable
-    public static class InputReferenceContainerWithNoImplementingClass
+    public static class InputReferenceContainerWithNoConstraint
     {
         @TestProcessing
         @Input
@@ -80,7 +80,7 @@ public class AttributeBinderTest
     }
 
     @Bindable
-    public static class OutputReferenceContainerWithNoImplementingClass
+    public static class OutputReferenceContainerWithNoConstraint
     {
         @TestProcessing
         @Output
@@ -604,14 +604,16 @@ public class AttributeBinderTest
     public void testOnlyBindingDirectionAnnotationProvided()
         throws InstantiationException
     {
-        final OnlyBindingDirectionAnnotationProvided instance = new OnlyBindingDirectionAnnotationProvided();
+        final OnlyBindingDirectionAnnotationProvided instance =
+            new OnlyBindingDirectionAnnotationProvided();
         AttributeBinder.bind(instance, attributes, Input.class, TestInit.class);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testOnlyBindingTimeAnnotationProvided() throws InstantiationException
     {
-        final OnlyBindingTimeAnnotationProvided instance = new OnlyBindingTimeAnnotationProvided();
+        final OnlyBindingTimeAnnotationProvided instance =
+            new OnlyBindingTimeAnnotationProvided();
         AttributeBinder.bind(instance, attributes, Input.class, TestInit.class);
     }
 
@@ -619,7 +621,8 @@ public class AttributeBinderTest
     public void testAttributeAnnotationWithoutBindingDirection()
         throws InstantiationException
     {
-        final AttributeAnnotationWithoutBindingDirection instance = new AttributeAnnotationWithoutBindingDirection();
+        final AttributeAnnotationWithoutBindingDirection instance =
+            new AttributeAnnotationWithoutBindingDirection();
         AttributeBinder.bind(instance, attributes, Input.class, TestInit.class);
     }
 
@@ -741,19 +744,21 @@ public class AttributeBinderTest
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testInputReferenceAttributeWithoutImplementingClass()
+    public void testInputReferenceAttributeWithoutConstraint()
         throws AttributeBindingException, InstantiationException
     {
-        final InputReferenceContainerWithNoImplementingClass instance = new InputReferenceContainerWithNoImplementingClass();
+        final InputReferenceContainerWithNoConstraint instance =
+            new InputReferenceContainerWithNoConstraint();
 
         AttributeBinder.bind(instance, attributes, Input.class);
     }
 
     @Test
-    public void testOutputReferenceAttributeWithoutImplementingClass()
+    public void testOutputReferenceAttributeWithoutConstraint()
         throws AttributeBindingException, InstantiationException
     {
-        final OutputReferenceContainerWithNoImplementingClass instance = new OutputReferenceContainerWithNoImplementingClass();
+        final OutputReferenceContainerWithNoConstraint instance =
+            new OutputReferenceContainerWithNoConstraint();
 
         AttributeBinder.bind(instance, attributes, Output.class);
     }
@@ -783,7 +788,8 @@ public class AttributeBinderTest
         final LinkedHashSet<String> linkedHashSet = new LinkedHashSet<String>();
         addAttribute(CollectionInputAttributes.class, "linkedHashSet", linkedHashSet);
         addAttribute(CollectionInputAttributes.class, "map", Collections.emptyMap());
-        final ConcurrentHashMap<String, String> concurrentHashMap = new ConcurrentHashMap<String, String>();
+        final ConcurrentHashMap<String, String> concurrentHashMap =
+            new ConcurrentHashMap<String, String>();
         addAttribute(CollectionInputAttributes.class, "concurrentHashMap",
             concurrentHashMap);
         AttributeBinder.bind(instance, attributes, Input.class);
