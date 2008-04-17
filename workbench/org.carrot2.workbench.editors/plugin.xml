@@ -50,6 +50,15 @@
             </constraint>
          </constraints>
       </typeEditor>
+      <typeEditor
+            attributeClass="java.io.File"
+            class="org.carrot2.workbench.editors.DirectoryEditor">
+         <constraints>
+            <constraint
+                  constraintClass="org.carrot2.util.attribute.constraint.IsDirectory">
+            </constraint>
+         </constraints>
+      </typeEditor>
    </extension>
 
 </plugin>
