@@ -88,7 +88,7 @@ public class DoubleRangeEditor extends RangeEditorBase
     @Override
     protected boolean isBounded()
     {
-        return (constraint.max() + 1 < Integer.MAX_VALUE);
+        return (constraint.max() < Double.MAX_VALUE);
     }
 
     @Override

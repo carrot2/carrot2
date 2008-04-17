@@ -2,7 +2,8 @@ package org.carrot2.clustering.stc;
 
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
-import org.carrot2.util.attribute.constraint.*;
+import org.carrot2.util.attribute.constraint.DoubleRange;
+import org.carrot2.util.attribute.constraint.IntRange;
 
 /**
  * STC algorithm parameters. These should be eventually moved into
@@ -150,7 +151,7 @@ public final class STCClusteringParameters
     @Processing
     @Input
     @Attribute
-    @DoubleRange(min = 0.5, max = Integer.MAX_VALUE)
+    @DoubleRange(min = 0.5, max = Double.MAX_VALUE)
     // @AttributeGroup(label="Base cluster boosts")    
     public double optimalPhraseLengthDev = 2.0d;
 
@@ -163,7 +164,7 @@ public final class STCClusteringParameters
     @Processing
     @Input
     @Attribute
-    @DoubleRange(min = 0, max = Integer.MAX_VALUE)
+    @DoubleRange(min = 0, max = Double.MAX_VALUE)
     // @AttributeGroup(label="Base cluster boosts")    
     public double documentCountBoost = 1.0d;
 }
