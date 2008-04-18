@@ -46,6 +46,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
      * </ul>
      * 
      * @label XML Resource
+     * @level Basic
      */
     @Input
     @Processing
@@ -72,6 +73,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
      * {@link #xsltParameters} attribute.
      * 
      * @label XSLT stylesheet
+     * @level Medium
      */
     @Input
     @Init
@@ -87,6 +89,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
      * Parameters to be passed to the XSLT transformer.
      * 
      * @label XSLT parameters
+     * @level Advanced
      */
     @Input
     @Init

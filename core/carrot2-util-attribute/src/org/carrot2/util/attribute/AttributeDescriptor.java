@@ -95,35 +95,9 @@ public class AttributeDescriptor
         return attributeField.getAnnotation(annotationClass);
     }
 
-    /*
-        @Override
-        public boolean equals(Object obj) 
-        {
-            if (obj == this)
-            {
-                return true;
-            }
-
-            if (obj == null || !(obj instanceof AttributeDescriptor))
-            {
-                return false;
-            }
-
-            final AttributeDescriptor other = ((AttributeDescriptor) obj);
-            return other.attributeField.equals(this.attributeField);
-        }
-
-        @Override
-        public int hashCode()
-        {
-            return key.hashCode();
-        }
-
-         */
     @Override
     public String toString()
     {
         return key + "=" + type;
     }
-
 }

@@ -1,6 +1,7 @@
 package org.carrot2.util.attribute;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 
 import com.thoughtworks.qdox.JavaDocBuilder;
 import com.thoughtworks.qdox.model.AbstractJavaEntity;
@@ -12,6 +13,36 @@ import com.thoughtworks.qdox.model.DocletTag;
 abstract class MetadataExtractor
 {
     /**
+     * Extracts attribute/ bindable descriptions. Anything in the JavaDoc comment that
+     * follows after its first sentence becomes a description.
+     */
+    static DescriptionExtractor DESCRIPTION_EXTRACTOR = new DescriptionExtractor();
+
+    /**
+     * Extracts attribute/ bindable titles. The first sentence of the JavaDoc comment
+     * becomes the title.
+     */
+    static TitleExtractor TITLE_EXTRACTOR = new TitleExtractor();
+
+    /**
+     * Extracts attribute labels from the "label" JavaDoc tag.
+     */
+    static SimpleTagExtractor LABEL_EXTRACTOR = new SimpleTagExtractor("label",
+        new LabelSetter());
+
+    /**
+     * Extracts attribute group name from the "group" JavaDoc tag.
+     */
+    static SimpleTagExtractor GROUP_EXTRACTOR = new SimpleTagExtractor("group",
+        new GroupSetter());
+
+    /**
+     * Extracts attribute levels from the "level" JavaDoc tag.
+     */
+    static SimpleTagExtractor LEVEL_EXTRACTOR = new SimpleTagExtractor("level",
+        new LevelSetter());
+
+    /**
      * Extracts some metadata from the provided Java source element and sets it on the
      * provided <code>attributeMetadata</code>.
      */
@@ -22,7 +53,7 @@ abstract class MetadataExtractor
      * Extracts attribute/ bindable descriptions. Anything in the JavaDoc comment that
      * follows after its first sentence becomes a description.
      */
-    static class DescriptionExtractor extends MetadataExtractor
+    private static class DescriptionExtractor extends MetadataExtractor
     {
         public boolean extractMetadataItem(AbstractJavaEntity javaEntity,
             JavaDocBuilder javaDocBuilder, CommonMetadata attributeMetadata)
@@ -50,32 +81,10 @@ abstract class MetadataExtractor
     }
 
     /**
-     * Extracts attribute/ bindable labels. Labels are extracted from the dedicated
-     * (label) JavaDoc tag.
-     */
-    static class LabelExtractor extends MetadataExtractor
-    {
-        public boolean extractMetadataItem(AbstractJavaEntity javaEntity,
-            JavaDocBuilder javaDocBuilder, CommonMetadata attributeMetadata)
-        {
-            final DocletTag labelTag = javaEntity.getTagByName("label");
-            if (labelTag != null && !StringUtils.isBlank(labelTag.getValue()))
-            {
-                attributeMetadata.setLabel(labelTag.getValue());
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-    }
-
-    /**
      * Extracts attribute/ bindable titles. The first sentence of the JavaDoc comment
      * becomes the title.
      */
-    static class TitleExtractor extends MetadataExtractor
+    private static class TitleExtractor extends MetadataExtractor
     {
         public boolean extractMetadataItem(AbstractJavaEntity javaEntity,
             JavaDocBuilder javaDocBuilder, CommonMetadata attributeMetadata)
@@ -100,6 +109,80 @@ abstract class MetadataExtractor
             {
                 attributeMetadata.setTitle(comment);
                 return true;
+            }
+        }
+    }
+
+    /**
+     * Extracts metadata from JavaDoc simple tags.
+     */
+    private static class SimpleTagExtractor extends MetadataExtractor
+    {
+        private String tagName;
+        private MetadataValueSetter valueSetter;
+
+        public SimpleTagExtractor(String tagName, MetadataValueSetter valueSetter)
+        {
+            this.tagName = tagName;
+            this.valueSetter = valueSetter;
+        }
+
+        public boolean extractMetadataItem(AbstractJavaEntity javaEntity,
+            JavaDocBuilder javaDocBuilder, CommonMetadata attributeMetadata)
+        {
+            final DocletTag labelTag = javaEntity.getTagByName(tagName);
+            if (labelTag != null && !StringUtils.isBlank(labelTag.getValue()))
+            {
+                valueSetter.setMetadataValue(attributeMetadata, labelTag.getValue());
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        static interface MetadataValueSetter
+        {
+            void setMetadataValue(CommonMetadata metadata, String value);
+        }
+    }
+
+    private static class LabelSetter implements SimpleTagExtractor.MetadataValueSetter
+    {
+        public void setMetadataValue(CommonMetadata metadata, String value)
+        {
+            metadata.setLabel(value);
+        }
+    }
+
+    private static class GroupSetter implements SimpleTagExtractor.MetadataValueSetter
+    {
+        public void setMetadataValue(CommonMetadata metadata, String value)
+        {
+            ((AttributeMetadata) metadata).setGroup(value);
+        }
+    }
+
+    private static class LevelSetter implements SimpleTagExtractor.MetadataValueSetter
+    {
+        public void setMetadataValue(CommonMetadata metadata, String value)
+        {
+            if (value == null)
+            {
+                return;
+            }
+            
+            try
+            {
+                ((AttributeMetadata) metadata).setLevel(AttributeLevel.valueOf(value
+                    .toUpperCase()));
+            }
+            catch (Throwable e)
+            {
+                // Thrown if unknown enum
+                Logger.getLogger(MetadataExtractor.class).warn(
+                    "Ignoring unknown attribute level: " + value);
             }
         }
     }

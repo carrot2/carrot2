@@ -138,6 +138,20 @@ public class BindableMetadataBuilderTest
 
     @Prerequisite(requires = "isSourcePathAvailable")
     @Test
+    public void testLabelNotDefined()
+    {
+        checkLabelOrTitle(AttributeTitles.class, "titleWithPeriod", "Title with period");
+    }
+
+    @Prerequisite(requires = "isSourcePathAvailable")
+    @Test
+    public void testLabelDefined()
+    {
+        checkLabelOrTitle(AttributeTitles.class, "titleWithLabel", "label");
+    }
+
+    @Prerequisite(requires = "isSourcePathAvailable")
+    @Test
     public void testTitleWithoutPeriod()
     {
         checkTitle(AttributeTitles.class, "titleWithoutPeriod", "Title without period");
@@ -327,6 +341,62 @@ public class BindableMetadataBuilderTest
         assertEquals("Test Bindable", metadata.label);
     }
 
+    @Prerequisite(requires = "isSourcePathAvailable")
+    @Test
+    public void testBasicLevel()
+    {
+        checkLevel(AttributeLevels.class, "basicLevel", AttributeLevel.BASIC);
+    }
+
+    @Prerequisite(requires = "isSourcePathAvailable")
+    @Test
+    public void testMediumLevel()
+    {
+        checkLevel(AttributeLevels.class, "mediumLevel", AttributeLevel.MEDIUM);
+    }
+
+    @Prerequisite(requires = "isSourcePathAvailable")
+    @Test
+    public void testAdvancedLevel()
+    {
+        checkLevel(AttributeLevels.class, "advancedLevel", AttributeLevel.ADVANCED);
+    }
+
+    @Prerequisite(requires = "isSourcePathAvailable")
+    @Test
+    public void testUnknownLevel()
+    {
+        assertNull(getLevel(AttributeLevels.class, "unknownLevel"));
+    }
+
+    @Prerequisite(requires = "isSourcePathAvailable")
+    @Test
+    public void testNoLevel()
+    {
+        assertNull(getLevel(AttributeLevels.class, "noLevel"));
+    }
+
+    @Prerequisite(requires = "isSourcePathAvailable")
+    @Test
+    public void testOneWordGroup()
+    {
+        checkGroup(AttributeGroups.class, "oneWordGroup", "Group");
+    }
+    
+    @Prerequisite(requires = "isSourcePathAvailable")
+    @Test
+    public void testMultiWordGroup()
+    {
+        checkGroup(AttributeGroups.class, "multiWordGroup", "Multi word group");
+    }
+    
+    @Prerequisite(requires = "isSourcePathAvailable")
+    @Test
+    public void testNoGroup()
+    {
+        assertNull(getGroup(AttributeGroups.class, "noGroup"));
+    }
+
     /**
      *
      */
@@ -335,6 +405,36 @@ public class BindableMetadataBuilderTest
     {
         assertNotNull(getAttributeMetadata(clazz, fieldName));
         assertEquals(expectedLabel, getLabel(clazz, fieldName));
+    }
+
+    /**
+     *
+     */
+    protected void checkGroup(final Class<?> clazz, final String fieldName,
+        final String expectedGroup)
+    {
+        assertNotNull(getAttributeMetadata(clazz, fieldName));
+        assertEquals(expectedGroup, getGroup(clazz, fieldName));
+    }
+
+    /**
+     *
+     */
+    protected void checkLevel(final Class<?> clazz, final String fieldName,
+        final AttributeLevel expectedLabel)
+    {
+        assertNotNull(getAttributeMetadata(clazz, fieldName));
+        assertEquals(expectedLabel, getLevel(clazz, fieldName));
+    }
+
+    /**
+     *
+     */
+    protected void checkLabelOrTitle(final Class<?> clazz, final String fieldName,
+        final String expectedLabel)
+    {
+        assertNotNull(getAttributeMetadata(clazz, fieldName));
+        assertEquals(expectedLabel, getLabelOrTitle(clazz, fieldName));
     }
 
     /**
@@ -366,6 +466,39 @@ public class BindableMetadataBuilderTest
             componentClass, fieldName);
 
         return fieldAttributeMetadata.getLabel();
+    }
+
+    /**
+     *
+     */
+    protected String getGroup(Class<?> componentClass, String fieldName)
+    {
+        final CommonMetadata fieldAttributeMetadata = getAttributeMetadata(
+            componentClass, fieldName);
+
+        return ((AttributeMetadata) fieldAttributeMetadata).getGroup();
+    }
+
+    /**
+     *
+     */
+    protected AttributeLevel getLevel(Class<?> componentClass, String fieldName)
+    {
+        final CommonMetadata fieldAttributeMetadata = getAttributeMetadata(
+            componentClass, fieldName);
+
+        return ((AttributeMetadata) fieldAttributeMetadata).getLevel();
+    }
+
+    /**
+     *
+     */
+    protected String getLabelOrTitle(Class<?> componentClass, String fieldName)
+    {
+        final CommonMetadata fieldAttributeMetadata = getAttributeMetadata(
+            componentClass, fieldName);
+
+        return fieldAttributeMetadata.getLabelOrTitle();
     }
 
     /**

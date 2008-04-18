@@ -23,6 +23,7 @@ public final class YahooWebSearchService extends YahooSearchService
      * Yahoo! service URI to be queried.
      * 
      * @label Service URI
+     * @level Advanced
      * @see <a href="http://api.search.yahoo.com/WebSearchService/V1/webSearch">Yahoo Web
      *      Search API</a>
      * @see <a href="http://search.yahooapis.com/NewsSearchService/V1/newsSearch">Yahoo
@@ -40,6 +41,7 @@ public final class YahooWebSearchService extends YahooSearchService
      * Omitting language returns results in any language.
      * 
      * @label Language
+     * @level Medium
      */
     @Processing
     @Input
@@ -52,6 +54,7 @@ public final class YahooWebSearchService extends YahooSearchService
      * href="http://developer.yahoo.com/search/countries.html">supported country codes</a>.
      * 
      * @label Country
+     * @level Medium
      */
     // TODO: maybe this should be enum?
     @Processing
@@ -64,6 +67,7 @@ public final class YahooWebSearchService extends YahooSearchService
      * make sense to implement multiple values here (allowed by Yahoo)?
      * 
      * @label Site
+     * @level Medium
      */
     @Processing
     @Input
@@ -77,6 +81,7 @@ public final class YahooWebSearchService extends YahooSearchService
      * codes</a>.
      * 
      * @label Region
+     * @level Medium
      */
     // TODO: maybe this should be enum?
     @Processing

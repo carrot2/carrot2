@@ -23,6 +23,9 @@ public final class Preprocessor
     /**
      * Analyzer used to split {@link #documents} into individual tokens (terms). This
      * analyzer must provide token {@link Payload} implementing {@link TokenType}.
+     * 
+     * @level Medium
+     * @group Preprocessing
      */
     @Init
     @Input
@@ -42,6 +45,9 @@ public final class Preprocessor
     /**
      * Textual fields of a {@link Document} that should be tokenized and parsed for
      * clustering.
+     * 
+     * @level Advanced
+     * @group Preprocessing
      */
     @Init
     @Input
@@ -53,6 +59,9 @@ public final class Preprocessor
 
     /**
      * Text tokenizer. Performs {@link PreprocessingTasks#TOKENIZE} task.
+     * 
+     * @level Medium
+     * @group Preprocessing
      */
     @Processing
     @Input
@@ -65,6 +74,9 @@ public final class Preprocessor
 
     /**
      * Case normalizer. Performs {@link PreprocessingTasks#CASE_NORMALIZE} task.
+     * 
+     * @level Medium
+     * @group Preprocessing
      */
     @Processing
     @Input
@@ -77,6 +89,9 @@ public final class Preprocessor
 
     /**
      * Stemmer. Performs {@link PreprocessingTasks#STEMMING} task.
+     * 
+     * @level Medium
+     * @group Preprocessing
      */
     @Processing
     @Input

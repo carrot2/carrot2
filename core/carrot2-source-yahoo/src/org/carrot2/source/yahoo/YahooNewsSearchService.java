@@ -44,7 +44,7 @@ public final class YahooNewsSearchService extends YahooSearchService
      * Yahoo! service URI to be queried.
      * 
      * @label Service URI
-     * 
+     * @level Advanced
      */
     @Init
     @Input
@@ -58,6 +58,7 @@ public final class YahooNewsSearchService extends YahooSearchService
      * codes. Omitting language returns results in any language.
      * 
      * @label Results Language
+     * @level Medium
      */
     // TODO: maybe this should be enum?
     @Processing
@@ -70,6 +71,7 @@ public final class YahooNewsSearchService extends YahooSearchService
      * make sense to implement multiple values here (allowed by Yahoo)?
      * 
      * @label Site
+     * @level Medium
      */
     @Processing
     @Input

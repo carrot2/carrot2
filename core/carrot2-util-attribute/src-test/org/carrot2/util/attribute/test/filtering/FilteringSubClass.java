@@ -12,18 +12,29 @@ import org.carrot2.util.attribute.*;
 @SuppressWarnings("unused")
 public class FilteringSubClass extends FilteringSuperClass
 {
+    /**
+     * @level basic
+     * @group Group B
+     */
     @TestInit
     @TestProcessing
     @Input
     @Attribute
     private int initProcessingInput = 10;
 
+    /**
+     * @level medium
+     * @group Group B
+     */
     @TestInit
     @TestProcessing
     @Output
     @Attribute
     private int initProcessingOutput = 10;
 
+    /**
+     * @group Group A
+     */
     @TestInit
     @TestProcessing
     @Input

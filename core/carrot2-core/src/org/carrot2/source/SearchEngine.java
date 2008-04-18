@@ -23,6 +23,7 @@ public abstract class SearchEngine
      * are called.
      *
      * @label Search Mode
+     * @level Advanced
      * @see SearchMode
      */
     @Processing

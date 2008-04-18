@@ -22,8 +22,9 @@ class BindableMetadataBuilder
      */
     private static final MetadataExtractor [] ATTRIBUTE_METADATA_EXTRACTORS = new MetadataExtractor []
     {
-        new MetadataExtractor.LabelExtractor(), new MetadataExtractor.TitleExtractor(),
-        new MetadataExtractor.DescriptionExtractor()
+        MetadataExtractor.LABEL_EXTRACTOR, MetadataExtractor.GROUP_EXTRACTOR,
+        MetadataExtractor.LEVEL_EXTRACTOR, MetadataExtractor.TITLE_EXTRACTOR,
+        MetadataExtractor.DESCRIPTION_EXTRACTOR
     };
 
     /**
@@ -31,8 +32,8 @@ class BindableMetadataBuilder
      */
     private static final MetadataExtractor [] BINDABLE_METADATA_EXTRACTORS = new MetadataExtractor []
     {
-        new MetadataExtractor.LabelExtractor(), new MetadataExtractor.TitleExtractor(),
-        new MetadataExtractor.DescriptionExtractor()
+        MetadataExtractor.LABEL_EXTRACTOR, MetadataExtractor.TITLE_EXTRACTOR,
+        MetadataExtractor.DESCRIPTION_EXTRACTOR
     };
 
     /** JavaDoc parser */

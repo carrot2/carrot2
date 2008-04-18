@@ -80,6 +80,7 @@ abstract class YahooSearchService
      * Application ID required for Yahoo! services.
      *
      * @label Application ID
+     * @level Advanced
      */
     @Init
     @Input
@@ -90,6 +91,7 @@ abstract class YahooSearchService
      * Maximum number of results returned per page.
      *
      * @label Results Per Page
+     * @level Advanced
      */
     @Init
     @Input
@@ -100,6 +102,7 @@ abstract class YahooSearchService
      * Maximum index of reachable result.
      *
      * @label Maximum Result Index
+     * @level Advanced
      */
     @Init
     @Input

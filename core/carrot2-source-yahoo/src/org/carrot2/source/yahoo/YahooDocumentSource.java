@@ -35,6 +35,7 @@ public final class YahooDocumentSource extends SearchEngine
      * News.
      *
      * @label Yahoo Search Service
+     * @level Advanced
      */
     @Init
     @Input

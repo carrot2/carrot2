@@ -93,10 +93,7 @@ public class AttributeListComponent
         String text = null;
         if (descriptor.metadata != null)
         {
-            text =
-                descriptor.metadata.getLabel() != null ? descriptor.metadata.getLabel()
-                    : null;
-            text = text != null ? text : descriptor.metadata.getTitle();
+            text = descriptor.metadata.getLabelOrTitle();
         }
         text = text != null ? text : "Attribute without label nor title :/";
         return text;

@@ -16,6 +16,9 @@ public final class LanguageModelFactory
 {
     /**
      * Currently active language.
+     * 
+     * @level Basic
+     * @group Preprocessing
      */
     @Required
     @Processing

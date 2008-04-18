@@ -1,5 +1,6 @@
 package org.carrot2.util.attribute;
 
+import org.apache.commons.lang.StringUtils;
 import org.simpleframework.xml.Element;
 
 /**
@@ -44,6 +45,14 @@ public class CommonMetadata
         this.label = label;
     }
 
+    /**
+     * Returns the label if it is not-<code>null</code>, otherwise returns title.
+     */
+    public String getLabelOrTitle()
+    {
+        return StringUtils.isNotBlank(label) ? label : title;
+    }
+    
     /**
      * A longer, possibly multi sentence, description of the element. Could be presented
      * as a body of the tool tip of the corresponding UI component.

@@ -12,6 +12,11 @@ public class AttributeAssertions
         return new CommonMetadataAssertion(actual);
     }
 
+    public static AttributeMetadataAssertion assertThat(AttributeMetadata actual)
+    {
+        return new AttributeMetadataAssertion(actual);
+    }
+    
     public static AttributeDescriptorAssertion assertThat(AttributeDescriptor actual)
     {
         return new AttributeDescriptorAssertion(actual);

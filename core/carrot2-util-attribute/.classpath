@@ -9,5 +9,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/com.thoughtworks.qdox"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.simpleframework.xml"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/com.bea.xml"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-log4j"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>

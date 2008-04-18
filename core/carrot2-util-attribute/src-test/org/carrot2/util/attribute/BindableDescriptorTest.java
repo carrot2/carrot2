@@ -30,7 +30,9 @@ public class BindableDescriptorTest
             keyFromSubClass("initProcessingInput"),
             keyFromSubClass("initProcessingOutput"),
             keyFromSubClass("initProcessingInputOutput"));
-        assertThat(getReferenceDescriptors(filteredDescriptor)).isEmpty();
+        assertThat(
+            getDescriptorsFromGroup(filteredDescriptor, FilteringReferenceClass.class))
+            .isNull();
     }
 
     @Test
@@ -42,7 +44,9 @@ public class BindableDescriptorTest
             keyFromSuperClass("initInputOutput"),
             keyFromSuperClass("processingInputOutput"),
             keyFromSubClass("initProcessingInputOutput"));
-        assertThat(getReferenceDescriptors(filteredDescriptor)).isEmpty();
+        assertThat(
+            getDescriptorsFromGroup(filteredDescriptor, FilteringReferenceClass.class))
+            .isNull();
     }
 
     @Test
@@ -52,7 +56,9 @@ public class BindableDescriptorTest
             TestProcessing.class, Input.class, Output.class);
         assertThat(filteredDescriptor.attributeDescriptors.keySet()).containsOnly(
             keyFromSubClass("initProcessingInputOutput"));
-        assertThat(getReferenceDescriptors(filteredDescriptor)).isEmpty();
+        assertThat(
+            getDescriptorsFromGroup(filteredDescriptor, FilteringReferenceClass.class))
+            .isNull();
     }
 
     @Test
@@ -67,8 +73,10 @@ public class BindableDescriptorTest
             keyFromSubClass("initProcessingInput"),
             keyFromSubClass("initProcessingInputOutput"));
 
-        assertThat(getReferenceDescriptors(filteredDescriptor).keySet()).containsOnly(
-            keyFromReferenceClass("initInput"), keyFromReferenceClass("processingInput"));
+        assertThat(
+            getDescriptorsFromGroup(filteredDescriptor, FilteringReferenceClass.class)
+                .keySet()).containsOnly(keyFromReferenceClass("initInput"),
+            keyFromReferenceClass("processingInput"));
     }
 
     @Test
@@ -83,8 +91,9 @@ public class BindableDescriptorTest
             keyFromSubClass("initProcessingInput"),
             keyFromSubClass("initProcessingInputOutput"));
 
-        assertThat(getReferenceDescriptors(filteredDescriptor).keySet()).containsOnly(
-            keyFromReferenceClass("processingInput"));
+        assertThat(
+            getDescriptorsFromGroup(filteredDescriptor, FilteringReferenceClass.class)
+                .keySet()).containsOnly(keyFromReferenceClass("processingInput"));
     }
 
     @Test
@@ -100,13 +109,115 @@ public class BindableDescriptorTest
             keyFromSubClass("initProcessingInputOutput"),
             keyFromReferenceClass("processingInput"));
 
-        assertThat(filteredDescriptor.bindableDescriptors).isEmpty();
+        assertThat(filteredDescriptor.attributeGroups).isEmpty();
     }
 
-    private Map<String, AttributeDescriptor> getReferenceDescriptors(
-        BindableDescriptor filteredDescriptor)
+    @Test
+    public void testAllByLevel()
     {
-        return filteredDescriptor.bindableDescriptors.get("reference").attributeDescriptors;
+        final BindableDescriptor filteredDescriptor = descriptor
+            .group(BindableDescriptor.GroupingMethod.LEVEL);
+
+        assertThat(filteredDescriptor.attributeDescriptors.keySet()).containsOnly(
+            keyFromSubClass("initProcessingInputOutput"),
+            keyFromSuperClass("processingInput"), keyFromSuperClass("processingOutput"),
+            keyFromSuperClass("processingInputOutput"),
+            keyFromReferenceClass("processingOutput"));
+
+        assertThat(
+            getDescriptorsFromGroup(filteredDescriptor, AttributeLevel.BASIC).keySet())
+            .containsOnly(keyFromSubClass("initProcessingInput"),
+                keyFromSuperClass("initInput"), keyFromReferenceClass("initInput"));
+
+        assertThat(
+            getDescriptorsFromGroup(filteredDescriptor, AttributeLevel.MEDIUM).keySet())
+            .containsOnly(keyFromSubClass("initProcessingOutput"),
+                keyFromSuperClass("initOutput"), keyFromReferenceClass("initOutput"));
+
+        assertThat(
+            getDescriptorsFromGroup(filteredDescriptor, AttributeLevel.ADVANCED).keySet())
+            .containsOnly(keyFromSuperClass("initInputOutput"),
+                keyFromReferenceClass("processingInput"));
+    }
+
+    @Test
+    public void testInputByLevel()
+    {
+        final BindableDescriptor filteredDescriptor = descriptor.only(Input.class).group(
+            BindableDescriptor.GroupingMethod.LEVEL);
+
+        assertThat(filteredDescriptor.attributeDescriptors.keySet()).containsOnly(
+            keyFromSubClass("initProcessingInputOutput"),
+            keyFromSuperClass("processingInput"),
+            keyFromSuperClass("processingInputOutput"));
+
+        assertThat(
+            getDescriptorsFromGroup(filteredDescriptor, AttributeLevel.BASIC).keySet())
+            .containsOnly(keyFromSubClass("initProcessingInput"),
+                keyFromSuperClass("initInput"), keyFromReferenceClass("initInput"));
+
+        assertThat(getDescriptorsFromGroup(filteredDescriptor, AttributeLevel.MEDIUM))
+            .isNull();
+
+        assertThat(
+            getDescriptorsFromGroup(filteredDescriptor, AttributeLevel.ADVANCED).keySet())
+            .containsOnly(keyFromSuperClass("initInputOutput"),
+                keyFromReferenceClass("processingInput"));
+    }
+
+    @Test
+    public void testAllByGroup()
+    {
+        final BindableDescriptor filteredDescriptor = descriptor
+            .group(BindableDescriptor.GroupingMethod.GROUP);
+
+        assertThat(filteredDescriptor.attributeDescriptors.keySet()).containsOnly(
+            keyFromSuperClass("initInput"), keyFromSuperClass("initOutput"),
+            keyFromSuperClass("initInputOutput"), keyFromReferenceClass("initInput"),
+            keyFromReferenceClass("initOutput"));
+
+        assertThat(getDescriptorsFromGroup(filteredDescriptor, "Group A").keySet())
+            .containsOnly(keyFromSubClass("initProcessingInputOutput"),
+                keyFromReferenceClass("processingOutput"));
+
+        assertThat(getDescriptorsFromGroup(filteredDescriptor, "Group B").keySet())
+            .containsOnly(keyFromSubClass("initProcessingOutput"),
+                keyFromSubClass("initProcessingInput"),
+                keyFromSuperClass("processingInputOutput"),
+                keyFromReferenceClass("processingInput"));
+
+        assertThat(getDescriptorsFromGroup(filteredDescriptor, "Group C").keySet())
+            .containsOnly(keyFromSuperClass("processingInput"),
+                keyFromSuperClass("processingOutput"));
+    }
+
+    @Test
+    public void testProcessingByGroup()
+    {
+        final BindableDescriptor filteredDescriptor = descriptor.only(
+            TestProcessing.class).group(BindableDescriptor.GroupingMethod.GROUP);
+
+        assertThat(filteredDescriptor.attributeDescriptors.keySet()).isEmpty();
+
+        assertThat(getDescriptorsFromGroup(filteredDescriptor, "Group A").keySet())
+            .containsOnly(keyFromSubClass("initProcessingInputOutput"),
+                keyFromReferenceClass("processingOutput"));
+
+        assertThat(getDescriptorsFromGroup(filteredDescriptor, "Group B").keySet())
+            .containsOnly(keyFromSubClass("initProcessingOutput"),
+                keyFromSubClass("initProcessingInput"),
+                keyFromSuperClass("processingInputOutput"),
+                keyFromReferenceClass("processingInput"));
+
+        assertThat(getDescriptorsFromGroup(filteredDescriptor, "Group C").keySet())
+            .containsOnly(keyFromSuperClass("processingInput"),
+                keyFromSuperClass("processingOutput"));
+    }
+
+    private <T> Map<String, AttributeDescriptor> getDescriptorsFromGroup(
+        BindableDescriptor filteredDescriptor, T groupKey)
+    {
+        return filteredDescriptor.attributeGroups.get(groupKey);
     }
 
     private String keyFromSuperClass(String fieldName)

@@ -12,6 +12,7 @@ public final class AttributeNames
      * Index (zero-based) of the first document/ search result to fetch.
      * 
      * @label Start Index
+     * @level Medium
      */
     public static final String START = "start";
 
@@ -19,6 +20,7 @@ public final class AttributeNames
      * Number of documents/ search results to fetch.
      * 
      * @label Results
+     * @level Basic
      */
     public static final String RESULTS = "results";
 
@@ -26,6 +28,7 @@ public final class AttributeNames
      * Query to be executed by the search engine/ document retrieval system.
      * 
      * @label Query
+     * @level Basic
      */
     public static final String QUERY = "query";
 

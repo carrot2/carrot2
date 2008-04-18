@@ -1,5 +1,6 @@
 package org.carrot2.util.attribute;
 
+import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 /**
@@ -9,20 +10,64 @@ import org.simpleframework.xml.Root;
 @Root(name = "attribute-metadata")
 public class AttributeMetadata extends CommonMetadata
 {
+    @Element(required = false)
+    private String group;
+
+    @Element(required = false)
+    private AttributeLevel level;
+
     AttributeMetadata()
     {
     }
 
     AttributeMetadata(String title, String label, String description)
     {
+        this(title, label, description, null, null);
+    }
+
+    AttributeMetadata(String title, String label, String description, String group,
+        AttributeLevel level)
+    {
         this.title = title;
         this.label = label;
         this.description = description;
+        this.group = group;
+        this.level = level;
     }
 
     @Override
     public String toString()
     {
         return "[" + title + ", " + label + ", " + description + "]";
+    }
+
+    /**
+     * Returns the label of the group this attribute belongs to or <code>null</code> if
+     * the attribute is not assigned to any group.
+     */
+    public String getGroup()
+    {
+        return group;
+    }
+
+    @SuppressWarnings("unused")
+    void setGroup(String group)
+    {
+        this.group = group;
+    }
+
+    /**
+     * Returns the attribute level (basic, medium, advanced) or <code>null</code> if the
+     * attribute has no level assigned.
+     */
+    public AttributeLevel getLevel()
+    {
+        return level;
+    }
+
+    @SuppressWarnings("unused")
+    void setLevel(AttributeLevel level)
+    {
+        this.level = level;
     }
 }

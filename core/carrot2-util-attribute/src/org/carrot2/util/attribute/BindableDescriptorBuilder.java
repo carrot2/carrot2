@@ -71,7 +71,7 @@ public class BindableDescriptorBuilder
             initializedInstance, bindableMetadata);
 
         // Build descriptors for nested bindables
-        final Map<String, BindableDescriptor> bindableDescriptors = Maps
+        final Map<Field, BindableDescriptor> bindableDescriptors = Maps
             .newLinkedHashMap();
 
         final Collection<Field> fieldsFromBindableHierarchy = BindableUtils
@@ -95,7 +95,7 @@ public class BindableDescriptorBuilder
             if (fieldValue != null
                 && fieldValue.getClass().getAnnotation(Bindable.class) != null)
             {
-                bindableDescriptors.put(field.getName(), buildDescriptor(fieldValue,
+                bindableDescriptors.put(field, buildDescriptor(fieldValue,
                     processedInstances, loadMetadata));
             }
         }

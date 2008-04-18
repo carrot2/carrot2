@@ -4,6 +4,7 @@
 package org.carrot2.examples.core;
 
 import java.util.*;
+import java.util.Map.Entry;
 
 import org.carrot2.core.attribute.Init;
 import org.carrot2.core.attribute.Processing;
@@ -19,9 +20,9 @@ import org.carrot2.util.attribute.constraint.ImplementingClasses;
  * <p>
  * For the time being, before you run this example, you need to run
  * {@link BindableMetadataXmlSerializer} giving source code locations of at least
- * <code>carrot2-core</code> and <code>carrot2-souce-yahoo</code> as parameters. There
- * is an Eclipse launch configuration that does just that in carrot2-util-attributes/ etc/
- * eclipse.
+ * <code>carrot2-core</code> and <code>carrot2-source-yahoo</code> as parameters.
+ * There is an Eclipse launch configuration that does just that in
+ * carrot2-util-attributes/ etc/ eclipse.
  */
 public class WorkingWithAttributeDescriptors
 {
@@ -57,6 +58,12 @@ public class WorkingWithAttributeDescriptors
         displayDescriptor(descriptor, 0);
         System.out.println("\n");
 
+        // You group descriptors by different keys
+        descriptor = BindableDescriptorBuilder.buildDescriptor(yahooDocumentSource)
+            .group(BindableDescriptor.GroupingMethod.LEVEL);
+        displayDescriptor(descriptor, 0);
+        System.out.println("\n");
+
         // You can also flatten the descriptor tree to a linear list
         descriptor = BindableDescriptorBuilder.buildDescriptor(yahooDocumentSource).only(
             Input.class, Processing.class).flatten();
@@ -80,18 +87,25 @@ public class WorkingWithAttributeDescriptors
         for (final AttributeDescriptor attributeDescriptor : descriptor.attributeDescriptors
             .values())
         {
-            System.out.print(ExampleUtils.getIndent(indent));
-            System.out.println(attributeDescriptor.metadata.getLabel() + ": "
-                + attributeDescriptor.metadata.getTitle());
+            displayDescriptor(attributeDescriptor, indent);
         }
 
-        for (final Map.Entry<String, BindableDescriptor> entry : descriptor.bindableDescriptors
+        for (final Entry<Object, Map<String, AttributeDescriptor>> entry : descriptor.attributeGroups
             .entrySet())
         {
-            final BindableDescriptor subdescriptor = entry.getValue();
-            System.out.print(ExampleUtils.getIndent(indent));
-            System.out.println(subdescriptor.metadata.getLabel());
-            displayDescriptor(subdescriptor, indent + 2);
+            System.out.println(entry.getKey().toString());
+            for (AttributeDescriptor attributeDescriptor : entry.getValue().values())
+            {
+                displayDescriptor(attributeDescriptor, indent + 2);
+            }
         }
+    }
+
+    private static void displayDescriptor(final AttributeDescriptor attributeDescriptor,
+        int indent)
+    {
+        System.out.print(ExampleUtils.getIndent(indent));
+        System.out.println(attributeDescriptor.metadata.getLabel() + ": "
+            + attributeDescriptor.metadata.getTitle());
     }
 }

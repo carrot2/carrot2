@@ -16,6 +16,8 @@ public class SingleClass
      * Init input int attribute.
      *
      * @label Init Input Int
+     * @level Basic
+     * @group Group A
      */
     @TestInit
     @Input
@@ -26,6 +28,8 @@ public class SingleClass
      * Processing input string attribute. Some description.
      *
      * @label Processing Input String
+     * @level Advanced
+     * @group Group B
      */
     @TestProcessing
     @Input

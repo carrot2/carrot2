@@ -16,7 +16,7 @@ public class BooleanEditor extends AttributeEditorAdapter implements IAttributeE
         button = new Button(parent, SWT.CHECK);
         assert (descriptor != null);
         assert (descriptor.metadata != null);
-        button.setText(descriptor.metadata.getLabel());
+        button.setText(descriptor.metadata.getLabelOrTitle());
         button.setLayoutData(layoutData);
         button.addSelectionListener(new SelectionAdapter()
         {
