@@ -1,5 +1,6 @@
 package org.carrot2.util.attribute;
 
+import java.io.File;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.*;
@@ -17,12 +18,11 @@ import com.google.common.collect.Sets;
 public class AttributeBinder
 {
     /** Consistency checks to be applied before binding */
-    private final static ConsistencyCheck [] CONSISTENCY_CHECKS =
-        new ConsistencyCheck []
-        {
-            new ConsistencyCheckRequiredAnnotations(),
-            new ConsistencyCheckNonPrimitivesWithoutConstraint()
-        };
+    private final static ConsistencyCheck [] CONSISTENCY_CHECKS = new ConsistencyCheck []
+    {
+        new ConsistencyCheckRequiredAnnotations(),
+        new ConsistencyCheckImplementingClasses()
+    };
 
     /**
      * Performs binding (setting or collecting) of {@link Attribute} values on the
@@ -96,12 +96,11 @@ public class AttributeBinder
         Class<? extends Annotation>... filteringAnnotations)
         throws InstantiationException, AttributeBindingException
     {
-        AttributeBinderAction [] actions =
-            new AttributeBinderAction []
-            {
-                new AttributeBinderActionBind(Input.class, values, true),
-                new AttributeBinderActionCollect(Output.class, values),
-            };
+        AttributeBinderAction [] actions = new AttributeBinderAction []
+        {
+            new AttributeBinderActionBind(Input.class, values, true),
+            new AttributeBinderActionCollect(Output.class, values),
+        };
 
         bind(object, actions, bindingDirectionAnnotation, filteringAnnotations);
     }
@@ -116,12 +115,11 @@ public class AttributeBinder
         Class<? extends Annotation>... filteringAnnotations)
         throws InstantiationException, AttributeBindingException
     {
-        AttributeBinderAction [] actions =
-            new AttributeBinderAction []
-            {
-                new AttributeBinderActionCollect(Input.class, values),
-                new AttributeBinderActionBind(Output.class, values, true),
-            };
+        AttributeBinderAction [] actions = new AttributeBinderAction []
+        {
+            new AttributeBinderActionCollect(Input.class, values),
+            new AttributeBinderActionBind(Output.class, values, true),
+        };
 
         bind(object, actions, bindingDirectionAnnotation, filteringAnnotations);
     }
@@ -169,8 +167,8 @@ public class AttributeBinder
         boundObjects.add(object);
 
         // Get all fields (including those from bindable super classes)
-        final Collection<Field> fieldSet =
-            BindableUtils.getFieldsFromBindableHierarchy(object.getClass());
+        final Collection<Field> fieldSet = BindableUtils
+            .getFieldsFromBindableHierarchy(object.getClass());
 
         for (final Field field : fieldSet)
         {
@@ -193,9 +191,8 @@ public class AttributeBinder
             boolean consistent = true;
             for (int i = 0; consistent && i < CONSISTENCY_CHECKS.length; i++)
             {
-                consistent &=
-                    CONSISTENCY_CHECKS[i].check(field, bindingDirectionAnnotation,
-                        filteringAnnotations);
+                consistent &= CONSISTENCY_CHECKS[i].check(field,
+                    bindingDirectionAnnotation, filteringAnnotations);
             }
 
             // We skip fields that do not have all the required annotations
@@ -272,8 +269,8 @@ public class AttributeBinder
             if (this.bindingDirectionAnnotation.equals(bindingDirectionAnnotation)
                 && field.getAnnotation(bindingDirectionAnnotation) != null)
             {
-                final boolean required =
-                    field.getAnnotation(Required.class) != null && checkRequired;
+                final boolean required = field.getAnnotation(Required.class) != null
+                    && checkRequired;
                 final Object currentValue = value;
 
                 // Transfer values from the map to the fields. If the input map
@@ -334,8 +331,8 @@ public class AttributeBinder
                 if (value != null)
                 {
                     // Check constraints
-                    final Annotation [] unmetConstraints =
-                        ConstraintValidator.isMet(value, field.getAnnotations());
+                    final Annotation [] unmetConstraints = ConstraintValidator.isMet(
+                        value, field.getAnnotations());
                     if (unmetConstraints.length > 0)
                     {
                         throw new ConstraintViolationException(key, value,
@@ -391,9 +388,8 @@ public class AttributeBinder
                     // Apply transforms
                     for (AttributeTransformer transformer : transformers)
                     {
-                        value =
-                            transformer.transform(value, key, field,
-                                bindingDirectionAnnotation, filteringAnnotations);
+                        value = transformer.transform(value, key, field,
+                            bindingDirectionAnnotation, filteringAnnotations);
                     }
 
                     values.put(key, value);
@@ -436,9 +432,8 @@ public class AttributeBinder
             Class<? extends Annotation>... filteringAnnotations)
         {
             final boolean hasAttribute = field.getAnnotation(Attribute.class) != null;
-            boolean hasBindingDirection =
-                field.getAnnotation(Input.class) != null
-                    || field.getAnnotation(Output.class) != null;
+            boolean hasBindingDirection = field.getAnnotation(Input.class) != null
+                || field.getAnnotation(Output.class) != null;
 
             boolean hasExtraAnnotations = filteringAnnotations.length == 0;
             for (Class<? extends Annotation> filteringAnnotation : filteringAnnotations)
@@ -477,16 +472,15 @@ public class AttributeBinder
      * Checks whether attributes of non-primitive types have the
      * {@link ImplementingClasses} constraint.
      */
-    static class ConsistencyCheckNonPrimitivesWithoutConstraint extends ConsistencyCheck
+    static class ConsistencyCheckImplementingClasses extends ConsistencyCheck
     {
-        static Set<Class<?>> ALLOWED_PLAIN_TYPES =
-            Sets.<Class<?>> immutableSet(Byte.class, Short.class, Integer.class,
-                Long.class, Float.class, Double.class, Boolean.class, String.class,
-                Class.class, Resource.class, Collection.class, Map.class);
+        static Set<Class<?>> ALLOWED_PLAIN_TYPES = Sets.<Class<?>> immutableSet(
+            Byte.class, Short.class, Integer.class, Long.class, Float.class,
+            Double.class, Boolean.class, String.class, Class.class, Resource.class,
+            Collection.class, Map.class, File.class);
 
-        static Set<Class<?>> ALLOWED_ASSIGNABLE_TYPES =
-            Sets.<Class<?>> immutableSet(Enum.class, Resource.class, Collection.class,
-                Map.class);
+        static Set<Class<?>> ALLOWED_ASSIGNABLE_TYPES = Sets.<Class<?>> immutableSet(
+            Enum.class, Resource.class, Collection.class, Map.class);
 
         @Override
         boolean check(Field field, Class<? extends Annotation> bindingDirection,
@@ -500,27 +494,16 @@ public class AttributeBinder
             final Class<?> attributeType = ClassUtils.primitiveToWrapper(field.getType());
 
             if (!ALLOWED_PLAIN_TYPES.contains(attributeType)
-                && !isAllowedAssignableType(attributeType) && !isConstrained(field))
+                && !isAllowedAssignableType(attributeType)
+                && field.getAnnotation(ImplementingClasses.class) == null)
             {
                 throw new IllegalArgumentException("Non-primitive typed attribute "
                     + field.getDeclaringClass().getName() + "#" + field.getName()
-                    + " must have some constraint specified.");
+                    + " must have the @" + ImplementingClasses.class.getSimpleName()
+                    + " constraint.");
             }
 
             return true;
-        }
-
-        private static boolean isConstrained(Field field)
-        {
-            for (int i = 0; i < field.getAnnotations().length; i++)
-            {
-                Annotation ann = field.getAnnotations()[i];
-                if (ann.annotationType().isAnnotationPresent(IsConstraint.class))
-                {
-                    return true;
-                }
-            }
-            return false;
         }
 
         private static boolean isAllowedAssignableType(Class<?> attributeType)
