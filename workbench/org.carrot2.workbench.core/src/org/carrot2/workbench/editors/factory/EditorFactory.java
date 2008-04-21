@@ -1,5 +1,7 @@
 package org.carrot2.workbench.editors.factory;
 
+import static org.apache.commons.lang.ClassUtils.*;
+
 import java.lang.annotation.Annotation;
 import java.util.Comparator;
 import java.util.List;
@@ -149,15 +151,15 @@ public class EditorFactory
             });
     }
 
+    @SuppressWarnings("unchecked")
     private static boolean isCompatible(Class<?> clazz, String className)
     {
-        // TODO: should interfaces of component also taken into account?
         boolean compatible = clazz.getName().equals(className);
-        Class<?> c = clazz;
-        while (!compatible && c.getSuperclass() != null)
+        if (!compatible)
         {
-            c = c.getSuperclass();
-            compatible = c.getName().equals(className);
+            List<String> superClasses =
+                convertClassesToClassNames(getAllSuperclasses(clazz));
+            compatible = superClasses.contains(className);
         }
         if (!compatible && clazz.isInterface())
         {
@@ -165,16 +167,8 @@ public class EditorFactory
         }
         if (!compatible)
         {
-            boolean innerCompatible = false;
-            for (int i = 0; i < clazz.getInterfaces().length; i++)
-            {
-                if (!innerCompatible)
-                {
-                    Class<?> c2 = clazz.getInterfaces()[i];
-                    innerCompatible = isCompatible(c2, className);
-                }
-            }
-            compatible = innerCompatible;
+            List<String> interfaces = convertClassesToClassNames(getAllInterfaces(clazz));
+            compatible = interfaces.contains(className);
         }
         return compatible;
     }
