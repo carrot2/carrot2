@@ -24,11 +24,11 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 
-public class DocumentListBrowser
+public class DocumentListBrowser implements IProcessingResultPart
 {
     private Browser browser;
 
-    public DocumentListBrowser(IWorkbenchSite site, Composite parent, ProcessingJob job)
+    public void init(IWorkbenchSite site, Composite parent, ProcessingJob job)
     {
         browser = new Browser(parent, SWT.NONE);
         attachToJobDone(job);
@@ -157,5 +157,9 @@ public class DocumentListBrowser
     public Control getControl()
     {
         return browser;
+    }
+
+    public void dispose()
+    {
     }
 }

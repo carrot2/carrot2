@@ -6,6 +6,7 @@ import org.carrot2.core.*;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.core.jobs.ProcessingJob;
 import org.carrot2.workbench.core.jobs.ProcessingStatus;
+import org.carrot2.workbench.core.ui.IProcessingResultPart;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
@@ -15,11 +16,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbenchSite;
 
-public class ClusterTreeComponent
+public class ClusterTreeComponent implements IProcessingResultPart
 {
     private TreeViewer viewer;
 
-    public ClusterTreeComponent(IWorkbenchSite site, Composite parent, ProcessingJob job)
+    public void init(IWorkbenchSite site, Composite parent, ProcessingJob job)
     {
         viewer = new TreeViewer(parent, SWT.MULTI);
         viewer.setLabelProvider(new ClusterLabelProvider());
@@ -52,5 +53,9 @@ public class ClusterTreeComponent
     public Control getControl()
     {
         return viewer.getTree();
+    }
+
+    public void dispose()
+    {
     }
 }

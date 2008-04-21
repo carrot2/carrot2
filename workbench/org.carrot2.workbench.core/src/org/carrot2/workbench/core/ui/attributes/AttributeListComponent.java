@@ -1,5 +1,6 @@
 package org.carrot2.workbench.core.ui.attributes;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import org.carrot2.core.attribute.AttributeNames;
@@ -7,6 +8,7 @@ import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.core.jobs.ProcessingJob;
+import org.carrot2.workbench.core.ui.IProcessingResultPart;
 import org.carrot2.workbench.editors.*;
 import org.carrot2.workbench.editors.factory.EditorFactory;
 import org.eclipse.swt.SWT;
@@ -15,14 +17,16 @@ import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.IWorkbenchSite;
 
-public class AttributeListComponent
+//TODO: add common interface for all components, with dispose method
+public class AttributeListComponent implements IProcessingResultPart
 {
     private Composite root;
     private ProcessingJob processingJob;
     private Label descriptionText;
+    private java.util.List<IAttributeEditor> editors = new ArrayList<IAttributeEditor>();
 
     @SuppressWarnings("unchecked")
-    public AttributeListComponent(IWorkbenchSite site, Composite parent, ProcessingJob job)
+    public void init(IWorkbenchSite site, Composite parent, ProcessingJob job)
     {
         initLayout(parent);
         this.processingJob = job;
@@ -46,9 +50,10 @@ public class AttributeListComponent
         {
             if (!descriptor.getValue().key.equals(AttributeNames.DOCUMENTS))
             {
+                IAttributeEditor editor = null;
                 try
                 {
-                    IAttributeEditor editor =
+                    editor =
                         EditorFactory.getEditorFor(job.algorithm, descriptor.getValue());
                     GridData data = new GridData();
                     // data.grabExcessHorizontalSpace = true;
@@ -68,6 +73,7 @@ public class AttributeListComponent
                     editor.createEditor(root, data);
                     editor.setValue(descriptor.getValue().defaultValue);
                     editor.addAttributeChangeListener(listener);
+                    editors.add(editor);
                     // if (descriptor.getValue().metadata.getDescription() != null)
                     // {
                     // descriptionText.setText(descriptor.getValue().metadata
@@ -82,6 +88,10 @@ public class AttributeListComponent
                     GridData gd = new GridData();
                     gd.horizontalSpan = 2;
                     l.setLayoutData(gd);
+                    if (editor != null)
+                    {
+                        editor.dispose();
+                    }
                 }
             }
         }
@@ -141,4 +151,11 @@ public class AttributeListComponent
         scroll.setContent(holder);
     }
 
+    public void dispose()
+    {
+        for (IAttributeEditor editor : editors)
+        {
+            editor.dispose();
+        }
+    }
 }

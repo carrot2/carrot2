@@ -14,6 +14,15 @@ public class ResultsEditor extends SashFormEditorPart
 {
     public static final String ID = "org.carrot2.workbench.core.editors.results";
     private Image sourceImage;
+    private IProcessingResultPart [] parts =
+        {
+            new ClusterTreeComponent(), new DocumentListBrowser(),
+            new AttributeListComponent()
+        };
+    private int [] weights =
+    {
+        1, 3, 3
+    };
 
     @Override
     protected void createControls()
@@ -22,15 +31,12 @@ public class ResultsEditor extends SashFormEditorPart
         ProcessingJob job =
             new ProcessingJob("Processing of a query",
                 (SearchParameters) getEditorInput());
-        ClusterTreeComponent tree =
-            new ClusterTreeComponent(getSite(), getContainer(), job);
-        addControl(tree.getControl(), 1);
-        DocumentListBrowser browser =
-            new DocumentListBrowser(getSite(), getContainer(), job);
-        addControl(browser.getControl(), 3);
-        AttributeListComponent attributeList =
-            new AttributeListComponent(getSite(), getContainer(), job);
-        addControl(attributeList.getControl(), 3);
+        for (int i = 0; i < parts.length; i++)
+        {
+            IProcessingResultPart part = parts[i];
+            part.init(getSite(), getContainer(), job);
+            addControl(part.getControl(), weights[i]);
+        }
         CorePlugin.getDefault().getWorkbench().getProgressService().showInDialog(
             Display.getDefault().getActiveShell(), job);
         job.schedule();
@@ -106,6 +112,11 @@ public class ResultsEditor extends SashFormEditorPart
     public void dispose()
     {
         sourceImage.dispose();
+        for (int i = 0; i < parts.length; i++)
+        {
+            IProcessingResultPart part = parts[i];
+            part.dispose();
+        }
         super.dispose();
     }
 }
