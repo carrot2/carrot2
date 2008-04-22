@@ -17,7 +17,6 @@ import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.IWorkbenchSite;
 
-//TODO: add common interface for all components, with dispose method
 public class AttributeListComponent implements IProcessingResultPart
 {
     private Composite root;

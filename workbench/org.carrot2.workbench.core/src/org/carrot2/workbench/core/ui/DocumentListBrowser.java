@@ -21,19 +21,49 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.*;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.ui.IWorkbenchSite;
+import org.eclipse.ui.*;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 
 public class DocumentListBrowser implements IProcessingResultPart
 {
     private Browser browser;
+    private ISelectionListener postSelectionListener;
+    private IWorkbenchSite site;
 
     public void init(IWorkbenchSite site, Composite parent, ProcessingJob job)
     {
+        this.site = site;
         browser = new Browser(parent, SWT.NONE);
         attachToJobDone(job);
         attachToSelectionChanged(site.getSelectionProvider());
         attachToLocationChanging();
+    }
+
+    public void init(IWorkbenchSite site, Composite parent)
+    {
+        this.site = site;
+        browser = new Browser(parent, SWT.NONE);
+        attachToPostSelection(site.getPage());
+        attachToLocationChanging();
+    }
+
+    private void attachToPostSelection(IWorkbenchPage page)
+    {
+        postSelectionListener = new ISelectionListener()
+        {
+            public void selectionChanged(IWorkbenchPart part, ISelection selection)
+            {
+                if (!selection.isEmpty() && selection instanceof IStructuredSelection)
+                {
+                    IStructuredSelection selected = (IStructuredSelection) selection;
+                    if (selected.getFirstElement() instanceof Cluster)
+                    {
+                        updateBrowserText((Cluster) selected.getFirstElement());
+                    }
+                }
+            }
+        };
+        page.addPostSelectionListener(postSelectionListener);
     }
 
     private void attachToLocationChanging()
@@ -161,5 +191,9 @@ public class DocumentListBrowser implements IProcessingResultPart
 
     public void dispose()
     {
+        if (postSelectionListener != null)
+        {
+            site.getPage().removePostSelectionListener(postSelectionListener);
+        }
     }
 }

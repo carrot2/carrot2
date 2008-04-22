@@ -1,8 +1,8 @@
 package org.carrot2.workbench.core;
 
 import org.carrot2.workbench.core.ui.SearchView;
-import org.eclipse.ui.IPageLayout;
-import org.eclipse.ui.IPerspectiveFactory;
+import org.carrot2.workbench.core.ui.views.DocumentListView;
+import org.eclipse.ui.*;
 
 public class Perspective implements IPerspectiveFactory
 {
@@ -14,7 +14,10 @@ public class Perspective implements IPerspectiveFactory
         layout.setEditorAreaVisible(true);
 
         // Display LogView for debugging.
-        layout.addStandaloneView("org.eclipse.pde.runtime.LogView", true,
-            IPageLayout.BOTTOM, .8f, layout.getEditorArea());
+        IFolderLayout folder =
+            layout.createFolder("bottomViews", IPageLayout.BOTTOM, .8f, layout
+                .getEditorArea());
+        folder.addView("org.eclipse.pde.runtime.LogView");
+        folder.addView(DocumentListView.ID);
     }
 }
