@@ -1,6 +1,7 @@
 package org.carrot2.workbench.core;
 
 import org.carrot2.workbench.core.ui.SearchView;
+import org.carrot2.workbench.core.ui.views.ClusterTreeView;
 import org.carrot2.workbench.core.ui.views.DocumentListView;
 import org.eclipse.ui.*;
 
@@ -14,10 +15,15 @@ public class Perspective implements IPerspectiveFactory
         layout.setEditorAreaVisible(true);
 
         // Display LogView for debugging.
-        IFolderLayout folder =
+        IFolderLayout horizontalFolder =
             layout.createFolder("bottomViews", IPageLayout.BOTTOM, .8f, layout
                 .getEditorArea());
-        folder.addView("org.eclipse.pde.runtime.LogView");
-        folder.addView(DocumentListView.ID);
+        horizontalFolder.addView("org.eclipse.pde.runtime.LogView");
+        horizontalFolder.addView(DocumentListView.ID);
+
+        IFolderLayout verticalFolder =
+            layout.createFolder("leftViewa", IPageLayout.RIGHT, .7f, layout
+                .getEditorArea());
+        verticalFolder.addView(ClusterTreeView.ID);
     }
 }

@@ -1,11 +1,15 @@
 package org.carrot2.workbench.core.ui;
 
+import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.workbench.core.CorePlugin;
 import org.carrot2.workbench.core.jobs.ProcessingJob;
+import org.carrot2.workbench.core.jobs.ProcessingStatus;
 import org.carrot2.workbench.core.ui.attributes.AttributeListComponent;
 import org.carrot2.workbench.core.ui.clusters.ClusterTreeComponent;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.*;
@@ -13,6 +17,7 @@ import org.eclipse.ui.*;
 public class ResultsEditor extends SashFormEditorPart
 {
     public static final String ID = "org.carrot2.workbench.core.editors.results";
+    private ProcessingResult currentContent;
     private Image sourceImage;
     private IProcessingResultPart [] parts =
         {
@@ -28,7 +33,7 @@ public class ResultsEditor extends SashFormEditorPart
     protected void createControls()
     {
         sourceImage = getEditorInput().getImageDescriptor().createImage();
-        ProcessingJob job =
+        final ProcessingJob job =
             new ProcessingJob("Processing of a query",
                 (SearchParameters) getEditorInput());
         for (int i = 0; i < parts.length; i++)
@@ -37,6 +42,16 @@ public class ResultsEditor extends SashFormEditorPart
             part.init(getSite(), getContainer(), job);
             addControl(part.getControl(), weights[i]);
         }
+        job.addJobChangeListener(new JobChangeAdapter()
+        {
+            @Override
+            public void done(IJobChangeEvent event)
+            {
+                //TODO: fire propertyChangeListener somewhere here
+                currentContent = ((ProcessingStatus) job.getResult()).result;
+            }
+        });
+
         CorePlugin.getDefault().getWorkbench().getProgressService().showInDialog(
             Display.getDefault().getActiveShell(), job);
         job.schedule();
@@ -118,5 +133,10 @@ public class ResultsEditor extends SashFormEditorPart
             part.dispose();
         }
         super.dispose();
+    }
+
+    public ProcessingResult getCurrentContent()
+    {
+        return currentContent;
     }
 }

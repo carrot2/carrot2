@@ -44,6 +44,12 @@
             id="org.carrot2.workbench.core.documents"
             name="Documents">
       </view>
+      <view
+            allowMultiple="false"
+            class="org.carrot2.workbench.core.ui.views.ClusterTreeView"
+            id="org.carrot2.workbench.core.clusters"
+            name="Clusters">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.editors">
