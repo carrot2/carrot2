@@ -23,5 +23,6 @@ Export-Package: org.carrot2.workbench.core,
  org.carrot2.workbench.core.ui,
  org.carrot2.workbench.core.ui.attributes,
  org.carrot2.workbench.core.ui.clusters,
+ org.carrot2.workbench.core.ui.views,
  org.carrot2.workbench.editors,
  org.carrot2.workbench.editors.factory

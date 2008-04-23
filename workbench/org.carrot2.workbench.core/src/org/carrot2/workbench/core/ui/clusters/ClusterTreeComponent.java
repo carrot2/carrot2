@@ -44,6 +44,17 @@ public class ClusterTreeComponent implements IProcessingResultPart
     public void init(IWorkbenchSite site, Composite parent)
     {
         initViewer(site, parent);
+        final IPropertyListener refresher = new IPropertyListener()
+        {
+            public void propertyChanged(Object source, int propId)
+            {
+                if (source instanceof ResultsEditor
+                    && propId == ResultsEditor.CURRENT_CONTENT)
+                {
+                    setClusters(((ResultsEditor) source).getCurrentContent());
+                }
+            }
+        };
         partListener = new IPartListener()
         {
 
@@ -65,6 +76,10 @@ public class ClusterTreeComponent implements IProcessingResultPart
 
             public void partClosed(IWorkbenchPart part)
             {
+                if (part instanceof ResultsEditor)
+                {
+                    part.removePropertyListener(refresher);
+                }
             }
 
             public void partDeactivated(IWorkbenchPart part)
@@ -73,11 +88,15 @@ public class ClusterTreeComponent implements IProcessingResultPart
 
             public void partOpened(IWorkbenchPart part)
             {
-                //TODO: attach to property change listener here and refresh if visible editor changes currentContent
+                if (part instanceof ResultsEditor)
+                {
+                    part.addPropertyListener(refresher);
+                }
             }
 
         };
         site.getPage().addPartListener(partListener);
+        //FIXME: iterate through all open editors and attach to their propertyChange event
     }
 
     private void initViewer(IWorkbenchSite site, Composite parent)

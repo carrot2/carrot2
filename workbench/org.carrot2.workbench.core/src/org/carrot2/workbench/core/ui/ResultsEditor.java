@@ -17,6 +17,9 @@ import org.eclipse.ui.*;
 public class ResultsEditor extends SashFormEditorPart
 {
     public static final String ID = "org.carrot2.workbench.core.editors.results";
+
+    public static final int CURRENT_CONTENT = 1;
+
     private ProcessingResult currentContent;
     private Image sourceImage;
     private IProcessingResultPart [] parts =
@@ -47,8 +50,11 @@ public class ResultsEditor extends SashFormEditorPart
             @Override
             public void done(IJobChangeEvent event)
             {
-                //TODO: fire propertyChangeListener somewhere here
-                currentContent = ((ProcessingStatus) job.getResult()).result;
+                if (job.getResult().isOK())
+                {
+                    currentContent = ((ProcessingStatus) job.getResult()).result;
+                    ResultsEditor.this.firePropertyChange(CURRENT_CONTENT);
+                }
             }
         });
 
