@@ -1,5 +1,7 @@
 package org.carrot2.workbench.core.ui.clusters;
 
+import static org.eclipse.ui.IWorkbenchPage.MATCH_ID;
+
 import java.util.ArrayList;
 
 import org.carrot2.core.*;
@@ -96,7 +98,13 @@ public class ClusterTreeComponent implements IProcessingResultPart
 
         };
         site.getPage().addPartListener(partListener);
-        //FIXME: iterate through all open editors and attach to their propertyChange event
+        IEditorReference [] refs =
+            site.getPage().findEditors(null, ResultsEditor.ID, MATCH_ID);
+        for (int i = 0; i < refs.length; i++)
+        {
+            IEditorReference ref = refs[i];
+            ref.addPropertyListener(refresher);
+        }
     }
 
     private void initViewer(IWorkbenchSite site, Composite parent)
