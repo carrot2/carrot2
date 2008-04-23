@@ -58,7 +58,14 @@ public class DocumentListBrowser implements IProcessingResultPart
                     IStructuredSelection selected = (IStructuredSelection) selection;
                     if (selected.getFirstElement() instanceof Cluster)
                     {
-                        updateBrowserText((Cluster) selected.getFirstElement());
+                        if (selected.size() == 1)
+                        {
+                            updateBrowserText((Cluster) selected.getFirstElement());
+                        }
+                        else
+                        {
+                            clear();
+                        }
                     }
                 }
             }
@@ -106,14 +113,14 @@ public class DocumentListBrowser implements IProcessingResultPart
             {
                 if (event.getSelection().isEmpty())
                 {
-                    browser.setText("");
+                    clear();
                     return;
                 }
                 IStructuredSelection selection =
                     (IStructuredSelection) event.getSelection();
                 if (selection.size() > 1)
                 {
-                    browser.setText("");
+                    clear();
                 }
                 else
                 {
@@ -195,5 +202,10 @@ public class DocumentListBrowser implements IProcessingResultPart
         {
             site.getPage().removePostSelectionListener(postSelectionListener);
         }
+    }
+
+    public void clear()
+    {
+        browser.setText("");
     }
 }
