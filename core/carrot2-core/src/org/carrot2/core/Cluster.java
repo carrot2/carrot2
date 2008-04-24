@@ -3,9 +3,13 @@ package org.carrot2.core;
 import java.util.*;
 
 import org.carrot2.util.StringUtils;
+import org.carrot2.util.attribute.TypeStringValuePair;
+import org.simpleframework.xml.*;
+import org.simpleframework.xml.load.Commit;
+import org.simpleframework.xml.load.Persist;
 
 import com.google.common.base.Function;
-import com.google.common.collect.Comparators;
+import com.google.common.collect.*;
 
 /**
  * A cluster (group) of {@link Document}s. Each cluster has a human-readable label
@@ -13,29 +17,46 @@ import com.google.common.collect.Comparators;
  * subclusters. Optionally, additional attributes can be associated with a cluster, e.g.
  * {@link #OTHER_TOPICS}. This class is <strong>not</strong> thread-safe.
  */
+@Root(name = "group", strict = false)
 public final class Cluster
 {
     /**
      * Indicates that the cluster is an "(Other Topics)" cluster. Such a cluster contains
      * documents that remain unclustered at given level of cluster hierarchy.
+     * <p>
+     * Type of this attribute is {@link Boolean}.
+     * </p>
      * 
      * @see #setAttribute(String, Object)
      * @see #getAttribute(String)
      */
     public static final String OTHER_TOPICS = "other-topics";
 
+    /**
+     * Score of this cluster that indicates the clustering algorithm's beliefs on the
+     * quality of this cluster. The exact semantics of the score varies across algorithms.
+     * <p>
+     * Type of this attribute is {@link Double}.
+     * </p>
+     * 
+     * @see #setAttribute(String, Object)
+     * @see #getAttribute(String)
+     */
+    public static final String SCORE = "score";
+
     /** Phrases describing this cluster. */
-    private final ArrayList<String> phrases = new ArrayList<String>();
+    @ElementList(required = false, name = "title", entry = "phrase")
+    private ArrayList<String> phrases = new ArrayList<String>();
 
     /** A read-only list of phrases exposed in {@link #getPhrases()}. */
-    private final List<String> phrasesView = Collections.unmodifiableList(phrases);
+    private List<String> phrasesView = Collections.unmodifiableList(phrases);
 
     /** Subclusters of this cluster. */
-    private final ArrayList<Cluster> subclusters = new ArrayList<Cluster>();
+    @ElementList(required = false, inline = true)
+    private ArrayList<Cluster> subclusters = new ArrayList<Cluster>();
 
     /** A read-only list of subclusters exposed in {@link #getSubclusters()}. */
-    private final List<Cluster> subclustersView = Collections
-        .unmodifiableList(subclusters);
+    private List<Cluster> subclustersView = Collections.unmodifiableList(subclusters);
 
     /** Documents contained in this cluster. */
     private final ArrayList<Document> documents = new ArrayList<Document>();
@@ -44,17 +65,49 @@ public final class Cluster
     private final List<Document> documentsView = Collections.unmodifiableList(documents);
 
     /** Attributes of this cluster. */
-    private final HashMap<String, Object> attributes = new HashMap<String, Object>();
+    private Map<String, Object> attributes = new HashMap<String, Object>();
 
     /** A Read-only view of the attributes of this cluster. */
-    private final Map<String, Object> attributesView = Collections
-        .unmodifiableMap(attributes);
+    private Map<String, Object> attributesView = Collections.unmodifiableMap(attributes);
 
     /** Cached concatenated label */
     private String labelCache = null;
 
     /** Cached list of documents from this cluster and subclusters */
     private List<Document> allDocuments;
+
+    /** Score of this cluster for serialization/ deserialization purposes. */
+    @Attribute(required = false)
+    private Double score;
+
+    /** Attributes of this cluster for serialization/ deserialization purposes. */
+    @ElementMap(name = "attributes", entry = "attribute", key = "key", inline = true, attribute = true, required = false)
+    private Map<String, TypeStringValuePair> otherAttributesAsStrings = new HashMap<String, TypeStringValuePair>();
+
+    /**
+     * List of document ids used for serialization/ deserialization purposes.
+     */
+    @ElementList(required = false, inline = true)
+    List<DocumentRefid> documentIds;
+
+    /**
+     * A helper class for serialization/ deserialization of documents with refids.
+     */
+    @Root(name = "document")
+    static class DocumentRefid
+    {
+        @Attribute
+        Integer refid;
+
+        DocumentRefid()
+        {
+        }
+
+        DocumentRefid(Integer refid)
+        {
+            this.refid = refid;
+        }
+    }
 
     /**
      * Creates a {@link Cluster} with an empty label, no documents and no subclusters.
@@ -351,4 +404,48 @@ public final class Cluster
      */
     public static final Comparator<Cluster> BY_REVERSED_SIZE_AND_LABEL_COMPARATOR = Comparators
         .compound(Collections.reverseOrder(BY_SIZE_COMPARATOR), BY_LABEL_COMPARATOR);
+
+    @Persist
+    @SuppressWarnings("unused")
+    private void beforeSerialization()
+    {
+        documentIds = Lists.newArrayListWithCapacity(documents.size());
+        for (Document document : documents)
+        {
+            documentIds.add(new DocumentRefid(document.getId()));
+        }
+
+        score = getAttribute(SCORE);
+
+        // Remove score from attributes for serialization
+        otherAttributesAsStrings = TypeStringValuePair.toTypeStringValuePairs(attributes);
+        otherAttributesAsStrings.remove(SCORE);
+        if (otherAttributesAsStrings.isEmpty())
+        {
+            otherAttributesAsStrings = null;
+        }
+    }
+
+    @Commit
+    @SuppressWarnings("unused")
+    private void afterDeserialization() throws Exception
+    {
+        if (otherAttributesAsStrings != null)
+        {
+            attributes.putAll(otherAttributesAsStrings);
+        }
+
+        attributes = TypeStringValuePair.fromTypeStringValuePairs(
+            new HashMap<String, Object>(), otherAttributesAsStrings);
+
+        if (score != null)
+        {
+            attributes.put(SCORE, score);
+        }
+
+        attributesView = Collections.unmodifiableMap(attributes);
+        phrasesView = Collections.unmodifiableList(phrases);
+        subclustersView = Collections.unmodifiableList(subclusters);
+        // Documents will be restored on the ProcessingResult level
+    }
 }

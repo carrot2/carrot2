@@ -3,6 +3,7 @@ package org.carrot2.util.attribute;
 import java.io.File;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.*;
 
 import org.apache.commons.lang.ClassUtils;
@@ -245,6 +246,75 @@ public class AttributeBinder
     }
 
     /**
+     * Transforms {@link String} attribute values to the types required by the target
+     * field by:
+     * <ol>
+     * <li>Leaving non-{@link String} typed values unchanged.</li>
+     * <li>Looking for a static <code>valueOf(String)</code> in the target type and
+     * using it for conversion.</li>
+     * <li>If the method is not available, trying to load a class named as the value of
+     * the attribute, so that this class can be further coerced to the class instance.</li>
+     * <li>If the class cannot be loaded, leaving the the value unchanged.</li>
+     * </ol>
+     */
+    public static class AttributeTransformerFromString implements AttributeTransformer
+    {
+        /** Shared instance of the transformer. */
+        public static final AttributeTransformerFromString INSTANCE = new AttributeTransformerFromString();
+
+        /**
+         * Private constructor, use {{@link #INSTANCE}.
+         */
+        private AttributeTransformerFromString()
+        {
+        }
+
+        public Object transform(Object value, String key, Field field,
+            Class<? extends Annotation> bindingDirectionAnnotation,
+            Class<? extends Annotation>... filteringAnnotations)
+        {
+            if (!(value instanceof String))
+            {
+                return value;
+            }
+
+            final String stringValue = (String) value;
+            final Class<?> fieldType = ClassUtils.primitiveToWrapper(field.getType());
+            if (String.class.equals(fieldType))
+            {
+                // Return Strings unchanged
+                return stringValue;
+            }
+            else
+            {
+                // Try valueOf(String)
+                try
+                {
+                    final Method valueOfMethod = fieldType.getMethod("valueOf",
+                        String.class);
+                    return valueOfMethod.invoke(null, stringValue);
+                }
+                catch (Exception e)
+                {
+                    // Just skip this possibility
+                }
+
+                // Try loading the class
+                try
+                {
+                    return Class.forName(stringValue);
+                }
+                catch (ClassNotFoundException e)
+                {
+                    // Just skip this possibility
+                }
+
+                return stringValue;
+            }
+        }
+    }
+
+    /**
      * An action that binds all {@link Input} attributes.
      */
     public static class AttributeBinderActionBind implements AttributeBinderAction
@@ -252,13 +322,16 @@ public class AttributeBinder
         final private Map<String, Object> values;
         final private Class<?> bindingDirectionAnnotation;
         final boolean checkRequired;
+        final AttributeTransformer [] transformers;
 
         public AttributeBinderActionBind(Class<?> bindingDirectionAnnotation,
-            Map<String, Object> values, boolean checkRequired)
+            Map<String, Object> values, boolean checkRequired,
+            AttributeTransformer... transformers)
         {
             this.values = values;
             this.bindingDirectionAnnotation = bindingDirectionAnnotation;
             this.checkRequired = checkRequired;
+            this.transformers = transformers;
         }
 
         public <T> void performAction(T object, String key, Field field, Object value,
@@ -297,6 +370,14 @@ public class AttributeBinder
                         throw new AttributeBindingException(key,
                             "Not allowed to set required attribute to null: " + key);
                     }
+                }
+
+                // Apply value transformers before any other checks, conversions
+                // to allow type-changing transformations as well.
+                for (AttributeTransformer transformer : transformers)
+                {
+                    value = transformer.transform(value, key, field,
+                        bindingDirectionAnnotation, filteringAnnotations);
                 }
 
                 // Try to coerce from class to its instance first

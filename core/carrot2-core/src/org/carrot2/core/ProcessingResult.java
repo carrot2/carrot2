@@ -35,8 +35,15 @@ public final class ProcessingResult
      * Documents field used during serialization/ deserialization, see
      * {@link #afterDeserialization()} and {@link #beforeSerialization()}
      */
-    @ElementList(inline = true)
+    @ElementList(inline = true, required = false)
     private List<Document> documents;
+
+    /**
+     * Clusters field used during serialization/ deserialization, see
+     * {@link #afterDeserialization()} and {@link #beforeSerialization()}
+     */
+    @ElementList(inline = true, required = false)
+    private List<Cluster> clusters;
 
     /**
      * Parameterless constructor required for XML serialization/ deserialization.
@@ -175,6 +182,10 @@ public final class ProcessingResult
     {
         query = (String) attributes.get(AttributeNames.QUERY);
         documents = Lists.newArrayList(getDocuments());
+        if (getClusters() != null)
+        {
+            clusters = Lists.newArrayList(getClusters());
+        }
     }
 
     /**
@@ -186,6 +197,35 @@ public final class ProcessingResult
     {
         attributes.put(AttributeNames.QUERY, query);
         attributes.put(AttributeNames.DOCUMENTS, documents);
+        attributes.put(AttributeNames.CLUSTERS, clusters);
+
+        // Convert document ids to the actual references
+        if (clusters != null && documents != null)
+        {
+            for (Cluster cluster : clusters)
+            {
+                documentIdToReference(cluster, documents);
+            }
+        }
+    }
+
+    /**
+     * Replace document refids with the actual references upon deserialization.
+     */
+    private void documentIdToReference(Cluster cluster, List<Document> documents)
+    {
+        if (cluster.documentIds != null)
+        {
+            for (Cluster.DocumentRefid documentRefid : cluster.documentIds)
+            {
+                cluster.addDocuments(documents.get(documentRefid.refid));
+            }
+        }
+
+        for (Cluster subcluster : cluster.getSubclusters())
+        {
+            documentIdToReference(subcluster, documents);
+        }
     }
 
     /**

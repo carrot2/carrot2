@@ -1,6 +1,5 @@
 package org.carrot2.util.attribute;
 
-import java.lang.reflect.Method;
 import java.util.Map;
 
 import org.simpleframework.xml.*;
@@ -55,32 +54,6 @@ public class AttributeValueSet
      */
     @ElementMap(name = "values", entry = "entry", key = "key", inline = true, attribute = true, required = false)
     private Map<String, TypeStringValuePair> overridenAttributeValuesAsStrings;
-
-    /**
-     * When serializing/ deserializing values, we also need to know the original class of
-     * the value. In theory, we could look the attribute descriptor up knowing the key of
-     * the attribute, but this tight coupling between attribute values sets and
-     * descriptors would probably be too cumbersome in most situations.
-     */
-    @Root(name = "value")
-    static class TypeStringValuePair
-    {
-        @org.simpleframework.xml.Attribute
-        private Class<?> type;
-
-        @org.simpleframework.xml.Attribute(required = false)
-        private String value;
-
-        TypeStringValuePair()
-        {
-        }
-
-        TypeStringValuePair(Class<?> type, String value)
-        {
-            this.value = value;
-            this.type = type;
-        }
-    }
 
     AttributeValueSet()
     {
@@ -214,23 +187,8 @@ public class AttributeValueSet
     @SuppressWarnings("unused")
     private void convertAttributeValuesToStrings()
     {
-        overridenAttributeValuesAsStrings = Maps.newHashMap();
-        for (final Map.Entry<String, Object> entry : overridenAttributeValues.entrySet())
-        {
-            if (entry.getValue() != null)
-            {
-                overridenAttributeValuesAsStrings.put(entry.getKey(),
-                    new TypeStringValuePair(entry.getValue().getClass(), entry.getValue()
-                        .toString()));
-            }
-            else
-            {
-                // Simple XML doesnt seem to be able to handle null entries,
-                // so we need to do some hacking here
-                overridenAttributeValuesAsStrings.put(entry.getKey(),
-                    new TypeStringValuePair(Object.class, null));
-            }
-        }
+        overridenAttributeValuesAsStrings = TypeStringValuePair
+            .toTypeStringValuePairs(overridenAttributeValues);
     }
 
     /**
@@ -246,39 +204,7 @@ public class AttributeValueSet
             return;
         }
 
-        for (final Map.Entry<String, TypeStringValuePair> entry : overridenAttributeValuesAsStrings
-            .entrySet())
-        {
-            if (entry.getValue().value != null)
-            {
-                final Class<?> clazz = entry.getValue().type;
-                final String stringValue = entry.getValue().value;
-                Object value = null;
-
-                // Special support for Class and String
-                if (String.class.equals(clazz))
-                {
-                    value = stringValue;
-                }
-                else if (Class.class.equals(clazz))
-                {
-                    value = Class.forName(stringValue
-                        .substring(stringValue.indexOf(' ') + 1));
-                }
-                else
-                {
-                    // Everything else needs to have a static valueOf(String) method
-                    final Method valueOfMethod = clazz.getMethod("valueOf", String.class);
-                    value = valueOfMethod.invoke(null, stringValue);
-                }
-
-                overridenAttributeValues.put(entry.getKey(), value);
-
-            }
-            else
-            {
-                overridenAttributeValues.put(entry.getKey(), null);
-            }
-        }
+        TypeStringValuePair.fromTypeStringValuePairs(overridenAttributeValues,
+            overridenAttributeValuesAsStrings);
     }
 }

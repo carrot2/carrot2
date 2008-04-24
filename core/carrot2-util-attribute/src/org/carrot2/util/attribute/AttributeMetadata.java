@@ -50,7 +50,6 @@ public class AttributeMetadata extends CommonMetadata
         return group;
     }
 
-    @SuppressWarnings("unused")
     void setGroup(String group)
     {
         this.group = group;
@@ -65,7 +64,6 @@ public class AttributeMetadata extends CommonMetadata
         return level;
     }
 
-    @SuppressWarnings("unused")
     void setLevel(AttributeLevel level)
     {
         this.level = level;

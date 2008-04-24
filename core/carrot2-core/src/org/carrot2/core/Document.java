@@ -2,6 +2,7 @@ package org.carrot2.core;
 
 import java.util.*;
 
+import org.carrot2.util.attribute.TypeStringValuePair;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.load.Commit;
 import org.simpleframework.xml.load.Persist;
@@ -29,10 +30,10 @@ public final class Document
     public static final String CONTENT_URL = "url";
 
     /** Fields of this document */
-    private final HashMap<String, Object> fields = new HashMap<String, Object>();
+    private Map<String, Object> fields = Maps.newHashMap();
 
     /** Read-only collection of fields exposed in {@link #getField(String)}. */
-    private final Map<String, Object> fieldsView = Collections.unmodifiableMap(fields);
+    private Map<String, Object> fieldsView = Collections.unmodifiableMap(fields);
 
     /**
      * Field used during serialization/ deserialization to preserve Carrot2 2.x format.
@@ -59,8 +60,8 @@ public final class Document
      * Field used during serialization/ deserialization to preserve Carrot2 2.x format.
      * See {@link #beforeSerialization()} and {@link #afterDeserialization()}.
      */
-    @ElementMap(required = false)
-    private HashMap<String, Object> otherFields;
+    @ElementMap(name = "fields", entry = "field", key = "key", inline = true, attribute = true, required = false)
+    private Map<String, TypeStringValuePair> otherFieldsAsStrings = new HashMap<String, TypeStringValuePair>();
 
     /**
      * Internal identifier of the document. This identifier is assigned dynamically after
@@ -157,10 +158,10 @@ public final class Document
         snippet = (String) fields.get(SUMMARY);
         url = (String) fields.get(CONTENT_URL);
 
-        otherFields = Maps.newHashMap(fields);
-        otherFields.remove(TITLE);
-        otherFields.remove(SUMMARY);
-        otherFields.remove(CONTENT_URL);
+        otherFieldsAsStrings = TypeStringValuePair.toTypeStringValuePairs(fields);
+        otherFieldsAsStrings.remove(TITLE);
+        otherFieldsAsStrings.remove(SUMMARY);
+        otherFieldsAsStrings.remove(CONTENT_URL);
     }
 
     /**
@@ -168,14 +169,17 @@ public final class Document
      */
     @Commit
     @SuppressWarnings("unused")
-    private void afterDeserialization()
+    private void afterDeserialization() throws Throwable
     {
-        if (otherFields != null)
+        if (otherFieldsAsStrings != null)
         {
-            fields.putAll(otherFields);
+            fields = TypeStringValuePair.fromTypeStringValuePairs(
+                new HashMap<String, Object>(), otherFieldsAsStrings);
         }
         fields.put(TITLE, title);
         fields.put(SUMMARY, snippet);
         fields.put(CONTENT_URL, url);
+        
+        fieldsView = Collections.unmodifiableMap(fields);
     }
 }
