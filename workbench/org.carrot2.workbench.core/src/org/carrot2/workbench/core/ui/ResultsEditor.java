@@ -3,6 +3,7 @@ package org.carrot2.workbench.core.ui;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.workbench.core.CorePlugin;
+import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.core.jobs.ProcessingJob;
 import org.carrot2.workbench.core.jobs.ProcessingStatus;
 import org.carrot2.workbench.core.ui.attributes.AttributeListComponent;
@@ -53,7 +54,13 @@ public class ResultsEditor extends SashFormEditorPart
                 if (job.getResult().isOK())
                 {
                     currentContent = ((ProcessingStatus) job.getResult()).result;
-                    ResultsEditor.this.firePropertyChange(CURRENT_CONTENT);
+                    Utils.asyncExec(new Runnable()
+                    {
+                        public void run()
+                        {
+                            ResultsEditor.this.firePropertyChange(CURRENT_CONTENT);
+                        }
+                    });
                 }
             }
         });
