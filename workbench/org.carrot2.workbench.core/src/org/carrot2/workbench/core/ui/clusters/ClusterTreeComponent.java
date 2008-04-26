@@ -15,13 +15,14 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.ui.*;
+import org.eclipse.ui.IPropertyListener;
+import org.eclipse.ui.IWorkbenchSite;
 
 public class ClusterTreeComponent implements IProcessingResultPart
 {
     private TreeViewer viewer;
-    private IPartListener partListener;
-    private IWorkbenchSite site;
+    private ResultsEditor editor;
+    private IPropertyListener refresher;
 
     public void init(IWorkbenchSite site, Composite parent, ProcessingJob job)
     {
@@ -41,10 +42,11 @@ public class ClusterTreeComponent implements IProcessingResultPart
         });
     }
 
-    public void init(IWorkbenchSite site, Composite parent)
+    public void init(IWorkbenchSite site, ResultsEditor editor, Composite parent)
     {
         initViewer(site, parent);
-        final IPropertyListener refresher = new IPropertyListener()
+        this.editor = editor;
+        refresher = new IPropertyListener()
         {
             public void propertyChanged(Object source, int propId)
             {
@@ -55,48 +57,7 @@ public class ClusterTreeComponent implements IProcessingResultPart
                 }
             }
         };
-        partListener = new IPartListener()
-        {
-
-            public void partActivated(IWorkbenchPart part)
-            {
-                if (part instanceof ResultsEditor)
-                {
-                    part.addPropertyListener(refresher);
-                    ResultsEditor resultsEditor = (ResultsEditor) part;
-                    if (resultsEditor.getCurrentContent() != null)
-                    {
-                        setClusters(resultsEditor.getCurrentContent());
-                    }
-                }
-            }
-
-            public void partBroughtToTop(IWorkbenchPart part)
-            {
-            }
-
-            public void partClosed(IWorkbenchPart part)
-            {
-                if (part instanceof ResultsEditor)
-                {
-                    part.removePropertyListener(refresher);
-                }
-            }
-
-            public void partDeactivated(IWorkbenchPart part)
-            {
-            }
-
-            public void partOpened(IWorkbenchPart part)
-            {
-                if (part instanceof ResultsEditor)
-                {
-                    part.addPropertyListener(refresher);
-                }
-            }
-
-        };
-        site.getPage().addPartListener(partListener);
+        editor.addPropertyListener(refresher);
     }
 
     private void initViewer(IWorkbenchSite site, Composite parent)
@@ -107,19 +68,18 @@ public class ClusterTreeComponent implements IProcessingResultPart
         viewer.setInput(new ArrayList<ClusterWithParent>());
         final ClusterSelectionProvider provider = new ClusterSelectionProvider(viewer);
         site.setSelectionProvider(provider);
-        this.site = site;
     }
 
     public Control getControl()
     {
-        return viewer.getTree();
+        return viewer.getControl();
     }
 
     public void dispose()
     {
-        if (partListener != null)
+        if (editor != null)
         {
-            site.getPage().removePartListener(partListener);
+            editor.removePropertyListener(refresher);
         }
     }
 

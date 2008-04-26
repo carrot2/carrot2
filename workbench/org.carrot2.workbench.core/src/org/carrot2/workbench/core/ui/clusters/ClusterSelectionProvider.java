@@ -11,33 +11,45 @@ import org.carrot2.core.Cluster;
 import org.carrot2.core.ClusterWithParent;
 import org.eclipse.jface.viewers.*;
 
-class ClusterSelectionProvider implements ISelectionProvider
+class ClusterSelectionProvider implements IPostSelectionProvider
 {
+    private final class SelectionListener implements ISelectionChangedListener
+    {
+        private List<ISelectionChangedListener> listeners;
+
+        public SelectionListener(List<ISelectionChangedListener> listeners)
+        {
+            this.listeners = listeners;
+        }
+
+        public void selectionChanged(SelectionChangedEvent event)
+        {
+            SelectionChangedEvent event2 =
+                new SelectionChangedEvent(ClusterSelectionProvider.this, getSelection());
+            fireSelectionChanged(listeners, event2);
+        }
+    }
+
     private TreeViewer viewer;
 
     public ClusterSelectionProvider(TreeViewer viewer)
     {
         this.viewer = viewer;
-        this.viewer.addSelectionChangedListener(new ISelectionChangedListener()
-        {
-
-            public void selectionChanged(SelectionChangedEvent event)
-            {
-                SelectionChangedEvent event2 =
-                    new SelectionChangedEvent(ClusterSelectionProvider.this,
-                        getSelection());
-                fireSelectionChanged(event2);
-            }
-
-        });
+        this.viewer
+            .addSelectionChangedListener(new SelectionListener(selectionListeners));
+        this.viewer.addPostSelectionChangedListener(new SelectionListener(
+            postSelectionListeners));
     }
 
-    List<ISelectionChangedListener> listeners =
+    List<ISelectionChangedListener> selectionListeners =
+        new ArrayList<ISelectionChangedListener>();
+
+    List<ISelectionChangedListener> postSelectionListeners =
         new ArrayList<ISelectionChangedListener>();
 
     public void addSelectionChangedListener(ISelectionChangedListener listener)
     {
-        listeners.add(listener);
+        selectionListeners.add(listener);
     }
 
     @SuppressWarnings("unchecked")
@@ -56,7 +68,7 @@ class ClusterSelectionProvider implements ISelectionProvider
 
     public void removeSelectionChangedListener(ISelectionChangedListener listener)
     {
-        listeners.remove(listener);
+        selectionListeners.remove(listener);
     }
 
     public void setSelection(ISelection selection)
@@ -64,12 +76,23 @@ class ClusterSelectionProvider implements ISelectionProvider
         throw new NotImplementedException();
     }
 
-    private void fireSelectionChanged(SelectionChangedEvent event)
+    private void fireSelectionChanged(List<ISelectionChangedListener> listeners,
+        SelectionChangedEvent event)
     {
         for (ISelectionChangedListener listener : listeners)
         {
             listener.selectionChanged(event);
         }
+    }
+
+    public void addPostSelectionChangedListener(ISelectionChangedListener listener)
+    {
+        postSelectionListeners.add(listener);
+    }
+
+    public void removePostSelectionChangedListener(ISelectionChangedListener listener)
+    {
+        postSelectionListeners.remove(listener);
     }
 
 }
