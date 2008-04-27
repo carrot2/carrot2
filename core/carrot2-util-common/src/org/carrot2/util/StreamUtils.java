@@ -17,7 +17,7 @@ public final class StreamUtils
      * Read the contents of an opened stream until EOF (or an exception is thrown). Note
      * that this method does close the input stream, regardless whether exception has been
      * thrown or not.
-     *
+     * 
      * @param input Input stream to be read.
      * @throws IOException propagated from the underlying stream.
      */
@@ -36,7 +36,7 @@ public final class StreamUtils
     /**
      * Read the contents of an opened stream until EOF (or an exception is thrown). Note
      * that this method does NOT close the stream.
-     *
+     * 
      * @param input InputStream from which data is to be read.
      * @throws IOException propagated from the underlying stream.
      */
@@ -58,7 +58,7 @@ public final class StreamUtils
      * Read the contents of an opened Reader until EOF (or an exception is thrown). Note
      * that this method does close the input stream, regardless whether exception has been
      * thrown or not.
-     *
+     * 
      * @param input Reader to be read.
      * @throws IOException propagated from the underlying stream.
      */
@@ -77,7 +77,7 @@ public final class StreamUtils
     /**
      * Read the contents of an opened reader until EOF (or an exception is thrown). Note
      * that this method does NOT close the stream.
-     *
+     * 
      * @param input Reader from which data will be read.
      * @throws IOException propagated from the underlying stream.
      */
@@ -109,4 +109,30 @@ public final class StreamUtils
             out.write(buffer, 0, tmp);
         }
     }
+
+    /**
+     * A writer with empty implementations of all {@link Writer} methods.
+     */
+    static class NullWriter extends Writer
+    {
+        @Override
+        public void close() throws IOException
+        {
+        }
+
+        @Override
+        public void flush() throws IOException
+        {
+        }
+
+        @Override
+        public void write(char [] cbuf, int off, int len) throws IOException
+        {
+        }
+    }
+
+    /**
+     * A dummy writer with empty implementations of {@link Writer} methods.
+     */
+    public static final Writer NULL_WRITER = new NullWriter();
 }

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
+  <display-name>carrot2-webapp</display-name>
+
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+  </welcome-file-list>
+
+  <servlet>
+    <description>Processes query requests</description>
+    <display-name>QueryProcessorServlet</display-name>
+    <servlet-name>QueryProcessorServlet</servlet-name>
+    <servlet-class>org.carrot2.webapp.QueryProcessorServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>JavascriptServlet</servlet-name>
+    <servlet-class>net.jawr.web.servlet.JawrServlet</servlet-class>
+                
+    <!-- Location in classpath of the config file -->
+    <init-param>
+      <param-name>configLocation</param-name>
+      <param-value>jawr.properties</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+        
+  <servlet>
+    <servlet-name>CSSServlet</servlet-name>
+    <servlet-class>net.jawr.web.servlet.JawrServlet</servlet-class>
+                
+    <!-- Location in classpath of the config file -->
+    <init-param>
+      <param-name>configLocation</param-name>
+      <param-value>jawr.properties</param-value>
+    </init-param>
+    <init-param>
+      <param-name>type</param-name>
+      <param-value>css</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+        
+  <servlet-mapping>
+    <servlet-name>QueryProcessorServlet</servlet-name>
+    <url-pattern>/xml</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>QueryProcessorServlet</servlet-name>
+    <url-pattern>/search</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>JavascriptServlet</servlet-name>
+    <url-pattern>*.jjs</url-pattern>
+  </servlet-mapping> 
+        
+  <servlet-mapping>
+    <servlet-name>CSSServlet</servlet-name>
+    <url-pattern>*.jcss</url-pattern>
+  </servlet-mapping> 
+
+  <filter>
+    <filter-name>xslt-filter</filter-name>
+    <display-name>XSLT Filter</display-name>
+    <filter-class>org.carrot2.util.xsltfilter.XSLTFilter</filter-class>
+    
+    <init-param>
+      <param-name>template.caching</param-name>
+      <param-value>false</param-value>
+    </init-param>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>xslt-filter</filter-name>
+    <url-pattern>/search</url-pattern>
+  </filter-mapping>
+</web-app>
