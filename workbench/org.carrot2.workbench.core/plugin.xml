@@ -34,22 +34,29 @@
    <extension
          point="org.eclipse.ui.views">
       <view
+            category="org.carrot2.workbench.core.carrot2Category"
             class="org.carrot2.workbench.core.ui.SearchView"
             id="org.carrot2.workbench.core.search"
             name="Search">
       </view>
       <view
             allowMultiple="false"
+            category="org.carrot2.workbench.core.carrot2Category"
             class="org.carrot2.workbench.core.ui.views.DocumentListView"
             id="org.carrot2.workbench.core.documents"
             name="Documents">
       </view>
       <view
             allowMultiple="false"
+            category="org.carrot2.workbench.core.carrot2Category"
             class="org.carrot2.workbench.core.ui.views.ClusterTreeView"
             id="org.carrot2.workbench.core.clusters"
             name="Clusters">
       </view>
+      <category
+            id="org.carrot2.workbench.core.carrot2Category"
+            name="Carrot2">
+      </category>
    </extension>
    <extension
          point="org.eclipse.ui.editors">

@@ -4,10 +4,10 @@ import org.carrot2.workbench.core.ui.ResultsEditor;
 import org.carrot2.workbench.core.ui.clusters.ClusterTreeComponent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.*;
 
-//FIXME: change superclass to PageBookView (this will save us all a lot of trouble)
 public class ClusterTreeView extends PageBookView
 {
 
@@ -26,6 +26,10 @@ public class ClusterTreeView extends PageBookView
     @Override
     protected PageRec doCreatePage(final IWorkbenchPart part)
     {
+        if (!(part instanceof ResultsEditor))
+        {
+            return null;
+        }
         Page partPage = new Page()
         {
 
@@ -71,13 +75,12 @@ public class ClusterTreeView extends PageBookView
     @Override
     protected IWorkbenchPart getBootstrapPart()
     {
-        IWorkbenchPart active = this.getSite().getPage().getActiveEditor();
-        return (isImportant(active) ? active : null);
+        return this.getSite().getPage().getActiveEditor();
     }
 
     @Override
     protected boolean isImportant(IWorkbenchPart part)
     {
-        return (part instanceof ResultsEditor);
+        return (part instanceof IEditorPart);
     }
 }
