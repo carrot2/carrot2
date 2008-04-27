@@ -1,5 +1,6 @@
 package org.carrot2.workbench.core.ui.attributes;
 
+import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.Input;
 import org.carrot2.workbench.core.jobs.ProcessingJob;
@@ -30,9 +31,9 @@ public class AttributeListComponent implements IProcessingResultPart
                 processingJob.schedule();
             }
         };
-        page =
-            new AttributesPage(job.algorithm, job.attributes, Input.class,
-                Processing.class);
+        page = new AttributesPage(job.algorithm, job.attributes);
+        page.ignoreAttributes(AttributeNames.DOCUMENTS);
+        page.filterAttributes(Input.class, Processing.class);
         page.init(new IPageSite()
         {
 

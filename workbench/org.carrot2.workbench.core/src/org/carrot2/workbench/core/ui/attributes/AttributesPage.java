@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import org.carrot2.core.ProcessingComponent;
-import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.attribute.*;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.editors.*;
@@ -16,6 +15,9 @@ import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.part.Page;
 
+/**
+ * 
+ */
 public class AttributesPage extends Page
 {
 
@@ -23,19 +25,23 @@ public class AttributesPage extends Page
     private Map<String, Object> attributes;
     private ProcessingComponent component;
     private Composite root;
-    private Label descriptionText;
     private java.util.List<IAttributeEditor> editors = new ArrayList<IAttributeEditor>();
+    private java.util.List<String> ignoredAttributes = new ArrayList<String>();
+    private Class<? extends Annotation> [] filterAnnotations;
 
-    public AttributesPage(ProcessingComponent component, Map<String, Object> attributes,
-        Class<? extends Annotation>... annotationClasses)
+    public AttributesPage(ProcessingComponent component, Map<String, Object> attributes)
     {
         this.component = component;
-        this.descriptor =
-            BindableDescriptorBuilder.buildDescriptor(component).only(annotationClasses)
-                .flatten();
+        this.descriptor = BindableDescriptorBuilder.buildDescriptor(component);
         this.attributes = attributes;
     }
 
+    /**
+     * Creates editors for attributes of component given in constructor. You can filter
+     * attributes using {@link AttributesPage#filterAttributes(Class...)}. If you want
+     * certain attributes not to be shown, you can also use
+     * {@link AttributesPage#ignoreAttributes(String...)} method.
+     */
     @Override
     public void createControl(Composite parent)
     {
@@ -44,11 +50,17 @@ public class AttributesPage extends Page
         GridLayout layout = new GridLayout();
         layout.numColumns = 2;
         root.setLayout(layout);
-        for (Map.Entry<String, AttributeDescriptor> entry : descriptor.attributeDescriptors
+        BindableDescriptor desc = descriptor.flatten();
+        if (filterAnnotations != null)
+        {
+            desc = desc.only(filterAnnotations);
+        }
+
+        for (Map.Entry<String, AttributeDescriptor> entry : desc.attributeDescriptors
             .entrySet())
         {
             AttributeDescriptor attDescriptor = entry.getValue();
-            if (!attDescriptor.key.equals(AttributeNames.DOCUMENTS))
+            if (!ignoredAttributes.contains(attDescriptor.key))
             {
                 IAttributeEditor editor = null;
                 try
@@ -118,6 +130,34 @@ public class AttributesPage extends Page
         super.dispose();
     }
 
+    /**
+     * Attributes with the given key will not be shown in the page.
+     * 
+     * Subsequent calls of this method override previous ones.
+     * 
+     * @param keys
+     */
+    public void ignoreAttributes(String... keys)
+    {
+        ignoredAttributes.clear();
+        for (int i = 0; i < keys.length; i++)
+        {
+            String key = keys[i];
+            ignoredAttributes.add(key);
+        }
+    }
+
+    /**
+     * Subsequent calls of this method override previous ones.
+     * 
+     * @param annotationClasses
+     * @see BindableDescriptor#only(Class...)
+     */
+    public void filterAttributes(Class<? extends Annotation>... annotationClasses)
+    {
+        filterAnnotations = annotationClasses;
+    }
+
     public void addAttributeChangeListener(AttributeChangeListener listener)
     {
         for (IAttributeEditor editor : editors)
@@ -150,32 +190,8 @@ public class AttributesPage extends Page
         final ScrolledComposite scroll =
             new ScrolledComposite(parent, SWT.V_SCROLL | SWT.H_SCROLL);
         final Composite holder = new Composite(scroll, SWT.NULL);
-        descriptionText = new Label(holder, SWT.WRAP);
-        Label Label_1 = new Label(holder, SWT.HORIZONTAL | SWT.SEPARATOR);
         root = new Composite(holder, SWT.NULL);
-
-        FormData FormData_3 = new FormData();
-        FormData FormData_2 = new FormData();
-        FormData FormData_1 = new FormData();
-
-        FormData_3.right = new FormAttachment(100, -5);
-        FormData_3.height = 100;
-        FormData_3.left = new FormAttachment(0, 5);
-        FormData_3.bottom = new FormAttachment(100, -5);
-        FormData_2.right = new FormAttachment(100, 0);
-        FormData_2.height = -1;
-        FormData_2.left = new FormAttachment(0, 0);
-        FormData_2.bottom = new FormAttachment(descriptionText, 0, 0);
-        FormData_1.right = new FormAttachment(100, 0);
-        FormData_1.top = new FormAttachment(0, 0);
-        FormData_1.left = new FormAttachment(0, 0);
-        FormData_1.bottom = new FormAttachment(Label_1, 0, 0);
-
-        descriptionText.setLayoutData(FormData_3);
-        Label_1.setLayoutData(FormData_2);
-        root.setLayoutData(FormData_1);
-        Label_1.setVisible(true);
-        holder.setLayout(new FormLayout());
+        holder.setLayout(new FillLayout());
 
         scroll.setLayout(new FillLayout());
 

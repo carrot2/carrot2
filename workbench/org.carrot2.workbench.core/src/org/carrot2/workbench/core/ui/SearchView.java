@@ -1,17 +1,26 @@
 package org.carrot2.workbench.core.ui;
 
-import java.util.ArrayList;
+import static org.eclipse.swt.SWT.FILL;
 
+import java.util.*;
+
+import org.carrot2.core.ProcessingComponent;
 import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.core.attribute.Processing;
+import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Required;
 import org.carrot2.workbench.core.helpers.*;
+import org.carrot2.workbench.core.ui.attributes.AttributesPage;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Resource;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.part.PageSite;
 import org.eclipse.ui.part.ViewPart;
 
 public class SearchView extends ViewPart
@@ -24,6 +33,8 @@ public class SearchView extends ViewPart
     private Button processButton;
     private Text queryText;
     private java.util.List<Resource> toDispose = new ArrayList<Resource>();
+    private Map<String, AttributesPage> attributesPages =
+        new HashMap<String, AttributesPage>();
 
     private class ComponentLabelProvider extends LabelProvider
     {
@@ -39,6 +50,8 @@ public class SearchView extends ViewPart
     public void createPartControl(Composite parent)
     {
         createPermanentLayout(parent);
+
+        createRequiredAttributesLayout();
 
         checkProcessingConditions(parent);
 
@@ -79,6 +92,48 @@ public class SearchView extends ViewPart
                 execQuery.run();
             }
         });
+    }
+
+    @SuppressWarnings("unchecked")
+    private void createRequiredAttributesLayout()
+    {
+        final Group requiredHolder = new Group(innerComposite, SWT.NONE);
+        requiredHolder.setText("Other required attributes");
+        final StackLayout stack = new StackLayout();
+        for (ComponentWrapper wrapper : ComponentLoader.SOURCE_LOADER.getComponents())
+        {
+            ProcessingComponent source = wrapper.getExecutableComponent();
+            AttributesPage page =
+                new AttributesPage(source, new HashMap<String, Object>());
+            page.ignoreAttributes(AttributeNames.QUERY);
+            page.filterAttributes(Input.class, Processing.class, Required.class);
+            page.init(new PageSite(this.getViewSite()));
+            page.createControl(requiredHolder);
+            attributesPages.put(wrapper.getId(), page);
+        }
+        requiredHolder.setLayout(stack);
+        if (getSourceId() != null)
+        {
+            stack.topControl = attributesPages.get(getSourceId()).getControl();
+            requiredHolder.layout();
+        }
+        sourceViewer.getCombo().addSelectionListener(new SelectionAdapter()
+        {
+            @Override
+            public void widgetSelected(SelectionEvent e)
+            {
+                if (getSourceId() != null)
+                {
+                    stack.topControl = attributesPages.get(getSourceId()).getControl();
+                    requiredHolder.layout();
+                }
+            }
+        });
+        GridData gd = new GridData();
+        gd.grabExcessHorizontalSpace = true;
+        gd.horizontalAlignment = FILL;
+        gd.horizontalSpan = 2;
+        requiredHolder.setLayoutData(gd);
     }
 
     /**
