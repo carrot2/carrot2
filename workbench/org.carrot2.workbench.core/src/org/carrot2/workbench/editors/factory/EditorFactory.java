@@ -59,7 +59,7 @@ public class EditorFactory
     }
 
     private static List<TypeEditorWrapper> sortTypeEditors(
-        List<TypeEditorWrapper> editors, AttributeDescriptor attribute)
+        List<TypeEditorWrapper> editors, final AttributeDescriptor attribute)
     {
         final boolean constraintsPreffered = !attribute.constraints.isEmpty();
         return Lists.sortedCopy(editors, new Comparator<TypeEditorWrapper>()
@@ -67,19 +67,30 @@ public class EditorFactory
 
             public int compare(TypeEditorWrapper o1, TypeEditorWrapper o2)
             {
+                int result =
+                    distance(attribute.type, o1.attributeClass)
+                        - distance(attribute.type, o2.attributeClass);
+                if (result != 0)
+                {
+                    return result;
+                }
                 if (o1.constraints.isEmpty() && o2.constraints.isEmpty())
                 {
-                    return 0;
+                    result = 0;
                 }
-                if (!o2.constraints.isEmpty() && !o2.constraints.isEmpty())
+                else if (!o2.constraints.isEmpty() && !o2.constraints.isEmpty())
                 {
-                    return 0;
+                    result = 0;
                 }
-                if (o1.constraints.isEmpty() ^ constraintsPreffered)
+                else if (o1.constraints.isEmpty() ^ constraintsPreffered)
                 {
-                    return -1;
+                    result = -1;
                 }
-                return 1;
+                else
+                {
+                    result = 1;
+                }
+                return result;
             }
 
         });
@@ -171,5 +182,20 @@ public class EditorFactory
             compatible = interfaces.contains(className);
         }
         return compatible;
+    }
+
+    @SuppressWarnings("unchecked")
+    static int distance(Class<?> clazz, String className)
+    {
+        if (clazz.getName().equals(className))
+        {
+            return 0;
+        }
+        List<String> superclasses = convertClassesToClassNames(getAllSuperclasses(clazz));
+        if (superclasses.contains(className))
+        {
+            return superclasses.indexOf(className) + 1;
+        }
+        return 0;
     }
 }

@@ -52,6 +52,7 @@ public class FactoryTest extends TestCase
         {
             // TODO: handle exception
         }
+        checkEditor(SubEditor.class, "subAttribute");
     }
 
     private void checkEditor(Class<?> expectedEditor, String attId)
@@ -62,5 +63,14 @@ public class FactoryTest extends TestCase
         assertNotNull(editor);
         assertEquals(expectedEditor, editor.getClass());
     }
+
+    //    public void testDistance()
+    //    {
+    //        assertEquals(0, EditorFactory.distance(SubTestType.class,
+    //            "org.carrot2.workbench.editors.EditorsTest$SubTestType"));
+    //        assertEquals(1, EditorFactory.distance(SubTestType.class,
+    //            "org.carrot2.workbench.editors.EditorsTest$TestType"));
+    //        assertEquals(2, EditorFactory.distance(SubTestType.class, "java.lang.Object"));
+    //    }
 
 }

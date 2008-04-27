@@ -16,6 +16,10 @@ public class EditorsTest
     {
     }
 
+    public static class SubTestType extends TestType
+    {
+    }
+
     @Bindable
     public static class TestComponent extends ProcessingComponentBase implements
         ClusteringAlgorithm
@@ -36,6 +40,11 @@ public class EditorsTest
         @Input
         @Processing
         TestType simpleAttribute;
+
+        @Attribute
+        @Input
+        @Processing
+        SubTestType subAttribute;
 
         @Attribute
         @Input
@@ -88,6 +97,11 @@ public class EditorsTest
     }
 
     public static class IntEditor extends AttributeEditorAdapter
+    {
+
+    }
+
+    public static class SubEditor extends AttributeEditorAdapter
     {
 
     }
