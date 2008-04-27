@@ -16,7 +16,11 @@ public class EditorsTest
     {
     }
 
-    public static class SubTestType extends TestType
+    public static class SubTestType extends TestType implements TestInterface
+    {
+    }
+
+    public static interface TestInterface
     {
     }
 
@@ -45,6 +49,23 @@ public class EditorsTest
         @Input
         @Processing
         SubTestType subAttribute;
+
+        @Attribute
+        @Input
+        @Processing
+        @IntRange(min = 0, max = 10)
+        SubTestType subRangeAttribute;
+
+        @Attribute
+        @Input
+        @Processing
+        @IntModulo(modulo = 2, offset = 1)
+        TestInterface interfaceRangeAttribute;
+
+        @Attribute
+        @Input
+        @Processing
+        TestInterface interfaceAttribute;
 
         @Attribute
         @Input
@@ -102,6 +123,11 @@ public class EditorsTest
     }
 
     public static class SubEditor extends AttributeEditorAdapter
+    {
+
+    }
+
+    public static class InterfaceEditor extends AttributeEditorAdapter
     {
 
     }

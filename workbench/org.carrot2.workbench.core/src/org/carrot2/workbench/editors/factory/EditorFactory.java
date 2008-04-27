@@ -185,16 +185,25 @@ public class EditorFactory
     }
 
     @SuppressWarnings("unchecked")
-    static int distance(Class<?> clazz, String className)
+    public static int distance(Class<?> clazz, String className)
     {
         if (clazz.getName().equals(className))
         {
             return 0;
         }
+        if (className.equals("java.lang.Object"))
+        {
+            return Integer.MAX_VALUE;
+        }
         List<String> superclasses = convertClassesToClassNames(getAllSuperclasses(clazz));
         if (superclasses.contains(className))
         {
             return superclasses.indexOf(className) + 1;
+        }
+        List<String> interfaces = convertClassesToClassNames(getAllInterfaces(clazz));
+        if (interfaces.contains(className))
+        {
+            return interfaces.indexOf(className) + 1;
         }
         return 0;
     }

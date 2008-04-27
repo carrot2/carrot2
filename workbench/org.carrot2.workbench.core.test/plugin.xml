@@ -67,6 +67,10 @@
             attributeClass="org.carrot2.workbench.editors.EditorsTest$SubTestType"
             class="org.carrot2.workbench.editors.EditorsTest$SubEditor">
       </typeEditor>
+      <typeEditor
+            attributeClass="org.carrot2.workbench.editors.EditorsTest$TestInterface"
+            class="org.carrot2.workbench.editors.EditorsTest$InterfaceEditor">
+      </typeEditor>
    </extension>
 
 </plugin>

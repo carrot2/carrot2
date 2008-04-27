@@ -53,6 +53,9 @@ public class FactoryTest extends TestCase
             // TODO: handle exception
         }
         checkEditor(SubEditor.class, "subAttribute");
+        checkEditor(SubEditor.class, "subRangeAttribute");
+        checkEditor(InterfaceEditor.class, "interfaceAttribute");
+        checkEditor(InterfaceEditor.class, "interfaceRangeAttribute");
     }
 
     private void checkEditor(Class<?> expectedEditor, String attId)
@@ -64,13 +67,16 @@ public class FactoryTest extends TestCase
         assertEquals(expectedEditor, editor.getClass());
     }
 
-    //    public void testDistance()
-    //    {
-    //        assertEquals(0, EditorFactory.distance(SubTestType.class,
-    //            "org.carrot2.workbench.editors.EditorsTest$SubTestType"));
-    //        assertEquals(1, EditorFactory.distance(SubTestType.class,
-    //            "org.carrot2.workbench.editors.EditorsTest$TestType"));
-    //        assertEquals(2, EditorFactory.distance(SubTestType.class, "java.lang.Object"));
-    //    }
+    public void testDistance()
+    {
+        assertEquals(0, EditorFactory.distance(SubTestType.class,
+            "org.carrot2.workbench.editors.EditorsTest$SubTestType"));
+        assertEquals(1, EditorFactory.distance(SubTestType.class,
+            "org.carrot2.workbench.editors.EditorsTest$TestType"));
+        assertEquals(Integer.MAX_VALUE, EditorFactory.distance(SubTestType.class,
+            "java.lang.Object"));
+        assertEquals(1, EditorFactory.distance(SubTestType.class,
+            "org.carrot2.workbench.editors.EditorsTest$TestInterface"));
+    }
 
 }
