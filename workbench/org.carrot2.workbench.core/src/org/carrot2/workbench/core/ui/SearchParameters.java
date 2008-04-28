@@ -44,6 +44,11 @@ public class SearchParameters implements IEditorInput, IPersistableElement
         this.attributes.put(key, value);
     }
 
+    public void putAllAttributes(Map<String, Object> attributes)
+    {
+        this.attributes.putAll(attributes);
+    }
+
     public Object removeAttribute(String key)
     {
         return this.attributes.remove(key);

@@ -1,8 +1,7 @@
 package org.carrot2.workbench.core.ui.attributes;
 
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.Map;
+import java.util.*;
 
 import org.carrot2.core.ProcessingComponent;
 import org.carrot2.util.attribute.*;
@@ -32,7 +31,7 @@ public class AttributesPage extends Page
     public AttributesPage(ProcessingComponent component, Map<String, Object> attributes)
     {
         this.component = component;
-        this.descriptor = BindableDescriptorBuilder.buildDescriptor(component);
+        this.descriptor = BindableDescriptorBuilder.buildDescriptor(component).flatten();
         this.attributes = attributes;
     }
 
@@ -50,7 +49,7 @@ public class AttributesPage extends Page
         GridLayout layout = new GridLayout();
         layout.numColumns = 2;
         root.setLayout(layout);
-        BindableDescriptor desc = descriptor.flatten();
+        BindableDescriptor desc = descriptor;
         if (filterAnnotations != null)
         {
             desc = desc.only(filterAnnotations);
@@ -67,7 +66,7 @@ public class AttributesPage extends Page
                 {
                     editor = EditorFactory.getEditorFor(component, attDescriptor);
                     GridData data = new GridData();
-                    // data.grabExcessHorizontalSpace = true;
+                    data.grabExcessHorizontalSpace = true;
                     editor.init(attDescriptor);
                     if (editor.containsLabel())
                     {
@@ -174,6 +173,16 @@ public class AttributesPage extends Page
         }
     }
 
+    public Map<String, Object> getAttributeValues()
+    {
+        Map<String, Object> map = new HashMap<String, Object>();
+        for (IAttributeEditor editor : editors)
+        {
+            map.put(editor.getAttributeKey(), editor.getValue());
+        }
+        return Collections.unmodifiableMap(map);
+    }
+
     private String getLabelForAttribute(AttributeDescriptor descriptor)
     {
         String text = null;
@@ -191,10 +200,8 @@ public class AttributesPage extends Page
             new ScrolledComposite(parent, SWT.V_SCROLL | SWT.H_SCROLL);
         final Composite holder = new Composite(scroll, SWT.NULL);
         root = new Composite(holder, SWT.NULL);
-        holder.setLayout(new FillLayout());
-
         scroll.setLayout(new FillLayout());
-
+        holder.setLayout(new FillLayout());
         scroll.setContent(holder);
     }
 

@@ -64,6 +64,8 @@ public class SearchView extends ViewPart
                 SearchParameters input =
                     new SearchParameters(getSourceId(), getAlgorithmId(), null);
                 input.putAttribute(AttributeNames.QUERY, queryText.getText());
+                input.putAllAttributes(attributesPages.get(getSourceId())
+                    .getAttributeValues());
                 page.openEditor(input, ResultsEditor.ID);
             }
 

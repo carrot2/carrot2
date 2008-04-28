@@ -68,6 +68,10 @@
             </constraint>
          </constraints>
       </typeEditor>
+      <typeEditor
+            attributeClass="org.carrot2.util.resource.Resource"
+            class="org.carrot2.workbench.editors.ResourceEditor">
+      </typeEditor>
    </extension>
 
 </plugin>
