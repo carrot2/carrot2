@@ -2,6 +2,7 @@ package org.carrot2.workbench.editors;
 
 import org.carrot2.util.attribute.AttributeDescriptor;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IPersistableEditor;
 
 /**
  * Attribute editor is a control, that is used to edit and display value of given
@@ -16,7 +17,7 @@ import org.eclipse.swt.widgets.Composite;
  * <li>call editor.dispose()
  * <ol>
  */
-public interface IAttributeEditor
+public interface IAttributeEditor extends IPersistableEditor
 {
 
     void init(AttributeDescriptor descriptor);
@@ -31,9 +32,9 @@ public interface IAttributeEditor
 
     void dispose();
 
-    public void addAttributeChangeListener(AttributeChangeListener listener);
+    void addAttributeChangeListener(AttributeChangeListener listener);
 
-    public void removeAttributeChangeListener(AttributeChangeListener listener);
+    void removeAttributeChangeListener(AttributeChangeListener listener);
 
     /**
      * If false, than surrounding view must display label for given attribute on it's own.
@@ -41,6 +42,6 @@ public interface IAttributeEditor
      * 
      * @return
      */
-    public boolean containsLabel();
+    boolean containsLabel();
 
 }

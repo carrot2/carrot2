@@ -12,12 +12,14 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
+import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IPersistableEditor;
 import org.eclipse.ui.part.Page;
 
 /**
  * 
  */
-public class AttributesPage extends Page
+public class AttributesPage extends Page implements IPersistableEditor
 {
 
     private BindableDescriptor descriptor;
@@ -127,6 +129,27 @@ public class AttributesPage extends Page
             editor.dispose();
         }
         super.dispose();
+    }
+
+    public void restoreState(IMemento memento)
+    {
+        for (IAttributeEditor editor : editors)
+        {
+            IMemento editorMemento = memento.getChild(editor.getAttributeKey());
+            if (editorMemento != null)
+            {
+                editor.restoreState(editorMemento);
+            }
+        }
+    }
+
+    public void saveState(IMemento memento)
+    {
+        for (IAttributeEditor editor : editors)
+        {
+            IMemento editorMemento = memento.createChild(editor.getAttributeKey());
+            editor.saveState(editorMemento);
+        }
     }
 
     /**

@@ -2,7 +2,6 @@ package org.carrot2.util.resource;
 
 import java.io.*;
 
-
 /**
  * A local filesystem resource.
  */
@@ -23,7 +22,8 @@ public final class FileResource implements Resource
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return info;
     }
 
@@ -34,7 +34,8 @@ public final class FileResource implements Resource
         {
             return true;
         }
-        if (obj instanceof FileResource) {
+        if (obj instanceof FileResource)
+        {
             return ((FileResource) obj).file.equals(this.file);
         }
         return false;
@@ -44,5 +45,11 @@ public final class FileResource implements Resource
     public int hashCode()
     {
         return this.file.hashCode();
+    }
+
+    public static FileResource valueOf(String string)
+    {
+        String path = string.substring("[file: ".length(), string.length() - 1);
+        return new FileResource(new File(path));
     }
 }

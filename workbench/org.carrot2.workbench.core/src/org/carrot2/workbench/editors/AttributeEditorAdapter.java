@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.carrot2.util.attribute.AttributeDescriptor;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IMemento;
 
 public abstract class AttributeEditorAdapter implements IAttributeEditor
 {
@@ -36,6 +37,14 @@ public abstract class AttributeEditorAdapter implements IAttributeEditor
     }
 
     public void setValue(Object currentValue)
+    {
+    }
+
+    public void saveState(IMemento memento)
+    {
+    }
+
+    public void restoreState(IMemento memento)
     {
     }
 

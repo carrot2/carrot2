@@ -139,12 +139,24 @@ public class FindVersionTask
         {
             throw new BuildException(includes + " not found!");
         }
-        if (result.length > 1)
+        if (result.length == 1)
         {
-            throw new BuildException("More than one resource matching " + includes
-                + " found!");
+            project.setProperty(property, new File(result[0]).getName());
         }
-        project.setProperty(property, new File(result[0]).getName());
+        else
+        {
+            //after update plugins can be duplicated - choose newest one than
+            File newest = new File(result[0]);
+            for (int i = 1; i < result.length; i++)
+            {
+                File file = new File(result[i]);
+                if (file.lastModified() > newest.lastModified())
+                {
+                    newest = file;
+                }
+            }
+            project.setProperty(property, new File(result[0]).getName());
+        }
     }
 
     private void checkAttributesCorrectness()
