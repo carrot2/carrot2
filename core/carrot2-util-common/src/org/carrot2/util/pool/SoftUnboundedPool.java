@@ -63,6 +63,9 @@ public final class SoftUnboundedPool<T, P>
      * @param clazz class of object to be borrowed
      * @param parameter additional parameter passed to all listeners when managing the
      *            life cycle of the pooled object. The parameter can be <code>null</code>.
+     *            Exactly the same value of the parameter must be passed to
+     *            {@link #returnObject(Object, Object)}. Otherwise, different instances
+     *            of the same class will get mixed up within the pool.
      */
     @SuppressWarnings("unchecked")
     public <I extends T> I borrowObject(Class<I> clazz, P parameter)
@@ -119,6 +122,12 @@ public final class SoftUnboundedPool<T, P>
 
     /**
      * Returns an object to the pool.
+     * 
+     * @param object object to return
+     * @param parameter parameter provided when borrowing the object. If the parameter was
+     *            not <code>null</code> when borrowing the object, the same value must
+     *            be passed here. Otherwise, different instances of the same class will
+     *            get mixed up within the pool.
      */
     @SuppressWarnings("unchecked")
     public void returnObject(T object, P parameter)

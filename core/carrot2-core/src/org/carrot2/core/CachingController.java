@@ -108,7 +108,14 @@ public final class CachingController implements Controller
     }
 
     /**
-     *
+     * An additional method to initialize this component, which enables processing with
+     * differently configured instances of the same {@link ProcessingComponent} class.
+     * Processing with components initialized in this method can be peformed using
+     * {@link #process(Map, String...)}.
+     * 
+     * @param globalInitAttributes see {@link Controller#init(Map)}
+     * @param componentConfigurations component configurations to be used. Identifiers of
+     *            the provided components must be unique.
      */
     public void init(Map<String, Object> globalInitAttributes,
         ComponentConfiguration... componentConfigurations)
@@ -125,10 +132,14 @@ public final class CachingController implements Controller
                 .newHashMap(globalInitAttributes);
             mergedAttributes.putAll(componentConfiguration.initAttributes);
 
-            componentSpecificInitAttributes.put(
+            if (componentSpecificInitAttributes.put(
                 new Pair<Class<? extends ProcessingComponent>, String>(
                     componentConfiguration.componentClass,
-                    componentConfiguration.componentId), mergedAttributes);
+                    componentConfiguration.componentId), mergedAttributes) != null)
+            {
+                throw new ComponentInitializationException("Duplicate component id: "
+                    + componentConfiguration.componentId);
+            }
 
             idToComponentClass.put(componentConfiguration.componentId,
                 componentConfiguration.componentClass);
@@ -175,8 +186,13 @@ public final class CachingController implements Controller
             IdentityProcessingComponentClassResolver.INSTANCE, processingComponentClasses);
     }
 
-    /*
-     *
+    /**
+     * An additional method for performing processing using configurations provided in 
+     * {@link #init(Map, ComponentConfiguration...)}.
+     * 
+     * @param attributes see {@link Controller#process(Map, Class...)}
+     * @param processingComponentIds identifiers of components to be involved in
+     *            processing, in the order they should be arranged in the pipeline.
      */
     public ProcessingResult process(Map<String, Object> attributes,
         String... processingComponentIds) throws ProcessingException
@@ -185,6 +201,10 @@ public final class CachingController implements Controller
             processingComponentIds);
     }
 
+    /**
+     * Internal implementation if processing. We need it to have all the logic (borrowing,
+     * returning components etc.) at one place.
+     */
     private <T> ProcessingResult processInternal(Map<String, Object> attributes,
         ProcessingComponentClassResolver<T> resolver, T... componentIds)
     {
@@ -282,11 +302,18 @@ public final class CachingController implements Controller
         cacheManager.shutdown();
     }
 
+    /**
+     * Resolves {@link ProcessingComponent} classes based on the provided componentId.
+     */
     private static interface ProcessingComponentClassResolver<T>
     {
         Pair<Class<? extends ProcessingComponent>, String> resolve(T componentId);
     }
 
+    /**
+     * Resolves {@link ProcessingComponent} classes from component ids being the classes
+     * themselves.
+     */
     private static class IdentityProcessingComponentClassResolver implements
         ProcessingComponentClassResolver<Class<?>>
     {
@@ -301,6 +328,10 @@ public final class CachingController implements Controller
         }
     }
 
+    /**
+     * Resolves {@link ProcessingComponent} classes from the component ids, based on the
+     * provided id-class mapping.
+     */
     private static class FromIdProcessingComponentClassResolver implements
         ProcessingComponentClassResolver<String>
     {
@@ -656,12 +687,34 @@ public final class CachingController implements Controller
 
     private final static ComponentConfiguration [] EMPTY_COMPONENT_CONFIGURATION_ARRAY = new ComponentConfiguration [0];
 
+    /**
+     * Represents a specific configuration of a {@link ProcessingComponent}.
+     */
     public static class ComponentConfiguration
     {
+        /**
+         * The specific {@link ProcessingComponent} class.
+         */
         public final Class<? extends ProcessingComponent> componentClass;
+
+        /**
+         * Identifier of the component.
+         */
         public final String componentId;
+
+        /**
+         * Initialization attributes for this component configuration.
+         */
         public final Map<String, Object> initAttributes;
 
+        /**
+         * Creates a new component configuration.
+         * 
+         * @param componentClass the specific {@link ProcessingComponent} class.
+         * @param componentId identifier of the component.
+         * @param initAttributes initialization attributes for this component
+         *            configuration.
+         */
         public ComponentConfiguration(
             Class<? extends ProcessingComponent> componentClass, String componentId,
             Map<String, Object> initAttributes)

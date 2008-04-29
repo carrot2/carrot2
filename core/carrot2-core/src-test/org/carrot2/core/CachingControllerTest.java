@@ -494,6 +494,7 @@ public class CachingControllerTest extends ControllerTestBase
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testComponentConfigurationDefaultInitAttributes()
     {
         final CachingController controller = new CachingController();
@@ -511,6 +512,7 @@ public class CachingControllerTest extends ControllerTestBase
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testComponentConfigurationDifferentIntiAttributes()
     {
         final CachingController controller = new CachingController();
@@ -530,9 +532,28 @@ public class CachingControllerTest extends ControllerTestBase
 
         ProcessingResult result1 = controller.process(attributes, "conf1");
         assertThat(result1.getAttributes()).contains(entry("result", "v1v1"));
-        
-        ProcessingResult result2 = controller.process(attributes, "conf2");
-        assertThat(result1.getAttributes()).contains(entry("result", "v2v2"));
 
+        ProcessingResult result2 = controller.process(attributes, "conf2");
+        assertThat(result2.getAttributes()).contains(entry("result", "v2v2"));
+
+    }
+
+    @Test(expected = ComponentInitializationException.class)
+    @SuppressWarnings("unchecked")
+    public void testComponentConfigurationDuplicateComponentId()
+    {
+        final CachingController controller = new CachingController();
+
+        final Map<String, Object> globalInitAttributes = Maps.newHashMap();
+        final Map<String, Object> conf1Attributes = Maps.immutableMap("init",
+            (Object) "v1");
+        final Map<String, Object> conf2Attributes = Maps.immutableMap("init",
+            (Object) "v2");
+
+        controller.init(globalInitAttributes,
+            new CachingController.ComponentConfiguration(
+                ComponentWithInitParameter.class, "conf1", conf1Attributes),
+            new CachingController.ComponentConfiguration(
+                ComponentWithInitParameter.class, "conf1", conf2Attributes));
     }
 }
