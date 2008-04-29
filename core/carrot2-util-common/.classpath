@@ -9,5 +9,7 @@
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.apache.log4j"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/net.sf.ehcache"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.apache.lucene"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.easymock"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.fest"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>
