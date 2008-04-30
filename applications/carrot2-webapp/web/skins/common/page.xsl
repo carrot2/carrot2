@@ -12,9 +12,12 @@
   
   <xsl:variable name="search-url" select="/page/config/@search-url" />
   <xsl:variable name="query-param" select="/page/config/@query-param" />
+  <xsl:variable name="source-param" select="/page/config/@source-param" />
   
-  <xsl:variable name="documents-url" select="concat($context-path, '/', $search-url, '?', $query-param, '=', /page/request/@query, '&amp;type=DOCUMENTS')" />
-  <xsl:variable name="clusters-url" select="concat($context-path, '/', $search-url, '?', $query-param, '=', /page/request/@query, '&amp;type=CLUSTERS')" />
+  <xsl:variable name="search-url-base" select="/page/@search-url-base" />
+  
+  <xsl:variable name="documents-url" select="concat($search-url-base, '&amp;type=DOCUMENTS')" />
+  <xsl:variable name="clusters-url" select="concat($search-url-base, '&amp;type=CLUSTERS')" />
 
   <!-- HTML scaffolding -->
   <xsl:template match="/">
@@ -65,7 +68,7 @@
   <!-- Body tag id -->
   <xsl:template name="page-body-id">
     <xsl:choose>
-      <xsl:when test="/page/request/@query">results</xsl:when>
+      <xsl:when test="string-length(/page/request/@query) > 0">results</xsl:when>
       <xsl:otherwise>startup</xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -97,11 +100,12 @@
             <h3 class="hide">Type your query:</h3>
 
             <input type="text" name="{$query-param}" id="query" value="{/page/request/@query}" />
+            <input type="hidden" name="{$source-param}" id="source" value="{/page/request/@source}" />
             <input type="submit" value="Search" id="search" />
           </form>
         </div>
 
-        <xsl:if test="/page/request/@query">
+        <xsl:if test="string-length(/page/request/@query) > 0">
           <xsl:apply-templates select="/page" mode="results" />
         </xsl:if>
       </div>
@@ -141,7 +145,7 @@
   <xsl:template match="source">
     <xsl:variable name="request-source" select="/page/request/@source" />
     
-    <li class="tab">
+    <li class="tab" id="{@id}">
       <xsl:choose>
         <xsl:when test="@id = $request-source">
           <xsl:attribute name="class">tab active</xsl:attribute>

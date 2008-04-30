@@ -1,5 +1,6 @@
 package org.carrot2.util.attribute;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.*;
 
 import java.lang.reflect.Field;
@@ -7,6 +8,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.carrot2.util.attribute.constraint.*;
+import org.fest.assertions.MapAssert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -604,16 +606,14 @@ public class AttributeBinderTest
     public void testOnlyBindingDirectionAnnotationProvided()
         throws InstantiationException
     {
-        final OnlyBindingDirectionAnnotationProvided instance =
-            new OnlyBindingDirectionAnnotationProvided();
+        final OnlyBindingDirectionAnnotationProvided instance = new OnlyBindingDirectionAnnotationProvided();
         AttributeBinder.bind(instance, attributes, Input.class, TestInit.class);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testOnlyBindingTimeAnnotationProvided() throws InstantiationException
     {
-        final OnlyBindingTimeAnnotationProvided instance =
-            new OnlyBindingTimeAnnotationProvided();
+        final OnlyBindingTimeAnnotationProvided instance = new OnlyBindingTimeAnnotationProvided();
         AttributeBinder.bind(instance, attributes, Input.class, TestInit.class);
     }
 
@@ -621,8 +621,7 @@ public class AttributeBinderTest
     public void testAttributeAnnotationWithoutBindingDirection()
         throws InstantiationException
     {
-        final AttributeAnnotationWithoutBindingDirection instance =
-            new AttributeAnnotationWithoutBindingDirection();
+        final AttributeAnnotationWithoutBindingDirection instance = new AttributeAnnotationWithoutBindingDirection();
         AttributeBinder.bind(instance, attributes, Input.class, TestInit.class);
     }
 
@@ -747,8 +746,7 @@ public class AttributeBinderTest
     public void testInputReferenceAttributeWithoutConstraint()
         throws AttributeBindingException, InstantiationException
     {
-        final InputReferenceContainerWithNoConstraint instance =
-            new InputReferenceContainerWithNoConstraint();
+        final InputReferenceContainerWithNoConstraint instance = new InputReferenceContainerWithNoConstraint();
 
         AttributeBinder.bind(instance, attributes, Input.class);
     }
@@ -757,8 +755,7 @@ public class AttributeBinderTest
     public void testOutputReferenceAttributeWithoutConstraint()
         throws AttributeBindingException, InstantiationException
     {
-        final OutputReferenceContainerWithNoConstraint instance =
-            new OutputReferenceContainerWithNoConstraint();
+        final OutputReferenceContainerWithNoConstraint instance = new OutputReferenceContainerWithNoConstraint();
 
         AttributeBinder.bind(instance, attributes, Output.class);
     }
@@ -788,8 +785,7 @@ public class AttributeBinderTest
         final LinkedHashSet<String> linkedHashSet = new LinkedHashSet<String>();
         addAttribute(CollectionInputAttributes.class, "linkedHashSet", linkedHashSet);
         addAttribute(CollectionInputAttributes.class, "map", Collections.emptyMap());
-        final ConcurrentHashMap<String, String> concurrentHashMap =
-            new ConcurrentHashMap<String, String>();
+        final ConcurrentHashMap<String, String> concurrentHashMap = new ConcurrentHashMap<String, String>();
         addAttribute(CollectionInputAttributes.class, "concurrentHashMap",
             concurrentHashMap);
         AttributeBinder.bind(instance, attributes, Input.class);
@@ -799,6 +795,28 @@ public class AttributeBinderTest
             Collections.emptySet(), "linkedHashSet", linkedHashSet, "map",
             Collections.emptyMap(), "concurrentHashMap", concurrentHashMap
         });
+    }
+
+    @Test
+    public void testRemainingAttributes() throws InstantiationException
+    {
+        SingleClass instance;
+
+        addAttribute(SingleClass.class, "initInput", 6);
+        addAttribute(SingleClass.class, "processingInput", 6);
+        attributes.put("remaining", 20);
+
+        instance = new SingleClass();
+        Map<String, Object> remaining = AttributeBinder.bind(instance, attributes,
+            Input.class, TestInit.class);
+        checkFieldValues(instance, new Object []
+        {
+            "initInput", 6, "processingInput", 5, "initOutput", 10, "processingOutput",
+            10
+        });
+
+        assertThat(remaining).hasSize(2).contains(MapAssert.entry("remaining", 20),
+            MapAssert.entry(getKey(SingleClass.class, "processingInput"), 6));
     }
 
     private void addAttribute(Class<?> clazz, String field, Object value)

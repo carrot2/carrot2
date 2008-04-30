@@ -3,14 +3,11 @@ package org.carrot2.util.attribute;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import org.simpleframework.xml.Root;
-
 import com.google.common.collect.Maps;
 
 /**
  * A helper class for serializing/ deserializing collection of objects using Simple XML.
  */
-@Root(name = "value")
 public class TypeStringValuePair
 {
     /** Type of the value to be serialized. */

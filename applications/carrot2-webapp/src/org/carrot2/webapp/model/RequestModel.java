@@ -1,10 +1,12 @@
 package org.carrot2.webapp.model;
 
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.attribute.*;
 import org.carrot2.webapp.attribute.Request;
+import org.simpleframework.xml.ElementMap;
 
 /**
  * Represents the data the application received in the HTTP request.
@@ -14,14 +16,14 @@ public class RequestModel
 {
     @Request
     @Input
-    @Attribute(key = "skin")
+    @Attribute(key = WebappConfig.SKIN_PARAM)
     public String skin = "fancy-large";
 
     @Request
     @Input
     @Attribute(key = AttributeNames.QUERY)
     @org.simpleframework.xml.Attribute(required = false)
-    public String query;
+    public String query = "";
 
     /**
      * Note that this is the number of results user requested, the actual number may be
@@ -37,20 +39,23 @@ public class RequestModel
     @Input
     @Attribute(key = WebappConfig.SOURCE_PARAM)
     @org.simpleframework.xml.Attribute
-    public String source = "yahoo";
+    public String source = WebappConfig.INSTANCE.components.sources.get(0).id;
 
     @Request
     @Input
     @Attribute(key = WebappConfig.ALGORITHM_PARAM)
     @org.simpleframework.xml.Attribute
-    public String algorithm = "stc";
+    public String algorithm = WebappConfig.INSTANCE.components.algorithms.get(0).id;
 
     @Request
     @Input
     @Attribute(key = WebappConfig.TYPE_PARAM)
     public RequestType type;
 
-    public void afterParametersBound()
+    @ElementMap(name = "parameters", entry = "parameter", key = "name", inline = true, attribute = true, required = false)
+    public Map<String, Object> otherParameters;
+
+    public void afterParametersBound(Map<String, Object> remainingHttpParameters)
     {
         if (type == null)
         {
@@ -64,5 +69,7 @@ public class RequestModel
                 type = RequestType.PAGE;
             }
         }
+
+        otherParameters = remainingHttpParameters;
     }
 }

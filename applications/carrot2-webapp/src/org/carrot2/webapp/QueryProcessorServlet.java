@@ -7,10 +7,8 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.carrot2.clustering.synthetic.ByUrlClusteringAlgorithm;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.source.yahoo.YahooDocumentSource;
 import org.carrot2.util.attribute.AttributeBinder;
 import org.carrot2.util.attribute.Input;
 import org.carrot2.webapp.attribute.Request;
@@ -45,7 +43,26 @@ public class QueryProcessorServlet extends javax.servlet.http.HttpServlet implem
         super.init(config);
 
         controller = new CachingController(DocumentSource.class);
-        controller.init(new HashMap<String, Object>());
+
+        final List<DocumentSourceModel> sources = WebappConfig.INSTANCE.components.sources;
+        final List<ProcessingComponentModel> algorithms = WebappConfig.INSTANCE.components.algorithms;
+        CachingController.ComponentConfiguration[] configurations = new CachingController.ComponentConfiguration [sources
+            .size()
+            + algorithms.size()];
+        int configurationIndex = 0;
+        for (DocumentSourceModel source : sources)
+        {
+            configurations[configurationIndex++] = new CachingController.ComponentConfiguration(
+                source.componentClass, source.id, source.initAttributes);
+        }
+
+        for (ProcessingComponentModel algorithm : algorithms)
+        {
+            configurations[configurationIndex++] = new CachingController.ComponentConfiguration(
+                algorithm.componentClass, algorithm.id, algorithm.initAttributes);
+        }
+
+        controller.init(new HashMap<String, Object>(), configurations);
 
         jawrUrlGenerator = new JawrUrlGenerator(config.getServletContext());
     }
@@ -62,14 +79,15 @@ public class QueryProcessorServlet extends javax.servlet.http.HttpServlet implem
         {
             // Build model for this request
             final RequestModel requestModel = new RequestModel();
+            final AttributeBinder.AttributeBinderActionBind attributeBinderActionBind = new AttributeBinder.AttributeBinderActionBind(
+                Input.class, requestParameters, true,
+                AttributeBinder.AttributeTransformerFromString.INSTANCE);
             AttributeBinder.bind(requestModel,
                 new AttributeBinder.AttributeBinderAction []
                 {
-                    new AttributeBinder.AttributeBinderActionBind(Input.class,
-                        requestParameters, true,
-                        AttributeBinder.AttributeTransformerFromString.INSTANCE)
+                    attributeBinderActionBind
                 }, Input.class, Request.class);
-            requestModel.afterParametersBound();
+            requestModel.afterParametersBound(attributeBinderActionBind.remainingValues);
 
             // Add some values in case there was no query parameters -- we want to use the
             // web application defaults and not component defaults.
@@ -83,12 +101,12 @@ public class QueryProcessorServlet extends javax.servlet.http.HttpServlet implem
                     || RequestType.FULL.equals(requestModel.type))
                 {
                     processingResult = controller.process(requestParameters,
-                        YahooDocumentSource.class, ByUrlClusteringAlgorithm.class);
+                        requestModel.source, requestModel.algorithm);
                 }
                 else if (RequestType.DOCUMENTS.equals(requestModel.type))
                 {
                     processingResult = controller.process(requestParameters,
-                        YahooDocumentSource.class);
+                        requestModel.source);
                 }
             }
 

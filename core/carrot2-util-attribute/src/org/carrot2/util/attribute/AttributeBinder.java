@@ -10,6 +10,7 @@ import org.apache.commons.lang.ClassUtils;
 import org.carrot2.util.attribute.constraint.*;
 import org.carrot2.util.resource.Resource;
 
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 /**
@@ -75,6 +76,8 @@ public class AttributeBinder
      *            attribute fields must have in order to be bound. This parameter can be
      *            used to selectively bind different set of attributes depending, e.g. on
      *            the life cycle of the <code>object</code>.
+     * @return entries from the <code>values</code> map that did not get bound to any of
+     *         the {@link Input} attributes.
      * @throws InstantiationException if coercion of a class attribute value to an
      *             instance fails, e.g. because the parameterless constructor is not
      *             present/ visible.
@@ -92,37 +95,48 @@ public class AttributeBinder
      * @throws UnsupportedOperationException if an attempt is made to bind values of
      *             attributes with circular references.
      */
-    public static <T> void bind(T object, Map<String, Object> values,
+    public static <T> Map<String, Object> bind(T object, Map<String, Object> values,
         Class<? extends Annotation> bindingDirectionAnnotation,
         Class<? extends Annotation>... filteringAnnotations)
         throws InstantiationException, AttributeBindingException
     {
-        AttributeBinderAction [] actions = new AttributeBinderAction []
+        final AttributeBinderActionBind attributeBinderActionBind = new AttributeBinderActionBind(
+            Input.class, values, true);
+        final AttributeBinderAction [] actions = new AttributeBinderAction []
         {
-            new AttributeBinderActionBind(Input.class, values, true),
+            attributeBinderActionBind,
             new AttributeBinderActionCollect(Output.class, values),
         };
 
         bind(object, actions, bindingDirectionAnnotation, filteringAnnotations);
+
+        return attributeBinderActionBind.remainingValues;
     }
 
     /**
      * A complementary version of the {@link #bind(Object, Map, Class, Class...)} method.
      * This method <strong>collects</strong> values of {@link Input} attributes and
      * <strong>sets</strong> values of {@link Output} attributes.
+     * 
+     * @return entries from the <code>values</code> map that did not get bound to any of
+     *         the {@link Output} attributes.
      */
-    public static <T> void unbind(T object, Map<String, Object> values,
+    public static <T> Map<String, Object> unbind(T object, Map<String, Object> values,
         Class<? extends Annotation> bindingDirectionAnnotation,
         Class<? extends Annotation>... filteringAnnotations)
         throws InstantiationException, AttributeBindingException
     {
-        AttributeBinderAction [] actions = new AttributeBinderAction []
+        final AttributeBinderActionBind attributeBinderActionBind = new AttributeBinderActionBind(
+            Output.class, values, true);
+        final AttributeBinderAction [] actions = new AttributeBinderAction []
         {
             new AttributeBinderActionCollect(Input.class, values),
-            new AttributeBinderActionBind(Output.class, values, true),
+            attributeBinderActionBind,
         };
 
         bind(object, actions, bindingDirectionAnnotation, filteringAnnotations);
+
+        return attributeBinderActionBind.remainingValues;
     }
 
     /**
@@ -319,10 +333,11 @@ public class AttributeBinder
      */
     public static class AttributeBinderActionBind implements AttributeBinderAction
     {
-        final private Map<String, Object> values;
-        final private Class<?> bindingDirectionAnnotation;
-        final boolean checkRequired;
-        final AttributeTransformer [] transformers;
+        private final Map<String, Object> values;
+        public final Map<String, Object> remainingValues;
+        private final Class<?> bindingDirectionAnnotation;
+        private final boolean checkRequired;
+        private final AttributeTransformer [] transformers;
 
         public AttributeBinderActionBind(Class<?> bindingDirectionAnnotation,
             Map<String, Object> values, boolean checkRequired,
@@ -332,6 +347,7 @@ public class AttributeBinder
             this.bindingDirectionAnnotation = bindingDirectionAnnotation;
             this.checkRequired = checkRequired;
             this.transformers = transformers;
+            this.remainingValues = Maps.newHashMap(values);
         }
 
         public <T> void performAction(T object, String key, Field field, Object value,
@@ -433,6 +449,8 @@ public class AttributeBinder
                         + object.getClass().getName() + "#" + field.getName()
                         + " with value " + value, e);
                 }
+
+                remainingValues.remove(key);
             }
         }
     }

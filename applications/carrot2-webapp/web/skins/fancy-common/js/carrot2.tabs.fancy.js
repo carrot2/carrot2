@@ -13,11 +13,11 @@
 
     // Bind listener for copying tab description
     $tabContainer.bind("tabsChanged", $.tabs.updateTabs);
-    $tabContainer.find("a.label").bind("tabActivated", copyTabInfo);
+    $tabContainer.find("li.tab").bind("tabActivated", copyTabInfo);
   };
 
   copyTabInfo = function(e) {
-    var $siblings = $(e.target).siblings();
+    var $siblings = $(e.target).find("a.label").siblings();
     $("#tab-info").html($siblings.find("span.tab-info").clone().removeClass("hide"));
     $("#example-queries").html($siblings.find("span.example-queries").clone().removeClass("hide"));
   }

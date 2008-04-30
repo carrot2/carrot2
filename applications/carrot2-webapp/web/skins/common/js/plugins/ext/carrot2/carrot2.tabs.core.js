@@ -4,7 +4,7 @@
     sourceTabs();
     
     $("body").bind("carrot2.loaded", function() {
-      $("#source-tabs .active a.label").trigger("tabActivated");
+      $("#source-tabs li.active").trigger("tabActivated");
     });
   });
 
@@ -34,7 +34,9 @@
     $tabContainer.find("li.tab").removeClass("active")
     $(e.target).parents("li.tab").addClass("active").removeClass("passive");
     $tabContainer.trigger("tabsChanged");
-    $(e.target).trigger("tabActivated");
+    $tabLi = $(e.target).parents("li").eq(0);
+    $tabLi.trigger("tabActivated");
+    $("#source").val($tabLi.attr("id"));
   };
 
   /**
