@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         id="microsoft"
+         point="org.carrot2.core.source">
+      <source
+            class="org.carrot2.source.microsoft.MicrosoftLiveDocumentSource"
+            icon="icons/live.png"
+            label="Microsoft Live! Search Engine">
+      </source>
+   </extension>
+
+</plugin>
