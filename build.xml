@@ -8,7 +8,9 @@
     <property name="javadoc.dir" location="tmp/javadoc" />
     <property name="tests.report.dir" location="tmp/test-report" />
     <property name="coverage.report.dir" location="tmp/coverage-report" />
+    <property name="duplication.report.dir" location="tmp/duplication-report" />
     <property name="clover.jar" location="${clover.home}/lib/clover.jar"/>
+    <property name="pmd.jar" location="${pmd.home}/lib/"/>
 
     <path id="src.folders">
         <dirset dir="core" includes="**/src" />
@@ -156,10 +158,32 @@
         <attributes-xml-copy java.source="workbench/org.carrot2.workbench.editors/src" output.dir="workbench/org.carrot2.workbench.editors/tmp/eclipse" copy.to="workbench/org.carrot2.workbench.editors/META-INF" />
     </target>
 
+    <path id="pmd.classpath">
+        <fileset dir="${pmd.home}/lib" includes="*.jar" />    
+    </path>
+
+    <target name="pmd.tasks" if="pmd.home">
+        <taskdef name="cpd" classname="net.sourceforge.pmd.cpd.CPDTask" classpathref="pmd.classpath" />
+    </target>
+
+    <target name="duplicates" depends="pmd.tasks">
+        <mkdir dir="${duplication.report.dir}" />
+        <cpd minimumTokenCount="100" outputFile="${duplication.report.dir}/duplication.xml" format="xml" encoding="UTF-8">
+            <fileset dir=".">
+                <include name="core/**/*.java"/>
+                <exclude name="core/carrot2-source-microsoft/src/com/microsoft/msnsearch/**" />
+                <exclude name="core/carrot2-algorithm-stc/src/org/tartarus/snowball/**" />
+                <include name="applications/**/*.java"/>
+                <include name="workbench/**/*.java"/>
+            </fileset>
+        </cpd>
+        <xslt in="${duplication.report.dir}/duplication.xml" style="etc/cpd/cpd2html.xsl" out="${duplication.report.dir}/duplication.html" />
+    </target>
+
+
     <target name="clover.tasks" if="clover.home">
         <taskdef resource="cloverlib.xml" classpath="${clover.jar}"/>
     </target>
-
 
     <target name="with.clover" depends="clover.tasks" if="clover.home">
         <clover-setup>
