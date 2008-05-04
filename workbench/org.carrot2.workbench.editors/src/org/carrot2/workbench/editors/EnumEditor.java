@@ -30,7 +30,7 @@ public class EnumEditor extends AttributeEditorAdapter implements IAttributeEdit
             @Override
             public String getText(Object element)
             {
-                return ((Enum<?>) element).name();
+                return ((Enum<?>) element).toString();
             }
         });
         viewer.setInput(constants);
