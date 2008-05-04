@@ -2,6 +2,7 @@ package org.carrot2.workbench.core.ui;
 
 import java.io.StringWriter;
 import java.net.URL;
+import java.util.Locale;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.velocity.Template;
@@ -9,6 +10,7 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.carrot2.core.Cluster;
 import org.carrot2.core.ProcessingResult;
+import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.workbench.core.CorePlugin;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.core.jobs.ProcessingJob;
@@ -116,8 +118,8 @@ public class DocumentListBrowser implements IProcessingResultPart
                     clear();
                     return;
                 }
-                IStructuredSelection selection =
-                    (IStructuredSelection) event.getSelection();
+                IStructuredSelection selection = (IStructuredSelection) event
+                    .getSelection();
                 if (selection.size() > 1)
                 {
                     clear();
@@ -140,8 +142,7 @@ public class DocumentListBrowser implements IProcessingResultPart
             {
                 if (event.getResult().getSeverity() == IStatus.OK)
                 {
-                    final ProcessingResult result =
-                        ((ProcessingStatus) event.getResult()).result;
+                    final ProcessingResult result = ((ProcessingStatus) event.getResult()).result;
                     Utils.asyncExec(new Runnable()
                     {
                         public void run()
@@ -158,6 +159,14 @@ public class DocumentListBrowser implements IProcessingResultPart
     {
         VelocityContext context = new VelocityContext();
         context.put("result", result);
+
+        if (result.getAttributes().get(AttributeNames.RESULTS_TOTAL) != null)
+        {
+            final long total = (Long) result.getAttributes().get(
+                AttributeNames.RESULTS_TOTAL);
+            context.put("results-total-formatted", String.format(Locale.ENGLISH, "%1$,d",
+                total));
+        }
 
         final String query = (String) result.getAttributes().get("query");
         context.put("queryEscaped", StringEscapeUtils.escapeHtml(query));

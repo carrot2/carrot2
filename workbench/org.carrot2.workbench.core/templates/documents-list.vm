@@ -31,8 +31,13 @@
 #if ($result)
 	#set ( $totalProcessingSec = ${result.Attributes.processing-time-total} / 1000.0 )
 	<div class="status">
- 		${result.Documents.size()} documents and ${result.Clusters.size()} clusters 
- 		fetched in ${totalProcessingSec} sec.
+ 		${result.Documents.size()} 
+ 		#if ($results-total-formatted)
+ 			out of ${results-total-formatted}
+ 		#end
+ 		documents
+ 		| ${result.Clusters.size()} clusters 
+ 		| ${totalProcessingSec} sec.
 	</div>
 	#set( $documents = $result.Documents )
 #end
