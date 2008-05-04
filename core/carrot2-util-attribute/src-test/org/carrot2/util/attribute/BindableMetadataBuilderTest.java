@@ -17,7 +17,7 @@ import org.junitext.runners.AnnotationRunner;
 public class BindableMetadataBuilderTest
 {
     private static final String SOURCE_PATH_PROPERTY = "source.paths";
-    private static final String COMMON_ATTRIBUTE_NAMES_SOURCE_PATH_PROPERTY = "common.attribte.names.source.path";
+    private static final String COMMON_ATTRIBUTE_NAMES_SOURCE_PATH_PROPERTY = "common.attribute.names.source.path";
     protected static Map<String, BindableMetadata> bindableMetadata;
 
     /**
