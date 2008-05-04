@@ -2,7 +2,7 @@ package org.carrot2.text.linguistic;
 
 import java.util.HashMap;
 
-import org.carrot2.core.attribute.Processing;
+import org.carrot2.core.attribute.*;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.resource.*;
 
@@ -23,7 +23,7 @@ public final class LanguageModelFactory
     @Required
     @Processing
     @Input
-    @Attribute
+    @Attribute(key = AttributeNames.ACTIVE_LANGUAGE)
     public LanguageCode current = LanguageCode.ENGLISH;
 
     /**
