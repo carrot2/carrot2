@@ -166,7 +166,7 @@
         <taskdef name="cpd" classname="net.sourceforge.pmd.cpd.CPDTask" classpathref="pmd.classpath" />
     </target>
 
-    <target name="duplicates" depends="pmd.tasks">
+    <target name="duplication" depends="pmd.tasks">
         <mkdir dir="${duplication.report.dir}" />
         <cpd minimumTokenCount="100" outputFile="${duplication.report.dir}/duplication.xml" format="xml" encoding="UTF-8">
             <fileset dir=".">

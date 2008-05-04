@@ -14,6 +14,9 @@
 
         <!-- build coverage report -->
         <ant dir="${carrot2.code.dir}" antfile="build.xml" target="coverage" inheritall="true" />
+
+        <!-- code duplication report -->
+        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="duplication" inheritall="true" />
     </target>
 
     <target name="workbench" description="Perform a full build of the workbench">
