@@ -40,7 +40,10 @@ public abstract class ControllerTestBase
         @Init
         @Input
         @Attribute(key = "delegate1")
-        @ImplementingClasses(classes = {ProcessingComponent.class}, strict = false)
+        @ImplementingClasses(classes =
+        {
+            ProcessingComponent.class
+        }, strict = false)
         protected ProcessingComponent delegate1;
 
         @Override
@@ -57,7 +60,10 @@ public abstract class ControllerTestBase
         @Init
         @Input
         @Attribute(key = "delegate2")
-        @ImplementingClasses(classes = {ProcessingComponent.class}, strict = false)
+        @ImplementingClasses(classes =
+        {
+            ProcessingComponent.class
+        }, strict = false)
         protected ProcessingComponent delegate2;
 
         @Override
@@ -73,7 +79,10 @@ public abstract class ControllerTestBase
         @Init
         @Input
         @Attribute(key = "delegate3")
-        @ImplementingClasses(classes = {ProcessingComponent.class}, strict = false)
+        @ImplementingClasses(classes =
+        {
+            ProcessingComponent.class
+        }, strict = false)
         protected ProcessingComponent delegate3;
 
         @Override
@@ -317,20 +326,7 @@ public abstract class ControllerTestBase
         performProcessingAndDispose(ProcessingComponent1.class,
             ProcessingComponent2.class, ProcessingComponent3.class);
 
-        assertThat(
-            ((Long) (attributes.get(AttributeNames.PROCESSING_TIME_TOTAL))).longValue())
-            .isLessThan((long) (totalTime * (1 + tolerance))).isGreaterThan(
-                (long) (totalTime * (1 - tolerance)));
-
-        assertThat(
-            ((Long) (attributes.get(AttributeNames.PROCESSING_TIME_SOURCE))).longValue())
-            .isLessThan((long) (c1Time * (1 + tolerance))).isGreaterThan(
-                (long) (c1Time * (1 - tolerance)));
-
-        assertThat(
-            ((Long) (attributes.get(AttributeNames.PROCESSING_TIME_ALGORITHM)))
-                .longValue()).isLessThan((long) (c2Time * (1 + tolerance)))
-            .isGreaterThan((long) (c2Time * (1 - tolerance)));
+        checkTimes(c1Time, c2Time, totalTime, tolerance);
         mocksControl.verify();
     }
 
@@ -379,22 +375,28 @@ public abstract class ControllerTestBase
         }
         finally
         {
-            assertThat(
-                ((Long) (attributes.get(AttributeNames.PROCESSING_TIME_TOTAL)))
-                    .longValue()).isLessThan((long) (totalTime * (1 + tolerance)))
-                .isGreaterThan((long) (totalTime * (1 - tolerance)));
-
-            assertThat(
-                ((Long) (attributes.get(AttributeNames.PROCESSING_TIME_SOURCE)))
-                    .longValue()).isLessThan((long) (c1Time * (1 + tolerance)))
-                .isGreaterThan((long) (c1Time * (1 - tolerance)));
-
-            assertThat(
-                ((Long) (attributes.get(AttributeNames.PROCESSING_TIME_ALGORITHM)))
-                    .longValue()).isLessThan((long) (c2Time * (1 + tolerance)))
-                .isGreaterThan((long) (c2Time * (1 - tolerance)));
+            checkTimes(c1Time, c2Time, totalTime, tolerance);
             mocksControl.verify();
         }
+    }
+
+    private void checkTimes(final long c1Time, final long c2Time, final long totalTime,
+        final double tolerance)
+    {
+        assertThat(
+            ((Long) (attributes.get(AttributeNames.PROCESSING_TIME_TOTAL))).longValue())
+            .isLessThan((long) (totalTime * (1 + tolerance))).isGreaterThan(
+                (long) (totalTime * (1 - tolerance)));
+
+        assertThat(
+            ((Long) (attributes.get(AttributeNames.PROCESSING_TIME_SOURCE))).longValue())
+            .isLessThan((long) (c1Time * (1 + tolerance))).isGreaterThan(
+                (long) (c1Time * (1 - tolerance)));
+
+        assertThat(
+            ((Long) (attributes.get(AttributeNames.PROCESSING_TIME_ALGORITHM)))
+                .longValue()).isLessThan((long) (c2Time * (1 + tolerance)))
+            .isGreaterThan((long) (c2Time * (1 - tolerance)));
     }
 
     protected void performProcessing(Class<?>... classes)
