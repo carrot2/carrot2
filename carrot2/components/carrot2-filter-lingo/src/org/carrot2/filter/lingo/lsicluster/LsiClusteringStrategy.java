@@ -663,12 +663,6 @@ public class LsiClusteringStrategy implements ClusteringStrategy {
         other.addLabel("(Other)");
         other.setScore(0.00001);
 
-        for (int s = 0; s < snippets.length; s++) {
-            if (!assigned[s]) {
-                other.addSnippet(snippets[s], snippetMaxScores[s]);
-            }
-        }
-
         // Create "Singletons" group
         List singletons = new ArrayList();
 
@@ -686,8 +680,24 @@ public class LsiClusteringStrategy implements ClusteringStrategy {
             Cluster singleton = (Cluster) it.next();
             other.addCluster(singleton);
         }
+        
+        Cluster reallyOther = other;
+        if (!singletons.isEmpty())
+        {
+            reallyOther = new Cluster();
+            reallyOther.setOtherTopics(true);
+            reallyOther.setScore(0.000001);
+            reallyOther.addLabel("(Unassigned)");
+            other.addCluster(reallyOther);
+        }
+        
+        for (int s = 0; s < snippets.length; s++) {
+            if (!assigned[s]) {
+                reallyOther.addSnippet(snippets[s], snippetMaxScores[s]);
+            }
+        }
 
-        if (other.getSnippets().length > 0) {
+        if (other.getSnippets().length > 0 || !singletons.isEmpty()) {
             finalClusters.add(other);
         }
 
