@@ -21,6 +21,7 @@
         <include name="**/*.java" />
         <exclude name="**/carrot2-examples/**/*.java" if="external.api.tests.disabled" />
         <exclude name="**/carrot2-source-yahoo/**/*.java" if="external.api.tests.disabled" />
+        <exclude name="**/carrot2-source-microsoft/**/*.java" if="external.api.tests.disabled" />
         <exclude name="**/carrot2-algorithm-stc/src/org/tartarus/snowball/**/*.java" />
     </fileset>
 
