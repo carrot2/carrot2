@@ -46,12 +46,15 @@ abstract class YahooSearchService
 
     /** */
     public enum QueryType {
-        ALL    { @Override
-        public String toString() { return "all"; } },
-        ANY    { @Override
-        public String toString() { return "any"; } },
-        PHRASE { @Override
-        public String toString() { return "phrase"; } },
+        ALL,
+        ANY,
+        PHRASE;
+        
+        @Override
+        public String toString()
+        {
+            return this.name().toLowerCase();
+        }
     }
 
     /**
