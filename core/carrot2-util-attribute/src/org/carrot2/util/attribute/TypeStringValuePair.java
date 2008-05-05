@@ -38,17 +38,31 @@ public class TypeStringValuePair
         Map<String, TypeStringValuePair> result = Maps.newLinkedHashMap();
         for (final Map.Entry<String, Object> entry : source.entrySet())
         {
-            if (entry.getValue() != null)
+            /*
+             * There are two a few special cases handled here. First, Simple XML library
+             * does not handle null entries. Second, enums need to be handled separately
+             * since their toString() method can (and should) be overriden to implement
+             * more human-friendly strings.
+             */
+
+            if (entry.getValue() == null)
             {
-                result.put(entry.getKey(), new TypeStringValuePair(entry.getValue()
-                    .getClass(), entry.getValue().toString()));
-            }
-            else
-            {
-                // Simple XML doesnt seem to be able to handle null entries,
-                // so we need to do some hacking here
+                // Simple XML hack.
                 result.put(entry.getKey(), new TypeStringValuePair(Object.class, null));
+                continue;
             }
+
+            if (entry.getValue() instanceof Enum)
+            {
+                // Enum handling.
+                result.put(entry.getKey(), new TypeStringValuePair(entry.getValue()
+                    .getClass(), ((Enum<?>) entry.getValue()).name()));
+                continue;
+            }
+
+            // All the remaining types.
+            result.put(entry.getKey(), new TypeStringValuePair(entry.getValue()
+                .getClass(), entry.getValue().toString()));
         }
 
         return result;

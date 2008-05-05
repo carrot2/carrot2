@@ -99,6 +99,28 @@ public class AttributeValueSetsTest
         checkSerializationDeserialization(sets);
     }
 
+    static enum CustomEnum {
+        ABC, DEF;
+    
+        public String toString() {
+            return this.name().toLowerCase();
+        }
+    }
+
+    @Test
+    public void testSerializationDeserializationEnumValues() throws Exception
+    {
+        final AttributeValueSets sets = new AttributeValueSets();
+
+        final AttributeValueSet set1 = new AttributeValueSet("Set 1", "Description 1",
+            null);
+        set1.setAttributeValue("att1", CustomEnum.ABC);
+
+        sets.addAttributeValueSet("set1", set1);
+
+        checkSerializationDeserialization(sets);
+    }
+
     static class CustomClass
     {
         String value1;
