@@ -22,22 +22,18 @@ public final class YahooNewsSearchService extends YahooSearchService
     /** */
     public enum SortType
     {
-        RANK
+        RANK, DATE;
+        
+        @Override
+        public String toString()
         {
-            @Override
-            public String toString()
+            switch (this)
             {
-                return "rank";
+                case RANK: return "rank";
+                case DATE: return "date";
+                default: throw new RuntimeException("Unknown constant: " + this.name());
             }
-        },
-        DATE
-        {
-            @Override
-            public String toString()
-            {
-                return "date";
-            }
-        },
+        }
     }
 
     /**
