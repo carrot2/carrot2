@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Carrot2 Google Source
+Bundle-SymbolicName: org.carrot2.source.google;singleton:=true
+Bundle-Version: 1.0.0
+Export-Package: org.carrot2.source.google;uses:="org.carrot2.core.test"
+Require-Bundle: org.carrot2.core,
+ org.carrot2.util.common,
+ org.apache.log4j,
+ json.org
+Bundle-ClassPath: META-INF/,
+ .

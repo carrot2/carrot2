@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component-metadata>
+  <title>A DocumentSource} fetching {@link Documents (search results) from Microsoft Live!</title>
+  <attributes class="java.util.LinkedHashMap">
+    <attribute field-name="key">
+      <attribute-metadata>
+        <title>Google-assigned application key for querying the API</title>
+      </attribute-metadata>
+    </attribute>
+    <attribute field-name="referer">
+      <attribute-metadata>
+        <title>Your site&apos;s URI for doing Google API searches</title>
+      </attribute-metadata>
+    </attribute>
+    <attribute field-name="version">
+      <attribute-metadata>
+        <title>API version to use</title>
+      </attribute-metadata>
+    </attribute>
+    <attribute field-name="start">
+      <attribute-metadata>
+        <title>Index (zero-based) of the first document/ search result to fetch</title>
+        <label>Start Index</label>
+        <level>MEDIUM</level>
+      </attribute-metadata>
+    </attribute>
+    <attribute field-name="results">
+      <attribute-metadata>
+        <title>Number of documents/ search results to fetch</title>
+        <label>Results</label>
+        <level>BASIC</level>
+      </attribute-metadata>
+    </attribute>
+    <attribute field-name="query">
+      <attribute-metadata>
+        <title>Query to be executed by the search engine/ document retrieval system</title>
+        <label>Query</label>
+        <level>BASIC</level>
+      </attribute-metadata>
+    </attribute>
+    <attribute field-name="resultsTotal">
+      <attribute-metadata>
+        <title>Estimated total number of matching documents</title>
+        <label>Total Results</label>
+      </attribute-metadata>
+    </attribute>
+    <attribute field-name="documents">
+      <attribute-metadata>
+        <title>Documents returned by the search engine/ document retrieval system</title>
+        <label>Documents</label>
+      </attribute-metadata>
+    </attribute>
+    <attribute field-name="compressionUsed">
+      <attribute-metadata/>
+    </attribute>
+    <attribute field-name="resultsPerPage">
+      <attribute-metadata>
+        <title>Maximum number of results returned per page</title>
+        <label>Results Per Page</label>
+        <level>ADVANCED</level>
+      </attribute-metadata>
+    </attribute>
+    <attribute field-name="maxResultIndex">
+      <attribute-metadata>
+        <title>Maximum index of reachable result</title>
+        <label>Maximum Result Index</label>
+        <level>ADVANCED</level>
+      </attribute-metadata>
+    </attribute>
+  </attributes>
+</component-metadata>
