@@ -14,4 +14,4 @@ Export-Package: org.simpleframework.xml,
  org.simpleframework.xml.util
 Require-Bundle: org.eclipse.core.runtime,
  com.bea.xml
-Import-Package: org.carrot2.util.resource
+Eclipse-BuddyPolicy: dependent

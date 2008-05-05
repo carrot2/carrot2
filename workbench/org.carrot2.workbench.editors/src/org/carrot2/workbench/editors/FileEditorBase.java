@@ -103,7 +103,6 @@ public abstract class FileEditorBase extends AttributeEditorAdapter
         dialogButton.addListener(SWT.Selection, new SelectionListener());
     }
 
-    //TODO: add subclass with method doEvent :/
     protected void doEvent()
     {
         AttributeChangeEvent event = new AttributeChangeEvent(this);

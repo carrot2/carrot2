@@ -31,7 +31,6 @@ public class SearchParametersFactory implements IElementFactory
             return null;
         }
         SearchParameters search = new SearchParameters(source, algorithm, null);
-        // TODO: add remembering of all required attributes in the same way - M2 probably
         try
         {
             IMemento attMemento = memento.getChild("attributes");
