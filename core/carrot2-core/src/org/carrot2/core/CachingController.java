@@ -132,17 +132,17 @@ public final class CachingController implements Controller
                 .newHashMap(globalInitAttributes);
             mergedAttributes.putAll(componentConfiguration.initAttributes);
 
-            if (componentSpecificInitAttributes.put(
+            componentSpecificInitAttributes.put(
                 new Pair<Class<? extends ProcessingComponent>, String>(
                     componentConfiguration.componentClass,
-                    componentConfiguration.componentId), mergedAttributes) != null)
+                    componentConfiguration.componentId), mergedAttributes);
+
+            if (idToComponentClass.put(componentConfiguration.componentId,
+                componentConfiguration.componentClass) != null)
             {
                 throw new ComponentInitializationException("Duplicate component id: "
                     + componentConfiguration.componentId);
             }
-
-            idToComponentClass.put(componentConfiguration.componentId,
-                componentConfiguration.componentClass);
         }
         processingComponentClassResolver = new FromIdProcessingComponentClassResolver(
             idToComponentClass);
@@ -187,7 +187,7 @@ public final class CachingController implements Controller
     }
 
     /**
-     * An additional method for performing processing using configurations provided in 
+     * An additional method for performing processing using configurations provided in
      * {@link #init(Map, ComponentConfiguration...)}.
      * 
      * @param attributes see {@link Controller#process(Map, Class...)}

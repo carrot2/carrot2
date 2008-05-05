@@ -1,10 +1,11 @@
 package org.carrot2.util.attribute;
 
-import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.*;
 import static org.fest.assertions.Assertions.assertThat;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -62,7 +63,57 @@ public class AttributeValueSetsTest
     }
 
     @Test
-    public void testSerializationDeserializationEmpty() throws Exception
+    public void testGetDefaultWithNoDefaultProvided()
+    {
+        final AttributeValueSets sets = new AttributeValueSets();
+
+        final AttributeValueSet set1 = new AttributeValueSet(null, null, null);
+        final AttributeValueSet set2 = new AttributeValueSet(null, null, set1);
+        final AttributeValueSet set3 = new AttributeValueSet(null, null, set2);
+
+        sets.addAttributeValueSet("set1", set1);
+        sets.addAttributeValueSet("set2", set2);
+        sets.addAttributeValueSet("set3", set3);
+
+        sets.setDefaultAttributeValueSetId(null);
+
+        assertSame(sets.getDefaultAttributeValueSet(), set1);
+    }
+
+    @Test
+    public void testGetDefaultWithDefaultProvided()
+    {
+        final AttributeValueSets sets = new AttributeValueSets();
+
+        final AttributeValueSet set1 = new AttributeValueSet(null, null, null);
+        final AttributeValueSet set2 = new AttributeValueSet(null, null, set1);
+        final AttributeValueSet set3 = new AttributeValueSet(null, null, set2);
+
+        sets.addAttributeValueSet("set1", set1);
+        sets.addAttributeValueSet("set2", set2);
+        sets.addAttributeValueSet("set3", set3);
+
+        sets.setDefaultAttributeValueSetId("set3");
+
+        assertSame(sets.getAttributeValueSet("set5", true), set3);
+    }
+
+    @Test
+    public void testGetDefaultWithEmptyAttributeValueSets()
+    {
+        final AttributeValueSets sets = new AttributeValueSets();
+        assertNull(sets.getDefaultAttributeValueSet());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testIllegalSetDefaultAttributeValueSetId()
+    {
+        final AttributeValueSets sets = new AttributeValueSets();
+        sets.setDefaultAttributeValueSetId("set1");
+    }
+
+    @Test
+    public void testSerializationDeserializationOfEmpty() throws Exception
     {
         final AttributeValueSets sets = new AttributeValueSets();
 
@@ -70,7 +121,7 @@ public class AttributeValueSetsTest
     }
 
     @Test
-    public void testSerializationDeserializationNoValues() throws Exception
+    public void testSerializationDeserializationWithNoValues() throws Exception
     {
         final AttributeValueSets sets = new AttributeValueSets();
 
@@ -83,7 +134,7 @@ public class AttributeValueSetsTest
     }
 
     @Test
-    public void testSerializationDeserializationPrimitiveValues() throws Exception
+    public void testSerializationDeserializationOfPrimitiveValues() throws Exception
     {
         final AttributeValueSets sets = new AttributeValueSets();
 
@@ -99,7 +150,7 @@ public class AttributeValueSetsTest
         checkSerializationDeserialization(sets);
     }
 
-    static enum CustomEnum {
+    public static enum CustomEnum {
         ABC, DEF;
     
         public String toString() {
@@ -121,7 +172,7 @@ public class AttributeValueSetsTest
         checkSerializationDeserialization(sets);
     }
 
-    static class CustomClass
+    public static class CustomClass
     {
         String value1;
         String value2;
@@ -166,7 +217,7 @@ public class AttributeValueSetsTest
     }
 
     @Test
-    public void testSerializationDeserializationCustomClass() throws Exception
+    public void testSerializationDeserializationOfCustomClass() throws Exception
     {
         final AttributeValueSets sets = new AttributeValueSets();
 
@@ -180,7 +231,7 @@ public class AttributeValueSetsTest
     }
 
     @Test
-    public void testSerializationDeserializationNullValue() throws Exception
+    public void testSerializationDeserializationOfNullValue() throws Exception
     {
         final AttributeValueSets sets = new AttributeValueSets();
 
@@ -194,7 +245,7 @@ public class AttributeValueSetsTest
     }
 
     @Test
-    public void testSerializationDeserializationBaseReferences() throws Exception
+    public void testSerializationDeserializationOfBaseReferences() throws Exception
     {
         final AttributeValueSets sets = new AttributeValueSets();
 
@@ -212,6 +263,39 @@ public class AttributeValueSetsTest
         checkSerializationDeserialization(sets);
     }
 
+    @Test
+    public void testSerializationDeserializationOfDefaultAttributeValueSetId()
+        throws Exception
+    {
+        final AttributeValueSets sets = new AttributeValueSets();
+
+        final AttributeValueSet set1 = new AttributeValueSet("Set 1", null, null);
+        final AttributeValueSet set2 = new AttributeValueSet("Set 2", null, set1);
+        final AttributeValueSet set3 = new AttributeValueSet("Set 3", null, set2);
+
+        sets.addAttributeValueSet("set1", set1);
+        sets.addAttributeValueSet("set2", set2);
+        sets.addAttributeValueSet("set3", set3);
+
+        sets.setDefaultAttributeValueSetId("set3");
+
+        checkSerializationDeserialization(sets);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testSerializationDeserializationOfIllegalDefaultAttributeValueSetId()
+        throws Exception
+    {
+        final AttributeValueSets sets = new AttributeValueSets();
+        final AttributeValueSet set1 = new AttributeValueSet("Set 1", null, null);
+        sets.addAttributeValueSet("set1", set1);
+
+        Field field = AttributeValueSets.class
+            .getDeclaredField("defaultAttributeValueSetId");
+        field.set(sets, "set3");
+        checkSerializationDeserialization(sets);
+    }
+
     private void checkSerializationDeserialization(AttributeValueSets sets)
         throws Exception
     {
@@ -221,19 +305,35 @@ public class AttributeValueSetsTest
         final AttributeValueSets deserialized = AttributeValueSets
             .deserialize(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
 
+        assertEquals(sets.defaultAttributeValueSetId,
+            deserialized.defaultAttributeValueSetId);
+
+        // The default attribute value set must exist
+        if (deserialized.defaultAttributeValueSetId != null)
+        {
+            assertTrue(deserialized.attributeValueSets
+                .containsKey(deserialized.defaultAttributeValueSetId));
+        }
+
         for (final Map.Entry<String, AttributeValueSet> entry : sets.attributeValueSets
             .entrySet())
         {
             final AttributeValueSet attributeValueSet = entry.getValue();
             assertEqualsAttributeValueSet(attributeValueSet, deserialized
                 .getAttributeValueSet(entry.getKey()));
+        }
+
+        for (final Map.Entry<String, AttributeValueSet> entry : deserialized.attributeValueSets
+            .entrySet())
+        {
+            final AttributeValueSet attributeValueSet = entry.getValue();
 
             // The base attribute value set must be in the sets (this way we'll
             // know the references have been properly deserialized)
             if (attributeValueSet.baseAttributeValueSet != null)
             {
-                deserialized.attributeValueSets
-                    .containsValue(attributeValueSet.baseAttributeValueSet);
+                assertTrue(deserialized.attributeValueSets
+                    .containsValue(attributeValueSet.baseAttributeValueSet));
             }
         }
     }

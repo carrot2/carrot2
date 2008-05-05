@@ -5,6 +5,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.attribute.*;
+import org.carrot2.util.simplexml.TypeStringValuePair;
 import org.carrot2.webapp.attribute.Request;
 import org.simpleframework.xml.ElementMap;
 
@@ -39,21 +40,24 @@ public class RequestModel
     @Input
     @Attribute(key = WebappConfig.SOURCE_PARAM)
     @org.simpleframework.xml.Attribute
-    public String source = WebappConfig.INSTANCE.components.sources.get(0).id;
+    public String source = WebappConfig.INSTANCE.components.getSources().get(0).getId();
 
     @Request
     @Input
     @Attribute(key = WebappConfig.ALGORITHM_PARAM)
     @org.simpleframework.xml.Attribute
-    public String algorithm = WebappConfig.INSTANCE.components.algorithms.get(0).id;
+    public String algorithm = WebappConfig.INSTANCE.components.getAlgorithms().get(0).getId();
 
     @Request
     @Input
     @Attribute(key = WebappConfig.TYPE_PARAM)
     public RequestType type;
 
-    @ElementMap(name = "parameters", entry = "parameter", key = "name", inline = true, attribute = true, required = false)
     public Map<String, Object> otherParameters;
+
+    @SuppressWarnings("unused")
+    @ElementMap(name = "parameters", entry = "parameter", key = "name", value="value", inline = true, attribute = true, required = false)
+    private Map<String, TypeStringValuePair> otherParametersToSerialize;
 
     public void afterParametersBound(Map<String, Object> remainingHttpParameters)
     {
@@ -71,5 +75,7 @@ public class RequestModel
         }
 
         otherParameters = remainingHttpParameters;
+        otherParametersToSerialize = TypeStringValuePair
+            .toTypeStringValuePairs(remainingHttpParameters);
     }
 }

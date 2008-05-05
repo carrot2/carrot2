@@ -1,0 +1,44 @@
+<component-suite>
+  <sources>
+    <source component-class="org.carrot2.source.yahoo.YahooDocumentSource" id="yahoo-web" mnemonic="y">
+      <label>Yahoo!</label>
+      <title>Yahoo Web Search</title>
+      <description>Carrot2 clustering engine will search the web with Yahoo and organize the results into thematic categories</description>
+      <example-queries>
+        <example-query>data mining</example-query>
+        <example-query>london</example-query>
+        <example-query>clustering</example-query>
+      </example-queries>
+    </source>
+    <source component-class="org.carrot2.source.yahoo.YahooDocumentSource" id="yahoo-news" mnemonic="n">
+      <label>News</label>
+      <title>Yahoo News Search</title>
+      <description>Carrot2 clustering engine will search Yahoo News and organize the results into thematic categories</description>
+      <example-queries>
+        <example-query>iphone</example-query>
+        <example-query>olympics</example-query>
+        <example-query>election</example-query>
+      </example-queries>
+    </source>
+    <source component-class="org.carrot2.source.microsoft.MicrosoftLiveDocumentSource" id="msn-web" mnemonic="m">
+      <label>MSN</label>
+      <title>MSN Live Search</title>
+      <description>Carrot2 clustering engine will search MSN Live and organize the results into thematic categories</description>
+      <example-queries>
+        <example-query>data mining</example-query>
+        <example-query>lucene</example-query>
+        <example-query>java</example-query>
+      </example-queries>
+    </source>
+  </sources>
+  <algorithms>
+    <algorithm component-class="org.carrot2.clustering.stc.STCClusteringAlgorithm" id="stc">
+      <label>STC</label>
+      <title>Suffix Tree Clustering</title>
+    </algorithm>
+    <algorithm component-class="org.carrot2.clustering.synthetic.ByUrlClusteringAlgorithm" id="url">
+      <label>By URL</label>
+      <title>By URL Clustering</title>
+    </algorithm>
+  </algorithms>
+</component-suite>

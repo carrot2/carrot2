@@ -12,7 +12,7 @@ import org.carrot2.core.*;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.*;
-import org.carrot2.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.carrot2.util.attribute.*;
 
 import com.microsoft.msnsearch.*;

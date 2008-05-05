@@ -1,4 +1,4 @@
-package org.carrot2.util.attribute;
+package org.carrot2.util.simplexml;
 
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -39,7 +39,7 @@ public class TypeStringValuePair
         for (final Map.Entry<String, Object> entry : source.entrySet())
         {
             /*
-             * There are two a few special cases handled here. First, Simple XML library
+             * There are two special cases handled here. First, Simple XML library
              * does not handle null entries. Second, enums need to be handled separately
              * since their toString() method can (and should) be overriden to implement
              * more human-friendly strings.

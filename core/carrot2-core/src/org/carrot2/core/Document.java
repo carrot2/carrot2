@@ -2,7 +2,7 @@ package org.carrot2.core;
 
 import java.util.*;
 
-import org.carrot2.util.attribute.TypeStringValuePair;
+import org.carrot2.util.simplexml.TypeStringValuePair;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.load.Commit;
 import org.simpleframework.xml.load.Persist;

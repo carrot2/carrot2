@@ -11,14 +11,13 @@ import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.attribute.AttributeBinder;
 import org.carrot2.util.attribute.Input;
+import org.carrot2.util.simplexml.NoClassAttributePersistenceStrategy;
 import org.carrot2.webapp.attribute.Request;
 import org.carrot2.webapp.jawr.JawrUrlGenerator;
 import org.carrot2.webapp.model.*;
 import org.carrot2.webapp.util.RequestParameterUtils;
-import org.simpleframework.xml.graph.CycleStrategy;
 import org.simpleframework.xml.load.Persister;
 import org.simpleframework.xml.stream.Format;
-import org.simpleframework.xml.stream.NodeMap;
 
 /**
  * 
@@ -44,22 +43,25 @@ public class QueryProcessorServlet extends javax.servlet.http.HttpServlet implem
 
         controller = new CachingController(DocumentSource.class);
 
-        final List<DocumentSourceModel> sources = WebappConfig.INSTANCE.components.sources;
-        final List<ProcessingComponentModel> algorithms = WebappConfig.INSTANCE.components.algorithms;
+        final List<DocumentSourceDescriptor> sources = WebappConfig.INSTANCE.components
+            .getSources();
+        final List<ProcessingComponentDescriptor> algorithms = WebappConfig.INSTANCE.components
+            .getAlgorithms();
         CachingController.ComponentConfiguration[] configurations = new CachingController.ComponentConfiguration [sources
             .size()
             + algorithms.size()];
         int configurationIndex = 0;
-        for (DocumentSourceModel source : sources)
+        for (DocumentSourceDescriptor source : sources)
         {
             configurations[configurationIndex++] = new CachingController.ComponentConfiguration(
-                source.componentClass, source.id, source.initAttributes);
+                source.getComponentClass(), source.getId(), source.getAttributes());
         }
 
-        for (ProcessingComponentModel algorithm : algorithms)
+        for (ProcessingComponentDescriptor algorithm : algorithms)
         {
             configurations[configurationIndex++] = new CachingController.ComponentConfiguration(
-                algorithm.componentClass, algorithm.id, algorithm.initAttributes);
+                algorithm.getComponentClass(), algorithm.getId(), algorithm
+                    .getAttributes());
         }
 
         controller.init(new HashMap<String, Object>(), configurations);
@@ -133,34 +135,5 @@ public class QueryProcessorServlet extends javax.servlet.http.HttpServlet implem
                 + WebappConfig
                     .getContextRelativeSkinStylesheet(pageModel.requestModel.skin)
                 + "\" ?>");
-    }
-
-    /**
-     * SimpleXML persister strategy that suppresses writing class attributes. We use
-     * SimpleXML only to output XML, so we don't need information on entity classes.
-     */
-    private final static class NoClassAttributePersistenceStrategy extends CycleStrategy
-    {
-        private static final String SIMPLE_XML_ENTITY_ID = "sid";
-        private static final String SIMPLE_XML_ENTITY_REF_ID = "sidref";
-
-        public static final NoClassAttributePersistenceStrategy INSTANCE = new NoClassAttributePersistenceStrategy(
-            SIMPLE_XML_ENTITY_ID, SIMPLE_XML_ENTITY_REF_ID);
-
-        private NoClassAttributePersistenceStrategy(String mark, String refer)
-        {
-            super(mark, refer);
-        }
-
-        @Override
-        @SuppressWarnings("unchecked")
-        public boolean setElement(Class field, Object value, NodeMap node, Map map)
-        {
-            boolean result = super.setElement(field, value, node, map);
-            node.remove(SIMPLE_XML_ENTITY_ID);
-            node.remove(SIMPLE_XML_ENTITY_REF_ID);
-            node.remove("class");
-            return result;
-        }
     }
 }

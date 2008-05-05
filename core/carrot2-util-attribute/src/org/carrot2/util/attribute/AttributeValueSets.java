@@ -2,8 +2,7 @@ package org.carrot2.util.attribute;
 
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.simpleframework.xml.ElementMap;
 import org.simpleframework.xml.Root;
@@ -21,6 +20,9 @@ public class AttributeValueSets
 {
     @ElementMap(name = "attribute-sets", entry = "attribute-set", key = "id", inline = true, attribute = true, required = false)
     Map<String, AttributeValueSet> attributeValueSets;
+
+    @org.simpleframework.xml.Attribute(name = "default", required = false)
+    String defaultAttributeValueSetId;
 
     /**
      * Creates an empty collection of attribute value sets.
@@ -79,6 +81,31 @@ public class AttributeValueSets
     }
 
     /**
+     * Returns the identifier of the default {@link AttributeValueSet} within this
+     * {@link AttributeValueSets}. The default identifier can be <code>null</code>.
+     */
+    public String getDefaultAttributeValueSetId()
+    {
+        return defaultAttributeValueSetId;
+    }
+
+    /**
+     * Sets the default attribute value set id for this {@link AttributeValueSets}. An
+     * {@link AttributeValueSet} with this id must exist in this
+     * {@link AttributeValueSets}.
+     */
+    public void setDefaultAttributeValueSetId(String defaultAttributeValueSetId)
+    {
+        if (defaultAttributeValueSetId != null
+            && !attributeValueSets.containsKey(defaultAttributeValueSetId))
+        {
+            throw new IllegalArgumentException("Attribute value set with id: "
+                + defaultAttributeValueSetId + " does not exist.");
+        }
+        this.defaultAttributeValueSetId = defaultAttributeValueSetId;
+    }
+
+    /**
      * Returns the {@link AttributeValueSet} corresponding to the provided <code>id</code>
      * or <code>null</code> if no {@link AttributeValueSet} corresponds to the
      * <code>id</code>.
@@ -89,7 +116,60 @@ public class AttributeValueSets
      */
     public AttributeValueSet getAttributeValueSet(String id)
     {
-        return attributeValueSets.get(id);
+        return getAttributeValueSet(id, false);
+    }
+
+    /**
+     * Returns the {@link AttributeValueSet} corresponding to the provided <code>id</code>
+     * or the default {@link AttributeValueSet} (possibly <code>null</code>) if no
+     * {@link AttributeValueSet} corresponds to the <code>id</code>.
+     * 
+     * @param id identifier of the {@link AttributeValueSet} to return
+     * @param useDefault if <code>true</code>, the default {@link AttributeValueSet}
+     *            will be returned if the {@link AttributeValueSet} with the provided id
+     *            does not exist.
+     * @return the {@link AttributeValueSet} corresponding to the provided <code>id</code>
+     *         or the default {@link AttributeValueSet} (possibly <code>null</code>) if
+     *         no {@link AttributeValueSet} corresponds to the <code>id</code>.
+     */
+    public AttributeValueSet getAttributeValueSet(String id, boolean useDefault)
+    {
+        if (attributeValueSets.containsKey(id))
+        {
+            return attributeValueSets.get(id);
+        }
+        else
+        {
+            return (useDefault ? getDefaultAttributeValueSet() : null);
+        }
+    }
+
+    /**
+     * Returns the default {@link AttributeValueSet} of this {@link AttributeValueSets} or
+     * the first available {@link AttributeValueSet} if
+     * {@link #getDefaultAttributeValueSetId()} is <code>null</code>. If this
+     * {@link AttributeValueSets} is empty, <code>null</code> will be returned.
+     */
+    public AttributeValueSet getDefaultAttributeValueSet()
+    {
+        AttributeValueSet result = null;
+        if (defaultAttributeValueSetId != null)
+        {
+            result = getAttributeValueSet(defaultAttributeValueSetId);
+        }
+
+        // Try the first attribute set
+        if (result == null)
+        {
+            final Iterator<AttributeValueSet> iterator = attributeValueSets.values()
+                .iterator();
+            if (iterator.hasNext())
+            {
+                result = iterator.next();
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -97,8 +177,10 @@ public class AttributeValueSets
      * from this collection. If any other {@link AttributeValueSet}s in this collection
      * are based on the set being removed, the associations are corrected accordingly,
      * i.e. sets based on the set being removed become based on the set the removed set is
-     * based on. If no {@link AttributeValueSet} corresponds to the provided
-     * <code>id</code>, no action is taken.
+     * based on. Also, if the removed {@link AttributeValueSet} was the default,
+     * <code>null</code> will be set as this {@link AttributeValueSets}' default
+     * {@link AttributeValueSet}. If no {@link AttributeValueSet} corresponds to the
+     * provided <code>id</code>, no action is taken.
      * 
      * @param id identifier of the {@link AttributeValueSet} to be removed
      */
@@ -117,6 +199,11 @@ public class AttributeValueSets
         for (final AttributeValueSet set : attributeValueSets.values())
         {
             set.baseAttributeValueSet = newBaseAttributeValueSet;
+        }
+
+        if (id.equals(defaultAttributeValueSetId))
+        {
+            defaultAttributeValueSetId = null;
         }
     }
 
@@ -207,6 +294,17 @@ public class AttributeValueSets
     public static AttributeValueSets deserialize(InputStream inputStream)
         throws Exception
     {
-        return new Persister().read(AttributeValueSets.class, inputStream);
+        final AttributeValueSets attributeValueSet = new Persister().read(
+            AttributeValueSets.class, inputStream);
+
+        if (attributeValueSet.defaultAttributeValueSetId != null
+            && !attributeValueSet.attributeValueSets
+                .containsKey(attributeValueSet.defaultAttributeValueSetId))
+        {
+            throw new RuntimeException("Default attribute value set not found: "
+                + attributeValueSet.defaultAttributeValueSetId);
+        }
+
+        return attributeValueSet;
     }
 }

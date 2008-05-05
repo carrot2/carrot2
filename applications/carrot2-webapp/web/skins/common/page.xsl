@@ -155,17 +155,17 @@
         </xsl:otherwise>
       </xsl:choose>
 
-      <a class="label {@id}" href="#" title="{@title}"><xsl:apply-templates select="@label" /></a>
+      <a class="label {@id}" href="#" title="{title}"><xsl:apply-templates select="label" /></a>
       <span class="hide">
-        <span class="tab-info"><xsl:value-of select="@description" /></span><br />
+        <span class="tab-info"><xsl:value-of select="description" /></span><br />
         <span class="example-queries">Example queries: 
-          <xsl:apply-templates select="examples/example" />
+          <xsl:apply-templates select="example-queries/example-query" />
         </span>
       </span>
     </li>
   </xsl:template>
 
-  <xsl:template match="source/examples/example">
+  <xsl:template match="source/example-queries/example-query">
     <a href="#"><xsl:apply-templates /></a>
   </xsl:template>
 

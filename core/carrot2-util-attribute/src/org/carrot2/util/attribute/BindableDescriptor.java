@@ -65,7 +65,7 @@ public class BindableDescriptor
         NONE
     }
 
-    final GroupingMethod groupedBy;
+    public final GroupingMethod groupedBy;
 
     /**
      * Descriptors without any group assignment. Keys in the map correspond to attribute
@@ -185,7 +185,6 @@ public class BindableDescriptor
      *            matched.
      * @return a new {@link BindableDescriptor} with the descriptors filtered.
      */
-    @SuppressWarnings("unchecked")
     public BindableDescriptor only(final Class<? extends Annotation>... annotationClasses)
     {
         if (annotationClasses.length == 0)

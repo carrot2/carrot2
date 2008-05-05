@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="src-test"/>
+	<classpathentry kind="src" path="suites"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-algorithm-stc"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-algorithm-synthetic"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-core"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-source-xml"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-source-yahoo"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.google.collections"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.fest"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.junit4-ext"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-common"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-source-microsoft"/>
+	<classpathentry kind="output" path="tmp/eclipse"/>
+</classpath>

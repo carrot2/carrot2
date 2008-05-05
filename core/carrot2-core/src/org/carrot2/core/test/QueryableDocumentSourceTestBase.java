@@ -30,7 +30,7 @@ public abstract class QueryableDocumentSourceTestBase<T extends DocumentSource> 
     @Prerequisite(requires = "externalApiTestsEnabled")
     public void testResultsTotal() throws Exception
     {
-        runQuery("apache", 50);
+        runQuery("apache", 250);
 
         assertNotNull(processingAttributes.get(AttributeNames.RESULTS_TOTAL));
         assertTrue((Long) processingAttributes.get(AttributeNames.RESULTS_TOTAL) > 0);

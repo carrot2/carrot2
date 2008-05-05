@@ -80,6 +80,10 @@
    * Installs cluster segmentation (showing in groups of e.g. 10 clusters).
    */
   function segmentation() {
+    if ($.cookie(COOKIE_ALWAYS_SHOW_ALL_CLUSTERS)) {
+      return;
+    }
+    
     $("#clusters").segment(10);
   };
  
@@ -107,11 +111,12 @@
     $showAll.one("click", function() {
       $("#clusters li:not(.more)").show();
       $("#clusters li.more").hide();
-      $alwaysShowAll = $("<a href='#'>Always show all clusters</a>").hide();
-      $("#clusters").append($alwaysShowAll.wrap("<span id='always-show-all'></span>"));
-      $alwaysShowAll.fadeIn(500).one("click", function() {
+      $alwaysShowAll = $("<span id='always-show-all'><a href='#'>Always show all clusters</a></span>");
+      $("#clusters").append($alwaysShowAll);
+      $alwaysShowAll.find("a").fadeIn(500).one("click", function() {
         $.cookie(COOKIE_ALWAYS_SHOW_ALL_CLUSTERS, "t");
         $(this).after(" (saved)");
+        $(this).parent().fadeOut(5000);
       });
     });
 

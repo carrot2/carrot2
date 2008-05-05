@@ -13,7 +13,7 @@ import org.junit.Assert;
 import com.google.common.base.Function;
 
 /**
- * Simple baseline tests that apply to most (?) data sources.
+ * Simple baseline tests that apply to a generic data sources.
  */
 public abstract class DocumentSourceTestBase<T extends DocumentSource> extends
     ProcessingComponentTestBase<T>
@@ -25,7 +25,6 @@ public abstract class DocumentSourceTestBase<T extends DocumentSource> extends
      * @return Returns the number of fetched documents. Access
      *         {@link #processingAttributes} map to get hold of the actual documents.
      */
-    @SuppressWarnings("unchecked")
     protected int runQuery()
     {
         return runQuery(simpleController);
@@ -38,7 +37,6 @@ public abstract class DocumentSourceTestBase<T extends DocumentSource> extends
      * @return Returns the number of fetched documents. Access
      *         {@link #processingAttributes} map to get hold of the actual documents.
      */
-    @SuppressWarnings("unchecked")
     protected int runQueryInCachingController()
     {
         return runQuery(cachingController);
@@ -78,7 +76,6 @@ public abstract class DocumentSourceTestBase<T extends DocumentSource> extends
      * @return Returns the number of fetched documents. Access
      *         {@link #processingAttributes} map to get hold of the actual documents.
      */
-    @SuppressWarnings("unchecked")
     protected final int runQuery(String query, int results)
     {
         processingAttributes.put(AttributeNames.QUERY, query);
@@ -89,7 +86,6 @@ public abstract class DocumentSourceTestBase<T extends DocumentSource> extends
     /**
      * Checks if values of a given field in a collection of {@link Document}s are unique.
      */
-    @SuppressWarnings("unchecked")
     protected final void assertFieldUnique(Collection<Document> result, String fieldName)
     {
         final HashMap<Object, Integer> values = new HashMap<Object, Integer>();

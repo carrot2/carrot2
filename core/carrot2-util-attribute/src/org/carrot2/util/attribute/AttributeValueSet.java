@@ -2,6 +2,7 @@ package org.carrot2.util.attribute;
 
 import java.util.Map;
 
+import org.carrot2.util.simplexml.TypeStringValuePair;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.load.Commit;
 import org.simpleframework.xml.load.Persist;
@@ -52,7 +53,7 @@ public class AttributeValueSet
      * {@link #convertAttributeValuesToStrings()} and
      * {@link #convertAttributeValuesFromStrings()}.
      */
-    @ElementMap(name = "values", entry = "entry", key = "key", inline = true, attribute = true, required = false)
+    @ElementMap(name = "values", entry = "entry", value = "value", key = "key", inline = true, attribute = true, required = false)
     private Map<String, TypeStringValuePair> overridenAttributeValuesAsStrings;
 
     AttributeValueSet()
@@ -178,6 +179,16 @@ public class AttributeValueSet
     public void setAttributeValues(Map<String, Object> values)
     {
         overridenAttributeValues.putAll(values);
+    }
+
+    /**
+     * Returns attribute values from the provided {@link AttributeValueSet} or
+     * <code>null</code> if the provided {@link AttributeValueSet} is <code>null</code>.
+     */
+    public static Map<String, Object> getAttributeValues(
+        AttributeValueSet attributeValueSet)
+    {
+        return attributeValueSet != null ? attributeValueSet.getAttributeValues() : null;
     }
 
     /**
