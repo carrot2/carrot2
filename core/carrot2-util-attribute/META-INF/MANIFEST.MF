@@ -7,7 +7,8 @@ Export-Package: org.carrot2.util.attribute,
  org.carrot2.util.attribute.constraint,
  org.carrot2.util.attribute.test.binder,
  org.carrot2.util.attribute.test.filtering,
- org.carrot2.util.attribute.test.metadata
+ org.carrot2.util.attribute.test.metadata,
+ org.carrot2.util.simplexml
 Require-Bundle: org.carrot2.util.common,
  com.bea.xml,
  com.google.collections,
