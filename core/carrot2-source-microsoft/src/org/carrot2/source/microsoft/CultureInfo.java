@@ -94,9 +94,9 @@ public enum CultureInfo
     /**
      * Return human-readable description. 
      */
-    @Override
-    public String toString()
-    {
-        return description;
-    }
+//    @Override  
+//    public String toString()
+//    {
+//        return description;
+//    }
 }
