@@ -113,7 +113,16 @@ public class AttributesPage extends Page implements IPersistableEditor
     @Override
     public Control getControl()
     {
-        return root.getParent().getParent();
+        //BugFixed(CARROT-210)
+        if (!root.isDisposed() && !root.getParent().isDisposed()
+            && !root.getParent().getParent().isDisposed())
+        {
+            return root.getParent().getParent();
+        }
+        else
+        {
+            return null;
+        }
     }
 
     @Override
