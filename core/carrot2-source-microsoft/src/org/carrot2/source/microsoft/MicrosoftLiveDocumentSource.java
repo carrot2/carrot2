@@ -166,28 +166,6 @@ public final class MicrosoftLiveDocumentSource extends SearchEngine
     }
 
     /**
-     * @return Return a new {@link ThreadFactory} that sets context class loader for newly
-     *         created threads.
-     */
-    protected static ThreadFactory contextClassLoaderThreadFactory(
-        final ClassLoader clazzLoader)
-    {
-        final ThreadFactory tf = new ThreadFactory()
-        {
-            private final ThreadFactory delegate = Executors.defaultThreadFactory();
-
-            public Thread newThread(Runnable r)
-            {
-                final Thread t = delegate.newThread(r);
-                t.setContextClassLoader(clazzLoader);
-                return t;
-            }
-        };
-
-        return tf;
-    }
-
-    /**
      * Create a single page fetcher for the search range.
      */
     @Override

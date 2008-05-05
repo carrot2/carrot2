@@ -29,7 +29,7 @@ public abstract class SearchEngine
     @Processing
     @Input
     @Attribute(key="search-mode")
-    private SearchMode searchMode = SearchMode.SPECULATIVE;
+    protected SearchMode searchMode = SearchMode.SPECULATIVE;
 
     /**
      * Subclasses should override this method and return a {@link Callable}
@@ -173,5 +173,26 @@ public abstract class SearchEngine
 
             throw new ProcessingException(cause.getMessage(), e);
         }
+    }
+    
+    /**
+     * @return Return a new {@link ThreadFactory} that sets context class loader for newly
+     *         created threads.
+     */
+    protected static ThreadFactory contextClassLoaderThreadFactory(final ClassLoader clazzLoader)
+    {
+        final ThreadFactory tf = new ThreadFactory()
+        {
+            private final ThreadFactory delegate = Executors.defaultThreadFactory();
+    
+            public Thread newThread(Runnable r)
+            {
+                final Thread t = delegate.newThread(r);
+                t.setContextClassLoader(clazzLoader);
+                return t;
+            }
+        };
+    
+        return tf;
     }
 }
