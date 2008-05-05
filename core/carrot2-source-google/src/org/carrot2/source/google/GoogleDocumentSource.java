@@ -2,8 +2,10 @@ package org.carrot2.source.google;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.httpclient.*;
@@ -11,14 +13,12 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.carrot2.core.*;
-import org.carrot2.core.attribute.*;
+import org.carrot2.core.attribute.Init;
 import org.carrot2.source.*;
 import org.carrot2.util.*;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.httpclient.HttpClientFactory;
 import org.json.*;
-
-import com.google.common.base.Predicate;
 
 /**
  * A {@link DocumentSource} fetching {@link Document}s (search results) from Microsoft
@@ -27,23 +27,23 @@ import com.google.common.base.Predicate;
 @Bindable
 public final class GoogleDocumentSource extends SearchEngine
 {
-    /** Logger for this class. */
-    final static Logger logger = Logger.getLogger(GoogleDocumentSource.class);
-
     /** Application key assigned to <code>demo.carrot2.org</code> */
-    public final static String KEY_DEMO_CARROT2_ORG = "ABQIAAAAb0120aE-we0NmwJ6odN2ExR8EGMSxyHQlExRZWWoPZ2MG_MAMhRhVwJV9deByMLLWfBq7h2Y5Clmbw";
+    public final static String KEY_DEMO_CARROT2_ORG = "ABQIAAAAb0120aE-we0NmwJ6odN2ExR8EGMSxy"
+        + "HQlExRZWWoPZ2MG_MAMhRhVwJV9deByMLLWfBq7h2Y5Clmbw";
+
+    /** Logger for this class. */
+    private final static Logger logger = Logger.getLogger(GoogleDocumentSource.class);
 
     /**
-     * Maximum concurrent threads to the API from all instances of this component.
+     * Maximum concurrent threads from all instances of this component.
      */
     private static final int MAX_CONCURRENT_THREADS = 10;
 
     /**
      * Static executor for running search threads.
      */
-    private final static ExecutorService executor = Executors.newFixedThreadPool(
-        MAX_CONCURRENT_THREADS,
-        contextClassLoaderThreadFactory(GoogleDocumentSource.class.getClassLoader()));
+    private final static ExecutorService executor = SearchEngine.createExecutorService(
+        MAX_CONCURRENT_THREADS, GoogleDocumentSource.class);
 
     /**
      * Metadata key for the compression algorithm used to decompress the returned stream.
@@ -51,6 +51,13 @@ public final class GoogleDocumentSource extends SearchEngine
      * @see SearchEngineResponse#metadata
      */
     private static final String COMPRESSION_USED_KEY = "compressionUsed";
+
+    /** HTTP header for requests. */
+    private static final Header CONTENT_HEADER = new Header("Content-type",
+        "application/x-www-form-urlencoded; charset=UTF-8");
+
+    /** HTTP header for declaring allowed GZIP encoding. */
+    private static final Header ENCODING_HEADER = new Header("Accept-Encoding", "gzip");
 
     /**
      * Google-assigned application key for querying the API.
@@ -80,59 +87,15 @@ public final class GoogleDocumentSource extends SearchEngine
     @Attribute
     String version = "1.0";
 
-    @Processing
-    @Input
-    @Attribute(key = AttributeNames.START)
-    int start = 0;
-
-    @Processing
-    @Input
-    @Attribute(key = AttributeNames.RESULTS)
-    int results = 100;
-
-    @Processing
-    @Input
-    @Attribute(key = AttributeNames.QUERY)
-    @Required
-    String query;
-
-    @SuppressWarnings("unused")
-    @Processing
-    @Output
-    @Attribute(key = AttributeNames.RESULTS_TOTAL)
-    long resultsTotal;
-
-    @Processing
-    @Output
-    @Attribute(key = AttributeNames.DOCUMENTS)
-    Collection<Document> documents;
-
-    @Processing
-    @Output
-    @Attribute
-    String compressionUsed;
-
     /**
-     * Maximum number of results returned per page.
-     * 
-     * @label Results Per Page
-     * @level Advanced
+     * Google search engine metadata.
      */
-    @Init
-    @Input
-    @Attribute
-    public int resultsPerPage = 8;
-
+    protected SearchEngineMetadata metadata = new SearchEngineMetadata(8, 32);
+    
     /**
-     * Maximum index of reachable result.
-     * 
-     * @label Maximum Result Index
-     * @level Advanced
+     * Base URI for Web search.
      */
-    @Init
-    @Input
-    @Attribute
-    public int maxResultIndex = 32;
+    private static String webSearchServiceURI = "http://ajax.googleapis.com/ajax/services/search/web";
 
     /**
      * Run a single request.
@@ -142,34 +105,7 @@ public final class GoogleDocumentSource extends SearchEngine
     {
         // Always run in conservative mode with Google.
         super.searchMode = SearchMode.CONSERVATIVE;
-
-        final SearchEngineResponse [] responses = runQuery(query, start, results,
-            maxResultIndex, resultsPerPage, executor);
-
-        if (responses.length > 0)
-        {
-            // Collect documents from the responses.
-            documents = new ArrayList<Document>(Math.min(results, maxResultIndex));
-            collectDocuments(documents, responses);
-
-            // Filter out duplicated URLs.
-            final Iterator<Document> i = documents.iterator();
-            final Predicate<Document> p = new UniqueFieldPredicate(Document.CONTENT_URL);
-            while (i.hasNext())
-            {
-                if (!p.apply(i.next()))
-                {
-                    i.remove();
-                }
-            }
-
-            resultsTotal = responses[0].getResultsTotal();
-        }
-        else
-        {
-            documents = Collections.<Document> emptyList();
-            resultsTotal = 0;
-        }
+        super.process(metadata, executor);
     }
 
     /**
@@ -182,25 +118,15 @@ public final class GoogleDocumentSource extends SearchEngine
         {
             public SearchEngineResponse call() throws Exception
             {
+                statistics.incrPageRequestCount();
                 return search(query, bucket.start, bucket.results, referer, key, version);
             }
         };
     }
 
-    /** HTTP header for requests. */
-    protected static final Header CONTENT_HEADER = new Header("Content-type",
-        "application/x-www-form-urlencoded; charset=UTF-8");
-
-    /** HTTP header for declaring allowed GZIP encoding. */
-    protected static final Header ENCODING_HEADER = new Header("Accept-Encoding", "gzip");
-
     /**
-     * Base URI for Web search.
-     */
-    private static String webSearchServiceURI = "http://ajax.googleapis.com/ajax/services/search/web";
-
-    /**
-     * Run the actual search against Google API.
+     * Run the actual search against Google Web Search API. <b>must be re-entrant and
+     * thread safe</b>.
      */
     private final static SearchEngineResponse search(String query, int startAt,
         int resultsRequested, String referer, String key, String version)
@@ -277,8 +203,8 @@ public final class GoogleDocumentSource extends SearchEngine
     /**
      * Assembles an array of {@link NameValuePair} with request parameters.
      */
-    protected static ArrayList<NameValuePair> createRequestParams(String query,
-        int start, String key, String version)
+    private static ArrayList<NameValuePair> createRequestParams(String query, int start,
+        String key, String version)
     {
         final ArrayList<NameValuePair> params = new ArrayList<NameValuePair>(10);
 
@@ -293,7 +219,7 @@ public final class GoogleDocumentSource extends SearchEngine
     }
 
     /**
-     * Parse the response stream, assuming it is JSON
+     * Parse the response stream, assuming it is in JSON format.
      */
     private static SearchEngineResponse parseResponse(final InputStream is)
         throws IOException
@@ -340,7 +266,8 @@ public final class GoogleDocumentSource extends SearchEngine
                 if (StringUtils.isEmpty(contentUrl)) continue;
 
                 final String title = doc.optString("titleNoFormatting");
-                final String summary = StringEscapeUtils.unescapeHtml(doc.optString("content"));
+                final String summary = StringEscapeUtils.unescapeHtml(doc
+                    .optString("content"));
                 documents.add(Document.create(title, summary, contentUrl));
             }
 

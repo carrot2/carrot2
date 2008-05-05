@@ -9,6 +9,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.carrot2.core.Document;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.test.QueryableDocumentSourceTestBase;
+import org.carrot2.source.SearchEngineStats;
 import org.carrot2.source.SearchMode;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -27,7 +28,7 @@ public class YahooDocumentSourceTest extends
     @Prerequisite(requires = "externalApiTestsEnabled")
     public void testQueryLargerThanPage() throws Exception
     {
-        final int needed = new YahooWebSearchService().resultsPerPage * 2 + 10;
+        final int needed = new YahooWebSearchService().metadata.resultsPerPage * 2 + 10;
 
         // Allow some slack (duplicated URLs).
         final int documentsReturned = runQuery("apache", needed);
@@ -53,8 +54,8 @@ public class YahooDocumentSourceTest extends
         processingAttributes.put("search-mode", SearchMode.CONSERVATIVE);
 
         assertEquals(0, runQuery("duiogig oiudgisugviw siug iugw iusviuwg", 100));
-        assertEquals(1, processingAttributes.get(YahooSearchService.class.getName()
-            + ".requestCount"));
+        assertEquals(1, processingAttributes.get(SearchEngineStats.class.getName()
+            + ".pageRequests"));
     }
 
     @Test
@@ -64,8 +65,8 @@ public class YahooDocumentSourceTest extends
         processingAttributes.put("search-mode", SearchMode.SPECULATIVE);
 
         assertEquals(0, runQuery("duiogig oiudgisugviw siug iugw iusviuwg", 100));
-        assertEquals(2, processingAttributes.get(YahooSearchService.class.getName()
-            + ".requestCount"));
+        assertEquals(2, processingAttributes.get(SearchEngineStats.class.getName()
+            + ".pageRequests"));
     }
 
     @Test

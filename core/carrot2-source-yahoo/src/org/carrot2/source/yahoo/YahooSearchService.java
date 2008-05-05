@@ -12,7 +12,7 @@ import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.log4j.Logger;
 import org.carrot2.core.attribute.Init;
-import org.carrot2.core.attribute.Processing;
+import org.carrot2.source.SearchEngineMetadata;
 import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.StreamUtils;
@@ -88,67 +88,9 @@ abstract class YahooSearchService
     protected String appid = "carrotsearch";
 
     /**
-     * Maximum number of results returned per page.
-     *
-     * @label Results Per Page
-     * @level Advanced
+     * Yahoo! engine defaults.
      */
-    @Init
-    @Input
-    @Attribute
-    public int resultsPerPage = 50;
-
-    /**
-     * Maximum index of reachable result.
-     *
-     * @label Maximum Result Index
-     * @level Advanced
-     */
-    @Init
-    @Input
-    @Attribute
-    public int maxResultIndex = 1000;
-
-    /**
-     * Number of individual HTTP requests made by this service (total).
-     *
-     * @label Total Requests
-     */
-    @Processing
-    @Output
-    @Attribute
-    private int requestCountTotal;
-
-    /**
-     * Number of individual HTTP requests made by this service (successful).
-     *
-     * @label Successful Requests
-     */
-    @Processing
-    @Output
-    @Attribute
-    private int requestCount;
-
-    /**
-     * A sum of all times spent on waiting for response from the
-     * service (in milliseconds).
-     *
-     * @label Total Request Time
-     */
-    @Processing
-    @Output
-    @Attribute
-    private long requestTimeSum;
-
-    /**
-     * Maximum request time.
-     *
-     * @label Maximum Request Time
-     */
-    @Processing
-    @Output
-    @Attribute
-    private long requestTimeMax;
+    protected SearchEngineMetadata metadata = new SearchEngineMetadata(50, 1000);
 
     /**
      * Keeps subclasses to this package.
@@ -176,18 +118,15 @@ abstract class YahooSearchService
         String query, int start, int results)
         throws IOException
     {
-        requestCountTotal++;
-
         // Yahoo's results start from 1.
         start++;
-        results = Math.min(results, resultsPerPage);
+        results = Math.min(results, metadata.resultsPerPage);
 
         final HttpClient client = HttpClientFactory.getTimeoutingClient();
         client.getParams().setVersion(HttpVersion.HTTP_1_1);
 
         InputStream is = null;
         final GetMethod request = new GetMethod();
-        final long startTime = System.currentTimeMillis();
         try
         {
             request.setURI(new URI(getServiceURI(), false));
@@ -236,12 +175,6 @@ abstract class YahooSearchService
                         + ", first: " + response.metadata.get(FIRST_INDEX_KEY));
                 }
 
-                // Update statistics.
-                final long duration = System.currentTimeMillis() - startTime;
-                requestCount++;
-                requestTimeMax = Math.max(requestTimeMax, duration);
-                requestTimeSum += duration;
-
                 return response;
             }
             else
@@ -266,7 +199,7 @@ abstract class YahooSearchService
     /**
      * Parse the response stream, assuming it is XML.
      */
-    private SearchEngineResponse parseResponseXML(final InputStream is) throws IOException
+    private static SearchEngineResponse parseResponseXML(final InputStream is) throws IOException
     {
         try
         {

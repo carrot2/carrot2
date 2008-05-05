@@ -5,63 +5,137 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.carrot2.core.*;
+import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
 
+import com.google.common.base.Predicate;
+
 /**
- * A superclass facilitating implementation of {@link DocumentSource}s wrapping
- * external search engines. This class implements helper methods for concurrent
- * querying of search services that limit the number of search results returned
- * in one request.
+ * A superclass facilitating implementation of {@link DocumentSource}s wrapping external
+ * search engines. This class implements helper methods for concurrent querying of search
+ * services that limit the number of search results returned in one request.
  */
 @Bindable
-public abstract class SearchEngine
-    extends ProcessingComponentBase implements DocumentSource
+public abstract class SearchEngine extends ProcessingComponentBase implements
+    DocumentSource
 {
     /**
      * Search mode defines how fetchers returned from {@link #createFetcher(SearchRange)}
      * are called.
-     *
+     * 
      * @label Search Mode
      * @level Advanced
      * @see SearchMode
      */
     @Processing
     @Input
-    @Attribute(key="search-mode")
+    @Attribute(key = "search-mode")
     protected SearchMode searchMode = SearchMode.SPECULATIVE;
 
     /**
-     * Subclasses should override this method and return a {@link Callable}
-     * instance that fetches search results in the given range.
+     * Starting index of the first result to fetch.
+     * 
+     * @label Start index
+     */
+    @Processing
+    @Input
+    @Attribute(key = AttributeNames.START)
+    protected int start = 0;
+
+    /**
+     * Number of results to fetch.
+     * 
+     * @label Results count
+     */
+    @Processing
+    @Input
+    @Attribute(key = AttributeNames.RESULTS)
+    protected int results = 100;
+
+    /**
+     * Search query to execute.
+     * 
+     * @label Query
+     */
+    @Processing
+    @Input
+    @Attribute(key = AttributeNames.QUERY)
+    @Required
+    protected String query;
+
+    /**
+     * Number of total matching documents. This may be an approximation.
+     * 
+     * @label Results Total
+     */
+    @SuppressWarnings("unused")
+    @Processing
+    @Output
+    @Attribute(key = AttributeNames.RESULTS_TOTAL)
+    protected long resultsTotal;
+
+    /**
+     * A collection of documents retrieved for the query.
+     */
+    @Processing
+    @Output
+    @Attribute(key = AttributeNames.DOCUMENTS)
+    protected Collection<Document> documents;
+
+    /**
+     * This component usage statistics.
+     */
+    protected SearchEngineStats statistics = new SearchEngineStats();
+
+    /**
+     * Run a request the search engine's API, setting <code>documents</code> to the set
+     * of returned documents.
+     */
+    protected void process(SearchEngineMetadata metadata, ExecutorService executor)
+        throws ProcessingException
+    {
+        final SearchEngineResponse [] responses = runQuery(query, start, results,
+            metadata, executor);
+
+        if (responses.length > 0)
+        {
+            // Collect documents from the responses.
+            documents = new ArrayList<Document>(Math.min(results, metadata.maxResultIndex));
+            collectDocuments(documents, responses);
+
+            // Filter out duplicated URLs.
+            final Iterator<Document> i = documents.iterator();
+            final Predicate<Document> p = new UniqueFieldPredicate(Document.CONTENT_URL);
+            while (i.hasNext())
+            {
+                if (!p.apply(i.next()))
+                {
+                    i.remove();
+                }
+            }
+
+            resultsTotal = responses[0].getResultsTotal();
+        }
+        else
+        {
+            documents = Collections.<Document> emptyList();
+            resultsTotal = 0;
+        }
+    }
+
+    /**
+     * Subclasses should override this method and return a {@link Callable} instance that
+     * fetches search results in the given range.
      * <p>
-     * Note the query (if any is required) should be passed at the concrete
-     * class level. We are not concerned with it here.
-     *
+     * Note the query (if any is required) should be passed at the concrete class level.
+     * We are not concerned with it here.
+     * 
      * @param bucket The search range to fetch.
      */
-    protected abstract Callable<SearchEngineResponse> createFetcher(final SearchRange bucket);
+    protected abstract Callable<SearchEngineResponse> createFetcher(
+        final SearchRange bucket);
 
-    /**
-     * Number queries to this search engine.
-     *
-     * @label Total Queries
-     */
-    @Processing
-    @Output
-    @Attribute
-    private int queriesCountTotal;
-
-    /**
-     * Number queries handled successfully by this search engine.
-     *
-     * @label Successful Queries
-     */
-    @Processing
-    @Output
-    @Attribute
-    private int queriesCount;
-    
     /**
      * Collects documents from an array of search engine's responses.
      */
@@ -75,21 +149,20 @@ public abstract class SearchEngine
     }
 
     /**
-     * This method implements the logic of querying a typical search engine. If the
-     * number of requested results is higher than the number of results on one response
-     * page, then multiple (possibly concurrent) requests are issued via the provided
+     * This method implements the logic of querying a typical search engine. If the number
+     * of requested results is higher than the number of results on one response page,
+     * then multiple (possibly concurrent) requests are issued via the provided
      * {@link ExecutorService}.
      */
-    protected final SearchEngineResponse [] runQuery(final String query,
-        final int start, final int results, final int maxResultIndex,
-        final int resultsPerPage, final ExecutorService executor)
-        throws ProcessingException
+    protected final SearchEngineResponse [] runQuery(final String query, final int start,
+        final int results, SearchEngineMetadata metadata,
+        final ExecutorService executor) throws ProcessingException
     {
-        queriesCountTotal++;
-        
+        this.statistics.incrQueryCount();
+
         // Split the requested range into pages.
-        SearchRange [] buckets =
-            SearchRange.getSearchRanges(start, results, maxResultIndex, resultsPerPage);
+        SearchRange [] buckets = SearchRange.getSearchRanges(start, results,
+            metadata.maxResultIndex, metadata.resultsPerPage);
 
         // Check preconditions.
         if (query == null || query.trim().equals("") || buckets.length == 0)
@@ -97,10 +170,11 @@ public abstract class SearchEngine
             return new SearchEngineResponse [0];
         }
 
-        try {
+        try
+        {
             // Initialize output documents array.
-            final ArrayList<SearchEngineResponse> responses =
-                new ArrayList<SearchEngineResponse>(buckets.length);
+            final ArrayList<SearchEngineResponse> responses = new ArrayList<SearchEngineResponse>(
+                buckets.length);
 
             // If in conservative mode, run the first request to estimate the
             // number of needed results.
@@ -114,7 +188,6 @@ public abstract class SearchEngine
                 if (buckets.length == 1)
                 {
                     // If there was just one bucket, there is no need to go further on.
-                    queriesCount++;
                     return responses.toArray(new SearchEngineResponse [responses.size()]);
                 }
                 else
@@ -123,15 +196,15 @@ public abstract class SearchEngine
                     // and recalculate the buckets.
                     if (resultsTotal != -1 && resultsTotal < results)
                     {
-                        buckets = SearchRange.getSearchRanges(
-                            buckets[0].results, (int) resultsTotal, maxResultIndex, resultsPerPage);
+                        buckets = SearchRange.getSearchRanges(buckets[0].results,
+                            (int) resultsTotal, metadata.maxResultIndex, metadata.resultsPerPage);
                     }
                 }
             }
 
             // Run concurrent requests using the executor.
-            final ArrayList<Callable<SearchEngineResponse>> fetchers =
-                new ArrayList<Callable<SearchEngineResponse>>(buckets.length);
+            final ArrayList<Callable<SearchEngineResponse>> fetchers = new ArrayList<Callable<SearchEngineResponse>>(
+                buckets.length);
 
             for (final SearchRange r : buckets)
             {
@@ -139,7 +212,8 @@ public abstract class SearchEngine
             }
 
             // Run requests in parallel.
-            final List<Future<SearchEngineResponse>> futures = executor.invokeAll(fetchers);
+            final List<Future<SearchEngineResponse>> futures = executor
+                .invokeAll(fetchers);
 
             // Collect results.
             for (final Future<SearchEngineResponse> future : futures)
@@ -150,8 +224,6 @@ public abstract class SearchEngine
                 }
             }
 
-            queriesCount++;
-            
             return responses.toArray(new SearchEngineResponse [responses.size()]);
         }
         catch (final IOException e)
@@ -174,17 +246,18 @@ public abstract class SearchEngine
             throw new ProcessingException(cause.getMessage(), e);
         }
     }
-    
+
     /**
      * @return Return a new {@link ThreadFactory} that sets context class loader for newly
      *         created threads.
      */
-    protected static ThreadFactory contextClassLoaderThreadFactory(final ClassLoader clazzLoader)
+    protected static ThreadFactory contextClassLoaderThreadFactory(
+        final ClassLoader clazzLoader)
     {
         final ThreadFactory tf = new ThreadFactory()
         {
             private final ThreadFactory delegate = Executors.defaultThreadFactory();
-    
+
             public Thread newThread(Runnable r)
             {
                 final Thread t = delegate.newThread(r);
@@ -192,7 +265,19 @@ public abstract class SearchEngine
                 return t;
             }
         };
-    
+
         return tf;
+    }
+
+    /**
+     * @return Return an executor service with a fixed thread pool of
+     *         <code>maxConcurrentThreads</code> threads and context class loader
+     *         initialized to <code>clazz</code>'s context class loader.
+     */
+    protected static ExecutorService createExecutorService(int maxConcurrentThreads,
+        Class<?> clazz)
+    {
+        return Executors.newFixedThreadPool(maxConcurrentThreads,
+            contextClassLoaderThreadFactory(clazz.getClassLoader()));
     }
 }

@@ -1,17 +1,14 @@
 package org.carrot2.source.yahoo;
 
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
 
 import org.apache.log4j.Logger;
 import org.carrot2.core.*;
-import org.carrot2.core.attribute.*;
+import org.carrot2.core.attribute.Init;
 import org.carrot2.source.*;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
-
-
-import com.google.common.base.Predicate;
 
 /**
  * A {@link DocumentSource} fetching {@link Document}s (search results) from Yahoo!.
@@ -23,11 +20,15 @@ public final class YahooDocumentSource extends SearchEngine
     final static Logger logger = Logger.getLogger(YahooDocumentSource.class);
 
     /**
-     * Static executor for running search threads to Yahoo!. You can set the number of
-     * concurrent requests from <b>all</b> instances of this component here.
+     * Maximum concurrent threads from all instances of this component.
      */
-    private final static ExecutorService executor = Executors
-        .newFixedThreadPool(/* max threads */10);
+    private static final int MAX_CONCURRENT_THREADS = 10;
+
+    /**
+     * Static executor for running search threads.
+     */
+    private final static ExecutorService executor = SearchEngine.createExecutorService(
+        MAX_CONCURRENT_THREADS, YahooDocumentSource.class);
 
     /**
      * The specific search service to be used by this document source. You can use this
@@ -46,70 +47,15 @@ public final class YahooDocumentSource extends SearchEngine
     })
     private YahooSearchService service = new YahooWebSearchService();
 
-    @Processing
-    @Input
-    @Attribute(key = AttributeNames.START)
-    private int start = 0;
-
-    @Processing
-    @Input
-    @Attribute(key = AttributeNames.RESULTS)
-    private int results = 100;
-
-    @Processing
-    @Input
-    @Attribute(key = AttributeNames.QUERY)
-    @Required
-    private String query;
-
-    @SuppressWarnings("unused")
-    @Processing
-    @Output
-    @Attribute(key = AttributeNames.RESULTS_TOTAL)
-    private long resultsTotal;
-
-    @Processing
-    @Output
-    @Attribute(key = AttributeNames.DOCUMENTS)
-    private Collection<Document> documents;
-
     /**
-     * Run a request against Yahoo! API and set <code>documents</code> to the set of returned
-     * documents.
+     * Run a single query.
      */
     @Override
     public void process() throws ProcessingException
     {
-        final SearchEngineResponse [] responses = runQuery(query, start, results,
-            service.maxResultIndex, service.resultsPerPage, executor);
-
-        if (responses.length > 0)
-        {
-            // Collect documents from the responses.
-            documents = new ArrayList<Document>(Math.min(results, service.maxResultIndex));
-            collectDocuments(documents, responses);
-
-            // Filter out duplicated URLs (may happen, the results are paged based
-            // on a heuristic at Yahoo).
-            final Iterator<Document> i = documents.iterator();
-            final Predicate<Document> p = new UniqueFieldPredicate(Document.CONTENT_URL);
-            while (i.hasNext())
-            {
-                if (!p.apply(i.next()))
-                {
-                    i.remove();
-                }
-            }
-
-            resultsTotal = responses[0].getResultsTotal();
-        }
-        else
-        {
-            documents = Collections.<Document> emptyList();
-            resultsTotal = 0;
-        }
+        super.process(service.metadata, executor);
     }
-
+    
     /**
      * Create a single page fetcher for the search range.
      */
@@ -120,6 +66,7 @@ public final class YahooDocumentSource extends SearchEngine
         {
             public SearchEngineResponse call() throws Exception
             {
+                statistics.incrPageRequestCount();
                 return service.query(query, bucket.start, bucket.results);
             }
         };
