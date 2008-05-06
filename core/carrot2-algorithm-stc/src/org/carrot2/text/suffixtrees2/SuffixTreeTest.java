@@ -1,10 +1,9 @@
-package org.carrot2.text.suffixtrees;
+package org.carrot2.text.suffixtrees2;
 
 import java.util.*;
 
-import org.junit.*;
-
-import com.google.common.collect.Iterators;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Tests {@link SuffixTree}.
@@ -18,22 +17,24 @@ public class SuffixTreeTest
     @Test
     public void testLeafNodes()
     {
-        final SuffixableElement sequence = new SuffixableCharacterSequence("mississippi");
+        final List<Character> sequence = asCharacterList("mississippi");
         final SuffixTree t = new SuffixTree();
-        t.add(sequence);
+        final Node<Character> rootNode = t.build(sequence);
 
         final List<String> actual = new ArrayList<String>();
         final Stack<Node> nodes = new Stack<Node>();
-        nodes.push(t.getRootNode());
+        nodes.push(rootNode);
         while (!nodes.isEmpty())
         {
             final Node n = nodes.pop();
-
-            for (Edge e : Iterators.newArray(n.getEdgesIterator(), Edge.class))
+            final Iterator<Edge<Character>> i = n.getEdgesIterator();
+            
+            while (i.hasNext())
             {
+                final Edge<Character> e = i.next();
                 if (e.endNode.isLeaf())
                 {
-                    List<Object> p = e.endNode.getPhrase();
+                    List<Character> p = sequence.subList(e.endNode.getSuffixStartIndex(), e.endNode.getSuffixEndIndex() + 1);
                     actual.add(toString(p));
                 }
                 else 
@@ -61,6 +62,22 @@ public class SuffixTreeTest
         Collections.sort(actual);
 
         Assert.assertEquals(expected, actual);
+    }
+
+    /*
+     * 
+     */
+    private List<Character> asCharacterList(String string)
+    {
+        final char [] characters = string.toCharArray();
+        final Character [] charList = new Character [characters.length];
+        
+        for (int i = 0; i < characters.length; i++)
+        {
+            charList[i] = characters[i];
+        }
+
+        return Arrays.asList(charList);
     }
 
     /**
