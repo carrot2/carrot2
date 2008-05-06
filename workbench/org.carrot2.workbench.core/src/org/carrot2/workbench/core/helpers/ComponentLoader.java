@@ -67,6 +67,11 @@ public class ComponentLoader
         return Lists.immutableList(componentCache.values());
     }
 
+    /**
+     * @param id
+     * @return
+     * @throws RuntimeException when component with given id is not found
+     */
     public ComponentWrapper getComponent(String id)
     {
         if (!componentCache.containsKey(id))

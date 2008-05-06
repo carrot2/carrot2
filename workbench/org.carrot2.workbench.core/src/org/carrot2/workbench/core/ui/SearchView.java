@@ -19,14 +19,19 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Resource;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
-import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.*;
 import org.eclipse.ui.part.PageSite;
 import org.eclipse.ui.part.ViewPart;
 
 public class SearchView extends ViewPart
 {
+    private static final String ALGORITHM_ID_ATTRIBUTE = "algorithmId";
+
+    private static final String SOURCE_ID_ATTRIBUTE = "sourceId";
+
     public static final String ID = "org.carrot2.workbench.core.search";
 
+    private IMemento state;
     private Composite innerComposite;
     private ComboViewer sourceViewer;
     private ComboViewer algorithmViewer;
@@ -194,7 +199,18 @@ public class SearchView extends ViewPart
             .getFirstElement()).getId();
     }
 
-    private ComboViewer createViewer(Combo combo, ComponentLoader loader)
+    /**
+     * Wraps component combobox (source or algorithm) with JFace viewer. Restores saved
+     * state if possible.
+     * 
+     * @param combo combo control used to create a viewer ({@link ComboViewer#ComboViewer(Combo)})
+     * @param loader loader of components (sources or algorithms)
+     * @param stateAttribute name of the attribute, which stores id of the component, that
+     *            should be chosen by default
+     * @return create wrapper
+     */
+    private ComboViewer createViewer(Combo combo, ComponentLoader loader,
+        String stateAttribute)
     {
         combo.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
         ComboViewer viewer = new ComboViewer(combo);
@@ -202,7 +218,39 @@ public class SearchView extends ViewPart
         viewer.setContentProvider(new ArrayContentProvider());
         viewer.setInput(loader.getComponents());
         combo.select(0);
+        try
+        {
+            if (state != null)
+            {
+                String id = state.getString(stateAttribute);
+                if (id != null)
+                {
+                    ComponentWrapper wrapper = loader.getComponent(id);
+                    IStructuredSelection sel = new StructuredSelection(wrapper);
+                    viewer.setSelection(sel);
+                }
+            }
+        }
+        catch (RuntimeException re)
+        {
+            Utils
+                .logError("Problem accured while restoring Search view state", re, false);
+        }
         return viewer;
+    }
+
+    @Override
+    public void init(IViewSite site, IMemento memento) throws PartInitException
+    {
+        state = memento;
+        super.init(site, memento);
+    }
+
+    @Override
+    public void saveState(IMemento memento)
+    {
+        memento.putString(SOURCE_ID_ATTRIBUTE, getSourceId());
+        memento.putString(ALGORITHM_ID_ATTRIBUTE, getAlgorithmId());
     }
 
     @Override
@@ -282,7 +330,9 @@ public class SearchView extends ViewPart
 
         innerComposite.setLayout(new GridLayout(4, false));
 
-        sourceViewer = createViewer(sourceCombo, ComponentLoader.SOURCE_LOADER);
-        algorithmViewer = createViewer(algorithmCombo, ComponentLoader.ALGORITHM_LOADER);
+        sourceViewer =
+            createViewer(sourceCombo, ComponentLoader.SOURCE_LOADER, SOURCE_ID_ATTRIBUTE);
+        algorithmViewer =
+            createViewer(algorithmCombo, ComponentLoader.ALGORITHM_LOADER, ALGORITHM_ID_ATTRIBUTE);
     }
 }
