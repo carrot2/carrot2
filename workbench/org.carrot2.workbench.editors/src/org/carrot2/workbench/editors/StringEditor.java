@@ -6,6 +6,7 @@ import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IMemento;
 
 public class StringEditor extends AttributeEditorAdapter
 {
@@ -49,5 +50,17 @@ public class StringEditor extends AttributeEditorAdapter
         {
             textBox.setText(currentValue.toString());
         }
+    }
+
+    @Override
+    public void saveState(IMemento memento)
+    {
+        memento.putTextData(getValue().toString());
+    }
+
+    @Override
+    public void restoreState(IMemento memento)
+    {
+        setValue(memento.getTextData());
     }
 }

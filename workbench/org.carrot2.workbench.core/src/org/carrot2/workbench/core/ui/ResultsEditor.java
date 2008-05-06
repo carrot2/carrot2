@@ -106,8 +106,17 @@ public class ResultsEditor extends SashFormEditorPart
     @Override
     public String getPartName()
     {
-        return ((SearchParameters) this.getEditorInput()).getAttributes().get(
-            AttributeNames.QUERY).toString();
+        Object query =
+            ((SearchParameters) this.getEditorInput()).getAttributes().get(
+                AttributeNames.QUERY);
+        if (query != null)
+        {
+            return query.toString();
+        }
+        else
+        {
+            return "no query attribute";
+        }
     }
 
     @Override

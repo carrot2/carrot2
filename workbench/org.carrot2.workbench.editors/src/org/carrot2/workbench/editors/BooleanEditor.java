@@ -1,10 +1,13 @@
 package org.carrot2.workbench.editors;
 
+import static org.apache.commons.lang.StringUtils.isBlank;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IMemento;
 
 public class BooleanEditor extends AttributeEditorAdapter implements IAttributeEditor
 {
@@ -51,5 +54,21 @@ public class BooleanEditor extends AttributeEditorAdapter implements IAttributeE
     public boolean containsLabel()
     {
         return true;
+    }
+
+    @Override
+    public void saveState(IMemento memento)
+    {
+        memento.putString("checked", ((Boolean) getValue()).toString());
+    }
+
+    @Override
+    public void restoreState(IMemento memento)
+    {
+        String checked = memento.getString("checked");
+        if (!isBlank(checked))
+        {
+            setValue(Boolean.parseBoolean(checked));
+        }
     }
 }

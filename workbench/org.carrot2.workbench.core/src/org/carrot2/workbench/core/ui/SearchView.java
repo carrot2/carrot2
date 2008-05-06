@@ -106,6 +106,8 @@ public class SearchView extends ViewPart
             attributesPages.put(wrapper.getId(), page);
         }
         requiredHolder.setLayout(stack);
+        restoreRequiredAttributesState();
+
         if (getSourceId() != null)
         {
             stack.topControl = attributesPages.get(getSourceId()).getControl();
@@ -128,6 +130,28 @@ public class SearchView extends ViewPart
         gd.horizontalAlignment = FILL;
         gd.horizontalSpan = 2;
         requiredHolder.setLayoutData(gd);
+    }
+
+    private void restoreRequiredAttributesState()
+    {
+        if (state != null)
+        {
+            IMemento allPagesState = state.getChild("requiredAttributesPages");
+            if (allPagesState != null)
+            {
+                IMemento [] pageStatesArray =
+                    allPagesState.getChildren("requiredAttributesPage");
+                for (int i = 0; i < pageStatesArray.length; i++)
+                {
+                    IMemento pageState = pageStatesArray[i];
+                    String id = pageState.getID();
+                    if (id != null)
+                    {
+                        attributesPages.get(id).restoreState(pageState);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -237,6 +261,13 @@ public class SearchView extends ViewPart
     {
         memento.putString(SOURCE_ID_ATTRIBUTE, getSourceId());
         memento.putString(ALGORITHM_ID_ATTRIBUTE, getAlgorithmId());
+        IMemento pagesState = memento.createChild("requiredAttributesPages");
+        for (String sourceKey : attributesPages.keySet())
+        {
+            IMemento pageState =
+                pagesState.createChild("requiredAttributesPage", sourceKey);
+            attributesPages.get(sourceKey).saveState(pageState);
+        }
     }
 
     @Override

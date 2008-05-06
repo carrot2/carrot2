@@ -1,11 +1,14 @@
 package org.carrot2.workbench.editors;
 
+import static org.apache.commons.lang.StringUtils.isBlank;
+
 import java.util.Arrays;
 
 import org.carrot2.util.attribute.AttributeDescriptor;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IMemento;
 
 public class EnumEditor extends AttributeEditorAdapter implements IAttributeEditor
 {
@@ -62,6 +65,23 @@ public class EnumEditor extends AttributeEditorAdapter implements IAttributeEdit
     public Object getValue()
     {
         return constants[viewer.getCombo().getSelectionIndex()];
+    }
+
+    @Override
+    public void saveState(IMemento memento)
+    {
+        memento.putString("value", ((Enum) getValue()).name());
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public void restoreState(IMemento memento)
+    {
+        String value = memento.getString("value");
+        if (!isBlank(value))
+        {
+            setValue(Enum.valueOf((Class<Enum>) descriptor.type, value));
+        }
     }
 
 }

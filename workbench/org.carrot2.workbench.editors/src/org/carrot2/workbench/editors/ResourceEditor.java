@@ -1,5 +1,7 @@
 package org.carrot2.workbench.editors;
 
+import static org.apache.commons.lang.StringUtils.isBlank;
+
 import java.io.File;
 
 import org.carrot2.util.resource.FileResource;
@@ -10,6 +12,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.*;
+import org.eclipse.ui.IMemento;
 
 public class ResourceEditor extends AttributeEditorAdapter
 {
@@ -162,6 +165,34 @@ public class ResourceEditor extends AttributeEditorAdapter
             resourceText.setText("");
         }
         resource = currentRes;
+    }
+
+    @Override
+    public void saveState(IMemento memento)
+    {
+        if (resource != null)
+        {
+            if (resource instanceof FileResource)
+            {
+                FileResource fileRes = (FileResource) resource;
+                memento.putString("type", "file");
+                memento.putString("value", fileRes.toString());
+            }
+        }
+    }
+
+    @Override
+    public void restoreState(IMemento memento)
+    {
+        String type = memento.getString("type");
+        String value = memento.getString("value");
+        if (!isBlank(type) && !isBlank(value))
+        {
+            if (type.equals("file"))
+            {
+                setCurrentResource(FileResource.valueOf(value));
+            }
+        }
     }
 
 }
