@@ -5,7 +5,6 @@ import static org.eclipse.swt.SWT.FILL;
 import java.util.*;
 
 import org.carrot2.core.ProcessingComponent;
-import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.Input;
 import org.carrot2.util.attribute.Required;
@@ -36,7 +35,6 @@ public class SearchView extends ViewPart
     private ComboViewer sourceViewer;
     private ComboViewer algorithmViewer;
     private Button processButton;
-    private Text queryText;
     private java.util.List<Resource> toDispose = new ArrayList<Resource>();
     private Map<String, AttributesPage> attributesPages =
         new HashMap<String, AttributesPage>();
@@ -56,8 +54,6 @@ public class SearchView extends ViewPart
     {
         createPermanentLayout(parent);
 
-        createRequiredAttributesLayout();
-
         checkProcessingConditions(parent);
 
         final Runnable execQuery = new RunnableWithErrorDialog()
@@ -68,7 +64,6 @@ public class SearchView extends ViewPart
                     SearchView.this.getViewSite().getWorkbenchWindow().getActivePage();
                 SearchParameters input =
                     new SearchParameters(getSourceId(), getAlgorithmId(), null);
-                input.putAttribute(AttributeNames.QUERY, queryText.getText());
                 input.putAllAttributes(attributesPages.get(getSourceId())
                     .getAttributeValues());
                 page.openEditor(input, ResultsEditor.ID);
@@ -88,31 +83,23 @@ public class SearchView extends ViewPart
                 execQuery.run();
 
                 // Set the focus back to the query box (?).
-                queryText.setFocus();
+                //                queryText.setFocus();
             }
         });
 
-        queryText.addListener(SWT.DefaultSelection, new Listener()
-        {
-            public void handleEvent(Event e)
-            {
-                execQuery.run();
-            }
-        });
     }
 
     @SuppressWarnings("unchecked")
     private void createRequiredAttributesLayout()
     {
         final Group requiredHolder = new Group(innerComposite, SWT.NONE);
-        requiredHolder.setText("Other required attributes");
+        requiredHolder.setText("Required attributes");
         final StackLayout stack = new StackLayout();
         for (ComponentWrapper wrapper : ComponentLoader.SOURCE_LOADER.getComponents())
         {
             ProcessingComponent source = wrapper.getExecutableComponent();
             AttributesPage page =
                 new AttributesPage(source, new HashMap<String, Object>());
-            page.ignoreAttributes(AttributeNames.QUERY);
             page.filterAttributes(Input.class, Processing.class, Required.class);
             page.init(new PageSite(this.getViewSite()));
             page.createControl(requiredHolder);
@@ -155,7 +142,6 @@ public class SearchView extends ViewPart
             || ComponentLoader.ALGORITHM_LOADER.getComponents().isEmpty())
         {
             processButton.setEnabled(false);
-            queryText.setEnabled(false);
         }
         if (ComponentLoader.SOURCE_LOADER.getComponents().isEmpty())
         {
@@ -256,7 +242,6 @@ public class SearchView extends ViewPart
     @Override
     public void setFocus()
     {
-        queryText.setFocus();
     }
 
     @Override
@@ -280,9 +265,6 @@ public class SearchView extends ViewPart
         Label algorithmLabel = new Label(innerComposite, SWT.CENTER);
         Combo algorithmCombo =
             new Combo(innerComposite, SWT.DROP_DOWN | SWT.READ_ONLY | SWT.BORDER);
-        Label queryLabel = new Label(innerComposite, SWT.CENTER);
-        queryText = new Text(innerComposite, SWT.SINGLE | SWT.SEARCH);
-        processButton = new Button(parent, SWT.PUSH);
 
         // init nonvisuals
         GridData GridData_3 = new GridData();
@@ -296,8 +278,9 @@ public class SearchView extends ViewPart
         GridData_3.grabExcessHorizontalSpace = true;
         GridData_4.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
         GridData_4.grabExcessHorizontalSpace = true;
-        GridData_5.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
-        GridData_5.grabExcessHorizontalSpace = true;
+        GridData_5.horizontalAlignment = org.eclipse.swt.layout.GridData.END;
+        GridData_5.verticalAlignment = GridData.END;
+        GridData_5.horizontalSpan = 2;
         FormData_1.right = new FormAttachment(100, 0);
         FormData_1.top = new FormAttachment(0, 0);
         FormData_1.left = new FormAttachment(0, 0);
@@ -314,25 +297,24 @@ public class SearchView extends ViewPart
         algorithmLabel.setLayoutData(new GridData());
         algorithmLabel.setText("Algorithm:");
 
-        queryLabel.setLayoutData(new GridData());
-        queryLabel.setText("Query:");
-
         sourceCombo.setLayoutData(GridData_3);
         sourceCombo.setText("Combo_1");
 
         algorithmCombo.setLayoutData(GridData_4);
         algorithmCombo.setText("Combo_2");
 
-        queryText.setLayoutData(GridData_5);
-
-        processButton.setLayoutData(FormData_2);
-        processButton.setText("Process");
-
-        innerComposite.setLayout(new GridLayout(4, false));
-
         sourceViewer =
             createViewer(sourceCombo, ComponentLoader.SOURCE_LOADER, SOURCE_ID_ATTRIBUTE);
         algorithmViewer =
-            createViewer(algorithmCombo, ComponentLoader.ALGORITHM_LOADER, ALGORITHM_ID_ATTRIBUTE);
+            createViewer(algorithmCombo, ComponentLoader.ALGORITHM_LOADER,
+                ALGORITHM_ID_ATTRIBUTE);
+
+        createRequiredAttributesLayout();
+
+        processButton = new Button(innerComposite, SWT.PUSH);
+        processButton.setLayoutData(GridData_5);
+        processButton.setText("Process");
+
+        innerComposite.setLayout(new GridLayout(4, false));
     }
 }

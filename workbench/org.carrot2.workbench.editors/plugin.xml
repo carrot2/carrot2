@@ -72,6 +72,10 @@
             attributeClass="org.carrot2.util.resource.Resource"
             class="org.carrot2.workbench.editors.ResourceEditor">
       </typeEditor>
+      <typeEditor
+            attributeClass="java.lang.String"
+            class="org.carrot2.workbench.editors.StringEditor">
+      </typeEditor>
    </extension>
 
 </plugin>
