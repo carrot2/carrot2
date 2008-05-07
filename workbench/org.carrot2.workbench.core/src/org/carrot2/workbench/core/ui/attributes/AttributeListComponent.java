@@ -2,7 +2,8 @@ package org.carrot2.workbench.core.ui.attributes;
 
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.Processing;
-import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
 import org.carrot2.workbench.core.jobs.ProcessingJob;
 import org.carrot2.workbench.core.ui.IProcessingResultPart;
 import org.carrot2.workbench.editors.AttributeChangeEvent;
@@ -16,10 +17,9 @@ import org.eclipse.ui.part.IPageSite;
 public class AttributeListComponent implements IProcessingResultPart
 {
     private ProcessingJob processingJob;
-    private AttributesPage page;
+    private IAttributesGrouppedControl groupControl;
     private AttributeChangeListener listener;
 
-    @SuppressWarnings("unchecked")
     public void init(final IWorkbenchSite site, Composite parent, ProcessingJob job)
     {
         this.processingJob = job;
@@ -31,10 +31,30 @@ public class AttributeListComponent implements IProcessingResultPart
                 processingJob.schedule();
             }
         };
-        page = new AttributesPage(job.algorithm, job.attributes);
-        page.ignoreAttributes(AttributeNames.DOCUMENTS);
-        page.filterAttributes(Input.class, Processing.class);
-        page.init(new IPageSite()
+        GroupingMethod method = GroupingMethod.STRUCTURE;
+        BindableDescriptor desc =
+            BindableDescriptorBuilder.buildDescriptor(job.algorithm);
+        desc = desc.flatten().group(method);
+        groupControl = new ExpandBarGrouppedControl();
+        Composite mainControl = groupControl.createMainControl(parent);
+        for (Object groupKey : desc.attributeGroups.keySet())
+        {
+            AttributesPage p1 =
+                createPageForGroup(site, mainControl, job, method, groupKey);
+            p1.addAttributeChangeListener(listener);
+            groupControl.createGroup(groupKey, p1);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private AttributesPage createPageForGroup(final IWorkbenchSite site,
+        Composite parent, ProcessingJob job, GroupingMethod method, Object key)
+    {
+        AttributesPage groupPage = new AttributesPage(job.algorithm, job.attributes);
+        groupPage.ignoreAttributes(AttributeNames.DOCUMENTS);
+        groupPage.filterAttributes(Input.class, Processing.class);
+        groupPage.filterGroup(method, key);
+        groupPage.init(new IPageSite()
         {
 
             public IActionBars getActionBars()
@@ -87,18 +107,21 @@ public class AttributeListComponent implements IProcessingResultPart
             }
 
         });
-        page.createControl(parent);
-        page.addAttributeChangeListener(listener);
+        groupPage.createControl(parent);
+        return groupPage;
     }
 
     public Control getControl()
     {
-        return page.getControl();
+        return groupControl.getControl();
     }
 
     public void dispose()
     {
-        page.removeAttributeChangeListener(listener);
-        page.dispose();
+        for (AttributesPage page : groupControl.getPages())
+        {
+            page.removeAttributeChangeListener(listener);
+        }
+        groupControl.dispose();
     }
 }

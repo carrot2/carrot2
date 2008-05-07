@@ -15,4 +15,9 @@ Require-Bundle: org.junit,
  org.carrot2.workbench.core,
  org.eclipse.ui,
  org.carrot2.core,
- org.carrot2.source.yahoo
+ org.carrot2.source.yahoo,
+ org.carrot2.source.google,
+ org.carrot2.source.microsoft,
+ org.carrot2.algorithm.stc,
+ org.carrot2.algorithm.synthetic,
+ org.carrot2.workbench.editors
