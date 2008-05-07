@@ -5,6 +5,7 @@ import java.util.*;
 
 import org.carrot2.core.ProcessingComponent;
 import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.editors.*;
 import org.carrot2.workbench.editors.factory.EditorFactory;
@@ -23,17 +24,21 @@ public class AttributesPage extends Page implements IPersistableEditor
 {
 
     private BindableDescriptor descriptor;
+    private BindableDescriptor flatDescriptor;
     private Map<String, Object> attributes;
     private ProcessingComponent component;
     private Composite root;
     private java.util.List<IAttributeEditor> editors = new ArrayList<IAttributeEditor>();
     private java.util.List<String> ignoredAttributes = new ArrayList<String>();
     private Class<? extends Annotation> [] filterAnnotations;
+    private Object filterGroupKey;
+    private GroupingMethod groupingMethod;
 
     public AttributesPage(ProcessingComponent component, Map<String, Object> attributes)
     {
         this.component = component;
-        this.descriptor = BindableDescriptorBuilder.buildDescriptor(component).flatten();
+        this.descriptor = BindableDescriptorBuilder.buildDescriptor(component);
+        this.flatDescriptor = descriptor.flatten();
         this.attributes = attributes;
     }
 
@@ -56,9 +61,27 @@ public class AttributesPage extends Page implements IPersistableEditor
         {
             desc = desc.only(filterAnnotations);
         }
-
-        for (Map.Entry<String, AttributeDescriptor> entry : desc.attributeDescriptors
-            .entrySet())
+        Map<String, AttributeDescriptor> attDescriptors = null;
+        desc = desc.flatten();
+        if (groupingMethod != null)
+        {
+            desc = desc.group(groupingMethod);
+            if (desc.attributeGroups.containsKey(filterGroupKey))
+            {
+                attDescriptors =
+                    desc.group(groupingMethod).attributeGroups.get(filterGroupKey);
+            }
+            else
+            {
+                Utils.logError("Group with key " + filterGroupKey + " not found", null,
+                    false);
+            }
+        }
+        if (attDescriptors == null)
+        {
+            attDescriptors = desc.attributeDescriptors;
+        }
+        for (Map.Entry<String, AttributeDescriptor> entry : attDescriptors.entrySet())
         {
             AttributeDescriptor attDescriptor = entry.getValue();
             if (!ignoredAttributes.contains(attDescriptor.key))
@@ -163,8 +186,13 @@ public class AttributesPage extends Page implements IPersistableEditor
 
     /**
      * Attributes with the given key will not be shown in the page.
-     * 
+     * <p>
      * Subsequent calls of this method override previous ones.
+     * </p>
+     * <p>
+     * Those {@code keys} are used inside {@link AttributesPage#createControl(Composite)}
+     * method. Setting them after calling this method has no effect.
+     * </p>
      * 
      * @param keys
      */
@@ -179,7 +207,14 @@ public class AttributesPage extends Page implements IPersistableEditor
     }
 
     /**
+     * Only attributes with the given annotations will be shown in the page.
+     * <p>
      * Subsequent calls of this method override previous ones.
+     * </p>
+     * <p>
+     * This filter is used inside {@link AttributesPage#createControl(Composite)} method.
+     * Setting the filter after calling this method has no effect.
+     * </p>
      * 
      * @param annotationClasses
      * @see BindableDescriptor#only(Class...)
@@ -187,6 +222,27 @@ public class AttributesPage extends Page implements IPersistableEditor
     public void filterAttributes(Class<? extends Annotation>... annotationClasses)
     {
         filterAnnotations = annotationClasses;
+    }
+
+    /**
+     * Only attributes inside given groups will be shown in the page.
+     * <p>
+     * Subsequent calls of this method override previous ones.
+     * </p>
+     * <p>
+     * This filter is used inside {@link AttributesPage#createControl(Composite)} method.
+     * Setting the filter after calling this method has no effect.
+     * </p>
+     * 
+     * @param method grouping method
+     * @param keys keys of the groups, that should be shown
+     * @see GroupingMethod
+     * @see BindableDescriptor#group(GroupingMethod)
+     */
+    public void filterGroup(GroupingMethod method, Object key)
+    {
+        this.filterGroupKey = key;
+        this.groupingMethod = method;
     }
 
     public void addAttributeChangeListener(AttributeChangeListener listener)
@@ -245,7 +301,7 @@ public class AttributesPage extends Page implements IPersistableEditor
         }
         else
         {
-            return descriptor.attributeDescriptors.get(key).defaultValue;
+            return flatDescriptor.attributeDescriptors.get(key).defaultValue;
         }
     }
 
