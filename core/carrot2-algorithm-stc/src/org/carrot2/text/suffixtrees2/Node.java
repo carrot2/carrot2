@@ -7,19 +7,19 @@ import org.carrot2.text.suffixtrees.SuffixableElement;
 /**
  * A node in a {@link SuffixTree}.
  */
-public class Node<T>
+public class Node
 {
     /** This node's owner tree. */
-    protected final SuffixTree<T> container;
+    protected final SuffixTree container;
 
     /** Pointer to the next smaller suffix. */
-    Node<T> suffixNode;
+    Node suffixNode;
 
     /**
      * The edge from parent node to this node. This is to speed up later management of
      * this suffix tree.
      */
-    private Edge<T> edgeToParent;
+    private Edge edgeToParent;
 
     /**
      * First outgoing edge from this node or <code>null</code> if none.
@@ -29,7 +29,7 @@ public class Node<T>
     /**
      * Every node knows its container tree.
      */
-    protected Node(SuffixTree<T> container)
+    protected Node(SuffixTree container)
     {
         this.container = container;
     }
@@ -37,15 +37,15 @@ public class Node<T>
     /**
      * Returns an iterator object of edges leaving this node.
      */
-    public Iterator<Edge<T>> getEdgesIterator()
+    public Iterator<Edge> getEdgesIterator()
     {
         if (firstEdge == null)
         {
-            final List<Edge<T>> l = Collections.emptyList();
+            final List<Edge> l = Collections.emptyList();
             return l.iterator();
         }
 
-        return new Iterator<Edge<T>>()
+        return new Iterator<Edge>()
         {
             NodeEdge current = firstEdge;
 
@@ -54,7 +54,7 @@ public class Node<T>
                 return current != null;
             }
 
-            public Edge<T> next()
+            public Edge next()
             {
                 final NodeEdge result = current;
                 current = result.next;
@@ -73,7 +73,7 @@ public class Node<T>
      * be valid part of some SuffixableElement, e.g., must implement equals method. Method
      * returns null if no matching edge has been found.
      */
-    public Edge<T> findEdgeMatchingFirstElement(Object key)
+    public Edge findEdgeMatchingFirstElement(Object key)
     {
         return this.container.getEdge(this, key);
     }
@@ -85,9 +85,9 @@ public class Node<T>
      * <code>index, index+1 and index+3</code>. The method returns <code>null</code>
      * if matching failed.
      */
-    public Edge<T> findEdgeMatchingEntirely(List<T> t, int startIndex)
+    public Edge findEdgeMatchingEntirely(List t, int startIndex)
     {
-        final Edge<T> matchingEdge = findEdgeMatchingFirstElement(t.get(startIndex));
+        final Edge matchingEdge = findEdgeMatchingFirstElement(t.get(startIndex));
         if (matchingEdge != null)
         {
             /*
@@ -128,10 +128,10 @@ public class Node<T>
     /**
      * Creates a child note and returns an edge to it.
      */
-    protected Edge<T> createChildNode(int firstElement, int lastElement)
+    protected Edge createChildNode(int firstElement, int lastElement)
     {
-        final Node<T> child = container.nodeFactory.createNode(container);
-        final Edge<T> link = new Edge<T>(firstElement, lastElement, this, child);
+        final Node child = container.nodeFactory.createNode(container);
+        final Edge link = new Edge(firstElement, lastElement, this, child);
 
         child.edgeToParent = link;
         this.addEdge(link);
@@ -159,7 +159,7 @@ public class Node<T>
         }
 
         int start = edgeToParent.getStartIndex();
-        for (Edge<T> ei = edgeToParent; ei.getStartNode().edgeToParent != null;)
+        for (Edge ei = edgeToParent; ei.getStartNode().edgeToParent != null;)
         {
             ei = ei.getStartNode().edgeToParent;
             start -= ei.length();
@@ -201,7 +201,7 @@ public class Node<T>
     /**
      * Adds an edge to this node.
      */
-    protected void addEdge(Edge<T> edge)
+    protected void addEdge(Edge edge)
     {
         final NodeEdge newEdge = new NodeEdge(this,
             container.sequence[edge.firstElementIndex]);
@@ -214,7 +214,7 @@ public class Node<T>
     /**
      * Removes an edge from this node.
      */
-    protected void removeEdge(Edge<T> edge)
+    protected void removeEdge(Edge edge)
     {
         final NodeEdge nodeEdge = container.removeEdge(this,
             container.sequence[edge.firstElementIndex]);

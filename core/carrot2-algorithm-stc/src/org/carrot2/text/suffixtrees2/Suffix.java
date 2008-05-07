@@ -3,10 +3,10 @@ package org.carrot2.text.suffixtrees2;
 /**
  * A suffix object used internally in class {@link SuffixTree}.
  */
-final class Suffix<T>
+final class Suffix
 {
     /** The owner of this suffix. */
-    protected final SuffixTree<T> container;
+    protected final SuffixTree container;
 
     /** first collection element where this suffix starts */
     protected int firstElementIndex;
@@ -15,12 +15,12 @@ final class Suffix<T>
     protected int lastElementIndex;
 
     /** Origin node needed for canonization operation. */
-    protected Node<T> originNode;
+    protected Node originNode;
 
     /**
      * 
      */
-    public Suffix(SuffixTree<T> container, Node<T> originNode, int firstElementIndex,
+    public Suffix(SuffixTree container, Node originNode, int firstElementIndex,
         int lastElementIndex)
     {
         this.container = container;

@@ -9,26 +9,23 @@ import java.util.List;
  * <p>
  * <b>Fast String Searching With Suffix Trees <i>Mark Nelson </i></b> Dr Dobb's Journal,
  * August 1996 http://softlab.od.ua/algo/data/suftrees/suffixt.htm (2000)
- * <p>
- * It is obvious that the performance of this class will <b>highly</b> depend on the type
- * of sequence collection.
  */
-public final class SuffixTree<T>
+public final class SuffixTree
 {
     /**
      * {@link Node} factory for internal tree nodes.
      */
-    final NodeFactory<T> nodeFactory;
+    final NodeFactory nodeFactory;
 
     /**
      * A hash map of edges leaving each node.
      */
-    final HashMap<NodeEdge, Edge<T>> edges = new HashMap<NodeEdge, Edge<T>>();
+    final HashMap<NodeEdge, Edge> edges = new HashMap<NodeEdge, Edge>();
 
     /**
      * This is the root node of the tree.
      */
-    Node<T> rootNode;
+    Node rootNode;
 
     /**
      * Sequence of elements to consider.
@@ -47,7 +44,7 @@ public final class SuffixTree<T>
     /*
      * 
      */
-    public SuffixTree(NodeFactory<T> nodeFactory)
+    public SuffixTree(NodeFactory nodeFactory)
     {
         this.nodeFactory = nodeFactory;
     }
@@ -56,7 +53,7 @@ public final class SuffixTree<T>
      * Creates a suffix tree for the given list of elements. Returns the root node of the
      * resulting tree.
      */
-    public Node<T> build(List<T> sequence)
+    public Node build(List sequence)
     {
         rootNode = nodeFactory.createNode(this);
         edges.clear();
@@ -103,8 +100,8 @@ public final class SuffixTree<T>
                 /*
                  * Explicit node, check if it has an edge starting with current element.
                  */
-                edge = active.originNode.findEdgeMatchingFirstElement(
-                    sequence[lastElementIndex]);
+                edge = active.originNode
+                    .findEdgeMatchingFirstElement(sequence[lastElementIndex]);
 
                 /*
                  * If it does, do nothing (path compression, an implicit node is created).
@@ -174,13 +171,13 @@ public final class SuffixTree<T>
 
         return active;
     }
-    
+
     private NodeEdge temp = new NodeEdge();
-    
+
     /*
      * 
      */
-    final NodeEdge removeEdge(Node<T> node, Object label)
+    final NodeEdge removeEdge(Node node, Object label)
     {
         this.temp.node = node;
         this.temp.key = label;
@@ -192,10 +189,10 @@ public final class SuffixTree<T>
     /*
      * 
      */
-    final Edge<T> getEdge(Node<T> node, Object label)
+    final Edge getEdge(Node node, Object label)
     {
         this.temp.node = node;
         this.temp.key = label;
         return this.edges.get(temp);
-    }    
+    }
 }

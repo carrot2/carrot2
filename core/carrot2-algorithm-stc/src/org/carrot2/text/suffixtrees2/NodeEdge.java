@@ -5,7 +5,7 @@ package org.carrot2.text.suffixtrees2;
  */
 final class NodeEdge
 {
-    Node<?> node;
+    Node node;
     Object key;
     NodeEdge next;
 
@@ -13,7 +13,7 @@ final class NodeEdge
     {
     }
 
-    public NodeEdge(Node<?> node, Object key)
+    public NodeEdge(Node node, Object key)
     {
         this.node = node;
         this.key = key;

@@ -3,7 +3,7 @@ package org.carrot2.text.suffixtrees2;
 /**
  * An edge between two nodes in a {@link SuffixTree}.
  */
-public final class Edge<T>
+public final class Edge
 {
     /** Edge's start index. */
     protected int firstElementIndex;
@@ -12,15 +12,15 @@ public final class Edge<T>
     protected final int lastElementIndex;
 
     /** A {@link Node} from which the edge starts. */
-    protected Node<T> startNode;
+    protected Node startNode;
 
     /** A {@link Node} where this edge ends */
-    protected final Node<T> endNode;
+    protected final Node endNode;
 
     /** 
      * 
      */
-    Edge(int firstElementIndex, int lastElementIndex, Node<T> startNode, Node<T> endNode)
+    Edge(int firstElementIndex, int lastElementIndex, Node startNode, Node endNode)
     {
         this.firstElementIndex = firstElementIndex;
         this.lastElementIndex = lastElementIndex;
@@ -32,11 +32,11 @@ public final class Edge<T>
      * This method splits an Edge on a given suffix, creates a new {@link Node} and makes
      * a fork in the tree.
      */
-    protected Node<T> splitEdge(Suffix<T> s)
+    protected Node splitEdge(Suffix s)
     {
         startNode.removeEdge(this);
 
-        final Edge<T> newEdge = s.originNode.createChildNode(s.firstElementIndex,
+        final Edge newEdge = s.originNode.createChildNode(s.firstElementIndex,
             s.lastElementIndex);
 
         newEdge.endNode.suffixNode = s.originNode;
@@ -49,13 +49,13 @@ public final class Edge<T>
     }
 
     /** Returns the start node of this edge. */
-    public Node<T> getStartNode()
+    public Node getStartNode()
     {
         return this.startNode;
     }
 
     /** Returns the end node of this edge. */
-    public Node<T> getEndNode()
+    public Node getEndNode()
     {
         return this.endNode;
     }

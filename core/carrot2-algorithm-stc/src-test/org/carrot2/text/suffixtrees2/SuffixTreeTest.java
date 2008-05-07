@@ -19,7 +19,7 @@ public class SuffixTreeTest
     {
         final List<Character> sequence = asCharacterList("mississippi");
         final SuffixTree t = new SuffixTree();
-        final Node<Character> rootNode = t.build(sequence);
+        final Node rootNode = t.build(sequence);
 
         final List<String> actual = new ArrayList<String>();
         final Stack<Node> nodes = new Stack<Node>();
@@ -27,11 +27,11 @@ public class SuffixTreeTest
         while (!nodes.isEmpty())
         {
             final Node n = nodes.pop();
-            final Iterator<Edge<Character>> i = n.getEdgesIterator();
+            final Iterator<Edge> i = n.getEdgesIterator();
             
             while (i.hasNext())
             {
-                final Edge<Character> e = i.next();
+                final Edge e = i.next();
                 if (e.endNode.isLeaf())
                 {
                     List<Character> p = sequence.subList(e.endNode.getSuffixStartIndex(), e.endNode.getSuffixEndIndex() + 1);
