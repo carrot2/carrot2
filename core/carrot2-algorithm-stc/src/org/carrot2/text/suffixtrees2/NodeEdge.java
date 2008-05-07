@@ -1,35 +1,36 @@
 package org.carrot2.text.suffixtrees2;
 
 /**
+ * A key in the hash map of all edges in the tree.
  * 
+ * @see SuffixTree#edges
  */
 final class NodeEdge
 {
     Node node;
-    Object key;
+    int objectCode;
     NodeEdge next;
 
     public NodeEdge()
     {
     }
 
-    public NodeEdge(Node node, Object key)
+    public NodeEdge(Node node, int objectCode)
     {
         this.node = node;
-        this.key = key;
+        this.objectCode = objectCode;
     }
 
     @Override
     public boolean equals(Object obj)
     {
         final NodeEdge other = (NodeEdge) obj;
-        return (other.node == this.node &&
-            other.key.equals(this.key));
+        return (other.node == this.node && (this.objectCode == other.objectCode));
     }
 
     @Override
     public int hashCode()
     {
-        return node.hashCode() ^ key.hashCode();
+        return node.hashCode() ^ objectCode;
     }
 }

@@ -2,14 +2,12 @@ package org.carrot2.text.suffixtrees2;
 
 import java.util.*;
 
-import org.carrot2.text.suffixtrees.SuffixableElement;
-
 /**
  * A node in a {@link SuffixTree}.
  */
-public class Node
+public class Node implements Iterable<Edge>
 {
-    /** This node's owner tree. */
+    /** This node's container tree. */
     protected final SuffixTree container;
 
     /** Pointer to the next smaller suffix. */
@@ -19,7 +17,7 @@ public class Node
      * The edge from parent node to this node. This is to speed up later management of
      * this suffix tree.
      */
-    private Edge edgeToParent;
+    Edge edgeToParent;
 
     /**
      * First outgoing edge from this node or <code>null</code> if none.
@@ -27,7 +25,7 @@ public class Node
     private NodeEdge firstEdge;
 
     /**
-     * Every node knows its container tree.
+     * 
      */
     protected Node(SuffixTree container)
     {
@@ -35,9 +33,9 @@ public class Node
     }
 
     /**
-     * Returns an iterator object of edges leaving this node.
+     * Returns an iterator over the edges leaving this node.
      */
-    public Iterator<Edge> getEdgesIterator()
+    public final Iterator<Edge> getEdges()
     {
         if (firstEdge == null)
         {
@@ -69,85 +67,21 @@ public class Node
     }
 
     /**
-     * Returns an Edge object, which matches the passed argument. The passed argument must
-     * be valid part of some SuffixableElement, e.g., must implement equals method. Method
-     * returns null if no matching edge has been found.
+     * Returns an {@link Edge} object, which matches the element code at index
+     * <code>index</code>. Method returns null if no matching edge has been found.
      */
-    public Edge findEdgeMatchingFirstElement(Object key)
+    public final Edge getEdge(int objectCode)
     {
-        return this.container.getEdge(this, key);
+        return this.container.getEdge(this, objectCode);
     }
 
     /**
-     * Finds an edge <b>entirely</b> matching the sequence of objects at some index.
-     * E.g., if the {@link Edge} holds three elements, the three of them are matched
-     * against elements of {@link SuffixableElement} at
-     * <code>index, index+1 and index+3</code>. The method returns <code>null</code>
-     * if matching failed.
-     */
-    public Edge findEdgeMatchingEntirely(List t, int startIndex)
-    {
-        final Edge matchingEdge = findEdgeMatchingFirstElement(t.get(startIndex));
-        if (matchingEdge != null)
-        {
-            /*
-             * Calculate the number of elements to compare. if there are less elements in
-             * t than in the edge, it may be possible that suffixableElement ends
-             * somewhere along the compressed path (is a prefix of the suffix represented
-             * by this path).
-             */
-            final int maxLength = Math.min(matchingEdge.length(), t.size() - startIndex);
-
-            // the first element matches, check all the remaining ones
-            for (int i = 1; i < maxLength; i++)
-            {
-                startIndex++;
-
-                if (container.sequence[matchingEdge.getStartIndex() + i].equals(t
-                    .get(startIndex)) == false)
-                {
-                    // This path doesn't entirely match.
-                    return null;
-                }
-            }
-
-            // are we along the compressed path?
-            if (matchingEdge.getEndIndex() > matchingEdge.getStartIndex() + maxLength - 1)
-            {
-                /*
-                 * We are along compressed path. Return null because we need entirely
-                 * matching edge.
-                 */
-                return null;
-            }
-        }
-
-        return matchingEdge;
-    }
-
-    /**
-     * Creates a child note and returns an edge to it.
-     */
-    protected Edge createChildNode(int firstElement, int lastElement)
-    {
-        final Node child = container.nodeFactory.createNode(container);
-        final Edge link = new Edge(firstElement, lastElement, this, child);
-
-        child.edgeToParent = link;
-        this.addEdge(link);
-
-        return link;
-    }
-
-    /**
-     * Returns the index of the start of this node's suffix (substring actually). To
-     * obtain a full path from root to this node, traverse SuffixableElement like below:
+     * Returns the start index of this node's suffix. Full path from root to this node:
      * 
      * <pre>
-     * SuffixableElement p = node.getSuffixableElement();
      * for (int i = node.getSuffixStartIndex(); i &lt;= node.getSuffixEndIndex(); i++)
      * {
-     *     System.out.print(p.get(i));
+     *     System.out.print(inputSequence.get(i));
      * }
      * </pre>
      */
@@ -169,16 +103,9 @@ public class Node
     }
 
     /**
-     * Returns the index of the last element of this node's suffix. To obtain a full path
-     * from root to this node, traverse SuffixableElement like below:
+     * Returns the index of the last element of this node's suffix (inclusive).
      * 
-     * <pre>
-     * SuffixableElement p = node.getSuffixableElement();
-     * for (int i = node.getSuffixStartIndex(); i &lt;= node.getSuffixEndIndex(); i++)
-     * {
-     *     System.out.print(p.get(i));
-     * }
-     * </pre>
+     * @see #getSuffixStartIndex()
      */
     public int getSuffixEndIndex()
     {
@@ -191,7 +118,7 @@ public class Node
     }
 
     /**
-     * Returns true if this {@link Node} is a leaf node (has no outgoing edges)
+     * Returns true if this {@link Node} is a leaf node (has no outgoing edges).
      */
     public boolean isLeaf()
     {
@@ -199,12 +126,45 @@ public class Node
     }
 
     /**
+     * 
+     */
+    public Iterator<Edge> iterator()
+    {
+        return getEdges();
+    }
+
+    /**
+     * @return Parent node or <code>null</code> if there is no parent node.
+     */
+    public final Node getParentNode()
+    {
+        if (this.edgeToParent == null)
+            return null;
+
+        return edgeToParent.startNode;
+    }
+
+    /**
+     * Creates a child node and returns an edge to it.
+     */
+    Edge createChildNode(int firstElement, int lastElement)
+    {
+        final Node child = container.createNode();
+        final Edge link = new Edge(firstElement, lastElement, this, child);
+
+        child.edgeToParent = link;
+        this.addEdge(link);
+
+        return link;
+    }
+
+    /**
      * Adds an edge to this node.
      */
-    protected void addEdge(Edge edge)
+    void addEdge(Edge edge)
     {
-        final NodeEdge newEdge = new NodeEdge(this,
-            container.sequence[edge.firstElementIndex]);
+        final NodeEdge newEdge = new NodeEdge(this, container.input
+            .objectAt(edge.firstElementIndex));
         container.edges.put(newEdge, edge);
 
         newEdge.next = this.firstEdge;
@@ -214,10 +174,10 @@ public class Node
     /**
      * Removes an edge from this node.
      */
-    protected void removeEdge(Edge edge)
+    void removeEdge(Edge edge)
     {
-        final NodeEdge nodeEdge = container.removeEdge(this,
-            container.sequence[edge.firstElementIndex]);
+        final NodeEdge nodeEdge = container.removeEdge(this, container.input
+            .objectAt(edge.firstElementIndex));
 
         if (nodeEdge.equals(this.firstEdge))
         {

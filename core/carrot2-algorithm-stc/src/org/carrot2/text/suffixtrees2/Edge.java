@@ -1,7 +1,7 @@
 package org.carrot2.text.suffixtrees2;
 
 /**
- * An edge between two nodes in a {@link SuffixTree}.
+ * An edge between two {@link Node}s in a {@link SuffixTree}.
  */
 public final class Edge
 {
@@ -32,7 +32,7 @@ public final class Edge
      * This method splits an Edge on a given suffix, creates a new {@link Node} and makes
      * a fork in the tree.
      */
-    protected Node splitEdge(Suffix s)
+    final Node splitEdge(Suffix s)
     {
         startNode.removeEdge(this);
 
@@ -79,6 +79,6 @@ public final class Edge
      */
     public int length()
     {
-        return getEndIndex() - getStartIndex() + 1;
+        return this.lastElementIndex - this.firstElementIndex + 1;
     }
 }

@@ -1,26 +1,30 @@
 package org.carrot2.text.suffixtrees2;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
- * This class implements a generic Esko Ukkonnen's algorithm for creating a suffix tree.
- * The implementation has been derived from the C-version by Mark Nelson:
+ * This class implements Esko Ukkonnen's algorithm for creating a suffix tree. The
+ * implementation has been derived from the C-version by Mark Nelson:
  * <p>
  * <b>Fast String Searching With Suffix Trees <i>Mark Nelson </i></b> Dr Dobb's Journal,
  * August 1996 http://softlab.od.ua/algo/data/suftrees/suffixt.htm (2000)
  */
-public final class SuffixTree
+public final class SuffixTree implements Iterable<Node>
 {
     /**
      * {@link Node} factory for internal tree nodes.
      */
-    final NodeFactory nodeFactory;
+    private final NodeFactory nodeFactory;
+
+    /**
+     * Number of created nodes.
+     */
+    private int nodesCount;
 
     /**
      * A hash map of edges leaving each node.
      */
-    final HashMap<NodeEdge, Edge> edges = new HashMap<NodeEdge, Edge>();
+    public final HashMap<NodeEdge, Edge> edges = new HashMap<NodeEdge, Edge>();
 
     /**
      * This is the root node of the tree.
@@ -30,7 +34,12 @@ public final class SuffixTree
     /**
      * Sequence of elements to consider.
      */
-    Object [] sequence;
+    Sequence input;
+
+    /*
+     * Temporary reusable object for lookups.
+     */
+    private NodeEdge temp = new NodeEdge();
 
     /*
      * 
@@ -50,24 +59,88 @@ public final class SuffixTree
     }
 
     /**
-     * Creates a suffix tree for the given list of elements. Returns the root node of the
-     * resulting tree.
+     * Recreates this suffix tree for another list of elements. Returns the root node of
+     * the resulting tree.
      */
-    public Node build(List sequence)
+    public Node build(Sequence input)
     {
-        rootNode = nodeFactory.createNode(this);
+        // Reset internal structures.
+        this.input = input;
         edges.clear();
-
-        final Suffix activePoint = new Suffix(this, rootNode, 0, -1);
+        nodesCount = 0;
+        rootNode = nodeFactory.createNode(this);
 
         // Loop through all prefixes of the input.
-        this.sequence = sequence.toArray(new Object [sequence.size()]);
-        for (int i = 0; i < this.sequence.length; i++)
+        final Suffix activePoint = new Suffix(this, rootNode, 0, -1);
+        final int maxIndex = this.input.size();
+        for (int i = 0; i < maxIndex; i++)
         {
             insertPrefix(activePoint, i);
         }
 
         return rootNode;
+    }
+
+    /**
+     * @return Returns <code>true</code> if this tree has a suffix (path from the root
+     *         node to a leaf node) matching the given sequence. Note that object codes in
+     *         both sequences must match each other.
+     */
+    public boolean hasSuffix(Sequence seq)
+    {
+        final Node n = getMatchingNode(seq);
+        return n.isLeaf();
+    }
+
+    /**
+     * @return Returns an iterator over all nodes of this tree.
+     */
+    public Iterator<Node> iterator()
+    {
+        return new DepthFirstNodeIterator(rootNode);
+    }
+
+    /**
+     * @return If <code>seq</code> exists in the tree (either as an explicit node or an
+     *         implicit node along the edge), then this method returns the node closest to
+     *         the end of the sequence (maximum prefix of <code>seq</code> that ends at
+     *         an explicit node in the tree). Otherwise this method returns
+     *         <code>null</code>.
+     */
+    private Node getMatchingNode(Sequence seq)
+    {
+        Node node = this.rootNode;
+        int index = 0;
+
+        while (index < seq.size())
+        {
+            final Edge e = node.getEdge(seq.objectAt(index));
+            if (e == null)
+            {
+                /* Not found. */
+                return null;
+            }
+
+            // Ensure all objects along this edge really match.
+            final int endIndex = e.getEndIndex();
+            for (int i = e.getStartIndex(); i <= endIndex; i++, index++)
+            {
+                if (index == seq.size())
+                {
+                    return node;
+                }
+
+                if (input.objectAt(i) != seq.objectAt(index))
+                {
+                    /* Not found. */
+                    return null;
+                }
+            }
+
+            node = e.endNode;
+        }
+
+        return node;
     }
 
     /**
@@ -81,7 +154,7 @@ public final class SuffixTree
      * @return current end point (becomes active point if more elements are to be
      *         inserted).
      */
-    protected Suffix insertPrefix(Suffix active, int lastElementIndex)
+    final Suffix insertPrefix(Suffix active, int lastElementIndex)
     {
         Node parent_node = null;
         Node last_parent_node = null;
@@ -100,8 +173,7 @@ public final class SuffixTree
                 /*
                  * Explicit node, check if it has an edge starting with current element.
                  */
-                edge = active.originNode
-                    .findEdgeMatchingFirstElement(sequence[lastElementIndex]);
+                edge = active.originNode.getEdge(input.objectAt(lastElementIndex));
 
                 /*
                  * If it does, do nothing (path compression, an implicit node is created).
@@ -116,12 +188,12 @@ public final class SuffixTree
                  * element.
                  */
                 edge = active.originNode
-                    .findEdgeMatchingFirstElement(sequence[active.firstElementIndex]);
+                    .getEdge(input.objectAt(active.firstElementIndex));
 
                 int span = active.lastElementIndex - active.firstElementIndex;
 
-                if (sequence[edge.firstElementIndex + span + 1]
-                    .equals(sequence[lastElementIndex]))
+                if (input.objectAt(edge.firstElementIndex + span + 1) == input
+                    .objectAt(lastElementIndex))
                 {
                     break;
                 }
@@ -138,7 +210,7 @@ public final class SuffixTree
              * create a new node, it also means we need to create a suffix link to the new
              * node from the last node we visited.
              */
-            parent_node.createChildNode(lastElementIndex, sequence.length - 1);
+            parent_node.createChildNode(lastElementIndex, input.size() - 1);
 
             if (last_parent_node != null && last_parent_node != rootNode)
             {
@@ -172,15 +244,13 @@ public final class SuffixTree
         return active;
     }
 
-    private NodeEdge temp = new NodeEdge();
-
     /*
      * 
      */
-    final NodeEdge removeEdge(Node node, Object label)
+    final NodeEdge removeEdge(Node node, int objectCode)
     {
         this.temp.node = node;
-        this.temp.key = label;
+        this.temp.objectCode = objectCode;
 
         this.edges.remove(temp);
         return temp;
@@ -189,10 +259,28 @@ public final class SuffixTree
     /*
      * 
      */
-    final Edge getEdge(Node node, Object label)
+    final Edge getEdge(Node node, int objectCode)
     {
         this.temp.node = node;
-        this.temp.key = label;
+        this.temp.objectCode = objectCode;
         return this.edges.get(temp);
+    }
+
+    /*
+     * 
+     */
+    final Node createNode()
+    {
+        nodesCount++;
+        return nodeFactory.createNode(this);
+    }
+
+    /*
+     * 
+     */
+    @Override
+    public String toString()
+    {
+        return "SuffixTree[edges=" + edges.size() + ", nodes created=" + nodesCount + "]";
     }
 }

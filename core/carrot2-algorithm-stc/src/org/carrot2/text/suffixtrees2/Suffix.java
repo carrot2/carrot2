@@ -54,8 +54,9 @@ final class Suffix
     {
         if (!isExplicit())
         {
-            Object element = container.sequence[firstElementIndex];
-            Edge edge = originNode.findEdgeMatchingFirstElement(element);
+            final Sequence input = originNode.container.input;
+
+            Edge edge = originNode.getEdge(input.objectAt(firstElementIndex));
             int edgeSpan = edge.lastElementIndex - edge.firstElementIndex;
 
             while (edgeSpan <= (lastElementIndex - firstElementIndex))
@@ -65,8 +66,7 @@ final class Suffix
 
                 if (firstElementIndex <= lastElementIndex)
                 {
-                    element = container.sequence[firstElementIndex];
-                    edge = originNode.findEdgeMatchingFirstElement(element);
+                    edge = originNode.getEdge(input.objectAt(firstElementIndex));
                     edgeSpan = edge.lastElementIndex - edge.firstElementIndex;
                 }
             }
