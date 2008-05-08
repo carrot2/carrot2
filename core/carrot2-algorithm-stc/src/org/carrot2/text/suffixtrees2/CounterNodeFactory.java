@@ -5,7 +5,6 @@ package org.carrot2.text.suffixtrees2;
  */
 public final class CounterNodeFactory implements NodeFactory<CounterNode>
 {
-    @Override
     public CounterNode createNode(SuffixTree<? super CounterNode> container)
     {
         return new CounterNode(container);

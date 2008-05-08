@@ -5,7 +5,6 @@ package org.carrot2.text.suffixtrees2;
  */
 public final class BitSetNodeFactory implements NodeFactory<BitSetNode>
 {
-    @Override
     public BitSetNode createNode(SuffixTree<? super BitSetNode> container)
     {
         return new BitSetNode(container);

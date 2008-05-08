@@ -1,11 +1,14 @@
 package org.carrot2.workbench.core.ui.attributes;
 
 import java.util.List;
+import java.util.Map;
 
+import org.carrot2.core.ProcessingComponent;
 import org.carrot2.util.attribute.BindableDescriptor;
 import org.carrot2.workbench.editors.AttributeChangeEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.part.IPageSite;
 
 /**
  * Implementing classes create grouping control, that {@link AttributesPage} can be put
@@ -19,6 +22,8 @@ import org.eclipse.swt.widgets.Control;
  */
 public interface IAttributesGrouppedControl
 {
+    void init(ProcessingComponent component, Map<String, Object> attributes);
+
     /**
      * Creates control, that will store one group only.
      * <p>
@@ -31,7 +36,7 @@ public interface IAttributesGrouppedControl
      *            created using mainControl as a parent;
      * @see BindableDescriptor#attributeGroups
      */
-    void createGroup(Object label, AttributesPage attributes);
+    void createGroup(Object groupKey, AttributesControlConfiguration conf, IPageSite site);
 
     /**
      * Creates one main control, that all the groups will be placed on.
@@ -40,7 +45,7 @@ public interface IAttributesGrouppedControl
      *            attribute pages
      * 
      */
-    Composite createMainControl(Composite parent);
+    void createMainControl(Composite parent);
 
     /**
      * @return root control of a groupped control

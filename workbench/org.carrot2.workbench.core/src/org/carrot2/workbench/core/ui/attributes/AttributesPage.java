@@ -1,11 +1,10 @@
 package org.carrot2.workbench.core.ui.attributes;
 
-import java.lang.annotation.Annotation;
 import java.util.*;
 
+import org.apache.commons.lang.NullArgumentException;
 import org.carrot2.core.ProcessingComponent;
 import org.carrot2.util.attribute.*;
-import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.editors.*;
 import org.carrot2.workbench.editors.factory.EditorFactory;
@@ -29,17 +28,25 @@ public class AttributesPage extends Page implements IPersistableEditor
     private ProcessingComponent component;
     private Composite root;
     private java.util.List<IAttributeEditor> editors = new ArrayList<IAttributeEditor>();
-    private java.util.List<String> ignoredAttributes = new ArrayList<String>();
-    private Class<? extends Annotation> [] filterAnnotations;
-    private Object filterGroupKey;
-    private GroupingMethod groupingMethod;
+    private AttributesControlConfiguration conf;
 
-    public AttributesPage(ProcessingComponent component, Map<String, Object> attributes)
+    public AttributesPage(ProcessingComponent component, Map<String, Object> attributes,
+        AttributesControlConfiguration configuration)
     {
+
+        if (configuration == null)
+        {
+            throw new NullArgumentException("configuration");
+        }
+        if (component == null)
+        {
+            throw new NullArgumentException("component");
+        }
         this.component = component;
         this.descriptor = BindableDescriptorBuilder.buildDescriptor(component);
         this.flatDescriptor = descriptor.flatten();
         this.attributes = attributes;
+        this.conf = configuration;
     }
 
     /**
@@ -57,24 +64,28 @@ public class AttributesPage extends Page implements IPersistableEditor
         layout.numColumns = 2;
         root.setLayout(layout);
         BindableDescriptor desc = descriptor;
-        if (filterAnnotations != null)
+        if (conf.filterAnnotations != null)
         {
-            desc = desc.only(filterAnnotations);
+            desc = desc.only(conf.getFilterAnnotationsArray());
         }
         Map<String, AttributeDescriptor> attDescriptors = null;
         desc = desc.flatten();
-        if (groupingMethod != null)
+        if (conf.groupingMethod != null)
         {
-            desc = desc.group(groupingMethod);
-            if (desc.attributeGroups.containsKey(filterGroupKey))
+            if (!desc.groupedBy.equals(conf.groupingMethod))
+            {
+                desc = desc.group(conf.groupingMethod);
+            }
+            if (desc.attributeGroups.containsKey(conf.filterGroupKey))
             {
                 attDescriptors =
-                    desc.group(groupingMethod).attributeGroups.get(filterGroupKey);
+                    desc.group(conf.groupingMethod).attributeGroups
+                        .get(conf.filterGroupKey);
             }
             else
             {
-                Utils.logError("Group with key " + filterGroupKey + " not found", null,
-                    false);
+                Utils.logError("Group with key " + conf.filterGroupKey + " not found",
+                    null, false);
             }
         }
         if (attDescriptors == null)
@@ -84,14 +95,14 @@ public class AttributesPage extends Page implements IPersistableEditor
         for (Map.Entry<String, AttributeDescriptor> entry : attDescriptors.entrySet())
         {
             AttributeDescriptor attDescriptor = entry.getValue();
-            if (!ignoredAttributes.contains(attDescriptor.key))
+            if (!conf.ignoredAttributes.contains(attDescriptor.key))
             {
                 IAttributeEditor editor = null;
                 try
                 {
                     editor = EditorFactory.getEditorFor(component, attDescriptor);
-                    GridData data = new GridData();
-                    data.grabExcessHorizontalSpace = true;
+                    GridData data =
+                        new GridData(GridData.FILL, GridData.FILL, true, false, 1, 1);
                     editor.init(attDescriptor);
                     if (editor.containsLabel())
                     {
@@ -184,67 +195,6 @@ public class AttributesPage extends Page implements IPersistableEditor
         }
     }
 
-    /**
-     * Attributes with the given key will not be shown in the page.
-     * <p>
-     * Subsequent calls of this method override previous ones.
-     * </p>
-     * <p>
-     * Those {@code keys} are used inside {@link AttributesPage#createControl(Composite)}
-     * method. Setting them after calling this method has no effect.
-     * </p>
-     * 
-     * @param keys
-     */
-    public void ignoreAttributes(String... keys)
-    {
-        ignoredAttributes.clear();
-        for (int i = 0; i < keys.length; i++)
-        {
-            String key = keys[i];
-            ignoredAttributes.add(key);
-        }
-    }
-
-    /**
-     * Only attributes with the given annotations will be shown in the page.
-     * <p>
-     * Subsequent calls of this method override previous ones.
-     * </p>
-     * <p>
-     * This filter is used inside {@link AttributesPage#createControl(Composite)} method.
-     * Setting the filter after calling this method has no effect.
-     * </p>
-     * 
-     * @param annotationClasses
-     * @see BindableDescriptor#only(Class...)
-     */
-    public void filterAttributes(Class<? extends Annotation>... annotationClasses)
-    {
-        filterAnnotations = annotationClasses;
-    }
-
-    /**
-     * Only attributes inside given groups will be shown in the page.
-     * <p>
-     * Subsequent calls of this method override previous ones.
-     * </p>
-     * <p>
-     * This filter is used inside {@link AttributesPage#createControl(Composite)} method.
-     * Setting the filter after calling this method has no effect.
-     * </p>
-     * 
-     * @param method grouping method
-     * @param keys keys of the groups, that should be shown
-     * @see GroupingMethod
-     * @see BindableDescriptor#group(GroupingMethod)
-     */
-    public void filterGroup(GroupingMethod method, Object key)
-    {
-        this.filterGroupKey = key;
-        this.groupingMethod = method;
-    }
-
     public void addAttributeChangeListener(AttributeChangeListener listener)
     {
         for (IAttributeEditor editor : editors)
@@ -289,7 +239,8 @@ public class AttributesPage extends Page implements IPersistableEditor
         final Composite holder = new Composite(scroll, SWT.NULL);
         root = new Composite(holder, SWT.NULL);
         scroll.setLayout(new FillLayout());
-        holder.setLayout(new FillLayout());
+        holder.setLayout(new GridLayout());
+        root.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, false, 1, 1));
         scroll.setContent(holder);
     }
 

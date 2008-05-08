@@ -9,6 +9,7 @@ import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.Input;
 import org.carrot2.util.attribute.Required;
 import org.carrot2.workbench.core.helpers.*;
+import org.carrot2.workbench.core.ui.attributes.AttributesControlConfiguration;
 import org.carrot2.workbench.core.ui.attributes.AttributesPage;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
@@ -98,9 +99,12 @@ public class SearchView extends ViewPart
         for (ComponentWrapper wrapper : ComponentLoader.SOURCE_LOADER.getComponents())
         {
             ProcessingComponent source = wrapper.getExecutableComponent();
+            AttributesControlConfiguration conf = new AttributesControlConfiguration();
+            conf.filterAnnotations.add(Input.class);
+            conf.filterAnnotations.add(Processing.class);
+            conf.filterAnnotations.add(Required.class);
             AttributesPage page =
-                new AttributesPage(source, new HashMap<String, Object>());
-            page.filterAttributes(Input.class, Processing.class, Required.class);
+                new AttributesPage(source, new HashMap<String, Object>(), conf);
             page.init(new PageSite(this.getViewSite()));
             page.createControl(requiredHolder);
             attributesPages.put(wrapper.getId(), page);

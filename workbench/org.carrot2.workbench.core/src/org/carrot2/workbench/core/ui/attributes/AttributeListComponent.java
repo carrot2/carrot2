@@ -14,12 +14,15 @@ import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.*;
 import org.eclipse.ui.part.IPageSite;
 
+import com.google.common.collect.Lists;
+
 public class AttributeListComponent implements IProcessingResultPart
 {
     private ProcessingJob processingJob;
     private IAttributesGrouppedControl groupControl;
     private AttributeChangeListener listener;
 
+    @SuppressWarnings("unchecked")
     public void init(final IWorkbenchSite site, Composite parent, ProcessingJob job)
     {
         this.processingJob = job;
@@ -31,30 +34,7 @@ public class AttributeListComponent implements IProcessingResultPart
                 processingJob.schedule();
             }
         };
-        GroupingMethod method = GroupingMethod.STRUCTURE;
-        BindableDescriptor desc =
-            BindableDescriptorBuilder.buildDescriptor(job.algorithm);
-        desc = desc.flatten().group(method);
-        groupControl = new ExpandBarGrouppedControl();
-        Composite mainControl = groupControl.createMainControl(parent);
-        for (Object groupKey : desc.attributeGroups.keySet())
-        {
-            AttributesPage p1 =
-                createPageForGroup(site, mainControl, job, method, groupKey);
-            p1.addAttributeChangeListener(listener);
-            groupControl.createGroup(groupKey, p1);
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    private AttributesPage createPageForGroup(final IWorkbenchSite site,
-        Composite parent, ProcessingJob job, GroupingMethod method, Object key)
-    {
-        AttributesPage groupPage = new AttributesPage(job.algorithm, job.attributes);
-        groupPage.ignoreAttributes(AttributeNames.DOCUMENTS);
-        groupPage.filterAttributes(Input.class, Processing.class);
-        groupPage.filterGroup(method, key);
-        groupPage.init(new IPageSite()
+        IPageSite pageSite = new IPageSite()
         {
 
             public IActionBars getActionBars()
@@ -106,9 +86,29 @@ public class AttributeListComponent implements IProcessingResultPart
                 return site.hasService(api);
             }
 
-        });
-        groupPage.createControl(parent);
-        return groupPage;
+        };
+        GroupingMethod method = GroupingMethod.STRUCTURE;
+        BindableDescriptor desc =
+            BindableDescriptorBuilder.buildDescriptor(job.algorithm);
+        desc = desc.flatten().group(method);
+        groupControl = new ExpandBarGrouppedControl();
+        groupControl.init(job.algorithm, job.attributes);
+        groupControl.createMainControl(parent);
+        for (Object groupKey : desc.attributeGroups.keySet())
+        {
+            AttributesControlConfiguration conf = new AttributesControlConfiguration();
+            conf.ignoredAttributes = Lists.newArrayList(AttributeNames.DOCUMENTS);
+            conf.filterAnnotations.add(Input.class);
+            conf.filterAnnotations.add(Processing.class);
+            conf.filterGroupKey = groupKey;
+            conf.groupingMethod = method;
+            groupControl.createGroup(groupKey, conf, pageSite);
+        }
+        for (AttributesPage page : groupControl.getPages())
+        {
+            page.addAttributeChangeListener(listener);
+        }
+
     }
 
     public Control getControl()
