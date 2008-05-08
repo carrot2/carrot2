@@ -6,14 +6,14 @@ import java.util.Iterator;
 /**
  * Depth-first node iterator with postorder traversal (parent nodes after children nodes).
  */
-public final class DepthFirstNodeIterator implements Iterator<Node>
+public final class DepthFirstNodeIterator<T extends Node> implements Iterator<T>
 {
-    private final ArrayList<Node> queue = new ArrayList<Node>();
+    private final ArrayList<T> queue = new ArrayList<T>();
 
     /*
      * 
      */
-    public DepthFirstNodeIterator(Node rootNode)
+    public DepthFirstNodeIterator(T rootNode)
     {
         if (rootNode != null)
         {
@@ -32,10 +32,11 @@ public final class DepthFirstNodeIterator implements Iterator<Node>
     /*
      * 
      */
-    public Node next()
+    @SuppressWarnings("unchecked")
+    public T next()
     {
         final int maxIndex = queue.size() - 1;
-        Node next = queue.remove(maxIndex);
+        T next = queue.remove(maxIndex);
         if (next == null)
         {
             // Previous node had children and was already expanded. Consume the marker
@@ -55,7 +56,7 @@ public final class DepthFirstNodeIterator implements Iterator<Node>
 
             for (final Edge e : next)
             {
-                queue.add(e.endNode);
+                queue.add((T) e.endNode);
             }
             
             return next();

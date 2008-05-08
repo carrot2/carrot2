@@ -8,7 +8,7 @@ import java.util.*;
 public class Node implements Iterable<Edge>
 {
     /** This node's container tree. */
-    protected final SuffixTree container;
+    protected final SuffixTree<?> container;
 
     /** Pointer to the next smaller suffix. */
     Node suffixNode;
@@ -27,7 +27,7 @@ public class Node implements Iterable<Edge>
     /**
      * 
      */
-    protected Node(SuffixTree container)
+    protected Node(SuffixTree<?> container)
     {
         this.container = container;
     }

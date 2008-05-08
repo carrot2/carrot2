@@ -29,21 +29,14 @@ public class SuffixTreeTest
     public void testNodeIterator()
     {
         final String seq = "banana$";
-        final SuffixTree t = new SuffixTree();
+        final SuffixTree<Node> t = SuffixTree.newSuffixTree();
         t.build(new CharacterSequence(seq));
 
         final List<String> expected = new ArrayList<String>(Arrays.asList(new String []
         {
-            "leaf: true: banana$",
-            "leaf: true: nana$",
-            "leaf: true: na$",
-            "leaf: false: na",
-            "leaf: true: anana$",
-            "leaf: true: ana$",
-            "leaf: false: ana",
-            "leaf: true: a$",
-            "leaf: false: a",
-            "leaf: true: $",
+            "leaf: true: banana$", "leaf: true: nana$", "leaf: true: na$",
+            "leaf: false: na", "leaf: true: anana$", "leaf: true: ana$",
+            "leaf: false: ana", "leaf: true: a$", "leaf: false: a", "leaf: true: $",
             "leaf: false: ",
         }));
 
@@ -59,7 +52,8 @@ public class SuffixTreeTest
     public void testCounterNode()
     {
         final String seq = "banana$";
-        final SuffixTree t = new SuffixTree(new CounterNodeFactory());
+        final SuffixTree<CounterNode> t = SuffixTree
+            .newSuffixTree(new CounterNodeFactory());
         t.build(new CharacterSequence(seq));
         CounterNode.leafCount(t);
 
@@ -67,14 +61,14 @@ public class SuffixTreeTest
         {
             "na, count: 2", "ana, count: 2", "a, count: 3", ", count: 7",
         }));
-        
-        for (Node n : t)
-        {
-            final CounterNode me = (CounterNode) n;
-            if (me.count == 1) continue;
 
-            assertNotNull(expected.remove(
-                seq.substring(n.getSuffixStartIndex(), n.getSuffixEndIndex() + 1) + ", count: " + me.count));
+        for (CounterNode n : t)
+        {
+            if (n.count == 1) continue;
+
+            assertNotNull(expected.remove(seq.substring(n.getSuffixStartIndex(), n
+                .getSuffixEndIndex() + 1)
+                + ", count: " + n.count));
         }
         assertEquals(0, expected.size());
     }
@@ -100,7 +94,7 @@ public class SuffixTreeTest
         randomData[randomData.length - 1] = -1;
 
         final Sequence seq = new IntSequence(randomData);
-        final SuffixTree t = new SuffixTree();
+        final SuffixTree<Node> t = SuffixTree.newSuffixTree();
         t.build(seq);
     }
 
@@ -125,7 +119,7 @@ public class SuffixTreeTest
      */
     private void assertAllSuffixes(Sequence sequence)
     {
-        final SuffixTree t = new SuffixTree();
+        final SuffixTree<Node> t = SuffixTree.newSuffixTree();
         t.build(sequence);
 
         final int [] codes = new int [sequence.size()];
@@ -146,7 +140,7 @@ public class SuffixTreeTest
      */
     private void assertLeafNodes(String sequence, List<String> expected)
     {
-        final SuffixTree t = new SuffixTree();
+        final SuffixTree<Node> t = SuffixTree.newSuffixTree();
         t.build(new CharacterSequence(sequence));
 
         final List<String> actual = new ArrayList<String>();

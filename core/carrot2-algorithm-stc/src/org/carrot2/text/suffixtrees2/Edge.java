@@ -9,13 +9,13 @@ public final class Edge
     protected int firstElementIndex;
 
     /** Edge's end index (inclusive). */
-    protected final int lastElementIndex;
+    protected int lastElementIndex;
 
     /** A {@link Node} from which the edge starts. */
     protected Node startNode;
 
     /** A {@link Node} where this edge ends */
-    protected final Node endNode;
+    protected Node endNode;
 
     /** 
      * 

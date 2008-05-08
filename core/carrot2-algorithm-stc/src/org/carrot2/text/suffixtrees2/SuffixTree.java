@@ -9,12 +9,12 @@ import java.util.*;
  * <b>Fast String Searching With Suffix Trees <i>Mark Nelson </i></b> Dr Dobb's Journal,
  * August 1996 http://softlab.od.ua/algo/data/suftrees/suffixt.htm (2000)
  */
-public final class SuffixTree implements Iterable<Node>
+public class SuffixTree<T extends Node> implements Iterable<T>
 {
     /**
      * {@link Node} factory for internal tree nodes.
      */
-    private final NodeFactory nodeFactory;
+    private final NodeFactory<? extends T> nodeFactory;
 
     /**
      * Number of created nodes.
@@ -24,12 +24,12 @@ public final class SuffixTree implements Iterable<Node>
     /**
      * A hash map of edges leaving each node.
      */
-    public final HashMap<NodeEdge, Edge> edges = new HashMap<NodeEdge, Edge>();
+    final HashMap<NodeEdge, Edge> edges = new HashMap<NodeEdge, Edge>();
 
     /**
      * This is the root node of the tree.
      */
-    Node rootNode;
+    T rootNode;
 
     /**
      * Sequence of elements to consider.
@@ -44,16 +44,7 @@ public final class SuffixTree implements Iterable<Node>
     /*
      * 
      */
-    @SuppressWarnings("unchecked")
-    public SuffixTree()
-    {
-        this(new DefaultNodeFactory());
-    }
-
-    /*
-     * 
-     */
-    public SuffixTree(NodeFactory nodeFactory)
+    public SuffixTree(NodeFactory<? extends T> nodeFactory)
     {
         this.nodeFactory = nodeFactory;
     }
@@ -71,7 +62,7 @@ public final class SuffixTree implements Iterable<Node>
         rootNode = nodeFactory.createNode(this);
 
         // Loop through all prefixes of the input.
-        final Suffix activePoint = new Suffix(this, rootNode, 0, -1);
+        final Suffix activePoint = new Suffix(rootNode, 0, -1);
         final int maxIndex = this.input.size();
         for (int i = 0; i < maxIndex; i++)
         {
@@ -95,9 +86,25 @@ public final class SuffixTree implements Iterable<Node>
     /**
      * @return Returns an iterator over all nodes of this tree.
      */
-    public Iterator<Node> iterator()
+    public Iterator<T> iterator()
     {
-        return new DepthFirstNodeIterator(rootNode);
+        return new DepthFirstNodeIterator<T>(rootNode);
+    }
+
+    /**
+     * Returns a {@link Node}-based suffix tree.
+     */
+    public static SuffixTree<Node> newSuffixTree()
+    {
+        return newSuffixTree(new DefaultNodeFactory());
+    }
+
+    /**
+     * Returns a suffix tree on top of an arbitrary node factory.
+     */
+    public static <E extends Node> SuffixTree<E> newSuffixTree(NodeFactory<E> factory)
+    {
+        return new SuffixTree<E>(factory);
     }
 
     /**

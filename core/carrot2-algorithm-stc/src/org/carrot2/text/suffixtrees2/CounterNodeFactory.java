@@ -3,10 +3,11 @@ package org.carrot2.text.suffixtrees2;
 /**
  * {@link NodeFactory} returning {@link CounterNode}s.
  */
-public final class CounterNodeFactory implements NodeFactory
+public final class CounterNodeFactory implements NodeFactory<CounterNode>
 {
-    public Node createNode(SuffixTree owner)
+    @Override
+    public CounterNode createNode(SuffixTree<? super CounterNode> container)
     {
-        return new CounterNode(owner);
+        return new CounterNode(container);
     }
 }

@@ -7,7 +7,7 @@ public class CounterNode extends Node
 {
     public int count;
 
-    protected CounterNode(SuffixTree container)
+    protected CounterNode(SuffixTree<?> container)
     {
         super(container);
     }
@@ -15,21 +15,20 @@ public class CounterNode extends Node
     /**
      * Calculate the number of leaves reachable from each internal node.
      */
-    public static void leafCount(SuffixTree tree)
+    @SuppressWarnings("unchecked")
+    public static <T extends CounterNode> void leafCount(SuffixTree<T> tree)
     {
-        for (Node n : tree)
+        for (T n : tree)
         {
-            final CounterNode me = (CounterNode) n;
-
             if (n.isLeaf())
             {
-                me.count = 1;
+                n.count = 1;
             }
 
-            CounterNode parent = ((CounterNode) n.getParentNode());
+            T parent = (T) n.getParentNode();
             if (parent != null)
             {
-                parent.count += me.count;
+                parent.count += n.count;
             }
         }
     }

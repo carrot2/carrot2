@@ -5,9 +5,6 @@ package org.carrot2.text.suffixtrees2;
  */
 final class Suffix
 {
-    /** The owner of this suffix. */
-    protected final SuffixTree container;
-
     /** first collection element where this suffix starts */
     protected int firstElementIndex;
 
@@ -20,10 +17,8 @@ final class Suffix
     /**
      * 
      */
-    public Suffix(SuffixTree container, Node originNode, int firstElementIndex,
-        int lastElementIndex)
+    public Suffix(Node originNode, int firstElementIndex, int lastElementIndex)
     {
-        this.container = container;
         this.originNode = originNode;
         this.firstElementIndex = firstElementIndex;
         this.lastElementIndex = lastElementIndex;
