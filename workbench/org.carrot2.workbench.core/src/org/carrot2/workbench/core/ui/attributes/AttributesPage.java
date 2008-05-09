@@ -10,7 +10,8 @@ import org.carrot2.workbench.editors.*;
 import org.carrot2.workbench.editors.factory.EditorFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.layout.*;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IPersistableEditor;
@@ -100,7 +101,7 @@ public class AttributesPage extends Page implements IPersistableEditor
                 {
                     editor = EditorFactory.getEditorFor(component, attDescriptor);
                     GridData data =
-                        new GridData(GridData.FILL, GridData.FILL, true, false, 1, 1);
+                        new GridData(GridData.FILL, GridData.FILL, true, false);
                     editor.init(attDescriptor);
                     if (editor.containsLabel())
                     {
@@ -112,7 +113,6 @@ public class AttributesPage extends Page implements IPersistableEditor
                         String text = getLabelForAttribute(attDescriptor);
                         l.setText(text);
                         l.setLayoutData(new GridData());
-                        data.horizontalAlignment = SWT.FILL;
                     }
                     editor.createEditor(root, data);
                     editor.setValue(getInitialValue(attDescriptor.key));
@@ -139,17 +139,16 @@ public class AttributesPage extends Page implements IPersistableEditor
                 }
             }
         }
-        root.getParent().setSize(root.getParent().computeSize(SWT.DEFAULT, SWT.DEFAULT));
+        root.setSize(root.computeSize(SWT.DEFAULT, SWT.DEFAULT));
     }
 
     @Override
     public Control getControl()
     {
         //BugFixed(CARROT-210)
-        if (!root.isDisposed() && !root.getParent().isDisposed()
-            && !root.getParent().getParent().isDisposed())
+        if (!root.isDisposed() && !root.getParent().isDisposed())
         {
-            return root.getParent().getParent();
+            return root.getParent();
         }
         else
         {
@@ -234,12 +233,10 @@ public class AttributesPage extends Page implements IPersistableEditor
     {
         final ScrolledComposite scroll =
             new ScrolledComposite(parent, SWT.V_SCROLL | SWT.H_SCROLL);
-        final Composite holder = new Composite(scroll, SWT.NULL);
-        root = new Composite(holder, SWT.NULL);
-        scroll.setLayout(new FillLayout());
-        holder.setLayout(new GridLayout());
-        root.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, false, 1, 1));
-        scroll.setContent(holder);
+        root = new Composite(scroll, SWT.NONE);
+        scroll.setLayout(new GridLayout());
+        root.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
+        scroll.setContent(root);
     }
 
     private Object getInitialValue(String key)
