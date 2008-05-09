@@ -45,7 +45,7 @@ public class ConstraintTest
     {
         final WithStrictImplementingClasses instance = new WithStrictImplementingClasses();
 
-        bindInputValues(instance, "object", "string", new Integer(10), Boolean.TRUE);
+        bindInputValues(instance, "object", "string", 10, Boolean.TRUE);
     }
 
     @Test(expected = ConstraintViolationException.class)
@@ -63,7 +63,7 @@ public class ConstraintTest
     {
         final WithNonStrictImplementingClasses instance = new WithNonStrictImplementingClasses();
 
-        bindInputValues(instance, "object", "string", new Integer(10), Boolean.TRUE);
+        bindInputValues(instance, "object", "string", 10, Boolean.TRUE);
     }
 
     private void bindInputValues(Object instance, String fieldName, Object... values)

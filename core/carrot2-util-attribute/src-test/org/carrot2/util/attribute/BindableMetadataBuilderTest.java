@@ -18,7 +18,7 @@ public class BindableMetadataBuilderTest
 {
     private static final String SOURCE_PATH_PROPERTY = "source.paths";
     private static final String COMMON_ATTRIBUTE_NAMES_SOURCE_PATH_PROPERTY = "common.attribute.names.source.path";
-    protected static Map<String, BindableMetadata> bindableMetadata;
+    static Map<String, BindableMetadata> bindableMetadata;
 
     /**
      * @return Return <code>true</code> if source path property is available and tests

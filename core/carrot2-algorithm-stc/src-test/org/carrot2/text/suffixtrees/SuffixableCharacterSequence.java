@@ -34,7 +34,7 @@ final class SuffixableCharacterSequence implements SuffixableElement
         if (obj == this) return true;
         if (obj instanceof SuffixableCharacterSequence)
         {
-            return asString.equals((SuffixableCharacterSequence) obj);
+            return asString.equals(((SuffixableCharacterSequence) obj).asString);
         }
         return false;
     }

@@ -89,6 +89,6 @@ public class ExceptionUtilsTest
     public void testNoMatchingWrapperFound()
     {
         Throwable t = new ExceptionB();
-        Throwable w = ExceptionUtils.wrapAs(ExceptionE.class, t);
+        ExceptionUtils.wrapAs(ExceptionE.class, t);
     }
 }

@@ -10,7 +10,7 @@ import org.junit.Test;
 
 public class ConstraintCreatorTest
 {
-    class TestSample
+    static class TestSample
     {
         @DoubleRange(min = 0.2, max = 0.5)
         public double somethingPercent = 0.8;
@@ -21,7 +21,7 @@ public class ConstraintCreatorTest
     }
 
     @Test
-    public void TestIsConstraintAnnotation()
+    public void testIsConstraintAnnotation()
     {
         assertTrue(ConstraintFactory.isConstraintAnnotation(IntRange.class));
         assertFalse(ConstraintFactory.isConstraintAnnotation(Target.class));

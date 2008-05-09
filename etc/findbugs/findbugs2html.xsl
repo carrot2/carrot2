@@ -294,8 +294,12 @@
     <xsl:variable name="kloc" select="@total_size div 1000.0"/>
     <xsl:variable name="format" select="'#######0.00'"/>
 
-    <h1 class="head"><span class="high-pri"><xsl:value-of select="number(@priority_1)"/> High Priority</span> problems found</h1>
-    <h1 class="head"><span class="med-pri"><xsl:value-of select="number(@priority_2)"/> Medium Priority</span> problems found</h1>
+    <xsl:if test="@priority_1">
+      <h1 class="head"><span class="high-pri"><xsl:value-of select="number(@priority_1)"/> High Priority</span> problems found</h1>
+    </xsl:if>
+    <xsl:if test="@priority_2">
+      <h1 class="head"><span class="med-pri"><xsl:value-of select="number(@priority_2)"/> Medium Priority</span> problems found</h1>
+    </xsl:if>
 
 	<p><xsl:value-of select="@total_size"/> lines of code analyzed,
 	in <xsl:value-of select="@total_classes"/> classes, 

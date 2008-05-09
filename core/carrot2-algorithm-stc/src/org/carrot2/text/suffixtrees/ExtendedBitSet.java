@@ -237,7 +237,7 @@ public final class ExtendedBitSet implements Cloneable, java.io.Serializable
 
             advance();
 
-            return new Integer(value);
+            return value;
         }
 
         /** We do not support this method */

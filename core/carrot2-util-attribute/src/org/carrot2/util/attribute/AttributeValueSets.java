@@ -192,7 +192,7 @@ public class AttributeValueSets
             return;
         }
 
-        attributeValueSets.remove(attributeValueSet);
+        attributeValueSets.remove(id);
 
         // Also, we need to fix the "based on" hierarchy here
         final AttributeValueSet newBaseAttributeValueSet = attributeValueSet.baseAttributeValueSet;

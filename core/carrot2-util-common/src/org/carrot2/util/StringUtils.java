@@ -5,12 +5,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Provides a number of useful method operating on {@link String}s.
- * <p>
- * Although we inherit from {@link org.apache.commons.lang.StringUtils} to explicitly show
- * the relation to it, please reference the static methods from their original class.
+ * Provides a number of useful method operating on {@link String}s that are not available
+ * in {@link org.apache.commons.lang.StringUtils}.
  */
-public final class StringUtils extends org.apache.commons.lang.StringUtils
+public final class StringUtils
 {
     private static Pattern camelCasePart;
 
@@ -62,6 +60,6 @@ public final class StringUtils extends org.apache.commons.lang.StringUtils
         {
             parts.add(matcher.group());
         }
-        return join(parts, ' ');
+        return org.apache.commons.lang.StringUtils.join(parts, ' ');
     }
 }

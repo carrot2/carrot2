@@ -438,7 +438,7 @@ public class BindableDescriptor
     /**
      * A predicate that tests the presence of annotations on {@link AttributeDescriptor}.
      */
-    private final class AnnotationsPredicate implements Predicate<AttributeDescriptor>
+    private static final class AnnotationsPredicate implements Predicate<AttributeDescriptor>
     {
         private final Class<? extends Annotation> [] annotationClasses;
         private final boolean requireAll;

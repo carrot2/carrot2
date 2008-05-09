@@ -60,6 +60,7 @@ public class AttributeValueSetsTest
         sets.removeAttributeValueSet("nonexisting");
 
         assertEquals(set1.baseAttributeValueSet, set3.baseAttributeValueSet);
+        assertNull(sets.getAttributeValueSet("set2"));
     }
 
     @Test

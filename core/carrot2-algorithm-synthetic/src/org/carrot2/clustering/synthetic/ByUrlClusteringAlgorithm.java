@@ -67,7 +67,7 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
         final List<Integer> documentIndexes = new ArrayList<Integer>(documentArray.length);
         for (int i = 0; i < documentArray.length; i++)
         {
-            documentIndexes.add(new Integer(i));
+            documentIndexes.add(i);
         }
         this.clusters = createClusters(documentArray, documentIndexes, urlParts, 0, "");
     }

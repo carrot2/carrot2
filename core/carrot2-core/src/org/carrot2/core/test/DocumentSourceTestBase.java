@@ -141,7 +141,7 @@ public abstract class DocumentSourceTestBase<T extends DocumentSource> extends
     /**
      * Transforms {@link Document}s to their ids.
      */
-    protected static Function<Document, Integer> DOCUMENT_TO_ID = new Function<Document, Integer>()
+    protected static final Function<Document, Integer> DOCUMENT_TO_ID = new Function<Document, Integer>()
     {
         public Integer apply(Document document)
         {
@@ -152,18 +152,18 @@ public abstract class DocumentSourceTestBase<T extends DocumentSource> extends
     /**
      * Transforms {@link Document}s to their titles.
      */
-    protected static DocumentToFieldTransformer DOCUMENT_TO_TITLE = new DocumentToFieldTransformer(
+    protected static final DocumentToFieldTransformer DOCUMENT_TO_TITLE = new DocumentToFieldTransformer(
         Document.TITLE);
 
     /**
      * Transforms {@link Document}s to their summaries.
      */
-    protected static DocumentToFieldTransformer DOCUMENT_TO_SUMMARY = new DocumentToFieldTransformer(
+    protected static final DocumentToFieldTransformer DOCUMENT_TO_SUMMARY = new DocumentToFieldTransformer(
         Document.SUMMARY);
 
     /**
      * Transforms {@link Document}s to their content URLs.
      */
-    protected static DocumentToFieldTransformer DOCUMENT_TO_CONTENT_URL = new DocumentToFieldTransformer(
+    protected static final DocumentToFieldTransformer DOCUMENT_TO_CONTENT_URL = new DocumentToFieldTransformer(
         Document.CONTENT_URL);
 }
