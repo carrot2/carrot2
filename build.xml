@@ -9,6 +9,7 @@
     <property name="tests.report.dir" location="tmp/test-report" />
     <property name="coverage.report.dir" location="tmp/coverage-report" />
     <property name="duplication.report.dir" location="tmp/duplication-report" />
+    <property name="findbugs.report.dir" location="tmp/findbugs-report" />
     <property name="clover.jar" location="${clover.home}/lib/clover.jar"/>
     <property name="pmd.jar" location="${pmd.home}/lib/"/>
 
@@ -23,6 +24,7 @@
         <exclude name="**/carrot2-source-yahoo/**/*.java" if="external.api.tests.disabled" />
         <exclude name="**/carrot2-source-microsoft/**/*.java" if="external.api.tests.disabled" />
         <exclude name="**/carrot2-algorithm-stc/src/org/tartarus/snowball/**/*.java" />
+        <exclude name="**/carrot2-source-microsoft/src/com/microsoft/msnsearch/**/*.java" />
     </fileset>
 
     <path id="lib.classpath">
@@ -40,8 +42,11 @@
     <target name="clean" depends="coverage.clean">
         <delete dir="tmp" failonerror="false" />
     </target>
-
     
+    <target name="clean.classes">
+        <delete dir="tmp/classes" failonerror="false" />
+    </target>
+
     <target name="compile" depends="with.clover">
         <mkdir dir="${build.dir}" />
 
@@ -51,8 +56,19 @@
             <classpath refid="lib.classpath" />
         </javac>
     </target>
+    
+    <target name="compile.findbugs">
+        <mkdir dir="${build.dir}" />
 
+        <!-- Clover hack: we explicitly provide the compiler attribute to compile without Clover's instrumentation -->
+        <javac destdir="${build.dir}" compiler="modern" source="1.5" target="1.5" encoding="UTF-8"
+               debug="on" debuglevel="lines,vars,source">
+            <src refid="src.folders" />
 
+            <classpath refid="lib.classpath" />
+        </javac>
+    </target>
+    
     <target name="resources" depends="">
         <mkdir dir="${build.dir}" />
         
@@ -69,7 +85,7 @@
     </target>
     
 
-    <target name="test" depends="compile,attributes,resources">
+    <target name="test" depends="compile, attributes, resources">
         <mkdir dir="${tests.report.dir}" />
 
         <property name="source.paths" location="core/carrot2-util-attribute/src-test" />
@@ -183,16 +199,42 @@
     </target>
 
 
+    <taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" 
+             classpath="${findbugs.home}/lib/findbugs-ant.jar" />
+     
+    <target name="findbugs" depends="clean.classes, compile.findbugs">
+      <mkdir dir="${findbugs.report.dir}" />
+
+      <!-- Delete some classes we don't want to have analyzed -->
+      <delete>
+        <fileset dir="tmp/classes">
+          <include name="com/microsoft/msnsearch/**/*.class" />
+          <include name="org/tartarus/snowball/**/*.class" />
+          <include name="**/ExtendedWhitespaceTokenizerImpl.class" />
+        </fileset>
+      </delete>
+
+      <fileset id="lib.contents" dir="." includes="lib/**/*.jar" />
+      <property name="lib.jars" refid="lib.contents"/>
+
+      <findbugs home="${findbugs.home}" jvmargs="-Xmx512m" excludeFilter="etc/findbugs/excludes.xml" effort="max"
+                output="xml:withMessages" outputFile="${findbugs.report.dir}/findbugs.xml" >
+        <auxClasspath path="${lib.jars}" />
+        <class location="tmp/classes" />
+      </findbugs>
+
+      <xslt in="${findbugs.report.dir}/findbugs.xml" style="etc/findbugs/findbugs2html.xsl" out="${findbugs.report.dir}/findbugs.html" />
+    </target>
+
     <target name="clover.tasks" if="clover.home">
         <taskdef resource="cloverlib.xml" classpath="${clover.jar}"/>
     </target>
 
     <target name="with.clover" depends="clover.tasks" if="clover.home">
-        <clover-setup>
+      <clover-setup>
           <fileset refid="src.coverage" />
-        </clover-setup>
+      </clover-setup>
     </target>
-    
 
     <target name="coverage" depends="coverage.html, coverage.xml" />
 

@@ -1,0 +1,11 @@
+<FindBugsFilter>
+   <Match>
+      <Bug code="UuF" />
+   </Match>
+   <Match>
+      <Bug code="UrF" />
+   </Match>
+   <Match>
+      <Bug code="SS" />
+   </Match>
+</FindBugsFilter>
