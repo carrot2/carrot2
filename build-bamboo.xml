@@ -17,6 +17,9 @@
 
         <!-- code duplication report -->
         <ant dir="${carrot2.code.dir}" antfile="build.xml" target="duplication" inheritall="true" />
+
+        <!-- FindBugs -->
+        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="findbugs" inheritall="true" />
     </target>
 
     <target name="workbench" description="Perform a full build of the workbench">
