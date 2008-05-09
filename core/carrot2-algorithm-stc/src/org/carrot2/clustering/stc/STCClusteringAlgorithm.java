@@ -24,8 +24,9 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
      */
     @Processing
     @Input
-    @Attribute(key = AttributeNames.DOCUMENTS)
     @Required
+    @Internal
+    @Attribute(key = AttributeNames.DOCUMENTS)
     public Collection<Document> documents;
 
     /**

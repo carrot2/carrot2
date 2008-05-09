@@ -109,6 +109,27 @@ public class BindableDescriptorTest
     }
 
     @Test
+    public void testNotInput()
+    {
+        final BindableDescriptor filteredDescriptor = descriptor.not(Input.class);
+
+        assertThat(filteredDescriptor.attributeDescriptors.keySet()).containsOnly(
+            keyFromSuperClass("initOutput"), keyFromSuperClass("processingOutput"),
+            keyFromSubClass("initProcessingOutput"), keyFromReferenceClass("initOutput"),
+            keyFromReferenceClass("processingOutput"));
+    }
+
+    @Test
+    public void testNotInputProcessing()
+    {
+        final BindableDescriptor filteredDescriptor = descriptor.not(Input.class,
+            TestProcessing.class);
+
+        assertThat(filteredDescriptor.attributeDescriptors.keySet()).containsOnly(
+            keyFromSuperClass("initOutput"), keyFromReferenceClass("initOutput"));
+    }
+
+    @Test
     public void testFlatten()
     {
         final BindableDescriptor filteredDescriptor = descriptor.only(Input.class,

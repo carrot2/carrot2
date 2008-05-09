@@ -39,6 +39,7 @@ public final class Preprocessor
     /** */
     @Processing
     @Input
+    @Internal
     @Attribute(key = AttributeNames.DOCUMENTS)
     public Collection<Document> documents;
 

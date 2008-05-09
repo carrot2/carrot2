@@ -35,7 +35,7 @@ public interface IAttributesGrouppedControl
      *            created using mainControl as a parent;
      * @see BindableDescriptor#attributeGroups
      */
-    void createGroup(Object groupKey, AttributesControlConfiguration conf, IPageSite site);
+    void createGroup(Object groupKey, BindableDescriptor bindableDescriptor, IPageSite site);
 
     /**
      * Creates one main control, that all the groups will be placed on.

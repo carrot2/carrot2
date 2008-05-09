@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.carrot2.core.ProcessingComponent;
+import org.carrot2.util.attribute.BindableDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.*;
@@ -29,13 +30,14 @@ public class ExpandBarGrouppedControl implements IAttributesGrouppedControl
         this.component = component;
     }
 
-    public void createGroup(Object label, AttributesControlConfiguration conf,
+    public void createGroup(Object label, BindableDescriptor bindableDescriptor,
         IPageSite site)
     {
         final ExpandableComposite group =
-            new ExpandableComposite(mainControl, SWT.NONE, ExpandableComposite.TREE_NODE);
+            new ExpandableComposite(mainControl, SWT.NONE, ExpandableComposite.TWISTIE);
         group.setText(label.toString());
-        AttributesPage page = new AttributesPage(component, conf);
+        AttributesPage page = new AttributesPage(component,
+            bindableDescriptor.attributeGroups.get(label));
         page.init(site);
         page.createControl(group);
 

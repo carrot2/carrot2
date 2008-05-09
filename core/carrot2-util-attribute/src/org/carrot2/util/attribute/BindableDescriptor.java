@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.Map.Entry;
 
 import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -193,10 +194,9 @@ public class BindableDescriptor
     }
 
     /**
-     * Preserves descriptors that match all of the provided binding time and filtering
-     * annotation restrictions. Notice that {@link BindableDescriptor}s are immutable, so
-     * the filtered descriptor set is returned rather than filtering being applied to the
-     * receiver.
+     * Preserves descriptors that have <strong>all</strong> of the specified annotations.
+     * Notice that {@link BindableDescriptor}s are immutable, so the filtered descriptor
+     * set is returned rather than filtering being applied to the receiver.
      * 
      * @param annotationClasses binding time and direction annotation classes to be
      *            matched.
@@ -209,21 +209,28 @@ public class BindableDescriptor
             return this;
         }
 
-        return only(new Predicate<AttributeDescriptor>()
-        {
-            public boolean apply(AttributeDescriptor descriptor)
-            {
-                for (final Class<? extends Annotation> annotationClass : annotationClasses)
-                {
-                    if (descriptor.getAnnotation(annotationClass) == null)
-                    {
-                        return false;
-                    }
-                }
+        return only(new AnnotationsPredicate(annotationClasses, true));
+    }
 
-                return true;
-            }
-        });
+    /**
+     * Preserves descriptors that have <strong>none</strong> of the specified
+     * annotations. Notice that {@link BindableDescriptor}s are immutable, so the
+     * filtered descriptor set is returned rather than filtering being applied to the
+     * receiver.
+     * 
+     * @param annotationClasses binding time and direction annotation classes to be
+     *            matched.
+     * @return a new {@link BindableDescriptor} with the descriptors filtered.
+     */
+    public BindableDescriptor not(final Class<? extends Annotation>... annotationClasses)
+    {
+        if (annotationClasses.length == 0)
+        {
+            return this;
+        }
+
+        return only(Predicates.<AttributeDescriptor> not(new AnnotationsPredicate(
+            annotationClasses, false)));
     }
 
     /**
@@ -425,6 +432,35 @@ public class BindableDescriptor
         public int compare(Class<?> o1, Class<?> o2)
         {
             return o1.getSimpleName().compareTo(o2.getSimpleName());
+        }
+    }
+
+    /**
+     * A predicate that tests the presence of annotations on {@link AttributeDescriptor}.
+     */
+    private final class AnnotationsPredicate implements Predicate<AttributeDescriptor>
+    {
+        private final Class<? extends Annotation> [] annotationClasses;
+        private final boolean requireAll;
+
+        private AnnotationsPredicate(Class<? extends Annotation> [] annotationClasses,
+            boolean requireAll)
+        {
+            this.annotationClasses = annotationClasses;
+            this.requireAll = requireAll;
+        }
+
+        public boolean apply(AttributeDescriptor descriptor)
+        {
+            for (final Class<? extends Annotation> annotationClass : annotationClasses)
+            {
+                if (descriptor.getAnnotation(annotationClass) == null ^ !requireAll)
+                {
+                    return !requireAll;
+                }
+            }
+
+            return requireAll;
         }
     }
 }

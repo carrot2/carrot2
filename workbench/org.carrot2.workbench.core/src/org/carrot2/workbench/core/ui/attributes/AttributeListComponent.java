@@ -1,7 +1,6 @@
 package org.carrot2.workbench.core.ui.attributes;
 
-import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.core.attribute.Processing;
+import org.carrot2.core.attribute.*;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
 import org.carrot2.workbench.core.jobs.ProcessingJob;
@@ -88,21 +87,15 @@ public class AttributeListComponent implements IProcessingResultPart
 
         };
         GroupingMethod method = GroupingMethod.STRUCTURE;
-        BindableDescriptor desc =
-            BindableDescriptorBuilder.buildDescriptor(job.algorithm);
-        desc = desc.flatten().group(method);
+        BindableDescriptor desc = BindableDescriptorBuilder
+            .buildDescriptor(job.algorithm);
+        desc = desc.only(Input.class, Processing.class).not(Internal.class).group(method);
         groupControl = new ExpandBarGrouppedControl();
         groupControl.init(job.algorithm);
         groupControl.createMainControl(parent);
         for (Object groupKey : desc.attributeGroups.keySet())
         {
-            AttributesControlConfiguration conf = new AttributesControlConfiguration();
-            conf.ignoredAttributes = Lists.newArrayList(AttributeNames.DOCUMENTS);
-            conf.filterAnnotations.add(Input.class);
-            conf.filterAnnotations.add(Processing.class);
-            conf.filterGroupKey = groupKey;
-            conf.groupingMethod = method;
-            groupControl.createGroup(groupKey, conf, pageSite);
+            groupControl.createGroup(groupKey, desc, pageSite);
         }
         for (AttributesPage page : groupControl.getPages())
         {

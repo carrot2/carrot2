@@ -22,30 +22,20 @@ import org.eclipse.ui.part.Page;
  */
 public class AttributesPage extends Page implements IPersistableEditor
 {
-
-    private BindableDescriptor descriptor;
-    private BindableDescriptor flatDescriptor;
+    private final Map<String, AttributeDescriptor> attributeDescriptors;
     private ProcessingComponent component;
     private Composite root;
     private java.util.List<IAttributeEditor> editors = new ArrayList<IAttributeEditor>();
-    private AttributesControlConfiguration conf;
-
+    
     public AttributesPage(ProcessingComponent component,
-        AttributesControlConfiguration configuration)
+        Map<String, AttributeDescriptor> attributeDescriptors)
     {
-
-        if (configuration == null)
-        {
-            throw new NullArgumentException("configuration");
-        }
         if (component == null)
         {
             throw new NullArgumentException("component");
         }
         this.component = component;
-        this.descriptor = BindableDescriptorBuilder.buildDescriptor(component);
-        this.flatDescriptor = descriptor.flatten();
-        this.conf = configuration;
+        this.attributeDescriptors = attributeDescriptors;
     }
 
     /**
@@ -62,40 +52,9 @@ public class AttributesPage extends Page implements IPersistableEditor
         GridLayout layout = new GridLayout();
         layout.numColumns = 2;
         root.setLayout(layout);
-        BindableDescriptor desc = descriptor;
-        if (conf.filterAnnotations != null)
-        {
-            desc = desc.only(conf.getFilterAnnotationsArray());
-        }
-        Map<String, AttributeDescriptor> attDescriptors = null;
-        desc = desc.flatten();
-        if (conf.groupingMethod != null)
-        {
-            if (!desc.groupedBy.equals(conf.groupingMethod))
-            {
-                desc = desc.group(conf.groupingMethod);
-            }
-            if (desc.attributeGroups.containsKey(conf.filterGroupKey))
-            {
-                attDescriptors =
-                    desc.group(conf.groupingMethod).attributeGroups
-                        .get(conf.filterGroupKey);
-            }
-            else
-            {
-                Utils.logError("Group with key " + conf.filterGroupKey + " not found",
-                    null, false);
-            }
-        }
-        if (attDescriptors == null)
-        {
-            attDescriptors = desc.attributeDescriptors;
-        }
-        for (Map.Entry<String, AttributeDescriptor> entry : attDescriptors.entrySet())
+        for (Map.Entry<String, AttributeDescriptor> entry : attributeDescriptors.entrySet())
         {
             AttributeDescriptor attDescriptor = entry.getValue();
-            if (!conf.ignoredAttributes.contains(attDescriptor.key))
-            {
                 IAttributeEditor editor = null;
                 try
                 {
@@ -137,7 +96,6 @@ public class AttributesPage extends Page implements IPersistableEditor
                         editor.dispose();
                     }
                 }
-            }
         }
         root.setSize(root.computeSize(SWT.DEFAULT, SWT.DEFAULT));
     }
@@ -241,7 +199,7 @@ public class AttributesPage extends Page implements IPersistableEditor
 
     private Object getInitialValue(String key)
     {
-        return flatDescriptor.attributeDescriptors.get(key).defaultValue;
+        return attributeDescriptors.get(key).defaultValue;
     }
 
 }
