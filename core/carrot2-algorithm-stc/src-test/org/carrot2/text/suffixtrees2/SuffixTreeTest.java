@@ -1,10 +1,10 @@
 package org.carrot2.text.suffixtrees2;
 
+import static org.junit.Assert.*;
+
 import java.util.*;
 
-import org.junit.Assert;
-import static org.junit.Assert.*;
-import org.junit.Test;
+import org.junit.*;
 
 /**
  * Tests {@link SuffixTree}.
@@ -87,6 +87,7 @@ public class SuffixTreeTest
         assertAllSuffixes(new CharacterSequence(sequence));
     }
 
+    @Ignore
     @Test
     public void testRandomInput()
     {
