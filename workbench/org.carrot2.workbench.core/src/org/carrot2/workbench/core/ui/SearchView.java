@@ -90,7 +90,6 @@ public class SearchView extends ViewPart
 
     }
 
-    @SuppressWarnings("unchecked")
     private void createRequiredAttributesLayout()
     {
         final Group requiredHolder = new Group(innerComposite, SWT.NONE);
@@ -103,8 +102,7 @@ public class SearchView extends ViewPart
             conf.filterAnnotations.add(Input.class);
             conf.filterAnnotations.add(Processing.class);
             conf.filterAnnotations.add(Required.class);
-            AttributesPage page =
-                new AttributesPage(source, new HashMap<String, Object>(), conf);
+            AttributesPage page = new AttributesPage(source, conf);
             page.init(new PageSite(this.getViewSite()));
             page.createControl(requiredHolder);
             attributesPages.put(wrapper.getId(), page);

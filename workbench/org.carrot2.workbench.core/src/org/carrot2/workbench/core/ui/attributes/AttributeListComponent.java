@@ -92,7 +92,7 @@ public class AttributeListComponent implements IProcessingResultPart
             BindableDescriptorBuilder.buildDescriptor(job.algorithm);
         desc = desc.flatten().group(method);
         groupControl = new ExpandBarGrouppedControl();
-        groupControl.init(job.algorithm, job.attributes);
+        groupControl.init(job.algorithm);
         groupControl.createMainControl(parent);
         for (Object groupKey : desc.attributeGroups.keySet())
         {

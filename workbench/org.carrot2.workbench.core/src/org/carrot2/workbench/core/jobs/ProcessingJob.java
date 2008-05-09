@@ -3,8 +3,11 @@ package org.carrot2.workbench.core.jobs;
 import java.util.Map;
 
 import org.carrot2.core.*;
+import org.carrot2.core.attribute.Processing;
+import org.carrot2.util.attribute.*;
 import org.carrot2.workbench.core.CorePlugin;
 import org.carrot2.workbench.core.helpers.ComponentLoader;
+import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.core.ui.SearchParameters;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -16,6 +19,7 @@ public class ProcessingJob extends Job
     public final ProcessingComponent algorithm;
     public final Map<String, Object> attributes;
 
+    @SuppressWarnings("unchecked")
     public ProcessingJob(String name, SearchParameters search)
     {
         super(name);
@@ -26,6 +30,18 @@ public class ProcessingJob extends Job
             ComponentLoader.ALGORITHM_LOADER.getExecutableComponent(search
                 .getAlgorithmId());
         attributes = search.getAttributes();
+        try
+        {
+            AttributeBinder.bind(algorithm, attributes, Input.class, Processing.class);
+        }
+        catch (AttributeBindingException e)
+        {
+            Utils.logError(e, false);
+        }
+        catch (InstantiationException e)
+        {
+            Utils.logError(e, false);
+        }
     }
 
     @Override

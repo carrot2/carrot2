@@ -2,7 +2,8 @@ package org.carrot2.workbench.core.ui.attributes;
 
 import static org.eclipse.swt.SWT.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.carrot2.core.ProcessingComponent;
 import org.eclipse.swt.SWT;
@@ -21,12 +22,10 @@ public class ExpandBarGrouppedControl implements IAttributesGrouppedControl
     private Composite mainControl;
     private java.util.List<AttributesPage> pages = new ArrayList<AttributesPage>();
     private ProcessingComponent component;
-    private Map<String, Object> attributes;
 
-    public void init(ProcessingComponent component, Map<String, Object> attributes)
+    public void init(ProcessingComponent component)
     {
         this.component = component;
-        this.attributes = attributes;
     }
 
     public void createGroup(Object label, AttributesControlConfiguration conf,
@@ -35,7 +34,7 @@ public class ExpandBarGrouppedControl implements IAttributesGrouppedControl
         final ExpandableComposite group =
             new ExpandableComposite(mainControl, SWT.NONE, ExpandableComposite.TWISTIE);
         group.setText(label.toString());
-        AttributesPage page = new AttributesPage(component, attributes, conf);
+        AttributesPage page = new AttributesPage(component, conf);
         page.init(site);
         page.createControl(group);
 

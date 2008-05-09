@@ -1,7 +1,6 @@
 package org.carrot2.workbench.core.ui.attributes;
 
 import java.util.List;
-import java.util.Map;
 
 import org.carrot2.core.ProcessingComponent;
 import org.carrot2.util.attribute.BindableDescriptor;
@@ -22,7 +21,7 @@ import org.eclipse.ui.part.IPageSite;
  */
 public interface IAttributesGrouppedControl
 {
-    void init(ProcessingComponent component, Map<String, Object> attributes);
+    void init(ProcessingComponent component);
 
     /**
      * Creates control, that will store one group only.

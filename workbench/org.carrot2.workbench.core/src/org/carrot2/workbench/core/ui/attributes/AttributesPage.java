@@ -24,13 +24,12 @@ public class AttributesPage extends Page implements IPersistableEditor
 
     private BindableDescriptor descriptor;
     private BindableDescriptor flatDescriptor;
-    private Map<String, Object> attributes;
     private ProcessingComponent component;
     private Composite root;
     private java.util.List<IAttributeEditor> editors = new ArrayList<IAttributeEditor>();
     private AttributesControlConfiguration conf;
 
-    public AttributesPage(ProcessingComponent component, Map<String, Object> attributes,
+    public AttributesPage(ProcessingComponent component,
         AttributesControlConfiguration configuration)
     {
 
@@ -45,7 +44,6 @@ public class AttributesPage extends Page implements IPersistableEditor
         this.component = component;
         this.descriptor = BindableDescriptorBuilder.buildDescriptor(component);
         this.flatDescriptor = descriptor.flatten();
-        this.attributes = attributes;
         this.conf = configuration;
     }
 
@@ -246,14 +244,7 @@ public class AttributesPage extends Page implements IPersistableEditor
 
     private Object getInitialValue(String key)
     {
-        if (attributes.containsKey(key))
-        {
-            return attributes.get(key);
-        }
-        else
-        {
-            return flatDescriptor.attributeDescriptors.get(key).defaultValue;
-        }
+        return flatDescriptor.attributeDescriptors.get(key).defaultValue;
     }
 
 }
