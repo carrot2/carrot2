@@ -9,7 +9,7 @@ public class Perspective implements IPerspectiveFactory
 {
     public void createInitialLayout(IPageLayout layout)
     {
-        layout.addStandaloneView(SearchView.ID, false, IPageLayout.TOP, 0.2f, layout
+        layout.addStandaloneView(SearchView.ID, false, IPageLayout.TOP, 0.25f, layout
             .getEditorArea());
         layout.getViewLayout(SearchView.ID).setCloseable(false);
         layout.setEditorAreaVisible(true);
@@ -25,5 +25,7 @@ public class Perspective implements IPerspectiveFactory
             layout.createFolder("leftViewa", IPageLayout.RIGHT, .7f, layout
                 .getEditorArea());
         verticalFolder.addView(ClusterTreeView.ID);
+        layout.addShowViewShortcut(ClusterTreeView.ID);
+        layout.addShowViewShortcut(DocumentListView.ID);
     }
 }

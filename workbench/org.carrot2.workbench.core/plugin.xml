@@ -14,9 +14,10 @@
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
-            name="RCP Perspective"
             class="org.carrot2.workbench.core.Perspective"
-            id="org.carrot2.workbench.core.perspective">
+            icon="icons/results.png"
+            id="org.carrot2.workbench.core.perspective"
+            name="Carrot2">
       </perspective>
    </extension>
    <extension
