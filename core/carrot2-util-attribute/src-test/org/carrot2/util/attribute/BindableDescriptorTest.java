@@ -1,5 +1,7 @@
 package org.carrot2.util.attribute;
 
+import static junit.framework.Assert.assertNotSame;
+import static junit.framework.Assert.assertSame;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
@@ -71,12 +73,8 @@ public class BindableDescriptorTest
             keyFromSuperClass("processingInput"),
             keyFromSuperClass("processingInputOutput"),
             keyFromSubClass("initProcessingInput"),
-            keyFromSubClass("initProcessingInputOutput"));
-
-        assertThat(
-            getDescriptorsFromGroup(filteredDescriptor, FilteringReferenceClass.class)
-                .keySet()).containsOnly(keyFromReferenceClass("initInput"),
-            keyFromReferenceClass("processingInput"));
+            keyFromSubClass("initProcessingInputOutput"),
+            keyFromReferenceClass("initInput"), keyFromReferenceClass("processingInput"));
     }
 
     @Test
@@ -89,11 +87,25 @@ public class BindableDescriptorTest
             keyFromSuperClass("processingInput"),
             keyFromSuperClass("processingInputOutput"),
             keyFromSubClass("initProcessingInput"),
-            keyFromSubClass("initProcessingInputOutput"));
+            keyFromSubClass("initProcessingInputOutput"),
+            keyFromReferenceClass("processingInput"));
+    }
 
-        assertThat(
-            getDescriptorsFromGroup(filteredDescriptor, FilteringReferenceClass.class)
-                .keySet()).containsOnly(keyFromReferenceClass("processingInput"));
+    @Test
+    public void testRepeatedGrouping()
+    {
+        final BindableDescriptor grouped = descriptor
+            .group(BindableDescriptor.GroupingMethod.LEVEL);
+
+        final BindableDescriptor groupedAgain = grouped
+            .group(BindableDescriptor.GroupingMethod.LEVEL);
+
+        final BindableDescriptor flattened = groupedAgain.flatten();
+        final BindableDescriptor flattenedAgain = flattened.flatten();
+
+        assertSame(grouped, groupedAgain);
+        assertNotSame(flattened, groupedAgain);
+        assertSame(flattened, flattenedAgain);
     }
 
     @Test
@@ -110,6 +122,58 @@ public class BindableDescriptorTest
             keyFromReferenceClass("processingInput"));
 
         assertThat(filteredDescriptor.attributeGroups).isEmpty();
+    }
+
+    @Test
+    public void testAllByStructure()
+    {
+        final BindableDescriptor filteredDescriptor = descriptor
+            .group(BindableDescriptor.GroupingMethod.STRUCTURE);
+
+        assertThat(filteredDescriptor.attributeDescriptors.keySet()).isEmpty();
+
+        assertThat(
+            getDescriptorsFromGroup(filteredDescriptor, FilteringSubClass.class).keySet())
+            .containsOnly(keyFromSubClass("initProcessingInput"),
+                keyFromSubClass("initProcessingOutput"),
+                keyFromSubClass("initProcessingInputOutput"));
+
+        assertThat(
+            getDescriptorsFromGroup(filteredDescriptor, FilteringSuperClass.class)
+                .keySet()).containsOnly(keyFromSuperClass("initInput"),
+            keyFromSuperClass("initOutput"), keyFromSuperClass("initInputOutput"),
+            keyFromSuperClass("processingInput"), keyFromSuperClass("processingOutput"),
+            keyFromSuperClass("processingInputOutput"));
+
+        assertThat(
+            getDescriptorsFromGroup(filteredDescriptor, FilteringReferenceClass.class)
+                .keySet()).containsOnly(keyFromReferenceClass("initInput"),
+            keyFromReferenceClass("initOutput"),
+            keyFromReferenceClass("processingInput"),
+            keyFromReferenceClass("processingOutput"));
+    }
+
+    @Test
+    public void testEmptyGroupsAfterFiltering()
+    {
+        final BindableDescriptor filteredDescriptor = descriptor.group(
+            BindableDescriptor.GroupingMethod.STRUCTURE).only(Input.class).only(
+            Output.class);
+
+        assertThat(filteredDescriptor.attributeDescriptors.keySet()).isEmpty();
+
+        assertThat(
+            getDescriptorsFromGroup(filteredDescriptor, FilteringSubClass.class).keySet())
+            .containsOnly(keyFromSubClass("initProcessingInputOutput"));
+
+        assertThat(
+            getDescriptorsFromGroup(filteredDescriptor, FilteringSuperClass.class)
+                .keySet()).containsOnly(keyFromSuperClass("initInputOutput"),
+            keyFromSuperClass("processingInputOutput"));
+
+        assertThat(
+            getDescriptorsFromGroup(filteredDescriptor, FilteringReferenceClass.class))
+            .isNull();
     }
 
     @Test

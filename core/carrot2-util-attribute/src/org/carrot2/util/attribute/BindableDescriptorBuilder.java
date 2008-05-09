@@ -100,7 +100,7 @@ public class BindableDescriptorBuilder
             }
         }
 
-        return new BindableDescriptor(bindableMetadata, bindableDescriptors,
+        return new BindableDescriptor(clazz, bindableMetadata, bindableDescriptors,
             attributeDescriptors);
     }
 

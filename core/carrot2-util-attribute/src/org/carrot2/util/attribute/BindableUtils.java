@@ -75,27 +75,34 @@ final class BindableUtils
 
         if (attributeAnnotation == null || "".equals(attributeAnnotation.key()))
         {
-            final Class<?> declaringClass = field.getDeclaringClass();
-            final Bindable classAnnotation = declaringClass.getAnnotation(Bindable.class);
-            if (classAnnotation == null)
-            {
-                throw new IllegalArgumentException();
-            }
-
-            final String classPrefix = classAnnotation.prefix();
-            if ("".equals(classPrefix))
-            {
-                return declaringClass.getName() + "." + field.getName();
-            }
-            else
-            {
-                return classPrefix + "." + field.getName();
-            }
-
+            return getPrefix(field.getDeclaringClass()) + "." + field.getName();
         }
         else
         {
             return attributeAnnotation.key();
+        }
+    }
+
+    /**
+     * Returns the prefix of a {@link Bindable} type or the the fully qualified class name
+     * if the prefix is not defined.
+     */
+    static String getPrefix(Class<?> bindableClass)
+    {
+        final Bindable bindable = bindableClass.getAnnotation(Bindable.class);
+        if (bindable == null)
+        {
+            throw new IllegalArgumentException("The argument must have @"
+                + Bindable.class.getSimpleName() + " annotation");
+        }
+
+        if ("".equals(bindable.prefix()))
+        {
+            return bindableClass.getName();
+        }
+        else
+        {
+            return bindable.prefix();
         }
     }
 }

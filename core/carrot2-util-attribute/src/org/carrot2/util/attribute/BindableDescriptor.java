@@ -65,7 +65,21 @@ public class BindableDescriptor
         NONE
     }
 
+    /**
+     * The method by which this {@link BindableDescriptor} is grouped.
+     */
     public final GroupingMethod groupedBy;
+
+    /**
+     * The type this {@link BindableDescriptor} refers to.
+     */
+    public final Class<?> type;
+
+    /**
+     * Prefix of the {@link Bindable} this descriptor refers to, as returned by
+     * {@link BindableUtils#getPrefix(Class)}.
+     */
+    public final String prefix;
 
     /**
      * Descriptors without any group assignment. Keys in the map correspond to attribute
@@ -76,8 +90,8 @@ public class BindableDescriptor
     public final Map<String, AttributeDescriptor> attributeDescriptors;
 
     /**
-     * Grouped descriptors. By default descriptors come grouped by
-     * {@link GroupingMethod#STRUCTURE}, to get other groupings, use
+     * Grouped descriptors. By default descriptors come ungrouped
+     * {@link GroupingMethod#NONE}, to get them grouped, use
      * {@link #group(GroupingMethod)}. The iterator returns values of this map in the
      * natural order of keys. For the exact type of the key of this map, see
      * {@link GroupingMethod}.
@@ -104,21 +118,24 @@ public class BindableDescriptor
     /**
      * An internal constructor.
      */
-    BindableDescriptor(BindableMetadata metadata,
+    BindableDescriptor(Class<?> bindableType, BindableMetadata metadata,
         Map<Field, BindableDescriptor> bindableDescriptors,
         Map<String, AttributeDescriptor> attributeDescriptors)
     {
-        this(metadata, bindableDescriptors, attributeDescriptors,
-            GroupingMethod.STRUCTURE);
+        this(bindableType, metadata, bindableDescriptors, attributeDescriptors,
+            GroupingMethod.NONE);
     }
 
     /**
      * An internal constructor.
      */
-    BindableDescriptor(BindableMetadata metadata,
+    BindableDescriptor(Class<?> bindableType, BindableMetadata metadata,
         Map<Field, BindableDescriptor> bindableDescriptors,
         Map<String, AttributeDescriptor> attributeDescriptors, GroupingMethod groupBy)
     {
+        this.type = bindableType;
+        this.prefix = BindableUtils.getPrefix(bindableType);
+
         this.metadata = metadata;
         this.bindableDescriptorsInternal = bindableDescriptors;
         this.attributeDescriptorsInternal = attributeDescriptors;
@@ -171,8 +188,8 @@ public class BindableDescriptor
                 predicate));
         }
 
-        return new BindableDescriptor(this.metadata, filteredBindableDescriptors,
-            filteredAttributeDescriptors, this.groupedBy);
+        return new BindableDescriptor(this.type, this.metadata,
+            filteredBindableDescriptors, filteredAttributeDescriptors, this.groupedBy);
     }
 
     /**
@@ -233,8 +250,16 @@ public class BindableDescriptor
      */
     public BindableDescriptor group(GroupingMethod groupingMethod)
     {
-        return new BindableDescriptor(this.metadata, this.bindableDescriptorsInternal,
-            this.attributeDescriptorsInternal, groupingMethod);
+        if (this.groupedBy.equals(groupingMethod))
+        {
+            return this;
+        }
+        else
+        {
+            return new BindableDescriptor(this.type, this.metadata,
+                this.bindableDescriptorsInternal, this.attributeDescriptorsInternal,
+                groupingMethod);
+        }
     }
 
     /**
@@ -242,7 +267,7 @@ public class BindableDescriptor
      */
     static interface Grouper<T>
     {
-        T getGroupingObject(Entry<Field, BindableDescriptor> bindableEntry,
+        T getGroupingObject(BindableDescriptor bindableDescriptor,
             AttributeDescriptor attributeDescriptor);
     }
 
@@ -301,24 +326,16 @@ public class BindableDescriptor
 
     static Grouper<Class<?>> GROUPER_BY_STRUCTURE = new Grouper<Class<?>>()
     {
-        public Class<?> getGroupingObject(Entry<Field, BindableDescriptor> bindableEntry,
+        public Class<?> getGroupingObject(BindableDescriptor bindableDescriptor,
             AttributeDescriptor attributeDescriptor)
         {
-            if (bindableEntry != null)
-            {
-                return bindableEntry.getKey().getType();
-            }
-            else
-            {
-                return null;
-            }
+            return attributeDescriptor.attributeField.getDeclaringClass();
         }
     };
 
     static Grouper<AttributeLevel> GROUPER_BY_LEVEL = new Grouper<AttributeLevel>()
     {
-        public AttributeLevel getGroupingObject(
-            Entry<Field, BindableDescriptor> bindableEntry,
+        public AttributeLevel getGroupingObject(BindableDescriptor bindableDescriptor,
             AttributeDescriptor attributeDescriptor)
         {
             if (attributeDescriptor.metadata != null)
@@ -334,7 +351,7 @@ public class BindableDescriptor
 
     static Grouper<String> GROUPER_BY_GROUP = new Grouper<String>()
     {
-        public String getGroupingObject(Entry<Field, BindableDescriptor> bindableEntry,
+        public String getGroupingObject(BindableDescriptor bindableDescriptor,
             AttributeDescriptor attributeDescriptor)
         {
             if (attributeDescriptor.metadata != null)
@@ -350,7 +367,7 @@ public class BindableDescriptor
 
     static Grouper<String> GROUPER_BY_NONE = new Grouper<String>()
     {
-        public String getGroupingObject(Entry<Field, BindableDescriptor> bindableEntry,
+        public String getGroupingObject(BindableDescriptor bindableDescriptor,
             AttributeDescriptor attributeDescriptor)
         {
             return null;
@@ -367,27 +384,15 @@ public class BindableDescriptor
             .values())
         {
             addToMaps(newAttributeDescriptors, newAttributeGroups, attributeDescriptor1,
-                grouper.getGroupingObject(null, attributeDescriptor1));
+                grouper.getGroupingObject(sourceBindableDescriptor, attributeDescriptor1));
         }
 
         // Recursively run through nested attribute descriptors
         for (Entry<Field, BindableDescriptor> entry : sourceBindableDescriptor.bindableDescriptorsInternal
             .entrySet())
         {
-            for (AttributeDescriptor attributeDescriptor : entry.getValue().attributeDescriptorsInternal
-                .values())
-            {
-                addToMaps(newAttributeDescriptors, newAttributeGroups,
-                    attributeDescriptor, grouper.getGroupingObject(entry,
-                        attributeDescriptor));
-            }
-
-            for (BindableDescriptor nestedBindableDescriptor : entry.getValue().bindableDescriptorsInternal
-                .values())
-            {
-                addGroups(nestedBindableDescriptor, newAttributeDescriptors,
-                    newAttributeGroups, grouper);
-            }
+            addGroups(entry.getValue(), newAttributeDescriptors, newAttributeGroups,
+                grouper);
         }
     }
 
