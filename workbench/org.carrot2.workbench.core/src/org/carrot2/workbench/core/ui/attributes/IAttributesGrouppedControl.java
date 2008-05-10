@@ -6,7 +6,6 @@ import org.carrot2.core.ProcessingComponent;
 import org.carrot2.util.attribute.BindableDescriptor;
 import org.carrot2.workbench.editors.AttributeChangeEvent;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.part.IPageSite;
 
 /**
@@ -35,7 +34,8 @@ public interface IAttributesGrouppedControl
      *            created using mainControl as a parent;
      * @see BindableDescriptor#attributeGroups
      */
-    void createGroup(Object groupKey, BindableDescriptor bindableDescriptor, IPageSite site);
+    void createGroup(Object groupKey, BindableDescriptor bindableDescriptor,
+        IPageSite site);
 
     /**
      * Creates one main control, that all the groups will be placed on.
@@ -49,7 +49,7 @@ public interface IAttributesGrouppedControl
     /**
      * @return root control of a groupped control
      */
-    Control getControl();
+    Composite getControl();
 
     List<AttributesPage> getPages();
 

@@ -26,24 +26,18 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.*;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.Section;
 
 public class DocumentListBrowser implements IProcessingResultPart
 {
     private Browser browser;
     private ISelectionListener postSelectionListener;
     private IWorkbenchSite site;
-    private Control ctrl;
 
     public void init(IWorkbenchSite site, Composite parent, FormToolkit toolkit,
         ProcessingJob job)
     {
         this.site = site;
-        Section sec = toolkit.createSection(parent, Section.EXPANDED | Section.TITLE_BAR);
-        sec.setText("Documents");
-        ctrl = sec;
-        browser = new Browser(sec, SWT.NONE);
-        sec.setClient(browser);
+        browser = new Browser(parent, SWT.NONE);
         attachToJobDone(job);
         attachToSelectionChanged(site.getSelectionProvider());
         attachToLocationChanging();
@@ -53,7 +47,6 @@ public class DocumentListBrowser implements IProcessingResultPart
     {
         this.site = site;
         browser = new Browser(parent, SWT.NONE);
-        ctrl = browser;
         attachToPostSelection(site.getPage());
         attachToLocationChanging();
     }
@@ -212,7 +205,7 @@ public class DocumentListBrowser implements IProcessingResultPart
 
     public Control getControl()
     {
-        return ctrl;
+        return browser;
     }
 
     public void dispose()
@@ -226,5 +219,10 @@ public class DocumentListBrowser implements IProcessingResultPart
     public void clear()
     {
         browser.setText("");
+    }
+
+    public String getPartName()
+    {
+        return "Documents";
     }
 }

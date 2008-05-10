@@ -11,10 +11,11 @@ import org.carrot2.util.attribute.BindableDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.*;
-import org.eclipse.swt.widgets.*;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
-import org.eclipse.ui.forms.widgets.ExpandableComposite;
+import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.part.IPageSite;
 
 public class ExpandBarGrouppedControl implements IAttributesGrouppedControl
@@ -32,9 +33,10 @@ public class ExpandBarGrouppedControl implements IAttributesGrouppedControl
     public void createGroup(Object label, BindableDescriptor bindableDescriptor,
         IPageSite site)
     {
-        final ExpandableComposite group =
-            new ExpandableComposite(mainControl, SWT.NONE, ExpandableComposite.TWISTIE);
+        final Section group =
+            new Section(mainControl, Section.TWISTIE | Section.CLIENT_INDENT);
         group.setText(label.toString());
+        group.setSeparatorControl(new Label(group, SWT.SEPARATOR | SWT.HORIZONTAL));
         AttributesPage page =
             new AttributesPage(component, bindableDescriptor.attributeGroups.get(label));
         page.init(site);
@@ -80,7 +82,7 @@ public class ExpandBarGrouppedControl implements IAttributesGrouppedControl
         }
     }
 
-    public Control getControl()
+    public Composite getControl()
     {
         if (!mainControl.isDisposed())
         {

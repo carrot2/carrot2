@@ -15,6 +15,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.*;
+import org.eclipse.ui.forms.widgets.Section;
 
 public class ResultsEditor extends SashFormEditorPart
 {
@@ -44,7 +45,11 @@ public class ResultsEditor extends SashFormEditorPart
         for (int i = 0; i < parts.length; i++)
         {
             IProcessingResultPart part = parts[i];
-            part.init(getSite(), parent, getToolkit(), job);
+            Section sec =
+                getToolkit().createSection(parent, Section.EXPANDED | Section.TITLE_BAR);
+            sec.setText(part.getPartName());
+            part.init(getSite(), sec, getToolkit(), job);
+            sec.setClient(part.getControl());
         }
         job.addJobChangeListener(new JobChangeAdapter()
         {

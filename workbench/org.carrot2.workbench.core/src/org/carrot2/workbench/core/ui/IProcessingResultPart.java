@@ -14,6 +14,8 @@ public interface IProcessingResultPart
 
     Control getControl();
 
+    String getPartName();
+
     void dispose();
 
 }

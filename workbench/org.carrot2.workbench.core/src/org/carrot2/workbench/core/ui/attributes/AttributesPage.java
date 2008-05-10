@@ -4,14 +4,13 @@ import java.util.*;
 
 import org.apache.commons.lang.NullArgumentException;
 import org.carrot2.core.ProcessingComponent;
-import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.AttributeDescriptor;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.editors.*;
 import org.carrot2.workbench.editors.factory.EditorFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IPersistableEditor;
@@ -52,50 +51,50 @@ public class AttributesPage extends Page implements IPersistableEditor
         GridLayout layout = new GridLayout();
         layout.numColumns = 2;
         root.setLayout(layout);
-        for (Map.Entry<String, AttributeDescriptor> entry : attributeDescriptors.entrySet())
+        for (Map.Entry<String, AttributeDescriptor> entry : attributeDescriptors
+            .entrySet())
         {
             AttributeDescriptor attDescriptor = entry.getValue();
-                IAttributeEditor editor = null;
-                try
+            IAttributeEditor editor = null;
+            try
+            {
+                editor = EditorFactory.getEditorFor(component, attDescriptor);
+                GridData data = new GridData(GridData.FILL, GridData.FILL, true, false);
+                editor.init(attDescriptor);
+                if (editor.containsLabel())
                 {
-                    editor = EditorFactory.getEditorFor(component, attDescriptor);
-                    GridData data =
-                        new GridData(GridData.FILL, GridData.FILL, true, false);
-                    editor.init(attDescriptor);
-                    if (editor.containsLabel())
-                    {
-                        data.horizontalSpan = 2;
-                    }
-                    else
-                    {
-                        Label l = new Label(root, SWT.NONE);
-                        String text = getLabelForAttribute(attDescriptor);
-                        l.setText(text);
-                        l.setLayoutData(new GridData());
-                    }
-                    editor.createEditor(root, data);
-                    editor.setValue(getInitialValue(attDescriptor.key));
-                    //editor.addAttributeChangeListener(listener);
-                    editors.add(editor);
-                    // if (descriptor.getValue().metadata.getDescription() != null)
-                    // {
-                    // descriptionText.setText(descriptor.getValue().metadata
-                    // .getDescription());
-                    // }
+                    data.horizontalSpan = 2;
                 }
-                catch (EditorNotFoundException ex)
+                else
                 {
-                    Utils.logError(ex, false);
                     Label l = new Label(root, SWT.NONE);
-                    l.setText(getLabelForAttribute(attDescriptor));
-                    GridData gd = new GridData();
-                    gd.horizontalSpan = 2;
-                    l.setLayoutData(gd);
-                    if (editor != null)
-                    {
-                        editor.dispose();
-                    }
+                    String text = getLabelForAttribute(attDescriptor);
+                    l.setText(text);
+                    l.setLayoutData(new GridData());
                 }
+                editor.createEditor(root, data);
+                editor.setValue(getInitialValue(attDescriptor.key));
+                //editor.addAttributeChangeListener(listener);
+                editors.add(editor);
+                // if (descriptor.getValue().metadata.getDescription() != null)
+                // {
+                // descriptionText.setText(descriptor.getValue().metadata
+                // .getDescription());
+                // }
+            }
+            catch (EditorNotFoundException ex)
+            {
+                Utils.logError(ex, false);
+                Label l = new Label(root, SWT.NONE);
+                l.setText(getLabelForAttribute(attDescriptor));
+                GridData gd = new GridData();
+                gd.horizontalSpan = 2;
+                l.setLayoutData(gd);
+                if (editor != null)
+                {
+                    editor.dispose();
+                }
+            }
         }
         root.setSize(root.computeSize(SWT.DEFAULT, SWT.DEFAULT));
     }
@@ -105,6 +104,7 @@ public class AttributesPage extends Page implements IPersistableEditor
     {
         //BugFixed(CARROT-210)
         if (!root.isDisposed() && !root.getParent().isDisposed())
+        //&& !root.getParent().getParent().isDisposed())
         {
             return root.getParent();
         }
@@ -192,8 +192,8 @@ public class AttributesPage extends Page implements IPersistableEditor
         final ScrolledComposite scroll =
             new ScrolledComposite(parent, SWT.V_SCROLL | SWT.H_SCROLL);
         root = new Composite(scroll, SWT.NONE);
-        scroll.setLayout(new GridLayout());
-        root.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
+        scroll.setLayout(new FillLayout());
+        //root.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
         scroll.setContent(root);
     }
 
