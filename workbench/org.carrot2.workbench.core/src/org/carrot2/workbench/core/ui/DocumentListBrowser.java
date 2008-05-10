@@ -25,17 +25,25 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.*;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.Section;
 
 public class DocumentListBrowser implements IProcessingResultPart
 {
     private Browser browser;
     private ISelectionListener postSelectionListener;
     private IWorkbenchSite site;
+    private Control ctrl;
 
-    public void init(IWorkbenchSite site, Composite parent, ProcessingJob job)
+    public void init(IWorkbenchSite site, Composite parent, FormToolkit toolkit,
+        ProcessingJob job)
     {
         this.site = site;
-        browser = new Browser(parent, SWT.NONE);
+        Section sec = toolkit.createSection(parent, Section.EXPANDED | Section.TITLE_BAR);
+        sec.setText("Documents");
+        ctrl = sec;
+        browser = new Browser(sec, SWT.NONE);
+        sec.setClient(browser);
         attachToJobDone(job);
         attachToSelectionChanged(site.getSelectionProvider());
         attachToLocationChanging();
@@ -45,6 +53,7 @@ public class DocumentListBrowser implements IProcessingResultPart
     {
         this.site = site;
         browser = new Browser(parent, SWT.NONE);
+        ctrl = browser;
         attachToPostSelection(site.getPage());
         attachToLocationChanging();
     }
@@ -118,8 +127,8 @@ public class DocumentListBrowser implements IProcessingResultPart
                     clear();
                     return;
                 }
-                IStructuredSelection selection = (IStructuredSelection) event
-                    .getSelection();
+                IStructuredSelection selection =
+                    (IStructuredSelection) event.getSelection();
                 if (selection.size() > 1)
                 {
                     clear();
@@ -142,7 +151,8 @@ public class DocumentListBrowser implements IProcessingResultPart
             {
                 if (event.getResult().getSeverity() == IStatus.OK)
                 {
-                    final ProcessingResult result = ((ProcessingStatus) event.getResult()).result;
+                    final ProcessingResult result =
+                        ((ProcessingStatus) event.getResult()).result;
                     Utils.asyncExec(new Runnable()
                     {
                         public void run()
@@ -162,8 +172,8 @@ public class DocumentListBrowser implements IProcessingResultPart
 
         if (result.getAttributes().get(AttributeNames.RESULTS_TOTAL) != null)
         {
-            final long total = (Long) result.getAttributes().get(
-                AttributeNames.RESULTS_TOTAL);
+            final long total =
+                (Long) result.getAttributes().get(AttributeNames.RESULTS_TOTAL);
             context.put("results-total-formatted", String.format(Locale.ENGLISH, "%1$,d",
                 total));
         }
@@ -202,7 +212,7 @@ public class DocumentListBrowser implements IProcessingResultPart
 
     public Control getControl()
     {
-        return browser;
+        return ctrl;
     }
 
     public void dispose()

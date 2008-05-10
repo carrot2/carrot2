@@ -12,6 +12,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.*;
 
@@ -34,7 +35,7 @@ public class ResultsEditor extends SashFormEditorPart
     };
 
     @Override
-    protected void createControls()
+    protected int [] createControls(Composite parent)
     {
         sourceImage = getEditorInput().getImageDescriptor().createImage();
         final ProcessingJob job =
@@ -43,8 +44,7 @@ public class ResultsEditor extends SashFormEditorPart
         for (int i = 0; i < parts.length; i++)
         {
             IProcessingResultPart part = parts[i];
-            part.init(getSite(), getContainer(), job);
-            addControl(part.getControl(), weights[i]);
+            part.init(getSite(), parent, getToolkit(), job);
         }
         job.addJobChangeListener(new JobChangeAdapter()
         {
@@ -68,6 +68,7 @@ public class ResultsEditor extends SashFormEditorPart
         CorePlugin.getDefault().getWorkbench().getProgressService().showInDialog(
             Display.getDefault().getActiveShell(), job);
         job.schedule();
+        return weights;
     }
 
     @Override

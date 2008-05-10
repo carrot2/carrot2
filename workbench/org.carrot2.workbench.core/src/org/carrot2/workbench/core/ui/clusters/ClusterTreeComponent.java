@@ -17,16 +17,26 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.IWorkbenchSite;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.Section;
 
 public class ClusterTreeComponent implements IProcessingResultPart
 {
     private TreeViewer viewer;
     private ResultsEditor editor;
     private IPropertyListener refresher;
+    private Control ctrl;
 
-    public void init(IWorkbenchSite site, Composite parent, ProcessingJob job)
+    public void init(IWorkbenchSite site, Composite parent, FormToolkit toolkit,
+        ProcessingJob job)
     {
-        initViewer(site, parent);
+        //FIXME: move creating of a section to ResultsEditor, so this code wont be dusplicated in 3 places
+        Section sec = toolkit.createSection(parent, Section.EXPANDED | Section.TITLE_BAR);
+        sec.setText("Clusters");
+        initViewer(site, sec);
+        sec.setClient(viewer.getControl());
+        toolkit.paintBordersFor(sec);
+        ctrl = sec;
         job.addJobChangeListener(new JobChangeAdapter()
         {
             @Override
@@ -45,6 +55,7 @@ public class ClusterTreeComponent implements IProcessingResultPart
     public void init(IWorkbenchSite site, ResultsEditor editor, Composite parent)
     {
         initViewer(site, parent);
+        ctrl = viewer.getControl();
         this.editor = editor;
         refresher = new IPropertyListener()
         {
@@ -72,7 +83,7 @@ public class ClusterTreeComponent implements IProcessingResultPart
 
     public Control getControl()
     {
-        return viewer.getControl();
+        return ctrl;
     }
 
     public void dispose()

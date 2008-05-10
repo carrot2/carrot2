@@ -95,7 +95,6 @@ public class TempClusteringAlgorithm extends ProcessingComponentBase implements
     @Attribute(key = AttributeNames.DOCUMENTS)
     Collection<Document> documents = Collections.<Document> emptyList();
 
-    @SuppressWarnings("unused")
     @Processing
     @Output
     @Attribute(key = AttributeNames.CLUSTERS)

@@ -1,6 +1,7 @@
 package org.carrot2.workbench.core.ui.attributes;
 
-import org.carrot2.core.attribute.*;
+import org.carrot2.core.attribute.Internal;
+import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
 import org.carrot2.workbench.core.jobs.ProcessingJob;
@@ -11,9 +12,9 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.*;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.part.IPageSite;
-
-import com.google.common.collect.Lists;
 
 public class AttributeListComponent implements IProcessingResultPart
 {
@@ -22,7 +23,8 @@ public class AttributeListComponent implements IProcessingResultPart
     private AttributeChangeListener listener;
 
     @SuppressWarnings("unchecked")
-    public void init(final IWorkbenchSite site, Composite parent, ProcessingJob job)
+    public void init(final IWorkbenchSite site, Composite parent, FormToolkit toolkit,
+        ProcessingJob job)
     {
         this.processingJob = job;
         listener = new AttributeChangeListener()
@@ -86,13 +88,15 @@ public class AttributeListComponent implements IProcessingResultPart
             }
 
         };
+        Section sec = toolkit.createSection(parent, Section.EXPANDED | Section.TITLE_BAR);
+        sec.setText("Attributes");
         GroupingMethod method = GroupingMethod.STRUCTURE;
-        BindableDescriptor desc = BindableDescriptorBuilder
-            .buildDescriptor(job.algorithm);
+        BindableDescriptor desc =
+            BindableDescriptorBuilder.buildDescriptor(job.algorithm);
         desc = desc.only(Input.class, Processing.class).not(Internal.class).group(method);
         groupControl = new ExpandBarGrouppedControl();
         groupControl.init(job.algorithm);
-        groupControl.createMainControl(parent);
+        groupControl.createMainControl(sec);
         for (Object groupKey : desc.attributeGroups.keySet())
         {
             groupControl.createGroup(groupKey, desc, pageSite);
@@ -101,12 +105,12 @@ public class AttributeListComponent implements IProcessingResultPart
         {
             page.addAttributeChangeListener(listener);
         }
-
+        sec.setClient(groupControl.getControl());
     }
 
     public Control getControl()
     {
-        return groupControl.getControl();
+        return groupControl.getControl().getParent();
     }
 
     public void dispose()

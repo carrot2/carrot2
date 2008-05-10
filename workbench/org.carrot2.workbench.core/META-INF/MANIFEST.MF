@@ -27,3 +27,4 @@ Export-Package: org.carrot2.workbench.core,
  org.carrot2.workbench.core.ui.views,
  org.carrot2.workbench.editors,
  org.carrot2.workbench.editors.factory
+Bundle-RequiredExecutionEnvironment: J2SE-1.5

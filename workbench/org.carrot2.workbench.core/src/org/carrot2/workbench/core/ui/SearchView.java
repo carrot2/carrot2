@@ -89,6 +89,7 @@ public class SearchView extends ViewPart
 
     }
 
+    @SuppressWarnings("unchecked")
     private void createRequiredAttributesLayout()
     {
         final Group requiredHolder = new Group(innerComposite, SWT.NONE);
@@ -97,9 +98,10 @@ public class SearchView extends ViewPart
         for (ComponentWrapper wrapper : ComponentLoader.SOURCE_LOADER.getComponents())
         {
             ProcessingComponent source = wrapper.getExecutableComponent();
-            AttributesPage page = new AttributesPage(source, BindableDescriptorBuilder
-                .buildDescriptor(source).only(Input.class, Processing.class,
-                    Required.class).not(Internal.class).flatten().attributeDescriptors);
+            AttributesPage page =
+                new AttributesPage(source, BindableDescriptorBuilder.buildDescriptor(
+                    source).only(Input.class, Processing.class, Required.class).not(
+                    Internal.class).flatten().attributeDescriptors);
             page.init(new PageSite(this.getViewSite()));
             page.createControl(requiredHolder);
             attributesPages.put(wrapper.getId(), page);

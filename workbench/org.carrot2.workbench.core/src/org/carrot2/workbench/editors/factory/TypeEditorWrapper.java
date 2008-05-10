@@ -19,7 +19,6 @@ public class TypeEditorWrapper extends AttributeEditorWrapper
     public final String attributeClass;
     public final List<String> constraints;
 
-    @SuppressWarnings("unchecked")
     public TypeEditorWrapper(IConfigurationElement element)
     {
         super(element);

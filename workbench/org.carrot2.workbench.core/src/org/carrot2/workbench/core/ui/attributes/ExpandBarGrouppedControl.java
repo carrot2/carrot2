@@ -11,8 +11,7 @@ import org.carrot2.util.attribute.BindableDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.*;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
@@ -36,8 +35,8 @@ public class ExpandBarGrouppedControl implements IAttributesGrouppedControl
         final ExpandableComposite group =
             new ExpandableComposite(mainControl, SWT.NONE, ExpandableComposite.TWISTIE);
         group.setText(label.toString());
-        AttributesPage page = new AttributesPage(component,
-            bindableDescriptor.attributeGroups.get(label));
+        AttributesPage page =
+            new AttributesPage(component, bindableDescriptor.attributeGroups.get(label));
         page.init(site);
         page.createControl(group);
 
@@ -75,7 +74,6 @@ public class ExpandBarGrouppedControl implements IAttributesGrouppedControl
 
     public void dispose()
     {
-        getControl().dispose();
         for (AttributesPage page : pages)
         {
             page.dispose();
@@ -84,7 +82,14 @@ public class ExpandBarGrouppedControl implements IAttributesGrouppedControl
 
     public Control getControl()
     {
-        return mainControl.getParent();
+        if (!mainControl.isDisposed())
+        {
+            return mainControl.getParent();
+        }
+        else
+        {
+            return null;
+        }
     }
 
     public List<AttributesPage> getPages()

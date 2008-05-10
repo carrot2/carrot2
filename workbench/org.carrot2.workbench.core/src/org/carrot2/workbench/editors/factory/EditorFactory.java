@@ -17,6 +17,7 @@ import com.google.common.collect.Lists;
 
 public class EditorFactory
 {
+    //FIXME: change attribute to Class<? extends ProcessingComponent>, ne need to create instance than
     public static IAttributeEditor getEditorFor(ProcessingComponent owner,
         AttributeDescriptor attribute)
     {

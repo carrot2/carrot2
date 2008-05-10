@@ -67,6 +67,7 @@ public class EnumEditor extends AttributeEditorAdapter implements IAttributeEdit
         return constants[viewer.getCombo().getSelectionIndex()];
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void saveState(IMemento memento)
     {

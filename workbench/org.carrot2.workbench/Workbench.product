@@ -11,6 +11,8 @@
 
    <windowImages/>
 
+   <splash
+      location="org.carrot2.workbench.core" />
    <launcher name="carrot2-workbench">
       <solaris/>
       <win useIco="false">

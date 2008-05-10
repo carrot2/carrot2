@@ -1,19 +1,23 @@
 package org.carrot2.workbench.core.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import org.apache.commons.lang.ArrayUtils;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.*;
+import org.eclipse.ui.forms.widgets.Form;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.EditorPart;
 
 public abstract class SashFormEditorPart extends EditorPart implements IPersistableEditor
 {
-    private SashForm form;
-    private List<Integer> weights;
+    private FormToolkit toolkit;
+    private Form rootForm;
+
+    private SashForm sashForm;
     private IMemento state;
 
     /**
@@ -22,41 +26,51 @@ public abstract class SashFormEditorPart extends EditorPart implements IPersista
     @Override
     public void createPartControl(Composite parent)
     {
-        form = new SashForm(parent, getSashFormOrientation());
-        weights = new ArrayList<Integer>();
-        createControls();
-        if (state != null)
+        toolkit = new FormToolkit(parent.getDisplay());
+        rootForm = toolkit.createForm(parent);
+        rootForm.setText("Results");
+        toolkit.decorateFormHeading(rootForm);
+        sashForm = new SashForm(rootForm.getBody(), getSashFormOrientation());
+        toolkit.adapt(sashForm);
+        //        weights = new ArrayList<Integer>();
+        int [] weights = createControls(sashForm);
+        int [] storedWeights = restoreWeightsFromState();
+        if (storedWeights == null)
         {
-            restoreWeightsFromState();
+            sashForm.setWeights(weights);
         }
-        int [] intWeights = new int [weights.size()];
-        for (int i = 0; i < intWeights.length; i++)
+        else
         {
-            intWeights[i] = weights.get(i);
+            sashForm.setWeights(weights);
         }
-        form.setWeights(intWeights);
+        GridLayout layout = GridLayoutFactory.swtDefaults().create();
+        rootForm.getBody().setLayout(layout);
+        sashForm.SASH_WIDTH = 5;
+        sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
     }
 
-    private void restoreWeightsFromState()
+    private int [] restoreWeightsFromState()
     {
-        int weightsAmount = state.getInteger("weights-amount");
-        if (weightsAmount != weights.size())
+        if (state == null)
         {
-            return;
+            return null;
         }
-        weights.clear();
+        int weightsAmount = state.getInteger("weights-amount");
+        if (weightsAmount != sashForm.getChildren().length)
+        {
+            return null;
+        }
+        int [] weights = new int [0];
         for (int i = 0; i < weightsAmount; i++)
         {
-            weights.add(state.getInteger("w" + i));
+            ArrayUtils.add(weights, state.getInteger("w" + i));
         }
+        return weights;
     }
 
-    /**
-     * @return parent that should be used for controls added with addControl()
-     */
-    protected Composite getContainer()
+    protected FormToolkit getToolkit()
     {
-        return form;
+        return toolkit;
     }
 
     /**
@@ -75,22 +89,7 @@ public abstract class SashFormEditorPart extends EditorPart implements IPersista
      * Creates controls to be put o SashForm. <b> Subclasses must implement this method!
      * </B>
      */
-    protected abstract void createControls();
-
-    /**
-     * Adds new Control to SashForm with the given weight.
-     * 
-     * @param control
-     * @param weight
-     */
-    protected void addControl(Control control, int weight)
-    {
-        if (!control.getParent().equals(form))
-        {
-            SWT.error(SWT.ERROR_INVALID_PARENT);
-        }
-        weights.add(weight);
-    }
+    protected abstract int [] createControls(Composite parent);
 
     @Override
     public void init(IEditorSite site, IEditorInput input) throws PartInitException
@@ -101,10 +100,10 @@ public abstract class SashFormEditorPart extends EditorPart implements IPersista
 
     public void saveState(IMemento memento)
     {
-        memento.putInteger("weights-amount", this.form.getWeights().length);
-        for (int i = 0; i < this.form.getWeights().length; i++)
+        memento.putInteger("weights-amount", this.sashForm.getWeights().length);
+        for (int i = 0; i < this.sashForm.getWeights().length; i++)
         {
-            int weight = this.form.getWeights()[i];
+            int weight = this.sashForm.getWeights()[i];
             memento.putInteger("w" + i, weight);
         }
     }
@@ -112,5 +111,12 @@ public abstract class SashFormEditorPart extends EditorPart implements IPersista
     public void restoreState(IMemento memento)
     {
         state = memento;
+    }
+
+    @Override
+    public void dispose()
+    {
+        toolkit.dispose();
+        super.dispose();
     }
 }
