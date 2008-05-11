@@ -50,6 +50,7 @@ public class AttributesPage extends Page implements IPersistableEditor
 
         GridLayout layout = new GridLayout();
         layout.numColumns = 2;
+        layout.marginWidth = 0;
         root.setLayout(layout);
         for (Map.Entry<String, AttributeDescriptor> entry : attributeDescriptors
             .entrySet())
@@ -70,7 +71,6 @@ public class AttributesPage extends Page implements IPersistableEditor
                     Label l = new Label(root, SWT.NONE);
                     String text = getLabelForAttribute(attDescriptor);
                     l.setText(text);
-                    l.setLayoutData(new GridData());
                 }
                 editor.createEditor(root, data);
                 editor.setValue(getInitialValue(attDescriptor.key));
@@ -106,7 +106,7 @@ public class AttributesPage extends Page implements IPersistableEditor
         if (!root.isDisposed() && !root.getParent().isDisposed())
         //&& !root.getParent().getParent().isDisposed())
         {
-            return root.getParent();
+            return root;
         }
         else
         {
@@ -189,12 +189,7 @@ public class AttributesPage extends Page implements IPersistableEditor
 
     private void initLayout(Composite parent)
     {
-        final ScrolledComposite scroll =
-            new ScrolledComposite(parent, SWT.V_SCROLL | SWT.H_SCROLL);
-        root = new Composite(scroll, SWT.NONE);
-        scroll.setLayout(new FillLayout());
-        //root.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
-        scroll.setContent(root);
+        root = new Composite(parent, SWT.NONE);
     }
 
     private Object getInitialValue(String key)

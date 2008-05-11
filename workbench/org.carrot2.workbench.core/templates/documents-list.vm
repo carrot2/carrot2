@@ -3,8 +3,11 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
 		<style type="text/css">
 		body, table {
-			font-size: 10pt;
-			font-family: Arial, Helvetica, sans-serif;
+			font-size: 11px;
+			font-family: Tahoma, Arial, Helvetica, sans-serif;
+			margin: 0;
+      overflow-y: auto;
+      overflow-x: hidden;			
 		}
 		
 		div.cl, div.status {
@@ -23,6 +26,15 @@
 		
 		span.du {
 			color: green;
+			overflow: hidden;
+		}
+		
+		span.id {
+			color: #a0a0a0;
+		}
+		
+		a {
+		  color: #60A4D9;
 		}
 		</style>
 	</head>
@@ -30,20 +42,10 @@
 
 #if ($result)
 	#set ( $totalProcessingSec = ${result.Attributes.processing-time-total} / 1000.0 )
-	<div class="status">
- 		${result.Documents.size()} 
- 		#if ($results-total-formatted)
- 			out of ${results-total-formatted}
- 		#end
- 		documents
- 		| ${result.Clusters.size()} clusters 
- 		| ${totalProcessingSec} sec.
-	</div>
 	#set( $documents = $result.Documents )
 #end
 
 #if ($cluster)
-	<div class="cl">$cluster.Label</div>
 	#set( $documents = $cluster.AllDocuments )
 #end
 
@@ -58,8 +60,8 @@
 #end
 
 #foreach ($document in $documents)
-	<a href="${document.getField("url")}"><b>$document.getField("title")</b></a>
-		<span style="color: gray;"> [$document.Id]</span><br>
+	<span class="id"> [$document.Id]</span> <a href="${document.getField("url")}"><b>$document.getField("title")</b></a>
+		<br>
     #if($document.getField("summary") != "")
 	$document.getField("summary")<br>
 	#end

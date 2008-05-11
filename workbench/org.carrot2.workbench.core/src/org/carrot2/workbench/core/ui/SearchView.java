@@ -1,7 +1,5 @@
 package org.carrot2.workbench.core.ui;
 
-import static org.eclipse.swt.SWT.FILL;
-
 import java.util.*;
 
 import org.carrot2.core.ProcessingComponent;
@@ -19,6 +17,7 @@ import org.eclipse.swt.graphics.Resource;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.*;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.PageSite;
 import org.eclipse.ui.part.ViewPart;
 
@@ -90,11 +89,18 @@ public class SearchView extends ViewPart
     }
 
     @SuppressWarnings("unchecked")
-    private void createRequiredAttributesLayout()
+    private void createRequiredAttributesLayout(FormToolkit formToolkit)
     {
-        final Group requiredHolder = new Group(innerComposite, SWT.NONE);
-        requiredHolder.setText("Required attributes");
         final StackLayout stack = new StackLayout();
+        final Composite requiredAttributes = formToolkit.createComposite(innerComposite);
+        requiredAttributes.setLayout(stack);
+
+        final GridData attributesGridData = new GridData();
+        attributesGridData.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
+        attributesGridData.grabExcessHorizontalSpace = true;
+        attributesGridData.horizontalSpan = 2;
+        requiredAttributes.setLayoutData(attributesGridData);
+
         for (ComponentWrapper wrapper : ComponentLoader.SOURCE_LOADER.getComponents())
         {
             ProcessingComponent source = wrapper.getExecutableComponent();
@@ -104,16 +110,16 @@ public class SearchView extends ViewPart
                     BindableDescriptorBuilder.buildDescriptor(source).only(Input.class,
                         Processing.class, Required.class).not(Internal.class).flatten().attributeDescriptors);
             page.init(new PageSite(this.getViewSite()));
-            page.createControl(requiredHolder);
+            page.createControl(requiredAttributes);
             attributesPages.put(wrapper.getId(), page);
         }
-        requiredHolder.setLayout(stack);
         restoreRequiredAttributesState();
+        UiFormUtils.adaptToFormUI(formToolkit, requiredAttributes);
 
         if (getSourceId() != null)
         {
             stack.topControl = attributesPages.get(getSourceId()).getControl();
-            requiredHolder.layout();
+            requiredAttributes.layout();
         }
         sourceViewer.getCombo().addSelectionListener(new SelectionAdapter()
         {
@@ -123,15 +129,10 @@ public class SearchView extends ViewPart
                 if (getSourceId() != null)
                 {
                     stack.topControl = attributesPages.get(getSourceId()).getControl();
-                    requiredHolder.layout();
+                    requiredAttributes.layout();
                 }
             }
         });
-        GridData gd = new GridData();
-        gd.grabExcessHorizontalSpace = true;
-        gd.horizontalAlignment = FILL;
-        gd.horizontalSpan = 2;
-        requiredHolder.setLayoutData(gd);
     }
 
     private void restoreRequiredAttributesState()
@@ -289,52 +290,40 @@ public class SearchView extends ViewPart
 
     private void createPermanentLayout(Composite parent)
     {
-        parent.setLayout(new FormLayout());
+        parent.setLayout(new FillLayout());
+        
+        FormToolkit toolkit = new FormToolkit(parent.getDisplay());
+        innerComposite = toolkit.createForm(parent).getBody();
+        innerComposite.setLayout(new GridLayout(2, false));
+        
+        Label sourceLabel = toolkit.createLabel(innerComposite, "Source", SWT.CENTER);
+        Combo sourceCombo = new Combo(innerComposite, SWT.DROP_DOWN | SWT.READ_ONLY
+            | SWT.BORDER);
 
-        innerComposite = new Composite(parent, SWT.NULL);
-        Label sourceLabel = new Label(innerComposite, SWT.CENTER);
-        Combo sourceCombo =
-            new Combo(innerComposite, SWT.DROP_DOWN | SWT.READ_ONLY | SWT.BORDER);
-        Label algorithmLabel = new Label(innerComposite, SWT.CENTER);
-        Combo algorithmCombo =
-            new Combo(innerComposite, SWT.DROP_DOWN | SWT.READ_ONLY | SWT.BORDER);
+        Label algorithmLabel = toolkit.createLabel(innerComposite, "Algorithm", SWT.CENTER);
+        Combo algorithmCombo = new Combo(innerComposite, SWT.DROP_DOWN | SWT.READ_ONLY
+            | SWT.BORDER);
 
         // init nonvisuals
-        GridData GridData_3 = new GridData();
-        GridData GridData_4 = new GridData();
-        GridData GridData_5 = new GridData();
-        FormData FormData_1 = new FormData();
-        FormData FormData_2 = new FormData();
+        GridData sourceGridData = new GridData();
+        GridData algorithmGridData = new GridData();
+        GridData processButtonGridData = new GridData();
 
         // set fields
-        GridData_3.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
-        GridData_3.grabExcessHorizontalSpace = true;
-        GridData_4.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
-        GridData_4.grabExcessHorizontalSpace = true;
-        GridData_5.horizontalAlignment = org.eclipse.swt.layout.GridData.END;
-        GridData_5.verticalAlignment = GridData.END;
-        GridData_5.horizontalSpan = 2;
-        FormData_1.right = new FormAttachment(100, 0);
-        FormData_1.top = new FormAttachment(0, 0);
-        FormData_1.left = new FormAttachment(0, 0);
-        FormData_2.right = new FormAttachment(100, -5);
-        FormData_2.top = new FormAttachment(innerComposite, 0, 0);
-
-        innerComposite.setLayoutData(FormData_1);
-
-        // TODO: We'll need to think about i18n at some point (externalize strings).
+        sourceGridData.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
+        sourceGridData.grabExcessHorizontalSpace = true;
+        algorithmGridData.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
+        algorithmGridData.grabExcessHorizontalSpace = true;
+        processButtonGridData.horizontalAlignment = org.eclipse.swt.layout.GridData.END;
+        processButtonGridData.verticalAlignment = GridData.END;
+        processButtonGridData.horizontalSpan = 2;
 
         sourceLabel.setLayoutData(new GridData());
-        sourceLabel.setText("Source:");
 
         algorithmLabel.setLayoutData(new GridData());
-        algorithmLabel.setText("Algorithm:");
 
-        sourceCombo.setLayoutData(GridData_3);
-        sourceCombo.setText("Combo_1");
-
-        algorithmCombo.setLayoutData(GridData_4);
-        algorithmCombo.setText("Combo_2");
+        sourceCombo.setLayoutData(sourceGridData);
+        algorithmCombo.setLayoutData(algorithmGridData);
 
         sourceViewer =
             createViewer(sourceCombo, ComponentLoader.SOURCE_LOADER, SOURCE_ID_ATTRIBUTE);
@@ -342,12 +331,9 @@ public class SearchView extends ViewPart
             createViewer(algorithmCombo, ComponentLoader.ALGORITHM_LOADER,
                 ALGORITHM_ID_ATTRIBUTE);
 
-        createRequiredAttributesLayout();
+        createRequiredAttributesLayout(toolkit);
 
-        processButton = new Button(innerComposite, SWT.PUSH);
-        processButton.setLayoutData(GridData_5);
-        processButton.setText("Process");
-
-        innerComposite.setLayout(new GridLayout(4, false));
+        processButton = toolkit.createButton(innerComposite, "Process", SWT.PUSH);
+        processButton.setLayoutData(processButtonGridData);
     }
 }

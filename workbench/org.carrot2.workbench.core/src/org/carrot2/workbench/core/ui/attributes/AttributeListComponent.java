@@ -6,6 +6,7 @@ import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
 import org.carrot2.workbench.core.jobs.ProcessingJob;
 import org.carrot2.workbench.core.ui.IProcessingResultPart;
+import org.carrot2.workbench.core.ui.UiFormUtils;
 import org.carrot2.workbench.editors.AttributeChangeEvent;
 import org.carrot2.workbench.editors.AttributeChangeListener;
 import org.eclipse.jface.action.MenuManager;
@@ -107,33 +108,9 @@ public class AttributeListComponent implements IProcessingResultPart
             page.addAttributeChangeListener(listener);
         }
         toolkit.paintBordersFor(groupControl.getControl());
-        adaptToFormUI(groupControl.getControl());
+        UiFormUtils.adaptToFormUI(toolkit, groupControl.getControl());
     }
 
-    /**
-     * Calls {@link FormToolkit#adapt(Control, boolean, boolean)} for given control. If
-     * <code>control</code> is instance of {@link Composite}, than this method is
-     * called for all the children.
-     * 
-     * @param control
-     */
-    public void adaptToFormUI(Control control)
-    {
-        if (control instanceof Composite)
-        {
-            Composite c = (Composite) control;
-            toolkit.adapt(c);
-            for (int i = 0; i < c.getChildren().length; i++)
-            {
-                Control child = c.getChildren()[i];
-                adaptToFormUI(child);
-            }
-        }
-        else
-        {
-            toolkit.adapt(control, true, true);
-        }
-    }
 
     public Control getControl()
     {

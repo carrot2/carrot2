@@ -37,7 +37,7 @@ public class ResultsEditor extends EditorPart
         };
     private int [] weights =
     {
-        1, 3, 3
+        1, 2, 2
     };
 
     private FormToolkit toolkit;
@@ -156,7 +156,7 @@ public class ResultsEditor extends EditorPart
         }
         else
         {
-            return "no query attribute";
+            return "loading...";
         }
     }
 
@@ -172,7 +172,7 @@ public class ResultsEditor extends EditorPart
     @Override
     public String getTitleToolTip()
     {
-        return "Results";
+        return getPartName();
     }
 
     @Override

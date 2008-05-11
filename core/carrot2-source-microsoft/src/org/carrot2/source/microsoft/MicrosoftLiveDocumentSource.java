@@ -66,7 +66,6 @@ public final class MicrosoftLiveDocumentSource extends SearchEngine
     @Input
     @Processing
     @Attribute
-    @Required
     CultureInfo culture = CultureInfo.ENGLISH_UNITED_STATES;
 
     /**
@@ -77,7 +76,6 @@ public final class MicrosoftLiveDocumentSource extends SearchEngine
     @Processing
     @Input
     @Attribute
-    @Required
     SafeSearch safeSearch = SafeSearch.MODERATE;
 
     /**

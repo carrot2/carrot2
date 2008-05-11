@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
+import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.part.IPageSite;
 
@@ -36,33 +37,27 @@ public class ExpandBarGrouppedControl implements IAttributesGrouppedControl
     public void createGroup(Object label)
     {
         final Section group =
-            new Section(mainControl, Section.TWISTIE | Section.CLIENT_INDENT);
+            new Section(mainControl, ExpandableComposite.TWISTIE | ExpandableComposite.CLIENT_INDENT);
         group.setText(label.toString());
         group.setSeparatorControl(new Label(group, SWT.SEPARATOR | SWT.HORIZONTAL));
         AttributesPage page =
             new AttributesPage((Class<? extends ProcessingComponent>) descriptor.type,
                 descriptor.attributeGroups.get(label));
         page.init(site);
-        page.createControl(group);
+        
+        Composite inner = new Composite(group, SWT.NONE);
+        GridLayout layout = new GridLayout();
+        layout.marginBottom = 10;
+        inner.setLayout(layout);
+        page.createControl(inner);
+        page.getControl().setLayoutData(new GridData(GridData.FILL, GridData.BEGINNING, true, false));
 
-        group.setClient(page.getControl());
+        group.setClient(inner);
         group.setExpanded(true);
         GridData gd = new GridData(GridData.FILL, GridData.FILL, true, false);
         gd.heightHint = group.computeSize(DEFAULT, DEFAULT).y;
         group.setLayoutData(gd);
-
-        group.addExpansionListener(new ExpansionAdapter()
-        {
-            @Override
-            public void expansionStateChanged(ExpansionEvent e)
-            {
-                GridData gd =
-                    new GridData(GridData.FILL, GridData.FILL, true, false, 1, 1);
-                gd.heightHint = group.computeSize(DEFAULT, DEFAULT).y;
-                group.setLayoutData(gd);
-                mainControl.layout(true);
-            }
-        });
+        
         mainControl.setSize(mainControl.computeSize(DEFAULT, DEFAULT));
         pages.add(page);
     }
