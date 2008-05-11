@@ -11,6 +11,7 @@ import org.carrot2.workbench.core.ui.clusters.ClusterTreeComponent;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
@@ -73,6 +74,14 @@ public class ResultsEditor extends EditorPart
         rootForm.getBody().setLayout(layout);
         sashForm.SASH_WIDTH = 5;
         sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+        createActions();
+    }
+
+    private void createActions()
+    {
+        IAction a = new SaveToXmlAction();
+        rootForm.getToolBarManager().add(a);
+        rootForm.getToolBarManager().update(true);
     }
 
     private int [] createControls(Composite parent)
