@@ -162,15 +162,15 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
     @Override
     public void process() throws ProcessingException
     {
-        InputStream carrot2XmlInputStream = null;
+        Reader carrot2XmlReader = null;
         try
         {
             // Perform the transformation if stylesheet available
-            carrot2XmlInputStream = getCarrot2XmlStream();
+            carrot2XmlReader = new InputStreamReader(getCarrot2XmlStream());
 
             // Deserialize the XML stream
             final ProcessingResult processingResult = ProcessingResult
-                .deserialize(carrot2XmlInputStream);
+                .deserialize(carrot2XmlReader);
 
             query = (String) processingResult.getAttributes().get(AttributeNames.QUERY);
             documents = processingResult.getDocuments();
@@ -198,7 +198,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
         }
         finally
         {
-            CloseableUtils.close(carrot2XmlInputStream);
+            CloseableUtils.close(carrot2XmlReader);
         }
     }
 

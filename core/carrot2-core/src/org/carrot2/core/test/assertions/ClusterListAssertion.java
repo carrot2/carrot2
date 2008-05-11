@@ -32,11 +32,28 @@ public class ClusterListAssertion
      */
     public ClusterListAssertion isEquivalentTo(List<Cluster> expectedClusterList)
     {
+        return isEquivalentTo(expectedClusterList, true);
+    }
+
+    /**
+     * Asserts that the cluster list is equivalent to the provided cluster list. Two lists
+     * of clusters are equivalent if they have the same size, and the clusters on the
+     * corresponding positions on the lists are equivalent (see
+     * {@link ClusterAssertion#isEquivalentTo(Cluster, boolean)}.
+     * 
+     * @param expectedClusterList the expected cluster list
+     * @param checkDocuments if <code>false</code>, cluster's document references will
+     *            not be checked
+     * @return this assertion for convenience
+     */
+    public ClusterListAssertion isEquivalentTo(List<Cluster> expectedClusterList,
+        boolean checkDocuments)
+    {
         assertThat(actualClusterList).hasSize(expectedClusterList.size());
         for (int i = 0; i < actualClusterList.size(); i++)
         {
             assertThat(actualClusterList.get(i)).isEquivalentTo(
-                expectedClusterList.get(i));
+                expectedClusterList.get(i), checkDocuments);
         }
         return this;
     }

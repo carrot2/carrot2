@@ -12,6 +12,7 @@ import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.test.TestDocumentFactory;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.CollectionUtils;
+import org.fest.assertions.Assertions;
 import org.junit.Test;
 
 import com.google.common.collect.Lists;
@@ -20,54 +21,21 @@ import com.google.common.collect.Maps;
 public class ProcessingResultTest
 {
     @Test
-    public void testSerializationDeserialization() throws Exception
+    public void testSerializationDeserializationAll() throws Exception
     {
-        final List<Document> documents = TestDocumentFactory.DEFAULT.generate(5);
-        final Map<String, Object> attributes = Maps.newHashMap();
-        attributes.put(AttributeNames.DOCUMENTS, documents);
+        checkSerializationDeserialization(true, true);
+    }
 
-        final Document document = documents.get(0);
-        document.addField("testString", "test");
-        document.addField("testInteger", 10);
-        document.addField("testDouble", 10.3);
-        document.addField("testBoolean", true);
+    @Test
+    public void testSerializationDeserializationDocumentsOnly() throws Exception
+    {
+        checkSerializationDeserialization(true, false);
+    }
 
-        final Cluster clusterA = new Cluster();
-        clusterA.addPhrases("Label 1", "Label 2");
-        clusterA.setAttribute(Cluster.SCORE, 1.0);
-        clusterA.setAttribute("testString", "test");
-        clusterA.setAttribute("testInteger", 10);
-        clusterA.setAttribute("testDouble", 10.3);
-        clusterA.setAttribute("testBoolean", true);
-
-        final Cluster clusterAA = new Cluster();
-        clusterAA.addPhrases("Label 3");
-        clusterAA.addDocuments(documents.get(0), documents.get(1));
-        clusterA.addSubclusters(clusterAA);
-
-        final Cluster clusterB = new Cluster();
-        clusterB.addPhrases("Label 4");
-        clusterB.setAttribute(Cluster.SCORE, 0.55);
-        clusterB.addDocuments(documents.get(1), documents.get(2));
-
-        final List<Cluster> clusters = Lists.newArrayList(clusterA, clusterB);
-        attributes.put(AttributeNames.CLUSTERS, clusters);
-
-        final ProcessingResult sourceProcessingResult = new ProcessingResult(attributes);
-
-        final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        sourceProcessingResult.serialize(outputStream);
-        CloseableUtils.close(outputStream);
-
-        final ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream
-            .toByteArray());
-
-        final ProcessingResult deserialized = ProcessingResult.deserialize(inputStream);
-
-        assertNotNull(deserialized);
-        assertNotNull(deserialized.getAttributes());
-        assertThat(deserialized.getDocuments()).isEquivalentTo(documents);
-        assertThat(deserialized.getClusters()).isEquivalentTo(clusters);
+    @Test
+    public void testSerializationDeserializationClustersOnly() throws Exception
+    {
+        checkSerializationDeserialization(false, true);
     }
 
     @Test
@@ -186,5 +154,81 @@ public class ProcessingResultTest
         clusterB.addDocuments(documents.get(1), documents.get(2));
 
         assertThat(clusters).isEquivalentTo(Lists.newArrayList(clusterA, clusterB));
+    }
+
+    private void checkSerializationDeserialization(boolean documentsDeserialized,
+        boolean clustersDeserialized) throws Exception
+    {
+        final ProcessingResult sourceProcessingResult = prepareProcessingResult();
+
+        final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        final Writer writer = new OutputStreamWriter(outputStream);
+        sourceProcessingResult.serialize(writer, documentsDeserialized,
+            clustersDeserialized);
+        CloseableUtils.close(writer);
+
+        final Reader reader = new InputStreamReader(new ByteArrayInputStream(outputStream
+            .toByteArray()));
+
+        final ProcessingResult deserialized = ProcessingResult.deserialize(reader);
+
+        assertNotNull(deserialized);
+        assertNotNull(deserialized.getAttributes());
+
+        if (documentsDeserialized)
+        {
+            assertThat(deserialized.getDocuments()).isEquivalentTo(
+                sourceProcessingResult.getDocuments());
+        }
+        else
+        {
+            Assertions.assertThat(deserialized.getDocuments()).isNull();
+        }
+
+        if (clustersDeserialized)
+        {
+            assertThat(deserialized.getClusters()).isEquivalentTo(
+                sourceProcessingResult.getClusters(), documentsDeserialized);
+        }
+        else
+        {
+            Assertions.assertThat(deserialized.getClusters()).isNull();
+        }
+    }
+
+    private ProcessingResult prepareProcessingResult()
+    {
+        final List<Document> documents = TestDocumentFactory.DEFAULT.generate(5);
+        final Map<String, Object> attributes = Maps.newHashMap();
+        attributes.put(AttributeNames.DOCUMENTS, documents);
+
+        final Document document = documents.get(0);
+        document.addField("testString", "test");
+        document.addField("testInteger", 10);
+        document.addField("testDouble", 10.3);
+        document.addField("testBoolean", true);
+
+        final Cluster clusterA = new Cluster();
+        clusterA.addPhrases("Label 1", "Label 2");
+        clusterA.setAttribute(Cluster.SCORE, 1.0);
+        clusterA.setAttribute("testString", "test");
+        clusterA.setAttribute("testInteger", 10);
+        clusterA.setAttribute("testDouble", 10.3);
+        clusterA.setAttribute("testBoolean", true);
+
+        final Cluster clusterAA = new Cluster();
+        clusterAA.addPhrases("Label 3");
+        clusterAA.addDocuments(documents.get(0), documents.get(1));
+        clusterA.addSubclusters(clusterAA);
+
+        final Cluster clusterB = new Cluster();
+        clusterB.addPhrases("Label 4");
+        clusterB.setAttribute(Cluster.SCORE, 0.55);
+        clusterB.addDocuments(documents.get(1), documents.get(2));
+
+        final List<Cluster> clusters = Lists.newArrayList(clusterA, clusterB);
+        attributes.put(AttributeNames.CLUSTERS, clusters);
+
+        return new ProcessingResult(attributes);
     }
 }

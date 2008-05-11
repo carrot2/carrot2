@@ -181,7 +181,10 @@ public final class ProcessingResult
     private void beforeSerialization()
     {
         query = (String) attributes.get(AttributeNames.QUERY);
-        documents = Lists.newArrayList(getDocuments());
+        if (getDocuments() != null)
+        {
+            documents = Lists.newArrayList(getDocuments());
+        }
         if (getClusters() != null)
         {
             clusters = Lists.newArrayList(getClusters());
@@ -229,18 +232,6 @@ public final class ProcessingResult
     }
 
     /**
-     * Serializes this {@link ProcessingResult} to an XML stream.
-     * 
-     * @param outputStream the stream to serialize this {@link ProcessingResult} to. The
-     *            stream will <strong>not</strong> be closed.
-     * @throws Exception in case of any problems with serialization
-     */
-    public void serialize(OutputStream outputStream) throws Exception
-    {
-        new Persister().write(this, outputStream);
-    }
-
-    /**
      * Serializes this {@link ProcessingResult} to an XML writer.
      * 
      * @param writer the writer to serialize this {@link ProcessingResult} to. The writer
@@ -249,20 +240,48 @@ public final class ProcessingResult
      */
     public void serialize(Writer writer) throws Exception
     {
-        new Persister().write(this, writer);
+        serialize(writer, true, true);
     }
 
     /**
-     * Deserializes a {@link ProcessingResult} from an XML stream.
+     * Serializes this {@link ProcessingResult} to an XML writer.
      * 
-     * @param inputStream the stream to deserialize a {@link ProcessingResult} from. The
-     *            stream will <strong>not</strong> be closed.
-     * @return deserialized {@link ProcessingResult}
-     * @throws Exception is case of any problems with deserialization
+     * @param writer the writer to serialize this {@link ProcessingResult} to. The writer
+     *            will <strong>not</strong> be closed.
+     * @param saveDocuments if <code>false</code>, documents will not be serialized.
+     *            Notice that when deserializing XML containing clusters but not
+     *            documents, document references in {@link Cluster#getDocuments()} will
+     *            not be restored.
+     * @param saveClusters if <code>false</code>, clusters will not be serialized
+     * @throws Exception in case of any problems with serialization
      */
-    public static ProcessingResult deserialize(InputStream inputStream) throws Exception
+    public void serialize(Writer writer, boolean saveDocuments, boolean saveClusters)
+        throws Exception
     {
-        return new Persister().read(ProcessingResult.class, inputStream);
+        final List<Document> documentsBackup = getDocuments();
+        final List<Cluster> clustersBackup = getClusters();
+
+        if (!saveDocuments)
+        {
+            attributes.remove(AttributeNames.DOCUMENTS);
+        }
+
+        if (!saveClusters)
+        {
+            attributes.remove(AttributeNames.CLUSTERS);
+        }
+
+        new Persister().write(this, writer);
+
+        if (documentsBackup != null)
+        {
+            attributes.put(AttributeNames.DOCUMENTS, documentsBackup);
+        }
+
+        if (clustersBackup != null)
+        {
+            attributes.put(AttributeNames.CLUSTERS, clustersBackup);
+        }
     }
 
     /**
