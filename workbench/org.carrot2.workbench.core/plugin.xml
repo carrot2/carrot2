@@ -30,6 +30,10 @@
                name="appName"
                value="Carrot2 Workbench">
          </property>
+         <property
+               name="windowImages"
+               value="icons/carrot2-16x16.gif,icons/carrot2-32x32.gif">
+         </property>
       </product>
    </extension>
    <extension
