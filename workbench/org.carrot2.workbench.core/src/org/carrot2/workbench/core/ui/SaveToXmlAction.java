@@ -13,16 +13,17 @@ public class SaveToXmlAction extends Action
     @Override
     public void run()
     {
+        ResultsEditor results =
+            (ResultsEditor) CorePlugin.getDefault().getWorkbench()
+                .getActiveWorkbenchWindow().getActivePage().getActiveEditor();
         SaveToXmlDialog dialog =
-            new SaveToXmlDialog(Display.getDefault().getActiveShell());
+            new SaveToXmlDialog(Display.getDefault().getActiveShell(), results
+                .getPartName());
         int status = dialog.open();
         if (status == Window.CANCEL)
         {
             return;
         }
-        ResultsEditor results =
-            (ResultsEditor) CorePlugin.getDefault().getWorkbench()
-                .getActiveWorkbenchWindow().getActivePage().getActiveEditor();
         try
         {
             File destinationFile = new File(dialog.getFilePath());

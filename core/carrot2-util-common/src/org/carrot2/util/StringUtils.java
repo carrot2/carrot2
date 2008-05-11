@@ -62,4 +62,12 @@ public final class StringUtils
         }
         return org.apache.commons.lang.StringUtils.join(parts, ' ');
     }
+
+    public static String convertToFileName(String baseString)
+    {
+        String result = baseString.replaceAll("[^a-zA-Z0-9\\s]", "");
+        result = result.replaceAll("[\\s]+", "-");
+        result = result.toLowerCase();
+        return result;
+    }
 }

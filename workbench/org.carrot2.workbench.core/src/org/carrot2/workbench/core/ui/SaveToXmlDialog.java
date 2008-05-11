@@ -4,6 +4,10 @@ import static org.apache.commons.lang.StringUtils.isBlank;
 import static org.eclipse.swt.SWT.Modify;
 import static org.eclipse.swt.SWT.Selection;
 
+import java.io.File;
+
+import org.carrot2.util.StringUtils;
+import org.carrot2.workbench.core.CorePlugin;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TrayDialog;
 import org.eclipse.swt.SWT;
@@ -26,6 +30,8 @@ import org.eclipse.ui.PlatformUI;
  */
 public class SaveToXmlDialog extends TrayDialog
 {
+    private static final String LAST_PATH_PREF = "action.saveToXml.LastPathChosen";
+
     private Button clusterOption;
     private Button docOption;
     private Button dialogButton;
@@ -33,10 +39,12 @@ public class SaveToXmlDialog extends TrayDialog
     private boolean docSelected;
     private boolean clustersSelected;
     private String filePath;
+    private String initialFileName;
 
-    public SaveToXmlDialog(Shell parentShell)
+    public SaveToXmlDialog(Shell parentShell, String query)
     {
         super(parentShell);
+        initialFileName = StringUtils.convertToFileName(query) + ".xml";
     }
 
     public boolean saveDocuments()
@@ -75,6 +83,8 @@ public class SaveToXmlDialog extends TrayDialog
         docSelected = docOption.getSelection();
         clustersSelected = clusterOption.getSelection();
         filePath = fileNameText.getText();
+        CorePlugin.getDefault().getPluginPreferences().setValue(LAST_PATH_PREF,
+            new File(filePath).getParent());
         super.okPressed();
     }
 
@@ -84,12 +94,32 @@ public class SaveToXmlDialog extends TrayDialog
         Composite root = (Composite) super.createDialogArea(parent);
 
         createControls(root);
+        String lastChosenPath =
+            CorePlugin.getDefault().getPluginPreferences().getString(LAST_PATH_PREF);
+        if (lastChosenPath.length() != 0)
+        {
+            fileNameText.setText(new File(lastChosenPath, initialFileName)
+                .getAbsolutePath());
+        }
         dialogButton.addListener(Selection, new Listener()
         {
             public void handleEvent(Event event)
             {
-                fileNameText
-                    .setText(new FileDialog(Display.getDefault().getActiveShell()).open());
+                FileDialog dialog = new FileDialog(Display.getDefault().getActiveShell());
+                dialog.setFileName(fileNameText.getText());
+                dialog.setFilterExtensions(new String []
+                {
+                    "*.xml", "*.*"
+                });
+                dialog.setFilterNames(new String []
+                {
+                    "XML Files", "All Files"
+                });
+                String newPath = dialog.open();
+                if (newPath != null)
+                {
+                    fileNameText.setText(newPath);
+                }
             }
         });
         Listener correctnessChecker = new Listener()
