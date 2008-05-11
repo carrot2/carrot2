@@ -33,12 +33,19 @@ public class ClusterTreeView extends PageBookView
         Page partPage = new Page()
         {
 
+            @Override
+            public void init(IPageSite pageSite)
+            {
+                super.init(pageSite);
+                tree = new ClusterTreeComponent();
+                tree.populateToolbar(pageSite.getActionBars().getToolBarManager());
+            }
+
             ClusterTreeComponent tree;
 
             @Override
             public void createControl(Composite parent)
             {
-                tree = new ClusterTreeComponent();
                 tree.init(getSite(), (ResultsEditor) part, parent);
             }
 

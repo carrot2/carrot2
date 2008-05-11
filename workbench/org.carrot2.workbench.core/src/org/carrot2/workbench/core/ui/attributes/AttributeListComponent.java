@@ -9,6 +9,7 @@ import org.carrot2.workbench.core.ui.IProcessingResultPart;
 import org.carrot2.workbench.core.ui.UiFormUtils;
 import org.carrot2.workbench.editors.AttributeChangeEvent;
 import org.carrot2.workbench.editors.AttributeChangeListener;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.swt.widgets.*;
@@ -111,6 +112,9 @@ public class AttributeListComponent implements IProcessingResultPart
         UiFormUtils.adaptToFormUI(toolkit, groupControl.getControl());
     }
 
+    public void populateToolbar(IToolBarManager manager)
+    {
+    }
 
     public Control getControl()
     {

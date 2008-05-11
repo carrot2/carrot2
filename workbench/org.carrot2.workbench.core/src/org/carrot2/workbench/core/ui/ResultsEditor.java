@@ -11,14 +11,17 @@ import org.carrot2.workbench.core.ui.clusters.ClusterTreeComponent;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
-import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.*;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.*;
 import org.eclipse.ui.forms.widgets.*;
 import org.eclipse.ui.part.EditorPart;
@@ -95,7 +98,9 @@ public class ResultsEditor extends EditorPart
             Section sec =
                 toolkit.createSection(parent, Section.EXPANDED | Section.TITLE_BAR);
             sec.setText(part.getPartName());
+            IToolBarManager manager = createToolbarManager(sec);
             part.init(getSite(), sec, toolkit, job);
+            part.populateToolbar(manager);
             sec.setClient(part.getControl());
         }
         job.addJobChangeListener(new JobChangeAdapter()
@@ -128,6 +133,28 @@ public class ResultsEditor extends EditorPart
 
         job.schedule();
         return weights;
+    }
+
+    private IToolBarManager createToolbarManager(Section section)
+    {
+        ToolBarManager toolBarManager = new ToolBarManager(SWT.FLAT);
+        ToolBar toolbar = toolBarManager.createControl(section);
+        final Cursor handCursor = new Cursor(Display.getCurrent(), SWT.CURSOR_HAND);
+        toolbar.setCursor(handCursor);
+        // Cursor needs to be explicitly disposed
+        toolbar.addDisposeListener(new DisposeListener()
+        {
+            public void widgetDisposed(DisposeEvent e)
+            {
+                if ((handCursor != null) && (handCursor.isDisposed() == false))
+                {
+                    handCursor.dispose();
+                }
+            }
+        });
+
+        section.setTextClient(toolbar);
+        return toolBarManager;
     }
 
     private void setBusy(final boolean busy)

@@ -11,6 +11,7 @@ import org.carrot2.workbench.core.ui.ResultsEditor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -70,6 +71,10 @@ public class ClusterTreeComponent implements IProcessingResultPart
         viewer.setInput(new ArrayList<ClusterWithParent>());
         final ClusterSelectionProvider provider = new ClusterSelectionProvider(viewer);
         site.setSelectionProvider(provider);
+    }
+
+    public void populateToolbar(IToolBarManager manager)
+    {
     }
 
     public Control getControl()

@@ -18,6 +18,7 @@ import org.carrot2.workbench.core.jobs.ProcessingStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.*;
@@ -156,6 +157,10 @@ public class DocumentListBrowser implements IProcessingResultPart
                 }
             }
         });
+    }
+
+    public void populateToolbar(IToolBarManager manager)
+    {
     }
 
     public void updateBrowserText(ProcessingResult result)

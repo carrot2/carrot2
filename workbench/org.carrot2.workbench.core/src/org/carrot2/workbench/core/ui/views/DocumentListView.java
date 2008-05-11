@@ -18,6 +18,7 @@ public class DocumentListView extends ViewPart
     {
         browserPart = new DocumentListBrowser();
         browserPart.init(this.getSite(), parent);
+        browserPart.populateToolbar(getViewSite().getActionBars().getToolBarManager());
     }
 
     @Override
