@@ -2,7 +2,6 @@ package org.carrot2.workbench.core.ui;
 
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.workbench.core.CorePlugin;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.core.jobs.ProcessingJob;
 import org.carrot2.workbench.core.jobs.ProcessingStatus;
@@ -13,7 +12,6 @@ import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.*;
 import org.eclipse.ui.forms.widgets.Section;
 
@@ -54,8 +52,15 @@ public class ResultsEditor extends SashFormEditorPart
         job.addJobChangeListener(new JobChangeAdapter()
         {
             @Override
+            public void aboutToRun(IJobChangeEvent event)
+            {
+                getForm().setBusy(true);
+            }
+
+            @Override
             public void done(IJobChangeEvent event)
             {
+                getForm().setBusy(false);
                 if (job.getResult().isOK())
                 {
                     currentContent = ((ProcessingStatus) job.getResult()).result;
@@ -70,8 +75,6 @@ public class ResultsEditor extends SashFormEditorPart
             }
         });
 
-        CorePlugin.getDefault().getWorkbench().getProgressService().showInDialog(
-            Display.getDefault().getActiveShell(), job);
         job.schedule();
         return weights;
     }

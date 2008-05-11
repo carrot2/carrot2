@@ -1,9 +1,11 @@
 package org.carrot2.workbench.core.ui;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.carrot2.workbench.core.CorePlugin;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -12,6 +14,7 @@ import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.EditorPart;
 
+//FIXME: merge SashFormEditorPart and ResultsEditor to one class
 public abstract class SashFormEditorPart extends EditorPart implements IPersistableEditor
 {
     private FormToolkit toolkit;
@@ -19,6 +22,7 @@ public abstract class SashFormEditorPart extends EditorPart implements IPersista
 
     private SashForm sashForm;
     private IMemento state;
+    private Image formImage;
 
     /**
      * Should not be called by subclasses. Call createControls().
@@ -29,6 +33,8 @@ public abstract class SashFormEditorPart extends EditorPart implements IPersista
         toolkit = new FormToolkit(parent.getDisplay());
         rootForm = toolkit.createForm(parent);
         rootForm.setText("Results");
+        formImage = CorePlugin.getImageDescriptor("icons/results.png").createImage();
+        rootForm.setImage(formImage);
         toolkit.decorateFormHeading(rootForm);
         sashForm = new SashForm(rootForm.getBody(), getSashFormOrientation());
         toolkit.adapt(sashForm);
@@ -66,6 +72,11 @@ public abstract class SashFormEditorPart extends EditorPart implements IPersista
             ArrayUtils.add(weights, state.getInteger("w" + i));
         }
         return weights;
+    }
+
+    protected Form getForm()
+    {
+        return rootForm;
     }
 
     protected FormToolkit getToolkit()
@@ -116,6 +127,7 @@ public abstract class SashFormEditorPart extends EditorPart implements IPersista
     @Override
     public void dispose()
     {
+        formImage.dispose();
         toolkit.dispose();
         super.dispose();
     }
