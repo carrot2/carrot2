@@ -5,6 +5,7 @@ import java.util.Map;
 import org.carrot2.core.*;
 import org.carrot2.workbench.core.CorePlugin;
 import org.carrot2.workbench.core.helpers.ComponentLoader;
+import org.carrot2.workbench.core.helpers.ComponentWrapper;
 import org.carrot2.workbench.core.ui.SearchParameters;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -12,19 +13,16 @@ import org.eclipse.core.runtime.jobs.Job;
 
 public class ProcessingJob extends Job
 {
-    public final ProcessingComponent source;
-    public final ProcessingComponent algorithm;
+    public final ComponentWrapper source;
+    public final ComponentWrapper algorithm;
     public final Map<String, Object> attributes;
 
     public ProcessingJob(String name, SearchParameters search)
     {
         super(name);
-        // TODO: I only need classes, not instances, figure out how to do this
-        source =
-            ComponentLoader.SOURCE_LOADER.getExecutableComponent(search.getSourceId());
+        source = ComponentLoader.SOURCE_LOADER.getComponent(search.getSourceId());
         algorithm =
-            ComponentLoader.ALGORITHM_LOADER.getExecutableComponent(search
-                .getAlgorithmId());
+            ComponentLoader.ALGORITHM_LOADER.getComponent(search.getAlgorithmId());
         attributes = search.getAttributes();
     }
 
@@ -37,7 +35,8 @@ public class ProcessingJob extends Job
         {
             final Controller controller = CorePlugin.getController();
             final ProcessingResult result =
-                controller.process(attributes, source.getClass(), algorithm.getClass());
+                controller.process(attributes, source.getComponentClass(), algorithm
+                    .getComponentClass());
             status = new ProcessingStatus(result);
         }
         catch (ProcessingException ex)

@@ -99,9 +99,10 @@ public class SearchView extends ViewPart
         {
             ProcessingComponent source = wrapper.getExecutableComponent();
             AttributesPage page =
-                new AttributesPage(source, BindableDescriptorBuilder.buildDescriptor(
-                    source).only(Input.class, Processing.class, Required.class).not(
-                    Internal.class).flatten().attributeDescriptors);
+                new AttributesPage(
+                    source.getClass(),
+                    BindableDescriptorBuilder.buildDescriptor(source).only(Input.class,
+                        Processing.class, Required.class).not(Internal.class).flatten().attributeDescriptors);
             page.init(new PageSite(this.getViewSite()));
             page.createControl(requiredHolder);
             attributesPages.put(wrapper.getId(), page);

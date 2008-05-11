@@ -2,6 +2,7 @@ package org.carrot2.workbench.editors.factory;
 
 import junit.framework.TestCase;
 
+import org.carrot2.core.ProcessingComponent;
 import org.carrot2.util.attribute.*;
 import org.carrot2.workbench.editors.EditorNotFoundException;
 import org.carrot2.workbench.editors.IAttributeEditor;
@@ -9,13 +10,13 @@ import org.carrot2.workbench.editors.EditorsTest.*;
 
 public class FactoryTest extends TestCase
 {
-    private TestComponent c;
+    private Class<? extends ProcessingComponent> c;
     private BindableDescriptor desc;
 
     @Override
     protected void setUp() throws Exception
     {
-        c = new TestComponent();
+        c = TestComponent.class;
         desc = BindableDescriptorBuilder.buildDescriptor(c, false);
     }
 

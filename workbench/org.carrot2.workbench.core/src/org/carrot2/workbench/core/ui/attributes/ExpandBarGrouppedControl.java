@@ -23,22 +23,25 @@ public class ExpandBarGrouppedControl implements IAttributesGrouppedControl
 
     private Composite mainControl;
     private java.util.List<AttributesPage> pages = new ArrayList<AttributesPage>();
-    private ProcessingComponent component;
+    private BindableDescriptor descriptor;
+    private IPageSite site;
 
-    public void init(ProcessingComponent component)
+    public void init(BindableDescriptor descriptor, IPageSite site)
     {
-        this.component = component;
+        this.descriptor = descriptor;
+        this.site = site;
     }
 
-    public void createGroup(Object label, BindableDescriptor bindableDescriptor,
-        IPageSite site)
+    @SuppressWarnings("unchecked")
+    public void createGroup(Object label)
     {
         final Section group =
             new Section(mainControl, Section.TWISTIE | Section.CLIENT_INDENT);
         group.setText(label.toString());
         group.setSeparatorControl(new Label(group, SWT.SEPARATOR | SWT.HORIZONTAL));
         AttributesPage page =
-            new AttributesPage(component, bindableDescriptor.attributeGroups.get(label));
+            new AttributesPage((Class<? extends ProcessingComponent>) descriptor.type,
+                descriptor.attributeGroups.get(label));
         page.init(site);
         page.createControl(group);
 

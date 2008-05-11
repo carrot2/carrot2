@@ -91,15 +91,16 @@ public class AttributeListComponent implements IProcessingResultPart
         };
         GroupingMethod method = GroupingMethod.GROUP;
         BindableDescriptor desc =
-            BindableDescriptorBuilder.buildDescriptor(job.algorithm);
+            BindableDescriptorBuilder.buildDescriptor(job.algorithm
+                .getExecutableComponent());
         desc = desc.only(Input.class, Processing.class).not(Internal.class).group(method);
         groupControl = new ExpandBarGrouppedControl();
-        groupControl.init(job.algorithm);
+        groupControl.init(desc, pageSite);
         groupControl.createMainControl(parent);
         toolkit.adapt((Composite) groupControl.getControl());
         for (Object groupKey : desc.attributeGroups.keySet())
         {
-            groupControl.createGroup(groupKey, desc, pageSite);
+            groupControl.createGroup(groupKey);
         }
         for (AttributesPage page : groupControl.getPages())
         {

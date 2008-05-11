@@ -12,6 +12,7 @@ public class ComponentWrapper extends ExtensionWrapperBase
     private String caption;
     private String className;
     private ImageDescriptor iconDescriptor;
+    private Class<? extends ProcessingComponent> clazz;
 
     public ComponentWrapper(IConfigurationElement element, String captionName,
         String className, String iconAttName)
@@ -40,6 +41,15 @@ public class ComponentWrapper extends ExtensionWrapperBase
     public ImageDescriptor getIcon()
     {
         return iconDescriptor;
+    }
+
+    public synchronized Class<? extends ProcessingComponent> getComponentClass()
+    {
+        if (clazz == null)
+        {
+            clazz = getExecutableComponent().getClass();
+        }
+        return clazz;
     }
 
     public ProcessingComponent getExecutableComponent()

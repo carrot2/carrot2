@@ -17,14 +17,13 @@ import com.google.common.collect.Lists;
 
 public class EditorFactory
 {
-    //FIXME: change attribute to Class<? extends ProcessingComponent>, ne need to create instance than
-    public static IAttributeEditor getEditorFor(ProcessingComponent owner,
-        AttributeDescriptor attribute)
+    public static IAttributeEditor getEditorFor(
+        Class<? extends ProcessingComponent> clazz, AttributeDescriptor attribute)
     {
-        IAttributeEditor editor = findDedicatedEditor(owner, attribute);
+        IAttributeEditor editor = findDedicatedEditor(clazz, attribute);
         if (editor == null)
         {
-            editor = findTypeEditor(owner, attribute);
+            editor = findTypeEditor(clazz, attribute);
         }
         if (editor == null)
         {
@@ -34,10 +33,10 @@ public class EditorFactory
         return editor;
     }
 
-    private static IAttributeEditor findTypeEditor(ProcessingComponent owner,
-        AttributeDescriptor attribute)
+    private static IAttributeEditor findTypeEditor(
+        Class<? extends ProcessingComponent> clazz, AttributeDescriptor attribute)
     {
-        List<TypeEditorWrapper> typeCandidates = filterTypeEditors(owner, attribute);
+        List<TypeEditorWrapper> typeCandidates = filterTypeEditors(attribute);
         if (!typeCandidates.isEmpty())
         {
             typeCandidates = sortTypeEditors(typeCandidates, attribute);
@@ -46,11 +45,12 @@ public class EditorFactory
         return null;
     }
 
-    private static IAttributeEditor findDedicatedEditor(final ProcessingComponent owner,
+    private static IAttributeEditor findDedicatedEditor(
+        final Class<? extends ProcessingComponent> clazz,
         final AttributeDescriptor attribute)
     {
         List<DedicatedEditorWrapper> candidates =
-            filterDedicatedEditors(owner, attribute);
+            filterDedicatedEditors(clazz, attribute);
 
         if (!candidates.isEmpty())
         {
@@ -98,7 +98,7 @@ public class EditorFactory
     }
 
     private static List<TypeEditorWrapper> filterTypeEditors(
-        final ProcessingComponent owner, final AttributeDescriptor attribute)
+        final AttributeDescriptor attribute)
     {
         return AttributeEditorLoader.INSTANCE
             .filterTypeEditors(new Predicate<TypeEditorWrapper>()
@@ -147,7 +147,8 @@ public class EditorFactory
     }
 
     private static List<DedicatedEditorWrapper> filterDedicatedEditors(
-        final ProcessingComponent owner, final AttributeDescriptor attribute)
+        final Class<? extends ProcessingComponent> clazz,
+        final AttributeDescriptor attribute)
     {
         return AttributeEditorLoader.INSTANCE
             .filterDedicatedEditors(new Predicate<DedicatedEditorWrapper>()
@@ -155,9 +156,9 @@ public class EditorFactory
 
                 public boolean apply(DedicatedEditorWrapper editor)
                 {
-                    return isCompatible(owner.getClass(), editor.componentClass)
-                        && AttributeUtils.getKey(owner.getClass(), editor.attributeId)
-                            .equals(attribute.key);
+                    return isCompatible(clazz, editor.componentClass)
+                        && AttributeUtils.getKey(clazz, editor.attributeId).equals(
+                            attribute.key);
                 }
 
             });

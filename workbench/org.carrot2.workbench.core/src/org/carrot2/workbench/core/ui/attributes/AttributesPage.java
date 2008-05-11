@@ -22,18 +22,18 @@ import org.eclipse.ui.part.Page;
 public class AttributesPage extends Page implements IPersistableEditor
 {
     private final Map<String, AttributeDescriptor> attributeDescriptors;
-    private ProcessingComponent component;
+    private Class<? extends ProcessingComponent> clazz;
     private Composite root;
     private java.util.List<IAttributeEditor> editors = new ArrayList<IAttributeEditor>();
-    
-    public AttributesPage(ProcessingComponent component,
+
+    public AttributesPage(Class<? extends ProcessingComponent> componentClass,
         Map<String, AttributeDescriptor> attributeDescriptors)
     {
-        if (component == null)
+        if (componentClass == null)
         {
             throw new NullArgumentException("component");
         }
-        this.component = component;
+        this.clazz = componentClass;
         this.attributeDescriptors = attributeDescriptors;
     }
 
@@ -58,7 +58,7 @@ public class AttributesPage extends Page implements IPersistableEditor
             IAttributeEditor editor = null;
             try
             {
-                editor = EditorFactory.getEditorFor(component, attDescriptor);
+                editor = EditorFactory.getEditorFor(clazz, attDescriptor);
                 GridData data = new GridData(GridData.FILL, GridData.FILL, true, false);
                 editor.init(attDescriptor);
                 if (editor.containsLabel())

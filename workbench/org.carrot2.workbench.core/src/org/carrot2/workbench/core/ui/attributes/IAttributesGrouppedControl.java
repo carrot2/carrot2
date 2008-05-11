@@ -2,7 +2,6 @@ package org.carrot2.workbench.core.ui.attributes;
 
 import java.util.List;
 
-import org.carrot2.core.ProcessingComponent;
 import org.carrot2.util.attribute.BindableDescriptor;
 import org.carrot2.workbench.editors.AttributeChangeEvent;
 import org.eclipse.swt.widgets.Composite;
@@ -20,7 +19,7 @@ import org.eclipse.ui.part.IPageSite;
  */
 public interface IAttributesGrouppedControl
 {
-    void init(ProcessingComponent component);
+    void init(BindableDescriptor descriptor, IPageSite site);
 
     /**
      * Creates control, that will store one group only.
@@ -34,8 +33,7 @@ public interface IAttributesGrouppedControl
      *            created using mainControl as a parent;
      * @see BindableDescriptor#attributeGroups
      */
-    void createGroup(Object groupKey, BindableDescriptor bindableDescriptor,
-        IPageSite site);
+    void createGroup(Object label);
 
     /**
      * Creates one main control, that all the groups will be placed on.
