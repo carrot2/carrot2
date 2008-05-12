@@ -217,6 +217,7 @@
 		<buildMetadata project.loc="${buildDirectory}/plugins/carrot2-algorithm-synthetic" />
 		<buildMetadata project.loc="${buildDirectory}/plugins/carrot2-source-yahoo" />
 		<buildMetadata project.loc="${buildDirectory}/plugins/carrot2-source-xml" />
+		<buildMetadata project.loc="${buildDirectory}/plugins/carrot2-source-microsoft" />
 		<buildMetadata project.loc="${buildDirectory}/plugins/carrot2-core" />
 	</target>
 
