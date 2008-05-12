@@ -17,7 +17,6 @@ import org.eclipse.swt.graphics.Resource;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.*;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.PageSite;
 import org.eclipse.ui.part.ViewPart;
 
@@ -89,10 +88,10 @@ public class SearchView extends ViewPart
     }
 
     @SuppressWarnings("unchecked")
-    private void createRequiredAttributesLayout(FormToolkit formToolkit)
+    private void createRequiredAttributesLayout()
     {
         final StackLayout stack = new StackLayout();
-        final Composite requiredAttributes = formToolkit.createComposite(innerComposite);
+        final Composite requiredAttributes = new Composite(innerComposite, SWT.NONE);
         requiredAttributes.setLayout(stack);
 
         final GridData attributesGridData = new GridData();
@@ -114,7 +113,6 @@ public class SearchView extends ViewPart
             attributesPages.put(wrapper.getId(), page);
         }
         restoreRequiredAttributesState();
-        UiFormUtils.adaptToFormUI(formToolkit, requiredAttributes);
 
         if (getSourceId() != null)
         {
@@ -292,15 +290,16 @@ public class SearchView extends ViewPart
     {
         parent.setLayout(new FillLayout());
         
-        FormToolkit toolkit = new FormToolkit(parent.getDisplay());
-        innerComposite = toolkit.createForm(parent).getBody();
+        innerComposite = new Composite(parent, SWT.NONE);
         innerComposite.setLayout(new GridLayout(2, false));
         
-        Label sourceLabel = toolkit.createLabel(innerComposite, "Source", SWT.CENTER);
+        Label sourceLabel = new Label(innerComposite, SWT.CENTER);
+        sourceLabel.setText("Source");
         Combo sourceCombo = new Combo(innerComposite, SWT.DROP_DOWN | SWT.READ_ONLY
             | SWT.BORDER);
 
-        Label algorithmLabel = toolkit.createLabel(innerComposite, "Algorithm", SWT.CENTER);
+        Label algorithmLabel = new Label(innerComposite, SWT.CENTER);
+        algorithmLabel.setText("Algorithm");
         Combo algorithmCombo = new Combo(innerComposite, SWT.DROP_DOWN | SWT.READ_ONLY
             | SWT.BORDER);
 
@@ -331,9 +330,10 @@ public class SearchView extends ViewPart
             createViewer(algorithmCombo, ComponentLoader.ALGORITHM_LOADER,
                 ALGORITHM_ID_ATTRIBUTE);
 
-        createRequiredAttributesLayout(toolkit);
+        createRequiredAttributesLayout();
 
-        processButton = toolkit.createButton(innerComposite, "Process", SWT.PUSH);
+        processButton = new Button(innerComposite, SWT.PUSH);
+        processButton.setText("Process");
         processButton.setLayoutData(processButtonGridData);
     }
 }
