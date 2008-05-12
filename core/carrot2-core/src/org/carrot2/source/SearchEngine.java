@@ -261,6 +261,7 @@ public abstract class SearchEngine extends ProcessingComponentBase implements
             public Thread newThread(Runnable r)
             {
                 final Thread t = delegate.newThread(r);
+                t.setDaemon(true);
                 t.setContextClassLoader(clazzLoader);
                 return t;
             }
