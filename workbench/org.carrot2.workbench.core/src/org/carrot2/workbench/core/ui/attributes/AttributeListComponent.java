@@ -4,13 +4,14 @@ import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
+import org.carrot2.workbench.core.CorePlugin;
 import org.carrot2.workbench.core.jobs.ProcessingJob;
 import org.carrot2.workbench.core.ui.IProcessingResultPart;
 import org.carrot2.workbench.core.ui.UiFormUtils;
 import org.carrot2.workbench.editors.AttributeChangeEvent;
 import org.carrot2.workbench.editors.AttributeChangeListener;
-import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.*;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.*;
@@ -22,20 +23,22 @@ public class AttributeListComponent implements IProcessingResultPart
     private ProcessingJob processingJob;
     private IAttributesGrouppedControl groupControl;
     private AttributeChangeListener listener;
-    private FormToolkit toolkit;
+    private volatile boolean liveUpdate = true;
 
     @SuppressWarnings("unchecked")
     public void init(final IWorkbenchSite site, Composite parent, FormToolkit toolkit,
         ProcessingJob job)
     {
-        this.toolkit = toolkit;
         this.processingJob = job;
         listener = new AttributeChangeListener()
         {
             public void attributeChange(AttributeChangeEvent event)
             {
                 processingJob.attributes.put(event.key, event.value);
-                processingJob.schedule();
+                if (liveUpdate)
+                {
+                    processingJob.schedule();
+                }
             }
         };
         IPageSite pageSite = new IPageSite()
@@ -114,6 +117,43 @@ public class AttributeListComponent implements IProcessingResultPart
 
     public void populateToolbar(IToolBarManager manager)
     {
+        IAction liveUpdateAction =
+            new Action("Attributes live update", IAction.AS_CHECK_BOX)
+            {
+                @Override
+                public void run()
+                {
+                    String tooltip = getToolTipText();
+                    liveUpdate = !liveUpdate;
+                    if (liveUpdate)
+                    {
+                        processingJob.schedule();
+                    }
+                    firePropertyChange(IAction.TOOL_TIP_TEXT, tooltip, getToolTipText());
+                }
+
+                @Override
+                public ImageDescriptor getImageDescriptor()
+                {
+                    return CorePlugin.getImageDescriptor("icons/synced.gif");
+                }
+
+                @Override
+                public String getToolTipText()
+                {
+                    if (liveUpdate)
+                    {
+                        return "Live Update On";
+                    }
+                    else
+                    {
+                        return "Live Update Off";
+                    }
+                }
+            };
+        liveUpdateAction.setChecked(liveUpdate);
+        manager.add(liveUpdateAction);
+        manager.update(true);
     }
 
     public Control getControl()
