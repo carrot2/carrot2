@@ -26,7 +26,7 @@ import org.eclipse.ui.*;
 import org.eclipse.ui.forms.widgets.*;
 import org.eclipse.ui.part.EditorPart;
 
-public class ResultsEditor extends EditorPart
+public class ResultsEditor extends EditorPart implements IPersistableEditor
 {
     public static final String ID = "org.carrot2.workbench.core.editors.results";
 
@@ -71,7 +71,7 @@ public class ResultsEditor extends EditorPart
         }
         else
         {
-            sashForm.setWeights(weights);
+            sashForm.setWeights(storedWeights);
         }
         GridLayout layout = GridLayoutFactory.swtDefaults().create();
         rootForm.getBody().setLayout(layout);
@@ -249,7 +249,7 @@ public class ResultsEditor extends EditorPart
         int [] weights = new int [0];
         for (int i = 0; i < weightsAmount; i++)
         {
-            ArrayUtils.add(weights, state.getInteger("w" + i));
+            weights = ArrayUtils.add(weights, state.getInteger("w" + i));
         }
         return weights;
     }
