@@ -11,7 +11,8 @@ Require-Bundle: org.eclipse.ui,
  org.junit4.ext,
  org.carrot2.util.attribute,
  org.carrot2.core,
- org.eclipse.ui.forms
+ org.eclipse.ui.forms,
+ org.eclipse.ui.ide
 Eclipse-LazyStart: true
 Bundle-ClassPath: lib/commons-collections-3.1.jar,
  lib/oro-2.0.8.jar,

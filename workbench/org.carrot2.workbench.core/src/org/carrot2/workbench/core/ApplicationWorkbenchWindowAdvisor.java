@@ -34,12 +34,12 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
         int width = calculateInitialSize(fullScreenSize.width, 800);
         int height = calculateInitialSize(fullScreenSize.height, 600);
         configurer.setInitialSize(new Point(width, height));
-        configurer.setShowCoolBar(false);
         configurer.setShowStatusLine(true);
         configurer.setTitle("Carrot2 Workbench");
         configurer.setShowMenuBar(true);
         configurer.setShowPerspectiveBar(true);
         configurer.setShowProgressIndicator(true);
+        configurer.setShowCoolBar(false);
     }
 
     /**
