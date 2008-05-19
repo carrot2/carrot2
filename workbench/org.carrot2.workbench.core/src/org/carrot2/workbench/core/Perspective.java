@@ -22,13 +22,9 @@ public class Perspective implements IPerspectiveFactory
             layout.createFolder("leftViews", IPageLayout.LEFT, .3f, layout
                 .getEditorArea());
         leftFolder.addView(SearchView.ID);
-
+        
         IFolderLayout leftBottomFolder =
             layout.createFolder("leftBottomViews", IPageLayout.BOTTOM, .3f, "leftViews");
         leftBottomFolder.addView(ClusterTreeView.ID);
-
-        layout.addShowViewShortcut(ClusterTreeView.ID);
-        layout.addShowViewShortcut(DocumentListView.ID);
-        layout.addShowViewShortcut(SearchView.ID);
     }
 }
