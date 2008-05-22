@@ -73,4 +73,11 @@
       $this.height($this.parent().innerHeight());
     });
   }
+  
+  /**
+   * Unescapes the '&amp;' entities in a string to '&' characters.
+   */
+  jQuery.unescape = function(string) {
+    return string.replace(/\&amp;/g, "&");
+  }
 })(jQuery);

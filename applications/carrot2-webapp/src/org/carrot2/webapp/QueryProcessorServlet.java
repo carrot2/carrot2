@@ -100,7 +100,8 @@ public class QueryProcessorServlet extends javax.servlet.http.HttpServlet implem
             if (requestModel.type.requiresProcessing)
             {
                 if (RequestType.CLUSTERS.equals(requestModel.type)
-                    || RequestType.FULL.equals(requestModel.type))
+                    || RequestType.FULL.equals(requestModel.type)
+                    || RequestType.CARROT2.equals(requestModel.type))
                 {
                     processingResult = controller.process(requestParameters,
                         requestModel.source, requestModel.algorithm);
@@ -120,7 +121,15 @@ public class QueryProcessorServlet extends javax.servlet.http.HttpServlet implem
             final Persister persister = new Persister(
                 NoClassAttributePersistenceStrategy.INSTANCE,
                 getPersisterFormat(pageModel));
-            persister.write(pageModel, outputStream);
+
+            if (RequestType.CARROT2.equals(requestModel.type))
+            {
+                persister.write(processingResult, outputStream);
+            }
+            else
+            {
+                persister.write(pageModel, outputStream);
+            }
         }
         catch (Exception e)
         {

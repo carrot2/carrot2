@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
   <xsl:output indent="yes" omit-xml-declaration="yes"
-       doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
-       doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
+       doctype-public="-//W3C//DTD XHTML 1.1//EN"
+       doctype-system="http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"
        media-type="text/html" encoding="utf-8" />
 
   <xsl:strip-space elements="*"/>
@@ -13,8 +13,13 @@
   <xsl:variable name="search-url" select="/page/config/@search-url" />
   <xsl:variable name="query-param" select="/page/config/@query-param" />
   <xsl:variable name="source-param" select="/page/config/@source-param" />
+  <xsl:variable name="algorithm-param" select="/page/config/@algorithm-param" />
+  <xsl:variable name="results-param" select="/page/config/@results-param" />
+  <xsl:variable name="view-param" select="/page/config/@view-param" />
   
   <xsl:variable name="search-url-base" select="/page/@search-url-base" />
+  <xsl:variable name="view-url-base" select="/page/@view-url-base" />
+  <xsl:variable name="xml-url-encoded" select="/page/@xml-url-encoded" />
   
   <xsl:variable name="documents-url" select="concat($search-url-base, '&amp;type=DOCUMENTS')" />
   <xsl:variable name="clusters-url" select="concat($search-url-base, '&amp;type=CLUSTERS')" />
@@ -79,11 +84,10 @@
       <div class="noscript"><xsl:call-template name="no-javascript-message" /></div>
     </noscript>
 
-    <a href="{$context-path}/{$search-url}">    
-      <div id="logo">
-        <h1 class="hide"><xsl:call-template name="main-title" /></h1>
-      </div>
-    </a>
+    <div id="logo">
+      <h1><a href="{$context-path}/{$search-url}"><span class="hide"><xsl:call-template name="main-title" /></span></a></h1>
+    </div>
+    
     <p class="hide">
       <xsl:call-template name="main-intro" />
     </p>
@@ -95,13 +99,53 @@
       <div id="main-area-inside">
         <xsl:apply-templates select="/page" mode="sources" />
         
-        <div id="search-area" class="disabled-ui">
+        <div id="search-area">
           <form action="{$context-path}/{$search-url}">
             <h3 class="hide">Type your query:</h3>
 
-            <input type="text" name="{$query-param}" id="query" value="{/page/request/@query}" />
-            <input type="hidden" name="{$source-param}" id="source" value="{/page/request/@source}" />
-            <input type="submit" value="Search" id="search" />
+            <div id="required">
+              <input type="hidden" name="{$source-param}" id="source" value="{/page/request/@source}" />
+              <input type="hidden" name="{$view-param}" id="view" value="{/page/request/@view}" />
+              
+              <xsl:apply-templates select=".." mode="query" />
+              <xsl:apply-templates select=".." mode="search" />
+              
+              <span id="show-options"><a href="#more-options">More options</a></span>
+            </div>
+
+            <div id="options" class="hide">
+              <xsl:if test="count(/page/config/sizes/size) > 1">
+                <label>
+                  Download
+                  <select name="{$results-param}">
+                    <xsl:for-each select="/page/config/sizes/size">
+                      <option value="{string(.)}">
+                        <xsl:if test="string(.) = /page/request/@results">
+                          <xsl:attribute name="selected">selected</xsl:attribute>
+                        </xsl:if>
+                        <xsl:value-of select="." /> results
+                      </option>
+                    </xsl:for-each>
+                  </select>
+                </label>
+              </xsl:if>
+                          
+              <xsl:if test="count(/page/config/components/algorithms/algorithm) > 1">
+                <label>
+                  Cluster with
+                  <select name="{$algorithm-param}">
+                    <xsl:for-each select="/page/config/components/algorithms/algorithm">
+                      <option value="{@id}">
+                        <xsl:if test="@id = /page/request/@algorithm">
+                          <xsl:attribute name="selected">selected</xsl:attribute>
+                        </xsl:if>
+                        <xsl:value-of select="label" />
+                      </option>
+                    </xsl:for-each>
+                  </select>
+                </label>
+              </xsl:if>
+            </div>
           </form>
         </div>
 
@@ -114,17 +158,17 @@
 
     <hr class="hide" />
 
-    <div id="util-links" class="disabled-ui">
+    <div id="util-links">
       <h3 class="hide">About Carrot<sup>2</sup>:</h3>
       <ul class="util-links">
-        <li><a href="#">About</a></li>
-        <li class="hot"><a href="#">New features!</a></li>
-        <li class="main"><a href="#">Beta</a></li>
-        <li><a href="#">More demos</a></li>
-        <li><a href="#">Plugins</a></li>
-        <li><a href="#">Download</a></li>
-        <li><a href="#">FAQ</a></li>
-        <li class="main"><a href="#">Carrot Search</a></li>
+        <li><a href="#">About</a><xsl:call-template name="pipe" /></li>
+        <li class="hot"><a href="#">New features!</a><xsl:call-template name="pipe" /></li>
+        <li class="main"><a href="#">Beta</a><xsl:call-template name="pipe" /></li>
+        <li><a href="#">More demos</a><xsl:call-template name="pipe" /></li>
+        <li><a href="#">Plugins</a><xsl:call-template name="pipe" /></li>
+        <li><a href="#">Download</a><xsl:call-template name="pipe" /></li>
+        <li><a href="#">FAQ</a><xsl:call-template name="pipe" /></li>
+        <li class="main"><a href="#">Carrot Search</a><xsl:call-template name="pipe" /></li>
         <li><a href="#">Contact</a></li>
       </ul>
     </div>
@@ -132,28 +176,58 @@
     <div id="loading">Loading...</div>
   </xsl:template>
 
-  <xsl:template match="page" mode="sources">
-    <div id="source-tabs" class="disabled-ui">
-      <h3 class="hide">Choose where to search:</h3>
+  <xsl:template name="pipe"><span class='pipe'> | </span></xsl:template>
 
+  <xsl:template match="page" mode="sources">
+    <div id="source-tabs">
+      <xsl:if test="/page/config/components/sources/source[1]/@id = /page/request/@source">
+        <xsl:attribute name="class">first-active</xsl:attribute>
+      </xsl:if>
+
+      <h3 class="hide">Choose where to search:</h3>
+      
+      <span id="tab-lead-in"><xsl:comment></xsl:comment></span>
       <ul class="tabs clearfix">
         <xsl:apply-templates select="config/components/sources/source" />
       </ul>
     </div>
   </xsl:template>
 
+  <xsl:template match="page" mode="query">
+    <xsl:apply-templates select=".." mode="query.field" />
+  </xsl:template>
+
+  <xsl:template match="page" mode="query.field">
+    <input type="text" name="{$query-param}" id="query" value="{/page/request/@query}" />
+  </xsl:template>
+
+  <xsl:template match="page" mode="search">
+    <xsl:apply-templates select=".." mode="search.field" />
+  </xsl:template>
+
+  <xsl:template match="page" mode="search.field">
+    <input type="submit" value="Search" id="search" />
+  </xsl:template>
+
   <xsl:template match="source">
     <xsl:variable name="request-source" select="/page/request/@source" />
+    <xsl:variable name="source-pos" select="position()" />
     
-    <li class="tab" id="{@id}">
-      <xsl:choose>
-        <xsl:when test="@id = $request-source">
-          <xsl:attribute name="class">tab active</xsl:attribute>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:attribute name="class">tab</xsl:attribute>
-        </xsl:otherwise>
-      </xsl:choose>
+    <li id="{@id}">
+      <xsl:attribute name="class">tab <xsl:choose>
+          <xsl:when test="@id = /page/request/@source">active <xsl:choose>
+              <xsl:when test="$source-pos = count(/page/config/components/sources/source)">active-last</xsl:when>
+            </xsl:choose>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:choose>
+              <xsl:when test="$source-pos = count(/page/config/components/sources/source)">passive-last</xsl:when>
+            </xsl:choose>
+          </xsl:otherwise>
+        </xsl:choose>
+      
+        <xsl:if test="/page/request/@source = /page/config/components/sources/source[$source-pos + 1]/@id">before-active</xsl:if>
+      </xsl:attribute>
 
       <a class="label {@id}" href="#" title="{title}"><xsl:apply-templates select="label" /></a>
       <span class="hide">
@@ -162,6 +236,7 @@
           <xsl:apply-templates select="example-queries/example-query" />
         </span>
       </span>
+      <span class="right"><xsl:comment></xsl:comment></span>
     </li>
   </xsl:template>
 

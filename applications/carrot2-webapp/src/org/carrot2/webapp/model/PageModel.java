@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.util.ExceptionUtils;
+import org.carrot2.util.StringUtils;
 import org.carrot2.webapp.jawr.JawrUrlGenerator;
 import org.simpleframework.xml.*;
 
@@ -44,6 +45,12 @@ public class PageModel
     @Attribute(name = "search-url-base")
     public final String searchUrlBase;
 
+    @Attribute(name = "view-url-base")
+    public final String viewUrlBase;
+
+    @Attribute(name = "xml-url-encoded")
+    public final String xmlUrlEncoded;
+
     public PageModel(HttpServletRequest request, JawrUrlGenerator urlGenerator,
         ProcessingResult processingResult, RequestModel requestModel)
     {
@@ -60,10 +67,29 @@ public class PageModel
         this.assetUrls = new AssetUrlsModel(requestModel.skin, request, urlGenerator);
 
         // Build search url base
+        StringBuilder searchUrl = buildSearchUrlBase(requestModel, webappConfig.searchUrl);
+
+        // View url
+        this.viewUrlBase = searchUrl.toString();
+
+        // Documents/clusters view
+        appendParameter(searchUrl, WebappConfig.VIEW_PARAM, requestModel.view);
+        this.searchUrlBase = searchUrl.toString();
+
+        // XML stream url base
+        StringBuilder xmlUrl = buildSearchUrlBase(requestModel, webappConfig.xmlUrl);
+        appendParameter(xmlUrl, WebappConfig.VIEW_PARAM, requestModel.view);
+        appendParameter(xmlUrl, WebappConfig.TYPE_PARAM, RequestType.CARROT2.name());
+        this.xmlUrlEncoded = StringUtils.urlEncodeIgnoreException(xmlUrl.toString(),
+            "UTF-8");
+    }
+
+    private StringBuilder buildSearchUrlBase(RequestModel requestModel, String action)
+    {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(contextPath);
         stringBuilder.append('/');
-        stringBuilder.append(webappConfig.searchUrl);
+        stringBuilder.append(action);
         appendParameter(stringBuilder, WebappConfig.QUERY_PARAM, requestModel.query, '?');
         appendParameter(stringBuilder, WebappConfig.SOURCE_PARAM, requestModel.source);
         appendParameter(stringBuilder, WebappConfig.ALGORITHM_PARAM,
@@ -76,7 +102,7 @@ public class PageModel
             appendParameter(stringBuilder, parameter.getKey(), parameter.getValue()
                 .toString());
         }
-        this.searchUrlBase = stringBuilder.toString();
+        return stringBuilder;
     }
 
     private static void appendParameter(StringBuilder builder, String name, String value)

@@ -25,25 +25,17 @@
    * Dynamically adds markup required by the specific skin.
    */
   function enhance() {
-    // Extra wrappers for tabs
-    $("#source-tabs li.tab").wrapInner('<div class="tab-right"><div class="tab-inside"></div></div>');
-
-    // A lead-in element for tabs
-    $("#source-tabs").prepend('<div id="tab-lead-in"></div>');
-
     // Add placeholders for tab information on the startup screen
     $("#startup #search-area").append('<div id="extra-info"><div id="tab-info"></div><div id="example-queries"></div></div>');
 
     // Add pipes between entries in lists of links
-    $("#util-links li:not(:last-child) a, .example-queries a:not(:last-child)").after("<span class='pipe'>&#160;| </span>");
+    $(".example-queries a:not(:last-child)").after("<span class='pipe'>&#160;| </span>");
 
     // Copy util links to the startup section
     $("#util-links ul").clone().appendTo("#startup #search-area");
 
     // Glows
-    $("#query").glow("glow-small", {marginTop: '3px'});
-    $("#search").glow("glow-big");
-    $("#results-area").glow("glow-small", {position: "absolute", top: "65px", bottom: ($.browser.msie ? "14px" : "10px"), left: "10px", right: "10px"});
+//    $("#results-area").glow("glow-small", {position: "absolute", top: "65px", bottom: ($.browser.msie ? "14px" : "10px"), left: "10px", right: "10px"});
   };
 
   /**

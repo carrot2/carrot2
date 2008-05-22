@@ -19,8 +19,11 @@ public class WebappConfig
 
     final static List<SkinModel> SKINS = Lists.immutableList(new SkinModel("fancy-large",
         RequestType.PAGE));
+    
+    final static List<ResultsViewModel> VIEWS = Lists.immutableList(new ResultsViewModel(
+        "tree", "Tree"), new ResultsViewModel("visu", "Visualization"));
 
-    public final static WebappConfig INSTANCE = new WebappConfig(SIZES, SKINS);
+    public final static WebappConfig INSTANCE = new WebappConfig(SIZES, SKINS, VIEWS);
 
     public static final String SKINS_FOLDER = "/skins";
 
@@ -33,9 +36,15 @@ public class WebappConfig
     @ElementList(entry = "size")
     public final List<Integer> sizes;
 
+    @ElementList(entry = "view")
+    public final List<ResultsViewModel> views;
+
     @Attribute(name = "search-url")
     public final String searchUrl = "search";
 
+    @Attribute(name = "xml-url")
+    public final String xmlUrl = "xml";
+    
     @Attribute(name = "query-param")
     public final static String QUERY_PARAM = AttributeNames.QUERY;
 
@@ -51,13 +60,17 @@ public class WebappConfig
     @Attribute(name = "type-param")
     public final static String TYPE_PARAM = "type";
 
+    @Attribute(name = "view-param")
+    public final static String VIEW_PARAM = "view";
+    
     @Attribute(name = "skin-param")
     public final static String SKIN_PARAM = "skin";
 
-    public WebappConfig(List<Integer> sizes, List<SkinModel> skins)
+    public WebappConfig(List<Integer> sizes, List<SkinModel> skins, List<ResultsViewModel> views)
     {
         this.sizes = sizes;
         this.skins = skins;
+        this.views = views;
         try
         {
             this.components = ProcessingComponentSuite.deserialize(ResourceUtilsFactory

@@ -71,3 +71,7 @@ a.in-new-window {
 a.show-preview {
   background-image: url('../img/icon-show-preview.gif'); /** sprite-ref: vert; sprite-alignment: right; sprite-margin-bottom: 20px; sprite-margin-top: 2px */
 }
+
+label {
+  color: #808080;
+}

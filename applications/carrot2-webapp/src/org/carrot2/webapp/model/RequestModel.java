@@ -52,6 +52,12 @@ public class RequestModel
     @Input
     @Attribute(key = WebappConfig.TYPE_PARAM)
     public RequestType type;
+    
+    @Request
+    @Input
+    @Attribute(key = WebappConfig.VIEW_PARAM)
+    @org.simpleframework.xml.Attribute
+    public String view = WebappConfig.INSTANCE.views.get(0).id;
 
     public Map<String, Object> otherParameters;
 
