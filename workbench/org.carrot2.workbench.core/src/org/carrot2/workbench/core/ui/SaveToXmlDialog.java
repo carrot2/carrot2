@@ -6,7 +6,6 @@ import static org.eclipse.swt.SWT.Selection;
 
 import java.io.File;
 
-import org.carrot2.util.StringUtils;
 import org.carrot2.workbench.core.CorePlugin;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TrayDialog;
@@ -44,7 +43,7 @@ public class SaveToXmlDialog extends TrayDialog
     public SaveToXmlDialog(Shell parentShell, String query)
     {
         super(parentShell);
-        initialFileName = StringUtils.convertToFileName(query) + ".xml";
+        initialFileName = convertToFileName(query) + ".xml";
     }
 
     public boolean saveDocuments()
@@ -60,6 +59,14 @@ public class SaveToXmlDialog extends TrayDialog
     public String getFilePath()
     {
         return filePath;
+    }
+    
+    private static String convertToFileName(String baseString)
+    {
+        String result = baseString.replaceAll("[^a-zA-Z0-9\\s]", "");
+        result = result.replaceAll("[\\s]+", "-");
+        result = result.toLowerCase();
+        return result;
     }
 
     @Override

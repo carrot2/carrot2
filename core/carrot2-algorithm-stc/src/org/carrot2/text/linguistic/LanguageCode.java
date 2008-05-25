@@ -2,6 +2,8 @@ package org.carrot2.text.linguistic;
 
 import java.util.Locale;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * Codes for languages for which linguistic resources are available.
  */
@@ -59,4 +61,11 @@ public enum LanguageCode
     {
         return locale;
     }
+
+    @Override
+    public String toString()
+    {
+        return StringUtils.capitalize(name().toLowerCase());
+    }
+    
 }

@@ -43,7 +43,7 @@ final class SnowballLanguageImpl extends ThreadSafeLanguageModelImpl
                 return null;
             }
         }
-    };
+    }
 
     /**
      * Creates a new language model based on Snowball stemmers and loading resources
