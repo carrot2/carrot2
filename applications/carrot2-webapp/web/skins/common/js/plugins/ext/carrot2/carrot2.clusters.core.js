@@ -8,6 +8,12 @@
    * subclusters.
    */
   var flattenedDocuments;
+  
+  /**
+   * An array containing ids of clusters for each document. Index: document index, 
+   * Value: array of ids of clusters to which the document belongs.
+   */
+  var documentClusters;
 
   /**
    * Binds a handler for an event called when clusters finish loading.
@@ -30,8 +36,9 @@
    * clusters finish loading.
    */
   function loaded() {
-    // Build and cache flattened cluster documents 
+    // Build and cache cluster-document relationship model 
     flattenedDocuments = $.clusters.flatten(window.documents);
+    documentClusters = $.clusters.documentClusters(flattenedDocuments);
     
     // Enhance makup, install listeners and cluster segmentation
     enhance();
@@ -185,7 +192,7 @@
     jQuery.clusters.toggle($ul, action, callback);
     if ($ul.size() == 0) {
       if (callback) {
-        callback.call(this);
+        window.setTimeout(callback, 10);
       }
     }
 
@@ -244,23 +251,11 @@
    */
   jQuery.fn.selectDocuments = function() {
     var clusterId = $(this).attr("id");
+    var clusterDocuments = $.clusters.documents(clusterId);
 
-    var documents = $.clusters.documents(clusterId);
-    var documentsIndex = 0;
-    for (var i = 0; i < window.documentCount; i++) {
-      var $document = $("#d" + i);
-      if (documentsIndex >= documents.length || documents[documentsIndex] > i) {
-        if ($document.is(":visible")) {
-          $document.hide();
-        }
-      } else {
-        if (!$document.is(":visible")) {
-          $document.show();
-        }
-        documentsIndex++;
-      }
-    }
+    $.documents.select(clusterDocuments);
 
+    // Notify listeners
     $("#clusters").trigger("carrot2.clusters.selected", [ documents ]);
 
     return this;
@@ -313,5 +308,39 @@
 
     return flattenedCluster;
   }
+  
+  /**
+   * Builds an array of cluster ids for each document.
+   */
+  jQuery.clusters.documentClusters = function(flattenedDocuments)
+  {
+    var documentClusters = [];
+    $.each(flattenedDocuments, function(clusterId, documentIndexes) {
+      $.each(documentIndexes, function(j, documentIndex) {
+        if (!documentClusters[documentIndex - 1]) {
+          documentClusters[documentIndex - 1] = [];
+        }
+        documentClusters[documentIndex - 1].push(clusterId);
+      });
+    });
+    
+    return documentClusters;
+  }
+  
+  /**
+   * Highlights those clusters that contain the provided document
+   */
+  jQuery.clusters.showInClusters = function(documentIndex) {
+    $.each(documentClusters[documentIndex], function(i, clusterId) {
+      $("#" + clusterId).addClass("hl");
+    });
+  }
+  
+  /**
+   * Removes cluster highlights.
+   */
+  jQuery.clusters.clearInClusters = function() {
+    $("#clusters .hl").removeClass("hl");
+  }  
 })(jQuery);
 

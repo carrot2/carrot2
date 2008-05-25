@@ -584,6 +584,10 @@ ul.tabs li.tab .jobs {
   left: 668px;
 }
 
+.visu #loading-documents {
+  left: 671px;
+}
+
 #status-bar { 
   background-color: #F6F4EC;
   height: 19px;

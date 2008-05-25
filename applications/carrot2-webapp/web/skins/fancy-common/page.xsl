@@ -2,7 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
   <xsl:include href="../common/page.xsl" />
   
-  <xsl:output indent="yes" omit-xml-declaration="yes"
+  <xsl:output indent="no" omit-xml-declaration="yes"
        doctype-public="-//W3C//DTD XHTML 1.1//EN"
        doctype-system="http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"
        media-type="text/html" encoding="utf-8" />
@@ -18,7 +18,10 @@
     <xsl:if test="string-length(/page/request/@query) > 0">
       <script type="text/javascript">
 $(document).ready(function() {
-  $("#documents-panel").load($.unescape("<xsl:value-of select="$documents-url" disable-output-escaping="no" />"));
+  $.get($.unescape("<xsl:value-of select="$documents-url" disable-output-escaping="no" />"), {}, function(data) {
+    $("#documents-panel").prepend(data);
+    $("#documents-panel").trigger("carrot2.documents.loaded");
+  });
 
 <xsl:if test="/page/request/@view != 'visu'">
   $.get($.unescape("<xsl:value-of select="$clusters-url" disable-output-escaping="no" />"), {}, function(data) {
@@ -39,6 +42,11 @@ $(document).ready(function() {
   <xsl:template match="page" mode="results">
     <span class="glow-small" style="padding: 4px; float: none; position: absolute; top: 65px; bottom: 10px; left: 10px; right: 10px;">
       <div id="results-area" class="{/page/request/@view}">
+        <xsl:if test="/page/request/@view != 'visu'">
+          <div id="loading-clusters">Loading...</div>
+        </xsl:if>
+        <div id="loading-documents">Loading...</div>
+        
         <ul id="views">
           <xsl:if test="/page/request/@view = /page/config/views/view[1]/@id">
             <xsl:attribute name="class">first-active</xsl:attribute>        
@@ -47,13 +55,17 @@ $(document).ready(function() {
         </ul>
         
         <div id="clusters-panel">
-          <xsl:if test="/page/request/@view != 'visu'">
-            <div id="loading-clusters">Loading...</div>
-          </xsl:if>
+          <xsl:comment></xsl:comment>
           <xsl:if test="/page/request/@view = 'visu'">
             <object type="application/x-shockwave-flash" width="100%" height="100%" data="{$skin-path}/common/swf/rings.swf?dataUrl={$xml-url-encoded}">
               <param name="movie" value="{$skin-path}/common/swf/rings.swf?dataUrl={$xml-url-encoded}" />
             </object>
+            <script type="text/javascript">
+function clusterClicked(clusterId, docList) {
+  var documentIndexes = docList.split(",");
+  $.documents.select(documentIndexes);
+}  
+            </script>  
           </xsl:if>
         </div>
   

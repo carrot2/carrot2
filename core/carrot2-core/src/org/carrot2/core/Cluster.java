@@ -84,6 +84,10 @@ public final class Cluster
     @ElementMap(name = "attributes", entry = "attribute", key = "key", inline = true, attribute = true, required = false)
     private Map<String, TypeStringValuePair> otherAttributesAsStrings = new HashMap<String, TypeStringValuePair>();
 
+    /** The actual size of this cluster, for serialization purposes only */
+    @Attribute(required = false)
+    private int size;
+    
     /**
      * List of document ids used for serialization/ deserialization purposes.
      */
@@ -416,6 +420,7 @@ public final class Cluster
         }
 
         score = getAttribute(SCORE);
+        size = size();
 
         // Remove score from attributes for serialization
         otherAttributesAsStrings = TypeStringValuePair.toTypeStringValuePairs(attributes);

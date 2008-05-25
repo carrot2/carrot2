@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-  <xsl:output indent="yes" omit-xml-declaration="yes"
+  <xsl:output indent="no" omit-xml-declaration="yes"
        doctype-public="-//W3C//DTD XHTML 1.1//EN"
        doctype-system="http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"
        media-type="text/html" encoding="utf-8" />
@@ -241,7 +241,7 @@
   </xsl:template>
 
   <xsl:template match="source/example-queries/example-query">
-    <a href="#"><xsl:apply-templates /></a>
+    <a href="{concat($search-url-base, '&amp;', $query-param, '=', string(.))}"><xsl:apply-templates /></a>
   </xsl:template>
 
   <!-- Overridable elements -->
@@ -271,9 +271,11 @@
       <div class="title">
         <h3>
           <span class="rank"><xsl:value-of select="number(@id) + 1" /></span>
-          <a href="{url}"><xsl:apply-templates select="title" /></a>
-          <a href="#" class="in-clusters" title="Show in clusters"><small>Show in clusters</small></a>
-          <a href="#" class="in-new-window" title="Open in new window"><small>Open in new window</small></a>
+          <span class="title-in-clusters">
+            <a href="{url}" target="_top" class="title"><xsl:apply-templates select="title" /></a>
+            <a href="#" class="in-clusters" title="Show in clusters"><small>Show in clusters</small></a>
+          </span>
+          <a href="{url}" target="_blank" class="in-new-window" title="Open in new window"><small>Open in new window</small></a>
           <a href="#" class="show-preview" title="Show preview"><small>Show preview</small></a>
         </h3>
       </div>
@@ -287,7 +289,7 @@
   <!-- Clusters -->
   <xsl:template match="page[@type = 'CLUSTERS']">
     <div id="clusters">
-      <a id="tree-top" href="#"><span>All Topics</span></a>
+      <a id="tree-top" href="#"><span class="label">All Topics</span><span class="size">(<xsl:value-of select="count(searchresult/document)" />)</span></a>
       <ul>
         <xsl:apply-templates select="searchresult/group" />
       </ul>
@@ -303,7 +305,7 @@
 
   <xsl:template match="group">
     <li class="folded" id="{generate-id(.)}">
-      <a href="#"><span><xsl:apply-templates select="title" /></span></a>
+      <a href="#"><span class="label"><xsl:apply-templates select="title" /></span><span class="size">(<xsl:value-of select="@size" />)</span></a>
       <xsl:if test="group">
         <ul>
           <xsl:apply-templates select="group" />

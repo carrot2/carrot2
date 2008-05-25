@@ -1,13 +1,10 @@
 package org.carrot2.webapp.model;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.carrot2.core.ProcessingResult;
-import org.carrot2.util.ExceptionUtils;
 import org.carrot2.util.StringUtils;
 import org.carrot2.webapp.jawr.JawrUrlGenerator;
 import org.simpleframework.xml.*;
@@ -90,13 +87,14 @@ public class PageModel
         stringBuilder.append(contextPath);
         stringBuilder.append('/');
         stringBuilder.append(action);
-        appendParameter(stringBuilder, WebappConfig.QUERY_PARAM, requestModel.query, '?');
-        appendParameter(stringBuilder, WebappConfig.SOURCE_PARAM, requestModel.source);
+        appendParameter(stringBuilder, WebappConfig.SOURCE_PARAM, requestModel.source,
+            '?');
         appendParameter(stringBuilder, WebappConfig.ALGORITHM_PARAM,
             requestModel.algorithm);
         appendParameter(stringBuilder, WebappConfig.RESULTS_PARAM, Integer
             .toString(requestModel.results));
         appendParameter(stringBuilder, WebappConfig.SKIN_PARAM, requestModel.skin);
+        appendParameter(stringBuilder, WebappConfig.QUERY_PARAM, requestModel.query);
         for (Entry<String, Object> parameter : requestModel.otherParameters.entrySet())
         {
             appendParameter(stringBuilder, parameter.getKey(), parameter.getValue()
@@ -113,16 +111,13 @@ public class PageModel
     private static void appendParameter(StringBuilder builder, String name, String value,
         char separator)
     {
-        builder.append(separator);
-        builder.append(name);
-        builder.append('=');
-        try
+        if (org.apache.commons.lang.StringUtils.isNotBlank(value))
         {
-            builder.append(URLEncoder.encode(value, "UTF-8"));
-        }
-        catch (UnsupportedEncodingException e)
-        {
-            throw ExceptionUtils.wrapAs(RuntimeException.class, e);
+
+            builder.append(separator);
+            builder.append(name);
+            builder.append('=');
+            builder.append(StringUtils.urlEncodeIgnoreException(value, "UTF-8"));
         }
     }
 }

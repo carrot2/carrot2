@@ -33,44 +33,5 @@
 
     // Copy util links to the startup section
     $("#util-links ul").clone().appendTo("#startup #search-area");
-
-    // Glows
-//    $("#results-area").glow("glow-small", {position: "absolute", top: "65px", bottom: ($.browser.msie ? "14px" : "10px"), left: "10px", right: "10px"});
-  };
-
-  /**
-   * Adds the markup required to create a glow effect.
-   */
-  jQuery.fn.glow = function(glowClass, containerCss, insideCss) {
-    return this.each(function() {
-      var $this = $(this);
-
-      // Get content dimensions
-      var contentWidth = $this.outerWidth();
-      var contentHeight = $this.outerHeight();
-    
-      // Add glow markup
-      var $glowDiv = $("<span class='" + glowClass + "'></span>");
-      $this.before($glowDiv);
-      $glowDiv.append($this);
-      $glowDiv.append("<span class='t'></span><span class='l'></span><span class='r'></span><span class='b'></span><span class='tl'></span><span class='bl'></span><span class='tr'></span><span class='br'></span>");
-
-      // Copy a number of CSS properties
-      $glowDiv.cssFrom($this, ["float"]);
-
-      // Extract border sizes
-      var borderWidth = $glowDiv.find(".tl").width();
-      var borderHeight = $glowDiv.find(".tl").height();
-
-      // Shift the contained element
-      $glowDiv.css({position: 'relative', padding: borderWidth + 'px ' + borderHeight + 'px'});
-      
-      if (containerCss) {
-        $glowDiv.css(containerCss);
-      }
-      if (insideCss) {
-        $this.css(insideCss);
-      }
-    });
   };
 })(jQuery);
