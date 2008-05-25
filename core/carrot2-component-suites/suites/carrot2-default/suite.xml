@@ -1,8 +1,9 @@
 <component-suite>
   <sources>
-    <source component-class="org.carrot2.source.yahoo.YahooDocumentSource" id="yahoo-web" mnemonic="y">
+    <source component-class="org.carrot2.source.yahoo.YahooDocumentSource" id="yahoo-web">
       <label>Yahoo!</label>
       <title>Yahoo Web Search</title>
+      <mnemonic>y</mnemonic>
       <description>Carrot2 clustering engine will search the web with Yahoo and organize the results into thematic categories</description>
       <example-queries>
         <example-query>data mining</example-query>
@@ -10,9 +11,10 @@
         <example-query>clustering</example-query>
       </example-queries>
     </source>
-    <source component-class="org.carrot2.source.yahoo.YahooDocumentSource" id="yahoo-news" mnemonic="n">
+    <source component-class="org.carrot2.source.yahoo.YahooDocumentSource" id="yahoo-news">
       <label>News</label>
       <title>Yahoo News Search</title>
+      <mnemonic>n</mnemonic>
       <description>Carrot2 clustering engine will search Yahoo News and organize the results into thematic categories</description>
       <example-queries>
         <example-query>iphone</example-query>
@@ -20,9 +22,10 @@
         <example-query>election</example-query>
       </example-queries>
     </source>
-    <source component-class="org.carrot2.source.microsoft.MicrosoftLiveDocumentSource" id="msn-web" mnemonic="m">
+    <source component-class="org.carrot2.source.microsoft.MicrosoftLiveDocumentSource" id="msn-web">
       <label>MSN</label>
       <title>MSN Live Search</title>
+      <mnemonic>m</mnemonic>
       <description>Carrot2 clustering engine will search MSN Live and organize the results into thematic categories</description>
       <example-queries>
         <example-query>data mining</example-query>

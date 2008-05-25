@@ -11,6 +11,9 @@ import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.load.Persister;
 
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+
 /**
  * A set of {@link ProcessingComponent}s used in Carrot2 applications.
  */
@@ -42,6 +45,15 @@ public class ProcessingComponentSuite
     public List<ProcessingComponentDescriptor> getAlgorithms()
     {
         return algorithms;
+    }
+
+    /**
+     * Returns all components available in this suite, including data sources, algorithms
+     * and any other types.
+     */
+    public List<ProcessingComponentDescriptor> getComponents()
+    {
+        return Lists.newArrayList(Iterables.concat(sources, algorithms));
     }
 
     /**

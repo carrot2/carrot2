@@ -29,7 +29,7 @@ public class ProcessingComponentDescriptor
     @Element
     private String label;
 
-    @Attribute(required = false)
+    @Element(required = false)
     private String mnemonic;
 
     @Element
@@ -46,26 +46,16 @@ public class ProcessingComponentDescriptor
     @Attribute(name = "attribute-set-id", required = false)
     private String attributeSetId;
 
-    public ProcessingComponentDescriptor()
+    ProcessingComponentDescriptor()
     {
     }
 
-    public ProcessingComponentDescriptor(String id,
-        Class<? extends ProcessingComponent> componentClass,
-        String attributeSetsResource, String attributeSetId, String label, String title,
-        String description, String mnemonic)
+    public ProcessingComponentConfiguration getComponentConfiguration()
     {
-        this.id = id;
-        this.componentClass = componentClass;
-        this.attributeSetsResource = attributeSetsResource;
-        this.attributeSetId = attributeSetId;
-        this.label = label;
-        this.title = title;
-        this.description = description;
-        this.mnemonic = mnemonic;
+        return new ProcessingComponentConfiguration(componentClass, id, getAttributes());
     }
 
-    public Map<String, Object> getAttributes()
+    private Map<String, Object> getAttributes()
     {
         Map<String, Object> result = AttributeValueSet
             .getAttributeValues(getAttributeSets().getAttributeValueSet(attributeSetId,

@@ -42,29 +42,7 @@ public class QueryProcessorServlet extends javax.servlet.http.HttpServlet implem
         super.init(config);
 
         controller = new CachingController(DocumentSource.class);
-
-        final List<DocumentSourceDescriptor> sources = WebappConfig.INSTANCE.components
-            .getSources();
-        final List<ProcessingComponentDescriptor> algorithms = WebappConfig.INSTANCE.components
-            .getAlgorithms();
-        CachingController.ComponentConfiguration[] configurations = new CachingController.ComponentConfiguration [sources
-            .size()
-            + algorithms.size()];
-        int configurationIndex = 0;
-        for (DocumentSourceDescriptor source : sources)
-        {
-            configurations[configurationIndex++] = new CachingController.ComponentConfiguration(
-                source.getComponentClass(), source.getId(), source.getAttributes());
-        }
-
-        for (ProcessingComponentDescriptor algorithm : algorithms)
-        {
-            configurations[configurationIndex++] = new CachingController.ComponentConfiguration(
-                algorithm.getComponentClass(), algorithm.getId(), algorithm
-                    .getAttributes());
-        }
-
-        controller.init(new HashMap<String, Object>(), configurations);
+        controller.init(new HashMap<String, Object>(), WebappConfig.INSTANCE.components);
 
         jawrUrlGenerator = new JawrUrlGenerator(config.getServletContext());
     }

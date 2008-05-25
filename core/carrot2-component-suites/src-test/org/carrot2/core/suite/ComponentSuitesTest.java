@@ -30,6 +30,8 @@ public class ComponentSuitesTest
         {
             assertThat(source.getId()).isNotEmpty();
             assertThat(source.getAttributeSets()).isNotNull();
+            assertThat(source.getLabel()).isNotEmpty();
+            assertThat(source.getTitle()).isNotEmpty();
 
             if ("yahoo-news".equals(source.getId()))
             {

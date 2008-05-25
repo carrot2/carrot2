@@ -524,11 +524,10 @@ public class CachingControllerTest extends ControllerTestBase
         final Map<String, Object> conf2Attributes = Maps.immutableMap("init",
             (Object) "v2");
 
-        controller.init(globalInitAttributes,
-            new CachingController.ComponentConfiguration(
-                ComponentWithInitParameter.class, "conf1", conf1Attributes),
-            new CachingController.ComponentConfiguration(
-                ComponentWithInitParameter.class, "conf2", conf2Attributes));
+        controller.init(globalInitAttributes, new ProcessingComponentConfiguration(
+            ComponentWithInitParameter.class, "conf1", conf1Attributes),
+            new ProcessingComponentConfiguration(ComponentWithInitParameter.class,
+                "conf2", conf2Attributes));
 
         ProcessingResult result1 = controller.process(attributes, "conf1");
         assertThat(result1.getAttributes()).contains(entry("result", "v1v1"));
@@ -550,10 +549,9 @@ public class CachingControllerTest extends ControllerTestBase
         final Map<String, Object> conf2Attributes = Maps.immutableMap("init",
             (Object) "v2");
 
-        controller.init(globalInitAttributes,
-            new CachingController.ComponentConfiguration(
-                ComponentWithInitParameter.class, "conf1", conf1Attributes),
-            new CachingController.ComponentConfiguration(
-                ComponentWithInitParameter.class, "conf1", conf2Attributes));
+        controller.init(globalInitAttributes, new ProcessingComponentConfiguration(
+            ComponentWithInitParameter.class, "conf1", conf1Attributes),
+            new ProcessingComponentConfiguration(ComponentWithInitParameter.class,
+                "conf1", conf2Attributes));
     }
 }

@@ -12,18 +12,8 @@ public class DocumentSourceDescriptor extends ProcessingComponentDescriptor
     @ElementList(name = "example-queries", entry = "example-query")
     private List<String> exampleQueries;
 
-    public DocumentSourceDescriptor()
+    DocumentSourceDescriptor()
     {
-    }
-
-    public DocumentSourceDescriptor(String id,
-        Class<? extends ProcessingComponent> componentClass,
-        String attributeSetsFileName, String label, String title, String description,
-        String mnemonic, List<String> exampleQueries)
-    {
-        super(id, componentClass, attributeSetsFileName, null, label, title, description,
-            mnemonic);
-        this.exampleQueries = exampleQueries;
     }
 
     public List<String> getExampleQueries()

@@ -3,8 +3,7 @@ package org.carrot2.core;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import javax.sql.DataSource;
 
@@ -23,8 +22,8 @@ import org.carrot2.util.attribute.constraint.ImplementingClasses;
 import org.carrot2.util.pool.*;
 import org.carrot2.util.resource.ClassResource;
 
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
+import com.google.common.base.Function;
+import com.google.common.collect.*;
 
 /**
  * A controller implementing the life cycle described in {@link ProcessingComponent} with
@@ -108,17 +107,44 @@ public final class CachingController implements Controller
     }
 
     /**
+     * Initializes this component based on the provided {@link ProcessingComponentSuite}.
+     */
+    public void init(Map<String, Object> globalInitAttributes,
+        ProcessingComponentSuite processingComponentSuite)
+        throws ComponentInitializationException
+    {
+        final List<ProcessingComponentConfiguration> componentConfigurations = Lists
+            .<ProcessingComponentDescriptor, ProcessingComponentConfiguration> transform(
+                processingComponentSuite.getComponents(),
+                new Function<ProcessingComponentDescriptor, ProcessingComponentConfiguration>()
+                {
+                    public ProcessingComponentConfiguration apply(
+                        ProcessingComponentDescriptor descriptor)
+                    {
+                        return descriptor.getComponentConfiguration();
+                    }
+                });
+
+        init(globalInitAttributes,
+            componentConfigurations
+                .toArray(new ProcessingComponentConfiguration [componentConfigurations
+                    .size()]));
+    }
+
+    /**
      * An additional method to initialize this component, which enables processing with
      * differently configured instances of the same {@link ProcessingComponent} class.
-     * Processing with components initialized in this method can be peformed using
+     * Processing with components initialized in this method can be performed using
      * {@link #process(Map, String...)}.
      * 
-     * @param globalInitAttributes see {@link Controller#init(Map)}
+     * @param globalInitAttributes see {@link Controller#init(Map)}. Global
+     *            initialization attributes will be overridden by component-specific
+     *            initialization attributes, if provided.
      * @param componentConfigurations component configurations to be used. Identifiers of
      *            the provided components must be unique.
      */
     public void init(Map<String, Object> globalInitAttributes,
-        ComponentConfiguration... componentConfigurations)
+        ProcessingComponentConfiguration... componentConfigurations)
         throws ComponentInitializationException
     {
         // Prepare component-specific init attributes
@@ -126,11 +152,11 @@ public final class CachingController implements Controller
             .newHashMap();
         final Map<String, Class<? extends ProcessingComponent>> idToComponentClass = Maps
             .newHashMap();
-        for (ComponentConfiguration componentConfiguration : componentConfigurations)
+        for (ProcessingComponentConfiguration componentConfiguration : componentConfigurations)
         {
             final Map<String, Object> mergedAttributes = Maps
                 .newHashMap(globalInitAttributes);
-            mergedAttributes.putAll(componentConfiguration.initAttributes);
+            mergedAttributes.putAll(componentConfiguration.attributes);
 
             componentSpecificInitAttributes.put(
                 new Pair<Class<? extends ProcessingComponent>, String>(
@@ -685,43 +711,5 @@ public final class CachingController implements Controller
         }
     }
 
-    private final static ComponentConfiguration [] EMPTY_COMPONENT_CONFIGURATION_ARRAY = new ComponentConfiguration [0];
-
-    /**
-     * Represents a specific configuration of a {@link ProcessingComponent}.
-     */
-    public static class ComponentConfiguration
-    {
-        /**
-         * The specific {@link ProcessingComponent} class.
-         */
-        public final Class<? extends ProcessingComponent> componentClass;
-
-        /**
-         * Identifier of the component.
-         */
-        public final String componentId;
-
-        /**
-         * Initialization attributes for this component configuration.
-         */
-        public final Map<String, Object> initAttributes;
-
-        /**
-         * Creates a new component configuration.
-         * 
-         * @param componentClass the specific {@link ProcessingComponent} class.
-         * @param componentId identifier of the component.
-         * @param initAttributes initialization attributes for this component
-         *            configuration.
-         */
-        public ComponentConfiguration(
-            Class<? extends ProcessingComponent> componentClass, String componentId,
-            Map<String, Object> initAttributes)
-        {
-            this.componentClass = componentClass;
-            this.componentId = componentId;
-            this.initAttributes = initAttributes;
-        }
-    }
+    private final static ProcessingComponentConfiguration [] EMPTY_COMPONENT_CONFIGURATION_ARRAY = new ProcessingComponentConfiguration [0];
 }
