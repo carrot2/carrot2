@@ -37,28 +37,40 @@ public class ExpandBarGrouppedControl implements IAttributesGrouppedControl
     public void createGroup(Object label)
     {
         final Section group =
-            new Section(mainControl, ExpandableComposite.TWISTIE | ExpandableComposite.CLIENT_INDENT);
+            new Section(mainControl, ExpandableComposite.TWISTIE
+                | ExpandableComposite.CLIENT_INDENT);
         group.setText(label.toString());
         group.setSeparatorControl(new Label(group, SWT.SEPARATOR | SWT.HORIZONTAL));
         AttributesPage page =
             new AttributesPage((Class<? extends ProcessingComponent>) descriptor.type,
                 descriptor.attributeGroups.get(label));
         page.init(site);
-        
+
         Composite inner = new Composite(group, SWT.NONE);
         GridLayout layout = new GridLayout();
         layout.marginBottom = 10;
         inner.setLayout(layout);
         page.createControl(inner);
-        page.getControl().setLayoutData(new GridData(GridData.FILL, GridData.BEGINNING, true, false));
+        page.getControl().setLayoutData(
+            new GridData(GridData.FILL, GridData.BEGINNING, true, false));
 
         group.setClient(inner);
         group.setExpanded(true);
         GridData gd = new GridData(GridData.FILL, GridData.FILL, true, false);
         gd.heightHint = group.computeSize(DEFAULT, DEFAULT).y;
         group.setLayoutData(gd);
-        
+
         mainControl.setSize(mainControl.computeSize(DEFAULT, DEFAULT));
+        group.addExpansionListener(new ExpansionAdapter()
+        {
+            @Override
+            public void expansionStateChanged(ExpansionEvent e)
+            {
+                mainControl.setSize(mainControl.computeSize(DEFAULT, DEFAULT));
+                mainControl.layout();
+            }
+        });
+
         pages.add(page);
     }
 
