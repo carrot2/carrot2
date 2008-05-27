@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.carrot2.core.Document;
@@ -73,10 +74,35 @@ public class YahooDocumentSourceTest extends
     @Prerequisite(requires = "externalApiTestsEnabled")
     public void testNewsServiceSearch() throws Exception
     {
-        processingAttributes.put(YahooDocumentSource.class.getName() + ".service",
+        initAttributes.put(YahooDocumentSource.class.getName() + ".service",
             YahooNewsSearchService.class);
 
         assertTrue(runQuery("iraq", 50) > 0);
+    }
+
+    @Test
+    @Prerequisite(requires = "externalApiTestsEnabled")
+    @SuppressWarnings("unchecked")
+    public void testNewsThumbnails() throws Exception
+    {
+        initAttributes.put(YahooDocumentSource.class.getName() + ".service",
+            YahooNewsSearchService.class);
+
+        assertTrue(runQuery("new york", 50) > 0);
+        List<Document> documents = (List<Document>) processingAttributes
+            .get(AttributeNames.DOCUMENTS);
+        
+        // At least one result should have a thumbnail
+        int thumbnailCount = 0;
+        for (Document document : documents)
+        {
+            if (document.getField(Document.THUMBNAIL_URL) != null)
+            {
+                thumbnailCount++;
+            }
+        }
+        
+        assertTrue(thumbnailCount > 0);
     }
 
     @Ignore

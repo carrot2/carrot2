@@ -241,7 +241,7 @@
   </xsl:template>
 
   <xsl:template match="source/example-queries/example-query">
-    <a href="{concat($search-url-base, '&amp;', $query-param, '=', string(.))}"><xsl:apply-templates /></a>
+    <a href="{$context-path}/{$search-url}?{concat($source-param, '=', string(../../@id), '&amp;', $query-param, '=', string(.))}"><xsl:apply-templates /></a>
   </xsl:template>
 
   <!-- Overridable elements -->
@@ -279,10 +279,14 @@
           <a href="#" class="show-preview" title="Show preview"><small>Show preview</small></a>
         </h3>
       </div>
+      <xsl:if test="field[@key = 'thumbnail-url']">
+        <img class="thumbnail" src="{field[@key = 'thumbnail-url']/value/@value}" />
+      </xsl:if>
       <xsl:if test="string-length(snippet) &gt; 0">
         <div class="snippet"><xsl:apply-templates select="snippet" /></div>
       </xsl:if>
       <div class="url"><xsl:apply-templates select="url" /></div>
+      <div style="clear: both"><xsl:comment></xsl:comment></div>
     </div>
   </xsl:template>
   

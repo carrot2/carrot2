@@ -29,6 +29,9 @@ public final class Document
     /** Field name for an URL pointing to the full version of the document. */
     public static final String CONTENT_URL = "url";
 
+    /** Field name for an URL pointing to the thumbnail image associated with the document. */
+    public static final String THUMBNAIL_URL = "thumbnail-url";
+    
     /** Fields of this document */
     private Map<String, Object> fields = Maps.newHashMap();
 
@@ -60,7 +63,7 @@ public final class Document
      * Field used during serialization/ deserialization to preserve Carrot2 2.x format.
      * See {@link #beforeSerialization()} and {@link #afterDeserialization()}.
      */
-    @ElementMap(name = "fields", entry = "field", key = "key", inline = true, attribute = true, required = false)
+    @ElementMap(name = "fields", entry = "field", key = "key", value = "value", inline = true, attribute = true, required = false)
     private Map<String, TypeStringValuePair> otherFieldsAsStrings = new HashMap<String, TypeStringValuePair>();
 
     /**

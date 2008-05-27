@@ -27,7 +27,7 @@ final class XMLResponseParser implements ContentHandler
 
     /** An error occurred. */
     private boolean error;
-    
+
     /** */
     private StringBuilder errorText;
 
@@ -57,8 +57,10 @@ final class XMLResponseParser implements ContentHandler
      */
     public void endDocument() throws SAXException
     {
-        if (error) {
-            throw new SAXException(new IOException("Yahoo! service error: " + errorText.toString()));
+        if (error)
+        {
+            throw new SAXException(new IOException("Yahoo! service error: "
+                + errorText.toString()));
         }
     }
 
@@ -73,14 +75,14 @@ final class XMLResponseParser implements ContentHandler
         {
             response = new SearchEngineResponse();
 
-            addResponseMetadataLong(attributes, "firstResultPosition",
-                response, YahooSearchService.FIRST_INDEX_KEY);
+            addResponseMetadataLong(attributes, "firstResultPosition", response,
+                YahooSearchService.FIRST_INDEX_KEY);
 
-            addResponseMetadataLong(attributes, "totalResultsAvailable",
-                response, SearchEngineResponse.RESULTS_TOTAL_KEY);
+            addResponseMetadataLong(attributes, "totalResultsAvailable", response,
+                SearchEngineResponse.RESULTS_TOTAL_KEY);
 
-            addResponseMetadataLong(attributes, "totalResultsReturned",
-                response, YahooSearchService.RESULTS_RETURNED_KEY);
+            addResponseMetadataLong(attributes, "totalResultsReturned", response,
+                YahooSearchService.RESULTS_RETURNED_KEY);
         }
         else if (stack.size() == 0 && "Error".equals(localName))
         {
@@ -100,12 +102,10 @@ final class XMLResponseParser implements ContentHandler
     }
 
     /**
-     * Adds a meta data entry to the response if it exists in the set of
-     * attributes.
+     * Adds a meta data entry to the response if it exists in the set of attributes.
      */
-    private static void addResponseMetadataLong(
-        Attributes attributes, String attributeName,
-        SearchEngineResponse response, String metadataKey)
+    private static void addResponseMetadataLong(Attributes attributes,
+        String attributeName, SearchEngineResponse response, String metadataKey)
     {
         final String value = attributes.getValue(attributeName);
         if (value != null)
@@ -153,10 +153,20 @@ final class XMLResponseParser implements ContentHandler
             {
                 document.addField(Document.CONTENT_URL, text);
             }
-            else
+            else if (!"Thumbnail".equals(localName))
             {
                 // All other fields go directly in the document.
                 document.addField(localName, text);
+            }
+        }
+        else if (stack.size() == 4 && "Thumbnail".equals(stack.get(2)))
+        {
+            final String text = StringEscapeUtils.unescapeHtml(buffer.toString());
+            buffer.setLength(0);
+
+            if ("Url".equals(localName)) 
+            {
+                document.addField(Document.THUMBNAIL_URL, text);
             }
         }
 
