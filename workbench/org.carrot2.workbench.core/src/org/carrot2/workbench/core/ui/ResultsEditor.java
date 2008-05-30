@@ -68,6 +68,8 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
 
     private SashForm sashForm;
 
+    private Section [] sections;
+
     private IMemento state;
 
     @Override
@@ -115,6 +117,7 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
         final ProcessingJob job =
             new ProcessingJob("Processing of a query",
                 (SearchParameters) getEditorInput());
+        sections = new Section [parts.length];
         for (int i = 0; i < parts.length; i++)
         {
             IProcessingResultPart part = parts[i];
@@ -125,7 +128,9 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
             part.init(getSite(), sec, toolkit, job);
             part.populateToolbar(manager);
             sec.setClient(part.getControl());
+            sections[i] = sec;
         }
+        restorePartVisibilityFromState();
         job.addJobChangeListener(new JobChangeAdapter()
         {
             @Override
@@ -193,7 +198,8 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
 
     private void toogleSectionVisibility(int sectionIndex, boolean visible)
     {
-        sashForm.getChildren()[sectionIndex].setVisible(visible);
+        sections[sectionIndex].setVisible(visible);
+        sections[sectionIndex].setData("visible", visible);
         sashForm.layout();
     }
 
@@ -266,30 +272,69 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
 
     private int [] restoreWeightsFromState()
     {
-        if (state == null)
-        {
-            return null;
-        }
-        int weightsAmount = state.getInteger("weights-amount");
-        if (weightsAmount != sashForm.getChildren().length)
-        {
-            return null;
-        }
+        IMemento weightsState =
+            getChildIfCorrect("weights", "weights-amount", sashForm.getChildren().length);
         int [] weights = new int [0];
-        for (int i = 0; i < weightsAmount; i++)
+        for (int i = 0; i < sashForm.getChildren().length; i++)
         {
-            weights = ArrayUtils.add(weights, state.getInteger("w" + i));
+            weights = ArrayUtils.add(weights, weightsState.getInteger("w" + i));
         }
         return weights;
     }
 
+    private void restorePartVisibilityFromState()
+    {
+        for (int i = 0; i < sections.length; i++)
+        {
+            toogleSectionVisibility(i, true);
+        }
+        IMemento partsState =
+            getChildIfCorrect("visibility", "parts-amount", sections.length);
+        if (partsState != null)
+        {
+            for (int i = 0; i < sections.length; i++)
+            {
+                toogleSectionVisibility(i, Boolean.parseBoolean(partsState
+                    .getString("visible-part" + i)));
+            }
+        }
+    }
+
+    private IMemento getChildIfCorrect(String childName, String amountAttribute,
+        int correctAmount)
+    {
+        if (state == null)
+        {
+            return null;
+        }
+        IMemento partsState = state.getChild(childName);
+        if (partsState == null)
+        {
+            return null;
+        }
+        int partsAmount = partsState.getInteger(amountAttribute);
+        if (partsAmount != correctAmount)
+        {
+            return null;
+        }
+        return partsState;
+    }
+
     public void saveState(IMemento memento)
     {
-        memento.putInteger("weights-amount", this.sashForm.getWeights().length);
+        IMemento weightsMemento = memento.createChild("weights");
+        weightsMemento.putInteger("weights-amount", this.sashForm.getWeights().length);
         for (int i = 0; i < this.sashForm.getWeights().length; i++)
         {
             int weight = this.sashForm.getWeights()[i];
-            memento.putInteger("w" + i, weight);
+            weightsMemento.putInteger("w" + i, weight);
+        }
+        IMemento partsMemento = memento.createChild("visibility");
+        partsMemento.putInteger("parts-amount", sections.length);
+        for (int i = 0; i < sections.length; i++)
+        {
+            partsMemento.putString("visible-part" + i, sections[i].getData("visible")
+                .toString());
         }
     }
 
