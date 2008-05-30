@@ -275,11 +275,15 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
         IMemento weightsState =
             getChildIfCorrect("weights", "weights-amount", sashForm.getChildren().length);
         int [] weights = new int [0];
-        for (int i = 0; i < sashForm.getChildren().length; i++)
+        if (weightsState != null)
         {
-            weights = ArrayUtils.add(weights, weightsState.getInteger("w" + i));
+            for (int i = 0; i < sashForm.getChildren().length; i++)
+            {
+                weights = ArrayUtils.add(weights, weightsState.getInteger("w" + i));
+            }
+            return weights;
         }
-        return weights;
+        return null;
     }
 
     private void restorePartVisibilityFromState()
