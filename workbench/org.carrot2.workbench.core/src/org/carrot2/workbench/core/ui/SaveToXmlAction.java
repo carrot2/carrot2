@@ -7,6 +7,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 public class SaveToXmlAction extends Action
 {
@@ -45,7 +46,7 @@ public class SaveToXmlAction extends Action
     @Override
     public ImageDescriptor getImageDescriptor()
     {
-        return CorePlugin.imageDescriptorFromPlugin("org.eclipse.ui",
+        return AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.ui",
             "icons/full/etool16/save_edit.gif");
     }
 }

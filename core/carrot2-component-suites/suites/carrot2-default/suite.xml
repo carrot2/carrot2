@@ -1,5 +1,16 @@
 <component-suite>
   <sources>
+    <source component-class="org.carrot2.source.etools.EToolsDocumentSource" id="etools">
+      <label>Web</label>
+      <title>Search the Web with etools.ch</title>
+      <mnemonic>w</mnemonic>
+      <description>Carrot2 clustering engine will search the Web with www.etools.ch and automatically organize the results into thematic categories</description>
+      <example-queries>
+        <example-query>data mining</example-query>
+        <example-query>london</example-query>
+        <example-query>clustering</example-query>
+      </example-queries>
+    </source>
     <source component-class="org.carrot2.source.yahoo.YahooDocumentSource" id="yahoo-web">
       <label>Yahoo!</label>
       <title>Yahoo Web Search</title>

@@ -81,7 +81,7 @@ public final class MicrosoftLiveDocumentSource extends SearchEngine
     /**
      * Microsoft Live! metadata.
      */
-    private static final SearchEngineMetadata metadata = new SearchEngineMetadata(50, 1000); 
+    static final SearchEngineMetadata metadata = new SearchEngineMetadata(50, 1000); 
 
     /**
      * Run a single query.
@@ -98,12 +98,11 @@ public final class MicrosoftLiveDocumentSource extends SearchEngine
     @Override
     protected final Callable<SearchEngineResponse> createFetcher(final SearchRange bucket)
     {
-        return new Callable<SearchEngineResponse>()
+        return new SearchEngineResponseCallable()
         {
-            public SearchEngineResponse call() throws Exception
+            public SearchEngineResponse search() throws Exception
             {
-                statistics.incrPageRequestCount();
-                return search(query, bucket.start, bucket.results);
+                return MicrosoftLiveDocumentSource.this.search(query, bucket.start, bucket.results);
             }
         };
     }

@@ -1,5 +1,6 @@
 package org.carrot2.core.test;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.*;
 
 import java.util.*;
@@ -14,7 +15,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
- *
+ * Common tests for {@link DocumentSource}s that accept a string query.
  */
 public abstract class QueryableDocumentSourceTestBase<T extends DocumentSource> extends
     DocumentSourceTestBase<T>
@@ -24,6 +25,20 @@ public abstract class QueryableDocumentSourceTestBase<T extends DocumentSource> 
     public void testNoResultsQuery() throws Exception
     {
         assertEquals(0, runQuery("duiogig oiudgisugviw siug iugw iusviuwg", 100));
+    }
+
+    @Test
+    @Prerequisite(requires = "externalApiTestsEnabled")
+    public void testSmallQuery() throws Exception
+    {
+        checkMinimumResults("apache", 50, 35);
+    }
+
+    @Test
+    @Prerequisite(requires = "externalApiTestsEnabled")
+    public void testLargeQuery() throws Exception
+    {
+        checkMinimumResults("data mining", 300, 150);
     }
 
     @Test
@@ -100,4 +115,10 @@ public abstract class QueryableDocumentSourceTestBase<T extends DocumentSource> 
         }
     }
 
+    private void checkMinimumResults(String query, int resultsToRequest,
+        int minimumExpectedResults)
+    {
+        int actualResults = runQuery("data mining", resultsToRequest);
+        assertThat(actualResults).isGreaterThanOrEqualTo(minimumExpectedResults);
+    }
 }

@@ -91,9 +91,14 @@ abstract class YahooSearchService
     protected String appid = "carrotsearch";
 
     /**
-     * Yahoo! engine defaults.
+     * Yahoo! engine current metadata.
      */
-    protected SearchEngineMetadata metadata = new SearchEngineMetadata(50, 1000);
+    protected SearchEngineMetadata metadata = DEFAULT_METADATA;
+    
+    /**
+     * Yahoo! engine default metadata.
+     */
+    final static SearchEngineMetadata DEFAULT_METADATA = new SearchEngineMetadata(50, 1000);
 
     /**
      * Keeps subclasses to this package.

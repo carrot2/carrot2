@@ -31,7 +31,7 @@ public abstract class SearchEngine extends ProcessingComponentBase implements
     @Processing
     @Input
     @Attribute(key = "search-mode")
-    protected SearchMode searchMode = SearchMode.SPECULATIVE;
+    public SearchMode searchMode = SearchMode.SPECULATIVE;
 
     /**
      * Starting index of the first result to fetch.
@@ -41,7 +41,7 @@ public abstract class SearchEngine extends ProcessingComponentBase implements
     @Processing
     @Input
     @Attribute(key = AttributeNames.START)
-    protected int start = 0;
+    public int start = 0;
 
     /**
      * Number of results to fetch.
@@ -51,7 +51,7 @@ public abstract class SearchEngine extends ProcessingComponentBase implements
     @Processing
     @Input
     @Attribute(key = AttributeNames.RESULTS)
-    protected int results = 100;
+    public int results = 100;
 
     /**
      * Search query to execute.
@@ -62,18 +62,17 @@ public abstract class SearchEngine extends ProcessingComponentBase implements
     @Input
     @Attribute(key = AttributeNames.QUERY)
     @Required
-    protected String query;
+    public String query;
 
     /**
      * Number of total matching documents. This may be an approximation.
      * 
      * @label Results Total
      */
-    @SuppressWarnings("unused")
     @Processing
     @Output
     @Attribute(key = AttributeNames.RESULTS_TOTAL)
-    protected long resultsTotal;
+    public long resultsTotal;
 
     /**
      * A collection of documents retrieved for the query.
@@ -81,12 +80,12 @@ public abstract class SearchEngine extends ProcessingComponentBase implements
     @Processing
     @Output
     @Attribute(key = AttributeNames.DOCUMENTS)
-    protected Collection<Document> documents;
+    public Collection<Document> documents;
 
     /**
      * This component usage statistics.
      */
-    protected SearchEngineStats statistics = new SearchEngineStats();
+    public SearchEngineStats statistics = new SearchEngineStats();
 
     /**
      * Run a request the search engine's API, setting <code>documents</code> to the set
@@ -101,7 +100,8 @@ public abstract class SearchEngine extends ProcessingComponentBase implements
         if (responses.length > 0)
         {
             // Collect documents from the responses.
-            documents = new ArrayList<Document>(Math.min(results, metadata.maxResultIndex));
+            documents = new ArrayList<Document>(Math
+                .min(results, metadata.maxResultIndex));
             collectDocuments(documents, responses);
 
             // Filter out duplicated URLs.
@@ -155,8 +155,8 @@ public abstract class SearchEngine extends ProcessingComponentBase implements
      * {@link ExecutorService}.
      */
     protected final SearchEngineResponse [] runQuery(final String query, final int start,
-        final int results, SearchEngineMetadata metadata,
-        final ExecutorService executor) throws ProcessingException
+        final int results, SearchEngineMetadata metadata, final ExecutorService executor)
+        throws ProcessingException
     {
         this.statistics.incrQueryCount();
 
@@ -197,7 +197,8 @@ public abstract class SearchEngine extends ProcessingComponentBase implements
                     if (resultsTotal != -1 && resultsTotal < results)
                     {
                         buckets = SearchRange.getSearchRanges(buckets[0].results,
-                            (int) resultsTotal, metadata.maxResultIndex, metadata.resultsPerPage);
+                            (int) resultsTotal, metadata.maxResultIndex,
+                            metadata.resultsPerPage);
                     }
                 }
             }
@@ -280,5 +281,24 @@ public abstract class SearchEngine extends ProcessingComponentBase implements
     {
         return Executors.newFixedThreadPool(maxConcurrentThreads,
             contextClassLoaderThreadFactory(clazz.getClassLoader()));
+    }
+
+    /**
+     * An implementation of {@link Callable} that increments page request count statistics
+     * before the actual search is made.
+     */
+    protected abstract class SearchEngineResponseCallable implements
+        Callable<SearchEngineResponse>
+    {
+        public final SearchEngineResponse call() throws Exception
+        {
+            statistics.incrPageRequestCount();
+            return search();
+        }
+
+        /**
+         * Performs the actual search and returns the response.
+         */
+        public abstract SearchEngineResponse search() throws Exception;
     }
 }

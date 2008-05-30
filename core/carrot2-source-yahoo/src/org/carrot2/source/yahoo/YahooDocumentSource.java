@@ -34,7 +34,7 @@ public final class YahooDocumentSource extends SearchEngine
      * The specific search service to be used by this document source. You can use this
      * attribute to choose which Yahoo! service to query, e.g. Yahoo Web Search or Yahoo
      * News.
-     *
+     * 
      * @label Yahoo Search Service
      * @level Advanced
      */
@@ -55,18 +55,17 @@ public final class YahooDocumentSource extends SearchEngine
     {
         super.process(service.metadata, executor);
     }
-    
+
     /**
      * Create a single page fetcher for the search range.
      */
     @Override
     protected final Callable<SearchEngineResponse> createFetcher(final SearchRange bucket)
     {
-        return new Callable<SearchEngineResponse>()
+        return new SearchEngineResponseCallable()
         {
-            public SearchEngineResponse call() throws Exception
+            public SearchEngineResponse search() throws Exception
             {
-                statistics.incrPageRequestCount();
                 return service.query(query, bucket.start, bucket.results);
             }
         };

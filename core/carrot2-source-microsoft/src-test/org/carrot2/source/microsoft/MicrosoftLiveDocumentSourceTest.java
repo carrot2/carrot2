@@ -1,6 +1,7 @@
 package org.carrot2.source.microsoft;
 
-import org.carrot2.core.test.QueryableDocumentSourceTestBase;
+import org.carrot2.core.test.MultipartDocumentSourceTestBase;
+import org.carrot2.source.SearchEngineMetadata;
 import org.junit.runner.RunWith;
 import org.junitext.runners.AnnotationRunner;
 
@@ -9,11 +10,17 @@ import org.junitext.runners.AnnotationRunner;
  */
 @RunWith(AnnotationRunner.class)
 public class MicrosoftLiveDocumentSourceTest extends
-    QueryableDocumentSourceTestBase<MicrosoftLiveDocumentSource>
+    MultipartDocumentSourceTestBase<MicrosoftLiveDocumentSource>
 {
     @Override
     public Class<MicrosoftLiveDocumentSource> getComponentClass()
     {
         return MicrosoftLiveDocumentSource.class;
+    }
+
+    @Override
+    protected SearchEngineMetadata getSearchEngineMetadata()
+    {
+        return MicrosoftLiveDocumentSource.metadata;
     }
 }

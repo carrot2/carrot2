@@ -19,6 +19,10 @@ import java.io.File;
  */
 public final class ResourceUtilsFactory
 {
+    /** Default {@link ResourceUtils}. */
+    public static final ResourceUtils DEFAULT = new ResourceUtils(
+        getDefaultResourceLocators());
+
     /**
      * Return the default resource-lookup locators.
      */
@@ -44,6 +48,6 @@ public final class ResourceUtilsFactory
      */
     public static ResourceUtils getDefaultResourceUtils()
     {
-        return new ResourceUtils(getDefaultResourceLocators());
+        return DEFAULT;
     }
 }

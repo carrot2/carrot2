@@ -17,7 +17,7 @@ public final class SearchEngineStats
     @Processing
     @Output
     @Attribute
-    private int queries;
+    public int queries;
 
     /**
      * Number of individual page requests issued.
@@ -27,7 +27,7 @@ public final class SearchEngineStats
     @Processing
     @Output
     @Attribute
-    private int pageRequests;
+    public int pageRequests;
     
     /* */
     public synchronized void incrQueryCount()

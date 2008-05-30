@@ -240,7 +240,7 @@ ul.tabs li.active .label {
   color: #404040;
 }
 
-ul.tabs li.tab .web {
+ul.tabs li.tab .etools {
   padding-left: 24px;
   background-image: url('../img/sources/web.gif'); /** sprite-ref: vert; sprite-margin-bottom: 10px */
 }

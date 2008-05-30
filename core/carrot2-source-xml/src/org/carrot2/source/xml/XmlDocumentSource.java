@@ -1,22 +1,19 @@
 package org.carrot2.source.xml;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
 
-import javax.xml.transform.*;
-import javax.xml.transform.sax.*;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
+import javax.xml.transform.Templates;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
-import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
 import org.carrot2.util.resource.*;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
@@ -111,7 +108,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
     @Processing
     @Output
     @Attribute(key = AttributeNames.DOCUMENTS)
-    private Collection<Document> documents;
+    private List<Document> documents;
 
     /**
      * The XSLT resource provided at init. If we want to allow specifying the XSLT both on
@@ -123,27 +120,14 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
     /** A template defined at initialization time, can be null */
     private Templates instanceLevelXslt;
 
-    /** XSLT transformer factory. */
-    private final TransformerFactory transformerFactory;
-
-    /**
-     * URI resolver. Does nothing.
-     */
-    private final static URIResolver uriResolver = new URIResolver()
-    {
-        public Source resolve(String href, String base) throws TransformerException
-        {
-            return null;
-        }
-    };
+    /** A helper class that groups common functionality for XML/XSLT based data sources. */
+    private final XmlDocumentSourceHelper xmlDocumentSourceHelper = new XmlDocumentSourceHelper();
 
     /**
      * Creates a new {@link XmlDocumentSource}.
      */
     public XmlDocumentSource()
     {
-        this.transformerFactory = TransformerFactory.newInstance();
-        this.transformerFactory.setURIResolver(uriResolver);
     }
 
     @Override
@@ -155,22 +139,18 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
         if (xslt != null)
         {
             initXslt = xslt;
-            instanceLevelXslt = loadXslt(xslt);
+            instanceLevelXslt = xmlDocumentSourceHelper.loadXslt(xslt);
         }
     }
 
     @Override
     public void process() throws ProcessingException
     {
-        Reader carrot2XmlReader = null;
         try
         {
-            // Perform the transformation if stylesheet available
-            carrot2XmlReader = new InputStreamReader(getCarrot2XmlStream());
-
-            // Deserialize the XML stream
-            final ProcessingResult processingResult = ProcessingResult
-                .deserialize(carrot2XmlReader);
+            final ProcessingResult processingResult = xmlDocumentSourceHelper
+                .loadProcessingResult(openResource(xml), resolveStylesheet(),
+                    xsltParameters);
 
             query = (String) processingResult.getAttributes().get(AttributeNames.QUERY);
             documents = processingResult.getDocuments();
@@ -178,36 +158,19 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
             // Truncate to the requested number of documents if needed
             if (results != -1 && documents.size() > results)
             {
-                List<Document> truncatedDocuments = Lists.newArrayList();
-
-                int documentCount = results;
-                for (Document document : documents)
-                {
-                    truncatedDocuments.add(document);
-                    if (--documentCount <= 0)
-                    {
-                        break;
-                    }
-                }
-                documents = truncatedDocuments;
+                documents = documents.subList(0, results);
             }
         }
         catch (Exception e)
         {
             throw new ProcessingException("Could not process query: " + e.getMessage(), e);
         }
-        finally
-        {
-            CloseableUtils.close(carrot2XmlReader);
-        }
     }
 
     /**
-     * Returns a Carrot2 XML stream, applying an XSLT transformation if the stylesheet is
-     * provided.
+     *
      */
-    private InputStream getCarrot2XmlStream() throws TransformerConfigurationException,
-        IOException, TransformerException
+    private Templates resolveStylesheet()
     {
         // Resolve the stylesheet to use
         Templates stylesheet = instanceLevelXslt;
@@ -215,121 +178,14 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
         {
             if (!ObjectUtils.equals(xslt, initXslt))
             {
-                stylesheet = loadXslt(xslt);
+                stylesheet = xmlDocumentSourceHelper.loadXslt(xslt);
             }
         }
         else
         {
             stylesheet = null;
         }
-
-        // Perform transformation if stylesheet found
-        InputStream carrot2XmlInputStream;
-        if (stylesheet != null)
-        {
-            InputStream xmlInputStream = null;
-            try
-            {
-                // Initialize transformer
-                final Transformer transformer = stylesheet.newTransformer();
-                final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
-                // Set XSLT parameters, if any
-                for (Map.Entry<String, String> entry : xsltParameters.entrySet())
-                {
-                    transformer.setParameter(entry.getKey(), entry.getValue());
-                }
-
-                // Perform transformation
-                xmlInputStream = openResource(xml);
-                transformer.transform(new StreamSource(xmlInputStream), new StreamResult(
-                    outputStream));
-                carrot2XmlInputStream = new ByteArrayInputStream(outputStream
-                    .toByteArray());
-            }
-            finally
-            {
-                CloseableUtils.close(xmlInputStream);
-            }
-        }
-        else
-        {
-            carrot2XmlInputStream = openResource(xml);
-        }
-
-        return carrot2XmlInputStream;
-    }
-
-    /**
-     * Loads the XSLT stylesheet from the provided {@link Resource}.
-     */
-    private Templates loadXslt(Resource xslt)
-    {
-        InputStream templateInputStream = null;
-        try
-        {
-            templateInputStream = xslt.open();
-
-            if (!transformerFactory.getFeature(SAXSource.FEATURE)
-                || !transformerFactory.getFeature(SAXResult.FEATURE))
-            {
-                throw new RuntimeException(
-                    "Required source types not supported by the Transformer Factory.");
-            }
-
-            if (!transformerFactory.getFeature(SAXResult.FEATURE)
-                || !transformerFactory.getFeature(StreamResult.FEATURE))
-            {
-                throw new RuntimeException(
-                    "Required result types not supported by the Transformer Factory.");
-            }
-
-            if (!(transformerFactory instanceof SAXTransformerFactory))
-            {
-                throw new RuntimeException(
-                    "TransformerFactory not an instance of SAXTransformerFactory");
-            }
-
-            transformerFactory.setErrorListener(new ErrorListener()
-            {
-                public void warning(TransformerException exception)
-                    throws TransformerException
-                {
-                    throw exception;
-                }
-
-                public void error(TransformerException exception)
-                    throws TransformerException
-                {
-                    throw exception;
-                }
-
-                public void fatalError(TransformerException exception)
-                    throws TransformerException
-                {
-                    throw exception;
-                }
-            });
-
-            try
-            {
-                final Templates newTemplates = transformerFactory
-                    .newTemplates(new StreamSource(templateInputStream));
-                return newTemplates;
-            }
-            catch (TransformerConfigurationException e)
-            {
-                throw new RuntimeException("Could not compile stylesheet.", e);
-            }
-        }
-        catch (IOException e)
-        {
-            throw new RuntimeException("Could not load stylesheet", e);
-        }
-        finally
-        {
-            CloseableUtils.close(templateInputStream);
-        }
+        return stylesheet;
     }
 
     /**

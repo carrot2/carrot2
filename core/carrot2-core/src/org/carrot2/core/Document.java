@@ -31,40 +31,15 @@ public final class Document
 
     /** Field name for an URL pointing to the thumbnail image associated with the document. */
     public static final String THUMBNAIL_URL = "thumbnail-url";
-    
+
+    /** Field name for a list of sources the document was found in. Value type: List<String> */
+    public static final String SOURCES = "sources";
+
     /** Fields of this document */
     private Map<String, Object> fields = Maps.newHashMap();
 
     /** Read-only collection of fields exposed in {@link #getField(String)}. */
     private Map<String, Object> fieldsView = Collections.unmodifiableMap(fields);
-
-    /**
-     * Field used during serialization/ deserialization to preserve Carrot2 2.x format.
-     * See {@link #beforeSerialization()} and {@link #afterDeserialization()}.
-     */
-    @Element(required = false)
-    private String title;
-
-    /**
-     * Field used during serialization/ deserialization to preserve Carrot2 2.x format.
-     * See {@link #beforeSerialization()} and {@link #afterDeserialization()}.
-     */
-    @Element(required = false)
-    private String url;
-
-    /**
-     * Field used during serialization/ deserialization to preserve Carrot2 2.x format.
-     * See {@link #beforeSerialization()} and {@link #afterDeserialization()}.
-     */
-    @Element(required = false)
-    private String snippet;
-
-    /**
-     * Field used during serialization/ deserialization to preserve Carrot2 2.x format.
-     * See {@link #beforeSerialization()} and {@link #afterDeserialization()}.
-     */
-    @ElementMap(name = "fields", entry = "field", key = "key", value = "value", inline = true, attribute = true, required = false)
-    private Map<String, TypeStringValuePair> otherFieldsAsStrings = new HashMap<String, TypeStringValuePair>();
 
     /**
      * Internal identifier of the document. This identifier is assigned dynamically after
@@ -151,20 +126,55 @@ public final class Document
     }
 
     /**
+     * Field used during serialization/ deserialization to preserve Carrot2 2.x format.
+     */
+    @Element(required = false)
+    private String title;
+
+    /**
+     * Field used during serialization/ deserialization to preserve Carrot2 2.x format.
+     */
+    @Element(required = false)
+    private String url;
+
+    /**
+     * Field used during serialization/ deserialization to preserve Carrot2 2.x format.
+     */
+    @Element(required = false)
+    private String snippet;
+
+    /**
+     * Field used during serialization/ deserialization.
+     */
+    @ElementList(entry = "source", required = false)
+    private List<String> sources;
+
+    /**
+     * Field used during serialization/ deserialization. See
+     */
+    @ElementMap(name = "fields", entry = "field", key = "key", value = "value", inline = true, attribute = true, required = false)
+    private Map<String, TypeStringValuePair> otherFieldsAsStrings = new HashMap<String, TypeStringValuePair>();
+
+    /**
      * Transfers some fields from the map to individual class fields.
      */
     @Persist
-    @SuppressWarnings("unused")
+    @SuppressWarnings(
+    {
+        "unused", "unchecked"
+    })
     private void beforeSerialization()
     {
         title = (String) fields.get(TITLE);
         snippet = (String) fields.get(SUMMARY);
         url = (String) fields.get(CONTENT_URL);
+        sources = (List<String>) fields.get(SOURCES);
 
         otherFieldsAsStrings = TypeStringValuePair.toTypeStringValuePairs(fields);
         otherFieldsAsStrings.remove(TITLE);
         otherFieldsAsStrings.remove(SUMMARY);
         otherFieldsAsStrings.remove(CONTENT_URL);
+        otherFieldsAsStrings.remove(SOURCES);
     }
 
     /**
@@ -182,7 +192,11 @@ public final class Document
         fields.put(TITLE, title);
         fields.put(SUMMARY, snippet);
         fields.put(CONTENT_URL, url);
-        
+        if (sources != null)
+        {
+            fields.put(SOURCES, sources);
+        }
+
         fieldsView = Collections.unmodifiableMap(fields);
     }
 }
