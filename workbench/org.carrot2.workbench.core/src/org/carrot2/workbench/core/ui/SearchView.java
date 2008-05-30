@@ -11,8 +11,7 @@ import org.carrot2.workbench.core.ui.attributes.AttributesPage;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.*;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Resource;
 import org.eclipse.swt.layout.*;
@@ -99,6 +98,16 @@ public class SearchView extends ViewPart
 
                 // Set the focus back to the query box (?).
                 //                queryText.setFocus();
+            }
+        });
+        parent.addTraverseListener(new TraverseListener()
+        {
+            public void keyTraversed(TraverseEvent e)
+            {
+                if (e.detail == SWT.TRAVERSE_RETURN)
+                {
+                    execQuery.run();
+                }
             }
         });
 
