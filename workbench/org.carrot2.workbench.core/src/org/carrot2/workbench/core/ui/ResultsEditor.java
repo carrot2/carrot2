@@ -28,6 +28,24 @@ import org.eclipse.ui.part.EditorPart;
 
 public class ResultsEditor extends EditorPart implements IPersistableEditor
 {
+    private class VisibilityToogleAction extends Action
+    {
+        private int sectionIndex;
+
+        public VisibilityToogleAction(String title, int index)
+        {
+            super(title, IAction.AS_CHECK_BOX);
+            this.sectionIndex = index;
+        }
+
+        @Override
+        public void run()
+        {
+            toogleSectionVisibility(sectionIndex, !isChecked());
+        }
+
+    }
+
     public static final String ID = "org.carrot2.workbench.core.editors.results";
 
     public static final int CURRENT_CONTENT = 1;
@@ -82,6 +100,11 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
 
     private void createActions()
     {
+        rootForm.getMenuManager().add(new VisibilityToogleAction("Hide Clusters", 0));
+        rootForm.getMenuManager().add(new VisibilityToogleAction("Hide Documents", 1));
+        rootForm.getMenuManager().add(new VisibilityToogleAction("Hide Attributes", 2));
+        rootForm.getMenuManager().update();
+
         IAction a = new SaveToXmlAction();
         rootForm.getToolBarManager().add(a);
         rootForm.getToolBarManager().update(true);
@@ -166,6 +189,12 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
                 rootForm.setBusy(busy);
             }
         });
+    }
+
+    private void toogleSectionVisibility(int sectionIndex, boolean visible)
+    {
+        sashForm.getChildren()[sectionIndex].setVisible(visible);
+        sashForm.layout();
     }
 
     @Override
