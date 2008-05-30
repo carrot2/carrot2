@@ -58,10 +58,10 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
     private ProcessingResult currentContent;
     private Image sourceImage;
     private IProcessingResultPart [] parts =
-    {
-        new ClusterTreeComponent(), new DocumentListBrowser(),
-        new AttributeListComponent()
-    };
+        {
+            new ClusterTreeComponent(), new DocumentListBrowser(),
+            new AttributeListComponent()
+        };
     private int [] weights =
     {
         1, 2, 2
@@ -108,17 +108,17 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
     private void createActions()
     {
         rootForm.getMenuManager().add(
-            new VisibilityToogleAction("Show Clusters", 0, true, AbstractUIPlugin
-                .imageDescriptorFromPlugin("org.eclipse.ui",
-                    "icons/full/eview16/filenav_nav.gif")));
+            new VisibilityToogleAction("Show Clusters", 0, (Boolean) sections[0]
+                .getData("visible"), AbstractUIPlugin.imageDescriptorFromPlugin(
+                "org.eclipse.ui", "icons/full/eview16/filenav_nav.gif")));
         rootForm.getMenuManager().add(
-            new VisibilityToogleAction("Show Documents", 1, true, AbstractUIPlugin
-                .imageDescriptorFromPlugin("org.eclipse.ui",
-                    "icons/full/obj16/file_obj.gif")));
+            new VisibilityToogleAction("Show Documents", 1, (Boolean) sections[1]
+                .getData("visible"), AbstractUIPlugin.imageDescriptorFromPlugin(
+                "org.eclipse.ui", "icons/full/obj16/file_obj.gif")));
         rootForm.getMenuManager().add(
-            new VisibilityToogleAction("Show Attributes", 2, true, AbstractUIPlugin
-                .imageDescriptorFromPlugin("org.eclipse.ui",
-                    "icons/full/obj16/generic_elements.gif")));
+            new VisibilityToogleAction("Show Attributes", 2, (Boolean) sections[2]
+                .getData("visible"), AbstractUIPlugin.imageDescriptorFromPlugin(
+                "org.eclipse.ui", "icons/full/obj16/generic_elements.gif")));
         rootForm.getMenuManager().update();
 
         IAction a = new SaveToXmlAction();
@@ -128,14 +128,16 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
 
     private int [] createControls(Composite parent)
     {
-        final ProcessingJob job = new ProcessingJob("Processing of a query",
-            (SearchParameters) getEditorInput());
+        final ProcessingJob job =
+            new ProcessingJob("Processing of a query",
+                (SearchParameters) getEditorInput());
         sections = new Section [parts.length];
         for (int i = 0; i < parts.length; i++)
         {
             IProcessingResultPart part = parts[i];
-            Section sec = toolkit.createSection(parent, ExpandableComposite.EXPANDED
-                | ExpandableComposite.TITLE_BAR);
+            Section sec =
+                toolkit.createSection(parent, ExpandableComposite.EXPANDED
+                    | ExpandableComposite.TITLE_BAR);
             sec.setText(part.getPartName());
             IToolBarManager manager = createToolbarManager(sec);
             part.init(getSite(), sec, toolkit, job);
@@ -232,8 +234,9 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
     @Override
     public String getPartName()
     {
-        Object query = ((SearchParameters) this.getEditorInput()).getAttributes().get(
-            AttributeNames.QUERY);
+        Object query =
+            ((SearchParameters) this.getEditorInput()).getAttributes().get(
+                AttributeNames.QUERY);
         if (query != null)
         {
             return query.toString();
@@ -285,8 +288,8 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
 
     private int [] restoreWeightsFromState()
     {
-        IMemento weightsState = getChildIfCorrect("weights", "weights-amount", sashForm
-            .getChildren().length);
+        IMemento weightsState =
+            getChildIfCorrect("weights", "weights-amount", sashForm.getChildren().length);
         int [] weights = new int [0];
         if (weightsState != null)
         {
@@ -305,8 +308,8 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
         {
             toogleSectionVisibility(i, true);
         }
-        IMemento partsState = getChildIfCorrect("visibility", "parts-amount",
-            sections.length);
+        IMemento partsState =
+            getChildIfCorrect("visibility", "parts-amount", sections.length);
         if (partsState != null)
         {
             for (int i = 0; i < sections.length; i++)
