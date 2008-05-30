@@ -13,6 +13,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Resource;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
@@ -22,6 +23,22 @@ import org.eclipse.ui.part.ViewPart;
 
 public class SearchView extends ViewPart
 {
+    /**
+     * Little improved {@link StackLayout}. The size of the composite is now equal to the
+     * size of visible control, not the biggest control.
+     */
+    private static class FlexibleStackLayout extends StackLayout
+    {
+
+        @Override
+        protected Point computeSize(Composite composite, int wHint, int hHint,
+            boolean flushCache)
+        {
+            return topControl.computeSize(wHint, hHint);
+        }
+
+    }
+
     private static final String ALGORITHM_ID_ATTRIBUTE = "algorithmId";
 
     private static final String SOURCE_ID_ATTRIBUTE = "sourceId";
@@ -90,7 +107,7 @@ public class SearchView extends ViewPart
     @SuppressWarnings("unchecked")
     private void createRequiredAttributesLayout()
     {
-        final StackLayout stack = new StackLayout();
+        final StackLayout stack = new FlexibleStackLayout();
         final Composite requiredAttributes = new Composite(innerComposite, SWT.NONE);
         requiredAttributes.setLayout(stack);
 
@@ -127,7 +144,7 @@ public class SearchView extends ViewPart
                 if (getSourceId() != null)
                 {
                     stack.topControl = attributesPages.get(getSourceId()).getControl();
-                    requiredAttributes.layout();
+                    innerComposite.layout();
                 }
             }
         });
@@ -214,7 +231,8 @@ public class SearchView extends ViewPart
      * Wraps component combobox (source or algorithm) with JFace viewer. Restores saved
      * state if possible.
      * 
-     * @param combo combo control used to create a viewer ({@link ComboViewer#ComboViewer(Combo)})
+     * @param combo combo control used to create a viewer (
+     *            {@link ComboViewer#ComboViewer(Combo)})
      * @param loader loader of components (sources or algorithms)
      * @param stateAttribute name of the attribute, which stores id of the component, that
      *            should be chosen by default
@@ -289,19 +307,19 @@ public class SearchView extends ViewPart
     private void createPermanentLayout(Composite parent)
     {
         parent.setLayout(new FillLayout());
-        
+
         innerComposite = new Composite(parent, SWT.NONE);
         innerComposite.setLayout(new GridLayout(2, false));
-        
+
         Label sourceLabel = new Label(innerComposite, SWT.CENTER);
         sourceLabel.setText("Source");
-        Combo sourceCombo = new Combo(innerComposite, SWT.DROP_DOWN | SWT.READ_ONLY
-            | SWT.BORDER);
+        Combo sourceCombo =
+            new Combo(innerComposite, SWT.DROP_DOWN | SWT.READ_ONLY | SWT.BORDER);
 
         Label algorithmLabel = new Label(innerComposite, SWT.CENTER);
         algorithmLabel.setText("Algorithm");
-        Combo algorithmCombo = new Combo(innerComposite, SWT.DROP_DOWN | SWT.READ_ONLY
-            | SWT.BORDER);
+        Combo algorithmCombo =
+            new Combo(innerComposite, SWT.DROP_DOWN | SWT.READ_ONLY | SWT.BORDER);
 
         // init nonvisuals
         GridData sourceGridData = new GridData();
