@@ -153,6 +153,7 @@ public class SearchView extends ViewPart
                 if (getSourceId() != null)
                 {
                     stack.topControl = attributesPages.get(getSourceId()).getControl();
+                    requiredAttributes.layout();
                     innerComposite.layout();
                 }
             }
