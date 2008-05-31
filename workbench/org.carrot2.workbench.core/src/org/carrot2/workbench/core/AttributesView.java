@@ -10,6 +10,15 @@ import org.eclipse.ui.*;
 import org.eclipse.ui.part.*;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+/**
+ * View showing attribute values for active editor.
+ * 
+ * It works similar to Outline view: every time new editor is activated, and it is
+ * {@link IAdaptable} and it adapts to {@link AttributesProvider}, new page in this view
+ * is created using provider's {@link AttributesProvider#createBindableDescriptor()} as a
+ * source of attributes to display. If attributes are groupped, than appropriate groups
+ * are displayed.
+ */
 public class AttributesView extends PageBookView
 {
 
