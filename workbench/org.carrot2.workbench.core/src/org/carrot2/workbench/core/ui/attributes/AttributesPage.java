@@ -9,8 +9,8 @@ import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.editors.*;
 import org.carrot2.workbench.editors.factory.EditorFactory;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.layout.*;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IPersistableEditor;
@@ -174,6 +174,19 @@ public class AttributesPage extends Page implements IPersistableEditor
             map.put(editor.getAttributeKey(), editor.getValue());
         }
         return Collections.unmodifiableMap(map);
+    }
+
+    public boolean setAttributeValue(String key, Object value)
+    {
+        for (IAttributeEditor editor : editors)
+        {
+            if (editor.getAttributeKey().equals(key))
+            {
+                editor.setValue(value);
+                return true;
+            }
+        }
+        return false;
     }
 
     private String getLabelForAttribute(AttributeDescriptor descriptor)

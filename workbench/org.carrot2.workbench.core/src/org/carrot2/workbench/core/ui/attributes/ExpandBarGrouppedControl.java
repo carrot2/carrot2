@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.carrot2.core.ProcessingComponent;
 import org.carrot2.util.attribute.BindableDescriptor;
+import org.carrot2.workbench.editors.AttributeChangeListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.*;
@@ -107,6 +108,33 @@ public class ExpandBarGrouppedControl implements IAttributesGrouppedControl
     public List<AttributesPage> getPages()
     {
         return pages;
+    }
+
+    public void addAttributeChangeListener(AttributeChangeListener listener)
+    {
+        for (AttributesPage page : pages)
+        {
+            page.addAttributeChangeListener(listener);
+        }
+    }
+
+    public void removeAttributeChangeListener(AttributeChangeListener listener)
+    {
+        for (AttributesPage page : pages)
+        {
+            page.removeAttributeChangeListener(listener);
+        }
+    }
+
+    public void setAttributeValue(String key, Object value)
+    {
+        for (AttributesPage page : pages)
+        {
+            if (page.setAttributeValue(key, value))
+            {
+                break;
+            }
+        }
     }
 
 }

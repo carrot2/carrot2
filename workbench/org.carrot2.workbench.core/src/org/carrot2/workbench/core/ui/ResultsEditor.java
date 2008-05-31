@@ -7,6 +7,7 @@ import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.core.jobs.ProcessingJob;
 import org.carrot2.workbench.core.jobs.ProcessingStatus;
 import org.carrot2.workbench.core.ui.attributes.AttributeListComponent;
+import org.carrot2.workbench.core.ui.attributes.AttributesProvider;
 import org.carrot2.workbench.core.ui.clusters.ClusterTreeComponent;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
@@ -389,5 +390,16 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
     public boolean isDirty()
     {
         return false;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Object getAdapter(Class adapter)
+    {
+        if (AttributesProvider.class.equals(adapter))
+        {
+            return (AttributesProvider) parts[2];
+        }
+        return super.getAdapter(adapter);
     }
 }

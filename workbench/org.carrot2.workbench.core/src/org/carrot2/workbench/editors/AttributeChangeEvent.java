@@ -15,4 +15,11 @@ public class AttributeChangeEvent extends EventObject
         value = source.getValue();
     }
 
+    public AttributeChangeEvent(Object source, String key, Object value)
+    {
+        super(source);
+        this.key = key;
+        this.value = value;
+    }
+
 }

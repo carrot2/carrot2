@@ -62,6 +62,12 @@
             id="org.carrot2.workbench.core.carrot2Category"
             name="Carrot2">
       </category>
+      <view
+            category="org.carrot2.workbench.core.carrot2Category"
+            class="org.carrot2.workbench.core.AttributesView"
+            id="org.carrot2.workbench.core.attributes"
+            name="Attributes">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.editors">

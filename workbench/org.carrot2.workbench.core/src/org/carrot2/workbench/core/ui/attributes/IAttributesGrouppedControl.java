@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.carrot2.util.attribute.BindableDescriptor;
 import org.carrot2.workbench.editors.AttributeChangeEvent;
+import org.carrot2.workbench.editors.AttributeChangeListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.IPageSite;
 
@@ -44,6 +45,8 @@ public interface IAttributesGrouppedControl
      */
     void createMainControl(Composite parent);
 
+    void setAttributeValue(String key, Object value);
+
     /**
      * @return root control of a groupped control
      */
@@ -52,5 +55,9 @@ public interface IAttributesGrouppedControl
     List<AttributesPage> getPages();
 
     void dispose();
+
+    public void addAttributeChangeListener(AttributeChangeListener listener);
+
+    public void removeAttributeChangeListener(AttributeChangeListener listener);
 
 }

@@ -18,7 +18,8 @@ import org.eclipse.ui.*;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.IPageSite;
 
-public class AttributeListComponent implements IProcessingResultPart
+public class AttributeListComponent extends AttributesProvider implements
+    IProcessingResultPart
 {
     private ProcessingJob processingJob;
     private IAttributesGrouppedControl groupControl;
@@ -39,6 +40,7 @@ public class AttributeListComponent implements IProcessingResultPart
                 {
                     processingJob.schedule();
                 }
+                fireAttributeChanged(event);
             }
         };
         IPageSite pageSite = new IPageSite()
@@ -94,25 +96,47 @@ public class AttributeListComponent implements IProcessingResultPart
             }
 
         };
-        GroupingMethod method = GroupingMethod.GROUP;
-        BindableDescriptor desc =
-            BindableDescriptorBuilder.buildDescriptor(job.algorithm
-                .getExecutableComponent());
-        desc = desc.only(Input.class, Processing.class).not(Internal.class).group(method);
-        groupControl = new ExpandBarGrouppedControl();
-        groupControl.init(desc, pageSite);
-        groupControl.createMainControl(parent);
-        toolkit.adapt((Composite) groupControl.getControl());
-        for (Object groupKey : desc.attributeGroups.keySet())
-        {
-            groupControl.createGroup(groupKey);
-        }
+        BindableDescriptor desc = createBindableDescriptor();
+        createControls(parent, pageSite, desc);
         for (AttributesPage page : groupControl.getPages())
         {
             page.addAttributeChangeListener(listener);
         }
+        toolkit.adapt((Composite) groupControl.getControl());
         toolkit.paintBordersFor(groupControl.getControl());
         UiFormUtils.adaptToFormUI(toolkit, groupControl.getControl());
+    }
+
+    private void createControls(Composite parent, IPageSite pageSite,
+        BindableDescriptor desc)
+    {
+        groupControl = new ExpandBarGrouppedControl();
+        groupControl.init(desc, pageSite);
+        groupControl.createMainControl(parent);
+        for (Object groupKey : desc.attributeGroups.keySet())
+        {
+            groupControl.createGroup(groupKey);
+        }
+    }
+
+    public void init(final IPageSite site, Composite parent,
+        final AttributesProvider provider)
+    {
+        createControls(parent, site, provider.createBindableDescriptor());
+        provider.addAttributeChangeListener(new AttributeChangeListener()
+        {
+            public void attributeChange(AttributeChangeEvent event)
+            {
+                groupControl.setAttributeValue(event.key, event.value);
+            }
+        });
+        groupControl.addAttributeChangeListener(new AttributeChangeListener()
+        {
+            public void attributeChange(AttributeChangeEvent event)
+            {
+                provider.setAttributeValue(event.key, event.value);
+            }
+        });
     }
 
     public void populateToolbar(IToolBarManager manager)
@@ -173,5 +197,36 @@ public class AttributeListComponent implements IProcessingResultPart
     public String getPartName()
     {
         return "Attributes";
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public BindableDescriptor createBindableDescriptor()
+    {
+        GroupingMethod method = GroupingMethod.GROUP;
+        BindableDescriptor desc =
+            BindableDescriptorBuilder.buildDescriptor(processingJob.algorithm
+                .getExecutableComponent());
+        desc = desc.only(Input.class, Processing.class).not(Internal.class).group(method);
+        return desc;
+    }
+
+    @Override
+    public void setAttributeValue(String key, Object value)
+    {
+        if (groupControl != null)
+        {
+            for (AttributesPage page : groupControl.getPages())
+            {
+                if (page.setAttributeValue(key, value))
+                {
+                    break;
+                }
+            }
+        }
+        if (listener != null)
+        {
+            listener.attributeChange(new AttributeChangeEvent(this, key, value));
+        }
     }
 }
