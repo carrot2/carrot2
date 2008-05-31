@@ -14,10 +14,10 @@ public @interface IntRange
     /**
      * Minimum value for the attribute, inclusive.
      */
-    int min();
+    int min() default Integer.MIN_VALUE;
 
     /**
      * Maximum value for the attribute, inclusive.
      */
-    int max();
+    int max() default Integer.MAX_VALUE;
 }

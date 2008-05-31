@@ -14,10 +14,10 @@ public @interface DoubleRange
     /**
      * Minimum value for the attribute, inclusive.
      */
-    double min();
+    double min() default Double.MIN_VALUE;
 
     /**
      * Maximum value for the attribute, inclusive.
      */
-    double max();
+    double max() default Double.MAX_VALUE;
 }

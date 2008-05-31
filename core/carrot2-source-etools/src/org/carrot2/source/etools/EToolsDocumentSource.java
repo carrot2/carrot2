@@ -122,7 +122,7 @@ public class EToolsDocumentSource extends SearchEngine
     @Input
     @Processing
     @Attribute
-    @IntRange(min = 0, max = Integer.MAX_VALUE)
+    @IntRange(min = 0)
     public int timeout = 4000;
 
     /**

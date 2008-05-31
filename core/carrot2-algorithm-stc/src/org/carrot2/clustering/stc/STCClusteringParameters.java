@@ -23,7 +23,7 @@ public final class STCClusteringParameters
     @Processing
     @Input
     @Attribute
-    @IntRange(min = 2, max = Integer.MAX_VALUE)
+    @IntRange(min = 2)
     public int ignoreWordIfInFewerDocs = 2;
 
     /**
@@ -61,7 +61,7 @@ public final class STCClusteringParameters
     @Processing
     @Input
     @Attribute
-    @IntRange(min = 2, max = Integer.MAX_VALUE)
+    @IntRange(min = 2)
     public int maxBaseClusters = 300;
 
     /**
@@ -85,7 +85,7 @@ public final class STCClusteringParameters
     @Processing
     @Input
     @Attribute
-    @IntRange(min = 1, max = Integer.MAX_VALUE)
+    @IntRange(min = 1)
     public int maxClusters = 15;
 
     /**
@@ -135,7 +135,7 @@ public final class STCClusteringParameters
     @Processing
     @Input
     @Attribute
-    @IntRange(min = 1, max = Integer.MAX_VALUE)
+    @IntRange(min = 1)
     public int maxDescPhraseLength = 4;
 
     /**
@@ -150,7 +150,7 @@ public final class STCClusteringParameters
     @Processing
     @Input
     @Attribute
-    @DoubleRange(min = 0, max = Double.MAX_VALUE)
+    @DoubleRange(min = 0)
     public double singleTermBoost = 0.5d;
 
     /**
@@ -163,7 +163,7 @@ public final class STCClusteringParameters
     @Processing
     @Input
     @Attribute
-    @IntRange(min = 1, max = Integer.MAX_VALUE)
+    @IntRange(min = 1)
     public int optimalPhraseLength = 3;
 
     /**
@@ -176,7 +176,7 @@ public final class STCClusteringParameters
     @Processing
     @Input
     @Attribute
-    @DoubleRange(min = 0.5, max = Double.MAX_VALUE)
+    @DoubleRange(min = 0.5)
     public double optimalPhraseLengthDev = 2.0d;
 
     /**
@@ -190,6 +190,6 @@ public final class STCClusteringParameters
     @Processing
     @Input
     @Attribute
-    @DoubleRange(min = 0, max = Double.MAX_VALUE)
+    @DoubleRange(min = 0)
     public double documentCountBoost = 1.0d;
 }
