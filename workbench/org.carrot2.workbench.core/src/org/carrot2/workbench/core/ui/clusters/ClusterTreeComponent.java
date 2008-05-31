@@ -20,6 +20,8 @@ import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.google.common.collect.Lists;
+
 public class ClusterTreeComponent implements IProcessingResultPart
 {
     private TreeViewer viewer;
@@ -37,8 +39,7 @@ public class ClusterTreeComponent implements IProcessingResultPart
             {
                 if (event.getResult().getSeverity() == IStatus.OK)
                 {
-                    final ProcessingResult result =
-                        ((ProcessingStatus) event.getResult()).result;
+                    final ProcessingResult result = ((ProcessingStatus) event.getResult()).result;
                     setClusters(result);
                 }
             }
@@ -65,10 +66,11 @@ public class ClusterTreeComponent implements IProcessingResultPart
 
     private void initViewer(IWorkbenchSite site, Composite parent)
     {
-        viewer = new TreeViewer(parent, SWT.MULTI);
+        viewer = new TreeViewer(parent, SWT.NONE);
         viewer.setLabelProvider(new ClusterLabelProvider());
         viewer.setContentProvider(new ClusterTreeContentProvider());
         viewer.setInput(new ArrayList<ClusterWithParent>());
+        viewer.setAutoExpandLevel(2);
         final ClusterSelectionProvider provider = new ClusterSelectionProvider(viewer);
         site.setSelectionProvider(provider);
     }
@@ -96,8 +98,8 @@ public class ClusterTreeComponent implements IProcessingResultPart
         {
             public void run()
             {
-                viewer.setInput(ClusterWithParent.wrap(new ArrayList<Cluster>(result
-                    .getClusters())));
+                viewer.setInput(Lists.newArrayList(ClusterWithParent.wrap(null, new Cluster("All topics",
+                    result.getClusters()))));
             }
         });
     }

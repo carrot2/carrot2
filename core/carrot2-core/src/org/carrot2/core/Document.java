@@ -7,7 +7,8 @@ import org.simpleframework.xml.*;
 import org.simpleframework.xml.load.Commit;
 import org.simpleframework.xml.load.Persist;
 
-import com.google.common.collect.Maps;
+import com.google.common.base.Function;
+import com.google.common.collect.*;
 
 /**
  * A document that to be processed by the framework. Each document is a collection of
@@ -55,6 +56,17 @@ public final class Document
      */
     public Document()
     {
+    }
+
+    /**
+     * Creates a document with the provided <code>title</code>, <code>summary</code>
+     * and <code>contentUrl</code>.
+     */
+    public Document(String title, String summary, String contentUrl)
+    {
+        addField(TITLE, title);
+        addField(SUMMARY, summary);
+        addField(CONTENT_URL, contentUrl);
     }
 
     /**
@@ -106,24 +118,64 @@ public final class Document
     }
 
     /**
-     * A utility method for creating a document with provided <code>title</code>,
-     * <code>summary</code> and <code>contentUrl</code>.
+     * Assigns sequential identifiers to the provided <code>documents</code>. If a
+     * document already has an identifier, the identifier will not be changed.
      * 
-     * @param title for the document
-     * @param summary for the document
-     * @param contentUrl for the document
-     * @return the created document
+     * @param documents documents to assign identifiers to.
+     * @throws IllegalArgumentException if the provided documents contain non-unique
+     *             identifiers
      */
-    public static Document create(String title, String summary, String contentUrl)
+    public static void assignDocumentIds(Collection<Document> documents)
     {
-        final Document document = new Document();
+        // We may get concurrent calls referring to the same documents
+        // in the same list, so we need to synchronize here.
+        synchronized (documents)
+        {
+            final HashSet<Integer> ids = Sets.newHashSet();
 
-        document.addField(TITLE, title);
-        document.addField(SUMMARY, summary);
-        document.addField(CONTENT_URL, contentUrl);
+            // First, find the start value for the id and check uniqueness of the ids
+            // already provided.
+            int maxId = Integer.MIN_VALUE;
+            for (final Document document : documents)
+            {
+                if (document.id != null)
+                {
+                    if (!ids.add(document.id))
+                    {
+                        throw new IllegalArgumentException(
+                            "Non-unique document id found: " + document.id);
+                    }
+                    maxId = Math.max(maxId, document.id);
+                }
+            }
 
-        return document;
+            // We'd rather start with 0
+            maxId = Math.max(maxId, -1);
+
+            // Assign missing ids
+            for (final Document document : documents)
+            {
+                if (document.id == null)
+                {
+                    document.id = ++maxId;
+                }
+            }
+        }
     }
+
+    /**
+     * Compares {@link Document}s by their identifiers {@link #getId()}, which
+     * effectively gives the original order in which they were returned by the document
+     * source.
+     */
+    public static final Comparator<Document> BY_ID_COMPARATOR = Comparators
+        .nullLeastOrder(Comparators.fromFunction(new Function<Document, Integer>()
+        {
+            public Integer apply(Document document)
+            {
+                return document.id;
+            }
+        }));
 
     /**
      * Field used during serialization/ deserialization to preserve Carrot2 2.x format.

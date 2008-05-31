@@ -14,6 +14,7 @@ import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.*;
 import org.carrot2.source.xml.XmlDocumentSourceHelper;
 import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.constraint.IntRange;
 import org.carrot2.util.resource.ClassResource;
 
 /**
@@ -121,6 +122,7 @@ public class EToolsDocumentSource extends SearchEngine
     @Input
     @Processing
     @Attribute
+    @IntRange(min = 0, max = Integer.MAX_VALUE)
     public int timeout = 4000;
 
     /**

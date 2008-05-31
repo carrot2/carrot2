@@ -45,10 +45,6 @@
 	#set( $documents = $result.Documents )
 #end
 
-#if ($cluster)
-	#set( $documents = $cluster.AllDocuments )
-#end
-
 #if ($documents.isEmpty())
 	Your query - <b>&quot;${queryEscaped}&quot;</b> - did not return any documents.<br><br> 
 	

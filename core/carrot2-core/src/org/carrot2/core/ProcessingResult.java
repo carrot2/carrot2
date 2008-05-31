@@ -8,7 +8,6 @@ import org.simpleframework.xml.*;
 import org.simpleframework.xml.load.*;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 /**
  * Encapsulates the results of processing. Provides access to the values of attributes
@@ -68,7 +67,7 @@ public final class ProcessingResult
             .get(AttributeNames.DOCUMENTS);
         if (documents != null)
         {
-            assignDocumentIds(documents);
+            Document.assignDocumentIds(documents);
             attributes.put(AttributeNames.DOCUMENTS, Collections
                 .unmodifiableList(documents));
         }
@@ -85,47 +84,6 @@ public final class ProcessingResult
         // Store a reference to attributes as an unmodifiable map
         this.attributesView = Collections.unmodifiableMap(attributes);
 
-    }
-
-    /**
-     * Assigns sequential identifiers to documents.
-     */
-    private void assignDocumentIds(Collection<Document> documents)
-    {
-        // We may get concurrent calls referring to the same documents
-        // in the same list, so we need to synchronize here.
-        synchronized (documents)
-        {
-            final HashSet<Integer> ids = Sets.newHashSet();
-
-            // First, find the start value for the id and check uniqueness of the ids
-            // already provided.
-            int maxId = Integer.MIN_VALUE;
-            for (final Document document : documents)
-            {
-                if (document.id != null)
-                {
-                    if (!ids.add(document.id))
-                    {
-                        throw new RuntimeException("Non-unique document id found: "
-                            + document.id);
-                    }
-                    maxId = Math.max(maxId, document.id);
-                }
-            }
-
-            // We'd rather start with 0
-            maxId = Math.max(maxId, -1);
-
-            // Assign missing ids
-            for (final Document document : documents)
-            {
-                if (document.id == null)
-                {
-                    document.id = ++maxId;
-                }
-            }
-        }
     }
 
     /**

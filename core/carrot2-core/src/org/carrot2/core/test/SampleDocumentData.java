@@ -618,7 +618,7 @@ final class SampleDocumentData
         final ArrayList<Document> documents = new ArrayList<Document>();
         for (String [] row : data)
         {
-            documents.add(Document.create(row[1], row[2], row[0]));
+            documents.add(new Document(row[1], row[2], row[0]));
         }
 
         DOCUMENTS_DATA_MINING = Collections.unmodifiableList(documents);
@@ -1224,7 +1224,7 @@ final class SampleDocumentData
         final ArrayList<Document> documents = new ArrayList<Document>();
         for (String [] row : data)
         {
-            documents.add(Document.create(row[1], row[2], row[0]));
+            documents.add(new Document(row[1], row[2], row[0]));
         }
 
         DOCUMENTS_DAWID = Collections.unmodifiableList(documents);

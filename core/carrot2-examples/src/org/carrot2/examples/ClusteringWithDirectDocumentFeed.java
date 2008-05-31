@@ -59,14 +59,12 @@ public class ClusteringWithDirectDocumentFeed
         { "National Center for Data Mining (NCDM) - University of Illinois at Chicago", "http://www.ncdm.uic.edu/" },
     };
 
-    @SuppressWarnings("unchecked")
     public static void main(String [] args)
     {
         final List<Document> documents = new ArrayList<Document>();
         for (final String [] element : documentContent)
         {
-            documents.add(Document.create(element[0], "",
-                element[1]));
+            documents.add(new Document(element[0], "", element[1]));
         }
 
         final SimpleController controller = new SimpleController();

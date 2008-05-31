@@ -8,8 +8,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
-import org.carrot2.core.Cluster;
-import org.carrot2.core.ProcessingResult;
+import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.workbench.core.CorePlugin;
 import org.carrot2.workbench.core.helpers.Utils;
@@ -185,8 +184,8 @@ public class DocumentListBrowser implements IProcessingResultPart
     public void updateBrowserText(Cluster cluster)
     {
         VelocityContext context = new VelocityContext();
-        context.put("cluster", cluster);
-
+        context.put("documents", cluster.getAllDocuments(Document.BY_ID_COMPARATOR));
+        
         merge(context);
     }
 

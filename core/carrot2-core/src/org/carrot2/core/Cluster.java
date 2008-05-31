@@ -81,13 +81,14 @@ public final class Cluster
     private Double score;
 
     /** Attributes of this cluster for serialization/ deserialization purposes. */
-    @ElementMap(name = "attributes", entry = "attribute", key = "key", value="value", inline = true, attribute = true, required = false)
+    @ElementMap(name = "attributes", entry = "attribute", key = "key", value = "value", inline = true, attribute = true, required = false)
     private Map<String, TypeStringValuePair> otherAttributesAsStrings = new HashMap<String, TypeStringValuePair>();
 
     /** The actual size of this cluster, for serialization purposes only */
+    @SuppressWarnings("unused")
     @Attribute(required = false)
     private int size;
-    
+
     /**
      * List of document ids used for serialization/ deserialization purposes.
      */
@@ -131,6 +132,12 @@ public final class Cluster
     {
         addPhrases(phrase);
         addDocuments(documents);
+    }
+
+    public Cluster(String phrase, List<Cluster> subclusters)
+    {
+        addPhrases(phrase);
+        addSubclusters(subclusters);
     }
 
     /**
@@ -199,6 +206,17 @@ public final class Cluster
         }
 
         return allDocuments;
+    }
+
+    /**
+     * Returns all documents in this cluster ordered according to the provided comparator.
+     * See {@link Document} for common comparators, e.g. {@link Document#BY_ID_COMPARATOR}.
+     */
+    public List<Document> getAllDocuments(Comparator<Document> comparator)
+    {
+        final List<Document> sortedDocuments = Lists.newArrayList(getAllDocuments());
+        Collections.sort(sortedDocuments, comparator);
+        return sortedDocuments;
     }
 
     /**
