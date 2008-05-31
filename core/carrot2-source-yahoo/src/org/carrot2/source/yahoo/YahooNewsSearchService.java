@@ -19,10 +19,20 @@ import org.carrot2.util.attribute.*;
 @Bindable
 public final class YahooNewsSearchService extends YahooSearchService
 {
-    /** */
+    /**
+     * Yahoo News results sort orders.
+     */
     public enum SortType
     {
-        RANK, DATE;
+        /**
+         * Sort results by relevance 
+         */
+        RANK, 
+        
+        /**
+         * Put most recent results first. 
+         */
+        DATE;
         
         @Override
         public String toString()
@@ -45,7 +55,7 @@ public final class YahooNewsSearchService extends YahooSearchService
     @Init
     @Input
     @Attribute
-    private String serviceURI =
+    public String serviceURI =
         "http://search.yahooapis.com/NewsSearchService/V1/newsSearch";
 
     /**
@@ -60,7 +70,7 @@ public final class YahooNewsSearchService extends YahooSearchService
     @Processing
     @Input
     @Attribute
-    private String language;
+    public String language;
 
     /**
      * A domain to restrict your searches to (e.g. www.yahoo.com). TODO: maybe it would
@@ -74,10 +84,9 @@ public final class YahooNewsSearchService extends YahooSearchService
     @Attribute
     public String site;
 
-    /** */
-    public QueryType type = QueryType.ALL;
-
-    /** */
+    /**
+     * Results sort order.
+     */
     public SortType sort = SortType.RANK;
 
     /**

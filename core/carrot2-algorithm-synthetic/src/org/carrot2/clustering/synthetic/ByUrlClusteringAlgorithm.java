@@ -38,12 +38,18 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
         STOP_URL_PARTS.add("www");
     }
 
+    /**
+     * {@link Document}s to cluster.
+     */
     @Processing
     @Input
     @Internal
     @Attribute(key = AttributeNames.DOCUMENTS)
-    private Collection<Document> documents = Collections.<Document> emptyList();
+    public Collection<Document> documents = Collections.<Document> emptyList();
 
+    /**
+     * {@link Cluster}s created by the algorithm.
+     */
     @SuppressWarnings("unused")
     @Processing
     @Output

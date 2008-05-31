@@ -53,7 +53,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
     {
         FileResource.class, ParameterizedUrlResource.class, URLResource.class
     }, strict = false)
-    private Resource xml;
+    public Resource xml;
 
     /**
      * The resource to load XSLT stylesheet from. The XSLT stylesheet is optional and is
@@ -80,7 +80,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
     {
         FileResource.class, ParameterizedUrlResource.class, URLResource.class
     }, strict = false)
-    private Resource xslt;
+    public Resource xslt;
 
     /**
      * Parameters to be passed to the XSLT transformer.
@@ -92,19 +92,30 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
     @Init
     @Processing
     @Attribute
-    private Map<String, String> xsltParameters = Maps.immutableMap();
+    public Map<String, String> xsltParameters = Maps.immutableMap();
 
+    /**
+     * Query to be used to fetch the documents (see {@link #xml}). After processing, the
+     * query read from the XML data, if any.
+     */
     @Input
     @Output
     @Processing
     @Attribute(key = AttributeNames.QUERY)
-    private String query;
+    public String query;
 
+    /**
+     * The number of {@link Document}s to read from the XML data. Set to <code>-1</code>
+     * to load all {@link Document}s available in the XML data.
+     */
     @Input
     @Processing
     @Attribute(key = AttributeNames.RESULTS)
-    private int results = -1;
+    public int results = -1;
 
+    /**
+     * {@link Document}s read from the XML data.
+     */
     @Processing
     @Output
     @Attribute(key = AttributeNames.DOCUMENTS)

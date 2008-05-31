@@ -32,7 +32,7 @@ public final class YahooWebSearchService extends YahooSearchService
     @Init
     @Input
     @Attribute
-    private String serviceURI =
+    public String serviceURI =
         "http://api.search.yahoo.com/WebSearchService/V1/webSearch";
 
     /**
@@ -88,9 +88,6 @@ public final class YahooWebSearchService extends YahooSearchService
     @Input
     @Attribute
     public String region;
-
-    /** */
-    public QueryType type = QueryType.ALL;
 
     /**
      * Assembles an array of {@link NameValuePair} with request parameters.

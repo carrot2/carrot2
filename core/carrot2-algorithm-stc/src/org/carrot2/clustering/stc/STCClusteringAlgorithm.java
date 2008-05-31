@@ -20,7 +20,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     ClusteringAlgorithm
 {
     /**
-     * Input documents.
+     * {@link Document}s to cluster.
      */
     @Processing
     @Input
@@ -30,9 +30,8 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     public Collection<Document> documents;
 
     /**
-     * Output clusters.
+     * {@link Cluster}s created by the algorithm.
      */
-    @SuppressWarnings("unused")
     @Processing
     @Output
     @Attribute(key = AttributeNames.CLUSTERS)

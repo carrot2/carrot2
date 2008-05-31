@@ -45,7 +45,7 @@ public final class YahooDocumentSource extends SearchEngine
     {
         YahooWebSearchService.class, YahooNewsSearchService.class
     })
-    private YahooSearchService service = new YahooWebSearchService();
+    public YahooSearchService service = new YahooWebSearchService();
 
     /**
      * Run a single query.

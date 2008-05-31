@@ -12,6 +12,7 @@ import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.log4j.Logger;
 import org.carrot2.core.attribute.Init;
+import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.SearchEngineMetadata;
 import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.util.CloseableUtils;
@@ -25,7 +26,7 @@ import org.xml.sax.*;
  * A superclass shared between Web and News searching services.
  */
 @Bindable
-abstract class YahooSearchService
+public abstract class YahooSearchService
 {
     /** Logger for this object. */
     protected final Logger logger = Logger.getLogger(this.getClass().getName());
@@ -44,10 +45,23 @@ abstract class YahooSearchService
     protected static final Header USER_AGENT_HEADER_MOZILLA =
         new Header("User-Agent", "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:0.9.7) Gecko/20011221");
 
-    /** */
+    /**
+     * Query types. 
+     */
     public enum QueryType {
+        /**
+         * Returns results with all query terms. 
+         */
         ALL,
+        
+        /**
+         * Returns results with one or more of the query terms.
+         */
         ANY,
+        
+        /**
+         * Returns results containing the query terms as a phrase.
+         */
         PHRASE;
         
         @Override
@@ -88,7 +102,16 @@ abstract class YahooSearchService
     @Init
     @Input
     @Attribute
-    protected String appid = "carrotsearch";
+    public String appid = "carrotsearch";
+    
+    /** 
+     * Query words interpretation. 
+     */
+    @Processing
+    @Input
+    @Attribute
+    public QueryType type = QueryType.ALL;
+
 
     /**
      * Yahoo! engine current metadata.

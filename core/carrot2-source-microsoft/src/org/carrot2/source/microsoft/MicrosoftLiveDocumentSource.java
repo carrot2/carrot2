@@ -56,7 +56,7 @@ public final class MicrosoftLiveDocumentSource extends SearchEngine
     @Init
     @Input
     @Attribute
-    String appid = CARROTSEARCH_APPID;
+    public String appid = CARROTSEARCH_APPID;
 
     /**
      * Culture and language restriction.
@@ -66,7 +66,7 @@ public final class MicrosoftLiveDocumentSource extends SearchEngine
     @Input
     @Processing
     @Attribute
-    CultureInfo culture = CultureInfo.ENGLISH_UNITED_STATES;
+    public CultureInfo culture = CultureInfo.ENGLISH_UNITED_STATES;
 
     /**
      * Safe search restriction (porn filter).
@@ -76,7 +76,7 @@ public final class MicrosoftLiveDocumentSource extends SearchEngine
     @Processing
     @Input
     @Attribute
-    SafeSearch safeSearch = SafeSearch.MODERATE;
+    public SafeSearch safeSearch = SafeSearch.MODERATE;
 
     /**
      * Microsoft Live! metadata.
