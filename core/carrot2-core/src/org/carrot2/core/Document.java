@@ -52,6 +52,36 @@ public final class Document
     Integer id;
 
     /**
+     * Field used during serialization/ deserialization to preserve Carrot2 2.x format.
+     */
+    @Element(required = false)
+    private String title;
+
+    /**
+     * Field used during serialization/ deserialization to preserve Carrot2 2.x format.
+     */
+    @Element(required = false)
+    private String url;
+
+    /**
+     * Field used during serialization/ deserialization to preserve Carrot2 2.x format.
+     */
+    @Element(required = false)
+    private String snippet;
+
+    /**
+     * Field used during serialization/ deserialization.
+     */
+    @ElementList(entry = "source", required = false)
+    private List<String> sources;
+
+    /**
+     * Field used during serialization/ deserialization. 
+     */
+    @ElementMap(name = "fields", entry = "field", key = "key", value = "value", inline = true, attribute = true, required = false)
+    private Map<String, TypeStringValuePair> otherFieldsAsStrings = new HashMap<String, TypeStringValuePair>();
+
+    /**
      * Creates an empty document with no fields.
      */
     public Document()
@@ -176,36 +206,6 @@ public final class Document
                 return document.id;
             }
         }));
-
-    /**
-     * Field used during serialization/ deserialization to preserve Carrot2 2.x format.
-     */
-    @Element(required = false)
-    private String title;
-
-    /**
-     * Field used during serialization/ deserialization to preserve Carrot2 2.x format.
-     */
-    @Element(required = false)
-    private String url;
-
-    /**
-     * Field used during serialization/ deserialization to preserve Carrot2 2.x format.
-     */
-    @Element(required = false)
-    private String snippet;
-
-    /**
-     * Field used during serialization/ deserialization.
-     */
-    @ElementList(entry = "source", required = false)
-    private List<String> sources;
-
-    /**
-     * Field used during serialization/ deserialization. See
-     */
-    @ElementMap(name = "fields", entry = "field", key = "key", value = "value", inline = true, attribute = true, required = false)
-    private Map<String, TypeStringValuePair> otherFieldsAsStrings = new HashMap<String, TypeStringValuePair>();
 
     /**
      * Transfers some fields from the map to individual class fields.
