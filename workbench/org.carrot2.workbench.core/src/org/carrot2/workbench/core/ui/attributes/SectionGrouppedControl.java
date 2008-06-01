@@ -19,7 +19,7 @@ import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.Section;
 
-public class ExpandBarGrouppedControl implements IAttributesGrouppedControl
+public class SectionGrouppedControl implements IAttributesGrouppedControl
 {
 
     private Composite mainControl;

@@ -1,4 +1,4 @@
-package org.carrot2.workbench.core.ui;
+package org.carrot2.workbench.core.ui.views;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,6 +8,8 @@ import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
 import org.carrot2.workbench.core.helpers.*;
+import org.carrot2.workbench.core.ui.ResultsEditor;
+import org.carrot2.workbench.core.ui.SearchParameters;
 import org.carrot2.workbench.core.ui.attributes.AttributesPage;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;

@@ -40,7 +40,7 @@
          point="org.eclipse.ui.views">
       <view
             category="org.carrot2.workbench.core.carrot2Category"
-            class="org.carrot2.workbench.core.ui.SearchView"
+            class="org.carrot2.workbench.core.ui.views.SearchView"
             id="org.carrot2.workbench.core.search"
             name="Search">
       </view>
@@ -64,7 +64,7 @@
       </category>
       <view
             category="org.carrot2.workbench.core.carrot2Category"
-            class="org.carrot2.workbench.core.AttributesView"
+            class="org.carrot2.workbench.core.ui.views.AttributesView"
             id="org.carrot2.workbench.core.attributes"
             name="Attributes">
       </view>

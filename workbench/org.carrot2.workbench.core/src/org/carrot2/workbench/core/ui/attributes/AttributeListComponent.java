@@ -107,7 +107,7 @@ public class AttributeListComponent extends AttributesProvider implements
 
     private void createControls(Composite parent, BindableDescriptor desc)
     {
-        groupControl = new ExpandBarGrouppedControl();
+        groupControl = new SectionGrouppedControl();
         groupControl.init(desc);
         groupControl.createMainControl(parent);
         for (Object groupKey : desc.attributeGroups.keySet())

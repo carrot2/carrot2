@@ -1,4 +1,4 @@
-package org.carrot2.workbench.core;
+package org.carrot2.workbench.core.ui.views;
 
 import org.carrot2.workbench.core.ui.attributes.*;
 import org.eclipse.core.runtime.IAdaptable;

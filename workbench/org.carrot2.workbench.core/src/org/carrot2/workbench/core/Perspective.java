@@ -1,8 +1,6 @@
 package org.carrot2.workbench.core;
 
-import org.carrot2.workbench.core.ui.SearchView;
-import org.carrot2.workbench.core.ui.views.ClusterTreeView;
-import org.carrot2.workbench.core.ui.views.DocumentListView;
+import org.carrot2.workbench.core.ui.views.*;
 import org.eclipse.ui.*;
 
 public class Perspective implements IPerspectiveFactory
