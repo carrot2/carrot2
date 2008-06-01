@@ -12,36 +12,21 @@ import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.workbench.core.CorePlugin;
 import org.carrot2.workbench.core.helpers.Utils;
-import org.carrot2.workbench.core.jobs.ProcessingJob;
-import org.carrot2.workbench.core.jobs.ProcessingStatus;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.jobs.IJobChangeEvent;
-import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.viewers.*;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.*;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.*;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 
-public class DocumentListBrowser implements IProcessingResultPart
+public class DocumentListBrowser// implements IProcessingResultPart
 {
     private Browser browser;
     private ISelectionListener postSelectionListener;
     private IWorkbenchSite site;
-
-    public void init(IWorkbenchSite site, Composite parent, FormToolkit toolkit,
-        ProcessingJob job)
-    {
-        this.site = site;
-        browser = new Browser(parent, SWT.NONE);
-        attachToJobDone(job);
-        attachToSelectionChanged(site.getSelectionProvider());
-        attachToLocationChanging();
-    }
 
     public void init(IWorkbenchSite site, Composite parent)
     {
@@ -108,56 +93,6 @@ public class DocumentListBrowser implements IProcessingResultPart
         });
     }
 
-    private void attachToSelectionChanged(ISelectionProvider provider)
-    {
-        provider.addSelectionChangedListener(new ISelectionChangedListener()
-        {
-
-            public void selectionChanged(SelectionChangedEvent event)
-            {
-                if (event.getSelection().isEmpty())
-                {
-                    clear();
-                    return;
-                }
-                IStructuredSelection selection =
-                    (IStructuredSelection) event.getSelection();
-                if (selection.size() > 1)
-                {
-                    clear();
-                }
-                else
-                {
-                    updateBrowserText((Cluster) selection.getFirstElement());
-                }
-            }
-
-        });
-    }
-
-    private void attachToJobDone(ProcessingJob job)
-    {
-        job.addJobChangeListener(new JobChangeAdapter()
-        {
-            @Override
-            public void done(IJobChangeEvent event)
-            {
-                if (event.getResult().getSeverity() == IStatus.OK)
-                {
-                    final ProcessingResult result =
-                        ((ProcessingStatus) event.getResult()).result;
-                    Utils.asyncExec(new Runnable()
-                    {
-                        public void run()
-                        {
-                            updateBrowserText(result);
-                        }
-                    });
-                }
-            }
-        });
-    }
-
     public void populateToolbar(IToolBarManager manager)
     {
     }
@@ -185,7 +120,7 @@ public class DocumentListBrowser implements IProcessingResultPart
     {
         VelocityContext context = new VelocityContext();
         context.put("documents", cluster.getAllDocuments(Document.BY_ID_COMPARATOR));
-        
+
         merge(context);
     }
 

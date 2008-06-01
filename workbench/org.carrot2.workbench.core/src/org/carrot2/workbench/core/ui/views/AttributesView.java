@@ -14,7 +14,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
  * 
  * It works similar to Outline view: every time new editor is activated, and it is
  * {@link IAdaptable} and it adapts to {@link AttributesProvider}, new page in this view
- * is created using provider's {@link AttributesProvider#createBindableDescriptor()} as a
+ * is created using provider's {@link AttributesProvider#getBindableDescriptor()} as a
  * source of attributes to display. If attributes are groupped, than appropriate groups
  * are displayed.
  */
@@ -42,8 +42,9 @@ public class AttributesView extends PageBookView
         {
             return null;
         }
-        final AttributesProvider provider =
-            (AttributesProvider) ((IAdaptable) part).getAdapter(AttributesProvider.class);
+        final AttributeListComponent provider =
+            (AttributeListComponent) ((IAdaptable) part)
+                .getAdapter(AttributeListComponent.class);
         if (provider == null)
         {
             return null;
@@ -57,7 +58,7 @@ public class AttributesView extends PageBookView
             public void createControl(Composite parent)
             {
                 component = new AttributeListComponent();
-                component.init(parent, provider);
+                component.init(parent, provider.getBindableDescriptor());
                 AttributesSynchronizer.synchronize(provider, component);
             }
 

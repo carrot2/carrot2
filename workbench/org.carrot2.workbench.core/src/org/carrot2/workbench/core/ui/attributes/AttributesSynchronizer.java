@@ -11,28 +11,41 @@ import org.eclipse.jface.util.PropertyChangeEvent;
  */
 public class AttributesSynchronizer
 {
-    public static void synchronize(final AttributesProvider provider1,
-        final AttributesProvider provider2)
+    public static void synchronize(final AttributeListComponent editorProvider,
+        final AttributeListComponent viewProvider)
     {
-        synchronizeOneWay(provider1, provider2);
-        synchronizeOneWay(provider2, provider1);
-    }
-
-    private static void synchronizeOneWay(final AttributesProvider provider1,
-        final AttributesProvider provider2)
-    {
-        provider1.addAttributeChangeListener(new AttributeChangeListener()
+        editorProvider.addAttributeChangeListener(new AttributeChangeListener()
         {
             public void attributeChange(AttributeChangeEvent event)
             {
-                provider2.setAttributeValue(event.key, event.value);
+                viewProvider.setAttributeValue(event.key, event.value, false);
             }
         });
-        provider1.addPropertyChangeListener(new IPropertyChangeListener()
+        editorProvider.addPropertyChangeListener(new IPropertyChangeListener()
         {
             public void propertyChange(PropertyChangeEvent event)
             {
-                provider2.setPropertyValue(event.getProperty(), event.getNewValue());
+                if (event.getProperty().equals(AttributeListComponent.LIVE_UPDATE))
+                {
+                    viewProvider.setLiveUpdate((Boolean) event.getNewValue(), false);
+                }
+            }
+        });
+        viewProvider.addAttributeChangeListener(new AttributeChangeListener()
+        {
+            public void attributeChange(AttributeChangeEvent event)
+            {
+                editorProvider.setAttributeValue(event.key, event.value);
+            }
+        });
+        viewProvider.addPropertyChangeListener(new IPropertyChangeListener()
+        {
+            public void propertyChange(PropertyChangeEvent event)
+            {
+                if (event.getProperty().equals(AttributeListComponent.LIVE_UPDATE))
+                {
+                    editorProvider.setLiveUpdate((Boolean) event.getNewValue());
+                }
             }
         });
     }

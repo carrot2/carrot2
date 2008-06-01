@@ -2,19 +2,25 @@ package org.carrot2.workbench.core.ui;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.carrot2.core.ProcessingResult;
-import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.core.attribute.*;
+import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.core.jobs.ProcessingJob;
 import org.carrot2.workbench.core.jobs.ProcessingStatus;
 import org.carrot2.workbench.core.ui.attributes.AttributeListComponent;
-import org.carrot2.workbench.core.ui.attributes.AttributesProvider;
 import org.carrot2.workbench.core.ui.clusters.ClusterTreeComponent;
+import org.carrot2.workbench.editors.AttributeChangeEvent;
+import org.carrot2.workbench.editors.AttributeChangeListener;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.action.*;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.DisposeEvent;
@@ -58,15 +64,11 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
 
     private ProcessingResult currentContent;
     private Image sourceImage;
-    private IProcessingResultPart [] parts =
-        {
-            new ClusterTreeComponent(), new DocumentListBrowser(),
-            new AttributeListComponent()
-        };
     private int [] weights =
     {
         1, 2, 2
     };
+    private AttributeListComponent attributeList = new AttributeListComponent();
 
     private FormToolkit toolkit;
 
@@ -77,6 +79,10 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
     private Section [] sections;
 
     private IMemento state;
+
+    private ClusterTreeComponent tree;
+
+    private DocumentListBrowser browser;
 
     @Override
     public void createPartControl(Composite parent)
@@ -132,20 +138,21 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
         final ProcessingJob job =
             new ProcessingJob("Processing of a query",
                 (SearchParameters) getEditorInput());
-        sections = new Section [parts.length];
-        for (int i = 0; i < parts.length; i++)
+        sections = new Section [3];
+        for (int i = 0; i < 3; i++)
         {
-            IProcessingResultPart part = parts[i];
             Section sec =
                 toolkit.createSection(parent, ExpandableComposite.EXPANDED
                     | ExpandableComposite.TITLE_BAR);
-            sec.setText(part.getPartName());
-            IToolBarManager manager = createToolbarManager(sec);
-            part.init(getSite(), sec, toolkit, job);
-            part.populateToolbar(manager);
-            sec.setClient(part.getControl());
             sections[i] = sec;
         }
+        IToolBarManager manager = createToolbarManager(sections[0]);
+        createClustersPart(sections[0], manager, job, getSite());
+        manager = createToolbarManager(sections[1]);
+        createDocumentsPart(sections[1], manager, job, getSite());
+        manager = createToolbarManager(sections[2]);
+        createAttributesPart(sections[2], manager, job, getSite());
+
         restorePartVisibilityFromState();
         job.addJobChangeListener(new JobChangeAdapter()
         {
@@ -200,6 +207,101 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
 
         section.setTextClient(toolbar);
         return toolBarManager;
+    }
+
+    private void createClustersPart(Section sec, IToolBarManager manager,
+        ProcessingJob job, IWorkbenchSite site)
+    {
+        tree = new ClusterTreeComponent();
+        sec.setText("Clusters");
+        tree.init(site, sec);
+        job.addJobChangeListener(new JobChangeAdapter()
+        {
+            @Override
+            public void done(IJobChangeEvent event)
+            {
+                if (event.getResult().getSeverity() == IStatus.OK)
+                {
+                    final ProcessingResult result =
+                        ((ProcessingStatus) event.getResult()).result;
+                    tree.setClusters(result);
+                }
+            }
+        });
+        tree.populateToolbar(manager);
+        sec.setClient(tree.getControl());
+    }
+
+    private void createDocumentsPart(Section sec, IToolBarManager manager,
+        ProcessingJob job, IWorkbenchSite site)
+    {
+        browser = new DocumentListBrowser();
+        sec.setText("Documents");
+        browser.init(site, sec);
+        job.addJobChangeListener(new JobChangeAdapter()
+        {
+            @Override
+            public void done(IJobChangeEvent event)
+            {
+                if (event.getResult().getSeverity() == IStatus.OK)
+                {
+                    final ProcessingResult result =
+                        ((ProcessingStatus) event.getResult()).result;
+                    Utils.asyncExec(new Runnable()
+                    {
+                        public void run()
+                        {
+                            browser.updateBrowserText(result);
+                        }
+                    });
+                }
+            }
+        });
+        browser.populateToolbar(manager);
+        sec.setClient(browser.getControl());
+    }
+
+    @SuppressWarnings("unchecked")
+    private void createAttributesPart(Section sec, IToolBarManager manager,
+        final ProcessingJob job, IWorkbenchSite site)
+    {
+        attributeList = new AttributeListComponent();
+        GroupingMethod method = GroupingMethod.GROUP;
+        BindableDescriptor desc =
+            BindableDescriptorBuilder.buildDescriptor(job.algorithm
+                .getExecutableComponent());
+        desc = desc.only(Input.class, Processing.class).not(Internal.class).group(method);
+
+        attributeList.init(sec, desc);
+        attributeList.addAttributeChangeListener(new AttributeChangeListener()
+        {
+            public void attributeChange(AttributeChangeEvent event)
+            {
+                job.attributes.put(event.key, event.value);
+                if (attributeList.isLiveUpdateEnabled())
+                {
+                    job.schedule();
+                }
+            }
+        });
+        attributeList.addPropertyChangeListener(new IPropertyChangeListener()
+        {
+            public void propertyChange(PropertyChangeEvent event)
+            {
+                if (event.getProperty().equals(AttributeListComponent.LIVE_UPDATE))
+                {
+                    if ((Boolean) event.getNewValue())
+                    {
+                        job.schedule();
+                    }
+                }
+            }
+        });
+        toolkit.adapt((Composite) attributeList.getControl());
+        toolkit.paintBordersFor((Composite) attributeList.getControl());
+        UiFormUtils.adaptToFormUI(toolkit, attributeList.getControl());
+        attributeList.populateToolbar(manager);
+        sec.setClient(attributeList.getControl());
     }
 
     private void setBusy(final boolean busy)
@@ -274,11 +376,9 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
     {
         toolkit.dispose();
         sourceImage.dispose();
-        for (int i = 0; i < parts.length; i++)
-        {
-            IProcessingResultPart part = parts[i];
-            part.dispose();
-        }
+        tree.dispose();
+        browser.dispose();
+        attributeList.dispose();
         super.dispose();
     }
 
@@ -396,9 +496,9 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
     @Override
     public Object getAdapter(Class adapter)
     {
-        if (AttributesProvider.class.equals(adapter))
+        if (AttributeListComponent.class.equals(adapter))
         {
-            return (AttributesProvider) parts[2];
+            return attributeList;
         }
         return super.getAdapter(adapter);
     }
