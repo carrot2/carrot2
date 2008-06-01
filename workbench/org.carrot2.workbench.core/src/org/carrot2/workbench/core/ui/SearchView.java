@@ -1,6 +1,7 @@
 package org.carrot2.workbench.core.ui;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.carrot2.core.ProcessingComponent;
 import org.carrot2.core.attribute.Internal;
@@ -13,11 +14,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.*;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Resource;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.*;
-import org.eclipse.ui.part.PageSite;
 import org.eclipse.ui.part.ViewPart;
 
 public class SearchView extends ViewPart
@@ -49,7 +48,6 @@ public class SearchView extends ViewPart
     private ComboViewer sourceViewer;
     private ComboViewer algorithmViewer;
     private Button processButton;
-    private java.util.List<Resource> toDispose = new ArrayList<Resource>();
     private Map<String, AttributesPage> attributesPages =
         new HashMap<String, AttributesPage>();
 
@@ -134,7 +132,6 @@ public class SearchView extends ViewPart
                     source.getClass(),
                     BindableDescriptorBuilder.buildDescriptor(source).only(Input.class,
                         Processing.class, Required.class).not(Internal.class).flatten().attributeDescriptors);
-            page.init(new PageSite(this.getViewSite()));
             page.createControl(requiredAttributes);
             attributesPages.put(wrapper.getId(), page);
         }
@@ -307,9 +304,9 @@ public class SearchView extends ViewPart
     @Override
     public void dispose()
     {
-        for (Resource resource : toDispose)
+        for (AttributesPage page : this.attributesPages.values())
         {
-            resource.dispose();
+            page.dispose();
         }
         super.dispose();
     }

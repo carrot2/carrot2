@@ -12,11 +12,10 @@ import org.carrot2.workbench.editors.AttributeChangeEvent;
 import org.carrot2.workbench.editors.AttributeChangeListener;
 import org.eclipse.jface.action.*;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.viewers.ISelectionProvider;
-import org.eclipse.swt.widgets.*;
-import org.eclipse.ui.*;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.part.IPageSite;
 
 public class AttributeListComponent extends AttributesProvider implements
     IProcessingResultPart
@@ -79,7 +78,6 @@ public class AttributeListComponent extends AttributesProvider implements
     private AttributeChangeListener listener;
     private LiveUpdateAction liveUpdateAction;
 
-    @SuppressWarnings("unchecked")
     public void init(final IWorkbenchSite site, Composite parent, FormToolkit toolkit,
         ProcessingJob job)
     {
@@ -96,61 +94,8 @@ public class AttributeListComponent extends AttributesProvider implements
                 fireAttributeChanged(event);
             }
         };
-        IPageSite pageSite = new IPageSite()
-        {
-
-            public IActionBars getActionBars()
-            {
-                return null;
-            }
-
-            public void registerContextMenu(String menuId, MenuManager menuManager,
-                ISelectionProvider selectionProvider)
-            {
-            }
-
-            public IWorkbenchPage getPage()
-            {
-                return site.getPage();
-            }
-
-            public ISelectionProvider getSelectionProvider()
-            {
-                return site.getSelectionProvider();
-            }
-
-            public Shell getShell()
-            {
-                return site.getShell();
-            }
-
-            public IWorkbenchWindow getWorkbenchWindow()
-            {
-                return site.getWorkbenchWindow();
-            }
-
-            public void setSelectionProvider(ISelectionProvider provider)
-            {
-            }
-
-            public Object getAdapter(Class adapter)
-            {
-                return site.getAdapter(adapter);
-            }
-
-            public Object getService(Class api)
-            {
-                return site.getService(api);
-            }
-
-            public boolean hasService(Class api)
-            {
-                return site.hasService(api);
-            }
-
-        };
         BindableDescriptor desc = createBindableDescriptor();
-        createControls(parent, pageSite, desc);
+        createControls(parent, desc);
         for (AttributesPage page : groupControl.getPages())
         {
             page.addAttributeChangeListener(listener);
@@ -160,11 +105,10 @@ public class AttributeListComponent extends AttributesProvider implements
         UiFormUtils.adaptToFormUI(toolkit, groupControl.getControl());
     }
 
-    private void createControls(Composite parent, IPageSite pageSite,
-        BindableDescriptor desc)
+    private void createControls(Composite parent, BindableDescriptor desc)
     {
         groupControl = new ExpandBarGrouppedControl();
-        groupControl.init(desc, pageSite);
+        groupControl.init(desc);
         groupControl.createMainControl(parent);
         for (Object groupKey : desc.attributeGroups.keySet())
         {
@@ -172,10 +116,9 @@ public class AttributeListComponent extends AttributesProvider implements
         }
     }
 
-    public void init(final IPageSite site, Composite parent,
-        final AttributesProvider provider)
+    public void init(Composite parent, final AttributesProvider provider)
     {
-        createControls(parent, site, provider.createBindableDescriptor());
+        createControls(parent, provider.createBindableDescriptor());
         groupControl.addAttributeChangeListener(new AttributeChangeListener()
         {
             public void attributeChange(AttributeChangeEvent event)

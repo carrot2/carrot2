@@ -57,7 +57,7 @@ public class AttributesView extends PageBookView
             public void createControl(Composite parent)
             {
                 component = new AttributeListComponent();
-                component.init(this.getSite(), parent, provider);
+                component.init(parent, provider);
                 AttributesSynchronizer.synchronize(provider, component);
             }
 

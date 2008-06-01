@@ -6,7 +6,6 @@ import org.carrot2.util.attribute.BindableDescriptor;
 import org.carrot2.workbench.editors.AttributeChangeEvent;
 import org.carrot2.workbench.editors.AttributeChangeListener;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.part.IPageSite;
 
 /**
  * Implementing classes create grouping control, that {@link AttributesPage} can be put
@@ -20,7 +19,7 @@ import org.eclipse.ui.part.IPageSite;
  */
 public interface IAttributesGrouppedControl
 {
-    void init(BindableDescriptor descriptor, IPageSite site);
+    void init(BindableDescriptor descriptor);
 
     /**
      * Creates control, that will store one group only.

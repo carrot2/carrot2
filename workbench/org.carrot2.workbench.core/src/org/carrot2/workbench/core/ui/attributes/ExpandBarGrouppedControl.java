@@ -18,7 +18,6 @@ import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.Section;
-import org.eclipse.ui.part.IPageSite;
 
 public class ExpandBarGrouppedControl implements IAttributesGrouppedControl
 {
@@ -26,12 +25,10 @@ public class ExpandBarGrouppedControl implements IAttributesGrouppedControl
     private Composite mainControl;
     private java.util.List<AttributesPage> pages = new ArrayList<AttributesPage>();
     private BindableDescriptor descriptor;
-    private IPageSite site;
 
-    public void init(BindableDescriptor descriptor, IPageSite site)
+    public void init(BindableDescriptor descriptor)
     {
         this.descriptor = descriptor;
-        this.site = site;
     }
 
     @SuppressWarnings("unchecked")
@@ -45,7 +42,6 @@ public class ExpandBarGrouppedControl implements IAttributesGrouppedControl
         AttributesPage page =
             new AttributesPage((Class<? extends ProcessingComponent>) descriptor.type,
                 descriptor.attributeGroups.get(label));
-        page.init(site);
 
         Composite inner = new Composite(group, SWT.NONE);
         GridLayout layout = new GridLayout();

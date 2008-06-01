@@ -14,12 +14,11 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IPersistableEditor;
-import org.eclipse.ui.part.Page;
 
 /**
  * 
  */
-public class AttributesPage extends Page implements IPersistableEditor
+public class AttributesPage implements IPersistableEditor
 {
     private final Map<String, AttributeDescriptor> attributeDescriptors;
     private Class<? extends ProcessingComponent> clazz;
@@ -43,7 +42,6 @@ public class AttributesPage extends Page implements IPersistableEditor
      * certain attributes not to be shown, you can also use
      * {@link AttributesPage#ignoreAttributes(String...)} method.
      */
-    @Override
     public void createControl(Composite parent)
     {
         initLayout(parent);
@@ -99,7 +97,6 @@ public class AttributesPage extends Page implements IPersistableEditor
         root.setSize(root.computeSize(SWT.DEFAULT, SWT.DEFAULT));
     }
 
-    @Override
     public Control getControl()
     {
         //BugFixed(CARROT-210)
@@ -114,19 +111,12 @@ public class AttributesPage extends Page implements IPersistableEditor
         }
     }
 
-    @Override
-    public void setFocus()
-    {
-    }
-
-    @Override
     public void dispose()
     {
         for (IAttributeEditor editor : editors)
         {
             editor.dispose();
         }
-        super.dispose();
     }
 
     public void restoreState(IMemento memento)
