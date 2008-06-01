@@ -21,10 +21,63 @@ import org.eclipse.ui.part.IPageSite;
 public class AttributeListComponent extends AttributesProvider implements
     IProcessingResultPart
 {
+    private final class LiveUpdateAction extends Action
+    {
+        private LiveUpdateAction(String text, int style)
+        {
+            super(text, style);
+        }
+
+        @Override
+        public void run()
+        {
+            runCore();
+            AttributeListComponent.this.filePropertyChanged(LIVE_UPDATE, !isChecked(),
+                isChecked());
+        }
+
+        public void runCore()
+        {
+            firePropertyChange(IAction.TOOL_TIP_TEXT, getToolTip(!isChecked()),
+                getToolTip(isChecked()));
+            if (isChecked() && processingJob != null)
+            {
+                processingJob.schedule();
+            }
+        }
+
+        @Override
+        public ImageDescriptor getImageDescriptor()
+        {
+            return CorePlugin.getImageDescriptor("icons/synced.gif");
+        }
+
+        private String getToolTip(boolean isOn)
+        {
+            if (isOn)
+            {
+                return "Live Update On";
+            }
+            else
+            {
+                return "Live Update Off";
+            }
+        }
+
+        @Override
+        public String getToolTipText()
+        {
+            return getToolTip(isChecked());
+        }
+    }
+
+    //property ids
+    public static final String LIVE_UPDATE = "live_update";
+
     private ProcessingJob processingJob;
     private IAttributesGrouppedControl groupControl;
     private AttributeChangeListener listener;
-    private volatile boolean liveUpdate = true;
+    private LiveUpdateAction liveUpdateAction;
 
     @SuppressWarnings("unchecked")
     public void init(final IWorkbenchSite site, Composite parent, FormToolkit toolkit,
@@ -36,7 +89,7 @@ public class AttributeListComponent extends AttributesProvider implements
             public void attributeChange(AttributeChangeEvent event)
             {
                 processingJob.attributes.put(event.key, event.value);
-                if (liveUpdate)
+                if (liveUpdateAction.isChecked())
                 {
                     processingJob.schedule();
                 }
@@ -123,59 +176,20 @@ public class AttributeListComponent extends AttributesProvider implements
         final AttributesProvider provider)
     {
         createControls(parent, site, provider.createBindableDescriptor());
-        provider.addAttributeChangeListener(new AttributeChangeListener()
-        {
-            public void attributeChange(AttributeChangeEvent event)
-            {
-                groupControl.setAttributeValue(event.key, event.value);
-            }
-        });
         groupControl.addAttributeChangeListener(new AttributeChangeListener()
         {
             public void attributeChange(AttributeChangeEvent event)
             {
-                provider.setAttributeValue(event.key, event.value);
+                fireAttributeChanged(event);
             }
         });
     }
 
     public void populateToolbar(IToolBarManager manager)
     {
-        IAction liveUpdateAction =
-            new Action("Attributes live update", IAction.AS_CHECK_BOX)
-            {
-                @Override
-                public void run()
-                {
-                    String tooltip = getToolTipText();
-                    liveUpdate = !liveUpdate;
-                    if (liveUpdate)
-                    {
-                        processingJob.schedule();
-                    }
-                    firePropertyChange(IAction.TOOL_TIP_TEXT, tooltip, getToolTipText());
-                }
-
-                @Override
-                public ImageDescriptor getImageDescriptor()
-                {
-                    return CorePlugin.getImageDescriptor("icons/synced.gif");
-                }
-
-                @Override
-                public String getToolTipText()
-                {
-                    if (liveUpdate)
-                    {
-                        return "Live Update On";
-                    }
-                    else
-                    {
-                        return "Live Update Off";
-                    }
-                }
-            };
-        liveUpdateAction.setChecked(liveUpdate);
+        liveUpdateAction =
+            new LiveUpdateAction("Attributes live update", IAction.AS_CHECK_BOX);
+        liveUpdateAction.setChecked(true);
         manager.add(liveUpdateAction);
         manager.update(true);
     }
@@ -227,6 +241,16 @@ public class AttributeListComponent extends AttributesProvider implements
         if (listener != null)
         {
             listener.attributeChange(new AttributeChangeEvent(this, key, value));
+        }
+    }
+
+    @Override
+    public void setPropertyValue(String key, Object value)
+    {
+        if (key.equals(LIVE_UPDATE))
+        {
+            liveUpdateAction.setChecked((Boolean) value);
+            liveUpdateAction.runCore();
         }
     }
 }

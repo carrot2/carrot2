@@ -1,7 +1,6 @@
 package org.carrot2.workbench.core;
 
-import org.carrot2.workbench.core.ui.attributes.AttributeListComponent;
-import org.carrot2.workbench.core.ui.attributes.AttributesProvider;
+import org.carrot2.workbench.core.ui.attributes.*;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
@@ -59,6 +58,7 @@ public class AttributesView extends PageBookView
             {
                 component = new AttributeListComponent();
                 component.init(this.getSite(), parent, provider);
+                AttributesSynchronizer.synchronize(provider, component);
             }
 
             @Override
