@@ -53,7 +53,7 @@ public class ComponentLoader
      * cached, so only first invocation actually reads the registry.
      * 
      * @return captions for all components of a given type
-     * @see ComponentLoader#ComponentLoader(String, String, String, String)
+     * @see ComponentLoader#ComponentLoader(String, String, String, String, String)
      */
     public List<String> getCaptions()
     {

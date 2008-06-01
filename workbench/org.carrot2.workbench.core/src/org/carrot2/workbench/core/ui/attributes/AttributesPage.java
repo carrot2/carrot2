@@ -37,10 +37,7 @@ public class AttributesPage implements IPersistableEditor
     }
 
     /**
-     * Creates editors for attributes of component given in constructor. You can filter
-     * attributes using {@link AttributesPage#filterAttributes(Class...)}. If you want
-     * certain attributes not to be shown, you can also use
-     * {@link AttributesPage#ignoreAttributes(String...)} method.
+     * Creates editors for attributes of component given in constructor.
      */
     public void createControl(Composite parent)
     {

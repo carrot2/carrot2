@@ -33,7 +33,7 @@ public abstract class ExtensionWrapperBase
      * @return value of given attribute or null, if attribute does not exist
      * @throws IllegalArgumentException if attribute with given name does not exist and
      *             <code>throwOnError</code> is true
-     * @see ExtensionWrapperBase#getAttribute(IConfigurationElement)
+     * @see ExtensionWrapperBase#getAttribute(IConfigurationElement, String)
      */
     protected String getAttribute(IConfigurationElement element, String attName,
         boolean throwOnError)
@@ -73,7 +73,7 @@ public abstract class ExtensionWrapperBase
      * @return value of given attribute or null, if attribute does not exist
      * @throws IllegalArgumentException if attribute with given name does not exist and
      *             <code>throwOnError</code> is true
-     * @see ExtensionWrapperBase#getAttribute(IConfigurationElement)
+     * @see ExtensionWrapperBase#getBooleanAttribute(IConfigurationElement, String)
      */
     protected boolean getBooleanAttribute(IConfigurationElement element, String attName,
         boolean throwOnError, boolean defaultValue)

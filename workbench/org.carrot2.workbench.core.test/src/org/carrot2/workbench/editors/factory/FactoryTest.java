@@ -36,7 +36,7 @@ public class FactoryTest extends TestCase
         }
         catch (EditorNotFoundException e)
         {
-            // TODO: handle exception
+            // should happen
         }
     }
 
@@ -51,7 +51,7 @@ public class FactoryTest extends TestCase
         }
         catch (EditorNotFoundException e)
         {
-            // TODO: handle exception
+            // should happen
         }
         checkEditor(SubEditor.class, "subAttribute");
         checkEditor(SubEditor.class, "subRangeAttribute");

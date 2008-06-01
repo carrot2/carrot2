@@ -27,10 +27,7 @@ public interface IAttributesGrouppedControl
      * Each group should be places on a main control.
      * </p>
      * 
-     * @param parent the parent control
      * @param label group label
-     * @param attributes page, that displays editors for attributes in the group. Page was
-     *            created using mainControl as a parent;
      * @see BindableDescriptor#attributeGroups
      */
     void createGroup(Object label);
