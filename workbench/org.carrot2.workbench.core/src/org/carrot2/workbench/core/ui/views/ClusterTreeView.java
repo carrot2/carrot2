@@ -2,20 +2,16 @@ package org.carrot2.workbench.core.ui.views;
 
 import org.carrot2.workbench.core.ui.ResultsEditor;
 import org.carrot2.workbench.core.ui.clusters.ClusterTreeComponent;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.*;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 public class ClusterTreeView extends PageBookView
 {
 
     public static final String ID = "org.carrot2.workbench.core.clusters";
-
-    private Image titleImage;
 
     @Override
     protected IPage createDefaultPage(PageBook book)
@@ -95,22 +91,4 @@ public class ClusterTreeView extends PageBookView
         return (part instanceof IEditorPart);
     }
 
-    @Override
-    public Image getTitleImage()
-    {
-        titleImage =
-            AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.ui",
-                "icons/full/eview16/filenav_nav.gif").createImage();
-        return titleImage;
-    }
-
-    @Override
-    public void dispose()
-    {
-        if (titleImage != null && !titleImage.isDisposed())
-        {
-            titleImage.dispose();
-        }
-        super.dispose();
-    }
 }

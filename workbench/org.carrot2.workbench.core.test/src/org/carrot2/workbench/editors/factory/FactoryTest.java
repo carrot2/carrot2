@@ -17,7 +17,7 @@ public class FactoryTest extends TestCase
     protected void setUp() throws Exception
     {
         c = TestComponent.class;
-        desc = BindableDescriptorBuilder.buildDescriptor(c, false);
+        desc = BindableDescriptorBuilder.buildDescriptor(c.newInstance(), false);
     }
 
     public void testFindDedicatedEditor()

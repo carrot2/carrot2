@@ -17,7 +17,13 @@
             class="org.carrot2.workbench.core.Perspective"
             icon="icons/results.png"
             id="org.carrot2.workbench.core.perspective"
-            name="Carrot2">
+            name="Search">
+      </perspective>
+      <perspective
+            class="org.carrot2.workbench.core.TuningPerspective"
+            icon="icons/attributes.gif"
+            id="org.carrot2.workbench.core.tuning"
+            name="Tuning">
       </perspective>
    </extension>
    <extension
@@ -48,6 +54,7 @@
             allowMultiple="false"
             category="org.carrot2.workbench.core.carrot2Category"
             class="org.carrot2.workbench.core.ui.views.DocumentListView"
+            icon="icons/documents.gif"
             id="org.carrot2.workbench.core.documents"
             name="Documents">
       </view>
@@ -55,6 +62,7 @@
             allowMultiple="false"
             category="org.carrot2.workbench.core.carrot2Category"
             class="org.carrot2.workbench.core.ui.views.ClusterTreeView"
+            icon="icons/clusters.gif"
             id="org.carrot2.workbench.core.clusters"
             name="Clusters">
       </view>
@@ -65,6 +73,7 @@
       <view
             category="org.carrot2.workbench.core.carrot2Category"
             class="org.carrot2.workbench.core.ui.views.AttributesView"
+            icon="icons/attributes.gif"
             id="org.carrot2.workbench.core.attributes"
             name="Attributes">
       </view>

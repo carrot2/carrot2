@@ -1,13 +1,12 @@
 package org.carrot2.workbench.core.ui.views;
 
-import org.carrot2.workbench.core.ui.attributes.*;
+import org.carrot2.workbench.core.ui.attributes.AttributeListComponent;
+import org.carrot2.workbench.core.ui.attributes.AttributesSynchronizer;
 import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.*;
 import org.eclipse.ui.part.*;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 /**
  * View showing attribute values for active editor.
@@ -22,8 +21,6 @@ public class AttributesView extends PageBookView
 {
 
     public static final String ID = "org.carrot2.workbench.core.attributes";
-
-    private Image titleImage;
 
     @Override
     protected IPage createDefaultPage(PageBook book)
@@ -109,25 +106,6 @@ public class AttributesView extends PageBookView
     protected boolean isImportant(IWorkbenchPart part)
     {
         return (part instanceof IEditorPart);
-    }
-
-    @Override
-    public Image getTitleImage()
-    {
-        titleImage =
-            AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.ui",
-                "icons/full/obj16/generic_elements.gif").createImage();
-        return titleImage;
-    }
-
-    @Override
-    public void dispose()
-    {
-        if (titleImage != null && !titleImage.isDisposed())
-        {
-            titleImage.dispose();
-        }
-        super.dispose();
     }
 
 }
