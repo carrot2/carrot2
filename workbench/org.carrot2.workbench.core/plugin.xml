@@ -43,6 +43,7 @@
       </product>
    </extension>
    <extension
+         id="views"
          point="org.eclipse.ui.views">
       <view
             category="org.carrot2.workbench.core.carrot2Category"

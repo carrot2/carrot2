@@ -1,19 +1,23 @@
 package org.carrot2.workbench.core.ui;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.commons.lang.ArrayUtils;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.*;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
+import org.carrot2.workbench.core.CorePlugin;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.core.jobs.ProcessingJob;
 import org.carrot2.workbench.core.jobs.ProcessingStatus;
 import org.carrot2.workbench.core.ui.attributes.AttributeListComponent;
 import org.carrot2.workbench.core.ui.clusters.ClusterTreeComponent;
+import org.carrot2.workbench.core.ui.views.*;
 import org.carrot2.workbench.editors.AttributeChangeEvent;
 import org.carrot2.workbench.editors.AttributeChangeListener;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.*;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.action.*;
@@ -33,7 +37,6 @@ import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.*;
 import org.eclipse.ui.forms.widgets.*;
 import org.eclipse.ui.part.EditorPart;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 public class ResultsEditor extends EditorPart implements IPersistableEditor
 {
@@ -114,18 +117,29 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
 
     private void createActions()
     {
+        IExtension ext =
+            Platform.getExtensionRegistry().getExtension("org.eclipse.ui.views",
+                "org.carrot2.workbench.core.views");
+        Map<String, ImageDescriptor> icons = new HashMap<String, ImageDescriptor>();
+        for (int i = 0; i < ext.getConfigurationElements().length; i++)
+        {
+            IConfigurationElement view = ext.getConfigurationElements()[i];
+            if (view.getName().equals("view") && view.getAttribute("icon") != null)
+            {
+                icons.put(view.getAttribute("id"), CorePlugin.getImageDescriptor(view
+                    .getAttribute("icon")));
+            }
+        }
+
         rootForm.getMenuManager().add(
             new VisibilityToogleAction("Show Clusters", 0, (Boolean) sections[0]
-                .getData("visible"), AbstractUIPlugin.imageDescriptorFromPlugin(
-                "org.eclipse.ui", "icons/full/eview16/filenav_nav.gif")));
+                .getData("visible"), icons.get(ClusterTreeView.ID)));
         rootForm.getMenuManager().add(
             new VisibilityToogleAction("Show Documents", 1, (Boolean) sections[1]
-                .getData("visible"), AbstractUIPlugin.imageDescriptorFromPlugin(
-                "org.eclipse.ui", "icons/full/obj16/file_obj.gif")));
+                .getData("visible"), icons.get(DocumentListView.ID)));
         rootForm.getMenuManager().add(
             new VisibilityToogleAction("Show Attributes", 2, (Boolean) sections[2]
-                .getData("visible"), AbstractUIPlugin.imageDescriptorFromPlugin(
-                "org.eclipse.ui", "icons/full/obj16/generic_elements.gif")));
+                .getData("visible"), icons.get(AttributesView.ID)));
         rootForm.getMenuManager().update();
 
         IAction a = new SaveToXmlAction();
