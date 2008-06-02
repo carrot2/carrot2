@@ -33,6 +33,11 @@ public interface IAttributesGrouppedControl
     void createGroup(Object label);
 
     /**
+     * Creates control, that will store attributes outside of any group.
+     */
+    void createOthers();
+
+    /**
      * Creates one main control, that all the groups will be placed on.
      * 
      * @param parent the parent control, which should be used as the parent for all

@@ -3,10 +3,10 @@ package org.carrot2.workbench.core.ui.attributes;
 import static org.eclipse.swt.SWT.DEFAULT;
 import static org.eclipse.swt.SWT.NONE;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import org.carrot2.core.ProcessingComponent;
+import org.carrot2.util.attribute.AttributeDescriptor;
 import org.carrot2.util.attribute.BindableDescriptor;
 import org.carrot2.workbench.editors.AttributeChangeListener;
 import org.eclipse.swt.SWT;
@@ -31,17 +31,27 @@ public class SectionGrouppedControl implements IAttributesGrouppedControl
         this.descriptor = descriptor;
     }
 
-    @SuppressWarnings("unchecked")
     public void createGroup(Object label)
+    {
+        createGroup(label.toString(), descriptor.attributeGroups.get(label));
+    }
+
+    public void createOthers()
+    {
+        createGroup("Other", descriptor.attributeDescriptors);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void createGroup(String text, Map<String, AttributeDescriptor> attributes)
     {
         final Section group =
             new Section(mainControl, ExpandableComposite.TWISTIE
                 | ExpandableComposite.CLIENT_INDENT);
-        group.setText(label.toString());
+        group.setText(text);
         group.setSeparatorControl(new Label(group, SWT.SEPARATOR | SWT.HORIZONTAL));
         AttributesPage page =
             new AttributesPage((Class<? extends ProcessingComponent>) descriptor.type,
-                descriptor.attributeGroups.get(label));
+                attributes);
 
         Composite inner = new Composite(group, SWT.NONE);
         GridLayout layout = new GridLayout();

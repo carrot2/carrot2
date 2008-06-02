@@ -88,6 +88,10 @@ public class AttributeListComponent
         {
             groupControl.createGroup(groupKey);
         }
+        if (!descriptor.attributeDescriptors.isEmpty())
+        {
+            groupControl.createOthers();
+        }
     }
 
     public void init(Composite parent, final BindableDescriptor desc)
@@ -130,11 +134,6 @@ public class AttributeListComponent
             page.removeAttributeChangeListener(listener);
         }
         groupControl.dispose();
-    }
-
-    public String getPartName()
-    {
-        return "Attributes";
     }
 
     public BindableDescriptor getBindableDescriptor()
