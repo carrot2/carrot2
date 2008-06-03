@@ -1,7 +1,6 @@
 package org.carrot2.workbench.core.ui;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.carrot2.core.ProcessingResult;
@@ -27,8 +26,7 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.*;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -40,6 +38,107 @@ import org.eclipse.ui.part.EditorPart;
 
 public class ResultsEditor extends EditorPart implements IPersistableEditor
 {
+    private final class SectionChooserAction extends Action
+    {
+        IMenuCreator creator = new IMenuCreator()
+        {
+            private Menu menu;
+            private Collection<Image> images = new ArrayList<Image>();
+
+            public Menu getMenu(Control parent)
+            {
+                menu = new Menu(parent);
+                createItems();
+                return menu;
+            }
+
+            public Menu getMenu(Menu parent)
+            {
+                menu = new Menu(parent);
+                createItems();
+                return menu;
+            }
+
+            private void createItems()
+            {
+                IExtension ext =
+                    Platform.getExtensionRegistry().getExtension("org.eclipse.ui.views",
+                        "org.carrot2.workbench.core.views");
+                final Map<String, ImageDescriptor> icons =
+                    new HashMap<String, ImageDescriptor>();
+                for (int i = 0; i < ext.getConfigurationElements().length; i++)
+                {
+                    IConfigurationElement view = ext.getConfigurationElements()[i];
+                    if (view.getName().equals("view")
+                        && view.getAttribute("icon") != null)
+                    {
+                        icons.put(view.getAttribute("id"), CorePlugin
+                            .getImageDescriptor(view.getAttribute("icon")));
+                    }
+                }
+
+                MenuItem mi1 = new MenuItem(menu, SWT.CHECK);
+                linkToAction(mi1, new VisibilityToogleAction("Show Clusters", 0,
+                    (Boolean) sections[0].getData("visible"), icons
+                        .get(ClusterTreeView.ID)));
+                MenuItem mi2 = new MenuItem(menu, SWT.CHECK);
+                linkToAction(mi2, new VisibilityToogleAction("Show Documents", 1,
+                    (Boolean) sections[1].getData("visible"), icons
+                        .get(DocumentListView.ID)));
+                MenuItem mi3 = new MenuItem(menu, SWT.CHECK);
+                linkToAction(mi3, new VisibilityToogleAction("Show Attributes", 2,
+                    (Boolean) sections[2].getData("visible"), icons
+                        .get(AttributesView.ID)));
+            }
+
+            private void linkToAction(final MenuItem mi, final Action action)
+            {
+                mi.setText(action.getText());
+                Image icon = action.getImageDescriptor().createImage();
+                images.add(icon);
+                mi.setImage(icon);
+                mi.setSelection(action.isChecked());
+                mi.addSelectionListener(new SelectionAdapter()
+                {
+                    @Override
+                    public void widgetSelected(SelectionEvent e)
+                    {
+                        action.setChecked(mi.getSelection());
+                        action.run();
+                        e.doit = true;
+                    }
+                });
+            }
+
+            public void dispose()
+            {
+                for (Image icon : images)
+                {
+                    icon.dispose();
+                }
+                menu.dispose();
+            }
+        };
+
+        private SectionChooserAction(String text)
+        {
+            super(text, IAction.AS_DROP_DOWN_MENU);
+        }
+
+        @Override
+        public IMenuCreator getMenuCreator()
+        {
+            return creator;
+        }
+
+        @Override
+        public ImageDescriptor getImageDescriptor()
+        {
+            return CorePlugin.getImageDescriptor("icons/sections.gif");
+        }
+
+    }
+
     private class VisibilityToogleAction extends Action
     {
         private int sectionIndex;
@@ -117,33 +216,11 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
 
     private void createActions()
     {
-        IExtension ext =
-            Platform.getExtensionRegistry().getExtension("org.eclipse.ui.views",
-                "org.carrot2.workbench.core.views");
-        Map<String, ImageDescriptor> icons = new HashMap<String, ImageDescriptor>();
-        for (int i = 0; i < ext.getConfigurationElements().length; i++)
-        {
-            IConfigurationElement view = ext.getConfigurationElements()[i];
-            if (view.getName().equals("view") && view.getAttribute("icon") != null)
-            {
-                icons.put(view.getAttribute("id"), CorePlugin.getImageDescriptor(view
-                    .getAttribute("icon")));
-            }
-        }
 
-        rootForm.getMenuManager().add(
-            new VisibilityToogleAction("Show Clusters", 0, (Boolean) sections[0]
-                .getData("visible"), icons.get(ClusterTreeView.ID)));
-        rootForm.getMenuManager().add(
-            new VisibilityToogleAction("Show Documents", 1, (Boolean) sections[1]
-                .getData("visible"), icons.get(DocumentListView.ID)));
-        rootForm.getMenuManager().add(
-            new VisibilityToogleAction("Show Attributes", 2, (Boolean) sections[2]
-                .getData("visible"), icons.get(AttributesView.ID)));
-        rootForm.getMenuManager().update();
-
-        IAction a = new SaveToXmlAction();
-        rootForm.getToolBarManager().add(a);
+        IAction saveToXmlAction = new SaveToXmlAction();
+        rootForm.getToolBarManager().add(saveToXmlAction);
+        IAction selectSectionsAction = new SectionChooserAction("Choose sections");
+        rootForm.getToolBarManager().add(selectSectionsAction);
         rootForm.getToolBarManager().update(true);
     }
 
