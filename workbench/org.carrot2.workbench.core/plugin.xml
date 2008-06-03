@@ -95,5 +95,19 @@
             id="org.carrot2.workbench.core.searchParametersFactory">
       </factory>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.carrot2.workbench.core.preferences.CarrotPreferencePage"
+            id="org.carrot2.workbench.core.preferences.CarrotPreferencePage"
+            name="Carrot">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.carrot2.workbench.core.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
 
 </plugin>

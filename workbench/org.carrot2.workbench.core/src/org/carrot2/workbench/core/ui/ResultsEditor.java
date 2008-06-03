@@ -11,6 +11,7 @@ import org.carrot2.workbench.core.CorePlugin;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.core.jobs.ProcessingJob;
 import org.carrot2.workbench.core.jobs.ProcessingStatus;
+import org.carrot2.workbench.core.preferences.PreferenceConstants;
 import org.carrot2.workbench.core.ui.attributes.AttributeListComponent;
 import org.carrot2.workbench.core.ui.clusters.ClusterTreeComponent;
 import org.carrot2.workbench.core.ui.views.*;
@@ -496,10 +497,12 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
 
     private void restorePartVisibilityFromState()
     {
-        for (int i = 0; i < sections.length; i++)
-        {
-            toogleSectionVisibility(i, true);
-        }
+        toogleSectionVisibility(0, CorePlugin.getDefault().getPreferenceStore()
+            .getBoolean(PreferenceConstants.P_SHOW_CLUSTERS));
+        toogleSectionVisibility(1, CorePlugin.getDefault().getPreferenceStore()
+            .getBoolean(PreferenceConstants.P_SHOW_DOCUMENTS));
+        toogleSectionVisibility(2, CorePlugin.getDefault().getPreferenceStore()
+            .getBoolean(PreferenceConstants.P_SHOW_ATTRIBUTES));
         IMemento partsState =
             getChildIfCorrect("visibility", "parts-amount", sections.length);
         if (partsState != null)
