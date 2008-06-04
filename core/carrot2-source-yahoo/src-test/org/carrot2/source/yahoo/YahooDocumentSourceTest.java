@@ -33,6 +33,7 @@ public class YahooDocumentSourceTest extends
         assertTrue(runQuery("iraq", 50) > 0);
     }
 
+    @Ignore
     @Test
     @Prerequisite(requires = "externalApiTestsEnabled")
     @SuppressWarnings("unchecked")
