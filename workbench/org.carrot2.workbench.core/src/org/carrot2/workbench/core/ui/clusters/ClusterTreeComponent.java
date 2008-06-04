@@ -6,6 +6,7 @@ import org.carrot2.core.*;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.core.ui.ResultsEditor;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -15,7 +16,7 @@ import org.eclipse.ui.IWorkbenchSite;
 
 import com.google.common.collect.Lists;
 
-public class ClusterTreeComponent// implements IProcessingResultPart
+public class ClusterTreeComponent
 {
     private TreeViewer viewer;
     private ResultsEditor editor;
@@ -78,8 +79,10 @@ public class ClusterTreeComponent// implements IProcessingResultPart
         {
             public void run()
             {
-                viewer.setInput(Lists.newArrayList(ClusterWithParent.wrap(null,
-                    new Cluster("All topics", result.getClusters()))));
+                Cluster root = new Cluster("All topics", result.getClusters());
+                ClusterWithParent wrappedRoot = ClusterWithParent.wrap(null, root);
+                viewer.setInput(Lists.newArrayList(wrappedRoot));
+                viewer.setSelection(new StructuredSelection(wrappedRoot));
             }
         });
     }

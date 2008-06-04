@@ -41,7 +41,7 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
 {
     private final class SectionChooserAction extends Action
     {
-        IMenuCreator creator = new IMenuCreator()
+        private IMenuCreator creator = new IMenuCreator()
         {
             private Menu menu;
             private Collection<Image> images = new ArrayList<Image>();
@@ -117,7 +117,11 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
                 {
                     icon.dispose();
                 }
-                menu.dispose();
+                //menu can be null, if action was never executed and menu was not shown
+                if (menu != null)
+                {
+                    menu.dispose();
+                }
             }
         };
 
