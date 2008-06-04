@@ -1,9 +1,11 @@
 package org.carrot2.workbench.core.ui.clusters;
 
-import java.util.ArrayList;
+import java.util.*;
 
-import org.carrot2.core.*;
+import org.carrot2.core.Cluster;
+import org.carrot2.core.ClusterWithParent;
 import org.carrot2.workbench.core.helpers.Utils;
+import org.carrot2.workbench.core.ui.PropertyProvider;
 import org.carrot2.workbench.core.ui.ResultsEditor;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -16,33 +18,18 @@ import org.eclipse.ui.IWorkbenchSite;
 
 import com.google.common.collect.Lists;
 
-public class ClusterTreeComponent
+public class ClusterTreeComponent extends PropertyProvider
 {
+    public static final String CONTENT = "content";
+
     private TreeViewer viewer;
     private ResultsEditor editor;
     private IPropertyListener refresher;
+    private List<Cluster> currentContent = Lists.newArrayList();
 
     public void init(IWorkbenchSite site, Composite parent)
     {
         initViewer(site, parent);
-    }
-
-    public void init(IWorkbenchSite site, ResultsEditor editor, Composite parent)
-    {
-        initViewer(site, parent);
-        this.editor = editor;
-        refresher = new IPropertyListener()
-        {
-            public void propertyChanged(Object source, int propId)
-            {
-                if (source instanceof ResultsEditor
-                    && propId == ResultsEditor.CURRENT_CONTENT)
-                {
-                    setClusters(((ResultsEditor) source).getCurrentContent());
-                }
-            }
-        };
-        editor.addPropertyListener(refresher);
     }
 
     private void initViewer(IWorkbenchSite site, Composite parent)
@@ -73,22 +60,25 @@ public class ClusterTreeComponent
         }
     }
 
-    public void setClusters(final ProcessingResult result)
+    public void setClusters(final List<Cluster> clusters)
     {
         Utils.asyncExec(new Runnable()
         {
             public void run()
             {
-                Cluster root = new Cluster("All topics", result.getClusters());
+                Cluster root = new Cluster("All topics", clusters);
                 ClusterWithParent wrappedRoot = ClusterWithParent.wrap(null, root);
                 viewer.setInput(Lists.newArrayList(wrappedRoot));
                 viewer.setSelection(new StructuredSelection(wrappedRoot));
+                Object oldContent = currentContent;
+                currentContent = clusters;
+                firePropertyChanged(CONTENT, oldContent, currentContent);
             }
         });
     }
 
-    public String getPartName()
+    public List<Cluster> getCurrentContent()
     {
-        return "Clusters";
+        return Collections.unmodifiableList(currentContent);
     }
 }

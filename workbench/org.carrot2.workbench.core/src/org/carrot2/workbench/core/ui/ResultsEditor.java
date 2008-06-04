@@ -320,7 +320,7 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
                 {
                     final ProcessingResult result =
                         ((ProcessingStatus) event.getResult()).result;
-                    tree.setClusters(result);
+                    tree.setClusters(result.getClusters());
                 }
             }
         });
@@ -597,6 +597,10 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
         if (AttributeListComponent.class.equals(adapter))
         {
             return attributeList;
+        }
+        if (ClusterTreeComponent.class.equals(adapter))
+        {
+            return tree;
         }
         return super.getAdapter(adapter);
     }

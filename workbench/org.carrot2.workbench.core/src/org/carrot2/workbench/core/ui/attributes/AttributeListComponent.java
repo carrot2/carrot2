@@ -5,16 +5,15 @@ import java.util.List;
 
 import org.carrot2.util.attribute.BindableDescriptor;
 import org.carrot2.workbench.core.CorePlugin;
+import org.carrot2.workbench.core.ui.PropertyProvider;
 import org.carrot2.workbench.editors.AttributeChangeEvent;
 import org.carrot2.workbench.editors.AttributeChangeListener;
 import org.eclipse.jface.action.*;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
-public class AttributeListComponent
+public class AttributeListComponent extends PropertyProvider
 {
     private final class LiveUpdateAction extends Action
     {
@@ -75,9 +74,6 @@ public class AttributeListComponent
 
     private List<AttributeChangeListener> listeners =
         new ArrayList<AttributeChangeListener>();
-
-    private List<IPropertyChangeListener> propListeners =
-        new ArrayList<IPropertyChangeListener>();
 
     private void createControls(Composite parent)
     {
@@ -185,30 +181,11 @@ public class AttributeListComponent
         listeners.remove(listener);
     }
 
-    public void addPropertyChangeListener(IPropertyChangeListener listener)
-    {
-        propListeners.add(listener);
-    }
-
-    public void removePropertyChangeListener(IPropertyChangeListener listener)
-    {
-        propListeners.remove(listener);
-    }
-
     protected void fireAttributeChanged(AttributeChangeEvent event)
     {
         for (AttributeChangeListener listener : listeners)
         {
             listener.attributeChange(event);
-        }
-    }
-
-    protected void firePropertyChanged(String propId, Object oldValue, Object newValue)
-    {
-        for (IPropertyChangeListener propListener : propListeners)
-        {
-            propListener.propertyChange(new PropertyChangeEvent(this, propId, oldValue,
-                newValue));
         }
     }
 }
