@@ -19,11 +19,6 @@ public class DocumentListView extends ViewPart
         browserPart = new DocumentListBrowser();
         browserPart.init(this.getSite(), parent);
         browserPart.populateToolbar(getViewSite().getActionBars().getToolBarManager());
-    }
-
-    @Override
-    public void setFocus()
-    {
         ISelection selection = getSite().getPage().getSelection();
         if (selection != null && !selection.isEmpty()
             && selection instanceof IStructuredSelection)
@@ -34,6 +29,11 @@ public class DocumentListView extends ViewPart
                 browserPart.updateBrowserText((Cluster) selected.getFirstElement());
             }
         }
+    }
+
+    @Override
+    public void setFocus()
+    {
     }
 
     @Override
