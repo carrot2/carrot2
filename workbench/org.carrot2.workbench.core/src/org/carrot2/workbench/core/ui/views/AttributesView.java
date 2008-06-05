@@ -1,5 +1,7 @@
 package org.carrot2.workbench.core.ui.views;
 
+import java.util.Map;
+
 import org.carrot2.workbench.core.ui.attributes.AttributeListComponent;
 import org.carrot2.workbench.core.ui.attributes.AttributesSynchronizer;
 import org.eclipse.core.runtime.IAdaptable;
@@ -56,6 +58,11 @@ public class AttributesView extends PageBookView
             {
                 component = new AttributeListComponent();
                 component.init(parent, provider.getBindableDescriptor());
+                for (Map.Entry<String, Object> entry : provider.getAttributeValues()
+                    .entrySet())
+                {
+                    component.setAttributeValue(entry.getKey(), entry.getValue());
+                }
                 AttributesSynchronizer.synchronize(provider, component);
             }
 

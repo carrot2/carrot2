@@ -1,7 +1,6 @@
 package org.carrot2.workbench.core.ui.attributes;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import org.carrot2.util.attribute.BindableDescriptor;
 import org.carrot2.workbench.core.CorePlugin;
@@ -158,6 +157,16 @@ public class AttributeListComponent extends PropertyProvider
     public void setAttributeValue(String key, Object value)
     {
         setAttributeValue(key, value, true);
+    }
+
+    public Map<String, Object> getAttributeValues()
+    {
+        HashMap<String, Object> values = new HashMap<String, Object>();
+        for (AttributesPage page : groupControl.getPages())
+        {
+            values.putAll(page.getAttributeValues());
+        }
+        return Collections.unmodifiableMap(values);
     }
 
     void setLiveUpdate(boolean value, boolean fireEvents)
