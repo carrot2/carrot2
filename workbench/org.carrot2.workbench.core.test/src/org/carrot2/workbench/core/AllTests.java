@@ -14,7 +14,6 @@ public class AllTests extends TestSuite
     public AllTests()
     {
         this.addTestSuite(ProcessingJobTest.class);
-        this.addTestSuite(MiscellaneousTests.class);
         this.addTestSuite(TypeEditorWrapperTest.class);
         this.addTestSuite(DedicatedEditorWrapperTest.class);
         this.addTestSuite(FactoryTest.class);
