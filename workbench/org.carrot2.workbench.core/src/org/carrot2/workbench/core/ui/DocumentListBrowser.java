@@ -22,7 +22,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.*;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 
-public class DocumentListBrowser// implements IProcessingResultPart
+public class DocumentListBrowser
 {
     private Browser browser;
     private ISelectionListener postSelectionListener;

@@ -122,6 +122,7 @@ public class AttributeListComponent extends PropertyProvider
         return liveUpdateAction.isChecked();
     }
 
+    @Override
     public void dispose()
     {
         for (AttributesPage page : groupControl.getPages())
@@ -129,6 +130,8 @@ public class AttributeListComponent extends PropertyProvider
             page.removeAttributeChangeListener(listener);
         }
         groupControl.dispose();
+        listeners.clear();
+        super.dispose();
     }
 
     public BindableDescriptor getBindableDescriptor()

@@ -31,4 +31,9 @@ public abstract class PropertyProvider
         }
     }
 
+    public void dispose()
+    {
+        propListeners.clear();
+    }
+
 }

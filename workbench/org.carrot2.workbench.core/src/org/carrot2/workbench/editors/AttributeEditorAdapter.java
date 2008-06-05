@@ -34,6 +34,7 @@ public abstract class AttributeEditorAdapter implements IAttributeEditor
 
     public void dispose()
     {
+        listeners.clear();
     }
 
     public void setValue(Object currentValue)
