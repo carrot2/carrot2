@@ -215,6 +215,7 @@
 		<buildMetadata project.loc="${buildDirectory}/plugins/carrot2-algorithm-stc" />
 		<buildMetadata project.loc="${buildDirectory}/plugins/org.carrot2.workbench.editors" />
 		<buildMetadata project.loc="${buildDirectory}/plugins/carrot2-algorithm-synthetic" />
+		<buildMetadata project.loc="${buildDirectory}/plugins/carrot2-source-etools" />
 		<buildMetadata project.loc="${buildDirectory}/plugins/carrot2-source-yahoo" />
 		<buildMetadata project.loc="${buildDirectory}/plugins/carrot2-source-xml" />
 		<buildMetadata project.loc="${buildDirectory}/plugins/carrot2-source-microsoft" />
