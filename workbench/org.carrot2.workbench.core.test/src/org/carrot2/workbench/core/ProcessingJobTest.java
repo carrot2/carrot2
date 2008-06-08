@@ -8,6 +8,7 @@ import junit.framework.TestCase;
 
 import org.carrot2.source.xml.XmlDocumentSource;
 import org.carrot2.util.attribute.AttributeUtils;
+import org.carrot2.util.attribute.BindableDescriptorBuilder;
 import org.carrot2.util.resource.Resource;
 import org.carrot2.util.resource.URLResource;
 import org.carrot2.workbench.core.helpers.ComponentLoader;
@@ -96,6 +97,27 @@ public class ProcessingJobTest extends TestCase
             assertTrue(search.getAttributes().containsKey(entry.getKey()));
             assertEquals(search.getAttributes().get(entry.getKey()), entry.getValue());
         }
+    }
+
+    public void testIfMetadataExists()
+    {
+        for (ComponentWrapper wrapper : ComponentLoader.SOURCE_LOADER.getComponents())
+        {
+            buildBindableDescriptor(wrapper);
+        }
+        for (ComponentWrapper wrapper : ComponentLoader.ALGORITHM_LOADER.getComponents())
+        {
+            buildBindableDescriptor(wrapper);
+        }
+    }
+
+    private void buildBindableDescriptor(ComponentWrapper wrapper)
+    {
+        if (wrapper.getId().equals("org.carrot2.workbench.core.test.algorithm1"))
+        {
+            return;
+        }
+        BindableDescriptorBuilder.buildDescriptor(wrapper.getExecutableComponent());
     }
 
 }

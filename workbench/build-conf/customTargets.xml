@@ -245,7 +245,6 @@
 	<!-- Steps to do after the build is done. -->
 	<!-- ===================================================================== -->
 	<target name="postBuild">
-		<buildMetadata project.loc="${buildDirectory}/plugins/carrot2-algorithm-stc" />
 		<antcall target="gatherLogs" />
 	</target>
 
