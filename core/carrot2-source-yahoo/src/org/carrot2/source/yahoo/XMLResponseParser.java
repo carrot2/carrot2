@@ -8,6 +8,8 @@ import org.carrot2.core.Document;
 import org.carrot2.source.SearchEngineResponse;
 import org.xml.sax.*;
 
+import com.google.common.collect.Lists;
+
 /**
  * XML content handler for parsing Yahoo! search response.
  */
@@ -152,6 +154,10 @@ final class XMLResponseParser implements ContentHandler
             else if ("Url".equals(localName))
             {
                 document.addField(Document.CONTENT_URL, text);
+            }
+            else if ("NewsSource".equals(localName))
+            {
+                document.addField(Document.SOURCES, Lists.newArrayList(text));
             }
             else if (!"Thumbnail".equals(localName))
             {

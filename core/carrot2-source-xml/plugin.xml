@@ -7,7 +7,7 @@
       <source
             class="org.carrot2.source.xml.XmlDocumentSource"
             icon="icons/xml.gif"
-            label="From XML">
+            label="XML Document Source">
       </source>
    </extension>
 

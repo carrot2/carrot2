@@ -1,5 +1,6 @@
 package org.carrot2.source.yahoo;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
@@ -33,7 +34,6 @@ public class YahooDocumentSourceTest extends
         assertTrue(runQuery("iraq", 50) > 0);
     }
 
-    @Ignore
     @Test
     @Prerequisite(requires = "externalApiTestsEnabled")
     @SuppressWarnings("unchecked")
@@ -42,7 +42,7 @@ public class YahooDocumentSourceTest extends
         initAttributes.put(YahooDocumentSource.class.getName() + ".service",
             YahooNewsSearchService.class);
 
-        assertTrue(runQuery("new york", 50) > 0);
+        assertTrue(runQuery("world", 200) > 0);
         List<Document> documents = (List<Document>) processingAttributes
             .get(AttributeNames.DOCUMENTS);
         
@@ -56,7 +56,7 @@ public class YahooDocumentSourceTest extends
             }
         }
         
-        assertTrue(thumbnailCount > 0);
+        assertThat(thumbnailCount).isGreaterThan(0);
     }
 
     @Ignore

@@ -11,7 +11,7 @@
       <source
             class="org.carrot2.source.etools.EToolsDocumentSource"
             icon="icons/etools.gif"
-            label="eTools">
+            label="eTools Metasearch Engine">
       </source>
    </extension>
 

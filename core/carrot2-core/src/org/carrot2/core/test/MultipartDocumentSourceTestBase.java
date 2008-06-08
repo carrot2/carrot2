@@ -1,7 +1,7 @@
 package org.carrot2.core.test;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import org.carrot2.core.DocumentSource;
 import org.carrot2.source.*;
@@ -24,12 +24,12 @@ public abstract class MultipartDocumentSourceTestBase<T extends DocumentSource> 
     @Prerequisite(requires = "externalApiTestsEnabled")
     public void testQueryLargerThanPage() throws Exception
     {
-        final int needed = getSearchEngineMetadata().resultsPerPage * 2 + 10;
+        final int needed = getSearchEngineMetadata().resultsPerPage * 2 + 25;
 
         // Allow some slack (duplicated URLs).
         final int documentsReturned = runQuery("apache", needed);
 
-        assertTrue(documentsReturned > needed - 5);
+        assertThat(documentsReturned).isGreaterThan(needed - 10);
     }
 
     @Test
