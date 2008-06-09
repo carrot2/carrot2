@@ -13,13 +13,13 @@
 
 package org.carrot2.stemming.snowball;
 
-import org.carrot2.core.linguistic.Stemmer;
-
-import org.tartarus.snowball.SnowballProgram;
-import org.tartarus.snowball.ext.*;
-
 import java.util.HashMap;
 import java.util.Iterator;
+
+import org.carrot2.core.linguistic.Stemmer;
+import org.tartarus.snowball.SnowballProgram;
+import org.tartarus.snowball.SnowballStemmer;
+import org.tartarus.snowball.ext.*;
 
 
 /**
@@ -90,7 +90,7 @@ public class SnowballStemmersFactory {
         if (snowballLanguages.containsKey(language)) {
             try {
                 // attempts to instantiate the stemmer.
-                SnowballProgram snowballStemmers = (SnowballProgram) ((Class) snowballLanguages.get(language)).newInstance();
+                SnowballStemmer snowballStemmers = (SnowballStemmer) ((Class) snowballLanguages.get(language)).newInstance();
 
                 return new SnowballStemmerAdapter(snowballStemmers);
             } catch (InstantiationException e) {
