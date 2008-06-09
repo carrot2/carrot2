@@ -36,7 +36,7 @@ public class DocumentListBrowser
         attachToLocationChanging();
     }
 
-    private void attachToPostSelection(IWorkbenchPage page)
+    private void attachToPostSelection(final IWorkbenchPage page)
     {
         postSelectionListener = new ISelectionListener()
         {
@@ -57,9 +57,44 @@ public class DocumentListBrowser
                         }
                     }
                 }
+                if (selection.isEmpty())
+                {
+                    clear();
+                }
             }
         };
         page.addPostSelectionListener(postSelectionListener);
+        page.addPartListener(new IPartListener()
+        {
+
+            public void partActivated(IWorkbenchPart part)
+            {
+            }
+
+            public void partBroughtToTop(IWorkbenchPart part)
+            {
+            }
+
+            public void partClosed(IWorkbenchPart part)
+            {
+                if (page.getEditorReferences().length == 0)
+                {
+                    if (!browser.isDisposed())
+                    {
+                        clear();
+                    }
+                }
+            }
+
+            public void partDeactivated(IWorkbenchPart part)
+            {
+            }
+
+            public void partOpened(IWorkbenchPart part)
+            {
+            }
+
+        });
     }
 
     private void attachToLocationChanging()
@@ -113,7 +148,7 @@ public class DocumentListBrowser
         final String query = (String) result.getAttributes().get("query");
         context.put("queryEscaped", StringEscapeUtils.escapeHtml(query));
 
-        merge(context);
+        merge(context, "documents-list.vm");
     }
 
     public void updateBrowserText(Cluster cluster)
@@ -121,16 +156,16 @@ public class DocumentListBrowser
         VelocityContext context = new VelocityContext();
         context.put("documents", cluster.getAllDocuments(Document.BY_ID_COMPARATOR));
 
-        merge(context);
+        merge(context, "documents-list.vm");
     }
 
-    private void merge(VelocityContext context)
+    private void merge(VelocityContext context, String templateName)
     {
         Template template = null;
         StringWriter sw = new StringWriter();
         try
         {
-            template = Velocity.getTemplate("documents-list.vm");
+            template = Velocity.getTemplate(templateName);
             template.merge(context, sw);
         }
         catch (Exception e)
@@ -157,7 +192,7 @@ public class DocumentListBrowser
 
     public void clear()
     {
-        browser.setText("");
+        merge(null, "empty-list.vm");
     }
 
     public String getPartName()

@@ -2,40 +2,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
 		<style type="text/css">
-		body, table {
-			font-size: 11px;
-			font-family: Tahoma, Arial, Helvetica, sans-serif;
-			margin: 0;
-      overflow-y: auto;
-      overflow-x: hidden;			
-		}
-		
-		div.cl, div.status {
-			color: white;
-			font-weight: bold;
-			background-color: #5588BE;
-			border-bottom: 1px solid #303030;
-			padding-bottom: 4px;
-			padding-top: 4px;
-			margin-bottom: 6pt;
-		}
-		
-		div.status {
-			text-align: right;
-		}
-		
-		span.du {
-			color: green;
-			overflow: hidden;
-		}
-		
-		span.id {
-			color: #a0a0a0;
-		}
-		
-		a {
-		  color: #1678C4;
-		}
+		#include ("style.css")
 		</style>
 	</head>
 	<body>
@@ -45,7 +12,7 @@
 	#set( $documents = $result.Documents )
 #end
 
-#if ($documents.isEmpty())
+#if ($documents.isEmpty() && $queryEscaped)
 	Your query - <b>&quot;${queryEscaped}&quot;</b> - did not return any documents.<br><br> 
 	
 	Suggestions:<ul>
