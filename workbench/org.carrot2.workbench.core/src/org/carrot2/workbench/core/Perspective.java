@@ -11,10 +11,22 @@ public class Perspective implements IPerspectiveFactory
     {
         layout.setEditorAreaVisible(true);
 
+        IPlaceholderFolderLayout bottomFolder =
+            layout.createPlaceholderFolder("bottomViews", IPageLayout.BOTTOM, .8f, layout
+                .getEditorArea());
+        bottomFolder.addPlaceholder("org.eclipse.pde.runtime.LogView");
+        bottomFolder.addPlaceholder(DocumentListView.ID);
+
         IFolderLayout leftFolder =
             layout.createFolder("leftViews", IPageLayout.LEFT, .3f, layout
                 .getEditorArea());
         leftFolder.addView(SearchView.ID);
+
+        IPlaceholderFolderLayout leftBottomFolder =
+            layout.createPlaceholderFolder("leftBottomViews", IPageLayout.BOTTOM, .3f,
+                "leftViews");
+        leftBottomFolder.addPlaceholder(ClusterTreeView.ID);
+        leftBottomFolder.addPlaceholder(AttributesView.ID);
 
         layout.addShowViewShortcut(ClusterTreeView.ID);
         layout.addShowViewShortcut(DocumentListView.ID);
