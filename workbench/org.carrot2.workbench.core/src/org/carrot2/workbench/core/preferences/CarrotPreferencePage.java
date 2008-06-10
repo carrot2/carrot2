@@ -23,6 +23,9 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class CarrotPreferencePage extends FieldEditorPreferencePage implements
     IWorkbenchPreferencePage
 {
+    public static final String ID =
+        "org.carrot2.workbench.core.preferences.CarrotPreferencePage";
+
     private Collection<BooleanFieldEditor> editors = new ArrayList<BooleanFieldEditor>();
 
     public CarrotPreferencePage()

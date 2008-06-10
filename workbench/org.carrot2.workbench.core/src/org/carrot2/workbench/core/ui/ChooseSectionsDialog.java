@@ -1,8 +1,17 @@
 package org.carrot2.workbench.core.ui;
 
+import org.carrot2.workbench.core.CorePlugin;
+import org.carrot2.workbench.core.preferences.CarrotPreferencePage;
+import org.carrot2.workbench.core.preferences.PreferenceConstants;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.preference.PreferenceDialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.*;
+import org.eclipse.ui.dialogs.PreferencesUtil;
 
 /**
  * This code was edited or generated using CloudGarden's Jigloo SWT/Swing GUI Builder,
@@ -65,6 +74,35 @@ public class ChooseSectionsDialog extends org.eclipse.jface.dialogs.TrayDialog
     {
         GridLayout parentLayout = new GridLayout();
         root.setLayout(parentLayout);
+        {
+            Link preferencesLink = new Link(root, SWT.NONE);
+            preferencesLink.setText("<A>Configure Defaults</A>");
+            preferencesLink.addSelectionListener(new SelectionAdapter()
+            {
+                @Override
+                public void widgetSelected(SelectionEvent e)
+                {
+                    PreferenceDialog dialog =
+                        PreferencesUtil.createPreferenceDialogOn(getShell(),
+                            CarrotPreferencePage.ID, new String []
+                            {
+                                CarrotPreferencePage.ID
+                            }, null);
+                    int result = dialog.open();
+                    if (result == Window.OK)
+                    {
+                        IPreferenceStore store =
+                            CorePlugin.getDefault().getPreferenceStore();
+                        clustersCheckbox.setSelection(store
+                            .getBoolean(PreferenceConstants.P_SHOW_CLUSTERS));
+                        documentsCheckbox.setSelection(store
+                            .getBoolean(PreferenceConstants.P_SHOW_DOCUMENTS));
+                        attributesCheckbox.setSelection(store
+                            .getBoolean(PreferenceConstants.P_SHOW_ATTRIBUTES));
+                    }
+                }
+            });
+        }
         {
             clustersCheckbox = new Button(root, SWT.CHECK | SWT.LEFT);
             clustersCheckbox.setText("Clusters");
