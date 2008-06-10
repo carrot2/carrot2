@@ -25,6 +25,7 @@ import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.*;
@@ -78,34 +79,26 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
                     }
                 }
 
-                MenuItem mi1 = new MenuItem(menu, SWT.CHECK);
-                linkToAction(mi1, new VisibilityToogleAction("Show Clusters", 0,
-                    (Boolean) sections[0].getData("visible"), icons
-                        .get(ClusterTreeView.ID)));
-                MenuItem mi2 = new MenuItem(menu, SWT.CHECK);
-                linkToAction(mi2, new VisibilityToogleAction("Show Documents", 1,
-                    (Boolean) sections[1].getData("visible"), icons
-                        .get(DocumentListView.ID)));
-                MenuItem mi3 = new MenuItem(menu, SWT.CHECK);
-                linkToAction(mi3, new VisibilityToogleAction("Show Attributes", 2,
-                    (Boolean) sections[2].getData("visible"), icons
-                        .get(AttributesView.ID)));
+                createItem("Show Clusters", 0, icons.get(ClusterTreeView.ID));
+                createItem("Show Documents", 1, icons.get(DocumentListView.ID));
+                createItem("Show Attributes", 2, icons.get(AttributesView.ID));
             }
 
-            private void linkToAction(final MenuItem mi, final Action action)
+            private void createItem(String text, final int sectionIndex,
+                ImageDescriptor image)
             {
-                mi.setText(action.getText());
-                Image icon = action.getImageDescriptor().createImage();
+                final MenuItem mi = new MenuItem(menu, SWT.CHECK);
+                mi.setText(text);
+                Image icon = image.createImage();
                 images.add(icon);
                 mi.setImage(icon);
-                mi.setSelection(action.isChecked());
+                mi.setSelection((Boolean) sections[sectionIndex].getData("visible"));
                 mi.addSelectionListener(new SelectionAdapter()
                 {
                     @Override
                     public void widgetSelected(SelectionEvent e)
                     {
-                        action.setChecked(mi.getSelection());
-                        action.run();
+                        toogleSectionVisibility(sectionIndex, mi.getSelection());
                         e.doit = true;
                     }
                 });
@@ -131,6 +124,28 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
         }
 
         @Override
+        public void run()
+        {
+            boolean [] flags = new boolean [sections.length];
+            for (int i = 0; i < sections.length; i++)
+            {
+                flags[i] = (Boolean) sections[i].getData("visible");
+            }
+            ChooseSectionsDialog dialog =
+                new ChooseSectionsDialog(Display.getDefault().getActiveShell(), flags);
+            int status = dialog.open();
+            if (status == Window.CANCEL)
+            {
+                return;
+            }
+            boolean [] resultFlags = dialog.getVisibilityFlags();
+            for (int i = 0; i < resultFlags.length; i++)
+            {
+                toogleSectionVisibility(i, resultFlags[i]);
+            }
+        }
+
+        @Override
         public IMenuCreator getMenuCreator()
         {
             return creator;
@@ -140,27 +155,6 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
         public ImageDescriptor getImageDescriptor()
         {
             return CorePlugin.getImageDescriptor("icons/sections.gif");
-        }
-
-    }
-
-    private class VisibilityToogleAction extends Action
-    {
-        private int sectionIndex;
-
-        public VisibilityToogleAction(String title, int index, boolean checked,
-            ImageDescriptor imageDescriptor)
-        {
-            super(title, IAction.AS_CHECK_BOX);
-            this.sectionIndex = index;
-            this.setChecked(checked);
-            this.setImageDescriptor(imageDescriptor);
-        }
-
-        @Override
-        public void run()
-        {
-            toogleSectionVisibility(sectionIndex, isChecked());
         }
 
     }
