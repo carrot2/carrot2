@@ -40,6 +40,14 @@
                name="windowImages"
                value="icons/carrot2-16x16.gif,icons/carrot2-32x32.gif">
          </property>
+         <property
+               name="aboutText"
+               value="Carrot2 Clustering Workbench&#x0D;&#x0A;&#x0D;&#x0A;Demo Application for Carrot Clustering Engine.&#x0D;&#x0A;&#x0D;&#x0A;Part of Carrot2 Project, available at SourceForge.&#x0D;&#x0A;&#x0D;&#x0A;Developed by Urszula Krukar as a part of Master&apos;s thesis (2008)">
+         </property>
+         <property
+               name="aboutImage"
+               value="icons/Carrot2-symbol-final.gif">
+         </property>
       </product>
    </extension>
    <extension

@@ -355,6 +355,7 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
     private void createAttributesPart(Section sec, IToolBarManager manager,
         final ProcessingJob job, IWorkbenchSite site)
     {
+        sec.setText("Attributes");
         attributeList = new AttributeListComponent();
         GroupingMethod method = GroupingMethod.GROUP;
         BindableDescriptor desc =
