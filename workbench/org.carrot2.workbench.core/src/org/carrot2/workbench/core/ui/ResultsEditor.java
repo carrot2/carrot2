@@ -218,7 +218,7 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
 
         IAction saveToXmlAction = new SaveToXmlAction();
         rootForm.getToolBarManager().add(saveToXmlAction);
-        IAction selectSectionsAction = new SectionChooserAction("Choose sections");
+        IAction selectSectionsAction = new SectionChooserAction("Choose visible panels");
         rootForm.getToolBarManager().add(selectSectionsAction);
         rootForm.getToolBarManager().update(true);
     }

@@ -32,7 +32,7 @@ public class CarrotPreferencePage extends FieldEditorPreferencePage implements
     {
         super(GRID);
         setPreferenceStore(CorePlugin.getDefault().getPreferenceStore());
-        setDescription("Choose sections to show in results editor by default:");
+        setDescription("Choose panels to show in results editors:");
     }
 
     /**

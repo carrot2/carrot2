@@ -9,6 +9,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.dialogs.PreferencesUtil;
@@ -41,7 +42,7 @@ public class ChooseSectionsDialog extends org.eclipse.jface.dialogs.TrayDialog
     protected void configureShell(Shell newShell)
     {
         super.configureShell(newShell);
-        newShell.setText("Choose sections");
+        newShell.setText("Choose visible panels");
     }
 
     @Override
@@ -75,8 +76,27 @@ public class ChooseSectionsDialog extends org.eclipse.jface.dialogs.TrayDialog
         GridLayout parentLayout = new GridLayout();
         root.setLayout(parentLayout);
         {
+            Label label = new Label(root, SWT.LEFT);
+            label.setText("Choose panels to show in this editor:");
+        }
+        {
+            clustersCheckbox = new Button(root, SWT.CHECK | SWT.LEFT);
+            clustersCheckbox.setText("Clusters");
+        }
+        {
+            documentsCheckbox = new Button(root, SWT.CHECK | SWT.LEFT);
+            documentsCheckbox.setText("Documents");
+        }
+        {
+            attributesCheckbox = new Button(root, SWT.CHECK | SWT.LEFT);
+            attributesCheckbox.setText("Attributes");
+        }
+        {
             Link preferencesLink = new Link(root, SWT.NONE);
-            preferencesLink.setText("<A>Configure Defaults</A>");
+            GridData gridData = new GridData();
+            gridData.verticalIndent = 10;
+            preferencesLink.setLayoutData(gridData);
+            preferencesLink.setText("<A>Choose panels to show in all editors</A>");
             preferencesLink.addSelectionListener(new SelectionAdapter()
             {
                 @Override
@@ -102,18 +122,6 @@ public class ChooseSectionsDialog extends org.eclipse.jface.dialogs.TrayDialog
                     }
                 }
             });
-        }
-        {
-            clustersCheckbox = new Button(root, SWT.CHECK | SWT.LEFT);
-            clustersCheckbox.setText("Clusters");
-        }
-        {
-            documentsCheckbox = new Button(root, SWT.CHECK | SWT.LEFT);
-            documentsCheckbox.setText("Documents");
-        }
-        {
-            attributesCheckbox = new Button(root, SWT.CHECK | SWT.LEFT);
-            attributesCheckbox.setText("Attributes");
         }
     }
 
