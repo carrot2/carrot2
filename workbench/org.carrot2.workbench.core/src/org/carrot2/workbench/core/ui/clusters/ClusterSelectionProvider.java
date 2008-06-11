@@ -3,10 +3,8 @@
  */
 package org.carrot2.workbench.core.ui.clusters;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import org.apache.commons.lang.NotImplementedException;
 import org.carrot2.core.Cluster;
 import org.carrot2.core.ClusterWithParent;
 import org.eclipse.jface.viewers.*;
@@ -71,9 +69,59 @@ class ClusterSelectionProvider implements IPostSelectionProvider
         selectionListeners.remove(listener);
     }
 
+    @SuppressWarnings("unchecked")
     public void setSelection(ISelection selection)
     {
-        throw new NotImplementedException();
+        if (selection instanceof IStructuredSelection)
+        {
+            if (getSelection().equals(selection))
+            {
+                return;
+            }
+            if (selection.isEmpty())
+            {
+                viewer.setSelection(selection);
+                return;
+            }
+            IStructuredSelection structured = (IStructuredSelection) selection;
+            List<String> labels = new ArrayList<String>();
+            Iterator it = structured.iterator();
+            while (it.hasNext())
+            {
+                Object obj = it.next();
+                if (obj instanceof Cluster)
+                {
+                    labels.add(((Cluster) obj).getLabel());
+                }
+                else
+                {
+                    return;
+                }
+            }
+            List<ClusterWithParent> input = (List<ClusterWithParent>) viewer.getInput();
+            List<ClusterWithParent> selected = new ArrayList<ClusterWithParent>();
+            for (ClusterWithParent clusterWithParent : input)
+            {
+                addIfLabelPresent(clusterWithParent, labels, selected);
+            }
+            viewer.setSelection(new StructuredSelection(selected));
+        }
+    }
+
+    private void addIfLabelPresent(ClusterWithParent clusterWithParent,
+        List<String> labels, List<ClusterWithParent> output)
+    {
+        if (labels.contains(clusterWithParent.cluster.getLabel()))
+        {
+            output.add(clusterWithParent);
+        }
+        else
+        {
+            for (ClusterWithParent child : clusterWithParent.subclusters)
+            {
+                addIfLabelPresent(child, labels, output);
+            }
+        }
     }
 
     private void fireSelectionChanged(List<ISelectionChangedListener> listeners,

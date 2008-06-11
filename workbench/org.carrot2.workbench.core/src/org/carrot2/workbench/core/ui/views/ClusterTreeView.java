@@ -7,6 +7,8 @@ import org.carrot2.workbench.core.ui.clusters.ClusterTreeComponent;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.*;
@@ -62,6 +64,15 @@ public class ClusterTreeView extends PageBookView
                         }
                     }
                 });
+                getSite().getSelectionProvider().addSelectionChangedListener(
+                    new ISelectionChangedListener()
+                    {
+                        public void selectionChanged(SelectionChangedEvent event)
+                        {
+                            part.getSite().getSelectionProvider().setSelection(
+                                event.getSelection());
+                        }
+                    });
                 tree.setClusters(provider.getCurrentContent());
             }
 
