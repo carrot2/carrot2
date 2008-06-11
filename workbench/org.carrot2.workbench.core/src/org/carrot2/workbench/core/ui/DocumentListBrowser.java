@@ -57,10 +57,6 @@ public class DocumentListBrowser
                         }
                     }
                 }
-                if (selection.isEmpty())
-                {
-                    clear();
-                }
             }
         };
         page.addPostSelectionListener(postSelectionListener);
