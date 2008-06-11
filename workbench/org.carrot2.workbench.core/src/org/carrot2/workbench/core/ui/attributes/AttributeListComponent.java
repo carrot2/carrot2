@@ -134,7 +134,7 @@ public class AttributeListComponent extends PropertyProvider
 
     public void setAttributeValue(String key, Object value)
     {
-        Map<String, Object> attributes = getAttributeValues();
+        boolean isChanged = isAttributeValueChanged(key, value);
         if (groupControl != null)
         {
             for (AttributesPage page : groupControl.getPages())
@@ -145,9 +145,34 @@ public class AttributeListComponent extends PropertyProvider
                 }
             }
         }
-        if (attributes.containsKey(key) && !attributes.get(key).equals(value))
+        if (isChanged)
         {
             listener.attributeChange(new AttributeChangeEvent(this, key, value));
+        }
+    }
+
+    private boolean isAttributeValueChanged(String key, Object value)
+    {
+        Map<String, Object> attributes = getAttributeValues();
+        if (!attributes.containsKey(key))
+        {
+            return true;
+        }
+        if (attributes.get(key) == null)
+        {
+            if (value == null)
+            {
+                return false;
+            }
+            return true;
+        }
+        else
+        {
+            if (value == null)
+            {
+                return true;
+            }
+            return !attributes.get(key).equals(value);
         }
     }
 
