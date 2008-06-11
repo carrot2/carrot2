@@ -14,37 +14,27 @@ public class AttributesSynchronizer
     public static void synchronize(final AttributeListComponent editorProvider,
         final AttributeListComponent viewProvider)
     {
-        editorProvider.addAttributeChangeListener(new AttributeChangeListener()
+        synchronizeOneWay(viewProvider, editorProvider);
+        synchronizeOneWay(editorProvider, viewProvider);
+    }
+
+    private static void synchronizeOneWay(final AttributeListComponent component1,
+        final AttributeListComponent component2)
+    {
+        component2.addAttributeChangeListener(new AttributeChangeListener()
         {
             public void attributeChange(AttributeChangeEvent event)
             {
-                viewProvider.setAttributeValue(event.key, event.value, false);
+                component1.setAttributeValue(event.key, event.value);
             }
         });
-        editorProvider.addPropertyChangeListener(new IPropertyChangeListener()
+        component2.addPropertyChangeListener(new IPropertyChangeListener()
         {
             public void propertyChange(PropertyChangeEvent event)
             {
                 if (event.getProperty().equals(AttributeListComponent.LIVE_UPDATE))
                 {
-                    viewProvider.setLiveUpdate((Boolean) event.getNewValue(), false);
-                }
-            }
-        });
-        viewProvider.addAttributeChangeListener(new AttributeChangeListener()
-        {
-            public void attributeChange(AttributeChangeEvent event)
-            {
-                editorProvider.setAttributeValue(event.key, event.value);
-            }
-        });
-        viewProvider.addPropertyChangeListener(new IPropertyChangeListener()
-        {
-            public void propertyChange(PropertyChangeEvent event)
-            {
-                if (event.getProperty().equals(AttributeListComponent.LIVE_UPDATE))
-                {
-                    editorProvider.setLiveUpdate((Boolean) event.getNewValue());
+                    component1.setLiveUpdate((Boolean) event.getNewValue());
                 }
             }
         });

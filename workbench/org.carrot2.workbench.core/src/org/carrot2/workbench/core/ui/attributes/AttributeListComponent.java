@@ -24,18 +24,11 @@ public class AttributeListComponent extends PropertyProvider
         @Override
         public void run()
         {
-            run(true);
-        }
-
-        public void run(boolean fireEvents)
-        {
             firePropertyChange(IAction.TOOL_TIP_TEXT, getToolTip(!isChecked()),
                 getToolTip(isChecked()));
-            if (fireEvents && isChecked())
-            {
-                AttributeListComponent.this.firePropertyChanged(LIVE_UPDATE,
-                    !isChecked(), isChecked());
-            }
+            AttributeListComponent.this.firePropertyChanged(LIVE_UPDATE, !isChecked(),
+                isChecked());
+
         }
 
         @Override
@@ -139,8 +132,9 @@ public class AttributeListComponent extends PropertyProvider
         return descriptor;
     }
 
-    void setAttributeValue(String key, Object value, boolean fireEvents)
+    public void setAttributeValue(String key, Object value)
     {
+        Map<String, Object> attributes = getAttributeValues();
         if (groupControl != null)
         {
             for (AttributesPage page : groupControl.getPages())
@@ -151,15 +145,10 @@ public class AttributeListComponent extends PropertyProvider
                 }
             }
         }
-        if (fireEvents)
+        if (attributes.containsKey(key) && !attributes.get(key).equals(value))
         {
             listener.attributeChange(new AttributeChangeEvent(this, key, value));
         }
-    }
-
-    public void setAttributeValue(String key, Object value)
-    {
-        setAttributeValue(key, value, true);
     }
 
     public Map<String, Object> getAttributeValues()
@@ -172,15 +161,13 @@ public class AttributeListComponent extends PropertyProvider
         return Collections.unmodifiableMap(values);
     }
 
-    void setLiveUpdate(boolean value, boolean fireEvents)
-    {
-        liveUpdateAction.setChecked(value);
-        liveUpdateAction.run(fireEvents);
-    }
-
     public void setLiveUpdate(boolean enabled)
     {
-        setLiveUpdate(enabled, true);
+        if (liveUpdateAction.isChecked() != enabled)
+        {
+            liveUpdateAction.setChecked(enabled);
+            liveUpdateAction.run();
+        }
     }
 
     public void addAttributeChangeListener(AttributeChangeListener listener)
