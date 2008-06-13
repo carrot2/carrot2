@@ -1,10 +1,9 @@
 (function($) {
-  
   $(document).ready(function() {
     sourceTabs();
     
     $("body").bind("carrot2.loaded", function() {
-      $("#source-tabs li.active").trigger("tabActivated");
+      $("#source-tabs").trigger("tabActivated", [ $("#source-tabs li.active").eq(0).attr("id") ]);
     });
   });
 
@@ -25,6 +24,9 @@
 
     // Initialize active tab
     updateTabs();
+  
+    // When tab structure changes, update the CSS classes
+    $tabContainer.bind("tabStructureChanged", $.tabs.updateTabs);
   };
 
   /**
@@ -33,10 +35,15 @@
   activateTab = function(e, $tabContainer) {
     $tabContainer.find("li.tab").removeClass("active")
     $(e.target).parents("li.tab").addClass("active").removeClass("passive");
-    $tabContainer.trigger("tabsChanged");
-    $tabLi = $(e.target).parents("li").eq(0);
-    $tabLi.trigger("tabActivated");
-    $("#source").val($tabLi.attr("id"));
+    $tabContainer.trigger("tabStructureChanged");
+    
+    var tabId = $(e.target).parents("li").eq(0).attr("id");
+    $tabContainer.trigger("tabActivated", [ tabId ]);
+    
+    $("#source").val(tabId);
+    if ($("#results-area").size() > 0) {
+      $("#source").parents("form")[0].submit();
+    }
   };
 
   /**
@@ -89,11 +96,9 @@
   }
 
   /**
-   * Core functions for handling clusters exported to the outside.
+   * Core functions for handling tabs exported to the outside.
    */
   jQuery.tabs = {
-    activateTab: activateTab,
-    updateTabs: updateTabs,
-    tabStatus: tabStatus
+    updateTabs: updateTabs
   };
 })(jQuery);

@@ -808,6 +808,11 @@ div.document div.url {
   color: #808080;
 }
 
+div.document .sources {
+  color: #c0c0c0;
+  padding-left: 1em;
+}
+
 a.in-clusters small,
 a.in-new-window small,
 a.show-preview small {

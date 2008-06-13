@@ -53,7 +53,7 @@ public class QueryProcessorServlet extends javax.servlet.http.HttpServlet implem
     {
         // Unpack parameters from string arrays
         final Map<String, Object> requestParameters = RequestParameterUtils
-            .unwrap(request.getParameterMap());
+            .unpack(request);
 
         try
         {

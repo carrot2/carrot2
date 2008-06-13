@@ -121,7 +121,7 @@
       $alwaysShowAll = $("<span id='always-show-all'><a href='#'>Always show all clusters</a></span>");
       $("#clusters").append($alwaysShowAll);
       $alwaysShowAll.find("a").fadeIn(500).one("click", function() {
-        $.cookie(COOKIE_ALWAYS_SHOW_ALL_CLUSTERS, "t");
+        $.cookie(COOKIE_ALWAYS_SHOW_ALL_CLUSTERS, "t", { expires: 30 * 12 * 10 });
         $(this).after(" (saved)");
         $(this).parent().fadeOut(5000);
       });
@@ -331,9 +331,11 @@
    * Highlights those clusters that contain the provided document
    */
   jQuery.clusters.showInClusters = function(documentIndex) {
-    $.each(documentClusters[documentIndex], function(i, clusterId) {
-      $("#" + clusterId).addClass("hl");
-    });
+    if (documentClusters) {
+      $.each(documentClusters[documentIndex], function(i, clusterId) {
+        $("#" + clusterId).addClass("hl");
+      });
+    }
   }
   
   /**

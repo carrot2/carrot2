@@ -23,6 +23,8 @@
   
   <xsl:variable name="documents-url" select="concat($search-url-base, '&amp;type=DOCUMENTS')" />
   <xsl:variable name="clusters-url" select="concat($search-url-base, '&amp;type=CLUSTERS')" />
+  
+  <xsl:variable name="debug" select="false" />
 
   <!-- HTML scaffolding -->
   <xsl:template match="/">
@@ -38,6 +40,9 @@
 
   <body>
     <xsl:attribute name="id"><xsl:call-template name="page-body-id" /></xsl:attribute>
+    <xsl:if test="$debug = 'true'">
+      <xsl:apply-templates select="/page/request/parameter" />
+    </xsl:if>
     <xsl:apply-templates />
     <xsl:apply-templates select="page/asset-urls/js-urls/js-url" />
     <xsl:call-template name="common-extra-js" />
@@ -51,9 +56,13 @@
     </xsl:choose>
   </xsl:template>
 
+  <xsl:template match="parameter">
+    Param: <xsl:value-of select="@name" />, value: <xsl:apply-templates select="value/@value" /><br />
+  </xsl:template>
+
   <!-- HTML head title -->
   <xsl:template name="page-title">
-    <xsl:if test="/page/request/@query">
+    <xsl:if test="string-length(/page/request/@query) > 0">
       <xsl:value-of select="/page/request/@query" />
       -
     </xsl:if>
@@ -180,7 +189,8 @@
 
   <xsl:template match="page" mode="sources">
     <div id="source-tabs">
-      <xsl:if test="/page/config/components/sources/source[1]/@id = /page/request/@source">
+      <xsl:variable name="is-first-source-active"><xsl:apply-templates select=".." mode="is-first-source-active" /></xsl:variable>
+      <xsl:if test="$is-first-source-active = 'yes'">
         <xsl:attribute name="class">first-active</xsl:attribute>
       </xsl:if>
 
@@ -188,9 +198,21 @@
       
       <span id="tab-lead-in"><xsl:comment></xsl:comment></span>
       <ul class="tabs clearfix">
-        <xsl:apply-templates select="config/components/sources/source" />
+        <xsl:apply-templates select="." mode="sources-internal" />
       </ul>
     </div>
+  </xsl:template>
+
+  <xsl:template match="page" mode="sources-internal">
+    <xsl:apply-templates select="config/components/sources/source" />
+  </xsl:template>
+
+  <xsl:template match="page" mode="is-first-source-active">
+    <xsl:apply-templates select=".." mode="is-first-source-active-internal" />
+  </xsl:template>
+
+  <xsl:template match="page" mode="is-first-source-active-internal">
+    <xsl:if test="/page/config/components/sources/source[1]/@id = /page/request/@source">yes</xsl:if>
   </xsl:template>
 
   <xsl:template match="page" mode="query">
@@ -210,30 +232,45 @@
   </xsl:template>
 
   <xsl:template match="source">
-    <xsl:variable name="request-source" select="/page/request/@source" />
-    <xsl:variable name="source-pos" select="position()" />
+    <xsl:variable name="source-position" select="position()" />
     
-    <li id="{@id}">
+    <xsl:call-template name="source">
+      <xsl:with-param name="source-id" select="@id" />
+      <xsl:with-param name="is-last" select="position() = count(/page/config/components/sources/source)" />
+      <xsl:with-param name="is-active" select="@id = /page/request/@source" />
+      <xsl:with-param name="is-before-active" select="/page/request/@source = /page/config/components/sources/source[$source-position + 1]/@id" />
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template name="source">
+    <xsl:param name="source-id" />
+    <xsl:param name="is-last" />
+    <xsl:param name="is-active" />
+    <xsl:param name="is-before-active" />
+    
+    <xsl:variable name="source" select="/page/config/components/sources/source[@id = $source-id]" />
+    
+    <li id="{$source/@id}">
       <xsl:attribute name="class">tab <xsl:choose>
-          <xsl:when test="@id = /page/request/@source">active <xsl:choose>
-              <xsl:when test="$source-pos = count(/page/config/components/sources/source)">active-last</xsl:when>
+          <xsl:when test="$is-active">active <xsl:choose>
+              <xsl:when test="$is-last">active-last</xsl:when>
             </xsl:choose>
           </xsl:when>
           <xsl:otherwise>
             <xsl:choose>
-              <xsl:when test="$source-pos = count(/page/config/components/sources/source)">passive-last</xsl:when>
+              <xsl:when test="$is-last">passive-last</xsl:when>
             </xsl:choose>
           </xsl:otherwise>
         </xsl:choose>
       
-        <xsl:if test="/page/request/@source = /page/config/components/sources/source[$source-pos + 1]/@id">before-active</xsl:if>
+        <xsl:if test="$is-before-active">before-active</xsl:if>
       </xsl:attribute>
 
-      <a class="label {@id}" href="#" title="{title}"><xsl:apply-templates select="label" /></a>
+      <a class="label {$source/@id}" href="#" title="{$source/title}"><xsl:apply-templates select="$source/label" /></a>
       <span class="hide">
-        <span class="tab-info"><xsl:value-of select="description" /></span><br />
+        <span class="tab-info"><xsl:value-of select="$source/description" /></span><br />
         <span class="example-queries">Example queries: 
-          <xsl:apply-templates select="example-queries/example-query" />
+          <xsl:apply-templates select="$source/example-queries/example-query" />
         </span>
       </span>
       <span class="right"><xsl:comment></xsl:comment></span>
@@ -244,7 +281,6 @@
     <a href="{$context-path}/{$search-url}?{concat($source-param, '=', string(../../@id), '&amp;', $query-param, '=', string(.))}"><xsl:apply-templates /></a>
   </xsl:template>
 
-  <!-- Overridable elements -->
   <xsl:template name="no-javascript-message">
     For browsers with no JavaScript support, please use the <a href="#">mobile version of Carrot<sup>2</sup></a>.
   </xsl:template>
@@ -285,9 +321,22 @@
       <xsl:if test="string-length(snippet) &gt; 0">
         <div class="snippet"><xsl:apply-templates select="snippet" /></div>
       </xsl:if>
-      <div class="url"><xsl:apply-templates select="url" /></div>
+      <div class="url">
+        <xsl:apply-templates select="url" />
+        <xsl:if test="count(sources/source) > 0">
+          <span class="sources"> [<xsl:apply-templates select="sources/source" />]</span>
+        </xsl:if>
+      </div>
       <div style="clear: both"><xsl:comment></xsl:comment></div>
     </div>
+  </xsl:template>
+  
+  <xsl:template match="document/sources/source[position() = last()]">
+    <xsl:apply-templates />
+  </xsl:template>
+  
+  <xsl:template match="document/sources/source[position() != last()]">
+    <xsl:apply-templates />,
   </xsl:template>
   
   <!-- Clusters -->

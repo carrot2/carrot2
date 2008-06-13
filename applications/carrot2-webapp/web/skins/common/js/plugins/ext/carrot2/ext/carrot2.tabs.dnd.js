@@ -1,5 +1,4 @@
 (function($) {
-  
   $(document).ready(function() {
     sourceTabs();
   });
@@ -14,7 +13,7 @@
     // Make the tabs sortable
     $tabContainer.find("ul").sortable({
       change: function() {
-        $tabContainer.trigger("tabsChanged");
+        $tabContainer.trigger("tabStructureChanged");
       },
       sort: function() {  
         if (!window.tabDragStarted) {
@@ -26,15 +25,10 @@
       stop: function() {
         window.tabDragStarted = false;
         $tabContainer.find("li:not(.drag), #tab-lead-in").css("visibility", "visible").animate({opacity: 1.0}, 300);
-      },
-      start: function(e) {
-        $.tabs.activateTab(e, $tabContainer);
+        $tabContainer.trigger("tabOrderChanged");
       },
       revert: true,
       distance: 15
     });
-
-    // Bind listener for copying tab description
-    $tabContainer.bind("tabsChanged", $.tabs.updateTabs);
   };
 })(jQuery);
