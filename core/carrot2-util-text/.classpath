@@ -4,10 +4,9 @@
 	<classpathentry kind="src" path="src-test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.junit4-ext"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/com.google.collections"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.apache.log4j"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.easymock"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.apache.log4j"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.apache.lucene"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.fest"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.apache.commons"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-util-common"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>

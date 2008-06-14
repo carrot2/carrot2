@@ -4,8 +4,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-/*
- * 
+/**
+ * Test cases for {@link MutableCharArray}.
  */
 public class MutableCharArrayTest
 {

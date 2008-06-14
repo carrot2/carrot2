@@ -10,7 +10,8 @@ Export-Package: org.carrot2.clustering.stc,
  org.tartarus.snowball,
  org.tartarus.snowball.ext
 Require-Bundle: org.carrot2.core,
- org.carrot2.util.common
+ org.carrot2.util.common,
+ org.carrot2.text
 Bundle-ClassPath: META-INF/,
  .,
  src-resources/

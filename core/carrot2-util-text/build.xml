@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<project name="carrot2-util-common" default="help">
+<project name="carrot2-util-text" default="help">
 	<property file="local.properties" />
 
 	<target name="help">

@@ -9,5 +9,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-core"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-common"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-log4j"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-util-text"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>

@@ -9,5 +9,6 @@
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-util-attribute"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-common"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.junit4-ext"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/net.sf.ehcache"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>
