@@ -3,10 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Carrot2 - STC Algorithm
 Bundle-SymbolicName: org.carrot2.algorithm.stc;singleton:=true
 Bundle-Version: 1.0.0
-Export-Package: org.carrot2.clustering.stc,
- org.carrot2.text.linguistic,
- org.carrot2.text.preprocessing,
- org.carrot2.text.suffixtrees
+Export-Package: org.carrot2.clustering.stc
 Require-Bundle: org.carrot2.core,
  org.carrot2.util.common,
  org.carrot2.text

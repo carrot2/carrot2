@@ -163,6 +163,7 @@
         <attributes-xml java.source="core/carrot2-source-yahoo/src" output.dir="${build.dir}" />
         <attributes-xml java.source="core/carrot2-source-microsoft/src" output.dir="${build.dir}" />
         <attributes-xml java.source="core/carrot2-source-xml/src" output.dir="${build.dir}" />
+        <attributes-xml java.source="core/carrot2-util-text/src" output.dir="${build.dir}" />
         <attributes-xml java.source="core/carrot2-util-attribute/src-test" output.dir="${build.dir}" />
     </target>
 
@@ -175,6 +176,7 @@
         <attributes-xml-copy java.source="core/carrot2-source-yahoo/src" output.dir="core/carrot2-source-yahoo/tmp/eclipse" copy.to="core/carrot2-source-yahoo/META-INF" />
         <attributes-xml-copy java.source="core/carrot2-source-microsoft/src" output.dir="core/carrot2-source-microsoft/tmp/eclipse" copy.to="core/carrot2-source-microsoft/META-INF" />
         <attributes-xml-copy java.source="core/carrot2-source-xml/src" output.dir="core/carrot2-source-xml/tmp/eclipse" copy.to="core/carrot2-source-xml/META-INF" />
+        <attributes-xml-copy java.source="core/carrot2-util-text/src" output.dir="core/carrot2-util-text/tmp/eclipse" copy.to="core/carrot2-util-text/META-INF" />
         <attributes-xml java.source="core/carrot2-util-attribute/src-test" output.dir="core/carrot2-util-attribute/tmp/eclipse" />
         <attributes-xml-copy java.source="workbench/org.carrot2.workbench.editors/src" output.dir="workbench/org.carrot2.workbench.editors/tmp/eclipse" copy.to="workbench/org.carrot2.workbench.editors/META-INF" />
     </target>

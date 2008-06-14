@@ -9,6 +9,10 @@ Require-Bundle:
  org.apache.lucene.v2;bundle-version="2.3.1";visibility:=reexport,
  org.tartarus.snowball;bundle-version="1.8.0";visibility:=reexport,
  org.carrot2.core;bundle-version="1.0.0"
-Bundle-ClassPath: .
+Bundle-ClassPath: META-INF/,
+ .,
+ src-resources/
 Export-Package: org.carrot2.text,
- org.carrot2.text.analysis
+ org.carrot2.text.analysis,
+ org.carrot2.text.linguistic,
+ org.carrot2.text.preprocessing

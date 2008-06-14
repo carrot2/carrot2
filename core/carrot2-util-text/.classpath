@@ -2,6 +2,8 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="src-test"/>
+	<classpathentry kind="lib" path="src-resources/"/>
+	<classpathentry kind="lib" path="META-INF/"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.junit4-ext"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.apache.log4j"/>
