@@ -195,7 +195,7 @@
             <fileset dir=".">
                 <include name="core/**/*.java"/>
                 <exclude name="core/carrot2-source-microsoft/src/com/microsoft/msnsearch/**" />
-                <exclude name="core/carrot2-algorithm-stc/src/org/tartarus/snowball/**" />
+                <exclude name="core/carrot2-stemmer-snowball/src/**" />
                 <include name="applications/**/*.java"/>
                 <include name="workbench/**/*.java"/>
             </fileset>
