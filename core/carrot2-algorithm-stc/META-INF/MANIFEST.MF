@@ -6,9 +6,7 @@ Bundle-Version: 1.0.0
 Export-Package: org.carrot2.clustering.stc,
  org.carrot2.text.linguistic,
  org.carrot2.text.preprocessing,
- org.carrot2.text.suffixtrees,
- org.tartarus.snowball,
- org.tartarus.snowball.ext
+ org.carrot2.text.suffixtrees
 Require-Bundle: org.carrot2.core,
  org.carrot2.util.common,
  org.carrot2.text

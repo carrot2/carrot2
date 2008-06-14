@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Snowball Stemmers
+Bundle-SymbolicName: org.tartarus.snowball
+Bundle-Version: 1.8.0
+Export-Package: org.tartarus.snowball,
+ org.tartarus.snowball.ext

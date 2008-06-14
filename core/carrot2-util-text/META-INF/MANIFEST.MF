@@ -6,7 +6,9 @@ Bundle-Version: 1.0.0
 Require-Bundle: 
  org.carrot2.util.common;bundle-version="1.0.0",
  org.carrot2.util.attribute;bundle-version="1.0.0",
- org.apache.lucene.v2;bundle-version="2.3.1";visibility:=reexport
+ org.apache.lucene.v2;bundle-version="2.3.1";visibility:=reexport,
+ org.tartarus.snowball;bundle-version="1.8.0";visibility:=reexport,
+ org.carrot2.core;bundle-version="1.0.0"
 Bundle-ClassPath: .
 Export-Package: org.carrot2.text,
  org.carrot2.text.analysis
