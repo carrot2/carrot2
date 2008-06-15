@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Primitive Collections for Java
+Bundle-SymbolicName: bak.pcj
+Bundle-Version: 1.2.0
+Bundle-ClassPath: pcj.jar
+Export-Package: bak.pcj,
+ bak.pcj.adapter,
+ bak.pcj.hash,
+ bak.pcj.list,
+ bak.pcj.map,
+ bak.pcj.set,
+ bak.pcj.util

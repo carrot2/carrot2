@@ -3,12 +3,14 @@ package org.carrot2.text.preprocessing;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
 
 import org.carrot2.core.Document;
 import org.carrot2.text.analysis.ExtendedWhitespaceAnalyzer;
-import org.carrot2.text.linguistic.*;
-import org.junit.*;
+import org.carrot2.text.linguistic.LanguageCode;
+import org.junit.Before;
+import org.junit.Test;
 
 public class PreprocessorTest
 {
@@ -58,8 +60,8 @@ public class PreprocessorTest
         final PreprocessingContext context = new PreprocessingContext();
         preprocessor.preprocess(context, PreprocessingTasks.TOKENIZE);
 
-        final CharSequence [] images = context.allTokenImages;
-        final int [] tokens = context.allTokens;
+        final CharSequence [] images = context.allWords.images;
+        final int [] tokens = context.allTokens.wordIndices;
 
         // unique token images.
         assertEquals("abc", images[0].toString());
@@ -89,7 +91,7 @@ public class PreprocessorTest
         preprocessor.preprocess(context, PreprocessingTasks.TOKENIZE,
             PreprocessingTasks.CASE_NORMALIZE);
 
-        final CharSequence [] images = context.allTokenImages;
+        final CharSequence [] images = context.allWords.images;
         final int [] tokens = context.allTokensNormalized;
 
         // Check case-normalized tokens.
@@ -120,7 +122,7 @@ public class PreprocessorTest
         preprocessor.preprocess(context, PreprocessingTasks.TOKENIZE,
             PreprocessingTasks.CASE_NORMALIZE, PreprocessingTasks.STEMMING);
 
-        final CharSequence [] images = context.allTokenImages;
+        final CharSequence [] images = context.allWords.images;
         final int [] tokens = context.allTokensStemmed;
 
         // Check tokens.
@@ -152,8 +154,8 @@ public class PreprocessorTest
             PreprocessingTasks.CASE_NORMALIZE, PreprocessingTasks.STEMMING,
             PreprocessingTasks.MARK_TOKENS_STOPLIST);
 
-        final CharSequence [] images = context.allTokenImages;
-        final boolean [] common = context.commonTermFlag;
+        final CharSequence [] images = context.allWords.images;
+        final boolean [] common = context.allWords.commonTermFlag;
         final int [] tokens = context.allTokensNormalized;
 
         // Check tokens.

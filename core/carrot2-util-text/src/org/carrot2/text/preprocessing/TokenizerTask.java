@@ -4,10 +4,11 @@ import java.util.Collection;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.carrot2.core.Document;
-import org.carrot2.text.*;
+import org.carrot2.text.CharSequenceIntMap;
+import org.carrot2.text.MutableCharArray;
 
 /**
- * Tokenization contract for {@link Preprocessor}. 
+ * Tokenization contract for {@link Preprocessor}.
  * 
  * @see PreprocessingTasks#TOKENIZE
  */
@@ -18,8 +19,9 @@ public interface TokenizerTask
      * given set of fields is inspected and added to the tokenizer stream. Fields are
      * separated with {@link PreprocessingContext#SEPARATOR_FIELD}.
      */
-    public abstract void add(Collection<Document> documents,
-        Collection<String> documentFields, Analyzer analyzer);
+    public abstract void tokenize(PreprocessingContext context,
+        Collection<Document> documents, Collection<String> documentFields,
+        Analyzer analyzer);
 
     /**
      * Returns unique images of tokens.
@@ -36,6 +38,12 @@ public interface TokenizerTask
      * {@link #getTokens()}.
      */
     public abstract int [] getTokenTypes();
+
+    public int [] getDocumentIndices();
+
+    public byte [] getFieldIndices();
+
+    public String [] getFieldNames();
 
     /**
      * @return Return the {@link CharSequenceIntMap} used internally to store unique token

@@ -22,9 +22,9 @@ public final class LanguageModelStemmingTask implements StemmingTask
         final MutableCharArray current = new MutableCharArray("");
         final Stemmer stemmer = language.getStemmer();
 
-        final CharSequence [] allTokenImages = context.allTokenImages;
+        final CharSequence [] allTokenImages = context.allWords.images;
         final int [] allTokens = (context.allTokensNormalized != null ? context.allTokensNormalized
-            : context.allTokens);
+            : context.allTokens.wordIndices);
 
         final int [] remapping = new int [allTokenImages.length];
         for (int i = 0; i < allTokenImages.length; i++)

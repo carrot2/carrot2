@@ -14,9 +14,9 @@ final class StopListMarkerTask
      */
     public void mark(PreprocessingContext context, LanguageModel language)
     {
-        this.commonTermFlags = new boolean [context.allTokenImages.length];
+        this.commonTermFlags = new boolean [context.allWords.images.length];
         
-        final CharSequence [] images = context.allTokenImages;
+        final CharSequence [] images = context.allWords.images;
         for (int i = 0; i < commonTermFlags.length; i++)
         {
             commonTermFlags[i] = language.isCommonWord(images[i]);

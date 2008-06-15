@@ -18,7 +18,7 @@ public class PreprocessedDocumentScanner
          * minimal anyway.
          */
         final IntArrayPredicateIterator docIterator = new IntArrayPredicateIterator(
-            context.allTokens, PreprocessingContext.ON_DOCUMENT_SEPARATOR);
+            context.allTokens.wordIndices, PreprocessingContext.ON_DOCUMENT_SEPARATOR);
 
         while (docIterator.hasNext())
         {
@@ -35,7 +35,7 @@ public class PreprocessedDocumentScanner
     protected void document(PreprocessingContext context, int start, int length)
     {
         final IntArrayPredicateIterator fieldIterator = new IntArrayPredicateIterator(
-            context.allTokens, start, length, PreprocessingContext.ON_FIELD_SEPARATOR);
+            context.allTokens.wordIndices, start, length, PreprocessingContext.ON_FIELD_SEPARATOR);
 
         while (fieldIterator.hasNext())
         {
@@ -52,7 +52,7 @@ public class PreprocessedDocumentScanner
     protected void field(PreprocessingContext context, int start, int length)
     {
         final IntArrayPredicateIterator sentenceIterator = new IntArrayPredicateIterator(
-            context.allTokens, start, length, PreprocessingContext.ON_SENTENCE_SEPARATOR);
+            context.allTokens.wordIndices, start, length, PreprocessingContext.ON_SENTENCE_SEPARATOR);
 
         while (sentenceIterator.hasNext())
         {

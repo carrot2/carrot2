@@ -132,12 +132,15 @@ public final class Preprocessor
             assertParameterGiven(PreprocessingTasks.TOKENIZE, "documentFields",
                 documentFields);
 
-            tokenizer.add(documents, documentFields, analyzer);
+            tokenizer.tokenize(context, documents, documentFields, analyzer);
 
             context.tokenMap = tokenizer.getTokenMap();
-            context.allTokens = tokenizer.getTokens();
-            context.allTypes = tokenizer.getTokenTypes();
-            context.allTokenImages = tokenizer.getTokenImages();
+            context.allTokens.documentIndices = tokenizer.getDocumentIndices();
+            context.allTokens.fieldIndices = tokenizer.getFieldIndices();
+            context.allTokens.wordIndices = tokenizer.getTokens();
+            context.allTokens.types = tokenizer.getTokenTypes();
+            context.allWords.images = tokenizer.getTokenImages();
+            context.allFields.names = tokenizer.getFieldNames();
         }
 
         /*
@@ -146,15 +149,15 @@ public final class Preprocessor
         if (taskSet.remove(PreprocessingTasks.CASE_NORMALIZE))
         {
             assertContextParameterGiven(PreprocessingTasks.CASE_NORMALIZE,
-                PreprocessingTasks.TOKENIZE, context.allTokenImages);
+                PreprocessingTasks.TOKENIZE, context.allWords.images);
             assertContextParameterGiven(PreprocessingTasks.CASE_NORMALIZE,
                 PreprocessingTasks.TOKENIZE, context.allTokens);
 
-            caseNormalizer.normalize(context.tokenMap, context.allTokenImages,
-                context.allTokens, languageFactory);
+            caseNormalizer.normalize(context.tokenMap, context.allWords.images,
+                context.allTokens.wordIndices, languageFactory);
 
             context.allTokensNormalized = caseNormalizer.getTokensNormalized();
-            context.allTokenImages = context.tokenMap.getTokenImages();
+            context.allWords.images = context.tokenMap.getTokenImages();
         }
 
         /*
@@ -163,11 +166,11 @@ public final class Preprocessor
         if (taskSet.remove(PreprocessingTasks.STEMMING))
         {
             assertContextParameterGiven(PreprocessingTasks.STEMMING,
-                PreprocessingTasks.TOKENIZE, context.allTokenImages);
+                PreprocessingTasks.TOKENIZE, context.allWords.images);
 
             stemmer.stem(context.tokenMap, context, language);
 
-            context.allTokenImages = context.tokenMap.getTokenImages();
+            context.allWords.images = context.tokenMap.getTokenImages();
             context.allTokensStemmed = stemmer.getTokensStemmed();
         }
 
@@ -177,12 +180,12 @@ public final class Preprocessor
         if (taskSet.remove(PreprocessingTasks.MARK_TOKENS_STOPLIST))
         {
             assertContextParameterGiven(PreprocessingTasks.MARK_TOKENS_STOPLIST,
-                PreprocessingTasks.TOKENIZE, context.allTokenImages);
+                PreprocessingTasks.TOKENIZE, context.allWords.images);
 
             final StopListMarkerTask task = new StopListMarkerTask();
             task.mark(context, language);
 
-            context.commonTermFlag = task.getCommonTermFlags();
+            context.allWords.commonTermFlag = task.getCommonTermFlags();
         }
 
         /*
