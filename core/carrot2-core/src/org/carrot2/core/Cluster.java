@@ -9,7 +9,8 @@ import org.simpleframework.xml.load.Commit;
 import org.simpleframework.xml.load.Persist;
 
 import com.google.common.base.Function;
-import com.google.common.collect.*;
+import com.google.common.collect.Comparators;
+import com.google.common.collect.Lists;
 
 /**
  * A cluster (group) of {@link Document}s. Each cluster has a human-readable label
@@ -408,14 +409,40 @@ public final class Cluster
      * Compares clusters by the natural order of their labels as returned by
      * {@link #getLabel()}.
      */
-    public static final Comparator<Cluster> BY_LABEL_COMPARATOR = Comparators
-        .nullLeastOrder(Comparators.fromFunction(new Function<Cluster, String>()
-        {
-            public String apply(Cluster cluster)
+    public static final Comparator<Cluster> BY_LABEL_COMPARATOR =
+        Comparators.nullLeastOrder(Comparators
+            .fromFunction(new Function<Cluster, String>()
             {
-                return cluster.getLabel();
+                public String apply(Cluster cluster)
+                {
+                    return cluster.getLabel();
+                }
+            }));
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj instanceof Cluster)
+        {
+            Cluster c = (Cluster) obj;
+            if (c.size() != this.size())
+            {
+                return false;
             }
-        }));
+            if (!c.getLabel().equals(this.getLabel()))
+            {
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return size() ^ getLabel().hashCode();
+    }
 
     /**
      * Compares clusters first by their size as returned by {@link #size()} and labels as

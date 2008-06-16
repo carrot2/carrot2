@@ -47,6 +47,7 @@ public class ClusterTreeView extends PageBookView
         {
 
             private ClusterTreeComponent tree;
+            private transient boolean initialized;
 
             @Override
             public void createControl(Composite parent)
@@ -61,6 +62,7 @@ public class ClusterTreeView extends PageBookView
                         if (event.getProperty().equals(ClusterTreeComponent.CONTENT))
                         {
                             tree.setClusters((List<Cluster>) event.getNewValue());
+                            initialized = true;
                         }
                     }
                 });
@@ -69,11 +71,30 @@ public class ClusterTreeView extends PageBookView
                     {
                         public void selectionChanged(SelectionChangedEvent event)
                         {
-                            part.getSite().getSelectionProvider().setSelection(
-                                event.getSelection());
+                            if (initialized)
+                            {
+                                part.getSite().getSelectionProvider().setSelection(
+                                    event.getSelection());
+                            }
+                        }
+                    });
+                part.getSite().getSelectionProvider().addSelectionChangedListener(
+                    new ISelectionChangedListener()
+                    {
+                        public void selectionChanged(SelectionChangedEvent event)
+                        {
+                            if (initialized)
+                            {
+                                getSite().getSelectionProvider().setSelection(
+                                    event.getSelection());
+                            }
                         }
                     });
                 tree.setClusters(provider.getCurrentContent());
+                if (!provider.getCurrentContent().isEmpty())
+                {
+                    initialized = true;
+                }
             }
 
             @Override
