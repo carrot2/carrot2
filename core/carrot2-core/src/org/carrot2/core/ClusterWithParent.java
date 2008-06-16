@@ -19,7 +19,7 @@ public class ClusterWithParent
      * The parent cluster of {@link #cluster}, may be <code>null</code> in case of
      * top-level clusters.
      */
-    public final Cluster parent;
+    public final ClusterWithParent parent;
 
     /**
      * Subclusters of {@link #cluster} wrapped to add their parent cluster. The list is
@@ -30,7 +30,7 @@ public class ClusterWithParent
     /**
      * Private constructor.
      */
-    private ClusterWithParent(Cluster parent, Cluster cluster,
+    private ClusterWithParent(ClusterWithParent parent, Cluster cluster,
         List<ClusterWithParent> subclusters)
     {
         this.parent = parent;
@@ -39,27 +39,39 @@ public class ClusterWithParent
     }
 
     /**
-     * Wraps a single <code>cluster</code> together with its parent cluster. Note that
-     * for efficiency reasons, reference cycles are <strong>not</strong> detected.
+     * Wraps a cluster hierarchy starting with the <code>root</code> into
+     * {@link ClusterWithParent} objects. All children of the <code>root</code> cluster
+     * will have the {@link #parent} field set to the wrapper corresponding to their
+     * parent clusters, while for the <code>root</code> cluster, {@link #parent} will be
+     * <code>null</code>. Note that for efficiency reasons, reference cycles are
+     * <strong>not</strong> detected.
      * 
-     * @param cluster the cluster to be wrapped
-     * @param parent the parent cluster of <code>cluster</code>, can be
-     *            <code>null</code>
+     * @param root the cluster to be wrapped
      * @return wrapped cluster with parent
      */
-    public static ClusterWithParent wrap(Cluster parent, Cluster cluster)
+    public static ClusterWithParent wrap(Cluster root)
     {
-        final List<Cluster> actualSubclusters = cluster.getSubclusters();
+        return wrap(null, root);
+    }
+
+    /**
+     * Private method that does the actual wrapping.
+     */
+    private static ClusterWithParent wrap(ClusterWithParent parent, Cluster root)
+    {
+        final List<Cluster> actualSubclusters = root.getSubclusters();
         final List<ClusterWithParent> subclustersWithParent = Lists
             .newArrayListWithCapacity(actualSubclusters.size());
 
+        final ClusterWithParent rootWithParent = new ClusterWithParent(parent, root,
+            Collections.unmodifiableList(subclustersWithParent));
+
         for (Cluster actualCluster : actualSubclusters)
         {
-            subclustersWithParent.add(wrap(cluster, actualCluster));
+            subclustersWithParent.add(wrap(rootWithParent, actualCluster));
         }
 
-        return new ClusterWithParent(parent, cluster, Collections
-            .unmodifiableList(subclustersWithParent));
+        return rootWithParent;
     }
 
     /**
@@ -77,7 +89,7 @@ public class ClusterWithParent
 
         for (Cluster cluster : clusters)
         {
-            result.add(wrap(null, cluster));
+            result.add(wrap(cluster));
         }
 
         return result;

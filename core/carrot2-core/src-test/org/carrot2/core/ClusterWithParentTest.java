@@ -21,7 +21,7 @@ public class ClusterWithParentTest
     public void testNoSubclusters()
     {
         final Cluster cluster = new Cluster();
-        final ClusterWithParent clusterWithParent = ClusterWithParent.wrap(null, cluster);
+        final ClusterWithParent clusterWithParent = ClusterWithParent.wrap(cluster);
 
         assertNotNull(clusterWithParent);
         assertNull(clusterWithParent.parent);
@@ -37,7 +37,7 @@ public class ClusterWithParentTest
         final Cluster subclusterA = new Cluster();
         cluster.addSubclusters(subclusterA);
 
-        final ClusterWithParent clusterWithParent = ClusterWithParent.wrap(null, cluster);
+        final ClusterWithParent clusterWithParent = ClusterWithParent.wrap(cluster);
 
         assertNotNull(clusterWithParent);
         assertNull(clusterWithParent.parent);
@@ -45,7 +45,7 @@ public class ClusterWithParentTest
         assertNotNull(clusterWithParent.subclusters);
         assertThat(clusterWithParent.subclusters).hasSize(1);
 
-        assertThat(cluster).isSameAs(clusterWithParent.subclusters.get(0).parent);
+        assertThat(cluster).isSameAs(clusterWithParent.subclusters.get(0).parent.cluster);
         assertThat(subclusterA).isSameAs(clusterWithParent.subclusters.get(0).cluster);
         assertThat(clusterWithParent.subclusters.get(0).subclusters).isEmpty();
     }
@@ -91,7 +91,7 @@ public class ClusterWithParentTest
         cluster.addSubclusters(subcluster);
         subcluster.addSubclusters(cluster); // Cyclic reference here
 
-        ClusterWithParent.wrap(null, cluster);
+        ClusterWithParent.wrap(cluster);
     }
 
     @Test
