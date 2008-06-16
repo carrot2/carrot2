@@ -409,40 +409,14 @@ public final class Cluster
      * Compares clusters by the natural order of their labels as returned by
      * {@link #getLabel()}.
      */
-    public static final Comparator<Cluster> BY_LABEL_COMPARATOR =
-        Comparators.nullLeastOrder(Comparators
-            .fromFunction(new Function<Cluster, String>()
-            {
-                public String apply(Cluster cluster)
-                {
-                    return cluster.getLabel();
-                }
-            }));
-
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (obj instanceof Cluster)
+    public static final Comparator<Cluster> BY_LABEL_COMPARATOR = Comparators
+        .nullLeastOrder(Comparators.fromFunction(new Function<Cluster, String>()
         {
-            Cluster c = (Cluster) obj;
-            if (c.size() != this.size())
+            public String apply(Cluster cluster)
             {
-                return false;
+                return cluster.getLabel();
             }
-            if (!c.getLabel().equals(this.getLabel()))
-            {
-                return false;
-            }
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return size() ^ getLabel().hashCode();
-    }
+        }));
 
     /**
      * Compares clusters first by their size as returned by {@link #size()} and labels as

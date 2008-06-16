@@ -3,6 +3,7 @@ package org.carrot2.workbench.core.ui;
 import java.util.*;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.carrot2.core.Cluster;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.*;
 import org.carrot2.util.attribute.*;
@@ -37,6 +38,8 @@ import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.*;
 import org.eclipse.ui.forms.widgets.*;
 import org.eclipse.ui.part.EditorPart;
+
+import com.google.common.collect.Lists;
 
 public class ResultsEditor extends EditorPart implements IPersistableEditor
 {
@@ -314,7 +317,8 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
                 {
                     final ProcessingResult result =
                         ((ProcessingStatus) event.getResult()).result;
-                    tree.setClusters(result.getClusters());
+                    Cluster root = new Cluster("All topics", result.getClusters());
+                    tree.setClusters(Lists.newArrayList(root));
                 }
             }
         });

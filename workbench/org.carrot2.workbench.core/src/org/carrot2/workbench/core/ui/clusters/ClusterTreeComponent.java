@@ -66,10 +66,13 @@ public class ClusterTreeComponent extends PropertyProvider
         {
             public void run()
             {
-                Cluster root = new Cluster("All topics", clusters);
-                ClusterWithParent wrappedRoot = ClusterWithParent.wrap(root);
-                viewer.setInput(Lists.newArrayList(wrappedRoot));
-                viewer.setSelection(new StructuredSelection(wrappedRoot));
+                final List<ClusterWithParent> wrappedClusters = ClusterWithParent
+                    .wrap(clusters);
+                viewer.setInput(wrappedClusters);
+                if (!wrappedClusters.isEmpty())
+                {
+                    viewer.setSelection(new StructuredSelection(wrappedClusters.get(0)));
+                }
                 Object oldContent = currentContent;
                 currentContent = clusters;
                 firePropertyChanged(CONTENT, oldContent, currentContent);
