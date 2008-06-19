@@ -53,7 +53,7 @@ public final class PreprocessingContext
         /**
          * Token images.
          */
-        public CharSequence [] images;
+        public char [][] images;
 
         /**
          * A set of {@link TokenType} bit flags for each token.

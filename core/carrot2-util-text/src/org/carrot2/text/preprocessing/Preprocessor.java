@@ -137,6 +137,7 @@ public final class Preprocessor
             context.tokenMap = tokenizer.getTokenMap();
             context.allTokens.documentIndices = tokenizer.getDocumentIndices();
             context.allTokens.fieldIndices = tokenizer.getFieldIndices();
+            context.allTokens.images = tokenizer.getImages();
             context.allTokens.wordIndices = tokenizer.getTokens();
             context.allTokens.types = tokenizer.getTokenTypes();
             context.allWords.images = tokenizer.getTokenImages();

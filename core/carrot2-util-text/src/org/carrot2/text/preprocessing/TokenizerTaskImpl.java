@@ -44,6 +44,11 @@ public final class TokenizerTaskImpl implements TokenizerTask
     private final IntArrayList tokens = new IntArrayList();
 
     /**
+     * Token images.
+     */
+    private final ArrayList<char []> images = Lists.newArrayList();
+
+    /**
      * An array of token types.
      * 
      * @see TokenType
@@ -62,6 +67,9 @@ public final class TokenizerTaskImpl implements TokenizerTask
      */
     private final ByteArrayList fieldIndices = new ByteArrayList();
 
+    /**
+     * Field names corresponding to {@link #fieldIndices}.
+     */
     private String [] fieldNames;
 
     /**
@@ -175,13 +183,16 @@ public final class TokenizerTaskImpl implements TokenizerTask
 
         if (TokenTypeUtils.isSentenceDelimiter(type))
         {
-            add(documentIndex, fieldIndex, PreprocessingContext.SEPARATOR_SENTENCE, type
-                .getRawFlags());
+            add(documentIndex, fieldIndex, null, PreprocessingContext.SEPARATOR_SENTENCE,
+                type.getRawFlags());
         }
         else
         {
+            final char [] buffer = new char [token.termLength()];
+            System.arraycopy(token.termBuffer(), 0, buffer, 0, token.termLength());
+
             currentToken.reset(token.termBuffer(), 0, token.termLength());
-            add(documentIndex, fieldIndex, tokenMap.getIndex(currentToken), type
+            add(documentIndex, fieldIndex, buffer, tokenMap.getIndex(currentToken), type
                 .getRawFlags());
         }
     }
@@ -191,7 +202,7 @@ public final class TokenizerTaskImpl implements TokenizerTask
      */
     public void addDocumentSeparator()
     {
-        add(-1, (byte) -1, PreprocessingContext.SEPARATOR_DOCUMENT,
+        add(-1, (byte) -1, null, PreprocessingContext.SEPARATOR_DOCUMENT,
             TokenType.TF_SEPARATOR_DOCUMENT);
     }
 
@@ -200,7 +211,7 @@ public final class TokenizerTaskImpl implements TokenizerTask
      */
     public void addFieldSeparator(int documentIndex)
     {
-        add(documentIndex, (byte) -1, PreprocessingContext.SEPARATOR_FIELD,
+        add(documentIndex, (byte) -1, null, PreprocessingContext.SEPARATOR_FIELD,
             TokenType.TF_SEPARATOR_FIELD);
     }
 
@@ -209,17 +220,19 @@ public final class TokenizerTaskImpl implements TokenizerTask
      */
     public void addSentenceSeparator(int documentIndex, byte fieldIndex)
     {
-        add(documentIndex, fieldIndex, PreprocessingContext.SEPARATOR_FIELD,
+        add(documentIndex, fieldIndex, null, PreprocessingContext.SEPARATOR_FIELD,
             TokenType.TF_SEPARATOR_FIELD);
     }
 
     /**
      * Adds custom token code to the sequence. May be used to add separator constants.
      */
-    public void add(int documentIndex, byte fieldIndex, int tokenCode, int tokenTypeCode)
+    public void add(int documentIndex, byte fieldIndex, char [] image, int tokenCode,
+        int tokenTypeCode)
     {
         documentIndices.add(documentIndex);
         fieldIndices.add(fieldIndex);
+        images.add(image);
         tokenTypes.add(tokenTypeCode);
         tokens.add(tokenCode);
     }
@@ -269,5 +282,10 @@ public final class TokenizerTaskImpl implements TokenizerTask
     public byte [] getFieldIndices()
     {
         return fieldIndices.toArray();
+    }
+
+    public char [][] getImages()
+    {
+        return images.toArray(new char [images.size()] []);
     }
 }

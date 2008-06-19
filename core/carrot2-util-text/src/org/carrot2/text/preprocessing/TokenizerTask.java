@@ -45,6 +45,8 @@ public interface TokenizerTask
 
     public String [] getFieldNames();
 
+    public char [][] getImages();
+
     /**
      * @return Return the {@link CharSequenceIntMap} used internally to store unique token
      *         images.
