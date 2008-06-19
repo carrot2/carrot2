@@ -28,6 +28,11 @@ public class Perspective implements IPerspectiveFactory
         leftBottomFolder.addPlaceholder(ClusterTreeView.ID);
         leftBottomFolder.addPlaceholder(AttributesView.ID);
 
+        addShortcuts(layout);
+    }
+
+    static void addShortcuts(IPageLayout layout)
+    {
         layout.addShowViewShortcut(ClusterTreeView.ID);
         layout.addShowViewShortcut(DocumentListView.ID);
         layout.addShowViewShortcut(SearchView.ID);

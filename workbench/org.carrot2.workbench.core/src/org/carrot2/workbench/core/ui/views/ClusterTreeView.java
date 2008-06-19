@@ -14,20 +14,10 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.*;
 import org.eclipse.ui.part.*;
 
-public class ClusterTreeView extends PageBookView
+public class ClusterTreeView extends PageBookViewBase
 {
 
     public static final String ID = "org.carrot2.workbench.core.clusters";
-
-    @Override
-    protected IPage createDefaultPage(PageBook book)
-    {
-        MessagePage defaultPage = new MessagePage();
-        initPage(defaultPage);
-        defaultPage.createControl(book);
-        defaultPage.setMessage("Nothing to show for this editor");
-        return defaultPage;
-    }
 
     @Override
     protected PageRec doCreatePage(final IWorkbenchPart part)
@@ -124,25 +114,6 @@ public class ClusterTreeView extends PageBookView
         initPage(partPage);
         partPage.createControl(getPageBook());
         return new PageRec(part, partPage);
-    }
-
-    @Override
-    protected void doDestroyPage(IWorkbenchPart part, PageRec pageRecord)
-    {
-        ((Page) pageRecord.page).dispose();
-        pageRecord.dispose();
-    }
-
-    @Override
-    protected IWorkbenchPart getBootstrapPart()
-    {
-        return this.getSite().getPage().getActiveEditor();
-    }
-
-    @Override
-    protected boolean isImportant(IWorkbenchPart part)
-    {
-        return (part instanceof IEditorPart);
     }
 
 }

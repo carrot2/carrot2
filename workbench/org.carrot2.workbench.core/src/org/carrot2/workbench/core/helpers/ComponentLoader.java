@@ -8,7 +8,7 @@ import org.eclipse.core.runtime.*;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-public class ComponentLoader
+public final class ComponentLoader
 {
     private final String extensionName;
     private final String elementName;
@@ -90,12 +90,7 @@ public class ComponentLoader
      */
     public ProcessingComponent getExecutableComponent(String id)
     {
-        if (!componentCache.containsKey(id))
-        {
-            throw new RuntimeException("No such component: " + id);
-        }
-
-        return componentCache.get(id).getExecutableComponent();
+        return getComponent(id).getExecutableComponent();
     }
 
     /*

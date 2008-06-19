@@ -19,20 +19,10 @@ import org.eclipse.ui.part.*;
  * source of attributes to display. If attributes are groupped, than appropriate groups
  * are displayed.
  */
-public class AttributesView extends PageBookView
+public class AttributesView extends PageBookViewBase
 {
 
     public static final String ID = "org.carrot2.workbench.core.attributes";
-
-    @Override
-    protected IPage createDefaultPage(PageBook book)
-    {
-        MessagePage defaultPage = new MessagePage();
-        initPage(defaultPage);
-        defaultPage.createControl(book);
-        defaultPage.setMessage("Nothing to show for this editor");
-        return defaultPage;
-    }
 
     @Override
     protected PageRec doCreatePage(IWorkbenchPart part)
@@ -94,25 +84,6 @@ public class AttributesView extends PageBookView
         initPage(page);
         page.createControl(getPageBook());
         return new PageRec(part, page);
-    }
-
-    @Override
-    protected void doDestroyPage(IWorkbenchPart part, PageRec pageRecord)
-    {
-        ((Page) pageRecord.page).dispose();
-        pageRecord.dispose();
-    }
-
-    @Override
-    protected IWorkbenchPart getBootstrapPart()
-    {
-        return this.getSite().getPage().getActiveEditor();
-    }
-
-    @Override
-    protected boolean isImportant(IWorkbenchPart part)
-    {
-        return (part instanceof IEditorPart);
     }
 
 }
