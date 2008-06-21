@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-Name: Algotithms Plug-in
-Bundle-SymbolicName: org.ukrukar.converter.core.algotithms;singleton:=true
-Bundle-Version: 1.0.0
-Bundle-Activator: org.ukrukar.converter.core.algotithms.Activator
-Require-Bundle: org.eclipse.core.runtime,
- org.ukrukar.converter.core
-Eclipse-LazyStart: true
