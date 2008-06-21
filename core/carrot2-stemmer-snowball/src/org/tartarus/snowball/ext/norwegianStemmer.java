@@ -9,6 +9,7 @@ import org.tartarus.snowball.Among;
   * It implements the stemming algorithm defined by a snowball script.
   */
 
+@SuppressWarnings({ "unchecked", "unused", "serial" })
 public class norwegianStemmer extends org.tartarus.snowball.SnowballStemmer {
 
 private static final long serialVersionUID = 1L;

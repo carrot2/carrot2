@@ -2,6 +2,7 @@
 package org.tartarus.snowball;
 import java.lang.reflect.InvocationTargetException;
 
+@SuppressWarnings({ "unchecked", "unused", "serial" })
 public class SnowballProgram {
     protected SnowballProgram()
     {
