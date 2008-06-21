@@ -27,6 +27,7 @@ public class ExtendedWhitespaceTokenizerTest
             this.image = image;
         }
 
+        @Override
         public boolean equals(Object o)
         {
             if (o instanceof TokenImage)
@@ -37,6 +38,12 @@ public class ExtendedWhitespaceTokenizerTest
             {
                 return false;
             }
+        }
+
+        @Override
+        public int hashCode()
+        {
+            return image != null ? image.hashCode() ^ type : type;
         }
 
         public String toString()
@@ -70,7 +77,8 @@ public class ExtendedWhitespaceTokenizerTest
         String test = " ...  S_NI_P token";
         TokenImage [] tokens =
         {
-            new TokenImage("...", TokenType.TT_PUNCTUATION | TokenType.TF_SEPARATOR_SENTENCE),
+            new TokenImage("...", TokenType.TT_PUNCTUATION
+                | TokenType.TF_SEPARATOR_SENTENCE),
             new TokenImage("S_NI_P", TokenType.TT_FILE),
             new TokenImage("token", TokenType.TT_TERM)
         };
@@ -114,7 +122,8 @@ public class ExtendedWhitespaceTokenizerTest
 
             new TokenImage("go2.pl/mail", TokenType.TT_FULL_URL),
 
-            new TokenImage("http://www.digimine.com/usama/datamine/.", TokenType.TT_FULL_URL),
+            new TokenImage("http://www.digimine.com/usama/datamine/.",
+                TokenType.TT_FULL_URL),
         };
 
         assertEqualTokens(test, tokens);
@@ -203,12 +212,13 @@ public class ExtendedWhitespaceTokenizerTest
             new TokenImage(",", TokenType.TT_PUNCTUATION),
             new TokenImage("Data", TokenType.TT_TERM),
             new TokenImage("Mining", TokenType.TT_TERM),
-            new TokenImage("!", TokenType.TT_PUNCTUATION | TokenType.TF_SEPARATOR_SENTENCE)
+            new TokenImage("!", TokenType.TT_PUNCTUATION
+                | TokenType.TF_SEPARATOR_SENTENCE)
         };
 
         assertEqualTokens(test, tokens);
-    }    
-    
+    }
+
     /**
      * Compare expected and produced token sequences.
      */
@@ -216,8 +226,8 @@ public class ExtendedWhitespaceTokenizerTest
     {
         try
         {
-            final Tokenizer tokenizer = new ExtendedWhitespaceTokenizer(
-                new StringReader(testString));
+            final Tokenizer tokenizer = new ExtendedWhitespaceTokenizer(new StringReader(
+                testString));
 
             final ArrayList<TokenImage> tokens = new ArrayList<TokenImage>();
             Token token;

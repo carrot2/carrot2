@@ -44,7 +44,7 @@ public final class PreprocessingContext
      * All arrays in this class have the same length and values across different arrays
      * correspond to each other for the same index.
      */
-    public class AllTokens
+    public static class AllTokens
     {
         /**
          * Token image as it appears in the input. On positions where {@link #type} is
@@ -100,7 +100,7 @@ public final class PreprocessingContext
      * Information about all fields processed for the input
      * {@link PreprocessingContext#documents}.
      */
-    public class AllFields
+    public static class AllFields
     {
         /**
          * Name of the document field. Entries of {@link AllTokens#fieldIndex} point to
@@ -128,7 +128,7 @@ public final class PreprocessingContext
      * All arrays in this class have the same length and values across different arrays
      * correspond to each other for the same index.
      */
-    public class AllWords
+    public static class AllWords
     {
         /**
          * The most frequently appearing variant of the word with respect to case. E.g. if
@@ -194,7 +194,7 @@ public final class PreprocessingContext
      * All arrays in this class have the same length and values across different arrays
      * correspond to each other for the same index.
      */
-    public class AllStems
+    public static class AllStems
     {
         /**
          * Stem image as produced by the {@link Stemmer}, may not correspond to any

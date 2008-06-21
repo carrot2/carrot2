@@ -93,7 +93,7 @@ public class PreprocessorTestBase
     /**
      * Default field names.
      */
-    protected final static String [] DEFAULT_DOCUMENT_FIELD_NAMES = new String []
+    final static String [] DEFAULT_DOCUMENT_FIELD_NAMES = new String []
     {
         "title", "snippet"
     };
