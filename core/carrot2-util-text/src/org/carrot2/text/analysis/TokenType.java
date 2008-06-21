@@ -36,10 +36,15 @@ public interface TokenType
      */
     /** Current token is a sentence separator. */
     public static final int TF_SEPARATOR_SENTENCE = 0x0100;
+    
     /** Current token is a document separator (never returned from parsing). */
     public static final int TF_SEPARATOR_DOCUMENT = 0x0200;
+    
     /** Current token separates document's logical fields. */
     public static final int TF_SEPARATOR_FIELD = 0x0800;
+    
+    /** Current token terminates the input (never returned from parsing). */
+    public static final int TF_TERMINATOR = 0x1000;
 
     /**
      * @return Returns raw bitmask associated with the token.

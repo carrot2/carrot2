@@ -7,7 +7,7 @@ import org.carrot2.text.MutableCharArray;
 /**
  * Implements {@link LanguageModel}.
  */
-abstract class ThreadSafeLanguageModelImpl implements LanguageModel
+abstract class ThreadSafeLanguageModel implements LanguageModel
 {
     private final LanguageCode language;
 
@@ -19,7 +19,7 @@ abstract class ThreadSafeLanguageModelImpl implements LanguageModel
     /**
      * 
      */
-    ThreadSafeLanguageModelImpl(LanguageCode language, Set<String> stopwords)
+    ThreadSafeLanguageModel(LanguageCode language, Set<String> stopwords)
     {
         this.language = language;
         this.stopwords = new HashSet<MutableCharArray>();

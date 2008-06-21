@@ -38,8 +38,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     public Collection<Cluster> clusters = null;
 
     /**
-     * Preprocessing pipeline. Not an attribute, but contains bindable
-     * attributes inside.
+     * Preprocessing pipeline. Not an attribute, but contains bindable attributes inside.
      */
     public Preprocessor preprocessor = new Preprocessor();
 
@@ -161,19 +160,29 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
 
             protected void sentence(PreprocessingContext context, int start, int length)
             {
-                final int [] tokens = context.allTokens.wordIndices;
-                final CharSequence [] images = context.allWords.images;
-                final int [] stemsMap = context.allTokensStemmed;
+                final int [] tokenWordIndices = context.allTokens.wordIndex;
+                final char [][] wordImages = context.allWords.image;
+                final int [] wordStemIndices = context.allWords.stemIndex;
                 final boolean [] commonWords = context.allWords.commonTermFlag;
+                final char [][] stemImages = context.allStems.images;
 
                 for (int i = start; i < start + length; i++)
                 {
-                    final int tokenCode = tokens[i];
-                    final String term = images[tokenCode].toString();
-                    final String stem = images[stemsMap[i]].toString();
+                    final boolean isPunctuation = TokenTypeUtils
+                        .maskType(context.allTokens.type[i]) == TokenType.TT_PUNCTUATION;
+                    final int wordIndex = tokenWordIndices[i];
+                    
+                    if (wordIndex < 0 && !isPunctuation)
+                    {
+                        continue;
+                    }
+                    
+                    final String term = (wordIndex >= 0 ? new String(
+                        wordImages[wordIndex]) : ".");
+                    final String stem = (wordIndex >= 0 ? new String(
+                        stemImages[wordStemIndices[wordIndex]]) : ".");
 
-                    boolean stop = commonWords[stemsMap[i]]
-                        || TokenTypeUtils.maskType(context.allTokens.types[i]) == TokenType.TT_PUNCTUATION;
+                    boolean stop = isPunctuation || commonWords[wordIndex];
 
                     currentDocument.add(new StemmedTerm(term, stem, stop));
                 }

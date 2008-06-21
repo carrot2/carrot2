@@ -4,6 +4,7 @@
 package org.carrot2.core.test;
 
 import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThat;
+import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.*;
 
 import java.util.*;
@@ -51,7 +52,7 @@ public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm>
         final ProcessingResult processingResult = cluster(DOCUMENTS_DATA_MINING);
         final Collection<Cluster> clusters = processingResult.getClusters();
 
-        assertTrue(clusters.size() > 0);
+        assertThat(clusters.size()).isGreaterThan(0);
     }
 
     @Test

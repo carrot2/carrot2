@@ -14,4 +14,12 @@ public class Assertions
     {
         return new CharCharArrayAssert(actual);
     }
+
+    /**
+     * Creates an {@link IntIntArrayAssert}.
+     */
+    public static IntIntArrayAssert assertThat(int [][] actual)
+    {
+        return new IntIntArrayAssert(actual);
+    }
 }

@@ -10,7 +10,7 @@ import org.tartarus.snowball.SnowballStemmer;
 /**
  * Implements language models on top of Snowball stemmers.
  */
-final class SnowballLanguageImpl extends ThreadSafeLanguageModelImpl
+final class SnowballLanguageModel extends ThreadSafeLanguageModel
 {
     private Class<SnowballStemmer> stemmerClazz;
 
@@ -50,7 +50,7 @@ final class SnowballLanguageImpl extends ThreadSafeLanguageModelImpl
      * associated with <code>languageCode</code>'s ISO code.
      */
     @SuppressWarnings("unchecked")
-    SnowballLanguageImpl(LanguageCode languageCode, ResourceUtils resourceLoaders)
+    SnowballLanguageModel(LanguageCode languageCode, ResourceUtils resourceLoaders)
     {
         super(languageCode, loadCommonWords(languageCode.getIsoCode(), resourceLoaders));
         
@@ -99,7 +99,7 @@ final class SnowballLanguageImpl extends ThreadSafeLanguageModelImpl
         try
         {
             final Resource commonWordsResource = resourceLoaders.getFirst("stopwords."
-                + isoCode, SnowballLanguageImpl.class);
+                + isoCode, SnowballLanguageModel.class);
 
             if (commonWordsResource == null)
             {

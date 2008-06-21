@@ -10,6 +10,7 @@ import org.carrot2.text.analysis.*;
 import org.carrot2.text.linguistic.*;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
+import org.carrot2.util.attribute.constraint.IntRange;
 
 import com.google.common.collect.Sets;
 
@@ -36,12 +37,14 @@ public final class Preprocessor
     })
     public Analyzer analyzer = new ExtendedWhitespaceAnalyzer();
 
-    /** */
+    /**
+     * A list of documents to be processed.
+     */
     @Processing
     @Input
     @Internal
     @Attribute(key = AttributeNames.DOCUMENTS)
-    public Collection<Document> documents;
+    public List<Document> documents;
 
     /**
      * Textual fields of a {@link Document} that should be tokenized and parsed for
@@ -59,54 +62,22 @@ public final class Preprocessor
     });
 
     /**
-     * Text tokenizer. Performs {@link PreprocessingTasks#TOKENIZE} task.
+     * The Document Frequency cut-off. Words appearing in less than <code>dfCutoff</code>
+     * documents will be ignored.
      * 
-     * @level Medium
+     * @level Advanced
      * @group Preprocessing
      */
     @Processing
     @Input
     @Attribute
-    @ImplementingClasses(classes =
-    {
-        TokenizerTaskImpl.class
-    })
-    public TokenizerTask tokenizer = new TokenizerTaskImpl();
-
-    /**
-     * Case normalizer. Performs {@link PreprocessingTasks#CASE_NORMALIZE} task.
-     * 
-     * @level Medium
-     * @group Preprocessing
-     */
-    @Processing
-    @Input
-    @Attribute
-    @ImplementingClasses(classes =
-    {
-        LocaleCaseNormalizer.class
-    })
-    public CaseNormalizerTask caseNormalizer = new LocaleCaseNormalizer();
-
-    /**
-     * Stemmer. Performs {@link PreprocessingTasks#STEMMING} task.
-     * 
-     * @level Medium
-     * @group Preprocessing
-     */
-    @Processing
-    @Input
-    @Attribute
-    @ImplementingClasses(classes =
-    {
-        LanguageModelStemmingTask.class
-    })
-    public StemmingTask stemmer = new LanguageModelStemmingTask();
+    @IntRange(min = 1, max = 100)
+    public int dfCutoff = 1;
 
     /**
      * Linguistic resources. Exposes current processing language internally.
      */
-    public LanguageModelFactory languageFactory = new LanguageModelFactory();
+    public LanguageModelFactory languageFactory = new SnowballLanguageModelFactory();
 
     /**
      * Run the selected preprocessing tasks.
@@ -114,6 +85,7 @@ public final class Preprocessor
     public void preprocess(PreprocessingContext context, PreprocessingTasks... tasks)
     {
         final LanguageModel language = languageFactory.getCurrentLanguage();
+        context.documents = documents;
 
         /*
          * Assert the correct order of preprocessing tasks by throwing them all in a set
@@ -127,21 +99,14 @@ public final class Preprocessor
          */
         if (taskSet.remove(PreprocessingTasks.TOKENIZE))
         {
+            final Tokenizer tokenizer = new Tokenizer();
+
             assertParameterGiven(PreprocessingTasks.TOKENIZE, "analyzer", analyzer);
             assertParameterGiven(PreprocessingTasks.TOKENIZE, "documents", documents);
             assertParameterGiven(PreprocessingTasks.TOKENIZE, "documentFields",
                 documentFields);
 
             tokenizer.tokenize(context, documents, documentFields, analyzer);
-
-            context.tokenMap = tokenizer.getTokenMap();
-            context.allTokens.documentIndices = tokenizer.getDocumentIndices();
-            context.allTokens.fieldIndices = tokenizer.getFieldIndices();
-            context.allTokens.images = tokenizer.getImages();
-            context.allTokens.wordIndices = tokenizer.getTokens();
-            context.allTokens.types = tokenizer.getTokenTypes();
-            context.allWords.images = tokenizer.getTokenImages();
-            context.allFields.names = tokenizer.getFieldNames();
         }
 
         /*
@@ -150,15 +115,16 @@ public final class Preprocessor
         if (taskSet.remove(PreprocessingTasks.CASE_NORMALIZE))
         {
             assertContextParameterGiven(PreprocessingTasks.CASE_NORMALIZE,
-                PreprocessingTasks.TOKENIZE, context.allWords.images);
+                PreprocessingTasks.TOKENIZE, context.allTokens.image);
             assertContextParameterGiven(PreprocessingTasks.CASE_NORMALIZE,
-                PreprocessingTasks.TOKENIZE, context.allTokens);
+                PreprocessingTasks.TOKENIZE, context.allTokens.type);
+            assertContextParameterGiven(PreprocessingTasks.CASE_NORMALIZE,
+                PreprocessingTasks.TOKENIZE, context.allTokens.documentIndex);
+            assertContextParameterGiven(PreprocessingTasks.CASE_NORMALIZE,
+                PreprocessingTasks.TOKENIZE, context.allTokens.fieldIndex);
 
-            caseNormalizer.normalize(context.tokenMap, context.allWords.images,
-                context.allTokens.wordIndices, languageFactory);
-
-            context.allTokensNormalized = caseNormalizer.getTokensNormalized();
-            context.allWords.images = context.tokenMap.getTokenImages();
+            CaseNormalizer caseNormalizer = new CaseNormalizer(dfCutoff);
+            caseNormalizer.normalize(context, languageFactory);
         }
 
         /*
@@ -167,12 +133,14 @@ public final class Preprocessor
         if (taskSet.remove(PreprocessingTasks.STEMMING))
         {
             assertContextParameterGiven(PreprocessingTasks.STEMMING,
-                PreprocessingTasks.TOKENIZE, context.allWords.images);
+                PreprocessingTasks.TOKENIZE, context.allWords.image);
+            assertContextParameterGiven(PreprocessingTasks.STEMMING,
+                PreprocessingTasks.TOKENIZE, context.allWords.tf);
+            assertContextParameterGiven(PreprocessingTasks.STEMMING,
+                PreprocessingTasks.TOKENIZE, context.allWords.tfByDocument);
 
-            stemmer.stem(context.tokenMap, context, language);
-
-            context.allWords.images = context.tokenMap.getTokenImages();
-            context.allTokensStemmed = stemmer.getTokensStemmed();
+            final LanguageModelStemmer stemmer = new LanguageModelStemmer();
+            stemmer.stem(context, language);
         }
 
         /*
@@ -181,12 +149,10 @@ public final class Preprocessor
         if (taskSet.remove(PreprocessingTasks.MARK_TOKENS_STOPLIST))
         {
             assertContextParameterGiven(PreprocessingTasks.MARK_TOKENS_STOPLIST,
-                PreprocessingTasks.TOKENIZE, context.allWords.images);
+                PreprocessingTasks.TOKENIZE, context.allWords.image);
 
-            final StopListMarkerTask task = new StopListMarkerTask();
+            final StopListMarker task = new StopListMarker();
             task.mark(context, language);
-
-            context.allWords.commonTermFlag = task.getCommonTermFlags();
         }
 
         /*

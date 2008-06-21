@@ -12,7 +12,7 @@ import com.google.common.collect.Maps;
  * Accessor to all {@link LanguageModel} objects.
  */
 @Bindable
-public final class LanguageModelFactory
+public final class SnowballLanguageModelFactory implements LanguageModelFactory
 {
     /**
      * Currently active language.
@@ -27,8 +27,7 @@ public final class LanguageModelFactory
     public LanguageCode current = LanguageCode.ENGLISH;
 
     /**
-     * @return Returns {@link LanguageModel} for the {@link #current} language or
-     *         <code>null</code> if such language model is not available.
+     *
      */
     public LanguageModel getCurrentLanguage()
     {
@@ -36,13 +35,11 @@ public final class LanguageModelFactory
     }
 
     /**
-     * @return Return a {@link LanguageModel} associated with the given code or
-     *         <code>null</code> if this language is not supported or its resources are
-     *         not available.
+     *
      */
     public LanguageModel getLanguage(LanguageCode language)
     {
-        synchronized (LanguageModelFactory.class)
+        synchronized (SnowballLanguageModelFactory.class)
         {
             if (languages == null)
             {
@@ -79,7 +76,7 @@ public final class LanguageModelFactory
             .getDefaultResourceUtils();
         for (LanguageCode lang : snowballLanguages)
         {
-            languages.put(lang, new SnowballLanguageImpl(lang, resourceLoaders));
+            languages.put(lang, new SnowballLanguageModel(lang, resourceLoaders));
         }
 
         return languages;

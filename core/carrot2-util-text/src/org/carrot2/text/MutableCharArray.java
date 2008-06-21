@@ -66,6 +66,17 @@ public final class MutableCharArray implements CharSequence
         this.hash = hashCode(buffer, start, length);
     }
 
+
+    /**
+     * Resets internal buffers in this object to point to another character buffer. See
+     * class header notes for side-effects on {@link #equals(Object)} and
+     * {@link #hashCode()}.
+     */
+    public void reset(char [] buffer)
+    {
+        reset(buffer, 0, buffer.length);
+    }
+    
     /**
      * Resets internal buffers in this object to point to another character buffer. See
      * class header notes for side-effects on {@link #equals(Object)} and
