@@ -7,6 +7,7 @@
 
 package com.microsoft.msnsearch;
 
+@SuppressWarnings({ "unchecked", "unused", "serial" })
 public class DateTime  implements java.io.Serializable {
     private int year;
 

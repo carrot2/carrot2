@@ -7,6 +7,7 @@
 
 package com.microsoft.msnsearch;
 
+@SuppressWarnings({ "unchecked", "unused", "serial" })
 public class SortByTypeNull implements java.io.Serializable {
     private java.lang.String _value_;
     private static java.util.HashMap _table_ = new java.util.HashMap();

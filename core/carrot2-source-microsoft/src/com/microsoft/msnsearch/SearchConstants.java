@@ -7,6 +7,7 @@
 
 package com.microsoft.msnsearch;
 
+@SuppressWarnings({ "unchecked", "unused", "serial" })
 public class SearchConstants  implements java.io.Serializable {
     private java.lang.String markBegin;
 

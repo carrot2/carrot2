@@ -7,6 +7,7 @@
 
 package com.microsoft.msnsearch;
 
+@SuppressWarnings({ "unchecked", "unused", "serial" })
 public class MSNSearchServiceLocator extends org.apache.axis.client.Service implements com.microsoft.msnsearch.MSNSearchService {
 
     public MSNSearchServiceLocator() {
