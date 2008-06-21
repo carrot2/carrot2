@@ -97,7 +97,8 @@ final class CaseNormalizer
             }
 
             // Check if we want to index this token at all
-            if (tokenType == TokenType.TT_PUNCTUATION)
+            if (tokenType == TokenType.TT_PUNCTUATION
+                || (tokenType & TokenType.TF_SEPARATOR_SENTENCE) != 0)
             {
                 variantStartIndex = i + 1;
                 maxTfVariantIndex = tokenImagesOrder[i + 1];
