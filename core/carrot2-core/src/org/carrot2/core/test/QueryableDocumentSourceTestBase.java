@@ -95,13 +95,15 @@ public abstract class QueryableDocumentSourceTestBase<T extends DocumentSource> 
         List<Future<ProcessingResult>> results = executorService.invokeAll(callables);
 
         List<Document> documents = null;
+        int index = 0;
         for (Future<ProcessingResult> future : results)
         {
             ProcessingResult processingResult = future.get();
             final List<Document> documentsLocal = (List<Document>) processingResult
                 .getAttributes().get(AttributeNames.DOCUMENTS);
-            assertNotNull(documentsLocal);
-            assertTrue(documentsLocal.size() <= 50 && documentsLocal.size() >= 35);
+            assertThat(documentsLocal).as("documents at " + index).isNotNull();
+            assertThat(documentsLocal.size()).as("documents.size() at " + index)
+                .isLessThanOrEqualTo(50).isGreaterThanOrEqualTo(35);
 
             // Should have same documents (from the cache)
             if (documents != null)
@@ -112,6 +114,7 @@ public abstract class QueryableDocumentSourceTestBase<T extends DocumentSource> 
                 }
             }
             documents = documentsLocal;
+            index++;
         }
     }
 
