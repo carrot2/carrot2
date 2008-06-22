@@ -1,0 +1,72 @@
+/** 
+ * Common CSS for glows. 
+ */
+.glow-small,
+.glow-big {
+  position: relative;
+}
+
+.glow-small > span,
+.glow-big > span {
+  position: absolute;
+  background-repeat: no-repeat;
+  z-index: 1;
+}
+
+.glow-small .t,
+.glow-small .b,
+.glow-big   .t,
+.glow-big   .b {
+  background-repeat: repeat-x;
+  z-index: 0;
+  width: 100%;
+}
+
+.glow-small .l,
+.glow-small .r,
+.glow-big   .l,
+.glow-big   .r {
+  background-repeat: repeat-y;
+  z-index: 0;
+  height: 100%;
+}
+
+.glow-small .b,
+.glow-big   .b {
+  bottom: 0px; left: 0px;
+}
+
+.glow-small .t,
+.glow-big   .t {
+  top: 0px; left: 0px;
+}
+
+.glow-small .l,
+.glow-big   .l {
+  left: 0px; top: 0px;
+}
+
+.glow-small .r,
+.glow-big   .r {
+  right: 0px; top: 0px;
+}
+
+.glow-small .tl,
+.glow-big   .tl {
+  left: 0px; top: 0px;
+}
+
+.glow-small .tr,
+.glow-big   .tr {
+  top: 0px; right: 0px;
+}
+
+.glow-small .bl,
+.glow-big   .bl {
+  bottom: 0px; left: 0px;
+}
+
+.glow-small .br,
+.glow-big   .br {
+  right: 0px; bottom: 0px;
+}

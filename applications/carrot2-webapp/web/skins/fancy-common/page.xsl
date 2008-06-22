@@ -10,11 +10,6 @@
 
   <xsl:strip-space elements="*"/>
 
-  <xsl:template name="common-extra-css">
-    <link rel="stylesheet" href="{$skin-path}/fancy-common/css/style.css" type="text/css" />
-    <xsl:call-template name="fancy-extra-css" />
-  </xsl:template>
-
   <xsl:template name="common-extra-js">
     <xsl:if test="string-length(/page/request/@query) > 0">
       <script type="text/javascript">
@@ -41,7 +36,7 @@ $(document).ready(function() {
   </xsl:template>
   
   <xsl:template match="page" mode="results">
-    <span class="glow-small" style="padding: 4px; float: none; position: absolute; top: 65px; bottom: 10px; left: 10px; right: 10px;">
+    <span class="glow-small">
       <div id="results-area" class="{/page/request/@view}">
         <xsl:if test="/page/request/@view != 'visu'">
           <div id="loading-clusters">Loading...</div>

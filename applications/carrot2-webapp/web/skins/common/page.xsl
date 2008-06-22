@@ -228,7 +228,7 @@
   </xsl:template>
 
   <xsl:template match="page" mode="search.field">
-    <input type="submit" value="Search" id="search" />
+    <button type="submit" id="search">Search</button>
   </xsl:template>
 
   <xsl:template match="source">

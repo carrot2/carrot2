@@ -1,0 +1,110 @@
+/**
+ * CSS for document source tabs.
+ */
+
+/** Icons for document sources */
+
+ul.tabs li.tab .etools {
+  background-image: url('../img/sources/web.gif'); /** sprite-ref: vert; sprite-margin-bottom: 10px */
+}
+
+ul.tabs li.tab .yahoo-news {
+  background-image: url('../img/sources/bulb.gif'); /** sprite-ref: vert; sprite-margin-bottom: 10px */
+}
+
+ul.tabs li.tab .yahoo-web {
+  background-image: url('../img/sources/yahoo.gif'); /** sprite-ref: vert; sprite-margin-bottom: 10px; sprite-margin-top: 2px */
+}
+
+ul.tabs li.tab .google {
+  background-image: url('../img/sources/google.gif'); /** sprite-ref: vert; sprite-margin-bottom: 10px */
+}
+
+ul.tabs li.tab .msn-web {
+  background-image: url('../img/sources/msn.gif'); /** sprite-ref: vert; sprite-margin-bottom: 10px */
+}
+
+ul.tabs li.tab .jobs {
+  background-image: url('../img/sources/jobs.gif'); /** sprite-ref: vert; sprite-margin-bottom: 10px; sprite-margin-left: 2px */
+}
+
+
+/** The actual tabs */
+
+#startup #source-tabs {
+  position: absolute;
+  top: -30px;
+  left: 230px;
+}
+
+#results #source-tabs {
+  position: absolute;
+  top: -30px;
+  left: 124px;
+}
+
+ul.tabs {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+#tab-lead-in {
+  padding-left: 13px;
+  height: 36px;
+  background-image: url('../img/tab-passive-lead-in.gif'); /** sprite-ref: vert; */
+}
+
+div.first-active #tab-lead-in {
+  background-image: url('../img/tab-active-lead-in.gif'); /** sprite-ref: vert; */
+}
+
+ul.tabs li.tab {
+  height: 36px;
+  padding: 11px 13px 0 0;
+  background-image: url('../img/tab-passive-body.gif'); /** sprite-ref: vert; sprite-alignment: right */
+}
+
+ul.tabs li.active {
+  background-image: url('../img/tab-active-body.gif'); /** sprite-ref: vert; sprite-alignment: right */
+}
+
+ul.tabs li.active-last,
+ul.tabs li.passive-last {
+  padding-right: 17px;
+}
+
+ul.tabs li.tab .right {
+  height: 36px;
+  width: 13px;
+  background-image: url('../img/tab-passive-passive-link.gif'); /** sprite-ref: vert; sprite-alignment: right */
+}
+
+ul.tabs li.active .right {
+  background-image: url('../img/tab-active-passive-link.gif'); /** sprite-ref: vert; sprite-alignment: right */
+}
+
+ul.tabs li.before-active .right {
+  background-image: url('../img/tab-passive-active-link.gif'); /** sprite-ref: vert; sprite-alignment: right */
+}
+
+ul.tabs li.passive-last .right,
+ul.tabs li.active-last .right {
+  width: 17px;
+}
+
+ul.tabs li.passive-last .right {
+  background-image: url('../img/tab-passive-lead-out.gif'); /** sprite-ref: vert; sprite-alignment: right */
+}
+
+ul.tabs li.active-last .right {
+  background-image: url('../img/tab-active-lead-out.gif'); /** sprite-ref: vert; sprite-alignment: right */
+}
+
+ul.tabs .tab a {
+  padding-right: 2px;
+}
+
+ul.tabs .tab .label {
+  padding-left: 24px;
+  margin-left: 2px;
+}

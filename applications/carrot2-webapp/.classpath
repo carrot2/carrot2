@@ -10,5 +10,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/javax.servlet"/>
 	<classpathentry kind="lib" path="lib/jawr-2.0.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-component-suites"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.carrot2.xsltfilter"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>

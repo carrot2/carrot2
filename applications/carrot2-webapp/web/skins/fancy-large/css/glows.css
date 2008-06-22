@@ -1,0 +1,75 @@
+/** 
+ * Specific image attachments for glows, common rules in fancy-common/. 
+ */
+
+.glow-small > span {
+  width: 4px; height: 4px;
+}
+
+.glow-big > span {
+  width: 7px; height: 7px;
+}
+
+.glow-small .b {
+  background-image: url('../img/glow-small-b.gif'); /** sprite-ref: vert; sprite-alignment: repeat */
+}
+
+.glow-small .t {
+  background-image: url('../img/glow-small-t.gif'); /** sprite-ref: vert; sprite-alignment: repeat */
+}
+
+.glow-small .l {
+  background-image: url('../img/glow-small-l.gif'); /** sprite-ref: horiz; sprite-alignment: repeat */
+}
+
+.glow-small .r {
+  background-image: url('../img/glow-small-r.gif'); /** sprite-ref: horiz; sprite-alignment: repeat */
+}
+
+.glow-small .tl {
+  background-image: url('../img/glow-small-tl.gif'); /** sprite-ref: vert; */
+}
+
+.glow-small .tr {
+  background-image: url('../img/glow-small-tr.gif'); /** sprite-ref: vert; */
+}
+
+.glow-small .bl {
+  background-image: url('../img/glow-small-bl.gif'); /** sprite-ref: vert; */
+}
+
+.glow-small .br {
+  background-image: url('../img/glow-small-br.gif'); /** sprite-ref: vert; */
+}
+
+.glow-big .b {
+  background-image: url('../img/glow-big-b.gif'); /** sprite-ref: vert; sprite-alignment: repeat */
+}
+
+.glow-big .t {
+  background-image: url('../img/glow-big-t.gif'); /** sprite-ref: vert; sprite-alignment: repeat */
+}
+
+.glow-big .l {
+  background-image: url('../img/glow-big-l.gif'); /** sprite-ref: horiz; sprite-alignment: repeat */
+}
+
+.glow-big .r {
+  background-image: url('../img/glow-big-r.gif'); /** sprite-ref: horiz; sprite-alignment: repeat */
+}
+
+.glow-big .tl {
+  background-image: url('../img/glow-big-tl.gif'); /** sprite-ref: vert; */
+}
+
+.glow-big .tr {
+  background-image: url('../img/glow-big-tr.gif'); /** sprite-ref: vert; */
+}
+
+.glow-big .bl {
+  background-image: url('../img/glow-big-bl.gif'); /** sprite-ref: vert; */
+}
+
+.glow-big .br {
+  background-image: url('../img/glow-big-br.gif'); /** sprite-ref: vert; */
+}

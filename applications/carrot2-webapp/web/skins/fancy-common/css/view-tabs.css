@@ -1,0 +1,32 @@
+/** 
+ * Common CSS for view tabs
+ */
+ 
+#views {
+  background-repeat: no-repeat;
+  position: absolute;
+  z-index: 2;
+}
+
+#views li {
+  float: left;
+  position: relative;
+}
+
+#views li .right {
+  background-repeat: no-repeat;
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+#views li a {
+  text-decoration: none;
+  font-weight: bold;
+  color: #94938F;
+}
+
+#views li.active a {
+  color: #404040;
+}
