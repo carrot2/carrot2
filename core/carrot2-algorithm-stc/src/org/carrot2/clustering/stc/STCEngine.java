@@ -16,6 +16,7 @@ import org.carrot2.text.suffixtrees.Edge;
  * In many of the above steps you will need additional objects like a stemmer or
  * stop-words filter.
  */
+@SuppressWarnings("unchecked")
 public class STCEngine
 {
     /** Suffix tree of the base clusters */

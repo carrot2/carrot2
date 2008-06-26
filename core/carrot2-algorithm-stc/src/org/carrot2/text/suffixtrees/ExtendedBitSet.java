@@ -32,6 +32,7 @@ import java.util.Iterator;
  * @author Arthur van Hoff
  * @author Michael McCloskey
  */
+@SuppressWarnings("unchecked")
 public final class ExtendedBitSet implements Cloneable, java.io.Serializable
 {
     /** Acceleration table for numberOfSetBits() method. */

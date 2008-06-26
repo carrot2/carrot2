@@ -48,6 +48,7 @@ import java.util.NoSuchElementException;
  *          1.1, 2 May 2001, Synchronizations removed. List interface added, final keyword
  *          removed from methods.
  */
+@SuppressWarnings("unchecked")
 final class FastVector extends AbstractList implements Cloneable, List
 {
     /** The buffer where elements are stored. */

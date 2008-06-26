@@ -11,6 +11,7 @@ import org.carrot2.text.suffixtrees.ExtendedBitSet;
 /**
  * A merged cluster (composition of {@link org.carrot2.filter.stc.algorithm.BaseCluster}s).
  */
+@SuppressWarnings("unchecked")
 public class MergedCluster implements Comparable
 {
     /** Merged base clusters list. */

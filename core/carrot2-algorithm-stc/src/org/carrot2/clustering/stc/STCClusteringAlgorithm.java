@@ -15,6 +15,7 @@ import com.google.common.collect.Lists;
  * 
  * @label STC Clustering
  */
+@SuppressWarnings("unchecked")
 @Bindable
 public final class STCClusteringAlgorithm extends ProcessingComponentBase implements
     ClusteringAlgorithm

@@ -8,6 +8,7 @@ import java.util.List;
  * with an associated score and assigned later links to other nodes in base clusters
  * graph.
  */
+@SuppressWarnings("unchecked")
 public final class BaseCluster
 {
     /**
