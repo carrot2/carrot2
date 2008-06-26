@@ -5,3 +5,4 @@ Bundle-SymbolicName: org.tartarus.snowball
 Bundle-Version: 1.8.0
 Export-Package: org.tartarus.snowball,
  org.tartarus.snowball.ext
+Bundle-Vendor: Carrot2.org

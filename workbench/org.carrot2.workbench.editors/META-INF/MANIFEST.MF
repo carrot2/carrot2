@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Editors Plug-in
+Bundle-Name: Attribute Editors
 Bundle-SymbolicName: org.carrot2.workbench.editors;singleton:=true
 Bundle-Version: 1.0.0
 Bundle-Activator: org.carrot2.workbench.editors.EditorsPlugin
@@ -16,3 +16,4 @@ Bundle-ClassPath: .,
 Export-Package: org.carrot2.workbench.editors,
  org.carrot2.workbench.editors.temp
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-Vendor: Carrot2.org

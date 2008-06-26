@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Carrot2 Core
+Bundle-Name: Carrot2 Framework Core
 Bundle-SymbolicName: org.carrot2.core;singleton:=true
 Bundle-Version: 1.0.0
 Export-Package: org.carrot2.core,
@@ -14,3 +14,4 @@ Require-Bundle: org.carrot2.util.attribute;visibility:=reexport,
  net.sf.ehcache;bundle-version="1.4.1"
 Bundle-ClassPath: META-INF/,
  .
+Bundle-Vendor: Carrot2.org

@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Carrot2 Yahoo! Source
+Bundle-Name: Yahoo! Document Source
 Bundle-SymbolicName: org.carrot2.source.yahoo;singleton:=true
 Bundle-Version: 1.0.0
 Export-Package: org.carrot2.source.yahoo
@@ -9,3 +9,4 @@ Require-Bundle: org.carrot2.core,
  org.apache.log4j
 Bundle-ClassPath: META-INF/,
  .
+Bundle-Vendor: Carrot2.org

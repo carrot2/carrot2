@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Carrot2 Microsoft Live! Source
+Bundle-Name: Microsoft Live! Document Source
 Bundle-SymbolicName: org.carrot2.source.microsoft;singleton:=true
 Bundle-Version: 1.0.0
 Export-Package: org.carrot2.source.microsoft;uses:="org.carrot2.core.test"
@@ -10,3 +10,4 @@ Require-Bundle: org.carrot2.core,
  org.apache.axis
 Bundle-ClassPath: META-INF/,
  .
+Bundle-Vendor: Carrot2.org

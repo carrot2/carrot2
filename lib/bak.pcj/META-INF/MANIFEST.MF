@@ -11,3 +11,4 @@ Export-Package: bak.pcj,
  bak.pcj.map,
  bak.pcj.set,
  bak.pcj.util
+Bundle-Vendor: pcj.sourceforge.net

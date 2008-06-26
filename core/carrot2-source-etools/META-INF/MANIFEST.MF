@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Carrot2 eTools Document Source
+Bundle-Name: eTools Document Source
 Bundle-SymbolicName: org.carrot2.source.etools;singleton:=true
 Bundle-Version: 1.0.0
 Export-Package: org.carrot2.source.etools
@@ -9,3 +9,4 @@ Require-Bundle: org.carrot2.core,
  org.carrot2.source.xml;bundle-version="1.0.0"
 Bundle-ClassPath: META-INF/,
  .
+Bundle-Vendor: Carrot2.org

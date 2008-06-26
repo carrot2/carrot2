@@ -1,23 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?pde version="3.4"?>
+<?pde version="3.1"?>
 
 <product name="Carrot2 Workbench" id="org.carrot2.workbench.core.product" application="org.carrot2.workbench.core.application" useFeatures="true">
 
    <aboutInfo>
-      <image path="/org.carrot2.workbench.core/icons/Carrot2-symbol-final.gif"/>
+      <image path="/org.carrot2.workbench.core/icons/product-logo.png"/>
       <text>
-         Carrot2 Clustering Workbench
-
-Demo Application for Carrot Clustering Engine.
-
-Part of Carrot2 Project, available at SourceForge.
-
-Developed by Urszula Krukar as a part of her Master&apos;s thesis (2008)
+         Carrot2 Workbench
       </text>
    </aboutInfo>
 
-   <configIni use="default">
-   </configIni>
+   <configIni use="default"/>
 
    <launcherArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>

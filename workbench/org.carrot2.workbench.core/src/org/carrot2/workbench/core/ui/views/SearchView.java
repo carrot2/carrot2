@@ -7,10 +7,13 @@ import org.carrot2.core.ProcessingComponent;
 import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
+import org.carrot2.workbench.core.CorePlugin;
 import org.carrot2.workbench.core.helpers.*;
 import org.carrot2.workbench.core.ui.ResultsEditor;
 import org.carrot2.workbench.core.ui.SearchParameters;
 import org.carrot2.workbench.core.ui.attributes.AttributesPage;
+import org.eclipse.core.commands.operations.OperationStatus;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
@@ -21,38 +24,62 @@ import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.*;
 import org.eclipse.ui.part.ViewPart;
 
+/**
+ * The search view defines a combination of source, algorithm and required input
+ * parameters required to open a new editor.
+ */
 public class SearchView extends ViewPart
 {
     /**
-     * Little improved {@link StackLayout}. The size of the composite is now equal to the
-     * size of visible control, not the biggest control.
+     * Public identifier of this view.
      */
-    private static class FlexibleStackLayout extends StackLayout
-    {
+    public static final String ID = "org.carrot2.workbench.core.search";
 
+    /**
+     * A bit modified {@link StackLayout}. The size of the composite equals the
+     * size of the visible control, not the biggest control available in the stack.
+     */
+    private static class VisibleComponentSizeStackLayout extends StackLayout
+    {
         @Override
         protected Point computeSize(Composite composite, int wHint, int hHint,
             boolean flushCache)
         {
             return topControl.computeSize(wHint, hHint);
         }
-
     }
 
+    /**
+     * Currently selected algorithm (state persistence).
+     */
     private static final String ALGORITHM_ID_ATTRIBUTE = "algorithmId";
 
+    /**
+     * Currently selected source (state persistence).
+     */
     private static final String SOURCE_ID_ATTRIBUTE = "sourceId";
 
-    public static final String ID = "org.carrot2.workbench.core.search";
-
+    /**
+     * State persistence.
+     */
     private IMemento state;
-    private Composite innerComposite;
+
     private ComboViewer sourceViewer;
     private ComboViewer algorithmViewer;
+    private Composite innerComposite;
+
     private Button processButton;
+
+    /**
+     * A map of {@link AttributesPage} associated with all 
+     * document sources.
+     */
     private Map<String, AttributesPage> attributesPages =
         new HashMap<String, AttributesPage>();
 
+    /**
+     * 
+     */
     private class ComponentLabelProvider extends LabelProvider
     {
         @Override
@@ -60,63 +87,65 @@ public class SearchView extends ViewPart
         {
             return ((ComponentWrapper) element).getCaption();
         }
-
     }
 
     @Override
     public void createPartControl(Composite parent)
     {
         createPermanentLayout(parent);
-
         checkProcessingConditions(parent);
-
-        final Runnable execQuery = new RunnableWithErrorDialog()
-        {
-            public void runCore() throws Exception
-            {
-                IWorkbenchPage page =
-                    SearchView.this.getViewSite().getWorkbenchWindow().getActivePage();
-                SearchParameters input =
-                    new SearchParameters(getSourceId(), getAlgorithmId(), null);
-                input.putAllAttributes(attributesPages.get(getSourceId())
-                    .getAttributeValues());
-                page.openEditor(input, ResultsEditor.ID);
-            }
-
-            @Override
-            protected String getErrorTitle()
-            {
-                return "Error while opening query result editor";
-            }
-        };
 
         processButton.addSelectionListener(new SelectionAdapter()
         {
             public void widgetSelected(SelectionEvent e)
             {
-                execQuery.run();
-
-                // Set the focus back to the query box (?).
-                //                queryText.setFocus();
+                fireProcessing();
             }
         });
+
         parent.addTraverseListener(new TraverseListener()
         {
             public void keyTraversed(TraverseEvent e)
             {
                 if (e.detail == SWT.TRAVERSE_RETURN)
                 {
-                    execQuery.run();
+                    fireProcessing();
                 }
             }
         });
+    }
 
+    /**
+     * Initiate query processing. Open an editor with the current parameter
+     * values.
+     */
+    private void fireProcessing()
+    {
+        // Initiate processing in a new editor.
+        final IWorkbenchPage page =
+            SearchView.this.getViewSite().getWorkbenchWindow().getActivePage();
+        final SearchParameters input =
+            new SearchParameters(getSourceId(), getAlgorithmId(), null);
+        input.putAllAttributes(attributesPages.get(getSourceId())
+            .getAttributeValues());
+
+        try
+        {
+            page.openEditor(input, ResultsEditor.ID);
+        }
+        catch (Exception x)
+        {
+            final IStatus status =
+                new OperationStatus(IStatus.ERROR, CorePlugin.PLUGIN_ID, -2,
+                    "Editor could not be opened.", x);
+            Utils.showError(status);
+        }
     }
 
     @SuppressWarnings("unchecked")
     private void createRequiredAttributesLayout()
     {
-        final StackLayout stack = new FlexibleStackLayout();
+        final StackLayout stack = new VisibleComponentSizeStackLayout();
         final Composite requiredAttributes = new Composite(innerComposite, SWT.NONE);
         requiredAttributes.setLayout(stack);
 
@@ -196,15 +225,18 @@ public class SearchView extends ViewPart
         }
         if (ComponentLoader.SOURCE_LOADER.getComponents().isEmpty())
         {
-            disableComboWithMessage(sourceViewer.getCombo(), "No Document Source found!");
+            disableComboWithMessage(sourceViewer.getCombo(), "No document sources found.");
         }
         if (ComponentLoader.ALGORITHM_LOADER.getComponents().isEmpty())
         {
             disableComboWithMessage(algorithmViewer.getCombo(),
-                "No Clustering Algorithm found!");
+                "No clustering algorithms found.");
         }
     }
 
+    /**
+     * 
+     */
     private void disableComboWithMessage(Combo toDisable, String message)
     {
         toDisable.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
@@ -216,6 +248,9 @@ public class SearchView extends ViewPart
         toDisable.setEnabled(false);
     }
 
+    /**
+     * 
+     */
     private String getSourceId()
     {
         if (sourceViewer.getSelection().isEmpty())
@@ -226,6 +261,9 @@ public class SearchView extends ViewPart
             .getFirstElement()).getId();
     }
 
+    /**
+     * 
+     */
     private String getAlgorithmId()
     {
         if (algorithmViewer.getSelection().isEmpty())
@@ -237,7 +275,7 @@ public class SearchView extends ViewPart
     }
 
     /**
-     * Wraps component combobox (source or algorithm) with JFace viewer. Restores saved
+     * Wraps component combobox (source or algorithm) with a JFace viewer. Restores saved
      * state if possible.
      * 
      * @param combo combo control used to create a viewer (
@@ -251,7 +289,8 @@ public class SearchView extends ViewPart
         String stateAttribute)
     {
         combo.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-        ComboViewer viewer = new ComboViewer(combo);
+
+        final ComboViewer viewer = new ComboViewer(combo);
         viewer.setLabelProvider(new ComponentLabelProvider());
         viewer.setContentProvider(new ArrayContentProvider());
         viewer.setInput(loader.getComponents());
@@ -310,6 +349,7 @@ public class SearchView extends ViewPart
         {
             page.dispose();
         }
+
         super.dispose();
     }
 

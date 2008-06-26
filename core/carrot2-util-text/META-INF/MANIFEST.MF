@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Carrot2 Text Processing Utils
+Bundle-Name: Text Processing Utils
 Bundle-SymbolicName: org.carrot2.text
 Bundle-Version: 1.0.0
 Require-Bundle: 
@@ -17,3 +17,4 @@ Export-Package: org.carrot2.text,
  org.carrot2.text.analysis,
  org.carrot2.text.linguistic,
  org.carrot2.text.preprocessing
+Bundle-Vendor: Carrot2.org

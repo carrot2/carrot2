@@ -15,3 +15,4 @@ Require-Bundle: org.carrot2.util.common,
  org.apache.commons,
  org.simpleframework.xml;visibility:=reexport,
  com.thoughtworks.qdox
+Bundle-Vendor: Carrot2.org

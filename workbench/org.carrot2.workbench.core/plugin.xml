@@ -31,10 +31,11 @@
          point="org.eclipse.core.runtime.products">
       <product
             application="org.carrot2.workbench.core.application"
-            name="Carrot2 Workbench">
+            name="%productName"
+            description="%productBlurb">
          <property
                name="appName"
-               value="Carrot2 Workbench">
+               value="%productName">
          </property>
          <property
                name="windowImages"
@@ -42,11 +43,11 @@
          </property>
          <property
                name="aboutText"
-               value="Carrot2 Clustering Workbench&#x0D;&#x0A;&#x0D;&#x0A;Demo Application for Carrot Clustering Engine.&#x0D;&#x0A;&#x0D;&#x0A;Part of Carrot2 Project, available at SourceForge.&#x0D;&#x0A;&#x0D;&#x0A;Developed by Urszula Krukar as a part of Master&apos;s thesis (2008)">
+               value="%productBlurb">
          </property>
          <property
                name="aboutImage"
-               value="icons/Carrot2-symbol-final.gif">
+               value="icons/product-logo.png">
          </property>
       </product>
    </extension>

@@ -2,10 +2,12 @@
 <feature
       id="org.carrot2.workbench"
       label="Workbench Feature"
-      version="1.0.0">
+      version="1.0.0"
+      provider-name="Carrot2.org"
+      plugin="org.carrot2.workbench.core">
 
-   <description url="http://www.example.com/description">
-      [Enter Feature Description here.]
+   <description url="http://www.carrot2.org">
+      Carrot2 clustering and text processing workbench.
    </description>
 
    <copyright url="http://www.example.com/copyright">

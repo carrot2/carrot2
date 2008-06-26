@@ -180,6 +180,7 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
 
     private SashForm sashForm;
 
+    // TODO: Refactor sections indices into an enum or something more sensible than integer indices.
     private Section [] sections;
 
     private IMemento state;
@@ -229,16 +230,18 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
     private int [] createControls(Composite parent)
     {
         final ProcessingJob job =
-            new ProcessingJob("Processing of a query",
+            new ProcessingJob("Query processing",
                 (SearchParameters) getEditorInput());
+
         sections = new Section [3];
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < sections.length; i++)
         {
             Section sec =
                 toolkit.createSection(parent, ExpandableComposite.EXPANDED
                     | ExpandableComposite.TITLE_BAR);
             sections[i] = sec;
         }
+
         IToolBarManager manager = createToolbarManager(sections[0]);
         createClustersPart(sections[0], manager, job, getSite());
         manager = createToolbarManager(sections[1]);

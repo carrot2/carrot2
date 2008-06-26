@@ -77,7 +77,7 @@ public class ChooseSectionsDialog extends org.eclipse.jface.dialogs.TrayDialog
         root.setLayout(parentLayout);
         {
             Label label = new Label(root, SWT.LEFT);
-            label.setText("Choose panels to show in this editor:");
+            label.setText("Choose panels in this editor:");
         }
         {
             clustersCheckbox = new Button(root, SWT.CHECK | SWT.LEFT);
@@ -96,7 +96,7 @@ public class ChooseSectionsDialog extends org.eclipse.jface.dialogs.TrayDialog
             GridData gridData = new GridData();
             gridData.verticalIndent = 10;
             preferencesLink.setLayoutData(gridData);
-            preferencesLink.setText("<A>Choose panels to show in all editors</A>");
+            preferencesLink.setText("<a>Edit defaults...</a>");
             preferencesLink.addSelectionListener(new SelectionAdapter()
             {
                 @Override

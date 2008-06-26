@@ -35,7 +35,6 @@ public class ClusterTreeView extends PageBookViewBase
         }
         Page partPage = new Page()
         {
-
             private ClusterTreeComponent tree;
             private transient boolean initialized;
 

@@ -27,6 +27,8 @@ public class Utils
      */
     public static void showError(final String message, final IStatus status)
     {
+        CorePlugin.getDefault().getLog().log(status);
+
         if (Display.getCurrent() != null)
         {
             ErrorDialog.openError(Display.getDefault().getActiveShell(), null, message,
