@@ -20,22 +20,36 @@ public class CorePlugin extends AbstractUIPlugin
     // The shared instance
     private static CorePlugin plugin;
 
-    private static CachingController controller;
+    /**
+     * Shared, thread-safe caching controller instance.
+     */
+    private CachingController controller;
 
+    /*
+     * 
+     */
     @SuppressWarnings("unchecked")
     public void start(BundleContext context) throws Exception
     {
         super.start(context);
+
         plugin = this;
+        VelocityHelper.init();
+
         controller = new CachingController(DocumentSource.class);
         controller.init(new HashMap<String, Object>());
-        VelocityHelper.init();
     }
 
+    /*
+     * 
+     */
     public void stop(BundleContext context) throws Exception
     {
         plugin = null;
+        
         controller.dispose();
+        controller = null;
+
         super.stop(context);
     }
 
@@ -49,13 +63,16 @@ public class CorePlugin extends AbstractUIPlugin
         return plugin;
     }
 
-    public static CachingController getController()
+    /**
+     * Returns an initialized shared controller instance.
+     */
+    public CachingController getController()
     {
         return controller;
     }
 
     /**
-     * Returns an image descriptor for the image file at the given plug-in relative path
+     * Returns an image descriptor for the image file at the given plug-in relative path.
      * 
      * @param path the path
      * @return the image descriptor
@@ -64,5 +81,4 @@ public class CorePlugin extends AbstractUIPlugin
     {
         return imageDescriptorFromPlugin(PLUGIN_ID, path);
     }
-
 }

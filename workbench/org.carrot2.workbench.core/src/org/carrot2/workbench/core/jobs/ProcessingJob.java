@@ -20,9 +20,9 @@ public class ProcessingJob extends Job
     public ProcessingJob(String name, SearchParameters search)
     {
         super(name);
+
         source = ComponentLoader.SOURCE_LOADER.getComponent(search.getSourceId());
-        algorithm =
-            ComponentLoader.ALGORITHM_LOADER.getComponent(search.getAlgorithmId());
+        algorithm = ComponentLoader.ALGORITHM_LOADER.getComponent(search.getAlgorithmId());
         attributes = search.getAttributes();
     }
 
@@ -33,7 +33,7 @@ public class ProcessingJob extends Job
         monitor.beginTask("Processing of a query", IProgressMonitor.UNKNOWN);
         try
         {
-            final Controller controller = CorePlugin.getController();
+            final Controller controller = CorePlugin.getDefault().getController();
             final ProcessingResult result =
                 controller.process(attributes, source.getComponentClass(), algorithm
                     .getComponentClass());
