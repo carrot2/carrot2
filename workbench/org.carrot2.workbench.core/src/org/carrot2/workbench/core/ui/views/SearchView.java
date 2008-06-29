@@ -7,7 +7,7 @@ import org.carrot2.core.ProcessingComponent;
 import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
-import org.carrot2.workbench.core.CorePlugin;
+import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.*;
 import org.carrot2.workbench.core.ui.ResultsEditor;
 import org.carrot2.workbench.core.ui.SearchParameters;
@@ -136,7 +136,7 @@ public class SearchView extends ViewPart
         catch (Exception x)
         {
             final IStatus status =
-                new OperationStatus(IStatus.ERROR, CorePlugin.PLUGIN_ID, -2,
+                new OperationStatus(IStatus.ERROR, WorkbenchCorePlugin.PLUGIN_ID, -2,
                     "Editor could not be opened.", x);
             Utils.showError(status);
         }

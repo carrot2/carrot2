@@ -3,10 +3,13 @@ package org.carrot2.workbench.core;
 import org.carrot2.workbench.core.ui.views.*;
 import org.eclipse.ui.*;
 
-public class Perspective implements IPerspectiveFactory
+public class SearchPerspective implements IPerspectiveFactory
 {
-    public static final String ID = "org.carrot2.workbench.core.perspective";
+    public static final String ID = "org.carrot2.workbench.core.perspective.search";
 
+    /*
+     * 
+     */
     public void createInitialLayout(IPageLayout layout)
     {
         layout.setEditorAreaVisible(true);
@@ -27,17 +30,5 @@ public class Perspective implements IPerspectiveFactory
                 "leftViews");
         leftBottomFolder.addPlaceholder(ClusterTreeView.ID);
         leftBottomFolder.addPlaceholder(AttributesView.ID);
-
-        addShortcuts(layout);
-    }
-
-    static void addShortcuts(IPageLayout layout)
-    {
-        layout.addShowViewShortcut(ClusterTreeView.ID);
-        layout.addShowViewShortcut(DocumentListView.ID);
-        layout.addShowViewShortcut(SearchView.ID);
-        layout.addShowViewShortcut(AttributesView.ID);
-
-        layout.addPerspectiveShortcut(TuningPerspective.ID);
     }
 }

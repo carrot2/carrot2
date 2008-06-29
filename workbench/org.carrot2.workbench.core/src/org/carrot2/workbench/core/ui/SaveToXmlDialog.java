@@ -6,7 +6,7 @@ import static org.eclipse.swt.SWT.Selection;
 
 import java.io.File;
 
-import org.carrot2.workbench.core.CorePlugin;
+import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TrayDialog;
 import org.eclipse.swt.SWT;
@@ -90,7 +90,7 @@ public class SaveToXmlDialog extends TrayDialog
         docSelected = docOption.getSelection();
         clustersSelected = clusterOption.getSelection();
         filePath = fileNameText.getText();
-        CorePlugin.getDefault().getPluginPreferences().setValue(LAST_PATH_PREF,
+        WorkbenchCorePlugin.getDefault().getPluginPreferences().setValue(LAST_PATH_PREF,
             new File(filePath).getParent());
         super.okPressed();
     }
@@ -102,7 +102,7 @@ public class SaveToXmlDialog extends TrayDialog
 
         createControls(root);
         String lastChosenPath =
-            CorePlugin.getDefault().getPluginPreferences().getString(LAST_PATH_PREF);
+            WorkbenchCorePlugin.getDefault().getPluginPreferences().getString(LAST_PATH_PREF);
         if (lastChosenPath.length() != 0)
         {
             fileNameText.setText(new File(lastChosenPath, initialFileName)

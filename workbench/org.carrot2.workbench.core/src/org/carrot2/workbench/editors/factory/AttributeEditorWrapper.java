@@ -1,6 +1,6 @@
 package org.carrot2.workbench.editors.factory;
 
-import org.carrot2.workbench.core.CorePlugin;
+import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.ExtensionWrapperBase;
 import org.carrot2.workbench.editors.IAttributeEditor;
 import org.eclipse.core.commands.operations.OperationStatus;
@@ -26,8 +26,8 @@ public abstract class AttributeEditorWrapper extends ExtensionWrapperBase
         }
         catch (CoreException e)
         {
-            CorePlugin.getDefault().getLog().log(
-                new OperationStatus(IStatus.ERROR, CorePlugin.PLUGIN_ID, -2,
+            WorkbenchCorePlugin.getDefault().getLog().log(
+                new OperationStatus(IStatus.ERROR, WorkbenchCorePlugin.PLUGIN_ID, -2,
                     "Error while initializing attribute editor : "
                         + element.getDeclaringExtension().getContributor().getName(), e));
 

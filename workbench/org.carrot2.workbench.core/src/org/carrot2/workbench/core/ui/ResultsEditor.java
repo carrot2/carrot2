@@ -8,7 +8,7 @@ import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.*;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
-import org.carrot2.workbench.core.CorePlugin;
+import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.core.jobs.ProcessingJob;
 import org.carrot2.workbench.core.jobs.ProcessingStatus;
@@ -77,7 +77,7 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
                     if (view.getName().equals("view")
                         && view.getAttribute("icon") != null)
                     {
-                        icons.put(view.getAttribute("id"), CorePlugin
+                        icons.put(view.getAttribute("id"), WorkbenchCorePlugin
                             .getImageDescriptor(view.getAttribute("icon")));
                     }
                 }
@@ -157,7 +157,7 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
         @Override
         public ImageDescriptor getImageDescriptor()
         {
-            return CorePlugin.getImageDescriptor("icons/sections.gif");
+            return WorkbenchCorePlugin.getImageDescriptor("icons/sections.gif");
         }
 
     }
@@ -503,11 +503,11 @@ public class ResultsEditor extends EditorPart implements IPersistableEditor
 
     private void restorePartVisibilityFromState()
     {
-        toogleSectionVisibility(0, CorePlugin.getDefault().getPreferenceStore()
+        toogleSectionVisibility(0, WorkbenchCorePlugin.getDefault().getPreferenceStore()
             .getBoolean(PreferenceConstants.P_SHOW_CLUSTERS));
-        toogleSectionVisibility(1, CorePlugin.getDefault().getPreferenceStore()
+        toogleSectionVisibility(1, WorkbenchCorePlugin.getDefault().getPreferenceStore()
             .getBoolean(PreferenceConstants.P_SHOW_DOCUMENTS));
-        toogleSectionVisibility(2, CorePlugin.getDefault().getPreferenceStore()
+        toogleSectionVisibility(2, WorkbenchCorePlugin.getDefault().getPreferenceStore()
             .getBoolean(PreferenceConstants.P_SHOW_ATTRIBUTES));
         IMemento partsState =
             getChildIfCorrect("visibility", "parts-amount", sections.length);

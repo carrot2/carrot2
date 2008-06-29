@@ -5,7 +5,10 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.application.*;
 
-public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
+/**
+ * Configures various aspects of the main application's window. 
+ */
+final class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
 {
     /*
      * 
@@ -28,12 +31,13 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
      */
     public void preWindowOpen()
     {
-        IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
-        Rectangle fullScreenSize =
+        final IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
+        final Rectangle fullScreenSize =
             Display.getDefault().getPrimaryMonitor().getClientArea();
         int width = calculateInitialSize(fullScreenSize.width, 800);
         int height = calculateInitialSize(fullScreenSize.height, 600);
         configurer.setInitialSize(new Point(width, height));
+
         configurer.setShowStatusLine(true);
         configurer.setTitle("Carrot2 Workbench");
         configurer.setShowMenuBar(true);

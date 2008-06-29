@@ -10,7 +10,7 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.workbench.core.CorePlugin;
+import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ISelection;
@@ -108,7 +108,7 @@ public class DocumentListBrowser
 
                 try
                 {
-                    CorePlugin.getDefault().getWorkbench().getBrowserSupport()
+                    WorkbenchCorePlugin.getDefault().getWorkbench().getBrowserSupport()
                         .createBrowser(
                             IWorkbenchBrowserSupport.AS_EDITOR
                                 | IWorkbenchBrowserSupport.LOCATION_BAR

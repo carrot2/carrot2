@@ -8,7 +8,10 @@ import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 
-public class ApplicationActionBarAdvisor extends ActionBarAdvisor
+/**
+ * 
+ */
+final class ApplicationActionBarAdvisor extends ActionBarAdvisor
 {
 
     private IWorkbenchAction closeAction;
@@ -66,24 +69,24 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
         hyperbolaMenu.add(closeAllAction);
         hyperbolaMenu.add(propertiesAction);
         hyperbolaMenu.add(exitAction);
+
         MenuManager helpMenu = new MenuManager("&About", "carrot2-about");
         helpMenu.add(helpContentsAction);
         helpMenu.add(aboutAction);
+
         MenuManager windowMenu = new MenuManager("&Window", "carrot2-window");
-        {
-            MenuManager changePerspMenuMgr = new MenuManager("Open Perspective"); //$NON-NLS-1$
-            changePerspMenuMgr.add(changePerspMenuItem);
-            windowMenu.add(changePerspMenuMgr);
-        }
-        {
-            MenuManager showViewMenuMgr = new MenuManager("Show view"); //$NON-NLS-1$
-            showViewMenuMgr.add(showViewMenu);
-            windowMenu.add(showViewMenuMgr);
-        }
+        MenuManager changePerspMenuMgr = new MenuManager("Open Perspective"); //$NON-NLS-1$
+        changePerspMenuMgr.add(changePerspMenuItem);
+        windowMenu.add(changePerspMenuMgr);
+
+
+        MenuManager showViewMenuMgr = new MenuManager("Show view"); //$NON-NLS-1$
+        showViewMenuMgr.add(showViewMenu);
+        windowMenu.add(showViewMenuMgr);
         windowMenu.add(openPreferencesAction);
+
         menuBar.add(hyperbolaMenu);
         menuBar.add(windowMenu);
         menuBar.add(helpMenu);
     }
-
 }

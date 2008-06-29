@@ -7,19 +7,29 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
 /**
- * This class controls all aspects of the application's execution.
+ * Entry point for the Workbench application.
  */
-public class Application implements IApplication
+public final class Application implements IApplication
 {
+    /**
+     * 
+     */
     public Object start(IApplicationContext context) throws Exception
     {
         Display display = PlatformUI.createDisplay();
         try
         {
-            int returnCode = PlatformUI.createAndRunWorkbench(display,
+            final int returnCode = PlatformUI.createAndRunWorkbench(display,
                 new ApplicationWorkbenchAdvisor());
-            if (returnCode == PlatformUI.RETURN_RESTART) return IApplication.EXIT_RESTART;
-            else return IApplication.EXIT_OK;
+
+            if (returnCode == PlatformUI.RETURN_RESTART)
+            {
+                return IApplication.EXIT_RESTART;
+            }
+            else
+            {
+                return IApplication.EXIT_OK;
+            }
         }
         finally
         {
@@ -28,10 +38,14 @@ public class Application implements IApplication
 
     }
 
+    /**
+     * 
+     */
     public void stop()
     {
         final IWorkbench workbench = PlatformUI.getWorkbench();
         if (workbench == null) return;
+
         final Display display = workbench.getDisplay();
         display.syncExec(new Runnable()
         {

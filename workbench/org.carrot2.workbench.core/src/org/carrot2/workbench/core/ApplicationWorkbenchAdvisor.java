@@ -2,10 +2,11 @@ package org.carrot2.workbench.core;
 
 import org.eclipse.ui.application.*;
 
-public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor
+/**
+ * Advisor for initial settings and configuration.
+ */
+final class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor
 {
-    private static final String PERSPECTIVE_ID = "org.carrot2.workbench.core.perspective";
-
     /*
      * 
      */
@@ -20,7 +21,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor
      */
     public String getInitialWindowPerspectiveId()
     {
-        return PERSPECTIVE_ID;
+        return SearchPerspective.ID;
     }
 
     /*

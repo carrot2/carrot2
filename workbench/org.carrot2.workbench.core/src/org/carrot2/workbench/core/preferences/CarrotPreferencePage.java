@@ -3,7 +3,7 @@ package org.carrot2.workbench.core.preferences;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.carrot2.workbench.core.CorePlugin;
+import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.eclipse.jface.preference.*;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.ui.IWorkbench;
@@ -31,7 +31,7 @@ public class CarrotPreferencePage extends FieldEditorPreferencePage implements
     public CarrotPreferencePage()
     {
         super(GRID);
-        setPreferenceStore(CorePlugin.getDefault().getPreferenceStore());
+        setPreferenceStore(WorkbenchCorePlugin.getDefault().getPreferenceStore());
         setDescription("Choose panels to show in results editors:");
     }
 

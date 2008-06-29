@@ -10,15 +10,16 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 /**
- * The activator class controls the plug-in life cycle.
+ * The activator class (plug-in's entry point), controls the life-cycle and contains a
+ * reference to the Carrot2 {@link Controller}.
  */
-public class CorePlugin extends AbstractUIPlugin
+public class WorkbenchCorePlugin extends AbstractUIPlugin
 {
-    // The plug-in ID
+    /** Plug-in ID. */
     public static final String PLUGIN_ID = "org.carrot2.workbench.core";
 
-    // The shared instance
-    private static CorePlugin plugin;
+    /** The shared instance. */
+    private static WorkbenchCorePlugin plugin;
 
     /**
      * Shared, thread-safe caching controller instance.
@@ -46,7 +47,7 @@ public class CorePlugin extends AbstractUIPlugin
     public void stop(BundleContext context) throws Exception
     {
         plugin = null;
-        
+
         controller.dispose();
         controller = null;
 
@@ -54,11 +55,9 @@ public class CorePlugin extends AbstractUIPlugin
     }
 
     /**
-     * Returns the shared instance
-     * 
-     * @return the shared instance
+     * Returns the shared instance.
      */
-    public static CorePlugin getDefault()
+    public static WorkbenchCorePlugin getDefault()
     {
         return plugin;
     }

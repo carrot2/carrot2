@@ -1,7 +1,7 @@
 package org.carrot2.workbench.core.helpers;
 
 import org.carrot2.core.ProcessingComponent;
-import org.carrot2.workbench.core.CorePlugin;
+import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.eclipse.core.commands.operations.OperationStatus;
 import org.eclipse.core.runtime.*;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -23,7 +23,7 @@ public class ComponentWrapper extends ExtensionWrapperBase
         getAttribute(element, className);
         String iconPath = getAttribute(element, iconAttName);
         iconDescriptor =
-            CorePlugin.imageDescriptorFromPlugin(element.getContributor().getName(),
+            WorkbenchCorePlugin.imageDescriptorFromPlugin(element.getContributor().getName(),
                 iconPath);
         if (iconDescriptor == null)
         {
@@ -60,8 +60,8 @@ public class ComponentWrapper extends ExtensionWrapperBase
         }
         catch (CoreException e)
         {
-            CorePlugin.getDefault().getLog().log(
-                new OperationStatus(IStatus.ERROR, CorePlugin.PLUGIN_ID, -2,
+            WorkbenchCorePlugin.getDefault().getLog().log(
+                new OperationStatus(IStatus.ERROR, WorkbenchCorePlugin.PLUGIN_ID, -2,
                     "Error while initializing component '" + className + ": "
                         + element.getDeclaringExtension().getContributor().getName(), e));
 

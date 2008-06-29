@@ -2,7 +2,7 @@ package org.carrot2.workbench.core.ui;
 
 import java.io.*;
 
-import org.carrot2.workbench.core.CorePlugin;
+import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.window.Window;
@@ -15,7 +15,7 @@ public class SaveToXmlAction extends Action
     public void run()
     {
         ResultsEditor results =
-            (ResultsEditor) CorePlugin.getDefault().getWorkbench()
+            (ResultsEditor) WorkbenchCorePlugin.getDefault().getWorkbench()
                 .getActiveWorkbenchWindow().getActivePage().getActiveEditor();
         SaveToXmlDialog dialog =
             new SaveToXmlDialog(Display.getDefault().getActiveShell(), results

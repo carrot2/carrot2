@@ -3,7 +3,7 @@ package org.carrot2.workbench.core.ui.attributes;
 import java.util.*;
 
 import org.carrot2.util.attribute.BindableDescriptor;
-import org.carrot2.workbench.core.CorePlugin;
+import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.ui.PropertyProvider;
 import org.carrot2.workbench.editors.AttributeChangeEvent;
 import org.carrot2.workbench.editors.AttributeChangeListener;
@@ -34,7 +34,7 @@ public class AttributeListComponent extends PropertyProvider
         @Override
         public ImageDescriptor getImageDescriptor()
         {
-            return CorePlugin.getImageDescriptor("icons/synced.gif");
+            return WorkbenchCorePlugin.getImageDescriptor("icons/synced.gif");
         }
 
         private String getToolTip(boolean isOn)

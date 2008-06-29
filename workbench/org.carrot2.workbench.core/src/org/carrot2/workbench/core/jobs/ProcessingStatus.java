@@ -1,7 +1,7 @@
 package org.carrot2.workbench.core.jobs;
 
 import org.carrot2.core.ProcessingResult;
-import org.carrot2.workbench.core.CorePlugin;
+import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
@@ -20,7 +20,7 @@ public class ProcessingStatus extends Status
      */
     public ProcessingStatus(Throwable exception)
     {
-        super(IStatus.ERROR, CorePlugin.PLUGIN_ID, -3, exception.getMessage(), exception);
+        super(IStatus.ERROR, WorkbenchCorePlugin.PLUGIN_ID, -3, exception.getMessage(), exception);
     }
 
     /**
@@ -30,7 +30,7 @@ public class ProcessingStatus extends Status
      */
     public ProcessingStatus(ProcessingResult result)
     {
-        super(IStatus.OK, CorePlugin.PLUGIN_ID, "");
+        super(IStatus.OK, WorkbenchCorePlugin.PLUGIN_ID, "");
         this.result = result;
     }
 

@@ -1,6 +1,6 @@
 package org.carrot2.workbench.core.ui;
 
-import org.carrot2.workbench.core.CorePlugin;
+import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.preferences.CarrotPreferencePage;
 import org.carrot2.workbench.core.preferences.PreferenceConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -112,7 +112,7 @@ public class ChooseSectionsDialog extends org.eclipse.jface.dialogs.TrayDialog
                     if (result == Window.OK)
                     {
                         IPreferenceStore store =
-                            CorePlugin.getDefault().getPreferenceStore();
+                            WorkbenchCorePlugin.getDefault().getPreferenceStore();
                         clustersCheckbox.setSelection(store
                             .getBoolean(PreferenceConstants.P_SHOW_CLUSTERS));
                         documentsCheckbox.setSelection(store

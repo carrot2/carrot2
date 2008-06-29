@@ -14,15 +14,15 @@
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
-            class="org.carrot2.workbench.core.Perspective"
-            icon="icons/results.png"
-            id="org.carrot2.workbench.core.perspective"
+            class="org.carrot2.workbench.core.SearchPerspective"
+            icon="icons/perspective-search.gif"
+            id="org.carrot2.workbench.core.perspective.search"
             name="Search">
       </perspective>
       <perspective
             class="org.carrot2.workbench.core.TuningPerspective"
-            icon="icons/attributes.gif"
-            id="org.carrot2.workbench.core.tuning"
+            icon="icons/perspective-tuning.gif"
+            id="org.carrot2.workbench.core.perspective.tuning"
             name="Tuning">
       </perspective>
    </extension>
@@ -117,6 +117,21 @@
       <initializer
             class="org.carrot2.workbench.core.preferences.PreferenceInitializer">
       </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.carrot2.workbench.core.perspective.search">
+         <perspectiveShortcut
+               id="org.carrot2.workbench.core.perspective.tuning">
+         </perspectiveShortcut>
+      </perspectiveExtension>
+      <perspectiveExtension
+            targetID="org.carrot2.workbench.core.perspective.tuning">
+         <perspectiveShortcut
+               id="org.carrot2.workbench.core.perspective.search">
+         </perspectiveShortcut>
+      </perspectiveExtension>
    </extension>
 
 </plugin>

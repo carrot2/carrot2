@@ -4,7 +4,7 @@ import java.util.Properties;
 
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.runtime.RuntimeConstants;
-import org.carrot2.workbench.core.CorePlugin;
+import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.eclipse.core.commands.operations.OperationStatus;
 import org.eclipse.core.runtime.IStatus;
 
@@ -27,9 +27,9 @@ public class VelocityHelper
         catch (Exception e)
         {
             final IStatus status =
-                new OperationStatus(IStatus.ERROR, CorePlugin.PLUGIN_ID, -2,
+                new OperationStatus(IStatus.ERROR, WorkbenchCorePlugin.PLUGIN_ID, -2,
                     "Error while initiating Velocity engine", e);
-            CorePlugin.getDefault().getLog().log(status);
+            WorkbenchCorePlugin.getDefault().getLog().log(status);
             Utils.showError(status);
         }
     }

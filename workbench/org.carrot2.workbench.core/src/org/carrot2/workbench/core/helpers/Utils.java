@@ -1,6 +1,6 @@
 package org.carrot2.workbench.core.helpers;
 
-import org.carrot2.workbench.core.CorePlugin;
+import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.eclipse.core.commands.operations.OperationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.ErrorDialog;
@@ -27,7 +27,7 @@ public class Utils
      */
     public static void showError(final String message, final IStatus status)
     {
-        CorePlugin.getDefault().getLog().log(status);
+        WorkbenchCorePlugin.getDefault().getLog().log(status);
 
         if (Display.getCurrent() != null)
         {
@@ -50,9 +50,9 @@ public class Utils
     public static void logError(String message, Throwable exception, boolean showError)
     {
         IStatus status =
-            new OperationStatus(IStatus.ERROR, CorePlugin.PLUGIN_ID, -1, message,
+            new OperationStatus(IStatus.ERROR, WorkbenchCorePlugin.PLUGIN_ID, -1, message,
                 exception);
-        CorePlugin.getDefault().getLog().log(status);
+        WorkbenchCorePlugin.getDefault().getLog().log(status);
         if (showError)
         {
             showError(status);

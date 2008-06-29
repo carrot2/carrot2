@@ -3,7 +3,7 @@ package org.carrot2.workbench.core.jobs;
 import java.util.Map;
 
 import org.carrot2.core.*;
-import org.carrot2.workbench.core.CorePlugin;
+import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.ComponentLoader;
 import org.carrot2.workbench.core.helpers.ComponentWrapper;
 import org.carrot2.workbench.core.ui.SearchParameters;
@@ -33,7 +33,7 @@ public class ProcessingJob extends Job
         monitor.beginTask("Processing of a query", IProgressMonitor.UNKNOWN);
         try
         {
-            final Controller controller = CorePlugin.getDefault().getController();
+            final Controller controller = WorkbenchCorePlugin.getDefault().getController();
             final ProcessingResult result =
                 controller.process(attributes, source.getComponentClass(), algorithm
                     .getComponentClass());
