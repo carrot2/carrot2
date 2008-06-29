@@ -6,9 +6,7 @@ import org.eclipse.ui.IPersistableEditor;
 
 /**
  * Attribute editor is a control, that is used to edit and display value of given
- * attribute.
- * 
- * The lifecycle of a attribute editor is as follows:
+ * attribute. The lifecycle of an attribute editor is as follows:
  * <ol>
  * <li>call editor.init(descriptor), if exception is thrown -> stop.
  * <li>call editor.createEditor(parent), if exception -> goto 5

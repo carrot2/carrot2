@@ -4,7 +4,5 @@ import java.util.EventListener;
 
 public interface AttributeChangeListener extends EventListener
 {
-
     void attributeChange(AttributeChangeEvent event);
-
 }
