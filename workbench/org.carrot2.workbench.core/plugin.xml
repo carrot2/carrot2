@@ -57,7 +57,7 @@
       <view
             category="org.carrot2.workbench.core.carrot2Category"
             class="org.carrot2.workbench.core.ui.views.SearchView"
-            id="org.carrot2.workbench.core.search"
+            id="org.carrot2.workbench.core.views.search"
             name="Search">
       </view>
       <view
@@ -65,7 +65,7 @@
             category="org.carrot2.workbench.core.carrot2Category"
             class="org.carrot2.workbench.core.ui.views.DocumentListView"
             icon="icons/documents.gif"
-            id="org.carrot2.workbench.core.documents"
+            id="org.carrot2.workbench.core.views.documents"
             name="Documents">
       </view>
       <view
@@ -73,7 +73,7 @@
             category="org.carrot2.workbench.core.carrot2Category"
             class="org.carrot2.workbench.core.ui.views.ClusterTreeView"
             icon="icons/clusters.gif"
-            id="org.carrot2.workbench.core.clusters"
+            id="org.carrot2.workbench.core.views.clusters"
             name="Clusters">
       </view>
       <category

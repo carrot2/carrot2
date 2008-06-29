@@ -22,9 +22,8 @@ public class ComponentWrapper extends ExtensionWrapperBase
         this.className = className;
         getAttribute(element, className);
         String iconPath = getAttribute(element, iconAttName);
-        iconDescriptor =
-            WorkbenchCorePlugin.imageDescriptorFromPlugin(element.getContributor().getName(),
-                iconPath);
+        iconDescriptor = WorkbenchCorePlugin.imageDescriptorFromPlugin(element
+            .getContributor().getName(), iconPath);
         if (iconDescriptor == null)
         {
             throw new IllegalArgumentException("Resource " + iconPath + " in plugin "
@@ -65,11 +64,11 @@ public class ComponentWrapper extends ExtensionWrapperBase
                     "Error while initializing component '" + className + ": "
                         + element.getDeclaringExtension().getContributor().getName(), e));
 
-            // TODO: This is a fall-through and it does look weird from the UI -- nothing
-            // happens,
-            // but the view does not show. I guess something like an error popup would be
-            // more appropriate
-            // to display critical errors?
+            /*
+             * TODO: This is a fall-through and it does look weird from the UI -- nothing
+             * happens, but the view does not show. I guess something like an error popup
+             * would be more appropriate to display critical errors?
+             */
         }
         return null;
     }

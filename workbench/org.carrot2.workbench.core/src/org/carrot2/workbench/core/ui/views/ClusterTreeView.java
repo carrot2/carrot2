@@ -17,7 +17,7 @@ import org.eclipse.ui.part.*;
 public class ClusterTreeView extends PageBookViewBase
 {
 
-    public static final String ID = "org.carrot2.workbench.core.clusters";
+    public static final String ID = "org.carrot2.workbench.core.views.clusters";
 
     @Override
     protected PageRec doCreatePage(final IWorkbenchPart part)

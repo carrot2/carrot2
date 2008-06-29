@@ -21,7 +21,6 @@ import org.eclipse.ui.part.*;
  */
 public class AttributesView extends PageBookViewBase
 {
-
     public static final String ID = "org.carrot2.workbench.core.attributes";
 
     @Override
@@ -85,5 +84,4 @@ public class AttributesView extends PageBookViewBase
         page.createControl(getPageBook());
         return new PageRec(part, page);
     }
-
 }

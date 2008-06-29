@@ -33,11 +33,11 @@ public class SearchView extends ViewPart
     /**
      * Public identifier of this view.
      */
-    public static final String ID = "org.carrot2.workbench.core.search";
+    public static final String ID = "org.carrot2.workbench.core.views.search";
 
     /**
-     * A bit modified {@link StackLayout}. The size of the composite equals the
-     * size of the visible control, not the biggest control available in the stack.
+     * A bit modified {@link StackLayout}. The size of the composite equals the size of
+     * the visible control, not the biggest control available in the stack.
      */
     private static class VisibleComponentSizeStackLayout extends StackLayout
     {
@@ -71,11 +71,9 @@ public class SearchView extends ViewPart
     private Button processButton;
 
     /**
-     * A map of {@link AttributesPage} associated with all 
-     * document sources.
+     * A map of {@link AttributesPage} associated with all document sources.
      */
-    private Map<String, AttributesPage> attributesPages =
-        new HashMap<String, AttributesPage>();
+    private Map<String, AttributesPage> attributesPages = new HashMap<String, AttributesPage>();
 
     /**
      * 
@@ -89,6 +87,9 @@ public class SearchView extends ViewPart
         }
     }
 
+    /*
+     * 
+     */
     @Override
     public void createPartControl(Composite parent)
     {
@@ -116,18 +117,16 @@ public class SearchView extends ViewPart
     }
 
     /**
-     * Initiate query processing. Open an editor with the current parameter
-     * values.
+     * Initiate query processing. Open an editor with the current parameter values.
      */
     private void fireProcessing()
     {
-        // Initiate processing in a new editor.
-        final IWorkbenchPage page =
-            SearchView.this.getViewSite().getWorkbenchWindow().getActivePage();
-        final SearchParameters input =
-            new SearchParameters(getSourceId(), getAlgorithmId(), null);
-        input.putAllAttributes(attributesPages.get(getSourceId())
-            .getAttributeValues());
+        // Initiate processing in a new editor, opened on the currently active page.
+        final IWorkbenchPage page = SearchView.this.getViewSite().getWorkbenchWindow()
+            .getActivePage();
+        final SearchParameters input = new SearchParameters(getSourceId(),
+            getAlgorithmId(), null);
+        input.putAllAttributes(attributesPages.get(getSourceId()).getAttributeValues());
 
         try
         {
@@ -135,9 +134,8 @@ public class SearchView extends ViewPart
         }
         catch (Exception x)
         {
-            final IStatus status =
-                new OperationStatus(IStatus.ERROR, WorkbenchCorePlugin.PLUGIN_ID, -2,
-                    "Editor could not be opened.", x);
+            final IStatus status = new OperationStatus(IStatus.ERROR,
+                WorkbenchCorePlugin.PLUGIN_ID, -2, "Editor could not be opened.", x);
             Utils.showError(status);
         }
     }
@@ -158,11 +156,10 @@ public class SearchView extends ViewPart
         for (ComponentWrapper wrapper : ComponentLoader.SOURCE_LOADER.getComponents())
         {
             ProcessingComponent source = wrapper.getExecutableComponent();
-            AttributesPage page =
-                new AttributesPage(
-                    source.getClass(),
-                    BindableDescriptorBuilder.buildDescriptor(source).only(Input.class,
-                        Processing.class, Required.class).not(Internal.class).flatten().attributeDescriptors);
+            AttributesPage page = new AttributesPage(
+                source.getClass(),
+                BindableDescriptorBuilder.buildDescriptor(source).only(Input.class,
+                    Processing.class, Required.class).not(Internal.class).flatten().attributeDescriptors);
             page.createControl(requiredAttributes);
             attributesPages.put(wrapper.getId(), page);
         }
@@ -195,8 +192,8 @@ public class SearchView extends ViewPart
             IMemento allPagesState = state.getChild("requiredAttributesPages");
             if (allPagesState != null)
             {
-                IMemento [] pageStatesArray =
-                    allPagesState.getChildren("requiredAttributesPage");
+                IMemento [] pageStatesArray = allPagesState
+                    .getChildren("requiredAttributesPage");
                 for (int i = 0; i < pageStatesArray.length; i++)
                 {
                     IMemento pageState = pageStatesArray[i];
@@ -285,7 +282,7 @@ public class SearchView extends ViewPart
      *            should be chosen by default
      * @return create wrapper
      */
-    private ComboViewer createViewer(Combo combo, ComponentLoader loader,
+    private ComboViewer createComboBoxWrapper(Combo combo, ComponentLoader loader,
         String stateAttribute)
     {
         combo.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
@@ -310,8 +307,7 @@ public class SearchView extends ViewPart
         }
         catch (RuntimeException re)
         {
-            Utils
-                .logError("Problem accured while restoring Search view state", re, false);
+            Utils.logError("Could not restore search view state", re, false);
         }
         return viewer;
     }
@@ -331,8 +327,8 @@ public class SearchView extends ViewPart
         IMemento pagesState = memento.createChild("requiredAttributesPages");
         for (String sourceKey : attributesPages.keySet())
         {
-            IMemento pageState =
-                pagesState.createChild("requiredAttributesPage", sourceKey);
+            IMemento pageState = pagesState.createChild("requiredAttributesPage",
+                sourceKey);
             attributesPages.get(sourceKey).saveState(pageState);
         }
     }
@@ -353,6 +349,9 @@ public class SearchView extends ViewPart
         super.dispose();
     }
 
+    /*
+     * 
+     */
     private void createPermanentLayout(Composite parent)
     {
         parent.setLayout(new FillLayout());
@@ -362,15 +361,15 @@ public class SearchView extends ViewPart
 
         Label sourceLabel = new Label(innerComposite, SWT.CENTER);
         sourceLabel.setText("Source");
-        Combo sourceCombo =
-            new Combo(innerComposite, SWT.DROP_DOWN | SWT.READ_ONLY | SWT.BORDER);
+        Combo sourceCombo = new Combo(innerComposite, SWT.DROP_DOWN | SWT.READ_ONLY
+            | SWT.BORDER);
 
         Label algorithmLabel = new Label(innerComposite, SWT.CENTER);
         algorithmLabel.setText("Algorithm");
-        Combo algorithmCombo =
-            new Combo(innerComposite, SWT.DROP_DOWN | SWT.READ_ONLY | SWT.BORDER);
+        Combo algorithmCombo = new Combo(innerComposite, SWT.DROP_DOWN | SWT.READ_ONLY
+            | SWT.BORDER);
 
-        // init nonvisuals
+        // init non-visuals
         GridData sourceGridData = new GridData();
         GridData algorithmGridData = new GridData();
         GridData processButtonGridData = new GridData();
@@ -391,11 +390,10 @@ public class SearchView extends ViewPart
         sourceCombo.setLayoutData(sourceGridData);
         algorithmCombo.setLayoutData(algorithmGridData);
 
-        sourceViewer =
-            createViewer(sourceCombo, ComponentLoader.SOURCE_LOADER, SOURCE_ID_ATTRIBUTE);
-        algorithmViewer =
-            createViewer(algorithmCombo, ComponentLoader.ALGORITHM_LOADER,
-                ALGORITHM_ID_ATTRIBUTE);
+        sourceViewer = createComboBoxWrapper(sourceCombo, ComponentLoader.SOURCE_LOADER,
+            SOURCE_ID_ATTRIBUTE);
+        algorithmViewer = createComboBoxWrapper(algorithmCombo,
+            ComponentLoader.ALGORITHM_LOADER, ALGORITHM_ID_ATTRIBUTE);
 
         createRequiredAttributesLayout();
 

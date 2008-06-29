@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.lang.StringUtils;
 import org.carrot2.workbench.core.helpers.ComponentLoader;
+import org.carrot2.workbench.core.helpers.ComponentWrapper;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.*;
 
@@ -76,7 +77,9 @@ public class SearchParameters implements IEditorInput, IPersistableElement
 
     public ImageDescriptor getImageDescriptor()
     {
-        return ComponentLoader.SOURCE_LOADER.getComponent(this.sourceId).getIcon();
+        ComponentWrapper wrapper = ComponentLoader.SOURCE_LOADER.getComponent(this.sourceId); 
+        ImageDescriptor icon = wrapper.getIcon();
+        return icon;
     }
 
     public String getName()

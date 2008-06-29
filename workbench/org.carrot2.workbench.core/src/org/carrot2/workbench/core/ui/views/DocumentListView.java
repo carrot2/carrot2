@@ -9,7 +9,7 @@ import org.eclipse.ui.part.ViewPart;
 
 public class DocumentListView extends ViewPart
 {
-    public static final String ID = "org.carrot2.workbench.core.documents";
+    public static final String ID = "org.carrot2.workbench.core.views.documents";
 
     private DocumentListBrowser browserPart;
 

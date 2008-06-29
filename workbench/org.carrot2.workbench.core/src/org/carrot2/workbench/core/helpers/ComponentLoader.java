@@ -8,6 +8,9 @@ import org.eclipse.core.runtime.*;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+/**
+ * Extension point parser and loader.
+ */
 public final class ComponentLoader
 {
     private final String extensionName;
@@ -44,6 +47,7 @@ public final class ComponentLoader
         this.captionAttName = captionName;
         this.classAttName = className;
         this.iconAttName = iconAttName;
+
         loadExtensions();
     }
 
@@ -57,13 +61,11 @@ public final class ComponentLoader
      */
     public List<String> getCaptions()
     {
-        // loadExtensions();
         return new ArrayList<String>(componentCache.keySet());
     }
 
     public List<ComponentWrapper> getComponents()
     {
-        // loadExtensions();
         return Lists.immutableList(componentCache.values());
     }
 
@@ -127,5 +129,4 @@ public final class ComponentLoader
         }
 
     }
-
 }

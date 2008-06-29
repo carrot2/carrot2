@@ -4,6 +4,9 @@ import static org.apache.commons.lang.StringUtils.isBlank;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 
+/**
+ * 
+ */
 public abstract class ExtensionWrapperBase
 {
 

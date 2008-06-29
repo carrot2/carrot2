@@ -1,6 +1,7 @@
 package org.carrot2.workbench.core.ui.views;
 
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.*;
 
@@ -25,9 +26,13 @@ public abstract class PageBookViewBase extends PageBookView
     }
 
     @Override
-    protected IWorkbenchPart getBootstrapPart()
-    {
-        return this.getSite().getPage().getActiveEditor();
+    protected IWorkbenchPart getBootstrapPart() {
+        final IWorkbenchPage page = getSite().getPage();
+        if (page != null) {
+            return page.getActiveEditor();
+        }
+
+        return null;
     }
 
     @Override
