@@ -2,6 +2,8 @@ package org.carrot2.text.util;
 
 import java.util.Comparator;
 
+import bak.pcj.IntComparator;
+
 /**
  * Utilities for sorting arrays that rather than swap elements in these arrays, returns
  * <code>int []</code> arrays with the actual order and keeps the input arrays intact.
@@ -17,9 +19,23 @@ public class IndirectSorter
     private static final int M = 16;
 
     /**
-     * Returns the order of elements in <code>array</code> according
+     * Returns the order of elements in <code>array</code> according to
+     * <code>comparator</code>.
      */
     public static <T> int [] sort(T [] array, Comparator<T> comparator)
+    {
+        int [] order = createOrderArray(array.length);
+        quickSort(array, 0, array.length - 1, order, comparator);
+        insertionSort(array, 0, array.length - 1, order, comparator);
+
+        return order;
+    }
+
+    /**
+     * Returns the order of elements in <code>array</code> according to
+     * <code>comparator</code>.
+     */
+    public static int [] sort(int [] array, IntComparator comparator)
     {
         int [] order = createOrderArray(array.length);
         quickSort(array, 0, array.length - 1, order, comparator);
@@ -43,7 +59,17 @@ public class IndirectSorter
     }
 
     /**
-     * Internal 2-way Quicksort.
+     * A common helper method for swapping elements of an array.
+     */
+    private static final void swap(int [] array, int l, int i)
+    {
+        int temp = array[l];
+        array[l] = array[i];
+        array[i] = temp;
+    }
+
+    /**
+     * Internal 2-way Quicksort for {@link Object}s.
      */
     private static <T> void quickSort(T [] array, int l, int r, int [] order,
         Comparator<T> comparator)
@@ -90,15 +116,8 @@ public class IndirectSorter
         }
     }
 
-    private static final void swap(int [] array, int l, int i)
-    {
-        int temp = array[l];
-        array[l] = array[i];
-        array[i] = temp;
-    }
-
     /**
-     * Internal insertion sort for small arrays.
+     * Internal insertion sort for {@link Object}s.
      */
     private static <T> void insertionSort(T [] array, int lo0, int hi0, int [] order,
         Comparator<T> comparator)
@@ -109,6 +128,75 @@ public class IndirectSorter
             int j = i;
             int t;
             while (j > lo0 && comparator.compare(array[t = order[j - 1]], array[v]) > 0)
+            {
+                order[j] = t;
+                j--;
+            }
+            order[j] = v;
+        }
+    }
+
+    /**
+     * Internal 2-way Quicksort for <code>int</code>s.
+     */
+    private static void quickSort(int [] array, int l, int r, int [] order,
+        IntComparator intComparator)
+    {
+        if ((r - l) > M)
+        {
+            int i = (r + l) / 2;
+
+            if (intComparator.compare(array[order[l]], array[order[i]]) > 0)
+            {
+                swap(order, l, i);
+            }
+            if (intComparator.compare(array[order[l]], array[order[r]]) > 0)
+            {
+                swap(order, l, r);
+            }
+            if (intComparator.compare(array[order[i]], array[order[r]]) > 0)
+            {
+                swap(order, i, r);
+            }
+
+            int j = r - 1;
+            swap(order, i, j);
+            i = l;
+            int v = array[order[j]];
+            for (;;)
+            {
+                while (intComparator.compare(array[order[++i]], v) < 0)
+                {
+                }
+                while (intComparator.compare(array[order[--j]], v) > 0)
+                {
+                }
+                if (j < i)
+                {
+                    break;
+                }
+                swap(order, i, j);
+            }
+            swap(order, i, r - 1);
+
+            quickSort(array, l, j, order, intComparator);
+            quickSort(array, i + 1, r, order, intComparator);
+        }
+    }
+
+    /**
+     * Internal insertion sort for <code>int</code>s.
+     */
+    private static void insertionSort(int [] array, int lo0, int hi0, int [] order,
+        IntComparator intComparator)
+    {
+        for (int i = lo0 + 1; i <= hi0; i++)
+        {
+            int v = order[i];
+            int j = i;
+            int t;
+            while (j > lo0
+                && intComparator.compare(array[t = order[j - 1]], array[v]) > 0)
             {
                 order[j] = t;
                 j--;

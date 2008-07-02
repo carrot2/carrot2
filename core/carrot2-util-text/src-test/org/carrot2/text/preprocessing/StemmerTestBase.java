@@ -25,7 +25,7 @@ public class StemmerTestBase extends PreprocessingComponentTestBase
         languageModelStemmer = new LanguageModelStemmer();
     }
     
-    protected void checkAsserts(char [][] expectedStemImages, int [] expectedStemTf,
+    protected void check(char [][] expectedStemImages, int [] expectedStemTf,
         int [] expectedStemIndices, int [][] expectedStemTfByDocument)
     {
         tokenizer.tokenize(context);

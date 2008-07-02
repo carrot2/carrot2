@@ -7,6 +7,8 @@ import java.util.Comparator;
 
 import org.junit.Test;
 
+import bak.pcj.IntComparator;
+
 import com.google.common.collect.Comparators;
 
 /**
@@ -18,17 +20,25 @@ public class IndirectSorterTest
     private static final Comparator<String> REVERSED_STRING_COMPARATOR = Collections
         .<String> reverseOrder(Comparators.<String> naturalOrder());
 
+    private static final IntComparator REVERSED_INT_COMPARATOR = new IntComparator()
+    {
+        public int compare(int v1, int v2)
+        {
+            return v2 - v1;
+        }
+    };
+
     @Test
-    public void testEmpty()
+    public void testObjectEmpty()
     {
         final String [] array = new String [] {};
         final int [] expectedOrder = new int [] {};
 
-        check(array, expectedOrder);
+        check(array, expectedOrder, REVERSED_STRING_COMPARATOR);
     }
 
     @Test
-    public void testSingleElement()
+    public void testObjectSingleElement()
     {
         final String [] array = new String []
         {
@@ -39,11 +49,11 @@ public class IndirectSorterTest
             0
         };
 
-        check(array, expectedOrder);
+        check(array, expectedOrder, REVERSED_STRING_COMPARATOR);
     }
 
     @Test
-    public void testSorted()
+    public void testObjectSorted()
     {
         final String [] array = new String []
         {
@@ -54,11 +64,11 @@ public class IndirectSorterTest
             6, 5, 4, 3, 2, 1, 0
         };
 
-        check(array, expectedOrder);
+        check(array, expectedOrder, REVERSED_STRING_COMPARATOR);
     }
 
     @Test
-    public void testReversed()
+    public void testObjectReversed()
     {
         final String [] array = new String []
         {
@@ -69,11 +79,11 @@ public class IndirectSorterTest
             0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
         };
 
-        check(array, expectedOrder);
+        check(array, expectedOrder, REVERSED_STRING_COMPARATOR);
     }
 
     @Test
-    public void testUnsorted()
+    public void testObjectUnsorted()
     {
         final String [] array = new String []
         {
@@ -84,11 +94,11 @@ public class IndirectSorterTest
             5, 4, 1, 0, 2, 3, 6
         };
 
-        check(array, expectedOrder);
+        check(array, expectedOrder, REVERSED_STRING_COMPARATOR);
     }
 
     @Test
-    public void testRepeatedElements()
+    public void testObjectRepeatedElements()
     {
         final String [] array = new String []
         {
@@ -99,12 +109,102 @@ public class IndirectSorterTest
             4, 5, 1, 0, 2, 3, 6
         };
 
-        check(array, expectedOrder);
+        check(array, expectedOrder, REVERSED_STRING_COMPARATOR);
     }
 
-    private void check(String [] array, int [] expectedOrder)
+    @Test
+    public void testIntEmpty()
     {
-        int [] order = IndirectSorter.sort(array, REVERSED_STRING_COMPARATOR);
+        final int [] array = new int [] {};
+        final int [] expectedOrder = new int [] {};
+
+        check(array, expectedOrder, REVERSED_INT_COMPARATOR);
+    }
+
+    @Test
+    public void testIntSingleElement()
+    {
+        final int [] array = new int []
+        {
+            2
+        };
+        final int [] expectedOrder = new int []
+        {
+            0
+        };
+
+        check(array, expectedOrder, REVERSED_INT_COMPARATOR);
+    }
+
+    @Test
+    public void testIntSorted()
+    {
+        final int [] array = new int []
+        {
+            2, 4, 6, 7, 8, 9, 12
+        };
+        final int [] expectedOrder = new int []
+        {
+            6, 5, 4, 3, 2, 1, 0
+        };
+
+        check(array, expectedOrder, REVERSED_INT_COMPARATOR);
+    }
+
+    @Test
+    public void testIntReversed()
+    {
+        final int [] array = new int []
+        {
+            21, 19, 18, 15, 14, 13, 12, 9, 8, 6, 5, 4, 3, 0
+        };
+        int [] expectedOrder = new int []
+        {
+            0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
+        };
+
+        check(array, expectedOrder, REVERSED_INT_COMPARATOR);
+    }
+
+    @Test
+    public void testIntUnsorted()
+    {
+        final int [] array = new int []
+        {
+            6, 8, 0, -3, 10, 13, -21
+        };
+        int [] expectedOrder = new int []
+        {
+            5, 4, 1, 0, 2, 3, 6
+        };
+
+        check(array, expectedOrder, REVERSED_INT_COMPARATOR);
+    }
+
+    @Test
+    public void testIntRepeatedElements()
+    {
+        final int [] array = new int []
+        {
+            8, 9, 4, 1, 10, 10, 1
+        };
+        final int [] expectedOrder = new int []
+        {
+            4, 5, 1, 0, 2, 3, 6
+        };
+
+        check(array, expectedOrder, REVERSED_INT_COMPARATOR);
+    }
+
+    private <T> void check(T [] array, int [] expectedOrder, Comparator<T> comparator)
+    {
+        int [] order = IndirectSorter.sort(array, comparator);
+        assertThat(order).isEqualTo(expectedOrder);
+    }
+
+    private <T> void check(int [] array, int [] expectedOrder, IntComparator comparator)
+    {
+        int [] order = IndirectSorter.sort(array, comparator);
         assertThat(order).isEqualTo(expectedOrder);
     }
 }

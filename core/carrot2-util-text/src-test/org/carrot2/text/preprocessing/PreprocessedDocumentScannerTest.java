@@ -22,7 +22,7 @@ public class PreprocessedDocumentScannerTest extends PreprocessingComponentTestB
         final List<List<Integer>> expectedFieldRanges = Lists.newArrayList();
         final List<List<Integer>> expectedSentenceRanges = Lists.newArrayList();
 
-        checkAsserts(expectedDocumentRanges, expectedFieldRanges, expectedSentenceRanges);
+        check(expectedDocumentRanges, expectedFieldRanges, expectedSentenceRanges);
     }
 
     @Test
@@ -34,7 +34,7 @@ public class PreprocessedDocumentScannerTest extends PreprocessingComponentTestB
         final List<List<Integer>> expectedFieldRanges = ranges(0, 1);
         final List<List<Integer>> expectedSentenceRanges = ranges(0, 1);
 
-        checkAsserts(expectedDocumentRanges, expectedFieldRanges, expectedSentenceRanges);
+        check(expectedDocumentRanges, expectedFieldRanges, expectedSentenceRanges);
     }
 
     @Test
@@ -46,7 +46,7 @@ public class PreprocessedDocumentScannerTest extends PreprocessingComponentTestB
         final List<List<Integer>> expectedFieldRanges = ranges(0, 5);
         final List<List<Integer>> expectedSentenceRanges = ranges(0, 1, 2, 1, 4, 1);
 
-        checkAsserts(expectedDocumentRanges, expectedFieldRanges, expectedSentenceRanges);
+        check(expectedDocumentRanges, expectedFieldRanges, expectedSentenceRanges);
     }
 
     @Test
@@ -59,7 +59,7 @@ public class PreprocessedDocumentScannerTest extends PreprocessingComponentTestB
         final List<List<Integer>> expectedSentenceRanges = ranges(0, 1, 2, 1, 4, 0, 5, 1,
             7, 1);
 
-        checkAsserts(expectedDocumentRanges, expectedFieldRanges, expectedSentenceRanges);
+        check(expectedDocumentRanges, expectedFieldRanges, expectedSentenceRanges);
     }
 
     @Test
@@ -72,7 +72,7 @@ public class PreprocessedDocumentScannerTest extends PreprocessingComponentTestB
         final List<List<Integer>> expectedSentenceRanges = ranges(0, 1, 2, 1, 4, 1, 6, 1,
             8, 1, 10, 1);
 
-        checkAsserts(expectedDocumentRanges, expectedFieldRanges, expectedSentenceRanges);
+        check(expectedDocumentRanges, expectedFieldRanges, expectedSentenceRanges);
     }
 
     private List<List<Integer>> ranges(int... ranges)
@@ -85,7 +85,7 @@ public class PreprocessedDocumentScannerTest extends PreprocessingComponentTestB
         return result;
     }
 
-    private void checkAsserts(List<List<Integer>> expectedDocumentRanges,
+    private void check(List<List<Integer>> expectedDocumentRanges,
         List<List<Integer>> expectedFieldRanges,
         List<List<Integer>> expectedSentenceRanges)
     {

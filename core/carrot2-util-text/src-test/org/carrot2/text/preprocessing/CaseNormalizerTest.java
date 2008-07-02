@@ -13,7 +13,7 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
 {
     /** Case normalizer under tests */
     private CaseNormalizer caseNormalizer;
-    
+
     /** Other preprocessing components required for the test */
     private Tokenizer tokenizer;
 
@@ -23,7 +23,7 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
         tokenizer = new Tokenizer();
         caseNormalizer = new CaseNormalizer();
     }
-    
+
     @Test
     public void testEmpty()
     {
@@ -37,7 +37,7 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
         };
         int [][] expectedWordTfByDocument = new int [] [] {};
 
-        checkAsserts(expectedWordImages, expectedWordTf, expectedWordIndices,
+        check(expectedWordImages, expectedWordTf, expectedWordIndices,
             expectedWordTfByDocument);
     }
 
@@ -68,7 +68,7 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
             }
         };
 
-        checkAsserts(expectedWordImages, expectedWordTf, expectedWordIndices,
+        check(expectedWordImages, expectedWordTf, expectedWordIndices,
             expectedWordTfByDocument);
     }
 
@@ -107,7 +107,7 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
             }
         };
 
-        checkAsserts(expectedWordImages, expectedWordTf, expectedWordIndices,
+        check(expectedWordImages, expectedWordTf, expectedWordIndices,
             expectedWordTfByDocument);
     }
 
@@ -146,7 +146,7 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
             0, 1
         };
 
-        checkAsserts(expectedWordImages, expectedWordTf, expectedWordIndices,
+        check(expectedWordImages, expectedWordTf, expectedWordIndices,
             expectedWordTfByDocument);
     }
 
@@ -177,7 +177,7 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
             }
         };
 
-        checkAsserts(expectedWordImages, expectedWordTf, expectedWordIndices,
+        check(expectedWordImages, expectedWordTf, expectedWordIndices,
             expectedWordTfByDocument);
     }
 
@@ -214,7 +214,7 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
             }
         };
 
-        checkAsserts(expectedWordImages, expectedWordTf, expectedWordIndices,
+        check(expectedWordImages, expectedWordTf, expectedWordIndices,
             expectedWordTfByDocument);
     }
 
@@ -245,7 +245,7 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
             }
         };
 
-        checkAsserts(expectedWordImages, expectedWordTf, expectedWordIndices,
+        check(expectedWordImages, expectedWordTf, expectedWordIndices,
             expectedWordTfByDocument);
     }
 
@@ -286,7 +286,7 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
             0, 1
         };
 
-        checkAsserts(expectedWordImages, expectedWordTf, expectedWordIndices,
+        check(expectedWordImages, expectedWordTf, expectedWordIndices,
             expectedWordTfByDocument);
     }
 
@@ -321,7 +321,7 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
             0, 1, 1, 1
         };
 
-        checkAsserts(expectedWordImages, expectedWordTf, expectedWordIndices,
+        check(expectedWordImages, expectedWordTf, expectedWordIndices,
             expectedWordTfByDocument);
     }
 
@@ -357,7 +357,7 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
             }
         };
 
-        checkAsserts(expectedWordImages, expectedWordTf, expectedWordIndices,
+        check(expectedWordImages, expectedWordTf, expectedWordIndices,
             expectedWordTfByDocument);
     }
 
@@ -388,7 +388,7 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
             }
         };
 
-        checkAsserts(expectedWordImages, expectedWordTf, expectedWordIndices,
+        check(expectedWordImages, expectedWordTf, expectedWordIndices,
             expectedWordTfByDocument);
     }
 
@@ -433,7 +433,7 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
             3, 4
         };
 
-        checkAsserts(expectedWordImages, expectedWordTf, expectedWordIndices,
+        check(expectedWordImages, expectedWordTf, expectedWordIndices,
             expectedWordTfByDocument);
     }
 
@@ -448,7 +448,7 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
         return expectedWordImages;
     }
 
-    private void checkAsserts(char [][] expectedWordImages, int [] expectedWordTf,
+    private void check(char [][] expectedWordImages, int [] expectedWordTf,
         int [] expectedWordIndices, int [][] expectedWordTfByDocument)
     {
         tokenizer.tokenize(context);

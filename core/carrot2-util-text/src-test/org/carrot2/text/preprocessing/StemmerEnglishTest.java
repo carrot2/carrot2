@@ -37,7 +37,7 @@ public class StemmerEnglishTest extends StemmerTestBase
             }
         };
 
-        checkAsserts(expectedStemImages, expectedStemTf, expectedStemIndices,
+        check(expectedStemImages, expectedStemTf, expectedStemIndices,
             expectedStemTfByDocument);
     }
 
@@ -71,7 +71,7 @@ public class StemmerEnglishTest extends StemmerTestBase
             }
         };
 
-        checkAsserts(expectedStemImages, expectedStemTf, expectedStemIndices,
+        check(expectedStemImages, expectedStemTf, expectedStemIndices,
             expectedStemTfByDocument);
     }
 
@@ -105,7 +105,7 @@ public class StemmerEnglishTest extends StemmerTestBase
             }
         };
 
-        checkAsserts(expectedStemImages, expectedStemTf, expectedStemIndices,
+        check(expectedStemImages, expectedStemTf, expectedStemIndices,
             expectedStemTfByDocument);
     }
 }

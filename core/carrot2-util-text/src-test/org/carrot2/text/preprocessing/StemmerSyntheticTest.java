@@ -18,8 +18,8 @@ public class StemmerSyntheticTest extends StemmerTestBase
         int [] expectedStemIndexesArray = new int [] {};
         int [][] expectedStemTfByDocumentArray = new int [] [] {};
 
-        checkAsserts(expectedStemImagesArray, expectedStemTfArray,
-            expectedStemIndexesArray, expectedStemTfByDocumentArray);
+        check(expectedStemImagesArray, expectedStemTfArray, expectedStemIndexesArray,
+            expectedStemTfByDocumentArray);
     }
 
     @Test
@@ -52,8 +52,8 @@ public class StemmerSyntheticTest extends StemmerTestBase
             }
         };
 
-        checkAsserts(expectedStemImagesArray, expectedStemTfArray,
-            expectedStemIndexesArray, expectedStemTfByDocumentArray);
+        check(expectedStemImagesArray, expectedStemTfArray, expectedStemIndexesArray,
+            expectedStemTfByDocumentArray);
     }
 
     @Test
@@ -86,8 +86,8 @@ public class StemmerSyntheticTest extends StemmerTestBase
             }
         };
 
-        checkAsserts(expectedStemImagesArray, expectedStemTfArray,
-            expectedStemIndexesArray, expectedStemTfByDocumentArray);
+        check(expectedStemImagesArray, expectedStemTfArray, expectedStemIndexesArray,
+            expectedStemTfByDocumentArray);
     }
 
     @Test
@@ -123,8 +123,8 @@ public class StemmerSyntheticTest extends StemmerTestBase
             }
         };
 
-        checkAsserts(expectedStemImagesArray, expectedStemTfArray,
-            expectedStemIndexesArray, expectedStemTfByDocumentArray);
+        check(expectedStemImagesArray, expectedStemTfArray, expectedStemIndexesArray,
+            expectedStemTfByDocumentArray);
     }
 
     @Test
@@ -160,8 +160,8 @@ public class StemmerSyntheticTest extends StemmerTestBase
             }
         };
 
-        checkAsserts(expectedStemImagesArray, expectedStemTfArray,
-            expectedStemIndexesArray, expectedStemTfByDocumentArray);
+        check(expectedStemImagesArray, expectedStemTfArray, expectedStemIndexesArray,
+            expectedStemTfByDocumentArray);
     }
 
     @Test
@@ -199,8 +199,8 @@ public class StemmerSyntheticTest extends StemmerTestBase
             }
         };
 
-        checkAsserts(expectedStemImagesArray, expectedStemTfArray,
-            expectedStemIndexesArray, expectedStemTfByDocumentArray);
+        check(expectedStemImagesArray, expectedStemTfArray, expectedStemIndexesArray,
+            expectedStemTfByDocumentArray);
     }
 
     @Override

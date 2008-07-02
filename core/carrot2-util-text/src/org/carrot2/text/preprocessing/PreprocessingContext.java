@@ -66,14 +66,14 @@ public final class PreprocessingContext
          * {@link TokenType#TF_SEPARATOR_DOCUMENT} or {@link TokenType#TF_SEPARATOR_FIELD}
          * , image is <code>null</code>.
          * <p>
-         * This array is produced by the {@link PreprocessingTasks#TOKENIZE} task.
+         * This array is produced by {@link Tokenizer}.
          */
         public char [][] image;
 
         /**
          * Token's {@link TokenType} bit flags.
          * <p>
-         * This array is produced by the {@link PreprocessingTasks#TOKENIZE} task.
+         * This array is produced by {@link Tokenizer}.
          */
         public int [] type;
 
@@ -81,7 +81,7 @@ public final class PreprocessingContext
          * Document field the token came from. The index points to arrays in
          * {@link AllFields}, equal to <code>-1</code> for document and field separators.
          * <p>
-         * This array is produced by the {@link PreprocessingTasks#TOKENIZE} task.
+         * This array is produced by {@link Tokenizer}.
          */
         public byte [] fieldIndex;
 
@@ -90,7 +90,7 @@ public final class PreprocessingContext
          * {@link PreprocessingContext#documents}. Equal to <code>-1</code> for document
          * separators.
          * <p>
-         * This array is produced by the {@link PreprocessingTasks#TOKENIZE} task.
+         * This array is produced by {@link Tokenizer}.
          */
         public int [] documentIndex;
 
@@ -99,9 +99,24 @@ public final class PreprocessingContext
          * for document, field and {@link TokenType#TT_PUNCTUATION} tokens (including
          * sentence separators).
          * <p>
-         * This array is produced by the {@link PreprocessingTasks#CASE_NORMALIZE} task.
+         * This array is produced by {@link CaseNormalizer}.
          */
         public int [] wordIndex;
+
+        /**
+         * The suffix order of tokens. Suffixes starting with a separator come at the end
+         * of the array.
+         * <p>
+         * This array is produced by {@link PhraseExtractor}.
+         */
+        public int [] suffixOrder;
+        
+        /**
+         * The Longest Common Prefix for the adjacent suffix-sorted token sequences.
+         * <p>
+         * This array is produced by {@link PhraseExtractor}.
+         */
+        public int [] lcp;
     }
 
     /**
@@ -119,7 +134,7 @@ public final class PreprocessingContext
          * Name of the document field. Entries of {@link AllTokens#fieldIndex} point to
          * this array.
          * <p>
-         * This array is produced by the {@link PreprocessingTasks#TOKENIZE} task.
+         * This array is produced by {@link Tokenizer}.
          */
         public String [] name;
     }
@@ -148,7 +163,7 @@ public final class PreprocessingContext
          * a token <em>ACM</em> appeared 12 times in the input and <em>Acm</em> appeared 3
          * times, the image will be equal to <em>ACM</em>.
          * <p>
-         * This array is produced by the {@link PreprocessingTasks#CASE_NORMALIZE} task.
+         * This array is produced by {@link CaseNormalizer}.
          */
         public char [][] image;
 
@@ -156,7 +171,7 @@ public final class PreprocessingContext
          * Term Frequency of the word, aggregated across all variants with respect to
          * case. Frequencies for each variant separately are not available.
          * <p>
-         * This array is produced by the {@link PreprocessingTasks#CASE_NORMALIZE} task.
+         * This array is produced by {@link CaseNormalizer}.
          */
         public int [] tf;
 
@@ -169,7 +184,7 @@ public final class PreprocessingContext
          * <code>[2, 15, 138, 7]</code> means that the word appeared 15 times in document
          * at index 2 and 7 times in document at index 138.
          * <p>
-         * This array is produced by the {@link PreprocessingTasks#CASE_NORMALIZE} task.
+         * This array is produced by {@link CaseNormalizer}.
          */
         public int [][] tfByDocument;
 
@@ -178,14 +193,14 @@ public final class PreprocessingContext
          * word. <b>This array will be replaced with a more generic word flags array in
          * the near future.</b>
          * <p>
-         * This array is produced by the {@link PreprocessingTasks#CASE_NORMALIZE} task.
+         * This array is produced by {@link CaseNormalizer}.
          */
         public boolean [] commonTermFlag;
 
         /**
          * A pointer to the {@link AllStems} arrays for this word.
          * <p>
-         * This array is produced by the {@link PreprocessingTasks#STEMMING} task.
+         * This array is produced by {@link LanguageModelStemmer}.
          */
         public int [] stemIndex;
     }
@@ -213,7 +228,7 @@ public final class PreprocessingContext
          * Stem image as produced by the {@link Stemmer}, may not correspond to any
          * correct word.
          * <p>
-         * This array is produced by the {@link PreprocessingTasks#STEMMING} task.
+         * This array is produced by {@link LanguageModelStemmer}.
          */
         public char [][] images;
 
@@ -221,7 +236,7 @@ public final class PreprocessingContext
          * Pointer to the {@link AllWords} arrays, to the most frequent original form of
          * the stem. Pointers to the less frequent variants are not available.
          * <p>
-         * This array is produced by the {@link PreprocessingTasks#STEMMING} task.
+         * This array is produced by {@link LanguageModelStemmer}.
          */
         public int [] mostFrequentOriginalWordIndex;
 
@@ -229,7 +244,7 @@ public final class PreprocessingContext
          * Term frequency of the stem, i.e. the sum of all words from {@link AllWords}
          * pointing to the stem.
          * <p>
-         * This array is produced by the {@link PreprocessingTasks#STEMMING} task.
+         * This array is produced by {@link LanguageModelStemmer}.
          */
         public int [] tf;
 
@@ -237,7 +252,7 @@ public final class PreprocessingContext
          * Term frequency of the stem for each document. For the encoding of this array,
          * see {@link AllWords#tfByDocument}.
          * <p>
-         * This array is produced by the {@link PreprocessingTasks#STEMMING} task.
+         * This array is produced by {@link LanguageModelStemmer}.
          */
         public int [][] tfByDocument;
     }

@@ -12,7 +12,7 @@ public class WordMarkerTest extends PreprocessingComponentTestBase
 {
     /** Marker under tests */
     private StopListMarker stopListMarker;
-    
+
     /** Other preprocessing components required for the test */
     private Tokenizer tokenizer;
     private CaseNormalizer caseNormalizer;
@@ -26,7 +26,7 @@ public class WordMarkerTest extends PreprocessingComponentTestBase
         languageModelStemmer = new LanguageModelStemmer();
         stopListMarker = new StopListMarker();
     }
-    
+
     @Test
     public void testNonStopWords()
     {
@@ -37,7 +37,7 @@ public class WordMarkerTest extends PreprocessingComponentTestBase
             false, false
         };
 
-        checkAsserts(expectedCommonTermFlag);
+        check(expectedCommonTermFlag);
     }
 
     @Test
@@ -50,16 +50,16 @@ public class WordMarkerTest extends PreprocessingComponentTestBase
             true, true, true, true
         };
 
-        checkAsserts(expectedCommonTermFlag);
+        check(expectedCommonTermFlag);
     }
 
-    private void checkAsserts(boolean [] expectedCommonTermFlag)
+    private void check(boolean [] expectedCommonTermFlag)
     {
         tokenizer.tokenize(context);
         caseNormalizer.normalize(context);
         languageModelStemmer.stem(context);
         stopListMarker.mark(context);
-        
+
         assertThat(context.allWords.commonTermFlag).isEqualTo(expectedCommonTermFlag);
     }
 }
