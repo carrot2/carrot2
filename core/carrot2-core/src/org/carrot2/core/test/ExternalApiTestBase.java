@@ -12,7 +12,7 @@ public class ExternalApiTestBase
     /**
      * A query that in theory should not return any results.
      */
-    protected static final String NO_RESULTS_QUERY = "duiogig oiudgisugviw siug iugw iusviuwg";
+    protected static final String NO_RESULTS_QUERY = "duiogig oiudgisugvi\u0078 siug iugw iusviuwg";
 
     /**
      * Allows to skip running tests that can fail because of a failure of some external
