@@ -3,10 +3,12 @@ package org.carrot2.text.preprocessing;
 import java.util.Arrays;
 import java.util.List;
 
+import org.carrot2.core.attribute.Processing;
 import org.carrot2.text.analysis.TokenType;
-import org.carrot2.text.linguistic.LanguageModelFactory;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
 import org.carrot2.text.util.*;
+import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.constraint.IntRange;
 
 import bak.pcj.list.IntArrayList;
 import bak.pcj.list.IntList;
@@ -19,30 +21,26 @@ import com.google.common.collect.Lists;
  * Implementation of {@link PreprocessingTasks#CASE_NORMALIZE}. As a side effect, this
  * class computes a number of word frequency statistics in {@link AllWords}.
  */
-final class CaseNormalizer
+@Bindable
+public final class CaseNormalizer
 {
-    /** Words appearing in less than dfThreshold documents will be ignored */
-    private int dfThreshold = 2;
-
     /**
-     * Creates a {@link CaseNormalizer} with the default {@link #dfThreshold}.
+     * Document Frequency cut-off. Words appearing in less than <code>dfCutoff</code>
+     * documents will be ignored.
+     * 
+     * @level Advanced
+     * @group Preprocessing
      */
-    CaseNormalizer()
-    {
-    }
-
-    /**
-     * Creates a {@link CaseNormalizer} with the provided {@link #dfThreshold}.
-     */
-    CaseNormalizer(int dfThreshold)
-    {
-        this.dfThreshold = dfThreshold;
-    }
+    @Processing
+    @Input
+    @Attribute
+    @IntRange(min = 1, max = 100)
+    public int dfCutoff = 1;
 
     /**
      * Performs normalization and saves the results to the <code>context</code>.
      */
-    void normalize(PreprocessingContext context, LanguageModelFactory languageFactory)
+    public void normalize(PreprocessingContext context)
     {
         // Local references to already existing arrays
         final char [][] tokenImages = context.allTokens.image;
@@ -145,7 +143,7 @@ final class CaseNormalizer
                 // see if we want to store the previous image, and if so
                 // we need add some data about it to the multi arrays
                 int wordDf = documentIndexes.size();
-                if (wordDf >= dfThreshold)
+                if (wordDf >= dfCutoff)
                 {
                     // Add the word to the word list
                     normalizedWordImages.add(tokenImages[maxTfVariantIndex]);

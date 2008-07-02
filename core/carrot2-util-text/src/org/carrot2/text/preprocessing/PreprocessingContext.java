@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.carrot2.core.Document;
 import org.carrot2.text.analysis.TokenType;
+import org.carrot2.text.linguistic.LanguageModel;
 import org.carrot2.text.linguistic.Stemmer;
 
 import com.google.common.base.Predicate;
@@ -32,8 +33,21 @@ public final class PreprocessingContext
         }
     };
 
-    /** Documents to which this context's data refer */
-    public List<Document> documents;
+    /** A list of documents to process. */
+    final List<Document> documents;
+
+    /** Language model to be used */
+    final LanguageModel language;
+
+    /**
+     * Creates a preprocessing context for the provided <code>documents</code> and with
+     * the provided <code>languageModel</code>.
+     */
+    public PreprocessingContext(LanguageModel languageModel, List<Document> documents)
+    {
+        this.documents = documents;
+        this.language = languageModel;
+    }
 
     /**
      * Information about all tokens of the input {@link PreprocessingContext#documents}.
@@ -49,8 +63,8 @@ public final class PreprocessingContext
         /**
          * Token image as it appears in the input. On positions where {@link #type} is
          * equal to one of {@link TokenType#TF_TERMINATOR},
-         * {@link TokenType#TF_SEPARATOR_DOCUMENT} or {@link TokenType#TF_SEPARATOR_FIELD},
-         * image is <code>null</code>.
+         * {@link TokenType#TF_SEPARATOR_DOCUMENT} or {@link TokenType#TF_SEPARATOR_FIELD}
+         * , image is <code>null</code>.
          * <p>
          * This array is produced by the {@link PreprocessingTasks#TOKENIZE} task.
          */
@@ -65,8 +79,7 @@ public final class PreprocessingContext
 
         /**
          * Document field the token came from. The index points to arrays in
-         * {@link AllFields}, equal to <code>-1</code> for document and field
-         * separators.
+         * {@link AllFields}, equal to <code>-1</code> for document and field separators.
          * <p>
          * This array is produced by the {@link PreprocessingTasks#TOKENIZE} task.
          */
@@ -74,8 +87,8 @@ public final class PreprocessingContext
 
         /**
          * Index of the document this token came from, points to elements of
-         * {@link PreprocessingContext#documents}. Equal to <code>-1</code> for
-         * document separators.
+         * {@link PreprocessingContext#documents}. Equal to <code>-1</code> for document
+         * separators.
          * <p>
          * This array is produced by the {@link PreprocessingTasks#TOKENIZE} task.
          */
@@ -119,11 +132,11 @@ public final class PreprocessingContext
 
     /**
      * Information about all unique words found in the input
-     * {@link PreprocessingContext#documents}. Each entry in each array corresponds to
-     * one unique word with respect to case, e.g. <em>data</em> and <em>DATA</em> will
-     * be conflated to one entry in the arrays. Different grammatical forms of one word,
-     * e.g. e.g <em>computer</em> and <em>computers</em>, will have different entries
-     * in the arrays (see {@link AllStems} for inflection-conflated versions).
+     * {@link PreprocessingContext#documents}. Each entry in each array corresponds to one
+     * unique word with respect to case, e.g. <em>data</em> and <em>DATA</em> will be
+     * conflated to one entry in the arrays. Different grammatical forms of one word, e.g.
+     * e.g <em>computer</em> and <em>computers</em>, will have different entries in the
+     * arrays (see {@link AllStems} for inflection-conflated versions).
      * <p>
      * All arrays in this class have the same length and values across different arrays
      * correspond to each other for the same index.
@@ -132,8 +145,8 @@ public final class PreprocessingContext
     {
         /**
          * The most frequently appearing variant of the word with respect to case. E.g. if
-         * a token <em>ACM</em> appeared 12 times in the input and <em>Acm</em>
-         * appeared 3 times, the image will be equal to <em>ACM</em>.
+         * a token <em>ACM</em> appeared 12 times in the input and <em>Acm</em> appeared 3
+         * times, the image will be equal to <em>ACM</em>.
          * <p>
          * This array is produced by the {@link PreprocessingTasks#CASE_NORMALIZE} task.
          */
@@ -153,17 +166,17 @@ public final class PreprocessingContext
          * multiplied by 2. Elements at even indices contain document indices pointing to
          * {@link PreprocessingContext#documents}, elements at odd indices contain the
          * frequency of the word in the document. For example, an array with 4 values:
-         * <code>[2, 15, 138, 7]</code> means that the word appeared 15 times in
-         * document at index 2 and 7 times in document at index 138.
+         * <code>[2, 15, 138, 7]</code> means that the word appeared 15 times in document
+         * at index 2 and 7 times in document at index 138.
          * <p>
          * This array is produced by the {@link PreprocessingTasks#CASE_NORMALIZE} task.
          */
         public int [][] tfByDocument;
 
         /**
-         * Common word flag for the word, equal to <code>true</code> if the word is a
-         * stop word. <b>This array will be replaced with a more generic word flags array
-         * in the near future.</b>
+         * Common word flag for the word, equal to <code>true</code> if the word is a stop
+         * word. <b>This array will be replaced with a more generic word flags array in
+         * the near future.</b>
          * <p>
          * This array is produced by the {@link PreprocessingTasks#CASE_NORMALIZE} task.
          */
@@ -185,10 +198,10 @@ public final class PreprocessingContext
 
     /**
      * Information about all unique stems found in the input
-     * {@link PreprocessingContext#documents}. Each entry in each array corresponds to
-     * one base form different words can be transformed to by the {@link Stemmer} used
-     * while processing. E.g. the English <em>mining</em> and <em>mine</em> will be
-     * aggregated to one entry in the arrays, while they will have separate entries in
+     * {@link PreprocessingContext#documents}. Each entry in each array corresponds to one
+     * base form different words can be transformed to by the {@link Stemmer} used while
+     * processing. E.g. the English <em>mining</em> and <em>mine</em> will be aggregated
+     * to one entry in the arrays, while they will have separate entries in
      * {@link AllWords}.
      * <p>
      * All arrays in this class have the same length and values across different arrays

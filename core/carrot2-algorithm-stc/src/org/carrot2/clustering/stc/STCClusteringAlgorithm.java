@@ -5,6 +5,8 @@ import java.util.*;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
 import org.carrot2.text.analysis.*;
+import org.carrot2.text.linguistic.LanguageModelFactory;
+import org.carrot2.text.linguistic.SnowballLanguageModelFactory;
 import org.carrot2.text.preprocessing.*;
 import org.carrot2.util.attribute.*;
 
@@ -28,7 +30,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     @Required
     @Internal
     @Attribute(key = AttributeNames.DOCUMENTS)
-    public Collection<Document> documents;
+    public List<Document> documents;
 
     /**
      * {@link Cluster}s created by the algorithm.
@@ -36,12 +38,32 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     @Processing
     @Output
     @Attribute(key = AttributeNames.CLUSTERS)
-    public Collection<Cluster> clusters = null;
+    public List<Cluster> clusters = null;
 
     /**
-     * Preprocessing pipeline. Not an attribute, but contains bindable attributes inside.
+     * Tokenizer used by the algorithm, contains bindable attributes.
      */
-    public Preprocessor preprocessor = new Preprocessor();
+    public Tokenizer tokenizer = new Tokenizer();
+
+    /**
+     * Case normalizer used by the algorithm, contains bindable attributes.
+     */
+    public CaseNormalizer caseNormalizer = new CaseNormalizer();
+
+    /**
+     * Stemmer used by the algorithm, contains bindable attributes.
+     */
+    public LanguageModelStemmer languageModelStemmer = new LanguageModelStemmer();
+
+    /**
+     * Stop list marker used by the algorithm, contains bindable attributes.
+     */
+    public StopListMarker stopListMarker = new StopListMarker();
+
+    /**
+     * Language model factory used by the algorithm, contains bindable attributes.
+     */
+    public LanguageModelFactory languageModelFactory = new SnowballLanguageModelFactory();
 
     /**
      * Parameters and thresholds of the algorithm.
@@ -56,12 +78,13 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     {
         final STCEngine engine = new STCEngine();
 
-        final PreprocessingContext context = new PreprocessingContext();
-
-        preprocessor.preprocess(context, PreprocessingTasks.TOKENIZE,
-            PreprocessingTasks.CASE_NORMALIZE, PreprocessingTasks.STEMMING,
-            PreprocessingTasks.MARK_TOKENS_STOPLIST);
-
+        final PreprocessingContext context = new PreprocessingContext(
+            languageModelFactory.getCurrentLanguage(), documents);
+        tokenizer.tokenize(context);
+        caseNormalizer.normalize(context);
+        languageModelStemmer.stem(context);
+        stopListMarker.mark(context);
+        
         final Document [] documentArray = this.documents
             .toArray(new Document [this.documents.size()]);
 
@@ -172,12 +195,12 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
                     final boolean isPunctuation = TokenTypeUtils
                         .maskType(context.allTokens.type[i]) == TokenType.TT_PUNCTUATION;
                     final int wordIndex = tokenWordIndices[i];
-                    
+
                     if (wordIndex < 0 && !isPunctuation)
                     {
                         continue;
                     }
-                    
+
                     final String term = (wordIndex >= 0 ? new String(
                         wordImages[wordIndex]) : ".");
                     final String stem = (wordIndex >= 0 ? new String(

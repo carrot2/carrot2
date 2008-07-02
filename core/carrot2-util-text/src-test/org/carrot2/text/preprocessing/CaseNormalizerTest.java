@@ -3,13 +3,27 @@ package org.carrot2.text.preprocessing;
 import static org.carrot2.util.test.Assertions.assertThat;
 import static org.fest.assertions.Assertions.assertThat;
 
+import org.junit.Before;
 import org.junit.Test;
 
 /**
  * Test cases for {@link CaseNormalizer}.
  */
-public class PreprocessorCaseNormalizerTest extends PreprocessorTestBase
+public class CaseNormalizerTest extends PreprocessingComponentTestBase
 {
+    /** Case normalizer under tests */
+    private CaseNormalizer caseNormalizer;
+    
+    /** Other preprocessing components required for the test */
+    private Tokenizer tokenizer;
+
+    @Before
+    public void setUpPreprocessingComponents()
+    {
+        tokenizer = new Tokenizer();
+        caseNormalizer = new CaseNormalizer();
+    }
+    
     @Test
     public void testEmpty()
     {
@@ -279,7 +293,7 @@ public class PreprocessorCaseNormalizerTest extends PreprocessorTestBase
     @Test
     public void testDfThresholding()
     {
-        preprocessor.dfCutoff = 2;
+        caseNormalizer.dfCutoff = 2;
         createDocuments("a b c", "d e f", "a", "a c");
 
         char [][] expectedWordImages = createExpectedWordImages(new String []
@@ -437,9 +451,8 @@ public class PreprocessorCaseNormalizerTest extends PreprocessorTestBase
     private void checkAsserts(char [][] expectedWordImages, int [] expectedWordTf,
         int [] expectedWordIndices, int [][] expectedWordTfByDocument)
     {
-        final PreprocessingContext context = new PreprocessingContext();
-        preprocessor.preprocess(context, PreprocessingTasks.TOKENIZE,
-            PreprocessingTasks.CASE_NORMALIZE);
+        tokenizer.tokenize(context);
+        caseNormalizer.normalize(context);
 
         assertThat(context.allTokens.wordIndex).as("allTokens.wordIndices").isEqualTo(
             expectedWordIndices);
@@ -448,5 +461,12 @@ public class PreprocessorCaseNormalizerTest extends PreprocessorTestBase
         assertThat(context.allWords.tf).as("allWords.tf").isEqualTo(expectedWordTf);
         assertThat(context.allWords.tfByDocument).as("allWords.tfByDocument").isEqualTo(
             expectedWordTfByDocument);
+    }
+
+    @Override
+    protected void beforePrepareWordIndices(Tokenizer temporaryTokenizer,
+        CaseNormalizer temporaryCaseNormalizer)
+    {
+        temporaryCaseNormalizer.dfCutoff = caseNormalizer.dfCutoff;
     }
 }

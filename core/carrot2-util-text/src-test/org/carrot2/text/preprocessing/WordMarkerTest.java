@@ -2,13 +2,31 @@ package org.carrot2.text.preprocessing;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+import org.junit.Before;
 import org.junit.Test;
 
 /**
  * Test cases for stemming in {@link Preprocessor}.
  */
-public class PreprocessorStemmerEnglishTest extends PreprocessorTestBase
+public class WordMarkerTest extends PreprocessingComponentTestBase
 {
+    /** Marker under tests */
+    private StopListMarker stopListMarker;
+    
+    /** Other preprocessing components required for the test */
+    private Tokenizer tokenizer;
+    private CaseNormalizer caseNormalizer;
+    private LanguageModelStemmer languageModelStemmer;
+
+    @Before
+    public void setUpPreprocessingComponents()
+    {
+        tokenizer = new Tokenizer();
+        caseNormalizer = new CaseNormalizer();
+        languageModelStemmer = new LanguageModelStemmer();
+        stopListMarker = new StopListMarker();
+    }
+    
     @Test
     public void testNonStopWords()
     {
@@ -37,11 +55,11 @@ public class PreprocessorStemmerEnglishTest extends PreprocessorTestBase
 
     private void checkAsserts(boolean [] expectedCommonTermFlag)
     {
-        final PreprocessingContext context = new PreprocessingContext();
-        preprocessor.preprocess(context, PreprocessingTasks.TOKENIZE,
-            PreprocessingTasks.CASE_NORMALIZE, PreprocessingTasks.STEMMING,
-            PreprocessingTasks.MARK_TOKENS_STOPLIST);
-
+        tokenizer.tokenize(context);
+        caseNormalizer.normalize(context);
+        languageModelStemmer.stem(context);
+        stopListMarker.mark(context);
+        
         assertThat(context.allWords.commonTermFlag).isEqualTo(expectedCommonTermFlag);
     }
 }

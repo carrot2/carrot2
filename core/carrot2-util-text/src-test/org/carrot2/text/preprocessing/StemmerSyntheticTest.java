@@ -6,7 +6,7 @@ import org.junit.Test;
 /**
  * Test cases for stemming in {@link Preprocessor}.
  */
-public class PreprocessorStemmerSyntheticTest extends PreprocessorStemmerTestBase
+public class StemmerSyntheticTest extends StemmerTestBase
 {
     @Test
     public void testEmpty()

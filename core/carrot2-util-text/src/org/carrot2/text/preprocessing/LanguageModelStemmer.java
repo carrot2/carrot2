@@ -8,6 +8,7 @@ import org.carrot2.text.linguistic.Stemmer;
 import org.carrot2.text.util.*;
 import org.carrot2.util.CharArrayUtils;
 import org.carrot2.util.CharSequenceUtils;
+import org.carrot2.util.attribute.Bindable;
 
 import bak.pcj.list.IntArrayList;
 import bak.pcj.list.IntList;
@@ -18,15 +19,16 @@ import bak.pcj.set.IntSet;
  * Implementation of {@link PreprocessingTasks#STEMMING} based on the current
  * {@link LanguageModel}.
  */
-final class LanguageModelStemmer
+@Bindable
+public final class LanguageModelStemmer
 {
     /**
      * Performs stemming and saves the results to the <code>context</code>.
      */
-    void stem(PreprocessingContext context, LanguageModel language)
+    public void stem(PreprocessingContext context)
     {
         final MutableCharArray current = new MutableCharArray("");
-        final Stemmer stemmer = language.getStemmer();
+        final Stemmer stemmer = context.language.getStemmer();
 
         final char [][] wordImages = context.allWords.image;
         final char [][] stemImages = new char [wordImages.length] [];

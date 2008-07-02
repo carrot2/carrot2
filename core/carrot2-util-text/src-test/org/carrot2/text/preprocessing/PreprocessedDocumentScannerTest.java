@@ -11,7 +11,7 @@ import com.google.common.collect.Lists;
 /**
  * Test cases for {@link PreprocessedDocumentScannerTest}.
  */
-public class PreprocessedDocumentScannerTest extends PreprocessorTestBase
+public class PreprocessedDocumentScannerTest extends PreprocessingComponentTestBase
 {
     @Test
     public void testEmpty()
@@ -89,9 +89,13 @@ public class PreprocessedDocumentScannerTest extends PreprocessorTestBase
         List<List<Integer>> expectedFieldRanges,
         List<List<Integer>> expectedSentenceRanges)
     {
-        final PreprocessingContext context = new PreprocessingContext();
-        preprocessor.preprocess(context, PreprocessingTasks.TOKENIZE,
-            PreprocessingTasks.CASE_NORMALIZE, PreprocessingTasks.STEMMING);
+        final Tokenizer tokenizer = new Tokenizer();
+        final CaseNormalizer caseNormalizer = new CaseNormalizer();
+        final LanguageModelStemmer languageModelStemmer = new LanguageModelStemmer();
+
+        tokenizer.tokenize(context);
+        caseNormalizer.normalize(context);
+        languageModelStemmer.stem(context);
 
         final List<List<Integer>> actualDocumentRanges = Lists.newArrayList();
         final List<List<Integer>> actualFieldRanges = Lists.newArrayList();
@@ -124,7 +128,7 @@ public class PreprocessedDocumentScannerTest extends PreprocessorTestBase
         scanner.iterate(context);
 
         assertThat(actualDocumentRanges).as("documentRanges.size()").hasSize(
-            documents.size());
+            context.documents.size());
         assertThat(actualDocumentRanges).as("documentRanges").isEqualTo(
             expectedDocumentRanges);
         assertThat(actualFieldRanges).as("fieldRanges").isEqualTo(expectedFieldRanges);

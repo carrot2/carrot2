@@ -3,18 +3,35 @@ package org.carrot2.text.preprocessing;
 import static org.carrot2.util.test.Assertions.assertThat;
 import static org.fest.assertions.Assertions.assertThat;
 
+import org.junit.Before;
+
 /**
  * Base class for {@link StemmingTask} tests.
  */
-public class PreprocessorStemmerTestBase extends PreprocessorTestBase
+public class StemmerTestBase extends PreprocessingComponentTestBase
 {
+    /** Stemmer under tests */
+    private LanguageModelStemmer languageModelStemmer;
+
+    /** Other preprocessing components required for the test */
+    private Tokenizer tokenizer;
+    private CaseNormalizer caseNormalizer;
+
+    @Before
+    public void setUpPreprocessingComponents()
+    {
+        tokenizer = new Tokenizer();
+        caseNormalizer = new CaseNormalizer();
+        languageModelStemmer = new LanguageModelStemmer();
+    }
+    
     protected void checkAsserts(char [][] expectedStemImages, int [] expectedStemTf,
         int [] expectedStemIndices, int [][] expectedStemTfByDocument)
     {
-        final PreprocessingContext context = new PreprocessingContext();
-        preprocessor.preprocess(context, PreprocessingTasks.TOKENIZE,
-            PreprocessingTasks.CASE_NORMALIZE, PreprocessingTasks.STEMMING);
-
+        tokenizer.tokenize(context);
+        caseNormalizer.normalize(context);
+        languageModelStemmer.stem(context);
+        
         assertThat(context.allWords.stemIndex).as("allWords.stemIndices").isEqualTo(
             expectedStemIndices);
         assertThat(context.allStems.images).as("allStems.images").isEqualTo(

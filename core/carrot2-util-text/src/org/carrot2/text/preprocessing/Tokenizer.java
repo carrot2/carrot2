@@ -6,11 +6,16 @@ import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.analysis.*;
+import org.apache.lucene.index.Payload;
 import org.carrot2.core.Document;
+import org.carrot2.core.attribute.Init;
+import org.carrot2.text.analysis.ExtendedWhitespaceAnalyzer;
 import org.carrot2.text.analysis.TokenType;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllFields;
 import org.carrot2.util.ExceptionUtils;
 import org.carrot2.util.Pair;
+import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.constraint.ImplementingClasses;
 
 import bak.pcj.list.ByteArrayList;
 import bak.pcj.list.IntArrayList;
@@ -21,47 +26,82 @@ import com.google.common.collect.Maps;
 /**
  * Implementation of {@link PreprocessingTasks#TOKENIZE}.
  */
-final class Tokenizer
+@Bindable
+public final class Tokenizer
 {
+    /**
+     * Analyzer used to split {@link #documents} into individual tokens (terms). This
+     * analyzer must provide token {@link Payload} implementing {@link TokenType}.
+     * 
+     * @level Medium
+     * @group Preprocessing
+     */
+    @Init
+    @Input
+    @Attribute
+    @ImplementingClasses(classes =
+    {
+        ExtendedWhitespaceAnalyzer.class
+    })
+    public Analyzer analyzer = new ExtendedWhitespaceAnalyzer();
+
+    /**
+     * Textual fields of a {@link Document} that should be tokenized and parsed for
+     * clustering.
+     * 
+     * @level Advanced
+     * @group Preprocessing
+     */
+    @Init
+    @Input
+    @Attribute
+    public Collection<String> documentFields = Arrays.asList(new String []
+    {
+        Document.TITLE, Document.SUMMARY
+    });
+
     /**
      * Token images.
      */
-    private final ArrayList<char []> images = Lists.newArrayList();
+    private ArrayList<char []> images;
 
     /**
      * An array of token types.
      * 
      * @see TokenType
      */
-    private final IntArrayList tokenTypes = new IntArrayList();
+    private IntArrayList tokenTypes;
 
     /**
      * An array of document indexes.
      */
-    private final IntArrayList documentIndices = new IntArrayList();
+    private IntArrayList documentIndices;
 
     /**
      * An array of field indexes.
      * 
      * @see AllFields
      */
-    private final ByteArrayList fieldIndices = new ByteArrayList();
-
-    /**
-     * Field names corresponding to {@link #fieldIndices}.
-     */
-    private String [] fieldNames;
+    private ByteArrayList fieldIndices;
 
     /**
      * Performs tokenization and saves the results to the <code>context</code>.
      */
-    public void tokenize(PreprocessingContext context, Collection<Document> documents,
-        Collection<String> documentFields, Analyzer analyzer)
+    public void tokenize(PreprocessingContext context)
     {
+        // Documents to tokenize
+        final List<Document> documents = context.documents;
+
+        // Prepare arrays
+        images = Lists.newArrayList();
+        tokenTypes = new IntArrayList();
+        documentIndices = new IntArrayList();
+        fieldIndices = new ByteArrayList();
+        
         // Map field names to their indices in AllFields
         final Map<String, Byte> fieldNameToIndex = createFieldNameToIndexMap(context,
             documentFields);
-        fieldNames = fieldNameToIndex.keySet().toArray(
+        final String [] fieldNames = fieldNameToIndex.keySet().toArray(
             new String [fieldNameToIndex.keySet().size()]);
 
         final ArrayList<Pair<String, String>> nonEmptyFieldValues = Lists.newArrayList();
@@ -138,7 +178,12 @@ final class Tokenizer
         context.allTokens.image = images.toArray(new char [images.size()] []);
         context.allTokens.type = tokenTypes.toArray();
         context.allFields.name = fieldNames;
-
+        
+        // Clean up
+        images = null;
+        fieldIndices = null;
+        tokenTypes = null;
+        documentIndices = null;
     }
 
     private Map<String, Byte> createFieldNameToIndexMap(PreprocessingContext context,

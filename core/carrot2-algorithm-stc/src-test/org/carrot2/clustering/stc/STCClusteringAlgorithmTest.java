@@ -6,7 +6,7 @@ import java.util.Collection;
 
 import org.carrot2.core.Cluster;
 import org.carrot2.core.test.ClusteringAlgorithmTestBase;
-import org.carrot2.text.preprocessing.Preprocessor;
+import org.carrot2.text.preprocessing.CaseNormalizer;
 import org.junit.Test;
 
 /**
@@ -24,7 +24,7 @@ public class STCClusteringAlgorithmTest extends
     @Test
     public void testClusteringWithDfCutOff()
     {
-        processingAttributes.put(Preprocessor.class.getName() + ".dfCutoff", 20);
+        processingAttributes.put(CaseNormalizer.class.getName() + ".dfCutoff", 20);
         final Collection<Cluster> clustersWithCutOff = cluster(DOCUMENTS_DATA_MINING)
             .getClusters();
 

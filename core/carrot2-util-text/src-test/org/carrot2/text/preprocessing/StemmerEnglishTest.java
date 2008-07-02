@@ -5,7 +5,7 @@ import org.junit.Test;
 /**
  * Test cases for stemming in {@link Preprocessor}.
  */
-public class PreprocessorWordMarkerTest extends PreprocessorStemmerTestBase
+public class StemmerEnglishTest extends StemmerTestBase
 {
     @Test
     public void testLowerCaseWords()

@@ -3,14 +3,26 @@ package org.carrot2.text.preprocessing;
 import static org.carrot2.util.test.Assertions.assertThat;
 import static org.fest.assertions.Assertions.assertThat;
 
+import java.util.Arrays;
+
 import org.carrot2.text.analysis.TokenType;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
  * Test cases for {@link Tokenizer}.
  */
-public class PreprocessorTokenizerTest extends PreprocessorTestBase
+public class TokenizerTest extends PreprocessingComponentTestBase
 {
+    /** The tokenizer under tests */
+    private Tokenizer tokenizer;
+    
+    @Before
+    public void setUpPreprocessingComponents()
+    {
+        tokenizer = new Tokenizer();
+    }
+
     @Test
     public void testNoDocuments()
     {
@@ -33,8 +45,8 @@ public class PreprocessorTokenizerTest extends PreprocessorTestBase
             -1
         };
 
-        check(expectedTokensImages, expectedTokensDocumentIndices, expectedTokensTypes, expectedTokensFieldIndices,
-            DEFAULT_DOCUMENT_FIELD_NAMES);
+        check(expectedTokensImages, expectedTokensDocumentIndices, expectedTokensTypes,
+            expectedTokensFieldIndices, DEFAULT_DOCUMENT_FIELD_NAMES);
     }
 
     @Test
@@ -59,8 +71,8 @@ public class PreprocessorTokenizerTest extends PreprocessorTestBase
             -1, -1
         };
 
-        check(expectedTokensImages, expectedTokensDocumentIndices, expectedTokensTypes, expectedTokensFieldIndices,
-            DEFAULT_DOCUMENT_FIELD_NAMES);
+        check(expectedTokensImages, expectedTokensDocumentIndices, expectedTokensTypes,
+            expectedTokensFieldIndices, DEFAULT_DOCUMENT_FIELD_NAMES);
     }
 
     @Test
@@ -87,8 +99,8 @@ public class PreprocessorTokenizerTest extends PreprocessorTestBase
             0, 0, -1, 1, 1, -1
         };
 
-        check(expectedTokensImages, expectedTokensDocumentIndices, expectedTokensTypes, expectedTokensFieldIndices,
-            DEFAULT_DOCUMENT_FIELD_NAMES);
+        check(expectedTokensImages, expectedTokensDocumentIndices, expectedTokensTypes,
+            expectedTokensFieldIndices, DEFAULT_DOCUMENT_FIELD_NAMES);
     }
 
     @Test
@@ -121,8 +133,8 @@ public class PreprocessorTokenizerTest extends PreprocessorTestBase
             0, 0, -1, 1, 1, -1, 0, 0, -1, 1, -1, 0, -1, 1, -1
         };
 
-        check(expectedTokensImages, expectedTokensDocumentIndices, expectedTokensTypes, expectedTokensFieldIndices,
-            DEFAULT_DOCUMENT_FIELD_NAMES);
+        check(expectedTokensImages, expectedTokensDocumentIndices, expectedTokensTypes,
+            expectedTokensFieldIndices, DEFAULT_DOCUMENT_FIELD_NAMES);
     }
 
     @Test
@@ -153,8 +165,9 @@ public class PreprocessorTokenizerTest extends PreprocessorTestBase
             0, 0, -1, 2, 2, -1
         };
 
-        check(expectedTokensImages, expectedTokensDocumentIndices, expectedTokensTypes, expectedTokensFieldIndices,
-            fieldNames);
+        tokenizer.documentFields = Arrays.asList(fieldNames);
+        check(expectedTokensImages, expectedTokensDocumentIndices, expectedTokensTypes,
+            expectedTokensFieldIndices, fieldNames);
     }
 
     @Test
@@ -181,24 +194,24 @@ public class PreprocessorTokenizerTest extends PreprocessorTestBase
             0, 0, 0, -1
         };
 
-        check(expectedTokensImages, expectedTokensDocumentIndices, expectedTokensTypes, expectedTokensFieldIndices,
-            DEFAULT_DOCUMENT_FIELD_NAMES);
+        check(expectedTokensImages, expectedTokensDocumentIndices, expectedTokensTypes,
+            expectedTokensFieldIndices, DEFAULT_DOCUMENT_FIELD_NAMES);
     }
 
-    private void check(char [][] expectedTokensImages, final int [] expectedTokensDocumentIndices,
-        final int [] expectedTokensTypes, final byte [] expectedTokensFieldIndices,
-        String [] expectedFieldsNames)
+    private void check(char [][] expectedTokensImages,
+        final int [] expectedTokensDocumentIndices, final int [] expectedTokensTypes,
+        final byte [] expectedTokensFieldIndices, String [] expectedFieldNames)
     {
-        final PreprocessingContext context = new PreprocessingContext();
-        preprocessor.preprocess(context, PreprocessingTasks.TOKENIZE);
+        tokenizer.tokenize(context);
+
         assertThat(context.allFields.name).as("allFields.names").isEqualTo(
-            expectedFieldsNames);
+            expectedFieldNames);
         assertThat(context.allTokens.image).as("allTokens.images").isEqualTo(
             expectedTokensImages);
         assertThat(context.allTokens.documentIndex).as("allTokens.documentIndices")
             .isEqualTo(expectedTokensDocumentIndices);
-        assertThat(context.allTokens.fieldIndex).as("allTokens.fieldIndices")
-            .isEqualTo(expectedTokensFieldIndices);
+        assertThat(context.allTokens.fieldIndex).as("allTokens.fieldIndices").isEqualTo(
+            expectedTokensFieldIndices);
         assertThat(context.allTokens.type).as("allTokens.types").isEqualTo(
             expectedTokensTypes);
     }
