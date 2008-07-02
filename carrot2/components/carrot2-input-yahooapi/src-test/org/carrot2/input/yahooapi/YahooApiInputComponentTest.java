@@ -81,7 +81,7 @@ public class YahooApiInputComponentTest extends LocalInputComponentTestBase
 
     public void testNoResults() throws Exception
     {
-        performQuery("duiogig oiudgisugviw siug iugw iusviuwg", 100, 0);
+        performQuery("duiogig oiudgisugvi\u0078 siug iugw iusviuwg", 100, 0);
     }
 
     public void testResultsRequested() throws Exception
