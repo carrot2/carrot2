@@ -38,7 +38,7 @@ public abstract class MultipartDocumentSourceTestBase<T extends DocumentSource> 
     {
         processingAttributes.put("search-mode", SearchMode.CONSERVATIVE);
 
-        assertEquals(0, runQuery("duiogig oiudgisugviw siug iugw iusviuwg", 100));
+        runAndCheckNoResultsQuery();
         assertEquals(1, processingAttributes.get(SearchEngineStats.class.getName()
             + ".pageRequests"));
     }
@@ -49,7 +49,7 @@ public abstract class MultipartDocumentSourceTestBase<T extends DocumentSource> 
     {
         processingAttributes.put("search-mode", SearchMode.SPECULATIVE);
 
-        assertEquals(0, runQuery("duiogig oiudgisugviw siug iugw iusviuwg", 100));
+        runAndCheckNoResultsQuery();
         assertEquals(2, processingAttributes.get(SearchEngineStats.class.getName()
             + ".pageRequests"));
     }

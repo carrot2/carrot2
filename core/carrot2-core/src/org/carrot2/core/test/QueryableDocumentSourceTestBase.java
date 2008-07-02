@@ -8,9 +8,11 @@ import java.util.concurrent.*;
 
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.util.StringUtils;
 import org.junit.Test;
 import org.junitext.Prerequisite;
 
+import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -24,7 +26,7 @@ public abstract class QueryableDocumentSourceTestBase<T extends DocumentSource> 
     @Prerequisite(requires = "externalApiTestsEnabled")
     public void testNoResultsQuery() throws Exception
     {
-        assertEquals(0, runQuery("duiogig oiudgisugviw siug iugw iusviuwg", 100));
+        runAndCheckNoResultsQuery();
     }
 
     @Test
@@ -123,5 +125,25 @@ public abstract class QueryableDocumentSourceTestBase<T extends DocumentSource> 
     {
         int actualResults = runQuery("data mining", resultsToRequest);
         assertThat(actualResults).isGreaterThanOrEqualTo(minimumExpectedResults);
+    }
+    
+    @SuppressWarnings("unchecked")
+    protected void runAndCheckNoResultsQuery()
+    {
+        final int results = runQuery(ExternalApiTestBase.NO_RESULTS_QUERY, 100);
+        if (results != 0)
+        {
+            final List<Document> documents = (List<Document>) processingAttributes
+                .get(AttributeNames.DOCUMENTS);
+            final String urls = StringUtils.toString(Lists.transform(documents,
+                new Function<Document, String>()
+                {
+                    public String apply(Document document)
+                    {
+                        return document.getField(Document.CONTENT_URL);
+                    }
+                }), ", ");
+            fail("Expected 0 results but found: " + results + " (urls: " + urls + ")");
+        }
     }
 }

@@ -33,7 +33,7 @@ public class YahooWebSearchServiceTest extends ExternalApiTestBase
     @Prerequisite(requires = "externalApiTestsEnabled")
     public void testNoResultsQuery() throws Exception
     {
-        final SearchEngineResponse response = service.query("duiogig oiudgisugviw siug iugw iusviuwg", 0, 100);
+        final SearchEngineResponse response = service.query(ExternalApiTestBase.NO_RESULTS_QUERY, 0, 100);
         assertEquals(0, response.results.size());
     }
 
