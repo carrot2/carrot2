@@ -98,8 +98,8 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     private IMemento state;
 
     /**
-     * {@link SearchEditor} forwards its selection provider methods to this component ({@link SearchEditorSections#CLUSTERS}
-     * panel).
+     * {@link SearchEditor} forwards its selection provider methods to this component 
+     * ({@link SearchEditorSections#CLUSTERS} panel).
      */
     private IPostSelectionProvider selectionProvider;
 
