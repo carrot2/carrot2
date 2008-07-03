@@ -1,5 +1,6 @@
 package org.carrot2.workbench.core;
 
+import org.carrot2.workbench.core.ui.perspectives.SearchPerspective;
 import org.eclipse.ui.application.*;
 
 /**

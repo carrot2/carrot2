@@ -4,7 +4,6 @@ import junit.framework.TestCase;
 
 import org.carrot2.core.ProcessingComponent;
 import org.carrot2.util.attribute.*;
-import org.carrot2.workbench.editors.EditorNotFoundException;
 import org.carrot2.workbench.editors.IAttributeEditor;
 import org.carrot2.workbench.editors.EditorsTest.*;
 

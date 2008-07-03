@@ -33,7 +33,7 @@ public class BooleanEditor extends AttributeEditorAdapter implements IAttributeE
 
     private void doEvent()
     {
-        AttributeChangeEvent event = new AttributeChangeEvent(this);
+        AttributeChangedEvent event = new AttributeChangedEvent(this);
         fireAttributeChange(event);
     }
 

@@ -5,16 +5,17 @@
         #include ("style.css")
         </style>
     </head>
+
     <body>
 
 #if ($result)
     #set ( $totalProcessingSec = ${result.Attributes.processing-time-total} / 1000.0 )
-    #set( $documents = $result.Documents )
+    #set ( $documents = $result.Documents )
 #end
 
 #if ($documents.isEmpty() && $queryEscaped)
     Your query - <b>&quot;${queryEscaped}&quot;</b> - did not return any documents.<br><br> 
-    
+
     Suggestions:<ul>
     <li>Make sure all words are spelled correctly.
     <li>Try different keywords.
@@ -30,4 +31,6 @@
     #end
     <span class="du">${document.getField("url")}</span><br><br>
 #end
-</body></html>
+
+	</body>
+</html>

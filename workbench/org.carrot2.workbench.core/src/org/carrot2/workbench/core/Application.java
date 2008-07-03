@@ -11,31 +11,28 @@ import org.eclipse.ui.PlatformUI;
  */
 public final class Application implements IApplication
 {
+    private Display display;
+
     /**
      * 
      */
     public Object start(IApplicationContext context) throws Exception
     {
-        Display display = PlatformUI.createDisplay();
-        try
-        {
-            final int returnCode = PlatformUI.createAndRunWorkbench(display,
-                new ApplicationWorkbenchAdvisor());
+        display = PlatformUI.createDisplay();
 
-            if (returnCode == PlatformUI.RETURN_RESTART)
-            {
-                return IApplication.EXIT_RESTART;
-            }
-            else
-            {
-                return IApplication.EXIT_OK;
-            }
-        }
-        finally
-        {
-            display.dispose();
-        }
+        final int returnCode = PlatformUI.createAndRunWorkbench(display,
+            new ApplicationWorkbenchAdvisor());
 
+        display.dispose();
+
+        if (returnCode == PlatformUI.RETURN_RESTART)
+        {
+            return IApplication.EXIT_RESTART;
+        }
+        else
+        {
+            return IApplication.EXIT_OK;
+        }
     }
 
     /**

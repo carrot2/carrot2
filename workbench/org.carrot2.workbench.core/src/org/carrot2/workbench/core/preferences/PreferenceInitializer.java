@@ -9,13 +9,13 @@ import org.eclipse.jface.preference.IPreferenceStore;
  */
 public class PreferenceInitializer extends AbstractPreferenceInitializer
 {
-
     public void initializeDefaultPreferences()
     {
-        IPreferenceStore store = WorkbenchCorePlugin.getDefault().getPreferenceStore();
+        final IPreferenceStore store = WorkbenchCorePlugin.getDefault()
+            .getPreferenceStore();
+
         store.setDefault(PreferenceConstants.P_SHOW_ATTRIBUTES, true);
         store.setDefault(PreferenceConstants.P_SHOW_CLUSTERS, true);
         store.setDefault(PreferenceConstants.P_SHOW_DOCUMENTS, true);
     }
-
 }

@@ -14,13 +14,13 @@
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
-            class="org.carrot2.workbench.core.SearchPerspective"
+            class="org.carrot2.workbench.core.ui.perspectives.SearchPerspective"
             icon="icons/perspective-search.gif"
             id="org.carrot2.workbench.core.perspective.search"
             name="Search">
       </perspective>
       <perspective
-            class="org.carrot2.workbench.core.TuningPerspective"
+            class="org.carrot2.workbench.core.ui.perspectives.TuningPerspective"
             icon="icons/perspective-tuning.gif"
             id="org.carrot2.workbench.core.perspective.tuning"
             name="Tuning">
@@ -56,14 +56,14 @@
          point="org.eclipse.ui.views">
       <view
             category="org.carrot2.workbench.core.carrot2Category"
-            class="org.carrot2.workbench.core.ui.views.SearchView"
+            class="org.carrot2.workbench.core.ui.SearchInputView"
             id="org.carrot2.workbench.core.views.search"
             name="Search">
       </view>
       <view
             allowMultiple="false"
             category="org.carrot2.workbench.core.carrot2Category"
-            class="org.carrot2.workbench.core.ui.views.DocumentListView"
+            class="org.carrot2.workbench.core.ui.DocumentListView"
             icon="icons/documents.gif"
             id="org.carrot2.workbench.core.views.documents"
             name="Documents">
@@ -71,7 +71,7 @@
       <view
             allowMultiple="false"
             category="org.carrot2.workbench.core.carrot2Category"
-            class="org.carrot2.workbench.core.ui.views.ClusterTreeView"
+            class="org.carrot2.workbench.core.ui.ClusterTreeView"
             icon="icons/clusters.gif"
             id="org.carrot2.workbench.core.views.clusters"
             name="Clusters">
@@ -82,7 +82,7 @@
       </category>
       <view
             category="org.carrot2.workbench.core.carrot2Category"
-            class="org.carrot2.workbench.core.ui.views.AttributesView"
+            class="org.carrot2.workbench.core.ui.AttributesView"
             icon="icons/attributes.gif"
             id="org.carrot2.workbench.core.attributes"
             name="Attributes">
@@ -91,7 +91,7 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="org.carrot2.workbench.core.ui.ResultsEditor"
+            class="org.carrot2.workbench.core.ui.SearchEditor"
             icon="icons/results.png"
             id="org.carrot2.workbench.core.editors.results"
             name="Results Editor">
@@ -100,14 +100,14 @@
    <extension
          point="org.eclipse.ui.elementFactories">
       <factory
-            class="org.carrot2.workbench.core.ui.SearchParametersFactory"
+            class="org.carrot2.workbench.core.ui.SearchInputFactory"
             id="org.carrot2.workbench.core.searchParametersFactory">
       </factory>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            class="org.carrot2.workbench.core.preferences.CarrotPreferencePage"
+            class="org.carrot2.workbench.core.preferences.WorkbenchPreferencesPage"
             id="org.carrot2.workbench.core.preferences.CarrotPreferencePage"
             name="Carrot">
       </page>

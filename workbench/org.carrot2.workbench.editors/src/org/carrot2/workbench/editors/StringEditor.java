@@ -2,45 +2,56 @@ package org.carrot2.workbench.editors;
 
 import static org.eclipse.swt.SWT.BORDER;
 
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.*;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IMemento;
 
+/**
+ * Editor for textual values. Sends change events only on actual content change, committed
+ * by return key traversal or focus lost event.
+ */
 public class StringEditor extends AttributeEditorAdapter
 {
     private Text textBox;
+    private String content;
 
     @Override
     public void createEditor(Composite parent, Object layoutData)
     {
         textBox = new Text(parent, BORDER);
         textBox.setLayoutData(layoutData);
-        textBox.addKeyListener(new KeyAdapter()
+
+        /*
+         * React to focus lost.
+         */
+        textBox.addFocusListener(new FocusAdapter()
         {
-            @Override
-            public void keyReleased(KeyEvent e)
+            public void focusLost(FocusEvent e)
             {
-                //enter pressed
-                if (e.keyCode == 13)
+                checkContentChange();
+            }
+        });
+
+        textBox.addTraverseListener(new TraverseListener()
+        {
+            public void keyTraversed(TraverseEvent e)
+            {
+                if (e.detail == SWT.TRAVERSE_RETURN)
                 {
-                    doEvent();
+                    checkContentChange();
                 }
             }
         });
-    }
 
-    private void doEvent()
-    {
-        AttributeChangeEvent event = new AttributeChangeEvent(this);
-        fireAttributeChange(event);
+        this.content = textBox.getText();
     }
 
     @Override
     public Object getValue()
     {
-        return textBox.getText();
+        return content;
     }
 
     @Override
@@ -49,6 +60,7 @@ public class StringEditor extends AttributeEditorAdapter
         if (currentValue != null)
         {
             textBox.setText(currentValue.toString());
+            checkContentChange();
         }
     }
 
@@ -62,5 +74,19 @@ public class StringEditor extends AttributeEditorAdapter
     public void restoreState(IMemento memento)
     {
         setValue(memento.getTextData());
+    }
+
+    /**
+     * Check if the content has changed compared to the current value of this attribute.
+     * If so, fire an event.
+     */
+    private void checkContentChange()
+    {
+        final String textBoxValue = this.textBox.getText();
+        if (this.content == null || !this.content.equals(textBoxValue))
+        {
+            this.content = textBoxValue;
+            fireAttributeChange(new AttributeChangedEvent(this));
+        }
     }
 }

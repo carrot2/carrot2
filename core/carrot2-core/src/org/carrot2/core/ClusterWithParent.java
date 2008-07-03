@@ -9,8 +9,11 @@ import com.google.common.collect.Lists;
  * Wraps a {@link Cluster} to add information about the cluster's parent cluster, if any.
  * A reference to the parent cluster is not kept directly in the {@link Cluster} class
  * because some algorithms may attach a single cluster to many parent clusters.
+ * <p>
+ * Instances of this class override {@link #hashCode()} and {@link #equals(Object)} by
+ * forwarding them to {@link #cluster}.
  */
-public class ClusterWithParent
+public final class ClusterWithParent
 {
     /** The cluster wrapped by this class */
     public final Cluster cluster;
@@ -33,6 +36,11 @@ public class ClusterWithParent
     private ClusterWithParent(ClusterWithParent parent, Cluster cluster,
         List<ClusterWithParent> subclusters)
     {
+        if (cluster == null)
+        {
+            throw new IllegalArgumentException();
+        }
+
         this.parent = parent;
         this.cluster = cluster;
         this.subclusters = subclusters;
@@ -93,5 +101,31 @@ public class ClusterWithParent
         }
 
         return result;
+    }
+    
+    /*
+     * 
+     */
+    @Override
+    public int hashCode()
+    {
+        return cluster == null ? 0 : cluster.hashCode();
+    }
+    
+    /*
+     * 
+     */
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj == this)
+            return true;
+        
+        if (obj instanceof ClusterWithParent)
+        {
+            return this.cluster.equals(((ClusterWithParent) obj).cluster);
+        }
+
+        return false;
     }
 }

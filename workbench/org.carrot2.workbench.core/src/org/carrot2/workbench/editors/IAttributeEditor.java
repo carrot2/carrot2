@@ -30,9 +30,9 @@ public interface IAttributeEditor extends IPersistableEditor
 
     void dispose();
 
-    void addAttributeChangeListener(AttributeChangeListener listener);
+    void addAttributeChangeListener(IAttributeListener listener);
 
-    void removeAttributeChangeListener(AttributeChangeListener listener);
+    void removeAttributeChangeListener(IAttributeListener listener);
 
     /**
      * If false, than surrounding view must display label for given attribute on it's own.

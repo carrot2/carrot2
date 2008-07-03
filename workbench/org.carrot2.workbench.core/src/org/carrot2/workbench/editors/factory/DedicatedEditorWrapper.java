@@ -1,5 +1,6 @@
 package org.carrot2.workbench.editors.factory;
 
+import static org.carrot2.workbench.core.helpers.ExtensionConfigurationUtils.*;
 import org.eclipse.core.runtime.IConfigurationElement;
 
 public class DedicatedEditorWrapper extends AttributeEditorWrapper
@@ -13,6 +14,7 @@ public class DedicatedEditorWrapper extends AttributeEditorWrapper
     public DedicatedEditorWrapper(IConfigurationElement element)
     {
         super(element);
+
         attributeId = getAttribute(element, ATT_ATTRIBUTE_ID);
         componentClass = getAttribute(element, ATT_COMPONENT_CLASS);
     }

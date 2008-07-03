@@ -51,7 +51,7 @@ public class EnumEditor extends AttributeEditorAdapter implements IAttributeEdit
 
     private void doEvent()
     {
-        AttributeChangeEvent event = new AttributeChangeEvent(this);
+        AttributeChangedEvent event = new AttributeChangedEvent(this);
         fireAttributeChange(event);
     }
 

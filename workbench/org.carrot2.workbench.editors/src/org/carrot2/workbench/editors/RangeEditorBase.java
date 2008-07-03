@@ -137,7 +137,7 @@ public abstract class RangeEditorBase extends AttributeEditorAdapter implements
         if (duringSelection)
         {
             duringSelection = false;
-            AttributeChangeEvent event = new AttributeChangeEvent(this);
+            AttributeChangedEvent event = new AttributeChangedEvent(this);
             fireAttributeChange(event);
         }
     }

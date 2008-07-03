@@ -92,52 +92,52 @@ public class EditorsTest
 
     }
 
-    public static class DedicatedEditor extends AttributeEditorAdapter
+    public static class DedicatedEditor extends EmptyAttributeEditorAdapter
     {
 
     }
 
-    public static class DedicatedEditor2 extends AttributeEditorAdapter
+    public static class DedicatedEditor2 extends EmptyAttributeEditorAdapter
     {
 
     }
 
-    public static class DedicatedEditor3 extends AttributeEditorAdapter
+    public static class DedicatedEditor3 extends EmptyAttributeEditorAdapter
     {
 
     }
 
-    public static class DedicatedEditor4 extends AttributeEditorAdapter
+    public static class DedicatedEditor4 extends EmptyAttributeEditorAdapter
     {
 
     }
 
-    public static class RangeEditor extends AttributeEditorAdapter
+    public static class RangeEditor extends EmptyAttributeEditorAdapter
     {
 
     }
 
-    public static class IntEditor extends AttributeEditorAdapter
+    public static class IntEditor extends EmptyAttributeEditorAdapter
     {
 
     }
 
-    public static class SubEditor extends AttributeEditorAdapter
+    public static class SubEditor extends EmptyAttributeEditorAdapter
     {
 
     }
 
-    public static class InterfaceEditor extends AttributeEditorAdapter
+    public static class InterfaceEditor extends EmptyAttributeEditorAdapter
     {
 
     }
 
-    public static class RangeEditor2 extends AttributeEditorAdapter
+    public static class RangeEditor2 extends EmptyAttributeEditorAdapter
     {
 
     }
 
-    public static class ComboEditor extends AttributeEditorAdapter
+    public static class ComboEditor extends EmptyAttributeEditorAdapter
     {
 
     }

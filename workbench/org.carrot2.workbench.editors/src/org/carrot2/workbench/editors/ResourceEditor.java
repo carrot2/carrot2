@@ -131,7 +131,7 @@ public class ResourceEditor extends AttributeEditorAdapter
 
     protected void doEvent()
     {
-        AttributeChangeEvent event = new AttributeChangeEvent(this);
+        AttributeChangedEvent event = new AttributeChangedEvent(this);
         fireAttributeChange(event);
     }
 

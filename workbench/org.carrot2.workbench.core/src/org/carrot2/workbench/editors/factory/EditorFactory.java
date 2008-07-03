@@ -9,7 +9,6 @@ import java.util.List;
 import org.carrot2.core.ProcessingComponent;
 import org.carrot2.util.attribute.AttributeDescriptor;
 import org.carrot2.util.attribute.AttributeUtils;
-import org.carrot2.workbench.editors.EditorNotFoundException;
 import org.carrot2.workbench.editors.IAttributeEditor;
 
 import com.google.common.base.Predicate;

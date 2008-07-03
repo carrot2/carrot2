@@ -2,7 +2,7 @@ package org.carrot2.workbench.editors.factory;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import static org.carrot2.workbench.core.helpers.ExtensionConfigurationUtils.*;
 import org.eclipse.core.runtime.IConfigurationElement;
 
 import com.google.common.collect.Lists;
@@ -22,6 +22,7 @@ public class TypeEditorWrapper extends AttributeEditorWrapper
     public TypeEditorWrapper(IConfigurationElement element)
     {
         super(element);
+
         attributeClass = getAttribute(element, ATT_ATTRIBUTE_CLASS);
         IConfigurationElement constraintsElement =
             getElement(element, EL_CONSTRAINTS, false);

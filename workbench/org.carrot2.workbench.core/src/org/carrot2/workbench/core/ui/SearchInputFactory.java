@@ -1,0 +1,128 @@
+package org.carrot2.workbench.core.ui;
+
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+import org.carrot2.core.ProcessingComponent;
+import org.carrot2.core.attribute.Processing;
+import org.carrot2.util.attribute.*;
+import org.carrot2.workbench.core.WorkbenchCorePlugin;
+import org.carrot2.workbench.core.helpers.Utils;
+import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.ui.IElementFactory;
+import org.eclipse.ui.IMemento;
+
+/**
+ * Factory storing and restoring {@link SearchInput} instances from {@link IMemento}.
+ */
+public final class SearchInputFactory implements IElementFactory
+{
+    private static final String ID_ATTRIBUTE = "id";
+    private static final String ALGORITHM_ELEMENT = "algorithm";
+    private static final String SOURCE_ELEMENT = "source";
+    private static final String ATTRIBUTES_ELEMENT = "attributes";
+
+    /**
+     * Public identifier of this {@link IElementFactory}.
+     */
+    public static final String ID = "org.carrot2.workbench.core.searchParametersFactory";
+
+    /*
+     * 
+     */
+    public IAdaptable createElement(IMemento memento)
+    {
+        String source = tryGetStringFrom(memento, SOURCE_ELEMENT, ID_ATTRIBUTE);
+        String algorithm = tryGetStringFrom(memento, ALGORITHM_ELEMENT, ID_ATTRIBUTE);
+        if (StringUtils.isBlank(source) || StringUtils.isBlank(algorithm))
+        {
+            return null;
+        }
+
+        final SearchInput search;
+        AttributeValueSet attributes = null;
+        try
+        {
+            IMemento attMemento = memento.getChild(ATTRIBUTES_ELEMENT);
+            if (attMemento != null)
+            {
+                String data = attMemento.getTextData();
+                if (data != null)
+                {
+                    final AttributeValueSets sets = AttributeValueSets
+                        .deserialize(new StringReader(data));
+                    attributes = sets.getDefaultAttributeValueSet();
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Utils.logError(e, false);
+        }
+
+        if (attributes == null)
+        {
+            attributes = new AttributeValueSet("defaults");            
+        }
+        search = new SearchInput(source, algorithm, attributes);
+
+        return search;
+    }
+
+    private String tryGetStringFrom(IMemento memento, String elementName,
+        String attributeName)
+    {
+        IMemento child = memento.getChild(elementName);
+        if (child != null)
+        {
+            return child.getString(attributeName);
+        }
+        return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    static void saveState(SearchInput search, IMemento memento)
+    {
+        memento.createChild(SOURCE_ELEMENT).putString(ID_ATTRIBUTE, search.getSourceId());
+        memento.createChild(ALGORITHM_ELEMENT).putString(ID_ATTRIBUTE,
+            search.getAlgorithmId());
+        try
+        {
+            final WorkbenchCorePlugin core = WorkbenchCorePlugin.getDefault();
+            final ProcessingComponent source = core.getSources().getImplementation(
+                search.getSourceId()).clazz.newInstance();
+
+            /*
+             * Limit saved attributes to @Input and @Processing ones.
+             */
+            final BindableDescriptor desc =
+                BindableDescriptorBuilder.buildDescriptor(source).flatten().only(
+                    Input.class, Processing.class);
+
+            final Map<String,Object> actual = search.getAttributeValueSet().getAttributeValues();
+            final AttributeValueSet filtered = new AttributeValueSet("memento-saved");
+
+            for (String key : desc.attributeDescriptors.keySet())
+            {
+                if (actual.containsKey(key))
+                {
+                    filtered.setAttributeValue(key, actual.get(key));
+                }
+            }
+
+            final StringWriter w = new StringWriter();
+            AttributeValueSets sets = new AttributeValueSets();
+            sets.addAttributeValueSet("default", filtered);
+            sets.serialize(w);
+            w.close();
+
+            memento.createChild(ATTRIBUTES_ELEMENT).putTextData(w.toString());
+        }
+        catch (Exception e)
+        {
+            Utils.logError(e, false);
+        }
+    }
+}

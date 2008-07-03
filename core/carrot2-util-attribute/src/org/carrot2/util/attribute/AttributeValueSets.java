@@ -1,7 +1,6 @@
 package org.carrot2.util.attribute;
 
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.*;
 
 import org.simpleframework.xml.ElementMap;
@@ -284,6 +283,18 @@ public class AttributeValueSets
     }
 
     /**
+     * Serializes this collection of {@link AttributeValueSet}s to an XML stream.
+     * 
+     * @param w the writer to serialize this {@link AttributeValueSets} to. The
+     *            stream will <strong>not</strong> be closed.
+     * @throws Exception in case of any problems with serialization
+     */
+    public void serialize(Writer w) throws Exception
+    {
+        new Persister().write(this, w);
+    }
+
+    /**
      * Deserializes a collection of {@link AttributeValueSet}s from an XML stream.
      * 
      * @param inputStream the stream to deserialize a {@link AttributeValueSets} from. The
@@ -296,6 +307,31 @@ public class AttributeValueSets
     {
         final AttributeValueSets attributeValueSet = new Persister().read(
             AttributeValueSets.class, inputStream);
+
+        if (attributeValueSet.defaultAttributeValueSetId != null
+            && !attributeValueSet.attributeValueSets
+                .containsKey(attributeValueSet.defaultAttributeValueSetId))
+        {
+            throw new RuntimeException("Default attribute value set not found: "
+                + attributeValueSet.defaultAttributeValueSetId);
+        }
+
+        return attributeValueSet;
+    }
+    
+    /**
+     * Deserializes a collection of {@link AttributeValueSet}s from XML.
+     * 
+     * @param inputStream the reader to deserialize a {@link AttributeValueSets} from. The
+     *            stream will <strong>not</strong> be closed.
+     * @return Deserialized collection of {@link AttributeValueSet}s
+     * @throws Exception is case of any problems with deserialization.
+     */
+    public static AttributeValueSets deserialize(Reader reader)
+        throws Exception
+    {
+        final AttributeValueSets attributeValueSet = new Persister().read(
+            AttributeValueSets.class, reader);
 
         if (attributeValueSet.defaultAttributeValueSetId != null
             && !attributeValueSet.attributeValueSets

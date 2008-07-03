@@ -1,17 +1,8 @@
 package org.carrot2.workbench.core;
 
 import java.util.HashMap;
-import java.util.Properties;
 
-import org.apache.velocity.app.Velocity;
-import org.apache.velocity.runtime.RuntimeConstants;
-import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
-import org.carrot2.core.CachingController;
-import org.carrot2.core.Controller;
-import org.carrot2.core.DocumentSource;
-import org.carrot2.workbench.core.helpers.Utils;
-import org.eclipse.core.commands.operations.OperationStatus;
-import org.eclipse.core.runtime.IStatus;
+import org.carrot2.core.*;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -25,6 +16,12 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
     /** Plug-in ID. */
     public static final String PLUGIN_ID = "org.carrot2.workbench.core";
 
+    /** Source extension identifier. */
+    public static final String SOURCE_EXTENSION_ID = "org.carrot2.core.source";
+
+    /** Algorithm extension identifier. */
+    public static final String ALGORITHM_EXTENSION_ID = "org.carrot2.core.algorithm";
+
     /** The shared instance. */
     private static WorkbenchCorePlugin plugin;
 
@@ -32,6 +29,16 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
      * Shared, thread-safe caching controller instance.
      */
     private CachingController controller;
+
+    /**
+     * Extension point implementations for {@link DocumentSource}.
+     */
+    private ExtensionLoader sources;
+
+    /**
+     * Extension point implementations for {@link ClusteringAlgorithm}.
+     */
+    private ExtensionLoader algorithms;
 
     /*
      * 
@@ -42,10 +49,11 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
         super.start(context);
         plugin = this;
 
-        initVelocityEngine();
-
         controller = new CachingController(DocumentSource.class);
         controller.init(new HashMap<String, Object>());
+
+        sources = new ExtensionLoader(SOURCE_EXTENSION_ID, "source");
+        algorithms = new ExtensionLoader(ALGORITHM_EXTENSION_ID, "algorithm");
     }
 
     /*
@@ -76,6 +84,16 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
     {
         return controller;
     }
+    
+    public ExtensionLoader getSources()
+    {
+        return sources;
+    }
+    
+    public ExtensionLoader getAlgorithms()
+    {
+        return algorithms;
+    }
 
     /**
      * Returns an image descriptor for the image file at the given plug-in relative path.
@@ -86,32 +104,5 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
     public static ImageDescriptor getImageDescriptor(String path)
     {
         return imageDescriptorFromPlugin(PLUGIN_ID, path);
-    }
-
-    /**
-     * Initialize Velocity engine.
-     */
-    private static void initVelocityEngine()
-    {
-        final Properties p = new Properties();
-        p.setProperty("resource.loader", "class");
-        p.setProperty("class.resource.loader.class", ClasspathResourceLoader.class
-            .getName());
-
-        // Disable separate Velocity logging.
-        p.setProperty(RuntimeConstants.RUNTIME_LOG, "");
-
-        try
-        {
-            Velocity.init(p);
-        }
-        catch (Exception e)
-        {
-            final IStatus status = new OperationStatus(IStatus.ERROR,
-                WorkbenchCorePlugin.PLUGIN_ID, -2,
-                "Error while initiating Velocity engine", e);
-            WorkbenchCorePlugin.getDefault().getLog().log(status);
-            Utils.showError(status);
-        }
     }
 }

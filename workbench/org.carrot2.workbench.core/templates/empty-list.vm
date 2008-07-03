@@ -1,10 +1,11 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
+
 		<style type="text/css">
 		#include ("style.css")
 		</style>
 	</head>
-	<body>
-Nothing to show for current selection.
-</body></html>
+
+	<body></body>
+</html>
