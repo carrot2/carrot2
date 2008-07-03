@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.text.analysis.TokenType;
-import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
 import org.carrot2.text.util.*;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.IntRange;
@@ -18,14 +17,13 @@ import bak.pcj.set.IntSet;
 import com.google.common.collect.Lists;
 
 /**
- * Implementation of {@link PreprocessingTasks#CASE_NORMALIZE}. As a side effect, this
- * class computes a number of word frequency statistics in {@link AllWords}.
+ * Performs case normalization and calculates a number of frequency statistics for words.
  */
 @Bindable
 public final class CaseNormalizer
 {
     /**
-     * Document Frequency cut-off. Words appearing in less than <code>dfCutoff</code>
+     * Word Document Frequency cut-off. Words appearing in less than <code>dfCutoff</code>
      * documents will be ignored.
      * 
      * @level Advanced
@@ -141,7 +139,7 @@ public final class CaseNormalizer
                 // The image has changed completely.
                 // Before we start processing the new image, we need to
                 // see if we want to store the previous image, and if so
-                // we need add some data about it to the multi arrays
+                // we need add some data about it to the arrays
                 int wordDf = documentIndexes.size();
                 if (wordDf >= dfCutoff)
                 {

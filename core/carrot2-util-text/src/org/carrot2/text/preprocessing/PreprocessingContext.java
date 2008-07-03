@@ -110,7 +110,7 @@ public final class PreprocessingContext
          * This array is produced by {@link PhraseExtractor}.
          */
         public int [] suffixOrder;
-        
+
         /**
          * The Longest Common Prefix for the adjacent suffix-sorted token sequences.
          * <p>
@@ -262,4 +262,15 @@ public final class PreprocessingContext
      * {@link PreprocessingContext#documents}.
      */
     public AllStems allStems = new AllStems();
+
+    public static class AllPhrases
+    {
+        public int [][] wordIndices;
+        
+        public int [] tf;
+        
+        public int [][] tfByDocument;
+    }
+    
+    public AllPhrases allPhrases = new AllPhrases();
 }

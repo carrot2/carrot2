@@ -44,7 +44,9 @@ final class SuffixSorter
         // Create a temporary array based on word indices with -1 values replaced
         // with unique negative values. This will ensure that the phrases discovered
         // based on the sorted/lcp array will not cross sentence/field boundaries.
-        // At some point we may want to make it an option.
+        // At some point we may want to make it an option. In this case, we'll need to
+        // review Substring and SubstringComparator for possible array index out of
+        // bounds.
         final int [] intCodes = new int [context.allTokens.wordIndex.length];
         System.arraycopy(context.allTokens.wordIndex, 0, intCodes, 0, intCodes.length);
         int currentSeparatorCode = -1;
@@ -67,7 +69,7 @@ final class SuffixSorter
         int [] suffixOrder = IndirectSorter.sort(sortInput,
             new SuffixComparator(intCodes));
         context.allTokens.suffixOrder = suffixOrder;
-        
+
         // Add LCPs
         context.allTokens.lcp = calculateLcp(intCodes, suffixOrder);
     }
@@ -90,7 +92,7 @@ final class SuffixSorter
             }
             lcpArray[i] = lcp;
         }
-        
+
         return lcpArray;
     }
 }

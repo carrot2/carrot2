@@ -3,7 +3,6 @@ package org.carrot2.text.preprocessing;
 import java.util.*;
 
 import org.carrot2.text.MutableCharArray;
-import org.carrot2.text.linguistic.LanguageModel;
 import org.carrot2.text.linguistic.Stemmer;
 import org.carrot2.text.util.*;
 import org.carrot2.util.CharArrayUtils;
@@ -16,8 +15,7 @@ import bak.pcj.set.IntBitSet;
 import bak.pcj.set.IntSet;
 
 /**
- * Implementation of {@link PreprocessingTasks#STEMMING} based on the current
- * {@link LanguageModel}.
+ * Applies stemming on words and calculates a number of frequency statistics for stems.
  */
 @Bindable
 public final class LanguageModelStemmer
