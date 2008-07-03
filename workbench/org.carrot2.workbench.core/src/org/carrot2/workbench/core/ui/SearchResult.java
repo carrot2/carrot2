@@ -5,7 +5,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.carrot2.core.Controller;
 import org.carrot2.core.ProcessingResult;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * Search process model is the core model around which all other views revolve (editors,
@@ -28,6 +28,21 @@ public final class SearchResult
      * An array of listeners interested in events happening on this search result.
      */
     private List<ISearchResultListener> listeners = new CopyOnWriteArrayList<ISearchResultListener>();
+
+    /**
+     * Dispatch {@link ISearchResultListener#processingResultUpdated(ProcessingResult)}
+     * to listeners.
+     */
+    final Runnable dispatchResultUpdated = new Runnable()
+    {
+        public void run()
+        {
+            for (ISearchResultListener listener : listeners)
+            {
+                listener.processingResultUpdated(result);
+            }
+        }
+    };
 
     /**
      * 
@@ -84,15 +99,17 @@ public final class SearchResult
      */
     private void fireProcessingResultUpdated()
     {
-        Display.getDefault().asyncExec(new Runnable()
+        /*
+         * If we have a running Workbench (which should always be the case), run the dispatch
+         * asynchronously. For headless tests, dispatch it immediately.
+         */
+        if (PlatformUI.isWorkbenchRunning())
         {
-            public void run()
-            {
-                for (ISearchResultListener listener : listeners)
-                {
-                    listener.processingResultUpdated(result);
-                }
-            }
-        });
+            PlatformUI.getWorkbench().getDisplay().asyncExec(dispatchResultUpdated);
+        }
+        else
+        {
+            dispatchResultUpdated.run();
+        }
     }
 }
