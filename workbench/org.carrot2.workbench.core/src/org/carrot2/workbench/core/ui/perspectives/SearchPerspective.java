@@ -1,7 +1,6 @@
 package org.carrot2.workbench.core.ui.perspectives;
 
 import org.carrot2.workbench.core.ui.*;
-import org.carrot2.workbench.core.ui.views.*;
 import org.eclipse.ui.*;
 
 /**
