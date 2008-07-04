@@ -122,7 +122,7 @@ public final class PreprocessingContext
     /**
      * Information about all tokens of the input {@link PreprocessingContext#documents}.
      */
-    public AllTokens allTokens = new AllTokens();
+    public final AllTokens allTokens = new AllTokens();
 
     /**
      * Information about all fields processed for the input
@@ -143,7 +143,7 @@ public final class PreprocessingContext
      * Information about all fields processed for the input
      * {@link PreprocessingContext#documents}.
      */
-    public AllFields allFields = new AllFields();
+    public final AllFields allFields = new AllFields();
 
     /**
      * Information about all unique words found in the input
@@ -209,7 +209,7 @@ public final class PreprocessingContext
      * Information about all unique words found in the input
      * {@link PreprocessingContext#documents}.
      */
-    public AllWords allWords = new AllWords();
+    public final AllWords allWords = new AllWords();
 
     /**
      * Information about all unique stems found in the input
@@ -261,16 +261,51 @@ public final class PreprocessingContext
      * Information about all unique stems found in the input
      * {@link PreprocessingContext#documents}.
      */
-    public AllStems allStems = new AllStems();
+    public final AllStems allStems = new AllStems();
 
+    /**
+     * Information about all frequently appearing sequences of words found in the input
+     * {@link PreprocessingContext#documents}. Each entry in each array corresponds to one
+     * sequence.
+     * <p>
+     * All arrays in this class have the same length and values across different arrays
+     * correspond to each other for the same index.
+     */
     public static class AllPhrases
     {
+        /**
+         * Pointers to {@link AllWords} for each word in the sequence.
+         * <p>
+         * This array is produced by {@link PhraseExtractor}.
+         */
         public int [][] wordIndices;
-        
+
+        /**
+         * Term frequency of the word sequence.
+         * <p>
+         * This array is produced by {@link PhraseExtractor}.
+         */
         public int [] tf;
-        
+
+        /**
+         * Term frequency of the word sequence for each document. For the encoding of this
+         * array, see {@link AllWords#tfByDocument}.
+         * <p>
+         * This array is produced by {@link PhraseExtractor}.
+         */
         public int [][] tfByDocument;
     }
-    
+
+    /**
+     * Information about all frequently appearing sequences of words found in the input
+     * {@link PreprocessingContext#documents}.
+     */
     public AllPhrases allPhrases = new AllPhrases();
+
+    public static class AllLabels
+    {
+        public int [] featureIndex;
+    }
+    
+    public final AllLabels allLabels = new AllLabels();
 }

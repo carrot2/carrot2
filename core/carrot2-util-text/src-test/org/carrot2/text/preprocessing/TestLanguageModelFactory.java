@@ -43,7 +43,7 @@ final class TestLanguageModelFactory implements LanguageModelFactory
 
         public boolean isCommonWord(CharSequence word)
         {
-            return false;
+            return word.toString().contains("stop");
         }
     }
 }

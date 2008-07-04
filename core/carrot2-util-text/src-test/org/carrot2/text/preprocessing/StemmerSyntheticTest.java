@@ -4,7 +4,7 @@ import org.carrot2.text.linguistic.*;
 import org.junit.Test;
 
 /**
- * Test cases for stemming in {@link Preprocessor}.
+ * Language-independent test cases for {@link LanguageModelStemmer}.
  */
 public class StemmerSyntheticTest extends StemmerTestBase
 {

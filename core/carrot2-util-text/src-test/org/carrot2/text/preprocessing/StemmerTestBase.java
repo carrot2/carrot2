@@ -6,7 +6,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import org.junit.Before;
 
 /**
- * Base class for {@link StemmingTask} tests.
+ * Base class for {@link LanguageModelStemmer} tests.
  */
 public class StemmerTestBase extends PreprocessingComponentTestBase
 {

@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 /**
  * Compares {@link Substring}s in such a way as to put them into different buckets in an
- * inflection-insensitive way. The order of different variants of substrings withing
+ * inflection-insensitive way. The order of different variants of substrings within
  * buckets is arbitrary.
  */
 class SubstringComparator implements Comparator<Substring>

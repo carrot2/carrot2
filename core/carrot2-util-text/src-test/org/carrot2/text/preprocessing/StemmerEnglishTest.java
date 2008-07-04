@@ -3,7 +3,7 @@ package org.carrot2.text.preprocessing;
 import org.junit.Test;
 
 /**
- * Test cases for stemming in {@link Preprocessor}.
+ * English test cases for {@link LanguageModelStemmer}.
  */
 public class StemmerEnglishTest extends StemmerTestBase
 {
