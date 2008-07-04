@@ -34,7 +34,7 @@ public class StemmerTestBase extends PreprocessingComponentTestBase
         
         assertThat(context.allWords.stemIndex).as("allWords.stemIndices").isEqualTo(
             expectedStemIndices);
-        assertThat(context.allStems.images).as("allStems.images").isEqualTo(
+        assertThat(context.allStems.image).as("allStems.images").isEqualTo(
             expectedStemImages);
         assertThat(context.allStems.tf).as("allStems.tf").isEqualTo(expectedStemTf);
         assertThat(context.allStems.tfByDocument).as("allStems.tfByDocument").isEqualTo(

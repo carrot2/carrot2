@@ -23,7 +23,7 @@ class Substring
     /** This substring's frequency across documents */
     public IntKeyIntMap tfByDocument;
 
-    /** */
+    /** Used to properly aggregate phrase frequencies */
     public int documentIndexToOffset = -1;
 
     public Substring(int id, int from, int to, int frequency)

@@ -5,7 +5,7 @@ import java.util.*;
 import com.google.common.collect.Lists;
 
 /**
- * 
+ * Filters out phrases that are not left complete.
  */
 class RightCompleteLabelFilter extends CompleteLabelFilterBase
 {

@@ -2,6 +2,7 @@ package org.carrot2.text.preprocessing;
 
 import java.util.Arrays;
 
+import org.carrot2.text.preprocessing.PreprocessingContext.*;
 import org.carrot2.text.preprocessing.filter.CompleteLabelFilter;
 import org.carrot2.text.preprocessing.filter.StopWordLabelFilter;
 import org.carrot2.util.attribute.Bindable;
@@ -9,10 +10,20 @@ import org.carrot2.util.attribute.Bindable;
 import bak.pcj.list.IntArrayList;
 
 /**
- * Applies {@link LabelFilterProcessor}s to words from
- * {@link PreprocessingContext#allWords} and phrases from
- * {@link PreprocessingContext#allPhrases} and stores the filtered list in
- * {@link PreprocessingContext#allLabels}.
+ * Applies basic filtering to words and phrases to produce candidates for cluster labels.
+ * Filtering is applied to {@link AllWords} and {@link AllPhrases}, the results are saved
+ * to {@link AllLabels}. Currently, the following filters are applied:
+ * <ol>
+ * <li>{@link StopWordLabelFilter}</li>
+ * <li>{@link CompleteLabelFilter}</li>
+ * </ol>
+ * This class saves the following results to the {@link PreprocessingContext}:
+ * <ul>
+ * <li>{@link AllLabels#featureIndex}</li>
+ * </ul>
+ * <p>
+ * This class requires that {@link Tokenizer}, {@link CaseNormalizer},
+ * {@link StopListMarker} and {@link PhraseExtractor} be invoked first.
  */
 @Bindable
 public class LabelFilterProcessor

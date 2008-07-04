@@ -6,7 +6,10 @@ import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.DoubleRange;
 
 /**
- *
+ * A filter that removes "incomplete" labels.
+ * <p>
+ * See {@link http://project.carrot2.org/publications/osinski-2003-lingo.pdf}, page 31 for
+ * a definition of a complete phrase.
  */
 @Bindable
 public class CompleteLabelFilter implements LabelFilter
@@ -38,6 +41,9 @@ public class CompleteLabelFilter implements LabelFilter
      */
     private RightCompleteLabelFilter rightCompleteLabelFilter = new RightCompleteLabelFilter();
 
+    /**
+     * Marks incomplete labels.
+     */
     public void filter(PreprocessingContext context, boolean [] acceptedWords,
         boolean [] acceptedPhrases)
     {

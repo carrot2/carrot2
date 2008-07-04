@@ -188,7 +188,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
                 final char [][] wordImages = context.allWords.image;
                 final int [] wordStemIndices = context.allWords.stemIndex;
                 final boolean [] commonWords = context.allWords.commonTermFlag;
-                final char [][] stemImages = context.allStems.images;
+                final char [][] stemImages = context.allStems.image;
 
                 for (int i = start; i < start + length; i++)
                 {

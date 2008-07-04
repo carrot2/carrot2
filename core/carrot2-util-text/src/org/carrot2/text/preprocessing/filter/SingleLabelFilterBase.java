@@ -32,7 +32,21 @@ public abstract class SingleLabelFilterBase implements LabelFilter
         }
     }
 
+    /**
+     * Should return <code>true</code> if the word located at <code>wordIndex</code> is to
+     * be accepted, <code>false</code> otherwise.
+     * 
+     * @param context provides access to all information about the word
+     * @param wordIndex index of the word for which decision is to be made
+     */
     public abstract boolean acceptWord(PreprocessingContext context, int wordIndex);
 
+    /**
+     * Should return <code>true</code> if the phrase located at <code>phraseIndex</code>
+     * is to be accepted, <code>false</code> otherwise.
+     * 
+     * @param context provides access to all information about the phrase
+     * @param phraseIndex index of the phrase for which decision is to be made
+     */
     public abstract boolean acceptPhrase(PreprocessingContext context, int phraseIndex);
 }

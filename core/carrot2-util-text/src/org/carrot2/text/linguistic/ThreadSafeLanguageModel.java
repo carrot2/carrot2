@@ -2,7 +2,7 @@ package org.carrot2.text.linguistic;
 
 import java.util.*;
 
-import org.carrot2.text.MutableCharArray;
+import org.carrot2.text.util.MutableCharArray;
 
 /**
  * Implements {@link LanguageModel}.

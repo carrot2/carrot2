@@ -11,7 +11,7 @@ import org.carrot2.core.Document;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.text.analysis.ExtendedWhitespaceAnalyzer;
 import org.carrot2.text.analysis.TokenType;
-import org.carrot2.text.preprocessing.PreprocessingContext.AllFields;
+import org.carrot2.text.preprocessing.PreprocessingContext.*;
 import org.carrot2.util.ExceptionUtils;
 import org.carrot2.util.Pair;
 import org.carrot2.util.attribute.*;
@@ -24,7 +24,15 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
- * Implementation of {@link PreprocessingTasks#TOKENIZE}.
+ * Performs tokenization of documents.
+ * <p>
+ * This class saves the following results to the {@link PreprocessingContext}:
+ * <ul>
+ * <li>{@link AllTokens#image}</li>
+ * <li>{@link AllTokens#documentIndex}</li>
+ * <li>{@link AllTokens#fieldIndex}</li>
+ * <li>{@link AllTokens#type}</li>
+ * </ul>
  */
 @Bindable
 public final class Tokenizer
@@ -97,7 +105,7 @@ public final class Tokenizer
         tokenTypes = new IntArrayList();
         documentIndices = new IntArrayList();
         fieldIndices = new ByteArrayList();
-        
+
         // Map field names to their indices in AllFields
         final Map<String, Byte> fieldNameToIndex = createFieldNameToIndexMap(context,
             documentFields);
@@ -178,7 +186,7 @@ public final class Tokenizer
         context.allTokens.image = images.toArray(new char [images.size()] []);
         context.allTokens.type = tokenTypes.toArray();
         context.allFields.name = fieldNames;
-        
+
         // Clean up
         images = null;
         fieldIndices = null;

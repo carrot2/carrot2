@@ -2,8 +2,8 @@ package org.carrot2.text.preprocessing;
 
 import java.util.*;
 
-import org.carrot2.text.MutableCharArray;
 import org.carrot2.text.linguistic.Stemmer;
+import org.carrot2.text.preprocessing.PreprocessingContext.*;
 import org.carrot2.text.util.*;
 import org.carrot2.util.CharArrayUtils;
 import org.carrot2.util.CharSequenceUtils;
@@ -15,7 +15,18 @@ import bak.pcj.set.IntBitSet;
 import bak.pcj.set.IntSet;
 
 /**
- * Applies stemming on words and calculates a number of frequency statistics for stems.
+ * Applies stemming to words and calculates a number of frequency statistics for stems.
+ * <p>
+ * This class saves the following results to the {@link PreprocessingContext}:
+ * <ul>
+ * <li>{@link AllWords#stemIndex}</li>
+ * <li>{@link AllStems#image}</li>
+ * <li>{@link AllStems#mostFrequentOriginalWordIndex}</li>
+ * <li>{@link AllStems#tf}</li>
+ * <li>{@link AllStems#tfByDocument}</li>
+ * </ul>
+ * <p>
+ * This class requires that {@link Tokenizer} and {@link CaseNormalizer} be invoked first.
  */
 @Bindable
 public final class LanguageModelStemmer
@@ -71,7 +82,7 @@ public final class LanguageModelStemmer
 
         if (stemImagesOrder.length == 0)
         {
-            context.allStems.images = new char [0] [];
+            context.allStems.image = new char [0] [];
             context.allStems.mostFrequentOriginalWordIndex = new int [0];
             context.allStems.tf = new int [0];
             context.allStems.tfByDocument = new int [0] [];
@@ -152,7 +163,7 @@ public final class LanguageModelStemmer
         stemTfByDocumentList.add(IntArrayUtils.toSparseEncoding(stemTfByDocument));
 
         // Convert lists to arrays and store them in allStems
-        context.allStems.images = stemImages.toArray(new char [stemImages.size()] []);
+        context.allStems.image = stemImages.toArray(new char [stemImages.size()] []);
         context.allStems.mostFrequentOriginalWordIndex = stemMostFrequentWordIndexes
             .toArray();
         context.allStems.tf = stemTf.toArray();

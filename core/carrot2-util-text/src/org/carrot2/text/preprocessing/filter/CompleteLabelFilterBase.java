@@ -8,7 +8,7 @@ import org.carrot2.text.preprocessing.PreprocessingContext;
 import com.google.common.collect.Lists;
 
 /**
- * 
+ * Base class for complete phrase filtering.
  */
 abstract class CompleteLabelFilterBase
 {

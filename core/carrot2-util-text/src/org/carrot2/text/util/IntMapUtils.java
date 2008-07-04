@@ -12,9 +12,6 @@ public final class IntMapUtils
      * Converts an {@link IntKeyIntMap} into a flat int [] array. Even indexes
      * in the flat array represent keys and the corresponding odd indexes --
      * values. Note: the order of keys in the flat array is arbitrary.
-     * 
-     * @param map
-     * @return
      */
     public static final int [] flatten(IntKeyIntMap map)
     {

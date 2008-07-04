@@ -2,7 +2,7 @@ package org.carrot2.text.linguistic;
 
 import static org.junit.Assert.*;
 
-import org.carrot2.text.MutableCharArray;
+import org.carrot2.text.util.MutableCharArray;
 import org.junit.*;
 
 /**

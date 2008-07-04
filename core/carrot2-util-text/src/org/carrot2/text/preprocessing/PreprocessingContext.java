@@ -160,8 +160,8 @@ public final class PreprocessingContext
     {
         /**
          * The most frequently appearing variant of the word with respect to case. E.g. if
-         * a token <em>ACM</em> appeared 12 times in the input and <em>Acm</em> appeared 3
-         * times, the image will be equal to <em>ACM</em>.
+         * a token <em>MacOS</em> appeared 12 times in the input and <em>macos</em>
+         * appeared 3 times, the image will be equal to <em>MacOS</em>.
          * <p>
          * This array is produced by {@link CaseNormalizer}.
          */
@@ -230,7 +230,7 @@ public final class PreprocessingContext
          * <p>
          * This array is produced by {@link LanguageModelStemmer}.
          */
-        public char [][] images;
+        public char [][] image;
 
         /**
          * Pointer to the {@link AllWords} arrays, to the most frequent original form of
@@ -302,10 +302,29 @@ public final class PreprocessingContext
      */
     public AllPhrases allPhrases = new AllPhrases();
 
+    /**
+     * Information about words and phrases that might be good cluster label candidates.
+     * Each entry in each array corresponds to one label candidate.
+     * <p>
+     * All arrays in this class have the same length and values across different arrays
+     * correspond to each other for the same index.
+     */
     public static class AllLabels
     {
+        /**
+         * Feature index of the label candidate. Features whose values are less than the
+         * size of {@link AllWords} arrays are single word features and point to entries
+         * in {@link AllWords}. Features whose values are larger or equal to the size of
+         * {@link AllWords}, after subtracting the size of {@link AllWords}, point to
+         * {@link AllPhrases}.
+         * <p>
+         * This array is produced by {@link LabelFilterProcessor}.
+         */
         public int [] featureIndex;
     }
-    
+
+    /**
+     * Information about words and phrases that might be good cluster label candidates.
+     */
     public final AllLabels allLabels = new AllLabels();
 }

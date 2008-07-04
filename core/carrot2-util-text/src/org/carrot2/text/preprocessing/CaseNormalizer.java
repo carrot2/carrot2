@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.text.analysis.TokenType;
+import org.carrot2.text.preprocessing.PreprocessingContext.AllTokens;
+import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
 import org.carrot2.text.util.*;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.IntRange;
@@ -18,6 +20,21 @@ import com.google.common.collect.Lists;
 
 /**
  * Performs case normalization and calculates a number of frequency statistics for words.
+ * The aim of case normalization is to find the most frequently appearing variants of
+ * words in terms of case. For example, if in the input documents <i>MacOS</i> appears 20
+ * times, <i>Macos</i> 5 times and <i>macos</i> 2 times, case normalizer will select
+ * <i>MacOS</i> to represent all variants and assign the aggregated term frequency of 27
+ * to it.
+ * <p>
+ * This class saves the following results to the {@link PreprocessingContext}:
+ * <ul>
+ * <li>{@link AllTokens#wordIndex}</li>
+ * <li>{@link AllWords#image}</li>
+ * <li>{@link AllWords#tf}</li>
+ * <li>{@link AllWords#tfByDocument}</li>
+ * </ul>
+ * <p>
+ * This class requires that {@link Tokenizer} be invoked first.
  */
 @Bindable
 public final class CaseNormalizer

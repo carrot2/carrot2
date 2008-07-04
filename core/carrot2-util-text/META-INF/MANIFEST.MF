@@ -13,7 +13,7 @@ Require-Bundle:
 Bundle-ClassPath: META-INF/,
  .,
  src-resources/
-Export-Package: org.carrot2.text,
+Export-Package: org.carrot2.text.util,
  org.carrot2.text.analysis,
  org.carrot2.text.linguistic,
  org.carrot2.text.preprocessing

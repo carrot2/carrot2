@@ -39,6 +39,9 @@ final class SuffixSorter
         }
     }
 
+    /**
+     * Performs suffix sorting and saves the results to the <code>context</code>.
+     */
     void suffixSort(PreprocessingContext context)
     {
         // Create a temporary array based on word indices with -1 values replaced

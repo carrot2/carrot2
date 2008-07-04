@@ -1,7 +1,8 @@
-package org.carrot2.text;
+package org.carrot2.text.util;
 
 import static org.junit.Assert.*;
 
+import org.carrot2.text.util.MutableCharArray;
 import org.junit.Test;
 
 /**

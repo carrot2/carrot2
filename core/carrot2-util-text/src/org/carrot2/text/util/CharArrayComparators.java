@@ -79,17 +79,16 @@ public class CharArrayComparators
     };
 
     /**
-     * A comparator that applies the following rules in the following order:
+     * A comparator that groups different strings into different buckets
+     * (case-insensitive) and strings within these buckets (case-sensitive). The
+     * comparator that applies the following rules in the following order:
      * <ol>
      * <li>A <code>null</code> string is greater than a non-<code>null</code> one</li>
      * <li>A longer string is greater</li>
      * <li>Strings are first compared in case-insensitive mode</li>
      * <li>Finally, strings are compared in case-sensitive mode</li>
      * </ol>
-     * This comparator does not provide a lexicographic order, it's main aim is to group
-     * different (case-insensitive) strings into different buckets and group strings
-     * within the buckets (case-sensitive). Not sticking to lexicographic order makes the
-     * comparator much faster.
+     * This comparator does not provide a lexicographic order, which makes it much faster.
      */
     public static final Comparator<char []> NORMALIZING_CHAR_ARRAY_COMPARATOR = new Comparator<char []>()
     {

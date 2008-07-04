@@ -1,10 +1,18 @@
 package org.carrot2.text.preprocessing;
 
-import org.carrot2.text.MutableCharArray;
+import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
+import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.util.attribute.Bindable;
 
 /**
- * Implementation of {@link PreprocessingTasks#MARK_TOKENS_STOPLIST}.
+ * Marks stop words based on the current language model.
+ * <p>
+ * This class saves the following results to the {@link PreprocessingContext}:
+ * <ul>
+ * <li>{@link AllWords#commonTermFlag}</li>
+ * </ul>
+ * <p>
+ * This class requires that {@link Tokenizer} and {@link CaseNormalizer} be invoked first.
  */
 @Bindable
 public final class StopListMarker

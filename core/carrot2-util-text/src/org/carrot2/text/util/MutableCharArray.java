@@ -1,4 +1,4 @@
-package org.carrot2.text;
+package org.carrot2.text.util;
 
 /**
  * Implements {@link CharSequence} over a mutable <code>char[]</code> buffer.

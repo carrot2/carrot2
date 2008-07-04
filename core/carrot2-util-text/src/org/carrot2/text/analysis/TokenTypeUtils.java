@@ -1,13 +1,10 @@
 package org.carrot2.text.analysis;
 
 /**
- * 
+ * Utility methods for working with {@link TokenType}s.
  */
 public final class TokenTypeUtils
 {
-    /*
-     * 
-     */
     private TokenTypeUtils()
     {
         // no instances.
@@ -20,16 +17,5 @@ public final class TokenTypeUtils
     public static int maskType(int rawType) 
     {
         return rawType & TokenType.TYPE_MASK;
-    }
-
-    /**
-     * Return <code>true</code> if the given token type denotes
-     * a sentence separator.
-     * 
-     * @see TokenType#TF_SEPARATOR_SENTENCE
-     */
-    public static boolean isSentenceDelimiter(TokenType type)
-    {
-        return (type.getRawFlags() & TokenType.TF_SEPARATOR_SENTENCE) != 0;
     }
 }

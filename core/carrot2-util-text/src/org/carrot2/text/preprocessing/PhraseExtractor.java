@@ -3,6 +3,7 @@ package org.carrot2.text.preprocessing;
 import java.util.*;
 
 import org.carrot2.core.attribute.Processing;
+import org.carrot2.text.preprocessing.PreprocessingContext.*;
 import org.carrot2.text.util.IntMapUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.IntRange;
@@ -18,8 +19,20 @@ import com.google.common.collect.Lists;
  * of words that appears in the documents more than once. This phrase extractor aggregates
  * different inflection variants of phrase words into one phrase, returning the most
  * frequent variant. For example, if phrase <i>computing science</i> appears 2 times and
- * <i>computer sciences</i> appears 4 times, the latter will be returned with frequency
- * <b>6</b>.
+ * <i>computer sciences</i> appears 4 times, the latter will be returned with aggregated
+ * frequency of 6.
+ * <p>
+ * This class saves the following results to the {@link PreprocessingContext}:
+ * <ul>
+ * <li>{@link AllPhrases#wordIndices}</li>
+ * <li>{@link AllPhrases#tf}</li>
+ * <li>{@link AllPhrases#tfByDocument}</li>
+ * <li>{@link AllTokens#suffixOrder}</li>
+ * <li>{@link AllTokens#lcp}</li>
+ * </ul>
+ * <p>
+ * This class requires that {@link Tokenizer}, {@link CaseNormalizer} and
+ * {@link LanguageModelStemmer} be invoked first.
  */
 @Bindable
 public class PhraseExtractor
