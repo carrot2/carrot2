@@ -1,6 +1,8 @@
 package org.carrot2.workbench.editors;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -46,16 +48,24 @@ public abstract class NumericRangeEditorBase extends AttributeEditorAdapter impl
      * Value multiplier needed to convert between fixed precision floating point
      * values and integers.
      */
-    private double multiplier;
+    private final double multiplier;
 
     /** Tooltip with allowed range. */
     private String tooltip;
 
     /**
+     * @param precisionDigits Number of digits after decimal separator.
+     */
+    public NumericRangeEditorBase(int precisionDigits)
+    {
+        this.precisionDigits = precisionDigits;
+        this.multiplier = Math.pow(10, precisionDigits);
+    }
+    
+    /**
      * Initialize numeric ranges, according to the descriptor's definition.
      */
-    protected final void setRanges(int min, int max, int precisionDigits, int increment,
-        int pageIncrement)
+    protected final void setRanges(int min, int max, int increment, int pageIncrement)
     {
         this.min = min;
         this.minBounded = (min != Integer.MIN_VALUE);
@@ -65,10 +75,6 @@ public abstract class NumericRangeEditorBase extends AttributeEditorAdapter impl
 
         this.increment = increment;
         this.pageIncrement = pageIncrement;
-
-        this.precisionDigits = precisionDigits;
-
-        this.multiplier = Math.pow(10, precisionDigits);
 
         if (!minBounded && !maxBounded)
         {
@@ -157,6 +163,14 @@ public abstract class NumericRangeEditorBase extends AttributeEditorAdapter impl
         scale.addSelectionListener(new SelectionAdapter()
         {
             public void widgetSelected(SelectionEvent e)
+            {
+                propagateNewValue(scale.getSelection());
+            }
+        });
+        
+        scale.addMouseWheelListener(new MouseWheelListener()
+        {
+            public void mouseScrolled(MouseEvent e)
             {
                 propagateNewValue(scale.getSelection());
             }

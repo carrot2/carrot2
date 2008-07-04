@@ -14,12 +14,20 @@ public final class DoubleRangeEditor extends NumericRangeEditorBase
     /**
      * Number of digits of precision.
      */
-    private final int EDITOR_PRECISION_DIGITS = 2;
+    private final static int EDITOR_PRECISION_DIGITS = 2;
 
     /**
      * Range constraint or <code>null</code> if not present.
      */
     private DoubleRange constraint;
+
+    /*
+     * 
+     */
+    public DoubleRangeEditor()
+    {
+        super(EDITOR_PRECISION_DIGITS);
+    }
 
     /*
      * 
@@ -59,7 +67,6 @@ public final class DoubleRangeEditor extends NumericRangeEditorBase
         }
 
         setRanges(to_i(min), to_i(max), 
-            EDITOR_PRECISION_DIGITS, 
             to_i(increment), to_i(pageIncrement));
     }
 

@@ -15,7 +15,15 @@ public final class IntegerRangeEditor extends NumericRangeEditorBase
      * Range constraint or <code>null</code> if not present.
      */
     private IntRange constraint;
-    
+
+    /*
+     * 
+     */
+    public IntegerRangeEditor()
+    {
+        super(/* precision digits */ 0);
+    }
+
     /*
      * 
      */
@@ -53,7 +61,7 @@ public final class IntegerRangeEditor extends NumericRangeEditorBase
             pageIncrement = 10;
         }
 
-        setRanges(min, max, 0, increment, pageIncrement);
+        setRanges(min, max, increment, pageIncrement);
     }
 
     /*
