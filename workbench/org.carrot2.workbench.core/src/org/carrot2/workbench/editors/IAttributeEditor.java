@@ -5,40 +5,65 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IPersistableEditor;
 
 /**
- * Attribute editor is a control, that is used to edit and display value of given
- * attribute. The lifecycle of an attribute editor is as follows:
+ * An attribute editor is a visual control which can be used to display and edit the value
+ * of given attribute, described using an {@link AttributeDescriptor}.
+ * <p>
+ * The life cycle of an attribute editor is as follows:
  * <ol>
- * <li>call editor.init(descriptor), if exception is thrown -> stop.
- * <li>call editor.createEditor(parent), if exception -> goto 5
- * <li>call editor.setValue(currentValue), if exception -> goto 5
- * <li>call editor.getValue()
- * <li>call editor.dispose()
+ * <li>call {@link #init(AttributeDescriptor)}, if exception is thrown -> stop.
+ * <li>call {@link #createEditor(Composite, Object)}, if exception -> goto 5
+ * <li>call {@link #setValue(Object)}, if exception -> goto 5
+ * <li>call {@link #getValue()}
+ * <li>call {@link #dispose()}
  * <ol>
  */
 public interface IAttributeEditor extends IPersistableEditor
 {
-
     void init(AttributeDescriptor descriptor);
 
-    String getAttributeKey();
-
+    /**
+     * Create the editor's composite using the given parent. The editor
+     * must set the created composite's layout data to the given object.
+     * 
+     * TODO: Remove layoutData from the interface.
+     */
     void createEditor(Composite parent, Object layoutData);
 
+    /**
+     * Returns the edited attribute key.
+     * 
+     * @see AttributeDescriptor#key
+     */
+    String getAttributeKey();
+
+    /**
+     * Set the editor's current value to the given object, update visual components. 
+     */
     void setValue(Object currentValue);
 
+    /**
+     * Return the current editor's value.
+     */
     Object getValue();
 
+    /**
+     * Dispose visual components and any other resources.
+     */
     void dispose();
 
+    /**
+     * Subscribe to change events. Change events may come in rapid succession.
+     */
     void addAttributeChangeListener(IAttributeListener listener);
 
+    /**
+     * Unsubscribe from change events.
+     */
     void removeAttributeChangeListener(IAttributeListener listener);
 
     /**
-     * If false, than surrounding view must display label for given attribute on it's own.
-     * If true, that label is a part of editor's control.
-     * 
-     * @return
+     * If <code>true</code>, then the editor displays its own label. Otherwise the
+     * containing component must display the edited attribute's label.
      */
     boolean containsLabel();
 

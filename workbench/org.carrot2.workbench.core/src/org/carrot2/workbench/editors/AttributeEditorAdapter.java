@@ -12,8 +12,8 @@ import org.eclipse.ui.IMemento;
  */
 public abstract class AttributeEditorAdapter implements IAttributeEditor
 {
-    /*
-     * 
+    /**
+     * Array of listeners interested in receiving change events from this editor.
      */
     private final List<IAttributeListener> listeners = 
         new CopyOnWriteArrayList<IAttributeListener>();
@@ -31,27 +31,34 @@ public abstract class AttributeEditorAdapter implements IAttributeEditor
         this.descriptor = descriptor;
     }
 
-    /*
-     * 
+    /**
+     * Returns attribute key from the attribute descriptor.
      */
     public String getAttributeKey()
     {
         return this.descriptor.key;
     }
 
-    /*
-     * 
+    /**
+     * Clear listeners array and clean references.
      */
     public void dispose()
     {
         listeners.clear();
+        descriptor = null;
     }
 
+    /*
+     * 
+     */
     public void saveState(IMemento memento)
     {
         // Do nothing.
     }
 
+    /*
+     * 
+     */
     public void restoreState(IMemento memento)
     {
         // Do nothing.
@@ -82,11 +89,12 @@ public abstract class AttributeEditorAdapter implements IAttributeEditor
     }
 
     /*
-     * Re-declare {@link IAttributeEditor} to avoid @Override warnings. 
+     * Re-declare methods from {@link IAttributeEditor} to avoid @Override warnings.
      */
-
     public abstract void createEditor(Composite parent, Object layoutData);
+
     public abstract Object getValue();
+
     public abstract void setValue(Object object);
 
     /**

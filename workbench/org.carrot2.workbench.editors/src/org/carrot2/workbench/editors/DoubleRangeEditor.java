@@ -6,94 +6,83 @@ import org.carrot2.util.RangeUtils;
 import org.carrot2.util.attribute.AttributeDescriptor;
 import org.carrot2.util.attribute.constraint.DoubleRange;
 
-public class DoubleRangeEditor extends RangeEditorBase
+/**
+ * Attribute editor for double values, possibly with {@link DoubleRange} annotations.
+ */
+public final class DoubleRangeEditor extends NumericRangeEditorBase
 {
+    /**
+     * Number of digits of precision.
+     */
+    private final int EDITOR_PRECISION_DIGITS = 2;
+
+    /**
+     * Range constraint or <code>null</code> if not present.
+     */
     private DoubleRange constraint;
 
+    /*
+     * 
+     */
     @Override
     public void init(AttributeDescriptor descriptor)
     {
         super.init(descriptor);
+
         for (Annotation ann : descriptor.constraints)
         {
             if (ann instanceof DoubleRange)
             {
                 constraint = (DoubleRange) ann;
+                break;
             }
         }
+
+        final double min;
+        final double max;
+        final double increment;
+        final double pageIncrement;
+
+        if (constraint != null)
+        {
+            min = constraint.min();
+            max = constraint.max();
+            increment = RangeUtils.getDoubleMinorTicks(min, max);
+            pageIncrement = RangeUtils.getDoubleMajorTicks(min, max);
+        }
+        else
+        {
+            min = Double.MIN_VALUE;
+            max = Double.MAX_VALUE;
+            increment = 1;
+            pageIncrement = 10;
+        }
+
+        setRanges(to_i(min), to_i(max), 
+            EDITOR_PRECISION_DIGITS, 
+            to_i(increment), to_i(pageIncrement));
     }
 
+    /*
+     * 
+     */
     @Override
-    public void setValue(Object currentValue)
+    public void setValue(Object value)
     {
-        setIntValue(convertToInt((Double) currentValue));
+        if (!(value instanceof Number))
+        {
+            return;
+        }
+
+        super.propagateNewValue(to_i(((Number) value).doubleValue()));
     }
 
+    /*
+     * 
+     */
     @Override
     public Object getValue()
     {
-        return convertToDouble(getIntValue());
-    }
-
-    @Override
-    protected int getIncrement()
-    {
-        if (isBounded())
-        {
-            return convertToInt(RangeUtils.getDoubleMinorTicks(constraint.min(),
-                constraint.max()));
-        }
-        else
-        {
-            return convertToInt(1);
-        }
-    }
-
-    @Override
-    protected int getMaximum()
-    {
-        return convertToInt(constraint.max());
-    }
-
-    @Override
-    protected int getMinimum()
-    {
-        return convertToInt(constraint.min());
-    }
-
-    @Override
-    protected int getPageIncrement()
-    {
-        if (isBounded())
-        {
-            return convertToInt(RangeUtils.getDoubleMajorTicks(constraint.min(),
-                constraint.max()));
-        }
-        else
-        {
-            return convertToInt(10);
-        }
-    }
-
-    private int convertToInt(double doubleValue)
-    {
-        return Math.round((float) ((Math.pow(10, getDigits()) * doubleValue)));
-    }
-
-    private double convertToDouble(int intValue)
-    {
-        return (intValue / Math.pow(10, getDigits()));
-    }
-
-    @Override
-    protected boolean isBounded()
-    {
-        return (constraint.max() < Double.MAX_VALUE);
-    }
-
-    @Override
-    protected int getDigits()
-    {
-        return 2;
+        return to_d((Integer) super.getValue());
     }
 }
