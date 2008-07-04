@@ -165,12 +165,20 @@ public final class AttributeEditorGroups extends SharedScrolledComposite
          * the control to separate from the next group
          */
         final Composite inner = new Composite(group, SWT.NONE);
-        final RowLayout layout = new RowLayout(SWT.VERTICAL);
+        final GridLayout layout = new GridLayout();
+        layout.numColumns = 1;
         layout.marginBottom = GROUP_VSPACE;
         inner.setLayout(layout);
 
         final AttributeEditorList editorList = 
             new AttributeEditorList(inner, attributes, descriptor.type);
+        
+        final GridData data = new GridData();
+        data.horizontalAlignment = GridData.FILL;
+        data.verticalAlignment = GridData.FILL;
+        data.grabExcessHorizontalSpace = true;
+        data.grabExcessVerticalSpace = false;
+        editorList.setLayoutData(data);
 
         /*
          * Update mapping between attribute keys and editors (for event routing).
