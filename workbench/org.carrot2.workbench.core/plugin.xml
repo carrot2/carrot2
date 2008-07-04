@@ -149,6 +149,17 @@
                toolbarPath="Search"
                tooltip="Restart processing of editor input">
          </action>
+         <action
+               class="org.carrot2.workbench.core.ui.actions.AutoUpdateActionDelegate"
+               disabledIcon="icons/autoupdate_d.gif"
+               icon="icons/autoupdate_e.gif"
+               id="org.carrot2.workbench.core.ui.actions.AutoUpdateAction"
+               label="&amp;Restart Processing Automatically"
+               menubarPath="org.carrot2.workbench.menus.searchMenu/processing"
+               style="toggle"
+               toolbarPath="Search"
+               tooltip="Automatically restarts processing after attributes change">
+         </action>
          <menu
                id="org.carrot2.workbench.menus.searchMenu"
                label="&amp;Search"

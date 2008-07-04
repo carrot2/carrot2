@@ -78,6 +78,13 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     }
 
     /**
+     * A public event identifier related to auto-update property.
+     * 
+     * @see #isAutoUpdate()
+     */
+    public static final int PROP_AUTO_UPDATE = 0;
+
+    /**
      * Most recent save options.
      */
     private SaveOptions saveOptions;
@@ -91,6 +98,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     private static final String SECTION_NAME = "name";
     private static final String SECTION_WEIGHT = "weight";
     private static final String SECTION_VISIBLE = "visible";
+    private static final String SECTION_AUTO_UPDATE = "auto-update";
 
     /**
      * Sections (panels) present inside the editor.
@@ -149,6 +157,12 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
      * @see #reprocess()
      */
     private SearchJob searchJob;
+
+    /**
+     * If <code>true</code>, then changes on attributes automatically trigger re-processing
+     * of the search result.
+     */
+    private boolean autoUpdate = true;
 
     /*
      * 
@@ -301,6 +315,8 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     {
         if (memento != null)
         {
+            memento.putString(SECTION_AUTO_UPDATE, Boolean.toString(autoUpdate));
+
             final IMemento sectionsMemento = memento.createChild(MEMENTO_SECTIONS);
             final int [] weights = this.sashForm.getWeights();
             int i = 0;
@@ -323,6 +339,8 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     {
         if (state != null && state.getChild(MEMENTO_SECTIONS) != null)
         {
+            this.autoUpdate = Boolean.valueOf(state.getString(SECTION_AUTO_UPDATE)); 
+            
             final IMemento sectionsMemento = state.getChild(MEMENTO_SECTIONS);
             for (IMemento sectionMemento : sectionsMemento.getChildren(MEMENTO_SECTION))
             {
@@ -429,6 +447,15 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     {
         return true;
     }
+    
+    /*
+     * Don't require save-on-close.
+     */
+    @Override
+    public boolean isSaveOnCloseNeeded()
+    {
+        return false;
+    }
 
     /*
      * 
@@ -446,6 +473,34 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     {
         this.dirty = value;
         firePropertyChange(PROP_DIRTY);
+    }
+
+    /**
+     * Returns the current auto-update property value.
+     */
+    public boolean isAutoUpdate()
+    {
+        return this.autoUpdate;
+    }
+
+    /**
+     * Sets the new auto-update property value. Note that setting
+     * auto-update to <code>true</code> will cause re-processing
+     * if the editor is in the dirty state.
+     */
+    public void setAutoUpdate(boolean autoUpdate)
+    {
+        if (this.autoUpdate == autoUpdate)
+            return;
+
+        this.autoUpdate = autoUpdate;
+
+        if (isDirty() && autoUpdate)
+        {
+            reprocess();
+        }
+
+        firePropertyChange(PROP_AUTO_UPDATE);
     }
 
     /**
@@ -509,19 +564,6 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     private void createActions()
     {
         final IToolBarManager toolbar = rootForm.getToolBarManager();
-
-        /*
-         * Install live-update trigger. 
-         */
-
-        /*
-         * TODO: Add live-update action button and event trigger here.
-         * The trigger should be hooked up to SearchInput's event stream
-         * and update a timer that would spawn a job when the count 
-         * down reaches zero.
-         */
-
-        toolbar.add(new Separator());
 
         /*
          * TODO: Add toggle buttons instead of a menu here?
@@ -591,7 +633,62 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
                 setDirty(true);
             }
         });
-        
+
+        /*
+         * Set up an event callback to spawn auto-update jobs on changes to attributes. This may
+         * look a bit over-the-top, but it's a pattern taken from Eclipse SDK... 
+         */
+        this.getSearchResult().getInput().addAttributeChangeListener(new IAttributeListener()
+        {
+            private final Object jobLock = new Object();
+            private Job job;
+
+            private final Runnable updater = new Runnable() {
+                public void run()
+                {
+                    reprocess();
+                }
+            };
+
+            public void attributeChange(AttributeChangedEvent event)
+            {
+                final int AUTO_UPDATE_DELAY = 1000;
+                if (isAutoUpdate())
+                {
+                    final Job newJob = new Job("Auto update (delayed)...") {
+                        protected IStatus run(IProgressMonitor monitor)
+                        {
+                            synchronized (jobLock)
+                            {
+                                if (job == this) 
+                                {
+                                    Utils.asyncExec(updater);
+                                }
+                            }
+                            return Status.OK_STATUS;
+                        }
+                    };
+                    newJob.setPriority(Job.INTERACTIVE);
+
+                    // System jobs are not visible in the GUI. I leave it for now, it's quite
+                    // interesting to see auto update tasks in the jobs panel.
+                    // newJob.setSystem(true);
+
+                    synchronized (jobLock)
+                    {
+                        // Cancel previous job.
+                        if (job != null && job.getState() == Job.SLEEPING)
+                        {
+                            job.cancel();
+                        }
+
+                        job = newJob;
+                        job.schedule(AUTO_UPDATE_DELAY);
+                    }
+                }
+            }
+        });
+
         /*
          * Install a synchronization agent between the current selection in the editor and
          * the document list panel.
@@ -766,13 +863,15 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
      */
     private void createJobs()
     {
+        /*
+         * Create search job.
+         */
+
         final String title = getAbbreviatedInputTitle(searchResult.getInput());
         this.searchJob = new SearchJob(
             "Searching for '" + title + "'...", searchResult);
 
-        /*
-         * I assume search jobs qualify as 'long' jobs (over one second).
-         */
+        // I assume search jobs qualify as 'long' jobs (over one second).
         this.searchJob.setPriority(Job.LONG);
 
         /*
