@@ -2,15 +2,6 @@
 <?eclipse version="3.2"?>
 <plugin>
    <extension
-         id="id1"
-         point="org.carrot2.core.algorithm">
-      <algorithm
-            class="org.carrot2.workbench.editors.temp.TempClusteringAlgorithm"
-            icon="icons/web.gif"
-            label="Temp ">
-      </algorithm>
-   </extension>
-   <extension
          id="basic"
          name="Basic Editors"
          point="org.carrot2.workbench.core.attributeEditor">
