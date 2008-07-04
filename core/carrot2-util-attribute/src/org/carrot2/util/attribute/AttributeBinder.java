@@ -28,36 +28,44 @@ public class AttributeBinder
 
     /**
      * Performs binding (setting or collecting) of {@link Attribute} values on the
-     * provided <code>instance</code>. The direction of binding, i.e. whether
-     * attributes will be set or collected from the <code>object</code> depends on the
-     * provided <code>bindingDirectionAnnotation</code>, which can be either
-     * {@link Input} or {@link Output} for setting and collecting attribute values of the
+     * provided <code>instance</code>. The direction of binding, i.e. whether attributes
+     * will be set or collected from the <code>object</code> depends on the provided
+     * <code>bindingDirectionAnnotation</code>, which can be either {@link Input} or
+     * {@link Output} for setting and collecting attribute values of the
      * <code>object</code>, respectively.
      * <p>
      * Binding will be performed for all attributes of the provided <code>object</code>,
-     * no matter where in the <code>object</code>'s hierarchy the attribute is
-     * declared. Binding will recursively descend into all fields of the
-     * <code>object</code> whose types are marked with {@link Bindable}, no matter
-     * whether these fields are attributes or not.
+     * no matter where in the <code>object</code>'s hierarchy the attribute is declared.
+     * Binding will recursively descend into all fields of the <code>object</code> whose
+     * types are marked with {@link Bindable}, no matter whether these fields are
+     * attributes or not.
      * <p>
-     * Keys of the <code>values</code> map are interpreted as attribute keys as defined
-     * by {@link Attribute#key()}. When setting attribute values, the map must contain
-     * non-<code>null</code> mappings for all {@link Required} attributes that have not
-     * yet been set on the <code>object</code> to a non-<code>null</code> value.
-     * Otherwise an {@link AttributeBindingException} will be thrown. If the map has no
-     * mapping for some non-{@link Required} attribute, the value of that attribute will
-     * not be changed. However, if the map contains a <code>null</code> mapping for some
-     * non-{@link Required} attribute, the value that attribute will be set to
+     * Keys of the <code>values</code> map are interpreted as attribute keys as defined by
+     * {@link Attribute#key()}. When setting attribute values, the map must contain non-
+     * <code>null</code> mappings for all {@link Required} attributes that have not yet
+     * been set on the <code>object</code> to a non-<code>null</code> value. Otherwise an
+     * {@link AttributeBindingException} will be thrown. If the map has no mapping for
+     * some non-{@link Required} attribute, the value of that attribute will not be
+     * changed. However, if the map contains a <code>null</code> mapping for some non-
+     * {@link Required} attribute, the value that attribute will be set to
      * <code>null</code>.
      * <p>
      * When setting attributes, values will be transferred from the map without any
-     * conversion with one exception. If the type of the attribute field is not
-     * {@link Class} and the corresponding value in the <code>values</code> map is of
-     * type {@link Class}, an attempt will be made to coerce the class to a corresponding
-     * instance by calling its parameterless constructor. If the created type is
-     * {@link Bindable}, an attempt will also be made to bind attributes of the newly
-     * created object using the <code>values</code> map, current
-     * <code>bindingDirectionAnnotation</code> and <code>filteringAnnotations</code>.
+     * conversion with two exceptions.
+     * <ol>
+     * <li>If the type of the value is {@link String} and the type of the attribute field
+     * is not {@link String}, the {@link AttributeTransformerFromString} will be applied
+     * to the value prior to transferring it to the attribute field. If you want to bypass
+     * this conversion, use
+     * {@link #bind(Object, AttributeBinderAction[], Class, Class...)}.</li>
+     * <li>If the type of the attribute field is not {@link Class} and the corresponding
+     * value in the <code>values</code> map is of type {@link Class}, an attempt will be
+     * made to coerce the class to a corresponding instance by calling its parameterless
+     * constructor. If the created type is {@link Bindable}, an attempt will also be made
+     * to bind attributes of the newly created object using the <code>values</code> map,
+     * current <code>bindingDirectionAnnotation</code> and
+     * <code>filteringAnnotations</code>.</li>
+     * </ol>
      * <p>
      * Before value of an attribute is set, the new value is checked against all
      * constraints defined for the attribute and must meet all these constraints.
@@ -81,8 +89,8 @@ public class AttributeBinder
      * @throws InstantiationException if coercion of a class attribute value to an
      *             instance fails, e.g. because the parameterless constructor is not
      *             present/ visible.
-     * @throws AttributeBindingException if in the <code>values</code> map there are no
-     *             or <code>null</code> values provided for one or more {@link Required}
+     * @throws AttributeBindingException if in the <code>values</code> map there are no or
+     *             <code>null</code> values provided for one or more {@link Required}
      *             attributes.
      * @throws AttributeBindingException reflection-based setting or reading field values
      *             fails.
@@ -101,7 +109,7 @@ public class AttributeBinder
         throws InstantiationException, AttributeBindingException
     {
         final AttributeBinderActionBind attributeBinderActionBind = new AttributeBinderActionBind(
-            Input.class, values, true);
+            Input.class, values, true, AttributeTransformerFromString.INSTANCE);
         final AttributeBinderAction [] actions = new AttributeBinderAction []
         {
             attributeBinderActionBind,
@@ -127,7 +135,7 @@ public class AttributeBinder
         throws InstantiationException, AttributeBindingException
     {
         final AttributeBinderActionBind attributeBinderActionBind = new AttributeBinderActionBind(
-            Output.class, values, true);
+            Output.class, values, true, AttributeTransformerFromString.INSTANCE);
         final AttributeBinderAction [] actions = new AttributeBinderAction []
         {
             new AttributeBinderActionCollect(Input.class, values),
@@ -263,12 +271,11 @@ public class AttributeBinder
      * Transforms {@link String} attribute values to the types required by the target
      * field by:
      * <ol>
-     * <li>Leaving non-{@link String} typed values unchanged.</li>
-     * <li>Looking for a static <code>valueOf(String)</code> in the target type and
-     * using it for conversion.</li>
-     * <li>If the method is not available, trying to load a class named as the value of
-     * the attribute, so that this class can be further coerced to the class instance.</li>
-     * <li>If the class cannot be loaded, leaving the the value unchanged.</li>
+     * <li>Leaving non-{@link String} typed values unchanged.</li> <li>Looking for a
+     * static <code>valueOf(String)</code> in the target type and using it for conversion.
+     * </li> <li>If the method is not available, trying to load a class named as the value
+     * of the attribute, so that this class can be further coerced to the class instance.
+     * </li> <li>If the class cannot be loaded, leaving the the value unchanged.</li>
      * </ol>
      */
     public static class AttributeTransformerFromString implements AttributeTransformer
