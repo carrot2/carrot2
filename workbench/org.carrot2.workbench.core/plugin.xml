@@ -93,7 +93,7 @@
       <editor
             class="org.carrot2.workbench.core.ui.SearchEditor"
             icon="icons/results.png"
-            id="org.carrot2.workbench.core.editors.results"
+            id="org.carrot2.workbench.core.editors.searchEditor"
             name="Results Editor">
       </editor>
    </extension>
@@ -132,6 +132,54 @@
                id="org.carrot2.workbench.core.perspective.search">
          </perspectiveShortcut>
       </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editorActions">
+      <editorContribution
+            id="org.carrot2.workbench.core.ui.searchEditorActions"
+            targetID="org.carrot2.workbench.core.editors.searchEditor">
+         <action
+               class="org.carrot2.workbench.core.ui.actions.ReprocessActionDelegate"
+               definitionId="org.carrot2.workbench.core.ui.actions.ReprocessCommand"
+               disabledIcon="icons/reprocess_d.gif"
+               icon="icons/reprocess_e.gif"
+               id="org.carrot2.workbench.core.ui.actions.ReprocessAction"
+               label="&amp;Restart Processing"
+               menubarPath="org.carrot2.workbench.menus.searchMenu/processing"
+               toolbarPath="Search"
+               tooltip="Restart processing of editor input">
+         </action>
+         <menu
+               id="org.carrot2.workbench.menus.searchMenu"
+               label="&amp;Search"
+               path="additions">
+            <groupMarker
+                  name="processing">
+            </groupMarker>
+            <separator
+                  name="additions">
+            </separator>
+         </menu>
+      </editorContribution>
+   </extension>
+   <extension
+         id="org.carrot2.workbench.core.ui.bindings"
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="org.carrot2.workbench.core.ui.actions.ReprocessCommand"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="CTRL+F11">
+      </key>
+   </extension>
+   <extension
+         id="org.carrot2.workbench.core.ui.commands"
+         point="org.eclipse.ui.commands">
+      <command
+            description="Restart processing in the currently active editor."
+            id="org.carrot2.workbench.core.ui.actions.ReprocessCommand"
+            name="Restart Processing">
+      </command>
    </extension>
 
 </plugin>

@@ -1,5 +1,6 @@
 package org.carrot2.workbench.core.ui;
 
+import java.io.File;
 import java.util.*;
 import java.util.List;
 
@@ -10,14 +11,18 @@ import org.carrot2.util.attribute.*;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.DisposeBin;
 import org.carrot2.workbench.core.helpers.Utils;
+import org.carrot2.workbench.core.ui.actions.SaveAsXMLActionDelegate;
 import org.carrot2.workbench.editors.AttributeChangedEvent;
 import org.carrot2.workbench.editors.IAttributeListener;
-import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.*;
 import org.eclipse.core.runtime.jobs.*;
 import org.eclipse.jface.action.*;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.*;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.DisposeEvent;
@@ -41,7 +46,41 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     /**
      * Public identifier of this editor.
      */
-    public static final String ID = "org.carrot2.workbench.core.editors.results";
+    public static final String ID = "org.carrot2.workbench.core.editors.searchEditor";
+
+    /**
+     * Options required for {@link #doSave(IProgressMonitor)}.
+     */
+    public static final class SaveOptions implements Cloneable
+    {
+        public String directory;
+        public String fileName;
+        
+        public boolean includeDocuments = true;
+        public boolean includeClusters = true;
+
+        public String getFullPath()
+        {
+            return new File(new File(directory), fileName).getAbsolutePath();
+        }
+
+        public static String sanitizeFileName(String anything)
+        {
+            String result = anything.replaceAll("[^a-zA-Z0-9_\\-.\\s]", "");
+            result = result.trim().replaceAll("[\\s]+", "-");
+            result = result.toLowerCase();
+            if (StringUtils.isEmpty(result))
+            {
+                result = "unnamed";
+            }
+            return result;
+        }
+    }
+
+    /**
+     * Most recent save options.
+     */
+    private SaveOptions saveOptions;
 
     /*
      * Memento attributes and sections.
@@ -103,6 +142,14 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
      */
     private IPostSelectionProvider selectionProvider;
 
+    /**
+     * There is only one {@link SearchJob} assigned to each editor. The job
+     * is re-scheduled when re-processing is required.
+     * 
+     * @see #reprocess()
+     */
+    private SearchJob searchJob;
+
     /*
      * 
      */
@@ -150,9 +197,9 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         this.searchResult.addListener(rootFormTitleUpdater);
         
         /*
-         * Schedule initial processing.
+         * Create jobs and schedule initial processing.
          */
-
+        createJobs();
         reprocess();
     }
 
@@ -160,6 +207,30 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
      * Update part name and root form's title
      */
     private void updatePartHeaders()
+    {
+        final String full = getFullInputTitle(getSearchResult().getInput());
+        final String abbreviated = getAbbreviatedInputTitle(getSearchResult().getInput());
+
+        setPartName(abbreviated);
+        setTitleToolTip(full);
+
+        rootForm.setText(abbreviated);
+    }
+
+    /**
+     * Abbreviates the input's title (and adds an ellipsis at end if needed).
+     */
+    private String getAbbreviatedInputTitle(SearchInput input)
+    {
+        final int MAX_WIDTH = 40;
+        return StringUtils.abbreviate(getFullInputTitle(input), MAX_WIDTH);
+    }
+
+    /**
+     * Attempts to construct an input title from either query attribute
+     * or attributes found in processing results.
+     */
+    private String getFullInputTitle(SearchInput input)
     {
         Object query = this.searchResult.getInput().getAttribute(AttributeNames.QUERY);
 
@@ -182,14 +253,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
             query = "(empty query)";
         }
 
-        final int MAX_WIDTH = 20;
-        final String full = (String) query;
-        final String abbreviated = StringUtils.abbreviate(full, MAX_WIDTH);
-
-        setPartName(abbreviated);
-        setTitleToolTip(full);
-
-        rootForm.setText(abbreviated);
+        return query.toString();
     }
 
     /*
@@ -287,15 +351,75 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
      */
     public void doSave(IProgressMonitor monitor)
     {
-        // Ignore.
+        if (saveOptions == null)
+        {
+            doSaveAs();
+            return;
+        }
+
+        doSave(saveOptions);
     }
 
-    /*
-     * 
+    /**
+     * Show a dialog prompting for file name and options and save the result to
+     * an XML file. 
      */
     public void doSaveAs()
     {
-        // TODO: Implement save and forward to {@link SaveAsXMLAction}?
+        if (isDirty() || this.searchJob.getState() == Job.RUNNING)
+        {
+            final MessageDialog dialog = new MessageDialog(getEditorSite().getShell(),
+                "Modified parameters", null, "Search parameters" +
+                		" have been changed. Save stale results?", MessageDialog.WARNING,
+                		new String[] { IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL }, 0);
+
+            if (dialog.open() == MessageDialog.CANCEL)
+            {
+                return;
+            }
+        }
+
+        SaveOptions newOptions = saveOptions;
+        if (newOptions == null)
+        {
+            newOptions = new SaveOptions();
+            newOptions.fileName = SaveOptions.sanitizeFileName(
+                getFullInputTitle(getSearchResult().getInput())) + ".xml";
+        }
+
+        final Shell shell = this.getEditorSite().getShell();
+        if (new SearchEditorSaveAsDialog(shell, newOptions).open() == Window.OK) 
+        {
+            this.saveOptions = newOptions;
+            doSave(saveOptions);
+        }
+    }
+
+    /**
+     * 
+     */
+    private void doSave(SaveOptions options)
+    {
+        final ProcessingResult result = getSearchResult().getProcessingResult();
+        if (result == null)
+        {
+            Utils.showError(new Status(Status.ERROR, WorkbenchCorePlugin.PLUGIN_ID,
+                "No search result yet."));
+            return;
+        }
+        
+        final IAction saveAction = new SaveAsXMLActionDelegate(result, options);
+        final Job job = new Job("Saving search result...")
+        {
+            @Override
+            protected IStatus run(IProgressMonitor monitor)
+            {
+                saveAction.run();
+                return Status.OK_STATUS;
+            }
+        };
+        job.setPriority(Job.SHORT);
+        job.schedule();
     }
 
     /*
@@ -303,7 +427,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
      */
     public boolean isSaveAsAllowed()
     {
-        return false;
+        return true;
     }
 
     /*
@@ -357,40 +481,18 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
      */
     public void reprocess()
     {
-        setDirty(false);
-
-        final SearchJob job = new SearchJob(searchResult);
-
         /*
-         * Add a job listener to update root form's busy state.
+         * There is a race condition between the search job and the dirty flag. The editor
+         * becomes 'clean' when the search job is initiated, so that further changes of parameters
+         * will simply re-schedule another job after the one started before ends.
+         * 
+         * This may lead to certain inconsistencies between the view
+         * and the attributes (temporal), but is much simpler than 
+         * trying to pool/ cache/ stack dirty tokens and manage them 
+         * in synchronization with running jobs.
          */
-        job.addJobChangeListener(new JobChangeAdapter()
-        {
-            @Override
-            public void aboutToRun(IJobChangeEvent event)
-            {
-                setBusy(true);
-            }
-
-            @Override
-            public void done(IJobChangeEvent event)
-            {
-                setBusy(false);
-            }
-
-            private void setBusy(final boolean busy)
-            {
-                Utils.asyncExec(new Runnable()
-                {
-                    public void run()
-                    {
-                        rootForm.setBusy(busy);
-                    }
-                });
-            }
-        });
-
-        job.schedule();
+        setDirty(false);
+        searchJob.schedule();
     }
 
     /**
@@ -408,28 +510,6 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     {
         final IToolBarManager toolbar = rootForm.getToolBarManager();
 
-        final IAction saveToXML = new SaveAsXMLAction();
-        toolbar.add(saveToXML);
-
-        toolbar.add(new Separator());
-
-        /*
-         * Add reprocess action and hook it to the dirty state of the editor.
-         */
-        final IAction reprocess = new ReprocessAction();
-        toolbar.add(reprocess);
-
-        this.addPropertyListener(new IPropertyListener()
-        {
-            public void propertyChanged(Object source, int propId)
-            {
-                if (propId == PROP_DIRTY)
-                {
-                    reprocess.setEnabled(isDirty());
-                }
-            }
-        });
-
         /*
          * Install live-update trigger. 
          */
@@ -437,7 +517,8 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         /*
          * TODO: Add live-update action button and event trigger here.
          * The trigger should be hooked up to SearchInput's event stream
-         * and update a timer that would spawn a job when the countdown reaches zero.
+         * and update a timer that would spawn a job when the count 
+         * down reaches zero.
          */
 
         toolbar.add(new Separator());
@@ -680,6 +761,50 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
             .not(Internal.class);
     }
 
+    /**
+     * Creates reusable jobs used in the editor.
+     */
+    private void createJobs()
+    {
+        final String title = getAbbreviatedInputTitle(searchResult.getInput());
+        this.searchJob = new SearchJob(
+            "Searching for '" + title + "'...", searchResult);
+
+        /*
+         * I assume search jobs qualify as 'long' jobs (over one second).
+         */
+        this.searchJob.setPriority(Job.LONG);
+
+        /*
+         * Add a job listener to update root form's busy state.
+         */
+        searchJob.addJobChangeListener(new JobChangeAdapter()
+        {
+            @Override
+            public void aboutToRun(IJobChangeEvent event)
+            {
+                setBusy(true);
+            }
+
+            @Override
+            public void done(IJobChangeEvent event)
+            {
+                setBusy(false);
+            }
+
+            private void setBusy(final boolean busy)
+            {
+                Utils.asyncExec(new Runnable()
+                {
+                    public void run()
+                    {
+                        rootForm.setBusy(busy);
+                    }
+                });
+            }
+        });
+    }
+    
     /*
      * 
      */

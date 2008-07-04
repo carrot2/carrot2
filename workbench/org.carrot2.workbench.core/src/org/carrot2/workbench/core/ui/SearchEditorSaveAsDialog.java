@@ -6,7 +6,9 @@ import static org.eclipse.swt.SWT.Selection;
 
 import java.io.File;
 
+import org.apache.commons.lang.StringUtils;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
+import org.carrot2.workbench.core.ui.SearchEditor.SaveOptions;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TrayDialog;
 import org.eclipse.swt.SWT;
@@ -15,53 +17,38 @@ import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.*;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
 /**
  * Displays a dialog prompting for the location of the output XML file
  * and options indicating what to save (clusters, documents or both).
  */
-final class SaveAsXMLDialog extends TrayDialog
+final class SearchEditorSaveAsDialog extends TrayDialog
 {
-    private static final String LAST_PATH_PREF = "action.saveToXml.LastPathChosen";
+    /**
+     * Global most recent path in case the editor did not have a previous one.
+     */
+    private static final String GLOBAL_PATH_PREF = 
+        SearchEditorSaveAsDialog.class.getName() + ".savePath";
+
+    private Text fileNameText;
+    private Button browseButton;
 
     private Button clusterOption;
     private Button docOption;
-    private Button dialogButton;
-    private Text fileNameText;
-    private boolean docSelected;
-    private boolean clustersSelected;
-    private String filePath;
-    private String initialFileName;
 
-    public SaveAsXMLDialog(Shell parentShell, String query)
+    /**
+     * Save options.
+     */
+    public SaveOptions options;
+
+    /*
+     * 
+     */
+    public SearchEditorSaveAsDialog(Shell parentShell, SearchEditor.SaveOptions options)
     {
         super(parentShell);
-        initialFileName = convertToFileName(query) + ".xml";
-    }
-
-    public boolean saveDocuments()
-    {
-        return docSelected;
-    }
-
-    public boolean saveClusters()
-    {
-        return clustersSelected;
-    }
-
-    public String getFilePath()
-    {
-        return filePath;
-    }
-    
-    private static String convertToFileName(String baseString)
-    {
-        String result = baseString.replaceAll("[^a-zA-Z0-9\\s]", "");
-        result = result.replaceAll("[\\s]+", "-");
-        result = result.toLowerCase();
-        return result;
+        this.options = options;
     }
 
     @Override
@@ -82,33 +69,49 @@ final class SaveAsXMLDialog extends TrayDialog
     @Override
     protected void okPressed()
     {
-        docSelected = docOption.getSelection();
-        clustersSelected = clusterOption.getSelection();
-        filePath = fileNameText.getText();
-        WorkbenchCorePlugin.getDefault().getPluginPreferences().setValue(LAST_PATH_PREF,
-            new File(filePath).getParent());
+        WorkbenchCorePlugin.getDefault().getPluginPreferences()
+            .setValue(GLOBAL_PATH_PREF, options.directory);
+
+        final File f = new File(this.fileNameText.getText());
+        options.directory = f.getParent();
+        options.fileName = f.getName();
+        options.includeClusters = clusterOption.getSelection();
+        options.includeDocuments = docOption.getSelection();
+
         super.okPressed();
     }
 
+    /*
+     * 
+     */
     @Override
     protected Control createDialogArea(Composite parent)
     {
-        Composite root = (Composite) super.createDialogArea(parent);
-
+        final Composite root = (Composite) super.createDialogArea(parent);
         createControls(root);
-        String lastChosenPath =
-            WorkbenchCorePlugin.getDefault().getPluginPreferences().getString(LAST_PATH_PREF);
-        if (lastChosenPath.length() != 0)
+
+        if (options.directory == null)
         {
-            fileNameText.setText(new File(lastChosenPath, initialFileName)
-                .getAbsolutePath());
+            options.directory = WorkbenchCorePlugin.getDefault().getPluginPreferences()
+                .getString(GLOBAL_PATH_PREF);
+
+            if (StringUtils.isEmpty(options.directory))
+            {
+                final File home = new File(System.getProperty("user.home", "."));
+                options.directory = home.getAbsolutePath();
+            }
         }
-        dialogButton.addListener(Selection, new Listener()
+
+        fileNameText.setText(options.getFullPath());
+
+        browseButton.addListener(Selection, new Listener()
         {
             public void handleEvent(Event event)
             {
-                FileDialog dialog = new FileDialog(Display.getDefault().getActiveShell());
-                dialog.setFileName(fileNameText.getText());
+                final FileDialog dialog = new FileDialog(
+                    PlatformUI.getWorkbench().getDisplay().getActiveShell());
+
+                dialog.setFileName(options.getFullPath());
                 dialog.setFilterExtensions(new String []
                 {
                     "*.xml", "*.*"
@@ -117,6 +120,7 @@ final class SaveAsXMLDialog extends TrayDialog
                 {
                     "XML Files", "All Files"
                 });
+
                 String newPath = dialog.open();
                 if (newPath != null)
                 {
@@ -124,6 +128,7 @@ final class SaveAsXMLDialog extends TrayDialog
                 }
             }
         });
+
         Listener correctnessChecker = new Listener()
         {
             public void handleEvent(Event event)
@@ -131,34 +136,47 @@ final class SaveAsXMLDialog extends TrayDialog
                 validateInput();
             }
         };
+
         docOption.addListener(Selection, correctnessChecker);
         clusterOption.addListener(Selection, correctnessChecker);
         fileNameText.addListener(Modify, correctnessChecker);
         return root;
     }
 
+    /*
+     * 
+     */
     private void validateInput()
     {
-        if ((!docOption.getSelection() && !clusterOption.getSelection())
-            || isBlank(fileNameText.getText()))
+        boolean invalid = false;
+        
+        invalid |= (docOption.getSelection() == false && clusterOption.getSelection() == false);
+
+        if (isBlank(fileNameText.getText()))
         {
-            getButton(IDialogConstants.OK_ID).setEnabled(false);
+            invalid = true;
         }
-        else if (!getButton(IDialogConstants.OK_ID).isEnabled())
+        else
         {
-            getButton(IDialogConstants.OK_ID).setEnabled(true);
+            invalid |= (!new File(fileNameText.getText()).getAbsoluteFile().getParentFile().isDirectory());            
         }
+
+        getButton(IDialogConstants.OK_ID).setEnabled(!invalid);
     }
 
+    /*
+     * 
+     */
     private void createControls(Composite root)
     {
-        GridLayout parentLayout = new GridLayout();
+        final GridLayout parentLayout = (GridLayout) root.getLayout();
+
         parentLayout.numColumns = 3;
-        parentLayout.horizontalSpacing = 0;
+
         root.setLayout(parentLayout);
         {
             Label fileNameLabel = new Label(root, SWT.NONE);
-            fileNameLabel.setText("File Name:");
+            fileNameLabel.setText("Location:");
         }
         {
             GridData fileNameTextLData = new GridData();
@@ -171,20 +189,21 @@ final class SaveAsXMLDialog extends TrayDialog
             fileNameText.setLayoutData(fileNameTextLData);
         }
         {
-            dialogButton = new Button(root, SWT.PUSH | SWT.CENTER | SWT.FLAT);
+            browseButton = new Button(root, SWT.NONE);
             GridData dialogButtonLData = new GridData();
             dialogButtonLData.horizontalAlignment = GridData.FILL;
             dialogButtonLData.verticalAlignment = GridData.FILL;
-            dialogButton.setLayoutData(dialogButtonLData);
-            dialogButton.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(
-                ISharedImages.IMG_OBJ_FOLDER));
+            browseButton.setText("Browse...");
+            dialogButtonLData.widthHint = browseButton.computeSize(SWT.DEFAULT, SWT.DEFAULT).x
+                + 2 * IDialogConstants.BUTTON_MARGIN;
+            browseButton.setLayoutData(dialogButtonLData);
         }
         {
             docOption = new Button(root, SWT.CHECK | SWT.LEFT);
             GridData docOptionLData = new GridData();
             docOptionLData.horizontalSpan = 3;
             docOption.setLayoutData(docOptionLData);
-            docOption.setText("Save documents");
+            docOption.setText("Include documents");
             docOption.setSelection(true);
         }
         {
@@ -192,7 +211,7 @@ final class SaveAsXMLDialog extends TrayDialog
             GridData clusterOptionLData = new GridData();
             clusterOptionLData.horizontalSpan = 3;
             clusterOption.setLayoutData(clusterOptionLData);
-            clusterOption.setText("Save clusters");
+            clusterOption.setText("Include clusters");
             clusterOption.setSelection(true);
         }
     }

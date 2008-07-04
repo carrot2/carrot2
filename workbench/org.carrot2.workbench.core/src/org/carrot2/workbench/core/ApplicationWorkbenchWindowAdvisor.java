@@ -1,5 +1,11 @@
 package org.carrot2.workbench.core;
 
+import java.util.Arrays;
+import java.util.Collection;
+
+import org.apache.log4j.Logger;
+import org.eclipse.jface.action.IContributionItem;
+import org.eclipse.jface.action.ICoolBarManager;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Display;
@@ -25,7 +31,7 @@ final class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
     {
         return new ApplicationActionBarAdvisor(configurer);
     }
-
+    
     /*
      * 
      */
@@ -43,7 +49,35 @@ final class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
         configurer.setShowMenuBar(true);
         configurer.setShowPerspectiveBar(true);
         configurer.setShowProgressIndicator(true);
-        configurer.setShowCoolBar(false);
+        configurer.setShowCoolBar(true);
+    }
+    
+    /*
+     * 
+     */
+    @Override
+    public void postWindowCreate()
+    {
+        /*
+         * Manually remove text editor contributions to the coolbar.
+         * TODO: Is there a nicer way to remove editor contributions in RCP? 
+         */
+
+        final Collection<String> toolbarRemoveItems = Arrays.asList(new String [] {
+            "org.eclipse.ui.edit.text.actionSet.annotationNavigation",
+            "org.eclipse.ui.edit.text.actionSet.navigation"
+        });
+
+        final ICoolBarManager mm = getWindowConfigurer().getActionBarConfigurer().getCoolBarManager();
+        for (IContributionItem item : mm.getItems())
+        {
+            Logger.getLogger(this.getClass()).info("Toolbar contribution: " + item.getId());
+            if (toolbarRemoveItems.contains(item.getId()))
+            {
+                mm.remove(item);
+            }
+        }
+        mm.update(true);
     }
 
     /**

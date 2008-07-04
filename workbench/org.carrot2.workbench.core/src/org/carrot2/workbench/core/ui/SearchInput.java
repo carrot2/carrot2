@@ -132,8 +132,7 @@ public class SearchInput implements IEditorInput, IPersistableElement, IAttribut
      */
     public String getName()
     {
-        return "Search [source: " + this.sourceId + ", algorithm: " + this.algorithmId
-            + "]";
+        return "SearchInput [source: " + this.sourceId + ", algorithm: " + this.algorithmId + "]";
     }
 
     /*
