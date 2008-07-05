@@ -6,7 +6,7 @@
   margin-left: 1px;
 }
 
-#clusters ul {
+#clusters li {
   background-repeat: repeat-y;
 }
 
@@ -50,6 +50,10 @@
 
 #clusters li.branch-last > a > span.tree {
   background-color: transparent;
+}
+
+#clusters li.branch-last {
+  background-image: none;
 }
 
 #clusters li.selected > a > span,

@@ -69,7 +69,7 @@
             <xsl:otherwise><xsl:value-of select="substring-after($source-order, ':')" /></xsl:otherwise>
           </xsl:choose>
         </xsl:variable>
-        
+       
         <xsl:call-template name="source">
           <xsl:with-param name="source-id" select="$source-id" />
           <xsl:with-param name="is-active" select="$source-id = $active-source-id" />

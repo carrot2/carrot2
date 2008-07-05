@@ -50,11 +50,10 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
     /**
      * {@link Cluster}s created by the algorithm.
      */
-    @SuppressWarnings("unused")
     @Processing
     @Output
     @Attribute(key = AttributeNames.CLUSTERS)
-    private Collection<Cluster> clusters = null;
+    public Collection<Cluster> clusters = null;
 
     /**
      * Performs by URL clustering.

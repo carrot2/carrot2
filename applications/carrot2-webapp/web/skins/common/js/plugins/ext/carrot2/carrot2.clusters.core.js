@@ -96,7 +96,7 @@
  
   jQuery.fn.segment = function(size) {
     var $lis = this.children("ul").children("li");
-    if ($lis.size() == 0) {
+    if ($lis.size() <= size) {
       return this;
     }
 
@@ -132,7 +132,7 @@
     $li.append(" | ");
     $li.append($showAll);
 
-    $lis.filter(":nth-child(" + size + "n)").after($li);
+    $lis.slice(0, $lis.size() - 1).filter(":nth-child(" + size + "n)").after($li);
     this.children("ul").children("li").slice(size + 1).hide();
 
     return this;

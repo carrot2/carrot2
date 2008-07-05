@@ -8,8 +8,6 @@
 
 #clusters ul {
   line-height: 1.7;
-  background-position: 2px top;
-  background-image: url('../img/tree-trunk.gif'); /** sprite-ref: horiz; sprite-alignment: repeat; sprite-margin-left: 2px; sprite-margin-right: 5px; */
 }
 
 #clusters li a, a#tree-top {
@@ -29,6 +27,8 @@ a#tree-top {
 
 #clusters li {
   padding-left: 18px;
+  background-position: 2px top;
+  background-image: url('../img/tree-trunk.gif'); /** sprite-ref: horiz; sprite-alignment: repeat; sprite-margin-left: 2px; sprite-margin-right: 5px; */
 }
 
 #clusters li > a > span.tree {

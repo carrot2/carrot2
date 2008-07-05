@@ -68,7 +68,9 @@
         else {
           $tabContainer.removeClass("first-active");
         }
-      } else if (i == $tabs.length - 1) {
+      }
+      
+      if (i == $tabs.length - 1) {
         orderSuffix = "-last";
       }
 

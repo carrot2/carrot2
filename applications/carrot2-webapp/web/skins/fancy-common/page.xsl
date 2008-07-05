@@ -3,7 +3,7 @@
   <xsl:include href="../common/page.xsl" />
   <xsl:include href="../common/source-cookies.xsl" />
   
-  <xsl:output indent="no" omit-xml-declaration="yes"
+  <xsl:output indent="no" omit-xml-declaration="yes" method="xml"
        doctype-public="-//W3C//DTD XHTML 1.1//EN"
        doctype-system="http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"
        media-type="text/html" encoding="utf-8" />
@@ -36,7 +36,7 @@ $(document).ready(function() {
   </xsl:template>
   
   <xsl:template match="page" mode="results">
-    <span class="glow-small">
+    <div class="glow-small">
       <div id="results-area" class="{/page/request/@view}">
         <xsl:if test="/page/request/@view != 'visu'">
           <div id="loading-clusters">Loading...</div>
@@ -70,12 +70,18 @@ function clusterClicked(clusterId, docList) {
         <div id="documents-panel"><xsl:comment></xsl:comment></div>
   
         <div id="status-bar">
-          Status bar
+          Query: <b><xsl:value-of select="/page/request/@query" /></b> 
+          -- 
+          Source: <b><xsl:value-of select="/page/config/components/sources/source[@id = /page/request/@source]/label" /></b>
+          <span class="hide"> (<span id="document-count"><xsl:comment></xsl:comment></span> results, <span id="source-time"><xsl:comment></xsl:comment></span> ms)</span>
+          --
+          Clusterer: <b><xsl:value-of select="/page/config/components/algorithms/algorithm[@id = /page/request/@algorithm]/label" /></b> 
+          <span class="hide"> (<span id="algorithm-time"><xsl:comment></xsl:comment></span> ms)</span>
         </div>
       </div>
       
       <xsl:call-template name="glow-spans" />
-    </span>
+    </div>
   </xsl:template>
   
   <xsl:template match="page" mode="query">

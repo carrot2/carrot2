@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 
 import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.util.simplexml.TypeStringValuePair;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.load.*;
 
@@ -11,17 +12,17 @@ import com.google.common.collect.Lists;
 
 /**
  * Encapsulates the results of processing. Provides access to the values of attributes
- * collected after processing and utility methods for obtaining processed documents ({@link #getDocuments()}))
- * and the created clusters ({@link #getClusters()}).
+ * collected after processing and utility methods for obtaining processed documents (
+ * {@link #getDocuments()})) and the created clusters ({@link #getClusters()}).
  */
 @Root(name = "searchresult", strict = false)
 public final class ProcessingResult
 {
     /** Attributes collected after processing */
-    private final Map<String, Object> attributes;
+    private Map<String, Object> attributes;
 
     /** Read-only view of attributes exposed in {@link #getAttributes()} */
-    private final Map<String, Object> attributesView;
+    private Map<String, Object> attributesView;
 
     /**
      * Query field used during serialization/ deserialization, see
@@ -43,6 +44,10 @@ public final class ProcessingResult
      */
     @ElementList(inline = true, required = false)
     private List<Cluster> clusters;
+
+    /** Attributes of this result for serialization/ deserialization purposes. */
+    @ElementMap(name = "attributes", entry = "attribute", key = "key", value = "value", inline = true, attribute = true, required = false)
+    private Map<String, TypeStringValuePair> otherAttributesAsStrings = new HashMap<String, TypeStringValuePair>();
 
     /**
      * Parameterless constructor required for XML serialization/ deserialization.
@@ -101,8 +106,8 @@ public final class ProcessingResult
      * Returns the documents that have been processed. The returned collection is
      * unmodifiable.
      * 
-     * @return documents that have been processed or <code>null</code> if no documents
-     *         are present in the result.
+     * @return documents that have been processed or <code>null</code> if no documents are
+     *         present in the result.
      */
     @SuppressWarnings("unchecked")
     public List<Document> getDocuments()
@@ -122,8 +127,8 @@ public final class ProcessingResult
      * Returns the clusters that have been created during processing. The returned list is
      * unmodifiable.
      * 
-     * @return clusters created during processing or <code>null</code> if no clusters
-     *         were present in the result.
+     * @return clusters created during processing or <code>null</code> if no clusters were
+     *         present in the result.
      */
     @SuppressWarnings("unchecked")
     public List<Cluster> getClusters()
@@ -147,6 +152,15 @@ public final class ProcessingResult
         {
             clusters = Lists.newArrayList(getClusters());
         }
+
+        otherAttributesAsStrings = TypeStringValuePair.toTypeStringValuePairs(attributes);
+        otherAttributesAsStrings.remove(AttributeNames.QUERY);
+        otherAttributesAsStrings.remove(AttributeNames.CLUSTERS);
+        otherAttributesAsStrings.remove(AttributeNames.DOCUMENTS);
+        if (otherAttributesAsStrings.isEmpty())
+        {
+            otherAttributesAsStrings = null;
+        }
     }
 
     /**
@@ -154,8 +168,12 @@ public final class ProcessingResult
      */
     @Commit
     @SuppressWarnings("unused")
-    private void afterDeserialization()
+    private void afterDeserialization() throws Exception
     {
+        attributes = TypeStringValuePair.fromTypeStringValuePairs(
+            new HashMap<String, Object>(), otherAttributesAsStrings);
+        attributesView = Collections.unmodifiableMap(attributes);
+
         attributes.put(AttributeNames.QUERY, query);
         attributes.put(AttributeNames.DOCUMENTS, documents);
         attributes.put(AttributeNames.CLUSTERS, clusters);
@@ -202,7 +220,8 @@ public final class ProcessingResult
     }
 
     /**
-     * Serializes this {@link ProcessingResult} to an XML writer.
+     * Serializes this {@link ProcessingResult} to an XML writer. This method is not
+     * thread-safe, external synchronization must be applied if needed.
      * 
      * @param writer the writer to serialize this {@link ProcessingResult} to. The writer
      *            will <strong>not</strong> be closed.

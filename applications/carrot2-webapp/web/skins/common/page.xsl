@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-  <xsl:output indent="no" omit-xml-declaration="yes"
+  <xsl:output indent="no" omit-xml-declaration="yes" method="xml"
        doctype-public="-//W3C//DTD XHTML 1.1//EN"
        doctype-system="http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"
        media-type="text/html" encoding="utf-8" />
@@ -16,6 +16,7 @@
   <xsl:variable name="algorithm-param" select="/page/config/@algorithm-param" />
   <xsl:variable name="results-param" select="/page/config/@results-param" />
   <xsl:variable name="view-param" select="/page/config/@view-param" />
+  <xsl:variable name="skin-param" select="/page/config/@skin-param" />
   
   <xsl:variable name="search-url-base" select="/page/@search-url-base" />
   <xsl:variable name="view-url-base" select="/page/@view-url-base" />
@@ -115,6 +116,7 @@
             <div id="required">
               <input type="hidden" name="{$source-param}" id="source" value="{/page/request/@source}" />
               <input type="hidden" name="{$view-param}" id="view" value="{/page/request/@view}" />
+              <input type="hidden" name="{$skin-param}" value="{/page/request/@skin}" />
               
               <xsl:apply-templates select=".." mode="query" />
               <xsl:apply-templates select=".." mode="search" />
@@ -299,6 +301,11 @@
   <xsl:template match="page[@type = 'DOCUMENTS']">
     <div id="documents">
       <xsl:apply-templates select="searchresult/document" />
+  
+      <script>
+        var fetchedDocumentsCount = <xsl:value-of select="count(searchresult/document)" />;
+        var sourceTime = "<xsl:value-of select="searchresult/attribute[@key = 'processing-time-source']/value/@value" />";
+      </script>
     </div>
   </xsl:template>
 
@@ -352,6 +359,7 @@
         var documents = {
           <xsl:apply-templates select="searchresult/group" mode="json" />
         };
+        var algorithmTime = "<xsl:value-of select="searchresult/attribute[@key = 'processing-time-algorithm']/value/@value" />";
       </script>
     </div>
   </xsl:template>
