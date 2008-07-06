@@ -478,4 +478,17 @@
          install-size="0"
          version="0.0.0"/>
 
+   <plugin
+         id="cern.colt"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.carrot2.algorithm.lingo"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
 </feature>

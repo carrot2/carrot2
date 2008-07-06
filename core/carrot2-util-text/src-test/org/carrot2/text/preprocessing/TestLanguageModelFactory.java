@@ -2,7 +2,7 @@ package org.carrot2.text.preprocessing;
 
 import org.carrot2.text.linguistic.*;
 
-final class TestLanguageModelFactory implements LanguageModelFactory
+public final class TestLanguageModelFactory implements LanguageModelFactory
 {
     private static final TestLanguageModel TEST_LANGUAGE_MODEL = new TestLanguageModel();
 

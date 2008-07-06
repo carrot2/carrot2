@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         id="id1"
+         point="org.carrot2.core.algorithm">
+      <algorithm
+            class="org.carrot2.clustering.lingo.LingoClusteringAlgorithm"
+            icon="icons/lingo.png"
+            label="Lingo Clustering">
+      </algorithm>
+   </extension>
+
+</plugin>

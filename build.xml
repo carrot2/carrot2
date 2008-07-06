@@ -156,6 +156,7 @@
 
     <target name="attributes" depends="compile">
         <property name="common.attribute.names.source.path" location="core/carrot2-core/src/org/carrot2/core/attribute/AttributeNames.java" />
+        <attributes-xml java.source="core/carrot2-algorithm-lingo/src" output.dir="${build.dir}" />
         <attributes-xml java.source="core/carrot2-algorithm-stc/src" output.dir="${build.dir}" />
         <attributes-xml java.source="core/carrot2-algorithm-synthetic/src" output.dir="${build.dir}" />
         <attributes-xml java.source="core/carrot2-core/src" output.dir="${build.dir}" />
@@ -169,6 +170,7 @@
 
     <target name="attributes-eclipse" depends="compile">
         <property name="common.attribute.names.source.path" location="core/carrot2-core/src/org/carrot2/core/attribute/AttributeNames.java" />
+        <attributes-xml-copy java.source="core/carrot2-algorithm-lingo/src" output.dir="core/carrot2-algorithm-lingo/tmp/eclipse" copy.to="core/carrot2-algorithm-lingo/META-INF" />
         <attributes-xml-copy java.source="core/carrot2-algorithm-stc/src" output.dir="core/carrot2-algorithm-stc/tmp/eclipse" copy.to="core/carrot2-algorithm-stc/META-INF" />
         <attributes-xml-copy java.source="core/carrot2-algorithm-synthetic/src" output.dir="core/carrot2-algorithm-synthetic/tmp/eclipse" copy.to="core/carrot2-algorithm-synthetic/META-INF" />
         <attributes-xml-copy java.source="core/carrot2-core/src" output.dir="core/carrot2-core/tmp/eclipse" copy.to="core/carrot2-core/META-INF" />

@@ -212,6 +212,7 @@
 	<!-- Steps to do before running assemble. -->
 	<!-- ===================================================================== -->
 	<target name="preAssemble">
+		<buildMetadata project.loc="${buildDirectory}/plugins/carrot2-algorithm-lingo" />
 		<buildMetadata project.loc="${buildDirectory}/plugins/carrot2-algorithm-stc" />
 		<buildMetadata project.loc="${buildDirectory}/plugins/org.carrot2.workbench.editors" />
 		<buildMetadata project.loc="${buildDirectory}/plugins/carrot2-algorithm-synthetic" />

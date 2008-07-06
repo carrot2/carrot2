@@ -15,7 +15,7 @@ public abstract class SingleLabelFilterBase implements LabelFilter
             return;
         }
 
-        for (int wordIndex = 0; wordIndex < context.allWords.image.length; wordIndex++)
+        for (int wordIndex = 0; wordIndex < acceptedWords.length; wordIndex++)
         {
             if (acceptedWords[wordIndex])
             {
@@ -23,7 +23,7 @@ public abstract class SingleLabelFilterBase implements LabelFilter
             }
         }
 
-        for (int phraseIndex = 0; phraseIndex < context.allPhrases.wordIndices.length; phraseIndex++)
+        for (int phraseIndex = 0; phraseIndex < acceptedPhrases.length; phraseIndex++)
         {
             if (acceptedPhrases[phraseIndex])
             {

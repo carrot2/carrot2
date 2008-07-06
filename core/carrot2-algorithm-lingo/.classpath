@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="var" path="CLOVER_RUNTIME"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="src-test"/>
+	<classpathentry exported="true" kind="lib" path="META-INF"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-core"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/cern.colt"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-text"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.fest"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="output" path="tmp/eclipse"/>
+</classpath>

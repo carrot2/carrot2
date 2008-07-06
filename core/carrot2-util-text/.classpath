@@ -12,6 +12,6 @@
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-util-common"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-core"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-stemmer-snowball"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/bak.pcj"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/bak.pcj"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>

@@ -34,10 +34,10 @@ public final class PreprocessingContext
     };
 
     /** A list of documents to process. */
-    final List<Document> documents;
+    public final List<Document> documents;
 
     /** Language model to be used */
-    final LanguageModel language;
+    public final LanguageModel language;
 
     /**
      * Creates a preprocessing context for the provided <code>documents</code> and with

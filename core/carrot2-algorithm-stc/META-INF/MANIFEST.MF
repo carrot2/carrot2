@@ -8,6 +8,5 @@ Require-Bundle: org.carrot2.core,
  org.carrot2.util.common,
  org.carrot2.text
 Bundle-ClassPath: META-INF/,
- .,
- src-resources/
+ .
 Bundle-Vendor: Carrot2.org

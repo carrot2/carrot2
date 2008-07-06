@@ -46,7 +46,7 @@ public class LabelFilterProcessor
      */
     public void process(PreprocessingContext context)
     {
-        final boolean [] acceptedWords = new boolean [context.allWords.image.length];
+        final boolean [] acceptedWords = new boolean [context.allStems.image.length];
         final boolean [] acceptedPhrases = new boolean [context.allPhrases.tf.length];
         Arrays.fill(acceptedWords, true);
         Arrays.fill(acceptedPhrases, true);
@@ -57,11 +57,12 @@ public class LabelFilterProcessor
         final IntArrayList acceptedFeatures = new IntArrayList(acceptedWords.length
             + acceptedPhrases.length);
 
+        final int [] mostFrequentOriginalWordIndex = context.allStems.mostFrequentOriginalWordIndex;
         for (int i = 0; i < acceptedWords.length; i++)
         {
             if (acceptedWords[i])
             {
-                acceptedFeatures.add(i);
+                acceptedFeatures.add(mostFrequentOriginalWordIndex[i]);
             }
         }
 

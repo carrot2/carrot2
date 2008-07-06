@@ -74,4 +74,17 @@ public class StopWordLabelFilterTest extends LabelFilterTestBase
 
         check(expectedLabelsFeatureIndex);
     }
+
+    @Test
+    public void testStemmedWords()
+    {
+        createDocuments("abc . abc . abc", "abd . abd . abe . abe");
+
+        final int [] expectedLabelsFeatureIndex = new int []
+        {
+            0
+        };
+
+        check(expectedLabelsFeatureIndex);
+    }
 }

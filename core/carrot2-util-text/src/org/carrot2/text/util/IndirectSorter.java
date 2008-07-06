@@ -2,6 +2,7 @@ package org.carrot2.text.util;
 
 import java.util.Comparator;
 
+import bak.pcj.DoubleComparator;
 import bak.pcj.IntComparator;
 
 /**
@@ -36,6 +37,19 @@ public class IndirectSorter
      * <code>comparator</code>.
      */
     public static int [] sort(int [] array, IntComparator comparator)
+    {
+        int [] order = createOrderArray(array.length);
+        quickSort(array, 0, array.length - 1, order, comparator);
+        insertionSort(array, 0, array.length - 1, order, comparator);
+
+        return order;
+    }
+
+    /**
+     * Returns the order of elements in <code>array</code> according to
+     * <code>comparator</code>.
+     */
+    public static int [] sort(double [] array, DoubleComparator comparator)
     {
         int [] order = createOrderArray(array.length);
         quickSort(array, 0, array.length - 1, order, comparator);
@@ -197,6 +211,75 @@ public class IndirectSorter
             int t;
             while (j > lo0
                 && intComparator.compare(array[t = order[j - 1]], array[v]) > 0)
+            {
+                order[j] = t;
+                j--;
+            }
+            order[j] = v;
+        }
+    }
+
+    /**
+     * Internal 2-way Quicksort for <code>double</code>s.
+     */
+    private static void quickSort(double [] array, int l, int r, int [] order,
+        DoubleComparator doubleComparator)
+    {
+        if ((r - l) > M)
+        {
+            int i = (r + l) / 2;
+
+            if (doubleComparator.compare(array[order[l]], array[order[i]]) > 0)
+            {
+                swap(order, l, i);
+            }
+            if (doubleComparator.compare(array[order[l]], array[order[r]]) > 0)
+            {
+                swap(order, l, r);
+            }
+            if (doubleComparator.compare(array[order[i]], array[order[r]]) > 0)
+            {
+                swap(order, i, r);
+            }
+
+            int j = r - 1;
+            swap(order, i, j);
+            i = l;
+            double v = array[order[j]];
+            for (;;)
+            {
+                while (doubleComparator.compare(array[order[++i]], v) < 0)
+                {
+                }
+                while (doubleComparator.compare(array[order[--j]], v) > 0)
+                {
+                }
+                if (j < i)
+                {
+                    break;
+                }
+                swap(order, i, j);
+            }
+            swap(order, i, r - 1);
+
+            quickSort(array, l, j, order, doubleComparator);
+            quickSort(array, i + 1, r, order, doubleComparator);
+        }
+    }
+
+    /**
+     * Internal insertion sort for <code>double</code>s.
+     */
+    private static void insertionSort(double [] array, int lo0, int hi0, int [] order,
+        DoubleComparator doubleComparator)
+    {
+        for (int i = lo0 + 1; i <= hi0; i++)
+        {
+            int v = order[i];
+            int j = i;
+            int t;
+            while (j > lo0
+                && doubleComparator.compare(array[t = order[j - 1]], array[v]) > 0)
             {
                 order[j] = t;
                 j--;

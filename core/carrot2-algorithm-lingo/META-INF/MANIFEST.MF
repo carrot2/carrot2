@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Lingo Clustering Algorithm
+Bundle-SymbolicName: org.carrot2.algorithm.lingo;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Vendor: Carrot2.org
+Require-Bundle: org.carrot2.core;bundle-version="1.0.0",
+ org.carrot2.util.common;bundle-version="1.0.0",
+ org.carrot2.text;bundle-version="1.0.0"
+Bundle-ClassPath: META-INF/,
+ .
