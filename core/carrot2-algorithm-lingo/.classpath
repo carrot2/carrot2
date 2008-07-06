@@ -10,5 +10,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-text"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.fest"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/bak.pcj"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>
