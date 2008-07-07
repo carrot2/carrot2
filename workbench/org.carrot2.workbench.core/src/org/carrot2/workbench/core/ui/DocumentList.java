@@ -23,7 +23,7 @@ import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 /**
  * Simple SWT composite displaying a list of {@link Document} or {@link Cluster} objects.
  * 
- * TODO: Fix document display depending what and how many arguments are passed (different templates).
+ * TODO: [CARROT-277] Fix document display depending what and how many arguments are passed (different templates).
  */
 public final class DocumentList extends Composite
 {
@@ -98,8 +98,6 @@ public final class DocumentList extends Composite
 
     /**
      * Show a template displaying one or more {@link Document}s.
-     * 
-     * TODO: Make it a Cluster... and display all clusters.
      */
     public void show(Document... documents)
     {

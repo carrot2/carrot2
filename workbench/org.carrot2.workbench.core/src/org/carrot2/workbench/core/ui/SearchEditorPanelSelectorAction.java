@@ -1,19 +1,15 @@
-/**
- * 
- */
 package org.carrot2.workbench.core.ui;
 
-import java.util.*;
+import java.util.EnumMap;
+import java.util.EnumSet;
 
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
-import org.eclipse.core.runtime.*;
 import org.eclipse.jface.action.*;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.*;
 
 /**
@@ -22,12 +18,11 @@ import org.eclipse.swt.widgets.*;
 final class SearchEditorPanelSelectorAction extends Action
 {
     /*
-     * Drop-down menu from action.
+     * Drop-down menu associated with this action.
      */
-    private IMenuCreator creator = new IMenuCreator()
+    private IMenuCreator menuCreator = new IMenuCreator()
     {
         private Menu menu;
-        private Collection<Image> images = new ArrayList<Image>();
 
         public Menu getMenu(Control parent)
         {
@@ -36,68 +31,44 @@ final class SearchEditorPanelSelectorAction extends Action
             return menu;
         }
 
+        /*
+         * 
+         */
         public Menu getMenu(Menu parent)
         {
-            menu = new Menu(parent);
-            createItems();
+            if (menu == null)
+            {
+                menu = new Menu(parent);
+                createItems();
+            }
             return menu;
         }
 
+        /*
+         * 
+         */
         private void createItems()
         {
-            /*
-             * TODO: This scans through all the extensions and retrieves an icon for
-             * the panel. Replace with something less awkward?
-             */
-            IExtension ext = Platform.getExtensionRegistry().getExtension(
-                "org.eclipse.ui.views", "org.carrot2.workbench.core.views");
-            final Map<String, ImageDescriptor> icons = new HashMap<String, ImageDescriptor>();
-            for (int i = 0; i < ext.getConfigurationElements().length; i++)
+            for (final SearchEditorSections section : EnumSet.allOf(SearchEditorSections.class))
             {
-                IConfigurationElement view = ext.getConfigurationElements()[i];
-                if (view.getName().equals("view")
-                    && view.getAttribute("icon") != null)
+                final MenuItem mi = new MenuItem(menu, SWT.CHECK);
+                mi.setText(section.name);
+
+                mi.setSelection((Boolean) editor.getSections().get(section).getData("visible"));
+                mi.addSelectionListener(new SelectionAdapter()
                 {
-                    icons.put(view.getAttribute("id"), WorkbenchCorePlugin
-                        .getImageDescriptor(view.getAttribute("icon")));
-                }
+                    @Override
+                    public void widgetSelected(SelectionEvent e)
+                    {
+                        editor.toogleSectionVisibility(section, mi.getSelection());
+                        e.doit = true;
+                    }
+                });
             }
-
-            for (SearchEditorSections section : EnumSet
-                .allOf(SearchEditorSections.class))
-            {
-                createItem(section, icons.get(section.iconID));
-            }
-        }
-
-        private void createItem(final SearchEditorSections section,
-            ImageDescriptor image)
-        {
-            final MenuItem mi = new MenuItem(menu, SWT.CHECK);
-            mi.setText(section.name);
-
-            final Image icon = image.createImage();
-            images.add(icon);
-            mi.setImage(icon);
-            mi.setSelection((Boolean) editor.getSections().get(section).getData("visible"));
-            mi.addSelectionListener(new SelectionAdapter()
-            {
-                @Override
-                public void widgetSelected(SelectionEvent e)
-                {
-                    editor.toogleSectionVisibility(section, mi.getSelection());
-                    e.doit = true;
-                }
-            });
         }
 
         public void dispose()
         {
-            for (Image icon : images)
-            {
-                icon.dispose();
-            }
-
             if (menu != null)
             {
                 menu.dispose();
@@ -125,34 +96,39 @@ final class SearchEditorPanelSelectorAction extends Action
     @Override
     public void run()
     {
-        final EnumMap<SearchEditorSections, Boolean> visibility = new EnumMap<SearchEditorSections, Boolean>(
-            SearchEditorSections.class);
+        final EnumMap<SearchEditorSections, Boolean> visibility = 
+            new EnumMap<SearchEditorSections, Boolean>(SearchEditorSections.class);
 
         for (SearchEditorSections section : EnumSet.allOf(SearchEditorSections.class))
         {
-            visibility.put(section, (Boolean) editor
-                .getSections().get(section).getData("visible"));
+            visibility.put(section, (Boolean) editor.getSections().get(section).getData(
+                "visible"));
         }
 
-        final SearchEditorPanelSelectorDialog dialog = new SearchEditorPanelSelectorDialog(Display
-            .getDefault().getActiveShell(), visibility);
+        final SearchEditorPanelSelectorDialog dialog = new SearchEditorPanelSelectorDialog(
+            Display.getDefault().getActiveShell(), visibility);
 
         if (dialog.open() != Window.CANCEL)
         {
-            for (SearchEditorSections section : EnumSet
-                .allOf(SearchEditorSections.class))
+            for (SearchEditorSections section : EnumSet.allOf(SearchEditorSections.class))
             {
                 editor.toogleSectionVisibility(section, visibility.get(section));
             }
         }
     }
 
+    /*
+     * 
+     */
     @Override
     public IMenuCreator getMenuCreator()
     {
-        return creator;
+        return menuCreator;
     }
 
+    /*
+     * 
+     */
     @Override
     public ImageDescriptor getImageDescriptor()
     {

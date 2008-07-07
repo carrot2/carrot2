@@ -16,7 +16,7 @@ public class AutoUpdateActionDelegate extends ActionDelegate implements
     private IAction action;
 
     /*
-     * TODO: Currently auto-update is a property of an editor. In my view it should
+     * TODO: [CARROT-275] Currently auto-update is a property of an editor. In my view it should
      * be a global setting, though (who'd want to keep separate states for multiple
      * editors)?
      */

@@ -164,6 +164,63 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
      */
     private boolean autoUpdate = true;
 
+    /**
+     * Auto-update listener calls {@link #reprocess()} after attributes change.
+     */
+    private IAttributeListener autoUpdateListener = new IAttributeListener()
+    {
+        private final Object jobLock = new Object();
+        private Job job;
+
+        private final Runnable updater = new Runnable() {
+            public void run()
+            {
+                reprocess();
+            }
+        };
+
+        public void attributeChange(AttributeChangedEvent event)
+        {
+            /*
+             * TODO: [CARROT-276] Make this setting a global preference. 
+             */
+            final int AUTO_UPDATE_DELAY = 1000;
+            if (isAutoUpdate())
+            {
+                final Job newJob = new Job("Auto update (delayed)...") {
+                    protected IStatus run(IProgressMonitor monitor)
+                    {
+                        synchronized (jobLock)
+                        {
+                            if (job == this) 
+                            {
+                                Utils.asyncExec(updater);
+                            }
+                        }
+                        return Status.OK_STATUS;
+                    }
+                };
+                newJob.setPriority(Job.INTERACTIVE);
+
+                // System jobs are not visible in the GUI. I leave it for now, it's quite
+                // interesting to see auto update tasks in the jobs panel.
+                // newJob.setSystem(true);
+
+                synchronized (jobLock)
+                {
+                    // Cancel previous job.
+                    if (job != null && job.getState() == Job.SLEEPING)
+                    {
+                        job.cancel();
+                    }
+
+                    job = newJob;
+                    job.schedule(AUTO_UPDATE_DELAY);
+                }
+            }
+        }
+    };
+
     /*
      * 
      */
@@ -638,56 +695,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
          * Set up an event callback to spawn auto-update jobs on changes to attributes. This may
          * look a bit over-the-top, but it's a pattern taken from Eclipse SDK... 
          */
-        this.getSearchResult().getInput().addAttributeChangeListener(new IAttributeListener()
-        {
-            private final Object jobLock = new Object();
-            private Job job;
-
-            private final Runnable updater = new Runnable() {
-                public void run()
-                {
-                    reprocess();
-                }
-            };
-
-            public void attributeChange(AttributeChangedEvent event)
-            {
-                final int AUTO_UPDATE_DELAY = 1000;
-                if (isAutoUpdate())
-                {
-                    final Job newJob = new Job("Auto update (delayed)...") {
-                        protected IStatus run(IProgressMonitor monitor)
-                        {
-                            synchronized (jobLock)
-                            {
-                                if (job == this) 
-                                {
-                                    Utils.asyncExec(updater);
-                                }
-                            }
-                            return Status.OK_STATUS;
-                        }
-                    };
-                    newJob.setPriority(Job.INTERACTIVE);
-
-                    // System jobs are not visible in the GUI. I leave it for now, it's quite
-                    // interesting to see auto update tasks in the jobs panel.
-                    // newJob.setSystem(true);
-
-                    synchronized (jobLock)
-                    {
-                        // Cancel previous job.
-                        if (job != null && job.getState() == Job.SLEEPING)
-                        {
-                            job.cancel();
-                        }
-
-                        job = newJob;
-                        job.schedule(AUTO_UPDATE_DELAY);
-                    }
-                }
-            }
-        });
+        this.getSearchResult().getInput().addAttributeChangeListener(autoUpdateListener);
 
         /*
          * Install a synchronization agent between the current selection in the editor and
