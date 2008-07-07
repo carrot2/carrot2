@@ -20,8 +20,6 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 
-import com.google.common.collect.Lists;
-
 /**
  * Simple SWT composite displaying a list of {@link Document} or {@link Cluster} objects.
  */
@@ -111,7 +109,7 @@ public final class DocumentList extends Composite
 
             final VelocityContext context = new VelocityContext();
 
-            final Comparator comparator = Document.BY_ID_COMPARATOR;
+            final Comparator<Document> comparator = Document.BY_ID_COMPARATOR;
             context.put("comparator", comparator);
             context.put("clusters", clusters);
 
