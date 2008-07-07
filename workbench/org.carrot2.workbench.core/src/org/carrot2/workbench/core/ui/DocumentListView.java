@@ -2,6 +2,7 @@ package org.carrot2.workbench.core.ui;
 
 import org.carrot2.core.Cluster;
 import org.carrot2.core.ProcessingResult;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -63,9 +64,10 @@ public final class DocumentListView extends PageBookViewBase
         {
             documentList = new DocumentList(parent, SWT.NONE);
 
-            // Register listeners, but also display the current content.
+            // Register listeners and display the current content.
             registerListeners();
-            showProcessingResult();
+            this.selectionSync.selectionChanged(
+                new SelectionChangedEvent(editor, editor.getSelection()));
         }
 
         /*

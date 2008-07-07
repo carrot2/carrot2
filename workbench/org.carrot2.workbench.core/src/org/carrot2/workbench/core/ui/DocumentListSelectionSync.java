@@ -2,7 +2,6 @@ package org.carrot2.workbench.core.ui;
 
 import java.util.ArrayList;
 
-import org.apache.log4j.Logger;
 import org.carrot2.core.*;
 import org.eclipse.jface.viewers.*;
 
@@ -43,10 +42,6 @@ final class DocumentListSelectionSync implements ISelectionChangedListener
     {
         final ISelection selection = event.getSelection();
 
-        Logger.getLogger(DocumentListSelectionSync.class).debug(
-            "Received selection [source=" + event.getSource()
-            + ", receipient: " + this + "]");
-
         // Skip redundant selection events that occur when switching between
         // parts (switching editors, for example).
         if (lastSelection == selection
@@ -73,10 +68,6 @@ final class DocumentListSelectionSync implements ISelectionChangedListener
                     clusters.add(((ClusterWithParent) o).cluster);
                 }
             }
-
-            Logger.getLogger(DocumentListSelectionSync.class).debug(
-                "Applying selection [source=" + event.getSource() + ", selection size: "
-                    + clusters.size() + "]");
 
             if (clusters.size() > 0)
             {
