@@ -1,0 +1,28 @@
+
+#parse("_header.vm")
+
+#*
+	Template displayed on show(Cluster...). 
+	
+	Available variables:
+
+	  clusters
+	  comparator
+*#
+
+#foreach ($cluster in $clusters)
+	<div class="cl">
+		$cluster.getLabel()
+	</div>
+
+	#foreach ($document in $cluster.getAllDocuments($comparator))
+	    <span class="id"> [$document.Id]</span> <a href="${document.getField("url")}"><b>$document.getField("title")</b></a>
+	    <br>
+	    #if ($document.getField("summary") && $document.getField("summary") != "")
+	        $document.getField("summary")<br>
+	    #end
+	    <span class="du">${document.getField("url")}</span><br><br>
+	#end
+#end
+
+#parse("_footer.vm")

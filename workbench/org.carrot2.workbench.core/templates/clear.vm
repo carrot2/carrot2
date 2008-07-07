@@ -1,0 +1,8 @@
+
+#parse("_header.vm")
+
+#*
+	Template displayed on clear() 
+*#
+
+#parse("_footer.vm")

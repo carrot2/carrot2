@@ -1,0 +1,39 @@
+
+#parse("_header.vm")
+
+#*
+	Template displayed on show(ProcessingResult). 
+	
+	Available variables:
+
+	  result
+	  results-total-formatted
+	  query-escaped
+*#
+
+#if ($result)
+    #set ( $totalProcessingSec = ${result.Attributes.processing-time-total} / 1000.0 )
+    #set ( $documents = $result.Documents )
+#end
+
+
+#if ($documents.isEmpty() && $queryEscaped)
+    Your query - <b>&quot;${query-escaped}&quot;</b> - did not return any documents.<br><br> 
+
+    Suggestions:<ul>
+    <li>Make sure all words are spelled correctly.
+    <li>Try different keywords.
+    <li>Try more general keywords.
+    </ul>
+#else
+	#foreach ($document in $documents)
+	    <span class="id"> [$document.Id]</span> <a href="${document.getField("url")}"><b>$document.getField("title")</b></a>
+	    <br>
+	    #if ($document.getField("summary") && $document.getField("summary") != "")
+	        $document.getField("summary")<br>
+	    #end
+	    <span class="du">${document.getField("url")}</span><br><br>
+	#end
+#end
+
+#parse("_footer.vm")

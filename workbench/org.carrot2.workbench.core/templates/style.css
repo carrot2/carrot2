@@ -13,9 +13,10 @@ div.cl, div.status {
 	border-bottom: 1px solid #303030;
 	padding-bottom: 4px;
 	padding-top: 4px;
+	padding-left: 2px;
 	margin-bottom: 6pt;
 }
-		
+
 div.status {
 	text-align: right;
 }

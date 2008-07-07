@@ -20,13 +20,23 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 
+import com.google.common.collect.Lists;
+
 /**
  * Simple SWT composite displaying a list of {@link Document} or {@link Cluster} objects.
- * 
- * TODO: [CARROT-277] Fix document display depending what and how many arguments are passed (different templates).
  */
 public final class DocumentList extends Composite
 {
+    /**
+     * Template displayed in {@link #show(ProcessingResult)}.
+     */
+    private static final String TEMPLATE_PROCESSING_RESULT = "processing-result.vm";
+    
+    /**
+     * Template displayed in {@link #clear()}.
+     */
+    private static final String TEMPLATE_CLEAR = "clear.vm";
+
     /**
      * Lazy velocity initialization flag.
      */
@@ -57,7 +67,8 @@ public final class DocumentList extends Composite
     }
 
     /**
-     * Show a template displaying all results from a {@link ProcessingResult}.
+     * Show a template displaying all results from a {@link ProcessingResult}. We simply
+     * display all documents available (no explicit cluster markers).
      */
     public void show(ProcessingResult result)
     {
@@ -68,43 +79,44 @@ public final class DocumentList extends Composite
         {
             final long total = (Long) result.getAttributes().get(
                 AttributeNames.RESULTS_TOTAL);
-            context.put("results-total-formatted", String.format(Locale.ENGLISH, "%1$,d",
-                total));
+
+            context.put(AttributeNames.RESULTS_TOTAL + "-formatted", 
+                String.format(Locale.ENGLISH, "%1$,d", total));
         }
 
         final String query = (String) result.getAttributes().get("query");
-        context.put("queryEscaped", StringEscapeUtils.escapeHtml(query));
+        context.put("query-escaped", StringEscapeUtils.escapeHtml(query));
 
-        update(context, "documents-list.vm");
+        update(context, TEMPLATE_PROCESSING_RESULT);
     }
 
     /**
      * Show a template displaying one or more {@link Cluster}s.
      */
-    public void show(Cluster... cluster)
+    public void show(Cluster... clusters)
     {
-        if (cluster.length == 0)
+        if (clusters.length == 0)
         {
             clear();
         }
         else
         {
+            /*
+            final List<List<Document>> clusterDocuments = Lists.newArrayList();
+            for (Cluster c : clusters)
+            {
+                clusterDocuments.add(c.getAllDocuments(Document.BY_ID_COMPARATOR));
+            }
+            */
+
             final VelocityContext context = new VelocityContext();
-            context.put("documents", cluster[0].getAllDocuments(Document.BY_ID_COMPARATOR));
-    
-            update(context, "documents-list.vm");
+
+            final Comparator comparator = Document.BY_ID_COMPARATOR;
+            context.put("comparator", comparator);
+            context.put("clusters", clusters);
+
+            update(context, "clusters.vm");
         }
-    }
-
-    /**
-     * Show a template displaying one or more {@link Document}s.
-     */
-    public void show(Document... documents)
-    {
-        final VelocityContext context = new VelocityContext();
-        context.put("documents", Arrays.asList(documents));
-
-        update(context, "documents-list.vm");
     }
 
     /**
@@ -112,7 +124,7 @@ public final class DocumentList extends Composite
      */
     public void clear()
     {
-        update(null, "empty-list.vm");
+        update(null, TEMPLATE_CLEAR);
     }
 
     /*
