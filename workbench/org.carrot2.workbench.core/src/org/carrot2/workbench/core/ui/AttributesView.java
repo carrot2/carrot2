@@ -13,7 +13,7 @@ import org.eclipse.ui.part.Page;
  */
 public final class AttributesView extends PageBookViewBase
 {
-    public static final String ID = "org.carrot2.workbench.core.attributes";
+    public static final String ID = "org.carrot2.workbench.core.views.attributes";
 
     /**
      * A single page internally bound to a concrete editor.

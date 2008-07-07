@@ -59,7 +59,7 @@
          id="views"
          point="org.eclipse.ui.views">
       <view
-            category="org.carrot2.workbench.core.carrot2Category"
+            category="org.carrot2.workbench.core.workbench.category"
             class="org.carrot2.workbench.core.ui.SearchInputView"
             icon="icons/view_search.gif"
             id="org.carrot2.workbench.core.views.search"
@@ -67,7 +67,7 @@
       </view>
       <view
             allowMultiple="false"
-            category="org.carrot2.workbench.core.carrot2Category"
+            category="org.carrot2.workbench.core.workbench.category"
             class="org.carrot2.workbench.core.ui.DocumentListView"
             icon="icons/view_documents.gif"
             id="org.carrot2.workbench.core.views.documents"
@@ -75,23 +75,23 @@
       </view>
       <view
             allowMultiple="false"
-            category="org.carrot2.workbench.core.carrot2Category"
+            category="org.carrot2.workbench.core.workbench.category"
             class="org.carrot2.workbench.core.ui.ClusterTreeView"
             icon="icons/view_clusters.gif"
             id="org.carrot2.workbench.core.views.clusters"
             name="Clusters">
       </view>
-      <category
-            id="org.carrot2.workbench.core.carrot2Category"
-            name="Carrot2">
-      </category>
       <view
-            category="org.carrot2.workbench.core.carrot2Category"
+            category="org.carrot2.workbench.core.workbench.category"
             class="org.carrot2.workbench.core.ui.AttributesView"
             icon="icons/view_attributes.gif"
-            id="org.carrot2.workbench.core.attributes"
+            id="org.carrot2.workbench.core.views.attributes"
             name="Attributes">
       </view>
+      <category
+            id="org.carrot2.workbench.core.workbench.category"
+            name="Carrot2">
+      </category>
    </extension>
    <extension
          point="org.eclipse.ui.editors">
@@ -130,12 +130,30 @@
          <perspectiveShortcut
                id="org.carrot2.workbench.core.perspective.tuning">
          </perspectiveShortcut>
+         <viewShortcut
+               id="org.carrot2.workbench.core.views.documents">
+         </viewShortcut>
+         <viewShortcut
+               id="org.carrot2.workbench.core.views.clusters">
+         </viewShortcut>
+         <viewShortcut
+               id="org.carrot2.workbench.core.views.attributes">
+         </viewShortcut>
       </perspectiveExtension>
       <perspectiveExtension
             targetID="org.carrot2.workbench.core.perspective.tuning">
          <perspectiveShortcut
                id="org.carrot2.workbench.core.perspective.search">
          </perspectiveShortcut>
+         <viewShortcut
+               id="org.carrot2.workbench.core.views.documents">
+         </viewShortcut>
+         <viewShortcut
+               id="org.carrot2.workbench.core.views.clusters">
+         </viewShortcut>
+         <viewShortcut
+               id="org.carrot2.workbench.core.views.attributes">
+         </viewShortcut>
       </perspectiveExtension>
    </extension>
    <extension
