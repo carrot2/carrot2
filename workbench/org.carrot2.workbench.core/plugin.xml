@@ -15,13 +15,13 @@
          point="org.eclipse.ui.perspectives">
       <perspective
             class="org.carrot2.workbench.core.ui.perspectives.SearchPerspective"
-            icon="icons/perspective-search.gif"
+            icon="icons/perspective_search.gif"
             id="org.carrot2.workbench.core.perspective.search"
             name="Search">
       </perspective>
       <perspective
             class="org.carrot2.workbench.core.ui.perspectives.TuningPerspective"
-            icon="icons/perspective-tuning.gif"
+            icon="icons/perspective_tuning.gif"
             id="org.carrot2.workbench.core.perspective.tuning"
             name="Tuning">
       </perspective>
@@ -47,7 +47,7 @@
          </property>
          <property
                name="aboutImage"
-               value="icons/product-logo.png">
+               value="icons/product_logo.png">
          </property>
          <property
                name="preferenceCustomization"
@@ -61,6 +61,7 @@
       <view
             category="org.carrot2.workbench.core.carrot2Category"
             class="org.carrot2.workbench.core.ui.SearchInputView"
+            icon="icons/view_search.gif"
             id="org.carrot2.workbench.core.views.search"
             name="Search">
       </view>

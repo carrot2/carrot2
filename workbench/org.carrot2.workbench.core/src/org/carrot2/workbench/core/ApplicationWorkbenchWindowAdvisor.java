@@ -9,6 +9,7 @@ import org.eclipse.jface.action.ICoolBarManager;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.*;
 import org.eclipse.ui.application.*;
 
 /**
@@ -78,6 +79,27 @@ final class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
             }
         }
         mm.update(true);
+    }
+    
+    /*
+     * 
+     */
+    @Override
+    public void postWindowOpen()
+    {
+        super.postWindowOpen();
+
+        /*
+         * After the Workbench window is opened we eagerly re-activate editors
+         * to initialize tab icons.
+         */
+        for (IWorkbenchWindow window : PlatformUI.getWorkbench().getWorkbenchWindows())
+        {
+            for (IEditorReference editor : window.getActivePage().getEditorReferences())
+            {
+                editor.getEditor(true);
+            }
+        }
     }
 
     /**
