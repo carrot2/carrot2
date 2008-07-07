@@ -156,6 +156,6 @@ final class SearchEditorPanelSelectorAction extends Action
     @Override
     public ImageDescriptor getImageDescriptor()
     {
-        return WorkbenchCorePlugin.getImageDescriptor("icons/sections.gif");
+        return WorkbenchCorePlugin.getImageDescriptor("icons/panels.gif");
     }
 }

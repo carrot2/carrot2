@@ -263,8 +263,8 @@ public class SearchInputView extends ViewPart
     private void fireProcessing()
     {
         /*
-         * TODO: Add checking if all required attributes have values. If not, skip processing.
-         * TODO: Hook this check to the process button and disable it if not.
+         * TODO: [CARROT-241] Add checking if all required attributes have values. 
+         * If not, skip processing. Hook this check to the process button and disable it if not.
          */
 
         final IWorkbenchPage page = SearchInputView.this.getViewSite()
