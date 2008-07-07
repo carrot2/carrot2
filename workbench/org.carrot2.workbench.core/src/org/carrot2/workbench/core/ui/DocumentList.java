@@ -99,14 +99,6 @@ public final class DocumentList extends Composite
         }
         else
         {
-            /*
-            final List<List<Document>> clusterDocuments = Lists.newArrayList();
-            for (Cluster c : clusters)
-            {
-                clusterDocuments.add(c.getAllDocuments(Document.BY_ID_COMPARATOR));
-            }
-            */
-
             final VelocityContext context = new VelocityContext();
 
             final Comparator<Document> comparator = Document.BY_ID_COMPARATOR;
