@@ -63,9 +63,12 @@ public final class ClusterTreeView extends PageBookViewBase
         {
             clusterTree = new ClusterTree(parent, SWT.NONE);
 
-            // Register listeners, but also display the current content.
+            // Register listeners
             registerListeners();
+            
+            // Display the current content and propagate selection.
             showProcessingResult();
+            this.clusterTree.setSelection(editor.getSelection());
         }
 
         /*
