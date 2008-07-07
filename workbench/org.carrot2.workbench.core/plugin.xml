@@ -49,6 +49,10 @@
                name="aboutImage"
                value="icons/product-logo.png">
          </property>
+         <property
+               name="preferenceCustomization"
+               value="plugin_customization.ini">
+         </property>
       </product>
    </extension>
    <extension

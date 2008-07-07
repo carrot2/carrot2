@@ -7,15 +7,15 @@
       plugin="org.carrot2.workbench.core">
 
    <description url="http://www.carrot2.org">
-      Carrot2 clustering and text processing workbench.
+      Carrot2 Workbench for text processing and clustering.
    </description>
 
-   <copyright url="http://www.example.com/copyright">
-      [Enter Copyright Description here.]
+   <copyright url="http://www.carrot2.org">
+      See http://www.carrot2.org/carrot2.LICENSE for copyright information.
    </copyright>
 
-   <license url="http://www.example.com/license">
-      [Enter License Description here.]
+   <license url="http://www.carrot2.org/carrot2.LICENSE">
+      See http://www.carrot2.org/carrot2.LICENSE for license.
    </license>
 
    <requires>
