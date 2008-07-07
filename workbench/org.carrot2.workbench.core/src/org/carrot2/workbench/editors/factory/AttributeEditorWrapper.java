@@ -28,15 +28,10 @@ public abstract class AttributeEditorWrapper
         {
             WorkbenchCorePlugin.getDefault().getLog().log(
                 new OperationStatus(IStatus.ERROR, WorkbenchCorePlugin.PLUGIN_ID, -2,
-                    "Error while initializing attribute editor : "
+                    "Error while initializing attribute editor: "
                         + element.getDeclaringExtension().getContributor().getName(), e));
-
-            /*
-             * TODO: This is a fall-through and it does look weird from the UI -- nothing
-             * happens, but the view does not show. I guess something like an error popup
-             * would be more appropriate to display critical errors?
-             */
         }
+
         return null;
     }
 
