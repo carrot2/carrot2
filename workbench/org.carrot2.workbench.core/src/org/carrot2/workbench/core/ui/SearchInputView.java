@@ -2,12 +2,15 @@ package org.carrot2.workbench.core.ui;
 
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.lang.annotation.Annotation;
 import java.util.*;
 
+import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.ProcessingComponent;
 import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.constraint.ConstraintValidator;
 import org.carrot2.workbench.core.*;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.editors.AttributeChangedEvent;
@@ -211,6 +214,7 @@ public class SearchInputView extends ViewPart
                 public void attributeChange(AttributeChangedEvent event)
                 {
                     sourceAttrs.setAttributeValue(event.key, event.value);
+                    processButton.setEnabled(hasAllRequiredAttributes(getSourceId()));
                 }
             });
         }
@@ -263,13 +267,12 @@ public class SearchInputView extends ViewPart
      */
     private void fireProcessing()
     {
-        /*
-         * TODO: [CARROT-241] Add checking if all required attributes have values. 
-         * If not, skip processing. Hook this check to the process button and disable it if not.
-         */
+        if (!hasAllRequiredAttributes(getSourceId()))
+        {
+            return;
+        }
 
-        final IWorkbenchPage page = SearchInputView.this.getViewSite()
-            .getWorkbenchWindow().getActivePage();
+        final IWorkbenchPage page = getViewSite().getWorkbenchWindow().getActivePage();
 
         /*
          * Clone current attribute values so that they can be freely 
@@ -290,6 +293,68 @@ public class SearchInputView extends ViewPart
                 WorkbenchCorePlugin.PLUGIN_ID, -2, "Editor could not be opened.", x);
             Utils.showError(status);
         }
+    }
+
+    /**
+     * Check if all required {@link Input} attributes of a given source are properly initialized.
+     */
+    private boolean hasAllRequiredAttributes(String sourceId)
+    {
+        final AttributeEditorList attributeEditorList = editors.get(sourceId);
+        final AttributeValueSet values = attributes.get(sourceId);
+        for (AttributeDescriptor d : attributeEditorList.getAttributeDescriptors())
+        {
+            final Object value = values.getAttributeValue(d.key);
+
+            if (!isValid(d, value))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Returns <code>true</code> if the value described by a given attribute descriptor
+     * is valid.
+     */
+    private boolean isValid(AttributeDescriptor d, Object value)
+    {
+        /*
+         * TODO: Should we move this method to AttributeDescriptor? I also see some duplication
+         * with AttributeBinder (the same validation is done there), but no easy way to reuse
+         * that functionality here since we don't have the target object and only care about
+         * a single value.
+         */
+        boolean empty = false;
+
+        if (value == null) empty = true;
+
+        if (value instanceof CharSequence)
+        {
+            if (StringUtils.isEmpty(((CharSequence) value).toString()))
+            {
+                empty = true;
+            }
+        }
+
+        if (d.requiredAttribute && empty)
+        {
+            return false;
+        }
+
+        if (!d.requiredAttribute && empty)
+        {
+            return true;
+        }
+
+        /*
+         * Check constraints.
+         */
+        
+        Annotation [] constraints = d.constraints.toArray(new Annotation [d.constraints.size()]);
+        return ConstraintValidator.isMet(value, constraints).length == 0;
     }
 
     /*
