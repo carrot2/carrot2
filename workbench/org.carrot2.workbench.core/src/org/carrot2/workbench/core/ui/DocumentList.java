@@ -2,20 +2,26 @@ package org.carrot2.workbench.core.ui;
 
 import java.io.StringWriter;
 import java.net.URL;
-import java.util.*;
+import java.util.Comparator;
+import java.util.Locale;
 
+import org.apache.commons.collections.ExtendedProperties;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.Velocity;
 import org.apache.velocity.runtime.RuntimeConstants;
-import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
-import org.carrot2.core.*;
+import org.apache.velocity.runtime.RuntimeInstance;
+import org.carrot2.core.Cluster;
+import org.carrot2.core.Document;
+import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.Utils;
+import org.carrot2.workbench.velocity.BundleResourceLoader;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.browser.*;
+import org.eclipse.swt.browser.Browser;
+import org.eclipse.swt.browser.LocationAdapter;
+import org.eclipse.swt.browser.LocationEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
@@ -25,6 +31,11 @@ import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
  */
 public final class DocumentList extends Composite
 {
+    /**
+     * Bundle folder in which templates are located.
+     */
+    private static final String TEMPLATES_PREFIX = "/templates/";
+
     /**
      * Template displayed in {@link #show(ProcessingResult)}.
      */
@@ -36,6 +47,12 @@ public final class DocumentList extends Composite
     private static final String TEMPLATE_CLEAR = "clear.vm";
 
     /**
+     * Template displayed in {@link #show(Cluster...)}.
+     */
+    private static final String TEMPLATE_CLUSTERS = "clusters.vm";
+    
+
+    /**
      * Lazy velocity initialization flag.
      */
     private static boolean initialized;
@@ -44,6 +61,11 @@ public final class DocumentList extends Composite
      * Internal HTML browser for displaying rendered results.
      */
     private Browser browser;
+
+    /**
+     * Velocity instance for processing templates.
+     */
+    private static RuntimeInstance velocity;
 
     /*
      * 
@@ -56,7 +78,7 @@ public final class DocumentList extends Composite
         {
             if (!initialized)
             {
-                initVelocity();
+                velocity = initVelocity();
                 initialized = true;
             }
         }
@@ -105,7 +127,7 @@ public final class DocumentList extends Composite
             context.put("comparator", comparator);
             context.put("clusters", clusters);
 
-            update(context, "clusters.vm");
+            update(context, TEMPLATE_CLUSTERS);
         }
     }
 
@@ -131,11 +153,10 @@ public final class DocumentList extends Composite
      */
     private void update(VelocityContext context, String templateName)
     {
-        Template template = null;
         StringWriter sw = new StringWriter();
         try
         {
-            template = Velocity.getTemplate(templateName);
+            final Template template = velocity.getTemplate(templateName, "UTF-8");
             template.merge(context, sw);
         }
         catch (Exception e)
@@ -195,19 +216,21 @@ public final class DocumentList extends Composite
     /**
      * Initialize Velocity engine.
      */
-    private static void initVelocity()
+    private static RuntimeInstance initVelocity()
     {
-        final Properties p = new Properties();
-        p.setProperty("resource.loader", "class");
-        p.setProperty("class.resource.loader.class", ClasspathResourceLoader.class
-            .getName());
-    
+        final ExtendedProperties p = new ExtendedProperties();
+        p.setProperty("resource.loader", "bundle");
+        p.setProperty("bundle.resource.loader.instance", 
+            new BundleResourceLoader(WorkbenchCorePlugin.PLUGIN_ID, TEMPLATES_PREFIX));
+
         // Disable separate Velocity logging.
         p.setProperty(RuntimeConstants.RUNTIME_LOG, "");
-    
+
         try
         {
-            Velocity.init(p);
+            final RuntimeInstance velocity = new RuntimeInstance();
+            velocity.setConfiguration(p);
+            return velocity;
         }
         catch (Exception e)
         {
