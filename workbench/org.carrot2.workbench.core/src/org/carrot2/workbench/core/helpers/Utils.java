@@ -1,11 +1,16 @@
 package org.carrot2.workbench.core.helpers;
 
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
-import org.eclipse.core.commands.operations.OperationStatus;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
-import org.eclipse.swt.widgets.*;
-import org.eclipse.ui.*;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 /*
@@ -61,8 +66,22 @@ public final class Utils
      */
     public static void logError(String message, Throwable exception, boolean showError)
     {
-        IStatus status = new OperationStatus(IStatus.ERROR,
+        IStatus status = new Status(IStatus.ERROR,
             WorkbenchCorePlugin.PLUGIN_ID, -1, message, exception);
+        WorkbenchCorePlugin.getDefault().getLog().log(status);
+        if (showError)
+        {
+            showError(status);
+        }
+    }
+
+    /*
+     * 
+     */
+    public static void logError(String message, boolean showError)
+    {
+        final IStatus status = new Status(IStatus.ERROR, 
+            WorkbenchCorePlugin.PLUGIN_ID, message);
         WorkbenchCorePlugin.getDefault().getLog().log(status);
         if (showError)
         {

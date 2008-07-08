@@ -5,11 +5,9 @@ import java.net.URL;
 import java.util.Comparator;
 import java.util.Locale;
 
-import org.apache.commons.collections.ExtendedProperties;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
-import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.RuntimeInstance;
 import org.carrot2.core.Cluster;
 import org.carrot2.core.Document;
@@ -17,7 +15,7 @@ import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.Utils;
-import org.carrot2.workbench.velocity.BundleResourceLoader;
+import org.carrot2.workbench.velocity.VelocityInitializer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.LocationAdapter;
@@ -78,7 +76,8 @@ public final class DocumentList extends Composite
         {
             if (!initialized)
             {
-                velocity = initVelocity();
+                velocity = VelocityInitializer.createInstance(
+                    WorkbenchCorePlugin.PLUGIN_ID, TEMPLATES_PREFIX);
                 initialized = true;
             }
         }
@@ -211,30 +210,5 @@ public final class DocumentList extends Composite
                 event.doit = false;
             }
         });
-    }
-
-    /**
-     * Initialize Velocity engine.
-     */
-    private static RuntimeInstance initVelocity()
-    {
-        final ExtendedProperties p = new ExtendedProperties();
-        p.setProperty("resource.loader", "bundle");
-        p.setProperty("bundle.resource.loader.instance", 
-            new BundleResourceLoader(WorkbenchCorePlugin.PLUGIN_ID, TEMPLATES_PREFIX));
-
-        // Disable separate Velocity logging.
-        p.setProperty(RuntimeConstants.RUNTIME_LOG, "");
-
-        try
-        {
-            final RuntimeInstance velocity = new RuntimeInstance();
-            velocity.setConfiguration(p);
-            return velocity;
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException("Velocity initialization failed.", e);
-        }
     }
 }
