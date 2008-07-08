@@ -36,9 +36,10 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
             -1
         };
         int [][] expectedWordTfByDocument = new int [] [] {};
+        byte [][] expectedFieldIndex = new byte [] [] {};
 
         check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument);
+            expectedWordTfByDocument, expectedFieldIndex);
     }
 
     @Test
@@ -67,9 +68,15 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
                 0, 1
             }
         };
+        byte [][] expectedFieldIndex = new byte [] []
+        {
+            {
+                0
+            }
+        };
 
         check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument);
+            expectedWordTfByDocument, expectedFieldIndex);
     }
 
     @Test
@@ -106,9 +113,21 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
                 0, 1
             }
         };
+        byte [][] expectedFieldIndex = new byte [] []
+        {
+            {
+                0
+            },
+            {
+                0
+            },
+            {
+                0
+            }
+        };
 
         check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument);
+            expectedWordTfByDocument, expectedFieldIndex);
     }
 
     @Test
@@ -145,9 +164,21 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
         {
             0, 1
         };
+        byte [][] expectedFieldIndex = new byte [] []
+        {
+            {
+                0, 1
+            },
+            {
+                0, 1
+            },
+            {
+                0
+            }
+        };
 
         check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument);
+            expectedWordTfByDocument, expectedFieldIndex);
     }
 
     @Test
@@ -176,9 +207,15 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
                 0, 4
             }
         };
+        byte [][] expectedFieldIndex = new byte [] []
+        {
+            {
+                0
+            }
+        };
 
         check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument);
+            expectedWordTfByDocument, expectedFieldIndex);
     }
 
     @Test
@@ -213,9 +250,18 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
                 0, 4
             }
         };
+        byte [][] expectedFieldIndex = new byte [] []
+        {
+            {
+                0
+            },
+            {
+                0
+            }
+        };
 
         check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument);
+            expectedWordTfByDocument, expectedFieldIndex);
     }
 
     @Test
@@ -244,9 +290,15 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
                 0, 6
             }
         };
+        byte [][] expectedFieldIndex = new byte [] []
+        {
+            {
+                0
+            }
+        };
 
         check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument);
+            expectedWordTfByDocument, expectedFieldIndex);
     }
 
     @Test
@@ -285,16 +337,28 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
         {
             0, 1
         };
+        byte [][] expectedFieldIndex = new byte [] []
+        {
+            {
+                0, 1
+            },
+            {
+                0, 1
+            },
+            {
+                0
+            }
+        };
 
         check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument);
+            expectedWordTfByDocument, expectedFieldIndex);
     }
 
     @Test
     public void testDfThresholding()
     {
         caseNormalizer.dfCutoff = 2;
-        createDocuments("a b c", "d e f", "a", "a c");
+        createDocuments("a b c", "d e f", "a c", "a");
 
         char [][] expectedWordImages = createExpectedWordImages(new String []
         {
@@ -308,7 +372,7 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
         int [] expectedWordIndices = new int []
         {
             wordIndices.get("a"), -1, wordIndices.get("c"), -1, -1, -1, -1, -1,
-            wordIndices.get("a"), -1, wordIndices.get("a"), wordIndices.get("c"), -1
+            wordIndices.get("a"), wordIndices.get("c"), -1, wordIndices.get("a"), -1
         };
 
         int [][] expectedWordTfByDocument = new int [2] [];
@@ -320,9 +384,18 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
         {
             0, 1, 1, 1
         };
+        byte [][] expectedFieldIndex = new byte [] []
+        {
+            {
+                0, 1
+            },
+            {
+                0
+            }
+        };
 
         check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument);
+            expectedWordTfByDocument, expectedFieldIndex);
     }
 
     @Test
@@ -356,9 +429,18 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
                 0, 2
             }
         };
+        byte [][] expectedFieldIndex = new byte [] []
+        {
+            {
+                0, 1
+            },
+            {
+                0, 1
+            }
+        };
 
         check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument);
+            expectedWordTfByDocument, expectedFieldIndex);
     }
 
     @Test
@@ -387,9 +469,15 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
                 0, 2
             }
         };
+        byte [][] expectedFieldIndex = new byte [] []
+        {
+            {
+                0
+            }
+        };
 
         check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument);
+            expectedWordTfByDocument, expectedFieldIndex);
     }
 
     @Test
@@ -432,9 +520,21 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
         {
             3, 4
         };
+        byte [][] expectedFieldIndex = new byte [] []
+        {
+            {
+                0, 1
+            },
+            {
+                0, 1
+            },
+            {
+                0, 1
+            }
+        };
 
         check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument);
+            expectedWordTfByDocument, expectedFieldIndex);
     }
 
     protected char [][] createExpectedWordImages(String [] wordImages)
@@ -449,7 +549,8 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
     }
 
     private void check(char [][] expectedWordImages, int [] expectedWordTf,
-        int [] expectedWordIndices, int [][] expectedWordTfByDocument)
+        int [] expectedWordIndices, int [][] expectedWordTfByDocument,
+        byte [][] expectedFieldIndex)
     {
         tokenizer.tokenize(context);
         caseNormalizer.normalize(context);
@@ -461,6 +562,8 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
         assertThat(context.allWords.tf).as("allWords.tf").isEqualTo(expectedWordTf);
         assertThat(context.allWords.tfByDocument).as("allWords.tfByDocument").isEqualTo(
             expectedWordTfByDocument);
+        assertThat(context.allWords.fieldIndices).as("allWords.fieldIndex").isEqualTo(
+            expectedFieldIndex);
     }
 
     @Override

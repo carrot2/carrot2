@@ -203,6 +203,14 @@ public final class PreprocessingContext
          * This array is produced by {@link LanguageModelStemmer}.
          */
         public int [] stemIndex;
+
+        /**
+         * Indices of all fields in which this word appears at least once. Values are
+         * pointers to the {@link AllFields} arrays.
+         * <p>
+         * This array is produced by {@link CaseNormalizer}.
+         */
+        public byte [][] fieldIndices;
     }
 
     /**

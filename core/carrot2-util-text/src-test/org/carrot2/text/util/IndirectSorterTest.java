@@ -106,6 +106,22 @@ public class IndirectSorterTest
     }
 
     @Test
+    public void testObjectLargerArray()
+    {
+        final String [] array = new String []
+        {
+            "17", "16", "15", "14", "13", "12", "11", "10", "09", "08", "07", "06", "05",
+            "04", "03", "02", "01", "00"
+        };
+        final int [] expectedOrder = new int []
+        {
+            0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17
+        };
+
+        check(array, expectedOrder, REVERSED_STRING_COMPARATOR);
+    }
+
+    @Test
     public void testIntEmpty()
     {
         final int [] array = new int [] {};
@@ -169,6 +185,21 @@ public class IndirectSorterTest
         int [] expectedOrder = new int []
         {
             5, 4, 1, 0, 2, 3, 6
+        };
+
+        check(array, expectedOrder, IntComparators.REVERSED_ORDER);
+    }
+
+    @Test
+    public void testIntLargerArray()
+    {
+        final int [] array = new int []
+        {
+            17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0
+        };
+        int [] expectedOrder = new int []
+        {
+            0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17
         };
 
         check(array, expectedOrder, IntComparators.REVERSED_ORDER);
@@ -268,6 +299,21 @@ public class IndirectSorterTest
         final int [] expectedOrder = new int []
         {
             4, 5, 1, 0, 2, 3, 6
+        };
+
+        check(array, expectedOrder, DoubleComparators.REVERSED_ORDER);
+    }
+
+    @Test
+    public void testDoubleLargerArray()
+    {
+        final double [] array = new double []
+        {
+            17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0
+        };
+        int [] expectedOrder = new int []
+        {
+            0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17
         };
 
         check(array, expectedOrder, DoubleComparators.REVERSED_ORDER);

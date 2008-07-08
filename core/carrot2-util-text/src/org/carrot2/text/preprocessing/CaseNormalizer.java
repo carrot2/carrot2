@@ -13,8 +13,7 @@ import org.carrot2.util.attribute.constraint.IntRange;
 
 import bak.pcj.list.IntArrayList;
 import bak.pcj.list.IntList;
-import bak.pcj.set.IntBitSet;
-import bak.pcj.set.IntSet;
+import bak.pcj.set.*;
 
 import com.google.common.collect.Lists;
 
@@ -61,6 +60,7 @@ public final class CaseNormalizer
         final char [][] tokenImages = context.allTokens.image;
         final int [] tokenTypesArray = context.allTokens.type;
         final int [] documentIndexesArray = context.allTokens.documentIndex;
+        final byte [] tokensFieldIndex = context.allTokens.fieldIndex;
         final int tokenCount = tokenImages.length;
         final int documentCount = context.documents.size();
 
@@ -72,6 +72,7 @@ public final class CaseNormalizer
         final List<char []> normalizedWordImages = Lists.newArrayList();
         final IntList normalizedWordTf = new IntArrayList();
         final List<int []> wordTfByDocumentList = Lists.newArrayList();
+        final List<byte []> fieldIndexList = Lists.newArrayList();
 
         final int [] wordIndexes = new int [tokenCount];
         Arrays.fill(wordIndexes, -1);
@@ -84,14 +85,17 @@ public final class CaseNormalizer
         int variantStartIndex = 0;
 
         // An int set for document frequency calculation
-        IntSet documentIndexes = new IntBitSet(documentCount);
+        final IntSet documentIndices = new IntBitSet(documentCount);
+
+        // A byte set for word fields tracking
+        final ByteSet fieldIndices = new ByteBitSet((byte) context.allFields.name.length);
 
         // An array for tracking words' tf across documents
         int [] wordTfByDocument = new int [documentCount];
 
         if (documentIndexesArray[tokenImagesOrder[0]] >= 0)
         {
-            documentIndexes.add(documentIndexesArray[tokenImagesOrder[0]]);
+            documentIndices.add(documentIndexesArray[tokenImagesOrder[0]]);
             wordTfByDocument[documentIndexesArray[tokenImagesOrder[0]]] = 1;
         }
 
@@ -117,6 +121,8 @@ public final class CaseNormalizer
                 maxTfVariantIndex = tokenImagesOrder[i + 1];
                 continue;
             }
+            
+            fieldIndices.add(tokensFieldIndex[tokenImagesOrder[i]]);
 
             // Now check if image case is changing
             final boolean sameCase = CharArrayComparators.FAST_CHAR_ARRAY_COMPARATOR
@@ -127,7 +133,7 @@ public final class CaseNormalizer
                 tf++;
                 totalTf++;
 
-                documentIndexes.add(documentIndex);
+                documentIndices.add(documentIndex);
                 wordTfByDocument[documentIndex] += 1;
                 continue;
             }
@@ -148,7 +154,7 @@ public final class CaseNormalizer
             if (sameImage)
             {
                 totalTf++;
-                documentIndexes.add(documentIndex);
+                documentIndices.add(documentIndex);
                 wordTfByDocument[documentIndex] += 1;
             }
             else
@@ -157,12 +163,13 @@ public final class CaseNormalizer
                 // Before we start processing the new image, we need to
                 // see if we want to store the previous image, and if so
                 // we need add some data about it to the arrays
-                int wordDf = documentIndexes.size();
+                int wordDf = documentIndices.size();
                 if (wordDf >= dfCutoff)
                 {
                     // Add the word to the word list
                     normalizedWordImages.add(tokenImages[maxTfVariantIndex]);
                     normalizedWordTf.add(totalTf);
+                    fieldIndexList.add(fieldIndices.toArray());
 
                     // Add this word's index in AllWords to all its instances
                     // in the AllTokens multiarray
@@ -184,11 +191,12 @@ public final class CaseNormalizer
                 variantStartIndex = i + 1;
 
                 // Re-initialize int set used for document frequency calculation
-                documentIndexes.clear();
+                documentIndices.clear();
+                fieldIndices.clear();
                 Arrays.fill(wordTfByDocument, 0);
                 if (documentIndexesArray[tokenImagesOrder[i + 1]] >= 0)
                 {
-                    documentIndexes.add(documentIndexesArray[tokenImagesOrder[i + 1]]);
+                    documentIndices.add(documentIndexesArray[tokenImagesOrder[i + 1]]);
                     wordTfByDocument[documentIndexesArray[tokenImagesOrder[i + 1]]] += 1;
                 }
             }
@@ -202,5 +210,7 @@ public final class CaseNormalizer
         context.allWords.tf = normalizedWordTf.toArray();
         context.allWords.tfByDocument = wordTfByDocumentList
             .toArray(new int [wordTfByDocumentList.size()] []);
+        context.allWords.fieldIndices = fieldIndexList.toArray(new byte [fieldIndexList
+            .size()] []);
     }
 }

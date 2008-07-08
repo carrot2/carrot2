@@ -5,17 +5,17 @@ import static org.fest.assertions.Assertions.assertThat;
 import org.fest.assertions.AssertExtension;
 
 /**
- * Assertions on <code>int [][]</code> arrays.
+ * Assertions on <code>byte [][]</code> arrays.
  */
-public class IntIntArrayAssert implements AssertExtension
+public class ByteByteArrayAssert implements AssertExtension
 {
     /** The actual array */
-    private int [][] actualArray;
+    private byte [][] actualArray;
 
     /** Description of the assertion */
     private String description;
 
-    IntIntArrayAssert(int [][] array)
+    ByteByteArrayAssert(byte [][] array)
     {
         this.actualArray = array;
     }
@@ -23,7 +23,7 @@ public class IntIntArrayAssert implements AssertExtension
     /**
      * Asserts that the array is equal to the provided
      */
-    public IntIntArrayAssert isEqualTo(int [][] expected)
+    public ByteByteArrayAssert isEqualTo(byte [][] expected)
     {
         assertThat(expected).as(description).isNotNull();
         assertThat(actualArray.length).as(description).isEqualTo(expected.length);
@@ -35,7 +35,7 @@ public class IntIntArrayAssert implements AssertExtension
         return this;
     }
 
-    public IntIntArrayAssert as(String description)
+    public ByteByteArrayAssert as(String description)
     {
         this.description = description;
         return this;
