@@ -1,27 +1,44 @@
 package org.carrot2.workbench.core.ui;
 
 import java.io.File;
-import java.util.*;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.carrot2.core.*;
-import org.carrot2.core.attribute.*;
-import org.carrot2.util.attribute.*;
+import org.carrot2.core.Cluster;
+import org.carrot2.core.ProcessingComponent;
+import org.carrot2.core.ProcessingResult;
+import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.core.attribute.Internal;
+import org.carrot2.core.attribute.Processing;
+import org.carrot2.util.attribute.BindableDescriptor;
+import org.carrot2.util.attribute.BindableDescriptorBuilder;
+import org.carrot2.util.attribute.Input;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.DisposeBin;
+import org.carrot2.workbench.core.helpers.PostponableJob;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.core.ui.actions.SaveAsXMLActionDelegate;
 import org.carrot2.workbench.editors.AttributeChangedEvent;
 import org.carrot2.workbench.editors.IAttributeListener;
-import org.eclipse.core.runtime.*;
-import org.eclipse.core.runtime.jobs.*;
-import org.eclipse.jface.action.*;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.viewers.*;
+import org.eclipse.jface.viewers.IPostSelectionProvider;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
@@ -31,10 +48,22 @@ import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.*;
-import org.eclipse.ui.*;
-import org.eclipse.ui.forms.widgets.*;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IPersistableEditor;
+import org.eclipse.ui.IWorkbenchSite;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.forms.widgets.ExpandableComposite;
+import org.eclipse.ui.forms.widgets.Form;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.part.EditorPart;
+import org.eclipse.ui.progress.UIJob;
 
 /**
  * Editor accepting {@link SearchInput} and performing operations on it. The editor also
@@ -169,54 +198,25 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
      */
     private IAttributeListener autoUpdateListener = new IAttributeListener()
     {
-        private final Object jobLock = new Object();
-        private Job job;
+        /*
+         * TODO: [CARROT-276] Make this setting a global preference. 
+         */
+        private final int AUTO_UPDATE_DELAY = 1000;
 
-        private final Runnable updater = new Runnable() {
-            public void run()
+        /** Postponable reschedule job. */
+        private PostponableJob job = new PostponableJob(new UIJob("Auto update...") {
+            public IStatus runInUIThread(IProgressMonitor monitor)
             {
                 reprocess();
+                return Status.OK_STATUS;
             }
-        };
+        });
 
         public void attributeChange(AttributeChangedEvent event)
         {
-            /*
-             * TODO: [CARROT-276] Make this setting a global preference. 
-             */
-            final int AUTO_UPDATE_DELAY = 1000;
             if (isAutoUpdate())
             {
-                final Job newJob = new Job("Auto update (delayed)...") {
-                    protected IStatus run(IProgressMonitor monitor)
-                    {
-                        synchronized (jobLock)
-                        {
-                            if (job == this) 
-                            {
-                                Utils.asyncExec(updater);
-                            }
-                        }
-                        return Status.OK_STATUS;
-                    }
-                };
-                newJob.setPriority(Job.INTERACTIVE);
-
-                // System jobs are not visible in the GUI. I leave it for now, it's quite
-                // interesting to see auto update tasks in the jobs panel.
-                // newJob.setSystem(true);
-
-                synchronized (jobLock)
-                {
-                    // Cancel previous job.
-                    if (job != null && job.getState() == Job.SLEEPING)
-                    {
-                        job.cancel();
-                    }
-
-                    job = newJob;
-                    job.schedule(AUTO_UPDATE_DELAY);
-                }
+                job.reschedule(AUTO_UPDATE_DELAY);
             }
         }
     };
