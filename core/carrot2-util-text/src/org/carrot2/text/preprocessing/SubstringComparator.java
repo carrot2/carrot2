@@ -1,5 +1,6 @@
 package org.carrot2.text.preprocessing;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 /**
@@ -7,8 +8,10 @@ import java.util.Comparator;
  * inflection-insensitive way. The order of different variants of substrings within
  * buckets is arbitrary.
  */
-class SubstringComparator implements Comparator<Substring>
+class SubstringComparator implements Comparator<Substring>, Serializable
 {
+    private static final long serialVersionUID = 1L;
+    
     private final int [] tokensWordIndex;
     private final int [] wordsStemIndex;
 

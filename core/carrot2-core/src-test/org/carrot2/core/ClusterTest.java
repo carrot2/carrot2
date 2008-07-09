@@ -141,7 +141,7 @@ public class ClusterTest
         assertTrue(Cluster.BY_REVERSED_SIZE_AND_LABEL_COMPARATOR.compare(clusterA,
             clusterC) > 0);
     }
-    
+
     @Test()
     public void testNoIdentifiers()
     {
@@ -182,7 +182,7 @@ public class ClusterTest
         final Cluster d4 = new Cluster();
         d4.id = 5;
         final Cluster d5 = new Cluster();
-        
+
         Cluster.assignClusterIds(Lists.newArrayList(d1, d2, d3, d4, d5));
         assertThat(d1.id).isEqualTo(2);
         assertThat(d2.id).isEqualTo(6);
@@ -190,7 +190,7 @@ public class ClusterTest
         assertThat(d4.id).isEqualTo(5);
         assertThat(d5.id).isEqualTo(8);
     }
-    
+
     @Test(expected = IllegalArgumentException.class)
     public void testNonUniqueIdentifiers()
     {
@@ -200,5 +200,46 @@ public class ClusterTest
         d2.id = 0;
 
         Cluster.assignClusterIds(Lists.newArrayList(d1, d2));
+    }
+
+    @Test
+    public void testFindRootCluster()
+    {
+        final Cluster c1 = new Cluster();
+        c1.id = 0;
+        final Cluster c2 = new Cluster();
+        c2.id = 1;
+
+        assertThat(Cluster.find(1, Lists.newArrayList(c1, c2))).isSameAs(c2);
+    }
+
+    @Test
+    public void testFindSubcluster()
+    {
+        final Cluster c1 = new Cluster();
+        c1.id = 0;
+        final Cluster c2 = new Cluster();
+        c2.id = 1;
+        c1.addSubclusters(c2);
+        final Cluster c3 = new Cluster();
+        c3.id = 2;
+        c2.addSubclusters(c3);
+
+        assertThat(Cluster.find(2, Lists.newArrayList(c1))).isSameAs(c3);
+    }
+
+    @Test
+    public void testFindNotFound()
+    {
+        final Cluster c1 = new Cluster();
+        c1.id = 0;
+        final Cluster c2 = new Cluster();
+        c2.id = 1;
+        c1.addSubclusters(c2);
+        final Cluster c3 = new Cluster();
+        c3.id = 2;
+        c2.addSubclusters(c3);
+
+        assertThat(Cluster.find(3, Lists.newArrayList(c1))).isNull();
     }
 }

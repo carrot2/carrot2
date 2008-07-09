@@ -24,8 +24,18 @@ final class NodeEdge
     @Override
     public boolean equals(Object obj)
     {
-        final NodeEdge other = (NodeEdge) obj;
-        return (other.node == this.node && (this.objectCode == other.objectCode));
+        if (obj == this)
+        {
+            return true;
+        }
+        
+        if (obj instanceof NodeEdge)
+        {
+            final NodeEdge other = (NodeEdge) obj;
+            return (other.node == this.node && (this.objectCode == other.objectCode));
+        }
+        
+        return false;
     }
 
     @Override

@@ -90,7 +90,7 @@ public class IndirectSorter
     {
         if ((r - l) > M)
         {
-            int i = (r + l) / 2;
+            int i = (r + l) >>> 1;
 
             if (comparator.compare(array[order[l]], array[order[i]]) > 0)
             {
@@ -158,7 +158,7 @@ public class IndirectSorter
     {
         if ((r - l) > M)
         {
-            int i = (r + l) / 2;
+            int i = (r + l) >>> 1;
 
             if (intComparator.compare(array[order[l]], array[order[i]]) > 0)
             {
@@ -227,7 +227,7 @@ public class IndirectSorter
     {
         if ((r - l) > M)
         {
-            int i = (r + l) / 2;
+            int i = (r + l) >>> 1;
 
             if (doubleComparator.compare(array[order[l]], array[order[i]]) > 0)
             {

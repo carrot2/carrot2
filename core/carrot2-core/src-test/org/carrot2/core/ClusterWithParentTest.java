@@ -104,4 +104,75 @@ public class ClusterWithParentTest
         assertNotNull(clustersWithParents);
         assertThat(clustersWithParents).isEmpty();
     }
+
+    @Test
+    public void testFindRootCluster()
+    {
+        final Cluster c1 = new Cluster();
+        c1.id = 0;
+        final Cluster c2 = new Cluster();
+        c2.id = 1;
+
+        final List<ClusterWithParent> clustersWithParent = ClusterWithParent.wrap(Lists
+            .newArrayList(c1, c2));
+
+        assertThat(ClusterWithParent.find(0, clustersWithParent)).isSameAs(
+            clustersWithParent.get(0));
+    }
+
+    @Test
+    public void testFindSubcluster()
+    {
+        final Cluster c1 = new Cluster();
+        c1.id = 0;
+        final Cluster c2 = new Cluster();
+        c2.id = 1;
+        c1.addSubclusters(c2);
+        final Cluster c3 = new Cluster();
+        c3.id = 2;
+        c2.addSubclusters(c3);
+
+        final List<ClusterWithParent> clustersWithParent = ClusterWithParent.wrap(Lists
+            .newArrayList(c1));
+
+        assertThat(ClusterWithParent.find(2, clustersWithParent)).isSameAs(
+            clustersWithParent.get(0).subclusters.get(0).subclusters.get(0));
+    }
+
+    @Test
+    public void testFindNotFound()
+    {
+        final Cluster c1 = new Cluster();
+        c1.id = 0;
+        final Cluster c2 = new Cluster();
+        c2.id = 1;
+        c1.addSubclusters(c2);
+        final Cluster c3 = new Cluster();
+        c3.id = 2;
+        c2.addSubclusters(c3);
+
+        final List<ClusterWithParent> clustersWithParent = ClusterWithParent.wrap(Lists
+            .newArrayList(c1));
+
+        assertThat(ClusterWithParent.find(4, clustersWithParent)).isNull();
+    }
+
+    @Test
+    public void testEqualsAndHashCode()
+    {
+        final Cluster cluster = new Cluster();
+        cluster.id = 1;
+        final ClusterWithParent c1 = ClusterWithParent.wrap(cluster);
+        final ClusterWithParent c2 = ClusterWithParent.wrap(cluster);
+        final ClusterWithParent c3 = ClusterWithParent.wrap(new Cluster());
+        c1.cluster.id = 3;
+
+        assertThat(c1).isEqualTo(c1);
+        assertThat(c1).isEqualTo(c2);
+        assertThat(c2).isEqualTo(c1);
+        assertThat(c1).isNotEqualTo(c3);
+        assertThat(c3).isNotEqualTo(c1);
+
+        assertThat(c1.hashCode()).isEqualTo(c2.hashCode()).isNotEqualTo(c3.hashCode());
+    }
 }

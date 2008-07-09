@@ -87,7 +87,7 @@ public final class Cluster
     /** Score of this cluster for serialization/ deserialization purposes. */
     @Attribute(required = false)
     private Double score;
-    
+
     /** Attributes of this cluster for serialization/ deserialization purposes. */
     @ElementMap(name = "attributes", entry = "attribute", key = "key", value = "value", inline = true, attribute = true, required = false)
     private Map<String, TypeStringValuePair> otherAttributesAsStrings = new HashMap<String, TypeStringValuePair>();
@@ -140,12 +140,6 @@ public final class Cluster
     {
         addPhrases(phrase);
         addDocuments(documents);
-    }
-
-    public Cluster(String phrase, List<Cluster> subclusters)
-    {
-        addPhrases(phrase);
-        addSubclusters(subclusters);
     }
 
     /**
@@ -218,7 +212,8 @@ public final class Cluster
 
     /**
      * Returns all documents in this cluster ordered according to the provided comparator.
-     * See {@link Document} for common comparators, e.g. {@link Document#BY_ID_COMPARATOR}.
+     * See {@link Document} for common comparators, e.g. {@link Document#BY_ID_COMPARATOR}
+     * .
      */
     public List<Document> getAllDocuments(Comparator<Document> comparator)
     {
@@ -398,11 +393,11 @@ public final class Cluster
     {
         return getAllDocuments().size();
     }
-    
+
     /**
-     * Internal identifier of this cluster within the
-     * {@link ProcessingResult}. This identifier is assigned dynamically after
-     * clusters are passed to {@link ProcessingResult}.
+     * Internal identifier of this cluster within the {@link ProcessingResult}. This
+     * identifier is assigned dynamically after clusters are passed to
+     * {@link ProcessingResult}.
      * 
      * @see ProcessingResult
      */
@@ -448,9 +443,9 @@ public final class Cluster
         .compound(Collections.reverseOrder(BY_SIZE_COMPARATOR), BY_LABEL_COMPARATOR);
 
     /**
-     * Assigns sequential identifiers to the provided <code>clusters</code> (and
-     * their sub-clusters). If a cluster already has an identifier, 
-     * the identifier will not be changed.
+     * Assigns sequential identifiers to the provided <code>clusters</code> (and their
+     * sub-clusters). If a cluster already has an identifier, the identifier will not be
+     * changed.
      * 
      * @param clusters Clusters to assign identifiers to.
      * @throws IllegalArgumentException if the provided clusters contain non-unique
@@ -458,7 +453,8 @@ public final class Cluster
      */
     public static void assignClusterIds(Collection<Cluster> clusters)
     {
-        final ArrayList<Cluster> flattened = Lists.newArrayListWithCapacity(clusters.size());
+        final ArrayList<Cluster> flattened = Lists.newArrayListWithCapacity(clusters
+            .size());
 
         flatten(flattened, clusters);
 
@@ -513,10 +509,10 @@ public final class Cluster
     }
 
     /**
-     * Locate the first cluster that has id equal to <code>id</code>. The search
-     * includes all the clusters in the input and their sub-clusters. The
-     * first cluster with matching identifier is returned or <code>null</code>
-     * if no such cluster could be found.
+     * Locate the first cluster that has id equal to <code>id</code>. The search includes
+     * all the clusters in the input and their sub-clusters. The first cluster with
+     * matching identifier is returned or <code>null</code> if no such cluster could be
+     * found.
      */
     public static Cluster find(int id, Collection<Cluster> clusters)
     {
@@ -528,7 +524,7 @@ public final class Cluster
                 {
                     return c;
                 }
-                
+
                 if (!c.getSubclusters().isEmpty())
                 {
                     final Cluster sub = find(id, c.getSubclusters());
@@ -542,7 +538,7 @@ public final class Cluster
 
         return null;
     }
-    
+
     @Persist
     @SuppressWarnings("unused")
     private void beforeSerialization()
@@ -572,10 +568,9 @@ public final class Cluster
         if (otherAttributesAsStrings != null)
         {
             attributes.putAll(otherAttributesAsStrings);
+            attributes = TypeStringValuePair.fromTypeStringValuePairs(
+                new HashMap<String, Object>(), otherAttributesAsStrings);
         }
-
-        attributes = TypeStringValuePair.fromTypeStringValuePairs(
-            new HashMap<String, Object>(), otherAttributesAsStrings);
 
         if (score != null)
         {
