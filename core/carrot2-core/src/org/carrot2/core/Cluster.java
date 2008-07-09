@@ -11,6 +11,7 @@ import org.simpleframework.xml.load.Persist;
 import com.google.common.base.Function;
 import com.google.common.collect.Comparators;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 /**
  * A cluster (group) of {@link Document}s. Each cluster has a human-readable label
@@ -44,6 +45,12 @@ public final class Cluster
      * @see #getAttribute(String)
      */
     public static final String SCORE = "score";
+
+    /**
+     * @see #getId()
+     */
+    @Attribute(required = false)
+    Integer id;
 
     /** Phrases describing this cluster. */
     @ElementList(required = false, name = "title", entry = "phrase")
@@ -80,7 +87,7 @@ public final class Cluster
     /** Score of this cluster for serialization/ deserialization purposes. */
     @Attribute(required = false)
     private Double score;
-
+    
     /** Attributes of this cluster for serialization/ deserialization purposes. */
     @ElementMap(name = "attributes", entry = "attribute", key = "key", value = "value", inline = true, attribute = true, required = false)
     private Map<String, TypeStringValuePair> otherAttributesAsStrings = new HashMap<String, TypeStringValuePair>();
@@ -391,6 +398,18 @@ public final class Cluster
     {
         return getAllDocuments().size();
     }
+    
+    /**
+     * Internal identifier of this cluster within the
+     * {@link ProcessingResult}. This identifier is assigned dynamically after
+     * clusters are passed to {@link ProcessingResult}.
+     * 
+     * @see ProcessingResult
+     */
+    public Integer getId()
+    {
+        return id;
+    }
 
     /**
      * Compares clusters by size as returned by {@link #size()}. Clusters with more
@@ -427,6 +446,51 @@ public final class Cluster
      */
     public static final Comparator<Cluster> BY_REVERSED_SIZE_AND_LABEL_COMPARATOR = Comparators
         .compound(Collections.reverseOrder(BY_SIZE_COMPARATOR), BY_LABEL_COMPARATOR);
+
+    /**
+     * Assigns sequential identifiers to the provided <code>clusters</code> (and
+     * their sub-clusters). If a cluster already has an identifier, 
+     * the identifier will not be changed.
+     * 
+     * @param clusters Clusters to assign identifiers to.
+     * @throws IllegalArgumentException if the provided clusters contain non-unique
+     *             identifiers
+     */
+    public static void assignClusterIds(Collection<Cluster> clusters)
+    {
+        synchronized (clusters)
+        {
+            final HashSet<Integer> ids = Sets.newHashSet();
+
+            // First, find the start value for the id and check uniqueness of the ids
+            // already provided.
+            int maxId = Integer.MIN_VALUE;
+            for (final Cluster cluster : clusters)
+            {
+                if (cluster.id != null)
+                {
+                    if (!ids.add(cluster.id))
+                    {
+                        throw new IllegalArgumentException(
+                            "Non-unique cluster id found: " + cluster.id);
+                    }
+                    maxId = Math.max(maxId, cluster.id);
+                }
+            }
+
+            // We'd rather start with 0
+            maxId = Math.max(maxId, -1);
+
+            // Assign missing ids
+            for (final Cluster c : clusters)
+            {
+                if (c.id == null)
+                {
+                    c.id = ++maxId;
+                }
+            }
+        }
+    }
 
     @Persist
     @SuppressWarnings("unused")

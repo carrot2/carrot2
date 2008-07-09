@@ -84,6 +84,7 @@ public final class ProcessingResult
             .get(AttributeNames.CLUSTERS);
         if (clusters != null)
         {
+            Cluster.assignClusterIds(clusters);
             attributes.put(AttributeNames.CLUSTERS, Collections
                 .unmodifiableList(clusters));
         }
