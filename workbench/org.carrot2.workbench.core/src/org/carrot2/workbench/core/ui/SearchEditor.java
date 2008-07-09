@@ -905,7 +905,10 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
                 {
                     public void run()
                     {
-                        rootForm.setBusy(busy);
+                        if (!rootForm.isDisposed())
+                        {
+                            rootForm.setBusy(busy);
+                        }
                     }
                 });
             }
