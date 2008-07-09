@@ -11,9 +11,11 @@
 *#
 
 #foreach ($cluster in $clusters)
-	<div class="cl">
-		$cluster.getLabel()
-	</div>
+	#if( ${clusters.size()} > 1 )
+		<div class="cl">
+			$cluster.getLabel()
+		</div>
+	#end
 
 	#foreach ($document in $cluster.getAllDocuments($comparator))
 	    <span class="id"> [$document.Id]</span> <a href="${document.getField("url")}"><b>$document.getField("title")</b></a>

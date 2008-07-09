@@ -1,6 +1,5 @@
 package org.carrot2.workbench.core.ui;
 
-import org.apache.log4j.Logger;
 import org.eclipse.jface.viewers.*;
 
 /**
@@ -32,9 +31,6 @@ final class ClusterTreeSelectionSync implements ISelectionChangedListener
     {
         final Object part = event.getSource();
         final ISelection selection = event.getSelection();
-
-        Logger.getLogger(ClusterTreeSelectionSync.class).debug(
-            "Received selection [part=" + part + ", receipient: " + this + "]");
 
         // Skip redundant selection events that occur when switching between
         // parts (switching editors, for example).

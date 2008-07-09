@@ -2,8 +2,7 @@ package org.carrot2.workbench.core.ui;
 
 import java.io.StringWriter;
 import java.net.URL;
-import java.util.Comparator;
-import java.util.Locale;
+import java.util.*;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.velocity.Template;
@@ -124,7 +123,7 @@ public final class DocumentList extends Composite
 
             final Comparator<Document> comparator = Document.BY_ID_COMPARATOR;
             context.put("comparator", comparator);
-            context.put("clusters", clusters);
+            context.put("clusters", Arrays.asList(clusters));
 
             update(context, TEMPLATE_CLUSTERS);
         }
