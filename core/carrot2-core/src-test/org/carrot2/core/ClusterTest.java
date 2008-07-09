@@ -156,6 +156,23 @@ public class ClusterTest
     }
 
     @Test()
+    public void testSubclusterIdentifiers()
+    {
+        final Cluster d1 = new Cluster();
+        final Cluster d2 = new Cluster();
+        final Cluster d3 = new Cluster();
+        final Cluster d4 = new Cluster();
+        d1.addSubclusters(d2);
+        d2.addSubclusters(d4);
+
+        Cluster.assignClusterIds(Lists.newArrayList(d1, d3));
+        assertThat(d1.id).isEqualTo(0);
+        assertThat(d2.id).isEqualTo(1);
+        assertThat(d4.id).isEqualTo(2);
+        assertThat(d3.id).isEqualTo(3);
+    }
+
+    @Test()
     public void testSomeIdentifiers()
     {
         final Cluster d1 = new Cluster();

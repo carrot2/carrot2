@@ -458,6 +458,10 @@ public final class Cluster
      */
     public static void assignClusterIds(Collection<Cluster> clusters)
     {
+        final ArrayList<Cluster> flattened = Lists.newArrayListWithCapacity(clusters.size());
+
+        flatten(flattened, clusters);
+
         synchronized (clusters)
         {
             final HashSet<Integer> ids = Sets.newHashSet();
@@ -465,7 +469,7 @@ public final class Cluster
             // First, find the start value for the id and check uniqueness of the ids
             // already provided.
             int maxId = Integer.MIN_VALUE;
-            for (final Cluster cluster : clusters)
+            for (final Cluster cluster : flattened)
             {
                 if (cluster.id != null)
                 {
@@ -482,7 +486,7 @@ public final class Cluster
             maxId = Math.max(maxId, -1);
 
             // Assign missing ids
-            for (final Cluster c : clusters)
+            for (final Cluster c : flattened)
             {
                 if (c.id == null)
                 {
@@ -492,6 +496,53 @@ public final class Cluster
         }
     }
 
+    /*
+     * Recursive descent into subclusters.
+     */
+    private static void flatten(ArrayList<Cluster> flattened, Collection<Cluster> clusters)
+    {
+        for (Cluster c : clusters)
+        {
+            flattened.add(c);
+            final List<Cluster> subclusters = c.getSubclusters();
+            if (!subclusters.isEmpty())
+            {
+                flatten(flattened, subclusters);
+            }
+        }
+    }
+
+    /**
+     * Locate the first cluster that has id equal to <code>id</code>. The search
+     * includes all the clusters in the input and their sub-clusters. The
+     * first cluster with matching identifier is returned or <code>null</code>
+     * if no such cluster could be found.
+     */
+    public static Cluster find(int id, Collection<Cluster> clusters)
+    {
+        for (Cluster c : clusters)
+        {
+            if (c != null)
+            {
+                if (c.id != null && c.id == id)
+                {
+                    return c;
+                }
+                
+                if (!c.getSubclusters().isEmpty())
+                {
+                    final Cluster sub = find(id, c.getSubclusters());
+                    if (sub != null)
+                    {
+                        return sub;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+    
     @Persist
     @SuppressWarnings("unused")
     private void beforeSerialization()
