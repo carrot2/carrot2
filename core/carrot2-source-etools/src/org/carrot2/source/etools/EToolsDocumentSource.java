@@ -242,8 +242,10 @@ public class EToolsDocumentSource extends SearchEngine
             public SearchEngineResponse search() throws Exception
             {
                 // Ignore buckets, SearchEngine is configured to perform one request
+                final URL serviceURL = new URL(buildServiceUrl());
+
                 final ProcessingResult processingResult = xmlDocumentSourceHelper
-                    .loadProcessingResult(new URL(buildServiceUrl()).openStream(),
+                    .loadProcessingResult(serviceURL.openStream(), 
                         eTools2Carrot2Xslt, null);
 
                 final SearchEngineResponse response = new SearchEngineResponse();

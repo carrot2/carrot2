@@ -50,20 +50,15 @@ public class XmlDocumentSourceHelper
     public ProcessingResult loadProcessingResult(InputStream xml, Templates stylesheet,
         Map<String, String> xsltParameters) throws Exception
     {
-        // Perform the transformation if stylesheet available
-        Reader carrot2XmlReader = null;
-
+        InputStream carrot2XmlStream = null;
         try
         {
-            carrot2XmlReader = new InputStreamReader(getCarrot2XmlStream(xml, stylesheet,
-                xsltParameters));
-
-            // Deserialize the XML stream
-            return ProcessingResult.deserialize(carrot2XmlReader);
+            carrot2XmlStream = getCarrot2XmlStream(xml, stylesheet, xsltParameters);
+            return ProcessingResult.deserialize(carrot2XmlStream);
         }
         finally
         {
-            CloseableUtils.close(carrot2XmlReader);
+            CloseableUtils.close(carrot2XmlStream);
         }
     }
 

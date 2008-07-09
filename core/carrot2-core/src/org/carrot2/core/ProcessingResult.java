@@ -46,8 +46,10 @@ public final class ProcessingResult
     private List<Cluster> clusters;
 
     /** Attributes of this result for serialization/ deserialization purposes. */
-    @ElementMap(name = "attributes", entry = "attribute", key = "key", value = "value", inline = true, attribute = true, required = false)
-    private Map<String, TypeStringValuePair> otherAttributesAsStrings = new HashMap<String, TypeStringValuePair>();
+    @ElementMap(name = "attributes", entry = "attribute", key = "key", value = "value", 
+        inline = true, attribute = true, required = false)
+    private Map<String, TypeStringValuePair> otherAttributesAsStrings = 
+        new HashMap<String, TypeStringValuePair>();
 
     /**
      * Parameterless constructor required for XML serialization/ deserialization.
@@ -208,7 +210,7 @@ public final class ProcessingResult
     }
 
     /**
-     * Serializes this {@link ProcessingResult} to an XML writer.
+     * Serializes this {@link ProcessingResult} to an XML file.
      * 
      * @param writer the writer to serialize this {@link ProcessingResult} to. The writer
      *            will <strong>not</strong> be closed.
@@ -262,7 +264,7 @@ public final class ProcessingResult
     }
 
     /**
-     * Deserializes a {@link ProcessingResult} from an XML reader.
+     * Deserializes a {@link ProcessingResult} from an XML character stream.
      * 
      * @param reader the reader to deserialize a {@link ProcessingResult} from. The reader
      *            will <strong>not</strong> be closed.
@@ -272,5 +274,18 @@ public final class ProcessingResult
     public static ProcessingResult deserialize(Reader reader) throws Exception
     {
         return new Persister().read(ProcessingResult.class, reader);
+    }
+    
+    /**
+     * Deserializes a {@link ProcessingResult} from an XML byte stream.
+     * 
+     * @param stream the stream to deserialize a {@link ProcessingResult} from. The stream
+     *            will <strong>not</strong> be closed.
+     * @return deserialized {@link ProcessingResult}
+     * @throws Exception is case of any problems with deserialization
+     */
+    public static ProcessingResult deserialize(InputStream stream) throws Exception
+    {
+        return new Persister().read(ProcessingResult.class, stream);
     }
 }
