@@ -1,5 +1,6 @@
 package org.carrot2.core;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -102,7 +103,38 @@ public final class ClusterWithParent
 
         return result;
     }
-    
+
+    /**
+     * Locate the first cluster that has id equal to <code>id</code>. The search
+     * includes all the clusters in the input and their sub-clusters. The
+     * first cluster with matching identifier is returned or <code>null</code>
+     * if no such cluster could be found.
+     */
+    public static ClusterWithParent find(int id, Collection<ClusterWithParent> wrappers)
+    {
+        for (ClusterWithParent c : wrappers)
+        {
+            if (c != null)
+            {
+                if (c.cluster.id != null && c.cluster.id == id)
+                {
+                    return c;
+                }
+                
+                if (!c.cluster.getSubclusters().isEmpty())
+                {
+                    final ClusterWithParent sub = find(id, c.subclusters);
+                    if (sub != null)
+                    {
+                        return sub;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
     /*
      * 
      */
