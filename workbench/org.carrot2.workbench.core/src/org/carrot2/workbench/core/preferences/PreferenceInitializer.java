@@ -1,6 +1,9 @@
 package org.carrot2.workbench.core.preferences;
 
+import java.util.EnumSet;
+
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
+import org.carrot2.workbench.core.ui.SearchEditorSections;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 
@@ -14,8 +17,10 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer
         final IPreferenceStore store = WorkbenchCorePlugin.getDefault()
             .getPreferenceStore();
 
-        store.setDefault(PreferenceConstants.P_SHOW_ATTRIBUTES, true);
-        store.setDefault(PreferenceConstants.P_SHOW_CLUSTERS, true);
-        store.setDefault(PreferenceConstants.P_SHOW_DOCUMENTS, true);
+        for (SearchEditorSections s : EnumSet.allOf(SearchEditorSections.class))
+        {
+            store.setDefault(
+                PreferenceConstants.getSectionVisibilityKey(s), true);
+        }
     }
 }

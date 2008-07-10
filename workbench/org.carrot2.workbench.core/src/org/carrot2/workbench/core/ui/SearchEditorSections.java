@@ -11,9 +11,9 @@ import org.carrot2.workbench.core.preferences.PreferenceConstants;
  */
 public enum SearchEditorSections
 {
-    CLUSTERS("Clusters", 1, ClusterTreeView.ID, PreferenceConstants.P_SHOW_CLUSTERS),
-    DOCUMENTS("Documents", 2, DocumentListView.ID, PreferenceConstants.P_SHOW_DOCUMENTS),
-    ATTRIBUTES("Attributes", 2, AttributesView.ID, PreferenceConstants.P_SHOW_ATTRIBUTES);
+    CLUSTERS("Clusters", 1, ClusterTreeView.ID),
+    DOCUMENTS("Documents", 2, DocumentListView.ID),
+    ATTRIBUTES("Attributes", 2, AttributesView.ID);
 
     /** Default weight. */
     public final int weight;
@@ -24,15 +24,10 @@ public enum SearchEditorSections
     /** Icon identifier. */
     public final String iconID;
 
-    /** @see PreferenceConstants */
-    final String defaultVisibility;
-
-    private SearchEditorSections(String name, int weight, String iconID,
-        String defaultVisibility)
+    private SearchEditorSections(String name, int weight, String iconID)
     {
         this.weight = weight;
         this.name = name;
         this.iconID = iconID;
-        this.defaultVisibility = defaultVisibility;
     }
 }

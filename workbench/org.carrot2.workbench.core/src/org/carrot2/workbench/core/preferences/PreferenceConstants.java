@@ -1,15 +1,33 @@
 package org.carrot2.workbench.core.preferences;
 
+import org.carrot2.workbench.core.ui.SearchEditorSections;
+
 /**
  * Constant definitions for plug-in preferences
  */
-public class PreferenceConstants
+public final class PreferenceConstants
 {
+    /*
+     * 
+     */
+    private PreferenceConstants()
+    {
+        // No instances.
+    }
 
-    public static final String P_SHOW_CLUSTERS = "showClusters";
+    /**
+     * Returns preference key for a given editor section's visibility.
+     */
+    public static String getSectionVisibilityKey(SearchEditorSections s)
+    {
+        return s.name + ".visible";
+    }
 
-    public static final String P_SHOW_DOCUMENTS = "showDocuments";
-
-    public static final String P_SHOW_ATTRIBUTES = "showAttributes";
-
+    /**
+     * Returns preference key for a given editor section's weight.
+     */
+    public static String getSectionWeightKey(SearchEditorSections s)
+    {
+        return s.name + ".weight";
+    }
 }

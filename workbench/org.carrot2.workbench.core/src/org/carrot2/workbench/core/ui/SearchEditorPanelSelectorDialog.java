@@ -3,6 +3,7 @@ package org.carrot2.workbench.core.ui;
 import java.util.EnumMap;
 
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
+import org.carrot2.workbench.core.preferences.PreferenceConstants;
 import org.carrot2.workbench.core.preferences.WorkbenchPreferencesPage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
@@ -101,8 +102,8 @@ final class SearchEditorPanelSelectorDialog extends org.eclipse.jface.dialogs.Tr
                     // Set to new defaults.
                     for (SearchEditorSections section : buttons.keySet())
                     {
-                        buttons.get(section).setSelection(
-                            store.getBoolean(section.defaultVisibility));
+                        final String key = PreferenceConstants.getSectionVisibilityKey(section);
+                        buttons.get(section).setSelection(store.getBoolean(key));
                     }
                 }
             }

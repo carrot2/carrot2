@@ -1,36 +1,29 @@
 package org.carrot2.workbench.core.preferences;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
 
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
+import org.carrot2.workbench.core.ui.SearchEditorSections;
 import org.eclipse.jface.preference.*;
 import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 /**
- * This class represents a preference page that is contributed to the Preferences dialog.
- * By subclassing <samp>FieldEditorPreferencePage</samp>, we can use the field support
- * built into JFace that allows us to create a page that is small and knows how to save,
- * restore and apply itself.
- * <p>
- * This page is used to modify preferences only. They are stored in the preference store
- * that belongs to the main plug-in class. That way, preferences can be accessed directly
- * via the preference store.
+ * 
  */
-
 public class WorkbenchPreferencesPage extends FieldEditorPreferencePage implements
     IWorkbenchPreferencePage
 {
-    public static final String ID =
-        "org.carrot2.workbench.core.preferences.WorkbenchPreferencesPage";
+    public static final String ID = "org.carrot2.workbench.core.preferences.WorkbenchPreferencesPage";
 
     private Collection<BooleanFieldEditor> editors = new ArrayList<BooleanFieldEditor>();
 
     public WorkbenchPreferencesPage()
     {
         super(GRID);
+
         setPreferenceStore(WorkbenchCorePlugin.getDefault().getPreferenceStore());
         setDescription("Choose panels to show in results editors:");
     }
@@ -42,14 +35,14 @@ public class WorkbenchPreferencesPage extends FieldEditorPreferencePage implemen
      */
     public void createFieldEditors()
     {
-        editors.add(new BooleanFieldEditor(PreferenceConstants.P_SHOW_CLUSTERS,
-            "&Clusters", getFieldEditorParent()));
-        editors.add(new BooleanFieldEditor(PreferenceConstants.P_SHOW_DOCUMENTS,
-            "&Documents", getFieldEditorParent()));
-        editors.add(new BooleanFieldEditor(PreferenceConstants.P_SHOW_ATTRIBUTES,
-            "&Attributes", getFieldEditorParent()));
-        for (FieldEditor editor : editors)
+        final Composite parent = getFieldEditorParent();
+
+        for (SearchEditorSections s : EnumSet.allOf(SearchEditorSections.class))
         {
+            final String key = PreferenceConstants.getSectionVisibilityKey(s);
+            final BooleanFieldEditor editor = new BooleanFieldEditor(key, s.name, parent);
+
+            editors.add(editor);
             addField(editor);
         }
     }
@@ -70,6 +63,7 @@ public class WorkbenchPreferencesPage extends FieldEditorPreferencePage implemen
 
     public void init(IWorkbench workbench)
     {
+        // empty.
     }
 
     @Override

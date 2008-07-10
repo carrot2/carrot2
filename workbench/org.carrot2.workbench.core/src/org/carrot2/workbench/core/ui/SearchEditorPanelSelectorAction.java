@@ -1,9 +1,9 @@
 package org.carrot2.workbench.core.ui;
 
 import java.util.EnumMap;
-import java.util.EnumSet;
 
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
+import org.carrot2.workbench.core.ui.SearchEditor.SectionReference;
 import org.eclipse.jface.action.*;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.window.Window;
@@ -49,18 +49,18 @@ final class SearchEditorPanelSelectorAction extends Action
          */
         private void createItems()
         {
-            for (final SearchEditorSections section : EnumSet.allOf(SearchEditorSections.class))
+            for (final SearchEditorSections section : editor.getSections().keySet())
             {
                 final MenuItem mi = new MenuItem(menu, SWT.CHECK);
                 mi.setText(section.name);
 
-                mi.setSelection((Boolean) editor.getSections().get(section).getData("visible"));
+                mi.setSelection(editor.getSections().get(section).visibility);
                 mi.addSelectionListener(new SelectionAdapter()
                 {
                     @Override
                     public void widgetSelected(SelectionEvent e)
                     {
-                        editor.toogleSectionVisibility(section, mi.getSelection());
+                        editor.setSectionVisibility(section, mi.getSelection());
                         e.doit = true;
                     }
                 });
@@ -99,10 +99,11 @@ final class SearchEditorPanelSelectorAction extends Action
         final EnumMap<SearchEditorSections, Boolean> visibility = 
             new EnumMap<SearchEditorSections, Boolean>(SearchEditorSections.class);
 
-        for (SearchEditorSections section : EnumSet.allOf(SearchEditorSections.class))
+        final EnumMap<SearchEditorSections, SectionReference> sections = editor.getSections();
+
+        for (SearchEditorSections section : sections.keySet())
         {
-            visibility.put(section, (Boolean) editor.getSections().get(section).getData(
-                "visible"));
+            visibility.put(section, sections.get(section).visibility);
         }
 
         final SearchEditorPanelSelectorDialog dialog = new SearchEditorPanelSelectorDialog(
@@ -110,9 +111,9 @@ final class SearchEditorPanelSelectorAction extends Action
 
         if (dialog.open() != Window.CANCEL)
         {
-            for (SearchEditorSections section : EnumSet.allOf(SearchEditorSections.class))
+            for (SearchEditorSections section : sections.keySet())
             {
-                editor.toogleSectionVisibility(section, visibility.get(section));
+                editor.setSectionVisibility(section, visibility.get(section));
             }
         }
     }

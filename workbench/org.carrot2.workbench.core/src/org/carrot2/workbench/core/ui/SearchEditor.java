@@ -1,67 +1,36 @@
 package org.carrot2.workbench.core.ui;
 
 import java.io.File;
-import java.util.Collections;
-import java.util.EnumMap;
-import java.util.EnumSet;
+import java.util.*;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.carrot2.core.Cluster;
-import org.carrot2.core.ProcessingComponent;
-import org.carrot2.core.ProcessingResult;
-import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.core.attribute.Internal;
-import org.carrot2.core.attribute.Processing;
-import org.carrot2.util.attribute.BindableDescriptor;
-import org.carrot2.util.attribute.BindableDescriptorBuilder;
-import org.carrot2.util.attribute.Input;
+import org.carrot2.core.*;
+import org.carrot2.core.attribute.*;
+import org.carrot2.util.attribute.*;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
-import org.carrot2.workbench.core.helpers.DisposeBin;
-import org.carrot2.workbench.core.helpers.PostponableJob;
-import org.carrot2.workbench.core.helpers.Utils;
+import org.carrot2.workbench.core.helpers.*;
 import org.carrot2.workbench.core.ui.actions.SaveAsXMLActionDelegate;
 import org.carrot2.workbench.editors.AttributeChangedEvent;
 import org.carrot2.workbench.editors.IAttributeListener;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.IJobChangeEvent;
-import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.core.runtime.jobs.JobChangeAdapter;
-import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.core.runtime.*;
+import org.eclipse.core.runtime.jobs.*;
+import org.eclipse.jface.action.*;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.viewers.IPostSelectionProvider;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.*;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.*;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.ToolBar;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.IMemento;
-import org.eclipse.ui.IPersistableEditor;
-import org.eclipse.ui.IWorkbenchSite;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.forms.widgets.ExpandableComposite;
-import org.eclipse.ui.forms.widgets.Form;
-import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.Section;
+import org.eclipse.swt.widgets.*;
+import org.eclipse.ui.*;
+import org.eclipse.ui.forms.widgets.*;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.progress.UIJob;
 
@@ -107,7 +76,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     }
 
     /**
-     * A public event identifier related to auto-update property.
+     * A public event identifier related to <code>auto-update</code> property.
      * 
      * @see #isAutoUpdate()
      */
@@ -130,9 +99,28 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     private static final String SECTION_AUTO_UPDATE = "auto-update";
 
     /**
+     * All attributes of a single panel.
+     */
+    public final class SectionReference
+    {
+        public final Section section;
+        public final int sashIndex;
+        public boolean visibility;
+        public int weight;
+        
+        public SectionReference(Section self, int sashIndex, boolean v, int w)
+        {
+            this.section = self;
+            this.sashIndex = sashIndex;
+            this.visibility = v;
+            this.weight = w;
+        }
+    }
+    
+    /**
      * Sections (panels) present inside the editor.
      */
-    private EnumMap<SearchEditorSections, Section> sections;
+    private EnumMap<SearchEditorSections, SectionReference> sections;
 
     /**
      * Search result model is the core model around which all other views revolve
@@ -171,6 +159,9 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     private Form rootForm;
     private SashForm sashForm;
 
+    /**
+     * This editor's restore state information.
+     */
     private IMemento state;
 
     /**
@@ -221,8 +212,8 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         }
     };
 
-    /*
-     * 
+    /**
+     * Create main GUI components, hook up events, schedule initial processing.
      */
     @Override
     public void createPartControl(Composite parent)
@@ -250,7 +241,6 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         createControls(sashForm);
         updatePartHeaders();
 
-        sashForm.SASH_WIDTH = 5;
         sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
         createActions();
@@ -342,12 +332,18 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         this.searchResult = new SearchResult((SearchInput) input);
     }
 
+    /*
+     * 
+     */
     @Override
     public Image getTitleImage()
     {
         return sourceImage;
     }
 
+    /*
+     * 
+     */
     @Override
     public void setFocus()
     {
@@ -366,7 +362,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     }
 
     /*
-     * 
+     *
      */
     public void saveState(IMemento memento)
     {
@@ -374,17 +370,49 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         {
             memento.putString(SECTION_AUTO_UPDATE, Boolean.toString(autoUpdate));
 
-            final IMemento sectionsMemento = memento.createChild(MEMENTO_SECTIONS);
-            final int [] weights = this.sashForm.getWeights();
-            int i = 0;
-            for (SearchEditorSections section : EnumSet.allOf(SearchEditorSections.class))
+            saveSectionsState(memento, sections);
+        }
+    }
+
+    /**
+     * Creates a custom child in a given memento and persists information from
+     * a set of {@link SectionReference}s.
+     */
+    final static void saveSectionsState(IMemento memento, 
+        EnumMap<SearchEditorSections, SectionReference> sections)
+    {
+        final IMemento sectionsMemento = memento.createChild(MEMENTO_SECTIONS);
+        for (SearchEditorSections section : sections.keySet())
+        {
+            final SectionReference sr = sections.get(section);
+
+            final IMemento sectionMemento = sectionsMemento.createChild(MEMENTO_SECTION);
+            sectionMemento.putString(SECTION_NAME, section.name());
+            sectionMemento.putInteger(SECTION_WEIGHT, sr.weight);
+            sectionMemento.putString(SECTION_VISIBLE, Boolean.toString(sr.visibility));
+        }
+    }
+    
+    /**
+     * Restores partial attributes saved by {@link #saveSectionsState()}
+     */
+    final static void restoreSectionsState(IMemento memento, 
+        EnumMap<SearchEditorSections, SectionReference> sections)
+    {
+        final IMemento sectionsMemento = memento.getChild(MEMENTO_SECTIONS);
+        if (sectionsMemento != null)
+        {
+            for (IMemento sectionMemento : sectionsMemento.getChildren(MEMENTO_SECTION))
             {
-                final IMemento sectionMemento = sectionsMemento
-                    .createChild(MEMENTO_SECTION);
-                sectionMemento.putString(SECTION_NAME, section.name());
-                sectionMemento.putInteger(SECTION_WEIGHT, weights[i++]);
-                sectionMemento.putString(SECTION_VISIBLE, sections.get(section).getData(
-                    "visible").toString());
+                final SearchEditorSections section = SearchEditorSections.valueOf(
+                    sectionMemento.getString(SECTION_NAME));
+
+                if (sections.containsKey(section))
+                {
+                    final SectionReference r = sections.get(section);
+                    r.weight = sectionMemento.getInteger(SECTION_WEIGHT);
+                    r.visibility = Boolean.valueOf(sectionMemento.getString(SECTION_VISIBLE));
+                }
             }
         }
     }
@@ -392,25 +420,79 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     /*
      * 
      */
-    private void restoreState(EnumMap<SearchEditorSections, Integer> weights)
+    private void restoreState()
     {
-        if (state != null && state.getChild(MEMENTO_SECTIONS) != null)
+        /*
+         * Restore auto-update state.
+         */
+        if (state != null && state.getString(SECTION_AUTO_UPDATE) != null)
         {
-            this.autoUpdate = Boolean.valueOf(state.getString(SECTION_AUTO_UPDATE)); 
-            
-            final IMemento sectionsMemento = state.getChild(MEMENTO_SECTIONS);
-            for (IMemento sectionMemento : sectionsMemento.getChildren(MEMENTO_SECTION))
-            {
-                final SearchEditorSections section = SearchEditorSections
-                    .valueOf(sectionMemento.getString(SECTION_NAME));
-                final int weight = sectionMemento.getInteger(SECTION_WEIGHT);
-                final boolean visible = Boolean.valueOf(sectionMemento
-                    .getString(SECTION_VISIBLE));
-
-                this.toogleSectionVisibility(section, visible);
-                weights.put(section, weight);
-            }
+            this.autoUpdate = Boolean.valueOf(state.getString(SECTION_AUTO_UPDATE));
         }
+
+        /*
+         * Assign default section weights.
+         */
+        for (SearchEditorSections s : sections.keySet())
+        {
+            sections.get(s).weight = s.weight;
+        }
+
+        /*
+         * Restore global sections attributes, if possible.
+         */
+        final WorkbenchCorePlugin core = WorkbenchCorePlugin.getDefault();
+        core.restoreSectionsState(sections);
+
+        /*
+         * Restore weights from editor's memento, if possible.
+         */
+        if (state != null)
+        {
+            restoreSectionsState(state, sections);
+        }
+
+        /*
+         * Update weights and visibility.
+         */
+        final int [] weights = sashForm.getWeights();
+        for (SearchEditorSections s : sections.keySet())
+        {
+            final SectionReference sr = sections.get(s);
+            weights[sr.sashIndex] = sr.weight;
+            setSectionVisibility(s, sr.visibility);
+        }
+        sashForm.setWeights(weights);
+        
+        /*
+         * Unfortunately SashForm does not propagate layout events,
+         * so we need to acquire these events from sash form elements directly.
+         */
+        for (final SearchEditorSections section : sections.keySet())
+        {
+            final SectionReference sr = sections.get(section);
+            sr.section.addControlListener(new ControlListener() {
+                public void controlMoved(ControlEvent e)
+                {
+                    sr.weight = sashForm.getWeights()[sr.sashIndex];
+                    WorkbenchCorePlugin.getDefault().storeSectionsState(sections);
+                }
+
+                public void controlResized(ControlEvent e)
+                {
+                     controlMoved(e);
+                }
+            });
+        }
+        
+        sashForm.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseUp(MouseEvent e)
+            {
+                super.mouseUp(e);
+                System.out.println("Sel: " + e);
+            }
+        });
     }
 
     /*
@@ -571,20 +653,23 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     }
 
     /**
-     * Returns a map of this editor's panels ({@link Section}s).
+     * Returns a map of this editor's panels ({@link SectionReference}s). This
+     * map and its objects are considered <b>read-only</b>.
+     * 
+     * @see #setSectionVisibility(SearchEditorSections, boolean)
      */
-    EnumMap<SearchEditorSections, Section> getSections()
+    EnumMap<SearchEditorSections, SectionReference> getSections()
     {
         return sections;
     }
 
-    /*
-     * 
+    /**
+     * Shows or hides a given panel.
      */
-    void toogleSectionVisibility(SearchEditorSections section, boolean visible)
+    public void setSectionVisibility(SearchEditorSections section, boolean visible)
     {
-        sections.get(section).setVisible(visible);
-        sections.get(section).setData("visible", visible);
+        sections.get(section).visibility = visible;
+        sections.get(section).section.setVisible(visible);
         sashForm.layout();
     }
 
@@ -637,16 +722,13 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
      */
     private void createControls(SashForm parent)
     {
-        final IPreferenceStore preferenceStore = WorkbenchCorePlugin.getDefault()
-            .getPreferenceStore();
-
-        this.sections = new EnumMap<SearchEditorSections, Section>(
-            SearchEditorSections.class);
-
         /*
          * Create and add sections in order of their declaration in the enum type.
          */
-        for (SearchEditorSections s : EnumSet.allOf(SearchEditorSections.class))
+        this.sections = new EnumMap<SearchEditorSections, SectionReference>(SearchEditorSections.class);
+
+        int index = 0;
+        for (final SearchEditorSections s : EnumSet.allOf(SearchEditorSections.class))
         {
             final Section section;
             switch (s)
@@ -667,8 +749,10 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
                     throw new RuntimeException("Unhandled section: " + s);
             }
 
-            sections.put(s, section);
-            toogleSectionVisibility(s, preferenceStore.getBoolean(s.defaultVisibility));
+            final SectionReference sr = new SectionReference(section, index, true, 0);            
+            sections.put(s, sr);
+
+            index++;
         }
 
         /*
@@ -676,7 +760,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
          * the part.
          */
         final ClusterTree tree = (ClusterTree) getSections().get(
-            SearchEditorSections.CLUSTERS).getClient();
+            SearchEditorSections.CLUSTERS).section.getClient();
 
         this.selectionProvider = tree;
         this.getSite().setSelectionProvider(this);
@@ -692,8 +776,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         });
 
         /*
-         * Set up an event callback to spawn auto-update jobs on changes to attributes. This may
-         * look a bit over-the-top, but it's a pattern taken from Eclipse SDK... 
+         * Set up an event callback to spawn auto-update jobs on changes to attributes.
          */
         this.getSearchResult().getInput().addAttributeChangeListener(autoUpdateListener);
 
@@ -702,25 +785,14 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
          * the document list panel.
          */
         final DocumentList documentList = (DocumentList) getSections().get(
-            SearchEditorSections.DOCUMENTS).getClient();
+            SearchEditorSections.DOCUMENTS).section.getClient();
         documentListSelectionSync = new DocumentListSelectionSync(documentList, this);
         this.addPostSelectionChangedListener(documentListSelectionSync);
 
         /*
-         * Assign default weights.
-         */
-        final EnumMap<SearchEditorSections, Integer> weights = new EnumMap<SearchEditorSections, Integer>(
-            SearchEditorSections.class);
-
-        for (SearchEditorSections s : EnumSet.allOf(SearchEditorSections.class))
-        {
-            weights.put(s, s.weight);
-        }
-
-        /*
          * Restore state information.
          */
-        restoreState(weights);
+        restoreState();
     }
 
     /*

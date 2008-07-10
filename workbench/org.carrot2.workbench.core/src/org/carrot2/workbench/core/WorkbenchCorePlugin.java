@@ -1,8 +1,13 @@
 package org.carrot2.workbench.core;
 
-import java.util.HashMap;
+import java.util.*;
 
 import org.carrot2.core.*;
+import org.carrot2.workbench.core.preferences.PreferenceConstants;
+import org.carrot2.workbench.core.ui.SearchEditor;
+import org.carrot2.workbench.core.ui.SearchEditorSections;
+import org.carrot2.workbench.core.ui.SearchEditor.SectionReference;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -104,5 +109,44 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
     public static ImageDescriptor getImageDescriptor(String path)
     {
         return imageDescriptorFromPlugin(PLUGIN_ID, path);
+    }
+    
+    /**
+     * Restore the state of editor's sections from the most recent global state.
+     */
+    public void restoreSectionsState(
+        EnumMap<SearchEditorSections, SearchEditor.SectionReference> sections)
+    {
+        final IPreferenceStore store = getPreferenceStore();
+        for (Map.Entry<SearchEditorSections, SearchEditor.SectionReference> s 
+            : sections.entrySet())
+        {
+            final SearchEditorSections section = s.getKey();
+            final SectionReference ref = s.getValue();
+
+            final String key = PreferenceConstants.getSectionWeightKey(section);
+            if (!store.isDefault(key))
+            {
+                ref.weight = store.getInt(key);
+            }
+        }
+    }
+
+    /**
+     * Keep a reference to the most recently updated editor's sections.
+     */
+    public void storeSectionsState(
+        EnumMap<SearchEditorSections, SectionReference> sections)
+    {
+        final IPreferenceStore store = getPreferenceStore();
+        for (Map.Entry<SearchEditorSections, SearchEditor.SectionReference> s 
+            : sections.entrySet())
+        {
+            final SearchEditorSections section = s.getKey();
+            final SectionReference ref = s.getValue();
+
+            final String key = PreferenceConstants.getSectionWeightKey(section);
+            store.setValue(key, ref.weight);
+        }
     }
 }
