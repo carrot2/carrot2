@@ -29,7 +29,6 @@ final class ClusterTreeSelectionSync implements ISelectionChangedListener
      */
     public void selectionChanged(SelectionChangedEvent event)
     {
-        final Object part = event.getSource();
         final ISelection selection = event.getSelection();
 
         // Skip redundant selection events that occur when switching between
