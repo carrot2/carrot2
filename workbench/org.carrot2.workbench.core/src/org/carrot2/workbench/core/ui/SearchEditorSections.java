@@ -1,6 +1,5 @@
 package org.carrot2.workbench.core.ui;
 
-import org.carrot2.workbench.core.preferences.PreferenceConstants;
 
 /**
  * {@link SearchEditor} has several panels. These panels are identifier with constants in

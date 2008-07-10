@@ -1,112 +1,149 @@
 package org.carrot2.workbench.core.ui;
 
 import java.util.EnumMap;
+import java.util.Map;
 
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
-import org.carrot2.workbench.core.preferences.PreferenceConstants;
-import org.carrot2.workbench.core.preferences.WorkbenchPreferencesPage;
-import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.preference.PreferenceDialog;
-import org.eclipse.jface.window.Window;
+import org.carrot2.workbench.core.ui.SearchEditor.SectionReference;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.TrayDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.*;
-import org.eclipse.ui.dialogs.PreferencesUtil;
 
 /**
- * Visible panels selection dialog.
+ * Selection of visible panels.
  */
-final class SearchEditorPanelSelectorDialog extends org.eclipse.jface.dialogs.TrayDialog
+final class SearchEditorPanelSelectorDialog extends TrayDialog
 {
-    private final EnumMap<SearchEditorSections, Boolean> visibility;
-    private final EnumMap<SearchEditorSections, Button> buttons;
+    private static final int SAVE_DEFAULTS_ID = IDialogConstants.CLIENT_ID + 1;
 
-    public SearchEditorPanelSelectorDialog(Shell parent, EnumMap<SearchEditorSections, Boolean> visibility)
+    private final SearchEditor editor;
+    private EnumMap<SearchEditorSections, SectionReference> localSections;
+
+    /*
+     * 
+     */
+    public SearchEditorPanelSelectorDialog(SearchEditor editor)
     {
-        super(parent);
+        super(editor.getSite().getShell());
 
-        this.visibility = visibility;
-        this.buttons = new EnumMap<SearchEditorSections, Button>(SearchEditorSections.class);
-    }
+        this.editor = editor;
 
-    @Override
-    protected void configureShell(Shell newShell)
-    {
-        super.configureShell(newShell);
-        newShell.setText("Editor panels");
-    }
-
-    @Override
-    protected void okPressed()
-    {
-        for (SearchEditorSections section : buttons.keySet())
+        localSections = new EnumMap<SearchEditorSections, SectionReference>(SearchEditorSections.class);
+        for (Map.Entry<SearchEditorSections, SectionReference> e 
+            : editor.getSections().entrySet())
         {
-            visibility.put(section, buttons.get(section).getSelection());
+            localSections.put(e.getKey(), new SectionReference(e.getValue()));
+        }
+    }
+
+    /*
+     * 
+     */
+    @Override
+    protected void createButtonsForButtonBar(Composite parent)
+    {
+        createButton(parent, SAVE_DEFAULTS_ID, "Save Default", false);
+        createButton(parent, IDialogConstants.OK_ID, "Apply", true);
+        createButton(parent, IDialogConstants.CANCEL_ID, "Cancel", false);
+    }
+
+    /*
+     * 
+     */
+    @Override
+    protected void configureShell(Shell s)
+    {
+        super.configureShell(s);
+        s.setText("Configure editor panels");
+    }
+
+    /*
+     * 
+     */
+    @Override
+    protected void buttonPressed(int buttonId)
+    {
+        if (buttonId == SAVE_DEFAULTS_ID)
+        {
+            WorkbenchCorePlugin.getDefault().storeSectionsState(
+                localSections);
         }
 
-        super.okPressed();
+        if (buttonId == IDialogConstants.OK_ID || buttonId == SAVE_DEFAULTS_ID)
+        {
+            for (SearchEditorSections section : localSections.keySet())
+            {
+                editor.setSectionVisibility(section, 
+                    localSections.get(section).visibility);
+            }
+            okPressed();
+        }
+        else
+        {
+            cancelPressed();
+        }
     }
 
+    /*
+     * 
+     */
     @Override
     protected Control createDialogArea(Composite parent)
     {
-        Composite root = (Composite) super.createDialogArea(parent);
+        final Composite root = (Composite) super.createDialogArea(parent);
         createControls(root);
         root.layout();
 
         return root;
     }
 
+    /*
+     * 
+     */
     private void createControls(Composite root)
     {
-        GridLayout parentLayout = new GridLayout();
-        root.setLayout(parentLayout);
+        final Composite content = new Composite(root, SWT.LEAD);
+        final GridLayout layout = new GridLayout();
+        layout.numColumns = 2;
+        content.setLayout(layout);
 
-        Label label = new Label(root, SWT.LEFT);
-        label.setText("Visible panels:");
+        GridData gd;
+        final Label label = new Label(content, SWT.LEAD);
+        label.setText("Select active panels:");
+        gd = new GridData();
+        gd.horizontalSpan = 2;
+        label.setLayoutData(gd);
 
-        for (SearchEditorSections section : visibility.keySet())
+        int totalWeight = 0;
+        for (SearchEditorSections section : localSections.keySet())
         {
-            final Button checkbox = new Button(root, SWT.CHECK | SWT.LEFT);
-            checkbox.setText(section.name);
-            checkbox.setSelection(visibility.get(section));
-
-            buttons.put(section, checkbox);
+            final SectionReference target = localSections.get(section);
+            totalWeight += target.weight;
         }
+        if (totalWeight == 0) totalWeight = 1;
 
-        final Link preferencesLink = new Link(root, SWT.NONE);
-        final GridData gridData = new GridData();
-        gridData.verticalIndent = 10;
-        preferencesLink.setLayoutData(gridData);
-        preferencesLink.setText("<a>Edit defaults...</a>");
-        preferencesLink.addSelectionListener(new SelectionAdapter()
+        for (SearchEditorSections section : localSections.keySet())
         {
-            @Override
-            public void widgetSelected(SelectionEvent e)
-            {
-                PreferenceDialog dialog =
-                    PreferencesUtil.createPreferenceDialogOn(getShell(),
-                        WorkbenchPreferencesPage.ID, new String []
-                        {
-                            WorkbenchPreferencesPage.ID
-                        }, null);
+            final SectionReference target = localSections.get(section);
 
-                if (dialog.open() == Window.OK)
+            final Button checkbox = new Button(content, SWT.CHECK | SWT.LEFT);
+            checkbox.setText(section.name);
+            checkbox.setSelection(target.visibility);
+            checkbox.addSelectionListener(new SelectionAdapter() {
+                @Override
+                public void widgetSelected(SelectionEvent e)
                 {
-                    IPreferenceStore store =
-                        WorkbenchCorePlugin.getDefault().getPreferenceStore();
-
-                    // Set to new defaults.
-                    for (SearchEditorSections section : buttons.keySet())
-                    {
-                        final String key = PreferenceConstants.getSectionVisibilityKey(section);
-                        buttons.get(section).setSelection(store.getBoolean(key));
-                    }
+                    target.visibility = checkbox.getSelection();
                 }
-            }
-        });
+            });
+
+            final Label weightLabel = new Label(content, SWT.LEAD);
+            weightLabel.setText((target.weight * 100) / totalWeight + "%");
+        }
     }
 }

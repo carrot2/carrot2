@@ -125,9 +125,11 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
             final SectionReference ref = s.getValue();
 
             final String key = PreferenceConstants.getSectionWeightKey(section);
+            final String key2 = PreferenceConstants.getSectionVisibilityKey(section);
             if (!store.isDefault(key))
             {
                 ref.weight = store.getInt(key);
+                ref.visibility = store.getBoolean(key2);
             }
         }
     }
@@ -146,7 +148,9 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
             final SectionReference ref = s.getValue();
 
             final String key = PreferenceConstants.getSectionWeightKey(section);
+            final String key2 = PreferenceConstants.getSectionVisibilityKey(section);
             store.setValue(key, ref.weight);
+            store.setValue(key2, ref.visibility);
         }
     }
 }

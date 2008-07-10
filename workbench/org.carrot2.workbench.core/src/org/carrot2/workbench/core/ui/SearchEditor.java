@@ -101,19 +101,24 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     /**
      * All attributes of a single panel.
      */
-    public final class SectionReference
+    public final static class SectionReference
     {
         public final Section section;
         public final int sashIndex;
         public boolean visibility;
         public int weight;
-        
-        public SectionReference(Section self, int sashIndex, boolean v, int w)
+
+        SectionReference(Section self, int sashIndex, boolean v, int w)
         {
             this.section = self;
             this.sashIndex = sashIndex;
             this.visibility = v;
             this.weight = w;
+        }
+
+        public SectionReference(SectionReference other)
+        {
+            this(null, -1, other.visibility, other.weight);
         }
     }
     
@@ -475,7 +480,6 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
                 public void controlMoved(ControlEvent e)
                 {
                     sr.weight = sashForm.getWeights()[sr.sashIndex];
-                    WorkbenchCorePlugin.getDefault().storeSectionsState(sections);
                 }
 
                 public void controlResized(ControlEvent e)
@@ -484,15 +488,6 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
                 }
             });
         }
-        
-        sashForm.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseUp(MouseEvent e)
-            {
-                super.mouseUp(e);
-                System.out.println("Sel: " + e);
-            }
-        });
     }
 
     /*
