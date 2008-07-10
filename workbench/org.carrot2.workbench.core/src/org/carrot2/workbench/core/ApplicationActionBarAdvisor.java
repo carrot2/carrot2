@@ -88,7 +88,7 @@ final class ApplicationActionBarAdvisor extends ActionBarAdvisor
          * File-related toolbar actions
          */
 
-        final IToolBarManager fileToolBar = new ToolBarManager(SWT.NONE);
+        final IToolBarManager fileToolBar = new ToolBarManager(coolBar.getStyle());
         fileToolBar.add(saveAsAction);
         fileToolBar.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 
