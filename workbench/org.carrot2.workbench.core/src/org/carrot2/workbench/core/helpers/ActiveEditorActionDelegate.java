@@ -71,6 +71,8 @@ public abstract class ActiveEditorActionDelegate
     public void init(IAction action)
     {
         this.action = action;
+
+        updateActionState(action, null);
         updateActiveEditor();
     }
 

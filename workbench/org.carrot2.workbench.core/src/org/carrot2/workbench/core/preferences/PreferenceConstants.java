@@ -7,6 +7,16 @@ import org.carrot2.workbench.core.ui.SearchEditorSections;
  */
 public final class PreferenceConstants
 {
+    /**
+     * Automatically re-render editors after attributes change.
+     */
+    public static final String AUTO_UPDATE = "auto-update.enabled"; 
+
+    /**
+     * {@link #AUTO_UPDATE} delay. 
+     */
+    public static final String AUTO_UPDATE_DELAY = "auto-update.delay"; 
+
     /*
      * 
      */

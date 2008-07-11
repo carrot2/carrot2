@@ -8,8 +8,7 @@ import org.eclipse.ui.IPropertyListener;
 
 /**
  * {@link ActiveEditorActionDelegate} that tracks the active {@link SearchEditor}, registers
- * a property listener to it and updates its state on {@Link SearchEditor#PROP_AUTO_UPDATE}
- * and {@link IEditorPart#PROP_DIRTY} events.
+ * a property listener to it and updates its state on {@link IEditorPart#PROP_DIRTY} events.
  */
 abstract class ActiveSearchEditorActionDelegate extends ActiveEditorActionDelegate 
 {
@@ -19,7 +18,7 @@ abstract class ActiveSearchEditorActionDelegate extends ActiveEditorActionDelega
     private IPropertyListener listener = new IPropertyListener() {
         public void propertyChanged(Object source, int propId)
         {
-            if (propId == SearchEditor.PROP_DIRTY || propId == SearchEditor.PROP_AUTO_UPDATE)
+            if (propId == SearchEditor.PROP_DIRTY)
             {
                 updateActionState(getAction(), getEditor());
             }

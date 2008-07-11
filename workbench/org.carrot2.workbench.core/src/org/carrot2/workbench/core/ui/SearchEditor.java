@@ -10,6 +10,7 @@ import org.carrot2.core.attribute.*;
 import org.carrot2.util.attribute.*;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.*;
+import org.carrot2.workbench.core.preferences.PreferenceConstants;
 import org.carrot2.workbench.core.ui.actions.SaveAsXMLActionDelegate;
 import org.carrot2.workbench.editors.AttributeChangedEvent;
 import org.carrot2.workbench.editors.IAttributeListener;
@@ -19,6 +20,9 @@ import org.eclipse.jface.action.*;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -76,13 +80,6 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     }
 
     /**
-     * A public event identifier related to <code>auto-update</code> property.
-     * 
-     * @see #isAutoUpdate()
-     */
-    public static final int PROP_AUTO_UPDATE = 0x00010000;
-
-    /**
      * Most recent save options.
      */
     private SaveOptions saveOptions;
@@ -96,7 +93,6 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     private static final String SECTION_NAME = "name";
     private static final String SECTION_WEIGHT = "weight";
     private static final String SECTION_VISIBLE = "visible";
-    private static final String SECTION_AUTO_UPDATE = "auto-update";
 
     /**
      * All attributes of a single panel.
@@ -184,21 +180,11 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     private SearchJob searchJob;
 
     /**
-     * If <code>true</code>, then changes on attributes automatically trigger re-processing
-     * of the search result.
-     */
-    private boolean autoUpdate = true;
-
-    /**
-     * Auto-update listener calls {@link #reprocess()} after attributes change.
+     * Auto-update listener calls {@link #reprocess()} after 
+     * {@link PreferenceConstants#AUTO_UPDATE} property changes.
      */
     private IAttributeListener autoUpdateListener = new IAttributeListener()
     {
-        /*
-         * TODO: [CARROT-276] Make this setting a global preference. 
-         */
-        private final int AUTO_UPDATE_DELAY = 1000;
-
         /** Postponable reschedule job. */
         private PostponableJob job = new PostponableJob(new UIJob("Auto update...") {
             public IStatus runInUIThread(IProgressMonitor monitor)
@@ -210,9 +196,28 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
 
         public void attributeChange(AttributeChangedEvent event)
         {
-            if (isAutoUpdate())
+            final IPreferenceStore store = WorkbenchCorePlugin.getDefault().getPreferenceStore();
+            if (store.getBoolean(PreferenceConstants.AUTO_UPDATE))
             {
-                job.reschedule(AUTO_UPDATE_DELAY);
+                final int delay = store.getInt(PreferenceConstants.AUTO_UPDATE_DELAY);
+                job.reschedule(delay);
+            }
+        }
+    };
+
+    /**
+     * When auto-update key in the preference store changes, force re-processing in case
+     * the editor is dirty.
+     */
+    private IPropertyChangeListener autoUpdateListener2 = new IPropertyChangeListener() {
+        public void propertyChange(PropertyChangeEvent event)
+        {
+            if (PreferenceConstants.AUTO_UPDATE.equals(event.getProperty()))
+            {
+                if (isDirty())
+                {
+                    reprocess();
+                }
             }
         }
     };
@@ -361,7 +366,6 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     @Override
     public void dispose()
     {
-        this.removePostSelectionChangedListener(documentListSelectionSync);
         this.resources.dispose();
         super.dispose();
     }
@@ -373,8 +377,6 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     {
         if (memento != null)
         {
-            memento.putString(SECTION_AUTO_UPDATE, Boolean.toString(autoUpdate));
-
             saveSectionsState(memento, sections);
         }
     }
@@ -427,14 +429,6 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
      */
     private void restoreState()
     {
-        /*
-         * Restore auto-update state.
-         */
-        if (state != null && state.getString(SECTION_AUTO_UPDATE) != null)
-        {
-            this.autoUpdate = Boolean.valueOf(state.getString(SECTION_AUTO_UPDATE));
-        }
-
         /*
          * Assign default section weights.
          */
@@ -610,34 +604,6 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     }
 
     /**
-     * Returns the current auto-update property value.
-     */
-    public boolean isAutoUpdate()
-    {
-        return this.autoUpdate;
-    }
-
-    /**
-     * Sets the new auto-update property value. Note that setting
-     * auto-update to <code>true</code> will cause re-processing
-     * if the editor is in the dirty state.
-     */
-    public void setAutoUpdate(boolean autoUpdate)
-    {
-        if (this.autoUpdate == autoUpdate)
-            return;
-
-        this.autoUpdate = autoUpdate;
-
-        if (isDirty() && autoUpdate)
-        {
-            reprocess();
-        }
-
-        firePropertyChange(PROP_AUTO_UPDATE);
-    }
-
-    /**
      * {@link SearchEditor} adaptations.
      */
     @SuppressWarnings("unchecked")
@@ -773,7 +739,15 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         /*
          * Set up an event callback to spawn auto-update jobs on changes to attributes.
          */
-        this.getSearchResult().getInput().addAttributeChangeListener(autoUpdateListener);
+        resources.registerAttributeChangeListener(
+            this.getSearchResult().getInput(), autoUpdateListener);
+
+        /*
+         * Set up an event callback to restart processing after auto-update is
+         * enabled and the editor is dirty.
+         */
+        resources.registerPropertyChangeListener(
+            WorkbenchCorePlugin.getDefault().getPreferenceStore(), autoUpdateListener2);
 
         /*
          * Install a synchronization agent between the current selection in the editor and
@@ -782,7 +756,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         final DocumentList documentList = (DocumentList) getSections().get(
             SearchEditorSections.DOCUMENTS).section.getClient();
         documentListSelectionSync = new DocumentListSelectionSync(documentList, this);
-        this.addPostSelectionChangedListener(documentListSelectionSync);
+        resources.registerPostSelectionChangedListener(this, documentListSelectionSync);
 
         /*
          * Restore state information.

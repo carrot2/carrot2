@@ -1,21 +1,32 @@
 package org.carrot2.workbench.core.helpers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.carrot2.workbench.editors.IAttributeChangeProvider;
+import org.carrot2.workbench.editors.IAttributeListener;
 import org.eclipse.core.commands.operations.OperationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.viewers.IPostSelectionProvider;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.swt.graphics.Resource;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.google.common.collect.Lists;
+
 /**
- * A collection of disposable resources (of multiple types that do not share
- * a common interface).
+ * A collection of disposable resources (of multiple types that do not share a common
+ * interface). The dispose bin can also register various kinds of listeners and unregister
+ * them automatically at {@link #dispose()}.
  */
 public final class DisposeBin
 {
-    private static abstract class Disposer<T> {
+    private static abstract class Disposer<T>
+    {
         protected final T t;
 
         Disposer(T t)
@@ -64,15 +75,39 @@ public final class DisposeBin
             t.dispose();
         }
     };
-    
+
+    private static class ListenerPair
+    {
+        public final Object registrar;
+        public final Object listener;
+
+        public ListenerPair(Object registrar, Object listener)
+        {
+            this.registrar = registrar;
+            this.listener = listener;
+        }
+    }
+
+    /*
+     * 
+     */
     private final HashMap<Object, Disposer<?>> resources = new HashMap<Object, Disposer<?>>();
+
+    /*
+     * 
+     */
+    private final ArrayList<ListenerPair> listeners = Lists.newArrayList();
+
+    /*
+     * 
+     */
     private final Plugin plugin;
 
     public DisposeBin()
     {
         this(null);
     }
-    
+
     public DisposeBin(Plugin plugin)
     {
         this.plugin = plugin;
@@ -90,7 +125,7 @@ public final class DisposeBin
     {
         this.resources.put(toolkit, new FormToolkitDisposer(toolkit));
     }
-    
+
     /*
      * 
      */
@@ -111,18 +146,81 @@ public final class DisposeBin
             {
                 if (plugin != null)
                 {
-                    IStatus status =
-                        new OperationStatus(IStatus.ERROR, 
-                            plugin.getBundle().getSymbolicName(), 
-                            -1, 
-                            "Resource disposal failed.",
-                            e);
+                    IStatus status = new OperationStatus(IStatus.ERROR, plugin
+                        .getBundle().getSymbolicName(), -1, "Resource disposal failed.",
+                        e);
 
                     plugin.getLog().log(status);
                 }
             }
         }
-        
+
         resources.clear();
+
+        for (ListenerPair p : listeners)
+        {
+            try
+            {
+                if (p.registrar instanceof IPreferenceStore)
+                {
+                    ((IPreferenceStore) p.registrar)
+                        .removePropertyChangeListener((IPropertyChangeListener) p.listener);
+                }
+                else if (p.registrar instanceof IAttributeChangeProvider)
+                {
+                    ((IAttributeChangeProvider) p.registrar)
+                        .removeAttributeChangeListener((IAttributeListener) p.listener);
+                }
+                else if (p.registrar instanceof IPostSelectionProvider)
+                {
+                    ((IPostSelectionProvider) p.registrar)
+                        .removePostSelectionChangedListener((ISelectionChangedListener) p.listener);
+                }
+                else
+                {
+                    throw new RuntimeException("Unhandled registrar: " + p.registrar);
+                }
+            }
+            catch (Throwable t)
+            {
+                if (plugin != null)
+                {
+                    IStatus status = new OperationStatus(IStatus.ERROR, plugin
+                        .getBundle().getSymbolicName(), -1, "Listener disposal failed.",
+                        t);
+
+                    plugin.getLog().log(status);
+                }
+            }
+        }
+
+        listeners.clear();
+    }
+
+    /*
+     * 
+     */
+    public void registerPropertyChangeListener(IPreferenceStore provider, IPropertyChangeListener l)
+    {
+        provider.addPropertyChangeListener(l);
+        listeners.add(new ListenerPair(provider, l));
+    }
+
+    /*
+     * 
+     */
+    public void registerAttributeChangeListener(IAttributeChangeProvider provider, IAttributeListener l)
+    {
+        provider.addAttributeChangeListener(l);
+        listeners.add(new ListenerPair(provider, l));
+    }
+
+    /*
+     * 
+     */
+    public void registerPostSelectionChangedListener(IPostSelectionProvider searchEditor,
+        ISelectionChangedListener l)
+    {
+        searchEditor.addPostSelectionChangedListener(l);
     }
 }

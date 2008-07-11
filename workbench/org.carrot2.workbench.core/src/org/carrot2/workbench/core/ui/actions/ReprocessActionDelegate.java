@@ -1,6 +1,12 @@
 package org.carrot2.workbench.core.ui.actions;
 
+import org.carrot2.workbench.core.WorkbenchCorePlugin;
+import org.carrot2.workbench.core.preferences.PreferenceConstants;
 import org.carrot2.workbench.core.ui.SearchEditor;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.ui.IEditorPart;
 
 /**
@@ -8,6 +14,34 @@ import org.eclipse.ui.IEditorPart;
  */
 public class ReprocessActionDelegate extends ActiveSearchEditorActionDelegate 
 {
+    /*
+     * 
+     */
+    private IPreferenceStore store;
+
+    /**
+     * When auto-update key in the preference store changes, update the state
+     * of this action.
+     */
+    private IPropertyChangeListener listener = new IPropertyChangeListener() {
+        public void propertyChange(PropertyChangeEvent event)
+        {
+            if (PreferenceConstants.AUTO_UPDATE.equals(event.getProperty()))
+            {
+                updateActionState(getAction(), getEditor());
+            }
+        }
+    };
+
+    @Override
+    public void init(IAction action)
+    {
+        this.store = WorkbenchCorePlugin.getDefault().getPreferenceStore();
+        store.addPropertyChangeListener(listener);
+
+        super.init(action);
+    }
+    
     /*
      * 
      */
@@ -28,6 +62,17 @@ public class ReprocessActionDelegate extends ActiveSearchEditorActionDelegate
          *  
          * activeEditor.isDirty();
          */
-        return !((SearchEditor) activeEditor).isAutoUpdate();
+
+        final IPreferenceStore store = WorkbenchCorePlugin.getDefault().getPreferenceStore();
+        final boolean autoUpdate = store.getBoolean(PreferenceConstants.AUTO_UPDATE);
+
+        return activeEditor != null && !autoUpdate;
+    }
+    
+    @Override
+    public void dispose()
+    {
+        super.dispose();
+        store.removePropertyChangeListener(listener);
     }
 }

@@ -17,10 +17,19 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer
         final IPreferenceStore store = WorkbenchCorePlugin.getDefault()
             .getPreferenceStore();
 
+        /*
+         * Default editor panel properties.
+         */
         for (SearchEditorSections s : EnumSet.allOf(SearchEditorSections.class))
         {
             store.setDefault(
                 PreferenceConstants.getSectionVisibilityKey(s), true);
         }
+
+        /*
+         * Auto-update.
+         */
+        store.setDefault(PreferenceConstants.AUTO_UPDATE, true);
+        store.setDefault(PreferenceConstants.AUTO_UPDATE_DELAY, 1000);
     }
 }
