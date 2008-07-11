@@ -64,7 +64,7 @@ public class MsnApiInputComponentTest extends LocalInputComponentTestBase
 
     public void testEmptyQuery() throws Exception
     {
-        performQuery("duiogig oiudgisugviw siug iugw iusviuwg", 100, 0);
+        performQuery("duiogig oiudgisugvi\u0078 siug iugw iusviuwg", 100, 0);
     }
 
     public void testStartFromBug() throws Exception
