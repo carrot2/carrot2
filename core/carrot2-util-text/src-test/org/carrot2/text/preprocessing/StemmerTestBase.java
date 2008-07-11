@@ -24,14 +24,15 @@ public class StemmerTestBase extends PreprocessingComponentTestBase
         caseNormalizer = new CaseNormalizer();
         languageModelStemmer = new LanguageModelStemmer();
     }
-    
+
     protected void check(char [][] expectedStemImages, int [] expectedStemTf,
-        int [] expectedStemIndices, int [][] expectedStemTfByDocument)
+        int [] expectedStemIndices, int [][] expectedStemTfByDocument,
+        byte [][] expectedFieldIndices)
     {
         tokenizer.tokenize(context);
         caseNormalizer.normalize(context);
         languageModelStemmer.stem(context);
-        
+
         assertThat(context.allWords.stemIndex).as("allWords.stemIndices").isEqualTo(
             expectedStemIndices);
         assertThat(context.allStems.image).as("allStems.images").isEqualTo(
@@ -39,5 +40,7 @@ public class StemmerTestBase extends PreprocessingComponentTestBase
         assertThat(context.allStems.tf).as("allStems.tf").isEqualTo(expectedStemTf);
         assertThat(context.allStems.tfByDocument).as("allStems.tfByDocument").isEqualTo(
             expectedStemTfByDocument);
+        assertThat(context.allStems.fieldIndices).as("allStems.fieldIndices").isEqualTo(
+            expectedFieldIndices);
     }
 }

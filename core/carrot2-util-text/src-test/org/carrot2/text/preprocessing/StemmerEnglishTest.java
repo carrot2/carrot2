@@ -36,9 +36,18 @@ public class StemmerEnglishTest extends StemmerTestBase
                 0, 2
             }
         };
+        byte [][] expectedFieldIndices = new byte [] []
+        {
+            {
+                0, 1
+            },
+            {
+                0, 1
+            }
+        };
 
         check(expectedStemImages, expectedStemTf, expectedStemIndices,
-            expectedStemTfByDocument);
+            expectedStemTfByDocument, expectedFieldIndices);
     }
 
     @Test
@@ -70,9 +79,18 @@ public class StemmerEnglishTest extends StemmerTestBase
                 0, 2
             }
         };
+        byte [][] expectedFieldIndices = new byte [] []
+        {
+            {
+                0, 1
+            },
+            {
+                0, 1
+            }
+        };
 
         check(expectedStemImages, expectedStemTf, expectedStemIndices,
-            expectedStemTfByDocument);
+            expectedStemTfByDocument, expectedFieldIndices);
     }
 
     @Test
@@ -104,8 +122,17 @@ public class StemmerEnglishTest extends StemmerTestBase
                 0, 4
             }
         };
+        byte [][] expectedFieldIndices = new byte [] []
+        {
+            {
+                0, 1
+            },
+            {
+                0, 1
+            }
+        };
 
         check(expectedStemImages, expectedStemTf, expectedStemIndices,
-            expectedStemTfByDocument);
+            expectedStemTfByDocument, expectedFieldIndices);
     }
 }

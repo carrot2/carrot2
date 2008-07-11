@@ -9,10 +9,11 @@ import org.carrot2.util.CharArrayUtils;
 import org.carrot2.util.CharSequenceUtils;
 import org.carrot2.util.attribute.Bindable;
 
+import com.google.common.collect.Lists;
+
 import bak.pcj.list.IntArrayList;
 import bak.pcj.list.IntList;
-import bak.pcj.set.IntBitSet;
-import bak.pcj.set.IntSet;
+import bak.pcj.set.*;
 
 /**
  * Applies stemming to words and calculates a number of frequency statistics for stems.
@@ -74,6 +75,7 @@ public final class LanguageModelStemmer
         // Local array references
         final int [] wordTfArray = context.allWords.tf;
         final int [][] wordTfByDocumentArray = context.allWords.tfByDocument;
+        final byte [][] wordsFieldIndices = context.allWords.fieldIndices;
 
         final int allWordsCount = wordTfArray.length;
 
@@ -86,6 +88,7 @@ public final class LanguageModelStemmer
             context.allStems.mostFrequentOriginalWordIndex = new int [0];
             context.allStems.tf = new int [0];
             context.allStems.tfByDocument = new int [0] [];
+            context.allStems.fieldIndices = new byte [0] [];
 
             context.allWords.stemIndex = new int [context.allWords.image.length];
 
@@ -97,6 +100,7 @@ public final class LanguageModelStemmer
         final IntList stemTf = new IntArrayList(allWordsCount);
         final IntList stemMostFrequentWordIndexes = new IntArrayList(allWordsCount);
         final List<int []> stemTfByDocumentList = new ArrayList<int []>(allWordsCount);
+        final List<byte []> fieldIndexList = Lists.newArrayList();
 
         // Counters
         int totalTf = wordTfArray[stemImagesOrder[0]];
@@ -108,6 +112,9 @@ public final class LanguageModelStemmer
         final int [] stemTfByDocument = new int [context.documents.size()];
         IntArrayUtils.addAllFromSparselyEncoded(stemTfByDocument,
             wordTfByDocumentArray[stemImagesOrder[0]]);
+        final ByteBitSet fieldIndices = new ByteBitSet(
+            (byte) context.allFields.name.length);
+        addAll(fieldIndices, wordsFieldIndices[0]);
 
         // Go through all words in the order of stem images
         for (int i = 0; i < stemImagesOrder.length - 1; i++)
@@ -127,6 +134,7 @@ public final class LanguageModelStemmer
                 totalTf += wordTfArray[nextInOrderIndex];
                 IntArrayUtils.addAllFromSparselyEncoded(stemTfByDocument,
                     wordTfByDocumentArray[nextInOrderIndex]);
+                addAll(fieldIndices, wordsFieldIndices[nextInOrderIndex]);
                 if (mostFrequentWordFrequency < wordTfArray[nextInOrderIndex])
                 {
                     mostFrequentWordFrequency = wordTfArray[nextInOrderIndex];
@@ -141,6 +149,7 @@ public final class LanguageModelStemmer
                 stemMostFrequentWordIndexes.add(mostFrequentWordIndex);
                 stemTfByDocumentList
                     .add(IntArrayUtils.toSparseEncoding(stemTfByDocument));
+                fieldIndexList.add(fieldIndices.toArray());
 
                 stemIndex++;
                 totalTf = wordTfArray[nextInOrderIndex];
@@ -148,6 +157,8 @@ public final class LanguageModelStemmer
                 mostFrequentWordIndex = nextInOrderIndex;
                 originalWordIndexesSet.clear();
                 originalWordIndexesSet.add(nextInOrderIndex);
+                fieldIndices.clear();
+                addAll(fieldIndices, wordsFieldIndices[nextInOrderIndex]);
 
                 Arrays.fill(stemTfByDocument, 0);
                 IntArrayUtils.addAllFromSparselyEncoded(stemTfByDocument,
@@ -161,6 +172,7 @@ public final class LanguageModelStemmer
         stemMostFrequentWordIndexes.add(mostFrequentWordIndex);
         stemIndexesArray[stemImagesOrder[stemImagesOrder.length - 1]] = stemIndex;
         stemTfByDocumentList.add(IntArrayUtils.toSparseEncoding(stemTfByDocument));
+        fieldIndexList.add(fieldIndices.toArray());
 
         // Convert lists to arrays and store them in allStems
         context.allStems.image = stemImages.toArray(new char [stemImages.size()] []);
@@ -169,8 +181,18 @@ public final class LanguageModelStemmer
         context.allStems.tf = stemTf.toArray();
         context.allStems.tfByDocument = stemTfByDocumentList
             .toArray(new int [stemTfByDocumentList.size()] []);
+        context.allStems.fieldIndices = fieldIndexList.toArray(new byte [fieldIndexList
+            .size()] []);
 
         // References in allWords
         context.allWords.stemIndex = stemIndexesArray;
+    }
+
+    private final static void addAll(ByteBitSet set, byte [] values)
+    {
+        for (byte b : values)
+        {
+            set.add(b);
+        }
     }
 }

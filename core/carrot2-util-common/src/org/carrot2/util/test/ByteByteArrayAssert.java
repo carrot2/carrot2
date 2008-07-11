@@ -30,7 +30,8 @@ public class ByteByteArrayAssert implements AssertExtension
 
         for (int i = 0; i < expected.length; i++)
         {
-            assertThat(actualArray[i]).as(description).isEqualTo(expected[i]);
+            assertThat(actualArray[i]).as(description + "[" + i + "]").isEqualTo(
+                expected[i]);
         }
         return this;
     }
