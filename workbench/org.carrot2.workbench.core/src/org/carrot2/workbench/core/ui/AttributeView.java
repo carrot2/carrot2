@@ -3,15 +3,12 @@ package org.carrot2.workbench.core.ui;
 import org.eclipse.ui.IWorkbenchPart;
 
 /**
- * A cluster tree view displays a {@link ClusterTree} control attached
- * to the currently visible editor.
+ * A view showing attribute values associated with the active editor's
+ * {@link SearchResult}.
  */
-public final class ClusterTreeView extends PageBookViewBase
+public final class AttributeView extends PageBookViewBase
 {
-    /**
-     * Public identifier of this view.
-     */
-    public static final String ID = "org.carrot2.workbench.core.views.clusters";
+    public static final String ID = "org.carrot2.workbench.core.views.attributes";
 
     /**
      * Create a tree view for the given part.
@@ -21,7 +18,7 @@ public final class ClusterTreeView extends PageBookViewBase
     {
         final SearchEditor editor = (SearchEditor) part;
 
-        final ClusterTreeViewPage page = new ClusterTreeViewPage(editor);
+        final AttributeViewPage page = new AttributeViewPage(editor);
         initPage(page);
         page.createControl(getPageBook());
 

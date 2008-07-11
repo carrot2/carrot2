@@ -83,7 +83,7 @@
       </view>
       <view
             category="org.carrot2.workbench.core.workbench.category"
-            class="org.carrot2.workbench.core.ui.AttributesView"
+            class="org.carrot2.workbench.core.ui.AttributeView"
             icon="icons/view_attributes.gif"
             id="org.carrot2.workbench.core.views.attributes"
             name="Attributes">

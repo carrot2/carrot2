@@ -32,6 +32,6 @@ public final class SearchPerspective implements IPerspectiveFactory
             layout.createPlaceholderFolder("leftBottomViews", IPageLayout.BOTTOM, .3f,
                 "leftViews");
         leftBottomFolder.addPlaceholder(ClusterTreeView.ID);
-        leftBottomFolder.addPlaceholder(AttributesView.ID);
+        leftBottomFolder.addPlaceholder(AttributeView.ID);
     }
 }

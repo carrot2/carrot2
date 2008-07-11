@@ -14,7 +14,7 @@ import org.eclipse.ui.actions.ActionDelegate;
  * Controls the state of the auto-update feature for editors (re-processing
  * after attributes change). 
  */
-public class AutoUpdateActionDelegate extends ActionDelegate implements IWorkbenchWindowActionDelegate 
+public class AutoUpdateActionDelegate extends ActionDelegate implements IWorkbenchWindowActionDelegate
 {
     /*
      * 

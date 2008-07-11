@@ -5,7 +5,6 @@ import java.io.StringWriter;
 import java.lang.annotation.Annotation;
 import java.util.*;
 
-import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.ProcessingComponent;
 import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;

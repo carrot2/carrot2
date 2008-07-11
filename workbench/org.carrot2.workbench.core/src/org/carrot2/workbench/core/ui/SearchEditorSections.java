@@ -12,7 +12,7 @@ public enum SearchEditorSections
 {
     CLUSTERS("Clusters", 1, ClusterTreeView.ID),
     DOCUMENTS("Documents", 2, DocumentListView.ID),
-    ATTRIBUTES("Attributes", 2, AttributesView.ID);
+    ATTRIBUTES("Attributes", 2, AttributeView.ID);
 
     /** Default weight. */
     public final int weight;

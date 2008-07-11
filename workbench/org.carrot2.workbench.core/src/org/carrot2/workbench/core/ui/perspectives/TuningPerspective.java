@@ -29,10 +29,10 @@ public final class TuningPerspective implements IPerspectiveFactory
         IFolderLayout leftBottomFolder = layout.createFolder("leftBottomViews",
             IPageLayout.BOTTOM, .3f, "leftViews");
         leftBottomFolder.addView(ClusterTreeView.ID);
-        leftBottomFolder.addView(AttributesView.ID);
+        leftBottomFolder.addView(AttributeView.ID);
 
         layout.addShowViewShortcut(ClusterTreeView.ID);
-        layout.addShowViewShortcut(AttributesView.ID);
+        layout.addShowViewShortcut(AttributeView.ID);
         layout.addShowViewShortcut(SearchInputView.ID);
     }
 }
