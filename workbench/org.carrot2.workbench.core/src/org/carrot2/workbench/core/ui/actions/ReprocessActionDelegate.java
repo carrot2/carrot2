@@ -1,97 +1,33 @@
 package org.carrot2.workbench.core.ui.actions;
 
 import org.carrot2.workbench.core.ui.SearchEditor;
-import org.eclipse.jface.action.IAction;
-import org.eclipse.ui.*;
-import org.eclipse.ui.actions.ActionDelegate;
+import org.eclipse.ui.IEditorPart;
 
 /**
  * Restarts processing in the currently active editor.
  */
-public class ReprocessActionDelegate extends ActionDelegate implements
-    IWorkbenchWindowActionDelegate, IEditorActionDelegate, IPropertyListener
+public class ReprocessActionDelegate extends ActiveSearchEditorActionDelegate 
 {
-    private SearchEditor editor;
-    private IAction action;
-
     /*
      * 
      */
-    public void setActiveEditor(IAction action, IEditorPart targetEditor)
+    @Override
+    public void run(SearchEditor editor)
     {
-        if (this.action == null)
-        {
-            this.action = action;
-        }
-
-        if (this.action != action)
-        {
-            throw new RuntimeException("Multiple actions assigned to the delegate.");
-        }
-
-        unregister();
-
-        if (targetEditor instanceof SearchEditor)
-        {
-            this.editor = (SearchEditor) targetEditor;
-            this.editor.addPropertyListener(this);
-        }
-
-        updateState(action);
-    }
-
-    /*
-     * 
-     */
-    public void run(IAction action)
-    {
-        if (editor.isDirty())
-        {
-            editor.reprocess();
-        }
-    }
-
-    public void dispose()
-    {
-        unregister();
+        editor.reprocess();
     }
 
     /**
-     * 
+     * Is this action enabled for the given editor?
      */
-    public void propertyChanged(Object source, int propId)
+    protected boolean isEnabled(IEditorPart activeEditor)
     {
-        if (propId == IEditorPart.PROP_DIRTY && action != null)
-        {
-            updateState(action);
-        }
-    }
-
-    /*
-     * 
-     */
-    public void init(IWorkbenchWindow window)
-    {
-        // Do nothing.
-    }
-
-    /**
-     * Unregister from editor's property listening queue.
-     */
-    private void unregister()
-    {
-        if (editor != null)
-        {
-            editor.removePropertyListener(this);
-            editor = null;
-        }
-    }
-
-    /*
-     * 
-     */
-    private void updateState(IAction action)
-    {
-        action.setEnabled(this.editor != null && this.editor.isDirty());
+        /*
+         * Allow forcing of re-rendering of the editor's contents when 
+         * auto-update is off. Alternatively, we could disable re-rendering with:
+         *  
+         * activeEditor.isDirty();
+         */
+        return !((SearchEditor) activeEditor).isAutoUpdate();
     }
 }

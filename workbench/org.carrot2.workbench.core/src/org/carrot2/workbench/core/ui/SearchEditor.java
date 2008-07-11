@@ -80,7 +80,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
      * 
      * @see #isAutoUpdate()
      */
-    public static final int PROP_AUTO_UPDATE = 0;
+    public static final int PROP_AUTO_UPDATE = 0x00010000;
 
     /**
      * Most recent save options.

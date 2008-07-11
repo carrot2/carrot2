@@ -161,39 +161,6 @@
       <editorContribution
             id="org.carrot2.workbench.core.ui.searchEditorActions"
             targetID="org.carrot2.workbench.core.editors.searchEditor">
-         <action
-               class="org.carrot2.workbench.core.ui.actions.ReprocessActionDelegate"
-               definitionId="org.carrot2.workbench.core.ui.actions.ReprocessCommand"
-               disabledIcon="icons/reprocess_d.gif"
-               icon="icons/reprocess_e.gif"
-               id="org.carrot2.workbench.core.ui.actions.ReprocessAction"
-               label="&amp;Restart Processing"
-               menubarPath="org.carrot2.workbench.menus.searchMenu/processing"
-               toolbarPath="Search"
-               tooltip="Restart processing of editor input">
-         </action>
-         <action
-               class="org.carrot2.workbench.core.ui.actions.AutoUpdateActionDelegate"
-               disabledIcon="icons/autoupdate_d.gif"
-               icon="icons/autoupdate_e.gif"
-               id="org.carrot2.workbench.core.ui.actions.AutoUpdateAction"
-               label="&amp;Restart Processing Automatically"
-               menubarPath="org.carrot2.workbench.menus.searchMenu/processing"
-               style="toggle"
-               toolbarPath="Search"
-               tooltip="Automatically restarts processing after attributes change">
-         </action>
-         <menu
-               id="org.carrot2.workbench.menus.searchMenu"
-               label="&amp;Search"
-               path="additions">
-            <groupMarker
-                  name="processing">
-            </groupMarker>
-            <separator
-                  name="additions">
-            </separator>
-         </menu>
       </editorContribution>
    </extension>
    <extension
@@ -214,6 +181,54 @@
             id="org.carrot2.workbench.core.ui.actions.ReprocessCommand"
             name="Restart Processing">
       </command>
+      <command
+            description="Automatically restarts processing after attributes change"
+            id="org.carrot2.workbench.core.ui.actions.AutoUpdateCommand"
+            name="Restart Processing Automatically">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            description="Actions on the active Search Editor(s)"
+            id="org.carrot2.workbench.core.SearchEditorActionSet"
+            label="Search Editor Actions"
+            visible="true">
+         <action
+               class="org.carrot2.workbench.core.ui.actions.ReprocessActionDelegate"
+               definitionId="org.carrot2.workbench.core.ui.actions.ReprocessCommand"
+               disabledIcon="icons/reprocess_d.gif"
+               icon="icons/reprocess_e.gif"
+               id="org.carrot2.workbench.core.ui.actions.ReprocessAction"
+               label="&amp;Restart Processing"
+               menubarPath="org.carrot2.workbench.menus.searchMenu/processing"
+               toolbarPath="Search"
+               tooltip="Restart processing of editor input">
+         </action>
+         <action
+               class="org.carrot2.workbench.core.ui.actions.AutoUpdateActionDelegate"
+               definitionId="org.carrot2.workbench.core.ui.actions.AutoUpdateCommand"
+               disabledIcon="icons/autoupdate_d.gif"
+               icon="icons/autoupdate_e.gif"
+               id="org.carrot2.workbench.core.ui.actions.AutoUpdateAction2"
+               label="&amp;Restart Processing Automatically"
+               menubarPath="org.carrot2.workbench.menus.searchMenu/processing"
+               style="toggle"
+               toolbarPath="Search"
+               tooltip="Automatically restarts processing after attributes change">
+         </action>
+         <menu
+               id="org.carrot2.workbench.menus.searchMenu"
+               label="&amp;Search"
+               path="additions">
+            <groupMarker
+                  name="processing">
+            </groupMarker>
+            <separator
+                  name="additions">
+            </separator>
+         </menu>
+      </actionSet>
    </extension>
 
 </plugin>
