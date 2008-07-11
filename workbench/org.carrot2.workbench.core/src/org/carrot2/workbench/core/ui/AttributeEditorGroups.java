@@ -21,11 +21,10 @@ import org.eclipse.ui.forms.widgets.*;
 import com.google.common.collect.Maps;
 
 /**
- * An SWT composite displaying groups of editors for processing attributes of an attached
- * editor.
+ * An SWT composite displaying groups of {@link IAttributeEditor}s.
  */
-public final class AttributeEditorGroups extends SharedScrolledComposite
-    implements IAttributeChangeProvider
+public final class AttributeEditorGroups extends SharedScrolledComposite implements
+    IAttributeChangeProvider
 {
     /**
      * Method of grouping attribute editors.
@@ -40,8 +39,7 @@ public final class AttributeEditorGroups extends SharedScrolledComposite
     /**
      * Attribute change listeners.
      */
-    private final List<IAttributeListener> listeners = 
-        new CopyOnWriteArrayList<IAttributeListener>();
+    private final List<IAttributeListener> listeners = new CopyOnWriteArrayList<IAttributeListener>();
 
     /**
      * Forward events from editors to external listeners.
@@ -56,12 +54,12 @@ public final class AttributeEditorGroups extends SharedScrolledComposite
             }
         }
     };
-    
+
     /**
      * Descriptors of attribute editors to be created.
      */
     private BindableDescriptor descriptor;
-    
+
     /**
      * A hashmap of attribute IDs to {@link AttributeEditorList} that contain them.
      * 
@@ -70,11 +68,12 @@ public final class AttributeEditorGroups extends SharedScrolledComposite
     private Map<String, AttributeEditorList> attributeEditors = Maps.newHashMap();
 
     /**
-     * Builds the component for a given {@link BindableDescriptor}. 
+     * Builds the component for a given {@link BindableDescriptor}.
      */
     public AttributeEditorGroups(Composite parent, BindableDescriptor descriptor)
     {
         super(parent, SWT.V_SCROLL | SWT.H_SCROLL);
+        this.setDelayedReflow(false);
 
         this.descriptor = descriptor;
         createComponents();
@@ -170,9 +169,9 @@ public final class AttributeEditorGroups extends SharedScrolledComposite
         layout.marginBottom = GROUP_VSPACE;
         inner.setLayout(layout);
 
-        final AttributeEditorList editorList = 
-            new AttributeEditorList(inner, attributes, descriptor.type);
-        
+        final AttributeEditorList editorList = new AttributeEditorList(inner, attributes,
+            descriptor.type);
+
         final GridData data = new GridData();
         data.horizontalAlignment = GridData.FILL;
         data.verticalAlignment = GridData.FILL;
@@ -188,7 +187,7 @@ public final class AttributeEditorGroups extends SharedScrolledComposite
         {
             attributeEditors.put(key, editorList);
         }
-        
+
         /*
          * Register for event notifications from editors.
          */
@@ -219,8 +218,8 @@ public final class AttributeEditorGroups extends SharedScrolledComposite
     }
 
     /**
-     * On reflow, update both vertical and horizontal scroller (for some reason
-     * the horizontal one is neglected in current version of Eclipse).
+     * On reflow, update both vertical and horizontal scroller (for some reason the
+     * horizontal one is neglected in current version of Eclipse).
      */
     @Override
     public void reflow(boolean flushCache)
@@ -235,7 +234,7 @@ public final class AttributeEditorGroups extends SharedScrolledComposite
             hbar.setPageIncrement(increment);
         }
     }
-    
+
     /**
      * 
      */
