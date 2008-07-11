@@ -2,10 +2,11 @@ package org.carrot2.workbench.core.ui;
 
 import static org.eclipse.swt.SWT.NONE;
 
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.apache.commons.lang.StringUtils;
 import org.carrot2.util.attribute.AttributeDescriptor;
 import org.carrot2.util.attribute.BindableDescriptor;
 import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
@@ -19,6 +20,7 @@ import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.*;
 
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 /**
  * An SWT composite displaying groups of {@link IAttributeEditor}s.
@@ -29,7 +31,7 @@ public final class AttributeEditorGroups extends SharedScrolledComposite impleme
     /**
      * Method of grouping attribute editors.
      */
-    private GroupingMethod grouping = GroupingMethod.GROUP;
+    private GroupingMethod grouping;
 
     /**
      * Main control in which editors are embedded.
@@ -37,7 +39,7 @@ public final class AttributeEditorGroups extends SharedScrolledComposite impleme
     private Composite mainControl;
 
     /**
-     * Attribute change listeners.
+     * External attribute change listeners.
      */
     private final List<IAttributeListener> listeners = new CopyOnWriteArrayList<IAttributeListener>();
 
@@ -70,23 +72,18 @@ public final class AttributeEditorGroups extends SharedScrolledComposite impleme
     /**
      * Builds the component for a given {@link BindableDescriptor}.
      */
-    public AttributeEditorGroups(Composite parent, BindableDescriptor descriptor)
+    public AttributeEditorGroups(Composite parent, BindableDescriptor descriptor, GroupingMethod grouping)
     {
         super(parent, SWT.V_SCROLL | SWT.H_SCROLL);
         this.setDelayedReflow(false);
 
         this.descriptor = descriptor;
         createComponents();
-    }
 
-    /*
-     * 
-     */
-    @Override
-    public void dispose()
-    {
-        super.dispose();
-        this.listeners.clear();
+        /*
+         * Set initial grouping and recreate components.
+         */
+        setGrouping(grouping);
     }
 
     /**
@@ -99,8 +96,6 @@ public final class AttributeEditorGroups extends SharedScrolledComposite impleme
         mainControl.setLayout(new GridLayout());
         this.mainControl = mainControl;
 
-        createEditors(mainControl, grouping);
-
         /*
          * Expand controls horizontally, do not expand vertically.
          */
@@ -109,6 +104,34 @@ public final class AttributeEditorGroups extends SharedScrolledComposite impleme
         this.reflow(true);
     }
 
+    /**
+     * Reset the grouping of attributes inside this component. 
+     */
+    public void setGrouping(GroupingMethod newGrouping)
+    {
+        if (newGrouping == grouping)
+        {
+            return;
+        }
+
+        this.grouping = newGrouping;
+
+        this.mainControl.setRedraw(false);
+        disposeEditors();
+        createEditors(mainControl, grouping);
+        this.mainControl.setRedraw(true);
+
+        this.reflow(true);
+    }
+
+    /**
+     * Returns the current grouping state.
+     */
+    public GroupingMethod getGrouping()
+    {
+        return grouping;
+    }
+    
     /**
      * Create editors based on the given {@link GroupingMethod}.
      */
@@ -124,7 +147,21 @@ public final class AttributeEditorGroups extends SharedScrolledComposite impleme
          */
         for (Object groupKey : descriptor.attributeGroups.keySet())
         {
-            createEditorGroup(mainControl, groupKey.toString(), descriptor,
+            final String groupLabel;
+            final String groupTooltip;
+            if (groupKey instanceof Class)
+            {
+                groupLabel = ((Class<?>) groupKey).getSimpleName();
+                groupTooltip = "Class: " + ((Class<?>) groupKey).getName();
+            }
+            else
+            {
+                // Anything else, we simply convert to a string.
+                groupTooltip = groupKey.toString();
+                groupLabel = StringUtils.abbreviate(groupTooltip, 80);
+            }
+            
+            createEditorGroup(mainControl, groupLabel, groupTooltip, descriptor,
                 descriptor.attributeGroups.get(groupKey));
         }
 
@@ -133,7 +170,7 @@ public final class AttributeEditorGroups extends SharedScrolledComposite impleme
          */
         if (!descriptor.attributeDescriptors.isEmpty())
         {
-            createEditorGroup(mainControl, "Ungrouped", descriptor,
+            createEditorGroup(mainControl, "Ungrouped", "Other ungrouped attributes", descriptor,
                 descriptor.attributeDescriptors);
         }
     }
@@ -143,6 +180,7 @@ public final class AttributeEditorGroups extends SharedScrolledComposite impleme
      */
     @SuppressWarnings("unchecked")
     private void createEditorGroup(final Composite parent, String groupName,
+        String tooltip,
         BindableDescriptor descriptor, Map<String, AttributeDescriptor> attributes)
     {
         /*
@@ -156,6 +194,7 @@ public final class AttributeEditorGroups extends SharedScrolledComposite impleme
         final int style = ExpandableComposite.TWISTIE | ExpandableComposite.CLIENT_INDENT;
         final Section group = new Section(parent, style);
         group.setText(groupName);
+        group.setToolTipText(tooltip);
         group.setExpanded(true);
         group.setSeparatorControl(new Label(group, SWT.SEPARATOR | SWT.HORIZONTAL));
 
@@ -261,5 +300,45 @@ public final class AttributeEditorGroups extends SharedScrolledComposite impleme
         {
             attributeEditorList.setAttribute(key, value);
         }
+    }
+
+    /**
+     * Dispose and unregister any editors currently held.
+     */
+    private void disposeEditors()
+    {
+        if (this.attributeEditors.isEmpty())
+            return;
+
+        /*
+         * Unsubscribe from attribute editors (unique).
+         */
+        final HashSet<AttributeEditorList> values = Sets.newHashSet(this.attributeEditors.values());
+        for (AttributeEditorList attEditor : values)
+        {
+            attEditor.removeAttributeChangeListener(forwardListener);
+        }
+        
+        /*
+         * Dispose controls.
+         */
+        for (Control c : this.mainControl.getChildren())
+        {
+            if (!c.isDisposed()) c.dispose();
+        }
+
+        this.attributeEditors.clear();
+    }
+
+    /*
+     * 
+     */
+    @Override
+    public void dispose()
+    {
+        disposeEditors();
+        this.listeners.clear();
+
+        super.dispose();
     }
 }

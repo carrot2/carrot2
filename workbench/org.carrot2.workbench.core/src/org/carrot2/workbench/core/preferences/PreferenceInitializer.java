@@ -2,6 +2,7 @@ package org.carrot2.workbench.core.preferences;
 
 import java.util.EnumSet;
 
+import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.ui.SearchEditorSections;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
@@ -31,5 +32,10 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer
          */
         store.setDefault(PreferenceConstants.AUTO_UPDATE, true);
         store.setDefault(PreferenceConstants.AUTO_UPDATE_DELAY, 1000);
+        
+        /*
+         * Attribute grouping.
+         */
+        store.setDefault(PreferenceConstants.ATTRIBUTE_GROUPING_LAYOUT, GroupingMethod.GROUP.name());
     }
 }

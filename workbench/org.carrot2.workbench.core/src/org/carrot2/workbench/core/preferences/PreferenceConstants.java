@@ -15,7 +15,12 @@ public final class PreferenceConstants
     /**
      * {@link #AUTO_UPDATE} delay. 
      */
-    public static final String AUTO_UPDATE_DELAY = "auto-update.delay"; 
+    public static final String AUTO_UPDATE_DELAY = "auto-update.delay";
+
+    /**
+     * Attribute grouping layout.
+     */
+    public static final String ATTRIBUTE_GROUPING_LAYOUT = "attributes-view.layout"; 
 
     /*
      * 

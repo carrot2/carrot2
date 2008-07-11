@@ -8,6 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
 import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.*;
 import org.carrot2.workbench.core.preferences.PreferenceConstants;
@@ -846,7 +847,8 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         sec.setText(section.name);
 
         final BindableDescriptor descriptor = getAlgorithmDescriptor();
-        final AttributeEditorGroups attributesList = new AttributeEditorGroups(sec, descriptor);
+        final AttributeEditorGroups attributesList = new AttributeEditorGroups(
+            sec, descriptor, GroupingMethod.GROUP);
         resources.add(attributesList);
 
         /*

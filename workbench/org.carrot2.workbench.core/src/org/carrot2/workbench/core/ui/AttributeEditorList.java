@@ -1,5 +1,6 @@
 package org.carrot2.workbench.core.ui;
 
+import java.text.Collator;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -15,6 +16,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 
@@ -162,11 +164,33 @@ public final class AttributeEditorList extends Composite
     
         layout.numColumns = 2;
         layout.marginWidth = 0;
-    
+        
+        /*
+         * Sort alphabetically by label.
+         */
+        final Locale locale = Locale.getDefault();
+        final Map<String,String> labels = Maps.newHashMap();
         for (Map.Entry<String, AttributeDescriptor> entry : attributeDescriptors.entrySet())
         {
-            final AttributeDescriptor descriptor = entry.getValue();
-    
+            labels.put(entry.getKey(), getLabel(entry.getValue()).toLowerCase(locale));
+        }
+
+        final Collator collator = Collator.getInstance(locale);
+        final List<String> sortedKeys = Lists.newArrayList(labels.keySet());
+        Collections.sort(sortedKeys, new Comparator<String>() {
+            public int compare(String a, String b)
+            {
+                return collator.compare(labels.get(a), labels.get(b));
+            }
+        });
+
+        /*
+         * Create editors.
+         */
+        for (String key : sortedKeys)
+        {
+            final AttributeDescriptor descriptor = attributeDescriptors.get(key);
+
             final GridData data = new GridData();
             data.horizontalAlignment = GridData.FILL;
             data.verticalAlignment = GridData.FILL;

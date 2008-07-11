@@ -1,13 +1,14 @@
 package org.carrot2.workbench.core.ui;
 
+import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
 import org.carrot2.workbench.core.WorkbenchActionFactory;
+import org.carrot2.workbench.core.WorkbenchCorePlugin;
+import org.carrot2.workbench.core.preferences.PreferenceConstants;
 import org.carrot2.workbench.editors.AttributeChangedEvent;
 import org.carrot2.workbench.editors.IAttributeListener;
-import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.jface.action.*;
+import org.eclipse.swt.widgets.*;
+import org.eclipse.ui.*;
 import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.part.Page;
 
@@ -16,14 +17,60 @@ import org.eclipse.ui.part.Page;
  */
 final class AttributeViewPage extends Page
 {
+    /**
+     * The search editor this page is attached to.
+     */
     private final SearchEditor editor;
-    private AttributeEditorGroups attributeEditors;
     
+    /**
+     * Attribute editors.
+     */
+    private AttributeEditorGroups attributeEditors;
+
     /**
      * Synchronization of attribute values from {@link SearchEditor}'s
      * {@link SearchInput} back to this view.
      */
     private IAttributeListener editorToViewSync;
+
+    /**
+     * Layout actions associated with this page's menu.  
+     */
+    private LayoutAction [] layoutActions = new LayoutAction  [] {
+        new LayoutAction(GroupingMethod.GROUP, "Attribute semantics"),
+        new LayoutAction(GroupingMethod.LEVEL, "Attribute level"),
+        new LayoutAction(GroupingMethod.STRUCTURE, "Declaring class"),
+        null,
+        new LayoutAction(GroupingMethod.NONE, "None"),
+    };
+    
+    /**
+     * Sets the given grouping method and updates state of all controls
+     * associated with grouping.
+     */
+    private final class LayoutAction extends Action 
+    {
+        public final GroupingMethod grouping;  
+
+        public LayoutAction(GroupingMethod grouping, String label)
+        {
+            super(label, Action.AS_RADIO_BUTTON);
+            this.grouping = grouping;
+        }
+
+        @Override
+        public void run()
+        {
+            /*
+             * Save the default.
+             */
+            WorkbenchCorePlugin.getDefault().getPreferenceStore().setValue(
+                PreferenceConstants.ATTRIBUTE_GROUPING_LAYOUT, grouping.name());
+
+            attributeEditors.setGrouping(grouping);
+            updateGroupingState();
+        }
+    }
 
     /*
      * 
@@ -32,7 +79,7 @@ final class AttributeViewPage extends Page
     {
         this.editor = editor;
     }
-    
+
     /*
      * 
      */
@@ -43,8 +90,32 @@ final class AttributeViewPage extends Page
 
         final IActionBars bars = pageSite.getActionBars();
         createToolbarActions(bars.getToolBarManager());
+        
+        createMenu(bars.getMenuManager());
 
         bars.updateActionBars();
+    }
+
+    /*
+     * 
+     */
+    private void createMenu(IMenuManager viewMenu)
+    {
+        /*
+         * Layout menu.
+         */
+        final IMenuManager layoutSubMenu= new MenuManager("&Grouping"); 
+        viewMenu.add(layoutSubMenu);
+        for (IAction action : layoutActions)
+        {
+            if (action == null)
+            {
+                layoutSubMenu.add(new Separator());
+                continue;
+            }
+            layoutSubMenu.add(action);
+        }
+        viewMenu.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
     }
 
     /*
@@ -58,14 +129,36 @@ final class AttributeViewPage extends Page
         final IWorkbenchWindow window = getSite().getWorkbenchWindow();
         toolBarManager.add(WorkbenchActionFactory.AUTO_UPDATE_ACTION.create(window));
     }
-    
+
+    /**
+     * Update grouping state in toolbars/ menus.
+     */
+    private void updateGroupingState()
+    {
+        final GroupingMethod grouping = attributeEditors.getGrouping();
+        for (LayoutAction action : layoutActions)
+        {
+            if (action != null)
+            {
+                action.setChecked(grouping.equals(action.grouping));
+            }
+        }
+    }
+
     /*
      * 
      */
     @Override
     public void createControl(Composite parent)
     {
-        attributeEditors = new AttributeEditorGroups(parent, editor.getAlgorithmDescriptor());
+        final GroupingMethod defaultGrouping = GroupingMethod.valueOf(
+            WorkbenchCorePlugin.getDefault().getPreferenceStore().getString(
+                PreferenceConstants.ATTRIBUTE_GROUPING_LAYOUT));
+
+        attributeEditors = new AttributeEditorGroups(parent, 
+            editor.getAlgorithmDescriptor(), defaultGrouping);
+
+        updateGroupingState();
         registerListeners();
     }
 
