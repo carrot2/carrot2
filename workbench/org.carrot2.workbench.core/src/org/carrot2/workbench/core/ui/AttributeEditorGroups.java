@@ -322,9 +322,12 @@ public final class AttributeEditorGroups extends SharedScrolledComposite impleme
         /*
          * Dispose controls.
          */
-        for (Control c : this.mainControl.getChildren())
+        if (!mainControl.isDisposed())
         {
-            if (!c.isDisposed()) c.dispose();
+            for (Control c : this.mainControl.getChildren())
+            {
+                if (!c.isDisposed()) c.dispose();
+            }
         }
 
         this.attributeEditors.clear();
