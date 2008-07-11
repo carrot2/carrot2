@@ -321,39 +321,8 @@ public class SearchInputView extends ViewPart
      */
     private boolean isValid(AttributeDescriptor d, Object value)
     {
-        /*
-         * TODO: Should we move this method to AttributeDescriptor? I also see some duplication
-         * with AttributeBinder (the same validation is done there), but no easy way to reuse
-         * that functionality here since we don't have the target object and only care about
-         * a single value.
-         */
-        boolean empty = false;
-
-        if (value == null) empty = true;
-
-        if (value instanceof CharSequence)
-        {
-            if (StringUtils.isEmpty(((CharSequence) value).toString()))
-            {
-                empty = true;
-            }
-        }
-
-        if (d.requiredAttribute && empty)
-        {
-            return false;
-        }
-
-        if (!d.requiredAttribute && empty)
-        {
-            return true;
-        }
-
-        /*
-         * Check constraints.
-         */
-        
-        Annotation [] constraints = d.constraints.toArray(new Annotation [d.constraints.size()]);
+        Annotation [] constraints = d.constraints.toArray(new Annotation [d.constraints
+            .size()]);
         return ConstraintValidator.isMet(value, constraints).length == 0;
     }
 
