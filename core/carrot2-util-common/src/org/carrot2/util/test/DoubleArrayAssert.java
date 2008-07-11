@@ -1,0 +1,48 @@
+package org.carrot2.util.test;
+
+import static org.fest.assertions.Assertions.assertThat;
+
+import org.fest.assertions.AssertExtension;
+import org.fest.assertions.DoubleAssert;
+import org.fest.assertions.DoubleAssert.Delta;
+
+/**
+ * Additional assertions on <code>double []</code> arrays.
+ */
+public class DoubleArrayAssert implements AssertExtension
+{
+    /** The actual array */
+    private double [] actualArray;
+
+    /** Description of the assertion */
+    private String description;
+
+    DoubleArrayAssert(double [] array)
+    {
+        this.actualArray = array;
+    }
+
+    /**
+     * Asserts that the array is equal to the provided with a <code>delta</code> on each
+     * element.
+     */
+    public DoubleArrayAssert isEqualTo(double [] expected, double delta)
+    {
+        assertThat(expected).as(description).isNotNull();
+        assertThat(actualArray.length).as(description).isEqualTo(expected.length);
+
+        final Delta deltaObject = DoubleAssert.delta(delta);
+        for (int i = 0; i < expected.length; i++)
+        {
+            assertThat(actualArray[i]).as(description + "[" + i + "]").isEqualTo(
+                expected[i], deltaObject);
+        }
+        return this;
+    }
+
+    public DoubleArrayAssert as(String description)
+    {
+        this.description = description;
+        return this;
+    }
+}

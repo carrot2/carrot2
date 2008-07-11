@@ -8,7 +8,8 @@ Require-Bundle: org.carrot2.core;bundle-version="1.0.0",
  org.carrot2.util.common;bundle-version="1.0.0",
  org.carrot2.text;bundle-version="1.0.0",
  cern.colt;bundle-version="1.0.0",
- bak.pcj;bundle-version="1.2.0"
+ bak.pcj;bundle-version="1.2.0",
+ org.carrot2.util.matrix;bundle-version="1.0.0"
 Bundle-ClassPath: META-INF/,
  .
 Export-Package: org.carrot2.clustering.lingo

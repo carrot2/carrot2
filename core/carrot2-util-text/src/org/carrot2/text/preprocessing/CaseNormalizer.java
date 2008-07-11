@@ -8,6 +8,8 @@ import org.carrot2.text.analysis.TokenType;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllTokens;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
 import org.carrot2.text.util.*;
+import org.carrot2.util.IndirectSorter;
+import org.carrot2.util.IntArrayUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.IntRange;
 
@@ -114,14 +116,20 @@ public final class CaseNormalizer
             }
 
             // Check if we want to index this token at all
-            if (tokenType == TokenType.TT_PUNCTUATION
-                || (tokenType & TokenType.TF_SEPARATOR_SENTENCE) != 0)
+            if (isIndexed(tokenType))
             {
                 variantStartIndex = i + 1;
                 maxTfVariantIndex = tokenImagesOrder[i + 1];
+
+                final int nextTokenType = tokenTypesArray[tokenImagesOrder[i]];
+                if (isIndexed(nextTokenType))
+                {
+                    resetForNewTokenImage(documentIndexesArray, tokenImagesOrder,
+                        documentIndices, fieldIndices, wordTfByDocument, i);
+                }
                 continue;
             }
-            
+
             fieldIndices.add(tokensFieldIndex[tokenImagesOrder[i]]);
 
             // Now check if image case is changing
@@ -191,14 +199,8 @@ public final class CaseNormalizer
                 variantStartIndex = i + 1;
 
                 // Re-initialize int set used for document frequency calculation
-                documentIndices.clear();
-                fieldIndices.clear();
-                Arrays.fill(wordTfByDocument, 0);
-                if (documentIndexesArray[tokenImagesOrder[i + 1]] >= 0)
-                {
-                    documentIndices.add(documentIndexesArray[tokenImagesOrder[i + 1]]);
-                    wordTfByDocument[documentIndexesArray[tokenImagesOrder[i + 1]]] += 1;
-                }
+                resetForNewTokenImage(documentIndexesArray, tokenImagesOrder,
+                    documentIndices, fieldIndices, wordTfByDocument, i);
             }
         }
 
@@ -212,5 +214,31 @@ public final class CaseNormalizer
             .toArray(new int [wordTfByDocumentList.size()] []);
         context.allWords.fieldIndices = fieldIndexList.toArray(new byte [fieldIndexList
             .size()] []);
+    }
+
+    /**
+     * Initializes the counters for the a token image.
+     */
+    private void resetForNewTokenImage(final int [] documentIndexesArray,
+        final int [] tokenImagesOrder, final IntSet documentIndices,
+        final ByteSet fieldIndices, int [] wordTfByDocument, int i)
+    {
+        documentIndices.clear();
+        fieldIndices.clear();
+        Arrays.fill(wordTfByDocument, 0);
+        if (documentIndexesArray[tokenImagesOrder[i + 1]] >= 0)
+        {
+            documentIndices.add(documentIndexesArray[tokenImagesOrder[i + 1]]);
+            wordTfByDocument[documentIndexesArray[tokenImagesOrder[i + 1]]] += 1;
+        }
+    }
+
+    /**
+     * Determines whether we should include the token in AllWords.
+     */
+    private boolean isIndexed(final int tokenType)
+    {
+        return tokenType == TokenType.TT_PUNCTUATION
+            || (tokenType & TokenType.TF_SEPARATOR_SENTENCE) != 0;
     }
 }

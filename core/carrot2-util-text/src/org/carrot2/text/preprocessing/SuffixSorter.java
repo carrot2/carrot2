@@ -1,6 +1,6 @@
 package org.carrot2.text.preprocessing;
 
-import org.carrot2.text.util.IndirectSorter;
+import org.carrot2.util.IndirectSorter;
 
 import bak.pcj.IntComparator;
 

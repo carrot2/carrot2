@@ -5,8 +5,7 @@ import java.util.*;
 import org.carrot2.text.linguistic.Stemmer;
 import org.carrot2.text.preprocessing.PreprocessingContext.*;
 import org.carrot2.text.util.*;
-import org.carrot2.util.CharArrayUtils;
-import org.carrot2.util.CharSequenceUtils;
+import org.carrot2.util.*;
 import org.carrot2.util.attribute.Bindable;
 
 import com.google.common.collect.Lists;

@@ -22,12 +22,20 @@ public class Assertions
     {
         return new IntIntArrayAssert(actual);
     }
-    
+
     /**
      * Creates an {@link IntIntArrayAssert}.
      */
     public static ByteByteArrayAssert assertThat(byte [][] actual)
     {
         return new ByteByteArrayAssert(actual);
+    }
+
+    /**
+     * Creates a {@link DoubleArrayAssert}.
+     */
+    public static DoubleArrayAssert assertThat(double [] actual)
+    {
+        return new DoubleArrayAssert(actual);
     }
 }

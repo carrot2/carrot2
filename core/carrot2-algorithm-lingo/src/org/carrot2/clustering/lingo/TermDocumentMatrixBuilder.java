@@ -1,13 +1,13 @@
 package org.carrot2.clustering.lingo;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.carrot2.core.Document;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.text.preprocessing.PreprocessingContext;
-import org.carrot2.text.util.DoubleComparators;
-import org.carrot2.text.util.IndirectSorter;
+import org.carrot2.util.DoubleComparators;
+import org.carrot2.util.IndirectSorter;
 import org.carrot2.util.attribute.*;
-import org.carrot2.util.attribute.constraint.ImplementingClasses;
-import org.carrot2.util.attribute.constraint.IntRange;
+import org.carrot2.util.attribute.constraint.*;
 
 import bak.pcj.set.IntBitSet;
 import cern.colt.GenericPermuting;
@@ -43,6 +43,21 @@ public class TermDocumentMatrixBuilder
     public int maximumMatrixSize = 250 * 150;
 
     /**
+     * Title word boost. Gives more weight to words that appeared in
+     * {@link Document#TITLE} fields.
+     */
+    /*
+     * TODO: For the time being, we hardcode this parameter on title words. Ideally, we
+     * should find a way to enable the user to choose from list of field names to be
+     * boosted.
+     */
+    @Input
+    @Processing
+    @Attribute
+    @DoubleRange(min = 0, max = 10)
+    public double titleWordsBoost = 2.0;
+
+    /**
      * Builds a term document matrix from data provided in the <code>context</code>,
      * stores the result in there.
      */
@@ -53,12 +68,25 @@ public class TermDocumentMatrixBuilder
         final int documentCount = preprocessingContext.documents.size();
         final int [] stemsTf = preprocessingContext.allStems.tf;
         final int [][] stemsTfByDocument = preprocessingContext.allStems.tfByDocument;
+        final byte [][] stemsFieldIndices = preprocessingContext.allStems.fieldIndices;
 
         if (documentCount == 0)
         {
             lingoContext.tdMatrix = DoubleFactory2D.dense.make(0, 0);
             lingoContext.tdMatrixStemIndices = new int [0];
             return;
+        }
+
+        // Determine the index of the title field
+        int titleFieldIndex = -1;
+        final String [] fieldsName = preprocessingContext.allFields.name;
+        for (int i = 0; i < fieldsName.length; i++)
+        {
+            if (Document.TITLE.equals(fieldsName[i]))
+            {
+                titleFieldIndex = i;
+                break;
+            }
         }
 
         // Determine the stems we, ideally, should include in the matrix
@@ -69,9 +97,10 @@ public class TermDocumentMatrixBuilder
         final double [] stemsWeight = new double [stemsToInclude.length];
         for (int i = 0; i < stemsToInclude.length; i++)
         {
-            stemsWeight[i] = termWeighting.calculateTermWeight(
-                stemsTf[stemsToInclude[i]],
-                stemsTfByDocument[stemsToInclude[i]].length / 2, documentCount);
+            final int stemIndex = stemsToInclude[i];
+            stemsWeight[i] = termWeighting.calculateTermWeight(stemsTf[stemIndex],
+                stemsTfByDocument[stemIndex].length / 2, documentCount)
+                * getWeightBoost(titleFieldIndex, stemsFieldIndices[stemIndex]);
         }
         final int [] stemWeightOrder = IndirectSorter.sort(stemsWeight,
             DoubleComparators.REVERSED_ORDER);
@@ -86,6 +115,7 @@ public class TermDocumentMatrixBuilder
             final int stemIndex = stemsToInclude[stemWeightOrder[i]];
             final int [] tfByDocument = stemsTfByDocument[stemIndex];
             final int df = tfByDocument.length / 2;
+            final byte [] fieldIndices = stemsFieldIndices[stemIndex];
 
             int tfByDocumentIndex = 0;
             for (int documentIndex = 0; documentIndex < documentCount; documentIndex++)
@@ -93,8 +123,10 @@ public class TermDocumentMatrixBuilder
                 if (tfByDocumentIndex * 2 < tfByDocument.length
                     && tfByDocument[tfByDocumentIndex * 2] == documentIndex)
                 {
-                    final double weight = termWeighting.calculateTermWeight(
+                    double weight = termWeighting.calculateTermWeight(
                         tfByDocument[tfByDocumentIndex * 2 + 1], df, documentCount);
+
+                    weight *= getWeightBoost(titleFieldIndex, fieldIndices);
                     tfByDocumentIndex++;
 
                     tdMatrix.set(i, documentIndex, weight);
@@ -109,6 +141,21 @@ public class TermDocumentMatrixBuilder
         lingoContext.tdMatrix = tdMatrix;
         lingoContext.tdMatrixStemIndices = ArrayUtils.subarray(stemsToInclude, 0,
             tdMatrix.rows());
+    }
+
+    /**
+     * Calculates the boost we should apply to a stem, based on the field indices array.
+     */
+    private double getWeightBoost(int titleFieldIndex, final byte [] fieldIndices)
+    {
+        for (int fieldIndex = 0; fieldIndex < fieldIndices.length; fieldIndex++)
+        {
+            if (fieldIndices[fieldIndex] == titleFieldIndex)
+            {
+                return titleWordsBoost;
+            }
+        }
+        return 1;
     }
 
     /**

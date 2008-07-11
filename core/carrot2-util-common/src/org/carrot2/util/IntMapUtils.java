@@ -1,4 +1,4 @@
-package org.carrot2.text.util;
+package org.carrot2.util;
 
 import bak.pcj.map.IntKeyIntMap;
 import bak.pcj.map.IntKeyIntMapIterator;

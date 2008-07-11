@@ -9,5 +9,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/org.easymock"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.fest"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.apache.commons"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/bak.pcj"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>

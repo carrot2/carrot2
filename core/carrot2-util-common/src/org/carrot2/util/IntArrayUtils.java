@@ -1,4 +1,4 @@
-package org.carrot2.text.util;
+package org.carrot2.util;
 
 /**
  * Utilities for working with <code>int</code> arrays.

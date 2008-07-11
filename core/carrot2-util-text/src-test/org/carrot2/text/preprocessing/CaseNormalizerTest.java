@@ -537,6 +537,61 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
             expectedWordTfByDocument, expectedFieldIndex);
     }
 
+    @Test
+    public void testPunctuationTokenFirst()
+    {
+        createDocuments("aa", "bb", "", "bb . cc", "", "aa . cc . cc");
+
+        char [][] expectedWordImages = createExpectedWordImages(new String []
+        {
+            "aa", "bb", "cc"
+        });
+
+        int [] expectedWordTf = new int [3];
+        expectedWordTf[wordIndices.get("aa")] = 2;
+        expectedWordTf[wordIndices.get("bb")] = 2;
+        expectedWordTf[wordIndices.get("cc")] = 3;
+
+        int [] expectedWordIndices = new int []
+        {
+            wordIndices.get("aa"), -1, wordIndices.get("bb"), -1,
+
+            wordIndices.get("bb"), -1, wordIndices.get("cc"), -1,
+
+            wordIndices.get("aa"), -1, wordIndices.get("cc"), -1, wordIndices.get("cc"),
+            -1
+        };
+
+        int [][] expectedWordTfByDocument = new int [3] [];
+        expectedWordTfByDocument[wordIndices.get("aa")] = new int []
+        {
+            0, 1, 2, 1
+        };
+        expectedWordTfByDocument[wordIndices.get("bb")] = new int []
+        {
+            0, 1, 1, 1
+        };
+        expectedWordTfByDocument[wordIndices.get("cc")] = new int []
+        {
+            1, 1, 2, 2
+        };
+        byte [][] expectedFieldIndex = new byte [] []
+        {
+            {
+                0, 1
+            },
+            {
+                1
+            },
+            {
+                1
+            }
+        };
+
+        check(expectedWordImages, expectedWordTf, expectedWordIndices,
+            expectedWordTfByDocument, expectedFieldIndex);
+    }
+
     protected char [][] createExpectedWordImages(String [] wordImages)
     {
         char [][] expectedWordImages = new char [wordImages.length] [];

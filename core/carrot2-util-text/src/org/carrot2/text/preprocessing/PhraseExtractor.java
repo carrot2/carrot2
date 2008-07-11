@@ -4,7 +4,7 @@ import java.util.*;
 
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.text.preprocessing.PreprocessingContext.*;
-import org.carrot2.text.util.IntMapUtils;
+import org.carrot2.util.IntMapUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.IntRange;
 

@@ -30,6 +30,7 @@
 
     <path id="lib.classpath">
         <fileset dir="lib" includes="*/*.jar" />    
+        <fileset dir="core/carrot2-util-matrix/lib" includes="*.jar" />    
     </path>
 
     <path id="test.classpath">

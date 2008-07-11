@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Matrix Utilities
+Bundle-SymbolicName: org.carrot2.util.matrix
+Bundle-Version: 1.0.0
+Bundle-ClassPath: carrot2-util-matrix.jar,
+ lib/nni.jar
+Export-Package: cern.colt.matrix,
+ cern.colt.matrix.impl,
+ nni,
+ org.carrot2.matrix,
+ org.carrot2.matrix.factorization,
+ org.carrot2.matrix.factorization.seeding
+Bundle-Vendor: Carrot2.org
+Require-Bundle: cern.colt;bundle-version="1.0.0",
+ org.carrot2.util.common;bundle-version="1.0.0"

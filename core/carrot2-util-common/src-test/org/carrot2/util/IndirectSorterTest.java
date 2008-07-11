@@ -1,10 +1,11 @@
-package org.carrot2.text.util;
+package org.carrot2.util;
 
 import static org.fest.assertions.Assertions.assertThat;
 
 import java.util.Collections;
 import java.util.Comparator;
 
+import org.carrot2.util.*;
 import org.junit.Test;
 
 import bak.pcj.DoubleComparator;

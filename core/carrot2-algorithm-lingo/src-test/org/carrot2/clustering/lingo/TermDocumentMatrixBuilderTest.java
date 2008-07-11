@@ -1,8 +1,8 @@
 package org.carrot2.clustering.lingo;
 
-import static org.carrot2.clustering.lingo.MatrixAssertions.assertThat;
 import static org.fest.assertions.Assertions.assertThat;
 
+import org.carrot2.matrix.MatrixAssertions;
 import org.carrot2.text.linguistic.LanguageModelFactory;
 import org.carrot2.text.preprocessing.*;
 import org.junit.Before;
@@ -127,6 +127,31 @@ public class TermDocumentMatrixBuilderTest extends PreprocessingComponentTestBas
         check(expectedTdMatrixElements, expectedTdMatrixStemIndices);
     }
 
+    @Test
+    public void testTitleWordBoost()
+    {
+        createDocuments("aa", "bb", "", "bb . cc", "", "aa . cc . cc");
+
+        int [] expectedTdMatrixStemIndices = new int []
+        {
+            0, 2, 1
+        };
+        double [][] expectedTdMatrixElements = new double [] []
+        {
+            {
+                2, 0, 2
+            },
+            {
+                0, 1, 2
+            },
+            {
+                1, 1, 0
+            }
+        };
+
+        check(expectedTdMatrixElements, expectedTdMatrixStemIndices);
+    }
+
     private void check(double [][] expectedTdMatrixElements,
         int [] expectedTdMatrixStemIndices)
     {
@@ -152,7 +177,8 @@ public class TermDocumentMatrixBuilderTest extends PreprocessingComponentTestBas
             expectedTdMatrixStemIndices.length);
         assertThat(lingoContext.tdMatrixStemIndices).as("tdMatrixStemIndices").isEqualTo(
             expectedTdMatrixStemIndices);
-        assertThat(lingoContext.tdMatrix).isEquivalentTo(expectedTdMatrixElements);
+        MatrixAssertions.assertThat(lingoContext.tdMatrix).isEquivalentTo(
+            expectedTdMatrixElements);
     }
 
     @Override
