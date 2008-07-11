@@ -38,7 +38,7 @@ public class YahooSearchServiceTest extends ExternalApiTestBase {
         descriptor.initializeFromXML(this.getClass().getResourceAsStream("yahoo-site-cs.xml"));
 
         YahooSearchService service = new YahooSearchService(descriptor);
-        YahooSearchResult [] result = service.query("duiogig oiudgisugviw siug iugw iusviuwg", 255);
+        YahooSearchResult [] result = service.query("duiogig oiudgisugvi\u0078 siug iugw iusviuwg", 255);
         assertEquals(0, result.length);
     }
 
