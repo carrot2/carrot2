@@ -113,8 +113,8 @@
          point="org.eclipse.ui.preferencePages">
       <page
             class="org.carrot2.workbench.core.preferences.WorkbenchPreferencesPage"
-            id="org.carrot2.workbench.core.preferences.CarrotPreferencePage"
-            name="Carrot">
+            id="org.carrot2.workbench.core.preferences.WorkbenchPreferencePage"
+            name="Carrot2">
       </page>
    </extension>
    <extension
