@@ -55,6 +55,14 @@ public final class AttributeEditorGroups extends SharedScrolledComposite impleme
                 listener.attributeChange(event);
             }
         }
+        
+        public void contentChanging(IAttributeEditor editor, Object value)
+        {
+            for (IAttributeListener listener : listeners)
+            {
+                listener.contentChanging(editor, value);
+            }
+        }
     };
 
     /**

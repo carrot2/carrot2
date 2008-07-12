@@ -16,8 +16,7 @@ import org.eclipse.swt.widgets.Spinner;
  * integer numeric ranges. The numeric widget contains a {@link Scale} and a
  * {@link Spinner}, both of which can be used to modify the current value of the editor.
  */
-public abstract class NumericRangeEditorBase extends AttributeEditorAdapter implements
-    IAttributeEditor
+public abstract class NumericRangeEditorBase extends AttributeEditorAdapter
 {
     /** */
     private Scale scale;

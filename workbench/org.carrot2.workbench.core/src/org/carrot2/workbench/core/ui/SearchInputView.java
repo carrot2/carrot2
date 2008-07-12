@@ -3,27 +3,58 @@ package org.carrot2.workbench.core.ui;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.annotation.Annotation;
-import java.util.*;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.carrot2.core.ProcessingComponent;
 import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
-import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.AttributeDescriptor;
+import org.carrot2.util.attribute.AttributeValueSet;
+import org.carrot2.util.attribute.AttributeValueSets;
+import org.carrot2.util.attribute.BindableDescriptorBuilder;
+import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Required;
 import org.carrot2.util.attribute.constraint.ConstraintValidator;
-import org.carrot2.workbench.core.*;
+import org.carrot2.workbench.core.ExtensionImpl;
+import org.carrot2.workbench.core.ExtensionLoader;
+import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.editors.AttributeChangedEvent;
-import org.carrot2.workbench.editors.IAttributeListener;
+import org.carrot2.workbench.editors.AttributeListenerAdapter;
+import org.carrot2.workbench.editors.IAttributeEditor;
 import org.eclipse.core.commands.operations.OperationStatus;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.jface.viewers.*;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
-import org.eclipse.swt.events.*;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.layout.*;
-import org.eclipse.swt.widgets.*;
-import org.eclipse.ui.*;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Widget;
+import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
 /**
@@ -168,6 +199,7 @@ public class SearchInputView extends ViewPart
                     attributesPagesStack.topControl = editors.get(impl.id);
                     editorStack.layout();
                     innerComposite.layout();
+                    checkAllRequiredAttributes();
                 }
             }
         });
@@ -209,11 +241,26 @@ public class SearchInputView extends ViewPart
             final AttributeValueSet sourceAttrs = attributes.get(sourceID);
             final AttributeEditorList editor = editors.get(sourceID);
 
-            editor.addAttributeChangeListener(new IAttributeListener() {
+            editor.addAttributeChangeListener(new AttributeListenerAdapter() {
                 public void attributeChange(AttributeChangedEvent event)
                 {
                     sourceAttrs.setAttributeValue(event.key, event.value);
-                    processButton.setEnabled(hasAllRequiredAttributes(getSourceId()));
+                    checkAllRequiredAttributes();
+                }
+
+                public void contentChanging(IAttributeEditor editor, Object value)
+                {
+                    /*
+                     * On content changing, temporarily substitute the value of the
+                     * given attribute with the new value.
+                     */
+                    final String attributeKey = editor.getAttributeKey();
+                    final AttributeValueSet attributeSet = attributes.get(getSourceId());
+
+                    final Object currentValue = attributeSet.getAttributeValue(attributeKey);
+                    attributeSet.setAttributeValue(attributeKey, value);
+                    checkAllRequiredAttributes();
+                    attributeSet.setAttributeValue(attributeKey, currentValue);
                 }
             });
         }
@@ -314,6 +361,15 @@ public class SearchInputView extends ViewPart
         return true;
     }
 
+    /**
+     * Check if all required attributes for the current configuration are available and
+     * update the {@link #processButton}.
+     */
+    private void checkAllRequiredAttributes()
+    {
+        processButton.setEnabled(hasAllRequiredAttributes(getSourceId()));
+    }
+    
     /**
      * Returns <code>true</code> if the value described by a given attribute descriptor
      * is valid.

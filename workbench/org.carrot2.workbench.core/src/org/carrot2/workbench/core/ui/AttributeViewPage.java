@@ -5,10 +5,19 @@ import org.carrot2.workbench.core.WorkbenchActionFactory;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.preferences.PreferenceConstants;
 import org.carrot2.workbench.editors.AttributeChangedEvent;
+import org.carrot2.workbench.editors.AttributeListenerAdapter;
 import org.carrot2.workbench.editors.IAttributeListener;
-import org.eclipse.jface.action.*;
-import org.eclipse.swt.widgets.*;
-import org.eclipse.ui.*;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.part.Page;
 
@@ -201,7 +210,7 @@ final class AttributeViewPage extends Page
          * Link attribute value changes:
          * attribute view -> search result
          */
-        final IAttributeListener viewToEditorSync = new IAttributeListener() {
+        final IAttributeListener viewToEditorSync = new AttributeListenerAdapter() {
             public void attributeChange(AttributeChangedEvent event)
             {
                 editor.getSearchResult().getInput().setAttribute(
@@ -214,7 +223,7 @@ final class AttributeViewPage extends Page
          * Link attribute value changes:
          * search result -> attribute view
          */
-        editorToViewSync = new IAttributeListener() {
+        editorToViewSync = new AttributeListenerAdapter() {
             public void attributeChange(AttributeChangedEvent event)
             {
                 /*

@@ -9,8 +9,11 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IMemento;
 
 /**
- * Editor for textual values. Sends change events only on actual content change, committed
- * by return key traversal or focus lost event.
+ * Editor for textual content. Sends
+ * {@link IAttributeListener#attributeChange(AttributeChangedEvent)} events only on actual
+ * content change, committed by return key traversal or focus lost event. On-keystroke
+ * content change is propagated via 
+ * {@link IAttributeListener#contentChanging(IAttributeEditor, Object value)}.
  */
 public class StringEditor extends AttributeEditorAdapter
 {
@@ -31,6 +34,14 @@ public class StringEditor extends AttributeEditorAdapter
             public void focusLost(FocusEvent e)
             {
                 checkContentChange();
+            }
+        });
+
+        textBox.addModifyListener(new ModifyListener() {
+            @Override
+            public void modifyText(ModifyEvent e)
+            {
+                fireContentChange(textBox.getText());
             }
         });
 
@@ -88,5 +99,15 @@ public class StringEditor extends AttributeEditorAdapter
             this.content = textBoxValue;
             fireAttributeChange(new AttributeChangedEvent(this));
         }
+    }
+    
+    /*
+     * JVM bug? Calling this method directly from the nested class (listener)
+     * causes runtime (!) illegal access exception. The compiler (JDT?) seems not to generate
+     * a synthetic accessor between the nested class and protected method of the outer class. 
+     */
+    protected void fireContentChange(Object value)
+    {
+        super.fireContentChange(value);
     }
 }

@@ -98,13 +98,26 @@ public abstract class AttributeEditorAdapter implements IAttributeEditor
     public abstract void setValue(Object object);
 
     /**
-     * Unconditionally fire a change event.
+     * Unconditionally fire attribute change event.
      */
     protected final void fireAttributeChange(AttributeChangedEvent event)
     {
         for (IAttributeListener listener : listeners)
         {
             listener.attributeChange(event);
+        }
+    }
+
+    /**
+     * Unconditionally fire content change event.
+     * 
+     * @param value Value to pass to {@link IAttributeListener#contentChanging(IAttributeEditor, Object)}.
+     */
+    protected void fireContentChange(Object value)
+    {
+        for (IAttributeListener listener : listeners)
+        {
+            listener.contentChanging(this, value);
         }
     }
 }

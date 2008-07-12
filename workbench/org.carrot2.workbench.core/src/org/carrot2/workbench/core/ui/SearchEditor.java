@@ -1,41 +1,74 @@
 package org.carrot2.workbench.core.ui;
 
 import java.io.File;
-import java.util.*;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.carrot2.core.*;
-import org.carrot2.core.attribute.*;
-import org.carrot2.util.attribute.*;
+import org.carrot2.core.Cluster;
+import org.carrot2.core.ProcessingComponent;
+import org.carrot2.core.ProcessingResult;
+import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.core.attribute.Internal;
+import org.carrot2.core.attribute.Processing;
+import org.carrot2.util.attribute.BindableDescriptor;
+import org.carrot2.util.attribute.BindableDescriptorBuilder;
+import org.carrot2.util.attribute.Input;
 import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
-import org.carrot2.workbench.core.helpers.*;
+import org.carrot2.workbench.core.helpers.DisposeBin;
+import org.carrot2.workbench.core.helpers.PostponableJob;
+import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.core.preferences.PreferenceConstants;
 import org.carrot2.workbench.core.ui.actions.SaveAsXMLActionDelegate;
 import org.carrot2.workbench.editors.AttributeChangedEvent;
+import org.carrot2.workbench.editors.AttributeListenerAdapter;
 import org.carrot2.workbench.editors.IAttributeListener;
-import org.eclipse.core.runtime.*;
-import org.eclipse.core.runtime.jobs.*;
-import org.eclipse.jface.action.*;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
-import org.eclipse.jface.viewers.*;
+import org.eclipse.jface.viewers.IPostSelectionProvider;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.events.*;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.*;
-import org.eclipse.ui.*;
-import org.eclipse.ui.forms.widgets.*;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IPersistableEditor;
+import org.eclipse.ui.IWorkbenchSite;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.forms.widgets.ExpandableComposite;
+import org.eclipse.ui.forms.widgets.Form;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.progress.UIJob;
 
@@ -184,7 +217,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
      * Auto-update listener calls {@link #reprocess()} after 
      * {@link PreferenceConstants#AUTO_UPDATE} property changes.
      */
-    private IAttributeListener autoUpdateListener = new IAttributeListener()
+    private IAttributeListener autoUpdateListener = new AttributeListenerAdapter()
     {
         /** Postponable reschedule job. */
         private PostponableJob job = new PostponableJob(new UIJob("Auto update...") {
@@ -730,7 +763,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         /*
          * Set up an event callback making editor dirty when attributes change. 
          */
-        this.getSearchResult().getInput().addAttributeChangeListener(new IAttributeListener() {
+        this.getSearchResult().getInput().addAttributeChangeListener(new AttributeListenerAdapter() {
             public void attributeChange(AttributeChangedEvent event)
             {
                 setDirty(true);
@@ -855,7 +888,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
          * Link attribute value changes:
          * attribute panel -> search result
          */
-        final IAttributeListener panelToEditorSync = new IAttributeListener() {
+        final IAttributeListener panelToEditorSync = new AttributeListenerAdapter() {
             public void attributeChange(AttributeChangedEvent event)
             {
                 getSearchResult().getInput().setAttribute(event.key, event.value);
@@ -867,7 +900,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
          * Link attribute value changes:
          * search result -> attribute panel
          */
-        final IAttributeListener editorToPanelSync = new IAttributeListener() {
+        final IAttributeListener editorToPanelSync = new AttributeListenerAdapter() {
             public void attributeChange(AttributeChangedEvent event)
             {
                 /*

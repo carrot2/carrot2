@@ -6,7 +6,7 @@ import org.eclipse.ui.IPersistableEditor;
 
 /**
  * An attribute editor is a visual control which can be used to display and edit the value
- * of given attribute, described using an {@link AttributeDescriptor}.
+ * of given attribute (described by an {@link AttributeDescriptor}).
  * <p>
  * The life cycle of an attribute editor is as follows:
  * <ol>
@@ -19,25 +19,35 @@ import org.eclipse.ui.IPersistableEditor;
  */
 public interface IAttributeEditor extends IPersistableEditor
 {
+    /**
+     * Initialize editor to work with a given attribute descriptor.
+     */
     void init(AttributeDescriptor descriptor);
 
     /**
-     * Create the editor's composite using the given parent. The editor
-     * must set the created composite's layout data to the given object.
-     * 
+     * Create the editor's composite using the given parent. The editor must set the
+     * created composite's layout data to the given object.
+     * <p>
      * TODO: Remove layoutData from the interface.
      */
     void createEditor(Composite parent, Object layoutData);
 
     /**
-     * Returns the edited attribute key.
+     * If <code>true</code>, then the editor displays its own label. Otherwise the
+     * containing component must display the edited attribute's label based on the
+     * {@link AttributeDescriptor}.
+     */
+    boolean containsLabel();
+
+    /**
+     * Returns the associated {@link AttributeDescriptor}'s key.
      * 
      * @see AttributeDescriptor#key
      */
     String getAttributeKey();
 
     /**
-     * Set the editor's current value to the given object, update visual components. 
+     * Set the editor's current value to the given object, update visual components.
      */
     void setValue(Object currentValue);
 
@@ -47,24 +57,18 @@ public interface IAttributeEditor extends IPersistableEditor
     Object getValue();
 
     /**
-     * Dispose visual components and any other resources.
-     */
-    void dispose();
-
-    /**
-     * Subscribe to change events. Change events may come in rapid succession.
+     * Subscribe the <code>listener</code> to change events. Change events may come in
+     * rapid succession.
      */
     void addAttributeChangeListener(IAttributeListener listener);
 
     /**
-     * Unsubscribe from change events.
+     * Unsubscribe <code>listener</code> from change events.
      */
     void removeAttributeChangeListener(IAttributeListener listener);
 
     /**
-     * If <code>true</code>, then the editor displays its own label. Otherwise the
-     * containing component must display the edited attribute's label.
+     * Dispose visual components and any other resources.
      */
-    boolean containsLabel();
-
+    void dispose();
 }

@@ -1,13 +1,21 @@
 package org.carrot2.workbench.core.ui;
 
 import java.text.Collator;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.carrot2.core.ProcessingComponent;
 import org.carrot2.util.attribute.AttributeDescriptor;
 import org.carrot2.workbench.core.helpers.Utils;
-import org.carrot2.workbench.editors.*;
+import org.carrot2.workbench.editors.AttributeChangedEvent;
+import org.carrot2.workbench.editors.IAttributeChangeProvider;
+import org.carrot2.workbench.editors.IAttributeEditor;
+import org.carrot2.workbench.editors.IAttributeListener;
 import org.carrot2.workbench.editors.factory.EditorFactory;
 import org.carrot2.workbench.editors.factory.EditorNotFoundException;
 import org.eclipse.swt.SWT;
@@ -60,8 +68,16 @@ public final class AttributeEditorList extends Composite
                 listener.attributeChange(event);
             }
         }
+        
+        public void contentChanging(IAttributeEditor editor, Object value)
+        {
+            for (IAttributeListener listener : listeners)
+            {
+                listener.contentChanging(editor, value);
+            }
+        }
     };
-    
+
     /**
      * Create a new editor list for a given set of attribute descriptors and
      * an (optional) component class.
