@@ -17,8 +17,9 @@ public @interface ImplementingClasses
     Class<?> [] classes();
 
     /**
-     * If <code>true</code>, only instance of the listed {@link #classes()} will be
-     * allowed. Otherwise, any instance assignable to the attribute type will be allowed.
+     * If <code>true</code>, only instances assignable to one of the listed
+     * {@link #classes()} will be allowed. Otherwise, any instance assignable to the
+     * attribute type will be allowed.
      */
     boolean strict() default true;
 }

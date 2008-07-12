@@ -81,10 +81,24 @@ class ConstraintFactory
         final Method [] methods = ann.annotationType().getDeclaredMethods();
         for (final Method method : methods)
         {
-            final Field field = implementator.getClass().getDeclaredField(
-                method.getName());
-            field.setAccessible(true);
-            field.set(implementator, method.invoke(ann));
+            try
+            {
+                final Field field = implementator.getClass().getDeclaredField(
+                    method.getName());
+                field.setAccessible(true);
+                field.set(implementator, method.invoke(ann));
+            }
+            catch (NoSuchFieldException e) 
+            {
+                /*
+                 * This mapping between methods and fields is so hacky... be verbose
+                 * about the error.
+                 */
+                throw new RuntimeException("Constraint " + ann.annotationType().getName()
+                    + " declares a field (method): '" + method.getName() +
+                    "' for which there is no corresponding field in the implementation" +
+                    " class: " + implementator.getClass().getName());
+            }
         }
     }
 }
