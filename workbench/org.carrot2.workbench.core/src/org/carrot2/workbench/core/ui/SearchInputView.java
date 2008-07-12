@@ -57,6 +57,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
+
 /**
  * The search view defines a combination of source, algorithm and required input
  * parameters required to open a new editor.
@@ -372,12 +373,19 @@ public class SearchInputView extends ViewPart
     
     /**
      * Returns <code>true</code> if the value described by a given attribute descriptor
-     * is valid.
+     * is valid (non-<code>null</code> for {@link Required} attributes and fulfilling
+     * all other constraints.
      */
     private boolean isValid(AttributeDescriptor d, Object value)
     {
-        Annotation [] constraints = d.constraints.toArray(new Annotation [d.constraints
-            .size()]);
+        if (d.requiredAttribute && value == null)
+        {
+            return false;
+        }
+
+        final Annotation [] constraints = d.constraints.toArray(
+            new Annotation [d.constraints.size()]);
+
         return ConstraintValidator.isMet(value, constraints).length == 0;
     }
 
