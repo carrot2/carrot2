@@ -49,6 +49,6 @@ class ImplementingClassesConstraint extends Constraint
             }
         }
 
-        return strict;
+        return !strict;
     }
 }
