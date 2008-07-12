@@ -39,6 +39,12 @@ public class NotBlankConstraintTest
         assertInvalid(new StringBuffer(" \t  "));
     }
 
+    @Test
+    public void testInvalidNull() throws Exception
+    {
+        assertInvalid(null);
+    }
+
     @Test(expected = RuntimeException.class)
     public void testNotCharSequence() throws Exception
     {

@@ -13,12 +13,18 @@ class NotBlankConstraint extends Constraint
 
     boolean isMet(Object value)
     {
+        if (value == null)
+        {
+            return false;
+        }
+
         if (value instanceof CharSequence)
         {
             return StringUtils.isNotBlank(value.toString());
         }
 
-        throw new RuntimeException("Expected an instance of CharSequence");
+        throw new RuntimeException("Expected an instance of CharSequence: "
+            + value);
     }
 
     @Override
