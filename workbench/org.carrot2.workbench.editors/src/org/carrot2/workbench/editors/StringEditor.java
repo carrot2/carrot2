@@ -38,7 +38,6 @@ public class StringEditor extends AttributeEditorAdapter
         });
 
         textBox.addModifyListener(new ModifyListener() {
-            @Override
             public void modifyText(ModifyEvent e)
             {
                 fireContentChange(textBox.getText());
