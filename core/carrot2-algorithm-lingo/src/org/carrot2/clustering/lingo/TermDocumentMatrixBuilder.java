@@ -22,6 +22,9 @@ public class TermDocumentMatrixBuilder
 {
     /**
      * Term weighting.
+     * 
+     * @level Medium
+     * @group Matrix model
      */
     @Input
     @Processing
@@ -34,17 +37,11 @@ public class TermDocumentMatrixBuilder
     public TermWeighting termWeighting = new LogTfIdfTermWeighting();
 
     /**
-     * Maximum matrix size.
-     */
-    @Input
-    @Processing
-    @Attribute
-    @IntRange(min = 50 * 100)
-    public int maximumMatrixSize = 250 * 150;
-
-    /**
      * Title word boost. Gives more weight to words that appeared in
      * {@link Document#TITLE} fields.
+     * 
+     * @level Medium
+     * @group Matrix model
      */
     /*
      * TODO: For the time being, we hardcode this parameter on title words. Ideally, we
@@ -56,6 +53,18 @@ public class TermDocumentMatrixBuilder
     @Attribute
     @DoubleRange(min = 0, max = 10)
     public double titleWordsBoost = 2.0;
+
+    /**
+     * Maximum matrix size.
+     * 
+     * @level Advanced
+     * @group Matrix model
+     */
+    @Input
+    @Processing
+    @Attribute
+    @IntRange(min = 50 * 100)
+    public int maximumMatrixSize = 250 * 150;
 
     /**
      * Builds a term document matrix from data provided in the <code>context</code>,

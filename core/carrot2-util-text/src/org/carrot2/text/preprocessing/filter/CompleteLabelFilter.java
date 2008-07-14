@@ -16,6 +16,9 @@ public class CompleteLabelFilter implements LabelFilter
 {
     /**
      * Remove truncated phrases.
+     * 
+     * @level Medium
+     * @group Phrase extraction
      */
     @Input
     @Processing
@@ -24,6 +27,9 @@ public class CompleteLabelFilter implements LabelFilter
 
     /**
      * Label override threshold.
+     * 
+     * @level Advanced
+     * @group Phrase extraction
      */
     @Input
     @Processing

@@ -6,7 +6,6 @@ import cern.colt.matrix.DoubleMatrix2D;
  * {@link KMeansMatrixFactorization} factory.
  */
 public class KMeansMatrixFactorizationFactory extends IterativeMatrixFactorizationFactory
-    implements MatrixFactorizationFactory
 {
     public MatrixFactorization factorize(DoubleMatrix2D A)
     {

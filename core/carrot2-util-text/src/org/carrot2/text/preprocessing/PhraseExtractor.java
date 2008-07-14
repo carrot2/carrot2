@@ -48,7 +48,7 @@ public class PhraseExtractor
      * <code>dfCutoff</code> documents will be ignored.
      * 
      * @level Advanced
-     * @group Preprocessing
+     * @group Phrase extraction
      */
     @Processing
     @Input

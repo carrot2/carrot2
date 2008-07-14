@@ -1,16 +1,7 @@
-/*
- * Carrot2 project.
- *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
- * All rights reserved.
- *
- * Refer to the full license file "carrot2.LICENSE"
- * in the root folder of the repository checkout or at:
- * http://www.carrot2.org/carrot2.LICENSE
- */
-
 package cern.colt.matrix.impl;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 import nni.BLAS;
 import cern.colt.matrix.DoubleMatrix1D;
@@ -42,11 +33,6 @@ public class NNIDenseDoubleMatrix2D extends DenseDoubleMatrix2D
         super(rows, columns, elements, rowZero, columnZero, rowStride, columnStride);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see cern.colt.matrix.DoubleMatrix2D#zMult(cern.colt.matrix.DoubleMatrix1D,
-     * cern.colt.matrix.DoubleMatrix1D, double, double, boolean)
-     */
     public DoubleMatrix1D zMult(DoubleMatrix1D y, DoubleMatrix1D z, double alpha,
         double beta, boolean transposeA)
     {
@@ -68,20 +54,24 @@ public class NNIDenseDoubleMatrix2D extends DenseDoubleMatrix2D
     public DoubleMatrix2D zMult(DoubleMatrix2D B, DoubleMatrix2D C, double alpha,
         double beta, boolean transposeA, boolean transposeB)
     {
-        // A workaround for a bug in DenseDoubleMatrix2D
+        // A workaround for a bug in DenseDoubleMatrix2D.
         // If B is a SelectedDenseDoubleMatrix the implementation of this method
         // throws a ClassCastException. The workaround is to swap and transpose
-        // the arguments and then transpose the result
-        if (B instanceof SelectedDenseDoubleMatrix2D)
+        // the arguments and then transpose the result. As SelectedDenseDoubleMatrix2D is
+        // package-private, if it was loaded with a different class loader than
+        // the one used for this class it would give a VerificationError if we referred
+        // to it directly here. Hence the hacky string comparison here.
+        // 
+        if (B.getClass().getName().endsWith("SelectedDenseDoubleMatrix2D"))
         {
             return B.zMult(this, C, alpha, beta, !transposeB, !transposeA).viewDice();
         }
 
         // Check the sizes
-        int rowsB = (transposeB ? B.columns : B.rows);
-        int columnsB = (transposeB ? B.rows : B.columns);
-        int rowsA = (transposeA ? columns : rows);
-        int columnsA = (transposeA ? rows : columns);
+        int rowsB = (transposeB ? B.columns() : B.rows());
+        int columnsB = (transposeB ? B.rows() : B.columns());
+        int rowsA = (transposeA ? columns() : rows());
+        int columnsA = (transposeA ? rows() : columns());
 
         if (C == null)
         {
@@ -93,8 +83,8 @@ public class NNIDenseDoubleMatrix2D extends DenseDoubleMatrix2D
             throw new IllegalArgumentException("Matrices must not be identical");
         }
 
-        int rowsC = C.rows;
-        int columnsC = C.columns;
+        final int rowsC = C.rows();
+        final int columnsC = C.columns();
 
         if (rowsB != columnsA)
         {
@@ -112,16 +102,16 @@ public class NNIDenseDoubleMatrix2D extends DenseDoubleMatrix2D
         // Default to Colt's implementation otherwise
         if (!NNIInterface.isNativeBlasAvailable()
             || (!(B instanceof DenseDoubleMatrix2D))
-            || (!(C instanceof DenseDoubleMatrix2D)) || !isNoView || !B.isNoView
-            || !C.isNoView)
+            || (!(C instanceof DenseDoubleMatrix2D)) || !isNoView
+            || isView((DenseDoubleMatrix2D) B) || isView((DenseDoubleMatrix2D) C))
         {
             return super.zMult(B, C, alpha, beta, transposeA, transposeB);
         }
 
         // Get the matrices data. It is in row-major format.
         final double [] dataA = this.elements;
-        final double [] dataB = ((DenseDoubleMatrix2D) B).elements;
-        final double [] dataC = ((DenseDoubleMatrix2D) C).elements;
+        final double [] dataB = getDoubleData((DenseDoubleMatrix2D) B);
+        final double [] dataC = getDoubleData((DenseDoubleMatrix2D) C);
 
         // Multiply
         BLAS.gemm(BLAS.RowMajor, transposeA ? BLAS.Trans : BLAS.NoTrans,
@@ -137,7 +127,17 @@ public class NNIDenseDoubleMatrix2D extends DenseDoubleMatrix2D
      */
     public static double [] getDoubleData(DenseDoubleMatrix2D A)
     {
-        return A.elements;
+        try
+        {
+            final Field elementsField = DenseDoubleMatrix2D.class
+                .getDeclaredField("elements");
+            elementsField.setAccessible(true);
+            return (double []) elementsField.get(A);
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -145,7 +145,16 @@ public class NNIDenseDoubleMatrix2D extends DenseDoubleMatrix2D
      */
     public static boolean isView(DenseDoubleMatrix2D A)
     {
-        return A.isView();
+        try
+        {
+            final Method isViewMethod = AbstractMatrix.class.getDeclaredMethod("isView");
+            isViewMethod.setAccessible(true);
+            return (Boolean) isViewMethod.invoke(A);
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -156,7 +165,7 @@ public class NNIDenseDoubleMatrix2D extends DenseDoubleMatrix2D
      */
     public static void deepTranspose(DenseDoubleMatrix2D A)
     {
-        double [] data = A.elements;
+        double [] data = getDoubleData(A);
 
         int from = 2;
         int to = 0;

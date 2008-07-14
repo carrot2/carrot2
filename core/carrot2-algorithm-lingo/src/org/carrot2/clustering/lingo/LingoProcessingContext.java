@@ -21,6 +21,9 @@ class LingoProcessingContext
      */
     int [] tdMatrixStemIndices;
 
+    /** Reduced term-document matrix */
+    DoubleMatrix2D reducedTdMatrix;
+    
     LingoProcessingContext(PreprocessingContext preprocessingContext)
     {
         this.preprocessingContext = preprocessingContext;

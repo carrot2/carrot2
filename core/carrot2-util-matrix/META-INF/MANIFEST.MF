@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Matrix Utilities
 Bundle-SymbolicName: org.carrot2.util.matrix
 Bundle-Version: 1.0.0
-Bundle-ClassPath: carrot2-util-matrix.jar,
+Bundle-ClassPath: .,
  lib/nni.jar
 Export-Package: cern.colt.matrix,
  cern.colt.matrix.impl,

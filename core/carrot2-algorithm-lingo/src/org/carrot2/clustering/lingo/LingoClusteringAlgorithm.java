@@ -72,6 +72,16 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     public LanguageModelFactory languageModelFactory = new SnowballLanguageModelFactory();
 
     /**
+     * Term-document matrix builder for the algorithm, contains bindable attributes.
+     */
+    public TermDocumentMatrixBuilder matrixBuilder = new TermDocumentMatrixBuilder();
+
+    /**
+     * Term-document matrix reducer for the algorithm, contains bindable attributes.
+     */
+    public TermDocumentMatrixReducer matrixReducer = new TermDocumentMatrixReducer();
+
+    /**
      * Performs Lingo clustering of {@link #documents}.
      */
     @Override
@@ -86,6 +96,13 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
         stopListMarker.mark(context);
         phraseExtractor.extractPhrases(context);
         labelFilterProcessor.process(context);
+
+        // Term-document matrix building and reduction
+        LingoProcessingContext lingoContext = new LingoProcessingContext(context);
+        matrixBuilder.build(lingoContext);
+        matrixReducer.reduce(lingoContext);
+        
+        // Cluster building
 
         clusters = Lists.newArrayList();
 
@@ -114,7 +131,7 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
                 cluster.addDocuments(documents
                     .get(phrasesTfByDocument[phraseIndex][j * 2]));
             }
-            
+
             clusters.add(cluster);
         }
     }
