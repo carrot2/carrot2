@@ -209,7 +209,7 @@ public class BindableDescriptor
             return this;
         }
 
-        return only(new AnnotationsPredicate(annotationClasses, true));
+        return only(new AnnotationsPredicate(true, annotationClasses));
     }
 
     /**
@@ -229,8 +229,8 @@ public class BindableDescriptor
             return this;
         }
 
-        return only(Predicates.<AttributeDescriptor> not(new AnnotationsPredicate(
-            annotationClasses, false)));
+        return only(Predicates.<AttributeDescriptor> not(new AnnotationsPredicate(false, 
+            annotationClasses)));
     }
 
     /**
@@ -432,35 +432,6 @@ public class BindableDescriptor
         public int compare(Class<?> o1, Class<?> o2)
         {
             return o1.getSimpleName().compareTo(o2.getSimpleName());
-        }
-    }
-
-    /**
-     * A predicate that tests the presence of annotations on {@link AttributeDescriptor}.
-     */
-    private static final class AnnotationsPredicate implements Predicate<AttributeDescriptor>
-    {
-        private final Class<? extends Annotation> [] annotationClasses;
-        private final boolean requireAll;
-
-        private AnnotationsPredicate(Class<? extends Annotation> [] annotationClasses,
-            boolean requireAll)
-        {
-            this.annotationClasses = annotationClasses;
-            this.requireAll = requireAll;
-        }
-
-        public boolean apply(AttributeDescriptor descriptor)
-        {
-            for (final Class<? extends Annotation> annotationClass : annotationClasses)
-            {
-                if (descriptor.getAnnotation(annotationClass) == null ^ !requireAll)
-                {
-                    return !requireAll;
-                }
-            }
-
-            return requireAll;
         }
     }
 }
