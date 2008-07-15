@@ -1,7 +1,6 @@
 package org.carrot2.workbench.core.ui;
 
 import java.text.Collator;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -11,6 +10,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.carrot2.core.ProcessingComponent;
 import org.carrot2.util.attribute.AttributeDescriptor;
+import org.carrot2.workbench.core.helpers.GUIFactory;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.editors.AttributeChangedEvent;
 import org.carrot2.workbench.editors.IAttributeChangeProvider;
@@ -140,15 +140,6 @@ public final class AttributeEditorList extends Composite
     {
         this.listeners.remove(listener);
     }
-    
-    /**
-     * @return Returns an immutable collection of {@link AttributeDescriptors} associated with 
-     * this editor list.
-     */
-    public Collection<AttributeDescriptor> getAttributeDescriptors()
-    {
-        return Collections.unmodifiableCollection(this.attributeDescriptors.values());
-    }
 
     /**
      * 
@@ -175,9 +166,9 @@ public final class AttributeEditorList extends Composite
          * The layout of this control is in two columns: labels in the
          * first column, editors in the second column.
          */
-        final GridLayout layout = new GridLayout();
+        final GridLayout layout = GUIFactory.zeroMarginGridLayout();
         this.setLayout(layout);
-    
+        
         layout.numColumns = 2;
         layout.marginWidth = 0;
         
@@ -243,6 +234,7 @@ public final class AttributeEditorList extends Composite
             if (editor != null)
             {
                 editor.createEditor(this, data);
+                
                 editor.setValue(attributeDescriptors.get(descriptor.key).defaultValue);
                 editors.put(editor.getAttributeKey(), editor);
     

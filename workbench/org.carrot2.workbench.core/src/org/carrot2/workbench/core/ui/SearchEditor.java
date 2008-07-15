@@ -19,6 +19,7 @@ import org.carrot2.util.attribute.Input;
 import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.DisposeBin;
+import org.carrot2.workbench.core.helpers.GUIFactory;
 import org.carrot2.workbench.core.helpers.PostponableJob;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.core.preferences.PreferenceConstants;
@@ -881,7 +882,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
 
         final BindableDescriptor descriptor = getAlgorithmDescriptor();
         final AttributeEditorGroups attributesList = new AttributeEditorGroups(
-            sec, descriptor, GroupingMethod.GROUP);
+            sec, GUIFactory.zeroMarginGridLayout(), descriptor, GroupingMethod.GROUP);
         resources.add(attributesList);
 
         /*

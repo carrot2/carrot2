@@ -13,6 +13,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IActionBars;
@@ -49,7 +50,7 @@ final class AttributeViewPage extends Page
         new LayoutAction(GroupingMethod.GROUP, "Attribute semantics"),
         new LayoutAction(GroupingMethod.LEVEL, "Attribute level"),
         new LayoutAction(GroupingMethod.STRUCTURE, "Declaring class"),
-        null,
+        null, /* Separator */
         new LayoutAction(GroupingMethod.NONE, "None"),
     };
     
@@ -164,7 +165,8 @@ final class AttributeViewPage extends Page
             WorkbenchCorePlugin.getDefault().getPreferenceStore().getString(
                 PreferenceConstants.ATTRIBUTE_GROUPING_LAYOUT));
 
-        attributeEditors = new AttributeEditorGroups(parent, 
+        attributeEditors = new AttributeEditorGroups(parent,
+            new GridLayout(), 
             editor.getAlgorithmDescriptor(), defaultGrouping);
 
         updateGroupingState();

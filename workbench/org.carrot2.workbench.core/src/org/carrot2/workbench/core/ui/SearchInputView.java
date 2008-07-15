@@ -5,22 +5,24 @@ import java.io.StringWriter;
 import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.carrot2.core.ProcessingComponent;
-import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
+import org.carrot2.util.attribute.AnnotationsPredicate;
 import org.carrot2.util.attribute.AttributeDescriptor;
 import org.carrot2.util.attribute.AttributeValueSet;
 import org.carrot2.util.attribute.AttributeValueSets;
+import org.carrot2.util.attribute.BindableDescriptor;
 import org.carrot2.util.attribute.BindableDescriptorBuilder;
 import org.carrot2.util.attribute.Input;
 import org.carrot2.util.attribute.Required;
+import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
 import org.carrot2.util.attribute.constraint.ConstraintValidator;
 import org.carrot2.workbench.core.ExtensionImpl;
 import org.carrot2.workbench.core.ExtensionLoader;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
+import org.carrot2.workbench.core.helpers.GUIFactory;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.editors.AttributeChangedEvent;
 import org.carrot2.workbench.editors.AttributeListenerAdapter;
@@ -55,7 +57,12 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
+
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
+import com.google.common.collect.Maps;
 
 
 /**
@@ -106,6 +113,17 @@ public class SearchInputView extends ViewPart
     private static final String MEMENTO_ATTRIBUTE_SET_SERIALIZED = "serialized";
 
     /**
+     * Filter showing only required attributes.
+     */
+    @SuppressWarnings("unchecked")
+    private final static Predicate<AttributeDescriptor> SHOW_REQUIRED = new AnnotationsPredicate(false, Required.class);
+
+    /**
+     * Filter showing all attributes.
+     */
+    private final static Predicate<AttributeDescriptor> SHOW_ALL = Predicates.alwaysTrue();
+    
+    /**
      * State persistence.
      */
     private IMemento state;
@@ -115,7 +133,7 @@ public class SearchInputView extends ViewPart
     private Composite innerComposite;
 
     /**
-     * A composite with a {@link StackLayout}, holding {@link AttributeEditorList}s for
+     * A composite with a {@link StackLayout}, holding {@link AttributeEditorGroups}s for
      * all document sources. 
      */
     private Composite editorStack;
@@ -127,16 +145,22 @@ public class SearchInputView extends ViewPart
     private Button processButton;
 
     /**
-     * A map of {@link AttributeEditorList} associated with all document source IDs from
+     * A map of {@link AttributeEditorGroups} associated with all document source IDs from
      * {@link WorkbenchCorePlugin#getSources()}.
      */
-    private Map<String, AttributeEditorList> editors = new HashMap<String, AttributeEditorList>();
+    private Map<String, AttributeEditorGroups> editors = Maps.newHashMap();
 
     /**
      * A map of {@link AttributeValueSet} associated with all document source IDs from
      * {@link WorkbenchCorePlugin#getSources()}.
      */
-    private Map<String, AttributeValueSet> attributes = new HashMap<String, AttributeValueSet>();
+    private Map<String, AttributeValueSet> attributes = Maps.newHashMap();
+
+    /**
+     * A map of {@link BindableDescriptor} for each document source ID from {@link
+     * WorkbenchCorePlugin#getSources()}.
+     */
+    private Map<String, BindableDescriptor> descriptors = Maps.newHashMap();
 
     /**
      * Create user interface for the view.
@@ -226,7 +250,7 @@ public class SearchInputView extends ViewPart
         for (String sourceID : editors.keySet())
         {
             final AttributeValueSet sourceAttrs = attributes.get(sourceID);
-            final AttributeEditorList editor = editors.get(sourceID);
+            final AttributeEditorGroups editor = editors.get(sourceID);
 
             for (Map.Entry<String, Object> entry : sourceAttrs.getAttributeValues().entrySet())
             {
@@ -240,7 +264,7 @@ public class SearchInputView extends ViewPart
         for (String sourceID : editors.keySet())
         {
             final AttributeValueSet sourceAttrs = attributes.get(sourceID);
-            final AttributeEditorList editor = editors.get(sourceID);
+            final AttributeEditorGroups editor = editors.get(sourceID);
 
             editor.addAttributeChangeListener(new AttributeListenerAdapter() {
                 public void attributeChange(AttributeChangedEvent event)
@@ -284,7 +308,6 @@ public class SearchInputView extends ViewPart
         final Combo combo = new Combo(innerComposite, SWT.DROP_DOWN | SWT.READ_ONLY
             | SWT.BORDER);
         combo.setLayoutData(gridData);
-
         combo.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 
         final ComboViewer viewer = new ComboViewer(combo);
@@ -347,9 +370,12 @@ public class SearchInputView extends ViewPart
      */
     private boolean hasAllRequiredAttributes(String sourceId)
     {
-        final AttributeEditorList attributeEditorList = editors.get(sourceId);
         final AttributeValueSet values = attributes.get(sourceId);
-        for (AttributeDescriptor d : attributeEditorList.getAttributeDescriptors())
+        
+        final Collection<AttributeDescriptor> desc = descriptors.get(sourceId)
+            .flatten().attributeDescriptors.values();
+
+        for (AttributeDescriptor d : desc)
         {
             final Object value = values.getAttributeValue(d.key);
 
@@ -411,17 +437,22 @@ public class SearchInputView extends ViewPart
         {
             final ProcessingComponent source = implementation.getInstance();
 
-            final Map<String, AttributeDescriptor> descriptors = BindableDescriptorBuilder
-                .buildDescriptor(source).only(Input.class, Processing.class,
-                    Required.class).not(Internal.class).flatten().attributeDescriptors;
-
             final String sourceID = implementation.id;
             if (!attributes.containsKey(sourceID))
             {
                 this.attributes.put(sourceID, new AttributeValueSet(sourceID));
             }
 
-            final AttributeEditorList page = new AttributeEditorList(editorStack, descriptors);
+            final BindableDescriptor descriptor = BindableDescriptorBuilder
+                .buildDescriptor(source).only(
+                    Input.class, Processing.class);
+            
+            descriptors.put(sourceID, descriptor);
+
+            final AttributeEditorGroups page = new AttributeEditorGroups(
+                editorStack, GUIFactory.zeroMarginGridLayout(), 
+                descriptor, GroupingMethod.NONE, SHOW_REQUIRED);
+
             this.editors.put(sourceID, page);
         }
     }
