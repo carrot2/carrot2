@@ -1,6 +1,7 @@
 package org.carrot2.workbench.core.preferences;
 
 import org.carrot2.workbench.core.ui.SearchEditorSections;
+import org.carrot2.workbench.core.ui.SearchInputView;
 
 /**
  * Constant definitions for plug-in preferences
@@ -20,7 +21,12 @@ public final class PreferenceConstants
     /**
      * Attribute grouping layout.
      */
-    public static final String ATTRIBUTE_GROUPING_LAYOUT = "attributes-view.layout"; 
+    public static final String ATTRIBUTE_GROUPING_LAYOUT = "attributes-view.layout";
+
+    /**
+     * Show only required attributes in the {@link SearchInputView}.
+     */
+    public static final String SHOW_REQUIRED_ONLY = "search-input-view.show-required"; 
 
     /*
      * 

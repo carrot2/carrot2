@@ -37,5 +37,10 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer
          * Attribute grouping.
          */
         store.setDefault(PreferenceConstants.ATTRIBUTE_GROUPING_LAYOUT, GroupingMethod.GROUP.name());
+
+        /*
+         * SearchInputView
+         */
+        store.setDefault(PreferenceConstants.SHOW_REQUIRED_ONLY, true);
     }
 }

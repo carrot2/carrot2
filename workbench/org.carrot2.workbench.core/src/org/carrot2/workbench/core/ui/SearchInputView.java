@@ -24,11 +24,20 @@ import org.carrot2.workbench.core.ExtensionLoader;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.GUIFactory;
 import org.carrot2.workbench.core.helpers.Utils;
+import org.carrot2.workbench.core.preferences.PreferenceConstants;
+import org.carrot2.workbench.core.ui.widgets.CScrolledComposite;
 import org.carrot2.workbench.editors.AttributeChangedEvent;
 import org.carrot2.workbench.editors.AttributeListenerAdapter;
 import org.carrot2.workbench.editors.IAttributeEditor;
 import org.eclipse.core.commands.operations.OperationStatus;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -53,8 +62,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Widget;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
@@ -113,31 +124,21 @@ public class SearchInputView extends ViewPart
     private static final String MEMENTO_ATTRIBUTE_SET_SERIALIZED = "serialized";
 
     /**
-     * Filter showing only required attributes.
-     */
-    @SuppressWarnings("unchecked")
-    private final static Predicate<AttributeDescriptor> SHOW_REQUIRED = new AnnotationsPredicate(false, Required.class);
-
-    /**
-     * Filter showing all attributes.
-     */
-    private final static Predicate<AttributeDescriptor> SHOW_ALL = Predicates.alwaysTrue();
-    
-    /**
      * State persistence.
      */
     private IMemento state;
 
     private ComboViewer sourceViewer;
     private ComboViewer algorithmViewer;
-    private Composite innerComposite;
 
     /**
      * A composite with a {@link StackLayout}, holding {@link AttributeGroups}s for
      * all document sources. 
      */
-    private Composite editorStack;
     private VisibleComponentSizeStackLayout attributesPagesStack;
+    /*
+    private Composite editorStack;
+    */
 
     /*
      * 
@@ -161,6 +162,78 @@ public class SearchInputView extends ViewPart
      * WorkbenchCorePlugin#getSources()}.
      */
     private Map<String, BindableDescriptor> descriptors = Maps.newHashMap();
+
+    /**
+     * Scroller composite container.
+     */
+    private CScrolledComposite scroller;
+
+    /**
+     * Filter showing only required attributes.
+     */
+    @SuppressWarnings("unchecked")
+    private final static Predicate<AttributeDescriptor> SHOW_REQUIRED = new AnnotationsPredicate(false, Required.class);
+
+    /**
+     * Filter showing all attributes.
+     */
+    private final static Predicate<AttributeDescriptor> SHOW_ALL = Predicates.alwaysTrue();
+    
+    /**
+     * Toggles between {@link SearchInputView#SHOW_REQUIRED} and
+     * {@link SearchInputView#SHOW_ALL}. 
+     */
+    private class ShowRequiredOnlyAction extends Action
+    {
+        public ShowRequiredOnlyAction()
+        {
+            super("Show only required attributes", SWT.TOGGLE);
+        }
+
+        @Override
+        public void run()
+        {
+            final IPreferenceStore preferenceStore = 
+                WorkbenchCorePlugin.getDefault().getPreferenceStore();
+
+            final boolean state =  preferenceStore.getBoolean(
+                PreferenceConstants.SHOW_REQUIRED_ONLY);
+
+            preferenceStore.setValue(PreferenceConstants.SHOW_REQUIRED_ONLY, !state);
+        }
+
+        @Override
+        public boolean isChecked()
+        {
+            return WorkbenchCorePlugin.getDefault().getPreferenceStore().getBoolean(
+                PreferenceConstants.SHOW_REQUIRED_ONLY);
+        }
+    }
+
+    /*
+     * 
+     */
+    @Override
+    public void init(IViewSite site) throws PartInitException
+    {
+        super.init(site);
+
+        final IActionBars bars = site.getActionBars();
+        createMenu(bars.getMenuManager());
+
+        bars.updateActionBars();        
+    }
+    
+    /*
+     * 
+     */
+    private void createMenu(IMenuManager menuManager)
+    {
+        final IAction showRequiredOnly = new ShowRequiredOnlyAction();
+
+        menuManager.add(showRequiredOnly);
+        menuManager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+    }
 
     /**
      * Create user interface for the view.
@@ -198,6 +271,62 @@ public class SearchInputView extends ViewPart
                 }
             }
         });
+        
+        /*
+         * Hook global preference updates.
+         */
+        final IPreferenceStore preferenceStore = 
+            WorkbenchCorePlugin.getDefault().getPreferenceStore();
+        preferenceStore.addPropertyChangeListener(new IPropertyChangeListener() {
+            public void propertyChange(PropertyChangeEvent event)
+            {
+                if (PreferenceConstants.SHOW_REQUIRED_ONLY.equals(
+                    event.getProperty()))
+                {
+                    updateRequiredFilterState();
+                }
+            }
+        });
+    }
+
+    /**
+     * Update attribute panels with current filtering settings.
+     */
+    private void updateRequiredFilterState()
+    {
+        final IPreferenceStore preferenceStore = 
+            WorkbenchCorePlugin.getDefault().getPreferenceStore();
+
+        final Predicate<AttributeDescriptor> filter;
+        if (preferenceStore.getBoolean(PreferenceConstants.SHOW_REQUIRED_ONLY))
+        {
+            filter = SHOW_REQUIRED;
+        }
+        else
+        {
+            filter = SHOW_ALL;
+        }
+
+        for (AttributeGroups i : editors.values())
+        {
+            i.setFilter(filter);
+        }
+
+        /*
+         * Update current attribute values. 
+         */
+        for (String sourceID : editors.keySet())
+        {
+            final AttributeValueSet sourceAttrs = attributes.get(sourceID);
+            final AttributeGroups editor = editors.get(sourceID);
+
+            for (Map.Entry<String, Object> entry : sourceAttrs.getAttributeValues().entrySet())
+            {
+                editor.setAttribute(entry.getKey(), entry.getValue());
+            }
+        }
+
+        scroller.reflow(true);
     }
 
     /**
@@ -208,10 +337,19 @@ public class SearchInputView extends ViewPart
         final WorkbenchCorePlugin core = WorkbenchCorePlugin.getDefault();
         parent.setLayout(new FillLayout());
 
-        innerComposite = new Composite(parent, SWT.NONE);
-        innerComposite.setLayout(new GridLayout(2, false));
+        this.scroller = new CScrolledComposite(parent, 
+            SWT.H_SCROLL | SWT.V_SCROLL);
+        scroller.setExpandHorizontal(true);
+        scroller.setExpandVertical(false);
 
-        sourceViewer = createComboViewer("Source", core.getSources());
+        Composite innerComposite = GUIFactory.createSpacer(scroller);
+        final GridLayout gridLayout = (GridLayout) innerComposite.getLayout();
+        gridLayout.numColumns = 2;
+        gridLayout.makeColumnsEqualWidth = false;
+
+        scroller.setContent(innerComposite);
+
+        sourceViewer = createComboViewer(innerComposite, "Source", core.getSources());
         sourceViewer.addSelectionChangedListener(new ISelectionChangedListener()
         {
             public void selectionChanged(SelectionChangedEvent event)
@@ -222,16 +360,15 @@ public class SearchInputView extends ViewPart
                 if (impl != null)
                 {
                     attributesPagesStack.topControl = editors.get(impl.id);
-                    editorStack.layout();
-                    innerComposite.layout();
                     checkAllRequiredAttributes();
+                    scroller.reflow(true);
                 }
             }
         });
 
-        algorithmViewer = createComboViewer("Algorithm", core.getAlgorithms());
+        algorithmViewer = createComboViewer(innerComposite, "Algorithm", core.getAlgorithms());
 
-        createRequiredAttributesLayout();
+        createRequiredAttributesLayout(innerComposite);
 
         final GridData processButtonGridData = new GridData();
         processButtonGridData.horizontalAlignment = GridData.END;
@@ -246,17 +383,7 @@ public class SearchInputView extends ViewPart
          * Restore state and push initial values to editors.
          */
         restoreState();
-
-        for (String sourceID : editors.keySet())
-        {
-            final AttributeValueSet sourceAttrs = attributes.get(sourceID);
-            final AttributeGroups editor = editors.get(sourceID);
-
-            for (Map.Entry<String, Object> entry : sourceAttrs.getAttributeValues().entrySet())
-            {
-                editor.setAttribute(entry.getKey(), entry.getValue());
-            }
-        }
+        updateRequiredFilterState();
 
         /*
          * Hook up listeners updating attributes on changes in editors. 
@@ -295,9 +422,9 @@ public class SearchInputView extends ViewPart
      * creates a JFace ComboViewer around a collection of extension point implementations.
      * Restores saved selection state if possible.
      */
-    private ComboViewer createComboViewer(String comboLabel, ExtensionLoader loader)
+    private ComboViewer createComboViewer(Composite parent, String comboLabel, ExtensionLoader loader)
     {
-        final Label label = new Label(innerComposite, SWT.CENTER);
+        final Label label = new Label(parent, SWT.CENTER);
         label.setLayoutData(new GridData());
         label.setText(comboLabel);
 
@@ -305,7 +432,7 @@ public class SearchInputView extends ViewPart
         gridData.horizontalAlignment = GridData.FILL;
         gridData.grabExcessHorizontalSpace = true;
 
-        final Combo combo = new Combo(innerComposite, SWT.DROP_DOWN | SWT.READ_ONLY
+        final Combo combo = new Combo(parent, SWT.DROP_DOWN | SWT.READ_ONLY
             | SWT.BORDER);
         combo.setLayoutData(gridData);
         combo.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
@@ -419,12 +546,12 @@ public class SearchInputView extends ViewPart
      * 
      */
     @SuppressWarnings("unchecked")
-    private void createRequiredAttributesLayout()
+    private void createRequiredAttributesLayout(Composite innerComposite)
     {
         final WorkbenchCorePlugin core = WorkbenchCorePlugin.getDefault();
 
         attributesPagesStack = new VisibleComponentSizeStackLayout();
-        editorStack = new Composite(innerComposite, SWT.NONE);
+        final Composite editorStack = new Composite(innerComposite, SWT.NONE);
         editorStack.setLayout(attributesPagesStack);
 
         final GridData attributesGridData = new GridData();

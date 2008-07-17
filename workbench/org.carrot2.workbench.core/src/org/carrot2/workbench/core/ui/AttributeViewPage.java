@@ -1,5 +1,8 @@
 package org.carrot2.workbench.core.ui;
 
+import java.util.Map;
+
+import org.carrot2.core.ProcessingResult;
 import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
 import org.carrot2.workbench.core.WorkbenchActionFactory;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
@@ -86,8 +89,7 @@ final class AttributeViewPage extends Page
             WorkbenchCorePlugin.getDefault().getPreferenceStore().setValue(
                 PreferenceConstants.ATTRIBUTE_GROUPING_LAYOUT, grouping.name());
 
-            attributeEditors.setGrouping(grouping);
-            updateGroupingState();
+            updateGroupingState(grouping);
         }
     }
 
@@ -150,16 +152,30 @@ final class AttributeViewPage extends Page
     }
 
     /**
-     * Update grouping state in toolbars/ menus.
+     * Update grouping state in toolbars/ menus, push initial values 
+     * to editors.
      */
-    private void updateGroupingState()
+    private void updateGroupingState(GroupingMethod grouping)
     {
-        final GroupingMethod grouping = attributeEditors.getGrouping();
+        attributeEditors.setGrouping(grouping);
         for (LayoutAction action : layoutActions)
         {
             if (action != null)
             {
                 action.setChecked(grouping.equals(action.grouping));
+            }
+        }
+        
+        /*
+         * Refresh current attribute values. 
+         */
+
+        final ProcessingResult pr = this.editor.getSearchResult().getProcessingResult();
+        if (pr != null)
+        {
+            for (Map.Entry<String, Object> e : pr.getAttributes().entrySet())
+            {
+                attributeEditors.setAttribute(e.getKey(), e.getValue());
             }
         }
     }
@@ -191,7 +207,7 @@ final class AttributeViewPage extends Page
         this.mainControl = scroller;
         scroller.reflow(true);
 
-        updateGroupingState();
+        updateGroupingState(defaultGrouping);
         registerListeners();
     }
 

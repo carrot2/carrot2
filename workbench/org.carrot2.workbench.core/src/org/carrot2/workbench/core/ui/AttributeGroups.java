@@ -177,7 +177,7 @@ public final class AttributeGroups extends Composite implements
     }
 
     /**
-     * Force reflow of parent {@link SharedScrolledComposite}s.
+     * Force reflow of parent {@link SharedScrolledComposite}s, if there are any.
      */
     private void forceReflow()
     {
