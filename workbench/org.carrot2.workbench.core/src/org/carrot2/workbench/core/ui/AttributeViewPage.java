@@ -3,7 +3,9 @@ package org.carrot2.workbench.core.ui;
 import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
 import org.carrot2.workbench.core.WorkbenchActionFactory;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
+import org.carrot2.workbench.core.helpers.GUIFactory;
 import org.carrot2.workbench.core.preferences.PreferenceConstants;
+import org.carrot2.workbench.core.ui.widgets.CScrolledComposite;
 import org.carrot2.workbench.editors.AttributeChangedEvent;
 import org.carrot2.workbench.editors.AttributeListenerAdapter;
 import org.carrot2.workbench.editors.IAttributeListener;
@@ -13,12 +15,14 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.forms.widgets.SharedScrolledComposite;
 import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.part.Page;
 
@@ -31,11 +35,11 @@ final class AttributeViewPage extends Page
      * The search editor this page is attached to.
      */
     private final SearchEditor editor;
-    
+
     /**
      * Attribute editors.
      */
-    private AttributeEditorGroups attributeEditors;
+    private AttributeGroups attributeEditors;
 
     /**
      * Synchronization of attribute values from {@link SearchEditor}'s
@@ -44,23 +48,28 @@ final class AttributeViewPage extends Page
     private IAttributeListener editorToViewSync;
 
     /**
-     * Layout actions associated with this page's menu.  
+     * Layout actions associated with this page's menu.
      */
-    private LayoutAction [] layoutActions = new LayoutAction  [] {
+    private LayoutAction [] layoutActions = new LayoutAction []
+    {
         new LayoutAction(GroupingMethod.GROUP, "Attribute semantics"),
         new LayoutAction(GroupingMethod.LEVEL, "Attribute level"),
-        new LayoutAction(GroupingMethod.STRUCTURE, "Declaring class"),
-        null, /* Separator */
+        new LayoutAction(GroupingMethod.STRUCTURE, "Declaring class"), null, /* Separator */
         new LayoutAction(GroupingMethod.NONE, "None"),
     };
-    
+
     /**
-     * Sets the given grouping method and updates state of all controls
-     * associated with grouping.
+     * Main control in this page.
      */
-    private final class LayoutAction extends Action 
+    private Composite mainControl;
+
+    /**
+     * Sets the given grouping method and updates state of all controls associated with
+     * grouping.
+     */
+    private final class LayoutAction extends Action
     {
-        public final GroupingMethod grouping;  
+        public final GroupingMethod grouping;
 
         public LayoutAction(GroupingMethod grouping, String label)
         {
@@ -100,7 +109,7 @@ final class AttributeViewPage extends Page
 
         final IActionBars bars = pageSite.getActionBars();
         createToolbarActions(bars.getToolBarManager());
-        
+
         createMenu(bars.getMenuManager());
 
         bars.updateActionBars();
@@ -114,7 +123,7 @@ final class AttributeViewPage extends Page
         /*
          * Layout menu.
          */
-        final IMenuManager layoutSubMenu= new MenuManager("&Grouping"); 
+        final IMenuManager layoutSubMenu = new MenuManager("&Grouping");
         viewMenu.add(layoutSubMenu);
         for (IAction action : layoutActions)
         {
@@ -161,13 +170,26 @@ final class AttributeViewPage extends Page
     @Override
     public void createControl(Composite parent)
     {
-        final GroupingMethod defaultGrouping = GroupingMethod.valueOf(
-            WorkbenchCorePlugin.getDefault().getPreferenceStore().getString(
+        final GroupingMethod defaultGrouping = GroupingMethod.valueOf(WorkbenchCorePlugin
+            .getDefault().getPreferenceStore().getString(
                 PreferenceConstants.ATTRIBUTE_GROUPING_LAYOUT));
 
-        attributeEditors = new AttributeEditorGroups(parent,
-            new GridLayout(), 
-            editor.getAlgorithmDescriptor(), defaultGrouping);
+        final SharedScrolledComposite scroller = new CScrolledComposite(parent,
+            SWT.H_SCROLL | SWT.V_SCROLL);
+
+        final Composite spacer = GUIFactory.createSpacer(scroller);
+
+        scroller.setContent(spacer);
+        scroller.setExpandHorizontal(true);
+        scroller.setExpandVertical(false);
+
+        attributeEditors = new AttributeGroups(spacer, editor.getAlgorithmDescriptor(),
+            defaultGrouping);
+        attributeEditors.setLayoutData(GridDataFactory.fillDefaults().grab(true, true)
+            .create());
+
+        this.mainControl = scroller;
+        scroller.reflow(true);
 
         updateGroupingState();
         registerListeners();
@@ -179,7 +201,7 @@ final class AttributeViewPage extends Page
     @Override
     public Control getControl()
     {
-        return this.attributeEditors;
+        return this.mainControl;
     }
 
     /*
@@ -209,28 +231,27 @@ final class AttributeViewPage extends Page
     private void registerListeners()
     {
         /*
-         * Link attribute value changes:
-         * attribute view -> search result
+         * Link attribute value changes: attribute view -> search result
          */
-        final IAttributeListener viewToEditorSync = new AttributeListenerAdapter() {
+        final IAttributeListener viewToEditorSync = new AttributeListenerAdapter()
+        {
             public void attributeChange(AttributeChangedEvent event)
             {
-                editor.getSearchResult().getInput().setAttribute(
-                    event.key, event.value);
+                editor.getSearchResult().getInput().setAttribute(event.key, event.value);
             }
         };
         this.attributeEditors.addAttributeChangeListener(viewToEditorSync);
 
         /*
-         * Link attribute value changes:
-         * search result -> attribute view
+         * Link attribute value changes: search result -> attribute view
          */
-        editorToViewSync = new AttributeListenerAdapter() {
+        editorToViewSync = new AttributeListenerAdapter()
+        {
             public void attributeChange(AttributeChangedEvent event)
             {
                 /*
-                 * temporarily unsubscribe from events from the attributes
-                 * list to avoid event looping.
+                 * temporarily unsubscribe from events from the attributes list to avoid
+                 * event looping.
                  */
                 attributeEditors.removeAttributeChangeListener(viewToEditorSync);
                 attributeEditors.setAttribute(event.key, event.value);
@@ -245,6 +266,7 @@ final class AttributeViewPage extends Page
      */
     private void unregisterListeners()
     {
-        editor.getSearchResult().getInput().removeAttributeChangeListener(editorToViewSync);
+        editor.getSearchResult().getInput().removeAttributeChangeListener(
+            editorToViewSync);
     }
 }

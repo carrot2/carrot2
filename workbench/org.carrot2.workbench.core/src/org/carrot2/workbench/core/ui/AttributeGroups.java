@@ -18,14 +18,13 @@ import org.carrot2.workbench.editors.AttributeChangedEvent;
 import org.carrot2.workbench.editors.IAttributeChangeProvider;
 import org.carrot2.workbench.editors.IAttributeEditor;
 import org.carrot2.workbench.editors.IAttributeListener;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.ScrollBar;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
@@ -37,9 +36,10 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 /**
- * An SWT composite displaying groups of {@link IAttributeEditor}s.
+ * An SWT composite capable of displaying groups of {@link IAttributeEditor}s, sorted by
+ * {@link GroupingMethod} and filtered using {@link #setFilter(Predicate)}.
  */
-public final class AttributeEditorGroups extends SharedScrolledComposite implements
+public final class AttributeGroups extends Composite implements
     IAttributeChangeProvider
 {
     /**
@@ -85,60 +85,53 @@ public final class AttributeEditorGroups extends SharedScrolledComposite impleme
     private BindableDescriptor descriptor;
 
     /**
-     * A hashmap of attribute IDs to {@link AttributeEditorList} that contain them.
+     * A hashmap of attribute IDs to {@link AttributeList} that contain them.
      * 
      * @see #setAttribute(String, Object)
      */
-    private Map<String, AttributeEditorList> attributeEditors = Maps.newHashMap();
+    private Map<String, AttributeList> attributeEditors = Maps.newHashMap();
 
     /**
-     * Predicate used to filter attribute descriptors shown in the editor
-     * or <code>null</code>.
+     * Predicate used to filter attribute descriptors shown in the editor or
+     * <code>null</code>.
      */
     private Predicate<AttributeDescriptor> filterPredicate;
 
     /**
      * Builds the component for a given {@link BindableDescriptor}.
      */
-    public AttributeEditorGroups(Composite parent, 
-        GridLayout innerMargins, BindableDescriptor descriptor,
+    public AttributeGroups(Composite parent, BindableDescriptor descriptor,
         GroupingMethod grouping, Predicate<AttributeDescriptor> filter)
     {
-        super(parent, SWT.V_SCROLL | SWT.H_SCROLL);
-        this.setDelayedReflow(false);
+        super(parent, SWT.NONE);
 
         this.descriptor = descriptor;
         this.grouping = grouping;
         this.filterPredicate = filter;
-        createComponents(innerMargins);
+        createComponents();
 
         refreshUI();
     }
-    
-    public AttributeEditorGroups(Composite parent, 
-        GridLayout innerMargins, BindableDescriptor descriptor,
+
+    public AttributeGroups(Composite parent, BindableDescriptor descriptor,
         GroupingMethod grouping)
     {
-        this(parent, innerMargins, descriptor, grouping, null);
+        this(parent, descriptor, grouping, null);
     }
 
     /**
      * Create GUI components (sections, editors).
      */
-    private void createComponents(GridLayout innerMargins)
+    private void createComponents()
     {
-        final Composite mainControl = new Composite(this, NONE);
-        this.setContent(mainControl);
-        innerMargins.numColumns = 1;
-        mainControl.setLayout(innerMargins);
-        this.mainControl = mainControl;
+        final GridLayout layout = GUIFactory.zeroMarginGridLayout();
+        this.setLayout(layout);
 
-        /*
-         * Expand controls horizontally, do not expand vertically.
-         */
-        this.setExpandHorizontal(true);
-        this.setExpandVertical(false);
-        this.reflow(true);
+        final Composite mainControl = new Composite(this, NONE);
+        mainControl.setLayout(GUIFactory.zeroMarginGridLayout());
+        mainControl.setLayoutData(GridDataFactory.fillDefaults().grab(true, true)
+            .create());
+        this.mainControl = mainControl;
     }
 
     /**
@@ -169,9 +162,9 @@ public final class AttributeEditorGroups extends SharedScrolledComposite impleme
         refreshUI();
     }
 
-    /*
-     * Refresh user interface after a change to the displayed editors.
-     * This may take a longer time.
+    /**
+     * Refresh user interface after a change to the displayed editors. This may take a
+     * longer time.
      */
     private void refreshUI()
     {
@@ -180,9 +173,27 @@ public final class AttributeEditorGroups extends SharedScrolledComposite impleme
         createEditors(mainControl);
         this.mainControl.setRedraw(true);
 
-        this.reflow(true);
+        forceReflow();
     }
-    
+
+    /**
+     * Force reflow of parent {@link SharedScrolledComposite}s.
+     */
+    private void forceReflow()
+    {
+        Control c = this;
+        while (c != null)
+        {
+            if (c instanceof SharedScrolledComposite)
+            {
+                ((SharedScrolledComposite) c).reflow(true);
+                break;
+            }
+
+            c = c.getParent();
+        }
+    }
+
     /**
      * Returns the current grouping state.
      */
@@ -279,7 +290,7 @@ public final class AttributeEditorGroups extends SharedScrolledComposite impleme
         gd.grabExcessVerticalSpace = false;
         inner.setLayoutData(gd);
 
-        final AttributeEditorList editorList = new AttributeEditorList(inner, attributes,
+        final AttributeList editorList = new AttributeList(inner, attributes,
             descriptor.type);
 
         final GridData data = new GridData();
@@ -323,7 +334,7 @@ public final class AttributeEditorGroups extends SharedScrolledComposite impleme
         layout.numColumns = 1;
         // Vertical space between groups
         layout.marginBottom = 10;
-        
+
         /*
          * Prepare editors inside the group widget. Add some extra space at the bottom of
          * the control to separate from the next group
@@ -331,7 +342,7 @@ public final class AttributeEditorGroups extends SharedScrolledComposite impleme
         final Composite inner = new Composite(group, SWT.NONE);
         inner.setLayout(layout);
 
-        final AttributeEditorList editorList = new AttributeEditorList(inner, attributes,
+        final AttributeList editorList = new AttributeList(inner, attributes,
             descriptor.type);
 
         final GridData data = new GridData();
@@ -374,27 +385,9 @@ public final class AttributeEditorGroups extends SharedScrolledComposite impleme
         {
             public void expansionStateChanged(ExpansionEvent e)
             {
-                AttributeEditorGroups.this.reflow(true);
+                forceReflow();
             }
         });
-    }
-
-    /**
-     * On reflow, update both vertical and horizontal scroller (for some reason the
-     * horizontal one is neglected in current version of Eclipse).
-     */
-    @Override
-    public void reflow(boolean flushCache)
-    {
-        super.reflow(flushCache);
-
-        final ScrollBar hbar = getHorizontalBar();
-        if (hbar != null)
-        {
-            final Rectangle clientArea = getClientArea();
-            final int increment = Math.max(clientArea.width - 5, 5);
-            hbar.setPageIncrement(increment);
-        }
     }
 
     /**
@@ -418,7 +411,7 @@ public final class AttributeEditorGroups extends SharedScrolledComposite impleme
      */
     public void setAttribute(String key, Object value)
     {
-        final AttributeEditorList attributeEditorList = this.attributeEditors.get(key);
+        final AttributeList attributeEditorList = this.attributeEditors.get(key);
         if (attributeEditorList != null)
         {
             attributeEditorList.setAttribute(key, value);
@@ -435,9 +428,9 @@ public final class AttributeEditorGroups extends SharedScrolledComposite impleme
         /*
          * Unsubscribe from attribute editors (unique).
          */
-        final HashSet<AttributeEditorList> values = Sets.newHashSet(this.attributeEditors
+        final HashSet<AttributeList> values = Sets.newHashSet(this.attributeEditors
             .values());
-        for (AttributeEditorList attEditor : values)
+        for (AttributeList attEditor : values)
         {
             attEditor.removeAttributeChangeListener(forwardListener);
         }

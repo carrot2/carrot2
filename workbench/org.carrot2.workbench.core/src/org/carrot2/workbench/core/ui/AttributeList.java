@@ -29,9 +29,10 @@ import com.google.common.collect.Maps;
 
 
 /**
- * An SWT composite displaying a set of attribute editors.
+ * An SWT composite displaying an alphabetically ordered list of 
+ * {@link IAttributeEditor}s.
  */
-public final class AttributeEditorList extends Composite
+public final class AttributeList extends Composite
     implements IAttributeChangeProvider
 {
     /**
@@ -83,7 +84,7 @@ public final class AttributeEditorList extends Composite
      * an (optional) component class.
      */
     @SuppressWarnings("unchecked")
-    public AttributeEditorList(Composite parent, 
+    public AttributeList(Composite parent, 
         Map<String, AttributeDescriptor> attributeDescriptors)
     {
         this(parent, attributeDescriptors, null);
@@ -94,7 +95,7 @@ public final class AttributeEditorList extends Composite
      * an (optional) component class.
      */
     @SuppressWarnings("unchecked")
-    public AttributeEditorList(Composite parent, 
+    public AttributeList(Composite parent, 
         Map<String, AttributeDescriptor> attributeDescriptors, Class<?> componentClazz)
     {
         super(parent, SWT.NONE);

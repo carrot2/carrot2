@@ -133,7 +133,7 @@ public class SearchInputView extends ViewPart
     private Composite innerComposite;
 
     /**
-     * A composite with a {@link StackLayout}, holding {@link AttributeEditorGroups}s for
+     * A composite with a {@link StackLayout}, holding {@link AttributeGroups}s for
      * all document sources. 
      */
     private Composite editorStack;
@@ -145,10 +145,10 @@ public class SearchInputView extends ViewPart
     private Button processButton;
 
     /**
-     * A map of {@link AttributeEditorGroups} associated with all document source IDs from
+     * A map of {@link AttributeGroups} associated with all document source IDs from
      * {@link WorkbenchCorePlugin#getSources()}.
      */
-    private Map<String, AttributeEditorGroups> editors = Maps.newHashMap();
+    private Map<String, AttributeGroups> editors = Maps.newHashMap();
 
     /**
      * A map of {@link AttributeValueSet} associated with all document source IDs from
@@ -250,7 +250,7 @@ public class SearchInputView extends ViewPart
         for (String sourceID : editors.keySet())
         {
             final AttributeValueSet sourceAttrs = attributes.get(sourceID);
-            final AttributeEditorGroups editor = editors.get(sourceID);
+            final AttributeGroups editor = editors.get(sourceID);
 
             for (Map.Entry<String, Object> entry : sourceAttrs.getAttributeValues().entrySet())
             {
@@ -264,7 +264,7 @@ public class SearchInputView extends ViewPart
         for (String sourceID : editors.keySet())
         {
             final AttributeValueSet sourceAttrs = attributes.get(sourceID);
-            final AttributeEditorGroups editor = editors.get(sourceID);
+            final AttributeGroups editor = editors.get(sourceID);
 
             editor.addAttributeChangeListener(new AttributeListenerAdapter() {
                 public void attributeChange(AttributeChangedEvent event)
@@ -449,9 +449,11 @@ public class SearchInputView extends ViewPart
             
             descriptors.put(sourceID, descriptor);
 
-            final AttributeEditorGroups page = new AttributeEditorGroups(
-                editorStack, GUIFactory.zeroMarginGridLayout(), 
-                descriptor, GroupingMethod.NONE, SHOW_REQUIRED);
+            final AttributeGroups page = new AttributeGroups(
+                editorStack, descriptor, GroupingMethod.NONE, SHOW_REQUIRED);
+
+            page.setBackground(
+                PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_BLUE));
 
             this.editors.put(sourceID, page);
         }

@@ -24,6 +24,7 @@ import org.carrot2.workbench.core.helpers.PostponableJob;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.core.preferences.PreferenceConstants;
 import org.carrot2.workbench.core.ui.actions.SaveAsXMLActionDelegate;
+import org.carrot2.workbench.core.ui.widgets.CScrolledComposite;
 import org.carrot2.workbench.editors.AttributeChangedEvent;
 import org.carrot2.workbench.editors.AttributeListenerAdapter;
 import org.carrot2.workbench.editors.IAttributeListener;
@@ -272,9 +273,6 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         resources.add(toolkit);
 
         rootForm = toolkit.createForm(parent);
-        final GridLayout layout = GridLayoutFactory.swtDefaults().create();
-        rootForm.getBody().setLayout(layout);
-
         rootForm.setText(getPartName());
         rootForm.setImage(getTitleImage());
 
@@ -282,6 +280,10 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
 
         sashForm = new SashForm(rootForm.getBody(), SWT.HORIZONTAL);
         toolkit.adapt(sashForm);
+
+        final GridLayout layout = GridLayoutFactory.swtDefaults()
+            .margins(sashForm.SASH_WIDTH, sashForm.SASH_WIDTH).create();
+        rootForm.getBody().setLayout(layout);        
 
         createControls(sashForm);
         updatePartHeaders();
@@ -881,9 +883,23 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         sec.setText(section.name);
 
         final BindableDescriptor descriptor = getAlgorithmDescriptor();
-        final AttributeEditorGroups attributesList = new AttributeEditorGroups(
-            sec, GUIFactory.zeroMarginGridLayout(), descriptor, GroupingMethod.GROUP);
-        resources.add(attributesList);
+
+        final CScrolledComposite scroller = new CScrolledComposite(sec, 
+            SWT.H_SCROLL | SWT.V_SCROLL);
+        resources.add(scroller);
+        
+        final Composite spacer = GUIFactory.createSpacer(scroller);
+        resources.add(spacer);
+
+        final AttributeGroups attributesPanel = new AttributeGroups(
+            spacer, descriptor, GroupingMethod.GROUP);
+        resources.add(attributesPanel);
+
+        toolkit.paintBordersFor(scroller);
+        toolkit.adapt(scroller);
+        scroller.setExpandHorizontal(true);
+        scroller.setExpandVertical(false);
+        scroller.setContent(spacer);
 
         /*
          * Link attribute value changes:
@@ -895,7 +911,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
                 getSearchResult().getInput().setAttribute(event.key, event.value);
             }
         };
-        attributesList.addAttributeChangeListener(panelToEditorSync);
+        attributesPanel.addAttributeChangeListener(panelToEditorSync);
 
         /*
          * Link attribute value changes:
@@ -908,9 +924,9 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
                  * temporarily unsubscribe from events from the attributes
                  * list to avoid event looping.
                  */
-                attributesList.removeAttributeChangeListener(panelToEditorSync);
-                attributesList.setAttribute(event.key, event.value);
-                attributesList.addAttributeChangeListener(panelToEditorSync);
+                attributesPanel.removeAttributeChangeListener(panelToEditorSync);
+                attributesPanel.setAttribute(event.key, event.value);
+                attributesPanel.addAttributeChangeListener(panelToEditorSync);
             }
         };
         getSearchResult().getInput().addAttributeChangeListener(editorToPanelSync);
@@ -918,11 +934,10 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         /*
          * Perform GUI adaptations.
          */
-        toolkit.adapt(attributesList);
-        toolkit.paintBordersFor(attributesList);
-        Utils.adaptToFormUI(toolkit, attributesList);
-        
-        sec.setClient(attributesList);
+        Utils.adaptToFormUI(toolkit, attributesPanel);
+        Utils.adaptToFormUI(toolkit, scroller);
+
+        sec.setClient(scroller);
         return sec;
     }
 

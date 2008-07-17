@@ -1,6 +1,7 @@
 package org.carrot2.workbench.core.helpers;
 
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
+import org.carrot2.workbench.core.ui.AttributeGroups;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
@@ -144,5 +145,14 @@ public final class Utils
         {
             toolkit.adapt(control, true, true);
         }
+    }
+
+    /**
+     * Set the given component's background color to a given system color.
+     */
+    public static void setBackground(Control c, int systemColor)
+    {
+        c.setBackground(
+            PlatformUI.getWorkbench().getDisplay().getSystemColor(systemColor));
     }
 }
