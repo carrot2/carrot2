@@ -1,6 +1,7 @@
-package cern.colt.matrix;
+package org.carrot2.matrix;
 
-import cern.colt.matrix.impl.NNIDenseDoubleMatrix2D;
+import cern.colt.matrix.DoubleFactory2D;
+import cern.colt.matrix.DoubleMatrix2D;
 
 /**
  * A factory for convenient construction of 2D matrices backed by the NNI interface. Use

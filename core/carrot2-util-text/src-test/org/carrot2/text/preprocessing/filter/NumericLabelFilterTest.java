@@ -6,12 +6,12 @@ import org.junit.Test;
 /**
  * Test cases for {@link StopWordLabelFilter}.
  */
-public class StopWordLabelFilterTest extends LabelFilterTestBase
+public class NumericLabelFilterTest extends LabelFilterTestBase
 {
     @Override
     protected void initializeFilters(LabelFilterProcessor filterProcessor)
     {
-        filterProcessor.stopWordLabelFilter.enabled = true;
+        filterProcessor.numericLabelFilter.enabled = true;
     }
 
     @Test
@@ -23,7 +23,7 @@ public class StopWordLabelFilterTest extends LabelFilterTestBase
     }
 
     @Test
-    public void testNonStopWords()
+    public void testNonNumericWords()
     {
         createDocuments("aa . aa", "bb . bb");
 
@@ -36,9 +36,9 @@ public class StopWordLabelFilterTest extends LabelFilterTestBase
     }
 
     @Test
-    public void testStopWords()
+    public void testNumericWords()
     {
-        createDocuments("stop . stop", "bb . bb");
+        createDocuments("10,12 . 10,12", "bb . bb");
 
         final int [] expectedLabelsFeatureIndex = new int []
         {
@@ -49,40 +49,26 @@ public class StopWordLabelFilterTest extends LabelFilterTestBase
     }
 
     @Test
-    public void testNonStopPhrases()
+    public void testPhraseStartingWithNumbers()
     {
-        createDocuments("aa aa . aa aa", "bb bb . bb bb");
+        createDocuments("5 xx", "5 xx");
 
         final int [] expectedLabelsFeatureIndex = new int []
         {
-            0, 1, 2, 3
+            wordIndices.get("xx")
         };
 
         check(expectedLabelsFeatureIndex);
     }
 
     @Test
-    public void testStopPhrases()
+    public void testPhraseStartingWithNonNumbers()
     {
-        createDocuments("aa stop aa . aa stop aa",
-            "stop bb . stop bb . bb stop . bb stop");
+        createDocuments("xx 5", "xx 5");
 
         final int [] expectedLabelsFeatureIndex = new int []
         {
-            0, 1, 7
-        };
-
-        check(expectedLabelsFeatureIndex);
-    }
-
-    @Test
-    public void testStemmedWords()
-    {
-        createDocuments("abc . abc . abc", "abd . abd . abe . abe");
-
-        final int [] expectedLabelsFeatureIndex = new int []
-        {
-            0
+            1, 2
         };
 
         check(expectedLabelsFeatureIndex);

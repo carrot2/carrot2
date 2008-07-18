@@ -7,7 +7,7 @@ import org.carrot2.text.preprocessing.PreprocessingContext;
  */
 public abstract class SingleLabelFilterBase implements LabelFilter
 {
-    public void filter(PreprocessingContext context, boolean [] acceptedWords,
+    public void filter(PreprocessingContext context, boolean [] acceptedStems,
         boolean [] acceptedPhrases)
     {
         if (!isEnabled())
@@ -15,11 +15,14 @@ public abstract class SingleLabelFilterBase implements LabelFilter
             return;
         }
 
-        for (int wordIndex = 0; wordIndex < acceptedWords.length; wordIndex++)
+        final int [] mostFrequentOriginalWordIndex = context.allStems.mostFrequentOriginalWordIndex;
+
+        for (int stemIndex = 0; stemIndex < acceptedStems.length; stemIndex++)
         {
-            if (acceptedWords[wordIndex])
+            if (acceptedStems[stemIndex])
             {
-                acceptedWords[wordIndex] = acceptWord(context, wordIndex);
+                acceptedStems[stemIndex] = acceptWord(context,
+                    mostFrequentOriginalWordIndex[stemIndex]);
             }
         }
 

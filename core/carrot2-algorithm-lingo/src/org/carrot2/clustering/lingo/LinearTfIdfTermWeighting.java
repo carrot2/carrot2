@@ -9,6 +9,6 @@ public class LinearTfIdfTermWeighting implements TermWeighting
         int documentCount)
     {
         return termFrequency
-            * ((documentCount - documentFrequency) / (double) (documentFrequency - 1));
+            * ((documentCount - documentFrequency) / (double) documentFrequency);
     }
 }

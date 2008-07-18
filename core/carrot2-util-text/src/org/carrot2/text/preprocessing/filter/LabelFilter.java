@@ -15,12 +15,12 @@ public interface LabelFilter
      * Called to perform label filtering.
      * 
      * @param context contains words and phrases to be filtered
-     * @param acceptedWords the filter should set to <code>false</code> those elements
-     *            that correspond to the words to be filtered out
+     * @param acceptedStems the filter should set to <code>false</code> those elements
+     *            that correspond to the stems to be filtered out
      * @param acceptedPhrases the filter should set to <code>false</code> those elements
      *            that correspond to the phrases to be filtered out
      */
-    public void filter(PreprocessingContext context, boolean [] acceptedWords,
+    public void filter(PreprocessingContext context, boolean [] acceptedStems,
         boolean [] acceptedPhrases);
 
     /**

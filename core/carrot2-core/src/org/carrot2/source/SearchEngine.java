@@ -8,6 +8,7 @@ import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.constraint.IntRange;
 import org.carrot2.util.attribute.constraint.NotBlank;
 
 import com.google.common.base.Predicate;
@@ -52,6 +53,7 @@ public abstract class SearchEngine extends ProcessingComponentBase implements
     @Processing
     @Input
     @Attribute(key = AttributeNames.RESULTS)
+    @IntRange(min = 10)
     public int results = 100;
 
     /**

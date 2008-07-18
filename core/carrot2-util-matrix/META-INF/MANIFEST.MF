@@ -5,8 +5,7 @@ Bundle-SymbolicName: org.carrot2.util.matrix
 Bundle-Version: 1.0.0
 Bundle-ClassPath: .,
  lib/nni.jar
-Export-Package: cern.colt.matrix,
- cern.colt.matrix.impl,
+Export-Package: 
  nni,
  org.carrot2.matrix,
  org.carrot2.matrix.factorization,

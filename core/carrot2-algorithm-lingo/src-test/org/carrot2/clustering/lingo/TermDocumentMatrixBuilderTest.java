@@ -3,26 +3,13 @@ package org.carrot2.clustering.lingo;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.carrot2.matrix.MatrixAssertions;
-import org.carrot2.text.linguistic.LanguageModelFactory;
-import org.carrot2.text.preprocessing.*;
-import org.junit.Before;
 import org.junit.Test;
 
 /**
  * Test cases for {@link TermDocumentMatrixBuilder}.
  */
-public class TermDocumentMatrixBuilderTest extends PreprocessingComponentTestBase
+public class TermDocumentMatrixBuilderTest extends TermDocumentMatrixBuilderTestBase
 {
-    /** Matrix builder under tests */
-    private TermDocumentMatrixBuilder matrixBuilder;
-
-    @Before
-    public void setUpMatrixBuilder()
-    {
-        matrixBuilder = new TermDocumentMatrixBuilder();
-        matrixBuilder.termWeighting = new TfTermWeighting();
-    }
-
     @Test
     public void testEmpty()
     {
@@ -76,6 +63,38 @@ public class TermDocumentMatrixBuilderTest extends PreprocessingComponentTestBas
             },
             {
                 1, 1, 1
+            },
+        };
+
+        check(expectedTdMatrixElements, expectedTdMatrixStemIndices);
+    }
+
+    @Test
+    public void testSinglePhraseWithSingleWords()
+    {
+        createDocuments("", "aa bb cc", "", "aa bb cc", "", "aa bb cc", "",
+            "ff . gg . ff . gg");
+
+        int [] expectedTdMatrixStemIndices = new int []
+        {
+            0, 1, 2, 3, 4
+        };
+        double [][] expectedTdMatrixElements = new double [] []
+        {
+            {
+                1, 1, 1, 0
+            },
+            {
+                1, 1, 1, 0
+            },
+            {
+                1, 1, 1, 0
+            },
+            {
+                0, 0, 0, 2
+            },
+            {
+                0, 0, 0, 2
             },
         };
 
@@ -155,35 +174,13 @@ public class TermDocumentMatrixBuilderTest extends PreprocessingComponentTestBas
     private void check(double [][] expectedTdMatrixElements,
         int [] expectedTdMatrixStemIndices)
     {
-        Tokenizer tokenizer = new Tokenizer();
-        CaseNormalizer caseNormalizer = new CaseNormalizer();
-        LanguageModelStemmer languageModelStemmer = new LanguageModelStemmer();
-        PhraseExtractor phraseExtractor = new PhraseExtractor();
-        StopListMarker stopListMarker = new StopListMarker();
-        LabelFilterProcessor labelFilterProcessor = new LabelFilterProcessor();
-
-        tokenizer.tokenize(context);
-        caseNormalizer.normalize(context);
-        languageModelStemmer.stem(context);
-        phraseExtractor.extractPhrases(context);
-        stopListMarker.mark(context);
-        labelFilterProcessor.process(context);
-
-        LingoProcessingContext lingoContext = new LingoProcessingContext(context);
-
-        matrixBuilder.build(lingoContext);
+        buildTermDocumentMatrix();
 
         assertThat(lingoContext.tdMatrix.rows()).as("tdMatrix.rowCount").isEqualTo(
             expectedTdMatrixStemIndices.length);
-        assertThat(lingoContext.tdMatrixStemIndices).as("tdMatrixStemIndices").isEqualTo(
+        assertThat(lingoContext.tdMatrixStemIndex).as("tdMatrixStemIndices").isEqualTo(
             expectedTdMatrixStemIndices);
         MatrixAssertions.assertThat(lingoContext.tdMatrix).isEquivalentTo(
             expectedTdMatrixElements);
-    }
-
-    @Override
-    protected LanguageModelFactory createLanguageModelFactory()
-    {
-        return new TestLanguageModelFactory();
     }
 }

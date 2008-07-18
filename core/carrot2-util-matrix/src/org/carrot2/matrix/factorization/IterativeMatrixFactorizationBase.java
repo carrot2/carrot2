@@ -1,10 +1,10 @@
 package org.carrot2.matrix.factorization;
 
+import org.carrot2.matrix.NNIDoubleFactory2D;
 import org.carrot2.matrix.factorization.seeding.RandomSeedingStrategy;
 import org.carrot2.matrix.factorization.seeding.SeedingStrategy;
 
 import cern.colt.matrix.DoubleMatrix2D;
-import cern.colt.matrix.NNIDoubleFactory2D;
 import cern.colt.matrix.doublealgo.Sorting;
 import cern.colt.matrix.linalg.Algebra;
 import cern.jet.math.Functions;

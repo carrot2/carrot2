@@ -2,7 +2,7 @@ package org.carrot2.matrix.factorization;
 
 import static org.carrot2.matrix.MatrixAssertions.assertThat;
 
-import org.carrot2.matrix.NNITestBase;
+import org.carrot2.matrix.*;
 import org.carrot2.matrix.factorization.seeding.SeedingStrategy;
 import org.carrot2.matrix.factorization.seeding.SeedingStrategyFactory;
 import org.carrot2.util.test.Assertions;
@@ -12,8 +12,6 @@ import org.junitext.Prerequisite;
 import org.junitext.runners.AnnotationRunner;
 
 import cern.colt.matrix.DoubleMatrix2D;
-import cern.colt.matrix.NNIDoubleFactory2D;
-import cern.colt.matrix.impl.NNIInterface;
 
 /**
  * Test cases for matrix factorizations.

@@ -5,9 +5,11 @@ import java.util.Arrays;
 import org.carrot2.util.DoubleComparators;
 
 import bak.pcj.DoubleComparator;
+import cern.colt.function.DoubleFunction;
 import cern.colt.list.DoubleArrayList;
 import cern.colt.list.IntArrayList;
 import cern.colt.matrix.DoubleMatrix2D;
+import cern.jet.math.Functions;
 
 /**
  * A set of {@link DoubleMatrix2D} shorthands and utility methods.
@@ -228,7 +230,8 @@ public class MatrixUtils
     public static int [] minInColumns(DoubleMatrix2D A, int [] indices,
         double [] minValues)
     {
-        return inColumns(A, indices, minValues, DoubleComparators.REVERSED_ORDER);
+        return inColumns(A, indices, minValues, DoubleComparators.REVERSED_ORDER,
+            Functions.identity);
     }
 
     /**
@@ -249,14 +252,21 @@ public class MatrixUtils
     public static int [] maxInColumns(DoubleMatrix2D A, int [] indices,
         double [] maxValues)
     {
-        return inColumns(A, indices, maxValues, DoubleComparators.NATURAL_ORDER);
+        return maxInColumns(A, indices, maxValues, Functions.identity);
+    }
+
+    public static int [] maxInColumns(DoubleMatrix2D A, int [] indices,
+        double [] maxValues, DoubleFunction transform)
+    {
+        return inColumns(A, indices, maxValues, DoubleComparators.NATURAL_ORDER,
+            transform);
     }
 
     /**
      * Common implementation of finding extreme elements in columns.
      */
     static int [] inColumns(DoubleMatrix2D A, int [] indices, double [] extValues,
-        DoubleComparator doubleComparator)
+        DoubleComparator doubleComparator, DoubleFunction transform)
     {
         if (indices == null)
         {
@@ -275,7 +285,7 @@ public class MatrixUtils
 
         for (int c = 0; c < A.columns(); c++)
         {
-            extValues[c] = A.getQuick(0, c);
+            extValues[c] = transform.apply(A.getQuick(0, c));
         }
         Arrays.fill(indices, 0);
 
@@ -283,9 +293,10 @@ public class MatrixUtils
         {
             for (int c = 0; c < A.columns(); c++)
             {
-                if (doubleComparator.compare(A.getQuick(r, c), extValues[c]) > 0)
+                final double transformed = transform.apply(A.getQuick(r, c));
+                if (doubleComparator.compare(transformed, extValues[c]) > 0)
                 {
-                    extValues[c] = A.getQuick(r, c);
+                    extValues[c] = transformed;
                     indices[c] = r;
                 }
             }

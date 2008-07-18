@@ -2,6 +2,7 @@ package org.carrot2.text.preprocessing;
 
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
 import org.carrot2.text.util.MutableCharArray;
+import org.carrot2.util.CharArrayUtils;
 import org.carrot2.util.attribute.Bindable;
 
 /**
@@ -28,7 +29,8 @@ public final class StopListMarker
 
         for (int i = 0; i < commonTermFlags.length; i++)
         {
-            current.reset(wordImages[i]);
+            final char [] imageLowerCase = CharArrayUtils.toLowerCase(wordImages[i]);
+            current.reset(imageLowerCase);
             commonTermFlags[i] = context.language.isCommonWord(current);
         }
 

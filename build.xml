@@ -59,7 +59,7 @@
         </javac>
     </target>
     
-    <target name="compile.findbugs">
+    <target name="compile.noclover">
         <mkdir dir="${build.dir}" />
 
         <!-- Clover hack: we explicitly provide the compiler attribute to compile without Clover's instrumentation -->
@@ -155,7 +155,7 @@
       </sequential>
     </macrodef>
 
-    <target name="attributes" depends="compile">
+    <target name="attributes" depends="compile.noclover">
         <property name="common.attribute.names.source.path" location="core/carrot2-core/src/org/carrot2/core/attribute/AttributeNames.java" />
         <attributes-xml java.source="core/carrot2-algorithm-lingo/src" output.dir="${build.dir}" />
         <attributes-xml java.source="core/carrot2-algorithm-stc/src" output.dir="${build.dir}" />
@@ -169,7 +169,7 @@
         <attributes-xml java.source="core/carrot2-util-attribute/src-test" output.dir="${build.dir}" />
     </target>
 
-    <target name="attributes-eclipse" depends="compile">
+    <target name="attributes-eclipse" depends="compile.noclover">
         <property name="common.attribute.names.source.path" location="core/carrot2-core/src/org/carrot2/core/attribute/AttributeNames.java" />
         <attributes-xml-copy java.source="core/carrot2-algorithm-lingo/src" output.dir="core/carrot2-algorithm-lingo/tmp/eclipse" copy.to="core/carrot2-algorithm-lingo/META-INF" />
         <attributes-xml-copy java.source="core/carrot2-algorithm-stc/src" output.dir="core/carrot2-algorithm-stc/tmp/eclipse" copy.to="core/carrot2-algorithm-stc/META-INF" />
@@ -206,7 +206,7 @@
         <xslt in="${duplication.report.dir}/duplication.xml" style="etc/cpd/cpd2html.xsl" out="${duplication.report.dir}/duplication.html" />
     </target>
      
-    <target name="findbugs" depends="clean.classes, compile.findbugs" if="findbugs.home">
+    <target name="findbugs" depends="clean.classes, compile.noclover" if="findbugs.home">
     	<taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" 
     	             classpath="${findbugs.home}/lib/findbugs-ant.jar" />
       <mkdir dir="${findbugs.report.dir}" />

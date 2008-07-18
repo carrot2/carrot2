@@ -2,7 +2,6 @@ package org.carrot2.matrix;
 
 import nni.LAPACK;
 import cern.colt.matrix.DoubleMatrix2D;
-import cern.colt.matrix.impl.*;
 import cern.colt.matrix.linalg.EigenvalueDecomposition;
 
 /**
@@ -19,18 +18,18 @@ public class EigenvalueCalculator
         // Need native LAPACK, dense matrices and no views to operate
         // Default to Colt's implementation otherwise
         if (!NNIInterface.isNativeLapackAvailable()
-            || (!(A instanceof DenseDoubleMatrix2D))
-            || NNIDenseDoubleMatrix2D.isView((DenseDoubleMatrix2D) A))
+            || (!(A instanceof NNIDenseDoubleMatrix2D))
+            || ((NNIDenseDoubleMatrix2D) A).isView())
         {
             return new EigenvalueDecomposition(A).getRealEigenvalues().toArray();
         }
         else
         {
-            return computeEigenvaluesSymmetricalNNI((DenseDoubleMatrix2D) A);
+            return computeEigenvaluesSymmetricalNNI((NNIDenseDoubleMatrix2D) A);
         }
     }
 
-    static double [] computeEigenvaluesSymmetricalNNI(DenseDoubleMatrix2D A)
+    static double [] computeEigenvaluesSymmetricalNNI(NNIDenseDoubleMatrix2D A)
     {
         // Some parts of the code borrowed from NNI
         // Find and allocate work space
@@ -103,9 +102,9 @@ public class EigenvalueCalculator
 
         // Copy the data array of the A matrix (LAPACK will overwrite the
         // input data)
-        double [] dataA = new double [NNIDenseDoubleMatrix2D.getDoubleData(A).length];
-        System.arraycopy(NNIDenseDoubleMatrix2D.getDoubleData(A), 0, dataA, 0,
-            dataA.length);
+        final double [] data = A.getData();
+        double [] dataA = new double [data.length];
+        System.arraycopy(data, 0, dataA, 0, dataA.length);
 
         LAPACK.syevr(new char []
         {
@@ -154,7 +153,7 @@ public class EigenvalueCalculator
     /**
      * Computes eigenvalues matrix <code>A</code>, requires that NNI is available.
      */
-    public static double [] computeEigenvaluesNNI(DenseDoubleMatrix2D A)
+    public static double [] computeEigenvaluesNNI(NNIDenseDoubleMatrix2D A)
     {
         // Some parts of the code borrowed from NNI
         double [] work;
@@ -204,9 +203,9 @@ public class EigenvalueCalculator
 
         // Copy the data array of the A matrix (LAPACK will overwrite the
         // input data)
-        double [] dataA = new double [NNIDenseDoubleMatrix2D.getDoubleData(A).length];
-        System.arraycopy(NNIDenseDoubleMatrix2D.getDoubleData(A), 0, dataA, 0,
-            dataA.length);
+        double [] data = A.getData();
+        double [] dataA = new double [data.length];
+        System.arraycopy(data, 0, dataA, 0, dataA.length);
 
         LAPACK.geev(new char []
         {

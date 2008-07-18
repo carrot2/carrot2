@@ -2,6 +2,8 @@ package cern.colt.matrix.impl;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+import org.carrot2.matrix.NNIDenseDoubleMatrix2D;
+import org.carrot2.matrix.NNIDoubleFactory2D;
 import org.junit.Test;
 
 import cern.colt.matrix.*;
@@ -104,10 +106,28 @@ public class NNIDenseDoubleMatrix2DTest
     }
 
     @Test
-    public void testDeepTranspose()
+    public void testTranspose()
     {
-        DenseDoubleMatrix2D copyE = new NNIDenseDoubleMatrix2D(E.toArray());
-        NNIDenseDoubleMatrix2D.deepTranspose(copyE);
+        NNIDenseDoubleMatrix2D copyE = new NNIDenseDoubleMatrix2D(E.toArray());
+        copyE.transpose();
         assertThat(copyE).isEqualTo(E.viewDice());
+    }
+
+    @Test
+    public void testTranspose2x2Matrix()
+    {
+        NNIDenseDoubleMatrix2D matrix = new NNIDenseDoubleMatrix2D(new double [] []
+        {
+            new double []
+            {
+                1, 2
+            }, new double []
+            {
+                3, 4
+            }
+        });
+        final NNIDenseDoubleMatrix2D copy = (NNIDenseDoubleMatrix2D) matrix.clone();
+        copy.transpose();
+        assertThat(matrix).isEqualTo(copy.viewDice());
     }
 }

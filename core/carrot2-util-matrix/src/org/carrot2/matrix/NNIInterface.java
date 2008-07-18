@@ -1,4 +1,4 @@
-package cern.colt.matrix.impl;
+package org.carrot2.matrix;
 
 import nni.BLAS;
 import nni.LAPACK;

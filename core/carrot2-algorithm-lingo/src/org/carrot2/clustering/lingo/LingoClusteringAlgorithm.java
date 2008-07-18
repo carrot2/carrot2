@@ -8,6 +8,7 @@ import org.carrot2.text.linguistic.LanguageModelFactory;
 import org.carrot2.text.linguistic.SnowballLanguageModelFactory;
 import org.carrot2.text.preprocessing.*;
 import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.constraint.ImplementingClasses;
 
 import com.google.common.collect.Lists;
 
@@ -35,6 +36,22 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     @Output
     @Attribute(key = AttributeNames.CLUSTERS)
     public List<Cluster> clusters = null;
+
+    /**
+     * Term weighting.
+     * 
+     * @level Medium
+     * @group Matrix model
+     */
+    @Input
+    @Processing
+    @Attribute
+    @ImplementingClasses(classes =
+    {
+        LogTfIdfTermWeighting.class, LinearTfIdfTermWeighting.class,
+        TfTermWeighting.class
+    })
+    public TermWeighting termWeighting = new LogTfIdfTermWeighting();
 
     /**
      * Tokenizer used by the algorithm, contains bindable attributes.
@@ -82,6 +99,11 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     public TermDocumentMatrixReducer matrixReducer = new TermDocumentMatrixReducer();
 
     /**
+     * Cluster label builder, contains bindable attributes.
+     */
+    public ClusterLabelBuilder labelBuilder = new ClusterLabelBuilder();
+
+    /**
      * Performs Lingo clustering of {@link #documents}.
      */
     @Override
@@ -99,38 +121,51 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
 
         // Term-document matrix building and reduction
         LingoProcessingContext lingoContext = new LingoProcessingContext(context);
-        matrixBuilder.build(lingoContext);
+        matrixBuilder.build(lingoContext, termWeighting);
         matrixReducer.reduce(lingoContext);
-        
-        // Cluster building
 
+        // Cluster label building
+        labelBuilder.buildLabels(lingoContext, termWeighting);
+
+        // Temporary cluster rendering
         clusters = Lists.newArrayList();
 
+//        final int [] clusterLabelIndex = context.allLabels.featureIndex;
+        final int [] clusterLabelIndex = lingoContext.clusterLabelFeatureIndex;
         final int [][] phrasesWordIndices = context.allPhrases.wordIndices;
-        final int [][] phrasesTfByDocument = context.allPhrases.tfByDocument;
         final char [][] wordsImage = context.allWords.image;
-        for (int phraseIndex = 0; phraseIndex < phrasesWordIndices.length
-            && phraseIndex < 10; phraseIndex++)
+        final int wordCount = wordsImage.length;
+
+        int [] phrasesTf = context.allPhrases.tf;
+        
+        for (int i = 0; i < clusterLabelIndex.length; i++)
         {
             final Cluster cluster = new Cluster();
             final StringBuilder label = new StringBuilder();
 
-            for (int wordIndex = 0; wordIndex < phrasesWordIndices[phraseIndex].length; wordIndex++)
+            final int labelFeature = clusterLabelIndex[i];
+            if (labelFeature < wordCount)
             {
-                label.append(wordsImage[phrasesWordIndices[phraseIndex][wordIndex]]);
-                if (wordIndex < phrasesWordIndices[phraseIndex].length - 1)
+                label.append(wordsImage[labelFeature]);
+//                continue;
+            }
+            else
+            {
+                final int phraseIndex = labelFeature - wordCount;
+                for (int wordIndex = 0; wordIndex < phrasesWordIndices[phraseIndex].length; wordIndex++)
                 {
-                    label.append(" ");
+                    label.append(wordsImage[phrasesWordIndices[phraseIndex][wordIndex]]);
+                    if (wordIndex < phrasesWordIndices[phraseIndex].length - 1)
+                    {
+                        label.append(" ");
+                    }
+                    
                 }
+                label.append(" [" + phrasesTf[phraseIndex] + "]");
             }
 
             cluster.addPhrases(label.toString());
-
-            for (int j = 0; j < phrasesTfByDocument[phraseIndex].length / 2; j++)
-            {
-                cluster.addDocuments(documents
-                    .get(phrasesTfByDocument[phraseIndex][j * 2]));
-            }
+            cluster.addDocuments(documents.get(0));
 
             clusters.add(cluster);
         }

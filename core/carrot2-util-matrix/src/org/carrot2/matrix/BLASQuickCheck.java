@@ -7,8 +7,6 @@ import java.util.Random;
 import org.carrot2.matrix.factorization.*;
 
 import cern.colt.matrix.DoubleMatrix2D;
-import cern.colt.matrix.NNIDoubleFactory2D;
-import cern.colt.matrix.impl.NNIInterface;
 
 /**
  * Quickly checks if the native BLAS libraries can be loaded and what the performance gain

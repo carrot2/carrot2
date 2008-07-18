@@ -1,5 +1,7 @@
 package org.carrot2.matrix.factorization;
 
+import org.carrot2.matrix.NNIDoubleFactory2D;
+
 import cern.colt.matrix.*;
 
 /**

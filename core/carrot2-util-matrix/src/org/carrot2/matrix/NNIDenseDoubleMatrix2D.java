@@ -1,11 +1,9 @@
-package cern.colt.matrix.impl;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+package org.carrot2.matrix;
 
 import nni.BLAS;
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
+import cern.colt.matrix.impl.DenseDoubleMatrix2D;
 
 /**
  * A very crude native implementation of Colt's @link cern.colt.matrix.DoubleMatrix2D
@@ -101,17 +99,18 @@ public class NNIDenseDoubleMatrix2D extends DenseDoubleMatrix2D
         // Need native BLAS, dense matrices and no views to operate
         // Default to Colt's implementation otherwise
         if (!NNIInterface.isNativeBlasAvailable()
-            || (!(B instanceof DenseDoubleMatrix2D))
-            || (!(C instanceof DenseDoubleMatrix2D)) || !isNoView
-            || isView((DenseDoubleMatrix2D) B) || isView((DenseDoubleMatrix2D) C))
+            || (!(B instanceof NNIDenseDoubleMatrix2D))
+            || (!(C instanceof NNIDenseDoubleMatrix2D)) || isView()
+            || ((NNIDenseDoubleMatrix2D) B).isView()
+            || ((NNIDenseDoubleMatrix2D) C).isView())
         {
             return super.zMult(B, C, alpha, beta, transposeA, transposeB);
         }
 
         // Get the matrices data. It is in row-major format.
         final double [] dataA = this.elements;
-        final double [] dataB = getDoubleData((DenseDoubleMatrix2D) B);
-        final double [] dataC = getDoubleData((DenseDoubleMatrix2D) C);
+        final double [] dataB = ((NNIDenseDoubleMatrix2D) B).getData();
+        final double [] dataC = ((NNIDenseDoubleMatrix2D) C).getData();
 
         // Multiply
         BLAS.gemm(BLAS.RowMajor, transposeA ? BLAS.Trans : BLAS.NoTrans,
@@ -123,74 +122,40 @@ public class NNIDenseDoubleMatrix2D extends DenseDoubleMatrix2D
     }
 
     /**
-     * Exposes the underlying data array of {@link DenseDoubleMatrix2D}.
-     */
-    public static double [] getDoubleData(DenseDoubleMatrix2D A)
-    {
-        try
-        {
-            final Field elementsField = DenseDoubleMatrix2D.class
-                .getDeclaredField("elements");
-            elementsField.setAccessible(true);
-            return (double []) elementsField.get(A);
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
      * Checks if the provided {@link DenseDoubleMatrix2D} is a view.
      */
-    public static boolean isView(DenseDoubleMatrix2D A)
+    public boolean isView()
     {
-        try
-        {
-            final Method isViewMethod = AbstractMatrix.class.getDeclaredMethod("isView");
-            isViewMethod.setAccessible(true);
-            return (Boolean) isViewMethod.invoke(A);
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e);
-        }
+        return super.isView();
     }
 
     /**
-     * Transposes in place matrix A. Note that this algorithm is simple but very
-     * inefficient with respect to cache utilization.
+     * Exposes the internal representation of the contents of this matrix.
+     */
+    public double [] getData()
+    {
+        return elements;
+    }
+
+    /**
+     * Transposes in place matrix A.
      * 
      * @param A matrix to be transposed in place
      */
-    public static void deepTranspose(DenseDoubleMatrix2D A)
+    public void transpose()
     {
-        double [] data = getDoubleData(A);
-
-        int from = 2;
-        int to = 0;
-        double store = data[from];
-        double temp;
-        do
-        {
-            to = (from % A.columns) + (from / A.rows);
-            temp = data[to];
-            data[to] = store;
-            store = temp;
-
-            from = to;
-        }
-        while (from != 2);
-
         int tmp;
-        tmp = A.rows;
-        A.rows = A.columns;
-        A.columns = tmp;
-        tmp = A.rowStride;
-        A.rowStride = A.columnStride;
-        A.columnStride = tmp;
-        tmp = A.rowZero;
-        A.rowZero = A.columnZero;
-        A.columnZero = tmp;
+
+        tmp = rows;
+        rows = columns;
+        columns = tmp;
+
+        tmp = rowStride;
+        rowStride = columnStride;
+        columnStride = tmp;
+
+        tmp = rowZero;
+        rowZero = columnZero;
+        columnZero = tmp;
     }
 }

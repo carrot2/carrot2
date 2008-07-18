@@ -6,13 +6,12 @@ import org.junit.Test;
 /**
  * Test cases for {@link StopWordLabelFilter}.
  */
-public class CompleteLabelFilterTest extends LabelFilterTestBase
+public class StopWordLabelFilterSyntheticTest extends LabelFilterTestBase
 {
     @Override
     protected void initializeFilters(LabelFilterProcessor filterProcessor)
     {
         filterProcessor.stopWordLabelFilter.enabled = true;
-        filterProcessor.completeLabelFilter.enabled = true;
     }
 
     @Test
@@ -24,81 +23,80 @@ public class CompleteLabelFilterTest extends LabelFilterTestBase
     }
 
     @Test
-    public void testOnePhrase()
+    public void testNonStopWords()
     {
-        createDocuments("aa bb cc . aa bb cc", "aa bb cc . aa bb cc");
+        createDocuments("aa . aa", "bb . bb");
 
         final int [] expectedLabelsFeatureIndex = new int []
         {
-            5
+            0, 1
         };
 
         check(expectedLabelsFeatureIndex);
     }
 
     @Test
-    public void testSubphrases()
+    public void testStopWords()
     {
-        createDocuments("aa bb cc . aa bb cc", "bb cc . bb cc");
+        createDocuments("stop . stop", "bb . bb");
 
         final int [] expectedLabelsFeatureIndex = new int []
         {
-            5
+            wordIndices.get("bb")
         };
 
         check(expectedLabelsFeatureIndex);
     }
 
     @Test
-    public void testNestedPhrases()
+    public void testNonStopPhrases()
     {
-        createDocuments("aa bb cc dd . aa bb cc dd", "aa bb dd . aa bb dd");
+        createDocuments("aa aa . aa aa", "bb bb . bb bb");
 
         final int [] expectedLabelsFeatureIndex = new int []
         {
-            9, 11
+            0, 1, 2, 3
         };
 
         check(expectedLabelsFeatureIndex);
     }
 
     @Test
-    public void testFuzzyOverrideApplied()
+    public void testStopPhrases()
     {
-        createDocuments("aa bb cc . aa bb cc . aa bb cc . aa bb cc . aa bb cc dd . aa bb cc dd");
+        createDocuments("aa stop aa . aa stop aa",
+            "stop bb . stop bb . bb stop . bb stop");
 
         final int [] expectedLabelsFeatureIndex = new int []
         {
-            9
-        };
-
-        double previousCutoff = labelFilterProcessor.completeLabelFilter.labelOverrideCutoff;
-        labelFilterProcessor.completeLabelFilter.labelOverrideCutoff = 0.3;
-        check(expectedLabelsFeatureIndex);
-        labelFilterProcessor.completeLabelFilter.labelOverrideCutoff = previousCutoff;
-    }
-
-    @Test
-    public void testFuzzyOverrideNotApplied()
-    {
-        createDocuments("aa bb cc . aa bb cc . aa bb cc . aa bb cc . aa bb cc dd . aa bb cc dd");
-
-        final int [] expectedLabelsFeatureIndex = new int []
-        {
-            7, 9
+            0, 1, 7
         };
 
         check(expectedLabelsFeatureIndex);
     }
 
     @Test
-    public void testOverridingByFilteredOutPhrase()
+    public void testStopPhrasesWithStemmedWords()
     {
-        createDocuments("stop aa bb stop . stop aa bb stop");
+        createDocuments("aa1 . aa2 . aa1 . aa2",
+            "stop aa1 aa2. stop aa1 aa2 . stop aa1 aa2");
 
         final int [] expectedLabelsFeatureIndex = new int []
         {
-            3
+            0, 3
+        };
+
+        check(expectedLabelsFeatureIndex);
+    }
+
+    @Test
+    public void testStemmedWords()
+    {
+        createDocuments("abc . abc . abc", "abd . abd . abe . abe");
+
+        final int [] expectedLabelsFeatureIndex = new int []
+        {
+            0
         };
 
         check(expectedLabelsFeatureIndex);

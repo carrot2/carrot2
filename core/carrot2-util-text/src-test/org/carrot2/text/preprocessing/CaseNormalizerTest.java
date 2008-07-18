@@ -3,6 +3,9 @@ package org.carrot2.text.preprocessing;
 import static org.carrot2.util.test.Assertions.assertThat;
 import static org.fest.assertions.Assertions.assertThat;
 
+import java.util.Arrays;
+
+import org.carrot2.text.analysis.TokenType;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -39,7 +42,8 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
         byte [][] expectedFieldIndex = new byte [] [] {};
 
         check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument, expectedFieldIndex);
+            expectedWordTfByDocument, expectedFieldIndex,
+            createTermTokenTypes(expectedWordImages.length));
     }
 
     @Test
@@ -76,17 +80,18 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
         };
 
         check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument, expectedFieldIndex);
+            expectedWordTfByDocument, expectedFieldIndex,
+            createTermTokenTypes(expectedWordImages.length));
     }
 
     @Test
     public void testMoreSingleDifferentTokens()
     {
-        createDocuments("a simple test_symbol");
+        createDocuments("a simple testsymbol");
 
         char [][] expectedWordImages = createExpectedWordImages(new String []
         {
-            "a", "test_symbol", "simple"
+            "a", "testsymbol", "simple"
         });
 
         int [] expectedWordTf = new int []
@@ -127,7 +132,78 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
         };
 
         check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument, expectedFieldIndex);
+            expectedWordTfByDocument, expectedFieldIndex,
+            createTermTokenTypes(expectedWordImages.length));
+    }
+
+    @Test
+    public void testTokenTypes()
+    {
+        createDocuments("12.2 email@email.com IEEE www.test.com file_name");
+
+        char [][] expectedWordImages = createExpectedWordImages(new String []
+        {
+            "12.2", "IEEE", "file_name", "www.test.com", "email@email.com"
+        });
+
+        int [] expectedWordTf = new int []
+        {
+            1, 1, 1, 1, 1
+        };
+
+        int [] expectedWordIndices = new int []
+        {
+            0, 4, 1, 3, 2, -1
+        };
+
+        int [][] expectedWordTfByDocument = new int [] []
+        {
+            {
+                0, 1
+            },
+
+            {
+                0, 1
+            },
+
+            {
+                0, 1
+            },
+
+            {
+                0, 1
+            },
+
+            {
+                0, 1
+            }
+        };
+        byte [][] expectedFieldIndex = new byte [] []
+        {
+            {
+                0
+            },
+            {
+                0
+            },
+            {
+                0
+            },
+            {
+                0
+            },
+            {
+                0
+            }
+        };
+        int [] expectedType = new int []
+        {
+            TokenType.TT_NUMERIC, TokenType.TT_TERM, TokenType.TT_FILE,
+            TokenType.TT_BARE_URL, TokenType.TT_EMAIL
+        };
+
+        check(expectedWordImages, expectedWordTf, expectedWordIndices,
+            expectedWordTfByDocument, expectedFieldIndex, expectedType);
     }
 
     @Test
@@ -178,7 +254,8 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
         };
 
         check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument, expectedFieldIndex);
+            expectedWordTfByDocument, expectedFieldIndex,
+            createTermTokenTypes(expectedWordImages.length));
     }
 
     @Test
@@ -215,7 +292,8 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
         };
 
         check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument, expectedFieldIndex);
+            expectedWordTfByDocument, expectedFieldIndex,
+            createTermTokenTypes(expectedWordImages.length));
     }
 
     @Test
@@ -261,7 +339,8 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
         };
 
         check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument, expectedFieldIndex);
+            expectedWordTfByDocument, expectedFieldIndex,
+            createTermTokenTypes(expectedWordImages.length));
     }
 
     @Test
@@ -298,7 +377,8 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
         };
 
         check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument, expectedFieldIndex);
+            expectedWordTfByDocument, expectedFieldIndex,
+            createTermTokenTypes(expectedWordImages.length));
     }
 
     @Test
@@ -351,7 +431,8 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
         };
 
         check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument, expectedFieldIndex);
+            expectedWordTfByDocument, expectedFieldIndex,
+            createTermTokenTypes(expectedWordImages.length));
     }
 
     @Test
@@ -395,7 +476,8 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
         };
 
         check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument, expectedFieldIndex);
+            expectedWordTfByDocument, expectedFieldIndex,
+            createTermTokenTypes(expectedWordImages.length));
     }
 
     @Test
@@ -440,7 +522,8 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
         };
 
         check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument, expectedFieldIndex);
+            expectedWordTfByDocument, expectedFieldIndex,
+            createTermTokenTypes(expectedWordImages.length));
     }
 
     @Test
@@ -477,7 +560,8 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
         };
 
         check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument, expectedFieldIndex);
+            expectedWordTfByDocument, expectedFieldIndex,
+            createTermTokenTypes(expectedWordImages.length));
     }
 
     @Test
@@ -534,7 +618,8 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
         };
 
         check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument, expectedFieldIndex);
+            expectedWordTfByDocument, expectedFieldIndex,
+            createTermTokenTypes(expectedWordImages.length));
     }
 
     @Test
@@ -589,7 +674,8 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
         };
 
         check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument, expectedFieldIndex);
+            expectedWordTfByDocument, expectedFieldIndex,
+            createTermTokenTypes(expectedWordImages.length));
     }
 
     protected char [][] createExpectedWordImages(String [] wordImages)
@@ -605,7 +691,7 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
 
     private void check(char [][] expectedWordImages, int [] expectedWordTf,
         int [] expectedWordIndices, int [][] expectedWordTfByDocument,
-        byte [][] expectedFieldIndex)
+        byte [][] expectedFieldIndex, int [] expectedType)
     {
         tokenizer.tokenize(context);
         caseNormalizer.normalize(context);
@@ -619,6 +705,7 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
             expectedWordTfByDocument);
         assertThat(context.allWords.fieldIndices).as("allWords.fieldIndex").isEqualTo(
             expectedFieldIndex);
+        assertThat(context.allWords.type).as("allWords.type").isEqualTo(expectedType);
     }
 
     @Override
@@ -626,5 +713,12 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
         CaseNormalizer temporaryCaseNormalizer)
     {
         temporaryCaseNormalizer.dfCutoff = caseNormalizer.dfCutoff;
+    }
+
+    private int [] createTermTokenTypes(int count)
+    {
+        final int [] result = new int [count];
+        Arrays.fill(result, TokenType.TT_TERM);
+        return result;
     }
 }

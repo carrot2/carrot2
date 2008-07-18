@@ -1,9 +1,9 @@
 package org.carrot2.matrix.factorization;
 
+import org.carrot2.matrix.NNIDoubleFactory2D;
 import org.carrot2.matrix.factorization.seeding.*;
 
 import cern.colt.matrix.DoubleFactory2D;
-import cern.colt.matrix.NNIDoubleFactory2D;
 
 /**
  * A factory for {@link MatrixFactorization}s.

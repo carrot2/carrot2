@@ -12,33 +12,28 @@ import com.google.common.collect.Lists;
  */
 abstract class CompleteLabelFilterBase
 {
-    void filter(PreprocessingContext context, boolean [] acceptedWords,
+    void filter(PreprocessingContext context, boolean [] acceptedStems,
         boolean [] acceptedPhrases, double labelOverrideThreshold)
     {
-        if (acceptedWords.length + acceptedPhrases.length < 2)
+        if (acceptedStems.length + acceptedPhrases.length < 2)
         {
             return;
         }
 
-        final int [] wordTf = context.allWords.tf;
+        final int [] stemTf = context.allStems.tf;
         final int [] phraseTf = context.allPhrases.tf;
+        final int [] mostFrequentOriginalWordIndex = context.allStems.mostFrequentOriginalWordIndex;
+        final int [] wordsStemIndex = context.allWords.stemIndex;
 
-        // For the purpose of this filter, create a common array of word and phrase
-        // indices (features).
-        final int [] labelIndexes = new int [acceptedWords.length
-            + acceptedPhrases.length];
-        for (int i = 0; i < labelIndexes.length; i++)
-        {
-            labelIndexes[i] = i;
-        }
-
+        // Build labelIndex-wordIndices combos for each word and phrase. We'll use
+        // them below to create an LCP array.
         final ArrayList<LabelIndexWithCodes> phraseIndexesWithCodes = Lists
-            .newArrayListWithCapacity(labelIndexes.length);
-        for (int i = 0; i < labelIndexes.length; i++)
+            .newArrayListWithCapacity(acceptedStems.length + acceptedPhrases.length);
+        for (int i = 0; i < acceptedStems.length + acceptedPhrases.length; i++)
         {
-            phraseIndexesWithCodes.add(new LabelIndexWithCodes(labelIndexes[i],
-                getLabelWordIndexes(acceptedWords.length, context.allPhrases.wordIndices,
-                    labelIndexes[i])));
+            phraseIndexesWithCodes.add(new LabelIndexWithCodes(i, getLabelWordIndexes(
+                acceptedStems.length, mostFrequentOriginalWordIndex,
+                context.allPhrases.wordIndices, i)));
         }
 
         // Sort and create LCP array
@@ -55,10 +50,10 @@ abstract class CompleteLabelFilterBase
 
             // Check only those phrases that are not removed and that are
             // themselves subphrases of some longer phrases
-            if (getLabelLength(acceptedWords.length, context.allPhrases.wordIndices,
+            if (getLabelLength(acceptedStems.length, context.allPhrases.wordIndices,
                 currentLabelIndex) == lcpArray[i]
-                && isLabelAccepted(acceptedWords.length, currentLabelIndex,
-                    acceptedWords, acceptedPhrases))
+                && isLabelAccepted(acceptedStems.length, wordsStemIndex,
+                    currentLabelIndex, acceptedStems, acceptedPhrases))
             {
                 int j = i;
                 while (j < sortedPhrasesWithCodes.size() - 1
@@ -68,13 +63,13 @@ abstract class CompleteLabelFilterBase
                         .get(j + 1);
                     final int nextLabelIndex = nextPhraseWithCodes.getLabelIndex();
 
-                    double labelOverride = calculateLabelOverride(acceptedWords.length,
-                        wordTf, phraseTf, nextLabelIndex, currentLabelIndex);
-                    if ((isLabelAccepted(acceptedWords.length, currentLabelIndex,
-                        acceptedWords, acceptedPhrases) && labelOverride >= labelOverrideThreshold))
+                    double labelOverride = calculateLabelOverride(acceptedStems.length,
+                        stemTf, phraseTf, nextLabelIndex, currentLabelIndex);
+                    if ((isLabelAccepted(acceptedStems.length, wordsStemIndex,
+                        nextLabelIndex, acceptedStems, acceptedPhrases) && labelOverride >= labelOverrideThreshold))
                     {
-                        markLabelAsRemoved(acceptedWords.length, currentLabelIndex,
-                            acceptedWords, acceptedPhrases);
+                        markLabelAsRemoved(acceptedStems.length, currentLabelIndex,
+                            acceptedStems, acceptedPhrases);
                         break;
                     }
 
@@ -114,14 +109,14 @@ abstract class CompleteLabelFilterBase
         }
     }
 
-    private final static int [] getLabelWordIndexes(int wordCount, int [][] wordIndices,
-        int featureIndex)
+    private final static int [] getLabelWordIndexes(int wordCount,
+        int [] mostFrequentWordIndex, int [][] wordIndices, int featureIndex)
     {
         if (featureIndex < wordCount)
         {
             return new int []
             {
-                featureIndex
+                mostFrequentWordIndex[featureIndex]
             };
         }
         else
@@ -137,12 +132,12 @@ abstract class CompleteLabelFilterBase
             : wordIndices[featureIndex - wordCount].length;
     }
 
-    private final static boolean isLabelAccepted(int wordCount, int featureIndex,
-        boolean [] acceptedWords, boolean [] acceptedPhrases)
+    private final static boolean isLabelAccepted(int wordCount, int [] wordStemIndex,
+        int featureIndex, boolean [] acceptedStems, boolean [] acceptedPhrases)
     {
         if (featureIndex < wordCount)
         {
-            return acceptedWords[featureIndex];
+            return acceptedStems[featureIndex];
         }
         else
         {

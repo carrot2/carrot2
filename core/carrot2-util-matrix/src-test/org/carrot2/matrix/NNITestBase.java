@@ -1,6 +1,5 @@
 package org.carrot2.matrix;
 
-import cern.colt.matrix.impl.NNIInterface;
 
 /**
  * Base class for tests of NNI-powered matrix operations.

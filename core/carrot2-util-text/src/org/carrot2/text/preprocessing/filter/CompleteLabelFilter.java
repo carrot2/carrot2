@@ -50,7 +50,7 @@ public class CompleteLabelFilter implements LabelFilter
     /**
      * Marks incomplete labels.
      */
-    public void filter(PreprocessingContext context, boolean [] acceptedWords,
+    public void filter(PreprocessingContext context, boolean [] acceptedStems,
         boolean [] acceptedPhrases)
     {
         if (!enabled)
@@ -58,9 +58,9 @@ public class CompleteLabelFilter implements LabelFilter
             return;
         }
 
-        leftCompleteLabelFilter.filter(context, acceptedWords, acceptedPhrases,
+        leftCompleteLabelFilter.filter(context, acceptedStems, acceptedPhrases,
             labelOverrideCutoff);
-        rightCompleteLabelFilter.filter(context, acceptedWords, acceptedPhrases,
+        rightCompleteLabelFilter.filter(context, acceptedStems, acceptedPhrases,
             labelOverrideCutoff);
     }
 

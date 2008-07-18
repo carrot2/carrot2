@@ -3,8 +3,7 @@ package org.carrot2.text.preprocessing;
 import java.util.Arrays;
 
 import org.carrot2.text.preprocessing.PreprocessingContext.*;
-import org.carrot2.text.preprocessing.filter.CompleteLabelFilter;
-import org.carrot2.text.preprocessing.filter.StopWordLabelFilter;
+import org.carrot2.text.preprocessing.filter.*;
 import org.carrot2.util.attribute.Bindable;
 
 import bak.pcj.list.IntArrayList;
@@ -37,6 +36,11 @@ public class LabelFilterProcessor
     public StopWordLabelFilter stopWordLabelFilter = new StopWordLabelFilter();
 
     /**
+     * Numeric label filter for this processor.
+     */
+    public NumericLabelFilter numericLabelFilter = new NumericLabelFilter();
+
+    /**
      * Truncated phrase filter for this processor.
      */
     public CompleteLabelFilter completeLabelFilter = new CompleteLabelFilter();
@@ -46,21 +50,23 @@ public class LabelFilterProcessor
      */
     public void process(PreprocessingContext context)
     {
-        final boolean [] acceptedWords = new boolean [context.allStems.image.length];
+        final int wordCount = context.allWords.image.length;
+        final boolean [] acceptedStems = new boolean [context.allStems.image.length];
         final boolean [] acceptedPhrases = new boolean [context.allPhrases.tf.length];
-        Arrays.fill(acceptedWords, true);
+        Arrays.fill(acceptedStems, true);
         Arrays.fill(acceptedPhrases, true);
 
-        stopWordLabelFilter.filter(context, acceptedWords, acceptedPhrases);
-        completeLabelFilter.filter(context, acceptedWords, acceptedPhrases);
+        stopWordLabelFilter.filter(context, acceptedStems, acceptedPhrases);
+        numericLabelFilter.filter(context, acceptedStems, acceptedPhrases);
+        completeLabelFilter.filter(context, acceptedStems, acceptedPhrases);
 
-        final IntArrayList acceptedFeatures = new IntArrayList(acceptedWords.length
+        final IntArrayList acceptedFeatures = new IntArrayList(acceptedStems.length
             + acceptedPhrases.length);
 
         final int [] mostFrequentOriginalWordIndex = context.allStems.mostFrequentOriginalWordIndex;
-        for (int i = 0; i < acceptedWords.length; i++)
+        for (int i = 0; i < acceptedStems.length; i++)
         {
-            if (acceptedWords[i])
+            if (acceptedStems[i])
             {
                 acceptedFeatures.add(mostFrequentOriginalWordIndex[i]);
             }
@@ -70,7 +76,7 @@ public class LabelFilterProcessor
         {
             if (acceptedPhrases[i])
             {
-                acceptedFeatures.add(i + acceptedWords.length);
+                acceptedFeatures.add(i + wordCount);
             }
         }
 

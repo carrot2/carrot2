@@ -158,6 +158,9 @@ public final class PreprocessingContext
      */
     public static class AllWords
     {
+        /** Flags words that are numbers of any kind */
+        public static final int FLAG_NUMERIC = 1;
+
         /**
          * The most frequently appearing variant of the word with respect to case. E.g. if
          * a token <em>MacOS</em> appeared 12 times in the input and <em>macos</em>
@@ -196,6 +199,13 @@ public final class PreprocessingContext
          * This array is produced by {@link CaseNormalizer}.
          */
         public boolean [] commonTermFlag;
+
+        /**
+         * Token type of this word. See {@link TokenType} for available types.
+         * <p>
+         * This array is produced by {@link CaseNormalizer}.
+         */
+        public int [] type;
 
         /**
          * A pointer to the {@link AllStems} arrays for this word.

@@ -1,8 +1,9 @@
 package org.carrot2.matrix.factorization;
 
+import org.carrot2.matrix.*;
+
 import nni.LAPACK;
 import cern.colt.matrix.DoubleMatrix2D;
-import cern.colt.matrix.NNIDoubleFactory2D;
 import cern.colt.matrix.impl.*;
 import cern.colt.matrix.linalg.SingularValueDecomposition;
 
@@ -35,7 +36,7 @@ public class PartialSingularValueDecomposition extends MatrixFactorizationBase i
      * Computes a partial SVD of a matrix. Before accessing results, perform computations
      * by calling the {@link #compute()}method.
      * 
-     * @param A matrxi to be factorized
+     * @param A matrix to be factorized
      */
     public PartialSingularValueDecomposition(DoubleMatrix2D A)
     {
@@ -49,8 +50,8 @@ public class PartialSingularValueDecomposition extends MatrixFactorizationBase i
         // Need native LAPACK, dense matrices and no views to operate
         // Default to Colt's implementation otherwise
         if (!NNIInterface.isNativeLapackAvailable()
-            || (!(A instanceof DenseDoubleMatrix2D))
-            || NNIDenseDoubleMatrix2D.isView((DenseDoubleMatrix2D) A))
+            || (!(A instanceof NNIDenseDoubleMatrix2D))
+            || ((NNIDenseDoubleMatrix2D) A).isView())
         {
             // Use (slow) Colt's SVD
             SingularValueDecomposition svd;
@@ -92,10 +93,9 @@ public class PartialSingularValueDecomposition extends MatrixFactorizationBase i
 
             // Copy the data array of the A matrix (LAPACK will overwrite the
             // input data)
-            double [] dataA = new double [NNIDenseDoubleMatrix2D
-                .getDoubleData((DenseDoubleMatrix2D) A).length];
-            System.arraycopy(NNIDenseDoubleMatrix2D
-                .getDoubleData((DenseDoubleMatrix2D) A), 0, dataA, 0, dataA.length);
+            final double [] data = ((NNIDenseDoubleMatrix2D) A).getData();
+            double [] dataA = new double [data.length];
+            System.arraycopy(data, 0, dataA, 0, dataA.length);
 
             int [] info = new int [1];
             LAPACK.gesdd(new char []
@@ -110,21 +110,19 @@ public class PartialSingularValueDecomposition extends MatrixFactorizationBase i
             }, dataA, new int []
             {
                 Math.max(1, m)
-            }, S, NNIDenseDoubleMatrix2D.getDoubleData((DenseDoubleMatrix2D) V),
-                new int []
-                {
-                    Math.max(1, m)
-                }, NNIDenseDoubleMatrix2D.getDoubleData((DenseDoubleMatrix2D) U),
-                new int []
-                {
-                    Math.max(1, n)
-                }, work, new int []
-                {
-                    work.length
-                }, iwork, info);
+            }, S, ((NNIDenseDoubleMatrix2D) V).getData(), new int []
+            {
+                Math.max(1, m)
+            }, ((NNIDenseDoubleMatrix2D) U).getData(), new int []
+            {
+                Math.max(1, n)
+            }, work, new int []
+            {
+                work.length
+            }, iwork, info);
 
             // LAPACK calculates V' instead of V so need to do a deep transpose
-            NNIDenseDoubleMatrix2D.deepTranspose((DenseDoubleMatrix2D) V);
+            ((NNIDenseDoubleMatrix2D) V).transpose();
 
             if (k > 0 && k < S.length)
             {
