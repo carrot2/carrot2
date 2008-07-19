@@ -33,4 +33,42 @@ public class CharArrayUtils
 
         return inPlaceToLowerCase(lowerCase);
     }
+
+    /**
+     * Returns the ratio of capitalized letters in the string.
+     */
+    public static double capitalizedRatio(char [] string)
+    {
+        if (string.length == 0)
+        {
+            return 0;
+        }
+
+        int capitalized = 0;
+        for (int i = 0; i < string.length; i++)
+        {
+            if (Character.isUpperCase(string[i]))
+            {
+                capitalized++;
+            }
+        }
+
+        return capitalized / (double) string.length;
+    }
+
+    /**
+     * Returns a capitalized copy of the string.
+     */
+    public static char [] capitalize(char [] string)
+    {
+        if (string.length == 0)
+        {
+            return string;
+        }
+
+        final char [] lowerCase = toLowerCase(string);
+        lowerCase[0] = Character.toUpperCase(lowerCase[0]);
+
+        return lowerCase;
+    }
 }

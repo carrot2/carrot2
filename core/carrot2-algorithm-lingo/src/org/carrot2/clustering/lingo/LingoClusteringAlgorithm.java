@@ -108,6 +108,11 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     public ClusterBuilder clusterBuilder = new ClusterBuilder();
 
     /**
+     * Cluster label formatter, contains bindable attributes.
+     */
+    public LabelFormatter labelFormatter = new LabelFormatter();
+
+    /**
      * Performs Lingo clustering of {@link #documents}.
      */
     @Override
@@ -136,21 +141,14 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
 
         // Cluster merging
         clusterBuilder.merge(lingoContext);
-        
-        // Temporary cluster rendering
-        clusters = Lists.newArrayList();
 
+        // Format final clusters
+        clusters = Lists.newArrayList();
         final int [] clusterLabelIndex = lingoContext.clusterLabelFeatureIndex;
         final IntBitSet [] clusterDocuments = lingoContext.clusterDocuments;
-
-        final int [][] phrasesWordIndices = context.allPhrases.wordIndices;
-        final char [][] wordsImage = context.allWords.image;
-        final int wordCount = wordsImage.length;
-
         for (int i = 0; i < clusterLabelIndex.length; i++)
         {
             final Cluster cluster = new Cluster();
-            final StringBuilder label = new StringBuilder();
 
             final int labelFeature = clusterLabelIndex[i];
             if (labelFeature < 0)
@@ -158,25 +156,9 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
                 // Cluster removed during merging
                 continue;
             }
-            
-            if (labelFeature < wordCount)
-            {
-                label.append(wordsImage[labelFeature]);
-            }
-            else
-            {
-                final int phraseIndex = labelFeature - wordCount;
-                for (int wordIndex = 0; wordIndex < phrasesWordIndices[phraseIndex].length; wordIndex++)
-                {
-                    label.append(wordsImage[phrasesWordIndices[phraseIndex][wordIndex]]);
-                    if (wordIndex < phrasesWordIndices[phraseIndex].length - 1)
-                    {
-                        label.append(" ");
-                    }
 
-                }
-            }
-            cluster.addPhrases(label.toString());
+            // Add label
+            cluster.addPhrases(labelFormatter.format(context, labelFeature));
 
             // Add documents
             for (IntIterator it = clusterDocuments[i].iterator(); it.hasNext();)
