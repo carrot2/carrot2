@@ -38,7 +38,7 @@ public class ClusterLabelBuilderTest extends TermDocumentMatrixBuilderTestBase
             0, 1, 2
         };
 
-        reducer.desiredClusterCount = 3;
+        reducer.desiredClusterCountBase = 30;
         check(expectedFeatureIndex);
     }
 
@@ -52,7 +52,7 @@ public class ClusterLabelBuilderTest extends TermDocumentMatrixBuilderTestBase
             2
         };
 
-        reducer.desiredClusterCount = 1;
+        reducer.desiredClusterCountBase = 10;
         check(expectedFeatureIndex);
     }
 
@@ -67,7 +67,7 @@ public class ClusterLabelBuilderTest extends TermDocumentMatrixBuilderTestBase
             2, 3
         };
 
-        reducer.desiredClusterCount = 2;
+        reducer.desiredClusterCountBase = 15;
         check(expectedFeatureIndex);
     }
 

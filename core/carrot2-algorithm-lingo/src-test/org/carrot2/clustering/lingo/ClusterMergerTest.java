@@ -32,7 +32,7 @@ public class ClusterMergerTest extends TermDocumentMatrixBuilderTestBase
     @Test
     public void testNoMerge()
     {
-        reducer.desiredClusterCount = 3;
+        reducer.desiredClusterCountBase = 30;
         createDocuments("", "aa . aa", "", "bb . bb", "", "cc . cc");
 
         final int [][] expectedDocumentIndices = new int [] []
@@ -60,7 +60,7 @@ public class ClusterMergerTest extends TermDocumentMatrixBuilderTestBase
     public void testSimpleMerge()
     {
         createDocuments("aa", "aa", "aa bb", "aa bb");
-        reducer.desiredClusterCount = 2;
+        reducer.desiredClusterCountBase = 20;
 
         final int [][] expectedDocumentIndices = new int [] []
         {
@@ -79,7 +79,7 @@ public class ClusterMergerTest extends TermDocumentMatrixBuilderTestBase
     public void testMultiMerge()
     {
         createDocuments("aa", "aa", "aa bb", "aa bb", "aa bb cc", "aa bb cc", "dd dd");
-        reducer.desiredClusterCount = 4;
+        reducer.desiredClusterCountBase = 40;
 
         final int [][] expectedDocumentIndices = new int [] []
         {

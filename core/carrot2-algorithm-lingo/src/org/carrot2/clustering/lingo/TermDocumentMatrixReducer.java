@@ -3,6 +3,7 @@ package org.carrot2.clustering.lingo;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.matrix.MatrixUtils;
 import org.carrot2.matrix.factorization.*;
+import org.carrot2.matrix.factorization.IterationNumberGuesser.FactorizationQuality;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
 import org.carrot2.util.attribute.constraint.IntRange;
@@ -36,7 +37,7 @@ public class TermDocumentMatrixReducer
     public MatrixFactorizationFactory factorizationFactory = new LocalNonnegativeMatrixFactorizationFactory();
 
     /**
-     * Desired cluster count.
+     * Desired cluster count base.
      * 
      * @level Medium
      * @group Matrix model
@@ -44,8 +45,19 @@ public class TermDocumentMatrixReducer
     @Input
     @Processing
     @Attribute
-    @IntRange(min = 2)
-    public int desiredClusterCount = 20;
+    @IntRange(min = 2, max = 100)
+    public int desiredClusterCountBase = 20;
+
+    /**
+     * Factorization quality.
+     * 
+     * @level Advanced
+     * @group Matrix model
+     */
+    @Input
+    @Processing
+    @Attribute
+    public FactorizationQuality factorizationQuality = FactorizationQuality.HIGH;
 
     /**
      * Performs the reduction.
@@ -62,17 +74,30 @@ public class TermDocumentMatrixReducer
         if (factorizationFactory instanceof IterativeMatrixFactorizationFactory)
         {
             ((IterativeMatrixFactorizationFactory) factorizationFactory)
-                .setK(desiredClusterCount);
+                .setK(getDesiredClusterCount(context));
+            IterationNumberGuesser.setEstimatedIterationsNumber(
+                (IterativeMatrixFactorizationFactory) factorizationFactory,
+                context.tdMatrix, factorizationQuality);
         }
 
         MatrixUtils.normalizeColumnL2(context.tdMatrix, null);
         context.baseMatrix = factorizationFactory.factorize(context.tdMatrix).getU();
 
         if (!(factorizationFactory instanceof IterativeMatrixFactorizationFactory)
-            && context.baseMatrix.columns() > desiredClusterCount)
+            && context.baseMatrix.columns() > desiredClusterCountBase)
         {
             context.baseMatrix = context.baseMatrix.viewPart(0, 0, context.baseMatrix
-                .rows(), desiredClusterCount);
+                .rows(), desiredClusterCountBase);
         }
+    }
+
+    /**
+     * Calculates the desired cluster count using a very simple model.
+     */
+    private int getDesiredClusterCount(LingoProcessingContext context)
+    {
+        final int documentCount = context.preprocessingContext.documents.size();
+        return Math.min((int) ((desiredClusterCountBase / 10.0) * Math
+            .sqrt(documentCount)), documentCount);
     }
 }

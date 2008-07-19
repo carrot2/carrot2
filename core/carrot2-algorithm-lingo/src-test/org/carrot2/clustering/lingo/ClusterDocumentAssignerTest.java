@@ -32,7 +32,7 @@ public class ClusterDocumentAssignerTest extends TermDocumentMatrixBuilderTestBa
     @Test
     public void testNoPhrases()
     {
-        reducer.desiredClusterCount = 3;
+        reducer.desiredClusterCountBase = 30;
         createDocuments("", "aa . aa", "", "bb . bb", "", "cc . cc");
 
         final int [][] expectedDocumentIndices = new int [] []
@@ -60,7 +60,7 @@ public class ClusterDocumentAssignerTest extends TermDocumentMatrixBuilderTestBa
     public void testSinglePhraseNoSingleWords()
     {
         createDocuments("aa bb", "aa bb", "aa bb", "aa bb");
-        reducer.desiredClusterCount = 1;
+        reducer.desiredClusterCountBase = 10;
 
         final int [][] expectedDocumentIndices = new int [] []
         {
@@ -77,8 +77,8 @@ public class ClusterDocumentAssignerTest extends TermDocumentMatrixBuilderTestBa
     public void testSinglePhraseSingleWords()
     {
         createDocuments("aa bb", "aa bb", "cc", "cc", "aa bb", "aa bb");
-        reducer.desiredClusterCount = 2;
-        clusterBuilder.phraseLabelBoost = 0.5;
+        reducer.desiredClusterCountBase = 15;
+        clusterBuilder.phraseLabelBoost = 0.3;
 
         final int [][] expectedDocumentIndices = new int [] []
         {
@@ -100,7 +100,9 @@ public class ClusterDocumentAssignerTest extends TermDocumentMatrixBuilderTestBa
     private void check(int [][] expectedDocumentIndices)
     {
         buildTermDocumentMatrix();
+        
         reducer.reduce(lingoContext);
+        
         final TfTermWeighting termWeighting = new TfTermWeighting();
         clusterBuilder.buildLabels(lingoContext, termWeighting);
         clusterBuilder.assignDocuments(lingoContext, termWeighting);

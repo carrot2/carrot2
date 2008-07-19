@@ -2,6 +2,7 @@ package org.carrot2.matrix.factorization;
 
 import java.util.*;
 
+import org.apache.commons.lang.StringUtils;
 import org.carrot2.matrix.factorization.seeding.KMeansSeedingStrategyFactory;
 import org.carrot2.matrix.factorization.seeding.RandomSeedingStrategyFactory;
 
@@ -16,6 +17,27 @@ import cern.colt.matrix.DoubleMatrix2D;
  */
 public class IterationNumberGuesser
 {
+    /**
+     * Factorization quality.
+     */
+    public enum FactorizationQuality
+    {
+        /** Low, quick processing */
+        LOW,
+
+        /** Medium, longer processing */
+        MEDIUM,
+
+        /** High, long processing */
+        HIGH;
+
+        @Override
+        public String toString()
+        {
+            return StringUtils.capitalize(name());
+        }
+    }
+
     /** Coefficients for all known combinations of input parameters */
     private static Map<List<Object>, double []> allKnownCoefficients;
 
@@ -27,7 +49,7 @@ public class IterationNumberGuesser
         allKnownCoefficients.put(Arrays.asList(new Object []
         {
             NonnegativeMatrixFactorizationEDFactory.class,
-            RandomSeedingStrategyFactory.class, new Integer(1)
+            RandomSeedingStrategyFactory.class, FactorizationQuality.LOW
         }), new double []
         {
             -0.0166, 0.3333, 8.0000
@@ -37,7 +59,7 @@ public class IterationNumberGuesser
         allKnownCoefficients.put(Arrays.asList(new Object []
         {
             NonnegativeMatrixFactorizationEDFactory.class,
-            RandomSeedingStrategyFactory.class, new Integer(2)
+            RandomSeedingStrategyFactory.class, FactorizationQuality.MEDIUM
         }), new double []
         {
             -0.0175, 0.6, 12.0
@@ -47,18 +69,17 @@ public class IterationNumberGuesser
         allKnownCoefficients.put(Arrays.asList(new Object []
         {
             NonnegativeMatrixFactorizationEDFactory.class,
-            RandomSeedingStrategyFactory.class, new Integer(3)
+            RandomSeedingStrategyFactory.class, FactorizationQuality.HIGH
         }), new double []
         {
             -0.0186, 0.8222, 17.3555
         });
 
-        // TODO: for the time being the values have been just C&P'd from NMF-ED
         /** NMF-KL, Random seeding, level 1 */
         allKnownCoefficients.put(Arrays.asList(new Object []
         {
             NonnegativeMatrixFactorizationKLFactory.class,
-            RandomSeedingStrategyFactory.class, new Integer(1)
+            RandomSeedingStrategyFactory.class, FactorizationQuality.LOW
         }), new double []
         {
             -0.0166, 0.3333, 8.0000
@@ -68,7 +89,7 @@ public class IterationNumberGuesser
         allKnownCoefficients.put(Arrays.asList(new Object []
         {
             NonnegativeMatrixFactorizationKLFactory.class,
-            RandomSeedingStrategyFactory.class, new Integer(2)
+            RandomSeedingStrategyFactory.class, FactorizationQuality.MEDIUM
         }), new double []
         {
             -0.0175, 0.6, 12.0
@@ -78,7 +99,7 @@ public class IterationNumberGuesser
         allKnownCoefficients.put(Arrays.asList(new Object []
         {
             NonnegativeMatrixFactorizationKLFactory.class,
-            RandomSeedingStrategyFactory.class, new Integer(3)
+            RandomSeedingStrategyFactory.class, FactorizationQuality.HIGH
         }), new double []
         {
             -0.0186, 0.8222, 17.3555
@@ -88,7 +109,7 @@ public class IterationNumberGuesser
         allKnownCoefficients.put(Arrays.asList(new Object []
         {
             NonnegativeMatrixFactorizationEDFactory.class,
-            KMeansSeedingStrategyFactory.class, new Integer(1)
+            KMeansSeedingStrategyFactory.class, FactorizationQuality.LOW
         }), new double []
         {
             -0.005, 0, 6
@@ -98,7 +119,7 @@ public class IterationNumberGuesser
         allKnownCoefficients.put(Arrays.asList(new Object []
         {
             NonnegativeMatrixFactorizationEDFactory.class,
-            KMeansSeedingStrategyFactory.class, new Integer(2)
+            KMeansSeedingStrategyFactory.class, FactorizationQuality.MEDIUM
         }), new double []
         {
             -0.005, 0, 10
@@ -108,7 +129,7 @@ public class IterationNumberGuesser
         allKnownCoefficients.put(Arrays.asList(new Object []
         {
             NonnegativeMatrixFactorizationEDFactory.class,
-            KMeansSeedingStrategyFactory.class, new Integer(3)
+            KMeansSeedingStrategyFactory.class, FactorizationQuality.HIGH
         }), new double []
         {
             -0.005, 0, 20
@@ -118,7 +139,7 @@ public class IterationNumberGuesser
         allKnownCoefficients.put(Arrays.asList(new Object []
         {
             LocalNonnegativeMatrixFactorizationFactory.class,
-            RandomSeedingStrategyFactory.class, new Integer(1)
+            RandomSeedingStrategyFactory.class, FactorizationQuality.LOW
         }), new double []
         {
             -0.014, 0.1, 7.5
@@ -128,7 +149,7 @@ public class IterationNumberGuesser
         allKnownCoefficients.put(Arrays.asList(new Object []
         {
             LocalNonnegativeMatrixFactorizationFactory.class,
-            RandomSeedingStrategyFactory.class, new Integer(2)
+            RandomSeedingStrategyFactory.class, FactorizationQuality.MEDIUM
         }), new double []
         {
             -0.0175, 0.15, 11.3333
@@ -138,7 +159,7 @@ public class IterationNumberGuesser
         allKnownCoefficients.put(Arrays.asList(new Object []
         {
             LocalNonnegativeMatrixFactorizationFactory.class,
-            RandomSeedingStrategyFactory.class, new Integer(3)
+            RandomSeedingStrategyFactory.class, FactorizationQuality.HIGH
         }), new double []
         {
             -0.02333, 0.2, 16.8888
@@ -148,8 +169,8 @@ public class IterationNumberGuesser
     /**
      * Sets the guesstimated iterations number in the <code>factory</code>. Different
      * models are used depending on the actual factorization algorithm, the seeding
-     * strategy and the <code>qualityLevel</code>, which can be 1 (low), 2 (medium) and 3
-     * (high, supposedly :). For the time being a crude linear model is assumed based on:
+     * strategy and the <code>qualityLevel</code>. For the time being a crude linear model
+     * is assumed based on:
      * <ul>
      * <li>the number of columns in <code>A</code>. The number of rows is assumed to be
      * 2.8 bigger than the number of rows (2.8 is pretty much random, the value is taken
@@ -158,19 +179,19 @@ public class IterationNumberGuesser
      * number of elements) is maintained. The model supports column counts (after scaling)
      * ranging from 50 to 400.
      * <li>the number of requested base vectors (read from the factorization factory). The
-     * model supports k = 5 ... 40.
+     * model supports k = 5 ... 50.
      * </ul>
      * A new maximum number of iterations will be set in the factory <b>only </b> if the
      * requested parameters fall within the ranges supported by the model. In this case
      * <code>true</code> will be returned.
      */
     public static boolean setEstimatedIterationsNumber(
-        IterativeMatrixFactorizationFactory factory, DoubleMatrix2D A, int qualityLevel)
+        IterativeMatrixFactorizationFactory factory, DoubleMatrix2D A,
+        FactorizationQuality qualityLevel)
     {
         double [] coefficients = allKnownCoefficients.get(Arrays.asList(new Object []
         {
-            factory.getClass(), factory.getSeedingFactory().getClass(),
-            new Integer(qualityLevel)
+            factory.getClass(), factory.getSeedingFactory().getClass(), qualityLevel
         }));
 
         if (coefficients != null)
