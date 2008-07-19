@@ -6,7 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Test cases for {@link ClusterLabelBuilder}.
+ * Test cases for label building in {@link ClusterBuilder}.
  */
 public class ClusterLabelBuilderTest extends TermDocumentMatrixBuilderTestBase
 {
@@ -14,12 +14,12 @@ public class ClusterLabelBuilderTest extends TermDocumentMatrixBuilderTestBase
     private TermDocumentMatrixReducer reducer;
 
     /** Label builder under tests */
-    private ClusterLabelBuilder labelBuilder;
+    private ClusterBuilder clusterBuilder;
 
     @Before
     public void setUpClusterLabelBuilder()
     {
-        labelBuilder = new ClusterLabelBuilder();
+        clusterBuilder = new ClusterBuilder();
         reducer = new TermDocumentMatrixReducer();
     }
 
@@ -60,6 +60,7 @@ public class ClusterLabelBuilderTest extends TermDocumentMatrixBuilderTestBase
     public void testSinglePhraseSingleWords()
     {
         createDocuments("aa bb", "aa bb", "cc", "cc", "aa bb", "aa bb");
+        clusterBuilder.phraseLabelBoost = 0.5;
 
         final int [] expectedFeatureIndex = new int []
         {
@@ -74,7 +75,7 @@ public class ClusterLabelBuilderTest extends TermDocumentMatrixBuilderTestBase
     {
         buildTermDocumentMatrix();
         reducer.reduce(lingoContext);
-        labelBuilder.buildLabels(lingoContext, new TfTermWeighting());
+        clusterBuilder.buildLabels(lingoContext, new TfTermWeighting());
 
         assertThat(lingoContext.clusterLabelFeatureIndex).as("clusterLabelFeatureIndex")
             .containsOnly(expectedFeatureIndex);

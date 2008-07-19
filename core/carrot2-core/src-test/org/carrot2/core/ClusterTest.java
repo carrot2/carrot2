@@ -1,11 +1,13 @@
 package org.carrot2.core;
 
+import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThat;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import org.fest.assertions.Assertions;
 import org.junit.Test;
 
 import com.google.common.collect.Lists;
@@ -20,7 +22,7 @@ public class ClusterTest
     {
         final Cluster flatCluster = new Cluster();
         assertEquals(0, flatCluster.size());
-        assertThat(flatCluster.getAllDocuments()).isEmpty();
+        Assertions.assertThat(flatCluster.getAllDocuments()).isEmpty();
     }
 
     @Test
@@ -33,7 +35,7 @@ public class ClusterTest
         subcluster.addSubclusters(new Cluster());
 
         assertEquals(0, hierarchicalCluster.size());
-        assertThat(hierarchicalCluster.getAllDocuments()).isEmpty();
+        Assertions.assertThat(hierarchicalCluster.getAllDocuments()).isEmpty();
     }
 
     @Test
@@ -210,7 +212,7 @@ public class ClusterTest
         final Cluster c2 = new Cluster();
         c2.id = 1;
 
-        assertThat(Cluster.find(1, Lists.newArrayList(c1, c2))).isSameAs(c2);
+        Assertions.assertThat(Cluster.find(1, Lists.newArrayList(c1, c2))).isSameAs(c2);
     }
 
     @Test
@@ -225,7 +227,7 @@ public class ClusterTest
         c3.id = 2;
         c2.addSubclusters(c3);
 
-        assertThat(Cluster.find(2, Lists.newArrayList(c1))).isSameAs(c3);
+        Assertions.assertThat(Cluster.find(2, Lists.newArrayList(c1))).isSameAs(c3);
     }
 
     @Test
@@ -240,6 +242,68 @@ public class ClusterTest
         c3.id = 2;
         c2.addSubclusters(c3);
 
-        assertThat(Cluster.find(3, Lists.newArrayList(c1))).isNull();
+        Assertions.assertThat(Cluster.find(3, Lists.newArrayList(c1))).isNull();
+    }
+
+    @Test
+    public void testBuildOtherTopicsNonAssigned()
+    {
+        final Document d1 = new Document();
+        final Document d2 = new Document();
+        final Document d3 = new Document();
+        final List<Document> allDocuments = Lists.newArrayList(d1, d2, d3);
+
+        final Cluster c1 = new Cluster();
+        final Cluster c2 = new Cluster();
+        final Cluster c3 = new Cluster();
+        c2.addSubclusters(c3);
+        final List<Cluster> clusters = Lists.newArrayList(c1, c2);
+
+        final Cluster otherTopics = Cluster.buildOtherTopics(allDocuments, clusters);
+
+        assertThat(otherTopics.getDocuments()).isEquivalentTo(allDocuments);
+    }
+
+    @Test
+    public void testBuildOtherTopicsSomeAssigned()
+    {
+        final Document d1 = new Document();
+        final Document d2 = new Document();
+        final Document d3 = new Document();
+        final List<Document> allDocuments = Lists.newArrayList(d1, d2, d3);
+
+        final Cluster c1 = new Cluster();
+        final Cluster c2 = new Cluster();
+        final Cluster c3 = new Cluster();
+        c2.addSubclusters(c3);
+        c3.addDocuments(d2);
+        final List<Cluster> clusters = Lists.newArrayList(c1, c2);
+
+        final Cluster otherTopics = Cluster.buildOtherTopics(allDocuments, clusters);
+
+        assertThat(otherTopics.getDocuments()).isEquivalentTo(Lists.newArrayList(d1, d3));
+    }
+
+    @Test
+    public void testBuildOtherTopicsAllAssigned()
+    {
+        final Document d1 = new Document();
+        final Document d2 = new Document();
+        final Document d3 = new Document();
+        final List<Document> allDocuments = Lists.newArrayList(d1, d2, d3);
+
+        final Cluster c1 = new Cluster();
+        final Cluster c2 = new Cluster();
+        final Cluster c3 = new Cluster();
+        c2.addSubclusters(c3);
+        c3.addDocuments(d2);
+        c1.addDocuments(d1);
+        c2.addDocuments(d3);
+        final List<Cluster> clusters = Lists.newArrayList(c1, c2);
+
+        final Cluster otherTopics = Cluster.buildOtherTopics(allDocuments, clusters);
+
+        assertThat(otherTopics.getDocuments()).isEquivalentTo(
+            Lists.<Document> newArrayList());
     }
 }

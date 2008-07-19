@@ -7,9 +7,7 @@ import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
 import org.carrot2.util.attribute.*;
 
-
-import com.google.common.collect.LinkedHashMultimap;
-import com.google.common.collect.Multimap;
+import com.google.common.collect.*;
 
 /**
  * Hierarchically clusters documents according to their content URLs.
@@ -147,22 +145,14 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
         Collections.sort(clusters, Cluster.BY_REVERSED_SIZE_AND_LABEL_COMPARATOR);
 
         // Add junk clusters
-        final Cluster otherUrls = new Cluster();
-        otherUrls.addPhrases("Other Sites");
-        otherUrls.setAttribute(Cluster.OTHER_TOPICS, true);
-
-        for (final Integer documentIndex : documentIndexes)
+        final ArrayList<Document> documentsInCluster = Lists
+            .newArrayListWithCapacity(documentIndexes.size());
+        for (Integer documentIndex : documentIndexes)
         {
-            if (!documentsInClusters.contains(documentIndex))
-            {
-                otherUrls.addDocuments(documents[documentIndex]);
-            }
+            documentsInCluster.add(documents[documentIndex]);
         }
 
-        if (!otherUrls.getDocuments().isEmpty())
-        {
-            clusters.add(otherUrls);
-        }
+        Cluster.appendOtherTopics(documentsInCluster, clusters, "Other Sites");
 
         return clusters;
     }

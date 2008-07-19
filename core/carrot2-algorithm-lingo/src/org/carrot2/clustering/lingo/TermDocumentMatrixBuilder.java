@@ -11,8 +11,11 @@ import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.DoubleRange;
 import org.carrot2.util.attribute.constraint.IntRange;
 
+import bak.pcj.map.IntKeyIntMap;
+import bak.pcj.map.IntKeyIntOpenHashMap;
 import bak.pcj.set.IntBitSet;
 import cern.colt.GenericPermuting;
+import cern.colt.matrix.DoubleFactory2D;
 import cern.colt.matrix.DoubleMatrix2D;
 
 /**
@@ -79,7 +82,7 @@ public class TermDocumentMatrixBuilder
         if (documentCount == 0)
         {
             lingoContext.tdMatrix = NNIDoubleFactory2D.nni.make(0, 0);
-            lingoContext.tdMatrixStemIndex = new int [0];
+            lingoContext.tdMatrixStemToRowIndex = new IntKeyIntOpenHashMap();
             return;
         }
 
@@ -142,11 +145,17 @@ public class TermDocumentMatrixBuilder
 
         // Convert stemsToInclude into tdMatrixStemIndices
         GenericPermuting.permute(stemsToInclude, stemWeightOrder);
+        stemsToInclude = ArrayUtils.subarray(stemsToInclude, 0, tdMatrix.rows());
+
+        final IntKeyIntMap stemToRowIndex = new IntKeyIntOpenHashMap();
+        for (int i = 0; i < stemsToInclude.length; i++)
+        {
+            stemToRowIndex.put(stemsToInclude[i], i);
+        }
 
         // Store the results
         lingoContext.tdMatrix = tdMatrix;
-        lingoContext.tdMatrixStemIndex = ArrayUtils.subarray(stemsToInclude, 0, tdMatrix
-            .rows());
+        lingoContext.tdMatrixStemToRowIndex = stemToRowIndex;
     }
 
     /**
@@ -215,5 +224,63 @@ public class TermDocumentMatrixBuilder
         {
             requiredStemIndices.add(stemIndex);
         }
+    }
+
+    /**
+     * Builds a sparse term-document-like matrix for the provided matrixWordIndices in the
+     * same term space as the original term-document matrix.
+     */
+    static DoubleMatrix2D buildAlignedMatrix(LingoProcessingContext lingoContext,
+        int [] featureIndex, TermWeighting termWeighting)
+    {
+        final IntKeyIntMap stemToRowIndex = lingoContext.tdMatrixStemToRowIndex;
+        if (featureIndex.length == 0)
+        {
+            return DoubleFactory2D.dense.make(stemToRowIndex.size(), 0);
+        }
+
+        final DoubleMatrix2D phraseMatrix = DoubleFactory2D.sparse.make(stemToRowIndex
+            .size(), featureIndex.length);
+
+        final PreprocessingContext preprocessingContext = lingoContext.preprocessingContext;
+        final int [] wordsStemIndex = preprocessingContext.allWords.stemIndex;
+        final int [] stemsTf = preprocessingContext.allStems.tf;
+        final int [][] stemsTfByDocument = preprocessingContext.allStems.tfByDocument;
+        final int [][] phrasesWordIndices = preprocessingContext.allPhrases.wordIndices;
+        final int documentCount = preprocessingContext.documents.size();
+        final int wordCount = wordsStemIndex.length;
+
+        for (int i = 0; i < featureIndex.length; i++)
+        {
+            final int feature = featureIndex[i];
+            final int [] wordIndices;
+            if (feature < wordCount)
+            {
+                wordIndices = new int []
+                {
+                    feature
+                };
+            }
+            else
+            {
+                wordIndices = phrasesWordIndices[feature - wordCount];
+            }
+
+            for (int wordIndex = 0; wordIndex < wordIndices.length; wordIndex++)
+            {
+                final int stemIndex = wordsStemIndex[wordIndices[wordIndex]];
+                if (stemToRowIndex.containsKey(stemIndex))
+                {
+                    final int rowIndex = stemToRowIndex.lget();
+
+                    double weight = termWeighting.calculateTermWeight(stemsTf[stemIndex],
+                        stemsTfByDocument[stemIndex].length / 2, documentCount);
+
+                    phraseMatrix.setQuick(rowIndex, i, weight);
+                }
+            }
+        }
+
+        return phraseMatrix;
     }
 }

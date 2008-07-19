@@ -5,6 +5,9 @@ import static org.fest.assertions.Assertions.assertThat;
 import org.carrot2.matrix.MatrixAssertions;
 import org.junit.Test;
 
+import bak.pcj.map.IntKeyIntMap;
+import bak.pcj.map.IntKeyIntOpenHashMap;
+
 /**
  * Test cases for {@link TermDocumentMatrixBuilder}.
  */
@@ -178,9 +181,16 @@ public class TermDocumentMatrixBuilderTest extends TermDocumentMatrixBuilderTest
 
         assertThat(lingoContext.tdMatrix.rows()).as("tdMatrix.rowCount").isEqualTo(
             expectedTdMatrixStemIndices.length);
-        assertThat(lingoContext.tdMatrixStemIndex).as("tdMatrixStemIndices").isEqualTo(
-            expectedTdMatrixStemIndices);
         MatrixAssertions.assertThat(lingoContext.tdMatrix).isEquivalentTo(
             expectedTdMatrixElements);
+
+        final IntKeyIntMap expectedStemToRowIndex = new IntKeyIntOpenHashMap();
+        for (int i = 0; i < expectedTdMatrixStemIndices.length; i++)
+        {
+            expectedStemToRowIndex.put(expectedTdMatrixStemIndices[i], i);
+        }
+
+        assertThat(lingoContext.tdMatrixStemToRowIndex).as("stemToRowIndex").isEqualTo(
+            expectedStemToRowIndex);
     }
 }

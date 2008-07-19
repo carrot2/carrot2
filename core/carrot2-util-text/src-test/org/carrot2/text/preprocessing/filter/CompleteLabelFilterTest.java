@@ -13,6 +13,7 @@ public class CompleteLabelFilterTest extends LabelFilterTestBase
     {
         filterProcessor.stopWordLabelFilter.enabled = true;
         filterProcessor.completeLabelFilter.enabled = true;
+        filterProcessor.completeLabelFilter.labelOverrideCutoff = 0.5;
     }
 
     @Test

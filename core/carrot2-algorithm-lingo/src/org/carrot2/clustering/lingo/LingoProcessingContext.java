@@ -3,6 +3,9 @@ package org.carrot2.clustering.lingo;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllLabels;
 
+import bak.pcj.map.IntKeyIntMap;
+import bak.pcj.set.IntBitSet;
+
 import cern.colt.matrix.DoubleMatrix2D;
 
 /**
@@ -16,20 +19,20 @@ class LingoProcessingContext
     /** Term-document matrix */
     DoubleMatrix2D tdMatrix;
 
-    /** Feature indices (like in {@link AllLabels}) that should form clusters */
+    /** Stem index to row index mapping for the tdMatrix */
+    IntKeyIntMap tdMatrixStemToRowIndex;
+
+    /** Base vectors for the tdMatrix */
+    DoubleMatrix2D baseMatrix;
+
+    /** Feature indices (like in {@link AllLabels#featureIndex}) that should form clusters */
     int [] clusterLabelFeatureIndex;
 
     /** Scores for cluster labels */
     double [] clusterLabelScore;
 
-    /**
-     * Stem indices corresponding to tdMatrix rows. The size of this array is equal to the
-     * number of rows of tdMatrix.
-     */
-    int [] tdMatrixStemIndex;
-
-    /** Reduced term-document matrix */
-    DoubleMatrix2D baseMatrix;
+    /** Documents assigned to clusters */
+    IntBitSet [] clusterDocuments;
 
     /**
      * Term-document-like matrix for phrases from {@link AllLabels}. If there are no

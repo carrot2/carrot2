@@ -35,7 +35,7 @@ public class CompleteLabelFilter implements LabelFilter
     @Processing
     @Attribute
     @DoubleRange(min = 0.0, max = 1.0)
-    public double labelOverrideCutoff = 0.5;
+    public double labelOverrideCutoff = 0.65;
 
     /**
      * Left complete label filter.

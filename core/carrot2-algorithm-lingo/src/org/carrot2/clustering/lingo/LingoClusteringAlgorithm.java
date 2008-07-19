@@ -1,5 +1,6 @@
 package org.carrot2.clustering.lingo;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.carrot2.core.*;
@@ -9,6 +10,9 @@ import org.carrot2.text.linguistic.SnowballLanguageModelFactory;
 import org.carrot2.text.preprocessing.*;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
+
+import bak.pcj.IntIterator;
+import bak.pcj.set.IntBitSet;
 
 import com.google.common.collect.Lists;
 
@@ -101,7 +105,7 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     /**
      * Cluster label builder, contains bindable attributes.
      */
-    public ClusterLabelBuilder labelBuilder = new ClusterLabelBuilder();
+    public ClusterBuilder clusterBuilder = new ClusterBuilder();
 
     /**
      * Performs Lingo clustering of {@link #documents}.
@@ -125,29 +129,39 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
         matrixReducer.reduce(lingoContext);
 
         // Cluster label building
-        labelBuilder.buildLabels(lingoContext, termWeighting);
+        clusterBuilder.buildLabels(lingoContext, termWeighting);
 
+        // Document assignment
+        clusterBuilder.assignDocuments(lingoContext, termWeighting);
+
+        // Cluster merging
+        clusterBuilder.merge(lingoContext);
+        
         // Temporary cluster rendering
         clusters = Lists.newArrayList();
 
-//        final int [] clusterLabelIndex = context.allLabels.featureIndex;
         final int [] clusterLabelIndex = lingoContext.clusterLabelFeatureIndex;
+        final IntBitSet [] clusterDocuments = lingoContext.clusterDocuments;
+
         final int [][] phrasesWordIndices = context.allPhrases.wordIndices;
         final char [][] wordsImage = context.allWords.image;
         final int wordCount = wordsImage.length;
 
-        int [] phrasesTf = context.allPhrases.tf;
-        
         for (int i = 0; i < clusterLabelIndex.length; i++)
         {
             final Cluster cluster = new Cluster();
             final StringBuilder label = new StringBuilder();
 
             final int labelFeature = clusterLabelIndex[i];
+            if (labelFeature < 0)
+            {
+                // Cluster removed during merging
+                continue;
+            }
+            
             if (labelFeature < wordCount)
             {
                 label.append(wordsImage[labelFeature]);
-//                continue;
             }
             else
             {
@@ -159,15 +173,25 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
                     {
                         label.append(" ");
                     }
-                    
+
                 }
-                label.append(" [" + phrasesTf[phraseIndex] + "]");
+            }
+            cluster.addPhrases(label.toString());
+
+            // Add documents
+            for (IntIterator it = clusterDocuments[i].iterator(); it.hasNext();)
+            {
+                cluster.addDocuments(documents.get(it.next()));
             }
 
-            cluster.addPhrases(label.toString());
-            cluster.addDocuments(documents.get(0));
-
-            clusters.add(cluster);
+            // Add cluster
+            if (cluster.getDocuments().size() > 1)
+            {
+                clusters.add(cluster);
+            }
         }
+
+        Collections.sort(clusters, Cluster.BY_REVERSED_SIZE_AND_LABEL_COMPARATOR);
+        Cluster.appendOtherTopics(documents, clusters);
     }
 }

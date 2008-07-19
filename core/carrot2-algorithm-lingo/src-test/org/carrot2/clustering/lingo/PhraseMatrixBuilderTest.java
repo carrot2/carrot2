@@ -10,17 +10,17 @@ import org.junit.Test;
 import cern.colt.matrix.DoubleMatrix2D;
 
 /**
- * Test cases for phrase matrix building in {@link ClusterLabelBuilder}.
+ * Test cases for phrase matrix building in {@link ClusterBuilder}.
  */
 public class PhraseMatrixBuilderTest extends TermDocumentMatrixBuilderTestBase
 {
     /** Label builder under tests */
-    private ClusterLabelBuilder labelBuilder;
+    private ClusterBuilder labelBuilder;
 
     @Before
     public void setUpClusterLabelBuilder()
     {
-        labelBuilder = new ClusterLabelBuilder();
+        labelBuilder = new ClusterBuilder();
     }
 
     @Test

@@ -226,7 +226,7 @@ public final class Cluster
      * A recursive routine for collecting unique documents from this cluster and
      * subclusters.
      */
-    private Set<Document> collectAllDocuments(Cluster cluster, Set<Document> docs)
+    private static Set<Document> collectAllDocuments(Cluster cluster, Set<Document> docs)
     {
         if (cluster == null)
         {
@@ -537,6 +537,79 @@ public final class Cluster
         }
 
         return null;
+    }
+
+    /**
+     * Builds an "Other Topics" cluster that groups those documents from
+     * <code>allDocument</code> that were not referenced in any cluster in
+     * <code>clusters</code>.
+     * 
+     * @param allDocuments all documents to check against
+     * @param clusters list of clusters with assigned documents
+     * @return the "Other Topics" cluster
+     */
+    public static Cluster buildOtherTopics(List<Document> allDocuments,
+        List<Cluster> clusters)
+    {
+        return buildOtherTopics(allDocuments, clusters, "Other Topics");
+    }
+
+    /**
+     * Builds an "Other Topics" cluster that groups those documents from
+     * <code>allDocument</code> that were not referenced in any cluster in
+     * <code>clusters</code>.
+     * 
+     * @param allDocuments all documents to check against
+     * @param clusters list of clusters with assigned documents
+     * @param label label for the "Other Topics" group
+     * @return the "Other Topics" cluster
+     */
+    public static Cluster buildOtherTopics(List<Document> allDocuments,
+        List<Cluster> clusters, String label)
+    {
+        final Set<Document> unclusteredDocuments = Sets.newLinkedHashSet(allDocuments);
+        final Set<Document> assignedDocuments = Sets.newHashSet();
+
+        for (Cluster cluster : clusters)
+        {
+            collectAllDocuments(cluster, assignedDocuments);
+        }
+
+        unclusteredDocuments.removeAll(assignedDocuments);
+
+        final Cluster otherTopics = new Cluster(label);
+        otherTopics.addDocuments(unclusteredDocuments);
+        otherTopics.setAttribute(Cluster.OTHER_TOPICS, Boolean.TRUE);
+
+        return otherTopics;
+    }
+
+    /**
+     * If there are unclustered documents, appends the "Other Topics" group to the
+     * <code>clusters</code>.
+     * 
+     * @see #buildOtherTopics(List, List)
+     */
+    public static void appendOtherTopics(List<Document> allDocuments,
+        List<Cluster> clusters)
+    {
+        appendOtherTopics(allDocuments, clusters, "Other Topics");
+    }
+
+    /**
+     * If there are unclustered documents, appends the "Other Topics" group to the
+     * <code>clusters</code>.
+     * 
+     * @see #buildOtherTopics(List, List, String)
+     */
+    public static void appendOtherTopics(List<Document> allDocuments,
+        List<Cluster> clusters, String label)
+    {
+        final Cluster otherTopics = buildOtherTopics(allDocuments, clusters, label);
+        if (!otherTopics.getDocuments().isEmpty())
+        {
+            clusters.add(otherTopics);
+        }
     }
 
     @Persist
