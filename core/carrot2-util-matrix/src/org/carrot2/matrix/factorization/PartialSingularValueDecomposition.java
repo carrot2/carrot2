@@ -17,7 +17,7 @@ public class PartialSingularValueDecomposition extends MatrixFactorizationBase i
     protected int k;
 
     /** The default number of desired base vectors */
-    protected static int DEFAULT_K = -1;
+    protected static final int DEFAULT_K = -1;
 
     /**
      * Work array

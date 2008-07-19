@@ -186,7 +186,7 @@ public class MatrixUtils
             }
         }
 
-        return orthogonality / ((cosines.rows() - 1) * cosines.rows() / 2);
+        return orthogonality / ((cosines.rows() - 1) * cosines.rows() / 2.0);
     }
 
     /**

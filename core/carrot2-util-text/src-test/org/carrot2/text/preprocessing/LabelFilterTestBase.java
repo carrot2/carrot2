@@ -32,6 +32,8 @@ public class LabelFilterTestBase extends PreprocessingComponentTestBase
         labelFilterProcessor = new LabelFilterProcessor();
 
         // Disable all filters by defaults. Tests will enable the filters need.
+        labelFilterProcessor.queryLabelFilter.enabled = false;
+        labelFilterProcessor.numericLabelFilter.enabled = false;
         labelFilterProcessor.stopWordLabelFilter.enabled = false;
         labelFilterProcessor.completeLabelFilter.enabled = false;
 

@@ -31,6 +31,11 @@ public class LabelFilterProcessor
     // to add custom label filters as parameters, we'll need to come up with something.
 
     /**
+     * Query word label filter for this processor.
+     */
+    public QueryLabelFilter queryLabelFilter = new QueryLabelFilter();
+
+    /**
      * Stop word label filter for this processor.
      */
     public StopWordLabelFilter stopWordLabelFilter = new StopWordLabelFilter();
@@ -56,6 +61,7 @@ public class LabelFilterProcessor
         Arrays.fill(acceptedStems, true);
         Arrays.fill(acceptedPhrases, true);
 
+        queryLabelFilter.filter(context, acceptedStems, acceptedPhrases);
         stopWordLabelFilter.filter(context, acceptedStems, acceptedPhrases);
         numericLabelFilter.filter(context, acceptedStems, acceptedPhrases);
         completeLabelFilter.filter(context, acceptedStems, acceptedPhrases);

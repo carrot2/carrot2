@@ -28,16 +28,29 @@ import cern.jet.math.Functions;
 public class ClusterBuilder
 {
     /**
-     * Document assignment cut-off.
+     * Document assignment threshold. The similarity between cluster label and document
+     * required for the document to be included in the cluster. Low values will cause more
+     * documents to be put in clusters, which will make the "Other Topics" cluster
+     * smaller, but also lower the precision of cluster-document assignments. High values
+     * will cause less documents to be put in clusters, which result in higher precision
+     * of assignment, but also a larger "Other Topics" group.
+     * 
+     * @group Clusters
+     * @level Medium
      */
     @Input
     @Processing
     @Attribute
     @DoubleRange(min = 0.1, max = 1.0)
-    public double documentAssignmentCutoff = 0.2;
+    public double documentAssignmentThreshold = 0.2;
 
     /**
-     * Phrase label boost.
+     * Phrase label boost. The weight of multi-word labels relative to one-word labels.
+     * Low values will result in more one-word labels being produced, higher values will
+     * favor multi-word labels.
+     * 
+     * @group Labels
+     * @level Medium
      */
     @Input
     @Processing
@@ -46,7 +59,12 @@ public class ClusterBuilder
     public double phraseLabelBoost = 1.0;
 
     /**
-     * Phrase length penalty start.
+     * Phrase length penalty start. The phrase length at which the overlong multi-word
+     * labels should start to be penalized. Phrases of length smaller than
+     * <code>phraseLengthPenaltyStart</code> will not be penalized.
+     * 
+     * @group Labels
+     * @level Advanced
      */
     @Input
     @Processing
@@ -55,7 +73,12 @@ public class ClusterBuilder
     public int phraseLengthPenaltyStart = 5;
 
     /**
-     * Phrase length penalty stop.
+     * Phrase length penalty stop. The phrase length at which the overlong multi-word
+     * labels should be removed completely. Phrases of length larger than
+     * <code>phraseLengthPenaltyStop</code> will be removed.
+     * 
+     * @group Labels
+     * @level Advanced
      */
     @Input
     @Processing
@@ -64,13 +87,20 @@ public class ClusterBuilder
     public int phraseLengthPenaltyStop = 8;
 
     /**
-     * Cluster merging cut-off.
+     * Cluster merging threshold. The percentage overlap between two cluster's documents
+     * required for the clusters to be merged into one clusters. Low values will result in
+     * more aggressive merging, which may lead to irrelevant documents in clusters. High
+     * values will result in fewer clusters being merged, which may lead to very similar
+     * or duplicated clusters.
+     * 
+     * @group Labels
+     * @level Medium
      */
     @Input
     @Processing
     @Attribute
     @DoubleRange(min = 0.0, max = 1.0)
-    public double clusterMergingCutoff = 0.7;
+    public double clusterMergingThreshold = 0.7;
 
     /**
      * Discovers labels for clusters.
@@ -209,7 +239,7 @@ public class ClusterBuilder
         final DoubleMatrix2D clusterDocumentCos = clusterLabelMatrix.viewDice().zMult(
             tdMatrix, null);
 
-        // Assign documents to clusters based if the cosine is larger than the cut-off
+        // Assign documents to clusters if the cosine is larger than the threshold
         final IntBitSet [] clusterDocuments = new IntBitSet [clusterLabelFeatureIndex.length];
         for (int clusterIndex = 0; clusterIndex < clusterDocuments.length; clusterIndex++)
         {
@@ -217,7 +247,7 @@ public class ClusterBuilder
             clusterDocuments[clusterIndex] = documents;
             for (int documentIndex = 0; documentIndex < clusterDocumentCos.columns(); documentIndex++)
             {
-                if (clusterDocumentCos.getQuick(clusterIndex, documentIndex) >= documentAssignmentCutoff)
+                if (clusterDocumentCos.getQuick(clusterIndex, documentIndex) >= documentAssignmentThreshold)
                 {
                     documents.add(documentIndex);
                 }
@@ -244,11 +274,6 @@ public class ClusterBuilder
 
                 public boolean isArcPresent(int clusterA, int clusterB)
                 {
-                    if (clusterA == clusterB)
-                    {
-                        return true;
-                    }
-
                     temp.clear();
                     int size;
                     IntSet setA = clusterDocuments[clusterA];
@@ -271,7 +296,7 @@ public class ClusterBuilder
                         size = setA.size();
                     }
 
-                    return temp.size() / (double) size >= clusterMergingCutoff;
+                    return temp.size() / (double) size >= clusterMergingThreshold;
                 }
             }, true);
 

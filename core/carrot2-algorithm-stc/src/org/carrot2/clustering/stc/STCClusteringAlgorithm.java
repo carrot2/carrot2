@@ -23,6 +23,15 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     ClusteringAlgorithm
 {
     /**
+     * Query that produced the documents, optional.
+     */
+    @Processing
+    @Input
+    @Internal
+    @Attribute(key = AttributeNames.QUERY)
+    public String query = null;
+
+    /**
      * {@link Document}s to cluster.
      */
     @Processing
@@ -79,7 +88,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
         final STCEngine engine = new STCEngine();
 
         final PreprocessingContext context = new PreprocessingContext(
-            languageModelFactory.getCurrentLanguage(), documents);
+            languageModelFactory.getCurrentLanguage(), documents, null);
         tokenizer.tokenize(context);
         caseNormalizer.normalize(context);
         languageModelStemmer.stem(context);

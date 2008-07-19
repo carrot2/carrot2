@@ -1,6 +1,7 @@
 package org.carrot2.text.preprocessing;
 
 import org.carrot2.text.linguistic.*;
+import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
 import org.junit.Test;
 
 /**
@@ -250,6 +251,73 @@ public class StemmerSyntheticTest extends StemmerTestBase
 
         check(expectedStemImages, expectedStemTf, expectedStemIndices,
             expectedStemTfByDocument, expectedFieldIndices);
+    }
+
+    @Test
+    public void testAllQueryWords()
+    {
+        createDocuments("q1 q2", "q3");
+
+        int [] expectedFordsFlag = new int [3];
+        expectedFordsFlag[wordIndices.get("q1")] = AllWords.FLAG_QUERY;
+        expectedFordsFlag[wordIndices.get("q2")] = AllWords.FLAG_QUERY;
+        expectedFordsFlag[wordIndices.get("q3")] = AllWords.FLAG_QUERY;
+
+        check("q1 q2 q3", expectedFordsFlag);
+    }
+
+    @Test
+    public void testSomeQueryWords()
+    {
+        createDocuments("test q2", "aa q1");
+
+        int [] expectedFordsFlag = new int [4];
+        expectedFordsFlag[wordIndices.get("q1")] = AllWords.FLAG_QUERY;
+        expectedFordsFlag[wordIndices.get("q2")] = AllWords.FLAG_QUERY;
+
+        check("q1 q2 q3", expectedFordsFlag);
+    }
+
+    @Test
+    public void testNoQueryWords()
+    {
+        createDocuments("q2", "aa q1");
+
+        int [] expectedFordsFlag = new int [3];
+
+        check("q3", expectedFordsFlag);
+    }
+
+    @Test
+    public void testBlankQuery()
+    {
+        createDocuments("q2", "aa q1");
+
+        int [] expectedFordsFlag = new int [3];
+
+        check("", expectedFordsFlag);
+    }
+
+    @Test
+    public void testNullQuery()
+    {
+        createDocuments("q2", "aa q1");
+
+        int [] expectedFordsFlag = new int [3];
+
+        check(null, expectedFordsFlag);
+    }
+
+    @Test
+    public void testDifferentStemsInQuery()
+    {
+        createDocuments("que01 que02", "test word");
+
+        int [] expectedFordsFlag = new int [4];
+        expectedFordsFlag[wordIndices.get("que01")] = AllWords.FLAG_QUERY;
+        expectedFordsFlag[wordIndices.get("que02")] = AllWords.FLAG_QUERY;
+
+        check("que04", expectedFordsFlag);
     }
 
     @Override

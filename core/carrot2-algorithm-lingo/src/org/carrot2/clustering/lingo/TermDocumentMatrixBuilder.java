@@ -29,12 +29,7 @@ public class TermDocumentMatrixBuilder
      * {@link Document#TITLE} fields.
      * 
      * @level Medium
-     * @group Matrix model
-     */
-    /*
-     * TODO: For the time being, we hardcode this parameter on title words. Ideally, we
-     * should find a way to enable the user to choose from list of field names to be
-     * boosted.
+     * @group Labels
      */
     @Input
     @Processing
@@ -43,7 +38,8 @@ public class TermDocumentMatrixBuilder
     public double titleWordsBoost = 2.0;
 
     /**
-     * Maximum matrix size.
+     * Maximum matrix size. The maximum number of the term-document matrix elements. The
+     * larger the size, the more accurate, time- and memory-consuming clustering.
      * 
      * @level Advanced
      * @group Matrix model
@@ -55,7 +51,9 @@ public class TermDocumentMatrixBuilder
     public int maximumMatrixSize = 250 * 150;
 
     /**
-     * Max word df cut-off.
+     * Maximum word document frequency. The maximum document frequency allowed for words
+     * as a fraction of all documents. Words with document frequency larger than
+     * <code>maxWordDf</code> will be ignored.
      * 
      * @level Advanced
      * @group Matrix model
@@ -215,12 +213,16 @@ public class TermDocumentMatrixBuilder
         return requiredStemIndices.toArray();
     }
 
+    /**
+     * Adds stem index to the set with a check on the stem's document frequency.
+     */
     private void addStemIndex(final int [] wordsStemIndex, int documentCount,
         int [][] stemsTfByDocument, final IntBitSet requiredStemIndices,
         final int featureIndex)
     {
         final int stemIndex = wordsStemIndex[featureIndex];
-        if (((stemsTfByDocument[stemIndex].length / 2) / (double) documentCount) <= maxWordDf)
+        final int df = stemsTfByDocument[stemIndex].length / 2;
+        if (((double) df / documentCount) <= maxWordDf)
         {
             requiredStemIndices.add(stemIndex);
         }

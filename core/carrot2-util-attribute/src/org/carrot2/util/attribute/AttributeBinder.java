@@ -323,7 +323,8 @@ public class AttributeBinder
                 // Try loading the class
                 try
                 {
-                    return Class.forName(stringValue);
+                    return Thread.currentThread().getContextClassLoader().loadClass(
+                        stringValue);
                 }
                 catch (ClassNotFoundException e)
                 {

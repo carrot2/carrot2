@@ -39,10 +39,10 @@ public class TypeStringValuePair
         for (final Map.Entry<String, Object> entry : source.entrySet())
         {
             /*
-             * There are two special cases handled here. First, Simple XML library
-             * does not handle null entries. Second, enums need to be handled separately
-             * since their toString() method can (and should) be overriden to implement
-             * more human-friendly strings.
+             * There are two special cases handled here. First, Simple XML library does
+             * not handle null entries. Second, enums need to be handled separately since
+             * their toString() method can (and should) be overriden to implement more
+             * human-friendly strings.
              */
 
             if (entry.getValue() == null)
@@ -92,8 +92,8 @@ public class TypeStringValuePair
                 }
                 else if (Class.class.equals(clazz))
                 {
-                    value = Class.forName(stringValue
-                        .substring(stringValue.indexOf(' ') + 1));
+                    value = Thread.currentThread().getContextClassLoader().loadClass(
+                        stringValue.substring(stringValue.indexOf(' ') + 1));
                 }
                 else
                 {

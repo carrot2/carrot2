@@ -728,9 +728,9 @@ public class PhraseExtractorTest extends PreprocessingComponentTestBase
     }
 
     @Test
-    public void testDfCutoff()
+    public void testDfThreshold()
     {
-        phraseExtractor.dfCutoff = 2;
+        phraseExtractor.dfThreshold = 2;
         createDocuments("a a", "a a", "a a . b b . c c", "a a . b b", "a a", "a a . c c");
 
         int [][] expectedPhraseWordIndexes = new int [] []

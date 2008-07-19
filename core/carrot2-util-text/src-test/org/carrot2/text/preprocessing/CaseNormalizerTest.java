@@ -438,7 +438,7 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
     @Test
     public void testDfThresholding()
     {
-        caseNormalizer.dfCutoff = 2;
+        caseNormalizer.dfThreshold = 2;
         createDocuments("a b c", "d e f", "a c", "a");
 
         char [][] expectedWordImages = createExpectedWordImages(new String []
@@ -712,7 +712,7 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
     protected void beforePrepareWordIndices(Tokenizer temporaryTokenizer,
         CaseNormalizer temporaryCaseNormalizer)
     {
-        temporaryCaseNormalizer.dfCutoff = caseNormalizer.dfCutoff;
+        temporaryCaseNormalizer.dfThreshold = caseNormalizer.dfThreshold;
     }
 
     private int [] createTermTokenTypes(int count)

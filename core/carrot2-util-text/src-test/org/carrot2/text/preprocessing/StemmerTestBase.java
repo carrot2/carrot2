@@ -29,9 +29,7 @@ public class StemmerTestBase extends PreprocessingComponentTestBase
         int [] expectedStemIndices, int [][] expectedStemTfByDocument,
         byte [][] expectedFieldIndices)
     {
-        tokenizer.tokenize(context);
-        caseNormalizer.normalize(context);
-        languageModelStemmer.stem(context);
+        performProcessing();
 
         assertThat(context.allWords.stemIndex).as("allWords.stemIndices").isEqualTo(
             expectedStemIndices);
@@ -42,5 +40,21 @@ public class StemmerTestBase extends PreprocessingComponentTestBase
             expectedStemTfByDocument);
         assertThat(context.allStems.fieldIndices).as("allStems.fieldIndices").isEqualTo(
             expectedFieldIndices);
+    }
+
+    protected void check(String query, int [] expectedWordsFlag)
+    {
+        createPreprocessingContext(query);
+        performProcessing();
+
+        assertThat(context.allWords.flag).as("allWords.flag")
+            .isEqualTo(expectedWordsFlag);
+    }
+
+    private void performProcessing()
+    {
+        tokenizer.tokenize(context);
+        caseNormalizer.normalize(context);
+        languageModelStemmer.stem(context);
     }
 }

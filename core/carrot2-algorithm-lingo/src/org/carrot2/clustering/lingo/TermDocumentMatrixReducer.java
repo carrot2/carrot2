@@ -18,7 +18,8 @@ import cern.colt.matrix.DoubleFactory2D;
 public class TermDocumentMatrixReducer
 {
     /**
-     * Factorization method.
+     * Factorization method. The method to be used to factorize the term-document matrix
+     * and create base vectors that will give rise to cluster labels.
      * 
      * @level Advanced
      * @group Matrix model
@@ -37,19 +38,8 @@ public class TermDocumentMatrixReducer
     public MatrixFactorizationFactory factorizationFactory = new LocalNonnegativeMatrixFactorizationFactory();
 
     /**
-     * Desired cluster count base.
-     * 
-     * @level Medium
-     * @group Matrix model
-     */
-    @Input
-    @Processing
-    @Attribute
-    @IntRange(min = 2, max = 100)
-    public int desiredClusterCountBase = 20;
-
-    /**
-     * Factorization quality.
+     * Factorization quality. The number of iterations of matrix factorization to perform.
+     * The higher the required quality, the more time-consuming clustering.
      * 
      * @level Advanced
      * @group Matrix model
@@ -58,6 +48,21 @@ public class TermDocumentMatrixReducer
     @Processing
     @Attribute
     public FactorizationQuality factorizationQuality = FactorizationQuality.HIGH;
+
+    /**
+     * Desired cluster count base. Base factor used to calculate the number of clusters
+     * based on the number of documents on input. The larger the value, the more clusters
+     * will be created. The number of clusters created by the algorithm will be
+     * proportional to the cluster count base, but not in a linear way.
+     * 
+     * @level Basic
+     * @group Clusters
+     */
+    @Input
+    @Processing
+    @Attribute
+    @IntRange(min = 2, max = 100)
+    public int desiredClusterCountBase = 25;
 
     /**
      * Performs the reduction.

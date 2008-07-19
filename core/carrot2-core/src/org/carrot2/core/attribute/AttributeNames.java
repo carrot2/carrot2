@@ -83,10 +83,11 @@ public final class AttributeNames
     public static final String PROCESSING_TIME_ALGORITHM = "processing-time-algorithm";
 
     /**
-     * Current active language (hint). 
+     * Current active language (hint).
      * 
+     * @label Processing Language
+     * @level Basic
      * @see LanguageCode
-     * @label Current Language
      */
     public static final String ACTIVE_LANGUAGE = "active-language";
 

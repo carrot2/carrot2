@@ -34,7 +34,7 @@ public class IterationNumberGuesser
         @Override
         public String toString()
         {
-            return StringUtils.capitalize(name());
+            return StringUtils.capitalize(name().toLowerCase());
         }
     }
 

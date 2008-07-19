@@ -71,7 +71,8 @@ public final class ResourceUtils
 
         if (logger.isDebugEnabled())
         {
-            final StringBuffer buf = new StringBuffer("All matching: " + resource + ", ");
+            final StringBuilder buf = new StringBuilder("All matching: " + resource
+                + ", ");
             for (int i = 0; i < result.size(); i++)
             {
                 if (i > 0)

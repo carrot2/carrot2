@@ -12,7 +12,7 @@ public class PartialSingularValueDecompositionFactory implements
     protected int k;
 
     /** The default desired number of base vectors */
-    protected static int DEFAULT_K = -1;
+    protected static final int DEFAULT_K = -1;
 
     /**
      * Creates the factory that creates factorizations that compute the maximum number of

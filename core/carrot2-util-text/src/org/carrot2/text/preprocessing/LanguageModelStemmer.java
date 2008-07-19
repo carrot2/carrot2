@@ -3,16 +3,19 @@ package org.carrot2.text.preprocessing;
 import java.util.*;
 
 import org.carrot2.text.linguistic.Stemmer;
-import org.carrot2.text.preprocessing.PreprocessingContext.*;
-import org.carrot2.text.util.*;
+import org.carrot2.text.preprocessing.PreprocessingContext.AllStems;
+import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
+import org.carrot2.text.util.CharArrayComparators;
+import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.util.*;
 import org.carrot2.util.attribute.Bindable;
-
-import com.google.common.collect.Lists;
 
 import bak.pcj.list.IntArrayList;
 import bak.pcj.list.IntList;
 import bak.pcj.set.*;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 /**
  * Applies stemming to words and calculates a number of frequency statistics for stems.
@@ -24,9 +27,8 @@ import bak.pcj.set.*;
  * <li>{@link AllStems#mostFrequentOriginalWordIndex}</li>
  * <li>{@link AllStems#tf}</li>
  * <li>{@link AllStems#tfByDocument}</li>
- * </ul>
- * <p>
- * This class requires that {@link Tokenizer} and {@link CaseNormalizer} be invoked first.
+ * <li>{@link AllWords#FLAG_QUERY} in {@link This class requires that {@link Tokenizer}
+ * and {@link CaseNormalizer} be invoked first.
  */
 @Bindable
 public final class LanguageModelStemmer
@@ -60,13 +62,14 @@ public final class LanguageModelStemmer
             }
         }
 
-        addStemStatistics(context, stemImages);
+        addStemStatistics(context, stemImages, prepareQueryWords(context.query, stemmer));
     }
 
     /**
      * Adds frequency statistics to the stems.
      */
-    private void addStemStatistics(PreprocessingContext context, char [][] wordStemImages)
+    private void addStemStatistics(PreprocessingContext context,
+        char [][] wordStemImages, Set<MutableCharArray> queryStems)
     {
         final int [] stemImagesOrder = IndirectSorter.sort(wordStemImages,
             CharArrayComparators.FAST_CHAR_ARRAY_COMPARATOR);
@@ -75,6 +78,7 @@ public final class LanguageModelStemmer
         final int [] wordTfArray = context.allWords.tf;
         final int [][] wordTfByDocumentArray = context.allWords.tfByDocument;
         final byte [][] wordsFieldIndices = context.allWords.fieldIndices;
+        final int [] wordsFlag = context.allWords.flag;
 
         final int allWordsCount = wordTfArray.length;
 
@@ -90,7 +94,6 @@ public final class LanguageModelStemmer
             context.allStems.fieldIndices = new byte [0] [];
 
             context.allWords.stemIndex = new int [context.allWords.image.length];
-
             return;
         }
 
@@ -115,14 +118,24 @@ public final class LanguageModelStemmer
             (byte) context.allFields.name.length);
         addAll(fieldIndices, wordsFieldIndices[0]);
 
+        // For locating query words
+        final MutableCharArray buffer = new MutableCharArray(
+            wordStemImages[stemImagesOrder[0]]);
+        boolean inQuery = queryStems.contains(buffer);
+
         // Go through all words in the order of stem images
         for (int i = 0; i < stemImagesOrder.length - 1; i++)
         {
-            final char [] stem = wordStemImages[stemImagesOrder[i]];
+            final int orderIndex = stemImagesOrder[i];
+            final char [] stem = wordStemImages[orderIndex];
             final int nextInOrderIndex = stemImagesOrder[i + 1];
             final char [] nextStem = wordStemImages[nextInOrderIndex];
 
-            stemIndexesArray[stemImagesOrder[i]] = stemIndex;
+            stemIndexesArray[orderIndex] = stemIndex;
+            if (inQuery)
+            {
+                wordsFlag[orderIndex] |= AllWords.FLAG_QUERY;
+            }
 
             // Now check if token image is changing
             final boolean sameStem = CharArrayComparators.FAST_CHAR_ARRAY_COMPARATOR
@@ -162,6 +175,9 @@ public final class LanguageModelStemmer
                 Arrays.fill(stemTfByDocument, 0);
                 IntArrayUtils.addAllFromSparselyEncoded(stemTfByDocument,
                     wordTfByDocumentArray[nextInOrderIndex]);
+
+                buffer.reset(wordStemImages[nextInOrderIndex]);
+                inQuery = queryStems.contains(buffer);
             }
         }
 
@@ -172,6 +188,10 @@ public final class LanguageModelStemmer
         stemIndexesArray[stemImagesOrder[stemImagesOrder.length - 1]] = stemIndex;
         stemTfByDocumentList.add(IntArrayUtils.toSparseEncoding(stemTfByDocument));
         fieldIndexList.add(fieldIndices.toArray());
+        if (inQuery)
+        {
+            wordsFlag[stemImagesOrder[stemImagesOrder.length - 1]] |= AllWords.FLAG_QUERY;
+        }
 
         // Convert lists to arrays and store them in allStems
         context.allStems.image = stemImages.toArray(new char [stemImages.size()] []);
@@ -193,5 +213,29 @@ public final class LanguageModelStemmer
         {
             set.add(b);
         }
+    }
+
+    private Set<MutableCharArray> prepareQueryWords(String query, Stemmer stemmer)
+    {
+        final Set<MutableCharArray> queryWords = Sets.newHashSet();
+
+        if (query != null)
+        {
+            final String [] split = query.toLowerCase().split("\\s");
+            for (int i = 0; i < split.length; i++)
+            {
+                final CharSequence stem = stemmer.stem(split[i]);
+                if (stem != null)
+                {
+                    queryWords.add(new MutableCharArray(stem));
+                }
+                else
+                {
+                    queryWords.add(new MutableCharArray(split[i]));
+                }
+            }
+        }
+
+        return queryWords;
     }
 }

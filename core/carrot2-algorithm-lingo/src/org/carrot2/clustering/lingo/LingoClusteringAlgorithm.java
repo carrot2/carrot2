@@ -24,6 +24,15 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     ClusteringAlgorithm
 {
     /**
+     * Query that produced the documents, optional.
+     */
+    @Processing
+    @Input
+    @Internal
+    @Attribute(key = AttributeNames.QUERY)
+    public String query = null;
+
+    /**
      * {@link Document}s to cluster.
      */
     @Processing
@@ -42,9 +51,10 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     public List<Cluster> clusters = null;
 
     /**
-     * Term weighting.
+     * Term weighting. The method for calculating weight of words in the term-document
+     * matrices.
      * 
-     * @level Medium
+     * @level Advanced
      * @group Matrix model
      */
     @Input
@@ -120,7 +130,7 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     {
         // Preprocessing of documents
         final PreprocessingContext context = new PreprocessingContext(
-            languageModelFactory.getCurrentLanguage(), documents);
+            languageModelFactory.getCurrentLanguage(), documents, query);
         tokenizer.tokenize(context);
         caseNormalizer.normalize(context);
         languageModelStemmer.stem(context);

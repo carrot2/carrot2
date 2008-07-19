@@ -44,8 +44,8 @@ public class PhraseExtractor
     private static final int MAX_PHRASE_LENGTH = 8;
 
     /**
-     * Phrase Document Frequency cut-off. Phrases appearing in less than
-     * <code>dfCutoff</code> documents will be ignored.
+     * Phrase Document Frequency threshold. Phrases appearing in fewer than
+     * <code>dfThreshold</code> documents will be ignored.
      * 
      * @level Advanced
      * @group Phrase extraction
@@ -54,7 +54,7 @@ public class PhraseExtractor
     @Input
     @Attribute
     @IntRange(min = 1, max = 100)
-    public int dfCutoff = 1;
+    public int dfThreshold = 1;
 
     /**
      * Suffix sorter to be used by this phrase extractor. When the suffix sorter gets some
@@ -161,7 +161,6 @@ public class PhraseExtractor
         int sp;
 
         int i;
-        int dfThreshold = dfCutoff;
         rcsStack = new Substring [lcpArray.length];
         sp = -1;
 

@@ -22,13 +22,13 @@ public class STCClusteringAlgorithmTest extends
     }
 
     @Test
-    public void testClusteringWithDfCutOff()
+    public void testClusteringWithDfThreshold()
     {
-        processingAttributes.put(CaseNormalizer.class.getName() + ".dfCutoff", 20);
-        final Collection<Cluster> clustersWithCutOff = cluster(DOCUMENTS_DATA_MINING)
+        processingAttributes.put(CaseNormalizer.class.getName() + ".dfThreshold", 20);
+        final Collection<Cluster> clustersWithThreshold = cluster(DOCUMENTS_DATA_MINING)
             .getClusters();
 
-        // Clustering with df cut-off must not fail
-        assertThat(clustersWithCutOff.size()).isGreaterThan(0);
+        // Clustering with df threshold must not fail
+        assertThat(clustersWithThreshold.size()).isGreaterThan(0);
     }
 }

@@ -31,6 +31,15 @@ public class PreprocessingComponentTestBase
     @Before
     public void setUpPreprocessingInfrastructure()
     {
+        documents = Lists.newArrayList();
+        createPreprocessingContext(null);
+    }
+
+    /**
+     * Creates the {@link PreprocessingContext} for tests.
+     */
+    protected void createPreprocessingContext(String query)
+    {
         final LanguageModelFactory languageModelFactory = createLanguageModelFactory();
         if (languageModelFactory != null)
         {
@@ -41,9 +50,8 @@ public class PreprocessingComponentTestBase
             languageFactory = new SnowballLanguageModelFactory();
         }
 
-        documents = Lists.newArrayList();
         context = new PreprocessingContext(languageFactory.getCurrentLanguage(),
-            documents);
+            documents, query);
     }
 
     /**
@@ -109,7 +117,7 @@ public class PreprocessingComponentTestBase
         final Tokenizer temporaryTokenizer = new Tokenizer();
         final CaseNormalizer temporaryCaseNormalizer = new CaseNormalizer();
         final PreprocessingContext temporaryContext = new PreprocessingContext(
-            languageFactory.getCurrentLanguage(), documents);
+            languageFactory.getCurrentLanguage(), documents, null);
         beforePrepareWordIndices(temporaryTokenizer, temporaryCaseNormalizer);
 
         temporaryTokenizer.tokenize(temporaryContext);

@@ -42,6 +42,14 @@ public final class MutableCharArray implements CharSequence
     /**
      * 
      */
+    public MutableCharArray(char [] buffer)
+    {
+        reset(buffer, 0, buffer.length);
+    }
+    
+    /**
+     * 
+     */
     public MutableCharArray(char [] buffer, int start, int length)
     {
         reset(buffer, start, length);

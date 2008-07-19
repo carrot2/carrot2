@@ -72,10 +72,10 @@ public final class CachingController implements Controller
 
     /**
      * Populates on-demand and caches the data from components of classes provided in
-     * {@link #cachedComponentClasses}. The key of the cache is a map of all
-     * {@link Input} {@link Processing} attributes of the component for which caching is
-     * performed. The value of the cache is a map of all {@link Output} {@link Processing}
-     * attributes produced by the component.
+     * {@link #cachedComponentClasses}. The key of the cache is a map of all {@link Input}
+     * {@link Processing} attributes of the component for which caching is performed. The
+     * value of the cache is a map of all {@link Output} {@link Processing} attributes
+     * produced by the component.
      */
     private SelfPopulatingCache dataCache;
 
@@ -137,9 +137,9 @@ public final class CachingController implements Controller
      * Processing with components initialized in this method can be performed using
      * {@link #process(Map, String...)}.
      * 
-     * @param globalInitAttributes see {@link Controller#init(Map)}. Global
-     *            initialization attributes will be overridden by component-specific
-     *            initialization attributes, if provided.
+     * @param globalInitAttributes see {@link Controller#init(Map)}. Global initialization
+     *            attributes will be overridden by component-specific initialization
+     *            attributes, if provided.
      * @param componentConfigurations component configurations to be used. Identifiers of
      *            the provided components must be unique.
      */
@@ -381,8 +381,8 @@ public final class CachingController implements Controller
             {
                 try
                 {
-                    resultClass = (Class<? extends ProcessingComponent>) Class
-                        .forName(componentId);
+                    resultClass = (Class<? extends ProcessingComponent>) Thread
+                        .currentThread().getContextClassLoader().loadClass(componentId);
 
                     // The component id was coerced to a generic class,
                     // so we're not using a specific version of a component.

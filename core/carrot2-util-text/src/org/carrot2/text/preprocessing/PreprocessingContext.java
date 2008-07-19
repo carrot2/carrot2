@@ -33,6 +33,9 @@ public final class PreprocessingContext
         }
     };
 
+    /** Query used to perform processing, may be <code>null</code> */
+    public final String query;
+
     /** A list of documents to process. */
     public final List<Document> documents;
 
@@ -43,8 +46,10 @@ public final class PreprocessingContext
      * Creates a preprocessing context for the provided <code>documents</code> and with
      * the provided <code>languageModel</code>.
      */
-    public PreprocessingContext(LanguageModel languageModel, List<Document> documents)
+    public PreprocessingContext(LanguageModel languageModel, List<Document> documents,
+        String query)
     {
+        this.query = query;
         this.documents = documents;
         this.language = languageModel;
     }
@@ -158,8 +163,8 @@ public final class PreprocessingContext
      */
     public static class AllWords
     {
-        /** Flags words that are numbers of any kind */
-        public static final int FLAG_NUMERIC = 1;
+        /** Flags words that are contained in the query (inflection-insensitive) */
+        public static final int FLAG_QUERY = 1;
 
         /**
          * The most frequently appearing variant of the word with respect to case. E.g. if
@@ -206,6 +211,14 @@ public final class PreprocessingContext
          * This array is produced by {@link CaseNormalizer}.
          */
         public int [] type;
+
+        /**
+         * Additional flags for this word.
+         * <p>
+         * This array is produced by {@link CaseNormalizer}. The
+         * {@link AllWords#FLAG_QUERY} is set by {@link LanguageModelStemmer}.
+         */
+        public int [] flag;
 
         /**
          * A pointer to the {@link AllStems} arrays for this word.

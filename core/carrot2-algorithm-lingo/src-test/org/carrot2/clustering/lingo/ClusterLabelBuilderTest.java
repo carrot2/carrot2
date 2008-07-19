@@ -71,6 +71,23 @@ public class ClusterLabelBuilderTest extends TermDocumentMatrixBuilderTestBase
         check(expectedFeatureIndex);
     }
 
+    @Test
+    public void testQueryWordsRemoval()
+    {
+        createDocuments("query word . aa", "query word . aa", "query . word",
+            "query . word . aa");
+        clusterBuilder.phraseLabelBoost = 0.5;
+
+        final int [] expectedFeatureIndex = new int []
+        {
+            0
+        };
+
+        reducer.desiredClusterCountBase = 10;
+        createPreprocessingContext("query word");
+        check(expectedFeatureIndex);
+    }
+
     private void check(int [] expectedFeatureIndex)
     {
         buildTermDocumentMatrix();

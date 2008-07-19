@@ -13,7 +13,7 @@ public class CompleteLabelFilterTest extends LabelFilterTestBase
     {
         filterProcessor.stopWordLabelFilter.enabled = true;
         filterProcessor.completeLabelFilter.enabled = true;
-        filterProcessor.completeLabelFilter.labelOverrideCutoff = 0.5;
+        filterProcessor.completeLabelFilter.labelOverrideThreshold = 0.5;
     }
 
     @Test
@@ -73,10 +73,10 @@ public class CompleteLabelFilterTest extends LabelFilterTestBase
             9
         };
 
-        double previousCutoff = labelFilterProcessor.completeLabelFilter.labelOverrideCutoff;
-        labelFilterProcessor.completeLabelFilter.labelOverrideCutoff = 0.3;
+        double previousThreshold = labelFilterProcessor.completeLabelFilter.labelOverrideThreshold;
+        labelFilterProcessor.completeLabelFilter.labelOverrideThreshold = 0.3;
         check(expectedLabelsFeatureIndex);
-        labelFilterProcessor.completeLabelFilter.labelOverrideCutoff = previousCutoff;
+        labelFilterProcessor.completeLabelFilter.labelOverrideThreshold = previousThreshold;
     }
 
     @Test

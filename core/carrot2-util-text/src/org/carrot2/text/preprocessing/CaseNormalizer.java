@@ -41,8 +41,8 @@ import com.google.common.collect.Lists;
 public final class CaseNormalizer
 {
     /**
-     * Word Document Frequency cut-off. Words appearing in less than <code>dfCutoff</code>
-     * documents will be ignored.
+     * Word Document Frequency threshold. Words appearing in fewer than
+     * <code>dfThreshold</code> documents will be ignored.
      * 
      * @level Advanced
      * @group Preprocessing
@@ -51,7 +51,7 @@ public final class CaseNormalizer
     @Input
     @Attribute
     @IntRange(min = 1, max = 100)
-    public int dfCutoff = 1;
+    public int dfThreshold = 1;
 
     /**
      * Performs normalization and saves the results to the <code>context</code>.
@@ -173,7 +173,7 @@ public final class CaseNormalizer
                 // see if we want to store the previous image, and if so
                 // we need add some data about it to the arrays
                 int wordDf = documentIndices.size();
-                if (wordDf >= dfCutoff)
+                if (wordDf >= dfThreshold)
                 {
                     // Add the word to the word list
                     normalizedWordImages.add(tokenImages[maxTfVariantIndex]);
@@ -217,6 +217,7 @@ public final class CaseNormalizer
         context.allWords.fieldIndices = fieldIndexList.toArray(new byte [fieldIndexList
             .size()] []);
         context.allWords.type = types.toArray();
+        context.allWords.flag = new int [types.size()];
     }
 
     /**

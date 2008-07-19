@@ -15,10 +15,11 @@ import org.carrot2.util.attribute.constraint.DoubleRange;
 public class CompleteLabelFilter implements LabelFilter
 {
     /**
-     * Remove truncated phrases.
+     * Remove truncated phrases. Try to remove "incomplete" cluster labels, e.g. prefer
+     * "Conference on Data" to "Conference on Data Mining".
      * 
-     * @level Medium
-     * @group Phrase extraction
+     * @level Basic
+     * @group Label filtering
      */
     @Input
     @Processing
@@ -26,7 +27,10 @@ public class CompleteLabelFilter implements LabelFilter
     public boolean enabled = true;
 
     /**
-     * Label override threshold.
+     * Truncated label threshold. Determines the strength of the truncated label filter.
+     * The lowest value means strongest truncated labels elimination, which may lead to
+     * overlong cluster labels and many unclustered documents. The highest value
+     * effectively disables the filter, which may result in short or truncated labels.
      * 
      * @level Advanced
      * @group Phrase extraction
@@ -35,7 +39,7 @@ public class CompleteLabelFilter implements LabelFilter
     @Processing
     @Attribute
     @DoubleRange(min = 0.0, max = 1.0)
-    public double labelOverrideCutoff = 0.65;
+    public double labelOverrideThreshold = 0.65;
 
     /**
      * Left complete label filter.
@@ -59,9 +63,9 @@ public class CompleteLabelFilter implements LabelFilter
         }
 
         leftCompleteLabelFilter.filter(context, acceptedStems, acceptedPhrases,
-            labelOverrideCutoff);
+            labelOverrideThreshold);
         rightCompleteLabelFilter.filter(context, acceptedStems, acceptedPhrases,
-            labelOverrideCutoff);
+            labelOverrideThreshold);
     }
 
     public boolean isEnabled()
