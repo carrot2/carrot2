@@ -9,6 +9,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-common"/>
 	<classpathentry kind="lib" path="lib/jdom-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/rome-1.0RC1.jar"/>
-	<classpathentry kind="lib" path="lib/rome-fetcher-0.9.jar"/>
+	<classpathentry kind="lib" path="lib/rome-fetcher-0.7.jar"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>
