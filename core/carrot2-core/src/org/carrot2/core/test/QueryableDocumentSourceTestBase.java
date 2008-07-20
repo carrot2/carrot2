@@ -33,24 +33,51 @@ public abstract class QueryableDocumentSourceTestBase<T extends DocumentSource> 
     @Prerequisite(requires = "externalApiTestsEnabled")
     public void testSmallQuery() throws Exception
     {
-        checkMinimumResults("apache", 50, 35);
+        checkMinimumResults("blog", getSmallQuerySize(), getSmallQuerySize() / 2);
+    }
+
+    /**
+     * Override to customize small query size.
+     */
+    protected int getSmallQuerySize()
+    {
+        return 50;
     }
 
     @Test
     @Prerequisite(requires = "externalApiTestsEnabled")
     public void testLargeQuery() throws Exception
     {
-        checkMinimumResults("data mining", 300, 150);
+        checkMinimumResults("data mining", getLargeQuerySize(), getSmallQuerySize() / 2);
+    }
+
+    /**
+     * Override to customize large query size.
+     */
+    protected int getLargeQuerySize()
+    {
+        return 300;
     }
 
     @Test
     @Prerequisite(requires = "externalApiTestsEnabled")
     public void testResultsTotal() throws Exception
     {
-        runQuery("apache", 250);
+        if (hasTotalResultsEstimate())
+        {
+            runQuery("apache", getSmallQuerySize());
 
-        assertNotNull(processingAttributes.get(AttributeNames.RESULTS_TOTAL));
-        assertTrue((Long) processingAttributes.get(AttributeNames.RESULTS_TOTAL) > 0);
+            assertNotNull(processingAttributes.get(AttributeNames.RESULTS_TOTAL));
+            assertTrue((Long) processingAttributes.get(AttributeNames.RESULTS_TOTAL) > 0);
+        }
+    }
+
+    /**
+     * Override to switch checking of total results estimates.
+     */
+    protected boolean hasTotalResultsEstimate()
+    {
+        return true;
     }
 
     @Test
@@ -58,7 +85,7 @@ public abstract class QueryableDocumentSourceTestBase<T extends DocumentSource> 
     @SuppressWarnings("unchecked")
     public void testURLsUnique() throws Exception
     {
-        runQuery("apache", 200);
+        runQuery("apache", getLargeQuerySize());
 
         assertFieldUnique((Collection<Document>) processingAttributes
             .get(AttributeNames.DOCUMENTS), Document.CONTENT_URL);
@@ -76,7 +103,7 @@ public abstract class QueryableDocumentSourceTestBase<T extends DocumentSource> 
         // Cache results from all DataSources
         final CachingController cachingController = new CachingController(
             DocumentSource.class);
-        cachingController.init(new HashMap<String, Object>());
+        cachingController.init(initAttributes);
 
         int count = 3;
         ExecutorService executorService = Executors.newFixedThreadPool(count);
@@ -126,7 +153,7 @@ public abstract class QueryableDocumentSourceTestBase<T extends DocumentSource> 
         int actualResults = runQuery("data mining", resultsToRequest);
         assertThat(actualResults).isGreaterThanOrEqualTo(minimumExpectedResults);
     }
-    
+
     @SuppressWarnings("unchecked")
     protected void runAndCheckNoResultsQuery()
     {

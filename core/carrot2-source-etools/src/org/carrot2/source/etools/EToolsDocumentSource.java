@@ -278,7 +278,7 @@ public class EToolsDocumentSource extends SearchEngine
         }
 
         return urlBase + "?partner=" + partnerId + "&query="
-            + org.carrot2.util.StringUtils.urlEncodeIgnoreException(query, "UTF-8")
+            + org.carrot2.util.StringUtils.urlEncodeWrapException(query, "UTF-8")
             + "&dataSourceResults=" + Integer.toString(getDataSourceResultsCount())
             + "&maxRecords=" + results + "&language=" + language.getCode() + "&timeout="
             + Integer.toString(timeout) + "&dataSources=" + dataSources.getCode()

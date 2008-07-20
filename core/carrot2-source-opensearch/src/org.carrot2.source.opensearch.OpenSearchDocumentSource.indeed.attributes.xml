@@ -1,0 +1,16 @@
+<attribute-sets>
+  <attribute-set id="news">
+    <value-set>
+      <label>Jobs</label>
+      <entry key="org.carrot2.source.opensearch.OpenSearchDocumentSource.feedUrlTemplate">
+        <value type="java.lang.String" value="http://www.indeed.com/opensearch?q=${searchTerms}&amp;start=${startIndex}&amp;limit=${count}"/>
+      </entry>
+      <entry key="org.carrot2.source.opensearch.OpenSearchDocumentSource.resultsPerPage">
+        <value type="java.lang.Integer" value="50"/>
+      </entry>
+      <entry key="org.carrot2.source.opensearch.OpenSearchDocumentSource.maximumResults">
+        <value type="java.lang.Integer" value="400"/>
+      </entry>
+    </value-set>
+  </attribute-set>
+</attribute-sets>

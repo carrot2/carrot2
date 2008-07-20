@@ -24,8 +24,9 @@ ul.tabs li.tab .msn-web {
   background-image: url('../img/sources/msn.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px */
 }
 
-ul.tabs li.tab .jobs {
-  background-image: url('../img/sources/jobs.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px; sprite-margin-left: 2px */
+ul.tabs li.tab .indeed {
+  background-image: url('../img/sources/indeed.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px; sprite-margin-left: 2px */
+  padding-left: 13px;
 }
 
 
@@ -70,7 +71,7 @@ ul.tabs li.active {
 
 ul.tabs li.active-last,
 ul.tabs li.passive-last {
-  padding-right: 17px;
+  padding-right: 10px;
 }
 
 ul.tabs li.tab .right {

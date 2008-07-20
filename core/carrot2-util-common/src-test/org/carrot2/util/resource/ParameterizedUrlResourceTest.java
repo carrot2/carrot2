@@ -1,9 +1,10 @@
-package org.carrot2.source.xml;
+package org.carrot2.util.resource;
 
 import static junit.framework.Assert.assertEquals;
 
 import java.util.Map;
 
+import org.carrot2.util.resource.ParameterizedUrlResource;
 import org.junit.Test;
 
 import com.google.common.collect.Maps;

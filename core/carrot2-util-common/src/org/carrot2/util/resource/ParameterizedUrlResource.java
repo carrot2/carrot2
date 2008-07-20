@@ -1,17 +1,17 @@
-package org.carrot2.source.xml;
+package org.carrot2.util.resource;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import org.carrot2.util.resource.Resource;
+import org.carrot2.util.StringUtils;
 
 /**
  * A {@link Resource} implementation that allows URLs to be parameterized. The attribute
- * place holders are of format: <code>${attribute}</code> and will be replaced before
- * the contents is fetched from the URL when the {@link #open(Map)} method is used.
+ * place holders are of format: <code>${attribute}</code> and will be replaced before the
+ * contents is fetched from the URL when the {@link #open(Map)} method is used.
  */
 public class ParameterizedUrlResource implements Resource
 {
@@ -43,7 +43,7 @@ public class ParameterizedUrlResource implements Resource
      *            will be replaced by the value found (if any) in the attributes map under
      *            the <code>attributeX</code> key.
      */
-    InputStream open(Map<String, Object> attributes) throws IOException
+    public InputStream open(Map<String, Object> attributes) throws IOException
     {
         String urlString = url.toExternalForm();
         urlString = substituteAttributes(attributes, urlString);
@@ -53,24 +53,36 @@ public class ParameterizedUrlResource implements Resource
     /**
      * Performs attribute substitution.
      */
-    static String substituteAttributes(Map<String, Object> attributes, String urlString)
+    public static String substituteAttributes(Map<String, Object> attributes,
+        String urlString)
     {
         for (Map.Entry<String, Object> entry : attributes.entrySet())
         {
             // In theory, we could cache the patterns, but the gains are not worth it
-            Pattern pattern = Pattern.compile("${" + entry.getKey() + "}",
+            Pattern pattern = Pattern.compile(formatAttributePlaceholder(entry.getKey()),
                 Pattern.LITERAL);
-            try
-            {
-                urlString = pattern.matcher(urlString).replaceAll(
-                    URLEncoder.encode(entry.getValue().toString(), "UTF-8"));
-            }
-            catch (UnsupportedEncodingException e)
-            {
-                throw new RuntimeException(e);
-            }
+            urlString = pattern.matcher(urlString).replaceAll(
+                StringUtils.urlEncodeWrapException(entry.getValue().toString(), "UTF-8"));
         }
         return urlString;
+    }
+
+    /**
+     * Returns <code>true</code> if the <code>urlTemplate</code> contains the
+     * <code>attributePlaceholderName</code>.
+     */
+    public static boolean containsAttributePlaceholder(String urlTemplate,
+        String attributePlaceholderName)
+    {
+        return urlTemplate.contains(formatAttributePlaceholder(attributePlaceholderName));
+    }
+
+    /**
+     * Returns attribute place holder based on the attribute name.
+     */
+    public static String formatAttributePlaceholder(String attributePlaceholderName)
+    {
+        return "${" + attributePlaceholderName + "}";
     }
 
     @Override

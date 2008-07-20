@@ -92,8 +92,8 @@ public abstract class SearchEngine extends ProcessingComponentBase implements
     public SearchEngineStats statistics = new SearchEngineStats();
 
     /**
-     * Run a request the search engine's API, setting <code>documents</code> to the set
-     * of returned documents.
+     * Run a request the search engine's API, setting <code>documents</code> to the set of
+     * returned documents.
      */
     protected void process(SearchEngineMetadata metadata, ExecutorService executor)
         throws ProcessingException
@@ -166,7 +166,7 @@ public abstract class SearchEngine extends ProcessingComponentBase implements
 
         // Split the requested range into pages.
         SearchRange [] buckets = SearchRange.getSearchRanges(start, results,
-            metadata.maxResultIndex, metadata.resultsPerPage);
+            metadata.maxResultIndex, metadata.resultsPerPage, metadata.incrementByPage);
 
         // Check preconditions.
         if (query == null || query.trim().equals("") || buckets.length == 0)
@@ -202,7 +202,7 @@ public abstract class SearchEngine extends ProcessingComponentBase implements
                     {
                         buckets = SearchRange.getSearchRanges(buckets[0].results,
                             (int) resultsTotal, metadata.maxResultIndex,
-                            metadata.resultsPerPage);
+                            metadata.resultsPerPage, metadata.incrementByPage);
                     }
                 }
             }

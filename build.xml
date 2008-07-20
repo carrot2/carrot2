@@ -24,6 +24,7 @@
         <exclude name="**/carrot2-source-etools/**/*.java" if="external.api.tests.disabled" />
         <exclude name="**/carrot2-source-yahoo/**/*.java" if="external.api.tests.disabled" />
         <exclude name="**/carrot2-source-microsoft/**/*.java" if="external.api.tests.disabled" />
+        <exclude name="**/carrot2-source-opensearch/**/*.java" if="external.api.tests.disabled" />
         <exclude name="**/carrot2-stemmer-snowball/src/**/*.java" />
         <exclude name="**/carrot2-source-microsoft/src/com/microsoft/msnsearch/**/*.java" />
     </fileset>
@@ -31,6 +32,7 @@
     <path id="lib.classpath">
         <fileset dir="lib" includes="*/*.jar" />    
         <fileset dir="core/carrot2-util-matrix/lib" includes="*.jar" />    
+        <fileset dir="core/carrot2-source-opensearch/lib" includes="*.jar" />    
     </path>
 
     <path id="test.classpath">
@@ -164,6 +166,7 @@
         <attributes-xml java.source="core/carrot2-source-etools/src" output.dir="${build.dir}" />
         <attributes-xml java.source="core/carrot2-source-yahoo/src" output.dir="${build.dir}" />
         <attributes-xml java.source="core/carrot2-source-microsoft/src" output.dir="${build.dir}" />
+        <attributes-xml java.source="core/carrot2-source-opensearch/src" output.dir="${build.dir}" />
         <attributes-xml java.source="core/carrot2-source-xml/src" output.dir="${build.dir}" />
         <attributes-xml java.source="core/carrot2-util-text/src" output.dir="${build.dir}" />
         <attributes-xml java.source="core/carrot2-util-attribute/src-test" output.dir="${build.dir}" />
@@ -178,6 +181,7 @@
         <attributes-xml-copy java.source="core/carrot2-source-etools/src" output.dir="core/carrot2-source-etools/tmp/eclipse" copy.to="core/carrot2-source-etools/META-INF" />
         <attributes-xml-copy java.source="core/carrot2-source-yahoo/src" output.dir="core/carrot2-source-yahoo/tmp/eclipse" copy.to="core/carrot2-source-yahoo/META-INF" />
         <attributes-xml-copy java.source="core/carrot2-source-microsoft/src" output.dir="core/carrot2-source-microsoft/tmp/eclipse" copy.to="core/carrot2-source-microsoft/META-INF" />
+        <attributes-xml-copy java.source="core/carrot2-source-opensearch/src" output.dir="core/carrot2-source-microsoft/tmp/eclipse" copy.to="core/carrot2-source-opensearch/META-INF" />
         <attributes-xml-copy java.source="core/carrot2-source-xml/src" output.dir="core/carrot2-source-xml/tmp/eclipse" copy.to="core/carrot2-source-xml/META-INF" />
         <attributes-xml-copy java.source="core/carrot2-util-text/src" output.dir="core/carrot2-util-text/tmp/eclipse" copy.to="core/carrot2-util-text/META-INF" />
         <attributes-xml java.source="core/carrot2-util-attribute/src-test" output.dir="core/carrot2-util-attribute/tmp/eclipse" />

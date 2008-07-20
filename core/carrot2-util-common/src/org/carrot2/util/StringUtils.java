@@ -6,16 +6,12 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
-
 /**
  * Provides a number of useful method operating on {@link String}s that are not available
  * in {@link org.apache.commons.lang.StringUtils}.
  */
 public final class StringUtils
 {
-    private static final Logger logger = Logger.getLogger(StringUtils.class);
-
     private static final Pattern CAMEL_CASE_SEGMENT_PATTERN = Pattern
         .compile("[A-Z][a-z0-9]*");
 
@@ -51,7 +47,7 @@ public final class StringUtils
         return org.apache.commons.lang.StringUtils.join(parts, ' ');
     }
 
-    public static String urlEncodeIgnoreException(String string, String encoding)
+    public static String urlEncodeWrapException(String string, String encoding)
     {
         try
         {
@@ -59,8 +55,7 @@ public final class StringUtils
         }
         catch (UnsupportedEncodingException e)
         {
-            logger.error("Could not URLEncode string: " + string, e);
-            return null;
+            throw ExceptionUtils.wrapAs(RuntimeException.class, e);
         }
     }
 }

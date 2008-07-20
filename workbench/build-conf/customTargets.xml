@@ -220,6 +220,7 @@
 		<buildMetadata project.loc="${buildDirectory}/plugins/carrot2-source-yahoo" />
 		<buildMetadata project.loc="${buildDirectory}/plugins/carrot2-source-xml" />
 		<buildMetadata project.loc="${buildDirectory}/plugins/carrot2-source-microsoft" />
+		<buildMetadata project.loc="${buildDirectory}/plugins/carrot2-source-opensearch" />
 		<buildMetadata project.loc="${buildDirectory}/plugins/carrot2-util-text" />
 		<buildMetadata project.loc="${buildDirectory}/plugins/carrot2-core" />
 	</target>

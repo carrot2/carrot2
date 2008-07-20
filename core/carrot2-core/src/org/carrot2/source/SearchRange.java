@@ -16,10 +16,10 @@ public final class SearchRange
 
     /**
      * Create a new search range.
-     *
+     * 
      * @param start Start index of the first result to return (0-based).
      * @param results The number of results to return. The actual number of results
-     * returned by a search service may be lower than this number.
+     *            returned by a search service may be lower than this number.
      */
     public SearchRange(int start, int results)
     {
@@ -31,15 +31,17 @@ public final class SearchRange
      * Given an unconstrained start and results count, adjust it to the allowed window and
      * split into page buckets if necessary.
      */
-    public static SearchRange [] getSearchRanges(int start, int results,
-        int maxIndex, int resultsPerPage)
+    public static SearchRange [] getSearchRanges(int start, int results, int maxIndex,
+        int resultsPerPage, boolean incrementByPage)
     {
         // Sanity check.
         results = Math.max(results, 0);
         start = Math.max(start, 0);
 
-        int startIndex = Math.min(start, maxIndex);
-        final int endIndex = Math.min(start + results, maxIndex);
+        int startIndex = Math.min(start * (incrementByPage ? resultsPerPage : 1),
+            maxIndex);
+        final int endIndex = Math.min(start * (incrementByPage ? resultsPerPage : 1)
+            + results, maxIndex);
 
         final int resultsNeeded = endIndex - startIndex;
         if (resultsNeeded == 0)
@@ -55,7 +57,8 @@ public final class SearchRange
         for (int i = 0; i < buckets.length; i++)
         {
             final int window = Math.min(resultsPerPage, endIndex - startIndex);
-            buckets[i] = new SearchRange(startIndex, window);
+            buckets[i] = new SearchRange((incrementByPage ? start + i : startIndex),
+                window);
             startIndex += window;
         }
 

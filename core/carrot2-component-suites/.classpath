@@ -16,5 +16,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-common"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-source-microsoft"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-source-etools"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-algorithm-lingo"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-source-opensearch"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>

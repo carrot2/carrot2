@@ -77,7 +77,7 @@ public class PageModel
         StringBuilder xmlUrl = buildSearchUrlBase(requestModel, webappConfig.xmlUrl);
         appendParameter(xmlUrl, WebappConfig.VIEW_PARAM, requestModel.view);
         appendParameter(xmlUrl, WebappConfig.TYPE_PARAM, RequestType.CARROT2.name());
-        this.xmlUrlEncoded = StringUtils.urlEncodeIgnoreException(xmlUrl.toString(),
+        this.xmlUrlEncoded = StringUtils.urlEncodeWrapException(xmlUrl.toString(),
             "UTF-8");
     }
 
@@ -117,7 +117,7 @@ public class PageModel
             builder.append(separator);
             builder.append(name);
             builder.append('=');
-            builder.append(StringUtils.urlEncodeIgnoreException(value, "UTF-8"));
+            builder.append(StringUtils.urlEncodeWrapException(value, "UTF-8"));
         }
     }
 }
