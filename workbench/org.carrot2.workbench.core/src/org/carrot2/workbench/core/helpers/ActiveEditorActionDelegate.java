@@ -122,8 +122,8 @@ public abstract class ActiveEditorActionDelegate
             this.editor = null;
         }
 
-        switchingEditors(previous, activeEditor);
-        updateActionState(action, activeEditor);
+        switchingEditors(previous, editor);
+        updateActionState(action, editor);
     }
 
     /**

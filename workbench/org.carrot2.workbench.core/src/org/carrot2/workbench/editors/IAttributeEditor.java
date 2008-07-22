@@ -1,8 +1,8 @@
 package org.carrot2.workbench.editors;
 
 import org.carrot2.util.attribute.AttributeDescriptor;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IPersistableEditor;
 
 /**
  * An attribute editor is a visual control which can be used to display and edit the value
@@ -12,32 +12,27 @@ import org.eclipse.ui.IPersistableEditor;
  * <ol>
  * <li>call {@link #init(AttributeDescriptor)}, if exception is thrown -> stop.
  * <li>call {@link #createEditor(Composite, Object)}, if exception -> goto 5
- * <li>call {@link #setValue(Object)}, if exception -> goto 5
+ * <li>call {@link #setValue(Object)}
  * <li>call {@link #getValue()}
  * <li>call {@link #dispose()}
  * <ol>
  */
-public interface IAttributeEditor extends IPersistableEditor
+public interface IAttributeEditor
 {
     /**
-     * Initialize editor to work with a given attribute descriptor.
+     * Initialize editor to work with a given attribute descriptor and return
+     * hints for graphical layout of this editor.
      */
-    void init(AttributeDescriptor descriptor);
+    AttributeEditorInfo init(AttributeDescriptor descriptor);
 
     /**
-     * Create the editor's composite using the given parent. The editor must set the
-     * created composite's layout data to the given object.
+     * Create the editor's visual aspects using the given parent composite and the
+     * provided number of columns.
      * <p>
-     * TODO: Remove layoutData from the interface.
+     * The parent composite will have {@link GridLayout}, the editor <b>must</b> fill
+     * the given number of columns.
      */
-    void createEditor(Composite parent, Object layoutData);
-
-    /**
-     * If <code>true</code>, then the editor displays its own label. Otherwise the
-     * containing component must display the edited attribute's label based on the
-     * {@link AttributeDescriptor}.
-     */
-    boolean containsLabel();
+    void createEditor(Composite parent, int gridColumns);
 
     /**
      * Returns the associated {@link AttributeDescriptor}'s key.
@@ -63,7 +58,7 @@ public interface IAttributeEditor extends IPersistableEditor
     void addAttributeChangeListener(IAttributeListener listener);
 
     /**
-     * Unsubscribe <code>listener</code> from change events.
+     * Unsubscribe the <code>listener</code> from change events.
      */
     void removeAttributeChangeListener(IAttributeListener listener);
 

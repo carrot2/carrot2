@@ -1,10 +1,11 @@
-package org.carrot2.workbench.editors;
+package org.carrot2.workbench.editors.impl;
 
 import java.lang.annotation.Annotation;
 
 import org.carrot2.util.RangeUtils;
 import org.carrot2.util.attribute.AttributeDescriptor;
 import org.carrot2.util.attribute.constraint.IntRange;
+import org.carrot2.workbench.editors.AttributeEditorInfo;
 
 /**
  * Attribute editor for integer values, possibly with {@link IntRange} annotations.
@@ -28,9 +29,9 @@ public final class IntegerRangeEditor extends NumericRangeEditorBase
      * 
      */
     @Override
-    public void init(AttributeDescriptor descriptor)
+    public AttributeEditorInfo init(AttributeDescriptor descriptor)
     {
-        super.init(descriptor);
+        final AttributeEditorInfo info = super.init(descriptor);
 
         for (Annotation ann : descriptor.constraints)
         {
@@ -62,6 +63,8 @@ public final class IntegerRangeEditor extends NumericRangeEditorBase
         }
 
         setRanges(min, max, increment, pageIncrement);
+        
+        return info;
     }
 
     /*

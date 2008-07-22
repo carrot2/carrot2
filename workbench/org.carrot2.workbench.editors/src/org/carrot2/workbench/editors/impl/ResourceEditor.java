@@ -1,4 +1,4 @@
-package org.carrot2.workbench.editors;
+package org.carrot2.workbench.editors.impl;
 
 import static org.apache.commons.lang.StringUtils.isBlank;
 
@@ -6,7 +6,9 @@ import java.io.File;
 
 import org.carrot2.util.resource.FileResource;
 import org.carrot2.util.resource.Resource;
+import org.carrot2.workbench.core.helpers.GUIFactory;
 import org.carrot2.workbench.core.helpers.Utils;
+import org.carrot2.workbench.editors.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -22,12 +24,25 @@ public class ResourceEditor extends AttributeEditorAdapter
     private Image clearImage;
     private Text resourceText;
     private Resource resource = null;
+    
+    /*
+     * 
+     */
+    public ResourceEditor()
+    {
+        super(new AttributeEditorInfo(1, false));
+    }
 
+    /*
+     * 
+     */
     @Override
-    public void createEditor(Composite parent, Object layoutData)
+    public void createEditor(Composite parent, int gridColumns)
     {
         Composite holder = new Composite(parent, SWT.NONE);
-        holder.setLayoutData(layoutData);
+        holder.setLayoutData(GUIFactory.editorGridData().grab(true, false)
+            .span(gridColumns, 1).create());
+
         GridLayout gl = new GridLayout(4, false);
         gl.marginHeight = 0;
         gl.marginWidth = 0;

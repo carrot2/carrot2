@@ -4,8 +4,13 @@ import org.eclipse.swt.widgets.Composite;
 
 class EmptyAttributeEditorAdapter extends AttributeEditorAdapter
 {
+    public EmptyAttributeEditorAdapter()
+    {
+        super(new AttributeEditorInfo(1, false));
+    }
+
     @Override
-    public void createEditor(Composite parent, Object layoutData)
+    public void createEditor(Composite parent, int layoutData)
     {
     }
 

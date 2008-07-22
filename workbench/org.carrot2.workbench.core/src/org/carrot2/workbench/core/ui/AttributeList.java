@@ -1,25 +1,17 @@
 package org.carrot2.workbench.core.ui;
 
 import java.text.Collator;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.carrot2.core.ProcessingComponent;
 import org.carrot2.util.attribute.AttributeDescriptor;
 import org.carrot2.workbench.core.helpers.GUIFactory;
-import org.carrot2.workbench.core.helpers.Utils;
-import org.carrot2.workbench.editors.AttributeChangedEvent;
-import org.carrot2.workbench.editors.IAttributeChangeProvider;
-import org.carrot2.workbench.editors.IAttributeEditor;
-import org.carrot2.workbench.editors.IAttributeListener;
+import org.carrot2.workbench.editors.*;
 import org.carrot2.workbench.editors.factory.EditorFactory;
 import org.carrot2.workbench.editors.factory.EditorNotFoundException;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -164,16 +156,6 @@ public final class AttributeList extends Composite
     private void createComponents()
     {
         /*
-         * The layout of this control is in two columns: labels in the
-         * first column, editors in the second column.
-         */
-        final GridLayout layout = GUIFactory.zeroMarginGridLayout();
-        this.setLayout(layout);
-        
-        layout.numColumns = 2;
-        layout.marginWidth = 0;
-        
-        /*
          * Sort alphabetically by label.
          */
         final Locale locale = Locale.getDefault();
@@ -193,52 +175,74 @@ public final class AttributeList extends Composite
         });
 
         /*
-         * Create editors.
+         * Create editors and inquire about their layout needs.
          */
+        final Map<String, IAttributeEditor> editors = Maps.newHashMap();
+        final Map<String, AttributeEditorInfo> editorInfos = Maps.newHashMap();
+
+        int maxColumns = 1;
         for (String key : sortedKeys)
         {
             final AttributeDescriptor descriptor = attributeDescriptors.get(key);
 
-            final GridData data = new GridData();
-            data.horizontalAlignment = GridData.FILL;
-            data.verticalAlignment = GridData.FILL;
-            data.grabExcessHorizontalSpace = true;
-            data.grabExcessVerticalSpace = false;
-    
             IAttributeEditor editor = null;
             try
             {
                 editor = EditorFactory.getEditorFor(this.componentClazz, descriptor);
-                editor.init(descriptor);
+                final AttributeEditorInfo info = editor.init(descriptor);
+
+                editorInfos.put(key, info);
+                maxColumns = Math.max(maxColumns, info.columns);
             }
             catch (EditorNotFoundException ex)
             {
                 /*
-                 * No such editor -- log error.
+                 * Skip editor.
                  */
-                Utils.logError(ex, false);
                 editor = null;
             }
-    
-            // Editors that do not have a label span over two columns.
-            if (editor != null && editor.containsLabel())
+
+            editors.put(key, editor);
+        }
+        
+        /*
+         * Prepare the layout for this editor. 
+         */
+        final GridLayout layout = GUIFactory.zeroMarginGridLayout();
+        layout.makeColumnsEqualWidth = false;
+        layout.numColumns = maxColumns;
+        this.setLayout(layout);
+
+        /*
+         * Create visual components for editors.
+         */
+        final GridDataFactory labelFactory = GridDataFactory.fillDefaults()
+            .span(maxColumns, 1);
+
+        for (String key : sortedKeys)
+        {
+            final AttributeDescriptor descriptor = attributeDescriptors.get(key);
+            final IAttributeEditor editor = editors.get(key);
+            final AttributeEditorInfo editorInfo = editorInfos.get(key);
+
+            // Add label to editors that do not have it.
+            if (editor != null && !editorInfo.displaysOwnLabel)
             {
-                data.horizontalSpan = 2;
-            }
-            else
-            {
-                final Label label = new Label(this, SWT.NONE);
+                final Label label = new Label(this, SWT.LEAD);
                 label.setText(getLabel(descriptor));
                 label.setToolTipText(getToolTip(descriptor));
+
+                label.setLayoutData(labelFactory.create());
             }
-    
+
+            // Add the editor, if available.
             if (editor != null)
             {
-                editor.createEditor(this, data);
-                
+                editor.createEditor(this, maxColumns);
+
                 editor.setValue(attributeDescriptors.get(descriptor.key).defaultValue);
                 editors.put(editor.getAttributeKey(), editor);
-    
+
                 /*
                  * Forward events from this editor to all our listeners.
                  */
@@ -247,7 +251,10 @@ public final class AttributeList extends Composite
             else
             {
                 final Label label = new Label(this, SWT.NONE);
-                label.setText("No editor");
+                label.setText("No suitable editor");
+                label.setEnabled(false);
+
+                label.setLayoutData(labelFactory.create());
             }
         }
     }

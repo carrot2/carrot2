@@ -24,11 +24,26 @@ public abstract class AttributeEditorAdapter implements IAttributeEditor
     protected AttributeDescriptor descriptor;
 
     /**
+     * Layout and visual info.
+     */
+    protected final AttributeEditorInfo attributeEditorInfo;
+
+    /*
+     * 
+     */
+    public AttributeEditorAdapter(AttributeEditorInfo info)
+    {
+        this.attributeEditorInfo = info;
+    }
+    
+    /**
      * Store attribute descriptor in {@link #descriptor}.
      */
-    public void init(AttributeDescriptor descriptor)
+    public AttributeEditorInfo init(AttributeDescriptor descriptor)
     {
         this.descriptor = descriptor;
+
+        return attributeEditorInfo;
     }
 
     /**
@@ -64,6 +79,15 @@ public abstract class AttributeEditorAdapter implements IAttributeEditor
         // Do nothing.
     }
 
+    /*
+     * Re-declare methods from {@link IAttributeEditor} to avoid @Override warnings.
+     */
+    public abstract void createEditor(Composite parent, int gridColumns);
+
+    public abstract Object getValue();
+
+    public abstract void setValue(Object object);
+
     /**
      * 
      */
@@ -81,26 +105,9 @@ public abstract class AttributeEditorAdapter implements IAttributeEditor
     }
 
     /**
-     * Default implementation returns <code>false</code>.
-     */
-    public boolean containsLabel()
-    {
-        return false;
-    }
-
-    /*
-     * Re-declare methods from {@link IAttributeEditor} to avoid @Override warnings.
-     */
-    public abstract void createEditor(Composite parent, Object layoutData);
-
-    public abstract Object getValue();
-
-    public abstract void setValue(Object object);
-
-    /**
      * Unconditionally fire attribute change event.
      */
-    protected final void fireAttributeChange(AttributeChangedEvent event)
+    protected void fireAttributeChange(AttributeChangedEvent event)
     {
         for (IAttributeListener listener : listeners)
         {

@@ -1,16 +1,26 @@
-package org.carrot2.workbench.editors;
+package org.carrot2.workbench.editors.impl;
 
 import java.io.File;
 
+import org.carrot2.util.attribute.constraint.IsDirectory;
+import org.carrot2.util.attribute.constraint.IsFile;
+import org.carrot2.workbench.core.helpers.GUIFactory;
+import org.carrot2.workbench.editors.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.*;
 
-public abstract class FileEditorBase extends AttributeEditorAdapter
+/**
+ * Attribute editor for files and directories. By default, the editor allows
+ * file selection ({@link IsFile}). {@link IsDirectory} constraint can be used to
+ * limit selection to directories only.
+ * 
+ * TODO: fix event propagation, add support for constraints.
+ */
+public class FileEditor extends AttributeEditorAdapter
 {
-
     private final class SelectionListener implements Listener
     {
         public void handleEvent(Event event)
@@ -19,7 +29,7 @@ public abstract class FileEditorBase extends AttributeEditorAdapter
             {
                 public void run()
                 {
-                    String newPath = FileEditorBase.this.getFilePath();
+                    String newPath = openFileDialog();
                     if (newPath != null)
                     {
                         setCurrentFile(new File(newPath));
@@ -35,40 +45,44 @@ public abstract class FileEditorBase extends AttributeEditorAdapter
     private Text pathText;
     private File directory = null;
 
+    /*
+     * 
+     */
+    public FileEditor()
+    {
+        super(new AttributeEditorInfo(1, false));
+    }
+
+    /*
+     * 
+     */
     @Override
-    public void createEditor(Composite parent, Object layoutData)
+    public void createEditor(Composite parent, int gridColumns)
     {
         Composite holder = new Composite(parent, SWT.NONE);
-        holder.setLayoutData(layoutData);
-        GridLayout gl = new GridLayout(3, false);
+        holder.setLayoutData(GUIFactory.editorGridData()
+            .grab(true, false).span(gridColumns, 1).create());
+
+        final GridLayout gl = new GridLayout(3, false);
         gl.marginHeight = 0;
         gl.marginWidth = 0;
         gl.horizontalSpacing = 0;
         holder.setLayout(gl);
 
         pathText = new Text(holder, SWT.READ_ONLY | SWT.BORDER | SWT.SINGLE);
-        GridData gd1 = new GridData();
+        final GridData gd1 = new GridData();
         gd1.horizontalAlignment = SWT.FILL;
         gd1.verticalAlignment = SWT.FILL;
         gd1.grabExcessHorizontalSpace = true;
         pathText.setLayoutData(gd1);
 
         createDialogButton(holder);
-
         createClearButton(holder);
-
     }
 
-    /**
-     * Subclasses should open appropriate dialog within this method and return chosen file
-     * path. It is guaranteed, that this method will be called from within GUI thread.
+    /*
      * 
-     * @return abstract path of a chosen file or null
-     * @see DirectoryDialog#open()
-     * @see FileDialog#open()
      */
-    protected abstract String getFilePath();
-
     private void createClearButton(Composite holder)
     {
         Button clearButton = new Button(holder, SWT.PUSH | SWT.CENTER | SWT.FLAT);
@@ -90,6 +104,9 @@ public abstract class FileEditorBase extends AttributeEditorAdapter
         });
     }
 
+    /*
+     * 
+     */
     private void createDialogButton(Composite holder)
     {
         Button dialogButton = new Button(holder, SWT.PUSH | SWT.CENTER | SWT.FLAT);
@@ -99,28 +116,39 @@ public abstract class FileEditorBase extends AttributeEditorAdapter
         gd2.horizontalAlignment = SWT.FILL;
         gd2.verticalAlignment = SWT.FILL;
         dialogButton.setLayoutData(gd2);
-
         dialogButton.addListener(SWT.Selection, new SelectionListener());
     }
 
+    /*
+     * 
+     */
     protected void doEvent()
     {
         AttributeChangedEvent event = new AttributeChangedEvent(this);
         fireAttributeChange(event);
     }
 
+    /*
+     * 
+     */
     @Override
     public void setValue(Object currentValue)
     {
         setCurrentFile((File) currentValue);
     }
 
+    /*
+     * 
+     */
     @Override
     public Object getValue()
     {
         return directory;
     }
 
+    /*
+     * 
+     */
     @Override
     public void dispose()
     {
@@ -128,6 +156,9 @@ public abstract class FileEditorBase extends AttributeEditorAdapter
         clearImage.dispose();
     }
 
+    /*
+     * 
+     */
     protected void setCurrentFile(File currentFile)
     {
         if (currentFile != null)
@@ -143,4 +174,12 @@ public abstract class FileEditorBase extends AttributeEditorAdapter
         directory = currentFile;
     }
 
+    /*
+     * 
+     */
+    protected String openFileDialog()
+    {
+        // new DirectoryDialog(Display.getDefault().getActiveShell()).open();
+        return new FileDialog(Display.getDefault().getActiveShell()).open();
+    }
 }

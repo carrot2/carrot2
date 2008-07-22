@@ -1,10 +1,11 @@
-package org.carrot2.workbench.editors;
+package org.carrot2.workbench.editors.impl;
 
 import java.lang.annotation.Annotation;
 
 import org.carrot2.util.RangeUtils;
 import org.carrot2.util.attribute.AttributeDescriptor;
 import org.carrot2.util.attribute.constraint.DoubleRange;
+import org.carrot2.workbench.editors.AttributeEditorInfo;
 
 /**
  * Attribute editor for double values, possibly with {@link DoubleRange} annotations.
@@ -33,9 +34,9 @@ public final class DoubleRangeEditor extends NumericRangeEditorBase
      * 
      */
     @Override
-    public void init(AttributeDescriptor descriptor)
+    public AttributeEditorInfo init(AttributeDescriptor descriptor)
     {
-        super.init(descriptor);
+        AttributeEditorInfo info = super.init(descriptor);
 
         for (Annotation ann : descriptor.constraints)
         {
@@ -68,6 +69,8 @@ public final class DoubleRangeEditor extends NumericRangeEditorBase
 
         setRanges(to_i(min), to_i(max), 
             to_i(increment), to_i(pageIncrement));
+
+        return info;
     }
 
     /*

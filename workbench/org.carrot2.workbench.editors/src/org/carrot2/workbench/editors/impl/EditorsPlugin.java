@@ -1,4 +1,4 @@
-package org.carrot2.workbench.editors;
+package org.carrot2.workbench.editors.impl;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;

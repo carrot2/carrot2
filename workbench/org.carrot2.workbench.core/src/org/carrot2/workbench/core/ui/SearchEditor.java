@@ -39,6 +39,7 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -893,6 +894,8 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
 
         final AttributeGroups attributesPanel = new AttributeGroups(
             spacer, descriptor, GroupingMethod.GROUP);
+        attributesPanel.setLayoutData(GridDataFactory.fillDefaults().grab(true, true)
+            .create());        
         resources.add(attributesPanel);
 
         toolkit.paintBordersFor(scroller);

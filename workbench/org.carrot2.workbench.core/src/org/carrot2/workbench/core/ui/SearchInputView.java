@@ -536,6 +536,11 @@ public class SearchInputView extends ViewPart
             return false;
         }
 
+        if (value == null)
+        {
+            value = d.defaultValue;
+        }
+
         final Annotation [] constraints = d.constraints.toArray(
             new Annotation [d.constraints.size()]);
 

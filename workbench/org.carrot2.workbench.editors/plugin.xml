@@ -7,11 +7,11 @@
          point="org.carrot2.workbench.core.attributeEditor">
       <type-editor
             attribute-class="java.lang.Boolean"
-            class="org.carrot2.workbench.editors.BooleanEditor">
+            class="org.carrot2.workbench.editors.impl.BooleanEditor">
       </type-editor>
       <type-editor
             attribute-class="java.lang.Object"
-            class="org.carrot2.workbench.editors.ImplementingClassesEditor">
+            class="org.carrot2.workbench.editors.impl.ImplementingClassesEditor">
          <constraints all-constraints-required="true">
             <constraint
                   constraint-class="org.carrot2.util.attribute.constraint.ImplementingClasses">
@@ -20,11 +20,11 @@
       </type-editor>
       <type-editor
             attribute-class="java.lang.Enum"
-            class="org.carrot2.workbench.editors.EnumEditor">
+            class="org.carrot2.workbench.editors.impl.EnumEditor">
       </type-editor>
       <type-editor
             attribute-class="java.lang.Integer"
-            class="org.carrot2.workbench.editors.IntegerRangeEditor">
+            class="org.carrot2.workbench.editors.impl.IntegerRangeEditor">
          <constraints>
             <constraint
                   constraint-class="org.carrot2.util.attribute.constraint.IntRange">
@@ -33,7 +33,7 @@
       </type-editor>
       <type-editor
             attribute-class="java.lang.Double"
-            class="org.carrot2.workbench.editors.DoubleRangeEditor">
+            class="org.carrot2.workbench.editors.impl.DoubleRangeEditor">
          <constraints>
             <constraint
                   constraint-class="org.carrot2.util.attribute.constraint.DoubleRange">
@@ -42,29 +42,23 @@
       </type-editor>
       <type-editor
             attribute-class="java.io.File"
-            class="org.carrot2.workbench.editors.DirectoryEditor">
-         <constraints all-constraints-required="true">
+            class="org.carrot2.workbench.editors.impl.FileEditor">
+         <constraints all-constraints-required="false">
+            <constraint
+                  constraint-class="org.carrot2.util.attribute.constraint.IsFile">
+            </constraint>
             <constraint
                   constraint-class="org.carrot2.util.attribute.constraint.IsDirectory">
             </constraint>
          </constraints>
       </type-editor>
       <type-editor
-            attribute-class="java.io.File"
-            class="org.carrot2.workbench.editors.FileEditor">
-         <constraints>
-            <constraint
-                  constraint-class="org.carrot2.util.attribute.constraint.IsFile">
-            </constraint>
-         </constraints>
-      </type-editor>
-      <type-editor
             attribute-class="org.carrot2.util.resource.Resource"
-            class="org.carrot2.workbench.editors.ResourceEditor">
+            class="org.carrot2.workbench.editors.impl.ResourceEditor">
       </type-editor>
       <type-editor
             attribute-class="java.lang.String"
-            class="org.carrot2.workbench.editors.StringEditor">
+            class="org.carrot2.workbench.editors.impl.StringEditor">
       </type-editor>
    </extension>
 

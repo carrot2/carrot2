@@ -1,15 +1,12 @@
-package org.carrot2.workbench.editors;
+package org.carrot2.workbench.editors.impl;
 
+import org.carrot2.workbench.core.helpers.GUIFactory;
+import org.carrot2.workbench.editors.*;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseWheelListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.*;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Scale;
-import org.eclipse.swt.widgets.Spinner;
+import org.eclipse.swt.widgets.*;
 
 /**
  * Common class for both floating point (with arbitrary precision of decimal digits) and
@@ -57,6 +54,8 @@ public abstract class NumericRangeEditorBase extends AttributeEditorAdapter
      */
     public NumericRangeEditorBase(int precisionDigits)
     {
+        super(new AttributeEditorInfo(2, false));
+
         this.precisionDigits = precisionDigits;
         this.multiplier = Math.pow(10, precisionDigits);
     }
@@ -99,48 +98,38 @@ public abstract class NumericRangeEditorBase extends AttributeEditorAdapter
      * 
      */
     @Override
-    public void createEditor(Composite parent, Object layoutData)
+    public void createEditor(Composite parent, int gridColumns)
     {
         final int MIN_SPINNER_SIZE = 50;
 
-        final Composite holder = new Composite(parent, SWT.NULL);
-        holder.setLayoutData(layoutData);
+        final GridDataFactory factory = GUIFactory.editorGridData();
 
-        final GridLayout layout = new GridLayout();
-        layout.marginWidth = 0;
-        layout.marginHeight = 0;
+        final GridData spinnerLayoutData = factory.create();
+        spinnerLayoutData.horizontalSpan = 1;
+        spinnerLayoutData.grabExcessHorizontalSpace = false;
 
-        final GridData scaleLayoutData = new GridData();
-        final GridData spinnerLayoutData = new GridData();
+        final GridData scaleLayoutData = factory
+            .span(gridColumns - 1, 1).grab(true, false).create();
 
         if (minBounded && maxBounded)
         {
-            layout.numColumns = 2;
-
-            scaleLayoutData.horizontalAlignment = SWT.FILL;
-            scaleLayoutData.grabExcessHorizontalSpace = true;
-
-            createScale(holder);
+            createScale(parent);
             scale.setLayoutData(scaleLayoutData);
-            
-            spinnerLayoutData.grabExcessHorizontalSpace = false;            
         }
         else
         {
-            layout.numColumns = 1;
-
-            spinnerLayoutData.grabExcessHorizontalSpace = true;
+            Label c = new Label(parent, SWT.NONE);
+            c.setText("");
+            c.setLayoutData(scaleLayoutData);
         }
 
-        createSpinner(holder);
+        createSpinner(parent);
         spinner.setSelection(spinner.getMaximum());
         spinnerLayoutData.minimumWidth = Math.max(MIN_SPINNER_SIZE, spinner.computeSize(
             SWT.DEFAULT, SWT.DEFAULT).x);
         spinnerLayoutData.horizontalAlignment = SWT.FILL;
 
         spinner.setLayoutData(spinnerLayoutData);
-
-        holder.setLayout(layout);
     }
 
     /**
@@ -154,7 +143,7 @@ public abstract class NumericRangeEditorBase extends AttributeEditorAdapter
         scale.setMaximum(max);
         scale.setIncrement(increment);
         scale.setPageIncrement(pageIncrement);
-        scale.setToolTipText(tooltip);        
+        scale.setToolTipText(tooltip);
 
         /*
          * Hook event listener to the scale component.

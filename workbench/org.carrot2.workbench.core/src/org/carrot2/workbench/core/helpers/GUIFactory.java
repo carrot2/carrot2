@@ -1,5 +1,7 @@
 package org.carrot2.workbench.core.helpers;
 
+import org.carrot2.workbench.editors.IAttributeEditor;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
@@ -27,12 +29,21 @@ public final class GUIFactory
     }
 
     /**
+     * Return a {@link GridDataFactory} suitable for default {@link IAttributeEditor}
+     * cells.
+     */
+    public static GridDataFactory editorGridData()
+    {
+        return GridDataFactory.fillDefaults();
+    }
+
+    /**
      * Create a composite with {@link GridLayout} inside set to default margins.
      */
     public static Composite createSpacer(Composite parent)
     {
         final Composite spacer = new Composite(parent, SWT.NONE);
-        spacer.setLayout(GridLayoutFactory.fillDefaults().margins(3, 3).create());
+        spacer.setLayout(GridLayoutFactory.fillDefaults().margins(5, 3).create());
         return spacer;
     }
 }
