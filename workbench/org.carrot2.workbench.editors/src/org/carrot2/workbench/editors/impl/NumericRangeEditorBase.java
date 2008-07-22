@@ -107,6 +107,7 @@ public abstract class NumericRangeEditorBase extends AttributeEditorAdapter
         final GridData spinnerLayoutData = factory.create();
         spinnerLayoutData.horizontalSpan = 1;
         spinnerLayoutData.grabExcessHorizontalSpace = false;
+        spinnerLayoutData.verticalAlignment = SWT.CENTER;
 
         final GridData scaleLayoutData = factory
             .span(gridColumns - 1, 1).grab(true, false).create();
