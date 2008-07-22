@@ -38,7 +38,14 @@ public class EditorsTest
         @Input
         @Processing
         @IntRange(min = 0, max = 10)
-        TestType rangeAttribute;
+        TestType oneConstraintAttribute;
+
+        @Attribute
+        @Input
+        @Processing
+        @IntRange(min = 0, max = 10)
+        @IntModulo(modulo = 2, offset = 10)
+        TestType twoConstraintsAttribute;
 
         @Attribute
         @Input
@@ -117,6 +124,11 @@ public class EditorsTest
 
     }
 
+    public static class RangeModuloEditor extends EmptyAttributeEditorAdapter
+    {
+
+    }
+    
     public static class IntEditor extends EmptyAttributeEditorAdapter
     {
 
@@ -141,5 +153,4 @@ public class EditorsTest
     {
 
     }
-
 }

@@ -37,43 +37,13 @@ public class DedicatedEditorWrapperTest extends TestCase
         assertEquals("org.carrot2.workbench.editors.EditorsTest$TestComponent", wrapper.componentClass);
     }
 
-    public void testNoId()
-    {
-        IConfigurationElement element =
-            findEditor("org.carrot2.workbench.editors.EditorsTest$DedicatedEditor3");
-        try
-        {
-            new DedicatedEditorWrapper(element);
-            fail("Dedicated editor without componentClass attribute was created!");
-        }
-        catch (IllegalArgumentException ex)
-        {
-            // should happen
-        }
-    }
-
-    public void testNoAttributeId()
-    {
-        IConfigurationElement element =
-            findEditor("org.carrot2.workbench.editors.EditorsTest$DedicatedEditor4");
-        try
-        {
-            new DedicatedEditorWrapper(element);
-            fail("Dedicated editor without attribute id was created!");
-        }
-        catch (IllegalArgumentException ex)
-        {
-            // should happen
-        }
-    }
-
     private IConfigurationElement findEditor(String editorClassname)
     {
         IConfigurationElement element = null;
         for (int i = 0; i < elements.length; i++)
         {
             IConfigurationElement editor = elements[i];
-            if (editor.getName().equals("dedicatedEditor"))
+            if (editor.getName().equals("dedicated-editor"))
             {
                 if (editor.getAttribute(TypeEditorWrapper.ATT_CLASS).equals(
                     editorClassname))

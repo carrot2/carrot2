@@ -26,12 +26,12 @@ public class FactoryTest extends TestCase
 
     public void testEditorFactory()
     {
-        checkEditor(RangeEditor.class, "rangeAttribute");
-        checkEditor(IntEditor.class, "simpleAttribute");
+        checkEditor(RangeEditor.class, "oneConstraintAttribute");
+        checkEditor(RangeModuloEditor.class, "twoConstraintsAttribute");
+        checkEditor(RangeEditor.class, "simpleAttribute");
         try
         {
             checkEditor(null, "rangeDoubleAttribute");
-            fail("No editor for field 'rangeDoubleAttribute' should be found");
         }
         catch (EditorNotFoundException e)
         {
@@ -78,5 +78,4 @@ public class FactoryTest extends TestCase
         assertEquals(1, EditorFactory.distance(SubTestType.class,
             "org.carrot2.workbench.editors.EditorsTest$TestInterface"));
     }
-
 }

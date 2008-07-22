@@ -5,8 +5,8 @@ import org.eclipse.core.runtime.IConfigurationElement;
 
 public class DedicatedEditorWrapper extends AttributeEditorWrapper
 {
-    public static final String ATT_ATTRIBUTE_ID = "attributeId";
-    public static final String ATT_COMPONENT_CLASS = "componentClass";
+    public static final String ATT_ATTRIBUTE_ID = "attribute-id";
+    public static final String ATT_COMPONENT_CLASS = "component-class";
 
     public final String attributeId;
     public final String componentClass;

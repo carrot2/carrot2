@@ -13,64 +13,68 @@
    <extension
          id="testEditors"
          point="org.carrot2.workbench.core.attributeEditor">
-      <dedicatedEditor
-            attributeId="specificAttribute"
+      <dedicated-editor
+            attribute-id="specificAttribute"
             class="org.carrot2.workbench.editors.EditorsTest$DedicatedEditor"
-            componentClass="org.carrot2.workbench.editors.EditorsTest$TestComponent">
-      </dedicatedEditor>
-      <typeEditor
-            attributeClass="org.carrot2.workbench.editors.EditorsTest$TestType"
+            component-class="org.carrot2.workbench.editors.EditorsTest$TestComponent">
+      </dedicated-editor>
+      <type-editor
+            attribute-class="org.carrot2.workbench.editors.EditorsTest$TestType"
             class="org.carrot2.workbench.editors.EditorsTest$RangeEditor">
          <constraints
-               allAtOnce="false">
+               all-constraints-required="false">
             <constraint
-                  constraintClass="org.carrot2.util.attribute.constraint.IntRange">
+                  constraint-class="org.carrot2.util.attribute.constraint.IntRange">
             </constraint>
          </constraints>
-      </typeEditor>
-      <typeEditor
-            attributeClass="org.carrot2.workbench.editors.EditorsTest$TestType"
+      </type-editor>
+      <type-editor
+            attribute-class="org.carrot2.workbench.editors.EditorsTest$TestType"
+            class="org.carrot2.workbench.editors.EditorsTest$RangeModuloEditor">
+         <constraints
+               all-constraints-required="true">
+            <constraint
+                  constraint-class="org.carrot2.util.attribute.constraint.IntRange">
+            </constraint>
+            <constraint
+                  constraint-class="org.carrot2.util.attribute.constraint.IntModulo">
+            </constraint>
+         </constraints>
+      </type-editor>
+      <type-editor
+            attribute-class="org.carrot2.workbench.editors.EditorsTest$TestType"
             class="org.carrot2.workbench.editors.EditorsTest$IntEditor">
-      </typeEditor>
-      <typeEditor
-            attributeClass="org.carrot2.workbench.editors.EditorsTest$TestType"
+      </type-editor>
+      <type-editor
+            attribute-class="org.carrot2.workbench.editors.EditorsTest$TestType"
             class="org.carrot2.workbench.editors.EditorsTest$RangeEditor2">
          <constraints
-               allAtOnce="true">
+               all-constraints-required="true">
             <constraint
-                  constraintClass="org.carrot2.util.attribute.constraint.DoubleRange">
+                  constraint-class="org.carrot2.util.attribute.constraint.DoubleRange">
             </constraint>
             <constraint
-                  constraintClass="org.carrot2.util.attribute.constraint.ImplementingClasses">
+                  constraint-class="org.carrot2.util.attribute.constraint.ImplementingClasses">
             </constraint>
          </constraints>
-      </typeEditor>
-      <dedicatedEditor
-            attributeId="attId2"
-            class="org.carrot2.workbench.editors.EditorsTest$DedicatedEditor3">
-      </dedicatedEditor>
-      <dedicatedEditor
-            class="org.carrot2.workbench.editors.EditorsTest$DedicatedEditor4"
-            componentClass="org.carrot2.source.yahoo.YahooDocumentSource">
-      </dedicatedEditor>
-      <typeEditor
-            attributeClass="java.lang.Object"
+      </type-editor>
+      <type-editor
+            attribute-class="java.lang.Object"
             class="org.carrot2.workbench.editors.EditorsTest$ComboEditor">
-         <constraints
-               allAtOnce="true">
+         <constraints all-constraints-required="true">
             <constraint
-                  constraintClass="org.carrot2.util.attribute.constraint.IntModulo">
+                  constraint-class="org.carrot2.util.attribute.constraint.IntModulo">
             </constraint>
          </constraints>
-      </typeEditor>
-      <typeEditor
-            attributeClass="org.carrot2.workbench.editors.EditorsTest$SubTestType"
+      </type-editor>
+      <type-editor
+            attribute-class="org.carrot2.workbench.editors.EditorsTest$SubTestType"
             class="org.carrot2.workbench.editors.EditorsTest$SubEditor">
-      </typeEditor>
-      <typeEditor
-            attributeClass="org.carrot2.workbench.editors.EditorsTest$TestInterface"
+      </type-editor>
+      <type-editor
+            attribute-class="org.carrot2.workbench.editors.EditorsTest$TestInterface"
             class="org.carrot2.workbench.editors.EditorsTest$InterfaceEditor">
-      </typeEditor>
+      </type-editor>
    </extension>
 
 </plugin>

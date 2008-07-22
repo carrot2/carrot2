@@ -9,13 +9,13 @@ import com.google.common.collect.Lists;
 
 public class TypeEditorWrapper extends AttributeEditorWrapper
 {
-    public static final String ATT_ATTRIBUTE_CLASS = "attributeClass";
+    public static final String ATT_ATTRIBUTE_CLASS = "attribute-class";
     public static final String EL_CONSTRAINTS = "constraints";
-    public static final String ATT_ALL_AT_ONCE = "allAtOnce";
+    public static final String ATT_ALL_CONSTRAINTS_REQUIRED = "all-constraints-required";
     public static final String EL_CONSTRAINT = "constraint";
-    public static final String ATT_CONSTRAINT_CLASS = "constraintClass";
+    public static final String ATT_CONSTRAINT_CLASS = "constraint-class";
 
-    public final boolean allAtOnce;
+    public final boolean allConstraintsRequired;
     public final String attributeClass;
     public final List<String> constraints;
 
@@ -29,8 +29,8 @@ public class TypeEditorWrapper extends AttributeEditorWrapper
         List<String> tempConstraints = new ArrayList<String>();
         if (constraintsElement != null)
         {
-            allAtOnce =
-                getBooleanAttribute(constraintsElement, ATT_ALL_AT_ONCE, false, false);
+            allConstraintsRequired =
+                getBooleanAttribute(constraintsElement, ATT_ALL_CONSTRAINTS_REQUIRED, false, false);
             IConfigurationElement [] constraintElements =
                 getChildren(constraintsElement, EL_CONSTRAINT);
             for (int i = 0; i < constraintElements.length; i++)
@@ -44,7 +44,7 @@ public class TypeEditorWrapper extends AttributeEditorWrapper
         }
         else
         {
-            allAtOnce = false;
+            allConstraintsRequired = false;
             constraints = Lists.immutableList();
         }
     }

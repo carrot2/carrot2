@@ -48,7 +48,7 @@ public class TypeEditorWrapperTest extends TestCase
         assertFalse(wrapper.constraints.isEmpty());
         assertEquals(1, wrapper.constraints.size());
         assertEquals(IntRange.class.getName(), wrapper.constraints.get(0));
-        assertFalse(wrapper.allAtOnce);
+        assertFalse(wrapper.allConstraintsRequired);
     }
 
     public void testWithConstraints()
@@ -61,7 +61,7 @@ public class TypeEditorWrapperTest extends TestCase
         assertEquals(2, wrapper.constraints.size());
         assertTrue(wrapper.constraints.contains(DoubleRange.class.getName()));
         assertTrue(wrapper.constraints.contains(ImplementingClasses.class.getName()));
-        assertTrue(wrapper.allAtOnce);
+        assertTrue(wrapper.allConstraintsRequired);
     }
 
     private IConfigurationElement findEditor(String editorClassname)
@@ -70,7 +70,7 @@ public class TypeEditorWrapperTest extends TestCase
         for (int i = 0; i < elements.length; i++)
         {
             IConfigurationElement editor = elements[i];
-            if (editor.getName().equals("typeEditor"))
+            if (editor.getName().equals("type-editor"))
             {
                 if (editor.getAttribute(TypeEditorWrapper.ATT_CLASS).equals(
                     editorClassname))

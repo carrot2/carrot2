@@ -3,17 +3,22 @@ package org.carrot2.workbench.editors.factory;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.eclipse.core.runtime.*;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 
-public class AttributeEditorLoader
+/**
+ * 
+ */
+class AttributeEditorLoader
 {
     public static final String EXTENSION_NAME = "attributeEditor";
-    public static final String EL_TYPE_EDITOR = "typeEditor";
-    public static final String EL_DEDICATED_EDITOR = "dedicatedEditor";
+
+    public static final String EL_TYPE_EDITOR = "type-editor";
+    public static final String EL_DEDICATED_EDITOR = "dedicated-editor";
 
     public static final AttributeEditorLoader INSTANCE;
 
@@ -28,13 +33,20 @@ public class AttributeEditorLoader
         INSTANCE = new AttributeEditorLoader();
     }
 
+    /*
+     * 
+     */
     private AttributeEditorLoader()
     {
         loadExtensions();
+
         dedicatedEditors = Lists.immutableList(dedicatedEditorsList);
         typeEditors = Lists.immutableList(typeEditorsList);
     }
 
+    /*
+     * 
+     */
     List<DedicatedEditorWrapper> filterDedicatedEditors(
         Predicate<DedicatedEditorWrapper> predicate)
     {
@@ -42,12 +54,18 @@ public class AttributeEditorLoader
         return Lists.immutableList(result);
     }
 
+    /*
+     * 
+     */
     List<TypeEditorWrapper> filterTypeEditors(Predicate<TypeEditorWrapper> predicate)
     {
         List<TypeEditorWrapper> result = apply(predicate, typeEditorsList);
         return Lists.immutableList(result);
     }
 
+    /*
+     * 
+     */
     private <T extends AttributeEditorWrapper> List<T> apply(Predicate<T> predicate,
         List<T> list)
     {
@@ -69,7 +87,7 @@ public class AttributeEditorLoader
     {
         final IExtension [] extensions =
             Platform.getExtensionRegistry().getExtensionPoint(
-                "org.carrot2.workbench.core", EXTENSION_NAME).getExtensions();
+                WorkbenchCorePlugin.PLUGIN_ID, EXTENSION_NAME).getExtensions();
         for (IExtension extension : extensions)
         {
             parseExtension(extension.getConfigurationElements());
@@ -88,7 +106,6 @@ public class AttributeEditorLoader
             {
                 if (configurationElement.getName().equals(EL_DEDICATED_EDITOR))
                 {
-
                     DedicatedEditorWrapper wrapper =
                         new DedicatedEditorWrapper(configurationElement);
                     dedicatedEditorsList.add(wrapper);
@@ -107,7 +124,5 @@ public class AttributeEditorLoader
                     ex, false);
             }
         }
-
     }
-
 }

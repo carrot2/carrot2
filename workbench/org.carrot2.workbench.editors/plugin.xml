@@ -5,68 +5,67 @@
          id="basic"
          name="Basic Editors"
          point="org.carrot2.workbench.core.attributeEditor">
-      <typeEditor
-            attributeClass="java.lang.Boolean"
+      <type-editor
+            attribute-class="java.lang.Boolean"
             class="org.carrot2.workbench.editors.BooleanEditor">
-      </typeEditor>
-      <typeEditor
-            attributeClass="java.lang.Object"
+      </type-editor>
+      <type-editor
+            attribute-class="java.lang.Object"
             class="org.carrot2.workbench.editors.ImplementingClassesEditor">
-         <constraints
-               allAtOnce="false">
+         <constraints all-constraints-required="true">
             <constraint
-                  constraintClass="org.carrot2.util.attribute.constraint.ImplementingClasses">
+                  constraint-class="org.carrot2.util.attribute.constraint.ImplementingClasses">
             </constraint>
          </constraints>
-      </typeEditor>
-      <typeEditor
-            attributeClass="java.lang.Enum"
+      </type-editor>
+      <type-editor
+            attribute-class="java.lang.Enum"
             class="org.carrot2.workbench.editors.EnumEditor">
-      </typeEditor>
-      <typeEditor
-            attributeClass="java.lang.Integer"
+      </type-editor>
+      <type-editor
+            attribute-class="java.lang.Integer"
             class="org.carrot2.workbench.editors.IntegerRangeEditor">
          <constraints>
             <constraint
-                  constraintClass="org.carrot2.util.attribute.constraint.IntRange">
+                  constraint-class="org.carrot2.util.attribute.constraint.IntRange">
             </constraint>
          </constraints>
-      </typeEditor>
-      <typeEditor
-            attributeClass="java.lang.Double"
+      </type-editor>
+      <type-editor
+            attribute-class="java.lang.Double"
             class="org.carrot2.workbench.editors.DoubleRangeEditor">
          <constraints>
             <constraint
-                  constraintClass="org.carrot2.util.attribute.constraint.DoubleRange">
+                  constraint-class="org.carrot2.util.attribute.constraint.DoubleRange">
             </constraint>
          </constraints>
-      </typeEditor>
-      <typeEditor
-            attributeClass="java.io.File"
+      </type-editor>
+      <type-editor
+            attribute-class="java.io.File"
             class="org.carrot2.workbench.editors.DirectoryEditor">
-         <constraints>
+         <constraints all-constraints-required="true">
             <constraint
-                  constraintClass="org.carrot2.util.attribute.constraint.IsDirectory">
+                  constraint-class="org.carrot2.util.attribute.constraint.IsDirectory">
             </constraint>
          </constraints>
-      </typeEditor>
-      <typeEditor
-            attributeClass="java.io.File"
+      </type-editor>
+      <type-editor
+            attribute-class="java.io.File"
             class="org.carrot2.workbench.editors.FileEditor">
          <constraints>
             <constraint
-                  constraintClass="org.carrot2.util.attribute.constraint.IsFile">
+                  constraint-class="org.carrot2.util.attribute.constraint.IsFile">
             </constraint>
          </constraints>
-      </typeEditor>
-      <typeEditor
-            attributeClass="org.carrot2.util.resource.Resource"
+      </type-editor>
+      <type-editor
+            attribute-class="org.carrot2.util.resource.Resource"
             class="org.carrot2.workbench.editors.ResourceEditor">
-      </typeEditor>
-      <typeEditor
-            attributeClass="java.lang.String"
+      </type-editor>
+      <type-editor
+            attribute-class="java.lang.String"
             class="org.carrot2.workbench.editors.StringEditor">
-      </typeEditor>
+      </type-editor>
    </extension>
 
 </plugin>

@@ -6,23 +6,18 @@
          <meta.schema plugin="org.carrot2.workbench.core" id="attributeEditor" name="Attribute Editor"/>
       </appInfo>
       <documentation>
-         Extention for defining attribute editors. Those editors will be used to create Attributes view.&lt;br&gt;&lt;br&gt;
-When looking for appropriate editor for given attribute, editors will be looked for in this order:
-&lt;ol&gt;
-&lt;li&gt;dedicatedEditor for this attribute,
-&lt;li&gt;if attribute has constraints: typeEditor with matching attributeClass and matching all constraints with allAtOnce set to true,
-&lt;li&gt;if attribute has constraints: typeEditor with matching attributeClass and at least one matching constraint, where constraints has allAtOnce set to false,
-&lt;li&gt;typeEditor with matching attributeClass.
-&lt;/ol&gt;
-First one found is used.
+         Extention point for adding attribute editors. Attribute editors are used to display and possibly 
+edit the values of attributes affecting the input and processing components.
+
+The active attribute editor is selected to maximize its specificity with respect to a given attribute&apos;s descriptor: the type of the editor, number of constraints and possibly other aspects are taken into account. Look at the source code for more information.
       </documentation>
    </annotation>
 
    <element name="extension">
       <complexType>
          <sequence>
-            <element ref="typeEditor" minOccurs="0" maxOccurs="unbounded"/>
-            <element ref="dedicatedEditor" minOccurs="0" maxOccurs="unbounded"/>
+            <element ref="type-editor" minOccurs="0" maxOccurs="unbounded"/>
+            <element ref="dedicated-editor" minOccurs="0" maxOccurs="unbounded"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -51,20 +46,20 @@ First one found is used.
       </complexType>
    </element>
 
-   <element name="typeEditor">
+   <element name="type-editor">
       <annotation>
          <appInfo>
             <meta.element labelAttribute="attributeClass"/>
          </appInfo>
          <documentation>
-            Used to add editor, that can be used for all attributes of a given type having given constraints.
+            Used to add an editor that can be used for any attribute of a given type, possibly having a set of constraints.
          </documentation>
       </annotation>
       <complexType>
          <sequence>
             <element ref="constraints" minOccurs="0" maxOccurs="1"/>
          </sequence>
-         <attribute name="attributeClass" type="string" use="required">
+         <attribute name="attribute-class" type="string" use="required">
             <annotation>
                <documentation>
                   Class or ancestor of an attribute.&lt;br&gt;
@@ -99,7 +94,7 @@ When looking for an editor for an attribute that has constraints, editor with ma
          <sequence>
             <element ref="constraint" minOccurs="1" maxOccurs="unbounded"/>
          </sequence>
-         <attribute name="allAtOnce" type="boolean" use="default" value="false">
+         <attribute name="all-constraints-required" type="boolean" use="default" value="false">
             <annotation>
                <documentation>
                   If true, than attribute must have all specified constraints. Otherwise, only one of the constraints is enough.
@@ -111,7 +106,7 @@ When looking for an editor for an attribute that has constraints, editor with ma
 
    <element name="constraint">
       <complexType>
-         <attribute name="constraintClass" type="string" use="required">
+         <attribute name="constraint-class" type="string" use="required">
             <annotation>
                <documentation>
                   Class of a constraint. Must be annotated with &lt;code&gt;@IsConstraint&lt;/code&gt;.
@@ -124,17 +119,17 @@ When looking for an editor for an attribute that has constraints, editor with ma
       </complexType>
    </element>
 
-   <element name="dedicatedEditor">
+   <element name="dedicated-editor">
       <annotation>
          <appInfo>
             <meta.element labelAttribute="attributeId"/>
          </appInfo>
          <documentation>
-            Used to add editor that is dedicated for specific attribute in specific component (source or algorithm).
+            Used to add an editor that is dedicated to a specific attribute in a specific component (source or algorithm).
          </documentation>
       </annotation>
       <complexType>
-         <attribute name="attributeId" type="string" use="required">
+         <attribute name="attribute-id" type="string" use="required">
             <annotation>
                <documentation>
                   Identifier of attribute.
@@ -152,7 +147,7 @@ Value from the editor will be stored with the key &lt;code&gt;AttributeUtils.get
                </appInfo>
             </annotation>
          </attribute>
-         <attribute name="componentClass" type="string" use="required">
+         <attribute name="component-class" type="string" use="required">
             <annotation>
                <documentation>
                   
