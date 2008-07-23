@@ -5,10 +5,12 @@
          id="basic"
          name="Basic Editors"
          point="org.carrot2.workbench.core.attributeEditor">
+
       <type-editor
             attribute-class="java.lang.Boolean"
             class="org.carrot2.workbench.editors.impl.BooleanEditor">
       </type-editor>
+
       <type-editor
             attribute-class="java.lang.Object"
             class="org.carrot2.workbench.editors.impl.ImplementingClassesEditor">
@@ -18,6 +20,7 @@
             </constraint>
          </constraints>
       </type-editor>
+
       <type-editor
             attribute-class="java.lang.Enum"
             class="org.carrot2.workbench.editors.impl.EnumEditor">
@@ -44,21 +47,10 @@
       </type-editor>
 
       <type-editor
-            attribute-class="java.io.File"
-            class="org.carrot2.workbench.editors.impl.FileEditor">
-         <constraints all-constraints-required="false">
-            <constraint
-                  constraint-class="org.carrot2.util.attribute.constraint.IsFile">
-            </constraint>
-            <constraint
-                  constraint-class="org.carrot2.util.attribute.constraint.IsDirectory">
-            </constraint>
-         </constraints>
-      </type-editor>
-      <type-editor
             attribute-class="org.carrot2.util.resource.Resource"
             class="org.carrot2.workbench.editors.impl.ResourceEditor">
       </type-editor>
+
       <type-editor
             attribute-class="java.lang.String"
             class="org.carrot2.workbench.editors.impl.StringEditor">

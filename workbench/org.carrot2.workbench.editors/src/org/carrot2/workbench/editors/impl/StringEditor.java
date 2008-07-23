@@ -18,7 +18,14 @@ import org.eclipse.swt.widgets.Text;
  */
 public class StringEditor extends AttributeEditorAdapter
 {
+    /*
+     * 
+     */
     private Text textBox;
+    
+    /*
+     * 
+     */
     private String content;
 
     /*
@@ -28,7 +35,7 @@ public class StringEditor extends AttributeEditorAdapter
     {
         super(new AttributeEditorInfo(1, false));
     }
-    
+
     /*
      * 
      */
@@ -36,7 +43,8 @@ public class StringEditor extends AttributeEditorAdapter
     public void createEditor(Composite parent, int gridColumns)
     {
         textBox = new Text(parent, BORDER);
-        textBox.setLayoutData(GUIFactory.editorGridData().grab(true, false)
+        textBox.setLayoutData(GUIFactory.editorGridData()
+            .grab(true, false)
             .span(gridColumns, 1).create());
 
         /*
@@ -94,9 +102,6 @@ public class StringEditor extends AttributeEditorAdapter
         }
     }
 
-    /*
-     * 
-     */
     /**
      * Check if the content has changed compared to the current value of this attribute.
      * If so, fire an event.

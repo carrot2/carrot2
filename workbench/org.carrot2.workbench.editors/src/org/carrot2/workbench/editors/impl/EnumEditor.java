@@ -12,9 +12,19 @@ import org.eclipse.swt.widgets.Composite;
  */
 public final class EnumEditor extends AttributeEditorAdapter implements IAttributeEditor
 {
+    /**
+     * The edited enum constants.
+     */
     private Object [] constants;
+    
+    /**
+     * Combo viewer used to display these constants.
+     */
     private ComboViewer viewer;
 
+    /*
+     * 
+     */
     public EnumEditor()
     {
         super(new AttributeEditorInfo(1, false));
@@ -44,7 +54,8 @@ public final class EnumEditor extends AttributeEditorAdapter implements IAttribu
             @Override
             public String getText(Object element)
             {
-                return ((Enum<?>) element).toString();
+                final String text = ((Enum<?>) element).toString();
+                return text;
             }
         });
 
@@ -58,7 +69,9 @@ public final class EnumEditor extends AttributeEditorAdapter implements IAttribu
 
         viewer.setInput(constants);
         viewer.getCombo().setLayoutData(
-            GUIFactory.editorGridData().grab(true, false).span(gridColumns, 1).create());
+            GUIFactory.editorGridData()
+                .grab(true, false)
+                .span(gridColumns, 1).create());
     }
 
     /*

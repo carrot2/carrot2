@@ -15,13 +15,31 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
 /**
- * TODO: fix event propagation, add support for constraints.
+ * An editor for any fields that have {@link ImplementingClasses} annotation. The field is
+ * then initialized with an instance of one of the classes listed in
+ * {@link ImplementingClasses#classes()}.
  */
 public final class ImplementingClassesEditor extends AttributeEditorAdapter
 {
+    /**
+     * The constraint.
+     */
     private ImplementingClasses constraint;
-    private ComboViewer combo;
+
+    /**
+     * Extracted from {@link #constraint}.
+     */
     private List<Class<?>> classes;
+
+    /*
+     * 
+     */
+    private ComboViewer combo;
+
+    /*
+     * Event cycle avoidance.
+     */
+    private boolean updating;
 
     /*
      * 
@@ -44,6 +62,12 @@ public final class ImplementingClassesEditor extends AttributeEditorAdapter
                 constraint = (ImplementingClasses) ann;
             }
         }
+        
+        if (constraint == null)
+        {
+            throw new RuntimeException("Missing constraint.");
+        }
+
         classes = Arrays.asList(constraint.classes());
 
         return super.init(descriptor);
@@ -56,6 +80,7 @@ public final class ImplementingClassesEditor extends AttributeEditorAdapter
     public void createEditor(Composite parent, int gridColumns)
     {
         combo = new ComboViewer(parent, SWT.READ_ONLY | SWT.DROP_DOWN | SWT.SINGLE);
+        
         combo.setContentProvider(new ArrayContentProvider());
         combo.setLabelProvider(new LabelProvider()
         {
@@ -65,25 +90,36 @@ public final class ImplementingClassesEditor extends AttributeEditorAdapter
                     .getShortClassName((Class<?>) element));
             }
         });
+
         combo.setInput(constraint.classes());
+
         combo.addSelectionChangedListener(new ISelectionChangedListener()
         {
             public void selectionChanged(SelectionChangedEvent event)
             {
-                doEvent();
+                propagateNewValue();
             }
         });
-        combo.getCombo().setLayoutData(GUIFactory.editorGridData()
-            .grab(true, false).span(gridColumns, 1).create());
+
+        combo.getCombo().setLayoutData(
+            GUIFactory.editorGridData()
+                .grab(true, false)
+                .span(gridColumns, 1).create());
     }
 
     /*
      * 
      */
-    private void doEvent()
+    private void propagateNewValue()
     {
-        AttributeChangedEvent event = new AttributeChangedEvent(this);
-        fireAttributeChange(event);
+        if (updating) 
+        {
+            return;
+        }
+
+        updating = true;
+        fireAttributeChange(new AttributeChangedEvent(this));
+        updating = false;
     }
 
     /*
@@ -92,10 +128,12 @@ public final class ImplementingClassesEditor extends AttributeEditorAdapter
     @Override
     public void setValue(Object currentValue)
     {
-        if (currentValue != null)
+        if (currentValue != null && currentValue != getValue())
         {
             int current = classes.indexOf(currentValue.getClass());
             combo.getCombo().select(current);
+
+            propagateNewValue();
         }
     }
 
@@ -105,7 +143,7 @@ public final class ImplementingClassesEditor extends AttributeEditorAdapter
     @Override
     public Object getValue()
     {
-        int current = combo.getCombo().getSelectionIndex();
+        final int current = combo.getCombo().getSelectionIndex();
         return (classes.get(current));
     }
 }

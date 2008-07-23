@@ -1,29 +1,80 @@
 package org.carrot2.workbench.editors.impl;
 
-import static org.apache.commons.lang.StringUtils.isBlank;
-
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 import org.carrot2.util.resource.FileResource;
 import org.carrot2.util.resource.Resource;
+import org.carrot2.util.resource.URLResource;
 import org.carrot2.workbench.core.helpers.GUIFactory;
-import org.carrot2.workbench.core.helpers.Utils;
-import org.carrot2.workbench.editors.*;
+import org.carrot2.workbench.editors.AttributeChangedEvent;
+import org.carrot2.workbench.editors.AttributeEditorAdapter;
+import org.carrot2.workbench.editors.AttributeEditorInfo;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.IInputValidator;
+import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.*;
-import org.eclipse.ui.IMemento;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Text;
 
+/**
+ * Editor for attributes that are of {@link Resource} type.
+ */
 public class ResourceEditor extends AttributeEditorAdapter
 {
+    private Image browseIcon;
+    private Image openURLIcon;
 
-    private Image fileImage;
-    private Image urlImage;
-    private Image clearImage;
-    private Text resourceText;
+    /**
+     * Resource information string.
+     */
+    private Text resourceInfo;
+
+    /**
+     * The actual resource (most recent valid value or <code>null</code>).
+     */
     private Resource resource = null;
+
+    /*
+     * Event cycle avoidance.
+     */
+    private boolean updating;
+
+    /*
+     * Validator for URIs.
+     */
+    private final static IInputValidator validatorURI = new IInputValidator() 
+    {
+        public String isValid(String text)
+        {
+            try
+            {
+                URI validURI = new URI(text);
+
+                if (validURI.getScheme() == null)
+                {
+                    throw new URISyntaxException(text, "Empty scheme.");
+                }
+            } 
+            catch (URISyntaxException e)
+            {
+                return "Not a valid URI";
+            }
+
+            return null;
+        }
+    };
     
     /*
      * 
@@ -39,175 +90,171 @@ public class ResourceEditor extends AttributeEditorAdapter
     @Override
     public void createEditor(Composite parent, int gridColumns)
     {
-        Composite holder = new Composite(parent, SWT.NONE);
-        holder.setLayoutData(GUIFactory.editorGridData().grab(true, false)
-            .span(gridColumns, 1).create());
+        final Composite holder = new Composite(parent, SWT.NONE);
+        holder.setLayoutData(
+            GUIFactory.editorGridData()
+                .grab(true, false)
+                .span(gridColumns, 1).create());
 
-        GridLayout gl = new GridLayout(4, false);
-        gl.marginHeight = 0;
-        gl.marginWidth = 0;
-        gl.horizontalSpacing = 0;
+        GridLayout gl = GUIFactory.zeroMarginGridLayout();
+        gl.numColumns = 3;
+        gl.horizontalSpacing = 3;
+
         holder.setLayout(gl);
-
-        resourceText = new Text(holder, SWT.READ_ONLY | SWT.BORDER | SWT.SINGLE);
-        GridData gd1 = new GridData();
-        gd1.horizontalAlignment = SWT.FILL;
-        gd1.verticalAlignment = SWT.FILL;
-        gd1.grabExcessHorizontalSpace = true;
-        resourceText.setLayoutData(gd1);
+        
+        createTextBox(holder);
 
         createFileButton(holder);
-
         createUrlButton(holder);
-
-        createClearButton(holder);
-
     }
 
-    private void createClearButton(Composite holder)
+    /*
+     * 
+     */
+    private void createTextBox(Composite holder)
     {
-        Button clearButton = new Button(holder, SWT.PUSH | SWT.CENTER | SWT.FLAT);
-        clearImage =
-            EditorsPlugin.getImageDescriptor("icons/delete_edit.gif").createImage();
-        clearButton.setImage(clearImage);
-        GridData gd2 = new GridData();
-        gd2.horizontalAlignment = SWT.FILL;
-        gd2.verticalAlignment = SWT.FILL;
-        clearButton.setLayoutData(gd2);
+        // TODO: replace with a CLabel (no minimum length).
+        this.resourceInfo = new Text(holder, SWT.READ_ONLY | SWT.BORDER | SWT.SINGLE);
 
-        clearButton.addListener(SWT.Selection, new Listener()
-        {
-            public void handleEvent(Event event)
-            {
-                setCurrentResource(null);
-                doEvent();
-            }
-        });
+        final GridData gd = GridDataFactory.fillDefaults().grab(true, false).create();
+        resourceInfo.setLayoutData(gd);
     }
 
+    /*
+     * 
+     */
     private void createFileButton(Composite holder)
     {
-        Button dialogButton = new Button(holder, SWT.PUSH | SWT.CENTER | SWT.FLAT);
-        fileImage = EditorsPlugin.getImageDescriptor("icons/folder.gif").createImage();
-        dialogButton.setImage(fileImage);
-        GridData gd2 = new GridData();
-        gd2.horizontalAlignment = SWT.FILL;
-        gd2.verticalAlignment = SWT.FILL;
-        dialogButton.setLayoutData(gd2);
+        browseIcon = EditorsPlugin.getImageDescriptor("icons/open_folder.gif").createImage();
 
-        dialogButton.addListener(SWT.Selection, new Listener()
-        {
-            public void handleEvent(Event event)
+        final Button button = new Button(holder, SWT.PUSH | SWT.CENTER);
+        button.setImage(browseIcon);
+        button.setLayoutData(GridDataFactory.fillDefaults().create());
+
+        button.addSelectionListener(new SelectionAdapter() {
+            public void widgetSelected(SelectionEvent e)
             {
-                Utils.asyncExec(new Runnable()
-                {
-                    public void run()
-                    {
-                        FileDialog dialog =
-                            new FileDialog(Display.getCurrent().getActiveShell());
-                        dialog.setFilterExtensions(new String []
-                        {
-                            "*.xml", "*.*"
-                        });
-                        dialog.setFilterNames(new String []
-                        {
-                            "XML files", "All"
-                        });
-                        String chosenPath = dialog.open();
-                        if (chosenPath != null)
-                        {
-                            FileResource res = new FileResource(new File(chosenPath));
-                            setCurrentResource(res);
-                        }
-                    }
-                });
+                openFileResourceDialog();
             }
         });
     }
 
+    /*
+     * 
+     */
+    private void openFileResourceDialog()
+    {
+        // TODO: Store/restore previous directory.
+
+        final FileDialog dialog = new FileDialog(this.resourceInfo.getShell());
+        dialog.setFilterExtensions(new String []
+        {
+            "*.xml", "*.*"
+        });
+        dialog.setFilterNames(new String []
+        {
+            "XML files", "All"
+        });
+
+        final String path = dialog.open();
+        if (path != null)
+        {
+            setValue(new FileResource(new File(path)));
+        }
+    }
+
+    /*
+     * 
+     */
     private void createUrlButton(Composite holder)
     {
-        Button dialogButton = new Button(holder, SWT.PUSH | SWT.CENTER | SWT.FLAT);
-        urlImage = EditorsPlugin.getImageDescriptor("icons/web.gif").createImage();
-        dialogButton.setImage(urlImage);
-        GridData gd2 = new GridData();
-        gd2.horizontalAlignment = SWT.FILL;
-        gd2.verticalAlignment = SWT.FILL;
-        dialogButton.setLayoutData(gd2);
+        openURLIcon = EditorsPlugin.getImageDescriptor("icons/open_url.gif").createImage();
 
-        dialogButton.addListener(SWT.Selection, new Listener()
-        {
-            public void handleEvent(Event event)
+        final Button button = new Button(holder, SWT.PUSH | SWT.CENTER);
+        button.setImage(openURLIcon);
+        button.setLayoutData(GridDataFactory.fillDefaults().create());
+
+        button.addSelectionListener(new SelectionAdapter() {
+            public void widgetSelected(SelectionEvent e)
             {
-
+                openURLResourceDialog();
             }
         });
     }
 
-    protected void doEvent()
+    /*
+     * 
+     */
+    private void openURLResourceDialog()
     {
-        AttributeChangedEvent event = new AttributeChangedEvent(this);
-        fireAttributeChange(event);
-    }
+        // TODO: Store/restore previous URL
 
+        final String previous = "";
+        final InputDialog dialog = new InputDialog(resourceInfo.getShell(), 
+            "Open URL...", "Enter resource URL", previous, validatorURI);
+
+        if (dialog.open() == IDialogConstants.OK_ID)
+        {
+            try
+            {
+                setValue(new URLResource(new URL(dialog.getValue())));
+            }
+            catch (MalformedURLException e)
+            {
+                // Simply skip, shouldn't happen.
+            }
+        }
+    }    
+
+    /*
+     * 
+     */
     @Override
-    public void setValue(Object currentValue)
+    public void setValue(Object newValue)
     {
-        setCurrentResource((Resource) currentValue);
+        if (updating || newValue == resource)
+        {
+            return;
+        }
+        
+        if (resource != null && resource.equals(newValue))
+        {
+            return;
+        }
+        
+        if (!(newValue instanceof Resource))
+        {
+            return;
+        }
+
+        updating = true;
+
+        this.resource = (Resource) newValue;
+
+        this.resourceInfo.setText(
+            resource == null ? "" : resource.toString());
+
+        fireAttributeChange(new AttributeChangedEvent(this));
+
+        updating = false;
     }
 
+    /*
+     * 
+     */
     @Override
     public Object getValue()
     {
         return resource;
     }
 
+    /*
+     * 
+     */
     @Override
     public void dispose()
     {
-        fileImage.dispose();
-        clearImage.dispose();
+        browseIcon.dispose();
+        openURLIcon.dispose();
     }
-
-    protected void setCurrentResource(Resource currentRes)
-    {
-        if (currentRes != null)
-        {
-            resourceText.setText(currentRes.toString());
-        }
-        else
-        {
-            resourceText.setText("");
-        }
-        resource = currentRes;
-    }
-
-    @Override
-    public void saveState(IMemento memento)
-    {
-        if (resource != null)
-        {
-            if (resource instanceof FileResource)
-            {
-                FileResource fileRes = (FileResource) resource;
-                memento.putString("type", "file");
-                memento.putString("value", fileRes.toString());
-            }
-        }
-    }
-
-    @Override
-    public void restoreState(IMemento memento)
-    {
-        String type = memento.getString("type");
-        String value = memento.getString("value");
-        if (!isBlank(type) && !isBlank(value))
-        {
-            if (type.equals("file"))
-            {
-                setCurrentResource(FileResource.valueOf(value));
-            }
-        }
-    }
-
 }
