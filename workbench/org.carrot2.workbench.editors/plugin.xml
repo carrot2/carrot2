@@ -22,24 +22,27 @@
             attribute-class="java.lang.Enum"
             class="org.carrot2.workbench.editors.impl.EnumEditor">
       </type-editor>
+
       <type-editor
             attribute-class="java.lang.Integer"
-            class="org.carrot2.workbench.editors.impl.IntegerRangeEditor">
+            class="org.carrot2.workbench.editors.impl.numeric.NumericEditorProxy">
          <constraints>
             <constraint
                   constraint-class="org.carrot2.util.attribute.constraint.IntRange">
             </constraint>
          </constraints>
       </type-editor>
+
       <type-editor
             attribute-class="java.lang.Double"
-            class="org.carrot2.workbench.editors.impl.DoubleRangeEditor">
+            class="org.carrot2.workbench.editors.impl.numeric.NumericEditorProxy">
          <constraints>
             <constraint
                   constraint-class="org.carrot2.util.attribute.constraint.DoubleRange">
             </constraint>
          </constraints>
       </type-editor>
+
       <type-editor
             attribute-class="java.io.File"
             class="org.carrot2.workbench.editors.impl.FileEditor">

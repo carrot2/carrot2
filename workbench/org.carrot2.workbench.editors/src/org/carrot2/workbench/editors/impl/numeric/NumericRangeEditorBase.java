@@ -1,4 +1,4 @@
-package org.carrot2.workbench.editors.impl;
+package org.carrot2.workbench.editors.impl.numeric;
 
 import org.carrot2.workbench.core.helpers.GUIFactory;
 import org.carrot2.workbench.editors.*;
@@ -10,10 +10,12 @@ import org.eclipse.swt.widgets.*;
 
 /**
  * Common class for both floating point (with arbitrary precision of decimal digits) and
- * integer numeric ranges. The numeric widget contains a {@link Scale} and a
- * {@link Spinner}, both of which can be used to modify the current value of the editor.
+ * integer, non-negative numeric ranges.
+ * <p>
+ * The widget is composed of a {@link Scale} and a {@link Spinner}, both of which can be
+ * used to modify the current value of the attribute.
  */
-public abstract class NumericRangeEditorBase extends AttributeEditorAdapter
+abstract class NumericRangeEditorBase extends AttributeEditorAdapter
 {
     /** */
     private Scale scale;
@@ -41,13 +43,15 @@ public abstract class NumericRangeEditorBase extends AttributeEditorAdapter
     private boolean maxBounded;
 
     /**
-     * Value multiplier needed to convert between fixed precision floating point
-     * values and integers.
+     * Value multiplier needed to convert between fixed precision floating point values
+     * and integers.
      */
     private final double multiplier;
 
     /** Tooltip with allowed range. */
     private String tooltip;
+
+    private int maxSpinnerWidth;
 
     /**
      * @param precisionDigits Number of digits after decimal separator.
@@ -59,7 +63,7 @@ public abstract class NumericRangeEditorBase extends AttributeEditorAdapter
         this.precisionDigits = precisionDigits;
         this.multiplier = Math.pow(10, precisionDigits);
     }
-    
+
     /**
      * Initialize numeric ranges, according to the descriptor's definition.
      */
@@ -80,8 +84,7 @@ public abstract class NumericRangeEditorBase extends AttributeEditorAdapter
         }
         else
         {
-            this.tooltip = "Valid range: ["
-                + to_s(min) + "; " + to_s(max) + "]";
+            this.tooltip = "Valid range: [" + to_s(min) + "; " + to_s(max) + "]";
         }
     }
 
@@ -100,8 +103,6 @@ public abstract class NumericRangeEditorBase extends AttributeEditorAdapter
     @Override
     public void createEditor(Composite parent, int gridColumns)
     {
-        final int MIN_SPINNER_SIZE = 50;
-
         final GridDataFactory factory = GUIFactory.editorGridData();
 
         final GridData spinnerLayoutData = factory.create();
@@ -109,8 +110,8 @@ public abstract class NumericRangeEditorBase extends AttributeEditorAdapter
         spinnerLayoutData.grabExcessHorizontalSpace = false;
         spinnerLayoutData.verticalAlignment = SWT.CENTER;
 
-        final GridData scaleLayoutData = factory
-            .span(gridColumns - 1, 1).grab(true, false).create();
+        final GridData scaleLayoutData = factory.span(gridColumns - 1, 1).grab(true,
+            false).create();
 
         if (minBounded && maxBounded)
         {
@@ -119,15 +120,14 @@ public abstract class NumericRangeEditorBase extends AttributeEditorAdapter
         }
         else
         {
-            Label c = new Label(parent, SWT.NONE);
-            c.setText("");
-            c.setLayoutData(scaleLayoutData);
+            spinnerLayoutData.horizontalSpan = 2;
+            spinnerLayoutData.grabExcessHorizontalSpace = true;
         }
 
         createSpinner(parent);
+
         spinner.setSelection(spinner.getMaximum());
-        spinnerLayoutData.minimumWidth = Math.max(MIN_SPINNER_SIZE, spinner.computeSize(
-            SWT.DEFAULT, SWT.DEFAULT).x);
+        spinnerLayoutData.widthHint = maxSpinnerWidth;
         spinnerLayoutData.horizontalAlignment = SWT.FILL;
 
         spinner.setLayoutData(spinnerLayoutData);
@@ -156,7 +156,7 @@ public abstract class NumericRangeEditorBase extends AttributeEditorAdapter
                 propagateNewValue(scale.getSelection());
             }
         });
-        
+
         scale.addMouseWheelListener(new MouseWheelListener()
         {
             public void mouseScrolled(MouseEvent e)
@@ -173,6 +173,19 @@ public abstract class NumericRangeEditorBase extends AttributeEditorAdapter
     {
         spinner = new Spinner(holder, SWT.BORDER);
 
+        /*
+         * Calculate maximum spinner width (consistently among all editors).
+         */
+        spinner.setMaximum(1000);
+        spinner.setMinimum(0);
+        spinner.setDigits(2);
+
+        this.maxSpinnerWidth = spinner.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
+
+        /*
+         * Now proceed with setting the actual values.
+         */
+        
         spinner.setMinimum(min);
         spinner.setMaximum(max);
         spinner.setDigits(precisionDigits);
@@ -194,7 +207,8 @@ public abstract class NumericRangeEditorBase extends AttributeEditorAdapter
     }
 
     /**
-     * Propagates value change event to all listeners.
+     * Propagates value change event to all listeners and updates
+     * GUI widgets.
      */
     protected final void propagateNewValue(int value)
     {
@@ -217,10 +231,10 @@ public abstract class NumericRangeEditorBase extends AttributeEditorAdapter
             fireAttributeChange(new AttributeChangedEvent(this));
         }
     }
-    
+
     /**
-     * Convert between double values and integer values (taking into
-     * account precision shift).
+     * Convert between double values and integer values (taking into account precision
+     * shift).
      */
     protected final int to_i(double v)
     {
@@ -243,14 +257,14 @@ public abstract class NumericRangeEditorBase extends AttributeEditorAdapter
     }
 
     /**
-     * Convert between double values and integer values (taking into
-     * account precision shift).
+     * Convert between double values and integer values (taking into account precision
+     * shift).
      */
     protected final double to_d(int i)
     {
         return i / multiplier;
     }
-    
+
     /*
      * Converts the given argument to a human-readable string.
      */
