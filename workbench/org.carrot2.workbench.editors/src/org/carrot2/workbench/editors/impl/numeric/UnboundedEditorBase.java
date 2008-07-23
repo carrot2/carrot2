@@ -95,7 +95,7 @@ abstract class UnboundedEditorBase<T extends Number> extends AttributeEditorAdap
         layoutData.grabExcessHorizontalSpace = false;
         layoutData.verticalAlignment = SWT.CENTER;
 
-        text = new Text(parent, SWT.RIGHT | SWT.SINGLE | SWT.BORDER);
+        text = new Text(parent, SWT.LEAD | SWT.SINGLE | SWT.BORDER);
         text.setLayoutData(layoutData);
 
         /*
