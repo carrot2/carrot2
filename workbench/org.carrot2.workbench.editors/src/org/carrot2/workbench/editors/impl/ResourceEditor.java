@@ -113,7 +113,6 @@ public class ResourceEditor extends AttributeEditorAdapter
      */
     private void createTextBox(Composite holder)
     {
-        // TODO: replace with a CLabel (no minimum length).
         this.resourceInfo = new Text(holder, SWT.READ_ONLY | SWT.BORDER | SWT.SINGLE);
 
         final GridData gd = GridDataFactory.fillDefaults().grab(true, false).create();

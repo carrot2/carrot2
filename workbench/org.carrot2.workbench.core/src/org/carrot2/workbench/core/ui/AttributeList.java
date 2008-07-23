@@ -226,7 +226,7 @@ public final class AttributeList extends Composite
             final AttributeEditorInfo editorInfo = editorInfos.get(key);
 
             // Add label to editors that do not have it.
-            if (editor != null && !editorInfo.displaysOwnLabel)
+            if (editor == null || editorInfo.displaysOwnLabel == false)
             {
                 final Label label = new Label(this, SWT.LEAD);
                 label.setText(getLabel(descriptor));
@@ -250,7 +250,7 @@ public final class AttributeList extends Composite
             }
             else
             {
-                final Label label = new Label(this, SWT.NONE);
+                final Label label = new Label(this, SWT.BORDER);
                 label.setText("No suitable editor");
                 label.setEnabled(false);
 
