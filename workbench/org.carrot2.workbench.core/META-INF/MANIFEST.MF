@@ -7,7 +7,6 @@ Bundle-Activator: org.carrot2.workbench.core.WorkbenchCorePlugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.carrot2.util.common;visibility:=reexport,
- org.eclipse.pde.runtime,
  org.junit4.ext,
  org.carrot2.util.attribute,
  org.carrot2.core,
