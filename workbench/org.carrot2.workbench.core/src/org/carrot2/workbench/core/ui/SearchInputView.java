@@ -188,6 +188,37 @@ public class SearchInputView extends ViewPart
         public ShowRequiredOnlyAction()
         {
             super("Show only required attributes", SWT.TOGGLE);
+            
+            /*
+             * Subscribe to change events on the global preference
+             * property and update initial state.
+             */
+            final IPreferenceStore preferenceStore = 
+                WorkbenchCorePlugin.getDefault().getPreferenceStore();
+            preferenceStore.addPropertyChangeListener(new IPropertyChangeListener() {
+                public void propertyChange(PropertyChangeEvent event)
+                {
+                    if (PreferenceConstants.SHOW_REQUIRED_ONLY.equals(
+                        event.getProperty()))
+                    {
+                        updateState();
+                    }
+                }
+            });
+
+            updateState();
+        }
+
+        /*
+         * Update selection state.
+         */
+        private void updateState()
+        {
+            final boolean state = 
+                WorkbenchCorePlugin.getDefault().getPreferenceStore().getBoolean(
+                PreferenceConstants.SHOW_REQUIRED_ONLY);
+
+            setChecked(state);
         }
 
         @Override
@@ -200,13 +231,6 @@ public class SearchInputView extends ViewPart
                 PreferenceConstants.SHOW_REQUIRED_ONLY);
 
             preferenceStore.setValue(PreferenceConstants.SHOW_REQUIRED_ONLY, !state);
-        }
-
-        @Override
-        public boolean isChecked()
-        {
-            return WorkbenchCorePlugin.getDefault().getPreferenceStore().getBoolean(
-                PreferenceConstants.SHOW_REQUIRED_ONLY);
         }
     }
 
