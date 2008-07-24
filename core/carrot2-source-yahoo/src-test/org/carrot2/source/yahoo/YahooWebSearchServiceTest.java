@@ -86,6 +86,6 @@ public class YahooWebSearchServiceTest extends ExternalApiTestBase
     {
         final SearchEngineResponse response = service.query("apache", 0, 50);
         assertEquals("gzip",
-            response.metadata.get(YahooSearchService.COMPRESSION_USED_KEY));
+            response.metadata.get(SearchEngineResponse.COMPRESSION_KEY));
     }
 }

@@ -2,15 +2,21 @@ package org.carrot2.source.xml;
 
 import java.io.*;
 import java.util.Map;
+import java.util.zip.GZIPInputStream;
 
 import javax.xml.transform.*;
 import javax.xml.transform.sax.*;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import org.apache.commons.httpclient.*;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.carrot2.core.DocumentSource;
 import org.carrot2.core.ProcessingResult;
+import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.util.CloseableUtils;
+import org.carrot2.util.httpclient.HttpClientFactory;
+import org.carrot2.util.httpclient.HttpHeaders;
 import org.carrot2.util.resource.Resource;
 
 /**
@@ -41,6 +47,52 @@ public class XmlDocumentSourceHelper
     {
         this.transformerFactory = TransformerFactory.newInstance();
         this.transformerFactory.setURIResolver(uriResolver);
+    }
+
+    /**
+     * Loads a {@link ProcessingResult} from the provided remote URL, applying XSLT
+     * transform if specified. This method can handle gzip-compressed streams if supported
+     * by the data source.
+     * 
+     * @param metadata if a non-<code>null</code> map is provided, request metadata will
+     *            be put into the map.
+     */
+    public ProcessingResult loadProcessingResult(String url, Templates stylesheet,
+        Map<String, String> xsltParameters, Map<String, Object> metadata)
+        throws Exception
+    {
+        final HttpClient client = HttpClientFactory.getTimeoutingClient();
+        client.getParams().setVersion(HttpVersion.HTTP_1_1);
+
+        InputStream carrot2XmlStream = null;
+        final GetMethod request = new GetMethod();
+
+        request.setURI(new URI(url, false));
+        request.setRequestHeader(HttpHeaders.URL_ENCODED);
+        request.setRequestHeader(HttpHeaders.GZIP_ENCODING);
+
+        final int statusCode = client.executeMethod(request);
+
+        carrot2XmlStream = request.getResponseBodyAsStream();
+        final Header encoded = request.getResponseHeader("Content-Encoding");
+        String compressionUsed = "uncompressed";
+        if (encoded != null && "gzip".equalsIgnoreCase(encoded.getValue()))
+        {
+            carrot2XmlStream = new GZIPInputStream(carrot2XmlStream);
+            compressionUsed = "gzip";
+        }
+
+        if (statusCode == HttpStatus.SC_OK
+            || statusCode == HttpStatus.SC_SERVICE_UNAVAILABLE
+            || statusCode == HttpStatus.SC_BAD_REQUEST)
+        {
+            metadata.put(SearchEngineResponse.COMPRESSION_KEY, compressionUsed);
+            return loadProcessingResult(carrot2XmlStream, stylesheet, xsltParameters);
+        }
+        else
+        {
+            throw new IOException("HTTP error, status code: " + statusCode);
+        }
     }
 
     /**

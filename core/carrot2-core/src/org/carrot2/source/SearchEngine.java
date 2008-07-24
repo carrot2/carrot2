@@ -92,6 +92,14 @@ public abstract class SearchEngine extends ProcessingComponentBase implements
     public SearchEngineStats statistics = new SearchEngineStats();
 
     /**
+     * Indicates whether the search engine returned a compressed result stream.
+     */
+    @Processing
+    @Output
+    @Attribute
+    public boolean compressed;
+
+    /**
      * Run a request the search engine's API, setting <code>documents</code> to the set of
      * returned documents.
      */
@@ -101,6 +109,7 @@ public abstract class SearchEngine extends ProcessingComponentBase implements
         final SearchEngineResponse [] responses = runQuery(query, start, results,
             metadata, executor);
 
+        compressed = false;
         if (responses.length > 0)
         {
             // Collect documents from the responses.
@@ -120,6 +129,16 @@ public abstract class SearchEngine extends ProcessingComponentBase implements
             }
 
             resultsTotal = responses[0].getResultsTotal();
+
+            for (int j = 0; j < responses.length; j++)
+            {
+                final String compression = (String) responses[j].metadata
+                    .get(SearchEngineResponse.COMPRESSION_KEY);
+                if (compression != null && "gzip".contains(compression))
+                {
+                    compressed = true;
+                }
+            }
         }
         else
         {

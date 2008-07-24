@@ -1,6 +1,5 @@
 package org.carrot2.source.etools;
 
-import java.net.URL;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -242,13 +241,13 @@ public class EToolsDocumentSource extends SearchEngine
             public SearchEngineResponse search() throws Exception
             {
                 // Ignore buckets, SearchEngine is configured to perform one request
-                final URL serviceURL = new URL(buildServiceUrl());
+                final String serviceURL = buildServiceUrl();
+                final SearchEngineResponse response = new SearchEngineResponse();
 
                 final ProcessingResult processingResult = xmlDocumentSourceHelper
-                    .loadProcessingResult(serviceURL.openStream(), 
-                        eTools2Carrot2Xslt, null);
+                    .loadProcessingResult(serviceURL, eTools2Carrot2Xslt, null,
+                        response.metadata);
 
-                final SearchEngineResponse response = new SearchEngineResponse();
                 final List<Document> documents = processingResult.getDocuments();
                 if (documents != null)
                 {

@@ -19,6 +19,7 @@ import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.StreamUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.httpclient.HttpClientFactory;
+import org.carrot2.util.httpclient.HttpHeaders;
 import org.xml.sax.*;
 
 
@@ -30,20 +31,6 @@ public abstract class YahooSearchService
 {
     /** Logger for this object. */
     protected final Logger logger = Logger.getLogger(this.getClass().getName());
-
-    /** HTTP header for requests. */
-    protected static final Header CONTENT_HEADER = new Header("Content-type",
-            "application/x-www-form-urlencoded; charset=UTF-8");
-
-    /** HTTP header for declaring allowed GZIP encoding. */
-    protected static final Header ENCODING_HEADER = new Header("Accept-Encoding", "gzip");
-
-    /**
-     * HTTP header faking Mozilla as the user agent (otherwise compression
-     * doesn't work).
-     */
-    protected static final Header USER_AGENT_HEADER_MOZILLA =
-        new Header("User-Agent", "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:0.9.7) Gecko/20011221");
 
     /**
      * Query types. 
@@ -84,14 +71,6 @@ public abstract class YahooSearchService
      * @see SearchEngineResponse#metadata
      */
     public static final String RESULTS_RETURNED_KEY = "resultsReturned";
-
-    /**
-     * Metadata key for the compression algorithm used to decompress
-     * the returned stream.
-     *
-     * @see SearchEngineResponse#metadata
-     */
-    public static final String COMPRESSION_USED_KEY = "compressionUsed";
 
     /**
      * Application ID required for Yahoo! services.
@@ -161,9 +140,9 @@ public abstract class YahooSearchService
         try
         {
             request.setURI(new URI(getServiceURI(), false));
-            request.setRequestHeader(CONTENT_HEADER);
-            request.setRequestHeader(ENCODING_HEADER);
-            request.setRequestHeader(USER_AGENT_HEADER_MOZILLA);
+            request.setRequestHeader(HttpHeaders.URL_ENCODED);
+            request.setRequestHeader(HttpHeaders.GZIP_ENCODING);
+            request.setRequestHeader(HttpHeaders.USER_AGENT_HEADER_MOZILLA);
 
             final ArrayList<NameValuePair> params = createRequestParams(query, start,
                 results);
@@ -197,7 +176,7 @@ public abstract class YahooSearchService
             {
                 // Parse the data stream.
                 final SearchEngineResponse response = parseResponseXML(is);
-                response.metadata.put(COMPRESSION_USED_KEY, compressionUsed);
+                response.metadata.put(SearchEngineResponse.COMPRESSION_KEY, compressionUsed);
 
                 if (logger.isDebugEnabled()) {
                     logger.debug("Received, results: "

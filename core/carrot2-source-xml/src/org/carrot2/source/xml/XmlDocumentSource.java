@@ -21,6 +21,9 @@ import com.google.common.collect.Maps;
  * stylesheet can be applied to the XML stream before it is deserialized into Carrot2
  * data.
  */
+/**
+ *
+ */
 @Bindable
 public class XmlDocumentSource extends ProcessingComponentBase implements DocumentSource
 {
@@ -34,11 +37,11 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
      * in the URL that will be replaced during runtime. The place holder format is
      * <code>${attribute}</code>. The following attributes will be resolved:
      * <ul>
-     * <li><code>query</code> will be replaced with the current query being processed.
-     * If the query has not been provided, this attribute will be substituted with an
-     * empty string.</li>
-     * <li><code>results</code> will be replaced with the number of results requested.
-     * If the number of results has not been provided, this attribute will be substituted
+     * <li><code>query</code> will be replaced with the current query being processed. If
+     * the query has not been provided, this attribute will be substituted with an empty
+     * string.</li>
+     * <li><code>results</code> will be replaced with the number of results requested. If
+     * the number of results has not been provided, this attribute will be substituted
      * with an empty string.</li>
      * </ul>
      * 
@@ -119,7 +122,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
     @Processing
     @Output
     @Attribute(key = AttributeNames.DOCUMENTS)
-    private List<Document> documents;
+    public List<Document> documents;
 
     /**
      * The XSLT resource provided at init. If we want to allow specifying the XSLT both on

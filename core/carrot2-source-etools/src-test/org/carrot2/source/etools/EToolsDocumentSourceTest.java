@@ -8,6 +8,8 @@ import java.util.Set;
 
 import org.carrot2.core.Document;
 import org.carrot2.core.test.QueryableDocumentSourceTestBase;
+import org.carrot2.source.SearchEngine;
+import org.fest.assertions.MapAssert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junitext.Prerequisite;
@@ -43,6 +45,15 @@ public class EToolsDocumentSourceTest extends
         }
 
         assertThat(sources.size()).isGreaterThanOrEqualTo(2);
+    }
+
+    @Test
+    @Prerequisite(requires = "externalApiTestsEnabled")
+    public void testGzipCompression() throws Exception
+    {
+        runQuery("apache", 50);
+        assertThat(processingAttributes).contains(
+            MapAssert.entry(SearchEngine.class.getName() + ".compressed", true));
     }
 
     @Test
