@@ -2,6 +2,7 @@ package org.carrot2.workbench.editors.impl;
 
 import static org.eclipse.swt.SWT.BORDER;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.carrot2.workbench.core.helpers.GUIFactory;
 import org.carrot2.workbench.editors.*;
 import org.eclipse.swt.SWT;
@@ -94,13 +95,15 @@ public class StringEditor extends AttributeEditorAdapter
      * 
      */
     @Override
-    public void setValue(Object currentValue)
+    public void setValue(Object newValue)
     {
-        if (currentValue != null)
+        if (ObjectUtils.equals(newValue, getValue()))
         {
-            textBox.setText(currentValue.toString());
-            checkContentChange();
+            return;
         }
+
+        textBox.setText(newValue == null ? "" : newValue.toString());
+        checkContentChange();
     }
 
     /**
@@ -110,7 +113,7 @@ public class StringEditor extends AttributeEditorAdapter
     private void checkContentChange()
     {
         final String textBoxValue = this.textBox.getText();
-        if (this.content == null || !this.content.equals(textBoxValue))
+        if (!ObjectUtils.equals(textBoxValue, content))
         {
             this.content = textBoxValue;
             fireAttributeChange(new AttributeChangedEvent(this));
