@@ -4,14 +4,13 @@ Bundle-Name: Workbench Core
 Bundle-SymbolicName: org.carrot2.workbench.core; singleton:=true
 Bundle-Version: 1.0.0
 Bundle-Activator: org.carrot2.workbench.core.WorkbenchCorePlugin
-Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime,
+Require-Bundle: org.eclipse.ui;visibility:=reexport,
+ org.eclipse.core.runtime;visibility:=reexport,
+ org.eclipse.ui.forms;visibility:=reexport,
+ org.eclipse.ui.ide;visibility:=reexport,
  org.carrot2.util.common;visibility:=reexport,
- org.junit4.ext,
  org.carrot2.util.attribute,
  org.carrot2.core,
- org.eclipse.ui.forms,
- org.eclipse.ui.ide,
  org.apache.velocity
 Eclipse-LazyStart: true
 Bundle-ClassPath: .
