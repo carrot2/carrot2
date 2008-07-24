@@ -177,7 +177,7 @@ public final class AttributeList extends Composite
         /*
          * Create editors and inquire about their layout needs.
          */
-        final Map<String, IAttributeEditor> editors = Maps.newHashMap();
+        editors = Maps.newHashMap();
         final Map<String, AttributeEditorInfo> editorInfos = Maps.newHashMap();
 
         int maxColumns = 1;
