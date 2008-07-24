@@ -126,11 +126,11 @@ public final class ImplementingClassesEditor extends AttributeEditorAdapter
      * 
      */
     @Override
-    public void setValue(Object currentValue)
+    public void setValue(Object newValue)
     {
-        if (currentValue != null && currentValue != getValue())
+        if (newValue != null && newValue != getValue())
         {
-            int current = classes.indexOf(currentValue.getClass());
+            int current = classes.indexOf(newValue.getClass());
             combo.getCombo().select(current);
 
             propagateNewValue();
@@ -144,6 +144,12 @@ public final class ImplementingClassesEditor extends AttributeEditorAdapter
     public Object getValue()
     {
         final int current = combo.getCombo().getSelectionIndex();
-        return (classes.get(current));
+        
+        if (current == -1)
+        {
+            return null;
+        }
+
+        return classes.get(current);
     }
 }
