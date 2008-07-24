@@ -37,7 +37,7 @@ public final class AttributeGroups extends Composite implements
     /**
      * Padding between a given group (when it is expanded) and the following group.
      */
-    public static final int SPACE_TO_NEXT_GROUP = 15;
+    public static final int SPACE_TO_NEXT_GROUP = 30;
     
     /**
      * Method of grouping attribute editors.
