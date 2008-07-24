@@ -7,7 +7,14 @@ import java.io.*;
  */
 public final class FileResource implements Resource
 {
-    private final File file;
+    /**
+     * Public immutable file pointed to by this resource.
+     */
+    public final File file;
+
+    /*
+     * 
+     */
     private final String info;
 
     public FileResource(File file)
@@ -47,6 +54,9 @@ public final class FileResource implements Resource
         return this.file.hashCode();
     }
 
+    /**
+     * 
+     */
     public static FileResource valueOf(String string)
     {
         String path = string.substring("[file: ".length(), string.length() - 1);

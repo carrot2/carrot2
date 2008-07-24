@@ -28,7 +28,14 @@ import java.util.jar.JarFile;
  */
 public class URLResource implements Resource
 {
-    private final URL url;
+    /**
+     * Immutable public address of the resource.
+     */
+    public final URL url;
+
+    /*
+     * 
+     */
     private final String info;
 
     public URLResource(URL url)
