@@ -1,7 +1,6 @@
 package org.carrot2.workbench.core.helpers;
 
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
-import org.carrot2.workbench.core.ui.AttributeGroups;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
