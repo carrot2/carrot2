@@ -21,6 +21,11 @@ final class UnboundedDoubleEditor extends UnboundedEditorBase<Double>
      */
     private final static Pattern pattern = Pattern.compile("[\\-\\+]?[0-9]+[.]?[0-9]*");
 
+    /**
+     * Temporary editing validation pattern.
+     */
+    private final static Pattern temporaryPattern = Pattern.compile("[\\-\\+]?");
+
     /*
      * 
      */
@@ -114,5 +119,14 @@ final class UnboundedDoubleEditor extends UnboundedEditorBase<Double>
     protected Double to_v(String value)
     {
         return Double.parseDouble(value);
+    }
+
+    /*
+     * 
+     */
+    @Override
+    protected boolean isValidForEditing(String value)
+    {
+        return isValid(value) || temporaryPattern.matcher(value).matches();
     }
 }

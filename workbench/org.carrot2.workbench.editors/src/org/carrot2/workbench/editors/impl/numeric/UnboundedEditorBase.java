@@ -1,5 +1,6 @@
 package org.carrot2.workbench.editors.impl.numeric;
 
+import org.apache.commons.lang.StringUtils;
 import org.carrot2.workbench.core.helpers.GUIFactory;
 import org.carrot2.workbench.editors.*;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -14,7 +15,7 @@ import org.eclipse.swt.widgets.*;
 abstract class UnboundedEditorBase<T extends Number> extends AttributeEditorAdapter
 {
     /**
-     * Text box for editing. 
+     * Text box for editing.
      */
     protected Text text;
 
@@ -38,7 +39,7 @@ abstract class UnboundedEditorBase<T extends Number> extends AttributeEditorAdap
     {
         super(new AttributeEditorInfo(1, false));
     }
-    
+
     /*
      * Return the current editor value.
      */
@@ -112,6 +113,17 @@ abstract class UnboundedEditorBase<T extends Number> extends AttributeEditorAdap
             }
         });
 
+        text.addFocusListener(new FocusAdapter()
+        {
+            public void focusLost(FocusEvent e)
+            {
+                /*
+                 * Update with last valid value on focus lost.
+                 */
+                propagateNewValue(to_s((Number) lastValidValue));
+            }
+        });
+
         text.addVerifyListener(new VerifyListener()
         {
             public void verifyText(VerifyEvent e)
@@ -122,16 +134,17 @@ abstract class UnboundedEditorBase<T extends Number> extends AttributeEditorAdap
                 final String newText = currentText.substring(0, e.start) + e.text
                     + currentText.substring(e.end);
 
-                e.doit = isValid(newText);
+                e.doit = StringUtils.isEmpty(newText) || isValidForEditing(newText);
             }
         });
 
-        text.addListener(SWT.MouseWheel, new Listener() {
+        text.addListener(SWT.MouseWheel, new Listener()
+        {
             public void handleEvent(Event event)
             {
                 event.doit = false;
 
-                if (getValue() != null) 
+                if (getValue() != null)
                 {
                     doPageIncrement(event.count > 0);
                 }
@@ -186,11 +199,20 @@ abstract class UnboundedEditorBase<T extends Number> extends AttributeEditorAdap
      */
     protected abstract T toRange(T d);
 
-    /*
-     * 
+    /**
+     * Should return <code>true</code> if and only if the value is valid
+     * and will parse with {@link #to_v}.
      */
     protected abstract boolean isValid(String value);
-    
+
+    /**
+     * Should return <code>true</code> if the value is valid as a temporal value of the
+     * input text editor, but may not validate with {@link #isValid(String)}. Examples:
+     * <code>-</code>, <code>+</code> and an empty string are all valid temporary
+     * states, but not numbers.
+     */
+    protected abstract boolean isValidForEditing(String value);
+
     /**
      * Parse the number and return its string representation.
      */

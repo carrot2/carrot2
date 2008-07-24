@@ -17,9 +17,14 @@ final class UnboundedIntegerEditor extends UnboundedEditorBase<Integer>
     private IntRange constraint;
     
     /**
-     * Validation pattern for doubles. We allow decimal format only (no scientific format).
+     * Validation pattern.
      */
-    private final static Pattern pattern = Pattern.compile("[\\-\\+]?[0-9]*");
+    private final static Pattern pattern = Pattern.compile("[\\-\\+]?[0-9]+");
+
+    /**
+     * Temporary editing validation pattern.
+     */
+    private final static Pattern temporaryPattern = Pattern.compile("[\\-\\+]?");
 
     /*
      * 
@@ -106,6 +111,15 @@ final class UnboundedIntegerEditor extends UnboundedEditorBase<Integer>
         }
 
         return false;
+    }
+
+    /*
+     * 
+     */
+    @Override
+    protected boolean isValidForEditing(String value)
+    {
+        return isValid(value) || temporaryPattern.matcher(value).matches();
     }
 
     /*
