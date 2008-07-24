@@ -4,21 +4,18 @@ import java.io.StringWriter;
 import java.net.URL;
 import java.util.*;
 
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.runtime.RuntimeInstance;
-import org.carrot2.core.Cluster;
-import org.carrot2.core.Document;
-import org.carrot2.core.ProcessingResult;
+import org.apache.velocity.tools.generic.EscapeTool;
+import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.velocity.VelocityInitializer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.browser.Browser;
-import org.eclipse.swt.browser.LocationAdapter;
-import org.eclipse.swt.browser.LocationEvent;
+import org.eclipse.swt.browser.*;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
@@ -90,7 +87,7 @@ public final class DocumentList extends Composite
      */
     public void show(ProcessingResult result)
     {
-        final VelocityContext context = new VelocityContext();
+        final VelocityContext context = createContext();
         context.put("result", result);
 
         if (result.getAttributes().get(AttributeNames.RESULTS_TOTAL) != null)
@@ -102,8 +99,12 @@ public final class DocumentList extends Composite
                 String.format(Locale.ENGLISH, "%1$,d", total));
         }
 
-        final String query = (String) result.getAttributes().get("query");
-        context.put("query-escaped", StringEscapeUtils.escapeHtml(query));
+        String query = (String) result.getAttributes().get("query");
+        if (StringUtils.isEmpty(query)) 
+        {
+            query = "";
+        }
+        context.put("query", query);
 
         update(context, TEMPLATE_PROCESSING_RESULT);
     }
@@ -119,7 +120,7 @@ public final class DocumentList extends Composite
         }
         else
         {
-            final VelocityContext context = new VelocityContext();
+            final VelocityContext context = createContext();
 
             final Comparator<Document> comparator = Document.BY_ID_COMPARATOR;
             context.put("comparator", comparator);
@@ -127,6 +128,18 @@ public final class DocumentList extends Composite
 
             update(context, TEMPLATE_CLUSTERS);
         }
+    }
+
+    /**
+     * Create Velocity context and place default tools into it.
+     */
+    private VelocityContext createContext()
+    {
+        final VelocityContext context = new VelocityContext();
+        
+        context.put("esc", new EscapeTool());
+
+        return context;
     }
 
     /**

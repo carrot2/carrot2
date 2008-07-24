@@ -17,13 +17,16 @@
 		</div>
 	#end
 
+
 	#foreach ($document in $cluster.getAllDocuments($comparator))
-	    <span class="id"> [$document.Id]</span> <a href="${document.getField("url")}"><b>$document.getField("title")</b></a>
+	    <span class="id"> [$document.Id]</span>
+	    <a href="$esc.html(${document.getField("url")})">
+	    	<b>$esc.html($document.getField("title"))</b></a>
 	    <br>
 	    #if ($document.getField("summary") && $document.getField("summary") != "")
-	        $document.getField("summary")<br>
+	        $esc.html($document.getField("summary"))<br>
 	    #end
-	    <span class="du">${document.getField("url")}</span><br><br>
+	    <span class="du">$esc.html(${document.getField("url")})</span><br><br>
 	#end
 #end
 

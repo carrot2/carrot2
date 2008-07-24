@@ -8,7 +8,7 @@
 
 	  result
 	  results-total-formatted
-	  query-escaped
+	  query
 *#
 
 #if ($result)
@@ -16,9 +16,8 @@
     #set ( $documents = $result.Documents )
 #end
 
-
-#if ($documents.isEmpty() && $queryEscaped)
-    Your query - <b>&quot;${query-escaped}&quot;</b> - did not return any documents.<br><br> 
+#if ($documents.isEmpty())
+    Your query - <b>&quot;$esc.html($query)&quot;</b> - did not return any documents.<br><br> 
 
     Suggestions:<ul>
     <li>Make sure all words are spelled correctly.
@@ -27,12 +26,14 @@
     </ul>
 #else
 	#foreach ($document in $documents)
-	    <span class="id"> [$document.Id]</span> <a href="${document.getField("url")}"><b>$document.getField("title")</b></a>
+	    <span class="id"> [$document.Id]</span>
+	    <a href="$esc.html(${document.getField("url")})">
+	    	<b>$esc.html($document.getField("title"))</b></a>
 	    <br>
 	    #if ($document.getField("summary") && $document.getField("summary") != "")
-	        $document.getField("summary")<br>
+	        $esc.html($document.getField("summary"))<br>
 	    #end
-	    <span class="du">${document.getField("url")}</span><br><br>
+	    <span class="du">$esc.html(${document.getField("url")})</span><br><br>
 	#end
 #end
 
