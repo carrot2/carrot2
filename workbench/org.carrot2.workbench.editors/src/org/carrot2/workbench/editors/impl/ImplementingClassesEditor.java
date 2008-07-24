@@ -104,6 +104,7 @@ public final class ImplementingClassesEditor extends AttributeEditorAdapter
         combo.getCombo().setLayoutData(
             GUIFactory.editorGridData()
                 .grab(true, false)
+                .hint(100, SWT.DEFAULT)
                 .span(gridColumns, 1).create());
     }
 

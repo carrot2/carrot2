@@ -45,6 +45,7 @@ public class StringEditor extends AttributeEditorAdapter
         textBox = new Text(parent, BORDER);
         textBox.setLayoutData(GUIFactory.editorGridData()
             .grab(true, false)
+            .hint(200, SWT.DEFAULT)
             .span(gridColumns, 1).create());
 
         /*
