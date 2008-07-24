@@ -218,4 +218,27 @@ public class AttributeValueSet
         TypeStringValuePair.fromTypeStringValuePairs(overridenAttributeValues,
             overridenAttributeValuesAsStrings);
     }
+
+    /*
+     * 
+     */
+    @Override
+    public String toString()
+    {
+        final StringBuilder b = new StringBuilder();
+        b.append("AttributeValueSet [");
+
+        boolean first = true;
+        for (Map.Entry<String, Object> e : getAttributeValues().entrySet())
+        {
+            if (!first) b.append(", ");
+            b.append(e.getKey() != null ? e.getKey().toString() : "null");
+            b.append('=');
+            b.append(e.getValue() != null ? e.getValue().toString() : "null");
+            first = false;
+        }
+        b.append("]");
+
+        return b.toString();
+    }
 }

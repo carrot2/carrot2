@@ -343,4 +343,14 @@ public class AttributeValueSets
 
         return attributeValueSet;
     }
+    
+    /*
+     * 
+     */
+    @Override
+    public String toString()
+    {
+        return "AttributeValueSet [set IDs: " + 
+            Arrays.toString(this.getAttributeValueSetIds().toArray()) + "]";
+    }
 }
