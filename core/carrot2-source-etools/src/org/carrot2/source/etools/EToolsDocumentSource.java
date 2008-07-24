@@ -31,6 +31,7 @@ public class EToolsDocumentSource extends SearchEngine
      */
     @Input
     @Processing
+    @Internal
     @Attribute
     public String serviceUrlBase = "http://www.etools.ch/partnerSearch.do";
 
