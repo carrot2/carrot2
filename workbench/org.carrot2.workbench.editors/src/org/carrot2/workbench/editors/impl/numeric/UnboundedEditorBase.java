@@ -106,9 +106,14 @@ abstract class UnboundedEditorBase<T extends Number> extends AttributeEditorAdap
         {
             public void modifyText(ModifyEvent e)
             {
+                /*
+                 * Propagate valid intermediate values as soon
+                 * as the user types them in, but do not
+                 * refresh {@link #text}, as it causes selection caret to be reset. 
+                 */
                 if (isValid(text.getText()))
                 {
-                    propagateNewValue(text.getText());
+                    propagateNewValue(text.getText(), false);
                 }
             }
         });
@@ -118,7 +123,9 @@ abstract class UnboundedEditorBase<T extends Number> extends AttributeEditorAdap
             public void focusLost(FocusEvent e)
             {
                 /*
-                 * Update with last valid value on focus lost.
+                 * Update with last valid value on focus lost (if the intermediate
+                 * value was for some reason invalid, for example consisted
+                 * only of a '-' sign, it will be reverted to the last valid value.
                  */
                 propagateNewValue(to_s((Number) lastValidValue));
             }
@@ -126,6 +133,10 @@ abstract class UnboundedEditorBase<T extends Number> extends AttributeEditorAdap
 
         text.addVerifyListener(new VerifyListener()
         {
+            /*
+             * Allow only these modifications that result in a valid value or
+             * a temporary string that can lead to one.
+             */
             public void verifyText(VerifyEvent e)
             {
                 if (duringSelection) return;
@@ -140,6 +151,10 @@ abstract class UnboundedEditorBase<T extends Number> extends AttributeEditorAdap
 
         text.addListener(SWT.MouseWheel, new Listener()
         {
+            /*
+             * On mouse wheel, update value by page increment and
+             * stop wheel event's propagation.
+             */
             public void handleEvent(Event event)
             {
                 event.doit = false;
@@ -155,24 +170,26 @@ abstract class UnboundedEditorBase<T extends Number> extends AttributeEditorAdap
     }
 
     /**
-     * Propagates value change event to all listeners and updates GUI widgets.
+     * {@Link #propagateNewValue(String, boolean)} and refresh {@link #text}'s value.
      */
     protected final void propagateNewValue(String value)
+    {
+        propagateNewValue(value, true);
+    }
+    
+    /**
+     * Propagates value change event to all listeners and updates GUI widgets.
+     */
+    protected final void propagateNewValue(String value, boolean refreshTextBox)
     {
         if (!this.duringSelection)
         {
             this.duringSelection = true;
 
-            if (value == null)
+            if (refreshTextBox)
             {
-                this.text.setText("");
+                this.text.setText(value == null ? "" : value);
             }
-            else
-            {
-                this.text.setText(value);
-            }
-
-            this.duringSelection = false;
 
             if (isValid(value))
             {
@@ -186,6 +203,8 @@ abstract class UnboundedEditorBase<T extends Number> extends AttributeEditorAdap
                     // Just skip.
                 }
             }
+
+            this.duringSelection = false;
         }
     }
 

@@ -19,12 +19,12 @@ final class UnboundedDoubleEditor extends UnboundedEditorBase<Double>
     /**
      * Validation pattern for doubles. We allow decimal format only (no scientific format).
      */
-    private final static Pattern pattern = Pattern.compile("[\\-\\+]?[0-9]+[.]?[0-9]*");
+    private final static Pattern pattern = Pattern.compile("[\\-]?[0-9]+[.]?[0-9]*");
 
     /**
      * Temporary editing validation pattern.
      */
-    private final static Pattern temporaryPattern = Pattern.compile("[\\-\\+]?");
+    private final static Pattern temporaryPattern = Pattern.compile("[\\-]?[0-9]*");
 
     /*
      * 
