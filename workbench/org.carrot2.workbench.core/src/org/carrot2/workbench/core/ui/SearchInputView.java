@@ -183,11 +183,11 @@ public class SearchInputView extends ViewPart
      * Toggles between {@link SearchInputView#SHOW_REQUIRED} and
      * {@link SearchInputView#SHOW_ALL}. 
      */
-    private class ShowRequiredOnlyAction extends Action
+    private class ShowOptionalAction extends Action
     {
-        public ShowRequiredOnlyAction()
+        public ShowOptionalAction()
         {
-            super("Show only required attributes", SWT.TOGGLE);
+            super("Show optional attributes", SWT.TOGGLE);
             
             /*
              * Subscribe to change events on the global preference
@@ -198,7 +198,7 @@ public class SearchInputView extends ViewPart
             preferenceStore.addPropertyChangeListener(new IPropertyChangeListener() {
                 public void propertyChange(PropertyChangeEvent event)
                 {
-                    if (PreferenceConstants.SHOW_REQUIRED_ONLY.equals(
+                    if (PreferenceConstants.SHOW_OPTIONAL.equals(
                         event.getProperty()))
                     {
                         updateState();
@@ -216,7 +216,7 @@ public class SearchInputView extends ViewPart
         {
             final boolean state = 
                 WorkbenchCorePlugin.getDefault().getPreferenceStore().getBoolean(
-                PreferenceConstants.SHOW_REQUIRED_ONLY);
+                PreferenceConstants.SHOW_OPTIONAL);
 
             setChecked(state);
         }
@@ -228,9 +228,9 @@ public class SearchInputView extends ViewPart
                 WorkbenchCorePlugin.getDefault().getPreferenceStore();
 
             final boolean state =  preferenceStore.getBoolean(
-                PreferenceConstants.SHOW_REQUIRED_ONLY);
+                PreferenceConstants.SHOW_OPTIONAL);
 
-            preferenceStore.setValue(PreferenceConstants.SHOW_REQUIRED_ONLY, !state);
+            preferenceStore.setValue(PreferenceConstants.SHOW_OPTIONAL, !state);
         }
     }
 
@@ -253,7 +253,7 @@ public class SearchInputView extends ViewPart
      */
     private void createMenu(IMenuManager menuManager)
     {
-        final IAction showRequiredOnly = new ShowRequiredOnlyAction();
+        final IAction showRequiredOnly = new ShowOptionalAction();
 
         menuManager.add(showRequiredOnly);
         menuManager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
@@ -304,7 +304,7 @@ public class SearchInputView extends ViewPart
         preferenceStore.addPropertyChangeListener(new IPropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent event)
             {
-                if (PreferenceConstants.SHOW_REQUIRED_ONLY.equals(
+                if (PreferenceConstants.SHOW_OPTIONAL.equals(
                     event.getProperty()))
                 {
                     updateRequiredFilterState();
@@ -322,13 +322,13 @@ public class SearchInputView extends ViewPart
             WorkbenchCorePlugin.getDefault().getPreferenceStore();
 
         final Predicate<AttributeDescriptor> filter;
-        if (preferenceStore.getBoolean(PreferenceConstants.SHOW_REQUIRED_ONLY))
+        if (preferenceStore.getBoolean(PreferenceConstants.SHOW_OPTIONAL))
         {
-            filter = SHOW_REQUIRED;
+            filter = SHOW_ALL;
         }
         else
         {
-            filter = SHOW_ALL;
+            filter = SHOW_REQUIRED;
         }
 
         for (AttributeGroups i : editors.values())

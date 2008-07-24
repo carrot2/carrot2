@@ -26,7 +26,7 @@ public final class PreferenceConstants
     /**
      * Show only required attributes in the {@link SearchInputView}.
      */
-    public static final String SHOW_REQUIRED_ONLY = "search-input-view.show-required"; 
+    public static final String SHOW_OPTIONAL = "search-input-view.show-required"; 
 
     /*
      * 

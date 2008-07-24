@@ -41,6 +41,6 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer
         /*
          * SearchInputView
          */
-        store.setDefault(PreferenceConstants.SHOW_REQUIRED_ONLY, true);
+        store.setDefault(PreferenceConstants.SHOW_OPTIONAL, true);
     }
 }
