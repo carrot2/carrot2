@@ -323,7 +323,31 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         setPartName(abbreviated);
         setTitleToolTip(full);
 
-        rootForm.setText(abbreviated);
+        /*
+         * Add the number of documents and clusters to the root form's title.
+         */
+        final ProcessingResult result = getSearchResult().getProcessingResult();
+        if (result != null)
+        {
+            final int documents = result.getDocuments().size();
+            final int clusters = result.getClusters().size();
+
+            rootForm.setText(abbreviated 
+                + " (" + pluralize(documents, "document")
+                + ", " + pluralize(clusters, "cluster") + ")");
+        }
+        else
+        {
+            rootForm.setText(abbreviated);
+        }
+    }
+
+    /**
+     * Pluralize a given number.
+     */
+    private String pluralize(int value, String title)
+    {
+        return Integer.toString(value) + " " + title + (value != 1 ? "s" : "");
     }
 
     /**
