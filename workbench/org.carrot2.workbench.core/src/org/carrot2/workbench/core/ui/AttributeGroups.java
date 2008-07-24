@@ -2,9 +2,8 @@ package org.carrot2.workbench.core.ui;
 
 import static org.eclipse.swt.SWT.NONE;
 
-import java.util.HashSet;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.commons.lang.StringUtils;
@@ -14,10 +13,7 @@ import org.carrot2.util.attribute.BindableDescriptor;
 import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
 import org.carrot2.workbench.core.helpers.GUIFactory;
 import org.carrot2.workbench.core.helpers.Utils;
-import org.carrot2.workbench.editors.AttributeChangedEvent;
-import org.carrot2.workbench.editors.IAttributeChangeProvider;
-import org.carrot2.workbench.editors.IAttributeEditor;
-import org.carrot2.workbench.editors.IAttributeListener;
+import org.carrot2.workbench.editors.*;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -25,9 +21,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
-import org.eclipse.ui.forms.widgets.ExpandableComposite;
-import org.eclipse.ui.forms.widgets.Section;
-import org.eclipse.ui.forms.widgets.SharedScrolledComposite;
+import org.eclipse.ui.forms.widgets.*;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Maps;
@@ -40,6 +34,11 @@ import com.google.common.collect.Sets;
 public final class AttributeGroups extends Composite implements
     IAttributeChangeProvider
 {
+    /**
+     * Padding between a given group (when it is expanded) and the following group.
+     */
+    public static final int SPACE_TO_NEXT_GROUP = 15;
+    
     /**
      * Method of grouping attribute editors.
      */
@@ -330,8 +329,10 @@ public final class AttributeGroups extends Composite implements
 
         final GridLayout layout = GUIFactory.zeroMarginGridLayout();
         layout.numColumns = 1;
-        // Vertical space between groups
-        layout.marginBottom = 10;
+
+        // Vertical space between groups of attributes
+        layout.marginBottom = SPACE_TO_NEXT_GROUP;
+        layout.marginTop = AttributeList.SPACE_BEFORE_LABEL;
 
         /*
          * Prepare editors inside the group widget. Add some extra space at the bottom of

@@ -12,6 +12,7 @@ import org.carrot2.workbench.editors.factory.EditorFactory;
 import org.carrot2.workbench.editors.factory.EditorNotFoundException;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -27,6 +28,11 @@ import com.google.common.collect.Maps;
 public final class AttributeList extends Composite
     implements IAttributeChangeProvider
 {
+    /**
+     * Space before the editor label (if separate).
+     */
+    public final static int SPACE_BEFORE_LABEL = 5;
+    
     /**
      * A list of {@link AttributeDescriptor}s, indexed by their keys.
      */
@@ -219,6 +225,7 @@ public final class AttributeList extends Composite
         final GridDataFactory labelFactory = GridDataFactory.fillDefaults()
             .span(maxColumns, 1);
 
+        boolean firstEditor = true;
         for (String key : sortedKeys)
         {
             final AttributeDescriptor descriptor = attributeDescriptors.get(key);
@@ -232,7 +239,12 @@ public final class AttributeList extends Composite
                 label.setText(getLabel(descriptor));
                 label.setToolTipText(getToolTip(descriptor));
 
-                label.setLayoutData(labelFactory.create());
+                final GridData gd = labelFactory.create();
+                if (!firstEditor)
+                {
+                    gd.verticalIndent = SPACE_BEFORE_LABEL;
+                }
+                label.setLayoutData(gd);
             }
 
             // Add the editor, if available.
@@ -256,6 +268,8 @@ public final class AttributeList extends Composite
 
                 label.setLayoutData(labelFactory.create());
             }
+
+            firstEditor = false;
         }
     }
 
