@@ -326,6 +326,7 @@ public class SearchInputView extends ViewPart
             }
         }
 
+        checkAllRequiredAttributes();
         scroller.reflow(true);
     }
 
