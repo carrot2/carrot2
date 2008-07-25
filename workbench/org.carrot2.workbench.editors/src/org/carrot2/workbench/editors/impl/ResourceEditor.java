@@ -106,9 +106,6 @@ public class ResourceEditor extends AttributeEditorAdapter
     {
         this.resourceInfo = new Text(holder, SWT.READ_ONLY | SWT.NO_FOCUS | SWT.BORDER | SWT.SINGLE);
 
-        resourceInfo.setBackground(
-            resourceInfo.getDisplay().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND));
-
         final GridData gd = GridDataFactory.fillDefaults()
             .grab(true, false)
             .hint(100, SWT.DEFAULT)
