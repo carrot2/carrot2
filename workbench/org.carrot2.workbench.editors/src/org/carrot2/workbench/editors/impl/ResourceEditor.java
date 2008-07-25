@@ -51,14 +51,14 @@ public class ResourceEditor extends AttributeEditorAdapter
         {
             try
             {
-                URI validURI = new URI(text);
+                URL validURI = new URL(text);
 
-                if (validURI.getScheme() == null)
+                if (validURI.getProtocol() == null)
                 {
-                    throw new URISyntaxException(text, "Empty scheme.");
+                    throw new MalformedURLException("Empty scheme.");
                 }
             } 
-            catch (URISyntaxException e)
+            catch (MalformedURLException e)
             {
                 return "Not a valid URI";
             }
@@ -203,6 +203,11 @@ public class ResourceEditor extends AttributeEditorAdapter
             previous = ((URLResource) resource).url.toExternalForm();
         }
 
+        if (resource != null && resource instanceof ParameterizedUrlResource)
+        {
+            previous = ((ParameterizedUrlResource) resource).url.toExternalForm();
+        }
+
         final InputDialog dialog = new InputDialog(resourceInfo.getShell(), 
             "Enter resource URL", "Enter resource URL", previous, validatorURI);
 
@@ -210,7 +215,7 @@ public class ResourceEditor extends AttributeEditorAdapter
         {
             try
             {
-                setValue(new URLResource(new URL(dialog.getValue())));
+                setValue(new ParameterizedUrlResource(new URL(dialog.getValue())));
             }
             catch (MalformedURLException e)
             {
