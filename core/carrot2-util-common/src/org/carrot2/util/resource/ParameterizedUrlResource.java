@@ -15,7 +15,11 @@ import org.carrot2.util.StringUtils;
  */
 public class ParameterizedUrlResource implements Resource
 {
-    private final URL url;
+    /**
+     * Immutable public address of the resource.
+     */
+    public final URL url;
+
     private final String info;
 
     /**
