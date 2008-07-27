@@ -40,7 +40,10 @@ public abstract class QueryableDocumentSourceTestBase<T extends DocumentSource> 
     @Prerequisite(requires = "externalApiTestsEnabled")
     public void testUtfCharacters() throws Exception
     {
-        checkMinimumResults("kaczyński", getSmallQuerySize(), getSmallQuerySize() / 2);
+        if (hasUtfResults())
+        {
+            checkMinimumResults("kaczyński", getSmallQuerySize(), getSmallQuerySize() / 2);
+        }
     }
 
     /**
