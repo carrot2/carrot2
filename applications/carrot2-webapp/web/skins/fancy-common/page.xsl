@@ -25,7 +25,25 @@ $(document).ready(function() {
     $("#clusters-panel").trigger("carrot2.clusters.loaded");
   });
 </xsl:if>  
-});</script>
+
+<xsl:if test="/page/request/@view = 'visu'">
+var flashvars = {
+  data_sourceURL: "<xsl:value-of select="$xml-url-encoded" />",
+  callback_onGroupClick: "groupClicked"
+};
+var params = {};
+var attributes = {};
+
+swfobject.embedSWF("<xsl:value-of select="$skin-path" />/common/swf/org.carrotsearch.vis.circles.swf", "clusters-visu", "100%", "100%", "9.0.0", "<xsl:value-of select="$skin-path" />/common/swf/expressInstall.swf",
+    flashvars, params, attributes);
+</xsl:if>
+});
+
+function groupClicked(clusterId, docList) {
+  var documentIndexes = docList.split(",");
+  $.documents.select(documentIndexes);
+}  
+</script>
     </xsl:if>
     
     <script type="text/javascript">
@@ -50,18 +68,12 @@ $(document).ready(function() {
           <xsl:apply-templates select="/page/config/views/view" />
         </ul>
         
+
+        
         <div id="clusters-panel">
           <xsl:comment></xsl:comment>
           <xsl:if test="/page/request/@view = 'visu'">
-            <object type="application/x-shockwave-flash" width="100%" height="100%" data="{$skin-path}/common/swf/rings.swf?dataUrl={$xml-url-encoded}">
-              <param name="movie" value="{$skin-path}/common/swf/rings.swf?dataUrl={$xml-url-encoded}" />
-            </object>
-            <script type="text/javascript">
-function clusterClicked(clusterId, docList) {
-  var documentIndexes = docList.split(",");
-  $.documents.select(documentIndexes);
-}  
-            </script>  
+            <div id="clusters-visu"><xsl:comment></xsl:comment></div>
           </xsl:if>
         </div>
   

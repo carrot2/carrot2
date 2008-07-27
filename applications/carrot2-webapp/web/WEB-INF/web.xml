@@ -68,7 +68,7 @@
     
     <init-param>
       <param-name>template.caching</param-name>
-      <param-value>true</param-value>
+      <param-value>false</param-value>
     </init-param>
   </filter>
 
