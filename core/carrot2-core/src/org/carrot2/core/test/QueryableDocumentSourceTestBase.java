@@ -36,6 +36,21 @@ public abstract class QueryableDocumentSourceTestBase<T extends DocumentSource> 
         checkMinimumResults("blog", getSmallQuerySize(), getSmallQuerySize() / 2);
     }
 
+    @Test
+    @Prerequisite(requires = "externalApiTestsEnabled")
+    public void testUtfCharacters() throws Exception
+    {
+        checkMinimumResults("kaczyński", getSmallQuerySize(), getSmallQuerySize() / 2);
+    }
+
+    /**
+     * Override to switch on checking non-English results.
+     */
+    protected boolean hasUtfResults()
+    {
+        return false;
+    }
+
     /**
      * Override to customize small query size.
      */
@@ -150,7 +165,7 @@ public abstract class QueryableDocumentSourceTestBase<T extends DocumentSource> 
     private void checkMinimumResults(String query, int resultsToRequest,
         int minimumExpectedResults)
     {
-        int actualResults = runQuery("data mining", resultsToRequest);
+        int actualResults = runQuery(query, resultsToRequest);
         assertThat(actualResults).isGreaterThanOrEqualTo(minimumExpectedResults);
     }
 

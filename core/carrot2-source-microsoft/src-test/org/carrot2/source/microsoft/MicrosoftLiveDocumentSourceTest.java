@@ -23,4 +23,10 @@ public class MicrosoftLiveDocumentSourceTest extends
     {
         return MicrosoftLiveDocumentSource.metadata;
     }
+
+    @Override
+    protected boolean hasUtfResults()
+    {
+        return true;
+    }
 }

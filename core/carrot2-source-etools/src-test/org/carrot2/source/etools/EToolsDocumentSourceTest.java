@@ -30,6 +30,12 @@ public class EToolsDocumentSourceTest extends
         return EToolsDocumentSource.class;
     }
 
+    @Override
+    protected boolean hasUtfResults()
+    {
+        return true;
+    }
+
     @Test
     @Prerequisite(requires = "externalApiTestsEnabled")
     public void testDataSources() throws Exception

@@ -45,7 +45,7 @@ public class ResourceEditor extends AttributeEditorAdapter
     /*
      * Validator for URIs.
      */
-    private final static IInputValidator validatorURI = new IInputValidator() 
+    private final static IInputValidator validatorURI = new IInputValidator()
     {
         public String isValid(String text)
         {
@@ -57,16 +57,16 @@ public class ResourceEditor extends AttributeEditorAdapter
                 {
                     throw new MalformedURLException("Empty scheme.");
                 }
-            } 
+            }
             catch (MalformedURLException e)
             {
-                return "Not a valid URI";
+                return "Not a valid URL";
             }
 
             return null;
         }
     };
-    
+
     /*
      * 
      */
@@ -82,17 +82,15 @@ public class ResourceEditor extends AttributeEditorAdapter
     public void createEditor(Composite parent, int gridColumns)
     {
         final Composite holder = new Composite(parent, SWT.NONE);
-        holder.setLayoutData(
-            GUIFactory.editorGridData()
-                .grab(true, false)
-                .span(gridColumns, 1).create());
+        holder.setLayoutData(GUIFactory.editorGridData().grab(true, false).span(
+            gridColumns, 1).create());
 
         GridLayout gl = GUIFactory.zeroMarginGridLayout();
         gl.numColumns = 3;
         gl.horizontalSpacing = 3;
 
         holder.setLayout(gl);
-        
+
         createTextBox(holder);
 
         createFileButton(holder);
@@ -104,12 +102,11 @@ public class ResourceEditor extends AttributeEditorAdapter
      */
     private void createTextBox(Composite holder)
     {
-        this.resourceInfo = new Text(holder, SWT.READ_ONLY | SWT.NO_FOCUS | SWT.BORDER | SWT.SINGLE);
+        this.resourceInfo = new Text(holder, SWT.READ_ONLY | SWT.NO_FOCUS | SWT.BORDER
+            | SWT.SINGLE);
 
-        final GridData gd = GridDataFactory.fillDefaults()
-            .grab(true, false)
-            .hint(100, SWT.DEFAULT)
-            .create();
+        final GridData gd = GridDataFactory.fillDefaults().grab(true, false).hint(100,
+            SWT.DEFAULT).align(SWT.FILL, SWT.CENTER).create();
         resourceInfo.setLayoutData(gd);
     }
 
@@ -118,14 +115,17 @@ public class ResourceEditor extends AttributeEditorAdapter
      */
     private void createFileButton(Composite holder)
     {
-        final Image image = EditorsPlugin.getImageDescriptor("icons/open_folder.gif").createImage();
+        final Image image = EditorsPlugin.getImageDescriptor("icons/open_folder.gif")
+            .createImage();
         disposeBin.add(image);
 
         final Button button = new Button(holder, SWT.PUSH | SWT.CENTER);
         button.setImage(image);
-        button.setLayoutData(GridDataFactory.fillDefaults().create());
+        button.setLayoutData(GridDataFactory.fillDefaults().align(SWT.CENTER, SWT.CENTER)
+            .create());
 
-        button.addSelectionListener(new SelectionAdapter() {
+        button.addSelectionListener(new SelectionAdapter()
+        {
             public void widgetSelected(SelectionEvent e)
             {
                 openFileResourceDialog();
@@ -155,11 +155,10 @@ public class ResourceEditor extends AttributeEditorAdapter
         else
         {
             // In case we can't restore last file, refer to global last key.
-            dialog.setFileName(
-                EditorsPlugin.getDefault().getPreferenceStore().getString(
-                    EditorsPluginConstants.PREF_LAST_SELECTED_FILE));
+            dialog.setFileName(EditorsPlugin.getDefault().getPreferenceStore().getString(
+                EditorsPluginConstants.PREF_LAST_SELECTED_FILE));
         }
-        
+
         final String path = dialog.open();
         if (path != null)
         {
@@ -177,14 +176,16 @@ public class ResourceEditor extends AttributeEditorAdapter
      */
     private void createUrlButton(Composite holder)
     {
-        final Image image = EditorsPlugin.getImageDescriptor("icons/open_url.gif").createImage();
+        final Image image = EditorsPlugin.getImageDescriptor("icons/open_url.gif")
+            .createImage();
         disposeBin.add(image);
 
         final Button button = new Button(holder, SWT.PUSH | SWT.CENTER);
         button.setImage(image);
         button.setLayoutData(GridDataFactory.fillDefaults().create());
 
-        button.addSelectionListener(new SelectionAdapter() {
+        button.addSelectionListener(new SelectionAdapter()
+        {
             public void widgetSelected(SelectionEvent e)
             {
                 openURLResourceDialog();
@@ -208,7 +209,7 @@ public class ResourceEditor extends AttributeEditorAdapter
             previous = ((ParameterizedUrlResource) resource).url.toExternalForm();
         }
 
-        final InputDialog dialog = new InputDialog(resourceInfo.getShell(), 
+        final InputDialog dialog = new InputDialog(resourceInfo.getShell(),
             "Enter resource URL", "Enter resource URL", previous, validatorURI);
 
         if (dialog.open() == IDialogConstants.OK_ID)
@@ -222,7 +223,7 @@ public class ResourceEditor extends AttributeEditorAdapter
                 // Simply skip, shouldn't happen.
             }
         }
-    }    
+    }
 
     /*
      * 
@@ -234,12 +235,12 @@ public class ResourceEditor extends AttributeEditorAdapter
         {
             return;
         }
-        
+
         if (resource != null && resource.equals(newValue))
         {
             return;
         }
-        
+
         if (!(newValue instanceof Resource))
         {
             return;
@@ -249,8 +250,7 @@ public class ResourceEditor extends AttributeEditorAdapter
 
         this.resource = (Resource) newValue;
 
-        this.resourceInfo.setText(
-            resource == null ? "" : resource.toString());
+        this.resourceInfo.setText(resource == null ? "" : resource.toString());
 
         fireAttributeChange(new AttributeChangedEvent(this));
 

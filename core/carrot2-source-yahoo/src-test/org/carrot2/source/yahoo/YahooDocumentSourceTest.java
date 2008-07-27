@@ -92,4 +92,10 @@ public class YahooDocumentSourceTest extends
     {
         return YahooSearchService.DEFAULT_METADATA;
     }
+
+    @Override
+    protected boolean hasUtfResults()
+    {
+        return true;
+    }
 }

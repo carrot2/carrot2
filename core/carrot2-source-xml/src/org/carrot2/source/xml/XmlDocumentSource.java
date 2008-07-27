@@ -12,6 +12,7 @@ import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
+import org.carrot2.util.attribute.constraint.IntRange;
 import org.carrot2.util.resource.*;
 
 import com.google.common.collect.Maps;
@@ -108,13 +109,13 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
     public String query;
 
     /**
-     * The number of {@link Document}s to read from the XML data. Set to <code>-1</code>
-     * to load all {@link Document}s available in the XML data.
+     * The number of {@link Document}s to read from the XML data.
      */
     @Input
     @Processing
     @Attribute(key = AttributeNames.RESULTS)
-    public int results = -1;
+    @IntRange(min = 1)
+    public int results = 100;
 
     /**
      * {@link Document}s read from the XML data.
@@ -170,7 +171,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
             documents = processingResult.getDocuments();
 
             // Truncate to the requested number of documents if needed
-            if (results != -1 && documents.size() > results)
+            if (documents.size() > results)
             {
                 documents = documents.subList(0, results);
             }
