@@ -16,6 +16,7 @@ import org.carrot2.workbench.core.*;
 import org.carrot2.workbench.core.helpers.GUIFactory;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.core.preferences.PreferenceConstants;
+import org.carrot2.workbench.core.ui.actions.GroupingMethodActionFactory;
 import org.carrot2.workbench.core.ui.widgets.CScrolledComposite;
 import org.carrot2.workbench.editors.*;
 import org.eclipse.core.commands.operations.OperationStatus;
@@ -200,10 +201,20 @@ public class SearchInputView extends ViewPart
 
         final IActionBars bars = site.getActionBars();
         createMenu(bars.getMenuManager());
+        createToolbar(bars.getToolBarManager());
 
         bars.updateActionBars();        
     }
     
+    /*
+     * 
+     */
+    private void createToolbar(IToolBarManager toolBarManager)
+    {
+        toolBarManager.add(GroupingMethodActionFactory.createAction(
+            PreferenceConstants.GROUPING_INPUT_VIEW));
+    }
+
     /*
      * 
      */
@@ -257,14 +268,22 @@ public class SearchInputView extends ViewPart
          */
         final IPreferenceStore preferenceStore = 
             WorkbenchCorePlugin.getDefault().getPreferenceStore();
-        preferenceStore.addPropertyChangeListener(new IPropertyChangeListener() {
-            public void propertyChange(PropertyChangeEvent event)
+
+        preferenceStore.addPropertyChangeListener(
+            new PreferenceStoreKeyChangeListener(PreferenceConstants.SHOW_OPTIONAL)
+        {
+            public void propertyChangeFiltered(PropertyChangeEvent event)
             {
-                if (PreferenceConstants.SHOW_OPTIONAL.equals(
-                    event.getProperty()))
-                {
-                    displayEditorSet();
-                }
+                displayEditorSet();
+            }
+        });
+        
+        preferenceStore.addPropertyChangeListener(
+            new PreferenceStoreKeyChangeListener(PreferenceConstants.GROUPING_INPUT_VIEW)
+        {
+            public void propertyChangeFiltered(PropertyChangeEvent event)
+            {
+                displayEditorSet();
             }
         });
     }
@@ -302,8 +321,12 @@ public class SearchInputView extends ViewPart
         /*
          * Create a new editor set.
          */
+        final IPreferenceStore prefStore = 
+            WorkbenchCorePlugin.getDefault().getPreferenceStore();
+
         final String sourceID = getSourceId();
-        final GroupingMethod groupingMethod = GroupingMethod.NONE;
+        final GroupingMethod groupingMethod = GroupingMethod.valueOf(
+            prefStore.getString(PreferenceConstants.GROUPING_INPUT_VIEW));
         final BindableDescriptor sourceDescriptor = this.descriptors.get(sourceID);
 
         if (StringUtils.isEmpty(getSourceId()))

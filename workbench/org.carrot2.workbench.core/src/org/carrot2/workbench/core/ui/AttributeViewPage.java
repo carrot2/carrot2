@@ -8,23 +8,17 @@ import org.carrot2.workbench.core.WorkbenchActionFactory;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.GUIFactory;
 import org.carrot2.workbench.core.preferences.PreferenceConstants;
+import org.carrot2.workbench.core.ui.actions.GroupingMethodActionFactory;
 import org.carrot2.workbench.core.ui.widgets.CScrolledComposite;
-import org.carrot2.workbench.editors.AttributeChangedEvent;
-import org.carrot2.workbench.editors.AttributeListenerAdapter;
-import org.carrot2.workbench.editors.IAttributeListener;
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.action.Separator;
+import org.carrot2.workbench.editors.*;
+import org.eclipse.jface.action.*;
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.IWorkbenchActionConstants;
-import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.*;
 import org.eclipse.ui.forms.widgets.SharedScrolledComposite;
 import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.part.Page;
@@ -51,47 +45,9 @@ final class AttributeViewPage extends Page
     private IAttributeListener editorToViewSync;
 
     /**
-     * Layout actions associated with this page's menu.
-     */
-    private LayoutAction [] layoutActions = new LayoutAction []
-    {
-        new LayoutAction(GroupingMethod.GROUP, "Attribute semantics"),
-        new LayoutAction(GroupingMethod.LEVEL, "Attribute level"),
-        new LayoutAction(GroupingMethod.STRUCTURE, "Declaring class"), null, /* Separator */
-        new LayoutAction(GroupingMethod.NONE, "None"),
-    };
-
-    /**
      * Main control in this page.
      */
     private Composite mainControl;
-
-    /**
-     * Sets the given grouping method and updates state of all controls associated with
-     * grouping.
-     */
-    private final class LayoutAction extends Action
-    {
-        public final GroupingMethod grouping;
-
-        public LayoutAction(GroupingMethod grouping, String label)
-        {
-            super(label, Action.AS_RADIO_BUTTON);
-            this.grouping = grouping;
-        }
-
-        @Override
-        public void run()
-        {
-            /*
-             * Save the default.
-             */
-            WorkbenchCorePlugin.getDefault().getPreferenceStore().setValue(
-                PreferenceConstants.ATTRIBUTE_GROUPING_LAYOUT, grouping.name());
-
-            updateGroupingState(grouping);
-        }
-    }
 
     /*
      * 
@@ -112,31 +68,7 @@ final class AttributeViewPage extends Page
         final IActionBars bars = pageSite.getActionBars();
         createToolbarActions(bars.getToolBarManager());
 
-        createMenu(bars.getMenuManager());
-
         bars.updateActionBars();
-    }
-
-    /*
-     * 
-     */
-    private void createMenu(IMenuManager viewMenu)
-    {
-        /*
-         * Layout menu.
-         */
-        final IMenuManager layoutSubMenu = new MenuManager("&Grouping");
-        viewMenu.add(layoutSubMenu);
-        for (IAction action : layoutActions)
-        {
-            if (action == null)
-            {
-                layoutSubMenu.add(new Separator());
-                continue;
-            }
-            layoutSubMenu.add(action);
-        }
-        viewMenu.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
     }
 
     /*
@@ -149,6 +81,12 @@ final class AttributeViewPage extends Page
          */
         final IWorkbenchWindow window = getSite().getWorkbenchWindow();
         toolBarManager.add(WorkbenchActionFactory.AUTO_UPDATE_ACTION.create(window));
+
+        /*
+         * Add attribute grouping action.
+         */
+        toolBarManager.add(GroupingMethodActionFactory.createAction(
+            PreferenceConstants.GROUPING_ATTRIBUTE_VIEW));
     }
 
     /**
@@ -158,14 +96,7 @@ final class AttributeViewPage extends Page
     private void updateGroupingState(GroupingMethod grouping)
     {
         attributeEditors.setGrouping(grouping);
-        for (LayoutAction action : layoutActions)
-        {
-            if (action != null)
-            {
-                action.setChecked(grouping.equals(action.grouping));
-            }
-        }
-        
+
         /*
          * Refresh current attribute values. 
          */
@@ -186,9 +117,15 @@ final class AttributeViewPage extends Page
     @Override
     public void createControl(Composite parent)
     {
-        final GroupingMethod defaultGrouping = GroupingMethod.valueOf(WorkbenchCorePlugin
-            .getDefault().getPreferenceStore().getString(
-                PreferenceConstants.ATTRIBUTE_GROUPING_LAYOUT));
+        final IPreferenceStore prefStore = WorkbenchCorePlugin.getDefault().getPreferenceStore();
+
+        final String key = PreferenceConstants.GROUPING_ATTRIBUTE_VIEW;
+        prefStore.addPropertyChangeListener(new PreferenceStoreKeyChangeListener(key) {
+            protected void propertyChangeFiltered(PropertyChangeEvent event)
+            {
+                updateGroupingState(GroupingMethod.valueOf(prefStore.getString(key)));
+            }
+        });
 
         final SharedScrolledComposite scroller = new CScrolledComposite(parent,
             SWT.H_SCROLL | SWT.V_SCROLL);
@@ -198,6 +135,8 @@ final class AttributeViewPage extends Page
         scroller.setContent(spacer);
         scroller.setExpandHorizontal(true);
         scroller.setExpandVertical(false);
+
+        final GroupingMethod defaultGrouping = GroupingMethod.valueOf(prefStore.getString(key));
 
         attributeEditors = new AttributeGroups(spacer, editor.getAlgorithmDescriptor(),
             defaultGrouping);

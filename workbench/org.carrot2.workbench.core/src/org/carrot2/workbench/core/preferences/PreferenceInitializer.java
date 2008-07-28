@@ -36,11 +36,12 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer
         /*
          * Attribute grouping.
          */
-        store.setDefault(PreferenceConstants.ATTRIBUTE_GROUPING_LAYOUT, GroupingMethod.GROUP.name());
+        store.setDefault(PreferenceConstants.GROUPING_ATTRIBUTE_VIEW, GroupingMethod.GROUP.name());
 
         /*
          * SearchInputView
          */
         store.setDefault(PreferenceConstants.SHOW_OPTIONAL, false);
+        store.setDefault(PreferenceConstants.GROUPING_INPUT_VIEW, GroupingMethod.NONE.name());
     }
 }

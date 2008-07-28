@@ -19,14 +19,19 @@ public final class PreferenceConstants
     public static final String AUTO_UPDATE_DELAY = "auto-update.delay";
 
     /**
-     * Attribute grouping layout.
+     * Attribute grouping layout, attributes view.
      */
-    public static final String ATTRIBUTE_GROUPING_LAYOUT = "attributes-view.layout";
+    public static final String GROUPING_ATTRIBUTE_VIEW = "attributes-view.layout";
+
+    /**
+     * Attribute grouping layout, input view.
+     */
+    public static final String GROUPING_INPUT_VIEW = "search-input-view.layout"; 
 
     /**
      * Show only required attributes in the {@link SearchInputView}.
      */
-    public static final String SHOW_OPTIONAL = "search-input-view.show-required"; 
+    public static final String SHOW_OPTIONAL = "search-input-view.show-required";
 
     /*
      * 
