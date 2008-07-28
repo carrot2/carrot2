@@ -13,8 +13,9 @@ import org.carrot2.workbench.core.WorkbenchActionFactory;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.*;
 import org.carrot2.workbench.core.preferences.PreferenceConstants;
-import org.carrot2.workbench.core.ui.actions.GroupingMethodActionFactory;
+import org.carrot2.workbench.core.ui.actions.GroupingMethodAction;
 import org.carrot2.workbench.core.ui.actions.SaveAsXMLActionDelegate;
+import org.carrot2.workbench.core.ui.sash.SashForm;
 import org.carrot2.workbench.core.ui.widgets.CScrolledComposite;
 import org.carrot2.workbench.editors.*;
 import org.eclipse.core.runtime.*;
@@ -30,8 +31,8 @@ import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.events.*;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -251,7 +252,27 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
 
         toolkit.decorateFormHeading(rootForm);
 
-        sashForm = new SashForm(rootForm.getBody(), SWT.HORIZONTAL);
+        sashForm = new SashForm(rootForm.getBody(), SWT.HORIZONTAL) {
+            protected boolean onDragSash(Event event)
+            {
+                final boolean modified = super.onDragSash(event);
+                if (modified)
+                {
+                    /*
+                     * Update globally remembered weights.
+                     */
+                    final int [] weights = sashForm.getWeights();
+                    for (SearchEditorSections s : sections.keySet())
+                    {
+                        SectionReference sr = sections.get(s);
+                        sr.weight = weights[sr.sashIndex];
+                    }
+
+                    WorkbenchCorePlugin.getDefault().storeSectionsState(getSections());
+                }
+                return modified;
+            }
+        };
         toolkit.adapt(sashForm);
 
         final GridLayout layout = GridLayoutFactory.swtDefaults()
@@ -496,26 +517,6 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
             setSectionVisibility(s, sr.visibility);
         }
         sashForm.setWeights(weights);
-        
-        /*
-         * Unfortunately SashForm does not propagate layout events,
-         * so we need to acquire these events from sash form elements directly.
-         */
-        for (final SearchEditorSections section : sections.keySet())
-        {
-            final SectionReference sr = sections.get(section);
-            sr.section.addControlListener(new ControlListener() {
-                public void controlMoved(ControlEvent e)
-                {
-                    sr.weight = sashForm.getWeights()[sr.sashIndex];
-                }
-
-                public void controlResized(ControlEvent e)
-                {
-                     controlMoved(e);
-                }
-            });
-        }
     }
 
     /*
@@ -708,7 +709,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
 
         // Attribute grouping.
         final String key = PreferenceConstants.GROUPING_EDITOR_PANEL;
-        toolbar.add(GroupingMethodActionFactory.createAction(key));
+        toolbar.add(new GroupingMethodAction(key));
 
         final IPreferenceStore prefStore = WorkbenchCorePlugin.getDefault().getPreferenceStore();
 
@@ -726,7 +727,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         });
 
         // Choose visible panels.
-        final IAction selectSectionsAction = new SearchEditorPanelSelectorAction(
+        final IAction selectSectionsAction = new SearchEditorPanelsAction(
             "Choose visible panels", this);
         toolbar.add(selectSectionsAction);
 

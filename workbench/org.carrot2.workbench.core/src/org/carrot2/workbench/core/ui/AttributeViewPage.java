@@ -8,17 +8,18 @@ import org.carrot2.workbench.core.WorkbenchActionFactory;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.GUIFactory;
 import org.carrot2.workbench.core.preferences.PreferenceConstants;
-import org.carrot2.workbench.core.ui.actions.GroupingMethodActionFactory;
+import org.carrot2.workbench.core.ui.actions.GroupingMethodAction;
 import org.carrot2.workbench.core.ui.widgets.CScrolledComposite;
 import org.carrot2.workbench.editors.*;
-import org.eclipse.jface.action.*;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.ui.*;
+import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.forms.widgets.SharedScrolledComposite;
 import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.part.Page;
@@ -85,8 +86,7 @@ final class AttributeViewPage extends Page
         /*
          * Add attribute grouping action.
          */
-        toolBarManager.add(GroupingMethodActionFactory.createAction(
-            PreferenceConstants.GROUPING_ATTRIBUTE_VIEW));
+        toolBarManager.add(new GroupingMethodAction(PreferenceConstants.GROUPING_ATTRIBUTE_VIEW));
     }
 
     /**

@@ -1,8 +1,10 @@
 package org.carrot2.workbench.core.ui;
 
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
-import org.eclipse.jface.action.*;
-import org.eclipse.jface.resource.ImageDescriptor;
+import org.carrot2.workbench.core.helpers.DisposeBin;
+import org.carrot2.workbench.core.helpers.DropDownMenuAction;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -11,7 +13,7 @@ import org.eclipse.swt.widgets.*;
 /**
  * {@link SearchEditor}'s panels selection action.
  */
-final class SearchEditorPanelSelectorAction extends Action
+final class SearchEditorPanelsAction extends Action
 {
     /**
      * The editor this action is attached to.
@@ -23,12 +25,15 @@ final class SearchEditorPanelSelectorAction extends Action
      */
     private IMenuCreator menuCreator = new IMenuCreator()
     {
-        private Menu menu;
+        private DisposeBin bin = new DisposeBin();
 
+        /*
+         * 
+         */
         public Menu getMenu(Control parent)
         {
-            menu = new Menu(parent);
-            createItems();
+            Menu menu = createItems(new Menu(parent));
+            bin.add(menu);
             return menu;
         }
 
@@ -37,18 +42,15 @@ final class SearchEditorPanelSelectorAction extends Action
          */
         public Menu getMenu(Menu parent)
         {
-            if (menu == null)
-            {
-                menu = new Menu(parent);
-                createItems();
-            }
+            Menu menu = createItems(new Menu(parent));
+            bin.add(menu);
             return menu;
         }
 
         /*
          * 
          */
-        private void createItems()
+        private Menu createItems(Menu menu)
         {
             for (final SearchEditorSections section : editor.getSections().keySet())
             {
@@ -64,7 +66,7 @@ final class SearchEditorPanelSelectorAction extends Action
                     }
                 });
             }
-            
+
             new MenuItem(menu, SWT.SEPARATOR);
             final MenuItem mi = new MenuItem(menu, SWT.PUSH);
             mi.setText("Save as default layout");
@@ -75,50 +77,34 @@ final class SearchEditorPanelSelectorAction extends Action
                         editor.getSections());
                 }
             });
+
+            return menu;
         }
 
         public void dispose()
         {
-            if (menu != null)
-            {
-                menu.dispose();
-            }
+            bin.dispose();
         }
     };
 
     /*
      * 
      */
-    SearchEditorPanelSelectorAction(String text, SearchEditor editor)
+    SearchEditorPanelsAction(String text, SearchEditor editor)
     {
-        super(text, IAction.AS_DROP_DOWN_MENU);
+        super(text, Action.AS_DROP_DOWN_MENU);
         this.editor = editor;
+
+        setMenuCreator(menuCreator);
+        setImageDescriptor(WorkbenchCorePlugin.getImageDescriptor("icons/panels.gif"));
     }
 
     /*
      * 
      */
     @Override
-    public void run()
+    public void runWithEvent(Event event)
     {
-        new SearchEditorPanelSelectorDialog(editor).open();
-    }
-
-    /*
-     * 
-     */
-    @Override
-    public IMenuCreator getMenuCreator()
-    {
-        return menuCreator;
-    }
-
-    /*
-     * 
-     */
-    @Override
-    public ImageDescriptor getImageDescriptor()
-    {
-        return WorkbenchCorePlugin.getImageDescriptor("icons/panels.gif");
+        DropDownMenuAction.showMenu(this, event);
     }
 }

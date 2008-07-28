@@ -16,7 +16,7 @@ import org.carrot2.workbench.core.*;
 import org.carrot2.workbench.core.helpers.GUIFactory;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.core.preferences.PreferenceConstants;
-import org.carrot2.workbench.core.ui.actions.GroupingMethodActionFactory;
+import org.carrot2.workbench.core.ui.actions.GroupingMethodAction;
 import org.carrot2.workbench.core.ui.widgets.CScrolledComposite;
 import org.carrot2.workbench.editors.*;
 import org.eclipse.core.commands.operations.OperationStatus;
@@ -211,8 +211,7 @@ public class SearchInputView extends ViewPart
      */
     private void createToolbar(IToolBarManager toolBarManager)
     {
-        toolBarManager.add(GroupingMethodActionFactory.createAction(
-            PreferenceConstants.GROUPING_INPUT_VIEW));
+        toolBarManager.add(new GroupingMethodAction(PreferenceConstants.GROUPING_INPUT_VIEW));
     }
 
     /*
