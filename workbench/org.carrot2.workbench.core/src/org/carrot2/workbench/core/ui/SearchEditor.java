@@ -1,42 +1,25 @@
 package org.carrot2.workbench.core.ui;
 
 import java.io.File;
-import java.util.Collections;
-import java.util.EnumMap;
-import java.util.EnumSet;
+import java.util.*;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.carrot2.core.Cluster;
-import org.carrot2.core.ProcessingComponent;
-import org.carrot2.core.ProcessingResult;
-import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.core.attribute.Internal;
-import org.carrot2.core.attribute.Processing;
-import org.carrot2.util.attribute.BindableDescriptor;
-import org.carrot2.util.attribute.BindableDescriptorBuilder;
-import org.carrot2.util.attribute.Input;
+import org.carrot2.core.*;
+import org.carrot2.core.attribute.*;
+import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
+import org.carrot2.workbench.core.WorkbenchActionFactory;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
-import org.carrot2.workbench.core.helpers.DisposeBin;
-import org.carrot2.workbench.core.helpers.GUIFactory;
-import org.carrot2.workbench.core.helpers.PostponableJob;
-import org.carrot2.workbench.core.helpers.Utils;
+import org.carrot2.workbench.core.helpers.*;
 import org.carrot2.workbench.core.preferences.PreferenceConstants;
+import org.carrot2.workbench.core.ui.actions.GroupingMethodActionFactory;
 import org.carrot2.workbench.core.ui.actions.SaveAsXMLActionDelegate;
 import org.carrot2.workbench.core.ui.widgets.CScrolledComposite;
-import org.carrot2.workbench.editors.AttributeChangedEvent;
-import org.carrot2.workbench.editors.AttributeListenerAdapter;
-import org.carrot2.workbench.editors.IAttributeListener;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.IJobChangeEvent;
-import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.core.runtime.jobs.JobChangeAdapter;
-import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.action.ToolBarManager;
+import org.carrot2.workbench.editors.*;
+import org.eclipse.core.runtime.*;
+import org.eclipse.core.runtime.jobs.*;
+import org.eclipse.jface.action.*;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -44,34 +27,18 @@ import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
-import org.eclipse.jface.viewers.IPostSelectionProvider;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.*;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.ControlListener;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.*;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.ToolBar;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.IMemento;
-import org.eclipse.ui.IPersistableEditor;
-import org.eclipse.ui.IWorkbenchSite;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.forms.widgets.ExpandableComposite;
-import org.eclipse.ui.forms.widgets.Form;
-import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.Section;
+import org.eclipse.swt.widgets.*;
+import org.eclipse.ui.*;
+import org.eclipse.ui.forms.widgets.*;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.progress.UIJob;
 
@@ -258,6 +225,11 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
             }
         }
     };
+
+    /**
+     * Attribute editors.
+     */
+    private AttributeGroups attributesPanel;
 
     /**
      * Create main GUI components, hook up events, schedule initial processing.
@@ -723,20 +695,41 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         return searchResult;
     }
 
-    /*
-     * 
+    /**
+     * Add actions to the root form's toolbar.
      */
     private void createActions()
     {
         final IToolBarManager toolbar = rootForm.getToolBarManager();
 
-        /*
-         * TODO: Add toggle buttons instead of a menu here?
-         */
+        // Auto update action.
+        final IWorkbenchWindow window = getSite().getWorkbenchWindow();
+        toolbar.add(WorkbenchActionFactory.AUTO_UPDATE_ACTION.create(window));
 
+        // Attribute grouping.
+        final String key = PreferenceConstants.GROUPING_EDITOR_PANEL;
+        toolbar.add(GroupingMethodActionFactory.createAction(key));
+
+        final IPreferenceStore prefStore = WorkbenchCorePlugin.getDefault().getPreferenceStore();
+
+        prefStore.addPropertyChangeListener(new PreferenceStoreKeyChangeListener(key) {
+            protected void propertyChangeFiltered(PropertyChangeEvent event)
+            {
+                attributesPanel.setGrouping(GroupingMethod.valueOf(prefStore.getString(key)));
+                Utils.adaptToFormUI(toolkit, attributesPanel);
+                
+                if (!sections.get(SearchEditorSections.ATTRIBUTES).visibility)
+                {
+                    setSectionVisibility(SearchEditorSections.ATTRIBUTES, true);
+                }
+            }
+        });
+
+        // Choose visible panels.
         final IAction selectSectionsAction = new SearchEditorPanelSelectorAction(
             "Choose visible panels", this);
         toolbar.add(selectSectionsAction);
+
         toolbar.update(true);
     }
 
@@ -916,8 +909,12 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         final Composite spacer = GUIFactory.createSpacer(scroller);
         resources.add(spacer);
 
-        final AttributeGroups attributesPanel = new AttributeGroups(
-            spacer, descriptor, GroupingMethod.GROUP);
+        final IPreferenceStore prefStore = WorkbenchCorePlugin.getDefault().getPreferenceStore();
+        final GroupingMethod grouping = GroupingMethod.valueOf(
+            prefStore.getString(PreferenceConstants.GROUPING_EDITOR_PANEL)); 
+
+        attributesPanel = new AttributeGroups(
+            spacer, descriptor, grouping);
         attributesPanel.setLayoutData(GridDataFactory.fillDefaults().grab(true, true)
             .create());        
         resources.add(attributesPanel);

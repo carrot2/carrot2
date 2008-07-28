@@ -47,7 +47,8 @@ public final class GroupingMethodActionFactory
                 menu.add(new Separator());
                 continue;
             }
-            menu.add(action);
+
+            menu.add(new ActionContributionItem(action));
         }
         
         return menu;

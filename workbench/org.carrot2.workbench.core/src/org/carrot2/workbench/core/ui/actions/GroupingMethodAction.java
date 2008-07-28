@@ -1,10 +1,14 @@
 package org.carrot2.workbench.core.ui.actions;
 
+import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
+import org.carrot2.workbench.core.helpers.DropDownMenuAction;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IMenuCreator;
+import org.eclipse.swt.widgets.Event;
 
 /**
- * 
+ * An action that displays a menu of possible {@link GroupingMethod}.
  */
 final class GroupingMethodAction extends Action 
 {
@@ -14,14 +18,19 @@ final class GroupingMethodAction extends Action
 
         setImageDescriptor(WorkbenchCorePlugin.getImageDescriptor("icons/grouping.gif"));
     }
-    
+
     @Override
-    public void run()
+    public void runWithEvent(Event event)
     {
         /*
-         * TODO: This seems strange, but AS_DROP_DOWN_MENU actions do not show context
-         * menu popup when clicked. Eclipse has similar behaviour, so I assume
-         * it is "normal".
+         * Attempt to open the drop-down menu.
          */
+        DropDownMenuAction.showMenu(this, event);
+    }
+    
+    @Override
+    public IMenuCreator getMenuCreator()
+    {
+        return super.getMenuCreator();
     }
 }

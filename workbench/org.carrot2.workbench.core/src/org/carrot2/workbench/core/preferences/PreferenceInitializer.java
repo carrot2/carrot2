@@ -43,5 +43,10 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer
          */
         store.setDefault(PreferenceConstants.SHOW_OPTIONAL, false);
         store.setDefault(PreferenceConstants.GROUPING_INPUT_VIEW, GroupingMethod.NONE.name());
+        
+        /*
+         * SearchEditor
+         */
+        store.setDefault(PreferenceConstants.GROUPING_EDITOR_PANEL, GroupingMethod.GROUP.name());        
     }
 }
