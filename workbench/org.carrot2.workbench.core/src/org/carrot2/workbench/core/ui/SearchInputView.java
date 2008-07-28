@@ -3,73 +3,35 @@ package org.carrot2.workbench.core.ui;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.annotation.Annotation;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.*;
 
+import org.apache.commons.lang.StringUtils;
+import org.carrot2.core.DocumentSource;
 import org.carrot2.core.ProcessingComponent;
 import org.carrot2.core.attribute.Processing;
-import org.carrot2.util.attribute.AnnotationsPredicate;
-import org.carrot2.util.attribute.AttributeDescriptor;
-import org.carrot2.util.attribute.AttributeValueSet;
-import org.carrot2.util.attribute.AttributeValueSets;
-import org.carrot2.util.attribute.BindableDescriptor;
-import org.carrot2.util.attribute.BindableDescriptorBuilder;
-import org.carrot2.util.attribute.Input;
-import org.carrot2.util.attribute.Required;
+import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
 import org.carrot2.util.attribute.constraint.ConstraintValidator;
-import org.carrot2.workbench.core.ExtensionImpl;
-import org.carrot2.workbench.core.ExtensionLoader;
-import org.carrot2.workbench.core.WorkbenchCorePlugin;
+import org.carrot2.workbench.core.*;
 import org.carrot2.workbench.core.helpers.GUIFactory;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.core.preferences.PreferenceConstants;
 import org.carrot2.workbench.core.ui.widgets.CScrolledComposite;
-import org.carrot2.workbench.editors.AttributeChangedEvent;
-import org.carrot2.workbench.editors.AttributeListenerAdapter;
-import org.carrot2.workbench.editors.IAttributeEditor;
+import org.carrot2.workbench.editors.*;
 import org.eclipse.core.commands.operations.OperationStatus;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.action.*;
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
-import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.ComboViewer;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.ViewerComparator;
+import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StackLayout;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.TraverseEvent;
-import org.eclipse.swt.events.TraverseListener;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Widget;
-import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.IMemento;
-import org.eclipse.ui.IViewSite;
-import org.eclipse.ui.IWorkbenchActionConstants;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.swt.events.*;
+import org.eclipse.swt.layout.*;
+import org.eclipse.swt.widgets.*;
+import org.eclipse.ui.*;
 import org.eclipse.ui.part.ViewPart;
 
 import com.google.common.base.Predicate;
@@ -87,22 +49,6 @@ public class SearchInputView extends ViewPart
      * Public identifier of this view.
      */
     public static final String ID = "org.carrot2.workbench.core.views.search";
-
-    /**
-     * A bit modified {@link StackLayout}. The size of the composite equals the size of
-     * the visible control, not the biggest control available on the attributesPagesStack.
-     */
-    private static class VisibleComponentSizeStackLayout extends StackLayout
-    {
-        @Override
-        protected Point computeSize(Composite composite, int wHint, int hHint,
-            boolean flushCache)
-        {
-            if (topControl == null) return new Point(0, 0);
-
-            return topControl.computeSize(wHint, hHint);
-        }
-    }
 
     /**
      * Memento branch for persisting algorithm component ID;
@@ -150,16 +96,15 @@ public class SearchInputView extends ViewPart
     private CScrolledComposite scroller;
 
     /**
-     * A composite with a {@link StackLayout}, holding {@link AttributeGroups}s for
-     * all document sources. 
+     * A composite holding holding an {@link AttributeGroups} (editors for the current
+     * combination of input/ source).
      */
-    private VisibleComponentSizeStackLayout attributesPagesStack;
+    private Composite editorCompositeContainer;
 
     /**
-     * A map of {@link AttributeGroups} associated with all document source IDs from
-     * {@link WorkbenchCorePlugin#getSources()}.
+     * The current editor composite.
      */
-    private Map<String, AttributeGroups> editors = Maps.newHashMap();
+    private AttributeGroups editorComposite;
 
     /**
      * A joint set of attributes for all sources from {@link WorkbenchCorePlugin#getSources()}.
@@ -171,6 +116,24 @@ public class SearchInputView extends ViewPart
      * WorkbenchCorePlugin#getSources()}.
      */
     private Map<String, BindableDescriptor> descriptors = Maps.newHashMap();
+
+    /**
+     * All {@link ExtensionImpl} related to {@link DocumentSource}s in {@link #sourceViewer}. 
+     */
+    private HashMap<String, ExtensionImpl> sources;
+
+    /**
+     * Selection listener on {@link #sourceViewer}.
+     */
+    private ISelectionChangedListener sourceSelectionListener = new ISelectionChangedListener()
+    {
+        public void selectionChanged(SelectionChangedEvent event)
+        {
+            final ExtensionImpl impl = (ExtensionImpl) 
+                ((IStructuredSelection) event.getSelection()).getFirstElement();
+            setSourceId(impl.id);
+        }
+    };
 
     /**
      * Toggles between {@link SearchInputView#SHOW_REQUIRED} and
@@ -261,7 +224,7 @@ public class SearchInputView extends ViewPart
         createComponents(parent);
 
         /*
-         * Hook processing startup to the processing button and on focus-list (when all
+         * Hook processing event to the processing button and on traversal (when all
          * attributes are given).
          */
         processButton.addSelectionListener(new SelectionAdapter()
@@ -300,16 +263,17 @@ public class SearchInputView extends ViewPart
                 if (PreferenceConstants.SHOW_OPTIONAL.equals(
                     event.getProperty()))
                 {
-                    updateRequiredFilterState();
+                    displayEditorSet();
                 }
             }
         });
     }
 
     /**
-     * Update attribute panels with current filtering settings.
+     * Display a new composite with editors for the current combination of the source, algorithm
+     * and grouping/ filtering flags.
      */
-    private void updateRequiredFilterState()
+    private void displayEditorSet()
     {
         final IPreferenceStore preferenceStore = 
             WorkbenchCorePlugin.getDefault().getPreferenceStore();
@@ -324,34 +288,77 @@ public class SearchInputView extends ViewPart
             filter = SHOW_REQUIRED;
         }
 
-        for (AttributeGroups i : editors.values())
+        this.editorCompositeContainer.setRedraw(false);
+
+        /*
+         * Dispose of last editor.
+         */
+        if (this.editorComposite != null)
         {
-            i.setFilter(filter);
+            this.editorComposite.dispose();
+            this.editorComposite = null;
+        }
+        
+        /*
+         * Create a new editor set.
+         */
+        final String sourceID = getSourceId();
+        final GroupingMethod groupingMethod = GroupingMethod.NONE;
+        final BindableDescriptor sourceDescriptor = this.descriptors.get(sourceID);
+
+        if (StringUtils.isEmpty(getSourceId()))
+        {
+            // No active source.
+            return;
+        }
+
+        this.editorComposite = new AttributeGroups(editorCompositeContainer, 
+            sourceDescriptor, groupingMethod, filter);
+        
+        final GridData gd = new GridData();
+        gd.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
+        gd.grabExcessHorizontalSpace = true;
+        editorComposite.setLayoutData(gd);
+
+        /*
+         * Set initial values for editors.
+         */
+        for (Map.Entry<String, Object> e : filterAttributesOf(sourceID).entrySet())
+        {
+            editorComposite.setAttribute(e.getKey(), e.getValue());
         }
 
         /*
-         * Update attribute values of newly shown editors. 
+         * Hook up listeners updating attributes on changes in editors. 
          */
-        updateEditorValues();
+        editorComposite.addAttributeChangeListener(new AttributeListenerAdapter() {
+            public void attributeChange(AttributeChangedEvent event)
+            {
+                attributes.setAttributeValue(event.key, event.value);
+                checkAllRequiredAttributes();
+            }
 
+            public void contentChanging(IAttributeEditor editor, Object value)
+            {
+                /*
+                 * On content changing, temporarily substitute the value of the
+                 * given attribute with the new value.
+                 */
+                final String attributeKey = editor.getAttributeKey();
+
+                final Object currentValue = attributes.getAttributeValue(attributeKey);
+                attributes.setAttributeValue(attributeKey, value);
+                checkAllRequiredAttributes();
+                attributes.setAttributeValue(attributeKey, currentValue);
+            }
+        });
+
+        /*
+         * Redraw GUI. 
+         */
+        this.editorCompositeContainer.setRedraw(true);
         checkAllRequiredAttributes();
         scroller.reflow(true);
-    }
-
-    /**
-     * Update editor values to the current state of attributes.
-     */
-    private void updateEditorValues()
-    {
-        for (String sourceID : editors.keySet())
-        {
-            final AttributeGroups editor = editors.get(sourceID);
-
-            for (Map.Entry<String, Object> entry : filterAttributesOf(sourceID).entrySet())
-            {
-                editor.setAttribute(entry.getKey(), entry.getValue());
-            }
-        }
     }
 
     /**
@@ -369,106 +376,71 @@ public class SearchInputView extends ViewPart
     }
 
     /**
-     * Creates permanent GUI elements (source, algorithm combos).
+     * Creates permanent GUI elements (source, algorithm combos, placeholder for
+     * the editors).
      */
+    @SuppressWarnings("unchecked")
     private void createComponents(Composite parent)
     {
         final WorkbenchCorePlugin core = WorkbenchCorePlugin.getDefault();
         parent.setLayout(new FillLayout());
 
-        this.scroller = new CScrolledComposite(parent, 
-            SWT.H_SCROLL | SWT.V_SCROLL);
+        this.scroller = new CScrolledComposite(parent, SWT.H_SCROLL | SWT.V_SCROLL);
         scroller.setExpandHorizontal(true);
         scroller.setExpandVertical(false);
 
-        Composite innerComposite = GUIFactory.createSpacer(scroller);
+        final Composite innerComposite = GUIFactory.createSpacer(scroller);
         final GridLayout gridLayout = (GridLayout) innerComposite.getLayout();
         gridLayout.numColumns = 2;
         gridLayout.makeColumnsEqualWidth = false;
 
         scroller.setContent(innerComposite);
 
+        // Initialize sources, descriptors and source combo.
         sourceViewer = createComboViewer(innerComposite, "Source", core.getSources());
-        sourceViewer.addSelectionChangedListener(new ISelectionChangedListener()
-        {
-            public void selectionChanged(SelectionChangedEvent event)
-            {
-                final IStructuredSelection selection = (IStructuredSelection) event
-                    .getSelection();
-                final ExtensionImpl impl = (ExtensionImpl) selection.getFirstElement();
-                if (impl != null)
-                {
-                    attributesPagesStack.topControl = editors.get(impl.id);
-                    checkAllRequiredAttributes();
-                    scroller.reflow(true);
-                }
-            }
-        });
+        sourceViewer.addSelectionChangedListener(sourceSelectionListener);
 
+        sources = Maps.newHashMap();
+        for (ExtensionImpl e : core.getSources().getImplementations())
+        {
+            sources.put(e.id, e);
+
+            final ProcessingComponent pc = e.getInstance();
+            final BindableDescriptor descriptor = BindableDescriptorBuilder
+                .buildDescriptor(pc).only(Input.class, Processing.class);
+        
+            descriptors.put(e.id, descriptor);
+        }
+
+        // Initialize algorithms and algorithm combo.
         algorithmViewer = createComboViewer(innerComposite, "Algorithm", core.getAlgorithms());
 
-        createRequiredAttributesPanel(innerComposite);
+        // Initialize a placeholder for the editors.
+        this.editorCompositeContainer = new Composite(innerComposite, SWT.NONE);
+        this.editorCompositeContainer.setLayoutData(
+            GridDataFactory.fillDefaults().span(2, 1).create());
+        this.editorCompositeContainer.setLayout(
+            GridLayoutFactory.fillDefaults().create());
+
+        // Initialize process button.
+        processButton = new Button(innerComposite, SWT.PUSH);
+        processButton.setText("Process");
 
         final GridData processButtonGridData = new GridData();
         processButtonGridData.horizontalAlignment = GridData.END;
         processButtonGridData.verticalAlignment = GridData.END;
         processButtonGridData.horizontalSpan = 2;
-
-        processButton = new Button(innerComposite, SWT.PUSH);
-        processButton.setText("Process");
         processButton.setLayoutData(processButtonGridData);
 
         /*
          * Restore state and push initial values to editors.
          */
         restoreState();
-        updateRequiredFilterState();
-
-        /*
-         * Hook up listeners updating attributes on changes in editors. 
-         */
-        for (String sourceID : editors.keySet())
-        {
-            final AttributeGroups editor = editors.get(sourceID);
-
-            final AtomicBoolean propagating = new AtomicBoolean(); 
-            editor.addAttributeChangeListener(new AttributeListenerAdapter() {
-                public void attributeChange(AttributeChangedEvent event)
-                {
-                    if (propagating.get())
-                    {
-                        return;
-                    }
-
-                    propagating.set(true);
-
-                    attributes.setAttributeValue(event.key, event.value);
-                    updateEditorValues();
-                    checkAllRequiredAttributes();
-                    
-                    propagating.set(false);
-                }
-
-                public void contentChanging(IAttributeEditor editor, Object value)
-                {
-                    /*
-                     * On content changing, temporarily substitute the value of the
-                     * given attribute with the new value.
-                     */
-                    final String attributeKey = editor.getAttributeKey();
-
-                    final Object currentValue = attributes.getAttributeValue(attributeKey);
-                    attributes.setAttributeValue(attributeKey, value);
-                    checkAllRequiredAttributes();
-                    attributes.setAttributeValue(attributeKey, currentValue);
-                }
-            });
-        }
+        displayEditorSet();
     }
-
+    
     /**
-     * creates a JFace ComboViewer around a collection of extension point implementations.
-     * Restores saved selection state if possible.
+     * Creates a JFace ComboViewer around a collection of extension point implementations.
      */
     private ComboViewer createComboViewer(Composite parent, String comboLabel, ExtensionLoader loader)
     {
@@ -592,46 +564,6 @@ public class SearchInputView extends ViewPart
         return ConstraintValidator.isMet(value, constraints).length == 0;
     }
 
-    /*
-     * 
-     */
-    @SuppressWarnings("unchecked")
-    private void createRequiredAttributesPanel(Composite innerComposite)
-    {
-        final WorkbenchCorePlugin core = WorkbenchCorePlugin.getDefault();
-
-        attributesPagesStack = new VisibleComponentSizeStackLayout();
-        final Composite editorStack = new Composite(innerComposite, SWT.NONE);
-        editorStack.setLayout(attributesPagesStack);
-
-        final GridData attributesGridData = new GridData();
-        attributesGridData.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
-        attributesGridData.grabExcessHorizontalSpace = true;
-        attributesGridData.horizontalSpan = 2;
-        editorStack.setLayoutData(attributesGridData);
-
-        for (ExtensionImpl implementation : core.getSources().getImplementations())
-        {
-            final ProcessingComponent source = implementation.getInstance();
-
-            final String sourceID = implementation.id;
-
-            final BindableDescriptor descriptor = BindableDescriptorBuilder
-                .buildDescriptor(source).only(
-                    Input.class, Processing.class);
-            
-            descriptors.put(sourceID, descriptor);
-
-            final AttributeGroups page = new AttributeGroups(
-                editorStack, descriptor, GroupingMethod.NONE, SHOW_REQUIRED);
-
-            page.setBackground(
-                PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_BLUE));
-
-            this.editors.put(sourceID, page);
-        }
-    }
-
     /**
      * Restore state of UI components from memento.
      */
@@ -739,20 +671,20 @@ public class SearchInputView extends ViewPart
         final WorkbenchCorePlugin core = WorkbenchCorePlugin.getDefault();
         if (core.getSources().getImplementations().isEmpty())
         {
-            disableComboWithMessage(sourceViewer.getCombo(), "No document sources found.");
+            disableComboWithMessage(sourceViewer.getCombo(), "No document sources.");
             processButton.setEnabled(false);
         }
 
         if (core.getAlgorithms().getImplementations().isEmpty())
         {
             disableComboWithMessage(algorithmViewer.getCombo(),
-                "No clustering algorithms found.");
+                "No clustering algorithms.");
             processButton.setEnabled(false);
         }
     }
 
     /*
-     * 
+     *
      */
     private void disableComboWithMessage(Combo toDisable, String message)
     {
@@ -761,12 +693,24 @@ public class SearchInputView extends ViewPart
         toDisable.setEnabled(false);
     }
 
-    /*
-     * 
+    /**
+     * Return the current source component identifier.
      */
     private String getSourceId()
     {
         return getSelectedId(sourceViewer);
+    }
+
+    /**
+     * Switch to user interface to the given source.
+     */
+    private void setSourceId(String sourceID)
+    {
+        sourceViewer.removeSelectionChangedListener(sourceSelectionListener);
+        sourceViewer.setSelection(new StructuredSelection(sources.get(sourceID)));
+        sourceViewer.addSelectionChangedListener(sourceSelectionListener);
+
+        displayEditorSet();
     }
 
     /*
@@ -855,11 +799,7 @@ public class SearchInputView extends ViewPart
     @Override
     public void dispose()
     {
-        for (Widget w : editors.values())
-        {
-            w.dispose();
-        }
-
+        this.editorComposite.dispose();
         super.dispose();
     }
 }
