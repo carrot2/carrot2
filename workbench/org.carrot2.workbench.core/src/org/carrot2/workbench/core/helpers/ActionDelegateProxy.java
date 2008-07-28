@@ -3,8 +3,7 @@ package org.carrot2.workbench.core.helpers;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.ui.IActionDelegate;
-import org.eclipse.ui.IActionDelegate2;
+import org.eclipse.ui.*;
 import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
 
 /**
@@ -32,8 +31,13 @@ public final class ActionDelegateProxy extends Action implements IWorkbenchActio
         {
             ((IActionDelegate2) delegate).init(this);
         }
+        
+        if (delegate instanceof IWorkbenchWindowActionDelegate)
+        {
+            ((IWorkbenchWindowActionDelegate) delegate).init(PlatformUI.getWorkbench().getActiveWorkbenchWindow());
+        }
     }
-    
+
     /*
      * 
      */
@@ -80,6 +84,11 @@ public final class ActionDelegateProxy extends Action implements IWorkbenchActio
             if (delegate instanceof IActionDelegate2)
             {
                 ((IActionDelegate2) delegate).dispose();
+            }
+            else
+            if (delegate instanceof IWorkbenchWindowActionDelegate)
+            {
+                ((IWorkbenchWindowActionDelegate) delegate).dispose();
             }
         }
 

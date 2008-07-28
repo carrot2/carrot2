@@ -208,8 +208,8 @@
          <action
                class="org.carrot2.workbench.core.ui.actions.AutoUpdateActionDelegate"
                definitionId="org.carrot2.workbench.core.ui.actions.AutoUpdateCommand"
-               disabledIcon="icons/autoupdate_d.gif"
-               icon="icons/autoupdate_e.gif"
+               disabledIcon="icons/autoupdate_d.png"
+               icon="icons/autoupdate_e.png"
                id="org.carrot2.workbench.core.ui.actions.AutoUpdateAction2"
                label="&amp;Restart Processing Automatically"
                menubarPath="org.carrot2.workbench.menus.searchMenu/processing"

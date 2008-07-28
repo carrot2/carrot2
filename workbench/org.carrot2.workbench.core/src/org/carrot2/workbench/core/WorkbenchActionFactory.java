@@ -21,8 +21,8 @@ public class WorkbenchActionFactory
         {
             final IWorkbenchAction action = new ActionDelegateProxy(
                 new AutoUpdateActionDelegate(), Action.AS_CHECK_BOX);
-            action.setImageDescriptor(WorkbenchCorePlugin.getImageDescriptor("icons/autoupdate_e.gif"));
-            action.setDisabledImageDescriptor(WorkbenchCorePlugin.getImageDescriptor("icons/autoupdate_d.gif"));
+            action.setImageDescriptor(WorkbenchCorePlugin.getImageDescriptor("icons/autoupdate_e.png"));
+            action.setDisabledImageDescriptor(WorkbenchCorePlugin.getImageDescriptor("icons/autoupdate_d.png"));
             action.setToolTipText("Automatically restarts processing after attributes change");
             return action; 
         }

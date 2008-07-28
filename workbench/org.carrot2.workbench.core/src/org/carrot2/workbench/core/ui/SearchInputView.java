@@ -6,16 +6,15 @@ import java.lang.annotation.Annotation;
 import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
-import org.carrot2.core.DocumentSource;
-import org.carrot2.core.ProcessingComponent;
+import org.carrot2.core.*;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
 import org.carrot2.util.attribute.constraint.ConstraintValidator;
 import org.carrot2.workbench.core.*;
-import org.carrot2.workbench.core.helpers.GUIFactory;
-import org.carrot2.workbench.core.helpers.Utils;
+import org.carrot2.workbench.core.helpers.*;
 import org.carrot2.workbench.core.preferences.PreferenceConstants;
+import org.carrot2.workbench.core.ui.actions.ActiveSearchEditorActionDelegate;
 import org.carrot2.workbench.core.ui.actions.GroupingMethodAction;
 import org.carrot2.workbench.core.ui.widgets.CScrolledComposite;
 import org.carrot2.workbench.editors.*;
@@ -50,6 +49,11 @@ public class SearchInputView extends ViewPart
      * Public identifier of this view.
      */
     public static final String ID = "org.carrot2.workbench.core.views.search";
+
+    /**
+     * Memento attribute for persisting {@link #linkWithEditor}.
+     */
+    private static final String MEMENTO_EDITOR_LINK = "link-with-editor";
 
     /**
      * Memento branch for persisting algorithm component ID;
@@ -124,6 +128,17 @@ public class SearchInputView extends ViewPart
     private HashMap<String, ExtensionImpl> sources;
 
     /**
+     * All {@link ExtensionImpl} related to {@link ClusteringAlgorithm}s 
+     * in {@link #algorithmViewer}.
+     */
+    private HashMap<String, ExtensionImpl> algorithms;
+
+    /**
+     * Link the GUI with currently selected editor.
+     */
+    private boolean linkWithEditor = false;
+
+    /**
      * Selection listener on {@link #sourceViewer}.
      */
     private ISelectionChangedListener sourceSelectionListener = new ISelectionChangedListener()
@@ -135,12 +150,73 @@ public class SearchInputView extends ViewPart
             setSourceId(impl.id);
         }
     };
+    
+    /**
+     * Link the GUI of {@link SearchInputView} with the currently 
+     * active {@link SearchEditor}.
+     */
+    private class LinkWithEditorActionDelegate extends ActiveSearchEditorActionDelegate
+    {
+        /*
+         * 
+         */
+        @Override
+        public void run(SearchEditor editor)
+        {
+            linkWithEditor = !linkWithEditor;
+
+            super.getAction().setChecked(linkWithEditor);
+            if (linkWithEditor)
+            {
+                if (isEnabled(getEditor()))
+                {
+                    linkWith((SearchEditor) getEditor());
+                }
+            }
+        }
+
+        /**
+         * Is this action enabled for the given editor?
+         */
+        protected boolean isEnabled(IEditorPart activeEditor)
+        {
+            return activeEditor != null && activeEditor instanceof SearchEditor;
+        }
+
+        /**
+         * Detect editor switch.
+         */
+        @Override
+        protected void switchingEditors(IEditorPart previous, IEditorPart activeEditor)
+        {
+            super.switchingEditors(previous, activeEditor);
+
+            if (activeEditor != null && linkWithEditor)
+            {
+                final SearchEditor editor = (SearchEditor) activeEditor;
+                linkWith(editor);
+            }
+        }
+
+        /**
+         * Synchronize the view with the given editor.
+         */
+        private void linkWith(SearchEditor editor)
+        {
+            final SearchInput input = editor.getSearchResult().getInput();
+
+            setAlgorithmId(input.getAlgorithmId());
+            attributes.setAttributeValues(
+                input.getAttributeValueSet().getAttributeValues());
+            setSourceId(input.getSourceId());
+        }
+    }
 
     /**
      * Toggles between {@link SearchInputView#SHOW_REQUIRED} and
      * {@link SearchInputView#SHOW_ALL}. 
      */
-    private class ShowOptionalAction extends Action
+    private static class ShowOptionalAction extends Action
     {
         public ShowOptionalAction()
         {
@@ -211,6 +287,12 @@ public class SearchInputView extends ViewPart
      */
     private void createToolbar(IToolBarManager toolBarManager)
     {
+        final IAction linkWithEditor = new ActionDelegateProxy(
+            new LinkWithEditorActionDelegate(), IAction.AS_CHECK_BOX);
+        linkWithEditor.setImageDescriptor(WorkbenchCorePlugin.getImageDescriptor("icons/link_e.gif"));
+        linkWithEditor.setToolTipText("Link the interface with current editor");
+        toolBarManager.add(linkWithEditor);
+
         toolBarManager.add(new GroupingMethodAction(PreferenceConstants.GROUPING_INPUT_VIEW));
     }
 
@@ -437,6 +519,13 @@ public class SearchInputView extends ViewPart
         // Initialize algorithms and algorithm combo.
         algorithmViewer = createComboViewer(innerComposite, "Algorithm", core.getAlgorithms());
 
+        algorithms = Maps.newHashMap();
+        for (ExtensionImpl e : core.getAlgorithms().getImplementations())
+        {
+            algorithms.put(e.id, e);
+        }
+
+        
         // Initialize a placeholder for the editors.
         this.editorCompositeContainer = new Composite(innerComposite, SWT.NONE);
         this.editorCompositeContainer.setLayoutData(
@@ -628,6 +717,8 @@ public class SearchInputView extends ViewPart
                     }
                 }
             }
+
+            this.linkWithEditor = Boolean.valueOf(state.getString(MEMENTO_EDITOR_LINK));
         }
 
         /*
@@ -742,6 +833,15 @@ public class SearchInputView extends ViewPart
     {
         return getSelectedId(algorithmViewer);
     }
+    
+    /*
+     * 
+     */
+    private void setAlgorithmId(String algorithmID)
+    {
+        algorithmViewer.setSelection(
+            new StructuredSelection(algorithms.get(algorithmID)));
+    }
 
     /**
      * 
@@ -776,6 +876,7 @@ public class SearchInputView extends ViewPart
     {
         memento.putString(MEMENTO_SOURCE_ID, getSourceId());
         memento.putString(MEMENTO_ALGORITHM_ID, getAlgorithmId());
+        memento.putString(MEMENTO_EDITOR_LINK, Boolean.toString(linkWithEditor));
 
         /*
          * Save attributes for each input separately.

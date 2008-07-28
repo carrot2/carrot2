@@ -10,7 +10,7 @@ import org.eclipse.ui.IPropertyListener;
  * {@link ActiveEditorActionDelegate} that tracks the active {@link SearchEditor}, registers
  * a property listener to it and updates its state on {@link IEditorPart#PROP_DIRTY} events.
  */
-abstract class ActiveSearchEditorActionDelegate extends ActiveEditorActionDelegate 
+public abstract class ActiveSearchEditorActionDelegate extends ActiveEditorActionDelegate 
 {
     /**
      * Reacts to property changes.
