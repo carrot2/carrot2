@@ -44,10 +44,41 @@ public class LabelFormatter
     }
 
     /**
+     * A method for formatting cluster labels that is not coupled to
+     * {@link PreprocessingContext#allLabels} and can be used in algorithms that do not
+     * use the full preprocessing pipeline.
+     * 
+     * @param image images of the words making the label.
+     * @param stopWord determines whether the corresponding word of the label is a stop
+     *            word
+     */
+    public static String format(char [][] image, boolean [] stopWord)
+    {
+        final StringBuilder label = new StringBuilder();
+        if (image.length == 1)
+        {
+            appendFormatted(label, image[0], true, stopWord[0]);
+        }
+        else
+        {
+            for (int i = 0; i < image.length; i++)
+            {
+                appendFormatted(label, image[i], i == 0, stopWord[i]);
+                if (i < image.length - 1)
+                {
+                    label.append(" ");
+                }
+            }
+        }
+
+        return label.toString();
+    }
+
+    /**
      * Appends a segment of the label to the buffer, capitalized or lower-cased depending
      * on the position and content.
      */
-    private void appendFormatted(final StringBuilder label, final char [] image,
+    private static void appendFormatted(final StringBuilder label, final char [] image,
         boolean isFirst, boolean isCommon)
     {
         if (CharArrayUtils.capitalizedRatio(image) > 0.0)

@@ -37,14 +37,32 @@ public class LabelFormatterTest extends PreprocessingComponentTestBase
     public void testSingleWordNotCapitalized()
     {
         createDocuments("test", "test");
-        check("Test");
+        final String expectedLabel = "Test";
+
+        checkFullPreprocessing(expectedLabel);
+        checkWithoutPreprocessing(new char [] []
+        {
+            "test".toCharArray()
+        }, new boolean []
+        {
+            false
+        }, expectedLabel);
     }
 
     @Test
     public void testSingleWordCapitalized()
     {
         createDocuments("kMN", "kMN");
-        check("kMN");
+        final String expectedLabel = "kMN";
+
+        checkFullPreprocessing(expectedLabel);
+        checkWithoutPreprocessing(new char [] []
+        {
+            "kMN".toCharArray()
+        }, new boolean []
+        {
+            false
+        }, expectedLabel);
     }
 
     @Test
@@ -52,31 +70,74 @@ public class LabelFormatterTest extends PreprocessingComponentTestBase
     {
         createDocuments("for", "for");
         labelFilterProcessor.stopWordLabelFilter.enabled = false;
-        check("For");
+        final String expectedLabel = "For";
+
+        checkFullPreprocessing(expectedLabel);
+        checkWithoutPreprocessing(new char [] []
+        {
+            "for".toCharArray()
+        }, new boolean []
+        {
+            true
+        }, expectedLabel);
     }
 
     @Test
     public void testPhraseWithLowerCaseWords()
     {
         createDocuments("test phrase", "test phrase");
-        check("Test Phrase");
+        final String expectedLabel = "Test Phrase";
+
+        checkFullPreprocessing(expectedLabel);
+        checkWithoutPreprocessing(new char [] []
+        {
+            "test".toCharArray(), "phrase".toCharArray()
+        }, new boolean []
+        {
+            false, false
+        }, expectedLabel);
     }
 
     @Test
     public void testPhraseWithStopWords()
     {
         createDocuments("food for dog", "food for dog");
-        check("Food for Dog");
+        final String expectedLabel = "Food for Dog";
+
+        checkFullPreprocessing(expectedLabel);
+        checkWithoutPreprocessing(new char [] []
+        {
+            "food".toCharArray(), "for".toCharArray(), "dog".toCharArray()
+        }, new boolean []
+        {
+            false, true, false
+        }, expectedLabel);
     }
 
     @Test
     public void testPhraseWithCapitalizedWords()
     {
         createDocuments("iMac stuff", "iMac stuff");
-        check("iMac Stuff");
+        final String expectedLabel = "iMac Stuff";
+
+        checkFullPreprocessing(expectedLabel);
+        checkWithoutPreprocessing(new char [] []
+        {
+            "iMac".toCharArray(), "stuff".toCharArray()
+        }, new boolean []
+        {
+            false, false
+        }, expectedLabel);
     }
 
-    private void check(String... expectedFormattedLabels)
+    private void checkWithoutPreprocessing(char [][] words, boolean [] stopWords,
+        String expectedFormattedLabel)
+    {
+        assertThat(LabelFormatter.format(words, stopWords)).isEqualTo(
+            expectedFormattedLabel);
+    }
+
+    private void checkFullPreprocessing(String... expectedFormattedLabels)
     {
         tokenizer.tokenize(context);
         caseNormalizer.normalize(context);
