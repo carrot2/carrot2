@@ -28,6 +28,7 @@ public abstract class SearchEngine extends ProcessingComponentBase implements
      * 
      * @label Search Mode
      * @level Advanced
+     * @group Results paging
      * @see SearchMode
      */
     @Processing
@@ -38,16 +39,19 @@ public abstract class SearchEngine extends ProcessingComponentBase implements
     /**
      * Starting index of the first result to fetch.
      * 
+     * @group Results paging
      * @label Start index
      */
     @Processing
     @Input
     @Attribute(key = AttributeNames.START)
+    @IntRange(min = 0)
     public int start = 0;
 
     /**
      * Number of results to fetch.
      * 
+     * @group Results paging
      * @label Results count
      */
     @Processing
@@ -59,6 +63,7 @@ public abstract class SearchEngine extends ProcessingComponentBase implements
     /**
      * Search query to execute.
      * 
+     * @group Search query
      * @label Query
      */
     @Processing

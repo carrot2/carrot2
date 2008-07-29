@@ -40,6 +40,7 @@ public final class YahooWebSearchService extends YahooSearchService
      * href="http://developer.yahoo.com/search/languages.html">supported language codes</a>.
      * Omitting language returns results in any language.
      * 
+     * @group Results filtering
      * @label Language
      * @level Medium
      */
@@ -53,6 +54,7 @@ public final class YahooWebSearchService extends YahooSearchService
      * within this country are returned. Value must be one of the <a
      * href="http://developer.yahoo.com/search/countries.html">supported country codes</a>.
      * 
+     * @group Results filtering
      * @label Country
      * @level Medium
      */
@@ -66,7 +68,8 @@ public final class YahooWebSearchService extends YahooSearchService
      * A domain to restrict your searches to (e.g. www.yahoo.com). TODO: maybe it would
      * make sense to implement multiple values here (allowed by Yahoo)?
      * 
-     * @label Site
+     * @group Results filtering
+     * @label Domain restriction
      * @level Medium
      */
     @Processing
@@ -80,6 +83,7 @@ public final class YahooWebSearchService extends YahooSearchService
      * of the <a href="http://developer.yahoo.com/search/regions.html">supported region
      * codes</a>.
      * 
+     * @group Results filtering
      * @label Region
      * @level Medium
      */

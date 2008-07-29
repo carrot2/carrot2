@@ -84,7 +84,10 @@ public abstract class YahooSearchService
     public String appid = "carrotsearch";
     
     /** 
-     * Query words interpretation. 
+     * Query words interpretation.
+     * 
+     * @group Search query
+     * @level Medium
      */
     @Processing
     @Input
