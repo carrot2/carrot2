@@ -356,7 +356,7 @@ public class SearchInputView extends ViewPart
             WorkbenchCorePlugin.getDefault().getPreferenceStore();
 
         preferenceStore.addPropertyChangeListener(
-            new PreferenceStoreKeyChangeListener(PreferenceConstants.SHOW_OPTIONAL)
+            new PropertyChangeListenerAdapter(PreferenceConstants.SHOW_OPTIONAL)
         {
             public void propertyChangeFiltered(PropertyChangeEvent event)
             {
@@ -365,7 +365,7 @@ public class SearchInputView extends ViewPart
         });
         
         preferenceStore.addPropertyChangeListener(
-            new PreferenceStoreKeyChangeListener(PreferenceConstants.GROUPING_INPUT_VIEW)
+            new PropertyChangeListenerAdapter(PreferenceConstants.GROUPING_INPUT_VIEW)
         {
             public void propertyChangeFiltered(PropertyChangeEvent event)
             {

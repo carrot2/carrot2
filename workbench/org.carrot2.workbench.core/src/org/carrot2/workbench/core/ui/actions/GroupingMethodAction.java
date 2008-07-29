@@ -6,55 +6,122 @@ import org.carrot2.workbench.core.helpers.DisposeBin;
 import org.carrot2.workbench.core.helpers.DropDownMenuAction;
 import org.eclipse.jface.action.*;
 import org.eclipse.swt.widgets.*;
+import org.eclipse.ui.IWorkbenchPart3;
 
 /**
- * An action that displays a menu of possible {@link GroupingMethod}.
+ * An action that displays a menu of possible {@link GroupingMethod}s.
  */
-public final class GroupingMethodAction extends Action 
+public final class GroupingMethodAction extends Action
 {
     /*
      * 
      */
-    private static class ToggleSwitchAction extends ValueSwitchAction
+    private class ToggleSwitchAction extends ValueSwitchAction
     {
-        public ToggleSwitchAction(String key, GroupingMethod method, String label)
+        public ToggleSwitchAction(GroupingMethod method, String label)
         {
-            super(key, method.name(), label, Action.AS_RADIO_BUTTON);
+            super(propertyKey, method.name(), label, Action.AS_RADIO_BUTTON, host);
         }
     }
+    
+    /*
+     * 
+     */
+    private final String propertyKey;
 
     /*
      * 
      */
-    public GroupingMethodAction(final String preferenceKey)
+    private final IPropertyHost host;
+
+    /*
+     * 
+     */
+    private final IMenuCreator menuCreator = new IMenuCreator()
+    {
+        private DisposeBin bin = new DisposeBin();
+
+        public Menu getMenu(Control parent)
+        {
+            Menu m = createMenu(propertyKey).createContextMenu(parent);
+            bin.add(m);
+            return m;
+        }
+
+        public Menu getMenu(Menu parent)
+        {
+            Menu m = createMenu(propertyKey).getMenu();
+            bin.add(m);
+            return createMenu(propertyKey).getMenu();
+        }
+
+        public void dispose()
+        {
+            bin.dispose();
+        }
+        
+        /**
+         * Creates a {@link IMenuManager} with {@link GroupingMethod} options, associated to a
+         * given key in the preference store.
+         */
+        private MenuManager createMenu(String preferenceKey)
+        {
+            final MenuManager menu = new MenuManager("Attribute &grouping");
+
+            final ToggleSwitchAction [] layoutActions = new ToggleSwitchAction []
+            {
+                new ToggleSwitchAction(GroupingMethod.GROUP, "Attribute semantics"),
+                new ToggleSwitchAction(GroupingMethod.LEVEL, "Attribute level"),
+                new ToggleSwitchAction(GroupingMethod.STRUCTURE, "Declaring class"), 
+                null, /* Separator */
+                new ToggleSwitchAction(GroupingMethod.NONE, "None"),
+            };
+
+            for (ToggleSwitchAction action : layoutActions)
+            {
+                if (action == null)
+                {
+                    menu.add(new Separator());
+                    continue;
+                }
+
+                menu.add(action);
+                bin.add(action);
+            }
+
+            return menu;
+        }
+    };
+
+    /*
+     * Common constructor.
+     */
+    private GroupingMethodAction(final String propertyKey, IPropertyHost host)
     {
         super("Attribute grouping", Action.AS_DROP_DOWN_MENU);
 
+        this.propertyKey = propertyKey;
+        this.host = host;
+
         setImageDescriptor(WorkbenchCorePlugin.getImageDescriptor("icons/grouping.gif"));
+        setMenuCreator(menuCreator);
+    }
 
-        setMenuCreator(new IMenuCreator()
-        {
-            private DisposeBin bin = new DisposeBin(); 
+    /**
+     * Creates a grouping action bound to a part's property.
+     */
+    public GroupingMethodAction(final String partPreferenceKey, IWorkbenchPart3 part)
+    {
+        this(partPreferenceKey, new WorkbenchPartPropertyHost(part));
+    }
 
-            public Menu getMenu(Control parent)
-            {
-                Menu m = createMenu(preferenceKey).createContextMenu(parent);
-                bin.add(m);
-                return m;
-            }
-
-            public Menu getMenu(Menu parent)
-            {
-                Menu m = createMenu(preferenceKey).getMenu();
-                bin.add(m);
-                return createMenu(preferenceKey).getMenu();
-            }
-
-            public void dispose()
-            {
-                bin.dispose();
-            }
-        });
+    /**
+     * Creates a grouping action bound to the global plugin's preference store key.
+     */
+    public GroupingMethodAction(final String preferenceKey)
+    {
+        this(preferenceKey, new PreferenceStorePropertyHost(
+            WorkbenchCorePlugin.getDefault().getPreferenceStore()));
     }
 
     /*
@@ -67,36 +134,5 @@ public final class GroupingMethodAction extends Action
          * Attempt to open the drop-down menu.
          */
         DropDownMenuAction.showMenu(this, event);
-    }
-    
-    /**
-     * Creates a {@link IMenuManager} with {@link GroupingMethod} options, associated
-     * to a given key in the preference store. 
-     */
-    private static MenuManager createMenu(String preferenceKey)
-    {
-        final MenuManager menu = new MenuManager("Attribute &grouping");
-
-        final ToggleSwitchAction [] layoutActions = new ToggleSwitchAction []
-        {
-            new ToggleSwitchAction(preferenceKey, GroupingMethod.GROUP, "Attribute semantics"),
-            new ToggleSwitchAction(preferenceKey, GroupingMethod.LEVEL, "Attribute level"),
-            new ToggleSwitchAction(preferenceKey, GroupingMethod.STRUCTURE, "Declaring class"), 
-            null, /* Separator */
-            new ToggleSwitchAction(preferenceKey, GroupingMethod.NONE, "None"),
-        };
-
-        for (IAction action : layoutActions)
-        {
-            if (action == null)
-            {
-                menu.add(new Separator());
-                continue;
-            }
-
-            menu.add(action);
-        }
-
-        return menu;
     }
 }

@@ -2,16 +2,17 @@ package org.carrot2.workbench.core.ui.actions;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
-import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
 
 /**
- * A value switch action bound to {@link IPreferenceStore}.
+ * A value switch action that implements {@link IPropertyChangeListener}
+ * and actively reacts to changes on a given property, selecting the action
+ * if the property's value equals the given value.
  */
-class ValueSwitchAction extends Action implements IPropertyChangeListener
+public class ValueSwitchAction extends Action implements IPropertyChangeListener, IWorkbenchAction
 {
     /**
      * The value of this action in the preference store.
@@ -23,18 +24,24 @@ class ValueSwitchAction extends Action implements IPropertyChangeListener
      */
     public final String key;
 
+    /**
+     * The host of this property.
+     */
+    private IPropertyHost propertyHost;
+
     /*
      * 
      */
-    public ValueSwitchAction(String key, String value, String label, int style)
+    public ValueSwitchAction(String key, String value, String label, int style, IPropertyHost host)
     {
         super(label, style);
 
         this.key = key;
         this.value = value;
+        this.propertyHost = host;
 
-        WorkbenchCorePlugin.getDefault().getPreferenceStore().addPropertyChangeListener(
-            this);
+        host.addPropertyChangeListener(this);
+        
         updateState();
     }
 
@@ -44,7 +51,7 @@ class ValueSwitchAction extends Action implements IPropertyChangeListener
     @Override
     public void run()
     {
-        WorkbenchCorePlugin.getDefault().getPreferenceStore().setValue(key, value);
+        propertyHost.setProperty(key, value);
     }
 
     /*
@@ -63,19 +70,15 @@ class ValueSwitchAction extends Action implements IPropertyChangeListener
      */
     private void updateState()
     {
-        final String current = WorkbenchCorePlugin.getDefault().getPreferenceStore().getString(key);
+        final String current = propertyHost.getProperty(key);
         setChecked(StringUtils.equals(current, value));
     }
 
     /*
-     * Not too pretty, but should work (no explicit dispose).
+     * 
      */
-    @Override
-    protected void finalize() throws Throwable
+    public void dispose()
     {
-        super.finalize();
-
-        WorkbenchCorePlugin.getDefault().getPreferenceStore().removePropertyChangeListener(
-            this);
+        propertyHost.removePropertyChangeListener(this);
     }
 }

@@ -14,6 +14,7 @@ import org.eclipse.jface.viewers.IPostSelectionProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.swt.graphics.Resource;
 import org.eclipse.swt.widgets.Widget;
+import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.google.common.collect.Lists;
@@ -76,6 +77,19 @@ public final class DisposeBin
         }
     };
 
+    private static class ActionDisposer extends Disposer<IWorkbenchAction>
+    {
+        public ActionDisposer(IWorkbenchAction t)
+        {
+            super(t);
+        }
+
+        public void dispose()
+        {
+            t.dispose();
+        }
+    };
+
     private static class ListenerPair
     {
         public final Object registrar;
@@ -126,13 +140,16 @@ public final class DisposeBin
         this.resources.put(toolkit, new FormToolkitDisposer(toolkit));
     }
 
-    /*
-     * 
-     */
     public void add(Widget w)
     {
         this.resources.put(w, new WidgetDisposer(w));
     }
+    
+    public void add(IWorkbenchAction action)
+    {
+        this.resources.put(action, new ActionDisposer(action));
+    }
+    
 
     public void dispose()
     {

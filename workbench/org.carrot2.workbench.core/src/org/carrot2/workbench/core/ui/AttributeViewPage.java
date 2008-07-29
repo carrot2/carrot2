@@ -120,7 +120,7 @@ final class AttributeViewPage extends Page
         final IPreferenceStore prefStore = WorkbenchCorePlugin.getDefault().getPreferenceStore();
 
         final String key = PreferenceConstants.GROUPING_ATTRIBUTE_VIEW;
-        prefStore.addPropertyChangeListener(new PreferenceStoreKeyChangeListener(key) {
+        prefStore.addPropertyChangeListener(new PropertyChangeListenerAdapter(key) {
             protected void propertyChangeFiltered(PropertyChangeEvent event)
             {
                 updateGroupingState(GroupingMethod.valueOf(prefStore.getString(key)));

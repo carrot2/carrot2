@@ -9,11 +9,11 @@ import org.eclipse.jface.util.PropertyChangeEvent;
  * An abstract class that reacts on changes to a given property in the
  * {@link IPreferenceStore}.
  */
-public abstract class PreferenceStoreKeyChangeListener implements IPropertyChangeListener
+public abstract class PropertyChangeListenerAdapter implements IPropertyChangeListener
 {
     protected final String property;
     
-    public PreferenceStoreKeyChangeListener(String property)
+    public PropertyChangeListenerAdapter(String property)
     {
         this.property = property;
     }

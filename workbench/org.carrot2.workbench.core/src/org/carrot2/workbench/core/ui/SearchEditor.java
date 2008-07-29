@@ -100,6 +100,12 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     private static final String SECTION_VISIBLE = "visible";
 
     /**
+     * Part property indicating current grouping of attributes on the
+     * {@link SearchEditorSections#ATTRIBUTES}.
+     */
+    private static final String GROUPING_LOCAL = PreferenceConstants.GROUPING_EDITOR_PANEL + ".local";
+
+    /**
      * All attributes of a single panel.
      */
     public final static class SectionReference
@@ -393,6 +399,19 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
 
         setSite(site);
         setInput(input);
+        
+        /*
+         * Set default local grouping if not already restored. We must set it here
+         * because it is used to create components later (and before restoreState()).
+         */
+        if (StringUtils.isEmpty(getPartProperty(GROUPING_LOCAL)))
+        {
+            final IPreferenceStore preferenceStore = 
+                WorkbenchCorePlugin.getDefault().getPreferenceStore();
+
+            setPartProperty(GROUPING_LOCAL, 
+                preferenceStore.getString(PreferenceConstants.GROUPING_EDITOR_PANEL));        
+        }
 
         this.searchResult = new SearchResult((SearchInput) input);
     }
@@ -708,17 +727,23 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         toolbar.add(WorkbenchActionFactory.AUTO_UPDATE_ACTION.create(window));
 
         // Attribute grouping.
-        final String key = PreferenceConstants.GROUPING_EDITOR_PANEL;
-        toolbar.add(new GroupingMethodAction(key));
+        final String globalPreferenceKey = PreferenceConstants.GROUPING_EDITOR_PANEL;
 
-        final IPreferenceStore prefStore = WorkbenchCorePlugin.getDefault().getPreferenceStore();
+        toolbar.add(new GroupingMethodAction(GROUPING_LOCAL, this));
 
-        prefStore.addPropertyChangeListener(new PreferenceStoreKeyChangeListener(key) {
+        // Update global preferences when local change.
+        addPartPropertyListener(new PropertyChangeListenerAdapter(GROUPING_LOCAL) {
             protected void propertyChangeFiltered(PropertyChangeEvent event)
             {
-                attributesPanel.setGrouping(GroupingMethod.valueOf(prefStore.getString(key)));
-                Utils.adaptToFormUI(toolkit, attributesPanel);
+                final IPreferenceStore prefStore = WorkbenchCorePlugin
+                    .getDefault().getPreferenceStore();
                 
+                final String currentValue = getPartProperty(GROUPING_LOCAL);
+                prefStore.setValue(globalPreferenceKey, currentValue);
+
+                attributesPanel.setGrouping(GroupingMethod.valueOf(currentValue));
+                Utils.adaptToFormUI(toolkit, attributesPanel);
+
                 if (!sections.get(SearchEditorSections.ATTRIBUTES).visibility)
                 {
                     setSectionVisibility(SearchEditorSections.ATTRIBUTES, true);
@@ -910,12 +935,10 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         final Composite spacer = GUIFactory.createSpacer(scroller);
         resources.add(spacer);
 
-        final IPreferenceStore prefStore = WorkbenchCorePlugin.getDefault().getPreferenceStore();
-        final GroupingMethod grouping = GroupingMethod.valueOf(
-            prefStore.getString(PreferenceConstants.GROUPING_EDITOR_PANEL)); 
+        final String groupingValue = getPartProperty(GROUPING_LOCAL);
+        final GroupingMethod grouping = GroupingMethod.valueOf(groupingValue); 
 
-        attributesPanel = new AttributeGroups(
-            spacer, descriptor, grouping);
+        attributesPanel = new AttributeGroups(spacer, descriptor, grouping);
         attributesPanel.setLayoutData(GridDataFactory.fillDefaults().grab(true, true)
             .create());        
         resources.add(attributesPanel);

@@ -28,7 +28,8 @@ public final class PreferenceConstants
     public static final String GROUPING_INPUT_VIEW = "search-input-view.layout"; 
 
     /**
-     * Show only required attributes in the {@link SearchEditor}'s attributes panel.
+     * Attribute grouping layout, {@link SearchEditorSections#ATTRIBUTES} section
+     * of {@link SearchEditor}.
      */
     public static final String GROUPING_EDITOR_PANEL = "search-editor.layout";
 
