@@ -88,6 +88,14 @@
             id="org.carrot2.workbench.core.views.attributes"
             name="Attributes">
       </view>
+      <view
+            allowMultiple="false"
+            category="org.carrot2.workbench.core.workbench.category"
+            class="org.carrot2.workbench.core.ui.AttributeInfoView"
+            icon="icons/view_attribute_info.gif"
+            id="org.carrot2.workbench.core.views.attributeInfo"
+            name="Attribute Info">
+      </view>
       <category
             id="org.carrot2.workbench.core.workbench.category"
             name="Carrot2">

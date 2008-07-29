@@ -1,9 +1,11 @@
 package org.carrot2.workbench.velocity;
 
 import org.apache.commons.collections.ExtendedProperties;
+import org.apache.velocity.VelocityContext;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.RuntimeInstance;
 import org.apache.velocity.runtime.log.NullLogChute;
+import org.apache.velocity.tools.generic.EscapeTool;
 
 /**
  * See {@link #createInstance()}.
@@ -40,5 +42,17 @@ public final class VelocityInitializer
         {
             throw new RuntimeException("Velocity initialization failed.", e);
         }
+    }
+
+    /**
+     * Create Velocity context and place default tools into it.
+     */
+    public static VelocityContext createContext()
+    {
+        final VelocityContext context = new VelocityContext();
+        
+        context.put("esc", new EscapeTool());
+
+        return context;
     }
 }

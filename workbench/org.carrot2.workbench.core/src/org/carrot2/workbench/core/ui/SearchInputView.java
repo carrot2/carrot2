@@ -530,7 +530,10 @@ public class SearchInputView extends ViewPart
             algorithms.put(e.id, e);
         }
 
-        
+        final Label l = new Label(innerComposite, SWT.SEPARATOR | SWT.HORIZONTAL);
+        l.setLayoutData(GridDataFactory.fillDefaults()
+            .align(SWT.FILL, SWT.CENTER).span(2, 1).minSize(SWT.DEFAULT, 10).create());
+
         // Initialize a placeholder for the editors.
         this.editorCompositeContainer = new Composite(innerComposite, SWT.NONE);
         this.editorCompositeContainer.setLayoutData(

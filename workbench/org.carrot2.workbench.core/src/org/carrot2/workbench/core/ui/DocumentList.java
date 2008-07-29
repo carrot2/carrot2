@@ -8,7 +8,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.runtime.RuntimeInstance;
-import org.apache.velocity.tools.generic.EscapeTool;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
@@ -87,7 +86,7 @@ public final class DocumentList extends Composite
      */
     public void show(ProcessingResult result)
     {
-        final VelocityContext context = createContext();
+        final VelocityContext context = VelocityInitializer.createContext();
         context.put("result", result);
 
         if (result.getAttributes().get(AttributeNames.RESULTS_TOTAL) != null)
@@ -120,7 +119,7 @@ public final class DocumentList extends Composite
         }
         else
         {
-            final VelocityContext context = createContext();
+            final VelocityContext context = VelocityInitializer.createContext();
 
             final Comparator<Document> comparator = Document.BY_ID_COMPARATOR;
             context.put("comparator", comparator);
@@ -128,18 +127,6 @@ public final class DocumentList extends Composite
 
             update(context, TEMPLATE_CLUSTERS);
         }
-    }
-
-    /**
-     * Create Velocity context and place default tools into it.
-     */
-    private VelocityContext createContext()
-    {
-        final VelocityContext context = new VelocityContext();
-        
-        context.put("esc", new EscapeTool());
-
-        return context;
     }
 
     /**

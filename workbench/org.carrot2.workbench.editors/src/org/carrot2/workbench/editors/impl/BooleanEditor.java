@@ -34,11 +34,11 @@ public final class BooleanEditor extends AttributeEditorAdapter implements IAttr
         button = new Button(parent, SWT.CHECK);
 
         button.setText(descriptor.metadata.getLabelOrTitle());
-        button.setToolTipText(descriptor.metadata.getDescription());
 
         final GridData gridData = GUIFactory.editorGridData()
             .align(SWT.BEGINNING, SWT.BEGINNING)
             .span(gridColumns, 1)
+            .grab(true, false)
             .create();
         button.setLayoutData(gridData);
 
