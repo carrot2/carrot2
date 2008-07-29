@@ -275,10 +275,12 @@ public class SearchInputView extends ViewPart
     {
         super.init(site);
 
-        final IActionBars bars = site.getActionBars();
+        /*
+         * Create toolbar and menu contributions.
+         */
+        final IActionBars bars = getViewSite().getActionBars();
         createMenu(bars.getMenuManager());
         createToolbar(bars.getToolBarManager());
-
         bars.updateActionBars();        
     }
     
@@ -313,6 +315,9 @@ public class SearchInputView extends ViewPart
     @Override
     public void createPartControl(Composite parent)
     {
+        /*
+         * Create GUI components.
+         */
         createComponents(parent);
 
         /*

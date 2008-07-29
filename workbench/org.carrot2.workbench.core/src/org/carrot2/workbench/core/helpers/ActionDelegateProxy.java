@@ -34,7 +34,8 @@ public final class ActionDelegateProxy extends Action implements IWorkbenchActio
         
         if (delegate instanceof IWorkbenchWindowActionDelegate)
         {
-            ((IWorkbenchWindowActionDelegate) delegate).init(PlatformUI.getWorkbench().getActiveWorkbenchWindow());
+            ((IWorkbenchWindowActionDelegate) delegate).init(
+                PlatformUI.getWorkbench().getActiveWorkbenchWindow());
         }
     }
 

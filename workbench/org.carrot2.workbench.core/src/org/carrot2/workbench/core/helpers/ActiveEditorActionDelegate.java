@@ -84,10 +84,7 @@ public abstract class ActiveEditorActionDelegate
     {
         if (window != null)
         {
-            if (window.getActivePage() != null)
-            {
-                window.getActivePage().removePartListener(partListener);
-            }
+            window.getPartService().removePartListener(partListener);
         }
     }
 
@@ -96,7 +93,7 @@ public abstract class ActiveEditorActionDelegate
      */
     public void init(IWorkbenchWindow window)
     {
-        window.getActivePage().addPartListener(partListener);
+        window.getPartService().addPartListener(partListener);
         this.window = window;
     }
 
