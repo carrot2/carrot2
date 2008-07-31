@@ -202,8 +202,9 @@ public final class CachingController implements Controller
         }
     }
 
-    /*
-     *
+    /**
+     * A generic method that runs processing for a given set of component
+     * instances (created from a sequence of classes).
      */
     public ProcessingResult process(Map<String, Object> attributes,
         Class<?>... processingComponentClasses) throws ProcessingException

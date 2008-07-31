@@ -57,10 +57,10 @@ public final class SearchJob extends Job
             final Map<String, Object> attributes = searchInput.getAttributeValueSet()
                 .getAttributeValues();
 
-            final Controller controller = core.getController();
+            final CachingController controller = core.getController();
 
             final ProcessingResult result = controller.process(
-                attributes, source.getComponentClass(), algorithm.getComponentClass());
+                attributes, source.getId(), algorithm.getId());
 
             searchResult.setProcessingResult(result);
             status = Status.OK_STATUS;
