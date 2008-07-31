@@ -332,13 +332,31 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
             final int clusters = result.getClusters().size();
 
             rootForm.setText(abbreviated 
-                + " (" + pluralize(documents, "document")
-                + ", " + pluralize(clusters, "cluster") + ")");
+                + " (" + pluralize(documents, "document") + " from "
+                + componentName(getSearchResult().getInput().getSourceId())
+                + ", " + pluralize(clusters, "cluster") + " from " 
+                + componentName(getSearchResult().getInput().getAlgorithmId()) + ")");
         }
         else
         {
             rootForm.setText(abbreviated);
         }
+    }
+
+    /**
+     * Returns the component label or id if not available
+     */
+    private String componentName(String componentId)
+    {
+        final ProcessingComponentDescriptor component = WorkbenchCorePlugin.getDefault()
+            .getComponent(componentId);
+        
+        if (component != null && !StringUtils.isEmpty(component.getLabel()))
+        {
+            return component.getLabel();
+        }
+
+        return componentId;
     }
 
     /**
