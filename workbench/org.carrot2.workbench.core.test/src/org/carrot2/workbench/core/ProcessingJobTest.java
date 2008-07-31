@@ -5,6 +5,8 @@ import java.util.Map.Entry;
 
 import junit.framework.TestCase;
 
+import org.carrot2.core.DocumentSourceDescriptor;
+import org.carrot2.core.ProcessingComponentDescriptor;
 import org.carrot2.source.xml.XmlDocumentSource;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.resource.Resource;
@@ -17,7 +19,14 @@ import org.eclipse.ui.XMLMemento;
 public class ProcessingJobTest extends TestCase
 {
     private AttributeValueSet attributes;
-
+    
+    /*
+     * This source ID must be available in the input suite. 
+     */
+    private final static String SOURCE_XML = "test-xml";
+    
+    private final static String ALGO_BY_URL = "test-by-url";
+    
     @Override
     protected void setUp() throws Exception
     {
@@ -36,24 +45,19 @@ public class ProcessingJobTest extends TestCase
 
     public void testDocumentSources() throws InterruptedException
     {
-        for (ExtensionImpl wrapper : WorkbenchCorePlugin.getDefault()
-            .getSources().getImplementations())
+        for (DocumentSourceDescriptor wrapper : WorkbenchCorePlugin.getDefault()
+            .getComponentSuite().getSources())
         {
-            runSearch("org.carrot2.algorithm.synthetic.byUrl", wrapper.id);
+            runSearch(ALGO_BY_URL, wrapper.getId());
         }
     }
 
     public void testClusteringAlgorithms() throws InterruptedException
     {
-        for (ExtensionImpl wrapper : WorkbenchCorePlugin.getDefault()
-            .getAlgorithms().getImplementations())
+        for (ProcessingComponentDescriptor wrapper : WorkbenchCorePlugin.getDefault()
+            .getComponentSuite().getAlgorithms())
         {
-            if (wrapper.id.equals("org.carrot2.workbench.core.test.algorithm1"))
-            {
-                continue;
-            }
-
-            runSearch(wrapper.id, "org.carrot2.source.xml.xml");
+            runSearch(wrapper.getId(), SOURCE_XML);
         }
     }
 
@@ -76,17 +80,17 @@ public class ProcessingJobTest extends TestCase
 
     public void testSavingAndRestoringOfRequiredAttributes()
     {
-        for (ExtensionImpl wrapper : WorkbenchCorePlugin.getDefault()
-            .getSources().getImplementations())
+        for (DocumentSourceDescriptor wrapper : WorkbenchCorePlugin.getDefault()
+            .getComponentSuite().getSources())
         {
-            performSaveAndRestore(wrapper.id);
+            performSaveAndRestore(wrapper.getId());
         }
     }
 
     private void performSaveAndRestore(String sourceId)
     {
         SearchInput search = new SearchInput(sourceId,
-            "org.carrot2.algorithm.synthetic.byUrl", attributes);
+            ALGO_BY_URL, attributes);
         IMemento memento = XMLMemento.createWriteRoot("root");
         search.saveState(memento);
 
@@ -102,29 +106,5 @@ public class ProcessingJobTest extends TestCase
             assertTrue(attributeValues.containsKey(entry.getKey()));
             assertEquals(attributeValues.get(entry.getKey()), entry.getValue());
         }
-    }
-
-    public void testIfMetadataExists()
-    {
-        for (ExtensionImpl wrapper : WorkbenchCorePlugin.getDefault()
-            .getSources().getImplementations())
-        {
-            buildBindableDescriptor(wrapper);
-        }
-
-        for (ExtensionImpl wrapper : WorkbenchCorePlugin.getDefault()
-            .getAlgorithms().getImplementations())
-        {
-            buildBindableDescriptor(wrapper);
-        }
-    }
-
-    private void buildBindableDescriptor(ExtensionImpl wrapper)
-    {
-        if (wrapper.id.equals("org.carrot2.workbench.core.test.algorithm1"))
-        {
-            return;
-        }
-        BindableDescriptorBuilder.buildDescriptor(wrapper.getInstance());
     }
 }

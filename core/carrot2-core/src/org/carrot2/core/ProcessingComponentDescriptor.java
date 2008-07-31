@@ -34,6 +34,9 @@ public class ProcessingComponentDescriptor
 
     @Element
     private String title;
+    
+    @Element(required = false, name = "icon-path")
+    private String iconPath;
 
     @Element(required = false)
     private String description;
@@ -94,6 +97,15 @@ public class ProcessingComponentDescriptor
         return title;
     }
 
+    /**
+     * @return Returns (optional) path to the icon of this component. The interpretation of this
+     * path is up to the application (icon resources may be placed in various places).
+     */
+    public String getIconPath()
+    {
+        return iconPath;
+    }
+
     public String getDescription()
     {
         return description;
@@ -109,32 +121,37 @@ public class ProcessingComponentDescriptor
         return attributeSetId;
     }
 
+    /**
+     * Invoked by the XML loading framework when the object is deserialized.
+     */
     @Commit
     @SuppressWarnings("unused")
     private void loadAttributeSets() throws Exception
     {
         final ResourceUtils resourceUtils = ResourceUtilsFactory
             .getDefaultResourceUtils();
+
+        final Class<?> clazz = getComponentClass();
         Resource resource = null;
 
         if (!StringUtils.isBlank(attributeSetsResource))
         {
             // Try to load from the directly provided location
-            resource = resourceUtils.getFirst(attributeSetsResource);
+            resource = resourceUtils.getFirst(attributeSetsResource, clazz);
         }
 
         if (resource == null)
         {
             // Try className.id.attributes.xml
             resource = resourceUtils.getFirst(getComponentClass().getName() + "."
-                + getId() + ".attributes.xml");
+                + getId() + ".attributes.xml", clazz);
         }
 
         if (resource == null)
         {
             // Try className.attributes.xml
             resource = resourceUtils.getFirst(getComponentClass().getName()
-                + ".attributes.xml");
+                + ".attributes.xml", clazz);
         }
 
         if (resource != null)

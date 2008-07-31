@@ -3,7 +3,6 @@ package org.carrot2.workbench.core.ui;
 import java.util.Map;
 
 import org.carrot2.core.*;
-import org.carrot2.workbench.core.ExtensionImpl;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.eclipse.core.runtime.*;
 import org.eclipse.core.runtime.jobs.Job;
@@ -46,15 +45,13 @@ public final class SearchJob extends Job
         final SearchInput searchInput = searchResult.getInput();
         final WorkbenchCorePlugin core = WorkbenchCorePlugin.getDefault();
 
-        final ExtensionImpl source = core.getSources()
-            .getImplementation(searchInput.getSourceId());
+        final ProcessingComponentDescriptor source = core.getComponent(searchInput.getSourceId());
+        final ProcessingComponentDescriptor algorithm = core.getComponent(searchInput.getAlgorithmId());
     
-        final ExtensionImpl algorithm = core.getAlgorithms()
-            .getImplementation(searchInput.getAlgorithmId());
-
         IStatus status;
         monitor.beginTask("Processing: "
-            + source.label + " -> " + algorithm.label, IProgressMonitor.UNKNOWN);
+            + source.getLabel() + " -> " + algorithm.getLabel(), IProgressMonitor.UNKNOWN);
+
         try
         {
             final Map<String, Object> attributes = searchInput.getAttributeValueSet()
@@ -63,7 +60,7 @@ public final class SearchJob extends Job
             final Controller controller = core.getController();
 
             final ProcessingResult result = controller.process(
-                attributes, source.clazz, algorithm.clazz);
+                attributes, source.getComponentClass(), algorithm.getComponentClass());
 
             searchResult.setProcessingResult(result);
             status = Status.OK_STATUS;

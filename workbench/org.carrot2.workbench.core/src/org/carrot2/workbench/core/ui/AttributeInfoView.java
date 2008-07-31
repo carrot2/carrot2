@@ -15,7 +15,6 @@ import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.velocity.VelocityInitializer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
-import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 

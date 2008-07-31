@@ -18,5 +18,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-source-etools"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-algorithm-lingo"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-source-opensearch"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>

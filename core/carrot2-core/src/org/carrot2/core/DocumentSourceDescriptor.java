@@ -9,7 +9,7 @@ import org.simpleframework.xml.ElementList;
  */
 public class DocumentSourceDescriptor extends ProcessingComponentDescriptor
 {
-    @ElementList(name = "example-queries", entry = "example-query")
+    @ElementList(name = "example-queries", entry = "example-query", required = false)
     private List<String> exampleQueries;
 
     DocumentSourceDescriptor()

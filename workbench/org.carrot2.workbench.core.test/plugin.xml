@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
-   <extension
-         id="algorithm1"
-         point="org.carrot2.core.algorithm">
-      <algorithm
-            class="org.carrot2.workbench.editors.EditorsTest$TestComponent"
-            icon="icons/yahoo.png"
-            label="testComponent">
-      </algorithm>
-   </extension>
+
    <extension
          id="testEditors"
          point="org.carrot2.workbench.core.attributeEditor">
@@ -75,6 +67,14 @@
             attribute-class="org.carrot2.workbench.editors.EditorsTest$TestInterface"
             class="org.carrot2.workbench.editors.EditorsTest$InterfaceEditor">
       </type-editor>
+   </extension>
+   <extension
+         id="id2"
+         point="org.carrot2.core.componentSuite">
+      <suite
+            name="Test component suite"
+            resource="test-suite.xml">
+      </suite>
    </extension>
 
 </plugin>

@@ -2,6 +2,7 @@ package org.carrot2.core;
 
 import java.io.InputStream;
 import java.io.Writer;
+import java.util.Collections;
 import java.util.List;
 
 import org.carrot2.util.CloseableUtils;
@@ -9,6 +10,7 @@ import org.carrot2.util.resource.*;
 import org.carrot2.util.simplexml.NoClassAttributePersistenceStrategy;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
+import org.simpleframework.xml.load.Commit;
 import org.simpleframework.xml.load.Persister;
 
 import com.google.common.collect.Iterables;
@@ -20,10 +22,10 @@ import com.google.common.collect.Lists;
 @Root(name = "component-suite")
 public class ProcessingComponentSuite
 {
-    @ElementList(name = "sources", entry = "source")
+    @ElementList(name = "sources", entry = "source", required = false)
     private List<DocumentSourceDescriptor> sources;
 
-    @ElementList(name = "algorithms", entry = "algorithm")
+    @ElementList(name = "algorithms", entry = "algorithm", required = false)
     private List<ProcessingComponentDescriptor> algorithms;
 
     public ProcessingComponentSuite()
@@ -54,6 +56,17 @@ public class ProcessingComponentSuite
     public List<ProcessingComponentDescriptor> getComponents()
     {
         return Lists.newArrayList(Iterables.concat(sources, algorithms));
+    }
+    
+    /**
+     * Replace missing attributes with empty lists.
+     */
+    @Commit
+    @SuppressWarnings("unused")
+    private void postDeserialize()
+    {
+        if (sources == null) sources = Collections.emptyList();
+        if (algorithms == null) algorithms = Collections.emptyList();
     }
 
     /**

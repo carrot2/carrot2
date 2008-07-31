@@ -119,12 +119,12 @@ public class SearchInput implements IEditorInput, IPersistableElement, IAttribut
         return true;
     }
 
-    /*
-     * 
+    /**
+     * @see WorkbenchCorePlugin#getComponentImageDescriptor(String);
      */
     public ImageDescriptor getImageDescriptor()
     {
-        return WorkbenchCorePlugin.getDefault().getSources().getImplementation(sourceId).icon;
+        return WorkbenchCorePlugin.getDefault().getComponentImageDescriptor(getSourceId());
     }
 
     /*

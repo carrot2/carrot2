@@ -998,11 +998,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         final WorkbenchCorePlugin core = WorkbenchCorePlugin.getDefault();
         final String algorithmID = getSearchResult().getInput().getAlgorithmId();
 
-        final ProcessingComponent component = core.getAlgorithms().getImplementation(
-            algorithmID).getInstance();
-
-        return BindableDescriptorBuilder.buildDescriptor(component)
-            .only(Input.class, Processing.class)
+        return core.getComponentDescriptor(algorithmID).only(Input.class, Processing.class)
             .not(Internal.class);
     }
 

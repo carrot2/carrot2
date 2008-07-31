@@ -4,6 +4,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.annotation.Annotation;
 import java.util.*;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.*;
@@ -11,7 +12,7 @@ import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
 import org.carrot2.util.attribute.constraint.ConstraintValidator;
-import org.carrot2.workbench.core.*;
+import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.*;
 import org.carrot2.workbench.core.preferences.PreferenceConstants;
 import org.carrot2.workbench.core.ui.actions.ActiveSearchEditorActionDelegate;
@@ -123,15 +124,16 @@ public class SearchInputView extends ViewPart
     private Map<String, BindableDescriptor> descriptors = Maps.newHashMap();
 
     /**
-     * All {@link ExtensionImpl} related to {@link DocumentSource}s in {@link #sourceViewer}. 
+     * All {@link DocumentSourceDescriptor}s related to {@link DocumentSource}s in 
+     * {@link #sourceViewer}. 
      */
-    private HashMap<String, ExtensionImpl> sources;
+    private HashMap<String, DocumentSourceDescriptor> sources;
 
     /**
-     * All {@link ExtensionImpl} related to {@link ClusteringAlgorithm}s 
+     * All {@link ProcessingComponentDescriptor}s related to {@link ClusteringAlgorithm}s 
      * in {@link #algorithmViewer}.
      */
-    private HashMap<String, ExtensionImpl> algorithms;
+    private HashMap<String, ProcessingComponentDescriptor> algorithms;
 
     /**
      * Link the GUI with currently selected editor.
@@ -145,9 +147,9 @@ public class SearchInputView extends ViewPart
     {
         public void selectionChanged(SelectionChangedEvent event)
         {
-            final ExtensionImpl impl = (ExtensionImpl) 
+            final DocumentSourceDescriptor impl = (DocumentSourceDescriptor) 
                 ((IStructuredSelection) event.getSelection()).getFirstElement();
-            setSourceId(impl.id);
+            setSourceId(impl.getId());
         }
     };
     
@@ -506,35 +508,45 @@ public class SearchInputView extends ViewPart
         scroller.setContent(innerComposite);
 
         // Initialize sources, descriptors and source combo.
-        sourceViewer = createComboViewer(innerComposite, "Source", core.getSources());
+        ProcessingComponentSuite suite = core.getComponentSuite();
+        
+        sourceViewer = createComboViewer(innerComposite, "Source", suite.getSources());
         sourceViewer.addSelectionChangedListener(sourceSelectionListener);
 
         sources = Maps.newHashMap();
-        for (ExtensionImpl e : core.getSources().getImplementations())
+        for (DocumentSourceDescriptor e : suite.getSources())
         {
-            sources.put(e.id, e);
-
-            final ProcessingComponent pc = e.getInstance();
-            final BindableDescriptor descriptor = BindableDescriptorBuilder
-                .buildDescriptor(pc).only(Input.class, Processing.class);
-        
-            descriptors.put(e.id, descriptor);
+            try
+            {
+                final ProcessingComponent pc = e.getComponentClass().newInstance();
+    
+                sources.put(e.getId(), e);
+    
+                final BindableDescriptor descriptor = BindableDescriptorBuilder
+                    .buildDescriptor(pc).only(Input.class, Processing.class);
+            
+                descriptors.put(e.getId(), descriptor);
+            }
+            catch (Exception x)
+            {
+                Utils.logError("Could not initialize source: " + e.getId(), false);
+            }
         }
 
         // Initialize algorithms and algorithm combo.
-        algorithmViewer = createComboViewer(innerComposite, "Algorithm", core.getAlgorithms());
+        algorithmViewer = createComboViewer(innerComposite, "Algorithm", suite.getAlgorithms());
 
         algorithms = Maps.newHashMap();
-        for (ExtensionImpl e : core.getAlgorithms().getImplementations())
+        for (ProcessingComponentDescriptor e : suite.getAlgorithms())
         {
-            algorithms.put(e.id, e);
+            algorithms.put(e.getId(), e);
         }
 
         final Label l = new Label(innerComposite, SWT.SEPARATOR | SWT.HORIZONTAL);
         l.setLayoutData(GridDataFactory.fillDefaults()
             .align(SWT.FILL, SWT.CENTER).span(2, 1).minSize(SWT.DEFAULT, 10).create());
 
-        // Initialize a placeholder for the editors.
+        // Initialize a place holder for the editors.
         this.editorCompositeContainer = new Composite(innerComposite, SWT.NONE);
         this.editorCompositeContainer.setLayoutData(
             GridDataFactory.fillDefaults().span(2, 1).create());
@@ -561,7 +573,8 @@ public class SearchInputView extends ViewPart
     /**
      * Creates a JFace ComboViewer around a collection of extension point implementations.
      */
-    private ComboViewer createComboViewer(Composite parent, String comboLabel, ExtensionLoader loader)
+    private ComboViewer createComboViewer(Composite parent, String comboLabel, 
+        List<? extends ProcessingComponentDescriptor> components)
     {
         final Label label = new Label(parent, SWT.CENTER);
         label.setLayoutData(new GridData());
@@ -581,9 +594,10 @@ public class SearchInputView extends ViewPart
         {
             public String getText(Object element)
             {
-                return ((ExtensionImpl) element).label;
+                return ((ProcessingComponentDescriptor) element).getLabel();
             }
         });
+
         viewer.setComparator(new ViewerComparator(new Comparator<String>()
         {
             public int compare(String s1, String s2)
@@ -593,7 +607,7 @@ public class SearchInputView extends ViewPart
         }));
 
         viewer.setContentProvider(new ArrayContentProvider());
-        viewer.setInput(loader.getImplementations());
+        viewer.setInput(components);
 
         return viewer;
     }
@@ -749,8 +763,8 @@ public class SearchInputView extends ViewPart
                 ComboViewer combo = (ComboViewer) comboPair[0];
                 String mementoAttr = (String) comboPair[1];
 
-                Collection<ExtensionImpl> options = (Collection<ExtensionImpl>) combo
-                    .getInput();
+                Collection<ProcessingComponentDescriptor> options = 
+                    (Collection<ProcessingComponentDescriptor>) combo.getInput();
 
                 /*
                  * Attempt to restore selection from memento, if not available,
@@ -762,9 +776,9 @@ public class SearchInputView extends ViewPart
                     String id = state.getString(mementoAttr);
                     if (id != null)
                     {
-                        for (ExtensionImpl i : options)
+                        for (ProcessingComponentDescriptor i : options)
                         {
-                            if (i.id.equals(id))
+                            if (i.getId().equals(id))
                             {
                                 combo.setSelection(new StructuredSelection(i), true);
                                 restored = true;
@@ -788,18 +802,15 @@ public class SearchInputView extends ViewPart
         /*
          * Disable GUI if no inputs or algorithms.
          */
-
-        final WorkbenchCorePlugin core = WorkbenchCorePlugin.getDefault();
-        if (core.getSources().getImplementations().isEmpty())
+        if (sources.isEmpty())
         {
             disableComboWithMessage(sourceViewer.getCombo(), "No document sources.");
             processButton.setEnabled(false);
         }
 
-        if (core.getAlgorithms().getImplementations().isEmpty())
+        if (algorithms.isEmpty())
         {
-            disableComboWithMessage(algorithmViewer.getCombo(),
-                "No clustering algorithms.");
+            disableComboWithMessage(algorithmViewer.getCombo(), "No clustering algorithms.");
             processButton.setEnabled(false);
         }
     }
@@ -863,7 +874,7 @@ public class SearchInputView extends ViewPart
 
         final IStructuredSelection selection = ((IStructuredSelection) combo
             .getSelection());
-        return ((ExtensionImpl) selection.getFirstElement()).id;
+        return ((ProcessingComponentDescriptor) selection.getFirstElement()).getId();
     }
 
     /*

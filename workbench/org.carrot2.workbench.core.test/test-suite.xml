@@ -1,0 +1,19 @@
+<component-suite>
+  <sources>
+    <source component-class="org.carrot2.source.xml.XmlDocumentSource" id="test-xml">
+      <label>XML</label>
+      <title>XML files</title>
+      <mnemonic>X</mnemonic>
+      <description>Carrot2 clustering engine will load and organize documents in an XML file.</description>
+    </source>
+  </sources>
+
+  <algorithms>
+
+    <algorithm component-class="org.carrot2.clustering.synthetic.ByUrlClusteringAlgorithm" id="test-by-url">
+      <label>By URL</label>
+      <title>By URL Clustering</title>
+    </algorithm>
+    
+  </algorithms>
+</component-suite>

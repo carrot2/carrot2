@@ -1,18 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
-<plugin
-   id="org.carrot2.source.etools"
-   name="Carrot2 eTools Document Source"
-   version="1.0.0"
->
-   <extension
-         id="xml"
-         point="org.carrot2.core.source">
-      <source
-            class="org.carrot2.source.etools.EToolsDocumentSource"
-            icon="icons/etools.gif"
-            label="eTools Metasearch Engine">
-      </source>
-   </extension>
+<plugin>
 
 </plugin>

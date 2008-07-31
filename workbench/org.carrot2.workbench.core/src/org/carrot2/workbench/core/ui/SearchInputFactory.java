@@ -5,7 +5,6 @@ import java.io.StringWriter;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.carrot2.core.ProcessingComponent;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
@@ -91,15 +90,13 @@ public final class SearchInputFactory implements IElementFactory
         try
         {
             final WorkbenchCorePlugin core = WorkbenchCorePlugin.getDefault();
-            final ProcessingComponent source = core.getSources().getImplementation(
-                search.getSourceId()).clazz.newInstance();
+            final String id = search.getSourceId();
 
             /*
              * Limit saved attributes to @Input and @Processing ones.
              */
             final BindableDescriptor desc =
-                BindableDescriptorBuilder.buildDescriptor(source).flatten().only(
-                    Input.class, Processing.class);
+                core.getComponentDescriptor(id).flatten().only(Input.class, Processing.class);
 
             final Map<String,Object> actual = search.getAttributeValueSet().getAttributeValues();
             final AttributeValueSet filtered = new AttributeValueSet("memento-saved");
