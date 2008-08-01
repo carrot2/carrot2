@@ -178,7 +178,7 @@ public class AttributeInfoTooltip extends ToolTip
 
         if (descriptor.defaultValue != null)
         {
-            builder.println()
+            builder.println().println()
                 .println("Default value:", BOLD)
                 .print(INDENT)
                 .print(descriptor.defaultValue.toString());
