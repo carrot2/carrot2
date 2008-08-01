@@ -11,9 +11,9 @@ import org.carrot2.util.attribute.BindableDescriptorBuilder;
 import org.carrot2.util.resource.URLResource;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.core.preferences.PreferenceConstants;
-import org.carrot2.workbench.core.ui.SearchEditor;
-import org.carrot2.workbench.core.ui.SearchEditorSections;
+import org.carrot2.workbench.core.ui.*;
 import org.carrot2.workbench.core.ui.SearchEditor.SectionReference;
+import org.carrot2.workbench.core.ui.adapters.SearchResultAdapterFactory;
 import org.eclipse.core.runtime.*;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -74,9 +74,14 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
 
         // Scan the list of suite extension points.
         scanSuites();
-        
+
         controller = new CachingController(DocumentSource.class);
         controller.init(new HashMap<String, Object>(), componentSuite);
+
+        /*
+         * Register adapters.
+         */
+        SearchResultAdapterFactory.register(Platform.getAdapterManager());
     }
 
     /*

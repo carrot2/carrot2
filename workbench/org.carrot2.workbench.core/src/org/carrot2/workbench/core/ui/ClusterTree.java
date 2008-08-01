@@ -45,6 +45,11 @@ public final class ClusterTree extends Composite implements IPostSelectionProvid
 
         public Object getParent(Object element)
         {
+            if (!(element instanceof ClusterWithParent))
+            {
+                return null;
+            }
+
             return ((ClusterWithParent) element).parent;
         }
 

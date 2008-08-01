@@ -300,6 +300,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
             public void processingResultUpdated(ProcessingResult result)
             {
                 updatePartHeaders();
+                setSelection(StructuredSelection.EMPTY);
             }
         };
         this.searchResult.addListener(rootFormTitleUpdater);
@@ -822,7 +823,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         final ClusterTree tree = (ClusterTree) getSections().get(
             SearchEditorSections.CLUSTERS).section.getClient();
 
-        this.selectionProvider = tree;
+        this.selectionProvider = new SearchEditorSelectionProxy(this, tree);
         this.getSite().setSelectionProvider(this);
 
         /*
