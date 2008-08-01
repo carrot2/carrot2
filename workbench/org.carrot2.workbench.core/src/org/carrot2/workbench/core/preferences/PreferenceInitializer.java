@@ -47,6 +47,11 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer
         /*
          * SearchEditor
          */
-        store.setDefault(PreferenceConstants.GROUPING_EDITOR_PANEL, GroupingMethod.GROUP.name());        
+        store.setDefault(PreferenceConstants.GROUPING_EDITOR_PANEL, GroupingMethod.GROUP.name());
+
+        /*
+         * Automatically show attribute info in the view.
+         */
+        store.setDefault(PreferenceConstants.ATTRIBUTE_INFO_SYNC, false);
     }
 }

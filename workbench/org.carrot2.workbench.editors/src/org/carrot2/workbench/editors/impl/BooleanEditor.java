@@ -1,6 +1,7 @@
 package org.carrot2.workbench.editors.impl;
 
 import org.carrot2.workbench.core.helpers.GUIFactory;
+import org.carrot2.workbench.core.ui.AttributeInfoTooltip;
 import org.carrot2.workbench.editors.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -32,6 +33,7 @@ public final class BooleanEditor extends AttributeEditorAdapter implements IAttr
     public void createEditor(Composite parent, int gridColumns)
     {
         button = new Button(parent, SWT.CHECK);
+        AttributeInfoTooltip.attach(button, descriptor);
 
         button.setText(descriptor.metadata.getLabelOrTitle());
 

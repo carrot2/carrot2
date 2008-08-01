@@ -221,20 +221,17 @@ public final class AttributeGroups extends Composite implements
         for (Object groupKey : descriptor.attributeGroups.keySet())
         {
             final String groupLabel;
-            final String groupTooltip;
             if (groupKey instanceof Class)
             {
                 groupLabel = ((Class<?>) groupKey).getSimpleName();
-                groupTooltip = "Class: " + ((Class<?>) groupKey).getName();
             }
             else
             {
                 // Anything else, we simply convert to a string.
-                groupTooltip = groupKey.toString();
-                groupLabel = StringUtils.abbreviate(groupTooltip, 80);
+                groupLabel = StringUtils.abbreviate(groupKey.toString(), 160);
             }
 
-            createEditorGroup(mainControl, groupLabel, groupTooltip, descriptor,
+            createEditorGroup(mainControl, groupLabel, descriptor,
                 descriptor.attributeGroups.get(groupKey));
         }
 
@@ -261,7 +258,7 @@ public final class AttributeGroups extends Composite implements
              */
             if (!descriptor.attributeDescriptors.isEmpty())
             {
-                createEditorGroup(mainControl, "Ungrouped", "Other ungrouped attributes",
+                createEditorGroup(mainControl, "Ungrouped", 
                     descriptor, descriptor.attributeDescriptors);
             }
         }
@@ -316,14 +313,12 @@ public final class AttributeGroups extends Composite implements
      * Create an editor group associated with a group of attributes.
      */
     @SuppressWarnings("unchecked")
-    private void createEditorGroup(final Composite parent, String groupName,
-        String tooltip, BindableDescriptor descriptor,
-        Map<String, AttributeDescriptor> attributes)
+    private void createEditorGroup(final Composite parent, String groupName, 
+        BindableDescriptor descriptor, Map<String, AttributeDescriptor> attributes)
     {
         final int style = ExpandableComposite.TWISTIE | ExpandableComposite.CLIENT_INDENT;
         final Section group = new Section(parent, style);
         group.setText(groupName);
-        group.setToolTipText(tooltip);
         group.setExpanded(true);
         group.setSeparatorControl(new Label(group, SWT.SEPARATOR | SWT.HORIZONTAL));
 

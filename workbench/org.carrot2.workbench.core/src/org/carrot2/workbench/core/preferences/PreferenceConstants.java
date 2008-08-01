@@ -38,6 +38,11 @@ public final class PreferenceConstants
      */
     public static final String SHOW_OPTIONAL = "search-input-view.show-required";
 
+    /**
+     * Automatically show extended attribute info when tooltip is shown. 
+     */
+    public static final String ATTRIBUTE_INFO_SYNC = "attribute-info-view.sync";
+
     /*
      * 
      */

@@ -2,7 +2,6 @@ package org.carrot2.workbench.core.ui;
 
 import java.text.Collator;
 import java.util.*;
-import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.carrot2.core.ProcessingComponent;
@@ -11,17 +10,12 @@ import org.carrot2.workbench.core.helpers.GUIFactory;
 import org.carrot2.workbench.editors.*;
 import org.carrot2.workbench.editors.factory.EditorFactory;
 import org.carrot2.workbench.editors.factory.EditorNotFoundException;
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.layout.GridDataFactory;
-import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.*;
-import org.eclipse.swt.graphics.Cursor;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.*;
-import org.eclipse.ui.*;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -221,15 +215,13 @@ public final class AttributeList extends Composite implements IAttributeChangePr
         final GridLayout layout = GUIFactory.zeroMarginGridLayout();
         layout.makeColumnsEqualWidth = false;
 
-        // Add 1 column for the parameter help icons.
-        layout.numColumns = maxColumns + 1;
+        layout.numColumns = maxColumns;
         this.setLayout(layout);
 
         /*
          * Create visual components for editors.
          */
-        final GridDataFactory labelFactory = GridDataFactory.fillDefaults().span(
-            maxColumns + 1, 1);
+        final GridDataFactory labelFactory = GridDataFactory.fillDefaults().span(maxColumns, 1);
 
         boolean firstEditor = true;
         for (String key : sortedKeys)
@@ -249,7 +241,6 @@ public final class AttributeList extends Composite implements IAttributeChangePr
             {
                 final Label label = new Label(this, SWT.LEAD);
                 label.setText(getLabel(descriptor));
-                label.setToolTipText(getToolTip(descriptor));
 
                 final GridData gd = labelFactory.create();
                 if (!firstEditor)
@@ -257,6 +248,7 @@ public final class AttributeList extends Composite implements IAttributeChangePr
                     gd.verticalIndent = SPACE_BEFORE_LABEL;
                 }
                 label.setLayoutData(gd);
+                AttributeInfoTooltip.attach(label, descriptor);
             }
 
             // Add the editor, if available.
@@ -270,61 +262,8 @@ public final class AttributeList extends Composite implements IAttributeChangePr
              */
             editor.addAttributeChangeListener(forwardListener);
 
-            /*
-             * Add a help icon and link to opening the attribute info view.
-             */
-            final ToolItem helpButton = createHelpButton(this);
-            helpButton.addSelectionListener(new SelectionAdapter()
-            {
-                public void widgetSelected(SelectionEvent e)
-                {
-                    IWorkbenchPage page = PlatformUI.getWorkbench()
-                        .getActiveWorkbenchWindow().getActivePage();
-                    if (page != null)
-                    {
-                        try
-                        {
-                            final IViewPart view = page.showView(AttributeInfoView.ID);
-                            ((AttributeInfoView) view).show(descriptor);
-                        }
-                        catch (PartInitException x)
-                        {
-                            // Ignore, nothing to do here.
-                        }
-                    }
-                }
-            });
-
             firstEditor = false;
         }
-    }
-
-    /*
-     * Copied almost directly from: TrayDialog#createHelpImageButton()
-     */
-    private ToolItem createHelpButton(Composite parent)
-    {
-        final ToolBar toolBar = new ToolBar(parent, SWT.FLAT | SWT.NO_FOCUS);
-
-        final Image helpImage = JFaceResources.getImage(Dialog.DLG_IMG_HELP);
-
-        toolBar.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER)
-            .create());
-
-        final Cursor cursor = new Cursor(parent.getDisplay(), SWT.CURSOR_HAND);
-        toolBar.setCursor(cursor);
-        toolBar.addDisposeListener(new DisposeListener()
-        {
-            public void widgetDisposed(DisposeEvent e)
-            {
-                cursor.dispose();
-            }
-        });
-
-        final ToolItem item = new ToolItem(toolBar, SWT.NONE);
-        item.setImage(helpImage);
-
-        return item;
     }
 
     /*
@@ -342,21 +281,6 @@ public final class AttributeList extends Composite implements IAttributeChangePr
         if (text == null)
         {
             text = "(no label available)";
-        }
-
-        return text;
-    }
-
-    /*
-     * 
-     */
-    private String getToolTip(AttributeDescriptor descriptor)
-    {
-        String text = null;
-
-        if (descriptor.metadata != null)
-        {
-            text = descriptor.metadata.getLabelOrTitle();
         }
 
         return text;

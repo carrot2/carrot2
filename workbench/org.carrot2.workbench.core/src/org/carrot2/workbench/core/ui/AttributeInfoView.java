@@ -10,12 +10,15 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.runtime.RuntimeInstance;
 import org.carrot2.util.attribute.AttributeDescriptor;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
-import org.carrot2.workbench.core.helpers.DisposeBin;
-import org.carrot2.workbench.core.helpers.Utils;
+import org.carrot2.workbench.core.helpers.*;
+import org.carrot2.workbench.core.ui.actions.AttributeInfoSyncAction;
 import org.carrot2.workbench.velocity.VelocityInitializer;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.*;
 import org.eclipse.ui.part.ViewPart;
 
 import com.google.common.collect.Maps;
@@ -65,6 +68,34 @@ public class AttributeInfoView extends ViewPart
                     WorkbenchCorePlugin.PLUGIN_ID, TEMPLATES_PREFIX);
             }
         }
+    }
+
+    /*
+     * 
+     */
+    @Override
+    public void init(IViewSite site) throws PartInitException
+    {
+        super.init(site);
+
+        /*
+         * Create toolbar and menu contributions.
+         */
+        final IActionBars bars = getViewSite().getActionBars();
+        createToolbar(bars.getToolBarManager());
+        bars.updateActionBars();        
+    }
+    
+    /*
+     * 
+     */
+    private void createToolbar(IToolBarManager toolBarManager)
+    {
+        final IAction action = new ActionDelegateProxy(new AttributeInfoSyncAction(), SWT.TOGGLE);
+        action.setImageDescriptor(WorkbenchCorePlugin.getImageDescriptor("icons/help-sync.gif"));
+        action.setToolTipText("Update when attribute tooltip is shown.");
+
+        toolBarManager.add(action);
     }
 
     /*
