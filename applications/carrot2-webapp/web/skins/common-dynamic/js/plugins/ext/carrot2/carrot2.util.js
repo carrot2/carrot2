@@ -53,4 +53,12 @@
   jQuery.unescape = function(string) {
     return string.replace(/\&amp;/g, "&");
   }
+  
+  /**
+   * Returns true of client is using a modern browser. A modern browser is anything
+   * other than IE6-.
+   */
+  jQuery.modern = function(string) {
+    return !jQuery.browser.msie || !parseInt(jQuery.browser.version) > 6; 
+  }
 })(jQuery);

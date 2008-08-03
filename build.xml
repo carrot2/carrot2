@@ -16,10 +16,13 @@
     <path id="src.folders">
         <dirset dir="core" includes="**/src" />
         <dirset dir="core" includes="**/src-test" />
+        <dirset dir="applications" includes="**/src" />
+        <dirset dir="applications" includes="**/src-test" />
     </path>
 
-    <fileset id="src.coverage" dir="core">
-        <include name="**/*.java" />
+    <fileset id="src.coverage" dir=".">
+        <include name="core/**/*.java" />
+        <include name="applications/**/*.java" />
         <exclude name="**/carrot2-examples/**/*.java" if="external.api.tests.disabled" />
         <exclude name="**/carrot2-source-etools/**/*.java" if="external.api.tests.disabled" />
         <exclude name="**/carrot2-source-yahoo/**/*.java" if="external.api.tests.disabled" />
@@ -33,6 +36,7 @@
         <fileset dir="lib" includes="*/*.jar" />    
         <fileset dir="core/carrot2-util-matrix/lib" includes="*.jar" />    
         <fileset dir="core/carrot2-source-opensearch/lib" includes="*.jar" />    
+        <fileset dir="applications/carrot2-webapp/lib" includes="*.jar" />    
     </path>
 
     <path id="test.classpath">

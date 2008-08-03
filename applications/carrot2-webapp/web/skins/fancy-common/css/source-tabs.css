@@ -1,25 +1,9 @@
 /**
  * Common CSS for document source tabs.
  */
-ul.tabs {
-  margin: 0;
-  padding: 0;
-  list-style-type: none;
-  float: left;
-}
-
-#tab-lead-in {
-  float: left;
-  display: block;
-  background-repeat: no-repeat;
-}
-
 ul.tabs li.tab {
   margin: 0;
   padding: 0;
-  display: block;
-  float: left;
-  position: relative;
   background-repeat: repeat-x;
 }
 
@@ -34,24 +18,4 @@ ul.tabs li.tab .right {
 ul.tabs li.drag,
 ul.tabs li.drag .right {
   background-image: none !important;
-  cursor: move;
-}
-
-ul.tabs .tab a {
-  text-decoration: none;
-  color: black;
-}
-
-ul.tabs .tab a:hover {
-  text-decoration: underline;
-}
-
-ul.tabs .tab .label {
-  white-space: nowrap;
-  background-repeat: no-repeat;
-  color: #909090;
-}
-
-ul.tabs li.active .label {
-  color: #404040;
 }

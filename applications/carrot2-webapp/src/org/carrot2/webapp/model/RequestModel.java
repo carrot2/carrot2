@@ -60,6 +60,12 @@ public class RequestModel
     @org.simpleframework.xml.Attribute
     public String view = WebappConfig.INSTANCE.views.get(0).id;
 
+    @Request
+    @Input
+    @Attribute(key = "modern")
+    @org.simpleframework.xml.Attribute
+    public boolean modern = true;
+    
     public Map<String, Object> otherParameters;
 
     @SuppressWarnings("unused")
@@ -81,6 +87,11 @@ public class RequestModel
             }
         }
 
+        if (!modern) 
+        {
+            skin = "simple";
+        }
+        
         otherParameters = remainingHttpParameters;
         otherParametersToSerialize = TypeStringValuePair
             .toTypeStringValuePairs(remainingHttpParameters);

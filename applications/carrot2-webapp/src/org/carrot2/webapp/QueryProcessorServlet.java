@@ -16,6 +16,7 @@ import org.carrot2.webapp.attribute.Request;
 import org.carrot2.webapp.jawr.JawrUrlGenerator;
 import org.carrot2.webapp.model.*;
 import org.carrot2.webapp.util.RequestParameterUtils;
+import org.carrot2.webapp.util.UserAgentUtils;
 import org.simpleframework.xml.load.Persister;
 import org.simpleframework.xml.stream.Format;
 
@@ -54,6 +55,8 @@ public class QueryProcessorServlet extends javax.servlet.http.HttpServlet implem
         // Unpack parameters from string arrays
         final Map<String, Object> requestParameters = RequestParameterUtils
             .unpack(request);
+        requestParameters.put("modern", UserAgentUtils.isModernBrowser(request
+            .getHeader("User-Agent")));
 
         try
         {

@@ -21,6 +21,7 @@ public class Main
         wac.setClassLoader(Thread.currentThread().getContextClassLoader());
         wac.setContextPath("/");
         wac.setWar("web");
+        wac.setDefaultsDescriptor("etc/webdefault.xml");
         server.setHandler(wac);
         server.setStopAtShutdown(true);
 

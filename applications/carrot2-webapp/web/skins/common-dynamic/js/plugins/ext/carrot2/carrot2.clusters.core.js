@@ -55,6 +55,7 @@
    */
   function enhance() {
     $("#clusters li a").prepend("<span class='tree'></span>");
+    $("#clusters li:not(:last-child):has(ul)").addClass("branch");
   };
 
   /**
@@ -163,6 +164,13 @@
    *    d. if the cluster was unfolded, it gets folded
    */
   jQuery.fn.toggleFolding = function(mode, callback) {
+    if (!$.modern()) {
+      if (callback) {
+        window.setTimeout(callback, 10);
+      }
+      return this;
+    }
+    
     var action = mode || "toggle";
     $this = $(this);
 

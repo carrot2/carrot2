@@ -1,122 +1,6 @@
 /**
  * Common CSS for fancy skins.
  */
- 
-/** General page styling */
-body#startup, 
-body#results
-{
-  background-image: url('../img/c2-background.gif');
-}
-
-a {
-  color: #1678C4;
-}
-
-label {
-  color: #808080;
-}
-
-sup {
-  font-size: 80%;
-  position: relative;
-  top: -0.7ex;
-}
-
-/** Noscript message */
-div.noscript
-{
-  position: absolute;
-  width: 20em;
-  background-color: #fafafa;
-  border: 1px #b0b0b0 dotted;
-  -moz-border-radius: 7px;
-  padding: 5px;
-  padding-left: 30px;
-  background-image: url('../img/icon-info.png');
-  background-repeat: no-repeat;
-  background-position: 7px 5px;
-  z-index: 50;
-}
-
-
-.clearfix:after {
-  content: "."; 
-  display: block; 
-  height: 0; 
-  clear: both; 
-  visibility: hidden;
-}
-
-/** Loading indicators */
-#loading,
-#loading-clusters,
-#loading-documents {
-  position: absolute;
-  border-top: 0;
-  border-left: 0;
-  width: 45px;
-  padding: 0px;
-  padding-left: 12px;
-  font-size: 9px;
-  z-index: 5;
-  background-position: 3px 4px;
-  background-repeat: no-repeat;
-}
-
-#loading {
-  top: -1px;
-  left: -1px;
-  -moz-border-radius-bottomright: 7px;
-  border: 1px #c0c0c0 solid;
-  background-color: #EFEDE5;
-  color: #808080;
-}
-
-#loading-clusters,
-#loading-documents {
-  color: #a0a0a0;
-  background-color: #fcfcfc;
-  border: 1px #f0f0f0 solid;
-  border-top: none;
-}
-
-#loading-clusters {
-  -moz-border-radius-bottomleft: 7px;
-  border-right: none;
-}
-
-#loading-documents {
-  left: 271px;
-  border-left: none;
-  -moz-border-radius-bottomright: 7px;
-}
-
-/** Util links*/
-#util-links {
-  position: absolute;
-  top: 0;
-  right: 0;
-}
-
-#util-links a {
-  color: #909090;
-}
-
-.util-links li {
-  display: inline;
-}
-
-.util-links li.hot a,
-#util-links li.hot a
-{
-  color: #e00000;
-}
-
-.pipe {
-  color: #b0b0b0;
-}
-
 /** Form controls */
 #search-glow {
   float: left; 
@@ -151,87 +35,21 @@ div.noscript
 }
 
 /** Startup screen */
-#startup #logo {
-  background-repeat: no-repeat;
-  position: absolute;
-  z-index: 1;
-}
-
-#startup #logo a {
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-#startup #main-area-top {
-  background-position: top left;
-  background-repeat: repeat-x;
-}
-
-#startup #main-area-bottom {
-  background-position: top left;
-  background-repeat: repeat-x;
-}
-
-#startup #search-area {
-  position: relative;
-}
-
-#startup #extra-info {
-  clear: both;
-  color: #606060;
-}
-
-#startup #example-queries {
-  position: relative;
-}
-
 #startup #search-area ul.util-links {
-  border-top: 1px #808080 dotted;
-}
-
-#startup #search-area ul.util-links li.main {
-  display: none;
+  border-top: 1px #a0a0a0 dotted;
 }
 
 #startup #main-area {
-  position: relative;
   background-color: #F6F4EC;
-  width: 100%;
 }
 
 /** Results screen */
-#results #logo {
-  background-repeat: no-repeat;
-  position: absolute;
-  z-index: 1;
-}
-
-#results #logo a {
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
 #results #main-area {
-  position: absolute;
   background-color: #F6F4EC;
-  width: 100%;
   bottom: 0;
 }
 
-#results #main-area-top {
-  background-position: top left;
-  background-repeat: repeat-x;
-}
-
-#results #search-area {
-  position: relative;
-}
-
 #results-area {
-  position: absolute;
-  background-color: white;
   top: 0px;
   bottom: 0px;
   left: 0px;
@@ -239,40 +57,13 @@ div.noscript
   height: 100%;
 }
 
-#clusters-panel {
-  width: 258px;
-  position: absolute;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-#documents-panel {
-  position: absolute;
-  left: 275px;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-#split-panel {
-  position: absolute;
-  top: 0px;
-  bottom: 0px;
-  left: 268px;
-  width: 5px;
-  background-position: 2px top;
-  background-repeat: repeat-y;
-}
-
 #status-bar { 
   background-color: #F6F4EC;
-  height: 19px;
   border-top: 1px dotted #808080;
   position: absolute;
   bottom: 0px;
   left: 0px;
   right: 0px;
-  padding: 0 10px;
-  font-size: 9px;
   color: #808080;
 }
 

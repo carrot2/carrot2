@@ -59,10 +59,12 @@ public class JawrUrlGenerator
         final ArrayList<String> links = new ArrayList<String>();
         final CollectingLinkRenderer renderer = new CollectingLinkRenderer(handler,
             false, links);
+        final String localeKey = renderer.getBundler().getConfig().getLocaleResolver()
+            .resolveLocaleCode(request);
 
         try
         {
-            renderer.renderBundleLinks(bundleId, request.getContextPath(),
+            renderer.renderBundleLinks(bundleId, request.getContextPath(), localeKey,
                 RendererRequestUtils.getAddedBundlesLog(request), isGzippable,
                 StreamUtils.NULL_WRITER);
         }

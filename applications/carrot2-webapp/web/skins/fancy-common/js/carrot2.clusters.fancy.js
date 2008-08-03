@@ -14,12 +14,9 @@
    * Adds markup required by the "fancy" skin.
    */
   function enhance() {
-    $("#clusters li:not(:last-child):has(ul)").addClass("branch");
     $("#clusters li:last-child:not(:has(ul))").addClass("leaf-last");
     $("#clusters li:last-child:has(ul)").addClass("branch-last");
     $("#clusters li.more").addClass("leaf-last");
-    
-    $("#algorithm-time").html(window.algorithmTime).parent().show();
   };
 
   /**

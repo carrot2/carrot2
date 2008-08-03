@@ -2,47 +2,27 @@
 /** sprite: horiz; sprite-image: url('../img/sprite-horiz.png'); sprite-layout: horizontal; */
 
 /** General styles */
-body {
-  font-family: Tahoma,Arial, sans-serif;
+body, input, select, label {
+  font-family: Tahoma, Arial, sans-serif;
   font-size: 11px;
-}
-
-input, select, label {
-  font-family: Tahoma,Arial, sans-serif;
-  font-size: 11px;
-}
-
-input, select {
-  border: 1px solid #c0c0c0;
-  padding: 1px;
-}
-
-sup {
-  font-size: 80%;
-  position: relative;
-  top: -0.7ex;
-}
-
-a {
-  color: #1678C4;
 }
 
 /** Noscript message */
 #startup div.noscript {
   left: 237px;
-  top: 177px;
+  top: 200px;
 }
 
 #results div.noscript {
-  left: 131px;
-  top: 74px;
+  left: 39px;
+  top: 122px;
 }
 
 /** Loading indicators */
 #loading,
 #loading-clusters,
 #loading-documents {
-  background-image: url('../../fancy-common/img/icon-refresh.png'); /** sprite-ref: vert; sprite-margin-top: 5px; sprite-margin-left: 3px; sprite-margin-bottom: 10px; */
+  background-image: url('../../common/img/icon-refresh.png'); /** sprite-ref: vert; sprite-margin-top: 5px; sprite-margin-left: 3px; sprite-margin-bottom: 10px; */
 }
 
 #loading-clusters,
@@ -50,15 +30,9 @@ a {
   top: 2px;
 }
 
-#loading-clusters {
-  left: 212px;
-}
-
 /** Util links*/
 #util-links {
-  font-size: 9px;
-  margin-top: 3px;
-  margin-right: 5px;
+  font-size: 10px;
 }
 
 /** Form controls */
@@ -83,18 +57,17 @@ a {
 #query {
   width: 400px;
   height: 14px;
-  padding-top: 2px;
-  padding-left: 1px;
+  padding: 2px 1px 1px 1px;
 }
 
 #options {
-  width: 408px;
+  width: 407px;
   padding-top: 3px;
   margin-bottom: 20px;
 }
 
 #startup #options {
-  min-height: 55px;
+  min-height: 54px;
 }
 
 #show-options {
@@ -202,10 +175,6 @@ a {
   right: 7px;
 }
 
-#split-panel {
-  background-image: url('../img/split.gif'); /** sprite-ref: horiz; sprite-alignment: repeat; sprite-margin-left: 2px; sprite-margin-right: 2px; */
-}
-
 #results #main-area-inside > .glow-small {
   padding: 3px; 
   float: none; 
@@ -216,21 +185,8 @@ a {
   right: 10px;
 }
 
-/** Different panel split for visualization */
-.visu #clusters-panel {
-  width: 658px;
-  overflow-y: hidden;
+#status-bar { 
+  height: 17px;
+  padding: 0 7px;
+  font-size: 10px;
 }
-
-.visu #documents-panel {
-  left: 675px;
-}
-
-.visu #split-panel {
-  left: 668px;
-}
-
-.visu #loading-documents {
-  left: 671px;
-}
-

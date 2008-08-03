@@ -2,35 +2,20 @@
 /** sprite: horiz; sprite-image: url('../img/sprite-horiz.png'); sprite-layout: horizontal; */
 
 /** General styles */
-body {
+body, input, select, label {
   font-family: Trebuchet MS, sans-serif;
   font-size: 12px;
-}
-
-input, select, label {
-  font-family: Trebuchet MS, sans-serif;
-  font-size: 13px;
-}
-
-sup {
-  font-size: 80%;
-  position: relative;
-  top: -0.7ex;
-}
-
-a {
-  color: #1678C4;
 }
 
 /** Noscript message */
 #startup div.noscript {
   left: 237px;
-  top: 177px;
+  top: 218px;
 }
 
 #results div.noscript {
-  left: 131px;
-  top: 74px;
+  left: 32px;
+  top: 155px;
 }
 
 /** Loading indicators */
@@ -43,10 +28,6 @@ a {
 #loading-clusters,
 #loading-documents {
   top: 3px;
-}
-
-#loading-clusters {
-  left: 211px;
 }
 
 /** Util links*/
@@ -78,12 +59,11 @@ a {
 #query {
   width: 400px;
   height: 17px;
-  padding-top: 2px;
-  padding-left: 1px;
+  padding: 2px 1px 1px 1px;
 }
 
 #options {
-  width: 408px;
+  width: 409px;
   padding-top: 3px;
   margin-bottom: 20px;
 }
@@ -96,6 +76,7 @@ a {
   width: 5ex;
   padding-top: 5px;
   padding-left: 1px;
+  padding-bottom: 1px;
   line-height: 1;
   font-size: 11px;
 }
@@ -199,10 +180,6 @@ a {
   right: 7px;
 }
 
-#split-panel {
-  background-image: url('../img/split.gif'); /** sprite-ref: horiz; sprite-alignment: repeat; sprite-margin-left: 2px; sprite-margin-right: 2px; */
-}
-
 #results #main-area-inside > .glow-small {
   padding: 4px; 
   float: none; 
@@ -213,21 +190,8 @@ a {
   right: 10px;
 }
 
-/** Different panel split for visualization */
-.visu #clusters-panel {
-  width: 658px;
-  overflow-y: hidden;
+#status-bar { 
+  height: 19px;
+  padding: 0 9px;
+  font-size: 10px;
 }
-
-.visu #documents-panel {
-  left: 675px;
-}
-
-.visu #split-panel {
-  left: 668px;
-}
-
-.visu #loading-documents {
-  left: 671px;
-}
-

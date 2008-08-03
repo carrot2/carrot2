@@ -4,27 +4,6 @@
 (function($) {
   
   $(document).ready(function() {
-    enableUi();
-    enhance();
-  });
-  
-  /**
-   * Shows the actual UI elements. If there is no JavaScript enabled, this
-   * function will not be called and the user will see the message shown
-   * in <noscript> rather than the UI which requires JavaScript to run.
-   */
-  function enableUi() {
-    setTimeout(function() { 
-      $("#query").focus();
-    }, 200);
-    $("#loading").fadeOut(1000);
-    $("div.disabled-ui").removeClass("disabled-ui");
-  };
-
-  /**
-   * Dynamically adds markup required by the specific skin.
-   */
-  function enhance() {
     // Add placeholders for tab information on the startup screen
     $("#startup #search-area").append('<div id="extra-info"><div id="tab-info"></div><div id="example-queries"></div></div>');
 
@@ -33,5 +12,16 @@
 
     // Copy util links to the startup section
     $("#util-links ul").clone().appendTo("#startup #search-area");
-  };
+    
+    $("#source-tabs").bind("tabActivated", copyTabInfo);
+  });
+  
+  /**
+   * Copies tab info from the tab li to the extra information area.
+   */
+  function copyTabInfo (e, tabId) {
+    var $siblings = $("#" + tabId).find("a.label").siblings();
+    $("#tab-info").html($siblings.find("span.tab-info").clone().removeClass("hide"));
+    $("#example-queries").html($siblings.find("span.example-queries").clone().removeClass("hide"));
+  }
 })(jQuery);

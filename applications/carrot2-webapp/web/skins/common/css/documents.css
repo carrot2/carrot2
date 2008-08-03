@@ -63,4 +63,8 @@ a.in-new-window,
 a.show-preview {
   background-repeat: no-repeat;
   text-decoration: none;
+  padding-left: 14px;
+  padding-bottom: 2px; 
+  position: relative;
+  left: 3px;
 }

@@ -1,43 +1,12 @@
 /** 
  * CSS for the cluster tree.
  */
-
-#clusters {
-  margin-left: 1px;
-}
-
-#clusters li {
-  background-repeat: repeat-y;
-}
-
-#clusters li.folded > ul {
-  display: none;
-}
-
-#clusters li.unfolded > ul {
-  display: none;
-}
-
 #clusters li a, a#tree-top {
-  font-weight: bold;
-  background-repeat: no-repeat;
-  display: block;
+  padding-left: 18px;
 }
 
-#clusters li.more a {
-  display: inline;
-}
-
-#clusters li.more a.show-all {
-  background-image: none;
-  padding-left: 0;
-  font-weight: normal;
-}
-
-#clusters li > a > span.tree {
-  position: absolute;
-  background-repeat: no-repeat;
-  background-color: transparent !important;
+a#tree-top {
+  padding-top: 2px;
 }
 
 #clusters li.leaf-last > a > span.tree {
@@ -56,30 +25,43 @@
   background-image: none;
 }
 
-#clusters li.selected > a > span,
-a#tree-top.selected > span {
-  color: white;
-  background-color: #1678C4;
+#clusters li.more a {
+  background-position: left 2px;
 }
 
-/** Cluster highlight */
-#clusters li.hl > a > span.label,
-#clusters li.hl > a > span.size,
-.title .hl {
-  background-color: #FFF8B5;
+#clusters li {
+  padding-left: 18px;
+  background-position: 2px top;
 }
 
-#clusters a span.size {
-  padding-left: 0.3em;
-  font-weight: normal;
+#clusters li > a > span.tree {
+  margin-left:  -34px;
+  margin-top: 3px;
+  width: 9px; height: 15px;
 }
 
-/** Cluster utils */
+#clusters li.leaf-last > a > span.tree {
+  margin-top: -2px;
+  width: 9px; height: 24px;
+}
+
+#clusters li.branch > a > span.tree {
+  margin-top: 3px;
+  width: 9px; height: 15px;
+}
+
+#clusters li.branch-last > a > span.tree {
+  margin-top: 0px;
+  width: 9px; height: 24px;
+}
+
+
+
+#clusters a > span {
+  padding-left: 1px;
+}
+
 #always-show-all {
-  display: block;
-  color: #b0b0b0;
-}
-
-#always-show-all, #always-show-all a {
-  color: #b0b0b0;
+  font-size: 11px;
+  margin-left: 37px;
 }

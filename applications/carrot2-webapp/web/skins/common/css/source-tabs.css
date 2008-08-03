@@ -1,0 +1,71 @@
+/**
+ * Common CSS for document source tabs.
+ */
+ul.tabs {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  float: left;
+}
+
+#tab-lead-in {
+  float: left;
+  display: block;
+  background-repeat: no-repeat;
+}
+
+ul.tabs li.tab {
+  display: block;
+  float: left;
+  position: relative;
+}
+
+ul.tabs li.drag {
+  cursor: move;
+}
+
+ul.tabs .tab a {
+  text-decoration: none;
+  color: black;
+}
+
+ul.tabs .tab a:hover {
+  text-decoration: underline;
+}
+
+ul.tabs .tab .label {
+  white-space: nowrap;
+  background-repeat: no-repeat;
+  color: #909090;
+}
+
+ul.tabs li.active .label {
+  color: #404040;
+}
+
+/** Icons for document sources */
+
+ul.tabs li.tab .etools {
+  background-image: url('../img/sources/web.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px */
+}
+
+ul.tabs li.tab .yahoo-news {
+  background-image: url('../img/sources/bulb.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px */
+}
+
+ul.tabs li.tab .yahoo-web {
+  background-image: url('../img/sources/yahoo.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px; sprite-margin-top: 2px */
+}
+
+ul.tabs li.tab .google {
+  background-image: url('../img/sources/google.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px */
+}
+
+ul.tabs li.tab .msn-web {
+  background-image: url('../img/sources/msn.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px */
+}
+
+ul.tabs li.tab .indeed {
+  background-image: url('../img/sources/indeed.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px; sprite-margin-left: 2px */
+  padding-left: 13px;
+}

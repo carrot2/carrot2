@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
   <xsl:output indent="no" omit-xml-declaration="yes" method="xml"
-       doctype-public="-//W3C//DTD XHTML 1.1//EN"
-       doctype-system="http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"
+       doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"
+       doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
        media-type="text/html" encoding="utf-8" />
 
   <xsl:strip-space elements="*"/>
@@ -44,9 +44,12 @@
     <xsl:if test="$debug = 'true'">
       <xsl:apply-templates select="/page/request/parameter" />
     </xsl:if>
+    
+    <!-- Page content -->
     <xsl:apply-templates />
-    <xsl:apply-templates select="page/asset-urls/js-urls/js-url" />
-    <xsl:call-template name="common-extra-js" />
+    
+    <!-- Custom in-line javascript -->
+    <xsl:apply-templates select="/page" mode="js" />
   </body>
 </html>
       </xsl:when>
@@ -60,7 +63,7 @@
   <xsl:template match="parameter">
     Param: <xsl:value-of select="@name" />, value: <xsl:apply-templates select="value/@value" /><br />
   </xsl:template>
-
+  
   <!-- HTML head title -->
   <xsl:template name="page-title">
     <xsl:if test="string-length(/page/request/@query) > 0">
@@ -80,6 +83,8 @@
     <script src="{.}" type="text/javascript"><xsl:comment></xsl:comment></script>
   </xsl:template>
   
+  <xsl:template match="/page" mode="js" />
+  
   <!-- Body tag id -->
   <xsl:template name="page-body-id">
     <xsl:choose>
@@ -94,6 +99,10 @@
       <div class="noscript"><xsl:call-template name="no-javascript-message" /></div>
     </noscript>
 
+    <xsl:if test="/page/request/@modern = 'false'">
+      <span id="use-modern">Use a <a href="http://browsehappy.com/">modern browser</a> for best experience!</span>
+    </xsl:if>
+              
     <div id="logo">
       <h1><a href="{$context-path}/{$search-url}"><span class="hide"><xsl:call-template name="main-title" /></span></a></h1>
     </div>
@@ -113,7 +122,7 @@
           <form action="{$context-path}/{$search-url}">
             <h3 class="hide">Type your query:</h3>
 
-            <div id="required">
+            <div id="required" class="clearfix">
               <input type="hidden" name="{$source-param}" id="source" value="{/page/request/@source}" />
               <input type="hidden" name="{$view-param}" id="view" value="{/page/request/@view}" />
               <input type="hidden" name="{$skin-param}" value="{/page/request/@skin}" />
@@ -284,7 +293,8 @@
   </xsl:template>
 
   <xsl:template name="no-javascript-message">
-    For browsers with no JavaScript support, please use the <a href="#">mobile version of Carrot<sup>2</sup></a>.
+    To use Carrot<sup>2</sup>, please enable 
+    JavaScript in your browser.
   </xsl:template>
 
   <xsl:template name="main-title">
@@ -316,10 +326,10 @@
           <span class="rank"><xsl:value-of select="number(@id) + 1" /></span>
           <span class="title-in-clusters">
             <a href="{url}" target="_top" class="title"><xsl:apply-templates select="title" /></a>
-            <a href="#" class="in-clusters" title="Show in clusters"><small>Show in clusters</small></a>
+            <a href="#" class="in-clusters" title="Show in clusters">&#160;<small>Show in clusters</small></a>
           </span>
-          <a href="{url}" target="_blank" class="in-new-window" title="Open in new window"><small>Open in new window</small></a>
-          <a href="#" class="show-preview" title="Show preview"><small>Show preview</small></a>
+          <a href="{url}" target="_blank" class="in-new-window" title="Open in new window">&#160;<small>Open in new window</small></a>
+          <a href="#" class="show-preview" title="Show preview">&#160;<small>Show preview</small></a>
         </h3>
       </div>
       <xsl:if test="field[@key = 'thumbnail-url']">
