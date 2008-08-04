@@ -21,7 +21,7 @@ public final class CirclesView extends PageBookViewBase
     /**
      * Public identifier of this view.
      */
-    public static final String ID = "com.carrotsearch.workbench.views.circles";
+    public static final String ID = "org.carrot2.workbench.views.circles";
 
     /**
      * A map of unique identifiers and individual {@link CirclesViewPage}s

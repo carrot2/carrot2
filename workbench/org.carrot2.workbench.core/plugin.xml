@@ -147,6 +147,36 @@
          <viewShortcut
                id="org.carrot2.workbench.core.views.attributes">
          </viewShortcut>
+         <viewShortcut
+               id="org.carrot2.workbench.core.views.attributeInfo">
+         </viewShortcut>
+
+         <view
+               id="org.carrot2.workbench.core.views.attributeInfo"
+               ratio="0.33"
+               relationship="bottom"
+               minimized="false"
+               visible="true"
+               relative="org.carrot2.workbench.core.views.search"/>
+
+         <view
+               id="org.carrot2.workbench.core.views.attributes"
+               relationship="stack"
+               visible="true"
+               relative="org.carrot2.workbench.core.views.attributeInfo"/>
+
+         <view
+               id="org.carrot2.workbench.core.views.clusters"
+               relationship="stack"
+               visible="false"
+               relative="org.carrot2.workbench.core.views.attributeInfo"/>
+
+         <view
+               id="org.carrot2.workbench.core.views.documents"
+               relationship="stack"
+               visible="false"
+               relative="org.carrot2.workbench.core.views.attributeInfo"/>
+
       </perspectiveExtension>
       <perspectiveExtension
             targetID="org.carrot2.workbench.core.perspective.tuning">
@@ -161,6 +191,9 @@
          </viewShortcut>
          <viewShortcut
                id="org.carrot2.workbench.core.views.attributes">
+         </viewShortcut>
+         <viewShortcut
+               id="org.carrot2.workbench.core.views.attributeInfo">
          </viewShortcut>
       </perspectiveExtension>
    </extension>

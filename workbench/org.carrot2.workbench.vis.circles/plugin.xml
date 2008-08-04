@@ -69,4 +69,13 @@
          </init-param>
       </servlet>
    </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.carrot2.workbench.core.perspective.search">
+         <viewShortcut
+               id="org.carrot2.workbench.views.circles">
+         </viewShortcut>
+      </perspectiveExtension>
+   </extension>
 </plugin>
