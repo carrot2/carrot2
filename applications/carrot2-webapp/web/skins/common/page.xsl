@@ -18,12 +18,11 @@
   <xsl:variable name="view-param" select="/page/config/@view-param" />
   <xsl:variable name="skin-param" select="/page/config/@skin-param" />
   
-  <xsl:variable name="search-url-base" select="/page/@search-url-base" />
-  <xsl:variable name="view-url-base" select="/page/@view-url-base" />
+  <xsl:variable name="request-url" select="/page/@request-url" />
   <xsl:variable name="xml-url-encoded" select="/page/@xml-url-encoded" />
   
-  <xsl:variable name="documents-url" select="concat($search-url-base, '&amp;type=DOCUMENTS')" />
-  <xsl:variable name="clusters-url" select="concat($search-url-base, '&amp;type=CLUSTERS')" />
+  <xsl:variable name="documents-url" select="concat($request-url, '&amp;type=DOCUMENTS')" />
+  <xsl:variable name="clusters-url" select="concat($request-url, '&amp;type=CLUSTERS')" />
   
   <xsl:variable name="debug" select="false" />
 
@@ -411,5 +410,20 @@
 
   <xsl:template match="group/document" mode="json">
     <xsl:value-of select="@refid" /><xsl:if test="not(position() = last())">,</xsl:if>
+  </xsl:template>
+  
+  <!-- Replaces one parameter in the provided url -->
+  <xsl:template name="replace-in-url">
+    <xsl:param name="url" />
+    <xsl:param name="param" />
+    <xsl:param name="value" />
+    
+    <xsl:variable name="left"><xsl:value-of select="substring-before($url, concat($param, '='))" /></xsl:variable>
+    <xsl:variable name="after-param"><xsl:value-of select="substring-after($url, concat($param, '='))" /></xsl:variable>
+    <xsl:variable name="right"><xsl:value-of select="substring-after(substring($after-param, 1), '&amp;')" /></xsl:variable>
+    
+    <xsl:value-of select="concat($left, $param, '=', $value)" /><xsl:if test="string-length($right) > 0">
+      <xsl:value-of select="concat('&amp;', $right)" />
+    </xsl:if>
   </xsl:template>
 </xsl:stylesheet>

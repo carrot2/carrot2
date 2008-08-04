@@ -124,7 +124,14 @@ $(document).ready(function() {
         <xsl:if test="$view-pos = 1"> first</xsl:if>
       </xsl:attribute>
       
-      <a href="{concat($view-url-base, '&amp;', $view-param, '=', @id)}"><xsl:value-of select="label" /></a>
+      <xsl:variable name="view-url">
+        <xsl:call-template name="replace-in-url">
+          <xsl:with-param name="url" select="$request-url" />
+          <xsl:with-param name="param" select="$view-param" />
+          <xsl:with-param name="value" select="@id" />
+        </xsl:call-template>
+      </xsl:variable>
+      <a href="{$view-url}"><xsl:value-of select="label" /></a>
       <span class="right"><xsl:comment></xsl:comment></span>
     </li>
   </xsl:template>

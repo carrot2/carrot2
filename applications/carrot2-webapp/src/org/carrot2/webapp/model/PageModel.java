@@ -1,7 +1,5 @@
 package org.carrot2.webapp.model;
 
-import java.util.Map.Entry;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.carrot2.core.ProcessingResult;
@@ -39,14 +37,11 @@ public class PageModel
     @Attribute(name = "skin-path")
     public final String skinPath;
 
-    @Attribute(name = "search-url-base")
-    public final String searchUrlBase;
-
-    @Attribute(name = "view-url-base")
-    public final String viewUrlBase;
-
     @Attribute(name = "xml-url-encoded")
     public final String xmlUrlEncoded;
+
+    @Attribute(name = "request-url")
+    public final String requestUrl;
 
     public PageModel(HttpServletRequest request, JawrUrlGenerator urlGenerator,
         ProcessingResult processingResult, RequestModel requestModel)
@@ -63,19 +58,11 @@ public class PageModel
         this.skinPath = contextPath + WebappConfig.SKINS_FOLDER;
         this.assetUrls = new AssetUrlsModel(requestModel.skin, request, urlGenerator);
 
-        // Build search url base
-        StringBuilder searchUrl = buildSearchUrlBase(requestModel, webappConfig.searchUrl);
-
-        // View url
-        this.viewUrlBase = searchUrl.toString();
-
-        // Documents/clusters view
-        appendParameter(searchUrl, WebappConfig.VIEW_PARAM, requestModel.view);
-        this.searchUrlBase = searchUrl.toString();
+        this.requestUrl = buildSearchUrlBase(requestModel, webappConfig.searchUrl)
+            .toString();
 
         // XML stream url base
         StringBuilder xmlUrl = buildSearchUrlBase(requestModel, webappConfig.xmlUrl);
-        appendParameter(xmlUrl, WebappConfig.VIEW_PARAM, requestModel.view);
         appendParameter(xmlUrl, WebappConfig.TYPE_PARAM, RequestType.CARROT2.name());
         this.xmlUrlEncoded = StringUtils.urlEncodeWrapException(xmlUrl.toString(),
             "UTF-8");
@@ -87,19 +74,14 @@ public class PageModel
         stringBuilder.append(contextPath);
         stringBuilder.append('/');
         stringBuilder.append(action);
-        appendParameter(stringBuilder, WebappConfig.SOURCE_PARAM, requestModel.source,
-            '?');
-        appendParameter(stringBuilder, WebappConfig.ALGORITHM_PARAM,
-            requestModel.algorithm);
+        appendParameter(stringBuilder, WebappConfig.QUERY_PARAM, requestModel.query, '?');
         appendParameter(stringBuilder, WebappConfig.RESULTS_PARAM, Integer
             .toString(requestModel.results));
+        appendParameter(stringBuilder, WebappConfig.SOURCE_PARAM, requestModel.source);
+        appendParameter(stringBuilder, WebappConfig.ALGORITHM_PARAM,
+            requestModel.algorithm);
+        appendParameter(stringBuilder, WebappConfig.VIEW_PARAM, requestModel.view);
         appendParameter(stringBuilder, WebappConfig.SKIN_PARAM, requestModel.skin);
-        appendParameter(stringBuilder, WebappConfig.QUERY_PARAM, requestModel.query);
-        for (Entry<String, Object> parameter : requestModel.otherParameters.entrySet())
-        {
-            appendParameter(stringBuilder, parameter.getKey(), parameter.getValue()
-                .toString());
-        }
         return stringBuilder;
     }
 
@@ -113,7 +95,6 @@ public class PageModel
     {
         if (org.apache.commons.lang.StringUtils.isNotBlank(value))
         {
-
             builder.append(separator);
             builder.append(name);
             builder.append('=');
