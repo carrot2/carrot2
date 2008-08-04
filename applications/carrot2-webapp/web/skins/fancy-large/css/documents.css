@@ -19,14 +19,14 @@ a.show-preview {
 }
 
 a.in-clusters {
-  background-image: url('../../fancy-common/img/icon-in-clusters.gif'); /** sprite-ref: vert; sprite-alignment: right; sprite-margin-bottom: 20px; sprite-margin-top: 2px */
+  background-image: url('../../common/img/icon-in-clusters.gif'); /** sprite-ref: vert; sprite-alignment: right; sprite-margin-bottom: 20px; sprite-margin-top: 2px */
 }
 
 a.in-new-window {
-  background-image: url('../../fancy-common/img/icon-in-new-window.gif'); /** sprite-ref: vert; sprite-alignment: right; sprite-margin-bottom: 20px; sprite-margin-top: 2px */
+  background-image: url('../../common/img/icon-in-new-window.gif'); /** sprite-ref: vert; sprite-alignment: right; sprite-margin-bottom: 20px; sprite-margin-top: 2px */
 }
 
 a.show-preview {
-  background-image: url('../../fancy-common/img/icon-show-preview.gif'); /** sprite-ref: vert; sprite-alignment: right; sprite-margin-bottom: 20px; sprite-margin-top: 2px */
+  background-image: url('../../common/img/icon-show-preview.gif'); /** sprite-ref: vert; sprite-alignment: right; sprite-margin-bottom: 20px; sprite-margin-top: 2px */
 }
 

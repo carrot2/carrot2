@@ -43,10 +43,22 @@ a#tree-top.selected > span {
 }
 
 /** Cluster highlight */
+#clusters li.hl.selected > a > span.label,
+#clusters li.hl.selected > a > span.size {
+  background-color: #1678C4;
+  color: #FFF8B5;
+}
+
+
 #clusters li.hl > a > span.label,
 #clusters li.hl > a > span.size,
 .title .hl {
   background-color: #FFF8B5;
+}
+
+#clusters li.hl > a > span.label,
+#clusters li.hl > a > span.size {
+  text-decoration: underline;
 }
 
 #clusters a span.size {

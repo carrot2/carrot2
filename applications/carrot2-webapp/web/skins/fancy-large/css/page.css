@@ -22,7 +22,7 @@ body, input, select, label {
 #loading,
 #loading-clusters,
 #loading-documents {
-  background-image: url('../../fancy-common/img/icon-refresh.png'); /** sprite-ref: vert; sprite-margin-top: 5px; sprite-margin-left: 3px; sprite-margin-bottom: 10px; */
+  background-image: url('../../common/img/icon-refresh.png'); /** sprite-ref: vert; sprite-margin-top: 5px; sprite-margin-left: 3px; sprite-margin-bottom: 10px; */
 }
 
 #loading-clusters,
