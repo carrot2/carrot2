@@ -452,15 +452,14 @@ public class SearchInputView extends ViewPart
             public void contentChanging(IAttributeEditor editor, Object value)
             {
                 /*
-                 * On content changing, temporarily substitute the value of the
-                 * given attribute with the new value.
+                 * On content changing, eagerly substitute the value of the
+                 * given attribute with the new value. In the input view, early
+                 * commit of attribute values should not trigger any additional 
+                 * consequences, so we can do it.
                  */
                 final String attributeKey = editor.getAttributeKey();
-
-                final Object currentValue = attributes.getAttributeValue(attributeKey);
                 attributes.setAttributeValue(attributeKey, value);
                 checkAllRequiredAttributes();
-                attributes.setAttributeValue(attributeKey, currentValue);
             }
         });
 
