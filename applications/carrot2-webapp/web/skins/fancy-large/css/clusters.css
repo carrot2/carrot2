@@ -5,6 +5,10 @@
   line-height: 1.7;
 }
 
+#no-clusters {
+  font-size: 13px;
+}
+
 #clusters li a, a#tree-top {
   background-position: left 4px;
   background-image: url('../img/tree-folder.gif'); /** sprite-ref: vert; sprite-margin-top: 4px; sprite-margin-bottom: 50px */

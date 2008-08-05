@@ -318,12 +318,20 @@
   <!-- Documents -->
   <xsl:template match="page[@type = 'DOCUMENTS']">
     <div id="documents">
-      <xsl:apply-templates select="searchresult/document" />
-  
-      <script>
-        var fetchedDocumentsCount = <xsl:value-of select="count(searchresult/document)" />;
-        var sourceTime = "<xsl:value-of select="searchresult/attribute[@key = 'processing-time-source']/value/@value" />";
-      </script>
+      <xsl:choose>
+        <xsl:when test="count(searchresult/document) > 0">
+          <xsl:apply-templates select="searchresult/document" />
+        
+          <script>
+            var fetchedDocumentsCount = <xsl:value-of select="count(searchresult/document)" />;
+            var sourceTime = "<xsl:value-of select="searchresult/attribute[@key = 'processing-time-source']/value/@value" />";
+          </script>
+        </xsl:when>
+        
+        <xsl:otherwise>
+          <div id="no-documents">Your query returned no documents. <br />Please try a more general query.</div>
+        </xsl:otherwise>
+      </xsl:choose>    
     </div>
   </xsl:template>
 
@@ -367,18 +375,26 @@
   <!-- Clusters -->
   <xsl:template match="page[@type = 'CLUSTERS']">
     <div id="clusters">
-      <a id="tree-top" href="#"><span class="label">All Topics</span><span class="size">(<xsl:value-of select="count(searchresult/document)" />)</span></a>
-      <ul>
-        <xsl:apply-templates select="searchresult/group" />
-      </ul>
-  
-      <script>
-        var documentCount = <xsl:value-of select="count(searchresult/document)" />;
-        var documents = {
-          <xsl:apply-templates select="searchresult/group" mode="json" />
-        };
-        var algorithmTime = "<xsl:value-of select="searchresult/attribute[@key = 'processing-time-algorithm']/value/@value" />";
-      </script>
+      <xsl:choose>
+        <xsl:when test="count(searchresult/group) > 0">
+          <a id="tree-top" href="#"><span class="label">All Topics</span><span class="size">(<xsl:value-of select="count(searchresult/document)" />)</span></a>
+          <ul>
+            <xsl:apply-templates select="searchresult/group" />
+          </ul>
+      
+          <script>
+            var documentCount = <xsl:value-of select="count(searchresult/document)" />;
+            var documents = {
+              <xsl:apply-templates select="searchresult/group" mode="json" />
+            };
+            var algorithmTime = "<xsl:value-of select="searchresult/attribute[@key = 'processing-time-algorithm']/value/@value" />";
+          </script>
+        </xsl:when>
+        
+        <xsl:otherwise>
+          <div id="no-clusters">No clusters found</div>
+        </xsl:otherwise>
+      </xsl:choose>
     </div>
   </xsl:template>
 

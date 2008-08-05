@@ -1,11 +1,11 @@
 package org.carrot2.webapp;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
@@ -24,8 +24,7 @@ import org.simpleframework.xml.stream.Format;
  * 
  */
 @SuppressWarnings("serial")
-public class QueryProcessorServlet extends javax.servlet.http.HttpServlet implements
-    javax.servlet.Servlet
+public class QueryProcessorServlet extends HttpServlet 
 {
     public final static String MIME_XML = "text/xml";
     public final static String ENCODING_UTF = "utf-8";

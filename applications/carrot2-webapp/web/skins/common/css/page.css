@@ -340,3 +340,9 @@ input, select {
   left: 671px;
 }
 
+/** No documents/clusters messages */
+#no-documents, 
+#no-clusters {
+  text-align: center;
+  margin-top: 5ex;
+}
