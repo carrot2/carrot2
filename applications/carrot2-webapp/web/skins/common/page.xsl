@@ -92,6 +92,15 @@
     </xsl:choose>
   </xsl:template>
 
+  <!-- Error message -->
+  <xsl:template match="page[@type = 'ERROR']">
+    <div class="processing-error">
+    Our apologies, the following processing error has occurred: 
+    <span class="message"><xsl:value-of select="/page/@exception-message" /></span>
+    If the error persists, please <a href="http://project.carrot2.org/support.html">contact us</a>.
+    </div>
+  </xsl:template>
+
   <!-- Main page contents -->
   <xsl:template match="page[@type = 'PAGE' or @type = 'FULL']">
     <noscript>

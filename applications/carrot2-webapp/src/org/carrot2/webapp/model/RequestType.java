@@ -18,7 +18,10 @@ public enum RequestType
     CLUSTERS(true),
     
     /** Documents and clusters in Carrot2 standard format */
-    CARROT2(true);
+    CARROT2(true),
+    
+    /** Error page */
+    ERROR(false);
     
     /** True when Carrot2 processing is required */
     public final boolean requiresProcessing;

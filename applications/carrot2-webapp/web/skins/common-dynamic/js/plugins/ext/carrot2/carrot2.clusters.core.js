@@ -282,13 +282,15 @@
   jQuery.clusters.flatten = function (clusters) {
     var flattened = { };
   
-    $.each(clusters, function(key, value) {
-      flattenDocsInternal(key, value, flattened);
-    });
-
-    $.each(flattened, function(key, value) {
-      $.sortUnique(value);
-    });
+    if (clusters) {
+      $.each(clusters, function(key, value) {
+        flattenDocsInternal(key, value, flattened);
+      });
+  
+      $.each(flattened, function(key, value) {
+        $.sortUnique(value);
+      });
+    }
 
     return flattened;
   };

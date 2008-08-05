@@ -7,6 +7,10 @@ body, input, select, label {
   font-size: 12px;
 }
 
+input, select, label {
+  font-size: 13px;
+}
+
 /** Noscript message */
 #startup div.noscript {
   left: 237px;

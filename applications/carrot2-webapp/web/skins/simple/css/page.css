@@ -98,7 +98,7 @@ body, input, select, label, button {
   border: 1px solid #b6afa8;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
-  padding: 3px 2px 2px 2px;
+  padding: 3px 2px 3px 2px;
   margin-right: 3px; 
   width: 350px;
 }

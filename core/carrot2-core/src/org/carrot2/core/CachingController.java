@@ -7,6 +7,7 @@ import java.util.*;
 
 import javax.sql.DataSource;
 
+import net.sf.ehcache.CacheException;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.constructs.blocking.CacheEntryFactory;
 import net.sf.ehcache.constructs.blocking.SelfPopulatingCache;
@@ -203,8 +204,8 @@ public final class CachingController implements Controller
     }
 
     /**
-     * A generic method that runs processing for a given set of component
-     * instances (created from a sequence of classes).
+     * A generic method that runs processing for a given set of component instances
+     * (created from a sequence of classes).
      */
     public ProcessingResult process(Map<String, Object> attributes,
         Class<?>... processingComponentClasses) throws ProcessingException
@@ -587,8 +588,16 @@ public final class CachingController implements Controller
             inputAttributes.put(COMPONENT_CLASS_KEY, componentClass);
             inputAttributes.put(COMPONENT_ID_KEY, componentId);
 
-            attributes.putAll(getAttributesForDescriptors(descriptors.outputDescriptors,
-                (Map<String, Object>) dataCache.get(inputAttributes).getObjectValue()));
+            try
+            {
+                attributes.putAll(getAttributesForDescriptors(
+                    descriptors.outputDescriptors, (Map<String, Object>) dataCache.get(
+                        inputAttributes).getObjectValue()));
+            }
+            catch (CacheException e)
+            {
+                throw ExceptionUtils.wrapAs(ProcessingException.class, e.getCause());
+            }
         }
 
         /**

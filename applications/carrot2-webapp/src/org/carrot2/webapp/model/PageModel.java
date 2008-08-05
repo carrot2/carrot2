@@ -2,6 +2,7 @@ package org.carrot2.webapp.model;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.carrot2.core.ProcessingException;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.util.StringUtils;
 import org.carrot2.webapp.jawr.JawrUrlGenerator;
@@ -25,6 +26,9 @@ public class PageModel
     @Element(name = "searchresult", required = false)
     public final ProcessingResult processingResult;
 
+    @Attribute(name = "exception-message", required = false)
+    public final String processingExceptionMessage;
+
     @Attribute(name = "type")
     public final RequestType type;
 
@@ -43,12 +47,15 @@ public class PageModel
     @Attribute(name = "request-url")
     public final String requestUrl;
 
-    public PageModel(HttpServletRequest request, JawrUrlGenerator urlGenerator,
-        ProcessingResult processingResult, RequestModel requestModel)
+    public PageModel(HttpServletRequest request, RequestModel requestModel,
+        JawrUrlGenerator urlGenerator, ProcessingResult processingResult,
+        ProcessingException processingException)
     {
         this.processingResult = processingResult;
         this.requestModel = requestModel;
-        this.type = requestModel.type;
+        this.type = processingException == null ? requestModel.type : RequestType.ERROR;
+        this.processingExceptionMessage = processingException == null ? null
+            : processingException.getMessage();
 
         // TODO: determine based on skin
         this.fullHtml = !RequestType.DOCUMENTS.equals(requestModel.type)

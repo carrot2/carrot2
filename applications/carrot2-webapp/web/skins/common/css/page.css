@@ -200,21 +200,49 @@ input, select {
 #required {
 }
 
-#use-modern {
-  width: 10em;
+#use-modern,
+.processing-error {
   display: block;
-  line-height: 1.15;
-  margin-right: 5px;
-  border: 1px solid #eecc79;
-  background-color: #f6f0cd;
+  border: 1px solid #dc9e27;
+  background-color: #fff3b7;
   padding: 5px;
   padding-left: 25px;
   background-image: url("../img/icon-error.gif");
   background-repeat: no-repeat;
-  background-position: 3px center;
+  background-position: 3px 5px;
+  -moz-border-radius: 5px;
+}
+
+#use-modern {
+  width: 10em;
+  line-height: 1.15;
+  margin-right: 5px;
   position: absolute;
   right: 2px;
   z-index: 10;
+}
+
+.processing-error {
+  width: 185px;
+  position: relative;
+  padding: 10px 10px 10px 33px;
+  background-position: 8px 10px;
+}
+
+.processing-error .message {
+  display: block;
+  margin: 1ex 0 2ex 0px;
+  font-weight: bold
+}
+
+#clusters-panel .processing-error {
+  top: 13px;
+  left: 15px;
+}
+
+#documents-panel .processing-error {
+  top: 36px;
+  left: 13px;
 }
 
 #results #use-modern {

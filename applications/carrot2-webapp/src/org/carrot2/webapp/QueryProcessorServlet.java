@@ -78,27 +78,36 @@ public class QueryProcessorServlet extends javax.servlet.http.HttpServlet implem
 
             // Perform processing
             ProcessingResult processingResult = null;
-            if (requestModel.type.requiresProcessing)
+            ProcessingException processingException = null;
+            try
             {
-                if (RequestType.CLUSTERS.equals(requestModel.type)
-                    || RequestType.FULL.equals(requestModel.type)
-                    || RequestType.CARROT2.equals(requestModel.type))
+                if (requestModel.type.requiresProcessing)
                 {
-                    processingResult = controller.process(requestParameters,
-                        requestModel.source, requestModel.algorithm);
+                    if (RequestType.CLUSTERS.equals(requestModel.type)
+                        || RequestType.FULL.equals(requestModel.type)
+                        || RequestType.CARROT2.equals(requestModel.type))
+                    {
+                        processingResult = controller.process(requestParameters,
+                            requestModel.source, requestModel.algorithm);
+                    }
+                    else if (RequestType.DOCUMENTS.equals(requestModel.type))
+                    {
+                        processingResult = controller.process(requestParameters,
+                            requestModel.source);
+                    }
                 }
-                else if (RequestType.DOCUMENTS.equals(requestModel.type))
-                {
-                    processingResult = controller.process(requestParameters,
-                        requestModel.source);
-                }
+            }
+            catch (ProcessingException e)
+            {
+                processingException = e;
             }
 
             // Send response
             response.setContentType(MIME_XML_CHARSET_UTF);
             final ServletOutputStream outputStream = response.getOutputStream();
-            final PageModel pageModel = new PageModel(request, jawrUrlGenerator,
-                processingResult, requestModel);
+            final PageModel pageModel = new PageModel(request, requestModel,
+                jawrUrlGenerator, processingResult, processingException);
+
             final Persister persister = new Persister(
                 NoClassAttributePersistenceStrategy.INSTANCE,
                 getPersisterFormat(pageModel));
@@ -120,10 +129,9 @@ public class QueryProcessorServlet extends javax.servlet.http.HttpServlet implem
 
     private Format getPersisterFormat(PageModel pageModel)
     {
-        return new Format(2,
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<?xml-stylesheet type=\"text/xsl\" href=\"@"
-                + WebappConfig
-                    .getContextRelativeSkinStylesheet(pageModel.requestModel.skin)
-                + "\" ?>");
+        return new Format(2, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+            + "<?xml-stylesheet type=\"text/xsl\" href=\"@"
+            + WebappConfig.getContextRelativeSkinStylesheet(pageModel.requestModel.skin)
+            + "\" ?>");
     }
 }

@@ -2,6 +2,13 @@
  * CSS for the documents list. 
  */
 
+a.in-clusters,
+a.in-new-window,
+a.show-preview {
+  padding-left: 16px;
+  background-position: right 0;
+}
+
 a.in-clusters {
   background-image: url('../../common/img/icon-in-clusters.gif'); /** sprite-ref: vert; sprite-alignment: right; sprite-margin-bottom: 20px; sprite-margin-top: 2px */
 }
