@@ -83,7 +83,7 @@ public class AttributeInfoView extends ViewPart
          */
         final IActionBars bars = getViewSite().getActionBars();
         createToolbar(bars.getToolBarManager());
-        bars.updateActionBars();        
+        bars.updateActionBars();
     }
     
     /*
@@ -106,6 +106,8 @@ public class AttributeInfoView extends ViewPart
     {
         this.browser = new Browser(parent, SWT.NONE);
         bin.add(browser);
+        
+        clear();
     }
 
     /**
@@ -114,7 +116,6 @@ public class AttributeInfoView extends ViewPart
     public void show(AttributeDescriptor descriptor)
     {
         final VelocityContext context = VelocityInitializer.createContext();
-
         context.put("descriptor", descriptor);
 
         /*
@@ -139,6 +140,27 @@ public class AttributeInfoView extends ViewPart
         browser.setText(sw.toString());
     }
 
+    /**
+     * Clears the view.
+     */
+    public void clear()
+    {
+        final VelocityContext context = VelocityInitializer.createContext();
+        StringWriter sw = new StringWriter();
+        try
+        {
+            final Template template = velocity.getTemplate(TEMPLATE_ATTR_INFO, "UTF-8");
+            template.merge(context, sw);
+        }
+        catch (Exception e)
+        {
+            Utils.logError("Error while loading template", e, true);
+            return;
+        }
+
+        browser.setText(sw.toString());
+    }
+    
     /*
      * Copy public fields to a map. Velocity does not support field access
      */

@@ -59,6 +59,8 @@
 			#end
 		</dd>
 	</dl>
+#else
+	<p>Hover over attribute label to display attribute info.</p>
 #end
 
 #parse("_footer.vm")
