@@ -25,7 +25,10 @@ public final class ClusterPropertySource extends MapPropertySource
             properties.put("sub-clusters", cluster.getSubclusters());
         }
 
-        properties.put("attributes", cluster.getAttributes());
+        if (!cluster.getAttributes().isEmpty())
+        {
+            properties.put("attributes", cluster.getAttributes());
+        }
 
         add(properties, null);
     }

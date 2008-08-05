@@ -31,9 +31,14 @@ public class MapPropertySource implements IPropertySource2
     private final List<IPropertyDescriptor> descriptors = Lists.newArrayList();
 
     /**
-     * {@link #toString()} cache. 
+     * {@link #toString()} cache if {@link #label} is not available. 
      */
     private String cache;
+
+    /**
+     * Fixed label returned from {@link #toString()} or <code>null</code>.
+     */
+    private String label;
 
     /*
      * 
@@ -41,15 +46,32 @@ public class MapPropertySource implements IPropertySource2
     public MapPropertySource()
     {
     }
-    
-    /*
-     * 
+
+    /**
+     * Creates a property source for a given set of keys and values. 
      */
     public MapPropertySource(Map properties)
     {
+        this(properties, null);
+    }
+
+    /**
+     * Creates a wrapper map for a given collection of elements.  
+     */
+    public MapPropertySource(Collection value)
+    {
+        this(asMap(value, 0), getLabel(value.size()));
+    }
+
+    /**
+     *  
+     */
+    protected MapPropertySource(Map properties, String label)
+    {
+        this.label = label;
         add(properties, null);
     }
-    
+
     /**
      * Add new properties to this map. Property keys must not overlap.
      * 
@@ -70,8 +92,11 @@ public class MapPropertySource implements IPropertySource2
      */
     private void refreshCache()
     {
+        if (label != null)
+            return;
+
         // Try to fit all the values if they are small.
-        StringBuilder builder = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
         for (Object key : properties.keySet())
         {
             if (builder.length() > 0) builder.append(", ");
@@ -88,13 +113,20 @@ public class MapPropertySource implements IPropertySource2
 
         if (builder.length() > MAX_LENGTH)
         {
-            cache = "[" + properties.size() 
-                + " element" + (properties.size() != 0 ? "s" : "") + "]";
+            cache = getLabel(properties.size());
         }
         else
         {
             cache = builder.toString();
         }
+    }
+
+    /*
+     * 
+     */
+    private static String getLabel(int size)
+    {
+        return "[" + size + " element" + (size != 0 ? "s" : "") + "]";
     }
 
     /*
@@ -150,7 +182,7 @@ public class MapPropertySource implements IPropertySource2
     public void setPropertyValue(Object id, Object value)
     {
     }
-    
+
     /*
      * 
      */
@@ -174,17 +206,7 @@ public class MapPropertySource implements IPropertySource2
                 else
                 if (value instanceof Collection)
                 {
-                    final LinkedHashMap submap = Maps.newLinkedHashMap();
-                    
-                    final int maxDigits = maxDigits(((Collection) value).size());
-                    final String format = "index %1$0" + maxDigits + "d";
-                    int index = 0;
-                    for (Object element : (Collection) value)
-                    {
-                        submap.put(String.format(format, index), element);
-                        index++;
-                    }
-                    e.setValue(new MapPropertySource(submap));
+                    e.setValue(new MapPropertySource((Collection) value));
                 }
                 else
                 {
@@ -197,16 +219,78 @@ public class MapPropertySource implements IPropertySource2
                 }
             }
 
-            final PropertyDescriptor descriptor = new PropertyDescriptor(key, key.toString());
+            /*
+             * Create a property descriptor with a read-only cell editor, so that
+             * value copying is possible. For mapped property sources, create read-only
+             * property editor.
+             */
+            final PropertyDescriptor descriptor;
+            if (newProperties.get(key) instanceof MapPropertySource)
+            {
+                descriptor = new PropertyDescriptor(key, key.toString());
+            }
+            else
+            {
+                descriptor = new ReadOnlyTextPropertyDescriptor(key, key.toString());
+            }
+
             descriptor.setCategory(categoryName);
             descriptors.add(descriptor);
         }
     }
 
-    /*
-     * 
+    /**
+     * Convert a collection of elements to a {@link Map}, where keys
+     * are artificially generated from indices of the elements.
      */
-    private int maxDigits(int number)
+    private static Map asMap(Collection value, final int startIndex)
+    {
+        final int size = value.size();
+
+        final LinkedHashMap submap = Maps.newLinkedHashMap();
+        final int maxDigits = maxDigits(size);
+        final String format = "%1$0" + maxDigits + "d";
+
+        /*
+         * We want a maximum of MAX_LEVEL_ELEMENTS at each level of the tree.
+         */
+        final double MAX_LEVEL_ELEMENTS = 10;
+
+        if (size <= MAX_LEVEL_ELEMENTS)
+        {
+            int index = startIndex;
+            for (Object element : (Collection) value)
+            {
+                submap.put(String.format(format, index), element);
+                index++;
+            }
+        }
+        else
+        {
+            final int levels = (int) Math.ceil(Math.log(value.size()) / Math.log(MAX_LEVEL_ELEMENTS));
+            final int increment = (int) Math.pow(MAX_LEVEL_ELEMENTS, levels - 1);
+
+            final ArrayList asArray = new ArrayList(value);
+
+            for (int from = 0; from < asArray.size(); from += increment)
+            {
+                final int to = Math.min(from + increment, asArray.size());
+
+                final Map slice = asMap(asArray.subList(from, to), from + startIndex);
+
+                submap.put(String.format(format, from + startIndex) 
+                    + ".." + String.format(format, to + startIndex - 1), slice);
+            }
+        }
+
+        return submap;
+    }
+
+    /**
+     * Return the minimum number of decimal digits that can fully
+     * represent a given number.
+     */
+    private static int maxDigits(int number)
     {
         int digits = 1;
         while ((number / 10) != 0)
@@ -223,6 +307,6 @@ public class MapPropertySource implements IPropertySource2
     @Override
     public String toString()
     {
-        return cache;
+        return label != null ? label : cache;
     }
 }
