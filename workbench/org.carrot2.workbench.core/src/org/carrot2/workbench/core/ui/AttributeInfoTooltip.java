@@ -48,6 +48,12 @@ public class AttributeInfoTooltip extends ToolTip
         this.setRespectDisplayBounds(true);
         this.setRespectMonitorBounds(true);
         this.setHideOnMouseDown(false);
+        
+        // This shows a help cursor when you hover over the target component. Looks
+        // too strange for me to actually commit it in, but take a look yourself, maybe
+        // you'll like it.
+
+        // parent.setCursor(parent.getDisplay().getSystemCursor(SWT.CURSOR_HELP));
     }
 
     /*
