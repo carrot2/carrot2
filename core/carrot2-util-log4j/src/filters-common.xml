@@ -20,7 +20,7 @@
 <logger name="org.apache.axis"><level value="warn"/></logger>
 
 <!-- JETTY -->
-<logger name="org.mortbay"><level value="warn"/></logger>
+<logger name="org.mortbay"><level value="info"/></logger>
 
 <!-- EHCache -->
 <logger name="net.sf.ehcache"><level value="info"/></logger>
@@ -30,3 +30,6 @@
 
 <!-- Velocity -->
 <logger name="org.apache.velocity"><level value="info" /></logger>
+
+<!-- JAWR -->
+<logger name="net.jawr"><level value="info" /></logger>

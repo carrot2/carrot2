@@ -13,5 +13,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/org.carrot2.xslt"/>
 	<classpathentry kind="lib" path="lib/jawr-2.4.2.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.4.3.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-log4j12-1.4.3.jar"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>

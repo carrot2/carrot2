@@ -33,6 +33,11 @@ public class Main
      */
     public static void main(String [] args) throws Exception
     {
+        /*
+         * This enables LOG4J logging in Jetty (specify on command-line, if possible).
+         */
+        System.setProperty("org.mortbay.log.LogFactory.noDiscovery", "false");
+        
         new Main().startJetty(8080);
     }
 }
