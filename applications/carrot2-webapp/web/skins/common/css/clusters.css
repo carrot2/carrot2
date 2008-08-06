@@ -1,6 +1,11 @@
 /** 
  * Base CSS for the cluster tree.
  */
+#clusters {
+  margin-top: 5px;
+  margin-left: 5px;
+}
+ 
 #clusters li {
   background-repeat: repeat-y;
 }
@@ -75,4 +80,9 @@ a#tree-top.selected > span {
 #always-show-all, 
 #always-show-all a {
   color: #b0b0b0;
+}
+
+#status-cluster-label, 
+#status-cluster-size {
+  font-weight: bold;
 }

@@ -296,9 +296,17 @@ input, select {
 #documents-panel {
   position: absolute;
   left: 275px;
+  top: 7px;
+}
+
+#documents {
   overflow-y: auto;
   overflow-x: hidden;
-  top: 7px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 #split-panel {

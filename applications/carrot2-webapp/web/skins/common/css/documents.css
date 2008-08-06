@@ -68,3 +68,16 @@ a.show-preview {
   position: relative;
   left: -2px;
 }
+
+#documents-status {
+  color: #606060;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 20px;
+}
+
+#status-fetched-documents, 
+#status-total-documents,
+#status-query {
+  font-weight: bold;
+}

@@ -20,14 +20,14 @@
 $(document).ready(function() {
   $.get($.unescape("<xsl:value-of select="$documents-url" disable-output-escaping="no" />"), {}, function(data) {
     $("#documents-panel").prepend(data);
-    $("#documents-panel").trigger("carrot2.documents.loaded");
+    $("#documents-panel").trigger("carrot2-documents-loaded");
   });
 
 <!-- AJAX loading of groups -->
 <xsl:if test="/page/request/@view != 'visu'">
   $.get($.unescape("<xsl:value-of select="$clusters-url" disable-output-escaping="no" />"), {}, function(data) {
     $("#clusters-panel").prepend(data);
-    $("#clusters-panel").trigger("carrot2.clusters.loaded");
+    $("#clusters-panel").trigger("carrot2-clusters-loaded");
   });
 </xsl:if>  
 
@@ -47,8 +47,10 @@ swfobject.embedSWF("<xsl:value-of select="$skin-path" />/common-dynamic/swf/org.
 
 function groupClicked(clusterId, docList) {
   var documentIndexes = docList.split(",");
-  $.documents.select(documentIndexes);
-}  
+  $("#clusters-panel").trigger("carrot2-clusters-selected", [ clusterId, documentIndexes ]);
+}
+  
+$("#clusters-panel").trigger("carrot2-clusters-loaded");
       </xsl:if>
 
 <!-- Common initialization -->
@@ -59,7 +61,7 @@ $(document).ready(function() {
   $("#loading").fadeOut(1000);
   $("div.disabled-ui").removeClass("disabled-ui");
 
-  $("body").trigger("carrot2.loaded");
+  $("body").trigger("carrot2-loaded");
 });      
     </script>
   </xsl:template>
@@ -91,7 +93,18 @@ $(document).ready(function() {
 
       <div id="split-panel"><xsl:comment></xsl:comment></div>
       
-      <div id="documents-panel"><xsl:comment></xsl:comment></div>
+      <div id="documents-panel">
+        <div id="documents-status">
+          <span id="documents-status-overall" class="hide">
+            Top&#160;<span id="status-fetched-documents"><xsl:comment></xsl:comment></span> results 
+            <span id="status-total" class="hide">of about <span id="status-total-documents"><xsl:comment></xsl:comment></span></span>&#160;for&#160;<span id="status-query"><xsl:comment></xsl:comment></span> 
+          </span>
+          <span id="documents-status-cluster" class="hide">
+            Cluster&#160;<span id="status-cluster-label"><xsl:comment></xsl:comment></span>
+            with&#160;<span id="status-cluster-size"><xsl:comment></xsl:comment></span> documents
+          </span>
+        </div>
+      </div>
 
       <div id="status-bar">
         Query: <b><xsl:value-of select="/page/request/@query" /></b> 

@@ -8,15 +8,19 @@
    * Binds a handler for an event called when documents finish loading.
    */
   $(document).ready(function() {
-    $("#documents-panel").bind("carrot2.documents.loaded", function() {
+    $("#documents-panel").bind("carrot2-documents-loaded", function() {
       loaded();
+    });
+    
+    $("#clusters-panel").bind("carrot2-clusters-selected", function(target, clusterId, documents) {
+      select(documents);
     });
   });
 
   /**
    * Shows the documents with the provided documents, hides all other documents.
    */
-  jQuery.documents.select = function(documentIndexes) {
+  function select(documentIndexes) {
     
     // Detach from DOM
     $temp = $("<span></span>");

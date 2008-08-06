@@ -59,6 +59,6 @@
    * other than IE6-.
    */
   jQuery.modern = function(string) {
-    return !jQuery.browser.msie || !parseInt(jQuery.browser.version) > 6; 
+    return !jQuery.browser.msie || parseInt(jQuery.browser.version) > 6; 
   }
 })(jQuery);

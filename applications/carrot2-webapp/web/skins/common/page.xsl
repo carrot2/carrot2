@@ -324,6 +324,7 @@
         
           <script>
             var fetchedDocumentsCount = <xsl:value-of select="count(searchresult/document)" />;
+            var totalDocumentsCount = "<xsl:value-of select="searchresult/attribute[@key = 'results-total']/value/@value" />";
             var sourceTime = "<xsl:value-of select="searchresult/attribute[@key = 'processing-time-source']/value/@value" />";
           </script>
         </xsl:when>

@@ -1,11 +1,11 @@
 (function($) {
 
   $(document).ready(function() {
-    $("#clusters-panel").bind("carrot2.clusters.loaded", function() {
+    $("#clusters-panel").bind("carrot2-clusters-loaded", function() {
       enhance();
       if ($.browser.msie) {
-        $("#clusters").bind("carrot2.clusters.folded", fixLayout);
-        $("#clusters").bind("carrot2.clusters.more", fixLayout);
+        $("#clusters").bind("carrot2-clusters-folded", fixLayout);
+        $("#clusters").bind("carrot2-clusters=more", fixLayout);
       }
     });
   });

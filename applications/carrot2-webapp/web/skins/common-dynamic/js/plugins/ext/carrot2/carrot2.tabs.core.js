@@ -2,7 +2,7 @@
   $(document).ready(function() {
     sourceTabs();
     
-    $("body").bind("carrot2.loaded", function() {
+    $("body").bind("carrot2-loaded", function() {
       $("#source-tabs").trigger("tabActivated", [ $("#source-tabs li.active").eq(0).attr("id") ]);
     });
   });

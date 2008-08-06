@@ -19,7 +19,7 @@
    * Binds a handler for an event called when clusters finish loading.
    */
   $(document).ready(function() {
-    $("#clusters-panel").bind("carrot2.clusters.loaded", function() {
+    $("#clusters-panel").bind("carrot2-clusters-loaded", function() {
       loaded();
     });
   });
@@ -80,7 +80,7 @@
           $document.show();
         }
       }
-      $("#clusters").trigger("carrot2.clusters.selected.top");
+      $("#clusters-panel").trigger("carrot2-clusters-selected-top");
     });
   };
 
@@ -112,7 +112,7 @@
       var $li = $(this).parent();
       $.clusters.toggle($li.nextAll().slice(0, size + 1), "show");
       $.clusters.toggle($li, "hide");
-      $("#clusters").trigger("carrot2.clusters.more", [ $li ]);
+      $("#clusters").trigger("carrot2-clusters-more", [ $li ]);
     });
 
     var $showAll = $("<a class='show-all' href='#'>show all</a>");
@@ -205,7 +205,7 @@
     }
 
     // Notify listeners
-    $("#clusters").trigger("carrot2.clusters.folded", [ $this, action ]);
+    $("#clusters").trigger("carrot2-clusters-folded", [ $this, action ]);
 
     return this;
   };
@@ -261,10 +261,8 @@
     var clusterId = $(this).attr("id");
     var clusterDocuments = $.clusters.documents(clusterId);
 
-    $.documents.select(clusterDocuments);
-
     // Notify listeners
-    $("#clusters").trigger("carrot2.clusters.selected", [ documents ]);
+    $("#clusters-panel").trigger("carrot2-clusters-selected", [ clusterId, clusterDocuments ]);
 
     return this;
   };

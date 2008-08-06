@@ -4,7 +4,13 @@
 
 #documents {
   font-size: 13px;
-  margin-top: 1.0ex;
+  top: 29px;
+}
+
+#documents-status {
+  margin-top: 3px;
+  margin-left: 17px;
+  font-size: 13px;
 }
 
 div.document {
