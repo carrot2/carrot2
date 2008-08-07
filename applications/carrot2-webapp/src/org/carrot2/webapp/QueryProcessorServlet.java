@@ -30,9 +30,9 @@ public class QueryProcessorServlet extends HttpServlet
     public final static String MIME_XML_CHARSET_UTF = MIME_XML + "; charset="
         + ENCODING_UTF;
 
-    private CachingController controller;
+    private transient CachingController controller;
 
-    private JawrUrlGenerator jawrUrlGenerator;
+    private transient JawrUrlGenerator jawrUrlGenerator;
 
     @Override
     @SuppressWarnings("unchecked")

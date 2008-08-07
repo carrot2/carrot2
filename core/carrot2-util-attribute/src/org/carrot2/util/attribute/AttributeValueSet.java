@@ -232,7 +232,7 @@ public class AttributeValueSet
         for (Map.Entry<String, Object> e : getAttributeValues().entrySet())
         {
             if (!first) b.append(", ");
-            b.append(e.getKey() != null ? e.getKey().toString() : "null");
+            b.append(e.getKey() != null ? e.getKey() : "null");
             b.append('=');
             b.append(e.getValue() != null ? e.getValue().toString() : "null");
             first = false;

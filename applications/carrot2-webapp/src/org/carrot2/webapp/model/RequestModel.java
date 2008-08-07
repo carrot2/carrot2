@@ -2,7 +2,6 @@ package org.carrot2.webapp.model;
 
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.simplexml.TypeStringValuePair;
@@ -76,15 +75,8 @@ public class RequestModel
     {
         if (type == null)
         {
-            if (StringUtils.isNotBlank(query))
-            {
-                // TODO: determine based on skin
-                type = RequestType.PAGE;
-            }
-            else
-            {
-                type = RequestType.PAGE;
-            }
+            // TODO: determine based on skin
+            type = RequestType.PAGE;
         }
 
         if (!modern) 

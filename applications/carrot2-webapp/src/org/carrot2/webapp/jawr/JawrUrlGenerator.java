@@ -34,7 +34,7 @@ public class JawrUrlGenerator
 
         if (cssJawrHandler == null || jsJawrHandler == null)
         {
-            new IllegalStateException(
+            throw new IllegalStateException(
                 "ResourceBundlesHandler not present in servlet context. "
                     + "Initialization of Jawr either failed or never occurred.");
         }

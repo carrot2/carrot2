@@ -160,7 +160,10 @@ abstract class MetadataExtractor
     {
         public void setMetadataValue(CommonMetadata metadata, String value)
         {
-            ((AttributeMetadata) metadata).setGroup(value);
+            if (metadata instanceof AttributeMetadata)
+            {
+                ((AttributeMetadata) metadata).setGroup(value);
+            }
         }
     }
 
@@ -172,11 +175,14 @@ abstract class MetadataExtractor
             {
                 return;
             }
-            
+
             try
             {
-                ((AttributeMetadata) metadata).setLevel(AttributeLevel.valueOf(value
-                    .toUpperCase()));
+                if (metadata instanceof AttributeMetadata)
+                {
+                    ((AttributeMetadata) metadata).setLevel(AttributeLevel.valueOf(value
+                        .toUpperCase()));
+                }
             }
             catch (Throwable e)
             {
