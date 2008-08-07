@@ -1,0 +1,90 @@
+/** 
+ * Specific image attachments for glows, common rules in fancy-common/. 
+ */
+.glow-small > span {
+  width: 3px; height: 3px;
+}
+
+.glow-big > span {
+  width: 5px; height: 5px;
+}
+
+.glow-small .b {
+  background-image: url('../img/sprite-vert.png');
+  background-position: left -305px;
+}
+
+.glow-small .t {
+  background-image: url('../img/sprite-vert.png');
+  background-position: left -308px;
+}
+
+.glow-small .l {
+  background-image: url('../img/sprite-horiz.png');
+  background-position: -73px top;
+}
+
+.glow-small .r {
+  background-image: url('../img/sprite-horiz.png');
+  background-position: -76px top;
+}
+
+.glow-small .tl {
+  background-image: url('../img/sprite-vert.png');
+  background-position: left -311px;
+}
+
+.glow-small .tr {
+  background-image: url('../img/sprite-vert.png');
+  background-position: left -314px;
+}
+
+.glow-small .bl {
+  background-image: url('../img/sprite-vert.png');
+  background-position: left -317px;
+}
+
+.glow-small .br {
+  background-image: url('../img/sprite-vert.png');
+  background-position: left -320px;
+}
+
+.glow-big .b {
+  background-image: url('../img/sprite-vert.png');
+  background-position: left -323px;
+}
+
+.glow-big .t {
+  background-image: url('../img/sprite-vert.png');
+  background-position: left -328px;
+}
+
+.glow-big .l {
+  background-image: url('../img/sprite-horiz.png');
+  background-position: -79px top;
+}
+
+.glow-big .r {
+  background-image: url('../img/sprite-horiz.png');
+  background-position: -84px top;
+}
+
+.glow-big .tl {
+  background-image: url('../img/sprite-vert.png');
+  background-position: left -333px;
+}
+
+.glow-big .tr {
+  background-image: url('../img/sprite-vert.png');
+  background-position: left -338px;
+}
+
+.glow-big .bl {
+  background-image: url('../img/sprite-vert.png');
+  background-position: left -343px;
+}
+
+.glow-big .br {
+  background-image: url('../img/sprite-vert.png');
+  background-position: left -348px;
+}

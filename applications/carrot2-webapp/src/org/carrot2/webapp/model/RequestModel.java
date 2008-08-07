@@ -19,7 +19,7 @@ public class RequestModel
     @Input
     @Attribute(key = WebappConfig.SKIN_PARAM)
     @org.simpleframework.xml.Attribute
-    public String skin = "fancy-large";
+    public String skin = "fancy-compact";
 
     @Request
     @Input

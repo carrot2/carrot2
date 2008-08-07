@@ -1,0 +1,200 @@
+
+/** General styles */
+body, input, select, label {
+  font-family: Trebuchet MS, sans-serif;
+  font-size: 12px;
+}
+
+input, select, label {
+  font-size: 13px;
+}
+
+/** Noscript message */
+#startup div.noscript {
+  left: 237px;
+  top: 218px;
+}
+
+#results div.noscript {
+  left: 32px;
+  top: 155px;
+}
+
+/** Loading indicators */
+#loading,
+#loading-clusters,
+#loading-documents {
+  background-image: url('../img/sprite-vert.png');
+  background-position: left -980px;
+}
+
+#loading-clusters,
+#loading-documents {
+  top: 3px;
+}
+
+/** Util links*/
+#util-links {
+  font-size: 11px;
+  margin-top: 3px;
+  margin-right: 5px;
+}
+
+/** Form controls */
+#search-glow {
+  padding: 7px; 
+}
+
+#search {
+  width: 63px;
+  font-family: Trebuchet MS, Tahoma, sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  padding-top: 1px;
+  height: 20px;
+}
+
+#query-glow {
+  padding: 4px; 
+  margin-top: 3px;
+}
+
+#query {
+  width: 400px;
+  height: 17px;
+  padding: 2px 1px 1px 1px;
+}
+
+#options {
+  width: 409px;
+  padding-top: 3px;
+  margin-bottom: 20px;
+}
+
+#startup #options {
+  min-height: 63px;
+}
+
+#show-options {
+  width: 5ex;
+  padding-top: 5px;
+  padding-left: 1px;
+  padding-bottom: 1px;
+  line-height: 1;
+  font-size: 11px;
+}
+
+/** Startup screen */
+#startup #logo {
+  background-image: url('../img/sprite-vert.png');
+  background-position: left -1000px;
+  width: 168px;
+  height: 179px;
+  top: 95px;
+  left: 51px;
+}
+
+#startup #logo a {
+  width: 168px;
+  height: 179px;
+}
+
+#startup #main-area-top,
+#results #main-area-top {
+    height: 6px;
+  background-image: url('../img/sprite-vert.png');
+  background-position: left -1179px;
+}
+
+#startup #main-area-bottom {
+  height: 6px;
+  background-image: url('../img/sprite-vert.png');
+  background-position: left -1185px;
+}
+
+#startup #main-area-inside {
+  margin-bottom: 20px;
+  min-height: 165px;
+}
+
+#startup #search-area {
+  padding-left: 236px;
+  padding-top: 15px;
+}
+
+#startup #extra-info {
+  padding-top: 10px;
+  padding-left: 1px;
+  width: 400px;
+  font-size: 13px;
+}
+
+#startup #example-queries {
+  margin-top: 7px;
+}
+
+#startup #search-area ul.util-links {
+  margin-top: 14px;
+  padding-top: 13px;
+  width: 400px;
+}
+
+#startup #search-area ul.util-links li {
+  font-size: 11px;
+}
+
+#startup #main-area {
+  top: 150px;
+}
+
+/** Results screen */
+#results #logo {
+  background-image: url('../img/sprite-horiz.png');
+  background-position: -333px top;
+  width: 101px;
+  height: 94px;
+  top: 10px;
+  left: 16px;
+}
+
+#results #logo a {
+  width: 101px;
+  height: 94px;
+}
+
+#results #main-area {
+  top: 47px;
+}
+
+#results #search-area {
+  padding-left: 130px;
+  padding-top: 15px;
+}
+
+#clusters-panel {
+  left: 7px;
+  top: 30px;
+  bottom: 24px;
+}
+
+#documents-panel {
+  top: 7px;
+  bottom: 24px;
+  right: 7px;
+}
+
+#results #main-area-inside > .glow-small {
+  padding: 4px; 
+  float: none; 
+  position: absolute; 
+  top: 65px; 
+  bottom: 10px; 
+  left: 10px; 
+  right: 10px;
+}
+
+#status-bar { 
+  height: 19px;
+  padding: 0 9px;
+  font-size: 10px;
+}

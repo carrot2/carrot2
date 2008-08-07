@@ -44,7 +44,7 @@ ul.tabs li.tab .yahoo-news {
 }
 
 ul.tabs li.tab .yahoo-web {
-  background-image: url('../img/sources/yahoo.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px; sprite-margin-top: 2px */
+  background-image: url('../img/sources/yahoo.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px; sprite-margin-top: 1px */
 }
 
 ul.tabs li.tab .google {

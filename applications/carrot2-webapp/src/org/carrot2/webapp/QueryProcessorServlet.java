@@ -24,7 +24,7 @@ import org.simpleframework.xml.stream.Format;
  * 
  */
 @SuppressWarnings("serial")
-public class QueryProcessorServlet extends HttpServlet 
+public class QueryProcessorServlet extends HttpServlet
 {
     public final static String MIME_XML = "text/xml";
     public final static String ENCODING_UTF = "utf-8";
@@ -54,8 +54,7 @@ public class QueryProcessorServlet extends HttpServlet
         // Unpack parameters from string arrays
         final Map<String, Object> requestParameters = RequestParameterUtils
             .unpack(request);
-        requestParameters.put("modern", UserAgentUtils.isModernBrowser(request
-            .getHeader("User-Agent")));
+        requestParameters.put("modern", UserAgentUtils.isModernBrowser(request));
 
         try
         {

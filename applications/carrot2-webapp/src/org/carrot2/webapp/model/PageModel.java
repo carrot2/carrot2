@@ -63,7 +63,8 @@ public class PageModel
 
         this.contextPath = request.getContextPath();
         this.skinPath = contextPath + WebappConfig.SKINS_FOLDER;
-        this.assetUrls = new AssetUrlsModel(requestModel.skin, request, urlGenerator);
+        this.assetUrls = new AssetUrlsModel(webappConfig.getSkinById(requestModel.skin),
+            request, urlGenerator);
 
         this.requestUrl = buildSearchUrlBase(requestModel, webappConfig.searchUrl)
             .toString();

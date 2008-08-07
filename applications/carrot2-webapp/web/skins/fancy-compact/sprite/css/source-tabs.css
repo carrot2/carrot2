@@ -1,0 +1,123 @@
+/**
+ * CSS for document source tabs.
+ */
+
+#startup #source-tabs {
+  position: absolute;
+  top: -20px;
+  left: 234px;
+}
+
+#results #source-tabs {
+  position: absolute;
+  top: -20px;
+  left: 90px;
+}
+
+ul.tabs {
+  font-size: 11px;
+  font-weight: bold;
+}
+
+#tab-lead-in {
+  padding-left: 7px;
+  height: 24px;
+  background-image: url('../img/sprite-vert.png');
+  background-position: left -455px;
+}
+
+div.first-active #tab-lead-in {
+  background-image: url('../img/sprite-vert.png');
+  background-position: left -479px;
+}
+
+ul.tabs li.tab {
+  height: 18px;
+  padding: 6px 10px 0 2px;
+  background-image: url('../img/sprite-vert.png');
+  background-position: left -503px;
+}
+
+ul.tabs li.active {
+  background-image: url('../img/sprite-vert.png');
+  background-position: left -527px;
+}
+
+ul.tabs li.active-last,
+ul.tabs li.passive-last {
+  padding-right: 10px;
+}
+
+ul.tabs li.tab .right {
+  height: 24px;
+  width: 7px;
+  background-image: url('../img/sprite-vert.png');
+  background-position: right -551px;
+}
+
+ul.tabs li.active .right {
+  background-image: url('../img/sprite-vert.png');
+  background-position: right -575px;
+}
+
+ul.tabs li.before-active .right {
+  background-image: url('../img/sprite-vert.png');
+  background-position: right -599px;
+}
+
+ul.tabs li.passive-last .right,
+ul.tabs li.active-last .right {
+  width: 7px;
+}
+
+ul.tabs li.passive-last .right {
+  background-image: url('../img/sprite-vert.png');
+  background-position: right -623px;
+}
+
+ul.tabs li.active-last .right {
+  background-image: url('../img/sprite-vert.png');
+  background-position: right -647px;
+}
+
+ul.tabs .tab a {
+  padding-right: 2px;
+}
+
+ul.tabs .tab .label {
+  padding-left: 16px;
+  margin-left: 2px;
+  background-position: 0 1px;
+}
+
+/** Icons for document sources */
+ul.tabs li.tab .etools {
+  background-image: url('../img/sprite-vert.png');
+  background-position: left -671px;
+}
+
+ul.tabs li.tab .yahoo-news {
+  background-image: url('../img/sprite-vert.png');
+  background-position: left -693px;
+}
+
+ul.tabs li.tab .yahoo-web {
+  background-image: url('../img/sprite-vert.png');
+  background-position: left -715px;
+}
+
+ul.tabs li.tab .google {
+  background-image: url('../img/sprite-vert.png');
+  background-position: left -736px;
+}
+
+ul.tabs li.tab .msn-web {
+  background-image: url('../img/sprite-vert.png');
+  background-position: left -758px;
+}
+
+ul.tabs li.tab .indeed {
+  background-image: url('../img/sprite-vert.png');
+  background-position: left -779px;
+  padding-left: 13px;
+}

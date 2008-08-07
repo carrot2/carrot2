@@ -30,13 +30,13 @@ div.first-active #tab-lead-in {
 }
 
 ul.tabs li.tab {
-  height: 36px;
+  height: 25px;
   padding: 11px 13px 0 0;
-  background-image: url('../img/tab-passive-body.gif'); /** sprite-ref: vert; sprite-alignment: right */
+  background-image: url('../img/tab-passive-body.gif'); /** sprite-ref: vert; sprite-alignment: repeat */
 }
 
 ul.tabs li.active {
-  background-image: url('../img/tab-active-body.gif'); /** sprite-ref: vert; sprite-alignment: right */
+  background-image: url('../img/tab-active-body.gif'); /** sprite-ref: vert; sprite-alignment: repeat */
 }
 
 ul.tabs li.active-last,

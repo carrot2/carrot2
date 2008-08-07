@@ -1,5 +1,7 @@
 package org.carrot2.webapp.util;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -9,6 +11,15 @@ public class UserAgentUtils
 {
     private UserAgentUtils()
     {
+    }
+
+    /**
+     * Returns true, if the user agent header is not blank and points to any browser
+     * different than MSIE 6.0 or earlier.
+     */
+    public static boolean isModernBrowser(HttpServletRequest request)
+    {
+        return isModernBrowser(request.getHeader("User-Agent"));
     }
 
     /**

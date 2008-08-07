@@ -18,8 +18,9 @@ public class WebappConfig
     final static List<Integer> SIZES = Lists.immutableList(50, 100, 150, 200);
 
     final static List<SkinModel> SKINS = Lists.immutableList(new SkinModel("fancy-large",
-        RequestType.PAGE));
-    
+        RequestType.PAGE), new SkinModel("fancy-compact", RequestType.PAGE),
+        new SkinModel("simple", RequestType.PAGE));
+
     final static List<ResultsViewModel> VIEWS = Lists.immutableList(new ResultsViewModel(
         "tree", "Tree"), new ResultsViewModel("visu", "Visualization"));
 
@@ -44,7 +45,7 @@ public class WebappConfig
 
     @Attribute(name = "xml-url")
     public final String xmlUrl = "xml";
-    
+
     @Attribute(name = "query-param")
     public final static String QUERY_PARAM = AttributeNames.QUERY;
 
@@ -62,11 +63,12 @@ public class WebappConfig
 
     @Attribute(name = "view-param")
     public final static String VIEW_PARAM = "view";
-    
+
     @Attribute(name = "skin-param")
     public final static String SKIN_PARAM = "skin";
 
-    public WebappConfig(List<Integer> sizes, List<SkinModel> skins, List<ResultsViewModel> views)
+    public WebappConfig(List<Integer> sizes, List<SkinModel> skins,
+        List<ResultsViewModel> views)
     {
         this.sizes = sizes;
         this.skins = skins;
@@ -85,5 +87,19 @@ public class WebappConfig
     public static String getContextRelativeSkinStylesheet(String skinName)
     {
         return SKINS_FOLDER + "/" + skinName + "/page.xsl";
+    }
+
+    public SkinModel getSkinById(String skinId)
+    {
+        // Short list, we can afford linear search
+        for (SkinModel skin : skins)
+        {
+            if (skin.id.equals(skinId))
+            {
+                return skin;
+            }
+        }
+
+        return null;
     }
 }

@@ -30,13 +30,13 @@ div.first-active #tab-lead-in {
 }
 
 ul.tabs li.tab {
-  height: 24px;
+  height: 18px;
   padding: 6px 10px 0 2px;
-  background-image: url('../img/tab-passive-body.png'); /** sprite-ref: vert; sprite-alignment: right */
+  background-image: url('../img/tab-passive-body.png'); /** sprite-ref: vert; sprite-alignment: repeat */
 }
 
 ul.tabs li.active {
-  background-image: url('../img/tab-active-body.png'); /** sprite-ref: vert; sprite-alignment: right */
+  background-image: url('../img/tab-active-body.png'); /** sprite-ref: vert; sprite-alignment: repeat */
 }
 
 ul.tabs li.active-last,
@@ -91,7 +91,7 @@ ul.tabs li.tab .yahoo-news {
 }
 
 ul.tabs li.tab .yahoo-web {
-  background-image: url('../img/sources/yahoo.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px; sprite-margin-top: 2px */
+  background-image: url('../img/sources/yahoo.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px */
 }
 
 ul.tabs li.tab .google {
@@ -103,6 +103,6 @@ ul.tabs li.tab .msn-web {
 }
 
 ul.tabs li.tab .indeed {
-  background-image: url('../img/sources/indeed.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px; sprite-margin-left: 2px */
+  background-image: url('../img/sources/indeed.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px */
   padding-left: 13px;
 }
