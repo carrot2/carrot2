@@ -12,7 +12,7 @@ public class UserAgentUtilsTest
     @Test
     public void testNull()
     {
-        assertFalse(UserAgentUtils.isModernBrowser(null));
+        assertFalse(UserAgentUtils.isModernBrowser((String)null));
     }
 
     @Test
