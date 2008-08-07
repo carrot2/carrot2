@@ -241,8 +241,9 @@ input, select {
 }
 
 #documents-panel .processing-error {
-  top: 36px;
+  top: 22px;
   left: 13px;
+  width: 320px;
 }
 
 #results #use-modern {

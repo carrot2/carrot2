@@ -1,8 +1,7 @@
 package org.carrot2.webapp;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -55,6 +54,7 @@ public class QueryProcessorServlet extends HttpServlet
         final Map<String, Object> requestParameters = RequestParameterUtils
             .unpack(request);
         requestParameters.put("modern", UserAgentUtils.isModernBrowser(request));
+        setExpires(response);
 
         try
         {
@@ -123,6 +123,15 @@ public class QueryProcessorServlet extends HttpServlet
         {
             throw new ServletException(e);
         }
+    }
+
+    private void setExpires(HttpServletResponse response)
+    {
+        final HttpServletResponse httpResponse = response;
+
+        final Calendar expiresCalendar = Calendar.getInstance();
+        expiresCalendar.add(Calendar.MINUTE, 5);
+        httpResponse.addDateHeader("Expires", expiresCalendar.getTimeInMillis());
     }
 
     private Format getPersisterFormat(PageModel pageModel)

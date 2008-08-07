@@ -45,7 +45,6 @@
     <servlet-name>QueryProcessorServlet</servlet-name>
     <url-pattern>/xml</url-pattern>
   </servlet-mapping>
-
   <servlet-mapping>
     <servlet-name>QueryProcessorServlet</servlet-name>
     <url-pattern>/search</url-pattern>
@@ -55,11 +54,32 @@
     <servlet-name>JavascriptServlet</servlet-name>
     <url-pattern>*.jjs</url-pattern>
   </servlet-mapping> 
-        
   <servlet-mapping>
     <servlet-name>CSSServlet</servlet-name>
     <url-pattern>*.jcss</url-pattern>
   </servlet-mapping> 
+  
+  <filter>
+    <filter-name>CompressingFilter</filter-name>
+    <filter-class>com.planetj.servlet.filter.compression.CompressingFilter</filter-class>
+  </filter>
+ 
+  <filter-mapping>
+    <filter-name>CompressingFilter</filter-name>
+    <url-pattern>/xml</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>CompressingFilter</filter-name>
+    <url-pattern>/search</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>CompressingFilter</filter-name>
+    <url-pattern>/*.jjs</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>CompressingFilter</filter-name>
+    <url-pattern>/*.jcss</url-pattern>
+  </filter-mapping>
 
   <filter>
     <filter-name>xslt-filter</filter-name>
@@ -76,4 +96,25 @@
     <filter-name>xslt-filter</filter-name>
     <url-pattern>/search</url-pattern>
   </filter-mapping>
-</web-app>
+  
+  <filter>
+    <filter-name>FarFutureExpires</filter-name>
+    <filter-class>org.carrot2.webapp.filter.FarFutureExpiresHeaderFilter</filter-class>
+    <init-param>
+      <param-name>user-agent-exclude</param-name>
+      <param-value>MSIE 6\\.0</param-value>
+    </init-param>
+  </filter>
+  
+  <filter-mapping>
+      <filter-name>FarFutureExpires</filter-name>
+      <url-pattern>/skins/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+      <filter-name>FarFutureExpires</filter-name>
+      <url-pattern>*.jcss</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+      <filter-name>FarFutureExpires</filter-name>
+      <url-pattern>*.jjs</url-pattern>
+  </filter-mapping></web-app>

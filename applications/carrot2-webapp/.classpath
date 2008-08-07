@@ -15,5 +15,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="lib/slf4j-api-1.4.3.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-log4j12-1.4.3.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.planetj.compression"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>
