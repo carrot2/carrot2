@@ -2,6 +2,7 @@ package org.carrot2.webapp.model;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.carrot2.core.ProcessingComponentSuite;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.ExceptionUtils;
@@ -15,6 +16,8 @@ import com.google.common.collect.Lists;
  */
 public class WebappConfig
 {
+    private final static Logger log = Logger.getLogger(WebappConfig.class);
+
     final static List<Integer> SIZES = Lists.immutableList(50, 100, 150, 200);
 
     final static List<SkinModel> SKINS = Lists.immutableList(new SkinModel("fancy-large",
@@ -77,6 +80,8 @@ public class WebappConfig
         {
             this.components = ProcessingComponentSuite.deserialize(ResourceUtilsFactory
                 .getDefaultResourceUtils().getFirst("carrot2-default/suite.xml"));
+            log.info("Loaded " + components.getSources().size() + " sources and "
+                + components.getAlgorithms().size() + " algorithms");
         }
         catch (Exception e)
         {

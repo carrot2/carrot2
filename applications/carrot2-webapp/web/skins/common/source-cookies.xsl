@@ -46,8 +46,8 @@
   <xsl:template match="page" mode="is-first-source-active">
     <xsl:variable name="source-order" select="/page/request/parameter[@name = 'source-order']/value/@value" />
     <xsl:choose>
-      <xsl:when test="contains($source-order, ':')">
-        <xsl:if test="substring-before($source-order, ':') = $active-source-id">yes</xsl:if>    
+      <xsl:when test="contains($source-order, '*')">
+        <xsl:if test="substring-before($source-order, '*') = $active-source-id">yes</xsl:if>    
       </xsl:when>
       <xsl:otherwise>
         <xsl:apply-templates select=".." mode="is-first-source-active-internal" />
@@ -61,12 +61,12 @@
   <xsl:template name="user-order-source">
     <xsl:param name="source-order"/>
     <xsl:choose>
-      <xsl:when test="contains($source-order,':')">
-        <xsl:variable name="source-id" select="substring-before($source-order,':')" />
+      <xsl:when test="contains($source-order,'*')">
+        <xsl:variable name="source-id" select="substring-before($source-order,'*')" />
         <xsl:variable name="next-source-id">
           <xsl:choose>
-            <xsl:when test="contains(substring-after($source-order,':'), ':')"><xsl:value-of select="substring-before(substring-after($source-order, ':'), ':')" /></xsl:when>
-            <xsl:otherwise><xsl:value-of select="substring-after($source-order, ':')" /></xsl:otherwise>
+            <xsl:when test="contains(substring-after($source-order, '*'), '*')"><xsl:value-of select="substring-before(substring-after($source-order, '*'), '*')" /></xsl:when>
+            <xsl:otherwise><xsl:value-of select="substring-after($source-order, '*')" /></xsl:otherwise>
           </xsl:choose>
         </xsl:variable>
        
@@ -77,7 +77,7 @@
         </xsl:call-template>
         
         <xsl:call-template name="user-order-source">
-          <xsl:with-param name="source-order" select="substring-after($source-order,':')"/>
+          <xsl:with-param name="source-order" select="substring-after($source-order,'*')"/>
         </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>

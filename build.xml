@@ -1,18 +1,25 @@
-
-
-<project name="proto-3.0" default="test">
-
+<!--
+  Builds main components and applications of Carrot2 3.0.
+  Carrot2 Workbench is built using a dedicated script.
+ -->
+<project name="Carrot2 3.0" default="test">
+    <!-- Import local properties -->
     <property file="local.properties" />
 
+    <!-- Ouptut dirs -->
     <property name="build.dir" location="tmp/classes" />
+    <property name="webapp.dir" location="tmp/webapp" />
     <property name="javadoc.dir" location="tmp/javadoc" />
     <property name="tests.report.dir" location="tmp/test-report" />
     <property name="coverage.report.dir" location="tmp/coverage-report" />
     <property name="duplication.report.dir" location="tmp/duplication-report" />
     <property name="findbugs.report.dir" location="tmp/findbugs-report" />
-    <property name="clover.jar" location="${clover.home}/lib/clover.jar"/>
-    <property name="pmd.jar" location="${pmd.home}/lib/"/>
 
+    <!-- Extra tools the build can use if available -->
+    <property name="clover.jar" location="${clover.home}/lib/clover.jar" />
+    <property name="pmd.jar" location="${pmd.home}/lib/" />
+
+    <!-- Source files to compile -->
     <path id="src.folders">
         <dirset dir="core" includes="**/src" />
         <dirset dir="core" includes="**/src-test" />
@@ -20,6 +27,11 @@
         <dirset dir="applications" includes="**/src-test" />
     </path>
 
+    <!-- 
+      Source files for coverage calculation. The auto-generated code is excluded from the 
+      list. Also, if external API tests are disabled, the document source classes are
+      also excluded from coverage calculation.
+    -->
     <fileset id="src.coverage" dir=".">
         <include name="core/**/*.java" />
         <include name="applications/**/*.java" />
@@ -32,13 +44,19 @@
         <exclude name="**/carrot2-source-microsoft/src/com/microsoft/msnsearch/**/*.java" />
     </fileset>
 
+    <!-- All JARs required by the code -->
+    <fileset dir="." id="lib.files">
+        <include name="lib/**/*.jar" />
+        <include name="core/carrot2-util-matrix/lib/*.jar" />
+        <include name="core/carrot2-source-opensearch/lib/*.jar" />
+        <include name="applications/carrot2-webapp/lib/*.jar" />
+    </fileset>
+
     <path id="lib.classpath">
-        <fileset dir="lib" includes="*/*.jar" />    
-        <fileset dir="core/carrot2-util-matrix/lib" includes="*.jar" />    
-        <fileset dir="core/carrot2-source-opensearch/lib" includes="*.jar" />    
-        <fileset dir="applications/carrot2-webapp/lib" includes="*.jar" />    
+        <fileset refid="lib.files" />
     </path>
 
+    <!-- Extra classpath entries for unit tests -->
     <path id="test.classpath">
         <path refid="lib.classpath" />
         <path location="core/carrot2-component-suites/suites" />
@@ -46,16 +64,21 @@
         <path location="${clover.jar}" />
     </path>
 
-    
-    <target name="clean" depends="coverage.clean">
+    <!-- 
+         Output cleanup.
+      -->
+    <target name="clean" depends="coverage.clean" description="Cleans all build results">
         <delete dir="tmp" failonerror="false" />
     </target>
-    
-    <target name="clean.classes">
+
+    <target name="clean.classes" description="Cleans compiled classes">
         <delete dir="tmp/classes" failonerror="false" />
     </target>
 
-    <target name="compile" depends="with.clover">
+    <!-- 
+         Source compilation.
+      -->
+    <target name="compile" depends="with.clover" description="Compiles the code with clover instrumentation">
         <mkdir dir="${build.dir}" />
 
         <javac destdir="${build.dir}" source="1.5" target="1.5" encoding="UTF-8">
@@ -64,22 +87,21 @@
             <classpath refid="lib.classpath" />
         </javac>
     </target>
-    
-    <target name="compile.noclover">
+
+    <target name="compile.noclover" description="Compiles the code without clover instrumentation">
         <mkdir dir="${build.dir}" />
 
         <!-- Clover hack: we explicitly provide the compiler attribute to compile without Clover's instrumentation -->
-        <javac destdir="${build.dir}" compiler="modern" source="1.5" target="1.5" encoding="UTF-8"
-               debug="on" debuglevel="lines,vars,source">
+        <javac destdir="${build.dir}" compiler="modern" source="1.5" target="1.5" encoding="UTF-8" debug="on" debuglevel="lines,vars,source">
             <src refid="src.folders" />
 
             <classpath refid="lib.classpath" />
         </javac>
     </target>
-    
-    <target name="resources" depends="">
+
+    <target name="resources" description="Copies the classpath resources required for tests to the compiled classes directory">
         <mkdir dir="${build.dir}" />
-        
+
         <copy todir="${build.dir}">
             <fileset dir="core">
                 <include name="**/src/**" />
@@ -88,22 +110,24 @@
                 <exclude name="**/*.java" />
                 <exclude name="**/carrot2-util-log4j/**" />
             </fileset>
-            <regexpmapper from="^.*src((-resources)|(-test))?(.*)$$" to="\4"/>
+            <regexpmapper from="^.*src((-resources)|(-test))?(.*)$$" to="\4" />
         </copy>
     </target>
-    
 
-    <target name="test" depends="compile, attributes, resources">
+    <!-- 
+         Unit tests.
+      -->
+    <target name="test" depends="compile, attributes, resources" description="Runs all unit tests">
         <mkdir dir="${tests.report.dir}" />
 
         <property name="source.paths" location="core/carrot2-util-attribute/src-test" />
         <property name="test.common.attribute.names.source.path" location="core/carrot2-util-attribute/src-test/org/carrot2/util/attribute/test/metadata/TestAttributeNames.java" />
         <condition property="carrot2.xml.feed.url.base.internal" value="${carrot2.xml.feed.url.base}" else="">
-          <isset property="carrot2.xml.feed.url.base"/>
+            <isset property="carrot2.xml.feed.url.base" />
         </condition>
 
         <junit fork="true" forkmode="once" printsummary="on" errorproperty="junit.error" failureproperty="junit.failure">
-            <formatter type="xml"/>
+            <formatter type="xml" />
 
             <classpath refid="test.classpath" />
 
@@ -121,9 +145,9 @@
 
         <junitreport todir="${tests.report.dir}">
             <fileset dir="${tests.report.dir}">
-                <include name="TEST-*.xml"/>
+                <include name="TEST-*.xml" />
             </fileset>
-            <report format="frames" todir="${tests.report.dir}"/>
+            <report format="frames" todir="${tests.report.dir}" />
         </junitreport>
 
         <condition property="tests.failed" value="true">
@@ -134,34 +158,37 @@
         </condition>
         <fail message="Tests failed. See ${tests.report.dir} for report." if="tests.failed" />
     </target>
-   
+
+    <!-- 
+         Attribute metadata related targets and macros.
+      -->
     <macrodef name="attributes-xml">
-      <attribute name="java.source" />
-      <attribute name="output.dir" />
-      <sequential>
-          <java classname="org.carrot2.util.attribute.BindableMetadataXmlSerializer" classpathref="test.classpath">
-              <arg file="@{java.source}" />
-              <arg file="@{output.dir}" />
-              <arg value="${common.attribute.names.source.path}" />
-          </java>
-      </sequential>
-    </macrodef>
-   
-    <macrodef name="attributes-xml-copy">
-      <attribute name="java.source" />
-      <attribute name="output.dir" />
-      <attribute name="copy.to" />
-      <sequential>
-          <attributes-xml java.source="@{java.source}" output.dir="@{output.dir}" />
-          <copy todir="@{copy.to}">
-            <fileset dir="@{output.dir}">
-              <include name="*.xml" />
-            </fileset>
-          </copy>
-      </sequential>
+        <attribute name="java.source" />
+        <attribute name="output.dir" />
+        <sequential>
+            <java classname="org.carrot2.util.attribute.BindableMetadataXmlSerializer" classpathref="test.classpath">
+                <arg file="@{java.source}" />
+                <arg file="@{output.dir}" />
+                <arg value="${common.attribute.names.source.path}" />
+            </java>
+        </sequential>
     </macrodef>
 
-    <target name="attributes" depends="compile.noclover">
+    <macrodef name="attributes-xml-copy">
+        <attribute name="java.source" />
+        <attribute name="output.dir" />
+        <attribute name="copy.to" />
+        <sequential>
+            <attributes-xml java.source="@{java.source}" output.dir="@{output.dir}" />
+            <copy todir="@{copy.to}">
+                <fileset dir="@{output.dir}">
+                    <include name="*.xml" />
+                </fileset>
+            </copy>
+        </sequential>
+    </macrodef>
+
+    <target name="attributes" depends="compile.noclover" description="Builds attribute metadata files into the compiled classes dir">
         <property name="common.attribute.names.source.path" location="core/carrot2-core/src/org/carrot2/core/attribute/AttributeNames.java" />
         <attributes-xml java.source="core/carrot2-algorithm-lingo/src" output.dir="${build.dir}" />
         <attributes-xml java.source="core/carrot2-algorithm-stc/src" output.dir="${build.dir}" />
@@ -176,7 +203,7 @@
         <attributes-xml java.source="core/carrot2-util-attribute/src-test" output.dir="${build.dir}" />
     </target>
 
-    <target name="attributes-eclipse" depends="compile.noclover">
+    <target name="attributes-eclipse" depends="compile.noclover" description="Builds attribute metadata files into the Eclipse-compiled classes dirs">
         <property name="common.attribute.names.source.path" location="core/carrot2-core/src/org/carrot2/core/attribute/AttributeNames.java" />
         <attributes-xml-copy java.source="core/carrot2-algorithm-lingo/src" output.dir="core/carrot2-algorithm-lingo/tmp/eclipse" copy.to="core/carrot2-algorithm-lingo/META-INF" />
         <attributes-xml-copy java.source="core/carrot2-algorithm-stc/src" output.dir="core/carrot2-algorithm-stc/tmp/eclipse" copy.to="core/carrot2-algorithm-stc/META-INF" />
@@ -192,91 +219,97 @@
         <attributes-xml-copy java.source="workbench/org.carrot2.workbench.editors/src" output.dir="workbench/org.carrot2.workbench.editors/tmp/eclipse" copy.to="workbench/org.carrot2.workbench.editors/META-INF" />
     </target>
 
+    <!-- 
+         Code duplication detection.
+      -->
     <path id="pmd.classpath">
-        <fileset dir="${pmd.home}/lib" includes="*.jar" />    
+        <fileset dir="${pmd.home}/lib" includes="*.jar" />
     </path>
 
-    <target name="pmd.tasks" if="pmd.home">
+    <target name="pmd.tasks" if="pmd.home" description="Installs PMD/CPD tasks">
         <taskdef name="cpd" classname="net.sourceforge.pmd.cpd.CPDTask" classpathref="pmd.classpath" />
     </target>
 
-    <target name="duplication" depends="pmd.tasks" if="pmd.home">
+    <target name="duplication" depends="pmd.tasks" if="pmd.home" description="Generates code duplication report">
         <mkdir dir="${duplication.report.dir}" />
         <cpd minimumTokenCount="100" outputFile="${duplication.report.dir}/duplication.xml" format="xml" encoding="UTF-8">
             <fileset dir=".">
-                <include name="core/**/*.java"/>
+                <include name="core/**/*.java" />
                 <exclude name="core/carrot2-source-microsoft/src/com/microsoft/msnsearch/**" />
                 <exclude name="core/carrot2-stemmer-snowball/src/**" />
-                <include name="applications/**/*.java"/>
-                <include name="workbench/**/*.java"/>
+                <include name="applications/**/*.java" />
+                <include name="workbench/**/*.java" />
             </fileset>
         </cpd>
         <xslt in="${duplication.report.dir}/duplication.xml" style="etc/cpd/cpd2html.xsl" out="${duplication.report.dir}/duplication.html" />
     </target>
-     
-    <target name="findbugs" depends="clean.classes, compile.noclover" if="findbugs.home">
-    	<taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" 
-    	             classpath="${findbugs.home}/lib/findbugs-ant.jar" />
-      <mkdir dir="${findbugs.report.dir}" />
 
-      <!-- Delete some classes we don't want to have analyzed -->
-      <delete>
-        <fileset dir="tmp/classes">
-          <include name="com/microsoft/msnsearch/**/*.class" />
-          <include name="org/tartarus/snowball/**/*.class" />
-          <include name="**/ExtendedWhitespaceTokenizerImpl.class" />
-        </fileset>
-      </delete>
+    <!-- 
+         FindBugs static analysis.
+      -->
+    <target name="findbugs" depends="clean.classes, compile.noclover" if="findbugs.home" description="Generates FindBugs report">
+        <taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" classpath="${findbugs.home}/lib/findbugs-ant.jar" />
+        <mkdir dir="${findbugs.report.dir}" />
 
-      <fileset id="lib.contents" dir="." includes="lib/**/*.jar" />
-      <property name="lib.jars" refid="lib.contents"/>
+        <!-- Delete some classes we don't want to have analyzed -->
+        <delete>
+            <fileset dir="tmp/classes">
+                <include name="com/microsoft/msnsearch/**/*.class" />
+                <include name="org/tartarus/snowball/**/*.class" />
+                <include name="**/ExtendedWhitespaceTokenizerImpl.class" />
+            </fileset>
+        </delete>
 
-      <findbugs home="${findbugs.home}" jvmargs="-Xmx512m" excludeFilter="etc/findbugs/excludes.xml" effort="max"
-                output="xml:withMessages" outputFile="${findbugs.report.dir}/findbugs.xml" >
-        <auxClasspath path="${lib.jars}" />
-        <class location="tmp/classes" />
-      </findbugs>
+        <fileset id="lib.contents" dir="." includes="lib/**/*.jar" />
+        <property name="lib.jars" refid="lib.contents" />
 
-      <xslt in="${findbugs.report.dir}/findbugs.xml" style="etc/findbugs/findbugs2html.xsl" out="${findbugs.report.dir}/findbugs.html" />
+        <findbugs home="${findbugs.home}" jvmargs="-Xmx512m" excludeFilter="etc/findbugs/excludes.xml" effort="max" output="xml:withMessages" outputFile="${findbugs.report.dir}/findbugs.xml">
+            <auxClasspath path="${lib.jars}" />
+            <class location="tmp/classes" />
+        </findbugs>
+
+        <xslt in="${findbugs.report.dir}/findbugs.xml" style="etc/findbugs/findbugs2html.xsl" out="${findbugs.report.dir}/findbugs.html" />
     </target>
 
-    <target name="clover.tasks" if="clover.home">
-        <taskdef resource="cloverlib.xml" classpath="${clover.jar}"/>
+    <!-- 
+         Code coverage calculation.
+      -->
+    <target name="clover.tasks" if="clover.home" description="Installs Clover tasks">
+        <taskdef resource="cloverlib.xml" classpath="${clover.jar}" />
     </target>
 
-    <target name="with.clover" depends="clover.tasks" if="clover.home">
-      <clover-setup>
-          <fileset refid="src.coverage" />
-      </clover-setup>
+    <target name="with.clover" depends="clover.tasks" if="clover.home" description="Installs Clover instrumentation before the sources get compiled">
+        <clover-setup>
+            <fileset refid="src.coverage" />
+        </clover-setup>
     </target>
 
-    <target name="coverage" depends="coverage.html, coverage.xml" />
+    <target name="coverage" depends="coverage.html, coverage.xml" description="Generates all coverage reports" />
 
-    
-    <target name="coverage.html" depends="clover.tasks" if="clover.home">
+    <target name="coverage.html" depends="clover.tasks" if="clover.home" description="Generates coverage HTML report">
         <clover-report>
             <current outfile="${coverage.report.dir}" title="Carrot2 3.0">
                 <format type="html" />
             </current>
         </clover-report>
     </target>
-   
-    
-    <target name="coverage.xml" depends="clover.tasks" if="clover.home">
+
+    <target name="coverage.xml" depends="clover.tasks" if="clover.home" description="Generates coverage XML report">
         <clover-report>
-           <current outfile="${coverage.report.dir}/coverage.xml" title="Carrot2 3.0">
-              <format type="xml" />
-           </current>
+            <current outfile="${coverage.report.dir}/coverage.xml" title="Carrot2 3.0">
+                <format type="xml" />
+            </current>
         </clover-report>
     </target>
 
-
-    <target name="coverage.clean" depends="clover.tasks" if="clover.home">
+    <target name="coverage.clean" depends="clover.tasks" if="clover.home" description="Cleans coverage data">
         <clover-clean />
     </target>
 
-
-    <target name="javadoc">
+    <!-- 
+         JavaDoc generation.
+      -->
+    <target name="javadoc" description="Builds JavaDocs for all core classes">
         <delete dir="${javadoc.dir}" failonerror="false" />
 
         <mkdir dir="tmp/src" />
@@ -289,25 +322,14 @@
                 <exclude name="**/tmp/**/*" />
             </fileset>
             <chainedmapper>
-                <filtermapper><replacestring from="\" to="/"/></filtermapper>
-                <mapper type="regexp" from="^(.+)/src/(.+)" to="\2"/>
+                <filtermapper>
+                    <replacestring from="\" to="/" />
+                </filtermapper>
+                <mapper type="regexp" from="^(.+)/src/(.+)" to="\2" />
             </chainedmapper>
         </copy>
 
-        <javadoc
-                 destdir          = "${javadoc.dir}"
-                 access           = "public"
-                 version          = "true"
-                 use              = "false"
-                 encoding         = "UTF-8"
-                 doctitle         = "Carrot&lt;sup&gt;2&lt;/sup&gt; Framework API Specification"
-                 header           = "&lt;div class='logo'&gt;Carrot&lt;sup&gt;2&lt;/sup&gt; Framework&lt;br&gt;API Specification&lt;/div&gt;"
-                 footer           = "&lt;div class='logo'&gt;Please refer to project documentation at &lt;br&gt;&lt;a target='_top' href=http://project.carrot2.org&gt;http://project.carrot2.org&lt;/a&gt;&lt;/div&gt;"
-                 bottom           = "&lt;center&gt;Copyright (c) Dawid Weiss, Stanislaw Osinski &lt;/center&gt;"
-                 failonerror      = "true"
-                 stylesheetfile   = "etc/javadoc/stylesheet.css"
-                 useexternalfile  = "true"
-        >
+        <javadoc destdir="${javadoc.dir}" access="public" version="true" use="false" encoding="UTF-8" doctitle="Carrot&lt;sup&gt;2&lt;/sup&gt; Framework API Specification" header="&lt;div class='logo'&gt;Carrot&lt;sup&gt;2&lt;/sup&gt; Framework&lt;br&gt;API Specification&lt;/div&gt;" footer="&lt;div class='logo'&gt;Please refer to project documentation at &lt;br&gt;&lt;a target='_top' href=http://project.carrot2.org&gt;http://project.carrot2.org&lt;/a&gt;&lt;/div&gt;" bottom="&lt;center&gt;Copyright (c) Dawid Weiss, Stanislaw Osinski &lt;/center&gt;" failonerror="true" stylesheetfile="etc/javadoc/stylesheet.css" useexternalfile="true">
             <classpath>
                 <fileset dir=".">
                     <include name="lib/*/*.jar" />
@@ -321,11 +343,11 @@
             <link href="http://java.sun.com/j2se/1.5.0/docs/api/" />
 
             <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Core" packages="org.carrot2.core*" />
-            <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Demos and Examples" packages="org.carrot2.examples*"/>
-            <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Data Sources" packages="org.carrot2.source*"/>
-            <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Clustering Algorithms" packages="org.carrot2.clustering*"/>
-            <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Attribute Binding" packages="org.carrot2.util.attribute*"/>
-            <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Utility classes" packages="org.carrot2.util*"/>
+            <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Demos and Examples" packages="org.carrot2.examples*" />
+            <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Data Sources" packages="org.carrot2.source*" />
+            <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Clustering Algorithms" packages="org.carrot2.clustering*" />
+            <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Attribute Binding" packages="org.carrot2.util.attribute*" />
+            <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Utility classes" packages="org.carrot2.util*" />
         </javadoc>
 
         <delete dir="tmp/src" />
@@ -336,4 +358,32 @@
         </copy>
     </target>
 
+    <!-- 
+         Web application WAR file.
+    <target name="webapp" depends="clean.webapp">
+      -->
+    <target name="webapp" depends="clean, compile.noclover, attributes, resources">
+        <mkdir dir="${webapp.dir}/lib-flattened" />
+        <copy todir="${webapp.dir}/lib-flattened">
+            <fileset refid="lib.files" />
+            <mapper type="flatten" />
+        </copy>
+
+        <mkdir dir="${webapp.dir}" />
+        <war destfile="${webapp.dir}/carrot2-webapp.war" webxml="applications/carrot2-webapp/web/WEB-INF/web.xml">
+            <fileset dir="applications/carrot2-webapp/web" />
+            <lib dir="${webapp.dir}/lib-flattened" />
+            <classes dir="${build.dir}" />
+            <classes dir="core/carrot2-component-suites/suites" />
+            <classes dir="applications/carrot2-webapp/src"> 
+                <exclude name="*.java" />
+            </classes>
+        </war>
+
+        <delete dir="${webapp.dir}/lib-flattened" />
+    </target>
+
+    <target name="clean.webapp">
+        <delete dir="${webapp.dir}" />
+    </target>
 </project>

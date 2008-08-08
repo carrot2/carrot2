@@ -23,7 +23,7 @@
       var order = $.map($tabContainer.find(".tab:not(.drag)"), function(val) {
         return val.id;
       });
-      $.cookie(COOKIE_SOURCE_ORDER, order.join(":"), { expires: NEVER_EXPIRE });
+      $.cookie(COOKIE_SOURCE_ORDER, order.join("*"), { expires: NEVER_EXPIRE });
     });
   });
 })(jQuery);

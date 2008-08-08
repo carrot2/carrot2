@@ -72,14 +72,6 @@
     <filter-name>CompressingFilter</filter-name>
     <url-pattern>/search</url-pattern>
   </filter-mapping>
-  <filter-mapping>
-    <filter-name>CompressingFilter</filter-name>
-    <url-pattern>/*.jjs</url-pattern>
-  </filter-mapping>
-  <filter-mapping>
-    <filter-name>CompressingFilter</filter-name>
-    <url-pattern>/*.jcss</url-pattern>
-  </filter-mapping>
 
   <filter>
     <filter-name>xslt-filter</filter-name>
