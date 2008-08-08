@@ -100,8 +100,8 @@ public final class SimpleController implements Controller
                 ControllerUtils.init(element, initAttributes);
             }
 
-            ControllerUtils.performProcessingWithTimeMeasurement(attributes,
-                processingComponents);
+            ControllerUtils.performProcessing(attributes,
+                true, processingComponents);
 
             return new ProcessingResult(attributes);
 

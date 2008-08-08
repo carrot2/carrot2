@@ -1,7 +1,7 @@
 package org.carrot2.core;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.MapAssert.*;
+import static org.fest.assertions.MapAssert.entry;
 import static org.junit.Assert.assertEquals;
 
 import java.util.*;
@@ -24,6 +24,7 @@ public class CachingControllerTest extends ControllerTestBase
 
     @Bindable
     public static class CachedProcessingComponent1 extends DelegatingProcessingComponent
+        implements DocumentSource
     {
         @Init
         @Input
@@ -553,5 +554,44 @@ public class CachingControllerTest extends ControllerTestBase
             ComponentWithInitParameter.class, "conf1", conf1Attributes),
             new ProcessingComponentConfiguration(ComponentWithInitParameter.class,
                 "conf1", conf2Attributes));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testCachedExecutionTimeMeasurement()
+    {
+        final long c1Time = 500;
+        final long c2Time = 300;
+        final long totalTime = c1Time + c2Time;
+        final double tolerance = 0.3;
+
+        mocksControl.checkOrder(false); // we don't care about the order of initialization
+        cachedProcessingComponent1Mock.init();
+        processingComponent2Mock.init();
+        mocksControl.checkOrder(true);
+
+        cachedProcessingComponent1Mock.beforeProcessing();
+        cachedProcessingComponent1Mock.process();
+        mocksControl.andAnswer(new DelayedAnswer<Object>(c1Time));
+        cachedProcessingComponent1Mock.afterProcessing();
+
+        processingComponent2Mock.beforeProcessing();
+        processingComponent2Mock.process();
+        mocksControl.andAnswer(new DelayedAnswer<Object>(c2Time));
+        processingComponent2Mock.afterProcessing();
+
+        mocksControl.checkOrder(false); // we don't care about the order of disposal
+        cachedProcessingComponent1Mock.dispose();
+        processingComponent2Mock.dispose();
+        mocksControl.checkOrder(true);
+
+        mocksControl.replay();
+
+        attributes.put("data", "d");
+        performProcessingAndDispose(CachedProcessingComponent1.class,
+            ProcessingComponent2.class);
+
+        checkTimes(c1Time, c2Time, totalTime, tolerance);
+        mocksControl.verify();
     }
 }

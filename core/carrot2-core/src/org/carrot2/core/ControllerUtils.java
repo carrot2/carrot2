@@ -78,50 +78,80 @@ final class ControllerUtils
     /**
      * Perform processing on the provided {@link ProcessingComponent}s, including
      * {@link ProcessingComponent#beforeProcessing()} and
-     * {@link ProcessingComponent#afterProcessing()} hooks. Stores processing times in the
-     * attributes map on return.
+     * {@link ProcessingComponent#afterProcessing()} hooks. If requested, stores
+     * processing times in the attributes map on return.
+     * 
+     * @param measureTime if <code>true</code>, processing time will be measured and
+     *            stored in the attributes map
+     * @see AttributeNames#PROCESSING_TIME_ALGORITHM
+     * @see AttributeNames#PROCESSING_TIME_SOURCE
+     * @see AttributeNames#PROCESSING_TIME_TOTAL
      */
-    public static void performProcessingWithTimeMeasurement(
-        Map<String, Object> attributes, ProcessingComponent... processingComponents)
+    public static void performProcessing(Map<String, Object> attributes,
+        boolean measureTime, ProcessingComponent... processingComponents)
     {
-        long totalStart = System.currentTimeMillis();
-        long sourceTime = 0;
-        long algorithmTime = 0;
+        for (final ProcessingComponent element : processingComponents)
+        {
+            performProcessing(element, attributes, measureTime);
+        }
+    }
 
+    /**
+     * Performs processing with the provided {@link ProcessingComponent}, including
+     * {@link ProcessingComponent#beforeProcessing()} and
+     * {@link ProcessingComponent#afterProcessing()} hooks. If requested, stores
+     * processing times in the attributes map.
+     * 
+     * @param measureTime if <code>true</code>, processing time will be measured and
+     *            stored in the attributes map
+     * @see AttributeNames#PROCESSING_TIME_ALGORITHM
+     * @see AttributeNames#PROCESSING_TIME_SOURCE
+     * @see AttributeNames#PROCESSING_TIME_TOTAL
+     */
+    public static void performProcessing(ProcessingComponent processingComponent,
+        Map<String, Object> attributes, boolean measureTime)
+    {
+        long componentStart = System.currentTimeMillis();
         try
         {
-            for (final ProcessingComponent element : processingComponents)
-            {
-                long componentStart = System.currentTimeMillis();
-                try
-                {
-                    beforeProcessing(element, attributes);
-                    performProcessing(element, attributes);
-                }
-                finally
-                {
-                    afterProcessing(element, attributes);
-                    long componentStop = System.currentTimeMillis();
-
-                    if (element instanceof DocumentSource)
-                    {
-                        sourceTime += (componentStop - componentStart);
-                    }
-                    else if (element instanceof ClusteringAlgorithm)
-                    {
-                        algorithmTime += (componentStop - componentStart);
-                    }
-                }
-            }
+            beforeProcessing(processingComponent, attributes);
+            performProcessing(processingComponent, attributes);
         }
         finally
         {
-            long totalStop = System.currentTimeMillis();
+            afterProcessing(processingComponent, attributes);
 
-            attributes
-                .put(AttributeNames.PROCESSING_TIME_TOTAL, (totalStop - totalStart));
-            attributes.put(AttributeNames.PROCESSING_TIME_SOURCE, sourceTime);
-            attributes.put(AttributeNames.PROCESSING_TIME_ALGORITHM, algorithmTime);
+            if (measureTime)
+            {
+                long componentStop = System.currentTimeMillis();
+
+                final long time = componentStop - componentStart;
+                if (processingComponent instanceof DocumentSource)
+                {
+                    addTime(AttributeNames.PROCESSING_TIME_SOURCE, time, attributes);
+                }
+                else if (processingComponent instanceof ClusteringAlgorithm)
+                {
+                    addTime(AttributeNames.PROCESSING_TIME_ALGORITHM, time, attributes);
+                }
+                addTime(AttributeNames.PROCESSING_TIME_TOTAL, time, attributes);
+            }
+        }
+    }
+
+    /**
+     * Adds time to the specified time attribute.
+     */
+    private static void addTime(String key, long timeToAdd, Map<String, Object> attributes)
+    {
+        final Long time = (Long) attributes.get(key);
+        if (time == null)
+        {
+            attributes.put(key, timeToAdd);
+        }
+        else
+        {
+            attributes.put(key, time + timeToAdd);
         }
     }
 

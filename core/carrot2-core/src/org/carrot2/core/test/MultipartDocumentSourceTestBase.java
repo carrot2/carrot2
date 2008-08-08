@@ -27,7 +27,7 @@ public abstract class MultipartDocumentSourceTestBase<T extends DocumentSource> 
         final int needed = getSearchEngineMetadata().resultsPerPage * 2 + 25;
 
         // Allow some slack (duplicated URLs).
-        final int documentsReturned = runQuery("apache", needed);
+        final int documentsReturned = runQuery("test", needed);
 
         assertThat(documentsReturned).isGreaterThan(needed - 10);
     }

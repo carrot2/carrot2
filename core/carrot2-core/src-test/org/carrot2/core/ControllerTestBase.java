@@ -380,23 +380,24 @@ public abstract class ControllerTestBase
         }
     }
 
-    private void checkTimes(final long c1Time, final long c2Time, final long totalTime,
+    protected void checkTimes(final long c1Time, final long c2Time, final long totalTime,
         final double tolerance)
     {
         assertThat(
             ((Long) (attributes.get(AttributeNames.PROCESSING_TIME_TOTAL))).longValue())
-            .isLessThan((long) (totalTime * (1 + tolerance))).isGreaterThan(
-                (long) (totalTime * (1 - tolerance)));
+            .as("Total time").isLessThan((long) (totalTime * (1 + tolerance)))
+            .isGreaterThan((long) (totalTime * (1 - tolerance)));
 
         assertThat(
             ((Long) (attributes.get(AttributeNames.PROCESSING_TIME_SOURCE))).longValue())
-            .isLessThan((long) (c1Time * (1 + tolerance))).isGreaterThan(
-                (long) (c1Time * (1 - tolerance)));
+            .as("Source time").isLessThan((long) (c1Time * (1 + tolerance)))
+            .isGreaterThan((long) (c1Time * (1 - tolerance)));
 
         assertThat(
             ((Long) (attributes.get(AttributeNames.PROCESSING_TIME_ALGORITHM)))
-                .longValue()).isLessThan((long) (c2Time * (1 + tolerance)))
-            .isGreaterThan((long) (c2Time * (1 - tolerance)));
+                .longValue()).as("Alorithm time").isLessThan(
+            (long) (c2Time * (1 + tolerance))).isGreaterThan(
+            (long) (c2Time * (1 - tolerance)));
     }
 
     protected void performProcessing(Class<?>... classes)

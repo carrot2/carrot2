@@ -12,8 +12,7 @@ import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.constructs.blocking.CacheEntryFactory;
 import net.sf.ehcache.constructs.blocking.SelfPopulatingCache;
 
-import org.carrot2.core.attribute.Init;
-import org.carrot2.core.attribute.Processing;
+import org.carrot2.core.attribute.*;
 import org.carrot2.util.ExceptionUtils;
 import org.carrot2.util.Pair;
 import org.carrot2.util.attribute.*;
@@ -257,8 +256,11 @@ public final class CachingController implements Controller
                     resolved.objectB, attributes);
             }
 
-            ControllerUtils.performProcessingWithTimeMeasurement(attributes,
-                processingComponents);
+            for (ProcessingComponent processingComponent : processingComponents)
+            {
+                ControllerUtils.performProcessing(processingComponent, attributes,
+                    !(processingComponent instanceof CachedProcessingComponent));
+            }
 
             return new ProcessingResult(attributes);
         }
@@ -590,9 +592,21 @@ public final class CachingController implements Controller
 
             try
             {
+                final Map<String, Object> processingResult = (Map<String, Object>) dataCache
+                    .get(inputAttributes).getObjectValue();
+
+                // Copy the actual results
                 attributes.putAll(getAttributesForDescriptors(
-                    descriptors.outputDescriptors, (Map<String, Object>) dataCache.get(
-                        inputAttributes).getObjectValue()));
+                    descriptors.outputDescriptors, processingResult));
+
+                // Copy processing times
+                attributes.put(AttributeNames.PROCESSING_TIME_ALGORITHM, processingResult
+                    .get(AttributeNames.PROCESSING_TIME_ALGORITHM));
+                attributes.put(AttributeNames.PROCESSING_TIME_SOURCE, processingResult
+                    .get(AttributeNames.PROCESSING_TIME_SOURCE));
+                attributes.put(AttributeNames.PROCESSING_TIME_TOTAL, processingResult
+                    .get(AttributeNames.PROCESSING_TIME_TOTAL));
+
             }
             catch (CacheException e)
             {
@@ -684,16 +698,8 @@ public final class CachingController implements Controller
             try
             {
                 component = componentPool.borrowObject(componentClass, componentId);
-                Map<String, Object> attributes = Maps.newHashMap(inputAttributes);
-                try
-                {
-                    ControllerUtils.beforeProcessing(component, attributes);
-                    ControllerUtils.performProcessing(component, attributes);
-                }
-                finally
-                {
-                    ControllerUtils.afterProcessing(component, attributes);
-                }
+                final Map<String, Object> attributes = Maps.newHashMap(inputAttributes);
+                ControllerUtils.performProcessing(component, attributes, true);
 
                 return attributes;
             }
