@@ -76,7 +76,7 @@
 
    <features>
       <feature id="org.carrot2.workbench" version="1.0.0"/>
-      <feature id="org.eclipse.platform" version="3.3.1.R33x_r20070911-_19UEkpF-B7Uh2hKy75y"/>
+      <feature id="org.eclipse.rcp" version="3.3.1.R33x_r20070802-8y8eE8sEV3Fz0z0GlHJrXvTAUS"/>
    </features>
 
 </product>
