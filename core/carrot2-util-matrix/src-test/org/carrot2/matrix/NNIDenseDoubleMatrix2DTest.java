@@ -1,4 +1,4 @@
-package cern.colt.matrix.impl;
+package org.carrot2.matrix;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -7,6 +7,7 @@ import org.carrot2.matrix.NNIDoubleFactory2D;
 import org.junit.Test;
 
 import cern.colt.matrix.*;
+import cern.colt.matrix.impl.DenseDoubleMatrix2D;
 
 /**
  * Test cases for {@link NNIDenseDoubleMatrix2D}.

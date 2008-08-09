@@ -3,8 +3,10 @@ package org.carrot2.clustering.lingo;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
+import org.carrot2.matrix.NNIInterface;
 import org.carrot2.text.linguistic.LanguageModelFactory;
 import org.carrot2.text.linguistic.SnowballLanguageModelFactory;
 import org.carrot2.text.preprocessing.*;
@@ -121,6 +123,21 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
      * Cluster label formatter, contains bindable attributes.
      */
     public LabelFormatter labelFormatter = new LabelFormatter();
+
+    private static final Logger log = Logger.getLogger(LingoClusteringAlgorithm.class);
+
+    @Override
+    public void init()
+    {
+        if (NNIInterface.isNativeBlasAvailable())
+        {
+            log.info("Native BLAS routines available");
+        }
+        else
+        {
+            log.info("Native BLAS routines not available");
+        }
+    }
 
     /**
      * Performs Lingo clustering of {@link #documents}.
