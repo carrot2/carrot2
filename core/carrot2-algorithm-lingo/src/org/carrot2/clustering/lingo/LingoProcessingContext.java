@@ -4,8 +4,7 @@ import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllLabels;
 
 import bak.pcj.map.IntKeyIntMap;
-import bak.pcj.set.IntBitSet;
-
+import bak.pcj.set.IntSet;
 import cern.colt.matrix.DoubleMatrix2D;
 
 /**
@@ -32,7 +31,7 @@ class LingoProcessingContext
     double [] clusterLabelScore;
 
     /** Documents assigned to clusters */
-    IntBitSet [] clusterDocuments;
+    IntSet [] clusterDocuments;
 
     /**
      * Term-document-like matrix for phrases from {@link AllLabels}. If there are no

@@ -420,6 +420,19 @@ public final class Cluster
         }));
 
     /**
+     * Compares clusters by score as returned by {@link #SCORE}. Clusters with larger
+     * score are larger.
+     */
+    public static final Comparator<Cluster> BY_SCORE_COMPARATOR = Comparators
+        .nullLeastOrder(Comparators.fromFunction(new Function<Cluster, Double>()
+        {
+            public Double apply(Cluster cluster)
+            {
+                return cluster.getAttribute(SCORE);
+            }
+        }));
+
+    /**
      * Compares clusters by the natural order of their labels as returned by
      * {@link #getLabel()}.
      */
@@ -441,6 +454,16 @@ public final class Cluster
      */
     public static final Comparator<Cluster> BY_REVERSED_SIZE_AND_LABEL_COMPARATOR = Comparators
         .compound(Collections.reverseOrder(BY_SIZE_COMPARATOR), BY_LABEL_COMPARATOR);
+
+    /**
+     * Compares clusters first by their size as returned by {@link #SCORE} and labels as
+     * returned by {@link #getLabel()}. Please note that cluster with a larger score is
+     * <b>smaller</b> according to this comparator, so that it ends up towards the
+     * beginning of the list being sorted. In case of equal scores, natural order of the
+     * labels decides.
+     */
+    public static final Comparator<Cluster> BY_REVERSED_SCORE_AND_LABEL_COMPARATOR = Comparators
+        .compound(Collections.reverseOrder(BY_SCORE_COMPARATOR), BY_LABEL_COMPARATOR);
 
     /**
      * Assigns sequential identifiers to the provided <code>clusters</code> (and their

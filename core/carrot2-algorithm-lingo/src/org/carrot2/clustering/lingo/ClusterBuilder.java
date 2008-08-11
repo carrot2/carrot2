@@ -7,6 +7,7 @@ import org.carrot2.core.attribute.Processing;
 import org.carrot2.matrix.MatrixUtils;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.util.GraphUtils;
+import org.carrot2.util.LinearApproximation;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.DoubleRange;
 import org.carrot2.util.attribute.constraint.IntRange;
@@ -27,23 +28,6 @@ import cern.jet.math.Functions;
 @Bindable
 public class ClusterBuilder
 {
-    /**
-     * Document assignment threshold. The similarity between cluster label and document
-     * required for the document to be included in the cluster. Low values will cause more
-     * documents to be put in clusters, which will make the "Other Topics" cluster
-     * smaller, but also lower the precision of cluster-document assignments. High values
-     * will cause less documents to be put in clusters, which result in higher precision
-     * of assignment, but also a larger "Other Topics" group.
-     * 
-     * @group Clusters
-     * @level Medium
-     */
-    @Input
-    @Processing
-    @Attribute
-    @DoubleRange(min = 0.1, max = 1.0)
-    public double documentAssignmentThreshold = 0.2;
-
     /**
      * Phrase label boost. The weight of multi-word labels relative to one-word labels.
      * Low values will result in more one-word labels being produced, higher values will
@@ -103,6 +87,15 @@ public class ClusterBuilder
     public double clusterMergingThreshold = 0.7;
 
     /**
+     * Coefficients for label weighting based on the cluster size.
+     */
+    private LinearApproximation documentSizeCoefficients = new LinearApproximation(
+        new double []
+        {
+            1.0, 1.5, 1.3, 0.9, 0.7, 0.6, 0.3, 0.05, 0.05, 0.05, 0.05
+        }, 0.0, 1.0);
+
+    /**
      * Discovers labels for clusters.
      */
     void buildLabels(LingoProcessingContext context, TermWeighting termWeighting)
@@ -114,7 +107,9 @@ public class ClusterBuilder
         final int [] labelsFeatureIndex = preprocessingContext.allLabels.featureIndex;
         final int [] mostFrequentOriginalWordIndex = preprocessingContext.allStems.mostFrequentOriginalWordIndex;
         final int [][] phrasesWordIndices = preprocessingContext.allPhrases.wordIndices;
+        final IntSet [] labelsDocumentIndices = preprocessingContext.allLabels.documentIndices;
         final int wordCount = wordsStemIndex.length;
+        final int documentCount = preprocessingContext.documents.size();
 
         // tdMatrixStemIndex contains individual stems that appeared in AllLabels
         // but also stems that appeared only in phrases from AllLabels, but not
@@ -181,12 +176,16 @@ public class ClusterBuilder
                 final int phraseFeature = labelsFeatureIndex[row + firstPhraseIndex];
                 int [] phraseWordIndices = phrasesWordIndices[phraseFeature - wordCount];
 
+                double penalty = documentSizeCoefficients
+                    .getValue(labelsDocumentIndices[row + firstPhraseIndex].size()
+                        / (double) documentCount);
+
                 if (phraseWordIndices.length >= phraseLengthPenaltyStart)
                 {
-                    final double penalty = 1 - penaltyStep
+                    penalty *= 1 - penaltyStep
                         * (phraseWordIndices.length - phraseLengthPenaltyStart + 1);
-                    phraseCos.viewRow(row).assign(Functions.mult(penalty));
                 }
+                phraseCos.viewRow(row).assign(Functions.mult(penalty));
             }
 
             // Normalize again
@@ -228,30 +227,21 @@ public class ClusterBuilder
     void assignDocuments(LingoProcessingContext context, TermWeighting termWeighting)
     {
         final int [] clusterLabelFeatureIndex = context.clusterLabelFeatureIndex;
-        final DoubleMatrix2D tdMatrix = context.tdMatrix;
+        final IntSet [] clusterDocuments = new IntBitSet [clusterLabelFeatureIndex.length];
 
-        // Build cluster label vectors
-        final DoubleMatrix2D clusterLabelMatrix = TermDocumentMatrixBuilder
-            .buildAlignedMatrix(context, clusterLabelFeatureIndex, termWeighting);
-        MatrixUtils.normalizeColumnL2(clusterLabelMatrix, null);
+        final int [] labelsFeatureIndex = context.preprocessingContext.allLabels.featureIndex;
+        final IntSet [] documentIndices = context.preprocessingContext.allLabels.documentIndices;
+        final IntKeyIntMap featureValueToIndex = new IntKeyIntOpenHashMap();
 
-        // Cosine similarity between cluster label vectors and document vectors
-        final DoubleMatrix2D clusterDocumentCos = clusterLabelMatrix.viewDice().zMult(
-            tdMatrix, null);
+        for (int i = 0; i < labelsFeatureIndex.length; i++)
+        {
+            featureValueToIndex.put(labelsFeatureIndex[i], i);
+        }
 
-        // Assign documents to clusters if the cosine is larger than the threshold
-        final IntBitSet [] clusterDocuments = new IntBitSet [clusterLabelFeatureIndex.length];
         for (int clusterIndex = 0; clusterIndex < clusterDocuments.length; clusterIndex++)
         {
-            final IntBitSet documents = new IntBitSet();
-            clusterDocuments[clusterIndex] = documents;
-            for (int documentIndex = 0; documentIndex < clusterDocumentCos.columns(); documentIndex++)
-            {
-                if (clusterDocumentCos.getQuick(clusterIndex, documentIndex) >= documentAssignmentThreshold)
-                {
-                    documents.add(documentIndex);
-                }
-            }
+            clusterDocuments[clusterIndex] = documentIndices[featureValueToIndex
+                .get(clusterLabelFeatureIndex[clusterIndex])];
         }
 
         context.clusterDocuments = clusterDocuments;
@@ -263,7 +253,7 @@ public class ClusterBuilder
      */
     void merge(LingoProcessingContext context)
     {
-        final IntBitSet [] clusterDocuments = context.clusterDocuments;
+        final IntSet [] clusterDocuments = context.clusterDocuments;
         final int [] clusterLabelFeatureIndex = context.clusterLabelFeatureIndex;
         final double [] clusterLabelScore = context.clusterLabelScore;
 

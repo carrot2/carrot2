@@ -7,6 +7,8 @@ import org.carrot2.text.analysis.TokenType;
 import org.carrot2.text.linguistic.LanguageModel;
 import org.carrot2.text.linguistic.Stemmer;
 
+import bak.pcj.set.IntSet;
+
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 
@@ -360,6 +362,13 @@ public final class PreprocessingContext
          * This array is produced by {@link LabelFilterProcessor}.
          */
         public int [] featureIndex;
+        
+        /**
+         * Indices of documents assigned to the label candidate.
+         * <p>
+         * This array is produced by {@link DocumentAssigner}.
+         */
+        public IntSet [] documentIndices;
     }
 
     /**

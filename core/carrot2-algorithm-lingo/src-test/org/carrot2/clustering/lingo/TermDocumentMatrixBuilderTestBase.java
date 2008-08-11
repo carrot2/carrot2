@@ -15,10 +15,13 @@ public class TermDocumentMatrixBuilderTestBase extends PreprocessingComponentTes
     /** Lingo processing context with all the data */
     protected LingoProcessingContext lingoContext;
 
+    protected LabelFilterProcessor labelFilterProcessor;
+    
     @Before
     public void setUpMatrixBuilder()
     {
         matrixBuilder = new TermDocumentMatrixBuilder();
+        labelFilterProcessor = new LabelFilterProcessor();
     }
 
     protected void buildTermDocumentMatrix()
@@ -28,7 +31,7 @@ public class TermDocumentMatrixBuilderTestBase extends PreprocessingComponentTes
         LanguageModelStemmer languageModelStemmer = new LanguageModelStemmer();
         PhraseExtractor phraseExtractor = new PhraseExtractor();
         StopListMarker stopListMarker = new StopListMarker();
-        LabelFilterProcessor labelFilterProcessor = new LabelFilterProcessor();
+        DocumentAssigner documentAssigner = new DocumentAssigner();
 
         tokenizer.tokenize(context);
         caseNormalizer.normalize(context);
@@ -36,6 +39,7 @@ public class TermDocumentMatrixBuilderTestBase extends PreprocessingComponentTes
         phraseExtractor.extractPhrases(context);
         stopListMarker.mark(context);
         labelFilterProcessor.process(context);
+        documentAssigner.assign(context);
 
         lingoContext = new LingoProcessingContext(context);
         matrixBuilder.build(lingoContext, new TfTermWeighting());

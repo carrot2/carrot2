@@ -452,15 +452,30 @@ public final class CachingController implements Controller
                     .get(new Pair<Class<? extends ProcessingComponent>, String>(component
                         .getClass(), parameter));
 
-                // Initialize the component first
+                final Map<String, Object> actualInitAttributes;
                 if (specificInitAttributes != null)
                 {
-                    ControllerUtils.init(component, specificInitAttributes);
+                    actualInitAttributes = specificInitAttributes;
                 }
                 else
                 {
-                    ControllerUtils.init(component, initAttributes);
+                    actualInitAttributes = initAttributes;
                 }
+
+                // Initialize the component first.
+                ControllerUtils.init(component, actualInitAttributes);
+
+                // To support a very natural scenario where processing attributes are 
+                // provided/overridden during initialization, we'll also bind processing 
+                // attributes here. Also, we need to switch off checking for required
+                // attributes as the required processing attributes will be most likely
+                // provided at request time.
+                AttributeBinder.bind(component,
+                    new AttributeBinder.AttributeBinderAction []
+                    {
+                        new AttributeBinder.AttributeBinderActionBind(Input.class,
+                            actualInitAttributes, false)
+                    }, Input.class, Processing.class);
 
                 // If this is the first component we initialize, remember attribute
                 // values so that they can be reset on returning to the pool.

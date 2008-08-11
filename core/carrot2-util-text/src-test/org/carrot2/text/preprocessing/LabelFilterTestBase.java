@@ -31,7 +31,7 @@ public class LabelFilterTestBase extends PreprocessingComponentTestBase
         stopListMarker = new StopListMarker();
         labelFilterProcessor = new LabelFilterProcessor();
 
-        // Disable all filters by defaults. Tests will enable the filters need.
+        // Disable all filters by default. Tests will enable the filters they need.
         labelFilterProcessor.queryLabelFilter.enabled = false;
         labelFilterProcessor.numericLabelFilter.enabled = false;
         labelFilterProcessor.stopWordLabelFilter.enabled = false;
@@ -46,15 +46,20 @@ public class LabelFilterTestBase extends PreprocessingComponentTestBase
 
     protected void check(int [] expectedLabelsFeatureIndex)
     {
+        runPreprocessing();
+
+        assertThat(context.allLabels.featureIndex).as("allLabels.featureIndex")
+            .isEqualTo(expectedLabelsFeatureIndex);
+    }
+
+    protected void runPreprocessing()
+    {
         tokenizer.tokenize(context);
         caseNormalizer.normalize(context);
         languageModelStemmer.stem(context);
         phraseExtractor.extractPhrases(context);
         stopListMarker.mark(context);
         labelFilterProcessor.process(context);
-
-        assertThat(context.allLabels.featureIndex).as("allLabels.featureIndex")
-            .isEqualTo(expectedLabelsFeatureIndex);
     }
 
     @Override

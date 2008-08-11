@@ -91,6 +91,27 @@ public class CachingControllerTest extends ControllerTestBase
         }
     }
 
+    @Bindable
+    public static class ComponentWithProcessingParameter extends ProcessingComponentBase
+    {
+        @Input
+        @Processing
+        @Attribute(key = "processing")
+        private String processing = "default";
+
+        @Output
+        @Processing
+        @Attribute(key = "result")
+        @SuppressWarnings("unused")
+        private String result;
+
+        @Override
+        public void process() throws ProcessingException
+        {
+            result = processing + processing;
+        }
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     protected Controller createController()
@@ -536,6 +557,31 @@ public class CachingControllerTest extends ControllerTestBase
         ProcessingResult result2 = controller.process(attributes, "conf2");
         assertThat(result2.getAttributes()).contains(entry("result", "v2v2"));
 
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testComponentConfigurationProcessingAttributeAtInitTime()
+    {
+        final CachingController controller = new CachingController();
+        final Map<String, Object> attributes = Maps.newHashMap();
+
+        final Map<String, Object> globalInitAttributes = Maps.newHashMap();
+        final Map<String, Object> conf1Attributes = Maps.immutableMap("processing",
+            (Object) "v1");
+        final Map<String, Object> conf2Attributes = Maps.immutableMap("processing",
+            (Object) "v2");
+
+        controller.init(globalInitAttributes, new ProcessingComponentConfiguration(
+            ComponentWithProcessingParameter.class, "conf1", conf1Attributes),
+            new ProcessingComponentConfiguration(ComponentWithProcessingParameter.class,
+                "conf2", conf2Attributes));
+
+        ProcessingResult result1 = controller.process(attributes, "conf1");
+        assertThat(result1.getAttributes()).contains(entry("result", "v1v1"));
+
+        ProcessingResult result2 = controller.process(attributes, "conf2");
+        assertThat(result2.getAttributes()).contains(entry("result", "v2v2"));
     }
 
     @Test(expected = ComponentInitializationException.class)

@@ -14,7 +14,7 @@ import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
 
 import bak.pcj.IntIterator;
-import bak.pcj.set.IntBitSet;
+import bak.pcj.set.IntSet;
 
 import com.google.common.collect.Lists;
 
@@ -100,6 +100,11 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     public LabelFilterProcessor labelFilterProcessor = new LabelFilterProcessor();
 
     /**
+     * Document assigner used by the algorithm, contains bindable attributes.
+     */
+    public DocumentAssigner documentAssigner = new DocumentAssigner();
+
+    /**
      * Language model factory used by the algorithm, contains bindable attributes.
      */
     public LanguageModelFactory languageModelFactory = new SnowballLanguageModelFactory();
@@ -154,6 +159,7 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
         stopListMarker.mark(context);
         phraseExtractor.extractPhrases(context);
         labelFilterProcessor.process(context);
+        documentAssigner.assign(context);
 
         // Term-document matrix building and reduction
         LingoProcessingContext lingoContext = new LingoProcessingContext(context);
@@ -172,7 +178,8 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
         // Format final clusters
         clusters = Lists.newArrayList();
         final int [] clusterLabelIndex = lingoContext.clusterLabelFeatureIndex;
-        final IntBitSet [] clusterDocuments = lingoContext.clusterDocuments;
+        final IntSet [] clusterDocuments = lingoContext.clusterDocuments;
+        final double [] clusterLabelScore = lingoContext.clusterLabelScore;
         for (int i = 0; i < clusterLabelIndex.length; i++)
         {
             final Cluster cluster = new Cluster();
@@ -184,9 +191,10 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
                 continue;
             }
 
-            // Add label
+            // Add label and score
             cluster.addPhrases(labelFormatter.format(context, labelFeature));
-
+            cluster.setAttribute(Cluster.SCORE, clusterLabelScore[i]);
+            
             // Add documents
             for (IntIterator it = clusterDocuments[i].iterator(); it.hasNext();)
             {
