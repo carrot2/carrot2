@@ -14,6 +14,10 @@
     <!-- JavaScripts -->
     <xsl:apply-templates select="/page/asset-urls/js-urls/js-url" />
   
+    <xsl:if test="/page/request/@view = 'visu'">
+      <script type="text/javascript" src="{$skin-path}/common-dynamic/js/swfobject.js"><xsl:comment></xsl:comment></script>
+    </xsl:if>
+    
     <script type="text/javascript">
       <xsl:if test="string-length(/page/request/@query) > 0">
 <!-- AJAX loading of documents -->
