@@ -37,15 +37,15 @@ $(document).ready(function() {
 
 <!-- Visualization -->
 <xsl:if test="/page/request/@view = 'visu'">
-var flashvars = {
-  data_sourceURL: "<xsl:value-of select="$xml-url-encoded" />",
-  callback_onGroupClick: "groupClicked"
-};
-var params = {};
-var attributes = {};
-
-swfobject.embedSWF("<xsl:value-of select="$skin-path" />/common-dynamic/swf/org.carrotsearch.vis.circles.swf", "clusters-visu", "100%", "100%", "9.0.0", "<xsl:value-of select="$skin-path" />/common/swf/expressInstall.swf",
-    flashvars, params, attributes);
+  var flashvars = {
+    data_sourceURL: "<xsl:value-of select="$xml-url-encoded" />",
+    callback_onGroupClick: "groupClicked"
+  };
+  var params = {};
+  var attributes = {};
+  
+  swfobject.embedSWF("<xsl:value-of select="$skin-path" />/common-dynamic/swf/org.carrotsearch.vis.circles.swf", "clusters-visu", "100%", "100%", "9.0.0", "<xsl:value-of select="$skin-path" />/common/swf/expressInstall.swf",
+      flashvars, params, attributes);
 </xsl:if>
 });
 
@@ -66,7 +66,16 @@ $(document).ready(function() {
   $("div.disabled-ui").removeClass("disabled-ui");
 
   $("body").trigger("carrot2-loaded");
-});      
+});
+
+<!-- Safari sizing fix -->
+<xsl:if test="/page/request/@view = 'visu'">
+$(window).load(function() {
+  if ($.browser.safari) {
+    $("#clusters-visu").css("display", "block");
+  }
+});
+</xsl:if>      
     </script>
   </xsl:template>
 
@@ -104,8 +113,8 @@ $(document).ready(function() {
             <span id="status-total" class="hide">of about <span id="status-total-documents"><xsl:comment></xsl:comment></span></span>&#160;for&#160;<span id="status-query"><xsl:comment></xsl:comment></span> 
           </span>
           <span id="documents-status-cluster" class="hide">
-            Cluster&#160;<span id="status-cluster-label"><xsl:comment></xsl:comment></span>
-            with&#160;<span id="status-cluster-size"><xsl:comment></xsl:comment></span> documents
+            Cluster <span id="status-cluster-label"><xsl:comment></xsl:comment></span>
+            with <span id="status-cluster-size"><xsl:comment></xsl:comment></span> documents
           </span>
         </div>
       </div>

@@ -85,4 +85,10 @@ a#tree-top.selected > span {
 #status-cluster-label, 
 #status-cluster-size {
   font-weight: bold;
+  -padding-right: 0.3em;
+}
+
+*:first-child+html #status-cluster-label,
+*:first-child+html #status-cluster-size {
+  padding-right: 0.3em;
 }

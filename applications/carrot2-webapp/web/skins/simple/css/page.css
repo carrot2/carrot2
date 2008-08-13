@@ -168,8 +168,11 @@ body, input, select, label, button {
 #documents-panel {
   bottom: 24px;
   right: 7px;
-  -width: expression(document.documentElement.clientWidth - 20 - 275 - 7);
   -height: expression(document.documentElement.clientHeight - 130);
+}
+
+.visu #documents {
+  width: expression(document.documentElement.clientWidth - 20 - 675 - 7);
 }
 
 #split-panel {

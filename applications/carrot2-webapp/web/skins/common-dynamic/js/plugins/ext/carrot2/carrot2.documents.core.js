@@ -22,9 +22,16 @@
    */
   function select(documentIndexes) {
     
-    // Detach from DOM
-    $temp = $("<span></span>");
-    $documents = $("#documents").appendTo($temp);
+    var $temp;
+    var $documents;
+    
+    // Detach from DOM if not on Safari
+    if (!$.browser.safari) {
+      var $temp = $("<span></span>");
+      var $documents = $("#documents").appendTo($temp);
+    } else {
+      var $documents = $("#documents");
+    }
     var documentsIndex = 0;
     
     $documents.children().each(function(i) {
@@ -38,7 +45,9 @@
     });
     
     // Attach back to DOM
-    $("#documents-panel").append($documents);
+    if (!$.browser.safari) {
+      $("#documents-panel").append($documents);
+    }
   }
   
   /**
