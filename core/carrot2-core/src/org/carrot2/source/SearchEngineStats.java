@@ -4,7 +4,7 @@ import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
 
 /**
- * Usage statistics for an instance of {@link SearchEngine}. 
+ * Usage statistics for an instance of {@link MultipartSearchEngine}. 
  */
 @Bindable
 public final class SearchEngineStats

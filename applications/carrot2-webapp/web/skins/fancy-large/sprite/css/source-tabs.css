@@ -92,7 +92,7 @@ ul.tabs .tab .label {
 
 /** Icons for document sources */
 
-ul.tabs li.tab .etools {
+ul.tabs li.tab .web {
   background-image: url('../img/sprite-vert.png');
   background-position: left -324px;
 }

@@ -19,7 +19,8 @@ body, input, select, label {
 /** Loading indicators */
 #loading,
 #loading-clusters,
-#loading-documents {
+#loading-documents,
+#documents #loading-more {
   background-image: url('../img/sprite-vert.png');
   background-position: left -0px;
 }

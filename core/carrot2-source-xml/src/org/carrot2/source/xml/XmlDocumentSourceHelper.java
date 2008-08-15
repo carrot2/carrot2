@@ -2,22 +2,21 @@ package org.carrot2.source.xml;
 
 import java.io.*;
 import java.util.Map;
-import java.util.zip.GZIPInputStream;
 
 import javax.xml.transform.*;
 import javax.xml.transform.sax.*;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.commons.httpclient.*;
-import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.HttpStatus;
 import org.carrot2.core.DocumentSource;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.util.CloseableUtils;
-import org.carrot2.util.httpclient.HttpClientFactory;
-import org.carrot2.util.httpclient.HttpHeaders;
+import org.carrot2.util.httpclient.HttpUtils;
 import org.carrot2.util.resource.Resource;
+
+import com.google.common.collect.Maps;
 
 /**
  * Exposes the common functionality a {@link DocumentSource} based on XML/XSLT is likely
@@ -61,26 +60,12 @@ public class XmlDocumentSourceHelper
         Map<String, String> xsltParameters, Map<String, Object> metadata)
         throws Exception
     {
-        final HttpClient client = HttpClientFactory.getTimeoutingClient();
-        client.getParams().setVersion(HttpVersion.HTTP_1_1);
+        final Map<String, Object> status = Maps.newHashMap();
+        final InputStream carrot2XmlStream = HttpUtils.openGzipHttpStream(url, status);
 
-        InputStream carrot2XmlStream = null;
-        final GetMethod request = new GetMethod();
-
-        request.setURI(new URI(url, false));
-        request.setRequestHeader(HttpHeaders.URL_ENCODED);
-        request.setRequestHeader(HttpHeaders.GZIP_ENCODING);
-
-        final int statusCode = client.executeMethod(request);
-
-        carrot2XmlStream = request.getResponseBodyAsStream();
-        final Header encoded = request.getResponseHeader("Content-Encoding");
-        String compressionUsed = "uncompressed";
-        if (encoded != null && "gzip".equalsIgnoreCase(encoded.getValue()))
-        {
-            carrot2XmlStream = new GZIPInputStream(carrot2XmlStream);
-            compressionUsed = "gzip";
-        }
+        final Integer statusCode = (Integer) status.get(HttpUtils.STATUS_CODE);
+        final String compressionUsed = (String) status
+            .get(HttpUtils.STATUS_COMPRESSION_USED);
 
         if (statusCode == HttpStatus.SC_OK
             || statusCode == HttpStatus.SC_SERVICE_UNAVAILABLE

@@ -7,8 +7,8 @@ import java.io.IOException;
 
 import org.carrot2.core.Document;
 import org.carrot2.core.test.ExternalApiTestBase;
-import org.carrot2.source.SearchEngineMetadata;
 import org.carrot2.source.SearchEngineResponse;
+import org.carrot2.source.MultipartSearchEngine.MultipartSearchEngineMetadata;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -76,7 +76,7 @@ public class YahooWebSearchServiceTest extends ExternalApiTestBase
     @Prerequisite(requires = "externalApiTestsEnabled")
     public void testErrorResult() throws Exception
     {
-        service.metadata = new SearchEngineMetadata(400, 1000);
+        service.metadata = new MultipartSearchEngineMetadata(400, 1000);
         service.query("apache", 0, 400);
     }
 

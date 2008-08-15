@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 import org.apache.commons.lang.ClassUtils;
+import org.carrot2.util.Pair;
 import org.carrot2.util.attribute.constraint.*;
 import org.carrot2.util.resource.Resource;
 
@@ -157,15 +158,15 @@ public class AttributeBinder
         Class<? extends Annotation>... filteringAnnotations)
         throws InstantiationException, AttributeBindingException
     {
-        bind(new HashSet<Object>(), object, attributeBinderActions,
-            bindingDirectionAnnotation, filteringAnnotations);
+        bind(new HashSet<Object>(), new BindingTracker(), 0, object,
+            attributeBinderActions, bindingDirectionAnnotation, filteringAnnotations);
     }
 
     /**
      * Internal implementation that tracks object that have already been bound.
      */
-    static <T> void bind(Set<Object> boundObjects, T object,
-        AttributeBinderAction [] attributeBinderActions,
+    static <T> void bind(Set<Object> boundObjects, BindingTracker bindingTracker,
+        int level, T object, AttributeBinderAction [] attributeBinderActions,
         Class<? extends Annotation> bindingDirectionAnnotation,
         Class<? extends Annotation>... filteringAnnotations)
         throws InstantiationException, AttributeBindingException
@@ -224,8 +225,9 @@ public class AttributeBinder
                 // Apply binding actions provided
                 for (int i = 0; i < attributeBinderActions.length; i++)
                 {
-                    attributeBinderActions[i].performAction(object, key, field, value,
-                        bindingDirectionAnnotation, filteringAnnotations);
+                    attributeBinderActions[i].performAction(bindingTracker, level,
+                        object, key, field, value, bindingDirectionAnnotation,
+                        filteringAnnotations);
                 }
             }
 
@@ -240,8 +242,9 @@ public class AttributeBinder
                 }
 
                 // Recursively descend into other types.
-                bind(boundObjects, value, attributeBinderActions,
-                    bindingDirectionAnnotation, filteringAnnotations);
+                bind(boundObjects, bindingTracker, level + 1, value,
+                    attributeBinderActions, bindingDirectionAnnotation,
+                    filteringAnnotations);
             }
         }
     }
@@ -251,7 +254,8 @@ public class AttributeBinder
      */
     public static interface AttributeBinderAction
     {
-        public <T> void performAction(T object, String key, Field field, Object value,
+        public <T> void performAction(BindingTracker bindingTracker, int level, T object,
+            String key, Field field, Object value,
             Class<? extends Annotation> bindingDirectionAnnotation,
             Class<? extends Annotation>... filteringAnnotations)
             throws InstantiationException;
@@ -358,7 +362,8 @@ public class AttributeBinder
             this.remainingValues = Maps.newHashMap(values);
         }
 
-        public <T> void performAction(T object, String key, Field field, Object value,
+        public <T> void performAction(BindingTracker bindingTracker, int level, T object,
+            String key, Field field, Object value,
             Class<? extends Annotation> bindingDirectionAnnotation,
             Class<? extends Annotation>... filteringAnnotations)
             throws InstantiationException
@@ -480,7 +485,8 @@ public class AttributeBinder
             this.transformers = transformers;
         }
 
-        public <T> void performAction(T object, String key, Field field, Object value,
+        public <T> void performAction(BindingTracker bindingTracker, int level, T object,
+            String key, Field field, Object value,
             Class<? extends Annotation> bindingDirectionAnnotation,
             Class<? extends Annotation>... filteringAnnotations)
             throws InstantiationException
@@ -499,7 +505,10 @@ public class AttributeBinder
                             bindingDirectionAnnotation, filteringAnnotations);
                     }
 
-                    values.put(key, value);
+                    if (bindingTracker.canBind(object, key, level))
+                    {
+                        values.put(key, value);
+                    }
                 }
                 catch (final Exception e)
                 {
@@ -542,10 +551,10 @@ public class AttributeBinder
             boolean hasBindingDirection = field.getAnnotation(Input.class) != null
                 || field.getAnnotation(Output.class) != null;
 
-            boolean hasExtraAnnotations = filteringAnnotations.length == 0;
+            boolean hasRequiredExtraAnnotations = false;
             for (Class<? extends Annotation> filteringAnnotation : filteringAnnotations)
             {
-                hasExtraAnnotations |= field.getAnnotation(filteringAnnotation) != null;
+                hasRequiredExtraAnnotations |= field.getAnnotation(filteringAnnotation) != null;
             }
 
             if (hasAttribute)
@@ -561,7 +570,7 @@ public class AttributeBinder
             }
             else
             {
-                if (hasBindingDirection || hasExtraAnnotations)
+                if (hasBindingDirection || hasRequiredExtraAnnotations)
                 {
                     throw new IllegalArgumentException(
                         "Binding time or direction defined for a field ("
@@ -571,7 +580,8 @@ public class AttributeBinder
                 }
             }
 
-            return hasAttribute && hasExtraAnnotations;
+            return hasAttribute
+                && (filteringAnnotations.length == 0 || hasRequiredExtraAnnotations);
         }
     }
 
@@ -624,6 +634,50 @@ public class AttributeBinder
             }
 
             return false;
+        }
+    }
+
+    /**
+     * Tracks which attributes have already been collected and prevents overwriting of
+     * collected values.
+     */
+    private static class BindingTracker
+    {
+        /**
+         * The lowest nesting level from which the attribute has been collected.
+         */
+        private Map<String, Integer> bindingLevel = Maps.newHashMap();
+
+        /**
+         * Containing instance + attribute key pairs that have already been collected.
+         */
+        private Set<Pair<Object, String>> boundInstances = Sets.newHashSet();
+
+        boolean canBind(Object instance, String key, int level)
+        {
+            final Pair<Object, String> pair = new Pair<Object, String>(instance, key);
+            if (boundInstances.contains(pair))
+            {
+                throw new AttributeBindingException(
+                    "Collecting values of multiple attributes with the same key (" + key
+                        + ") in the same instance of class ("
+                        + instance.getClass().getName() + ") is not allowed");
+            }
+            boundInstances.add(pair);
+
+            // We can collect this attribute if:
+            // 1) it has not yet been collected or
+            // 2) it has been collected at a deeper level of the nesting hierarchy
+            // but we found another value for it found closer to the root object for
+            // which binding is performed.
+            final Integer boundAtLevel = bindingLevel.get(key);
+            final boolean canBind = boundAtLevel == null
+                || (boundAtLevel != null && boundAtLevel > level);
+            if (canBind)
+            {
+                bindingLevel.put(key, level);
+            }
+            return canBind;
         }
     }
 }

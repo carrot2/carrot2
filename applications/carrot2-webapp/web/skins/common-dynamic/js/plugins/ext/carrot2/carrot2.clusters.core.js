@@ -22,6 +22,13 @@
     $("#clusters-panel").bind("carrot2-clusters-loaded", function() {
       loaded();
     });
+    
+    if (typeof $.clusters.url != 'undefined') {
+      $.get($.unescape($.clusters.url), {}, function(data) {
+        $("#clusters-panel").prepend(data);
+        $("#clusters-panel").trigger("carrot2-clusters-loaded");
+      });
+    }
   });
 
   /**

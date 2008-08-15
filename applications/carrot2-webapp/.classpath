@@ -16,5 +16,8 @@
 	<classpathentry kind="lib" path="lib/slf4j-api-1.4.3.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-log4j12-1.4.3.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/com.planetj.compression"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-source-google"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.fest"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.junit4-ext"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>

@@ -10,7 +10,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.carrot2.core.Document;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.test.MultipartDocumentSourceTestBase;
-import org.carrot2.source.SearchEngineMetadata;
+import org.carrot2.source.MultipartSearchEngine.MultipartSearchEngineMetadata;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -88,7 +88,7 @@ public class YahooDocumentSourceTest extends
     }
 
     @Override
-    protected SearchEngineMetadata getSearchEngineMetadata()
+    protected MultipartSearchEngineMetadata getSearchEngineMetadata()
     {
         return YahooSearchService.DEFAULT_METADATA;
     }

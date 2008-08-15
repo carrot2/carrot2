@@ -37,6 +37,7 @@
         <include name="applications/**/*.java" />
         <exclude name="**/carrot2-examples/**/*.java" if="external.api.tests.disabled" />
         <exclude name="**/carrot2-source-etools/**/*.java" if="external.api.tests.disabled" />
+        <exclude name="**/carrot2-source-google/**/*.java" if="external.api.tests.disabled" />
         <exclude name="**/carrot2-source-yahoo/**/*.java" if="external.api.tests.disabled" />
         <exclude name="**/carrot2-source-microsoft/**/*.java" if="external.api.tests.disabled" />
         <exclude name="**/carrot2-source-opensearch/**/*.java" if="external.api.tests.disabled" />
@@ -48,6 +49,7 @@
     <fileset dir="." id="lib.files">
         <include name="lib/**/*.jar" />
         <include name="core/carrot2-util-matrix/lib/*.jar" />
+        <include name="core/carrot2-source-google/lib/*.jar" />
         <include name="core/carrot2-source-opensearch/lib/*.jar" />
         <include name="applications/carrot2-webapp/lib/*.jar" />
     </fileset>
@@ -360,7 +362,6 @@
 
     <!-- 
          Web application WAR file.
-    <target name="webapp" depends="clean.webapp">
       -->
     <target name="webapp" depends="clean, compile.noclover, attributes, resources">
         <mkdir dir="${webapp.dir}/lib-flattened" />

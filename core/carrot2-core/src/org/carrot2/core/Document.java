@@ -250,5 +250,7 @@ public final class Document
         }
 
         fieldsView = Collections.unmodifiableMap(fields);
+        
+        sources = null;
     }
 }

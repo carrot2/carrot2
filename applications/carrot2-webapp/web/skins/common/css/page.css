@@ -330,6 +330,14 @@ input, select {
   font-size: 9px;
 }
 
+#documents #loading-more {
+  color: #808080;
+  margin-left: 2.2em;
+  padding-left: 12px;
+  font-size: 9px;
+  line-height: 13px;
+  background-repeat: no-repeat;
+}
 
 /** Different panel split for visualization */
 .visu #clusters-panel {

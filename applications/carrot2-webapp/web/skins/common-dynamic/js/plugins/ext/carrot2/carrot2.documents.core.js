@@ -1,8 +1,8 @@
 (function($) {
   /** 
-   * Document-related methods exported to the outside.
+   * Document-related methods exported to and imported from the outside.
    */
-  jQuery.documents = { }
+  jQuery.documents = { loaded: false }
   
   /**
    * Binds a handler for an event called when documents finish loading.
@@ -15,6 +15,37 @@
     $("#clusters-panel").bind("carrot2-clusters-selected", function(target, clusterId, documents) {
       select(documents);
     });
+
+    // Some actions for the results page
+    if (typeof $.documents.query != 'undefined') {
+      // Initiate document loading
+      $.get($.unescape($.documents.url), {}, function(data) {
+        jQuery.documents.loaded = true;
+        var $documents = $("#documents-panel #documents");
+        if ($documents.size() != 0) {
+          $documents.remove();
+        }
+        $("#documents-panel").append(data);
+        $("#documents-panel").trigger("carrot2-documents-loaded");
+      });
+  
+      // Quick preload of some results
+      if (!jQuery.documents.loaded && $.documents.source == 'web') {
+        $.getJSON(
+          "http://ajax.googleapis.com/ajax/services/search/web?callback=?",
+          {
+            v: "1.0",
+            rsz: "large",
+            q: $.documents.query
+          },
+          function(json) {
+            if (!jQuery.documents.loaded) {
+              $("#documents-panel").prepend(build(json));
+            }
+          }
+        );
+      }
+    }
   });
 
   /**
@@ -96,7 +127,7 @@
   }
   
   /**
-   * Highlights clusters that contains the documet being hovered on.
+   * Highlights clusters that contains the document being hovered on.
    */
   function clusters()
   {
@@ -109,6 +140,35 @@
       $.clusters.clearInClusters();
       $(this).removeClass("hl");
     });
+  }
+  
+  /**
+   * Builds documents HTML based on the provided Google API JSON data.
+   */
+  function build(json)
+  {
+    var $documents = $("<div id='documents'></div>");
+    var $templateDocument = $("#template-document .document");
+    
+    var results = json.responseData.results;
+    for (var i = 0; i < results.length; i++)
+    {
+      var result = results[i];
+      
+      $document = $templateDocument.clone();
+      $document.attr("id", "d" + i);
+      $document.find(".rank").html(i + 1);
+      $document.find("a.title, a.in-new-window").attr("href", result.url);
+      $document.find("a.title").html(result.titleNoFormatting);
+      $document.find(".snippet").html(result.content.replace(/<\/?b>/g, ""));
+      $document.find(".url").html(result.url + "<span class='sources'>[Google]</span>");
+      
+      $documents.append($document);
+    }
+    
+    $documents.append("<div id='loading-more'>Loading more results...</div>");
+    
+    return $documents;
   }
 })(jQuery);
 

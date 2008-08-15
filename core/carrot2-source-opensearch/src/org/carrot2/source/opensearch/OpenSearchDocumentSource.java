@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.source.*;
+import org.carrot2.util.ExecutorServiceUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.IntRange;
 import org.carrot2.util.resource.ParameterizedUrlResource;
@@ -28,7 +29,7 @@ import com.sun.syndication.fetcher.impl.HttpURLFeedFetcher;
  * @see http://www.opensearch.org
  */
 @Bindable
-public class OpenSearchDocumentSource extends SearchEngine
+public class OpenSearchDocumentSource extends MultipartSearchEngine
 {
     /** Logger for this class. */
     final static Logger logger = Logger.getLogger(OpenSearchDocumentSource.class);
@@ -41,7 +42,7 @@ public class OpenSearchDocumentSource extends SearchEngine
     /**
      * Static executor for running search threads.
      */
-    private final static ExecutorService executor = SearchEngine.createExecutorService(
+    private final static ExecutorService executor = ExecutorServiceUtils.createExecutorService(
         MAX_CONCURRENT_THREADS, OpenSearchDocumentSource.class);
 
     /**
@@ -87,7 +88,7 @@ public class OpenSearchDocumentSource extends SearchEngine
     /**
      * Search engine metadata create upon initialization.
      */
-    private SearchEngineMetadata metadata;
+    private MultipartSearchEngineMetadata metadata;
 
     /** Fetcher for OpenSearch feed. */
     private FeedFetcher feedFetcher;
@@ -140,7 +141,7 @@ public class OpenSearchDocumentSource extends SearchEngine
             throw new ComponentInitializationException("resultsPerPage must be set");
         }
 
-        this.metadata = new SearchEngineMetadata(resultsPerPage, maximumResults,
+        this.metadata = new MultipartSearchEngineMetadata(resultsPerPage, maximumResults,
             hasStartPage);
         this.feedFetcher = new HttpURLFeedFetcher();
     }

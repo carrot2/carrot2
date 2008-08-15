@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="src-test"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="/carrot2-core"/>
+	<classpathentry kind="lib" path="lib/jackson-0.9.2.jar"/>
+	<classpathentry kind="src" path="/com.google.collections"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-common"/>
+	<classpathentry kind="src" path="/org.junit4-ext"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.fest"/>
+	<classpathentry kind="output" path="tmp/eclipse"/>
+</classpath>

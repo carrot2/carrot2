@@ -3,8 +3,8 @@
   <xsl:include href="../common-dynamic/page.xsl" />
   
   <xsl:output indent="no" omit-xml-declaration="yes" method="xml"
-       doctype-public="-//W3C//DTD XHTML 1.1//EN"
-       doctype-system="http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"
+       doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
+       doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
        media-type="text/html" encoding="utf-8" />
 
   <xsl:strip-space elements="*"/>

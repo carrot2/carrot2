@@ -13,8 +13,8 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.log4j.Logger;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.core.attribute.Processing;
-import org.carrot2.source.SearchEngineMetadata;
 import org.carrot2.source.SearchEngineResponse;
+import org.carrot2.source.MultipartSearchEngine.MultipartSearchEngineMetadata;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.StreamUtils;
 import org.carrot2.util.attribute.*;
@@ -98,12 +98,12 @@ public abstract class YahooSearchService
     /**
      * Yahoo! engine current metadata.
      */
-    protected SearchEngineMetadata metadata = DEFAULT_METADATA;
+    protected MultipartSearchEngineMetadata metadata = DEFAULT_METADATA;
     
     /**
      * Yahoo! engine default metadata.
      */
-    final static SearchEngineMetadata DEFAULT_METADATA = new SearchEngineMetadata(50, 1000);
+    final static MultipartSearchEngineMetadata DEFAULT_METADATA = new MultipartSearchEngineMetadata(50, 1000);
 
     /**
      * Keeps subclasses to this package.

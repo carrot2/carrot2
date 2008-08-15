@@ -4,8 +4,8 @@
   <xsl:include href="../common/source-cookies.xsl" />
   
   <xsl:output indent="no" omit-xml-declaration="yes" method="xml"
-       doctype-public="-//W3C//DTD XHTML 1.1//EN"
-       doctype-system="http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"
+       doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
+       doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
        media-type="text/html" encoding="utf-8" />
 
   <xsl:strip-space elements="*"/>
@@ -20,62 +20,24 @@
     
     <script type="text/javascript">
       <xsl:if test="string-length(/page/request/@query) > 0">
-<!-- AJAX loading of documents -->
-$(document).ready(function() {
-  $.get($.unescape("<xsl:value-of select="$documents-url" disable-output-escaping="no" />"), {}, function(data) {
-    $("#documents-panel").prepend(data);
-    $("#documents-panel").trigger("carrot2-documents-loaded");
-  });
+        jQuery.documents.url = "<xsl:value-of select="$documents-url" disable-output-escaping="no" />";
+        jQuery.documents.source = "<xsl:value-of select="/page/request/@source" />";
+        jQuery.documents.query = "<xsl:value-of select="/page/request/@query" />";
+        
+        <xsl:if test="/page/request/@view != 'visu'">
+          jQuery.clusters.url = "<xsl:value-of select="$clusters-url" disable-output-escaping="no" />"; 
+        </xsl:if>  
 
-<!-- AJAX loading of groups -->
-<xsl:if test="/page/request/@view != 'visu'">
-  $.get($.unescape("<xsl:value-of select="$clusters-url" disable-output-escaping="no" />"), {}, function(data) {
-    $("#clusters-panel").prepend(data);
-    $("#clusters-panel").trigger("carrot2-clusters-loaded");
-  });
-</xsl:if>  
-
-<!-- Visualization -->
-<xsl:if test="/page/request/@view = 'visu'">
-  var flashvars = {
-    data_sourceURL: "<xsl:value-of select="$xml-url-encoded" />",
-    callback_onGroupClick: "groupClicked"
-  };
-  var params = {};
-  var attributes = {};
-  
-  swfobject.embedSWF("<xsl:value-of select="$skin-path" />/common-dynamic/swf/org.carrotsearch.vis.circles.swf", "clusters-visu", "100%", "100%", "9.0.0", "<xsl:value-of select="$skin-path" />/common/swf/expressInstall.swf",
-      flashvars, params, attributes);
-</xsl:if>
-});
-
-function groupClicked(clusterId, docList) {
-  var documentIndexes = docList.split(",");
-  $("#clusters-panel").trigger("carrot2-clusters-selected", [ clusterId, documentIndexes ]);
-}
-  
-$("#clusters-panel").trigger("carrot2-clusters-loaded");
+        <xsl:if test="/page/request/@view = 'visu'">
+          jQuery.visualization.dataUrl = "<xsl:value-of select="$xml-url-encoded" />";
+          jQuery.visualization.skinPath = "<xsl:value-of select="$skin-path" />";
+        </xsl:if>
       </xsl:if>
 
 <!-- Common initialization -->
 $(document).ready(function() {
-  setTimeout(function() { 
-    $("#query").focus();
-  }, 200);
-  $("#loading").fadeOut(1000);
-  $("div.disabled-ui").removeClass("disabled-ui");
-
   $("body").trigger("carrot2-loaded");
 });
-
-<!-- Safari sizing fix -->
-<xsl:if test="/page/request/@view = 'visu'">
-$(window).load(function() {
-  if ($.browser.safari) {
-    $("#clusters-visu").css("display", "block");
-  }
-});
-</xsl:if>      
     </script>
   </xsl:template>
 

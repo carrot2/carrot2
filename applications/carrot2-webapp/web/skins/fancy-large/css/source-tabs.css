@@ -83,7 +83,7 @@ ul.tabs .tab .label {
 
 /** Icons for document sources */
 
-ul.tabs li.tab .etools {
+ul.tabs li.tab .web {
   background-image: url('../img/sources/web.gif'); /** sprite-ref: vert; sprite-margin-bottom: 10px */
 }
 

@@ -34,7 +34,7 @@ public class RequestModel
     @Input
     @Attribute(key = AttributeNames.RESULTS)
     @org.simpleframework.xml.Attribute
-    public int results = 50;
+    public int results = 100;
 
     @Request
     @Input

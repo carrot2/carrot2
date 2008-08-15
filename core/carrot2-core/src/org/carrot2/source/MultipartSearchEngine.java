@@ -5,11 +5,8 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.carrot2.core.*;
-import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
-import org.carrot2.util.attribute.constraint.IntRange;
-import org.carrot2.util.attribute.constraint.NotBlank;
 
 import com.google.common.base.Predicate;
 
@@ -17,10 +14,11 @@ import com.google.common.base.Predicate;
  * A superclass facilitating implementation of {@link DocumentSource}s wrapping external
  * search engines. This class implements helper methods for concurrent querying of search
  * services that limit the number of search results returned in one request.
+ * 
+ * @see SimpleSearchEngine
  */
 @Bindable
-public abstract class SearchEngine extends ProcessingComponentBase implements
-    DocumentSource
+public abstract class MultipartSearchEngine extends SearchEngineBase
 {
     /**
      * Search mode defines how fetchers returned from {@link #createFetcher(SearchRange)}
@@ -37,79 +35,11 @@ public abstract class SearchEngine extends ProcessingComponentBase implements
     public SearchMode searchMode = SearchMode.SPECULATIVE;
 
     /**
-     * Starting index of the first result to fetch.
-     * 
-     * @group Results paging
-     * @label Start index
-     */
-    @Processing
-    @Input
-    @Attribute(key = AttributeNames.START)
-    @IntRange(min = 0)
-    public int start = 0;
-
-    /**
-     * Number of results to fetch.
-     * 
-     * @group Results paging
-     * @label Results count
-     */
-    @Processing
-    @Input
-    @Attribute(key = AttributeNames.RESULTS)
-    @IntRange(min = 10)
-    public int results = 100;
-
-    /**
-     * Search query to execute.
-     * 
-     * @group Search query
-     * @label Query
-     */
-    @Processing
-    @Input
-    @Attribute(key = AttributeNames.QUERY)
-    @Required
-    @NotBlank
-    public String query;
-
-    /**
-     * Number of total matching documents. This may be an approximation.
-     * 
-     * @label Results Total
-     */
-    @Processing
-    @Output
-    @Attribute(key = AttributeNames.RESULTS_TOTAL)
-    public long resultsTotal;
-
-    /**
-     * A collection of documents retrieved for the query.
-     */
-    @Processing
-    @Output
-    @Attribute(key = AttributeNames.DOCUMENTS)
-    public Collection<Document> documents;
-
-    /**
-     * This component usage statistics.
-     */
-    public SearchEngineStats statistics = new SearchEngineStats();
-
-    /**
-     * Indicates whether the search engine returned a compressed result stream.
-     */
-    @Processing
-    @Output
-    @Attribute
-    public boolean compressed;
-
-    /**
      * Run a request the search engine's API, setting <code>documents</code> to the set of
      * returned documents.
      */
-    protected void process(SearchEngineMetadata metadata, ExecutorService executor)
-        throws ProcessingException
+    protected void process(MultipartSearchEngineMetadata metadata,
+        ExecutorService executor) throws ProcessingException
     {
         final SearchEngineResponse [] responses = runQuery(query, start, results,
             metadata, executor);
@@ -183,8 +113,8 @@ public abstract class SearchEngine extends ProcessingComponentBase implements
      * {@link ExecutorService}.
      */
     protected final SearchEngineResponse [] runQuery(final String query, final int start,
-        final int results, SearchEngineMetadata metadata, final ExecutorService executor)
-        throws ProcessingException
+        final int results, MultipartSearchEngineMetadata metadata,
+        final ExecutorService executor) throws ProcessingException
     {
         this.statistics.incrQueryCount();
 
@@ -277,41 +207,6 @@ public abstract class SearchEngine extends ProcessingComponentBase implements
     }
 
     /**
-     * @return Return a new {@link ThreadFactory} that sets context class loader for newly
-     *         created threads.
-     */
-    protected static ThreadFactory contextClassLoaderThreadFactory(
-        final ClassLoader clazzLoader)
-    {
-        final ThreadFactory tf = new ThreadFactory()
-        {
-            private final ThreadFactory delegate = Executors.defaultThreadFactory();
-
-            public Thread newThread(Runnable r)
-            {
-                final Thread t = delegate.newThread(r);
-                t.setDaemon(true);
-                t.setContextClassLoader(clazzLoader);
-                return t;
-            }
-        };
-
-        return tf;
-    }
-
-    /**
-     * @return Return an executor service with a fixed thread pool of
-     *         <code>maxConcurrentThreads</code> threads and context class loader
-     *         initialized to <code>clazz</code>'s context class loader.
-     */
-    protected static ExecutorService createExecutorService(int maxConcurrentThreads,
-        Class<?> clazz)
-    {
-        return Executors.newFixedThreadPool(maxConcurrentThreads,
-            contextClassLoaderThreadFactory(clazz.getClassLoader()));
-    }
-
-    /**
      * An implementation of {@link Callable} that increments page request count statistics
      * before the actual search is made.
      */
@@ -328,5 +223,137 @@ public abstract class SearchEngine extends ProcessingComponentBase implements
          * Performs the actual search and returns the response.
          */
         public abstract SearchEngineResponse search() throws Exception;
+    }
+
+    /**
+     * Metadata describing {@link MultipartSearchEngine} characteristics.
+     */
+    public final static class MultipartSearchEngineMetadata
+    {
+        /**
+         * Maximum number of results returned per page.
+         */
+        public final int resultsPerPage;
+
+        /**
+         * Maximum reachable result index.
+         */
+        public final int maxResultIndex;
+
+        /**
+         * If <code>false</code>, the start position of the search is determined by the
+         * result index, which is the case for most search engines. If <code>true</code>,
+         * the start position is determined by the page index.
+         */
+        public final boolean incrementByPage;
+
+        /**
+         * Creates search engine metadata with {@link #incrementByPage} set to
+         * <code>false</code>.
+         */
+        public MultipartSearchEngineMetadata(int resultsPerPage, int maxResultIndex)
+        {
+            this(resultsPerPage, maxResultIndex, false);
+        }
+
+        public MultipartSearchEngineMetadata(int resultsPerPage, int maxResultIndex,
+            boolean incrementByPage)
+        {
+            this.incrementByPage = incrementByPage;
+            this.maxResultIndex = maxResultIndex;
+            this.resultsPerPage = resultsPerPage;
+        }
+    }
+
+    /**
+     * A single result window to fetch.
+     */
+    protected final static class SearchRange
+    {
+        /** Empty range. */
+        private static final SearchRange [] EMPTY_RANGE = new SearchRange [0];
+
+        /** Start index from which to search (inclusive). */
+        public final int start;
+
+        /** How many results to fetch. */
+        public final int results;
+
+        /**
+         * Create a new search range.
+         * 
+         * @param start Start index of the first result to return (0-based).
+         * @param results The number of results to return. The actual number of results
+         *            returned by a search service may be lower than this number.
+         */
+        public SearchRange(int start, int results)
+        {
+            this.start = start;
+            this.results = results;
+        }
+
+        /**
+         * Given an unconstrained start and results count, adjust it to the allowed window
+         * and split into page buckets if necessary.
+         */
+        public static SearchRange [] getSearchRanges(int start, int results,
+            int maxIndex, int resultsPerPage, boolean incrementByPage)
+        {
+            // Sanity check.
+            results = Math.max(results, 0);
+            start = Math.max(start, 0);
+
+            int startIndex = Math.min(start * (incrementByPage ? resultsPerPage : 1),
+                maxIndex);
+            final int endIndex = Math.min(start * (incrementByPage ? resultsPerPage : 1)
+                + results, maxIndex);
+
+            final int resultsNeeded = endIndex - startIndex;
+            if (resultsNeeded == 0)
+            {
+                return EMPTY_RANGE;
+            }
+
+            final int lastBucketSize = resultsNeeded % resultsPerPage;
+            final int bucketsNeeded = resultsNeeded / resultsPerPage
+                + (lastBucketSize > 0 ? 1 : 0);
+
+            final SearchRange [] buckets = new SearchRange [bucketsNeeded];
+            for (int i = 0; i < buckets.length; i++)
+            {
+                final int window = Math.min(resultsPerPage, endIndex - startIndex);
+                buckets[i] = new SearchRange((incrementByPage ? start + i : startIndex),
+                    window);
+                startIndex += window;
+            }
+
+            return buckets;
+        }
+    }
+
+    /**
+     * Search mode for data source components that implement parallel request to some
+     * search service.
+     */
+    public enum SearchMode
+    {
+        /**
+         * In this mode, an initial search request is performed to estimate the number of
+         * documents available on the server. Then the requested number of documents is
+         * adjusted according to the number of documents available to minimize the number
+         * of requests.
+         */
+        CONSERVATIVE,
+
+        /**
+         * In this mode, the number of requested documents is divided by the maximum
+         * number of documents the search engine can return in a single request. The
+         * result is the number of <b>concurrent</b> requests launched to the search
+         * service.
+         * <p>
+         * Note that speculative threads cause larger load on the search service and will
+         * exhaust your request pool quicker (if it is limited).
+         */
+        SPECULATIVE,
     }
 }

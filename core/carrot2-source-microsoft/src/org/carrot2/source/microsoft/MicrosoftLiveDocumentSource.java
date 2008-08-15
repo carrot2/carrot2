@@ -13,6 +13,7 @@ import org.carrot2.core.attribute.Init;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.*;
 import org.apache.commons.lang.StringUtils;
+import org.carrot2.util.ExecutorServiceUtils;
 import org.carrot2.util.attribute.*;
 
 import com.microsoft.msnsearch.*;
@@ -22,7 +23,7 @@ import com.microsoft.msnsearch.*;
  * Live!.
  */
 @Bindable
-public final class MicrosoftLiveDocumentSource extends SearchEngine
+public final class MicrosoftLiveDocumentSource extends MultipartSearchEngine
 {
     /** Application ID assigned to Carrot Search s.c. */
     public final static String CARROTSEARCH_APPID = "DE531D8A42139F590B253CADFAD7A86172F93B96";
@@ -47,7 +48,7 @@ public final class MicrosoftLiveDocumentSource extends SearchEngine
     /**
      * Static executor for running search threads.
      */
-    private final static ExecutorService executor = SearchEngine.createExecutorService(
+    private final static ExecutorService executor = ExecutorServiceUtils.createExecutorService(
         MAX_CONCURRENT_THREADS, MicrosoftLiveDocumentSource.class);
 
     /**
@@ -81,7 +82,7 @@ public final class MicrosoftLiveDocumentSource extends SearchEngine
     /**
      * Microsoft Live! metadata.
      */
-    static final SearchEngineMetadata metadata = new SearchEngineMetadata(50, 1000); 
+    static final MultipartSearchEngineMetadata metadata = new MultipartSearchEngineMetadata(50, 1000); 
 
     /**
      * Run a single query.

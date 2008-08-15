@@ -10,7 +10,7 @@ import com.google.common.base.Predicate;
  * This predicate allows one to filter out documents with non-unique
  * field values.
  */
-public final class UniqueFieldPredicate implements Predicate<Document>
+final class UniqueFieldPredicate implements Predicate<Document>
 {
     private final HashSet<Object> unique = new HashSet<Object>();
 
@@ -34,5 +34,4 @@ public final class UniqueFieldPredicate implements Predicate<Document>
             return unique.add(fieldValue);
         }
     }
-
 }

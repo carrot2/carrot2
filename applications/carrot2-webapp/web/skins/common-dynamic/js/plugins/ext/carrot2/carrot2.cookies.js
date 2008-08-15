@@ -9,10 +9,31 @@
   /** Cookie name for storing tab order */
   var COOKIE_SOURCE_ORDER = "source-order";
   
+  /** 
+   * Cookie for tracking the application version. Sometimes after an upgrade on the
+   * server, we'll need to delete some cookies and this cookie will tell us when this 
+   * should happen. 
+   */
+  var COOKIE_APP_VERSION = "app-version";
+  
+  /**
+   * Current application version. It needs to be incremented e.g. when we add, remove
+   * or change id of a document source.
+   */
+  var CURRENT_VERSION = 2999;
+  
   /** "Forever" (10 years) storage period for cookie */
   var NEVER_EXPIRE = 30 * 12 * 10;
   
   $(document).ready(function() {
+    var appVersion = $.cookie(COOKIE_APP_VERSION);
+    if (!appVersion || appVersion < CURRENT_VERSION)
+    {
+      $.cookie(COOKIE_ACTIVE_SOURCE, null);
+      $.cookie(COOKIE_SOURCE_ORDER, null);
+      $.cookie(COOKIE_APP_VERSION, CURRENT_VERSION);
+    }
+    
     var $tabContainer = $("#source-tabs");
     
     $tabContainer.bind("tabActivated", function(e, tabId) {

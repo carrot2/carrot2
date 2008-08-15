@@ -12,6 +12,9 @@ import org.fest.assertions.MapAssert;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * Test cases for {@link AttributeBinder}.
+ */
 @SuppressWarnings(value =
 {
     "unchecked", "unused"
@@ -322,6 +325,40 @@ public class AttributeBinderTest
         @Input
         @Attribute
         private ConcurrentHashMap<String, String> concurrentHashMap;
+    }
+
+    @Bindable
+    public static class DuplicateAttributeKeys
+    {
+        @Input
+        @Output
+        @Attribute(key = "int")
+        private int int1 = 10;
+
+        @Input
+        @Output
+        @Attribute(key = "int")
+        private int int2 = 5;
+    }
+
+    @Bindable
+    public static class DuplicateAttributeKeysChild
+    {
+        @Input
+        @Output
+        @Attribute(key = "int")
+        private int int1 = 5;
+    }
+
+    @Bindable
+    public static class DuplicateAttributeKeysParent
+    {
+        private DuplicateAttributeKeysChild child = new DuplicateAttributeKeysChild();
+
+        @Input
+        @Output
+        @Attribute(key = "int")
+        private int int1 = 7;
     }
 
     @Before
@@ -817,6 +854,55 @@ public class AttributeBinderTest
 
         assertThat(remaining).hasSize(2).contains(MapAssert.entry("remaining", 20),
             MapAssert.entry(getKey(SingleClass.class, "processingInput"), 6));
+    }
+
+    @Test
+    public void testDuplicateInputKeysAtSameLevel() throws AttributeBindingException,
+        InstantiationException
+    {
+        DuplicateAttributeKeys instance = new DuplicateAttributeKeys();
+        attributes.put("int", 11);
+        AttributeBinder.bind(instance, attributes, Input.class);
+        checkFieldValues(instance, new Object []
+        {
+            "int1", 11, "int2", 11
+        });
+    }
+
+    @Test(expected = AttributeBindingException.class)
+    public void testDuplicateOutputKeysAtSameLevel() throws AttributeBindingException,
+        InstantiationException
+    {
+        DuplicateAttributeKeys instance = new DuplicateAttributeKeys();
+        AttributeBinder.bind(instance, attributes, Output.class);
+    }
+
+    @Test
+    public void testDuplicateInputKeysAtDifferentLevels()
+        throws AttributeBindingException, InstantiationException
+    {
+        DuplicateAttributeKeysParent instance = new DuplicateAttributeKeysParent();
+        attributes.put("int", 11);
+        AttributeBinder.bind(instance, attributes, Input.class);
+        checkFieldValues(instance, new Object []
+        {
+            "int1", 11
+        });
+        checkFieldValues(instance.child, new Object []
+        {
+            "int1", 11
+        });
+    }
+
+    @Test
+    public void testDuplicateOutputKeysAtDifferentLevels()
+        throws AttributeBindingException, InstantiationException
+    {
+        DuplicateAttributeKeysParent instance = new DuplicateAttributeKeysParent();
+        instance.int1 = 19;
+        instance.child.int1 = 8;
+        AttributeBinder.bind(instance, attributes, Output.class);
+        assertThat(attributes).hasSize(1).contains(MapAssert.entry("int", 19));
     }
 
     private void addAttribute(Class<?> clazz, String field, Object value)

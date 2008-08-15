@@ -1,16 +1,16 @@
 package org.carrot2.source.etools;
 
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
 
 import javax.xml.transform.Templates;
 
 import org.apache.commons.lang.StringUtils;
-import org.carrot2.core.*;
+import org.carrot2.core.Document;
+import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
-import org.carrot2.source.*;
+import org.carrot2.source.SearchEngineResponse;
+import org.carrot2.source.SimpleSearchEngine;
 import org.carrot2.source.xml.XmlDocumentSourceHelper;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.IntRange;
@@ -21,7 +21,7 @@ import org.carrot2.util.resource.ClassResource;
  * licensing of the eTools feed, please e-mail: contact@comcepta.com.
  */
 @Bindable
-public class EToolsDocumentSource extends SearchEngine
+public class EToolsDocumentSource extends SimpleSearchEngine
 {
     /**
      * Base URL for the eTools service
@@ -200,17 +200,6 @@ public class EToolsDocumentSource extends SearchEngine
     private static final int FASTEST_SOURCES_COUNT = 5;
     private static final int ALL_SOURCES_COUNT = 10;
 
-    /**
-     * Maximum concurrent threads from all instances of this component.
-     */
-    private static final int MAX_CONCURRENT_THREADS = 10;
-
-    /**
-     * Static executor for running search threads.
-     */
-    private final static ExecutorService executor = SearchEngine.createExecutorService(
-        MAX_CONCURRENT_THREADS, EToolsDocumentSource.class);
-
     /** eTools XML to Carrot2 XML XSLT */
     private final Templates eTools2Carrot2Xslt;
 
@@ -227,43 +216,28 @@ public class EToolsDocumentSource extends SearchEngine
     }
 
     @Override
-    public void process() throws ProcessingException
+    public SearchEngineResponse fetchSearchResponse() throws Exception
     {
-        // ETools returns all results at once, but it's still useful to use
-        // the SearchEngine class for statistics and common attributes
-        super.process(new SearchEngineMetadata(results, results), executor);
-    }
+        // Ignore buckets, SearchEngine is configured to perform one request
+        final String serviceURL = buildServiceUrl();
+        final SearchEngineResponse response = new SearchEngineResponse();
 
-    @Override
-    protected Callable<SearchEngineResponse> createFetcher(final SearchRange bucket)
-    {
-        return new SearchEngineResponseCallable()
+        final ProcessingResult processingResult = xmlDocumentSourceHelper
+            .loadProcessingResult(serviceURL, eTools2Carrot2Xslt, null, response.metadata);
+
+        final List<Document> documents = processingResult.getDocuments();
+        if (documents != null)
         {
-            public SearchEngineResponse search() throws Exception
-            {
-                // Ignore buckets, SearchEngine is configured to perform one request
-                final String serviceURL = buildServiceUrl();
-                final SearchEngineResponse response = new SearchEngineResponse();
+            response.results.addAll(documents);
+            response.metadata.put(SearchEngineResponse.RESULTS_TOTAL_KEY,
+                (long) documents.size());
+        }
+        else
+        {
+            response.metadata.put(SearchEngineResponse.RESULTS_TOTAL_KEY, 0L);
+        }
 
-                final ProcessingResult processingResult = xmlDocumentSourceHelper
-                    .loadProcessingResult(serviceURL, eTools2Carrot2Xslt, null,
-                        response.metadata);
-
-                final List<Document> documents = processingResult.getDocuments();
-                if (documents != null)
-                {
-                    response.results.addAll(documents);
-                    response.metadata.put(SearchEngineResponse.RESULTS_TOTAL_KEY,
-                        (long) documents.size());
-                }
-                else
-                {
-                    response.metadata.put(SearchEngineResponse.RESULTS_TOTAL_KEY, 0L);
-                }
-
-                return response;
-            }
-        };
+        return response;
     }
 
     /**

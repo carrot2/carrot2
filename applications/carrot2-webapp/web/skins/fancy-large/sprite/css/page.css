@@ -23,9 +23,10 @@ input, select, label {
 /** Loading indicators */
 #loading,
 #loading-clusters,
-#loading-documents {
+#loading-documents,
+#documents #loading-more {
   background-image: url('../img/sprite-vert.png');
-  background-position: left -980px;
+  background-position: left -1075px;
 }
 
 #loading-clusters,
@@ -87,7 +88,7 @@ input, select, label {
 /** Startup screen */
 #startup #logo {
   background-image: url('../img/sprite-vert.png');
-  background-position: left -1000px;
+  background-position: left -1095px;
   width: 168px;
   height: 179px;
   top: 95px;
@@ -103,13 +104,13 @@ input, select, label {
 #results #main-area-top {
     height: 6px;
   background-image: url('../img/sprite-vert.png');
-  background-position: left -1179px;
+  background-position: left -1274px;
 }
 
 #startup #main-area-bottom {
   height: 6px;
   background-image: url('../img/sprite-vert.png');
-  background-position: left -1185px;
+  background-position: left -1280px;
 }
 
 #startup #main-area-inside {

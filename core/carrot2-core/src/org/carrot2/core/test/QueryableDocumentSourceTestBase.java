@@ -116,7 +116,7 @@ public abstract class QueryableDocumentSourceTestBase<T extends DocumentSource> 
     {
         final Map<String, Object> attributes = Maps.newHashMap();
         attributes.put(AttributeNames.QUERY, "test");
-        attributes.put(AttributeNames.RESULTS, 50);
+        attributes.put(AttributeNames.RESULTS, getSmallQuerySize());
 
         // Cache results from all DataSources
         final CachingController cachingController = new CachingController(
@@ -150,7 +150,8 @@ public abstract class QueryableDocumentSourceTestBase<T extends DocumentSource> 
                 .getAttributes().get(AttributeNames.DOCUMENTS);
             assertThat(documentsLocal).as("documents at " + index).isNotNull();
             assertThat(documentsLocal.size()).as("documents.size() at " + index)
-                .isLessThanOrEqualTo(50).isGreaterThanOrEqualTo(35);
+                .isLessThanOrEqualTo(getSmallQuerySize()).isGreaterThanOrEqualTo(
+                    getSmallQuerySize() / 2);
 
             // Should have same documents (from the cache)
             if (documents != null)
@@ -178,14 +179,17 @@ public abstract class QueryableDocumentSourceTestBase<T extends DocumentSource> 
         assertThat(actualResults).isGreaterThanOrEqualTo(minimumExpectedResults);
     }
 
-    @SuppressWarnings("unchecked")
     protected void runAndCheckNoResultsQuery()
     {
-        final int results = runQuery(ExternalApiTestBase.NO_RESULTS_QUERY, 100);
+        runAndCheckNoResultsQuery(getSmallQuerySize());
+    }
+
+    protected void runAndCheckNoResultsQuery(int size)
+    {
+        final int results = runQuery(ExternalApiTestBase.NO_RESULTS_QUERY, size);
         if (results != 0)
         {
-            final List<Document> documents = (List<Document>) processingAttributes
-                .get(AttributeNames.DOCUMENTS);
+            final List<Document> documents = getDocuments();
             final String urls = StringUtils.toString(Lists.transform(documents,
                 new Function<Document, String>()
                 {

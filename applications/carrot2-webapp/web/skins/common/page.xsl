@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
   <xsl:output indent="no" omit-xml-declaration="yes" method="xml"
-       doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"
-       doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
+       doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
+       doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
        media-type="text/html" encoding="utf-8" />
 
   <xsl:strip-space elements="*"/>
@@ -202,6 +202,12 @@
     </div>
 
     <div id="loading">Loading...</div>
+    
+    <xsl:if test="string-length(/page/request/@query) > 0">
+      <div id="template-document" class="hide">
+        <xsl:apply-templates select="document('template-document.xml')" />
+      </div>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template name="pipe"><span class='pipe'> | </span></xsl:template>
@@ -342,7 +348,7 @@
         <h3>
           <span class="rank"><xsl:value-of select="number(@id) + 1" /></span>
           <span class="title-in-clusters">
-            <a href="{url}" target="_top" class="title"><xsl:apply-templates select="title" /></a>
+            <a href="{url}" class="title"><xsl:value-of disable-output-escaping="yes" select="title" /></a>
             <a href="#" class="in-clusters" title="Show in clusters">&#160;<small>Show in clusters</small></a>
           </span>
           <a href="{url}" target="_blank" class="in-new-window" title="Open in new window">&#160;<small>Open in new window</small></a>
@@ -353,7 +359,7 @@
         <img class="thumbnail" src="{field[@key = 'thumbnail-url']/value/@value}" />
       </xsl:if>
       <xsl:if test="string-length(snippet) &gt; 0">
-        <div class="snippet"><xsl:apply-templates select="snippet" /></div>
+        <div class="snippet"><xsl:value-of disable-output-escaping="yes" select="snippet" /></div>
       </xsl:if>
       <div class="url">
         <xsl:apply-templates select="url" />

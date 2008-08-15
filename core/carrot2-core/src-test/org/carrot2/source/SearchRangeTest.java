@@ -2,6 +2,7 @@ package org.carrot2.source;
 
 import static org.junit.Assert.assertEquals;
 
+import org.carrot2.source.MultipartSearchEngine.SearchRange;
 import org.junit.Test;
 
 public class SearchRangeTest
