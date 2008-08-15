@@ -130,7 +130,7 @@ public class QueryProcessorServlet extends HttpServlet
         final HttpServletResponse httpResponse = response;
 
         final Calendar expiresCalendar = Calendar.getInstance();
-        expiresCalendar.add(Calendar.MINUTE, 5);
+        expiresCalendar.add(Calendar.YEAR, -1);
         httpResponse.addDateHeader("Expires", expiresCalendar.getTimeInMillis());
     }
 
