@@ -7,6 +7,22 @@ function groupClicked(clusterId, docList) {
 }
 
 /**
+ * Callback function invoked by the visualization:
+ * selection has been cleared.
+ */
+function selectionCleared() {
+  $.post(selectionClearedCallback, { } );
+}
+
+/**
+ * Callback function invoked by the visualization:
+ * document was clicked.
+ */
+function documentClicked(documentId) {
+  $.post(documentClickedCallback, { document: documentId } );
+}
+
+/**
  * Externally 'select' a given group (id-based) in the visualisation circle.
  */
 function selectGroupById(id) {

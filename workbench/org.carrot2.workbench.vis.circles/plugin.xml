@@ -43,7 +43,7 @@
          point="org.eclipse.equinox.http.registry.servlets">
       <servlet
             alias="/servlets/select"
-            class="org.carrot2.workbench.vis.circles.SelectServlet"
+            class="org.carrot2.workbench.vis.circles.SelectionServlet"
             httpcontextId="org.carrot2.workbench.vis.circles.http-service"
             load-on-startup="true">
       </servlet>

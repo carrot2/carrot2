@@ -4,7 +4,9 @@
 #set ( $swf = "org.carrotsearch.vis.circles.swf" )
 
 #set ( $source = "servlets/pull?page=" + $page )
-#set ( $selectionCallback = "servlets/select?page=" + $page )
+#set ( $selectionCallback = "servlets/select?action=group&page=" + $page )
+#set ( $selectionClearedCallback = "servlets/select?action=clear&page=" + $page )
+#set ( $documentClickedCallback = "servlets/select?action=document&page=" + $page )
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 	<head>
@@ -23,11 +25,15 @@
 
 		<script type="text/javascript">
 			var selectionCallback = "$selectionCallback";
+			var selectionClearedCallback = "$selectionClearedCallback";
+			var documentClickedCallback = "$documentClickedCallback";
 
 			/* Publish SWF using the dynamic embedding method. */
 			var flashvars = {
 				data_sourceURL: "$source",
-				callback_onGroupClick: "groupClicked"
+				callback_onGroupClick: "groupClicked",
+		        callback_onDocumentClick: "documentClicked",
+		        callback_onSelectionClear: "selectionCleared"
 			};
 			var params = {};
 			var attributes = {};
