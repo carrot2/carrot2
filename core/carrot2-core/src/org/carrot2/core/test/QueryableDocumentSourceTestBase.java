@@ -111,6 +111,21 @@ public abstract class QueryableDocumentSourceTestBase<T extends DocumentSource> 
 
     @Test
     @Prerequisite(requires = "externalApiTestsEnabled")
+    public void testHtmlUnescaping()
+    {
+        runQuery("html dt tag", getSmallQuerySize());
+        final List<Document> documents = getDocuments();
+        for (Document document : documents)
+        {
+            assertThat((String) document.getField(Document.SUMMARY)).as("snippet")
+                .doesNotMatch(".*&lt;.*");
+            assertThat((String) document.getField(Document.TITLE)).as("title")
+                .doesNotMatch(".*&lt;.*");
+        }
+    }
+
+    @Test
+    @Prerequisite(requires = "externalApiTestsEnabled")
     @SuppressWarnings("unchecked")
     public void testInCachingController() throws InterruptedException, ExecutionException
     {

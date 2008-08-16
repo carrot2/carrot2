@@ -9,6 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.httpclient.Header;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
 import org.carrot2.source.*;
@@ -130,11 +131,12 @@ public class GoogleDocumentSource extends MultipageSearchEngine
                         for (; results.hasNext();)
                         {
                             final JsonNode result = results.next();
-                            final Document document = new Document(result.getFieldValue(
-                                "titleNoFormatting").getTextValue(),
-                                removeHighlights(result.getFieldValue("content")
-                                    .getTextValue()), result.getFieldValue("url")
-                                    .getTextValue());
+                            final Document document = new Document(StringEscapeUtils
+                                .unescapeHtml(result.getFieldValue("titleNoFormatting")
+                                    .getTextValue()), StringEscapeUtils
+                                .unescapeHtml(removeHighlights(result.getFieldValue(
+                                    "content").getTextValue())), result.getFieldValue(
+                                "url").getTextValue());
                             response.results.add(document);
                         }
 

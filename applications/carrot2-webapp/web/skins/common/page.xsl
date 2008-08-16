@@ -348,7 +348,7 @@
         <h3>
           <span class="rank"><xsl:value-of select="number(@id) + 1" /></span>
           <span class="title-in-clusters">
-            <a href="{url}" class="title"><xsl:value-of disable-output-escaping="yes" select="translate(string(title), '&lt;', ' ')" /></a>
+            <a href="{url}" class="title"><xsl:value-of select="string(title)" /></a>
             <a href="#" class="in-clusters" title="Show in clusters">&#160;<small>Show in clusters</small></a>
           </span>
           <a href="{url}" target="_blank" class="in-new-window" title="Open in new window">&#160;<small>Open in new window</small></a>
@@ -359,7 +359,7 @@
         <img class="thumbnail" src="{field[@key = 'thumbnail-url']/value/@value}" />
       </xsl:if>
       <xsl:if test="string-length(snippet) &gt; 0">
-        <div class="snippet"><xsl:value-of disable-output-escaping="yes" select="translate(string(snippet), '&lt;', ' ')" /></div>
+        <div class="snippet"><xsl:value-of select="string(snippet)" /></div>
       </xsl:if>
       <div class="url">
         <xsl:apply-templates select="url" />
