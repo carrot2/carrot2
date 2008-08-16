@@ -4,6 +4,8 @@
 
 #documents {
   top: 19px;
+  -width: expression(document.documentElement.clientWidth - 20 - 275 - 7);
+  -height: expression(document.documentElement.clientHeight - 149);
 }
 
 #documents-status {

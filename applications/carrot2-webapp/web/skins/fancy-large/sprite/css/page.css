@@ -26,7 +26,7 @@ input, select, label {
 #loading-documents,
 #documents #loading-more {
   background-image: url('../img/sprite-vert.png');
-  background-position: left -1075px;
+  background-position: left -1129px;
 }
 
 #loading-clusters,
@@ -88,7 +88,7 @@ input, select, label {
 /** Startup screen */
 #startup #logo {
   background-image: url('../img/sprite-vert.png');
-  background-position: left -1095px;
+  background-position: left -1149px;
   width: 168px;
   height: 179px;
   top: 95px;
@@ -104,13 +104,13 @@ input, select, label {
 #results #main-area-top {
     height: 6px;
   background-image: url('../img/sprite-vert.png');
-  background-position: left -1274px;
+  background-position: left -1328px;
 }
 
 #startup #main-area-bottom {
   height: 6px;
   background-image: url('../img/sprite-vert.png');
-  background-position: left -1280px;
+  background-position: left -1334px;
 }
 
 #startup #main-area-inside {

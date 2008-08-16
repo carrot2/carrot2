@@ -12,14 +12,14 @@
 #clusters li a {
   background-position: left 4px;
   background-image: url('../img/sprite-vert.png');
-  background-position: left -365px;
+  background-position: left -410px;
   padding-left: 18px;
 }
 
 a#tree-top {
   background-position: left 3px;
   background-image: url('../img/sprite-vert.png');
-  background-position: left -479px;
+  background-position: left -524px;
   padding-left: 18px;
 }
 
@@ -32,12 +32,12 @@ a#tree-top {
   width: 12px; 
   height: 15px;
   background-image: url('../img/sprite-vert.png');
-  background-position: left -592px;
+  background-position: left -637px;
 }
 
 #clusters li.more a {
   background-position: left 2px;
   background-image: url('../img/sprite-vert.png');
-  background-position: left -607px;
+  background-position: left -652px;
 }
 

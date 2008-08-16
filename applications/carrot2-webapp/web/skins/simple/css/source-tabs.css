@@ -59,3 +59,12 @@ ul.tabs li.tab .indeed {
   background-image: url('../img/sources/indeed.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px; sprite-margin-left: 2px */
   padding-left: 13px;
 }
+
+ul.tabs li.tab .pubmed {
+  background-image: url('../img/sources/pubmed.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px */
+}
+
+ul.tabs li.tab .icerocket {
+  background-image: url('../img/sources/icerocket.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px; sprite-margin-top: 1px; sprite-margin-right: 1px */
+  padding-left: 18px;
+}

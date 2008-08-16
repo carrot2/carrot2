@@ -55,6 +55,28 @@
         <example-query>ruby</example-query>
       </example-queries>
     </source>
+    <source component-class="org.carrot2.source.opensearch.OpenSearchDocumentSource" id="icerocket">
+      <label>Blogs</label>
+      <title>Blogs from icerocket.com</title>
+      <mnemonic>J</mnemonic>
+      <description>Carrot2 clustering engine will search blogs from icerocket.com and organize the results into thematic categories</description>
+      <example-queries>
+        <example-query>olympics</example-query>
+        <example-query>music</example-query>
+        <example-query>election</example-query>
+      </example-queries>
+    </source>
+    <source component-class="org.carrot2.source.pubmed.PubMedDocumentSource" id="pubmed">
+      <label>PubMed</label>
+      <title>PubMed medical database</title>
+      <mnemonic>b</mnemonic>
+      <description>Carrot2 clustering engine will search the PubMed medical abstracts database and cluster the results</description>
+      <example-queries>
+        <example-query>cancer</example-query>
+        <example-query>heart</example-query>
+        <example-query>lung</example-query>
+      </example-queries>
+    </source>
   </sources>
   <algorithms>
     <algorithm component-class="org.carrot2.clustering.lingo.LingoClusteringAlgorithm" id="lingo">

@@ -33,7 +33,7 @@ public abstract class QueryableDocumentSourceTestBase<T extends DocumentSource> 
     @Prerequisite(requires = "externalApiTestsEnabled")
     public void testSmallQuery() throws Exception
     {
-        checkMinimumResults("blog", getSmallQuerySize(), getSmallQuerySize() / 2);
+        checkMinimumResults(getSmallQueryText(), getSmallQuerySize(), getSmallQuerySize() / 2);
     }
 
     @Test
@@ -46,35 +46,11 @@ public abstract class QueryableDocumentSourceTestBase<T extends DocumentSource> 
         }
     }
 
-    /**
-     * Override to switch on checking non-English results.
-     */
-    protected boolean hasUtfResults()
-    {
-        return false;
-    }
-
-    /**
-     * Override to customize small query size.
-     */
-    protected int getSmallQuerySize()
-    {
-        return 50;
-    }
-
     @Test
     @Prerequisite(requires = "externalApiTestsEnabled")
     public void testLargeQuery() throws Exception
     {
-        checkMinimumResults("data mining", getLargeQuerySize(), getSmallQuerySize() / 2);
-    }
-
-    /**
-     * Override to customize large query size.
-     */
-    protected int getLargeQuerySize()
-    {
-        return 300;
+        checkMinimumResults(getLargeQueryText(), getLargeQuerySize(), getLargeQuerySize() / 2);
     }
 
     @Test
@@ -83,19 +59,11 @@ public abstract class QueryableDocumentSourceTestBase<T extends DocumentSource> 
     {
         if (hasTotalResultsEstimate())
         {
-            runQuery("apache", getSmallQuerySize());
+            runQuery(getSmallQueryText(), getSmallQuerySize());
 
             assertNotNull(processingAttributes.get(AttributeNames.RESULTS_TOTAL));
             assertTrue((Long) processingAttributes.get(AttributeNames.RESULTS_TOTAL) > 0);
         }
-    }
-
-    /**
-     * Override to switch checking of total results estimates.
-     */
-    protected boolean hasTotalResultsEstimate()
-    {
-        return true;
     }
 
     @Test
@@ -103,7 +71,7 @@ public abstract class QueryableDocumentSourceTestBase<T extends DocumentSource> 
     @SuppressWarnings("unchecked")
     public void testURLsUnique() throws Exception
     {
-        runQuery("apache", getLargeQuerySize());
+        runQuery(getLargeQueryText(), getLargeQuerySize());
 
         assertFieldUnique((Collection<Document>) processingAttributes
             .get(AttributeNames.DOCUMENTS), Document.CONTENT_URL);
@@ -113,14 +81,17 @@ public abstract class QueryableDocumentSourceTestBase<T extends DocumentSource> 
     @Prerequisite(requires = "externalApiTestsEnabled")
     public void testHtmlUnescaping()
     {
-        runQuery("html dt tag", getSmallQuerySize());
-        final List<Document> documents = getDocuments();
-        for (Document document : documents)
+        if (canReturnEscapedHtml())
         {
-            assertThat((String) document.getField(Document.SUMMARY)).as("snippet")
-                .doesNotMatch(".*&lt;.*");
-            assertThat((String) document.getField(Document.TITLE)).as("title")
-                .doesNotMatch(".*&lt;.*");
+            runQuery("html dt tag", getSmallQuerySize());
+            final List<Document> documents = getDocuments();
+            for (Document document : documents)
+            {
+                assertThat((String) document.getField(Document.SUMMARY)).as("snippet")
+                    .doesNotMatch(".*&lt;.*");
+                assertThat((String) document.getField(Document.TITLE)).as("title")
+                    .doesNotMatch(".*&lt;.*");
+            }
         }
     }
 
@@ -130,7 +101,7 @@ public abstract class QueryableDocumentSourceTestBase<T extends DocumentSource> 
     public void testInCachingController() throws InterruptedException, ExecutionException
     {
         final Map<String, Object> attributes = Maps.newHashMap();
-        attributes.put(AttributeNames.QUERY, "test");
+        attributes.put(AttributeNames.QUERY, getSmallQueryText());
         attributes.put(AttributeNames.RESULTS, getSmallQuerySize());
 
         // Cache results from all DataSources
@@ -187,6 +158,70 @@ public abstract class QueryableDocumentSourceTestBase<T extends DocumentSource> 
         }
     }
 
+    /**
+     * Override to switch on checking non-English results.
+     */
+    protected boolean hasUtfResults()
+    {
+        return false;
+    }
+
+    /**
+     * Override to customize small query size.
+     */
+    protected int getSmallQuerySize()
+    {
+        return 50;
+    }
+
+    /**
+     * Override to customize small query text.
+     */
+    protected String getSmallQueryText()
+    {
+        return "blog";
+    }
+
+    /**
+     * Override to customize large query size.
+     */
+    protected int getLargeQuerySize()
+    {
+        return 300;
+    }
+
+    /**
+     * Override to customize large query text.
+     */
+    protected String getLargeQueryText()
+    {
+        return "apache";
+    }
+
+    /**
+     * Override to switch checking of total results estimates.
+     */
+    protected boolean hasTotalResultsEstimate()
+    {
+        return true;
+    }
+
+    /**
+     * Override to switch checking of HTML unescaping.
+     */
+    protected boolean canReturnEscapedHtml()
+    {
+        return true;
+    }
+
+    /**
+     * Override to customize no results query.
+     */
+    protected String getNoResultsQueryText()
+    {
+        return ExternalApiTestBase.NO_RESULTS_QUERY;
+    }
+    
     private void checkMinimumResults(String query, int resultsToRequest,
         int minimumExpectedResults)
     {
@@ -201,7 +236,7 @@ public abstract class QueryableDocumentSourceTestBase<T extends DocumentSource> 
 
     protected void runAndCheckNoResultsQuery(int size)
     {
-        final int results = runQuery(ExternalApiTestBase.NO_RESULTS_QUERY, size);
+        final int results = runQuery(getNoResultsQueryText(), size);
         if (results != 0)
         {
             final List<Document> documents = getDocuments();

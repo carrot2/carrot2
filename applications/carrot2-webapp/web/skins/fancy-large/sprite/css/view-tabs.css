@@ -6,17 +6,17 @@
   padding-left: 6px;
   height: 23px;
   background-image: url('../img/sprite-vert.png');
-  background-position: left -587px;
+  background-position: left -641px;
 }
 
 #views.first-active {
   background-image: url('../img/sprite-vert.png');
-  background-position: left -610px;
+  background-position: left -664px;
 }
 
 #views li {
   background-image: url('../img/sprite-vert.png');
-  background-position: left -633px;
+  background-position: left -687px;
   padding-right: 11px;
   padding-top: 5px;
   padding-left: 1px;
@@ -25,7 +25,7 @@
 
 #views li.active {
   background-image: url('../img/sprite-vert.png');
-  background-position: left -656px;
+  background-position: left -710px;
 }
 
 #views li .right {
@@ -35,27 +35,27 @@
 
 #views li .right {
   background-image: url('../img/sprite-vert.png');
-  background-position: left -679px;
+  background-position: left -733px;
 }
 
 #views li.active .right {
   background-image: url('../img/sprite-vert.png');
-  background-position: left -702px;
+  background-position: left -756px;
 }
 
 #views li.active-last .right {
   background-image: url('../img/sprite-vert.png');
-  background-position: left -725px;
+  background-position: left -779px;
   width: 10px;
 }
 
 #views li.passive-last .right {
   background-image: url('../img/sprite-vert.png');
-  background-position: left -748px;
+  background-position: left -802px;
   width: 10px;
 }
 
 #views li.before-active .right {
   background-image: url('../img/sprite-vert.png');
-  background-position: left -771px;
+  background-position: left -825px;
 }

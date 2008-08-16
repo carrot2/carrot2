@@ -5,11 +5,13 @@ import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.source.*;
 import org.carrot2.util.ExecutorServiceUtils;
+import org.carrot2.util.StringUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.IntRange;
 import org.carrot2.util.resource.ParameterizedUrlResource;
@@ -42,8 +44,8 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
     /**
      * Static executor for running search threads.
      */
-    private final static ExecutorService executor = ExecutorServiceUtils.createExecutorService(
-        MAX_CONCURRENT_THREADS, OpenSearchDocumentSource.class);
+    private final static ExecutorService executor = ExecutorServiceUtils
+        .createExecutorService(MAX_CONCURRENT_THREADS, OpenSearchDocumentSource.class);
 
     /**
      * URL to fetch the search feed from. The URL template can contain variable place
@@ -180,8 +182,9 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
                     final SyndEntry entry = (SyndEntry) it.next();
                     final Document document = new Document();
 
-                    document.addField(Document.TITLE, entry.getTitle());
-                    document.addField(Document.SUMMARY, entry.getDescription().getValue());
+                    document.addField(Document.TITLE, clean(entry.getTitle()));
+                    document.addField(Document.SUMMARY, clean(entry.getDescription()
+                        .getValue()));
                     document.addField(Document.CONTENT_URL, entry.getLink());
 
                     response.results.add(document);
@@ -190,5 +193,10 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
                 return response;
             }
         };
+    }
+
+    private String clean(String string)
+    {
+        return StringUtils.removeHtmlTags(StringEscapeUtils.unescapeHtml(string));
     }
 }

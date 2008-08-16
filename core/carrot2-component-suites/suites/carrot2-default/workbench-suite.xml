@@ -48,6 +48,18 @@
         <example-query>java</example-query>
       </example-queries>
     </source>
+    <source component-class="org.carrot2.source.pubmed.PubMedDocumentSource" id="pubmed">
+      <label>PubMed</label>
+      <title>PubMed medical database</title>
+      <icon-path>icons/pubmed.gif</icon-path>
+      <mnemonic>p</mnemonic>
+      <description>Carrot2 clustering engine will search PubMed medical database and organize the results into thematic categories</description>
+      <example-queries>
+        <example-query>cancer</example-query>
+        <example-query>lung</example-query>
+        <example-query>heart</example-query>
+      </example-queries>
+    </source>
     <source component-class="org.carrot2.source.xml.XmlDocumentSource" id="xml">
       <label>XML</label>
       <title>XML files</title>

@@ -12,12 +12,12 @@
 
 .glow-small .b {
   background-image: url('../img/sprite-vert.png');
-  background-position: left -1009px;
+  background-position: left -1063px;
 }
 
 .glow-small .t {
   background-image: url('../img/sprite-vert.png');
-  background-position: left -1013px;
+  background-position: left -1067px;
 }
 
 .glow-small .l {
@@ -32,32 +32,32 @@
 
 .glow-small .tl {
   background-image: url('../img/sprite-vert.png');
-  background-position: left -1017px;
+  background-position: left -1071px;
 }
 
 .glow-small .tr {
   background-image: url('../img/sprite-vert.png');
-  background-position: left -1021px;
+  background-position: left -1075px;
 }
 
 .glow-small .bl {
   background-image: url('../img/sprite-vert.png');
-  background-position: left -1025px;
+  background-position: left -1079px;
 }
 
 .glow-small .br {
   background-image: url('../img/sprite-vert.png');
-  background-position: left -1029px;
+  background-position: left -1083px;
 }
 
 .glow-big .b {
   background-image: url('../img/sprite-vert.png');
-  background-position: left -1033px;
+  background-position: left -1087px;
 }
 
 .glow-big .t {
   background-image: url('../img/sprite-vert.png');
-  background-position: left -1040px;
+  background-position: left -1094px;
 }
 
 .glow-big .l {
@@ -72,20 +72,20 @@
 
 .glow-big .tl {
   background-image: url('../img/sprite-vert.png');
-  background-position: left -1047px;
+  background-position: left -1101px;
 }
 
 .glow-big .tr {
   background-image: url('../img/sprite-vert.png');
-  background-position: left -1054px;
+  background-position: left -1108px;
 }
 
 .glow-big .bl {
   background-image: url('../img/sprite-vert.png');
-  background-position: left -1061px;
+  background-position: left -1115px;
 }
 
 .glow-big .br {
   background-image: url('../img/sprite-vert.png');
-  background-position: left -1068px;
+  background-position: left -1122px;
 }

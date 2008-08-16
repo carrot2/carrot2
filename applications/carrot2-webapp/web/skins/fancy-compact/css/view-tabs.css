@@ -30,7 +30,6 @@
 }
 
 #views li .right {
-  background-image: url('../img/tab-small-passive-passive-link.png'); /** sprite-ref: vert; */
 }
 
 #views li.active .right {

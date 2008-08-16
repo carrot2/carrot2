@@ -65,3 +65,14 @@ ul.tabs li.tab .indeed {
   background-position: left -211px;
   padding-left: 13px;
 }
+
+ul.tabs li.tab .pubmed {
+  background-image: url('../img/sprite-vert.png');
+  background-position: left -232px;
+}
+
+ul.tabs li.tab .icerocket {
+  background-image: url('../img/sprite-vert.png');
+  background-position: left -254px;
+  padding-left: 18px;
+}

@@ -15,6 +15,9 @@ public final class StringUtils
     private static final Pattern CAMEL_CASE_SEGMENT_PATTERN = Pattern
         .compile("[A-Z][a-z0-9]*");
 
+    private static final Pattern HTML_TAG_PATTERN = Pattern.compile("<.+?>",
+        Pattern.CASE_INSENSITIVE);
+
     private StringUtils()
     {
     }
@@ -57,5 +60,10 @@ public final class StringUtils
         {
             throw ExceptionUtils.wrapAs(RuntimeException.class, e);
         }
+    }
+
+    public static String removeHtmlTags(String string)
+    {
+        return HTML_TAG_PATTERN.matcher(string).replaceAll("");
     }
 }

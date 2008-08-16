@@ -10,7 +10,7 @@ body, input, select, label, button {
 #loading-documents,
 #documents #loading-more {
   background-image: url('../img/sprite-vert.png');
-  background-position: left -232px;
+  background-position: left -277px;
 }
 
 #util-links {
@@ -33,7 +33,7 @@ body, input, select, label, button {
 /** Startup screen */
 #startup #logo {
   background-image: url('../img/sprite-vert.png');
-  background-position: left -252px;
+  background-position: left -297px;
   top: 107px;
   left: 100px;
 }
@@ -170,8 +170,11 @@ body, input, select, label, button {
 #documents-panel {
   bottom: 24px;
   right: 7px;
-  -width: expression(document.documentElement.clientWidth - 20 - 275 - 7);
   -height: expression(document.documentElement.clientHeight - 130);
+}
+
+.visu #documents {
+  width: expression(document.documentElement.clientWidth - 20 - 675 - 7);
 }
 
 #split-panel {

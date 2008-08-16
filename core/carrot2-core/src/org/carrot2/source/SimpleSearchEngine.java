@@ -19,7 +19,7 @@ public abstract class SimpleSearchEngine extends SearchEngineBase
      * 
      * @throws Exception in case of problems with the underlying search engine
      */
-    public abstract SearchEngineResponse fetchSearchResponse() throws Exception;
+    protected abstract SearchEngineResponse fetchSearchResponse() throws Exception;
 
     @Override
     public void process() throws ProcessingException

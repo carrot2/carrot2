@@ -116,8 +116,19 @@ ul.tabs li.tab .msn-web {
   background-position: left -758px;
 }
 
-ul.tabs li.tab .indeed {
+ul.tabs li.tab .pubmed {
   background-image: url('../img/sprite-vert.png');
   background-position: left -779px;
+}
+
+ul.tabs li.tab .icerocket {
+  background-image: url('../img/sprite-vert.png');
+  background-position: left -801px;
+  padding-left: 18px;
+}
+
+ul.tabs li.tab .indeed {
+  background-image: url('../img/sprite-vert.png');
+  background-position: left -824px;
   padding-left: 13px;
 }
