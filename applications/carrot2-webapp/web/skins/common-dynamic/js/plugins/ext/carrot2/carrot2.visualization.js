@@ -10,7 +10,8 @@
           data_sourceURL: $.visualization.dataUrl,
           callback_onGroupClick: "groupClicked",
           callback_onDocumentClick: "documentClicked",
-          callback_onSelectionClear: "selectionCleared"
+          callback_onSelectionClear: "selectionCleared",
+          openDocumentsOnClick: "true"
         };
       var params = {};
       var attributes = {};
@@ -44,5 +45,8 @@ function selectionCleared() {
 
 // Callback function invoked by the visualization
 function documentClicked(documentId) {
-  window.open($("#d" + documentId + " a.title").attr("href"));
+  // Ignore the click feedback, using flash directly to open a new
+  // browser window (see openDocumentsOnClick above).
+  //
+  // window.open($("#d" + documentId + " a.title").attr("href"));
 }
