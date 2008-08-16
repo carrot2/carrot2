@@ -9,7 +9,7 @@ import org.carrot2.util.attribute.Bindable;
  * search engines. This implementation assumes that all requested results can be fetched
  * from the search engine using one request.
  * 
- * @see MultipartSearchEngine
+ * @see MultipageSearchEngine
  */
 @Bindable
 public abstract class SimpleSearchEngine extends SearchEngineBase

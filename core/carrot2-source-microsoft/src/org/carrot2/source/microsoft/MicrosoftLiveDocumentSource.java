@@ -23,7 +23,7 @@ import com.microsoft.msnsearch.*;
  * Live!.
  */
 @Bindable
-public final class MicrosoftLiveDocumentSource extends MultipartSearchEngine
+public final class MicrosoftLiveDocumentSource extends MultipageSearchEngine
 {
     /** Application ID assigned to Carrot Search s.c. */
     public final static String CARROTSEARCH_APPID = "DE531D8A42139F590B253CADFAD7A86172F93B96";
@@ -82,7 +82,7 @@ public final class MicrosoftLiveDocumentSource extends MultipartSearchEngine
     /**
      * Microsoft Live! metadata.
      */
-    static final MultipartSearchEngineMetadata metadata = new MultipartSearchEngineMetadata(50, 1000); 
+    static final MultipageSearchEngineMetadata metadata = new MultipageSearchEngineMetadata(50, 1000); 
 
     /**
      * Run a single query.

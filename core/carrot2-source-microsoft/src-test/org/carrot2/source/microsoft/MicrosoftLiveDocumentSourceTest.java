@@ -1,7 +1,7 @@
 package org.carrot2.source.microsoft;
 
 import org.carrot2.core.test.MultipartDocumentSourceTestBase;
-import org.carrot2.source.MultipartSearchEngine.MultipartSearchEngineMetadata;
+import org.carrot2.source.MultipageSearchEngineMetadata;
 import org.junit.runner.RunWith;
 import org.junitext.runners.AnnotationRunner;
 
@@ -19,7 +19,7 @@ public class MicrosoftLiveDocumentSourceTest extends
     }
 
     @Override
-    protected MultipartSearchEngineMetadata getSearchEngineMetadata()
+    protected MultipageSearchEngineMetadata getSearchEngineMetadata()
     {
         return MicrosoftLiveDocumentSource.metadata;
     }

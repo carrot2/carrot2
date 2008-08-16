@@ -18,7 +18,7 @@ import com.google.common.base.Predicate;
  * @see SimpleSearchEngine
  */
 @Bindable
-public abstract class MultipartSearchEngine extends SearchEngineBase
+public abstract class MultipageSearchEngine extends SearchEngineBase
 {
     /**
      * Search mode defines how fetchers returned from {@link #createFetcher(SearchRange)}
@@ -38,7 +38,7 @@ public abstract class MultipartSearchEngine extends SearchEngineBase
      * Run a request the search engine's API, setting <code>documents</code> to the set of
      * returned documents.
      */
-    protected void process(MultipartSearchEngineMetadata metadata,
+    protected void process(MultipageSearchEngineMetadata metadata,
         ExecutorService executor) throws ProcessingException
     {
         final SearchEngineResponse [] responses = runQuery(query, start, results,
@@ -113,7 +113,7 @@ public abstract class MultipartSearchEngine extends SearchEngineBase
      * {@link ExecutorService}.
      */
     protected final SearchEngineResponse [] runQuery(final String query, final int start,
-        final int results, MultipartSearchEngineMetadata metadata,
+        final int results, MultipageSearchEngineMetadata metadata,
         final ExecutorService executor) throws ProcessingException
     {
         this.statistics.incrQueryCount();
@@ -223,46 +223,6 @@ public abstract class MultipartSearchEngine extends SearchEngineBase
          * Performs the actual search and returns the response.
          */
         public abstract SearchEngineResponse search() throws Exception;
-    }
-
-    /**
-     * Metadata describing {@link MultipartSearchEngine} characteristics.
-     */
-    public final static class MultipartSearchEngineMetadata
-    {
-        /**
-         * Maximum number of results returned per page.
-         */
-        public final int resultsPerPage;
-
-        /**
-         * Maximum reachable result index.
-         */
-        public final int maxResultIndex;
-
-        /**
-         * If <code>false</code>, the start position of the search is determined by the
-         * result index, which is the case for most search engines. If <code>true</code>,
-         * the start position is determined by the page index.
-         */
-        public final boolean incrementByPage;
-
-        /**
-         * Creates search engine metadata with {@link #incrementByPage} set to
-         * <code>false</code>.
-         */
-        public MultipartSearchEngineMetadata(int resultsPerPage, int maxResultIndex)
-        {
-            this(resultsPerPage, maxResultIndex, false);
-        }
-
-        public MultipartSearchEngineMetadata(int resultsPerPage, int maxResultIndex,
-            boolean incrementByPage)
-        {
-            this.incrementByPage = incrementByPage;
-            this.maxResultIndex = maxResultIndex;
-            this.resultsPerPage = resultsPerPage;
-        }
     }
 
     /**

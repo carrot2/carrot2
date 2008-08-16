@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.carrot2.core.Document;
 import org.carrot2.core.test.MultipartDocumentSourceTestBase;
-import org.carrot2.source.MultipartSearchEngine.MultipartSearchEngineMetadata;
+import org.carrot2.source.MultipageSearchEngineMetadata;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junitext.runners.AnnotationRunner;
@@ -25,7 +25,7 @@ public class GoogleDocumentSourceTest extends
     }
 
     @Override
-    protected MultipartSearchEngineMetadata getSearchEngineMetadata()
+    protected MultipageSearchEngineMetadata getSearchEngineMetadata()
     {
         return GoogleDocumentSource.metadata;
     }

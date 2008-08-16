@@ -29,7 +29,7 @@ import com.google.common.collect.Maps;
  * @see http://code.google.com/apis/ajaxsearch/documentation/#fonje
  */
 @Bindable
-public class GoogleDocumentSource extends MultipartSearchEngine
+public class GoogleDocumentSource extends MultipageSearchEngine
 {
     /**
      * Service URL.
@@ -74,7 +74,7 @@ public class GoogleDocumentSource extends MultipartSearchEngine
     /**
      * Google search metadata.
      */
-    static final MultipartSearchEngineMetadata metadata = new MultipartSearchEngineMetadata(
+    static final MultipageSearchEngineMetadata metadata = new MultipageSearchEngineMetadata(
         8, 32);
 
     /**

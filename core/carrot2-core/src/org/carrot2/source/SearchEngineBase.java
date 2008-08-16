@@ -15,7 +15,7 @@ import org.carrot2.util.attribute.constraint.NotBlank;
  * specific base classes and concrete implementations.
  * 
  * @see SimpleSearchEngine
- * @see MultipartSearchEngine
+ * @see MultipageSearchEngine
  */
 @Bindable
 public abstract class SearchEngineBase extends ProcessingComponentBase implements DocumentSource

@@ -6,7 +6,7 @@ import java.util.concurrent.ExecutorService;
 import org.apache.log4j.Logger;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.Init;
-import org.carrot2.source.MultipartSearchEngine;
+import org.carrot2.source.MultipageSearchEngine;
 import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.util.ExecutorServiceUtils;
 import org.carrot2.util.attribute.*;
@@ -16,7 +16,7 @@ import org.carrot2.util.attribute.constraint.ImplementingClasses;
  * A {@link DocumentSource} fetching {@link Document}s (search results) from Yahoo!.
  */
 @Bindable
-public final class YahooDocumentSource extends MultipartSearchEngine
+public final class YahooDocumentSource extends MultipageSearchEngine
 {
     /** Logger for this class. */
     final static Logger logger = Logger.getLogger(YahooDocumentSource.class);

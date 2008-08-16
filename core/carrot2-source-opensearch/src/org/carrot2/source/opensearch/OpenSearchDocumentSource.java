@@ -29,7 +29,7 @@ import com.sun.syndication.fetcher.impl.HttpURLFeedFetcher;
  * @see http://www.opensearch.org
  */
 @Bindable
-public class OpenSearchDocumentSource extends MultipartSearchEngine
+public class OpenSearchDocumentSource extends MultipageSearchEngine
 {
     /** Logger for this class. */
     final static Logger logger = Logger.getLogger(OpenSearchDocumentSource.class);
@@ -88,7 +88,7 @@ public class OpenSearchDocumentSource extends MultipartSearchEngine
     /**
      * Search engine metadata create upon initialization.
      */
-    private MultipartSearchEngineMetadata metadata;
+    private MultipageSearchEngineMetadata metadata;
 
     /** Fetcher for OpenSearch feed. */
     private FeedFetcher feedFetcher;
@@ -141,7 +141,7 @@ public class OpenSearchDocumentSource extends MultipartSearchEngine
             throw new ComponentInitializationException("resultsPerPage must be set");
         }
 
-        this.metadata = new MultipartSearchEngineMetadata(resultsPerPage, maximumResults,
+        this.metadata = new MultipageSearchEngineMetadata(resultsPerPage, maximumResults,
             hasStartPage);
         this.feedFetcher = new HttpURLFeedFetcher();
     }

@@ -4,10 +4,8 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
 import org.carrot2.core.DocumentSource;
-import org.carrot2.source.MultipartSearchEngine;
-import org.carrot2.source.SearchEngineStats;
-import org.carrot2.source.MultipartSearchEngine.MultipartSearchEngineMetadata;
-import org.carrot2.source.MultipartSearchEngine.SearchMode;
+import org.carrot2.source.*;
+import org.carrot2.source.MultipageSearchEngine.SearchMode;
 import org.junit.Test;
 import org.junitext.Prerequisite;
 
@@ -19,9 +17,9 @@ public abstract class MultipartDocumentSourceTestBase<T extends DocumentSource> 
     QueryableDocumentSourceTestBase<T>
 {
     /**
-     * Metadata for the {@link MultipartSearchEngine} being tested.
+     * Metadata for the {@link MultipageSearchEngine} being tested.
      */
-    protected abstract MultipartSearchEngineMetadata getSearchEngineMetadata();
+    protected abstract MultipageSearchEngineMetadata getSearchEngineMetadata();
 
     @Test
     @Prerequisite(requires = "externalApiTestsEnabled")
