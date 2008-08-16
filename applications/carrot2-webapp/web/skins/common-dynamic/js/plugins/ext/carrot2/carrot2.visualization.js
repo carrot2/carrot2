@@ -8,11 +8,13 @@
     if (typeof $.visualization.dataUrl != 'undefined') {
       var flashvars = {
           data_sourceURL: $.visualization.dataUrl,
-          callback_onGroupClick: "groupClicked"
+          callback_onGroupClick: "groupClicked",
+          callback_onDocumentClick: "documentClicked",
+          callback_onSelectionClear: "selectionCleared"
         };
       var params = {};
       var attributes = {};
-      
+
       swfobject.embedSWF($.visualization.skinPath + "/common-dynamic/swf/org.carrotsearch.vis.circles.swf", 
           "clusters-visu", "100%", "100%", "9.0.0", $.visualization.skinPath + "/common/swf/expressInstall.swf",
           flashvars, params, attributes);
@@ -27,8 +29,20 @@
   });
 })(jQuery);
 
-// Callback function invoked by the visualization
+// Callback function invoked by the visualization:
+// a group has been selected.
 function groupClicked(clusterId, docList) {
   var documentIndexes = docList.split(",");
   $("#clusters-panel").trigger("carrot2-clusters-selected", [ clusterId, documentIndexes ]);
+}
+
+// Callback function invoked by the visualization:
+// selection has been cleared
+function selectionCleared() {
+  $("#clusters-panel").trigger("carrot2-clusters-selected-top");
+}
+
+// Callback function invoked by the visualization
+function documentClicked(documentId) {
+  alert("Document click: " + documentId);
 }
