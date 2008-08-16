@@ -24,9 +24,14 @@
     });
     
     if (typeof $.clusters.url != 'undefined') {
-      $.get($.unescape($.clusters.url), {}, function(data) {
-        $("#clusters-panel").prepend(data);
-        $("#clusters-panel").trigger("carrot2-clusters-loaded");
+      $.ajax({
+        url: $.unescape($.clusters.url), 
+        success: function(data) {
+          $("#clusters-panel").prepend(data);
+          $("#clusters-panel").trigger("carrot2-clusters-loaded");
+        },
+        // Firefox somehow does not execute JS that comes in a cached AJAX response...
+        cache: !$.browser.mozilla 
       });
     }
   });
@@ -360,4 +365,3 @@
     $("#clusters .hl").removeClass("hl");
   }  
 })(jQuery);
-

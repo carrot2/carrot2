@@ -19,14 +19,19 @@
     // Some actions for the results page
     if (typeof $.documents.query != 'undefined') {
       // Initiate document loading
-      $.get($.unescape($.documents.url), {}, function(data) {
-        jQuery.documents.loaded = true;
-        var $documents = $("#documents-panel #documents");
-        if ($documents.size() != 0) {
-          $documents.remove();
-        }
-        $("#documents-panel").append(data);
-        $("#documents-panel").trigger("carrot2-documents-loaded");
+      $.ajax({
+        url: $.unescape($.documents.url), 
+        success: function(data) {
+          jQuery.documents.loaded = true;
+          var $documents = $("#documents-panel #documents");
+          if ($documents.size() != 0) {
+            $documents.remove();
+          }
+          $("#documents-panel").append(data);
+          $("#documents-panel").trigger("carrot2-documents-loaded");
+        },
+        // Firefox somehow does not execute JS that comes in a cached AJAX response...
+        cache: !$.browser.mozilla 
       });
   
       // Quick preload of some results
