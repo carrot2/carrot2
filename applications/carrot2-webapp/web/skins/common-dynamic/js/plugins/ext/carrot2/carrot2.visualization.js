@@ -44,5 +44,5 @@ function selectionCleared() {
 
 // Callback function invoked by the visualization
 function documentClicked(documentId) {
-  alert("Document click: " + documentId);
+  window.open($("#d" + documentId + " a.title").attr("href"));
 }

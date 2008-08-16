@@ -16,6 +16,10 @@
       select(documents);
     });
 
+    $("#clusters-panel").bind("carrot2-clusters-selected-top", function() {
+      selectAll();
+    });
+    
     // Some actions for the results page
     if (typeof $.documents.query != 'undefined') {
       // Initiate document loading
@@ -57,7 +61,34 @@
    * Shows the documents with the provided documents, hides all other documents.
    */
   function select(documentIndexes) {
-    
+    withDocumentsDetached(function ($documents) {
+      var documentsIndex = 0;
+      $documents.children().each(function(i) {
+        if (documentsIndex >= documentIndexes.length || documentIndexes[documentsIndex] > i) {
+          $(this).hide();
+        }
+        else {
+          $(this).show();
+          documentsIndex++;
+        }
+      });
+    });
+  }
+  
+  /**
+   * Shows all documents.
+   */
+  function selectAll() {
+    withDocumentsDetached(function ($documents) {
+      $documents.children().show();
+    });
+  }
+  
+  /**
+   * Detaches documents from DOM, performs callback (documents passed as the first 
+   * parameter), attaches documents back.
+   */
+  function withDocumentsDetached(callback) {
     var $temp;
     var $documents;
     
@@ -68,17 +99,8 @@
     } else {
       var $documents = $("#documents");
     }
-    var documentsIndex = 0;
     
-    $documents.children().each(function(i) {
-      if (documentsIndex >= documentIndexes.length || documentIndexes[documentsIndex] > i) {
-        $(this).hide();
-      }
-      else {
-        $(this).show();
-        documentsIndex++;
-      }
-    });
+    callback.apply(this, [ $documents ]);
     
     // Attach back to DOM
     if (!$.browser.safari) {

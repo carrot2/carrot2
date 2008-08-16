@@ -86,12 +86,6 @@
     $("#tree-top").click(function () {
       $("#clusters .selected").removeClass("selected");
       $("#tree-top").addClass("selected");
-      for (var i = 0; i < window.documentCount; i++) {
-        var $document = $("#d" + i);
-        if (!$document.is(":visible")) {
-          $document.show();
-        }
-      }
       $("#clusters-panel").trigger("carrot2-clusters-selected-top");
     });
   };
