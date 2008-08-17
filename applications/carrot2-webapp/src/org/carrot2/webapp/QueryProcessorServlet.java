@@ -54,12 +54,12 @@ public class QueryProcessorServlet extends HttpServlet
         final Map<String, Object> requestParameters = RequestParameterUtils
             .unpack(request);
         requestParameters.put("modern", UserAgentUtils.isModernBrowser(request));
-        setExpires(response);
 
         try
         {
             // Build model for this request
-            final RequestModel requestModel = new RequestModel();
+            final RequestModel requestModel = WebappConfig.INSTANCE
+                .setDefaults(new RequestModel());
             final AttributeBinder.AttributeBinderActionBind attributeBinderActionBind = new AttributeBinder.AttributeBinderActionBind(
                 Input.class, requestParameters, true,
                 AttributeBinder.AttributeTransformerFromString.INSTANCE);
@@ -93,6 +93,7 @@ public class QueryProcessorServlet extends HttpServlet
                         processingResult = controller.process(requestParameters,
                             requestModel.source);
                     }
+                    setExpires(response);
                 }
             }
             catch (ProcessingException e)

@@ -49,6 +49,14 @@
     
     <!-- Custom in-line javascript -->
     <xsl:apply-templates select="/page" mode="js" />
+    <script type="text/javascript">
+      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+      var pageTracker = _gat._getTracker("UA-317750-3");
+      pageTracker._trackPageview();
+    </script>
   </body>
 </html>
       </xsl:when>
@@ -147,11 +155,11 @@
                   Download
                   <select name="{$results-param}">
                     <xsl:for-each select="/page/config/sizes/size">
-                      <option value="{string(.)}">
-                        <xsl:if test="string(.) = /page/request/@results">
+                      <option value="{string(@size)}">
+                        <xsl:if test="string(@size) = /page/request/@results">
                           <xsl:attribute name="selected">selected</xsl:attribute>
                         </xsl:if>
-                        <xsl:value-of select="." /> results
+                        <xsl:value-of select="@size" /> results
                       </option>
                     </xsl:for-each>
                   </select>

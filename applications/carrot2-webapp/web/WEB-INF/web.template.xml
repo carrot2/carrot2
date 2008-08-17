@@ -84,7 +84,7 @@
     
     <init-param>
       <param-name>template.caching</param-name>
-      <param-value>true</param-value>
+      <param-value>false</param-value>
     </init-param>
   </filter>
 
@@ -104,7 +104,7 @@
   
   <filter-mapping>
       <filter-name>FarFutureExpires</filter-name>
-      <url-pattern>/skins/*</url-pattern>
+      <url-pattern>/skins@VERSION@/*</url-pattern>
   </filter-mapping>
   <filter-mapping>
       <filter-name>FarFutureExpires</filter-name>

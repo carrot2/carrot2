@@ -155,7 +155,7 @@ body, input, select, label {
 }
 
 #results #main-area-top {
-  height: 6px;
+  height: 4px;
   background-image: url('../img/border-top.png'); /** sprite-ref: vert; sprite-alignment: repeat */
 }
 

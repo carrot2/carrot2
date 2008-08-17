@@ -6,17 +6,11 @@ import org.simpleframework.xml.Element;
 /**
  * Represents search results view
  */
-public class ResultsViewModel
+public class ResultsViewModel extends ModelWithDefault
 {
     @Attribute
-    public final String id;
+    public String id;
 
     @Element
-    public final String label;
-
-    public ResultsViewModel(String id, String label)
-    {
-        this.id = id;
-        this.label = label;
-    }
+    public String label;
 }

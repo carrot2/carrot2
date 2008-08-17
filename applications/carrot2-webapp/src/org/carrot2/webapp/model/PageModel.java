@@ -62,7 +62,7 @@ public class PageModel
             && !RequestType.CLUSTERS.equals(requestModel.type);
 
         this.contextPath = request.getContextPath();
-        this.skinPath = contextPath + WebappConfig.SKINS_FOLDER;
+        this.skinPath = contextPath + "/" + WebappConfig.INSTANCE.skinsFolder;
         this.assetUrls = new AssetUrlsModel(webappConfig.getSkinById(requestModel.skin),
             request, urlGenerator);
 

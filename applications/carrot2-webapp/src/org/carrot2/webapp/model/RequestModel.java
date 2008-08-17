@@ -18,7 +18,7 @@ public class RequestModel
     @Input
     @Attribute(key = WebappConfig.SKIN_PARAM)
     @org.simpleframework.xml.Attribute
-    public String skin = "fancy-compact";
+    public String skin;
 
     @Request
     @Input
@@ -34,7 +34,7 @@ public class RequestModel
     @Input
     @Attribute(key = AttributeNames.RESULTS)
     @org.simpleframework.xml.Attribute
-    public int results = 100;
+    public int results;
 
     @Request
     @Input
@@ -57,7 +57,7 @@ public class RequestModel
     @Input
     @Attribute(key = WebappConfig.VIEW_PARAM)
     @org.simpleframework.xml.Attribute
-    public String view = WebappConfig.INSTANCE.views.get(0).id;
+    public String view;
 
     @Request
     @Input

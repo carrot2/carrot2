@@ -9,6 +9,12 @@
 # Path to PMD, required to generate code duplication reports
 #pmd.home=D:/dev/java/pmd
 
+# Path to FindBugs, required for static code analysis
+#findbugs.home=D:/dev/java/findbugs
+
+# Path to SmartSprites, required to build the CSS sprites-powered web application
+#smartsprites.home=E:/repositories/carrot2-labs/smartsprites
+
 # Set this property to true to disable tests depending on the correct
 # functioning of external APIs, e.g. search engine APIs.
 #external.api.tests.disabled=true

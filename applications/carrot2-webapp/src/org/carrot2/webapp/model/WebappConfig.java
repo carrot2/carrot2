@@ -1,97 +1,106 @@
 package org.carrot2.webapp.model;
 
+import java.io.InputStream;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.carrot2.core.ProcessingComponentSuite;
 import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.util.ExceptionUtils;
+import org.carrot2.util.CloseableUtils;
+import org.carrot2.util.resource.Resource;
 import org.carrot2.util.resource.ResourceUtilsFactory;
 import org.simpleframework.xml.*;
-
-import com.google.common.collect.Lists;
+import org.simpleframework.xml.load.Persister;
 
 /**
- *
+ * The application-wide configuration.
  */
 public class WebappConfig
 {
     private final static Logger log = Logger.getLogger(WebappConfig.class);
 
-    final static List<Integer> SIZES = Lists.immutableList(50, 100, 150, 200);
-
-    final static List<SkinModel> SKINS = Lists.immutableList(new SkinModel("fancy-large",
-        RequestType.PAGE), new SkinModel("fancy-compact", RequestType.PAGE),
-        new SkinModel("simple", RequestType.PAGE));
-
-    final static List<ResultsViewModel> VIEWS = Lists.immutableList(new ResultsViewModel(
-        "tree", "Tree"), new ResultsViewModel("visu", "Visualization"));
-
-    public final static WebappConfig INSTANCE = new WebappConfig(SIZES, SKINS, VIEWS);
-
-    public static final String SKINS_FOLDER = "/skins";
-
-    @Element
+    @Element(required = false)
     public ProcessingComponentSuite components;
 
     @ElementList(entry = "skin")
-    public final List<SkinModel> skins;
+    public List<SkinModel> skins;
 
     @ElementList(entry = "size")
-    public final List<Integer> sizes;
+    public List<ResultsSizeModel> sizes;
 
     @ElementList(entry = "view")
-    public final List<ResultsViewModel> views;
+    public List<ResultsViewModel> views;
 
-    @Attribute(name = "search-url")
+    @Attribute(name = "skins-folder")
+    public String skinsFolder;
+
+    @Attribute(name = "search-url", required = false)
     public final String searchUrl = "search";
 
-    @Attribute(name = "xml-url")
+    @Attribute(name = "xml-url", required = false)
     public final String xmlUrl = "xml";
 
-    @Attribute(name = "query-param")
+    @Attribute(name = "query-param", required = false)
     public final static String QUERY_PARAM = AttributeNames.QUERY;
 
-    @Attribute(name = "results-param")
+    @Attribute(name = "results-param", required = false)
     public final static String RESULTS_PARAM = AttributeNames.RESULTS;
 
-    @Attribute(name = "source-param")
+    @Attribute(name = "source-param", required = false)
     public final static String SOURCE_PARAM = "source";
 
-    @Attribute(name = "algorithm-param")
+    @Attribute(name = "algorithm-param", required = false)
     public final static String ALGORITHM_PARAM = "algorithm";
 
-    @Attribute(name = "type-param")
+    @Attribute(name = "type-param", required = false)
     public final static String TYPE_PARAM = "type";
 
-    @Attribute(name = "view-param")
+    @Attribute(name = "view-param", required = false)
     public final static String VIEW_PARAM = "view";
 
-    @Attribute(name = "skin-param")
+    @Attribute(name = "skin-param", required = false)
     public final static String SKIN_PARAM = "skin";
 
-    public WebappConfig(List<Integer> sizes, List<SkinModel> skins,
-        List<ResultsViewModel> views)
+    /** Application-wide instance of the configuration */
+    public final static WebappConfig INSTANCE;
+
+    static
     {
-        this.sizes = sizes;
-        this.skins = skins;
-        this.views = views;
         try
         {
-            this.components = ProcessingComponentSuite.deserialize(ResourceUtilsFactory
-                .getDefaultResourceUtils().getFirst("carrot2-default/suite.xml"));
-            log.info("Loaded " + components.getSources().size() + " sources and "
-                + components.getAlgorithms().size() + " algorithms");
+            INSTANCE = deserialize(ResourceUtilsFactory.getDefaultResourceUtils()
+                .getFirst("config.xml"));
+
+            if (INSTANCE.skins.size() == 0)
+            {
+                throw new RuntimeException("Configuration must contain at leas one skin");
+            }
+            if (INSTANCE.views.size() == 0)
+            {
+                throw new RuntimeException("Configuration must contain at leas one view");
+            }
+            if (INSTANCE.sizes.size() == 0)
+            {
+                throw new RuntimeException(
+                    "Configuration must contain at leas one result list size");
+            }
+
+            INSTANCE.components = ProcessingComponentSuite
+                .deserialize(ResourceUtilsFactory.getDefaultResourceUtils().getFirst(
+                    "carrot2-default/suite.xml"));
+            log.info("Loaded " + INSTANCE.components.getSources().size()
+                + " sources and " + INSTANCE.components.getAlgorithms().size()
+                + " algorithms");
         }
         catch (Exception e)
         {
-            throw ExceptionUtils.wrapAs(RuntimeException.class, e);
+            throw new RuntimeException("Could not load application config", e);
         }
     }
 
     public static String getContextRelativeSkinStylesheet(String skinName)
     {
-        return SKINS_FOLDER + "/" + skinName + "/page.xsl";
+        return "/" + INSTANCE.skinsFolder + "/" + skinName + "/page.xsl";
     }
 
     public SkinModel getSkinById(String skinId)
@@ -106,5 +115,30 @@ public class WebappConfig
         }
 
         return null;
+    }
+
+    public RequestModel setDefaults(RequestModel requestModel)
+    {
+        requestModel.skin = ModelWithDefault.getDefault(skins).id;
+        requestModel.results = ModelWithDefault.getDefault(sizes).size;
+        requestModel.view = ModelWithDefault.getDefault(views).id;
+
+        return requestModel;
+    }
+
+    private static WebappConfig deserialize(Resource resource) throws Exception
+    {
+        final InputStream inputStream = resource.open();
+        final WebappConfig loaded;
+        try
+        {
+            loaded = new Persister().read(WebappConfig.class, inputStream);
+        }
+        finally
+        {
+            CloseableUtils.close(inputStream);
+        }
+
+        return loaded;
     }
 }

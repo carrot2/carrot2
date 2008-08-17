@@ -5,24 +5,13 @@ import org.simpleframework.xml.Attribute;
 /**
  *
  */
-public class SkinModel
+public class SkinModel extends ModelWithDefault
 {
     @Attribute
-    public final String id;
+    public String id;
 
-    public final RequestType resultsRequestType;
+    public final RequestType resultsRequestType = RequestType.PAGE;
 
-    public final boolean sprited;
-
-    public SkinModel(String id, RequestType resultsRequestType)
-    {
-        this(id, resultsRequestType, true);
-    }
-
-    public SkinModel(String id, RequestType resultsRequestType, boolean sprited)
-    {
-        this.id = id;
-        this.resultsRequestType = resultsRequestType;
-        this.sprited = sprited;
-    }
+    @Attribute
+    public boolean sprited;
 }

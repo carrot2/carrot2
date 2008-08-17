@@ -31,7 +31,7 @@
     {
       $.cookie(COOKIE_ACTIVE_SOURCE, null);
       $.cookie(COOKIE_SOURCE_ORDER, null);
-      $.cookie(COOKIE_APP_VERSION, CURRENT_VERSION);
+      $.cookie(COOKIE_APP_VERSION, CURRENT_VERSION, { expires: NEVER_EXPIRE });
     }
     
     var $tabContainer = $("#source-tabs");
