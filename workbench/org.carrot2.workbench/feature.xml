@@ -33,37 +33,43 @@
          id="com.bea.xml"
          download-size="0"
          install-size="0"
-         version="1.2.0"/>
+         version="1.2.0"
+         unpack="false"/>
 
    <plugin
          id="com.google.collections"
          download-size="0"
          install-size="0"
-         version="1.0.0"/>
+         version="1.0.0"
+         unpack="false"/>
 
    <plugin
          id="com.thoughtworks.qdox"
          download-size="0"
          install-size="0"
-         version="1.6.3"/>
+         version="1.6.3"
+         unpack="false"/>
 
    <plugin
          id="net.sf.ehcache"
          download-size="0"
          install-size="0"
-         version="1.4.1"/>
+         version="1.4.1"
+         unpack="false"/>
 
    <plugin
          id="org.apache.commons"
          download-size="0"
          install-size="0"
-         version="1.0.0"/>
+         version="1.0.0"
+         unpack="false"/>
 
    <plugin
          id="org.apache.log4j"
          download-size="0"
          install-size="0"
-         version="1.2.14"/>
+         version="1.2.14"
+         unpack="false"/>
 
    <plugin
          id="org.carrot2.algorithm.synthetic"
@@ -112,13 +118,15 @@
          id="org.easymock"
          download-size="0"
          install-size="0"
-         version="2.3.0"/>
+         version="2.3.0"
+         unpack="false"/>
 
    <plugin
          id="org.simpleframework.xml"
          download-size="0"
          install-size="0"
-         version="1.7.2"/>
+         version="1.7.2"
+         unpack="false"/>
 
    <plugin
          id="org.eclipse.pde.runtime"
@@ -131,7 +139,8 @@
          id="org.junit4.ext"
          download-size="0"
          install-size="0"
-         version="4.3.1"/>
+         version="4.3.1"
+         unpack="false"/>
 
    <plugin
          id="javax.servlet"
@@ -144,7 +153,8 @@
          id="org.apache.ant"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
+         version="0.0.0"
+         unpack="false"/>
 
    <plugin
          id="org.carrot2.source.xml"
@@ -164,7 +174,8 @@
          id="org.apache.lucene.v2"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
+         version="0.0.0"
+         unpack="false"/>
 
    <plugin
          id="org.carrot2.algorithm.stc"
@@ -191,13 +202,15 @@
          id="json.org"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
+         version="0.0.0"
+         unpack="false"/>
 
    <plugin
          id="org.apache.axis"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
+         version="0.0.0"
+         unpack="false"/>
 
    <plugin
          id="org.eclipse.core.resources.compatibility"
@@ -380,13 +393,6 @@
          unpack="false"/>
 
    <plugin
-         id="org.apache.ant"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.eclipse.update.core.linux"
          os="linux"
          download-size="0"
@@ -455,8 +461,7 @@
          id="org.carrot2.text"
          download-size="0"
          install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
    <plugin
          id="org.tartarus.snowball"
@@ -469,13 +474,15 @@
          id="bak.pcj"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
+         version="0.0.0"
+         unpack="false"/>
 
    <plugin
          id="cern.colt"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
+         version="0.0.0"
+         unpack="false"/>
 
    <plugin
          id="org.carrot2.algorithm.lingo"
@@ -488,13 +495,15 @@
          id="org.apache.oro"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
+         version="0.0.0"
+         unpack="false"/>
 
    <plugin
          id="org.apache.velocity"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
+         version="0.0.0"
+         unpack="false"/>
 
    <plugin
          id="org.carrot2.util.matrix"
