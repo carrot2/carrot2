@@ -207,6 +207,7 @@
 		       printsummary="on"
 		       errorproperty="junit.error"
 		       failureproperty="junit.failure">
+      <jvmarg value="-Djava.library.path=${nni.native.library.path}" />
 			<formatter type="xml" />
 
 			<classpath refid="test.classpath" />
