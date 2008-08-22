@@ -317,10 +317,10 @@
 		                     output.dir="core/carrot2-source-microsoft/tmp/eclipse"
 		                     copy.to="core/carrot2-source-microsoft/META-INF" />
 		<attributes-xml-copy java.source="core/carrot2-source-pubmed/src"
-		                     output.dir="core/carrot2-source-microsoft/tmp/eclipse"
+		                     output.dir="core/carrot2-source-pubmed/tmp/eclipse"
 		                     copy.to="core/carrot2-source-pubmed/META-INF" />
 		<attributes-xml-copy java.source="core/carrot2-source-opensearch/src"
-		                     output.dir="core/carrot2-source-microsoft/tmp/eclipse"
+		                     output.dir="core/carrot2-source-opensearch/tmp/eclipse"
 		                     copy.to="core/carrot2-source-opensearch/META-INF" />
 		<attributes-xml-copy java.source="core/carrot2-source-xml/src"
 		                     output.dir="core/carrot2-source-xml/tmp/eclipse"
