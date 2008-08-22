@@ -15,23 +15,20 @@ public final class SearchPerspective implements IPerspectiveFactory
      */
     public void createInitialLayout(IPageLayout layout)
     {
+        createCommonLayout(layout);
+    }
+
+    /**
+     * Create common layout components and placeholders. Note
+     * that views should be arranged via extension points (in plugin.xml),
+     * relative to other existing views.
+     */
+    static void createCommonLayout(IPageLayout layout)
+    {
         layout.setEditorAreaVisible(true);
 
-        IPlaceholderFolderLayout bottomFolder =
-            layout.createPlaceholderFolder("bottomViews", IPageLayout.BOTTOM, .8f, layout
-                .getEditorArea());
-        bottomFolder.addPlaceholder("org.eclipse.pde.runtime.LogView");
-        bottomFolder.addPlaceholder(DocumentListView.ID);
-
-        IFolderLayout leftFolder =
-            layout.createFolder("leftViews", IPageLayout.LEFT, .3f, layout
-                .getEditorArea());
-        leftFolder.addView(SearchInputView.ID);
-
-        IPlaceholderFolderLayout leftBottomFolder =
-            layout.createPlaceholderFolder("leftBottomViews", IPageLayout.BOTTOM, .3f,
-                "leftViews");
-        leftBottomFolder.addPlaceholder(ClusterTreeView.ID);
-        leftBottomFolder.addPlaceholder(AttributeView.ID);
+        final IFolderLayout leftFolder = layout.createFolder("leftViews",
+            IPageLayout.LEFT, .3f, layout.getEditorArea());
+        leftFolder.addView(SearchInputView.ID);        
     }
 }

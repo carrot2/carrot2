@@ -49,14 +49,17 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
     private ProcessingComponentSuite componentSuite;
 
     /**
-     * Cached {@link BindableDescriptor}s of all available components in {@link #componentSuite}.
+     * Cached {@link BindableDescriptor}s of all available components in
+     * {@link #componentSuite}.
      */
     private HashMap<String, BindableDescriptor> bindableDescriptors = Maps.newHashMap();
 
     /**
-     * Cached component bindableDescriptors of all available components in {@link #componentSuite}.
+     * Cached component bindableDescriptors of all available components in
+     * {@link #componentSuite}.
      */
-    private HashMap<String, ProcessingComponentDescriptor> processingDescriptors = Maps.newHashMap();
+    private HashMap<String, ProcessingComponentDescriptor> processingDescriptors = Maps
+        .newHashMap();
 
     /**
      * Cached image descriptors of components.
@@ -117,7 +120,8 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
     }
 
     /**
-     * Returns all loaded components ({@link ClusteringAlgorithm} and {@link DocumentSource}.
+     * Returns all loaded components ({@link ClusteringAlgorithm} and
+     * {@link DocumentSource}.
      */
     public ProcessingComponentSuite getComponentSuite()
     {
@@ -134,7 +138,8 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
     }
 
     /**
-     * Returns a {@link ProcessingComponentDescriptor} for a given component ID or <code>null<code>.
+     * Returns a {@link ProcessingComponentDescriptor} for a given component ID or
+     * <code>null<code>.
      */
     public ProcessingComponentDescriptor getComponent(String componentID)
     {
@@ -142,8 +147,8 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
     }
 
     /**
-     * Returns a {@link ImageDescriptor} for a given component or a default image if
-     * the component did not contain any icon.
+     * Returns a {@link ImageDescriptor} for a given component or a default image if the
+     * component did not contain any icon.
      */
     public ImageDescriptor getComponentImageDescriptor(String componentID)
     {
@@ -164,123 +169,125 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
     }
 
     /**
-         * Scan all declared extensions of {@link #COMPONENT_SUITE_EXTENSION_ID} extension
-         * point.
-         */
-        private void scanSuites()
+     * Scan all declared extensions of {@link #COMPONENT_SUITE_EXTENSION_ID} extension
+     * point.
+     */
+    private void scanSuites()
+    {
+        final List<ProcessingComponentSuite> suites = Lists.newArrayList();
+
+        final IExtension [] extensions = Platform.getExtensionRegistry()
+            .getExtensionPoint(COMPONENT_SUITE_EXTENSION_ID).getExtensions();
+
+        // Load suites from extension points.
+        extLoop: for (IExtension extension : extensions)
         {
-            final List<ProcessingComponentSuite> suites = Lists.newArrayList();
-    
-            final IExtension [] extensions = Platform.getExtensionRegistry()
-                .getExtensionPoint(COMPONENT_SUITE_EXTENSION_ID).getExtensions();
-    
-            // Load suites from extension points.
-extLoop:
-            for (IExtension extension : extensions)
+            final IConfigurationElement [] configElements = extension
+                .getConfigurationElements();
+            if (configElements.length == 1 && "suite".equals(configElements[0].getName()))
             {
-                final IConfigurationElement [] configElements = extension.getConfigurationElements();
-                if (configElements.length == 1 && "suite".equals(configElements[0].getName()))
+                final String suiteResource = configElements[0].getAttribute("resource");
+                if (StringUtils.isEmpty(suiteResource))
                 {
-                    final String suiteResource = configElements[0].getAttribute("resource");
-                    if (StringUtils.isEmpty(suiteResource))
-                    {
-                        continue;
-                    }
-    
-                    final IContributor c = extension.getContributor();
-                    final Bundle b = Platform.getBundle(c.getName());
-                    
-                    if (b.getState() != Bundle.ACTIVE)
-                    {
-                        try
-                        {
-                            b.start();
-                        } 
-                        catch (BundleException e)
-                        {
-                            continue extLoop;
-                        }
-                    }
-    
-                    final URL bundleURL = b.getEntry(suiteResource);
-                    
-                    /*
-                     * We rely on Eclipse-BuddyPolicy declared on the simplexml framework here.
-                     * This policy could be removed if we passed an explicit Persister with
-                     * a strategy substituting the context class loader with the given Bundle's
-                     * loadClass() call. I leave it for now. 
-                     */
+                    continue;
+                }
+
+                final IContributor c = extension.getContributor();
+                final Bundle b = Platform.getBundle(c.getName());
+
+                if (b.getState() != Bundle.ACTIVE)
+                {
                     try
                     {
-                        final ProcessingComponentSuite suite = 
-                            ProcessingComponentSuite.deserialize(new URLResource(bundleURL));
-    
-                        /*
-                         * Cache icons.
-                         */
-                        for (ProcessingComponentDescriptor d : suite.getComponents())
-                        {
-                            final String iconPath = d.getIconPath();
-                            if (StringUtils.isEmpty(iconPath))
-                            {
-                                continue;
-                            }
-    
-                            componentImages.put(d.getId(), 
-                                imageDescriptorFromPlugin(c.getName(), iconPath));
-                        }
-    
-                        suites.add(suite);
+                        b.start();
                     }
-                    catch (Exception e)
+                    catch (BundleException e)
                     {
-                        Logger.getRootLogger().error("Failed to load extension.", e);
-                        // Skip errors, logging them.
-                        Utils.logError("Failed to load suite extension.", e, false);
+                        continue extLoop;
                     }
                 }
-            }
-    
-            // Merge all available suites
-            final List<DocumentSourceDescriptor> sources = Lists.newArrayList();
-            final List<ProcessingComponentDescriptor> algorithms = Lists.newArrayList();
-    
-            for (ProcessingComponentSuite s : suites)
-            {
-                sources.addAll(s.getSources());
-                algorithms.addAll(s.getAlgorithms());
-            }
-    
-            this.componentSuite = new ProcessingComponentSuite(sources, algorithms);
-    
-            // Extract and cache bindableDescriptors.
-            for (ProcessingComponentDescriptor pcd : componentSuite.getComponents())
-            {
+
+                final URL bundleURL = b.getEntry(suiteResource);
+
+                /*
+                 * We rely on Eclipse-BuddyPolicy declared on the simplexml framework
+                 * here. This policy could be removed if we passed an explicit Persister
+                 * with a strategy substituting the context class loader with the given
+                 * Bundle's loadClass() call. I leave it for now.
+                 */
                 try
                 {
-                    final ProcessingComponent pc = pcd.getComponentClass().newInstance();
+                    final ProcessingComponentSuite suite = ProcessingComponentSuite
+                        .deserialize(new URLResource(bundleURL));
 
-                    processingDescriptors.put(pcd.getId(), pcd);
+                    /*
+                     * Cache icons.
+                     */
+                    for (ProcessingComponentDescriptor d : suite.getComponents())
+                    {
+                        final String iconPath = d.getIconPath();
+                        if (StringUtils.isEmpty(iconPath))
+                        {
+                            continue;
+                        }
 
-                    bindableDescriptors.put(pcd.getId(), 
-                        BindableDescriptorBuilder.buildDescriptor(pc));
+                        componentImages.put(d.getId(), imageDescriptorFromPlugin(c
+                            .getName(), iconPath));
+                    }
+
+                    suites.add(suite);
                 }
                 catch (Exception e)
                 {
-                    Utils.logError("Could not extract descriptor from: " + pcd.getId(), false);
+                    Logger.getRootLogger().error("Failed to load extension.", e);
+                    // Skip errors, logging them.
+                    Utils.logError("Failed to load suite extension.", e, false);
                 }
             }
         }
 
+        // Merge all available suites
+        final List<DocumentSourceDescriptor> sources = Lists.newArrayList();
+        final List<ProcessingComponentDescriptor> algorithms = Lists.newArrayList();
+
+        for (ProcessingComponentSuite s : suites)
+        {
+            sources.addAll(s.getSources());
+            algorithms.addAll(s.getAlgorithms());
+        }
+
+        this.componentSuite = new ProcessingComponentSuite(sources, algorithms);
+
+        // Extract and cache bindableDescriptors.
+        for (ProcessingComponentDescriptor pcd : componentSuite.getComponents())
+        {
+            try
+            {
+                final ProcessingComponent pc = pcd.getComponentClass().newInstance();
+
+                processingDescriptors.put(pcd.getId(), pcd);
+
+                bindableDescriptors.put(pcd.getId(), BindableDescriptorBuilder
+                    .buildDescriptor(pc));
+            }
+            catch (Exception e)
+            {
+                Utils
+                    .logError("Could not extract descriptor from: " + pcd.getId(), false);
+            }
+        }
+    }
+
     /**
-     * Restore the state of {@link SearchEditor}'s sections from the most recent global state.
+     * Restore the state of {@link SearchEditor}'s sections from the most recent global
+     * state.
      */
     public void restoreSectionsState(
         EnumMap<SearchEditorSections, SearchEditor.SectionReference> sections)
     {
         final IPreferenceStore store = getPreferenceStore();
-        for (Map.Entry<SearchEditorSections, SearchEditor.SectionReference> s 
-            : sections.entrySet())
+        for (Map.Entry<SearchEditorSections, SearchEditor.SectionReference> s : sections
+            .entrySet())
         {
             final SearchEditorSections section = s.getKey();
             final SectionReference ref = s.getValue();
@@ -302,8 +309,8 @@ extLoop:
         EnumMap<SearchEditorSections, SectionReference> sections)
     {
         final IPreferenceStore store = getPreferenceStore();
-        for (Map.Entry<SearchEditorSections, SearchEditor.SectionReference> s 
-            : sections.entrySet())
+        for (Map.Entry<SearchEditorSections, SearchEditor.SectionReference> s : sections
+            .entrySet())
         {
             final SearchEditorSections section = s.getKey();
             final SectionReference ref = s.getValue();

@@ -76,6 +76,13 @@
          <viewShortcut
                id="org.carrot2.workbench.views.circles">
          </viewShortcut>
+         
+         <view
+               id="org.carrot2.workbench.views.circles"
+               relationship="stack"
+               visible="true"
+               relative="org.carrot2.workbench.core.views.attributeInfo">
+         </view>
       </perspectiveExtension>
    </extension>
 </plugin>

@@ -155,18 +155,17 @@
                id="org.carrot2.workbench.core.views.attributeInfo"
                ratio="0.33"
                relationship="bottom"
-               minimized="false"
                visible="true"
                relative="org.carrot2.workbench.core.views.search"/>
 
          <view
-               id="org.carrot2.workbench.core.views.attributes"
+               id="org.carrot2.workbench.core.views.clusters"
                relationship="stack"
-               visible="true"
+               visible="false"
                relative="org.carrot2.workbench.core.views.attributeInfo"/>
 
          <view
-               id="org.carrot2.workbench.core.views.clusters"
+               id="org.carrot2.workbench.core.views.attributes"
                relationship="stack"
                visible="false"
                relative="org.carrot2.workbench.core.views.attributeInfo"/>
@@ -178,6 +177,7 @@
                relative="org.carrot2.workbench.core.views.attributeInfo"/>
 
       </perspectiveExtension>
+
       <perspectiveExtension
             targetID="org.carrot2.workbench.core.perspective.tuning">
          <perspectiveShortcut
@@ -195,6 +195,40 @@
          <viewShortcut
                id="org.carrot2.workbench.core.views.attributeInfo">
          </viewShortcut>
+         
+         <view
+               id="org.carrot2.workbench.core.views.attributeInfo"
+               ratio="0.33"
+               relationship="bottom"
+               visible="true"
+               relative="org.carrot2.workbench.core.views.search"/>
+
+         <view
+               id="org.carrot2.workbench.core.views.clusters"
+               relationship="stack"
+               visible="true"
+               relative="org.carrot2.workbench.core.views.attributeInfo"/>
+
+         <view
+               id="org.carrot2.workbench.core.views.attributes"
+               relationship="right"
+               visible="true"
+               relative="org.eclipse.ui.editorss"/>
+
+         <view
+               id="org.carrot2.workbench.core.views.documents"
+               relationship="stack"
+               visible="false"
+               relative="org.carrot2.workbench.core.views.attributeInfo"/>
+
+		<!-- Open the PDE errors for debugging. -->
+         <view
+               id="org.eclipse.pde.runtime.LogView"
+               ratio="0.80"
+               relationship="bottom"
+               visible="true"
+               relative="org.eclipse.ui.editorss"/>
+         
       </perspectiveExtension>
    </extension>
    <extension
