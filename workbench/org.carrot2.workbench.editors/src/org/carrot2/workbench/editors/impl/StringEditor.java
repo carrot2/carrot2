@@ -80,8 +80,7 @@ public class StringEditor extends AttributeEditorAdapter
                 }
             }
         });
-
-        AttributeInfoTooltip.attach(textBox, descriptor);        
+        
         this.content = textBox.getText();
     }
 
