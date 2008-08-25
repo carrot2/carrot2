@@ -35,6 +35,12 @@ public interface IAttributeEditor
     void createEditor(Composite parent, int gridColumns);
 
     /**
+     * The container request to set the focus to the internal component 
+     * that should have initial focus.
+     */
+    void setFocus();
+    
+    /**
      * Returns the associated {@link AttributeDescriptor}'s key.
      * 
      * @see AttributeDescriptor#key

@@ -89,6 +89,15 @@ public class StringEditor extends AttributeEditorAdapter
      * 
      */
     @Override
+    public void setFocus()
+    {
+        this.textBox.setFocus();
+    }
+
+    /*
+     * 
+     */
+    @Override
     public Object getValue()
     {
         return content;

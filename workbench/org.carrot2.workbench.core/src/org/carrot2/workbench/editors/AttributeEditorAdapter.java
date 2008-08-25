@@ -84,6 +84,14 @@ public abstract class AttributeEditorAdapter implements IAttributeEditor
      */
     public abstract void createEditor(Composite parent, int gridColumns);
 
+    /**
+     * Does nothing by default.
+     */
+    public void setFocus()
+    {
+        // Ignore.
+    }
+    
     public abstract Object getValue();
 
     public abstract void setValue(Object object);

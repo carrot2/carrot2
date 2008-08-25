@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.commons.lang.StringUtils;
+import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.Internal;
 import org.carrot2.util.attribute.AttributeDescriptor;
 import org.carrot2.util.attribute.BindableDescriptor;
@@ -86,7 +87,7 @@ public final class AttributeGroups extends Composite implements
      * 
      * @see #setAttribute(String, Object)
      */
-    private Map<String, AttributeList> attributeEditors = Maps.newHashMap();
+    private Map<String, AttributeList> attributeEditors = Maps.newLinkedHashMap();
 
     /**
      * Predicate used to filter attribute descriptors shown in the editor or
@@ -441,6 +442,21 @@ public final class AttributeGroups extends Composite implements
         }
 
         this.attributeEditors.clear();
+    }
+
+    /**
+     * Set the focus to the {@link AttributeList} containing 
+     * {@link AttributeNames#QUERY}, if possible. 
+     */
+    @Override
+    public boolean setFocus()
+    {
+        if (this.attributeEditors.containsKey(AttributeNames.QUERY))
+        {
+            return attributeEditors.get(AttributeNames.QUERY).setFocus();
+        }
+
+        return false;
     }
 
     /*

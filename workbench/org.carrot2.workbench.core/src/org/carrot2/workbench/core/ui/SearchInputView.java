@@ -39,7 +39,6 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Maps;
 
-
 /**
  * The search view defines a combination of source, algorithm and required input
  * parameters required to open a new editor.
@@ -70,7 +69,7 @@ public class SearchInputView extends ViewPart
      * Memento branch for persisting {@link #attributes}.
      */
     private static final String MEMENTO_ATTRIBUTES = "attribute-set";
-    
+
     /**
      * A serialized {@link AttributeValueSet} attribute inside memento.
      */
@@ -80,12 +79,14 @@ public class SearchInputView extends ViewPart
      * Filter showing only required attributes.
      */
     @SuppressWarnings("unchecked")
-    private final static Predicate<AttributeDescriptor> SHOW_REQUIRED = new AnnotationsPredicate(false, Required.class);
+    private final static Predicate<AttributeDescriptor> SHOW_REQUIRED = new AnnotationsPredicate(
+        false, Required.class);
 
     /**
      * Filter showing all attributes.
      */
-    private final static Predicate<AttributeDescriptor> SHOW_ALL = Predicates.alwaysTrue();
+    private final static Predicate<AttributeDescriptor> SHOW_ALL = Predicates
+        .alwaysTrue();
 
     /**
      * State persistence.
@@ -113,7 +114,8 @@ public class SearchInputView extends ViewPart
     private AttributeGroups editorComposite;
 
     /**
-     * A joint set of attributes for all sources from {@link WorkbenchCorePlugin#getSources()}.
+     * A joint set of attributes for all sources from
+     * {@link WorkbenchCorePlugin#getSources()}.
      */
     private AttributeValueSet attributes = new AttributeValueSet("all-inputs");
 
@@ -124,13 +126,13 @@ public class SearchInputView extends ViewPart
     private Map<String, BindableDescriptor> descriptors = Maps.newHashMap();
 
     /**
-     * All {@link DocumentSourceDescriptor}s related to {@link DocumentSource}s in 
-     * {@link #sourceViewer}. 
+     * All {@link DocumentSourceDescriptor}s related to {@link DocumentSource}s in
+     * {@link #sourceViewer}.
      */
     private HashMap<String, DocumentSourceDescriptor> sources;
 
     /**
-     * All {@link ProcessingComponentDescriptor}s related to {@link ClusteringAlgorithm}s 
+     * All {@link ProcessingComponentDescriptor}s related to {@link ClusteringAlgorithm}s
      * in {@link #algorithmViewer}.
      */
     private HashMap<String, ProcessingComponentDescriptor> algorithms;
@@ -147,15 +149,15 @@ public class SearchInputView extends ViewPart
     {
         public void selectionChanged(SelectionChangedEvent event)
         {
-            final DocumentSourceDescriptor impl = (DocumentSourceDescriptor) 
-                ((IStructuredSelection) event.getSelection()).getFirstElement();
+            final DocumentSourceDescriptor impl = (DocumentSourceDescriptor) ((IStructuredSelection) event
+                .getSelection()).getFirstElement();
             setSourceId(impl.getId());
         }
     };
-    
+
     /**
-     * Link the GUI of {@link SearchInputView} with the currently 
-     * active {@link SearchEditor}.
+     * Link the GUI of {@link SearchInputView} with the currently active
+     * {@link SearchEditor}.
      */
     private class LinkWithEditorActionDelegate extends ActiveSearchEditorActionDelegate
     {
@@ -208,33 +210,33 @@ public class SearchInputView extends ViewPart
             final SearchInput input = editor.getSearchResult().getInput();
 
             setAlgorithmId(input.getAlgorithmId());
-            attributes.setAttributeValues(
-                input.getAttributeValueSet().getAttributeValues());
+            attributes.setAttributeValues(input.getAttributeValueSet()
+                .getAttributeValues());
             setSourceId(input.getSourceId());
         }
     }
 
     /**
      * Toggles between {@link SearchInputView#SHOW_REQUIRED} and
-     * {@link SearchInputView#SHOW_ALL}. 
+     * {@link SearchInputView#SHOW_ALL}.
      */
     private static class ShowOptionalAction extends Action
     {
         public ShowOptionalAction()
         {
             super("Show optional attributes", SWT.TOGGLE);
-            
+
             /*
-             * Subscribe to change events on the global preference
-             * property and update initial state.
+             * Subscribe to change events on the global preference property and update
+             * initial state.
              */
-            final IPreferenceStore preferenceStore = 
-                WorkbenchCorePlugin.getDefault().getPreferenceStore();
-            preferenceStore.addPropertyChangeListener(new IPropertyChangeListener() {
+            final IPreferenceStore preferenceStore = WorkbenchCorePlugin.getDefault()
+                .getPreferenceStore();
+            preferenceStore.addPropertyChangeListener(new IPropertyChangeListener()
+            {
                 public void propertyChange(PropertyChangeEvent event)
                 {
-                    if (PreferenceConstants.SHOW_OPTIONAL.equals(
-                        event.getProperty()))
+                    if (PreferenceConstants.SHOW_OPTIONAL.equals(event.getProperty()))
                     {
                         updateState();
                     }
@@ -249,9 +251,8 @@ public class SearchInputView extends ViewPart
          */
         private void updateState()
         {
-            final boolean state = 
-                WorkbenchCorePlugin.getDefault().getPreferenceStore().getBoolean(
-                PreferenceConstants.SHOW_OPTIONAL);
+            final boolean state = WorkbenchCorePlugin.getDefault().getPreferenceStore()
+                .getBoolean(PreferenceConstants.SHOW_OPTIONAL);
 
             setChecked(state);
         }
@@ -259,11 +260,11 @@ public class SearchInputView extends ViewPart
         @Override
         public void run()
         {
-            final IPreferenceStore preferenceStore = 
-                WorkbenchCorePlugin.getDefault().getPreferenceStore();
+            final IPreferenceStore preferenceStore = WorkbenchCorePlugin.getDefault()
+                .getPreferenceStore();
 
-            final boolean state =  preferenceStore.getBoolean(
-                PreferenceConstants.SHOW_OPTIONAL);
+            final boolean state = preferenceStore
+                .getBoolean(PreferenceConstants.SHOW_OPTIONAL);
 
             preferenceStore.setValue(PreferenceConstants.SHOW_OPTIONAL, !state);
         }
@@ -283,9 +284,9 @@ public class SearchInputView extends ViewPart
         final IActionBars bars = getViewSite().getActionBars();
         createMenu(bars.getMenuManager());
         createToolbar(bars.getToolBarManager());
-        bars.updateActionBars();        
+        bars.updateActionBars();
     }
-    
+
     /*
      * 
      */
@@ -293,11 +294,13 @@ public class SearchInputView extends ViewPart
     {
         final IAction linkWithEditor = new ActionDelegateProxy(
             new LinkWithEditorActionDelegate(), IAction.AS_CHECK_BOX);
-        linkWithEditor.setImageDescriptor(WorkbenchCorePlugin.getImageDescriptor("icons/link_e.gif"));
+        linkWithEditor.setImageDescriptor(WorkbenchCorePlugin
+            .getImageDescriptor("icons/link_e.gif"));
         linkWithEditor.setToolTipText("Link the interface with current editor");
         toolBarManager.add(linkWithEditor);
 
-        toolBarManager.add(new GroupingMethodAction(PreferenceConstants.GROUPING_INPUT_VIEW));
+        toolBarManager.add(new GroupingMethodAction(
+            PreferenceConstants.GROUPING_INPUT_VIEW));
     }
 
     /*
@@ -350,24 +353,24 @@ public class SearchInputView extends ViewPart
                 }
             }
         });
-        
+
         /*
          * Hook global preference updates.
          */
-        final IPreferenceStore preferenceStore = 
-            WorkbenchCorePlugin.getDefault().getPreferenceStore();
+        final IPreferenceStore preferenceStore = WorkbenchCorePlugin.getDefault()
+            .getPreferenceStore();
 
-        preferenceStore.addPropertyChangeListener(
-            new PropertyChangeListenerAdapter(PreferenceConstants.SHOW_OPTIONAL)
+        preferenceStore.addPropertyChangeListener(new PropertyChangeListenerAdapter(
+            PreferenceConstants.SHOW_OPTIONAL)
         {
             public void propertyChangeFiltered(PropertyChangeEvent event)
             {
                 displayEditorSet();
             }
         });
-        
-        preferenceStore.addPropertyChangeListener(
-            new PropertyChangeListenerAdapter(PreferenceConstants.GROUPING_INPUT_VIEW)
+
+        preferenceStore.addPropertyChangeListener(new PropertyChangeListenerAdapter(
+            PreferenceConstants.GROUPING_INPUT_VIEW)
         {
             public void propertyChangeFiltered(PropertyChangeEvent event)
             {
@@ -377,13 +380,13 @@ public class SearchInputView extends ViewPart
     }
 
     /**
-     * Display a new composite with editors for the current combination of the source, algorithm
-     * and grouping/ filtering flags.
+     * Display a new composite with editors for the current combination of the source,
+     * algorithm and grouping/ filtering flags.
      */
     private void displayEditorSet()
     {
-        final IPreferenceStore preferenceStore = 
-            WorkbenchCorePlugin.getDefault().getPreferenceStore();
+        final IPreferenceStore preferenceStore = WorkbenchCorePlugin.getDefault()
+            .getPreferenceStore();
 
         final Predicate<AttributeDescriptor> filter;
         if (preferenceStore.getBoolean(PreferenceConstants.SHOW_OPTIONAL))
@@ -405,16 +408,16 @@ public class SearchInputView extends ViewPart
             this.editorComposite.dispose();
             this.editorComposite = null;
         }
-        
+
         /*
          * Create a new editor set.
          */
-        final IPreferenceStore prefStore = 
-            WorkbenchCorePlugin.getDefault().getPreferenceStore();
+        final IPreferenceStore prefStore = WorkbenchCorePlugin.getDefault()
+            .getPreferenceStore();
 
         final String sourceID = getSourceId();
-        final GroupingMethod groupingMethod = GroupingMethod.valueOf(
-            prefStore.getString(PreferenceConstants.GROUPING_INPUT_VIEW));
+        final GroupingMethod groupingMethod = GroupingMethod.valueOf(prefStore
+            .getString(PreferenceConstants.GROUPING_INPUT_VIEW));
         final BindableDescriptor sourceDescriptor = this.descriptors.get(sourceID);
 
         if (StringUtils.isEmpty(getSourceId()))
@@ -423,9 +426,9 @@ public class SearchInputView extends ViewPart
             return;
         }
 
-        this.editorComposite = new AttributeGroups(editorCompositeContainer, 
+        this.editorComposite = new AttributeGroups(editorCompositeContainer,
             sourceDescriptor, groupingMethod, filter);
-        
+
         final GridData gd = new GridData();
         gd.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
         gd.grabExcessHorizontalSpace = true;
@@ -440,9 +443,10 @@ public class SearchInputView extends ViewPart
         }
 
         /*
-         * Hook up listeners updating attributes on changes in editors. 
+         * Hook up listeners updating attributes on changes in editors.
          */
-        editorComposite.addAttributeChangeListener(new AttributeListenerAdapter() {
+        editorComposite.addAttributeChangeListener(new AttributeListenerAdapter()
+        {
             public void attributeChange(AttributeChangedEvent event)
             {
                 attributes.setAttributeValue(event.key, event.value);
@@ -452,10 +456,10 @@ public class SearchInputView extends ViewPart
             public void contentChanging(IAttributeEditor editor, Object value)
             {
                 /*
-                 * On content changing, eagerly substitute the value of the
-                 * given attribute with the new value. In the input view, early
-                 * commit of attribute values should not trigger any additional 
-                 * consequences, so we can do it.
+                 * On content changing, eagerly substitute the value of the given
+                 * attribute with the new value. In the input view, early commit of
+                 * attribute values should not trigger any additional consequences, so we
+                 * can do it.
                  */
                 final String attributeKey = editor.getAttributeKey();
                 attributes.setAttributeValue(attributeKey, value);
@@ -464,7 +468,7 @@ public class SearchInputView extends ViewPart
         });
 
         /*
-         * Redraw GUI. 
+         * Redraw GUI.
          */
         this.editorCompositeContainer.setRedraw(true);
         checkAllRequiredAttributes();
@@ -473,21 +477,22 @@ public class SearchInputView extends ViewPart
 
     /**
      * Filter only those keys from {@link #attributes} that belong to source
-     * <code>sourceID</code>. 
+     * <code>sourceID</code>.
      */
     private Map<String, Object> filterAttributesOf(String sourceID)
     {
-        final Map<String, Object> filtered = Maps.newLinkedHashMap(
-            attributes.getAttributeValues());
+        final Map<String, Object> filtered = Maps.newLinkedHashMap(attributes
+            .getAttributeValues());
 
-        filtered.keySet().retainAll(descriptors.get(sourceID).attributeDescriptors.keySet());
-        
+        filtered.keySet().retainAll(
+            descriptors.get(sourceID).attributeDescriptors.keySet());
+
         return filtered;
     }
 
     /**
-     * Creates permanent GUI elements (source, algorithm combos, placeholder for
-     * the editors).
+     * Creates permanent GUI elements (source, algorithm combos, placeholder for the
+     * editors).
      */
     @SuppressWarnings("unchecked")
     private void createComponents(Composite parent)
@@ -508,7 +513,7 @@ public class SearchInputView extends ViewPart
 
         // Initialize sources, descriptors and source combo.
         ProcessingComponentSuite suite = core.getComponentSuite();
-        
+
         sourceViewer = createComboViewer(innerComposite, "Source", suite.getSources());
         sourceViewer.addSelectionChangedListener(sourceSelectionListener);
 
@@ -518,12 +523,12 @@ public class SearchInputView extends ViewPart
             try
             {
                 final ProcessingComponent pc = e.getComponentClass().newInstance();
-    
+
                 sources.put(e.getId(), e);
-    
+
                 final BindableDescriptor descriptor = BindableDescriptorBuilder
                     .buildDescriptor(pc).only(Input.class, Processing.class);
-            
+
                 descriptors.put(e.getId(), descriptor);
             }
             catch (Exception x)
@@ -533,7 +538,8 @@ public class SearchInputView extends ViewPart
         }
 
         // Initialize algorithms and algorithm combo.
-        algorithmViewer = createComboViewer(innerComposite, "Algorithm", suite.getAlgorithms());
+        algorithmViewer = createComboViewer(innerComposite, "Algorithm", suite
+            .getAlgorithms());
 
         algorithms = Maps.newHashMap();
         for (ProcessingComponentDescriptor e : suite.getAlgorithms())
@@ -542,15 +548,15 @@ public class SearchInputView extends ViewPart
         }
 
         final Label l = new Label(innerComposite, SWT.SEPARATOR | SWT.HORIZONTAL);
-        l.setLayoutData(GridDataFactory.fillDefaults()
-            .align(SWT.FILL, SWT.CENTER).span(2, 1).minSize(SWT.DEFAULT, 10).create());
+        l.setLayoutData(GridDataFactory.fillDefaults().align(SWT.FILL, SWT.CENTER).span(
+            2, 1).minSize(SWT.DEFAULT, 10).create());
 
         // Initialize a place holder for the editors.
         this.editorCompositeContainer = new Composite(innerComposite, SWT.NONE);
-        this.editorCompositeContainer.setLayoutData(
-            GridDataFactory.fillDefaults().span(2, 1).create());
-        this.editorCompositeContainer.setLayout(
-            GridLayoutFactory.fillDefaults().create());
+        this.editorCompositeContainer.setLayoutData(GridDataFactory.fillDefaults().span(
+            2, 1).create());
+        this.editorCompositeContainer
+            .setLayout(GridLayoutFactory.fillDefaults().create());
 
         // Initialize process button.
         processButton = new Button(innerComposite, SWT.PUSH);
@@ -568,11 +574,11 @@ public class SearchInputView extends ViewPart
         restoreState();
         displayEditorSet();
     }
-    
+
     /**
      * Creates a JFace ComboViewer around a collection of extension point implementations.
      */
-    private ComboViewer createComboViewer(Composite parent, String comboLabel, 
+    private ComboViewer createComboViewer(Composite parent, String comboLabel,
         List<? extends ProcessingComponentDescriptor> components)
     {
         final Label label = new Label(parent, SWT.CENTER);
@@ -583,8 +589,7 @@ public class SearchInputView extends ViewPart
         gridData.horizontalAlignment = GridData.FILL;
         gridData.grabExcessHorizontalSpace = true;
 
-        final Combo combo = new Combo(parent, SWT.DROP_DOWN | SWT.READ_ONLY
-            | SWT.BORDER);
+        final Combo combo = new Combo(parent, SWT.DROP_DOWN | SWT.READ_ONLY | SWT.BORDER);
         combo.setLayoutData(gridData);
         combo.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 
@@ -624,13 +629,14 @@ public class SearchInputView extends ViewPart
         final IWorkbenchPage page = getViewSite().getWorkbenchWindow().getActivePage();
 
         /*
-         * Clone current attribute values so that they can be freely 
-         * modified in the editor and in the input view.
+         * Clone current attribute values so that they can be freely modified in the
+         * editor and in the input view.
          */
         final AttributeValueSet requestAttrs = new AttributeValueSet("request");
         requestAttrs.setAttributeValues(filterAttributesOf(getSourceId()));
 
-        final SearchInput input = new SearchInput(getSourceId(), getAlgorithmId(), requestAttrs);
+        final SearchInput input = new SearchInput(getSourceId(), getAlgorithmId(),
+            requestAttrs);
         try
         {
             page.openEditor(input, SearchEditor.ID);
@@ -644,12 +650,13 @@ public class SearchInputView extends ViewPart
     }
 
     /**
-     * Check if all required {@link Input} attributes of a given source are properly initialized.
+     * Check if all required {@link Input} attributes of a given source are properly
+     * initialized.
      */
     private boolean hasAllRequiredAttributes(String sourceId)
     {
-        final Collection<AttributeDescriptor> desc = descriptors.get(sourceId)
-            .flatten().attributeDescriptors.values();
+        final Collection<AttributeDescriptor> desc = descriptors.get(sourceId).flatten().attributeDescriptors
+            .values();
 
         for (AttributeDescriptor d : desc)
         {
@@ -672,7 +679,7 @@ public class SearchInputView extends ViewPart
     {
         processButton.setEnabled(hasAllRequiredAttributes(getSourceId()));
     }
-    
+
     /**
      * Returns <code>true</code> if the value described by a given attribute descriptor
      * is valid (non-<code>null</code> for {@link Required} attributes and fulfilling
@@ -690,8 +697,8 @@ public class SearchInputView extends ViewPart
             value = d.defaultValue;
         }
 
-        final Annotation [] constraints = d.constraints.toArray(
-            new Annotation [d.constraints.size()]);
+        final Annotation [] constraints = d.constraints
+            .toArray(new Annotation [d.constraints.size()]);
 
         return ConstraintValidator.isMet(value, constraints).length == 0;
     }
@@ -715,7 +722,8 @@ public class SearchInputView extends ViewPart
                     final IMemento single = mementos[i];
 
                     final String id = single.getID();
-                    final String serialized = single.getString(MEMENTO_ATTRIBUTE_SET_SERIALIZED);
+                    final String serialized = single
+                        .getString(MEMENTO_ATTRIBUTE_SET_SERIALIZED);
 
                     if (id == null || serialized == null)
                     {
@@ -724,8 +732,8 @@ public class SearchInputView extends ViewPart
 
                     try
                     {
-                        final AttributeValueSets sets = AttributeValueSets.deserialize(
-                            new StringReader(serialized));
+                        final AttributeValueSets sets = AttributeValueSets
+                            .deserialize(new StringReader(serialized));
                         final AttributeValueSet set = sets.getDefaultAttributeValueSet();
                         if (set != null)
                         {
@@ -762,12 +770,12 @@ public class SearchInputView extends ViewPart
                 ComboViewer combo = (ComboViewer) comboPair[0];
                 String mementoAttr = (String) comboPair[1];
 
-                Collection<ProcessingComponentDescriptor> options = 
-                    (Collection<ProcessingComponentDescriptor>) combo.getInput();
+                Collection<ProcessingComponentDescriptor> options = (Collection<ProcessingComponentDescriptor>) combo
+                    .getInput();
 
                 /*
-                 * Attempt to restore selection from memento, if not available,
-                 * set the default option.
+                 * Attempt to restore selection from memento, if not available, set the
+                 * default option.
                  */
                 boolean restored = false;
                 if (state != null)
@@ -809,7 +817,8 @@ public class SearchInputView extends ViewPart
 
         if (algorithms.isEmpty())
         {
-            disableComboWithMessage(algorithmViewer.getCombo(), "No clustering algorithms.");
+            disableComboWithMessage(algorithmViewer.getCombo(),
+                "No clustering algorithms.");
             processButton.setEnabled(false);
         }
     }
@@ -851,14 +860,14 @@ public class SearchInputView extends ViewPart
     {
         return getSelectedId(algorithmViewer);
     }
-    
+
     /*
      * 
      */
     private void setAlgorithmId(String algorithmID)
     {
-        algorithmViewer.setSelection(
-            new StructuredSelection(algorithms.get(algorithmID)));
+        algorithmViewer
+            .setSelection(new StructuredSelection(algorithms.get(algorithmID)));
     }
 
     /**
@@ -899,7 +908,7 @@ public class SearchInputView extends ViewPart
         /*
          * Save attributes for each input separately.
          */
-        
+
         for (String sourceID : this.descriptors.keySet())
         {
             final AttributeValueSet set = new AttributeValueSet(sourceID);
@@ -925,13 +934,21 @@ public class SearchInputView extends ViewPart
         }
     }
 
-    /*
-     * 
+    /**
+     * We set the focus to the current {@link #editorComposite}'s default element if
+     * possible. Otherwise, set the focus to the input source combo.
      */
     @Override
     public void setFocus()
     {
-        this.sourceViewer.getCombo().setFocus();
+        if (editorComposite != null)
+        {
+            editorComposite.setFocus();
+        }
+        else
+        {
+            this.sourceViewer.getCombo().setFocus();
+        }
     }
 
     /*

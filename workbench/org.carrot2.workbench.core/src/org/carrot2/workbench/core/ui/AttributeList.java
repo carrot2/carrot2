@@ -5,6 +5,7 @@ import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.carrot2.core.ProcessingComponent;
+import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.attribute.AttributeDescriptor;
 import org.carrot2.workbench.core.helpers.GUIFactory;
 import org.carrot2.workbench.editors.*;
@@ -150,6 +151,21 @@ public final class AttributeList extends Composite implements IAttributeChangePr
         }
 
         super.dispose();
+    }
+    
+    /**
+     * Set the focus to the editor containing {@link AttributeNames#QUERY},
+     * if possible.
+     */
+    @Override
+    public boolean setFocus()
+    {
+        if (editors.containsKey(AttributeNames.QUERY))
+        {
+            editors.get(AttributeNames.QUERY).setFocus();
+            return true;
+        }
+        else return false;
     }
 
     /**

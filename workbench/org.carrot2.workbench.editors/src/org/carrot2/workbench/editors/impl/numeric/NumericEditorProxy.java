@@ -113,6 +113,11 @@ public final class NumericEditorProxy implements IAttributeEditor
     {
         delegate.createEditor(parent, gridColumns);
     }
+    
+    public void setFocus()
+    {
+        delegate.setFocus();
+    }
 
     public void removeAttributeChangeListener(IAttributeListener listener)
     {
