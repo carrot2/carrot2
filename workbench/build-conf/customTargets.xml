@@ -125,7 +125,9 @@
 		<copy todir="${buildDirectory}/plugins">
 			<fileset dir="${carrot2.dir}/workbench">
 				<patternset refid="to.exclude" />
-				<include name="org.carrot2.workbench?*/**" />
+				<include name="org.carrot2?*/**" />
+				<exclude name="org.carrot2.workbench.test/**" />
+				<exclude name="org.carrot2.workbench/**" />
 			</fileset>
 		</copy>
 		<copy todir="${buildDirectory}/features/org.carrot2.workbench">
