@@ -153,28 +153,30 @@
 
          <view
                id="org.carrot2.workbench.core.views.attributeInfo"
-               ratio="0.33"
-               relationship="bottom"
+               ratio="0.75"
+               relationship="right"
                visible="true"
-               relative="org.carrot2.workbench.core.views.search"/>
-
-         <view
-               id="org.carrot2.workbench.core.views.clusters"
-               relationship="stack"
-               visible="false"
-               relative="org.carrot2.workbench.core.views.attributeInfo"/>
+               relative="org.eclipse.ui.editorss"/>
 
          <view
                id="org.carrot2.workbench.core.views.attributes"
-               relationship="stack"
-               visible="false"
+               ratio="0.50"
+               relationship="top"
+               visible="true"
                relative="org.carrot2.workbench.core.views.attributeInfo"/>
+
+         <view
+               id="org.carrot2.workbench.core.views.clusters"
+               ratio="0.5"
+               relationship="bottom"
+               visible="false"
+               relative="org.carrot2.workbench.core.views.search"/>
 
          <view
                id="org.carrot2.workbench.core.views.documents"
                relationship="stack"
                visible="false"
-               relative="org.carrot2.workbench.core.views.attributeInfo"/>
+               relative="org.carrot2.workbench.core.views.clusters"/>
 
       </perspectiveExtension>
 
@@ -198,6 +200,22 @@
          
          <view
                id="org.carrot2.workbench.core.views.attributeInfo"
+               ratio="0.70"
+               relationship="right"
+               visible="true"
+               relative="org.eclipse.ui.editorss"/>
+
+         <view
+               id="org.carrot2.workbench.core.views.attributes"
+               ratio="0.75"
+               relationship="top"
+               visible="true"
+               relative="org.carrot2.workbench.core.views.attributeInfo"/>
+
+		<!-- Open the properties view. -->
+
+        <view
+               id="org.eclipse.ui.views.PropertySheet"
                ratio="0.33"
                relationship="bottom"
                visible="true"
@@ -207,27 +225,27 @@
                id="org.carrot2.workbench.core.views.clusters"
                relationship="stack"
                visible="true"
-               relative="org.carrot2.workbench.core.views.attributeInfo"/>
-
-         <view
-               id="org.carrot2.workbench.core.views.attributes"
-               relationship="right"
-               visible="true"
-               relative="org.eclipse.ui.editorss"/>
+               relative="org.eclipse.ui.views.PropertySheet"/>
 
          <view
                id="org.carrot2.workbench.core.views.documents"
                relationship="stack"
                visible="false"
-               relative="org.carrot2.workbench.core.views.attributeInfo"/>
+               relative="org.carrot2.workbench.core.views.clusters"/>
 
-		<!-- Open the PDE errors for debugging. -->
+		<!-- Open the PDE errors and progress view for debugging. -->
          <view
-               id="org.eclipse.pde.runtime.LogView"
-               ratio="0.80"
+               id="org.eclipse.ui.views.ProgressView"
+               ratio="0.70"
                relationship="bottom"
                visible="true"
-               relative="org.eclipse.ui.editorss"/>
+               relative="org.carrot2.workbench.core.views.clusters" />
+
+         <view
+               id="org.eclipse.pde.runtime.LogView"
+               relationship="stack"
+               visible="true"
+               relative="org.eclipse.ui.views.ProgressView" />
          
       </perspectiveExtension>
    </extension>

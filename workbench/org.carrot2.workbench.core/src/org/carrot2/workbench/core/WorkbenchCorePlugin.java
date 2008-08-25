@@ -292,13 +292,8 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
             final SearchEditorSections section = s.getKey();
             final SectionReference ref = s.getValue();
 
-            final String key = PreferenceConstants.getSectionWeightKey(section);
-            final String key2 = PreferenceConstants.getSectionVisibilityKey(section);
-            if (!store.isDefault(key))
-            {
-                ref.weight = store.getInt(key);
-                ref.visibility = store.getBoolean(key2);
-            }
+            ref.weight = store.getInt(PreferenceConstants.getSectionWeightKey(section));
+            ref.visibility = store.getBoolean(PreferenceConstants.getSectionVisibilityKey(section));
         }
     }
 

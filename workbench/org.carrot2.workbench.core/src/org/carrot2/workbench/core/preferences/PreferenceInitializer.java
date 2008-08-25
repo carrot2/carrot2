@@ -19,12 +19,17 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer
             .getPreferenceStore();
 
         /*
-         * Default editor panel properties.
+         * Default editor panels.
          */
+        final EnumSet<SearchEditorSections> enabled = EnumSet.of(
+            SearchEditorSections.DOCUMENTS, SearchEditorSections.CLUSTERS);
+
         for (SearchEditorSections s : EnumSet.allOf(SearchEditorSections.class))
         {
             store.setDefault(
-                PreferenceConstants.getSectionVisibilityKey(s), true);
+                PreferenceConstants.getSectionVisibilityKey(s), 
+                enabled.contains(s));
+            store.setDefault(PreferenceConstants.getSectionWeightKey(s), s.weight);
         }
 
         /*
@@ -52,6 +57,6 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer
         /*
          * Automatically show attribute info in the view.
          */
-        store.setDefault(PreferenceConstants.ATTRIBUTE_INFO_SYNC, false);
+        store.setDefault(PreferenceConstants.ATTRIBUTE_INFO_SYNC, true);
     }
 }

@@ -69,6 +69,7 @@
          </init-param>
       </servlet>
    </extension>
+
    <extension
          point="org.eclipse.ui.perspectiveExtensions">
       <perspectiveExtension
@@ -76,13 +77,27 @@
          <viewShortcut
                id="org.carrot2.workbench.views.circles">
          </viewShortcut>
-         
+
          <view
                id="org.carrot2.workbench.views.circles"
                relationship="stack"
                visible="true"
-               relative="org.carrot2.workbench.core.views.attributeInfo">
+               relative="org.carrot2.workbench.core.views.clusters">
          </view>
       </perspectiveExtension>
+      
+      <perspectiveExtension
+            targetID="org.carrot2.workbench.core.perspective.tuning">
+         <viewShortcut
+               id="org.carrot2.workbench.views.circles">
+         </viewShortcut>
+
+         <view
+               id="org.carrot2.workbench.views.circles"
+               relationship="stack"
+               visible="true"
+               relative="org.carrot2.workbench.core.views.clusters">
+         </view>
+      </perspectiveExtension>      
    </extension>
 </plugin>
