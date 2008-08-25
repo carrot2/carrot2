@@ -68,8 +68,13 @@ public class AttributeInfoTooltip extends ToolTip
         {
             try
             {
-                final IViewPart view = page.showView(AttributeInfoView.ID);
-                ((AttributeInfoView) view).show(descriptor);
+                IViewPart view2 = page.findView(AttributeInfoView.ID);
+                if (!page.isPartVisible(view2))
+                {
+                    view2 = page.showView(AttributeInfoView.ID);
+                }
+
+                ((AttributeInfoView) view2).show(descriptor);
                 hide();
             }
             catch (PartInitException x)
