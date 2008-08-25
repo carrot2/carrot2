@@ -8,20 +8,13 @@ import java.io.File;
 public final class AbsoluteFilePathLocator implements ResourceLocator
 {
     /**
-     * Creates a new {@link AbsoluteFilePathLocator}.
-     */
-    public AbsoluteFilePathLocator()
-    {
-    }
-
-    /**
      * If the resource is an absolute file path, returns an array with the corresponding
      * {@link Resource}. Otherwise an empty array is returned.
      */
     public Resource [] getAll(String resource, Class<?> clazz)
     {
         final File resourceFile = new File(resource);
-        if (resourceFile.isFile() && resourceFile.canRead())
+        if (resourceFile.isAbsolute() && resourceFile.isFile() && resourceFile.canRead())
         {
             return new Resource []
             {

@@ -1,5 +1,6 @@
 package org.carrot2.workbench.core;
 
+import java.io.File;
 import java.net.URL;
 import java.util.*;
 
@@ -8,10 +9,11 @@ import org.apache.log4j.Logger;
 import org.carrot2.core.*;
 import org.carrot2.util.attribute.BindableDescriptor;
 import org.carrot2.util.attribute.BindableDescriptorBuilder;
-import org.carrot2.util.resource.URLResource;
+import org.carrot2.util.resource.*;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.core.preferences.PreferenceConstants;
-import org.carrot2.workbench.core.ui.*;
+import org.carrot2.workbench.core.ui.SearchEditor;
+import org.carrot2.workbench.core.ui.SearchEditorSections;
 import org.carrot2.workbench.core.ui.SearchEditor.SectionReference;
 import org.carrot2.workbench.core.ui.adapters.SearchResultAdapterFactory;
 import org.eclipse.core.runtime.*;
@@ -75,6 +77,9 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
         super.start(context);
         plugin = this;
 
+        // Add workspace to the list of resource locations.
+        installWorkbenchResourceLocator();
+
         // Scan the list of suite extension points.
         scanSuites();
 
@@ -85,6 +90,23 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
          * Register adapters.
          */
         SearchResultAdapterFactory.register(Platform.getAdapterManager());
+    }
+
+    /**
+     * Adds workspace () to the list of resource locations.
+     */
+    private void installWorkbenchResourceLocator()
+    {
+        final IPath instanceLocation = Platform.getLocation();
+        if (instanceLocation == null)
+        {
+            // Issue a warning about read-only location.
+            Utils.logError("Instance location not available.", false);
+            return;
+        }
+        
+        final File path = instanceLocation.toFile();
+        ResourceUtilsFactory.addFirst(new DirLocator(path.getAbsolutePath()));        
     }
 
     /*

@@ -13,6 +13,10 @@
 package org.carrot2.util.resource;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import com.google.common.collect.Lists;
 
 /**
  * A factory of {@link ResourceUtils}.
@@ -20,16 +24,18 @@ import java.io.File;
 public final class ResourceUtilsFactory
 {
     /** Default {@link ResourceUtils}. */
-    public static final ResourceUtils DEFAULT = new ResourceUtils(
-        getDefaultResourceLocators());
+    public static volatile ResourceUtils defaultResourceUtils;
 
-    /**
-     * Return the default resource-lookup locators.
+    /** Default list of {@link ResourceLocator}s. */
+    public static ArrayList<ResourceLocator> defaultResourceLocators = Lists
+        .newArrayList();
+
+    /*
+     * Initialize default resource locators.
      */
-    public static ResourceLocator [] getDefaultResourceLocators()
+    static
     {
-        final ResourceLocator [] base = new ResourceLocator []
-        {
+        addLast( 
             // Absolute resource files
             new AbsoluteFilePathLocator(),
             // Current working directory
@@ -37,10 +43,49 @@ public final class ResourceUtilsFactory
             // Context class loader-relative
             new ContextClassLoaderLocator(),
             // Given class-relative resources
-            new ClassRelativeLocator(),
-        };
+            new ClassRelativeLocator());
+    }
 
-        return base;
+    /**
+     * Return the default resource-lookup locators.
+     */
+    public static ResourceLocator [] getDefaultResourceLocators()
+    {
+        return defaultResourceLocators
+            .toArray(new ResourceLocator [defaultResourceLocators.size()]);
+    }
+
+    /**
+     * Inserts a set of {@link ResourceLocator}s before existing defaults. Re-creates
+     * {@link ResourceUtils} factory returned from {@link #getDefaultResourceUtils()}.
+     */
+    public static void addFirst(ResourceLocator... locators)
+    {
+        add(0, locators);
+    }
+
+    /**
+     * Appends a set of {@link ResourceLocator}s after existing defaults. Re-creates
+     * {@link ResourceUtils} factory returned from {@link #getDefaultResourceUtils()}.
+     */
+    public static void addLast(ResourceLocator... locators)
+    {
+        add(defaultResourceLocators.size(), locators);
+    }
+
+    /**
+     * Adds a set of new {@link ResourceLocator} to the set of default resource locators,
+     * at the given index. Re-creates {@link ResourceUtils} factory returned from
+     * {@link #getDefaultResourceUtils()}.
+     */
+    private static void add(int index, ResourceLocator... locators)
+    {
+        synchronized (ResourceUtilsFactory.class)
+        {
+            defaultResourceLocators.addAll(index, Arrays.asList(locators));
+            defaultResourceUtils = new ResourceUtils(defaultResourceLocators
+                .toArray(new ResourceLocator [defaultResourceLocators.size()]));
+        }
     }
 
     /**
@@ -48,6 +93,6 @@ public final class ResourceUtilsFactory
      */
     public static ResourceUtils getDefaultResourceUtils()
     {
-        return DEFAULT;
+        return defaultResourceUtils;
     }
 }
