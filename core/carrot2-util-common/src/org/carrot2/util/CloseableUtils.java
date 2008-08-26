@@ -33,6 +33,13 @@ public final class CloseableUtils
     }
 
     /**
+     * Close all {@link Closeables}, ignoring exceptions.
+     */
+    public static void close(Closeable... closeables) {
+        for (Closeable c : closeables) close(c);
+    }
+
+    /**
      * Close a {@link Connection}, ignoring the exception if any.
      */
     public static void close(Connection conn) {
@@ -46,6 +53,13 @@ public final class CloseableUtils
     }
 
     /**
+     * Close all {@link Connection}s, ignoring exceptions.
+     */
+    public static void close(Connection... connections) {
+        for (Connection c : connections) close(c);
+    }
+
+    /**
      * Close a {@link Statement}, ignoring the exception if any.
      */
     public static void close(Statement conn) {
@@ -56,5 +70,12 @@ public final class CloseableUtils
                 // Ignore.
             }
         }
+    }
+    
+    /**
+     * Close all {@link Statement}s, ignoring exceptions.
+     */
+    public static void close(Statement... statements) {
+        for (Statement s : statements) close(s);
     }
 }
