@@ -1,12 +1,15 @@
 package org.carrot2.workbench.core;
 
-import java.io.File;
+import java.io.*;
 import java.net.URL;
 import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.carrot2.core.*;
+import org.carrot2.text.linguistic.LanguageCode;
+import org.carrot2.util.CloseableUtils;
+import org.carrot2.util.StreamUtils;
 import org.carrot2.util.attribute.BindableDescriptor;
 import org.carrot2.util.attribute.BindableDescriptorBuilder;
 import org.carrot2.util.resource.*;
@@ -77,7 +80,10 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
         super.start(context);
         plugin = this;
 
-        // Add workspace to the list of resource locations.
+        /*
+         * Copy linguistic resources at first launch (or if deleted from workspace). Add
+         * workspace to the list of resource locations.
+         */
         installWorkbenchResourceLocator();
 
         // Scan the list of suite extension points.
@@ -90,23 +96,6 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
          * Register adapters.
          */
         SearchResultAdapterFactory.register(Platform.getAdapterManager());
-    }
-
-    /**
-     * Adds workspace () to the list of resource locations.
-     */
-    private void installWorkbenchResourceLocator()
-    {
-        final IPath instanceLocation = Platform.getLocation();
-        if (instanceLocation == null)
-        {
-            // Issue a warning about read-only location.
-            Utils.logError("Instance location not available.", false);
-            return;
-        }
-        
-        final File path = instanceLocation.toFile();
-        ResourceUtilsFactory.addFirst(new DirLocator(path.getAbsolutePath()));        
     }
 
     /*
@@ -301,6 +290,73 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
     }
 
     /**
+     * Adds workspace to the list of resource locations.
+     */
+    private void installWorkbenchResourceLocator()
+    {
+        final IPath instanceLocation = Platform.getLocation();
+        if (instanceLocation == null)
+        {
+            // Issue a warning about read-only location.
+            Utils.logError("Instance location not available.", false);
+            return;
+        }
+        final File workspacePath = instanceLocation.toFile().getAbsoluteFile();
+
+        /*
+         * Copy linguistic resources to the given location on first launch (or if
+         * missing). Make sure this is done <b>before</b> installing the new resource
+         * locator because we'd be chasing our tail here.
+         */
+        final Map<String, Resource> resources = Maps.newLinkedHashMap();
+        final ResourceUtils resUtils = ResourceUtilsFactory.getDefaultResourceUtils();
+
+        for (LanguageCode language : LanguageCode.values())
+        {
+            final String stopwords = "stopwords." + language.getIsoCode();
+            final Resource resource = resUtils.getFirst(stopwords);
+            if (resource != null)
+            {
+                resources.put(stopwords, resource);
+            }
+        }
+
+        for (Map.Entry<String, Resource> e : resources.entrySet())
+        {
+            final String fileName = e.getKey();
+            final File targetFile = new File(workspacePath, fileName);
+
+            if (targetFile.exists())
+            {
+                // Skip if exists.
+                continue;
+            }
+
+            InputStream in = null;
+            OutputStream out = null;
+            try
+            {
+                in = e.getValue().open();
+                out = new FileOutputStream(targetFile);
+                StreamUtils.copy(in, out, 8 * 1024);
+            }
+            catch (IOException x)
+            {
+                Utils.logError("Could not copy resource: " + fileName, x, false);
+            }
+            finally
+            {
+                CloseableUtils.close(in, out);
+            }
+        }
+
+        /*
+         * Install a resource locator pointing to the workspace.
+         */
+        ResourceUtilsFactory.addFirst(new DirLocator(workspacePath.getAbsolutePath()));
+    }
+    
+    /**
      * Restore the state of {@link SearchEditor}'s sections from the most recent global
      * state.
      */
@@ -315,7 +371,8 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
             final SectionReference ref = s.getValue();
 
             ref.weight = store.getInt(PreferenceConstants.getSectionWeightKey(section));
-            ref.visibility = store.getBoolean(PreferenceConstants.getSectionVisibilityKey(section));
+            ref.visibility = store.getBoolean(PreferenceConstants
+                .getSectionVisibilityKey(section));
         }
     }
 
