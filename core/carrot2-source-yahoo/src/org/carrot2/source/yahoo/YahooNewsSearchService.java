@@ -106,7 +106,7 @@ public final class YahooNewsSearchService extends YahooSearchService
 
         if (language != null)
         {
-            params.add(new NameValuePair("languae", language));
+            params.add(new NameValuePair("language", language));
         }
         if (site != null)
         {
