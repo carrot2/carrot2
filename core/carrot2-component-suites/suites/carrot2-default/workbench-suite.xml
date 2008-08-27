@@ -66,6 +66,17 @@
       <mnemonic>X</mnemonic>
       <description>Carrot2 clustering engine will load and organize documents in an XML file.</description>
     </source>
+    <source component-class="org.carrot2.source.boss.BossDocumentSource" id="boss-web">
+      <label>Yahoo Boss (Web)</label>
+      <title>Yahoo Boss Web search</title>
+      <mnemonic>B</mnemonic>
+      <description>Carrot2 clustering engine will search the Web using Yahoo Boss</description>
+      <example-queries>
+        <example-query>data mining</example-query>
+        <example-query>olympics</example-query>
+        <example-query>London</example-query>
+      </example-queries>
+    </source>
   </sources>
   <algorithms>
     <algorithm component-class="org.carrot2.clustering.lingo.LingoClusteringAlgorithm" id="lingo">
