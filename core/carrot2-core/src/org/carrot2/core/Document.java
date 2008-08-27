@@ -30,8 +30,15 @@ public final class Document
     /** Field name for an URL pointing to the full version of the document. */
     public static final String CONTENT_URL = "url";
 
+    /** Click URL. The URL that should be placed in the anchor to the document instead
+     * of the value returned in {@link #CONTENT_URL}. */
+    public static final String CLICK_URL = "click-url";
+
     /** Field name for an URL pointing to the thumbnail image associated with the document. */
     public static final String THUMBNAIL_URL = "thumbnail-url";
+
+    /** Document size. */
+    public static final String SIZE = "size";
 
     /** Field name for a list of sources the document was found in. Value type: List<String> */
     public static final String SOURCES = "sources";

@@ -11,7 +11,9 @@ import org.carrot2.core.Document;
  */
 public final class SearchEngineResponse
 {
-    /** */
+    /** 
+     * Total number of results available in the source (possibly an approximation). 
+     */
     public static final String RESULTS_TOTAL_KEY = "resultsTotal";
 
     /**
