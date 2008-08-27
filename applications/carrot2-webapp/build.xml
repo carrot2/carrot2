@@ -1,147 +1,147 @@
 <project name="Carrot2 Web Application" default="fail">
-	<property name="build.number" value="" />
-	
-	<!-- Webapp project location -->
-	<property name="webapp.project" location="applications/carrot2-webapp" />
+  <property name="build.number" value="" />
+  
+  <!-- Webapp project location -->
+  <property name="webapp.project" location="applications/carrot2-webapp" />
 
-	<!-- Webapp build dirs -->
+  <!-- Webapp build dirs -->
   <property name="webapp.dir" location="tmp/webapp" />
   <property name="webapp.skins.dir" location="${webapp.dir}/skins${build.number}" />
-	
-	<!-- 
+  
+  <!-- 
        Web application WAR file.
     -->
-	<target name="webapp" depends="webapp.templates, webapp.skins.prepare, webapp.sprites">
-		<mkdir dir="${webapp.dir}" />
-		<antcall target="jar" />
-		
-		<mkdir dir="${webapp.dir}/lib-flattened" />
-		<copy todir="${webapp.dir}/lib-flattened">
-			<fileset refid="lib.files" />
-			<fileset dir="${jar.dir}" />
-			<mapper type="flatten" />
-		</copy>
+  <target name="webapp" depends="webapp.templates, webapp.skins.prepare, webapp.sprites">
+    <mkdir dir="${webapp.dir}" />
+    <antcall target="jar" />
+    
+    <mkdir dir="${webapp.dir}/lib-flattened" />
+    <copy todir="${webapp.dir}/lib-flattened">
+      <fileset refid="lib.files" />
+      <fileset dir="${jar.dir}" />
+      <mapper type="flatten" />
+    </copy>
 
-		<mkdir dir="${webapp.dir}/classes" />
+    <mkdir dir="${webapp.dir}/classes" />
 
-		<!-- Clover hack: we explicitly provide the compiler attribute to compile without Clover's instrumentation -->
-		<javac srcdir="${webapp.project}/src"
-		       destdir="${webapp.dir}/classes"
-		       compiler="modern"
-		       source="1.5"
-		       target="1.5"
-		       encoding="UTF-8">
-			<classpath refid="lib.classpath" />
-			<classpath path="${jar.dir}/carrot2-core.jar" />
-		</javac>
-		<copy tofile="${webapp.dir}/classes/log4j.xml"
-		      file="core/carrot2-util-log4j/src/log4j-webapp.xml" />
+    <!-- Clover hack: we explicitly provide the compiler attribute to compile without Clover's instrumentation -->
+    <javac srcdir="${webapp.project}/src"
+           destdir="${webapp.dir}/classes"
+           compiler="modern"
+           source="1.5"
+           target="1.5"
+           encoding="UTF-8">
+      <classpath refid="lib.classpath" />
+      <classpath path="${jar.dir}/carrot2-core.jar" />
+    </javac>
+    <copy tofile="${webapp.dir}/classes/log4j.xml"
+          file="core/carrot2-util-log4j/src/log4j-webapp.xml" />
 
-		<war destfile="${webapp.dir}/carrot2-webapp.war" webxml="${webapp.project}/web/WEB-INF/web.xml">
-			<fileset dir="${webapp.project}/web">
-				<include name="index.html" />
-			</fileset>
-			<fileset dir="${webapp.skins.dir}/..">
-				<include name="skins${build.number}/**" />
-			</fileset>
-			<lib dir="${webapp.dir}/lib-flattened" />
-			<classes dir="${webapp.dir}/classes">
-				<exclude name="*.java" />
-			</classes>
-			<classes dir="${webapp.project}/src">
-				<exclude name="*.java" />
-				<exclude name="*.template.*" />
-			</classes>
-			<classes dir="core/carrot2-util-log4j/src">
-				<include name="appender-*" />
-				<include name="filters-*" />
-			</classes>
-		</war>
+    <war destfile="${webapp.dir}/carrot2-webapp.war" webxml="${webapp.project}/web/WEB-INF/web.xml">
+      <fileset dir="${webapp.project}/web">
+        <include name="index.html" />
+      </fileset>
+      <fileset dir="${webapp.skins.dir}/..">
+        <include name="skins${build.number}/**" />
+      </fileset>
+      <lib dir="${webapp.dir}/lib-flattened" />
+      <classes dir="${webapp.dir}/classes">
+        <exclude name="*.java" />
+      </classes>
+      <classes dir="${webapp.project}/src">
+        <exclude name="*.java" />
+        <exclude name="*.template.*" />
+      </classes>
+      <classes dir="core/carrot2-util-log4j/src">
+        <include name="appender-*" />
+        <include name="filters-*" />
+      </classes>
+    </war>
 
-		<delete dir="${webapp.dir}/lib-flattened" />
-		<delete dir="${webapp.dir}/classes" />
-		<delete dir="${webapp.skins.dir}" />
-	</target>
+    <delete dir="${webapp.dir}/lib-flattened" />
+    <delete dir="${webapp.dir}/classes" />
+    <delete dir="${webapp.skins.dir}" />
+  </target>
 
-	<target name="webapp.skins.prepare">
-		<mkdir dir="${webapp.skins.dir}" />
-		<copy todir="${webapp.skins.dir}">
-			<fileset dir="${webapp.project}/web/skins" />
-		</copy>
-	</target>
+  <target name="webapp.skins.prepare">
+    <mkdir dir="${webapp.skins.dir}" />
+    <copy todir="${webapp.skins.dir}">
+      <fileset dir="${webapp.project}/web/skins" />
+    </copy>
+  </target>
 
-	<!-- 
+  <!-- 
        Build sprite images
     -->
-	<macrodef name="build-sprites">
-		<attribute name="root.dir" />
+  <macrodef name="build-sprites">
+    <attribute name="root.dir" />
 
-		<sequential>
-			<taskdef name="smartsprites" classname="org.carrot2.labs.smartsprites.ant.SmartSpritesTask">
-				<classpath>
-					<fileset dir="${smartsprites.home}/lib" />
-				</classpath>
-			</taskdef>
+    <sequential>
+      <taskdef name="smartsprites" classname="org.carrot2.labs.smartsprites.ant.SmartSpritesTask">
+        <classpath>
+          <fileset dir="${smartsprites.home}/lib" />
+        </classpath>
+      </taskdef>
 
-			<smartsprites rootdir="${webapp.skins.dir}/@{root.dir}"
-			              outputdir="${webapp.skins.dir}/@{root.dir}/sprite"
-			              loglevel="WARN" />
-			
-		  <copy todir="${webapp.skins.dir}/@{root.dir}/sprite" overwrite="false">
-		    <fileset dir="${webapp.skins.dir}/@{root.dir}">
-		    	<include name="css/**" />
-	    	</fileset>
-			</copy>
-		</sequential>
-	</macrodef>
+      <smartsprites rootdir="${webapp.skins.dir}/@{root.dir}"
+                    outputdir="${webapp.skins.dir}/@{root.dir}/sprite"
+                    cssfilesuffix="" loglevel="WARN" />
+      
+      <copy todir="${webapp.skins.dir}/@{root.dir}/sprite" overwrite="false">
+        <fileset dir="${webapp.skins.dir}/@{root.dir}">
+          <include name="css/**" />
+        </fileset>
+      </copy>
+    </sequential>
+  </macrodef>
 
-	<target name="webapp.sprites" if="smartsprites.home" depends="webapp.skins.prepare">
-		<build-sprites root.dir="fancy-compact" />
-		<build-sprites root.dir="fancy-large" />
-		<build-sprites root.dir="simple" />
-	</target>
+  <target name="webapp.sprites" if="smartsprites.home" depends="webapp.skins.prepare">
+    <build-sprites root.dir="fancy-compact" />
+    <build-sprites root.dir="fancy-large" />
+    <build-sprites root.dir="simple" />
+  </target>
 
-	<!-- 
+  <!-- 
        Processing of file templates
     -->
-	<target name="webapp.templates"
-	        description="Processes configuration files required for the webapp">
+  <target name="webapp.templates"
+          description="Processes configuration files required for the webapp">
 
-		<condition property="sprite.suffix" value="sprite/" else="">
-			<isset property="smartsprites.home" />
-		</condition>
+    <condition property="sprite.suffix" value="sprite/" else="">
+      <isset property="smartsprites.home" />
+    </condition>
 
-		<filterset id="version.filterset">
-			<filter token="VERSION" value="${build.number}" />
-		</filterset>
+    <filterset id="version.filterset">
+      <filter token="VERSION" value="${build.number}" />
+    </filterset>
 
-		<copy file="${webapp.project}/src/jawr.template.properties"
-		      tofile="${webapp.project}/src/jawr.properties"
-		      overwrite="true">
-			<filterset refid="version.filterset" />
-			<filterset>
-				<filter token="SPRITE" value="${sprite.suffix}" />
-			</filterset>
-		</copy>
+    <copy file="${webapp.project}/src/jawr.template.properties"
+          tofile="${webapp.project}/src/jawr.properties"
+          overwrite="true">
+      <filterset refid="version.filterset" />
+      <filterset>
+        <filter token="SPRITE" value="${sprite.suffix}" />
+      </filterset>
+    </copy>
 
-		<copy file="${webapp.project}/src/config.template.xml"
-		      tofile="${webapp.project}/src/config.xml"
-		      overwrite="true">
-			<filterset refid="version.filterset" />
-		</copy>
+    <copy file="${webapp.project}/src/config.template.xml"
+          tofile="${webapp.project}/src/config.xml"
+          overwrite="true">
+      <filterset refid="version.filterset" />
+    </copy>
 
-		<copy file="${webapp.project}/web/WEB-INF/web.template.xml"
-		      tofile="${webapp.project}/web/WEB-INF/web.xml"
-		      overwrite="true">
-			<filterset refid="version.filterset" />
-		</copy>
-	</target>
+    <copy file="${webapp.project}/web/WEB-INF/web.template.xml"
+          tofile="${webapp.project}/web/WEB-INF/web.xml"
+          overwrite="true">
+      <filterset refid="version.filterset" />
+    </copy>
+  </target>
 
-	<target name="clean.webapp">
-		<delete dir="${webapp.dir}" />
-	</target>
+  <target name="clean.webapp">
+    <delete dir="${webapp.dir}" />
+  </target>
 
-	<target name="fail">
-		<fail>Please use the top-level build file to build the web application.</fail>
-	</target>
+  <target name="fail">
+    <fail>Please use the top-level build file to build the web application.</fail>
+  </target>
 </project>

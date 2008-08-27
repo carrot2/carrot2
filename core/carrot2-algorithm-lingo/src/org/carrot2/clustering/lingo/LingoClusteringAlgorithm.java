@@ -70,6 +70,16 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     public TermWeighting termWeighting = new LogTfIdfTermWeighting();
 
     /**
+     * Indicates whether Lingo used fast native matrix computation routines. Value
+     * of this attribute is equal to {@link NNIInterface#isNativeBlasAvailable()} at
+     * the time of running the algorithm.
+     */
+    @Processing
+    @Output
+    @Attribute
+    public boolean nativeMatrixUsed;
+    
+    /**
      * Tokenizer used by the algorithm, contains bindable attributes.
      */
     public Tokenizer tokenizer = new Tokenizer();
@@ -150,6 +160,8 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     @Override
     public void process() throws ProcessingException
     {
+        nativeMatrixUsed = NNIInterface.isNativeBlasAvailable();
+        
         // Preprocessing of documents
         final PreprocessingContext context = new PreprocessingContext(
             languageModelFactory.getCurrentLanguage(), documents, query);
