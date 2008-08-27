@@ -22,6 +22,7 @@ import org.carrot2.workbench.core.ui.adapters.SearchResultAdapterFactory;
 import org.eclipse.core.runtime.*;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.*;
 
@@ -301,7 +302,23 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
             Utils.logError("Instance location not available.", false);
             return;
         }
+
+        /*
+         * Check if the workspace directory exists. It may happen the workspace
+         * has just been created.
+         */
         final File workspacePath = instanceLocation.toFile().getAbsoluteFile();
+        if (!workspacePath.exists())
+        {
+            workspacePath.mkdirs();
+        }
+
+        if (!workspacePath.exists())
+        {
+            // Issue a warning about read-only location.
+            Utils.logError("Instance location does not exist: " + workspacePath, false);
+            return;
+        }
 
         /*
          * Copy linguistic resources to the given location on first launch (or if
