@@ -1,7 +1,7 @@
 package org.carrot2.source.boss.data;
 
 import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.lang.StringUtils;
+import org.carrot2.util.StringUtils;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.load.Commit;
@@ -40,18 +40,18 @@ public final class WebResult
     @SuppressWarnings("unused")
     private void unescape()   
     {
-        summary = unescape(summary);
-        title = unescape(title);
+        summary = clean(summary);
+        title = clean(title);
     }
 
     /*
      * 
      */
-    private static String unescape(String value)
+    private static String clean(String value)
     {
-        if (value == null || StringUtils.isEmpty(value))
+        if (value == null || org.apache.commons.lang.StringUtils.isEmpty(value))
             return value;
 
-        return StringEscapeUtils.unescapeHtml(value);
+        return StringUtils.removeHtmlTags(StringEscapeUtils.unescapeHtml(value));
     }
 }
