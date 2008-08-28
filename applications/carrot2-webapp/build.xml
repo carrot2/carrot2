@@ -1,20 +1,20 @@
 <project name="Carrot2 Web Application" default="fail">
   <property name="build.number" value="" />
-  
+
   <!-- Webapp project location -->
   <property name="webapp.project" location="applications/carrot2-webapp" />
 
   <!-- Webapp build dirs -->
   <property name="webapp.dir" location="tmp/webapp" />
   <property name="webapp.skins.dir" location="${webapp.dir}/skins${build.number}" />
-  
+
   <!-- 
        Web application WAR file.
     -->
   <target name="webapp" depends="webapp.templates, webapp.skins.prepare, webapp.sprites">
     <mkdir dir="${webapp.dir}" />
     <antcall target="jar" />
-    
+
     <mkdir dir="${webapp.dir}/lib-flattened" />
     <copy todir="${webapp.dir}/lib-flattened">
       <fileset refid="lib.files" />
@@ -74,6 +74,7 @@
        Build sprite images
     -->
   <macrodef name="build-sprites">
+    <attribute name="base.dir" />
     <attribute name="root.dir" />
 
     <sequential>
@@ -83,12 +84,13 @@
         </classpath>
       </taskdef>
 
-      <smartsprites rootdir="${webapp.skins.dir}/@{root.dir}"
-                    outputdir="${webapp.skins.dir}/@{root.dir}/sprite"
-                    cssfilesuffix="" loglevel="WARN" />
-      
-      <copy todir="${webapp.skins.dir}/@{root.dir}/sprite" overwrite="false">
-        <fileset dir="${webapp.skins.dir}/@{root.dir}">
+      <smartsprites rootdir="@{base.dir}/@{root.dir}"
+                    outputdir="@{base.dir}/@{root.dir}/sprite"
+                    cssfilesuffix=""
+                    loglevel="WARN" />
+
+      <copy todir="@{base.dir}/@{root.dir}/sprite" overwrite="false">
+        <fileset dir="@{base.dir}/@{root.dir}">
           <include name="css/**" />
         </fileset>
       </copy>
@@ -96,9 +98,15 @@
   </macrodef>
 
   <target name="webapp.sprites" if="smartsprites.home" depends="webapp.skins.prepare">
-    <build-sprites root.dir="fancy-compact" />
-    <build-sprites root.dir="fancy-large" />
-    <build-sprites root.dir="simple" />
+    <build-sprites base.dir="${webapp.skins.dir}" root.dir="fancy-compact" />
+    <build-sprites base.dir="${webapp.skins.dir}" root.dir="fancy-large" />
+    <build-sprites base.dir="${webapp.skins.dir}" root.dir="simple" />
+  </target>
+
+  <target name="webapp.sprites.eclipse" if="smartsprites.home">
+    <build-sprites base.dir="${webapp.project}/web/skins" root.dir="fancy-compact" />
+    <build-sprites base.dir="${webapp.project}/web/skins" root.dir="fancy-large" />
+    <build-sprites base.dir="${webapp.project}/web/skins" root.dir="simple" />
   </target>
 
   <!-- 

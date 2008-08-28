@@ -6,6 +6,8 @@ import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.attribute.AttributeBinder;
@@ -20,7 +22,7 @@ import org.simpleframework.xml.load.Persister;
 import org.simpleframework.xml.stream.Format;
 
 /**
- * 
+ * Processes search requests.
  */
 @SuppressWarnings("serial")
 public class QueryProcessorServlet extends HttpServlet
@@ -30,9 +32,14 @@ public class QueryProcessorServlet extends HttpServlet
     public final static String MIME_XML_CHARSET_UTF = MIME_XML + "; charset="
         + ENCODING_UTF;
 
+    /** Controller that performs all searches */
     private transient CachingController controller;
 
+    /** Generates urls to combined CSS/Javascript files */
     private transient JawrUrlGenerator jawrUrlGenerator;
+
+    /** Logger for processed queries */
+    private volatile Logger queryLogger;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -44,6 +51,17 @@ public class QueryProcessorServlet extends HttpServlet
         controller.init(new HashMap<String, Object>(), WebappConfig.INSTANCE.components);
 
         jawrUrlGenerator = new JawrUrlGenerator(config.getServletContext());
+
+        // initialize query logger.
+        String contextPath = config.getServletContext().getContextPath();
+
+        if (StringUtils.isBlank(contextPath))
+        {
+            contextPath = "ROOT";
+        }
+        contextPath = contextPath.replaceAll("[^a-zA-Z0-9]", "");
+
+        this.queryLogger = Logger.getLogger("queryLog." + contextPath);
     }
 
     @SuppressWarnings("unchecked")
@@ -87,6 +105,7 @@ public class QueryProcessorServlet extends HttpServlet
                     {
                         processingResult = controller.process(requestParameters,
                             requestModel.source, requestModel.algorithm);
+                        logQuery(requestModel, processingResult);
                     }
                     else if (RequestType.DOCUMENTS.equals(requestModel.type))
                     {
@@ -124,6 +143,14 @@ public class QueryProcessorServlet extends HttpServlet
         {
             throw new ServletException(e);
         }
+    }
+
+    private void logQuery(RequestModel requestModel, ProcessingResult processingResult)
+    {
+        this.queryLogger.info(requestModel.algorithm + "," + requestModel.source + ","
+            + requestModel.results + ","
+            + processingResult.getAttributes().get(AttributeNames.PROCESSING_TIME_TOTAL)
+            + "," + requestModel.query);
     }
 
     private void setExpires(HttpServletResponse response)
