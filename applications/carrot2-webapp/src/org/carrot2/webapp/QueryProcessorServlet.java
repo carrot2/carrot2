@@ -51,23 +51,27 @@ public class QueryProcessorServlet extends HttpServlet
         controller.init(new HashMap<String, Object>(), WebappConfig.INSTANCE.components);
 
         jawrUrlGenerator = new JawrUrlGenerator(config.getServletContext());
-
-        // initialize query logger.
-        String contextPath = config.getServletContext().getContextPath();
-
-        if (StringUtils.isBlank(contextPath))
-        {
-            contextPath = "ROOT";
-        }
-        contextPath = contextPath.replaceAll("[^a-zA-Z0-9]", "");
-
-        this.queryLogger = Logger.getLogger("queryLog." + contextPath);
     }
 
     @SuppressWarnings("unchecked")
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException
     {
+        // Initialize query logger.
+        // TODO: refactor this to init() and use Servlet API 2.5 to get context
+        // path from servlet config
+        synchronized (this)
+        {
+            String contextPath = request.getContextPath();
+            if (StringUtils.isBlank(contextPath))
+            {
+                contextPath = "ROOT";
+            }
+            contextPath = contextPath.replaceAll("[^a-zA-Z0-9]", "");
+
+            this.queryLogger = Logger.getLogger("queryLog." + contextPath);
+        }
+
         // Unpack parameters from string arrays
         final Map<String, Object> requestParameters = RequestParameterUtils
             .unpack(request);
