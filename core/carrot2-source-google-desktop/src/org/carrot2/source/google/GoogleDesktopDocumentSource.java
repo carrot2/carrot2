@@ -1,7 +1,6 @@
 package org.carrot2.source.google;
 
 import org.carrot2.core.Document;
-import org.carrot2.core.ProcessingException;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.source.xml.RemoteXmlSimpleSearchEngineBase;
@@ -41,13 +40,20 @@ public class GoogleDesktopDocumentSource extends RemoteXmlSimpleSearchEngineBase
     public boolean keepHighlights = false;
 
     @Override
-    public void beforeProcessing() throws ProcessingException
+    protected SearchEngineResponse fetchSearchResponse() throws Exception
     {
-        super.beforeProcessing();
         if (org.apache.commons.lang.StringUtils.isBlank(queryUrl))
         {
-            throw new ProcessingException(
-                "Query URL must not be blank. Is Google Desktop installed on your machine?");
+            // Return the error in a more gentle way
+            final SearchEngineResponse response = new SearchEngineResponse();
+
+            response.results.add(new Document("Could not connect to Google Desktop",
+                "Is Google Desktop installed on your machine?", ""));
+            return response;
+        }
+        else
+        {
+            return super.fetchSearchResponse();
         }
     }
 
