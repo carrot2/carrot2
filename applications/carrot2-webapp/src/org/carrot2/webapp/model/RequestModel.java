@@ -5,6 +5,7 @@ import java.util.Map;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.simplexml.TypeStringValuePair;
+import org.carrot2.webapp.QueryProcessorServlet;
 import org.carrot2.webapp.attribute.Request;
 import org.simpleframework.xml.ElementMap;
 
@@ -61,7 +62,9 @@ public class RequestModel
 
     @Request
     @Input
-    @Attribute(key = "modern")
+    @Attribute(key = QueryProcessorServlet.STATS_KEY)
+    public String statsKey;
+    
     @org.simpleframework.xml.Attribute
     public boolean modern = true;
     
@@ -75,7 +78,6 @@ public class RequestModel
     {
         if (type == null)
         {
-            // TODO: determine based on skin
             type = RequestType.PAGE;
         }
 

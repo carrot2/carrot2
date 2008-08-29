@@ -199,9 +199,15 @@ public abstract class ControllerTestBase
         mocksControl.times(0, 1);
         mocksControl.replay();
 
-        performProcessingAndDispose(ProcessingComponent1.class,
-            ProcessingComponentWithoutDefaultConstructor.class);
-        mocksControl.verify();
+        try
+        {
+            performProcessingAndDispose(ProcessingComponent1.class,
+                ProcessingComponentWithoutDefaultConstructor.class);
+        }
+        finally
+        {
+            mocksControl.verify();
+        }
     }
 
     @Test(expected = ProcessingException.class)
@@ -229,9 +235,15 @@ public abstract class ControllerTestBase
         mocksControl.replay();
 
         attributes.put("data", "d");
-        performProcessingAndDispose(ProcessingComponent1.class,
-            ProcessingComponent2.class, ProcessingComponent3.class);
-        mocksControl.verify();
+        try
+        {
+            performProcessingAndDispose(ProcessingComponent1.class,
+                ProcessingComponent2.class, ProcessingComponent3.class);
+        }
+        finally
+        {
+            mocksControl.verify();
+        }
     }
 
     @Test(expected = ProcessingException.class)
@@ -260,9 +272,15 @@ public abstract class ControllerTestBase
         mocksControl.replay();
 
         attributes.put("data", "d");
-        performProcessingAndDispose(ProcessingComponent1.class,
-            ProcessingComponent2.class, ProcessingComponent3.class);
-        mocksControl.verify();
+        try
+        {
+            performProcessingAndDispose(ProcessingComponent1.class,
+                ProcessingComponent2.class, ProcessingComponent3.class);
+        }
+        finally
+        {
+            mocksControl.verify();
+        }
     }
 
     @Test(expected = ComponentInitializationException.class)
@@ -278,9 +296,15 @@ public abstract class ControllerTestBase
         mocksControl.checkOrder(true);
         mocksControl.replay();
 
-        performProcessingAndDispose(ProcessingComponent1.class,
-            ProcessingComponent2.class, ProcessingComponent3.class);
-        mocksControl.verify();
+        try
+        {
+            performProcessingAndDispose(ProcessingComponent1.class,
+                ProcessingComponent2.class, ProcessingComponent3.class);
+        }
+        finally
+        {
+            mocksControl.verify();
+        }
     }
 
     @Test

@@ -21,7 +21,10 @@ public enum RequestType
     CARROT2(true),
     
     /** Error page */
-    ERROR(false);
+    ERROR(false),
+    
+    /** Simple statistics page */
+    STATS(false);
     
     /** True when Carrot2 processing is required */
     public final boolean requiresProcessing;

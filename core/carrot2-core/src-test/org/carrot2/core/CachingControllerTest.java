@@ -640,4 +640,167 @@ public class CachingControllerTest extends ControllerTestBase
         checkTimes(c1Time, c2Time, totalTime, tolerance);
         mocksControl.verify();
     }
+
+    @Test
+    public void testNoStats()
+    {
+        final CachingControllerStatistics statistics = getCachingController()
+            .getStatistics();
+        assertThat(statistics).isNotNull();
+        assertThat(statistics.totalQueries).isEqualTo(0);
+        assertThat(statistics.goodQueries).isEqualTo(0);
+        assertThat(statistics.algorithmTimeAverageInWindow).isEqualTo(0);
+        assertThat(statistics.algorithmTimeMeasurementsInWindow).isEqualTo(0);
+        assertThat(statistics.sourceTimeAverageInWindow).isEqualTo(0);
+        assertThat(statistics.sourceTimeMeasurementsInWindow).isEqualTo(0);
+        assertThat(statistics.totalTimeAverageInWindow).isEqualTo(0);
+        assertThat(statistics.totalTimeMeasurementsInWindow).isEqualTo(0);
+        assertThat(statistics.cacheMisses).isEqualTo(0);
+        assertThat(statistics.cacheTotalHits).isEqualTo(0);
+        assertThat(statistics.cacheMemoryHits).isEqualTo(0);
+        assertThat(statistics.cacheDiskHits).isEqualTo(0);
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testStatsOneGoodQueryNotCached()
+    {
+        attributes.put("data", "d");
+
+        mocksControl.checkOrder(false);
+        processingComponent1Mock.init();
+        processingComponent2Mock.init();
+        mocksControl.checkOrder(true);
+
+        processingComponent1Mock.beforeProcessing();
+        processingComponent1Mock.process();
+        mocksControl.andAnswer(new DelayedAnswer<Object>(300));
+        processingComponent1Mock.afterProcessing();
+
+        processingComponent2Mock.beforeProcessing();
+        processingComponent2Mock.process();
+        mocksControl.andAnswer(new DelayedAnswer<Object>(300));
+        processingComponent2Mock.afterProcessing();
+
+        mocksControl.checkOrder(false);
+        processingComponent1Mock.dispose();
+        processingComponent2Mock.dispose();
+        mocksControl.checkOrder(true);
+        
+        mocksControl.replay();
+
+        performProcessing(ProcessingComponent1.class, ProcessingComponent2.class);
+
+        final CachingControllerStatistics statistics = getCachingController()
+            .getStatistics();
+        assertThat(statistics).isNotNull();
+        assertThat(statistics.totalQueries).isEqualTo(1);
+        assertThat(statistics.goodQueries).isEqualTo(1);
+        assertThat(statistics.algorithmTimeAverageInWindow).isGreaterThanOrEqualTo(200);
+        assertThat(statistics.algorithmTimeMeasurementsInWindow).isEqualTo(1);
+        assertThat(statistics.sourceTimeAverageInWindow).isGreaterThanOrEqualTo(200);
+        assertThat(statistics.sourceTimeMeasurementsInWindow).isEqualTo(1);
+        assertThat(statistics.totalTimeAverageInWindow).isGreaterThanOrEqualTo(400);
+        assertThat(statistics.totalTimeMeasurementsInWindow).isEqualTo(1);
+        assertThat(statistics.cacheMisses).isEqualTo(0);
+        assertThat(statistics.cacheTotalHits).isEqualTo(0);
+        assertThat(statistics.cacheMemoryHits).isEqualTo(0);
+        assertThat(statistics.cacheDiskHits).isEqualTo(0);
+        
+        controller.dispose();
+    }
+
+    @Test
+    public void testStatsOneGoodQueryCached()
+    {
+        attributes.put("data", "d");
+        performProcessing(CachedProcessingComponent1.class);
+
+        final CachingControllerStatistics statistics = getCachingController()
+            .getStatistics();
+        assertThat(statistics).isNotNull();
+        assertThat(statistics.totalQueries).isEqualTo(1);
+        assertThat(statistics.goodQueries).isEqualTo(1);
+        assertThat(statistics.cacheMisses).isEqualTo(1);
+        assertThat(statistics.cacheTotalHits).isEqualTo(0);
+        assertThat(statistics.cacheMemoryHits).isEqualTo(0);
+        assertThat(statistics.cacheDiskHits).isEqualTo(0);
+        
+        controller.dispose();
+    }
+
+    @Test
+    public void testStatsTwoGoodQueriesCached()
+    {
+        attributes.put("data", "d");
+        performProcessing(CachedProcessingComponent1.class);
+        attributes.put("data", "d");
+        performProcessing(CachedProcessingComponent1.class);
+
+        final CachingControllerStatistics statistics = getCachingController()
+            .getStatistics();
+        assertThat(statistics).isNotNull();
+        assertThat(statistics.totalQueries).isEqualTo(2);
+        assertThat(statistics.goodQueries).isEqualTo(2);
+        assertThat(statistics.cacheMisses).isEqualTo(1);
+        assertThat(statistics.cacheTotalHits).isEqualTo(1);
+        assertThat(statistics.cacheMemoryHits).isEqualTo(1);
+        assertThat(statistics.cacheDiskHits).isEqualTo(0);
+        
+        controller.dispose();
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testStatsGoodQueryOneErrorQueryNotCached()
+    {
+        attributes.put("data", "d");
+
+        processingComponent3Mock.init();
+        processingComponent3Mock.beforeProcessing();
+        processingComponent3Mock.process();
+        processingComponent3Mock.afterProcessing();
+        
+        mocksControl.checkOrder(false);
+        processingComponent1Mock.init();
+        processingComponent2Mock.init();
+        mocksControl.checkOrder(true);
+        
+        processingComponent1Mock.beforeProcessing();
+        processingComponent1Mock.process();
+        mocksControl.andThrow(new RuntimeException());
+        processingComponent1Mock.afterProcessing();
+
+        mocksControl.checkOrder(false);
+        processingComponent1Mock.dispose();
+        processingComponent2Mock.dispose();
+        processingComponent3Mock.dispose();
+        mocksControl.checkOrder(true);
+        
+        mocksControl.replay();
+        
+        try
+        {
+            performProcessing(ProcessingComponent3.class);
+            performProcessing(ProcessingComponent1.class, ProcessingComponent2.class);
+        }
+        finally
+        {
+            final CachingControllerStatistics statistics = getCachingController()
+                .getStatistics();
+            assertThat(statistics).isNotNull();
+            assertThat(statistics.totalQueries).isEqualTo(2);
+            assertThat(statistics.goodQueries).isEqualTo(1);
+            assertThat(statistics.cacheMisses).isEqualTo(0);
+            assertThat(statistics.cacheTotalHits).isEqualTo(0);
+            assertThat(statistics.cacheMemoryHits).isEqualTo(0);
+            assertThat(statistics.cacheDiskHits).isEqualTo(0);
+            
+            controller.dispose();
+        }
+    }
+
+    private CachingController getCachingController()
+    {
+        return (CachingController) controller;
+    }
 }

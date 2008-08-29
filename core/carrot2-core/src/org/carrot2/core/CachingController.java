@@ -13,8 +13,7 @@ import net.sf.ehcache.constructs.blocking.CacheEntryFactory;
 import net.sf.ehcache.constructs.blocking.SelfPopulatingCache;
 
 import org.carrot2.core.attribute.*;
-import org.carrot2.util.ExceptionUtils;
-import org.carrot2.util.Pair;
+import org.carrot2.util.*;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.AttributeBinder.AttributeBinderAction;
 import org.carrot2.util.attribute.AttributeBinder.AttributeBinderActionCollect;
@@ -81,6 +80,9 @@ public final class CachingController implements Controller
 
     /** Ehcache manager */
     private CacheManager cacheManager;
+
+    /** Tracks various processing statistics */
+    private ProcessingStatistics statistics = new ProcessingStatistics();
 
     /**
      * Creates a new caching controller.
@@ -243,6 +245,7 @@ public final class CachingController implements Controller
 
         final String actualComponentIds[] = new String [componentIds.length];
         final ProcessingComponent [] processingComponents = new ProcessingComponent [componentIds.length];
+        ProcessingResult processingResult = null;
         try
         {
             // Borrow instances of processing components.
@@ -262,10 +265,13 @@ public final class CachingController implements Controller
                     !(processingComponent instanceof CachedProcessingComponent));
             }
 
-            return new ProcessingResult(attributes);
+            processingResult = new ProcessingResult(attributes);
+            return processingResult;
         }
         finally
         {
+            statistics.update(processingResult);
+
             for (int i = 0; i < processingComponents.length; i++)
             {
                 if (!(processingComponents[i] instanceof CachedProcessingComponent))
@@ -330,6 +336,16 @@ public final class CachingController implements Controller
     {
         componentPool.dispose();
         cacheManager.shutdown();
+    }
+
+    /**
+     * Returns processing statistics for this controller. The returned object is immutable
+     * and will not be updated after more queries are handled, to obtain updated
+     * statistics, call this method again.
+     */
+    public CachingControllerStatistics getStatistics()
+    {
+        return statistics.getStatistics();
     }
 
     /**
@@ -465,8 +481,8 @@ public final class CachingController implements Controller
                 // Initialize the component first.
                 ControllerUtils.init(component, actualInitAttributes);
 
-                // To support a very natural scenario where processing attributes are 
-                // provided/overridden during initialization, we'll also bind processing 
+                // To support a very natural scenario where processing attributes are
+                // provided/overridden during initialization, we'll also bind processing
                 // attributes here. Also, we need to switch off checking for required
                 // attributes as the required processing attributes will be most likely
                 // provided at request time.
@@ -743,4 +759,70 @@ public final class CachingController implements Controller
     }
 
     private final static ProcessingComponentConfiguration [] EMPTY_COMPONENT_CONFIGURATION_ARRAY = new ProcessingComponentConfiguration [0];
+
+    /**
+     * Tracks various statistics about processing performed in this component
+     */
+    final class ProcessingStatistics
+    {
+        /** Total queries processed (including erroneous) */
+        long totalQueries = 0;
+
+        /** Queries that resulted in a processing exception */
+        long goodQueries = 0;
+
+        /** Document source processing rolling average time */
+        RollingWindowAverage sourceTimeAverage = new RollingWindowAverage(
+            5 * RollingWindowAverage.MINUTE, 10 * RollingWindowAverage.SECOND);
+
+        /** Clustering algorithm processing rolling average time */
+        RollingWindowAverage algorithmTimeAverage = new RollingWindowAverage(
+            5 * RollingWindowAverage.MINUTE, 10 * RollingWindowAverage.SECOND);
+
+        /** Total processing time rolling average time */
+        RollingWindowAverage totalTimeAverage = new RollingWindowAverage(
+            5 * RollingWindowAverage.MINUTE, 10 * RollingWindowAverage.SECOND);
+
+        /**
+         * Updates the statistics
+         */
+        void update(ProcessingResult processingResult)
+        {
+            synchronized (this)
+            {
+                totalQueries++;
+                if (processingResult != null)
+                {
+                    goodQueries++;
+
+                    final Map<String, Object> attributes = processingResult
+                        .getAttributes();
+                    addTimeToAverage(attributes, AttributeNames.PROCESSING_TIME_SOURCE,
+                        sourceTimeAverage);
+                    addTimeToAverage(attributes,
+                        AttributeNames.PROCESSING_TIME_ALGORITHM, algorithmTimeAverage);
+                    addTimeToAverage(attributes, AttributeNames.PROCESSING_TIME_TOTAL,
+                        totalTimeAverage);
+                }
+            }
+        }
+
+        CachingControllerStatistics getStatistics()
+        {
+            synchronized (this)
+            {
+                return new CachingControllerStatistics(this, dataCache.getStatistics());
+            }
+        }
+
+        private void addTimeToAverage(Map<String, Object> attributes, String key,
+            RollingWindowAverage average)
+        {
+            final Long time = (Long) attributes.get(key);
+            if (time != null)
+            {
+                average.add(System.currentTimeMillis(), time);
+            }
+        }
+    }
 }

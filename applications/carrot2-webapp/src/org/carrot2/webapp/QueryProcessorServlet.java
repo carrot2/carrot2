@@ -1,6 +1,6 @@
 package org.carrot2.webapp;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 import javax.servlet.*;
@@ -27,11 +27,6 @@ import org.simpleframework.xml.stream.Format;
 @SuppressWarnings("serial")
 public class QueryProcessorServlet extends HttpServlet
 {
-    public final static String MIME_XML = "text/xml";
-    public final static String ENCODING_UTF = "utf-8";
-    public final static String MIME_XML_CHARSET_UTF = MIME_XML + "; charset="
-        + ENCODING_UTF;
-
     /** Controller that performs all searches */
     private transient CachingController controller;
 
@@ -40,6 +35,20 @@ public class QueryProcessorServlet extends HttpServlet
 
     /** Logger for processed queries */
     private volatile Logger queryLogger;
+
+    /**
+     * Define this system property to enable statistical information from the query
+     * processor. A GET request to {@link QueryProcessorServlet} with parameter
+     * <code>type=STATS</code> and <code>stats.key</code> equal to the value of this
+     * property will return plain text information about the processing state.
+     */
+    public final static String STATS_KEY = "stats.key";
+
+    /** Response constants */
+    private final static String MIME_XML = "text/xml";
+    private final static String ENCODING_UTF = "utf-8";
+    private final static String MIME_XML_CHARSET_UTF = MIME_XML + "; charset="
+        + ENCODING_UTF;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -75,13 +84,12 @@ public class QueryProcessorServlet extends HttpServlet
         // Unpack parameters from string arrays
         final Map<String, Object> requestParameters = RequestParameterUtils
             .unpack(request);
-        requestParameters.put("modern", UserAgentUtils.isModernBrowser(request));
-
         try
         {
             // Build model for this request
             final RequestModel requestModel = WebappConfig.INSTANCE
                 .setDefaults(new RequestModel());
+            requestModel.modern = UserAgentUtils.isModernBrowser(request);
             final AttributeBinder.AttributeBinderActionBind attributeBinderActionBind = new AttributeBinder.AttributeBinderActionBind(
                 Input.class, requestParameters, true,
                 AttributeBinder.AttributeTransformerFromString.INSTANCE);
@@ -92,60 +100,135 @@ public class QueryProcessorServlet extends HttpServlet
                 }, Input.class, Request.class);
             requestModel.afterParametersBound(attributeBinderActionBind.remainingValues);
 
-            // Add some values in case there was no query parameters -- we want to use the
-            // web application defaults and not component defaults.
-            requestParameters.put(AttributeNames.RESULTS, requestModel.results);
-
-            // Perform processing
-            ProcessingResult processingResult = null;
-            ProcessingException processingException = null;
-            try
+            if (RequestType.STATS.equals(requestModel.type))
             {
-                if (requestModel.type.requiresProcessing)
-                {
-                    if (RequestType.CLUSTERS.equals(requestModel.type)
-                        || RequestType.FULL.equals(requestModel.type)
-                        || RequestType.CARROT2.equals(requestModel.type))
-                    {
-                        processingResult = controller.process(requestParameters,
-                            requestModel.source, requestModel.algorithm);
-                        logQuery(requestModel, processingResult);
-                    }
-                    else if (RequestType.DOCUMENTS.equals(requestModel.type))
-                    {
-                        processingResult = controller.process(requestParameters,
-                            requestModel.source);
-                    }
-                    setExpires(response);
-                }
-            }
-            catch (ProcessingException e)
-            {
-                processingException = e;
-            }
-
-            // Send response
-            response.setContentType(MIME_XML_CHARSET_UTF);
-            final ServletOutputStream outputStream = response.getOutputStream();
-            final PageModel pageModel = new PageModel(request, requestModel,
-                jawrUrlGenerator, processingResult, processingException);
-
-            final Persister persister = new Persister(
-                NoClassAttributePersistenceStrategy.INSTANCE,
-                getPersisterFormat(pageModel));
-
-            if (RequestType.CARROT2.equals(requestModel.type))
-            {
-                persister.write(processingResult, outputStream);
+                handleStatsRequest(request, response, requestParameters, requestModel);
             }
             else
             {
-                persister.write(pageModel, outputStream);
+                handleSearchRequest(request, response, requestParameters, requestModel);
             }
         }
         catch (Exception e)
         {
             throw new ServletException(e);
+        }
+    }
+
+    /**
+     * Handles controller statistics requests.
+     */
+    private void handleStatsRequest(HttpServletRequest request,
+        HttpServletResponse response, Map<String, Object> requestParameters,
+        RequestModel requestModel) throws IOException
+    {
+        final String key = System.getProperty(STATS_KEY);
+        if (key != null && key.equals(requestModel.statsKey))
+        {
+            final CachingControllerStatistics statistics = controller.getStatistics();
+
+            response.setContentType("text/plain; charset=utf-8");
+            final Writer output = new OutputStreamWriter(response.getOutputStream(),
+                "UTF-8");
+
+            output.write("clustering-total-queries: " + statistics.totalQueries + "\n");
+            output.write("clustering-good-queries: " + statistics.goodQueries + "\n");
+
+            if (statistics.algorithmTimeAverageInWindow > 0)
+            {
+                output.write("clustering-ms-per-query: "
+                    + statistics.algorithmTimeAverageInWindow + "\n");
+                output.write("clustering-updates-in-window: "
+                    + statistics.algorithmTimeMeasurementsInWindow + "\n");
+            }
+
+            if (statistics.sourceTimeAverageInWindow > 0)
+            {
+                output.write("source-ms-per-query: "
+                    + statistics.sourceTimeAverageInWindow + "\n");
+                output.write("source-updates-in-window: "
+                    + statistics.sourceTimeMeasurementsInWindow + "\n");
+            }
+            
+            if (statistics.totalTimeAverageInWindow > 0)
+            {
+                output.write("all-ms-per-query: "
+                    + statistics.totalTimeAverageInWindow + "\n");
+                output.write("all-updates-in-window: "
+                    + statistics.totalTimeMeasurementsInWindow + "\n");
+            }
+            
+            output.write("jvm.freemem: " + Runtime.getRuntime().freeMemory() + "\n");
+            output.write("jvm.totalmem: " + Runtime.getRuntime().totalMemory() + "\n");
+
+            output.write("ehcache.hits: " + statistics.cacheTotalHits + "\n");
+            output.write("ehcache.misses: " + statistics.cacheMisses + "\n");
+            output.write("ehcache.memhits: " + statistics.cacheMemoryHits  + "\n");
+            output.write("ehcache.diskhits: " + statistics.cacheDiskHits  + "\n");
+
+            output.flush();
+        }
+        else
+        {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        }
+    }
+
+    /**
+     * Handles search requests.
+     */
+    private void handleSearchRequest(HttpServletRequest request,
+        HttpServletResponse response, final Map<String, Object> requestParameters,
+        final RequestModel requestModel) throws IOException, Exception
+    {
+        // Add some values in case there was no query parameters -- we want to use the
+        // web application defaults and not component defaults.
+        requestParameters.put(AttributeNames.RESULTS, requestModel.results);
+
+        // Perform processing
+        ProcessingResult processingResult = null;
+        ProcessingException processingException = null;
+        try
+        {
+            if (requestModel.type.requiresProcessing)
+            {
+                if (RequestType.CLUSTERS.equals(requestModel.type)
+                    || RequestType.FULL.equals(requestModel.type)
+                    || RequestType.CARROT2.equals(requestModel.type))
+                {
+                    processingResult = controller.process(requestParameters,
+                        requestModel.source, requestModel.algorithm);
+                    logQuery(requestModel, processingResult);
+                }
+                else if (RequestType.DOCUMENTS.equals(requestModel.type))
+                {
+                    processingResult = controller.process(requestParameters,
+                        requestModel.source);
+                }
+                setExpires(response);
+            }
+        }
+        catch (ProcessingException e)
+        {
+            processingException = e;
+        }
+
+        // Send response
+        response.setContentType(MIME_XML_CHARSET_UTF);
+        final ServletOutputStream outputStream = response.getOutputStream();
+        final PageModel pageModel = new PageModel(request, requestModel,
+            jawrUrlGenerator, processingResult, processingException);
+
+        final Persister persister = new Persister(
+            NoClassAttributePersistenceStrategy.INSTANCE, getPersisterFormat(pageModel));
+
+        if (RequestType.CARROT2.equals(requestModel.type))
+        {
+            persister.write(processingResult, outputStream);
+        }
+        else
+        {
+            persister.write(pageModel, outputStream);
         }
     }
 

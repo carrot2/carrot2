@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  version="1.0">
   <xsl:output indent="no" omit-xml-declaration="yes" method="xml"
-       doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
-       doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
-       media-type="text/html" encoding="utf-8" />
-
-  <xsl:strip-space elements="*"/>
-
+    doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
+    doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
+    media-type="text/html" encoding="utf-8" />
+  <xsl:strip-space elements="*" />
   <xsl:variable name="context-path" select="/page/@context-path" />
   <xsl:variable name="skin-path" select="/page/@skin-path" />
-  
   <xsl:variable name="search-url" select="/page/config/@search-url" />
   <xsl:variable name="query-param" select="/page/config/@query-param" />
   <xsl:variable name="source-param" select="/page/config/@source-param" />
@@ -17,41 +15,42 @@
   <xsl:variable name="results-param" select="/page/config/@results-param" />
   <xsl:variable name="view-param" select="/page/config/@view-param" />
   <xsl:variable name="skin-param" select="/page/config/@skin-param" />
-  
   <xsl:variable name="request-url" select="/page/@request-url" />
   <xsl:variable name="xml-url-encoded" select="/page/@xml-url-encoded" />
-  
-  <xsl:variable name="documents-url" select="concat($request-url, '&amp;type=DOCUMENTS')" />
-  <xsl:variable name="clusters-url" select="concat($request-url, '&amp;type=CLUSTERS')" />
-  
+  <xsl:variable name="documents-url"
+    select="concat($request-url, '&amp;type=DOCUMENTS')" />
+  <xsl:variable name="clusters-url"
+    select="concat($request-url, '&amp;type=CLUSTERS')" />
   <xsl:variable name="debug" select="false" />
 
   <!-- HTML scaffolding -->
   <xsl:template match="/">
     <xsl:choose>
       <xsl:when test="page[@full-html = 'true']">
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title><xsl:call-template name="page-title" /></title>
-    
-    <xsl:apply-templates select="page/asset-urls/css-urls/css-url" />
-  </head>
-
-  <body>
-    <xsl:attribute name="id"><xsl:call-template name="page-body-id" /></xsl:attribute>
-    <xsl:if test="$debug = 'true'">
-      <xsl:apply-templates select="/page/request/parameter" />
-    </xsl:if>
+        <html xmlns="http://www.w3.org/1999/xhtml">
+          <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <title>
+              <xsl:call-template name="page-title" />
+            </title>
+            <xsl:apply-templates select="page/asset-urls/css-urls/css-url" />
+          </head>
+          <body>
+            <xsl:attribute name="id"><xsl:call-template
+              name="page-body-id" /></xsl:attribute>
+            <xsl:if test="$debug = 'true'">
+              <xsl:apply-templates select="/page/request/parameter" />
+            </xsl:if>
     
     <!-- Page content -->
-    <xsl:apply-templates />
+            <xsl:apply-templates />
     
     <!-- Custom in-line javascript -->
-    <xsl:apply-templates select="/page" mode="js" />
-    <script type="text/javascript">
-      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+            <xsl:apply-templates select="/page"
+              mode="js" />
+            <script type="text/javascript"> var gaJsHost = (("https:" ==
+              document.location.protocol) ? "https://ssl." :
+              "http://www."); document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
     </script>
     <script type="text/javascript">
       var pageTracker = _gat._getTracker("UA-317750-3");
@@ -282,6 +281,8 @@
     <xsl:param name="is-before-active" />
     
     <xsl:variable name="source" select="/page/config/components/sources/source[@id = $source-id]" />
+    <xsl:variable name="mnemonic" select="string($source/mnemonic)" />
+    <xsl:variable name="label" select="string($source/label)" />
     
     <li id="{$source/@id}">
       <xsl:attribute name="class">tab <xsl:choose>
@@ -299,7 +300,28 @@
         <xsl:if test="$is-before-active">before-active</xsl:if>
       </xsl:attribute>
 
-      <a class="label {$source/@id}" href="#" title="{$source/title}"><xsl:apply-templates select="$source/label" /></a>
+      <a class="label {$source/@id}" href="#" title="{$source/title}">
+        <xsl:choose>
+          <xsl:when test="string-length($mnemonic) > 0">
+            <xsl:attribute name="accesskey"><xsl:value-of select="$mnemonic" /></xsl:attribute>
+          
+            <xsl:variable name="label-after" select="substring-after($label, $mnemonic)" />
+            <xsl:choose>
+              <xsl:when test="string-length($label-after) > 0">
+                <xsl:value-of select="substring-before($label, $mnemonic)" /><u><xsl:value-of select="$mnemonic" /></u><xsl:value-of select="$label-after" />
+              </xsl:when>
+              
+              <xsl:otherwise>
+                <xsl:apply-templates select="$source/label" />
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:when>
+          
+          <xsl:otherwise>
+            <xsl:apply-templates select="$source/label" />
+          </xsl:otherwise>
+        </xsl:choose>
+      </a>
       <span class="hide">
         <span class="tab-info"><xsl:value-of select="$source/description" /></span><br />
         <span class="example-queries">Example queries: 

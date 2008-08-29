@@ -43,6 +43,8 @@
     $("#source").val(tabId);
     if ($("#results-area").size() > 0) {
       $("#source").parents("form")[0].submit();
+    } else {
+      $("#query").focus();
     }
   };
 
