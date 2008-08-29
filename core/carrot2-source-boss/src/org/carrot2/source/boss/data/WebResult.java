@@ -49,9 +49,12 @@ public final class WebResult
      */
     private static String clean(String value)
     {
-        if (value == null || org.apache.commons.lang.StringUtils.isEmpty(value))
+        if (org.apache.commons.lang.StringUtils.isBlank(value)) {
             return value;
+        }
 
+        // TODO: should we really remove all tags here? Or just unescape and
+        // possibly remove highlights in bold?
         return StringUtils.removeHtmlTags(StringEscapeUtils.unescapeHtml(value));
     }
 }

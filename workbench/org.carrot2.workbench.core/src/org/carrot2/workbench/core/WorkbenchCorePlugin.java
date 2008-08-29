@@ -285,7 +285,7 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
             catch (Exception e)
             {
                 Utils
-                    .logError("Could not extract descriptor from: " + pcd.getId(), false);
+                    .logError("Could not extract descriptor from: " + pcd.getId(), e, false);
             }
         }
     }

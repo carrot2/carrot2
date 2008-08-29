@@ -13,4 +13,5 @@ Require-Bundle: org.carrot2.core,
  org.carrot2.source.microsoft;visibility:=reexport,
  org.carrot2.source.xml;visibility:=reexport,
  org.carrot2.source.yahoo;visibility:=reexport,
- org.carrot2.source.boss;visibility:=reexport
+ org.carrot2.source.boss;visibility:=reexport,
+ org.carrot2.source.google.desktop;visibility:=reexport

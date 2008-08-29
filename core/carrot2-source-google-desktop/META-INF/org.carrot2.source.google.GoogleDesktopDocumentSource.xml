@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component-metadata>
+  <title>Fetches documents from an instance of Google Desktop search engine</title>
+  <attributes class="java.util.LinkedHashMap">
+    <attribute field-name="queryUrl">
+      <attribute-metadata>
+        <title>Query URL</title>
+        <description>Installation-specific URL at which Google Desktop search service is available. On Windows machines, the URL is available at the &lt;code&gt;HKEY_CURRENT_USER\Software\Google\Google Desktop\API\search_url&lt;/code&gt; system registry key. Please consult Google Desktop API documents for further instructions if needed.</description>
+      </attribute-metadata>
+    </attribute>
+    <attribute field-name="keepHighlights">
+      <attribute-metadata>
+        <title>Remove query word highlighting</title>
+        <description>Google by default highlights query words in snippets using the bold HTML tag. Set this attribute to &lt;code&gt;true&lt;/code&gt; to keep these highlights.</description>
+      </attribute-metadata>
+    </attribute>
+  </attributes>
+</component-metadata>

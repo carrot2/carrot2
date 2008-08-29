@@ -18,7 +18,7 @@ public final class HttpClientFactory
      */
     public static HttpClient getTimeoutingClient()
     {
-        final int timeout = 5 * 1000;
+        final int timeout = 16 * 1000;
         final HttpClient httpClient = new HttpClient(new SingleHttpConnectionManager());
 
         // Setup default timeouts.

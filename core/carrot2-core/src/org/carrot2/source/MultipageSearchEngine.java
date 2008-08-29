@@ -216,7 +216,9 @@ public abstract class MultipageSearchEngine extends SearchEngineBase
         public final SearchEngineResponse call() throws Exception
         {
             statistics.incrPageRequestCount();
-            return search();
+            final SearchEngineResponse response = search();
+            afterFetch(response);
+            return response;
         }
 
         /**

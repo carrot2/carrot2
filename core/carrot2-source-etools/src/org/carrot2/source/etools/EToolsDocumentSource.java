@@ -1,17 +1,9 @@
 package org.carrot2.source.etools;
 
-import java.util.List;
-
-import javax.xml.transform.Templates;
-
 import org.apache.commons.lang.StringUtils;
-import org.carrot2.core.Document;
-import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
-import org.carrot2.source.SearchEngineResponse;
-import org.carrot2.source.SimpleSearchEngine;
-import org.carrot2.source.xml.XmlDocumentSourceHelper;
+import org.carrot2.source.xml.RemoteXmlSimpleSearchEngineBase;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.IntRange;
 import org.carrot2.util.resource.ClassResource;
@@ -21,7 +13,7 @@ import org.carrot2.util.resource.ClassResource;
  * licensing of the eTools feed, please e-mail: contact@comcepta.com.
  */
 @Bindable
-public class EToolsDocumentSource extends SimpleSearchEngine
+public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
 {
     /**
      * Base URL for the eTools service
@@ -200,50 +192,14 @@ public class EToolsDocumentSource extends SimpleSearchEngine
     private static final int FASTEST_SOURCES_COUNT = 5;
     private static final int ALL_SOURCES_COUNT = 10;
 
-    /** eTools XML to Carrot2 XML XSLT */
-    private final Templates eTools2Carrot2Xslt;
-
-    /** A helper class that groups common functionality for XML/XSLT based data sources. */
-    private final XmlDocumentSourceHelper xmlDocumentSourceHelper = new XmlDocumentSourceHelper();
-
-    /**
-     * Creates an {@link EToolsDocumentSource} with the default values of attributes.
-     */
-    public EToolsDocumentSource()
+    @Override
+    protected ClassResource getXsltResource()
     {
-        eTools2Carrot2Xslt = xmlDocumentSourceHelper.loadXslt(new ClassResource(
-            EToolsDocumentSource.class, "etools-to-c2.xsl"));
+        return new ClassResource(EToolsDocumentSource.class, "etools-to-c2.xsl");
     }
 
     @Override
-    public SearchEngineResponse fetchSearchResponse() throws Exception
-    {
-        // Ignore buckets, SearchEngine is configured to perform one request
-        final String serviceURL = buildServiceUrl();
-        final SearchEngineResponse response = new SearchEngineResponse();
-
-        final ProcessingResult processingResult = xmlDocumentSourceHelper
-            .loadProcessingResult(serviceURL, eTools2Carrot2Xslt, null, response.metadata);
-
-        final List<Document> documents = processingResult.getDocuments();
-        if (documents != null)
-        {
-            response.results.addAll(documents);
-            response.metadata.put(SearchEngineResponse.RESULTS_TOTAL_KEY,
-                (long) documents.size());
-        }
-        else
-        {
-            response.metadata.put(SearchEngineResponse.RESULTS_TOTAL_KEY, 0L);
-        }
-
-        return response;
-    }
-
-    /**
-     * Builds the service url for the specific query and attributes.
-     */
-    private String buildServiceUrl()
+    protected String buildServiceUrl()
     {
         String urlBase = serviceUrlBase;
         if (urlBase.endsWith("/"))

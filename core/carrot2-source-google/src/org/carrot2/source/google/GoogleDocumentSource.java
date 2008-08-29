@@ -5,13 +5,11 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.commons.httpclient.Header;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.carrot2.core.*;
-import org.carrot2.core.attribute.*;
+import org.carrot2.core.attribute.Internal;
+import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.*;
 import org.carrot2.util.*;
 import org.carrot2.util.attribute.*;
@@ -89,11 +87,6 @@ public class GoogleDocumentSource extends MultipageSearchEngine
     private final static ExecutorService executor = ExecutorServiceUtils
         .createExecutorService(MAX_CONCURRENT_THREADS, GoogleDocumentSource.class);
 
-    /**
-     * Regexp pattern for matching query word highlighting.
-     */
-    private Pattern HIGHLIGHTS_PATTERN = Pattern.compile("</?b>");
-
     @Override
     public void process() throws ProcessingException
     {
@@ -131,12 +124,10 @@ public class GoogleDocumentSource extends MultipageSearchEngine
                         for (; results.hasNext();)
                         {
                             final JsonNode result = results.next();
-                            final Document document = new Document(StringEscapeUtils
-                                .unescapeHtml(result.getFieldValue("titleNoFormatting")
-                                    .getTextValue()), StringEscapeUtils
-                                .unescapeHtml(removeHighlights(result.getFieldValue(
-                                    "content").getTextValue())), result.getFieldValue(
-                                "url").getTextValue());
+                            final Document document = new Document(result.getFieldValue(
+                                "titleNoFormatting").getTextValue(), result
+                                .getFieldValue("content").getTextValue(), result
+                                .getFieldValue("url").getTextValue());
                             response.results.add(document);
                         }
 
@@ -164,17 +155,10 @@ public class GoogleDocumentSource extends MultipageSearchEngine
         };
     }
 
-    private final String removeHighlights(String string)
+    @Override
+    protected void afterFetch(SearchEngineResponse response)
     {
-        if (keepHighlights)
-        {
-            return string;
-        }
-        else
-        {
-            final Matcher matcher = HIGHLIGHTS_PATTERN.matcher(string);
-            return matcher.replaceAll("");
-        }
+        clean(response, keepHighlights, Document.TITLE, Document.SUMMARY);
     }
 
     private String buildServiceUrl(int start)

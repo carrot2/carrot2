@@ -1,7 +1,11 @@
 package org.carrot2.source;
 
 import java.util.Collection;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.Processing;
@@ -18,7 +22,8 @@ import org.carrot2.util.attribute.constraint.NotBlank;
  * @see MultipageSearchEngine
  */
 @Bindable
-public abstract class SearchEngineBase extends ProcessingComponentBase implements DocumentSource
+public abstract class SearchEngineBase extends ProcessingComponentBase implements
+    DocumentSource
 {
     /**
      * Starting index of the first result to fetch.
@@ -88,4 +93,49 @@ public abstract class SearchEngineBase extends ProcessingComponentBase implement
     @Attribute
     public boolean compressed;
 
+    /**
+     * Regexp pattern for matching query word highlighting.
+     */
+    private static Pattern HIGHLIGHTS_PATTERN = Pattern.compile("</?b>");
+
+    /**
+     * Cleans <code>fields</code> of all documents in the provided <code>response</code>.
+     * 
+     * @param response the search engine response to clean
+     * @param keepHighlights set to <code>true</code> to keep query terms highlights
+     * @param fields names of fields to clean
+     */
+    protected static void clean(SearchEngineResponse response, boolean keepHighlights,
+        String... fields)
+    {
+        for (Document document : response.results)
+        {
+            for (String field : fields)
+            {
+                final String originalField = document.getField(field);
+                if (StringUtils.isNotBlank(originalField))
+                {
+                    String cleanedField = originalField;
+                    if (!keepHighlights)
+                    {
+                        final Matcher matcher = HIGHLIGHTS_PATTERN.matcher(cleanedField);
+                        cleanedField = matcher.replaceAll("");
+                    }
+
+                    cleanedField = StringEscapeUtils.unescapeHtml(cleanedField);
+
+                    document.addField(field, cleanedField);
+                }
+            }
+        }
+    }
+
+    /**
+     * Called after a single search engine response has been fetched. The concrete
+     * implementation may want to override this empty implementation to e.g. clean or
+     * otherwise postprocess the returned results.
+     */
+    protected void afterFetch(SearchEngineResponse response)
+    {
+    }
 }
