@@ -1,4 +1,13 @@
 <component-suite>
+<!--
+  TODO: We resolve includes using the default resource utils, but this doesn't
+  seem to work with Workbench, so hardcoding the included files for a moment.
+  Also, the common suite contains an OpenSearch-based document source so we'd
+  need to convert that project to a plugin.
+   
+  <include suite="carrot2-default/suite-local.xml" />
+  <include suite="carrot2-default/suite-common.xml" />
+-->
   <sources>
     <source component-class="org.carrot2.source.etools.EToolsDocumentSource" id="etools">
       <label>eTools</label>
@@ -12,72 +21,12 @@
         <example-query>clustering</example-query>
       </example-queries>
     </source>
-    <source component-class="org.carrot2.source.yahoo.YahooDocumentSource" id="yahoo-web">
-      <label>Yahoo!</label>
-      <title>Yahoo Web Search</title>
-      <icon-path>icons/yahoo.png</icon-path>
-      <mnemonic>y</mnemonic>
-      <description>Carrot2 clustering engine will search the web with Yahoo and organize the results into thematic categories</description>
-      <example-queries>
-        <example-query>data mining</example-query>
-        <example-query>london</example-query>
-        <example-query>clustering</example-query>
-      </example-queries>
-    </source>
-    <source component-class="org.carrot2.source.yahoo.YahooDocumentSource" id="yahoo-news">
-      <label>Yahoo! News</label>
-      <title>Yahoo News Search</title>
-      <icon-path>icons/yahoo.png</icon-path>
-      <mnemonic>n</mnemonic>
-      <description>Carrot2 clustering engine will search Yahoo News and organize the results into thematic categories</description>
-      <example-queries>
-        <example-query>iphone</example-query>
-        <example-query>olympics</example-query>
-        <example-query>election</example-query>
-      </example-queries>
-    </source>
-    <source component-class="org.carrot2.source.microsoft.MicrosoftLiveDocumentSource" id="msn-web">
-      <label>Live Search</label>
-      <title>MSN Live Search</title>
-      <icon-path>icons/live.png</icon-path>
-      <mnemonic>m</mnemonic>
-      <description>Carrot2 clustering engine will search MSN Live and organize the results into thematic categories</description>
-      <example-queries>
-        <example-query>data mining</example-query>
-        <example-query>lucene</example-query>
-        <example-query>java</example-query>
-      </example-queries>
-    </source>
-    <source component-class="org.carrot2.source.pubmed.PubMedDocumentSource" id="pubmed">
-      <label>PubMed</label>
-      <title>PubMed medical database</title>
-      <icon-path>icons/pubmed.gif</icon-path>
-      <mnemonic>p</mnemonic>
-      <description>Carrot2 clustering engine will search PubMed medical database and organize the results into thematic categories</description>
-      <example-queries>
-        <example-query>cancer</example-query>
-        <example-query>lung</example-query>
-        <example-query>heart</example-query>
-      </example-queries>
-    </source>
     <source component-class="org.carrot2.source.xml.XmlDocumentSource" id="xml">
       <label>XML</label>
       <title>XML files</title>
       <icon-path>icons/xml.gif</icon-path>
       <mnemonic>X</mnemonic>
       <description>Carrot2 clustering engine will load and organize documents in an XML file.</description>
-    </source>
-    <source component-class="org.carrot2.source.boss.BossDocumentSource" id="boss-web">
-      <label>Yahoo Boss (Web)</label>
-      <title>Yahoo Boss Web search</title>
-      <icon-path>icons/yahoo.png</icon-path>
-      <mnemonic>B</mnemonic>
-      <description>Carrot2 clustering engine will search the Web using Yahoo Boss</description>
-      <example-queries>
-        <example-query>data mining</example-query>
-        <example-query>olympics</example-query>
-        <example-query>London</example-query>
-      </example-queries>
     </source>
     <source component-class="org.carrot2.source.google.GoogleDesktopDocumentSource" id="google-desktop">
       <label>Google Desktop</label>
@@ -89,6 +38,54 @@
         <example-query>email</example-query>
         <example-query>pictures</example-query>
         <example-query>order</example-query>
+      </example-queries>
+    </source>
+    <source component-class="org.carrot2.source.boss.BossDocumentSource" id="yahoo-web">
+      <label>Yahoo!</label>
+      <title>Yahoo Web Search</title>
+      <mnemonic>Y</mnemonic>
+      <description>Carrot2 clustering engine will search the Web using Yahoo Boss</description>
+      <icon-path>icons/yahoo.png</icon-path>
+      <example-queries>
+        <example-query>data mining</example-query>
+        <example-query>olympics</example-query>
+        <example-query>London</example-query>
+      </example-queries>
+    </source>    
+    <source component-class="org.carrot2.source.yahoo.YahooDocumentSource" id="yahoo-news">
+      <label>News</label>
+      <title>Yahoo News Search</title>
+      <mnemonic>N</mnemonic>
+      <description>Carrot2 clustering engine will search Yahoo News and organize the results into thematic categories</description>
+      <icon-path>icons/yahoo.png</icon-path>
+      <example-queries>
+        <example-query>iphone</example-query>
+        <example-query>olympics</example-query>
+        <example-query>election</example-query>
+      </example-queries>
+    </source>
+    <source component-class="org.carrot2.source.microsoft.MicrosoftLiveDocumentSource" id="msn-web">
+      <label>MSN</label>
+      <title>MSN Live Search</title>
+      <mnemonic>M</mnemonic>
+      <description>Carrot2 clustering engine will search MSN Live and organize the results into thematic categories</description>
+      <icon-path>icons/live.png</icon-path>
+      <example-queries>
+        <example-query>data mining</example-query>
+        <example-query>lucene</example-query>
+        <example-query>java</example-query>
+      </example-queries>
+    </source>
+    <source component-class="org.carrot2.source.pubmed.PubMedDocumentSource" id="pubmed">
+      <label>PubMed</label>
+      <title>PubMed medical database</title>
+      <mnemonic>P</mnemonic>
+      <description>Carrot2 clustering engine will search the PubMed medical abstracts database and cluster the results</description>
+      <icon-path>icons/pubmed.png</icon-path>
+      <example-queries>
+        <example-query>cancer</example-query>
+        <example-query>heart</example-query>
+        <example-query>lung</example-query>
       </example-queries>
     </source>
   </sources>

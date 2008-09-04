@@ -34,7 +34,7 @@ public class ProcessingComponentDescriptor
 
     @Element
     private String title;
-    
+
     @Element(required = false, name = "icon-path")
     private String iconPath;
 
@@ -48,6 +48,24 @@ public class ProcessingComponentDescriptor
 
     @Attribute(name = "attribute-set-id", required = false)
     private String attributeSetId;
+
+    @Attribute(required = false)
+    Position position = Position.MIDDLE;
+    
+    /**
+     * The relative positioning of the component within the suite.
+     */
+    static enum Position
+    {
+        /** Component appended at the beginning */
+        BEGINNING,
+
+        /** Component appended after those at the beginning but before those at the end */
+        MIDDLE,
+
+        /** Component appended at the end */
+        END;
+    }
 
     ProcessingComponentDescriptor()
     {
@@ -98,8 +116,9 @@ public class ProcessingComponentDescriptor
     }
 
     /**
-     * @return Returns (optional) path to the icon of this component. The interpretation of this
-     * path is up to the application (icon resources may be placed in various places).
+     * @return Returns (optional) path to the icon of this component. The interpretation
+     *         of this path is up to the application (icon resources may be placed in
+     *         various places).
      */
     public String getIconPath()
     {

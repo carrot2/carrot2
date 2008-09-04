@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry exported="true" kind="lib" path="cssparser-0.9.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="htmlunit-2.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="htmlunit-core-js-2.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="nekohtml-1.9.8.jar"/>
+	<classpathentry exported="true" kind="lib" path="sac-1.3.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.apache.xml"/>
+	<classpathentry kind="output" path="tmp/eclipse"/>
+</classpath>

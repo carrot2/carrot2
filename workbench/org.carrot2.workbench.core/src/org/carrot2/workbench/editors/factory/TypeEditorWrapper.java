@@ -1,11 +1,13 @@
 package org.carrot2.workbench.editors.factory;
 
+import static org.carrot2.workbench.core.helpers.ExtensionConfigurationUtils.*;
+
 import java.util.ArrayList;
 import java.util.List;
-import static org.carrot2.workbench.core.helpers.ExtensionConfigurationUtils.*;
+
 import org.eclipse.core.runtime.IConfigurationElement;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
 
 public class TypeEditorWrapper extends AttributeEditorWrapper
 {
@@ -40,12 +42,12 @@ public class TypeEditorWrapper extends AttributeEditorWrapper
                     getAttribute(constraintElement, ATT_CONSTRAINT_CLASS);
                 tempConstraints.add(constraintClassName);
             }
-            constraints = Lists.immutableList(tempConstraints);
+            constraints = ImmutableList.copyOf(tempConstraints);
         }
         else
         {
             allConstraintsRequired = false;
-            constraints = Lists.immutableList();
+            constraints = ImmutableList.of();
         }
     }
 

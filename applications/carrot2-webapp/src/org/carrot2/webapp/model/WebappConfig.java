@@ -87,7 +87,7 @@ public class WebappConfig
 
             INSTANCE.components = ProcessingComponentSuite
                 .deserialize(ResourceUtilsFactory.getDefaultResourceUtils().getFirst(
-                    "carrot2-default/suite.xml"));
+                    "carrot2-default/suite-webapp.xml"));
             log.info("Loaded " + INSTANCE.components.getSources().size()
                 + " sources and " + INSTANCE.components.getAlgorithms().size()
                 + " algorithms");

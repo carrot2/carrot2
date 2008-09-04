@@ -476,7 +476,7 @@ public final class Cluster
      */
     public static void assignClusterIds(Collection<Cluster> clusters)
     {
-        final ArrayList<Cluster> flattened = Lists.newArrayListWithCapacity(clusters
+        final ArrayList<Cluster> flattened = Lists.newArrayListWithExpectedSize(clusters
             .size());
 
         flatten(flattened, clusters);
@@ -639,7 +639,7 @@ public final class Cluster
     @SuppressWarnings("unused")
     private void beforeSerialization()
     {
-        documentIds = Lists.newArrayListWithCapacity(documents.size());
+        documentIds = Lists.newArrayListWithExpectedSize(documents.size());
         for (Document document : documents)
         {
             documentIds.add(new DocumentRefid(document.getId()));

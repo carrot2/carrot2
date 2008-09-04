@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Open Source Components
 Bundle-SymbolicName: org.carrot2.suites.default;singleton:=true
 Bundle-Version: 1.0.0
-Export-Package: org.carrot2.core.suite
+Export-Package: org.carrot2.core
 Bundle-Vendor: Carrot2.org
 Require-Bundle: org.carrot2.core,
  org.carrot2.algorithm.lingo;visibility:=reexport,

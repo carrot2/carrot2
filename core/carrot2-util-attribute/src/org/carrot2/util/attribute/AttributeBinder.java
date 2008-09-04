@@ -11,8 +11,7 @@ import org.carrot2.util.Pair;
 import org.carrot2.util.attribute.constraint.*;
 import org.carrot2.util.resource.Resource;
 
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
+import com.google.common.collect.*;
 
 /**
  * Provides methods for binding (setting and collecting) values of attributes defined by
@@ -591,12 +590,12 @@ public class AttributeBinder
      */
     static class ConsistencyCheckImplementingClasses extends ConsistencyCheck
     {
-        static Set<Class<?>> ALLOWED_PLAIN_TYPES = Sets.<Class<?>> immutableSet(
+        static Set<Class<?>> ALLOWED_PLAIN_TYPES = ImmutableSet.<Class<?>>of(
             Byte.class, Short.class, Integer.class, Long.class, Float.class,
             Double.class, Boolean.class, String.class, Class.class, Resource.class,
             Collection.class, Map.class, File.class);
 
-        static Set<Class<?>> ALLOWED_ASSIGNABLE_TYPES = Sets.<Class<?>> immutableSet(
+        static Set<Class<?>> ALLOWED_ASSIGNABLE_TYPES = ImmutableSet.<Class<?>>of(
             Enum.class, Resource.class, Collection.class, Map.class);
 
         @Override

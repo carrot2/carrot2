@@ -25,7 +25,7 @@ class PubMedSearchHandler implements ContentHandler
 
     public void startDocument() throws SAXException
     {
-        pubMedPrimaryIds = Lists.newArrayListWithCapacity(100);
+        pubMedPrimaryIds = Lists.newArrayListWithExpectedSize(100);
         handlingId = false;
         id = new StringBuffer();
     }

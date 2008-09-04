@@ -61,10 +61,13 @@
     <include name="core/carrot2-source-google/lib/*.jar" />
     <include name="core/carrot2-source-opensearch/lib/*.jar" />
     <include name="applications/carrot2-webapp/lib/*.jar" />
+    <include name="applications/carrot2-dcs/lib/*.jar" />
     <exclude name="lib/**/axis-ant.jar" />
     <exclude name="lib/**/easymock.jar" />
     <exclude name="lib/**/fest-*.jar" />
     <exclude name="lib/**/servlet-api-*.jar" />
+    <exclude name="lib/org.gargoylesoftware.htmlunit/*.jar" />
+    <exclude name="lib/org.apache.xml/*.jar" />
   </fileset>
 
   <fileset dir="." id="lib.test.files">
@@ -73,6 +76,7 @@
     <include name="core/carrot2-source-google/lib/*.jar" />
     <include name="core/carrot2-source-opensearch/lib/*.jar" />
     <include name="applications/carrot2-webapp/lib/*.jar" />
+    <include name="applications/carrot2-dcs/lib/*.jar" />
   </fileset>
 
   <path id="lib.classpath">
@@ -163,6 +167,9 @@
         <exclude name="**/*.clover" />
         <exclude name="**/carrot2-util-log4j/**" />
       </fileset>
+      <fileset dir="applications">
+        <include name="carrot2-dcs/src/config.xml" />
+      </fileset>
       <regexpmapper from="^.*src(-resources)?(.*)$$" to="\2" />
     </copy>
     <copy todir="${build.dir}" includeemptydirs="false">
@@ -218,6 +225,7 @@
                    value="${test.common.attribute.names.source.path}" />
       <sysproperty key="external.api.tests.disabled" value="${external.api.tests.disabled}" />
       <sysproperty key="carrot2.xml.feed.url.base" value="${carrot2.xml.feed.url.base.internal}" />
+      <sysproperty key="dcs.test.web.dir.prefix" value="applications/carrot2-dcs" />
 
       <batchtest todir="${tests.report.dir}">
         <fileset dir="${build.dir}">

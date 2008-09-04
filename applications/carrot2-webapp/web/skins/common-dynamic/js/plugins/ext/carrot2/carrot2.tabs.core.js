@@ -16,7 +16,7 @@
 
     // Make tabs respond to clicks
     $tabContainer.click($.delegate({
-      ".label": function(e) {
+      ".label, .label u": function(e) {
         activateTab(e, $tabContainer);
         return false;
       }

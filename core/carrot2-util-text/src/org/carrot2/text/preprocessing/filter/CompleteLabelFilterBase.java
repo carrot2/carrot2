@@ -28,7 +28,7 @@ abstract class CompleteLabelFilterBase
         // Build labelIndex-wordIndices combos for each word and phrase. We'll use
         // them below to create an LCP array.
         final ArrayList<LabelIndexWithCodes> phraseIndexesWithCodes = Lists
-            .newArrayListWithCapacity(acceptedStems.length + acceptedPhrases.length);
+            .newArrayListWithExpectedSize(acceptedStems.length + acceptedPhrases.length);
         for (int i = 0; i < acceptedStems.length + acceptedPhrases.length; i++)
         {
             phraseIndexesWithCodes.add(new LabelIndexWithCodes(i, getLabelWordIndexes(

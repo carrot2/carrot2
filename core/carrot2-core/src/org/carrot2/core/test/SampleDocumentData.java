@@ -4,7 +4,7 @@ import java.util.*;
 
 import org.carrot2.core.Document;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
 
 /**
  * A set of sample documents returned for the query <i>data mining</i>. This set is
@@ -1230,7 +1230,6 @@ final class SampleDocumentData
         DOCUMENTS_DAWID = Collections.unmodifiableList(documents);
     }
     
-    @SuppressWarnings("unchecked")
-    final static List<Collection<Document>> ALL = Lists.immutableList(
+    final static List<Collection<Document>> ALL = ImmutableList.of(
         DOCUMENTS_DATA_MINING, DOCUMENTS_DAWID);
 }

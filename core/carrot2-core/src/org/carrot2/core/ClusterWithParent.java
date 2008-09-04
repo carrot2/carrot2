@@ -70,7 +70,7 @@ public final class ClusterWithParent
     {
         final List<Cluster> actualSubclusters = root.getSubclusters();
         final List<ClusterWithParent> subclustersWithParent = Lists
-            .newArrayListWithCapacity(actualSubclusters.size());
+            .newArrayListWithExpectedSize(actualSubclusters.size());
 
         final ClusterWithParent rootWithParent = new ClusterWithParent(parent, root,
             Collections.unmodifiableList(subclustersWithParent));
@@ -93,7 +93,7 @@ public final class ClusterWithParent
      */
     public static List<ClusterWithParent> wrap(List<Cluster> clusters)
     {
-        final List<ClusterWithParent> result = Lists.newArrayListWithCapacity(clusters
+        final List<ClusterWithParent> result = Lists.newArrayListWithExpectedSize(clusters
             .size());
 
         for (Cluster cluster : clusters)

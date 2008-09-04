@@ -8,7 +8,7 @@ import org.carrot2.workbench.core.helpers.Utils;
 import org.eclipse.core.runtime.*;
 
 import com.google.common.base.Predicate;
-import com.google.common.collect.Lists;
+import com.google.common.collect.*;
 
 /**
  * 
@@ -40,8 +40,8 @@ class AttributeEditorLoader
     {
         loadExtensions();
 
-        dedicatedEditors = Lists.immutableList(dedicatedEditorsList);
-        typeEditors = Lists.immutableList(typeEditorsList);
+        dedicatedEditors = ImmutableList.copyOf(dedicatedEditorsList);
+        typeEditors = ImmutableList.copyOf(typeEditorsList);
     }
 
     /*
@@ -50,8 +50,7 @@ class AttributeEditorLoader
     List<DedicatedEditorWrapper> filterDedicatedEditors(
         Predicate<DedicatedEditorWrapper> predicate)
     {
-        List<DedicatedEditorWrapper> result = apply(predicate, dedicatedEditorsList);
-        return Lists.immutableList(result);
+        return ImmutableList.copyOf(Collections2.filter(dedicatedEditorsList, predicate));
     }
 
     /*
@@ -59,25 +58,7 @@ class AttributeEditorLoader
      */
     List<TypeEditorWrapper> filterTypeEditors(Predicate<TypeEditorWrapper> predicate)
     {
-        List<TypeEditorWrapper> result = apply(predicate, typeEditorsList);
-        return Lists.immutableList(result);
-    }
-
-    /*
-     * 
-     */
-    private <T extends AttributeEditorWrapper> List<T> apply(Predicate<T> predicate,
-        List<T> list)
-    {
-        List<T> result = Lists.newArrayList();
-        for (T element : list)
-        {
-            if (predicate.apply(element))
-            {
-                result.add(element);
-            }
-        }
-        return Lists.immutableList(result);
+        return ImmutableList.copyOf(Collections2.filter(typeEditorsList, predicate));
     }
 
     /*

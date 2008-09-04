@@ -541,9 +541,9 @@ public class CachingControllerTest extends ControllerTestBase
         final Map<String, Object> attributes = Maps.newHashMap();
 
         final Map<String, Object> globalInitAttributes = Maps.newHashMap();
-        final Map<String, Object> conf1Attributes = Maps.immutableMap("init",
+        final Map<String, Object> conf1Attributes = ImmutableMap.of("init",
             (Object) "v1");
-        final Map<String, Object> conf2Attributes = Maps.immutableMap("init",
+        final Map<String, Object> conf2Attributes = ImmutableMap.of("init",
             (Object) "v2");
 
         controller.init(globalInitAttributes, new ProcessingComponentConfiguration(
@@ -567,9 +567,9 @@ public class CachingControllerTest extends ControllerTestBase
         final Map<String, Object> attributes = Maps.newHashMap();
 
         final Map<String, Object> globalInitAttributes = Maps.newHashMap();
-        final Map<String, Object> conf1Attributes = Maps.immutableMap("processing",
+        final Map<String, Object> conf1Attributes = ImmutableMap.of("processing",
             (Object) "v1");
-        final Map<String, Object> conf2Attributes = Maps.immutableMap("processing",
+        final Map<String, Object> conf2Attributes = ImmutableMap.of("processing",
             (Object) "v2");
 
         controller.init(globalInitAttributes, new ProcessingComponentConfiguration(
@@ -591,9 +591,9 @@ public class CachingControllerTest extends ControllerTestBase
         final CachingController controller = new CachingController();
 
         final Map<String, Object> globalInitAttributes = Maps.newHashMap();
-        final Map<String, Object> conf1Attributes = Maps.immutableMap("init",
+        final Map<String, Object> conf1Attributes = ImmutableMap.of("init",
             (Object) "v1");
-        final Map<String, Object> conf2Attributes = Maps.immutableMap("init",
+        final Map<String, Object> conf2Attributes = ImmutableMap.of("init",
             (Object) "v2");
 
         controller.init(globalInitAttributes, new ProcessingComponentConfiguration(
@@ -656,9 +656,9 @@ public class CachingControllerTest extends ControllerTestBase
         assertThat(statistics.totalTimeAverageInWindow).isEqualTo(0);
         assertThat(statistics.totalTimeMeasurementsInWindow).isEqualTo(0);
         assertThat(statistics.cacheMisses).isEqualTo(0);
-        assertThat(statistics.cacheTotalHits).isEqualTo(0);
-        assertThat(statistics.cacheMemoryHits).isEqualTo(0);
-        assertThat(statistics.cacheDiskHits).isEqualTo(0);
+        assertThat(statistics.cacheHitsTotal).isEqualTo(0);
+        assertThat(statistics.cacheHitsMemory).isEqualTo(0);
+        assertThat(statistics.cacheHitsDisk).isEqualTo(0);
     }
 
     @Test
@@ -703,9 +703,9 @@ public class CachingControllerTest extends ControllerTestBase
         assertThat(statistics.totalTimeAverageInWindow).isGreaterThanOrEqualTo(400);
         assertThat(statistics.totalTimeMeasurementsInWindow).isEqualTo(1);
         assertThat(statistics.cacheMisses).isEqualTo(0);
-        assertThat(statistics.cacheTotalHits).isEqualTo(0);
-        assertThat(statistics.cacheMemoryHits).isEqualTo(0);
-        assertThat(statistics.cacheDiskHits).isEqualTo(0);
+        assertThat(statistics.cacheHitsTotal).isEqualTo(0);
+        assertThat(statistics.cacheHitsMemory).isEqualTo(0);
+        assertThat(statistics.cacheHitsDisk).isEqualTo(0);
         
         controller.dispose();
     }
@@ -722,9 +722,9 @@ public class CachingControllerTest extends ControllerTestBase
         assertThat(statistics.totalQueries).isEqualTo(1);
         assertThat(statistics.goodQueries).isEqualTo(1);
         assertThat(statistics.cacheMisses).isEqualTo(1);
-        assertThat(statistics.cacheTotalHits).isEqualTo(0);
-        assertThat(statistics.cacheMemoryHits).isEqualTo(0);
-        assertThat(statistics.cacheDiskHits).isEqualTo(0);
+        assertThat(statistics.cacheHitsTotal).isEqualTo(0);
+        assertThat(statistics.cacheHitsMemory).isEqualTo(0);
+        assertThat(statistics.cacheHitsDisk).isEqualTo(0);
         
         controller.dispose();
     }
@@ -743,9 +743,9 @@ public class CachingControllerTest extends ControllerTestBase
         assertThat(statistics.totalQueries).isEqualTo(2);
         assertThat(statistics.goodQueries).isEqualTo(2);
         assertThat(statistics.cacheMisses).isEqualTo(1);
-        assertThat(statistics.cacheTotalHits).isEqualTo(1);
-        assertThat(statistics.cacheMemoryHits).isEqualTo(1);
-        assertThat(statistics.cacheDiskHits).isEqualTo(0);
+        assertThat(statistics.cacheHitsTotal).isEqualTo(1);
+        assertThat(statistics.cacheHitsMemory).isEqualTo(1);
+        assertThat(statistics.cacheHitsDisk).isEqualTo(0);
         
         controller.dispose();
     }
@@ -791,9 +791,9 @@ public class CachingControllerTest extends ControllerTestBase
             assertThat(statistics.totalQueries).isEqualTo(2);
             assertThat(statistics.goodQueries).isEqualTo(1);
             assertThat(statistics.cacheMisses).isEqualTo(0);
-            assertThat(statistics.cacheTotalHits).isEqualTo(0);
-            assertThat(statistics.cacheMemoryHits).isEqualTo(0);
-            assertThat(statistics.cacheDiskHits).isEqualTo(0);
+            assertThat(statistics.cacheHitsTotal).isEqualTo(0);
+            assertThat(statistics.cacheHitsMemory).isEqualTo(0);
+            assertThat(statistics.cacheHitsDisk).isEqualTo(0);
             
             controller.dispose();
         }

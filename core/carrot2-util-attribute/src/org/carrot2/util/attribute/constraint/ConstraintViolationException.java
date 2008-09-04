@@ -51,7 +51,7 @@ public class ConstraintViolationException extends RuntimeException
             }
         }
 
-        return "Value: " + offendingValue + " of attribute: " + key
-            + " violates constraints: " + constraintsString;
+        return "Value: '" + offendingValue + "' of attribute: '" + key
+            + "' violates constraints: " + constraintsString;
     }
 }

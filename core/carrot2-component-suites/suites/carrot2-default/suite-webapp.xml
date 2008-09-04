@@ -1,0 +1,28 @@
+<component-suite>
+  <include suite="carrot2-default/suite-common.xml" />
+
+  <sources>
+    <source component-class="org.carrot2.webapp.source.WebDocumentSource" id="web">
+      <label>Web</label>
+      <title>Search the Web with etools.ch</title>
+      <mnemonic>W</mnemonic>
+      <description>Carrot2 clustering engine will search the Web with www.etools.ch and automatically organize the results into thematic categories</description>
+      <example-queries>
+        <example-query>data mining</example-query>
+        <example-query>london</example-query>
+        <example-query>clustering</example-query>
+      </example-queries>
+    </source>
+    <source component-class="org.carrot2.source.opensearch.OpenSearchDocumentSource" id="icerocket">
+      <label>Blogs</label>
+      <title>Blogs from icerocket.com</title>
+      <mnemonic>B</mnemonic>
+      <description>Carrot2 clustering engine will search blogs from icerocket.com and organize the results into thematic categories</description>
+      <example-queries>
+        <example-query>olympics</example-query>
+        <example-query>music</example-query>
+        <example-query>election</example-query>
+      </example-queries>
+    </source>
+  </sources>
+</component-suite>

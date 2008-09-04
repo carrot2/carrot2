@@ -177,7 +177,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     private List<StemmedTerm []> convertToLegacyFormat(PreprocessingContext context)
     {
         final ArrayList<StemmedTerm []> documentData = Lists
-            .newArrayListWithCapacity(documents.size());
+            .newArrayListWithExpectedSize(documents.size());
         final ArrayList<StemmedTerm> currentDocument = Lists.newArrayList();
 
         final PreprocessedDocumentScanner scanner = new PreprocessedDocumentScanner()

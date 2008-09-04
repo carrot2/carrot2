@@ -1,91 +1,112 @@
 package org.carrot2.core;
 
-import org.carrot2.util.RollingWindowAverage;
+import java.io.Writer;
 
 import net.sf.ehcache.Statistics;
+
+import org.carrot2.util.RollingWindowAverage;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Root;
+import org.simpleframework.xml.load.Persister;
 
 /**
  * Provides some statistics about processing performed in a {@link CachingController}.
  */
+@Root(name = "statistics")
 public final class CachingControllerStatistics
 {
     /**
      * Total number of queries handled, including queries resulting in an exception.
      */
+    @Attribute(name = "total-queries")
     public final long totalQueries;
 
     /**
      * Number of queries handled without an exception.
      */
+    @Attribute(name = "good-queries")
     public final long goodQueries;
 
     /**
      * Average clustering time measured within the {@link #algorithmTimeWindowSize}.
      */
+    @Attribute(name = "algorithm-time-average-in-window")
     public final double algorithmTimeAverageInWindow;
 
     /**
      * Number of algorithm time measurements within the {@link #algorithmTimeWindowSize}.
      */
+    @Attribute(name = "algorithm-time-measurements-in-window")
     public final long algorithmTimeMeasurementsInWindow;
 
     /**
      * Clustering average time measurement window, in milliseconds.
      */
+    @Attribute(name = "algorithm-time-window-size")
     public final long algorithmTimeWindowSize;
 
     /**
      * Average document source processing time measured within the
      * {@link #sourceTimeWindowSize}.
      */
+    @Attribute(name = "source-time-average-in-window")
     public final double sourceTimeAverageInWindow;
 
     /**
      * Number of document source processing time measurements within the
      * {@link #sourceTimeWindowSize}.
      */
+    @Attribute(name = "source-time-measurements-in-window")
     public final long sourceTimeMeasurementsInWindow;
 
     /**
      * Document source average processing time measurement window, in milliseconds.
      */
+    @Attribute(name = "source-time-window-size")
     public final long sourceTimeWindowSize;
 
     /**
      * Average total processing time measured within the {@link #totalTimeWindowSize}.
      */
+    @Attribute(name = "total-time-average-in-window")
     public final double totalTimeAverageInWindow;
 
     /**
      * Number of total processing time measurements within the
      * {@link #totalTimeWindowSize}.
      */
+    @Attribute(name = "total-time-measurements-in-window")
     public final long totalTimeMeasurementsInWindow;
 
     /**
      * Total average processing time measurement window, in milliseconds.
      */
+    @Attribute(name = "total-time-window-size")
     public final long totalTimeWindowSize;
 
     /**
      * Number of requests that generated cache misses.
      */
+    @Attribute(name = "cache-misses")
     public final long cacheMisses;
 
     /**
      * Number of requests served from cache.
      */
-    public final long cacheTotalHits;
+    @Attribute(name = "cache-hits-total")
+    public final long cacheHitsTotal;
 
     /**
      * Number of requests served from in-memory cache.
      */
-    public final long cacheMemoryHits;
+    @Attribute(name = "cache-hits-memory")
+    public final long cacheHitsMemory;
 
     /**
      * Number of requests served from on-disk cache.
      */
-    public final long cacheDiskHits;
+    @Attribute(name = "cache-hits-disk")
+    public final long cacheHitsDisk;
 
     /**
      * Populates the statistics. References to the arguments will not (and must not) be
@@ -116,8 +137,16 @@ public final class CachingControllerStatistics
 
         // Cache stats
         cacheMisses = ehcacheStats.getCacheMisses();
-        cacheTotalHits = ehcacheStats.getCacheHits();
-        cacheMemoryHits = ehcacheStats.getInMemoryHits();
-        cacheDiskHits = ehcacheStats.getOnDiskHits();
+        cacheHitsTotal = ehcacheStats.getCacheHits();
+        cacheHitsMemory = ehcacheStats.getInMemoryHits();
+        cacheHitsDisk = ehcacheStats.getOnDiskHits();
+    }
+    
+    /**
+     * Serializes this statistics object as XML to the provided writer.
+     */
+    public void serialize(Writer writer) throws Exception
+    {
+        new Persister().write(this, writer);
     }
 }

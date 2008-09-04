@@ -1,0 +1,140 @@
+body {
+  margin: 0;
+  background-color: #e3dfd6;
+}
+
+body, input, select, label, button {
+  font-family: Tahoma, Arial, sans-serif;
+  font-size: 11px;
+}
+
+sup {
+  font-size: 90%;
+}
+
+.hide {
+  display: none;
+}
+
+#logo {
+  position: absolute;
+  background-image: url('../img/c2-logo-results.png');
+  background-repeat: no-repeat;
+  width: 73px;
+  height: 67px;
+  left: 100px;
+  margin-top: -32px;
+}
+
+#content {
+  background-color: #f6f4ec;
+  border-top: 1px solid #b6afa8;
+  border-bottom: 1px solid #b6afa8;
+  margin-top: 60px;
+  margin-bottom: 50px;
+  padding-bottom: 2ex;
+  padding-left: 174px;
+}
+
+#content h1 {
+  padding-top: 6px;
+  font-size: 20px;
+  font-weight: normal;
+  margin: 0;
+  margin-bottom: 1ex;
+  color: #404040;
+}
+
+#content p {
+  width: 45em;
+}
+
+#content dl {
+  width: 45em;
+  margin-top: 4ex;
+}
+
+dt {
+  margin-top: 2ex;
+  font-weight: bold;
+}
+
+form {
+  margin: 4ex 0 0 0;
+  position: relative;
+}
+
+label span.label {
+  display: block;
+  font-weight: bold;
+  color: #505050;
+  margin-bottom: 0.5ex;
+  width: 12em;
+  position: absolute;
+  left: 0;
+  text-align: right;
+}
+
+form ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  padding-top: 2ex;
+  border-top: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
+  width: 46em;
+}
+
+form ul.submit {
+  border: none;
+}
+
+form ul li {
+  margin: 0;
+  padding: 0;
+  padding-bottom: 2ex;
+  padding-left: 12.8em;
+}
+
+input[type=radio], input[type=checkbox] {
+  vertical-align: middle;
+  margin: 0;
+  margin-right: 0.5ex;
+}
+
+select {
+  width: 12em;
+  position: relative;
+  top: -0.3em;
+}
+
+input[type=text], input[type=file], textarea {
+  width: 12em;
+  position: relative;
+  top: -0.2em;
+}
+
+input[type=text], select, textarea {
+  border: 1px solid #b0b0b0;
+  padding: 2px;
+  -moz-border-radius: 2px;
+}
+
+textarea {
+  width: 25em;
+  height: 10em;
+}
+
+button {
+  background-color: #60a4d9;
+  border: 1px solid #276eb1;
+  color: white;
+  font-weight: bold;
+  padding: 2px;
+  -moz-border-radius: 3px;
+}
+
+span.hint {
+  padding-left: 0.5em;
+  color: #808080;
+}

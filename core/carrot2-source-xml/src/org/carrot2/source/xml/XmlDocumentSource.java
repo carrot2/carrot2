@@ -15,6 +15,7 @@ import org.carrot2.util.attribute.constraint.ImplementingClasses;
 import org.carrot2.util.attribute.constraint.IntRange;
 import org.carrot2.util.resource.*;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
 /**
@@ -96,7 +97,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
     @Init
     @Processing
     @Attribute
-    public Map<String, String> xsltParameters = Maps.immutableMap();
+    public Map<String, String> xsltParameters = ImmutableMap.of();
 
     /**
      * Query to be used to fetch the documents (see {@link #xml}). After processing, the

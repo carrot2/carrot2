@@ -13,7 +13,6 @@ import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.attribute.AttributeBinder;
 import org.carrot2.util.attribute.Input;
 import org.carrot2.util.simplexml.NoClassAttributePersistenceStrategy;
-import org.carrot2.webapp.attribute.Request;
 import org.carrot2.webapp.jawr.JawrUrlGenerator;
 import org.carrot2.webapp.model.*;
 import org.carrot2.webapp.util.RequestParameterUtils;
@@ -62,7 +61,6 @@ public class QueryProcessorServlet extends HttpServlet
         jawrUrlGenerator = new JawrUrlGenerator(config.getServletContext());
     }
 
-    @SuppressWarnings("unchecked")
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException
     {
@@ -97,7 +95,7 @@ public class QueryProcessorServlet extends HttpServlet
                 new AttributeBinder.AttributeBinderAction []
                 {
                     attributeBinderActionBind
-                }, Input.class, Request.class);
+                }, Input.class);
             requestModel.afterParametersBound(attributeBinderActionBind.remainingValues);
 
             if (RequestType.STATS.equals(requestModel.type))
@@ -161,10 +159,10 @@ public class QueryProcessorServlet extends HttpServlet
             output.write("jvm.freemem: " + Runtime.getRuntime().freeMemory() + "\n");
             output.write("jvm.totalmem: " + Runtime.getRuntime().totalMemory() + "\n");
 
-            output.write("ehcache.hits: " + statistics.cacheTotalHits + "\n");
+            output.write("ehcache.hits: " + statistics.cacheHitsTotal + "\n");
             output.write("ehcache.misses: " + statistics.cacheMisses + "\n");
-            output.write("ehcache.memhits: " + statistics.cacheMemoryHits  + "\n");
-            output.write("ehcache.diskhits: " + statistics.cacheDiskHits  + "\n");
+            output.write("ehcache.memhits: " + statistics.cacheHitsMemory  + "\n");
+            output.write("ehcache.diskhits: " + statistics.cacheHitsDisk  + "\n");
 
             output.flush();
         }

@@ -20,5 +20,6 @@
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-source-opensearch"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-source-pubmed"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-source-boss"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-source-google-desktop"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>

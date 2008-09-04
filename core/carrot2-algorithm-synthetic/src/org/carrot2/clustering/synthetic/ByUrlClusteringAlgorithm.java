@@ -146,7 +146,7 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
 
         // Add junk clusters
         final ArrayList<Document> documentsInCluster = Lists
-            .newArrayListWithCapacity(documentIndexes.size());
+            .newArrayListWithExpectedSize(documentIndexes.size());
         for (Integer documentIndex : documentIndexes)
         {
             documentsInCluster.add(documents[documentIndex]);

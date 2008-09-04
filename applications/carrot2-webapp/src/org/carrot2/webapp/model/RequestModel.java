@@ -6,7 +6,6 @@ import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.simplexml.TypeStringValuePair;
 import org.carrot2.webapp.QueryProcessorServlet;
-import org.carrot2.webapp.attribute.Request;
 import org.simpleframework.xml.ElementMap;
 
 /**
@@ -15,13 +14,11 @@ import org.simpleframework.xml.ElementMap;
 @Bindable
 public class RequestModel
 {
-    @Request
     @Input
     @Attribute(key = WebappConfig.SKIN_PARAM)
     @org.simpleframework.xml.Attribute
     public String skin;
 
-    @Request
     @Input
     @Attribute(key = AttributeNames.QUERY)
     @org.simpleframework.xml.Attribute(required = false)
@@ -31,36 +28,30 @@ public class RequestModel
      * Note that this is the number of results user requested, the actual number may be
      * different, in particular 0.
      */
-    @Request
     @Input
     @Attribute(key = AttributeNames.RESULTS)
     @org.simpleframework.xml.Attribute
     public int results;
 
-    @Request
     @Input
     @Attribute(key = WebappConfig.SOURCE_PARAM)
     @org.simpleframework.xml.Attribute
     public String source = WebappConfig.INSTANCE.components.getSources().get(0).getId();
 
-    @Request
     @Input
     @Attribute(key = WebappConfig.ALGORITHM_PARAM)
     @org.simpleframework.xml.Attribute
     public String algorithm = WebappConfig.INSTANCE.components.getAlgorithms().get(0).getId();
 
-    @Request
     @Input
     @Attribute(key = WebappConfig.TYPE_PARAM)
     public RequestType type;
     
-    @Request
     @Input
     @Attribute(key = WebappConfig.VIEW_PARAM)
     @org.simpleframework.xml.Attribute
     public String view;
 
-    @Request
     @Input
     @Attribute(key = QueryProcessorServlet.STATS_KEY)
     public String statsKey;

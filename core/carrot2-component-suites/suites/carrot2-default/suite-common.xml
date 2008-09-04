@@ -1,21 +1,12 @@
+<!-- Components included in all applications -->
 <component-suite>
   <sources>
-    <source component-class="org.carrot2.webapp.source.WebDocumentSource" id="web">
-      <label>Web</label>
-      <title>Search the Web with etools.ch</title>
-      <mnemonic>W</mnemonic>
-      <description>Carrot2 clustering engine will search the Web with www.etools.ch and automatically organize the results into thematic categories</description>
-      <example-queries>
-        <example-query>data mining</example-query>
-        <example-query>london</example-query>
-        <example-query>clustering</example-query>
-      </example-queries>
-    </source>
     <source component-class="org.carrot2.source.boss.BossDocumentSource" id="yahoo-web">
       <label>Yahoo!</label>
       <title>Yahoo Web Search</title>
       <mnemonic>Y</mnemonic>
       <description>Carrot2 clustering engine will search the Web using Yahoo Boss</description>
+      <icon-path>icons/yahoo.png</icon-path>
       <example-queries>
         <example-query>data mining</example-query>
         <example-query>olympics</example-query>
@@ -27,6 +18,7 @@
       <title>Yahoo News Search</title>
       <mnemonic>N</mnemonic>
       <description>Carrot2 clustering engine will search Yahoo News and organize the results into thematic categories</description>
+      <icon-path>icons/yahoo.png</icon-path>
       <example-queries>
         <example-query>iphone</example-query>
         <example-query>olympics</example-query>
@@ -38,6 +30,7 @@
       <title>MSN Live Search</title>
       <mnemonic>M</mnemonic>
       <description>Carrot2 clustering engine will search MSN Live and organize the results into thematic categories</description>
+      <icon-path>icons/live.png</icon-path>
       <example-queries>
         <example-query>data mining</example-query>
         <example-query>lucene</example-query>
@@ -55,22 +48,12 @@
         <example-query>ruby</example-query>
       </example-queries>
     </source>
-    <source component-class="org.carrot2.source.opensearch.OpenSearchDocumentSource" id="icerocket">
-      <label>Blogs</label>
-      <title>Blogs from icerocket.com</title>
-      <mnemonic>B</mnemonic>
-      <description>Carrot2 clustering engine will search blogs from icerocket.com and organize the results into thematic categories</description>
-      <example-queries>
-        <example-query>olympics</example-query>
-        <example-query>music</example-query>
-        <example-query>election</example-query>
-      </example-queries>
-    </source>
     <source component-class="org.carrot2.source.pubmed.PubMedDocumentSource" id="pubmed">
       <label>PubMed</label>
       <title>PubMed medical database</title>
       <mnemonic>P</mnemonic>
       <description>Carrot2 clustering engine will search the PubMed medical abstracts database and cluster the results</description>
+      <icon-path>icons/pubmed.png</icon-path>
       <example-queries>
         <example-query>cancer</example-query>
         <example-query>heart</example-query>
