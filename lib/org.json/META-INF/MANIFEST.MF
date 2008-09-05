@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-Name: json.org (Carrot2)
-Bundle-SymbolicName: json.org
-Bundle-Version: 0.0.0
-Bundle-ClassPath: json.jar
-Bundle-Vendor: JSON.org
-Export-Package: 
- org.json

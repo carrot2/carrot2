@@ -10,8 +10,8 @@ import org.junit.Test;
 import org.junitext.Prerequisite;
 
 /**
- * Common tests for {@link DocumentSource}s that can make more than one search requests
- * to get results for one query.
+ * Common tests for {@link DocumentSource}s that can make more than one search requests to
+ * get results for one query.
  */
 public abstract class MultipartDocumentSourceTestBase<T extends DocumentSource> extends
     QueryableDocumentSourceTestBase<T>
@@ -25,7 +25,8 @@ public abstract class MultipartDocumentSourceTestBase<T extends DocumentSource> 
     @Prerequisite(requires = "externalApiTestsEnabled")
     public void testQueryLargerThanPage() throws Exception
     {
-        final int needed = getSearchEngineMetadata().resultsPerPage * 2 + 25;
+        final int needed = getSearchEngineMetadata().resultsPerPage * 2
+            + getSearchEngineMetadata().resultsPerPage / 2;
 
         // Allow some slack (duplicated URLs).
         final int documentsReturned = runQuery("test", needed);

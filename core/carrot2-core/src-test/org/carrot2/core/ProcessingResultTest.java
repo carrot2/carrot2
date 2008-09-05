@@ -5,19 +5,23 @@ import static junit.framework.Assert.assertNotNull;
 import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThat;
 
 import java.io.*;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.test.TestDocumentFactory;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.CollectionUtils;
+import org.codehaus.jackson.*;
+import org.codehaus.jackson.map.JsonNode;
+import org.codehaus.jackson.map.JsonTypeMapper;
 import org.fest.assertions.Assertions;
 import org.junit.Test;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import com.google.common.collect.*;
 
+/**
+ * Test cases for {@link ProcessingResult}.
+ */
 public class ProcessingResultTest
 {
     @Test
@@ -156,6 +160,79 @@ public class ProcessingResultTest
         assertThat(clusters).isEquivalentTo(Lists.newArrayList(clusterA, clusterB));
     }
 
+    @Test
+    public void testJsonSerializationAll() throws IOException
+    {
+        final ProcessingResult result = prepareProcessingResult();
+        final JsonNode root = getJsonRootNode(result, true, true);
+
+        checkJsonQuery(root);
+        checkJsonClusters(result, root);
+        checkJsonDocuments(result, root);
+    }
+
+    @Test
+    public void testJsonSerializationDocumentsOnly() throws IOException
+    {
+        final ProcessingResult result = prepareProcessingResult();
+        final JsonNode root = getJsonRootNode(result, true, false);
+
+        checkJsonQuery(root);
+        checkJsonDocuments(result, root);
+        Assertions.assertThat(root.getFieldValue("clusters")).isNull();
+    }
+    
+    @Test
+    public void testJsonSerializationClustersOnly() throws IOException
+    {
+        final ProcessingResult result = prepareProcessingResult();
+        final JsonNode root = getJsonRootNode(result, false, true);
+        
+        checkJsonQuery(root);
+        checkJsonClusters(result, root);
+        Assertions.assertThat(root.getFieldValue("documents")).isNull();
+    }
+
+    private void checkJsonQuery(final JsonNode root)
+    {
+        Assertions.assertThat(root.getFieldValue("query").getTextValue()).isEqualTo(
+            "query");
+    }
+
+    private void checkJsonClusters(final ProcessingResult result, final JsonNode root)
+    {
+        final JsonNode clusters = root.getFieldValue("clusters");
+        Assertions.assertThat(clusters).isNotNull();
+        final ArrayList<JsonNode> clusterNodes = Lists.newArrayList(clusters
+            .getElements());
+        Assertions.assertThat(clusterNodes).hasSize(result.getClusters().size());
+    }
+
+    private void checkJsonDocuments(final ProcessingResult result, final JsonNode root)
+    {
+        final JsonNode documents = root.getFieldValue("documents");
+        Assertions.assertThat(documents).isNotNull();
+        final ArrayList<JsonNode> documentNodes = Lists.newArrayList(documents
+            .getElements());
+        Assertions.assertThat(documentNodes).hasSize(result.getDocuments().size());
+    }
+
+    private JsonNode getJsonRootNode(final ProcessingResult result,
+        boolean saveDocuments, boolean saveClusters) throws IOException,
+        JsonParseException
+    {
+        final StringWriter json = new StringWriter();
+        result.serializeJson(json, saveDocuments, saveClusters);
+
+        // Some basic checks
+        final JsonParser jsonParser = new JsonFactory()
+            .createJsonParser(new StringReader(json.toString()));
+        final JsonTypeMapper mapper = new JsonTypeMapper();
+        final JsonNode root = mapper.read(jsonParser);
+
+        return root;
+    }
+
     private void checkSerializationDeserialization(boolean documentsDeserialized,
         boolean clustersDeserialized) throws Exception
     {
@@ -228,6 +305,8 @@ public class ProcessingResultTest
 
         final List<Cluster> clusters = Lists.newArrayList(clusterA, clusterB);
         attributes.put(AttributeNames.CLUSTERS, clusters);
+
+        attributes.put(AttributeNames.QUERY, "query");
 
         return new ProcessingResult(attributes);
     }

@@ -1,0 +1,5 @@
+<project name="Webapp setup tasks for for Eclipse" default="webapp.eclipse.setup">
+  <target name="webapp.eclipse.setup">
+    <ant dir="../../../../" antfile="build.xml" target="webapp.eclipse.setup" />
+  </target>
+</project>

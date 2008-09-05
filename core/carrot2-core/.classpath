@@ -10,5 +10,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-common"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.junit4-ext"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/net.sf.ehcache"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.codehaus.jackson"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>

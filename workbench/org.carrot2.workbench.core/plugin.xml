@@ -31,23 +31,23 @@
          point="org.eclipse.core.runtime.products">
       <product
             application="org.carrot2.workbench.core.application"
-            name="%productName"
+            name="Carrot2 Workbench"
             description="%productBlurb">
          <property
                name="appName"
-               value="%productName">
+               value="Carrot2 Workbench">
          </property>
          <property
                name="windowImages"
-               value="icons/carrot2-16x16.png,icons/carrot2-32x32.png">
+               value="icons/carrot2-16x16.gif,icons/carrot2-32x32.gif">
          </property>
          <property
                name="aboutText"
-               value="%productBlurb">
+               value="Carrot2 Workbench">
          </property>
          <property
                name="aboutImage"
-               value="icons/product_logo.png">
+               value="icons/product-logo.png">
          </property>
          <property
                name="preferenceCustomization"

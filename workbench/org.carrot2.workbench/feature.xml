@@ -199,13 +199,6 @@
          unpack="false"/>
 
    <plugin
-         id="json.org"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.apache.axis"
          download-size="0"
          install-size="0"
@@ -583,5 +576,11 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
+
+   <plugin
+         id="org.codehaus.jackson"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
 
 </feature>

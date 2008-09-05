@@ -109,6 +109,8 @@
     <build-sprites base.dir="${webapp.project}/web/skins" root.dir="simple" />
   </target>
 
+  <target name="webapp.eclipse.setup" depends="webapp.templates, webapp.sprites.eclipse" />
+  
   <!-- 
        Processing of file templates
     -->

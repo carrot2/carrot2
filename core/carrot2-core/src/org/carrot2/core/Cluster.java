@@ -639,11 +639,13 @@ public final class Cluster
     @SuppressWarnings("unused")
     private void beforeSerialization()
     {
-        documentIds = Lists.newArrayListWithExpectedSize(documents.size());
-        for (Document document : documents)
+        documentIds = Lists.transform(documents, new Function<Document, DocumentRefid>()
         {
-            documentIds.add(new DocumentRefid(document.getId()));
-        }
+            public DocumentRefid apply(Document document)
+            {
+                return new DocumentRefid(document.getId());
+            }
+        });
 
         score = getAttribute(SCORE);
         size = size();

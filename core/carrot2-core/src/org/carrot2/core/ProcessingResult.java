@@ -5,10 +5,14 @@ import java.util.*;
 
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.simplexml.TypeStringValuePair;
+import org.codehaus.jackson.*;
+import org.codehaus.jackson.impl.DefaultPrettyPrinter;
+import org.codehaus.jackson.map.*;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.load.*;
 
-import com.google.common.collect.Lists;
+import com.google.common.base.Function;
+import com.google.common.collect.*;
 
 /**
  * Encapsulates the results of processing. Provides access to the values of attributes
@@ -46,10 +50,8 @@ public final class ProcessingResult
     private List<Cluster> clusters;
 
     /** Attributes of this result for serialization/ deserialization purposes. */
-    @ElementMap(name = "attributes", entry = "attribute", key = "key", value = "value", 
-        inline = true, attribute = true, required = false)
-    private Map<String, TypeStringValuePair> otherAttributesAsStrings = 
-        new HashMap<String, TypeStringValuePair>();
+    @ElementMap(name = "attributes", entry = "attribute", key = "key", value = "value", inline = true, attribute = true, required = false)
+    private Map<String, TypeStringValuePair> otherAttributesAsStrings = new HashMap<String, TypeStringValuePair>();
 
     /**
      * Parameterless constructor required for XML serialization/ deserialization.
@@ -276,7 +278,7 @@ public final class ProcessingResult
     {
         return new Persister().read(ProcessingResult.class, reader);
     }
-    
+
     /**
      * Deserializes a {@link ProcessingResult} from an XML byte stream.
      * 
@@ -289,4 +291,124 @@ public final class ProcessingResult
     {
         return new Persister().read(ProcessingResult.class, stream);
     }
+
+    /**
+     * Serializes this processing result as JSON to the provided <code>writer</code>.
+     * 
+     * @param writer the writer to serialize this processing result to. The writer will
+     *            <strong>not</strong> be closed.
+     * @param saveDocuments if <code>false</code>, documents will not be serialized.
+     * @param saveClusters if <code>false</code>, clusters will not be serialized
+     * @throws Exception in case of any problems with serialization
+     */
+    public void serializeJson(Writer writer)
+        throws IOException
+    {
+        serializeJson(writer, true, true);
+    }
+
+    /**
+     * Serializes this processing result as JSON to the provided <code>writer</code>.
+     * 
+     * @param writer the writer to serialize this processing result to. The writer will
+     *            <strong>not</strong> be closed.
+     * @param saveDocuments if <code>false</code>, documents will not be serialized.
+     * @param saveClusters if <code>false</code>, clusters will not be serialized
+     * @throws Exception in case of any problems with serialization
+     */
+    public void serializeJson(Writer writer, boolean saveDocuments, boolean saveClusters)
+        throws IOException
+    {
+        final JavaTypeMapper mapper = new JavaTypeMapper();
+        mapper.setCustomSerializer(CARROT2_JAVA_TYPES_SERIALIZER);
+        final JsonGenerator generator = new JsonFactory().createJsonGenerator(writer);
+        generator.setPrettyPrinter(new DefaultPrettyPrinter());
+
+        final Map<String, Object> mapToSerialize = Maps.newHashMap(attributes);
+        if (!saveDocuments)
+        {
+            mapToSerialize.remove(AttributeNames.DOCUMENTS);
+        }
+        if (!saveClusters)
+        {
+            mapToSerialize.remove(AttributeNames.CLUSTERS);
+        }
+
+        mapper.write(generator, mapToSerialize);
+    }
+
+    /**
+     * Serializes {@link Document}s as JSON.
+     */
+    private static class DocumentJavaTypeSerializer extends
+        JavaTypeSerializerBase<Document>
+    {
+        @Override
+        public boolean writeAny(JavaTypeSerializer<Object> defaultSerializer,
+            JsonGenerator generator, Document document) throws IOException,
+            JsonParseException
+        {
+            // Put all properties in a single map so that Jackson serializes
+            // them to a JSON map. Using linked map to preserve order.
+            final Map<String, Object> fields = Maps.newLinkedHashMap();
+            fields.put("id", document.getId());
+            fields.put("title", document.getField(Document.TITLE));
+            fields.put("snippet", document.getField(Document.SUMMARY));
+            fields.put("url", document.getField(Document.CONTENT_URL));
+            fields.putAll(document.getFields());
+            defaultSerializer.writeValue(defaultSerializer, generator, fields);
+            return true;
+        }
+    }
+
+    /**
+     * Serializes {@link Cluster}s as JSON.
+     */
+    private static class ClusterJavaTypeSerializer extends
+        JavaTypeSerializerBase<Cluster>
+    {
+        @Override
+        public boolean writeAny(JavaTypeSerializer<Object> defaultSerializer,
+            JsonGenerator generator, Cluster cluster) throws IOException,
+            JsonParseException
+        {
+            // Put all properties in a single map so that Jackson serializes
+            // them to a JSON map. Using linked map to preserve order.
+            final Map<String, Object> attributes = Maps.newLinkedHashMap();
+
+            attributes.put("id", cluster.getId());
+            final Object score = cluster.getAttribute(Cluster.SCORE);
+            if (score != null)
+            {
+                attributes.put("score", score);
+            }
+            attributes.put("phrases", cluster.getPhrases());
+            attributes.put("documents", Lists.transform(cluster.getDocuments(),
+                new Function<Document, Integer>()
+                {
+                    public Integer apply(Document document)
+                    {
+                        return document.getId();
+                    }
+                }));
+            if (!cluster.getSubclusters().isEmpty())
+            {
+                attributes.put("clusters", cluster.getSubclusters());
+            }
+
+            // Add any other attributes
+            attributes.putAll(cluster.getAttributes());
+
+            defaultSerializer.writeValue(defaultSerializer, generator, attributes);
+            return true;
+        }
+    }
+
+    /**
+     * JSON serializer for Carrot2-specific Java types.
+     */
+    private final static ClassDispatchingJavaTypeSerializer CARROT2_JAVA_TYPES_SERIALIZER = new ClassDispatchingJavaTypeSerializer(
+        ImmutableMap.<Class<?>, JavaTypeSerializer<?>> of(Document.class,
+            new DocumentJavaTypeSerializer(), Cluster.class,
+            new ClusterJavaTypeSerializer()));
 }

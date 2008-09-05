@@ -25,22 +25,29 @@ public final class Document
      * Field name for a short summary of the document, e.g. the snippet returned by the
      * search engine.
      */
-    public static final String SUMMARY = "summary";
+    public static final String SUMMARY = "snippet";
 
     /** Field name for an URL pointing to the full version of the document. */
     public static final String CONTENT_URL = "url";
 
-    /** Click URL. The URL that should be placed in the anchor to the document instead
-     * of the value returned in {@link #CONTENT_URL}. */
+    /**
+     * Click URL. The URL that should be placed in the anchor to the document instead of
+     * the value returned in {@link #CONTENT_URL}.
+     */
     public static final String CLICK_URL = "click-url";
 
-    /** Field name for an URL pointing to the thumbnail image associated with the document. */
+    /**
+     * Field name for an URL pointing to the thumbnail image associated with the document.
+     */
     public static final String THUMBNAIL_URL = "thumbnail-url";
 
     /** Document size. */
     public static final String SIZE = "size";
 
-    /** Field name for a list of sources the document was found in. Value type: List<String> */
+    /**
+     * Field name for a list of sources the document was found in. Value type:
+     * List<String>
+     */
     public static final String SOURCES = "sources";
 
     /** Fields of this document */
@@ -83,7 +90,7 @@ public final class Document
     private List<String> sources;
 
     /**
-     * Field used during serialization/ deserialization. 
+     * Field used during serialization/ deserialization.
      */
     @ElementMap(name = "fields", entry = "field", key = "key", value = "value", inline = true, attribute = true, required = false)
     private Map<String, TypeStringValuePair> otherFieldsAsStrings = new HashMap<String, TypeStringValuePair>();
@@ -96,8 +103,8 @@ public final class Document
     }
 
     /**
-     * Creates a document with the provided <code>title</code>, <code>summary</code>
-     * and <code>contentUrl</code>.
+     * Creates a document with the provided <code>title</code>, <code>summary</code> and
+     * <code>contentUrl</code>.
      */
     public Document(String title, String summary, String contentUrl)
     {
@@ -201,9 +208,8 @@ public final class Document
     }
 
     /**
-     * Compares {@link Document}s by their identifiers {@link #getId()}, which
-     * effectively gives the original order in which they were returned by the document
-     * source.
+     * Compares {@link Document}s by their identifiers {@link #getId()}, which effectively
+     * gives the original order in which they were returned by the document source.
      */
     public static final Comparator<Document> BY_ID_COMPARATOR = Comparators
         .nullLeastOrder(Comparators.fromFunction(new Function<Document, Integer>()
@@ -257,7 +263,7 @@ public final class Document
         }
 
         fieldsView = Collections.unmodifiableMap(fields);
-        
+
         sources = null;
     }
 }

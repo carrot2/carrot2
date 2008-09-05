@@ -11,7 +11,8 @@ Require-Bundle: org.carrot2.util.attribute;visibility:=reexport,
  org.carrot2.util.common,
  org.junit4.ext,
  org.simpleframework.xml,
- net.sf.ehcache;bundle-version="1.4.1"
+ net.sf.ehcache;bundle-version="1.4.1",
+ org.codehaus.jackson;bundle-version="1.0.0"
 Bundle-ClassPath: META-INF/,
  .
 Bundle-Vendor: Carrot2.org

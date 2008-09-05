@@ -23,8 +23,8 @@
 	    <a href="$esc.html(${document.getField("url")})">
 	    	<b>$esc.html($document.getField("title"))</b></a>
 	    <br>
-	    #if ($document.getField("summary") && $document.getField("summary") != "")
-	        $esc.html($document.getField("summary"))<br>
+	    #if ($document.getField("snippet") && $document.getField("snippet") != "")
+	        $esc.html($document.getField("snippet"))<br>
 	    #end
 	    <span class="du">$esc.html(${document.getField("url")})</span><br><br>
 	#end
